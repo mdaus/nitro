@@ -1,0 +1,202 @@
+#  _________________________         
+# |   ____  _||_  ___  __   |
+# |  /___ \/_||_\| __\/  \  |
+# | //   \// || \||  \\ _ \ |
+# | ||   [===||===]  ||(_)| |
+# | ||   _|| || |||  ||__ | |
+# | \\ _/ |\_||_/||__/|| || |
+# |  \___/ \_||_/|___/|| || |
+# |          ||             |
+#  -------------------------
+#
+# (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
+#
+# This is free software; you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this program; If not,
+# see <http://www.gnu.org/licenses/>.
+# 
+
+ROOT = $(PWD)
+DRIVER_PATH = $(ROOT)/../drivers
+
+all: libs tests
+
+#  Make all of the libraries in CODA OSS
+libs: core_libs #dbi_libs
+
+# This represents pretty much everything we need
+core: core_libs core_tests
+# If you have a DB and the associated API, you can build these
+dbi: dbi_libs dbi_tests
+
+#  Clean all of the packages in CODA OSS
+clean: core_clean drivers_clean #dbi_clean
+raw: core_raw #dbi_raw
+	rm -f Makefile
+	rm -f config.status
+	rm -rf install
+
+#  Make all of the tests in CODA OSS
+tests: core_tests #dbi_tests 
+
+#  Build the SAX driver.  You need to do this only if your configure
+#  could not detect a working version of expat when you selected
+#  --enable-xml-layer=expat
+sax_driver:
+	perl -I$(DRIVER_PATH) $(DRIVER_PATH)/sax_driver.pl $(ROOT) $(DRIVER_PATH) @target@/@lib_dir@ "@cxx_64_flags@ @cxx_pic_flags@"
+
+#  Build the SSL driver.  You need to do this only if your configure
+#  could not detect a working version of openssl when you selected
+#  --enable-ssl-layer=openssl (XXX: there is no current driver for this library)
+ssl_driver:
+	cd ../drivers; perl openssl_driver.pl $(DRIVER_PATH) @target@/@lib_dir@
+
+#  Build the PCRE driver.  You need to do this only if your configure
+#  could not detect a working version of pcre when you selected
+#  --enable-pcre, which is enabled by default
+pcre_driver:
+	perl -I$(DRIVER_PATH) $(DRIVER_PATH)/pcre_driver.pl $(ROOT) $(DRIVER_PATH) @target@/@lib_dir@ "@cxx_64_flags@ @cxx_pic_flags@"
+
+#  Build the UUID driver
+uuid_driver:
+	perl -I$(DRIVER_PATH) $(DRIVER_PATH)/uuid_driver.pl $(ROOT) $(DRIVER_PATH) @target@/@lib_dir@ "@cxx_64_flags@ @cxx_pic_flags@" --with-ldopts="'@cxx_64_flags@'"
+
+
+#-------------------------------------------------------
+#  Most basic libraries
+#-------------------------------------------------------
+min_libs:
+	@make_pcre_driver@
+	cd except; make library
+	cd str; make library
+	cd sys; make library
+	cd re; make library
+	cd io;  make library
+	cd mt;  make library
+
+min_install:
+	cd except; make install
+	cd str;    make install
+	cd sys;    make install
+	cd re;     make install
+	cd io;     make install
+	cd mt;     make install
+
+min_clean:
+	cd except; make clean
+	cd str;    make clean
+	cd sys;    make clean
+	cd re;     make clean
+	cd io;     make clean
+	cd mt;     make clean
+
+min_raw:
+	cd except; make raw
+	cd str;    make raw
+	cd sys;    make raw
+	cd re;     make raw
+	cd io;     make raw
+	cd mt;     make raw
+
+#  Create all of the tests for the core modules
+min_tests:
+	cd except; make unit-tests
+	cd str;    make unit-tests
+	cd sys;    make unit-tests
+	cd re;     make unit-tests
+	cd io;     make unit-tests
+	cd mt;     make unit-tests
+
+#-------------------------------------------------------
+#  Core libraries
+#-------------------------------------------------------
+core_libs: min_libs
+	@make_sax_driver@
+	@make_uuid_driver@
+	@make_ssl_driver@
+	cd logging; make library
+	cd plugin; make library
+	cd net;      make library
+	cd net.ssl;  make library
+	cd xml.lite; make library
+	cd unique; make library
+
+core_clean: min_clean
+	cd logging; make clean
+	cd plugin; make clean
+	cd net;      make clean
+	cd net.ssl;  make clean
+	cd xml.lite; make clean
+	cd unique; make clean
+
+core_raw: min_raw
+	cd logging; make raw
+	cd plugin; make raw
+	cd net;      make raw
+	cd net.ssl;  make raw
+	cd xml.lite; make raw
+	cd unique; make raw
+
+core_tests: min_tests
+	cd logging; make unit-tests
+	cd net;      make unit-tests
+	cd net.ssl;  make unit-tests
+	cd xml.lite; make unit-tests
+	cd unique; make unit-tests
+
+core_install: min_install
+	cd logging; make install
+	cd plugin; make install
+	cd net; make install
+	cd net.ssl; make install
+	cd xml.lite; make install
+	cd unique; make install
+
+dbi_libs:
+	cd dbi;      make library
+
+dbi_clean:
+	cd dbi;      make clean
+
+dbi_raw:
+	cd dbi;      make raw
+
+dbi_install:
+	cd dbi; make install
+
+dbi_tests:
+	cd dbi;      make unit-tests
+
+install: core_install #dbi_install 
+
+fresh: clean
+	make
+
+
+#TODO - in the future, we should use the Driver module to do this
+#for now, it will be hardcoded...
+drivers_clean:
+	cd ../drivers; rm -rf e2fsprogs-1.40-uuid
+	cd ../drivers; rm -rf expat-1.95.7
+	cd ../drivers; rm -rf pcre-5.0
+	cd ../drivers; rm -rf fftw-2.1.5
+	cd ../drivers; rm -rf openssl-0.9.8
+	if test -f ../drivers/nitf/Makefile; \
+	then cd ../drivers/nitf; make clean; \
+	     rm -f *INSTALL_SUCCEEDED; \
+	fi
+	if test -f ../drivers/cgm/Makefile; \
+	then cd ../drivers/cgm; make clean; \
+	     rm -f *INSTALL_SUCCEEDED; \
+	fi
+

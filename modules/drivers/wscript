@@ -1,0 +1,431 @@
+import os
+import Options
+from TaskGen import feature, before, taskgen
+import Tools.misc as misc
+
+
+def set_options(opt):
+    opt.add_option('--disable-pcre', action='store_false', dest='enable_pcre',
+                   help='turn off PCRE')
+    opt.add_option('--enable-pcre', action='store_true',
+                   default=True, help='turn on PCRE (default)')
+    opt.add_option('--with-pcre-home', action='store',
+                   help='Specify the PCRE Home - where PCRE is installed to')
+    opt.add_option('--enable-xml-layer', action='store', choices=['expat', 'xerces'],
+                   dest='xml_layer', default='expat', help='Specify the XML layer')
+    opt.add_option('--with-xml-home', action='store', dest='xml_home',
+                   help='Specify the XML Home - where the XML library is installed to')
+    opt.add_option('--with-fft-home', action='store', dest='fft_home',
+                   help='Specify the FFT Home - where an FFT library is installed')
+    
+    opt.add_option('--disable-fft', action='store_false', dest='enable_fft',
+                   help='turn off building FFT (default)')
+    opt.add_option('--enable-fft', action='store_true', dest='enable_fft',
+                   default=False, help='turn on FFT')
+    
+    opt.add_option('--build-pcre', action='store_true',
+                   default=False, help='force building PCRE from scratch')
+    opt.add_option('--build-xml', action='store_true',
+                   default=False, help='force building XML library (expat) from scratch')
+    opt.add_option('--build-fft', action='store_true',
+                   default=False, help='force building FFT library (fftw) from scratch')
+    
+    if Options.platform != 'win32':
+        opt.add_option('--build-uuid', action='store_true',
+                       default=False, help='force building libuuid from scratch')
+
+
+def configure(conf):
+    #-- PCRE -------------------------------------------------------------------
+    pcreHome = Options.options.with_pcre_home
+    enablePCRE = Options.options.enable_pcre
+    
+    if enablePCRE:
+        makePCRE = False
+        if Options.options.build_pcre:
+            makePCRE = True
+        elif pcreHome:
+            conf.check_message_2('setting pcre home to %s' % pcreHome)
+            conf.env.append_value('LIBPATH_PCRE', os.path.join(pcreHome, 'lib'))
+            conf.env.append_value('CPPPATH_PCRE', os.path.join(pcreHome, 'include'))
+        else:
+            if not conf.check_cxx(lib='pcre', mandatory=False,
+                                  uselib_store='PCRE'):
+                #default to building locally
+                makePCRE = True
+        if makePCRE:
+            conf.env['MAKE_PCRE'] = makePCRE
+            conf.check_message_1('Building local lib')
+            conf.check_message_2('pcre')
+        else:
+            conf.env['LIB_PCRE'] = ['pcre']
+    
+    #-- UUID -------------------------------------------------------------------
+    if Options.platform != 'win32':
+        if Options.options.build_uuid or not conf.check_cxx(
+                lib='uuid', function_name='uuid_generate', uselib_store='UUID'):
+            conf.env['MAKE_UUID'] = True
+            conf.check_message_1('Building local lib')
+            conf.check_message_2('uuid')
+    
+    
+    #-- XML --------------------------------------------------------------------
+    xmlHome = Options.options.xml_home
+    xmlLayer = Options.options.xml_layer
+    makeXML = Options.options.build_xml
+    
+    if makeXML:
+        xmlLayer = 'expat'
+    
+    if xmlHome and not makeXML:
+        conf.check_message_1('Setting xml home')
+        conf.check_message_2(xmlHome)
+        conf.env.append_value('LIBPATH_XML', os.path.join(xmlHome, 'lib'))
+        conf.env.append_value('CPPPATH_XML', os.path.join(xmlHome, 'include'))
+    
+    expatDefines = '-DUSE_EXPAT -DXML_STATIC'
+    if not makeXML:
+        if xmlLayer == 'expat':
+            conf.env.append_value('CXXFLAGS_XML', expatDefines.split())
+            if not xmlHome:
+                #look for it on the system
+                if not conf.check_cc(lib='expat', mandatory=False, uselib_store='XML') \
+                    or not conf.check_cc(header_name='expat.h'):
+                    #we must use/build the local one
+                    makeXML = True
+            else:
+                conf.env['LIB_XML'] = ['expat']
+        elif xmlLayer == 'xerces':
+            conf.env.append_value('CXXFLAGS_XML', '-DUSE_XERCES')
+            conf.env['LIB_XML'] = ['xerces-c']
+            if not xmlHome:
+                conf.check_cxx(lib='xerces-c', mandatory=True, uselib_store='XML')
+
+    if makeXML:
+        conf.env['MAKE_XML'] = xmlLayer
+        conf.env.append_unique('CXXFLAGS_XML', expatDefines.split())
+        conf.check_message_1('Building local lib')
+        conf.check_message_2(xmlLayer)
+        
+    
+    
+    #-- FFT --------------------------------------------------------------------
+    enableFFT = Options.options.enable_fft
+    
+    if enableFFT:
+        fftHome = Options.options.fft_home
+        makeFFT = Options.options.build_fft
+        
+        if fftHome and not makeFFT:
+            conf.check_message_2('setting fft home to %s' % xmlHome)
+            conf.env.append_value('LIBPATH_FFT', os.path.join(xmlHome, 'lib'))
+            conf.env.append_value('CPPPATH_FFT', os.path.join(xmlHome, 'include'))
+        
+        if not makeFFT and not fftHome:
+            #try to find it
+            if not conf.check_cc(lib='fftw', mandatory=False, uselib_store='FFT'):
+                #we must use/build the local one
+                makeFFT = True
+    
+        if makeFFT:
+            conf.env['MAKE_FFT'] = True
+            conf.check_message_1('Building local lib')
+            conf.check_message_2('fftw')
+    
+    #add some flags for the nitro lib - if a lib states NITRO as a uselib (or uselib local)
+    #these flags will get applied automatically
+    conf.env.append_value('CCFLAGS_NITRO', '-DNITF_MODULE_EXPORTS')
+    conf.env.append_value('CXXFLAGS_NITRO', '-DNITF_MODULE_EXPORTS')
+
+
+@taskgen
+@feature('untar')
+def untar(self):
+    import tarfile
+    f = self.path.find_or_declare(self.fname)
+    tf = tarfile.open(f.abspath(), 'r')
+    p = self.path.abspath()
+    for x in tf:
+        tf.extract(x, p)
+    tf.close()
+    
+
+@taskgen
+@feature('m4subst')
+def m4subst(tsk):
+    import re
+    #similar to the subst in misc.py - but outputs to the src directory
+    m4_re = re.compile('@(\w+)@', re.M)
+
+    env = tsk.env
+    infile = os.path.join(tsk.path.abspath(), tsk.input)
+    outfile = os.path.join(tsk.path.abspath(), tsk.output)
+    
+    file = open(infile, 'r')
+    code = file.read()
+    file.close()
+
+    # replace all % by %% to prevent errors by % signs in the input file while string formatting
+    code = code.replace('%', '%%')
+
+    s = m4_re.sub(r'%(\1)s', code)
+
+    di = tsk.dict or {}
+    if not di:
+        names = m4_re.findall(code)
+        for i in names:
+            di[i] = env.get_flat(i) or env.get_flat(i.upper())
+    
+    file = open(outfile, 'w')
+    file.write(s % di)
+    file.close()
+    if tsk.chmod: os.chmod(outfile, tsk.chmod)
+
+
+@taskgen
+@feature('commentUndefs')
+def commentUndefs(tsk):
+    import re
+    env = tsk.env
+    infile = os.path.join(tsk.path.abspath(), tsk.input)
+    outfile = os.path.join(tsk.path.abspath(), tsk.output)
+    
+    file = open(infile, 'r')
+    code = file.read()
+    file.close()
+
+    code = re.sub(r'(#undef[^\n]*)(\n)', r'/* \1 */\2', code)
+    file = open(outfile, 'w')
+    file.write(code)
+    file.close()
+    if tsk.chmod: os.chmod(outfile, tsk.chmod)
+
+
+@taskgen
+@feature('makeHeader')
+def makeHeader(tsk):
+    outfile = os.path.join(tsk.path.abspath(), tsk.output)
+    dest = open(outfile, 'w')
+    guard = '__CONFIG_H__'
+    dest.write('#ifndef %s\n#define %s\n\n' % (guard, guard))
+
+    for k in tsk.defs.keys():
+        v = tsk.defs[k]
+        if v is None:
+            v = ''
+        dest.write('\n#ifndef %s\n#define %s %s\n#endif\n' % (k, k, v))
+    
+    if hasattr(tsk, 'undefs'):
+        for u in tsk.undefs:
+            dest.write('\n#undef %s\n' % u)
+
+    dest.write('\n#endif /* %s */\n' % guard)
+    dest.close()
+    if tsk.chmod: os.chmod(outfile, tsk.chmod)
+
+
+def build(bld):
+    variant = bld.env['VARIANT']
+    env = bld.env_of_name(variant)
+    env.set_variant(variant)
+
+    defs = env['defines']
+    defList = []
+    for k, v in defs.iteritems():
+        if v:
+            defList.append('%s=%s' % (k, v))
+    #defs = map(lambda t: '%s=%s' % t, [(k, v) for k, v in bld.env['defines'].iteritems()])
+
+    driversNode = bld.path
+    
+    if 'MAKE_PCRE' in env:
+        fname = 'pcre-5.0'
+        ut = bld.new_task_gen(path=bld.path, env=env.copy(),
+                              fname='%s.tar' % fname, before='dftables')
+        ut.features = ['untar']
+        bld.add_group()
+        
+        driverNode = driversNode.ensure_dir_node_from_path(fname)
+        
+        #we need to do a few substitution transformations
+        #these taken from the configure.in in the package
+        pcreDict = dict(PCRE_MAJOR=5, PCRE_MINOR=0, PCRE_DATE='13-Sep-2004',
+                        MATCH_LIMIT=10000000, POSIX_MALLOC_THRESHOLD=10,
+                        HAVE_STRERROR=env['HAVE_STRERROR'],
+                        HAVE_MEMMOVE=env['HAVE_MEMMOVE'],
+                        HAVE_BCOPY=env['HAVE_BCOPY'],
+                        EBCDIC=0, NEWLINE="'\\n'", LINK_SIZE=2,
+                        EXPORT=None)
+        
+        configH = bld.new_task_gen(output='config.h',
+                                   path=driverNode, env=env.copy(),
+                                   defs=pcreDict, before='dftables')
+        configH.features = ['makeHeader']
+        
+        pcreH = bld.new_task_gen(input='pcre.in', output='pcre.h', env=env.copy(),
+                                 dict=pcreDict, path=driverNode, before='dftables')
+        pcreH.features = ['m4subst']
+        
+        #make the dftables executable
+        dfTables = bld.new_task_gen('cc', 'program', source='dftables.c',
+                                    includes=['.'],
+                                    target='dftables',
+                                    path=driverNode,
+                                    install_path=None,
+                                    env=env.copy(),
+                                    before='chartables')
+        bld.add_group()
+        
+        appName = Options.platform.startswith('win32') and 'dftables.exe' or 'dftables'
+        charTables = bld.new_task_gen(source=appName, path=driverNode,
+                                      rule='${SRC} "%s/chartables.c"' % driverNode.abspath(),
+                                      install_path=None, name='chartables',
+                                      env=env.copy(), before='pcre')
+        bld.add_group()
+        
+        
+        pcreposix = bld.new_task_gen('cc', 'staticlib',
+                         includes=['.'], env=env.copy(),
+                         target='pcreposix', source='pcreposix.c',
+                         path=driverNode, export_incdirs='.')
+    
+        pcre = bld.new_task_gen('cc', 'staticlib',
+                         includes=['.'],
+                         export_incdirs='.',
+                         target='pcre',
+                         source='maketables.c get.c study.c pcre.c',
+                         path=driverNode,
+                         env=env.copy(),
+                         name='PCRE')
+        
+        bld.install_files('${PREFIX}/include',
+                          map(lambda x: os.path.join(driverNode.abspath(), x),
+                              'pcre.h pcreposix.h'.split()))
+        
+    if 'MAKE_UUID' in env:
+        
+        fname = 'e2fsprogs-1.40-uuid'
+        ut = bld.new_task_gen(path=bld.path, fname='%s.tar' % fname, env=env.copy())
+        ut.features = ['untar']
+        bld.add_group()
+        
+        driverNode = driversNode.ensure_dir_node_from_path(fname)
+        
+        uuidH = bld.new_task_gen(input='lib/uuid/uuid_types.h.in',
+                                 output='lib/uuid/uuid_types.h',
+                                 dict=env['defines'], path=driverNode,
+                                 env=env.copy(), before='uuid')
+        uuidH.features = ['m4subst']
+    
+        sources = map(lambda x: 'lib/uuid/%s' % x,
+					'clear.c compare.c copy.c gen_uuid.c isnull.c pack.c parse.c ' \
+                  	'unpack.c unparse.c uuid_time.c'.split())
+        uuid = bld.new_task_gen('cc', 'staticlib', includes='lib',
+                                source=sources,
+                                target='uuid', export_incdirs='lib',
+                                name='UUID', path=driverNode,
+                                env=env.copy(), defines=defList)
+        
+        bld.install_files('${PREFIX}/include/uuid',
+                          os.path.join(driverNode.abspath(), 'lib/uuid/uuid.h'))
+    
+    if 'MAKE_XML' in env:
+        
+        driver = Options.options.xml_layer
+        
+        if driver == 'expat':
+            fname = 'expat-1.95.7'
+            ut = bld.new_task_gen(path=bld.path, fname='%s.tar' % fname,
+                                  env=env.copy(), before='XML')
+            ut.features = ['untar']
+            bld.add_group()
+            
+            driverNode = driversNode.ensure_dir_node_from_path(fname)
+        
+            expatDefs = ['PACKAGE_VERSION="1.95.7"',
+                         'XML_CONTEXT_BYTES=1024',
+                         'XML_DTD=1',
+                         'XML_NS=1',
+                         'PACKAGE_STRING="expat 1.95.7"',
+                         'XML_STATIC=1']
+            
+            sources = 'lib/xmlparse.c lib/xmltok.c lib/xmlrole.c'
+            expat = bld.new_task_gen('cc', 'staticlib', includes='.', source=sources,
+                             target='expat', path=driverNode, export_incdirs='lib',
+                             uselib='XML', name='XML', env=env.copy(),
+                             defines=defList + expatDefs)
+            
+            bld.install_files('${PREFIX}/include',
+                          os.path.join(driverNode.abspath(), 'lib/expat.h'))
+        else:
+            raise Exception('Invalid XML driver: %s' % driver)
+    
+    
+    if 'MAKE_FFT' in env:
+        
+        fname = 'fftw-2.1.5'
+        ut = bld.new_task_gen(path=bld.path, env=env.copy(),
+                              fname='%s.tar' % fname)
+        ut.features = ['untar']
+        bld.add_group()
+        
+        driverNode = driversNode.ensure_dir_node_from_path(fname)
+        
+        #create fftw.h
+        fftwH = bld.new_task_gen(input='fftw/fftw.h.in',
+                                 output='fftw/fftw.h',
+                                 path=driverNode,
+                                 env=env.copy(),
+                                 before='fftw')
+        fftwH.features = ['commentUndefs']
+        
+        envDefs = env['defines']
+        d, u = {}, []
+        for k, v in envDefs.iteritems():
+            if v:
+                d[k] = v
+            else:
+                u.append(k)
+        d['FFTW_VERSION'] = '"2.1.5"'
+        d['FFTW_ENABLE_FLOAT'] = '1'
+        configH = bld.new_task_gen(output='fftw/config.h',
+                                   path=driverNode,
+                                   defs=d,
+                                   env=env.copy(),
+                                   undefs=u)
+        configH.features = ['makeHeader']
+        
+        bld.add_group()
+        
+        #copied from fftw Makefile
+        NOTW_CODELETS = 'fn_1.c fn_2.c fn_3.c fn_4.c fn_5.c fn_6.c fn_7.c fn_8.c fn_9.c fn_10.c fn_11.c fn_12.c fn_13.c fn_14.c fn_15.c fn_16.c fn_32.c fn_64.c'
+        TWID_CODELETS = 'ftw_2.c ftw_3.c ftw_4.c ftw_5.c ftw_6.c ftw_7.c ftw_8.c ftw_9.c ftw_10.c ftw_16.c ftw_32.c ftw_64.c'
+        NOTWI_CODELETS = 'fni_1.c fni_2.c fni_3.c fni_4.c fni_5.c fni_6.c fni_7.c fni_8.c fni_9.c fni_10.c fni_11.c fni_12.c fni_13.c fni_14.c fni_15.c fni_16.c fni_32.c fni_64.c'
+        TWIDI_CODELETS = 'ftwi_2.c ftwi_3.c ftwi_4.c ftwi_5.c ftwi_6.c ftwi_7.c ftwi_8.c ftwi_9.c ftwi_10.c ftwi_16.c ftwi_32.c ftwi_64.c'
+        OTHERSRC = 'timer.c config.c planner.c twiddle.c executor.c ' \
+               'generic.c fftwnd.c malloc.c wisdom.c wisdomio.c putils.c rader.c ' \
+                   'fftwf77.c'
+    
+        sources = map(lambda s: 'fftw/%s' % s,
+                      ' '.join([NOTW_CODELETS, TWID_CODELETS, NOTWI_CODELETS, TWIDI_CODELETS, OTHERSRC]).split())
+        fftw = bld.new_task_gen('cc', 'staticlib', includes=['fftw', 'rfftw'], source=sources,
+                                target='fftw', path=driverNode, export_incdirs=['fftw', 'rfftw'],
+                                name='FFT', defines=defList, env=env.copy())
+        
+        bld.install_files('${PREFIX}/include',
+                      os.path.join(driverNode.abspath(), 'fftw/fftw.h'))
+    
+    
+
+def distclean(context):
+    #remove the untarred directories
+    import shutil
+    
+    dirs = map(lambda d: os.path.join(context.curdir, d),
+               ['pcre-5.0', 'e2fsprogs-1.40-uuid', 'expat-1.95.7', 'fftw-2.1.5'])
+    for d in dirs:
+        try:
+            if os.path.exists(d):
+                shutil.rmtree(d, ignore_errors=True)
+        except:{}
+    

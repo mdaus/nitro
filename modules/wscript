@@ -1,0 +1,25 @@
+import os
+import Scripting, Options
+from Build import BuildContext
+
+VERSION = '2.5-dev'
+APPNAME = 'CODA'
+srcdir  = '.'
+blddir  = 'target'
+
+def set_options(opt):
+    opt.tool_options('build', tooldir='./build')
+    opt.sub_options('drivers c++')
+
+def configure(conf):
+    conf.check_tool('build', tooldir='./build')
+    conf.configureCODA()
+    conf.sub_config('drivers c++')
+
+def build(bld):
+    bld.add_subdirs('drivers c++')
+        
+def distclean(context):
+    context.recurse('drivers c++')
+    Scripting.distclean(context)
+

@@ -1,0 +1,32 @@
+PACKAGE = net.ssl
+BUILD = library unit-tests
+MAJOR_VERSION = 2
+MINOR_VERSION = 0
+VERSION_SUFFIX = dev
+VERSION = $(MAJOR_VERSION)_$(MINOR_VERSION)$(VERSION_SUFFIX)
+MAINTAINER = Dan.Pressel@gd-ais.com, Jeffrey.Randolph@gd-ais.com, Thomas.Zellman@gd-ais.com
+DESCRIPTION = net.ssl is a client library for the internet using  \
+              OpenSSL.  The SSL layer is transparent, as the      \
+              module is developed directly on the net interfaces. \
+              This library may be used by the net.http module to  \
+              allow HTTPS transfers (client side only).
+
+SOURCES = SSLConnection.cpp SSLConnectionClientFactory.cpp
+TESTS = SSLTestClient.cpp SSLTestClientNoURL.cpp
+
+MY_CXXFLAGS = 
+MY_CXXDEFINES =
+MY_LFLAGS =
+MY_INCLUDES = -I@top_srcdir@/except/include \
+              -I@top_srcdir@/str/include \
+              -I@top_srcdir@/sys/include \
+              -I@top_srcdir@/io/include \
+              -I@top_srcdir@/re/include \
+              -I@top_srcdir@/net/include
+MY_LIBPATH = -L@top_srcdir@/except/lib/@target@/@lib_dir@ \
+             -L@top_srcdir@/str/lib/@target@/@lib_dir@ \
+             -L@top_srcdir@/sys/lib/@target@/@lib_dir@ \
+             -L@top_srcdir@/io/lib/@target@/@lib_dir@ \
+             -L@top_srcdir@/re/lib/@target@/@lib_dir@ \
+             -L@top_srcdir@/net/lib/@target@/@lib_dir@
+MY_LIBS = -lnet-c++ -lre-c++ -lio-c++ -lsys-c++ -lstr-c++ -lexcept-c++
