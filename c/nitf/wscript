@@ -1,0 +1,90 @@
+import os
+import Options
+
+
+def build(bld):
+    variant = bld.env['VARIANT']
+    env = bld.env_of_name(variant)
+    env.set_variant(variant)
+        
+    includes = ['include']
+    libname = 'nitf'
+    
+    uselibs = 'THREAD DL MATH NITRO'.split()
+    lib = bld.new_task_gen('cc', env['LIB_TYPE'] or 'staticlib',
+                           includes=includes,
+                           target='%s-c' % libname, uselib=uselibs,
+                           export_incdirs=includes, env=env.copy(),
+                           defines = 'NITF_MODULE_EXPORTS', name='NITRO')
+    lib.find_sources_in_dirs('source')
+    
+    #make all of plug-ins normally - as separate DSOs
+    pluginNode = bld.path.find_dir('shared')
+    libPattern = env['shlib_PATTERN']
+    if libPattern.startswith('lib'):
+        libPattern = libPattern[3:]
+    
+    pluginList = []
+    for p in pluginNode.find_iter(in_pat=['*.c'], maxdepth=1, flat=True).split(' '):
+        pEnv = env.copy()
+        pEnv['shlib_PATTERN'] = libPattern
+        pluginName = os.path.splitext(p)[0]
+        plugin = bld.new_task_gen('cc', 'shlib', source=p,
+                                  uselib_local='NITRO',
+                                  target=pluginName,
+                                  path=pluginNode, env=pEnv,
+                                  install_path='${PREFIX}/share/nitf/plugins')
+        pluginList.append(pluginName)
+    
+    #now, to support static linkage, make the plug-ins as a static library
+    lib = bld.new_task_gen('cc', env['LIB_TYPE'] or 'staticlib', includes=includes,
+                           target='%s-handlers' % libname, env=env.copy(),
+                           uselib_local = 'NITRO', add_objects = pluginList)
+    #lib.find_sources_in_dirs('./shared', excludes=[])
+        
+    
+    #build tests
+    testDir = bld.path.find_dir('tests')
+    tests = testDir.find_iter(in_pat=['test*.c'],
+                              ex_pat=['test_1band_rw_line.c', 'test_fileIO.c',
+                                      'test_hash_table_2.c', 'test_writer_s.c',
+                                      'test_des_read.c', 'test_read_acftb.c',
+                                      'test_add_masks.c', 'test_plugin_reg_1.c',
+                                      'test_des_write.c', 'test_ImageIO_support.c',
+                                      'test_make_pattern.c', 'test_des.c',
+                                      'test_ext_iter.c', 'test_ImageIO_read_data.c',
+                                      'test_ImageIO_writePattern.c', 'test_static_plugin.c'],
+                              maxdepth=1, flat=True).split(' ')
+    for test in tests:
+        exe = bld.new_task_gen('cc', 'program', source=test,
+                               uselib_local='NITRO',
+                               target=os.path.splitext(test)[0],
+                               path=testDir, env=env.copy(),
+                               install_path='${PREFIX}/share/nitf/tests')
+    
+    #install headers
+    for f in bld.path.find_dir('include').find_iter():
+        relpath = f.relpath_gen(bld.path)
+        bld.install_files('${PREFIX}/%s' % os.path.dirname(relpath), relpath)
+        
+    #run doxygen
+    if 'DOXYGEN' in env and Options.is_install:
+        bld.new_task_gen(rule='${DOXYGEN}', cwd=bld.path.abspath(), always=True)
+        try:
+            htmlDocs = bld.path.find_dir('doc/html')
+            for f in htmlDocs.find_iter():
+                relpath = f.relpath_gen(htmlDocs)
+                bld.install_files('${PREFIX}/share/doc/nitf/c/%s' % relpath, f.abspath())
+        except:{}
+    
+    #add some extra/custom targets
+    extraTargets = {'nitro-plugins' : pluginList, 'nitro' : pluginList + ['nitf-handlers']}
+    newTargets = []
+    if Options.options.compile_targets:
+        targets = Options.options.compile_targets.split(',')
+        for k in extraTargets.keys():
+            if k in targets:
+                newTargets.extend(extraTargets[k])
+                targets.remove(k)
+        newTargets.extend(targets) #add the remaining targets, if any
+    Options.options.compile_targets = ','.join(newTargets) #reset the options
