@@ -66,7 +66,7 @@
 /*! \def NITF_IMAGE_IO_PIXEL_TYPE_C - Complex floating point */
 #define NITF_IMAGE_IO_PIXEL_TYPE_C ((nitf_Uint32) 0x00800000)
 
-/* Psuedo type for 12 bit integer (NBPP == 12 and ABPP = 12)
+/* Psuedo type for 12 bit integer (NBPP == 12 and ABPP = 12) */
 /*! \def NITF_IMAGE_IO_PIXEL_TYPE_12 - 12 bit integer signed or unsigned */
 #define NITF_IMAGE_IO_PIXEL_TYPE_12 ((nitf_Uint32) 0x01000000)
 
