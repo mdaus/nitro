@@ -1,7 +1,7 @@
 /* =========================================================================
- * This file is part of xml.lite-c++ 
+ * This file is part of xml.lite-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
  *
  * xml.lite-c++ is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -61,6 +61,16 @@
 
 //XERCES_CPP_NAMESPACE_BEGIN
 // Make sure its obvious which parser we are using
+
+#if defined(XERCES_VERSION_MAJOR)
+#   if XERCES_VERSION_MAJOR == 2
+        typedef unsigned int __xmlSize_t;
+#   else
+        typedef XMLSize_t __xmlSize_t;
+#   endif
+#else
+    typedef XMLSize_t __xmlSize_t;
+#endif
 
 
 //XERCES_CPP_NAMESPACE_END
@@ -148,7 +158,7 @@ protected:
 
     /*!
      *  Convert a string from XMLCh* to std::string
-     *  \param  xmlStr    an XMLCh* string 
+     *  \param  xmlStr    an XMLCh* string
      *  \return           a local std::string
      */
     std::string toLocal(const XMLCh *xmlStr);
@@ -161,7 +171,7 @@ protected:
 /*!
  *  \class __XercesContentHandler
  *  \brief This class is a mapping between Xerces SAX2.0 and xml.lite
- *  
+ *
  *  With Expat, a C parser, we had to bind function pointers to
  *  C subroutines, and use those to drive our xml.lite ContentHandler.
  *  Here, we are starting with an already SAX2.0 compliant parser,
@@ -171,12 +181,12 @@ protected:
  *
  *  Recall that xml.lite is based on a subset of SAX2.0 and DOM calls.
  *  Under Expat, we get significant performance and simplicity gains,
- *  by making the parser start with a defined base handler for 
+ *  by making the parser start with a defined base handler for
  *  everything.  But having Xerces is beneficial as well, particularly
  *  if you need more conformance.  While Expat is the world's fastest
  *  XML parser, and should be used wherever possible, Apache has
  *  possibly the most standards conformant implementation.  We want
- *  to allow (in a performance tradeoff) the possibility for 
+ *  to allow (in a performance tradeoff) the possibility for
  *  Xerces use as well as Expat (and ultimately MSXML as well)
  *
  */
@@ -198,7 +208,7 @@ public:
     {}
 
     virtual void ignorableWhitespace(const XMLCh *const chars,
-                                     const unsigned int length)
+                                     const __xmlSize_t length)
     {}
     virtual void  processingInstruction(const XMLCh *const target,
                                         const XMLCh *const data)
@@ -214,7 +224,7 @@ public:
      *  \param length   The length
      */
     virtual void characters(const XMLCh* const chars,
-                            const unsigned int length);
+                            const __xmlSize_t length);
 
     /*!
      *  Fire off the end document notification
@@ -331,7 +341,7 @@ public:
 
 /*!
  *  \class XMLReaderXerces
- *  \brief SAX 2.0 XML Parsing class, replaces 1.0 Parser class 
+ *  \brief SAX 2.0 XML Parsing class, replaces 1.0 Parser class
  *
  *  Provide the API for SAX-driven parsing.  We are using
  *  the Expat C Parser underneath, and wiring it to

@@ -1,7 +1,7 @@
 /* =========================================================================
- * This file is part of xml.lite-c++ 
+ * This file is part of xml.lite-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
  *
  * xml.lite-c++ is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -23,7 +23,6 @@
 #include "xml/lite/XMLReader.h"
 
 #if defined(USE_XERCES)
-
 
 xml::lite::__XercesLocalString::__XercesLocalString(const XMLCh *xmlStr)
 {
@@ -72,7 +71,7 @@ std::string xml::lite::__XercesLocalString::toLocal(const XMLCh *xmlStr)
 }
 
 void xml::lite::__XercesContentHandler::characters(const XMLCh* const chars,
-        const unsigned int length)
+        const __xmlSize_t length)
 {
     xml::lite::__XercesLocalString __xstr(chars);
     mLiteHandler->characters(__xstr.c_str(), (int)length);
@@ -213,9 +212,9 @@ void xml::lite::XMLReaderXerces::parse(io::InputStream & is, int size)
 void xml::lite::XMLReaderXerces::setValidation(bool validate)
 {
     /*
-    mNative->setFeature(__XercesLocalString("http://xml.org/sax/features/validation").toXMLCh(), 
+    mNative->setFeature(__XercesLocalString("http://xml.org/sax/features/validation").toXMLCh(),
     validate);
-    mNative->setFeature(__XercesLocalString("http://xml.org/sax/features/validation/schema").toXMLCh(), 
+    mNative->setFeature(__XercesLocalString("http://xml.org/sax/features/validation/schema").toXMLCh(),
     validate);
     */
     mNative->setFeature(XMLUni::fgSAX2CoreNameSpacePrefixes, true);

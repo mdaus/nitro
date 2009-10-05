@@ -1,7 +1,7 @@
 /* =========================================================================
- * This file is part of sys-c++ 
+ * This file is part of sys-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
  *
  * sys-c++ is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -46,23 +46,23 @@ void sys::DateTime::setNow()
     mTimeInMillis = (now.tv_sec + 1.0e-6 * now.tv_usec) * 1000;
 #elif defined(_WIN32)
     // Getting time twice may be inefficient but is quicker
-    // than converting the SYSTEMTIME structure into 
+    // than converting the SYSTEMTIME structure into
     // milliseconds
-    // We could add an additional flag here if the user 
+    // We could add an additional flag here if the user
     // does not need millisecond accuracy
     SYSTEMTIME now;
     GetLocalTime(&now);
     mTimeInMillis = (double)time(NULL) * 1000 + now.wMilliseconds;
 #else
-    mTimeInMillis = (double)time(NULL) * 1000; 
+    mTimeInMillis = (double)time(NULL) * 1000;
 #endif
-    fromMillis();	
+    fromMillis();
 }
 
 
 void sys::DateTime::fromMillis()
 {
-    time_t timeInSeconds = mTimeInMillis / 1000;
+    time_t timeInSeconds = (time_t)(mTimeInMillis / 1000);
     tm t = *localtime(&timeInSeconds);
     // this is year since 1900 so need to add that
     mYear = t.tm_year + 1900;
@@ -89,9 +89,9 @@ void sys::DateTime::toMillis()
     t.tm_yday = mDayOfYear - 1;
     t.tm_hour = mHour;
     t.tm_min = mMinute;
-    t.tm_sec = mSecond;
+    t.tm_sec = (int)mSecond;
     t.tm_isdst = mDST;
-    
+
     mTimeInMillis = toMillis(t);
 }
 
@@ -126,7 +126,7 @@ sys::DateTime::DateTime(int year, int month, int day)
     fromMillis();
 }
 
-sys::DateTime::DateTime(int year, int month, int day, 
+sys::DateTime::DateTime(int year, int month, int day,
 			int hour, int minute, double second)
 {
     mYear = year;
@@ -148,7 +148,7 @@ sys::DateTime::DateTime(double timeInMillis)
 
 double sys::DateTime::getGMTimeInMillis() const
 {
-    time_t curr = mTimeInMillis/1000;
+    time_t curr = (time_t)(mTimeInMillis/1000);
     tm local = *gmtime(&curr);
     local.tm_isdst = mDST;
     return toMillis(local);

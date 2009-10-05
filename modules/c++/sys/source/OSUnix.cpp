@@ -1,7 +1,7 @@
 /* =========================================================================
- * This file is part of sys-c++ 
+ * This file is part of sys-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
  *
  * sys-c++ is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -69,7 +69,7 @@ void sys::OSUnix::search(std::vector<std::string>& exhaustiveEnumerations,
             if (strstr(entry->d_name, fragment.c_str()) != NULL)
             {
                 std::string fullPath(entry->d_name);
-                unsigned int lpos = fullPath.find_last_of(".");
+                std::string::size_type lpos = fullPath.find_last_of(".");
                 if (lpos == std::string::npos || lpos + 1 == std::string::npos)
                     continue;
 

@@ -67,7 +67,10 @@ const char* String::toCharArray() const
 
 String String::substring(int beginIndex, int endIndex) const
 {
-    if (beginIndex < 0 || endIndex >= length() || (endIndex
+    if (endIndex >= length())
+        endIndex = std::string::npos;
+ 
+    if (beginIndex < 0 || (endIndex
             != std::string::npos && endIndex < beginIndex))
         throw except::IndexOutOfRangeException(String::format(
                         "substring indices out of bounds: %d, %d",
