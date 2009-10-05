@@ -2,7 +2,7 @@ import sys, os, types, re, fnmatch
 
 import Options, Utils
 from Configure import conf
-from TaskGen import taskgen, feature
+from TaskGen import taskgen, feature, before, after, task_gen
 
 
 class GlobDirectoryWalker:
@@ -509,3 +509,4 @@ def makeHeader(tsk):
     dest.write('\n#endif /* %s */\n' % guard)
     dest.close()
     if tsk.chmod: os.chmod(outfile, tsk.chmod)
+    

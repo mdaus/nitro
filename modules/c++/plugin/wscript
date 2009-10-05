@@ -1,0 +1,9 @@
+NAME            = 'plugin'
+MAINTAINER      = 'tzellman@users.sourceforge.net gojira1@users.sourceforge.net'
+VERSION         = '1.0'
+MODULE_DEPS     = 'io'
+
+set_options = configure = distclean = lambda p: None
+
+def build(bld):
+    bld.codaModule(**globals())

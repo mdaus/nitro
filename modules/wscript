@@ -2,7 +2,7 @@ import os
 import Scripting, Options
 from Build import BuildContext
 
-VERSION = '2.5-dev'
+VERSION = '2.0-dev'
 APPNAME = 'CODA'
 srcdir  = '.'
 blddir  = 'target'

@@ -1,0 +1,44 @@
+import Options
+import os
+
+NAME            = 'linear.lite'
+MAINTAINER      = 'tzellman@users.sourceforge.net gojira1@users.sourceforge.net'
+VERSION         = '1.0'
+
+def set_options(opt):
+    opt.add_option('--enable-linmath-driver', action='store', default='tnt',
+                   choices=['tnt', 'ublas', 'mtl'],
+                   help='choose the linear algebra driver to use (default is tnt)')
+    opt.add_option('--with-linmath-home', action='store',
+                   help='Specify the location of the linear algebra package')
+
+
+def configure(conf):
+    linAlgHome = Options.options.with_linmath_home
+    linAlgDriver = Options.options.enable_linmath_driver
+    #default value
+    conf.env['CPPPATH_LINMATH'] = os.path.join(conf.curdir, os.pardir,
+                                               'drivers', 'tnt_3_0_9')
+
+    if linAlgHome:
+        self.check_message_1('Setting linear algebra driver home')
+        self.check_message_2(linAlgHome)
+        conf.env['CPPPATH_LINMATH'] = os.path.join(linAlgHome, 'include')
+
+    if linAlgDriver == 'tnt':
+        conf.env['CXXFLAGS_LINMATH'] = '-DHAVE_TNT_DRIVER'
+    elif linAlgDriver == 'ublas':
+        conf.env['CXXFLAGS_LINMATH'] = '-DHAVE_UBLAS_DRIVER'
+    elif linAlgDriver == 'mtl':
+        conf.env['CXXFLAGS_LINMATH'] = '-DHAVE_MTL_DRIVER'
+
+    conf.env.append_value('CPPPATH_LINMATH',
+                          os.path.join(conf.curdir, 'linear.lite', 'include'))
+
+distclean = lambda p: None
+
+def build(bld):
+    for f in bld.path.find_dir('include').find_iter():
+        relpath = f.relpath_gen(bld.path)
+        bld.install_files('${PREFIX}/%s' % os.path.dirname(relpath),
+                          f.abspath())

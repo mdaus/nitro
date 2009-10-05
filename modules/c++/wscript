@@ -1,77 +1,54 @@
-import os, re
-import Options
+import os
+
+MODULES = 'except str sys io mt plugin logging dbi re xstr net net.ssl ' \
+          'unique xml.lite linear.lite'
+
 
 def set_options(opt):
-    pass
+    opt.sub_options(MODULES)
 
 def configure(conf):
-    pass
+    conf.sub_config(MODULES)
     
 def build(bld):
-    variant = bld.env['VARIANT']
-    env = bld.env_of_name(variant)
-
-    def buildModule(dir, **kwargs):
-        libName = '%s-c++' % kwargs.get('name', dir)
-        path = bld.path.find_dir(dir)
+    def codaModule(**modArgs):
+        variant = bld.env['VARIANT']
+        env = bld.env_of_name(variant)
         
-        deps = map(lambda x: '%s-c++' % x, kwargs.get('deps', '').split())
-        defines = kwargs.get('defines', '').split()
+        modArgs = dict((k.lower(), v) for k, v in modArgs.iteritems())
+        libName = '%s-c++' % modArgs['name']
         
-        uselib_local = deps + kwargs.get('uselib_locals', '').split()
-        uselib = kwargs.get('uselibs', '').split()
+        deps = map(lambda x: '%s-c++' % x, modArgs.get('module_deps', '').split())
+        defines = modArgs.get('defines', '').split()
+        uselib_local = deps + modArgs.get('uselib_local', '').split()
+        uselib = modArgs.get('uselib', '').split()
+        includes = modArgs.get('includes', 'include').split()
+        exportIncludes = modArgs.get('export_includes', 'include').split()
         
-        lib = bld.new_task_gen('cxx', 'staticlib', includes='include',
-                target=libName, name=libName, export_incdirs='include',
+        lib = bld.new_task_gen('cxx', 'staticlib', includes=includes,
+                target=libName, name=libName, export_incdirs=exportIncludes,
                 uselib_local=uselib_local, uselib=uselib, env=env.copy(),
-                defines=defines, path=path, install_path='${PREFIX}/lib')
+                defines=defines, path=bld.path, install_path='${PREFIX}/lib')
         lib.find_sources_in_dirs('source')
-        lib.source = filter(kwargs.get('srcFilter', None), lib.source)
-    
-        for f in path.find_dir('include').find_iter():
-            relpath = f.relpath_gen(path)
+        lib.source = filter(modArgs.get('source_filter', None), lib.source)
+        
+        for f in bld.path.find_dir('include').find_iter():
+            relpath = f.relpath_gen(bld.path)
             bld.install_files('${PREFIX}/%s' % os.path.dirname(relpath),
                               f.abspath())
         
-        testNode = path.find_dir('tests')
-        for test in filter(kwargs.get('testFilter', None),
-                           testNode.find_iter(in_pat=['*.cpp'], maxdepth=1, flat=True).split()):
+        testNode = bld.path.find_dir('tests')
+        for test in filter(modArgs.get('test_filter', None),
+                           testNode.find_iter(in_pat=['*.cpp'],
+                                              maxdepth=1, flat=True).split()):
             exe = bld.new_task_gen('cxx', 'program', source=test,
                     uselib_local=libName, env=env.copy(),
                     target=os.path.splitext(test)[0], path=testNode,
-                    install_path='${PREFIX}/share/coda/%s/tests' % dir)
-
-
-    pcre = 'MAKE_PCRE' in env and 'PCRE' or ''
-    uuid = 'MAKE_UUID' in env and 'UUID' or ''
-    xml = 'MAKE_XML' in env and 'XML' or ''
+                    install_path=None)
     
-    libs = [
-        dict(dir='except'),
-        dict(dir='str', deps='except'),
-        dict(dir='sys', deps='str', uselibs='THREAD DL',
-             testFilter=lambda t: t not in 'MMapReadOnlyTest.cpp ProcessTest1.cpp'.split()),
-        dict(dir='io', deps='sys', uselibs='THREAD DL',
-             srcFilter=lambda x: x.find('MMapInputStream.cpp') < 0,
-             testFilter=lambda t: t.find('mmByte') < 0),
-        dict(dir='mt', deps='sys'),
-        dict(dir='plugin', deps='io'),
-        dict(dir='logging', deps='io mt'),
-        dict(dir='dbi', deps='io'),
-        dict(dir='re', deps='sys', defines='USE_PCRE', uselibs=not pcre and 'PCRE' or '',
-             uselib_locals=pcre or ''),
-        dict(dir='xstr', deps='re'),
-        dict(dir='net', deps='re io', uselibs='NSL SOCKET',
-             testFilter = lambda x: not re.match(r'.*(Serializable|Multicast).*', x)),
-        dict(dir='net.ssl', deps='net'),
-        dict(dir='unique', deps='except', uselibs=not uuid and 'UUID RPC' or 'RPC',
-             uselib_locals=uuid or ''),
-        dict(dir='xml.lite', deps='io', uselibs=not xml and 'XML' or '',
-             uselib_locals=xml or '',
-             testFilter=lambda t: t not in 'MMParserTest1.cpp MinidomParserTest2.cpp'.split()),
-    ]
-    map(lambda x: buildModule(**x), libs)
-    
+    #add the codaModule method to the build
+    bld.codaModule = codaModule
+    bld.add_subdirs(MODULES)
 
 def distclean(context):
-    pass
+    context.recurse(MODULES)

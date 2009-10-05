@@ -1,0 +1,11 @@
+NAME            = 'sys'
+MAINTAINER      = 'tzellman@users.sourceforge.net gojira1@users.sourceforge.net'
+VERSION         = '1.0'
+MODULE_DEPS     = 'str'
+USELIB          = 'THREAD DL'
+TEST_FILTER     = lambda t: t not in 'MMapReadOnlyTest.cpp ProcessTest1.cpp'.split()
+
+set_options = configure = distclean = lambda p: None
+
+def build(bld):
+    bld.codaModule(**globals())
