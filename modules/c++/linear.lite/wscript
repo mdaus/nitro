@@ -1,9 +1,9 @@
 import Options
 import os
 
-NAME            = 'linear.lite'
-MAINTAINER      = 'tzellman@users.sourceforge.net gojira1@users.sourceforge.net'
-VERSION         = '1.0'
+NAME = 'linear.lite'
+MAINTAINER = 'tzellman@users.sourceforge.net gojira1@users.sourceforge.net'
+VERSION = '1.0'
 
 def set_options(opt):
     opt.add_option('--enable-linmath-driver', action='store', default='tnt',
@@ -17,7 +17,7 @@ def configure(conf):
     linAlgHome = Options.options.with_linmath_home
     linAlgDriver = Options.options.enable_linmath_driver
     #default value
-    conf.env['CPPPATH_LINMATH'] = os.path.join(conf.curdir, os.pardir,
+    conf.env['CPPPATH_LINMATH'] = os.path.join(conf.curdir, os.pardir, os.pardir,
                                                'drivers', 'tnt_3_0_9')
 
     if linAlgHome:
@@ -33,7 +33,7 @@ def configure(conf):
         conf.env['CXXFLAGS_LINMATH'] = '-DHAVE_MTL_DRIVER'
 
     conf.env.append_value('CPPPATH_LINMATH',
-                          os.path.join(conf.curdir, 'linear.lite', 'include'))
+                          os.path.join(conf.curdir, 'include'))
 
 distclean = lambda p: None
 
