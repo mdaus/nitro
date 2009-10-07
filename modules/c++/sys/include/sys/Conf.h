@@ -83,8 +83,9 @@
 
 namespace sys
 {
+    typedef char              byte;
+    typedef unsigned char     ubyte;
     typedef HANDLE            Handle_T;
-    typedef char byte;
     typedef unsigned char     Uint8_T;
     typedef unsigned __int16  Uint16_T;
     typedef unsigned __int32  Uint32_T;
@@ -145,6 +146,7 @@ namespace sys
 {
     
     typedef char               byte;
+    typedef unsigned char      ubyte;
     typedef uint8_t            Uint8_T;
     typedef uint16_t           Uint16_T;
     typedef uint32_t           Uint32_T;
