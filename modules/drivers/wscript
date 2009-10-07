@@ -284,12 +284,12 @@ def build(bld):
         bld.add_group()
         
         
-        pcreposix = bld.new_task_gen('cc', 'staticlib',
+        pcreposix = bld.new_task_gen('cc', env['LIB_TYPE'] or 'staticlib',
                          includes=['.'], env=env.copy(),
                          target='pcreposix', source='pcreposix.c',
                          path=driverNode, export_incdirs='.')
     
-        pcre = bld.new_task_gen('cc', 'staticlib',
+        pcre = bld.new_task_gen('cc', env['LIB_TYPE'] or 'staticlib',
                          includes=['.'],
                          export_incdirs='.',
                          target='pcre',
@@ -320,9 +320,11 @@ def build(bld):
         sources = map(lambda x: 'lib/uuid/%s' % x,
 					'clear.c compare.c copy.c gen_uuid.c isnull.c pack.c parse.c ' \
                   	'unpack.c unparse.c uuid_time.c'.split())
-        uuid = bld.new_task_gen('cc', 'staticlib', includes='lib',
+        uuid = bld.new_task_gen('cc', env['LIB_TYPE'] or 'staticlib',
                                 source=sources,
-                                target='uuid', export_incdirs='lib',
+                                export_incdirs='lib',
+                                includes='lib',
+                                target='uuid',
                                 name='UUID', path=driverNode,
                                 env=env.copy(), defines=defList)
         
@@ -350,8 +352,9 @@ def build(bld):
                          'XML_STATIC=1']
             
             sources = 'lib/xmlparse.c lib/xmltok.c lib/xmlrole.c'
-            expat = bld.new_task_gen('cc', 'staticlib', includes='.', source=sources,
-                             target='expat', path=driverNode, export_incdirs='lib',
+            expat = bld.new_task_gen('cc', env['LIB_TYPE'] or 'staticlib', source=sources,
+                             includes='.', export_incdirs='lib',
+                             target='expat', path=driverNode,
                              uselib='XML', name='XML', env=env.copy(),
                              defines=defList + expatDefs)
             
@@ -408,8 +411,10 @@ def build(bld):
     
         sources = map(lambda s: 'fftw/%s' % s,
                       ' '.join([NOTW_CODELETS, TWID_CODELETS, NOTWI_CODELETS, TWIDI_CODELETS, OTHERSRC]).split())
-        fftw = bld.new_task_gen('cc', 'staticlib', includes=['fftw', 'rfftw'], source=sources,
-                                target='fftw', path=driverNode, export_incdirs=['fftw', 'rfftw'],
+        fftw = bld.new_task_gen('cc', env['LIB_TYPE'] or 'staticlib', source=sources,
+                                export_incdirs=['fftw', 'rfftw'],
+                                target='fftw', path=driverNode,
+                                includes=['fftw', 'rfftw'],
                                 name='FFT', defines=defList, env=env.copy())
         
         bld.install_files('${PREFIX}/include',
