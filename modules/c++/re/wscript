@@ -15,4 +15,4 @@ def build(bld):
         kw['USELIB_LOCAL'] = 'PCRE'
     else:
         kw['USELIB'] = 'PCRE'
-    bld.codaModule(**kw)
+    bld.module(**kw)

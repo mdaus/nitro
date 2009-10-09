@@ -10,4 +10,4 @@ TEST_FILTER     = lambda x: not re.match(r'.*(Serializable|Multicast).*', x)
 set_options = configure = distclean = lambda p: None
 
 def build(bld):
-    bld.codaModule(**globals())
+    bld.module(**globals())

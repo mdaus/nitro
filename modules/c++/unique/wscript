@@ -15,4 +15,4 @@ def build(bld):
         kw['USELIB'] = 'RPC'
     else:
         kw['USELIB'] = 'UUID RPC'
-    bld.codaModule(**kw)
+    bld.module(**kw)

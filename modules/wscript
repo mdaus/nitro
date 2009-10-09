@@ -13,7 +13,6 @@ def set_options(opt):
 
 def configure(conf):
     conf.check_tool('build', tooldir='./build')
-    conf.configureCODA()
     conf.sub_config('drivers c++')
 
 def build(bld):

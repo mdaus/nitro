@@ -8,4 +8,4 @@ TEST_FILTER     = lambda t: t not in 'MMapReadOnlyTest.cpp ProcessTest1.cpp'.spl
 set_options = configure = distclean = lambda p: None
 
 def build(bld):
-    bld.codaModule(**globals())
+    bld.module(**globals())

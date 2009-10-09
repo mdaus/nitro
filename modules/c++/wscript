@@ -1,4 +1,9 @@
 import os
+import Utils
+from build import CPPBuildContext
+
+#override the default build context with our own
+Utils.g_module.build_context = CPPBuildContext
 
 MODULES = 'except str sys io mt plugin logging dbi re xstr net net.ssl ' \
           'unique xml.lite linear.lite'
@@ -11,43 +16,6 @@ def configure(conf):
     conf.sub_config(MODULES)
     
 def build(bld):
-    def codaModule(**modArgs):
-        variant = bld.env['VARIANT']
-        env = bld.env_of_name(variant)
-        
-        modArgs = dict((k.lower(), v) for k, v in modArgs.iteritems())
-        libName = '%s-c++' % modArgs['name']
-        
-        deps = map(lambda x: '%s-c++' % x, modArgs.get('module_deps', '').split())
-        defines = modArgs.get('defines', '').split()
-        uselib_local = deps + modArgs.get('uselib_local', '').split()
-        uselib = modArgs.get('uselib', '').split()
-        includes = modArgs.get('includes', 'include').split()
-        exportIncludes = modArgs.get('export_includes', 'include').split()
-        
-        lib = bld.new_task_gen('cxx', 'staticlib', includes=includes,
-                target=libName, name=libName, export_incdirs=exportIncludes,
-                uselib_local=uselib_local, uselib=uselib, env=env.copy(),
-                defines=defines, path=bld.path, install_path='${PREFIX}/lib')
-        lib.find_sources_in_dirs('source')
-        lib.source = filter(modArgs.get('source_filter', None), lib.source)
-        
-        for f in bld.path.find_dir('include').find_iter():
-            relpath = f.relpath_gen(bld.path)
-            bld.install_files('${PREFIX}/%s' % os.path.dirname(relpath),
-                              f.abspath())
-        
-        testNode = bld.path.find_dir('tests')
-        for test in filter(modArgs.get('test_filter', None),
-                           testNode.find_iter(in_pat=['*.cpp'],
-                                              maxdepth=1, flat=True).split()):
-            exe = bld.new_task_gen('cxx', 'program', source=test,
-                    uselib_local=libName, env=env.copy(),
-                    target=os.path.splitext(test)[0], path=testNode,
-                    install_path=None)
-    
-    #add the codaModule method to the build
-    bld.codaModule = codaModule
     bld.add_subdirs(MODULES)
 
 def distclean(context):

@@ -8,4 +8,4 @@ SOURCE_FILTER   = lambda x: x.find('MMapInputStream.cpp') < 0
 set_options = configure = distclean = lambda p: None
 
 def build(bld):
-    bld.codaModule(**globals())
+    bld.module(**globals())

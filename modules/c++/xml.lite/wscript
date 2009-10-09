@@ -15,4 +15,4 @@ def build(bld):
         kw['USELIB_LOCAL'] = 'XML'
     else:
         kw['USELIB'] = 'XML'
-    bld.codaModule(**kw)
+    bld.module(**kw)
