@@ -31,8 +31,10 @@ def set_options(opt):
                    default=False, help='force building FFT library (fftw) from scratch')
     
     if Options.platform != 'win32':
-        opt.add_option('--build-uuid', action='store_true',
+        opt.add_option('--build-uuid', action='store_true', dest='build_uuid',
                        default=False, help='force building libuuid from scratch')
+        opt.add_option('--with-uuid-home', action='store', dest='uuid_home',
+                   help='Specify the UUID lib/headers home')
 
 
 def configure(conf):
@@ -62,8 +64,13 @@ def configure(conf):
     
     #-- UUID -------------------------------------------------------------------
     if Options.platform != 'win32':
-        if Options.options.build_uuid or not conf.check_cxx(
-                lib='uuid', function_name='uuid_generate', uselib_store='UUID'):
+        uuid_home = Options.options.uuid_home or '/usr'
+        
+        if Options.options.build_uuid or not conf.check(
+                header_name='uuid/uuid.h', lib='uuid',
+                function_name='uuid_generate', uselib_store='UUID',
+                libpath=os.path.join(uuid_home, 'lib'),
+                includes=os.path.join(uuid_home, 'include')):
             conf.env['MAKE_UUID'] = True
             conf.check_message_1('Building local lib')
             conf.check_message_2('uuid')
