@@ -1,9 +1,9 @@
 import Options
 import os
 
-NAME = 'linear.lite'
-MAINTAINER = 'tzellman@users.sourceforge.net gojira1@users.sourceforge.net'
-VERSION = '1.0'
+NAME            = 'linear.lite'
+MAINTAINER      = 'tzellman@users.sourceforge.net gojira_1@users.sourceforge.net'
+VERSION         = '1.0'
 
 def set_options(opt):
     opt.add_option('--enable-linmath-driver', action='store', default='tnt',

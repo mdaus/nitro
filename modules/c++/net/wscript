@@ -1,7 +1,7 @@
 import re
 
 NAME            = 'net'
-MAINTAINER      = 'tzellman@users.sourceforge.net gojira1@users.sourceforge.net'
+MAINTAINER      = 'tzellman@users.sourceforge.net gojira_1@users.sourceforge.net'
 VERSION         = '1.0'
 MODULE_DEPS     = 're io'
 USELIB          = 'NSL SOCKET'
