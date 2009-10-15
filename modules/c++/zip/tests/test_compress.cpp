@@ -14,7 +14,7 @@ int main(int argc, char** argv)
         outputName += ".gz";
         
         std::cout << "Attempting to zip: " 
-                  << std::endl << "\tInput" << inputName << std::endl
+                  << std::endl << "\tInput: " << inputName << std::endl
                   << "\tTarget: " << outputName << std::endl;;
         
         io::FileInputStream input(inputName);

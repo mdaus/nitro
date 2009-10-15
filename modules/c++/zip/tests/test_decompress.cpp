@@ -13,7 +13,7 @@ int main(int argc, char** argv)
         std::string outputName(argv[2]);
 
         std::cout << "Attempting to unzip: " 
-                  << std::endl << "\tInput" << inputName << std::endl
+                  << std::endl << "\tInput: " << inputName << std::endl
                   << "\tTarget: " << outputName << std::endl;;
         
         zip::GZipInputStream input(inputName);
