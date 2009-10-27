@@ -1,8 +1,8 @@
 PACKAGE = sys
 BUILD = library unit-tests
 MAJOR_VERSION = 1
-MINOR_VERSION = 1
-VERSION_SUFFIX = RC3
+MINOR_VERSION = 2
+VERSION_SUFFIX = dev
 VERSION = $(MAJOR_VERSION)_$(MINOR_VERSION)$(VERSION_SUFFIX)
 MAINTAINER = Dan.Pressel@gd-ais.com, Jeffrey.Randolph@gd-ais.com, Thomas.Zellman@gd-ais.com
 DESCRIPTION = Contains robust thread layer, system dso loading layer \

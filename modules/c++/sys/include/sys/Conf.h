@@ -74,12 +74,15 @@
 #   define NativeLayer_func__ ""
 #endif
 
+
+
 #if defined(WIN32) || defined(_WIN32)
 #  ifndef WIN32_LEAN_AND_MEAN
 #      define WIN32_LEAN_AND_MEAN
 #  endif
 #  include <windows.h>
 #  include <process.h>
+
 
 namespace sys
 {
@@ -188,6 +191,75 @@ namespace sys
      * RISC architectures we are big-endian.
      */
     bool isBigEndianSystem();
+
+
+   /*!
+     *  Swap bytes in-place.  Note that a complex pixel
+     *  is equivalent to two floats so elemSize and numElems
+     *  must be adjusted accordingly.
+     *
+     *  \param [inout] buffer to transform
+     *  \param elemSize
+     *  \param numElems
+     */
+    inline void byteSwap(sys::byte *buffer,
+			 const unsigned short elemSize,
+			 const size_t numElems)
+    {
+	if (!buffer || elemSize < 2 || !numElems)
+	    return;
+
+	unsigned short half = elemSize >> 1;
+	long offset = 0, innerOff = 0, innerSwap = 0;
+
+	for(size_t i = 0; i < numElems; ++i, offset += elemSize)
+	{
+	    for(unsigned short j = 0; j < half; ++j)
+	    {
+		innerOff = offset + j;
+		innerSwap = offset + elemSize - 1 - j;
+		
+		sys::byte tmp       = buffer[innerOff];
+		buffer[innerOff]    = buffer[innerSwap];
+		buffer[innerSwap]   = tmp;
+	    }
+	}
+    }
+
+    /*!
+     *  Function to swap one element irrespective of size.  The inplace 
+     *  buffer function should be preferred.
+     *
+     *  To specialize complex float, first include the complex library
+     *  \code
+        #include <complex>
+     *  \endcode
+     *
+     *  Then put an overload in as specified below:
+     *  \code
+        template <typename T> std::complex<T> byteSwap(std::complex<T> val)
+        {
+            std::complex<T> out(byteSwap<T>(val.real()),
+	                        byteSwap<T>(val.imag()));
+	    return out;
+        }
+     *  \endcode
+     *
+     */
+    template <typename T> T byteSwap(T val)
+    {
+	size_t size = sizeof(T);
+	T out;
+	
+	unsigned char* cOut = reinterpret_cast<unsigned char*>(&out);
+	unsigned char* cIn = reinterpret_cast<unsigned char*>(&val);
+	for (int i = 0, j = size - 1; i < j; ++i, --j)
+	{
+	    cOut[i] = cIn[j];
+	    cOut[j] = cIn[i];
+	}
+	return out;
+    }
 
 }
 
