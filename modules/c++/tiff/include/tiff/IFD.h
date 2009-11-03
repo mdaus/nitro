@@ -133,7 +133,7 @@ public:
      * @param value
      *   the value to add to the IFDEntry
      *****************************************************************/
-    template <typename T> void addEntry(const std::string& name, const T value)
+    template <typename T> void addEntry(const std::string& name, const T& value)
     {
         tiff::IFDEntry *mapEntry = tiff::KnownTagsRegistry::getInstance()[name];
         //we can't add it if we don't know about it

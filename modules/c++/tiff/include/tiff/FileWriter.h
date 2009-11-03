@@ -122,7 +122,7 @@ public:
 private:
 
     //! The position to write the offset to the first IFD to
-    std::streampos mIFDOffset;
+    sys::Uint32_T mIFDOffset;
 
     //! The output stream
     io::FileOutputStream mOutput;
