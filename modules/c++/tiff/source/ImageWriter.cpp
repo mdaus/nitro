@@ -92,16 +92,16 @@ void tiff::ImageWriter::validate()
     tiff::IFDEntry *xResolution = mIFD["XResolution"];
     if (!xResolution)
     {
-        mIFD.addEntry("XResolution", tiff::rational::combine(
-                (sys::Uint32_T) 72, (sys::Uint32_T) 1));
+        mIFD.addEntry("XResolution", tiff::combine(
+                          (sys::Uint32_T) 72, (sys::Uint32_T) 1));
     }
 
     // YResolution
     tiff::IFDEntry *yResolution = mIFD["YResolution"];
     if (!yResolution)
     {
-        mIFD.addEntry("YResolution", tiff::rational::combine(
-                (sys::Uint32_T) 72, (sys::Uint32_T) 1));
+        mIFD.addEntry("YResolution", tiff::combine(
+                          (sys::Uint32_T) 72, (sys::Uint32_T) 1));
     }
 
     // ResolutionUnit

@@ -88,7 +88,7 @@ public:
  * the data to a string for printing, and retrieving the data in
  * byte form.
  *********************************************************************/
-template <typename Data_T, typename Strategy_T =tiff::PrintStrategy> class GenericType :
+template <typename Data_T, typename Strategy_T = tiff::PrintStrategy> class GenericType :
     public TypeInterface
 {
 public:

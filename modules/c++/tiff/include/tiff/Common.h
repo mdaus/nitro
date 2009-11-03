@@ -207,11 +207,9 @@ public:
     }
 };
 
-namespace rational
-{
 /**
  *******************************************************************
- * @class PrintStrategy
+ * @class RationalPrintStrategy
  * @brief A strategy that defines how to print data for rational
  * values.
  *
@@ -219,16 +217,14 @@ namespace rational
  * printable string.  It divides the numerator by the denominator
  * and returns the string form of the result.
  *******************************************************************/
-class PrintStrategy
+class RationalPrintStrategy
 {
 public:
     //! Default Constructor
-    PrintStrategy()
-    {
-    }
+    RationalPrintStrategy() {}
 
     //! Constructor
-    ~PrintStrategy()
+    ~RationalPrintStrategy()
     {
     }
 
@@ -250,7 +246,7 @@ public:
  *****************************************************************
  * Combines a numerator and a denominator into a single data
  * type.  The numerator is placed in the top 4 bytes, and the
- * denominator in the bottom 4 bytes of the returned sys::Uint32_T.
+ * denominator in the bottom 4 bytes of the returned sys::Uint64_T.
  *
  * @param numerator
  *   the numerator
@@ -259,7 +255,7 @@ public:
  * @return
  *   the combined rational number
  *****************************************************************/
-//sys::Uint32_T combine(sys::Uint32_T numerator, sys::Uint32_T denominator);
+sys::Uint64_T combine(sys::Uint32_T numerator, sys::Uint32_T denominator);
 
 /**
  *****************************************************************
@@ -275,7 +271,7 @@ public:
  * @return
  *   the combined rational number
  *****************************************************************/
-sys::Uint32_T combine(sys::Uint32_T numerator, sys::Uint32_T denominator);
+sys::Uint64_T combine(sys::Uint32_T numerator, sys::Uint32_T denominator);
 
 /**
  *****************************************************************
@@ -303,10 +299,8 @@ sys::Uint32_T combine(sys::Uint32_T numerator, sys::Uint32_T denominator);
  * @param denominator
  *   the returned denominator
  *****************************************************************/
-void split(sys::Uint32_T value, sys::Uint32_T &numerator,
-        sys::Uint32_T &denominator);
-
-} // End namespace rational.
+void split(sys::Uint64_T value, sys::Uint32_T &numerator,
+           sys::Uint32_T &denominator);
 
 } // End namespace tiff.
 

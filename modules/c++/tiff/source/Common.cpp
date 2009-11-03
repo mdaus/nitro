@@ -29,7 +29,7 @@
 short tiff::Const::mTypeSizes[tiff::Const::Type::MAX] =
 { 0, 1, 1, 2, 4, 8, 1, 1, 2, 4, 8, 4, 8 };
 
-std::string tiff::rational::PrintStrategy::toString(const sys::Uint32_T data)
+std::string tiff::RationalPrintStrategy::toString(const sys::Uint32_T data)
 {
     std::ostringstream tempStream;
     sys::Uint32_T numerator = *((sys::Uint32_T *)(&data));
@@ -39,10 +39,10 @@ std::string tiff::rational::PrintStrategy::toString(const sys::Uint32_T data)
     return tempStream.str();
 }
 
-sys::Uint32_T tiff::rational::combine(sys::Uint32_T numerator,
+sys::Uint64_T tiff::combine(sys::Uint32_T numerator,
         sys::Uint32_T denominator)
 {
-    sys::Uint32_T value;
+    sys::Uint64_T value;
     sys::Uint32_T *ptr = (sys::Uint32_T *)&value;
 
     memcpy(ptr, &numerator, sizeof(sys::Uint32_T));
@@ -51,8 +51,8 @@ sys::Uint32_T tiff::rational::combine(sys::Uint32_T numerator,
 
     return value;
 }
-void tiff::rational::split(sys::Uint32_T value, sys::Uint32_T &numerator,
-        sys::Uint32_T &denominator)
+void tiff::split(sys::Uint64_T value, sys::Uint32_T &numerator,
+                 sys::Uint32_T &denominator)
 {
     numerator = ((sys::Uint32_T *)&value)[0];
     denominator = ((sys::Uint32_T *)&value)[1];
