@@ -22,6 +22,7 @@
 
 
 #include "str/Format.h"
+#include <stdio.h>
 
 std::string str::format(const char *format, ...)
 {
