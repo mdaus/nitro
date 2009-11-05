@@ -1,0 +1,18 @@
+NAME            = 'zip'
+MAINTAINER      = 'tzellman@users.sourceforge.net gojira_1@users.sourceforge.net'
+VERSION         = '1.0'
+MODULE_DEPS     = 'io'
+USELIB          = 'Z'
+
+set_options = distclean = lambda p: None
+
+def configure(conf):
+    conf.check(header_name='zlib.h', define_name='HAVE_ZLIB_H', lib='z',
+               uselib_store='Z')
+
+def build(bld):
+    variant = bld.env['VARIANT'] or 'default'
+    env = bld.env_of_name(variant)
+    
+    if 'HAVE_ZLIB_H' in env:
+        bld.module(**globals())
