@@ -46,13 +46,14 @@ class CPPBuildContext(BuildContext):
                               f.abspath())
 
         testNode = bld.path.find_dir('tests')
-        for test in filter(modArgs.get('test_filter', None),
-                           testNode.find_iter(in_pat=['*.cpp'],
-                                              maxdepth=1, flat=True).split()):
-            exe = bld.new_task_gen('cxx', 'program', source=test,
-                    uselib_local=libName, env=env.copy(),
-                    target=os.path.splitext(test)[0], path=testNode,
-                    install_path='${PREFIX}/share/%s/tests' % modArgs['name'])
+        if testNode and not Options.options.libs_only:
+            for test in filter(modArgs.get('test_filter', None),
+                               testNode.find_iter(in_pat=['*.cpp'],
+                                                  maxdepth=1, flat=True).split()):
+                exe = bld.new_task_gen('cxx', 'program', source=test,
+                        uselib_local=libName, env=env.copy(),
+                        target=os.path.splitext(test)[0], path=testNode,
+                        install_path='${PREFIX}/share/%s/tests' % modArgs['name'])
     
     def plugin(self, **modArgs):
         """
@@ -74,7 +75,6 @@ class CPPBuildContext(BuildContext):
         uselib = modArgs.get('uselib', '').split() + ['CSTD', 'CRUN']
         includes = modArgs.get('includes', 'include').split()
         exportIncludes = modArgs.get('export_includes', 'include').split()
-        plugin = modArgs.get('plugin', None)
         
         lib = bld.new_task_gen('cxx', 'shlib', includes=includes,
                 target=libName, name=libName, export_incdirs=exportIncludes,
@@ -83,6 +83,34 @@ class CPPBuildContext(BuildContext):
                 install_path='${PREFIX}/share/%s/plugins' % plugin)
         lib.find_sources_in_dirs('source')
         lib.source = filter(modArgs.get('source_filter', None), lib.source)
+    
+    
+    def program(self, **modArgs):
+        """
+        Builds a program (exe)
+        """
+        bld = self
+        variant = bld.env['VARIANT'] or 'default'
+        env = bld.env_of_name(variant)
+        env.set_variant(variant)
+        
+        modArgs = dict((k.lower(), v) for k, v in modArgs.iteritems())
+        progName = modArgs['name']
+
+        deps = map(lambda x: '%s-c++' % x, modArgs.get('module_deps', '').split())
+        defines = modArgs.get('defines', '').split()
+        uselib_local = deps + modArgs.get('uselib_local', '').split()
+        uselib = modArgs.get('uselib', '').split() + ['CSTD', 'CRUN']
+        includes = modArgs.get('includes', 'include').split()
+        source = modArgs.get('source', '').split() or None
+        
+        exe = bld.new_task_gen('cxx', 'program', source=source,
+                               uselib_local=uselib_local, uselib=uselib,
+                               env=env.copy(), target=progName,
+                               install_path='${PREFIX}/bin')
+        if not source:
+            exe.find_sources_in_dirs(modArgs.get('sourcedir', 'source'))
+            exe.source = filter(modArgs.get('source_filter', None), exe.source)
 
 
 class GlobDirectoryWalker:
