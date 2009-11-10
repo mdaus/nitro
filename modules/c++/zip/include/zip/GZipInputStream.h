@@ -1,9 +1,7 @@
 #ifndef __ZIP_GZIP_INPUT_STREAM_H__
 #define __ZIP_GZIP_INPUT_STREAM_H__
 
-#include "io/InputStream.h"
-#include <import/sys.h>
-#include <zlib.h>
+#include "zip/Types.h"
 
 
 namespace zip
