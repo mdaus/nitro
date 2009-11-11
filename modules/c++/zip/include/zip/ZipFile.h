@@ -39,14 +39,14 @@ namespace zip
 
 	//!  Compressed data buffer (yes we eat the whole file)
 	sys::ubyte* mCompressed;
-
 	sys::Size_T mCompressedLength;
-	
-	//! More meta-data that isnt used
+
+        unsigned short mDiskNum;
+        unsigned short mDiskWithCentralDir;
+
 	unsigned int mCentralDirSize;
-
-
 	unsigned int mCentralDirOffset;
+        
 
 	std::string mComment;
 
@@ -114,7 +114,20 @@ namespace zip
 	    return mEntries.end();
 	}
 
+
+
+	unsigned int getCentralDirSize() const
+        {
+            return mCentralDirSize;
+        }
+	unsigned int getCentralDirOffset() const
+        {
+            return mCentralDirOffset;
+        }
 	std::string getComment() const { return mComment; }
+
+        unsigned long getNumEntries() const { return mEntries.size(); }
+
     };
 
 

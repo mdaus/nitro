@@ -2,6 +2,31 @@
 
 using namespace zip;
 
+const static char* sZipFileMadeByStr[] =
+{
+    "MS-DOS and OS/2 (FAT / VFAT / FAT32 file systems)",
+    "Amiga",
+    "OpenVMS",
+    "UNIX",
+    "VM/CMS",
+    "Atari ST",
+    "OS/2 H.P.F.S.",
+    "Macintosh",
+    "Z-System",
+    "CP/M",
+    "Windows NTFS",
+    "MVS (OS/390 - Z/OS)",
+    "VSE",
+    "Acorn Risc",
+    "VFAT",
+    "alternative MVS",
+    "BeOS",
+    "Tandem",
+    "OS/400",
+    "OS/X (Darwin)",
+    NULL
+};
+
 void ZipEntry::inflate(sys::ubyte* out, sys::Size_T outLen,
 		       sys::ubyte* in, sys::Size_T inLen)
 {
@@ -46,6 +71,14 @@ void ZipEntry::inflate(sys::ubyte* out, sys::Size_T outLen,
     
 }
 
+const char* ZipEntry::getVersionMadeByString() const
+{
+
+    if (mVersionMadeBy >= 20)
+        return NULL;
+
+    return sZipFileMadeByStr[mVersionMadeBy];
+}
 
 sys::ubyte* ZipEntry::decompress()
 {
@@ -69,3 +102,30 @@ void ZipEntry::decompress(sys::ubyte* out, sys::Size_T outLen)
     
 }
 
+
+std::ostream& operator<<(std::ostream& os, const zip::ZipEntry& ze)
+{
+    const char* madeBy = ze.getVersionMadeByString();
+    std::string asStr = "Unknown";
+    if (madeBy != NULL)
+    {
+        asStr = madeBy;
+    }
+
+    os << "version made by: " << asStr << std::endl;
+    os << "version to extract: " << ze.getVersionToExtract() << std::endl;
+    os << "general purpose bits: " << ze.getGeneralPurposeBitFlag() << std::endl;
+    os << "compression method: " << ze.getCompressionMethod() << std::endl;
+
+    
+    os << "last modified : " << ze.getLastModifiedTime() << std::endl;
+    os << "last modified date: " << ze.getLastModifiedDate() << std::endl;
+    os << "crc (hex): " << std::hex << ze.getCRC32() << std::endl;
+    os << "internal attrs: " << ze.getInternalAttrs() << std::endl;
+    os << "external attrs: " << ze.getExternalAttrs() << std::endl;
+    os << "file name: " << ze.getFileName() << std::endl;
+    os << "comment: " << ze.getFileComment() << std::endl;
+    os << "compressed: " << ze.getCompressedSize() << std::endl;
+    os << "uncompressed: " << ze.getUncompressedSize() << std::endl;
+    return os;
+}
