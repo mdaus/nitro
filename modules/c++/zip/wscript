@@ -14,5 +14,5 @@ def build(bld):
     variant = bld.env['VARIANT'] or 'default'
     env = bld.env_of_name(variant)
     
-    if 'HAVE_ZLIB_H' in env:
+    if env['HAVE_ZLIB_H']:
         bld.module(**globals())
