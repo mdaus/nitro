@@ -30,7 +30,7 @@ unsigned int ZipFile::readInt(sys::ubyte* buf)
 
 unsigned short ZipFile::readShort(sys::ubyte* buf)
 {
-    unsigned short le;
+    unsigned short le = *((unsigned short*)buf);
     if (mSwapBytes)
 	le = sys::byteSwap<unsigned short>(le);
     return le;
@@ -176,15 +176,15 @@ void ZipFile::readCentralDirValues(sys::ubyte* buf, sys::SSize_T len)
     unsigned short off = 4;
     
     unsigned short diskNum = Z_READ_SHORT_INC(buf, off);
-    if (diskNum != 0)
-	throw except::IOException(Ctxt("disk number must be 0"));
-    
+    //if (diskNum != 0)
+    //throw except::IOException(Ctxt("disk number must be 0"));
+    std::cout << "DiskNum: " << diskNum << std::endl;
     unsigned short diskWithCentralDir = Z_READ_SHORT_INC(buf, off);
 
-    if (diskWithCentralDir != 0)
-	throw except::IOException(
-	    Ctxt("central dir disk number must be 0")
-	    );
+//     if (diskWithCentralDir != diskNum)
+// 	throw except::IOException(
+// 	    Ctxt("central dir disk number must be same")
+// 	    );
     
     unsigned short entryCount = Z_READ_SHORT_INC(buf, off);
     unsigned short totalEntries = Z_READ_SHORT_INC(buf, off);

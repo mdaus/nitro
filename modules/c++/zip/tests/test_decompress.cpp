@@ -18,7 +18,7 @@ int main(int argc, char** argv)
         
         zip::GZipInputStream input(inputName);
         io::FileOutputStream output(outputName);
-        while ( input.streamTo(output, 8192) );
+        while ( input.streamTo(output, 10) );
 
         input.close();
         output.close();
