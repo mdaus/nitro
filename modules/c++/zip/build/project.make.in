@@ -7,9 +7,9 @@ VERSION = $(MAJOR_VERSION)_$(MINOR_VERSION)$(VERSION_SUFFIX)
 MAINTAINER = Dan.Pressel@gd-ais.com, Thomas.Zellman@gd-ais.com
 DESCRIPTION = Compression/Decompression IO interface to zlib
 
-SOURCES = GZipInputStream.cpp GZipOutputStream.cpp
+SOURCES = GZipInputStream.cpp GZipOutputStream.cpp ZipEntry.cpp ZipFile.cpp
 
-TESTS = test_compress.cpp test_decompress.cpp
+TESTS = test_compress.cpp test_decompress.cpp test_pkunzip.cpp
 
 MY_CXXFLAGS = 
 MY_CXXDEFINES =

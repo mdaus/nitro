@@ -5,7 +5,7 @@
 int main(int argc, char** argv)
 {
     if (argc != 3)
-        die_printf("Usage: %s <gz-file> <out-file>\n", argv[0]);
+        die_printf("Usage: %s <zip-file> <out-file>\n", argv[0]);
 
     try
     {
