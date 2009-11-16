@@ -41,20 +41,20 @@ namespace zip
 	sys::ubyte* mCompressed;
 	sys::Size_T mCompressedLength;
 
-        unsigned short mDiskNum;
-        unsigned short mDiskWithCentralDir;
+        sys::Uint16_T mDiskNum;
+        sys::Uint16_T mDiskWithCentralDir;
 
-	unsigned int mCentralDirSize;
-	unsigned int mCentralDirOffset;
+	sys::Uint32_T mCentralDirSize;
+	sys::Uint32_T mCentralDirOffset;
         
 
 	std::string mComment;
 
 	//!  Read an integer (little-endian)
-	unsigned int readInt(sys::ubyte* buf);
+	sys::Uint32_T readInt(sys::ubyte* buf);
 
 	//!  Read a short (little-endian)
-	unsigned short readShort(sys::ubyte* buf);
+	sys::Uint16_T readShort(sys::ubyte* buf);
 
 	//!  Read the top-level zip directory
 	void readCentralDir();
@@ -116,11 +116,11 @@ namespace zip
 
 
 
-	unsigned int getCentralDirSize() const
+	sys::Uint32_T getCentralDirSize() const
         {
             return mCentralDirSize;
         }
-	unsigned int getCentralDirOffset() const
+	sys::Uint32_T getCentralDirOffset() const
         {
             return mCentralDirOffset;
         }

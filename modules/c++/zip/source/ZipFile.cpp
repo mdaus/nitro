@@ -19,21 +19,31 @@ ZipFile::~ZipFile()
 }
 
 
-unsigned int ZipFile::readInt(sys::ubyte* buf)
+sys::Uint32_T ZipFile::readInt(sys::ubyte* buf)
 {
-    unsigned int le = *((unsigned int*)buf);
-    // Kind of hackish, but we need it like yesterday
-    
+    sys::ubyte* p;
+    sys::Uint32_T le;// = *((sys::Uint32_T *)buf);
+    p = (sys::ubyte*)&le;
+    memcpy(p, buf, 4);
+
+    // Kind of hackish, but we need it like yesterday    
     if (mSwapBytes)
-	le = sys::byteSwap<unsigned int>(le);
+    {
+	le = sys::byteSwap<sys::Uint32_T>(le);
+
+    }
     return le;
 }
 
-unsigned short ZipFile::readShort(sys::ubyte* buf)
+sys::Uint16_T ZipFile::readShort(sys::ubyte* buf)
 {
-    unsigned short le = *((unsigned short*)buf);
+    sys::ubyte* p;
+    sys::Uint16_T le;// = *((sys::Uint16_T *)buf);
+    p = (sys::ubyte*)&le;
+    memcpy(p, buf, 2);
+
     if (mSwapBytes)
-	le = sys::byteSwap<unsigned short>(le);
+	le = sys::byteSwap<sys::Uint16_T>(le);
     return le;
 }
 
@@ -54,23 +64,24 @@ ZipFile::Iterator ZipFile::lookup(std::string fileName) const
 
 void ZipFile::readCentralDir()
 {
-    
     if (mCompressedLength < EOCD_LEN)
 	throw except::IOException(
 	    Ctxt("stream source too small to be a zip stream")
 	    );
-    
     sys::ubyte* start;
     sys::ubyte* eocd;
     
     if (mCompressedLength > MAX_EOCD_SEARCH)
+    {
 	start = mCompressed + mCompressedLength - MAX_EOCD_SEARCH;
-
+    }
     else
+    {
 	start = mCompressed;
-    
+    }
     sys::ubyte* p = mCompressed + mCompressedLength - 4;
     
+    int i =  mCompressedLength - 4;
     while( p >= start )
     {
 	if (*p == 0x50)
@@ -82,22 +93,22 @@ void ZipFile::readCentralDir()
 	    }
 	}
 	p--;
+	i--;
     }
     if ( p < start)
     {
 	throw except::IOException(Ctxt("EOCD not found"));
     }
-    
     // else still rockin'
     readCentralDirValues(eocd, (mCompressed + mCompressedLength) - eocd);
     
     p = mCompressed + mCentralDirOffset;
     sys::SSize_T len = (mCompressed + mCompressedLength) - p;
-    
     for (unsigned int i = 0; i < mEntries.size(); ++i)
     {
 	mEntries[i] = newCentralDirEntry(&p, len);
     }
+
 }
 
 
@@ -110,29 +121,29 @@ ZipEntry* ZipFile::newCentralDirEntry(sys::ubyte** buf, sys::SSize_T len)
 
     sys::ubyte* p = *buf;
 
-    unsigned int entrySig = Z_READ_INT_INC(p, off);
+    sys::Uint32_T entrySig = Z_READ_INT_INC(p, off);
 
     if (entrySig != ENTRY_SIGNATURE)
 	throw except::IOException(
 	    Ctxt("Did not find entry signature")
 	    );
 
-    unsigned short versionMadeBy = Z_READ_SHORT_INC(p, off);
-    unsigned short versionToExtract = Z_READ_SHORT_INC(p, off);
-    unsigned short generalPurposeBitFlag = Z_READ_SHORT_INC(p, off);
-    unsigned short compressionMethod = Z_READ_SHORT_INC(p, off);
-    unsigned short lastModifiedTime = Z_READ_SHORT_INC(p, off);
-    unsigned short lastModifiedDate = Z_READ_SHORT_INC(p, off);
-    unsigned int crc32 = Z_READ_INT_INC(p, off);
-    unsigned int compressedSize = Z_READ_INT_INC(p, off);
-    unsigned int uncompressedSize = Z_READ_INT_INC(p, off);
-    unsigned short fileNameLength = Z_READ_SHORT_INC(p, off);
-    unsigned short extraFieldLength = Z_READ_SHORT_INC(p, off);
-    unsigned short fileCommentLength = Z_READ_SHORT_INC(p, off);
-    unsigned short diskNumberStart = Z_READ_SHORT_INC(p, off);
-    unsigned short internalAttrs = Z_READ_SHORT_INC(p, off);
-    unsigned short externalAttrs = Z_READ_INT_INC(p, off);
-    unsigned int localHeaderRelOffset = readInt(&p[off]);
+    sys::Uint16_T versionMadeBy = Z_READ_SHORT_INC(p, off);
+    sys::Uint16_T versionToExtract = Z_READ_SHORT_INC(p, off);
+    sys::Uint16_T generalPurposeBitFlag = Z_READ_SHORT_INC(p, off);
+    sys::Uint16_T compressionMethod = Z_READ_SHORT_INC(p, off);
+    sys::Uint16_T lastModifiedTime = Z_READ_SHORT_INC(p, off);
+    sys::Uint16_T lastModifiedDate = Z_READ_SHORT_INC(p, off);
+    sys::Uint32_T crc32 = Z_READ_INT_INC(p, off);
+    sys::Uint32_T compressedSize = Z_READ_INT_INC(p, off);
+    sys::Uint32_T uncompressedSize = Z_READ_INT_INC(p, off);
+    sys::Uint16_T fileNameLength = Z_READ_SHORT_INC(p, off);
+    sys::Uint16_T extraFieldLength = Z_READ_SHORT_INC(p, off);
+    sys::Uint16_T fileCommentLength = Z_READ_SHORT_INC(p, off);
+    sys::Uint16_T diskNumberStart = Z_READ_SHORT_INC(p, off);
+    sys::Uint16_T internalAttrs = Z_READ_SHORT_INC(p, off);
+    sys::Uint16_T externalAttrs = Z_READ_INT_INC(p, off);
+    sys::Uint32_T localHeaderRelOffset = readInt(&p[off]);
     p += ENTRY_LEN;
     
     std::string fileName;
@@ -184,20 +195,20 @@ void ZipFile::readCentralDirValues(sys::ubyte* buf, sys::SSize_T len)
     if (len < EOCD_LEN)
 	throw except::IOException(Ctxt("len < EOCD_LEN"));
     
-    unsigned short off = 4;
+    sys::Uint16_T off = 4;
     
-    unsigned short diskNum = Z_READ_SHORT_INC(buf, off);
+    sys::Uint16_T diskNum = Z_READ_SHORT_INC(buf, off);
     if (diskNum != 0)
         throw except::IOException(Ctxt("disk number must be 0"));
-    unsigned short diskWithCentralDir = Z_READ_SHORT_INC(buf, off);
+    sys::Uint16_T diskWithCentralDir = Z_READ_SHORT_INC(buf, off);
 
      if (diskWithCentralDir != diskNum)
  	throw except::IOException(
  	    Ctxt("central dir disk number must be same")
  	    );
     
-    unsigned short entryCount = Z_READ_SHORT_INC(buf, off);
-    unsigned short totalEntries = Z_READ_SHORT_INC(buf, off);
+    sys::Uint16_T entryCount = Z_READ_SHORT_INC(buf, off);
+    sys::Uint16_T totalEntries = Z_READ_SHORT_INC(buf, off);
 
     if (totalEntries != entryCount)
 	throw except::IOException(Ctxt("Total entries must match entries"));
@@ -207,7 +218,7 @@ void ZipFile::readCentralDirValues(sys::ubyte* buf, sys::SSize_T len)
     mCentralDirSize = Z_READ_INT_INC(buf, off);
     mCentralDirOffset = Z_READ_INT_INC(buf, off);
 
-    unsigned short commentLength = Z_READ_SHORT_INC(buf, off);
+    sys::Uint16_T commentLength = Z_READ_SHORT_INC(buf, off);
     
     if ( EOCD_LEN + commentLength > len)
 	throw except::IOException(Ctxt("Comment line too long"));

@@ -17,15 +17,15 @@ namespace zip
     {
 	enum CompressionMethod { COMP_STORED = 0, COMP_DEFLATED = 8 };
 
-        unsigned short mVersionMadeBy;
-        unsigned short mVersionToExtract;
-        unsigned short mGeneralPurposeBitFlag;
-	unsigned short mCompressionMethod;
-        unsigned short mLastModifiedTime;
-        unsigned short mLastModifiedDate;
-        unsigned int   mCRC32;
-        unsigned short mInternalAttrs;
-        unsigned int mExternalAttrs;
+        sys::Uint16_T mVersionMadeBy;
+        sys::Uint16_T mVersionToExtract;
+        sys::Uint16_T mGeneralPurposeBitFlag;
+	sys::Uint16_T mCompressionMethod;
+        sys::Uint16_T mLastModifiedTime;
+        sys::Uint16_T mLastModifiedDate;
+        sys::Uint32_T   mCRC32;
+        sys::Uint16_T mInternalAttrs;
+        sys::Uint32_T mExternalAttrs;
 
 	sys::ubyte* mCompressedData;
 	sys::Size_T mCompressedSize;
@@ -43,15 +43,15 @@ namespace zip
 		 sys::Size_T uncompressedSize,
 		 std::string fileName,
 		 std::string fileComment,
-                 unsigned short versionMadeBy,
-                 unsigned short versionToExtract,
-                 unsigned short generalPurposeBitFlag,
-                 unsigned short compressionMethod,
-                 unsigned short lastModifiedTime,
-                 unsigned short lastModifiedDate,
-                 unsigned int   crc32,
-                 unsigned short internalAttrs,
-                 unsigned int externalAttrs) :
+                 sys::Uint16_T versionMadeBy,
+                 sys::Uint16_T versionToExtract,
+                 sys::Uint16_T generalPurposeBitFlag,
+                 sys::Uint16_T compressionMethod,
+                 sys::Uint16_T lastModifiedTime,
+                 sys::Uint16_T lastModifiedDate,
+                 sys::Uint32_T   crc32,
+                 sys::Uint16_T internalAttrs,
+                 sys::Uint32_T externalAttrs) :
             mCompressedData(compressedData),
             mCompressedSize(compressedSize),
             mUncompressedSize(uncompressedSize),
@@ -74,42 +74,42 @@ namespace zip
 	sys::ubyte* decompress();
 	void decompress(sys::ubyte* out, sys::Size_T outLen);
 
-        unsigned short getVersionMadeBy() const
+        sys::Uint16_T getVersionMadeBy() const
         {
             return mVersionMadeBy;
         }
         const char* getVersionMadeByString() const;
 
-        unsigned short getVersionToExtract() const
+        sys::Uint16_T getVersionToExtract() const
         {
             return mVersionToExtract;
         }
-        unsigned short getGeneralPurposeBitFlag() const
+        sys::Uint16_T getGeneralPurposeBitFlag() const
         {
             return mGeneralPurposeBitFlag;
         }
-	unsigned short getCompressionMethod() const
+	sys::Uint16_T getCompressionMethod() const
         {
             return mCompressionMethod;
         }
-        unsigned short getLastModifiedTime() const
+        sys::Uint16_T getLastModifiedTime() const
         {
             return mLastModifiedTime;
         }
 
-        unsigned short getLastModifiedDate() const
+        sys::Uint16_T getLastModifiedDate() const
         {
             return mLastModifiedDate;
         }
-        unsigned int getCRC32() const
+        sys::Uint32_T getCRC32() const
         {
             return mCRC32;
         }
-        unsigned short getInternalAttrs() const
+        sys::Uint16_T getInternalAttrs() const
         {
             return mInternalAttrs;
         }
-        unsigned int getExternalAttrs() const
+        sys::Uint32_T getExternalAttrs() const
         {
             return mExternalAttrs;
         }
