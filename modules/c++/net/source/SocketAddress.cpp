@@ -24,7 +24,6 @@
 
 using namespace net;
 
-
 SocketAddress::SocketAddress()
 {
     clear();
@@ -47,7 +46,7 @@ SocketAddress::SocketAddress(int port)
 void SocketAddress::clear()
 {
     ::memset(&mAddress, 0, sizeof(SockAddrIn_T));
-    
+
 }
 
 void SocketAddress::setPort(int port)
@@ -73,7 +72,6 @@ void SocketAddress::setHost(const std::string& host)
         ::inet_pton(AF_INET, host.c_str(), &mAddress.sin_addr);
 #endif
     }
-    
 }
 
 void SocketAddress::set(int port, std::string host)

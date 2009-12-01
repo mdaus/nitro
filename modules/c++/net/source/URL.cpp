@@ -21,55 +21,127 @@
  */
 
 #include "net/URL.h"
+#include <import/str.h>
+#include <import/re.h>
 
-void net::URL::set(const std::string& url)
+net::URL::URL(const std::string url)
 {
-    re::PCRE rx;
-    rx.compile(net::URL::MATCH());
+    if (!url.empty())
+        set(url);
+}
 
-    re::PCREMatch matches;
-    if (!rx.match(url, matches))
-        throw net::MalformedURLException(Ctxt(url));
-
-    std::string protocol = matches[2];
-    if (protocol.length())
-        mProto = protocol;
-
-    std::string line = matches[3];
-    std::vector<std::string> hostPortPair =
-        str::Tokenizer(line, ":");
-
-    int hostPortPairNum = (int)hostPortPair.size();
-    if (hostPortPairNum != 1 && hostPortPairNum != 2)
-        throw except::Exception(Ctxt("Host and port pair must contain at least a host"));
-
-    mHost = hostPortPair[0];
-
-    if (hostPortPairNum == 1)
+net::URL::URL(const net::URL& url)
+{
+    mProtocol = url.getProtocol();
+    mHost = url.getHost();
+    mPath = url.getPath();
+    mFragment = url.getFragment();
+    for (std::map<std::string, std::string>::const_iterator it =
+            mParams.begin(); it != mParams.end(); ++it)
     {
-        if (mProto == "https")
-        {
-            mPort = DEFAULT_HTTPS_PORT;
-        }
-        else
-        {
-            mPort = DEFAULT_HTTP_PORT;
-        }
-    }
-    else
-    {
-        mPort = atoi(hostPortPair[1].c_str());
-    }
-
-    if (matches.size() == 5)
-    {
-        dbg_printf("Found document: %s\n",
-                   matches[4].c_str());
-        mDocument = matches[4];
-    }
-    if (mDocument.length() == 0)
-    {
-        mDocument = "/index.html";
+        mParams[it->first] = it->second;
     }
 }
 
+void net::URL::set(std::string url)
+{
+    std::vector<std::string> parts = net::urlSplit(url);
+    mProtocol = parts[0];
+    mHost = parts[1];
+    mPath = parts[2];
+    std::string params = parts[3];
+    mFragment = parts[4];
+
+    if (!params.empty())
+    {
+        std::vector<std::string> paramParts = str::split(params, "&");
+        for (size_t i = 0, size = paramParts.size(); i < size; ++i)
+        {
+            std::string param = paramParts[i];
+            size_t pos = param.find("=");
+            if (pos > 0)
+            {
+                mParams[param.substr(0, pos)] = param.substr(pos);
+            }
+            else
+            {
+                mParams[param] = "";
+            }
+        }
+    }
+}
+
+std::string net::URL::getProtocol() const
+{
+    return mProtocol;
+}
+std::string net::URL::getHost() const
+{
+    return mHost;
+}
+int net::URL::getPort() const
+{
+    re::PCRE regex;
+    regex.compile("[^:]:(\\d+)");
+    re::PCREMatch match;
+    if (regex.match(getHost(), match))
+    {
+        return str::toType<int>(match[1]);
+    }
+    return net::DEFAULT_PORT_HTTP;
+}
+std::string net::URL::getPath() const
+{
+    return mPath;
+}
+std::string net::URL::getFragment() const
+{
+    return mFragment;
+}
+std::string net::URL::getQuery() const
+{
+    std::ostringstream s;
+    bool firstParam = true;
+    for (std::map<std::string, std::string>::const_iterator it =
+            mParams.begin(); it != mParams.end(); ++it)
+    {
+        if (!firstParam)
+            s << "&";
+        s << net::quote(it->first) << "=" << net::quote(it->second);
+        firstParam = false;
+    }
+    return s.str();
+}
+
+std::string net::URL::getDocument() const
+{
+    std::ostringstream doc;
+    doc << "/" << getPath();
+    std::string query = getQuery();
+    if (!query.empty())
+        doc << "?" << query;
+    std::string fragment = getFragment();
+    if (!fragment.empty())
+        doc << "#" << fragment;
+    return doc.str();
+}
+
+std::map<std::string, std::string>& net::URL::getParams()
+{
+    return mParams;
+}
+const std::map<std::string, std::string>& net::URL::getParams() const
+{
+    return mParams;
+}
+
+std::string net::URL::toString() const
+{
+    return net::urlJoin(getProtocol(), getHost(), getPath(), getQuery(),
+            getFragment());
+}
+
+bool net::URL::operator==(const net::URL& url) const
+{
+    return toString() == url.toString();
+}

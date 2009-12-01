@@ -41,15 +41,17 @@ int main(int argc, char **argv)
         URL url(argv[1]);
 
         cout << "protocol: " << url.getProtocol() << endl;
-        cout << "document: " << url.getDocument() << endl;
         cout << "host: " << url.getHost() << endl;
         cout << "port: " << url.getPort() << endl;
+        cout << "path: " << url.getPath() << endl;
+        cout << "query: " << url.getQuery() << endl;
+        cout << "fragment: " << url.getFragment() << endl;
         cout << "Url: " << url.toString() << endl;
     }
     catch (Throwable& t)
     {
-        cout << "Caught Throwable: " << t.getType() << ":" <<
-        t.getMessage() << endl;
+        cout << "Caught Throwable: " << t.getType() << ":" << t.getMessage()
+                << endl;
     }
     return 0;
 }

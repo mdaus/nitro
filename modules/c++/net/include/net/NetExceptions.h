@@ -76,7 +76,6 @@ public:
     {
         mMessage = "In: ";
         mMessage += c.getMessage();
-
     }
 
 };

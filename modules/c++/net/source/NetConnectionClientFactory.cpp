@@ -40,31 +40,30 @@ net::NetConnection *net::NetConnectionClientFactory::create(const net::URL& url)
     hostent = net::getHostByName(asStr.c_str());
     if (!hostent)
     {
-        throw sys::SocketException(
-            Ctxt(FmtX("net::getHostByName() failed for creation \"%s\"",
-                      url.toString().c_str())) );
+        throw sys::SocketException(Ctxt(FmtX(
+                "net::getHostByName() failed for creation \"%s\"",
+                url.toString().c_str())));
     }
 
     net::SocketAddress sa;
     sa.setPort(url.getPort());
     // Add this to class???
-    ::memcpy(&(sa.getAddress().sin_addr.s_addr),
-             hostent->h_addr,
-             hostent->h_length);
+    ::memcpy(&(sa.getAddress().sin_addr.s_addr), hostent->h_addr,
+            hostent->h_length);
     return create(sa);
 }
 
-
-net::NetConnection* net::NetConnectionClientFactory::newConnection(net::Socket toServer)
+net::NetConnection* net::NetConnectionClientFactory::newConnection(
+        net::Socket toServer)
 {
     return new net::NetConnection(toServer);
 }
 
-
-net::NetConnection * net::NetConnectionClientFactory::create(const net::SocketAddress& address)
+net::NetConnection * net::NetConnectionClientFactory::create(
+        const net::SocketAddress& address)
 {
     net::Socket socket = net::TCPClientSocketFactory().create(address);
     return newConnection(socket);
-//     return new net::NetConnection(socket);
+    //     return new net::NetConnection(socket);
 
 }

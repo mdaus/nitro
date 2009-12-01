@@ -68,7 +68,8 @@ public:
      *  to an existing connection.
      */
     SerializableConnection()
-    {}
+    {
+    }
 
     /*!
      *  This is a constructor featuring a TCP/IP connection.
@@ -79,10 +80,10 @@ public:
         mConnection.open(connection);
     }
 
-
     //! Destructor
     virtual ~SerializableConnection()
-    {}
+    {
+    }
 
     /*!
      *  Close the connection
@@ -105,12 +106,12 @@ public:
     }
 
     /*!
-    *  Read up to len bytes of data
-    *  \param b   Buffer to read into
-    *  \param len The length to read
-    *  \throw IOException
-    *  \return  The number of bytes read, or -1 if eof
-    */
+     *  Read up to len bytes of data
+     *  \param b   Buffer to read into
+     *  \param len The length to read
+     *  \throw IOException
+     *  \return  The number of bytes read, or -1 if eof
+     */
     sys::SSize_T read(sys::byte* b, sys::Size_T len)
     {
         return mConnection.read(b, len);

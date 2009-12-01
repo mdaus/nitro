@@ -36,5 +36,6 @@
 #include "net/PerRequestThreadAllocStrategy.h"
 #include "net/URL.h"
 #include "net/AllocStrategy.h"
+#include "net/NetUtils.h"
 
 #endif

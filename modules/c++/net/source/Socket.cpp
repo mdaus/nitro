@@ -41,17 +41,15 @@ void net::Socket::listen(int backlog)
 
 void net::Socket::connect(const net::SocketAddress& address)
 {
-    if (::connect(mNative,
-                  (net::ConnParam2_T *)&(address.getAddress()),
-                  (SockLen_T)sizeof(address.getAddress())) != 0)
+    if (::connect(mNative, (net::ConnParam2_T *) &(address.getAddress()),
+            (SockLen_T) sizeof(address.getAddress())) != 0)
         throw sys::SocketException(Ctxt("During connect"));
 }
 
 void net::Socket::bind(const net::SocketAddress& address)
 {
-    if (::bind(mNative,
-               (const struct sockaddr *)&(address.getAddress()),
-               (SockLen_T)sizeof(address.getAddress())) != 0)
+    if (::bind(mNative, (const struct sockaddr *) &(address.getAddress()),
+            (SockLen_T) sizeof(address.getAddress())) != 0)
         throw sys::SocketException(Ctxt("During bind"));
 }
 
@@ -61,33 +59,31 @@ net::Socket net::Socket::accept(net::SocketAddress& fromClient)
 
     net::SockLen_T addrLen = sizeof(in);
     net::Socket toClient;
-    toClient.mNative = ::accept(mNative,
-                                (net::SockAddr_T *) & in,
-                                &addrLen);
+    toClient.mNative = ::accept(mNative, (net::SockAddr_T *) &in, &addrLen);
     return toClient;
 }
 
 sys::SSize_T net::Socket::recv(sys::byte* b, sys::Size_T len, int flags)
 {
     sys::SSize_T numBytes(0);
-    if (len == 0) return -1;
+    if (len == 0)
+        return -1;
 
-    numBytes = ::recv(mNative, (char*)b, len, flags);
+    numBytes = ::recv(mNative, (char*) b, len, flags);
 
 #if defined(__DEBUG_SOCKET)
     std::cout << "========== READ FROM CONNECTION =============" << std::endl;
 #endif
 
-    if ((numBytes == -1 &&
-            (NATIVE_SOCKET_GETLASTERROR() != NATIVE_SOCKET_ERROR(WOULDBLOCK))))
+    if ((numBytes == -1 && (NATIVE_SOCKET_GETLASTERROR()
+            != NATIVE_SOCKET_ERROR(WOULDBLOCK))))
     {
         std::cout << strerror(errno) << std::endl;
 #if defined(__DEBUG_SOCKET)
         std::cout << " Error on read!!!" << std::endl;
         std::cout << "=============================================" << std::endl << std::endl;
 #endif
-        throw sys::SocketException(Ctxt(FmtX("When receiving %d bytes",
-                                             len)) );
+        throw sys::SocketException(Ctxt(FmtX("When receiving %d bytes", len)));
     }
     else if (numBytes == 0)
     {
@@ -108,21 +104,19 @@ sys::SSize_T net::Socket::recv(sys::byte* b, sys::Size_T len, int flags)
     return numBytes;
 }
 
-sys::SSize_T net::Socket::recvFrom(net::SocketAddress& address,
-                                   sys::byte* b,
-                                   sys::Size_T len,
-                                   int flags)
+sys::SSize_T net::Socket::recvFrom(net::SocketAddress& address, sys::byte* b,
+        sys::Size_T len, int flags)
 {
 
     net::SockAddrIn_T& in = address.getAddress();
     net::SockLen_T addrLen = sizeof(in);
     sys::SSize_T bytes = ::recvfrom(mNative, b, len, flags,
-                                    (struct sockaddr *) & in, &addrLen);
+            (struct sockaddr *) &in, &addrLen);
     if (bytes == -1)
     {
         std::cout << strerror(errno) << std::endl;
     }
-//    address.getAddress() = in;
+    //    address.getAddress() = in;
     return bytes;
 
 }
@@ -130,7 +124,8 @@ sys::SSize_T net::Socket::recvFrom(net::SocketAddress& address,
 void net::Socket::send(const sys::byte* b, sys::Size_T len, int flags)
 {
     int numBytes(0);
-    if (len <= 0) return;
+    if (len <= 0)
+        return;
 #if defined(__DEBUG_SOCKET)
     std::cout << "========== WROTE TO CONNECTION =============" << std::endl;
     std::cout << "---------------------------------------------" << std::endl;
@@ -139,30 +134,28 @@ void net::Socket::send(const sys::byte* b, sys::Size_T len, int flags)
     std::cout << "=============================================" << std::endl << std::endl;
 #endif
 
-    numBytes = ::send(mNative, (const char*)b, len, flags);
+    numBytes = ::send(mNative, (const char*) b, len, flags);
 
     if (numBytes != len)
     {
         std::cout << strerror(errno) << std::endl;
         throw sys::SocketException(Ctxt(FmtX("Tried sending %d bytes, %d sent",
-                                             len, numBytes)) );
+                len, numBytes)));
     }
 }
 
-void net::Socket::sendTo(const SocketAddress& address,
-                         const sys::byte* b,
-                         sys::Size_T len,
-                         int flags)
+void net::Socket::sendTo(const SocketAddress& address, const sys::byte* b,
+        sys::Size_T len, int flags)
 {
     int numBytes = ::sendto(mNative, b, len, flags,
-                            (const struct sockaddr *) & (address.getAddress()),
-                            (net::SockLen_T)sizeof(address.getAddress()));
+            (const struct sockaddr *) &(address.getAddress()),
+            (net::SockLen_T) sizeof(address.getAddress()));
 
     // Maybe shouldnt even bother with this
     if (numBytes != len)
     {
         std::cout << strerror(errno) << std::endl;
         throw sys::SocketException(Ctxt(FmtX("Tried sending %d bytes, %d sent",
-                                             len, numBytes)) );
+                len, numBytes)));
     }
 }

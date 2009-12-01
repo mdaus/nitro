@@ -41,11 +41,13 @@ class RequestHandler
 public:
     //!  Constructor
     RequestHandler()
-    {}
+    {
+    }
 
     //!  Destructor
     virtual ~RequestHandler()
-    {}
+    {
+    }
 
     /*!
      *  Operation for handling a connection.  Overload this with
@@ -53,32 +55,34 @@ public:
      *
      *  \param conn The connection
      */
-    virtual void operator() (net::NetConnection* conn) = 0;
+    virtual void operator()(net::NetConnection* conn) = 0;
 };
 
 class RequestHandlerFactory
 {
 public:
     RequestHandlerFactory()
-    {}
+    {
+    }
     virtual ~RequestHandlerFactory()
-    {}
+    {
+    }
     virtual net::RequestHandler* create() = 0;
 };
 
-template<typename ReqHandler_T> class DefaultRequestHandlerFactory :
-            public RequestHandlerFactory
+template<typename ReqHandler_T> class DefaultRequestHandlerFactory: public RequestHandlerFactory
 {
 public:
     DefaultRequestHandlerFactory()
-    {}
+    {
+    }
     virtual ~DefaultRequestHandlerFactory()
-    {}
+    {
+    }
     net::RequestHandler* create()
     {
         return new ReqHandler_T();
     }
-
 };
 
 }

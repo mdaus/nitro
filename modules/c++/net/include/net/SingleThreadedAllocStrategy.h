@@ -23,7 +23,6 @@
 #ifndef __NET_SINGLE_THREADED_ALLOC_STRATEGY_H__
 #define __NET_SINGLE_THREADED_ALLOC_STRATEGY_H__
 
-
 #include "net/AllocStrategy.h"
 #include <memory>
 
@@ -38,18 +37,21 @@ namespace net
  *  requests.  Re-uses the same handler for each request.
  *
  */
-class SingleThreadedAllocStrategy : public AllocStrategy
+class SingleThreadedAllocStrategy: public AllocStrategy
 {
 public:
 
     //!  Constructor
-    SingleThreadedAllocStrategy() : mHandler(NULL)
-    {}
+    SingleThreadedAllocStrategy() :
+        mHandler(NULL)
+    {
+    }
 
     //!  Destructor
     ~SingleThreadedAllocStrategy()
     {
-        if (mHandler) delete mHandler;
+        if (mHandler)
+            delete mHandler;
     }
 
     /*!
@@ -73,7 +75,9 @@ public:
 private:
     net::RequestHandler* mHandler;
 };
+
 typedef SingleThreadedAllocStrategy DefaultAllocStrategy;
+
 }
 
 #endif

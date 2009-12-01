@@ -20,15 +20,52 @@
  *
  */
 
-#include "net/NetConnection.h"
+#ifndef __NET_NET_UTILS_H__
+#define __NET_NET_UTILS_H__
 
-sys::SSize_T net::NetConnection::read(sys::byte* b, sys::Size_T len)
-{
-    return mSocket.recv(b, len);
-}
+#include <string>
+#include <vector>
 
-void net::NetConnection::write(const sys::byte* b, sys::Size_T len)
+namespace net
 {
-    mSocket.send((const char*) b, len);
+
+enum
+{
+    DEFAULT_PORT_HTTP = 80, DEFAULT_PORT_HTTPS = 443
+};
+
+/**
+ * Splits a URL string into 5 parts:
+ * - scheme/protocol
+ * - host/location
+ * - path
+ * - query
+ * - fragment
+ * \param url the string to parse
+ */
+std::vector<std::string> urlSplit(std::string url);
+
+/**
+ * Joins the given url components into a url string
+ */
+std::string urlJoin(std::string scheme, std::string location, std::string path =
+        "", std::string query = "", std::string fragment = "");
+
+/**
+ * Joins the url components given in the vector into a url string
+ */
+std::string urlJoin(const std::vector<std::string>& parts);
+
+/**
+ * Quotes the given string - mainly for use in query strings
+ */
+std::string quote(std::string s);
+
+/**
+ * Unquotes the given string - inverse of quote()
+ */
+std::string unquote(std::string s);
+
 }
+#endif
 

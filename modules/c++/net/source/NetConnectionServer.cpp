@@ -23,12 +23,13 @@
 #include "net/NetConnectionServer.h"
 
 net::NetConnectionServer::NetConnectionServer() :
-        mPortNumber(0), mBacklog(0), mAllocStrategy(NULL)
-{}
+    mPortNumber(0), mBacklog(0), mAllocStrategy(NULL)
+{
+}
 
 net::NetConnectionServer::~NetConnectionServer()
 {
-    setAllocStrategy(NULL);
+    setAllocStrategy( NULL);
 }
 
 void net::NetConnectionServer::create(int portNumber, int backlog)

@@ -24,11 +24,9 @@
 #define __NET_URL_H__
 
 #include <string>
+#include <map>
 #include "net/NetExceptions.h"
-#include "sys/Dbg.h"
-#include "re/PCRE.h"
-#include "str/Tokenizer.h"
-
+#include "net/NetUtils.h"
 
 /*! \file URL.h
  *  \brief Class for abstract locations
@@ -40,195 +38,47 @@
 namespace net
 {
 
-/*!
- *  Class to abstract the details of a location on the internet.
- *  The URL-type format is host:port, and the internal representation
- *  is std::string, int
- *
- */
 class URL
 {
 public:
-    const static char *MATCH()
-    {
-        return "(([a-zA-Z]+)://)?([^/]+)(.*)";
-    }
-    enum { DEFAULT_HTTP_PORT = 80 };
-    enum { DEFAULT_HTTPS_PORT = 443 };
 
-    //! Default constructor.
-    URL() : mProto("http"), mPort(DEFAULT_HTTP_PORT)
-    {}
-
-    /*!
-     *  Takes a full URL or a host:port formatted string and
-     *  parses out the host and port.
-     *  \param  url   The location
-     */
-    URL(const std::string& url) : mProto("http")
-    {
-        set(url);
-    }
-
-    /*!
-     *  Take host/port representation
-     *  \param  host    The host name
-     *  \param  port    The port number
-     */
-    URL(std::string host, int port)
-    {
-        set(host, port);
-    }
+    URL(const std::string url = "");
 
     /*!
      *  Copy constructor.
      *  \param url A right-hand-side URL
      */
-    URL(const URL& url)
+    URL(const URL& url);
+
+    virtual ~URL()
     {
-        mProto = url.mProto;
-        mHost = url.mHost;
-        mPort = url.mPort;
-        mDocument = url.mDocument;
     }
 
-    /*!
-     *  Assignment operator
-     *  \param url A right-hand-side URL
-     *  \return *this
-     */
-    URL& operator=(const URL& url)
-    {
-        if (this != &url)
-        {
-            mProto = url.mProto;
-            mHost = url.mHost;
-            mPort = url.mPort;
-            mDocument = url.mDocument;
-        }
-        return *this;
-    }
+    void set(std::string url);
 
-    //! Default deconstructor.
-    ~URL()
-    {}
-
-    /*!
-     * Set method
-     * \param url A well-formed url
-     */
-    void set(const char *url)
-    {
-        set(std::string(url));
-    }
-
-    /*!
-     * Set method
-     * \param url A well-formed url
-     */
-    void set(const std::string& url);
-
-    /*!
-     * Set method
-     * \param host The host name
-     * \param port The port number
-     */
-    void set(const std::string& host,
-                 int port)
-    {
-        mHost = host; mPort = port;
-    }
-
-    /*!
-     * Set method
-     * \param host The host name
-     * \param port The port number
-     */
-    void set(const char* host, int port)
-    {
-        mHost = host; mPort = port;
-    }
+    std::string getProtocol() const;
+    std::string getHost() const;
+    int getPort() const;
+    std::string getPath() const;
+    std::string getFragment() const;
+    std::string getQuery() const;
+    std::string getDocument() const;
+    std::map<std::string, std::string>& getParams();
+    const std::map<std::string, std::string>& getParams() const;
+    std::string toString() const;
 
     /*!
      * Are these URLs equal
      * \param url A URL to compare
      */
-    bool operator==(const URL& url)
-    {
-        return (mPort == url.mPort &&
-                mHost == url.mHost &&
-                mProto == url.mProto &&
-                mDocument == url.mDocument);
-    }
+    bool operator==(const URL& url) const;
 
-    /*!
-     *  Get URL-style formatting.  This used to use stringstream
-     *  and then string.  Both hung.  I replaced their calls with 
-     *  sprintf and now it works.  I will revert back if I can.
-     *  It looks like some bug in the Regex library is smothering
-     *  everything -- causing the system to hang.  That is the 
-     *  next order of business.
-     *
-     *  \return  String with host:port format
-     */
-    std::string toString() const
-    {
-        char url[512];
-        memset(url, 0, 512);
-        int  mark = 0;
-        if (mProto.length())
-        {
-            sprintf(url, "%s://", mProto.c_str() );
-            mark += (int)strlen(url);
-        }
-        // Size check
-        sprintf(url + mark, "%s", mHost.c_str());
-        mark = (int)strlen(url);
-
-        if (mPort != DEFAULT_HTTP_PORT && mPort != DEFAULT_HTTPS_PORT)
-        {
-            sprintf(url + mark, ":%d", mPort);
-            mark = (int)strlen(url);
-        }
-        if (mDocument.length())
-        {
-            // Size check
-            sprintf(url + mark, "%s", mDocument.c_str());
-        }
-
-        return std::string(url);
-
-    }
-
-    //! Get document location
-    std::string getDocument() const
-    {
-        return mDocument;
-    }
-
-    //! Get connetion protocol
-    std::string getProtocol() const
-    {
-        return mProto;
-    }
-
-    //! Get host name
-    std::string getHost() const
-    {
-        return mHost;
-    }
-
-    //! Get port number
-    int getPort() const
-    {
-        return mPort;
-    }
-
-private:
-    std::string  mDocument;
-    std::string  mProto;
-    std::string  mHost;
-    int          mPort;
+protected:
+    std::string mProtocol;
+    std::string mHost;
+    std::string mPath;
+    std::map<std::string, std::string> mParams;
+    std::string mFragment;
 };
 }
 #endif
