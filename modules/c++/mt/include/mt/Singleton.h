@@ -77,7 +77,7 @@ public:
      * Returns the one and only instance of the object
      */
     static T& getInstance();
-    
+
     /*!
      * This attempts to destroy the internal singleton object. If it has
      * already been destroyed, it does nothing. Usually you only should
@@ -85,7 +85,7 @@ public:
      * will get automatically called at program exit.
      */
     static void destroy();
-    
+
 protected:
     //! Constructor
     inline explicit Singleton()
@@ -96,7 +96,7 @@ protected:
     //! Destructor
     inline ~Singleton() { mInstance = 0; }
 
-private: 
+private:
     static T* mInstance; //static instance
     static sys::Mutex mMutex; //static mutex for locking access to the instance
     inline explicit Singleton(Singleton const&) {}
@@ -114,13 +114,9 @@ T& Singleton<T, AutoDestroy>::getInstance()
         {
             mInstance = new T; //create the instance
             if (AutoDestroy)
-	    {
-#if defined(__sgi) && !defined(__SGI_LIBC_BEGIN_NAMESPACE_STD)
-	        atexit(destroy);
-#else
-                std::atexit(destroy); //register the destroy function
-#endif
-	    }
+            {
+                atexit(destroy); //register the destroy function
+            }
         }
     }
     return *mInstance;
