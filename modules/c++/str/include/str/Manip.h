@@ -20,15 +20,12 @@
  *
  */
 
-
 #ifndef __STR_MANIP_H__
 #define __STR_MANIP_H__
 
 #include <string>
 #include <ctype.h>
 #include <vector>
-#include <iostream>
-#include <algorithm>
 
 namespace str
 {
@@ -36,7 +33,7 @@ namespace str
  *  Trim the white space off the back and front of a string
  *  @param  s  String to trim
  */
-void trim(std::string& s);
+std::string& trim(std::string& s);
 
 /**
  *  Checks the end of s with match
@@ -61,15 +58,18 @@ bool startsWith(const std::string& s, const std::string& match);
  *  @param  splitter  String to split upon
  *  @return vector of strings
  */
-std::vector<std::string> split(const std::string& s, const std::string& splitter);
+std::vector<std::string> split(const std::string& s,
+        const std::string& splitter);
 
 //! Uses std::transform to convert all chars to lower case
-void lower(std::string& s);
+std::string& lower(std::string& s);
 
 //! Uses std::transform to convert all chars to upper case
-void upper(std::string& s);
+std::string& upper(std::string& s);
+
+//! Joins a vector of strings w/the given joining string
+std::string join(const std::vector<std::string>& vec, std::string joiner = "");
 
 }
-
 
 #endif

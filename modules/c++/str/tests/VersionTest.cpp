@@ -20,7 +20,6 @@
  *
  */
 
-
 #include <iostream>
 #include <import/str.h>
 
@@ -30,28 +29,20 @@
 #   define FORMAT_FUNC str::format
 #endif
 
-
 int main()
 {
     std::cout << FORMAT_FUNC("Your version of str is %d.%d.%d\n",
-			     STR_MAJOR_VERSION,
-			     STR_MINOR_VERSION,
-			     STR_MICRO_VERSION);
+            STR_MAJOR_VERSION, STR_MINOR_VERSION, STR_MICRO_VERSION);
     std::cout << "Specialization for string test..." << std::endl;
     std::string ok("This test passes");
     std::cout << str::toType<std::string>(ok) << std::endl;
-    
+
     std::cout << "Testing the trim function..." << std::endl;
     std::string s = "  test   ";
     std::cout << "'" << s << "', length: " << s.length() << std::endl;
     str::trim(s);
     std::cout << "'" << s << "', length: " << s.length() << std::endl;
-    
-    str::upper(s);
-    std::cout << "Upper: " << s << std::endl;
-    
-    str::lower(s);
-    std::cout << "Lower: " << s << std::endl;
-
+    std::cout << "Upper: " << str::upper(s) << std::endl;
+    std::cout << "Lower: " << str::lower(s) << std::endl;
     return 0;
 }
