@@ -42,6 +42,10 @@ std::vector<std::string> net::urlSplit(std::string url)
             if (i < matchLen)
                 parts[i - 1] = match[i];
         }
+
+        //unquote the query string
+        parts[3] = net::unquote(parts[3]);
+
         return parts;
     }
     else
@@ -93,7 +97,7 @@ std::string net::quote(std::string s)
 {
     std::ostringstream quoted;
     re::PCRE regex;
-    regex.compile("[A-Za-z0-9+-._]");
+    regex.compile("[^&\\s]");
     for (size_t i = 0, len = s.length(); i < len; ++i)
     {
         std::string c = s.substr(i, 1);

@@ -60,9 +60,12 @@ void net::URL::set(std::string url)
         {
             std::string param = paramParts[i];
             size_t pos = param.find("=");
-            if (pos > 0 && pos < (param.length() - 1))
+            if (pos > 0)
             {
-                mParams[param.substr(0, pos)] = param.substr(pos + 1);
+                std::string key = param.substr(0, pos);
+                std::string val = (pos < (param.length() - 1)) ? param.substr(
+                        pos + 1) : "";
+                mParams[key] = val;
             }
             else
             {
