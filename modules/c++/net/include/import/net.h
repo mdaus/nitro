@@ -37,5 +37,6 @@
 #include "net/URL.h"
 #include "net/AllocStrategy.h"
 #include "net/NetUtils.h"
+#include "net/URLBuilder.h"
 
 #endif

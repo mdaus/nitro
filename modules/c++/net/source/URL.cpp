@@ -36,8 +36,9 @@ net::URL::URL(const net::URL& url)
     mHost = url.getHost();
     mPath = url.getPath();
     mFragment = url.getFragment();
-    for (std::map<std::string, std::string>::const_iterator it =
-            mParams.begin(); it != mParams.end(); ++it)
+    std::map<std::string, std::string> params = url.getParams();
+    for (std::map<std::string, std::string>::const_iterator it = params.begin(); it
+            != params.end(); ++it)
     {
         mParams[it->first] = it->second;
     }
@@ -59,9 +60,9 @@ void net::URL::set(std::string url)
         {
             std::string param = paramParts[i];
             size_t pos = param.find("=");
-            if (pos > 0)
+            if (pos > 0 && pos < (param.length() - 1))
             {
-                mParams[param.substr(0, pos)] = param.substr(pos);
+                mParams[param.substr(0, pos)] = param.substr(pos + 1);
             }
             else
             {
@@ -124,6 +125,13 @@ std::string net::URL::getDocument() const
     if (!fragment.empty())
         doc << "#" << fragment;
     return doc.str();
+}
+
+std::string net::URL::getServer() const
+{
+    std::ostringstream server;
+    server << getProtocol() << "://" << getHost();
+    return server.str();
 }
 
 std::map<std::string, std::string>& net::URL::getParams()

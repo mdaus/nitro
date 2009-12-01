@@ -62,6 +62,7 @@ public:
     std::string getPath() const;
     std::string getFragment() const;
     std::string getQuery() const;
+    std::string getServer() const;
     std::string getDocument() const;
     std::map<std::string, std::string>& getParams();
     const std::map<std::string, std::string>& getParams() const;
@@ -74,6 +75,7 @@ public:
     bool operator==(const URL& url) const;
 
 protected:
+    friend class URLBuilder;
     std::string mProtocol;
     std::string mHost;
     std::string mPath;

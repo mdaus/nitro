@@ -30,7 +30,7 @@ std::vector<std::string> net::urlSplit(std::string url)
 {
     re::PCRE regex;
     regex.compile(
-            "([A-Za-z]+)://([^/?#]+)(/[^/?#]+)?/?(?:[?]([^&#/]+(?:[&][^&#/]+)*)?)?(?:[#](.*))?");
+            "([A-Za-z]+)://([^/?#]+)(/[^?#]+)?(?:[?]([^&#/]+(?:[&][^&#/]+)*)?)?(?:[#](.*))?");
 
     re::PCREMatch match;
     if (regex.match(url, match))
@@ -56,7 +56,11 @@ std::string net::urlJoin(std::string scheme, std::string location,
     std::ostringstream url;
     url << scheme << "://" << location;
     if (!path.empty())
-        url << "/" << path;
+    {
+        if (!str::startsWith(path, "/"))
+            url << "/";
+        url << path;
+    }
     if (!query.empty())
         url << "?" << query;
     if (!fragment.empty())
@@ -89,14 +93,14 @@ std::string net::quote(std::string s)
 {
     std::ostringstream quoted;
     re::PCRE regex;
-    regex.compile("[A-Za-z0-9+-.]");
+    regex.compile("[A-Za-z0-9+-._]");
     for (size_t i = 0, len = s.length(); i < len; ++i)
     {
         std::string c = s.substr(i, 1);
         if (regex.matches(c))
             quoted << c[0];
         else
-            quoted << "%" << std::hex << ((int) c[0]);
+            quoted << "%" << std::hex << ((int) c[0]) << std::dec;
     }
     return quoted.str();
 }
