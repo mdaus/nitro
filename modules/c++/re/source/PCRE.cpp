@@ -155,7 +155,15 @@ bool re::PCRE::match(const std::string& str,
         {
             throw PCREException(Ctxt(FmtX("Match: Match substring out of range (%d,%d) for string of length %d", index, subStringCheck, mMatchString.length())));
         }
-        matchObject.push_back(mMatchString.substr(index, subStringLength));
+        else if (subStringLength == 0)
+        {
+            matchObject.push_back("");
+        }
+        else if (index >= 0)
+        {
+            matchObject.push_back(mMatchString.substr(index, subStringLength));
+        }
+        //otherwise, it was likely a non-capturing group
     }
 
     if (result >= 0)
