@@ -20,7 +20,6 @@
  *
  */
 
-
 #include "mt/GenericRequestHandler.h"
 
 void mt::GenericRequestHandler::run()
@@ -30,13 +29,14 @@ void mt::GenericRequestHandler::run()
         // Pull a runnable off the queue
         sys::Runnable *handler = NULL;
         mRequest->dequeue(handler);
-	if(!handler) return;
-       
-	// Run the runnable that we pulled off the queue
-	handler->run();
-	
-	// Delete the runnable we pulled off the queue
-	delete handler;
+        if (!handler)
+            return;
+
+        // Run the runnable that we pulled off the queue
+        handler->run();
+
+        // Delete the runnable we pulled off the queue
+        delete handler;
     }
 }
 

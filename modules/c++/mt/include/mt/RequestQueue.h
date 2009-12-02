@@ -20,7 +20,6 @@
  *
  */
 
-
 #ifndef __MT_REQUEST_QUEUE_H__
 #define __MT_REQUEST_QUEUE_H__
 
@@ -32,7 +31,6 @@
 
 namespace mt
 {
-
 
 /*!
  *
@@ -50,7 +48,7 @@ namespace mt
  *
  */
 
-template <typename T>
+template<typename T>
 class RequestQueue
 {
 public:
@@ -117,9 +115,25 @@ public:
         return mRequestQueue.size();
     }
 
+    void clear()
+    {
+#ifdef THREAD_DEBUG
+        dbg_printf("Locking (dequeue)\n");
+#endif
+        assert(mQueueLock.lock());
+        while (!isEmpty())
+            mRequestQueue.pop();
+
+#ifdef THREAD_DEBUG
+        dbg_printf("Unlocking (dequeue), new size [%d]\n", mRequestQueue.size());
+#endif
+        assert(mQueueLock.unlock());
+        mAvailableSpace->signal();
+    }
+
 private:
     //! The internal data structure
-    std::queue< T > mRequestQueue;
+    std::queue<T> mRequestQueue;
     //! This condition is "is there space?"
     sys::ConditionVar *mAvailableSpace;
     //! This condition is "is there an item?"
@@ -128,7 +142,7 @@ private:
     sys::Mutex mQueueLock;
 };
 
-typedef RequestQueue< sys::Runnable* > RunnableRequestQueue;
+typedef RequestQueue<sys::Runnable*> RunnableRequestQueue;
 }
 
 #endif // __MT_REQUEST_QUEUE_H__

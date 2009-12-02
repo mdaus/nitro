@@ -20,7 +20,6 @@
  *
  */
 
-
 #ifndef __MT_BASIC_THREAD_POOL_H__
 #define __MT_BASIC_THREAD_POOL_H__
 
@@ -34,7 +33,7 @@
 
 namespace mt
 {
-template <typename RequestHandler_T>
+template<typename RequestHandler_T>
 class BasicThreadPool
 {
 public:
@@ -42,7 +41,8 @@ public:
     /*! Constructor.  Set up the thread pool.
      *  \param numThreads the number of threads
      */
-    BasicThreadPool(unsigned short numThreads = 0) : mStarted(false)
+    BasicThreadPool(unsigned short numThreads = 0) :
+        mStarted(false)
     {
         mNumThreads = numThreads;
     }
@@ -62,8 +62,7 @@ public:
 
         for (unsigned short i = 0; i < mNumThreads; i++)
         {
-            sys::Thread *thread =
-                new sys::Thread(newRequestHandler());
+            sys::Thread *thread = new sys::Thread(newRequestHandler());
             mPool.push_back(thread);
             mPool[i]->start();
         }
@@ -75,10 +74,8 @@ public:
         {
             dbg_printf("mPool[%d]->join()\n", i);
             mPool[i]->join();
-
         }
         destroy(mPool.size());
-
         mStarted = false;
     }
 
@@ -99,10 +96,26 @@ public:
     {
         mHandlerQueue.enqueue(handler);
     }
+
     virtual size_t getSize() const
     {
         return mPool.size();
     }
+
+    virtual void shutdown()
+    {
+        // Add requests that signal the thread should stop
+        static sys::Runnable *stopSignal = NULL;
+        for (unsigned int i = 0, size = mPool.size(); i < size; ++i)
+        {
+            addRequest(stopSignal);
+        }
+        // Join all threads
+        join();
+        // Clear the request queue - mainly just cleanup in case we reuse
+        mHandlerQueue.clear();
+    }
+
 protected:
 
     // Derive this to use a new kind of request handler
