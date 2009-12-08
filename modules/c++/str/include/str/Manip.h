@@ -67,8 +67,6 @@ std::string& lower(std::string& s);
 //! Uses std::transform to convert all chars to upper case
 std::string& upper(std::string& s);
 
-//! Joins a vector of strings w/the given joining string
-std::string join(const std::vector<std::string>& vec, std::string joiner = "");
 
 }
 
