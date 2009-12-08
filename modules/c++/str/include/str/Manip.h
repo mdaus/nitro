@@ -26,6 +26,7 @@
 #include <string>
 #include <ctype.h>
 #include <vector>
+#include "str/Convert.h"
 
 namespace str
 {
@@ -66,6 +67,19 @@ std::string& lower(std::string& s);
 
 //! Uses std::transform to convert all chars to upper case
 std::string& upper(std::string& s);
+
+template<typename T> std::string join(std::vector<T> toks, std::string with)
+{
+    int len = (int)toks.size();
+    std::ostringstream oss;
+    int i = 0;
+    for (; i < len - 1; i++)
+    {
+        oss << str::toString<T>(toks[i]) << with;
+    }
+    oss << str::toString(toks[i]);
+    return oss.str();
+}
 
 
 }

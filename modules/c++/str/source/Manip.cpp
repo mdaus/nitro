@@ -101,14 +101,3 @@ std::string& str::upper(std::string& s)
     return s;
 }
 
-std::string str::join(const std::vector<std::string>& vec, std::string joiner)
-{
-    std::ostringstream s;
-    for(size_t i = 0, size = vec.size(); i < size; ++i)
-    {
-        s << vec[i];
-        if (i < size - 1)
-            s << joiner;
-    }
-    return s.str();
-}
