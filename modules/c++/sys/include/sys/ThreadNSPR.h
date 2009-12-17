@@ -29,9 +29,18 @@
 #include <prlock.h>
 #include <prcvar.h>
 #include <prthread.h>
+#include <sys/Convert.h>
+
 
 namespace sys
 {
+
+    inline long getThreadID()
+    {
+	return (long) PR_GetCurrentThread();
+    }
+
+
 /*!
  *  \class ThreadNSPR
  *  \brief The implementation for Netscape Portable Runtime threads
@@ -49,6 +58,7 @@ class ThreadNSPR : public ThreadInterface<PRThread *>
 {
 public:
     typedef ThreadInterface<PRThread *> Parent_T;
+
 
     /*!
      *  The default constructor.  When called with no args,

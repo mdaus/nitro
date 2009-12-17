@@ -30,6 +30,7 @@
 #include <pthread.h>
 #include "sys/ThreadInterface.h"
 
+
 /*!
  *  \file ThreadPosix.h
  *  \brief Provides the compatibility layer for pthreads
@@ -39,6 +40,15 @@
  */
 namespace sys
 {
+
+    /*!
+     *  Function returns a string identifier for the current
+     *  thread.
+     */
+    inline long getThreadID()
+    {
+	return (long)pthread_self();
+    }
 
 /*!
  *  \class ThreadPosix

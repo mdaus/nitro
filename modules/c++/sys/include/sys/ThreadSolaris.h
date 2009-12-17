@@ -34,6 +34,11 @@
 namespace sys
 {
 
+    inline long getThreadID()
+    {
+	return (long)thr_self();
+    }
+
 /*!
  *  \class ThreadSolaris
  *  \brief The implementation of a pthread-specialized thread

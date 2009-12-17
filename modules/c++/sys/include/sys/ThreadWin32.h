@@ -30,6 +30,8 @@
 
 #include "sys/ThreadInterface.h"
 #include "sys/Conf.h"
+#include <sstream>
+
 
 #define sleep Sleep
 
@@ -58,6 +60,13 @@ typedef unsigned (__stdcall *THREAD_START_FN) (void *);
 #endif
 namespace sys
 {
+
+
+    inline long getThreadID()
+    {
+	return (long)GetCurrentThreadId();
+    }
+
 class ThreadWin32 : public ThreadInterface<HANDLE>
 {
 public:

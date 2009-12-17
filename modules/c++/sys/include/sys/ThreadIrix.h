@@ -31,6 +31,11 @@
 
 namespace sys
 {
+inline long getThreadID()
+{
+    return (long)getpid();
+}
+
 class ThreadIrix : public ThreadInterface<pid_t>
 {
 public:
