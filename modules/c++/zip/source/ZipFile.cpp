@@ -29,7 +29,7 @@ sys::Uint32_T ZipFile::readInt(sys::ubyte* buf)
     // Kind of hackish, but we need it like yesterday    
     if (mSwapBytes)
     {
-	le = sys::byteSwap<sys::Uint32_T>(le);
+	le = sys::byteSwap(le);
 
     }
     return le;
@@ -43,7 +43,7 @@ sys::Uint16_T ZipFile::readShort(sys::ubyte* buf)
     memcpy(p, buf, 2);
 
     if (mSwapBytes)
-	le = sys::byteSwap<sys::Uint16_T>(le);
+	le = sys::byteSwap(le);
     return le;
 }
 
