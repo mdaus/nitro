@@ -25,6 +25,7 @@ class CPPBuildContext(BuildContext):
     
         modArgs = dict((k.lower(), v) for k, v in modArgs.iteritems())
         libName = '%s-c++' % modArgs['name']
+        path = 'dir' in modArgs and bld.path.find_dir(modArgs['dir']) or bld.path
 
         module_deps = map(lambda x: '%s-c++' % x, modArgs.get('module_deps', '').split())
         defines = modArgs.get('defines', '').split()
@@ -32,26 +33,31 @@ class CPPBuildContext(BuildContext):
         uselib = modArgs.get('uselib', '').split() + ['CSTD', 'CRUN']
         includes = modArgs.get('includes', 'include').split()
         exportIncludes = modArgs.get('export_includes', 'include').split()
+        
+        headersOnly = modArgs.get('headersonly', False)
+        if not headersOnly:
+            #build the lib
+            lib = bld.new_task_gen('cxx', env['LIB_TYPE'] or 'staticlib', includes=includes,
+                    target=libName, name=libName, export_incdirs=exportIncludes,
+                    uselib_local=uselib_local, uselib=uselib, env=env.copy(),
+                    defines=defines, path=path, install_path='${PREFIX}/lib')
+            lib.find_sources_in_dirs('source')
+            lib.source = filter(modArgs.get('source_filter', None), lib.source)
 
-        lib = bld.new_task_gen('cxx', env['LIB_TYPE'] or 'staticlib', includes=includes,
-                target=libName, name=libName, export_incdirs=exportIncludes,
-                uselib_local=uselib_local, uselib=uselib, env=env.copy(),
-                defines=defines, path=bld.path, install_path='${PREFIX}/lib')
-        lib.find_sources_in_dirs('source')
-        lib.source = filter(modArgs.get('source_filter', None), lib.source)
-
-        for f in bld.path.find_dir('include').find_iter():
-            relpath = f.relpath_gen(bld.path)
+        for f in path.find_dir('include').find_iter():
+            relpath = f.relpath_gen(path)
             bld.install_files('${PREFIX}/%s' % os.path.dirname(relpath),
                               f.abspath())
 
-        testNode = bld.path.find_dir('tests')
+        testNode = path.find_dir('tests')
         if testNode and not Options.options.libs_only:
+            if not headersOnly:
+                uselib_local = libName
             for test in filter(modArgs.get('test_filter', None),
                                testNode.find_iter(in_pat=['*.cpp'],
                                                   maxdepth=1, flat=True).split()):
                 exe = bld.new_task_gen('cxx', 'program', source=test,
-                        uselib_local=libName, env=env.copy(),
+                        uselib_local=uselib_local, uselib=uselib, env=env.copy(), includes='.',
                         target=os.path.splitext(test)[0], path=testNode,
                         install_path='${PREFIX}/share/%s/tests' % modArgs['name'])
     
@@ -68,6 +74,7 @@ class CPPBuildContext(BuildContext):
         modArgs = dict((k.lower(), v) for k, v in modArgs.iteritems())
         libName = '%s-c++' % modArgs['name']
         plugin = modArgs.get('plugin', '')
+        path = 'dir' in modArgs and bld.path.find_dir(modArgs['dir']) or bld.path
 
         module_deps = map(lambda x: '%s-c++' % x, modArgs.get('module_deps', '').split())
         defines = modArgs.get('defines', '').split() + ['PLUGIN_MODULE_EXPORTS']
@@ -79,7 +86,7 @@ class CPPBuildContext(BuildContext):
         lib = bld.new_task_gen('cxx', 'shlib', includes=includes,
                 target=libName, name=libName, export_incdirs=exportIncludes,
                 uselib_local=uselib_local, uselib=uselib, env=env.copy(),
-                defines=defines, path=bld.path,
+                defines=defines, path=path,
                 install_path='${PREFIX}/share/%s/plugins' % plugin)
         lib.find_sources_in_dirs('source')
         lib.source = filter(modArgs.get('source_filter', None), lib.source)
@@ -96,6 +103,7 @@ class CPPBuildContext(BuildContext):
         
         modArgs = dict((k.lower(), v) for k, v in modArgs.iteritems())
         progName = modArgs['name']
+        path = 'dir' in modArgs and bld.path.find_dir(modArgs['dir']) or bld.path
 
         deps = map(lambda x: '%s-c++' % x, modArgs.get('module_deps', '').split())
         defines = modArgs.get('defines', '').split()
@@ -106,7 +114,7 @@ class CPPBuildContext(BuildContext):
         
         exe = bld.new_task_gen('cxx', 'program', source=source,
                                uselib_local=uselib_local, uselib=uselib,
-                               env=env.copy(), target=progName,
+                               env=env.copy(), target=progName, path=path,
                                install_path='${PREFIX}/bin')
         if not source:
             exe.find_sources_in_dirs(modArgs.get('sourcedir', 'source'))
@@ -250,7 +258,6 @@ int main()
     return 0;
 }
 '''
-
 
 def detect(self):
     platform = getPlatform(default=Options.platform)
