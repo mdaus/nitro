@@ -169,7 +169,7 @@ std::string xml::lite::AttributeNode::getPrefix() const
 
 std::string xml::lite::AttributeNode::getValue() const
 {
-    return mValue;;
+    return mValue;
 }
 
 std::string xml::lite::AttributeNode::getQName() const

@@ -120,6 +120,7 @@ public:
     std::string getLocalName() const;
     std::string getPrefix() const;
     std::string getValue() const;
+    std::string& getValue() { return mValue; }
     std::string getQName() const;
 
 protected:
@@ -266,6 +267,17 @@ public:
     const AttributeNode& operator[] (int i) const
     {
         return getNode(i);
+    }
+
+    std::string& operator[](std::string s)
+    {
+	if (getIndex(s) == -1)
+	{
+	    AttributeNode node;
+	    node.setQName(s);
+	    mAttributes.push_back(node);
+	}
+	return mAttributes[ getIndex(s) ].getValue();
     }
 
     /*!

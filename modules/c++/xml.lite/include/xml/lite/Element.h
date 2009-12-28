@@ -96,6 +96,11 @@ public:
         return mAttributes;
     }
 
+    std::string& attribute(std::string s)
+    {
+	return mAttributes[s];
+    }
+
     /*!
      *  Get the attributes in a const way
      *  \return attributes
@@ -119,6 +124,7 @@ public:
     }
 
 
+
     /*!
      *  Get the elements by tag name
      *  \param qname the QName
@@ -129,6 +135,17 @@ public:
 
 
     /*!
+     *  Utility for people that dont like to pass by reference
+     *
+     */
+    std::vector<Element*> getElementsByTagNameNS(const std::string& qname)
+    {
+	std::vector<Element*> v;
+	getElementsByTagNameNS(qname, v);
+	return v;
+    }
+
+    /*!
      *  Sometimes we dont care about the qname or the uri -- just 
      *  the local name is good enough.  For those times, use this function
      *  \param localName The local name
@@ -137,6 +154,18 @@ public:
     void getElementsByTagName(const std::string & localName,
                               std::vector < Element * >&elements);
 
+
+    /*!
+     *  Utility for people that dont like to pass by reference
+     *
+     */
+
+    std::vector<Element*> getElementsByTagName(const std::string& localName)
+    {
+	std::vector<Element*> v;
+	getElementsByTagName(localName, v);
+	return v;
+    }
 
     /*!
      *  1)  Find this child's attribute and change it
