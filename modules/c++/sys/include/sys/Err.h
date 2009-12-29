@@ -111,7 +111,7 @@ public:
         }
     }
     //!  Return the last error, probably should be static
-    virtual int getLast();
+    virtual int getLast() const;
 protected:
     int mErrId;
 };
@@ -162,7 +162,7 @@ public:
     {}
     // bool operator==(const )
     //!  Redefined for socket errors
-    virtual int getLast();
+    virtual int getLast() const;
 };
 }
 

@@ -25,7 +25,7 @@
 
 #include "sys/Err.h"
 
-int sys::Err::getLast()
+int sys::Err::getLast() const
 {
     return errno;
 }
