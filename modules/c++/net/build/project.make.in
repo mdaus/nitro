@@ -12,7 +12,7 @@ DESCRIPTION = Provide a high-level socket interface built on top of the io \
 
 SOURCES = Socket.cpp SocketAddress.cpp \
           NetConnectionClientFactory.cpp NetConnection.cpp \
-          NetConnectionServer.cpp URL.cpp \
+          NetConnectionServer.cpp NetUtils.cpp URL.cpp \
           PerRequestThreadAllocStrategy.cpp ThreadPoolAllocStrategy.cpp
 
 TESTS =  UDPClientTest.cpp UDPServerTest.cpp \
