@@ -91,25 +91,12 @@ public:
 
     /*!
      *  Produces the system-named thread ID
-     *  \todo Fix this & propagate to parent
+     *  \todo Remove?
      *
      */
     std::string getThreadId()
     {
-        std::ostringstream oss;
-#ifdef __POSIX
-        pthread_t self = this->getNative();
-        oss << (long)self;
-#else
-#    ifdef WIN32
-        HANDLE self = this->getNative();
-        oss << GetCurrentThreadId();
-#    else
-        oss << this->getName();
-#    endif
-#endif
-        return oss.str();
-
+	return sys::getThreadID();
     }
 protected:
 
