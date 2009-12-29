@@ -74,18 +74,25 @@ int main(int argc, char **argv)
 {
     try
     {
-        if (argc != 2)
-            throw(Exception(FmtX("Usage: %s <port>", argv[0])));
+        if (argc < 2)
+            throw(Exception(FmtX("Usage: %s <port> (-mt|-st|-tp)", argv[0])));
 
-        net::NetConnectionServer server;
-        net::DefaultAllocStrategy *strategy = new net::DefaultAllocStrategy();
-        strategy->setRequestHandlerFactory(
-            new DefaultRequestHandlerFactory<EchoHandler>()
-        );
-        strategy->initialize();
-        server.setAllocStrategy(strategy);
+	net::AllocStrategy* strategy = NULL;
+
+	if (argc == 3)
+	{
+	    std::string arg(argv[2]);
+	    if (arg == "-mt")
+		strategy = new net::PerRequestThreadAllocStrategy();
+	    else if (arg == "-tp")
+		strategy = new net::ThreadPoolAllocStrategy(2);
+	    else if (arg == "-st")
+		strategy = new net::SingleThreadedAllocStrategy();
+	}
+        net::NetConnectionServer server;	
+	server.initialize(new DefaultRequestHandlerFactory<EchoHandler>(),
+			  strategy);
         server.create(atoi(argv[1]));
-        server.handleClients();
     }
     catch (except::Throwable& t)
     {

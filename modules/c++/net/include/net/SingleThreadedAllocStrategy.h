@@ -76,8 +76,6 @@ private:
     net::RequestHandler* mHandler;
 };
 
-typedef SingleThreadedAllocStrategy DefaultAllocStrategy;
-
 }
 
 #endif

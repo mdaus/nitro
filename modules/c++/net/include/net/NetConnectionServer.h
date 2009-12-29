@@ -27,7 +27,8 @@
 #include "net/Sockets.h"
 #include "net/ServerSocketFactory.h"
 #include "sys/SystemException.h"
-#include "net/AllocStrategy.h"
+#include "net/SingleThreadedAllocStrategy.h"
+
 
 /*! \file
  *  \brief Methods for server socket creation.
@@ -36,6 +37,8 @@
  */
 namespace net
 {
+
+typedef SingleThreadedAllocStrategy DefaultAllocStrategy;
 
 /*!
  *  Class for TCP/IP server creation abstraction.  Allows developer
@@ -62,10 +65,13 @@ public:
      */
     void create(int portNumber, int backlog = DEFAULT_BACKLOG);
 
-    //!  Pure virtual method for handling clients.
-    virtual void handleClients();
-
-    void setAllocStrategy(net::AllocStrategy* newStrategy);
+    /*!
+     *  Initialize
+     *
+     *
+     */
+    void initialize(net::RequestHandlerFactory* requestHandlerFactory,
+		    net::AllocStrategy* allocStrategy = NULL);
     //virtual void handleConnection(NetConnection* connection) = 0;
 
     /*!

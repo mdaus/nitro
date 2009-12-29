@@ -34,6 +34,7 @@
 #include "net/Socket.h"
 #include "net/SingleThreadedAllocStrategy.h"
 #include "net/PerRequestThreadAllocStrategy.h"
+#include "net/ThreadPoolAllocStrategy.h"
 #include "net/URL.h"
 #include "net/AllocStrategy.h"
 #include "net/NetUtils.h"

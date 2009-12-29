@@ -72,7 +72,8 @@ public:
     //! Destructor
     virtual ~AllocStrategy()
     {
-        delete mRequestHandlerFactory;
+	if (mRequestHandlerFactory)
+	    delete mRequestHandlerFactory;
     }
 
     /*!

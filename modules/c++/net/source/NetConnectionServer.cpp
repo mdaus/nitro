@@ -29,7 +29,7 @@ net::NetConnectionServer::NetConnectionServer() :
 
 net::NetConnectionServer::~NetConnectionServer()
 {
-    setAllocStrategy( NULL);
+    if (mAllocStrategy == NULL) delete mAllocStrategy;
 }
 
 void net::NetConnectionServer::create(int portNumber, int backlog)
@@ -38,7 +38,11 @@ void net::NetConnectionServer::create(int portNumber, int backlog)
     net::SocketAddress address(mPortNumber);
     TCPServerSocketFactory socketFactory(backlog);
     mSocket = socketFactory.create(address);
-    //mSocket = TCPServerSocketFactory(backlog).create(address);
+    while (true)
+    {
+        net::NetConnection* conn = accept();
+        mAllocStrategy->handleConnection(conn);
+    }
 }
 
 std::string net::NetConnectionServer::getHostName()
@@ -54,18 +58,16 @@ net::NetConnection* net::NetConnectionServer::accept()
     return new net::NetConnection(mSocket.accept(sa));
 }
 
-void net::NetConnectionServer::handleClients()
+void net::NetConnectionServer::initialize(net::RequestHandlerFactory* factory,
+					  net::AllocStrategy* newStrategy)
 {
-    while (true)
-    {
-        net::NetConnection* conn = accept();
-        mAllocStrategy->handleConnection(conn);
-    }
-}
+    if (newStrategy == NULL)
+	newStrategy = new DefaultAllocStrategy();
 
-void net::NetConnectionServer::setAllocStrategy(net::AllocStrategy* newStrategy)
-{
     if (mAllocStrategy != NULL)
         delete mAllocStrategy;
+    newStrategy->setRequestHandlerFactory(factory);
+    newStrategy->initialize();
+
     mAllocStrategy = newStrategy;
 }

@@ -2,10 +2,10 @@ PACKAGE = net
 BUILD = library unit-tests
 MAJOR_VERSION = 2
 MINOR_VERSION = 0
-VERSION_SUFFIX = RC1
+VERSION_SUFFIX = dev
 VERSION = $(MAJOR_VERSION)_$(MINOR_VERSION)$(VERSION_SUFFIX)
 MAINTAINER = Dan.Pressel@gd-ais.com, Jeffrey.Randolph@gd-ais.com, Thomas.Zellman@gd-ais.com
-DESCRIPTION = Provide a high-level socket interface built atop the io \
+DESCRIPTION = Provide a high-level socket interface built on top of the io \
               module.  This module allows users to manufacture TCP  \
               connections, to make use of URLs, and to serialize data \
               over socket connections.
@@ -13,7 +13,7 @@ DESCRIPTION = Provide a high-level socket interface built atop the io \
 SOURCES = Socket.cpp SocketAddress.cpp \
           NetConnectionClientFactory.cpp NetConnection.cpp \
           NetConnectionServer.cpp URL.cpp \
-          PerRequestThreadAllocStrategy.cpp
+          PerRequestThreadAllocStrategy.cpp ThreadPoolAllocStrategy.cpp
 
 TESTS =  UDPClientTest.cpp UDPServerTest.cpp \
          TCPClientTest.cpp TCPServerTest.cpp \
@@ -26,10 +26,13 @@ MY_INCLUDES = -I@top_srcdir@/except/include \
               -I@top_srcdir@/str/include \
               -I@top_srcdir@/sys/include \
               -I@top_srcdir@/io/include \
+              -I@top_srcdir@/mt/include \
               -I@top_srcdir@/re/include
+
 MY_LIBPATH = -L@top_srcdir@/except/lib/@target@/@lib_dir@ \
              -L@top_srcdir@/str/lib/@target@/@lib_dir@ \
              -L@top_srcdir@/sys/lib/@target@/@lib_dir@ \
              -L@top_srcdir@/io/lib/@target@/@lib_dir@ \
+             -L@top_srcdir@/mt/lib/@target@/@lib_dir@ \
              -L@top_srcdir@/re/lib/@target@/@lib_dir@
-MY_LIBS = -lre-c++ -lio-c++ -lsys-c++ -lstr-c++ -lexcept-c++
+MY_LIBS = -lre-c++ -lmt-c++ -lio-c++ -lsys-c++ -lstr-c++ -lexcept-c++
