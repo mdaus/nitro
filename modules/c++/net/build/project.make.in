@@ -27,12 +27,15 @@ MY_INCLUDES = -I@top_srcdir@/except/include \
               -I@top_srcdir@/sys/include \
               -I@top_srcdir@/io/include \
               -I@top_srcdir@/mt/include \
+              -I@top_srcdir@/logging/include \
               -I@top_srcdir@/re/include
 
 MY_LIBPATH = -L@top_srcdir@/except/lib/@target@/@lib_dir@ \
              -L@top_srcdir@/str/lib/@target@/@lib_dir@ \
              -L@top_srcdir@/sys/lib/@target@/@lib_dir@ \
              -L@top_srcdir@/io/lib/@target@/@lib_dir@ \
-             -L@top_srcdir@/mt/lib/@target@/@lib_dir@ \
+             -L@top_srcdir@/logging/lib/@target@/@lib_dir@ \
+             -I@top_srcdir@/mt/lib/@target@/@lib_dir@ \
              -L@top_srcdir@/re/lib/@target@/@lib_dir@
-MY_LIBS = -lre-c++ -lmt-c++ -lio-c++ -lsys-c++ -lstr-c++ -lexcept-c++
+
+MY_LIBS = -lre-c++ -llogging-c++ -lmt-c++ -lio-c++ -lsys-c++ -lstr-c++ -lexcept-c++

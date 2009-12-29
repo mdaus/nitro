@@ -1,9 +1,11 @@
 #ifndef __NET_THREAD_ALLOC_STRATEGY_H__
 #define __NET_THREAD_ALLOC_STRATEGY_H__
 
-#include "mt/AbstractThreadPool.h"
+#include <import/mt.h>
 #include "net/NetConnection.h"
 #include "net/AllocStrategy.h"
+#include "net/RequestHandler.h"
+
 namespace net
 {
 
@@ -28,7 +30,7 @@ namespace net
     public:
 	//! Each thread gets 1 unique request handler
 	ConnectionThread(mt::RequestQueue<NetConnection*>* connQueue,
-			 RequestHandler* handler) : 
+			 net::RequestHandler* handler) : 
 	    mt::WorkerThread<NetConnection*>(connQueue),
 	    mHandler(handler) {}
 
