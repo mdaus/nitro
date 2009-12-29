@@ -96,7 +96,7 @@ public:
      */
     std::string getThreadId()
     {
-	return sys::getThreadID();
+	return str::toString<long>(sys::getThreadID());
     }
 protected:
 
