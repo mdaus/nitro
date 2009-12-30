@@ -112,6 +112,7 @@ public:
     }
     //!  Return the last error, probably should be static
     virtual int getLast() const;
+    int getErrID() const { return mErrId; }
 protected:
     int mErrId;
 };
