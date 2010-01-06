@@ -11,24 +11,31 @@ def set_options(opt):
                    default=True, help='turn on PCRE (default)')
     opt.add_option('--with-pcre-home', action='store',
                    help='Specify the PCRE Home - where PCRE is installed to')
+    opt.add_option('--build-pcre', action='store_true',
+                   default=False, help='force building PCRE from scratch')
+    
     opt.add_option('--enable-xml-layer', action='store', choices=['expat', 'xerces'],
                    dest='xml_layer', default='expat', help='Specify the XML layer')
     opt.add_option('--with-xml-home', action='store', dest='xml_home',
                    help='Specify the XML Home - where the XML library is installed to')
+    opt.add_option('--build-xml', action='store_true',
+                   default=False, help='force building XML library (expat) from scratch')
+    
     opt.add_option('--with-fft-home', action='store', dest='fft_home',
                    help='Specify the FFT Home - where an FFT library is installed')
-    
     opt.add_option('--disable-fft', action='store_false', dest='enable_fft',
                    help='turn off building FFT (default)')
     opt.add_option('--enable-fft', action='store_true', dest='enable_fft',
                    default=False, help='turn on FFT')
-    
-    opt.add_option('--build-pcre', action='store_true',
-                   default=False, help='force building PCRE from scratch')
-    opt.add_option('--build-xml', action='store_true',
-                   default=False, help='force building XML library (expat) from scratch')
     opt.add_option('--build-fft', action='store_true',
                    default=False, help='force building FFT library (fftw) from scratch')
+    
+    opt.add_option('--disable-zip', action='store_false', dest='enable_zip',
+                   help='will not build the zip (zlib) library')
+    opt.add_option('--enable-zip', action='store_true',
+                   default=True, help='will build the zip (libz) library if not found on the system (default)')
+    opt.add_option('--build-zip', action='store_true',
+                   default=False, help='force building zip (zlib) library from scratch')
     
     if Options.platform != 'win32':
         opt.add_option('--build-uuid', action='store_true', dest='build_uuid',
@@ -61,6 +68,25 @@ def configure(conf):
             conf.check_message_2('pcre')
         else:
             conf.env['LIB_PCRE'] = ['pcre']
+
+    #-- ZIP --------------------------------------------------------------------
+    enableZip = Options.options.enable_zip
+    
+    if enableZip:
+        makeZip = False
+        if Options.options.build_zip:
+            makeZip = True
+        else:
+            if not conf.check(header_name='zlib.h', define_name='HAVE_ZLIB_H',
+                              lib='z', uselib_store='ZIP'):
+                #default to building locally
+                makeZip = True
+        if makeZip:
+            conf.env['MAKE_ZIP'] = makeZip
+            conf.check_message_1('Building local lib')
+            conf.check_message_2('zip (zlib)')
+        else:
+            conf.env['LIB_ZIP'] = ['z']
     
     #-- UUID -------------------------------------------------------------------
     if Options.platform != 'win32':
@@ -308,6 +334,28 @@ def build(bld):
         bld.install_files('${PREFIX}/include',
                           map(lambda x: os.path.join(driverNode.abspath(), x),
                               'pcre.h pcreposix.h'.split()))
+    if 'MAKE_ZIP' in env:
+        fname = 'zlib-1.2.3'
+        ut = bld.new_task_gen(path=bld.path, env=env.copy(),
+                              fname='%s.tar' % fname, before='dftables')
+        ut.features = ['untar']
+        bld.add_group()
+        
+        driverNode = driversNode.ensure_dir_node_from_path(fname)
+        
+        zlib = bld.new_task_gen('cc', env['LIB_TYPE'] or 'staticlib',
+                         includes=['.'],
+                         export_incdirs='.',
+                         target='z',
+                         source='adler32.c compress.c crc32.c gzio.c uncompr.c deflate.c trees.c ' \
+                                'zutil.c inflate.c infback.c inftrees.c inffast.c',
+                         path=driverNode,
+                         env=env.copy(),
+                         name='ZIP')
+        
+        bld.install_files('${PREFIX}/include',
+                          map(lambda x: os.path.join(driverNode.abspath(), x),
+                              'zlib.h'.split()))
         
     if 'MAKE_UUID' in env:
         
@@ -434,7 +482,7 @@ def distclean(context):
     import shutil
     
     dirs = map(lambda d: os.path.join(context.curdir, d),
-               ['pcre-5.0', 'e2fsprogs-1.40-uuid', 'expat-1.95.7', 'fftw-2.1.5'])
+               ['pcre-5.0', 'e2fsprogs-1.40-uuid', 'expat-1.95.7', 'fftw-2.1.5', 'zlib-1.2.3'])
     for d in dirs:
         try:
             if os.path.exists(d):
