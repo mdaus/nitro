@@ -2,33 +2,15 @@
 
 using namespace zip;
 
-const static char* sZipFileMadeByStr[] =
-{
-    "MS-DOS and OS/2 (FAT / VFAT / FAT32 file systems)",
-    "Amiga",
-    "OpenVMS",
-    "UNIX",
-    "VM/CMS",
-    "Atari ST",
-    "OS/2 H.P.F.S.",
-    "Macintosh",
-    "Z-System",
-    "CP/M",
-    "Windows NTFS",
-    "MVS (OS/390 - Z/OS)",
-    "VSE",
-    "Acorn Risc",
-    "VFAT",
-    "alternative MVS",
-    "BeOS",
-    "Tandem",
-    "OS/400",
-    "OS/X (Darwin)",
-    NULL
-};
+const static char* sZipFileMadeByStr[] = {
+        "MS-DOS and OS/2 (FAT / VFAT / FAT32 file systems)", "Amiga",
+        "OpenVMS", "UNIX", "VM/CMS", "Atari ST", "OS/2 H.P.F.S.", "Macintosh",
+        "Z-System", "CP/M", "Windows NTFS", "MVS (OS/390 - Z/OS)", "VSE",
+        "Acorn Risc", "VFAT", "alternative MVS", "BeOS", "Tandem", "OS/400",
+        "OS/X (Darwin)", NULL };
 
-void ZipEntry::inflate(sys::ubyte* out, sys::Size_T outLen,
-		       sys::ubyte* in, sys::Size_T inLen)
+void ZipEntry::inflate(sys::ubyte* out, sys::Size_T outLen, sys::ubyte* in,
+        sys::Size_T inLen)
 {
     z_stream zstream;
     unsigned long crc;
@@ -38,37 +20,26 @@ void ZipEntry::inflate(sys::ubyte* out, sys::Size_T outLen,
     zstream.opaque = Z_NULL;
     zstream.next_in = in;
     zstream.avail_in = inLen;
-    zstream.next_out = (Bytef*)out;
+    zstream.next_out = (Bytef*) out;
     zstream.avail_out = outLen;
     zstream.data_type = Z_UNKNOWN;
-    
+
     int zerr = inflateInit2(&zstream, -MAX_WBITS);
     if (zerr != Z_OK)
     {
-	throw except::IOException(
-	    Ctxt(
-		FmtX("inflateInit2 failed [%d]",
-		     zerr)
-		)
-	    );
+        throw except::IOException(Ctxt(FmtX("inflateInit2 failed [%d]", zerr)));
     }
-    
+
     // decompress
     zerr = ::inflate(&zstream, Z_FINISH);
-    
+
     if (zerr != Z_STREAM_END)
     {
-	throw except::IOException(
-	    Ctxt(
-		FmtX("inflate failed [%d]: wanted: %d, got: %lu",
-		     zerr,
-		     Z_STREAM_END,
-		     zstream.total_out)
-		)
-	    );
+        throw except::IOException(Ctxt(FmtX(
+                "inflate failed [%d]: wanted: %d, got: %lu", zerr,
+                Z_STREAM_END, zstream.total_out)));
     }
     inflateEnd(&zstream);
-    
 }
 
 const char* ZipEntry::getVersionMadeByString() const
@@ -87,21 +58,17 @@ sys::ubyte* ZipEntry::decompress()
     return uncompressed;
 }
 
-
 void ZipEntry::decompress(sys::ubyte* out, sys::Size_T outLen)
 {
-    
     if (mCompressionMethod == COMP_STORED)
     {
-	memcpy(out, mCompressedData, outLen);
+        memcpy(out, mCompressedData, outLen);
     }
     else
     {
-	inflate(out, outLen, mCompressedData, mCompressedSize);
+        inflate(out, outLen, mCompressedData, mCompressedSize);
     }
-    
 }
-
 
 std::ostream& operator<<(std::ostream& os, const zip::ZipEntry& ze)
 {
@@ -114,10 +81,10 @@ std::ostream& operator<<(std::ostream& os, const zip::ZipEntry& ze)
 
     os << "version made by: " << asStr << std::endl;
     os << "version to extract: " << ze.getVersionToExtract() << std::endl;
-    os << "general purpose bits: " << ze.getGeneralPurposeBitFlag() << std::endl;
+    os << "general purpose bits: " << ze.getGeneralPurposeBitFlag()
+            << std::endl;
     os << "compression method: " << ze.getCompressionMethod() << std::endl;
 
-    
     os << "last modified : " << ze.getLastModifiedTime() << std::endl;
     os << "last modified date: " << ze.getLastModifiedDate() << std::endl;
     os << "crc (hex): " << std::hex << ze.getCRC32() << std::endl;

@@ -2,17 +2,16 @@ NAME            = 'zip'
 MAINTAINER      = 'tzellman@users.sourceforge.net gojira_1@users.sourceforge.net'
 VERSION         = '0.1'
 MODULE_DEPS     = 'io'
-USELIB          = 'Z'
 
-set_options = distclean = lambda p: None
-
-def configure(conf):
-    conf.check(header_name='zlib.h', define_name='HAVE_ZLIB_H', lib='z',
-               uselib_store='Z')
+set_options = configure = distclean = lambda p: None
 
 def build(bld):
     variant = bld.env['VARIANT'] or 'default'
     env = bld.env_of_name(variant)
     
-    if env['HAVE_ZLIB_H']:
-        bld.module(**globals())
+    kw = globals().copy()
+    if 'MAKE_ZIP' in env:
+        kw['USELIB_LOCAL'] = 'ZIP'
+    else:
+        kw['USELIB'] = 'ZIP'
+    bld.module(**kw)

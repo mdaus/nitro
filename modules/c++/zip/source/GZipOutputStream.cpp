@@ -2,18 +2,13 @@
 
 using namespace zip;
 
-
 GZipOutputStream::GZipOutputStream(std::string file)
 {
     mFile = gzopen(file.c_str(), "wb");
     if (mFile == NULL)
-        throw except::IOException(
-            Ctxt(
-                FmtX("Failed to open gzip stream [%s]",
-                     file.c_str())
-                )
-            );
-    
+        throw except::IOException(Ctxt(FmtX("Failed to open gzip stream [%s]",
+                file.c_str())));
+
 }
 
 void GZipOutputStream::write(const sys::byte* b, sys::Size_T len)
@@ -25,7 +20,7 @@ void GZipOutputStream::write(const sys::byte* b, sys::Size_T len)
         rv = gzwrite(mFile, &(b[written]), len - written);
         if (rv < 0)
         {
-            std::string err( gzerror(mFile, &rv) );
+            std::string err(gzerror(mFile, &rv));
             throw except::Exception(Ctxt(err));
         }
         if (!rv)
@@ -33,12 +28,12 @@ void GZipOutputStream::write(const sys::byte* b, sys::Size_T len)
         written += rv;
     }
     while (written < len);
-    
+
 }
 
 void GZipOutputStream::close()
 {
-    gzclose(mFile);
+    gzclose( mFile);
     mFile = NULL;
 }
 
