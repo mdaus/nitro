@@ -45,6 +45,7 @@ namespace logging
  *  L = Line number
  *  M = Function
  *  m = Log message
+ *  t = Thread id
  *
  *  The default format looks like this:
  *  [%c] %p %d %F %L ==> %m
@@ -52,22 +53,26 @@ namespace logging
 class Formatter
 {
 public:
-    Formatter(const std::string& fmt = "[%c] %p %d %F %L ==> %m") : mFmt(fmt) {}
+    static const char DEFAULT_FORMAT[];
+
+    Formatter() : mFmt(DEFAULT_FORMAT) {}
+    Formatter(const std::string& fmt) : mFmt(fmt) {}
     virtual ~Formatter();
 
     virtual std::string format(LogRecord* record) const;
 
 private:
-    const static std::string THREAD_ID;
-    const static std::string LOG_NAME;
-    const static std::string LOG_LEVEL;
-    const static std::string TIMESTAMP;
-    const static std::string FILE_NAME;
-    const static std::string LINE_NUM;
-    const static std::string MESSAGE;
-    const static std::string FUNCTION;
+    static const char THREAD_ID[];
+    static const char LOG_NAME[];
+    static const char LOG_LEVEL[];
+    static const char TIMESTAMP[];
+    static const char FILE_NAME[];
+    static const char LINE_NUM[];
+    static const char MESSAGE[];
+    static const char FUNCTION[];
 
-    void replace(std::string& str, const std::string& search, const std::string& replace) const;
+    void replace(std::string& str, const std::string& search,
+            const std::string& replace) const;
 
     std::string mFmt;
 };

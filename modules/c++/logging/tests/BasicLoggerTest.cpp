@@ -34,7 +34,7 @@ int main(int argc, char **argv)
 
     //log everything to the console
     StreamHandler handler(LOG_DEBUG);
-    Formatter* formatter = new Formatter("Name = %c, Level = %p, File = %F, Method = %M, Line = %L, TimeStamp = %d, Message = %m");
+    Formatter* formatter = new Formatter("Thread = %t, Name = %c, Level = %p, File = %F, Method = %M, Line = %L, TimeStamp = %d, Message = %m");
     handler.setFormatter(formatter);
     logger.addHandler(&handler);
 

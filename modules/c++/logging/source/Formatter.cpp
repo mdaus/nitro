@@ -26,17 +26,19 @@
 
 #include <sstream>
 #include <iostream>
+#include <import/sys.h>
 #include <import/str.h>
 #include "logging/Formatter.h"
 
-const static std::string THREAD_ID = "%t";
-const static std::string LOG_NAME = "%c";
-const static std::string LOG_LEVEL = "%p";
-const static std::string TIMESTAMP = "%d";
-const static std::string FILE_NAME = "%F";
-const static std::string LINE_NUM = "%L";
-const static std::string MESSAGE = "%m";
-const static std::string FUNCTION = "%M";
+const char logging::Formatter::DEFAULT_FORMAT[] = "[%c] %p [%t] %d %F %L ==> %m";
+const char logging::Formatter::THREAD_ID[] = "%t";
+const char logging::Formatter::LOG_NAME[] = "%c";
+const char logging::Formatter::LOG_LEVEL[] = "%p";
+const char logging::Formatter::TIMESTAMP[] = "%d";
+const char logging::Formatter::FILE_NAME[] = "%F";
+const char logging::Formatter::LINE_NUM[] = "%L";
+const char logging::Formatter::MESSAGE[] = "%m";
+const char logging::Formatter::FUNCTION[] = "%M";
 
 logging::Formatter::~Formatter()
 {
@@ -61,8 +63,9 @@ std::string logging::Formatter::format(logging::LogRecord* record) const
     */
     // t = thread, p = level, m = message, F = filename, L = line num, M = method, d = date, c = name
 
+    long threadId = sys::getThreadID();
     std::string format = mFmt;
-    //replace(format, "%t", record->);
+    replace(format, "%t", str::toString(threadId));
     replace(format, "%c", name);
     replace(format, "%p", record->getLevelName());
     replace(format, "%d", record->getTimeStamp());
@@ -73,8 +76,8 @@ std::string logging::Formatter::format(logging::LogRecord* record) const
     }
     else
     {
-        replace(format, "%F", " ");
-        replace(format, "%L", " ");
+        replace(format, "%F", "");
+        replace(format, "%L", "");
     }
     replace(format, "%M", record->getFunction());
     replace(format, "%m", record->getMessage());
