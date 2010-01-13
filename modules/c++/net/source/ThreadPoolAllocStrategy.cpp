@@ -2,10 +2,10 @@
 
 using namespace net;
 
-
-ThreadPoolAllocStrategy::~ThreadPoolAllocStrategy() 
+ThreadPoolAllocStrategy::~ThreadPoolAllocStrategy()
 {
-    if (mPool) delete mPool;
+    if (mPool)
+        delete mPool;
 }
 void ThreadPoolAllocStrategy::initialize()
 {

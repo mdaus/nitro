@@ -66,14 +66,16 @@ public:
      *  Constructor.  Set our internal factory to NULL.
      *
      */
-    AllocStrategy() : mRequestHandlerFactory(NULL)
-    {}
+    AllocStrategy() :
+        mRequestHandlerFactory(NULL)
+    {
+    }
 
     //! Destructor
     virtual ~AllocStrategy()
     {
-	if (mRequestHandlerFactory)
-	    delete mRequestHandlerFactory;
+        if (mRequestHandlerFactory)
+            delete mRequestHandlerFactory;
     }
 
     /*!
@@ -87,7 +89,6 @@ public:
     {
         mRequestHandlerFactory = factory;
     }
-
 
     /*!
      *  This is a hook that allows our derived classes one place
