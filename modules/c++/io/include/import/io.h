@@ -59,10 +59,11 @@
 #include "io/OutputStream.h"
 #include "io/FileInputStream.h"
 #include "io/FileOutputStream.h"
+#include "io/Seekable.h"
 #include "io/Serializable.h"
+#include "io/SerializableFile.h"
 #include "io/StandardStreams.h"
 #include "io/StringStream.h"
-#include "io/Seekable.h"
 
 //#include "io/MMapInputStream.h"
 //using namespace io;

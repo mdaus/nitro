@@ -43,15 +43,17 @@ namespace io
  *  is also considered to be Serializable, meaning that it conforms to
  *  the interface for a SerializableConnection
  */
-class DataStream : public io::Serializable
+class DataStream: public io::Serializable
 {
 public:
     //! Default constructor
     DataStream()
-    {}
+    {
+    }
     //! Deconstructor
     virtual ~DataStream()
-    {}
+    {
+    }
 
     //! Returns the number of bytes available to read.
     virtual sys::Off_T available()
@@ -81,7 +83,7 @@ public:
 
     /*!
      *  Outputs this object into an output stream.
-            *  \param os the OutputStream to write to
+     *  \param os the OutputStream to write to
      */
     virtual void serialize(io::OutputStream& os)
     {

@@ -20,20 +20,13 @@
  *
  */
 
-#ifndef __IO_SERIALIZABLE_H__
-#define __IO_SERIALIZABLE_H__
+#ifndef __IO_SERIALIZABLE_FILE_H__
+#define __IO_SERIALIZABLE_FILE_H__
 
-#include "io/InputStream.h"
-#include "io/OutputStream.h"
+#include "io/Serializable.h"
 
 /*!
- *  \file Serializable.h
- *  \brief File containing the interface for serializable objects
- *
- *  A serializable is an object that can be written to and from a stream.
- *  This stream could be a socket, a file, a memory image -- even a url.
- *  This object has a known derived type SOAPMessage, which is concretely
- *  defined to handle SOAP objects
+ *  \file SerializableFile.h
  */
 namespace io
 {
@@ -46,28 +39,32 @@ namespace io
  *  This object has a known derived type SOAPMessage, which is concretely
  *  defined to handle SOAP objects
  */
-class Serializable
+class SerializableFile: public Serializable
 {
 public:
     //! Default constructor
-    Serializable()
+    SerializableFile(std::string& filename) :
+        mFilename(filename)
     {
     }
     //! Deconstructor
-    virtual ~Serializable()
+    virtual ~SerializableFile()
     {
     }
 
     /*!
      * Transfer this object into a byte stream
      */
-    virtual void serialize(io::OutputStream& os) = 0;
+    void serialize(io::OutputStream& os);
 
     /*!
      * Unpack this input stream to the object
      * \param is  Stream to read object from
      */
-    virtual void deserialize(io::InputStream& is) = 0;
+    void deserialize(io::InputStream& is);
+
+protected:
+    std::string mFilename;
 
 };
 }
