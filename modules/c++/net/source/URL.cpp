@@ -120,7 +120,10 @@ std::string net::URL::getQuery() const
 std::string net::URL::getDocument() const
 {
     std::ostringstream doc;
-    doc << "/" << getPath();
+    std::string path = getPath();
+    if (!str::startsWith(path, "/"))
+        doc << "/";
+    doc << path;
     std::string query = getQuery();
     if (!query.empty())
         doc << "?" << query;
