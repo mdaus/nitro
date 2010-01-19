@@ -34,7 +34,7 @@ namespace str
  *  Trim the white space off the back and front of a string
  *  @param  s  String to trim
  */
-std::string& trim(std::string& s);
+void trim(std::string& s);
 
 /**
  *  Checks the end of s with match
@@ -63,12 +63,13 @@ std::vector<std::string> split(const std::string& s,
         const std::string& splitter);
 
 //! Uses std::transform to convert all chars to lower case
-std::string& lower(std::string& s);
+void lower(std::string& s);
 
 //! Uses std::transform to convert all chars to upper case
-std::string& upper(std::string& s);
+void upper(std::string& s);
 
-template<typename T> std::string join(std::vector<T> toks, std::string with)
+template<typename T>
+std::string join(std::vector<T> toks, std::string with)
 {
     int len = (int)toks.size();
     std::ostringstream oss;

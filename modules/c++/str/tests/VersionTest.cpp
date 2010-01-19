@@ -42,7 +42,9 @@ int main()
     std::cout << "'" << s << "', length: " << s.length() << std::endl;
     str::trim(s);
     std::cout << "'" << s << "', length: " << s.length() << std::endl;
-    std::cout << "Upper: " << str::upper(s) << std::endl;
-    std::cout << "Lower: " << str::lower(s) << std::endl;
+    str::upper(s);
+    std::cout << "Upper: " << s << std::endl;
+    str::lower(s);
+    std::cout << "Lower: " << s << std::endl;
     return 0;
 }

@@ -26,7 +26,7 @@
 #include <sstream>
 #include <algorithm>
 
-std::string& str::trim(std::string & s)
+void str::trim(std::string & s)
 {
     unsigned int i;
     for (i = 0; i < s.length(); i++)
@@ -44,7 +44,6 @@ std::string& str::trim(std::string & s)
     }
     if (i + 1 < s.length())
         s.erase(i + 1);
-    return s;
 }
 
 bool str::endsWith(const std::string & s, const std::string & match)
@@ -89,15 +88,13 @@ std::vector<std::string> str::split(const std::string& s,
 }
 
 
-std::string& str::lower(std::string& s)
+void str::lower(std::string& s)
 {
     std::transform(s.begin(), s.end(), s.begin(), (int(*)(int)) tolower);
-    return s;
 }
 
-std::string& str::upper(std::string& s)
+void str::upper(std::string& s)
 {
     std::transform(s.begin(), s.end(), s.begin(), (int(*)(int)) toupper);
-    return s;
 }
 
