@@ -17,7 +17,7 @@ void GZipOutputStream::write(const sys::byte* b, sys::Size_T len)
     int rv = 0;
     do
     {
-        rv = gzwrite(mFile, &(b[written]), len - written);
+        rv = gzwrite(mFile, (const voidp)&(b[written]), len - written);
         if (rv < 0)
         {
             std::string err(gzerror(mFile, &rv));
