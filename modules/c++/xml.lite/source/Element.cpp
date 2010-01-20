@@ -182,23 +182,32 @@ void xml::lite::Element::depthPrint(io::OutputStream & stream, int depth, std::s
         acc += mAttributes.getValue(i);
         acc += std::string("\"");
     }
-    stream.write(acc + rBrack);
-    stream.write(mCharacterData);
 
-    for (unsigned int i = 0; i < mChildren.size(); i++)
+    if (mCharacterData.empty() && mChildren.empty())
     {
-        if (!formatter.empty())
-            stream.write("\n");
-        mChildren[i]->depthPrint(stream, depth + 1, formatter);
+        //simple type - just end it here
+        stream.write(acc + "/" + rBrack);
     }
-
-    if (!mChildren.empty() && !formatter.empty())
+    else
     {
-        stream.write("\n" + prefix);
-    }
+        stream.write(acc + rBrack);
+        stream.write(mCharacterData);
 
-    lBrack += "/";
-    stream.write(lBrack + mName.toString() + rBrack);
+        for (unsigned int i = 0; i < mChildren.size(); i++)
+        {
+            if (!formatter.empty())
+                stream.write("\n");
+            mChildren[i]->depthPrint(stream, depth + 1, formatter);
+        }
+
+        if (!mChildren.empty() && !formatter.empty())
+        {
+            stream.write("\n" + prefix);
+        }
+
+        lBrack += "/";
+        stream.write(lBrack + mName.toString() + rBrack);
+    }
 }
 
 void
