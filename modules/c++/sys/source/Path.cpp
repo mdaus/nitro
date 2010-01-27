@@ -20,33 +20,34 @@
  *
  */
 
-
 #include "sys/Path.h"
 
 std::string sys::Path::normalizePath(const std::string& path)
 {
     std::string osDelimStr(sys::Path::delimiter());
     std::string delimStr = osDelimStr;
-    
+
     //if it's not a forward slash, add it as one of the options
     if (delimStr != "/")
         delimStr += "/";
-    
+
     //get the drive parts, if any -- we will use the drive later
     sys::Path::StringPair driveParts = sys::Path::splitDrive(path);
-    
+
     std::vector<std::string> parts = str::Tokenizer(path, delimStr);
-    
+
     int upCount = 0;
     std::deque<std::string> pathDeque;
-    for (std::vector<std::string>::iterator it = parts.begin();
-        it != parts.end(); ++it)
+    for (std::vector<std::string>::iterator it = parts.begin(); it
+            != parts.end(); ++it)
     {
-        if (*it == ".") continue;
+        if (*it == ".")
+            continue;
         else if (*it == "..")
         {
-        	  //we want to keep the drive, if there is one
-            if (pathDeque.size() == 1 && (*pathDeque.begin()) == driveParts.first)
+            //we want to keep the drive, if there is one
+            if (pathDeque.size() == 1 && (*pathDeque.begin())
+                    == driveParts.first)
                 continue;
             if (pathDeque.size() > 0)
                 pathDeque.pop_back();
@@ -56,19 +57,19 @@ std::string sys::Path::normalizePath(const std::string& path)
         else
             pathDeque.push_back(*it);
     }
-    
+
     //use the OS-specific delimiters
     std::ostringstream out;
     //only apply the beginning up directories if we didn't start at the root (/)
-    if (!str::startsWith(path, osDelimStr) && !str::startsWith(path, "/") &&
-        driveParts.first.empty())
+    if (!str::startsWith(path, osDelimStr) && !str::startsWith(path, "/")
+            && driveParts.first.empty())
     {
         if (upCount > 0)
             out << "..";
         for (int i = 1; i < upCount; ++i)
             out << osDelimStr << "..";
     }
-    
+
     //make sure we don't prepend the drive with a delimiter!
     std::deque<std::string>::iterator it = pathDeque.begin();
     if (!driveParts.first.empty())
@@ -78,10 +79,16 @@ std::string sys::Path::normalizePath(const std::string& path)
     return out.str();
 }
 
-std::string sys::Path::joinPaths(const std::string& path1, const std::string& path2)
+std::string sys::Path::joinPaths(const std::string& path1,
+        const std::string& path2)
 {
     std::string osDelimStr(sys::Path::delimiter());
-    
+
+    //check to see if path2 is a root path
+    if (str::startsWith(path2, osDelimStr) || str::startsWith(path2, "/")
+            || !sys::Path::splitDrive(path2).first.empty())
+        return path2;
+
     std::ostringstream out;
     out << path1;
     if (!str::endsWith(path1, osDelimStr) && !str::endsWith(path1, "/"))
@@ -95,26 +102,25 @@ std::string sys::Path::absolutePath(const std::string& path)
     sys::OS os;
     std::string osDelimStr(sys::Path::delimiter());
     sys::Path::StringPair driveParts = sys::Path::splitDrive(path);
-    if (!str::startsWith(path, osDelimStr) && !str::startsWith(path, "/") &&
-        driveParts.first.empty())
+    if (!str::startsWith(path, osDelimStr) && !str::startsWith(path, "/")
+            && driveParts.first.empty())
         return sys::Path::normalizePath(sys::Path::joinPaths(
-            os.getCurrentWorkingDirectory(), path));
+                os.getCurrentWorkingDirectory(), path));
     return sys::Path::normalizePath(path);
 }
-
 
 sys::Path::StringPair sys::Path::splitPath(const std::string& path)
 {
     std::string delimStr(sys::Path::delimiter());
-    
+
     //if it's not a forward slash, add it as one of the options
     if (delimStr != "/")
         delimStr += "/";
-    
+
     std::string::size_type pos = path.find_last_of(delimStr);
     if (pos == std::string::npos)
         return sys::Path::StringPair("", path);
-    
+
     std::string::size_type lastRootPos = path.find_last_not_of(delimStr, pos);
     std::string root;
     if (lastRootPos == std::string::npos)
@@ -147,9 +153,9 @@ sys::Path::StringPair sys::Path::splitDrive(const std::string& path)
 #ifdef WIN32
     std::string::size_type pos = path.find(":");
 #else
-    std::string::size_type pos = std::string::npos; 
+    std::string::size_type pos = std::string::npos;
 #endif
-    
+
     if (pos == std::string::npos)
         return sys::Path::StringPair("", path);
     return sys::Path::StringPair(path.substr(0, pos + 1), path.substr(pos + 1));
@@ -160,7 +166,7 @@ const char* sys::Path::delimiter()
 #ifdef WIN32
     return "\\";
 #else
-    return "/"; 
+    return "/";
 #endif
 }
 
@@ -169,7 +175,7 @@ const char* sys::Path::separator()
 #ifdef WIN32
     return ";";
 #else
-    return ":"; 
+    return ":";
 #endif
 }
 

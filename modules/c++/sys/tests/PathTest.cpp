@@ -68,6 +68,9 @@ int main(int argc, char **argv)
         
         std::cout << Path::normalizePath("data/junk/tzellman/../../../../../..///./nitf///data/../vendor1.ntf") << std::endl;
         
+        std::cout << Path::joinPaths("/data/junk/", "test.txt") << std::endl;
+        std::cout << Path::joinPaths("/data/junk/", "///test.txt") << std::endl;
+        std::cout << Path::joinPaths("/data/junk/", "/test.txt") << std::endl;
         std::cout << Path::joinPaths("/data/junk", "test.txt") << std::endl;
         std::cout << Path::absolutePath("data/junk/tzellman/../../../../../..///./nitf///data/../vendor1.ntf") << std::endl;
         std::cout << Path::normalizePath("data/junk/tzellman/../../../../../..///./nitf///data/../vendor1.ntf") << std::endl;
