@@ -166,7 +166,6 @@ bool sys::OSWin32::isDirectory(const std::string& path) const
 bool sys::OSWin32::makeDirectory(const std::string& path) const
 {
     return (bool)CreateDirectory(path.c_str(), NULL);
-
 }
 
 std::string sys::OSWin32::getCurrentWorkingDirectory() const
@@ -213,6 +212,44 @@ off_t sys::OSWin32::getSize(const std::string& path) const
     CloseHandle(handle);
     return ((highOff) << 32) + ret;
 }
+
+off_t sys::OSWin32::getLastModifiedTime(const std::string& path) const
+{
+    HANDLE handle = CreateFile(path.c_str(),
+                               GENERIC_READ,
+                               0,
+                               NULL,
+                               OPEN_EXISTING,
+                               FILE_ATTRIBUTE_NORMAL,
+                               0);
+    if (handle == NULL)
+        throw sys::SystemException(
+            FmtX("Could not open file with path %s",
+                 path.c_str())); // ??
+
+    FILETIME creationTime, lastAccessTime, lastWriteTime;
+    BOOL ret = GetFileTime(handle, &creationTime,
+            &lastAccessTime, &lastWriteTime);
+
+    CloseHandle(handle);
+
+    if (ret)
+    {
+        ULARGE_INTEGER uli;
+        uli.LowPart = lastWriteTime.dwLowDateTime;
+        uli.HighPart = lastWriteTime.dwHighDateTime;
+
+        ULONGLONG stInMillis(uli.QuadPart/10000);
+        return (off_t)stInMillis;
+    }
+    else
+    {
+        throw sys::SystemException(
+            FmtX("Error getting last modified time for path %s",
+                 path.c_str()));
+    }
+}
+
 
 void sys::OSWin32::millisleep(int milliseconds) const
 {

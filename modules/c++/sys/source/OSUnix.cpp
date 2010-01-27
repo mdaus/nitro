@@ -208,6 +208,15 @@ off_t sys::OSUnix::getSize(const std::string& path) const
     return info.st_size;
 }
 
+off_t sys::OSUnix::getLastModifiedTime(const std::string& path) const
+{
+    struct stat info;
+    if (stat(path.c_str(), &info) == -1)
+        throw sys::SystemException("Stat failed");
+
+    return (off_t)info.st_mtime * 1000;
+}
+
 void sys::OSUnix::millisleep(int milliseconds) const
 {
     usleep(milliseconds * 1000);

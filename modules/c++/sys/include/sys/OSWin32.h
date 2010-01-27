@@ -161,6 +161,8 @@ public:
      */
     virtual off_t getSize(const std::string& path) const;
 
+    virtual off_t getLastModifiedTime(const std::string& path) const;
+
     /*!
      *  This is a system independent sleep function.
      *  Be careful using timing calls with threads

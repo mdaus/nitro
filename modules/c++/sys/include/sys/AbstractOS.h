@@ -172,6 +172,12 @@ public:
     virtual off_t getSize(const std::string& path) const = 0;
 
     /*!
+     *  Return the size in bytes of a file
+     *  \return The file size
+     */
+    virtual off_t getLastModifiedTime(const std::string& path) const = 0;
+
+    /*!
      *  This is a system independent sleep function.
      *  Be careful using timing calls with threads
      *  \param milliseconds The params
