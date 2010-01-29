@@ -42,6 +42,8 @@ class URL
 {
 public:
 
+    typedef std::map<std::string, std::string> Params;
+
     URL(const std::string url = "");
 
     /*!
@@ -64,8 +66,8 @@ public:
     std::string getQuery() const;
     std::string getServer() const;
     std::string getDocument() const;
-    std::map<std::string, std::string>& getParams();
-    const std::map<std::string, std::string>& getParams() const;
+    Params& getParams();
+    const Params& getParams() const;
     std::string toString() const;
 
     /*!
@@ -79,7 +81,7 @@ protected:
     std::string mProtocol;
     std::string mHost;
     std::string mPath;
-    std::map<std::string, std::string> mParams;
+    Params mParams;
     std::string mFragment;
 };
 }
