@@ -159,9 +159,9 @@ public:
      *  Return the size in bytes of a file
      *  \return The file size
      */
-    virtual off_t getSize(const std::string& path) const;
+    virtual sys::Off_T getSize(const std::string& path) const;
 
-    virtual off_t getLastModifiedTime(const std::string& path) const;
+    virtual sys::Off_T getLastModifiedTime(const std::string& path) const;
 
     /*!
      *  This is a system independent sleep function.

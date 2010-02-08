@@ -199,22 +199,22 @@ std::string sys::OSUnix::getTempName(std::string path, std::string prefix) const
     return name;
 }
 
-off_t sys::OSUnix::getSize(const std::string& path) const
+sys::Off_T sys::OSUnix::getSize(const std::string& path) const
 {
     struct stat info;
     if (stat(path.c_str(), &info) == -1)
         throw sys::SystemException("Stat failed");
 
-    return info.st_size;
+    return (sys::Off_T)info.st_size;
 }
 
-off_t sys::OSUnix::getLastModifiedTime(const std::string& path) const
+sys::Off_T sys::OSUnix::getLastModifiedTime(const std::string& path) const
 {
     struct stat info;
     if (stat(path.c_str(), &info) == -1)
         throw sys::SystemException("Stat failed");
 
-    return (off_t)info.st_mtime * 1000;
+    return (sys::Off_T)info.st_mtime * 1000;
 }
 
 void sys::OSUnix::millisleep(int milliseconds) const

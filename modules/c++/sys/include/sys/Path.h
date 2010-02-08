@@ -41,10 +41,38 @@ namespace sys
 
 class Path
 {
-protected:
-    Path();
-
+    std::string mPathName;
+    OS mOS;
 public:
+
+    Path() {}
+    Path(const Path& parent, std::string child)
+    {
+        mPathName = joinPaths(parent.mPathName, child);
+    }
+    
+    Path(std::string parent, std::string child)
+    {
+        mPathName = joinPaths(parent, child);
+    }
+
+    Path(std::string pathName) : mPathName(pathName) {}
+
+    Path& operator=(const Path& path)
+    {
+        if (this != &path)
+        {
+            mPathName = path.mPathName;
+        }
+        return *this;
+    }
+
+    Path(const Path& path)
+    {
+        mPathName = path.mPathName;
+    }
+
+
     ~Path(){}
     
     //! Shortcut for a std::pair of std::strings
@@ -55,16 +83,32 @@ public:
      * references. On Windows, it converts forward slashes to backward slashes.
      */
     static std::string normalizePath(const std::string& path);
+
+    inline std::string normalize() const
+    {
+        return normalizePath(mPathName);
+    }
+
     
     /*!
      * Joins two paths together, using the OS-specific delimiter.
      */
     static std::string joinPaths(const std::string& path1, const std::string& path2);
-    
+
+    inline Path join(const std::string& path) const
+    {
+        return joinPaths(mPathName, path);
+    }
+
     /*!
      * Return a normalized absolutized verion of the pathname supplied.
      */
     static std::string absolutePath(const std::string& path);
+
+    inline std::string getAbsolutePath() const
+    {
+        return absolutePath(mPathName);
+    }
     
     /*!
      * Splits the path into two components: head & tail.
@@ -74,6 +118,11 @@ public:
      */
     static StringPair splitPath(const std::string& path);
     
+    inline StringPair split() const
+    {
+        return splitPath(mPathName);
+    }
+
     /*!
      * Splits the path it into two components: drive & tail.
      * 
@@ -82,6 +131,11 @@ public:
      */
     static StringPair splitDrive(const std::string& path);
     
+    inline StringPair splitDrive() const
+    {
+        return splitDrive(mPathName);
+    }
+
     /*!
      * Splits the pathname into two components: root & ext.
      * 
@@ -92,12 +146,21 @@ public:
     static StringPair splitExt(const std::string& path);
     
     
+    inline StringPair splitExt() const
+    {
+        return splitExt(mPathName);
+    }
+
     /*!
      * Returns the base name of the path supplied. This is the second half of the
      * pair returned by splitPath()
      */
     static std::string basename(const std::string& path, bool removeExt = false);
-    
+    inline std::string getBasePath(bool removeExt = false) const
+    {
+        return sys::Path::basename(mPathName, removeExt);
+    }
+
     /*!
      * Returns the path delimiter
      */
@@ -107,8 +170,55 @@ public:
      * Returns the path separator
      */
     static const char* separator();
+   
+    inline bool exists() const
+    {
+        return mOS.exists(mPathName);
+    }
     
+    inline bool isDirectory() const
+    {
+        return mOS.isDirectory(mPathName);
+    }
+    inline bool isFile() const
+    {
+        return mOS.isFile(mPathName);
+    }
+
+    inline off_t lastModified() const
+    {
+        return mOS.getLastModifiedTime(mPathName);
+    }
+
+    inline std::string getPath() const { return mPathName; }
     
+    std::vector<std::string> list() const;
+
+    inline bool mkdir() const
+    {
+        return mOS.makeDirectory(mPathName);
+    }
+
+    inline bool remove() const
+    {
+        return mOS.remove(mPathName);
+    }
+
+    inline bool renameTo(std::string dest)
+    {
+        if (mOS.move(mPathName, dest))
+        {
+            mPathName = dest;
+            return true;
+        }
+        return false;
+    }
+    inline sys::Off_T length() const
+    {
+        return mOS.getSize(mPathName);
+    }
+
+
 };
 
 }

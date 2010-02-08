@@ -193,7 +193,7 @@ std::string sys::OSWin32::getTempName(std::string path,
     return std::string(buffer);
 }
 
-off_t sys::OSWin32::getSize(const std::string& path) const
+sys::Off_T sys::OSWin32::getSize(const std::string& path) const
 {
     HANDLE handle = CreateFile(path.c_str(),
                                GENERIC_READ,
@@ -210,10 +210,10 @@ off_t sys::OSWin32::getSize(const std::string& path) const
     DWORD highOff;
     DWORD ret = GetFileSize(handle, &highOff);
     CloseHandle(handle);
-    return ((highOff) << 32) + ret;
+    return (sys::Off_T)((highOff) << 32) + ret;
 }
 
-off_t sys::OSWin32::getLastModifiedTime(const std::string& path) const
+sys::Off_T sys::OSWin32::getLastModifiedTime(const std::string& path) const
 {
     HANDLE handle = CreateFile(path.c_str(),
                                GENERIC_READ,
@@ -240,14 +240,11 @@ off_t sys::OSWin32::getLastModifiedTime(const std::string& path) const
         uli.HighPart = lastWriteTime.dwHighDateTime;
 
         ULONGLONG stInMillis(uli.QuadPart/10000);
-        return (off_t)stInMillis;
+        return (sys::Off_T)stInMillis;
     }
-    else
-    {
-        throw sys::SystemException(
-            FmtX("Error getting last modified time for path %s",
-                 path.c_str()));
-    }
+    throw sys::SystemException(
+        FmtX("Error getting last modified time for path %s",
+             path.c_str()));
 }
 
 

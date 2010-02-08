@@ -99,13 +99,15 @@ std::string sys::Path::joinPaths(const std::string& path1,
 
 std::string sys::Path::absolutePath(const std::string& path)
 {
-    sys::OS os;
     std::string osDelimStr(sys::Path::delimiter());
+    
     sys::Path::StringPair driveParts = sys::Path::splitDrive(path);
     if (!str::startsWith(path, osDelimStr) && !str::startsWith(path, "/")
             && driveParts.first.empty())
-        return sys::Path::normalizePath(sys::Path::joinPaths(
-                os.getCurrentWorkingDirectory(), path));
+        return sys::Path::normalizePath(
+            sys::Path::joinPaths(
+                sys::OS().getCurrentWorkingDirectory(), path)
+            );
     return sys::Path::normalizePath(path);
 }
 
@@ -179,3 +181,22 @@ const char* sys::Path::separator()
 #endif
 }
 
+std::vector<std::string> sys::Path::list() const
+{
+    if (!mOS.exists(mPathName) || !mOS.isDirectory(mPathName))
+    {
+        std::ostringstream oss;
+        oss << "'" << mPathName 
+            << "' does not exist or is not a valid directory";
+        throw except::Exception(Ctxt(oss.str()));
+    }
+    std::vector<std::string> listing;
+    sys::Directory directory;
+    const char* p = directory.findFirstFile(mPathName.c_str());
+    while (p != NULL)
+    {
+        listing.push_back(p);
+        p = directory.findNextFile();
+    }
+    return listing;
+}
