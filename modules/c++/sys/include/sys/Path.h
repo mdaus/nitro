@@ -223,4 +223,6 @@ public:
 
 }
 
+std::ostream& operator<<(std::ostream& os, sys::Path& path);
+
 #endif

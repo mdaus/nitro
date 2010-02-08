@@ -200,3 +200,9 @@ std::vector<std::string> sys::Path::list() const
     }
     return listing;
 }
+
+std::ostream& operator<< (std::ostream& os, sys::Path& path)
+{
+    os << path.getPath().c_str();
+    return os;
+}
