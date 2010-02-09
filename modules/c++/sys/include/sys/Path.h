@@ -39,10 +39,12 @@
 namespace sys
 {
 
+
 class Path
 {
     std::string mPathName;
     OS mOS;
+
 public:
 
     Path() {}
@@ -218,11 +220,19 @@ public:
         return mOS.getSize(mPathName);
     }
 
+    void reset(std::string str)
+    {
+        mPathName = str;
+    }
+
 
 };
+
 
 }
 
 std::ostream& operator<<(std::ostream& os, const sys::Path& path);
+std::istream& operator>>(std::istream& os, sys::Path& path);
+
 
 #endif

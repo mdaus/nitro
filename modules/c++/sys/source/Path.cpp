@@ -206,3 +206,10 @@ std::ostream& operator<< (std::ostream& os, const sys::Path& path)
     os << path.getPath().c_str();
     return os;
 }
+std::istream& operator>>(std::istream& is, sys::Path& path)
+{
+    std::string str;
+    is >> str;
+    path.reset(str);
+    return is;
+}
