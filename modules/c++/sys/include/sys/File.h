@@ -26,6 +26,7 @@
 
 #include "sys/Conf.h"
 #include "sys/SystemException.h"
+#include "sys/Path.h"
 
 #ifdef WIN32
 #    define _SYS_SEEK_CUR FILE_CURRENT
@@ -83,31 +84,37 @@ public:
            READ_ONLY = _SYS_RDONLY,
            WRITE_ONLY = _SYS_WRONLY,
            READ_AND_WRITE = _SYS_RDWR };
-
+    
     /*!
-    *  Default constructor.  Does nothing
-    */
+     *  Default constructor.  Does nothing
+     */
     File() : mHandle(SYS_INVALID_HANDLE)
     {}
 
-    /*!
-     *  Constructor.  Initializes to a file.
-     *  @param str A file name to open
-     */
-    File(const std::string& str) throw(sys::SystemException)
-    {
-        create(str, READ_ONLY, EXISTING);
-    }
 
     /*!
      *  Constructor.  Initializes to a file.
-     *  @param str A file name to open
-     *  @param accessFlags File access flags
-     *  @param creationFlags File creation flags
+     *  \param str A file name to open
+     *  \param accessFlags File access flags
+     *  \param creationFlags File creation flags
      */
-    File(const std::string& str,
-         int accessFlags,
-         int creationFlags) throw(sys::SystemException)
+    File(const Path& path,
+         int accessFlags = READ_ONLY,
+         int creationFlags = EXISTING) throw(sys::SystemException)
+    {
+        create(path.getPath(), accessFlags, creationFlags);
+    }
+
+
+    /*!
+     *  Constructor.  Initializes to a file.
+     *  \param str A file name to open
+     *  \param accessFlags File access flags
+     *  \param creationFlags File creation flags
+     */
+    File(std::string str,
+         int accessFlags = READ_ONLY,
+         int creationFlags = EXISTING) throw(sys::SystemException)
     {
         create(str, accessFlags, creationFlags);
     }
@@ -122,7 +129,7 @@ public:
 
     /*!
      *  Is the file open?
-     *  @return true if open, false if invalid handle
+     *  \return true if open, false if invalid handle
      */
     bool isOpen()
     {
@@ -138,9 +145,9 @@ public:
 
     /*!
      *  Initialize the object to a file.
-     *  @param str A file name to open
-     *  @param accessFlags File access flags
-     *  @param creationFlags File creation flags
+     *  \param str A file name to open
+     *  \param accessFlags File access flags
+     *  \param creationFlags File creation flags
      */
     void create(const std::string& str,
                 int accessFlags,
@@ -154,8 +161,8 @@ public:
      *  If size is < 0, an exception is thrown.
      *  If size is > length of file, an exception occurs.
      *
-     *  @param buffer The buffer to put to
-     *  @param size The number of bytes
+     *  \param buffer The buffer to put to
+     *  \param size The number of bytes
      */
     void readInto(char* buffer, Size_T size)
     throw(sys::SystemException);
@@ -167,8 +174,8 @@ public:
      *  If size is 0, no OS level write operation occurs.
      *  If size is < 0, an exception is thrown.
      *
-     *  @param buffer The buffer to read from
-     *  @param size The number of bytes to write out
+     *  \param buffer The buffer to read from
+     *  \param size The number of bytes to write out
      */
     void writeFrom(const char* buffer, Size_T size)
     throw(sys::SystemException);
@@ -177,7 +184,8 @@ public:
     /*!
      *  Seek to the specified offset, relative to 'whence.'
      *  Valid values are FROM_START, FROM_CURRENT, FROM_END.
-     *  @return Global offset location.
+     *
+     *  \return Global offset location.
      */
 
     sys::Off_T seekTo(sys::Off_T offset, int whence)
@@ -185,7 +193,8 @@ public:
 
     /*!
      *  Report current offset within file.
-     *  @return Current offset;
+     *
+     *  \return Current offset;
      */
     sys::Off_T getCurrentOffset() throw(sys::SystemException)
     {
@@ -194,7 +203,8 @@ public:
 
     /*!
      *  Report the length of the file.
-     *  @return The length
+     *
+     *  \return The length
      */
     sys::Off_T length() throw(sys::SystemException);
 

@@ -38,8 +38,13 @@ int main(int argc, char **argv)
 	std::cout << os["PATH"] << std::endl;
 	
 	std::string cwd = os.getCurrentWorkingDirectory();
-	sys::DirectoryEntry d(cwd);
-	std::cout << "Searching directory: " << d.getName() << std::endl;
+
+        sys::Path path(cwd);
+
+        
+	std::cout << "Searching directory: " << path << std::endl;
+
+        sys::DirectoryEntry d(path);
 	
 	for (sys::DirectoryEntry::Iterator p = d.begin(); p != d.end(); ++p)
 	{

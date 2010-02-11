@@ -24,7 +24,10 @@
 #ifndef __SYS_DIRECTORY_ENTRY_H__
 #define __SYS_DIRECTORY_ENTRY_H__
 
+#include "except/Exception.h"
 #include "sys/OS.h"
+#include "sys/Path.h"
+
 
 namespace sys
 {
@@ -33,6 +36,31 @@ class DirectoryEntry
 public:
     class Iterator;
     friend class Iterator;
+
+    DirectoryEntry(const Path& path)
+    {
+        if (!path.exists() || !path.isDirectory())
+            throw except::FileNotFoundException(Ctxt(path.getPath()));
+
+        mCurrent = mDir.findFirstFile(path.getPath().c_str());
+        mFirst.reset(this);
+        mLast.reset(NULL);
+
+    }
+
+    /* Dont worry about this for now
+    DirectoryEntry& operator=(const Path& path)
+    {
+        if (!path.exists() || !path.isDirectory())
+            throw except::NoSuchFileException(Ctxt(path));
+
+        mCurrent = mDir.findFirstFile(path.getPath());
+        mFirst.reset(this);
+        mLast.reset(NULL);
+        return *this;
+    }
+    */
+
     DirectoryEntry(const std::string& dirName) : mDirName(dirName)
     {
         mCurrent = mDir.findFirstFile(dirName.c_str());
@@ -49,7 +77,7 @@ public:
     {
         return mCurrent;
     }
-    virtual const std::string& getName() const
+    virtual std::string getName() const
     {
         return mDirName;
     }
@@ -73,11 +101,11 @@ public:
             if (mEntry->mCurrent == NULL) mEntry = NULL;
             return *this;
         }
-        const char* operator*() const
+        std::string operator*() const
         {
             if (!mEntry->mCurrent)
                 throw except::NullPointerReference(Ctxt("DirectoryEntry::Iterator NULL entry not allowed"));
-            return mEntry->mCurrent;
+            return std::string(mEntry->mCurrent);
         }
         DirectoryEntry* get() const
         {
