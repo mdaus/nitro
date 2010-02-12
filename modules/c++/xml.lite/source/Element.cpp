@@ -36,8 +36,7 @@ xml::lite::Element::Element(const xml::lite::Element & node)
 
 }
 
-xml::lite::Element & xml::lite::Element::operator=(const xml::lite::
-        Element & node)
+xml::lite::Element & xml::lite::Element::operator=(const xml::lite::Element & node)
 {
     if (this != &node)
     {
@@ -55,7 +54,7 @@ void xml::lite::Element::clone(const xml::lite::Element & node)
     mCharacterData = node.mCharacterData;
     mAttributes = node.mAttributes;
 
-    std::vector< xml::lite::Element * >::const_iterator iter;
+    std::vector<xml::lite::Element *>::const_iterator iter;
     iter = node.getChildren().begin();
     for (; iter != node.getChildren().end(); ++iter)
     {
@@ -65,22 +64,20 @@ void xml::lite::Element::clone(const xml::lite::Element & node)
     }
 }
 
-bool
-xml::lite::Element::hasElement(const std::string & uri,
-                               const std::string & localName) const
+bool xml::lite::Element::hasElement(const std::string & uri,
+                                    const std::string & localName) const
 {
 
     for (unsigned int i = 0; i < mChildren.size(); i++)
     {
-        if (mChildren[i]->getUri() == uri &&
-                mChildren[i]->getLocalName() == localName)
+        if (mChildren[i]->getUri() == uri && mChildren[i]->getLocalName()
+                == localName)
             return true;
     }
     return false;
 }
 
-bool
-xml::lite::Element::hasElement(const std::string & localName) const
+bool xml::lite::Element::hasElement(const std::string & localName) const
 {
 
     for (unsigned int i = 0; i < mChildren.size(); i++)
@@ -91,24 +88,21 @@ xml::lite::Element::hasElement(const std::string & localName) const
     return false;
 }
 
-void
-xml::lite::Element::getElementsByTagName(const std::string & uri,
-        const std::string & localName,
-        std::vector < Element * >&elements)
+void xml::lite::Element::getElementsByTagName(const std::string & uri,
+                                              const std::string & localName,
+                                              std::vector<Element *>&elements)
 {
     elements.clear();
     for (unsigned int i = 0; i < mChildren.size(); i++)
     {
-        if (mChildren[i]->getUri() == uri &&
-                mChildren[i]->getLocalName() == localName)
+        if (mChildren[i]->getUri() == uri && mChildren[i]->getLocalName()
+                == localName)
             elements.push_back(mChildren[i]);
     }
 }
 
-
-void
-xml::lite::Element::getElementsByTagName(const std::string & localName,
-        std::vector < Element * >&elements)
+void xml::lite::Element::getElementsByTagName(const std::string & localName,
+                                              std::vector<Element *>&elements)
 {
     elements.clear();
     for (unsigned int i = 0; i < mChildren.size(); i++)
@@ -118,9 +112,8 @@ xml::lite::Element::getElementsByTagName(const std::string & localName,
     }
 }
 
-void
-xml::lite::Element::getElementsByTagNameNS(const std::string & qname,
-        std::vector < Element * >&elements)
+void xml::lite::Element::getElementsByTagNameNS(const std::string & qname,
+                                                std::vector<Element *>&elements)
 {
     elements.clear();
     for (unsigned int i = 0; i < mChildren.size(); i++)
@@ -130,8 +123,7 @@ xml::lite::Element::getElementsByTagNameNS(const std::string & qname,
     }
 }
 
-void
-xml::lite::Element::destroyChildren()
+void xml::lite::Element::destroyChildren()
 {
     // While something is in vector
     while (mChildren.size())
@@ -150,19 +142,20 @@ xml::lite::Element::destroyChildren()
     }
 }
 
-void
-xml::lite::Element::print(io::OutputStream & stream)
+void xml::lite::Element::print(io::OutputStream & stream)
 {
     depthPrint(stream, 0, "");
 }
 
 void xml::lite::Element::prettyPrint(io::OutputStream & stream,
-        std::string formatter)
+                                     std::string formatter)
 {
     depthPrint(stream, 0, formatter);
 }
 
-void xml::lite::Element::depthPrint(io::OutputStream & stream, int depth, std::string formatter)
+void xml::lite::Element::depthPrint(io::OutputStream & stream,
+                                    int depth,
+                                    std::string formatter)
 {
     std::string prefix = "";
     for (int i = 0; i < depth; ++i)
@@ -210,18 +203,16 @@ void xml::lite::Element::depthPrint(io::OutputStream & stream, int depth, std::s
     }
 }
 
-void
-xml::lite::Element::addChild(xml::lite::Element * node)
+void xml::lite::Element::addChild(xml::lite::Element * node)
 {
-//       std::string(node->characterData.getData(),
-//                   node->characterData.getDataSize()) << std::endl;
+    //       std::string(node->characterData.getData(),
+    //                   node->characterData.getDataSize()) << std::endl;
     // End temp code
     mChildren.push_back(node);
 }
 
-void xml::lite::Element::changePrefix(Element* element,
-                                      const std::pair < std::string,
-                                      std::string > & prefixAndUri)
+void xml::lite::Element::changePrefix(Element* element, const std::pair<
+        std::string, std::string> & prefixAndUri)
 {
 
     if (element->mName.getAssociatedUri() == prefixAndUri.second)
@@ -231,8 +222,7 @@ void xml::lite::Element::changePrefix(Element* element,
 
         for (int i = 0; i < mAttributes.getLength(); i++)
         {
-            if (mAttributes[i].getUri() ==
-                    prefixAndUri.second)
+            if (mAttributes[i].getUri() == prefixAndUri.second)
             {
                 //std::cout << "Rewriting prefix in Atts!" << std::endl;
                 mAttributes[i].setPrefix(prefixAndUri.first);
@@ -245,11 +235,8 @@ void xml::lite::Element::changePrefix(Element* element,
     }
 }
 
-
-
-void xml::lite::Element::changeUri(Element* element,
-                                   const std::pair < std::string,
-                                   std::string > & prefixAndUri)
+void xml::lite::Element::changeUri(Element* element, const std::pair<
+        std::string, std::string> & prefixAndUri)
 {
 
     if (element->mName.getPrefix() == prefixAndUri.first)
@@ -264,10 +251,8 @@ void xml::lite::Element::changeUri(Element* element,
     }
 }
 
-
-
-void xml::lite::Element::rewriteNamespacePrefix(const std::pair < std::string,
-        std::string > & prefixAndUri)
+void xml::lite::Element::rewriteNamespacePrefix(const std::pair<std::string,
+        std::string> & prefixAndUri)
 {
     for (int i = 0; i < mAttributes.getLength(); i++)
     {
@@ -280,8 +265,8 @@ void xml::lite::Element::rewriteNamespacePrefix(const std::pair < std::string,
     changePrefix(this, prefixAndUri);
 }
 
-void xml::lite::Element::rewriteNamespaceUri(const std::pair < std::string,
-        std::string > & prefixAndUri)
+void xml::lite::Element::rewriteNamespaceUri(const std::pair<std::string,
+        std::string> & prefixAndUri)
 {
     for (int i = 0; i < mAttributes.getLength(); i++)
     {
@@ -294,6 +279,4 @@ void xml::lite::Element::rewriteNamespaceUri(const std::pair < std::string,
     }
     changeUri(this, prefixAndUri);
 }
-
-
 

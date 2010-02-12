@@ -36,11 +36,13 @@ public:
 
     //!  Constructor
     XMLReaderInterface()
-    {}
+    {
+    }
 
     //!  Destructor
     virtual ~XMLReaderInterface()
-    {}
+    {
+    }
 
     /*!
      *  Returns the xml::lite::ContentHandler
@@ -52,16 +54,14 @@ public:
      *  Set the internal xml::lite::ContentHandler
      *  \param newHandler The ContentHandler to set
      */
-    virtual void
-    setContentHandler(xml::lite::ContentHandler* newHandler) = 0;
+    virtual void setContentHandler(xml::lite::ContentHandler* newHandler) = 0;
 
     /*!
      *  Parse the input stream
      *  \param is The input stream to read from
      *  \param size The number of bytes to read
      */
-    void parse(io::InputStream & is,
-               int size = io::InputStream::IS_END);
+    void parse(io::InputStream & is, int size = io::InputStream::IS_END);
 
     //! Method to create an xml reader
     virtual void create() = 0;
@@ -98,6 +98,7 @@ public:
 
     virtual void setValidation(bool validate) = 0;
     virtual bool getValidation() = 0;
+
 protected:
     Native_T mNative;
 
@@ -107,7 +108,6 @@ private:
 
     //! Private overloaded assignment operator
     XMLReaderInterface & operator=(const XMLReaderInterface &);
-
 
 };
 }

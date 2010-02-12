@@ -56,10 +56,9 @@ namespace xml
 {
 namespace lite
 {
-typedef std::stack < int >NamespaceRefStack;
-typedef std::pair < std::string, std::string > NamespaceEntity;
-typedef std::vector < NamespaceEntity > NamespaceEntityMap;
-
+typedef std::stack<int> NamespaceRefStack;
+typedef std::pair<std::string, std::string> NamespaceEntity;
+typedef std::vector<NamespaceEntity> NamespaceEntityMap;
 
 /*!
  * \class NamespaceStack
@@ -75,10 +74,12 @@ class NamespaceStack
 {
 public:
     NamespaceStack()
-    {}
+    {
+    }
 
     ~NamespaceStack()
-    {}
+    {
+    }
 
     /*!
      *  Push a new scope on the stack.  This will add a zero-
@@ -105,8 +106,7 @@ public:
      *  \param prefix  The unique prefix to associate
      *  \param uri     The uri to associate
      */
-    void newMapping(const std::string & prefix,
-                    const std::string & uri);
+    void newMapping(const std::string & prefix, const std::string & uri);
 
     /*!
      *  Of course, we also wish to retrieve the
@@ -122,7 +122,7 @@ public:
      *  \param allPrefixes All of the prefixes
      *
      */
-    void getAllPrefixes(std::vector < std::string > &allPrefixes) const;
+    void getAllPrefixes(std::vector<std::string> &allPrefixes) const;
 
 private:
     NamespaceEntityMap mMappingStack;

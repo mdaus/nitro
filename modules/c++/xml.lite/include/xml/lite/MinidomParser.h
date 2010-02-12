@@ -65,7 +65,8 @@ public:
 
     //! Destructor.
     virtual ~ MinidomParser()
-    {}
+    {
+    }
 
     /*!
      *  Present our parsing interface.  Similar to DOM, the input
@@ -74,8 +75,7 @@ public:
      *  \param is  This is the input stream to feed the parser
      *  \param size  This is the size of the stream to feed the parser
      */
-    virtual void parse(io::InputStream & is,
-                       int size = io::InputStream::IS_END)
+    virtual void parse(io::InputStream & is, int size = io::InputStream::IS_END)
     {
         mReader.parse(is, size);
     }
@@ -100,6 +100,11 @@ public:
         return mHandler.getDocument();
     }
 
+    virtual Document *getDocument(bool steal = false)
+    {
+        return mHandler.getDocument(steal);
+    }
+
     /*!
      *  Reader accessor
      *  \return The reader by constant reference
@@ -108,7 +113,6 @@ public:
     {
         return mReader;
     }
-
 
     /*!
      *  Reader accessor
@@ -119,7 +123,6 @@ public:
         return mReader;
     }
 
-
     /*!
      *  This is the public interface for resetting the
      *  XML document.  This will call the handler version of this
@@ -127,9 +130,9 @@ public:
      *
      *  \param newDocument The new document.
      */
-    virtual void setNewDocument(Document * newDocument)
+    virtual void setDocument(Document * newDocument, bool own = true)
     {
-        mHandler.setNewDocument(newDocument);
+        mHandler.setDocument(newDocument, own);
     }
 
     /*!

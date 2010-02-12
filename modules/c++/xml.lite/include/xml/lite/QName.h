@@ -23,7 +23,6 @@
 #ifndef __XML_LITE_QNAME_H__
 #define __XML_LITE_QNAME_H__
 
-
 /*!
  * \file QName.h
  * \brief A Qualified name (includes the namespace stuff)
@@ -67,15 +66,15 @@ class QName
 public:
     //! Default constructor
     QName()
-    {}
+    {
+    }
 
     /*!
      * Constructor taking the namespace prefix and the local name 
      * \param uri The uri of the object 
      * \param qname The qname of the object 
      */
-    QName(const std::string& uri,
-          const std::string& qname)
+    QName(const std::string& uri, const std::string& qname)
     {
         setQName(qname);
         setAssociatedUri(uri);
@@ -92,10 +91,10 @@ public:
 
     //! Destructor
     ~QName()
-    {}
+    {
+    }
 
-
-    QName( const QName & qname )
+    QName(const QName & qname)
     {
         mPrefix = qname.mPrefix;
         mLocalName = qname.mLocalName;
@@ -112,7 +111,6 @@ public:
         }
         return *this;
     }
-
 
     /*!
      *  Set the local part (unqualified)
@@ -154,7 +152,7 @@ public:
      *  Here you specify that URI.
      *  \param uri The URI to associate with this QName
      */
-    void setAssociatedUri( const std::string& uri);
+    void setAssociatedUri(const std::string& uri);
 
     /*!
      *  Get the URI associated with the QName

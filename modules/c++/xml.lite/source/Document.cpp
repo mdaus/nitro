@@ -22,23 +22,29 @@
 
 #include "xml/lite/Document.h"
 
+void xml::lite::Document::setRootElement(Element * element, bool own)
+{
+    destroy();
+    mOwnRoot = own;
+    mRootNode = element;
+}
+
 void xml::lite::Document::destroy()
 {
-    /*  Took out this line because remove() checks now) */
-    //if (mRootNode)
     remove(mRootNode);
 }
 
 void xml::lite::Document::remove(Element * toDelete)
 {
-    /*  Added code here to make sure we can remove from root */
+    //  Added code here to make sure we can remove from root
     if (toDelete == mRootNode)
     {
-        if (mRootNode) delete mRootNode;
+        if (mRootNode && mOwnRoot)
+            delete mRootNode;
         mRootNode = NULL;
     }
-    /*  End of new code */
-    else remove(toDelete, mRootNode);
+    else
+        remove(toDelete, mRootNode);
 }
 
 xml::lite::Element *
@@ -63,13 +69,13 @@ void xml::lite::Document::insert(xml::lite::Element * element,
 }
 
 void xml::lite::Document::remove(xml::lite::Element * toDelete,
-                                     xml::lite::Element * fromHere)
+                                 xml::lite::Element * fromHere)
 {
-
     if (fromHere != NULL && toDelete != NULL)
     {
-        for (std::vector < xml::lite::Element * >::iterator i =
-                    fromHere->getChildren().begin(); i != fromHere->getChildren().end(); ++i)
+        for (std::vector<xml::lite::Element *>::iterator i =
+                fromHere->getChildren().begin(); i
+                != fromHere->getChildren().end(); ++i)
         {
             if (*i == toDelete)
             {

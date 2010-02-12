@@ -56,7 +56,8 @@ class Element
 public:
     //! Constructor
     Element()
-    {}
+    {
+    }
 
     //! Destructor
     virtual ~Element()
@@ -91,21 +92,21 @@ public:
      *  Get the attributes in a non-const way
      *  \return attributes
      */
-    Attributes & getAttributes()
+    Attributes& getAttributes()
     {
         return mAttributes;
     }
 
     std::string& attribute(std::string s)
     {
-	return mAttributes[s];
+        return mAttributes[s];
     }
 
     /*!
      *  Get the attributes in a const way
      *  \return attributes
      */
-    const Attributes & getAttributes() const
+    const Attributes& getAttributes() const
     {
         return mAttributes;
     }
@@ -114,7 +115,7 @@ public:
      *  Set the attributes
      *  \param attributes The attributes to set
      */
-    void setAttributes(const Attributes & attributes)
+    void setAttributes(const Attributes& attributes)
     {
         mAttributes.clear();
         for (int i = 0; i < attributes.getLength(); i++)
@@ -123,16 +124,13 @@ public:
         }
     }
 
-
-
     /*!
      *  Get the elements by tag name
      *  \param qname the QName
      *  \param elements the elements that match the QName
      */
     void getElementsByTagNameNS(const std::string & qname,
-                                std::vector < Element * >&elements);
-
+                                std::vector<Element *>&elements);
 
     /*!
      *  Utility for people that dont like to pass by reference
@@ -140,9 +138,9 @@ public:
      */
     std::vector<Element*> getElementsByTagNameNS(const std::string& qname)
     {
-	std::vector<Element*> v;
-	getElementsByTagNameNS(qname, v);
-	return v;
+        std::vector<Element*> v;
+        getElementsByTagNameNS(qname, v);
+        return v;
     }
 
     /*!
@@ -152,33 +150,26 @@ public:
      *  \param elements The elements
      */
     void getElementsByTagName(const std::string & localName,
-                              std::vector < Element * >&elements);
-
+                              std::vector<Element *>&elements);
 
     /*!
      *  Utility for people that dont like to pass by reference
-     *
      */
-
     std::vector<Element*> getElementsByTagName(const std::string& localName)
     {
-	std::vector<Element*> v;
-	getElementsByTagName(localName, v);
-	return v;
+        std::vector<Element*> v;
+        getElementsByTagName(localName, v);
+        return v;
     }
 
     /*!
      *  1)  Find this child's attribute and change it
      *  2)  Recursively descend over children and fix all
      *  namespaces below using fixNodeNamespace()
-     *  
-     * 
      */
-    void rewriteNamespacePrefix(const std::pair < std::string,
-                                std::string > & prefixAndUri);
-    void rewriteNamespaceUri(const std::pair < std::string,
-                             std::string > & prefixAndUri);
+    void rewriteNamespacePrefix(const std::pair<std::string, std::string> & prefixAndUri);
 
+    void rewriteNamespaceUri(const std::pair<std::string, std::string> & prefixAndUri);
 
     /*!
      *  Get the elements by tag name
@@ -188,13 +179,13 @@ public:
      */
     void getElementsByTagName(const std::string & uri,
                               const std::string & localName,
-                              std::vector < Element * >&elements);
+                              std::vector<Element *>&elements);
 
     /*!
      *  Prints the element to the specified OutputStream
      *  \param stream the OutputStream to write to
      *  \param formatter  The formatter
-    *  \todo Add format capability
+     *  \todo Add format capability
      */
     void print(io::OutputStream & stream);
 
@@ -247,7 +238,7 @@ public:
      *  Returns the local name of this element.
      *  \return the local name
      */
-    std::string getLocalName()const
+    std::string getLocalName() const
     {
         return mName.getName();
     }
@@ -265,7 +256,7 @@ public:
      *  Returns the QName of this element.
      *  \return the QName
      */
-    std::string getQName()const
+    std::string getQName() const
     {
         return mName.toString();
     }
@@ -276,7 +267,7 @@ public:
      */
     void setUri(const std::string & uri)
     {
-        mName.setAssociatedUri( uri );
+        mName.setAssociatedUri(uri);
     }
 
     /*!
@@ -298,7 +289,7 @@ public:
      *  Returns all of the children of this element
      *  \return the children of this element
      */
-    std::vector < Element * >&getChildren()
+    std::vector<Element*>& getChildren()
     {
         return mChildren;
     }
@@ -307,7 +298,7 @@ public:
      *  Returns all of the children of this element
      *  \return the children of this element
      */
-    const std::vector < Element * >&getChildren() const
+    const std::vector<Element*>& getChildren() const
     {
         return mChildren;
     }
@@ -315,17 +306,17 @@ public:
 protected:
 
     void changePrefix(Element* element,
-                      const std::pair < std::string,
-                      std::string > & prefixAndUri);
-    void changeUri(Element* element,
-                   const std::pair < std::string,
-                   std::string > & prefixAndUri);
+                      const std::pair<std::string, std::string> & prefixAndUri);
 
-    void depthPrint(io::OutputStream & stream, int depth, std::string formatter);
+    void changeUri(Element* element,
+                   const std::pair<std::string, std::string> & prefixAndUri);
+
+    void depthPrint(io::OutputStream & stream,
+                    int depth,
+                    std::string formatter);
 
     //! The children of this element
-    std::vector < Element * >mChildren;
-    //! QNames replace lname, pre, uri
+    std::vector<Element*> mChildren;
     xml::lite::QName mName;
     //! The attributes for this element
     xml::lite::Attributes mAttributes;

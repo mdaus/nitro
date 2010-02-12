@@ -22,16 +22,15 @@
 
 #include "xml/lite/MinidomHandler.h"
 
-
-void xml::lite::MinidomHandler::setNewDocument(Document *newDocument)
+void xml::lite::MinidomHandler::setDocument(Document *newDocument, bool own)
 {
-    if (mDocument != NULL)
+    if (mDocument != NULL && mOwnDocument)
     {
-        if (newDocument == mDocument)
-            return;
-        delete mDocument;
+        if (newDocument != mDocument)
+            delete mDocument;
     }
     mDocument = newDocument;
+    mOwnDocument = own;
 }
 
 void xml::lite::MinidomHandler::clear()
@@ -49,42 +48,29 @@ void xml::lite::MinidomHandler::clear()
 void xml::lite::MinidomHandler::characters(const char *value, int length)
 {
     // Append new data
-
     if (length)
         currentCharacterData += std::string(value, length);
 
-    //    dbg_printf("Current Char Data: @@@%s@@@\n", currentCharacterData.c_str());
     // Append number of bytes added to this node's stack value
     assert(bytesForElement.size());
     bytesForElement.top() += length;
 }
 
-void
-xml::lite::MinidomHandler::startElement(const std::string & uri,
-                                        const std::string & localName,
-                                        const std::string & qname,
-                                        const xml::lite::Attributes & atts)
+void xml::lite::MinidomHandler::startElement(const std::string & uri,
+                                             const std::string & localName,
+                                             const std::string & qname,
+                                             const xml::lite::Attributes & atts)
 {
     // Assign what we can now, and push rest on stack
     // for later
 
-//     dbg_printf("Local name: <%s>", localName.c_str() );
-//     dbg_printf("Uri:        <%s>", uri.c_str() );
-//     dbg_printf("QName:      <%s>", qname.c_str() );
-
-
     xml::lite::Element * current = mDocument->createElement(qname, uri);
-
 
     current->setAttributes(atts);
     // Push this onto the node stack
     nodeStack.push(current);
-    // Push a size of zero bytes on stack for this node's
-    // char data
+    // Push a size of zero bytes on stack for this node's char data
     bytesForElement.push(0);
-    //    dbg_printf("========================PUSH: <%d>=========================\n",
-    //bytesForElement.size());
-
 }
 
 // This function subtracts off the char place from the push
@@ -93,16 +79,13 @@ std::string xml::lite::MinidomHandler::adjustCharacterData()
     // Edit the string with regard to this node's char data
     // Get rid of what we take on char data accumulator
 
+    int diff = (int) (currentCharacterData.length()) - bytesForElement.top();
 
-    int diff =
-        (int)(currentCharacterData.length()) -
-        bytesForElement.top();
-
-//     dbg_printf("Diff: %d", diff);
-//     dbg_printf("Current Char Data Length: %d",
-//             currentCharacterData.length());
-    std::string newCharacterData(currentCharacterData.
-                                 substr(diff, currentCharacterData.length()));
+    std::string
+            newCharacterData(
+                             currentCharacterData. substr(
+                                                          diff,
+                                                          currentCharacterData.length()));
     assert(diff >= 0);
     currentCharacterData.erase(diff, currentCharacterData.length());
     if (!mPreserveCharData)
@@ -111,60 +94,44 @@ std::string xml::lite::MinidomHandler::adjustCharacterData()
     return newCharacterData;
 }
 
-void
-xml::lite::MinidomHandler::trim(std::string & s)
+void xml::lite::MinidomHandler::trim(std::string & s)
 {
     int i;
 
-
-    for (i = 0; i < (int)s.length(); i++)
+    for (i = 0; i < (int) s.length(); i++)
     {
         if (!isspace(s[i]))
             break;
     }
     s.erase(0, i);
 
-
-    for (i = (int)s.length() - 1; i >= 0; i--)
+    for (i = (int) s.length() - 1; i >= 0; i--)
     {
         if (!isspace(s[i]))
             break;
 
     }
-    if (i + 1 < (int)s.length())
+    if (i + 1 < (int) s.length())
         s.erase(i + 1);
 }
 
-void
-xml::lite::MinidomHandler::endElement(const std::string & uri,
-                                      const std::string & localName,
-                                      const std::string & qname)
+void xml::lite::MinidomHandler::endElement(const std::string & uri,
+                                           const std::string & localName,
+                                           const std::string & qname)
 {
     // Pop current off top
     xml::lite::Element * current = nodeStack.top();
     nodeStack.pop();
 
-    // Set final info for current
-
-    //    EVAL(current->characterData.getDataSize());
-
-
     current->setCharacterData(adjustCharacterData());
-
-//     dbg_printf("Finalized Character Data: [>>%s<<]",
-//                   current->getCharacterData().c_str());
 
     // Remove corresponding int on bytes stack
     bytesForElement.pop();
-    //    dbg_printf("========================POP: <%d>==========================\n",
-    //bytesForElement.size());
     // Something is left on the stack
     // (We dont have not top-level node)
     if (nodeStack.size())
     {
         // Add current to child of parent
-        //          std::cout << "Adding node: " << current.name << std::endl;
-        //HERE();
         xml::lite::Element * parent = nodeStack.top();
         parent->addChild(current);
     }
@@ -172,12 +139,8 @@ xml::lite::MinidomHandler::endElement(const std::string & uri,
     // Just Assign
     else
     {
-        //          OutputFileStream debug("Debug.xml");
-        //          current.print(debug);
-        //          debug.close();
         mDocument->setRootElement(current);
     }
-
 }
 
 void xml::lite::MinidomHandler::preserveCharacterData(bool preserve)

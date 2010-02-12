@@ -67,24 +67,30 @@ class MinidomHandler : public ContentHandler
 {
 public:
     //! Constructor.  Uses default document
-    MinidomHandler() : mDocument(NULL), mPreserveCharData(false)
+    MinidomHandler() :
+        mDocument(NULL), mPreserveCharData(false), mOwnDocument(true)
     {
-        setNewDocument(new Document());
+        setDocument(new Document());
     }
-
-    //\! Alternate constructor.  Takes whatever document you want
-
-    /*      MinidomHandler(Document *adoptThis) : mDocument(NULL) */
-
-    /*   { setNewDocument(adoptThis); } */
 
     //! Destructor
     virtual ~ MinidomHandler()
     {
-        setNewDocument(NULL);
+        setDocument(NULL, true);
     }
 
-    virtual void setNewDocument(Document * newDocument);
+    virtual void setDocument(Document *newDocument, bool own = true);
+
+    /**
+     * Retrieves the Document.
+     * @param steal     if specified, ownership will be given up (if owned)
+     */
+    virtual Document *getDocument(bool steal = false)
+    {
+        if (steal)
+            mOwnDocument = false;
+        return mDocument;
+    }
 
     virtual Document *getDocument() const
     {
@@ -116,7 +122,6 @@ public:
                               const std::string & qname,
                               const Attributes & atts);
 
-
     /*!
      * We want to push only the proper amount of bytes
      * to the node when we start writing.  Here we chew
@@ -124,7 +129,6 @@ public:
      * \return The chracter data for the node
      */
     virtual std::string adjustCharacterData();
-
 
     /*!
      * Handles the actual popping of the node off the node
@@ -137,18 +141,6 @@ public:
     virtual void endElement(const std::string & uri,
                             const std::string & localName,
                             const std::string & qname);
-
-    /*\!
-     * This method gets the pointer to the top of the tree.
-     * Make sure you get this before your destructor gets
-     * called or youll lose the reference AND the memory.
-     *
-     * Once you get the reference, dont forget to delete
-     * the top level element explicitly
-     * \return The top-level element
-     */
-
-    //      Document& getDocument() { return mDocument; }
 
     virtual void clear();
 
@@ -166,9 +158,10 @@ public:
 
 protected:
     std::string currentCharacterData;
-    std::stack < int >bytesForElement;
-    std::stack < Element * >nodeStack;
+    std::stack<int> bytesForElement;
+    std::stack<Element *> nodeStack;
     Document *mDocument;
+    bool mOwnDocument;
     bool mPreserveCharData;
 };
 }

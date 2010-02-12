@@ -52,16 +52,9 @@ class Document
 {
 public:
     //! Constructor
-    Document(): mRootNode(NULL)
-    {}
-
-    /*!
-     *  Constructor.  Takes a root node
-     *  \param rootNode The root of the document
-     */
-    Document(Element * rootNode)
+    Document(Element* rootNode = NULL, bool own = true) :
+        mRootNode(rootNode), mOwnRoot(own)
     {
-        mRootNode = rootNode;
     }
 
     /*!
@@ -73,11 +66,10 @@ public:
         destroy();
     }
 
-
     virtual Document* clone() const
     {
         Document* doc = new Document();
-        
+
         Element* cloneRoot = new Element();
         cloneRoot->clone(*mRootNode);
         doc->setRootElement(cloneRoot);
@@ -95,7 +87,6 @@ public:
                                    const std::string & uri,
                                    std::string characterData = "");
 
-
     /*!
      * Blanket destructor.  This thing deletes everything
      */
@@ -110,7 +101,6 @@ public:
      * \param underThis Element to add element to
      */
     virtual void insert(Element * element, Element * underThis);
-
 
     /*!
      * Remove an element from the tree, starting at the root
@@ -131,16 +121,20 @@ public:
      * Sets the internal root element
      * \param element The node to set.
      */
-    void setRootElement(Element * element)
-    {
-        mRootNode = element;
-    }
+    void setRootElement(Element * element, bool own = true);
 
     /*!
      * Retrieves the internal root element
      * \return The root node
      */
-    Element *getRootElement()
+    Element *getRootElement(bool steal = false)
+    {
+        if (steal)
+            mOwnRoot = false;
+        return mRootNode;
+    }
+
+    Element *getRootElement() const
     {
         return mRootNode;
     }
@@ -154,6 +148,7 @@ protected:
 
     //! The root node element
     Element *mRootNode;
+    bool mOwnRoot;
 };
 }
 }

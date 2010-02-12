@@ -26,7 +26,6 @@
 #include <string>
 #include "Attributes.h"
 
-
 /*!
  *  \file  ContentHandler.h
  *  \brief Implementation of a SAX 2.0 content handler
@@ -67,37 +66,22 @@ class ContentHandler
 public:
     //! Constructor
     ContentHandler()
-    {}
+    {
+    }
 
     //! Destructor
     virtual ~ ContentHandler()
-    {}
+    {
+    }
 
     //! Receive notification of the beginning of a document.
     virtual void startDocument()
-    {}
+    {
+    }
     //! Receive notification of the end of a document.
     virtual void endDocument()
-    {}
-
-    /*
-     *  \todo Not currently implemented
-     *  Begin the scope of a prefix-URI Namespace mapping.
-     *  Fired when we start a new prefix mapping
-     *  \param prefix  The new prefix
-     *  \param uri     The associated uri
-     */
-
-    /*virtual void startPrefixMapping(const std::string& prefix, */
-
-    /*          const std::string& uri) {} */
-
-    /*  \todo Not currently implemented
-     *  End the scope of a prefix-URI mapping.
-     *  Fired when we end a prefix mapping
-     *  \param prefix  The prefix we are dropping
-     */
-    //virtual void endPrefixMapping(const std::string& prefix) {}
+    {
+    }
 
     /*!
      *  Receive notification of character data.
@@ -105,9 +89,7 @@ public:
      *  \param data  The character data
      *  \param length The length of the new data
      */
-    virtual void characters(const char *data,
-                            int length) = 0;
-
+    virtual void characters(const char *data, int length) = 0;
 
     /*!
      *  Receive notification of the beginning of an element.
@@ -119,8 +101,7 @@ public:
     virtual void startElement(const std::string & uri,
                               const std::string & localName,
                               const std::string & qname,
-                              const xml::lite::Attributes &
-                              attributes) = 0;
+                              const xml::lite::Attributes & attributes) = 0;
     /*!
      *  Receive notification of the end of an element.
      *  \param uri  The associated uri
@@ -136,7 +117,8 @@ public:
      *  \param c The comment
      */
     virtual void comment(const std::string & c)
-    {}
+    {
+    }
 };
 }
 }

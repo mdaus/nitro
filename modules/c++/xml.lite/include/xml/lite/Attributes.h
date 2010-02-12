@@ -57,7 +57,8 @@ public:
 
     //! Constructor
     AttributeNode()
-    {}
+    {
+    }
 
     /*!
      *  Copy constructor
@@ -75,7 +76,8 @@ public:
 
     //! Destructor
     ~AttributeNode()
-    {}
+    {
+    }
 
     /*!
      *  This function takes a fully qualified name.
@@ -83,33 +85,32 @@ public:
      *  bind a namespace
      *  \param qname The fully qualified name
      */
-    void setQName( const std::string& qname );
+    void setQName(const std::string& qname);
 
     /*!
      *  Set the local (unqualified portion) of the name
      *  \param lname The new local name
      *
      */
-    void setLocalName( const std::string& lname );
-
+    void setLocalName(const std::string& lname);
 
     /*!
      *  Set the prefix (qualified portion) of the name
      *  \param prefix  This is the prefix
      */
-    void setPrefix( const std::string& prefix );
+    void setPrefix(const std::string& prefix);
 
     /*!
      *  Set the URI association in the QName
      *  \param uri The new uri
      */
-    void setUri( const std::string& uri);
+    void setUri(const std::string& uri);
 
     /*!
      *  Set the attribute value
      *  \param value The attribute value
      */
-    void setValue( const std::string& value );
+    void setValue(const std::string& value);
 
     /*!
      *  Get the URI associated with the QName.  Blank string
@@ -120,7 +121,10 @@ public:
     std::string getLocalName() const;
     std::string getPrefix() const;
     std::string getValue() const;
-    std::string& getValue() { return mValue; }
+    std::string& getValue()
+    {
+        return mValue;
+    }
     std::string getQName() const;
 
 protected:
@@ -128,11 +132,6 @@ protected:
     QName mName;
     //! The value of the attribute
     std::string mValue;
-
-
-
-
-
 
 };
 
@@ -152,21 +151,22 @@ class Attributes
 {
 public:
 
-    typedef std::vector< AttributeNode > Attributes_T;
+    typedef std::vector<AttributeNode> Attributes_T;
     //! Default constructor
     Attributes()
-    {}
+    {
+    }
 
     //! Copy constructor
     Attributes(const Attributes & attributes);
-
 
     //! Assignment operator
     Attributes & operator=(const Attributes & attributes);
 
     //! Destructor
     ~Attributes()
-    {}
+    {
+    }
 
     /*!
      *  Adds an attribute to the list of attributes.
@@ -187,8 +187,7 @@ public:
      * \param localName  The local name of the attribute
      * \return the index or -1 if none found
      */
-    int getIndex(const std::string & uri,
-                 const std::string & localName) const;
+    int getIndex(const std::string & uri, const std::string & localName) const;
 
     /*!
      * Return the number of attributes in the list.
@@ -196,7 +195,7 @@ public:
      */
     int getLength() const
     {
-        return (int)mAttributes.size();
+        return (int) mAttributes.size();
     }
 
     /*!
@@ -207,7 +206,6 @@ public:
      */
     std::string getLocalName(int i) const;
 
-
     std::string getQName(int i) const;
 
     /*!
@@ -217,7 +215,6 @@ public:
      * \throw IndexOutOfRangeException if the index is out of range
      */
     std::string getUri(int i) const;
-
 
     /*!
      * Look up an attribute's value by index.
@@ -242,8 +239,8 @@ public:
      * \return The value
      * \throw NoSuchKeyException If the qname is not found
      */
-    std::string getValue(const std::string & uri,
-                         const std::string & localName);
+    std::string
+            getValue(const std::string & uri, const std::string & localName);
     /*!
      * Get an attribute note based on the index as a const ref
      * \param i The node index
@@ -264,20 +261,20 @@ public:
      * \return The attribute node
      */
 
-    const AttributeNode& operator[] (int i) const
+    const AttributeNode& operator[](int i) const
     {
         return getNode(i);
     }
 
     std::string& operator[](std::string s)
     {
-	if (getIndex(s) == -1)
-	{
-	    AttributeNode node;
-	    node.setQName(s);
-	    mAttributes.push_back(node);
-	}
-	return mAttributes[ getIndex(s) ].getValue();
+        if (getIndex(s) == -1)
+        {
+            AttributeNode node;
+            node.setQName(s);
+            mAttributes.push_back(node);
+        }
+        return mAttributes[getIndex(s)].getValue();
     }
 
     /*!
@@ -285,11 +282,32 @@ public:
      * \param i The node index
      * \return The attribute node
      */
-
-    AttributeNode& operator[] (int i)
+    AttributeNode& operator[](int i)
     {
         return getNode(i);
     }
+
+    /**
+     * Remove the attribute with the given QName
+     */
+    void remove(const std::string& qname)
+    {
+        remove(getIndex(qname));
+    }
+
+    /**
+     * Remove the attribute at the given index (if possible)
+     */
+    void remove(int index)
+    {
+        if (index >= 0 && index < mAttributes.size())
+        {
+            Attributes_T::iterator it = mAttributes.begin();
+            for(int i = 0; i < index; ++i, ++it);
+            mAttributes.erase(it);
+        }
+    }
+
     void clear()
     {
         mAttributes.clear();
