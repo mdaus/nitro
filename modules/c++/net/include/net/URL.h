@@ -25,6 +25,7 @@
 
 #include <string>
 #include <map>
+#include <list>
 #include "net/NetExceptions.h"
 #include "net/NetUtils.h"
 
@@ -38,11 +39,32 @@
 namespace net
 {
 
+
+class URLParams
+{
+public:
+    typedef std::list<std::string> ParamValues;
+
+    URLParams(const std::string paramString = "");
+
+    bool contains(std::string key) const;
+    ParamValues& get(std::string key) throw (except::NoSuchKeyException);
+    const ParamValues& get(std::string key) const throw (except::NoSuchKeyException);
+    std::string getFirst(std::string key) const throw (except::NoSuchKeyException);
+    void add(std::string key, std::string value = "");
+    void remove(std::string key);
+
+    std::string toString() const;
+
+protected:
+    typedef std::map<std::string, ParamValues> Params;
+    Params mParams;
+};
+
+
 class URL
 {
 public:
-
-    typedef std::map<std::string, std::string> Params;
 
     URL(const std::string url = "");
 
@@ -66,8 +88,8 @@ public:
     std::string getQuery() const;
     std::string getServer() const;
     std::string getDocument() const;
-    Params& getParams();
-    const Params& getParams() const;
+    URLParams& getParams() { return mParams; }
+    const URLParams& getParams() const { return mParams; }
     std::string toString() const;
 
     /*!
@@ -81,7 +103,7 @@ protected:
     std::string mProtocol;
     std::string mHost;
     std::string mPath;
-    Params mParams;
+    URLParams mParams;
     std::string mFragment;
 };
 }

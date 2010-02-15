@@ -36,12 +36,7 @@ net::URL::URL(const net::URL& url)
     mHost = url.getHost();
     mPath = url.getPath();
     mFragment = url.getFragment();
-    std::map<std::string, std::string> params = url.getParams();
-    for (std::map<std::string, std::string>::const_iterator it = params.begin(); it
-            != params.end(); ++it)
-    {
-        mParams[it->first] = it->second;
-    }
+    mParams = net::URLParams(url.getParams().toString());
 }
 
 void net::URL::set(std::string url)
@@ -52,27 +47,7 @@ void net::URL::set(std::string url)
     mPath = parts[2];
     std::string params = parts[3];
     mFragment = parts[4];
-
-    if (!params.empty())
-    {
-        std::vector<std::string> paramParts = str::split(params, "&");
-        for (size_t i = 0, size = paramParts.size(); i < size; ++i)
-        {
-            std::string param = paramParts[i];
-            size_t pos = param.find("=");
-            if (pos > 0)
-            {
-                std::string key = param.substr(0, pos);
-                std::string val = (pos < (param.length() - 1)) ? param.substr(
-                        pos + 1) : "";
-                mParams[key] = val;
-            }
-            else
-            {
-                mParams[param] = "";
-            }
-        }
-    }
+    mParams = net::URLParams(params);
 }
 
 std::string net::URL::getProtocol() const
@@ -104,17 +79,7 @@ std::string net::URL::getFragment() const
 }
 std::string net::URL::getQuery() const
 {
-    std::ostringstream s;
-    bool firstParam = true;
-    for (std::map<std::string, std::string>::const_iterator it =
-            mParams.begin(); it != mParams.end(); ++it)
-    {
-        if (!firstParam)
-            s << "&";
-        s << net::quote(it->first) << "=" << net::quote(it->second);
-        firstParam = false;
-    }
-    return s.str();
+    return mParams.toString();
 }
 
 std::string net::URL::getDocument() const
@@ -140,22 +105,94 @@ std::string net::URL::getServer() const
     return server.str();
 }
 
-std::map<std::string, std::string>& net::URL::getParams()
-{
-    return mParams;
-}
-const std::map<std::string, std::string>& net::URL::getParams() const
-{
-    return mParams;
-}
-
 std::string net::URL::toString() const
 {
     return net::urlJoin(getProtocol(), getHost(), getPath(), getQuery(),
-            getFragment());
+                        getFragment());
 }
 
 bool net::URL::operator==(const net::URL& url) const
 {
     return toString() == url.toString();
+}
+
+net::URLParams::URLParams(const std::string paramString)
+{
+    if (!paramString.empty())
+    {
+        str::Tokenizer tokenizer(paramString, "&;"); //can be & or ;
+        str::Tokenizer::Tokens& paramParts = (str::Tokenizer::Tokens&)tokenizer;
+        for (size_t i = 0, size = paramParts.size(); i < size; ++i)
+        {
+            std::string param = paramParts[i];
+            std::string val = "";
+            size_t pos = param.find("=");
+            if (pos > 0)
+            {
+                std::string key = param.substr(0, pos);
+                val = (pos < (param.length() - 1)) ? param.substr(pos + 1) : "";
+                param = key;
+            }
+            add(param, val);
+        }
+    }
+}
+
+bool net::URLParams::contains(std::string key) const
+{
+    net::URLParams::Params::const_iterator it = mParams.find(key);
+    return it != mParams.end() && it->second.size() > 0;
+}
+
+net::URLParams::ParamValues& net::URLParams::get(std::string key) throw (except::NoSuchKeyException)
+{
+    net::URLParams::Params::iterator it = mParams.find(key);
+    if (it == mParams.end() || it->second.size() == 0)
+        throw except::NoSuchKeyException(Ctxt(key));
+    return it->second;
+}
+
+const net::URLParams::ParamValues& net::URLParams::get(std::string key) const throw (except::NoSuchKeyException)
+{
+    net::URLParams::Params::const_iterator it = mParams.find(key);
+    if (it == mParams.end() || it->second.size() == 0)
+        throw except::NoSuchKeyException(Ctxt(key));
+    return it->second;
+}
+std::string net::URLParams::getFirst(std::string key) const throw (except::NoSuchKeyException)
+{
+    net::URLParams::Params::const_iterator it = mParams.find(key);
+    if (it == mParams.end() || it->second.size() == 0)
+        throw except::NoSuchKeyException(Ctxt(key));
+    return it->second.front();
+}
+void net::URLParams::add(std::string key, std::string value)
+{
+    if (mParams.find(key) == mParams.end())
+        mParams[key] = net::URLParams::ParamValues();
+    mParams[key].push_back(value);
+}
+void net::URLParams::remove(std::string key)
+{
+    if (mParams.find(key) != mParams.end())
+        mParams.erase(key);
+}
+
+std::string net::URLParams::toString() const
+{
+    std::ostringstream s;
+    bool firstParam = true;
+    for (net::URLParams::Params::const_iterator it = mParams.begin(); it
+            != mParams.end(); ++it)
+    {
+        for (net::URLParams::ParamValues::const_iterator it2 = it->second.begin();
+                it2 != it->second.end(); ++it2)
+        {
+            if (!firstParam)
+                s << "&";
+            s << net::quote(it->first) << "=" << net::quote(*it2);
+            firstParam = false;
+        }
+    }
+    return s.str();
 }

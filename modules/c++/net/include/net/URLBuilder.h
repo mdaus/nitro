@@ -49,7 +49,7 @@ public:
 
     URLBuilder& addParam(const std::string key, const std::string value)
     {
-        mURL.mParams[key] = value;
+        mURL.getParams().add(key, value);
         return *this;
     }
 

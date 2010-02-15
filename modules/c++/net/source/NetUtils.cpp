@@ -30,7 +30,7 @@ std::vector<std::string> net::urlSplit(std::string url)
 {
     re::PCRE regex;
     regex.compile(
-            "([A-Za-z]+)://([^/?#]+)(/[^?#]+)?(?:[?]([^&#/]+(?:[&][^&#/]+)*)?)?(?:[#](.*))?");
+            "([A-Za-z]+)://([^/?#]+)(/[^?#]+)?(?:[?]([^&#/]+(?:[&;][^&;#/]+)*)?)?(?:[#](.*))?");
 
     re::PCREMatch match;
     if (regex.match(url, match))
