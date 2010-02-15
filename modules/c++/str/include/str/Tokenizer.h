@@ -53,6 +53,7 @@ namespace str
 class Tokenizer
 {
 public:
+    typedef std::vector<std::string> Tokens;
     /*!
      * Constructor.  Take a string to parse, and a delimiter set
      * \param str String to parse
@@ -64,12 +65,12 @@ public:
      * Method to return the resultant vector 
      * \return The vector that was created by the tokenizer
      */
-    operator std::vector<std::string>& ()
+    operator Tokenizer::Tokens& ()
     {
         return vec;
     }
 protected:
-    std::vector<std::string> vec;
+    Tokenizer::Tokens vec;
 };
 
 }
