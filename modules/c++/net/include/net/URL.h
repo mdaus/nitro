@@ -44,12 +44,15 @@ class URLParams
 {
 public:
     typedef std::list<std::string> ParamValues;
+    typedef std::map<std::string, ParamValues> Params;
 
     URLParams(const std::string paramString = "");
 
     bool contains(std::string key) const;
     ParamValues& get(std::string key) throw (except::NoSuchKeyException);
     const ParamValues& get(std::string key) const throw (except::NoSuchKeyException);
+    Params& get() { return mParams; }
+    const Params& get() const { return mParams; }
     std::string getFirst(std::string key) const throw (except::NoSuchKeyException);
     void add(std::string key, std::string value = "");
     void remove(std::string key);
@@ -57,7 +60,6 @@ public:
     std::string toString() const;
 
 protected:
-    typedef std::map<std::string, ParamValues> Params;
     Params mParams;
 };
 

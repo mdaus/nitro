@@ -185,12 +185,14 @@ std::string net::URLParams::toString() const
     for (net::URLParams::Params::const_iterator it = mParams.begin(); it
             != mParams.end(); ++it)
     {
-        for (net::URLParams::ParamValues::const_iterator it2 = it->second.begin();
-                it2 != it->second.end(); ++it2)
+        std::string key = it->first;
+        const net::URLParams::ParamValues& vals = it->second;
+        for (net::URLParams::ParamValues::const_iterator it2 = vals.begin();
+                it2 != vals.end(); ++it2)
         {
             if (!firstParam)
                 s << "&";
-            s << net::quote(it->first) << "=" << net::quote(*it2);
+            s << net::quote(key) << "=" << net::quote(*it2);
             firstParam = false;
         }
     }
