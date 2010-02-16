@@ -102,8 +102,8 @@ namespace sys
 #   ifndef _SIZE_T_DEFINED
 #       ifdef  _WIN64
             typedef unsigned __int64    Size_T;
-#	else
-	    typedef _W64 unsigned int   Size_T;
+#       else
+            typedef _W64 unsigned int   Size_T;
 #       endif
 #   else
         typedef size_t Size_T;
@@ -203,27 +203,27 @@ namespace sys
      *  \param numElems
      */
     inline void byteSwap(sys::byte *buffer,
-			 const unsigned short elemSize,
-			 const size_t numElems)
+                         const unsigned short elemSize,
+                         const size_t numElems)
     {
-	if (!buffer || elemSize < 2 || !numElems)
-	    return;
+        if (!buffer || elemSize < 2 || !numElems)
+            return;
 
-	unsigned short half = elemSize >> 1;
-	long offset = 0, innerOff = 0, innerSwap = 0;
+        unsigned short half = elemSize >> 1;
+        long offset = 0, innerOff = 0, innerSwap = 0;
 
-	for(size_t i = 0; i < numElems; ++i, offset += elemSize)
-	{
-	    for(unsigned short j = 0; j < half; ++j)
-	    {
-		innerOff = offset + j;
-		innerSwap = offset + elemSize - 1 - j;
-		
-		sys::byte tmp       = buffer[innerOff];
-		buffer[innerOff]    = buffer[innerSwap];
-		buffer[innerSwap]   = tmp;
-	    }
-	}
+        for(size_t i = 0; i < numElems; ++i, offset += elemSize)
+        {
+            for(unsigned short j = 0; j < half; ++j)
+            {
+                innerOff = offset + j;
+                innerSwap = offset + elemSize - 1 - j;
+                
+                sys::byte tmp       = buffer[innerOff];
+                buffer[innerOff]    = buffer[innerSwap];
+                buffer[innerSwap]   = tmp;
+            }
+        }
     }
 
     /*!
@@ -240,25 +240,25 @@ namespace sys
         template <typename T> std::complex<T> byteSwap(std::complex<T> val)
         {
             std::complex<T> out(byteSwap<T>(val.real()),
-	                        byteSwap<T>(val.imag()));
-	    return out;
+                                byteSwap<T>(val.imag()));
+            return out;
         }
      *  \endcode
      *
      */
     template <typename T> T byteSwap(T val)
     {
-	size_t size = sizeof(T);
-	T out;
-	
-	unsigned char* cOut = reinterpret_cast<unsigned char*>(&out);
-	unsigned char* cIn = reinterpret_cast<unsigned char*>(&val);
-	for (int i = 0, j = size - 1; i < j; ++i, --j)
-	{
-	    cOut[i] = cIn[j];
-	    cOut[j] = cIn[i];
-	}
-	return out;
+        size_t size = sizeof(T);
+        T out;
+        
+        unsigned char* cOut = reinterpret_cast<unsigned char*>(&out);
+        unsigned char* cIn = reinterpret_cast<unsigned char*>(&val);
+        for (int i = 0, j = size - 1; i < j; ++i, --j)
+        {
+            cOut[i] = cIn[j];
+            cOut[j] = cIn[i];
+        }
+        return out;
     }
 
 }

@@ -36,7 +36,7 @@ namespace sys
 
     inline long getThreadID()
     {
-	return (long)thr_self();
+        return (long)thr_self();
     }
 
 /*!
@@ -82,12 +82,6 @@ public:
      */
     virtual void start();
 
-    /*!
-     *  Run function defined and bound to pthread_create.
-     *  This should not be invoked directly
-     *  \param v The start arg
-     */
-    static void *__start(void *v);
 
     /*!
      *  Calls the native destroy stuff
@@ -105,6 +99,17 @@ public:
     static void yield();
 
 };
+
+}
+
+extern "C"
+{
+    /*!
+     *  Run function defined and bound to pthread_create.
+     *  This should not be invoked directly
+     *  \param v The start arg
+     */
+    void *__sys_ThreadSolaris_start(void *v);
 
 }
 #endif

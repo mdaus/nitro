@@ -39,7 +39,7 @@ void sys::ThreadSolaris::start()
 
     int p = thr_create(NULL,
                        0,
-                       (void * (*)(void *))this->__start,
+                       __sys_ThreadSolaris_start,
                        this,
                        flags,
                        &mNative);
@@ -52,7 +52,7 @@ void sys::ThreadSolaris::start()
         throw sys::SystemException(message);
     }
 }
-void *sys::ThreadSolaris::__start(void *v)
+extern "C" void *__sys_ThreadSolaris_start(void *v)
 {
     dbg_printf("Beginning __start()\n");
     STANDARD_START_CALL(ThreadSolaris, v);
