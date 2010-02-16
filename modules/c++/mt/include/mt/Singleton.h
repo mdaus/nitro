@@ -115,7 +115,17 @@ T& Singleton<T, AutoDestroy>::getInstance()
             mInstance = new T; //create the instance
             if (AutoDestroy)
             {
-                atexit(destroy); //register the destroy function
+#if defined(__SunOS_5_10)
+/* 
+ * Fix for Solaris bug where atexit is not extern C++
+ * http://bugs.opensolaris.org/bugdatabase/view_bug.do;jsessionid=9c8c03419fb896b730de20cd53ae?bug_id=6455603
+ */
+#   if !defined(ELIMINATE_BROKEN_LINKAGE)
+                atexit(destroy);
+#   endif
+#else
+                std::atexit(destroy);
+#endif
             }
         }
     }
