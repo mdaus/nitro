@@ -30,13 +30,14 @@
 
 #include <assert.h>
 #include <iostream>
-#include <stdlib.h>
 #include <stdio.h>
 
 #if defined(__sgi) || defined(__sgi__)
 #   include <stdarg.h>
+#   include <stdlib.h>
 #else
 #   include <cstdarg>
+#   include <cstdlib>
 #endif
 
 #include <memory>
