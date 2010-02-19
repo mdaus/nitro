@@ -7,7 +7,7 @@
     <name>nitf-imageio</name>
     <id>nitf-imageio</id>
     <groupId>nitro-nitf</groupId>
-    <currentVersion>1.1-dev</currentVersion>
+    <currentVersion>1.1</currentVersion>
 
     <developers>
         <developer>

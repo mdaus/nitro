@@ -27,7 +27,8 @@ nitf::IOInterface::IOInterface() throw (nitf::NITFException)
     static nitf_IIOInterface io = getIOInterfaceImpl();
 
     // Create the dummy handle
-    nitf_IOInterface * interface = (nitf_IOInterface*)NITF_MALLOC(sizeof(nitf_IOInterface));
+    nitf_IOInterface * interface =
+            (nitf_IOInterface*) NITF_MALLOC(sizeof(nitf_IOInterface));
     setNative(interface);
     if (!isValid())
         throw nitf::NITFException(Ctxt("Could not create IOInterface"));
@@ -40,69 +41,82 @@ nitf::IOInterface::IOInterface() throw (nitf::NITFException)
     setManaged(false);
 }
 
-
-NITF_BOOL nitf::IOInterface::IOInterfaceImpl_read(NITF_DATA* data,
-        char* buf, size_t size, nitf_Error* error)
+extern "C" NITF_BOOL __nitf_IOInterfaceImpl_read(NITF_DATA* data,
+                                                 char* buf,
+                                                 size_t size,
+                                                 nitf_Error* error)
 {
-    if (!data) throw except::NullPointerReference(Ctxt("IOInterfaceImpl_read"));
-    ((nitf::IOInterface*)data)->read(buf, size);
+    if (!data)
+        throw except::NullPointerReference(Ctxt("IOInterfaceImpl_read"));
+    ((nitf::IOInterface*) data)->read(buf, size);
     return NITF_SUCCESS;
 }
 
-NITF_BOOL nitf::IOInterface::IOInterfaceImpl_write(NITF_DATA* data,
-        const char* buf, size_t size, nitf_Error* error)
+extern "C" NITF_BOOL __nitf_IOInterfaceImpl_write(NITF_DATA* data,
+                                                  const char* buf,
+                                                  size_t size,
+                                                  nitf_Error* error)
 {
-    if (!data) throw except::NullPointerReference(Ctxt("IOInterfaceImpl_write"));
-    ((nitf::IOInterface*)data)->write(buf, size);
+    if (!data)
+        throw except::NullPointerReference(Ctxt("IOInterfaceImpl_write"));
+    ((nitf::IOInterface*) data)->write(buf, size);
     return NITF_SUCCESS;
 }
 
-nitf::Off nitf::IOInterface::IOInterfaceImpl_seek(NITF_DATA* data,
-        nitf::Off offset, int whence, nitf_Error* error)
+extern "C" nitf::Off __nitf_IOInterfaceImpl_seek(NITF_DATA* data,
+                                                 nitf::Off offset,
+                                                 int whence,
+                                                 nitf_Error* error)
 {
-    if (!data) throw except::NullPointerReference(Ctxt("IOInterfaceImpl_seek"));
-    return ((nitf::IOInterface*)data)->seek(offset, whence);
+    if (!data)
+        throw except::NullPointerReference(Ctxt("IOInterfaceImpl_seek"));
+    return ((nitf::IOInterface*) data)->seek(offset, whence);
 }
 
-nitf::Off nitf::IOInterface::IOInterfaceImpl_tell(NITF_DATA* data, nitf_Error* error)
+extern "C" nitf::Off __nitf_IOInterfaceImpl_tell(NITF_DATA* data,
+                                                 nitf_Error* error)
 {
-    if (!data) throw except::NullPointerReference(Ctxt("IOInterfaceImpl_tell"));
-    return ((nitf::IOInterface*)data)->tell();
+    if (!data)
+        throw except::NullPointerReference(Ctxt("IOInterfaceImpl_tell"));
+    return ((nitf::IOInterface*) data)->tell();
 }
 
-nitf::Off nitf::IOInterface::IOInterfaceImpl_getSize(NITF_DATA* data, nitf_Error* error)
+extern "C" nitf::Off __nitf_IOInterfaceImpl_getSize(NITF_DATA* data,
+                                                    nitf_Error* error)
 {
-    if (!data) throw except::NullPointerReference(Ctxt("IOInterfaceImpl_getSize"));
-    return ((nitf::IOInterface*)data)->getSize();
+    if (!data)
+        throw except::NullPointerReference(Ctxt("IOInterfaceImpl_getSize"));
+    return ((nitf::IOInterface*) data)->getSize();
 }
 
-NITF_BOOL nitf::IOInterface::IOInterfaceImpl_close(NITF_DATA* data, nitf_Error* error)
+extern "C" NITF_BOOL __nitf_IOInterfaceImpl_close(NITF_DATA* data,
+                                                  nitf_Error* error)
 {
-    if (!data) throw except::NullPointerReference(Ctxt("IOInterfaceImpl_tell"));
-    ((nitf::IOInterface*)data)->close();
+    if (!data)
+        throw except::NullPointerReference(Ctxt("IOInterfaceImpl_tell"));
+    ((nitf::IOInterface*) data)->close();
     return NITF_SUCCESS;
 }
 
-void nitf::IOInterface::IOInterfaceImpl_destruct(NITF_DATA* data)
-{
-}
-
+extern "C" void __nitf_IOInterfaceImpl_destruct(NITF_DATA* data) {}
 
 void nitf::NativeIOInterface::read(char * buf, size_t size)
 {
     nitf_IOInterface *io = getNativeOrThrow();
     NITF_BOOL x = io->iface->read(io->data, buf, size, &error);
-    if (!x) throw nitf::NITFException(&error);
+    if (!x)
+        throw nitf::NITFException(&error);
 }
 
-void nitf::NativeIOInterface::write(const char * buf, size_t size) throw(nitf::NITFException)
+void nitf::NativeIOInterface::write(const char * buf, size_t size) throw (nitf::NITFException)
 {
     nitf_IOInterface *io = getNativeOrThrow();
     NITF_BOOL x = io->iface->write(io->data, buf, size, &error);
-    if (!x) throw nitf::NITFException(&error);
+    if (!x)
+        throw nitf::NITFException(&error);
 }
 
-nitf::Off nitf::NativeIOInterface::seek(nitf::Off offset, int whence) throw(nitf::NITFException)
+nitf::Off nitf::NativeIOInterface::seek(nitf::Off offset, int whence) throw (nitf::NITFException)
 {
     nitf_IOInterface *io = getNativeOrThrow();
     if (io->iface->seek(io->data, offset, whence, &error))
@@ -110,7 +124,7 @@ nitf::Off nitf::NativeIOInterface::seek(nitf::Off offset, int whence) throw(nitf
     throw nitf::NITFException(&error);
 }
 
-nitf::Off nitf::NativeIOInterface::tell() throw(nitf::NITFException)
+nitf::Off nitf::NativeIOInterface::tell() throw (nitf::NITFException)
 {
     nitf_IOInterface *io = getNativeOrThrow();
     nitf::Off t = io->iface->tell(io->data, &error);
@@ -119,7 +133,7 @@ nitf::Off nitf::NativeIOInterface::tell() throw(nitf::NITFException)
     return t;
 }
 
-nitf::Off nitf::NativeIOInterface::getSize() throw(nitf::NITFException)
+nitf::Off nitf::NativeIOInterface::getSize() throw (nitf::NITFException)
 {
     nitf_IOInterface *io = getNativeOrThrow();
     nitf::Off size = io->iface->getSize(io->data, &error);

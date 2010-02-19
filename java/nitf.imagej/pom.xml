@@ -6,7 +6,7 @@
     <groupId>nitro-nitf</groupId>
     <artifactId>NITF_ImageJ</artifactId>
     <packaging>jar</packaging>
-    <version>2.5-RC1</version>
+    <version>1.1</version>
     <inceptionYear>2004</inceptionYear>
     <name>NITRO ImageIO codec</name>
     <url>http://nitro-nitf.sourceforge.net/</url>

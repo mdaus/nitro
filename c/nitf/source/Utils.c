@@ -393,7 +393,8 @@ NITFPROT(void) nitf_Utils_geographicLatToCharArray(int degrees,
         dir = 'S';
         degrees *= -1;
     }
-    sprintf(buffer7, "%02d%02d%02d%c", degrees, minutes, (int)seconds, dir);
+    NITF_SNPRINTF(buffer7, 7, "%02d%02d%02d%c",
+                  degrees, minutes, (int)seconds, dir);
 }
 
 NITFPROT(void) nitf_Utils_geographicLonToCharArray(int degrees,
@@ -406,20 +407,21 @@ NITFPROT(void) nitf_Utils_geographicLonToCharArray(int degrees,
     {
         dir = 'E';
     }
-    sprintf(buffer8, "%03d%02d%02d%c", degrees, minutes, (int)seconds, dir);
+    NITF_SNPRINTF(buffer8, 8, "%03d%02d%02d%c",
+                  degrees, minutes, (int)seconds, dir);
 
 }
 
 NITFPROT(void) nitf_Utils_decimalLatToCharArray(double decimal,
                                                 char *buffer7)
 {
-    sprintf(buffer7, "%+07.3f", decimal);
+    NITF_SNPRINTF(buffer7, 7, "%+07.3f", decimal);
 }
 
 NITFPROT(void) nitf_Utils_decimalLonToCharArray(double decimal,
                                                 char *buffer8)
 {
-    sprintf(buffer8, "%+08.3f", decimal);
+    NITF_SNPRINTF(buffer8, 8, "%+08.3f", decimal);
 }
 
 NITFPROT(void) nitf_Utils_decimalLatToGeoCharArray(double decimal,
@@ -467,4 +469,19 @@ NITFAPI(double) nitf_Utils_getCurrentTimeMillis()
     millis = (double)time(NULL) * 1000;
 #endif
     return millis;
+}
+
+NITFAPI(int) nitf_Utils_strncasecmp(char *s1, char *s2, size_t n)
+{
+    if (n == 0)
+        return 0;
+
+    while (n-- != 0 && tolower(*s1) == tolower(*s2))
+    {
+        if (n == 0 || *s1 == '\0' || *s2 == '\0')
+            break;
+        s1++;
+        s2++;
+    }
+    return tolower(*(unsigned char *) s1) - tolower(*(unsigned char *) s2);
 }

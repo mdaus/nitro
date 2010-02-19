@@ -20,9 +20,10 @@
  *
  */
 
+#include "nitf/Directory.h"
+
 #ifdef WIN32
 
-#include "nitf/Directory.h"
 
 NITF_CXX_GUARD typedef struct _DirectoryWin32
 {
@@ -64,7 +65,7 @@ NITFAPI(const char *) nitf_Directory_findFirstFile(nitf_Directory * dir,
 {
     DirectoryWin32 *nDir = (DirectoryWin32 *) dir;
     char buffer[NITF_MAX_PATH] = "";
-    sprintf(buffer, "%s\\*", path);
+    NITF_SNPRINTF(buffer, NITF_MAX_PATH, "%s\\*", path);
     nDir->handle = FindFirstFile(buffer, &(nDir->fileData));
     if (nDir->handle == INVALID_HANDLE_VALUE)
         return NULL;
