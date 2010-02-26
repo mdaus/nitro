@@ -41,7 +41,3 @@ fi
 AC_SUBST(cxx_mpi_defs)
 AC_SUBST(link_mpi_libs)
 AC_SUBST(mpi_compiler)
-
-# :vim:syntax=sh
-
-

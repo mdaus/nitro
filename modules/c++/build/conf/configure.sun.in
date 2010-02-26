@@ -1,6 +1,6 @@
 case "${target}" in
    sparc-sun-*)
-      case "${CXX}" in
+      case `basename "${CXX}"` in
          CC)
             AC_MSG_RESULT(selecting the forte compiler...)
 	    AC_MSG_RESULT(selecting the xar option for archiver...)

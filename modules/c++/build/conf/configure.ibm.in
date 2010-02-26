@@ -1,14 +1,14 @@
 # Make an adjustment for system compiler on AIX systems, which is named xlC.
 case "${target}" in
    rs6000-ibm-*)
-      case "${CXX}" in
+      case `basename "${CXX}"` in
          CC)
             CXX="xlC"
          ;;
       esac
    ;;
    powerpc-ibm-*)
-      case "${CXX}" in
+      case `basename "${CXX}"` in
          CC)
             CXX="xlC"
          ;;
@@ -20,7 +20,7 @@ esac
 
 case "${target}" in
     powerpc-ibm-*)
-        case "${CXX}" in
+        case `basename "${CXX}"` in
           xlC)
               AC_MSG_RESULT(selecting the ibm compiler...)
             AC_MSG_RESULT(selecting the ar archiver...)
@@ -74,7 +74,7 @@ case "${target}" in
    
    
     rs6000-ibm-*)
-        case "${CXX}" in
+        case `basename "${CXX}"` in
         xlC)
             AC_MSG_RESULT(selecting the ibm compiler...)
             AC_MSG_RESULT(selecting the ar archiver...)

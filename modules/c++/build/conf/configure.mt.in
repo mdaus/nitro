@@ -3,36 +3,36 @@ cxx_thread_libs="-lpthread"
 
 case "${target}" in
    mips-sgi-*)
-      case "${CXX}" in
+      case `basename "${CXX}"` in
          CC)
 	        cxx_thread_defs="-D_REENTRANT"
 	        link_thread_libs=""
          ;;
          
          g++)
-		    cxx_thread_defs="-D_REENTRANT"
-		    link_thread_libs=""
+		cxx_thread_defs="-D_REENTRANT"
+		link_thread_libs=""
          ;;
       esac
    ;;
 
    sparc-sun-*)
-      case "${CXX}" in
+      case `basename "${CXX}"` in
          CC)
 	        cxx_thread_defs="-mt"
 	        link_thread_libs="-lthread"
          ;;
          
          g++)
-		    cxx_thread_defs="-D_REENTRANT -D__POSIX"
-		    link_thread_libs="-lpthread"
+		cxx_thread_defs="-D_REENTRANT -D__POSIX"
+		link_thread_libs="-lpthread"
          ;;
       esac
    ;;
 
    
    *-*-linux-*|i686-pc-*)
-      case "${CXX}" in
+      case `basename "${CXX}"` in
          icc)
             cxx_thread_defs="-D_REENTRANT -D__POSIX"
 	    	link_thread_libs="-lpthread"
@@ -46,7 +46,7 @@ case "${target}" in
    ;;
    
    powerpc-ibm-*)
-      case "${CXX}" in
+      case `basename "${CXX}"` in
          xlC)
 	        cxx_thread_defs="-D_REENTRANT -D__POSIX"
 	        link_thread_libs="-lpthread"
@@ -60,7 +60,7 @@ case "${target}" in
    
    
    rs6000-ibm-*)
-      case "${CXX}" in
+      case `basename "${CXX}"` in
          xlC)
 	        cxx_thread_defs="-D_REENTRANT -D__POSIX"
 	        link_thread_libs="-lpthread"

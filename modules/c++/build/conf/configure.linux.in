@@ -13,7 +13,7 @@ esac
 
 case "${target}" in
     *-*-linux-*|i686-pc-*)
-        case "${CXX}" in
+        case `basename "${CXX}"` in
           
             icc)
                 AC_MSG_RESULT(selecting the intel icc compiler...)
