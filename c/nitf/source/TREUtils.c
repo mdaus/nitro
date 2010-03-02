@@ -1001,6 +1001,19 @@ NITFPRIV(NITF_BOOL) basicHasNext(nitf_TREEnumerator** it)
     return cursor != NULL ? NITF_SUCCESS : NITF_FAILURE;
 }
 
+NITFPRIV(const char*) basicGetFieldDescription(nitf_TREEnumerator* it,
+                                               nitf_Error* error)
+{
+    nitf_TRECursor* cursor = it ? (nitf_TRECursor*)(it->data) : NULL;
+    if (cursor && cursor->desc_ptr && cursor->desc_ptr->label)
+    {
+        return cursor->desc_ptr->label;
+    }
+    nitf_Error_init(error, "No TRE Description available",
+                    NITF_CTXT, NITF_ERR_INVALID_OBJECT);
+    return NULL;
+}
+
 NITFPRIV(nitf_TREEnumerator*) basicBegin(nitf_TRE* tre, nitf_Error* error)
 {
     nitf_TREEnumerator* it =
@@ -1013,8 +1026,8 @@ NITFPRIV(nitf_TREEnumerator*) basicBegin(nitf_TRE* tre, nitf_Error* error)
     it->data = cursor;
     it->next = basicIncrement;
     it->hasNext = basicHasNext;
+    it->getFieldDescription = basicGetFieldDescription;
     return it;
-
 }
 
 NITFAPI(nitf_TREHandler*) 
