@@ -295,6 +295,19 @@ public:
         remove(getIndex(qname));
     }
 
+    bool contains(const std::string& qname)
+    {
+        try
+        {
+            getValue(qname);
+            return true;
+        }
+        catch(except::NoSuchKeyException& ex)
+        {
+            return false;
+        }
+    }
+
     /**
      * Remove the attribute at the given index (if possible)
      */
