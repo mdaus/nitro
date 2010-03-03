@@ -74,7 +74,7 @@ template <typename T> T toType(const std::string& s)
 
     std::istringstream buf(s);
     T value;
-    buf >> value;
+    buf >> std::boolalpha >> value;
 
     if (buf.fail())
     {
