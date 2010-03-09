@@ -6,8 +6,7 @@ MODULE_DEPS     = 'except'
 set_options = configure = distclean = lambda p: None
 
 def build(bld):
-    variant = bld.env['VARIANT'] or 'default'
-    env = bld.env_of_name(variant)
+    env = bld.variantEnv
     
     kw = globals().copy()
     if 'MAKE_UUID' in env:

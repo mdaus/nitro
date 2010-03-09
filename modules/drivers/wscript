@@ -1,5 +1,5 @@
 import os
-import Options
+import Options, Utils
 from TaskGen import feature, before, taskgen
 import Tools.misc as misc
 
@@ -171,94 +171,14 @@ def configure(conf):
     conf.env.append_value('CXXFLAGS_nitf-c', '-DNITF_MODULE_EXPORTS')
 
 
-@taskgen
-@feature('untar')
-def untar(self):
-    import tarfile
-    f = self.path.find_or_declare(self.fname)
-    tf = tarfile.open(f.abspath(), 'r')
-    p = self.path.abspath()
-    for x in tf:
-        tf.extract(x, p)
-    tf.close()
-    
+from build import CPPBuildContext
 
-@taskgen
-@feature('m4subst')
-def m4subst(tsk):
-    import re
-    #similar to the subst in misc.py - but outputs to the src directory
-    m4_re = re.compile('@(\w+)@', re.M)
-
-    env = tsk.env
-    infile = os.path.join(tsk.path.abspath(), tsk.input)
-    outfile = os.path.join(tsk.path.abspath(), tsk.output)
-    
-    file = open(infile, 'r')
-    code = file.read()
-    file.close()
-
-    # replace all % by %% to prevent errors by % signs in the input file while string formatting
-    code = code.replace('%', '%%')
-
-    s = m4_re.sub(r'%(\1)s', code)
-
-    di = tsk.dict or {}
-    if not di:
-        names = m4_re.findall(code)
-        for i in names:
-            di[i] = env.get_flat(i) or env.get_flat(i.upper())
-    
-    file = open(outfile, 'w')
-    file.write(s % di)
-    file.close()
-    if tsk.chmod: os.chmod(outfile, tsk.chmod)
-
-
-@taskgen
-@feature('commentUndefs')
-def commentUndefs(tsk):
-    import re
-    env = tsk.env
-    infile = os.path.join(tsk.path.abspath(), tsk.input)
-    outfile = os.path.join(tsk.path.abspath(), tsk.output)
-    
-    file = open(infile, 'r')
-    code = file.read()
-    file.close()
-
-    code = re.sub(r'(#undef[^\n]*)(\n)', r'/* \1 */\2', code)
-    file = open(outfile, 'w')
-    file.write(code)
-    file.close()
-    if tsk.chmod: os.chmod(outfile, tsk.chmod)
-
-
-@taskgen
-@feature('makeHeader')
-def makeHeader(tsk):
-    outfile = os.path.join(tsk.path.abspath(), tsk.output)
-    dest = open(outfile, 'w')
-    guard = '__CONFIG_H__'
-    dest.write('#ifndef %s\n#define %s\n\n' % (guard, guard))
-
-    for k in tsk.defs.keys():
-        v = tsk.defs[k]
-        if v is None:
-            v = ''
-        dest.write('\n#ifndef %s\n#define %s %s\n#endif\n' % (k, k, v))
-    
-    if hasattr(tsk, 'undefs'):
-        for u in tsk.undefs:
-            dest.write('\n#undef %s\n' % u)
-
-    dest.write('\n#endif /* %s */\n' % guard)
-    dest.close()
-    if tsk.chmod: os.chmod(outfile, tsk.chmod)
-
+#override the default build context with our own
+Utils.g_module.build_context = Utils.g_module.install_context = \
+    Utils.g_module.clean_context = CPPBuildContext
 
 def build(bld):
-    variant = bld.env['VARIANT']
+    variant = Options.options.variants[0]
     env = bld.env_of_name(variant)
     env.set_variant(variant)
 
@@ -482,7 +402,8 @@ def distclean(context):
     import shutil
     
     dirs = map(lambda d: os.path.join(context.curdir, d),
-               ['pcre-5.0', 'e2fsprogs-1.40-uuid', 'expat-1.95.7', 'fftw-2.1.5', 'zlib-1.2.3'])
+               ['pcre-5.0', 'e2fsprogs-1.40-uuid', 'expat-2.0.0',
+                'expat-1.95.7', 'fftw-2.1.5', 'zlib-1.2.3'])
     for d in dirs:
         try:
             if os.path.exists(d):

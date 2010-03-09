@@ -7,8 +7,7 @@ TEST_FILTER     = lambda t: t not in 'MMParserTest1.cpp MinidomParserTest2.cpp'.
 set_options = configure = distclean = lambda p: None
 
 def build(bld):
-    variant = bld.env['VARIANT'] or 'default'
-    env = bld.env_of_name(variant)
+    env = bld.variantEnv
     
     kw = globals().copy()
     if 'MAKE_XML' in env:
