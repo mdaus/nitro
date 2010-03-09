@@ -6,7 +6,8 @@ MODULE_DEPS     = 'io'
 set_options = configure = distclean = lambda p: None
 
 def build(bld):
-    env = bld.variantEnv
+    variant = bld.env['VARIANT'] or 'default'
+    env = bld.env_of_name(variant)
     
     kw = globals().copy()
     if 'MAKE_ZIP' in env:

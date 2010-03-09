@@ -2,12 +2,12 @@ import os
 import Utils
 from build import CPPBuildContext
 
+#override the default build context with our own
+Utils.g_module.build_context = Utils.g_module.install_context = CPPBuildContext
+
 MODULES = 'except str sys io mt plugin logging dbi re xstr net net.ssl ' \
           'unique xml.lite linear.lite zip math.linear math.poly'
 
-#override the default build context with our own
-Utils.g_module.build_context = Utils.g_module.install_context = \
-    Utils.g_module.clean_context = CPPBuildContext
 
 def set_options(opt):
     opt.sub_options(MODULES)
@@ -20,4 +20,3 @@ def build(bld):
 
 def distclean(context):
     context.recurse(MODULES)
-
