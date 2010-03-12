@@ -193,7 +193,7 @@ public:
 
         // Reuse socket address (important for most TCP apps)
         int on = 1;
-        s.setOption(SOL_SOCKET, SO_REUSEADDR, &on);
+        s.setOption(SOL_SOCKET, SO_REUSEADDR, on);
 
         // Convert to a passive socket
         s.listen(mBacklog);
