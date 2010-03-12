@@ -54,8 +54,21 @@ namespace lite
 class Element
 {
 public:
-    //! Constructor
+    //! Default constructor
     Element()
+    {
+    }
+
+    /*!
+     * Constructor taking the namespace prefix and the local name 
+     * \param qname The qname of the object
+     * \param uri The uri of the object
+     * \param characterData The character data (if any)
+     */
+    Element(const std::string & qname,
+            const std::string & uri,
+            std::string characterData = "") :
+        mName(uri, qname), mCharacterData(characterData)
     {
     }
 
@@ -167,9 +180,9 @@ public:
      *  2)  Recursively descend over children and fix all
      *  namespaces below using fixNodeNamespace()
      */
-    void rewriteNamespacePrefix(const std::pair<std::string, std::string> & prefixAndUri);
+    void setNamespacePrefix(std::string prefix, std::string uri);
 
-    void rewriteNamespaceUri(const std::pair<std::string, std::string> & prefixAndUri);
+    void setNamespaceURI(std::string prefix, std::string uri);
 
     /*!
      *  Get the elements by tag name
@@ -305,11 +318,9 @@ public:
 
 protected:
 
-    void changePrefix(Element* element,
-                      const std::pair<std::string, std::string> & prefixAndUri);
+    void changePrefix(Element* element, std::string prefix, std::string uri);
 
-    void changeUri(Element* element,
-                   const std::pair<std::string, std::string> & prefixAndUri);
+    void changeURI(Element* element, std::string prefix, std::string uri);
 
     void depthPrint(io::OutputStream & stream,
                     int depth,

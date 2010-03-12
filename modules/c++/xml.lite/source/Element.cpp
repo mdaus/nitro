@@ -211,72 +211,79 @@ void xml::lite::Element::addChild(xml::lite::Element * node)
     mChildren.push_back(node);
 }
 
-void xml::lite::Element::changePrefix(Element* element, const std::pair<
-        std::string, std::string> & prefixAndUri)
+void xml::lite::Element::changePrefix(Element* element,
+    std::string prefix, std::string uri)
 {
-
-    if (element->mName.getAssociatedUri() == prefixAndUri.second)
+    if (element->mName.getAssociatedUri() == uri)
     {
-        //std::cout << "Got here" << std::endl;
-        element->mName.setPrefix(prefixAndUri.first);
+        element->mName.setPrefix(prefix);
+    }
 
-        for (int i = 0; i < mAttributes.getLength(); i++)
+    // Traverse backward to support removing nodes
+    for (int i = element->mChildren.size() - 1; i >= 0; i--)
+    {
+        if (element->mAttributes[i].getPrefix() == "xmlns" &&
+            element->mAttributes[i].getValue() == uri)
         {
-            if (mAttributes[i].getUri() == prefixAndUri.second)
-            {
-                //std::cout << "Rewriting prefix in Atts!" << std::endl;
-                mAttributes[i].setPrefix(prefixAndUri.first);
-            }
+            // Remove all definitions of namespace
+            element->mAttributes.remove(i);
         }
-        for (unsigned int i = 0; i < mChildren.size(); i++)
+        else if (element->mAttributes[i].getUri() == uri)
         {
-            changePrefix(element->mChildren[i], prefixAndUri);
+            element->mAttributes[i].setPrefix(prefix);
         }
+    }
+
+    for (int i = 0, s = element->mChildren.size(); i < s; i++)
+    {
+        changePrefix(element->mChildren[i], prefix, uri);
     }
 }
 
-void xml::lite::Element::changeUri(Element* element, const std::pair<
-        std::string, std::string> & prefixAndUri)
+void xml::lite::Element::changeURI(Element* element,
+    std::string prefix, std::string uri)
 {
-
-    if (element->mName.getPrefix() == prefixAndUri.first)
+    if (element->mName.getPrefix() == prefix)
     {
-        //std::cout << "Got here" << std::endl;
-        element->mName.setAssociatedUri(prefixAndUri.second);
-        for (unsigned int i = 0; i < mChildren.size(); i++)
+        element->mName.setAssociatedUri(uri);
+    }
+
+    // Traverse backward to support removing nodes
+    for (int i = element->mChildren.size() - 1; i >= 0; i--)
+    {
+        if (element->mAttributes[i].getPrefix() == "xmlns" &&
+            element->mAttributes[i].getLocalName() == prefix)
         {
-            changeUri(element->mChildren[i], prefixAndUri);
-            break;
+            // Remove all definitions of namespace
+            element->mAttributes.remove(i);
         }
+        else if (element->mAttributes[i].getPrefix() == prefix)
+        {
+            element->mAttributes[i].setUri(uri);
+        }
+    }
+
+    for (int i = 0, s = element->mChildren.size(); i < s; i++)
+    {
+        changeURI(element->mChildren[i], prefix, uri);
+        break;
     }
 }
 
-void xml::lite::Element::rewriteNamespacePrefix(const std::pair<std::string,
-        std::string> & prefixAndUri)
+void xml::lite::Element::setNamespacePrefix(std::string prefix, std::string uri)
 {
-    for (int i = 0; i < mAttributes.getLength(); i++)
-    {
-        if (mAttributes[i].getValue() == prefixAndUri.second)
-        {
-            mAttributes[i].setLocalName(prefixAndUri.first);
-            break;
-        }
-    }
-    changePrefix(this, prefixAndUri);
+    changePrefix(this, prefix, uri);
+
+    // Add namespace definition
+    ::xml::lite::Attributes& attr = getAttributes();
+    attr[std::string("xmlns:") + prefix] = uri;
 }
 
-void xml::lite::Element::rewriteNamespaceUri(const std::pair<std::string,
-        std::string> & prefixAndUri)
+void xml::lite::Element::setNamespaceURI(std::string prefix, std::string uri)
 {
-    for (int i = 0; i < mAttributes.getLength(); i++)
-    {
-        if (mAttributes[i].getLocalName() == prefixAndUri.first)
-        {
-            std::cout << "Got here" << std::endl;
-            mAttributes[i].setValue(prefixAndUri.second);
-            break;
-        }
-    }
-    changeUri(this, prefixAndUri);
-}
+    changeURI(this, prefix, uri);
 
+    // Add namespace definition
+    ::xml::lite::Attributes& attr = getAttributes();
+    attr[std::string("xmlns:") + prefix] = uri;
+}

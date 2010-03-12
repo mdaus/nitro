@@ -36,23 +36,20 @@ int main(int argc, char **argv)
     {
 
         std::string file    = argv[1];
+        std::string prefix  = argv[2];
+        std::string uri     = argv[3];
         std::string outfile = argv[4];
 
-        std::pair<std::string, std::string>
-        prefixAndUri( argv[2],
-                      argv[3] );
-
-
-        std::cout << "Replacing all matching prefixes" << prefixAndUri.second
-        << " with uri " << prefixAndUri.first << std::endl;
+        std::cout << "Replacing all matching prefixes " << prefix
+            << " with uri " << uri << std::endl;
         io::FileInputStream fis( file );
 
         xml::lite::MinidomParser parser;
         parser.parse(fis);
         xml::lite::Element* topLevel = parser.getDocument()->getRootElement();
-        topLevel->rewriteNamespaceUri( prefixAndUri );
+        topLevel->setNamespaceURI( prefix, uri );
         io::FileOutputStream fos( outfile );
-        topLevel->print( fos );
+        topLevel->prettyPrint( fos );
     }
     catch (except::Throwable& anything)
     {
