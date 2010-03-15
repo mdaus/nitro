@@ -29,6 +29,7 @@ namespace math
 namespace linear
 {
  
+
 template<size_t _ND, typename _T=double> class VectorN
 {
     typedef VectorN<_ND, _T> Like_T;
@@ -217,7 +218,14 @@ public:
         return v2;
     }
 
+    bool operator==(const Like_T& v) const
+    {
+        return mRaw == v.mRaw;
+    }
+
 };
+
+
 
 
 template<typename _T> VectorN<3, _T> cross(const VectorN<3, _T>& u,

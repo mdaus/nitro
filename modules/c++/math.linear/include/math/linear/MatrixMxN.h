@@ -29,6 +29,20 @@ namespace math
 namespace linear
 {
 
+// Create a safe comparison
+template<typename _T> bool equals(const _T& e1, const _T& e2)
+{
+    return e1 == e2;
+}
+template<> inline bool equals(const float& e1, const float& e2)
+{
+    return (e1 - e2) < std::numeric_limits<float>::epsilon();
+}
+template<> inline bool equals(const double& e1, const double& e2)
+{
+    return (e1 - e2) < std::numeric_limits<double>::epsilon();
+}
+
 template <size_t _MD, size_t _ND, typename _T=double>
 class MatrixMxN
 {
@@ -152,6 +166,26 @@ public:
             }
         }
         return *this;
+    }
+
+
+    /*!
+     *  Assignment operator from one matrix to another
+     *  \param mx The source matrix
+     *  \return this (the copy)
+     */
+    bool operator==(const MatrixMxN& mx) const
+    {
+        if (this != &mx)
+        for (unsigned int i = 0; i < _MD; i++)
+        {
+            for (unsigned int j = 0; j < _ND; j++)
+            {
+                if (equals(mRaw[i][j], mx.mRaw[i][j]))
+                    return false;
+            }
+        }
+        return true;
     }
 
     /*!
@@ -740,7 +774,7 @@ template<size_t _MD, size_t _ND, typename _T> inline
 
     for (unsigned int i = 0; i < _ND; i++)
     {
-        if (lu(i, i) == 0)
+        if ( equals(lu(i, i), 0) )
             throw except::Exception(Ctxt("Non-invertible matrix!"));
     }
 
@@ -777,7 +811,7 @@ math::linear::inverse<2, 2, double>(const math::linear::MatrixMxN<2, 2, double>&
     math::linear::MatrixMxN<2, 2, double> inv;
     double determinant = mx[1][1] * mx[0][0] - mx[1][0]*mx[0][1];
     
-    if (determinant == 0.0)
+    if (equals(determinant, 0.0))
         throw except::Exception(Ctxt("Non-invertible matrix!"));
 
     // Standard 2x2 inverse
@@ -815,7 +849,7 @@ math::linear::inverse<3, 3, double>(const math::linear::MatrixMxN<3, 3, double>&
     double determinant = 
         a*g1 - b*g2 + c*g3;
     
-    if (determinant == 0.0)
+    if (equals(determinant, 0.0))
         throw except::Exception(Ctxt("Non-invertible matrix!"));
 
 
@@ -834,11 +868,6 @@ template<size_t _MD, size_t _ND, typename _T> math::linear::MatrixMxN<_MD, _ND, 
 {
     return m.multiply(scalar);
 }
-
-
-
-
-
 
 template<size_t _MD, size_t _ND, typename _T>
     std::ostream& operator<<(std::ostream& os,
