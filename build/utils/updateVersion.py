@@ -74,6 +74,7 @@ if __name__ == '__main__':
     replaceInWscript(os.path.join(top_dir, 'c++/nitf/wscript'))
     replaceInWscript(os.path.join(top_dir, 'java/nitf/wscript'))
     replaceInWscript(os.path.join(top_dir, 'java/cgm/wscript'))
+    replaceInWscript(os.path.join(top_dir, 'wscript'))
     
     #update python setup.py
     setupFile = os.path.join(top_dir, 'python/nitf/setup.py')
