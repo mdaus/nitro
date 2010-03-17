@@ -220,7 +220,7 @@ void xml::lite::Element::changePrefix(Element* element,
     }
 
     // Traverse backward to support removing nodes
-    for (int i = element->mChildren.size() - 1; i >= 0; i--)
+    for (int i = element->mAttributes.getLength() - 1; i >= 0; i--)
     {
         if (element->mAttributes[i].getPrefix() == "xmlns" &&
             element->mAttributes[i].getValue() == uri)
@@ -249,7 +249,7 @@ void xml::lite::Element::changeURI(Element* element,
     }
 
     // Traverse backward to support removing nodes
-    for (int i = element->mChildren.size() - 1; i >= 0; i--)
+    for (int i = element->mAttributes.getLength() - 1; i >= 0; i--)
     {
         if (element->mAttributes[i].getPrefix() == "xmlns" &&
             element->mAttributes[i].getLocalName() == prefix)
