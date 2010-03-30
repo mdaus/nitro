@@ -286,7 +286,7 @@ namespace linear
 		*/
 		MatrixInterface<T>* newMatrix(int rows, int cols) const { return new MatrixTNT<T>(rows, cols); }
 
-                MatrixInterface<T>* newMatrix(int rows, int cols, T* dataPtr) const
+                MatrixInterface<T>* newMatrix(int rows, int cols, const T* dataPtr) const
                 {
                    return MatrixCreatorPartial<T>::newMatrix(rows, cols, dataPtr);
                 }

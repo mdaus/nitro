@@ -147,7 +147,7 @@ namespace linear
 		    return new VectorTNT<T>(d);
 		}
 
-                VectorInterface<T>* newVector(int d, T* dataPtr) const
+                VectorInterface<T>* newVector(int d, const T* dataPtr) const
                 {
                     return VectorCreatorPartial<T>::newVector(d, dataPtr);
                 }

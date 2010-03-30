@@ -255,7 +255,7 @@ namespace linear
 		VectorCreatorInterface() {}
 		virtual ~VectorCreatorInterface() {}
 		virtual VectorInterface<T>* newVector(int d) const = 0;
-		virtual VectorInterface<T>* newVector(int d, T* dataPtr) const = 0;
+		virtual VectorInterface<T>* newVector(int d, const T* dataPtr) const = 0;
 		virtual VectorInterface<T>* newConstantVector(int d, T constantValue) const = 0;
 	};
 	
@@ -287,7 +287,7 @@ namespace linear
 		 *  \param dataPtr An data array to assign each element to
 		 *  \return A new vector
 		 */
-		virtual VectorInterface<T>* newVector(int d, T* dataPtr) const
+		virtual VectorInterface<T>* newVector(int d, const T* dataPtr) const
 		{
 			VectorInterface<T>* vec = this->newVector(d);
                         vec->set(d, dataPtr);

@@ -341,7 +341,7 @@ namespace linear
 		 *  \param dataPtr The data values to intialize each element with
 		 *  \return A dynamically allocated Matrix of type T
 		 */
-		virtual MatrixInterface<T>* newMatrix(int rows, int cols, T* dataPtr) const = 0;
+		virtual MatrixInterface<T>* newMatrix(int rows, int cols, const T* dataPtr) const = 0;
 
 	    /*!
 		 *  Create a new matrix with number of rows and columns specified,
@@ -390,7 +390,7 @@ namespace linear
 		 *  \param dataPtr The data to use to initialize the matrix
 		 *  \return A dynamically allocated Matrix of type T
 		 */
-		virtual MatrixInterface<T>* newMatrix(int rows, int cols, T* dataPtr) const
+		virtual MatrixInterface<T>* newMatrix(int rows, int cols, const T* dataPtr) const
 		{
 			MatrixInterface<T>* mat = this->newMatrix(rows, cols);
                         mat->set(rows, cols, dataPtr);
