@@ -214,9 +214,27 @@ public:
 
         try
         {
-            // Load the DSO
-            sys::DLL *dso = new sys::DLL(file);
-	    mDSOs.push_back(dso);
+            sys::DLL *dso = NULL;
+            bool loadDSO = true;
+
+            // First check if the DSO is already loaded
+            for (unsigned int i = 0; i < mDSOs.size(); ++i)
+            {
+                if (mDSOs[i]->getLibName() == file)
+                {
+                    //It's already loaded - don't add it
+                    dso = mDSOs[i];
+                    loadDSO = false;
+                    break;
+                }
+            }
+
+            if (loadDSO)
+            {
+                // Load the DSO
+                dso = new sys::DLL(file);
+                mDSOs.push_back(dso);
+            }
 
             /*
              *  First, retrieve the plugin identity we are talking about.
