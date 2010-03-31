@@ -41,6 +41,7 @@ throw(sys::SystemException)
     {
         throw sys::SystemException("Error opening file: " + str);
     }
+    mFileName = str;
 }
 
 void sys::File::readInto(char *buffer, Size_T size)

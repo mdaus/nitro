@@ -187,7 +187,7 @@ public:
         return mOS.isFile(mPathName);
     }
 
-    inline off_t lastModified() const
+    inline sys::Off_T lastModified() const
     {
         return mOS.getLastModifiedTime(mPathName);
     }

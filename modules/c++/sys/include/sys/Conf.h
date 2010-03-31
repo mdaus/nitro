@@ -94,11 +94,11 @@ namespace sys
     typedef unsigned __int16  Uint16_T;
     typedef unsigned __int32  Uint32_T;
     typedef unsigned __int64  Uint64_T;
-    typedef off_t             Off_T;
     typedef signed char       Int8_T;
     typedef __int16           Int16_T;
     typedef __int32           Int32_T;
     typedef __int64           Int64_T;
+    typedef Int64_T           Off_T;
     typedef DWORD             Pid_T;
 #   ifndef _SIZE_T_DEFINED
 #       ifdef  _WIN64

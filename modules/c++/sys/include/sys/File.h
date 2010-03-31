@@ -73,6 +73,7 @@ class File
 {
 protected:
     _SYS_HANDLE_TYPE mHandle;
+    std::string mFileName;
 public:
 
     enum { FROM_START = _SYS_SEEK_SET,

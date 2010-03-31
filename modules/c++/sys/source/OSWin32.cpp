@@ -124,7 +124,7 @@ sys::Pid_T sys::OSWin32::getProcessId() const
 bool sys::OSWin32::remove(const std::string& path) const
 {
     if (isDirectory(path))
-        return (bool)RemoveDirectory(path.c_str());
+	return (RemoveDirectory(path.c_str())) ? (true): (false);
 
     return (DeleteFile(path.c_str() )) ? (true) : (false);
 }
@@ -132,7 +132,7 @@ bool sys::OSWin32::remove(const std::string& path) const
 
 bool sys::OSWin32::move(const std::string& path, const std::string& newPath) const
 {
-    return MoveFile(path.c_str(), newPath.c_str()) ? true : false;
+    return (MoveFile(path.c_str(), newPath.c_str())) ? (true) : (false);
 }
 
 
@@ -165,7 +165,7 @@ bool sys::OSWin32::isDirectory(const std::string& path) const
 
 bool sys::OSWin32::makeDirectory(const std::string& path) const
 {
-    return (bool)CreateDirectory(path.c_str(), NULL);
+    return (CreateDirectory(path.c_str(), NULL)) ? (true): (false);
 }
 
 std::string sys::OSWin32::getCurrentWorkingDirectory() const
@@ -210,7 +210,8 @@ sys::Off_T sys::OSWin32::getSize(const std::string& path) const
     DWORD highOff;
     DWORD ret = GetFileSize(handle, &highOff);
     CloseHandle(handle);
-    return (sys::Off_T)((highOff) << 32) + ret;
+    sys::Uint64_T off = highOff;
+    return (sys::Off_T)(off << 32) + ret;
 }
 
 sys::Off_T sys::OSWin32::getLastModifiedTime(const std::string& path) const

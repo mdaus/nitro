@@ -51,6 +51,7 @@ void sys::File::create(const std::string& str,
     {
         throw sys::SystemException("Error opening file: " + str);
     }
+    mFileName = str;
 }
 
 void sys::File::readInto(char *buffer, Size_T size)
@@ -136,17 +137,7 @@ sys::Off_T sys::File::seekTo(sys::Off_T offset, int whence)
 
 sys::Off_T sys::File::length()
 {
-    DWORD ret;
-    DWORD highOff;
-    ret = GetFileSize(mHandle, &highOff);
-    if ((ret == -1))
-    {
-        throw sys::SystemException(
-            "GetFileSize failed"
-        );
-
-    }
-    return ((highOff) << 32) + ret;
+    return sys::OS().getSize(mFileName);
 }
 
 void sys::File::close()
