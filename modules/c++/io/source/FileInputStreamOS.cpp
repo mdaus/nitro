@@ -49,11 +49,11 @@ sys::SSize_T io::FileInputStreamOS::read(sys::byte* b, sys::Size_T len)
     sys::Off_T avail = available();
     if (!avail)
         return io::InputStream::IS_EOF;
-    if (len < avail)
-        avail = len;
+    if (len > avail)
+        len = (sys::Size_T)avail;
 
-    mFile.readInto((char *)b, avail);
-    return avail;
+    mFile.readInto((char *)b, len);
+    return (sys::SSize_T)len;
 
 }
 
