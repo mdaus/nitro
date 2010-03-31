@@ -43,7 +43,7 @@ sys::SSize_T io::ByteStream::read(sys::byte *b, sys::Size_T len)
     sys::Off_T maxSize = available();
     if (maxSize <= 0) return io::InputStream::IS_END;
 
-    if (maxSize < len)
+    if (maxSize < (sys::Off_T)len)
         len = maxSize;
 
     if (len <= 0) return 0;

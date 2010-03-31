@@ -64,9 +64,9 @@ public:
 	dbg.writeln(FmtX("vec[1] = %s", vec_1.c_str()));
 	dbg.writeln(FmtX("vec[2] = %s", vec_2.c_str()));
 
-	vec[0] = atof(vec_0.c_str());
-	vec[1] = atof(vec_1.c_str());
-	vec[2] = atof(vec_2.c_str());
+	vec[0] = str::toType<float>(vec_0);
+	vec[1] = str::toType<float>(vec_1);
+	vec[2] = str::toType<float>(vec_2);
 
     }
     std::string fillString(io::InputStream &is)

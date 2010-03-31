@@ -34,28 +34,13 @@ class Copy
 public:
     static void run(const char* src, const char* dest)
     {
-	try
-	{
-	    io::FileInputStream  in(src);
-	    io::FileOutputStream out(dest);
-	    
-	    in.streamTo(out);
-	    
-	    in.close();
-	    out.close();
-	}
-	catch (except::Exception& e)
-	{
-	    throw except::Exception(Ctxt("Could not copy"));
-	}
-	catch (except::Error& e)
-	{
-	    throw except::Exception(Ctxt("Could not copy"));
-	}
-	catch (...)
-	{
-	    throw except::Exception(Ctxt("Could not copy"));
-	}
+	io::FileInputStream  in(src);
+	io::FileOutputStream out(dest);
+	
+	in.streamTo(out);
+	
+	in.close();
+	out.close();
 
     }
 };
