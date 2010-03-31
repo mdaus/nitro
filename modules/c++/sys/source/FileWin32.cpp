@@ -107,42 +107,12 @@ sys::Off_T sys::File::seekTo(sys::Off_T offset, int whence)
 {
     /* Ahhh!!! */
     LARGE_INTEGER largeInt;
-    int lastError;
-    LONG low = offset;
-    PLONG high = NULL;
-    if (offset > 0)
-    {
-        largeInt.QuadPart = offset;
-        low = largeInt.LowPart;
-        high = &largeInt.HighPart;
-    }
-    largeInt.LowPart = SetFilePointer(mHandle, low, high, whence);
-
-    lastError = GetLastError();
-    if ((largeInt.LowPart == INVALID_SET_FILE_POINTER) &&
-            (lastError != NO_ERROR))
-    {
-        /*LPVOID lpMsgBuf;
-        LPVOID lpDisplayBuf;
-
-        FormatMessage(
-         FORMAT_MESSAGE_ALLOCATE_BUFFER | 
-         FORMAT_MESSAGE_FROM_SYSTEM |
-         FORMAT_MESSAGE_IGNORE_INSERTS,
-         NULL,
-         lastError,
-         MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-         (LPTSTR) &lpMsgBuf,
-         0, NULL );
-
-        MessageBox(NULL, (LPCTSTR)lpMsgBuf, TEXT("Error"), MB_OK); 
-
-        LocalFree(lpMsgBuf);
-        LocalFree(lpDisplayBuf);*/
-
+    LARGE_INTEGER toWhere;
+    largeInt.QuadPart = offset;
+    if (!SetFilePointerEx(mHandle, largeInt, &toWhere, whence))
         throw sys::SystemException("SetFilePointer failed");
-    }
-    return (sys::Off_T) largeInt.QuadPart;
+    
+    return (sys::Off_T) toWhere.QuadPart;
 }
 
 
