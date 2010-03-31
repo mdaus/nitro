@@ -31,15 +31,26 @@ void sys::File::create(const std::string& str,
 {
     // The user should pass in the info telling it
     // to truncate
-    /*if (accessFlags & sys::File::WRITE_ONLY)
-       {
-     WIN32_FIND_DATA findData;
-     mHandle = FindFirstFile(str.c_str(), &findData);
-     if (mHandle != SYS_INVALID_HANDLE)
-     {
-      creationFlags |= TRUNCATE_EXISTING;
-     }
-       }*/
+    //if (accessFlags & sys::File::WRITE_ONLY)
+    //{
+    //WIN32_FIND_DATA findData;
+    //mHandle = FindFirstFile(str.c_str(), &findData);
+    //if (mHandle != SYS_INVALID_HANDLE)
+    //{
+    //creationFlags |= TRUNCATE_EXISTING;
+    //}
+    //}
+
+    // If the truncate bit is on AND the file does exist,
+    // we need to set the mode to TRUNCATE_EXISTING
+    if ((creationFlags & sys::File::TRUNCATE) && sys::OS().exists(str) )
+    {
+	creationFlags = TRUNCATE_EXISTING;
+    }
+    else
+    {
+	creationFlags = ~sys::File::TRUNCATE & creationFlags;
+    }
 
     mHandle = CreateFile(str.c_str(),
                          accessFlags,
