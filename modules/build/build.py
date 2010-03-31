@@ -537,7 +537,7 @@ def detect(self):
         config['cxx'].update(vars)
         config['cc'].update(vars)
 
-        defines = '_FILE_OFFSET_BITS=64 _LARGEFILE_SOURCE WIN32'.split()
+        defines = '_CRT_SECURE_NO_WARNINGS _FILE_OFFSET_BITS=64 _LARGEFILE_SOURCE WIN32'.split()
         flags = '/UUNICODE /U_UNICODE /EHs /GR'.split()
         threadFlags = '/D_REENTRANT'
         
