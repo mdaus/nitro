@@ -302,7 +302,7 @@ public:
             getValue(qname);
             return true;
         }
-        catch(except::NoSuchKeyException& ex)
+        catch(except::NoSuchKeyException&)
         {
             return false;
         }
