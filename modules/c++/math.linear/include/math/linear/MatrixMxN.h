@@ -181,7 +181,7 @@ public:
         {
             for (unsigned int j = 0; j < _ND; j++)
             {
-                if (equals(mRaw[i][j], mx.mRaw[i][j]))
+                if (!equals(mRaw[i][j], mx.mRaw[i][j]))
                     return false;
             }
         }
