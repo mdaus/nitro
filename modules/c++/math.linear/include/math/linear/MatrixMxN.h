@@ -58,7 +58,7 @@ public:
      */
     MatrixMxN()
     {
-
+        MatrixMxN(0);
     }
 
     /*!
