@@ -22,6 +22,7 @@
 #ifndef __MATH_LINEAR_MATRIX_M_X_N_H__
 #define __MATH_LINEAR_MATRIX_M_X_N_H__
 
+#include <cmath>
 #include <import/sys.h>
 
 namespace math
@@ -36,11 +37,11 @@ template<typename _T> bool equals(const _T& e1, const _T& e2)
 }
 template<> inline bool equals(const float& e1, const float& e2)
 {
-    return (e1 - e2) < std::numeric_limits<float>::epsilon();
+    return std::abs(e1 - e2) < std::numeric_limits<float>::epsilon();
 }
 template<> inline bool equals(const double& e1, const double& e2)
 {
-    return (e1 - e2) < std::numeric_limits<double>::epsilon();
+    return std::abs(e1 - e2) < std::numeric_limits<double>::epsilon();
 }
 
 template <size_t _MD, size_t _ND, typename _T=double>
