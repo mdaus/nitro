@@ -20,6 +20,7 @@
  *
  */
 
+#include <cmath>
 #include <import/except.h>
 #include <import/sys.h>
 
@@ -27,6 +28,20 @@ namespace math
 {
 namespace poly
 {
+
+// Create a safe comparison
+template<typename _T> bool equals(const _T& e1, const _T& e2)
+{
+    return e1 == e2;
+}
+template<> inline bool equals(const float& e1, const float& e2)
+{
+    return std::abs(e1 - e2) < std::numeric_limits<float>::epsilon();
+}
+template<> inline bool equals(const double& e1, const double& e2)
+{
+    return std::abs(e1 - e2) < std::numeric_limits<double>::epsilon();
+}
 
 template<typename _T>
 _T 
@@ -251,6 +266,46 @@ OneD<_T>::operator / (double cv) const
    OneD<_T> lRet(*this);
    lRet *= (1.0/cv);
    return lRet;
+}
+
+template<typename _T>
+bool
+OneD<_T>::operator == (const OneD<_T>& p) const
+{
+    if (this == &p)
+        return true;
+
+    unsigned int lMinSize = std::min<unsigned int>(mCoef.size(),
+            p.mCoef.size());
+
+    for (unsigned int lX = 0 ; lX < lMinSize ; lX++)
+        if (!equals(mCoef[lX], p.mCoef[lX]))
+            return false;
+
+    _T dflt;
+
+    // Cover case where one polynomial has more coefficients than the other.
+    if (mCoef.size() > p.mCoef.size())
+    {
+        for (unsigned int lX = lMinSize ; lX < mCoef.size() ; lX++)
+            if (!equals(mCoef[lX], dflt))
+                return false;
+    }
+    else if (mCoef.size() < p.mCoef.size())
+    {
+        for (unsigned int lX = lMinSize; lX < p.mCoef.size(); lX++)
+            if (!equals(p.mCoef[lX], dflt))
+                return false;
+    }
+
+    return true;
+}
+
+template<typename _T>
+bool
+OneD<_T>::operator != (const OneD<_T>& p) const
+{
+    return !(*this == p);
 }
 
 } // poly

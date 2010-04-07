@@ -65,6 +65,25 @@ int main(int argc, char* argv[])
     std::cout << "lOneDTstPoly2: " << lOneDTst2 << std::endl;
     std::cout << "lOneDTstPoly2 - lOneDTstPoly1: " << lOneDTst2-lOneDTst << std::endl;
     std::cout << std::endl;
+
+    math::poly::OneD<double> lOneDTst3(5);
+    lOneDTst3[0] = lOneDTst[0];
+    lOneDTst3[1] = lOneDTst[1];
+    lOneDTst3[2] = lOneDTst[2];
+    lOneDTst3[3] = 0.0;
+    lOneDTst3[4] = 0.0;
+
+    std::cout << "Test 1-D Polynomial == implementation..." << std::endl;
+    std::cout << "lOneDTstPoly1: " << lOneDTst << std::endl;
+    std::cout << "lOneDTstPoly2: " << lOneDTst2 << std::endl;
+    std::cout << "lOneDTstPoly3: " << lOneDTst3 << std::endl;
+    std::cout << "lOneDTstPoly1 == lOneDTstPoly1: " << (int) (lOneDTst==lOneDTst) << std::endl;
+    std::cout << "lOneDTstPoly1 == lOneDTstPoly2: " << (int) (lOneDTst==lOneDTst2) << std::endl;
+    std::cout << "lOneDTstPoly1 == lOneDTstPoly3: " << (int) (lOneDTst==lOneDTst3) << std::endl;
+    std::cout << "lOneDTstPoly2 == lOneDTstPoly1: " << (int) (lOneDTst2==lOneDTst) << std::endl;
+    std::cout << "lOneDTstPoly2 == lOneDTstPoly3: " << (int) (lOneDTst2==lOneDTst3) << std::endl;
+    std::cout << "lOneDTstPoly3 == lOneDTstPoly: " << (int) (lOneDTst3==lOneDTst) << std::endl;
+    std::cout << "lOneDTstPoly3 == lOneDTstPoly2: " << (int) (lOneDTst3==lOneDTst2) << std::endl;
     
     // now, lets do a two-d polynomial test...
     math::poly::TwoD<double> lTwoDTst(3, 1);
@@ -140,4 +159,27 @@ int main(int argc, char* argv[])
     std::cout << "lTwoDTstPoly2: " << lTwoDTst2 << std::endl;
     std::cout << "lOneDTstPoly2 - lOneDTstPoly1: " << lTwoDTst2-lTwoDTst << std::endl;
     std::cout << std::endl;
+
+    math::poly::TwoD<double> lTwoDTst3(4,1);
+    lTwoDTst3[0][0] = lTwoDTst2[0][0];
+    lTwoDTst3[0][1] = lTwoDTst2[0][1];
+    lTwoDTst3[1][0] = lTwoDTst2[1][0];
+    lTwoDTst3[1][1] = lTwoDTst2[1][1];
+
+    std::cout << "Test 2-D Polynomial == implementation..." << std::endl;
+    std::cout << "lTwoDTstPoly1: " << lTwoDTst << std::endl;
+    std::cout << "lTwoDTstPoly2: " << lTwoDTst2 << std::endl;
+    std::cout << "lTwoDTstPoly3: " << lTwoDTst3 << std::endl;
+    std::cout << "lTwoDTstPoly1 == lTwoDTstPoly1: " << (int) (lTwoDTst==lTwoDTst) << std::endl;
+    std::cout << "lTwoDTstPoly1 == lTwoDTstPoly2: " << (int) (lTwoDTst==lTwoDTst2) << std::endl;
+    std::cout << "lTwoDTstPoly1 == lTwoDTstPoly3: " << (int) (lTwoDTst==lTwoDTst3) << std::endl;
+    std::cout << "lTwoDTstPoly2 == lTwoDTstPoly1: " << (int) (lTwoDTst2==lTwoDTst) << std::endl;
+    std::cout << "lTwoDTstPoly2 == lTwoDTstPoly3: " << (int) (lTwoDTst2==lTwoDTst3) << std::endl;
+    std::cout << "lTwoDTstPoly3 == lTwoDTstPoly1: " << (int) (lTwoDTst3==lTwoDTst) << std::endl;
+    std::cout << "lTwoDTstPoly3 == lTwoDTstPoly2: " << (int) (lTwoDTst3==lTwoDTst2) << std::endl;
+
+    math::poly::TwoD<double> lundefTwoD1;
+    math::poly::TwoD<double> lundefTwoD2;
+    std::cout << "lundefTwoD1 == lundefTwoD1: " << (int) (lundefTwoD1==lundefTwoD1) << std::endl;
+    std::cout << "lundefTwoD1 == lundefTwoD2: " << (int) (lundefTwoD1==lundefTwoD2) << std::endl;
 }

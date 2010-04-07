@@ -341,7 +341,46 @@ operator << (std::ostream& out, const TwoD<_T> p)
     return out;
 }
 
+template<typename _T>
+bool
+TwoD<_T>::operator == (const TwoD<_T>& p) const
+{
+    unsigned int lMinSize = std::min<unsigned int>(mCoef.size(),
+            p.mCoef.size());
+
+    for (unsigned int lX = 0 ; lX < lMinSize ; lX++)
+    {
+        if (mCoef[lX] != p.mCoef[lX])
+            return false;
+    }
+
+    // Cover case where one polynomial has more coefficients than the other.
+    if (mCoef.size() > p.mCoef.size())
+    {
+        OneD<_T> lDflt(orderY());
+
+        for (unsigned int lX = lMinSize ; lX < mCoef.size() ; ++lX)
+            if (mCoef[lX] != lDflt)
+                return false;
+    }
+    else if (mCoef.size() < p.mCoef.size())
+    {
+        OneD<_T> lDflt(p.orderY());
+
+        for (unsigned int lX = lMinSize ; lX < p.mCoef.size() ; ++lX)
+            if (p.mCoef[lX] != lDflt)
+                return false;
+    }
+
+    return true;
+}
+
+template<typename _T>
+bool
+TwoD<_T>::operator != (const TwoD<_T>& p) const
+{
+    return !(*this == p);
+}
+
 } // poly
 } // math
-
-

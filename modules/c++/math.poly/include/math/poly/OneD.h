@@ -83,6 +83,8 @@ public:
     OneD<_T> operator - (const OneD<_T>& p) const;
     OneD<_T>& operator /= (double cv);
     OneD<_T> operator / (double cv) const;
+    bool operator == (const OneD<_T>& p) const;
+    bool operator != (const OneD<_T>& p) const;
 };
 
 } // poly

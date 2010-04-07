@@ -93,6 +93,8 @@ public:
     TwoD<_T> operator - (const TwoD<_T>& p) const;
     TwoD<_T>& operator /= (double cv);
     TwoD<_T> operator / (double cv) const;
+    bool operator == (const TwoD<_T>& p) const;
+    bool operator != (const TwoD<_T>& p) const;
 
     TwoD<_T> power(int toThe) const;
 
