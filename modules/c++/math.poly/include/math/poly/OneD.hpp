@@ -282,7 +282,7 @@ OneD<_T>::operator == (const OneD<_T>& p) const
         if (!equals(mCoef[lX], p.mCoef[lX]))
             return false;
 
-    _T dflt;
+    _T dflt(0.0);
 
     // Cover case where one polynomial has more coefficients than the other.
     if (mCoef.size() > p.mCoef.size())
