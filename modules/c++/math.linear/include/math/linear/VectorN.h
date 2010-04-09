@@ -38,26 +38,96 @@ template<size_t _ND, typename _T=double> class VectorN
 public:
 
 
-
-    VectorN() 
-    {
-        VectorN(0.0);
-    }
-
+    //!  Default constructor (no initialization)
+    VectorN() {}
+   
+    /*!
+     *  Create a vector of fixed size (_ND), each component
+     *  initialized to a single value
+     *
+     *  \param sv The scalar value to assign from
+     */
     VectorN(_T sv)
     {
         mRaw = sv;
     }
 
-    ~VectorN()
+    /*!
+     *  Vector copy from a _T pointer.
+     *  This is not a pointer reference!
+     *
+     *  \param raw A raw pointer
+     *
+     */
+    VectorN(const _T* raw)
     {
-
+        mRaw = raw;
     }
 
+    /*!
+     *  Copy a vector from another vector
+     *
+     */
     VectorN(const VectorN& v)
     {
         mRaw = v.mRaw;
     }
+
+    /*!
+     *  Initialize from a one dimensional
+     *  row vector matrix
+     */
+    VectorN(const MatrixMxN<_ND, 1, _T>& mx)
+    {
+        mRaw = mx;
+    }
+    /*!
+     *  Copy a vector from a raw STL vector
+     *  which must be sized with at least _ND
+     *  elements (the rest will be ignored)
+     *
+     */
+    VectorN(const std::vector<_T>& raw)
+    {
+        if (raw.size() < _ND)
+            throw except::Exception(Ctxt("Not enough elements"));
+
+        mRaw = raw;
+    }
+
+    /*!
+     *  Copy from a standard STL vector of size
+     *  greater or equal to _ND (the rest will
+     *  be ignored).
+     *
+     *  \param raw A vector
+     */
+    VectorN& operator=(const std::vector<_T>& raw)
+    {
+        if (raw.size() < _ND)
+            throw except::Exception(Ctxt("Not enough elements"));
+
+        mRaw = raw;
+        return *this;
+    }
+
+    /*!
+     *  Construct a VectorN from a raw pointer
+     *  where the raw pointer is expected to
+     *  point to an array with at least _ND 
+     *  elements
+     *
+     *  \param raw A raw pointer
+     */
+    VectorN& operator=(const _T* raw)
+    {
+        mRaw = raw;
+        return *this;
+    }
+
+    /*!
+     *  Assignment operator from a VectorN
+     */
     VectorN& operator=(const VectorN& v)
     {
         if (this != &v)
@@ -67,16 +137,30 @@ public:
         return *this;
     }
 
+    /*!
+     *  Assign a single scalar value into
+     *  every component of this VectorN
+     *
+     *  \param sv Scalar value
+     *  \return A reference
+     */
     VectorN& operator=(const _T& sv)
     {
         mRaw = sv;
         return *this;
     }
 
-    VectorN(const MatrixMxN<_ND, 1, _T>& mx)
+    VectorN& operator=(const MatrixMxN<_ND, 1, _T>& mx)
     {
         mRaw = mx;
+        return *this;
     }
+
+    //!  Destructor
+    ~VectorN() {}
+
+    
+ 
 
     MatrixMxN<_ND, 1, _T>& matrix() { return mRaw; }
     const MatrixMxN<_ND, 1, _T>& matrix() const { return mRaw; }
@@ -97,6 +181,8 @@ public:
 
     }
 
+    inline size_t size() const { return _ND; }
+
     _T dot(const VectorN<_ND>& vec) const
     {
         _T acc(0);
@@ -112,17 +198,12 @@ public:
      */
     _T norm() const
     {
-        _T acc(0);
-        for (unsigned int i = 0; i < _ND; ++i)
-        {
-            acc += (*this)[i] * (*this)[i];
-        }
-        return (_T)::sqrt((const _T)acc);
+        return mRaw.norm();
     }
 
     void normalize()
     {
-        mRaw.scale(1.0/norm());
+        mRaw.normalize();
     }
 
     void scale(_T scalar)
@@ -218,15 +299,23 @@ public:
         return v2;
     }
 
-    bool operator==(const Like_T& v) const
+    template<typename Vector_T> bool operator==(const Vector_T& v) const
     {
-        return mRaw == v.mRaw;
+        size_t sz = v.size();
+        for (size_t i = 0; i < sz; ++i)
+            if (!equals<_T>((*this)[i], v[i])) 
+                return false;
+
+      
+        return true;
+    }
+
+    template<typename Vector_T> bool operator!=(const Vector_T& v) const
+    {
+        return !(*this == v); 
     }
 
 };
-
-
-
 
 template<typename _T> VectorN<3, _T> cross(const VectorN<3, _T>& u,
                                            const VectorN<3, _T>& v)
@@ -241,7 +330,7 @@ template<typename _T> VectorN<3, _T> cross(const VectorN<3, _T>& u,
 template<size_t _ND, typename _T> VectorN<_ND, _T> 
     constantVector(_T cv = 0)
 {
-    VectorN<_ND, _T> v(math::linear::constantMatrix<_ND, 1, _T>(cv));
+    VectorN<_ND, _T> v(constantMatrix<_ND, 1, _T>(cv));
     return v;
 }
 
@@ -269,7 +358,7 @@ template<size_t _ND, typename _T>
 {
     for (unsigned int i = 0; i < _ND; ++i)
     {
-        os << v[i] << std::endl;
+        os << std::setw(10) << v[i] << " ";
     }
     return os;
     

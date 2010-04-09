@@ -20,6 +20,9 @@
  *
  */
 #include <import/math/linear.h>
+#include "TestCase.h"
+
+
 /*
         mx::VectorN<3> vec = mx::constantVector<3, double>(1);
         vec[0] = fromSample;
@@ -30,21 +33,147 @@
         line   = result[1];
 
  */
-namespace mx=math::linear;
+using namespace math::linear;
 
-typedef mx::MatrixMxN<2, 2> _2x2;
-typedef mx::MatrixMxN<3, 2> _3x2;
-typedef mx::MatrixMxN<3, 3> _3x3;
-typedef mx::MatrixMxN<4, 4> _4x4;
-typedef mx::VectorN<3> _V3;
-typedef mx::VectorN<2> _V2;
+typedef MatrixMxN<2, 2> Matrix2x2;
+typedef MatrixMxN<3, 2> Matrix3x2;
+typedef MatrixMxN<3, 3> Matrix3x3;
+typedef MatrixMxN<4, 4> Matrix4x4;
+typedef VectorN<3> Vector3;
+typedef VectorN<2> Vector2;
+
+TEST_CASE(testEquality)
+{
+    std::vector<double> v1(3, 3);
+    Vector<> v2(3, 3);
+    Vector3 v3(3);
+   
+    if (v2 != v1)
+        TEST_ASSERT(false);
+    if (v3 != v1)
+        TEST_ASSERT(false);
+
+    
+    TEST_ASSERT_EQ(v2, v3);
+    TEST_ASSERT_EQ(v3, v2);
+    
+}
+
+TEST_CASE(testPtrAssign)
+{
+    std::vector<double> v1(3, 42);
+    Vector<> v2(v1.size(), &v1[0]);
+    Vector3 v3(&v1[0]);
+
+    if (v2 != v1)
+        TEST_ASSERT(false);
+    TEST_ASSERT_EQ(v2, v3);
+
+}
+TEST_CASE(testSTLVectorAssign)
+{
+    std::vector<double> v1(3, 42);
+    Vector<> v2(v1);
+    Vector3 v3(&v1[0]);
+
+    if (v2 != v1)
+        TEST_ASSERT(false);
+    TEST_ASSERT_EQ(v2, v3);
+}
+
+TEST_CASE(testArithmetic)
+{
+    Matrix2D<double> A = identityMatrix<double>(3);
+    Matrix3x3 A2( A.mRaw );
+
+    Vector<double> x = constantVector<double>(3, 1.2);
+    x[2] = 2;
+    Vector3 x2(x.matrix().row(0));
+    
+    Vector3 b2 = A2 * x2;
+    TEST_ASSERT_EQ(b2, x2);
+    TEST_ASSERT_EQ(x, x2);
+    TEST_ASSERT_EQ(A2, A);
+
+    Vector<double> b = A * x;
+    TEST_ASSERT_EQ(b, x);
+    
+}
+
+TEST_CASE(testLinear)
+{
+    double q[] = 
+    {
+        0.681759432346851, -0.469118050335902, -0.561366485689289,
+        0.484971425801214,  0.864311190345374, -0.133299971493248,
+        0.547728758202852, -0.181368192064663,  0.816761156241381
+    };
+
+    Matrix2D<> mx1(3, 3, q);
+    Matrix3x3 mx2(q);
+
+
+    // This one can do a raw pointer assign
+    Vector3 u1(mx2.row(0));
+
+    // This one doesnt know how big it is unless you tell it
+    Vector<>  u2(3, mx1.row(0));
+    TEST_ASSERT_EQ(u1, u2);
+
+    // Notice that it doesnt matter which matrix the row came
+    // from since its a raw pointer
+    Vector3 u3(mx1.row(0));
+    TEST_ASSERT_EQ(u2, u3);
+
+    // Okay, time to get to work
+    Vector3 v1(mx1.row(1));
+
+    Vector3 w1 = mx2.row(2);
+    Vector3 w2 = cross<double>(u1, v1);
+    TEST_ASSERT_EQ(w2, w1);
+
+    Vector3 w3 = u1.dot(v1);
+    Vector3 zeros((double)0);
+
+    TEST_ASSERT_EQ(w3, zeros);
+
+}
+
+
+TEST_CASE(testNormalize)
+{
+    double d[]  = {0.276922984960890, 0.046171390631154, 0.097131781235848};
+    double n[]  = {0.932169641471869, 0.155420716185689, 0.326962016904922};
+
+    Vector3 v1(d);
+    v1.normalize();
+    
+    Vector<> v2(3, d);
+    v2.normalize();
+
+    
+    TEST_ASSERT_EQ(v1, v2);
+    TEST_ASSERT_EQ(v2, v1);
+
+    Vector3 truth(n);
+    
+    TEST_ASSERT_ALMOST_EQ(v1[0], truth[0]);
+    TEST_ASSERT_ALMOST_EQ(v1[1], truth[1]);
+    TEST_ASSERT_ALMOST_EQ(v1[2], truth[2]);
+}
 
 int main()
 {
-    _3x3 A = mx::identityMatrix<3, double>();
-    std::cout << A << std::endl;
-
-    _V3 v3 = mx::constantVector<3, double>(1.2);
+    TEST_CHECK(testEquality);
+    TEST_CHECK(testNormalize);
+    TEST_CHECK(testPtrAssign);
+    TEST_CHECK(testSTLVectorAssign);
+    TEST_CHECK(testArithmetic);
+    TEST_CHECK(testLinear);
+    /*
+    Matrix3x3 A = mx::identityMatrix<3, double>();
+    
+    Vector3 v3 = mx::constantVector<3, double>(1.2);
 
     v3[2] = 2;
     
@@ -66,5 +195,5 @@ int main()
     y[1] = 1;
 
     std::cout << cross(v3, y) << std::endl;
-
+*/
 }

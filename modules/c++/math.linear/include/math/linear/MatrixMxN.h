@@ -33,15 +33,23 @@ namespace linear
 // Create a safe comparison
 template<typename _T> bool equals(const _T& e1, const _T& e2)
 {
+    std::cout << "1 " << std::endl;
     return e1 == e2;
 }
+
+template<typename _T> inline bool equals(const _T& e1, const _T& e2, _T eps)
+{
+    return std::abs(e1 - e2) < eps;
+}
+
 template<> inline bool equals(const float& e1, const float& e2)
 {
-    return std::abs(e1 - e2) < std::numeric_limits<float>::epsilon();
+    return equals<float>(e1, e2, std::numeric_limits<float>::epsilon());
 }
 template<> inline bool equals(const double& e1, const double& e2)
 {
-    return std::abs(e1 - e2) < std::numeric_limits<double>::epsilon();
+    // Its a really bold assertion here to say numeric_limits<double>
+    return equals<double>(e1, e2, std::numeric_limits<float>::epsilon());
 }
 
 template <size_t _MD, size_t _ND, typename _T=double>
@@ -51,15 +59,6 @@ class MatrixMxN
     typedef MatrixMxN<_MD, _ND, _T> Like_T;
 public:
     _T mRaw[_MD][_ND];
-
-    /*!
-     *  No initialization here!
-     *
-     */
-    MatrixMxN()
-    {
-        MatrixMxN(0);
-    }
 
     /*!
      *  Create a matrix with a constant value for
@@ -82,6 +81,13 @@ public:
             }
         }
     }
+    /*!
+     *  No initialization here!
+     *
+     */
+    MatrixMxN()
+    {
+    }
 
 
     ~MatrixMxN() {}
@@ -95,13 +101,23 @@ public:
      */
     inline const _T* operator[](int i) const
     {
+        return row(i);
+    }
+
+    inline _T* operator[](int i)
+    { 
+        return row(i);
+    }
+
+    inline const _T* row(int i) const
+    {
 #if defined(MATH_LINEAR_BOUNDS)
         assert( i < _MD);
 #endif
         return mRaw[i];
     }
 
-    inline _T* operator[](int i)
+    inline _T* row(int i)
     {
 #if defined(MATH_LINEAR_BOUNDS)
         assert( i < _MD);
@@ -116,6 +132,30 @@ public:
 #endif
         return mRaw[i][j];
     }
+
+    std::vector<_T> col(size_t j) const
+    {
+        std::vector<_T> jth(_MD);
+        for (unsigned int i = 0; i < _MD; ++i)
+        {
+            jth[i] = mRaw[i][j];
+        }
+        return jth;
+    }
+    /*!
+     *  This function is not really necessary, but
+     *  might be handy if you have some template code
+     *
+     */
+    inline size_t rows() const { return _MD; }
+    
+    /*!
+     *  This function is not really necessary, but
+     *  might be handy if you have some template code
+     */
+    inline size_t cols() const { return _ND; }
+
+    inline size_t size() const { return _MD * _ND; }
 
     /*!
      *  This operator allows you to mutate an element
@@ -132,6 +172,62 @@ public:
         assert( i < _MD && j < _ND );
 #endif
         return mRaw[i][j];
+    }
+
+    /*!
+     *  Assign a matrix from a raw pointer
+     *  Assumes that the pointer is of correct size
+     *  
+     *  \param raw A raw pointer to copy internally
+     */
+    MatrixMxN(const _T* raw)
+    {
+        for (unsigned int i = 0; i < _MD; i++)
+        {
+            for (unsigned int j = 0; j < _ND; j++)
+            {
+                mRaw[i][j] = raw[i * _ND + j];
+            }
+        }
+    }
+
+    MatrixMxN(const std::vector<_T>& raw)
+    {
+        if (raw.size() < size())
+            throw except::Exception(Ctxt("Invalid size exception"));
+
+        for (unsigned int i = 0; i < _MD; ++i)
+        {
+            for (unsigned int j = 0; j < _ND; ++j)
+            {
+                mRaw[i][j] = raw[i * _ND + j];
+            }
+        }
+    }
+
+    MatrixMxN& operator=(const _T* raw)
+    {
+        for (unsigned int i = 0; i < _MD; i++)
+        {
+            for (unsigned int j = 0; j < _ND; j++)
+            {
+                mRaw[i][j] = raw[i * _ND + j];
+            }
+        }
+        return *this;
+    }
+    MatrixMxN& operator=(const std::vector<_T>& raw)
+    {
+        if (raw.size() < size())
+            throw except::Exception(Ctxt("Invalid size exception"));
+        for (unsigned int i = 0; i < _MD; i++)
+        {
+            for (unsigned int j = 0; j < _ND; j++)
+            {
+                mRaw[i][j] = raw[i * _ND + j];
+            }
+        }
+        return *this;
     }
 
     /*!
@@ -175,6 +271,29 @@ public:
      *  \param mx The source matrix
      *  \return this (the copy)
      */
+           
+    template<typename Matrix_T> inline bool operator==(const Matrix_T& mx) const
+    {
+        
+        if (_MD != mx.rows() || _ND != mx.cols())
+            return false;
+
+        for (size_t i = 0; i < _MD; ++i)
+        {
+            for (size_t j = 0; j < _ND; ++j)
+            {
+                if (! equals(mRaw[i][j], mx(i, j)))
+                    return false;
+            }
+        }
+        return true;
+    }
+          
+    template<typename Matrix_T> inline bool operator!=(const Matrix_T& mx) const
+    {
+            return !(*this == mx);
+    }
+    /*
     bool operator==(const MatrixMxN& mx) const
     {
         if (this != &mx)
@@ -188,6 +307,10 @@ public:
         }
         return true;
     }
+    bool operator!=(const MatrixMxN& mx) const
+    {
+        return !(*this == mx); 
+    }*/
 
     /*!
      *  Set a matrix (each element) to the contents
@@ -295,7 +418,7 @@ public:
         {
             for (j = 0; j < _PD; j++)
             {
-		newM.mRaw[i][j] = 0;
+                newM.mRaw[i][j] = 0;
                 for (k = 0; k < _ND; k++)
                 {
                     newM.mRaw[i][j] += mRaw[i][k] * mx.mRaw[k][j];
@@ -402,7 +525,6 @@ public:
     Like_T&
     operator-=(const Like_T& mx)
     {
-        Like_T newM;
         for (unsigned int i = 0; i < _MD; i++)
         {
             for (unsigned int j = 0; j < _ND; j++)
@@ -593,6 +715,23 @@ public:
         }
         return perm;
     }
+    _T norm() const
+    {
+        _T acc(0);
+        for (unsigned int i = 0; i < _MD; ++i)
+        {
+            for (unsigned int j = 0; j < _ND; ++j)
+            {
+                acc += mRaw[i][j] * mRaw[i][j];
+            }
+        }
+        return (_T)::sqrt((const _T)acc);
+    }
+
+    void normalize()
+    {
+        scale(1.0/norm());
+    }
 
     /*!
      *  Alias for this->add();
@@ -657,11 +796,13 @@ public:
      *  \endcode
      */
     template<size_t _PD>
-    math::linear::MatrixMxN<_MD, _PD, _T>
-    operator*(const math::linear::MatrixMxN<_ND, _PD, _T>& mx) const
+    MatrixMxN<_MD, _PD, _T>
+        operator*(const MatrixMxN<_ND, _PD, _T>& mx) const
     {
         return multiply(mx);
     }
+    
+
 
 
 };
@@ -762,25 +903,33 @@ template<size_t _MD, size_t _ND, size_t _PD, typename _T>
  *  \endcode
  *
  */
-template<size_t _MD, size_t _ND, typename _T> inline
-    MatrixMxN<_MD, _ND, _T> inverse(const MatrixMxN<_MD, _ND, _T>& mx)
+template<size_t _ND, typename _T> inline
+    MatrixMxN<_ND, _ND, _T> inverseLU(const MatrixMxN<_ND, _ND, _T>& mx)
 {
-    MatrixMxN<_MD, _ND, _T> a(0);
+    MatrixMxN<_ND, _ND, _T> a((_T)0);
 
-    for (unsigned int i = 0; i < _MD; i++)
+    // Identity
+    for (unsigned int i = 0; i < _ND; i++)
         a(i, i) = 1;
 
-    int pivots[_MD];
-    MatrixMxN<_MD, _ND, _T> lu = mx.decomposeLU(pivots);
-
+    int pivots[_ND];
+    MatrixMxN<_ND, _ND, _T> lu = mx.decomposeLU(pivots);
+    
     for (unsigned int i = 0; i < _ND; i++)
     {
-        if ( equals(lu(i, i), 0) )
+        if ( equals<_T>(lu(i, i), 0) )
             throw except::Exception(Ctxt("Non-invertible matrix!"));
     }
 
-    return solveLU<_MD, _ND, _ND, _T>(pivots, lu, a);
+    return solveLU<_ND, _ND, _ND, _T>(pivots, lu, a);
 
+}
+
+
+template<size_t _ND, typename _T> inline
+    MatrixMxN<_ND, _ND, _T> inverse(const MatrixMxN<_ND, _ND, _T>& mx)
+{
+    return inverseLU<_ND, _T>(mx);
 }
 
 /*!
@@ -794,11 +943,18 @@ template<size_t _MD, size_t _ND, typename _T> inline
  *
  */
 template<> inline
-    MatrixMxN<2, 2, double> inverse<2, 2, double>(const MatrixMxN<2, 2, double>& mx);
+    MatrixMxN<2, 2, double> inverse<2, double>(const MatrixMxN<2, 2, double>& mx);
 
 
 template<> inline
-    MatrixMxN<3, 3, double> inverse<3, 3, double>(const MatrixMxN<3, 3, double>& mx);
+    MatrixMxN<3, 3, double> inverse<3, double>(const MatrixMxN<3, 3, double>& mx);
+
+template<> inline
+    MatrixMxN<2, 2, float> inverse<2, float>(const MatrixMxN<2, 2, float>& mx);
+
+
+template<> inline
+    MatrixMxN<3, 3, float> inverse<3, float>(const MatrixMxN<3, 3, float>& mx);
 
 
 }
@@ -807,7 +963,7 @@ template<> inline
 
 template<> inline
 math::linear::MatrixMxN<2, 2, double> 
-math::linear::inverse<2, 2, double>(const math::linear::MatrixMxN<2, 2, double>& mx)
+math::linear::inverse<2, double>(const math::linear::MatrixMxN<2, 2, double>& mx)
 {
     math::linear::MatrixMxN<2, 2, double> inv;
     double determinant = mx[1][1] * mx[0][0] - mx[1][0]*mx[0][1];
@@ -827,7 +983,7 @@ math::linear::inverse<2, 2, double>(const math::linear::MatrixMxN<2, 2, double>&
 
 template<> inline
 math::linear::MatrixMxN<3, 3, double> 
-math::linear::inverse<3, 3, double>(const math::linear::MatrixMxN<3, 3, double>& mx)
+math::linear::inverse<3, double>(const math::linear::MatrixMxN<3, 3, double>& mx)
 {
     math::linear::MatrixMxN<3, 3> inv;
 
@@ -864,12 +1020,100 @@ math::linear::inverse<3, 3, double>(const math::linear::MatrixMxN<3, 3, double>&
 }
 
 
+template<> inline
+math::linear::MatrixMxN<2, 2, float> 
+math::linear::inverse<2, float>(const math::linear::MatrixMxN<2, 2, float>& mx)
+{
+    math::linear::MatrixMxN<2, 2, float> inv;
+    float determinant = mx[1][1] * mx[0][0] - mx[1][0]*mx[0][1];
+    
+    if (equals(determinant, 0.0f))
+        throw except::Exception(Ctxt("Non-invertible matrix!"));
+
+    // Standard 2x2 inverse
+    inv[0][0] =  mx[1][1];
+    inv[0][1] = -mx[0][1];
+    inv[1][0] = -mx[1][0];
+    inv[1][1] =  mx[0][0];
+
+    inv.scale( 1.0f / determinant );
+    return inv;
+}
+
+template<> inline
+math::linear::MatrixMxN<3, 3, float> 
+math::linear::inverse<3, float>(const math::linear::MatrixMxN<3, 3, float>& mx)
+{
+    math::linear::MatrixMxN<3, 3, float> inv;
+
+    float a = mx[0][0];
+    float b = mx[0][1];
+    float c = mx[0][2];
+
+    float d = mx[1][0];
+    float e = mx[1][1];
+    float f = mx[1][2];
+
+    float g = mx[2][0];
+    float h = mx[2][1];
+    float i = mx[2][2];
+
+    float g1 = e*i - f*h;
+    float g2 = d*i - f*g;
+    float g3 = d*h - e*g;
+
+    float determinant = 
+        a*g1 - b*g2 + c*g3;
+    
+    if (equals(determinant, 0.0f))
+        throw except::Exception(Ctxt("Non-invertible matrix!"));
+
+
+    inv[0][0] =  g1; inv[0][1] =  c*h - b*i; inv[0][2] =  b*f - c*e;
+    inv[1][0] = -g2; inv[1][1] =  a*i - c*g; inv[1][2] =  c*d - a*f;
+    inv[2][0] =  g3; inv[2][1] =  b*g - a*h; inv[2][2] =  a*e - b*d;
+    inv.scale( 1.0f / determinant );
+    
+    return inv;
+
+}
+
+
+/*!
+ *  Could possibly be more clever here, and template the actual matrix
+ */
 template<size_t _MD, size_t _ND, typename _T> math::linear::MatrixMxN<_MD, _ND, _T>
     operator*(_T scalar, const math::linear::MatrixMxN<_MD, _ND, _T>& m)
 {
     return m.multiply(scalar);
 }
 
+
+
+template<typename Matrix_T> Matrix_T tidy(const Matrix_T& constMatrix, double eps = std::numeric_limits<float>::epsilon())
+{
+    Matrix_T mx = constMatrix;
+    for (unsigned int i = 0; i < mx.rows(); i++)
+    {
+        for (unsigned int j = 0; j < mx.cols(); j++)
+        {
+            double lower = std::floor(mx(i,j));
+            double higher = std::ceil(mx(i,j));
+
+            // If the floor is within epsilon, floor this
+            if (equals<double>(std::abs(mx(i, j) - lower), 0, eps))
+                mx(i, j) = lower;
+
+            else if (equals<double>(std::abs(higher - mx(i, j)), 0, eps))
+                mx(i, j) = higher;
+            
+            if (mx(i, j) == -0)
+                mx(i, j) = 0;
+        }
+    }
+    return mx;
+}
+ 
 template<size_t _MD, size_t _ND, typename _T>
     std::ostream& operator<<(std::ostream& os,
                              const math::linear::MatrixMxN<_MD, _ND, _T>& m)
@@ -878,11 +1122,12 @@ template<size_t _MD, size_t _ND, typename _T>
 
     unsigned int i, j;
     std::cout << "(" << _MD << ',' << _ND << ")" << std::endl;
+    
     for (i = 0; i < _MD; ++i)
     {
         for (j = 0; j < _ND; ++j)
         {
-            os << m(i, j) << " ";
+            os << std::setw(10) << m(i, j) << " ";
         }
         os << std::endl;
     }

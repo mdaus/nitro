@@ -25,5 +25,8 @@
 #include "math/linear/MatrixMxN.h"
 #include "math/linear/VectorN.h"
 
+#include "math/linear/Matrix2D.h"
+#include "math/linear/Vector.h"
+
 #endif  // __MATH_LINEAR_H__
 
