@@ -356,7 +356,7 @@ public:
     //!  Divide anotehr vector into this and product a copy
     Vector operator/(const Vector& v) const
     {
-        Like_T v2(*this);
+        Vector v2(*this);
         v2 /= v;
         return v2;
     }
