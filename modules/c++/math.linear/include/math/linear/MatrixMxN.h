@@ -33,7 +33,6 @@ namespace linear
 // Create a safe comparison
 template<typename _T> bool equals(const _T& e1, const _T& e2)
 {
-    std::cout << "1 " << std::endl;
     return e1 == e2;
 }
 
@@ -1006,7 +1005,7 @@ math::linear::inverse<3, double>(const math::linear::MatrixMxN<3, 3, double>& mx
     double determinant = 
         a*g1 - b*g2 + c*g3;
     
-    if (equals(determinant, 0.0))
+    if (math::linear::equals(determinant, 0.0))
         throw except::Exception(Ctxt("Non-invertible matrix!"));
 
 
@@ -1027,7 +1026,7 @@ math::linear::inverse<2, float>(const math::linear::MatrixMxN<2, 2, float>& mx)
     math::linear::MatrixMxN<2, 2, float> inv;
     float determinant = mx[1][1] * mx[0][0] - mx[1][0]*mx[0][1];
     
-    if (equals(determinant, 0.0f))
+    if (math::linear::equals(determinant, 0.0f))
         throw except::Exception(Ctxt("Non-invertible matrix!"));
 
     // Standard 2x2 inverse
@@ -1101,10 +1100,10 @@ template<typename Matrix_T> Matrix_T tidy(const Matrix_T& constMatrix, double ep
             double higher = std::ceil(mx(i,j));
 
             // If the floor is within epsilon, floor this
-            if (equals<double>(std::abs(mx(i, j) - lower), 0, eps))
+            if (math::linear::equals(std::abs(mx(i, j) - lower), 0.0, eps))
                 mx(i, j) = lower;
 
-            else if (equals<double>(std::abs(higher - mx(i, j)), 0, eps))
+            else if (equals(std::abs(higher - mx(i, j)), 0.0, eps))
                 mx(i, j) = higher;
             
             if (mx(i, j) == -0)
