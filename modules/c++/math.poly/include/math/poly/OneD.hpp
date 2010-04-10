@@ -47,7 +47,7 @@ template<typename _T>
 _T 
 OneD<_T>::operator () (double at) const
 {
-   _T lRet(0);
+   _T lRet(0.0);
    double lAtPwr = 1.0;
    for (unsigned int lX = 0, lXEnd = mCoef.size() ; lX < lXEnd ; lX++)
    {
@@ -62,7 +62,7 @@ template<typename _T>
 _T 
 OneD<_T>::integrate(double start, double end) const
 {
-   _T lRet(0);
+   _T lRet(0.0);
    double lEndAtPwr = end;
    double lStartAtPwr = start;
    double lDiv = 0;
@@ -117,7 +117,7 @@ template<typename _T>
 _T 
 OneD<_T>::operator [] (unsigned int idx) const
 {
-   _T lRet(0);
+   _T lRet(0.0);
    if (idx < mCoef.size())
    {
       lRet = mCoef[idx];

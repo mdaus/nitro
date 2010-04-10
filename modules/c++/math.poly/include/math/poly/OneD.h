@@ -54,7 +54,7 @@ public:
     OneD() {}
     OneD(int order) : mCoef(order+1,0) {}
     OneD(const std::vector<_T>& coef) : mCoef(coef) {}
-    template<typename Cont_T> OneD(const Cont_T& coeff) 
+        /*template<typename Cont_T> OneD(const Cont_T& coeff) 
     {
         size_t sizeC = coeff.size();
         mCoef.resize(sizeC);
@@ -62,7 +62,7 @@ public:
         {
             mCoef[i] = coeff[i];
         }
-    }
+        }*/
     int order() const { return mCoef.size()-1; }
     _T operator () (double at) const;
     _T integrate(double start, double end) const;
