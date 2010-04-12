@@ -1,8 +1,8 @@
 import os, copy
 
 NAME            = 'MATH_LINEAR'
-MAINTAINER      = 'dan.pressel@gd-ais.com thomas.zellman@gd-ais.com'
-VERSION         = '0.1'
+MAINTAINER      = 'dan.pressel@gd-ais.com'
+VERSION         = '0.2'
 USELIB          = '%s' % NAME
 MODULE_DEPS     = 'sys'
 HEADERSONLY     = True
