@@ -32,30 +32,35 @@ namespace math
 namespace linear
 {
 
+/*!
+ *  \class Matrix2D
+ *  \brief Flexible sized Matrix template
+ *
+ *  This class provides a flexible size class of arbitrary, sizable 
+ *  dimensions M and N.  Invocations are not required to know the size of these matrices
+ *  at compile time.  This class is more flexible then its MatrixMxN counterpart, however
+ *  the MatrixMxN should be favored wherever possible (in other words, whenever the
+ *  matrix dimensions are known a priori).
+ *
+ *  This class is assumed to be a mathematical matrix of small to moderate size.  Memory
+ *  allocation is managed by the STL vector used underneath.
+ *
+ *
+ */
 template <typename _T=double>
 class Matrix2D
 {
-public:
-    size_t mM;
-    size_t mN;
+    //!  The raw storage
     std::vector<_T> mRaw;
+public:
+    //!  Matrix dimension in rows
+    size_t mM;
+
+    //!  Matrix dimension in cols
+    size_t mN;
 
     //! Default constructor (does nothing)
     Matrix2D() { mM = mN = 0; }
-
-    /*!
-     *  Set constant value embedded across matrix
-     *
-     *  \code
-           Matrix2D<double> mx(4.2, 2, 2);
-     *  \endcode
-     */
-    Matrix2D(size_t M, size_t N)
-    {
-        mRaw.resize(M * N, 0);
-        mM = M;
-        mN = N;
-    }
 
     /*!
      *  Create a matrix with a constant value for
@@ -68,72 +73,29 @@ public:
      *  \endcode
      *
      */
-    Matrix2D(size_t M, size_t N, _T cv)
+    Matrix2D(size_t M, size_t N, _T cv = 0)
     {
 
         mRaw.resize(M * N, cv);
         mM = M;
         mN = N;
     }
-
-
-    //! Nothing is allocated
-    ~Matrix2D() {}
-
-
-    /*!
-     *  Operator with compile time size check only
-     *  \param i The ith index into the rows (M)
-     *  \param j The jth index into the cols (N)
-     */
-    inline _T operator()(int i, int j) const
-    {
-#if defined(MATH_LINEAR_BOUNDS)
-        assert( i < mM && j < mN );
-#endif
-        return mRaw[i * mN + j];
-    }
-
-    /*!
-     *  This operator allows you to mutate an element
-     *  at mx(i, j):
-     *  
+   /*!
+     *  Construct a matrix from a 1D raw M*N pointer.
+     *  Assumes that the pointer is of correct size.
+     *
      *  \code
-           mx(i, j) = 4.3;
+          double raw9[] = 
+          {
+             1, 2, 3
+             4, 5, 6,
+             7, 8, 8
+          };
+          Matrix2D<> A(3, 3, raw9);
      *  \endcode
-     *
-     *  \param i The ith index into the rows (M)
-     *  \param j The jth index into the cols (N)
+     *  
+     *  \param raw A raw pointer to copy internally
      */
-    inline _T& operator()(int i, int j)
-    {
-#if defined(MATH_LINEAR_BOUNDS)
-        assert( i < mM && j < mN );
-#endif
-        return mRaw[i * mN + j];
-    }
-
-    /*!
-     *  Supports explicit assignment from
-     *  one matrix to another
-     *
-     *  \param mx
-     *
-     */
-    Matrix2D(const Matrix2D& mx)
-    {
-        mRaw = mx.mRaw;
-        mM = mx.mN;
-        mN = mx.mN;
-    }
-
-    Matrix2D(size_t M, size_t N, const std::vector<_T>& raw)
-    {
-        mRaw = raw;
-        mM = M;
-        mN = N;
-    }
-
     Matrix2D(size_t M, size_t N, const _T* raw)
     {
         size_t sz = M * N;
@@ -146,7 +108,46 @@ public:
         mN = N;
     }
     /*!
+     *  Construct a matrix from a 1D M*N vector.
+     *
+     *  \code
+          std::vector<double> vec9(9, 42.0);
+          Matrix2D<> A(3, 3, vec9);
+     *  \endcode
+     *
+     *
+     */
+    Matrix2D(size_t M, size_t N, const std::vector<_T>& raw)
+    {
+        mRaw = raw;
+        mM = M;
+        mN = N;
+    }
+    /*!
+     *  Supports explicit assignment from
+     *  one matrix to another
+     *
+     * \param mx A constant matrix to copy
+     *
+     *  \code
+          Matrix2D<> At(A.transpose());
+     *  \endcode
+     */
+    Matrix2D(const Matrix2D& mx)
+    {
+        mRaw = mx.mRaw;
+        mM = mx.mN;
+        mN = mx.mN;
+    }
+   
+
+  
+    /*!
      *  Assignment operator from one matrix to another
+     *
+     *  \code
+          Matrix2D<> At = A.transpose();
+     *  \endcode
      *
      *  \param mx The source matrix
      *  \return this (the copy)
@@ -162,7 +163,245 @@ public:
         return *this;
     }
 
-        
+    /*!
+     *  Set a matrix to a single element containing the contents
+     *  of a scalar value.  Note that this behavior differs (drastically)
+     *  from the MatrixMxN operator for a scalar value, since here, the
+     *  dimensions cannot be known
+     *
+     *  \code
+           Matrix2D<float> mx = 4.3f;
+           assert(mx.size() == 1);
+     *  \endcode
+     *
+     */
+    Matrix2D& operator=(const _T& sv)
+    {
+        mM = 1;
+        mN = 1;
+        mRaw.resize(1, sv);
+        return *this;
+    }
+
+    //! Nothing is allocated by us
+    ~Matrix2D() {}
+
+
+    /*!
+     *  Get back the value at index i, j
+     *  \code
+           double Aij = A(i, j);
+     *  \endcode
+     *
+     *  \param i The row index
+     *  \param j The column index
+     */
+    inline _T operator()(int i, int j) const
+    {
+#if defined(MATH_LINEAR_BOUNDS)
+        assert( i < mM && j < mN );
+#endif
+        return mRaw[i * mN + j];
+    }
+
+    /*!
+     *  This operator allows you to mutate an element
+     *  at A(i, j):
+     *  
+     *  \code
+           A(i, j) = 4.3;
+     *  \endcode
+     *
+     *  \param i The ith index into the rows (M)
+     *  \param j The jth index into the cols (N)
+     */
+    inline _T& operator()(int i, int j)
+    {
+#if defined(MATH_LINEAR_BOUNDS)
+        assert( i < mM && j < mN );
+#endif
+        return mRaw[i * mN + j];
+    }
+
+    /*!
+     * Please try to avoid this method.  There is extensive information
+     * here about why you should avoid it:
+     * http://www.parashift.com/c++-faq-lite/operator-overloading.html#faq-13.10
+     * http://www.parashift.com/c++-faq-lite/operator-overloading.html#faq-13.11
+     */
+    inline const _T* operator[](int i) const
+    {
+        return row(i);
+    }
+
+    /*!
+     *  Never use this method!  It should not be used for the same reasons as
+     *  its const-alternative:
+     *  http://www.parashift.com/c++-faq-lite/operator-overloading.html#faq-13.10
+     *  http://www.parashift.com/c++-faq-lite/operator-overloading.html#faq-13.11
+     *
+     *  But it is even more dangerous, since the user can cause damage by unwittingly
+     *  treating row i as a mutable pointer.
+     */
+    inline _T* operator[](int i)
+    {
+        return row(i);
+    }
+
+    /*!
+     *  Get a constant pointer to a row
+     *  
+     *  \code
+          // Get second row vector
+          const double* rowVector = A.row(1);
+     *  \endcode
+     *
+     */
+    inline const _T* row(int i) const
+    {
+#if defined(MATH_LINEAR_BOUNDS)
+        assert( i < mM);
+#endif
+        return &mRaw[i * mN];
+    }
+
+    /*!
+     *  Never use this method!  This method is dangerous
+     *  since the user can cause damage by unwittingly
+     *  treating row i as a mutable pointer.
+     */
+    inline _T* row(int i)
+    {
+#if defined(MATH_LINEAR_BOUNDS)
+        assert( i < mM);
+#endif
+        return &mRaw[i * mN];
+    }
+
+    /*!
+     *  Set the matrix row i to a copy of 
+     *  the row vector
+     *
+     *  \code
+          Matrix2D<> A(3, 3, 42.0);
+          double rowVec[] = { 1, 2, 3 };
+          A.row(0, rowVec);
+     *  \endcode
+     *  
+     *  \param i The row index
+     *  \param vec The row vector to copy from
+     */
+    inline void row(int i, const _T* vec)
+    {
+        for (unsigned int j = 0; j < mN; j++)
+        {
+            mRaw[i * mN + j] = vec[j];
+        }
+    }
+    /*!
+     *  Set the matrix row i to a copy of 
+     *  the row vector
+     *  
+     *  \code
+          Matrix2D<> A(3, 3, 42.0);
+          std::vector<double> rowVec(3, 1.2);
+          A.row(0, rowVec);
+     *  \endcode
+     *
+     *  \param i The row index
+     *  \param vec The row vector to copy from
+     */
+    inline void row(int i, const std::vector<_T>& vec)
+    {
+        row(i, &vec[0]);
+    }
+
+    /*!
+     *  Get back the column vector at index j
+     *  
+     *  \code
+          std::vector<double> colVec = A.col(0);
+     *  \endcode
+     *
+     *  \param j The column index
+     *  \return A vector copy of the column
+     */
+    std::vector<_T> col(size_t j) const
+    {
+        std::vector<_T> jth(mM);
+        for (unsigned int i = 0; i < mM; ++i)
+        {
+            jth[i] = mRaw[i * mN + j];
+        }
+        return jth;
+    }
+
+    /*!
+     *  Set column from vector at index j
+     *
+     *  \code
+          Matrix<3, 3> A(42.0);
+          double colVec[] = { 1, 2, 3 };
+          A.col(0, colVec);
+     *  \endcode
+     *
+     *  \param j The column index
+     *  \param vec The vector to copy from
+     */
+    void col(int j, const _T* vec)
+    {
+        for (unsigned int i = 0; i < mM; ++i)
+        {
+            mRaw[i * mN + j] = vec[i];
+        }
+    }
+
+    /*!
+     *  Set column from vector at index j
+     *
+     *  \code
+          Matrix2D<> A(3, 3, 42.0);
+          std::vector<double> colVec(3, 1.2);
+          A.col(0, colVec);
+     *  \endcode
+     *
+     *  \param j The column index
+     *  \param vec The vector to copy from
+     */
+    void col(int j, std::vector<_T>& vec)
+    {
+        col(j, &vec[0]);
+    }
+
+    //!  Return number of rows (M)
+    size_t rows() const { return mM; }
+
+    //!  Return number of cols (N)
+    size_t cols() const { return mN; }
+
+    //!  Return total size (M x N)
+    size_t size() const { return mRaw.size(); }
+
+    //! Get a constant ref to the underlying vector
+    const std::vector<_T>& vec() const { return mRaw; }
+ 
+    /*!
+     *  Equality operator test
+     *
+     *  \code
+
+          double raw4[] = { 1, 2, 3, 4 };
+          Matrix2D<double> A(2, 2, raw4);
+          MatrixMxN<2, 2> B(raw4);
+          Matrix2D<double> C = A;
+          assert( A == B );
+          assert( A == C );
+
+     *  \endcode
+     *
+     *  \param mx The source matrix
+     *  \return this (the copy)
+     */
     template<typename Matrix_T> inline bool operator==(const Matrix_T& mx) const
     {
         
@@ -181,56 +420,28 @@ public:
         }
         return true;
     }
-          
+    /*!
+     *  Non-equality operator test
+     *
+     *  \code
+
+          double raw4[] = { 1, 2, 3, 4 };
+          Matrix2D<double> A(2, 2, raw4);
+          MatrixMxN<2, 2> B(raw4);
+          B(1, 1) = 42.0;
+          Matrix2D<double> C(2, 2, &B.mRaw[0][0]);
+          assert( A != B );
+          assert( A != C );
+
+     *  \endcode
+     *
+     *  \param mx The source matrix
+     *  \return this (the copy)
+     */   
     template<typename Matrix_T> inline bool operator!=(const Matrix_T& mx) const
     {
             return !(*this == mx);
     }
-    /*
-    bool operator==(const Matrix2D& mx) const
-    {
-        if (this != &mx)
-        {
-            if (mx.mM != mM || mx.mN != mN)
-                return false;
-
-            for (size_t i = 0; i < mRaw.size(); ++i)
-            {
-                if (!equals(mRaw[i], mx.mRaw[i]))
-                    return false;
-            }
-        }
-        return true;
-    }
-    bool operator!=(const Matrix2D& mx) const
-    {
-        return !(*this == mx);
-    }*/
-    /*!
-     *  Set a matrix to a single element containing the contents
-     *  of a scalar value:
-     *
-     *  \code
-           mx = 4.3f;
-     *  \endcode
-     *
-     */
-    Matrix2D& operator=(const _T& sv)
-    {
-        mM = 1;
-        mN = 1;
-        mRaw.resize(1, sv);
-        return *this;
-    }
-
-    //!  Return number of rows (M)
-    size_t rows() const { return mM; }
-
-    //!  Return number of cols (N)
-    size_t cols() const { return mN; }
-
-    //!  Return total size (M x N)
-    size_t size() const { return mRaw.size(); }
 
     /*!
      *  The scale function allows you to scale
@@ -241,6 +452,7 @@ public:
      *  multiply counterpart
      *
      *  \code
+           Matrix2D<float> mx = createIdentity<float>(3);
            mx.scale(4.2f);   
      *  \endcode
      *
@@ -248,11 +460,12 @@ public:
      *  \param scalar The value to multiply into mx
      *
      */
-    void scale(_T scalar)
+    Matrix2D& scale(_T scalar)
     {
         size_t sz = mRaw.size();
         for (size_t i = 0; i < sz; ++i)
             mRaw[i] *= scalar;
+        return *this;
     }
 
     /*!
@@ -260,14 +473,15 @@ public:
      *  output is a matrix of same dimensions.  This
      *  function is identical to the scale() method
      *  except that this matrix is not mutated -
-     *  a scale copy is produced and returned
+     *  a scale copy is produced and returned. Note that
+     *  it is never necessary to do this function directly,
+     *  as the multiply ('*') operator is overloaded
      *
-     *  \param
-     *  
      *  \code
            scaled = mx.multiply(scalar);
      *  \endcode
      *
+     *  \param scalar A scalar value
      *  return a scaled matrix
      *
      */
@@ -278,7 +492,7 @@ public:
        
         for (size_t i = 0; i < sz; ++i)
         {
-                mx.mRaw[i] *= scalar;
+            mx.mRaw[i] *= scalar;
         }
         return mx;
     }
@@ -290,15 +504,15 @@ public:
      *  This function accesses the inner arrays for
      *  (potential, though slight) performance reasons.
      *
-     *  One would hope that the compiler will unroll these
-     *  loops since they are of constant size.
-     *
      *  \param mx An NxP matrix
      *  \return An MxP matrix
      *
      *
      *  \code
-           C = B.multiply(A);
+           Matrix2D<> a3x1(3, 1, 42.0);
+           Matrix2D<> a1x3(1, 3, 1.0);
+           Matrix2D<> a3x3(A.multiply(B));
+           Matrix2D<> a1x1(B.multiply(A));
      *  \endcode
      *
      */
@@ -484,48 +698,6 @@ public:
         return newM;
     }
 
-    /*!
-     * Please try never to use this method.  There is extensive information
-     * here about why you should avoid it:
-     * http://www.parashift.com/c++-faq-lite/operator-overloading.html#faq-13.10
-     * http://www.parashift.com/c++-faq-lite/operator-overloading.html#faq-13.11
-     */
-    inline const _T* operator[](int i) const
-    {
-        return row(i);
-    }
-
-    inline _T* operator[](int i)
-    {
-        return row(i);
-    }
-
-
-    inline const _T* row(int i) const
-    {
-#if defined(MATH_LINEAR_BOUNDS)
-        assert( i < mM);
-#endif
-        return &mRaw[i * mN];
-    }
-
-    inline _T* row(int i)
-    {
-#if defined(MATH_LINEAR_BOUNDS)
-        assert( i < mM);
-#endif
-        return &mRaw[i * mN];
-    }
-
-    std::vector<_T> col(size_t j) const
-    {
-        std::vector<_T> jth(mM);
-        for (unsigned int i = 0; i < mM; ++i)
-        {
-            jth[i] = mRaw[i * mN + j];
-        }
-        return jth;
-    }
 
     /*!
      *  Create a NxM matrix which is the transpose of this
@@ -641,23 +813,6 @@ public:
         return lu;
     }
 
-     /*!
-     *  Cleans up a Matrix where values are within epsilon of zero
-     *
-     *
-     */
-    void tidy(_T eps = std::numeric_limits<_T>::epsilon())
-    {
-        size_t sz = mM * mN;
-        for (unsigned int i = 0; i < sz; ++i)
-        { 
-            if (equals<_T>(mRaw[i], 0, eps))
-            {
-                mRaw[i] = 0;
-                
-            }
-        }
-    }
     /*!
      *  Permute a matrix from pivots.  This funtion does
      *  not mutate this.
@@ -686,6 +841,10 @@ public:
         return perm;
     }
 
+    /*!
+     *  Find the L2 norm of the matrix.
+     *  \return The norm
+     */
     _T norm() const
     {
         size_t sz = mM * mN;
@@ -697,9 +856,13 @@ public:
         return (_T)::sqrt((const _T)acc);
     }
 
-    void normalize()
+    /*!
+     *  Scale the entire matrix inplace by the L2 norm value.
+     *  \return A reference to this
+     */
+    Matrix2D& normalize()
     {
-        scale(1.0/norm());
+        return scale(1.0/norm());
     }
     /*!
      *  Alias for this->add();
@@ -780,6 +943,8 @@ public:
         Matrix2D = identityMatrix<double>(4);
  *  \endcode
  *
+ *  \param N the dimension in rows and in cols for the matrix to be produced
+ *
  */
 template<typename _T> Matrix2D<_T>
     identityMatrix(size_t N)
@@ -838,7 +1003,12 @@ template<typename _T>
     return x;
 }
 
-    
+/*!
+ *  Perform hard-coded 2x2 matrix inversion.  You can use this method
+ *  directly, or the inverse() operator which will automatically call
+ *  this for 2x2s
+ *
+ */
 template<typename _T> inline Matrix2D<_T> inverse2x2(const Matrix2D<_T>& mx)
 {
     Matrix2D<_T> inv(2, 2);
@@ -857,6 +1027,12 @@ template<typename _T> inline Matrix2D<_T> inverse2x2(const Matrix2D<_T>& mx)
     return inv;
 }
 
+/*!
+ *  Perform hard-coded 3x3 matrix inversion.  You can use this method
+ *  directly, or the inverse() operator which will automatically call
+ *  this for 3x3s
+ *
+ */
 template<typename _T> inline Matrix2D<_T> 
     inverse3x3(const Matrix2D<_T>& mx)
 {
@@ -900,8 +1076,8 @@ template<typename _T> inline Matrix2D<_T>
  *
  *  \param mx A matrix to invert
  *
- *  \code
-         inv = inverse(A);
+ *  \code      
+         Matrix2D<> Ainv = inverseLU<double>(A);
  *  \endcode
  *
  */
@@ -930,6 +1106,15 @@ template<typename _T> inline
 
 }
 
+/*!
+ *  Generalized inverse function.  This function has special
+ *  cases for 2x2s and 3x3s.  Otherwise, it uses generalized
+ *  LU decomposition to solve for the inverse.
+ *
+ *  \code      
+         Matrix2D<> Ainv = inverse<double>(A);
+ *  \endcode
+ */
 template<typename _T> inline
     Matrix2D<_T> inverse(const Matrix2D<_T>& mx)
 {
@@ -953,7 +1138,10 @@ template<typename _T> math::linear::Matrix2D<_T>
     return m.multiply(scalar);
 }
 
-
+/*!
+ *  Try to pretty print the Matrix to an ostream.
+ *  \return Reference to ostream
+ */
 template<typename _T>
     std::ostream& operator<<(std::ostream& os,
                              const math::linear::Matrix2D<_T>& m)

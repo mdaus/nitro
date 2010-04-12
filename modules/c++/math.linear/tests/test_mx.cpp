@@ -315,6 +315,52 @@ TEST_CASE(testPermuteInvert2x2)
 
 }
 
+TEST_CASE(testSetCols)
+{
+    MatrixMxN<3, 2> A(0.0);
+    Matrix2D<> A2(3, 2);
+    // Make it so each column vector has the same values
+    std::vector<double> v(3);
+    v[0] = 1;
+    v[1] = 2;
+    v[2] = 3;
+    A.col(0, v);
+    A.col(1, &v[0]);
+    
+    A2.col(0, v);
+    A2.col(1, &v[0]);
+    foreach_ij(3, 2)
+    {
+        TEST_ASSERT_ALMOST_EQ(A(i, j), i + 1);
+        TEST_ASSERT_ALMOST_EQ(A2(i, j), i + 1);
+    }
+}
+
+TEST_CASE(testSetRows)
+{
+    MatrixMxN<3, 2> A;
+    Matrix2D<> A2(3, 2);
+    std::vector<double> v(3, 0);
+    v[0] = 1;
+    v[1] = 2;
+
+    A.row(0, v);
+    A.row(1, &v[0]);
+    A(2, 0) = v[0];
+    A(2, 1) = v[1];
+
+    A2.row(0, v);
+    A2.row(1, &v[0]);
+    A2(2, 0) = v[0];
+    A2(2, 1) = v[1];
+    
+    foreach_ij(3, 2)
+    {
+        TEST_ASSERT_ALMOST_EQ(A(i, j), j + 1);
+        TEST_ASSERT_ALMOST_EQ(A2(i, j), j + 1);
+    }
+    //std::cout << A << std::endl;
+}
 TEST_CASE(testGrabCols)
 {
     MatrixMxN<3, 2> A;
@@ -410,7 +456,10 @@ int main()
 
     TEST_CHECK(testIdentityMxN);
     TEST_CHECK(testScaleMultiplyMxN);
+    TEST_CHECK(testSetRows);
     TEST_CHECK(testGrabRows);
+    TEST_CHECK(testSetCols);
+    TEST_CHECK(testGrabCols);
     TEST_CHECK(testArithmeticMxN);
     TEST_CHECK(testPermuteInvert2x2);
     TEST_CHECK(testInvert2x2);

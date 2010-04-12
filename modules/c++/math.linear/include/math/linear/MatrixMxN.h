@@ -51,13 +51,52 @@ template<> inline bool equals(const double& e1, const double& e2)
     return equals<double>(e1, e2, std::numeric_limits<float>::epsilon());
 }
 
+/*!
+ *  \class MatrixMxN
+ *  \brief Compile-time fixed size Matrix template
+ *
+ *  This class provides a compile time fixed size class of arbitrary
+ *  dimensions M and N.  Any invocation of this class is therefore required
+ *  to know the absolute size of the matrix at compile time.  This class should
+ *  always be used instead of Matrix2D when possible, as it should perform much
+ *  better than its flexible-sized alternative. Use Matrix2D only when the matrix
+ *  dimensions cannot be known at compile time
+ *
+ *  Attempts are made where possible to take advantage of the fixed size,
+ *  providing full specialization where possible.  Additionally, it is
+ *  expected that, during compilation loops may be unrolled by the compiler,
+ *  given the right optimization settings.  To faciliate compiler optimizations,
+ *  the internal storage of the class is as a two-dimensional vector,
+ *  following the Rationale presented in the AMD Software Optimization Guide
+ *  for AMD64 Processors 25112 Rev. 3.06 (see chapter 2.2).  Over time, the
+ *  headers will be extended to support LAPACK implementation routine
+ *
+ *  The class attempts to provide an intuitive interface for matrices, while
+ *  achieving reasonable performance and optimizations where possible.  It does
+ *  not attempt to provide a comprehensive solution for every matrix problem,
+ *  but it does try to handle practical problems gracefully.  Efforts are made
+ *  to make this class compatible with STL and raw C pointers where possible.
+ *
+ *  The doxygen attempts to demonstrate the functionality of the class, though the
+ *  source code and unit tests should be consulted for example usage as well.
+ *
+ */
 template <size_t _MD, size_t _ND, typename _T=double>
 class MatrixMxN
 {
 
     typedef MatrixMxN<_MD, _ND, _T> Like_T;
 public:
+    //!  Public but really should be avoided
     _T mRaw[_MD][_ND];
+
+    /*!
+     *  No initialization here!
+     *
+     */
+    MatrixMxN()
+    {
+    }
 
     /*!
      *  Create a matrix with a constant value for
@@ -80,102 +119,21 @@ public:
             }
         }
     }
+
+
     /*!
-     *  No initialization here!
+     *  Construct a matrix from a 1D raw M*N pointer.
+     *  Assumes that the pointer is of correct size.
      *
-     */
-    MatrixMxN()
-    {
-    }
-
-
-    ~MatrixMxN() {}
-
-
-    /*!
-     * Please try never to use this method.  There is extensive information
-     * here about why you should avoid it:
-     * http://www.parashift.com/c++-faq-lite/operator-overloading.html#faq-13.10
-     * http://www.parashift.com/c++-faq-lite/operator-overloading.html#faq-13.11
-     */
-    inline const _T* operator[](int i) const
-    {
-        return row(i);
-    }
-
-    inline _T* operator[](int i)
-    { 
-        return row(i);
-    }
-
-    inline const _T* row(int i) const
-    {
-#if defined(MATH_LINEAR_BOUNDS)
-        assert( i < _MD);
-#endif
-        return mRaw[i];
-    }
-
-    inline _T* row(int i)
-    {
-#if defined(MATH_LINEAR_BOUNDS)
-        assert( i < _MD);
-#endif
-        return mRaw[i];
-    }
-
-    inline _T operator()(int i, int j) const
-    {
-#if defined(MATH_LINEAR_BOUNDS)
-        assert( i < _MD && j < _ND );
-#endif
-        return mRaw[i][j];
-    }
-
-    std::vector<_T> col(size_t j) const
-    {
-        std::vector<_T> jth(_MD);
-        for (unsigned int i = 0; i < _MD; ++i)
-        {
-            jth[i] = mRaw[i][j];
-        }
-        return jth;
-    }
-    /*!
-     *  This function is not really necessary, but
-     *  might be handy if you have some template code
-     *
-     */
-    inline size_t rows() const { return _MD; }
-    
-    /*!
-     *  This function is not really necessary, but
-     *  might be handy if you have some template code
-     */
-    inline size_t cols() const { return _ND; }
-
-    inline size_t size() const { return _MD * _ND; }
-
-    /*!
-     *  This operator allows you to mutate an element
-     *  at mx(i, j):
-     *  
      *  \code
-           mx(i, j) = 4.3;
+          double raw9[] = 
+          {
+             1, 2, 3
+             4, 5, 6,
+             7, 8, 8
+          };
+          MatrixMxN<3, 3> A(raw9);
      *  \endcode
-     *
-     */
-    inline _T& operator()(int i, int j)
-    {
-#if defined(MATH_LINEAR_BOUNDS)
-        assert( i < _MD && j < _ND );
-#endif
-        return mRaw[i][j];
-    }
-
-    /*!
-     *  Assign a matrix from a raw pointer
-     *  Assumes that the pointer is of correct size
      *  
      *  \param raw A raw pointer to copy internally
      */
@@ -190,6 +148,16 @@ public:
         }
     }
 
+    /*!
+     *  Construct a matrix from a 1D M*N vector.
+     *
+     *  \code
+          std::vector<double> vec9(9, 42.0);
+          MatrixMxN<3, 3> A(vec9);
+     *  \endcode
+     *
+     *
+     */
     MatrixMxN(const std::vector<_T>& raw)
     {
         if (raw.size() < size())
@@ -204,6 +172,43 @@ public:
         }
     }
 
+    /*!
+     *  Supports explicit assignment from
+     *  one matrix to another
+     *
+     *
+     *  \param mx A constant matrix to copy
+     *
+     *  \code
+          MatrixMxN<3, 3> At(A.transpose());
+     *  \endcode
+     */
+    MatrixMxN(const MatrixMxN& mx)
+    {
+        for (unsigned int i = 0; i < _MD; i++)
+        {
+            for (unsigned int j = 0; j < _ND; j++)
+            {
+                mRaw[i][j] = mx.mRaw[i][j];
+            }
+        }
+    }
+    /*!
+     *  Assign a matrix from a 1D raw M*N pointer.
+     *  Assumes that the pointer is of correct size.
+     *
+     *  \code
+          double raw9[] = 
+          {
+             1, 2, 3
+             4, 5, 6,
+             7, 8, 8
+          };
+          MatrixMxN<3, 3> A = raw9;
+     *  \endcode
+     *  
+     *  \param raw A raw pointer to copy internally
+     */
     MatrixMxN& operator=(const _T* raw)
     {
         for (unsigned int i = 0; i < _MD; i++)
@@ -215,6 +220,17 @@ public:
         }
         return *this;
     }
+
+    /*!
+     *  Assign a matrix from a 1D M*N vector.
+     *
+     *  \code
+          std::vector<double> vec9(9, 42.0);
+          MatrixMxN<3, 3> A = vec9;
+     *  \endcode
+     *
+     *
+     */
     MatrixMxN& operator=(const std::vector<_T>& raw)
     {
         if (raw.size() < size())
@@ -229,25 +245,14 @@ public:
         return *this;
     }
 
-    /*!
-     *  Supports explicit assignment from
-     *  one matrix to another
-     *
-     *  \param mx
-     *
-     */
-    MatrixMxN(const MatrixMxN& mx)
-    {
-        for (unsigned int i = 0; i < _MD; i++)
-        {
-            for (unsigned int j = 0; j < _ND; j++)
-            {
-                mRaw[i][j] = mx.mRaw[i][j];
-            }
-        }
-    }
+ 
     /*!
      *  Assignment operator from one matrix to another
+     *
+     *  \code
+          MatrixMxN<3, 3> At = A.transpose();
+     *  \endcode
+     *
      *  \param mx The source matrix
      *  \return this (the copy)
      */
@@ -264,9 +269,274 @@ public:
         return *this;
     }
 
+    /*!
+     *  Set a matrix (each element) to the contents
+     *  of a scalar value.  Be careful to make sure
+     *  that the compiler knows that the right-hand side
+     *  is of matching type to this matrix, otherwise
+     *  it may not be able to determine if this is the
+     *  scalar operation or a raw pointer;
+     *
+     *  \code
+           Matrix<3, 3, float> mx = 4.3f;
+     *  \endcode
+     *
+     */
+    MatrixMxN& operator=(const _T& sv)
+    {
+        for (unsigned int i = 0; i < _MD; i++)
+        {
+            for (unsigned int j = 0; j < _ND; j++)
+            {
+                mRaw[i][0] = sv;
+            }
+        }
+        return *this;
+    }
+
+    //!  Destructor
+    ~MatrixMxN() {}
+
 
     /*!
-     *  Assignment operator from one matrix to another
+     *  Get back the value at index i, j
+     *  \code
+           double Aij = A(i, j);
+     *  \endcode
+     *
+     *  \param i The row index
+     *  \param j The column index
+     */
+    inline _T operator()(int i, int j) const
+    {
+#if defined(MATH_LINEAR_BOUNDS)
+        assert( i < _MD && j < _ND );
+#endif
+        return mRaw[i][j];
+    }
+    /*!
+     *  This operator allows you to mutate an element
+     *  at A(i, j):
+     *  
+     *  \code
+           A(i, j) = 4.3;
+     *  \endcode
+     *
+     *  \param i The ith index into the rows (M)
+     *  \param j The jth index into the cols (N)
+     */
+    inline _T& operator()(int i, int j)
+    {
+#if defined(MATH_LINEAR_BOUNDS)
+        assert( i < _MD && j < _ND );
+#endif
+        return mRaw[i][j];
+    }
+
+    /*!
+     *  Please try to avoid this method.  There is extensive information
+     *  here about why you should not use it:
+     *  http://www.parashift.com/c++-faq-lite/operator-overloading.html#faq-13.10
+     *  http://www.parashift.com/c++-faq-lite/operator-overloading.html#faq-13.11
+     */
+    inline const _T* operator[](int i) const
+    {
+        return row(i);
+    }
+
+    /*!
+     *  Never use this method!  It should not be used for the same reasons as
+     *  its const-alternative:
+     *  http://www.parashift.com/c++-faq-lite/operator-overloading.html#faq-13.10
+     *  http://www.parashift.com/c++-faq-lite/operator-overloading.html#faq-13.11
+     *
+     *  But it is even more dangerous, since the user can cause damage by unwittingly
+     *  treating row i as a mutable pointer.  This method is only preserved for compatibility
+     */
+    inline _T* operator[](int i)
+    { 
+        return row(i);
+    }
+
+    /*!
+     *  Get a constant pointer to a row
+     *  
+     *  \code
+          // Get second row vector
+          const double* rowVector = A.row(1);
+     *  \endcode
+     *
+     */
+    inline const _T* row(int i) const
+    {
+#if defined(MATH_LINEAR_BOUNDS)
+        assert( i < _MD);
+#endif
+        return mRaw[i];
+    }
+
+    /*!
+     *  Never use this method!  This method is dangerous
+     *  since the user can cause damage by unwittingly
+     *  treating row i as a mutable pointer.
+     */
+    inline _T* row(int i)
+    {
+#if defined(MATH_LINEAR_BOUNDS)
+        assert( i < _MD);
+#endif
+        return mRaw[i];
+    }
+
+    /*!
+     *  Set the matrix row i to a copy of 
+     *  the row vector
+     *
+     *  \code
+          Matrix<3, 3> A(42.0);
+          double rowVec[] = { 1, 2, 3 };
+          A.row(0, rowVec);
+     *  \endcode
+     *  
+     *  \param i The row index
+     *  \param vec The row vector to copy from
+     */
+    inline void row(int i, const _T* vec)
+    {
+        for (unsigned int j = 0; j < _ND; j++)
+        {
+            mRaw[i][j] = vec[j];
+        }
+    }
+
+    /*!
+     *  Set the matrix row i to a copy of 
+     *  the row vector
+     *  
+     *  \code
+          Matrix<3, 3> A(42.0);
+          std::vector<double> rowVec(3, 1.2);
+          A.row(0, rowVec);
+     *  \endcode
+     *
+     *  \param i The row index
+     *  \param vec The row vector to copy from
+     */
+    inline void row(int i, const std::vector<_T>& vec)
+    {
+        row(i, &vec[0]);
+    }
+
+  
+    /*!
+     *  Get back the column vector at index j
+     *  
+     *  \code
+          std::vector<double> colVec = A.col(0);
+     *  \endcode
+     *
+     *  \param j The column index
+     *  \return A vector copy of the column
+     */
+    std::vector<_T> col(int j) const
+    {
+        std::vector<_T> jth(_MD);
+        for (unsigned int i = 0; i < _MD; ++i)
+        {
+            jth[i] = mRaw[i][j];
+        }
+        return jth;
+    }
+
+
+    /*!
+     *  Set column from vector at index j
+     *
+     *  \code
+          Matrix<3, 3> A(42.0);
+          double colVec[] = { 1, 2, 3 };
+          A.col(0, colVec);
+     *  \endcode
+     *
+     *  \param j The column index
+     *  \param vec The vector to copy from
+     */
+    void col(int j, const _T* vec)
+    {
+        
+        for (unsigned int i = 0; i < _MD; ++i)
+        {
+            mRaw[i][j] = vec[i];
+        }
+    }
+
+    /*!
+     *  Set column from vector at index j
+     *
+     *  \code
+          Matrix<3, 3> A(42.0);
+          std::vector<double> colVec(3, 1.2);
+          A.col(0, colVec);
+     *  \endcode
+     *
+     *  \param j The column index
+     *  \param vec The vector to copy from
+     */
+    void col(int j, std::vector<_T>& vec)
+    {
+        col(j, &vec[0]);
+    }
+
+
+    /*!
+     *  This function is not really necessary since presumably
+     *  the caller knows the dims, but it is helpful for
+     *  template functions where the exact matrix type is
+     *  not know (e.g., MatrixMxN vs. Matrix2D
+     *
+     *  It is assumed that the compiler, in most cases can
+     *  hardcode in the proper value of _MD, though this has
+     *  not been verified
+     *
+     *  \return _MD
+     */
+    inline size_t rows() const { return _MD; }
+    
+    /*!
+     *  This function is not really necessary, but
+     *  might be handy if you have some template code
+     *  
+     *  It is assumed that the compiler, in most cases can
+     *  hardcode in the proper value of _ND, though this has
+     *  not been verified
+     *
+     *  \return _ND
+     */
+    inline size_t cols() const { return _ND; }
+
+    /*!
+     *  Gives back the value full size of the matrix
+     *
+     *  \return _MD * _ND
+     */
+    inline size_t size() const { return _MD * _ND; }
+
+
+
+    /*!
+     *  Equality operator test
+     *
+     *  \code
+
+          double raw4[] = { 1, 2, 3, 4 };
+          Matrix<2, 2> A(raw4);
+          Matrix2D<double> B(2, 2, raw4);
+          Matrix<2, 2> C = A;
+          assert( A == B );
+          assert( A == C );
+
+     *  \endcode
+     *
      *  \param mx The source matrix
      *  \return this (the copy)
      */
@@ -287,49 +557,29 @@ public:
         }
         return true;
     }
-          
+    
+    /*!
+     *  Non-equality operator test
+     *
+     *  \code
+
+          double raw4[] = { 1, 2, 3, 4 };
+          Matrix<2, 2> A(raw4);
+          Matrix2D<double> B(2, 2, raw4);
+          B(1, 1) = 42.0;
+          Matrix<2, 2> C(B.vec());
+          assert( A != B );
+          assert( A != C );
+
+     *  \endcode
+     *
+     *  \param mx The source matrix
+     *  \return this (the copy)
+     */
+
     template<typename Matrix_T> inline bool operator!=(const Matrix_T& mx) const
     {
             return !(*this == mx);
-    }
-    /*
-    bool operator==(const MatrixMxN& mx) const
-    {
-        if (this != &mx)
-        for (unsigned int i = 0; i < _MD; i++)
-        {
-            for (unsigned int j = 0; j < _ND; j++)
-            {
-                if (!equals(mRaw[i][j], mx.mRaw[i][j]))
-                    return false;
-            }
-        }
-        return true;
-    }
-    bool operator!=(const MatrixMxN& mx) const
-    {
-        return !(*this == mx); 
-    }*/
-
-    /*!
-     *  Set a matrix (each element) to the contents
-     *  of a scalar value:
-     *
-     *  \code
-           mx = 4.3f;
-     *  \endcode
-     *
-     */
-    MatrixMxN& operator=(const _T& sv)
-    {
-        for (unsigned int i = 0; i < _MD; i++)
-        {
-            for (unsigned int j = 0; j < _ND; j++)
-            {
-                mRaw[i][0] = sv;
-            }
-        }
-        return *this;
     }
 
     /*!
@@ -341,14 +591,16 @@ public:
      *  multiply counterpart
      *
      *  \code
+           Matrix<3, 3> mx = createIdentity<3, double>();
            mx.scale(4.2f);   
      *  \endcode
      *
      *
      *  \param scalar The value to multiply into mx
+     *  \return This object
      *
      */
-    void scale(_T scalar)
+    MatrixMxN& scale(_T scalar)
     {
         for (unsigned int i = 0; i < _MD; i++)
         {
@@ -357,6 +609,7 @@ public:
                 mRaw[i][j] *= scalar;
             }
         }
+        return *this;
     }
 
     /*!
@@ -364,14 +617,15 @@ public:
      *  output is a matrix of same dimensions.  This
      *  function is identical to the scale() method
      *  except that this matrix is not mutated -
-     *  a scale copy is produced and returned
-     *
-     *  \param
+     *  a scale copy is produced and returned.  Note that
+     *  it is never necessary to do this function directly,
+     *  as the multiply ('*') operator is overloaded
      *  
      *  \code
            scaled = mx.multiply(scalar);
      *  \endcode
      *
+     *  \param scalar A scalar value
      *  return a scaled matrix
      *
      */
@@ -390,7 +644,9 @@ public:
 
     /*!
      *  Multiply an NxP matrix to a MxN matrix (this) to
-     *  produce an MxP matrix output.
+     *  produce an MxP matrix output.  This function will
+     *  fail at compile time if the input and output matrix
+     *  dimensions are incorrect.
      *
      *  This function accesses the inner arrays for
      *  (potential, though slight) performance reasons.
@@ -403,7 +659,10 @@ public:
      *
      *
      *  \code
-           C = B.multiply(A);
+           MatrixMxN<3, 1> A(42.0);
+           MatrixMxN<1, 3> B(1.0);
+           MatrixMxN<3, 3> C(A.multiply(B));
+           MatrixMxN<1, 1> D(B.multiply(A));
      *  \endcode
      *
      */
@@ -484,7 +743,11 @@ public:
     /*!
      *  This function does an add and accumulate
      *  operation.  The parameter is add-assigned
-     *  element-wise to this
+     *  element-wise to this.  
+     *
+     *  This method generates a
+     *  compile time error if the matrix dimensions 
+     *  do not agree
      *
      *  \param mx The matrix to assign (MxN)
      *  \return This
@@ -513,6 +776,10 @@ public:
      *  This function does a subtraction
      *  operation element wise.
      *
+     *  This method generates a
+     *  compile time error if the matrix dimensions 
+     *  do not agree
+     *
      *  \param mx MxN matrix to subtract from this
      *  \return This
      *
@@ -538,6 +805,11 @@ public:
     /*!
      *  Add an MxN matrix to another and return a third
      *  that is the sum.  This operation does not mutate this.
+     *  You can use the overloaded ('+') operator instead
+     *
+     *  This method generates a
+     *  compile time error if the matrix dimensions 
+     *  do not agree
      *
      *  \param mx
      *  \return The sum
@@ -557,6 +829,11 @@ public:
     /*!
      *  Subtract an MxN matrix to another and return a third
      *  that is the sum.  This operation does not mutate this.
+     *  You can use the overloaded ('-') operator instead
+     *
+     *  This method generates a
+     *  compile time error if the matrix dimensions 
+     *  do not agree
      *
      *  \param mx
      *  \return The sum
@@ -576,7 +853,8 @@ public:
 
     /*!
      *  Create a NxM matrix which is the transpose of this
-     *  MxN matrix.
+     *  MxN matrix.  This method generates a compiler error
+     *  if the output matrix dimensions are not NxM
      *
      *  \return An NxM matrix that is the transpose
      *
@@ -714,6 +992,10 @@ public:
         }
         return perm;
     }
+    /*!
+     *  Find the L2 norm of the matrix.
+     *  \return The norm
+     */
     _T norm() const
     {
         _T acc(0);
@@ -727,9 +1009,13 @@ public:
         return (_T)::sqrt((const _T)acc);
     }
 
-    void normalize()
+    /*!
+     *  Scale the entire matrix inplace by the L2 norm value.
+     *  \return A reference to this
+     */
+    MatrixMxN& normalize()
     {
-        scale(1.0/norm());
+        return scale(1.0/norm());
     }
 
     /*!
@@ -816,12 +1102,13 @@ public:
  *
  *  This function produces a matrix that is set to this value
  *
- *  \param cv An optional constant value
- *
  *  \code
        MatrixMxN<4, 4> mx = constantMatrix<4, 4, double>(4.2)
  *  \endcode
  *
+ *  This function is relatively worthless, favor the constructor
+ *
+ *  \param cv An optional constant value
  */
 template<size_t _MD, size_t _ND, typename _T> MatrixMxN<_MD, _ND, _T>
     constantMatrix(_T cv = 0)
@@ -893,12 +1180,12 @@ template<size_t _MD, size_t _ND, size_t _PD, typename _T>
 }
 
 /*!
- *  Generalized inverse method (currently uses LU decomposition).
+ *  Generalized inverse method using LU decomposition
  *
  *  \param mx A matrix to invert
  *
- *  \code
-         inv = inverse(A);
+ *  \code      
+         Matrix<3, 3> Ainv = inverseLU<3, double>(A);
  *  \endcode
  *
  */
@@ -924,7 +1211,14 @@ template<size_t _ND, typename _T> inline
 
 }
 
-
+/*!
+ *  Generalized inverse function.  This function is specialized for 2x2s
+ *  and 3x3s for type double and float.
+ *
+ *  \code      
+         Matrix<3, 3> Ainv = inverse<3, double>(A);
+ *  \endcode
+ */
 template<size_t _ND, typename _T> inline
     MatrixMxN<_ND, _ND, _T> inverse(const MatrixMxN<_ND, _ND, _T>& mx)
 {
@@ -1088,8 +1382,21 @@ template<size_t _MD, size_t _ND, typename _T> math::linear::MatrixMxN<_MD, _ND, 
 }
 
 
-
-template<typename Matrix_T> Matrix_T tidy(const Matrix_T& constMatrix, double eps = std::numeric_limits<float>::epsilon())
+/*!
+ *  This method "cleans" a Matrix of unknown type.  Concrete instantiations could
+ *  include MatrixMxN or Matrix2D, or any other type that has a rows() and cols(),
+ *  a proper assignment operator from the same type, and an overloaded (i, j)
+ *  operator.
+ *
+ *  Any value that is within the given epsilon of an integer is rounded to that
+ *  integer value.  The parameter is unmodified
+ *
+ *  \param constMatrix A matrix to tidy
+ *  \param The epsilon fudge factor
+ *  \return 
+ */
+template<typename Matrix_T> Matrix_T tidy(const Matrix_T& constMatrix,
+                                          double eps = std::numeric_limits<float>::epsilon())
 {
     Matrix_T mx = constMatrix;
     for (unsigned int i = 0; i < mx.rows(); i++)
@@ -1112,7 +1419,11 @@ template<typename Matrix_T> Matrix_T tidy(const Matrix_T& constMatrix, double ep
     }
     return mx;
 }
- 
+
+/*!
+ *  Try to pretty print the Matrix to an ostream.
+ *  \return Reference to ostream
+ */
 template<size_t _MD, size_t _ND, typename _T>
     std::ostream& operator<<(std::ostream& os,
                              const math::linear::MatrixMxN<_MD, _ND, _T>& m)
