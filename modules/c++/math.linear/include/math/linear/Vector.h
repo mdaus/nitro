@@ -22,7 +22,7 @@
 #ifndef __MATH_LINEAR_VECTOR_H__
 #define __MATH_LINEAR_VECTOR_H__
 
-#include "math/linear/VectorN.h"
+#include "math/linear/Matrix2D.h"
 
 namespace math
 {
@@ -187,6 +187,9 @@ public:
 
     //!  Get back the const raw matrix implementation
     const Matrix2D<_T>& matrix() const { return mRaw; }
+
+    //!  Get back a const-vector
+    const std::vector<_T>& vec() const { return mRaw.mRaw; }
 
     //!  Const dereference operator
     inline _T operator[](int i) const
@@ -424,7 +427,7 @@ template<typename _T>
 /*!
  *  Reverse order template overload for scalar * Vector
  */
-template<size_t _ND, typename _T> math::linear::Vector<_T>
+template<typename _T> math::linear::Vector<_T>
     operator*(_T scalar, const math::linear::Vector<_T>& v)
 {
     return v * scalar;

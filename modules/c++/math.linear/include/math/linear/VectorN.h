@@ -22,7 +22,7 @@
 #ifndef __MATH_LINEAR_VECTOR_N_H__
 #define __MATH_LINEAR_VECTOR_N_H__
 
-#include "math/linear/VectorN.h"
+#include "math/linear/MatrixMxN.h"
 
 namespace math
 {

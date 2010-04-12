@@ -50,9 +50,11 @@ namespace linear
 template <typename _T=double>
 class Matrix2D
 {
+    
+public:
     //!  The raw storage
     std::vector<_T> mRaw;
-public:
+
     //!  Matrix dimension in rows
     size_t mM;
 
@@ -136,7 +138,7 @@ public:
     Matrix2D(const Matrix2D& mx)
     {
         mRaw = mx.mRaw;
-        mM = mx.mN;
+        mM = mx.mM;
         mN = mx.mN;
     }
    
@@ -714,8 +716,8 @@ public:
     {
 
         Matrix2D x(mN, mM);
-        for (int i = 0; i < mM; i++)
-            for (int j = 0; j < mN; j++)
+        for (size_t i = 0; i < mM; i++)
+            for (size_t j = 0; j < mN; j++)
                 x.mRaw[j * mM + i] = mRaw[i * mN + j];
 
         return x;
