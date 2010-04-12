@@ -245,7 +245,7 @@ public:
     //!  Normalize a value
     void normalize()
     {
-        return mRaw.normalize();
+        mRaw.normalize();
     }
 
     //!  Scale a value
