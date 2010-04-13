@@ -58,7 +58,7 @@ public:
      *  \param sz The size of the Vector
      *  \param sv The scalar value to assign from
      */
-    Vector(size_t sz, _T sv)
+    Vector(size_t sz, _T sv = 0.0)
     {
         mRaw = Matrix2D<_T>(sz, 1, sv);
     }
@@ -389,11 +389,13 @@ public:
 
 /*!
  *  Cross product of two 3-dimensional vectors.
+ *  You should never ever use this, Vector's are
+ *  MUCH slower than VectorN's
  */
 template<typename _T> Vector<_T> cross(const Vector<_T>& u,
                                        const Vector<_T>& v)
 {
-    VectorN<3, _T> xp;
+    Vector<_T> xp(3);
     xp[0] = (u[1]*v[2] - u[2]*v[1]);
     xp[1] = (u[2]*v[0] - u[0]*v[2]);
     xp[2] = (u[0]*v[1] - u[1]*v[0]);
