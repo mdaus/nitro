@@ -71,6 +71,7 @@ public:
     {
 	mCoef.resize(order + 1,0); 
     }
+
     /*!
      *  This function allows you to copy the values
      *  directly from a raw buffer.  The first argument

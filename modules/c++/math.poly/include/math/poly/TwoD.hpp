@@ -171,7 +171,7 @@ template<typename _T>
 OneD<_T> 
 TwoD<_T>::operator [] (unsigned int idx) const
 {
-    OneD<_T> lRet(0.0);
+    OneD<_T> lRet(0);
     if (idx < mCoef.size())
     {
         lRet = mCoef[idx];
@@ -336,7 +336,7 @@ operator << (std::ostream& out, const TwoD<_T> p)
 {
     for (unsigned int lX = 0 ; lX < p.mCoef.size() ; lX++)
     {
-        out << "x^" << lX << "*(" << p[lX] << ")" << std::endl;
+        out <<  "x^" << lX << "*(" << p[lX] << ")" << std::endl;
     }
     return out;
 }
