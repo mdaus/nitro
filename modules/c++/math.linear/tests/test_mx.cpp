@@ -161,11 +161,33 @@ TEST_CASE(testInvert4x4)
 
     TEST_ASSERT_EQ(Qinv, Q2inv);
 
-    Matrix4x4 truth(qinv);
+    Matrix4x4 Qtruth(qinv);
 
     foreach_ij(4, 4)
     {
-        TEST_ASSERT_ALMOST_EQ_EPS(Qinv(i, j), truth(i, j), 0.00001);
+        TEST_ASSERT_ALMOST_EQ_EPS(Qinv(i, j), Qtruth(i, j), 0.00001);
+    }
+
+    double m[] =
+    {
+        9,        7.34847,  7.34847,  6,
+        7.34847,  9,        6,        7.34847,
+        7.34847,  6,        9,        7.34847,
+        6,        7.34847,  7.34847,  9
+    };
+    double minv[] =
+    {
+        1.0000,  -0.8165,  -0.8165,   0.6667,
+       -0.8165,   1.0000,   0.6667,  -0.8165,
+       -0.8165,   0.6667,   1.0000,  -0.8165,
+        0.6667,  -0.8165,  -0.8165,   1.0000
+    };
+    MatrixMxN<4, 4> M(m);
+    MatrixMxN<4, 4> Mtruth(minv);
+    MatrixMxN<4, 4> Minv = inverse<4, double>(M);
+    foreach_ij(4, 4)
+    {
+        TEST_ASSERT_ALMOST_EQ_EPS(Minv(i, j), Mtruth(i, j), 0.0001);
     }
 
 }
