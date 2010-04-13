@@ -69,7 +69,7 @@ public:
      */
     OneD(size_t order)  
     {
-	mCoef.resize(order + 1,0); 
+	mCoef.resize(order + 1, 0.0); 
     }
 
     /*!
