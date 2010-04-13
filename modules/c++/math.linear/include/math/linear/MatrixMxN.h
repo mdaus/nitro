@@ -926,7 +926,6 @@ public:
                 }
                 colj[i] -= s;
                 rowi[j] = colj[i];
-
             }
 
             unsigned int p = j;
@@ -949,14 +948,13 @@ public:
                 k = pivotsM[p];
                 pivotsM[p] = pivotsM[j];
                 pivotsM[j] = k;
-
-                if (j < _MD && lu(j, j) )
+            }
+            if (j < _MD && lu(j, j) )
+            {
+                for (unsigned int i = j + 1; i < _MD; i++)
                 {
-                    for (unsigned int i = j + 1; i < _MD; i++)
-                    {
-                        // Divide out our rows
-                        lu(i, j) /= lu(j, j);
-                    }
+                    // Divide out our rows
+                    lu(i, j) /= lu(j, j);
                 }
             }
 
@@ -1431,7 +1429,7 @@ template<size_t _MD, size_t _ND, typename _T>
 
 
     unsigned int i, j;
-    std::cout << "(" << _MD << ',' << _ND << ")" << std::endl;
+    os << "(" << _MD << ',' << _ND << ")" << std::endl;
     
     for (i = 0; i < _MD; ++i)
     {

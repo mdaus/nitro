@@ -798,17 +798,15 @@ public:
                 k = pivotsM[p];
                 pivotsM[p] = pivotsM[j];
                 pivotsM[j] = k;
-
-                if (j < mM && lu(j, j) )
+            }
+            if (j < mM && lu(j, j) )
+            {
+                for (unsigned int i = j + 1; i < mM; i++)
                 {
-                    for (unsigned int i = j + 1; i < mM; i++)
-                    {
-                        // Divide out our rows
-                        lu(i, j) /= lu(j, j);
-                    }
+                    // Divide out our rows
+                    lu(i, j) /= lu(j, j);
                 }
             }
-
 
         }
 
@@ -1151,7 +1149,7 @@ template<typename _T>
 
 
     unsigned int i, j;
-    std::cout << "(" << m.mM << ',' << m.mN << ")" << std::endl;
+    os << "(" << m.mM << ',' << m.mN << ")" << std::endl;
     for (i = 0; i < m.mM; ++i)
     {
         for (j = 0; j < m.mN; ++j)

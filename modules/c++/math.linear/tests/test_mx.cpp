@@ -132,6 +132,43 @@ TEST_CASE(testInvert3x3)
   
 }
 
+TEST_CASE(testInvert4x4)
+{
+
+    double q[] = 
+    {
+        0.537004, -0.291456, -0.769743,  0.184864,
+        0.377207,  0.812143, -0.145395, -0.420713,
+        0.678185,  0.025277,  0.573694,  0.458585,
+        0.330765, -0.504816,  0.239229, -0.760608
+    };
+    double qinv[] =
+    {
+        0.537004,   0.377207,  0.678185,  0.330765,
+        -0.291456,  0.812143,  0.025277, -0.504816,
+        -0.769743, -0.145395,  0.573694,  0.239229,
+        0.184864,  -0.420713,  0.458585, -0.760608
+        
+    };
+
+
+    Matrix4x4 Q(q);
+    Matrix4x4 Qinv = inverse<4, double>(Q);
+
+    Matrix2D<> Q2(4, 4, q);
+    Matrix2D<> Q2inv = inverse<double>(Q2);
+
+    TEST_ASSERT_EQ(Qinv, Q2inv);
+
+    Matrix4x4 truth(qinv);
+
+    foreach_ij(4, 4)
+    {
+        TEST_ASSERT_ALMOST_EQ_EPS(Qinv(i, j), truth(i, j), 0.00001);
+    }
+
+}
+
 TEST_CASE(testOrthoTranspose5x5)
 {
     double q[] =
@@ -178,11 +215,11 @@ TEST_CASE(testInvert5x5)
 
     double correct[] =
     { 
-        -0.1659,  -0.3047,  -0.9473,   0.2330,  -0.0987,
-        -0.1158,   0.6673,   0.1316,   0.8010,  -0.1946,
-         0.6550,  -0.1994,  -0.0513,  -0.0687,  -0.8387,
-        -0.4169,   0.6561,  -0.3299,  -0.6912,  -0.4510,
-         0.7756,   0.4767,  -0.2715,  -0.2381,   0.5967
+        -0.165907, -0.304698, -0.947308,  0.232976, -0.098678,
+        -0.115846,  0.667319,  0.131571,  0.800976, -0.194628,
+        0.654964,  -0.199442, -0.051345, -0.068673, -0.838682,
+        -0.416854,  0.656088, -0.329889, -0.691226, -0.451030,
+        0.775624,   0.476702, -0.271485, -0.238111,  0.596720
     };
     Matrix5x5 Q(q);
 
@@ -190,10 +227,10 @@ TEST_CASE(testInvert5x5)
     Matrix5x5 Qinv = inverse(Q);
     foreach_ij(5, 5)
     {
-        TEST_ASSERT_ALMOST_EQ_EPS(Qinv(i, j), C(i, j), .15);
+        TEST_ASSERT_ALMOST_EQ_EPS(Qinv(i, j), C(i, j), .00001);
     }
     
-
+    
     Matrix5x5 M = tidy(Q * Qinv, 0.05);
     Matrix5x5 I = identityMatrix<5, double>();
     TEST_ASSERT_EQ(M, I);
@@ -464,9 +501,11 @@ int main()
     TEST_CHECK(testPermuteInvert2x2);
     TEST_CHECK(testInvert2x2);
     TEST_CHECK(testInvert3x3);
+    TEST_CHECK(testInvert4x4);
+    TEST_CHECK(testInvert5x5);
     TEST_CHECK(testPtrAssign);
     TEST_CHECK(testSTLVectorAssign);
-    TEST_CHECK(testInvert5x5);
+
     TEST_CHECK(testOrthoTranspose5x5);
 
    
