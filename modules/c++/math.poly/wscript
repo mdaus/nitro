@@ -1,9 +1,9 @@
 import os, copy
 
 NAME            = 'MATH_POLY'
-MAINTAINER      = 'dan.pressel@gd-ais.com thomas.zellman@gd-ais.com'
-VERSION         = '0.1'
-USELIB          = '%s' % NAME
+MAINTAINER      = 'james.walter@gd-ais.com dan.pressel@gd-ais.com'
+VERSION         = '0.2'
+USELIB          = 'MATH_LINEAR MATH_POLY'
 MODULE_DEPS     = 'sys'
 HEADERSONLY     = True
 

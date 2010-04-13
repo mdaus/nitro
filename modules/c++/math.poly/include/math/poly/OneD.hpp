@@ -29,20 +29,6 @@ namespace math
 namespace poly
 {
 
-// Create a safe comparison
-template<typename _T> bool equals(const _T& e1, const _T& e2)
-{
-    return e1 == e2;
-}
-template<> inline bool equals(const float& e1, const float& e2)
-{
-    return std::abs(e1 - e2) < std::numeric_limits<float>::epsilon();
-}
-template<> inline bool equals(const double& e1, const double& e2)
-{
-    return std::abs(e1 - e2) < std::numeric_limits<double>::epsilon();
-}
-
 template<typename _T>
 _T 
 OneD<_T>::operator () (double at) const
@@ -267,7 +253,7 @@ OneD<_T>::operator / (double cv) const
    lRet *= (1.0/cv);
    return lRet;
 }
-
+/*
 template<typename _T>
 bool
 OneD<_T>::operator == (const OneD<_T>& p) const
@@ -279,7 +265,7 @@ OneD<_T>::operator == (const OneD<_T>& p) const
             p.mCoef.size());
 
     for (unsigned int lX = 0 ; lX < lMinSize ; lX++)
-        if (!equals(mCoef[lX], p.mCoef[lX]))
+        if (!math::linear::equals(mCoef[lX], p.mCoef[lX]))
             return false;
 
     _T dflt(0.0);
@@ -288,25 +274,49 @@ OneD<_T>::operator == (const OneD<_T>& p) const
     if (mCoef.size() > p.mCoef.size())
     {
         for (unsigned int lX = lMinSize ; lX < mCoef.size() ; lX++)
-            if (!equals(mCoef[lX], dflt))
+            if (!math::linear::equals(mCoef[lX], dflt))
                 return false;
     }
     else if (mCoef.size() < p.mCoef.size())
     {
         for (unsigned int lX = lMinSize; lX < p.mCoef.size(); lX++)
-            if (!equals(p.mCoef[lX], dflt))
+            if (!math::linear::equals(p.mCoef[lX], dflt))
                 return false;
     }
 
     return true;
 }
-
-template<typename _T>
-bool
-OneD<_T>::operator != (const OneD<_T>& p) const
+*/
+template<typename Vector_T> OneD<double> fit(const Vector_T& x,
+					     const Vector_T& y,
+					     int numCoeffs)
 {
-    return !(*this == p);
+        
+    math::linear::Vector<double> vy(y);
+    // n is polynomial order
+    int sizeX = x.size();
+
+    math::linear::Matrix2D<double> A(x.size(), numCoeffs + 1);
+
+    for (int i = 0; i < sizeX; i++)
+    {
+        // The c0 coefficient is a freebie
+        A(i, 0) = 1;
+        double v = x[i];
+        A(i, 1) = v;
+        for (int j = 2; j <= numCoeffs; j++)
+        {
+            A(i, j) = pow(v, j);
+        }
+    }
+    
+    math::linear::Matrix2D<double> At = A.transpose();
+    math::linear::Matrix2D<double> inv = inverse(At * A);
+    math::linear::Matrix2D<double> B = inv * At;
+    math::linear::Vector<double> c(B * vy.matrix());
+    return math::poly::OneD<double>(c.vec());
 }
+
 
 } // poly
 } // math

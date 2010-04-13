@@ -52,6 +52,7 @@ template <size_t _Order, typename _T=double> class Fixed1D
 protected:
     _T mCoef[_Order+1];
 public:
+
    /*!
     *  Default constructor clears memory
     *
@@ -97,6 +98,9 @@ public:
             mCoef[i] = coeff[i];
         }
     }
+
+    inline int order() const { return _Order; }
+    inline size_t size() const { return _Order + 1; }
 
     /*!
      *

@@ -23,6 +23,7 @@
 #define __MATH_POLY_TWOD_H__
 
 #include "math/poly/OneD.h"
+#include "math/linear/Matrix2D.h"
 
 namespace math
 {
@@ -59,9 +60,22 @@ public:
     std::vector<OneD<_T> >& coeffs(){ return mCoef; }
 
     TwoD() {}
-    TwoD(int orderX, int orderY) : mCoef(orderX+1,OneD<_T>(orderY)) {}; 
-    int orderX() const { return mCoef.size()-1; };
-    int orderY() const { return (orderX() < 0 ? -1 : mCoef[0].order()); };
+    TwoD(int orderX, int orderY) : mCoef(orderX+1,OneD<_T>(orderY)) {}
+    
+    
+    template<typename Vector_T> TwoD(int orderX, int orderY, const Vector_T& coeffs)
+    {
+        mCoef.resize(orderX+1,OneD<_T>(orderY));
+        for (int i = 0; i <= orderX; ++i)
+        {
+            for (int j = 0; j <= orderY; ++j)
+            {
+                mCoef[i][j] = coeffs[i * (orderY+1) + j];
+            }
+        }
+    }
+    int orderX() const { return mCoef.size()-1; }
+    int orderY() const { return (orderX() < 0 ? -1 : mCoef[0].order()); }
     _T operator () (double atX, double atY) const;
     _T integrate(double xStart, double xEnd, double yStart, double yEnd) const;
 
@@ -101,6 +115,176 @@ public:
     template<typename _TT>
         friend std::ostream& operator << (std::ostream& out, const TwoD<_TT> p);
 };
+
+/*!
+ *  This is based on Jim W.'s MathCAD for a 2D least squares
+ *  fit.  This type of algorithm may be used, for example, to
+ *  fit a 2D polynomial plane projection, by picking a grid of
+ *  sample coordinates in the planes, ideally sampled with 
+ *  roughly twice the number of samples as would be required
+ *  to do least squares in a well-tempered case.
+ *
+ *  To make sure that one dimension does not dominate the other,
+ *  we normalize the x and y matrices.
+ *
+ *  The x, y and z matrices must all be the same size, and the
+ *  x(i, j) point in X must correspond to y(i, j) in Y
+ *
+ *  \param x Input x coordinate
+ *  \param y Input y coordinates
+ *  \param z Observed outputs
+ *  \param nx The requested order X of the output poly
+ *  \param ny The requested order Y of the output poly
+ *  \throw Exception if matrices are not equally sized
+ *  \return A polynomial, f(x, y) = z
+ */
+
+inline math::poly::TwoD<double> fit(const math::linear::Matrix2D<double>& x,
+				    const math::linear::Matrix2D<double>& y,
+				    const math::linear::Matrix2D<double>& z,
+				    int nx,
+				    int ny)
+{
+    // Normalize the values in the matrix
+    int m = x.rows();
+    int n = x.cols();
+    
+    if (m != y.rows())
+        throw except::Exception(Ctxt("Matrices must be equally sized"));
+
+    if (n != y.cols())
+        throw except::Exception(Ctxt("Matrices must be equally sized"));
+    
+    double xacc = 0.0;
+    double yacc = 0.0;
+    for (int i = 0; i < m; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            xacc += x(i, j) * x(i, j);
+            yacc += y(i, j) * y(i, j);
+        }
+    }
+    
+    // by num elements
+    int mxn = m*n;
+    
+    xacc /= (double)mxn;
+    yacc /= (double)mxn;
+    
+    double rxrms = 1/std::sqrt(xacc);
+    double ryrms = 1/std::sqrt(yacc);
+    
+    // Scalar division
+    
+    math::linear::Matrix2D<double> xp = x * rxrms;
+    math::linear::Matrix2D<double> yp = y * ryrms;
+
+    int acols = (nx+1) * (ny+1);
+
+    // R = M x N
+    // C = NX+1 x NY+1
+
+    // size(A) = R x P
+    math::linear::Matrix2D<double> A(mxn, acols);
+    
+    for (int i = 0; i < m; i++)
+    {
+        int xidx = i*n;
+        for (int j = 0; j < n; j++)
+        {
+
+            // We are doing an accumulation of pow()s to get this
+
+            // Pre-calculate these
+            double xij = xp(i, j);
+            double yij = yp(i, j);
+
+            xacc = 1;
+
+            for (int k = 0; k <= nx; k++)
+            {
+                int yidx = k * (ny + 1);
+                yacc = 1;
+                
+                for (int l = 0; l <= ny; l++)
+                {
+
+                    A(xidx, yidx) = xacc * yacc;
+                    yacc *= yij;
+                    ++yidx;
+
+                }
+                xacc *= xij;
+            }
+            // xidx: i*n + j;
+            xidx++;
+        }
+    }
+    
+    // size(tmp) = R x 1
+    math::linear::Matrix2D<double> tmp(mxn, 1);
+
+    for (int i = 0; i < m; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            tmp(i*n + j, 0) = z(i, j);
+        }
+    }
+    
+    math::linear::Matrix2D<double> At = A.transpose();
+
+    //       T
+    // size(A  A) = (P x R) (R x P) = (P x P)
+    // size(inv) = (P x P)
+    math::linear::Matrix2D<double> inv = math::linear::inverse<double>(At * A);
+
+    // size(C) = ((P x P) (P x R))(R x 1)
+    //         =   (P x R)(R x 1)
+    //         =   (P x 1)
+    //         =   (NX+1xNY+1 x 1)
+
+    math::linear::Matrix2D<double> C = inv * At * tmp;
+
+    // Now we need the NX+1 components out for our x coeffs
+    // and NY+1 components out for our y coeffs
+    math::poly::TwoD<double> coeffs(nx, ny);
+
+    xacc = 1;
+    int p = 0;
+    for (int i = 0; i <= nx; i++)
+    {
+        yacc = 1;
+        for (int j = 0; j <= ny; j++)
+        {
+            coeffs[i][j] = C(p, 0)*(xacc * yacc);
+            ++p;
+            yacc *= ryrms;
+        }
+        xacc *= rxrms;
+    }
+    return coeffs;
+
+
+}
+
+inline math::poly::TwoD<double> fit(int numRows,
+				    int numCols,
+				    const double* x,
+				    const double* y,
+				    const double* z,
+				    int nx,
+				    int ny)
+{
+    math::linear::Matrix2D<double> xm(numRows, numCols, x);
+    math::linear::Matrix2D<double> ym(numRows, numCols, y);
+    math::linear::Matrix2D<double> zm(numRows, numCols, z);
+
+    return fit(xm, ym, zm, nx, ny);
+}
+ 
+ 
 
 } // poly
 } // math
