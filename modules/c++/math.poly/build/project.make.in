@@ -18,7 +18,8 @@ MY_LFLAGS =
 MY_INCLUDES = \
               -I@top_srcdir@/except/include \
               -I@top_srcdir@/str/include \
-              -I@top_srcdir@/sys/include
+              -I@top_srcdir@/sys/include \
+              -I@top_srcdir@/math.linear/include
 
 MY_LIBPATH = \
              -L@top_srcdir@/except/lib/@target@/@lib_dir@ \
