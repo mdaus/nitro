@@ -30,14 +30,7 @@
 void xml::lite::XMLReaderExpat::parse(io::InputStream & is, int size)
 {
     mContentHandler->startDocument();
-//     io::FileOutputStream ofs("tmp.txt");
-//     is.streamTo(ofs);
-//     ofs.close();
-
-//     io::FileInputStream ifs("tmp.txt");
-
     is.streamTo(*this, size);
-    //    ifs.close();
     finish();
 
 }
@@ -48,8 +41,6 @@ void xml::lite::XMLReaderExpat::parse(const sys::byte *data,
                                       int size,
                                       bool done)
 {
-    //    if (size)
-    //  std::cout << "~~~~" << std::string(data, size) << "~~~~" << std::endl;
     if (!XML_Parse(mNative, (const char *)data, size, (int) done))
         __xml_parse_ex(FmtX(getErrorString((XML_Error) getLastError())));
 }
