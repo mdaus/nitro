@@ -27,5 +27,6 @@
 #include "math/poly/TwoD.h"
 #include "math/poly/Fixed1D.h"
 #include "math/poly/Fixed2D.h"
+#include "math/poly/Fit.h"
 
 #endif  // __MATH_POLY_H__

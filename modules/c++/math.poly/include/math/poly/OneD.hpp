@@ -287,35 +287,6 @@ OneD<_T>::operator == (const OneD<_T>& p) const
     return true;
 }
 */
-template<typename Vector_T> OneD<double> fit(const Vector_T& x,
-					     const Vector_T& y,
-					     int numCoeffs)
-{
-        
-    math::linear::Vector<double> vy(y);
-    // n is polynomial order
-    int sizeX = x.size();
-
-    math::linear::Matrix2D<double> A(x.size(), numCoeffs + 1);
-
-    for (int i = 0; i < sizeX; i++)
-    {
-        // The c0 coefficient is a freebie
-        A(i, 0) = 1;
-        double v = x[i];
-        A(i, 1) = v;
-        for (int j = 2; j <= numCoeffs; j++)
-        {
-            A(i, j) = pow(v, j);
-        }
-    }
-    
-    math::linear::Matrix2D<double> At = A.transpose();
-    math::linear::Matrix2D<double> inv = inverse(At * A);
-    math::linear::Matrix2D<double> B = inv * At;
-    math::linear::Vector<double> c(B * vy.matrix());
-    return math::poly::OneD<double>(c.vec());
-}
 
 
 } // poly

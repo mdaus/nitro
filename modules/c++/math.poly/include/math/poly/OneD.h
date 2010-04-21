@@ -152,53 +152,6 @@ public:
     }
 };
 
-/*!
- *  Templated function to perform a linear least squares fit for the data.
- *  This algorithm is fairly straightforward.
- *
- *  To fit an order N polynomial, we need to solve
- *  Ax=b, for x.
- *
- *  A is a system of polynomials, e.g.
- *
- *  f(x) = c0 + c1*x + c2*x^2 + c3*x^3 = y
- *  
- *  Each observed point in the data sets is computed
- *  for our A matrix.
- *
- *  e.g.: f(1) = 3, f(-1) = 13, f(2) 1, f(-2) = 33
- *
- *  | 1  1  1  1 || c0 |   |  3 |
- *  | 1 -1  1 -1 || c1 | = | 13 |
- *  | 1  2  4  8 || c2 |   |  1 |
- *  | 1 -2  4 -8 || c3 |   | 33 |
- *
- *  
- *  Linear least squares solution for system where
- *  ker(A) = {0} (IOW, there are free variables)
- *
- *  x = inv(A' * A) * A' * b
- *
- *  \param x The observable x points
- *  \param y The observable y solutions
- *  \return A one dimensional polynomial that fits the curve
- */
- 
-template<typename Vector_T> OneD<double> fit(const Vector_T& x,
-					     const Vector_T& y,
-					     int numCoeffs);
-
-/*!
- *  This method allows us to fit a set of observations using raw
- *  pointers
- */
-inline OneD<double> fit(int numObs, const double* x, const double* y, 
-			int numCoeffs)
-{
-    math::linear::Vector<double> xv(numObs, x);
-    math::linear::Vector<double> yv(numObs, y);
-    return math::poly::fit<math::linear::Vector<double> >(xv, yv, numCoeffs);
-}
 
 
 } // poly
