@@ -90,7 +90,7 @@ void xml::lite::XMLReaderExpat::__pushNamespaceContext(const char **atts)
     for (int i = 0; atts[i] != NULL; i += 2)
     {
         std::string __attr(atts[i]);
-        unsigned int x = (unsigned int)__attr.find_first_of(':');
+        std::string::size_type x = __attr.find_first_of(':');
 
         // Either we have a namespace prefix
         if (x != std::string::npos)
@@ -131,7 +131,7 @@ void xml::lite::XMLReaderExpat::__resolve(const char *name,
     qname = name;
 
     // Find the delimiter if any
-    unsigned int x = (unsigned int)qname.find_first_of(':');
+    std::string::size_type x = qname.find_first_of(':');
 
     // If it exists, set the associated uri and localName
     if (x != std::string::npos)
