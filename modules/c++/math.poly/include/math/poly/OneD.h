@@ -55,13 +55,21 @@ protected:
     std::vector<_T> mCoef;
     
 public:
-    OneD() {}
+    //!  Make sure we never have an order() that is negative
+    OneD() 
+    {
+        mCoef.resize(1, 0.0);
+    }
     
     /*!
      *  A vector of ascending power coefficients (note that
      *  this is the reverse of Matlab)
      */
-    OneD(const std::vector<_T>& coef) : mCoef(coef) {}
+    OneD(const std::vector<_T>& coef) : mCoef(coef) 
+    {
+        if (mCoef.size() == 0)
+            mCoef.resize(1, 0.0);
+    }
 
     /*!
      *  Create a vector of given order, with each coefficient
@@ -90,15 +98,14 @@ public:
 	mCoef.resize(order + 1);
 	memcpy(&mCoef[0], coef, (order + 1) * sizeof(_T));
     }
-    int order() const { return mCoef.size()-1; }
-
+    size_t order() const { return mCoef.size()-1; }
     inline size_t size() const { return mCoef.size(); }
 
     _T operator () (double at) const;
     _T integrate(double start, double end) const;
     OneD<_T> derivative() const;
-    _T& operator [] (unsigned int idx);
-    _T operator [] (unsigned int idx) const;
+    _T& operator[](size_t i);
+    _T operator[](size_t i) const;
     template<typename _TT>
         friend std::ostream& operator << (std::ostream& out, const OneD<_TT>& p);
     OneD<_T>& operator *= (double cv);
@@ -118,10 +125,9 @@ public:
     {
 	size_t sz = size();
 	size_t psz = p.size();
-	unsigned int minSize = std::min<unsigned int>(sz,
-						      psz);
+	size_t minSize = std::min<size_t>(sz, psz);
 	
-	for (unsigned int i = 0 ; i < minSize ; i++)
+	for (size_t i = 0 ; i < minSize ; i++)
 	    if (!math::linear::equals(mCoef[i], p[i]))
 		return false;
 	
@@ -131,13 +137,13 @@ public:
 	// coefficients than the other.
 	if (sz > psz)
 	{
-	    for (unsigned int i = minSize; i < sz; i++)
+	    for (size_t i = minSize; i < sz; i++)
 		if (!math::linear::equals(mCoef[i], dflt))
 		    return false;
 	}
 	else if (sz < psz)
 	{
-	    for (unsigned int i = minSize; i < psz; i++)
+	    for (size_t i = minSize; i < psz; i++)
 		if (!math::linear::equals(p[i], dflt))
 		    return false;
 	}

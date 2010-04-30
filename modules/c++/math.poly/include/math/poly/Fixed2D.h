@@ -46,8 +46,8 @@ public:
         Fixed2D(const Fixed2D<_OtherOrderX, _OtherOrderY, _T>& coeff)
     {
 
-        unsigned int sizeC = std::min<unsigned int>(_OtherOrderX, _OrderX);
-        for (unsigned int i = 0; i <= sizeC; i++)
+        size_t sizeC = std::min<unsigned int>(_OtherOrderX, _OrderX);
+        for (size_t i = 0; i <= sizeC; i++)
         {
             mCoef[i] = coeff[i];
         }
@@ -58,8 +58,8 @@ public:
     Fixed2D(const TwoD<_T>& coeff)
     {
 
-        unsigned int sizeC = std::min<unsigned int>((size_t)coeff.orderX(), _OrderX);
-        for (unsigned int i = 0; i <= sizeC; i++)
+        size_t sizeC = std::min<size_t>(coeff.orderX(), _OrderX);
+        for (size_t i = 0; i <= sizeC; i++)
         {
             mCoef[i] = coeff[i];
         }
@@ -68,8 +68,8 @@ public:
     Fixed2D<_OrderX, _OrderY, _T>& operator=(const TwoD<_T>& coeff)
     {
 
-        unsigned int sizeC = std::min<unsigned int>((size_t)coeff.orderX(), _OrderX);
-        for (unsigned int i = 0; i <= sizeC; i++)
+        size_t sizeC = std::min<unsigned int>(coeff.orderX(), _OrderX);
+        for (size_t i = 0; i <= sizeC; i++)
         {
             mCoef[i] = coeff[i];
         }
@@ -81,9 +81,8 @@ public:
              operator=(const Fixed2D<_OtherOrderX, _OtherOrderY, _T>& coeff)
     {
 
-
-        unsigned int sizeC = std::min<unsigned int>(_OtherOrderX, _OrderX);
-        for (unsigned int i = 0; i <= sizeC; i++)
+        size_t sizeC = std::min<size_t>(_OtherOrderX, _OrderX);
+        for (size_t i = 0; i <= sizeC; i++)
         {
             mCoef[i] = coeff[i];
         }
@@ -95,7 +94,7 @@ public:
         _T rv(0);
         double atXPower(1);
 
-        for (unsigned int i = 0; i <= _OrderX; i++)
+        for (size_t i = 0; i <= _OrderX; i++)
         {
             rv += mCoef[i](atY)*atXPower;
             atXPower *= atX;
@@ -110,7 +109,7 @@ public:
         double endAtPower = endX;
         double startAtPower = startX;
         double newCoef;
-        for (unsigned int i = 0; i <= _OrderX; i++)
+        for (size_t i = 0; i <= _OrderX; i++)
         {
             div = 1.0/(i+1);
             newCoef = mCoef[i].integrate(startY, endY) * div;
@@ -132,7 +131,7 @@ public:
             throw except::Exception(Ctxt("Must have order 1 in Y"));
         Fixed2D<_OrderX, _OrderY-1, _T> dy;
 
-        for (unsigned int i = 0; i <= _OrderX; i++)
+        for (size_t i = 0; i <= _OrderX; i++)
         {
             dy[i] = mCoef[i].derivative();
         }
@@ -143,7 +142,7 @@ public:
         if (!_OrderX)
             throw except::Exception(Ctxt("Must have order 1 in Y"));
         Fixed2D<_OrderX-1, _OrderY, _T> dx;
-        for (unsigned int i = 0; i <= _OrderX-1; i++)
+        for (size_t i = 0; i <= _OrderX-1; i++)
         {
             dx[i] = mCoef[i+1] * (_T)(i+1);
         }
@@ -164,19 +163,19 @@ public:
         // We will have a 1D poly of order X
         Fixed1D<_OrderX, _T> polyY;
 
-        for (unsigned int i = 0; i <= _OrderX; i++)
+        for (size_t i = 0; i <= _OrderX; i++)
         {
             polyY[i] = mCoef[i](y);
         }
         return polyY;
 
     }
-    inline Fixed1D<_OrderY, _T> operator[](unsigned int i) const
+    inline Fixed1D<_OrderY, _T> operator[](size_t i) const
     {
         return mCoef[i];
     }
 
-    inline Fixed1D<_OrderY, _T>& operator[](unsigned int i)
+    inline Fixed1D<_OrderY, _T>& operator[](size_t i)
     {
         return mCoef[i];
     }
@@ -185,7 +184,7 @@ public:
     {
         Fixed2D<_OrderX, _OrderY> copy(*this);
 
-        for (unsigned int i = 0; i <= _OrderX; i++)
+        for (size_t i = 0; i <= _OrderX; i++)
         {
             copy[i] *= cv;
         }
@@ -218,9 +217,9 @@ public:
         Fixed2D<_OrderX+_OtherOrderX, _OrderY+_OtherOrderY, _T> copy(*this);
         Fixed2D<_OrderX+_OtherOrderX, _OrderY+_OtherOrderY, _T> newPoly;
 
-        for (unsigned int i = 0; i <= _OrderX; i++)
+        for (size_t i = 0; i <= _OrderX; i++)
         {
-            for (unsigned int j = 0; j <= _OtherOrderX; j++)
+            for (size_t j = 0; j <= _OtherOrderX; j++)
             {
                 // This produces a new polynomial which uses the
                 // copy constructor
@@ -244,7 +243,7 @@ public:
     {
         Fixed2D<_OrderX+_OtherOrderX, _OrderY+_OtherOrderY, _T> copy(*this);
 
-        for (unsigned int i = 0; i <= _OtherOrderX; i++)
+        for (size_t i = 0; i <= _OtherOrderX; i++)
         {
             copy[i] += p[i];
         }
@@ -270,7 +269,7 @@ public:
     }
     Fixed2D<_OrderX, _OrderY, _T>& operator /= (double cv)
     {
-        for (unsigned int i = 0; i <= _OrderX; i++)
+        for (size_t i = 0; i <= _OrderX; i++)
         {
             mCoef[i] /= cv;
         }
@@ -281,7 +280,7 @@ public:
     {
         Fixed2D<_OrderX, _OrderY> copy(*this);
 
-        for (unsigned int i = 0; i <= _OrderX; i++)
+        for (size_t i = 0; i <= _OrderX; i++)
         {
             copy[i] /= cv;
         }
@@ -334,7 +333,7 @@ math::poly::Fixed2D<_OrderX, _OrderY, _T>
 {
     math::poly::Fixed2D<_OrderX, _OrderY> copy(p);
 
-    for (unsigned int i = 0; i <= _OrderX; i++)
+    for (size_t i = 0; i <= _OrderX; i++)
     {
         copy[i] *= cv;
     }
@@ -345,7 +344,7 @@ template<size_t _OtherOrderX, size_t _OtherOrderY, typename _T>
 std::ostream&
 operator << (std::ostream& out, const math::poly::Fixed2D<_OtherOrderX, _OtherOrderY, _T>& p)
 {
-    for (unsigned int i = 0 ; i <= _OtherOrderX ; i++)
+    for (size_t i = 0 ; i <= _OtherOrderX ; i++)
     {
       out << "x^" << i << "*(" << p[i] << ")" << std::endl;
     }

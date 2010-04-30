@@ -33,34 +33,33 @@ template<typename _T>
 _T 
 OneD<_T>::operator () (double at) const
 {
-   _T lRet(0.0);
-   double lAtPwr = 1.0;
-   for (unsigned int lX = 0, lXEnd = mCoef.size() ; lX < lXEnd ; lX++)
+   _T ret(0.0);
+   double atPwr = 1.0;
+   for (size_t i = 0, sz = mCoef.size() ; i < sz; i++)
    {
-      lRet += mCoef[lX]*lAtPwr;
-      lAtPwr *= at;
+      ret += mCoef[i]*atPwr;
+      atPwr *= at;
    }
-   
-   return lRet;
+   return ret;
 }
 
 template<typename _T>
 _T 
 OneD<_T>::integrate(double start, double end) const
 {
-   _T lRet(0.0);
-   double lEndAtPwr = end;
-   double lStartAtPwr = start;
-   double lDiv = 0;
-   double lNewCoef;
-   for (unsigned int lX = 0, lXEnd = mCoef.size() ; lX < lXEnd ; lX++)
+   _T ret(0.0);
+   double endAtPwr = end;
+   double startAtPwr = start;
+   double div = 0;
+   double newCoef;
+   for (size_t i = 0, sz = mCoef.size(); i < sz; i++)
    {
-      lDiv = 1.0 / (lX + 1);
-      lNewCoef = mCoef[lX] * lDiv;
-      lRet += lNewCoef * lEndAtPwr;
-      lRet -= lNewCoef * lStartAtPwr;
-      lEndAtPwr *= end;
-      lStartAtPwr *= start;
+      div = 1.0 / (i + 1);
+      newCoef = mCoef[lX] * div;
+      ret += newCoef * endAtPwr;
+      ret -= newCoef * startAtPwr;
+      endAtPwr *= end;
+      startAtPwr *= start;
    }
    return lRet;
 }
@@ -69,62 +68,63 @@ template<typename _T>
 OneD<_T>
 OneD<_T>::derivative() const
 {
-   OneD<_T> lRet;
-   if (order() > 0)
-   {
-      lRet = OneD<_T>(order()-1);
-      for (unsigned int lX = 0 ; lX < mCoef.size()-1 ; lX++)
-      {
-         lRet[lX] = mCoef[lX+1] * (lX+1);
-      }
-   }
-   return lRet;
+    OneD<_T> ret;
+    if (order() > 0)
+    {
+        ret = OneD<_T>(order()-1);
+        for (size_t i = 0, sz = mCoef.size() - 1; i < sz; i++)
+        {
+            ret[i] = mCoef[i+1] * (i+1);
+        }
+    }
+    return ret;
 }
 
 template<typename _T>
 _T& 
-OneD<_T>::operator [] (unsigned int idx)
+OneD<_T>::operator [] (size_t i)
 {
-   if (idx < mCoef.size())
-   {
-      return (mCoef[idx]);
-   }
-   else
-   {
-      std::stringstream lStr;
-      lStr << "idx(" << idx << ") not within range [0..." << mCoef.size() << ")";
-      std::string lMsg(lStr.str());
-      throw(except::IndexOutOfRangeException(Ctxt(lMsg)));
-   }
+    if (i < mCoef.size())
+    {
+        return (mCoef[i]);
+    }
+    else
+    {
+        std::stringstream str;
+        str << "index: " << i << " not within range [0..."
+            << mCoef.size() << ")";
+        std::string msg(str.str());
+        throw except::IndexOutOfRangeException(Ctxt(msg));
+    }
 }
 
 
 template<typename _T>
 _T 
-OneD<_T>::operator [] (unsigned int idx) const
+OneD<_T>::operator [] (size_t i) const
 {
-   _T lRet(0.0);
-   if (idx < mCoef.size())
+   _T ret(0.0);
+   if (i < mCoef.size())
    {
-      lRet = mCoef[idx];
+      ret = mCoef[i];
    }
    else
    {
-      std::stringstream lStr;
-      lStr << "idx(" << idx << ") not within range [0..." << mCoef.size() << ")";
-      std::string lMsg(lStr.str());
-      throw(except::IndexOutOfRangeException(Ctxt(lMsg)));
+      std::stringstream str;
+      str << "idx(" << i << ") not within range [0..." << mCoef.size() << ")";
+      std::string msg(str.str());
+      throw except::IndexOutOfRangeException(Ctxt(msg));
    }
-   return lRet;
+   return ret;
 }
 
 template<typename _T>
 std::ostream& 
 operator << (std::ostream& out, const OneD<_T>& p)
 {
-   for (unsigned int lX = 0 ; lX < p.mCoef.size() ; lX++)
+   for (size_t i = 0 ; i < p.mCoef.size() ; i++)
    {
-      out << p[lX] << "*y^" << lX << " ";
+      out << p[i] << "*y^" << i << " ";
    }
    return out;
 }
@@ -133,68 +133,68 @@ template<typename _T>
 OneD<_T>& 
 OneD<_T>::operator *= (double cv) 
 {
-   for (unsigned int lX = 0, lXEnd = mCoef.size() ; lX < lXEnd ; lX++)
-   {
-      mCoef[lX] *= cv;
-   }
-   return *this;
+    for (size_t i = 0, sz = mCoef.size() ; i < sz; i++)
+    {
+        mCoef[i] *= cv;
+    }
+    return *this;
 }
-
+    
 template<typename _T>
 OneD<_T> 
 OneD<_T>::operator * (double cv) const
 {
-   OneD<_T> lRet(*this);
-   lRet *= cv;
-   return lRet;
+    OneD<_T> ret(*this);
+    ret *= cv;
+    return ret;
 }
 
 template<typename _T>
 OneD<_T> 
 operator * (double cv, const OneD<_T>& p) 
 {
-   return p*cv;
+    return p*cv;
 }
 
 template<typename _T>
 OneD<_T>& 
 OneD<_T>::operator *= (const OneD<_T>& p) 
 {
-   OneD<_T> lTmp(order()+p.order());
-   for (unsigned int lX = 0, lXEnd = mCoef.size() ; lX < lXEnd ; lX++)
+   OneD<_T> tmp(order()+p.order());
+   for (size_t i = 0, xsz = mCoef.size() ; i < xsz; i++)
    {
-      for (unsigned int lY = 0, lYEnd = p.mCoef.size() ; lY < lYEnd ; lY++)
-      {
-         lTmp.mCoef[lX+lY] += mCoef[lX] * p.mCoef[lY];
-      }
+       for (unsigned int j = 0, ysz = p.mCoef.size() ; j < ysz; j++)
+       {
+           lTmp.mCoef[i + j] += mCoef[i] * p.mCoef[j];
+       }
    }
-   *this = lTmp;
+   *this = tmp;
    return *this;
 }
-
+    
 template<typename _T>
 OneD<_T> 
 OneD<_T>::operator * (const OneD<_T>& p) const
 {
-   OneD<_T> lRet(*this);
-   lRet *= p;
-   return lRet;
+    OneD<_T> ret(*this);
+    ret *= p;
+    return ret;
 }
 
 template<typename _T>
 OneD<_T>& 
 OneD<_T>::operator += (const OneD<_T>& p) 
 {
-   OneD<_T> lTmp(std::max<int>(order(),p.order()));
-   for (unsigned int lX = 0, lXEnd = mCoef.size() ; lX < lXEnd ; lX++)
-   {
-      lTmp.mCoef[lX] = mCoef[lX];
-   }
-   for (unsigned int lX = 0, lXEnd = p.mCoef.size() ; lX < lXEnd ; lX++)
-   {
-      lTmp.mCoef[lX] += p.mCoef[lX];
-   }
-   *this = lTmp;
+    OneD<_T> tmp(std::max<size_t>(order(), p.order()));
+    for (size_t i = 0, sz = mCoef.size() ; i < sz; i++)
+    {
+        tmp.mCoef[i] = mCoef[i];
+    }
+    for (size_t i = 0, sz = p.mCoef.size() ; i < sz; i++)
+    {
+        tmp.mCoef[i] += p.mCoef[i];
+    }
+   *this = tmp;
    return *this;
 }
 
@@ -202,25 +202,25 @@ template<typename _T>
 OneD<_T> 
 OneD<_T>::operator + (const OneD<_T>& p) const
 {
-   OneD<_T> lRet(*this);
-   lRet += p;
-   return lRet;
+    OneD<_T> ret(*this);
+    ret += p;
+    return ret;
 }
-
+    
 template<typename _T>
 OneD<_T>& 
 OneD<_T>::operator -= (const OneD<_T>& p) 
 {
-   OneD<_T> lTmp(std::max<int>(order(),p.order()));
-   for (unsigned int lX = 0, lXEnd = mCoef.size() ; lX < lXEnd ; lX++)
+   OneD<_T> tmp(std::max<size_t>(order(), p.order()));
+   for (unsigned int i = 0, sz = mCoef.size() ; i < sz; i++)
    {
-      lTmp.mCoef[lX] = mCoef[lX];
+       tmp.mCoef[i] = mCoef[i];
    }
-   for (unsigned int lX = 0, lXEnd = p.mCoef.size() ; lX < lXEnd ; lX++)
+   for (unsigned int i = 0, sz = p.mCoef.size(); i < sz; i++)
    {
-      lTmp.mCoef[lX] -= p.mCoef[lX];
+       tmp.mCoef[i] -= p.mCoef[i];
    }
-   *this = lTmp;
+   *this = tmp;
    return *this;
 }
 
@@ -228,66 +228,31 @@ template<typename _T>
 OneD<_T> 
 OneD<_T>::operator - (const OneD<_T>& p) const
 {
-   OneD<_T> lRet(*this);
-   lRet -= p;
-   return lRet;
+   OneD<_T> ret(*this);
+   ret -= p;
+   return ret;
 }
 
 template<typename _T>
 OneD<_T>& 
 OneD<_T>::operator /= (double cv) 
 {
-   double lRecipCV = 1.0/cv;
-   for (unsigned int lX = 0, lXEnd = mCoef.size() ; lX < lXEnd ; lX++)
-   {
-      mCoef[lX] *= lRecipCV;
-   }
-   return *this;
+    double recipCV = 1.0/cv;
+    for (unsigned int i = 0, sz = mCoef.size() ; i < sz; i++)
+    {
+        mCoef[i] *= recipCV;
+    }
+    return *this;
 }
 
 template<typename _T>
 OneD<_T> 
 OneD<_T>::operator / (double cv) const
 {
-   OneD<_T> lRet(*this);
-   lRet *= (1.0/cv);
-   return lRet;
+    OneD<_T> ret(*this);
+    ret *= (1.0/cv);
+    return ret;
 }
-/*
-template<typename _T>
-bool
-OneD<_T>::operator == (const OneD<_T>& p) const
-{
-    if (this == &p)
-        return true;
-
-    unsigned int lMinSize = std::min<unsigned int>(mCoef.size(),
-            p.mCoef.size());
-
-    for (unsigned int lX = 0 ; lX < lMinSize ; lX++)
-        if (!math::linear::equals(mCoef[lX], p.mCoef[lX]))
-            return false;
-
-    _T dflt(0.0);
-
-    // Cover case where one polynomial has more coefficients than the other.
-    if (mCoef.size() > p.mCoef.size())
-    {
-        for (unsigned int lX = lMinSize ; lX < mCoef.size() ; lX++)
-            if (!math::linear::equals(mCoef[lX], dflt))
-                return false;
-    }
-    else if (mCoef.size() < p.mCoef.size())
-    {
-        for (unsigned int lX = lMinSize; lX < p.mCoef.size(); lX++)
-            if (!math::linear::equals(p.mCoef[lX], dflt))
-                return false;
-    }
-
-    return true;
-}
-*/
-
 
 } // poly
 } // math

@@ -45,19 +45,19 @@ template<typename Vector_T> OneD<double> fit(const Vector_T& x,
         
     math::linear::Vector<double> vy(y);
     // n is polynomial order
-    int sizeX = x.size();
+    size_t sizeX = x.size();
 
     math::linear::Matrix2D<double> A(x.size(), numCoeffs + 1);
 
-    for (int i = 0; i < sizeX; i++)
+    for (size_t i = 0; i < sizeX; i++)
     {
         // The c0 coefficient is a freebie
         A(i, 0) = 1;
         double v = x[i];
         A(i, 1) = v;
-        for (int j = 2; j <= numCoeffs; j++)
+        for (size_t j = 2; j <= numCoeffs; j++)
         {
-            A(i, j) = pow(v, j);
+            A(i, j) = std::pow(v, (double)j);
         }
     }
     
@@ -73,8 +73,8 @@ template<typename Vector_T> OneD<double> fit(const Vector_T& x,
  *  This method allows us to fit a set of observations using raw
  *  pointers
  */
-inline OneD<double> fit(int numObs, const double* x, const double* y, 
-			int numCoeffs)
+inline OneD<double> fit(size_t numObs, const double* x, const double* y, 
+			size_t numCoeffs)
 {
     math::linear::Vector<double> xv(numObs, x);
     math::linear::Vector<double> yv(numObs, y);
@@ -106,8 +106,8 @@ inline math::poly::TwoD<double> fit(const math::linear::Matrix2D<double>& x,
 				    int ny)
 {
     // Normalize the values in the matrix
-    int m = x.rows();
-    int n = x.cols();
+    size_t m = x.rows();
+    size_t n = x.cols();
     
     if (m != y.rows())
         throw except::Exception(Ctxt("Matrices must be equally sized"));
@@ -117,9 +117,9 @@ inline math::poly::TwoD<double> fit(const math::linear::Matrix2D<double>& x,
     
     double xacc = 0.0;
     double yacc = 0.0;
-    for (int i = 0; i < m; i++)
+    for (size_t i = 0; i < m; i++)
     {
-        for (int j = 0; j < n; j++)
+        for (size_t j = 0; j < n; j++)
         {
             xacc += x(i, j) * x(i, j);
             yacc += y(i, j) * y(i, j);
@@ -127,7 +127,7 @@ inline math::poly::TwoD<double> fit(const math::linear::Matrix2D<double>& x,
     }
     
     // by num elements
-    int mxn = m*n;
+    size_t mxn = m*n;
     
     xacc /= (double)mxn;
     yacc /= (double)mxn;
@@ -140,7 +140,7 @@ inline math::poly::TwoD<double> fit(const math::linear::Matrix2D<double>& x,
     math::linear::Matrix2D<double> xp = x * rxrms;
     math::linear::Matrix2D<double> yp = y * ryrms;
 
-    int acols = (nx+1) * (ny+1);
+    size_t acols = (nx+1) * (ny+1);
 
     // R = M x N
     // C = NX+1 x NY+1
@@ -148,10 +148,10 @@ inline math::poly::TwoD<double> fit(const math::linear::Matrix2D<double>& x,
     // size(A) = R x P
     math::linear::Matrix2D<double> A(mxn, acols);
     
-    for (int i = 0; i < m; i++)
+    for (size_t i = 0; i < m; i++)
     {
-        int xidx = i*n;
-        for (int j = 0; j < n; j++)
+        size_t xidx = i*n;
+        for (size_t j = 0; j < n; j++)
         {
 
             // We are doing an accumulation of pow()s to get this
@@ -162,12 +162,12 @@ inline math::poly::TwoD<double> fit(const math::linear::Matrix2D<double>& x,
 
             xacc = 1;
 
-            for (int k = 0; k <= nx; k++)
+            for (size_t k = 0; k <= nx; k++)
             {
-                int yidx = k * (ny + 1);
+                size_t yidx = k * (ny + 1);
                 yacc = 1;
                 
-                for (int l = 0; l <= ny; l++)
+                for (size_t l = 0; l <= ny; l++)
                 {
 
                     A(xidx, yidx) = xacc * yacc;
@@ -185,9 +185,9 @@ inline math::poly::TwoD<double> fit(const math::linear::Matrix2D<double>& x,
     // size(tmp) = R x 1
     math::linear::Matrix2D<double> tmp(mxn, 1);
 
-    for (int i = 0; i < m; i++)
+    for (size_t i = 0; i < m; i++)
     {
-        for (int j = 0; j < n; j++)
+        for (size_t j = 0; j < n; j++)
         {
             tmp(i*n + j, 0) = z(i, j);
         }
@@ -212,11 +212,11 @@ inline math::poly::TwoD<double> fit(const math::linear::Matrix2D<double>& x,
     math::poly::TwoD<double> coeffs(nx, ny);
 
     xacc = 1;
-    int p = 0;
-    for (int i = 0; i <= nx; i++)
+    size_t p = 0;
+    for (size_t i = 0; i <= nx; i++)
     {
         yacc = 1;
-        for (int j = 0; j <= ny; j++)
+        for (size_t j = 0; j <= ny; j++)
         {
             coeffs[i][j] = C(p, 0)*(xacc * yacc);
             ++p;

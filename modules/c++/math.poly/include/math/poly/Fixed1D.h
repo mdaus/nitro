@@ -60,7 +60,7 @@ public:
     Fixed1D()
     {
         // Initialize coefficents;
-        for (unsigned int i = 0; i < _Order+1; i++)
+        for (size_t i = 0; i < _Order+1; i++)
         {
             mCoef[i] = 0;
         }
@@ -74,7 +74,7 @@ public:
     {
         size_t sizeC = coeff.order();
         sizeC = std::min<size_t>(sizeC, _Order);
-        for (unsigned int i = 0; i <= sizeC; i++)
+        for (size_t i = 0; i <= sizeC; i++)
         {
             mCoef[i] = coeff[i];
         }
@@ -92,14 +92,14 @@ public:
     template<size_t _OtherOrder> Fixed1D(const Fixed1D<_OtherOrder, _T>& coeff)
     {
 
-        unsigned int sizeC = std::min<unsigned int>(_OtherOrder, _Order);
-        for (unsigned int i = 0; i <= sizeC; i++)
+        size_t sizeC = std::min<size_t>(_OtherOrder, _Order);
+        for (size_t i = 0; i <= sizeC; i++)
         {
             mCoef[i] = coeff[i];
         }
     }
 
-    inline int order() const { return _Order; }
+    inline size_t order() const { return _Order; }
     inline size_t size() const { return _Order + 1; }
 
     /*!
@@ -111,7 +111,7 @@ public:
     {
         size_t sizeC = coeff.order();
         sizeC = std::min<size_t>(sizeC, _Order);
-        for (unsigned int i = 0; i <= sizeC; i++)
+        for (size_t i = 0; i <= sizeC; i++)
         {
             mCoef[i] = coeff[i];
         }
@@ -122,7 +122,7 @@ public:
     {
 
         unsigned int sizeC = std::min<unsigned int>(_OtherOrder, _Order);
-        for (unsigned int i = 0; i <= sizeC; i++)
+        for (size_t i = 0; i <= sizeC; i++)
         {
             mCoef[i] = coeff[i];
         }
@@ -140,7 +140,7 @@ public:
         double rv(0);
         double atPower = 1;
 
-        for (unsigned int i = 0; i <= _Order; i++)
+        for (size_t i = 0; i <= _Order; i++)
         {
             rv += mCoef[i]*atPower;
             atPower *= at;
@@ -182,7 +182,7 @@ public:
         Fixed1D<_Order-1, _T> dv;
         if (_Order)
         {
-            for (unsigned int i = 0; i <= _Order-1; i++)
+            for (size_t i = 0; i <= _Order-1; i++)
             {
                 dv[i] = mCoef[i+1] * (i+1);
             }
@@ -193,14 +193,14 @@ public:
      *
      *
      */
-     _T& operator [] (unsigned int i)
+     _T& operator [] (size_t i)
     {
         if (i > _Order)
             throw except::IndexOutOfRangeException(Ctxt(FmtX("index [%d] is not in range [0..%d]", i, _Order)));
         return mCoef[i];
 
     }
-    _T operator [] (unsigned int i) const
+    _T operator [] (size_t i) const
     {
         if (i > _Order)
             throw except::IndexOutOfRangeException(Ctxt(FmtX("index [%d] is not in range [0..%d]", i, _Order)));
@@ -217,7 +217,7 @@ public:
 
     Fixed1D<_Order, _T>& operator*=(double cv)
     {
-        for (unsigned int i = 0; i <= _Order; i++)
+        for (size_t i = 0; i <= _Order; i++)
         {
             mCoef[i] *= cv;
         }
@@ -260,9 +260,9 @@ public:
         //Fixed1D<_Order+_OtherOrder, _T> copy(*this);
         Fixed1D<_Order+_OtherOrder, _T> newPoly;
 
-        for (unsigned int i = 0; i <= _Order; i++)
+        for (size_t i = 0; i <= _Order; i++)
         {
-            for (unsigned int j = 0; j <= _OtherOrder; j++)
+            for (size_t j = 0; j <= _OtherOrder; j++)
             {
                 newPoly[i+j] += mCoef[i] * p[j];
             }
@@ -280,7 +280,7 @@ public:
         if (_Order > _OtherOrder)
         {
             newPoly = *this;
-            for (unsigned int i = 0; i <= _OtherOrder; i++)
+            for (size_t i = 0; i <= _OtherOrder; i++)
             {
                 newPoly[i] += p[i];
             }
@@ -288,7 +288,7 @@ public:
         else
         {
             newPoly = p;
-            for (unsigned int i = 0; i <= _Order; i++)
+            for (size_t i = 0; i <= _Order; i++)
             {
                 newPoly[i] += mCoef[i];
             }
@@ -333,7 +333,7 @@ public:
         Fixed1D<_Order, _T>& operator /= (double cv)
     {
         double recip = 1.0/cv;
-        for (int i = 0; i <= _Order; i++)
+        for (size_t i = 0; i <= _Order; i++)
         {
             mCoef[i] *= recip;
         }
@@ -376,7 +376,7 @@ template<size_t _Order, typename _T>
     std::ostream& operator << (std::ostream& out,
                                const math::poly::Fixed1D<_Order, _T>& p)
 {
-    for (unsigned int i = 0 ; i <= _Order; i++)
+    for (size_t i = 0 ; i <= _Order; i++)
     {
         out << p[i] << "*y^" << i << " ";
     }

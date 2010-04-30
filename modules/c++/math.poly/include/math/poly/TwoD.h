@@ -59,23 +59,30 @@ public:
 
     std::vector<OneD<_T> >& coeffs(){ return mCoef; }
 
-    TwoD() {}
-    TwoD(int orderX, int orderY) : mCoef(orderX+1,OneD<_T>(orderY)) {}
-    
-    
-    template<typename Vector_T> TwoD(int orderX, int orderY, const Vector_T& coeffs)
+    TwoD() : mCoef(1, OneD<_T>(0)) {}
+
+    TwoD(size_t orderX, size_t orderY) : mCoef(orderX+1,OneD<_T>(orderY)) {}   
+
+    template<typename Vector_T> TwoD(int orderX, int orderY,
+                                     const Vector_T& coeffs)
     {
         mCoef.resize(orderX+1,OneD<_T>(orderY));
-        for (int i = 0; i <= orderX; ++i)
+        for (size_t i = 0; i <= orderX; ++i)
         {
-            for (int j = 0; j <= orderY; ++j)
+            for (size_t j = 0; j <= orderY; ++j)
             {
                 mCoef[i][j] = coeffs[i * (orderY+1) + j];
             }
         }
     }
-    int orderX() const { return mCoef.size()-1; }
-    int orderY() const { return (orderX() < 0 ? -1 : mCoef[0].order()); }
+    size_t orderX() const { return mCoef.size() - 1; }
+    size_t orderY() const
+    {
+
+        if (orderX() < 0)
+            throw except::IndexOutOfRangeException(Ctxt("Can't have an order less than zero"));
+        return mCoef[0].order(); 
+   }
     _T operator () (double atX, double atY) const;
     _T integrate(double xStart, double xEnd, double yStart, double yEnd) const;
 
@@ -88,13 +95,13 @@ public:
     TwoD<_T> derivativeX() const;
     TwoD<_T> derivativeXY() const;
     OneD<_T> atY(double y) const;
-    OneD<_T> operator [] (unsigned int idx) const;
+    OneD<_T> operator [] (size_t i) const;
     /*! In case you are curious about the return value, this guarantees that
       someone can only change the coefficient stored at [x][y], and not the
       polynomial itself. Unfortunately, however, it does not allow one bounds
       checking on the size of the polynomial.
     */
-    _T* operator [] (unsigned int idx);
+    _T* operator [] (size_t i);
     TwoD<_T>& operator *= (double cv) ;
     TwoD<_T> operator * (double cv) const;
     template<typename _TT>
@@ -109,9 +116,9 @@ public:
     TwoD<_T> operator / (double cv) const;
     bool operator == (const TwoD<_T>& p) const;
     bool operator != (const TwoD<_T>& p) const;
-
-    TwoD<_T> power(int toThe) const;
-
+    
+    TwoD<_T> power(size_t toThe) const;
+    
     template<typename _TT>
         friend std::ostream& operator << (std::ostream& out, const TwoD<_TT> p);
 };

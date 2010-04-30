@@ -33,82 +33,83 @@ template<typename _T>
 _T 
 TwoD<_T>::operator () (double atX, double atY) const
 {
-    _T lRet(0.0);
-    double lAtXPwr = 1.0;
-    for (unsigned int lX = 0, lXEnd = mCoef.size() ; lX < lXEnd ; lX++)
+    _T ret(0.0);
+    double atXPwr = 1.0;
+    for (size_t i = 0, sz = mCoef.size(); i < sz; i++)
     {
-        lRet += mCoef[lX](atY)*lAtXPwr;
-        lAtXPwr *= atX;
+        ret += mCoef[i](atY) * atXPwr;
+        atXPwr *= atX;
     }
-    return lRet;
+    return ret;
 }
     
 template<typename _T>
 _T 
-TwoD<_T>::integrate(double xStart, double xEnd, double yStart, double yEnd) const
+TwoD<_T>::integrate(double xStart, double xEnd,
+                    double yStart, double yEnd) const
 {
-    _T lRet(0.0);
-    double lEndAtPwr = xEnd;
-    double lStartAtPwr = xStart;
-    double lDiv = 0;
-    double lNewCoef;
-    for (unsigned int lX = 0, lXEnd = mCoef.size() ; lX < lXEnd ; lX++)
+    _T ret(0.0);
+    double endAtPwr = xEnd;
+    double startAtPwr = xStart;
+    double div = 0;
+    double newCoef;
+    for (size_t i = 0, sz = mCoef.size(); i < sz; i++)
     {
-        lDiv = 1.0 / (lX + 1);
-        lNewCoef = mCoef[lX].integrate(yStart,yEnd) * lDiv;
-        lRet += lNewCoef * lEndAtPwr;
-        lRet -= lNewCoef * lStartAtPwr;
-        lEndAtPwr *= xEnd;
-        lStartAtPwr *= xStart;
+        div = 1.0 / (i + 1);
+        newCoef = mCoef[i].integrate(yStart, yEnd) * div;
+        ret += newCoef * endAtPwr;
+        ret -= newCoef * startAtPwr;
+        endAtPwr *= xEnd;
+        startAtPwr *= xStart;
     }
-    return lRet;
+    return ret;
 }
     
 template<typename _T>
 TwoD<_T> 
 TwoD<_T>::derivativeY() const
 {
-    TwoD<_T> lRet;
+    TwoD<_T> ret;
     if ((orderY() > 0))
     {
-        lRet = TwoD<_T>(orderX(), orderY()-1);
-        for (unsigned int lX = 0 ; lX < mCoef.size() ; lX++)
+        ret = TwoD<_T>(orderX(), orderY()-1);
+        for (size_t i = 0 ; i < mCoef.size() ; i++)
         {
-            lRet.mCoef[lX] = mCoef[lX].derivative();
+            ret.mCoef[i] = mCoef[i].derivative();
         }
     }
-    return lRet;
+    return ret;
 }
 
 template<typename _T>
 TwoD<_T> 
 TwoD<_T>::derivativeX() const
 {
-    TwoD<_T> lRet;
+    TwoD<_T> ret;
     if ((orderX() > 0))
     {
-        lRet = TwoD<_T>(orderX()-1, orderY());
-        for (unsigned int lX = 0 ; lX < mCoef.size()-1 ; lX++)
+        ret = TwoD<_T>(orderX()-1, orderY());
+        for (size_t i = 0, sz = mCoef.size()-1; i < sz; i++)
         {
-            lRet.mCoef[lX] = mCoef[lX+1] * (_T)(lX+1);
+            ret.mCoef[i] = mCoef[i + 1] * (_T)(i+1);
         }
     }
-    return lRet;
+    return ret;
 }
 
 template<typename _T>
 OneD<_T>
 TwoD<_T>::atY(double y) const
 {
-    OneD<_T> lRet;
+    OneD<_T> ret;
     if (orderX() > 0)
     {
         // We have no more X, but we have Y still
-        lRet = OneD<_T>(orderX());
-        for (unsigned int lX = 0; lX < mCoef.size(); lX++)
+        ret = OneD<_T>(orderX());
+        for (size_t i = 0; i < mCoef.size(); i++)
         {
             // Get me down to an X
-            lRet[lX] = mCoef[lX](y);
+            lRet[i] = mCoef[i](y);
         }
     }
     return lRet;
@@ -116,7 +117,7 @@ TwoD<_T>::atY(double y) const
 
 template<typename _T>
 TwoD<_T>
-TwoD<_T>::power(int toThe) const
+TwoD<_T>::power(size_t toThe) const
 {
     // If its 0, we have to give back a 1*x^0*y^0 poly, since
     // we want a 2D poly out
@@ -134,14 +135,12 @@ TwoD<_T>::power(int toThe) const
         return rv;
 
  
-    // Otherwise, we have to raise it
-    
-    for (int i = 2; i <= toThe; i++)
+    // Otherwise, we have to raise it   
+    for (size_t i = 2; i <= toThe; i++)
     {
         rv *= *this;
     }
     return rv;
-
 }
 
 
@@ -149,12 +148,12 @@ template<typename _T>
 TwoD<_T> 
 TwoD<_T>::flipXY() const
 {
-    unsigned int oY = orderX();
-    unsigned int oX = orderY();
+    size_t oY = orderX();
+    size_t oX = orderY();
     TwoD<_T> prime(oX, oY);
     
-    for (unsigned int i = 0; i <= oX; i++)
-	for (unsigned int j = 0; j <= oY; j++)
+    for (size_t i = 0; i <= oX; i++)
+	for (size_t j = 0; j <= oY; j++)
 	    prime[i][j] = mCoef[j][i];
     return prime;
 }
@@ -163,43 +162,46 @@ template<typename _T>
 TwoD<_T> 
 TwoD<_T>::derivativeXY() const
 {
-    TwoD<_T> lRet = derivativeY().derivativeX();
-    return lRet;
+    TwoD<_T> ret = derivativeY().derivativeX();
+    return ret;
 }
     
 template<typename _T>
 OneD<_T> 
-TwoD<_T>::operator [] (unsigned int idx) const
+TwoD<_T>::operator [] (size_t i) const
 {
-    OneD<_T> lRet(0);
-    if (idx < mCoef.size())
+    OneD<_T> ret(0);
+    if (i < mCoef.size())
     {
-        lRet = mCoef[idx];
+        ret = mCoef[i];
     }
     else
     {
-        std::stringstream lStr;
-        lStr << "idx(" << idx << ") not within range [0..." << mCoef.size() << ")";
-        std::string lMsg(lStr.str());
-        throw(except::IndexOutOfRangeException(Ctxt(lMsg)));
+        std::stringstream str;
+        str << "index:" << i << " not within range [0..." 
+            << mCoef.size() << ")";
+
+        std::string msg(str.str());
+        throw except::IndexOutOfRangeException(Ctxt(msg));
     }
     return lRet;
 }
 
 template<typename _T>
 _T* 
-TwoD<_T>::operator [] (unsigned int idx) 
+TwoD<_T>::operator [] (size_t i) 
 {
-    if (idx < mCoef.size())
+    if (i < mCoef.size())
     {
-        return(&(mCoef[idx][0]));
+        return(&(mCoef[i][0]));
     }
     else
     {
-        std::stringstream lStr;
-        lStr << "idx(" << idx << ") not within range [0..." << mCoef.size() << ")";
-        std::string lMsg(lStr.str());
-        throw(except::IndexOutOfRangeException(Ctxt(lMsg)));
+        std::stringstream str;
+        str << "index: " << i << " not within range [0..."
+            << mCoef.size() << ")";
+        std::string msg(str.str());
+        throw(except::IndexOutOfRangeException(Ctxt(msg)));
     }
 }
     
@@ -207,9 +209,9 @@ template<typename _T>
 TwoD<_T>& 
 TwoD<_T>::operator *= (double cv) 
 {
-    for (unsigned int lX = 0, lXEnd = mCoef.size() ; lX < lXEnd ; lX++)
+    for (size_t i = 0, sz = mCoef.size(); i < sz; i++)
     {
-        mCoef[lX] *= cv;
+        mCoef[i] *= cv;
     }
     return *this;
 }
@@ -218,31 +220,31 @@ template<typename _T>
 TwoD<_T> 
 TwoD<_T>::operator * (double cv) const
 {
-    TwoD<_T> lRet(*this);
-    lRet *= cv;
-    return lRet;
+    TwoD<_T> ret(*this);
+    ret *= cv;
+    return ret;
 }
 
 template<typename _T>
 TwoD<_T> 
 operator * (double cv, const TwoD<_T>& p) 
 {
-    return p*cv;
+    return p * cv;
 }
     
 template<typename _T>
 TwoD<_T>& 
 TwoD<_T>::operator *= (const TwoD<_T>& p) 
 {
-    TwoD<_T> lTmp(orderX()+p.orderX(),orderY()+p.orderY());
-    for (int lX = 0, lXEnd = mCoef.size() ; lX < lXEnd ; lX++)
+    TwoD<_T> tmp(orderX() + p.orderX(), orderY() + p.orderY());
+    for (int i = 0, xsz = mCoef.size() ; i < xsz; i++)
     {
-        for (int lY = 0, lYEnd = p.mCoef.size() ; lY < lYEnd ; lY++)
+        for (int j = 0, ysz = p.mCoef.size() ; j < ysz; j++)
         {
-            lTmp.mCoef[lX+lY] += mCoef[lX] * p.mCoef[lY];
+            tmp.mCoef[i + j] += mCoef[i] * p.mCoef[j];
         }
     }
-    *this = lTmp;
+    *this = tmp;
     return *this;
 }
 
@@ -250,24 +252,24 @@ template<typename _T>
 TwoD<_T> 
 TwoD<_T>::operator * (const TwoD<_T>& p) const
 {
-    TwoD<_T> lRet(*this);
-    lRet *= p;
-    return lRet;
+    TwoD<_T> ret(*this);
+    ret *= p;
+    return ret;
 }
 
 template<typename _T>
 TwoD<_T>& 
 TwoD<_T>::operator += (const TwoD<_T>& p) 
 {
-    TwoD<_T> lTmp(std::max<int>(orderX(),p.orderX()),
-                  std::max<int>(orderY(),p.orderY()));
-    for (unsigned int lX = 0, lXEnd = mCoef.size() ; lX < lXEnd ; lX++)
+    TwoD<_T> tmp(std::max<int>(orderX(), p.orderX()),
+                 std::max<int>(orderY(), p.orderY()));
+    for (unsigned int i = 0, sz = mCoef.size() ; i < sz; i++)
     {
-        lTmp.mCoef[lX] = mCoef[lX];
+        lTmp.mCoef[i] = mCoef[i];
     }
-    for (unsigned int lX = 0, lXEnd = p.mCoef.size() ; lX < lXEnd ; lX++)
+    for (unsigned int i = 0, sz = p.mCoef.size() ; i < sz; i++)
     {
-        lTmp.mCoef[lX] += p.mCoef[lX];
+        lTmp.mCoef[i] += p.mCoef[i];
     }
     *this = lTmp;
     return *this;
@@ -277,66 +279,69 @@ template<typename _T>
 TwoD<_T> 
 TwoD<_T>::operator + (const TwoD<_T>& p) const
 {
-    TwoD<_T> lRet(*this);
-    lRet += p;
-    return lRet;
+    TwoD<_T> ret(*this);
+    ret += p;
+    return ret;
 }
 
 template<typename _T>
 TwoD<_T>& 
-TwoD<_T>::operator -= (const TwoD<_T>& p) 
+TwoD<_T>::operator-=(const TwoD<_T>& p) 
 {
-    TwoD<_T> lTmp(std::max<int>(orderX(),p.orderX()),
-                  std::max<int>(orderY(),p.orderY()));
-    for (unsigned int lX = 0, lXEnd = mCoef.size() ; lX < lXEnd ; lX++)
+    TwoD<_T> tmp(std::max<size_t>(orderX() ,p.orderX()),
+                  std::max<size_t>(orderY(), p.orderY()));
+
+    for (size_t i = 0, sz = mCoef.size() ; i < sz; i++)
     {
-        lTmp.mCoef[lX] = mCoef[lX];
+        tmp.mCoef[i] = mCoef[i];
     }
-    for (unsigned int lX = 0, lXEnd = p.mCoef.size() ; lX < lXEnd ; lX++)
+
+    for (size_t i = 0, sz = p.mCoef.size() ; i < sz; i++)
     {
-        lTmp.mCoef[lX] -= p.mCoef[lX];
+        tmp.mCoef[i] -= p.mCoef[i];
     }
-    *this = lTmp;
+
+    *this = tmp;
     return *this;
 }
     
 template<typename _T>
 TwoD<_T> 
-TwoD<_T>::operator - (const TwoD<_T>& p) const
+TwoD<_T>::operator-(const TwoD<_T>& p) const
 {
-    TwoD<_T> lRet(*this);
-    lRet -= p;
-    return lRet;
+    TwoD<_T> ret(*this);
+    ret -= p;
+    return ret;
 }
     
 template<typename _T>
 TwoD<_T>& 
-TwoD<_T>::operator /= (double cv) 
+TwoD<_T>::operator/=(double cv) 
 {
-    double lRecipCV = 1.0/cv;
-    for (unsigned int lX = 0, lXEnd = mCoef.size() ; lX < lXEnd ; lX++)
+    double recipCV = 1.0/cv;
+    for (size_t i = 0, sz = mCoef.size() ; i < sz; i++)
     {
-        mCoef[lX] *= lRecipCV;
+        mCoef[lX] *= recipCV;
     }
     return *this;
 }
 
 template<typename _T>
 TwoD<_T> 
-TwoD<_T>::operator / (double cv) const
+TwoD<_T>::operator/(double cv) const
 {
-    TwoD<_T> lRet(*this);
-    lRet *= (1.0/cv);
-    return lRet;
+    TwoD<_T> ret(*this);
+    ret *= (1.0/cv);
+    return ret;
 }
 
 template<typename _T>
 std::ostream& 
 operator << (std::ostream& out, const TwoD<_T> p)
 {
-    for (unsigned int lX = 0 ; lX < p.mCoef.size() ; lX++)
+    for (size_t i = 0 ; i < p.mCoef.size() ; i++)
     {
-        out <<  "x^" << lX << "*(" << p[lX] << ")" << std::endl;
+        out <<  "x^" << i << "*(" << p[i] << ")" << std::endl;
     }
     return out;
 }
@@ -345,30 +350,30 @@ template<typename _T>
 bool
 TwoD<_T>::operator == (const TwoD<_T>& p) const
 {
-    unsigned int lMinSize = std::min<unsigned int>(mCoef.size(),
-            p.mCoef.size());
+    size_t minSize = std::min<size_t>(mCoef.size(),
+                                      p.mCoef.size());
 
-    for (unsigned int lX = 0 ; lX < lMinSize ; lX++)
+    for (size_t i = 0 ; i < minSize ; i++)
     {
-        if (mCoef[lX] != p.mCoef[lX])
+        if (mCoef[i] != p.mCoef[i])
             return false;
     }
 
     // Cover case where one polynomial has more coefficients than the other.
     if (mCoef.size() > p.mCoef.size())
     {
-        OneD<_T> lDflt(orderY());
+        OneD<_T> dflt(orderY());
 
-        for (unsigned int lX = lMinSize ; lX < mCoef.size() ; ++lX)
-            if (mCoef[lX] != lDflt)
+        for (size_t i = minSize ; i < mCoef.size(); ++i)
+            if (mCoef[i] != dflt)
                 return false;
     }
     else if (mCoef.size() < p.mCoef.size())
     {
-        OneD<_T> lDflt(p.orderY());
+        OneD<_T> dflt(p.orderY());
 
-        for (unsigned int lX = lMinSize ; lX < p.mCoef.size() ; ++lX)
-            if (p.mCoef[lX] != lDflt)
+        for (unsigned int i = minSize ; i < p.mCoef.size() ; ++i)
+            if (p.mCoef[i] != dflt)
                 return false;
     }
 
