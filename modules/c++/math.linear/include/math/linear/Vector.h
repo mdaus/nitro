@@ -192,7 +192,7 @@ public:
     const std::vector<_T>& vec() const { return mRaw.mRaw; }
 
     //!  Const dereference operator
-    inline _T operator[](int i) const
+    inline _T operator[](size_t i) const
     {
 #if defined(MATH_LINEAR_BOUNDS)
         assert( i < _ND );
@@ -201,7 +201,7 @@ public:
     }
 
     //!  Non-const reference operator
-    inline _T& operator[](int i)
+    inline _T& operator[](size_t i)
     {
 #if defined(MATH_LINEAR_BOUNDS)
         assert( i < _ND );
@@ -226,7 +226,7 @@ public:
         size_t sz = mRaw.mRaw.size();
         if (vec.size() != sz)
             throw except::Exception(Ctxt("Dot product requires equal size vectors"));
-        for (unsigned int i = 0; i < sz; ++i)
+        for (size_t i = 0; i < sz; ++i)
         {
             acc += mRaw.mRaw[i] * mRaw.mRaw[i];
         }
@@ -338,7 +338,7 @@ public:
     Vector& operator /=(const Vector& v)
     {
         size_t sz = size();
-        for (unsigned int i = 0; i < sz; i++)
+        for (size_t i = 0; i < sz; i++)
         {
             mRaw.mRaw[i] /= v.mRaw.mRaw[i];
         }
@@ -443,7 +443,7 @@ template<typename _T>
     std::ostream& operator<<(std::ostream& os,
                              const math::linear::Vector<_T>& v)
 {
-    for (unsigned int i = 0; i < v.size(); ++i)
+    for (size_t i = 0; i < v.size(); ++i)
     {
         os << std::setw(10) << v[i] << " ";
     }

@@ -111,9 +111,9 @@ public:
      */
     MatrixMxN(_T cv)
     {
-        for (unsigned int i = 0; i < _MD; i++)
+        for (size_t i = 0; i < _MD; i++)
         {
-            for (unsigned int j = 0; j < _ND; j++)
+            for (size_t j = 0; j < _ND; j++)
             {
                 mRaw[i][j] = cv;
             }
@@ -139,9 +139,9 @@ public:
      */
     MatrixMxN(const _T* raw)
     {
-        for (unsigned int i = 0; i < _MD; i++)
+        for (size_t i = 0; i < _MD; i++)
         {
-            for (unsigned int j = 0; j < _ND; j++)
+            for (size_t j = 0; j < _ND; j++)
             {
                 mRaw[i][j] = raw[i * _ND + j];
             }
@@ -163,9 +163,9 @@ public:
         if (raw.size() < size())
             throw except::Exception(Ctxt("Invalid size exception"));
 
-        for (unsigned int i = 0; i < _MD; ++i)
+        for (size_t i = 0; i < _MD; ++i)
         {
-            for (unsigned int j = 0; j < _ND; ++j)
+            for (size_t j = 0; j < _ND; ++j)
             {
                 mRaw[i][j] = raw[i * _ND + j];
             }
@@ -185,9 +185,9 @@ public:
      */
     MatrixMxN(const MatrixMxN& mx)
     {
-        for (unsigned int i = 0; i < _MD; i++)
+        for (size_t i = 0; i < _MD; i++)
         {
-            for (unsigned int j = 0; j < _ND; j++)
+            for (size_t j = 0; j < _ND; j++)
             {
                 mRaw[i][j] = mx.mRaw[i][j];
             }
@@ -211,9 +211,9 @@ public:
      */
     MatrixMxN& operator=(const _T* raw)
     {
-        for (unsigned int i = 0; i < _MD; i++)
+        for (size_t i = 0; i < _MD; i++)
         {
-            for (unsigned int j = 0; j < _ND; j++)
+            for (size_t j = 0; j < _ND; j++)
             {
                 mRaw[i][j] = raw[i * _ND + j];
             }
@@ -235,9 +235,9 @@ public:
     {
         if (raw.size() < size())
             throw except::Exception(Ctxt("Invalid size exception"));
-        for (unsigned int i = 0; i < _MD; i++)
+        for (size_t i = 0; i < _MD; i++)
         {
-            for (unsigned int j = 0; j < _ND; j++)
+            for (size_t j = 0; j < _ND; j++)
             {
                 mRaw[i][j] = raw[i * _ND + j];
             }
@@ -259,9 +259,9 @@ public:
     MatrixMxN& operator=(const MatrixMxN& mx)
     {
         if (this != &mx)
-        for (unsigned int i = 0; i < _MD; i++)
+        for (size_t i = 0; i < _MD; i++)
         {
-            for (unsigned int j = 0; j < _ND; j++)
+            for (size_t j = 0; j < _ND; j++)
             {
                 mRaw[i][j] = mx.mRaw[i][j];
             }
@@ -284,9 +284,9 @@ public:
      */
     MatrixMxN& operator=(const _T& sv)
     {
-        for (unsigned int i = 0; i < _MD; i++)
+        for (size_t i = 0; i < _MD; i++)
         {
-            for (unsigned int j = 0; j < _ND; j++)
+            for (size_t j = 0; j < _ND; j++)
             {
                 mRaw[i][0] = sv;
             }
@@ -307,7 +307,7 @@ public:
      *  \param i The row index
      *  \param j The column index
      */
-    inline _T operator()(int i, int j) const
+    inline _T operator()(size_t i, size_t j) const
     {
 #if defined(MATH_LINEAR_BOUNDS)
         assert( i < _MD && j < _ND );
@@ -325,7 +325,7 @@ public:
      *  \param i The ith index into the rows (M)
      *  \param j The jth index into the cols (N)
      */
-    inline _T& operator()(int i, int j)
+    inline _T& operator()(size_t i, size_t j)
     {
 #if defined(MATH_LINEAR_BOUNDS)
         assert( i < _MD && j < _ND );
@@ -339,7 +339,7 @@ public:
      *  http://www.parashift.com/c++-faq-lite/operator-overloading.html#faq-13.10
      *  http://www.parashift.com/c++-faq-lite/operator-overloading.html#faq-13.11
      */
-    inline const _T* operator[](int i) const
+    inline const _T* operator[](size_t i) const
     {
         return row(i);
     }
@@ -353,7 +353,7 @@ public:
      *  But it is even more dangerous, since the user can cause damage by unwittingly
      *  treating row i as a mutable pointer.  This method is only preserved for compatibility
      */
-    inline _T* operator[](int i)
+    inline _T* operator[](size_t i)
     { 
         return row(i);
     }
@@ -367,7 +367,7 @@ public:
      *  \endcode
      *
      */
-    inline const _T* row(int i) const
+    inline const _T* row(size_t i) const
     {
 #if defined(MATH_LINEAR_BOUNDS)
         assert( i < _MD);
@@ -380,7 +380,7 @@ public:
      *  since the user can cause damage by unwittingly
      *  treating row i as a mutable pointer.
      */
-    inline _T* row(int i)
+    inline _T* row(size_t i)
     {
 #if defined(MATH_LINEAR_BOUNDS)
         assert( i < _MD);
@@ -401,9 +401,9 @@ public:
      *  \param i The row index
      *  \param vec The row vector to copy from
      */
-    inline void row(int i, const _T* vec)
+    inline void row(size_t i, const _T* vec)
     {
-        for (unsigned int j = 0; j < _ND; j++)
+        for (size_t j = 0; j < _ND; j++)
         {
             mRaw[i][j] = vec[j];
         }
@@ -422,7 +422,7 @@ public:
      *  \param i The row index
      *  \param vec The row vector to copy from
      */
-    inline void row(int i, const std::vector<_T>& vec)
+    inline void row(size_t i, const std::vector<_T>& vec)
     {
         row(i, &vec[0]);
     }
@@ -438,10 +438,10 @@ public:
      *  \param j The column index
      *  \return A vector copy of the column
      */
-    std::vector<_T> col(int j) const
+    std::vector<_T> col(size_t j) const
     {
         std::vector<_T> jth(_MD);
-        for (unsigned int i = 0; i < _MD; ++i)
+        for (size_t i = 0; i < _MD; ++i)
         {
             jth[i] = mRaw[i][j];
         }
@@ -461,10 +461,10 @@ public:
      *  \param j The column index
      *  \param vec The vector to copy from
      */
-    void col(int j, const _T* vec)
+    void col(size_t j, const _T* vec)
     {
         
-        for (unsigned int i = 0; i < _MD; ++i)
+        for (size_t i = 0; i < _MD; ++i)
         {
             mRaw[i][j] = vec[i];
         }
@@ -482,7 +482,7 @@ public:
      *  \param j The column index
      *  \param vec The vector to copy from
      */
-    void col(int j, std::vector<_T>& vec)
+    void col(size_t j, std::vector<_T>& vec)
     {
         col(j, &vec[0]);
     }
@@ -602,9 +602,9 @@ public:
      */
     MatrixMxN& scale(_T scalar)
     {
-        for (unsigned int i = 0; i < _MD; i++)
+        for (size_t i = 0; i < _MD; i++)
         {
-            for (unsigned int j = 0; j < _ND; j++)
+            for (size_t j = 0; j < _ND; j++)
             {
                 mRaw[i][j] *= scalar;
             }
@@ -632,9 +632,9 @@ public:
     MatrixMxN<_MD, _ND> multiply(_T scalar) const
     {
         MatrixMxN<_MD, _ND> mx = *this;
-        for (unsigned int i = 0; i < _MD; i++)
+        for (size_t i = 0; i < _MD; i++)
         {
-            for (unsigned int j = 0; j < _ND; j++)
+            for (size_t j = 0; j < _ND; j++)
             {
                 mx[i][j] *= scalar;
             }
@@ -670,7 +670,7 @@ public:
         multiply(const MatrixMxN<_ND, _PD, _T>& mx) const
     {
         MatrixMxN<_MD, _PD, _T> newM;
-        unsigned int i, j, k;
+        size_t i, j, k;
 
         for (i = 0; i < _MD; i++)
         {
@@ -707,7 +707,7 @@ public:
      */
     MatrixMxN& scaleDiagonal(const MatrixMxN<_ND, _ND, _T>& mx)
     {
-        unsigned int i, j;
+        size_t i, j;
         for (i = 0; i < _MD; i++)
         {
             for (j = 0; j < _ND; j++)
@@ -761,9 +761,9 @@ public:
     operator+=(const Like_T& mx)
     {
         Like_T newM;
-        for (unsigned int i = 0; i < _MD; i++)
+        for (size_t i = 0; i < _MD; i++)
         {
-            for (unsigned int j = 0; j < _ND; j++)
+            for (size_t j = 0; j < _ND; j++)
             {
                 mRaw[i][j] += mx.mRaw[i][j];
             }
@@ -791,9 +791,9 @@ public:
     Like_T&
     operator-=(const Like_T& mx)
     {
-        for (unsigned int i = 0; i < _MD; i++)
+        for (size_t i = 0; i < _MD; i++)
         {
-            for (unsigned int j = 0; j < _ND; j++)
+            for (size_t j = 0; j < _ND; j++)
             {
                 mRaw[i][j] -= mx(i, j);
             }
@@ -867,8 +867,8 @@ public:
     {
 
         MatrixMxN<_ND, _MD, _T> x;
-        for (int i = 0; i < _MD; i++)
-            for (int j = 0; j < _ND; j++)
+        for (size_t i = 0; i < _MD; i++)
+            for (size_t j = 0; j < _ND; j++)
                 x.mRaw[j][i] = mRaw[i][j];
 
         return x;
@@ -888,16 +888,16 @@ public:
      *  \param [out] pivotsM
      *
      */
-    Like_T decomposeLU(int* pivotsM) const
+    Like_T decomposeLU(size_t* pivotsM) const
     {
 
         Like_T lu;
 
-        for (unsigned int i = 0; i < _MD; i++)
+        for (size_t i = 0; i < _MD; i++)
         {
             // Start by making our pivots unpermuted
             pivotsM[i] = i;
-            for (unsigned int j = 0; j < _ND; j++)
+            for (size_t j = 0; j < _ND; j++)
             {
                 // And copying elements
                 lu(i, j) = mRaw[i][j];
@@ -907,20 +907,20 @@ public:
 
         _T colj[_MD];
         _T* rowi;
-        for (unsigned int j = 0; j < _ND; j++)
+        for (size_t j = 0; j < _ND; j++)
         {
-            for (unsigned int i = 0; i < _MD; i++)
+            for (size_t i = 0; i < _MD; i++)
             {
                 colj[i] = lu(i, j);
             }
 
-            for (unsigned int i = 0; i < _MD; i++)
+            for (size_t i = 0; i < _MD; i++)
             {
                 rowi = lu[i];
 
-                int max = std::min<int>(i, j);
+                size_t kmax = std::min<size_t>(i, j);
                 double s(0);
-                for (int k = 0; k < max; k++)
+                for (int k = 0; k < kmax; k++)
                 {
                     s += rowi[k] * colj[k];
                 }
@@ -928,8 +928,8 @@ public:
                 rowi[j] = colj[i];
             }
 
-            unsigned int p = j;
-            for (unsigned int i = j + 1; i < _MD; i++)
+            size_t p = j;
+            for (size_t i = j + 1; i < _MD; i++)
             {
                 if (std::abs(colj[i]) > std::abs(colj[p]))
                     p = i;
@@ -937,7 +937,7 @@ public:
             }
             if (p != j)
             {
-                unsigned int k = 0;
+                size_t k = 0;
                 for (; k < _ND; k++)
                 {
                     // We are swapping
@@ -951,13 +951,12 @@ public:
             }
             if (j < _MD && lu(j, j) )
             {
-                for (unsigned int i = j + 1; i < _MD; i++)
+                for (size_t i = j + 1; i < _MD; i++)
                 {
                     // Divide out our rows
                     lu(i, j) /= lu(j, j);
                 }
             }
-
 
         }
 
@@ -978,12 +977,12 @@ public:
      *  \endcode
      *
      */
-    Like_T permute(int* pivotsM, size_t n = _ND) const
+    Like_T permute(size_t* pivotsM, size_t n = _ND) const
     {
         Like_T perm;
-        for (unsigned int i = 0; i < _MD; i++)
+        for (size_t i = 0; i < _MD; i++)
         {
-            for (unsigned int j = 0; j < n; j++)
+            for (size_t j = 0; j < n; j++)
             {
                 perm[i][j] = mRaw[pivotsM[i]][j];
             }
@@ -997,9 +996,9 @@ public:
     _T norm() const
     {
         _T acc(0);
-        for (unsigned int i = 0; i < _MD; ++i)
+        for (size_t i = 0; i < _MD; ++i)
         {
-            for (unsigned int j = 0; j < _ND; ++j)
+            for (size_t j = 0; j < _ND; ++j)
             {
                 acc += mRaw[i][j] * mRaw[i][j];
             }
@@ -1128,9 +1127,9 @@ template<size_t _ND, typename _T> MatrixMxN<_ND, _ND, _T>
     identityMatrix()
 {
     MatrixMxN<_ND, _ND, _T> mx;
-    for (unsigned int i = 0; i < _ND; i++)
+    for (size_t i = 0; i < _ND; i++)
     {
-        for (unsigned int j = 0; j < _ND; j++)
+        for (size_t j = 0; j < _ND; j++)
         {
             mx(i, j) = (i == j) ? 1: 0;
         }
@@ -1145,7 +1144,7 @@ template<size_t _ND, typename _T> MatrixMxN<_ND, _ND, _T>
  *
  */
 template<size_t _MD, size_t _ND, size_t _PD, typename _T>
-    math::linear::MatrixMxN<_ND, _PD, _T> solveLU(int* pivotsM,
+    math::linear::MatrixMxN<_ND, _PD, _T> solveLU(size_t* pivotsM,
                                                   const MatrixMxN<_MD, _ND> &lu,
                                                   const MatrixMxN<_ND, _PD> &b)
 {
@@ -1154,21 +1153,21 @@ template<size_t _MD, size_t _ND, size_t _PD, typename _T>
     // If we dont have something in the diagonal, we can't solve this
     math::linear::MatrixMxN<_ND, _PD, _T> x = b.permute(pivotsM, _PD);
 
-    for (unsigned int k = 0; k < _ND; k++) {
-        for (unsigned int i = k + 1; i < _ND; i++) {
-            for (unsigned int j = 0; j < _PD; j++) {
+    for (size_t k = 0; k < _ND; k++) {
+        for (size_t i = k + 1; i < _ND; i++) {
+            for (size_t j = 0; j < _PD; j++) {
                 x(i, j) -= x(k, j)*lu(i, k);
             }
         }
     }
-    for (int k = _ND - 1; k >= 0; k--) {
-        for (unsigned int j = 0; j < _PD; j++) {
+    for (size_t k = _ND - 1; k >= 0; k--) {
+        for (size_t j = 0; j < _PD; j++) {
             x(k, j) /= lu(k, k);
         }
 
-        for (unsigned int i = 0; i < (unsigned int)k; i++) {
+        for (size_t i = 0; i < k; i++) {
             // This one could be _Q
-            for (unsigned int j = 0; j < _PD; j++) {
+            for (size_t j = 0; j < _PD; j++) {
                 x(i, j) -= x(k, j)*lu(i, k);
             }
         }
@@ -1193,13 +1192,13 @@ template<size_t _ND, typename _T> inline
     MatrixMxN<_ND, _ND, _T> a((_T)0);
 
     // Identity
-    for (unsigned int i = 0; i < _ND; i++)
+    for (size_t i = 0; i < _ND; i++)
         a(i, i) = 1;
 
     int pivots[_ND];
     MatrixMxN<_ND, _ND, _T> lu = mx.decomposeLU(pivots);
     
-    for (unsigned int i = 0; i < _ND; i++)
+    for (size_t i = 0; i < _ND; i++)
     {
         if ( equals<_T>(lu(i, i), 0) )
             throw except::Exception(Ctxt("Non-invertible matrix!"));
@@ -1397,9 +1396,9 @@ template<typename Matrix_T> Matrix_T tidy(const Matrix_T& constMatrix,
                                           double eps = std::numeric_limits<float>::epsilon())
 {
     Matrix_T mx = constMatrix;
-    for (unsigned int i = 0; i < mx.rows(); i++)
+    for (size_t i = 0; i < mx.rows(); i++)
     {
-        for (unsigned int j = 0; j < mx.cols(); j++)
+        for (size_t j = 0; j < mx.cols(); j++)
         {
             double lower = std::floor(mx(i,j));
             double higher = std::ceil(mx(i,j));
@@ -1428,7 +1427,7 @@ template<size_t _MD, size_t _ND, typename _T>
 {
 
 
-    unsigned int i, j;
+    size_t i, j;
     os << "(" << _MD << ',' << _ND << ")" << std::endl;
     
     for (i = 0; i < _MD; ++i)

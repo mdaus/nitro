@@ -102,7 +102,7 @@ public:
     {
         size_t sz = M * N;
         mRaw.resize(sz);
-        for (unsigned int i = 0; i < sz; ++i)
+        for (size_t i = 0; i < sz; ++i)
         {
            mRaw[i] = raw[i];
         }
@@ -198,7 +198,7 @@ public:
      *  \param i The row index
      *  \param j The column index
      */
-    inline _T operator()(int i, int j) const
+    inline _T operator()(size_t i, size_t j) const
     {
 #if defined(MATH_LINEAR_BOUNDS)
         assert( i < mM && j < mN );
@@ -217,7 +217,7 @@ public:
      *  \param i The ith index into the rows (M)
      *  \param j The jth index into the cols (N)
      */
-    inline _T& operator()(int i, int j)
+    inline _T& operator()(size_t i, size_t j)
     {
 #if defined(MATH_LINEAR_BOUNDS)
         assert( i < mM && j < mN );
@@ -231,7 +231,7 @@ public:
      * http://www.parashift.com/c++-faq-lite/operator-overloading.html#faq-13.10
      * http://www.parashift.com/c++-faq-lite/operator-overloading.html#faq-13.11
      */
-    inline const _T* operator[](int i) const
+    inline const _T* operator[](size_t i) const
     {
         return row(i);
     }
@@ -245,7 +245,7 @@ public:
      *  But it is even more dangerous, since the user can cause damage by unwittingly
      *  treating row i as a mutable pointer.
      */
-    inline _T* operator[](int i)
+    inline _T* operator[](size_t i)
     {
         return row(i);
     }
@@ -259,7 +259,7 @@ public:
      *  \endcode
      *
      */
-    inline const _T* row(int i) const
+    inline const _T* row(size_t i) const
     {
 #if defined(MATH_LINEAR_BOUNDS)
         assert( i < mM);
@@ -272,7 +272,7 @@ public:
      *  since the user can cause damage by unwittingly
      *  treating row i as a mutable pointer.
      */
-    inline _T* row(int i)
+    inline _T* row(size_t i)
     {
 #if defined(MATH_LINEAR_BOUNDS)
         assert( i < mM);
@@ -293,9 +293,9 @@ public:
      *  \param i The row index
      *  \param vec The row vector to copy from
      */
-    inline void row(int i, const _T* vec)
+    inline void row(size_t i, const _T* vec)
     {
-        for (unsigned int j = 0; j < mN; j++)
+        for (size_t j = 0; j < mN; j++)
         {
             mRaw[i * mN + j] = vec[j];
         }
@@ -313,7 +313,7 @@ public:
      *  \param i The row index
      *  \param vec The row vector to copy from
      */
-    inline void row(int i, const std::vector<_T>& vec)
+    inline void row(size_t i, const std::vector<_T>& vec)
     {
         row(i, &vec[0]);
     }
@@ -331,7 +331,7 @@ public:
     std::vector<_T> col(size_t j) const
     {
         std::vector<_T> jth(mM);
-        for (unsigned int i = 0; i < mM; ++i)
+        for (size_t i = 0; i < mM; ++i)
         {
             jth[i] = mRaw[i * mN + j];
         }
@@ -350,9 +350,9 @@ public:
      *  \param j The column index
      *  \param vec The vector to copy from
      */
-    void col(int j, const _T* vec)
+    void col(size_t j, const _T* vec)
     {
-        for (unsigned int i = 0; i < mM; ++i)
+        for (size_t i = 0; i < mM; ++i)
         {
             mRaw[i * mN + j] = vec[i];
         }
@@ -370,7 +370,7 @@ public:
      *  \param j The column index
      *  \param vec The vector to copy from
      */
-    void col(int j, std::vector<_T>& vec)
+    void col(size_t j, std::vector<_T>& vec)
     {
         col(j, &vec[0]);
     }
@@ -524,13 +524,13 @@ public:
         if (mN != mx.mM)
             throw except::Exception(Ctxt("Invalid size for multiply"));
 
-        unsigned int M = mM;
-        unsigned int N = mN;
-        unsigned int P = mx.mN;
+        size_t M = mM;
+        size_t N = mN;
+        size_t P = mx.mN;
 
         Matrix2D newM(M, P);
         
-        unsigned int i, j, k;
+        size_t i, j, k;
 
         for (i = 0; i < M; i++)
         {
@@ -571,7 +571,7 @@ public:
         if (mx.mM != mx.mN || mx.mN != mN)
             throw except::Exception(Ctxt("Invalid size for diagonal multiply"));
 
-        unsigned int i, j;
+        size_t i, j;
         for (i = 0; i < mM; i++)
         {
             for (j = 0; j < mN; j++)
@@ -650,9 +650,9 @@ public:
         if (mx.mM != mM || mx.mN != mN)
             throw except::Exception(Ctxt("Matrices must be same size for element-wise subtract"));
         
-        for (unsigned int i = 0; i < mM; i++)
+        for (size_t i = 0; i < mM; i++)
         {
-            for (unsigned int j = 0; j < mN; j++)
+            for (size_t j = 0; j < mN; j++)
             {
                 mRaw[i * mN + j] -= mx(i, j);
             }
@@ -737,16 +737,16 @@ public:
      *  \param [out] pivotsM (pre sized)
      *
      */
-    Matrix2D decomposeLU(std::vector<int>& pivotsM) const
+    Matrix2D decomposeLU(std::vector<size_t>& pivotsM) const
     {
 
         Matrix2D lu(mM, mN);
 
-        for (unsigned int i = 0; i < mM; i++)
+        for (size_t i = 0; i < mM; i++)
         {
             // Start by making our pivots unpermuted
             pivotsM[i] = i;
-            for (unsigned int j = 0; j < mN; j++)
+            for (size_t j = 0; j < mN; j++)
             {
                 // And copying elements
                 lu.mRaw[i * mN + j] = mRaw[i * mN + j];
@@ -756,20 +756,20 @@ public:
         std::vector<_T> colj(mM);
         _T* rowi;
 
-        for (unsigned int j = 0; j < mN; j++)
+        for (size_t j = 0; j < mN; j++)
         {
-            for (unsigned int i = 0; i < mM; i++)
+            for (size_t i = 0; i < mM; i++)
             {
                 colj[i] = lu(i, j);
             }
 
-            for (unsigned int i = 0; i < mM; i++)
+            for (size_t i = 0; i < mM; i++)
             {
                 rowi = lu[i];
 
-                int max = std::min<int>(i, j);
+                size_t max = std::min<size_t>(i, j);
                 double s(0);
-                for (int k = 0; k < max; k++)
+                for (size_t k = 0; k < max; k++)
                 {
                     s += rowi[k] * colj[k];
                 }
@@ -778,8 +778,8 @@ public:
 
             }
 
-            unsigned int p = j;
-            for (unsigned int i = j + 1; i < mM; i++)
+            size_t p = j;
+            for (size_t i = j + 1; i < mM; i++)
             {
                 if (std::abs(colj[i]) > std::abs(colj[p]))
                     p = i;
@@ -787,7 +787,7 @@ public:
             }
             if (p != j)
             {
-                unsigned int k = 0;
+                size_t k = 0;
                 for (; k < mN; k++)
                 {
                     // We are swapping
@@ -801,7 +801,7 @@ public:
             }
             if (j < mM && lu(j, j) )
             {
-                for (unsigned int i = j + 1; i < mM; i++)
+                for (size_t i = j + 1; i < mM; i++)
                 {
                     // Divide out our rows
                     lu(i, j) /= lu(j, j);
@@ -827,13 +827,13 @@ public:
      *  \endcode
      *
      */
-    Matrix2D permute(const std::vector<int>& pivotsM, int n = -1) const
+    Matrix2D permute(const std::vector<size_t>& pivotsM, size_t n = 0) const
     {
-        if (n == -1) n = mN;
+        if (n == 0) n = mN;
         Matrix2D perm(mM, n);
-        for (unsigned int i = 0; i < mM; i++)
+        for (size_t i = 0; i < mM; i++)
         {
-            for (unsigned int j = 0; j < (unsigned int)n; j++)
+            for (size_t j = 0; j < n; j++)
             {
                 perm(i, j) = mRaw[pivotsM[i] * mN + j];
             }
@@ -849,7 +849,7 @@ public:
     {
         size_t sz = mM * mN;
         _T acc(0);
-        for (unsigned int i = 0; i < sz; ++i)
+        for (size_t i = 0; i < sz; ++i)
         {
             acc += mRaw[i] * mRaw[i];
         }
@@ -950,9 +950,9 @@ template<typename _T> Matrix2D<_T>
     identityMatrix(size_t N)
 {
     Matrix2D<_T> mx(N, N);
-    for (unsigned int i = 0; i < N; i++)
+    for (size_t i = 0; i < N; i++)
     {
-        for (unsigned int j = 0; j < N; j++)
+        for (size_t j = 0; j < N; j++)
         {
             mx(i, j) = (i == j) ? 1: 0;
         }
@@ -969,7 +969,7 @@ template<typename _T> Matrix2D<_T>
  *
  */
 template<typename _T>
-    math::linear::Matrix2D<_T> solveLU(const std::vector<int>& pivotsM,
+    math::linear::Matrix2D<_T> solveLU(const std::vector<size_t>& pivotsM,
                                        const Matrix2D<_T> &lu,
                                        const Matrix2D<_T> &b)
 {
@@ -978,23 +978,23 @@ template<typename _T>
     // If we dont have something in the diagonal, we can't solve this
     math::linear::Matrix2D<_T> x = b.permute(pivotsM);
 
-    unsigned int P = b.mN;
-    unsigned int N = lu.mN;
-    for (unsigned int k = 0; k < N; k++) {
-        for (unsigned int i = k + 1; i < N; i++) {
-            for (unsigned int j = 0; j < P; j++) {
+    size_t P = b.mN;
+    size_t N = lu.mN;
+    for (size_t k = 0; k < N; k++) {
+        for (size_t i = k + 1; i < N; i++) {
+            for (size_t j = 0; j < P; j++) {
                 x(i, j) -= x(k, j)*lu(i, k);
             }
         }
     }
-    for (int k = N - 1; k >= 0; k--) {
-        for (unsigned int j = 0; j < P; j++) {
+    for (size_t k = N - 1; k >= 0; k--) {
+        for (size_t j = 0; j < P; j++) {
             x(k, j) /= lu(k, k);
         }
 
-        for (unsigned int i = 0; i < (unsigned int)k; i++) {
+        for (size_t i = 0; i < k; i++) {
             // This one could be _Q
-            for (unsigned int j = 0; j < P; j++) {
+            for (size_t j = 0; j < P; j++) {
                 x(i, j) -= x(k, j)*lu(i, k);
             }
         }
@@ -1086,17 +1086,17 @@ template<typename _T> inline
 {
    
 
-    unsigned int M = mx.mM;
-    unsigned int N = mx.mN;
+    size_t M = mx.mM;
+    size_t N = mx.mN;
     Matrix2D<_T> a(M, M, (_T)0);
 
-    for (unsigned int i = 0; i < M; i++)
+    for (size_t i = 0; i < M; i++)
         a(i, i) = 1;
 
-    std::vector<int> pivots(M);
+    std::vector<size_t> pivots(M);
     Matrix2D<_T> lu = mx.decomposeLU(pivots);
     
-    for (unsigned int i = 0; i < N; i++)
+    for (size_t i = 0; i < N; i++)
     {
         if ( equals<_T>(lu(i, i), 0) )
             throw except::Exception(Ctxt("Non-invertible matrix!"));
@@ -1148,7 +1148,7 @@ template<typename _T>
 {
 
 
-    unsigned int i, j;
+    size_t i, j;
     os << "(" << m.mM << ',' << m.mN << ")" << std::endl;
     for (i = 0; i < m.mM; ++i)
     {

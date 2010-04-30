@@ -165,7 +165,7 @@ public:
     MatrixMxN<_ND, 1, _T>& matrix() { return mRaw; }
     const MatrixMxN<_ND, 1, _T>& matrix() const { return mRaw; }
 
-    inline _T operator[](int i) const
+    inline _T operator[](size_t i) const
     {
 #if defined(MATH_LINEAR_BOUNDS)
         assert( i < _ND );
@@ -251,7 +251,7 @@ public:
 
     Like_T& operator *=(const Like_T& v)
     {
-        for (unsigned int i = 0; i < _ND; i++)
+        for (size_t i = 0; i < _ND; i++)
         {
             mRaw(i, 0) *= v[i];
         }
@@ -278,7 +278,7 @@ public:
 
     Like_T& operator /=(const Like_T& v)
     {
-        for (unsigned int i = 0; i < _ND; i++)
+        for (size_t i = 0; i < _ND; i++)
         {
             mRaw(i, 0) /= v[i];
         }
@@ -356,7 +356,7 @@ template<size_t _ND, typename _T>
     std::ostream& operator<<(std::ostream& os,
                              const math::linear::VectorN<_ND, _T>& v)
 {
-    for (unsigned int i = 0; i < _ND; ++i)
+    for (size_t i = 0; i < _ND; ++i)
     {
         os << std::setw(10) << v[i] << " ";
     }
