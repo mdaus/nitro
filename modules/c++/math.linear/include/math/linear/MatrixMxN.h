@@ -1195,7 +1195,7 @@ template<size_t _ND, typename _T> inline
     for (size_t i = 0; i < _ND; i++)
         a(i, i) = 1;
 
-    int pivots[_ND];
+    size_t pivots[_ND];
     MatrixMxN<_ND, _ND, _T> lu = mx.decomposeLU(pivots);
     
     for (size_t i = 0; i < _ND; i++)
