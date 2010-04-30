@@ -55,13 +55,13 @@ OneD<_T>::integrate(double start, double end) const
    for (size_t i = 0, sz = mCoef.size(); i < sz; i++)
    {
       div = 1.0 / (i + 1);
-      newCoef = mCoef[lX] * div;
+      newCoef = mCoef[i] * div;
       ret += newCoef * endAtPwr;
       ret -= newCoef * startAtPwr;
       endAtPwr *= end;
       startAtPwr *= start;
    }
-   return lRet;
+   return ret;
 }
 
 template<typename _T>
@@ -165,7 +165,7 @@ OneD<_T>::operator *= (const OneD<_T>& p)
    {
        for (unsigned int j = 0, ysz = p.mCoef.size() ; j < ysz; j++)
        {
-           lTmp.mCoef[i + j] += mCoef[i] * p.mCoef[j];
+           tmp.mCoef[i + j] += mCoef[i] * p.mCoef[j];
        }
    }
    *this = tmp;

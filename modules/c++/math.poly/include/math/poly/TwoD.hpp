@@ -109,10 +109,10 @@ TwoD<_T>::atY(double y) const
         for (size_t i = 0; i < mCoef.size(); i++)
         {
             // Get me down to an X
-            lRet[i] = mCoef[i](y);
+            ret[i] = mCoef[i](y);
         }
     }
-    return lRet;
+    return ret;
 }
 
 template<typename _T>
@@ -184,7 +184,7 @@ TwoD<_T>::operator [] (size_t i) const
         std::string msg(str.str());
         throw except::IndexOutOfRangeException(Ctxt(msg));
     }
-    return lRet;
+    return ret;
 }
 
 template<typename _T>
@@ -265,13 +265,13 @@ TwoD<_T>::operator += (const TwoD<_T>& p)
                  std::max<int>(orderY(), p.orderY()));
     for (unsigned int i = 0, sz = mCoef.size() ; i < sz; i++)
     {
-        lTmp.mCoef[i] = mCoef[i];
+        tmp.mCoef[i] = mCoef[i];
     }
     for (unsigned int i = 0, sz = p.mCoef.size() ; i < sz; i++)
     {
-        lTmp.mCoef[i] += p.mCoef[i];
+        tmp.mCoef[i] += p.mCoef[i];
     }
-    *this = lTmp;
+    *this = tmp;
     return *this;
 }
     
@@ -321,7 +321,7 @@ TwoD<_T>::operator/=(double cv)
     double recipCV = 1.0/cv;
     for (size_t i = 0, sz = mCoef.size() ; i < sz; i++)
     {
-        mCoef[lX] *= recipCV;
+        mCoef[i] *= recipCV;
     }
     return *this;
 }
