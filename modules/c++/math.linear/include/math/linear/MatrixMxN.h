@@ -1160,7 +1160,7 @@ template<size_t _MD, size_t _ND, size_t _PD, typename _T>
             }
         }
     }
-    for (size_t k = _ND - 1; k >= 0; k--) {
+    for (sys::SSize_T k = _ND - 1; k >= 0; k--) {
         for (size_t j = 0; j < _PD; j++) {
             x(k, j) /= lu(k, k);
         }
