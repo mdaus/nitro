@@ -143,16 +143,18 @@ public:
      *  \param elements the elements that match the QName
      */
     void getElementsByTagNameNS(const std::string & qname,
-                                std::vector<Element *>&elements);
+                                std::vector<Element *>&elements,
+                                bool recurse = false);
 
     /*!
      *  Utility for people that dont like to pass by reference
      *
      */
-    std::vector<Element*> getElementsByTagNameNS(const std::string& qname)
+    std::vector<Element*> getElementsByTagNameNS(const std::string& qname,
+                                                 bool recurse = false)
     {
         std::vector<Element*> v;
-        getElementsByTagNameNS(qname, v);
+        getElementsByTagNameNS(qname, v, recurse);
         return v;
     }
 
@@ -163,15 +165,17 @@ public:
      *  \param elements The elements
      */
     void getElementsByTagName(const std::string & localName,
-                              std::vector<Element *>&elements);
+                              std::vector<Element *>&elements,
+                              bool recurse = false);
 
     /*!
      *  Utility for people that dont like to pass by reference
      */
-    std::vector<Element*> getElementsByTagName(const std::string& localName)
+    std::vector<Element*> getElementsByTagName(const std::string& localName,
+                                               bool recurse = false)
     {
         std::vector<Element*> v;
-        getElementsByTagName(localName, v);
+        getElementsByTagName(localName, v, recurse);
         return v;
     }
 
@@ -192,7 +196,8 @@ public:
      */
     void getElementsByTagName(const std::string & uri,
                               const std::string & localName,
-                              std::vector<Element *>&elements);
+                              std::vector<Element *>&elements,
+                              bool recurse = false);
 
     /*!
      *  Prints the element to the specified OutputStream

@@ -90,36 +90,42 @@ bool xml::lite::Element::hasElement(const std::string & localName) const
 
 void xml::lite::Element::getElementsByTagName(const std::string & uri,
                                               const std::string & localName,
-                                              std::vector<Element *>&elements)
+                                              std::vector<Element *>&elements,
+                                              bool recurse)
 {
-    elements.clear();
     for (unsigned int i = 0; i < mChildren.size(); i++)
     {
         if (mChildren[i]->getUri() == uri && mChildren[i]->getLocalName()
                 == localName)
             elements.push_back(mChildren[i]);
+        if (recurse)
+            mChildren[i]->getElementsByTagName(uri, localName, elements);
     }
 }
 
 void xml::lite::Element::getElementsByTagName(const std::string & localName,
-                                              std::vector<Element *>&elements)
+                                              std::vector<Element *>&elements,
+                                              bool recurse)
 {
-    elements.clear();
     for (unsigned int i = 0; i < mChildren.size(); i++)
     {
         if (mChildren[i]->getLocalName() == localName)
             elements.push_back(mChildren[i]);
+        if (recurse)
+            mChildren[i]->getElementsByTagName(localName, elements);
     }
 }
 
 void xml::lite::Element::getElementsByTagNameNS(const std::string & qname,
-                                                std::vector<Element *>&elements)
+                                                std::vector<Element *>&elements,
+                                                bool recurse)
 {
-    elements.clear();
     for (unsigned int i = 0; i < mChildren.size(); i++)
     {
         if (mChildren[i]->mName.toString() == qname)
             elements.push_back(mChildren[i]);
+        if (recurse)
+            mChildren[i]->getElementsByTagNameNS(qname, elements);
     }
 }
 

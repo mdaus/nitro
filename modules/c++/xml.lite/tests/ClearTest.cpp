@@ -24,16 +24,18 @@
 #include <import/io.h>
 #include <vector>
 #include <iostream>
-const char* xmldata =
-    "<root okay=\"1\"><A>This</A><A>is</A><A>an</A><B>otter</B></root>";
-void printCD( std::vector<xml::lite::Element*>& e )
+const char
+        * xmldata =
+                "<root okay=\"1\"><A>This</A><A>is</A><A>an</A><A><B>ugly</B></A><B>otter</B></root>";
+void printCD(std::string tag, std::vector<xml::lite::Element*>& e)
 {
+    std::cout << tag << ": ";
     for (int i = 0; i < e.size(); ++i)
     {
         std::cout << e[i]->getCharacterData();
         std::cout << " ";
     }
-    std::cout << "*";
+    std::cout << std::endl;
 }
 
 int main()
@@ -41,23 +43,31 @@ int main()
     io::StringStream ss;
     ss.write(xmldata, strlen(xmldata));
     xml::lite::MinidomParser p;
-    p.parse( ss );
+    p.parse(ss);
     xml::lite::Element* elem = p.getDocument()->getRootElement();
+
     std::vector<xml::lite::Element*> vec;
     elem->getElementsByTagName("A", vec);
-    printCD( vec );
+    printCD("A", vec);
+    vec.clear();
+
     elem->getElementsByTagName("B", vec);
+    printCD("B", vec);
+    vec.clear();
+
+    elem->getElementsByTagName("B", vec, true);
+    printCD("B", vec);
+    vec.clear();
+
     xml::lite::AttributeNode attr;
     attr.setQName("better");
     attr.setValue("1");
     xml::lite::Attributes atts;
-    atts.add( attr );
-    elem->setAttributes( atts );
-
-    printCD( vec );
-    std::cout << std::endl;
+    atts.add(attr);
+    elem->setAttributes(atts);
 
     io::StandardOutStream sout;
-    elem->print( sout );
+    elem->print(sout);
+    std::cout << std::endl;
 }
 
