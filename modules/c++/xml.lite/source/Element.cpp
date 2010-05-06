@@ -211,10 +211,8 @@ void xml::lite::Element::depthPrint(io::OutputStream & stream,
 
 void xml::lite::Element::addChild(xml::lite::Element * node)
 {
-    //       std::string(node->characterData.getData(),
-    //                   node->characterData.getDataSize()) << std::endl;
-    // End temp code
     mChildren.push_back(node);
+    node->setParent(this);
 }
 
 void xml::lite::Element::changePrefix(Element* element,

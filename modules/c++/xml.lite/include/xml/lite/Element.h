@@ -55,7 +55,7 @@ class Element
 {
 public:
     //! Default constructor
-    Element()
+    Element() : mParent(NULL)
     {
     }
 
@@ -321,6 +321,16 @@ public:
         return mChildren;
     }
 
+    Element* getParent() const
+    {
+        return mParent;
+    }
+
+    void setParent(Element* parent)
+    {
+        mParent = parent;
+    }
+
 protected:
 
     void changePrefix(Element* element, std::string prefix, std::string uri);
@@ -331,6 +341,7 @@ protected:
                     int depth,
                     std::string formatter);
 
+    Element* mParent;
     //! The children of this element
     std::vector<Element*> mChildren;
     xml::lite::QName mName;
