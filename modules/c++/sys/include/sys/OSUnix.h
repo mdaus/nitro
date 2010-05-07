@@ -154,6 +154,8 @@ public:
 
     virtual std::string operator[](const std::string& s) const;
 
+    virtual std::string getDSOSuffix() const;
+
     /*
     virtual void* mapFile(sys::Handle_T handle,
             size_t length,

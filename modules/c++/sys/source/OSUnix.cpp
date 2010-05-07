@@ -221,6 +221,10 @@ void sys::OSUnix::millisleep(int milliseconds) const
 {
     usleep(milliseconds * 1000);
 }
+std::string sys::OSUnix::getDSOSuffix() const
+{
+    return "so";
+}
 
 std::string sys::OSUnix::operator[](const std::string& s) const
 {

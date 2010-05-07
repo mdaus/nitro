@@ -163,6 +163,8 @@ public:
 
     virtual sys::Off_T getLastModifiedTime(const std::string& path) const;
 
+    virtual std::string getDSOSuffix() const;
+
     /*!
      *  This is a system independent sleep function.
      *  Be careful using timing calls with threads
@@ -171,6 +173,8 @@ public:
     virtual void millisleep(int milliseconds) const;
 
     virtual std::string operator[](const std::string& s) const;
+
+
 
 };
 

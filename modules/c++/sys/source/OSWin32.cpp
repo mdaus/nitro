@@ -254,6 +254,11 @@ void sys::OSWin32::millisleep(int milliseconds) const
     Sleep(milliseconds);
 }
 
+std::string sys::OSWin32::getDSOSuffix() const
+{
+    return "dll";
+}
+
 std::string sys::OSWin32::operator[](const std::string& s) const
 {
 

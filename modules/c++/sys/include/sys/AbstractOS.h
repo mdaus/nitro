@@ -188,6 +188,9 @@ public:
 
     virtual Pid_T getProcessId() const = 0;
 
+    virtual std::string getDSOSuffix() const = 0;
+
+
     /*
     virtual void* mapFile(sys::Handle_T handle, 
             size_t length,
