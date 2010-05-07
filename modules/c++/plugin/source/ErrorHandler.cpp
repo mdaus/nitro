@@ -40,6 +40,12 @@ void plugin::DefaultErrorHandler::onPluginLoadFailed(const std::string& file)
     std::cout << "Warning: plugin manager failed to load: " << file << std::endl;
 }
 
+void plugin::DefaultErrorHandler::onPluginLoadedAlready(const std::string& file)
+{
+    std::cout << "Warning: plugin manager already loaded: " << file << std::endl;
+}
+
+
 void plugin::DefaultErrorHandler::onPluginVersionUnsupported(const std::string& message)
 {
     std::cout << "Warning: " << message << std::endl;

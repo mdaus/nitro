@@ -217,12 +217,22 @@ public:
             sys::DLL *dso = NULL;
             bool loadDSO = true;
 
+            std::string baseFile = sys::Path::basename(file);
+
             // First check if the DSO is already loaded
             for (unsigned int i = 0; i < mDSOs.size(); ++i)
             {
-                if (mDSOs[i]->getLibName() == file)
+
+                std::string baseLib =
+                    sys::Path::basename(mDSOs[i]->getLibName());
+
+                if (baseLib == baseFile)
                 {
-                    //It's already loaded - don't add it
+
+                    // Give the caller a chance to exit out
+                    eh->onPluginLoadedAlready(file);
+                    
+                    // And if we are still here, we need to resume loading
                     dso = mDSOs[i];
                     loadDSO = false;
                     break;
