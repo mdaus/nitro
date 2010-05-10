@@ -89,6 +89,9 @@ public:
         return *this;
     }
 
+    size_t orderX() const { return _OrderX; }
+    size_t orderY() const { return _OrderY; }
+
     inline _T operator()(double atX, double atY) const
     {
         _T rv(0);
