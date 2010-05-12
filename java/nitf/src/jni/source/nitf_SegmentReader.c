@@ -56,19 +56,18 @@ JNIEXPORT jboolean JNICALL Java_nitf_SegmentReader_read
     jint success;
 
     jbyte *byteBuf = (*env)->GetByteArrayElements(env, buf, 0);
-    success =
-        nitf_SegmentReader_read(reader, (char *) byteBuf, size, &error);
-
-    /* Check for errors */
-    if (NITF_IO_SUCCESS(success))
+    if (!byteBuf)
     {
-        (*env)->SetByteArrayRegion(env, buf, 0, size, byteBuf);
+        _ThrowNITFException(env, "Out of memory!");
+        return JNI_FALSE;
     }
-    else
+
+    if (!nitf_SegmentReader_read(reader, (char *) byteBuf, size, &error))
     {
         _ThrowNITFException(env, error.message);
         return JNI_FALSE;
     }
+    (*env)->ReleaseByteArrayElements(env, buf, byteBuf, 0);
     return JNI_TRUE;
 }
 
