@@ -1,23 +1,23 @@
-/* =========================================================================
+/*
+ * =========================================================================
  * This file is part of NITRO
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2008, General Dynamics - Advanced Information Systems
- *
+ * 
  * NITRO is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
- *
+ * 
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; if not, If not, 
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
- *
  */
 
 package nitf;
@@ -49,7 +49,7 @@ public class TRETest extends TestCase
         return new TRE(tag, tag);
     }
 
-    public void xtestCreate()
+    public void testCreate()
     {
         try
         {
@@ -62,7 +62,7 @@ public class TRETest extends TestCase
         }
     }
 
-    public void xtestGetSetFields()
+    public void testGetSetFields()
     {
         try
         {
@@ -79,7 +79,7 @@ public class TRETest extends TestCase
         }
     }
 
-    public void xtestFind()
+    public void testFind()
     {
         try
         {
@@ -98,37 +98,33 @@ public class TRETest extends TestCase
         }
     }
 
-    public void xtestExtensionsIterator() throws Exception
+    public void testExtensionsIterator() throws Exception
     {
-    	Record r = new Record();
-    	TRE tre = makeNewTRE("JITCID");
-    	
-    	Iterator<TRE> emptyIt = r.getHeader().getExtendedSection().iterator();
-    	assertTrue(!emptyIt.hasNext());
-    	//Iterator<TRE> it = all.iterator();
-    	// This is almost certainly not going to work
-    	r.getHeader().getExtendedSection().appendTRE(tre);
-    	Iterator<TRE> it = r.getHeader().getExtendedSection().iterator();
-    	//while (assert)
-    	//int size = 0;
-    	assertTrue(it.hasNext());
-    	TRE fromIt = it.next();
-    	//PrintStream ps = new PrintStream();
-    	
-    	System.out.println(fromIt.getTag());
-    	
-    	assertTrue(tre.equals(fromIt));
-    	
-    	assertEquals(1, r.getHeader().getExtendedSection().getAll().size());
-    	it.remove();
-    	assertEquals(0, r.getHeader().getExtendedSection().getAll().size());
-    	
-    	
-    	
-    	
-    	
+        Record r = new Record();
+        TRE tre = makeNewTRE("JITCID");
+
+        Iterator<TRE> emptyIt = r.getHeader().getExtendedSection().iterator();
+        assertTrue(!emptyIt.hasNext());
+        // Iterator<TRE> it = all.iterator();
+        // This is almost certainly not going to work
+        r.getHeader().getExtendedSection().appendTRE(tre);
+        Iterator<TRE> it = r.getHeader().getExtendedSection().iterator();
+        // while (assert)
+        // int size = 0;
+        assertTrue(it.hasNext());
+        TRE fromIt = it.next();
+        // PrintStream ps = new PrintStream();
+
+        System.out.println(fromIt.getTag());
+
+        assertTrue(tre.equals(fromIt));
+
+        assertEquals(1, r.getHeader().getExtendedSection().getAll().size());
+        it.remove();
+        assertEquals(0, r.getHeader().getExtendedSection().getAll().size());
     }
-    public void xtestIterator()
+
+    public void testIterator()
     {
         try
         {
@@ -145,13 +141,13 @@ public class TRETest extends TestCase
         }
     }
 
-    public void xtestPrint()
+    public void testPrint()
     {
         try
         {
             TRE tre = makeNewTRE("JITCID");
             tre.setField("FILCMT", "comment1".getBytes());
-            //tre.setField("FILCMT", "comment2".getBytes());
+            // tre.setField("FILCMT", "comment2".getBytes());
 
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             tre.print(new PrintStream(out));
@@ -162,6 +158,7 @@ public class TRETest extends TestCase
             fail(ExceptionUtils.getStackTrace(e));
         }
     }
+
     public void testDummy()
     {
 
