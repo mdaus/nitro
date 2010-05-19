@@ -3,7 +3,7 @@ import Options
 
 NAME            = 'nitf'
 MAINTAINER      = 'tzellman@users.sourceforge.net gojira_1@users.sourceforge.net'
-VERSION         = '2.5-rc7'
+VERSION         = '2.5-rc8'
 MODULE_DEPS     = ''
 LANG            = 'c'
 USELIB          = 'THREAD DL MATH nitf-c'
