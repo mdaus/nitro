@@ -68,7 +68,7 @@ public:
     Element(const std::string & qname,
             const std::string & uri,
             std::string characterData = "") :
-        mName(uri, qname), mCharacterData(characterData)
+        mName(uri, qname), mCharacterData(characterData), mParent(NULL)
     {
     }
 

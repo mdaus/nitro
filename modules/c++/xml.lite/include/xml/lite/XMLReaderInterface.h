@@ -23,6 +23,7 @@
 #ifndef __XML_LITE_ABSTRACT_XML_READER_H__
 #define __XML_LITE_ABSTRACT_XML_READER_H__
 
+#include <typeinfo>
 #include "XMLException.h"
 
 namespace xml

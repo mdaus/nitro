@@ -33,7 +33,7 @@ xml::lite::Element::Element(const xml::lite::Element & node)
     mCharacterData = node.mCharacterData;
     mAttributes = node.mAttributes;
     mChildren = node.mChildren;
-
+    mParent = node.mParent;
 }
 
 xml::lite::Element & xml::lite::Element::operator=(const xml::lite::Element & node)
@@ -44,6 +44,7 @@ xml::lite::Element & xml::lite::Element::operator=(const xml::lite::Element & no
         mCharacterData = node.mCharacterData;
         mAttributes = node.mAttributes;
         mChildren = node.mChildren;
+        mParent = node.mParent;
     }
     return *this;
 }
@@ -53,6 +54,7 @@ void xml::lite::Element::clone(const xml::lite::Element & node)
     mName = node.mName;
     mCharacterData = node.mCharacterData;
     mAttributes = node.mAttributes;
+    mParent = NULL;
 
     std::vector<xml::lite::Element *>::const_iterator iter;
     iter = node.getChildren().begin();
