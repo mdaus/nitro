@@ -245,8 +245,8 @@ NITFAPI(NITF_BOOL) nitf_DateTime_formatMillis(double millis,
     time_t remainingMillis;
     double fractSeconds;
     struct tm t;
-    char *newFmtString = format;
-    char *endString = NULL;
+    char *newFmtString = NULL;
+    const char *endString = NULL;
     int begStringLen = 0;
     int formatLength;
     int startIndex;
@@ -258,7 +258,7 @@ NITFAPI(NITF_BOOL) nitf_DateTime_formatMillis(double millis,
     t = *gmtime(&timeInSeconds);
     remainingMillis = (time_t)((time_t)millis % 1000);
 
-    // Search for "%...S" string
+    /* Search for "%...S" string */
     formatLength = strlen(format);
     for (i = 0; i < formatLength; ++i)
     {
@@ -266,7 +266,8 @@ NITFAPI(NITF_BOOL) nitf_DateTime_formatMillis(double millis,
         if (format[i] == '%')
         {
             startIndex = i;
-            for (j = startIndex + 1; j < formatLength; ++j) {
+            for (j = startIndex + 1; j < formatLength; ++j)
+            {
                 if (format[j] == '%')
                 {
                     break;
@@ -279,28 +280,28 @@ NITFAPI(NITF_BOOL) nitf_DateTime_formatMillis(double millis,
                     begStringLen = startIndex;
                     endString = &(format[j + 1]);
                 }
-	    }
-	}
+            }
+        }
 
         if (found)
         {
             break;
-	}
+        }
     }
 
-    // If we found a "%...S" string, parse it
-    // to find out how many decimal places to use
+    /* If we found a "%...S" string, parse it */
+    /* to find out how many decimal places to use */
     if (found)
     {
         int decimalPlaces = 0;
 
-        // Figure out how many decimal places we need...
+        /* Figure out how many decimal places we need... */
         for (i = startIndex + 1; i < startIndex + (formatLength - 1); ++i)
         {
-	    if (format[i] == '.')
+            if (format[i] == '.')
             {
-                // The digits that follow should be
-                // the number of decimal places
+                /* The digits that follow should be */
+                /* the number of decimal places */
                 sscanf(&(format[i + 1]), "%d", &decimalPlaces);
             }
         }
@@ -319,9 +320,11 @@ NITFAPI(NITF_BOOL) nitf_DateTime_formatMillis(double millis,
 
             memset(tempString, 0, decimalPlaces + 1);
 
-            // Get the fractional value while also
-            // moving the decimal to the right
-            fractSeconds = (remainingMillis / 1000.0) * pow(10.0,decimalPlaces);
+            /* Get the fractional value while also */
+            /* moving the decimal to the right */
+            fractSeconds = (remainingMillis / 1000.0);
+            for(i = 0; i < decimalPlaces; ++i)
+                fractSeconds *= 10;
 
             sprintf(tempString, "%0*d", decimalPlaces, (int)(fractSeconds + 0.5));
 
@@ -343,24 +346,23 @@ NITFAPI(NITF_BOOL) nitf_DateTime_formatMillis(double millis,
         }
     }
 
-    if (strftime(outBuf, maxSize, newFmtString, &t) == 0)
+    if (strftime(outBuf, maxSize,
+                 newFmtString != NULL ? newFmtString : format, &t) == 0)
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_OBJECT,
                 "Unknown error caused by the call to strftime with format string: [%s]",
-                newFmtString);
+                newFmtString != NULL ? newFmtString : format);
 
         returnValue = NITF_FAILURE;
     }
 
-    if (newFmtString && (newFmtString != format))
-    {
+    if (newFmtString != NULL)
         NITF_FREE(newFmtString);
-    }
 
     return returnValue;
 }
 
-//http://social.msdn.microsoft.com/forums/en-US/vcgeneral/thread/25a654f9-b6b6-490a-8f36-c87483bb36b7
+/* http://social.msdn.microsoft.com/forums/en-US/vcgeneral/thread/25a654f9-b6b6-490a-8f36-c87483bb36b7 */
 
 /*
  * We do not implement alternate representations. However, we always
@@ -368,7 +370,7 @@ NITFAPI(NITF_BOOL) nitf_DateTime_formatMillis(double millis,
  */
 #define ALT_E          0x01
 #define ALT_O          0x02
-//#define LEGAL_ALT(x)       { if (alt_format & ~(x)) return (0); }
+/* #define LEGAL_ALT(x)       { if (alt_format & ~(x)) return (0); } */
 #define LEGAL_ALT(x)       { ; }
 #define TM_YEAR_BASE   (1900) /* changed from 1970 */
 
@@ -605,40 +607,40 @@ NITFPRIV(char*) _nitf_strptime(const char *buf, const char *fmt, struct tm *tm, 
             tm->tm_mon = i - 1;
             break;
 
-            //            case 'p': /* The locale's equivalent of AM/PM. */
-            //                LEGAL_ALT(0);
-            //                /* AM? */
-            //                if (strcasecmp(am_pm[0], bp) == 0)
-            //                {
-            //                    if (tm->tm_hour > 11)
-            //                        return NULL;
-            //
-            //                    bp += strlen(am_pm[0]);
-            //                    break;
-            //                }
-            //                /* PM? */
-            //                else if (strcasecmp(am_pm[1], bp) == 0)
-            //                {
-            //                    if (tm->tm_hour > 11)
-            //                        return NULL;
-            //
-            //                    tm->tm_hour += 12;
-            //                    bp += strlen(am_pm[1]);
-            //                    break;
-            //                }
-            //
-            //                /* Nothing matched. */
-            //                return NULL;
+/*                        case 'p':  The locale's equivalent of AM/PM.
+                            LEGAL_ALT(0);
+                             AM?
+                            if (strcasecmp(am_pm[0], bp) == 0)
+                            {
+                                if (tm->tm_hour > 11)
+                                    return NULL;
+
+                                bp += strlen(am_pm[0]);
+                                break;
+                            }
+                             PM?
+                            else if (strcasecmp(am_pm[1], bp) == 0)
+                            {
+                                if (tm->tm_hour > 11)
+                                    return NULL;
+
+                                tm->tm_hour += 12;
+                                bp += strlen(am_pm[1]);
+                                break;
+                            }
+
+                             Nothing matched.
+                            return NULL;*/
 
             case 'S': /* The seconds. */
             LEGAL_ALT(ALT_O);
             if (!(_nitf_convNum(&bp, &tm->tm_sec, 0, 61)))
             return NULL;
 
-            // Determine if the next character is a decimal...
+            /* Determine if the next character is a decimal... */
             if (*bp == '.')
             {
-                // Get the fractional seconds value
+                /* Get the fractional seconds value */
                 bp++;
                 if (!(_nitf_convNum(&bp, millis, 0, 1000)))
                 return NULL;
@@ -716,7 +718,7 @@ static int _nitf_convNum(const char **buf, int *dest, int llim, int ulim)
     int rulim = ulim;
 
     if (**buf < '0' || **buf > '9')
-    return (0);
+        return 0;
 
     do
     {
@@ -727,9 +729,9 @@ static int _nitf_convNum(const char **buf, int *dest, int llim, int ulim)
     while ((result * 10 <= ulim) && rulim && **buf >= '0' && **buf <= '9');
 
     if (result < llim || result > ulim)
-    return (0);
+        return 0;
 
     *dest = result;
-    return (1);
+    return 1;
 }
 
