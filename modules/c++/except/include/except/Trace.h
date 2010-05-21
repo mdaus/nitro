@@ -20,11 +20,10 @@
  *
  */
 
-
 #ifndef __EXCEPT_TRACE_H__
 #define __EXCEPT_TRACE_H__
 
-#include <stack>
+#include <list>
 #include <iostream>
 #include "except/Context.h"
 
@@ -40,7 +39,6 @@ namespace except
 /*!
  * \class Trace
  * \brief Holds stack of context information
- * 
  */
 class Trace
 {
@@ -48,10 +46,10 @@ public:
 
     /*!
      * Default Constructor
-     *
      */
     Trace()
-    {}
+    {
+    }
 
     /*!
      * Constructor. Takes a Trace
@@ -66,7 +64,7 @@ public:
      * Assignment operator
      * \param t The Trace to copy
      */
-    Trace& operator= (const Trace& t);
+    Trace& operator=(const Trace& t);
 
     /*!
      * Gets size of stack
@@ -83,7 +81,7 @@ public:
      */
     void pushContext(const Context& c)
     {
-        mStack.push(c);
+        mStack.push_front(c);
     }
 
     /*!
@@ -91,7 +89,7 @@ public:
      */
     void popContext()
     {
-        mStack.pop();
+        mStack.pop_front();
     }
 
     /*!
@@ -99,14 +97,14 @@ public:
      */
     const Context& getContext() const
     {
-        return mStack.top();
+        return mStack.front();
     }
 
     /*!
      * Get the stack
      * \return The stack (const)
      */
-    const std::stack<Context>& getStack() const
+    const std::list<Context>& getStack() const
     {
         return mStack;
     }
@@ -115,18 +113,18 @@ public:
      * Get the stack
      * \return The stack (non-const)
      */
-    std::stack<Context>& getStack()
+    std::list<Context>& getStack()
     {
         return mStack;
     }
 
 private:
     //! The name of the internal stack wrapped by the Trace
-    std::stack<Context> mStack;
+    std::list<Context> mStack;
 
 };
 }
 
-std::ostream& operator<< (std::ostream& os, except::Trace& t);
+std::ostream& operator<<(std::ostream& os, const except::Trace& t);
 
 #endif

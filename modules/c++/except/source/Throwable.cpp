@@ -20,18 +20,7 @@
  *
  */
 
-
 #include "except/Throwable.h"
-
-/*!
- * \file Throwable.cpp
- * \brief Contains the classes to do with error handling
- *
- * A Throwable has two possible classifications (according to java, and for our
- * purposes, that is good enough): Errors and Exceptions.
- *
- *
- */
 
 except::Throwable::Throwable(except::Context c)
 {

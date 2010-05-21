@@ -29,18 +29,8 @@
 using std::endl; using std::cout;
 using namespace except;
 
-class DivideByZero : public Exception
-{
-public:
-    DivideByZero(): Exception()
-    {}
-    DivideByZero(Context c): Exception(c)
-    {}
-    DivideByZero(const Throwable& t, Context c): Exception(t, c)
-    {}
-    ~DivideByZero()
-    {}
-};
+DECLARE_EXCEPTION(DivideByZero)
+typedef DivideByZeroException DivideByZero;
 
 double Divide(double x, double y);
 
@@ -87,7 +77,7 @@ int main(int argc, char* argv[])
     catch (Throwable& t)
     {
         cout << "Why did you do that?" << endl;
-        cout << t.getTrace() << endl;
+        cout << t.toString() << endl;
     }
     return 0;
 }

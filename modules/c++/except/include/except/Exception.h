@@ -20,7 +20,6 @@
  *
  */
 
-
 #ifndef __EXCEPT_EXCEPTION_H__
 #define __EXCEPT_EXCEPTION_H__
 
@@ -36,6 +35,23 @@
 #include <string>
 #include <sstream>
 #include "except/Throwable.h"
+
+/*!
+ * Useful macro for defining Exception classes
+ */
+#define DECLARE_EXTENDED_EXCEPTION(_Name, _Base) \
+  class _Name##Exception : public _Base \
+  { \
+  public: \
+      _Name##Exception() : _Base(){} \
+      _Name##Exception(const except::Context& c) : _Base(c){} \
+      _Name##Exception(const std::string& msg) : _Base(msg){} \
+      _Name##Exception(const except::Throwable& t, const except::Context& c) : _Base(t, c){} \
+      virtual ~_Name##Exception(){} \
+      virtual std::string getType() const{ return #_Name"Exception"; } \
+  };
+
+#define DECLARE_EXCEPTION(_Name) DECLARE_EXTENDED_EXCEPTION(_Name, except::Exception)
 
 namespace except
 {
@@ -53,262 +69,85 @@ public:
     /*!
      * Constructor.
      */
-    Exception() : Throwable()
-    {}
+    Exception() :
+        Throwable()
+    {
+    }
 
     /*!
      * Constructor. Takes a Context
      * \param c The Context
      */
-    Exception(const Context& c) : Throwable(c)
-    {}
+    Exception(const Context& c) :
+        Throwable(c)
+    {
+    }
 
     /*!
      * Constructor. Takes an Throwable and a Context
      * \param t The Throwable
      * \param c The Context
      */
-    Exception(const Throwable& t, const Context& c) : Throwable(t, c)
-    {}
+    Exception(const Throwable& t, const Context& c) :
+        Throwable(t, c)
+    {
+    }
 
     /*!
      * Constructor.  Takes a message
      * \param message The message
      */
-    Exception(const std::string& message) : Throwable(message)
-    {}
+    Exception(const std::string& message) :
+        Throwable(message)
+    {
+    }
 
     //! Destructor
     virtual ~Exception()
-    {}
+    {
+    }
+
+    virtual std::string getType() const
+    {
+        return "Exception";
+    }
 };
 
 /*!
  * \class IOException
  * \brief Throwable related to IO problems.
  */
-class IOException : public Exception
-{
-public:
-    //! Default Constructor
-    IOException()
-    {}
-    /*!
-     *  User constructor.  Sets the exception context.
-     *  \param c The exception context
-     */
-    IOException(const Context& c) : Exception(c)
-    {}
-    /*!
-     *  User constructor.  Sets the exception message.
-     *  \param message the exception message
-     */
-    IOException(const std::string& message) : Exception(message)
-    {}
-
-    /*!
-     * User constructor. Takes an Throwable and a Context
-     * \param t The Throwable
-     * \param c The Context
-     */
-    IOException(const Throwable& t, const Context& c) : Exception(t, c)
-    {}
-
-    //!  Destructor
-    virtual ~IOException()
-    {}
-};
-
-/*!
- * \class BadCastException
- * \brief Exception for bad casting operations
- */
-class BadCastException : public Exception
-{
-public:
-    //! Default Constructor
-    BadCastException()
-    {}
-    /*!
-     *  User constructor.  Sets the exception context.
-     *  \param c The exception context
-     */
-    BadCastException(const Context& c) : Exception(c)
-    {}
-    /*!
-     *  User constructor.  Sets the exception message.
-     *  \param message the exception message
-     */
-    BadCastException(const std::string& message) : Exception(message)
-    {}
-
-    /*!
-     * User constructor. Takes an Throwable and a Context
-     * \param t The Throwable
-     * \param c The Context
-     */
-    BadCastException(const Throwable& t, const Context& c) : Exception(t, c)
-    {}
-
-    //!  Destructor
-    virtual ~BadCastException()
-    {}
-};
-/*!
- * \class InvalidFormatException
- * \brief Throwable related to an invalid file format.
- */
-class InvalidFormatException : public Exception
-{
-public:
-    //! Default Constructor
-    InvalidFormatException()
-    {}
-    /*!
-     *  User constructor.  Sets the exception context.
-     *  \param c The exception context
-     */
-    InvalidFormatException(const Context& c) : Exception(c)
-    {}
-    /*!
-     *  User constructor.  Sets the exception message.
-     *  \param message the exception message
-     */
-    InvalidFormatException(const std::string& message) : Exception(message)
-    {}
-
-    /*!
-     * User constructor. Takes an Throwable and a Context
-     * \param t The Throwable
-     * \param c The Context
-     */
-    InvalidFormatException(const Throwable& t, const Context& c) : Exception(t, c)
-    {}
-
-    //!  Destructor
-    ~InvalidFormatException()
-    {}
-};
-
-/*!
- * \class IndexOutOfRangeException
- * \brief Throwable related to an index being out of range.
- */
-class IndexOutOfRangeException : public Exception
-{
-public:
-    //! Default Constructor
-    IndexOutOfRangeException()
-    {}
-    /*!
-     *  User constructor.  Sets the exception message.
-     *  \param where where the exception was thrown
-     *  \param lbound the left bound of the ranged structure
-     *  \param rbound the right bound of the ranged structure
-     */
-    IndexOutOfRangeException(int where, int lbound, int rbound)
-    {
-        std::ostringstream s;
-        s << "Index out of range (" << lbound << " <= X < " << rbound << "): " << where;
-        mMessage = s.str();
-    }
-    /*!
-     *  User constructor.  Sets the exception context.
-     *  \param c The exception context
-     */
-    IndexOutOfRangeException(const Context& c) : Exception(c)
-    {}
-    /*!
-     *  User constructor.  Sets the exception message.
-     *  \param message the exception message
-     */
-    IndexOutOfRangeException(const std::string& message) : Exception(message)
-    {}
-
-    /*!
-     * User constructor. Takes an Throwable and a Context
-     * \param t The Throwable
-     * \param c The Context
-     */
-    IndexOutOfRangeException(const Throwable& t, const Context& c) : Exception(t, c)
-    {}
-
-    //!  Destructor
-    ~IndexOutOfRangeException()
-    {}
-};
-
-/*!
- * \class OutOfMemoryException
- * \brief Throwable related to memory allocation problems.
- */
-class OutOfMemoryException : public Exception
-{
-public:
-    //! Default Constructor
-    OutOfMemoryException()
-    {}
-    /*!
-     *  User constructor.  Sets the exception message.
-     *  \param message the exception message
-     */
-    OutOfMemoryException(const std::string& message) : Exception(message)
-    {}
-    /*!
-     *  User constructor.  Sets the exception context.
-     *  \param c The exception context
-     */
-    OutOfMemoryException(const Context& c) : Exception(c)
-    {}
-
-    /*!
-     * User constructor. Takes an Throwable and a Context
-     * \param t The Throwable
-     * \param c The Context
-     */
-    OutOfMemoryException(const Throwable& t, const Context& c) : Exception(t, c)
-    {}
-
-    //!  Destructor
-    ~OutOfMemoryException()
-    {}
-};
+DECLARE_EXCEPTION(IO)
 
 /*!
  * \class FileNotFoundException
  * \brief Throwable related to a file not found.
  */
-class FileNotFoundException : public Exception
-{
-public:
-    //! Default Constructor
-    FileNotFoundException()
-    {}
-    /*!
-     *  User constructor.  Sets the exception context.
-     *  \param c The exception context
-     */
-    FileNotFoundException(const Context& c) : Exception(c)
-    {}
-    /*!
-     *  User constructor.  Sets the exception message.
-     *  \param message the exception message
-     */
-    FileNotFoundException(const std::string& message) : Exception(message)
-    {}
+DECLARE_EXTENDED_EXCEPTION(FileNotFound, except::IOException)
 
-    /*!
-     * User constructor. Takes an Throwable and a Context
-     * \param t The Throwable
-     * \param c The Context
-     */
-    FileNotFoundException(const Throwable& t, const Context& c) : Exception(t, c)
-    {}
+/*!
+ * \class BadCastException
+ * \brief Exception for bad casting operations
+ */
+DECLARE_EXCEPTION(BadCast)
 
-    //!  Destructor
-    ~FileNotFoundException()
-    {}
-};
+/*!
+ * \class InvalidFormatException
+ * \brief Throwable related to an invalid file format.
+ */
+DECLARE_EXCEPTION(InvalidFormat)
+
+/*!
+ * \class IndexOutOfRangeException
+ * \brief Throwable related to an index being out of range.
+ */
+DECLARE_EXCEPTION(IndexOutOfRange)
+
+/*!
+ * \class OutOfMemoryException
+ * \brief Throwable related to memory allocation problems.
+ */
+DECLARE_EXCEPTION(OutOfMemory)
 
 /*!
  * \class NullPointerReference
@@ -317,182 +156,52 @@ public:
  * This class is currently treated as an exception, meaning that its
  * behavior is not necessarily fatal. 
  */
-class NullPointerReference : public Exception
-{
-public:
-    //!  Constructor
-    NullPointerReference()
-    {}
+DECLARE_EXCEPTION(NullPointerReference)
+//! For backwards-compatibility
+typedef NullPointerReferenceException NullPointerReference;
 
-    /*!
-     *  Construct from context
-     *  \param c The exception context.
-     */
-    NullPointerReference(const Context& c) : Exception(c)
-    {}
-
-    /*!
-     *  Construct from message
-     *  \param message The exception message
-     */
-    NullPointerReference(const std::string& message) : Exception(message)
-    {}
-
-    /*!
-     * User constructor. Takes an Throwable and a Context
-     * \param t The Throwable
-     * \param c The Context
-     */
-    NullPointerReference(const Throwable& t, const Context& c) : Exception(t, c)
-    {}
-
-    //!  Destructor
-    ~NullPointerReference()
-    {}
-};
 /*!
  * \class NoSuchKeyException
  * \brief Throwable related to unknown keys.
  */
-class NoSuchKeyException : public Exception
-{
-public:
-    //! Default Constructor
-    NoSuchKeyException()
-    {}
-    /*!
-     *  User constructor.  Sets the exception context.
-     *  \param c The exception context
-     */
-    NoSuchKeyException(const Context& c) : Exception(c)
-    {}
-    /*!
-     *  User constructor.  Sets the exception message.
-     *  \param message the exception message
-     */
-    NoSuchKeyException(const std::string& message) : Exception(message)
-    {}
-
-    /*!
-     * User constructor. Takes an Throwable and a Context
-     * \param t The Throwable
-     * \param c The Context
-     */
-    NoSuchKeyException(const Throwable& t, const Context& c) : Exception(t, c)
-    {}
-
-    //!  Destructor
-    ~NoSuchKeyException()
-    {}
-};
+DECLARE_EXCEPTION(NoSuchKey)
 
 /*!
  * \class NoSuchReferenceException
  * \brief Throwable related to unknown references.
  */
-class NoSuchReferenceException : public Exception
-{
-public:
-    //! Default Constructor
-    NoSuchReferenceException()
-    {}
-    /*!
-     *  User constructor.  Sets the exception context.
-     *  \param c The exception context
-     */
-    NoSuchReferenceException(const Context& c) : Exception(c)
-    {}
-    /*!
-     *  User constructor.  Sets the exception message.
-     *  \param message the exception message
-     */
-    NoSuchReferenceException(const std::string& message) : Exception(message)
-    {}
-
-    /*!
-     * User constructor. Takes an Throwable and a Context
-     * \param t The Throwable
-     * \param c The Context
-     */
-    NoSuchReferenceException(const Throwable& t, const Context& c) : Exception(t, c)
-    {}
-
-    //!  Destructor
-    ~NoSuchReferenceException()
-    {}
-};
+DECLARE_EXCEPTION(NoSuchReference)
 
 /*!
  * \class KeyAlreadyExistsException
  * \brief Throwable related to duplicate keys.
  */
-class KeyAlreadyExistsException : public Exception
-{
-public:
-    //! Default Constructor
-    KeyAlreadyExistsException()
-    {}
-    /*!
-     *  User constructor.  Sets the exception context.
-     *  \param c The exception context
-     */
-    KeyAlreadyExistsException(const Context& c) : Exception(c)
-    {}
-    /*!
-     *  User constructor.  Sets the exception message.
-     *  \param message the exception message
-     */
-    KeyAlreadyExistsException(const std::string& message) : Exception(message)
-    {}
-
-    /*!
-     * User constructor. Takes an Throwable and a Context
-     * \param t The Throwable
-     * \param c The Context
-     */
-    KeyAlreadyExistsException(const Throwable& t, const Context& c) : Exception(t, c)
-    {}
-
-    //!  Destructor
-    ~KeyAlreadyExistsException()
-    {}
-};
-
+DECLARE_EXCEPTION(KeyAlreadyExists)
 
 /*!
  * \class NotImplementedException
  * \brief Throwable related to code not being implemented yet.
  */
-class NotImplementedException : public Exception
-{
-public:
-    NotImplementedException()
-    {}
-    /*!
-     *  User constructor.  Sets the exception context.
-     *  \param c The exception context
-     */
-    NotImplementedException(const Context& c) : Exception(c)
-    {}
-    /*!
-     *  User constructor.  Sets the exception message.
-     *  \param message the exception message
-     */
-    NotImplementedException(const std::string& message) : Exception(message)
-    {}
+DECLARE_EXCEPTION(NotImplemented)
 
-    /*!
-     * User constructor. Takes an Throwable and a Context
-     * \param t The Throwable
-     * \param c The Context
-     */
-    NotImplementedException(const Throwable& t, const Context& c) : Exception(t, c)
-    {}
+/*!
+ * \class InvalidArgumentException
+ * \brief Throwable related to an invalid argument being passed.
+ */
+DECLARE_EXCEPTION(InvalidArgument)
 
-    //!  Destructor
-    ~NotImplementedException()
-    {}
-};
+/*!
+ * \class SerializationException
+ * \brief Throwable related to failing to serialize/deserialize data.
+ */
+DECLARE_EXTENDED_EXCEPTION(Serialization, except::IOException)
+
+/*!
+ * \class ParseException
+ * \brief Throwable related to failing to parse data.
+ */
+DECLARE_EXTENDED_EXCEPTION(Parse, except::IOException)
+
 }
 
 #endif

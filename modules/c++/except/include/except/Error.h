@@ -20,9 +20,8 @@
  *
  */
 
-
-#ifndef __XPC_EXCEPT_ERROR_H__
-#define __XPC_EXCEPT_ERROR_H__
+#ifndef __EXCEPT_ERROR_H__
+#define __EXCEPT_ERROR_H__
 
 /*!
  *  \file Error.h
@@ -35,6 +34,22 @@
  */
 #include "Throwable.h"
 
+/*!
+ * Useful macro for defining Exception classes
+ */
+#define DECLARE_EXTENDED_ERROR(_Name, _Base) \
+  class _Name##Error : public _Base \
+  { \
+  public: \
+      _Name##Error() : _Base(){} \
+      _Name##Error(const except::Context& c) : _Base(c){} \
+      _Name##Error(const std::string& msg) : _Base(msg){} \
+      _Name##Error(const except::Throwable& t, const except::Context& c) : _Base(t, c){} \
+      virtual ~_Name##Error(){} \
+      virtual std::string getType() const{ return #_Name; } \
+  };
+
+#define DECLARE_ERROR(_Name) DECLARE_EXTENDED_ERROR(_Name, except::Error)
 
 namespace except
 {
@@ -53,84 +68,55 @@ public:
     /*!
      * Default constructor
      */
-    Error() : Throwable()
-    {}
+    Error() :
+        Throwable()
+    {
+    }
 
     /*!
      * Constructor. Takes a Context
      * \param c The Context
      */
-    Error(const Context& c) : Throwable(c)
-    {}
+    Error(const Context& c) :
+        Throwable(c)
+    {
+    }
 
     /*!
      * Constructor.  Takes a message
      * \param message The message
      */
-    Error(const std::string& message) : Throwable(message)
-    {}
+    Error(const std::string& message) :
+        Throwable(message)
+    {
+    }
 
     /*!
      * Constructor. Takes an Throwable and a Context
      * \param t The Throwable
      * \param c The Context
      */
-    Error(const Throwable& t, const Context& c) : Throwable(t, c)
-    {}
+    Error(const Throwable& t, const Context& c) :
+        Throwable(t, c)
+    {
+    }
 
-    /*\!
-     * Get the type id
-     * \return The type
-     */ 
-    //     virtual const char* getType() const { return __XpcTHISTYPENAME(); }
     //!  Destructor
     virtual ~Error()
-    {}
-}
-;
+    {
+    }
+
+    virtual std::string getType() const
+    {
+        return "Error";
+    }
+};
 
 /*!
  * \class InvalidDerivedTypeError
  * \brief Represents an invalid derived type error.
  */
-class InvalidDerivedTypeError : public Error
-{
-public:
-    //! Default constructor
-    InvalidDerivedTypeError()
-    {}
-
-    /*!
-     *  User constructor
-     *  \param c the error context
-     */
-    InvalidDerivedTypeError(const Context& c) : Error(c)
-    {}
-
-    /*!
-     *  User constructor
-     *  \param message the error message
-     */
-    InvalidDerivedTypeError(const std::string& message) :
-            Error(message)
-    {}
-
-    /*!
-     * User constructor. Takes an Throwable and a Context
-     * \param t The Throwable
-     * \param c The Context
-     */
-    InvalidDerivedTypeError(const Throwable& t, const Context& c) : Error(t, c)
-    {}
-
-    //!  Destructor
-    ~InvalidDerivedTypeError()
-    {}
-}
-;
-
-
-
+DECLARE_ERROR(InvalidDerivedType)
 
 }
 

@@ -20,23 +20,20 @@
  *
  */
 
-
 #ifndef __EXCEPT_THROWABLE_H__
 #define __EXCEPT_THROWABLE_H__
 
 #include <string>
-#include <typeinfo>
+#include <sstream>
 #include "except/Trace.h"
+
 /*!
  * \file Throwable.h
  * \brief Contains the classes to do with error handling
  *
  * A Throwable has two possible classifications (according to java, and for our
  * purposes, that is good enough): Errors and Exceptions.
- *
- *
  */
-
 namespace except
 {
 
@@ -45,7 +42,6 @@ namespace except
  * \brief The interface for exceptions and errors
  *
  * This class provides the base interface for exceptions and errors.
- * 
  */
 class Throwable
 {
@@ -53,17 +49,19 @@ public:
 
     /*!
      * Default Constructor
-     *
      */
     Throwable()
-    {}
+    {
+    }
 
     /*!
      * Constructor.  Takes a message
      * \param message The message
      */
-    Throwable(const std::string& message) : mMessage(message)
-    {}
+    Throwable(const std::string& message) :
+        mMessage(message)
+    {
+    }
 
     /*!
      * Constructor.  Takes a Context.
@@ -82,7 +80,8 @@ public:
      * Destructor
      */
     virtual ~Throwable()
-    {}
+    {
+    }
 
     /*!
      * Get the message
@@ -115,9 +114,17 @@ public:
      * Get the type id
      * \return The type
      */
-    virtual const char* getType() const
+    virtual std::string getType() const
     {
-        return typeid(*this).name();
+        return "Throwable";
+    }
+
+    virtual std::string toString() const
+    {
+        std::ostringstream s;
+        s << getType() << ": ";
+        s << mTrace;
+        return s.str();
     }
 
 protected:
@@ -125,8 +132,7 @@ protected:
     Trace mTrace;
     //! The name of the message the exception was thrown
     std::string mMessage;
-
 };
-
 }
+
 #endif

@@ -39,13 +39,14 @@ except::Trace& except::Trace::operator= (const except::Trace& t)
     return *this;
 }
 
-std::ostream& operator<< (std::ostream& os, except::Trace& t)
+std::ostream& operator<< (std::ostream& os, const except::Trace& t)
 {
-    int size = t.getSize();
-    for (int i = 0; i < size; i++)
+    const std::list<except::Context>& stack = t.getStack();
+    int size = stack.size();
+    for (std::list<except::Context>::const_iterator it = stack.begin();
+            it != stack.end(); ++it)
     {
-        os << t.getContext() << std::endl;
-        t.popContext();
+        os << *it << std::endl;
     }
     return os;
 }
