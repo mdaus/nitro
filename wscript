@@ -2,7 +2,7 @@ import os
 import Scripting, Options
 from Build import BuildContext
 
-VERSION = '2.5-rc8'
+VERSION = '2.5-rc9'
 APPNAME = 'nitro'
 srcdir  = '.'
 blddir  = 'target'
