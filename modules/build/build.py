@@ -134,6 +134,7 @@ class CPPBuildContext(BuildContext):
         source = modArgs.get('source', '').split() or None
         
         exe = bld.new_task_gen('cxx', 'program', source=source,
+                               includes=includes,
                                uselib_local=uselib_local, uselib=uselib,
                                env=env.copy(), target=progName, path=path,
                                install_path='${PREFIX}/bin')
