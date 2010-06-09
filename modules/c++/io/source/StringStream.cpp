@@ -32,6 +32,11 @@ void io::StringStream::write(const sys::byte* data, sys::Size_T size)
     mStream.write(data, size);
 }
 
+void io::StringStream::write(const std::string& s)
+{
+    mStream.write((sys::byte*)s.c_str(), (sys::Size_T)s.length());
+}
+
 sys::SSize_T io::StringStream::read(sys::byte *data, sys::Size_T size)
 {
     return mStream.read(data, size);

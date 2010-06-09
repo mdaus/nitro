@@ -71,6 +71,8 @@ public:
      */
     virtual void write(const sys::byte* data, sys::Size_T size);
 
+    virtual void write(const std::string& s);
+
     /*!
      *  This is the read method from ByteStream.  It has an added member
      *  for GCC < 3.0, and for sun forte compilers.  The older compilers

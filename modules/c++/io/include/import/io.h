@@ -64,6 +64,8 @@
 #include "io/SerializableFile.h"
 #include "io/StandardStreams.h"
 #include "io/StringStream.h"
+#include "io/NullStreams.h"
+#include "io/ProxyStreams.h"
 
 //#include "io/MMapInputStream.h"
 //using namespace io;
