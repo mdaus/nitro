@@ -172,7 +172,7 @@ public:
 #endif
         return mRaw[i][0];
     }
-    inline _T& operator[](int i)
+    inline _T& operator[](size_t i)
     {
 #if defined(MATH_LINEAR_BOUNDS)
         assert( i < _ND );
