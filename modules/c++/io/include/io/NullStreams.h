@@ -81,7 +81,7 @@ protected:
     {
         return (sys::byte) 0;
     }
-    virtual sys::byte processBytes(sys::byte* b, sys::Size_T len) const
+    virtual void processBytes(sys::byte* b, sys::Size_T len) const
     {
         //override for different behavior
         memset(b, 0, len);
