@@ -53,31 +53,43 @@ class OneD
 {
 protected:
     std::vector<_T> mCoef;
-    
+
 public:
     //!  Make sure we never have an order() that is negative
-    OneD() 
+    OneD()
     {
-        mCoef.resize(1, 0.0);
+        mCoef.resize(1, (_T)0.0);
     }
-    
+
     /*!
      *  A vector of ascending power coefficients (note that
      *  this is the reverse of Matlab)
      */
-    OneD(const std::vector<_T>& coef) : mCoef(coef) 
+    OneD(const std::vector<_T>& coef) :
+        mCoef(coef)
     {
         if (mCoef.size() == 0)
-            mCoef.resize(1, 0.0);
+            mCoef.resize(1, (_T)0.0);
     }
 
     /*!
      *  Create a vector of given order, with each coefficient
      *  set to zero
      */
-    OneD(size_t order)  
+    OneD(size_t order)
     {
-	mCoef.resize(order + 1, 0.0); 
+        mCoef.resize(order + 1, (_T)0.0);
+    }
+
+    //! assignment operator
+    OneD& operator=(const OneD& o)
+    {
+        if (&o != this)
+        {
+            mCoef.clear();
+            std::copy(o.mCoef.begin(), o.mCoef.end(), std::back_inserter(mCoef));
+        }
+        return *this;
     }
 
     /*!
@@ -95,70 +107,79 @@ public:
      */
     OneD(size_t order, const _T* coef)
     {
-	mCoef.resize(order + 1);
-	memcpy(&mCoef[0], coef, (order + 1) * sizeof(_T));
+        mCoef.resize(order + 1);
+        memcpy(&mCoef[0], coef, (order + 1) * sizeof(_T));
     }
-    size_t order() const { return mCoef.size()-1; }
-    inline size_t size() const { return mCoef.size(); }
 
-    _T operator () (double at) const;
+    size_t order() const
+    {
+        if (size() == 0)
+            throw except::IndexOutOfRangeException(
+                                                   Ctxt(
+                                                        "Can't have an order less than zero"));
+        return mCoef.size() - 1;
+    }
+
+    inline size_t size() const
+    {
+        return mCoef.size();
+    }
+
+    _T operator ()(double at) const;
     _T integrate(double start, double end) const;
-    OneD<_T> derivative() const;
+    OneD<_T>derivative() const;
     _T& operator[](size_t i);
     _T operator[](size_t i) const;
     template<typename _TT>
-        friend std::ostream& operator << (std::ostream& out, const OneD<_TT>& p);
-    OneD<_T>& operator *= (double cv);
-    OneD<_T> operator * (double cv) const;
+    friend std::ostream& operator <<(std::ostream& out, const OneD<_TT>& p);
+    OneD<_T>& operator *=(double cv);
+    OneD<_T>operator *(double cv) const;
     template<typename _TT>
-        friend OneD<_TT> operator * (double cv, const OneD<_TT>& p);
-    OneD<_T>& operator *= (const OneD<_T>& p);
-    OneD<_T> operator * (const OneD<_T>& p) const;
-    OneD<_T>& operator += (const OneD<_T>& p);
-    OneD<_T> operator + (const OneD<_T>& p) const;
-    OneD<_T>& operator -= (const OneD<_T>& p);
-    OneD<_T> operator - (const OneD<_T>& p) const;
-    OneD<_T>& operator /= (double cv);
-    OneD<_T> operator / (double cv) const;
+    friend OneD<_TT>operator *(double cv, const OneD<_TT>& p);
+    OneD<_T>& operator *=(const OneD<_T>& p);
+    OneD<_T>operator *(const OneD<_T>& p) const;
+    OneD<_T>& operator +=(const OneD<_T>& p);
+    OneD<_T>operator +(const OneD<_T>& p) const;
+    OneD<_T>& operator -=(const OneD<_T>& p);
+    OneD<_T>operator -(const OneD<_T>& p) const;
+    OneD<_T>& operator /=(double cv);
+    OneD<_T>operator /(double cv) const;
 
     template<typename Vector_T> bool operator==(const Vector_T& p) const
     {
-	size_t sz = size();
-	size_t psz = p.size();
-	size_t minSize = std::min<size_t>(sz, psz);
-	
-	for (size_t i = 0 ; i < minSize ; i++)
-	    if (!math::linear::equals(mCoef[i], p[i]))
-		return false;
-	
-	_T dflt(0.0);
-	
-	// Cover case where one polynomial has more 
-	// coefficients than the other.
-	if (sz > psz)
-	{
-	    for (size_t i = minSize; i < sz; i++)
-		if (!math::linear::equals(mCoef[i], dflt))
-		    return false;
-	}
-	else if (sz < psz)
-	{
-	    for (size_t i = minSize; i < psz; i++)
-		if (!math::linear::equals(p[i], dflt))
-		    return false;
-	}
-	
-	return true;
+        size_t sz = size();
+        size_t psz = p.size();
+        size_t minSize = std::min<size_t>(sz, psz);
+
+        for (size_t i = 0; i < minSize; i++)
+            if (!math::linear::equals(mCoef[i], p[i]))
+                return false;
+
+        _T dflt(0.0);
+
+        // Cover case where one polynomial has more
+        // coefficients than the other.
+        if (sz > psz)
+        {
+            for (size_t i = minSize; i < sz; i++)
+                if (!math::linear::equals(mCoef[i], dflt))
+                    return false;
+        }
+        else if (sz < psz)
+        {
+            for (size_t i = minSize; i < psz; i++)
+                if (!math::linear::equals(p[i], dflt))
+                    return false;
+        }
+
+        return true;
     }
 
-    
     template<typename Vector_T> bool operator!=(const Vector_T& p) const
     {
-	return !(*this == p);
+        return !(*this == p);
     }
 };
-
-
 
 } // poly
 } // math
