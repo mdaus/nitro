@@ -26,7 +26,6 @@
 #include "sys/Dbg.h"
 #include "sys/Conf.h"
 
-
 /*!
  * \file OutputStream.h
  * \brief File containing class for handling output streams
@@ -50,11 +49,12 @@ class OutputStream
 public:
     //! Default constructor
     OutputStream()
-    {}
+    {
+    }
     //! Destructor
     virtual ~OutputStream()
-    {}
-
+    {
+    }
 
     /*!
      * Write one byte to the stream
@@ -71,7 +71,7 @@ public:
      */
     void write(const std::string& str)
     {
-        write((sys::byte*)str.c_str(), (sys::Size_T)str.length());
+        write((sys::byte*) str.c_str(), (sys::Size_T) str.length());
     }
 
     /*!
@@ -83,6 +83,7 @@ public:
         write(str);
         write('\n');
     }
+
     /*!
      * This method defines a given OutputStream. By defining,
      * this method, you can define the unique attributes of an OutputStream
@@ -97,10 +98,17 @@ public:
      *  Flush the stream if needed
      */
     virtual void flush()
-    {}
+    {
+    }
 
+    /*!
+     * Close the stream
+     */
+    virtual void close()
+    {
+    }
+
+};
 }
-;
-} // namespace io
 
 #endif

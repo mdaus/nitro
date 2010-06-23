@@ -120,6 +120,11 @@ public:
         mProxy->flush();
     }
 
+    virtual void close()
+    {
+        mProxy->close();
+    }
+
     virtual void setProxy(OutputStream *proxy, bool ownPtr = false)
     {
         if (!mOwnPtr)
@@ -164,6 +169,13 @@ public:
     inline bool isEnabled() const
     {
         return mEnabled;
+    }
+
+    void close()
+    {
+        if (mEnabled && mPtr)
+            mPtr->close();
+        setEnabled(false);
     }
 
 private:
