@@ -40,7 +40,7 @@ namespace poly
  
 template<typename Vector_T> OneD<double> fit(const Vector_T& x,
 					     const Vector_T& y,
-					     int numCoeffs)
+					     size_t numCoeffs)
 {
         
     math::linear::Vector<double> vy(y);
@@ -102,8 +102,8 @@ inline OneD<double> fit(size_t numObs, const double* x, const double* y,
 inline math::poly::TwoD<double> fit(const math::linear::Matrix2D<double>& x,
 				    const math::linear::Matrix2D<double>& y,
 				    const math::linear::Matrix2D<double>& z,
-				    int nx,
-				    int ny)
+				    size_t nx,
+				    size_t ny)
 {
     // Normalize the values in the matrix
     size_t m = x.rows();
@@ -229,13 +229,13 @@ inline math::poly::TwoD<double> fit(const math::linear::Matrix2D<double>& x,
 
 }
 
-inline math::poly::TwoD<double> fit(int numRows,
-				    int numCols,
+inline math::poly::TwoD<double> fit(size_t numRows,
+				    size_t numCols,
 				    const double* x,
 				    const double* y,
 				    const double* z,
-				    int nx,
-				    int ny)
+				    size_t nx,
+				    size_t ny)
 {
     math::linear::Matrix2D<double> xm(numRows, numCols, x);
     math::linear::Matrix2D<double> ym(numRows, numCols, y);
