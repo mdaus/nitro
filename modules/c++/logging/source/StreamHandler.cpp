@@ -26,15 +26,15 @@
 
 #include "logging/StreamHandler.h"
 
-
-logging::StreamHandler::StreamHandler(logging::LogLevel level)
-        : logging::Handler(level)
+logging::StreamHandler::StreamHandler(logging::LogLevel level) :
+    logging::Handler(level)
 {
     mStream.reset(new io::StandardOutStream());
 }
 
-logging::StreamHandler::StreamHandler(io::OutputStream* stream, logging::LogLevel level)
-        : logging::Handler(level)
+logging::StreamHandler::StreamHandler(io::OutputStream* stream,
+                                      logging::LogLevel level) :
+    logging::Handler(level)
 {
     if (!stream)
         mStream.reset(new io::StandardOutStream());
@@ -42,6 +42,16 @@ logging::StreamHandler::StreamHandler(io::OutputStream* stream, logging::LogLeve
         mStream.reset(stream);
 }
 
+logging::StreamHandler::~StreamHandler()
+{
+    close();
+}
+
+void logging::StreamHandler::close()
+{
+    if (mStream.get())
+        mStream->close();
+}
 
 void logging::StreamHandler::emitRecord(logging::LogRecord* record)
 {

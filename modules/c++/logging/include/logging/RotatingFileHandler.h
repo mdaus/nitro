@@ -30,7 +30,7 @@
 #include <string>
 #include <iostream>
 #include "logging/LogRecord.h"
-#include "logging/FileHandler.h"
+#include "logging/StreamHandler.h"
 #include <import/io.h>
 #include <import/sys.h>
 
@@ -47,7 +47,7 @@ namespace logging
  * renamed to 'error.log.1', and all future logs will be logged to error.log.
  * This is useful if you would like to keep backups of logs.
  */
-class RotatingFileHandler : public FileHandler
+class RotatingFileHandler : public StreamHandler
 {
 
 public:
@@ -57,14 +57,10 @@ public:
      * \param backupCount   The max number of backups
      * \param level         The minimum LogLevel
      */
-    RotatingFileHandler(const std::string& fname,
-                        long maxBytes = 0,
-                        int backupCount = 0,
-                        LogLevel level = LOG_NOTSET)
-            : FileHandler(fname, level),  mMaxBytes(maxBytes),
-            mBackupCount(backupCount) {}
+    RotatingFileHandler(const std::string& fname, long maxBytes = 0,
+                        int backupCount = 0, LogLevel level = LOG_NOTSET);
 
-    virtual ~RotatingFileHandler() {}
+    virtual ~RotatingFileHandler();
 
 protected:
     virtual void emitRecord(LogRecord* record);
@@ -72,6 +68,7 @@ protected:
     virtual void doRollover();
     long mMaxBytes;
     int mBackupCount;
+    std::string mLogFile;
 
 };
 }

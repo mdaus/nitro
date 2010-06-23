@@ -48,8 +48,8 @@ public:
     //! Constructs a StreamHandler using the specified OutputStream
     StreamHandler(io::OutputStream* stream, LogLevel level = LOG_NOTSET);
 
-    virtual ~StreamHandler(){};
-    virtual void close(){};
+    virtual ~StreamHandler();
+    virtual void close();
 
 protected:
     virtual void emitRecord(LogRecord* record);

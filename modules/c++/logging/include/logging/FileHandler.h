@@ -43,17 +43,16 @@ class FileHandler : public StreamHandler
 {
 
 public:
-    FileHandler(const std::string& fname, LogLevel level = LOG_NOTSET) :
-            StreamHandler(new io::FileOutputStream(fname,
-                                                   sys::File::CREATE), level), mName(fname)
+    FileHandler(const std::string& fname, LogLevel level = LOG_NOTSET,
+                int creationFlags = sys::File::CREATE | sys::File::TRUNCATE) :
+        StreamHandler(new io::FileOutputStream(fname, creationFlags), level)
     {
-        // Append Mode!
-        ((io::FileOutputStream*)mStream.get())->seek(0, io::Seekable::END);
+        // In case we are in append mode
+        ((io::FileOutputStream*) mStream.get())->seek(0, io::Seekable::END);
     }
-    virtual ~FileHandler(){}
-
-protected:
-    std::string mName;
+    virtual ~FileHandler()
+    {
+    }
 
 };
 }

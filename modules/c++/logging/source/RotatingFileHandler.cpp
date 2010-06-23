@@ -26,33 +26,72 @@
 
 #include "logging/RotatingFileHandler.h"
 
+using namespace logging;
 
-void logging::RotatingFileHandler::emitRecord(logging::LogRecord* record)
+RotatingFileHandler::RotatingFileHandler(const std::string& fname,
+                                         long maxBytes, int backupCount,
+                                         LogLevel level) :
+    StreamHandler(level), mLogFile(fname), mMaxBytes(maxBytes),
+            mBackupCount(backupCount)
+{
+    sys::OS os;
+
+    if (os.exists(mLogFile))
+    {
+        mStream.reset(new io::FileOutputStream(mLogFile, sys::File::EXISTING));
+        ((io::FileOutputStream*) mStream.get())->seek(0, io::Seekable::END);
+    }
+    else
+    {
+        //see if we need to make the parent directory
+        std::string parDir = sys::Path::splitPath(mLogFile).first;
+        if (!os.exists(parDir))
+            os.makeDirectory(parDir);
+        mStream.reset(new io::FileOutputStream(mLogFile, sys::File::CREATE));
+    }
+
+    // in case we already have a full log to begin with
+    if (shouldRollover(NULL))
+        doRollover();
+}
+
+RotatingFileHandler::~RotatingFileHandler()
+{
+    // the StreamHandler destructor closes the stream
+}
+
+void RotatingFileHandler::emitRecord(logging::LogRecord* record)
 {
     if (shouldRollover(record))
         doRollover();
-    logging::FileHandler::emitRecord(record);
+    StreamHandler::emitRecord(record);
 }
 
-
-bool logging::RotatingFileHandler::shouldRollover(LogRecord* record)
+bool RotatingFileHandler::shouldRollover(LogRecord* record)
 {
     if (mMaxBytes > 0)
     {
-        std::string msg = format(record);
-        io::FileOutputStream* fos = (io::FileOutputStream*)mStream.get();
+        std::string msg = record ? format(record) : "";
+        io::FileOutputStream* fos = (io::FileOutputStream*) mStream.get();
         sys::Off_T pos = fos->tell();
 
+        // first check if we are at the beginning of the file
+        // if one log message overflows our max bytes, we'll just write it
+        // the other option is to not write it at all - at least this way we
+        // track it
+        if (pos == 0 && msg.length() > mMaxBytes)
+            return false;
+
+        // otherwise, if this message puts us over, we rollover
         if (pos + msg.length() > mMaxBytes)
             return true;
     }
     return false;
 }
 
-
-void logging::RotatingFileHandler::doRollover()
+void RotatingFileHandler::doRollover()
 {
-    io::FileOutputStream* fos = (io::FileOutputStream*)mStream.get();
+    io::FileOutputStream* fos = (io::FileOutputStream*) mStream.get();
     fos->close();
     sys::OS os;
 
@@ -61,9 +100,9 @@ void logging::RotatingFileHandler::doRollover()
         for (int i = mBackupCount - 1; i > 0; --i)
         {
             std::stringstream curName;
-            curName << mName << "." << i;
+            curName << mLogFile << "." << i;
             std::stringstream nextName;
-            nextName << mName << "." << (i + 1);
+            nextName << mLogFile << "." << (i + 1);
             if (os.exists(curName.str()))
             {
                 if (os.exists(nextName.str()))
@@ -73,17 +112,10 @@ void logging::RotatingFileHandler::doRollover()
                 os.move(curName.str(), nextName.str());
             }
         }
-        std::string curName = mName + ".1";
+        std::string curName = mLogFile + ".1";
         if (os.exists(curName))
             os.remove(curName);
-        os.move(mName, curName);
+        os.move(mLogFile, curName);
     }
-
-    //reopen the "new" base filename
-#ifdef USE_IO_STREAMS
-    fos->open(mName.c_str(), std::ios::out | std::ios::app);
-#else
-    fos->create(mName.c_str());
-#endif
+    mStream.reset(new io::FileOutputStream(mLogFile, sys::File::CREATE));
 }
-
