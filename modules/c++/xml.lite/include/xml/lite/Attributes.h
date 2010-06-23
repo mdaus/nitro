@@ -320,7 +320,7 @@ public:
         if (index < mAttributes.size())
         {
             Attributes_T::iterator it = mAttributes.begin();
-            for(int size_t = 0; i < index; ++i, ++it);
+            for(size_t i = 0; i < index; ++i, ++it);
             mAttributes.erase(it);
         }
     }
