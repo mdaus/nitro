@@ -47,9 +47,10 @@ public:
 
     virtual sys::SSize_T read(sys::byte* b, sys::Size_T len)
     {
-        sys::Size_T numToRead = (sys::Size_T)(mAvailable >= len ? len
-                                                                : mAvailable);
-        mAvailable -= numToRead;
+        sys::Size_T numToRead =
+                (mAvailable >= (long) len ? len : (sys::Size_T) mAvailable);
+
+        mAvailable -= (long) numToRead;
 
         if (numToRead == 0)
             throw except::IOException(Ctxt("EOF - no more data to read"));
