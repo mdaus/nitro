@@ -61,6 +61,7 @@
 #include "io/FileOutputStream.h"
 #include "io/Seekable.h"
 #include "io/Serializable.h"
+#include "io/SerializableArray.h"
 #include "io/SerializableFile.h"
 #include "io/StandardStreams.h"
 #include "io/StringStream.h"
