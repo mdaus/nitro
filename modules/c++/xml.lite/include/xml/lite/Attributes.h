@@ -268,13 +268,15 @@ public:
 
     std::string& operator[](std::string s)
     {
-        if (getIndex(s) == -1)
+        int idx = getIndex(s);
+        if (idx < 0)
         {
             AttributeNode node;
             node.setQName(s);
             mAttributes.push_back(node);
+            idx = (int)(mAttributes.size() - 1);
         }
-        return mAttributes[getIndex(s)].getValue();
+        return mAttributes[(size_t)idx].getValue();
     }
 
     /*!
@@ -292,7 +294,9 @@ public:
      */
     void remove(const std::string& qname)
     {
-        remove(getIndex(qname));
+        int idx = getIndex(qname);
+        if (idx >= 0)
+            remove((size_t)idx);
     }
 
     bool contains(const std::string& qname)
@@ -311,12 +315,12 @@ public:
     /**
      * Remove the attribute at the given index (if possible)
      */
-    void remove(int index)
+    void remove(size_t index)
     {
-        if (index >= 0 && index < mAttributes.size())
+        if (index < mAttributes.size())
         {
             Attributes_T::iterator it = mAttributes.begin();
-            for(int i = 0; i < index; ++i, ++it);
+            for(int size_t = 0; i < index; ++i, ++it);
             mAttributes.erase(it);
         }
     }

@@ -55,7 +55,8 @@ class Element
 {
 public:
     //! Default constructor
-    Element() : mParent(NULL)
+    Element() :
+        mParent(NULL)
     {
     }
 
@@ -65,10 +66,9 @@ public:
      * \param uri The uri of the object
      * \param characterData The character data (if any)
      */
-    Element(const std::string & qname,
-            const std::string & uri,
+    Element(const std::string & qname, const std::string & uri,
             std::string characterData = "") :
-        mName(uri, qname), mCharacterData(characterData), mParent(NULL)
+        mParent(NULL), mName(uri, qname), mCharacterData(characterData)
     {
     }
 
@@ -142,9 +142,8 @@ public:
      *  \param qname the QName
      *  \param elements the elements that match the QName
      */
-    void getElementsByTagNameNS(const std::string & qname,
-                                std::vector<Element *>&elements,
-                                bool recurse = false);
+    void getElementsByTagNameNS(const std::string & qname, std::vector<
+            Element *>&elements, bool recurse = false);
 
     /*!
      *  Utility for people that dont like to pass by reference
@@ -164,9 +163,8 @@ public:
      *  \param localName The local name
      *  \param elements The elements
      */
-    void getElementsByTagName(const std::string & localName,
-                              std::vector<Element *>&elements,
-                              bool recurse = false);
+    void getElementsByTagName(const std::string & localName, std::vector<
+            Element *>&elements, bool recurse = false);
 
     /*!
      *  Utility for people that dont like to pass by reference
@@ -194,10 +192,11 @@ public:
      *  \param localName the local name
      *  \param elements the elements that match the QName
      */
-    void getElementsByTagName(const std::string & uri,
-                              const std::string & localName,
-                              std::vector<Element *>&elements,
-                              bool recurse = false);
+    void
+            getElementsByTagName(const std::string & uri,
+                                 const std::string & localName, std::vector<
+                                         Element *>&elements, bool recurse =
+                                         false);
 
     /*!
      *  Prints the element to the specified OutputStream
@@ -222,8 +221,8 @@ public:
      *  \param localName the local name to search for
      *  \return true if it exists, false if not
      */
-    bool hasElement(const std::string & uri,
-                    const std::string & localName) const;
+    bool
+            hasElement(const std::string & uri, const std::string & localName) const;
 
     /*!
      *  Returns the character data of this element.
@@ -337,9 +336,9 @@ protected:
 
     void changeURI(Element* element, std::string prefix, std::string uri);
 
-    void depthPrint(io::OutputStream & stream,
-                    int depth,
-                    std::string formatter);
+    void
+            depthPrint(io::OutputStream & stream, int depth,
+                       std::string formatter);
 
     Element* mParent;
     //! The children of this element

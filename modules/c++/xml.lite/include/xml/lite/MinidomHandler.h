@@ -68,7 +68,7 @@ class MinidomHandler : public ContentHandler
 public:
     //! Constructor.  Uses default document
     MinidomHandler() :
-        mDocument(NULL), mPreserveCharData(false), mOwnDocument(true)
+        mDocument(NULL), mOwnDocument(true), mPreserveCharData(false)
     {
         setDocument(new Document());
     }
