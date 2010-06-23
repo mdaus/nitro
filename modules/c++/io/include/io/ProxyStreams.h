@@ -146,8 +146,8 @@ class ToggleOutputStream : public io::ProxyOutputStream
 {
 public:
     ToggleOutputStream(io::OutputStream *output = NULL, bool ownPtr = false) :
-        io::ProxyOutputStream(NULL), mPtr(output), mOwnPtr(ownPtr),
-                mNullStream(new io::NullOutputStream)
+        io::ProxyOutputStream(NULL), mPtr(output),
+                mNullStream(new io::NullOutputStream), mOwnPtr(ownPtr)
     {
         setEnabled(mPtr != NULL);
     }
