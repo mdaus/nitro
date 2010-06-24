@@ -21,6 +21,7 @@
  */
 
 #include "xml/lite/Element.h"
+#include <import/str.h>
 
 /*==================================================*/
 /* This marks the start of tree element code        */
@@ -278,18 +279,30 @@ void xml::lite::Element::changeURI(Element* element,
 
 void xml::lite::Element::setNamespacePrefix(std::string prefix, std::string uri)
 {
+    str::trim(prefix);
     changePrefix(this, prefix, uri);
 
     // Add namespace definition
     ::xml::lite::Attributes& attr = getAttributes();
-    attr[std::string("xmlns:") + prefix] = uri;
+
+    std::string p("xmlns");
+    if (!prefix.empty())
+        p += std::string(":") + prefix;
+    attr[p] = uri;
 }
 
 void xml::lite::Element::setNamespaceURI(std::string prefix, std::string uri)
 {
+    str::trim(prefix);
     changeURI(this, prefix, uri);
 
     // Add namespace definition
     ::xml::lite::Attributes& attr = getAttributes();
+
+    std::string p("xmlns");
+    if (!prefix.empty())
+        p += std::string(":") + prefix;
+    attr[p] = uri;
+
     attr[std::string("xmlns:") + prefix] = uri;
 }
