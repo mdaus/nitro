@@ -1,6 +1,6 @@
 NAME            = 'nitf'
 MAINTAINER      = 'tzellman@users.sourceforge.net gojira1@users.sourceforge.net'
-VERSION         = '2.5-rc9'
+VERSION         = '2.5-rc10'
 MODULE_DEPS     = 'mt sys'
 USELIB          = 'THREAD DL'
 USELIB_LOCAL    = 'nitf-c'

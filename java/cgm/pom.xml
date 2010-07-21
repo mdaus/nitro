@@ -53,7 +53,7 @@
     </developers>
 
     <properties>
-        <nitro.version>2.5-rc9</nitro.version>
+        <nitro.version>2.5-rc10</nitro.version>
         <log4j.version>1.2.14</log4j.version>
         <commons-logging.version>1.1.1</commons-logging.version>
         <commons-lang.version>2.4</commons-lang.version>

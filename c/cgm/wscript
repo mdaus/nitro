@@ -2,7 +2,7 @@ import Options
 
 NAME            = 'cgm'
 MAINTAINER      = 'tzellman@users.sourceforge.net gojira_1@users.sourceforge.net'
-VERSION         = '2.5-rc9'
+VERSION         = '2.5-rc10'
 MODULE_DEPS     = 'nitf'
 LANG            = 'c'
 USELIB_LOCAL    = 'nitf-c'
