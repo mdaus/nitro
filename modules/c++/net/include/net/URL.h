@@ -104,6 +104,7 @@ protected:
     friend class URLBuilder;
     std::string mProtocol;
     std::string mHost;
+    int mPort;
     std::string mPath;
     URLParams mParams;
     std::string mFragment;

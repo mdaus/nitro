@@ -59,6 +59,12 @@ public:
         return *this;
     }
 
+    URLBuilder& setPort(int port)
+    {
+        mURL.mPort = port;
+        return *this;
+    }
+
     URLBuilder& setFragment(const std::string fragment)
     {
         mURL.mFragment = fragment;

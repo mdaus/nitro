@@ -39,5 +39,6 @@
 #include "net/AllocStrategy.h"
 #include "net/NetUtils.h"
 #include "net/URLBuilder.h"
+#include "net/Daemon.h"
 
 #endif

@@ -30,13 +30,13 @@ std::vector<std::string> net::urlSplit(std::string url)
 {
     re::PCRE regex;
     regex.compile(
-            "([A-Za-z]+)://([^/?#]+)(/[^?#]+)?(?:[?]([^&#/]+(?:[&;][^&;#/]+)*)?)?(?:[#](.*))?");
+                  "([A-Za-z]+)://([^/?#:]+)(?::(\\d+))?(/[^?#:]+)?(?:[?]([^&#/]+(?:[&;][^&;#/]+)*)?)?(?:[#](.*))?");
 
     re::PCREMatch match;
     if (regex.match(url, match))
     {
         size_t matchLen = match.size();
-        std::vector<std::string> parts(5, "");
+        std::vector < std::string > parts(6, "");
         for (int i = 1; i <= 6; ++i)
         {
             if (i < matchLen)
@@ -44,7 +44,7 @@ std::vector<std::string> net::urlSplit(std::string url)
         }
 
         //unquote the query string
-        parts[3] = net::unquote(parts[3]);
+        parts[4] = net::unquote(parts[4]);
 
         return parts;
     }
@@ -54,11 +54,13 @@ std::vector<std::string> net::urlSplit(std::string url)
     }
 }
 
-std::string net::urlJoin(std::string scheme, std::string location,
+std::string net::urlJoin(std::string scheme, std::string location, int port,
         std::string path, std::string query, std::string fragment)
 {
     std::ostringstream url;
     url << scheme << "://" << location;
+    if (port >= 0)
+        url << ":" << port;
     if (!path.empty())
     {
         if (!str::startsWith(path, "/"))
@@ -78,19 +80,30 @@ std::string net::urlJoin(const std::vector<std::string>& parts)
     if (numParts < 2)
         throw net::MalformedURLException("No URL provided");
     std::string scheme, location, path, query, fragment;
-    scheme = parts[0];
-    location = parts[1];
-    if (numParts > 2)
+    int port = -1;
+    size_t idx = 0;
+    scheme = parts[idx++];
+    location = parts[idx++];
+    if (numParts > idx)
     {
-        path = parts[2];
-        if (numParts > 3)
+        re::PCRE regex;
+        regex.compile("\\d+");
+        re::PCREMatch match;
+        if (regex.match(parts[idx], match))
+            port = str::toType<int>(parts[idx++]);
+
+        if (numParts > idx)
         {
-            query = parts[3];
-            if (numParts > 4)
-                fragment = parts[4];
+            path = parts[idx++];
+            if (numParts > idx)
+            {
+                query = parts[idx++];
+                if (numParts > idx)
+                    fragment = parts[idx++];
+            }
         }
     }
-    return urlJoin(scheme, location, path, query, fragment);
+    return urlJoin(scheme, location, port, path, query, fragment);
 }
 
 std::string net::quote(std::string s)
@@ -112,7 +125,7 @@ std::string net::quote(std::string s)
 std::string net::unquote(std::string s)
 {
     std::ostringstream unquoted;
-    std::vector<std::string> parts = str::split(s, "%");
+    std::vector < std::string > parts = str::split(s, "%");
     size_t numParts = parts.size();
     if (numParts > 0)
         unquoted << parts[0];

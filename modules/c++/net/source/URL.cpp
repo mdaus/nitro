@@ -24,7 +24,7 @@
 #include <import/str.h>
 #include <import/re.h>
 
-net::URL::URL(const std::string url)
+net::URL::URL(const std::string url) : mPort(-1)
 {
     if (!url.empty())
         set(url);
@@ -41,12 +41,13 @@ net::URL::URL(const net::URL& url)
 
 void net::URL::set(std::string url)
 {
-    std::vector<std::string> parts = net::urlSplit(url);
+    std::vector < std::string > parts = net::urlSplit(url);
     mProtocol = parts[0];
     mHost = parts[1];
-    mPath = parts[2];
-    std::string params = parts[3];
-    mFragment = parts[4];
+    mPort = parts[2].empty() ? -1 : str::toType<int>(parts[2]);
+    mPath = parts[3];
+    std::string params = parts[4];
+    mFragment = parts[5];
     mParams = net::URLParams(params);
 }
 
@@ -60,14 +61,7 @@ std::string net::URL::getHost() const
 }
 int net::URL::getPort() const
 {
-    re::PCRE regex;
-    regex.compile("[^:]:(\\d+)");
-    re::PCREMatch match;
-    if (regex.match(getHost(), match))
-    {
-        return str::toType<int>(match[1]);
-    }
-    return net::DEFAULT_PORT_HTTP;
+    return mPort;
 }
 std::string net::URL::getPath() const
 {
@@ -101,14 +95,17 @@ std::string net::URL::getDocument() const
 std::string net::URL::getServer() const
 {
     std::ostringstream server;
-    server << getProtocol() << "://" << getHost();
+    server << getHost();
+    int port = getPort();
+    if (port >= 0)
+        server << ":" << port;
     return server.str();
 }
 
 std::string net::URL::toString() const
 {
-    return net::urlJoin(getProtocol(), getHost(), getPath(), getQuery(),
-                        getFragment());
+    return net::urlJoin(getProtocol(), getHost(), getPort(), getPath(),
+                        getQuery(), getFragment());
 }
 
 bool net::URL::operator==(const net::URL& url) const
@@ -121,7 +118,8 @@ net::URLParams::URLParams(const std::string paramString)
     if (!paramString.empty())
     {
         str::Tokenizer tokenizer(paramString, "&;"); //can be & or ;
-        str::Tokenizer::Tokens& paramParts = (str::Tokenizer::Tokens&)tokenizer;
+        str::Tokenizer::Tokens& paramParts =
+                (str::Tokenizer::Tokens&) tokenizer;
         for (size_t i = 0, size = paramParts.size(); i < size; ++i)
         {
             std::string param = paramParts[i];
@@ -144,7 +142,8 @@ bool net::URLParams::contains(std::string key) const
     return it != mParams.end() && it->second.size() > 0;
 }
 
-net::URLParams::ParamValues& net::URLParams::get(std::string key) throw (except::NoSuchKeyException)
+net::URLParams::ParamValues& net::URLParams::get(std::string key)
+        throw (except::NoSuchKeyException)
 {
     net::URLParams::Params::iterator it = mParams.find(key);
     if (it == mParams.end() || it->second.size() == 0)
@@ -152,14 +151,16 @@ net::URLParams::ParamValues& net::URLParams::get(std::string key) throw (except:
     return it->second;
 }
 
-const net::URLParams::ParamValues& net::URLParams::get(std::string key) const throw (except::NoSuchKeyException)
+const net::URLParams::ParamValues& net::URLParams::get(std::string key) const
+        throw (except::NoSuchKeyException)
 {
     net::URLParams::Params::const_iterator it = mParams.find(key);
     if (it == mParams.end() || it->second.size() == 0)
         throw except::NoSuchKeyException(Ctxt(key));
     return it->second;
 }
-std::string net::URLParams::getFirst(std::string key) const throw (except::NoSuchKeyException)
+std::string net::URLParams::getFirst(std::string key) const
+        throw (except::NoSuchKeyException)
 {
     net::URLParams::Params::const_iterator it = mParams.find(key);
     if (it == mParams.end() || it->second.size() == 0)
@@ -187,8 +188,8 @@ std::string net::URLParams::toString() const
     {
         std::string key = it->first;
         const net::URLParams::ParamValues& vals = it->second;
-        for (net::URLParams::ParamValues::const_iterator it2 = vals.begin();
-                it2 != vals.end(); ++it2)
+        for (net::URLParams::ParamValues::const_iterator it2 = vals.begin(); it2
+                != vals.end(); ++it2)
         {
             if (!firstParam)
                 s << "&";

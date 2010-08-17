@@ -48,8 +48,9 @@ std::vector<std::string> urlSplit(std::string url);
 /**
  * Joins the given url components into a url string
  */
-std::string urlJoin(std::string scheme, std::string location, std::string path =
-        "", std::string query = "", std::string fragment = "");
+std::string urlJoin(std::string scheme, std::string location, int port = -1,
+        std::string path = "", std::string query = "", std::string fragment =
+                "");
 
 /**
  * Joins the url components given in the vector into a url string

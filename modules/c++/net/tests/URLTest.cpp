@@ -46,6 +46,7 @@ int main(int argc, char **argv)
         cout << "path: " << url.getPath() << endl;
         cout << "query: " << url.getQuery() << endl;
         cout << "fragment: " << url.getFragment() << endl;
+        cout << "server: " << url.getServer() << endl;
         cout << "Url: " << url.toString() << endl;
     }
     catch (Throwable& t)
