@@ -186,7 +186,7 @@ public:
     _T dot(const VectorN<_ND>& vec) const
     {
         _T acc(0);
-        for (unsigned int i = 0; i < _ND; ++i)
+        for (size_t i = 0; i < _ND; ++i)
         {
             acc += (*this)[i] * vec[i];
         }

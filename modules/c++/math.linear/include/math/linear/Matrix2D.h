@@ -987,7 +987,7 @@ template<typename _T>
             }
         }
     }
-    for (size_t k = N - 1; k >= 0; k--) {
+    for (sys::SSize_T k = N - 1; k >= 0; k--) {
         for (size_t j = 0; j < P; j++) {
             x(k, j) /= lu(k, k);
         }
