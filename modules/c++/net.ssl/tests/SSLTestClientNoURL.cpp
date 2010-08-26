@@ -36,43 +36,42 @@ const static std::string SEND_THIS = "Hello, Server";
 
 int main(int argc, char **argv)
 {
-    #if defined(USE_OPENSSL)
+#if defined(USE_OPENSSL)
     try
     {
-	if (argc != 3)
-	    throw(Exception(FmtX("Usage: %s <host> <port>", argv[0])));
+        if (argc != 3)
+        throw(Exception(FmtX("Usage: %s <host> <port>", argv[0])));
 
+        std::string host(argv[1]);
+        int port(atoi(argv[2]));
 
-	std::string host(argv[1]);
-	int port(atoi(argv[2]));
-	
- 	cout << host << endl;
- 	cout << port << endl;
+        cout << host << endl;
+        cout << port << endl;
 
- 	cout << "Connecting to: " << host << ":" << port << endl;
-	URL url(host, port);
+        cout << "Connecting to: " << host << ":" << port << endl;
+        URL url(host, port);
 
- 	net::ssl::SSLConnectionClientFactory clientBuilder;
-	NetConnection * toUrl = clientBuilder.create(url);
+        net::ssl::SSLConnectionClientFactory clientBuilder;
+        NetConnection * toUrl = clientBuilder.create(url);
 
-  	cout << "Sending this to Url: " << SEND_THIS << endl;
+        cout << "Sending this to Url: " << SEND_THIS << endl;
         // Send a block
-	sys::byte sendThis[128] = "Hello, Server";
-	toUrl->write(sendThis, 128);
+        sys::byte sendThis[128] = "Hello, Server";
+        toUrl->write(sendThis, 128);
 
         // Recv a block
         sys::byte recvThis[128];
         memset(recvThis, 0, 128);
         toUrl->read(recvThis, 128);
         cout << "Received response: \"" << recvThis << "\" Back from server" << endl;
- 
-	clientBuilder.destroy(toUrl);
+
+        clientBuilder.destroy(toUrl);
     }
     catch (except::Throwable& t)
     {
-	cout << t.getMessage() << endl;
-	exit(EXIT_FAILURE);
+        cout << t.toString() << endl;
+        exit(EXIT_FAILURE);
     }
-    #endif
+#endif
 }
 

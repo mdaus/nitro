@@ -44,30 +44,31 @@ int main(int argc, char **argv)
         s = 1.21f;
         std::cout << s << std::endl;
 
-        for(String::iterator it = s.begin(); it != s.end(); ++it)
+        for (String::iterator it = s.begin(); it != s.end(); ++it)
             std::cout << *it << std::endl;
 
         s = "All work and no play makes Tom a dull\nboy";
         std::cout << s.toUpperCase() << std::endl;
-        std::vector<String> parts = s.split("\\s");
+        std::vector < String > parts = s.split("\\s");
         std::cout << parts.size() << std::endl;
-        for(std::vector<String>::iterator it = parts.begin();
-                it != parts.end(); ++it)
+        for (std::vector<String>::iterator it = parts.begin(); it
+                != parts.end(); ++it)
             std::cout << *it << std::endl;
 
         std::cout << s.matches(".*Tom.*") << std::endl;
         std::cout << s.matches(".*Goof.*") << std::endl;
 
         std::cout << s.contains('z') << std::endl;
-        std::cout << s.indexOf('z') << std::endl;
+        std::cout << (s.indexOf('z') == String::npos) << std::endl;
         std::cout << s.indexOf("dull") << std::endl;
-        std::cout << String("real american hero").lastIndexOf('r') << std::endl;
+        std::cout << String("real american hero").lastIndexOf(String('r'))
+                << std::endl;
 
         s = "gonnaBlowUp";
         std::cout << s.substring(2, 1) << std::endl;
     }
-    catch(except::Exception& e)
+    catch (except::Exception& e)
     {
-        std::cout << "Error: " << e.getMessage() << std::endl;
+        std::cout << "Error: " << e.toString() << std::endl;
     }
 }

@@ -20,7 +20,6 @@
  *
  */
 
-
 #include <import/sys.h>
 using namespace sys;
 using namespace std;
@@ -30,15 +29,15 @@ using namespace std;
 class TestThread : public Thread
 {
 public:
-    TestThread(int *val) 
+    TestThread(int *val)
     {
 
         mVal = val;
-	std::cout << "Constructing thread with value " << *mVal << std::endl;
+        std::cout << "Constructing thread with value " << *mVal << std::endl;
     }
     ~TestThread()
     {
-	std::cout << "Destructing thread with value " << *mVal << std::endl;
+        std::cout << "Destructing thread with value " << *mVal << std::endl;
         delete mVal;
     }
 
@@ -56,44 +55,44 @@ int main()
 
     try
     {
-	for (int i = 0; i < 5; i++)
-	{
-	    tAry[i] = new TestThread(new int(i + 1));
-	    tAry[i]->start();
-	}
-//         TestThread(new int(1)).start();	
-//         TestThread(new int(2)).start();	
-//         TestThread(new int(3)).start();	
-//         TestThread(new int(4)).start();	
-//         TestThread(new int(5)).start();	
+        for (int i = 0; i < 5; i++)
+        {
+            tAry[i] = new TestThread(new int(i + 1));
+            tAry[i]->start();
+        }
+        //         TestThread(new int(1)).start();
+        //         TestThread(new int(2)).start();
+        //         TestThread(new int(3)).start();
+        //         TestThread(new int(4)).start();
+        //         TestThread(new int(5)).start();
 
-	for (int i = 0; i < 5; i++)
-	{
-	    tAry[i]->join();
-	}
-	while (tAry.size())
-	{
-	    TestThread *t = tAry.back();
-	    tAry.pop_back();
-	    delete t;
-	}
+        for (int i = 0; i < 5; i++)
+        {
+            tAry[i]->join();
+        }
+        while (tAry.size())
+        {
+            TestThread *t = tAry.back();
+            tAry.pop_back();
+            delete t;
+        }
 
     }
     catch (except::Exception& e)
     {
-	cout << e.getMessage() << endl;
+        cout << e.toString() << endl;
     }
     catch (...)
     {
-	cout << "Unknown exception" << endl;
+        cout << "Unknown exception" << endl;
     }
     return 0;
 };
 #else
 int main()
 {
-	std::cout << "sys is not Multithreaded" << std::endl;
-	return 0;
+    std::cout << "sys is not Multithreaded" << std::endl;
+    return 0;
 }
 
 #endif

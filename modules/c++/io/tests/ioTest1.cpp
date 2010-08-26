@@ -31,26 +31,27 @@ int main(int argc, char **argv)
 {
     try
     {
-    if (argc != 3)
-    {
-	throw Exception(Ctxt(FmtX("Usage: %s <input file> <output file>", argv[0])));
-    }
+        if (argc != 3)
+        {
+            throw Exception(Ctxt(FmtX("Usage: %s <input file> <output file>",
+                                      argv[0])));
+        }
 
-    FileInputStream  fis(argv[1]);
-    FileOutputStream fos(argv[2]);
-    fis.streamTo(fos);
+        FileInputStream fis(argv[1]);
+        FileOutputStream fos(argv[2]);
+        fis.streamTo(fos);
 
-    fis.close();
-    fos.close();
+        fis.close();
+        fos.close();
     }
     catch (Throwable& t)
     {
-	cout << "Caught throwable: " << t.getMessage() << std::endl;
+        cout << "Caught throwable: " << t.toString() << std::endl;
     }
     catch (...)
     {
-	cout << "Caught unnamed exception" << endl;
+        cout << "Caught unnamed exception" << endl;
     }
-    
+
     return 0;
 }

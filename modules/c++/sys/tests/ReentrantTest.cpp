@@ -20,22 +20,21 @@
  *
  */
 
-
 #include <iostream>
 #include <import/sys.h>
 using namespace sys;
 
-
-
-
 #if defined(_REENTRANT)
 class NoteThread : public Thread
 {
-	public:
-		NoteThread() { std::cout << "Constructed a thread" << std::endl; }
-		void run() { std::cout << "Running a thread" << std::endl; }
+public:
+    NoteThread()
+    {   std::cout << "Constructed a thread" << std::endl;}
+    void run()
+    {   std::cout << "Running a thread" << std::endl;}
 
-		~NoteThread() { std::cout << "Completed a thread. Destroying..." << std::endl; }
+    ~NoteThread()
+    {   std::cout << "Completed a thread. Destroying..." << std::endl;}
 
 };
 #endif
@@ -44,34 +43,34 @@ int main()
 #if defined(_REENTRANT)
     try
     {
-	std::cout << "Your implementation of sys is multi-threaded" << std::endl;
-	NoteThread* nThr = new NoteThread;
-	std::cout << "Your thread type is: " << nThr->getNativeType() << std::endl;
-	
-	nThr->start();
-	nThr->join();
-	delete nThr;
-	std::cout << "Exiting" << std::endl;	
+        std::cout << "Your implementation of sys is multi-threaded" << std::endl;
+        NoteThread* nThr = new NoteThread;
+        std::cout << "Your thread type is: " << nThr->getNativeType() << std::endl;
+
+        nThr->start();
+        nThr->join();
+        delete nThr;
+        std::cout << "Exiting" << std::endl;
     }
 
     catch (except::Throwable& t)
     {
-	std::cout << "Caught throwable: " << t.getMessage() << std::endl;
-	
+        std::cout << "Caught throwable: " << t.toString() << std::endl;
+
     }
     catch (std::exception& e)
     {
-	std::cout << "Caught stl exception: " << e.what() << std::endl;
+        std::cout << "Caught stl exception: " << e.what() << std::endl;
     }
     catch (...)
     {
-	std::cout << "Caught unknown exception" << std::endl;
+        std::cout << "Caught unknown exception" << std::endl;
     }
 #else
-	
-	std::cout << "Your implementation of sys is single-threaded" << std::endl;
+
+    std::cout << "Your implementation of sys is single-threaded" << std::endl;
 #endif
-	return 0;
+    return 0;
 
 }
 

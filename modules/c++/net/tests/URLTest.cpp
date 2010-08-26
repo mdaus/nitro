@@ -51,8 +51,7 @@ int main(int argc, char **argv)
     }
     catch (Throwable& t)
     {
-        cout << "Caught Throwable: " << t.getType() << ":" << t.getMessage()
-                << endl;
+        cout << "Caught Throwable: " << t.toString() << endl;
     }
     return 0;
 }

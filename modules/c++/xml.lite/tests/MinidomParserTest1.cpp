@@ -68,7 +68,7 @@ int main(int argc, char **argv)
     // Catch all throwables and exit in a reasonable manner
     catch (Throwable & t)
     {
-        cout << "Caught Throwable: " << t.getMessage() << endl;
+        cout << "Caught Throwable: " << t.toString() << endl;
 
         // If we caught an exception, exit unfavorably.
         exit(EXIT_FAILURE);

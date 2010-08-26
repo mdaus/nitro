@@ -29,13 +29,11 @@
 #include "net/SingleThreadedAllocStrategy.h"
 #include "net/NetConnectionServer.h"
 
-
 using namespace std;
 using namespace io;
 using namespace except;
 using namespace sys;
 using namespace net;
-
 
 const static std::string SEND_THIS = "Hello, Client";
 
@@ -47,15 +45,17 @@ class EchoHandler : public net::RequestHandler
 {
 public:
     EchoHandler()
-    {}
+    {
+    }
     ~EchoHandler()
-    {}
-    void operator() (net::NetConnection* conn)
+    {
+    }
+    void operator()(net::NetConnection* conn)
     {
         char buf[MAX_BUF_SIZE];
         int length;
-        conn->read((char*)&length, 4);
-        assert( length <= (MAX_BUF_SIZE - strlen(RET_STR)));
+        conn->read((char*) &length, 4);
+        assert(length <= (MAX_BUF_SIZE - strlen(RET_STR)));
         conn->read(buf, length);
         buf[length] = 0;
         std::cout << "Recieved: " << buf << std::endl;
@@ -63,12 +63,11 @@ public:
         memcpy(&buf[length], RET_STR, strlen(RET_STR));
         length = length + strlen(RET_STR);
         buf[length] = 0;
-        conn->write((const char*)&length, 4);
-        conn->write((const char*)buf, length);
+        conn->write((const char*) &length, 4);
+        conn->write((const char*) buf, length);
 
     }
 };
-
 
 int main(int argc, char **argv)
 {
@@ -77,26 +76,26 @@ int main(int argc, char **argv)
         if (argc < 2)
             throw(Exception(FmtX("Usage: %s <port> (-mt|-st|-tp)", argv[0])));
 
-	net::AllocStrategy* strategy = NULL;
+        net::AllocStrategy* strategy = NULL;
 
-	if (argc == 3)
-	{
-	    std::string arg(argv[2]);
-	    if (arg == "-mt")
-		strategy = new net::PerRequestThreadAllocStrategy();
-	    else if (arg == "-tp")
-		strategy = new net::ThreadPoolAllocStrategy(2);
-	    else if (arg == "-st")
-		strategy = new net::SingleThreadedAllocStrategy();
-	}
-        net::NetConnectionServer server;	
-	server.initialize(new DefaultRequestHandlerFactory<EchoHandler>(),
-			  strategy);
+        if (argc == 3)
+        {
+            std::string arg(argv[2]);
+            if (arg == "-mt")
+                strategy = new net::PerRequestThreadAllocStrategy();
+            else if (arg == "-tp")
+                strategy = new net::ThreadPoolAllocStrategy(2);
+            else if (arg == "-st")
+                strategy = new net::SingleThreadedAllocStrategy();
+        }
+        net::NetConnectionServer server;
+        server.initialize(new DefaultRequestHandlerFactory<EchoHandler>(),
+                          strategy);
         server.create(atoi(argv[1]));
     }
     catch (except::Throwable& t)
     {
-        cout << t.getMessage() << endl;
-        exit(EXIT_FAILURE);
+        cout << t.toString() << endl;
+        exit( EXIT_FAILURE);
     }
 }

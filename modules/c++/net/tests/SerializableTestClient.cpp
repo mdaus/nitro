@@ -57,21 +57,22 @@ int main(int argc, char **argv)
 
         char buffer[20] = "HELLO WORLD!";
 
-        outData.write((sys::byte*)buffer, sizeof(buffer));
+        outData.write((sys::byte*) buffer, sizeof(buffer));
 
         cout << "Sending this to Url: " << buffer << endl;
         // Send a block
 
         myConn.write(outData);
         myConn.read(inData);
-        inData.read((sys::byte*)buffer, sizeof(buffer));
-        cout << "Received response: \"" << buffer << "\" Back from server" << endl;
+        inData.read((sys::byte*) buffer, sizeof(buffer));
+        cout << "Received response: \"" << buffer << "\" Back from server"
+                << endl;
 
         clientBuilder.destroy(toUrl);
     }
     catch (except::Throwable& t)
     {
-        cout << t.getMessage() << endl;
-        exit(EXIT_FAILURE);
+        cout << t.toString() << endl;
+        exit( EXIT_FAILURE);
     }
 }

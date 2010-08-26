@@ -133,7 +133,7 @@ int main(int argc, char **argv)
     }    // Catch all throwables and exit in a reasonable manner
     catch (Throwable & t)
     {
-        cout << t.getMessage() << endl;
+        cout << t.toString() << endl;
         // If we caught an exception, exit unfavorably.
         exit(EXIT_FAILURE);
     }

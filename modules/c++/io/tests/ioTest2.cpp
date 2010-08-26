@@ -31,15 +31,15 @@ class Copy
 public:
     static void run(const char* src, const char* dest)
     {
-	FileInputStream  in(src);
-	FileOutputStream out(dest);
-	int c;
-	unsigned char buf[25] = "";
-	
-	while ((c = in.read((sys::byte*)buf, 25)) != FileInputStream::IS_EOF)
-	    out.write((sys::byte*)buf, c);
-	in.close();
-	out.close();
+        FileInputStream in(src);
+        FileOutputStream out(dest);
+        int c;
+        unsigned char buf[25] = "";
+
+        while ((c = in.read((sys::byte*) buf, 25)) != FileInputStream::IS_EOF)
+            out.write((sys::byte*) buf, c);
+        in.close();
+        out.close();
     }
 };
 
@@ -47,15 +47,14 @@ int main(int argc, char **argv)
 {
     try
     {
-	if (argc != 3)
-	    throw Exception(Ctxt("argc != 3"));
+        if (argc != 3)
+            throw Exception(Ctxt("argc != 3"));
 
-	Copy::run(argv[1], argv[2]);
+        Copy::run(argv[1], argv[2]);
     }
     catch (Exception& e)
     {
-	cout << e.getMessage() << endl;
-        cout << e.getTrace() << endl;
+        cout << e.toString() << endl;
     }
 
 }

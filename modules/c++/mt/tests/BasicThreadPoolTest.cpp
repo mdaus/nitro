@@ -36,52 +36,56 @@ using namespace sys;
 using namespace mt;
 using namespace std;
 
-
-
 const int NUM_TASKS = 5;
 const int TO_SLEEP = 2;
 
 class MyRunTask : public Runnable
-{   Semaphore& mSem;
+{
+    Semaphore& mSem;
 public:
-    MyRunTask(Semaphore& sem) : mSem(sem) {}
-    virtual ~MyRunTask() {}
+    MyRunTask(Semaphore& sem) :
+        mSem(sem)
+    {
+    }
+    virtual ~MyRunTask()
+    {
+    }
 
     virtual void run()
     {
-	sleep(TO_SLEEP);
+        sleep(TO_SLEEP);
         mSem.signal();
     }
 };
 
-int main (int argc, char *argv[])
+int main(int argc, char *argv[])
 {
     try
     {
-	// Semaphore inited at 0
- 	Semaphore sem;
+        // Semaphore inited at 0
+        Semaphore sem;
 
-	// Create a thread pool of size 2
-        BasicThreadPool<GenericRequestHandler> pool(2);
-	
-	for (int i = 0; i < NUM_TASKS; i++)
-	{
-	    pool.addRequest(new MyRunTask(sem) );
-	}
+        // Create a thread pool of size 2
+        BasicThreadPool < GenericRequestHandler > pool(2);
+
+        for (int i = 0; i < NUM_TASKS; i++)
+        {
+            pool.addRequest(new MyRunTask(sem));
+        }
         pool.start();
 
-	for (int i = 0; i < NUM_TASKS; i++)
-	{
-	    sem.wait();
-	}
-	
+        for (int i = 0; i < NUM_TASKS; i++)
+        {
+            sem.wait();
+        }
+
         std::cout << "Finished all" << std::endl;
 
     }
-    
+
     catch (except::Throwable& t)
     {
-	cout << "Exception Caught: " << t.getMessage() << endl;
+        cout << "Exception Caught: " << t.toString() << endl;
     }
     catch (...)
     {

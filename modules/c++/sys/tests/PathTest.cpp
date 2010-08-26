@@ -20,7 +20,6 @@
  *
  */
 
-
 #include <import/sys.h>
 #include <fstream>
 #include <iomanip>
@@ -32,10 +31,9 @@ int main(int argc, char **argv)
     try
     {
         sys::OS os;
-        std::string fileName = os.getCurrentWorkingDirectory() + 
-                                 os.getDelimiter() + ".." +
-                                 os.getDelimiter() + "blah.txt";
-        
+        std::string fileName = os.getCurrentWorkingDirectory()
+                + os.getDelimiter() + ".." + os.getDelimiter() + "blah.txt";
+
         std::cout << "File Name as string: " << fileName << std::endl;
 
         Path parentPath(os.getCurrentWorkingDirectory(), "..");
@@ -43,63 +41,85 @@ int main(int argc, char **argv)
         std::cout << "File Name as path: " << filePath.getPath() << std::endl;
 
         Path::StringPair parts = Path::splitPath(fileName);
-        std::cout << "1) " << parts.first << " --- " << parts.second << std::endl;
-        
+        std::cout << "1) " << parts.first << " --- " << parts.second
+                << std::endl;
+
         parts = filePath.split();
-        std::cout << "2) " << parts.first << " --- " << parts.second << std::endl;
+        std::cout << "2) " << parts.first << " --- " << parts.second
+                << std::endl;
         parts = Path::splitDrive("c:/junk.txt");
-        std::cout << "1) " << parts.first << " --- " << parts.second << std::endl;
+        std::cout << "1) " << parts.first << " --- " << parts.second
+                << std::endl;
         filePath = Path("c:/junk.txt");
         parts = filePath.splitDrive();
-        std::cout << "2) " << parts.first << " --- " << parts.second << std::endl;
+        std::cout << "2) " << parts.first << " --- " << parts.second
+                << std::endl;
         filePath = Path("/data/nitf///data/vendor1.ntf");
 
-        std::string base = 
-            Path::basename("/data/nitf///data/vendor1.ntf", true);
+        std::string base =
+                Path::basename("/data/nitf///data/vendor1.ntf", true);
         std::cout << "1) " << base << std::endl;
-        
+
         base = filePath.getBasePath(true);
         std::cout << "2) " << base << std::endl;
 
-
         parts = Path::splitPath("/data.txt");
         std::cout << parts.first << " --- " << parts.second << std::endl;
-        
+
         parts = Path::splitExt(fileName);
         std::cout << parts.first << " --- " << parts.second << std::endl;
-        
+
         parts = Path::splitExt(Path::splitPath(fileName).second);
         std::cout << parts.first << " --- " << parts.second << std::endl;
-        
-        std::cout << Path::normalizePath(fileName) << std::endl;
-        std::cout << Path::normalizePath("c:/data/nitf/data/vendor1.ntf") << std::endl;
-        std::cout << Path("/data/nitf///data/vendor1.ntf").normalize() << std::endl;
-        
-        
 
-        std::cout << Path::normalizePath("/data/nitf///data/../vendor1.ntf") << std::endl;
-        
-        std::cout << Path::normalizePath("../data/../../..//./nitf///data/../vendor1.ntf") << std::endl;
-        
-        std::cout << Path::normalizePath("data/junk/tzellman/../../../../../..///./nitf///data/../vendor1.ntf") << std::endl;
-        
-        std::cout << "1) " << Path("/data/junk/", "test.txt").getPath() << std::endl;
-        std::cout << "2) " <<Path::joinPaths("/data/junk/", "///test.txt") << std::endl;
-        std::cout << "3) " << Path("/data/junk/").join("/test.txt").getPath() << std::endl;
-        std::cout << "4) " << Path::joinPaths("/data/junk", "test.txt") << std::endl;
-        std::cout << Path("data/junk/tzellman/../../../../../..///./nitf///data/../vendor1.ntf").getAbsolutePath() << std::endl;
-        std::cout << Path::normalizePath("data/junk/tzellman/../../../../../..///./nitf///data/../vendor1.ntf") << std::endl;
-        std::cout << Path::absolutePath("c:/data/junk/tzellman/../../../../../..///./nitf///data/../vendor1.ntf") << std::endl;
+        std::cout << Path::normalizePath(fileName) << std::endl;
+        std::cout << Path::normalizePath("c:/data/nitf/data/vendor1.ntf")
+                << std::endl;
+        std::cout << Path("/data/nitf///data/vendor1.ntf").normalize()
+                << std::endl;
+
+        std::cout << Path::normalizePath("/data/nitf///data/../vendor1.ntf")
+                << std::endl;
+
+        std::cout
+                << Path::normalizePath(
+                                       "../data/../../..//./nitf///data/../vendor1.ntf")
+                << std::endl;
+
+        std::cout
+                << Path::normalizePath(
+                                       "data/junk/tzellman/../../../../../..///./nitf///data/../vendor1.ntf")
+                << std::endl;
+
+        std::cout << "1) " << Path("/data/junk/", "test.txt").getPath()
+                << std::endl;
+        std::cout << "2) " << Path::joinPaths("/data/junk/", "///test.txt")
+                << std::endl;
+        std::cout << "3) " << Path("/data/junk/").join("/test.txt").getPath()
+                << std::endl;
+        std::cout << "4) " << Path::joinPaths("/data/junk", "test.txt")
+                << std::endl;
+        std::cout
+                << Path(
+                        "data/junk/tzellman/../../../../../..///./nitf///data/../vendor1.ntf").getAbsolutePath()
+                << std::endl;
+        std::cout
+                << Path::normalizePath(
+                                       "data/junk/tzellman/../../../../../..///./nitf///data/../vendor1.ntf")
+                << std::endl;
+        std::cout
+                << Path::absolutePath(
+                                      "c:/data/junk/tzellman/../../../../../..///./nitf///data/../vendor1.ntf")
+                << std::endl;
         std::cout << Path::normalizePath("c:/../../../junk.txt") << std::endl;
-        
+
         std::cout << Path::absolutePath("/home/tzellman/dev/") << std::endl;
-        
 
     }
     catch (except::Throwable& t)
     {
-        std::cerr << "Caught throwable: " << t.getMessage() << " (type:" << t.getType() << ")" << std::endl;
-        exit(EXIT_FAILURE);
+        std::cerr << "Caught throwable: " << t.toString() << std::endl;
+        exit( EXIT_FAILURE);
     }
     catch (...)
     {

@@ -42,17 +42,22 @@ class MyRunTask : public sys::Runnable
 {
     int mI;
 public:
-    MyRunTask(int i) : mI(i) {}
-    ~MyRunTask() {}
-	
+    MyRunTask(int i) :
+        mI(i)
+    {
+    }
+    ~MyRunTask()
+    {
+    }
+
     void run()
     {
-	sleep(TO_SLEEP);
-	
-	// Goes out of scope when we finish printing and return
-	mt::CriticalSection<sys::Mutex> cs(&gLock);
-	std::cout << "Run " << mI << " completed" << std::endl;
-	
+        sleep(TO_SLEEP);
+
+        // Goes out of scope when we finish printing and return
+        mt::CriticalSection < sys::Mutex > cs(&gLock);
+        std::cout << "Run " << mI << " completed" << std::endl;
+
     }
 };
 
@@ -63,7 +68,7 @@ void runGeneration(GenerationThreadPool& pool)
     std::vector<Runnable*> runs;
     for (int i = 0; i < nRunsInGen; i++)
     {
-	runs.push_back(new MyRunTask(i));
+        runs.push_back(new MyRunTask(i));
     }
 
     pool.addAndWaitGroup(runs);
@@ -75,21 +80,21 @@ int main()
 {
     try
     {
-	// Create a thread pool of size 4
-	GenerationThreadPool pool(4);
-	// Start it
-	pool.start();
+        // Create a thread pool of size 4
+        GenerationThreadPool pool(4);
+        // Start it
+        pool.start();
 
-	for (int i = 0; i < NUM_GENS; i++)
-	    runGeneration(pool);
-	
-	pool.shutdown();
-	pool.join();
+        for (int i = 0; i < NUM_GENS; i++)
+            runGeneration(pool);
+
+        pool.shutdown();
+        pool.join();
     }
     catch (except::Exception& ex)
     {
-	std::cout << "Caught exception: " << ex.getMessage() << std::endl;
-	std::cout << "\t" << ex.getTrace() << std::endl;
+        std::cout << "Caught exception: " << ex.toString() << std::endl;
+        std::cout << "\t" << ex.getTrace() << std::endl;
     }
 }
 #endif

@@ -20,7 +20,6 @@
  *
  */
 
-
 #include <import/sys.h>
 #include <import/except.h>
 
@@ -28,36 +27,32 @@ int main(int argc, char** argv)
 {
 
     if (argc != 2)
-	die_printf("Usage: %s <file-to-map>\n", argv[0]);
+        die_printf("Usage: %s <file-to-map>\n", argv[0]);
 
     try
     {
-	std::string fname = argv[1];
-	sys::OS os;
-	
-	sys::Handle_T handle;
-	size_t size = os.getSize(fname);
-	FILE* file = fopen(fname.c_str(), "r+b");
-	handle = fileno(file);
-	
-	
-	char* memLoc = (char*)os.mapFile(handle, size, PROT_READ, MAP_SHARED, 0);
-	
-	
-	for (int i = 0; i < size; i++)
-	    std::cout << memLoc[i];
+        std::string fname = argv[1];
+        sys::OS os;
 
-	os.unmapFile(memLoc, size);
-	
-	fclose(file);
-    return 0;	
+        sys::Handle_T handle;
+        size_t size = os.getSize(fname);
+        FILE* file = fopen(fname.c_str(), "r+b");
+        handle = fileno(file);
+
+        char* memLoc = (char*) os.mapFile(handle, size, PROT_READ, MAP_SHARED,
+                                          0);
+
+        for (int i = 0; i < size; i++)
+            std::cout << memLoc[i];
+
+        os.unmapFile(memLoc, size);
+
+        fclose(file);
+        return 0;
     }
-    catch(except::Throwable& t)
+    catch (except::Throwable& t)
     {
-	std::cout << t.getMessage() << std::endl;
-	std::cout << t.getTrace() << std::endl;
+        std::cout << t.toString() << std::endl;
     }
-   
-
 
 }

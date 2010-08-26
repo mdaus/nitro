@@ -31,15 +31,15 @@ class Copy
 public:
     static void run(const char* src, const char* dest)
     {
-	FileInputStream  in(src);
-	FileOutputStream out(dest);
-	ByteStream bs;
+        FileInputStream in(src);
+        FileOutputStream out(dest);
+        ByteStream bs;
 
-	in.streamTo(bs);
-	bs.streamTo(out);
+        in.streamTo(bs);
+        bs.streamTo(out);
 
-	in.close();
-	out.close();
+        in.close();
+        out.close();
     }
 };
 
@@ -47,13 +47,13 @@ int main(int argc, char **argv)
 {
     try
     {
-	if (argc != 3)
-	    throw Exception(Ctxt(FmtX("Usage: %s <input> <output>", argv[0])));
+        if (argc != 3)
+            throw Exception(Ctxt(FmtX("Usage: %s <input> <output>", argv[0])));
 
-	Copy::run(argv[1], argv[2]);
+        Copy::run(argv[1], argv[2]);
     }
     catch (Exception& e)
     {
-	cout << e.getMessage() << endl;
+        cout << e.toString() << endl;
     }
 }

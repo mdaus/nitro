@@ -34,27 +34,26 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-
     try
     {
-	FileInputStream  iStream(argv[1]);
-	FileOutputStream oStream(argv[2]);
-	StringStream sStream;
-	
-	iStream.streamTo(sStream);
-	sStream.streamTo(oStream);
-	
-	iStream.close();
-	oStream.close();
+        FileInputStream iStream(argv[1]);
+        FileOutputStream oStream(argv[2]);
+        StringStream sStream;
+
+        iStream.streamTo(sStream);
+        sStream.streamTo(oStream);
+
+        iStream.close();
+        oStream.close();
     }
     catch (Throwable& t)
     {
-	cerr << "Caught throwable: " << t.getMessage() << endl;
+        cerr << "Caught throwable: " << t.toString() << endl;
     }
 
     catch (...)
     {
-	cerr << "Caught unknown exception" << endl;
+        cerr << "Caught unknown exception" << endl;
     }
     return 0;
 }

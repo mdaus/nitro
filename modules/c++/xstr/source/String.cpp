@@ -26,14 +26,14 @@
 using namespace xstr;
 
 
-char String::charAt(int index)
+char String::charAt(size_t index)
 {
     return (*this)[index];
 }
 
-char String::operator[](int index) const
+char String::operator[](size_t index) const
 {
-    if (index < 0 || index >= length())
+    if (index >= length())
         throw except::IndexOutOfRangeException(String::format(
                         "index out of bounds: %d", index).mString);
     return mString[index];
@@ -65,18 +65,17 @@ const char* String::toCharArray() const
     return mString.c_str();
 }
 
-String String::substring(int beginIndex, int endIndex) const
+String String::substring(size_t beginIndex, size_t endIndex) const
 {
     if (endIndex >= length())
-        endIndex = std::string::npos;
+        endIndex = String::npos;
  
-    if (beginIndex < 0 || (endIndex
-            != std::string::npos && endIndex < beginIndex))
+    if (endIndex < beginIndex)
         throw except::IndexOutOfRangeException(String::format(
                         "substring indices out of bounds: %d, %d",
                         beginIndex, endIndex).mString);
 
-    return mString.substr(beginIndex, endIndex != std::string::npos ? endIndex
+    return mString.substr(beginIndex, endIndex != String::npos ? endIndex
             - beginIndex : endIndex);
 }
 
@@ -97,7 +96,7 @@ String String::toUpperCase() const
 String String::trim() const
 {
     std::string s = mString;
-    unsigned int i;
+    size_t i;
     for (i = 0; i < s.length(); i++)
         if (!isspace(s[i]))
             break;
@@ -128,9 +127,9 @@ bool String::startsWith(const String& s) const
 
 bool String::endsWith(const String& s) const
 {
-    int sLen = s.length();
-    int len = length();
-    for (int i = 0; i < len && i < sLen; ++i)
+    size_t sLen = s.length();
+    size_t len = length();
+    for (size_t i = 0; i < len && i < sLen; ++i)
         if (!(mString[len - i - 1] == s[sLen - i - 1]))
             return false;
     return len >= sLen;
@@ -144,7 +143,7 @@ std::vector<String> String::split(String pattern) const
     std::vector<std::string> parts;
     expr.split(mString, parts);
     std::vector<String> sParts(parts.size());
-    for(int i = 0, len = parts.size(); i  < len; ++i)
+    for(size_t i = 0, len = parts.size(); i < len; ++i)
         sParts[i] = parts[i];
     return sParts;
 }
@@ -156,24 +155,21 @@ bool String::matches(const String& pattern) const
     return expr.matches(mString);
 }
 
-int String::indexOf(const String& s, int fromIndex) const
+size_t String::indexOf(const String& s, size_t fromIndex) const
 {
-    int index = mString.find(s.mString, fromIndex);
-    return index != std::string::npos ? index : -1;
+    return mString.find(s.mString, fromIndex);
 }
 
-int String::lastIndexOf(const String& s, int fromIndex) const
+size_t String::lastIndexOf(const String& s, size_t fromIndex) const
 {
-    int index = mString.rfind(s.mString,
-            fromIndex != std::string::npos ? fromIndex : length() - 1);
-    return index != std::string::npos ? index : -1;
+    return mString.rfind(s.mString,
+            fromIndex != String::npos ? fromIndex : length() - 1);
 }
 
 bool String::contains(const String& s) const
 {
-    return indexOf(s) > 0;
+    return indexOf(s) != String::npos;
 }
-
 
 template <> std::string String::toType<std::string>()
 {

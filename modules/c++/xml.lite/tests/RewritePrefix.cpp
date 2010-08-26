@@ -53,7 +53,7 @@ int main(int argc, char **argv)
     catch (except::Throwable& anything)
     {
         std::cout << "Caught throwable: " << anything.getType() << " "
-        << anything.getMessage() << std::endl;
+        << anything.toString() << std::endl;
 
     }
 

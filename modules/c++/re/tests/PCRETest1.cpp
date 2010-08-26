@@ -61,7 +61,7 @@ int main()
         PCREMatch subs2;
         rx2.searchAll("arabsdsarbjudarc34ardnjfsdveqvare3arfarg", subs2);
 
-        if ( subs2.size() == 7 )
+        if (subs2.size() == 7)
             std::cout << "    Found all sub-strings" << std::endl;
         else
             throw PCREException("Did not find a sub-string");
@@ -71,13 +71,15 @@ int main()
         std::string subst = rx2.sub("Hearo", "ll");
 
         if (subst == "Hello")
-            std::cout << "    Successfully substituted string pattern" << std::endl;
+            std::cout << "    Successfully substituted string pattern"
+                    << std::endl;
         else
             throw PCREException("Did not correctly substitute string pattern");
 
         subst = rx2.sub("Hearo Keary!", "ll");
         if (subst == "Hello Kelly!")
-            std::cout << "    Successfully substituted string pattern" << std::endl;
+            std::cout << "    Successfully substituted string pattern"
+                    << std::endl;
         else
         {
             std::cout << subst << std::endl;
@@ -87,9 +89,9 @@ int main()
         cout << "4) Performing 'split' test..." << endl;
         cout << "    Delimiter is 'ar'" << std::endl;
 
-        std::vector< std::string > vec;
+        std::vector < std::string > vec;
         rx2.split("ONEarTWOarTHREE", vec);
-        std::vector< std::string >::iterator iter;
+        std::vector<std::string>::iterator iter;
         int i = 0;
         for (iter = vec.begin(); iter != vec.end(); ++iter)
         {
@@ -126,6 +128,6 @@ int main()
     catch (except::Throwable& t)
     {
         //std::cout << t.getMessage() << std::endl;
-        std::cout << "ERROR!!!!" << t.getTrace() << std::endl;
+        std::cout << "ERROR!!!!" << t.toString() << std::endl;
     }
 }

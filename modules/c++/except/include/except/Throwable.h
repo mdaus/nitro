@@ -122,8 +122,11 @@ public:
     virtual std::string toString() const
     {
         std::ostringstream s;
-        s << getType() << ": ";
-        s << mTrace;
+        s << getType() << ": " << getMessage();
+
+        const Trace& t = getTrace();
+        if (t.getSize() > 0)
+            s << ": " << t;
         return s.str();
     }
 

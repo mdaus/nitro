@@ -30,35 +30,35 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
-    try 
+    try
     {
-	
-	std::string input("abcdefghijklmnopqrstuvwxyz");
-	char buffer[32];
-	memset(buffer, 0, 32);
-	StringStream sStream;
-	
-	sStream.write((const sys::byte*)input.c_str(), 5);
-	sStream.read((sys::byte*)buffer, 3);
-	cout << buffer << endl;
-	
-	memset(buffer, 0, 32);
-	sStream.write((const sys::byte*)input.c_str(), 10);
-	sStream.read((sys::byte*)buffer, 11);
-	cout << buffer << endl;
-	
-	memset(buffer, 0, 32);
-	sStream.read((sys::byte*)buffer, 100);
-	cout << buffer << endl;
-	
+
+        std::string input("abcdefghijklmnopqrstuvwxyz");
+        char buffer[32];
+        memset(buffer, 0, 32);
+        StringStream sStream;
+
+        sStream.write((const sys::byte*) input.c_str(), 5);
+        sStream.read((sys::byte*) buffer, 3);
+        cout << buffer << endl;
+
+        memset(buffer, 0, 32);
+        sStream.write((const sys::byte*) input.c_str(), 10);
+        sStream.read((sys::byte*) buffer, 11);
+        cout << buffer << endl;
+
+        memset(buffer, 0, 32);
+        sStream.read((sys::byte*) buffer, 100);
+        cout << buffer << endl;
+
     }
     catch (Throwable& t)
     {
-	cerr << "Caught throwable: " << t.getMessage() << endl;
+        cerr << "Caught throwable: " << t.toString() << endl;
     }
     catch (...)
     {
-	cerr << "Caught unknown exception" << endl;
+        cerr << "Caught unknown exception" << endl;
     }
     return 0;
 }

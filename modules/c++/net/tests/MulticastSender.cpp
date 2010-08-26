@@ -32,7 +32,6 @@ using namespace net;
 using namespace sys;
 using namespace io;
 using namespace except;
-    
 
 Socket createSenderSocket(SocketAddress& address, int loopback = 1)
 {
@@ -40,21 +39,20 @@ Socket createSenderSocket(SocketAddress& address, int loopback = 1)
 
     int on = 1;
     s.setOption(SOL_SOCKET, SO_REUSEADDR, on);
-    
+
     // Turn off loopback to this machine
     if (!loopback)
-	s.setOption(IPPROTO_IP, IP_MULTICAST_LOOP, loopback);
-    
-//    s.bind(address);
+        s.setOption(IPPROTO_IP, IP_MULTICAST_LOOP, loopback);
+
+    //    s.bind(address);
     return s;
 }
 
 struct Packet
-{    
-    int  number;
+{
+    int number;
     char what[128];
 
-    
 };
 
 #define ACK_CHANNEL 8647
@@ -63,28 +61,26 @@ int main(int argc, char** argv)
 {
     try
     {
-	if (argc != 3)
-	    die_printf("Usage: %s <multicast-group> <port>\n");
-	std::string mcastGroup = argv[1];
-	int port = atoi(argv[2]);
-	SocketAddress sa(mcastGroup, port);
+        if (argc != 3)
+            die_printf("Usage: %s <multicast-group> <port>\n");
+        std::string mcastGroup = argv[1];
+        int port = atoi(argv[2]);
+        SocketAddress sa(mcastGroup, port);
 
-	// Register ourselves with the OS as members of this group
-	Socket socket = createSenderSocket(sa);
-	Packet packet;
-	std::string myMessage = "Hello group!";
-	memcpy(packet.what, myMessage.c_str(), myMessage.length());
-	packet.what[myMessage.length()] = 0;
-	packet.number = 1;
-	socket.sendTo(sa, (const char*)&packet, sizeof(packet));
-	
+        // Register ourselves with the OS as members of this group
+        Socket socket = createSenderSocket(sa);
+        Packet packet;
+        std::string myMessage = "Hello group!";
+        memcpy(packet.what, myMessage.c_str(), myMessage.length());
+        packet.what[myMessage.length()] = 0;
+        packet.number = 1;
+        socket.sendTo(sa, (const char*) &packet, sizeof(packet));
+
     }
-    catch(Exception& ex)
+    catch (Exception& ex)
     {
-	std::cout << ex.getMessage() << std::endl;
-	std::cout << ex.getTrace() << std::endl;
+        std::cout << ex.toString() << std::endl;
     }
-
 
 }
 

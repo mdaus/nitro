@@ -20,7 +20,6 @@
  *
  */
 
-
 #include <import/sys.h>
 
 #if defined(_REENTRANT)
@@ -31,81 +30,82 @@ using namespace std;
 class Getter : public sys::Runnable
 {
 public:
-    Getter(sys::Mutex *by, int * val, int n) : theVal(val), syncBy(by), id(n) 
+    Getter(sys::Mutex *by, int * val, int n) : theVal(val), syncBy(by), id(n)
     {}
-    virtual ~Getter() {}
+    virtual ~Getter()
+    {}
 
     virtual void run()
     {
-	for (int i = 0; i < 250; i++)
-	{
+        for (int i = 0; i < 250; i++)
+        {
 
-	    std::cout << "Getter::run: " << std::endl;
-	    std::cout << typeid(this).name() << std::endl;
-	    if ( !syncBy->lock() )
-	    {
-		cout << "Err: " << sys::Err().toString() << endl;
-		assert(0);
-	    }
-	    int x = get();
-	    cout << "Thread id: "<< id << " got back " << x << endl;
-	    if ( !syncBy->unlock() )
-	    {
-		cout << "Err: " << sys::Err().toString() << endl;
-		assert(0);
-	    }
-	    sys::Thread::yield();
-	}
+            std::cout << "Getter::run: " << std::endl;
+            std::cout << typeid(this).name() << std::endl;
+            if ( !syncBy->lock() )
+            {
+                cout << "Err: " << sys::Err().toString() << endl;
+                assert(0);
+            }
+            int x = get();
+            cout << "Thread id: "<< id << " got back " << x << endl;
+            if ( !syncBy->unlock() )
+            {
+                cout << "Err: " << sys::Err().toString() << endl;
+                assert(0);
+            }
+            sys::Thread::yield();
+        }
     }
     int get()
     {
 
-	return *theVal;
+        return *theVal;
     }
 protected:
     int *theVal;
     sys::Mutex *syncBy;
     int id;
-    
+
 };
 class Putter : public sys::Runnable
 {
 public:
     Putter(sys::Mutex *by,int *val, int n) : theVal(val), syncBy(by), id(n)
     {}
-    virtual ~Putter() {}
+    virtual ~Putter()
+    {}
 
     virtual void run()
     {
 
-	std::cout << "Putter::run: " << std::endl;
-	std::cout << typeid(this).name() << std::endl;
+        std::cout << "Putter::run: " << std::endl;
+        std::cout << typeid(this).name() << std::endl;
 
-	for (int i = 0; i < 250; i++)
-	{
-	    if ( !syncBy->lock() )
-	    {
-		cout << "Err: " << sys::Err().toString() << endl;
-		assert(0);
-	    }
+        for (int i = 0; i < 250; i++)
+        {
+            if ( !syncBy->lock() )
+            {
+                cout << "Err: " << sys::Err().toString() << endl;
+                assert(0);
+            }
 
+            set(i);
+            cout << "Thread id: "<< id << " set to " << i << endl;
+            if ( !syncBy->unlock() )
+            {
+                cout << "Err: " << sys::Err().toString() << endl;
+                assert(0);
+            }
 
-	    set(i);
-	    cout << "Thread id: "<< id << " set to " << i << endl;
-	    if ( !syncBy->unlock() )
-	    {
-		cout << "Err: " << sys::Err().toString() << endl;
-		assert(0);
-	    }
-	    
-	    sys::Thread::yield();
+            sys::Thread::yield();
 
-	}
+        }
 
     }
     void set(int val)
     {
-	*theVal = val;
+        *theVal = val;
     }
 protected:
     int *theVal;
@@ -117,46 +117,44 @@ int main()
 {
     try
     {
-	int val = 24;
-	sys::Mutex syncBy;
-	sys::Thread *gT[5];
-	sys::Thread *pT[5];
+        int val = 24;
+        sys::Mutex syncBy;
+        sys::Thread *gT[5];
+        sys::Thread *pT[5];
 
-	    
-	for (int i = 0; i < 5; i++)
-	{
+        for (int i = 0; i < 5; i++)
+        {
 
-	    gT[i] = new sys::Thread(new Getter(&syncBy, &val, i));
-	    gT[i]->start();
-	    
-	    pT[i] = new sys::Thread(new Putter(&syncBy, &val, i));
-	    pT[i]->start();
+            gT[i] = new sys::Thread(new Getter(&syncBy, &val, i));
+            gT[i]->start();
 
-// 	    //printf("p (&) %x\n", p);
-// 	    sys::Thread(p).start();
-// 	    sys::Thread(new Putter(&syncBy, &val, i)).start();	    
-	}
+            pT[i] = new sys::Thread(new Putter(&syncBy, &val, i));
+            pT[i]->start();
 
+            // 	    //printf("p (&) %x\n", p);
+            // 	    sys::Thread(p).start();
+            // 	    sys::Thread(new Putter(&syncBy, &val, i)).start();
+        }
 
-	for (int i = 0; i < 5; i++)
-	{
-	    gT[i]->join();
-	    cout << "Joined on gT[" << i << "]" << endl;
-	    delete gT[i];
-	    pT[i]->join();
-	    delete pT[i];
-	    cout << "Joined on pT[" << i << "]" << endl;
-	}
-	//	sys::Thread::yield();
+        for (int i = 0; i < 5; i++)
+        {
+            gT[i]->join();
+            cout << "Joined on gT[" << i << "]" << endl;
+            delete gT[i];
+            pT[i]->join();
+            delete pT[i];
+            cout << "Joined on pT[" << i << "]" << endl;
+        }
+        //	sys::Thread::yield();
 
     }
     catch (except::Exception& e)
     {
-	cout << "Caught Exception: " << e.getMessage() << endl;
+        cout << "Caught Exception: " << e.toString() << endl;
     }
     catch (...)
     {
-	cout << "Unknown exception" << endl;
+        cout << "Unknown exception" << endl;
     }
     return 0;
 };
@@ -165,8 +163,8 @@ int main()
 
 int main()
 {
-	std::cout << "sys is not Multithreaded" << std::endl;
-	return 0;
+    std::cout << "sys is not Multithreaded" << std::endl;
+    return 0;
 }
 
 #endif

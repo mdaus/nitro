@@ -20,7 +20,6 @@
  *
  */
 
-
 #include <import/except.h>
 #include <import/str.h>
 #include <import/sys.h>
@@ -28,39 +27,38 @@
 using namespace except;
 using namespace sys;
 
-
 typedef bool (*HOOK_FN)(void);
 
 int main(int argc, char** argv)
 {
-    if (argc != 3) 
+    if (argc != 3)
     {
-	die_printf("Usage: %s <dso-path> <hook>\n\twhere hook=bool (void*)(void)\n", argv[0]);
+        die_printf(
+                   "Usage: %s <dso-path> <hook>\n\twhere hook=bool (void*)(void)\n",
+                   argv[0]);
     }
     // Ok, we got past the initial hurdle, now lets 
     // try and load the thing
     try
     {
-	std::string dsoPath = argv[1];
-	std::string hook    = argv[2];
+        std::string dsoPath = argv[1];
+        std::string hook = argv[2];
 
-	DLL dso( dsoPath );
+        DLL dso(dsoPath);
 
-	HOOK_FN theHook = (HOOK_FN)dso.retrieve( hook );
-	
-	// Call the hook
-	if (!theHook())
-	{
-	    throw Exception(Ctxt("The hook failed!"));
-	}
+        HOOK_FN theHook = (HOOK_FN) dso.retrieve(hook);
+
+        // Call the hook
+        if (!theHook())
+        {
+            throw Exception(Ctxt("The hook failed!"));
+        }
 
     }
     catch (Throwable& ex)
     {
-	std::cout << ex.getMessage() << std::endl;
-	std::cout << ex.getTrace() << std::endl;
+        std::cout << ex.toString() << std::endl;
     }
 
 }
-
 

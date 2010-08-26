@@ -29,41 +29,38 @@ using namespace sys;
 using namespace io;
 using namespace except;
 
-
-Socket createMulticastSubscriber(const std::string& group, const SocketAddress& local)
+Socket createMulticastSubscriber(const std::string& group,
+        const SocketAddress& local)
 {
     Socket socket(UDP_PROTO);
 
     socket.bind(local);
 
     struct ip_mreq mreq;
-    
+
     //const net::SockAddrIn_T& in = address.getAddress();
-    
+
     // Need to initialize our structure properly here.
-//     memcpy(&mreq.imr_multiaddr,
-// 	   &in.sin_addr,
-// 	   sizeof(struct in_addr));
-    
+    //     memcpy(&mreq.imr_multiaddr,
+    // 	   &in.sin_addr,
+    // 	   sizeof(struct in_addr));
+
     // We want to let the kernel choose the interface device
     // (eth0,1, etc)
     std::cout << "Here!" << std::endl;
     mreq.imr_multiaddr.s_addr = inet_addr(group.c_str());
     mreq.imr_interface.s_addr = htonl(INADDR_ANY);
-    
+
     // Now set our socket option to add us as members
-    socket.setOption(IPPROTO_IP, IP_ADD_MEMBERSHIP,
-		     mreq);
-    
+    socket.setOption(IPPROTO_IP, IP_ADD_MEMBERSHIP, mreq);
 
     return socket;
 }
 
-
 struct Packet
-{    
-    int  number;
-    char what[128];   
+{
+    int number;
+    char what[128];
 };
 
 #define ACK_CHANNEL 8647
@@ -72,28 +69,26 @@ int main(int argc, char** argv)
 {
     try
     {
-	if (argc != 3)
-	    die_printf("Usage: %s <multicast-group> <port>\n");
-	std::string mcastGroup = argv[1];
-	int port = atoi(argv[2]);
+        if (argc != 3)
+            die_printf("Usage: %s <multicast-group> <port>\n");
+        std::string mcastGroup = argv[1];
+        int port = atoi(argv[2]);
 
-	SocketAddress here(port);
+        SocketAddress here(port);
 
-	// Register ourselves with the OS as members of this group
-	
-	Socket socket = createMulticastSubscriber(mcastGroup, here);
-	Packet packet;
-	SocketAddress whereFrom;
-	socket.recvFrom(whereFrom, (char*)&packet, sizeof(packet));
-	std::cout << "Recv'd message: " << packet.what << std::endl;
-	std::cout << "Packet #: " << packet.number << std::endl;
-	socket.close();
+        // Register ourselves with the OS as members of this group
+
+        Socket socket = createMulticastSubscriber(mcastGroup, here);
+        Packet packet;
+        SocketAddress whereFrom;
+        socket.recvFrom(whereFrom, (char*) &packet, sizeof(packet));
+        std::cout << "Recv'd message: " << packet.what << std::endl;
+        std::cout << "Packet #: " << packet.number << std::endl;
+        socket.close();
     }
-    catch(Exception& ex)
+    catch (Exception& ex)
     {
-	std::cout << ex.getMessage() << std::endl;
-	std::cout << ex.getTrace() << std::endl;
+        std::cout << ex.toString() << std::endl;
     }
-
 
 }

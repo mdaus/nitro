@@ -20,7 +20,6 @@
  *
  */
 
-
 #include <import/sys.h>
 #include <import/str.h>
 #include <import/except.h>
@@ -30,39 +29,37 @@ int main(int argc, char **argv)
     try
     {
 
-	sys::TimeStamp ts;
-	std::cout << ts.gmt() << std::endl;
-	std::cout << ts.local() << std::endl;
-	
-	sys::OS os;
-	std::cout << os["PATH"] << std::endl;
-	
-	std::string cwd = os.getCurrentWorkingDirectory();
+        sys::TimeStamp ts;
+        std::cout << ts.gmt() << std::endl;
+        std::cout << ts.local() << std::endl;
+
+        sys::OS os;
+        std::cout << os["PATH"] << std::endl;
+
+        std::string cwd = os.getCurrentWorkingDirectory();
 
         sys::Path path(cwd);
 
-        
-	std::cout << "Searching directory: " << path << std::endl;
+        std::cout << "Searching directory: " << path << std::endl;
 
         sys::DirectoryEntry d(path);
-	
-	for (sys::DirectoryEntry::Iterator p = d.begin(); p != d.end(); ++p)
-	{
-		std::cout << "Found file: " << *p << std::endl;
-	}
+
+        for (sys::DirectoryEntry::Iterator p = d.begin(); p != d.end(); ++p)
+        {
+            std::cout << "Found file: " << *p << std::endl;
+        }
     }
     catch (except::Throwable& t)
     {
-	std::cout << t.getMessage() << std::endl;
-	std::cout << t.getTrace() << std::endl;
+        std::cout << t.toString() << std::endl;
     }
     catch (std::exception& ex)
     {
-	std::cout << ex.what() << std::endl;
+        std::cout << ex.what() << std::endl;
     }
     catch (...)
     {
-	std::cout << "Caught unnknown throwable" << std::endl;
+        std::cout << "Caught unnknown throwable" << std::endl;
     }
     return 0;
 

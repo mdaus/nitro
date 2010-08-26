@@ -41,6 +41,12 @@ namespace xstr
 class String
 {
 public:
+
+    enum
+    {
+        npos = std::string::npos
+    };
+
     String() :
         mString("")
     {
@@ -79,9 +85,9 @@ public:
      * length() - 1. The first char value of the sequence is at index 0, the
      * next at index 1, and so on, as for array indexing.
      */
-    char charAt(int index);
+    char charAt(size_t index);
 
-    char operator[](int index) const;
+    char operator[](size_t index) const;
 
     /*!
      * Returns the length of this string.
@@ -112,7 +118,7 @@ public:
      * \param endIndex
      * \return String substring, or throws an IndexOutOfRangeException
      */
-    String substring(int beginIndex, int endIndex = std::string::npos) const;
+    String substring(size_t beginIndex, size_t endIndex = String::npos) const;
 
     /*!
      * Returns a copy of the String, converted to lower case
@@ -161,9 +167,9 @@ public:
      */
     bool matches(const String& pattern) const;
 
-    int indexOf(const String& s, int fromIndex = 0) const;
+    size_t indexOf(const String& s, size_t fromIndex = 0) const;
 
-    int lastIndexOf(const String& s, int fromIndex = std::string::npos) const;
+    size_t lastIndexOf(const String& s, size_t fromIndex = String::npos) const;
 
     bool contains(const String& s) const;
 

@@ -41,7 +41,6 @@ int main(int argc, char **argv)
         if (argc != 3)
             throw(Exception(FmtX("Usage: %s <host> <port>", argv[0])));
 
-
         std::string host(argv[1]);
         int port(atoi(argv[2]));
 
@@ -55,20 +54,21 @@ int main(int argc, char **argv)
 
 
         unsigned int length = SEND_THIS.length();
-        toServer->write((const char*)& length, 4);
+        toServer->write((const char*) &length, 4);
         toServer->write(SEND_THIS.c_str(), length);
 
         // Recv a block
         char recvThis[1024];
-        toServer->read((char*)&length, 4);
+        toServer->read((char*) &length, 4);
         toServer->read(recvThis, length);
 
-        cout << "Received response: \"" << recvThis << "\" Back from server" << endl;
+        cout << "Received response: \"" << recvThis << "\" Back from server"
+                << endl;
         clientBuilder.destroy(toServer);
     }
     catch (except::Throwable& t)
     {
-        cout << t.getMessage() << endl;
-        exit(EXIT_FAILURE);
+        cout << t.toString() << endl;
+        exit( EXIT_FAILURE);
     }
 }

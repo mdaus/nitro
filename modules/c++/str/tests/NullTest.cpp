@@ -20,7 +20,6 @@
  *
  */
 
-
 #include <import/str.h>
 #include <import/except.h>
 
@@ -28,24 +27,21 @@ int main()
 {
     try
     {
-       std::string strng = str::toString(NULL);
-       return 0;
-
+        std::string strng = str::toString(NULL);
+        return 0;
 
     }
-    catch(except::Exception& e)
+    catch (except::Exception& e)
     {
-       std::cout << e.getMessage() << std::endl;
-       std::cout << e.getTrace() << std::endl;
-       std::cout << e.getType() << std::endl;
+        std::cout << e.toString() << std::endl;
     }
     catch (std::exception& ex)
     {
-       std::cout << ex.what() << std::endl;
+        std::cout << ex.what() << std::endl;
     }
     catch (...)
     {
-       std::cout << "Caught something" << std::endl;
+        std::cout << "Caught something" << std::endl;
     }
-	return 0;
+    return 0;
 }

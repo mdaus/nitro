@@ -20,7 +20,6 @@
  *
  */
 
-
 #include <iostream>
 #include <vector>
 #include <map>
@@ -34,8 +33,9 @@ using namespace except;
 using namespace re;
 using namespace std;
 
-
-const char *request = "GET http://pluto.beseen.com:1113 HTTP/1.0\r\nProxy-Connection: Keep-Alive\r\nUser-Agent: Mozilla/4.75 [en] (X11; U; SunOS 5.6 sun4u)\r\nAccept: image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, image/png, */*\r\nAccept-Encoding: gzip\r\nAccept-Language: en\r\nAccept-Charset: iso-8859-1,*,utf-8\r\nContent-type: application/x-www-form-urlencoded\r\nContent-Length: 96\r\n\r\n";
+const char
+        *request =
+                "GET http://pluto.beseen.com:1113 HTTP/1.0\r\nProxy-Connection: Keep-Alive\r\nUser-Agent: Mozilla/4.75 [en] (X11; U; SunOS 5.6 sun4u)\r\nAccept: image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, image/png, */*\r\nAccept-Encoding: gzip\r\nAccept-Language: en\r\nAccept-Charset: iso-8859-1,*,utf-8\r\nContent-type: application/x-www-form-urlencoded\r\nContent-Length: 96\r\n\r\n";
 //const char *request = "HTTP/1.1 200\r\nContent-Length: 200\r\n\r\n";
 
 class HttpParser
@@ -44,14 +44,16 @@ public:
 
     HttpParser()
     {
-        mMatchRequest.compile("^([^ ]+) (http:[^ ]+) HTTP/([0-9]+\\.[0-9]+)\r\n(.*)");
+        mMatchRequest.compile(
+                              "^([^ ]+) (http:[^ ]+) HTTP/([0-9]+\\.[0-9]+)\r\n(.*)");
         mMatchPair.compile("^([^:]+):[ ]*([^\r\n]+)\r\n(.*)");
         mMatchEndOfHeader.compile("^\r\n");
         mMatchResponse.compile("^HTTP/([^ ]+) ([^\r\n]+)\r\n(.*)");
     }
 
     virtual ~HttpParser()
-    {}
+    {
+    }
 
     virtual void parseRest(const std::string& restOfChunk)
     {
@@ -64,7 +66,7 @@ public:
             PCREMatch keyVals;
             if (mMatchPair.match(rest, keyVals))
             {
-                mKeyValuePair[ keyVals[1] ] = keyVals[2];
+                mKeyValuePair[keyVals[1]] = keyVals[2];
 
                 rest = keyVals[3];
             }
@@ -81,8 +83,8 @@ public:
         {
             cout << "'response' matches." << endl;
 
-            mVersion    = responseVals[1];
-            mReturnVal  = responseVals[2];
+            mVersion = responseVals[1];
+            mReturnVal = responseVals[2];
 
             parseRest(responseVals[3]);
             return true;
@@ -108,8 +110,8 @@ public:
         {
             cout << "'request' matches." << endl;
 
-            mMethod  = requestVals[1];
-            mUrl     = requestVals[2];
+            mMethod = requestVals[1];
+            mUrl = requestVals[2];
             mVersion = requestVals[3];
 
             parseRest(requestVals[4]);
@@ -164,7 +166,7 @@ protected:
     PCRE mMatchPair;
     PCRE mMatchEndOfHeader;
     PCRE mMatchResponse;
-    map<string, string> mKeyValuePair;
+    map<string, string>mKeyValuePair;
 
     string mReturnVal;
     string mUrl;
@@ -186,13 +188,14 @@ int main()
         cout << "Url: " << p.getUrl() << endl;
         cout << "Version: " << p.getVersion() << endl;
         cout << "User-Agent: " << p.getAssociatedValue("User-Agent") << endl;
-        cout << "Accept-Encoding: " << p.getAssociatedValue("Accept-Encoding") << endl;
+        cout << "Accept-Encoding: " << p.getAssociatedValue("Accept-Encoding")
+                << endl;
         cout << "Content-Type: " << p.getContentType() << endl;
         cout << "Content-Length: " << p.getContentLength() << endl;
     }
     catch (Throwable& e)
     {
-        cout << e.getMessage() << endl;
+        cout << e.toString() << endl;
     }
 
     return 0;

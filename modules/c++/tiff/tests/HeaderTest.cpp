@@ -13,15 +13,15 @@ int main(int argc, char **argv)
         tiff::IFDEntry entry(254, 1);
         entry.print(st);
         entry.print(st);
-        
+
         tiff::IFDEntry entry2(255, 1);
         entry2.print(st);
-        entry2.print(st);        
+        entry2.print(st);
     }
     catch (except::Throwable& t)
     {
-        std::cerr << "Caught throwable: " << t.getMessage() << " (type:" << t.getType() << ")" << std::endl;
-        exit(EXIT_FAILURE);
+        std::cerr << "Caught throwable: " << t.toString() << std::endl;
+        exit( EXIT_FAILURE);
     }
     catch (...)
     {
