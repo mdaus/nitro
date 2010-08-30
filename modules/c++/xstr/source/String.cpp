@@ -26,6 +26,8 @@
 using namespace xstr;
 
 
+const size_t String::npos = std::string::npos;
+
 char String::charAt(size_t index)
 {
     return (*this)[index];

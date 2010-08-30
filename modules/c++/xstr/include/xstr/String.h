@@ -42,10 +42,7 @@ class String
 {
 public:
 
-    enum
-    {
-        npos = std::string::npos
-    };
+    static const size_t npos;
 
     String() :
         mString("")
