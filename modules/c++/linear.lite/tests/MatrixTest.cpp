@@ -225,7 +225,7 @@ int main()
         myMx2.print();
 
         linear::lite::Matrix<double>* myMx5;
-        std::auto_ptr < linear::lite::Matrix<double>> mAuto;
+        std::auto_ptr < linear::lite::Matrix<double> > mAuto;
 
         linear::lite::Matrix<double> tmp = MatrixCreator().newMatrix(0, 0);
 
