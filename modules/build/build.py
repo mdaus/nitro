@@ -237,6 +237,10 @@ def set_options(opt):
     
     if Options.platform == 'win32':
         opt.tool_options('msvc')
+        opt.add_option('--with-crt', action='store', choices=['MD', 'MT'],
+                       dest='crt', default='MT', help='Specify Windows CRT library - MT (default) or MD')
+        opt.add_option('--enable-warnings', action='store_true', dest='warnings',
+                   help='Enable warnings')
     
     opt.add_option('--enable-warnings', action='store_true', dest='warnings',
                    help='Enable warnings')
@@ -522,15 +526,18 @@ def detect(self):
         env.append_value('LIB_RPC', 'rpcrt4')
         env.append_value('LIB_SOCKET', 'Ws2_32')
         
+        crtFlag = '/%s' % Options.options.crt
+        crtDebug = '%sd' % crtFlag
+        
         vars = {}
-        vars['debug']          = '/Zi /MTd'.split()
+        vars['debug']          = ['/Zi', crtDebug]
         vars['warn']           = '/Wall'
         vars['nowarn']         = '/W3 /wd4290'.split()
         vars['verbose']        = ''
         vars['64']             = '/MACHINE:X64 '
-        vars['optz_med']       = '-O2 /MT'.split()
-        vars['optz_fast']      = '-O2 /MT'.split()
-        vars['optz_fastest']   = '-Ox /MT'.split()
+        vars['optz_med']       = ['-O2', crtFlag]
+        vars['optz_fast']      = ['-O2', crtFlag]
+        vars['optz_fastest']   = ['-Ox', crtFlag]
         
         # choose the runtime to link against
         # [/MD /MDd /MT /MTd]
