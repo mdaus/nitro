@@ -26,9 +26,11 @@ int main(int argc, char **argv)
             {
                 outStream.writeln("===========================");
                 outStream.writeln(FmtX("GeoTIFF detected: Image %d\n", (i + 1)));
-                tiff::Utils::createGeoTiffIFD(reader[i]->getIFD())->print(
-                                                                          outStream);
+                tiff::IFD *geoIFD =
+                        tiff::Utils::createGeoTiffIFD(reader[i]->getIFD());
+                geoIFD->print(outStream);
                 outStream.writeln("===========================");
+                delete geoIFD;
             }
         }
     }
