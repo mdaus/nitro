@@ -20,21 +20,27 @@
  *
  */
 
-#ifndef __IMPORT_TIFF_H__
-#define __IMPORT_TIFF_H__
+#ifndef __TIFF_UTILS_H__
+#define __TIFF_UTILS_H__
 
-#include "tiff/Common.h"
-#include "tiff/Header.h"
-#include "tiff/GenericType.h"
-#include "tiff/IFDEntry.h"
 #include "tiff/IFD.h"
-#include "tiff/KnownTags.h"
-#include "tiff/TypeFactory.h"
-#include "tiff/ImageReader.h"
-#include "tiff/FileReader.h"
-#include "tiff/ImageWriter.h"
-#include "tiff/FileWriter.h"
-#include "tiff/Utils.h"
 
-#endif
+namespace tiff
+{
 
+class Utils
+{
+public:
+
+    static bool hasGeoTiffIFD(tiff::IFD* inputIFD);
+    static tiff::IFD* createGeoTiffIFD(tiff::IFD* inputIFD);
+
+private:
+    Utils()
+    {
+    }
+
+};
+
+}
+#endif // __TIFF_UTILS_H__

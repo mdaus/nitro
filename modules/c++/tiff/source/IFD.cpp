@@ -105,19 +105,19 @@ void tiff::IFD::deserialize(io::InputStream& input, const bool reverseBytes)
 
 void tiff::IFD::serialize(io::OutputStream& output)
 {
-    io::SeekableOutputStream *seekableOut =
-            dynamic_cast<io::SeekableOutputStream *>(&output);
-    if (seekableOut == NULL)
+    io::Seekable *seekable =
+            dynamic_cast<io::Seekable *>(&output);
+    if (seekable == NULL)
         throw except::Exception(Ctxt("Can only serialize IFD to seekable stream"));
 
     // Makes sure all data offsets are defined for each entry.
     // Keep the offset just past the end of the IFD.  This offset
     // is where the next potential image could be written.
-    sys::Uint32_T endOffset = finalize(seekableOut->tell());
+    sys::Uint32_T endOffset = finalize(seekable->tell());
 
     // Write out IFD entry count.
     unsigned short ifdEntryCount = mIFD.size();
-    seekableOut->write((sys::byte *)&ifdEntryCount, sizeof(ifdEntryCount));
+    output.write((sys::byte *)&ifdEntryCount, sizeof(ifdEntryCount));
 
     // Write out each IFD entry.
     for (IFDType::const_iterator i = mIFD.begin(); i != mIFD.end(); ++i)
@@ -128,14 +128,14 @@ void tiff::IFD::serialize(io::OutputStream& output)
 
     // Remember the current position in case there is another IFD after
     // this one.
-    mNextIFDOffsetPosition = seekableOut->tell();
+    mNextIFDOffsetPosition = seekable->tell();
 
     // Write out the default next IFD location.
     sys::Uint32_T nextOffset = 0;
-    seekableOut->write((sys::byte *)&nextOffset, sizeof(sys::Uint32_T));
+    output.write((sys::byte *)&nextOffset, sizeof(sys::Uint32_T));
 
     // Seek the end of the IFD, the next image can begin here.
-    seekableOut->seek(endOffset, io::Seekable::START);
+    seekable->seek(endOffset, io::Seekable::START);
 }
 
 void tiff::IFD::print(io::OutputStream& output) const

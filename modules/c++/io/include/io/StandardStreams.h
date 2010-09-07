@@ -73,6 +73,9 @@ public:
      */
     void write(const sys::byte* b, sys::Size_T len);
 
+    using OutputStream::write;
+    using OutputStream::writeln;
+
 protected:
     _STDSTREAM_DECLARE_MUTEX_SEMICOLON_
 

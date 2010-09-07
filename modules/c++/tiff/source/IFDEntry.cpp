@@ -34,33 +34,33 @@
 
 void tiff::IFDEntry::serialize(io::OutputStream& output)
 {
-    io::SeekableOutputStream *seekableOut =
-            dynamic_cast<io::SeekableOutputStream *>(&output);
-    if (seekableOut == NULL)
+    io::Seekable *seekable =
+            dynamic_cast<io::Seekable *>(&output);
+    if (seekable == NULL)
         throw except::Exception(Ctxt("Can only serialize IFDEntry to seekable stream"));
 
-    seekableOut->write((sys::byte *)&mTag, sizeof(mTag));
-    seekableOut->write((sys::byte *)&mType, sizeof(mType));
-    seekableOut->write((sys::byte *)&mCount, sizeof(mCount));
+    output.write((sys::byte *)&mTag, sizeof(mTag));
+    output.write((sys::byte *)&mType, sizeof(mType));
+    output.write((sys::byte *)&mCount, sizeof(mCount));
 
     sys::Uint32_T size = mCount * tiff::Const::sizeOf(mType);
 
     if (size > 4)
     {
         // Keep the current position and jump to the write position.
-        sys::Uint32_T current = seekableOut->tell();
-        seekableOut->seek(mOffset, io::Seekable::START);
+        sys::Uint32_T current = seekable->tell();
+        seekable->seek(mOffset, io::Seekable::START);
 
         // Write the values out at the current cursor position
         for (sys::Uint32_T i = 0; i < mValues.size(); ++i)
-            seekableOut->write((sys::byte *)mValues[i]->data(),
+            output.write((sys::byte *)mValues[i]->data(),
                     mValues[i]->size());
 
         // Reset the cursor
-        seekableOut->seek(current, io::Seekable::START);
+        seekable->seek(current, io::Seekable::START);
 
         // Write out the data offset.
-        seekableOut->write((sys::byte *)&mOffset, sizeof(mOffset));
+        output.write((sys::byte *)&mOffset, sizeof(mOffset));
     }
     else
     {
@@ -71,7 +71,7 @@ void tiff::IFDEntry::serialize(io::OutputStream& output)
             unsigned short iterations = (4 / mCount) / mValues[i]->size();
 
             for (int j = 0; j < iterations; ++j)
-                seekableOut->write((sys::byte *)mValues[i]->data(),
+                output.write((sys::byte *)mValues[i]->data(),
                         mValues[i]->size());
         }
     }
@@ -84,15 +84,15 @@ void tiff::IFDEntry::deserialize(io::InputStream& input)
 
 void tiff::IFDEntry::deserialize(io::InputStream& input, const bool reverseBytes)
 {
-    io::SeekableInputStream *seekableIn =
-            dynamic_cast<io::SeekableInputStream *>(&input);
-    if (seekableIn == NULL)
+    io::Seekable *seekable =
+            dynamic_cast<io::Seekable*>(&input);
+    if (seekable == NULL)
         throw except::Exception(Ctxt("Can only deserialize IFDEntry from seekable stream"));
 
-    seekableIn->read((char *)&mTag, sizeof(mTag));
-    seekableIn->read((char *)&mType, sizeof(mType));
-    seekableIn->read((char *)&mCount, sizeof(mCount));
-    seekableIn->read((char *)&mOffset, sizeof(mOffset));
+    input.read((char *)&mTag, sizeof(mTag));
+    input.read((char *)&mType, sizeof(mType));
+    input.read((char *)&mCount, sizeof(mCount));
+    input.read((char *)&mOffset, sizeof(mOffset));
 
     if (reverseBytes)
     {
@@ -107,13 +107,13 @@ void tiff::IFDEntry::deserialize(io::InputStream& input, const bool reverseBytes
     if (size > 4)
     {
         // Keep the current position and jump to the read position.
-        sys::Uint32_T current = seekableIn->tell();
-        seekableIn->seek(mOffset, io::Seekable::START);
+        sys::Uint32_T current = seekable->tell();
+        seekable->seek(mOffset, io::Seekable::START);
 
         // Read in the value(s);
         sys::byte *buffer = new sys::byte[size];
 
-        seekableIn->read(buffer, size);
+        input.read(buffer, size);
         if (reverseBytes)
         {
             sys::Uint32_T elementSize = tiff::Const::sizeOf(mType);
@@ -132,7 +132,7 @@ void tiff::IFDEntry::deserialize(io::InputStream& input, const bool reverseBytes
         delete[] buffer;
 
         // Reset the cursor position.
-        seekableIn->seek(current, io::Seekable::START);
+        seekable->seek(current, io::Seekable::START);
     }
     else
     {

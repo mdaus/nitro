@@ -15,7 +15,8 @@ SOURCES = Common.cpp \
           ImageReader.cpp \
           FileReader.cpp \
           ImageWriter.cpp \
-          FileWriter.cpp
+          FileWriter.cpp \
+          Utils.cpp
 
 TESTS = DumpHeader.cpp
 

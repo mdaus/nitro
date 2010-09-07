@@ -19,6 +19,18 @@ int main(int argc, char **argv)
         io::StandardOutStream outStream;
         tiff::FileReader reader(path);
         reader.print(outStream);
+
+        for (sys::Uint32_T i = 0, n = reader.getImageCount(); i < n; ++i)
+        {
+            if (tiff::Utils::hasGeoTiffIFD(reader[i]->getIFD()))
+            {
+                outStream.writeln("===========================");
+                outStream.writeln(FmtX("GeoTIFF detected: Image %d\n", (i + 1)));
+                tiff::Utils::createGeoTiffIFD(reader[i]->getIFD())->print(
+                                                                          outStream);
+                outStream.writeln("===========================");
+            }
+        }
     }
     catch (except::Throwable& t)
     {
