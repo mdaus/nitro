@@ -98,11 +98,6 @@ public:
     {
     }
 
-    GenericType(Data_T data) :
-        mData(data)
-    {
-    }
-
     /**
      *****************************************************************
      * Constructor, initializes the object with the specified data.
