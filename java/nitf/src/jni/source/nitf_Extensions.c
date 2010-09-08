@@ -48,7 +48,8 @@ JNIEXPORT void JNICALL Java_nitf_Extensions_appendTRE
     }
     
     /* tell Java not to manage it */
-    _ManageObject(env, treObject, JNI_FALSE);
+    methodID = (*env)->GetMethodID(env, treClass, "setManaged", "(Z)V");
+    (*env)->CallVoidMethod(env, treObject, methodID, JNI_FALSE);
 }
 
 
@@ -62,6 +63,8 @@ JNIEXPORT jobject JNICALL Java_nitf_Extensions_getTREsByName
         (*env)->GetMethodID(env, treClass, "<init>", "(J)V");
     jmethodID listAddMethodID =
         (*env)->GetMethodID(env, listClass, "add", "(Ljava/lang/Object;)Z");
+    jmethodID setManagedMethodID =
+        (*env)->GetMethodID(env, treClass, "setManaged", "(Z)V");
     nitf_ListIterator iter, end;
     nitf_TRE *tre;
     jobject treObject;
@@ -92,7 +95,8 @@ JNIEXPORT jobject JNICALL Java_nitf_Extensions_getTREsByName
                 (*env)->NewObject(env, treClass, treInitMethodID, (jlong) tre);
             
             /* tell Java not to manage it */
-            _ManageObject(env, treObject, JNI_FALSE);
+            (*env)->CallVoidMethod(env, treObject,
+                                   setManagedMethodID, JNI_FALSE);
             
             (*env)->CallBooleanMethod(env, linkedList, listAddMethodID, treObject);
             nitf_ListIterator_increment(&iter);
@@ -155,6 +159,8 @@ JNIEXPORT jobject JNICALL Java_nitf_Extensions_getAll
         (*env)->GetMethodID(env, listClass, "add", "(Ljava/lang/Object;)Z");
     jmethodID treInitMethodID =
         (*env)->GetMethodID(env, treClass, "<init>", "(J)V");
+    jmethodID setManagedMethodID =
+        (*env)->GetMethodID(env, treClass, "setManaged", "(Z)V");
     nitf_TRE *tre;
     jobject element;
     jobject linkedList;
@@ -175,7 +181,7 @@ JNIEXPORT jobject JNICALL Java_nitf_Extensions_getAll
                                         treClass, treInitMethodID, (jlong) tre);
             
             /* tell Java not to manage it */
-            _ManageObject(env, element, JNI_FALSE);
+            (*env)->CallVoidMethod(env, element, setManagedMethodID, JNI_FALSE);
             
             (*env)->CallBooleanMethod(env, linkedList, listAddMethodID, element);
             nitf_ExtensionsIterator_increment(&startIter);
