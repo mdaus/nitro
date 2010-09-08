@@ -23,7 +23,7 @@
 PACKAGE = nitf
 MAJOR_VERSION = 2
 MINOR_VERSION = 5
-VERSION_SUFFIX = rc10
+VERSION_SUFFIX = rc11
 VERSION = $(MAJOR_VERSION)_$(MINOR_VERSION)$(VERSION_SUFFIX)
 LANGUAGE = c
 MAINTAINER = gojira_1@users.sourceforge.net, tzellman@users.sourceforge.net
@@ -33,7 +33,7 @@ LIBHANDLERS = lib$(PACKAGE)-handlers
 LIBEXT  = .a
 DSOEXT  = .so
 EXTLIBS = -lnitf-c
-EXTINCLUDEPATH = -I@top_srcdir@/include
+EXTINCLUDEPATH = -I@top_srcdir@/include -I@top_srcdir@/tests
 EXTLIBPATH = -L@top_srcdir@/lib/@target@
 CFGDEFS = @DEFS@
 SOURCES = BandInfo.c \
@@ -101,33 +101,29 @@ SOURCES = BandInfo.c \
           WriteHandler.c \
           Writer.c 
 
-#        DefaultUserSegment.c \
-#          UserSegment.c \
-#          DEReader.c \
-
-TESTS = test_replace_field.c test_find_field.c test_field.c \
-        test_dll_1.c test_list_1.c test_list_2.c \
+TESTS = test_replace_field.c test_find_field.c \
+        test_dll_1.c \
         test_debug_mem_1.c test_hash_table_1.c \
-        test_dump_record.c test_image_loading.c \
-        test_create.c test_fhdr_clone.c test_list_clone.c \
+        test_image_loading.c \
+        test_fhdr_clone.c \
         test_hash_table_clone.c test_imsub_clone.c \
         test_image_source.c test_writer_3.c \
-        test_file_source.c test_mem_source.c test_tree_1.c \
-        test_create_nitf.c test_tre_mods.c test_create_xmltre.c \
+        test_file_source.c \
+        test_tre_mods.c test_create_xmltre.c \
         test_insert_raw_xmltre.c test_geo_utils.c
 
-# test_ext_iter.c \
-#        test_ImageIO_read_data.c test_ImageIO_writePattern.c \
-#        test_record_clone.c test_tre_mods.c \
-#        test_read_acftb.c test_des_read.c test_field_set.c \
-#        test_text_read.c test_des_write.c
-
 #unit test info
-UNIT_TEST_MAIN = check_all.c
-UNIT_TESTS = check_list.c check_field.c
+UNITTESTS = test_core_values.c\
+            test_create_nitf.c \
+            test_create.c \
+            test_datetime.c \
+            test_field.c \
+            test_list.c \
+            test_mem_source.c \
+            test_tree.c \
+            test_zero_field.c
 
-
-APPS = get_nitf_version.c image_footprint_kml.c
+APPS = get_nitf_version.c image_footprint_kml.c show_nitf.c
 
 #TEST_DES.c
 PLUGINS = \

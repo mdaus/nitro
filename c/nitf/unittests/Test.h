@@ -53,6 +53,7 @@
 #endif
 
 #define CHECK(X) X(#X); fprintf(stderr, "%s : PASSED\n", #X);
+#define CHECK_ARGS(X) X(#X,argc,argv); fprintf(stderr, "%s : PASSED\n", #X);
 #define TEST_ASSERT(X) if (!(X)) { \
     fprintf(stderr, "%s (%s,%s,%d) : FAILED: Value should not be NULL\n", testName, TEST_FILE, TEST_FUNC, TEST_LINE); \
     exit(EXIT_FAILURE); \
@@ -66,7 +67,7 @@
     exit(EXIT_FAILURE); \
 }
 #define TEST_ASSERT_EQ_INT(X1, X2) if ((X1) != (X2)) { \
-    fprintf(stderr, "%s (%s,%s,%d) : FAILED: Recv'd %d, Expected %d\n", testName, TEST_FILE, TEST_FUNC, TEST_LINE, X1, X2); \
+    fprintf(stderr, "%s (%s,%s,%d) : FAILED: Recv'd %d, Expected %d\n", testName, TEST_FILE, TEST_FUNC, TEST_LINE, (int)X1, (int)X2); \
     exit(EXIT_FAILURE); \
 }
 /* TODO use epsilon for comparing floating points */
@@ -76,6 +77,7 @@
 }
 
 #define TEST_CASE(X) void X(const char* testName)
+#define TEST_CASE_ARGS(X) void X(const char* testName, int argc, char **argv)
 
 #endif
 

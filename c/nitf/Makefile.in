@@ -8,13 +8,13 @@ prefix = @prefix@
 exec_prefix = @exec_prefix@
 
 # This target builds the library.  The targets are defined below...
-all: library unit-tests test plugin progs
+all: library unittests test plugin progs
 ##############################################
 #  The ".PHONY" directive tells make not to try 
 #  to find any dependencies.  This keeps it 
 #  working even if there's a file called "libs" 
 #  or "clean".
-.PHONY: libs test shared docs clean raw install fresh progs unit-tests
+.PHONY: libs test shared docs clean raw install fresh progs unittests
 
 ############################################
 #  Make the library
@@ -32,10 +32,9 @@ plugin:
 progs:
 	cd apps; make
 
-unit-tests:
-	if test "@have_unit_tests@" = "yes"; \
-        then cd unit-tests; make; \
-        fi
+unittests:
+	cd unittests; make
+
 ############################################
 #  Make the doxygen
 docs:
@@ -80,9 +79,9 @@ install:
 #  CAUTION: This will delete all the libraries, 
 #  not just for one platform...
 clean:
-	rm -f ./lib/@target@/*$(LIBEXT)
-	rm -f ./lib/@target@/*$(DSOEXT)
-	rm -f ./unit-tests/@target@/*
+	rm -rf ./lib/@target@
+	rm -rf ./unittests/@target@
+	rm -rf ./tests/@target@
 	perl @build_dir@/rfk.pl -f
 
 

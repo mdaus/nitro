@@ -161,8 +161,22 @@ TEST_CASE(testMillis)
     date = nitf_DateTime_fromString(timeStr, "%Y-%m-%dT%H:%M:%SZ", &e);
     TEST_ASSERT(date);
 
+    TEST_ASSERT_EQ_INT((int)(1000 * (date->second - (int)date->second)), 123);
+
+    nitf_DateTime_format(date, "%S", buf, MAX_DATE_STRING, &e);
+    TEST_ASSERT_EQ_STR(buf, "37");
+
+    nitf_DateTime_format(date, "%.3S", buf, MAX_DATE_STRING, &e);
+    TEST_ASSERT_EQ_STR(buf, "37.123");
+
+    nitf_DateTime_format(date, "%Y%.3S", buf, MAX_DATE_STRING, &e);
+    TEST_ASSERT_EQ_STR(buf, "201037.123");
+
     nitf_DateTime_format(date, "%Y-%m-%dT%H:%M:%.6SZ", buf, MAX_DATE_STRING, &e);
-    TEST_ASSERT_EQ_STR(timeStr, buf);
+    TEST_ASSERT_EQ_STR(buf, timeStr);
+
+    nitf_DateTime_destruct(&date);
+    TEST_ASSERT_NULL(date);
 }
 
 int main(int argc, char **argv)
@@ -172,6 +186,5 @@ int main(int argc, char **argv)
     CHECK(testRoundTrip);
     CHECK(testSetIdentity);
     CHECK(testMillis);
-
     return 0;
 }

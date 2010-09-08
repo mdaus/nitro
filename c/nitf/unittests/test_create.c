@@ -20,12 +20,22 @@
  *
  */
 
-#ifndef __NITF_CHECK_ALL_H__
-#define __NITF_CHECK_ALL_H__
+#include <import/nitf.h>
+#include "Test.h"
 
-#include <check.h>
+TEST_CASE(testCreate)
+{
+    nitf_IOHandle handle;
+    nitf_Error error;
 
-Suite *make_list_suite(void);
-Suite *make_field_suite(void);
+    handle = nitf_IOHandle_create("test_create.ntf", NITF_ACCESS_READONLY, NITF_CREATE, &error);
+    TEST_ASSERT(!NITF_INVALID_HANDLE(handle));
 
-#endif
+    nitf_IOHandle_close(handle);
+}
+
+int main(int argc, char **argv)
+{
+    CHECK(testCreate);
+    return 0;
+}

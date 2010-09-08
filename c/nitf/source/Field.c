@@ -58,8 +58,12 @@ NITFAPI(nitf_Field *) nitf_Field_construct(size_t length,
 {
     nitf_Field *field = NULL;
 
-    /* punt on this for now */
-    assert(length > 0);
+    if (length == 0)
+    {
+        nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER,
+                         "Cannot create field of size 0");
+        goto CATCH_ERROR;
+    }
 
     field = (nitf_Field *) NITF_MALLOC(sizeof(nitf_Field));
     if (!field)
@@ -215,7 +219,7 @@ NITFAPI(NITF_BOOL) nitf_Field_setUint64(nitf_Field * field,
 
     /*  Convert thte number to a string */
 
-    NITF_SNPRINTF(numberBuffer, 20, "%llu", number);
+    NITF_SNPRINTF(numberBuffer, 20, "%lu", number);
     numberLen = strlen(numberBuffer);
 
     /* if it's resizable and a different length, we resize */
@@ -309,7 +313,7 @@ NITFAPI(NITF_BOOL) nitf_Field_setInt64(nitf_Field * field,
 
     /*  Convert thte number to a string */
 
-    NITF_SNPRINTF(numberBuffer, 20, "%lld", number);
+    NITF_SNPRINTF(numberBuffer, 20, "%ld", number);
     numberLen = strlen(numberBuffer);
 
     /* if it's resizable and a different length, we resize */
@@ -633,7 +637,7 @@ NITFPRIV(NITF_BOOL) fromIntToString(nitf_Field * field, char *outValue,
             nitf_Int64 int64;
             if (!toInt64(field, &int64, error))
                 goto CATCH_ERROR;
-            actualLength = NITF_SNPRINTF(buffer, 256, "%lld", int64);
+            actualLength = NITF_SNPRINTF(buffer, 256, "%ld", int64);
         }
         break;
         default:
@@ -1068,12 +1072,12 @@ NITFPROT(void) nitf_Field_print(nitf_Field * field)
     {
         case NITF_BINARY:
             /* avoid printing binary */
-            printf("<binary data, length %d>", field->length);
+            printf("<binary data, length %lu>", field->length);
             break;
 
         case NITF_BCS_N:
         case NITF_BCS_A:
-            printf("%.*s", field->length, field->raw);
+            printf("%.*s", (int)field->length, field->raw);
             break;
         default:
             printf("Invalid Field type [%d]\n", (int) field->type);
