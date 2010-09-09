@@ -98,6 +98,11 @@ public:
     {
     }
 
+    explicit GenericType(std::string s) :
+        mData(str::toType<Data_T>(s))
+    {
+    }
+
     /**
      *****************************************************************
      * Constructor, initializes the object with the specified data.

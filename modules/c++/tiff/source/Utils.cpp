@@ -127,7 +127,9 @@ tiff::IFD* tiff::Utils::createGeoTiffIFD(tiff::IFD* ifd)
 
         if (tiffTagLoc == 0)
         {
-            entry->addValue((tiff::GenericType<unsigned short>*) geoVals[idx++]);
+            entry->addValue(
+                            new tiff::GenericType<unsigned short>(
+                                                                  geoVals[idx++]->toString()));
         }
         else if (tiffTagLoc == 34736 && doubleParams)
         {
@@ -136,8 +138,9 @@ tiff::IFD* tiff::Utils::createGeoTiffIFD(tiff::IFD* ifd)
             for (unsigned short j = 0; j < count; ++j)
             {
                 entry->addValue(
-                                (tiff::GenericType<double>*) (*doubleParams)[valueOffset
-                                        + j]);
+                                new tiff::GenericType<double>(
+                                                              (*doubleParams)[valueOffset
+                                                                      + j]->toString()));
             }
         }
         else if (tiffTagLoc == 34737 && asciiParams)
@@ -147,8 +150,9 @@ tiff::IFD* tiff::Utils::createGeoTiffIFD(tiff::IFD* ifd)
             for (unsigned short j = 0; j < count; ++j)
             {
                 entry->addValue(
-                                (tiff::GenericType<std::string>*) (*asciiParams)[valueOffset
-                                        + j]);
+                                new tiff::GenericType<std::string>(
+                                                                   (*asciiParams)[valueOffset
+                                                                           + j]->toString()));
             }
         }
         geoIFD->addEntry(entry);
