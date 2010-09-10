@@ -59,7 +59,7 @@ std::string net::urlJoin(std::string scheme, std::string location, int port,
 {
     std::ostringstream url;
     url << scheme << "://" << location;
-    if (port >= 0)
+    if (port >= 0 && (net::getStandardPort(scheme) != port))
         url << ":" << port;
     if (!path.empty())
     {
@@ -139,4 +139,21 @@ std::string net::unquote(std::string s)
             unquoted << part.substr(2);
     }
     return unquoted.str();
+}
+
+
+int net::getStandardPort(std::string protocol)
+{
+    str::lower(protocol);
+    if (str::startsWith(protocol, "https"))
+        return 443;
+    else if (str::startsWith(protocol, "http"))
+        return 80;
+    else if (str::startsWith(protocol, "ssh"))
+        return 22;
+    else if (str::startsWith(protocol, "sftp"))
+        return 115;
+    else if (str::startsWith(protocol, "ftp"))
+        return 21;
+    return -1;
 }

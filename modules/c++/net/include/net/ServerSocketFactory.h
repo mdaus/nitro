@@ -134,7 +134,7 @@ public:
 
         // Make sure we're set up for broadcasting if necessary
         int on = 1;
-        s.setOption(SOL_SOCKET, SO_BROADCAST, &on);
+        s.setOption(SOL_SOCKET, SO_BROADCAST, on);
 
         // Bind to this address
         s.bind(address);

@@ -22,9 +22,10 @@
 
 #include "net/URL.h"
 #include <import/str.h>
-#include <import/re.h>
+#include <import/sys.h>
 
-net::URL::URL(const std::string url) : mPort(-1)
+net::URL::URL(const std::string url) :
+    mPort(-1)
 {
     if (!url.empty())
         set(url);
@@ -34,6 +35,7 @@ net::URL::URL(const net::URL& url)
 {
     mProtocol = url.getProtocol();
     mHost = url.getHost();
+    setPort(url.getPort());
     mPath = url.getPath();
     mFragment = url.getFragment();
     mParams = net::URLParams(url.getParams().toString());
@@ -41,14 +43,21 @@ net::URL::URL(const net::URL& url)
 
 void net::URL::set(std::string url)
 {
-    std::vector < std::string > parts = net::urlSplit(url);
+    std::vector<std::string> parts = net::urlSplit(url);
     mProtocol = parts[0];
     mHost = parts[1];
-    mPort = parts[2].empty() ? -1 : str::toType<int>(parts[2]);
+    setPort(parts[2].empty() ? -1 : str::toType<int>(parts[2]));
     mPath = parts[3];
     std::string params = parts[4];
     mFragment = parts[5];
     mParams = net::URLParams(params);
+}
+
+void net::URL::setPort(int port)
+{
+    mPort = port;
+    if (mPort < 0)
+        mPort = net::getStandardPort(getProtocol());
 }
 
 std::string net::URL::getProtocol() const

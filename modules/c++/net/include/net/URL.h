@@ -93,6 +93,8 @@ public:
     URLParams& getParams() { return mParams; }
     const URLParams& getParams() const { return mParams; }
     std::string toString() const;
+    void setPort(int port);
+    bool hasStandardPort() const;
 
     /*!
      * Are these URLs equal
@@ -108,6 +110,7 @@ protected:
     std::string mPath;
     URLParams mParams;
     std::string mFragment;
+
 };
 }
 #endif

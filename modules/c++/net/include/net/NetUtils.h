@@ -67,6 +67,11 @@ std::string quote(std::string s);
  */
 std::string unquote(std::string s);
 
+/**
+ * Returns the standard port for the given protocol (or url)
+ */
+int getStandardPort(std::string protocol);
+
 }
 #endif
 
