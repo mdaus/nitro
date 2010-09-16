@@ -1,21 +1,23 @@
-# ==================== DO NOT EDIT THIS HEADER ======================== 
+# =========================================================================
+# This file is part of CODA
+# =========================================================================
 # 
-# Copyright (c) 2006 General Dynamics - AIS
-# Ann Arbor, MI. 
-# 
-# All Rights Reserved 
-# 
-# THIS IS UNPUBLISHED COPYRIGHTED SOURCE CODE containing
-# proprietary information of General Dynamics - AIS
-# This copy has been provided on the basis of strict
-# confidentiality and on the express understanding that
-# it may not be reproduced, or revealed to any person,
-# in whole or in part, without express written permission
-# from General Dynamics - AIS, which is sole owner of
-# copyright and all other rights therein. 
-# No cost usage license granted to U.S. Government only.
-# 
-# ==================== DO NOT EDIT THIS HEADER ========================
+# (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
+#
+# CODA is free software; you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public 
+# License along with this program; If not, 
+# see <http://www.gnu.org/licenses/>.
+#
 
 
 #----------------------------------------
@@ -42,7 +44,7 @@ ARCHNAME = $(PACKAGE)-$(LANGUAGE)
 LIBNAME = lib$(ARCHNAME).a
 LIBDIR = ../lib/$(TARGET)/@lib_dir@
 DSONAME = lib$(ARCHNAME).so
-LIBS = $(MY_LIBS) @link_libs@ 
+LIBS = -l$(ARCHNAME) $(MY_LIBS) @link_libs@ 
 
 #----------------------------------------
 # Link

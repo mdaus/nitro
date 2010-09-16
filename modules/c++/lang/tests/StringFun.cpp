@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of xstr-c++
+ * This file is part of lang-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
+ * (C) Copyright 2004 - 2010, General Dynamics - Advanced Information Systems
  *
- * xstr-c++ is free software; you can redistribute it and/or modify
+ * lang-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -19,10 +19,11 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#include <import/xstr.h>
+
+#include <import/lang.h>
 #include <import/sys.h>
 
-using namespace xstr;
+using namespace lang;
 
 int main(int argc, char **argv)
 {

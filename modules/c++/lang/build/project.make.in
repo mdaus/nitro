@@ -1,5 +1,5 @@
 PACKAGE = lang
-BUILD = unit-tests
+BUILD = library unit-tests
 MAJOR_VERSION = 1
 MINOR_VERSION = 0
 VERSION_SUFFIX =
@@ -7,10 +7,9 @@ VERSION = $(MAJOR_VERSION)_$(MINOR_VERSION)$(VERSION_SUFFIX)
 MAINTAINER = tzellman@users.sourceforge.net,gojira_1@users.sourceforge.net
 DESCRIPTION = Core language structures
 
-SOURCES = 
+SOURCES = String.cpp
 
-TESTS =   ListTest.cpp \
-          MapTest.cpp
+TESTS =   ListTest.cpp MapTest.cpp StringFun.cpp
 
 MY_CXXFLAGS = 
 MY_CXXDEFINES =
@@ -18,9 +17,11 @@ MY_LFLAGS =
 MY_INCLUDES = -I@top_srcdir@/except/include \
               -I@top_srcdir@/str/include \
               -I@top_srcdir@/sys/include \
+              -I@top_srcdir@/re/include \
               -I@top_srcdir@/io/include
 MY_LIBPATH = -L@top_srcdir@/str/lib/@target@/@lib_dir@ \
              -L@top_srcdir@/except/lib/@target@/@lib_dir@ \
              -L@top_srcdir@/sys/lib/@target@/@lib_dir@ \
+             -L@top_srcdir@/re/lib/@target@/@lib_dir@ \
              -L@top_srcdir@/io/lib/@target@/@lib_dir@
-MY_LIBS = -lio-c++ -lsys-c++ -lstr-c++ -lexcept-c++
+MY_LIBS = -lio-c++ -lre-c++ -lsys-c++ -lstr-c++ -lexcept-c++ -lpcre

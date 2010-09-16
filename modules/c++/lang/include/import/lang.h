@@ -11,6 +11,7 @@
 #include "lang/STLList.h"
 #include "lang/STLMap.h"
 #include "lang/STLVector.h"
+#include "lang/String.h"
 #include "lang/Utility.h"
 
 #endif

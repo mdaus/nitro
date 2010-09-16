@@ -1,16 +1,9 @@
-import os
-
 NAME            = 'lang'
 MAINTAINER      = 'tzellman@users.sourceforge.net gojira_1@users.sourceforge.net'
 VERSION         = '1.0'
-MODULE_DEPS     = 'io'
-USELIB          = 'lang'
-HEADERSONLY     = True
+MODULE_DEPS     = 'io re'
 
-set_options = distclean = lambda p: None
-
-def configure(conf):
-    conf.env.append_value('CPPPATH_%s' % NAME, os.path.join(conf.curdir, 'include'))
+set_options = configure = distclean = lambda p: None
 
 def build(bld):
     bld.module(**globals())
