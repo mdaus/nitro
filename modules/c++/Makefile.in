@@ -45,6 +45,10 @@ raw: core_raw dbi_raw
 	rm -f Makefile
 	rm -f config.status
 	rm -rf install
+	rm -rf bin
+	rm -f config.log
+	rm -f xml.lite/include/expat_external.h
+	rm -f xml.lite/include/expat.h
 
 #  Make all of the tests in CODA OSS
 tests: core_tests #dbi_tests 
