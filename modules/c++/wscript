@@ -7,7 +7,7 @@ Utils.g_module.build_context = Utils.g_module.install_context = \
     Utils.g_module.clean_context = CPPBuildContext
 
 MODULES = 'except str sys io mt plugin logging dbi re xstr net net.ssl ' \
-          'unique xml.lite linear.lite zip math.linear math.poly'
+          'unique xml.lite linear.lite zip math.linear math.poly lang'
 
 
 def set_options(opt):

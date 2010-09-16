@@ -22,11 +22,13 @@ MY_INCLUDES = -I@top_srcdir@/except/include \
               -I@top_srcdir@/sys/include \
               -I@top_srcdir@/io/include \
               -I@top_srcdir@/re/include \
+              -I@top_srcdir@/mt/include \
               -I@top_srcdir@/net/include
 MY_LIBPATH = -L@top_srcdir@/except/lib/@target@/@lib_dir@ \
              -L@top_srcdir@/str/lib/@target@/@lib_dir@ \
              -L@top_srcdir@/sys/lib/@target@/@lib_dir@ \
              -L@top_srcdir@/io/lib/@target@/@lib_dir@ \
              -L@top_srcdir@/re/lib/@target@/@lib_dir@ \
+             -L@top_srcdir@/mt/lib/@target@/@lib_dir@ \
              -L@top_srcdir@/net/lib/@target@/@lib_dir@
-MY_LIBS = -lnet-c++ -lre-c++ -lio-c++ -lsys-c++ -lstr-c++ -lexcept-c++
+MY_LIBS = -lnet-c++ -lre-c++ -lio-c++ -lmt-c++ -lsys-c++ -lstr-c++ -lexcept-c++

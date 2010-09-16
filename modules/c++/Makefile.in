@@ -40,8 +40,8 @@ core: core_libs core_tests
 dbi: dbi_libs dbi_tests
 
 #  Clean all of the packages in CODA OSS
-clean: core_clean drivers_clean #dbi_clean
-raw: core_raw #dbi_raw
+clean: core_clean drivers_clean dbi_clean
+raw: core_raw dbi_raw
 	rm -f Makefile
 	rm -f config.status
 	rm -rf install
@@ -130,6 +130,9 @@ core_libs: min_libs
 	cd net.ssl;  make library
 	cd xml.lite; make library
 	cd unique; make library
+	cd xstr; make library
+	cd zip; make library
+	cd tiff; make library
 
 core_clean: min_clean
 	cd logging; make clean
@@ -138,6 +141,13 @@ core_clean: min_clean
 	cd net.ssl;  make clean
 	cd xml.lite; make clean
 	cd unique; make clean
+	cd xstr; make clean
+	cd zip; make clean
+	cd tiff; make clean
+	cd lang; make clean
+	cd math.linear; make clean
+	cd math.poly; make clean
+	cd linear.lite; make clean
 
 core_raw: min_raw
 	cd logging; make raw
@@ -146,6 +156,13 @@ core_raw: min_raw
 	cd net.ssl;  make raw
 	cd xml.lite; make raw
 	cd unique; make raw
+	cd xstr; make raw
+	cd zip; make raw
+	cd tiff; make raw
+	cd lang; make raw
+	cd math.linear; make raw
+	cd math.poly; make raw
+	cd linear.lite; make raw
 
 core_tests: min_tests
 	cd logging; make unit-tests
@@ -153,6 +170,12 @@ core_tests: min_tests
 	cd net.ssl;  make unit-tests
 	cd xml.lite; make unit-tests
 	cd unique; make unit-tests
+	cd xstr; make unit-tests
+	cd zip; make unit-tests
+	cd tiff; make unit-tests
+	cd lang; make unit-tests
+	cd math.linear; make unit-tests
+	cd math.poly; make unit-tests
 
 core_install: min_install
 	cd logging; make install
@@ -161,6 +184,12 @@ core_install: min_install
 	cd net.ssl; make install
 	cd xml.lite; make install
 	cd unique; make install
+	cd xstr; make install
+	cd zip; make install
+	cd tiff; make install
+	cd lang; make install
+	cd math.linear; make install
+	cd math.poly; make install
 
 dbi_libs:
 	cd dbi;      make library
