@@ -81,6 +81,8 @@
 #  ifndef WIN32_LEAN_AND_MEAN
 #      define WIN32_LEAN_AND_MEAN
 #  endif
+#  define NOMINMAX
+#  include <malloc.h>
 #  include <windows.h>
 #  include <process.h>
 
@@ -175,6 +177,7 @@ namespace sys
 #    undef  signal
 #endif
 
+#include "except/Exception.h"
 
 #define FmtX str::format
 
@@ -261,6 +264,106 @@ namespace sys
         }
         return out;
     }
+
+
+#ifdef WIN32
+
+    /*!
+     *  Method to create a block of memory on 16-byte boundary.
+     *  This typically reduces the amount of moves that the
+     *  OS has to do to get the data in the form that it needs
+     *  to be in.  Since this method is non-standard, we present
+     *  a windows and linux alternative.
+     *
+     *  \param sz The size (in bytes) of the buffer we wish to create
+     *  \throw Exception if a bad allocation occurs
+     *  \return a pointer to the data (this method never returns NULL)
+     */
+    inline void* alignedAlloc(size_t sz)
+    {
+        void* p = _aligned_malloc(sz, 16);
+        if (!p)
+            throw except::Exception("_aligned_malloc: bad alloc");
+        
+        return p;
+    }
+    
+    /*!
+     *  Free memory that was allocated with alignedAlloc
+     *  This method behaves like free
+     *
+     *  \param p A pointer to the data allocated using alignedAlloc
+     */
+    inline void alignedFree(void* p)
+    {
+        _aligned_free(p);
+    }
+#elif defined(__POSIX)
+
+    /*!
+     *  Method to create a block of memory on 16-byte boundary.
+     *  This typically reduces the amount of moves that the
+     *  OS has to do to get the data in the form that it needs
+     *  to be in.  Since this method is non-standard, we present
+     *  a windows and linux alternative.
+     *
+     *  \param sz The size (in bytes) of the buffer we wish to create
+     *  \throw Exception if a bad allocation occurs
+     *  \return a pointer to the data (this method never returns NULL)
+     */
+    inline void* alignedAlloc(size_t sz)
+    {
+        void* p = NULL;
+        if (posix_memalign(&p, 16, sz) != 0)
+            throw except::Exception("posix_memalign: bad alloc");
+        memset(p, 0, sz);
+        return p;
+    
+    }
+
+    /*!
+     *  Free memory that was allocated with alignedAlloc
+     *  This method behaves like free
+     *
+     *  \param p A pointer to the data allocated using alignedAlloc
+     */
+    inline void alignedFree(void* p)
+    {
+        free(p);
+    }
+#else
+
+    /*!
+     *  Method to create a block of memory on 16-byte boundary.
+     *  This typically reduces the amount of moves that the
+     *  OS has to do to get the data in the form that it needs
+     *  to be in.  Since this method is non-standard, we present
+     *  a windows and linux alternative.
+     *
+     *  \param sz The size (in bytes) of the buffer we wish to create
+     *  \throw Exception if a bad allocation occurs
+     *  \return a pointer to the data (this method never returns NULL)
+     */
+    inline void* alignedAlloc(size_t sz)
+    {
+        void* p = calloc(sz, 1);
+        if (p == NULL)
+            throw except::Exception("calloc: bad alloc");
+        return p;
+    }
+
+    /*!
+     *  Free memory that was allocated with alignedAlloc
+     *  This method behaves like free
+     *
+     *  \param p A pointer to the data allocated using alignedAlloc
+     */
+    inline void alignedFree(void* p)
+    {
+        free(p);
+    }
+#endif
+
 
 }
 

@@ -14,7 +14,7 @@
 using namespace net;
 
 DaemonUnix::DaemonUnix() :
-    DaemonInterface(), mPidfile(""), mTracefile("/dev/null")
+    DaemonInterface(), mPidfile(""), mTracefile("/dev/null"), mForeground(false)
 {
 }
 
@@ -29,8 +29,11 @@ void DaemonUnix::start()
     if (pid > 0)
         throw except::Exception(Ctxt("Daemon is already running."));
 
-    this->fork();
-    // ...now in the CHILD
+    if (!mForeground)
+    {
+        this->fork();
+        // ...now in the CHILD
+    }
 
     // Write the pidfile, if set
     writePidfile();
@@ -89,6 +92,10 @@ void DaemonUnix::daemonize(int& argc, char**& argv)
         else if (arg == "restart")
         {
             command = RESTART;
+        }
+        else if (arg == "--foreground")
+        {
+            mForeground = true;
         }
         else if (arg == "--pidfile" && i < (argc - 1))
         {
@@ -248,12 +255,12 @@ void DaemonUnix::redirectStreamsTo(const std::string& filename)
         throw except::Exception(
             Ctxt("Failed to open /dev/null for STDIN."));
     }
-    if (openFileFor(STDOUT_FILENO, filename, O_WRONLY|O_CREAT|O_APPEND) < 0)
+    if (openFileFor(STDOUT_FILENO, filename, O_WRONLY|O_CREAT|O_TRUNC) < 0)
     {
         throw except::Exception(
             Ctxt(FmtX("Failed to open file %s for STDOUT.", filename.c_str())));
     }
-    if (openFileFor(STDERR_FILENO, filename, O_WRONLY|O_CREAT|O_APPEND) < 0)
+    if (openFileFor(STDERR_FILENO, filename, O_WRONLY|O_CREAT|O_TRUNC) < 0)
     {
         throw except::Exception(
             Ctxt(FmtX("Failed to open file %s for STDERR.", filename.c_str())));

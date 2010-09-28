@@ -22,6 +22,43 @@
 
 #include "sys/Path.h"
 
+sys::Path::Path()
+{
+}
+
+sys::Path::Path(const Path& parent, std::string child)
+{
+    mPathName = joinPaths(parent.mPathName, child);
+}
+
+sys::Path::Path(std::string parent, std::string child)
+{
+    mPathName = joinPaths(parent, child);
+}
+
+sys::Path::Path(std::string pathName) :
+    mPathName(pathName)
+{
+}
+
+sys::Path& sys::Path::operator=(const sys::Path& path)
+{
+    if (this != &path)
+    {
+        mPathName = path.mPathName;
+    }
+    return *this;
+}
+
+sys::Path::Path(const sys::Path& path)
+{
+    mPathName = path.mPathName;
+}
+
+sys::Path::~Path()
+{
+}
+
 std::string sys::Path::normalizePath(const std::string& path)
 {
     std::string osDelimStr(sys::Path::delimiter());
@@ -80,7 +117,7 @@ std::string sys::Path::normalizePath(const std::string& path)
 }
 
 std::string sys::Path::joinPaths(const std::string& path1,
-        const std::string& path2)
+                                 const std::string& path2)
 {
     std::string osDelimStr(sys::Path::delimiter());
 
@@ -100,14 +137,14 @@ std::string sys::Path::joinPaths(const std::string& path1,
 std::string sys::Path::absolutePath(const std::string& path)
 {
     std::string osDelimStr(sys::Path::delimiter());
-    
+
     sys::Path::StringPair driveParts = sys::Path::splitDrive(path);
     if (!str::startsWith(path, osDelimStr) && !str::startsWith(path, "/")
             && driveParts.first.empty())
         return sys::Path::normalizePath(
-            sys::Path::joinPaths(
-                sys::OS().getCurrentWorkingDirectory(), path)
-            );
+                                        sys::Path::joinPaths(
+                                                             sys::OS().getCurrentWorkingDirectory(),
+                                                             path));
     return sys::Path::normalizePath(path);
 }
 
@@ -186,8 +223,8 @@ std::vector<std::string> sys::Path::list() const
     if (!mOS.exists(mPathName) || !mOS.isDirectory(mPathName))
     {
         std::ostringstream oss;
-        oss << "'" << mPathName 
-            << "' does not exist or is not a valid directory";
+        oss << "'" << mPathName
+                << "' does not exist or is not a valid directory";
         throw except::Exception(Ctxt(oss.str()));
     }
     std::vector<std::string> listing;
@@ -201,7 +238,7 @@ std::vector<std::string> sys::Path::list() const
     return listing;
 }
 
-std::ostream& operator<< (std::ostream& os, const sys::Path& path)
+std::ostream& operator<<(std::ostream& os, const sys::Path& path)
 {
     os << path.getPath().c_str();
     return os;

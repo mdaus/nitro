@@ -24,6 +24,7 @@
 #if defined(WIN32)
 
 #include "sys/OSWin32.h"
+#include "sys/File.h"
 
 
 std::string sys::OSWin32::getPlatformName() const
@@ -92,15 +93,6 @@ void sys::OSWin32::search(std::vector<std::string>& exhaustiveEnumerations,
     throw except::Exception("This function is not implemented yet");
 #endif
 }
-
-// std::string sys::OSWin32::getUsername() const
-// {
-//     DWORD pathLength = MAX_PATH;
-//     char buffer[MAX_PATH];
-//     if (!GetUserName(buffer, &pathLength))
-//         throw SystemException("GetUserName() failed");
-//     return std::string(buffer, pathLength);
-// }
 
 bool sys::OSWin32::exists(const std::string& path) const
 {
@@ -195,59 +187,13 @@ std::string sys::OSWin32::getTempName(std::string path,
 
 sys::Off_T sys::OSWin32::getSize(const std::string& path) const
 {
-    HANDLE handle = CreateFile(path.c_str(),
-                               GENERIC_READ,
-                               0,
-                               NULL,
-                               OPEN_EXISTING,
-                               FILE_ATTRIBUTE_NORMAL,
-                               0);
-    if (handle == NULL)
-        throw sys::SystemException(
-            FmtX("Could not open file with path %s",
-                 path.c_str())); // ??
-
-    DWORD highOff;
-    DWORD ret = GetFileSize(handle, &highOff);
-    CloseHandle(handle);
-    sys::Uint64_T off = highOff;
-    return (sys::Off_T)(off << 32) + ret;
+    return sys::File(path).length();
 }
 
 sys::Off_T sys::OSWin32::getLastModifiedTime(const std::string& path) const
 {
-    HANDLE handle = CreateFile(path.c_str(),
-                               GENERIC_READ,
-                               0,
-                               NULL,
-                               OPEN_EXISTING,
-                               FILE_ATTRIBUTE_NORMAL,
-                               0);
-    if (handle == NULL)
-        throw sys::SystemException(
-            FmtX("Could not open file with path %s",
-                 path.c_str())); // ??
-
-    FILETIME creationTime, lastAccessTime, lastWriteTime;
-    BOOL ret = GetFileTime(handle, &creationTime,
-            &lastAccessTime, &lastWriteTime);
-
-    CloseHandle(handle);
-
-    if (ret)
-    {
-        ULARGE_INTEGER uli;
-        uli.LowPart = lastWriteTime.dwLowDateTime;
-        uli.HighPart = lastWriteTime.dwHighDateTime;
-
-        ULONGLONG stInMillis(uli.QuadPart/10000);
-        return (sys::Off_T)stInMillis;
-    }
-    throw sys::SystemException(
-        FmtX("Error getting last modified time for path %s",
-             path.c_str()));
+    return sys::File(path).lastModifiedTime();
 }
-
 
 void sys::OSWin32::millisleep(int milliseconds) const
 {

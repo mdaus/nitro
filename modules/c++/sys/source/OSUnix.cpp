@@ -20,10 +20,10 @@
  *
  */
 
-
 #if !defined(WIN32)
 
 #include "sys/OSUnix.h"
+#include "sys/File.h"
 
 std::string sys::OSUnix::getPlatformName() const
 {
@@ -44,15 +44,10 @@ std::string sys::OSUnix::getNodeName() const
     return std::string(name.nodename);
 }
 
-
-
-
 void sys::OSUnix::search(std::vector<std::string>& exhaustiveEnumerations,
-                         const std::string& fragment,
-                         std::string filter,
-                         std::string pathList) const
+        const std::string& fragment, std::string filter, std::string pathList) const
 {
-    std::vector<std::string> paths = str::Tokenizer(pathList, ":");
+    std::vector < std::string > paths = str::Tokenizer(pathList, ":");
 
     for (unsigned int x = 0; x < paths.size(); x++)
     {
@@ -63,7 +58,7 @@ void sys::OSUnix::search(std::vector<std::string>& exhaustiveEnumerations,
             continue;
 
         // This should shut gcc up for linux
-        while ( (entry = (readdir(directory))) )
+        while ((entry = (readdir(directory))))
         {
             // Filename contains the file string.
             if (strstr(entry->d_name, fragment.c_str()) != NULL)
@@ -83,20 +78,6 @@ void sys::OSUnix::search(std::vector<std::string>& exhaustiveEnumerations,
         closedir(directory);
     }
 }
-
-// std::string sys::OSUnix::getUsername() const
-// {
-//     struct passwd* pass = getpwuid(geteuid());
-//     if (pass == NULL)
-//     {
-//  return std::string("");
-//     }
-
-//     std::string passStr = pass->pw_name;
-//     free(pass);
-//     return passStr;
-
-// }
 
 bool sys::OSUnix::exists(const std::string& path) const
 {
@@ -121,12 +102,10 @@ bool sys::OSUnix::remove(const std::string& path) const
     return false;
 }
 
-
 bool sys::OSUnix::move(const std::string& path, const std::string& newPath) const
 {
     return rename(path.c_str(), newPath.c_str()) == 0;
 }
-
 
 sys::Pid_T sys::OSUnix::getProcessId() const
 {
@@ -138,9 +117,7 @@ bool sys::OSUnix::makeDirectory(const std::string& path) const
     if (::mkdir(path.c_str(), 0777) == 0)
         return true;
     return false;
-
 }
-
 
 bool sys::OSUnix::isFile(const std::string& path) const
 {
@@ -201,20 +178,12 @@ std::string sys::OSUnix::getTempName(std::string path, std::string prefix) const
 
 sys::Off_T sys::OSUnix::getSize(const std::string& path) const
 {
-    struct stat info;
-    if (stat(path.c_str(), &info) == -1)
-        throw sys::SystemException("Stat failed");
-
-    return (sys::Off_T)info.st_size;
+    return sys::File(path).length();
 }
 
 sys::Off_T sys::OSUnix::getLastModifiedTime(const std::string& path) const
 {
-    struct stat info;
-    if (stat(path.c_str(), &info) == -1)
-        throw sys::SystemException("Stat failed");
-
-    return (sys::Off_T)info.st_mtime * 1000;
+    return sys::File(path).lastModifiedTime();
 }
 
 void sys::OSUnix::millisleep(int milliseconds) const
@@ -229,7 +198,8 @@ std::string sys::OSUnix::getDSOSuffix() const
 std::string sys::OSUnix::operator[](const std::string& s) const
 {
     const char* p = getenv(s.c_str());
-    if (p == NULL) throw sys::SystemException("While retrieving unix environment variable");
+    if (p == NULL)
+        throw sys::SystemException("While retrieving unix environment variable");
     return std::string(p);
 }
 
@@ -237,7 +207,7 @@ void sys::DirectoryUnix::close()
 {
     if (mDir)
     {
-        closedir(mDir);
+        closedir( mDir);
         mDir = NULL;
     }
 }
@@ -245,7 +215,8 @@ const char* sys::DirectoryUnix::findFirstFile(const char* dir)
 {
     // First file is always . on Unix
     mDir = ::opendir(dir);
-    if (mDir == NULL) return NULL;
+    if (mDir == NULL)
+        return NULL;
     return findNextFile();
 
 }
@@ -253,10 +224,10 @@ const char* sys::DirectoryUnix::findFirstFile(const char* dir)
 const char* sys::DirectoryUnix::findNextFile()
 {
     struct dirent* entry = NULL;
-    entry = ::readdir( mDir );
-    if (entry == NULL) return NULL;
+    entry = ::readdir(mDir);
+    if (entry == NULL)
+        return NULL;
     return entry->d_name;
 }
-
 
 #endif

@@ -200,6 +200,66 @@ public:
             mHandlers.find( name );
         return ( it != mHandlers.end() );
     }
+
+    /*!
+     *  Register a new plugin by identifier.
+     *  This may be used by the application to load any qualifying plugin
+     *  directly, including staticly linked identifiers.
+     *
+     *  \param identity The plugin identifier
+     *  \param eh The error handler to be used if something bad happens
+     */
+    virtual void addHandler(PluginIdentity<T>* identity, ErrorHandler* eh)
+    {
+        try
+        {
+            /*
+             *  Check that the plugin identity is a qualifying version.  You
+             *  can change what constitutes a valid version by overriding
+             *  the pluginVersionSupported function.  Then, we check the
+             *  operations that we are supporting.  There is a key to
+             *  designate each of the ops.  We enter a newly constructed
+             *  handler in the handler registry for each operation.
+             */
+
+            int majorVersion = identity->getMajorVersion();
+            int minorVersion = identity->getMinorVersion();
+
+            const char** ops = identity->getOperations();
+            if (! pluginVersionSupported( majorVersion, minorVersion ) )
+            {
+                std::ostringstream oss;
+
+                for (unsigned int i = 0;  ops[i] != NULL; i++)
+                    oss << ops[i] << ":";
+                eh->onPluginVersionUnsupported(
+                    FmtX("For plugin supporting ops %s version [%d.%d] not supported (%d.%d)",
+                         oss.str().c_str(), majorVersion, minorVersion,
+                         mMajorVersion, mMinorVersion
+                        )
+                );
+                return;
+            }
+
+            for (unsigned int i = 0; ops[i] != NULL; ++i)
+            {
+                T* pluginHandler = identity->spawnHandler();
+                if (! pluginHandler )
+                {
+                    eh->onPluginLoadFailed(
+                        FmtX("Failed to spawn handler for op %s", ops[i]));
+                    // Keep going
+                }
+                mHandlers[ ops[i] ].first = pluginHandler;
+                mHandlers[ ops[i] ].second = identity;
+            }
+        }
+        catch (except::Exception& ex)
+        {
+            eh->onPluginLoadFailed(ex.getMessage());
+        }
+    }
+
     /*!
      *  Load the plugin identified by the file name.
      *  This may be used by the application to load specific plugins
@@ -210,8 +270,6 @@ public:
      */
     virtual void loadPlugin(const std::string& file, ErrorHandler* eh)
     {
-
-
         try
         {
             sys::DLL *dso = NULL;
@@ -246,61 +304,18 @@ public:
                 mDSOs.push_back(dso);
             }
 
-            /*
-             *  First, retrieve the plugin identity we are talking about.
-             *  This thing, check that it is a qualifying version.  You
-             *  can change what constitutes a valid version by overriding
-             *  the pluginVersionSupported function.  Then, we check the
-             *  operations that we are supporting.  There is a key to
-             *  designate each of the ops.  We enter a newly constructed
-             *  handler in the handler registry for each operation.
-             */
+            // Retrieve the plugin identity and add a handler to the registry.
 
             PluginIdentity<T>*(*ident)(void) =
                 (PluginIdentity<T>*(*)(void))
                 dso->retrieve(getPluginIdentName());
 
-
-            PluginIdentity<T>* identity = (*ident)();
-
-            int majorVersion = identity->getMajorVersion();
-            int minorVersion = identity->getMinorVersion();
-
-            const char** ops = identity->getOperations();
-            if (! pluginVersionSupported( majorVersion, minorVersion ) )
-            {
-                std::ostringstream oss;
-
-                for (unsigned int i = 0;  ops[i] != NULL; i++)
-                    oss << ops[i] << ":";
-                eh->onPluginVersionUnsupported(
-                    FmtX("For plugin supporting ops %s version [%d.%d] not supported (%d.%d)",
-                         oss.str().c_str(), majorVersion, minorVersion,
-                         mMajorVersion, mMinorVersion
-                        )
-                );
-                return;
-            }
-
-            for (unsigned int i = 0; ops[i] != NULL; ++i)
-            {
-                T* pluginHandler = identity->spawnHandler();
-                if (! pluginHandler )
-                {
-                    eh->onPluginLoadFailed(file);
-                    // Keep going
-                }
-                mHandlers[ ops[i] ].first = pluginHandler;
-                mHandlers[ ops[i] ].second = identity;
-
-            }
-
+            addHandler((*ident)(), eh);
         }
         catch (except::Exception& ex)
         {
             eh->onPluginLoadFailed(ex.getMessage());
         }
-
     }
 
     void getAllHandlers(std::vector<T*>& handlers)

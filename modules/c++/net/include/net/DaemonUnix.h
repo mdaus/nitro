@@ -48,6 +48,7 @@ public:
 protected:
     std::string mPidfile;
     std::string mTracefile;
+    bool mForeground;
 
     void fork();
     void redirectStreamsTo(const std::string& filename);

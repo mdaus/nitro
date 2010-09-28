@@ -20,7 +20,6 @@
  *
  */
 
-
 #ifndef __SYS_PATH_H__
 #define __SYS_PATH_H__
 
@@ -39,47 +38,25 @@
 namespace sys
 {
 
-
 class Path
 {
-    std::string mPathName;
-    OS mOS;
-
 public:
+    Path();
+    Path(const Path& parent, std::string child);
+    Path(std::string parent, std::string child);
+    Path(std::string pathName);
+    Path& operator=(const Path& path);
+    Path(const Path& path);
+    ~Path();
 
-    Path() {}
-    Path(const Path& parent, std::string child)
+    inline operator std::string() const
     {
-        mPathName = joinPaths(parent.mPathName, child);
-    }
-    
-    Path(std::string parent, std::string child)
-    {
-        mPathName = joinPaths(parent, child);
-    }
-
-    Path(std::string pathName) : mPathName(pathName) {}
-
-    Path& operator=(const Path& path)
-    {
-        if (this != &path)
-        {
-            mPathName = path.mPathName;
-        }
-        return *this;
+        return mPathName;
     }
 
-    Path(const Path& path)
-    {
-        mPathName = path.mPathName;
-    }
-
-
-    ~Path(){}
-    
     //! Shortcut for a std::pair of std::strings
     typedef std::pair<std::string, std::string> StringPair;
-    
+
     /*!
      * Normalizes a pathname. Collapses redundant separators and up-level
      * references. On Windows, it converts forward slashes to backward slashes.
@@ -91,11 +68,11 @@ public:
         return normalizePath(mPathName);
     }
 
-    
     /*!
      * Joins two paths together, using the OS-specific delimiter.
      */
-    static std::string joinPaths(const std::string& path1, const std::string& path2);
+    static std::string joinPaths(const std::string& path1,
+                                 const std::string& path2);
 
     inline Path join(const std::string& path) const
     {
@@ -111,7 +88,7 @@ public:
     {
         return absolutePath(mPathName);
     }
-    
+
     /*!
      * Splits the path into two components: head & tail.
      * 
@@ -119,7 +96,7 @@ public:
      * tail will be empty. If there is no delim in path, head will be empty.
      */
     static StringPair splitPath(const std::string& path);
-    
+
     inline StringPair split() const
     {
         return splitPath(mPathName);
@@ -132,7 +109,7 @@ public:
      * be the empty string. drive + tail = path
      */
     static StringPair splitDrive(const std::string& path);
-    
+
     inline StringPair splitDrive() const
     {
         return splitDrive(mPathName);
@@ -146,8 +123,7 @@ public:
      * path.
      */
     static StringPair splitExt(const std::string& path);
-    
-    
+
     inline StringPair splitExt() const
     {
         return splitExt(mPathName);
@@ -157,7 +133,8 @@ public:
      * Returns the base name of the path supplied. This is the second half of the
      * pair returned by splitPath()
      */
-    static std::string basename(const std::string& path, bool removeExt = false);
+    static std::string basename(const std::string& path, bool rmvExt = false);
+
     inline std::string getBasePath(bool removeExt = false) const
     {
         return sys::Path::basename(mPathName, removeExt);
@@ -167,21 +144,22 @@ public:
      * Returns the path delimiter
      */
     static const char* delimiter();
-    
+
     /*!
      * Returns the path separator
      */
     static const char* separator();
-   
+
     inline bool exists() const
     {
         return mOS.exists(mPathName);
     }
-    
+
     inline bool isDirectory() const
     {
         return mOS.isDirectory(mPathName);
     }
+
     inline bool isFile() const
     {
         return mOS.isFile(mPathName);
@@ -192,8 +170,11 @@ public:
         return mOS.getLastModifiedTime(mPathName);
     }
 
-    inline std::string getPath() const { return mPathName; }
-    
+    inline std::string getPath() const
+    {
+        return mPathName;
+    }
+
     std::vector<std::string> list() const;
 
     inline bool mkdir() const
@@ -215,24 +196,25 @@ public:
         }
         return false;
     }
+
     inline sys::Off_T length() const
     {
         return mOS.getSize(mPathName);
     }
 
-    void reset(std::string str)
+    inline void reset(std::string str)
     {
         mPathName = str;
     }
 
-
+protected:
+    std::string mPathName;
+    OS mOS;
 };
-
 
 }
 
 std::ostream& operator<<(std::ostream& os, const sys::Path& path);
 std::istream& operator>>(std::istream& os, sys::Path& path);
-
 
 #endif

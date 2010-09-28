@@ -20,7 +20,6 @@
  *
  */
 
-
 #ifndef __SYS_ABSTRACT_OS_H__
 #define __SYS_ABSTRACT_OS_H__
 
@@ -52,9 +51,11 @@ class AbstractOS
 public:
 
     AbstractOS()
-    {}
+    {
+    }
     virtual ~AbstractOS()
-    {}
+    {
+    }
 
     /*!
      *  Get the name of the platform this was compiled for
@@ -89,16 +90,8 @@ public:
      *  \param pathList  The path list (colon delimited)
      */
     virtual void search(std::vector<std::string>& exhaustiveEnumerations,
-                        const std::string& fragment,
-                        std::string filter = "",
+                        const std::string& fragment, std::string filter = "",
                         std::string pathList = ".") const = 0;
-
-
-    /*!
-     *  Gets the username for windows users
-     *  \return The string name of the user
-     */ 
-    //virtual std::string getUsername() const = 0;
 
     /*!
      *  Does this path exist?
@@ -113,12 +106,12 @@ public:
      */
     virtual bool remove(const std::string& path) const = 0;
 
-
     /*!
      *  Move file with this path name to the newPath
      *  \return True upon success, false if failure
      */
-    virtual bool move(const std::string& path, const std::string& newPath) const = 0;
+    virtual bool
+            move(const std::string& path, const std::string& newPath) const = 0;
 
     /*!
      *  Does this path resolve to a file?
@@ -127,14 +120,12 @@ public:
      */
     virtual bool isFile(const std::string& path) const = 0;
 
-
     /*!
      *  Does this path resolve to a directory?
      *  \param path The path
      *  \return True if it does, false if not
      */
     virtual bool isDirectory(const std::string& path) const = 0;
-
 
     /*!
      *  Create a directory with for the path specified
@@ -143,7 +134,6 @@ public:
      *  you may only create if no such exists)
      */
     virtual bool makeDirectory(const std::string& path) const = 0;
-
 
     /*!
      *  Retrieve the current working directory.
@@ -162,8 +152,8 @@ public:
      *  \return The file name
      *
      */
-    virtual std::string getTempName(std::string path = "",
-                                    std::string prefix = "") const = 0;
+    virtual std::string getTempName(std::string path = "", std::string prefix =
+            "") const = 0;
 
     /*!
      *  Return the size in bytes of a file
@@ -172,8 +162,8 @@ public:
     virtual sys::Off_T getSize(const std::string& path) const = 0;
 
     /*!
-     *  Return the size in bytes of a file
-     *  \return The file size
+     * Return the last modified time of a file
+     * \return The last modified time, in millis
      */
     virtual sys::Off_T getLastModifiedTime(const std::string& path) const = 0;
 
@@ -189,33 +179,20 @@ public:
     virtual Pid_T getProcessId() const = 0;
 
     virtual std::string getDSOSuffix() const = 0;
-
-
-    /*
-    virtual void* mapFile(sys::Handle_T handle, 
-            size_t length,
-            int protectionFlags,
-            int accessFlags,
-            off_t offset) const = 0;
-
-    virtual int getPageSize() const = 0;
-
-    virtual void unmapFile(void *ptr, size_t length) const = 0;
-           */
 };
-
 
 class AbstractDirectory
 {
 public:
     AbstractDirectory()
-    {}
+    {
+    }
     virtual ~AbstractDirectory()
-    {}
+    {
+    }
     virtual void close() = 0;
     virtual const char* findFirstFile(const char* dir) = 0;
     virtual const char* findNextFile() = 0;
-
 
 };
 

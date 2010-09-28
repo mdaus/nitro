@@ -20,7 +20,6 @@
  *
  */
 
-
 #ifndef __SYS_FILE_H__
 #define __SYS_FILE_H__
 
@@ -66,32 +65,32 @@ typedef int _SYS_HANDLE_TYPE;
  *
  */
 
-
 namespace sys
 {
 class File
 {
-protected:
-    _SYS_HANDLE_TYPE mHandle;
-    std::string mFileName;
 public:
 
-    enum { FROM_START = _SYS_SEEK_SET,
-           FROM_CURRENT = _SYS_SEEK_CUR,
-           FROM_END = _SYS_SEEK_END,
-           CREATE = _SYS_CREAT,
-           EXISTING = _SYS_OPEN_EXISTING,
-           TRUNCATE = _SYS_TRUNC,
-           READ_ONLY = _SYS_RDONLY,
-           WRITE_ONLY = _SYS_WRONLY,
-           READ_AND_WRITE = _SYS_RDWR };
-    
+    enum
+    {
+        FROM_START = _SYS_SEEK_SET,
+        FROM_CURRENT = _SYS_SEEK_CUR,
+        FROM_END = _SYS_SEEK_END,
+        CREATE = _SYS_CREAT,
+        EXISTING = _SYS_OPEN_EXISTING,
+        TRUNCATE = _SYS_TRUNC,
+        READ_ONLY = _SYS_RDONLY,
+        WRITE_ONLY = _SYS_WRONLY,
+        READ_AND_WRITE = _SYS_RDWR
+    };
+
     /*!
      *  Default constructor.  Does nothing
      */
-    File() : mHandle(SYS_INVALID_HANDLE)
-    {}
-
+    File() :
+        mHandle(SYS_INVALID_HANDLE)
+    {
+    }
 
     /*!
      *  Constructor.  Initializes to a file.
@@ -99,13 +98,17 @@ public:
      *  \param accessFlags File access flags
      *  \param creationFlags File creation flags
      */
-    File(const Path& path,
-         int accessFlags = READ_ONLY,
-         int creationFlags = EXISTING) throw(sys::SystemException)
+    File(const Path& path, int accessFlags = READ_ONLY, int creationFlags =
+            EXISTING) throw (sys::SystemException)
     {
         create(path.getPath(), accessFlags, creationFlags);
     }
 
+    File(const Path& parent, std::string name, int accessFlags = READ_ONLY,
+         int creationFlags = EXISTING) throw (sys::SystemException)
+    {
+        create(parent.join(name).getPath(), accessFlags, creationFlags);
+    }
 
     /*!
      *  Constructor.  Initializes to a file.
@@ -113,9 +116,8 @@ public:
      *  \param accessFlags File access flags
      *  \param creationFlags File creation flags
      */
-    File(std::string str,
-         int accessFlags = READ_ONLY,
-         int creationFlags = EXISTING) throw(sys::SystemException)
+    File(std::string str, int accessFlags = READ_ONLY, int creationFlags =
+            EXISTING) throw (sys::SystemException)
     {
         create(str, accessFlags, creationFlags);
     }
@@ -125,7 +127,8 @@ public:
      */
     ~File()
     {
-        if (isOpen()) close();
+        if (isOpen())
+            close();
     }
 
     /*!
@@ -141,8 +144,20 @@ public:
      *  Return the underlying file handle
      *
      */
-    _SYS_HANDLE_TYPE getHandle() { return mHandle; }
+    _SYS_HANDLE_TYPE getHandle()
+    {
+        return mHandle;
+    }
 
+    sys::Path getPath() const
+    {
+        return sys::Path(mPath);
+    }
+
+    inline std::string getName() const
+    {
+        return getPath().split().second;
+    }
 
     /*!
      *  Initialize the object to a file.
@@ -150,10 +165,9 @@ public:
      *  \param accessFlags File access flags
      *  \param creationFlags File creation flags
      */
-    void create(const std::string& str,
-                int accessFlags,
-                int creationFlags) throw(sys::SystemException);
-
+    void
+            create(const std::string& str, int accessFlags, int creationFlags)
+                                                                               throw (sys::SystemException);
 
     /*!
      *  Read from the File into a buffer 'size' bytes.
@@ -165,8 +179,7 @@ public:
      *  \param buffer The buffer to put to
      *  \param size The number of bytes
      */
-    void readInto(char* buffer, Size_T size)
-    throw(sys::SystemException);
+    void readInto(char* buffer, Size_T size) throw (sys::SystemException);
 
     /*!
      *  Write from a buffer 'size' bytes into the 
@@ -178,9 +191,9 @@ public:
      *  \param buffer The buffer to read from
      *  \param size The number of bytes to write out
      */
-    void writeFrom(const char* buffer, Size_T size)
-    throw(sys::SystemException);
-
+    void
+            writeFrom(const char* buffer, Size_T size)
+                                                       throw (sys::SystemException);
 
     /*!
      *  Seek to the specified offset, relative to 'whence.'
@@ -189,35 +202,43 @@ public:
      *  \return Global offset location.
      */
 
-    sys::Off_T seekTo(sys::Off_T offset, int whence)
-    throw(sys::SystemException);
+    sys::Off_T
+            seekTo(sys::Off_T offset, int whence) throw (sys::SystemException);
 
     /*!
      *  Report current offset within file.
      *
      *  \return Current offset;
      */
-    sys::Off_T getCurrentOffset() throw(sys::SystemException)
+    sys::Off_T getCurrentOffset() throw (sys::SystemException)
     {
         return seekTo(0, sys::File::FROM_CURRENT);
     }
 
     /*!
-     *  Report the length of the file.
-     *
-     *  \return The length
+     * Report the length of the file.
+     * \return The length
      */
-    sys::Off_T length() throw(sys::SystemException);
+    sys::Off_T length() throw (sys::SystemException);
+
+    /*!
+     * Returns the last modified time of the file, in millis.
+     * \return last modified time
+     */
+    sys::Off_T lastModifiedTime() throw (sys::SystemException);
 
     /*!
      *  Close the handle.
      */
     void close();
 
+protected:
+    _SYS_HANDLE_TYPE mHandle;
+    std::string mPath;
+
 };
 
 }
-
 
 #endif
 

@@ -20,32 +20,28 @@
  *
  */
 
-
 #include "sys/File.h"
 
 #ifndef WIN32
 
-void sys::File::create(const std::string& str,
-                       int accessFlags,
-                       int creationFlags)
-throw(sys::SystemException)
+void sys::File::create(const std::string& str, int accessFlags,
+        int creationFlags) throw (sys::SystemException)
 {
 
     if (accessFlags & sys::File::WRITE_ONLY)
         creationFlags |= sys::File::TRUNCATE;
-    mHandle = open(str.c_str(),
-                   accessFlags | creationFlags,
-                   _SYS_DEFAULT_PERM);
+    mHandle = open(str.c_str(), accessFlags | creationFlags, _SYS_DEFAULT_PERM);
 
-    if (mHandle == SYS_INVALID_HANDLE)
+    if (mHandle < 0)
     {
-        throw sys::SystemException("Error opening file: " + str);
+        throw sys::SystemException(Ctxt(FmtX("Error opening file [%d]: [%s]",
+                                             mHandle, str.c_str())));
     }
-    mFileName = str;
+    mPath = str;
 }
 
 void sys::File::readInto(char *buffer, Size_T size)
-throw(sys::SystemException)
+        throw (sys::SystemException)
 {
     SSize_T bytesRead = 0;
     Size_T totalBytesRead = 0;
@@ -53,48 +49,46 @@ throw(sys::SystemException)
 
     /* make sure the user actually wants data */
     if (size == 0)
-        return ;
+        return;
 
     for (i = 1; i <= _SYS_MAX_READ_ATTEMPTS; i++)
     {
-        bytesRead =
-            ::read(mHandle, buffer + totalBytesRead, size - totalBytesRead);
+        bytesRead = ::read(mHandle, buffer + totalBytesRead, size
+                - totalBytesRead);
 
         switch (bytesRead)
         {
-            case - 1:                /* Some type of error occured */
-                switch (errno)
-                {
-                    case EINTR:
-                    case EAGAIN:        /* A non-fatal error occured, keep trying */
-                        break;
-
-                    default:            /* We failed */
-                        throw sys::SystemException("While reading from file");
-                }
+        case -1: /* Some type of error occured */
+            switch (errno)
+            {
+            case EINTR:
+            case EAGAIN: /* A non-fatal error occured, keep trying */
                 break;
 
-            case 0:                 /* EOF (unexpected) */
-                throw sys::SystemException("Unexpected end of file");
+            default: /* We failed */
+                throw sys::SystemException("While reading from file");
+            }
+            break;
 
-            default:                /* We made progress */
-                totalBytesRead += bytesRead;
+        case 0: /* EOF (unexpected) */
+            throw sys::SystemException(Ctxt("Unexpected end of file"));
 
-        }                       /* End of switch */
+        default: /* We made progress */
+            totalBytesRead += bytesRead;
+
+        } /* End of switch */
 
         /* Check for success */
         if (totalBytesRead == size)
         {
-            return ;
+            return;
         }
-
     }
-    throw sys::SystemException("Unknown read state");
-
+    throw sys::SystemException(Ctxt("Unknown read state"));
 }
 
 void sys::File::writeFrom(const char *buffer, Size_T size)
-throw(sys::SystemException)
+        throw (sys::SystemException)
 {
     Size_T bytesActuallyWritten = 0;
 
@@ -103,42 +97,43 @@ throw(sys::SystemException)
         SSize_T bytesThisRead = ::write(mHandle, buffer, size);
         if (bytesThisRead == -1)
         {
-            throw sys::SystemException("Writing to file");
+            throw sys::SystemException(Ctxt("Writing to file"));
         }
         bytesActuallyWritten += bytesThisRead;
     }
-    while (bytesActuallyWritten < size );
-
+    while (bytesActuallyWritten < size);
 }
 
-
 sys::Off_T sys::File::seekTo(sys::Off_T offset, int whence)
-throw(sys::SystemException)
+        throw (sys::SystemException)
 {
     sys::Off_T off = ::lseek(mHandle, offset, whence);
     if (off == (sys::Off_T) - 1)
-    {
-        throw sys::SystemException("Seeking in file");
-    }
+        throw sys::SystemException(Ctxt("Seeking in file"));
     return off;
 }
 
-sys::Off_T sys::File::length()
-throw(sys::SystemException)
+sys::Off_T sys::File::length() throw (sys::SystemException)
 {
     struct stat buf;
     int rval = fstat(mHandle, &buf);
     if (rval == -1)
-    {
-        throw sys::SystemException("Error querying file attributes");
-        return rval;
-    }
+        throw sys::SystemException(Ctxt("Error querying file attributes"));
     return buf.st_size;
+}
+
+sys::Off_T sys::File::lastModifiedTime() throw (sys::SystemException)
+{
+    struct stat buf;
+    int rval = fstat(mHandle, &buf);
+    if (rval == -1)
+        throw sys::SystemException(Ctxt("Error querying file attributes"));
+    return (sys::Off_T) buf.st_mtime * 1000;
 }
 
 void sys::File::close()
 {
-    ::close(mHandle);
+    ::close( mHandle);
     mHandle = SYS_INVALID_HANDLE;
 }
 

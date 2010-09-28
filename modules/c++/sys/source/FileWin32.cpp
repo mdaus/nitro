@@ -20,37 +20,36 @@
  *
  */
 
-
 #ifdef WIN32
 
 #include "sys/File.h"
 
 void sys::File::create(const std::string& str,
-                       int accessFlags,
-                       int creationFlags)
+        int accessFlags,
+        int creationFlags)
 {
     // If the truncate bit is on AND the file does exist,
     // we need to set the mode to TRUNCATE_EXISTING
     if ((creationFlags & sys::File::TRUNCATE) && sys::OS().exists(str) )
     {
-	creationFlags = TRUNCATE_EXISTING;
+        creationFlags = TRUNCATE_EXISTING;
     }
     else
     {
-	creationFlags = ~sys::File::TRUNCATE & creationFlags;
+        creationFlags = ~sys::File::TRUNCATE & creationFlags;
     }
 
     mHandle = CreateFile(str.c_str(),
-                         accessFlags,
-                         FILE_SHARE_READ, NULL,
-                         creationFlags,
-                         FILE_ATTRIBUTE_NORMAL, NULL);
+            accessFlags,
+            FILE_SHARE_READ, NULL,
+            creationFlags,
+            FILE_ATTRIBUTE_NORMAL, NULL);
 
     if (mHandle == SYS_INVALID_HANDLE)
     {
-        throw sys::SystemException("Error opening file: " + str);
+        throw sys::SystemException(Ctxt("Error opening file: [%s]", str.c_str()));
     }
-    mFileName = str;
+    mPath = str;
 }
 
 void sys::File::readInto(char *buffer, Size_T size)
@@ -58,17 +57,15 @@ void sys::File::readInto(char *buffer, Size_T size)
     /****************************
      *** Variable Declarations ***
      ****************************/
-    DWORD bytesRead = 0;        /* Number of bytes read during last read operation */
-    DWORD totalBytesRead = 0;   /* Total bytes read thus far */
+    DWORD bytesRead = 0; /* Number of bytes read during last read operation */
+    DWORD totalBytesRead = 0; /* Total bytes read thus far */
 
     /* Make the next read */
     if (!ReadFile(mHandle, buffer, size, &bytesRead, 0))
     {
-        throw sys::SystemException("Error reading from file");
+        throw sys::SystemException(Ctxt("Error reading from file"));
     }
 }
-
-
 
 void sys::File::writeFrom(const char *buffer, Size_T size)
 {
@@ -83,7 +80,7 @@ void sys::File::writeFrom(const char *buffer, Size_T size)
         if (!ok)
         {
             /* If the function failed, we want to get the last error */
-            throw sys::SystemException("Writing from file");
+            throw sys::SystemException(Ctxt("Writing from file"));
         }
         /* Otherwise, we want to accumulate this write until we are done */
         actuallyWritten += bytesWritten;
@@ -98,15 +95,35 @@ sys::Off_T sys::File::seekTo(sys::Off_T offset, int whence)
     LARGE_INTEGER toWhere;
     largeInt.QuadPart = offset;
     if (!SetFilePointerEx(mHandle, largeInt, &toWhere, whence))
-        throw sys::SystemException("SetFilePointer failed");
-    
+        throw sys::SystemException(Ctxt("SetFilePointer failed"));
+
     return (sys::Off_T) toWhere.QuadPart;
 }
 
-
 sys::Off_T sys::File::length()
 {
-    return sys::OS().getSize(mFileName);
+    DWORD highOff;
+    DWORD ret = GetFileSize(mHandle, &highOff);
+    sys::Uint64_T off = highOff;
+    return (sys::Off_T)(off << 32) + ret;
+}
+
+sys::Off_T sys::File::lastModifiedTime()
+{
+    FILETIME creationTime, lastAccessTime, lastWriteTime;
+    BOOL ret = GetFileTime(mHandle, &creationTime,
+            &lastAccessTime, &lastWriteTime);
+    if (ret)
+    {
+        ULARGE_INTEGER uli;
+        uli.LowPart = lastWriteTime.dwLowDateTime;
+        uli.HighPart = lastWriteTime.dwHighDateTime;
+        ULONGLONG stInMillis(uli.QuadPart/10000);
+        return (sys::Off_T)stInMillis;
+    }
+    throw sys::SystemException(Ctxt(
+                    FmtX("Error getting last modified time for path %s",
+                            mPath.c_str())));
 }
 
 void sys::File::close()
@@ -114,4 +131,5 @@ void sys::File::close()
     CloseHandle(mHandle);
     mHandle = SYS_INVALID_HANDLE;
 }
+
 #endif

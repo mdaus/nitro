@@ -61,12 +61,13 @@
 #include "io/FileOutputStream.h"
 #include "io/Seekable.h"
 #include "io/Serializable.h"
-#include "io/SerializableArray.h"
 #include "io/SerializableFile.h"
 #include "io/StandardStreams.h"
 #include "io/StringStream.h"
 #include "io/NullStreams.h"
 #include "io/ProxyStreams.h"
+#include "io/FileUtils.h"
+#include "io/SerializableArray.h"
 
 //#include "io/MMapInputStream.h"
 //using namespace io;

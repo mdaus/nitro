@@ -156,38 +156,6 @@ public:
 
     virtual std::string getDSOSuffix() const;
 
-    /*
-    virtual void* mapFile(sys::Handle_T handle,
-            size_t length,
-            int protectionFlags,
-            int accessFlags,
-            off_t offset) const
-           {
-        void* p = mmap((caddr_t)NULL, 
-         length, 
-         protectionFlags, 
-         accessFlags, 
-         (int)handle, 
-         offset);
-        if (p == MAP_FAILED)
-     throw sys::SystemException("memory mapping failed");
-        return p;
-
-}
-
-    virtual int getPageSize() const
-{
-        return ::getpagesize();
-}
-     
-    virtual void unmapFile(void* start, size_t length) const
-{
-        if (::munmap((caddr_t)start, length) == -1)
-     throw sys::SystemException(str::format("Unmapping at address [%p]", start));
-}
-    */
-
-
 };
 
 
