@@ -9,7 +9,6 @@ Utils.g_module.build_context = Utils.g_module.install_context = \
 MODULES = 'except str sys io mt plugin logging dbi re net net.ssl ' \
           'unique xml.lite linear.lite zip math.linear math.poly lang'
 
-
 def set_options(opt):
     opt.sub_options(MODULES)
 
