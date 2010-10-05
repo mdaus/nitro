@@ -11,15 +11,21 @@ def set_options(opt):
                    default=True, help='turn on PCRE (default)')
     opt.add_option('--with-pcre-home', action='store',
                    help='Specify the PCRE Home - where PCRE is installed to')
-    opt.add_option('--build-pcre', action='store_true',
-                   default=False, help='force building PCRE from scratch')
+    opt.add_option('--build-pcre', action='store_true', dest='build_pcre',
+                   default=True, help='force building PCRE from scratch')
+    opt.add_option('--nobuild-pcre', action='store_false', dest='build_pcre',
+                   help='force building PCRE from scratch')
     
+    opt.add_option('--disable-xml', action='store_false', dest='enable_xml', default=True,
+                   help='turn off XML')
     opt.add_option('--enable-xml-layer', action='store', choices=['expat', 'xerces'],
                    dest='xml_layer', default='expat', help='Specify the XML layer')
     opt.add_option('--with-xml-home', action='store', dest='xml_home',
                    help='Specify the XML Home - where the XML library is installed to')
-    opt.add_option('--build-xml', action='store_true',
-                   default=False, help='force building XML library (expat) from scratch')
+    opt.add_option('--build-xml', action='store_true', dest="build_xml",
+                   default=True, help='force building XML library (expat) from scratch')
+    opt.add_option('--nobuild-xml', action='store_false', dest="build_xml",
+                   help='force not building XML library from scratch')
     
     opt.add_option('--with-fft-home', action='store', dest='fft_home',
                    help='Specify the FFT Home - where an FFT library is installed')
@@ -27,29 +33,38 @@ def set_options(opt):
                    help='turn off building FFT (default)')
     opt.add_option('--enable-fft', action='store_true', dest='enable_fft',
                    default=False, help='turn on FFT')
-    opt.add_option('--build-fft', action='store_true',
-                   default=False, help='force building FFT library (fftw) from scratch')
+    # changed this to be the default, so we always build statically
+    opt.add_option('--build-fft', action='store_true', dest="build_fft",
+                   default=True, help='force building FFT library (fftw) from scratch')
+    opt.add_option('--nobuild-fft', action='store_false', dest="build_fft",
+                   help='force building FFT library (fftw) from scratch')
     
+    opt.add_option('--with-zip-home', action='store', dest='zip_home',
+                   help='Specify the ZIP Home - where the ZIP library is installed')
     opt.add_option('--disable-zip', action='store_false', dest='enable_zip',
                    help='will not build the zip (zlib) library')
     opt.add_option('--enable-zip', action='store_true',
                    default=True, help='will build the zip (libz) library if not found on the system (default)')
-    opt.add_option('--build-zip', action='store_true',
-                   default=False, help='force building zip (zlib) library from scratch')
+    opt.add_option('--build-zip', action='store_true', dest="build_zip",
+                   default=True, help='force building zip (zlib) library from scratch')
+    opt.add_option('--nobuild-zip', action='store_false', dest="build_zip",
+                   help='force building zip (zlib) library from scratch')
     
     if Options.platform != 'win32':
         opt.add_option('--build-uuid', action='store_true', dest='build_uuid',
-                       default=False, help='force building libuuid from scratch')
+                       default=True, help='force building libuuid from scratch')
+        opt.add_option('--nobuild-uuid', action='store_false', dest='build_uuid',
+                       help='force building libuuid from scratch')
         opt.add_option('--with-uuid-home', action='store', dest='uuid_home',
                    help='Specify the UUID lib/headers home')
 
 
 def configure(conf):
     #-- PCRE -------------------------------------------------------------------
-    pcreHome = Options.options.with_pcre_home
     enablePCRE = Options.options.enable_pcre
     
     if enablePCRE:
+        pcreHome = Options.options.with_pcre_home
         makePCRE = False
         if Options.options.build_pcre:
             makePCRE = True
@@ -73,9 +88,14 @@ def configure(conf):
     enableZip = Options.options.enable_zip
     
     if enableZip:
+        zipHome = Options.options.zip_home
         makeZip = False
         if Options.options.build_zip:
             makeZip = True
+        elif zipHome:
+            conf.check_message_2('setting zip home to %s' % zipHome)
+            conf.env.append_value('LIBPATH_ZIP', os.path.join(zipHome, 'lib'))
+            conf.env.append_value('CPPPATH_ZIP', os.path.join(zipHome, 'include'))
         else:
             if not conf.check(header_name='zlib.h', define_name='HAVE_ZLIB_H',
                               lib='z', uselib_store='ZIP'):
@@ -103,42 +123,45 @@ def configure(conf):
     
     
     #-- XML --------------------------------------------------------------------
-    xmlHome = Options.options.xml_home
-    xmlLayer = Options.options.xml_layer
-    makeXML = Options.options.build_xml
+    enableXML = Options.options.enable_xml
     
-    if makeXML:
-        xmlLayer = 'expat'
+    if enableXML:
+        xmlHome = Options.options.xml_home
+        xmlLayer = Options.options.xml_layer
+        makeXML = Options.options.build_xml
+        
+        if makeXML:
+            xmlLayer = 'expat'
+        
+        if xmlHome and not makeXML:
+            conf.check_message_1('Setting xml home')
+            conf.check_message_2(xmlHome)
+            conf.env.append_value('LIBPATH_XML', os.path.join(xmlHome, 'lib'))
+            conf.env.append_value('CPPPATH_XML', os.path.join(xmlHome, 'include'))
+        
+        expatDefines = '-DUSE_EXPAT -DXML_STATIC'
+        if not makeXML:
+            if xmlLayer == 'expat':
+                conf.env.append_value('CXXFLAGS_XML', expatDefines.split())
+                if not xmlHome:
+                    #look for it on the system
+                    if not conf.check_cc(lib='expat', mandatory=False, uselib_store='XML') \
+                        or not conf.check_cc(header_name='expat.h'):
+                        #we must use/build the local one
+                        makeXML = True
+                else:
+                    conf.env['LIB_XML'] = ['expat']
+            elif xmlLayer == 'xerces':
+                conf.env.append_value('CXXFLAGS_XML', '-DUSE_XERCES')
+                conf.env['LIB_XML'] = ['xerces-c']
+                if not xmlHome:
+                    conf.check_cxx(lib='xerces-c', mandatory=True, uselib_store='XML')
     
-    if xmlHome and not makeXML:
-        conf.check_message_1('Setting xml home')
-        conf.check_message_2(xmlHome)
-        conf.env.append_value('LIBPATH_XML', os.path.join(xmlHome, 'lib'))
-        conf.env.append_value('CPPPATH_XML', os.path.join(xmlHome, 'include'))
-    
-    expatDefines = '-DUSE_EXPAT -DXML_STATIC'
-    if not makeXML:
-        if xmlLayer == 'expat':
-            conf.env.append_value('CXXFLAGS_XML', expatDefines.split())
-            if not xmlHome:
-                #look for it on the system
-                if not conf.check_cc(lib='expat', mandatory=False, uselib_store='XML') \
-                    or not conf.check_cc(header_name='expat.h'):
-                    #we must use/build the local one
-                    makeXML = True
-            else:
-                conf.env['LIB_XML'] = ['expat']
-        elif xmlLayer == 'xerces':
-            conf.env.append_value('CXXFLAGS_XML', '-DUSE_XERCES')
-            conf.env['LIB_XML'] = ['xerces-c']
-            if not xmlHome:
-                conf.check_cxx(lib='xerces-c', mandatory=True, uselib_store='XML')
-
-    if makeXML:
-        conf.env['MAKE_XML'] = xmlLayer
-        conf.env.append_unique('CXXFLAGS_XML', expatDefines.split())
-        conf.check_message_1('Building local lib')
-        conf.check_message_2(xmlLayer)
+        if makeXML:
+            conf.env['MAKE_XML'] = xmlLayer
+            conf.env.append_unique('CXXFLAGS_XML', expatDefines.split())
+            conf.check_message_1('Building local lib')
+            conf.check_message_2(xmlLayer)
         
     
     
@@ -165,12 +188,6 @@ def configure(conf):
             conf.check_message_1('Building local lib')
             conf.check_message_2('fftw')
     
-    #add some flags for the nitro lib - if a lib states NITRO as a uselib (or uselib local)
-    #these flags will get applied automatically
-    conf.env.append_value('CCFLAGS_nitf-c', '-DNITF_MODULE_EXPORTS')
-    conf.env.append_value('CXXFLAGS_nitf-c', '-DNITF_MODULE_EXPORTS')
-
-
 @taskgen
 @feature('untar')
 def untar(self):

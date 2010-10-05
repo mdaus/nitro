@@ -30,7 +30,8 @@ class CPPBuildContext(BuildContext):
         lang = modArgs.get('lang', 'c++')
         libExeType = {'c++':'cxx', 'c':'cc'}.get(lang, 'cxx')
         libName = '%s-%s' % (modArgs['name'], lang)
-        path = 'dir' in modArgs and bld.path.find_dir(modArgs['dir']) or bld.path
+        path = modArgs.get('path',
+                           'dir' in modArgs and bld.path.find_dir(modArgs['dir']) or bld.path)
 
         module_deps = map(lambda x: '%s-%s' % (x, lang), modArgs.get('module_deps', '').split())
         defines = modArgs.get('defines', '').split()
@@ -53,11 +54,12 @@ class CPPBuildContext(BuildContext):
                     target=targetName, name=libName, export_incdirs=exportIncludes,
                     uselib_local=uselib_local, uselib=uselib, env=env.copy(),
                     defines=defines, path=path, install_path='${PREFIX}/lib')
-            lib.find_sources_in_dirs('source')
+            lib.find_sources_in_dirs(modArgs.get('source_dir', 'source'))
             lib.source = filter(modArgs.get('source_filter', None), lib.source)
             
             if libVersion is not None and sys.platform != 'win32' and Options.options.symlinks:
                 symlinkLoc = '%s/%s' % (lib.install_path, env['staticlib_PATTERN'] % libName)
+#                bld.add_group()
                 bld.symlink_as(symlinkLoc, env['staticlib_PATTERN'] % lib.target, env=env)
             
 
@@ -65,21 +67,27 @@ class CPPBuildContext(BuildContext):
             relpath = f.relpath_gen(path)
             bld.install_files('${PREFIX}/%s' % os.path.dirname(relpath),
                               f.abspath())
-
+        
         testNode = path.find_dir('tests')
         if testNode and not Options.options.libs_only:
+            
+            test_deps = map(lambda x: '%s-%s' % (x, lang), modArgs.get('test_deps', '').split()) or module_deps
+            test_uselib_local = test_deps + modArgs.get('test_uselib_local', '').split()
+            test_uselib = modArgs.get('test_uselib', modArgs.get('uselib', '')).split() + ['CSTD', 'CRUN']
+            
             if not headersOnly:
-                uselib_local = libName
+                test_uselib_local.insert(0, libName)
             
             sourceExt = {'c++':'.cpp', 'c':'.c'}.get(lang, 'cxx')
             for test in filter(modArgs.get('test_filter', None),
                                testNode.find_iter(in_pat=['*%s' % sourceExt],
                                                   maxdepth=1, flat=True).split()):
                 exe = bld.new_task_gen(libExeType, 'program', source=test,
-                        uselib_local=uselib_local, uselib=uselib, env=env.copy(), includes='.',
+                        uselib_local=test_uselib_local, uselib=test_uselib, env=env.copy(),
+                        includes=includes + ['.'],
                         target=os.path.splitext(test)[0], path=testNode,
                         install_path='${PREFIX}/share/%s/tests' % modArgs['name'])
-        
+
         return env
     
     def plugin(self, **modArgs):
@@ -93,24 +101,35 @@ class CPPBuildContext(BuildContext):
         env.set_variant(variant)
         
         modArgs = dict((k.lower(), v) for k, v in modArgs.iteritems())
-        libName = '%s-c++' % modArgs['name']
+        lang = modArgs.get('lang', 'c++')
+        libExeType = {'c++':'cxx', 'c':'cc'}.get(lang, 'cxx')
+        libName = '%s-%s' % (modArgs['name'], lang)
         plugin = modArgs.get('plugin', '')
-        path = 'dir' in modArgs and bld.path.find_dir(modArgs['dir']) or bld.path
+        path = modArgs.get('path',
+                           'dir' in modArgs and bld.path.find_dir(modArgs['dir']) or bld.path)
 
-        module_deps = map(lambda x: '%s-c++' % x, modArgs.get('module_deps', '').split())
+        module_deps = map(lambda x: '%s-%s' % (x, lang), modArgs.get('module_deps', '').split())
         defines = modArgs.get('defines', '').split() + ['PLUGIN_MODULE_EXPORTS']
         uselib_local = module_deps + modArgs.get('uselib_local', '').split()
         uselib = modArgs.get('uselib', '').split() + ['CSTD', 'CRUN']
         includes = modArgs.get('includes', 'include').split()
         exportIncludes = modArgs.get('export_includes', 'include').split()
+        source = modArgs.get('source', '').split() or None
         
-        lib = bld.new_task_gen('cxx', 'shlib', includes=includes,
+        lib = bld.new_task_gen(libExeType, 'shlib', includes=includes, source=source,
                 target=libName, name=libName, export_incdirs=exportIncludes,
                 uselib_local=uselib_local, uselib=uselib, env=env.copy(),
                 defines=defines, path=path,
                 install_path='${PREFIX}/share/%s/plugins' % plugin)
-        lib.find_sources_in_dirs('source')
-        lib.source = filter(modArgs.get('source_filter', None), lib.source)
+        if not source:
+            lib.find_sources_in_dirs(modArgs.get('source_dir', modArgs.get('sourcedir', 'source')))
+            lib.source = filter(modArgs.get('source_filter', None), lib.source)
+        
+        confDir = path.find_dir('conf')
+        if confDir:
+            for f in confDir.find_iter():
+                relpath = f.relpath_gen(path)
+                bld.install_files('${PREFIX}/share/%s/conf' % plugin, f.abspath())
     
     
     def program(self, **modArgs):
@@ -123,23 +142,26 @@ class CPPBuildContext(BuildContext):
         env.set_variant(variant)
         
         modArgs = dict((k.lower(), v) for k, v in modArgs.iteritems())
+        lang = modArgs.get('lang', 'c++')
+        libExeType = {'c++':'cxx', 'c':'cc'}.get(lang, 'cxx')
         progName = modArgs['name']
-        path = 'dir' in modArgs and bld.path.find_dir(modArgs['dir']) or bld.path
+        path = modArgs.get('path',
+                           'dir' in modArgs and bld.path.find_dir(modArgs['dir']) or bld.path)
 
-        deps = map(lambda x: '%s-c++' % x, modArgs.get('module_deps', '').split())
+        module_deps = map(lambda x: '%s-%s' % (x, lang), modArgs.get('module_deps', '').split())
         defines = modArgs.get('defines', '').split()
-        uselib_local = deps + modArgs.get('uselib_local', '').split()
+        uselib_local = module_deps + modArgs.get('uselib_local', '').split()
         uselib = modArgs.get('uselib', '').split() + ['CSTD', 'CRUN']
         includes = modArgs.get('includes', 'include').split()
         source = modArgs.get('source', '').split() or None
         
-        exe = bld.new_task_gen('cxx', 'program', source=source,
+        exe = bld.new_task_gen(libExeType, 'program', source=source,
                                includes=includes,
                                uselib_local=uselib_local, uselib=uselib,
                                env=env.copy(), target=progName, path=path,
                                install_path='${PREFIX}/bin')
         if not source:
-            exe.find_sources_in_dirs(modArgs.get('sourcedir', 'source'))
+            exe.find_sources_in_dirs(modArgs.get('source_dir', modArgs.get('sourcedir', 'source')))
             exe.source = filter(modArgs.get('source_filter', None), exe.source)
 
 
@@ -239,15 +261,16 @@ def set_options(opt):
         opt.tool_options('msvc')
         opt.add_option('--with-crt', action='store', choices=['MD', 'MT'],
                        dest='crt', default='MT', help='Specify Windows CRT library - MT (default) or MD')
-        opt.add_option('--enable-warnings', action='store_true', dest='warnings',
-                   help='Enable warnings')
     
     opt.add_option('--enable-warnings', action='store_true', dest='warnings',
                    help='Enable warnings')
     opt.add_option('--enable-debugging', action='store_true', dest='debugging',
                    help='Enable debugging')
+    #TODO - get rid of enable64 - it's useless now
     opt.add_option('--enable-64bit', action='store_true', dest='enable64',
                    help='Enable 64bit builds')
+    opt.add_option('--enable-32bit', action='store_true', dest='enable32',
+                   help='Enable 32bit builds')
     opt.add_option('--enable-doxygen', action='store_true', dest='doxygen',
                    help='Enable running doxygen')
     opt.add_option('--with-cflags', action='store', nargs=1, dest='cflags',
@@ -292,6 +315,10 @@ int main()
 '''
 
 def detect(self):
+    
+    if self.env['DETECTED_BUILD_PY']:
+        return
+    
     platform = getPlatform(default=Options.platform)
     
     self.check_message_custom('platform', '', platform, color='GREEN')
@@ -489,6 +516,8 @@ def detect(self):
             config['cxx']['verbose']        = '-v'
             config['cxx']['64']             = '-xtarget=generic64'
             config['cxx']['32']             = '-xtarget=generic'
+            config['cxx']['linkflags_32'] = '-xtarget=generic'
+            config['cxx']['linkflags_64'] = '-xtarget=generic64'
             config['cxx']['optz_med']       = '-xO3'
             config['cxx']['optz_fast']      = '-xO4'
             config['cxx']['optz_fastest']   = '-fast'
@@ -503,6 +532,8 @@ def detect(self):
             config['cc']['warn']           = ''
             config['cc']['verbose']        = '-v'
             config['cc']['64']             = '-xtarget=generic64'
+            config['cc']['linkflags_64'] = '-xtarget=generic64'
+            config['cc']['linkflags_32'] = '-xtarget=generic'
             config['cc']['32']             = '-xtarget=generic'
             config['cc']['optz_med']       = '-xO2'
             config['cc']['optz_fast']      = '-xO3'
@@ -513,12 +544,6 @@ def detect(self):
             env.append_value('CCFLAGS', '-KPIC'.split())
             env.append_value('CCFLAGS_THREAD', '-mt')
 
-        if Options.options.enable64:
-            env.append_value('LINKFLAGS', config['cc']['64'].split())
-        else:
-            env.append_value('LINKFLAGS', config['cc']['32'].split())
-
-    
     elif re.match(winRegex, platform):
         if Options.options.enable64:
             platform = 'win'
@@ -526,9 +551,10 @@ def detect(self):
         env.append_value('LIB_RPC', 'rpcrt4')
         env.append_value('LIB_SOCKET', 'Ws2_32')
         
+        winRegex
         crtFlag = '/%s' % Options.options.crt
         crtDebug = '%sd' % crtFlag
-        
+
         vars = {}
         vars['debug']          = ['/Zi', crtDebug]
         vars['warn']           = '/Wall'
@@ -538,7 +564,8 @@ def detect(self):
         vars['optz_med']       = ['-O2', crtFlag]
         vars['optz_fast']      = ['-O2', crtFlag]
         vars['optz_fastest']   = ['-Ox', crtFlag]
-        
+        vars['linkflags_32'] = vars['linkflags_64'] = '/STACK:80000000'
+
         # choose the runtime to link against
         # [/MD /MDd /MT /MTd]
         
@@ -583,13 +610,22 @@ def detect(self):
         variant.append_value('CXXFLAGS', config['cxx'].get('optz_%s' % optz, ''))
         variant.append_value('CCFLAGS', config['cc'].get('optz_%s' % optz, ''))
     
-    if Options.options.enable64:
+    
+    #check if the system is 64-bit capable
+    is64Bit = False
+    if '64' in config['cxx']:
+        if self.check_cxx(cxxflags=config['cxx']['64'], linkflags=config['cc'].get('linkflags_64', ''), mandatory=False):
+            is64Bit = self.check_cc(cflags=config['cc']['64'], linkflags=config['cc'].get('linkflags_64', ''), mandatory=False)
+    
+    if is64Bit and not Options.options.enable32:
         variantName = '%s-64' % variantName
         variant.append_value('CXXFLAGS', config['cxx'].get('64', ''))
         variant.append_value('CCFLAGS', config['cc'].get('64', ''))
+        variant.append_value('LINKFLAGS', config['cc'].get('linkflags_64', ''))
     else:
         variant.append_value('CXXFLAGS', config['cxx'].get('32', ''))
         variant.append_value('CCFLAGS', config['cc'].get('32', ''))
+        variant.append_value('LINKFLAGS', config['cc'].get('linkflags_32', ''))
         
     self.set_env_name(variantName, variant)
     variant.set_variant(variantName)
@@ -597,6 +633,9 @@ def detect(self):
     self.setenv(variantName)
     
     env['VARIANT'] = variant['VARIANT'] = variantName
+    
+    #flag that we already detected
+    self.env['DETECTED_BUILD_PY'] = True
 
 
 @taskgen
