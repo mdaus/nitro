@@ -150,7 +150,7 @@ public:
 
 private:
     /*! Handle to the MySQL database connection */
-    MYSQL mDBHandle;
+    ::MYSQL mDBHandle;
 };
 }
 #endif

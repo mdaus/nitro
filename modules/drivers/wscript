@@ -26,6 +26,11 @@ def set_options(opt):
                    default=True, help='force building XML library (expat) from scratch')
     opt.add_option('--nobuild-xml', action='store_false', dest="build_xml",
                    help='force not building XML library from scratch')
+
+    opt.add_option('--enable-sql-layer', action='store', choices=['mysql', 'psql', 'oracle'],
+                   dest='sql_layer', default=None, help='Specify the SQL layer')
+    opt.add_option('--with-sql-home', action='store', dest='sql_home',
+                   help='Specify the SQL Home - where the SQL library is installed to')
     
     opt.add_option('--with-fft-home', action='store', dest='fft_home',
                    help='Specify the FFT Home - where an FFT library is installed')
@@ -161,10 +166,40 @@ def configure(conf):
             conf.env['MAKE_XML'] = xmlLayer
             conf.env.append_unique('CXXFLAGS_XML', expatDefines.split())
             conf.check_message_1('Building local lib')
-            conf.check_message_2(xmlLayer)
+            conf.check_message_2(xmlLayer)    
+    
+    #-- SQL --------------------------------------------------------------------
+    sqlLayer = Options.options.sql_layer
+
+    if sqlLayer:
+        sqlHome = Options.options.sql_home
         
-    
-    
+        conf.check_message_1('Enabling SQL layer')
+        conf.check_message_2(sqlLayer)
+        
+        if sqlHome:
+            conf.check_message_1('Setting sql home')
+            conf.check_message_2(sqlHome)
+            if sqlLayer == 'mysql':
+                conf.env.append_value('LIBPATH_SQL', os.path.join(sqlHome, 'lib/mysql'))
+                conf.env.append_value('CPPPATH_SQL', os.path.join(sqlHome, 'include/mysql'))
+            else:
+                conf.env.append_value('LIBPATH_SQL', os.path.join(sqlHome, 'lib'))
+                conf.env.append_value('CPPPATH_SQL', os.path.join(sqlHome, 'include'))
+        
+        if sqlLayer == 'mysql':
+            if not sqlHome:
+                conf.env.append_value('LIBPATH_SQL', os.path.join('/usr/lib', 'mysql'))
+                conf.env.append_value('CPPPATH_SQL', os.path.join('/usr/include', 'mysql'))
+            conf.env.append_value('CXXFLAGS_SQL', '-DUSE_MYSQL')
+            conf.env['LIB_SQL'] = ['mysqlclient_r']
+        elif sqlLayer == 'psql':
+            conf.env.append_value('CXXFLAGS_SQL', '-DUSE_PGSQL')
+            conf.env['LIB_SQL'] = ['psql']
+        elif sqlLayer == 'oracle':
+            conf.env.append_value('CXXFLAGS_SQL', '-DUSE_ORACLE')
+            conf.env['LIB_SQL'] = ['clntsh']
+
     #-- FFT --------------------------------------------------------------------
     enableFFT = Options.options.enable_fft
     
@@ -390,8 +425,8 @@ def build(bld):
         uuidH.features = ['m4subst']
     
         sources = map(lambda x: 'lib/uuid/%s' % x,
-					'clear.c compare.c copy.c gen_uuid.c isnull.c pack.c parse.c ' \
-                  	'unpack.c unparse.c uuid_time.c'.split())
+                    'clear.c compare.c copy.c gen_uuid.c isnull.c pack.c parse.c ' \
+                      'unpack.c unparse.c uuid_time.c'.split())
         uuid = bld.new_task_gen('cc', env['LIB_TYPE'] or 'staticlib',
                                 source=sources,
                                 export_incdirs='lib',

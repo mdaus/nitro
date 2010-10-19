@@ -16,6 +16,16 @@ class CPPBuildContext(BuildContext):
     def safeVersion(self, version):
         return re.sub(r'[^\w]', '.', version)
     
+    def __getDefines(self, env):
+        defines = []
+        for k, v in env.defines.iteritems():
+            if v is not None and v != ():
+                if k.startswith('HAVE_') or k.startswith('USE_'):
+                    defines.append(k)
+                else:
+                    defines.append('%s=%s' % (k, v))
+        return defines
+    
     def module(self, **modArgs):
         """
         Builds a module, along with optional tests.
@@ -34,7 +44,7 @@ class CPPBuildContext(BuildContext):
                            'dir' in modArgs and bld.path.find_dir(modArgs['dir']) or bld.path)
 
         module_deps = map(lambda x: '%s-%s' % (x, lang), modArgs.get('module_deps', '').split())
-        defines = modArgs.get('defines', '').split()
+        defines = self.__getDefines(env) + modArgs.get('defines', '').split()
         uselib_local = module_deps + modArgs.get('uselib_local', '').split()
         uselib = modArgs.get('uselib', '').split() + ['CSTD', 'CRUN']
         includes = modArgs.get('includes', 'include').split()
@@ -109,7 +119,7 @@ class CPPBuildContext(BuildContext):
                            'dir' in modArgs and bld.path.find_dir(modArgs['dir']) or bld.path)
 
         module_deps = map(lambda x: '%s-%s' % (x, lang), modArgs.get('module_deps', '').split())
-        defines = modArgs.get('defines', '').split() + ['PLUGIN_MODULE_EXPORTS']
+        defines = self.__getDefines(env) + modArgs.get('defines', '').split() + ['PLUGIN_MODULE_EXPORTS']
         uselib_local = module_deps + modArgs.get('uselib_local', '').split()
         uselib = modArgs.get('uselib', '').split() + ['CSTD', 'CRUN']
         includes = modArgs.get('includes', 'include').split()
@@ -149,14 +159,14 @@ class CPPBuildContext(BuildContext):
                            'dir' in modArgs and bld.path.find_dir(modArgs['dir']) or bld.path)
 
         module_deps = map(lambda x: '%s-%s' % (x, lang), modArgs.get('module_deps', '').split())
-        defines = modArgs.get('defines', '').split()
+        defines = self.__getDefines(env) + modArgs.get('defines', '').split()
         uselib_local = module_deps + modArgs.get('uselib_local', '').split()
         uselib = modArgs.get('uselib', '').split() + ['CSTD', 'CRUN']
         includes = modArgs.get('includes', 'include').split()
         source = modArgs.get('source', '').split() or None
         
         exe = bld.new_task_gen(libExeType, 'program', source=source,
-                               includes=includes,
+                               includes=includes, defines=defines,
                                uselib_local=uselib_local, uselib=uselib,
                                env=env.copy(), target=progName, path=path,
                                install_path='${PREFIX}/bin')
@@ -365,9 +375,12 @@ def detect(self):
     self.check_cc(fragment='int main(){unsigned char i; return 0;}',
                   define_name='HAVE_UNSIGNED_CHAR', msg='Checking for unsigned char')
     self.check_cc(lib="m", mandatory=False, uselib_store='MATH')
+    self.check_cc(lib="rt", mandatory=False, uselib_store='RT')
     self.check_cc(lib="sqrt", mandatory=False, uselib_store='SQRT')
     
     self.check_cc(function_name='gettimeofday', header_name='sys/time.h')
+    if self.check_cc(lib='rt', function_name='clock_gettime', header_name='time.h'):
+        self.env.defines['USE_CLOCK_GETTIME']= 1
     self.check_cc(function_name='BSDgettimeofday', header_name='sys/time.h')
     self.check_cc(function_name='gethrtime', header_name='sys/time.h')
     self.check_cc(function_name='getpagesize', header_name='unistd.h')
@@ -545,8 +558,8 @@ def detect(self):
             env.append_value('CCFLAGS_THREAD', '-mt')
 
     elif re.match(winRegex, platform):
-        if Options.options.enable64:
-            platform = 'win'
+#        if Options.options.enable64:
+#            platform = 'win'
 
         env.append_value('LIB_RPC', 'rpcrt4')
         env.append_value('LIB_SOCKET', 'Ws2_32')
@@ -613,12 +626,17 @@ def detect(self):
     
     #check if the system is 64-bit capable
     is64Bit = False
-    if '64' in config['cxx']:
-        if self.check_cxx(cxxflags=config['cxx']['64'], linkflags=config['cc'].get('linkflags_64', ''), mandatory=False):
-            is64Bit = self.check_cc(cflags=config['cc']['64'], linkflags=config['cc'].get('linkflags_64', ''), mandatory=False)
-    
-    if is64Bit and not Options.options.enable32:
-        variantName = '%s-64' % variantName
+    #check if the system is 64-bit capable
+    if re.match(winRegex, platform):
+        is64Bit = Options.options.enable64
+    elif not Options.options.enable32:
+        if '64' in config['cxx']:
+            if self.check_cxx(cxxflags=config['cxx']['64'], linkflags=config['cc'].get('linkflags_64', ''), mandatory=False):
+                is64Bit = self.check_cc(cflags=config['cc']['64'], linkflags=config['cc'].get('linkflags_64', ''), mandatory=False)
+
+    if is64Bit:
+        if not re.match(winRegex, platform):
+            variantName = '%s-64' % variantName
         variant.append_value('CXXFLAGS', config['cxx'].get('64', ''))
         variant.append_value('CCFLAGS', config['cc'].get('64', ''))
         variant.append_value('LINKFLAGS', config['cc'].get('linkflags_64', ''))
@@ -626,7 +644,7 @@ def detect(self):
         variant.append_value('CXXFLAGS', config['cxx'].get('32', ''))
         variant.append_value('CCFLAGS', config['cc'].get('32', ''))
         variant.append_value('LINKFLAGS', config['cc'].get('linkflags_32', ''))
-        
+    
     self.set_env_name(variantName, variant)
     variant.set_variant(variantName)
     env.set_variant(variantName)
