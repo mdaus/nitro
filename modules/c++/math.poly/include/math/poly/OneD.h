@@ -26,6 +26,7 @@
 #include <iostream>
 #include <sstream>
 #include <vector>
+#include <iterator>
 #include <math/linear/Vector.h>
 
 namespace math
