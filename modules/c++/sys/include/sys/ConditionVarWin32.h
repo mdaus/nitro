@@ -33,15 +33,45 @@
 
 namespace sys
 {
-struct ConditionVarDataWin32
+/// @note  This implementation is based on section 3.4 of the
+///        "Strategies for Implementing POSIX Condition Variables on Win32"
+///        article at www.cse.wustl.edu/~schmidt/win32-cv-1.html.
+///        This is the ACE framework implementation.
+class ConditionVarDataWin32
 {
+public:
     ConditionVarDataWin32();
+
     ~ConditionVarDataWin32();
-    int nWaiters;
-    int nRelease;
-    int nWaitGeneration;
-    CRITICAL_SECTION lWaiters;
-    HANDLE event;
+
+    void wait(HANDLE externalMutex);
+
+    bool wait(HANDLE externalMutex, double timeout);
+
+    void signal();
+
+    void broadcast();
+
+private:
+    void waitImpl(HANDLE externalMutex);
+
+private:
+    // # of waiting threads
+	size_t           mNumWaiters;
+	CRITICAL_SECTION mNumWaitersCS;
+
+    // Semaphore used to queue up threads waiting for the condition to
+    // become signaled
+	HANDLE mSemaphore;
+
+    // Auto-reset event used by the broadcast/signal thread to wait for
+    // all the waiting thread(s) to wake up and be released from the
+    // semaphore
+	HANDLE mWaitersAreDone;
+
+    // Keep track of whether we were broadcasting or signaling.  This
+    // allows us to optimize the code if we're just signaling.
+	bool mWasBroadcast;
 };
 
 class ConditionVarWin32 :

@@ -159,6 +159,11 @@ sys::Path::StringPair sys::Path::splitPath(const std::string& path)
     std::string::size_type pos = path.find_last_of(delimStr);
     if (pos == std::string::npos)
         return sys::Path::StringPair("", path);
+    else if (!path.empty() && pos == path.length() - 1)
+    {
+        // Just call ourselves again without the delimiter
+        return sys::Path::splitPath(path.substr(0, path.length() - 1));
+    }
 
     std::string::size_type lastRootPos = path.find_last_not_of(delimStr, pos);
     std::string root;

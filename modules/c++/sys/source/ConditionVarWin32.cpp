@@ -27,125 +27,201 @@
 
 #include "sys/ConditionVarWin32.h"
 
-sys::ConditionVarDataWin32::ConditionVarDataWin32(): nWaiters(0), nRelease(0), nWaitGeneration(0)
+namespace
 {
-    InitializeCriticalSection(&lWaiters);
-    event = CreateEvent(NULL, TRUE, FALSE, NULL);
-    if (event == NULL)
-        throw sys::SystemException("ConditionVarDataWin32 Initializer failed");
+    // RAII for EnterCriticalSection() / LeaveCriticalSection()
+    class ScopedCriticalSection
+    {
+    public:
+        ScopedCriticalSection(CRITICAL_SECTION& criticalSection) :
+            mCriticalSection(criticalSection)
+        {
+            EnterCriticalSection(&mCriticalSection);
+        }
+
+        ~ScopedCriticalSection()
+        {
+            LeaveCriticalSection(&mCriticalSection);
+        }
+
+    private:
+        CRITICAL_SECTION& mCriticalSection;
+    };
+}
+
+sys::ConditionVarDataWin32::ConditionVarDataWin32():
+    mNumWaiters(0),
+    mSemaphore(CreateSemaphore(NULL, 0, 0x7FFFFFFF, NULL)),
+    mWaitersAreDone(CreateEvent(NULL, FALSE, FALSE, NULL)),
+    mWasBroadcast(false)
+{
+    InitializeCriticalSection(&mNumWaitersCS);
+    if (mSemaphore == NULL || mWaitersAreDone == NULL)
+    {
+        throw sys::SystemException(
+            "ConditionVarDataWin32 Initializer failed");
+    }
 }
 
 sys::ConditionVarDataWin32::~ConditionVarDataWin32()
 {
-    CloseHandle(event);
-    DeleteCriticalSection(&lWaiters);
+    CloseHandle(mWaitersAreDone);
+	CloseHandle(mSemaphore);
+    DeleteCriticalSection(&mNumWaitersCS);
+}
+
+void sys::ConditionVarDataWin32::wait(HANDLE externalMutex)
+{
+    // Increment # waiting
+    {
+        const ScopedCriticalSection lock(mNumWaitersCS);
+        ++mNumWaiters;
+    }
+
+    // Atomically release the mutex and wait on the semaphore until signal()
+    // or broadcast() are called by another thread
+    if (SignalObjectAndWait(externalMutex, mSemaphore, INFINITE, FALSE) != 
+        WAIT_OBJECT_0)
+    {
+        throw sys::SystemException("SignalObjectAndWait() failed");
+    }
+
+    waitImpl(externalMutex);
+}
+
+bool sys::ConditionVarDataWin32::wait(HANDLE externalMutex, double timeout)
+{
+    if (timeout == 0)
+    {
+        wait(externalMutex);
+        return true;
+    }
+
+    // Increment # waiting
+    {
+        const ScopedCriticalSection lock(mNumWaitersCS);
+        ++mNumWaiters;
+    }
+
+    // Atomically release the mutex and wait on the semaphore until signal()
+    // or broadcast() are called by another thread or we time out
+    switch (SignalObjectAndWait(externalMutex,
+                                mSemaphore, 
+                                static_cast<DWORD>(timeout * 1000), 
+                                FALSE))
+    {
+    case WAIT_OBJECT_0:
+        waitImpl(externalMutex);
+        return true;
+    case WAIT_TIMEOUT:
+        return false;
+    default:
+        throw sys::SystemException("SignalObjectAndWait() failed");
+    }
+}
+
+void sys::ConditionVarDataWin32::waitImpl(HANDLE externalMutex)
+{
+    // Mark that we're no longer waiting
+    // If we woke up via broadcast(), determine if we're the last waiter
+    bool lastWaiter;
+    {
+        const ScopedCriticalSection lock(mNumWaitersCS);
+        --mNumWaiters;
+        lastWaiter = (mWasBroadcast && mNumWaiters == 0);
+    }
+
+    if (lastWaiter)
+    {
+        // Atomically signals the mWaitersAreDone event and waits until it can
+        // acquire the external mutex.  This is used to ensure fairness.
+        /// @note  Fairness relies on the fact that Windows NT mutex requests
+        ///        are queued in FIFO order.  As a result, all waiting threads
+        ///        will acquire the external mutex before any of them can
+        ///        reacquire it a second time.
+        ///        Need the atomicity of SignalObjectAndWait() here to ensure
+        ///        that the last thread gets his chance to wait on the
+        ///        external mutex.
+        SignalObjectAndWait(mWaitersAreDone, externalMutex, INFINITE, FALSE);
+    }
+    else
+    {
+        // We need to wait until we get the external mutex back
+        WaitForSingleObject(externalMutex, INFINITE);
+    }
+}
+
+void sys::ConditionVarDataWin32::signal()
+{
+    bool haveWaiters;
+    {
+        const ScopedCriticalSection lock(mNumWaitersCS);
+        haveWaiters = mNumWaiters > 0;
+    }
+
+    // If there are waiters, increment the semaphore by 1 to wake one up
+    if (haveWaiters)
+    {
+        ReleaseSemaphore(mSemaphore, 1, NULL);
+    }
+}
+
+void sys::ConditionVarDataWin32::broadcast()
+{
+    bool haveWaiters;
+    {
+        const ScopedCriticalSection lock(mNumWaitersCS);
+
+        // Increment the semaphore by the # of threads waiting
+        // This will allow all those threads to wake up in wait()
+        if (mNumWaiters > 0)
+        {
+            mWasBroadcast = true;
+            haveWaiters = true;
+            ReleaseSemaphore(mSemaphore, mNumWaiters, 0);
+        }
+        else
+        {
+            haveWaiters = false;
+        }
+    }
+
+    if (haveWaiters)
+    {
+        // Wait for all the awakened threads to acquire mSemaphore
+        WaitForSingleObject(mWaitersAreDone, INFINITE);
+
+        // This assignment is ok w/o locking the critical section
+        // since no waiter threads can wake up to access it
+        mWasBroadcast = false;
+    }
 }
 
 bool sys::ConditionVarWin32::wait(double timeout)
 {
     dbg_printf("Timed waiting on condition [%f]\n", timeout);
-    if (timeout != 0)
-    {
-        EnterCriticalSection(&mNative.lWaiters);
-
-        mNative.nWaiters++;
-
-        int myGeneration = mNative.nWaitGeneration;
-
-        LeaveCriticalSection(&mNative.lWaiters);
-        mMutex->unlock();
-
-        for (;;)
-        {
-            WaitForSingleObject(mNative.event, (int)timeout * 1000);
-            EnterCriticalSection(&mNative.lWaiters);
-
-            bool waitDone = mNative.nRelease > 0 &&
-                            mNative.nWaitGeneration != myGeneration;
-            LeaveCriticalSection(&mNative.lWaiters);
-            if (waitDone)
-            {
-                break;
-            }
-        }
-        mMutex->lock();
-        EnterCriticalSection(&mNative.lWaiters);
-        mNative.nWaiters--;
-        mNative.nRelease--;
-        bool lastWaiter = (mNative.nRelease == 0);
-        LeaveCriticalSection(&mNative.lWaiters);
-        if (lastWaiter)
-        {
-            ResetEvent(mNative.event);
-        }
-        return true;
-    }
-    else return wait();
+    return mNative.wait(mMutex->getNative(), timeout);
 }
 
 bool sys::ConditionVarWin32::wait()
 {
     dbg_printf("Waiting on condition\n");
-    EnterCriticalSection(&mNative.lWaiters);
-
-    mNative.nWaiters++;
-
-    int myGeneration = mNative.nWaitGeneration;
-
-    LeaveCriticalSection(&mNative.lWaiters);
-    mMutex->unlock();
-
-    for (;;)
-    {
-        WaitForSingleObject(mNative.event, INFINITE);
-        EnterCriticalSection(&mNative.lWaiters);
-
-        bool waitDone = mNative.nRelease > 0 &&
-                        mNative.nWaitGeneration != myGeneration;
-        LeaveCriticalSection(&mNative.lWaiters);
-        if (waitDone)
-        {
-            break;
-        }
-    }
-    mMutex->lock();
-    EnterCriticalSection(&mNative.lWaiters);
-    mNative.nWaiters--;
-    mNative.nRelease--;
-    bool lastWaiter = (mNative.nRelease == 0);
-    LeaveCriticalSection(&mNative.lWaiters);
-    if (lastWaiter)
-    {
-        ResetEvent(mNative.event);
-    }
+    mNative.wait(mMutex->getNative());
     return true;
 }
 
 bool sys::ConditionVarWin32::signal()
 {
     dbg_printf("Signalling condition\n");
-    EnterCriticalSection(&mNative.lWaiters);
-    if (mNative.nWaiters > mNative.nRelease)
-    {
-        SetEvent(mNative.event);
-        mNative.nRelease++;
-        mNative.nWaitGeneration++;
-    }
-    LeaveCriticalSection(&mNative.lWaiters);
+    mNative.signal();
     return true;
 }
+
 
 bool sys::ConditionVarWin32::broadcast()
 {
     dbg_printf("Broadcasting condition\n");
-    EnterCriticalSection(&mNative.lWaiters);
-    if (mNative.nWaiters > 0)
-    {
-        SetEvent(mNative.event);
-        mNative.nRelease = mNative.nWaiters;
-        mNative.nWaitGeneration++;
-    }
-    LeaveCriticalSection(&mNative.lWaiters);
+    mNative.broadcast();
     return true;
 }
 
