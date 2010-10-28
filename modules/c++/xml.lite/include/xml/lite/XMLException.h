@@ -44,39 +44,7 @@ namespace lite
  *  This is the default XML exception, for when
  *  other, more specialized exception make no sense
  */
-class XMLException: public except::Exception
-{
-public:
-    //!  Default constructor
-    XMLException()
-    {}
-
-    /*!
-     *  Constructor taking a message
-     *  \param message The exception message
-     */
-    XMLException(const char *message): except::Exception(message)
-    {}
-
-    /*!
-     *  Constructor taking a message
-     *  \param message The exception message
-     */
-    XMLException(const std::string & message): except::Exception(message)
-    {}
-
-    /*!
-     *  Constructor taking a Context
-     *  \param c The exception Context
-     */
-    XMLException(const except::Context& c): except::Exception(c)
-    {}
-
-
-    //! Destructor
-    virtual ~ XMLException()
-    {}
-};
+DECLARE_EXCEPTION(XML)
 
 /*!
  *  \class XMLNotRecognizedException
@@ -85,41 +53,7 @@ public:
  *  Provides the derived implementation for bad formatting or
  *  for incorrect processing
  */
-class XMLNotRecognizedException: public XMLException
-{
-public:
-    //!  Default constructor
-    XMLNotRecognizedException()
-    {}
-
-    /*!
-     *  Constructor taking a message
-     *  \param message The exception message
-     */
-    XMLNotRecognizedException(const char *message): XMLException(message)
-    {}
-
-    /*!
-     *  Constructor taking a message
-     *  \param message The exception message
-     */
-    XMLNotRecognizedException(const std::
-                              string & message): XMLException(message)
-    {}
-
-    /*!
-            *  Constructor taking a context
-            *  \param c The exception context
-            */
-    XMLNotRecognizedException(const except::
-                              Context& c): XMLException(c)
-    {}
-
-
-    //! Destructor
-    virtual ~ XMLNotRecognizedException()
-    {}
-};
+DECLARE_EXTENDED_EXCEPTION(XMLNotRecognized, xml::lite::XMLException)
 
 /*!
  *  \class XMLNotSupportedException
@@ -130,41 +64,7 @@ public:
  *  systems that are not supported by the SAX/DOM standard
  *
  */
-class XMLNotSupportedException: public XMLException
-{
-public:
-    //!  Default constructor
-    XMLNotSupportedException()
-    {}
-
-    /*!
-     *  Constructor taking a message
-     *  \param message The exception message
-     */
-    XMLNotSupportedException(const char *message): XMLException(message)
-    {}
-
-    /*!
-     *  Constructor taking a message
-     *  \param message The exception message
-     */
-    XMLNotSupportedException(const std::
-                             string & message): XMLException(message)
-    {}
-
-    /*!
-            *  Constructor taking a context
-            *  \param c The exception context
-            */
-    XMLNotSupportedException(const except::
-                             Context& c): XMLException(c)
-    {}
-
-
-    //! Destructor
-    virtual ~ XMLNotSupportedException()
-    {}
-};
+DECLARE_EXTENDED_EXCEPTION(XMLNotSupported, xml::lite::XMLException)
 
 /*!
  *  \class XMLParseException
@@ -174,7 +74,7 @@ public:
  *  XML exception while processing documents
  *
  */
-class XMLParseException: public XMLException
+class XMLParseException : public XMLException
 {
 public:
     /*!
@@ -183,9 +83,8 @@ public:
      *  \param row As reported by the parser
      *  \param column As reported by the parser
      */
-    XMLParseException(const char *message,
-                      int row = 0,
-                      int column = 0): XMLException(message)
+    XMLParseException(const char *message, int row = 0, int column = 0) :
+        XMLException(message)
     {
         form(row, column);
     }
@@ -197,43 +96,56 @@ public:
      *  \param column As reported by the parser
      *  \param errNum An error number given by the parser
      */
-    XMLParseException(const std::string & message,
-                      int row = 0,
-                      int column = 0,
-                      int errNum = 0): XMLException(message)
+    XMLParseException(const std::string & message, int row = 0, int column = 0,
+            int errNum = 0) :
+        XMLException(message)
     {
         form(row, column);
     }
 
     /*!
-            *  Construct a parse exception
-            *  \param c A context with a message as presented by the parser
-            *  \param row As reported by the parser
-            *  \param column As reported by the parser
-            *  \param errNum An error number given by the parser
-            */
-    XMLParseException(const except::Context& c,
-                      int row = 0,
-                      int column = 0,
-                      int errNum = 0): XMLException(c)
+     *  Construct a parse exception
+     *  \param c A context with a message as presented by the parser
+     *  \param row As reported by the parser
+     *  \param column As reported by the parser
+     *  \param errNum An error number given by the parser
+     */
+    XMLParseException(const except::Context& c, int row = 0, int column = 0,
+            int errNum = 0) :
+        XMLException(c)
     {
         form(row, column);
     }
 
+    /*!
+     *  Constructor taking a Throwable and a Context
+     *  \param t The Throwable
+     *  \param c The exception Context
+     *  \param row As reported by the parser
+     *  \param column As reported by the parser
+     *  \param errNum An error number given by the parser
+     */
+    XMLParseException(const except::Throwable& t, const except::Context& c,
+            int row = 0, int column = 0, int errNum = 0) :
+        XMLException(t, c)
+    {
+        form(row, column);
+    }
 
     //! Destructor
     virtual ~ XMLParseException()
-    {}
+    {
+    }
 
 private:
+
     /*!
      *  Creates the actual message
      *  \param row As reported by the constructor
      *  \param col As reported by the constructor
      *
      */
-    void form(int row,
-              int column)
+    void form(int row, int column)
     {
         std::ostringstream oss;
         oss << " (" << row << ',' << column << "): " << mMessage;
