@@ -59,7 +59,8 @@ public:
 
     std::vector<OneD<_T> >& coeffs(){ return mCoef; }
 
-    TwoD() : mCoef(1, OneD<_T>(0)) {}
+    //! The polynomial is invalid (i.e. orderX() and orderY() will throw)
+    TwoD() {}
 
     TwoD(size_t orderX, size_t orderY) : mCoef(orderX+1,OneD<_T>(orderY)) {}   
 
@@ -75,14 +76,23 @@ public:
             }
         }
     }
-    size_t orderX() const { return mCoef.size() - 1; }
+    bool empty() const
+    {
+        return mCoef.empty();
+    }
+    size_t orderX() const
+    {
+        if (empty())
+            throw except::IndexOutOfRangeException(Ctxt("Can't have an order less than zero"));
+
+        return mCoef.size() - 1;
+    }
     size_t orderY() const
     {
-
-        if (orderX() < 0)
+        if (empty())
             throw except::IndexOutOfRangeException(Ctxt("Can't have an order less than zero"));
         return mCoef[0].order(); 
-   }
+    }
     _T operator () (double atX, double atY) const;
     _T integrate(double xStart, double xEnd, double yStart, double yEnd) const;
 

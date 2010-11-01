@@ -56,10 +56,12 @@ protected:
     std::vector<_T> mCoef;
 
 public:
-    //!  Make sure we never have an order() that is negative
+    /*!
+     * The polynomial is invalid (i.e. size() will return 0 and order() will
+     * throw)
+     */
     OneD()
     {
-        mCoef.resize(1, (_T)0.0);
     }
 
     /*!
@@ -69,7 +71,7 @@ public:
     OneD(const std::vector<_T>& coef) :
         mCoef(coef)
     {
-        if (mCoef.size() == 0)
+        if (mCoef.empty())
             mCoef.resize(1, (_T)0.0);
     }
 
@@ -77,9 +79,9 @@ public:
      *  Create a vector of given order, with each coefficient
      *  set to zero
      */
-    OneD(size_t order)
+    OneD(size_t order) :
+        mCoef(order + 1, (_T)0.0)
     {
-        mCoef.resize(order + 1, (_T)0.0);
     }
 
     //! assignment operator
@@ -114,7 +116,7 @@ public:
 
     size_t order() const
     {
-        if (size() == 0)
+        if (empty())
             throw except::IndexOutOfRangeException(
                                                    Ctxt(
                                                         "Can't have an order less than zero"));
@@ -124,6 +126,11 @@ public:
     inline size_t size() const
     {
         return mCoef.size();
+    }
+
+    inline bool empty() const
+    {
+        return mCoef.empty();
     }
 
     _T operator ()(double at) const;

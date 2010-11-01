@@ -69,7 +69,7 @@ template<typename _T>
 TwoD<_T> 
 TwoD<_T>::derivativeY() const
 {
-    TwoD<_T> ret;
+    TwoD<_T> ret(0, 0);
     if ((orderY() > 0))
     {
         ret = TwoD<_T>(orderX(), orderY()-1);
@@ -85,7 +85,7 @@ template<typename _T>
 TwoD<_T> 
 TwoD<_T>::derivativeX() const
 {
-    TwoD<_T> ret;
+    TwoD<_T> ret(0, 0);
     if ((orderX() > 0))
     {
         ret = TwoD<_T>(orderX()-1, orderY());
@@ -101,7 +101,7 @@ template<typename _T>
 OneD<_T>
 TwoD<_T>::atY(double y) const
 {
-    OneD<_T> ret;
+    OneD<_T> ret(0);
     if (orderX() > 0)
     {
         // We have no more X, but we have Y still

@@ -68,7 +68,7 @@ template<typename _T>
 OneD<_T>
 OneD<_T>::derivative() const
 {
-    OneD<_T> ret;
+    OneD<_T> ret(0);
     if (order() > 0)
     {
         ret = OneD<_T>(order()-1);
