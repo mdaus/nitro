@@ -20,21 +20,58 @@
  *
  */
 
-#ifndef __IMPORT_LOGGING_H__
-#define __IMPORT_LOGGING_H__
+///////////////////////////////////////////////////////////
+//  NullHandler.h
+///////////////////////////////////////////////////////////
 
-#include "logging/DefaultLogger.h"
-#include "logging/FileHandler.h"
-#include "logging/Filter.h"
-#include "logging/Filterer.h"
-#include "logging/Formatter.h"
+#ifndef __LOGGING_NULL_LOGGER_H__
+#define __LOGGING_NULL_LOGGER_H__
+
 #include "logging/Handler.h"
-#include "logging/Logger.h"
-#include "logging/LoggerFactory.h"
-#include "logging/LogRecord.h"
-#include "logging/MemoryHandler.h"
-#include "logging/NullLogger.h"
-#include "logging/RotatingFileHandler.h"
-#include "logging/StreamHandler.h"
 
+namespace logging
+{
+
+/*!
+ * \class NullHandler
+ * \brief Ignores all records
+ */
+class NullHandler : public Handler
+{
+
+public:
+    NullHandler(LogLevel level = LOG_NOTSET) :
+        Handler(level)
+    {
+    }
+    ~NullHandler()
+    {
+    }
+
+protected:
+    void emitRecord(LogRecord* record)
+    {
+        // does nothing...
+    }
+};
+
+/**
+ * A Logger that doesn't actually log anything. It can be used in cases where
+ * a Logger is required but you don't want anything to log.
+ */
+class NullLogger : public Logger
+{
+public:
+    NullLogger(std::string name = "") :
+        Logger(name)
+    {
+        addHandler(new NullHandler, true);
+    }
+
+    ~NullLogger()
+    {
+    }
+};
+
+}
 #endif

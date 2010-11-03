@@ -34,8 +34,10 @@ int main(int argc, char **argv)
 
     //log everything to the console
     StreamHandler handler(LOG_DEBUG);
-    Formatter* formatter = new Formatter("Thread = %t, Name = %c, Level = %p, File = %F, Method = %M, Line = %L, TimeStamp = %d, Message = %m");
-    handler.setFormatter(formatter);
+    std::string
+            format =
+                    "Thread = %t, Name = %c, Level = %p, File = %F, Method = %M, Line = %L, TimeStamp = %d, Message = %m";
+    handler.setFormatter(new Formatter(format));
     logger.addHandler(&handler);
 
     //log only WARNING or worse to the file
@@ -46,11 +48,18 @@ int main(int argc, char **argv)
     logger.debug(Ctxt("DEBUG TEST!"));
     logger.info(Ctxt("INFO TEST!"));
     logger.critical(Ctxt("CRITICAL TEST!"));
-    
+
     //use the global logging methods
     error("global error");
     warn("global warning");
 
+    logger.removeHandler(&handler);
+    logger.warn(Ctxt("No Handlers"));
+
+    logger.addHandler(new NullHandler, true);
+    logger.warn(Ctxt("Null Handler - should not log!"));
+    logger.addHandler(new StreamHandler(LOG_DEBUG), true);
+    logger.warn(Ctxt("WARNING Test!"));
 
     return 0;
 }

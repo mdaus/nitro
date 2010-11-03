@@ -51,8 +51,11 @@ public:
      * Constructs a Logger with an optional name
      * \param name  (optional) Name of the logger
      */
-    Logger(std::string name = ""): mName(name){}
-    virtual ~Logger(){}
+    Logger(std::string name = "") :
+        mName(name)
+    {
+    }
+    virtual ~Logger();
 
     //! Logs a message at the specified LogLevel
     void log(LogLevel level, const std::string& msg);
@@ -100,28 +103,40 @@ public:
      * Adds a Hander to the list of Handlers this Logger delegates to.
      * This Logger does not own the passed-in Handler.
      */
-    void addHandler(Handler* handler);
+    void addHandler(Handler* handler, bool own = false);
 
     /*!
      * Removes the specified Handler from the list of Handlers.
      */
     void removeHandler(Handler* handler);
-    
+
     /*!
      * This sets the LogLevel for all of the Handlers for this Logger
      */
     void setLevel(LogLevel level);
 
     //! Sets the name of the Logger
-    void setName(const std::string& name){ mName = name; }
+    void setName(const std::string& name)
+    {
+        mName = name;
+    }
     //! Returns the name of the Logger
-    std::string getName() const { return mName; }
+    std::string getName() const
+    {
+        return mName;
+    }
+
+    //! Removes all handlers
+    void reset();
 
 protected:
     void handle(LogRecord* record);
 
+    typedef std::pair<Handler*, bool> Handler_T;
+    typedef std::vector<Handler_T> Handlers_T;
+
     std::string mName;
-    std::vector< Handler* > handlers;
+    Handlers_T mHandlers;
 
 };
 }

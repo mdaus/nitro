@@ -27,6 +27,11 @@
 #include "logging/Logger.h"
 #include <deque>
 
+logging::Logger::~Logger()
+{
+    reset();
+}
+
 void logging::Logger::log(logging::LogLevel level, const std::string& msg)
 {
     logging::LogRecord *rec = new logging::LogRecord(mName, msg, level);
@@ -37,17 +42,20 @@ void logging::Logger::log(logging::LogLevel level, const std::string& msg)
 void logging::Logger::log(LogLevel level, const except::Context& ctxt)
 {
     logging::LogRecord *rec = new logging::LogRecord(mName, ctxt.getMessage(),
-                              level, ctxt.getFile(), ctxt.getFunction(), ctxt.getLine(), ctxt.getTime());
+                                                     level, ctxt.getFile(),
+                                                     ctxt.getFunction(),
+                                                     ctxt.getLine(),
+                                                     ctxt.getTime());
     handle(rec);
     delete rec;
 }
 
 void logging::Logger::log(LogLevel level, except::Throwable& t)
 {
-    std::deque<except::Context> savedContexts;
+    std::deque < except::Context > savedContexts;
     except::Trace& trace = t.getTrace();
     size_t size = trace.getSize();
-    if(size > 0)
+    if (size > 0)
     {
         for (unsigned int i = 0; i < size; ++i)
         {
@@ -73,75 +81,145 @@ void logging::Logger::log(LogLevel level, except::Throwable& t)
     }
 }
 
-void logging::Logger::debug(const std::string& msg){ log(LOG_DEBUG, msg); };
-void logging::Logger::info(const std::string& msg){ log(LOG_INFO, msg); };
-void logging::Logger::warn(const std::string& msg){ log(LOG_WARNING, msg); };
-void logging::Logger::error(const std::string& msg){ log(LOG_ERROR, msg); };
-void logging::Logger::critical(const std::string& msg){ log(LOG_CRITICAL, msg); };
+void logging::Logger::debug(const std::string& msg)
+{
+    log(LOG_DEBUG, msg);
+}
+;
+void logging::Logger::info(const std::string& msg)
+{
+    log(LOG_INFO, msg);
+}
+;
+void logging::Logger::warn(const std::string& msg)
+{
+    log(LOG_WARNING, msg);
+}
+;
+void logging::Logger::error(const std::string& msg)
+{
+    log(LOG_ERROR, msg);
+}
+;
+void logging::Logger::critical(const std::string& msg)
+{
+    log(LOG_CRITICAL, msg);
+}
+;
 
-void logging::Logger::debug(const except::Context& ctxt){ log(LOG_DEBUG, ctxt); };
-void logging::Logger::info(const except::Context& ctxt){ log(LOG_INFO, ctxt); };
-void logging::Logger::warn(const except::Context& ctxt){ log(LOG_WARNING, ctxt); };
-void logging::Logger::error(const except::Context& ctxt){ log(LOG_ERROR, ctxt); };
-void logging::Logger::critical(const except::Context& ctxt){ log(LOG_CRITICAL, ctxt); };
+void logging::Logger::debug(const except::Context& ctxt)
+{
+    log(LOG_DEBUG, ctxt);
+}
+;
+void logging::Logger::info(const except::Context& ctxt)
+{
+    log(LOG_INFO, ctxt);
+}
+;
+void logging::Logger::warn(const except::Context& ctxt)
+{
+    log(LOG_WARNING, ctxt);
+}
+;
+void logging::Logger::error(const except::Context& ctxt)
+{
+    log(LOG_ERROR, ctxt);
+}
+;
+void logging::Logger::critical(const except::Context& ctxt)
+{
+    log(LOG_CRITICAL, ctxt);
+}
+;
 
-void logging::Logger::debug(except::Throwable& t){ log(LOG_DEBUG, t); };
-void logging::Logger::info(except::Throwable& t){ log(LOG_INFO, t); };
-void logging::Logger::warn(except::Throwable& t){ log(LOG_WARNING, t); };
-void logging::Logger::error(except::Throwable& t){ log(LOG_ERROR, t); };
-void logging::Logger::critical(except::Throwable& t){ log(LOG_CRITICAL, t); };
+void logging::Logger::debug(except::Throwable& t)
+{
+    log(LOG_DEBUG, t);
+}
+;
+void logging::Logger::info(except::Throwable& t)
+{
+    log(LOG_INFO, t);
+}
+;
+void logging::Logger::warn(except::Throwable& t)
+{
+    log(LOG_WARNING, t);
+}
+;
+void logging::Logger::error(except::Throwable& t)
+{
+    log(LOG_ERROR, t);
+}
+;
+void logging::Logger::critical(except::Throwable& t)
+{
+    log(LOG_CRITICAL, t);
+}
+;
 
 void logging::Logger::handle(logging::LogRecord* record)
 {
     if (filter(record))
     {
-        for (std::vector<logging::Handler* >::iterator p = handlers.begin();
-                p != handlers.end(); ++p)
+        for (Handlers_T::iterator p = mHandlers.begin(); p != mHandlers.end(); ++p)
         {
             //std::cout << (int)(*p)->getLevel() << std::endl;
             //only handle if it is above/equal to threshold
-            if ((*p)->getLevel() <= record->getLevel())
+            if (p->first->getLevel() <= record->getLevel())
 
-                (*p)->handle(record);
+                p->first->handle(record);
         }
     }
 }
 
-void logging::Logger::addHandler(logging::Handler* handler)
+void logging::Logger::addHandler(logging::Handler* handler, bool own)
 {
     //only add the handler if it isn't added already
     bool found = false;
-    for (std::vector<logging::Handler* >::iterator p = handlers.begin();
-            p != handlers.end() && !found; ++p)
+    for (Handlers_T::iterator p = mHandlers.begin(); p != mHandlers.end()
+            && !found; ++p)
     {
-        if ((*p) == handler)
+        if (p->first == handler)
+        {
             found = true;
+            p->second = own;
+        }
     }
     if (!found)
-        handlers.push_back(handler);
+        mHandlers.push_back(Handler_T(handler, own));
 }
 
 void logging::Logger::removeHandler(logging::Handler* handler)
 {
     //find and remove, if it exists
-    for (std::vector<logging::Handler* >::iterator p = handlers.begin();
-            p != handlers.end(); ++p)
+    for (Handlers_T::iterator p = mHandlers.begin(); p != mHandlers.end(); ++p)
     {
-        if ((*p) == handler)
+        if (p->first == handler)
         {
-            handlers.erase(p);
+            mHandlers.erase(p);
             break;
         }
     }
 }
 
-
 void logging::Logger::setLevel(LogLevel level)
 {
-    for (std::vector<logging::Handler* >::iterator p = handlers.begin();
-            p != handlers.end(); ++p)
+    for (Handlers_T::iterator p = mHandlers.begin(); p != mHandlers.end(); ++p)
     {
         //set the level
-        (*p)->setLevel(level);
+        p->first->setLevel(level);
     }
+}
+
+void logging::Logger::reset()
+{
+    for (Handlers_T::iterator p = mHandlers.begin(); p
+            != mHandlers.end(); ++p)
+    {
+        if (p->second && p->first)
+            delete p->first;
+    }
+    mHandlers.clear();
 }
