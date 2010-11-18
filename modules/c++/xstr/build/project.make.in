@@ -1,0 +1,25 @@
+PACKAGE = xstr
+BUILD = library unit-tests
+MAJOR_VERSION = 1
+MINOR_VERSION = 0
+VERSION_SUFFIX =
+VERSION = $(MAJOR_VERSION)_$(MINOR_VERSION)$(VERSION_SUFFIX)
+MAINTAINER = Thomas.Zellman@gd-ais.com
+DESCRIPTION = Extended String (xstr) library for C++.
+
+SOURCES = String.cpp
+
+TESTS =   
+
+MY_CXXFLAGS = 
+MY_CXXDEFINES =
+MY_LFLAGS =
+MY_INCLUDES = -I@top_srcdir@/../../modules/c++/except/include \
+              -I@top_srcdir@/../../modules/c++/str/include \
+              -I@top_srcdir@/../../modules/c++/sys/include \
+              -I@top_srcdir@/../../modules/c++/re/include
+MY_LIBPATH = -L@top_srcdir@/../../modules/c++/str/lib/@target@/@lib_dir@ \
+             -L@top_srcdir@/../../modules/c++/except/lib/@target@/@lib_dir@ \
+             -L@top_srcdir@/../../modules/c++/sys/lib/@target@/@lib_dir@ \
+             -L@top_srcdir@/../../modules/c++/re/lib/@target@/@lib_dir@
+MY_LIBS = -lre-c++ -lsys-c++ -lstr-c++ -lexcept-c++
