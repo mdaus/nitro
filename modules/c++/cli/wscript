@@ -1,0 +1,9 @@
+NAME            = 'cli'
+MAINTAINER      = 'tzellman@users.sourceforge.net'
+VERSION         = '1.2'
+MODULE_DEPS     = 'io sys'
+
+set_options = distclean = configure = lambda p: None
+
+def build(bld):
+    bld.module(**globals())
