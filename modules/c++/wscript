@@ -6,13 +6,16 @@ from build import CPPBuildContext
 Utils.g_module.build_context = Utils.g_module.install_context = \
     Utils.g_module.clean_context = CPPBuildContext
 
-MODULES = 'except str sys io mt plugin logging dbi re net net.ssl ' \
-          'unique xml.lite linear.lite zip math.linear math.poly xstr'
+
+MODULES = 'except str sys io mt plugin logging dbi re xstr net net.ssl ' \
+          'unique xml.lite linear.lite zip math.linear math.poly cli'
+
 
 def set_options(opt):
     opt.sub_options(MODULES)
 
 def configure(conf):
+    conf.env.append_value('CPPPATH_UNITTEST', os.path.join(conf.curdir, 'include'))
     conf.sub_config(MODULES)
     
 def build(bld):
