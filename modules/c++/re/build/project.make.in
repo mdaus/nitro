@@ -11,8 +11,7 @@ DESCRIPTION = This library is a wrapper for the PCRE library   \
               like split and sub.
 
 SOURCES = PCRE.cpp
-TESTS =  PCRETest1.cpp \
-         PCRETest2.cpp \
+TESTS =  PCRETest2.cpp \
          PCRETest3.cpp
 
 MY_CXXFLAGS = 

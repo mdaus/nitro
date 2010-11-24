@@ -63,7 +63,7 @@ public:
     /*!
      *  The default constructor
      */
-    PCRE();
+    PCRE(const std::string& pattern = "", int flags = PCRE_DOTALL);
 
     //!  Destructor
     ~PCRE();

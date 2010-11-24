@@ -24,10 +24,11 @@
 
 #include "re/PCRE.h"
 
-re::PCRE::PCRE() : mPattern(""), mMatchString("")
+re::PCRE::PCRE(const std::string& pattern, int flags) :
+    mPattern(pattern), mMatchString(""), mPCRE(NULL), mNumMatches(0)
 {
-    mNumMatches = 0;
-    mPCRE = NULL;
+    if (!mPattern.empty())
+        compile(mPattern, flags);
 }
 
 void re::PCRE::destroy()
