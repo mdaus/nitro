@@ -608,16 +608,6 @@ cxx_pic_flags
 cxx_64_flags
 cxx_flags
 cxx_includes
-make_cgm_driver
-cxx_cgm_includes
-cxx_cgm_defs
-link_cgm_libpath
-link_cgm_libs
-make_nitf_driver
-cxx_nitf_includes
-cxx_nitf_defs
-link_nitf_libpath
-link_nitf_libs
 cxx_linmath_flags
 cxx_linmath_defs
 cxx_linmath_includes
@@ -767,10 +757,6 @@ with_java_home
 with_installed_modules_home
 enable_linmath_driver
 with_linmath_home
-with_nitf_home
-enable_nitf
-with_cgm_home
-enable_cgm
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1420,8 +1406,6 @@ Optional Features:
   --enable-apache=dist prefix	Use the Apache httpd server
   --enable-python  		Find/Use Python development libs/includes
   --enable-linmath-driver=DRIVER Compile with linear algebra driver (not mutually exclusive)
-  --enable-nitf  		Turn on NITF
-  --enable-cgm  		Turn on CGM
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -1463,8 +1447,6 @@ The tool and options are built from:
 		specify java home.]
   --with-installed-modules-home=CODA modules
   --with-linmath-home=HOME Compile with HOME
-  --with-nitf-home=HOME		Compile with HOME
-  --with-cgm-home=HOME		Compile with HOME
 
 Some influential environment variables:
   CC          C compiler command
@@ -6037,133 +6019,6 @@ fi
 
 
 cxx_linmath_includes="${cxx_linmath_external_includes}"
-
-
-
-
-make_nitf_driver="echo 'skipping nitf driver installation'"
-
-
-# Check whether --with-nitf-home was given.
-if test "${with_nitf_home+set}" = set; then :
-  withval=$with_nitf_home; ok=${withval}
-else
-  ok="no"
-fi
-
-if test "${ok}" != "no" && test "${ok}" != "yes" && test -n "${ok}"
-then
-    { $as_echo "$as_me:${as_lineno-$LINENO}: result: setting nitf home... ${ok}" >&5
-$as_echo "setting nitf home... ${ok}" >&6; }
-    link_nitf_libpath="-L${ok}/lib"
-    cxx_nitf_includes="-I${ok}/include"
-    nitf_home_defined="yes"
-    make_nitf_driver="echo 'skipping nitf driver installation'"
-fi
-
-
-# Check whether --enable-nitf was given.
-if test "${enable_nitf+set}" = set; then :
-  enableval=$enable_nitf; ok=${enableval}
-else
-  ok="yes"
-fi
-
-
-if test "${ok}" = "no"
-then
-    { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabling nitf..." >&5
-$as_echo "disabling nitf..." >&6; }
-else
-    { $as_echo "$as_me:${as_lineno-$LINENO}: result: enabling nitf..." >&5
-$as_echo "enabling nitf..." >&6; }
-    link_nitf_libs="-lnitf-c"
-    cxx_nitf_defs=""
-
-    # If home was not defined then check if nitf is installed
-    if test "${nitf_home_defined}" != "yes"
-    then
-        # Try this, if its there, use it, else use the driver
-        link_nitf_libpath="-L${here}/../drivers/nitf/lib/${target}/${lib_dir}"
-        cxx_nitf_includes="-I${here}/../drivers//nitf/include"
-	    build_nitf="true"
-        make_nitf_driver="make nitf_driver"
-	    { $as_echo "$as_me:${as_lineno-$LINENO}: result: using svn dependency nitf driver..." >&5
-$as_echo "using svn dependency nitf driver..." >&6; }
-    else
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: nitf includes directory... ${cxx_nitf_includes}" >&5
-$as_echo "nitf includes directory... ${cxx_nitf_includes}" >&6; }
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: nitf library directory... ${link_nitf_libpath}" >&5
-$as_echo "nitf library directory... ${link_nitf_libpath}" >&6; }
-    fi
-fi
-
-
-
-
-
-
-
-make_cgm_driver="echo 'skipping cgm driver installation'"
-
-
-# Check whether --with-cgm-home was given.
-if test "${with_cgm_home+set}" = set; then :
-  withval=$with_cgm_home; ok=${withval}
-else
-  ok="no"
-fi
-
-if test "${ok}" != "no" && test "${ok}" != "yes" && test -n "${ok}"
-then
-    { $as_echo "$as_me:${as_lineno-$LINENO}: result: setting cgm home... ${ok}" >&5
-$as_echo "setting cgm home... ${ok}" >&6; }
-    link_cgm_libpath="-L${ok}/lib"
-    cxx_cgm_includes="-I${ok}/include"
-    cgm_home_defined="yes"
-    make_cgm_driver="echo 'skipping cgm driver installation'"
-fi
-
-
-# Check whether --enable-cgm was given.
-if test "${enable_cgm+set}" = set; then :
-  enableval=$enable_cgm; ok=${enableval}
-else
-  ok="yes"
-fi
-
-
-if test "${ok}" = "no"
-then
-    { $as_echo "$as_me:${as_lineno-$LINENO}: result: disabling cgm..." >&5
-$as_echo "disabling cgm..." >&6; }
-else
-    { $as_echo "$as_me:${as_lineno-$LINENO}: result: enabling cgm..." >&5
-$as_echo "enabling cgm..." >&6; }
-    link_cgm_libs="-lcgm-c"
-    cxx_cgm_defs=""
-
-    # If home was not defined then check if cgm is installed
-    if test "${cgm_home_defined}" != "yes"
-    then
-        # Try this, if its there, use it, else use the driver
-        link_cgm_libpath="-L${here}/../drivers/cgm/lib/${target}/${lib_dir}"
-        cxx_cgm_includes="-I${here}/../drivers/cgm/include"
-	    build_cgm="true"
-        make_cgm_driver="make cgm_driver"
-	    { $as_echo "$as_me:${as_lineno-$LINENO}: result: using svn dependency cgm driver..." >&5
-$as_echo "using svn dependency cgm driver..." >&6; }
-    else
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: cgm includes directory... ${cxx_cgm_includes}" >&5
-$as_echo "cgm includes directory... ${cxx_cgm_includes}" >&6; }
-        { $as_echo "$as_me:${as_lineno-$LINENO}: result: cgm library directory... ${link_cgm_libpath}" >&5
-$as_echo "cgm library directory... ${link_cgm_libpath}" >&6; }
-    fi
-fi
-
-
-
-
 
 
 

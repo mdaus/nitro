@@ -71,14 +71,6 @@ pcre_driver:
 uuid_driver:
 	perl -I$(DRIVER_PATH) $(DRIVER_PATH)/uuid_driver.pl $(ROOT) $(DRIVER_PATH) @target@/@lib_dir@ "@cxx_64_flags@ @cxx_pic_flags@" --with-ldopts="'@cxx_64_flags@'"
 
-#  Build NITRO.  You need to do this only if your configure could not
-#  detect a working version of nitro
-nitf_driver:
-	perl -I$(DRIVER_PATH) $(DRIVER_PATH)/nitf_driver.pl $(ROOT) $(DRIVER_PATH) @target@/@lib_dir@ "@cxx_64_flags@ @cxx_pic_flags@"
-
-cgm_driver: nitf_driver
-	perl -I$(DRIVER_PATH) $(DRIVER_PATH)/cgm_driver.pl $(ROOT) $(DRIVER_PATH) @target@/@lib_dir@ "@cxx_64_flags@ @cxx_pic_flags@"
-
 #-------------------------------------------------------
 #  Most basic libraries
 #-------------------------------------------------------
@@ -131,13 +123,11 @@ core_libs: min_libs
 	@make_sax_driver@
 	@make_uuid_driver@
 	@make_ssl_driver@
-	@make_nitf_driver@
 	cd cli;      make library
 	cd logging;  make library
 	cd plugin;   make library
 	cd net;      make library
 	cd net.ssl;  make library
-	cd nitf;     make library
 	cd tiff;     make library
 	cd xml.lite; make library
 	cd unique;   make library
@@ -148,7 +138,6 @@ core_clean: min_clean
 	cd plugin;   make clean
 	cd net;      make clean
 	cd net.ssl;  make clean
-	cd nitf;     make clean
 	cd tiff;     make clean
 	cd xml.lite; make clean
 	cd unique;   make clean
@@ -159,7 +148,6 @@ core_raw: min_raw
 	cd plugin;   make raw
 	cd net;      make raw
 	cd net.ssl;  make raw
-	cd nitf;     make raw
 	cd tiff;     make raw
 	cd xml.lite; make raw
 	cd unique;   make raw
@@ -168,7 +156,6 @@ core_tests: min_tests
 	cd logging;  make unit-tests
 	cd net;      make unit-tests
 	cd net.ssl;  make unit-tests
-	cd nitf;     make unit-tests
 	cd tiff;     make unit-tests
 	cd xml.lite; make unit-tests
 	cd unique;   make unit-tests
@@ -179,7 +166,6 @@ core_install: min_install
 	cd plugin;   make install
 	cd net;      make install
 	cd net.ssl;  make install
-	cd nitf;     make install
 	cd tiff;     make install
 	cd xml.lite; make install
 	cd unique;   make install
@@ -209,16 +195,8 @@ fresh: clean
 #for now, it will be hardcoded...
 drivers_clean:
 	cd ../drivers; rm -rf e2fsprogs-1.40-uuid
-	cd ../drivers; rm -rf expat-1.95.7
+	cd ../drivers; rm -rf expat-2.0.0
 	cd ../drivers; rm -rf pcre-5.0
 	cd ../drivers; rm -rf fftw-2.1.5
 	cd ../drivers; rm -rf openssl-0.9.8
-	if test -f ../drivers/nitf/Makefile; \
-	then cd ../drivers/nitf; make clean; \
-	     rm -f *INSTALL_SUCCEEDED; \
-	fi
-	if test -f ../drivers/cgm/Makefile; \
-	then cd ../drivers/cgm; make clean; \
-	     rm -f *INSTALL_SUCCEEDED; \
-	fi
 
