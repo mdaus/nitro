@@ -28,7 +28,7 @@
 #  include <math.h>
 #else
 #  include <cassert>
-#  include <cmath>
+#include <cmath>
 #endif
 
 #include <import/sys.h>

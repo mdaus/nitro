@@ -134,25 +134,21 @@ bool sys::OSWin32::isFile(const std::string& path) const
     //  Im not 100% sure.  So Im checking
     //  1) Exists
     //  2) Not Directory
-    //  3) Not Archive
+    //  3) Not Archive - we aren't doing that...
     DWORD what = GetFileAttributes(path.c_str());
-    if (what == 0xFFFFFFFF)
-        throw sys::SystemException("GetFileAttributes failed");
-    if (what != FILE_ATTRIBUTE_DIRECTORY)
-        return true;
-    else return false;
-
+    return (what != 0xFFFFFFFF && what != FILE_ATTRIBUTE_DIRECTORY);
 }
 
 
 bool sys::OSWin32::isDirectory(const std::string& path) const
 {
     DWORD what = GetFileAttributes(path.c_str());
-    if (what == 0xFFFFFFFF)
-        throw sys::SystemException("GetFileAttributes failed");
-    if (what == FILE_ATTRIBUTE_DIRECTORY)
-        return true;
-    else return false;
+    return what == FILE_ATTRIBUTE_DIRECTORY;
+//    if (what == 0xFFFFFFFF)
+//        throw sys::SystemException("GetFileAttributes failed");
+//    if (what == FILE_ATTRIBUTE_DIRECTORY)
+//        return true;
+//    else return false;
 }
 
 bool sys::OSWin32::makeDirectory(const std::string& path) const

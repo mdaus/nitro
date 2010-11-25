@@ -46,6 +46,8 @@ public:
 
     static void touchFile(std::string filename) throw (except::IOException);
 
+    static void forceMkdir(std::string dirname) throw (except::IOException);
+
 private:
     //private constructor
     FileUtils()

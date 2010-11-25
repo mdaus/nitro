@@ -115,11 +115,31 @@ int main(int argc, char **argv)
 
         std::cout << Path::absolutePath("/home/tzellman/dev/") << std::endl;
 
+        const std::string currentDirWithDelimiter =
+            os.getCurrentWorkingDirectory() + os.getDelimiter();
+        parts = Path::splitPath(currentDirWithDelimiter);
+        std::cout << "1) " << parts.first << " --- " << parts.second
+                        << std::endl;
+
+        std::cout << Path::normalizePath(currentDirWithDelimiter)
+                  << std::endl;
+
+        std::cout << Path::absolutePath(currentDirWithDelimiter)
+                  << std::endl;
+
+        std::cout << Path::joinPaths(parts.first + os.getDelimiter(),
+                                     parts.second + os.getDelimiter())
+                  << std::endl;
     }
-    catch (except::Throwable& t)
+    catch (const except::Throwable& t)
     {
         std::cerr << "Caught throwable: " << t.toString() << std::endl;
-        exit( EXIT_FAILURE);
+        exit(EXIT_FAILURE);
+    }
+    catch (const std::exception& ex)
+    {
+        std::cerr << "Caught std::exception: " << ex.what() << std::endl;
+        exit(EXIT_FAILURE);
     }
     catch (...)
     {

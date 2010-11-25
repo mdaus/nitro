@@ -43,8 +43,10 @@ dbi: dbi_libs dbi_tests
 clean: core_clean drivers_clean #dbi_clean
 raw: core_raw #dbi_raw
 	rm -f Makefile
-	rm -f config.status
-	rm -rf install
+	rm -f config.status config.log
+	rm -rf install autom4te.cache
+	find -L . -name Makefile -exec rm -f {} \;
+	find -L . -name project.make -exec rm -f {} \;
 
 #  Make all of the tests in CODA OSS
 tests: core_tests #dbi_tests 

@@ -123,7 +123,8 @@ bool sys::OSUnix::isFile(const std::string& path) const
 {
     struct stat info;
     if (stat(path.c_str(), &info) == -1)
-        throw sys::SystemException("Stat failed");
+        return false;
+//        throw sys::SystemException("Stat failed");
     return (S_ISREG(info.st_mode)) ? (true) : (false);
 }
 
@@ -131,7 +132,8 @@ bool sys::OSUnix::isDirectory(const std::string& path) const
 {
     struct stat info;
     if (stat(path.c_str(), &info) == -1)
-        throw sys::SystemException("Stat failed");
+        return false;
+//        throw sys::SystemException("Stat failed");
     return (S_ISDIR(info.st_mode)) ? (true) : (false);
 }
 

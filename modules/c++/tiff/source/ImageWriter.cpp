@@ -23,7 +23,7 @@
 #include "tiff/ImageWriter.h"
 
 #include <sstream>
-#include <math.h>
+#include <cmath>
 #include <import/except.h>
 
 #include "tiff/Common.h"

@@ -960,8 +960,18 @@ template<typename _T> Matrix2D<_T>
     return mx;
 }
 
+template<typename _T, typename Vector_T > Matrix2D<_T>
+    diagonalMatrix(const Vector_T& diag)
+{
+    size_t N = diag.size();
 
-
+    Matrix2D<_T> mx(N, N, 0.0);
+    for (size_t i = 0; i < N; ++i)
+    {
+        mx(i, i) = diag[i];
+    }
+    return mx;
+}
 
 /*!
  *  Solve  Ax = b using LU decomposed matrix and the permutation vector.

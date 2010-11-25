@@ -50,7 +50,8 @@ public:
     /*!
      * Default Constructor
      */
-    Throwable()
+    Throwable() :
+        mMessage("")
     {
     }
 

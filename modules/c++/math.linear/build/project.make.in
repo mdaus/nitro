@@ -7,7 +7,7 @@ VERSION = $(MAJOR_VERSION)_$(MINOR_VERSION)$(VERSION_SUFFIX)
 BUILD = unit-tests
 SOURCES = #Matrix.cpp
 
-TESTS = test_mx.cpp test_lin.cpp test_cx.cpp test_diag.cpp
+TESTS = test_cx.cpp test_diag.cpp
 PLUGINS =
 MY_CXXFLAGS = 
 MY_CXXDEFINES =

@@ -24,8 +24,7 @@
 #include "io/FileOutputStream.h"
 
 std::string io::FileUtils::createFile(std::string dirname,
-                                      std::string filename, bool overwrite)
-                                                                            throw (except::IOException)
+        std::string filename, bool overwrite) throw (except::IOException)
 {
     sys::OS os;
 
@@ -85,5 +84,22 @@ void io::FileUtils::touchFile(std::string filename) throw (except::IOException)
         io::FileOutputStream f(filename, sys::File::CREATE
                 | sys::File::TRUNCATE);
         f.close();
+    }
+}
+
+void io::FileUtils::forceMkdir(std::string dirname) throw (except::IOException)
+{
+    sys::OS os;
+    if (os.exists(dirname))
+    {
+        if (!os.isDirectory(dirname))
+            throw except::IOException(
+                                      Ctxt(
+                                           "Cannot create directory - file already exists"));
+    }
+    else
+    {
+        if (!os.makeDirectory(dirname))
+            throw except::IOException(Ctxt("Cannot create directory"));
     }
 }

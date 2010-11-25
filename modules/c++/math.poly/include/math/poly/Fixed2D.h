@@ -125,7 +125,19 @@ public:
         return rv;
     }
 
+    Fixed2D<_OrderX, _OrderY, _T> flipXY() const
+    {
+        Fixed2D<_OrderX, _OrderY, _T> prime;
+        for (size_t ii = 0; ii <= _OrderX; ++ii)
+        {
+            for (size_t jj = 0; jj <= _OrderY; ++jj)
+            {
+                prime[ii][jj] = mCoef[jj][ii];
+            }
+        }
 
+        return prime;
+    }
 
     // Will not work with order 0!
     Fixed2D<_OrderX, _OrderY-1, _T> derivativeY() const
