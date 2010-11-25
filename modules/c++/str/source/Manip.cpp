@@ -68,14 +68,15 @@ bool str::startsWith(const std::string & s, const std::string & match)
 
 
 std::vector<std::string> str::split(const std::string& s,
-                                    const std::string& splitter)
+                                    const std::string& splitter,
+                                    size_t maxSplit)
 {
     std::vector<std::string> vec;
     int str_l = (int)s.length();
     int split_l = (int)splitter.length();
     int pos = 0;
     int nextPos;
-    while (pos < str_l)
+    while (pos < str_l && maxSplit != 1)
     {
         nextPos = (int)s.find(splitter, pos);
         if (nextPos == std::string::npos)
@@ -83,7 +84,13 @@ std::vector<std::string> str::split(const std::string& s,
         if (nextPos != pos)
             vec.push_back(s.substr(pos, nextPos - pos));
         pos = nextPos + split_l;
+        if (maxSplit != std::string::npos && vec.size() >= maxSplit - 1)
+            break;
     }
+
+    if (pos < str_l)
+        vec.push_back(s.substr(pos));
+
     return vec;
 }
 

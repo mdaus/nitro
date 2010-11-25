@@ -250,15 +250,40 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
             }
             else
             {
-                //split up each char and make sure only the last can have args
-                for (size_t j = 0, n = flag.size(); j < n; ++j)
+                // check for =
+                if (argStr.find("=") != std::string::npos)
                 {
-                    std::string charFlag = flag.substr(j, 1);
-                    std::ostringstream oss;
-                    oss << mPrefixChar << charFlag;
-                    explodedArgs.push_back(oss.str());
+                    std::vector < std::string > parts = str::split(argStr, "=",
+                                                                   2);
+                    std::copy(parts.begin(), parts.end(),
+                              std::back_inserter(explodedArgs));
+                }
+                else
+                {
+                    //split up each char as separate options
+                    // only the last will get any additional args
+                    for (size_t j = 0, n = flag.size(); j < n; ++j)
+                    {
+                        std::string charFlag = flag.substr(j, 1);
+                        std::ostringstream oss;
+                        oss << mPrefixChar << charFlag;
+                        explodedArgs.push_back(oss.str());
+                    }
                 }
             }
+        }
+        else if (argStr.size() > 2 && argStr[0] == mPrefixChar && argStr[1]
+                == mPrefixChar)
+        {
+            // check for =
+            if (argStr.find("=") != std::string::npos)
+            {
+                std::vector < std::string > parts = str::split(argStr, "=", 2);
+                std::copy(parts.begin(), parts.end(),
+                          std::back_inserter(explodedArgs));
+            }
+            else
+                explodedArgs.push_back(argStr);
         }
         else
         {
@@ -514,7 +539,7 @@ void cli::ArgumentParser::processFlags(std::vector<std::string>& posFlags,
                 s << " " << meta;
             ops.push_back(s.str());
         }
-        for (size_t i = 0, n = argShortFlags.size(); i < n; ++i)
+        for (size_t i = 0, n = argLongFlags.size(); i < n; ++i)
         {
             s.str("");
             s << mPrefixChar << mPrefixChar << argLongFlags[i];

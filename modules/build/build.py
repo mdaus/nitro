@@ -169,8 +169,8 @@ class CPPBuildContext(BuildContext):
 
         testNode = path.find_dir('unittests')
         if testNode:
-            test_deps = modArgs.get('module_deps', '').split()
-            test_uselib = modArgs.get('uselib', '').split()
+            test_deps = modArgs.get('unittest_deps', modArgs.get('module_deps', '')).split()
+            test_uselib = modArgs.get('unittest_uselib', modArgs.get('uselib', '')).split()
             
             if not headersOnly:
                 test_deps.append(modArgs['name'])

@@ -60,7 +60,7 @@ bool startsWith(const std::string& s, const std::string& match);
  *  @return vector of strings
  */
 std::vector<std::string> split(const std::string& s,
-        const std::string& splitter);
+        const std::string& splitter = " ", size_t maxSplit = std::string::npos);
 
 //! Uses std::transform to convert all chars to lower case
 void lower(std::string& s);

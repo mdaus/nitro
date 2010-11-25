@@ -50,6 +50,7 @@ builtin(include, ./build/conf/configure.uuid.in)
 builtin(include, ./build/conf/configure.python.in)
 builtin(include, ./build/conf/configure.java.in)
 builtin(include, ./build/conf/configure.misc.in)
+builtin(include, ./build/conf/configure.nitf.in)
 
 
 #disable optz if we are debugging
@@ -83,8 +84,8 @@ AC_SUBST(lib_dir)
 
 
 # Figure out which Makefile.ins to process
-makefile_in_subs=`find . -name Makefile.in -print | sed 's/.in$//'`
-proj_make_in=`find . -name project.make.in -print | sed 's/.in$//'`
+makefile_in_subs=`find -L . -name Makefile.in -print | sed 's/.in$//'`
+proj_make_in=`find -L . -name project.make.in -print | sed 's/.in$//'`
 AC_OUTPUT(${makefile_in_subs} ${proj_make_in})
 
 #now, expand the dependencies within the project.make files
