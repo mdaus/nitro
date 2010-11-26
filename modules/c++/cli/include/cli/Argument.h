@@ -31,7 +31,7 @@ namespace cli
 
 enum Action
 {
-    STORE, STORE_TRUE, STORE_FALSE, STORE_CONST, VERSION
+    STORE, STORE_TRUE, STORE_FALSE, STORE_CONST, SUB_OPTIONS, VERSION
 };
 
 // forward declaration
@@ -74,8 +74,6 @@ public:
         return this;
     }
 
-
-
     inline const std::string& getName() const { return mName; }
     inline const std::vector<std::string>& getShortFlags() const { return mShortFlags; }
     inline const std::vector<std::string>& getLongFlags() const { return mLongFlags; }
@@ -112,6 +110,8 @@ protected:
 
     friend class ArgumentParser;
     Argument(std::string nameOrFlags, ArgumentParser* parser);
+
+    std::string validateFlag(std::string flag) const;
 };
 
 }

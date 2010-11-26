@@ -40,14 +40,14 @@ public:
         destroy();
     }
 
-    bool exists(const std::string& key) const
+    bool hasValue(const std::string& key) const
     {
-        return mMap.find(key) != mMap.end();
+        return mValues.find(key) != mValues.end();
     }
 
-    size_t size() const
+    bool hasResults(const std::string& key) const
     {
-        return mMap.size();
+        return mResults.find(key) != mResults.end();
     }
 
     cli::Value* operator[](const std::string& key) const
@@ -59,58 +59,78 @@ public:
     cli::Value* getValue(const std::string& key) const
             throw (except::NoSuchKeyException)
     {
-        ConstIter_T p = mMap.find(key);
-        if (p == mMap.end())
+        ConstValueIter_T p = mValues.find(key);
+        if (p == mValues.end())
             throw except::NoSuchKeyException(Ctxt(key));
         return p->second;
     }
 
-    template <typename T>
+    template<typename T>
     T get(const std::string& key, unsigned int index = 0) const
             throw (except::NoSuchKeyException)
     {
         return getValue(key)->get<T>(index);
     }
 
-    template <typename T>
+    template<typename T>
     T operator()(const std::string& key, unsigned int index = 0) const
             throw (except::NoSuchKeyException)
     {
         return get<T>(key, index);
     }
 
-    std::vector<std::string> keys() const
+    cli::Results* getResults(const std::string& key) const
+            throw (except::NoSuchKeyException)
     {
-        std::vector<std::string> vec(mMap.size());
-        ConstIter_T p = mMap.begin();
-        for(size_t i = 0; p != mMap.end(); ++p, ++i)
-            vec[i] = p->first;
-        return vec;
+        ConstResultsIter_T p = mResults.find(key);
+        if (p == mResults.end())
+            throw except::NoSuchKeyException(Ctxt(key));
+        return p->second;
     }
 
 protected:
-    typedef std::map<std::string, cli::Value*> Storage_T;
-    typedef Storage_T::iterator Iter_T;
-    typedef Storage_T::const_iterator ConstIter_T;
-    Storage_T mMap;
+    typedef std::map<std::string, cli::Value*> ValueStorage_T;
+    typedef ValueStorage_T::iterator ValueIter_T;
+    typedef ValueStorage_T::const_iterator ConstValueIter_T;
+    typedef std::map<std::string, cli::Results*> ResultsStorage_T;
+    typedef ResultsStorage_T::iterator ResultsIter_T;
+    typedef ResultsStorage_T::const_iterator ConstResultsIter_T;
+    ValueStorage_T mValues;
+    ResultsStorage_T mResults;
 
     void destroy()
     {
-        Iter_T it = mMap.begin(), end = mMap.end();
-        for (; it != end; ++it)
-        {
+        for (ValueIter_T it = mValues.begin(), end = mValues.end(); it != end; ++it)
             delete it->second;
-        }
-        mMap.clear();
+        for (ResultsIter_T it = mResults.begin(), end = mResults.end(); it
+                != end; ++it)
+            delete it->second;
+        mValues.clear();
+        mResults.clear();
     }
 
     friend class ArgumentParser;
 
     void put(const std::string& key, cli::Value *value)
     {
-        if (exists(key))
-            delete getValue(key);
-        mMap[key] = value;
+        if (hasValue(key))
+        {
+            cli::Value* existing = getValue(key);
+            if (existing != value)
+                delete getValue(key);
+        }
+        mValues[key] = value;
+    }
+
+    void put(const std::string& key, cli::Results *results)
+    {
+        if (hasResults(key))
+        {
+            cli::Results *existing = getResults(key);
+            if (existing != results)
+                delete existing;
+        }
+        mResults[key] = results;
     }
 };
 

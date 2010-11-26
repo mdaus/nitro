@@ -16,10 +16,8 @@ MY_CXXDEFINES =
 MY_LFLAGS =
 MY_INCLUDES = -I@top_srcdir@/except/include \
               -I@top_srcdir@/str/include \
-              -I@top_srcdir@/sys/include \
-              -I@top_srcdir@/io/include
+              -I@top_srcdir@/sys/include
 MY_LIBPATH = -L@top_srcdir@/str/lib/@target@/@lib_dir@ \
              -L@top_srcdir@/except/lib/@target@/@lib_dir@ \
-             -L@top_srcdir@/sys/lib/@target@/@lib_dir@ \
-             -L@top_srcdir@/io/lib/@target@/@lib_dir@
-MY_LIBS = -lio-c++ -lsys-c++ -lstr-c++ -lexcept-c++
+             -L@top_srcdir@/sys/lib/@target@/@lib_dir@
+MY_LIBS = -lsys-c++ -lstr-c++ -lexcept-c++

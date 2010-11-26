@@ -59,6 +59,56 @@ TEST_CASE(testSplit)
     TEST_ASSERT_EQ(parts[2], "values are the best!");
 }
 
+TEST_CASE(testIsAlpha)
+{
+    TEST_ASSERT(str::isAlpha("abcdefghijklmnopqrstuvwxyz"));
+    TEST_ASSERT_FALSE(str::isAlpha("abc123"));
+    TEST_ASSERT_FALSE(str::isAlpha("abcs with spaces"));
+}
+TEST_CASE(testIsAlphaSpace)
+{
+    TEST_ASSERT(str::isAlphaSpace("abcdefghijklmnopqrstuvwxyz"));
+    TEST_ASSERT_FALSE(str::isAlphaSpace("abc123"));
+    TEST_ASSERT(str::isAlphaSpace("abcs with spaces"));
+}
+TEST_CASE(testIsNumeric)
+{
+    TEST_ASSERT_FALSE(str::isNumeric("abcdefghijklmnopqrstuvwxyz"));
+    TEST_ASSERT_FALSE(str::isNumeric("abc123"));
+    TEST_ASSERT_FALSE(str::isNumeric("abcs with spaces"));
+    TEST_ASSERT(str::isNumeric("42"));
+}
+TEST_CASE(testIsNumericSpace)
+{
+    TEST_ASSERT_FALSE(str::isNumericSpace("lotto47"));
+    TEST_ASSERT(str::isNumericSpace("42"));
+    TEST_ASSERT(str::isNumericSpace("42 15 23 5 12"));
+}
+TEST_CASE(testIsAlphanumeric)
+{
+    TEST_ASSERT(str::isAlphanumeric("lotto47"));
+    TEST_ASSERT(str::isAlphanumeric("42"));
+    TEST_ASSERT_FALSE(str::isAlphanumeric("42 15 23 5 12"));
+    TEST_ASSERT(str::isAlphanumeric("justtext"));
+}
+TEST_CASE(testIsWhitespace)
+{
+    TEST_ASSERT_FALSE(str::isWhitespace("lotto47"));
+    TEST_ASSERT(str::isWhitespace(""));
+    TEST_ASSERT(str::isWhitespace(" "));
+    TEST_ASSERT(str::isWhitespace("                          "));
+    TEST_ASSERT(str::isWhitespace("\t"));
+    TEST_ASSERT(str::isWhitespace("\t \n"));
+}
+TEST_CASE(testContainsOnly)
+{
+    TEST_ASSERT(str::containsOnly("abc", "abcdefghijklmnopqrstuvwxyz"));
+    TEST_ASSERT_FALSE(str::containsOnly("abc!", "abcdefghijklmnopqrstuvwxyz"));
+    TEST_ASSERT(str::containsOnly("some-cool-id", "-abcdefghijklmnopqrstuvwxyz"));
+    TEST_ASSERT(str::containsOnly("\n\r\t ", " \t\n\r0123456789"));
+    TEST_ASSERT(str::containsOnly("1-2-3", " \t\n\r0123456789-"));
+}
+
 int main(int argc, char* argv[])
 {
     TEST_CHECK( testNull);
@@ -66,4 +116,11 @@ int main(int argc, char* argv[])
     TEST_CHECK( testUpper);
     TEST_CHECK( testLower);
     TEST_CHECK( testSplit);
+    TEST_CHECK( testIsAlpha);
+    TEST_CHECK( testIsAlphaSpace);
+    TEST_CHECK( testIsNumeric);
+    TEST_CHECK( testIsNumericSpace);
+    TEST_CHECK( testIsAlphanumeric);
+    TEST_CHECK( testIsWhitespace);
+    TEST_CHECK( testContainsOnly);
 }

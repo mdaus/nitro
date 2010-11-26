@@ -24,7 +24,6 @@
 #define __CLI_ARGUMENT_PARSER_H__
 
 #include <import/str.h>
-#include <import/io.h>
 #include "cli/Argument.h"
 #include "cli/Results.h"
 
@@ -57,6 +56,11 @@ public:
     ArgumentParser& setDescription(const std::string description);
 
     /**
+     * Text to display before the usage
+     */
+    ArgumentParser& setProlog(const std::string prolog);
+
+    /**
      * Text to display after the argument help
      */
     ArgumentParser& setEpilog(const std::string epilog);
@@ -79,8 +83,7 @@ public:
     /**
      * Prints the help. Currently width is ignored.
      */
-    void printHelp(io::OutputStream& out, bool andExit = false) const;
-    void printHelp(bool andExit = false) const;
+    void printHelp(std::ostream& out = std::cerr, bool andExit = false) const;
 
     /**
      * Parses the given arguments
@@ -89,11 +92,11 @@ public:
     Results* parse(const std::vector<std::string>& args);
 
 protected:
+    friend class Argument;
+
     std::vector<Argument*> mArgs;
-    std::map<std::string, Argument*> mShortFlags;
-    std::map<std::string, Argument*> mLongFlags;
-    std::vector<Argument*> mPositionalArgs;
     std::string mDescription;
+    std::string mProlog;
     std::string mEpilog;
     std::string mUsage;
     std::string mProgram;

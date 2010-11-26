@@ -26,13 +26,12 @@
 
 namespace cli
 {
-void _writeArgumentHelp(io::OutputStream& out, const std::string heading,
-                        size_t maxFlagsWidth,
-                        const std::vector<std::string>& flags,
-                        const std::vector<std::string>& helps)
+void _writeArgumentHelp(std::ostream& out, const std::string heading,
+        size_t maxFlagsWidth, const std::vector<std::string>& flags,
+        const std::vector<std::string>& helps)
 {
     std::ostringstream s;
-    out.writeln(heading);
+    out << heading << std::endl;
     for (size_t i = 0, num = flags.size(); i < num; ++i)
     {
         s.str("");
@@ -45,19 +44,19 @@ void _writeArgumentHelp(io::OutputStream& out, const std::string heading,
             s << std::left << flag;
             s.width(0);
             s << help;
-            out.writeln(s.str());
+            out << s.str() << std::endl;
         }
         else
         {
             s << "  ";
             s << flag;
-            out.writeln(s.str());
+            out << s.str() << std::endl;
             s.str("");
             s.width(maxFlagsWidth + 3);
             s << " ";
             s.width(0);
             s << help;
-            out.writeln(s.str());
+            out << s.str() << std::endl;
         }
     }
 }
@@ -80,11 +79,8 @@ cli::ArgumentParser::~ArgumentParser()
  * Shortcut for adding an argument
  */
 cli::Argument* cli::ArgumentParser::addArgument(std::string nameOrFlags,
-                                                std::string help,
-                                                cli::Action action,
-                                                std::string dest,
-                                                std::string metavar,
-                                                int minArgs, int maxArgs)
+        std::string help, cli::Action action, std::string dest,
+        std::string metavar, int minArgs, int maxArgs)
 {
     cli::Argument *arg = new cli::Argument(nameOrFlags, this);
     arg->setMinArgs(minArgs);
@@ -96,40 +92,18 @@ cli::Argument* cli::ArgumentParser::addArgument(std::string nameOrFlags,
     arg->setMetavar(metavar);
     mArgs.push_back(arg);
 
-    if (arg->isPositional())
-    {
-        mPositionalArgs.push_back(arg);
-    }
-    else
-    {
-        const std::vector<std::string>& shortFlags = arg->getShortFlags();
-        const std::vector<std::string>& longFlags = arg->getLongFlags();
-        for (std::vector<std::string>::const_iterator it = shortFlags.begin(); it
-                != shortFlags.end(); ++it)
-        {
-            std::string op = *it;
-            if (mShortFlags.find(op) != mShortFlags.end())
-                throw except::Exception(Ctxt(FmtX("Conflicting option: %c%s",
-                                                  mPrefixChar, op.c_str())));
-            mShortFlags[op] = arg;
-        }
-        for (std::vector<std::string>::const_iterator it = longFlags.begin(); it
-                != longFlags.end(); ++it)
-        {
-            std::string op = *it;
-            if (mLongFlags.find(op) != mLongFlags.end())
-                throw except::Exception(Ctxt(FmtX("Conflicting option: %c%c%s",
-                                                  mPrefixChar, mPrefixChar,
-                                                  op.c_str())));
-            mLongFlags[op] = arg;
-        }
-    }
     return arg;
 }
 
 cli::ArgumentParser& cli::ArgumentParser::setDescription(const std::string d)
 {
     mDescription = d;
+    return *this;
+}
+
+cli::ArgumentParser& cli::ArgumentParser::setProlog(const std::string prolog)
+{
+    mProlog = prolog;
     return *this;
 }
 
@@ -157,7 +131,7 @@ cli::ArgumentParser& cli::ArgumentParser::setProgram(const std::string program)
     return *this;
 }
 
-void cli::ArgumentParser::printHelp(io::OutputStream& out, bool andExit) const
+void cli::ArgumentParser::printHelp(std::ostream& out, bool andExit) const
 {
     std::vector<std::string> posFlags, opFlags, posHelps, opHelps, opUsage,
             posUsage;
@@ -166,59 +140,55 @@ void cli::ArgumentParser::printHelp(io::OutputStream& out, bool andExit) const
     processFlags(posFlags, opFlags, posHelps, opHelps, opUsage, posUsage,
                  maxFlagsWidth);
 
-    std::ostringstream s;
-    s << "usage: ";
+    if (!mProlog.empty())
+    {
+        out << mProlog << std::endl << std::endl;
+    }
+
+    out << "usage: ";
     if (mUsage.empty())
     {
         std::string progName = mProgram;
-        s << (progName.empty() ? "program" : progName);
+        out << (progName.empty() ? "program" : progName);
         if (!opUsage.empty())
-            s << " " << str::join(opUsage, " ");
+            out << " " << str::join(opUsage, " ");
         if (!posUsage.empty())
-            s << " " << str::join(posUsage, " ");
+            out << " " << str::join(posUsage, " ");
+        out << std::endl;
     }
     else
     {
-        s << mUsage;
+        out << mUsage << std::endl;
     }
-    out.writeln(s.str());
 
     if (!mDescription.empty())
     {
-        out.writeln("");
-        out.writeln(mDescription);
+        out << std::endl << mDescription << std::endl;
     }
 
     if (posFlags.size() > 0)
     {
-        out.writeln("");
+        out << std::endl;
         cli::_writeArgumentHelp(out, "positional arguments:", maxFlagsWidth,
                                 posFlags, posHelps);
     }
 
     if (opFlags.size() > 0)
     {
-        out.writeln("");
+        out << std::endl;
         cli::_writeArgumentHelp(out, "optional arguments:", maxFlagsWidth,
                                 opFlags, opHelps);
     }
 
     if (!mEpilog.empty())
     {
-        out.writeln("");
-        out.writeln(mEpilog);
+        out << std::endl << mEpilog << std::endl;
     }
 
     if (andExit)
     {
         exit(cli::EXIT_USAGE);
     }
-}
-
-void cli::ArgumentParser::printHelp(bool andExit) const
-{
-    io::StandardErrStream err;
-    printHelp(err, andExit);
 }
 
 cli::Results* cli::ArgumentParser::parse(int argc, const char** argv)
@@ -235,8 +205,57 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
     if (mProgram.empty())
         setProgram("program");
 
+    std::map<std::string, Argument*> shortFlags;
+    std::map<std::string, Argument*> longFlags;
+    std::map<std::string, Argument*> shortOptionsFlags;
+    std::map<std::string, Argument*> longOptionsFlags;
+    std::vector<Argument*> positionalArgs;
+
+    // first, validate the arguments
+    for (std::vector<cli::Argument*>::const_iterator it = mArgs.begin(); it
+            != mArgs.end(); ++it)
+    {
+        cli::Argument *arg = *it;
+        std::string argVar = arg->getVariable();
+
+        if (arg->isPositional())
+        {
+            positionalArgs.push_back(arg);
+        }
+        else
+        {
+            const std::vector<std::string>& argShortFlags =
+                    arg->getShortFlags();
+            const std::vector<std::string>& argLongFlags = arg->getLongFlags();
+            bool subOption = (arg->getAction() == cli::SUB_OPTIONS);
+            for (std::vector<std::string>::const_iterator it =
+                    argShortFlags.begin(); it != argShortFlags.end(); ++it)
+            {
+                std::string op = *it;
+                std::map<std::string, Argument*>& flagMap =
+                        (subOption ? shortOptionsFlags : shortFlags);
+                if (flagMap.find(op) != flagMap.end())
+                    parseError(FmtX("Conflicting option: %c%s", mPrefixChar,
+                                    op.c_str()));
+                flagMap[op] = arg;
+            }
+            for (std::vector<std::string>::const_iterator it =
+                    argLongFlags.begin(); it != argLongFlags.end(); ++it)
+            {
+                std::string op = *it;
+                std::map<std::string, Argument*>& flagMap =
+                        (subOption ? longOptionsFlags : longFlags);
+                if (flagMap.find(op) != flagMap.end())
+                    parseError(FmtX("Conflicting option: %c%c%s", mPrefixChar,
+                                    mPrefixChar, op.c_str()));
+                flagMap[op] = arg;
+            }
+        }
+
+    }
+
     std::vector < std::string > explodedArgs;
-    // first, check for combined short options
+    // next, check for combined short options
     for (size_t i = 0, s = args.size(); i < s; ++i)
     {
         std::string argStr = args[i];
@@ -244,7 +263,7 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
                 != mPrefixChar)
         {
             std::string flag = argStr.substr(1);
-            if (mShortFlags.find(flag) != mShortFlags.end())
+            if (shortFlags.find(flag) != shortFlags.end())
             {
                 explodedArgs.push_back(argStr);
             }
@@ -260,14 +279,24 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
                 }
                 else
                 {
-                    //split up each char as separate options
-                    // only the last will get any additional args
-                    for (size_t j = 0, n = flag.size(); j < n; ++j)
+                    // first, see if it is an extra option
+                    std::vector < std::string > parts = str::split(argStr, ":",
+                                                                   2);
+                    if (parts.size() == 2)
                     {
-                        std::string charFlag = flag.substr(j, 1);
-                        std::ostringstream oss;
-                        oss << mPrefixChar << charFlag;
-                        explodedArgs.push_back(oss.str());
+                        explodedArgs.push_back(argStr);
+                    }
+                    else
+                    {
+                        // split up each char as separate options
+                        // only the last will get any additional args
+                        for (size_t j = 0, n = flag.size(); j < n; ++j)
+                        {
+                            std::string charFlag = flag.substr(j, 1);
+                            std::ostringstream oss;
+                            oss << mPrefixChar << charFlag;
+                            explodedArgs.push_back(oss.str());
+                        }
                     }
                 }
             }
@@ -292,44 +321,77 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
     }
 
     cli::Results *results = new Results;
+    cli::Results *currentResults = NULL;
     for (size_t i = 0, s = explodedArgs.size(); i < s; ++i)
     {
+        currentResults = results; // set the pointer
         std::string argStr = explodedArgs[i];
-        cli::Argument *arg = NULL;
+        cli::Argument *arg;
+        std::string optionsStr("");
         if (argStr.size() > 2 && argStr[0] == mPrefixChar && argStr[1]
                 == mPrefixChar)
         {
             std::string flag = argStr.substr(2);
-            if (mLongFlags.find(flag) != mLongFlags.end())
+            if (longFlags.find(flag) != longFlags.end())
             {
-                arg = mLongFlags[flag];
+                arg = longFlags[flag];
             }
             else if (mHelpEnabled && flag == "help")
             {
-                printHelp(true);
+                printHelp(std::cerr, true);
             }
             else
             {
-                throw except::Exception(Ctxt(FmtX("Invalid option: [%s]",
-                                                  argStr.c_str())));
+                // check if it's an options flag
+                std::vector < std::string > parts = str::split(flag, ":", 2);
+                if (parts.size() == 2 && longOptionsFlags.find(parts[0])
+                        != longOptionsFlags.end())
+                {
+                    arg = longOptionsFlags[parts[0]];
+                    optionsStr = parts[1];
+                    std::string argVar = arg->getVariable();
+                    if (!results->hasResults(argVar))
+                        results->put(argVar, new cli::Results);
+                    currentResults = results->getResults(argVar);
+                }
+                else
+                {
+                    throw except::Exception(Ctxt(FmtX("Invalid option: [%s]",
+                                                      argStr.c_str())));
+                }
             }
         }
         else if (argStr.size() > 1 && argStr[0] == mPrefixChar && argStr[1]
                 != mPrefixChar)
         {
             std::string flag = argStr.substr(1);
-            if (mShortFlags.find(flag) != mShortFlags.end())
+            if (shortFlags.find(flag) != shortFlags.end())
             {
-                arg = mShortFlags[flag];
+                arg = shortFlags[flag];
             }
             else if (mHelpEnabled && flag == "h")
             {
-                printHelp(true);
+                printHelp(std::cerr, true);
             }
             else
             {
-                throw except::Exception(Ctxt(FmtX("Invalid option: [%s]",
-                                                  argStr.c_str())));
+                // check if it's an options flag
+                std::vector < std::string > parts = str::split(flag, ":", 2);
+                if (parts.size() == 2 && shortOptionsFlags.find(parts[0])
+                        != shortOptionsFlags.end())
+                {
+                    arg = shortOptionsFlags[parts[0]];
+                    optionsStr = parts[1];
+                    std::string argVar = arg->getVariable();
+                    if (!results->hasResults(argVar))
+                        results->put(argVar, new cli::Results);
+                    currentResults = results->getResults(argVar);
+                }
+                else
+                {
+                    throw except::Exception(Ctxt(FmtX("Invalid option: [%s]",
+                                                      argStr.c_str())));
+                }
             }
         }
 
@@ -340,9 +402,11 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
             {
             case cli::STORE:
             {
-                cli::Value *v =
-                        results->exists(argVar) ? results->getValue(argVar)
-                                                : new cli::Value;
+                cli::Value
+                        *v =
+                                currentResults->hasValue(argVar) ? currentResults->getValue(
+                                                                                            argVar)
+                                                                 : new cli::Value;
                 int maxArgs = arg->getMaxArgs();
                 // risky, I know...
                 while (i < s - 1)
@@ -361,19 +425,51 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
                     v->add(nextArg);
                     ++i;
                 }
-                results->put(argVar, v);
+                currentResults->put(argVar, v);
                 break;
             }
             case cli::STORE_TRUE:
-                results->put(argVar, new cli::Value(true));
+                currentResults->put(argVar, new cli::Value(true));
                 break;
             case cli::STORE_FALSE:
-                results->put(argVar, new cli::Value(false));
+                currentResults->put(argVar, new cli::Value(false));
                 break;
             case cli::STORE_CONST:
             {
                 const Value* constVal = arg->getConst();
-                results->put(argVar, constVal ? constVal->clone() : NULL);
+                currentResults->put(argVar, constVal ? constVal->clone() : NULL);
+                break;
+            }
+            case cli::SUB_OPTIONS:
+            {
+                if (optionsStr.empty())
+                    parseError(FmtX("invalid sub option: [%s]", argVar.c_str()));
+                cli::Value
+                        *v =
+                                currentResults->hasValue(optionsStr) ? currentResults->getValue(
+                                                                                                optionsStr)
+                                                                     : new cli::Value;
+                if (i < s - 1)
+                {
+                    std::string nextArg = explodedArgs[i + 1];
+                    if (nextArg.size() > 1 && nextArg[0] == mPrefixChar)
+                    {
+                        // it's another flag
+                        // this indicates the sub op is a bool
+                        v->add(true);
+                    }
+                    else
+                    {
+                        v->add(nextArg);
+                        ++i;
+                    }
+                }
+                else
+                {
+                    // this indicates the sub op is a bool
+                    v->add(true);
+                }
+                currentResults->put(optionsStr, v);
                 break;
             }
             case cli::VERSION:
@@ -386,14 +482,15 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
             // it's a positional argument
             cli::Value *lastPosVal = NULL;
             for (std::vector<cli::Argument*>::iterator it =
-                    mPositionalArgs.begin(); it != mPositionalArgs.end(); ++it)
+                    positionalArgs.begin(); it != positionalArgs.end(); ++it)
             {
                 cli::Argument *posArg = *it;
                 std::string argVar = posArg->getVariable();
                 int maxArgs = posArg->getMaxArgs();
-                if (results->exists(argVar))
+                if (currentResults->hasValue(argVar))
                 {
-                    cli::Value *posVal = lastPosVal = results->getValue(argVar);
+                    cli::Value *posVal = lastPosVal
+                            = currentResults->getValue(argVar);
                     if (posVal->size() >= maxArgs)
                         continue;
                     break;
@@ -401,7 +498,7 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
                 else if (maxArgs != 0)
                 {
                     lastPosVal = new cli::Value;
-                    results->put(argVar, lastPosVal);
+                    currentResults->put(argVar, lastPosVal);
                     break;
                 }
             }
@@ -423,7 +520,7 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
         // also validate minArgs
         int minArgs = arg->getMinArgs();
 
-        if (!results->exists(argVar))
+        if (!results->hasValue(argVar))
         {
             if (defaultVal != NULL)
                 results->put(argVar, defaultVal->clone());
@@ -434,12 +531,13 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
         }
 
         //TODO validate choices
-
         if (minArgs > 0)
         {
-            size_t numGiven =
-                    results->exists(argVar) ? results->getValue(argVar)->size()
-                                            : 0;
+            size_t
+                    numGiven =
+                            results->hasValue(argVar) ? results->getValue(
+                                                                          argVar)->size()
+                                                      : 0;
             if (numGiven < minArgs)
                 parseError(FmtX("too few arguments: [%s]", argVar.c_str()));
         }
@@ -475,12 +573,9 @@ void cli::ArgumentParser::parseError(const std::string& msg)
 }
 
 void cli::ArgumentParser::processFlags(std::vector<std::string>& posFlags,
-                                       std::vector<std::string>& opFlags,
-                                       std::vector<std::string>&posHelps,
-                                       std::vector<std::string>&opHelps,
-                                       std::vector<std::string>&opUsage,
-                                       std::vector<std::string>&posUsage,
-                                       size_t& maxFlagsWidth) const
+        std::vector<std::string>& opFlags, std::vector<std::string>&posHelps,
+        std::vector<std::string>&opHelps, std::vector<std::string>&opUsage,
+        std::vector<std::string>&posUsage, size_t& maxFlagsWidth) const
 {
     std::ostringstream s;
 
@@ -498,6 +593,7 @@ void cli::ArgumentParser::processFlags(std::vector<std::string>& posFlags,
     {
         cli::Argument *arg = *it;
         const std::string& argName = arg->getName();
+        const cli::Action& argAction = arg->getAction();
         const std::vector<std::string>& argChoices = arg->getChoices();
         const std::string& argMetavar = arg->getMetavar();
         const std::string& argHelp = arg->getHelp();
@@ -514,49 +610,54 @@ void cli::ArgumentParser::processFlags(std::vector<std::string>& posFlags,
             s << argMetavar;
         else if (!argChoices.empty())
             s << "{" << str::join(argChoices, ",") << "}";
+        std::string meta = s.str();
 
         if (arg->isPositional())
         {
-            std::string op = s.str();
             //positional argument
-            if (op.empty())
-                s << argName;
-            op = s.str();
+            std::string op = meta.empty() ? argName : meta;
             maxFlagsWidth = std::max<size_t>(op.size(), maxFlagsWidth);
             posFlags.push_back(op);
             posHelps.push_back(helpMsg);
             posUsage.push_back(op);
         }
-        std::string meta = s.str();
-        std::vector < std::string > ops;
-        const std::vector<std::string>& argShortFlags = arg->getShortFlags();
-        const std::vector<std::string>& argLongFlags = arg->getLongFlags();
-        for (size_t i = 0, n = argShortFlags.size(); i < n; ++i)
+        else
         {
-            s.str("");
-            s << mPrefixChar << argShortFlags[i];
-            if (!meta.empty())
-                s << " " << meta;
-            ops.push_back(s.str());
-        }
-        for (size_t i = 0, n = argLongFlags.size(); i < n; ++i)
-        {
-            s.str("");
-            s << mPrefixChar << mPrefixChar << argLongFlags[i];
-            if (!meta.empty())
-                s << " " << meta;
-            ops.push_back(s.str());
-        }
-        if (!ops.empty())
-        {
-            s.str("");
-            s << "[" << ops[0] << "]";
-            opUsage.push_back(s.str());
+            std::vector < std::string > ops;
+            const std::vector<std::string>& argShortFlags =
+                    arg->getShortFlags();
+            const std::vector<std::string>& argLongFlags = arg->getLongFlags();
+            for (size_t i = 0, n = argShortFlags.size(); i < n; ++i)
+            {
+                s.str("");
+                s << mPrefixChar << argShortFlags[i];
+                if (argAction == cli::SUB_OPTIONS)
+                    s << ":ARG[=VALUE]";
+                else if (!meta.empty())
+                    s << " " << meta;
+                ops.push_back(s.str());
+            }
+            for (size_t i = 0, n = argLongFlags.size(); i < n; ++i)
+            {
+                s.str("");
+                s << mPrefixChar << mPrefixChar << argLongFlags[i];
+                if (argAction == cli::SUB_OPTIONS)
+                    s << ":ARG[=VALUE]";
+                else if (!meta.empty())
+                    s << " " << meta;
+                ops.push_back(s.str());
+            }
+            if (!ops.empty())
+            {
+                s.str("");
+                s << "[" << ops[0] << "]";
+                opUsage.push_back(s.str());
 
-            std::string opMsg = str::join(ops, ", ");
-            maxFlagsWidth = std::max<size_t>(opMsg.size(), maxFlagsWidth);
-            opFlags.push_back(opMsg);
-            opHelps.push_back(helpMsg);
+                std::string opMsg = str::join(ops, ", ");
+                maxFlagsWidth = std::max<size_t>(opMsg.size(), maxFlagsWidth);
+                opFlags.push_back(opMsg);
+                opHelps.push_back(helpMsg);
+            }
         }
     }
     maxFlagsWidth = std::min<size_t>(maxFlagsWidth, _MAX_ARG_LINE_LEN);

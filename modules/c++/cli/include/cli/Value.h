@@ -30,184 +30,121 @@ namespace cli
 {
 
 /**
- * The Value class provides access to one or more actual values. It provides index-based access to parameters.
+ * The Value class provides access to one or more actual values.
+ * It provides index-based access to parameters.
  */
 class Value
 {
 public:
-    Value() : mStorage(new ArrayStorage)
+    Value()
     {
     }
 
-    template <typename T>
-    explicit Value(std::vector<T> value) : mStorage(NULL)
+    template<typename T>
+    explicit Value(std::vector<T> value)
     {
         setContainer<T>(value);
     }
 
-    template <typename T>
-    Value(T value) : mStorage(NULL)
+    template<typename T>
+    Value(T value)
     {
         set<T>(value);
     }
 
-    template <typename T>
-    Value(T* value, size_t size, bool own = false) : mStorage(NULL)
+    template<typename T>
+    Value(T* value, size_t size, bool own = false)
     {
         set<T>(value, size, own);
     }
 
-    ~Value() { cleanup(); }
+    ~Value()
+    {
+        cleanup();
+    }
 
-    template <typename T>
+    template<typename T>
     void set(T value)
     {
         cleanup();
-        mStorage = new ScalarStorage(str::toString(value));
+        mValues.push_back(str::toString(value));
     }
 
-    template <typename T>
+    template<typename T>
     void set(T* value, size_t size, bool own = false)
     {
         cleanup();
-        std::vector<std::string> vec(size);
-        for(size_t i = 0; i < size; ++i)
-            vec[i] = str::toString(value[i]);
-        mStorage = new ArrayStorage(vec);
+        mValues.resize(size);
+        for (size_t i = 0; i < size; ++i)
+            mValues[i] = str::toString(value[i]);
         if (own)
-            delete [] value;
+            delete[] value;
     }
 
-    template <typename T>
+    template<typename T>
     void setContainer(const std::vector<T>& c)
     {
-        ArrayStorage *as = new ArrayStorage;
-        std::copy(c.begin(), c.end(), std::back_inserter(as->value));
-        mStorage = as;
+        cleanup();
+        std::copy(c.begin(), c.end(), std::back_inserter(mValues));
     }
 
-    template <typename T>
-    T operator [] (unsigned int index) const
+    template<typename T>
+    T operator [](unsigned int index) const
     {
         return at<T>(index);
     }
 
-    template <typename T>
+    template<typename T>
     T at(unsigned int index = 0) const
     {
-        switch(mStorage->type)
-        {
-        case STORAGE_SCALAR:
-            return str::toType<T>(((ScalarStorage*)mStorage)->value);
-        case STORAGE_ARRAY:
-            ArrayStorage* a = (ArrayStorage*)mStorage;
-            if (index >= a->value.size())
-                throw except::IndexOutOfRangeException(
-                        Ctxt(FmtX("Invalid index: %d", index)));
-            return str::toType<T>(a->value[index]);
-        }
-        throw except::Exception(Ctxt("Unsupported storage type"));
+        if (index >= mValues.size())
+            throw except::IndexOutOfRangeException(
+                                                   Ctxt(
+                                                        FmtX(
+                                                             "Invalid index: %d",
+                                                             index)));
+        return str::toType<T>(mValues[index]);
     }
 
-    template <typename T>
+    template<typename T>
     T get(unsigned int index = 0) const
     {
         return at<T>(index);
     }
 
-    template <typename T>
+    template<typename T>
     void add(T val)
     {
-        if (mStorage->type == STORAGE_SCALAR)
-        {
-            ArrayStorage *a = new ArrayStorage;
-            a->value.push_back(((ScalarStorage*)mStorage)->value);
-            cleanup();
-            mStorage = a;
-        }
-        if (mStorage->type == STORAGE_ARRAY)
-        {
-            ArrayStorage* a = (ArrayStorage*)mStorage;
-            a->value.push_back(str::toString(val));
-        }
-        else
-            throw except::Exception(Ctxt("Unsupported storage type"));
+        mValues.push_back(str::toString(val));
     }
 
     /**
-     * Returns the size of value. Scalars always have a size of 1. Arrays return the number of elements of the
+     * Returns the size of the value.
      */
     unsigned int size() const
     {
-        switch(mStorage->type)
-        {
-        case STORAGE_SCALAR:
-            return 1;
-        case STORAGE_ARRAY:
-            return ((ArrayStorage*)mStorage)->value.size();
-        }
-        throw except::Exception(Ctxt("Unsupported storage type"));
+        return mValues.size();
     }
 
     Value* clone() const
     {
-        switch(mStorage->type)
-        {
-        case STORAGE_SCALAR:
-            return new Value(((ScalarStorage*)mStorage)->value);
-        case STORAGE_ARRAY:
-            ArrayStorage* a = (ArrayStorage*)mStorage;
-            return new Value(a->value);
-        }
-        throw except::Exception(Ctxt("Unsupported storage type"));
+        return new Value(mValues);
     }
 
     std::string toString() const
     {
-        switch(mStorage->type)
-        {
-        case STORAGE_SCALAR:
-            return ((ScalarStorage*)mStorage)->value;
-        case STORAGE_ARRAY:
-            ArrayStorage* a = (ArrayStorage*)mStorage;
-            std::ostringstream s;
-            s << "[" << str::join(a->value, ", ") << "]";
-            return s.str();
-        }
-        throw except::Exception(Ctxt("Unsupported storage type"));
+        std::ostringstream s;
+        s << "[" << str::join(mValues, ", ") << "]";
+        return s.str();
     }
 
 protected:
+    std::vector<std::string> mValues;
 
-    enum StorageType
+    void cleanup()
     {
-        STORAGE_SCALAR,
-        STORAGE_ARRAY
-    };
-
-    struct Storage
-    {
-        Storage(StorageType t) : type(t){}
-        StorageType type;
-    };
-
-    struct ScalarStorage : public Storage
-    {
-        ScalarStorage(std::string v) : Storage(STORAGE_SCALAR), value(v){}
-        std::string value;
-    };
-
-    struct ArrayStorage : public Storage
-    {
-        ArrayStorage() : Storage(STORAGE_ARRAY) {}
-        ArrayStorage(std::vector<std::string> arr) :
-            Storage(STORAGE_ARRAY), value(arr){}
-        std::vector<std::string> value;
-    };
-
-    Storage *mStorage;
-
-    void cleanup() { if (mStorage) delete mStorage; }
+        mValues.clear();
+    }
 };
 
 }

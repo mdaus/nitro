@@ -53,6 +53,47 @@ bool endsWith(const std::string& s, const std::string& match);
 bool startsWith(const std::string& s, const std::string& match);
 
 /**
+ * Returns true if the string contains only letters.
+ */
+bool isAlpha(const std::string& s);
+
+/**
+ * Returns true if the string contains only letters and spaces.
+ */
+bool isAlphaSpace(const std::string& s);
+
+/**
+ * Returns true if the string contains only digits. This does not include
+ * decimal points.
+ */
+bool isNumeric(const std::string& s);
+
+/**
+ * Returns true if the string contains only digits and spaces.
+ */
+bool isNumericSpace(const std::string& s);
+
+/**
+ * Returns true if the string contains only whitespace characters (or empty).
+ */
+bool isWhitespace(const std::string& s);
+
+/**
+ * Returns true if the string contains only letters and digits.
+ */
+bool isAlphanumeric(const std::string& s);
+
+/**
+ * Returns true if the string contains only ASCII printable characters.
+ */
+bool isAsciiPrintable(const std::string& s);
+
+/**
+ * Returns true if the string contains only the given allowed characters.
+ */
+bool containsOnly(const std::string& s, const std::string& validChars);
+
+/**
  *  Splits a string based on a splitter string. Similar to tokenization, except
  *  the splitter string can be of any length.
  *  @param  s         String to check

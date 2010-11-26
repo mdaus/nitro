@@ -20,7 +20,6 @@
  *
  */
 
-
 #include "str/Manip.h"
 #include <iostream>
 #include <sstream>
@@ -66,19 +65,107 @@ bool str::startsWith(const std::string & s, const std::string & match)
     return sLen >= mLen;
 }
 
+bool str::isAlpha(const std::string& s)
+{
+    typedef std::string::const_iterator StringIter;
+    for (StringIter it = s.begin(); it != s.end(); ++it)
+    {
+        if (!isalpha(*it))
+            return false;
+    }
+    return !s.empty();
+}
+
+bool str::isAlphaSpace(const std::string& s)
+{
+    typedef std::string::const_iterator StringIter;
+    for (StringIter it = s.begin(); it != s.end(); ++it)
+    {
+        if (!isalpha(*it) && *it != ' ')
+            return false;
+    }
+    return !s.empty();
+}
+
+bool str::isNumeric(const std::string& s)
+{
+    typedef std::string::const_iterator StringIter;
+    for (StringIter it = s.begin(); it != s.end(); ++it)
+    {
+        if (!isdigit(*it))
+            return false;
+    }
+    return !s.empty();
+}
+
+bool str::isNumericSpace(const std::string& s)
+{
+    typedef std::string::const_iterator StringIter;
+    for (StringIter it = s.begin(); it != s.end(); ++it)
+    {
+        if (!isdigit(*it) && *it != ' ')
+            return false;
+    }
+    return !s.empty();
+}
+
+bool str::isWhitespace(const std::string& s)
+{
+    typedef std::string::const_iterator StringIter;
+    for (StringIter it = s.begin(); it != s.end(); ++it)
+    {
+        if (!isspace(*it))
+            return false;
+    }
+    return true;
+}
+
+bool str::isAlphanumeric(const std::string& s)
+{
+    typedef std::string::const_iterator StringIter;
+    for (StringIter it = s.begin(); it != s.end(); ++it)
+    {
+        if (!isalpha(*it) && !isdigit(*it))
+            return false;
+    }
+    return !s.empty();
+}
+
+bool str::isAsciiPrintable(const std::string& s)
+{
+    typedef std::string::const_iterator StringIter;
+    for (StringIter it = s.begin(); it != s.end(); ++it)
+    {
+        char c = *it;
+        if (c < 32 || c > 126)
+            return false;
+    }
+    return true;
+}
+
+bool str::containsOnly(const std::string& s, const std::string& validChars)
+{
+    typedef std::string::const_iterator StringIter;
+    std::vector<bool> chars(255, false);
+    for (StringIter it = validChars.begin(); it != validChars.end(); ++it)
+        chars[(unsigned int)*it] = true;
+    for (StringIter it = s.begin(); it != s.end(); ++it)
+        if (!chars[(unsigned int)*it])
+            return false;
+    return true;
+}
 
 std::vector<std::string> str::split(const std::string& s,
-                                    const std::string& splitter,
-                                    size_t maxSplit)
+        const std::string& splitter, size_t maxSplit)
 {
-    std::vector<std::string> vec;
-    int str_l = (int)s.length();
-    int split_l = (int)splitter.length();
+    std::vector < std::string > vec;
+    int str_l = (int) s.length();
+    int split_l = (int) splitter.length();
     int pos = 0;
     int nextPos;
     while (pos < str_l && maxSplit != 1)
     {
-        nextPos = (int)s.find(splitter, pos);
+        nextPos = (int) s.find(splitter, pos);
         if (nextPos == std::string::npos)
             nextPos = str_l;
         if (nextPos != pos)
@@ -93,7 +180,6 @@ std::vector<std::string> str::split(const std::string& s,
 
     return vec;
 }
-
 
 void str::lower(std::string& s)
 {

@@ -21,6 +21,7 @@
  */
 
 #include "cli/Argument.h"
+#include "cli/ArgumentParser.h"
 #include <iterator>
 
 cli::Argument::Argument(std::string nameOrFlags, cli::ArgumentParser* parser) :
@@ -51,12 +52,26 @@ cli::Argument::~Argument()
 
 cli::Argument* cli::Argument::addFlag(std::string flag)
 {
-    if (str::startsWith(flag, "--") && flag.size() > 2 && flag[2] != '-')
-        mLongFlags.push_back(flag.substr(2));
-    else if (str::startsWith(flag, "-") && flag.size() > 1 && flag[1] != '-')
-        mShortFlags.push_back(flag.substr(1));
+    char p = mParser->mPrefixChar;
+    std::string p2 = FmtX("%c%c", p, p);
+    if (flag.size() > 2 && str::startsWith(flag, p2) && flag[2] != p)
+        mLongFlags.push_back(validateFlag(flag.substr(2)));
+    else if (flag.size() > 1 && flag[0] == p && flag[1] != p)
+        mShortFlags.push_back(validateFlag(flag.substr(1)));
     return this;
 }
+std::string cli::Argument::validateFlag(std::string flag) const
+{
+    const static std::string idChars =
+            "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ012345789-_";
+    std::string firstChar(flag.substr(0, 1));
+    std::string rest = flag.substr(1);
+    if ((!str::isAlphanumeric(firstChar) && firstChar[0] != '_')
+            || (!str::containsOnly(rest, idChars)))
+        throw except::Exception(Ctxt("invalid flag"));
+    return flag;
+}
+
 cli::Argument* cli::Argument::setAction(cli::Action action)
 {
     mAction = action;
