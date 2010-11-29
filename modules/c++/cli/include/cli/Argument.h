@@ -59,6 +59,7 @@ public:
     Argument* setMetavar(std::string metavar);
     Argument* setDestination(std::string dest);
     Argument* setConst(Value* val, bool own = false);
+    Argument* setRequired(bool flag);
 
     template <typename T>
     Argument* setConst(const T val)
@@ -82,7 +83,7 @@ public:
     inline int getMaxArgs() const { return mMaxArgs; }
     inline const Value* getDefault() const { return mDefaultValue; }
     inline const std::vector<std::string>& getChoices() const { return mChoices; }
-    inline bool isRequired() const { return getMinArgs() > 0; }
+    inline bool isRequired() const { return mRequired; }
     inline const std::string& getHelp() const { return mHelp; }
     inline const std::string& getMetavar() const { return mMetavar; }
     inline const std::string& getDestination() const { return mDestination; }
@@ -106,6 +107,7 @@ protected:
     std::string mDestination;
     Value* mConstValue;
     bool mOwnConst;
+    bool mRequired;
     ArgumentParser* mParser;
 
     friend class ArgumentParser;

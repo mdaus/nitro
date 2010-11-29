@@ -66,7 +66,7 @@ public:
      * \param uri The uri of the object
      * \param characterData The character data (if any)
      */
-    Element(const std::string & qname, const std::string & uri,
+    Element(const std::string & qname, const std::string & uri = "",
             std::string characterData = "") :
         mParent(NULL), mName(uri, qname), mCharacterData(characterData)
     {

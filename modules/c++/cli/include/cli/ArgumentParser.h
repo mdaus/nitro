@@ -48,7 +48,8 @@ public:
                           cli::Action action = cli::STORE,
                           std::string destination = "",
                           std::string metavar = "",
-                          int minArgs = 0, int maxArgs = 1);
+                          int minArgs = -1, int maxArgs = -1,
+                          bool required = false);
 
     /**
      * Text to display before the argument help

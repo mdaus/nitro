@@ -120,20 +120,51 @@ TEST_CASE(testSubOptions)
     parser.printHelp();
 
     std::auto_ptr<cli::Results> results(parser.parse(str::split("-x:special")));
-    TEST_ASSERT(results->hasResults("extra"));
-    TEST_ASSERT(results->getResults("extra")->get<bool>("special"));
+    TEST_ASSERT(results->hasSubResults("extra"));
+    TEST_ASSERT(results->getSubResults("extra")->get<bool>("special"));
 
     results.reset(parser.parse(str::split("--extra:arg=something -x:arg2 1")));
-    TEST_ASSERT(results->hasResults("extra"));
-    TEST_ASSERT_EQ(results->getResults("extra")->get<std::string>("arg"), "something");
-    TEST_ASSERT_EQ(results->getResults("extra")->get<int>("arg2"), 1);
+    TEST_ASSERT(results->hasSubResults("extra"));
+    TEST_ASSERT_EQ(results->getSubResults("extra")->get<std::string>("arg"), "something");
+    TEST_ASSERT_EQ(results->getSubResults("extra")->get<int>("arg2"), 1);
 
     results.reset(parser.parse(str::split("--config /path/to/file --config:flag1 -c:flag2=true --config:flag3 false")));
     TEST_ASSERT_EQ(results->get<std::string>("config"), "/path/to/file");
-    TEST_ASSERT(results->hasResults("config"));
-    TEST_ASSERT(results->getResults("config")->get<bool>("flag1"));
-    TEST_ASSERT(results->getResults("config")->get<bool>("flag2"));
-    TEST_ASSERT_FALSE(results->getResults("config")->get<bool>("flag3"));
+    TEST_ASSERT(results->hasSubResults("config"));
+    TEST_ASSERT(results->getSubResults("config")->get<bool>("flag1"));
+    TEST_ASSERT(results->getSubResults("config")->get<bool>("flag2"));
+    TEST_ASSERT_FALSE(results->getSubResults("config")->get<bool>("flag3"));
+}
+
+TEST_CASE(testIterate)
+{
+    cli::ArgumentParser parser;
+    parser.setProgram("tester");
+    parser.addArgument("-v --verbose", "Toggle verbose", cli::STORE_TRUE);
+    parser.addArgument("-c --config", "Specify a config file", cli::STORE);
+
+    std::auto_ptr<cli::Results> results(parser.parse(str::split("-v -c config.xml")));
+    std::vector<std::string> keys;
+    for(cli::Results::const_iterator it = results->begin(); it != results->end(); ++it)
+        keys.push_back(it->first);
+    TEST_ASSERT_EQ(keys.size(), 2);
+    // std::map returns keys in alphabetical order...
+    TEST_ASSERT_EQ(keys[0], "config");
+    TEST_ASSERT_EQ(keys[1], "verbose");
+}
+
+TEST_CASE(testRequired)
+{
+    cli::ArgumentParser parser;
+    parser.setProgram("tester");
+    parser.addArgument("-v --verbose", "Toggle verbose", cli::STORE_TRUE);
+    parser.addArgument("-c --config", "Specify a config file", cli::STORE)->setRequired(true);
+
+    std::auto_ptr<cli::Results> results;
+    TEST_EXCEPTION(results.reset(parser.parse(str::split(""))));
+    TEST_EXCEPTION(results.reset(parser.parse(str::split("-c"))));
+    results.reset(parser.parse(str::split("-c configFile")));
+    TEST_ASSERT_EQ(results->get<std::string>("config"), "configFile");
 }
 
 int main(int argc, char* argv[])
@@ -142,4 +173,6 @@ int main(int argc, char* argv[])
     TEST_CHECK( testChoices);
     TEST_CHECK( testMultiple);
     TEST_CHECK( testSubOptions);
+    TEST_CHECK( testIterate);
+    TEST_CHECK( testRequired);
 }

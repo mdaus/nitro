@@ -31,6 +31,14 @@ namespace cli
 
 class Results
 {
+protected:
+    typedef std::map<std::string, cli::Value*> ValueStorage_T;
+    typedef ValueStorage_T::iterator ValueIter_T;
+    typedef ValueStorage_T::const_iterator ConstValueIter_T;
+    typedef std::map<std::string, cli::Results*> ResultsStorage_T;
+    typedef ResultsStorage_T::iterator ResultsIter_T;
+    typedef ResultsStorage_T::const_iterator ConstResultsIter_T;
+
 public:
     Results()
     {
@@ -45,7 +53,7 @@ public:
         return mValues.find(key) != mValues.end();
     }
 
-    bool hasResults(const std::string& key) const
+    bool hasSubResults(const std::string& key) const
     {
         return mResults.find(key) != mResults.end();
     }
@@ -79,7 +87,7 @@ public:
         return get<T>(key, index);
     }
 
-    cli::Results* getResults(const std::string& key) const
+    cli::Results* getSubResults(const std::string& key) const
             throw (except::NoSuchKeyException)
     {
         ConstResultsIter_T p = mResults.find(key);
@@ -88,13 +96,15 @@ public:
         return p->second;
     }
 
+    typedef ValueStorage_T::iterator iterator;
+    typedef ValueStorage_T::const_iterator const_iterator;
+
+    iterator begin() { return mValues.begin(); }
+    const_iterator begin() const { return mValues.begin(); }
+    iterator end() { return mValues.end(); }
+    const_iterator end() const { return mValues.end(); }
+
 protected:
-    typedef std::map<std::string, cli::Value*> ValueStorage_T;
-    typedef ValueStorage_T::iterator ValueIter_T;
-    typedef ValueStorage_T::const_iterator ConstValueIter_T;
-    typedef std::map<std::string, cli::Results*> ResultsStorage_T;
-    typedef ResultsStorage_T::iterator ResultsIter_T;
-    typedef ResultsStorage_T::const_iterator ConstResultsIter_T;
     ValueStorage_T mValues;
     ResultsStorage_T mResults;
 
@@ -124,9 +134,9 @@ protected:
 
     void put(const std::string& key, cli::Results *results)
     {
-        if (hasResults(key))
+        if (hasSubResults(key))
         {
-            cli::Results *existing = getResults(key);
+            cli::Results *existing = getSubResults(key);
             if (existing != results)
                 delete existing;
         }

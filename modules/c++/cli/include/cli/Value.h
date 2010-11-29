@@ -138,6 +138,14 @@ public:
         return s.str();
     }
 
+    typedef std::vector<std::string>::iterator iterator;
+    typedef std::vector<std::string>::const_iterator const_iterator;
+
+    iterator begin() { return mValues.begin(); }
+    const_iterator begin() const { return mValues.begin(); }
+    iterator end() { return mValues.end(); }
+    const_iterator end() const { return mValues.end(); }
+
 protected:
     std::vector<std::string> mValues;
 

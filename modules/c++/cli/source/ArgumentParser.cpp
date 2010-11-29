@@ -27,8 +27,9 @@
 namespace cli
 {
 void _writeArgumentHelp(std::ostream& out, const std::string heading,
-        size_t maxFlagsWidth, const std::vector<std::string>& flags,
-        const std::vector<std::string>& helps)
+                        size_t maxFlagsWidth,
+                        const std::vector<std::string>& flags,
+                        const std::vector<std::string>& helps)
 {
     std::ostringstream s;
     out << heading << std::endl;
@@ -79,19 +80,44 @@ cli::ArgumentParser::~ArgumentParser()
  * Shortcut for adding an argument
  */
 cli::Argument* cli::ArgumentParser::addArgument(std::string nameOrFlags,
-        std::string help, cli::Action action, std::string dest,
-        std::string metavar, int minArgs, int maxArgs)
+                                                std::string help,
+                                                cli::Action action,
+                                                std::string dest,
+                                                std::string metavar,
+                                                int minArgs, int maxArgs,
+                                                bool required)
 {
     cli::Argument *arg = new cli::Argument(nameOrFlags, this);
+    switch (action)
+    {
+    case cli::STORE:
+        if (minArgs < 0)
+        {
+            minArgs = 1;
+            maxArgs = 1;
+        }
+        break;
+    case cli::STORE_TRUE:
+    case cli::STORE_FALSE:
+    case cli::STORE_CONST:
+    case cli::VERSION:
+        minArgs = 0;
+        maxArgs = 0;
+        break;
+    case cli::SUB_OPTIONS:
+        if (minArgs < 0)
+            minArgs = 0;
+        break;
+    }
+
     arg->setMinArgs(minArgs);
     arg->setMaxArgs(maxArgs);
-    // set the action after setting num args, since action can modify args
     arg->setAction(action);
     arg->setDestination(dest);
     arg->setHelp(help);
     arg->setMetavar(metavar);
+    arg->setRequired(required);
     mArgs.push_back(arg);
-
     return arg;
 }
 
@@ -326,7 +352,7 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
     {
         currentResults = results; // set the pointer
         std::string argStr = explodedArgs[i];
-        cli::Argument *arg;
+        cli::Argument *arg = NULL;
         std::string optionsStr("");
         if (argStr.size() > 2 && argStr[0] == mPrefixChar && argStr[1]
                 == mPrefixChar)
@@ -350,9 +376,9 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
                     arg = longOptionsFlags[parts[0]];
                     optionsStr = parts[1];
                     std::string argVar = arg->getVariable();
-                    if (!results->hasResults(argVar))
+                    if (!results->hasSubResults(argVar))
                         results->put(argVar, new cli::Results);
-                    currentResults = results->getResults(argVar);
+                    currentResults = results->getSubResults(argVar);
                 }
                 else
                 {
@@ -383,9 +409,9 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
                     arg = shortOptionsFlags[parts[0]];
                     optionsStr = parts[1];
                     std::string argVar = arg->getVariable();
-                    if (!results->hasResults(argVar))
+                    if (!results->hasSubResults(argVar))
                         results->put(argVar, new cli::Results);
-                    currentResults = results->getResults(argVar);
+                    currentResults = results->getSubResults(argVar);
                 }
                 else
                 {
@@ -515,31 +541,33 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
     {
         cli::Argument *arg = *it;
         std::string argVar = arg->getVariable();
-        const Value* defaultVal = arg->getDefault();
-
-        // also validate minArgs
-        int minArgs = arg->getMinArgs();
 
         if (!results->hasValue(argVar))
         {
+            const Value* defaultVal = arg->getDefault();
             if (defaultVal != NULL)
                 results->put(argVar, defaultVal->clone());
             else if (arg->getAction() == cli::STORE_FALSE)
                 results->put(argVar, new cli::Value(true));
             else if (arg->getAction() == cli::STORE_TRUE)
                 results->put(argVar, new cli::Value(false));
+            else if (arg->isRequired())
+                parseError(FmtX("missing required argument: [%s]",
+                                argVar.c_str()));
         }
 
         //TODO validate choices
-        if (minArgs > 0)
+
+        // validate minArgs
+        int minArgs = arg->getMinArgs();
+        int maxArgs = arg->getMaxArgs();
+        if (minArgs > 0 && results->hasValue(argVar))
         {
-            size_t
-                    numGiven =
-                            results->hasValue(argVar) ? results->getValue(
-                                                                          argVar)->size()
-                                                      : 0;
+            size_t numGiven = results->getValue(argVar)->size();
             if (numGiven < minArgs)
                 parseError(FmtX("too few arguments: [%s]", argVar.c_str()));
+            else if (numGiven > maxArgs)
+                parseError(FmtX("too many arguments: [%s]", argVar.c_str()));
         }
     }
 
@@ -573,9 +601,12 @@ void cli::ArgumentParser::parseError(const std::string& msg)
 }
 
 void cli::ArgumentParser::processFlags(std::vector<std::string>& posFlags,
-        std::vector<std::string>& opFlags, std::vector<std::string>&posHelps,
-        std::vector<std::string>&opHelps, std::vector<std::string>&opUsage,
-        std::vector<std::string>&posUsage, size_t& maxFlagsWidth) const
+                                       std::vector<std::string>& opFlags,
+                                       std::vector<std::string>&posHelps,
+                                       std::vector<std::string>&opHelps,
+                                       std::vector<std::string>&opUsage,
+                                       std::vector<std::string>&posUsage,
+                                       size_t& maxFlagsWidth) const
 {
     std::ostringstream s;
 
