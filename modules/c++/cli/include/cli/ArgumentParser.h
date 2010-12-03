@@ -82,14 +82,25 @@ public:
     ArgumentParser& setProgram(const std::string program);
 
     /**
-     * Prints the help. Currently width is ignored.
+     * Prints the help and optionally exits.
      */
     void printHelp(std::ostream& out = std::cerr, bool andExit = false) const;
+
+    /**
+     * Prints the usage and optionally exits.
+     */
+    void printUsage(std::ostream& out = std::cerr, bool andExit = false,
+                    const std::string message = "") const;
 
     /**
      * Parses the given arguments
      */
     Results* parse(int argc, const char** argv);
+
+    /**
+     * Parses the arguments. args[0] is NOT used as the program name, so you
+     * will need to specify it explicitly using setProgramName().
+     */
     Results* parse(const std::vector<std::string>& args);
 
 protected:

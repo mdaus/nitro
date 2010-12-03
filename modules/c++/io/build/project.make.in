@@ -12,7 +12,9 @@ SOURCES = ByteStream.cpp \
           FileOutputStreamOS.cpp \
           FileInputStreamIOS.cpp \
           FileOutputStreamIOS.cpp \
+          FileUtils.cpp \
           InputStream.cpp \
+          SerializableFile.cpp \
           StandardStreams.cpp \
           StringStream.cpp
 

@@ -91,11 +91,14 @@ cli::Argument* cli::ArgumentParser::addArgument(std::string nameOrFlags,
     switch (action)
     {
     case cli::STORE:
+    case cli::SUB_OPTIONS:
         if (minArgs < 0)
         {
             minArgs = 1;
             maxArgs = 1;
         }
+        else if (maxArgs < 0)
+            maxArgs = minArgs;
         break;
     case cli::STORE_TRUE:
     case cli::STORE_FALSE:
@@ -103,10 +106,6 @@ cli::Argument* cli::ArgumentParser::addArgument(std::string nameOrFlags,
     case cli::VERSION:
         minArgs = 0;
         maxArgs = 0;
-        break;
-    case cli::SUB_OPTIONS:
-        if (minArgs < 0)
-            minArgs = 0;
         break;
     }
 
@@ -167,9 +166,7 @@ void cli::ArgumentParser::printHelp(std::ostream& out, bool andExit) const
                  maxFlagsWidth);
 
     if (!mProlog.empty())
-    {
         out << mProlog << std::endl << std::endl;
-    }
 
     out << "usage: ";
     if (mUsage.empty())
@@ -183,14 +180,10 @@ void cli::ArgumentParser::printHelp(std::ostream& out, bool andExit) const
         out << std::endl;
     }
     else
-    {
         out << mUsage << std::endl;
-    }
 
     if (!mDescription.empty())
-    {
         out << std::endl << mDescription << std::endl;
-    }
 
     if (posFlags.size() > 0)
     {
@@ -207,14 +200,10 @@ void cli::ArgumentParser::printHelp(std::ostream& out, bool andExit) const
     }
 
     if (!mEpilog.empty())
-    {
         out << std::endl << mEpilog << std::endl;
-    }
 
     if (andExit)
-    {
         exit(cli::EXIT_USAGE);
-    }
 }
 
 cli::Results* cli::ArgumentParser::parse(int argc, const char** argv)
@@ -440,13 +429,13 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
                     std::string nextArg(explodedArgs[i + 1]);
                     if (nextArg.size() > 1 && nextArg[0] == mPrefixChar)
                     {
-                        //it's another flag, so we have to break out
+                        // it's another flag, so we break out
                         break;
                     }
                     if (maxArgs >= 0 && v->size() >= maxArgs)
                     {
-                        parseError(FmtX("too many arguments: [%s]",
-                                        argVar.c_str()));
+                        // it's another positional argument, so we break out
+                        break;
                     }
                     v->add(nextArg);
                     ++i;
@@ -566,12 +555,41 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
             size_t numGiven = results->getValue(argVar)->size();
             if (numGiven < minArgs)
                 parseError(FmtX("too few arguments: [%s]", argVar.c_str()));
-            else if (numGiven > maxArgs)
+            else if (numGiven > maxArgs && maxArgs >= 0)
                 parseError(FmtX("too many arguments: [%s]", argVar.c_str()));
         }
     }
 
     return results;
+}
+
+void cli::ArgumentParser::printUsage(std::ostream& out, bool andExit,
+                                     const std::string message) const
+{
+    out << "usage: ";
+    if (mUsage.empty())
+    {
+        std::vector<std::string> posFlags, opFlags, posHelps, opHelps, opUsage,
+                posUsage;
+        size_t maxFlagsWidth = 0;
+
+        processFlags(posFlags, opFlags, posHelps, opHelps, opUsage, posUsage,
+                     maxFlagsWidth);
+
+        std::string progName = mProgram;
+        out << (progName.empty() ? "program" : progName);
+        if (!opUsage.empty())
+            out << " " << str::join(opUsage, " ");
+        if (!posUsage.empty())
+            out << " " << str::join(posUsage, " ");
+    }
+    else
+        out << mUsage;
+    if (!message.empty())
+        out << std::endl << std::endl << message;
+    out << std::endl;
+    if (andExit)
+        exit(cli::EXIT_USAGE);
 }
 
 void cli::ArgumentParser::parseError(const std::string& msg)
@@ -663,7 +681,12 @@ void cli::ArgumentParser::processFlags(std::vector<std::string>& posFlags,
                 s.str("");
                 s << mPrefixChar << argShortFlags[i];
                 if (argAction == cli::SUB_OPTIONS)
-                    s << ":ARG[=VALUE]";
+                {
+                    if (meta.empty())
+                        s << ":ARG[=VALUE]";
+                    else
+                        s << ":" << meta;
+                }
                 else if (!meta.empty())
                     s << " " << meta;
                 ops.push_back(s.str());
@@ -673,7 +696,12 @@ void cli::ArgumentParser::processFlags(std::vector<std::string>& posFlags,
                 s.str("");
                 s << mPrefixChar << mPrefixChar << argLongFlags[i];
                 if (argAction == cli::SUB_OPTIONS)
-                    s << ":ARG[=VALUE]";
+                {
+                    if (meta.empty())
+                        s << ":ARG[=VALUE]";
+                    else
+                        s << ":" << meta;
+                }
                 else if (!meta.empty())
                     s << " " << meta;
                 ops.push_back(s.str());
