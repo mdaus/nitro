@@ -20,27 +20,44 @@
  *
  */
 
-#ifndef __IO_BIDIRECTIONAL_STREAM_H__
-#define __IO_BIDIRECTIONAL_STREAM_H__
+#ifndef __IO_ROTATING_FILE_STREAMS_H__
+#define __IO_ROTATING_FILE_STREAMS_H__
 
-#include "io/InputStream.h"
-#include "io/OutputStream.h"
-
-/*!
- *  \file
- *  \brief Provides an interface for a stream that is both input
- *  and output.
- */
+#include <import/sys.h>
+#include "io/CountingStreams.h"
 
 namespace io
 {
-/*!
- *  \class BidirectionalStream
- *  \brief Provides a input/output stream as one class.
+
+/**
+ * An OutputStream that keeps track of the number of bytes written to the stream.
  */
-struct BidirectionalStream: public InputStream, public OutputStream
+class RotatingFileOutputStream: public CountingOutputStream
 {
+public:
+    RotatingFileOutputStream(const std::string& filename,
+                             unsigned long maxBytes = 0,
+                             size_t backupCount = 0, int creationFlags =
+                                     sys::File::CREATE | sys::File::TRUNCATE);
+
+    virtual ~RotatingFileOutputStream()
+    {
+    }
+
+    using CountingOutputStream::write;
+
+    virtual void write(const sys::byte* b, sys::Size_T len);
+
+protected:
+    std::string mFilename;
+    unsigned long mMaxBytes;
+    size_t mBackupCount;
+
+    virtual bool shouldRollover(sys::Size_T len);
+    virtual void doRollover();
+
 };
 
 }
+
 #endif

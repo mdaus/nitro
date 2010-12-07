@@ -64,6 +64,8 @@ TEST_CASE(testChoices)
     parser.addArgument("-v --verbose", "Toggle verbose", cli::STORE_TRUE);
     parser.addArgument("-t --type", "Specify a type to use", cli::STORE)->addChoice(
             "type1")->addChoice("type2")->addChoice("type3");
+    parser.addArgument("-m --many", "Specify a type to use", cli::STORE, "choices", "CHOICES", 0)->addChoice(
+            "type1")->addChoice("type2")->addChoice("type3");
     parser.addArgument("images", "Input images", cli::STORE);
     parser.setDescription("This program is kind of pointless, but have fun!");
     parser.setProlog("========= (c) COPYRIGHT BANNER ========= ");
@@ -89,6 +91,8 @@ TEST_CASE(testChoices)
     {
     }
     results.reset(parser.parse(str::split("-t type2", " ")));
+
+    results.reset(parser.parse(str::split("-m type2 --many type1 -m type3", " ")));
 }
 
 TEST_CASE(testMultiple)
@@ -143,10 +147,11 @@ TEST_CASE(testIterate)
     parser.addArgument("-v --verbose", "Toggle verbose", cli::STORE_TRUE);
     parser.addArgument("-c --config", "Specify a config file", cli::STORE);
 
-    std::auto_ptr<cli::Results> results(parser.parse(str::split("-v -c config.xml")));
+    std::auto_ptr<cli::Results>
+            results(parser.parse(str::split("-v -c config.xml")));
     std::vector<std::string> keys;
     for(cli::Results::const_iterator it = results->begin(); it != results->end(); ++it)
-        keys.push_back(it->first);
+    keys.push_back(it->first);
     TEST_ASSERT_EQ(keys.size(), 2);
     // std::map returns keys in alphabetical order...
     TEST_ASSERT_EQ(keys[0], "config");

@@ -20,27 +20,50 @@
  *
  */
 
-#ifndef __IO_BIDIRECTIONAL_STREAM_H__
-#define __IO_BIDIRECTIONAL_STREAM_H__
+#ifndef __IO_COUNTING_STREAMS_H__
+#define __IO_COUNTING_STREAMS_H__
 
-#include "io/InputStream.h"
-#include "io/OutputStream.h"
-
-/*!
- *  \file
- *  \brief Provides an interface for a stream that is both input
- *  and output.
- */
+#include "io/ProxyStreams.h"
 
 namespace io
 {
-/*!
- *  \class BidirectionalStream
- *  \brief Provides a input/output stream as one class.
+
+/**
+ * An OutputStream that keeps track of the number of bytes written to the stream.
  */
-struct BidirectionalStream: public InputStream, public OutputStream
+class CountingOutputStream: public ProxyOutputStream
 {
+public:
+    CountingOutputStream(OutputStream *proxy, bool ownPtr = false) :
+        ProxyOutputStream(proxy, ownPtr), mByteCount(0)
+    {
+    }
+    virtual ~CountingOutputStream()
+    {
+    }
+
+    using ProxyOutputStream::write;
+
+    virtual void write(const sys::byte* b, sys::Size_T len)
+    {
+        ProxyOutputStream::write(b, len);
+        mByteCount += len;
+    }
+
+    sys::Off_T getCount() const
+    {
+        return mByteCount;
+    }
+
+    void resetCount()
+    {
+        mByteCount = 0;
+    }
+
+protected:
+    sys::Off_T mByteCount;
 };
 
 }
+
 #endif

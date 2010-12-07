@@ -21,6 +21,7 @@
  */
 
 #include "cli/ArgumentParser.h"
+#include <iterator>
 
 #define _MAX_ARG_LINE_LEN 21
 
@@ -88,6 +89,10 @@ cli::Argument* cli::ArgumentParser::addArgument(std::string nameOrFlags,
                                                 bool required)
 {
     cli::Argument *arg = new cli::Argument(nameOrFlags, this);
+
+    if (arg->isPositional())
+        action = cli::STORE;
+
     switch (action)
     {
     case cli::STORE:
@@ -97,8 +102,6 @@ cli::Argument* cli::ArgumentParser::addArgument(std::string nameOrFlags,
             minArgs = 1;
             maxArgs = 1;
         }
-        else if (maxArgs < 0)
-            maxArgs = minArgs;
         break;
     case cli::STORE_TRUE:
     case cli::STORE_FALSE:
@@ -424,6 +427,7 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
                                                                  : new cli::Value;
                 int maxArgs = arg->getMaxArgs();
                 // risky, I know...
+                bool added = false;
                 while (i < s - 1)
                 {
                     std::string nextArg(explodedArgs[i + 1]);
@@ -439,7 +443,15 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
                     }
                     v->add(nextArg);
                     ++i;
+                    added = true;
                 }
+
+                if (!added)
+                    parseError(
+                               FmtX(
+                                    "option requires value or has exceeded its max: [%s]",
+                                    argVar.c_str()));
+
                 currentResults->put(argVar, v);
                 break;
             }

@@ -29,7 +29,7 @@
 
 namespace io
 {
-class ProxyInputStream : public InputStream
+class ProxyInputStream: public InputStream
 {
 public:
     ProxyInputStream(InputStream *proxy, bool ownPtr = false) :
@@ -54,17 +54,6 @@ public:
         return mProxy->read(b, len);
     }
 
-    virtual sys::SSize_T readln(sys::byte *cStr,
-                                const sys::Size_T strLenPlusNullByte)
-    {
-        return mProxy->readln(cStr, strLenPlusNullByte);
-    }
-
-    virtual int streamTo(OutputStream& soi, long numBytes = IS_END)
-    {
-        return mProxy->streamTo(soi, numBytes);
-    }
-
     virtual void setProxy(InputStream *proxy, bool ownPtr = false)
     {
         if (!mOwnPtr)
@@ -73,7 +62,7 @@ public:
         mOwnPtr = ownPtr;
     }
 
-private:
+protected:
     std::auto_ptr<InputStream> mProxy;
     bool mOwnPtr;
 };
@@ -81,7 +70,7 @@ private:
 /**
  * Proxies to the given OutputStream.
  */
-class ProxyOutputStream : public OutputStream
+class ProxyOutputStream: public OutputStream
 {
 public:
     ProxyOutputStream(OutputStream *proxy, bool ownPtr = false) :
@@ -95,20 +84,7 @@ public:
             mProxy.release();
     }
 
-    void write(sys::byte b)
-    {
-        return mProxy->write(b);
-    }
-
-    void write(const std::string& str)
-    {
-        return mProxy->write(str);
-    }
-
-    void writeln(const std::string& str)
-    {
-        return mProxy->writeln(str);
-    }
+    using OutputStream::write;
 
     virtual void write(const sys::byte* b, sys::Size_T len)
     {
@@ -133,16 +109,15 @@ public:
         mOwnPtr = ownPtr;
     }
 
-private:
+protected:
     std::auto_ptr<OutputStream> mProxy;
     bool mOwnPtr;
-
 };
 
 /**
  * An output stream that can be enabled/disabled (toggled).
  */
-class ToggleOutputStream : public io::ProxyOutputStream
+class ToggleOutputStream: public io::ProxyOutputStream
 {
 public:
     ToggleOutputStream(io::OutputStream *output = NULL, bool ownPtr = false) :
@@ -178,7 +153,7 @@ public:
         setEnabled(false);
     }
 
-private:
+protected:
     io::OutputStream *mPtr, *mNullStream;
     bool mOwnPtr, mEnabled;
 };

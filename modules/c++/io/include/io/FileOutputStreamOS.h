@@ -88,8 +88,6 @@ public:
     virtual void create(const std::string& str,
                         int creationFlags = sys::File::CREATE | sys::File::TRUNCATE);
 
-    //using OutputStream::write;
-
     //!  Close the file
     void close()
     {
@@ -101,6 +99,8 @@ public:
     sys::Off_T seek(sys::Off_T offset, io::Seekable::Whence whence);
     
     sys::Off_T tell();
+
+    using OutputStream::write;
 
     /*!
      * This method defines a given OutputStream. By defining,

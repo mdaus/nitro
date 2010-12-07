@@ -16,7 +16,8 @@ SOURCES = ByteStream.cpp \
           InputStream.cpp \
           SerializableFile.cpp \
           StandardStreams.cpp \
-          StringStream.cpp
+          StringStream.cpp \
+          RotatingFileOutputStream.cpp
 
 TESTS =   byteStreamTest1.cpp \
           byteStreamTest2.cpp \

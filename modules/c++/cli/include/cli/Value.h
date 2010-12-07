@@ -25,6 +25,7 @@
 
 #include <import/sys.h>
 #include <import/str.h>
+#include <iterator>
 
 namespace cli
 {
@@ -133,6 +134,8 @@ public:
 
     std::string toString() const
     {
+        if (mValues.size() == 1)
+            return mValues[0];
         std::ostringstream s;
         s << "[" << str::join(mValues, ", ") << "]";
         return s.str();

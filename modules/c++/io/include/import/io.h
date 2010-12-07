@@ -68,6 +68,8 @@
 #include "io/ProxyStreams.h"
 #include "io/FileUtils.h"
 #include "io/SerializableArray.h"
+#include "io/CountingStreams.h"
+#include "io/RotatingFileOutputStream.h"
 
 //#include "io/MMapInputStream.h"
 //using namespace io;

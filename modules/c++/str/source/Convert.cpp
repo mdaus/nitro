@@ -20,10 +20,21 @@
  *
  */
 
-
 #include "str/Convert.h"
 
-template <> std::string str::toType<std::string>(const std::string& s)
+template<> std::string str::toType<std::string>(const std::string& s)
 {
     return s;
+}
+template<> int str::getPrecision(const float& type)
+{
+    return std::numeric_limits<float>::digits10;
+}
+template<> int str::getPrecision(const double& type)
+{
+    return std::numeric_limits<long double>::digits10;
+}
+template<> int str::getPrecision(const long double& type)
+{
+    return std::numeric_limits<long double>::digits10;
 }

@@ -196,10 +196,7 @@ public:
      */
     template <typename T> static String valueOf(const T& value)
     {
-        std::ostringstream buf;
-        buf.precision(str::setPrecision(value));
-        buf << std::boolalpha << value;
-        return buf.str();
+        return str::toString<T>(value);
     }
 
     /*!

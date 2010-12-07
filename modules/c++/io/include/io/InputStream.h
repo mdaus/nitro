@@ -35,7 +35,6 @@
  *  simplifications and some extensions, simultaneously
  */
 
-
 namespace io
 {
 
@@ -55,23 +54,24 @@ namespace io
 class InputStream
 {
 public:
-    enum { DEFAULT_CHUNK_SIZE = 1024 };
-    //! This is the marker for end of file
-    enum { IS_EOF = -1 };
-    //! This is the markef for end of stream
-    enum { IS_END = -1 };
+    enum
+    {
+        IS_EOF = -1, IS_END = -1, DEFAULT_CHUNK_SIZE = 1024,
+    };
 
     //! Default Constructor
     InputStream()
-    {}
+    {
+    }
 
     //! Default Destructor
     virtual ~InputStream()
-    {}
+    {
+    }
 
     /*!
      * Returns the number of bytes that can be read
-            * without blocking by the next caller of a method for this input.
+     * without blocking by the next caller of a method for this input.
      * \throw IOException
      * \return number of bytes which are readable
      */
@@ -85,7 +85,7 @@ public:
      * \param b   Buffer to read into
      * \param len The length to read
      * \throw IOException
-     * \return  The number of bytes read, or -1 if eof
+     * \return  The number of bytes read, or -1 if EOF
      */
     virtual sys::SSize_T read(sys::byte* b, sys::Size_T len) = 0;
 
@@ -95,20 +95,8 @@ public:
      * \param cStr String to read data into
      * \param strLenPlusNullByte The max length we will read
      */
-    virtual sys::SSize_T readln(sys::byte *cStr, const sys::Size_T strLenPlusNullByte);
-
-    /*!
-     * Neatly dispose of n bytes that we dont want to read.  Skips
-     * by reading them into a dummy vector of size specified
-     *
-     * \param n Number of bytes to skip
-     * \throw IOException
-     */ 
-    // virtual void skip(const long n)
-    // {
-
-    // }
-
+    virtual sys::SSize_T readln(sys::byte *cStr,
+                                const sys::Size_T strLenPlusNullByte);
 
     /*!
      * The streaming occurs as follows: If the numBytes is IS_END, 
@@ -123,8 +111,6 @@ public:
      */
     virtual int streamTo(OutputStream& soi, long numBytes = IS_END);
 
-protected:
-    bool mEof;
 };
 }
 

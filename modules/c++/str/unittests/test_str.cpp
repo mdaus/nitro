@@ -108,6 +108,24 @@ TEST_CASE(testContainsOnly)
     TEST_ASSERT(str::containsOnly("\n\r\t ", " \t\n\r0123456789"));
     TEST_ASSERT(str::containsOnly("1-2-3", " \t\n\r0123456789-"));
 }
+TEST_CASE(testRoundDouble)
+{
+    double eps = std::numeric_limits<double>::epsilon();
+    double numerator = 10005.0;
+    double denom = 10007.0;
+    double v = numerator / denom;
+    std::string s = str::toString(v);
+    std::cout << s << std::endl;
+
+    double nv = str::toType<double>(s);
+    TEST_ASSERT_ALMOST_EQ_EPS(nv, v, eps);
+    nv *= denom;
+    TEST_ASSERT_ALMOST_EQ_EPS(nv, numerator, eps);
+    std::cout << nv << std::endl;
+    std::cout << (nv - (int)nv) << std::endl;
+    std::cout << std::numeric_limits<double>::epsilon() << std::endl;
+    TEST_ASSERT_EQ((int)std::ceil(nv), (int)numerator);
+}
 
 int main(int argc, char* argv[])
 {
@@ -123,4 +141,5 @@ int main(int argc, char* argv[])
     TEST_CHECK( testIsAlphanumeric);
     TEST_CHECK( testIsWhitespace);
     TEST_CHECK( testContainsOnly);
+    TEST_CHECK( testRoundDouble);
 }

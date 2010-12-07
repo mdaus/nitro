@@ -56,20 +56,21 @@ namespace io
  *  0's can be anywhere (Null-bytes) making it impossible to use
  *  strings as containers.  
  */
-class ByteStream :
-            public SeekableBidirectionalStream
+class ByteStream: public SeekableBidirectionalStream
 {
 public:
 
     //! Default constructor
-    ByteStream() : mData(std::stringstream::in |
-                                 std::stringstream::out |
-                                 std::stringstream::binary)
-    {}
+    ByteStream() :
+        mData(std::stringstream::in | std::stringstream::out
+                | std::stringstream::binary)
+    {
+    }
 
     //! Destructor
     ~ByteStream()
-    {}
+    {
+    }
 
     /*!
      *  Returns the stringstream associated with this ByteStream
@@ -79,7 +80,6 @@ public:
     {
         return mData;
     }
-
 
     sys::Off_T tell()
     {
@@ -91,16 +91,16 @@ public:
         std::ios::seekdir flags;
         switch (whence)
         {
-            case START:
-                flags = std::ios::beg;
-                break;
+        case START:
+            flags = std::ios::beg;
+            break;
 
-            case END:
-                flags = std::ios::end;
-                break;
+        case END:
+            flags = std::ios::end;
+            break;
 
-            default:
-                flags = std::ios::cur;
+        default:
+            flags = std::ios::cur;
 
         }
 
@@ -109,12 +109,13 @@ public:
         return tell();
     }
 
-
     /*!
      *  Returns the available bytes to read from the stream
      *  \return the available bytes to read
      */
     sys::Off_T available();
+
+    using OutputStream::write;
 
     /*!
      *  Writes the bytes in data to the stream.
@@ -139,22 +140,13 @@ public:
         return mData;
     }
 
-    /*\!
-     *  Reserve size Number of bytes
-     *  \param  size  Number of bytes to reserve
-     *  \return  Number of bytes allocated
-     */ 
-    // int  reserve(int size);
-    // long reset();
-    //      void deallocate();
-    //      int  reallocate(int nBytes);
+    void reset()
+    {
+        mData.str("");
+    }
 
 protected:
     std::stringstream mData;
-    // int   mDataSize;
-    //      int   mBufferSize;
-    //      int   mMark;
-    // int   mDefaultChunk;
 };
 }
 

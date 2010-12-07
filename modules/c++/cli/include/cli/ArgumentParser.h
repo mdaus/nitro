@@ -23,6 +23,7 @@
 #ifndef __CLI_ARGUMENT_PARSER_H__
 #define __CLI_ARGUMENT_PARSER_H__
 
+#include <iostream>
 #include <import/str.h>
 #include "cli/Argument.h"
 #include "cli/Results.h"
