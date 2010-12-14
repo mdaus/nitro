@@ -1,16 +1,11 @@
-import os, copy
-
-NAME            = 'MATH_POLY'
-MAINTAINER      = 'james.walter@gd-ais.com dan.pressel@gd-ais.com'
-VERSION         = '0.2'
-USELIB          = 'MATH_LINEAR MATH_POLY'
-MODULE_DEPS     = 'sys'
-HEADERSONLY     = True
+import os
 
 set_options = distclean = lambda p: None
 
 def configure(conf):
-    conf.env.append_value('CPPPATH_%s' % NAME, os.path.join(conf.curdir, 'include'))
+    conf.env.append_value('CPPPATH_math.poly', os.path.join(conf.curdir, 'include'))
+    #legacy
+    conf.env.append_value('CPPPATH_MATH_POLY', os.path.join(conf.curdir, 'include'))
 
 def build(bld):
-    bld.module(**globals())
+    bld.fromConfig(bld.curdir)

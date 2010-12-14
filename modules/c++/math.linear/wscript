@@ -1,16 +1,11 @@
-import os, copy
-
-NAME            = 'MATH_LINEAR'
-MAINTAINER      = 'dan.pressel@gd-ais.com'
-VERSION         = '0.2'
-USELIB          = '%s' % NAME
-MODULE_DEPS     = 'sys'
-HEADERSONLY     = True
+import os
 
 set_options = distclean = lambda p: None
 
 def configure(conf):
-    conf.env.append_value('CPPPATH_%s' % NAME, os.path.join(conf.curdir, 'include'))
+    conf.env.append_value('CPPPATH_MATH_LINEAR', os.path.join(conf.curdir, 'include'))
+    # legacy
+    conf.env.append_value('CPPPATH_math.linear', os.path.join(conf.curdir, 'include'))
 
 def build(bld):
-    bld.module(**globals())
+    bld.fromConfig(bld.curdir)

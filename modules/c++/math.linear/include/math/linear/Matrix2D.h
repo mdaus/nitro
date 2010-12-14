@@ -583,6 +583,26 @@ public:
     }
 
     /*!
+     * Same as scaleDiagonal() but takes mx in as a row vector
+     *
+     */
+    Matrix2D& scaleDiagonalRowVector(const Matrix2D& mx)
+    {
+        if (mx.mM != mN || mx.mN != 1)
+            throw except::Exception(Ctxt("Invalid size for diagonal multiply"));
+
+        size_t i, j;
+        for (i = 0; i < mM; i++)
+        {
+            for (j = 0; j < mN; j++)
+            {
+                mRaw[i * mN + j] *= mx(j,0);
+            }
+        }
+        return *this;
+    }
+
+    /*!
      *  This function is the same as scaleDiagonal except that
      *  it does not mutate this (it makes a copy and then calls
      *  that function on the copy).
@@ -601,6 +621,19 @@ public:
     {
         Matrix2D newM = *this;
         newM.scaleDiagonal(mx);
+        return newM;
+    }
+
+    /*!
+     *  This function is the same as multiplyDiagonal except that mx is a
+     *  row vector
+     *
+     */
+    Matrix2D
+        multiplyDiagonalRowVector(const Matrix2D& mx) const
+    {
+        Matrix2D newM = *this;
+        newM.scaleDiagonalRowVector(mx);
         return newM;
     }
 
