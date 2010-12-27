@@ -29,39 +29,51 @@
 
 #include <string>
 #include "logging/LogRecord.h"
+#include "import/io.h"
+
 
 namespace logging
 {
 
 /*!
  *  \class Formatter
- *  \brief  This class provides default formatting capabilities.  The syntax
- *  for the format string maps to that which is used in log4j.
- *
- *  c = Log Name
- *  p = Log Level
- *  d = Date/Time
- *  F = File name
- *  L = Line number
- *  M = Function
- *  m = Log message
- *  t = Thread id
- *
- *  The default format looks like this:
- *  [%c] %p %d %F %L ==> %m
+ *  \brief  This class is the interface for deriving formatters.
  */
 class Formatter
 {
 public:
-    static const char DEFAULT_FORMAT[];
 
-    Formatter() : mFmt(DEFAULT_FORMAT) {}
-    Formatter(const std::string& fmt) : mFmt(fmt) {}
-    virtual ~Formatter();
 
-    virtual std::string format(LogRecord* record) const;
+    Formatter() : mFmt(""),
+                  mPrologue(""),
+                  mEpilogue("") 
+    {
+    }
 
-private:
+    Formatter(const std::string& fmt, 
+              const std::string& prologue = "",
+              const std::string& epilogue = "") :
+        mFmt(fmt),
+        mPrologue(prologue),
+        mEpilogue(epilogue) 
+    {
+    }
+    
+    virtual ~Formatter() {}
+
+    // returns string
+    virtual void format(const LogRecord* record, io::OutputStream& os) const = 0;
+
+    virtual std::string getPrologue() const;
+    virtual std::string getEpilogue() const; 
+
+protected:
+
+    virtual unsigned int replace(std::string& str, 
+                                 const std::string& search,
+                                 const std::string& replace,
+                                 unsigned int start = 0) const;
+
     static const char THREAD_ID[];
     static const char LOG_NAME[];
     static const char LOG_LEVEL[];
@@ -71,10 +83,10 @@ private:
     static const char MESSAGE[];
     static const char FUNCTION[];
 
-    void replace(std::string& str, const std::string& search,
-            const std::string& replace) const;
-
-    std::string mFmt;
+    
+    const std::string mFmt;
+    const std::string mPrologue;
+    const std::string mEpilogue;
 };
 
 }

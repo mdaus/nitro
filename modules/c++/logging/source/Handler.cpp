@@ -30,21 +30,17 @@
 logging::Handler::Handler(logging::LogLevel level)
 {
     mLevel = level;
-    mFormatter = NULL;
+
+    // use standard formatter by default
+    mFormatter = &mDefaultFormatter;
 }
 
 void logging::Handler::close()
 {
-    if (mFormatter) delete mFormatter;
-}
-
-std::string logging::Handler::format(logging::LogRecord* record) const
-{
-    //static logging::Formatter dftFormatter(mDefaultFmt);
-    if (mFormatter)
-        return mFormatter->format(record);
-    else
-        return mDefaultFormatter.format(record);
+    // delete if necessary
+    if (mFormatter != &mDefaultFormatter &&
+        mFormatter != NULL)
+        delete mFormatter;
 }
 
 void logging::Handler::setLevel(logging::LogLevel level)
@@ -52,13 +48,13 @@ void logging::Handler::setLevel(logging::LogLevel level)
     mLevel = level;
 }
 
-bool logging::Handler::handle(logging::LogRecord* record)
+bool logging::Handler::handle(const logging::LogRecord* record)
 {
     bool rv = false;
     if (filter(record))
     {
         //acquire lock
-        mHandlerLock.lock();
+        mt::CriticalSection<sys::Mutex> lock(&mHandlerLock);
         try
         {
             emitRecord(record);
@@ -69,13 +65,17 @@ bool logging::Handler::handle(logging::LogRecord* record)
             //TODO do something here?
             //std::cout << t.getTrace() << std::endl;
         }
-        //release lock
-        mHandlerLock.unlock();
     }
     return rv;
 }
-
 void logging::Handler::setFormatter(logging::Formatter* formatter)
 {
-    mFormatter = formatter;
+    //check if current formatter
+    if (mFormatter != formatter)
+    {
+        // delete old formatter
+        Handler::close();
+
+        mFormatter = formatter;
+    }
 }

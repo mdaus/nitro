@@ -49,17 +49,23 @@ std::list<std::string>& MemoryHandler::getLogs(LogLevel level)
     return mLogMap[level];
 }
 
-void MemoryHandler::emitRecord(LogRecord* record)
+void MemoryHandler::emitRecord(const LogRecord* record)
 {
-    LogLevel level = record->getLevel();
-    if (mLogMap.find(level) == mLogMap.end())
-        mLogMap[level] = std::list<std::string>();
-    std::string formatted = format(record);
-    mLogMap[level].push_back(formatted);
-    if (level != LOG_NOTSET)
-    {
-        if (mLogMap.find(LOG_NOTSET) == mLogMap.end())
-            mLogMap[LOG_NOTSET] = std::list<std::string>();
-        mLogMap[LOG_NOTSET].push_back(formatted);
-    }
+    // TODO: The base handler no longer has a function
+    //       to format to a string, so we will need to 
+    //       update this to send a buffered output 
+    //       stream to emit, and then read this into the
+    //       log map when it get returned.
+
+    //LogLevel level = record->getLevel();
+    //if (mLogMap.find(level) == mLogMap.end())
+    //    mLogMap[level] = std::list<std::string>();
+    //std::string formatted = format(record);
+    //mLogMap[level].push_back(formatted);
+    //if (level != LOG_NOTSET)
+    //{
+    //    if (mLogMap.find(LOG_NOTSET) == mLogMap.end())
+    //        mLogMap[LOG_NOTSET] = std::list<std::string>();
+    //    mLogMap[LOG_NOTSET].push_back(formatted);
+    //}
 }

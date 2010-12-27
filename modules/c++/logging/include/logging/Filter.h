@@ -44,7 +44,7 @@ public:
     Filter(std::string name = "") : mName(name){}
     virtual ~Filter(){}
 
-    bool filter(LogRecord* record);
+    bool filter(const LogRecord* record) const;
     std::string getName() const { return mName; }
 
 protected:

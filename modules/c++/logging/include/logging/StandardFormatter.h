@@ -21,34 +21,51 @@
  */
 
 ///////////////////////////////////////////////////////////
-//  Filterer.cpp
+//  StandardFormatter.h
 ///////////////////////////////////////////////////////////
 
-#include "logging/Filterer.h"
+#ifndef __LOGGING_STANDARD_FORMATTER_H__
+#define __LOGGING_STANDARD_FORMATTER_H__
 
+#include <string>
+#include "logging/Formatter.h"
+#include "logging/LogRecord.h"
 
-void logging::Filterer::addFilter(logging::Filter* filter)
+namespace logging
 {
-    if (filters.find(filter->getName()) == filters.end())
-    {
-        filters[filter->getName()] = filter;
-    }
-}
 
-bool logging::Filterer::filter(const logging::LogRecord* record) const
+/*!
+ *  \class StandardFormatter
+ *  \brief  This class provides default formatting capabilities.  The syntax
+ *  for the format string maps to that which is used in log4j.
+ *
+ *  c = Log Name
+ *  p = Log Level
+ *  d = Date/Time
+ *  F = File name
+ *  L = Line number
+ *  M = Function
+ *  m = Log message
+ *  t = Thread id
+ *
+ *  The default format looks like this:
+ *  [%c] %p %d ==> %m
+ */
+class StandardFormatter : public Formatter
 {
-    for (std::map<std::string, logging::Filter*>::const_iterator p = filters.begin();
-            p != filters.end(); ++p)
-    {
-        if (!p->second->filter(record))
-            return false;
-    }
-    return true;
+public:
+    static const char DEFAULT_FORMAT[];
+
+    StandardFormatter() : Formatter(DEFAULT_FORMAT) {}
+    StandardFormatter(const std::string& fmt, 
+                      const std::string& prologue = "",
+                      const std::string& epilogue = "");
+
+    virtual ~StandardFormatter() {}
+
+    virtual void format(const LogRecord* record, io::OutputStream& os) const;
+
+};
+
 }
-
-void logging::Filterer::removeFilter(logging::Filter* filter)
-{
-    filters.erase(filter->getName());
-
-}
-
+#endif

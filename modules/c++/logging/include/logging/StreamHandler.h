@@ -48,13 +48,28 @@ public:
     //! Constructs a StreamHandler using the specified OutputStream
     StreamHandler(io::OutputStream* stream, LogLevel level = LOG_NOTSET);
 
-    virtual ~StreamHandler();
+    virtual ~StreamHandler()
+    {
+        close();
+    }
+
+    //! adds the need to write epilogue before deleting formatter
+    //  and then writing the prologue with the new formatter
+    virtual void setFormatter(Formatter* formatter);
+    
     virtual void close();
 
 protected:
-    virtual void emitRecord(LogRecord* record);
-    std::auto_ptr<io::OutputStream> mStream;
 
+    //! for general string write
+    virtual void write(const std::string&);
+
+    //! for writing directly to stream, 
+    // used for the bulk of the logging for speed
+    virtual void emitRecord(const LogRecord* record);
+
+
+    std::auto_ptr<io::OutputStream> mStream;
 };
 
 }

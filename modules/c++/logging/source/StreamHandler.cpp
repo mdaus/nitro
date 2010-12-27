@@ -28,33 +28,61 @@
 
 logging::StreamHandler::StreamHandler(logging::LogLevel level) :
     logging::Handler(level)
-{
+{    
     mStream.reset(new io::StandardOutStream());
+
+    // write prologue to stream
+    write(mFormatter->getPrologue());
 }
 
 logging::StreamHandler::StreamHandler(io::OutputStream* stream,
                                       logging::LogLevel level) :
     logging::Handler(level)
 {
-    if (!stream)
-        mStream.reset(new io::StandardOutStream());
-    else
-        mStream.reset(stream);
+    mStream.reset(stream);
+    
+    // write prologue to stream
+    write(mFormatter->getPrologue());
 }
 
-logging::StreamHandler::~StreamHandler()
+void logging::StreamHandler::setFormatter(logging::Formatter* formatter)
 {
-    close();
+    // end log with formatter injection
+    write(mFormatter->getEpilogue());
+
+    // delete old and reset to new
+    Handler::setFormatter(formatter);
+
+    // start log with formatter injection
+    write(mFormatter->getPrologue());
 }
 
 void logging::StreamHandler::close()
 {
+    // end log with formatter injection
+    write(mFormatter->getEpilogue());
+
+    // delete formatter
+    Handler::close();
+
+    // kill stream
     if (mStream.get())
         mStream->close();
 }
-
-void logging::StreamHandler::emitRecord(logging::LogRecord* record)
+void logging::StreamHandler::write(const std::string& str)
 {
-    mStream->write(format(record) + "\n");
+    if (!str.empty())
+    {
+        //acquire lock
+        mt::CriticalSection<sys::Mutex> lock(&mHandlerLock);
+
+        // write to stream
+        mStream->write(str);
+        mStream->flush();
+    }
+}
+void logging::StreamHandler::emitRecord(const LogRecord* record)
+{
+    mFormatter->format(record, *mStream);
     mStream->flush();
 }

@@ -21,7 +21,7 @@
  */
 
 ///////////////////////////////////////////////////////////
-//  Formatter.cpp
+//  StandardFormatter.cpp
 ///////////////////////////////////////////////////////////
 
 #include <sstream>
@@ -30,58 +30,42 @@
 #include <import/str.h>
 #include "logging/Formatter.h"
 
-const char logging::Formatter::DEFAULT_FORMAT[] = "[%c] %p [%t] %d %F %L ==> %m";
 const char logging::Formatter::THREAD_ID[] = "%t";
-const char logging::Formatter::LOG_NAME[] = "%c";
+const char logging::Formatter::LOG_NAME[]  = "%c";
 const char logging::Formatter::LOG_LEVEL[] = "%p";
 const char logging::Formatter::TIMESTAMP[] = "%d";
 const char logging::Formatter::FILE_NAME[] = "%F";
-const char logging::Formatter::LINE_NUM[] = "%L";
-const char logging::Formatter::MESSAGE[] = "%m";
-const char logging::Formatter::FUNCTION[] = "%M";
+const char logging::Formatter::LINE_NUM[]  = "%L";
+const char logging::Formatter::MESSAGE[]   = "%m";
+const char logging::Formatter::FUNCTION[]  = "%M";
 
-logging::Formatter::~Formatter()
+
+std::string logging::Formatter::getPrologue() const
 {
+    return (mPrologue.empty()) ? "" : mPrologue + "\n";
+}
+std::string logging::Formatter::getEpilogue() const 
+{ 
+    return (mEpilogue.empty()) ? "" : mEpilogue + "\n"; 
 }
 
-void logging::Formatter::replace(std::string& str, const std::string& search, const std::string& replace) const
+unsigned int logging::Formatter::replace(std::string& str, 
+                                         const std::string& search,
+                                         const std::string& replace,
+                                         unsigned int start) const
 {
-    int index = str.find(search);
-    if (index >= 0)
+    int index = str.find(search, start);
+
+    if (index != std::string::npos)
+    {
         str.replace(index, search.length(), replace);
-}
-
-std::string logging::Formatter::format(logging::LogRecord* record) const
-{
-    //std::ostringstream s;
-    std::string name = (record->getName().empty()) ? ("DEFAULT") : record->getName();
-    /*if (record->getLineNum() >= 0)
-        s << "[" << name << "] " << record->getLevelName() << "  " << record->getTimeStamp() << "  " <<
-            record->getFile() << " " << record->getLineNum() << " ==> " << record->getMessage();
-    else
-        s << record->getLevelName() << "  " << record->getTimeStamp() << " ==> " << record->getMessage();
-    */
-    // t = thread, p = level, m = message, F = filename, L = line num, M = method, d = date, c = name
-
-    long threadId = sys::getThreadID();
-    std::string format = mFmt;
-    replace(format, "%t", str::toString(threadId));
-    replace(format, "%c", name);
-    replace(format, "%p", record->getLevelName());
-    replace(format, "%d", record->getTimeStamp());
-    if (record->getLineNum() >= 0)
-    {
-        replace(format, "%F", record->getFile());
-        replace(format, "%L", str::toString<int>(record->getLineNum()));
+        start = index;
     }
     else
     {
-        replace(format, "%F", "");
-        replace(format, "%L", "");
+        start = str.length();
     }
-    replace(format, "%M", record->getFunction());
-    replace(format, "%m", record->getMessage());
 
-    return format;
+    return start;        
 }
 

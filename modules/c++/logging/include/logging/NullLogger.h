@@ -49,7 +49,12 @@ public:
     }
 
 protected:
-    void emitRecord(LogRecord* record)
+        
+    virtual void write(const std::string&)
+    {
+        // does nothing...
+    }
+    void emitRecord(const LogRecord* record)
     {
         // does nothing...
     }

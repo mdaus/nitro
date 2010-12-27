@@ -37,8 +37,8 @@ int main(int argc, char **argv)
     std::string
             format =
                     "Thread = %t, Name = %c, Level = %p, File = %F, Method = %M, Line = %L, TimeStamp = %d, Message = %m";
-    handler.setFormatter(new Formatter(format));
-    logger.addHandler(&handler);
+    handler.setFormatter(new StandardFormatter(format));
+    logger.addHandler(&handler, true);
 
     //log only WARNING or worse to the file
     //FileHandler fileHandler("./test.log", LOG_WARNING);

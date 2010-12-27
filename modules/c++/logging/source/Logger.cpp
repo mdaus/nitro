@@ -159,7 +159,7 @@ void logging::Logger::critical(except::Throwable& t)
 }
 ;
 
-void logging::Logger::handle(logging::LogRecord* record)
+void logging::Logger::handle(const logging::LogRecord* record)
 {
     if (filter(record))
     {
@@ -168,7 +168,6 @@ void logging::Logger::handle(logging::LogRecord* record)
             //std::cout << (int)(*p)->getLevel() << std::endl;
             //only handle if it is above/equal to threshold
             if (p->first->getLevel() <= record->getLevel())
-
                 p->first->handle(record);
         }
     }

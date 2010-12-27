@@ -130,7 +130,7 @@ public:
     void reset();
 
 protected:
-    void handle(LogRecord* record);
+    void handle(const LogRecord* record);
 
     typedef std::pair<Handler*, bool> Handler_T;
     typedef std::vector<Handler_T> Handlers_T;

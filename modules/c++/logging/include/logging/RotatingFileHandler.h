@@ -61,15 +61,6 @@ public:
                         int backupCount = 0, LogLevel level = LOG_NOTSET);
 
     virtual ~RotatingFileHandler();
-
-protected:
-    virtual void emitRecord(LogRecord* record);
-    virtual bool shouldRollover(LogRecord* record);
-    virtual void doRollover();
-    long mMaxBytes;
-    int mBackupCount;
-    std::string mLogFile;
-
 };
 }
 #endif

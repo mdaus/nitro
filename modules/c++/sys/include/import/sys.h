@@ -44,6 +44,8 @@
 #include "sys/Path.h"
 #include "sys/DateTime.h"
 #include "sys/StopWatch.h"
+#include "sys/ScopedArray.h"
+#include "sys/ScopedAlignedArray.h"
 /*!
 
 \file sys.h

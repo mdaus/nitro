@@ -53,7 +53,7 @@ public:
      */
     void addFilter(Filter* filter);
 
-    bool filter(LogRecord* record);
+    bool filter(const LogRecord* record) const;
 
     //! Removes the specified Filter
     void removeFilter(Filter* filter);

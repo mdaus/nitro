@@ -51,8 +51,14 @@ public:
 protected:
     std::map<LogLevel, std::list<std::string> > mLogMap;
 
+    virtual void write(const std::string& str)
+    {
+        // TODO: Update function to push 
+        // prologue and epilogue into LogMap 
+    }
+
     //! Emits the LogRecord
-    virtual void emitRecord(LogRecord* record);
+    virtual void emitRecord(const LogRecord* record);
 };
 
 }

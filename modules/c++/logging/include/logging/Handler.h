@@ -30,9 +30,11 @@
 #include <string>
 #include "logging/LogRecord.h"
 #include "logging/Formatter.h"
+#include "logging/StandardFormatter.h"
 #include "logging/Filterer.h"
 #include <import/sys.h>
 #include <import/except.h>
+#include <import/mt.h>
 
 namespace logging
 {
@@ -50,10 +52,15 @@ public:
      * Construct a Handler at the specified LogLevel (LOG_NOTSET is default)
      */
     Handler(LogLevel level = LOG_NOTSET);
-    virtual ~Handler(){ close(); }
+    virtual ~Handler()
+    {
+    }
 
-    //! Sets the Formatter to use when formatting LogRecords
-    void setFormatter(Formatter* formatter);
+    /*! 
+     * Sets the Formatter to use when formatting LogRecords
+     * Not Threads Safe!
+     */ 
+    virtual void setFormatter(Formatter* formatter);
 
     //! Sets the minimum LogLevel required to emit LogRecords
     void setLevel(LogLevel level);
@@ -66,21 +73,24 @@ public:
      * If the LogRecord meets the LogLevel criteria, it is formatted
      * and emitted.
      */
-    virtual bool handle(LogRecord* record);
+    virtual bool handle(const LogRecord* record);
 
     virtual void close();
 
 protected:
-    //! Emits the LogRecord
-    virtual void emitRecord(LogRecord* record) = 0;
 
-    //! Applies the Formatter to the LogRecord and returns a std::string
-    std::string format(LogRecord* record) const;
+    // for general string write
+    virtual void write(const std::string&) = 0;
+
+    // for writing directly to stream, 
+    // used for the bulk of the logging for speed
+    virtual void emitRecord(const LogRecord* record) = 0;
+
 
     LogLevel mLevel;
     sys::Mutex mHandlerLock;
     Formatter* mFormatter;
-    Formatter mDefaultFormatter;
+    StandardFormatter mDefaultFormatter; 
 };
 
 }

@@ -14,7 +14,7 @@ DESCRIPTION = Logging API for C++. \
 
 SOURCES = DefaultLogger.cpp Filter.cpp Filterer.cpp Formatter.cpp Handler.cpp \
           LogRecord.cpp Logger.cpp RotatingFileHandler.cpp StreamHandler.cpp \
-          MemoryHandler.cpp LoggerFactory.cpp
+          MemoryHandler.cpp LoggerFactory.cpp StandardFormatter.cpp
 
 TESTS =   BasicLoggerTest.cpp RotatingLoggerTest.cpp FactoryTest.cpp
 
