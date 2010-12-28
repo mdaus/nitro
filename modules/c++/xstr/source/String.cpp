@@ -28,6 +28,25 @@ using namespace xstr;
 
 const size_t String::npos = std::string::npos;
 
+String & String::operator=(const std::string& x)
+{
+    mString = x;
+    return *this;
+}
+
+String & String::operator=(const char* x)
+{
+    mString = x;
+    return *this;
+}
+
+String & String::operator=(const String& x)
+{
+    if (&x != this)
+        mString = x.mString;
+    return *this;
+}
+
 char String::charAt(size_t index)
 {
     return (*this)[index];

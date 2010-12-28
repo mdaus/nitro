@@ -69,6 +69,12 @@ public:
     {
     }
 
+    //! Assignment Operator
+    String & operator=(const std::string& x);
+    String & operator=(const char* x);
+    String & operator=(const String& x);
+
+
     ~String()
     {
     }
@@ -92,6 +98,11 @@ public:
     size_t length() const
     {
         return mString.size();
+    }
+
+    template <typename T> String & operator=(const std::complex<T>& value)
+    {
+        return (*this = String::valueOf(value));
     }
 
     template <typename T> String & operator=(const T& value)
@@ -191,12 +202,22 @@ public:
         return value;
     }
 
+    template <typename T> static String valueOf(const std::complex<T>& value)
+    {
+        return (String)str::toString<T>(value);
+    }
+
+    template <typename T> static String valueOf(const T& real, const T& imag)
+    {
+        return (String)str::toString<T>(real, imag);
+    }
+
     /*!
      * Converts the passed in type to a String
      */
     template <typename T> static String valueOf(const T& value)
     {
-        return str::toString<T>(value);
+        return (String)str::toString<T>(value);
     }
 
     /*!
