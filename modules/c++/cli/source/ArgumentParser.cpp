@@ -91,7 +91,12 @@ cli::Argument* cli::ArgumentParser::addArgument(std::string nameOrFlags,
     cli::Argument *arg = new cli::Argument(nameOrFlags, this);
 
     if (arg->isPositional())
+    {
         action = cli::STORE;
+        // if it is positional and a min args is supplied, require it
+        if (minArgs > 0)
+            required = true;
+    }
 
     switch (action)
     {
@@ -107,8 +112,8 @@ cli::Argument* cli::ArgumentParser::addArgument(std::string nameOrFlags,
     case cli::STORE_FALSE:
     case cli::STORE_CONST:
     case cli::VERSION:
-        minArgs = 0;
-        maxArgs = 0;
+        minArgs = 1;
+        maxArgs = 1;
         break;
     }
 
@@ -541,7 +546,10 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
             != mArgs.end(); ++it)
     {
         cli::Argument *arg = *it;
+        std::string argMeta = arg->getMetavar();
         std::string argVar = arg->getVariable();
+        std::string argId = arg->isPositional() && !argMeta.empty() ? argMeta
+                                                                    : argVar;
 
         if (!results->hasValue(argVar))
         {
@@ -557,18 +565,24 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
                                 argVar.c_str()));
         }
 
-        //TODO validate choices
+        // TODO validate choices
+        // TODO also, allow case-sensitivity to be an option
 
-        // validate minArgs
+        // validate # of args
         int minArgs = arg->getMinArgs();
         int maxArgs = arg->getMaxArgs();
-        if (minArgs > 0 && results->hasValue(argVar))
+        size_t numGiven =
+                results->hasValue(argVar) ? results->getValue(argVar)->size()
+                                          : 0;
+
+        if (arg->isRequired() || numGiven > 0)
         {
-            size_t numGiven = results->getValue(argVar)->size();
-            if (numGiven < minArgs)
-                parseError(FmtX("too few arguments: [%s]", argVar.c_str()));
-            else if (numGiven > maxArgs && maxArgs >= 0)
-                parseError(FmtX("too many arguments: [%s]", argVar.c_str()));
+            if (minArgs > 0 && numGiven < minArgs)
+                parseError(FmtX("not enough arguments, %d required: [%s]",
+                                minArgs, argId.c_str()));
+            if (maxArgs >= 0 && numGiven > maxArgs)
+                parseError(FmtX("too many arguments, %d supported: [%s]",
+                                maxArgs, argId.c_str()));
         }
     }
 

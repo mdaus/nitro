@@ -78,8 +78,9 @@ cli::Argument* cli::Argument::setAction(cli::Action action)
     if (action == cli::STORE_TRUE || action == cli::STORE_FALSE || action
             == cli::STORE_CONST || action == cli::VERSION)
     {
-        setMinArgs(0);
-        setMaxArgs(0);
+        // the flag, const or version are stored as the single argument
+        setMinArgs(1);
+        setMaxArgs(1);
     }
     return this;
 }
