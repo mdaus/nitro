@@ -135,6 +135,109 @@ private:
 
 };
 
+/** Enumeration for automatic detection of image type */
+enum { AUTO = -1 };
+
+/*!
+ *  This function is designed to mimic (roughly) the API for sio::lite::writeSIO().
+ *  It attempts to atuomatically guess the correct TIFF type for an input image,
+ *  and write as a TIFF file.
+ *
+ *  Unlike the writeSIO function, this function does not support complex pixels,
+ *  and will end up writing them as IEEE_FLOAT, which is probably not the desired
+ *  behavior, so care is required.  The supported types are double, float, RGB
+ *  3-byte unsigned, and single unsigned byte (mono).
+ *
+ *  Most TIFF viewers will not support float files, and therefore, it may be more
+ *  desirable to remap float data to bytes prior to calling this routine.
+ *
+ *  \param image The data to write to TIFF
+ *  \param rows The number of rows in image
+ *  \param cols The number of cols in image
+ *  \param imageFile The name of the file
+ *  \param et The element type, which can be any tiff::Const::SampleFormatType, or
+ *         defaults to automatically guessing based on the input data size
+ *  \param es The element size, which can be any size, but defaults to automatically
+ *         guessing based on the input data size
+ *
+ */
+template<typename T> void writeTIFF(const T* image, size_t rows, size_t cols,
+                                    std::string imageFile, unsigned short et = AUTO, int es = AUTO)
+{
+
+    if (es == AUTO)
+        es = sizeof(T);
+
+    unsigned int photoInterp(1);
+    unsigned int numBands(1);
+
+    if (et == static_cast<unsigned short>(AUTO))
+    {
+        switch (es)
+        {
+        case 8:
+            et = ::tiff::Const::SampleFormatType::IEEE_FLOAT;
+            numBands = 2;
+            break;
+
+        case 4:
+            et = ::tiff::Const::SampleFormatType::IEEE_FLOAT;
+            break;
+
+        case 3:
+            et = ::tiff::Const::SampleFormatType::UNSIGNED_INT;
+            photoInterp = (unsigned short) ::tiff::Const::PhotoInterpType::RGB;
+            numBands = 3;
+            break;
+
+        case 1:
+            et = ::tiff::Const::SampleFormatType::UNSIGNED_INT;
+            break;
+        default:
+            throw except::Exception(Ctxt(FmtX("Unexpected es: %d", es)));
+        }
+    }
+
+    ::tiff::FileWriter fileWriter(imageFile);
+
+    //write the header first
+    fileWriter.writeHeader();
+
+    
+    ::tiff::ImageWriter* imageWriter = fileWriter.addImage();
+    ::tiff::IFD* ifd = imageWriter->getIFD();
+
+    ifd->addEntry(::tiff::KnownTags::IMAGE_WIDTH, cols);
+    ifd->addEntry(::tiff::KnownTags::IMAGE_LENGTH, rows);
+       
+    ifd->addEntry(::tiff::KnownTags::COMPRESSION,
+                  (unsigned short) ::tiff::Const::CompressionType::NO_COMPRESSION);
+
+    
+    ifd->addEntry(::tiff::KnownTags::PHOTOMETRIC_INTERPRETATION, photoInterp);
+    ifd->addEntry(::tiff::KnownTags::BITS_PER_SAMPLE);
+    ifd->addEntry(::tiff::KnownTags::SAMPLE_FORMAT);
+    ::tiff::IFDEntry* bps = (*ifd)[::tiff::KnownTags::BITS_PER_SAMPLE];
+    ::tiff::IFDEntry* sf = (*ifd)[::tiff::KnownTags::SAMPLE_FORMAT];
+    unsigned short bitsPerBand = (es << 3) / numBands;
+
+    //set some fields that have 'numSamples' values
+    for (int band = 0; band < numBands; ++band)
+    {
+        bps->addValue(::tiff::TypeFactory::create((unsigned char *) &bitsPerBand,
+                                                  ::tiff::Const::Type::SHORT));
+        sf->addValue(::tiff::TypeFactory::create((unsigned char *) &et,
+                                                 ::tiff::Const::Type::SHORT));
+    }
+
+    imageWriter->putData((unsigned char*) image, rows * cols);
+
+    //write the IFD 
+    imageWriter->writeIFD();
+    fileWriter.close();
+
+}
+
 } // End namespace.
 
 #endif // __TIFF_FILE_WRITER_H__

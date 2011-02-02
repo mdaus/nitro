@@ -37,5 +37,6 @@
 #include "logging/RotatingFileHandler.h"
 #include "logging/StandardFormatter.h"
 #include "logging/StreamHandler.h"
+#include "logging/XMLFormatter.h"
 
 #endif
