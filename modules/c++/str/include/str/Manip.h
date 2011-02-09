@@ -112,6 +112,9 @@ void upper(std::string& s);
 template<typename T>
 std::string join(std::vector<T> toks, std::string with)
 {
+    if (toks.empty())
+        return "";
+
     int len = (int)toks.size();
     std::ostringstream oss;
     int i = 0;
