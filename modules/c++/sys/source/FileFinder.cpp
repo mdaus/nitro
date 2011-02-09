@@ -20,6 +20,7 @@
  *
  */
 
+#include <iterator>
 #include "sys/FileFinder.h"
 #include "sys/DirectoryEntry.h"
 #include "sys/Path.h"
