@@ -47,6 +47,7 @@ SOURCES = ErrUnix.cpp \
           Dbg.cpp \
           DirectoryEntry.cpp \
           Path.cpp \
+          FileFinder.cpp \
           Conf.cpp
 
 TESTS = OSTest.cpp \

@@ -46,6 +46,7 @@
 #include "sys/StopWatch.h"
 #include "sys/ScopedArray.h"
 #include "sys/ScopedAlignedArray.h"
+#include "sys/FileFinder.h"
 /*!
 
 \file sys.h
