@@ -2,6 +2,7 @@ import os
 import Scripting, Options
 from Build import BuildContext
 
+VERSION = '2.0-dev' # This has no meaning, but its built into the waf system
 APPNAME = 'CODA'
 srcdir  = '.'
 blddir  = 'target'
