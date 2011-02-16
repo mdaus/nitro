@@ -35,17 +35,15 @@ typedef XMLReaderXerces XMLReader;
 }
 
 }
-/* #elif defined(USE_LIBXML) */
-/* #  include "xml/lite/XMLReaderLibxml.h" */
-/* namespace xml */
-/* { */
-/*     namespace lite */
-/*     { */
-/*  typedef XMLReaderLibxml XMLReader; */
-/*     } */
-
-/* } */
-
+#elif defined(USE_LIBXML)
+#  include "xml/lite/XMLReaderLibXML.h"
+namespace xml
+{
+namespace lite
+{
+typedef XMLReaderLibXML XMLReader;
+}
+}
 #else
 #  if !defined(USE_EXPAT)
 #    define USE_EXPAT 1

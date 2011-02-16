@@ -2,7 +2,7 @@
  * This file is part of xml.lite-c++ 
  * =========================================================================
  * 
- * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
+ * (C) Copyright 2004 - 2011, General Dynamics - Advanced Information Systems
  *
  * xml.lite-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -22,14 +22,14 @@
 
 #include "xml/lite/Attributes.h"
 
-xml::lite::AttributeNode::AttributeNode(const xml::lite::AttributeNode & node)
+xml::lite::AttributeNode::AttributeNode(const xml::lite::AttributeNode& node)
 {
     mName = node.mName;
     mValue = node.mValue;
 }
 
-xml::lite::AttributeNode &
-xml::lite::AttributeNode::operator=(const xml::lite::AttributeNode & node)
+xml::lite::AttributeNode&
+xml::lite::AttributeNode::operator=(const xml::lite::AttributeNode& node)
 {
     if (&node != this)
     {
@@ -50,8 +50,8 @@ int xml::lite::Attributes::getIndex(const std::string& qname) const
     return -1;
 }
 
-int xml::lite::Attributes::getIndex(const std::string & uri,
-                                    const std::string & localName) const
+int xml::lite::Attributes::getIndex(const std::string& uri,
+                                    const std::string& localName) const
 {
     for (int i = 0; i < (int) mAttributes.size(); i++)
     {
@@ -82,7 +82,7 @@ std::string xml::lite::Attributes::getQName(int i) const
     return mAttributes[i].getQName();
 }
 
-std::string xml::lite::Attributes::getValue(const std::string & qname)
+std::string xml::lite::Attributes::getValue(const std::string& qname)
 {
     for (int i = 0; i < (int) mAttributes.size(); i++)
     {
@@ -96,8 +96,8 @@ std::string xml::lite::Attributes::getValue(const std::string & qname)
     return mAttributes[(int) mAttributes.size() - 1].getValue();
 }
 
-std::string xml::lite::Attributes::getValue(const std::string & uri,
-                                            const std::string & localName)
+std::string xml::lite::Attributes::getValue(const std::string& uri,
+                                            const std::string& localName)
 {
     for (int i = 0; i < (int) mAttributes.size(); i++)
     {
@@ -167,13 +167,13 @@ std::string xml::lite::AttributeNode::getQName() const
     return mName.toString();
 }
 
-xml::lite::Attributes::Attributes(const xml::lite::Attributes & attributes)
+xml::lite::Attributes::Attributes(const xml::lite::Attributes& attributes)
 {
     mAttributes = attributes.mAttributes;
 }
 
 xml::lite::Attributes&
-xml::lite::Attributes::operator=(const xml::lite::Attributes & attributes)
+xml::lite::Attributes::operator=(const xml::lite::Attributes& attributes)
 {
     if (this != &attributes)
     {

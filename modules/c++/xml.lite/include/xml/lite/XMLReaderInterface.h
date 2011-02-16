@@ -30,7 +30,6 @@ namespace xml
 {
 namespace lite
 {
-template<typename Native_T>
 class XMLReaderInterface : public io::OutputStream
 {
 public:
@@ -70,38 +69,10 @@ public:
     //! Method to destroy an xml reader
     virtual void destroy() = 0;
 
-    /*!
-     *  Get the native item back out
-     *  \return The native parser
-     */
-    Native_T& getNative()
-    {
-        return mNative;
-    }
-
-    /*!
-     *  Get the native item back out as content
-     *  \return The native parser
-     */
-    const Native_T& getNative() const
-    {
-        return mNative;
-    }
-
-    /*!
-     *  Get the native type back out as a string
-     *  \return The native type
-     */
-    const char* getNativeType() const
-    {
-        return typeid(mNative).name();
-    }
-
     virtual void setValidation(bool validate) = 0;
     virtual bool getValidation() = 0;
 
-protected:
-    Native_T mNative;
+    virtual std::string getDriverName() const = 0;
 
 private:
     //! Private copy constructor

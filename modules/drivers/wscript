@@ -18,7 +18,7 @@ def set_options(opt):
     
     opt.add_option('--disable-xml', action='store_false', dest='enable_xml', default=True,
                    help='turn off XML')
-    opt.add_option('--enable-xml-layer', action='store', choices=['expat', 'xerces'],
+    opt.add_option('--enable-xml-layer', action='store', choices=['expat', 'libxml', 'xerces'],
                    dest='xml_layer', default='expat', help='Specify the XML layer')
     opt.add_option('--with-xml-home', action='store', dest='xml_home',
                    help='Specify the XML Home - where the XML library is installed to')
@@ -34,6 +34,8 @@ def set_options(opt):
     
     opt.add_option('--with-fft-home', action='store', dest='fft_home',
                    help='Specify the FFT Home - where an FFT library is installed')
+    opt.add_option('--with-fftw3-home', action='store', dest='fft3_home',
+                   help='Specify the FFT3 Home - where the FFT3 library is installed')
     opt.add_option('--disable-fft', action='store_false', dest='enable_fft',
                    help='turn off building FFT (default)')
     opt.add_option('--enable-fft', action='store_true', dest='enable_fft',
@@ -156,6 +158,15 @@ def configure(conf):
                         makeXML = True
                 else:
                     conf.env['LIB_XML'] = ['expat']
+
+            elif xmlLayer == 'libxml':
+                conf.env.append_value('CXXFLAGS_XML', '-DUSE_LIBXML')
+                conf.env['LIB_XML'] = ['xml2']
+                if not xmlHome:
+                    conf.check_cxx(lib='xml2', mandatory=True, uselib_store='XML')
+                    xmlHome = '/usr/'                    
+                conf.env.append_value('CPPPATH_XML', os.path.join(xmlHome, 'include/libxml2'))
+
             elif xmlLayer == 'xerces':
                 conf.env.append_value('CXXFLAGS_XML', '-DUSE_XERCES')
                 conf.env['LIB_XML'] = ['xerces-c']
@@ -202,27 +213,63 @@ def configure(conf):
 
     #-- FFT --------------------------------------------------------------------
     enableFFT = Options.options.enable_fft
+    if not enableFFT:
+        if Options.options.fft_home or Options.options.fft3_home:
+            enableFFT = True
     
     if enableFFT:
-        fftHome = Options.options.fft_home
         makeFFT = Options.options.build_fft
-        
-        if fftHome and not makeFFT:
-            conf.check_message_2('setting fft home to %s' % xmlHome)
-            conf.env.append_value('LIBPATH_FFT', os.path.join(xmlHome, 'lib'))
-            conf.env.append_value('CPPPATH_FFT', os.path.join(xmlHome, 'include'))
-        
-        if not makeFFT and not fftHome:
-            #try to find it
-            if not conf.check_cc(lib='fftw', mandatory=False, uselib_store='FFT'):
+        fftHome = Options.options.fft_home
+        fft3Home = Options.options.fft3_home
+        foundLocal = False
+        foundLocalFFT3 = False
+
+        # FFTW2
+        if not fftHome:
+            if not makeFFT:
+                if not conf.check_cc(lib='fftw', mandatory=False, uselib_store='FFT'):
+                    #see if they defined env vars
+                    fftHome = os.environ.get('FFT_HOME', None)
+                else:
+                    foundLocal = True
+
+        if not foundLocal:
+            makeFFT = False
+            if fftHome:
+                conf.check_message_1('Setting fft home')
+                conf.check_message_2(fftHome)
+                conf.env.append_value('LIBPATH_FFT', os.path.join(fftHome, 'lib'))
+                conf.env.append_value('CPPPATH_FFT', os.path.join(fftHome, 'include'))
+            else:
                 #we must use/build the local one
                 makeFFT = True
-    
-        if makeFFT:
+
+        if makeFFT and not foundLocal:
             conf.env['MAKE_FFT'] = True
             conf.check_message_1('Building local lib')
             conf.check_message_2('fftw')
-    
+
+        # FFTW3
+        if not fft3Home:
+            if not conf.check_cc(header_name='fftw/fftw3.h', lib='fftw3f', mandatory=False, uselib_store='FFT3'):
+                #see if they defined env vars
+                fft3Home = os.environ.get('FFT3_HOME', None)
+            else:
+                foundLocalFFT3 = True
+                conf.env.append_value('LIB_FFT3', 'fftw3f')
+                conf.env.append_unique('CXXDEFINES_FFT3', ['HAVE_FFTW3'])
+                conf.env['HAVE_FFTW3'] = True
+
+        if not foundLocalFFT3:
+            if fft3Home:
+                conf.check_message_1('Setting fft3 home')
+                conf.check_message_2(fft3Home)
+                conf.env.append_value('LIBPATH_FFT3', os.path.join(fft3Home, 'lib'))
+                conf.env.append_value('CPPPATH_FFT3', os.path.join(fft3Home, 'include'))
+                conf.env.append_value('LIB_FFT3', 'fftw3f')
+                conf.env.append_unique('CXXDEFINES_FFT3', ['HAVE_FFTW3'])
+                conf.env['HAVE_FFTW3'] = True
+
 @taskgen
 @feature('untar')
 def untar(self):
@@ -520,13 +567,31 @@ def build(bld):
         sources = map(lambda s: 'fftw/%s' % s,
                       ' '.join([NOTW_CODELETS, TWID_CODELETS, NOTWI_CODELETS, TWIDI_CODELETS, OTHERSRC]).split())
         fftw = bld.new_task_gen('cc', env['LIB_TYPE'] or 'staticlib', source=sources,
-                                export_incdirs=['fftw', 'rfftw'],
+                                export_incdirs=['fftw'],
                                 target='fftw', path=driverNode,
-                                includes=['fftw', 'rfftw'],
+                                includes=['fftw'],
                                 name='FFT', defines=defList, env=env.copy())
         
         bld.install_files('${PREFIX}/include',
                       os.path.join(driverNode.abspath(), 'fftw/fftw.h'))
+        
+        NOTW_CODELETS = 'frc_1.c frc_2.c frc_3.c frc_4.c frc_5.c frc_6.c frc_7.c frc_8.c frc_9.c frc_10.c frc_11.c frc_12.c frc_13.c frc_14.c frc_15.c frc_16.c frc_32.c frc_64.c frc_128.c'
+        TWID_CODELETS = 'fhf_2.c fhf_3.c fhf_4.c fhf_5.c fhf_6.c fhf_7.c fhf_8.c fhf_9.c fhf_10.c fhf_16.c fhf_32.c'
+        NOTWI_CODELETS = 'fcr_1.c fcr_2.c fcr_3.c fcr_4.c fcr_5.c fcr_6.c fcr_7.c fcr_8.c fcr_9.c fcr_10.c fcr_11.c fcr_12.c fcr_13.c fcr_14.c fcr_15.c fcr_16.c fcr_32.c fcr_64.c fcr_128.c'
+        TWIDI_CODELETS = 'fhb_2.c fhb_3.c fhb_4.c fhb_5.c fhb_6.c fhb_7.c fhb_8.c fhb_9.c fhb_10.c fhb_16.c fhb_32.c'
+        OTHERSRC = 'rconfig.c rplanner.c rexec.c rexec2.c rfftwnd.c rgeneric.c  rfftwf77.c'
+    
+        sources = map(lambda s: 'rfftw/%s' % s,
+                      ' '.join([NOTW_CODELETS, TWID_CODELETS, NOTWI_CODELETS, TWIDI_CODELETS, OTHERSRC]).split())
+        rfftw = bld.new_task_gen('cc', env['LIB_TYPE'] or 'staticlib', source=sources,
+                                export_incdirs=['fftw', 'rfftw'],
+                                target='rfftw', path=driverNode,
+                                includes=['fftw', 'rfftw'],
+                                uselib_local='FFT',
+                                name='RFFT', defines=defList, env=env.copy())
+        
+        bld.install_files('${PREFIX}/include',
+                      os.path.join(driverNode.abspath(), 'rfftw/rfftw.h'))
     
     
 

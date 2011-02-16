@@ -24,18 +24,15 @@
 #define __XML_LITE_EXPAT_XML_READER_H__
 
 #if defined(USE_EXPAT)
+#include <expat.h>
+#include <io/OutputStream.h>
+#include <io/InputStream.h>
+#include "xml/lite/XMLException.h"
+#include "xml/lite/ContentHandler.h"
+#include "xml/lite/Attributes.h"
+#include "xml/lite/NamespaceStack.h"
+#include "xml/lite/XMLReaderInterface.h"
 
-#include "expat.h"
-#include "io/OutputStream.h"
-#include "io/InputStream.h"
-#include "XMLException.h"
-#include "ContentHandler.h"
-#include "Attributes.h"
-#include "NamespaceStack.h"
-#include "XMLReaderInterface.h"
-
-#define __xml_parse_ex(MSG) \
-    throw(xml::lite::XMLParseException(MSG, getCurrentLineNumber(), getCurrentColumnNumber()))
 
 /*!
  *  \file
@@ -76,8 +73,10 @@ namespace lite
  *  the Expat C Parser underneath, and wiring it to
  *  generic event calls, via the content handler.
  */
-class XMLReaderExpat : public XMLReaderInterface<XML_Parser>
+class XMLReaderExpat : public XMLReaderInterface
 {
+
+    XML_Parser mNative;
 public:
 
     //! Constructor.  Creates a new XML parser
@@ -159,12 +158,15 @@ public:
 
     virtual void setValidation(bool validate)
     {
-        //__warning__("Expat does not support this option");
     }
     virtual bool getValidation()
     {
         return false;
     }
+
+
+    std::string getDriverName() const { return "expat"; }
+
 private:
     //! This is how we maintain our content handler
     xml::lite::ContentHandler * mContentHandler;
@@ -196,40 +198,40 @@ private:
      *  xmlns:prefix="uri" type mappings, and insert them
      *  on the namespace stack
      */
-    void __pushNamespaceContext(const char **);
+    void pushNamespaceContext(const char **);
 
     //! Remove the context
-    void __popNamespaceContext();
+    void popNamespaceContext();
 
     /*!
      *  Take the raw input, and resolve it to something our
      *  SAX 2.0 content handler knows about, and fire it
      */
-    static void __comment(void *,
-                          const char *);
+    static void commentCallback(void *,
+                                const char *);
 
     /*!
      *  Take the raw input, and resolve it to something our
      *  SAX 2.0 content handler knows about, and fire it
      */
-    static void __startElement(void *,
-                               const char *,
-                               const char **);
+    static void startElementCallback(void *,
+                                     const char *,
+                                     const char **);
 
     /*!
      *  Take the raw input, and resolve it to something our
      *  SAX 2.0 content handler knows about, and fire it
      */
-    static void __endElement(void *,
-                             const char *);
-
+    static void endElementCallback(void *,
+                                   const char *);
+    
     /*!
      *  Take the raw input, and resolve it to something our
      *  SAX 2.0 content handler knows about, and fire it
      */
-    static void __characters(void *,
-                             const char *,
-                             int);
+    static void charactersCallback(void *,
+                                   const char *,
+                                   int);
 
     /*!
      *  Resolve the name to all of the things the content handler
@@ -239,11 +241,12 @@ private:
      *  \param localName The local name
      *  \param qname The QName
            */
-    void __resolve(const char *name,
-                   std::string & uri,
-                   std::string & localName,
-                   std::string & qname);
+    void resolve(const char *name,
+                 std::string& uri,
+                 std::string& localName,
+                 std::string& qname);
 
+    
 };
 }
 }

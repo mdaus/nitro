@@ -2,7 +2,7 @@
  * This file is part of xml.lite-c++ 
  * =========================================================================
  * 
- * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
+ * (C) Copyright 2004 - 2011, General Dynamics - Advanced Information Systems
  *
  * xml.lite-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -27,7 +27,7 @@
 
 //  This parse routine knows the start of a document by definition
 //  It does not know the end
-void xml::lite::XMLReaderExpat::parse(io::InputStream & is, int size)
+void xml::lite::XMLReaderExpat::parse(io::InputStream& is, int size)
 {
     mContentHandler->startDocument();
     is.streamTo(*this, size);
@@ -42,7 +42,12 @@ void xml::lite::XMLReaderExpat::parse(const sys::byte *data,
                                       bool done)
 {
     if (!XML_Parse(mNative, (const char *)data, size, (int) done))
-        __xml_parse_ex(FmtX(getErrorString((XML_Error) getLastError())));
+        throw
+            xml::lite::XMLParseException(
+                getErrorString((XML_Error) getLastError()),
+                getCurrentLineNumber(),
+                getCurrentColumnNumber()
+                );
 }
 
 
@@ -59,15 +64,15 @@ void xml::lite::XMLReaderExpat::create()
     XML_SetUserData(mNative, this);
     XML_SetElementHandler(mNative,
                           (XML_StartElementHandler) xml::lite::XMLReaderExpat::
-                          __startElement,
+                          startElementCallback,
                           (XML_EndElementHandler) xml::lite::XMLReaderExpat::
-                          __endElement);
+                          endElementCallback);
     XML_SetCharacterDataHandler(mNative,
                                 (XML_CharacterDataHandler) xml::lite::
-                                XMLReaderExpat::__characters);
+                                XMLReaderExpat::charactersCallback);
     XML_SetCommentHandler(mNative,
                           (XML_CommentHandler) xml::lite::XMLReaderExpat::
-                          __comment);
+                          commentCallback);
 
 }
 
@@ -82,39 +87,39 @@ void xml::lite::XMLReaderExpat::destroy()
 
 
 // This function puts the context on the stack
-void xml::lite::XMLReaderExpat::__pushNamespaceContext(const char **atts)
+void xml::lite::XMLReaderExpat::pushNamespaceContext(const char **atts)
 {
     mNamespaceStack.push();
 
     // Iterate through and find the mappings
     for (int i = 0; atts[i] != NULL; i += 2)
     {
-        std::string __attr(atts[i]);
-        std::string::size_type x = __attr.find_first_of(':');
+        std::string attr(atts[i]);
+        std::string::size_type x = attr.find_first_of(':');
 
         // Either we have a namespace prefix
         if (x != std::string::npos)
         {
             // Either our namespace prefix is xmlns
-            if (__attr.substr(0, x) == "xmlns")
+            if (attr.substr(0, x) == "xmlns")
             {
                 // Get the value
-                std::string __uri = atts[i + 1];
-                mNamespaceStack.newMapping(__attr.substr(x + 1), __uri);
+                std::string uri = atts[i + 1];
+                mNamespaceStack.newMapping(attr.substr(x + 1), uri);
 
             }
             // Or its not
         }
-        else if (__attr == "xmlns")
+        else if (attr == "xmlns")
         {
-            std::string __u = atts[i + 1];
-            mNamespaceStack.newMapping(__attr, __u);
+            std::string u = atts[i + 1];
+            mNamespaceStack.newMapping(attr, u);
         }
     }
 }
 
 // This function removes the context from the stack
-void xml::lite::XMLReaderExpat::__popNamespaceContext()
+void xml::lite::XMLReaderExpat::popNamespaceContext()
 {
     // All we have to do is pop the namespace stack context and we're done
     mNamespaceStack.pop();
@@ -122,7 +127,7 @@ void xml::lite::XMLReaderExpat::__popNamespaceContext()
 
 
 // This method resolves a name to all of its SAX 2.0 parts
-void xml::lite::XMLReaderExpat::__resolve(const char *name,
+void xml::lite::XMLReaderExpat::resolve(const char *name,
         std::string& uri,
         std::string& lname,
         std::string& qname)
@@ -148,87 +153,88 @@ void xml::lite::XMLReaderExpat::__resolve(const char *name,
 }
 
 // This function fires off the content handler's startElement() function
-void xml::lite::XMLReaderExpat::__startElement(void *p,
-        const char *tag,
-        const char **atts)
+void xml::lite::XMLReaderExpat::startElementCallback(void *p,
+                                                     const char *tag,
+                                                     const char **atts)
 {
     // Pull out our parser
     xml::lite::XMLReaderExpat * xmlReader = (xml::lite::XMLReaderExpat *) p;
 
     // Push the namespace context on for this element's attributes
-    xmlReader->__pushNamespaceContext(atts);
+    xmlReader->pushNamespaceContext(atts);
 
-    std::string __uri;
-    std::string __lname;
-    std::string __qname;
+    std::string uri;
+    std::string lname;
+    std::string qname;
 
     // Resolve the tag into what we really want
-    xmlReader->__resolve(tag, __uri, __lname, __qname);
+    xmlReader->resolve(tag, uri, lname, qname);
 
-    xml::lite::Attributes __attrs;
+    xml::lite::Attributes attrs;
     // Resolve the attributes to what we really want
     for (int i = 0; atts[i] != NULL; i += 2)
     {
-        xml::lite::AttributeNode __attr;
-        std::string __attr_qname;
-        std::string __attr_lname;
-        std::string __attr_uri;
+        xml::lite::AttributeNode attr;
+        std::string attrQName;
+        std::string attrLName;
+        std::string attrUri;
 
-        xmlReader->__resolve(atts[i],
-                             __attr_uri,
-                             __attr_lname,
-                             __attr_qname);
-        __attr.setValue(atts[i + 1]);
-
-        __attr.setQName(__attr_qname);
-        __attr.setUri(__attr_uri);
-        assert(__attr_lname == __attr.getLocalName());
-        __attrs.add(__attr);
+        xmlReader->resolve(atts[i],
+                           attrUri,
+                           attrLName,
+                           attrQName);
+        attr.setValue(atts[i + 1]);
+        
+        attr.setQName(attrQName);
+        attr.setUri(attrUri);
+        assert(attrLName == attr.getLocalName());
+        attrs.add(attr);
     }
 
     // Fire an event
-    xmlReader->getContentHandler()->startElement(__uri,
-            __lname,
-            __qname, __attrs);
+    xmlReader->getContentHandler()->startElement(uri,
+                                                 lname,
+                                                 qname,
+                                                 attrs);
 }
 
 // This function fires off the content handler's endElement() function
-void xml::lite::XMLReaderExpat::__endElement(void *p, const char *tag)
+void xml::lite::XMLReaderExpat::endElementCallback(void *p, const char *tag)
 {
     // Pull out our parser
     xml::lite::XMLReaderExpat * xmlReader = (xml::lite::XMLReaderExpat *) p;
 
-    std::string __uri;
-    std::string __localName;
-    std::string __qname;
+    std::string uri;
+    std::string localName;
+    std::string qname;
 
     // Resolve the tag into what we really want
-    xmlReader->__resolve(tag, __uri, __localName, __qname);
+    xmlReader->resolve(tag, uri, localName, qname);
 
     // Fire the event
-    xmlReader->getContentHandler()->endElement(__uri, __localName, __qname);
+    xmlReader->getContentHandler()->endElement(uri, localName, qname);
 
-    xmlReader->__popNamespaceContext();
+    xmlReader->popNamespaceContext();
 }
 
 
 // This function fires off the content handler's characters() function
-void xml::lite::XMLReaderExpat::__characters(void *p,
-        const char *data,
-        int size)
+void xml::lite::XMLReaderExpat::charactersCallback(void *p,
+                                                   const char *data,
+                                                   int size)
 {
 
     // Pull out our parser
-    xml::lite::XMLReaderExpat * xmlReader = (xml::lite::XMLReaderExpat *) p;
+    xml::lite::XMLReaderExpat* xmlReader = (xml::lite::XMLReaderExpat *) p;
     xmlReader->getContentHandler()->characters(data, size);
 }
 
-void xml::lite::XMLReaderExpat::__comment(void *p, const char *c)
+void xml::lite::XMLReaderExpat::commentCallback(void *p, const char *c)
 {
     // Pull out our parser
-    xml::lite::XMLReaderExpat * xmlReader = (xml::lite::XMLReaderExpat *) p;
-    std::string __c(c);
-    xmlReader->getContentHandler()->comment(__c);
+    xml::lite::XMLReaderExpat* xmlReader = (xml::lite::XMLReaderExpat *) p;
+    std::string cmt(c);
+    xmlReader->getContentHandler()->comment(cmt);
 }
 
 #endif

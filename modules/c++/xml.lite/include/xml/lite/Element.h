@@ -23,12 +23,10 @@
 #ifndef __XML_LITE_ELEMENT_H__
 #define __XML_LITE_ELEMENT_H__
 
-#include "io/InputStream.h"
-#include "io/OutputStream.h"
-#include "XMLException.h"
-#include "Attributes.h"
-
-#define CAST_ELEMENT(TYPE, XML_ELEMENT) dynamic_cast<TYPE*>(XML_ELEMENT)
+#include <io/InputStream.h>
+#include <io/OutputStream.h>
+#include "xml/lite/XMLException.h"
+#include "xml/lite/Attributes.h"
 
 /*!
  * \file  Element.h
@@ -66,7 +64,7 @@ public:
      * \param uri The uri of the object
      * \param characterData The character data (if any)
      */
-    Element(const std::string & qname, const std::string & uri = "",
+    Element(const std::string& qname, const std::string& uri = "",
             std::string characterData = "") :
         mParent(NULL), mName(uri, qname), mCharacterData(characterData)
     {
@@ -85,21 +83,21 @@ public:
      * Copy constructor
      * \param element  Takes an element
      */
-    Element(const Element & element);
+    Element(const Element& element);
 
     /*!
      *  Assignment operator
      *  \param element  Takes an element
      *  \return a reference to *this
      */
-    Element & operator=(const Element & element);
+    Element& operator=(const Element& element);
 
     /*!
      *  Clone function performs deep copy
      *  of element
      *  \param element  Takes an element
      */
-    void clone(const Element & element);
+    void clone(const Element& element);
 
     /*!
      *  Get the attributes in a non-const way
@@ -142,8 +140,9 @@ public:
      *  \param qname the QName
      *  \param elements the elements that match the QName
      */
-    void getElementsByTagNameNS(const std::string & qname, std::vector<
-            Element *>&elements, bool recurse = false);
+    void getElementsByTagNameNS(const std::string& qname,
+                                std::vector<Element*>& elements,
+                                bool recurse = false);
 
     /*!
      *  Utility for people that dont like to pass by reference
@@ -163,8 +162,9 @@ public:
      *  \param localName The local name
      *  \param elements The elements
      */
-    void getElementsByTagName(const std::string & localName, std::vector<
-            Element *>&elements, bool recurse = false);
+    void getElementsByTagName(const std::string& localName,
+                              std::vector<Element*>& elements,
+                              bool recurse = false);
 
     /*!
      *  Utility for people that dont like to pass by reference
@@ -192,28 +192,28 @@ public:
      *  \param localName the local name
      *  \param elements the elements that match the QName
      */
-    void
-            getElementsByTagName(const std::string & uri,
-                                 const std::string & localName, std::vector<
-                                         Element *>&elements, bool recurse =
-                                         false);
-
+    void getElementsByTagName(const std::string& uri,
+                              const std::string& localName,
+                              std::vector<Element*>& elements,
+                              bool recurse = false);
+    
     /*!
      *  Prints the element to the specified OutputStream
      *  \param stream the OutputStream to write to
      *  \param formatter  The formatter
      *  \todo Add format capability
      */
-    void print(io::OutputStream & stream);
+    void print(io::OutputStream& stream);
 
-    void prettyPrint(io::OutputStream & stream, std::string formatter = "    ");
+    void prettyPrint(io::OutputStream& stream,
+                     std::string formatter = "    ");
 
     /*!
      *  Determines if a child element exists
      *  \param localName the local name to search for
      *  \return true if it exists, false if not
      */
-    bool hasElement(const std::string & localName) const;
+    bool hasElement(const std::string& localName) const;
 
     /*!
      *  Determines if a child element exists
@@ -221,8 +221,8 @@ public:
      *  \param localName the local name to search for
      *  \return true if it exists, false if not
      */
-    bool
-            hasElement(const std::string & uri, const std::string & localName) const;
+    bool hasElement(const std::string& uri,
+                    const std::string& localName) const;
 
     /*!
      *  Returns the character data of this element.
@@ -237,7 +237,7 @@ public:
      *  Sets the character data for this element.
      *  \param characters The data to add to this element
      */
-    void setCharacterData(const std::string & characters)
+    void setCharacterData(const std::string& characters)
     {
         mCharacterData = characters;
     }
@@ -246,7 +246,7 @@ public:
      *  Sets the local name for this element.
      *  \param localName the data to add to this element
      */
-    void setLocalName(const std::string & localName)
+    void setLocalName(const std::string& localName)
     {
         mName.setName(localName);
     }
@@ -282,7 +282,7 @@ public:
      *  Sets the URI for this element.
      *  \param uri the data to add to this element
      */
-    void setUri(const std::string & uri)
+    void setUri(const std::string& uri)
     {
         mName.setAssociatedUri(uri);
     }
@@ -336,10 +336,9 @@ protected:
 
     void changeURI(Element* element, std::string prefix, std::string uri);
 
-    void
-            depthPrint(io::OutputStream & stream, int depth,
-                       std::string formatter);
-
+    void depthPrint(io::OutputStream& stream, int depth,
+                    std::string formatter);
+    
     Element* mParent;
     //! The children of this element
     std::vector<Element*> mChildren;

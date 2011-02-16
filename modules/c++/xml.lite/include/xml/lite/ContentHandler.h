@@ -2,7 +2,7 @@
  * This file is part of xml.lite-c++ 
  * =========================================================================
  * 
- * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
+ * (C) Copyright 2004 - 2011, General Dynamics - Advanced Information Systems
  *
  * xml.lite-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -24,7 +24,7 @@
 #define __XML_LITE_CONTENT_HANDLER_H__
 
 #include <string>
-#include "Attributes.h"
+#include "xml/lite/Attributes.h"
 
 /*!
  *  \file  ContentHandler.h
@@ -70,7 +70,7 @@ public:
     }
 
     //! Destructor
-    virtual ~ ContentHandler()
+    virtual ~ContentHandler()
     {
     }
 

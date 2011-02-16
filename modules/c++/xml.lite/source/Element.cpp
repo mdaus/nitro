@@ -2,7 +2,7 @@
  * This file is part of xml.lite-c++ 
  * =========================================================================
  * 
- * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
+ * (C) Copyright 2004 - 2011, General Dynamics - Advanced Information Systems
  *
  * xml.lite-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -23,11 +23,7 @@
 #include "xml/lite/Element.h"
 #include <import/str.h>
 
-/*==================================================*/
-/* This marks the start of tree element code        */
-/*==================================================*/
-
-xml::lite::Element::Element(const xml::lite::Element & node)
+xml::lite::Element::Element(const xml::lite::Element& node)
 {
     // Assign each member
     mName = node.mName;
@@ -37,9 +33,9 @@ xml::lite::Element::Element(const xml::lite::Element & node)
     mParent = node.mParent;
 }
 
-xml::lite::Element & xml::lite::Element::operator=(const xml::lite::Element & node)
+xml::lite::Element& xml::lite::Element::operator=(const xml::lite::Element& node)
 {
-    if (this != &node)
+    if (this !=&node)
     {
         mName = node.mName;
         mCharacterData = node.mCharacterData;
@@ -50,7 +46,7 @@ xml::lite::Element & xml::lite::Element::operator=(const xml::lite::Element & no
     return *this;
 }
 
-void xml::lite::Element::clone(const xml::lite::Element & node)
+void xml::lite::Element::clone(const xml::lite::Element& node)
 {
     mName = node.mName;
     mCharacterData = node.mCharacterData;
@@ -67,20 +63,20 @@ void xml::lite::Element::clone(const xml::lite::Element & node)
     }
 }
 
-bool xml::lite::Element::hasElement(const std::string & uri,
-                                    const std::string & localName) const
+bool xml::lite::Element::hasElement(const std::string& uri,
+                                    const std::string& localName) const
 {
 
     for (unsigned int i = 0; i < mChildren.size(); i++)
     {
-        if (mChildren[i]->getUri() == uri && mChildren[i]->getLocalName()
+        if (mChildren[i]->getUri() == uri&& mChildren[i]->getLocalName()
                 == localName)
             return true;
     }
     return false;
 }
 
-bool xml::lite::Element::hasElement(const std::string & localName) const
+bool xml::lite::Element::hasElement(const std::string& localName) const
 {
 
     for (unsigned int i = 0; i < mChildren.size(); i++)
@@ -91,14 +87,14 @@ bool xml::lite::Element::hasElement(const std::string & localName) const
     return false;
 }
 
-void xml::lite::Element::getElementsByTagName(const std::string & uri,
-                                              const std::string & localName,
-                                              std::vector<Element *>&elements,
+void xml::lite::Element::getElementsByTagName(const std::string& uri,
+                                              const std::string& localName,
+                                              std::vector<Element*>& elements,
                                               bool recurse)
 {
     for (unsigned int i = 0; i < mChildren.size(); i++)
     {
-        if (mChildren[i]->getUri() == uri && mChildren[i]->getLocalName()
+        if (mChildren[i]->getUri() == uri&& mChildren[i]->getLocalName()
                 == localName)
             elements.push_back(mChildren[i]);
         if (recurse)
@@ -106,8 +102,8 @@ void xml::lite::Element::getElementsByTagName(const std::string & uri,
     }
 }
 
-void xml::lite::Element::getElementsByTagName(const std::string & localName,
-                                              std::vector<Element *>&elements,
+void xml::lite::Element::getElementsByTagName(const std::string& localName,
+                                              std::vector<Element*>& elements,
                                               bool recurse)
 {
     for (unsigned int i = 0; i < mChildren.size(); i++)
@@ -119,8 +115,8 @@ void xml::lite::Element::getElementsByTagName(const std::string & localName,
     }
 }
 
-void xml::lite::Element::getElementsByTagNameNS(const std::string & qname,
-                                                std::vector<Element *>&elements,
+void xml::lite::Element::getElementsByTagNameNS(const std::string& qname,
+                                                std::vector<Element*>& elements,
                                                 bool recurse)
 {
     for (unsigned int i = 0; i < mChildren.size(); i++)
@@ -142,27 +138,23 @@ void xml::lite::Element::destroyChildren()
         // Pop it off
         mChildren.pop_back();
         // Delete it
-        //EVAL(childAtBack->name);
-
-
-        /* Added this line back in for 0.1.1 */
-        //std::cout << "Deleting child at back" << std::endl;
         delete childAtBack;
     }
 }
 
-void xml::lite::Element::print(io::OutputStream & stream)
+void xml::lite::Element::print(io::OutputStream& stream)
 {
     depthPrint(stream, 0, "");
 }
 
-void xml::lite::Element::prettyPrint(io::OutputStream & stream,
+void xml::lite::Element::prettyPrint(io::OutputStream& stream,
                                      std::string formatter)
 {
     depthPrint(stream, 0, formatter);
+    stream.writeln("");
 }
 
-void xml::lite::Element::depthPrint(io::OutputStream & stream,
+void xml::lite::Element::depthPrint(io::OutputStream& stream,
                                     int depth,
                                     std::string formatter)
 {
@@ -185,7 +177,7 @@ void xml::lite::Element::depthPrint(io::OutputStream & stream,
         acc += std::string("\"");
     }
 
-    if (mCharacterData.empty() && mChildren.empty())
+    if (mCharacterData.empty()&& mChildren.empty())
     {
         //simple type - just end it here
         stream.write(acc + "/" + rBrack);

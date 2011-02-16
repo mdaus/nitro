@@ -2,7 +2,7 @@
  * This file is part of xml.lite-c++ 
  * =========================================================================
  * 
- * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
+ * (C) Copyright 2004 - 2011, General Dynamics - Advanced Information Systems
  *
  * xml.lite-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -41,15 +41,15 @@ void xml::lite::NamespaceStack::pop()
 }
 
 
-void xml::lite::NamespaceStack::newMapping(const std::string & prefix,
-        const std::string & uri)
+void xml::lite::NamespaceStack::newMapping(const std::string& prefix,
+        const std::string& uri)
 {
     ++mRefStack.top();
     mMappingStack.push_back(xml::lite::NamespaceEntity(prefix, uri));
 }
 
 std::string
-xml::lite::NamespaceStack::getMapping(const std::string & prefix) const
+xml::lite::NamespaceStack::getMapping(const std::string& prefix) const
 {
     for (int i = (int)mMappingStack.size() - 1; i >= 0; --i)
     {
@@ -62,7 +62,7 @@ xml::lite::NamespaceStack::getMapping(const std::string & prefix) const
 }
 
 void xml::lite::NamespaceStack::
-getAllPrefixes(std::vector <std::string> &allPrefixes) const
+getAllPrefixes(std::vector<std::string>& allPrefixes) const
 {
     for (unsigned int i = 0; i < mMappingStack.size(); i++)
     {

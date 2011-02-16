@@ -2,7 +2,7 @@
  * This file is part of xml.lite-c++ 
  * =========================================================================
  * 
- * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
+ * (C) Copyright 2004 - 2011, General Dynamics - Advanced Information Systems
  *
  * xml.lite-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -20,7 +20,7 @@
  *
  */
 
-#if defined(USE_EXPAT) || defined(USE_XERCES)
+#if defined(USE_EXPAT) || defined(USE_XERCES) || defined(USE_LIBXML)
 #include <import/except.h>
 #include <import/io.h>
 #include <import/xml/lite.h>

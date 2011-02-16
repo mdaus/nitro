@@ -2,7 +2,7 @@
  * This file is part of xml.lite-c++ 
  * =========================================================================
  * 
- * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
+ * (C) Copyright 2004 - 2011, General Dynamics - Advanced Information Systems
  *
  * xml.lite-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -58,13 +58,10 @@ public:
     /*!
      *  Constructor.  Set our SAX ContentHandler.
      */
-    MinidomParser()
-    {
-        mReader.setContentHandler(&mHandler);
-    }
+    MinidomParser();
 
     //! Destructor.
-    virtual ~ MinidomParser()
+    virtual ~MinidomParser()
     {
     }
 
@@ -75,35 +72,24 @@ public:
      *  \param is  This is the input stream to feed the parser
      *  \param size  This is the size of the stream to feed the parser
      */
-    virtual void parse(io::InputStream & is, int size = io::InputStream::IS_END)
-    {
-        mReader.parse(is, size);
-    }
+    virtual void parse(io::InputStream& is, int size = io::InputStream::IS_END);
+    
 
     /*!
      *  This clears the MinidomHandler, killing its underlying Document
      *  tree.  The Document node is preserved, however -- it must
      *  be explicitly reset to another document to change element type.
      */
-    virtual void clear()
-    {
-        mHandler.clear();
-    }
+    virtual void clear();
 
     /*!
      *  Return a pointer to the document.  Note that its a reference
      *  so you dont get to keep it.
      *  \return Pointer to document.
      */
-    virtual Document *getDocument() const
-    {
-        return mHandler.getDocument();
-    }
+    virtual Document *getDocument() const;
 
-    virtual Document *getDocument(bool steal = false)
-    {
-        return mHandler.getDocument(steal);
-    }
+    virtual Document *getDocument(bool steal = false);
 
     /*!
      *  Reader accessor
@@ -130,18 +116,12 @@ public:
      *
      *  \param newDocument The new document.
      */
-    virtual void setDocument(Document * newDocument, bool own = true)
-    {
-        mHandler.setDocument(newDocument, own);
-    }
+    virtual void setDocument(Document * newDocument, bool own = true);
 
     /*!
      * @see MinidomHandler::preserveCharacterData
      */
-    virtual void preserveCharacterData(bool preserve)
-    {
-        mHandler.preserveCharacterData(preserve);
-    }
+    virtual void preserveCharacterData(bool preserve);
 
 protected:
     MinidomHandler mHandler;

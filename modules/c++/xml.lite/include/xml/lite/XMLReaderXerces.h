@@ -49,27 +49,25 @@
 #include <xercesc/util/XercesDefs.hpp>
 #include <xercesc/sax/ErrorHandler.hpp>
 
-#include "io/ByteStream.h"
-#include "io/OutputStream.h"
-#include "io/InputStream.h"
+#include <io/ByteStream.h>
+#include <io/OutputStream.h>
+#include <io/InputStream.h>
 #include "xml/lite/XMLException.h"
 #include "xml/lite/ContentHandler.h"
 #include "xml/lite/Attributes.h"
 #include "xml/lite/NamespaceStack.h"
 #include "xml/lite/XMLReaderInterface.h"
-#include "except/Error.h"
+#include <except/Error.h>
 
-//XERCES_CPP_NAMESPACE_BEGIN
-// Make sure its obvious which parser we are using
 
 #if defined(XERCES_VERSION_MAJOR)
 #   if XERCES_VERSION_MAJOR == 2
-        typedef unsigned int __xmlSize_t;
+        typedef unsigned int XercesSize_T;
 #   else
-        typedef XMLSize_t __xmlSize_t;
+        typedef XMLSize_t XercesSize_T;
 #   endif
 #else
-    typedef XMLSize_t __xmlSize_t;
+    typedef XMLSize_t XercesSize_T;
 #endif
 
 
@@ -77,9 +75,9 @@
 #if defined(XERCES_CPP_NAMESPACE_USE)
 XERCES_CPP_NAMESPACE_USE
 #endif
-typedef ContentHandler __XercesContentHandlerInterface_T;
-typedef Attributes     __XercesAttributesInterface_T;
-typedef ErrorHandler   __XercesErrorHandlerInterface_T;
+typedef ContentHandler XercesContentHandlerInterface_T;
+typedef Attributes     XercesAttributesInterface_T;
+typedef ErrorHandler   XercesErrorHandlerInterface_T;
 
 
 namespace xml
@@ -88,15 +86,15 @@ namespace lite
 {
 
 
-typedef xml::lite::ContentHandler __LiteContentHandler_T;
-typedef xml::lite::Attributes     __LiteAttributes_T;
-typedef xml::lite::AttributeNode  __LiteAttributesNode_T;
+typedef xml::lite::ContentHandler LiteContentHandler_T;
+typedef xml::lite::Attributes     LiteAttributes_T;
+typedef xml::lite::AttributeNode  LiteAttributesNode_T;
 
 /*!
  *  Interface to Xerces-C XMLCh*.  This is a string conversion
  *  class allowing unicode/native transparency
  */
-class __XercesLocalString
+class XercesLocalString
 {
 public:
 
@@ -104,26 +102,26 @@ public:
      *  Constructor from XMLCh*
      *  \param xmlStr   An XMLCh*
      */
-    __XercesLocalString(const XMLCh *xmlStr);
+    XercesLocalString(const XMLCh *xmlStr);
 
     /*!
      *  Constructor from c_str*
      *  \param c_str   A c_str*
      */
-    __XercesLocalString(const char *c_str);
+    XercesLocalString(const char *c_str);
 
     /*!
      *  Copy Constructor
      *  \param rhs the right-hand side operand of the operation
      */
-    __XercesLocalString(const __XercesLocalString& rhs);
+    XercesLocalString(const XercesLocalString& rhs);
 
     //! Destructor
-    ~__XercesLocalString()
+    ~XercesLocalString()
     { }
 
     /*!
-     *  Convert a __XercesLocalString to an XMLCh*
+     *  Convert a XercesLocalString to an XMLCh*
      *  \return          an XMLCh*
      */
     XMLCh *toXMLCh() const;
@@ -133,14 +131,14 @@ public:
      *  \param xmlStr    An XMLCh*
      *  \return          A reference to *this
      */
-    __XercesLocalString& operator=(const XMLCh *xmlStr);
+    XercesLocalString& operator=(const XMLCh *xmlStr);
 
     /*!
-     *  Assign from a __XercesLocalString
-     *  \param rhs    A __XercesLocalString*
+     *  Assign from a XercesLocalString
+     *  \param rhs    A XercesLocalString*
      *  \return       A reference to *this
      */
-    __XercesLocalString& operator=(const __XercesLocalString& rhs);
+    XercesLocalString& operator=(const XercesLocalString& rhs);
 
     /*! Return a native c string */
     const char *c_str() const
@@ -169,7 +167,7 @@ protected:
 
 
 /*!
- *  \class __XercesContentHandler
+ *  \class XercesContentHandler
  *  \brief This class is a mapping between Xerces SAX2.0 and xml.lite
  *
  *  With Expat, a C parser, we had to bind function pointers to
@@ -190,25 +188,25 @@ protected:
  *  Xerces use as well as Expat (and ultimately MSXML as well)
  *
  */
-class __XercesContentHandler :
-            public __XercesContentHandlerInterface_T
+class XercesContentHandler :
+            public XercesContentHandlerInterface_T
 {
 public:
     /*!
-     *  Our constructor will use an underlying __LiteContentHandler
+     *  Our constructor will use an underlying LiteContentHandler
      *  We will only bind to this, not free it.
      *  \param ch  The handler to bind
      */
-    __XercesContentHandler(xml::lite::ContentHandler* ch = NULL)
+    XercesContentHandler(xml::lite::ContentHandler* ch = NULL)
     {
         mLiteHandler = ch;
     }
 
-    ~__XercesContentHandler()
+    ~XercesContentHandler()
     {}
 
     virtual void ignorableWhitespace(const XMLCh *const chars,
-                                     const __xmlSize_t length)
+                                     const XercesSize_T length)
     {}
     virtual void  processingInstruction(const XMLCh *const target,
                                         const XMLCh *const data)
@@ -224,7 +222,7 @@ public:
      *  \param length   The length
      */
     virtual void characters(const XMLCh* const chars,
-                            const __xmlSize_t length);
+                            const XercesSize_T length);
 
     /*!
      *  Fire off the end document notification
@@ -261,7 +259,7 @@ public:
                               const XMLCh *const localName,
                               const XMLCh *const qname,
                               const
-                              __XercesAttributesInterface_T &attrs);
+                              XercesAttributesInterface_T &attrs);
 
     /*!
      *  Begin prefix mapping.  Transfer string types
@@ -271,13 +269,6 @@ public:
     virtual void startPrefixMapping (const XMLCh *const prefix,
                                      const XMLCh *const uri)
     {
-        /*
-        __XercesLocalString __prefix(prefix);
-        __XercesLocalString __uri(uri);
-        mLiteHandler->startPrefixMapping(__prefix.str(),
-        __uri.str()
-        );
-        */
     }
 
     /*!
@@ -286,10 +277,6 @@ public:
      */
     virtual void endPrefixMapping (const XMLCh *const prefix)
     {
-        /*
-        __XercesLocalString __prefix(prefix);
-        mLiteHandler->endPrefixMapping(__prefix.str());
-        */
     }
 
     virtual void
@@ -308,19 +295,19 @@ protected:
     xml::lite::ContentHandler* mLiteHandler;
 
 }
-; // That's all for the ContentHandler, folks!
+;
 
 
 /*!
-*  /class __XercesErrorHandler
+*  /class XercesErrorHandler
 *
 *  The error handler in xml::lite does is essentially non-existant
 *  (and unneccessary, due to the existance of the notification single).
 *  Our error handler implementation, then, simply calls the raise,
 *  and warning macros in the factory.
 */
-class __XercesErrorHandler :
-            public __XercesErrorHandlerInterface_T
+class XercesErrorHandler :
+            public XercesErrorHandlerInterface_T
 {
 public:
     /*!
@@ -335,8 +322,7 @@ public:
     virtual void fatalError (const SAXParseException &exception);
 
     // Useless??
-    virtual void resetErrors ()
-    {}
+    virtual void resetErrors() {}
 };
 
 /*!
@@ -347,8 +333,11 @@ public:
  *  the Expat C Parser underneath, and wiring it to
  *  generic event calls, via the content handler.
  */
-class XMLReaderXerces : public XMLReaderInterface<SAX2XMLReader*>
+class XMLReaderXerces : public XMLReaderInterface
 {
+
+private:
+    SAX2XMLReader* mNative;
 public:
 
     //! Constructor.  Creates a new XML parser
@@ -382,18 +371,20 @@ public:
      *  It will set this internally.
      *  \param handler  The content handler to pass
      */
-    void setContentHandler(xml::lite::ContentHandler * handler)
+    void setContentHandler(xml::lite::ContentHandler* handler)
     {
         mDriverContentHandler.setXMLLiteContentHandler(handler);
     }
 
     void parse(io::InputStream& is, int size = io::InputStream::IS_END);
     //! Method to create an xml reader
+
     void create();
 
     //! Method to destroy an xml reader
     void destroy();
 
+    std::string getDriverName() const { return "xerces"; }
 private:
 
     void write(const sys::byte *b, sys::Size_T len)
@@ -402,16 +393,16 @@ private:
     }
 
     //! Underlying parser implementation (Currently expat);
-    __XercesContentHandler mDriverContentHandler;
-    __XercesErrorHandler   mErrorHandler;
+    XercesContentHandler mDriverContentHandler;
+    XercesErrorHandler   mErrorHandler;
 };
 
 }
 }
 
-//! Overloaded output operator for __XercesLocalString
+//! Overloaded output operator for XercesLocalString
 std::ostream& operator<<(std::ostream& os,
-                         const xml::lite::__XercesLocalString& ls);
+                         const xml::lite::XercesLocalString& ls);
 
 
 #endif

@@ -2,7 +2,7 @@
  * This file is part of xml.lite-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
+ * (C) Copyright 2004 - 2011, General Dynamics - Advanced Information Systems
  *
  * xml.lite-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -24,36 +24,36 @@
 
 #if defined(USE_XERCES)
 
-xml::lite::__XercesLocalString::__XercesLocalString(const XMLCh *xmlStr)
+xml::lite::XercesLocalString::XercesLocalString(const XMLCh *xmlStr)
 {
     mLocal = toLocal(xmlStr);
 }
 
-xml::lite::__XercesLocalString::__XercesLocalString(const char *c_str)
+xml::lite::XercesLocalString::XercesLocalString(const char *c_str)
 {
     mLocal = c_str;
 }
 
-xml::lite::__XercesLocalString::
-__XercesLocalString(const __XercesLocalString& rhs)
+xml::lite::XercesLocalString::
+XercesLocalString(const XercesLocalString& rhs)
 {
     mLocal = rhs.mLocal;
 }
 
-XMLCh *xml::lite::__XercesLocalString::toXMLCh() const
+XMLCh *xml::lite::XercesLocalString::toXMLCh() const
 {
     return XMLString::transcode(mLocal.c_str());
 }
 
-xml::lite::__XercesLocalString& xml::lite::__XercesLocalString::
+xml::lite::XercesLocalString& xml::lite::XercesLocalString::
 operator=(const XMLCh *xmlStr)
 {
     mLocal = toLocal(xmlStr);
     return *this;
 }
 
-xml::lite::__XercesLocalString& xml::lite::__XercesLocalString::
-operator=(const xml::lite::__XercesLocalString& rhs)
+xml::lite::XercesLocalString& xml::lite::XercesLocalString::
+operator=(const xml::lite::XercesLocalString& rhs)
 {
     if (this != &rhs)
     {
@@ -62,7 +62,7 @@ operator=(const xml::lite::__XercesLocalString& rhs)
     return *this;
 }
 
-std::string xml::lite::__XercesLocalString::toLocal(const XMLCh *xmlStr)
+std::string xml::lite::XercesLocalString::toLocal(const XMLCh *xmlStr)
 {
     char *localCStr = XMLString::transcode(xmlStr);
     std::string local = localCStr;
@@ -70,99 +70,97 @@ std::string xml::lite::__XercesLocalString::toLocal(const XMLCh *xmlStr)
     return local;
 }
 
-void xml::lite::__XercesContentHandler::characters(const XMLCh* const chars,
-        const __xmlSize_t length)
+void xml::lite::XercesContentHandler::characters(const XMLCh* const chars,
+        const XercesSize_T length)
 {
-    xml::lite::__XercesLocalString __xstr(chars);
-    mLiteHandler->characters(__xstr.c_str(), (int)length);
+    xml::lite::XercesLocalString xstr(chars);
+    mLiteHandler->characters(xstr.c_str(), (int)length);
 }
 
-void xml::lite::__XercesContentHandler::startDocument()
+void xml::lite::XercesContentHandler::startDocument()
 {
     mLiteHandler->startDocument();
 }
 
-void xml::lite::__XercesContentHandler::endDocument()
+void xml::lite::XercesContentHandler::endDocument()
 {
     mLiteHandler->endDocument();
 }
 
-void xml::lite::__XercesContentHandler::endElement(const XMLCh *const uri,
+void xml::lite::XercesContentHandler::endElement(const XMLCh *const uri,
         const XMLCh *const localName,
         const XMLCh *const qname)
 {
-    xml::lite::__XercesLocalString __uri(uri);
-    xml::lite::__XercesLocalString __localName(localName);
-    xml::lite::__XercesLocalString __qname(qname);
+    xml::lite::XercesLocalString xuri(uri);
+    xml::lite::XercesLocalString xlocalName(localName);
+    xml::lite::XercesLocalString xqname(qname);
 
-    mLiteHandler->endElement(__uri.str(),
-                             __localName.str(),
-                             __qname.str());
+    mLiteHandler->endElement(xuri.str(),
+                             xlocalName.str(),
+                             xqname.str());
 }
 
-void xml::lite::__XercesContentHandler::
+void xml::lite::XercesContentHandler::
 startElement(const XMLCh *const uri,
              const XMLCh *const localName,
              const XMLCh *const qname,
-             const __XercesAttributesInterface_T &attrs)
+             const XercesAttributesInterface_T &attrs)
 
 {
     // We have to copy the whole array
-    __LiteAttributes_T __attributes;
+    LiteAttributes_T attributes;
     for (unsigned int i = 0; i < attrs.getLength(); i++)
     {
-        __LiteAttributesNode_T __attributeNode;
-        __attributeNode.setQName(
-            __XercesLocalString(attrs.getQName(i)).str()
+        LiteAttributesNode_T attributeNode;
+        attributeNode.setQName(
+            XercesLocalString(attrs.getQName(i)).str()
         );
 
-        assert(__attributeNode.getLocalName() ==
-               __XercesLocalString(attrs.getLocalName(i)).str()
+        assert(attributeNode.getLocalName() ==
+               XercesLocalString(attrs.getLocalName(i)).str()
               );
 
-        __attributeNode.setUri(
-            __XercesLocalString(attrs.getURI(i)).str()
+        attributeNode.setUri(
+            XercesLocalString(attrs.getURI(i)).str()
         );
 
-        __attributeNode.setValue(
-            __XercesLocalString(attrs.getValue(i)).str()
+        attributeNode.setValue(
+            XercesLocalString(attrs.getValue(i)).str()
         );
 
         //don't add duplicate attributes
-        if (__attributes.getIndex(__attributeNode.getUri(),
-                                  __attributeNode.getLocalName()) == -1)
-            __attributes.add(__attributeNode);
+        if (attributes.getIndex(attributeNode.getUri(),
+                                  attributeNode.getLocalName()) == -1)
+            attributes.add(attributeNode);
     }
 
-    __XercesLocalString __uri(uri);
-    __XercesLocalString __localName(localName);
-    __XercesLocalString __qname(qname);
-    //std::cout << "__qname=" << __qname.str() << std::endl;
-    mLiteHandler->startElement(__uri.str(),
-                               __localName.str(),
-                               __qname.str(),
-                               __attributes);
+    XercesLocalString xuri(uri);
+    XercesLocalString xlocalName(localName);
+    XercesLocalString xqname(qname);
+    mLiteHandler->startElement(xuri.str(),
+                               xlocalName.str(),
+                               xqname.str(),
+                               attributes);
 }
 
-void xml::lite::__XercesErrorHandler::
+void xml::lite::XercesErrorHandler::
 warning(const SAXParseException &exception)
 {
-    //__warning__(__XercesLocalString(exception.getMessage()).c_str());
 }
 
-void xml::lite::__XercesErrorHandler::
+void xml::lite::XercesErrorHandler::
 error(const SAXParseException &exception)
 {
-    __XercesLocalString m(exception.getMessage());
+    XercesLocalString m(exception.getMessage());
     throw(xml::lite::XMLParseException(m.str(),
                                        exception.getLineNumber(),
                                        exception.getColumnNumber()));
 }
 
-void xml::lite::__XercesErrorHandler::
+void xml::lite::XercesErrorHandler::
 fatalError(const SAXParseException &exception)
 {
-    __XercesLocalString m(exception.getMessage());
+    XercesLocalString m(exception.getMessage());
     xml::lite::XMLParseException xex(m.str(),
                                      exception.getLineNumber(),
                                      exception.getColumnNumber());
@@ -178,7 +176,7 @@ xml::lite::XMLReaderXerces::XMLReaderXerces()
     }
     catch (const ::XMLException& toCatch)
     {
-        xml::lite::__XercesLocalString local(toCatch.getMessage());
+        xml::lite::XercesLocalString local(toCatch.getMessage());
         except::Error e(Ctxt(local.str() + " (Initialization error)"));
         throw(e);
     }
@@ -211,12 +209,6 @@ void xml::lite::XMLReaderXerces::parse(io::InputStream & is, int size)
 
 void xml::lite::XMLReaderXerces::setValidation(bool validate)
 {
-    /*
-    mNative->setFeature(__XercesLocalString("http://xml.org/sax/features/validation").toXMLCh(),
-    validate);
-    mNative->setFeature(__XercesLocalString("http://xml.org/sax/features/validation/schema").toXMLCh(),
-    validate);
-    */
     mNative->setFeature(XMLUni::fgSAX2CoreNameSpacePrefixes, true);
     mNative->setFeature(XMLUni::fgXercesSchema, validate);
     mNative->setFeature(XMLUni::fgSAX2CoreValidation, validate);   // optional
@@ -225,14 +217,7 @@ void xml::lite::XMLReaderXerces::setValidation(bool validate)
 
 bool xml::lite::XMLReaderXerces::getValidation()
 {
-    return (
-               /* mNative->
-                   getFeature(__XercesLocalString("http://xml.org/sax/features/validation").toXMLCh()) &&
-                mNative->
-                   getFeature(__XercesLocalString("http://xml.org/sax/features/validation/schema").toXMLCh() )
-                   */
-               mNative->getFeature(XMLUni::fgSAX2CoreValidation)
-           );
+    return mNative->getFeature(XMLUni::fgSAX2CoreValidation);
 }
 
 
@@ -240,17 +225,6 @@ bool xml::lite::XMLReaderXerces::getValidation()
 void xml::lite::XMLReaderXerces::create()
 {
     mNative = XMLReaderFactory::createXMLReader();
-
-    // By default we auto validate
-    /*
-        mNative->setFeature(__XercesLocalString("http://xml.org/sax/features/namespaces").toXMLCh(), true);
-        mNative->setFeature(__XercesLocalString("http://xml.org/sax/features/namespaces-prefixes").toXMLCh(), true);
-
-        mNative->setFeature(__XercesLocalString("http://xml.org/sax/features/validation").toXMLCh(), false);
-        mNative->setFeature(__XercesLocalString("http://xml.org/sax/features/validation/schema").toXMLCh(),
-       false);
-    */
-
     mNative->setFeature(XMLUni::fgSAX2CoreNameSpacePrefixes, true);
     mNative->setFeature(XMLUni::fgSAX2CoreValidation, false);   // optional
     mNative->setFeature(XMLUni::fgSAX2CoreNameSpaces, true);   // optional

@@ -2,7 +2,7 @@
  * This file is part of xml.lite-c++ 
  * =========================================================================
  * 
- * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
+ * (C) Copyright 2004 - 2011, General Dynamics - Advanced Information Systems
  *
  * xml.lite-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -41,10 +41,6 @@ void xml::lite::MinidomHandler::clear()
     assert(nodeStack.empty());
 }
 
-/*==================================================*/
-/* This marks the start of tree handler code        */
-/*==================================================*/
-
 void xml::lite::MinidomHandler::characters(const char *value, int length)
 {
     // Append new data
@@ -82,10 +78,10 @@ std::string xml::lite::MinidomHandler::adjustCharacterData()
     int diff = (int) (currentCharacterData.length()) - bytesForElement.top();
 
     std::string
-            newCharacterData(
-                             currentCharacterData. substr(
-                                                          diff,
-                                                          currentCharacterData.length()));
+            newCharacterData(currentCharacterData.substr(
+                                 diff,
+                                 currentCharacterData.length())
+                );
     assert(diff >= 0);
     currentCharacterData.erase(diff, currentCharacterData.length());
     if (!mPreserveCharData)

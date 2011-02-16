@@ -20,7 +20,7 @@
  *
  */
 
-#if defined (USE_EXPAT) || defined(USE_XERCES)
+#if defined (USE_EXPAT) || defined(USE_XERCES) || defined(USE_LIBXML)
 
 #include <import/io.h>
 #include <import/xml/lite.h>

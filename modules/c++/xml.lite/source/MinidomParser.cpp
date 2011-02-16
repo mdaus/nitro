@@ -2,7 +2,7 @@
  * This file is part of xml.lite-c++ 
  * =========================================================================
  * 
- * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
+ * (C) Copyright 2004 - 2011, General Dynamics - Advanced Information Systems
  *
  * xml.lite-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -22,4 +22,39 @@
 
 #include "xml/lite/MinidomParser.h"
 
+xml::lite::MinidomParser::MinidomParser()
+{
+    mReader.setContentHandler(&mHandler);
+}
 
+void xml::lite::MinidomParser::parse(io::InputStream& is,
+                                     int size)
+{
+    mReader.parse(is, size);
+}
+
+void xml::lite::MinidomParser::clear()
+{
+    mHandler.clear();
+}
+
+xml::lite::Document* xml::lite::MinidomParser::getDocument() const
+{
+    return mHandler.getDocument();
+}
+
+xml::lite::Document* xml::lite::MinidomParser::getDocument(bool steal)
+{
+    return mHandler.getDocument(steal);
+}
+
+void xml::lite::MinidomParser::setDocument(xml::lite::Document* newDocument,
+                                           bool own)
+{
+    mHandler.setDocument(newDocument, own);
+}
+
+void xml::lite::MinidomParser::preserveCharacterData(bool preserve)
+{
+    mHandler.preserveCharacterData(preserve);
+}
