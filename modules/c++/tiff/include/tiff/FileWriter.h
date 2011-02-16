@@ -2,7 +2,7 @@
  * This file is part of tiff-c++ 
  * =========================================================================
  * 
- * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
+ * (C) Copyright 2004 - 2011, General Dynamics - Advanced Information Systems
  *
  * tiff-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -169,7 +169,7 @@ template<typename T> void writeTIFF(const T* image, size_t rows, size_t cols,
         es = sizeof(T);
 
     unsigned int photoInterp(1);
-    unsigned int numBands(1);
+    unsigned short numBands(1);
 
     if (et == static_cast<unsigned short>(AUTO))
     {
@@ -197,6 +197,16 @@ template<typename T> void writeTIFF(const T* image, size_t rows, size_t cols,
             throw except::Exception(Ctxt(FmtX("Unexpected es: %d", es)));
         }
     }
+    unsigned short alpha(0);
+    if (es == 4 && et == ::tiff::Const::SampleFormatType::UNSIGNED_INT)
+    {
+        photoInterp = (unsigned short) ::tiff::Const::PhotoInterpType::RGB;
+        numBands = 4;
+        // This is "unassociated alpha value"
+        alpha = 2;
+
+    }
+    
 
     ::tiff::FileWriter fileWriter(imageFile);
 
@@ -215,10 +225,14 @@ template<typename T> void writeTIFF(const T* image, size_t rows, size_t cols,
 
     
     ifd->addEntry(::tiff::KnownTags::PHOTOMETRIC_INTERPRETATION, photoInterp);
+    // Added this for RGBA, because otherwise the ImageWriter::validate() changes all of
+    // these fields back assuming 3 bytes per pixel
+    ifd->addEntry(::tiff::KnownTags::SAMPLES_PER_PIXEL, numBands);
     ifd->addEntry(::tiff::KnownTags::BITS_PER_SAMPLE);
     ifd->addEntry(::tiff::KnownTags::SAMPLE_FORMAT);
     ::tiff::IFDEntry* bps = (*ifd)[::tiff::KnownTags::BITS_PER_SAMPLE];
     ::tiff::IFDEntry* sf = (*ifd)[::tiff::KnownTags::SAMPLE_FORMAT];
+    
     unsigned short bitsPerBand = (es << 3) / numBands;
 
     //set some fields that have 'numSamples' values
@@ -229,6 +243,11 @@ template<typename T> void writeTIFF(const T* image, size_t rows, size_t cols,
         sf->addValue(::tiff::TypeFactory::create((unsigned char *) &et,
                                                  ::tiff::Const::Type::SHORT));
     }
+
+    // If the alpha channel is on (note 0 is a valid value for ExtraSamples,
+    // but Im using it to be boolean (0 = off) and the unassociated value here
+    if (alpha)
+        ifd->addEntry(std::string("ExtraSamples"), alpha);
 
     imageWriter->putData((unsigned char*) image, rows * cols);
 

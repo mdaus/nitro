@@ -2,7 +2,7 @@
  * This file is part of tiff-c++ 
  * =========================================================================
  * 
- * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
+ * (C) Copyright 2004 - 2011, General Dynamics - Advanced Information Systems
  *
  * tiff-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -96,7 +96,7 @@ tiff::KnownTags::KnownTags()
     addEntry(334, tiff::Const::Type::SHORT, "NumberOfInks");
     addEntry(336, tiff::Const::Type::SHORT, "DotRange");
     addEntry(337, tiff::Const::Type::ASCII, "TargetPrinter");
-    addEntry(338, tiff::Const::Type::BYTE, "ExtraSamples");
+    addEntry(338, tiff::Const::Type::SHORT, "ExtraSamples");
     addEntry(339, tiff::Const::Type::SHORT, tiff::KnownTags::SAMPLE_FORMAT);
     addEntry(340, tiff::Const::Type::UNDEFINED, "SMinSampleValue");
     addEntry(341, tiff::Const::Type::UNDEFINED, "SMaxSampleValue");
