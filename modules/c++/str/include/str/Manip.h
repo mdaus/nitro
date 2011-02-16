@@ -2,7 +2,7 @@
  * This file is part of str-c++ 
  * =========================================================================
  * 
- * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
+ * (C) Copyright 2004 - 2011, General Dynamics - Advanced Information Systems
  *
  * str-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -53,6 +53,22 @@ bool endsWith(const std::string& s, const std::string& match);
 bool startsWith(const std::string& s, const std::string& match);
 
 /**
+ *  finds the first instance of "search" and
+ *  substitutes it for "replace", it then returns
+ *  the start of search, so you can loop and replace
+ *  all instances of "search". 
+ *  @param  str     String to check
+ *  @param  search  String to search for
+ *  @param  replace String to replace with
+ *  @param  start   starting position to start search
+ *  @return position of first find, str.length() if not found
+ */
+unsigned int replace(std::string& str, 
+                     const std::string& search,
+                     const std::string& replace,
+                     unsigned int start = 0);
+
+/**
  * Returns true if the string contains only letters.
  */
 bool isAlpha(const std::string& s);
@@ -101,7 +117,8 @@ bool containsOnly(const std::string& s, const std::string& validChars);
  *  @return vector of strings
  */
 std::vector<std::string> split(const std::string& s,
-        const std::string& splitter = " ", size_t maxSplit = std::string::npos);
+                               const std::string& splitter = " ",
+                               size_t maxSplit = std::string::npos);
 
 //! Uses std::transform to convert all chars to lower case
 void lower(std::string& s);

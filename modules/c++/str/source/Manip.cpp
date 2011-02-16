@@ -2,7 +2,7 @@
  * This file is part of str-c++ 
  * =========================================================================
  * 
- * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
+ * (C) Copyright 2004 - 2011, General Dynamics - Advanced Information Systems
  *
  * str-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -63,6 +63,26 @@ bool str::startsWith(const std::string & s, const std::string & match)
         if (!(s[i] == match[i]))
             return false;
     return sLen >= mLen;
+}
+
+unsigned int str::replace(std::string& str, 
+                          const std::string& search,
+                          const std::string& replace,
+                          unsigned int start)
+{
+    int index = str.find(search, start);
+
+    if (index != std::string::npos)
+    {
+        str.replace(index, search.length(), replace);
+        start = index;
+    }
+    else
+    {
+        start = str.length();
+    }
+
+    return start;        
 }
 
 bool str::isAlpha(const std::string& s)
