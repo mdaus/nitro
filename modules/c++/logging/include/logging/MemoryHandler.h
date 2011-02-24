@@ -43,10 +43,10 @@ class MemoryHandler : public Handler
 {
 
 public:
-    MemoryHandler(LogLevel level = LOG_NOTSET);
+    MemoryHandler(LogLevel level = LogLevel::NOTSET);
     virtual ~MemoryHandler();
 
-    std::list<std::string>& getLogs(LogLevel level = LOG_NOTSET);
+    std::list<std::string>& getLogs(LogLevel level = LogLevel::NOTSET);
 
 protected:
     std::map<LogLevel, std::list<std::string> > mLogMap;

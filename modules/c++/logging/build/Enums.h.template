@@ -20,24 +20,23 @@
  *
  */
 
-#ifndef __IMPORT_LOGGING_H__
-#define __IMPORT_LOGGING_H__
+#ifndef __LOGGING_ENUMS_H__
+#define __LOGGING_ENUMS_H__
 
-#include "logging/DefaultLogger.h"
-#include "logging/Enums.h"
-#include "logging/FileHandler.h"
-#include "logging/Filter.h"
-#include "logging/Filterer.h"
-#include "logging/Formatter.h"
-#include "logging/Handler.h"
-#include "logging/Logger.h"
-#include "logging/LoggerFactory.h"
-#include "logging/LogRecord.h"
-#include "logging/MemoryHandler.h"
-#include "logging/NullLogger.h"
-#include "logging/RotatingFileHandler.h"
-#include "logging/StandardFormatter.h"
-#include "logging/StreamHandler.h"
-#include "logging/XMLFormatter.h"
+#include <import/except.h>
+#include <import/str.h>
+#include <import/sys.h>
+
+// -----------------------------------------------------------------------------
+// This file is auto-generated - please do NOT edit directly
+// -----------------------------------------------------------------------------
+
+namespace logging
+{
+
+${CODE}
+
+}
 
 #endif
+

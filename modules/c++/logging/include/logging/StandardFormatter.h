@@ -28,6 +28,7 @@
 #define __LOGGING_STANDARD_FORMATTER_H__
 
 #include <string>
+#include <str/Manip.h>
 #include "logging/Formatter.h"
 #include "logging/LogRecord.h"
 

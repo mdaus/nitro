@@ -69,11 +69,6 @@ public:
 
 protected:
 
-    virtual unsigned int replace(std::string& str, 
-                                 const std::string& search,
-                                 const std::string& replace,
-                                 unsigned int start = 0) const;
-
     static const char THREAD_ID[];
     static const char LOG_NAME[];
     static const char LOG_LEVEL[];

@@ -56,7 +56,7 @@ TEST_CASE(testRotate)
     std::auto_ptr<logging::Handler>
             logHandler(new logging::RotatingFileHandler(outFile, 10, maxFiles));
 
-    logHandler->setLevel(logging::LOG_DEBUG);
+    logHandler->setLevel(logging::LogLevel::DEBUG);
     logHandler->setFormatter(formatter.release());
     log->addHandler(logHandler.release(), true);
 

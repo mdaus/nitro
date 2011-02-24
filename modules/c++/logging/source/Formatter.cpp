@@ -49,23 +49,5 @@ std::string logging::Formatter::getEpilogue() const
     return (mEpilogue.empty()) ? "" : mEpilogue + "\n"; 
 }
 
-unsigned int logging::Formatter::replace(std::string& str, 
-                                         const std::string& search,
-                                         const std::string& replace,
-                                         unsigned int start) const
-{
-    int index = str.find(search, start);
 
-    if (index != std::string::npos)
-    {
-        str.replace(index, search.length(), replace);
-        start = index;
-    }
-    else
-    {
-        start = str.length();
-    }
-
-    return start;        
-}
 

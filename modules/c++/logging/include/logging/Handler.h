@@ -49,9 +49,9 @@ class Handler : public Filterer
 {
 public:
     /*!
-     * Construct a Handler at the specified LogLevel (LOG_NOTSET is default)
+     * Construct a Handler at the specified LogLevel (LogLevel::NOTSET is default)
      */
-    Handler(LogLevel level = LOG_NOTSET);
+    Handler(LogLevel level = LogLevel::NOTSET);
     virtual ~Handler()
     {
     }

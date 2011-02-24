@@ -43,10 +43,10 @@ class StreamHandler : public Handler
 {
 public:
     //! Constructs a StreamHandler that uses an io::StandardOutStream
-    StreamHandler(LogLevel level = LOG_NOTSET);
+    StreamHandler(LogLevel level = LogLevel::NOTSET);
 
     //! Constructs a StreamHandler using the specified OutputStream
-    StreamHandler(io::OutputStream* stream, LogLevel level = LOG_NOTSET);
+    StreamHandler(io::OutputStream* stream, LogLevel level = LogLevel::NOTSET);
 
     virtual ~StreamHandler()
     {

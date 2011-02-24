@@ -58,7 +58,7 @@ public:
      * \param level         The minimum LogLevel
      */
     RotatingFileHandler(const std::string& fname, long maxBytes = 0,
-                        int backupCount = 0, LogLevel level = LOG_NOTSET);
+                        int backupCount = 0, LogLevel level = LogLevel::NOTSET);
 
     virtual ~RotatingFileHandler();
 };

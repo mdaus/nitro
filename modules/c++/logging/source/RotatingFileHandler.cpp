@@ -36,18 +36,40 @@ RotatingFileHandler::RotatingFileHandler(const std::string& fname,
     sys::OS os;
     int creationFlags;
 
+    // create directory if one doesn't exist
     if (!os.exists(fname))
     {
         //see if we need to make the parent directory
         std::string parDir = sys::Path::splitPath(fname).first;
         if (!os.exists(parDir))
             os.makeDirectory(parDir);
-        creationFlags = sys::File::CREATE | sys::File::TRUNCATE;
     }
-    else
+    // do rollover, so we start fresh
+    if (backupCount > 0)
     {
-        creationFlags = sys::File::EXISTING;
+        for (int i = backupCount - 1; i > 0; --i)
+        {
+            std::stringstream curName;
+            curName << fname << "." << i;
+            std::stringstream nextName;
+            nextName << fname << "." << (i + 1);
+            if (os.exists(curName.str()))
+            {
+                if (os.exists(nextName.str()))
+                {
+                    os.remove(nextName.str());
+                }
+                os.move(curName.str(), nextName.str());
+            }
+        }
+        std::string curName = fname + ".1";
+        if (os.exists(curName))
+            os.remove(curName);
+        os.move(fname, curName);
     }
+    
+    // create log file
+    creationFlags = sys::File::CREATE | sys::File::TRUNCATE;
     mStream.reset(new io::RotatingFileOutputStream(fname, maxBytes,
                                                    backupCount, creationFlags));
 }

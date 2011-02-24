@@ -5,7 +5,7 @@
 #include "logging/DefaultLogger.h"
 
     
-logging::LogLevel logging::DefaultLogger::defaultLogLevel = logging::LOG_WARN;
+logging::LogLevel logging::DefaultLogger::defaultLogLevel = logging::LogLevel::WARNING;
 
 
 logging::DefaultLogger::DefaultLogger(std::string name)

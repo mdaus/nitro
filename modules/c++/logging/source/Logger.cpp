@@ -83,79 +83,79 @@ void logging::Logger::log(LogLevel level, except::Throwable& t)
 
 void logging::Logger::debug(const std::string& msg)
 {
-    log(LOG_DEBUG, msg);
+    log(LogLevel::DEBUG, msg);
 }
 ;
 void logging::Logger::info(const std::string& msg)
 {
-    log(LOG_INFO, msg);
+    log(LogLevel::INFO, msg);
 }
 ;
 void logging::Logger::warn(const std::string& msg)
 {
-    log(LOG_WARNING, msg);
+    log(LogLevel::WARNING, msg);
 }
 ;
 void logging::Logger::error(const std::string& msg)
 {
-    log(LOG_ERROR, msg);
+    log(LogLevel::ERROR, msg);
 }
 ;
 void logging::Logger::critical(const std::string& msg)
 {
-    log(LOG_CRITICAL, msg);
+    log(LogLevel::CRITICAL, msg);
 }
 ;
 
 void logging::Logger::debug(const except::Context& ctxt)
 {
-    log(LOG_DEBUG, ctxt);
+    log(LogLevel::DEBUG, ctxt);
 }
 ;
 void logging::Logger::info(const except::Context& ctxt)
 {
-    log(LOG_INFO, ctxt);
+    log(LogLevel::INFO, ctxt);
 }
 ;
 void logging::Logger::warn(const except::Context& ctxt)
 {
-    log(LOG_WARNING, ctxt);
+    log(LogLevel::WARNING, ctxt);
 }
 ;
 void logging::Logger::error(const except::Context& ctxt)
 {
-    log(LOG_ERROR, ctxt);
+    log(LogLevel::ERROR, ctxt);
 }
 ;
 void logging::Logger::critical(const except::Context& ctxt)
 {
-    log(LOG_CRITICAL, ctxt);
+    log(LogLevel::CRITICAL, ctxt);
 }
 ;
 
 void logging::Logger::debug(except::Throwable& t)
 {
-    log(LOG_DEBUG, t);
+    log(LogLevel::DEBUG, t);
 }
 ;
 void logging::Logger::info(except::Throwable& t)
 {
-    log(LOG_INFO, t);
+    log(LogLevel::INFO, t);
 }
 ;
 void logging::Logger::warn(except::Throwable& t)
 {
-    log(LOG_WARNING, t);
+    log(LogLevel::WARNING, t);
 }
 ;
 void logging::Logger::error(except::Throwable& t)
 {
-    log(LOG_ERROR, t);
+    log(LogLevel::ERROR, t);
 }
 ;
 void logging::Logger::critical(except::Throwable& t)
 {
-    log(LOG_CRITICAL, t);
+    log(LogLevel::CRITICAL, t);
 }
 ;
 

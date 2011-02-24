@@ -33,7 +33,7 @@ int main(int argc, char **argv)
     Logger logger;
 
     //log everything to the console
-    StreamHandler handler(LOG_DEBUG);
+    StreamHandler handler(LogLevel::DEBUG);
     std::string
             format =
                     "Thread = %t, Name = %c, Level = %p, File = %F, Method = %M, Line = %L, TimeStamp = %d, Message = %m";
@@ -41,7 +41,7 @@ int main(int argc, char **argv)
     logger.addHandler(&handler, true);
 
     //log only WARNING or worse to the file
-    //FileHandler fileHandler("./test.log", LOG_WARNING);
+    //FileHandler fileHandler("./test.log", LogLevel::WARNING);
     //logger.addHandler(&fileHandler);
 
     logger.warn(Ctxt("WARNING Test!"));
@@ -58,7 +58,7 @@ int main(int argc, char **argv)
 
     logger.addHandler(new NullHandler, true);
     logger.warn(Ctxt("Null Handler - should not log!"));
-    logger.addHandler(new StreamHandler(LOG_DEBUG), true);
+    logger.addHandler(new StreamHandler(LogLevel::DEBUG), true);
     logger.warn(Ctxt("WARNING Test!"));
 
     return 0;

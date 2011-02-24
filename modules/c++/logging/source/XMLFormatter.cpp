@@ -92,10 +92,10 @@ void logging::XMLFormatter::format(const logging::LogRecord* record, io::OutputS
             unsigned int start = 0;
             while (start < logRecord[chr].length())
             {
-                start = logging::Formatter::replace(logRecord[chr], 
-                                                    xmlSafeConvert[xml], 
-                                                    xmlSafeConvert[xml+1], 
-                                                    start);
+                start = str::replace(logRecord[chr], 
+                                     xmlSafeConvert[xml], 
+                                     xmlSafeConvert[xml+1], 
+                                     start);
 
                 // incremented due to replacing 
                 // '&' to '&amp'
@@ -107,22 +107,22 @@ void logging::XMLFormatter::format(const logging::LogRecord* record, io::OutputS
 
     // populate log
     std::string format = mFmt;
-    logging::Formatter::replace(format, THREAD_ID, logRecord[0]);
-    logging::Formatter::replace(format, LOG_NAME,  logRecord[1]);
-    logging::Formatter::replace(format, LOG_LEVEL, logRecord[2]);
-    logging::Formatter::replace(format, TIMESTAMP, logRecord[3]);
+    str::replace(format, THREAD_ID, logRecord[0]);
+    str::replace(format, LOG_NAME,  logRecord[1]);
+    str::replace(format, LOG_LEVEL, logRecord[2]);
+    str::replace(format, TIMESTAMP, logRecord[3]);
     if (record->getLineNum() >= 0)
     {
-        logging::Formatter::replace(format, FILE_NAME, logRecord[4]);
-        logging::Formatter::replace(format, LINE_NUM,  logRecord[5]);
+        str::replace(format, FILE_NAME, logRecord[4]);
+        str::replace(format, LINE_NUM,  logRecord[5]);
     }
     else
     {
-        logging::Formatter::replace(format, FILE_NAME, "");
-        logging::Formatter::replace(format, LINE_NUM,  "");
+        str::replace(format, FILE_NAME, "");
+        str::replace(format, LINE_NUM,  "");
     }
-    logging::Formatter::replace(format, FUNCTION, logRecord[6]);
-    logging::Formatter::replace(format, MESSAGE,  logRecord[7]);
+    str::replace(format, FUNCTION, logRecord[6]);
+    str::replace(format, MESSAGE,  logRecord[7]);
 
     // write to stream
     os.write(format + "\n");

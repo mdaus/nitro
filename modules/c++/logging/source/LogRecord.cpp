@@ -27,23 +27,6 @@
 #include "logging/LogRecord.h"
 #include "sys/TimeStamp.h"
 
-static const std::string LOG_LEVEL_NAMES[] = {"NOTSET", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"};
-
-logging::LogLevel logging::getLogLevelAsEnum(const std::string& levelStr)
-{
-    logging::LogLevel level = logging::LOG_DEBUG;
-
-    if (levelStr == LOG_LEVEL_NAMES[2])
-        level = logging::LOG_INFO;
-    else if (levelStr == LOG_LEVEL_NAMES[3])
-        level = logging::LOG_WARNING;
-    else if (levelStr == LOG_LEVEL_NAMES[4])
-        level = logging::LOG_ERROR;
-    else if (levelStr == LOG_LEVEL_NAMES[5])
-        level = logging::LOG_CRITICAL;
-    return level;
-}
-
 logging::LogRecord::LogRecord(std::string name, std::string msg, logging::LogLevel level)
         : mName(name), mMsg(msg), mLevel(level), mFile(""), mFunction(""), mLineNum(-1)
 {
@@ -51,5 +34,5 @@ logging::LogRecord::LogRecord(std::string name, std::string msg, logging::LogLev
 }
 
 
-std::string logging::LogRecord::getLevelName() const { return LOG_LEVEL_NAMES[mLevel]; };
+std::string logging::LogRecord::getLevelName() const { return mLevel.toString(); };
 
