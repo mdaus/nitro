@@ -33,12 +33,12 @@ MemoryHandler::MemoryHandler(LogLevel level) : Handler(level)
 {
     //might as well setup the map -- we could let emit take care of it,
     //but this would allow for less chance of an exception getting thrown
-    mLogMap[LogLevel::NOTSET] = std::list<std::string>();
-    mLogMap[LogLevel::DEBUG] = std::list<std::string>();
-    mLogMap[LogLevel::INFO] = std::list<std::string>();
-    mLogMap[LogLevel::WARNING] = std::list<std::string>();
-    mLogMap[LogLevel::ERROR] = std::list<std::string>();
-    mLogMap[LogLevel::CRITICAL] = std::list<std::string>();
+    mLogMap[LogLevel::LOG_NOTSET] = std::list<std::string>();
+    mLogMap[LogLevel::LOG_DEBUG] = std::list<std::string>();
+    mLogMap[LogLevel::LOG_INFO] = std::list<std::string>();
+    mLogMap[LogLevel::LOG_WARNING] = std::list<std::string>();
+    mLogMap[LogLevel::LOG_ERROR] = std::list<std::string>();
+    mLogMap[LogLevel::LOG_CRITICAL] = std::list<std::string>();
 }
 MemoryHandler::~MemoryHandler() {}
 
@@ -62,10 +62,10 @@ void MemoryHandler::emitRecord(const LogRecord* record)
     //    mLogMap[level] = std::list<std::string>();
     //std::string formatted = format(record);
     //mLogMap[level].push_back(formatted);
-    //if (level != LogLevel::NOTSET)
+    //if (level != LogLevel::LOG_NOTSET)
     //{
-    //    if (mLogMap.find(LogLevel::NOTSET) == mLogMap.end())
-    //        mLogMap[LogLevel::NOTSET] = std::list<std::string>();
-    //    mLogMap[LogLevel::NOTSET].push_back(formatted);
+    //    if (mLogMap.find(LogLevel::LOG_NOTSET) == mLogMap.end())
+    //        mLogMap[LogLevel::LOG_NOTSET] = std::list<std::string>();
+    //    mLogMap[LogLevel::LOG_NOTSET].push_back(formatted);
     //}
 }

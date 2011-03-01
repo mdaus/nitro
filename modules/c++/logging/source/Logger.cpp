@@ -83,79 +83,79 @@ void logging::Logger::log(LogLevel level, except::Throwable& t)
 
 void logging::Logger::debug(const std::string& msg)
 {
-    log(LogLevel::DEBUG, msg);
+    log(LogLevel::LOG_DEBUG, msg);
 }
 ;
 void logging::Logger::info(const std::string& msg)
 {
-    log(LogLevel::INFO, msg);
+    log(LogLevel::LOG_INFO, msg);
 }
 ;
 void logging::Logger::warn(const std::string& msg)
 {
-    log(LogLevel::WARNING, msg);
+    log(LogLevel::LOG_WARNING, msg);
 }
 ;
 void logging::Logger::error(const std::string& msg)
 {
-    log(LogLevel::ERROR, msg);
+    log(LogLevel::LOG_ERROR, msg);
 }
 ;
 void logging::Logger::critical(const std::string& msg)
 {
-    log(LogLevel::CRITICAL, msg);
+    log(LogLevel::LOG_CRITICAL, msg);
 }
 ;
 
 void logging::Logger::debug(const except::Context& ctxt)
 {
-    log(LogLevel::DEBUG, ctxt);
+    log(LogLevel::LOG_DEBUG, ctxt);
 }
 ;
 void logging::Logger::info(const except::Context& ctxt)
 {
-    log(LogLevel::INFO, ctxt);
+    log(LogLevel::LOG_INFO, ctxt);
 }
 ;
 void logging::Logger::warn(const except::Context& ctxt)
 {
-    log(LogLevel::WARNING, ctxt);
+    log(LogLevel::LOG_WARNING, ctxt);
 }
 ;
 void logging::Logger::error(const except::Context& ctxt)
 {
-    log(LogLevel::ERROR, ctxt);
+    log(LogLevel::LOG_ERROR, ctxt);
 }
 ;
 void logging::Logger::critical(const except::Context& ctxt)
 {
-    log(LogLevel::CRITICAL, ctxt);
+    log(LogLevel::LOG_CRITICAL, ctxt);
 }
 ;
 
 void logging::Logger::debug(except::Throwable& t)
 {
-    log(LogLevel::DEBUG, t);
+    log(LogLevel::LOG_DEBUG, t);
 }
 ;
 void logging::Logger::info(except::Throwable& t)
 {
-    log(LogLevel::INFO, t);
+    log(LogLevel::LOG_INFO, t);
 }
 ;
 void logging::Logger::warn(except::Throwable& t)
 {
-    log(LogLevel::WARNING, t);
+    log(LogLevel::LOG_WARNING, t);
 }
 ;
 void logging::Logger::error(except::Throwable& t)
 {
-    log(LogLevel::ERROR, t);
+    log(LogLevel::LOG_ERROR, t);
 }
 ;
 void logging::Logger::critical(except::Throwable& t)
 {
-    log(LogLevel::CRITICAL, t);
+    log(LogLevel::LOG_CRITICAL, t);
 }
 ;
 

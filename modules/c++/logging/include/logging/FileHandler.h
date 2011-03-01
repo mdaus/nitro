@@ -43,7 +43,7 @@ class FileHandler : public StreamHandler
 {
 
 public:
-    FileHandler(const std::string& fname, LogLevel level = LogLevel::NOTSET,
+    FileHandler(const std::string& fname, LogLevel level = LogLevel::LOG_NOTSET,
                 int creationFlags = sys::File::CREATE | sys::File::TRUNCATE) :
         StreamHandler(new io::FileOutputStream(fname, creationFlags), level)
     {

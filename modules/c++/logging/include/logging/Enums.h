@@ -45,36 +45,52 @@ struct LogLevel
     //! The enumerations allowed
     enum
     {
-        NOTSET = 0,
-        DEBUG = 1,
-        INFO = 2,
-        WARNING = 3,
-        ERROR = 4,
-        CRITICAL = 5
+        LOG_NOTSET = 0,
+        LOG_DEBUG = 1,
+        LOG_INFO = 2,
+        LOG_WARNING = 3,
+        LOG_ERROR = 4,
+        LOG_CRITICAL = 5
     };
 
     //! Default constructor
-    LogLevel(){ value = NOTSET; }
+    LogLevel(){ value = LOG_NOTSET; }
 
     //! string constructor
     LogLevel(std::string s)
     {
-        if (s == "NOTSET")
-            value = NOTSET;
+        if (s == "LOG_NOTSET")
+            value = LOG_NOTSET;
+        else if (s == "NOTSET")
+            value = LOG_NOTSET;
+        else if (s == "LOG_DEBUG")
+            value = LOG_DEBUG;
         else if (s == "DEBUG")
-            value = DEBUG;
+            value = LOG_DEBUG;
+        else if (s == "LOG_INFO")
+            value = LOG_INFO;
         else if (s == "INFO")
-            value = INFO;
+            value = LOG_INFO;
+        else if (s == "LOG_WARNING")
+            value = LOG_WARNING;
         else if (s == "WARNING")
-            value = WARNING;
+            value = LOG_WARNING;
+        else if (s == "LOG_WARN")
+            value = LOG_WARNING;
         else if (s == "WARN")
-            value = WARNING;
+            value = LOG_WARNING;
+        else if (s == "LOG_ERROR")
+            value = LOG_ERROR;
         else if (s == "ERROR")
-            value = ERROR;
+            value = LOG_ERROR;
+        else if (s == "LOG_CRITICAL")
+            value = LOG_CRITICAL;
         else if (s == "CRITICAL")
-            value = CRITICAL;
+            value = LOG_CRITICAL;
+        else if (s == "LOG_SEVERE")
+            value = LOG_CRITICAL;
         else if (s == "SEVERE")
-            value = CRITICAL;
+            value = LOG_CRITICAL;
         else
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));
     }
@@ -85,22 +101,22 @@ struct LogLevel
         switch(i)
         {
         case 0:
-            value = NOTSET;
+            value = LOG_NOTSET;
             break;
         case 1:
-            value = DEBUG;
+            value = LOG_DEBUG;
             break;
         case 2:
-            value = INFO;
+            value = LOG_INFO;
             break;
         case 3:
-            value = WARNING;
+            value = LOG_WARNING;
             break;
         case 4:
-            value = ERROR;
+            value = LOG_ERROR;
             break;
         case 5:
-            value = CRITICAL;
+            value = LOG_CRITICAL;
             break;
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", i)));
@@ -116,17 +132,17 @@ struct LogLevel
         switch(value)
         {
         case 0:
-            return std::string("NOTSET");
+            return std::string("LOG_NOTSET");
         case 1:
-            return std::string("DEBUG");
+            return std::string("LOG_DEBUG");
         case 2:
-            return std::string("INFO");
+            return std::string("LOG_INFO");
         case 3:
-            return std::string("WARNING");
+            return std::string("LOG_WARNING");
         case 4:
-            return std::string("ERROR");
+            return std::string("LOG_ERROR");
         case 5:
-            return std::string("CRITICAL");
+            return std::string("LOG_CRITICAL");
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
@@ -158,7 +174,7 @@ struct LogLevel
 
 };
 
-// code auto-generated 2011-02-24 15:02:40.063161
+// code auto-generated 2011-03-01 11:03:28.824000
 
 }
 

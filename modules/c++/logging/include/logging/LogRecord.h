@@ -33,16 +33,6 @@
 namespace logging
 {
 
-// the following macros are here for backward compatibility
-#define LOG_NOTSET      LogLevel::NOTSET
-#define LOG_DEBUG       LogLevel::DEBUG
-#define LOG_INFO        LogLevel::INFO
-#define LOG_WARNING     LogLevel::WARNING
-#define LOG_WARN        LogLevel::WARNING
-#define LOG_ERROR       LogLevel::ERROR
-#define LOG_CRITICAL    LogLevel::CRITICAL
-#define LOG_SEVERE      LogLevel::CRITICAL
-
 /*!
  * \class LogRecord
  *
@@ -55,7 +45,7 @@ class LogRecord
 {
 
 public:
-    LogRecord(std::string name, std::string msg, LogLevel level = LogLevel::NOTSET);
+    LogRecord(std::string name, std::string msg, LogLevel level = LogLevel::LOG_NOTSET);
     LogRecord(std::string name, std::string msg, LogLevel level,
               std::string file, std::string function, int lineNum, std::string timestamp) :
             mName(name), mMsg(msg), mLevel(level), mFile(file), mFunction(function),

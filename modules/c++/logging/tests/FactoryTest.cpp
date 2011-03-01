@@ -42,7 +42,7 @@ int main(int argc, char **argv)
     
     //you can set the loglevel of a particular logger like this:
     //keep in mind that this will set the level for all handlers of this Logger
-    logger->setLevel(LogLevel::DEBUG);
+    logger->setLevel(LogLevel::LOG_DEBUG);
     logger->info("Info message 2");
     logger->info("Debug message 2");
     
@@ -50,7 +50,7 @@ int main(int argc, char **argv)
     //we can also set the default logging level, which is set statically
     //It will be used for any future loggers that get created on the fly
     //via the factory
-    DefaultLogger::setDefaultLogLevel(LogLevel::DEBUG);
+    DefaultLogger::setDefaultLogLevel(LogLevel::LOG_DEBUG);
     logger = LoggerFactory::getInstance().getLogger("anotherLogger");
     logger->info("Info message 3");
     logger->info("Debug message 3");

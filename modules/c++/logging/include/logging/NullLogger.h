@@ -40,7 +40,7 @@ class NullHandler : public Handler
 {
 
 public:
-    NullHandler(LogLevel level = LogLevel::NOTSET) :
+    NullHandler(LogLevel level = LogLevel::LOG_NOTSET) :
         Handler(level)
     {
     }
