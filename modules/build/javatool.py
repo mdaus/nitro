@@ -53,10 +53,14 @@ def detect(self):
         incDirs = list(set(map(lambda x: dirname(x),
                       recursiveGlob(incDir, ['jni.h', 'jni_md.h']))))
         libDirs = list(set(map(lambda x: dirname(x),
-                      recursiveGlob(javaHome, ['*jvm.so', '*jvm.lib', '*jvm.dll']))))
+                      recursiveGlob(javaHome, ['*jvm.a', '*jvm.lib']))))
+        if not libDirs:
+            libDirs = list(set(map(lambda x: dirname(x),
+                          recursiveGlob(javaHome, ['*jvm.so', '*jvm.dll']))))
     
         if not self.check(header_name='jni.h', define_name='HAVE_JNI_H', lib='jvm',
-                    libpath=libDirs, includes=incDirs, uselib_store='JAVA', uselib='JAVA'):
+                    libpath=libDirs, includes=incDirs, uselib_store='JAVA', uselib='JAVA',
+                    function_name='JNI_GetCreatedJavaVMs'):
             if Options.options.force_jni:
                 self.fatal('could not find lib jvm in %r (see config.log)' % libDirs)
     except ConfigurationError, ex:

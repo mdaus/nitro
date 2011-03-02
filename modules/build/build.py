@@ -361,9 +361,13 @@ class CPPBuildContext(BuildContext):
         
         confDir = path.find_dir('conf')
         if confDir:
-            for f in confDir.find_iter():
-                relpath = f.relpath_gen(path)
+            for f in confDir.find_iter(maxdepth=0):
                 bld.install_files('${PREFIX}/share/%s/conf' % plugin, f.abspath())
+
+        descDir = path.find_dir('conf/desc')
+        if descDir:
+            for f in descDir.find_iter(maxdepth=0):
+                bld.install_files('${PREFIX}/share/%s/conf/desc' % plugin, f.abspath())
     
     
     def program(self, **modArgs):
