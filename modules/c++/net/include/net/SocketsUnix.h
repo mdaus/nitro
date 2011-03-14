@@ -86,6 +86,8 @@ typedef socklen_t SockLen_T;
 //  The new(er) AIX machine uses socklen_t...
 typedef socklen_t SockLen_T;
 #   endif
+#elif defined(__APPLE_CC__)
+typedef socklen_t SockLen_T;
 #else
 typedef int SockLen_T;
 #endif
