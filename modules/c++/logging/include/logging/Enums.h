@@ -132,17 +132,17 @@ struct LogLevel
         switch(value)
         {
         case 0:
-            return std::string("LOG_NOTSET");
+            return std::string("NOTSET");
         case 1:
-            return std::string("LOG_DEBUG");
+            return std::string("DEBUG");
         case 2:
-            return std::string("LOG_INFO");
+            return std::string("INFO");
         case 3:
-            return std::string("LOG_WARNING");
+            return std::string("WARNING");
         case 4:
-            return std::string("LOG_ERROR");
+            return std::string("ERROR");
         case 5:
-            return std::string("LOG_CRITICAL");
+            return std::string("CRITICAL");
         default:
             throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %d", value)));
         }
@@ -174,7 +174,7 @@ struct LogLevel
 
 };
 
-// code auto-generated 2011-03-01 11:03:28.824000
+// code auto-generated 2011-03-15 13:25:08.574563
 
 }
 

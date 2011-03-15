@@ -8,4 +8,5 @@ CRITICAL,SEVERE=5
 __default__=0
 __enum_prefix__=LOG_
 __string_noprefix__=True
+__tostring_noprefix__=True
 

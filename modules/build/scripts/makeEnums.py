@@ -23,7 +23,9 @@ def makeEnums(filenames):
     sections = list(c.sections())
     sections = sorted(sections)
     for enum in sections:
-        values = Bunch(default=0, prefix='', items=[], supportNoPrefixForStrings=False)
+        values = Bunch(default=0, prefix='', items=[],
+                       supportNoPrefixForStrings=False,
+                       toStringNoPrefix=False)
         for (name, value) in c.items(enum):
             name, value = map(lambda x: x.strip(), [name, value])
             if name == '__default__':
@@ -35,6 +37,8 @@ def makeEnums(filenames):
                 values.prefix = value
             elif name == '__string_noprefix__':
                 values.supportNoPrefixForStrings = value.lower() == 'true'
+            elif name == '__tostring_noprefix__':
+                values.toStringNoPrefix = value.lower() == 'true'
             else:
                 try:
                     value = int(value)
@@ -119,7 +123,10 @@ def makeEnums(filenames):
         for (i, item) in enumerate(values.items):
             if item.value is not None:
                 idx = item.value
-            s.write('        case %s:\n            return std::string("%s%s");\n' % (idx, values.prefix, item.names[0]))
+            if values.toStringNoPrefix:
+                s.write('        case %s:\n            return std::string("%s");\n' % (idx, item.names[0]))
+            else:
+                s.write('        case %s:\n            return std::string("%s%s");\n' % (idx, values.prefix, item.names[0]))
             try:
                 idx += 1
             except:{}
