@@ -350,8 +350,13 @@ template<typename _T>
 bool
 TwoD<_T>::operator == (const TwoD<_T>& p) const
 {
-    size_t minSize = std::min<size_t>(mCoef.size(),
-                                      p.mCoef.size());
+    size_t sz = mCoef.size();
+    size_t psz = p.mCoef.size();
+    size_t minSize = std::min<size_t>(sz, psz);
+
+    // guard against uninitialized
+    if (minSize == 0 && (sz != psz))
+        return false;
 
     for (size_t i = 0 ; i < minSize ; i++)
     {
@@ -360,19 +365,19 @@ TwoD<_T>::operator == (const TwoD<_T>& p) const
     }
 
     // Cover case where one polynomial has more coefficients than the other.
-    if (mCoef.size() > p.mCoef.size())
+    if (sz > psz)
     {
         OneD<_T> dflt(orderY());
 
-        for (size_t i = minSize ; i < mCoef.size(); ++i)
+        for (size_t i = minSize ; i < sz; ++i)
             if (mCoef[i] != dflt)
                 return false;
     }
-    else if (mCoef.size() < p.mCoef.size())
+    else if (sz < psz)
     {
         OneD<_T> dflt(p.orderY());
 
-        for (unsigned int i = minSize ; i < p.mCoef.size() ; ++i)
+        for (unsigned int i = minSize ; i < psz ; ++i)
             if (p.mCoef[i] != dflt)
                 return false;
     }

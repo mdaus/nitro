@@ -159,6 +159,10 @@ public:
         size_t psz = p.size();
         size_t minSize = std::min<size_t>(sz, psz);
 
+        // guard against uninitialized
+        if (minSize == 0 && (sz != psz))
+            return false;
+
         for (size_t i = 0; i < minSize; i++)
             if (!math::linear::equals(mCoef[i], p[i]))
                 return false;
