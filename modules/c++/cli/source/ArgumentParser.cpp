@@ -693,8 +693,11 @@ void cli::ArgumentParser::processFlags(std::vector<std::string>& posFlags,
             std::string op = meta.empty() ? argName : meta;
             maxFlagsWidth = std::max<size_t>(op.size(), maxFlagsWidth);
             posFlags.push_back(op);
-            posHelps.push_back(helpMsg);
-            posUsage.push_back(op);
+            if (arg->showsHelp())
+            {
+                posHelps.push_back(helpMsg);
+                posUsage.push_back(op);
+            }
         }
         else
         {
@@ -736,12 +739,16 @@ void cli::ArgumentParser::processFlags(std::vector<std::string>& posFlags,
             {
                 s.str("");
                 s << "[" << ops[0] << "]";
-                opUsage.push_back(s.str());
+                if (arg->showsHelp())
+                    opUsage.push_back(s.str());
 
                 std::string opMsg = str::join(ops, ", ");
                 maxFlagsWidth = std::max<size_t>(opMsg.size(), maxFlagsWidth);
-                opFlags.push_back(opMsg);
-                opHelps.push_back(helpMsg);
+                if (arg->showsHelp())
+                {
+                    opFlags.push_back(opMsg);
+                    opHelps.push_back(helpMsg);
+                }
             }
         }
     }

@@ -25,5 +25,6 @@
 
 #include "re/PCREException.h"
 #include "re/PCRE.h"
+#include "re/GlobFilePredicate.h"
 
 #endif

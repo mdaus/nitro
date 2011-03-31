@@ -34,6 +34,7 @@ namespace sys
  */
 struct FilePredicate: std::unary_function<std::string, bool>
 {
+    virtual ~FilePredicate() {}
     virtual bool operator()(const std::string& obj) = 0;
 };
 
@@ -42,18 +43,22 @@ struct FilePredicate: std::unary_function<std::string, bool>
  */
 struct FileOnlyPredicate: public FilePredicate
 {
+    virtual ~FileOnlyPredicate() {}
     virtual bool operator()(const std::string& filename);
 };
 
 /**
  * Predicate interface for filtering files with a specific extension
+ * This method will not match '.xxx.yyy' type patterns, since the 
+ * splitting routines will only find '.yyy'.  See re::GlobFilePredicate
+ * for a more useful finder.
  */
 class ExtensionPredicate: public FileOnlyPredicate
 {
 public:
     ExtensionPredicate(std::string ext, bool ignoreCase = true);
     bool operator()(const std::string& filename);
-protected:
+private:
     std::string mExt;
     bool mIgnoreCase;
 };

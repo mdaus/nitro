@@ -27,7 +27,7 @@
 cli::Argument::Argument(std::string nameOrFlags, cli::ArgumentParser* parser) :
     mAction(cli::STORE), mMinArgs(0), mMaxArgs(1), mDefaultValue(NULL),
             mOwnDefault(false), mConstValue(NULL), mOwnConst(false),
-            mRequired(false), mParser(parser)
+            mRequired(false), mShowsHelp(true), mParser(parser)
 {
     std::vector < std::string > vars = str::split(nameOrFlags, " ");
     if (vars.size() == 1 && !str::startsWith(vars[0], "-"))
@@ -135,6 +135,11 @@ cli::Argument* cli::Argument::setConst(Value* val, bool own)
 cli::Argument* cli::Argument::setRequired(bool flag)
 {
     mRequired = flag;
+    return this;
+}
+cli::Argument* cli::Argument::setShowsHelp(bool flag)
+{
+    mShowsHelp = flag;
     return this;
 }
 

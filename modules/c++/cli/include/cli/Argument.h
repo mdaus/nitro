@@ -60,6 +60,7 @@ public:
     Argument* setDestination(std::string dest);
     Argument* setConst(Value* val, bool own = false);
     Argument* setRequired(bool flag);
+    Argument* setShowsHelp(bool flag);
 
     template <typename T>
     Argument* setConst(const T val)
@@ -88,6 +89,7 @@ public:
     inline const std::string& getMetavar() const { return mMetavar; }
     inline const std::string& getDestination() const { return mDestination; }
     inline const Value* getConst() { return mConstValue; }
+    inline const bool showsHelp() { return mShowsHelp; }
 
     std::string getVariable() const;
     bool isPositional() const;
@@ -108,6 +110,7 @@ protected:
     Value* mConstValue;
     bool mOwnConst;
     bool mRequired;
+    bool mShowsHelp;
     ArgumentParser* mParser;
 
     friend class ArgumentParser;

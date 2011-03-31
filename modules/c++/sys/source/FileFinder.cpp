@@ -148,8 +148,8 @@ std::vector<std::string> sys::FileFinder::findFiles(bool recursive) const
             for (size_t i = 0, n = mPredicates.size(); addIt && i < n; ++i)
             {
                 const sys::FileFinder::PredicatePair& p = mPredicates[i];
-                if (p.first && (*p.first)(path.getPath()))
-                    addIt = false;
+                if (p.first)
+                    addIt = (*p.first)(path.getPath());
             }
             if (addIt)
                 files.push_back(path.getPath());
