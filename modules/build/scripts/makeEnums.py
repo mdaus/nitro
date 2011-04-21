@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import sys, os
+import sys, os, re
 try:
     from configparser import ConfigParser
 except:
@@ -25,7 +25,8 @@ def makeEnums(filenames):
     for enum in sections:
         values = Bunch(default=0, prefix='', items=[],
                        supportNoPrefixForStrings=False,
-                       toStringNoPrefix=False)
+                       toStringNoPrefix=False,
+                       constShortcuts=False)
         for (name, value) in c.items(enum):
             name, value = map(lambda x: x.strip(), [name, value])
             if name == '__default__':
@@ -35,15 +36,23 @@ def makeEnums(filenames):
                 except:{}
             elif name == '__enum_prefix__':
                 values.prefix = value
+                values.cleanPrefix = re.sub(r'[^\w_]', '_', value)
             elif name == '__string_noprefix__':
                 values.supportNoPrefixForStrings = value.lower() == 'true'
             elif name == '__tostring_noprefix__':
                 values.toStringNoPrefix = value.lower() == 'true'
+            elif name == '__const_shortcuts__':
+                values.constShortcuts = value.lower() == 'true'
             else:
+                valParts = value.split(',')
                 try:
-                    value = int(value)
+                    value = int(valParts[0])
                 except:{}
-                values.items.append(Bunch(names=name.split(','), value=value))
+                names=name.split(',')
+                toStringVal = len(valParts) > 1 and valParts[1] or names[0]
+                values.items.append(Bunch(names=names, value=value,
+                                          toString=toStringVal))
+                
         
         def cmpValues(x, y):
             if x.value < y.value:
@@ -59,7 +68,7 @@ def makeEnums(filenames):
         if values.default is not None:
             for item in values.items:
                 if values.default == item.value:
-                    values.default = ''.join([values.prefix, item.names[0]])
+                    values.default = ''.join([values.cleanPrefix, item.names[0]])
                     break
         if type(values.default) != str:
             values.default = values.items[0].value
@@ -75,9 +84,9 @@ def makeEnums(filenames):
         s.write('    enum\n    {\n')
         for (i, item) in enumerate(values.items):
             if item.value is not None:
-                s.write('        %s%s = %s' % (values.prefix, item.names[0], item.value))
+                s.write('        %s%s = %s' % (values.cleanPrefix, item.names[0], item.value))
             else:
-                s.write('        %s%s' % (values.prefix, item.names[0]))
+                s.write('        %s%s' % (values.cleanPrefix, item.names[0]))
             if i < len(values.items) - 1:
                 s.write(',')
             s.write('\n')
@@ -91,12 +100,14 @@ def makeEnums(filenames):
         i = 0
         for item in values.items:
             for n in item.names:
-                names = ['%s%s' % (values.prefix, n)]
+                names = ['%s%s' % (values.cleanPrefix, n)]
                 if values.supportNoPrefixForStrings:
                     names.append(n)
+                if values.prefix != values.cleanPrefix:
+                    names.append('%s%s' % (values.prefix, n))
                 for n in names:
                     s.write('        %sif (s == "%s")\n            value = %s%s;\n' % (i > 0 and 'else ' or '',
-                                                                       n, values.prefix, item.names[0]))
+                                                                       n, values.cleanPrefix, item.names[0]))
                     i += 1
         s.write('        else\n            throw except::InvalidFormatException(Ctxt(FmtX("Invalid enum value: %s", s.c_str())));\n')
         s.write('    }\n\n')
@@ -107,7 +118,7 @@ def makeEnums(filenames):
         for (i, item) in enumerate(values.items):
             if item.value is not None:
                 idx = item.value
-            s.write('        case %s:\n            value = %s%s;\n            break;\n' % (idx, values.prefix, item.names[0]))
+            s.write('        case %s:\n            value = %s%s;\n            break;\n' % (idx, values.cleanPrefix, item.names[0]))
             try:
                 idx += 1
             except:{}
@@ -124,9 +135,9 @@ def makeEnums(filenames):
             if item.value is not None:
                 idx = item.value
             if values.toStringNoPrefix:
-                s.write('        case %s:\n            return std::string("%s");\n' % (idx, item.names[0]))
+                s.write('        case %s:\n            return std::string("%s");\n' % (idx, item.toString))
             else:
-                s.write('        case %s:\n            return std::string("%s%s");\n' % (idx, values.prefix, item.names[0]))
+                s.write('        case %s:\n            return std::string("%s%s");\n' % (idx, values.prefix, item.toString))
             try:
                 idx += 1
             except:{}
@@ -149,8 +160,15 @@ def makeEnums(filenames):
         s.write('    bool operator>=(const %s& o) const { return value >= o.value; }\n' % enum)
         s.write('    operator int() const { return value; }\n')
         s.write('    operator std::string() const { return toString(); }\n\n')
+        s.write('    static size_t size() { return %d; }\n\n' % len(values.items))
         s.write('    int value;\n\n')
-        s.write('};\n')
+        s.write('};\n\n')
+        
+        if values.constShortcuts:
+            for (i, item) in enumerate(values.items):
+                s.write('const %s %s%s(%s::%s%s);\n' % (enum, values.cleanPrefix, item.names[0],
+                                                        enum, values.cleanPrefix, item.names[0]))
+            s.write('\n')
         
 #        print('template<> %s Init::undefined<%s>();' % (enum, enum))
 #        print('template<> %s Init::undefined<%s>()\n{\n    return %s::NOT_SET;\n}\n' % (enum, enum, enum))
