@@ -26,7 +26,8 @@ def makeEnums(filenames):
         values = Bunch(default=0, prefix='', items=[],
                        supportNoPrefixForStrings=False,
                        toStringNoPrefix=False,
-                       constShortcuts=False)
+                       constShortcuts=False,
+                       cleanPrefix='')
         for (name, value) in c.items(enum):
             name, value = map(lambda x: x.strip(), [name, value])
             if name == '__default__':
