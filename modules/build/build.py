@@ -195,7 +195,10 @@ class CPPBuildContext(BuildContext):
         modArgs = dict((k.lower(), v) for k, v in modArgs.iteritems())
         lang = modArgs.get('lang', 'c++')
         libExeType = {'c++':'cxx', 'c':'cc'}.get(lang, 'cxx')
-        libName = '%s-%s' % (modArgs['name'], lang)
+        if modArgs.get('nosuffix', False) :
+            libName = modArgs['name']
+        else :
+            libName = '%s-%s' % (modArgs['name'], lang)
         path = modArgs.get('path',
                            'dir' in modArgs and bld.path.find_dir(modArgs['dir']) or bld.path)
 

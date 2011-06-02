@@ -38,8 +38,8 @@ def set_options(opt):
                    help='Specify the FFT3 Home - where the FFT3 library is installed')
     opt.add_option('--disable-fft', action='store_false', dest='enable_fft',
                    help='turn off building FFT (default)')
-    opt.add_option('--enable-fft', action='store_true', dest='enable_fft',
-                   default=False, help='turn on FFT')
+    opt.add_option('--enable-fft', action='store_true',
+                   default=True, help='turn on FFT')
     # changed this to be the default, so we always build statically
     opt.add_option('--build-fft', action='store_true', dest="build_fft",
                    default=True, help='force building FFT library (fftw) from scratch')
@@ -58,6 +58,10 @@ def set_options(opt):
                    help='force building zip (zlib) library from scratch')
     
     if Options.platform != 'win32':
+        opt.add_option('--disable-uuid', action='store_false', dest='enable_uuid',
+                       help='will not build the uuid library')
+        opt.add_option('--enable-uuid', action='store_true',
+                       default=True, help='will build the uuid library if not found on the system (default)')
         opt.add_option('--build-uuid', action='store_true', dest='build_uuid',
                        default=True, help='force building libuuid from scratch')
         opt.add_option('--nobuild-uuid', action='store_false', dest='build_uuid',
@@ -116,7 +120,7 @@ def configure(conf):
             conf.env['LIB_ZIP'] = ['z']
     
     #-- UUID -------------------------------------------------------------------
-    if Options.platform != 'win32':
+    if Options.platform != 'win32' and Options.options.enable_uuid:
         uuid_home = Options.options.uuid_home or '/usr'
         
         if Options.options.build_uuid or not conf.check(
