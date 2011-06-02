@@ -21,20 +21,51 @@
  */
 
 #include "str/Convert.h"
+#include "str/Manip.h"
 
 template<> std::string str::toType<std::string>(const std::string& s)
 {
     return s;
 }
+template<> bool str::toType<bool>(const std::string& s)
+{
+    std::string ss = s;
+    str::lower(ss);
+
+    if (ss == "true")
+    {
+        return true;
+    }
+    else if (ss == "false")
+    {
+        return false;
+    }
+    else if (str::isNumeric(ss))
+    {
+        int value(0);
+        std::stringstream buf(ss);
+        buf >> value;
+        return (value != 0);
+    }
+    else
+    {
+        throw except::BadCastException(except::Context(__FILE__, __LINE__,
+            std::string(""), std::string(""),
+            std::string("Invalid bool: '") + s + std::string("'")));
+    }
+
+    return false;
+}
+
 template<> int str::getPrecision(const float& type)
 {
-    return std::numeric_limits<float>::digits10;
+    return std::numeric_limits<float>::digits10 + 1;
 }
 template<> int str::getPrecision(const double& type)
 {
-    return std::numeric_limits<long double>::digits10;
+    return std::numeric_limits<double>::digits10 + 1;
 }
 template<> int str::getPrecision(const long double& type)
 {
-    return std::numeric_limits<long double>::digits10;
+    return std::numeric_limits<long double>::digits10 + 1;
 }

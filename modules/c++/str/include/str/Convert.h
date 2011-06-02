@@ -41,7 +41,6 @@ template<typename T> int getPrecision(const T& type);
 template<typename T> std::string toString(const T& value)
 {
     std::ostringstream buf;
-    buf.setf(std::ios::fixed, std::ios::floatfield);
     buf.precision(str::getPrecision(value));
     buf << std::boolalpha << value;
     return buf.str();
@@ -68,25 +67,28 @@ template<typename T> std::string toString(const T& real, const T& imag)
 
 template<typename T> T toType(const std::string& s)
 {
+    if (s.empty())
+        throw except::BadCastException(except::Context(__FILE__, __LINE__,
+            std::string(""), std::string(""), std::string("Empty string")));
+
     T value;
 
-    if (!s.empty())
-    {
-        std::stringstream buf;
-        buf.setf(std::ios::fixed, std::ios::floatfield);
-        buf.precision(str::getPrecision(value));
-        buf << std::boolalpha << s;
-        buf >> std::boolalpha >> value;
+    std::stringstream buf(s);
+    buf.precision(str::getPrecision(value));
+    buf >> value;
 
-        if (buf.fail())
-        {
-            throw except::BadCastException(std::string("Conversion failed: '")
-                    + buf.str() + std::string("' -> ") + typeid(T).name());
-        }
+    if (buf.fail())
+    {
+        throw except::BadCastException(except::Context(__FILE__, __LINE__,
+            std::string(""), std::string(""),
+            std::string("Conversion failed: '")
+                + s + std::string("' -> ") + typeid(T).name()));
     }
+
     return value;
 }
 
+template<> bool toType<bool> (const std::string& s);
 template<> std::string toType<std::string> (const std::string& s);
 
 /**

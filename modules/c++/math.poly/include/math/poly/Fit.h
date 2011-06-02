@@ -39,8 +39,8 @@ namespace poly
  */
  
 template<typename Vector_T> OneD<double> fit(const Vector_T& x,
-					     const Vector_T& y,
-					     size_t numCoeffs)
+                                             const Vector_T& y,
+                                             size_t numCoeffs)
 {
         
     math::linear::Vector<double> vy(y);
