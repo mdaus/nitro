@@ -8,8 +8,8 @@
     |  \___/ \_||_/|___/|| || |
     |__________||_____________|
  
-CODA is a set of modules, and each module, while complimentary to one another,
-has a very specific and largely independent purpose.
+CODA is a set of modules, and each module, while complimentary to one another, has 
+a very specific and largely independent purpose.
 
 
 Building CODA
