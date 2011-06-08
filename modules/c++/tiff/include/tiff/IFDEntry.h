@@ -24,6 +24,7 @@
 #ifndef __TIFF_IFD_ENTRY_H__
 #define __TIFF_IFD_ENTRY_H__
 
+#include <memory>
 #include <string>
 #include <vector>
 #include <import/io.h>
@@ -239,8 +240,8 @@ public:
 
     /**
      *****************************************************************
-     * Adds a value to the IFD entry.  IFD Entries can have multiple
-     * values within them.
+     * Adds a value to the IFD entry, taking ownership.  IFD Entries
+     * can have multiple values within them.
      *
      * @param value
      *   the tiff::GenericType to add as a value
@@ -248,6 +249,20 @@ public:
     void addValue(tiff::TypeInterface *value)
     {
         mValues.push_back(value);
+        ++mCount;
+    }
+
+    /**
+     *****************************************************************
+     * Adds a value to the IFD entry.  IFD Entries can have multiple
+     * values within them.
+     *
+     * @param value
+     *   the tiff::GenericType to add as a value
+     *****************************************************************/
+    void addValue(std::auto_ptr<tiff::TypeInterface> value)
+    {
+        mValues.push_back(value.get());
         ++mCount;
     }
 
