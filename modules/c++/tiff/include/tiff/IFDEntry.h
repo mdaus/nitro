@@ -264,6 +264,7 @@ public:
     {
         mValues.push_back(value.get());
         ++mCount;
+        value.release();
     }
 
     /**
