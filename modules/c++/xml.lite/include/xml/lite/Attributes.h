@@ -230,7 +230,7 @@ public:
      * \return The value
      * \throw NoSuchKeyException If the qname is not found
      */
-    std::string getValue(const std::string & qname);
+    std::string getValue(const std::string & qname) const;
 
     /*!
      * Look up an attribute's value by Namespace name.
@@ -239,8 +239,8 @@ public:
      * \return The value
      * \throw NoSuchKeyException If the qname is not found
      */
-    std::string
-            getValue(const std::string & uri, const std::string & localName);
+    std::string getValue(const std::string & uri,
+                         const std::string & localName) const;
     /*!
      * Get an attribute note based on the index as a const ref
      * \param i The node index
@@ -299,14 +299,14 @@ public:
             remove((size_t)idx);
     }
 
-    bool contains(const std::string& qname)
+    bool contains(const std::string& qname) const
     {
         try
         {
             getValue(qname);
             return true;
         }
-        catch(except::NoSuchKeyException&)
+        catch(const except::NoSuchKeyException&)
         {
             return false;
         }

@@ -82,7 +82,7 @@ std::string xml::lite::Attributes::getQName(int i) const
     return mAttributes[i].getQName();
 }
 
-std::string xml::lite::Attributes::getValue(const std::string& qname)
+std::string xml::lite::Attributes::getValue(const std::string& qname) const
 {
     for (int i = 0; i < (int) mAttributes.size(); i++)
     {
@@ -96,8 +96,9 @@ std::string xml::lite::Attributes::getValue(const std::string& qname)
     return mAttributes[(int) mAttributes.size() - 1].getValue();
 }
 
-std::string xml::lite::Attributes::getValue(const std::string& uri,
-                                            const std::string& localName)
+std::string xml::lite::Attributes::getValue(
+    const std::string& uri,
+    const std::string& localName) const
 {
     for (int i = 0; i < (int) mAttributes.size(); i++)
     {
