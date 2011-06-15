@@ -1088,6 +1088,7 @@ def fix_libs(self):
     
     uselib = self.to_list(getattr(self, 'uselib', []))
     names = self.to_list(getattr(self, 'uselib_local', []))
+    libs = self.to_list(getattr(self, 'libs', []))
     
     seen = {}
     tmp = names[:]
@@ -1121,3 +1122,12 @@ def fix_libs(self):
                 allKeys.remove(k)
     
     env['STATICLIB'] = [seen[k][0].target for k in ordered]
+
+    tmp = libs[:]
+    while tmp:
+        lib_name = tmp.pop(0)
+
+        y = self.name_to_obj(lib_name)
+        if not y: continue
+        if getattr(self,'link_task',None) and getattr(y,'link_task',None):
+            self.link_task.set_run_after(y.link_task)
