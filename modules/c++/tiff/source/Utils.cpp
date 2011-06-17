@@ -93,40 +93,69 @@ tiff::IFD* tiff::Utils::createGeoTiffIFD(tiff::IFD* ifd)
     std::vector<tiff::TypeInterface*> geoVals = geoDir->getValues();
     size_t idx = 0;
 
-    // 34736 == "GeoDoubleParamsTag"
-    // 34737 == "GeoAsciiParamsTag"
-
-    unsigned short keyDirVersion =
-            str::toType<unsigned short>(geoVals[idx++]->toString());
-    unsigned short keyRevision =
-            str::toType<unsigned short>(geoVals[idx++]->toString());
-    unsigned short keyRevisionMinor =
-            str::toType<unsigned short>(geoVals[idx++]->toString());
-    unsigned short numKeys =
-            str::toType<unsigned short>(geoVals[idx++]->toString());
+    const unsigned short keyDirVersion =
+        str::toType<unsigned short>(geoVals[idx++]->toString());
+    const unsigned short keyRevision =
+        str::toType<unsigned short>(geoVals[idx++]->toString());
+    const unsigned short keyRevisionMinor =
+        str::toType<unsigned short>(geoVals[idx++]->toString());
+    const unsigned short numKeys =
+        str::toType<unsigned short>(geoVals[idx++]->toString());
 
     for (unsigned short i = 0; i < numKeys; ++i)
     {
-        unsigned short keyId =
-                str::toType<unsigned short>(geoVals[idx++]->toString());
-        unsigned short tiffTagLoc =
-                str::toType<unsigned short>(geoVals[idx++]->toString());
-        unsigned short count =
-                str::toType<unsigned short>(geoVals[idx++]->toString());
+        // Ensure idx is in range
+        if (idx + 2 >= geoVals.size())
+        {
+            throw except::Exception(Ctxt(
+                "'GeoKeyDirectoryTag' specified " +
+                str::toString(numKeys) + " keys but the IFD entry only had " +
+                str::toString(geoVals.size()) + " values"));
+        }
 
-        unsigned short entryType = tiff::Const::Type::SHORT;
-        if (tiffTagLoc == 34736)
+        const unsigned short keyId =
+            str::toType<unsigned short>(geoVals[idx++]->toString());
+        const unsigned short tiffTagLoc =
+            str::toType<unsigned short>(geoVals[idx++]->toString());
+        const unsigned short count =
+            str::toType<unsigned short>(geoVals[idx++]->toString());
+
+        // Ensure idx will be in range below
+        if (count > 0 && idx + count - 1 >= geoVals.size())
+        {
+            throw except::Exception(Ctxt(
+                "'GeoKeyDirectoryTag' specified " +
+                str::toString(numKeys) + " keys but the IFD entry only had " +
+                str::toString(geoVals.size()) + " values"));
+        }
+
+        unsigned short entryType;
+        switch (tiffTagLoc)
+        {
+        case 34736: // GeoDoubleParamsTag
             entryType = tiff::Const::Type::DOUBLE;
-        else if (tiffTagLoc == 34737)
+            break;
+        case 34737: // GeoAsciiParamsTag
             entryType = tiff::Const::Type::ASCII;
+            break;
+        default:
+            entryType = tiff::Const::Type::SHORT;
+            break;
+        }
 
-        std::string name = keyMap.find(keyId) != keyMap.end() ? keyMap[keyId]
-                                                              : "";
+        const std::string name = (keyMap.find(keyId) != keyMap.end()) ?
+            keyMap[keyId] : "";
 
         tiff::IFDEntry *entry = new tiff::IFDEntry(keyId, entryType, name);
 
         if (tiffTagLoc == 0)
         {
+            if (count != 1)
+            {
+                throw except::Exception(Ctxt(
+                    "Expected a count of 1 but got " + str::toString(count)));
+            }
+
             entry->addValue(
                             new tiff::GenericType<unsigned short>(
                                                                   geoVals[idx++]->toString()));
@@ -154,6 +183,11 @@ tiff::IFD* tiff::Utils::createGeoTiffIFD(tiff::IFD* ifd)
                                                                    (*asciiParams)[valueOffset
                                                                            + j]->toString()));
             }
+        }
+        else
+        {
+            // Just skip the values
+            idx += count;
         }
         geoIFD->addEntry(entry);
     }
