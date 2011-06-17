@@ -24,6 +24,24 @@
 #include "tiff/ImageWriter.h"
 #include "tiff/FileWriter.h"
 
+tiff::FileWriter::~FileWriter()
+{
+    for (size_t ii = 0; ii < mImages.size(); ++ii)
+    {
+        delete mImages[ii];
+    }
+
+    try
+    {
+        if (mOutput.isOpen())
+        {
+            mOutput.close();
+        }
+    }
+    catch (...)
+    {
+    }
+}
 
 void tiff::FileWriter::openFile(const std::string& fileName)
 {
@@ -46,13 +64,17 @@ void tiff::FileWriter::close()
 
     mOutput.close();
 
+    for (size_t ii = 0; ii < mImages.size(); ++ii)
+    {
+        delete mImages[ii];
+    }
     mImages.clear();
 }
 
 tiff::ImageWriter * tiff::FileWriter::operator[](const sys::Uint32_T index) const
 {
     if (index >= mImages.size())
-    throw except::Exception(Ctxt("Invalid sub-image index"));
+        throw except::Exception(Ctxt("Invalid sub-image index"));
 
     return mImages[index];
 }
@@ -68,12 +90,15 @@ void tiff::FileWriter::putData(unsigned char *buffer,
 
 tiff::ImageWriter *tiff::FileWriter::addImage()
 {
-    if (mImages.size() != 0)
-        mIFDOffset = mImages[mImages.size() - 1]->getNextIFDOffset();
+    if (!mImages.empty())
+        mIFDOffset = mImages.back()->getNextIFDOffset();
 
-    tiff::ImageWriter *image = new tiff::ImageWriter(&mOutput, mIFDOffset);
-    mImages.push_back(image);
-    return image;
+    std::auto_ptr<tiff::ImageWriter>
+        image(new tiff::ImageWriter(&mOutput, mIFDOffset));
+    mImages.push_back(image.get());
+    tiff::ImageWriter* const writer = image.release();
+
+    return writer;
 }
 
 void tiff::FileWriter::writeHeader()

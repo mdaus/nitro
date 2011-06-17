@@ -65,10 +65,7 @@ public:
     }
 
     //! Destructor
-    ~FileWriter()
-    {
-        close();
-    }
+    ~FileWriter();
 
     void openFile(const std::string& fileName);
     void close();
@@ -120,7 +117,11 @@ public:
 
 
 private:
+    // Noncopyable
+    FileWriter(const FileWriter& );
+    const FileWriter& operator=(const FileWriter& );
 
+private:
     //! The position to write the offset to the first IFD to
     sys::Uint32_T mIFDOffset;
 
@@ -140,7 +141,7 @@ enum { AUTO = -1 };
 
 /*!
  *  This function is designed to mimic (roughly) the API for sio::lite::writeSIO().
- *  It attempts to atuomatically guess the correct TIFF type for an input image,
+ *  It attempts to automatically guess the correct TIFF type for an input image,
  *  and write as a TIFF file.
  *
  *  Unlike the writeSIO function, this function does not support complex pixels,
