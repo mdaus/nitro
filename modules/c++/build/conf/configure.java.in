@@ -3,7 +3,7 @@ case "${target}" in
       java_ident="irix"
    ;;
 
-   sparc-sun-*)
+   sparc-sun-*|i.86-pc-solaris.*)
       java_ident="solaris"
    ;;
 
