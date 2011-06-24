@@ -174,7 +174,22 @@ public:
      */
     virtual void millisleep(int milliseconds) const = 0;
 
+    /*!
+     *  Get an environment variable
+     */
     virtual std::string operator[](const std::string& s) const = 0;
+
+    /*!
+     *  Get an environment variable
+     */
+    virtual std::string getEnv(const std::string& s) const = 0;
+
+    /*!
+     *  Set an environment variable
+     */
+    virtual void setEnv(const std::string& var, 
+			const std::string& val,
+			bool overwrite) = 0;
 
     virtual Pid_T getProcessId() const = 0;
 

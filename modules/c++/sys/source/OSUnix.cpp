@@ -199,11 +199,26 @@ std::string sys::OSUnix::getDSOSuffix() const
 
 std::string sys::OSUnix::operator[](const std::string& s) const
 {
+    return getEnv(s);
+}
+
+std::string sys::OSUnix::getEnv(const std::string& s) const
+{
     const char* p = getenv(s.c_str());
     if (p == NULL)
-        throw sys::SystemException("While retrieving unix environment variable");
-    return std::string(p);
+      throw sys::SystemException(Ctxt(FmtX("Unable to get unix environment variable %s", s.c_str())));
+    return std::string(p); 
 }
+
+void sys::OSUnix::setEnv(const std::string& var, 
+			 const std::string& val,
+			 bool overwrite)
+{
+    int ret = setenv(var.c_str(), val.c_str(), overwrite);
+    if(ret != 0)
+      throw sys::SystemException(Ctxt(FmtX("Unable to set unix environment variable %s", var.c_str())));
+}
+
 
 void sys::DirectoryUnix::close()
 {

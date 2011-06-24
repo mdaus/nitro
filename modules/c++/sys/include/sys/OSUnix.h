@@ -154,6 +154,18 @@ public:
 
     virtual std::string operator[](const std::string& s) const;
 
+    /*!
+     *  Get an environment variable
+     */
+    virtual std::string getEnv(const std::string& s) const;
+
+    /*!
+     *  Set an environment variable
+     */
+    virtual void setEnv(const std::string& var, 
+			const std::string& val,
+			bool overwrite);
+
     virtual std::string getDSOSuffix() const;
 
 };

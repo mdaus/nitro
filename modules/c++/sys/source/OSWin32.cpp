@@ -203,11 +203,16 @@ std::string sys::OSWin32::getDSOSuffix() const
 
 std::string sys::OSWin32::operator[](const std::string& s) const
 {
+    return getEnv(s);
+}
 
+
+std::string sys::OSWin32::getEnv(const std::string& s) const
+{
     std::string result;
     DWORD size = GetEnvironmentVariable(s.c_str(), NULL, 0);
     if (size == 0)
-        throw sys::SystemException(Ctxt("While retrieving variable from Win32 env"));
+      throw sys::SystemException(Ctxt(FmtX("Unable to get windows environment variable %s", s.c_str())));
 
     // If we can use a normal size buffer, lets not bother to malloc
 
@@ -217,7 +222,15 @@ std::string sys::OSWin32::operator[](const std::string& s) const
     delete [] buffer;
 
     return result;
+}
 
+void sys::OSWin32::setEnv(const std::string& var, 
+			 const std::string& val,
+			 bool overwrite)
+{
+    BOOL ret = SetEnvironmentVariable(var.c_str, val.c_str());
+    if(!ret)
+      throw sys::SystemException(Ctxt(FmtX("Unable to set windows environment variable %s", var.c_str())));
 }
 
 
