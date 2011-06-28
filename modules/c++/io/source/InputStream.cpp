@@ -22,7 +22,7 @@
 
 #include "io/InputStream.h"
 
-int io::InputStream::streamTo(io::OutputStream& soi, long bytesToPipe)
+sys::SSize_T io::InputStream::streamTo(io::OutputStream& soi, sys::SSize_T bytesToPipe)
 {
 
     // In this event, we want to find the end of file,
@@ -33,8 +33,8 @@ int io::InputStream::streamTo(io::OutputStream& soi, long bytesToPipe)
     }
 
     // Do some maintenance checking to make sure our state is as expected
-    long bytesRead = 0;
-    long totalBytesTransferred = 0;
+    sys::SSize_T bytesRead = 0;
+    sys::SSize_T totalBytesTransferred = 0;
 
     int sizeOfVec = (bytesToPipe <= DEFAULT_CHUNK_SIZE) ? (bytesToPipe) : (DEFAULT_CHUNK_SIZE);
     sys::byte vec[DEFAULT_CHUNK_SIZE];

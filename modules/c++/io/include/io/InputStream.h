@@ -109,7 +109,8 @@ public:
      * \return         The number of bytes transferred from the
      * input stream to the output stream
      */
-    virtual int streamTo(OutputStream& soi, long numBytes = IS_END);
+    virtual sys::SSize_T streamTo(OutputStream& soi,
+                                  sys::SSize_T numBytes = IS_END);
 
 };
 }

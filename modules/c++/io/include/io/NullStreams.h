@@ -65,14 +65,15 @@ public:
         return read(cStr, strLenPlusNullByte);
     }
 
-    virtual int streamTo(OutputStream& soi, long numBytes = IS_END)
+    virtual sys::SSize_T streamTo(OutputStream& soi,
+                                  sys::SSize_T numBytes = IS_END)
     {
-        long toProcess = (numBytes == IS_END) ? numBytes : (mAvailable
+        sys::SSize_T toProcess = (numBytes == IS_END) ? numBytes : (mAvailable
                 >= numBytes ? numBytes : mAvailable);
         mAvailable -= toProcess;
-        for (long i = 0; i < toProcess; ++i)
+        for (sys::SSize_T i = 0; i < toProcess; ++i)
             soi.write(processByte());
-        return (int) toProcess;
+        return toProcess;
     }
 
 protected:
