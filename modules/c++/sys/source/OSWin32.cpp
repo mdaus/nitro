@@ -228,7 +228,7 @@ void sys::OSWin32::setEnv(const std::string& var,
 			 const std::string& val,
 			 bool overwrite)
 {
-    BOOL ret = SetEnvironmentVariable(var.c_str, val.c_str());
+    BOOL ret = SetEnvironmentVariable(var.c_str(), val.c_str());
     if(!ret)
       throw sys::SystemException(Ctxt(FmtX("Unable to set windows environment variable %s", var.c_str())));
 }
