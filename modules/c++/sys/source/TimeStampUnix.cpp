@@ -22,23 +22,63 @@
 
 
 #if !defined(WIN32)
+#include <time.h>
+#include <string.h>
+#include <errno.h>
 #include "sys/TimeStamp.h"
-
+#include "sys/Conf.h"
+#include "except/Exception.h"
 
 std::string sys::TimeStamp::local()
 {
-    time_t __time = time(0);
+    // Get the current time
+    time_t __time = ::time(0);
+    if (__time == static_cast<time_t>(-1))
+    {
+        int const errnum = errno;
+        throw except::Exception(Ctxt("time() failed (" +
+            std::string(::strerror(errnum)) + ")"));
+    }
+
+    // Convert it to local time
+    tm temp;
+    if (::localtime_r(&__time, &temp) == NULL)
+    {
+        int const errnum = errno;
+        throw except::Exception(Ctxt("localtime_r() failed (" +
+            std::string(::strerror(errnum)) + ")"));
+    }
+
+    // Format it
     char timeStamp[MAX_TIME_STAMP];
-    strftime(timeStamp, MAX_TIME_STAMP - 1,
-             getFormat(), localtime(&__time));
+    ::strftime(timeStamp, MAX_TIME_STAMP - 1,
+               getFormat(), &temp);
     return timeStamp;
 }
 std::string sys::TimeStamp::gmt()
 {
-    time_t __time = time(0);
+    // Get the current time
+    time_t __time = ::time(0);
+    if (__time == static_cast<time_t>(-1))
+    {
+        int const errnum = errno;
+        throw except::Exception(Ctxt("time() failed (" +
+            std::string(::strerror(errnum)) + ")"));
+    }
+
+    // Convert it to GMT time
+    tm temp;
+    if (::gmtime_r(&__time, &temp) == NULL)
+    {
+        int const errnum = errno;
+        throw except::Exception(Ctxt("gmtime_r() failed (" +
+            std::string(::strerror(errnum)) + ")"));
+    }
+
+    // Format it
     char timeStamp[MAX_TIME_STAMP];
-    strftime(timeStamp, MAX_TIME_STAMP - 1,
-             getFormat(), localtime(&__time));
+    ::strftime(timeStamp, MAX_TIME_STAMP - 1,
+               getFormat(), &temp);
     return timeStamp;
 }
 const char* sys::TimeStamp::getFormat()
