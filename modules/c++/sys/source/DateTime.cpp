@@ -20,7 +20,11 @@
  *
  */
 
+#include <string.h>
+#include <errno.h>
 
+#include "sys/Conf.h"
+#include "except/Exception.h"
 #include "sys/DateTime.h"
 
 #if defined(HAVE_SYS_TIME_H)
@@ -62,8 +66,15 @@ void sys::DateTime::setNow()
 
 void sys::DateTime::fromMillis()
 {
-    time_t timeInSeconds = (time_t)(mTimeInMillis / 1000);
-    tm t = *localtime(&timeInSeconds);
+    const time_t timeInSeconds = static_cast<time_t>(mTimeInMillis / 1000);
+
+    tm t;
+    if (::localtime_r(&timeInSeconds, &t) == NULL)
+    {
+        int const errnum = errno;
+        throw except::Exception(Ctxt("localtime_r() failed (" +
+            std::string(::strerror(errnum)) + ")"));
+    }
     // this is year since 1900 so need to add that
     mYear = t.tm_year + 1900;
     // 0-based so add 1
@@ -75,7 +86,7 @@ void sys::DateTime::fromMillis()
     mMinute = t.tm_min;
     mDST = t.tm_isdst;
 
-    double timediff = (mTimeInMillis / 1000) - mktime(&t);
+    const double timediff = (mTimeInMillis / 1000) - mktime(&t);
     mSecond = t.tm_sec + timediff;
 }
 
@@ -148,10 +159,18 @@ sys::DateTime::DateTime(double timeInMillis)
 
 double sys::DateTime::getGMTimeInMillis() const
 {
-    time_t curr = (time_t)(mTimeInMillis/1000);
-    tm local = *gmtime(&curr);
-    local.tm_isdst = mDST;
-    return toMillis(local);
+    const time_t curr = static_cast<time_t>(mTimeInMillis / 1000);
+
+    tm gmTime;
+    if (::gmtime_r(&curr, &gmTime) == NULL)
+    {
+        int const errnum = errno;
+        throw except::Exception(Ctxt("gmtime_r() failed (" +
+            std::string(::strerror(errnum)) + ")"));
+    }
+
+    gmTime.tm_isdst = mDST;
+    return toMillis(gmTime);
 }
 
 void sys::DateTime::setDayOfMonth(int dayOfMonth)
