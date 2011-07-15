@@ -27,13 +27,14 @@
 #include <errno.h>
 #include "sys/TimeStamp.h"
 #include "sys/Conf.h"
+#include "sys/DateTime.h"
 #include "except/Exception.h"
 
 std::string sys::TimeStamp::local()
 {
     // Get the current time
-    time_t __time = ::time(0);
-    if (__time == static_cast<time_t>(-1))
+    const time_t numSecondsSinceEpoch = ::time(NULL);
+    if (numSecondsSinceEpoch == static_cast<time_t>(-1))
     {
         int const errnum = errno;
         throw except::Exception(Ctxt("time() failed (" +
@@ -41,44 +42,34 @@ std::string sys::TimeStamp::local()
     }
 
     // Convert it to local time
-    tm temp;
-    if (::localtime_r(&__time, &temp) == NULL)
-    {
-        int const errnum = errno;
-        throw except::Exception(Ctxt("localtime_r() failed (" +
-            std::string(::strerror(errnum)) + ")"));
-    }
+    tm localTime;
+    sys::DateTime::getLocalTime(numSecondsSinceEpoch, localTime);
 
     // Format it
     char timeStamp[MAX_TIME_STAMP];
     ::strftime(timeStamp, MAX_TIME_STAMP - 1,
-               getFormat(), &temp);
+               getFormat(), &localTime);
     return timeStamp;
 }
 std::string sys::TimeStamp::gmt()
 {
     // Get the current time
-    time_t __time = ::time(0);
-    if (__time == static_cast<time_t>(-1))
+    time_t numSecondsSinceEpoch = ::time(NULL);
+    if (numSecondsSinceEpoch == static_cast<time_t>(-1))
     {
         int const errnum = errno;
         throw except::Exception(Ctxt("time() failed (" +
             std::string(::strerror(errnum)) + ")"));
     }
 
-    // Convert it to GMT time
-    tm temp;
-    if (::gmtime_r(&__time, &temp) == NULL)
-    {
-        int const errnum = errno;
-        throw except::Exception(Ctxt("gmtime_r() failed (" +
-            std::string(::strerror(errnum)) + ")"));
-    }
+    // Convert it to GMT
+    tm gmTime;
+    sys::DateTime::getGMTime(numSecondsSinceEpoch, gmTime);
 
     // Format it
     char timeStamp[MAX_TIME_STAMP];
     ::strftime(timeStamp, MAX_TIME_STAMP - 1,
-               getFormat(), &temp);
+               getFormat(), &gmTime);
     return timeStamp;
 }
 const char* sys::TimeStamp::getFormat()

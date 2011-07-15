@@ -24,6 +24,7 @@
 #ifndef __SYS_DATETIME_H__
 #define __SYS_DATETIME_H__
 
+#include <string>
 #include <time.h>
 
 namespace sys
@@ -58,6 +59,10 @@ protected:
      * gettimeofday() for usec precision.
      */
     void setNow();
+    // Provides the local time as a 'tm'
+    void getLocalTime(tm &localTime) const;
+    // Provides the GM time as a 'tm'
+    void getGMTime(tm &gmTime) const;
 
 public:
 
@@ -109,6 +114,13 @@ public:
     //! Return the Daylight Savings Time flag (true = on, false = off)
     bool getDST() const { return mDST == 1; }
 
+    // ! Given seconds since the epoch, provides the local time
+    static
+    void getLocalTime(time_t numSecondsSinceEpoch, tm &localTime);
+    // ! Given seconds since the epoch, provides the GM time
+    static
+    void getGMTime(time_t numSecondsSinceEpoch, tm &gmTime);
+
     // Setters
     void setMonth(int month);
     void setDayOfMonth(int dayOfMonth);
@@ -118,6 +130,22 @@ public:
     void setTimeInMillis(double time);
     void setYear(int year);
     void setDST(bool isDST);
+
+    // Formatting
+    enum FormatTypes
+    {
+        // YYYY-MM-DDThh-mm-ssZ
+        FORMAT_ISO_8601 = 0
+    };
+
+    void format(FormatTypes formatType, std::string& formatStr) const;
+
+    std::string format(FormatTypes formatType) const
+    {
+        std::string formatStr;
+        format(formatType, formatStr);
+        return formatStr;
+    }
 };
 
 }

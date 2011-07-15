@@ -669,6 +669,8 @@ def detect(self):
     self.check_cc(header_name="stdbool.h")
     self.check_cc(header_name="stdlib.h")
     self.check_cc(header_name="stddef.h")
+    self.check_cc(function_name='localtime_r', header_name="time.h")
+    self.check_cc(function_name='gmtime_r', header_name="time.h")
     self.check_cc(function_name='mmap', header_name="sys/mman.h")
     self.check_cc(function_name='memmove', header_name="string.h")
     self.check_cc(function_name='strerror', header_name="string.h")

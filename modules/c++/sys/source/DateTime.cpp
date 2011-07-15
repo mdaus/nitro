@@ -22,10 +22,13 @@
 
 #include <string.h>
 #include <errno.h>
+#include <sstream>
+#include <iomanip>
 
 #include "sys/Conf.h"
 #include "except/Exception.h"
 #include "sys/DateTime.h"
+#include "str/Convert.h"
 
 #if defined(HAVE_SYS_TIME_H)
 #include <sys/time.h>
@@ -63,18 +66,69 @@ void sys::DateTime::setNow()
     fromMillis();
 }
 
-
-void sys::DateTime::fromMillis()
+void sys::DateTime::getLocalTime(tm &localTime) const
 {
-    const time_t timeInSeconds = static_cast<time_t>(mTimeInMillis / 1000);
+    getLocalTime(static_cast<time_t>(mTimeInMillis / 1000), localTime);
+}
 
-    tm t;
-    if (::localtime_r(&timeInSeconds, &t) == NULL)
+void sys::DateTime::getLocalTime(time_t numSecondsSinceEpoch, tm &localTime)
+{
+    // Would like to use the reentrant version.  If we don't have one, cross
+    // our fingers and hope the regular function actually is reentrant
+    // (supposedly this is the case on Windows).
+#ifdef HAVE_LOCALTIME_R
+    if (::localtime_r(&numSecondsSinceEpoch, &localTime) == NULL)
     {
         int const errnum = errno;
         throw except::Exception(Ctxt("localtime_r() failed (" +
             std::string(::strerror(errnum)) + ")"));
     }
+#else
+    tm const * const localTimePtr = ::localtime(&numSecondsSinceEpoch);
+    if (localTimePtr == NULL)
+    {
+        int const errnum = errno;
+        throw except::Exception(Ctxt("localtime failed (" +
+            std::string(::strerror(errnum)) + ")"));
+    }
+    localTime = *localTimePtr;
+#endif
+}
+
+void sys::DateTime::getGMTime(tm &gmTime) const
+{
+    getGMTime(static_cast<time_t>(mTimeInMillis / 1000), gmTime);
+}
+
+void sys::DateTime::getGMTime(time_t numSecondsSinceEpoch, tm &gmTime)
+{
+    // Would like to use the reentrant version.  If we don't have one, cross
+    // our fingers and hope the regular function actually is reentrant
+    // (supposedly this is the case on Windows).
+#ifdef HAVE_GMTIME_R
+    if (::gmtime_r(&numSecondsSinceEpoch, &gmTime) == NULL)
+    {
+        int const errnum = errno;
+        throw except::Exception(Ctxt("gmtime_r() failed (" +
+            std::string(::strerror(errnum)) + ")"));
+    }
+#else
+    tm const * const gmTimePtr = ::gmtime(&numSecondsSinceEpoch);
+    if (gmTimePtr == NULL)
+    {
+        int const errnum = errno;
+        throw except::Exception(Ctxt("gmtime failed (" +
+            std::string(::strerror(errnum)) + ")"));
+    }
+    gmTime = *gmTimePtr;
+#endif
+}
+
+void sys::DateTime::fromMillis()
+{
+    tm t;
+    getLocalTime(t);
+
     // this is year since 1900 so need to add that
     mYear = t.tm_year + 1900;
     // 0-based so add 1
@@ -159,16 +213,8 @@ sys::DateTime::DateTime(double timeInMillis)
 
 double sys::DateTime::getGMTimeInMillis() const
 {
-    const time_t curr = static_cast<time_t>(mTimeInMillis / 1000);
-
     tm gmTime;
-    if (::gmtime_r(&curr, &gmTime) == NULL)
-    {
-        int const errnum = errno;
-        throw except::Exception(Ctxt("gmtime_r() failed (" +
-            std::string(::strerror(errnum)) + ")"));
-    }
-
+    getGMTime(gmTime);
     gmTime.tm_isdst = mDST;
     return toMillis(gmTime);
 }
@@ -223,3 +269,27 @@ void sys::DateTime::setDST(bool isDST)
 	mDST = 0;
 }
 
+void sys::DateTime::format(FormatTypes formatType,
+                           std::string& formatStr) const
+{
+    std::ostringstream ostr;
+    ostr.fill('0');
+
+    switch (formatType)
+    {
+    case FORMAT_ISO_8601:
+        ostr << std::setw(4) << mYear << "-"
+             << std::setw(2) << mMonth << "-"
+             << std::setw(2) << mDayOfMonth << "T"
+             << std::setw(2) << mHour << ":"
+             << std::setw(2) << mMinute << ":"
+             << std::setw(2) << static_cast<int>(mSecond) << "Z";
+        break;
+
+    default:
+        throw except::Exception(Ctxt("Unknown format type " +
+                                         str::toString(formatType)));
+    }
+
+    formatStr = ostr.str();
+}
