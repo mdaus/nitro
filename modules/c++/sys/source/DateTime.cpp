@@ -278,12 +278,17 @@ void sys::DateTime::format(FormatTypes formatType,
     switch (formatType)
     {
     case FORMAT_ISO_8601:
-        ostr << std::setw(4) << mYear << "-"
-             << std::setw(2) << mMonth << "-"
-             << std::setw(2) << mDayOfMonth << "T"
-             << std::setw(2) << mHour << ":"
-             << std::setw(2) << mMinute << ":"
-             << std::setw(2) << static_cast<int>(mSecond) << "Z";
+    {
+        // We're in local time but this format is in GMT, so need to convert
+        DateTime const gmDT(getGMTimeInMillis());
+
+        ostr << std::setw(4) << gmDT.mYear << "-"
+             << std::setw(2) << gmDT.mMonth << "-"
+             << std::setw(2) << gmDT.mDayOfMonth << "T"
+             << std::setw(2) << gmDT.mHour << ":"
+             << std::setw(2) << gmDT.mMinute << ":"
+             << std::setw(2) << static_cast<int>(gmDT.mSecond) << "Z";
+    }
         break;
 
     default:
