@@ -131,24 +131,21 @@ bool sys::OSWin32::move(const std::string& path, const std::string& newPath) con
 
 bool sys::OSWin32::isFile(const std::string& path) const
 {
-    //  Im not 100% sure.  So Im checking
+    //  I'm not 100% sure.  So I'm checking
     //  1) Exists
     //  2) Not Directory
     //  3) Not Archive - we aren't doing that...
-    DWORD what = GetFileAttributes(path.c_str());
-    return (what != 0xFFFFFFFF && what != FILE_ATTRIBUTE_DIRECTORY);
+    const DWORD what = GetFileAttributes(path.c_str());
+    return (what != INVALID_FILE_ATTRIBUTES &&
+            !(what & FILE_ATTRIBUTE_DIRECTORY));
 }
 
 
 bool sys::OSWin32::isDirectory(const std::string& path) const
 {
-    DWORD what = GetFileAttributes(path.c_str());
-    return what == FILE_ATTRIBUTE_DIRECTORY;
-//    if (what == 0xFFFFFFFF)
-//        throw sys::SystemException("GetFileAttributes failed");
-//    if (what == FILE_ATTRIBUTE_DIRECTORY)
-//        return true;
-//    else return false;
+    const DWORD what = GetFileAttributes(path.c_str());
+    return (what != INVALID_FILE_ATTRIBUTES &&
+            (what & FILE_ATTRIBUTE_DIRECTORY));
 }
 
 bool sys::OSWin32::makeDirectory(const std::string& path) const
