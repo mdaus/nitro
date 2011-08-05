@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of sys-c++
+ * This file is part of mem-c++
  * =========================================================================
  *
  * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
  *
- * sys-c++ is free software; you can redistribute it and/or modify
+ * mem-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -20,20 +20,20 @@
  *
  */
 
-#ifndef __SYS_SCOPED_COPYABLE_POINTER_H__
-#define __SYS_SCOPED_COPYABLE_POINTER_H__
+#ifndef __MEM_SCOPED_CLONEABLE_PTR_H__
+#define __MEM_SCOPED_CLONEABLE_PTR_H__
 
 #include <memory>
 
-namespace sys
+namespace mem
 {
 /*!
- *  \class ScopedCopyablePointer
+ *  \class ScopedCloneablePtr
  *  \brief This class provides RAII for object allocations via new.  It is a
  *         light wrapper around std::auto_ptr and has the same semantics
  *         except that the copy constructor and assignment operator are deep
- *         copies (that is, they use T's copy constructor) rather than
- *         transferring ownership.
+ *         copies (by using T's clone() method) rather than transferring
+ *         ownership.
  *
  *         This is useful for cases where you have a class which has a member
  *         variable that's dynamically allocated and you want to provide a
@@ -41,36 +41,36 @@ namespace sys
  *         std::auto_ptr's, you'll have to write the copy constructor /
  *         assignment operator for this class - this is tedious and
  *         error-prone since you need to include all the members in the class.
- *         Using ScopedCopyablePointer's instead, the compiler-generated copy
+ *         Using ScopedCloneablePtr's instead, the compiler-generated copy
  *         constructor and assignment operator for your class will be correct
  *         (if all the other member variables are POD or have correct
  *         copy constructors / assignment operators).
  */
 template <class T>
-class ScopedCopyablePointer
+class ScopedCloneablePtr
 {
 public:
-    explicit ScopedCopyablePointer(T* ptr = NULL) throw()
+    explicit ScopedCloneablePtr(T* ptr = NULL)
     : mPtr(ptr)
     {
     }
 
-    ScopedCopyablePointer(const ScopedCopyablePointer& rhs)
+    ScopedCloneablePtr(const ScopedCloneablePtr& rhs)
     {
         if (rhs.mPtr.get())
         {
-            mPtr.reset(new T(*rhs.mPtr));
+            mPtr.reset(rhs.mPtr->clone());
         }
     }
 
-    const ScopedCopyablePointer&
-    operator=(const ScopedCopyablePointer& rhs)
+    const ScopedCloneablePtr&
+    operator=(const ScopedCloneablePtr& rhs)
     {
         if (this != &rhs)
         {
             if (rhs.mPtr.get())
             {
-                mPtr.reset(new T(*rhs.mPtr));
+                mPtr.reset(rhs.mPtr->clone());
             }
             else
             {
@@ -81,22 +81,22 @@ public:
         return *this;
     }
 
-    T* get() const throw()
+    T* get() const
     {
         return mPtr.get();
     }
 
-    T& operator*() const throw()
+    T& operator*() const
     {
         return *mPtr;
     }
 
-    T* operator->() const throw()
+    T* operator->() const
     {
         return mPtr.operator->();
     }
 
-    void reset(T* ptr = NULL) throw()
+    void reset(T* ptr = NULL)
     {
         mPtr.reset(ptr);
     }

@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of sys-c++
+ * This file is part of mem-c++
  * =========================================================================
  *
  * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
  *
- * sys-c++ is free software; you can redistribute it and/or modify
+ * mem-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -20,12 +20,12 @@
  *
  */
 
-#ifndef __SYS_SCOPED_ARRAY_H__
-#define __SYS_SCOPED_ARRAY_H__
+#ifndef __MEM_SCOPED_ARRAY_H__
+#define __MEM_SCOPED_ARRAY_H__
 
 #include <cstddef>
 
-namespace sys
+namespace mem
 {
     /*!
      *  \class ScopedArray

@@ -24,6 +24,7 @@
 #ifndef __IMPORT_SYS_H__
 #define __IMPORT_SYS_H__
 
+#include "sys/AtomicUint.h"
 #include "sys/Runnable.h"
 #include "sys/Dbg.h"
 #include "sys/Conf.h"
@@ -44,8 +45,6 @@
 #include "sys/Path.h"
 #include "sys/DateTime.h"
 #include "sys/StopWatch.h"
-#include "sys/ScopedArray.h"
-#include "sys/ScopedAlignedArray.h"
 #include "sys/FileFinder.h"
 /*!
 
