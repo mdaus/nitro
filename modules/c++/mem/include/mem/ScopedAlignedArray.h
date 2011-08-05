@@ -52,7 +52,7 @@ namespace mem
                 // in case...
                 try
                 {
-                    alignedFree(mArray);
+                    sys::alignedFree(mArray);
                 }
                 catch (...)
                 {
@@ -64,7 +64,7 @@ namespace mem
         {
             if (mArray)
             {
-                alignedFree(mArray);
+                sys::alignedFree(mArray);
                 mArray = NULL;
             }
 
@@ -99,7 +99,7 @@ namespace mem
             if (numElements > 0)
             {
                 const size_t numBytes(numElements * sizeof(T));
-                return static_cast<T *>(alignedAlloc(numBytes));
+                return static_cast<T *>(sys::alignedAlloc(numBytes));
             }
             else
             {
