@@ -50,7 +50,7 @@ void sys::DLL::load(const std::string& libName)
 
 void sys::DLL::unload()
 {
-    // First we check to see if its unloaded
+    // First we check to see if it's unloaded
     if (mLib)
     {
         // Next we unload it or raise an exception
@@ -59,7 +59,7 @@ void sys::DLL::unload()
 
         // Now we reset member data
         mLib = NULL;
-        mLibName = "";
+        mLibName.clear();
     }
 }
 DLL_FUNCTION_PTR

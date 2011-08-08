@@ -59,7 +59,7 @@ void sys::DLL::unload()
 
         // Now we reset member data
         mLib = NULL;
-        mLibName = "";
+        mLibName.clear();
     }
 }
 
