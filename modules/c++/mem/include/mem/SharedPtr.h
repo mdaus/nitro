@@ -25,7 +25,7 @@
 
 #include <memory>
 
-#include <sys/AtomicUint.h>
+#include <sys/AtomicCounter.h>
 
 namespace mem
 {
@@ -44,51 +44,30 @@ public:
     explicit SharedPtr(T* ptr = NULL) :
         mPtr(ptr)
     {
-        // NOTE: The only time mRefCtr is NULL is when the underlying pointer
-        //       is NULL.
-        // TODO: This is done to make default construction cheaper since the
-        //       AtomicUint implementation currently uses an expensive mutex.
-        //       Once this is changed to use atomic operations, this logic
-        //       can be removed.
-
-        if (ptr)
-        {
-            // Initially we have a reference count of 1
-            // In the constructor, we take ownership of the pointer no matter
-            // what, so if we're having a really bad day and creating the
-            // reference counter throws, we need to delete the input pointer
-            std::auto_ptr<T> scopedPtr(ptr);
-            mRefCtr = new sys::AtomicUint(1);
-            scopedPtr.release();
-        }
-        else
-        {
-            mRefCtr = NULL;
-        }
+        // Initially we have a reference count of 1
+        // In the constructor, we take ownership of the pointer no matter
+        // what, so temporarily wrap it in an auto_ptr in case creating the
+        // atomic counter throws
+        std::auto_ptr<T> scopedPtr(ptr);
+        mRefCtr = new sys::AtomicCounter(1);
+        scopedPtr.release();
     }
 
     explicit SharedPtr(std::auto_ptr<T> ptr) :
         mPtr(ptr.get())
     {
-        if (mPtr)
-        {
-            // Initially we have a reference count of 1
-            // If this throws, the auto_ptr will clean up the input pointer
-            // for us
-            mRefCtr = new sys::AtomicUint(1);
+        // Initially we have a reference count of 1
+        // If this throws, the auto_ptr will clean up the input pointer
+        // for us
+        mRefCtr = new sys::AtomicCounter(1);
 
-            // We now own the pointer
-            ptr.release();
-        }
-        else
-        {
-            mRefCtr = NULL;
-        }
+        // We now own the pointer
+        ptr.release();
     }
 
     ~SharedPtr()
     {
-        if (mRefCtr && mRefCtr->decrementAndGet() == 0)
+        if (mRefCtr->decrementThenGet() == 0)
         {
             delete mRefCtr;
             delete mPtr;
@@ -99,10 +78,7 @@ public:
         mRefCtr(rhs.mRefCtr),
         mPtr(rhs.mPtr)
     {
-        if (mRefCtr)
-        {
-            mRefCtr->increment();
-        }
+        mRefCtr->increment();
     }
 
     const SharedPtr&
@@ -110,7 +86,7 @@ public:
     {
         if (this != &rhs)
         {
-            if (mRefCtr && mRefCtr->decrementAndGet() == 0)
+            if (mRefCtr->decrementThenGet() == 0)
             {
                 // We were holding the last copy of this data prior to this
                 // assignment - need to clean it up
@@ -120,10 +96,7 @@ public:
 
             mRefCtr = rhs.mRefCtr;
             mPtr = rhs.mPtr;
-            if (mRefCtr)
-            {
-                mRefCtr->increment();
-            }
+            mRefCtr->increment();
         }
 
         return *this;
@@ -144,29 +117,24 @@ public:
         return mPtr.operator->();
     }
 
-    sys::AtomicUint::ValueType getCount() const
+    sys::AtomicCounter::ValueType getCount() const
     {
-        return (mRefCtr ? mRefCtr->get() : 0);
+        return mRefCtr->get();
     }
 
     void reset(T* ptr = NULL)
     {
-        // We've agreed to take ownership of the pointer no matter what, so
-        // if we're having a really bad day and creating the reference counter
-        // throws, we need to delete the input pointer
-        // NOTE: We need to do this on the side before decrementing mRefCtr.
-        //       This way, we can provide the strong exception guarantee (i.e.
-        //       the operation either succeeds or throws - the underlying
-        //       object is always in a good state).
-        sys::AtomicUint* newRefCtr = NULL;
-        if (ptr)
-        {
-            std::auto_ptr<T> scopedPtr(ptr);
-            newRefCtr = new sys::AtomicUint(1);
-            scopedPtr.release();
-        }
+        // We take ownership of the pointer no matter what, so temporarily
+        // wrap it in an auto_ptr in case creating the atomic counter throws.
+        // NOTE: We need to create newRefCtr on the side before decrementing
+        //       mRefCtr. This way, we can provide the strong exception
+        //       guarantee (i.e. the operation either succeeds or throws - the
+        //       underlying object is always in a good state).
+        std::auto_ptr<T> scopedPtr(ptr);
+        sys::AtomicCounter* const newRefCtr = new sys::AtomicCounter(1);
+        scopedPtr.release();
 
-        if (mRefCtr && mRefCtr->decrementAndGet() == 0)
+        if (mRefCtr->decrementThenGet() == 0)
         {
             // We were holding the last copy of this data prior to this
             // reset - need to clean up
@@ -179,8 +147,8 @@ public:
     }
 
 private:
-    sys::AtomicUint* mRefCtr;
-    T*               mPtr;
+    sys::AtomicCounter* mRefCtr;
+    T*                  mPtr;
 };
 }
 

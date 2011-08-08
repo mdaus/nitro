@@ -24,7 +24,7 @@
 #ifndef __IMPORT_SYS_H__
 #define __IMPORT_SYS_H__
 
-#include "sys/AtomicUint.h"
+#include "sys/AtomicCounter.h"
 #include "sys/Runnable.h"
 #include "sys/Dbg.h"
 #include "sys/Conf.h"
