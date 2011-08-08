@@ -118,8 +118,13 @@ public:
      */
     virtual ~BasicPluginManager()
     {
-        if (mHandlers.size())
+        try
+        {
             unload();
+        }
+        catch (...)
+        {
+        }
     }
 
     /*!
@@ -144,7 +149,6 @@ public:
      */
     void unload()
     {
-
         typename HandlerRegistry::iterator it;
         for (it = mHandlers.begin(); it != mHandlers.end(); ++it)
         {
@@ -154,9 +158,9 @@ public:
         }
         mHandlers.clear();
 
-        for (unsigned int i = 0; i < mDSOs.size(); ++i)
+        for (size_t ii = 0; ii < mDSOs.size(); ++ii)
         {
-            delete mDSOs[i];
+            delete mDSOs[ii];
         }
         mDSOs.clear();
     }
