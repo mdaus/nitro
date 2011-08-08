@@ -145,7 +145,7 @@ public:
         load( libName );
     }
     /*!
-     *  Destructor.  This auto-closes the DLL if you didnt call 
+     *  Destructor.  This auto-closes the DLL if you didn't call
      *  unload() explicitly.
      *
      */
@@ -153,7 +153,13 @@ public:
     {
         if ( mLib )
         {
-            unload();
+            try
+            {
+                unload();
+            }
+            catch (...)
+            {
+            }
         }
     }
 
