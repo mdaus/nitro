@@ -77,6 +77,11 @@ public:
      *****************************************************************/
     tiff::IFDEntry *operator[](const char *name);
 
+    tiff::IFDEntry *operator[](const std::string& name)
+    {
+        return this->operator[](name.c_str());
+    }
+
     /**
      *****************************************************************
      * Retrieves a pointer to the IFDEntry associated with the

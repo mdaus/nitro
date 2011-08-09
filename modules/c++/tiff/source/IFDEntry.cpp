@@ -21,6 +21,7 @@
  */
 
 #include <string>
+#include <string.h>
 #include <sstream>
 #include <import/io.h>
 #include <import/except.h>
@@ -142,7 +143,7 @@ void tiff::IFDEntry::deserialize(io::InputStream& input, const bool reverseBytes
             mOffset = sys::byteSwap(mOffset);
             unsigned short elementSize = tiff::Const::sizeOf(mType);
             sys::byteSwap((sys::byte*)&mOffset, elementSize, sizeof(mOffset)
-			  / elementSize);
+              / elementSize);
         }
         parseValues((unsigned char *)&mOffset);
     }
@@ -181,6 +182,28 @@ void tiff::IFDEntry::parseValues(const unsigned char *buffer,
 {
     mCount = count;
     parseValues(buffer);
+}
+
+void tiff::IFDEntry::addValue(double value)
+{
+    const unsigned char* const valuePtr =
+        reinterpret_cast<unsigned char *>(&value);
+
+    addValue(tiff::TypeFactory::create(valuePtr,
+                                       tiff::Const::Type::DOUBLE));
+}
+
+void tiff::IFDEntry::addValues(const char* str, int tiffType)
+{
+    const unsigned char* const strPtr =
+        reinterpret_cast<const unsigned char *>(str);
+
+    for (size_t ii = 0, len = ::strlen(str) + 1; ii < len; ++ii)
+    {
+        std::auto_ptr<tiff::TypeInterface>
+            value(tiff::TypeFactory::create(strPtr + ii, tiffType));
+        addValue(value);
+    }
 }
 
 void tiff::IFDEntry::parseValues(const unsigned char *buffer)

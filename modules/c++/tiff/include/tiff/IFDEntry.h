@@ -269,6 +269,48 @@ public:
 
     /**
      *****************************************************************
+     * Adds a double value to the IFD entry.
+     *
+     * @param value
+     *   the double to add as a value
+     *****************************************************************/
+    void addValue(double value);
+
+    /**
+     *****************************************************************
+     * Adds the same double value to the IFD entry multiple times.
+     *
+     * @param value
+     *   the double to add as a value
+     * @param numValues
+     *   the number of times to add the value
+     *****************************************************************/
+    void addValue(double value, size_t numValues)
+    {
+        for (size_t ii = 0; ii < numValues; ++ii)
+        {
+            addValue(value);
+        }
+    }
+
+    /**
+     *****************************************************************
+     * Adds each character of the string as a value to the IFD entry.
+     *
+     * @param value
+     *   the string to add as a series of values
+     * @param tiffType
+     *   the type of the value to use.  defaults to ascii.
+     *****************************************************************/
+    void addValues(const char* str, int tiffType = Const::Type::ASCII);
+
+    void addValues(const std::string& str, int tiffType = Const::Type::ASCII)
+    {
+        addValues(str.c_str(), tiffType);
+    }
+
+    /**
+     *****************************************************************
      * Parses the specified buffer for values to store into the
      * IFD entry.  Sets the value count of the IFD entry to the
      * specified count and uses it to determine how many values are in
