@@ -50,7 +50,7 @@ public:
     //! Deconstructor
     virtual ~BasicThreadPool()
     {
-        destroy(mPool.size());
+        destroy(static_cast<unsigned short>(mPool.size()));
     }
 
     virtual void start()
@@ -70,12 +70,12 @@ public:
 
     virtual void join()
     {
-        for (unsigned short i = 0; i < mPool.size(); i++)
+        for (size_t i = 0; i < mPool.size(); i++)
         {
             dbg_printf("mPool[%d]->join()\n", i);
             mPool[i]->join();
         }
-        destroy(mPool.size());
+        destroy(static_cast<unsigned short>(mPool.size()));
         mStarted = false;
     }
 
@@ -106,7 +106,7 @@ public:
     {
         // Add requests that signal the thread should stop
         static sys::Runnable *stopSignal = NULL;
-        for (unsigned int i = 0, size = mPool.size(); i < size; ++i)
+        for (size_t i = 0; i < mPool.size(); ++i)
         {
             addRequest(stopSignal);
         }
@@ -128,7 +128,7 @@ protected:
     virtual void destroy(unsigned short bySize)
     {
         if (bySize > mPool.size())
-            bySize = mPool.size();
+            bySize = static_cast<unsigned short>(mPool.size());
 
         for (unsigned short i = 0; i < bySize; i++)
         {
