@@ -108,6 +108,15 @@ public:
     bool exists(const char *name);
 
     /**
+     * Returns true if an IFDEntry with the given name exists in the IFD.
+     * \return true if the entry exists, otherwise false.
+     */
+    bool exists(const std::string& name)
+    {
+        return exists(name.c_str());
+    }
+
+    /**
      *****************************************************************
      * Adds the specified IFDEntry to the IFD.  Makes a copy of
      * the IFD entry passed in.
