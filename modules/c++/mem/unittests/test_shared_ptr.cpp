@@ -134,6 +134,26 @@ TEST_CASE(testAssigning)
     TEST_ASSERT_EQ(ptr3.get(), rawPtr);
     TEST_ASSERT_EQ(ptr3.getCount(), 1);
 }
+
+struct Foo
+{
+    Foo(size_t val) :
+        mVal(val)
+    {
+    }
+
+    size_t mVal;
+};
+
+TEST_CASE(testSyntax)
+{
+    Foo* const rawPtr(new Foo(123));
+    const mem::SharedPtr<Foo> ptr(rawPtr);
+
+    TEST_ASSERT_EQ(ptr.get(), rawPtr);
+    TEST_ASSERT_EQ(&*ptr, rawPtr);
+    TEST_ASSERT_EQ(&(ptr->mVal), &(rawPtr->mVal));
+}
 }
 
 int main(int argc, char **argv)
@@ -142,6 +162,7 @@ int main(int argc, char **argv)
    TEST_CHECK(testAutoPtrConstructor);
    TEST_CHECK(testCopying);
    TEST_CHECK(testAssigning);
+   TEST_CHECK(testSyntax);
 
    return 0;
 }

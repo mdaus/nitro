@@ -114,7 +114,7 @@ public:
 
     T* operator->() const
     {
-        return mPtr.operator->();
+        return mPtr;
     }
 
     sys::AtomicCounter::ValueType getCount() const

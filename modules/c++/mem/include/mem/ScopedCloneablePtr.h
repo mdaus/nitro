@@ -93,7 +93,7 @@ public:
 
     T* operator->() const
     {
-        return mPtr.operator->();
+        return mPtr.get();
     }
 
     void reset(T* ptr = NULL)

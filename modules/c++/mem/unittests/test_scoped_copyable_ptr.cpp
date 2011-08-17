@@ -131,6 +131,16 @@ TEST_CASE(testDestructor)
 
     TEST_ASSERT_EQ(val, 334);
 }
+
+TEST_CASE(testSyntax)
+{
+    Foo* const rawPtr(new Foo());
+    const mem::ScopedCopyablePtr<Foo> ptr(rawPtr);
+
+    TEST_ASSERT_EQ(ptr.get(), rawPtr);
+    TEST_ASSERT_EQ(&*ptr, rawPtr);
+    TEST_ASSERT_EQ(&(ptr->val1), &(rawPtr->val1));
+}
 }
 
 int main(int argc, char** argv)
@@ -138,6 +148,7 @@ int main(int argc, char** argv)
     TEST_CHECK(testCopyConstructor);
     TEST_CHECK(testAssignmentOperator);
     TEST_CHECK(testDestructor);
+    TEST_CHECK(testSyntax);
 
     return 0;
 }
