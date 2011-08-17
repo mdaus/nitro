@@ -25,8 +25,8 @@
 #include "sys/File.h"
 
 void sys::File::create(const std::string& str,
-        int accessFlags,
-        int creationFlags)
+                       int accessFlags,
+                       int creationFlags)
 {
     // If the truncate bit is on AND the file does exist,
     // we need to set the mode to TRUNCATE_EXISTING
@@ -40,10 +40,10 @@ void sys::File::create(const std::string& str,
     }
 
     mHandle = CreateFile(str.c_str(),
-            accessFlags,
-            FILE_SHARE_READ, NULL,
-            creationFlags,
-            FILE_ATTRIBUTE_NORMAL, NULL);
+                         accessFlags,
+                         FILE_SHARE_READ, NULL,
+                         creationFlags,
+                         FILE_ATTRIBUTE_NORMAL, NULL);
 
     if (mHandle == SYS_INVALID_HANDLE)
     {
