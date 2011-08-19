@@ -24,6 +24,8 @@
 #ifndef __PLUGIN_DEFINES_H__
 #define __PLUGIN_DEFINES_H__
 
+#include <mem/SharedPtr.h>
+
 /* #define PLUGIN_CONSTRUCTOR_NAME "SpawnPlugin" */
 /* #define PLUGIN_DESTRUCTOR_NAME "DestroyPlugin" */
 #define GET_PLUGIN_IDENT "GetPluginIdentity"
@@ -64,19 +66,19 @@
  *
  *  If you don't choose to use this magic, you need to define functions
  *  with PLUGIN_CONSTRUCTOR_NAME and PLUGIN_DESTRUCTOR_NAME that are
- *  extern "C" and return pointers to your base classes
+ *  extern "C" and return shared pointers to your base classes
  */
 #define PLUGIN_EXPOSE_IDENT(IDENT, BASE) \
-    PLUGIN_HOOK BASE* GetPluginIdentity() { \
-        static IDENT ident; \
-        return &ident;  \
+    PLUGIN_HOOK mem::SharedPtr<BASE> GetPluginIdentity() { \
+        static const mem::SharedPtr<BASE> ident(new IDENT()); \
+        return ident;  \
     }
 
 
 #define PLUGIN_EXPOSE_IDENT_PRE(IDENT, PRE, BASE) \
-    PLUGIN_HOOK BASE* PRE##GetPluginIdentity() { \
-        static IDENT ident; \
-        return &ident;  \
+    PLUGIN_HOOK mem::SharedPtr<BASE> PRE##GetPluginIdentity() { \
+        static const mem::SharedPtr<BASE> ident(new IDENT()); \
+        return ident;  \
     }
 
 namespace plugin

@@ -30,6 +30,8 @@
 #include <import/str.h>
 #include <import/except.h>
 
+#include <mem/SharedPtr.h>
+
 #include "plugin/PluginDefines.h"
 #include "plugin/ErrorHandler.h"
 
@@ -81,8 +83,10 @@ namespace plugin
 template<typename T> class BasicPluginManager
 {
 public:
-    typedef std::map<std::string, std::pair< T*, PluginIdentity<T>* > >
-    HandlerRegistry;
+    typedef mem::SharedPtr<PluginIdentity<T> > SharedPluginIdentity;
+    typedef std::map<std::string,
+                     std::pair<T*, SharedPluginIdentity> >
+        HandlerRegistry;
 
     /*!
      *  This is a default constructor, but its use is discouraged, since
@@ -149,12 +153,13 @@ public:
      */
     void unload()
     {
+        std::cout << "Unloading!" << std::endl;
         typename HandlerRegistry::iterator it;
         for (it = mHandlers.begin(); it != mHandlers.end(); ++it)
         {
-            PluginIdentity<T>* identity = (it->second.second);
-            //std::cout << typeid(*identity).name() << std::endl;
-            identity->destroyHandler( it->second.first );
+            PluginIdentity<T>& identity = *(it->second.second);
+            //std::cout << typeid(identity).name() << std::endl;
+            identity.destroyHandler(it->second.first);
         }
         mHandlers.clear();
 
@@ -213,7 +218,8 @@ public:
      *  \param identity The plugin identifier
      *  \param eh The error handler to be used if something bad happens
      */
-    virtual void addHandler(PluginIdentity<T>* identity, ErrorHandler* eh)
+    virtual void addHandler(mem::SharedPtr<PluginIdentity<T> > identity,
+                            ErrorHandler* eh)
     {
         try
         {
@@ -254,8 +260,8 @@ public:
                         FmtX("Failed to spawn handler for op %s", ops[i]));
                     // Keep going
                 }
-                mHandlers[ ops[i] ].first = pluginHandler;
-                mHandlers[ ops[i] ].second = identity;
+                mHandlers[ops[i]].first = pluginHandler;
+                mHandlers[ops[i]].second = identity;
             }
         }
         catch (except::Exception& ex)
@@ -301,22 +307,28 @@ public:
                 }
             }
 
+            if (file == "/var2/x/asylvest/build/IMX/install/share/common.task/plugins/libtlp-task-c++.so")
+            {
+                std::cout << "Got the file\n";
+            }
+
             if (loadDSO)
             {
                 // Load the DSO
-                dso = new sys::DLL(file);
-                mDSOs.push_back(dso);
+                std::auto_ptr<sys::DLL> autoDSO(new sys::DLL(file));
+                mDSOs.push_back(autoDSO.get());
+                dso = autoDSO.release();
             }
 
             // Retrieve the plugin identity and add a handler to the registry.
 
-            PluginIdentity<T>*(*ident)(void) =
-                (PluginIdentity<T>*(*)(void))
+            mem::SharedPtr<PluginIdentity<T> >(*ident)(void) =
+                (mem::SharedPtr<PluginIdentity<T> >(*)(void))
                 dso->retrieve(getPluginIdentName());
 
             addHandler((*ident)(), eh);
         }
-        catch (except::Exception& ex)
+        catch (const except::Exception& ex)
         {
             eh->onPluginLoadFailed(ex.getMessage());
         }
@@ -405,9 +417,8 @@ protected:
     int mMinorVersion;
 
 private:
-
-    std::map<std::string, std::pair< T*, PluginIdentity<T>* > > mHandlers;
-    std::vector< sys::DLL* > mDSOs;
+    HandlerRegistry        mHandlers;
+    std::vector<sys::DLL*> mDSOs;
 };
 
 }
