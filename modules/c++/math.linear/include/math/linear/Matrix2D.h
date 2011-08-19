@@ -1021,24 +1021,24 @@ template<typename _T>
     // If we dont have something in the diagonal, we can't solve this
     math::linear::Matrix2D<_T> x = b.permute(pivotsM);
 
-    size_t P = b.mN;
-    size_t N = lu.mN;
-    for (size_t k = 0; k < N; k++) {
-        for (size_t i = k + 1; i < N; i++) {
-            for (size_t j = 0; j < P; j++) {
-                x(i, j) -= x(k, j)*lu(i, k);
+    const size_t P = b.mN;
+    const size_t N = lu.mN;
+    for (size_t kk = 0; kk < N; kk++) {
+        for (size_t ii = kk + 1; ii < N; ii++) {
+            for (size_t jj = 0; jj < P; jj++) {
+                x(ii, jj) -= x(kk, jj)*lu(ii, kk);
             }
         }
     }
-    for (sys::SSize_T k = N - 1; k >= 0; k--) {
-        for (size_t j = 0; j < P; j++) {
-            x(k, j) /= lu(k, k);
+    for (sys::SSize_T kk = N - 1; kk >= 0; kk--) {
+        for (size_t jj = 0; jj < P; jj++) {
+            x(kk, jj) /= lu(kk, kk);
         }
 
-        for (size_t i = 0; i < k; i++) {
+        for (size_t ii = 0; ii < static_cast<size_t>(kk); ii++) {
             // This one could be _Q
-            for (size_t j = 0; j < P; j++) {
-                x(i, j) -= x(k, j)*lu(i, k);
+            for (size_t jj = 0; jj < P; jj++) {
+                x(ii, jj) -= x(kk, jj)*lu(ii, kk);
             }
         }
     }
