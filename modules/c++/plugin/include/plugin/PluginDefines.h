@@ -69,15 +69,15 @@
  *  extern "C" and return shared pointers to your base classes
  */
 #define PLUGIN_EXPOSE_IDENT(IDENT, BASE) \
-    PLUGIN_HOOK mem::SharedPtr<BASE> GetPluginIdentity() { \
-        static const mem::SharedPtr<BASE> ident(new IDENT()); \
+    PLUGIN_HOOK mem::SharedPtr<BASE > GetPluginIdentity() { \
+        static const mem::SharedPtr<BASE > ident(new IDENT()); \
         return ident;  \
     }
 
 
 #define PLUGIN_EXPOSE_IDENT_PRE(IDENT, PRE, BASE) \
-    PLUGIN_HOOK mem::SharedPtr<BASE> PRE##GetPluginIdentity() { \
-        static const mem::SharedPtr<BASE> ident(new IDENT()); \
+    PLUGIN_HOOK mem::SharedPtr<BASE > PRE##GetPluginIdentity() { \
+        static const mem::SharedPtr<BASE > ident(new IDENT()); \
         return ident;  \
     }
 
