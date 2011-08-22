@@ -66,19 +66,21 @@
  *
  *  If you don't choose to use this magic, you need to define functions
  *  with PLUGIN_CONSTRUCTOR_NAME and PLUGIN_DESTRUCTOR_NAME that are
- *  extern "C" and return shared pointers to your base classes
+ *  extern "C" and return pointers to shared pointers to your base classes.
+ *  The return type of the functions must be a void* since the functions are
+ *  extern C'd - the caller must cast to a pointer to a shared pointer.
  */
 #define PLUGIN_EXPOSE_IDENT(IDENT, BASE) \
-    PLUGIN_HOOK mem::SharedPtr<BASE > GetPluginIdentity() { \
+    PLUGIN_HOOK const void* GetPluginIdentity() { \
         static const mem::SharedPtr<BASE > ident(new IDENT()); \
-        return ident;  \
+        return &ident;  \
     }
 
 
 #define PLUGIN_EXPOSE_IDENT_PRE(IDENT, PRE, BASE) \
-    PLUGIN_HOOK mem::SharedPtr<BASE > PRE##GetPluginIdentity() { \
+    PLUGIN_HOOK const void* PRE##GetPluginIdentity() { \
         static const mem::SharedPtr<BASE > ident(new IDENT()); \
-        return ident;  \
+        return &ident;  \
     }
 
 namespace plugin

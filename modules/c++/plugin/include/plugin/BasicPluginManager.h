@@ -251,7 +251,7 @@ public:
                 return;
             }
 
-            for (unsigned int i = 0; ops[i] != NULL; ++i)
+            for (size_t i = 0; ops[i] != NULL; ++i)
             {
                 T* pluginHandler = identity->spawnHandler();
                 if (! pluginHandler )
@@ -264,7 +264,7 @@ public:
                 mHandlers[ops[i]].second = identity;
             }
         }
-        catch (except::Exception& ex)
+        catch (const except::Exception& ex)
         {
             eh->onPluginLoadFailed(ex.getMessage());
         }
@@ -322,11 +322,14 @@ public:
 
             // Retrieve the plugin identity and add a handler to the registry.
 
-            mem::SharedPtr<PluginIdentity<T> >(*ident)(void) =
-                (mem::SharedPtr<PluginIdentity<T> >(*)(void))
+            const void*(*ident)(void) =
+                (const void*(*)(void))
                 dso->retrieve(getPluginIdentName());
 
-            addHandler((*ident)(), eh);
+            const SharedPluginIdentity* const plugin =
+                static_cast<const SharedPluginIdentity*>((*ident)());
+
+            addHandler(*plugin, eh);
         }
         catch (const except::Exception& ex)
         {
