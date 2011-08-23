@@ -105,7 +105,7 @@ tiff::IFD* tiff::Utils::createGeoTiffIFD(tiff::IFD* ifd)
     for (unsigned short i = 0; i < numKeys; ++i)
     {
         // Ensure idx is in range
-        if (idx + 2 >= geoVals.size())
+        if (idx + 3 >= geoVals.size())
         {
             throw except::Exception(Ctxt(
                 "'GeoKeyDirectoryTag' specified " +
@@ -119,15 +119,7 @@ tiff::IFD* tiff::Utils::createGeoTiffIFD(tiff::IFD* ifd)
             str::toType<unsigned short>(geoVals[idx++]->toString());
         const unsigned short count =
             str::toType<unsigned short>(geoVals[idx++]->toString());
-
-        // Ensure idx will be in range below
-        if (count > 0 && idx + count - 1 >= geoVals.size())
-        {
-            throw except::Exception(Ctxt(
-                "'GeoKeyDirectoryTag' specified " +
-                str::toString(numKeys) + " keys but the IFD entry only had " +
-                str::toString(geoVals.size()) + " values"));
-        }
+        const std::string valueStr(geoVals[idx++]->toString());
 
         unsigned short entryType;
         switch (tiffTagLoc)
@@ -143,8 +135,9 @@ tiff::IFD* tiff::Utils::createGeoTiffIFD(tiff::IFD* ifd)
             break;
         }
 
-        const std::string name = (keyMap.find(keyId) != keyMap.end()) ?
-            keyMap[keyId] : "";
+        const std::map<unsigned short, std::string>::const_iterator iter =
+            keyMap.find(keyId);
+        const std::string name = (iter == keyMap.end()) ? "" : iter->second;
 
         tiff::IFDEntry *entry = new tiff::IFDEntry(keyId, entryType, name);
 
@@ -156,14 +149,12 @@ tiff::IFD* tiff::Utils::createGeoTiffIFD(tiff::IFD* ifd)
                     "Expected a count of 1 but got " + str::toString(count)));
             }
 
-            entry->addValue(
-                            new tiff::GenericType<unsigned short>(
-                                                                  geoVals[idx++]->toString()));
+            entry->addValue(new tiff::GenericType<unsigned short>(valueStr));
         }
         else if (tiffTagLoc == 34736 && doubleParams)
         {
-            unsigned short valueOffset =
-                    str::toType<unsigned short>(geoVals[idx++]->toString());
+            const unsigned short valueOffset =
+                str::toType<unsigned short>(valueStr);
             for (unsigned short j = 0; j < count; ++j)
             {
                 entry->addValue(
@@ -174,8 +165,8 @@ tiff::IFD* tiff::Utils::createGeoTiffIFD(tiff::IFD* ifd)
         }
         else if (tiffTagLoc == 34737 && asciiParams)
         {
-            unsigned short valueOffset =
-                    str::toType<unsigned short>(geoVals[idx++]->toString());
+            const unsigned short valueOffset =
+                str::toType<unsigned short>(valueStr);
             for (unsigned short j = 0; j < count; ++j)
             {
                 entry->addValue(
@@ -184,11 +175,7 @@ tiff::IFD* tiff::Utils::createGeoTiffIFD(tiff::IFD* ifd)
                                                                            + j]->toString()));
             }
         }
-        else
-        {
-            // Just skip the values
-            idx += count;
-        }
+
         geoIFD->addEntry(entry);
     }
 
