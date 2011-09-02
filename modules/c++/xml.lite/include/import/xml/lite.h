@@ -33,6 +33,7 @@
 #include "xml/lite/XMLReader.h"
 #include "xml/lite/MinidomHandler.h"
 #include "xml/lite/MinidomParser.h"
+#include "xml/lite/Serializable.h"
 
 /*!
  *  \file lite.h
