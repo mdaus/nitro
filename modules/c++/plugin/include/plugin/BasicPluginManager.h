@@ -153,7 +153,6 @@ public:
      */
     void unload()
     {
-        std::cout << "Unloading!" << std::endl;
         typename HandlerRegistry::iterator it;
         for (it = mHandlers.begin(); it != mHandlers.end(); ++it)
         {
