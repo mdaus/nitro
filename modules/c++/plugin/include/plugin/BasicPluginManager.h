@@ -307,11 +307,6 @@ public:
                 }
             }
 
-            if (file == "/var2/x/asylvest/build/IMX/install/share/common.task/plugins/libtlp-task-c++.so")
-            {
-                std::cout << "Got the file\n";
-            }
-
             if (loadDSO)
             {
                 // Load the DSO
