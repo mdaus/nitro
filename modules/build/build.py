@@ -286,6 +286,12 @@ class CPPBuildContext(BuildContext):
                 bld.add_post_fun(partial(CPPBuildContext.runUnitTests,
                                          tests=tests,
                                          path=self.getBuildDir(testNode)))
+
+        descDir = path.find_dir('conf/desc')
+        if descDir:
+            for f in descDir.find_iter(maxdepth=0):
+                bld.install_files('${PREFIX}/share/%s/conf/desc' % modArgs['name'], f.abspath())
+
         return env
     
     
