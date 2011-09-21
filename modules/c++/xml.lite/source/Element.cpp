@@ -98,7 +98,7 @@ void xml::lite::Element::getElementsByTagName(const std::string& uri,
                 == localName)
             elements.push_back(mChildren[i]);
         if (recurse)
-            mChildren[i]->getElementsByTagName(uri, localName, elements);
+            mChildren[i]->getElementsByTagName(uri, localName, elements, recurse);
     }
 }
 
@@ -111,7 +111,7 @@ void xml::lite::Element::getElementsByTagName(const std::string& localName,
         if (mChildren[i]->getLocalName() == localName)
             elements.push_back(mChildren[i]);
         if (recurse)
-            mChildren[i]->getElementsByTagName(localName, elements);
+            mChildren[i]->getElementsByTagName(localName, elements, recurse);
     }
 }
 
@@ -124,7 +124,7 @@ void xml::lite::Element::getElementsByTagNameNS(const std::string& qname,
         if (mChildren[i]->mName.toString() == qname)
             elements.push_back(mChildren[i]);
         if (recurse)
-            mChildren[i]->getElementsByTagNameNS(qname, elements);
+            mChildren[i]->getElementsByTagNameNS(qname, elements, recurse);
     }
 }
 
