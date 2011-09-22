@@ -47,7 +47,7 @@ void sys::File::create(const std::string& str,
 
     if (mHandle == SYS_INVALID_HANDLE)
     {
-        throw sys::SystemException(Ctxt("Error opening file: [%s]", str.c_str()));
+        throw sys::SystemException(Ctxt(FmtX("Error opening file: [%s]", str.c_str())));
     }
     mPath = str;
 }
