@@ -94,7 +94,9 @@ void sys::File::writeFrom(const char *buffer, Size_T size)
 
     do
     {
-        SSize_T bytesThisRead = ::write(mHandle, buffer, size);
+        const SSize_T bytesThisRead = ::write(mHandle,
+                                              buffer + bytesActuallyWritten,
+                                              size - bytesActuallyWritten);
         if (bytesThisRead == -1)
         {
             throw sys::SystemException(Ctxt("Writing to file"));

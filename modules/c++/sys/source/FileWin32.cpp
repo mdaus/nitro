@@ -76,7 +76,11 @@ void sys::File::writeFrom(const char *buffer, Size_T size)
         /* Keep track of the bytes we read */
         DWORD bytesWritten;
         /* Write the data */
-        BOOL ok = WriteFile(mHandle, buffer, size, &bytesWritten, NULL);
+        const BOOL ok = WriteFile(mHandle,
+                                  buffer + actuallyWritten,
+                                  size - actuallyWritten,
+                                  &bytesWritten,
+                                  NULL);
         if (!ok)
         {
             /* If the function failed, we want to get the last error */
