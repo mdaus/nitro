@@ -27,7 +27,7 @@
 
 #include "sys/Thread.h"
 #include "mt/RequestQueue.h"
-
+#include "str/Convert.h"
 
 
 
