@@ -29,19 +29,19 @@ namespace
 TEST_CASE(testNullCopying)
 {
     mem::SharedPtr<int> ptr1;
-    TEST_ASSERT_EQ(ptr1.get(), NULL);
+    TEST_ASSERT_EQ(ptr1.get(), static_cast<int *>(NULL));
 
     // Copy construction
     const mem::SharedPtr<int> ptr2(ptr1);
-    TEST_ASSERT_EQ(ptr2.get(), NULL);
+    TEST_ASSERT_EQ(ptr2.get(), static_cast<int *>(NULL));
 
     // Assignment operator
     mem::SharedPtr<int> ptr3;
     ptr3 = ptr1;
-    TEST_ASSERT_EQ(ptr3.get(), NULL);
+    TEST_ASSERT_EQ(ptr3.get(), static_cast<int *>(NULL));
 
     ptr1.reset();
-    TEST_ASSERT_EQ(ptr1.get(), NULL);
+    TEST_ASSERT_EQ(ptr1.get(), static_cast<int *>(NULL));
 }
 
 TEST_CASE(testAutoPtrConstructor)
