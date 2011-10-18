@@ -24,6 +24,10 @@
 
 #ifndef WIN32
 
+#include <unistd.h>
+#include <string.h>
+#include <errno.h>
+
 void sys::File::create(const std::string& str, int accessFlags,
         int creationFlags) throw (sys::SystemException)
 {
@@ -133,9 +137,19 @@ sys::Off_T sys::File::lastModifiedTime() throw (sys::SystemException)
     return (sys::Off_T) buf.st_mtime * 1000;
 }
 
+void sys::File::flush()
+{
+    if (::fsync(mHandle) != 0)
+    {
+        const int errnum = errno;
+        throw sys::SystemException(Ctxt(
+            "Error flushing file " + mPath + " (" + ::strerror(errnum) + ")"));
+    }
+}
+
 void sys::File::close()
 {
-    ::close( mHandle);
+    ::close(mHandle);
     mHandle = SYS_INVALID_HANDLE;
 }
 

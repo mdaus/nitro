@@ -130,6 +130,14 @@ sys::Off_T sys::File::lastModifiedTime()
                             mPath.c_str())));
 }
 
+void sys::File::flush()
+{
+    if (!FlushFileBuffers(mHandle))
+    {
+        throw sys::SystemException(Ctxt("Error flushing file " + mPath));
+    }
+}
+
 void sys::File::close()
 {
     CloseHandle(mHandle);

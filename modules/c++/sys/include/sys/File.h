@@ -228,6 +228,11 @@ public:
     sys::Off_T lastModifiedTime() throw (sys::SystemException);
 
     /*!
+     *  Flush the file to disk
+     */
+    void flush();
+
+    /*!
      *  Close the handle.
      */
     void close();
