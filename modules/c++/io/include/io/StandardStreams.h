@@ -61,9 +61,6 @@ public:
     //! Default constructor
     StandardOutStream()
     {}
-    //! Destructor
-    virtual ~StandardOutStream()
-    {}
 
     /*!
      * This method defines a write to stdout.
@@ -71,7 +68,12 @@ public:
      * \param len the length of bytes to read
      * \throw except::IOException
      */
-    void write(const sys::byte* b, sys::Size_T len);
+    virtual void write(const sys::byte* b, sys::Size_T len);
+
+    /*!
+     *  Flushes stdout
+     */
+    virtual void flush();
 
     using OutputStream::write;
     using OutputStream::writeln;
@@ -92,17 +94,19 @@ public:
     //! Default constructor
     StandardErrStream()
     {}
-    //! Destructor
-    virtual ~StandardErrStream()
-    {}
 
     /*!
-     * This method defines a write to stdout.
+     * This method defines a write to stderr.
      * \param b   The byte array to write to the stream
      * \param len the length of bytes to read
      * \throw except::IOException
      */
-    void write(const sys::byte* b, sys::Size_T len);
+    virtual void write(const sys::byte* b, sys::Size_T len);
+
+    /*!
+     *  Flushes stderr
+     */
+    virtual void flush();
 
 protected:
     _STDSTREAM_DECLARE_MUTEX_SEMICOLON_

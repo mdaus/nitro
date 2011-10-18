@@ -37,16 +37,29 @@ void io::StandardOutStream::write(const sys::byte* b, sys::Size_T len)
                      len)) );
 }
 
+void io::StandardOutStream::flush()
+{
+    _STDSTREAM_BEGIN_CS_SEMICOLON_
+    std::cout.flush();
+    _STDSTREAM_END_CS_SEMICOLON_
+}
+
 void io::StandardErrStream::write(const sys::byte* b, sys::Size_T len)
 {
-
     _STDSTREAM_BEGIN_CS_SEMICOLON_
     std::cerr.write((const char*)b, len);
-    //int returnVal = fwrite(b, len, len, stdout);
+    //int returnVal = fwrite(b, len, len, stderr);
     _STDSTREAM_END_CS_SEMICOLON_
     if (!std::cerr.good())
         throw except::IOException(
             Ctxt(
                 FmtX("std::cerr stream is bad after requested write: (%d)",
                      len) ) );
+}
+
+void io::StandardErrStream::flush()
+{
+    _STDSTREAM_BEGIN_CS_SEMICOLON_
+    std::cerr.flush();
+    _STDSTREAM_END_CS_SEMICOLON_
 }
