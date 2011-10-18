@@ -59,9 +59,8 @@ void io::FileOutputStreamOS::write(const sys::byte* b, sys::Size_T len)
 
 void io::FileOutputStreamOS::flush()
 {
-    // Anything?
+    mFile.flush();
 }
-
 
 sys::Off_T io::FileOutputStreamOS::seek(sys::Off_T offset,
                                         io::Seekable::Whence whence)
