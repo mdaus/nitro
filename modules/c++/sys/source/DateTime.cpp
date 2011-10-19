@@ -29,6 +29,7 @@
 #include "except/Exception.h"
 #include "sys/DateTime.h"
 #include "str/Convert.h"
+#include "str/Manip.h"
 
 #if defined(HAVE_SYS_TIME_H)
 #include <sys/time.h>
@@ -192,7 +193,7 @@ sys::DateTime::DateTime(int year, int month, int day)
 }
 
 sys::DateTime::DateTime(int year, int month, int day,
-			int hour, int minute, double second)
+                        int hour, int minute, double second)
 {
     mYear = year;
     mMonth = month;
@@ -264,9 +265,31 @@ void sys::DateTime::setYear(int year)
 void sys::DateTime::setDST(bool isDST)
 {
     if(isDST)
-	mDST = 1;
+        mDST = 1;
     else
-	mDST = 0;
+        mDST = 0;
+}
+
+std::string sys::DateTime::format(const std::string& formatStr) const
+{
+    std::string format = formatStr;
+
+    str::replace(format, "%y", str::format("%04d", this->getYear()));
+    str::replace(format, "%M", str::format("%02d", this->getMonth()));
+    str::replace(format, "%d", str::format("%02d", this->getDayOfMonth()));
+    str::replace(format, "%H", str::format("%02d", this->getHour()));
+    str::replace(format, "%m", str::format("%02d", this->getMinute()));
+
+    // second is a strange case where the input is a double
+    // and it does not make a distinction between seconds and
+    // sub-seconds with a decimal. in this case we chop the 
+    // first two numbers into a substring and convert that 
+    // to interger for properly padded formatting.
+    str::replace(format, "%s", str::format("%02d", 
+        str::toType<int>(
+            str::toString<double>(this->getSecond()).substr(0,2))));
+
+    return format;
 }
 
 void sys::DateTime::format(FormatTypes formatType,
@@ -277,24 +300,17 @@ void sys::DateTime::format(FormatTypes formatType,
 
     switch (formatType)
     {
-    case FORMAT_ISO_8601:
-    {
-        // We're in local time but this format is in GMT, so need to convert
-        DateTime const gmDT(getGMTimeInMillis());
-
-        ostr << std::setw(4) << gmDT.mYear << "-"
-             << std::setw(2) << gmDT.mMonth << "-"
-             << std::setw(2) << gmDT.mDayOfMonth << "T"
-             << std::setw(2) << gmDT.mHour << ":"
-             << std::setw(2) << gmDT.mMinute << ":"
-             << std::setw(2) << static_cast<int>(gmDT.mSecond) << "Z";
-    }
+        case FORMAT_ISO_8601:
+        {
+            // We're in local time but this format is in GMT, so need to convert
+            DateTime const gmDT(getGMTimeInMillis());
+            
+            formatStr = gmDT.format("%y-%M-%dT%H:%m:%sZ");
+        }
         break;
 
-    default:
-        throw except::Exception(Ctxt("Unknown format type " +
-                                         str::toString(formatType)));
+        default:
+            throw except::Exception(Ctxt("Unknown format type " +
+                                    str::toString(formatType)));
     }
-
-    formatStr = ostr.str();
 }

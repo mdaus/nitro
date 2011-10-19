@@ -138,6 +138,21 @@ public:
         FORMAT_ISO_8601 = 0
     };
 
+    /*!
+     *  format the DateTime string
+     *  y = year (YYYY)
+     *  M = month (MM)
+     *  d = day (DD)
+     *  H = hour (hh)
+     *  m = minute (mm)
+     *  s = second (ss)
+     *
+     *  The default format looks like this:
+     *  %y%-M%-d_%H:%m:%s
+     *  2011-10-19_11:59:46
+     */
+    std::string format(const std::string& formatStr = "%y-%M-%d_%H:%m:%s") const;
+
     void format(FormatTypes formatType, std::string& formatStr) const;
 
     std::string format(FormatTypes formatType) const
