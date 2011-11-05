@@ -43,7 +43,7 @@ class SerializableFile: public Serializable
 {
 public:
     //! Default constructor
-    SerializableFile(std::string& filename) :
+    SerializableFile(const std::string& filename) :
         mFilename(filename)
     {
     }
