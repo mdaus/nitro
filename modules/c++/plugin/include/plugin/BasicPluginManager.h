@@ -368,6 +368,7 @@ public:
         if ( !os.exists( dirName ) )
         {
             eh->onPluginDirectoryNotFound(dirName);
+            return;
         }
 
         sys::Directory dir;

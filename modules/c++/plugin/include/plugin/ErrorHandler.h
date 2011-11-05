@@ -37,8 +37,8 @@ public:
     virtual void onPluginDirectoryNotFound(const std::string& dir) = 0;
     virtual void onPluginLoadedAlready(const std::string& file) = 0;
     virtual void onPluginLoadFailed(const std::string& file) = 0;
-    virtual void onPluginVersionUnsupported(const std::string& message) = 0; virtual void onPluginError(except::Context& c) = 0;
-
+    virtual void onPluginVersionUnsupported(const std::string& message) = 0;
+    virtual void onPluginError(except::Context& c) = 0;
 };
 
 class DefaultErrorHandler : public ErrorHandler
@@ -56,11 +56,8 @@ public:
     virtual void onPluginVersionUnsupported(const std::string& message);
 
     virtual void onPluginError(except::Context& c);
-
-
 };
 
 }
-
 
 #endif
