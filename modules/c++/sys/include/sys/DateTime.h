@@ -65,6 +65,8 @@ protected:
     void getGMTime(tm &gmTime) const;
 
 public:
+    static const char DEFAULT_DATETIME_FORMAT[];
+    static const char FORMAT_ISO_8601[];
 
     /*!
      *  Construct as current date and time (localtime).
@@ -85,7 +87,7 @@ public:
      *  Construct with date and time values.
      */
     DateTime(int year, int month, int day, 
-	     int hour, int minute, double second);
+             int hour, int minute, double second);
     /*!
      *  Construct with time in milliseconds.
      */
@@ -111,8 +113,30 @@ public:
     double getGMTimeInMillis() const;
     //! Return the current year
     int getYear() const { return mYear; }
+    //! Return the Timezone (in hours)
+    float getTimezoneOffset()
+    {
+        return (float)(getTimeInMillis() - getGMTimeInMillis()) / 3600000;
+    }
     //! Return the Daylight Savings Time flag (true = on, false = off)
     bool getDST() const { return mDST == 1; }
+
+    // ! Given the {1,12} month return the alphabetic equivalent
+    static std::string monthToString(int month);
+    // ! Given the {1,7} day of the week return the alphabetic equivalent
+    static std::string dayOfWeekToString(int dayOfWeek);
+
+    // ! Given the {1,12} month return the abbreviated alphabetic equivalent
+    static std::string monthToStringAbbr(int month);
+    // ! Given the {1,7} day, return the abbreviated alphabetic equivalent
+    static std::string dayOfWeekToStringAbbr(int dayOfWeek);
+
+    // ! Given the alphabetic or abbreviated version return {1,12} equivalent 
+    // Acceptable input "August" or "Aug" would return 8
+    static int monthToValue(const std::string& month);
+    // ! Given the alphabetic or abbreviated version return {1,7} equivalent 
+    // Acceptable input "Wednesday" or "Wed" would return 4
+    static int dayOfWeekToValue(const std::string& dayOfWeek);
 
     // ! Given seconds since the epoch, provides the local time
     static
@@ -129,14 +153,8 @@ public:
     void setSecond(double second);
     void setTimeInMillis(double time);
     void setYear(int year);
+    void setTimezoneOffset(float offsetInHours);
     void setDST(bool isDST);
-
-    // Formatting
-    enum FormatTypes
-    {
-        // YYYY-MM-DDThh-mm-ssZ
-        FORMAT_ISO_8601 = 0
-    };
 
     /*!
      *  format the DateTime string
@@ -151,16 +169,8 @@ public:
      *  %y%-M%-d_%H:%m:%s
      *  2011-10-19_11:59:46
      */
-    std::string format(const std::string& formatStr = "%y-%M-%d_%H:%m:%s") const;
+    std::string format(const std::string& formatStr = DEFAULT_DATETIME_FORMAT) const;
 
-    void format(FormatTypes formatType, std::string& formatStr) const;
-
-    std::string format(FormatTypes formatType) const
-    {
-        std::string formatStr;
-        format(formatType, formatStr);
-        return formatStr;
-    }
 };
 
 }

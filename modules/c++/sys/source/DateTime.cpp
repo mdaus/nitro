@@ -24,9 +24,11 @@
 #include <errno.h>
 #include <sstream>
 #include <iomanip>
+#include <math.h>
 
-#include "sys/Conf.h"
 #include "except/Exception.h"
+#include "mem/ScopedArray.h"
+#include "sys/Conf.h"
 #include "sys/DateTime.h"
 #include "str/Convert.h"
 #include "str/Manip.h"
@@ -37,9 +39,117 @@
 #include <windows.h>
 #endif
 
+const char sys::DateTime::FORMAT_ISO_8601[] = "%Y-%m-%dT%H-%M-%SZ";
+const char sys::DateTime::DEFAULT_DATETIME_FORMAT[] = "%Y-%m-%d_%H:%M:%S";
+
 sys::DateTime::DateTime()
 {
     setNow();
+}
+
+std::string sys::DateTime::monthToString(int month)
+{
+    switch (month)
+    {
+        case 1: { return "January"; }break;
+        case 2: { return "February"; }break;
+        case 3: { return "March"; }break;
+        case 4: { return "April"; }break;
+        case 5: { return "May"; }break;
+        case 6: { return "June"; }break;
+        case 7: { return "July"; }break;
+        case 8: { return "August"; }break;
+        case 9: { return "September"; }break;
+        case 10: { return "October"; }break;
+        case 11: { return "November"; }break;
+        case 12: { return "December"; }break;
+        default: throw new except::InvalidArgumentException(
+                        "Value not in the valid range {1:12}");
+    }
+}
+
+std::string sys::DateTime::dayOfWeekToString(int dayOfWeek)
+{
+    switch (dayOfWeek)
+    {
+        case 1: { return "Sunday"; }break;
+        case 2: { return "Monday"; }break;
+        case 3: { return "Tuesday"; }break;
+        case 4: { return "Wednesday"; }break;
+        case 5: { return "Thursday"; }break;
+        case 6: { return "Friday"; }break;
+        case 7: { return "Saturday"; }break;
+        default: throw new except::InvalidArgumentException(
+                        "Value not in the valid range {1:7}");
+    }
+}
+
+std::string sys::DateTime::monthToStringAbbr(int month)
+{
+    return monthToString(month).substr(0,3);
+}
+
+std::string sys::DateTime::dayOfWeekToStringAbbr(int dayOfWeek)
+{
+    return dayOfWeekToString(dayOfWeek).substr(0,3);
+}
+
+int monthToValue(const std::string& month)
+{
+    std::string m = month;
+    str::lower(m);
+
+    if (str::startsWith(m, "jan"))
+        return 1;
+    else if (str::startsWith(m, "feb"))
+        return 2;
+    else if (str::startsWith(m, "mar"))
+        return 3;
+    else if (str::startsWith(m, "apr"))
+        return 4;
+    else if (str::startsWith(m, "may"))
+        return 5;
+    else if (str::startsWith(m, "jun"))
+        return 6;
+    else if (str::startsWith(m, "jul"))
+        return 7;
+    else if (str::startsWith(m, "aug"))
+        return 8;
+    else if (str::startsWith(m, "sep"))
+        return 9;
+    else if (str::startsWith(m, "oct"))
+        return 10;
+    else if (str::startsWith(m, "nov"))
+        return 11;
+    else if (str::startsWith(m, "dec"))
+        return 12;
+    else
+        throw new except::InvalidArgumentException(
+                        "Value not in the valid range {Jan:Dec}");
+}
+
+int dayOfWeekToValue(const std::string& dayOfWeek)
+{
+    std::string d = dayOfWeek;
+    str::lower(d);
+
+    if (str::startsWith(d, "sun"))
+        return 1;
+    else if (str::startsWith(d, "mon"))
+        return 2;
+    else if (str::startsWith(d, "tue"))
+        return 3;
+    else if (str::startsWith(d, "wed"))
+        return 4;
+    else if (str::startsWith(d, "thu"))
+        return 5;
+    else if (str::startsWith(d, "fri"))
+        return 6;
+    else if (str::startsWith(d, "sat"))
+        return 7;
+    else
+        throw new except::InvalidArgumentException(
+                        "Value not in the valid range {Sun:Sat}");
 }
 
 void sys::DateTime::setNow()
@@ -270,47 +380,27 @@ void sys::DateTime::setDST(bool isDST)
         mDST = 0;
 }
 
+void sys::DateTime::setTimezoneOffset(float offsetInHours)
+{
+    mTimeInMillis = getGMTimeInMillis() + (offsetInHours * 3600000);
+    fromMillis();
+}
+
 std::string sys::DateTime::format(const std::string& formatStr) const
 {
-    std::string format = formatStr;
+    // the longest string expansion is 
+    // %c => 'Thu Aug 23 14:55:02 2001' 
+    // which is an expansion of 22 characters
+    size_t maxSize = formatStr.length() * 22 + 1;
+    mem::ScopedArray<char> expanded(new char[maxSize]);
 
-    str::replace(format, "%y", str::format("%04d", this->getYear()));
-    str::replace(format, "%M", str::format("%02d", this->getMonth()));
-    str::replace(format, "%d", str::format("%02d", this->getDayOfMonth()));
-    str::replace(format, "%H", str::format("%02d", this->getHour()));
-    str::replace(format, "%m", str::format("%02d", this->getMinute()));
+    tm localTime;
+    getLocalTime(localTime);
+    if (!strftime(expanded.get(), maxSize, formatStr.c_str(), &localTime))
+        throw except::InvalidFormatException(
+            "The format string was unable to be expanded");
 
-    // second is a strange case where the input is a double
-    // and it does not make a distinction between seconds and
-    // sub-seconds with a decimal. in this case we chop the 
-    // first two numbers into a substring and convert that 
-    // to interger for properly padded formatting.
-    str::replace(format, "%s", str::format("%02d", 
-        str::toType<int>(
-            str::toString<double>(this->getSecond()).substr(0,2))));
-
-    return format;
+    std::string formatted = expanded.get();
+    return formatted;
 }
 
-void sys::DateTime::format(FormatTypes formatType,
-                           std::string& formatStr) const
-{
-    std::ostringstream ostr;
-    ostr.fill('0');
-
-    switch (formatType)
-    {
-        case FORMAT_ISO_8601:
-        {
-            // We're in local time but this format is in GMT, so need to convert
-            DateTime const gmDT(getGMTimeInMillis());
-            
-            formatStr = gmDT.format("%y-%M-%dT%H:%m:%sZ");
-        }
-        break;
-
-        default:
-            throw except::Exception(Ctxt("Unknown format type " +
-                                    str::toString(formatType)));
-    }
-}
