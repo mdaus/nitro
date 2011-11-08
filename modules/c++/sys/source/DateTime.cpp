@@ -25,9 +25,9 @@
 #include <sstream>
 #include <iomanip>
 #include <math.h>
+#include <memory>
 
 #include "except/Exception.h"
-#include "mem/ScopedArray.h"
 #include "sys/Conf.h"
 #include "sys/DateTime.h"
 #include "str/Convert.h"
@@ -392,7 +392,7 @@ std::string sys::DateTime::format(const std::string& formatStr) const
     // %c => 'Thu Aug 23 14:55:02 2001' 
     // which is an expansion of 22 characters
     size_t maxSize = formatStr.length() * 22 + 1;
-    mem::ScopedArray<char> expanded(new char[maxSize]);
+    std::auto_ptr<char> expanded(new char[maxSize]);
 
     tm localTime;
     getLocalTime(localTime);
