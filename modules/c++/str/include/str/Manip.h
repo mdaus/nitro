@@ -69,6 +69,12 @@ unsigned int replace(std::string& str,
                      unsigned int start = 0);
 
 /**
+ * Returns true if the string contains the match
+ */
+bool contains(const std::string& str, const std::string& match);
+
+
+/**
  * Returns true if the string contains only letters.
  */
 bool isAlpha(const std::string& s);

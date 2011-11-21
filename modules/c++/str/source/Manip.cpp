@@ -85,6 +85,11 @@ unsigned int str::replace(std::string& str,
     return start;        
 }
 
+bool str::contains(const std::string& str, const std::string& match)
+{
+    return str.find(match) != std::string::npos;
+}
+
 bool str::isAlpha(const std::string& s)
 {
     typedef std::string::const_iterator StringIter;
