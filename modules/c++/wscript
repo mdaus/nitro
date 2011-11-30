@@ -1,7 +1,7 @@
 from os.path import join, exists
 import Utils
 from build import CPPBuildContext
- 
+
 #override the default build context with our own
 Utils.g_module.build_context = Utils.g_module.install_context = \
     Utils.g_module.clean_context = CPPBuildContext
