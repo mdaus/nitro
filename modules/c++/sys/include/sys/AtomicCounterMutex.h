@@ -80,7 +80,7 @@ private:
 
 private:
     mutable ValueType mValue;
-    Mutex mMutex;
+    mutable Mutex mMutex;
 };
 }
 
