@@ -27,10 +27,17 @@
 #include <sys/AtomicCounterX86.h>
 #elif defined(WIN32)
 #include <sys/AtomicCounterWin32.h>
-#elif defined(__sun)
+#elif defined(__sun) && defined(HAVE_ATOMIC_H)
+// atomic.h is available in Solaris 10+
+// TODO: For Solaris 9 and older, we currently use the mutex implementation
+//       http://blogs.oracle.com/d/entry/atomic_operations
+//       provides a snippet of assembly code for atomic incrementing in
+//       Solaris 9 - this would be a starting point if a faster implementation
+//       is needed
 #include <sys/AtomicCounterSolaris.h>
 #else
-#error Unrecognized platform
+// Bummer - need to fall back on a slow mutex implementation
+#include <sys/AtomicCounterMutex.h>
 #endif
 
 namespace sys
