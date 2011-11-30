@@ -842,6 +842,7 @@ def detect(self):
         env.append_value('LIB_CRUN', 'Crun')
         env.append_value('LIB_CSTD', 'Cstd')
         self.check_cc(lib='thread', mandatory=True)
+        self.check_cc(header_name="atomic.h")
 
         if cxxCompiler == 'sunc++':
             (bitFlag32, bitFlag64) = getSolarisFlags(env['CXX'])
