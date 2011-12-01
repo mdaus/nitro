@@ -565,8 +565,32 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
                                 argVar.c_str()));
         }
 
-        // TODO validate choices
-        // TODO also, allow case-sensitivity to be an option
+
+        // validate the argument value against the choices
+        // TODO: add option to make case sensitive
+        std::vector<std::string> choices = arg->getChoices();
+        if (!choices.empty())
+        {
+            bool isValid = false;
+            std::string val = results->getValue(argVar)->toString();
+            str::lower(val);
+
+            for (int i = 0; i < choices.size(); i++)
+            {
+                std::string choice = choices[i];
+                str::lower(choice);
+                if (str::containsOnly(val, choice))
+                {
+                    isValid = true;
+                    break;
+                }
+            }
+            if (!isValid)
+            {
+                parseError(FmtX("invalid option for [%s]", argVar.c_str()));
+            }
+        }
+
 
         // validate # of args
         int minArgs = arg->getMinArgs();
