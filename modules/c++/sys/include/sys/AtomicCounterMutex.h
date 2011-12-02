@@ -79,7 +79,7 @@ private:
     const AtomicCounterImpl& operator=(const AtomicCounterImpl& );
 
 private:
-    mutable ValueType mValue;
+    ValueType mValue;
     mutable Mutex mMutex;
 };
 }
