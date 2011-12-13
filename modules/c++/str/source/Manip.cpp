@@ -65,12 +65,12 @@ bool str::startsWith(const std::string & s, const std::string & match)
     return sLen >= mLen;
 }
 
-unsigned int str::replace(std::string& str, 
-                          const std::string& search,
-                          const std::string& replace,
-                          unsigned int start)
+size_t str::replace(std::string& str, 
+                    const std::string& search,
+                    const std::string& replace,
+                    size_t start)
 {
-    int index = str.find(search, start);
+    size_t index = str.find(search, start);
 
     if (index != std::string::npos)
     {
@@ -83,6 +83,23 @@ unsigned int str::replace(std::string& str,
     }
 
     return start;        
+}
+
+void str::replaceAll(std::string& string, 
+                     const std::string& search,
+                     const std::string& replace)
+{
+    size_t start = 0;
+    while (start < string.length())
+    {
+        start = str::replace(string, 
+                             search, 
+                             replace, 
+                             start);
+        // skip ahead --
+        // avoids inifinite loop if replace contains search 
+        start += replace.length();                             
+    }
 }
 
 bool str::contains(const std::string& str, const std::string& match)

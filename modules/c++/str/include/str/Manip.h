@@ -63,10 +63,21 @@ bool startsWith(const std::string& s, const std::string& match);
  *  @param  start   starting position to start search
  *  @return position of first find, str.length() if not found
  */
-unsigned int replace(std::string& str, 
-                     const std::string& search,
-                     const std::string& replace,
-                     unsigned int start = 0);
+size_t replace(std::string& str, 
+               const std::string& search,
+               const std::string& replace,
+               size_t start = 0);
+
+/**
+ *  finds all instances of "search" and
+ *  substitutes them for "replace"
+ *  @param  string  String to check
+ *  @param  search  String to search for
+ *  @param  replace String to replace with
+ */
+void replaceAll(std::string& string, 
+                const std::string& search,
+                const std::string& replace);
 
 /**
  * Returns true if the string contains the match

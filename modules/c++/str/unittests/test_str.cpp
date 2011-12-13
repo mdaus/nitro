@@ -49,6 +49,39 @@ TEST_CASE(testLower)
     TEST_ASSERT_EQ(s, "test1");
 }
 
+TEST_CASE(testReplace)
+{
+    std::string s = "helo world";
+    str::replace(s, "l", "ll");
+    TEST_ASSERT_EQ(s, "hello world");
+}
+
+TEST_CASE(testReplaceAllInfinite)
+{
+    std::string s = "helo hello";
+    str::replaceAll(s, "l", "ll");
+    TEST_ASSERT_EQ(s, "hello hellllo");
+}
+
+TEST_CASE(testReplaceAllRecurse)
+{
+    std::string s = "Mississippi";
+    str::replaceAll(s, "i", " ");
+    TEST_ASSERT_EQ(s, "M ss ss pp ");
+}
+
+TEST_CASE(testContains)
+{
+    std::string s = "Mississippi";
+    TEST_ASSERT_TRUE(str::contains(s, "ssiss"));
+}
+
+TEST_CASE(testNotContains)
+{
+    std::string s = "Mississippi";
+    TEST_ASSERT_FALSE(str::contains(s, "miss"));
+}
+
 TEST_CASE(testSplit)
 {
     std::string s = "space delimited values are the best!";
@@ -133,6 +166,11 @@ int main(int argc, char* argv[])
     TEST_CHECK( testTrim);
     TEST_CHECK( testUpper);
     TEST_CHECK( testLower);
+    TEST_CHECK( testReplace);
+    TEST_CHECK( testReplaceAllInfinite);
+    TEST_CHECK( testReplaceAllRecurse);
+    TEST_CHECK( testContains);
+    TEST_CHECK( testNotContains);
     TEST_CHECK( testSplit);
     TEST_CHECK( testIsAlpha);
     TEST_CHECK( testIsAlphaSpace);
