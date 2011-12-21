@@ -259,7 +259,7 @@ class CPPBuildContext(BuildContext):
                              install_path='${PREFIX}/share/%s/test' % modArgs['name'])
 
         testNode = path.find_dir('unittests')
-        if testNode:
+        if testNode and not Options.options.libs_only:
             test_deps = listify(modArgs.get('unittest_deps', modArgs.get('module_deps', '')))
             test_uselib = listify(modArgs.get('unittest_uselib', modArgs.get('uselib', '')))
             
