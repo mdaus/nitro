@@ -20,29 +20,12 @@
  *
  */
 
+#include <except/Trace.h>
 
-#include <iostream>
-#include "except/Trace.h"
-
-/*!
- * \file Trace.cpp
- * \brief Class for holding exception traces
- *
- */
-
-except::Trace& except::Trace::operator= (const except::Trace& t)
-{
-    if (&t != this)
-    {
-        mStack = t.getStack();
-    }
-    return *this;
-}
-
-std::ostream& operator<< (std::ostream& os, const except::Trace& t)
+std::ostream& operator<<(std::ostream& os, const except::Trace& t)
 {
     const std::list<except::Context>& stack = t.getStack();
-    int size = stack.size();
+
     for (std::list<except::Context>::const_iterator it = stack.begin();
             it != stack.end(); ++it)
     {
@@ -50,4 +33,3 @@ std::ostream& operator<< (std::ostream& os, const except::Trace& t)
     }
     return os;
 }
-

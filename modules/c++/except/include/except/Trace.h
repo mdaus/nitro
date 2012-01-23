@@ -24,7 +24,7 @@
 #define __EXCEPT_TRACE_H__
 
 #include <list>
-#include <iostream>
+#include <sstream>
 #include "except/Context.h"
 
 /*!
@@ -35,7 +35,6 @@
 
 namespace except
 {
-
 /*!
  * \class Trace
  * \brief Holds stack of context information
@@ -43,28 +42,12 @@ namespace except
 class Trace
 {
 public:
-
     /*!
      * Default Constructor
      */
     Trace()
     {
     }
-
-    /*!
-     * Constructor. Takes a Trace
-     * \param t The Trace
-     */
-    Trace(const Trace& t)
-    {
-        mStack = t.getStack();
-    }
-
-    /*!
-     * Assignment operator
-     * \param t The Trace to copy
-     */
-    Trace& operator=(const Trace& t);
 
     /*!
      * Gets size of stack
@@ -121,7 +104,6 @@ public:
 private:
     //! The name of the internal stack wrapped by the Trace
     std::list<Context> mStack;
-
 };
 }
 
