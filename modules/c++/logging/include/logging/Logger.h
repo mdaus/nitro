@@ -64,7 +64,7 @@ public:
     void log(LogLevel level, const except::Context& ctxt);
 
     //! Logs a Throwable at the specified LogLevel
-    void log(LogLevel level, except::Throwable& t);
+    void log(LogLevel level, const except::Throwable& t);
 
     //! Logs a message at the DEBUG LogLevel
     void debug(const std::string& msg);
@@ -89,15 +89,15 @@ public:
     void critical(const except::Context& ctxt);
 
     //! Logs a Throwable at the DEBUG LogLevel
-    void debug(except::Throwable& t);
+    void debug(const except::Throwable& t);
     //! Logs a Throwable at the INFO LogLevel
-    void info(except::Throwable& t);
+    void info(const except::Throwable& t);
     //! Logs a Throwable at the WARNING LogLevel
-    void warn(except::Throwable& t);
+    void warn(const except::Throwable& t);
     //! Logs a Throwable at the ERROR LogLevel
-    void error(except::Throwable& t);
+    void error(const except::Throwable& t);
     //! Logs a Throwable at the CRITICAL LogLevel
-    void critical(except::Throwable& t);
+    void critical(const except::Throwable& t);
 
     /*!
      * Adds a Hander to the list of Handlers this Logger delegates to.
