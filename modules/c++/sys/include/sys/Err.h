@@ -57,14 +57,16 @@ const static int __last_err__ = 0;
 class Err
 {
 public:
+
     /*!
      * Copy constructor
      * \param err The err to take
      */
     Err(const Err& err)
     {
-        mErrId = err.mErrId;
+        mErrId = err.getErrID();
     }
+    
     /*!
      * Constructor from int error id
      * \param errNum  The error to initialize with. Defaults to last
@@ -73,6 +75,7 @@ public:
     {
         setThis(errNum);
     }
+    
     /*!
      *  Assignment operator
      *  \param err The err to take
@@ -81,15 +84,14 @@ public:
     {
         if (&err != this)
         {
-            mErrId = err.mErrId;
+            mErrId = err.getErrID();
         }
         return *this;
     }
+    
     //! Destructor
-    virtual ~Err()
-    {}
-    // bool operator==(const )
-
+    virtual ~Err() {}
+    
     /*!
      *  This is the equivalent of strerror, done in a cross-platform
      *  manner, wrapped in this class.  Prints this object to 
@@ -103,18 +105,23 @@ public:
      *  Set method
      *  \param i An int to initialize from
      */
-    void setThis(int i)
+    void setThis(int i = __last_err__)
     {
         if (i == __last_err__)
         {
             mErrId = getLast();
         }
     }
-    //!  Return the last error, probably should be static
+    
+    //!  Return the last error
     virtual int getLast() const;
+    
     int getErrID() const { return mErrId; }
+
 protected:
+
     int mErrId;
+
 };
 
 /*!
@@ -127,6 +134,7 @@ protected:
 class SocketErr : public Err
 {
 public:
+
     /*!
      *  Copy constructor.  Takes a right-hand-side
      *  \param err An error to initialize from
@@ -134,17 +142,19 @@ public:
      */
     SocketErr(const SocketErr& err)
     {
-        mErrId = err.mErrId;
+        mErrId = err.getErrID();
     }
+    
     /*!
      *  Constructor
      *  \param errNum  An int to initialize from
      *
-     */
+     */     
     SocketErr(int errNum = __last_err__)
     {
         setThis(errNum);
     }
+    
     /*!
      *  Assignment operator
      *  \param err The err to take
@@ -154,17 +164,19 @@ public:
     {
         if (&err != this)
         {
-            mErrId = err.mErrId;
+            mErrId = err.getErrID();
         }
         return *this;
     }
+    
     //!  Destructor
-    virtual ~SocketErr()
-    {}
-    // bool operator==(const )
+    virtual ~SocketErr() {}
+    
     //!  Redefined for socket errors
     virtual int getLast() const;
+
 };
+
 }
 
 #endif

@@ -20,30 +20,31 @@
  *
  */
 
+#include <import/except.h>
+#include <import/str.h>
+#include <import/sys.h>
 
-#if !defined(WIN32)
-
-#include "sys/Err.h"
-
-int sys::Err::getLast() const
+int main(int argc, char** argv)
 {
-    return errno;
+    try
+    {
+        // open non-existant file
+        FILE* f = fopen("supercalifragilisticexpialidocious.tmpl", "r");
+        
+        if (!f) throw except::Exception(Ctxt("File not Found! That's weird!?"));
+    }
+    catch (...)
+    {
+        sys::Err err;
+        sys::Err copyErr (err);
+        sys::Err assignErr = err;
+        
+        std::cout << "Default Constructed Error        : " << err.toString() << std::endl;
+        std::cout << "Copy Constructed Error           : " << copyErr.toString() << std::endl;
+        std::cout << "Assignment Constructed Error     : " << assignErr.toString() << std::endl;
+
+        sys::SocketErr socErr;
+        std::cout << "Default Constructed Socket Error : " << socErr.toString() << std::endl;
+    }
 }
-
-std::string sys::Err::toString() const
-{
-    char *temp = strerror(mErrId);
-    if (temp == NULL)
-        return std::string("");
-
-    std::string stringError = temp;
-    return stringError;
-}
-
-int sys::SocketErr::getLast() const
-{
-    return errno;
-}
-
-#endif
 

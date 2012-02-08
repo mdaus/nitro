@@ -23,6 +23,7 @@
 
 #if defined(WIN32)
 
+#include <WinSock.h>
 #include "sys/Err.h"
 
 int sys::Err::getLast() const
@@ -38,13 +39,17 @@ std::string sys::Err::toString() const
                       mErrId, 0,
                       (LPTSTR)&buffer, 0, NULL) == 0)
     {
-
         return std::string("Unknown error code");
-
     }
+    
     std::string error(buffer);
     LocalFree(buffer);
     return error;
+}
+
+int sys::SocketErr::getLast() const
+{
+    return WSAGetLastError();
 }
 
 #endif
