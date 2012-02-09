@@ -20,43 +20,41 @@
  *
  */
 
-
-#ifndef __IMPORT_SYS_H__
-#define __IMPORT_SYS_H__
-
-#include "sys/AtomicCounter.h"
-#include "sys/Runnable.h"
-#include "sys/Dbg.h"
-#include "sys/Conf.h"
-#include "sys/Err.h"
-#include "sys/SystemException.h"
-#include "sys/TimeStamp.h"
-#include "sys/OS.h"
-#include "sys/Semaphore.h"
-#include "sys/Mutex.h"
-#include "sys/ConditionVar.h"
-#include "sys/Thread.h"
-//#include "sys/Process.h"
-#include "sys/Exec.h"
-#include "sys/DLL.h"
-#include "sys/DirectoryEntry.h"
-/* TODO: Add File.h */
-#include "sys/File.h"
-#include "sys/ReadWriteMutex.h"
-#include "sys/Path.h"
-#include "sys/DateTime.h"
+#include <import/sys.h>
+#include <fstream>
+#include <iomanip>
 #include "sys/StopWatch.h"
-#include "sys/FileFinder.h"
-/*!
 
-\file sys.h
+using namespace sys;
 
-The sys library servers the purpose of creating a common, system-indepenent
-interface layer for cross-platform applications.  It currently supports
-UNIX and Windows, and provides interfaces for sockets, threads, 
-synchronization, conditions, time and operating system-specific function calls.
+int main(int argc, char **argv)
+{
+    try
+    {
+        std::string cmd;
 
-*/
+        if (argc > 1)
+            cmd = std::string(argv[1]);
+        else
+            cmd = "echo Scream!";
 
-#endif
+        sys::Exec exe(cmd);
+        exe.run();
+    }
+    catch (const except::Throwable& ex)
+    {
+        std::cerr << "Caught C++ exception" << 
+            ex.getMessage() << std::endl;
+    }
+    catch (const std::exception& ex)
+    {
+        std::cerr << "Caught standard exception" << 
+            ex.what() << std::endl;
+    }
+    catch (...)
+    {
+        std::cerr << "Caught unnamed Unwanted exception" << std::endl;
+    }
+    return 0;
+}
 

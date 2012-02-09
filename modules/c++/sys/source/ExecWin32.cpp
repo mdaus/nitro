@@ -21,42 +21,34 @@
  */
 
 
-#ifndef __IMPORT_SYS_H__
-#define __IMPORT_SYS_H__
+#if defined(WIN32)
 
-#include "sys/AtomicCounter.h"
-#include "sys/Runnable.h"
-#include "sys/Dbg.h"
-#include "sys/Conf.h"
 #include "sys/Err.h"
-#include "sys/SystemException.h"
-#include "sys/TimeStamp.h"
-#include "sys/OS.h"
-#include "sys/Semaphore.h"
-#include "sys/Mutex.h"
-#include "sys/ConditionVar.h"
-#include "sys/Thread.h"
-//#include "sys/Process.h"
 #include "sys/Exec.h"
-#include "sys/DLL.h"
-#include "sys/DirectoryEntry.h"
-/* TODO: Add File.h */
-#include "sys/File.h"
-#include "sys/ReadWriteMutex.h"
-#include "sys/Path.h"
-#include "sys/DateTime.h"
-#include "sys/StopWatch.h"
-#include "sys/FileFinder.h"
-/*!
 
-\file sys.h
+int sys::ExecPipe::closePipe()
+{
+    if (!mOutStream)
+    {
+        throw except::IOException(
+            Ctxt("The stream is already closed"));
+    }
 
-The sys library servers the purpose of creating a common, system-indepenent
-interface layer for cross-platform applications.  It currently supports
-UNIX and Windows, and provides interfaces for sockets, threads, 
-synchronization, conditions, time and operating system-specific function calls.
+    // in case it fails
+    FILE* tmp = mOutStream;
+    mOutStream = NULL;
 
-*/
+    const int exitStatus  = pclose(tmp);
+    if (exitStatus == -1)
+    {
+        sys::SocketErr err;
+        throw except::IOException(
+                Ctxt("Failure while closing stream to child process: " + 
+                     err.toString()));
+
+    }
+
+    return exitStatus;
+}
 
 #endif
-

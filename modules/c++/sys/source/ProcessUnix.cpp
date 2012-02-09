@@ -25,11 +25,6 @@
 #include "sys/ProcessUnix.h"
 #include <stdlib.h>
 
-void sys::Exec::run()
-{
-    ::system( mCmd.c_str() );
-}
-
 void sys::ProcessUnix::start()
 {
     pid_t lPid = fork();

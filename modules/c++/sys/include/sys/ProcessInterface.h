@@ -43,46 +43,6 @@
 namespace sys
 {
 
-/*!
- *  \class Exec
- *  \brief A good, old-fashioned exec call
- *
- *  This Exec class defines an API for a system-independent
- *  exec method.  The fact that it inherits the Runnable interface
- *  allows us to use it from within a Process to create a
- *  'system()'-like functionality.
- */
-class Exec : public sys::Runnable
-{
-public:
-    /*!
-     *  Execute a command on the run() function
-     *  \param cmd The command to exec()
-     */
-    Exec( const std::string& cmd );
-
-    /*!
-     *  Execute a command on the run() function
-     *  \param cmdAry The command to exec() as a vector
-     */
-    Exec( const std::vector< std::string >& cmdAry);
-
-    //!  Destructor
-    virtual ~Exec()
-    {}
-
-    /*!
-     *  Execute a command
-     */
-    virtual void run();
-
-protected:
-    //!  A command
-    std::string mCmd;
-
-};
-
-
 template <typename Pid_T> class ProcessInterface : public sys::Runnable
 {
 public:
