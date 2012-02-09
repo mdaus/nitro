@@ -62,6 +62,7 @@
 #include "io/Seekable.h"
 #include "io/Serializable.h"
 #include "io/SerializableFile.h"
+#include "io/PipeStream.h"
 #include "io/StandardStreams.h"
 #include "io/StringStream.h"
 #include "io/NullStreams.h"
