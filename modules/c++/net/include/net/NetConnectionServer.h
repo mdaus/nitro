@@ -55,7 +55,9 @@ public:
     NetConnectionServer();
 
     //! Destructor.
-    virtual ~NetConnectionServer();
+    virtual ~NetConnectionServer() 
+    {
+    }
 
     /*!
      *  Create a server on the port, with a backlog queue given in the
@@ -75,18 +77,18 @@ public:
     //virtual void handleConnection(NetConnection* connection) = 0;
 
     /*!
-            * Gets the port number
-            * \return Port number that the server is (or will be) on.
-            */
+     * Gets the port number
+     * \return Port number that the server is (or will be) on.
+     */
     int getPortNumber()
     {
         return mPortNumber;
     }
 
     /*!
-            * Gets the host name
-            * \return Host name that the server is (or will be) on.
-            */
+     * Gets the host name
+     * \return Host name that the server is (or will be) on.
+     */
     static std::string getHostName();
 
     /*!
@@ -101,9 +103,9 @@ protected:
     //! The amount of backlog
     int mBacklog;
     //! The socket we are listening on
-    net::Socket mSocket;
+    std::auto_ptr<net::Socket> mSocket;
 
-    net::AllocStrategy* mAllocStrategy;
+    std::auto_ptr<net::AllocStrategy> mAllocStrategy;
 };
 }
 

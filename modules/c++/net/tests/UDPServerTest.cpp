@@ -56,15 +56,15 @@ int main(int argc, char** argv)
         int port = atoi(argv[1]);
 
         SocketAddress address(port);
-        Socket socket = UDPServerSocketFactory().create(address);
+        std::auto_ptr<Socket> socket = UDPServerSocketFactory().create(address);
 
         my_packet_t packet;
         SocketAddress cliAddr(port);
-        socket.recvFrom(cliAddr, (char*)&packet, sizeof(my_packet_t));
+        socket->recvFrom(cliAddr, (char*)&packet, sizeof(my_packet_t));
         std::cout << "(in packet: #" << packet.packet_no << ")" << std::endl;
         int one = 1;
-        socket.sendTo(cliAddr, (const char*)&one, 4);
-        socket.close();
+        socket->sendTo(cliAddr, (const char*)&one, 4);
+        socket->close();
     }
     catch (except::Exception& ex)
     {

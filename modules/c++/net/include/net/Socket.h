@@ -23,10 +23,12 @@
 #ifndef __NET_SOCKET_H__
 #define __NET_SOCKET_H__
 
+#include <sys/SystemException.h>
+#include <except/Exception.h>
+#include <str/Manip.h>
+
 #include "net/Sockets.h"
 #include "net/SocketAddress.h"
-#include "sys/SystemException.h"
-#include "except/Exception.h"
 
 /*!
  *  \file
@@ -58,12 +60,6 @@ enum { TCP_PROTO = SOCK_STREAM, UDP_PROTO = SOCK_DGRAM };
 class Socket
 {
 public:
-    /*!
-     *  Default constructor.  Does nothing.  Socket is left in
-     *  invalid handle state
-     */
-    Socket() : mNative(INVALID_SOCKET)
-    {}
 
     /*!
      *  Give a protocol
@@ -72,50 +68,33 @@ public:
     Socket(int proto);
 
     /*!
-     *  Copy constructor
-     */
-    Socket(const Socket& socket)
-    {
-        mNative = socket.mNative;
-    }
-
-    /*!
-     *  Assignment operator
-     *  \param socket
-     */
-    Socket& operator=(const Socket& socket)
-    {
-        if (&socket != this)
-        {
-            mNative = socket.mNative;
-        }
-        return *this;
-    }
-
-    /*!
      *  Destructor
      */
-    virtual ~Socket()
-    { }
-
-    /*!
-     *  Method to open a socket.  Copies a handle to its internal
-     *  matter.  Connects the handles to their readers and writers.
-     *  \param socket The handle to initialize 
-     *  \throw SocketCreationFailedException
-     */
-    virtual void open(const Socket& socket)
-    {
-        mNative = socket.mNative;
+    ~Socket()
+    { 
+        try
+        {
+            close();
+        }
+        catch (...)
+        {
+        }
     }
 
     /*!
      *  Close a socket.  This releases the writers/readers and closes
      *  the handle.
      */
-    virtual void close()
+    void close()
     {
-        closesocket(mNative);
+        if (mNative != INVALID_SOCKET)
+        {
+            // this could throw so make sure it gets
+            // set to INVALID_SOCKET
+            net::Socket_T tmp = mNative;
+            mNative = INVALID_SOCKET;
+            closeSocketOrThrow(tmp);
+        }
     }
 
     /*!
@@ -124,7 +103,7 @@ public:
      *
      *  \param backlog
      */
-    virtual void listen(int backlog);
+    void listen(int backlog);
 
     /*!
      *  Connect the socket to this address.  This is usually called
@@ -132,14 +111,14 @@ public:
      * 
      *  \param address The address to connect to
      */
-    virtual void connect(const SocketAddress& address);
+    void connect(const SocketAddress& address);
 
     /*!
      *  Bind the socket to this address.  This is usually called
      *  by the creator pattern.
      *
      */
-    virtual void bind(const SocketAddress& address);
+    void bind(const SocketAddress& address);
 
 
     /*!
@@ -154,13 +133,16 @@ public:
                                         int option,
                                         const T& val)
     {
-        if (NATIVE_SOCKET_FAILED(::setsockopt(mNative, level, option, (const char*)&val,
-                (net::SockLen_T)sizeof(T))))
+
+        if (::setsockopt(mNative, level, option, (const char*)&val,
+                         (net::SockLen_T)sizeof(T)) != 0)
         {
-            
+            // capture the error
+            sys::SocketErr err; 
+
 #if defined(WIN32) || defined(_WIN32)
 
-       /* Wrapper for setsockopt dealing with Windows specific issues :-
+            /* Wrapper for setsockopt dealing with Windows specific issues :-
              *
              * IP_TOS and IP_MULTICAST_LOOP can't be set on some Windows
              * editions. 
@@ -169,7 +151,7 @@ public:
              * to get consistent behaviour with other operating systems.
              */
             
-       /*
+            /*
              * IP_TOS & IP_MULTICAST_LOOP can't be set on some versions
              * of Windows.
              */
@@ -177,15 +159,17 @@ public:
                     (option == IP_TOS || option == IP_MULTICAST_LOOP))
                 return;
 
-        /*
-              * IP_TOS can't be set on unbound UDP sockets.
-              */
+            /*
+             * IP_TOS can't be set on unbound UDP sockets.
+             */
             if ((WSAGetLastError() == WSAEINVAL) && (level == IPPROTO_IP) &&
                     (option == IP_TOS))
                 return;
 #endif 
-        
-            throw sys::SocketException(Ctxt("setsockop() function"));
+
+            std::ostringstream oss;
+            oss << "Socket setOptions failure: " << err.toString();
+            throw sys::SocketException(Ctxt(oss.str()));
         }
     }
 
@@ -211,9 +195,9 @@ public:
      *  \param len The number of bytes to read
      *  \param flags (optional) Addtional flags (not common)
      */
-    virtual sys::SSize_T recv(sys::byte* b,
-                              sys::Size_T len,
-                              int flags = 0);
+    sys::SSize_T recv(sys::byte* b,
+                      sys::Size_T len,
+                      int flags = 0);
 
     /*!
      *  Same as recv, except from a specified socket address.  Only
@@ -225,11 +209,10 @@ public:
      *  \param len The number of bytes read
      *  \param flags The flags (usually not specified)
      */
-
-    virtual sys::SSize_T recvFrom(SocketAddress& address,
-                                  sys::byte* b,
-                                  sys::Size_T len,
-                                  int flags = 0);
+    sys::SSize_T recvFrom(SocketAddress& address,
+                          sys::byte* b,
+                          sys::Size_T len,
+                          int flags = 0);
 
 
     /*!
@@ -238,9 +221,9 @@ public:
      *  \param len The number of bytes.
      *  \param flags The flags (usually not specified)
      */
-    virtual void send(const sys::byte* b,
-                      sys::Size_T len,
-                      int flags = 0);
+    void send(const sys::byte* b,
+              sys::Size_T len,
+              int flags = 0);
 
     /*!
      *  Same as send, except to a specified socket address.  Only
@@ -252,11 +235,10 @@ public:
      *  \param len The number of bytes read
      *  \param flags The flags (usually not specified)
      */
-
-    virtual void sendTo(const SocketAddress& address,
-                        const sys::byte* b,
-                        sys::Size_T len,
-                        int flags = 0);
+    void sendTo(const SocketAddress& address,
+                const sys::byte* b,
+                sys::Size_T len,
+                int flags = 0);
 
     /*!
      *  Accept a connection while listening on a passive socket.
@@ -267,15 +249,54 @@ public:
      *  \param fromClient Client socket address returned
      *  \return A new socket connection to the client
      */
-    virtual Socket accept(SocketAddress& fromClient);
+    std::auto_ptr<Socket> accept(SocketAddress& fromClient);
 
     net::Socket_T getHandle() const
     {
         return mNative;
     }
+
 protected:
     //! The socket
     net::Socket_T mNative;
+    
+    //! only this object should have access 
+    Socket (net::Socket_T socket, bool isSocket) :
+        mNative(isSocket ? socket : INVALID_SOCKET)
+    {
+        if (mNative == INVALID_SOCKET)
+        {
+            // we got a proto so we need to create the socket
+            mNative = ::socket(AF_INET, socket, 0);
+            if (mNative == INVALID_SOCKET)
+            {
+                throw sys::SocketException(Ctxt("Socket initialization failed"));
+            }
+        }
+    }
+    
+private:
+
+    /*!
+     *  Copy constructor
+     */
+    Socket(const Socket& socket)
+    {
+        mNative = socket.mNative;
+    }
+
+    /*!
+     *  Assignment operator
+     *  \param socket
+     */
+    Socket& operator=(const Socket& socket)
+    {
+        if (&socket != this)
+        {
+            mNative = socket.mNative;
+        }
+        return *this;
+    }
 };
 
 }

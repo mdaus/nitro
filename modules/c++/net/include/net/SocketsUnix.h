@@ -35,6 +35,7 @@
 #include <netinet/in.h>
 #include <errno.h>
 #include "sys/Dbg.h"
+#include <import/sys.h>
 
 #define NATIVE_CLIENTSOCKET_INIT() dbg_printf("Initializing client socket\n")
 #define NATIVE_SERVERSOCKET_INIT() net::UnixServerInit()
@@ -48,15 +49,9 @@
 
 #define INVALID_SOCKET -1
 
-#ifndef closesocket
-inline void closesocket(int socket)
-{
-    close(socket);
-}
-#endif
-
 namespace net
 {
+
 typedef struct hostent     HostEnt_T;
 typedef int                Socket_T;
 typedef struct sockaddr    SockAddr_T;
@@ -94,6 +89,17 @@ typedef int SockLen_T;
 
 typedef char* ByteBuf_T;
 typedef int   BufSize_T;
+
+//! close socket and throw on failure
+inline void closeSocketOrThrow(net::Socket_T socket)
+{
+    if (close(socket) != 0)
+    {
+        sys::SocketErr err;
+        throw except::Exception(
+            Ctxt("Socket close failure: " + err.toString()));
+    }
+}
 
 /*!
  *  Unix-specific function to ignore a SIGPIPE.  This prevents

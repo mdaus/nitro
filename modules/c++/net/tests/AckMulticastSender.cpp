@@ -32,8 +32,8 @@ using namespace except;
 template<typename T> class AckMulticastSender
 {
 
-    Socket mMulticastSender;
-    Socket mAckChannel;
+    std::auto_ptr<Socket> mMulticastSender;
+    std::auto_ptr<Socket> mAckChannel;
     SocketAddress mMulticastAddr;
     std::vector<std::string> mSubscribers;
     int mRetransmitPort;
@@ -50,35 +50,33 @@ public:
 
     ~AckMulticastSender()
     {
-        mMulticastSender.close();
-        mAckChannel.close();
-
     }
-    Socket createAckChannel(int localAckPort)
+    
+    std::auto_ptr<Socket> createAckChannel(int localAckPort)
     {
         SocketAddress address(localAckPort);
         return UDPServerSocketFactory().create(address);
     }
-    Socket createSenderSocket(const std::string& mcastGroup, int mcastPort,
+    std::auto_ptr<Socket> createSenderSocket(const std::string& mcastGroup, int mcastPort,
             int loopback)
     {
 
         mMulticastAddr.set(mcastPort, mcastGroup);
 
-        Socket s(UDP_PROTO);
+        std::auto_ptr<Socket> s( new Socket(UDP_PROTO) );
 
         int on = 1;
-        s.setOption(SOL_SOCKET, SO_REUSEADDR, on);
+        s->setOption(SOL_SOCKET, SO_REUSEADDR, on);
 
         // Turn off loopback to this machine
         if (!loopback)
-            s.setOption(IPPROTO_IP, IP_MULTICAST_LOOP, loopback);
+            s->setOption(IPPROTO_IP, IP_MULTICAST_LOOP, loopback);
 
         return s;
     }
     void sendNotification(const T& t)
     {
-        mMulticastSender.sendTo(mMulticastAddr, (const char*) &t, sizeof(t));
+        mMulticastSender->sendTo(mMulticastAddr, (const char*) &t, sizeof(t));
     }
 
     void confirmOrRetransmit(int number, const T& t)
@@ -101,7 +99,7 @@ public:
         for (int i = 0; i < needRetransmit.size(); i++)
         {
             SocketAddress sa(needRetransmit[i], mRetransmitPort);
-            Socket toRetransmit = net::TCPClientSocketFactory().create(sa);
+            std::auto_ptr<Socket> toRetransmit = net::TCPClientSocketFactory().create(sa);
             toRetransmit.send((const char*) &packet, sizeof(packet));
             toRetransmit.close();
         }
@@ -136,15 +134,15 @@ public:
             struct timeval tv;
             tv.tv_sec = 0;
             tv.tv_usec = 0; // 1 millisecond
-            //std::cout << (int) mAckChannel.getHandle() << std::endl;
+            //std::cout << (int) mAckChannel->getHandle() << std::endl;
             // Platform dependent code....
             fd_set readers;//, writers;
-            FD_ZERO(&readers);//	    FD_ZERO(&writers);
-            FD_SET(mAckChannel.getHandle(), &readers);
-            //FD_SET(mAckChannel.getHandle(), &writers);
-            assert(FD_ISSET(mAckChannel.getHandle(), &readers));
+            FD_ZERO(&readers);//        FD_ZERO(&writers);
+            FD_SET(mAckChannel->getHandle(), &readers);
+            //FD_SET(mAckChannel->getHandle(), &writers);
+            assert(FD_ISSET(mAckChannel->getHandle(), &readers));
             //int rv = 1;
-            int rv = ::select(mAckChannel.getHandle() + 1, &readers, NULL,
+            int rv = ::select(mAckChannel->getHandle() + 1, &readers, NULL,
                               NULL, &tv);
             if (rv < 0)
             {
@@ -154,7 +152,7 @@ public:
 
             if (rv)
             {
-                mAckChannel.recvFrom(whereFrom, (char*) &myNumber, sizeof(int));
+                mAckChannel->recvFrom(whereFrom, (char*) &myNumber, sizeof(int));
                 if (myNumber == number)
                 {
                     std::string host =

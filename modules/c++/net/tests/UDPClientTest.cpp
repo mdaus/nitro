@@ -62,15 +62,15 @@ int main(int argc, char** argv)
         int port = atoi(argv[2]);
 
         SocketAddress sa(host, port);
-        Socket socket = UDPClientSocketFactory().create(sa);
+        std::auto_ptr<Socket> socket = UDPClientSocketFactory().create(sa);
         my_packet_t packet;
         packet.packet_no = 1;
         packet.time_stamp = time(NULL);
-        socket.send((const char*)&packet, sizeof(my_packet_t));
+        socket->send((const char*)&packet, sizeof(my_packet_t));
         int rv;
-        socket.recv((char*)&rv, sizeof(int));
+        socket->recv((char*)&rv, sizeof(int));
         std::cout << "Recv'd: " << rv << " back from socket" << std::endl;
-        socket.close();
+        socket->close();
         return 0;
     }
     catch (except::Exception& ex)

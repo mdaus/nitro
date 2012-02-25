@@ -57,17 +57,17 @@ int main(int argc, char** argv)
         int port = atoi(argv[1]);
 
         SocketAddress address(port);
-        Socket listener = TCPServerSocketFactory().create(address);
+        std::auto_ptr<Socket> listener = TCPServerSocketFactory().create(address);
         SocketAddress clientAddress;
-        Socket client = listener.accept(clientAddress);
+        std::auto_ptr<Socket> client = listener->accept(clientAddress);
         // Print client address here!!
         my_packet_t packet;
-        client.recv((char*)&packet, sizeof(my_packet_t));
+        client->recv((char*)&packet, sizeof(my_packet_t));
         std::cout << "(in packet: #" << packet.packet_no << ")" << std::endl;
         int one = 1;
-        client.send((const char*)&one, 4);
-        client.close();
-        listener.close();
+        client->send((const char*)&one, 4);
+        client->close();
+        listener->close();
 
     }
     catch (except::Exception& ex)

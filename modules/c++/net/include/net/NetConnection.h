@@ -27,6 +27,7 @@
 #include "io/BidirectionalStream.h"
 #include "sys/SystemException.h"
 #include "except/Exception.h"
+#include "mem/SharedPtr.h"
 
 /*!
  *  \file NetConnection.h
@@ -57,7 +58,8 @@ public:
     NetConnection()
     {}
 
-    NetConnection(net::Socket socket) : mSocket(socket)
+    //! we own the ptr after this transaction
+    NetConnection(std::auto_ptr<net::Socket> socket) : mSocket(socket)
     {}
 
     /*!
@@ -87,7 +89,13 @@ public:
      */
     virtual ~NetConnection()
     {
-        close();
+        try
+        {
+            close();
+        }
+        catch(...)
+        {
+        }
     }
 
     /*!
@@ -105,25 +113,16 @@ public:
      *  Close a connection.  This releases the writers/readers and closes
      *  the handle.
      */
-    virtual void close()
+    void close()
     {
-        mSocket.close();
-    }
-
-    /*!
-     *  Get the socket by reference.
-     *  \return The socket
-     */
-    Socket& getSocket()
-    {
-        return mSocket;
+        mSocket->close();
     }
 
     /*!
      *  Get the socket by constant reference
      *  \return The socket
      */
-    const Socket& getSocket() const
+    mem::SharedPtr<net::Socket> getSocket() const
     {
         return mSocket;
     }
@@ -152,7 +151,7 @@ public:
 
 protected:
     //! The socket
-    net::Socket mSocket;
+    mem::SharedPtr<net::Socket> mSocket;
 };
 
 }

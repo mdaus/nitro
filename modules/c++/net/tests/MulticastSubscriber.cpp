@@ -29,12 +29,10 @@ using namespace sys;
 using namespace io;
 using namespace except;
 
-Socket createMulticastSubscriber(const std::string& group,
+std::auto_ptr<Socket> createMulticastSubscriber(const std::string& group,
         const SocketAddress& local)
 {
-    Socket socket(UDP_PROTO);
-
-    socket.bind(local);
+    std::auto_ptr<Socket> socket( new Socket(UDP_PROTO) );
 
     struct ip_mreq mreq;
 
@@ -52,7 +50,9 @@ Socket createMulticastSubscriber(const std::string& group,
     mreq.imr_interface.s_addr = htonl(INADDR_ANY);
 
     // Now set our socket option to add us as members
-    socket.setOption(IPPROTO_IP, IP_ADD_MEMBERSHIP, mreq);
+    socket->setOption(IPPROTO_IP, IP_ADD_MEMBERSHIP, mreq);
+
+    socket->bind(local);
 
     return socket;
 }
@@ -78,13 +78,13 @@ int main(int argc, char** argv)
 
         // Register ourselves with the OS as members of this group
 
-        Socket socket = createMulticastSubscriber(mcastGroup, here);
+        std::auto_ptr<Socket> socket = createMulticastSubscriber(mcastGroup, here);
         Packet packet;
         SocketAddress whereFrom;
-        socket.recvFrom(whereFrom, (char*) &packet, sizeof(packet));
+        socket->recvFrom(whereFrom, (char*) &packet, sizeof(packet));
         std::cout << "Recv'd message: " << packet.what << std::endl;
         std::cout << "Packet #: " << packet.number << std::endl;
-        socket.close();
+        socket->close();
     }
     catch (Exception& ex)
     {

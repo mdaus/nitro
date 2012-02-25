@@ -81,12 +81,12 @@ public:
      *  \param address Address to establish the socket for
      *  \return The created & bound socket
      */
-    virtual Socket create(SocketAddress& address)
+    virtual std::auto_ptr<Socket> create(SocketAddress& address)
     {
-        Socket s(mProto);
+        std::auto_ptr<Socket> s (new Socket(mProto));
 
         // Bind to this address
-        s.bind(address);
+        s->bind(address);
         return s;
     }
 
@@ -126,18 +126,16 @@ public:
      *
      *  \return The produced socket
      */
-    virtual Socket create(SocketAddress& address)
+    virtual std::auto_ptr<Socket> create(SocketAddress& address)
     {
-
-        Socket s(mProto);
-
+        std::auto_ptr<Socket> s (new Socket(mProto));
 
         // Make sure we're set up for broadcasting if necessary
         int on = 1;
-        s.setOption(SOL_SOCKET, SO_BROADCAST, on);
+        s->setOption(SOL_SOCKET, SO_BROADCAST, on);
 
         // Bind to this address
-        s.bind(address);
+        s->bind(address);
         return s;
     }
 
@@ -186,21 +184,23 @@ public:
      *  listen().
      *
      */
-    virtual Socket create(SocketAddress& address)
+    virtual std::auto_ptr<Socket> create(SocketAddress& address)
     {
-        Socket s(mProto);
-        s.bind(address);
+        std::auto_ptr<Socket> s (new Socket(mProto));
 
         // Reuse socket address (important for most TCP apps)
         int on = 1;
-        s.setOption(SOL_SOCKET, SO_REUSEADDR, on);
+        s->setOption(SOL_SOCKET, SO_REUSEADDR, on);
+
+        s->bind(address);
 
         // Convert to a passive socket
-        s.listen(mBacklog);
+        s->listen(mBacklog);
 
         // Return a socket
         return s;
     }
+
 protected:
     int mBacklog;
 };

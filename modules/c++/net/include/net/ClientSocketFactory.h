@@ -80,17 +80,18 @@ public:
      *
      *  \return A socket
      */
-    virtual Socket create(const SocketAddress& address)
+    virtual std::auto_ptr<Socket> create(const SocketAddress& address)
     {
-        Socket s(mProto);
+        std::auto_ptr<Socket> s (new Socket(mProto));
 
         // Make sure we're set up for broadcasting if necessary
         int on = 1;
-        s.setOption(SOL_SOCKET, SO_BROADCAST, on);
+        s->setOption(SOL_SOCKET, SO_BROADCAST, on);
 
-        s.connect(address);
+        s->connect(address);
         return s;
     }
+
 protected:
     int mProto;
 };

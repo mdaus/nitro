@@ -52,8 +52,8 @@ public:
 
 template<typename T> class AckMulticastSubscriber
 {
-    Socket mAckChannel;
-    Socket mMulticastSubscriber;
+    std::auto_ptr<Socket> mAckChannel;
+    std::auto_ptr<Socket> mMulticastSubscriber;
 public:
     AckMulticastSubscriber(const std::string& mcastGroup, int mcastLocalPort,
             const std::string& replyTo, int replyToPort)
@@ -65,15 +65,13 @@ public:
 
     ~AckMulticastSubscriber()
     {
-        mAckChannel.close();
-        mMulticastSubscriber.close();
     }
 
-    Socket createMulticastSubscriber(const std::string& group, int port)
+    std::auto_ptr<Socket> createMulticastSubscriber(const std::string& group, int port)
     {
         SocketAddress here(port);
-        Socket socket(UDP_PROTO);
-        socket.bind(here);
+        std::auto_ptr<Socket> socket( new Socket(UDP_PROTO) );
+        socket->bind(here);
         struct ip_mreq mreq;
 
         mreq.imr_multiaddr.s_addr = inet_addr(group.c_str());
@@ -82,15 +80,15 @@ public:
         mreq.imr_interface.s_addr = htonl(INADDR_ANY);
 
         // Now set our socket option to add us as members
-        socket.setOption(IPPROTO_IP, IP_ADD_MEMBERSHIP, mreq);
+        socket->setOption(IPPROTO_IP, IP_ADD_MEMBERSHIP, mreq);
 
         return socket;
     }
 
-    Socket createSocketForAck(const std::string& senderHost, int senderPort)
+    std::auto_ptr<Socket> createSocketForAck(const std::string& senderHost, int senderPort)
     {
         SocketAddress toSender(senderHost, senderPort);
-        Socket s = UDPClientSocketFactory().create(toSender);
+        std::auto_ptr<Socket> s = UDPClientSocketFactory().create(toSender);
         // This socket is already 'connect()'ed by now, so we use send()
         return s;
     }
@@ -98,12 +96,12 @@ public:
     void waitForNotification(T& packet)
     {
         SocketAddress whereFrom;
-        mMulticastSubscriber.recvFrom(whereFrom, (char*) &packet,
+        mMulticastSubscriber->recvFrom(whereFrom, (char*) &packet,
                                       sizeof(packet));
     }
     void confirmDelivery(int sequenceNumber)
     {
-        mAckChannel.send((const char*) &sequenceNumber, sizeof(int));
+        mAckChannel->send((const char*) &sequenceNumber, sizeof(int));
     }
 };
 

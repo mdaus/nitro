@@ -27,40 +27,54 @@ net::Socket::Socket(int proto)
     mNative = ::socket(AF_INET, proto, 0);
     if (mNative == INVALID_SOCKET)
     {
-        throw sys::SocketException(Ctxt("socket() function failed"));
+        throw sys::SocketException(Ctxt("Socket initialization failed"));
     }
 }
 
 void net::Socket::listen(int backlog)
 {
-
-    if (NATIVE_SOCKET_FAILED(::listen(mNative, backlog)))
-        throw sys::SocketException(Ctxt("listen() failed"));
-
+    // throw on failure
+    if (::listen(mNative, backlog) != 0)
+    {
+        sys::SocketErr err;
+        throw sys::SocketException(
+            Ctxt("Socket listen failure: " + err.toString()));
+    }                               
 }
 
 void net::Socket::connect(const net::SocketAddress& address)
 {
-    if (::connect(mNative, (net::ConnParam2_T *) &(address.getAddress()),
-            (SockLen_T) sizeof(address.getAddress())) != 0)
-        throw sys::SocketException(Ctxt("During connect"));
+    // throw on failure
+    if (::connect(mNative, 
+                  (net::ConnParam2_T *) &(address.getAddress()),
+                  (SockLen_T) sizeof(address.getAddress())) != 0)
+    {
+        sys::SocketErr err;
+        throw sys::SocketException(
+            Ctxt("Socket connect failure: " + err.toString()));
+    }                               
 }
 
 void net::Socket::bind(const net::SocketAddress& address)
 {
-    if (::bind(mNative, (const struct sockaddr *) &(address.getAddress()),
-            (SockLen_T) sizeof(address.getAddress())) != 0)
-        throw sys::SocketException(Ctxt("During bind"));
+    // throw on failure
+    if (::bind(mNative, 
+               (const struct sockaddr *) &(address.getAddress()),
+               (SockLen_T) sizeof(address.getAddress())) != 0)
+    {
+        sys::SocketErr err;
+        throw sys::SocketException(
+            Ctxt("Socket bind failure: " + err.toString()));
+    }                               
 }
 
-net::Socket net::Socket::accept(net::SocketAddress& fromClient)
+std::auto_ptr<net::Socket> net::Socket::accept(net::SocketAddress& fromClient)
 {
     net::SockAddrIn_T& in = fromClient.getAddress();
 
     net::SockLen_T addrLen = sizeof(in);
-    net::Socket toClient;
-    toClient.mNative = ::accept(mNative, (net::SockAddr_T *) &in, &addrLen);
-    return toClient;
+    return std::auto_ptr<net::Socket>( 
+        new Socket(::accept(mNative, (net::SockAddr_T *) &in, &addrLen), true) );
 }
 
 sys::SSize_T net::Socket::recv(sys::byte* b, sys::Size_T len, int flags)
@@ -78,12 +92,17 @@ sys::SSize_T net::Socket::recv(sys::byte* b, sys::Size_T len, int flags)
     if ((numBytes == -1 && (NATIVE_SOCKET_GETLASTERROR()
             != NATIVE_SOCKET_ERROR(WOULDBLOCK))))
     {
-        std::cout << strerror(errno) << std::endl;
 #if defined(__DEBUG_SOCKET)
         std::cout << " Error on read!!!" << std::endl;
         std::cout << "=============================================" << std::endl << std::endl;
 #endif
-        throw sys::SocketException(Ctxt(FmtX("When receiving %d bytes", len)));
+
+        sys::Err err;
+        std::ostringstream oss;
+        oss << "When receiving " << str::toString<sys::Size_T>(len) << " bytes: " << 
+            err.toString(); 
+
+        throw sys::SocketException(Ctxt(oss.str()));
     }
     else if (numBytes == 0)
     {
@@ -105,7 +124,7 @@ sys::SSize_T net::Socket::recv(sys::byte* b, sys::Size_T len, int flags)
 }
 
 sys::SSize_T net::Socket::recvFrom(net::SocketAddress& address, sys::byte* b,
-        sys::Size_T len, int flags)
+                                   sys::Size_T len, int flags)
 {
 
     net::SockAddrIn_T& in = address.getAddress();
@@ -114,11 +133,12 @@ sys::SSize_T net::Socket::recvFrom(net::SocketAddress& address, sys::byte* b,
             (struct sockaddr *) &in, &addrLen);
     if (bytes == -1)
     {
-        std::cout << strerror(errno) << std::endl;
+        sys::Err err;
+        throw sys::SocketException(
+            Ctxt("Socket error while receiving bytes: " +  err.toString()));
     }
-    //    address.getAddress() = in;
+    
     return bytes;
-
 }
 
 void net::Socket::send(const sys::byte* b, sys::Size_T len, int flags)
@@ -138,14 +158,17 @@ void net::Socket::send(const sys::byte* b, sys::Size_T len, int flags)
 
     if (numBytes != len)
     {
-        std::cout << strerror(errno) << std::endl;
-        throw sys::SocketException(Ctxt(FmtX("Tried sending %d bytes, %d sent",
-                len, numBytes)));
+        sys::Err err;
+        std::ostringstream oss;
+        oss << "Tried sending " << str::toString<sys::Size_T>(len) << " bytes, " <<
+                str::toString<int>(numBytes) << " sent: " <<  err.toString(); 
+
+        throw sys::SocketException(Ctxt(oss.str()));
     }
 }
 
 void net::Socket::sendTo(const SocketAddress& address, const sys::byte* b,
-        sys::Size_T len, int flags)
+                         sys::Size_T len, int flags)
 {
     int numBytes = ::sendto(mNative, b, len, flags,
             (const struct sockaddr *) &(address.getAddress()),
@@ -154,8 +177,11 @@ void net::Socket::sendTo(const SocketAddress& address, const sys::byte* b,
     // Maybe shouldnt even bother with this
     if (numBytes != len)
     {
-        std::cout << strerror(errno) << std::endl;
-        throw sys::SocketException(Ctxt(FmtX("Tried sending %d bytes, %d sent",
-                len, numBytes)));
+        sys::Err err;
+        std::ostringstream oss;
+        oss << "Tried sending " << str::toString<sys::Size_T>(len) << " bytes, " <<
+                str::toString<int>(numBytes) << " sent: " <<  err.toString(); 
+
+        throw sys::SocketException(Ctxt(oss.str()));
     }
 }

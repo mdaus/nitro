@@ -33,16 +33,16 @@ using namespace sys;
 using namespace io;
 using namespace except;
 
-Socket createSenderSocket(SocketAddress& address, int loopback = 1)
+std::auto_ptr<Socket> createSenderSocket(SocketAddress& address, int loopback = 1)
 {
-    Socket s(UDP_PROTO);
+    std::auto_ptr<Socket> s( new Socket(UDP_PROTO) );
 
     int on = 1;
-    s.setOption(SOL_SOCKET, SO_REUSEADDR, on);
+    s->setOption(SOL_SOCKET, SO_REUSEADDR, on);
 
     // Turn off loopback to this machine
     if (!loopback)
-        s.setOption(IPPROTO_IP, IP_MULTICAST_LOOP, loopback);
+        s->setOption(IPPROTO_IP, IP_MULTICAST_LOOP, loopback);
 
     //    s.bind(address);
     return s;
@@ -68,13 +68,13 @@ int main(int argc, char** argv)
         SocketAddress sa(mcastGroup, port);
 
         // Register ourselves with the OS as members of this group
-        Socket socket = createSenderSocket(sa);
+        std::auto_ptr<Socket> socket = createSenderSocket(sa);
         Packet packet;
         std::string myMessage = "Hello group!";
         memcpy(packet.what, myMessage.c_str(), myMessage.length());
         packet.what[myMessage.length()] = 0;
         packet.number = 1;
-        socket.sendTo(sa, (const char*) &packet, sizeof(packet));
+        socket->sendTo(sa, (const char*) &packet, sizeof(packet));
 
     }
     catch (Exception& ex)

@@ -24,11 +24,11 @@
 
 sys::SSize_T net::NetConnection::read(sys::byte* b, sys::Size_T len)
 {
-    return mSocket.recv(b, len);
+    return mSocket->recv(b, len);
 }
 
 void net::NetConnection::write(const sys::byte* b, sys::Size_T len)
 {
-    mSocket.send((const char*) b, len);
+    mSocket->send((const char*) b, len);
 }
 

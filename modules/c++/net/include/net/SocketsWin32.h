@@ -53,6 +53,17 @@ typedef char*       ByteBuf_T;
 typedef int         BufSize_T;
 typedef const SockAddr_T ConnParam2_T;
 
+//! close socket and throw on failure
+inline void closeSocketOrThrow(net::Socket_T socket)
+{
+    if (closesocket(socket) != 0)
+    {
+        sys::SocketErr err;
+        throw except::Exception(
+            Ctxt("Socket close failure: " + err.toString()));
+    }
+}
+
 /*!
  *  Method calls the dll destroy stuff
  *  \return the result of the startup
@@ -61,7 +72,6 @@ inline void Win32SocketDestroy()
 {
     WSACleanup();
 }
-
 
 /*!
  *  Method calls the dll init stuff

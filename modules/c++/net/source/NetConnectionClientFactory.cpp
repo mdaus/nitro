@@ -54,7 +54,7 @@ net::NetConnection *net::NetConnectionClientFactory::create(const net::URL& url)
 }
 
 net::NetConnection* net::NetConnectionClientFactory::newConnection(
-        net::Socket toServer)
+        std::auto_ptr<net::Socket> toServer)
 {
     return new net::NetConnection(toServer);
 }
@@ -62,7 +62,7 @@ net::NetConnection* net::NetConnectionClientFactory::newConnection(
 net::NetConnection * net::NetConnectionClientFactory::create(
         const net::SocketAddress& address)
 {
-    net::Socket socket = net::TCPClientSocketFactory().create(address);
+    std::auto_ptr<net::Socket> socket = net::TCPClientSocketFactory().create(address);
     return newConnection(socket);
     //     return new net::NetConnection(socket);
 
