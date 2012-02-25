@@ -26,24 +26,23 @@
 #if defined(USE_OPENSSL)
 namespace net
 {
-    namespace ssl
+namespace ssl
+{
+    /*! 
+     *  This function is the callback for checking the password instead
+     *  of having to enter it in manually for every connection.
+     *  It needs the password from the SSLConnectionClientFactory somehow...
+     */
+    int password_cb(char *buf, int num, int rwflag, void *userdata)
     {
-	/*! 
-	 *  This function is the callback for checking the password instead
-	 *  of having to enter it in manually for every connection.
-	 *  It needs the password from the SSLConnectionClientFactory somehow...
-	 */
-	static int password_cb(char *buf, int num, int rwflag, void *userdata)
-	{
-	    // Somehow need to obtain a password
-	    // from an SSLConnectionClientFactory
-	    /*if(num < (int)strlen("password")+1)
-	      return 0;
-	      
-	      strcpy(buf, "password");*/
-	    return strlen("password");
-	}
+        // Somehow need to obtain a password
+        // from an SSLConnectionClientFactory
+        /*if(num < (int)strlen("password")+1)
+            return 0;
+        strcpy(buf, "password");*/
+        return strlen("password");
     }
+}
 }
 #endif
 
@@ -56,33 +55,33 @@ void net::ssl::SSLConnectionClientFactory::initializeContext()
     SSL_METHOD *method = SSLv23_client_method();
     if(method == NULL)
     {
-	throw net::ssl::SSLException(Ctxt(FmtX("SSLv23_client_method failed")));
+        throw net::ssl::SSLException(Ctxt(FmtX("SSLv23_client_method failed")));
     }
     mCtx = SSL_CTX_new(method);
     if(mCtx == NULL)
     {
-	throw net::ssl::SSLException(Ctxt(FmtX("SSL_CTX_new failed")));
-    }	
-	
+        throw net::ssl::SSLException(Ctxt(FmtX("SSL_CTX_new failed")));
+    }
+
     if(mClientAuthentication)
     {
-	// Load our keys and certificates
-    	if(!(SSL_CTX_use_certificate_file(mCtx, mKeyfile.c_str(), SSL_FILETYPE_PEM)))
-	    throw net::ssl::SSLException(Ctxt("Can't read certificate file"));
-	
-    	//SSL_CTX_set_default_passwd_cb(mCtx, password_cb);
-    	if(!(SSL_CTX_use_PrivateKey_file(mCtx, mKeyfile.c_str(), SSL_FILETYPE_PEM)))
-	    throw net::ssl::SSLException(Ctxt("Can't read key file"));
-	
-    	// Load the CAs we trust
-    	if(!(SSL_CTX_load_verify_locations(mCtx, mCAList.c_str(), 0)))
-	    throw net::ssl::SSLException(Ctxt("Can't read CA list"));
-	
-    	// Set our cipher list
-    	if(mCiphers)
-	{
-	    SSL_CTX_set_cipher_list(mCtx, mCiphers);
-    	}
+        // Load our keys and certificates
+        if(!(SSL_CTX_use_certificate_file(mCtx, mKeyfile.c_str(), SSL_FILETYPE_PEM)))
+            throw net::ssl::SSLException(Ctxt("Can't read certificate file"));
+
+        //SSL_CTX_set_default_passwd_cb(mCtx, password_cb);
+        if(!(SSL_CTX_use_PrivateKey_file(mCtx, mKeyfile.c_str(), SSL_FILETYPE_PEM)))
+            throw net::ssl::SSLException(Ctxt("Can't read key file"));
+
+        // Load the CAs we trust
+        if(!(SSL_CTX_load_verify_locations(mCtx, mCAList.c_str(), 0)))
+            throw net::ssl::SSLException(Ctxt("Can't read CA list"));
+
+        // Set our cipher list
+        if(mCiphers)
+        {
+            SSL_CTX_set_cipher_list(mCtx, mCiphers);
+        }
     }
     
     // Load randomness
@@ -98,11 +97,11 @@ void net::ssl::SSLConnectionClientFactory::initializeContext()
 #endif
 }
 
-net::NetConnection * net::ssl::SSLConnectionClientFactory::newConnection(net::Socket toServer) 
+net::NetConnection * net::ssl::SSLConnectionClientFactory::newConnection(std::auto_ptr<net::Socket> toServer) 
 {
 #if defined(USE_OPENSSL)
-	return (new SSLConnection(toServer, mCtx, mServerAuthentication, mUrl.getHost())); 
+    return (new SSLConnection(toServer, mCtx, mServerAuthentication, mUrl.getHost())); 
 #else
-	return (new net::NetConnection(toServer));
+    return (new net::NetConnection(toServer));
 #endif
 }

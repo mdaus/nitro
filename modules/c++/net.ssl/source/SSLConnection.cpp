@@ -25,11 +25,11 @@
 #include "net/ssl/SSLConnection.h"
 #include "net/ssl/SSLExceptions.h"
 
-net::ssl::SSLConnection::SSLConnection(net::Socket socket, 
+net::ssl::SSLConnection::SSLConnection(std::auto_ptr<net::Socket> socket, 
                                        SSL_CTX * ctx,
-				       bool serverAuth,
-				       const std::string& host) :
-    NetConnection(native),
+                                       bool serverAuth,
+                                       const std::string& host) :
+    NetConnection(socket),
     mServerAuthentication(serverAuth)
 {
     mSSL = NULL;
@@ -39,7 +39,7 @@ net::ssl::SSLConnection::SSLConnection(net::Socket socket,
     mSSL = SSL_new(ctx);
     if(mSSL == NULL)
     {
-	throw net::ssl::SSLException(Ctxt(FmtX("SSL_new failed")));
+        throw net::ssl::SSLException(Ctxt(FmtX("SSL_new failed")));
     }
     
     setupSocket(host);
@@ -49,52 +49,52 @@ net::ssl::SSLConnection::~SSLConnection()
 {
     if(mSSL != NULL)
     {
-	SSL_shutdown(mSSL);
+        SSL_shutdown(mSSL);
     }
     if(mSSL != NULL)
     {
-	SSL_free(mSSL);
+        SSL_free(mSSL);
     }
 }
 
 void net::ssl::SSLConnection::setupSocket(const std::string& hostName)
 {
-    net::Socket_T fd = mNative.getSocket().getHandle();
+    net::Socket_T fd = mSocket->getHandle();
     BIO *sbio = BIO_new_socket(fd, BIO_NOCLOSE);
     SSL_set_bio(mSSL, sbio, sbio);
     int val = SSL_connect(mSSL);
     if(val <= 0)
     {
 #if defined(__DEBUG_SOCKET)
-	if(SSL_get_error(mSSL, val) == SSL_ERROR_WANT_CONNECT)
-	    printf("ERROR_WANT_CONNECT\n");
-	else if(SSL_get_error(mSSL, val) == SSL_ERROR_ZERO_RETURN)
-	    printf("ERROR_ZERO_RETURN\n");
-	else if(SSL_get_error(mSSL, val) == SSL_ERROR_SSL)
-	{
-	    printf("ERROR_SSL: ");
-	    char buffer[120];
-	    ERR_error_string(val, buffer);
-	    BIO_printf(mBioErr, "%s\n", buffer);
-	}
-	else if(SSL_get_error(mSSL, val) == SSL_ERROR_SYSCALL)
-	{
-	    printf("ERROR_SYSCALL: ");
-	    char buffer[120];
-	    ERR_error_string(val, buffer);
-	    BIO_printf(mBioErr, "%s\n", buffer);
-	}
-	else if(SSL_get_error(mSSL, val) == SSL_ERROR_NONE)
-	    printf("NO ERROR: WHY AM I HERE?\n");
+        if(SSL_get_error(mSSL, val) == SSL_ERROR_WANT_CONNECT)
+            printf("ERROR_WANT_CONNECT\n");
+        else if(SSL_get_error(mSSL, val) == SSL_ERROR_ZERO_RETURN)
+            printf("ERROR_ZERO_RETURN\n");
+        else if(SSL_get_error(mSSL, val) == SSL_ERROR_SSL)
+        {
+            printf("ERROR_SSL: ");
+            char buffer[120];
+            ERR_error_string(val, buffer);
+            BIO_printf(mBioErr, "%s\n", buffer);
+        }
+        else if(SSL_get_error(mSSL, val) == SSL_ERROR_SYSCALL)
+        {
+            printf("ERROR_SYSCALL: ");
+            char buffer[120];
+            ERR_error_string(val, buffer);
+            BIO_printf(mBioErr, "%s\n", buffer);
+        }
+        else if(SSL_get_error(mSSL, val) == SSL_ERROR_NONE)
+            printf("NO ERROR: WHY AM I HERE?\n");
 #endif
-			
+
         throw net::ssl::SSLException
-	    (Ctxt(FmtX("SSL_connect failed: %d", SSL_get_error(mSSL, val))));
+            (Ctxt(FmtX("SSL_connect failed: %d", SSL_get_error(mSSL, val))));
     }
     
     if(mServerAuthentication)
     {
-	verifyCertificate(hostName);
+        verifyCertificate(hostName);
     }
 }
 
@@ -115,11 +115,11 @@ void net::ssl::SSLConnection::verifyCertificate(const std::string& hostName)
     peer = SSL_get_peer_certificate(mSSL);
     X509_NAME_get_text_by_NID(X509_get_subject_name(peer),
                               NID_commonName, peer_CN, 
-			      256);
+                              256);
     
     if(strcasecmp(peer_CN, hostName.c_str()))
     {
-    	throw net::ssl::SSLException(Ctxt("Common name doesn't match host name"));
+        throw net::ssl::SSLException(Ctxt("Common name doesn't match host name"));
     }
 }
 
@@ -136,24 +136,25 @@ sys::SSize_T net::ssl::SSLConnection::read(sys::byte* b, sys::Size_T len)
     std::cout << "======= READ FROM SECURE CONNECTION =========" << std::endl;
 #endif
     
-    if (((val = SSL_get_error(mSSL, numBytes)) != SSL_ERROR_NONE) || (numBytes == -1 && 
-								      (NATIVE_SOCKET_GETLASTERROR() != NATIVE_SOCKET_ERROR(WOULDBLOCK))))
+    if (((val = SSL_get_error(mSSL, numBytes)) != SSL_ERROR_NONE) || 
+                        (numBytes == -1 && (NATIVE_SOCKET_GETLASTERROR() != 
+                        NATIVE_SOCKET_ERROR(WOULDBLOCK))))
     {
 #if defined(__DEBUG_SOCKET)
-	std::cout << " Error on read!!!" << std::endl;
-	std::cout << "=============================================" << std::endl << std::endl;
+        std::cout << " Error on read!!!" << std::endl;
+        std::cout << "=============================================" << std::endl << std::endl;
 #endif
-	
-	throw net::ssl::SSLException(Ctxt(FmtX("When receiving %d bytes",
-					       len)) );
+
+        throw net::ssl::SSLException(Ctxt(FmtX("When receiving %d bytes",
+                                               len)) );
     }
     else if (numBytes == 0) 
     {
 #if defined(__DEBUG_SOCKET)
-	std::cout << " Zero byte read (End of connection)" << std::endl;
-	std::cout << "=============================================" << std::endl << std::endl;
+        std::cout << " Zero byte read (End of connection)" << std::endl;
+        std::cout << "=============================================" << std::endl << std::endl;
 #endif
-	return -1;
+        return -1;
     }
 #if defined(__DEBUG_SOCKET)
     std::cout << FmtX("Read %d bytes from socket:", numBytes) << std::endl;
@@ -162,7 +163,7 @@ sys::SSize_T net::ssl::SSLConnection::read(sys::byte* b, sys::Size_T len)
     std::cout << "---------------------------------------------" << std::endl;
     std::cout << "=============================================" << std::endl << std::endl;
 #endif
-    
+
     return numBytes;
 }
 
@@ -176,7 +177,7 @@ void net::ssl::SSLConnection::write(const sys::byte* b, sys::Size_T len)
     if (numBytes != len)
     {
         throw net::ssl::SSLException(Ctxt(FmtX("Tried sending %d bytes, %d sent",
-					       len, numBytes)) );
+                                               len, numBytes)) );
     }
     
 #if defined(__DEBUG_SOCKET)	

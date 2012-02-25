@@ -39,101 +39,100 @@
 
 namespace net
 {
-    namespace ssl
-	{
-        /*!
-         *  \class SSLConnection
-         *  \brief The class for reading and writing to a socket, 
-         *  with SSL
-         *
-         *  This class takes uses an internal Net handle.
-         *  We can write using the OutputStream, and read using 
-         *  the InputStream.  Usually, the developer will prefer to use
-         *  the SerializableConnection class, to avoid dealing with the byte
-         *  transfer layer.
-         */
-        class SSLConnection : public NetConnection
+namespace ssl
+{
+/*!
+ *  \class SSLConnection
+ *  \brief The class for reading and writing to a socket, 
+ *  with SSL
+ *
+ *  This class takes uses an internal Net handle.
+ *  We can write using the OutputStream, and read using 
+ *  the InputStream.  Usually, the developer will prefer to use
+ *  the SerializableConnection class, to avoid dealing with the byte
+ *  transfer layer.
+ */
+class SSLConnection : public NetConnection
+{
+public:
+    /*!
+     *  Default Constructor
+     *  \param native  The socket
+     *  \param ctx  The SSL context for this socket
+     *  \param serverAuth  Flag for server authentication
+     *  \param host  The host name in which we are connected
+     */
+    SSLConnection(std::auto_ptr<net::Socket> socket, 
+                  SSL_CTX * ctx, 
+                  bool serverAuth = false,
+                  const std::string& host = "");
+
+    /*!  
+     *  Destructor
+     */
+    virtual ~SSLConnection();
+
+    /*!
+     *  Close the SSL connection
+     */
+    virtual void close() 
+    { 
+        if(mSSL != NULL)
         {
-        public:
-	    /*!
-	     *  Default Constructor
-	     *  \param native  The socket
-	     *  \param ctx  The SSL context for this socket
-	     *  \param serverAuth  Flag for server authentication
-	     *  \param host  The host name in which we are connected
-	     */
-	    SSLConnection(net::Socket socket, 
-			  SSL_CTX * ctx, 
-			  bool serverAuth = false,
-			  const std::string& host = "");
-	    
-	    /*!  
-	     *  Destructor
-	     */
-	    virtual ~SSLConnection();
-	    
-	    /*!
-	     *  Close the SSL connection
-	     */
-	    virtual void close() 
-	    { 
-		if(mSSL != NULL)
-		{
-		    SSL_shutdown(mSSL);
-		} 
-		NetConnection::close();
-	    }
-			
-	    /*!
-	     *  Read up to len bytes of data from input stream into an array
-	     *  \param b   Buffer to read into
-	     *  \param len The length to read
-	     *  \throw IOException
-	     *  \return  The number of bytes read, or -1 if eof
-	     */
-	    virtual sys::SSize_T read(sys::byte* b, sys::Size_T len);
-	    
-	    /*!
-	     *  This method defines a given OutputStream. By defining,
-	     *  this method, you can define the unique attributes of an OutputStream
-	     *  inheriting class.
-	     *  \param b   The byte array to write to the stream
-             *  \param len The length of the byte array to write to the stream
-	     *  \throw IOException
-	     */
-	    virtual void write(const sys::byte* b, sys::Size_T len);
-		
-        protected:
-	    
-	    /*!
-	     *  Binds the socket to an SSL object
-	     *  \param hostName  The host we are connecting to
-	     */
-	    void setupSocket(const std::string& hostName);
-	    
-	    /*!
-	     *  Authenticates the server by verifying its
-	     *  certificate
-	     *  \param hostName  The host we are connecting to
-	     */		
-	    void verifyCertificate(const std::string& hostName);
-	    
-	    //! The SSL object
-	    SSL * mSSL;
-	    
-	    //! The BIO error object
-	    BIO * mBioErr;
-	    
-	    //! Flag for doing additional server authentication
-	    bool mServerAuthentication;
-	    
-	    //! Default Constructor
-	    SSLConnection(){}
-	    
-	private:
-	    
-        };
-	}
+            SSL_shutdown(mSSL);
+        } 
+        NetConnection::close();
+    }
+
+    /*!
+     *  Read up to len bytes of data from input stream into an array
+     *  \param b   Buffer to read into
+     *  \param len The length to read
+     *  \throw IOException
+     *  \return  The number of bytes read, or -1 if eof
+     */
+    virtual sys::SSize_T read(sys::byte* b, sys::Size_T len);
+
+    /*!
+     *  This method defines a given OutputStream. By defining,
+     *  this method, you can define the unique attributes of an OutputStream
+     *  inheriting class.
+     *  \param b   The byte array to write to the stream
+     *  \param len The length of the byte array to write to the stream
+     *  \throw IOException
+     */
+    virtual void write(const sys::byte* b, sys::Size_T len);
+
+    protected:
+
+    /*!
+     *  Binds the socket to an SSL object
+     *  \param hostName  The host we are connecting to
+     */
+    void setupSocket(const std::string& hostName);
+
+    /*!
+     *  Authenticates the server by verifying its
+     *  certificate
+     *  \param hostName  The host we are connecting to
+     */
+    void verifyCertificate(const std::string& hostName);
+
+    //! The SSL object
+    SSL * mSSL;
+
+    //! The BIO error object
+    BIO * mBioErr;
+
+    //! Flag for doing additional server authentication
+    bool mServerAuthentication;
+
+    //! Default Constructor
+    SSLConnection(){}
+
+};
+
+}
 }
 
 #endif

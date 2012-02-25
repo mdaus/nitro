@@ -34,90 +34,91 @@
 
 namespace net
 {
-    namespace ssl
-    {	
-        /*!
-         *  \class SSLConnectionClientFactory
-         *  \brief Spawns SSLConnectionConnection objects
-         *  This class creates an SSL client connection and returns it.
-         *  The connection can be used to read or write data over
-         *  a socket
-         */
-        class SSLConnectionClientFactory : public NetConnectionClientFactory
+namespace ssl
+{
+/*!
+ *  \class SSLConnectionClientFactory
+ *  \brief Spawns SSLConnectionConnection objects
+ *  This class creates an SSL client connection and returns it.
+ *  The connection can be used to read or write data over
+ *  a socket
+ */
+class SSLConnectionClientFactory : public NetConnectionClientFactory
+{
+public:
+
+    /*!
+     *  Constructor. Create a TCP factory with SSL
+     *  \param clientAuth  Client authentication flag
+     *  \param keyfile  The private key file
+     *  \param password  The password for the keyfile
+     *  \param caList  The list of trusted CAs
+     *  \param serverAuth  Server authentication flag
+     *  \param ciphers  The list of ciphers to use
+     */
+    SSLConnectionClientFactory(bool clientAuth = false,
+                               const std::string& keyfile = "client.pem",
+                               const std::string& password = "password",
+                               const std::string& caList = "root.pem",
+                               bool serverAuth = true, 
+                               char * ciphers = NULL) : 
+        mClientAuthentication(clientAuth),
+        mKeyfile(keyfile), mPass(password),
+        mCAList(caList), 
+        mServerAuthentication(serverAuth),
+        mCiphers(ciphers)
+    { 
+        initializeContext(); 
+    }
+    
+    /*!
+     *  Destructor
+     */
+    virtual ~SSLConnectionClientFactory() 
+    {
+#               if defined(USE_OPENSSL)	
+        if(mCtx != NULL)
         {
-        public:
-	    
-	    /*!
-             *  Constructor. Create a TCP factory with SSL
-	     *  \param clientAuth  Client authentication flag
-	     *  \param keyfile  The private key file
-	     *  \param password  The password for the keyfile
-	     *  \param caList  The list of trusted CAs
-	     *  \param serverAuth  Server authentication flag
-	     *  \param ciphers  The list of ciphers to use
-	     */
-	    SSLConnectionClientFactory(bool clientAuth = false,
-			     const std::string& keyfile = "client.pem",
-			     const std::string& password = "password",
-			     const std::string& caList = "root.pem",
-			     bool serverAuth = true, 
-			     char * ciphers = NULL) : 
-		mClientAuthentication(clientAuth),
-		mKeyfile(keyfile), mPass(password),
-		mCAList(caList), 
-		mServerAuthentication(serverAuth),
-		mCiphers(ciphers)
-	    { 
-		initializeContext(); 
-	    }
-	    
-	    /*!
-	     *  Destructor
-	     */
-	    virtual ~SSLConnectionClientFactory() 
-	    {
-#           if defined(USE_OPENSSL)	
-		if(mCtx != NULL)
-		{
-		    SSL_CTX_free(mCtx);
-		}
-#           endif
-	    }
-	    
-        protected:
-	    
-	    /*!
-	     *  Initializes the context information for SSL
-	     *  connections.
-	     */
-	    virtual void initializeContext();
-	    
-            /*!
-	     * Return a new connection
-	     * \param toServer The socket for the new connection
-	     * \return A new SSLConnection
-	     */		
-            virtual NetConnection * newConnection(net::Socket toServer);
-	    
-	private:
-#           if defined(USE_OPENSSL)
-	    //! The SSL context
-	    SSL_CTX* mCtx;
-#           endif
-	    //! Flag for client authentication
-	    bool mClientAuthentication;
-	    //! The key file (.pem)
-	    std::string mKeyfile;
-	    //! The current password
-	    std::string mPass;
-	    //! The Trusted CA list (.pem)
-	    std::string mCAList;
-	    //! Flag for server authentication
-	    bool mServerAuthentication;
-	    //! The cipher list
-	    char *mCiphers;
-        };
-	}
+            SSL_CTX_free(mCtx);
+        }
+#              endif
+    }
+
+protected:
+
+    /*!
+     *  Initializes the context information for SSL
+     *  connections.
+     */
+    virtual void initializeContext();
+
+    /*!
+     * Return a new connection
+     * \param toServer The socket for the new connection
+     * \return A new SSLConnection
+     */
+    virtual NetConnection * newConnection(std::auto_ptr<net::Socket> toServer);
+
+private:
+#   if defined(USE_OPENSSL)
+    //! The SSL context
+    SSL_CTX* mCtx;
+#   endif
+    //! Flag for client authentication
+    bool mClientAuthentication;
+    //! The key file (.pem)
+    std::string mKeyfile;
+    //! The current password
+    std::string mPass;
+    //! The Trusted CA list (.pem)
+    std::string mCAList;
+    //! Flag for server authentication
+    bool mServerAuthentication;
+    //! The cipher list
+    char *mCiphers;
+};
+
+}
 }
 
 #endif
