@@ -888,7 +888,7 @@ public:
      *  \param [out] pivotsM
      *
      */
-    Like_T decomposeLU(size_t* pivotsM) const
+    Like_T decomposeLU(std::vector<size_t>& pivotsM) const
     {
 
         Like_T lu;
@@ -905,7 +905,7 @@ public:
         }
 
 
-        _T colj[_MD];
+        std::vector<_T> colj(_MD);
         _T* rowi;
         for (size_t j = 0; j < _ND; j++)
         {
@@ -919,7 +919,7 @@ public:
                 rowi = lu[i];
 
                 size_t kmax = std::min<size_t>(i, j);
-                double s(0);
+                _T s(0);
                 for (int k = 0; k < kmax; k++)
                 {
                     s += rowi[k] * colj[k];
@@ -941,7 +941,7 @@ public:
                 for (; k < _ND; k++)
                 {
                     // We are swapping
-                    double t = lu(p, k);
+                    _T t = lu(p, k);
                     lu(p, k) = lu(j, k);
                     lu(j, k) = t;
                 }
@@ -949,7 +949,7 @@ public:
                 pivotsM[p] = pivotsM[j];
                 pivotsM[j] = k;
             }
-            if (j < _MD && lu(j, j) )
+            if (j < _MD && abs( lu(j, j) ))
             {
                 for (size_t i = j + 1; i < _MD; i++)
                 {
@@ -977,7 +977,7 @@ public:
      *  \endcode
      *
      */
-    Like_T permute(size_t* pivotsM, size_t n = _ND) const
+    Like_T permute(const std::vector<size_t>&  pivotsM, size_t n = _ND) const
     {
         Like_T perm;
         for (size_t i = 0; i < _MD; i++)
@@ -1144,30 +1144,35 @@ template<size_t _ND, typename _T> MatrixMxN<_ND, _ND, _T>
  *
  */
 template<size_t _MD, size_t _ND, size_t _PD, typename _T>
-    math::linear::MatrixMxN<_ND, _PD, _T> solveLU(size_t* pivotsM,
-                                                  const MatrixMxN<_MD, _ND> &lu,
-                                                  const MatrixMxN<_ND, _PD> &b)
+    math::linear::MatrixMxN<_ND, _PD, _T> solveLU(const std::vector<size_t>& pivotsM,
+                                                  const MatrixMxN<_MD, _ND, _T> &lu,
+                                                  const MatrixMxN<_ND, _PD, _T> &b)
 {
-
-
     // If we dont have something in the diagonal, we can't solve this
     math::linear::MatrixMxN<_ND, _PD, _T> x = b.permute(pivotsM, _PD);
 
-    for (size_t k = 0; k < _ND; k++) {
-        for (size_t i = k + 1; i < _ND; i++) {
-            for (size_t j = 0; j < _PD; j++) {
+    for (size_t k = 0; k < _ND; k++) 
+    {
+        for (size_t i = k + 1; i < _ND; i++) 
+        {
+            for (size_t j = 0; j < _PD; j++) 
+            {
                 x(i, j) -= x(k, j)*lu(i, k);
             }
         }
     }
-    for (sys::SSize_T k = _ND - 1; k >= 0; k--) {
-        for (size_t j = 0; j < _PD; j++) {
+    for (sys::SSize_T k = _ND - 1; k >= 0; k--) 
+    {
+        for (size_t j = 0; j < _PD; j++) 
+        {
             x(k, j) /= lu(k, k);
         }
 
-        for (size_t i = 0; i < k; i++) {
+        for (size_t i = 0; i < k; i++) 
+        {
             // This one could be _Q
-            for (size_t j = 0; j < _PD; j++) {
+            for (size_t j = 0; j < _PD; j++) 
+            {
                 x(i, j) -= x(k, j)*lu(i, k);
             }
         }
@@ -1195,7 +1200,7 @@ template<size_t _ND, typename _T> inline
     for (size_t i = 0; i < _ND; i++)
         a(i, i) = 1;
 
-    size_t pivots[_ND];
+    std::vector<size_t> pivots(_ND);
     MatrixMxN<_ND, _ND, _T> lu = mx.decomposeLU(pivots);
     
     for (size_t i = 0; i < _ND; i++)
@@ -1205,7 +1210,6 @@ template<size_t _ND, typename _T> inline
     }
 
     return solveLU<_ND, _ND, _ND, _T>(pivots, lu, a);
-
 }
 
 /*!

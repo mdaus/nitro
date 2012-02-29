@@ -801,7 +801,7 @@ public:
                 rowi = lu[i];
 
                 size_t max = std::min<size_t>(i, j);
-                double s(0);
+                _T s(0);
                 for (size_t k = 0; k < max; k++)
                 {
                     s += rowi[k] * colj[k];
@@ -824,7 +824,7 @@ public:
                 for (; k < mN; k++)
                 {
                     // We are swapping
-                    double t = lu(p, k);
+                    _T t = lu(p, k);
                     lu(p, k) = lu(j, k);
                     lu(j, k) = t;
                 }
@@ -832,7 +832,7 @@ public:
                 pivotsM[p] = pivotsM[j];
                 pivotsM[j] = k;
             }
-            if (j < mM && lu(j, j) )
+            if (j < mM && abs( lu(j, j) ))
             {
                 for (size_t i = j + 1; i < mM; i++)
                 {
@@ -1023,21 +1023,28 @@ template<typename _T>
 
     const size_t P = b.mN;
     const size_t N = lu.mN;
-    for (size_t kk = 0; kk < N; kk++) {
-        for (size_t ii = kk + 1; ii < N; ii++) {
-            for (size_t jj = 0; jj < P; jj++) {
+    for (size_t kk = 0; kk < N; kk++) 
+    {
+        for (size_t ii = kk + 1; ii < N; ii++) 
+        {
+            for (size_t jj = 0; jj < P; jj++) 
+            {
                 x(ii, jj) -= x(kk, jj)*lu(ii, kk);
             }
         }
     }
-    for (sys::SSize_T kk = N - 1; kk >= 0; kk--) {
-        for (size_t jj = 0; jj < P; jj++) {
+    for (sys::SSize_T kk = N - 1; kk >= 0; kk--) 
+    {
+        for (size_t jj = 0; jj < P; jj++) 
+        {
             x(kk, jj) /= lu(kk, kk);
         }
 
-        for (size_t ii = 0; ii < static_cast<size_t>(kk); ii++) {
+        for (size_t ii = 0; ii < static_cast<size_t>(kk); ii++) 
+        {
             // This one could be _Q
-            for (size_t jj = 0; jj < P; jj++) {
+            for (size_t jj = 0; jj < P; jj++) 
+            {
                 x(ii, jj) -= x(kk, jj)*lu(ii, kk);
             }
         }
