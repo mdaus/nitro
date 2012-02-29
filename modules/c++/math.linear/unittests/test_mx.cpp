@@ -348,7 +348,9 @@ TEST_CASE(testPtrAssign)
 
 TEST_CASE(testPermuteInvert2x2)
 {
-    size_t p[2] = { 1, 0 };
+    std::vector<size_t> p(2);
+    p[0] = 1;
+    p[1] = 0;
 
     Matrix2x2 I = identityMatrix<2, double>();
     Matrix2x2 G = I.permute(p);
