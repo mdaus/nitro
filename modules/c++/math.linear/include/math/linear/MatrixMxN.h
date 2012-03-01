@@ -949,7 +949,7 @@ public:
                 pivotsM[p] = pivotsM[j];
                 pivotsM[j] = k;
             }
-            if (j < _MD && abs( lu(j, j) ))
+            if (j < _MD && std::abs( lu(j, j) ))
             {
                 for (size_t i = j + 1; i < _MD; i++)
                 {
