@@ -62,4 +62,38 @@ int main()
     y[1] = 1;
 
     std::cout << cross(v3, y) << std::endl;
+
+    // PA = LU
+    const unsigned int seed =
+        static_cast<unsigned int>(sys::DateTime().getTimeInMillis());
+    ::srand(seed);
+    A(0, 0) = _Cf((float)rand()/RAND_MAX, (float)rand()/RAND_MAX);
+    A(0, 1) = _Cf((float)rand()/RAND_MAX, (float)rand()/RAND_MAX);
+    A(0, 2) = _Cf((float)rand()/RAND_MAX, (float)rand()/RAND_MAX);
+    A(1, 0) = _Cf((float)rand()/RAND_MAX, (float)rand()/RAND_MAX);
+    A(1, 1) = _Cf((float)rand()/RAND_MAX, (float)rand()/RAND_MAX);
+    A(1, 2) = _Cf((float)rand()/RAND_MAX, (float)rand()/RAND_MAX);
+    A(2, 0) = _Cf((float)rand()/RAND_MAX, (float)rand()/RAND_MAX);
+    A(2, 1) = _Cf((float)rand()/RAND_MAX, (float)rand()/RAND_MAX);
+    A(2, 2) = _Cf((float)rand()/RAND_MAX, (float)rand()/RAND_MAX);
+    A.scale(10);
+
+    std::cout << "A: " << A << std::endl;
+
+    std::vector<size_t> p;
+    p.resize(3);
+    _3x3 lu = A.decomposeLU(p);
+    _3x3 PA = A.permute(p);
+
+    _3x3 L = mx::identityMatrix<3, _Cf>();
+    _3x3 U = mx::identityMatrix<3, _Cf>();
+
+    U(0, 0) = lu(0, 0); U(0, 1) = lu(0, 1); U(0, 2) = lu(0, 2);
+    L(1, 0) = lu(1, 0); U(1, 1) = lu(1, 1); U(1, 2) = lu(1, 2);
+    L(2, 0) = lu(2, 0); L(2, 1) = lu(2, 1); U(2, 2) = lu(2, 2);
+
+    std::cout << "L: " << L << std::endl;
+    std::cout << "U: " << U << std::endl;
+    std::cout << "LU: " << L * U << std::endl;
+    std::cout << "PA: " << PA << std::endl;
 }
