@@ -226,6 +226,8 @@ class CPPBuildContext(BuildContext):
                     defines=defines, path=path, install_path=installPath or '${PREFIX}/lib')
             lib.find_sources_in_dirs(modArgs.get('source_dir', modArgs.get('sourcedir', 'source')))
             lib.source = filter(modArgs.get('source_filter', None), lib.source)
+            if lib.source and modArgs.get('source_ext'):
+                lib.source[len(lib.source):] = modArgs.get('source_ext')
             
             pattern = env['%s_PATTERN' % (env['LIB_TYPE'] or 'staticlib')]
             if libVersion is not None and sys.platform != 'win32' and Options.options.symlinks:
