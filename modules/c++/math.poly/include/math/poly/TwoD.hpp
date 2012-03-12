@@ -369,17 +369,25 @@ TwoD<_T>::operator == (const TwoD<_T>& p) const
     {
         OneD<_T> dflt(orderY());
 
-        for (size_t i = minSize ; i < sz; ++i)
-            if (mCoef[i] != dflt)
+        for (size_t ii = minSize ; ii < sz; ++ii)
+        {
+            if (mCoef[ii] != dflt)
+            {
                 return false;
+            }
+        }
     }
     else if (sz < psz)
     {
         OneD<_T> dflt(p.orderY());
 
-        for (unsigned int i = minSize ; i < psz ; ++i)
-            if (p.mCoef[i] != dflt)
+        for (size_t ii = minSize ; ii < psz ; ++ii)
+        {
+            if (p.mCoef[ii] != dflt)
+            {
                 return false;
+            }
+        }
     }
 
     return true;

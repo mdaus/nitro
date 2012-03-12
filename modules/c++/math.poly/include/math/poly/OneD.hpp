@@ -72,9 +72,9 @@ OneD<_T>::derivative() const
     if (order() > 0)
     {
         ret = OneD<_T>(order()-1);
-        for (size_t i = 0, sz = mCoef.size() - 1; i < sz; i++)
+        for (size_t ii = 0, sz = mCoef.size() - 1; ii < sz; ii++)
         {
-            ret[i] = mCoef[i+1] * (i+1);
+            ret[ii] = static_cast<_T>(mCoef[ii + 1] * (ii + 1));
         }
     }
     return ret;
