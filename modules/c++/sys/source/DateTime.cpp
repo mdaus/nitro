@@ -289,29 +289,31 @@ sys::DateTime::DateTime(int hour, int minute, double second)
     toMillis();
 }
 
-sys::DateTime::DateTime(int year, int month, int day)
+sys::DateTime::DateTime(int year, int month, int day) :
+    mYear(year),
+    mMonth(month),
+    mDayOfMonth(day),
+    mHour(0),
+    mMinute(0),
+    mSecond(0),
+    mTimeInMillis(0.0),
+    mDST(-1) // Tell mktime() we're not sure
 {
-    mYear = year;
-    mMonth = month;
-    mDayOfMonth = day;
-    mHour = 0;
-    mMinute = 0;
-    mSecond = 0;
-
     toMillis();
     fromMillis();
 }
 
 sys::DateTime::DateTime(int year, int month, int day,
-                        int hour, int minute, double second)
+                        int hour, int minute, double second) :
+    mYear(year),
+    mMonth(month),
+    mDayOfMonth(day),
+    mHour(hour),
+    mMinute(minute),
+    mSecond(second),
+    mTimeInMillis(0.0),
+    mDST(-1) // Tell mktime() we're not sure
 {
-    mYear = year;
-    mMonth = month;
-    mDayOfMonth = day;
-    mHour = hour;
-    mMinute = minute;
-    mSecond = second;
-
     toMillis();
     fromMillis();
 }
