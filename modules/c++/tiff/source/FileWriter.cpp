@@ -79,8 +79,9 @@ tiff::ImageWriter * tiff::FileWriter::operator[](const sys::Uint32_T index) cons
     return mImages[index];
 }
 
-void tiff::FileWriter::putData(unsigned char *buffer,
-        const sys::Uint32_T numElementsToWrite, const sys::Uint32_T index)
+void tiff::FileWriter::putData(const unsigned char *buffer,
+                               sys::Uint32_T numElementsToWrite,
+                               sys::Uint32_T index)
 {
     if (index >= mImages.size())
         throw except::Exception(Ctxt("Invalid sub-image index"));

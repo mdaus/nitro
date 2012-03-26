@@ -32,15 +32,19 @@
 
 const unsigned short tiff::ImageWriter::CHUNK_SIZE = 8192;
 
-void tiff::ImageWriter::putData(unsigned char *buffer,
-        const sys::Uint32_T numElementsToWrite)
+void tiff::ImageWriter::putData(const unsigned char *buffer,
+                                sys::Uint32_T numElementsToWrite)
 {
     validate();
 
     if (mFormat == TILED)
+    {
         putTileData(buffer, numElementsToWrite);
+    }
     else
+    {
         putStripData(buffer, numElementsToWrite);
+    }
 }
 
 void tiff::ImageWriter::writeIFD()
@@ -307,8 +311,8 @@ void tiff::ImageWriter::initStrips()
     mStripByteCounts = mIFD["StripByteCounts"];
 }
 
-void tiff::ImageWriter::putTileData(unsigned char *buffer,
-        sys::Uint32_T numElementsToWrite)
+void tiff::ImageWriter::putTileData(const unsigned char *buffer,
+                                    sys::Uint32_T numElementsToWrite)
 {
     sys::Uint32_T imageElemWidth = mIFD.getImageWidth();
     sys::Uint32_T imageByteWidth = imageElemWidth * mElementSize;
@@ -455,8 +459,8 @@ void tiff::ImageWriter::putTileData(unsigned char *buffer,
     }
 }
 
-void tiff::ImageWriter::putStripData(unsigned char *buffer,
-        sys::Uint32_T numElementsToWrite)
+void tiff::ImageWriter::putStripData(const unsigned char *buffer,
+                                     sys::Uint32_T numElementsToWrite)
 {
     sys::Uint32_T stripSize = *(tiff::GenericType<sys::Uint32_T> *)(*mStripByteCounts)[0];
     sys::Uint32_T bufferIndex = 0;

@@ -94,8 +94,9 @@ public:
      * @param subImageIndex
      *   the index to a sub-image to write
      *****************************************************************/
-    void putData(unsigned char *buffer, const sys::Uint32_T numElementsToWrite,
-            const sys::Uint32_T subImageIndex = 0);
+    void putData(const unsigned char *buffer,
+                 sys::Uint32_T numElementsToWrite,
+                 sys::Uint32_T subImageIndex = 0);
 
     /**
      *****************************************************************
