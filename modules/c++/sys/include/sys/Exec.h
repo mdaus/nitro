@@ -23,6 +23,7 @@
 #ifndef __SYS_EXEC_PIPE_H__
 #define __SYS_EXEC_PIPE_H__
 
+#include <stdlib.h>
 #include <import/except.h>
 #include <str/Convert.h>
 
@@ -70,7 +71,12 @@ public:
      */
     virtual void run() 
     { 
-        ::system(mCmd.c_str());
+        if (::system(mCmd.c_str()) == -1)
+        {
+            sys::Err err;
+            throw except::IOException(
+                Ctxt("Unable to run system command: " + err.toString()));
+        }
     }
 
 protected:
