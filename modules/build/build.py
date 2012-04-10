@@ -739,10 +739,13 @@ def detect(self):
     env['PLATFORM'] = platform
     
     env['LIB_TYPE'] = Options.options.shared_libs and 'shlib' or 'staticlib'
-    
-    env.append_unique('CXXFLAGS', Options.options.cxxflags or '')
-    env.append_unique('CCFLAGS', Options.options.cflags or '')
-    env.append_unique('LINKFLAGS', Options.options.linkflags or '')
+
+    if Options.options.cxxflags:
+        env.append_unique('CXXFLAGS', Options.options.cxxflags.split())
+    if Options.options.cflags:
+        env.append_unique('CCFLAGS', Options.options.cflags.split())
+    if Options.options.linkflags:
+        env.append_unique('LINKFLAGS', Options.options.linkflags.split())
     if Options.options._defs:
         env.append_unique('CCDEFINES', Options.options._defs.split(','))
         env.append_unique('CXXDEFINES', Options.options._defs.split(','))
