@@ -22,9 +22,9 @@
 #ifndef __MATH_LINEAR_H__
 #define __MATH_LINEAR_H__
 
+#include "math/linear/Eigenvalue.h"
 #include "math/linear/MatrixMxN.h"
 #include "math/linear/VectorN.h"
-
 #include "math/linear/Matrix2D.h"
 #include "math/linear/Vector.h"
 
