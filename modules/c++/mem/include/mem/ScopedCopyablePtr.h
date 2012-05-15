@@ -24,6 +24,7 @@
 #define __MEM_SCOPED_COPYABLE_PTR_H__
 
 #include <memory>
+#include <cstddef>
 
 namespace mem
 {

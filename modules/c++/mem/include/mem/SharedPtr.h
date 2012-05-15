@@ -24,6 +24,7 @@
 #define __MEM_SHARED_PTR_H__
 
 #include <memory>
+#include <cstddef>
 
 #include <sys/AtomicCounter.h>
 
