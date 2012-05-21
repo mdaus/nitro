@@ -907,6 +907,12 @@ def detect(self):
         vars['optz_fastest']   = ['-Ox', crtFlag]
         vars['linkflags_32'] = vars['linkflags_64'] = '/STACK:80000000'
 
+        if Options.options.debugging:
+            # In order to generate a .pdb file, we need both the /Zi 
+            # compilation flag and the /DEBUG linker flag
+            vars['linkflags_32'].append('/DEBUG')
+            vars['linkflags_64'].append('/DEBUG')
+
         # choose the runtime to link against
         # [/MD /MDd /MT /MTd]
         
