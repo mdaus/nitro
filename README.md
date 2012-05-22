@@ -74,8 +74,11 @@ We primarily use Waf for building. Below are all of the options available.
                             Specify the SQL Home - where the SQL library is installed to
       --with-fft-home=FFT_HOME
                             Specify the FFT Home - where an FFT library is installed
+      --with-fftw3-home=FFT3_HOME
+                            Specify the FFT3 Home - where the FFT3 library is installed
       --disable-fft         turn off building FFT (default)
       --enable-fft          turn on FFT
+      --enable-fft-double   turn on double precision FFT
       --build-fft           force building FFT library (fftw) from scratch
       --nobuild-fft         force building FFT library (fftw) from scratch
       --with-zip-home=ZIP_HOME
@@ -84,15 +87,13 @@ We primarily use Waf for building. Below are all of the options available.
       --enable-zip          will build the zip (libz) library if not found on the system (default)
       --build-zip           force building zip (zlib) library from scratch
       --nobuild-zip         force building zip (zlib) library from scratch
+      --disable-uuid        will not build the uuid library
+      --enable-uuid         will build the uuid library if not found on the system (default)
       --build-uuid          force building libuuid from scratch
       --nobuild-uuid        force building libuuid from scratch
       --with-uuid-home=UUID_HOME
                             Specify the UUID lib/headers home
-      --enable-linmath-driver=ENABLE_LINMATH_DRIVER
-                            choose the linear algebra driver to use (default is tnt)
-      --with-linmath-home=WITH_LINMATH_HOME
-                            Specify the location of the linear algebra package
-    
+
       configuration options:
         -b BLDDIR, --blddir=BLDDIR
                             build dir for the project (configuration)

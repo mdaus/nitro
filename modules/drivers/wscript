@@ -40,6 +40,9 @@ def set_options(opt):
                    help='turn off building FFT (default)')
     opt.add_option('--enable-fft', action='store_true',
                    default=True, help='turn on FFT')
+    opt.add_option('--enable-fft-double', action='store_true', dest='fft_double',
+                   default=False, help='turn on double precision FFT')
+
     # changed this to be the default, so we always build statically
     opt.add_option('--build-fft', action='store_true', dest="build_fft",
                    default=True, help='force building FFT library (fftw) from scratch')
@@ -225,8 +228,10 @@ def configure(conf):
         makeFFT = Options.options.build_fft
         fftHome = Options.options.fft_home
         fft3Home = Options.options.fft3_home
+        fftDouble = Options.options.fft_double
         foundLocal = False
         foundLocalFFT3 = False
+
 
         # FFTW2
         if not fftHome:
@@ -247,6 +252,13 @@ def configure(conf):
             else:
                 #we must use/build the local one
                 makeFFT = True
+
+        if fftDouble:
+            makeFFT = True
+            conf.env['MAKE_FFT_DOUBLE'] = True
+            conf.env.defines['ENABLE_FFT_DOUBLE'] = 1
+        else:
+            conf.env['MAKE_FFT_DOUBLE'] = False
 
         if makeFFT and not foundLocal:
             conf.env['MAKE_FFT'] = True
@@ -548,8 +560,11 @@ def build(bld):
                 d[k] = v
             else:
                 u.append(k)
+
         d['FFTW_VERSION'] = '"2.1.5"'
-        d['FFTW_ENABLE_FLOAT'] = '1'
+        if not env['MAKE_FFT_DOUBLE']:
+            d['FFTW_ENABLE_FLOAT'] = '1'
+
         configH = bld.new_task_gen(output='fftw/config.h',
                                    path=driverNode,
                                    defs=d,
