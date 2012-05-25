@@ -732,7 +732,7 @@ def detect(self):
             elif v == 'False':
                 v = False
         #v = eval(v)
-        self.check_message_custom(k.replace('_', ' '), '', v)
+        self.check_message_custom(k.replace('_', ' '), '', str(v))
         self.define(k.upper(), v)
     
     env = self.env
@@ -1169,3 +1169,4 @@ def getSolarisFlags(compilerName):
             bitFlag64 = '-m64'
 
     return (bitFlag32, bitFlag64)
+
