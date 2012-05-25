@@ -118,7 +118,7 @@ def distclean(context):
     import shutil
     
     dirs = map(lambda d: os.path.join(context.curdir, d),
-               ['expat-1.95.7','expat-2.0.0']
+               ['expat-1.95.7','expat-2.0.0'])
     for d in dirs:
         try:
             if os.path.exists(d):
