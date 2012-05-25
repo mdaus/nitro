@@ -1,0 +1,92 @@
+import os
+import Options
+from TaskGen import feature, before, taskgen
+import Tools.misc as misc
+
+
+def set_options(opt):
+    opt.add_option('--with-zip-home', action='store', dest='zip_home',
+                   help='Specify the ZIP Home - where the ZIP library is installed')
+    opt.add_option('--disable-zip', action='store_false', dest='enable_zip',
+                   help='will not build the zip (zlib) library')
+    opt.add_option('--enable-zip', action='store_true',
+                   default=True, help='will build the zip (libz) library if not found on the system (default)')
+    opt.add_option('--build-zip', action='store_true', dest="build_zip",
+                   default=True, help='force building zip (zlib) library from scratch')
+    opt.add_option('--nobuild-zip', action='store_false', dest="build_zip",
+                   help='force building zip (zlib) library from scratch')
+
+def configure(conf):
+    #-- ZIP --------------------------------------------------------------------
+    enableZip = Options.options.enable_zip
+    
+    if enableZip:
+        zipHome = Options.options.zip_home
+        makeZip = False
+        if Options.options.build_zip:
+            makeZip = True
+        elif zipHome:
+            conf.check_message_2('setting zip home to %s' % zipHome)
+            conf.env.append_value('LIBPATH_ZIP', os.path.join(zipHome, 'lib'))
+            conf.env.append_value('CPPPATH_ZIP', os.path.join(zipHome, 'include'))
+        else:
+            if not conf.check(header_name='zlib.h', define_name='HAVE_ZLIB_H',
+                              lib='z', uselib_store='ZIP'):
+                #default to building locally
+                makeZip = True
+        if makeZip:
+            conf.env['MAKE_ZIP'] = makeZip
+            conf.check_message_1('Building local lib')
+            conf.check_message_2('zip (zlib)')
+        else:
+            conf.env['LIB_ZIP'] = ['z']
+
+def build(bld):
+    variant = bld.env['VARIANT']
+    env = bld.env_of_name(variant)
+    env.set_variant(variant)
+
+    defs = env['defines']
+    defList = []
+    for k, v in defs.iteritems():
+        if v:
+            defList.append('%s=%s' % (k, v))
+    #defs = map(lambda t: '%s=%s' % t, [(k, v) for k, v in bld.env['defines'].iteritems()])
+
+    driversNode = bld.path
+    
+    if 'MAKE_ZIP' in env:
+        fname = 'zlib-1.2.3'
+        ut = bld.new_task_gen(path=bld.path, env=env.copy(),
+                              fname='%s.tar' % fname, before='dftables')
+        ut.features = ['untar']
+        bld.add_group()
+        
+        driverNode = driversNode.ensure_dir_node_from_path(fname)
+        
+        zlib = bld.new_task_gen('cc', env['LIB_TYPE'] or 'staticlib',
+                         includes=['.'],
+                         export_incdirs='.',
+                         target='z',
+                         source='adler32.c compress.c crc32.c gzio.c uncompr.c deflate.c trees.c ' \
+                                'zutil.c inflate.c infback.c inftrees.c inffast.c',
+                         path=driverNode,
+                         env=env.copy(),
+                         name='ZIP')
+        
+        bld.install_files('${PREFIX}/include',
+                          map(lambda x: os.path.join(driverNode.abspath(), x),
+                              'zlib.h'.split()))
+
+def distclean(context):
+    #remove the untarred directories
+    import shutil
+    
+    dirs = map(lambda d: os.path.join(context.curdir, d),
+               ['zlib-1.2.3'])
+    for d in dirs:
+        try:
+            if os.path.exists(d):
+                shutil.rmtree(d, ignore_errors=True)
+        except:{}
+    
