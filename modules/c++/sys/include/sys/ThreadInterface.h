@@ -54,7 +54,6 @@ namespace sys
    me->setIsRunning(true); \
    me->target()->run(); \
    me->setIsRunning(false); \
-   if (me != me->target()) { delete me->target(); }
 
 
 /*!
@@ -145,7 +144,10 @@ public:
 
     //!  Destructor
     virtual ~ThreadInterface()
-    {}
+    {
+        if (mTarget && mTarget != this)
+            delete mTarget;
+    }
 
     /*!
      *  Return the name of this thread
