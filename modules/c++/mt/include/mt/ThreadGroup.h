@@ -67,11 +67,11 @@ public:
     void createThread(std::auto_ptr<sys::Runnable> runnable);
     
     /*!
-    *  Waits for all threads to complete
+    *  Waits for all threads to complete.
     */
     void joinAll();
 private:
-    std::vector<mem::SharedPtr<sys::Thread>> threads;
+    std::vector<mem::SharedPtr<sys::Thread> > threads;
 };
 }
 
