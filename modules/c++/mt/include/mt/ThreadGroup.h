@@ -73,8 +73,8 @@ public:
     void joinAll();
 
 private:
-    std::vector<mem::SharedPtr<sys::Thread> > threads;
-    int lastJoined;
+    std::vector<mem::SharedPtr<sys::Thread> > mThreads;
+    size_t mLastJoined;
 };
 }
 

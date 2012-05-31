@@ -23,7 +23,7 @@
 #include "mt/ThreadGroup.h"
 
 mt::ThreadGroup::ThreadGroup() :
-    lastJoined(0)
+    mLastJoined(0)
 {
 }
 
@@ -46,21 +46,21 @@ void mt::ThreadGroup::createThread(sys::Runnable *runnable)
 
 void mt::ThreadGroup::createThread(std::auto_ptr<sys::Runnable> runnable)
 {
-    sys::Thread *thread = new sys::Thread(runnable.get());
-    threads.push_back(mem::SharedPtr<sys::Thread>(thread));
+    mem::SharedPtr<sys::Thread> thread = mem::SharedPtr<sys::Thread>(new sys::Thread(runnable.get()));
+    runnable.release();
+    mThreads.push_back(thread);
     thread->start();
-	runnable.release();
 }
 
 void mt::ThreadGroup::joinAll()
 {
     bool failed = false;
     // Keep track of which threads we've already joined.
-    for (; lastJoined < threads.size(); lastJoined++)
+    for (; mLastJoined < mThreads.size(); mLastJoined++)
     {
         try
         {
-            if (!threads[lastJoined]->join())
+            if (!mThreads[mLastJoined]->join())
                 failed = true;
         }
         catch (...)
