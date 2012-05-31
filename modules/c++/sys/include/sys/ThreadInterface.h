@@ -28,6 +28,7 @@
 
 #if defined(_REENTRANT)
 #include <typeinfo>
+#include <iostream>
 #include "sys/SystemException.h"
 
 
@@ -145,6 +146,14 @@ public:
     //!  Destructor
     virtual ~ThreadInterface()
     {
+        // If the thread is still running, crash the program to prevent all kinds
+        // of nasty issues that could pop up (execution in freed memory, etc).
+        if (isRunning())
+        {
+            std::cerr << Ctxt(FmtX("Thread object [%s] destructed before thread terminated, aborting program.", getName())) << std::endl;
+            abort();
+        }
+        
         if (mTarget && mTarget != this)
             delete mTarget;
     }
@@ -242,11 +251,11 @@ public:
         return mTarget;
     }
 
-    virtual bool isRunning()
+    bool isRunning()
     {
         return mIsRunning;
     }
-    virtual void setIsRunning(bool isRunning)
+    void setIsRunning(bool isRunning)
     {
         mIsRunning = isRunning;
     }
