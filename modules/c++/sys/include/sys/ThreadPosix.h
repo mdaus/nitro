@@ -66,7 +66,7 @@ public:
             *  Default constructor.  Allows ThreadInterface to bind this to target
             *  \param name  The name
             */
-    ThreadPosix(std::string name = "") :
+    ThreadPosix(const std::string& name = "") :
             Parent_T(name)
     {}
     /*!
@@ -75,13 +75,13 @@ public:
             *  \param name  The name
      */
     ThreadPosix(Runnable *target,
-                std::string name = "") :
+                const std::string& name = "") :
             Parent_T(target, name)
     {}
 
 
     ThreadPosix(Runnable *target,
-                std::string name,
+                const std::string& name,
                 int level,
                 int priority) :
             Parent_T(target, name, level, priority)

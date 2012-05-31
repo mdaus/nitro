@@ -88,7 +88,7 @@ public:
      *  API
      *  \param name The name of this thread
      */
-    ThreadInterface(std::string name) : mIsSelf(true)
+    ThreadInterface(const std::string& name) : mIsSelf(true)
     {
         initialize(this, NORM_PRIORITY, DEFAULT_LEVEL, name);
     }
@@ -112,13 +112,13 @@ public:
      *  \param name The name of this thread
      */
     ThreadInterface(Runnable *target,
-                    std::string name) : mIsSelf(false)
+                    const std::string& name) : mIsSelf(false)
     {
         initialize(target, NORM_PRIORITY, DEFAULT_LEVEL, name);
     }
 
     ThreadInterface(Runnable *target,
-                    std::string name,
+                    const std::string& name,
                     int level,
                     int priority) : mIsSelf(false)
     {

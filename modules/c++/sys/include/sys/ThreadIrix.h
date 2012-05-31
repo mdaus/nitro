@@ -41,17 +41,17 @@ class ThreadIrix : public ThreadInterface<pid_t>
 public:
     typedef ThreadInterface<pid_t> Parent_T;
 
-    ThreadIrix(std::string name = "") :
+    ThreadIrix(const std::string& name = "") :
             Parent_T(name)
     {}
 
     ThreadIrix(sys::Runnable *target,
-               std::string name = "") :
+               const std::string& name = "") :
             Parent_T(target, name)
     {}
 
     ThreadIrix(sys::Runnable *target,
-               std::string name,
+               const std::string& name,
                int level,
                int priority) :
             Parent_T(target, name, level, priority)

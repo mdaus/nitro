@@ -66,7 +66,7 @@ public:
      *  \param name     Name of thread
      *  \param isLocal  Set to true if you want local threads
      */
-    ThreadNSPR(std::string name = "",
+    ThreadNSPR(const std::string& name = "",
                bool isLocal = true) :
             Parent_T(name)
     {
@@ -82,7 +82,7 @@ public:
      *  \param isLocal  Set to true if you want local threads
      */
     ThreadNSPR(Runnable *target,
-               std::string name = "",
+               const std::string& name = "",
                bool isLocal = true) :
             Parent_T(target, name)
     {
@@ -90,7 +90,7 @@ public:
     }
 
     ThreadNSPR(Runnable *target,
-               std::string name,
+               const std::string& name,
                int level,
                int priority,
                bool isLocal = true) :

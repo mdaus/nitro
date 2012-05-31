@@ -52,7 +52,7 @@ public:
 
     typedef ThreadInterface<thread_t> Parent_T;
     //!  Default constructor.  Allows ThreadInterface to bind this to target
-    ThreadSolaris(std::string name = "") : Parent_T(name)
+    ThreadSolaris(const std::string& name = "") : Parent_T(name)
     {}
 
     /*!
@@ -61,12 +61,12 @@ public:
             *  \param name  The name
      */
     ThreadSolaris(Runnable *target,
-                  std::string name = "") :
+                  const std::string& name = "") :
             Parent_T(target, name)
     {}
 
     ThreadSolaris(Runnable *target,
-                  std::string name,
+                  const std::string& name,
                   int level,
                   int priority) :
             Parent_T(target, name, level, priority)

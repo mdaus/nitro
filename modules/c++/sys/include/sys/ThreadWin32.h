@@ -72,16 +72,16 @@ class ThreadWin32 : public ThreadInterface<HANDLE>
 public:
     typedef ThreadInterface<HANDLE> Parent_T;
 
-    ThreadWin32(std::string name = "") : Parent_T(name)
+    ThreadWin32(const std::string& name = "") : Parent_T(name)
     {}
 
     ThreadWin32(sys::Runnable *target,
-                std::string name = "") :
+                const std::string& name = "") :
             Parent_T(target, name)
     {}
 
     ThreadWin32(sys::Runnable *target,
-                std::string name,
+                const std::string& name,
                 int level,
                 int priority) :
             Parent_T(target, name, level, priority)
