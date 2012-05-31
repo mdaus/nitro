@@ -46,7 +46,7 @@ void mt::ThreadGroup::createThread(sys::Runnable *runnable)
 
 void mt::ThreadGroup::createThread(std::auto_ptr<sys::Runnable> runnable)
 {
-    mem::SharedPtr<sys::Thread> thread = mem::SharedPtr<sys::Thread>(new sys::Thread(runnable.get()));
+    mem::SharedPtr<sys::Thread> thread(new sys::Thread(runnable.get()));
     runnable.release();
     mThreads.push_back(thread);
     thread->start();
