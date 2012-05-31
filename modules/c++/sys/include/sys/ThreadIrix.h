@@ -89,10 +89,6 @@ public:
         dbg_printf("ThreadIrix::__start()\n");
         sys::ThreadIrix *me = (sys::ThreadIrix *)v;
         me->target()->run();
-        if (me != me->target())
-        {
-            delete me->target();
-        }
         dbg_printf("ThreadIrix::__start() has completed\n");
         exit(EXIT_SUCCESS);
     }
