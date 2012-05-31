@@ -20,81 +20,69 @@
  *
  */
 
-#include <iostream>
-#include <cmath>
-#include <import/sys.h>
-#include <import/mt.h>
+#include "import/sys.h"
+#include "import/mt.h"
+#include "TestCase.h"
 
 using namespace sys;
 using namespace mt;
 using namespace std;
 
-const int NUM_TASKS = 4;
-
 class MyRunTask : public Runnable
 {
 public:
-    double result;
+    int result;
+    int *state;
+    int *num_deleted;
     
-    MyRunTask()
+    MyRunTask(int *new_state, int *new_num_deleted)
     {
-        result = 1;
+        state = new_state;
+        result = *new_state;
+        num_deleted = new_num_deleted;
     }
     virtual ~MyRunTask()
     {
+        (*num_deleted)++;
     }
 
     virtual void run()
     {
-		for (int count = 0; count < 1000000; count++)
-		{
-			result = sin((double) count);
-		}
+		while (result == 1)
+            result = *state;
     }
 };
 
-void print(MyRunTask *tasks[NUM_TASKS])
+TEST_CASE(ThreadGroupTest)
 {
-    for (int i = 0; i < NUM_TASKS; i++)
-        cout << tasks[i]->result << ", ";
+    ThreadGroup *threads = new ThreadGroup();
+    int state = 1, numDeleted = 0;
+    MyRunTask *tasks[3];
     
-    cout << endl;
+    for (int i = 0; i < 3; i++)
+        tasks[i] = new MyRunTask(&state, &numDeleted);
+    
+    threads->createThread(tasks[0]);
+    threads->createThread(tasks[1]);
+    state = 2;
+    threads->joinAll();
+    
+    TEST_ASSERT_EQ(tasks[0]->result, 2);
+    TEST_ASSERT_EQ(tasks[1]->result, 2);
+    
+    state = 1;
+    threads->createThread(tasks[2]);
+    state = 3;
+
+    TEST_ASSERT_EQ(numDeleted, 0);
+    
+    delete threads;
+    TEST_ASSERT_EQ(numDeleted, 3);
 }
 
 int main(int argc, char *argv[])
 {
-    ThreadGroup threads;
-    MyRunTask *tasks[NUM_TASKS];
-
-    try
-    {
-        
-        for (int i = 0; i < NUM_TASKS; i++)
-        {
-            tasks[i] = new MyRunTask();
-            threads.createThread(tasks[i]);
-        }
-        
-        for (int i = 0; i < 5; i++)
-        {
-            print(tasks);
-        }
-
-        threads.joinAll();
-        
-        std::cout << "Finished all" << std::endl;
-    }
-
-    catch (except::Throwable& t)
-    {
-        cout << "Exception Caught: " << t.toString() << endl;
-        return -1;
-    }
-    catch (...)
-    {
-        cout << "Exception Caught!" << endl;
-        return -1;
-    }
+    TEST_CHECK(ThreadGroupTest);
 
     return 0;
 }

@@ -28,6 +28,7 @@
 #include "sys/Runnable.h"
 #include "sys/Thread.h"
 #include "mem/SharedPtr.h"
+#include "except/Error.h"
 
 namespace mt
 {
@@ -70,8 +71,10 @@ public:
     *  Waits for all threads to complete.
     */
     void joinAll();
+
 private:
     std::vector<mem::SharedPtr<sys::Thread> > threads;
+    int lastJoined;
 };
 }
 

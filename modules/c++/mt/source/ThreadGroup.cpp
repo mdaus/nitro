@@ -22,8 +22,10 @@
 
 #include "mt/ThreadGroup.h"
 
-mt::ThreadGroup::ThreadGroup()
-{}
+mt::ThreadGroup::ThreadGroup() :
+    lastJoined(0)
+{
+}
 
 mt::ThreadGroup::~ThreadGroup()
 {
@@ -52,9 +54,21 @@ void mt::ThreadGroup::createThread(std::auto_ptr<sys::Runnable> runnable)
 
 void mt::ThreadGroup::joinAll()
 {
-    for (int i = 0; i < threads.size(); i++)
+    bool failed = false;
+    // Keep track of which threads we've already joined.
+    for (; lastJoined < threads.size(); lastJoined++)
     {
-        threads[i]->join();
+        try
+        {
+            if (!threads[lastJoined]->join())
+                failed = true;
+        }
+        catch (...)
+        {
+            failed = true;
+        }
     }
-    threads.clear();
+    
+    if (failed)
+        throw except::Error(Ctxt("ThreadGroup could not be joined"));
 }
