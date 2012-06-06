@@ -901,11 +901,11 @@ def detect(self):
         vars['warn']           = '/Wall'
         vars['nowarn']         = '/W1 /wd4290'.split()
         vars['verbose']        = ''
-        vars['64']             = '/MACHINE:X64 '
         vars['optz_med']       = ['-O2', crtFlag]
         vars['optz_fast']      = ['-O2', crtFlag]
         vars['optz_fastest']   = ['-Ox', crtFlag]
-        vars['linkflags_32'] = vars['linkflags_64'] = '/STACK:80000000'
+        vars['linkflags_32'] = vars['linkflags_64'] = ['/STACK:80000000']
+        vars['linkflags_64'].append('/MACHINE:X64')
 
         if Options.options.debugging:
             # In order to generate a .pdb file, we need both the /Zi 
