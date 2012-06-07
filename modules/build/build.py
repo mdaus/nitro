@@ -113,35 +113,35 @@ class CPPBuildContext(BuildContext):
             excludes.append(join(self.curdir, ex))	
         dist_exts.extend(pkgExcludes)
         
-    	if (name.startswith(',,') or name.startswith('++') or name.startswith('.waf-1.') or \
-    	   (src=='.' and name == Options.lockfile) or name in excludes or name == build_dir or \
-    	    join(src, name) in excludes):
-    		return True
-    	for ext in dist_exts :
-    		if name.endswith(ext) :
-    			return True
-    			
-    	return False
+        if (name.startswith(',,') or name.startswith('++') or name.startswith('.waf-1.') or \
+           (src=='.' and name == Options.lockfile) or name in excludes or name == build_dir or \
+            join(src, name) in excludes):
+            return True
+        for ext in dist_exts :
+            if name.endswith(ext) :
+                return True
+
+        return False
 
     # copy the entire directory minus certain things excluded --
     # this takes walking over individual elements    	
     def copyTree(self, src, dst, pkgExcludes, build_dir):
 
-    	names = os.listdir(src)
-    	if not exists(dst) :
-    	    os.makedirs(dst)
+        names = os.listdir(src)
+        if not exists(dst) :
+            os.makedirs(dst)
 
-    	for name in names:
-    		srcname = join(src, name)
-    		dstname = join(dst, name)
+        for name in names:
+            srcname = join(src, name)
+            dstname = join(dst, name)
 
             # build_dir is just to safeguard the dest being in the checkout area
-    		if self.__dontDist(name, src, pkgExcludes, build_dir):
-    			continue
-    		if isdir(srcname):
-    			self.copyTree(srcname, dstname, pkgExcludes, build_dir)
-    		else:
-    			shutil.copy2(srcname, dstname)
+            if self.__dontDist(name, src, pkgExcludes, build_dir):
+                continue
+            if isdir(srcname):
+                self.copyTree(srcname, dstname, pkgExcludes, build_dir)
+            else:
+                shutil.copy2(srcname, dstname)
 
     def removeDuplicates(self, lst) :
         # remove duplicates
