@@ -1,5 +1,6 @@
 import os
 import Scripting, Options
+from os.path import join, exists
 from Build import BuildContext
 
 VERSION = '2.0-dev' # This has no meaning, but its built into the waf system
@@ -7,19 +8,55 @@ APPNAME = 'CODA'
 srcdir  = '.'
 blddir  = 'target'
 
+ALWAYS_INSTALLED = ['waf', 'wscript', 'build', 'c++/wscript']
+PACKAGE_ALL = { 'SUB_DIRS' : ['drivers', 'c++'],
+                'SOURCE_INCLUDES' : ALWAYS_INSTALLED,
+                'SOURCE_EXCLUDES' : [],
+                'TARGETS' : []
+              } 
+
 def set_options(opt):
     opt.tool_options('build', tooldir='./build')
-    opt.sub_options('drivers c++')
+    
+    # always set_options on all
+    allDirs = PACKAGE_ALL['SUB_DIRS']
+    allDirs = filter(lambda x: exists(join(opt.curdir, x)), allDirs)
+    opt.sub_options(allDirs)
 
 def configure(conf):
     conf.check_tool('build', tooldir='./build')
-    conf.sub_config('drivers c++')
+    
+    # store the packages in the env
+    conf.env['BUILD_PACKAGES']['ALL'] = PACKAGE_ALL
+
+    # always configure on all 
+    allDirs = PACKAGE_ALL['SUB_DIRS']
+    allDirs = filter(lambda x: exists(join(conf.curdir, x)), allDirs)
+
+    conf.sub_config(allDirs)
 
 def build(bld):
-    bld.add_subdirs('drivers c++')
-        
+
+    variant = bld.env['VARIANT'] or 'default'
+    env = bld.env_of_name(variant)
+
+    # repeat from detect in build.py, but this
+    # allows build time user specification 
+    env['DELIVER_SOURCE'] = Options.options.dist_source
+
+    # build all by default        
+    if Options.options.packages is None :
+        Options.options.packages = 'ALL'
+
+    bld.build_packages(Options.options.packages)
+
 def distclean(context):
-    context.recurse('drivers c++')
+
+    # always distclean on all
+    allDirs = PACKAGE_ALL['SUB_DIRS']
+    allDirs = filter(lambda x: exists(join(context.curdir, x)), allDirs)
+    context.recurse(allDirs)
+
     Scripting.distclean(context)
 
 def init(context):

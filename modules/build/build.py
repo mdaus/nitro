@@ -1,4 +1,4 @@
-import sys, os, types, re, fnmatch, subprocess
+import sys, os, types, re, fnmatch, subprocess, shutil
 from os.path import split, isdir, isfile, exists, splitext, abspath, join, \
                     basename, dirname
 
@@ -8,6 +8,8 @@ from Build import BuildContext
 from TaskGen import taskgen, feature, after, before
 from Utils import to_list as listify
 
+COMMON_EXCLUDES = '.bzr .bzrignore .git .gitignore .svn CVS .cvsignore .arch-ids {arch} SCCS BitKeeper .hg _MTN _darcs Makefile Makefile.in config.log'.split()
+COMMON_EXCLUDES_EXT ='~ .rej .orig .pyc .pyo .bak .tar.bz2 tar.gz .zip .swp'.split()
 
 # provide a partial function if we don't have one
 try:
@@ -47,8 +49,182 @@ class CPPBuildContext(BuildContext):
         for i, s in enumerate(strs):
             sys.stderr.write("%s%s " % (Logs.colors(colors[i % len(colors)]), s))
         sys.stderr.write("%s%s" % (Logs.colors.NORMAL, os.linesep))
+        
+#    # recursively expand packages
+#    def __extendPackages(self, env, pkgs, iter) :
+#
+#        packages = pkgs
+#        
+#        if iter == len(packages) :
+#            return packages
+#
+#        if packages[iter].isupper() :
+#            p = 'PACKAGE_' + packages[iter]
+#            packages.remove(packages[iter])
+#            if p in env :
+#                packages.extend(env[p])
+#            packages = self.__extendPackages(env, packages, iter)
+#        else :
+#            packages = self.__extendPackages(env, packages, iter+1)
+#            
+#        return packages			        
+
+#    # expand package definitions into targets    
+#    def extendPackages(self, env, pkgs) :
+#        return self.__extendPackages(env, pkgs, 0)
+
+                    
+#    # updates the targets based on packages defined
+#    def addPackageList(self, packages, env) :
+#        targets = Options.options.compile_targets.split(',')
+#        pkgsTargets = self.extendPackages(env, packages)
+#        targets.extend(pkgsTargets)
+#        
+#        # remove duplicates
+#        targets = self.removeDuplicates(targets)
+#        Options.options.compile_targets = ','.join(targets)
+
+        
+    # because we can't assume python 2.6
+    def __computeRelPath(self, rel, frm) :
     
+        rel = abspath(rel)
+        frm = abspath(frm)
+
+        relList = rel.split(os.sep)
+        fromList = frm.split(os.sep)
+
+        for folder in fromList :
+            if len(relList) > 0 and relList[0] == folder :
+                relList.remove(folder)
+        return join(*relList)
+        
+    # find what should be excluded
+    def __dontDist (self, name, src, pkgExcludes, build_dir):
+
+        # if initialized to the list, it was residually appending 
+        # multiple version, so we start with an empty list
+        excludes = []
+        dist_exts = []
+        excludes.extend(COMMON_EXCLUDES)
+        dist_exts.extend(COMMON_EXCLUDES_EXT)
+
+        for ex in pkgExcludes :
+            excludes.append(join(self.curdir, ex))	
+        dist_exts.extend(pkgExcludes)
+        
+    	if (name.startswith(',,') or name.startswith('++') or name.startswith('.waf-1.') or \
+    	   (src=='.' and name == Options.lockfile) or name in excludes or name == build_dir or \
+    	    join(src, name) in excludes):
+    		return True
+    	for ext in dist_exts :
+    		if name.endswith(ext) :
+    			return True
+    			
+    	return False
+
+    # copy the entire directory minus certain things excluded --
+    # this takes walking over individual elements    	
+    def copyTree(self, src, dst, pkgExcludes, build_dir):
+
+    	names = os.listdir(src)
+    	if not exists(dst) :
+    	    os.makedirs(dst)
+
+    	for name in names:
+    		srcname = join(src, name)
+    		dstname = join(dst, name)
+
+            # build_dir is just to safeguard the dest being in the checkout area
+    		if self.__dontDist(name, src, pkgExcludes, build_dir):
+    			continue
+    		if isdir(srcname):
+    			self.copyTree(srcname, dstname, pkgExcludes, build_dir)
+    		else:
+    			shutil.copy2(srcname, dstname)
+
+    def removeDuplicates(self, lst) :
+        # remove duplicates
+        if lst :
+            lst.sort()
+            last = lst[-1]
+            for i in range(len(lst)-2, -1, -1):
+                if lst[i] == '' or last == lst[i] :
+                    del lst[i]
+                else:
+                    last = lst[i]
+        return lst
+        
+    # copies source to the output location
+    def __makeSourceDelivery(self, dirs) :
+
+        variant = self.env['VARIANT'] or 'default'
+        env = self.env_of_name(variant)
+
+        wafDir = abspath('./')
+        if isinstance(dirs, str):
+            dirs = dirs.split()
+        for dir in dirs :
+            if dir is None :
+                continue
+
+            dir = join(self.path.abspath(), dir)
+            relPath = self.__computeRelPath(dir, wafDir)
+            
+            # find things in env
+            deliverSource = env['DELIVER_SOURCE']
+            prefix = env['PREFIX']
+
+            # parse package excludes
+            pkgs = []
+            if Options.options.packages :
+                pkgs = Options.options.packages.split(',')
+            pkgsExcludes = []
+            for pkg in pkgs :
+                pkg = pkg.upper()
+                pkg = pkg.strip()
+                if pkg in env['BUILD_PACKAGES'] :
+                    pkgsExcludes.extend(env['BUILD_PACKAGES'][pkg]['SOURCE_EXCLUDES'])
+
+            pkgsExcludes = self.removeDuplicates(pkgsExcludes)
+            
+            if self.is_install and exists(dir) and deliverSource is True : 
+                relPath = self.__computeRelPath(dir, wafDir)
+                
+                # deliver all source from relPath recursively
+                # TODO: add excludes
+                self.copyTree(join(wafDir, relPath), 
+                                join (prefix, 'source', relPath), 
+                                pkgsExcludes, prefix)
+
+
+    # wrapper function for delivering everything below a wscript pickup
+    def add_subdirs_withSource(self, dirs) :
+    
+        if dirs is None :
+            return
+        if isinstance(dirs, str):
+            dirs = dirs.split()
+        for dir in dirs :
+            if dir is None :
+                continue
+                
+            self.__makeSourceDelivery(dir)
+            if not exists(join(self.curdir, dir, 'wscript')) :
+                self.fromConfig(dir)
+            else :
+                self.add_subdirs(dir)
+        
+    # wrapper function for delivering everything below a project.cfg pickup
+    def fromConfig_withSource(self, dirs, **overrides) :
+    
+        if dirs is None :
+            return
+        self.__makeSourceDelivery(dirs)
+        self.fromConfig(dirs, **overrides)
+        
     def fromConfig(self, path, **overrides):
+    
         bld = self
         from ConfigParser import SafeConfigParser as Parser
         cp = Parser()
@@ -134,6 +310,55 @@ class CPPBuildContext(BuildContext):
                              path=args['path'],
                              name=splitext(len(parts) == 2 and parts[1] or parts[0])[0])
         except Exception:{}
+        
+        
+    def build_packages(self, packages) :
+
+        variant = self.env['VARIANT'] or 'default'
+        env = self.env_of_name(variant)
+
+        if isinstance(packages, str):
+            packages = packages.split(',')
+            
+        # parse packages        
+        pkgsDirs = []
+        pkgsTargets = []
+        pkgsIncludes = []
+        pkgsExcludes = []
+        for package in packages :
+            if package is None :
+                continue
+            package = package.upper()
+            package = package.strip()
+
+            pkgsDirs.extend(env['BUILD_PACKAGES'][package]['SUB_DIRS'])
+            pkgsTargets.extend(env['BUILD_PACKAGES'][package]['TARGETS'])
+            pkgsIncludes.extend(env['BUILD_PACKAGES'][package]['SOURCE_INCLUDES'])
+            pkgsExcludes.extend(env['BUILD_PACKAGES'][package]['SOURCE_EXCLUDES'])
+            
+        # make sure there weren't repeats between packages
+#        pkgsDirs = self.removeDuplicates(pkgsDirs) # this depends on order
+        pkgsTargets = self.removeDuplicates(pkgsTargets)
+        pkgsIncludes = self.removeDuplicates(pkgsIncludes)
+        pkgsExcludes = self.removeDuplicates(pkgsExcludes)
+        
+        # add sub_dirs
+        self.add_subdirs_withSource(pkgsDirs)
+        
+        # add targets
+        targets = Options.options.compile_targets.split(',')
+        targets.extend(pkgsTargets)
+        targets = self.removeDuplicates(targets)
+        Options.options.compile_targets = ','.join(targets)
+        
+        # deliver certain things in main directory regarless
+        if env['DELIVER_SOURCE'] is True: 
+            for x in pkgsIncludes :
+                if os.path.isdir(join(self.curdir, x)) :
+                    self.copyTree(join(self.curdir, x), join(env['PREFIX'], 'source', x), pkgsExcludes, env['PREFIX'])
+                else :
+                    self.install_files(join(env['PREFIX'], 'source', os.path.split(x)[0]), x)
+        
     
     def runUnitTests(self, tests, path):
         path = path or self.path.abspath()
@@ -581,7 +806,10 @@ def set_options(opt):
         opt.tool_options('msvc')
         opt.add_option('--with-crt', action='store', choices=['MD', 'MT'],
                        dest='crt', default='MT', help='Specify Windows CRT library - MT (default) or MD')
-    
+    opt.add_option('--packages', action='store', dest='packages',
+                   help='Target packages to build (common-separated list)')
+    opt.add_option('--dist-source', action='store_true', dest='dist_source', default='False',
+                   help='Distribute source into the installation area (for delivering source)')
     opt.add_option('--enable-warnings', action='store_true', dest='warnings',
                    help='Enable warnings')
     opt.add_option('--enable-debugging', action='store_true', dest='debugging',
@@ -644,6 +872,17 @@ def detect(self):
         return
     
     platform = getPlatform(default=Options.platform)
+
+    
+    # build packages is a map of maps
+    self.env['BUILD_PACKAGES'] = {}
+
+    # store in the environment whether the user wants to
+    # deliver source into the installation area --
+    # this can also be a build time argument if placed in
+    # the top level wscript
+    self.env['DELIVER_SOURCE'] = Options.options.dist_source
+    
     
     self.check_message_custom('platform', '', platform, color='GREEN')
     self.check_tool('compiler_cc')

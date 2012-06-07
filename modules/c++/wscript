@@ -20,12 +20,18 @@ def configure(conf):
                            MODULES.split()))
     
 def build(bld):
-    configBuilds = filter(lambda m: not exists(join(bld.curdir, m, 'wscript')),
-                          MODULES.split())
-    # build these modules from their config files
-    map(bld.fromConfig, map(lambda m: join(bld.curdir, m), configBuilds))
-    map(bld.add_subdirs, filter(lambda m: m not in configBuilds, MODULES.split()))
-    
+
+    modules = filter(lambda x: exists(join(bld.curdir, x)), MODULES.split())
+                          
+    # build these modules from their project.cfg file
+    configBuilds = filter(lambda m: not exists(join(bld.curdir, m, 'wscript')), modules)
+    for config in configBuilds :
+        bld.fromConfig_withSource(join(bld.curdir, config))
+
+    # build the rest with the wscript
+    modules = set(modules) - set(configBuilds)
+    for mod in modules :
+        bld.add_subdirs_withSource(mod)
 
 def distclean(context):
     context.recurse(filter(lambda x: exists(join(context.curdir, x, 'wscript')),
