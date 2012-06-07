@@ -899,7 +899,7 @@ def detect(self):
         vars = {}
         vars['debug']          = ['/Zi', crtDebug]
         vars['warn']           = '/Wall'
-        vars['nowarn']         = '/W1 /wd4290'.split()
+        vars['nowarn']         = '/wd4290'.split()
         vars['verbose']        = ''
         vars['optz_med']       = ['-O2', crtFlag]
         vars['optz_fast']      = ['-O2', crtFlag]
@@ -978,13 +978,19 @@ int main() {
                                 execute=1, msg='Checking for 64-bit system')
             try:
                 is64Bit = bool(int(output))
+                if is64Bit:
+                    self.check_message_custom('system size', '', '64-bit')
+                else:
+                    self.check_message_custom('system size', '', '32-bit')
             except:{}
         elif '64' in config['cxx']:
             if self.check_cxx(cxxflags=config['cxx']['64'], linkflags=config['cc'].get('linkflags_64', ''), mandatory=False):
                 is64Bit = self.check_cc(cflags=config['cc']['64'], linkflags=config['cc'].get('linkflags_64', ''), mandatory=False)
 
     if is64Bit:
-        if not re.match(winRegex, platform):
+        if re.match(winRegex, platform):
+            variantName = variantName.replace('32', '64')
+        else:
             variantName = '%s-64' % variantName
         variant.append_value('CXXFLAGS', config['cxx'].get('64', ''))
         variant.append_value('CCFLAGS', config['cc'].get('64', ''))
