@@ -36,6 +36,7 @@
 #include "logging/MemoryHandler.h"
 #include "logging/NullLogger.h"
 #include "logging/RotatingFileHandler.h"
+#include "logging/Setup.h"
 #include "logging/StandardFormatter.h"
 #include "logging/StreamHandler.h"
 #include "logging/XMLFormatter.h"
