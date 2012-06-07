@@ -895,6 +895,9 @@ def detect(self):
         winRegex
         crtFlag = '/%s' % Options.options.crt
         crtDebug = '%sd' % crtFlag
+        
+        # Sets the size of the stack (in bytes)
+        stackFlag = '/STACK:80000000'
 
         vars = {}
         vars['debug']          = ['/Zi', crtDebug]
@@ -904,11 +907,12 @@ def detect(self):
         vars['optz_med']       = ['-O2', crtFlag]
         vars['optz_fast']      = ['-O2', crtFlag]
         vars['optz_fastest']   = ['-Ox', crtFlag]
-        vars['linkflags_32'] = vars['linkflags_64'] = ['/STACK:80000000']
-        # This is probably not actually necessary - the linker should figure
-        # it out, but this makes sure
-        vars['linkflags_32'].append('/MACHINE:X86')
-        vars['linkflags_64'].append('/MACHINE:X64')
+        # The MACHINE flag is is probably not actually necessary
+        # The linker should be able to infer it from the object files
+        # But doing this just to make sure we're really building 32/64 bit
+        # applications
+        vars['linkflags_32'] = [stackFlag, '/MACHINE:X86']
+        vars['linkflags_64'] = [stackFlag, '/MACHINE:X64']
 
         if Options.options.debugging:
             # In order to generate a .pdb file, we need both the /Zi 
