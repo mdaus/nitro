@@ -1,11 +1,13 @@
+BLD_DIRS = 'pcre fftw zlib uuid expat sql'
+
 def set_options(opt):
-    opt.sub_options('pcre fftw zlib uuid expat sql')
+    opt.sub_options(BLD_DIRS)
 
 def configure(conf):
-    conf.sub_config('pcre fftw zlib uuid expat sql')
+    conf.sub_config(BLD_DIRS)
 
 def build(bld):
-    bld.add_subdirs('pcre fftw zlib uuid expat')
+    bld.add_subdirs(BLD_DIRS)
 
 def distclean(ctx):
-    ctx.recurse('pcre fftw zlib uuid expat')
+    ctx.recurse(BLD_DIRS)

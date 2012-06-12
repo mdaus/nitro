@@ -3,6 +3,7 @@ import Options
 from TaskGen import feature, before, taskgen
 import Tools.misc as misc
 
+build = distclean = lambda x: None
 
 def set_options(opt):
     opt.add_option('--enable-sql-layer', action='store', choices=['mysql', 'psql', 'oracle'],
