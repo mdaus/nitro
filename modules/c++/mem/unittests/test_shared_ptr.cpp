@@ -50,7 +50,7 @@ TEST_CASE(testAutoPtrConstructor)
     std::auto_ptr<int> autoPtr(rawPtr);
     const mem::SharedPtr<int> ptr(autoPtr);
     TEST_ASSERT_EQ(ptr.get(), rawPtr);
-    TEST_ASSERT_EQ(autoPtr.get(), NULL);
+    TEST_ASSERT_EQ(autoPtr.get(), static_cast<int *>(NULL));
     TEST_ASSERT_EQ(ptr.getCount(), 1);
 }
 
