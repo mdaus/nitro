@@ -23,11 +23,6 @@
 #include <import/str.h>
 #include "TestCase.h"
 
-TEST_CASE(testNull)
-{
-    std::string s = str::toString(NULL);
-}
-
 TEST_CASE(testTrim)
 {
     std::string s = "  test   ";
@@ -162,7 +157,6 @@ TEST_CASE(testRoundDouble)
 
 int main(int argc, char* argv[])
 {
-    TEST_CHECK( testNull);
     TEST_CHECK( testTrim);
     TEST_CHECK( testUpper);
     TEST_CHECK( testLower);
