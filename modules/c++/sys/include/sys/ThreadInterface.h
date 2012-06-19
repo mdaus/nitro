@@ -125,24 +125,6 @@ public:
         initialize(target, priority, level, name);
     }
 
-    ThreadInterface(const ThreadInterface& t)
-    {
-        mName = t.mName;
-        mPriority = t.mPriority;
-        mLevel = t.mLevel;
-        mIsRunning = false;
-        if (t.mIsSelf)
-        {
-            mTarget = this;
-            mIsSelf = true;
-        }
-        else
-        {
-            mTarget = t.mTarget;
-            mIsSelf = false;
-        }
-    }
-
     //!  Destructor
     virtual ~ThreadInterface()
     {
@@ -313,6 +295,10 @@ protected:
     //!  The level at which this thread runs
     int mLevel;
     bool mIsRunning;
+private:
+    // Noncopyable
+    ThreadInterface(const ThreadInterface& );
+    const ThreadInterface& operator=(const ThreadInterface& );
 };
 }
 
