@@ -54,17 +54,10 @@ class RequestQueue
 public:
 
     //! Default constructor
-    RequestQueue()
+    RequestQueue() :
+        mAvailableSpace(&mQueueLock),
+        mAvailableItems(&mQueueLock)
     {
-        mAvailableSpace = new sys::ConditionVar(&mQueueLock);
-        mAvailableItems = new sys::ConditionVar(&mQueueLock);
-    }
-
-    //! Deconstructor
-    ~RequestQueue()
-    {
-        delete mAvailableSpace;
-        delete mAvailableItems;
     }
 
     // Put a (copy of, unless T is a pointer) request on the queue
@@ -73,14 +66,14 @@ public:
 #ifdef THREAD_DEBUG
         dbg_printf("Locking (enqueue)\n");
 #endif
-        assert(mQueueLock.lock());
+        mQueueLock.lock();
         mRequestQueue.push(request);
 #ifdef THREAD_DEBUG
         dbg_printf("Unlocking (enqueue), new size [%d]\n", mRequestQueue.size());
 #endif
-        assert(mQueueLock.unlock());
+        mQueueLock.unlock();
 
-        mAvailableItems->signal();
+        mAvailableItems.signal();
     }
 
     // Retrieve (by reference) T from the queue. blocks until ok
@@ -89,9 +82,11 @@ public:
 #ifdef THREAD_DEBUG
         dbg_printf("Locking (dequeue)\n");
 #endif
-        assert(mQueueLock.lock());
+        mQueueLock.lock();
         while (isEmpty())
-            mAvailableItems->wait();
+        {
+            mAvailableItems.wait();
+        }
 
         request = mRequestQueue.front();
         mRequestQueue.pop();
@@ -99,8 +94,8 @@ public:
 #ifdef THREAD_DEBUG
         dbg_printf("Unlocking (dequeue), new size [%d]\n", mRequestQueue.size());
 #endif
-        assert(mQueueLock.unlock());
-        mAvailableSpace->signal();
+        mQueueLock.unlock();
+        mAvailableSpace.signal();
     }
 
     // Check to see if its empty
@@ -120,26 +115,33 @@ public:
 #ifdef THREAD_DEBUG
         dbg_printf("Locking (dequeue)\n");
 #endif
-        assert(mQueueLock.lock());
+        mQueueLock.lock();
         while (!isEmpty())
+        {
             mRequestQueue.pop();
+        }
 
 #ifdef THREAD_DEBUG
         dbg_printf("Unlocking (dequeue), new size [%d]\n", mRequestQueue.size());
 #endif
-        assert(mQueueLock.unlock());
-        mAvailableSpace->signal();
+        mQueueLock.unlock();
+        mAvailableSpace.signal();
     }
+
+private:
+    // Noncopyable
+    RequestQueue(const RequestQueue& );
+    const RequestQueue& operator=(const RequestQueue& );
 
 private:
     //! The internal data structure
     std::queue<T> mRequestQueue;
-    //! This condition is "is there space?"
-    sys::ConditionVar *mAvailableSpace;
-    //! This condition is "is there an item?"
-    sys::ConditionVar *mAvailableItems;
     //! The synchronizer
     sys::Mutex mQueueLock;
+    //! This condition is "is there space?"
+    sys::ConditionVar mAvailableSpace;
+    //! This condition is "is there an item?"
+    sys::ConditionVar mAvailableItems;
 };
 
 typedef RequestQueue<sys::Runnable*> RunnableRequestQueue;
