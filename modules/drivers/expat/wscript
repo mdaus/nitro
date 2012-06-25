@@ -1,9 +1,8 @@
 import os
 import Options
-from TaskGen import feature, before, taskgen
-import Tools.misc as misc
+from TaskGen import feature, before, task_gen
 
-def set_options(opt):
+def options(opt):
     opt.add_option('--disable-xml', action='store_false', dest='enable_xml', default=True,
                    help='turn off XML')
     opt.add_option('--enable-xml-layer', action='store', choices=['expat', 'libxml', 'xerces'],
@@ -28,8 +27,7 @@ def configure(conf):
             xmlLayer = 'expat'
         
         if xmlHome and not makeXML:
-            conf.check_message_1('Setting xml home')
-            conf.check_message_2(xmlHome)
+            conf.msg('Setting xml home', xmlHome)
             conf.env.append_value('LIBPATH_XML', os.path.join(xmlHome, 'lib'))
             conf.env.append_value('CPPPATH_XML', os.path.join(xmlHome, 'include'))
         
@@ -63,20 +61,12 @@ def configure(conf):
         if makeXML:
             conf.env['MAKE_XML'] = xmlLayer
             conf.env.append_unique('CXXFLAGS_XML', expatDefines.split())
-            conf.check_message_1('Building local lib')
-            conf.check_message_2(xmlLayer)    
+            conf.msg('Building local lib', xmlLayer) 
 
 def build(bld):
     variant = bld.env['VARIANT']
     env = bld.env_of_name(variant)
     env.set_variant(variant)
-
-    defs = env['defines']
-    defList = []
-    for k, v in defs.iteritems():
-        if v:
-            defList.append('%s=%s' % (k, v))
-    #defs = map(lambda t: '%s=%s' % t, [(k, v) for k, v in bld.env['defines'].iteritems()])
 
     driversNode = bld.path
     
@@ -86,12 +76,14 @@ def build(bld):
         
         if driver == 'expat':
             fname = 'expat-2.0.0'
+            bld.set_group(0)
             ut = bld.new_task_gen(path=bld.path, fname='%s.tar' % fname,
-                                  env=env.copy(), before='XML')
+                                  env=env.copy())
+            bld.set_group(1)
             ut.features = ['untar']
-            bld.add_group()
+            #bld.add_group()
             
-            driverNode = driversNode.ensure_dir_node_from_path(fname)
+            driverNode = driversNode.make_node(fname)
         
             expatDefs = ['PACKAGE_VERSION="2.0.0"',
                          'XML_CONTEXT_BYTES=1024',
@@ -101,15 +93,15 @@ def build(bld):
                          'XML_STATIC=1']
             
             sources = 'lib/xmlparse.c lib/xmltok.c lib/xmlrole.c'
-            expat = bld.new_task_gen('cc', env['LIB_TYPE'] or 'staticlib', source=sources,
-                             includes='.', export_incdirs='lib',
+            expat = bld.new_task_gen(features='c c%s' % env['LIB_TYPE'] or 'stlib', source=sources,
+                             includes='.', export_includes='lib',
                              target='expat', path=driverNode,
                              uselib='XML', name='XML', env=env.copy(),
-                             defines=defList + expatDefs)
+                             defines=env['DEFINES'] + expatDefs)
             
             for f in ['expat.h', 'expat_external.h']:
-                bld.install_files('${PREFIX}/include',
-                              os.path.join(driverNode.abspath(), 'lib/%s' % f))
+                bld(features='install_tgt', install_path='${PREFIX}/include',
+                              dir=driverNode, pattern='lib/%s' % f)
         else:
             raise Exception('Invalid XML driver: %s' % driver)
 
@@ -117,7 +109,7 @@ def distclean(context):
     #remove the untarred directories
     import shutil
     
-    dirs = map(lambda d: os.path.join(context.curdir, d),
+    dirs = map(lambda d: os.path.join(context.path.abspath(), d),
                ['expat-1.95.7','expat-2.0.0'])
     for d in dirs:
         try:

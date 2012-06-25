@@ -2,11 +2,12 @@ import os
 import Scripting, Options
 from os.path import join, exists
 from Build import BuildContext
+from waflib.Tools import waf_unit_test
 
 VERSION = '2.0-dev' # This has no meaning, but its built into the waf system
 APPNAME = 'CODA'
-srcdir  = '.'
-blddir  = 'target'
+top  = '.'
+out  = 'target'
 
 ALWAYS_INSTALLED = ['waf', 'wscript', 'build', 'c++/wscript']
 PACKAGE_ALL = { 'SUB_DIRS' : ['drivers', 'c++'],
@@ -15,12 +16,12 @@ PACKAGE_ALL = { 'SUB_DIRS' : ['drivers', 'c++'],
                 'TARGETS' : []
               } 
 
-def set_options(opt):
+def options(opt):
     opt.tool_options('build', tooldir='./build')
     
     # always set_options on all
     allDirs = PACKAGE_ALL['SUB_DIRS']
-    allDirs = filter(lambda x: exists(join(opt.curdir, x)), allDirs)
+    allDirs = filter(lambda x: exists(join(opt.path.abspath(), x)), allDirs)
     opt.sub_options(allDirs)
 
 def configure(conf):
@@ -31,7 +32,7 @@ def configure(conf):
 
     # always configure on all 
     allDirs = PACKAGE_ALL['SUB_DIRS']
-    allDirs = filter(lambda x: exists(join(conf.curdir, x)), allDirs)
+    allDirs = filter(lambda x: exists(join(conf.path.abspath(), x)), allDirs)
 
     conf.sub_config(allDirs)
 
@@ -39,7 +40,10 @@ def build(bld):
 
     variant = bld.env['VARIANT'] or 'default'
     env = bld.env_of_name(variant)
-
+    
+    bld.add_group()
+    bld.add_group()
+    
     # repeat from detect in build.py, but this
     # allows build time user specification 
     env['DELIVER_SOURCE'] = Options.options.dist_source
@@ -49,24 +53,26 @@ def build(bld):
         Options.options.packages = 'ALL'
 
     bld.build_packages(Options.options.packages)
+    
+    bld.add_post_fun(waf_unit_test.summary)
 
 def distclean(context):
 
     # always distclean on all
     allDirs = PACKAGE_ALL['SUB_DIRS']
-    allDirs = filter(lambda x: exists(join(context.curdir, x)), allDirs)
+    allDirs = filter(lambda x: exists(join(context.path.abspath(), x)), allDirs)
     context.recurse(allDirs)
 
     Scripting.distclean(context)
 
-def init(context):
-    """
-    Override the lockfile - which allows you to build on multiple platforms
-    from the same sandbox without needing to re-configure every time you swap
-    between platforms.
-    
-    In other words, configure once per platform, then you can build for each
-    """
-    from build import getPlatform
-    platform = getPlatform()
-    Options.lockfile = '.lock-%s' % platform
+#def init(context):
+#    """
+#    Override the lockfile - which allows you to build on multiple platforms
+#    from the same sandbox without needing to re-configure every time you swap
+#    between platforms.
+#    
+#    In other words, configure once per platform, then you can build for each
+#    """
+#    from build import getPlatform
+#    platform = getPlatform()
+#    Options.lockfile = '.lock-%s' % platform

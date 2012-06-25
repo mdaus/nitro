@@ -1,6 +1,6 @@
 BLD_DIRS = 'pcre fftw zlib uuid expat sql'
 
-def set_options(opt):
+def options(opt):
     opt.sub_options(BLD_DIRS)
 
 def configure(conf):

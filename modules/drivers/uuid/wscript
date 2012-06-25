@@ -1,10 +1,9 @@
 import os
 import Options
-from TaskGen import feature, before, taskgen
-import Tools.misc as misc
+from TaskGen import feature, before, task_gen
 
 
-def set_options(opt):
+def options(opt):
     if Options.platform != 'win32':
         opt.add_option('--disable-uuid', action='store_false', dest='enable_uuid',
                        help='will not build the uuid library')
@@ -29,57 +28,51 @@ def configure(conf):
                 libpath=os.path.join(uuid_home, 'lib'),
                 includes=os.path.join(uuid_home, 'include')):
             conf.env['MAKE_UUID'] = True
-            conf.check_message_1('Building local lib')
-            conf.check_message_2('uuid')
+            conf.msg('Building local lib', 'uuid')
 
 def build(bld):
     variant = bld.env['VARIANT']
     env = bld.env_of_name(variant)
     env.set_variant(variant)
 
-    defs = env['defines']
-    defList = []
-    for k, v in defs.iteritems():
-        if v:
-            defList.append('%s=%s' % (k, v))
-    #defs = map(lambda t: '%s=%s' % t, [(k, v) for k, v in bld.env['defines'].iteritems()])
-
     driversNode = bld.path
         
     if 'MAKE_UUID' in env:
         
         fname = 'e2fsprogs-1.40-uuid'
+        bld.set_group(0)
         ut = bld.new_task_gen(path=bld.path, fname='%s.tar' % fname, env=env.copy())
+        bld.set_group(1)
         ut.features = ['untar']
-        bld.add_group()
+        #bld.add_group()
         
-        driverNode = driversNode.ensure_dir_node_from_path(fname)
+        driverNode = driversNode.make_node(fname)
         
         uuidH = bld.new_task_gen(input='lib/uuid/uuid_types.h.in',
                                  output='lib/uuid/uuid_types.h',
                                  dict=env['defines'], path=driverNode,
-                                 env=env.copy(), before='uuid')
+                                 env=env.copy())
         uuidH.features = ['m4subst']
     
         sources = map(lambda x: 'lib/uuid/%s' % x,
                     'clear.c compare.c copy.c gen_uuid.c isnull.c pack.c parse.c ' \
                       'unpack.c unparse.c uuid_time.c'.split())
-        uuid = bld.new_task_gen('cc', env['LIB_TYPE'] or 'staticlib',
+        uuid = bld.new_task_gen(features='c c%s' % env['LIB_TYPE'] or 'stlib',
                                 source=sources,
-                                export_incdirs='lib',
+                                export_includes='lib',
                                 includes='lib',
                                 target='uuid',
                                 name='UUID', path=driverNode,
-                                env=env.copy(), defines=defList)
+                                env=env.copy(), defines=env['DEFINES'])
         
-        bld.install_files('${PREFIX}/include/uuid',
-                          os.path.join(driverNode.abspath(), 'lib/uuid/uuid.h'))
+        bld(features='install_tgt', install_path='${PREFIX}/include/uuid',
+                          dir=driverNode, pattern='lib/uuid/uuid.h')
 
 def distclean(context):
     #remove the untarred directories
     import shutil
     
-    dirs = map(lambda d: os.path.join(context.curdir, d),
+    dirs = map(lambda d: os.path.join(context.path.abspath(), d),
                ['e2fsprogs-1.40-uuid'])
     for d in dirs:
         try:

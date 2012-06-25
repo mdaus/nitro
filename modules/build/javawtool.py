@@ -4,8 +4,8 @@ import Options
 from Configure import ConfigurationError
 
 
-def set_options(opt):
-    opt.tool_options('javaw')
+def options(opt):
+    opt.tool_options('java')
     opt.add_option('--disable-java', action='store_false', dest='java',
                    help='Disable java', default=True)
     opt.add_option('--with-java-home', action='store', dest='java_home',
@@ -16,7 +16,7 @@ def set_options(opt):
                help='Require Java lib/headers (configure option)', default=False)
     
 
-def detect(self):
+def configure(self):
     if not Options.options.java:
         return
     
@@ -26,7 +26,7 @@ def detect(self):
         self.environ['JAVA_HOME'] = Options.options.java_home 
     
     try:
-        self.check_tool('javaw')
+        self.check_tool('java')
     except Exception, e:
         if Options.options.force_java:
             raise e
@@ -70,4 +70,4 @@ def detect(self):
         if Options.options.force_java:
             self.fatal(err)
         else:
-            self.check_message_custom('Java', 'lib/headers', err, color='YELLOW')
+            self.msg('Java lib/headers', err, color='YELLOW')

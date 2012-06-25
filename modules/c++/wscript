@@ -3,30 +3,30 @@ import Utils
 from build import CPPBuildContext
 
 #override the default build context with our own
-Utils.g_module.build_context = Utils.g_module.install_context = \
-    Utils.g_module.clean_context = CPPBuildContext
+#Utils.g_module.build_context = Utils.g_module.install_context = \
+#    Utils.g_module.clean_context = CPPBuildContext
 
 
 MODULES = 'cli dbi except io logging mem mt net net.ssl plugin re str ' \
           'sys tiff unique xml.lite zip math.linear math.poly'
           
-def set_options(opt):
-    opt.sub_options(filter(lambda x: exists(join(opt.curdir, x, 'wscript')),
+def options(opt):
+    opt.sub_options(filter(lambda x: exists(join(opt.path.abspath(), x, 'wscript')),
                            MODULES.split()))
 
 def configure(conf):
-    conf.env.append_value('CPPPATH_UNITTEST', join(conf.curdir, 'include'))
-    conf.sub_config(filter(lambda x: exists(join(conf.curdir, x, 'wscript')),
+    conf.env.append_value('CPPPATH_UNITTEST', join(conf.path.abspath(), 'include'))
+    conf.sub_config(filter(lambda x: exists(join(conf.path.abspath(), x, 'wscript')),
                            MODULES.split()))
     
 def build(bld):
 
-    modules = filter(lambda x: exists(join(bld.curdir, x)), MODULES.split())
+    modules = filter(lambda x: exists(join(bld.path.abspath(), x)), MODULES.split())
                           
     # build these modules from their project.cfg file
-    configBuilds = filter(lambda m: not exists(join(bld.curdir, m, 'wscript')), modules)
+    configBuilds = filter(lambda m: not exists(join(bld.path.abspath(), m, 'wscript')), modules)
     for config in configBuilds :
-        bld.fromConfig_withSource(join(bld.curdir, config))
+        bld.fromConfig_withSource(join(bld.path.abspath(), config))
 
     # build the rest with the wscript
     modules = set(modules) - set(configBuilds)
@@ -34,5 +34,5 @@ def build(bld):
         bld.add_subdirs_withSource(mod)
 
 def distclean(context):
-    context.recurse(filter(lambda x: exists(join(context.curdir, x, 'wscript')),
+    context.recurse(filter(lambda x: exists(join(context.path.abspath(), x, 'wscript')),
                            MODULES.split()))

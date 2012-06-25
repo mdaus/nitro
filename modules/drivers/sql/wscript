@@ -1,11 +1,10 @@
 import os
 import Options
-from TaskGen import feature, before, taskgen
-import Tools.misc as misc
+from TaskGen import feature, before, task_gen
 
 build = distclean = lambda x: None
 
-def set_options(opt):
+def options(opt):
     opt.add_option('--enable-sql-layer', action='store', choices=['mysql', 'psql', 'oracle'],
                    dest='sql_layer', default=None, help='Specify the SQL layer')
     opt.add_option('--with-sql-home', action='store', dest='sql_home',
@@ -18,12 +17,10 @@ def configure(conf):
     if sqlLayer:
         sqlHome = Options.options.sql_home
         
-        conf.check_message_1('Enabling SQL layer')
-        conf.check_message_2(sqlLayer)
+        conf.msg('Enabling SQL layer', sqlLayer)
         
         if sqlHome:
-            conf.check_message_1('Setting sql home')
-            conf.check_message_2(sqlHome)
+            conf.msg('Setting sql home', sqlHome)
             if sqlLayer == 'mysql':
                 conf.env.append_value('LIBPATH_SQL', os.path.join(sqlHome, 'lib/mysql'))
                 conf.env.append_value('CPPPATH_SQL', os.path.join(sqlHome, 'include/mysql'))

@@ -4,7 +4,7 @@ import os, subprocess, re
 from os.path import join, dirname, abspath
 
 
-def set_options(opt):
+def options(opt):
     opt.add_option('--disable-matlab', action='store_false', dest='matlab',
                    help='Disable matlab', default=True)
     opt.add_option('--with-matlab-home', action='store', dest='matlab_home',
@@ -12,7 +12,7 @@ def set_options(opt):
     opt.add_option('--require-matlab', action='store_true', dest='force_matlab',
                help='Require matlab (configure option)', default=False)
 
-def detect(self):
+def configure(self):
     if not Options.options.matlab:
         return
     
@@ -72,7 +72,7 @@ def detect(self):
             libDirs = filtered
         libDirs = list(set(libDirs))
         
-        self.env.append_value('CCFLAGS_MEX', '-DMATLAB_MEX_FILE'.split())
+        self.env.append_value('CFLAGS_MEX', '-DMATLAB_MEX_FILE'.split())
 #        self.env.append_value('LINKFLAGS_MEX', '-Wl,-rpath-link,%s' % ':'.join(libDirs))
         try:
             env = self.env.copy()
@@ -103,6 +103,6 @@ def detect(self):
                 self.fatal(err)
             else:
                 self.env['HAVE_MEX_H'] = None
-                self.check_message_custom('matlab/mex', 'lib/headers', err, color='YELLOW')
+                self.msg('matlab/mex lib/headers', err, color='YELLOW')
         
 

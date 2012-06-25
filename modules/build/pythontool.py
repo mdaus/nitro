@@ -1,6 +1,6 @@
 import Options
 
-def set_options(opt):
+def options(opt):
     opt.tool_options('python')
     opt.add_option('--disable-python', action='store_false', dest='python',
                    help='Disable python', default=True)
@@ -11,7 +11,7 @@ def set_options(opt):
     opt.add_option('--python-dev', action='store_true', dest='python_dev',
                    help='Require Python lib/headers (configure option)', default=False)
     
-def detect(conf):
+def configure(conf):
     if Options.options.python:
     
         try:
@@ -38,4 +38,4 @@ def detect(conf):
             if Options.options.python_dev:
                 conf.fatal(err)
             else:
-                conf.check_message_custom('Python', 'lib/headers', err, color='YELLOW')
+                conf.msg('Python lib/headers', err, color='YELLOW')
