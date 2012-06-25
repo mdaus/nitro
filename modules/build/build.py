@@ -827,11 +827,30 @@ def configure(self):
     # the top level wscript
     self.env['DELIVER_SOURCE'] = Options.options.dist_source
     
+    # Dirty fix to get around libpath problems..
+    real_cmd_and_log = self.cmd_and_log
+    def wrap_cmd_and_log(*k, **kw):
+        sout = real_cmd_and_log(*k, **kw)
+        if sout:
+            lines=sout.splitlines()
+            if not lines[0]:lines=lines[1:]
+            for line in lines[1:]:
+                if line.startswith('LIB='):
+                    for i in line[4:].split(';'):
+                        if i:
+                            if not os.path.exists(i):
+                                self.fatal('libpath does not exist')
+        return sout
+    self.cmd_and_log = wrap_cmd_and_log
+    
     self.msg('Platform', platform, color='GREEN')
     self.check_tool('compiler_cc')
     self.check_tool('compiler_cxx')
     self.load('waf_unit_test')
-
+    
+    # Reset cmd_and_log
+    self.cmd_and_log = real_cmd_and_log
+    
     cxxCompiler = self.env["COMPILER_CXX"]
     ccCompiler = self.env["COMPILER_CC"]
     
