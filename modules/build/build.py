@@ -817,6 +817,10 @@ def configure(self):
         return
     
     sys_platform = getPlatform(default=Options.platform)
+    appleRegex = r'i.86-apple-.*'
+    linuxRegex = r'.*-.*-linux-.*|i686-pc-.*|linux'
+    solarisRegex = r'sparc-sun.*|i.86-pc-solaris.*'
+    winRegex = r'win32'
     
     # build packages is a map of maps
     self.env['BUILD_PACKAGES'] = {}
@@ -828,20 +832,27 @@ def configure(self):
     self.env['DELIVER_SOURCE'] = Options.options.dist_source
     
     # Dirty fix to get around libpath problems..
-    real_cmd_and_log = self.cmd_and_log
-    def wrap_cmd_and_log(*k, **kw):
-        sout = real_cmd_and_log(*k, **kw)
-        if sout:
-            lines=sout.splitlines()
-            if not lines[0]:lines=lines[1:]
-            for line in lines[1:]:
-                if line.startswith('LIB='):
-                    for i in line[4:].split(';'):
-                        if i:
-                            if not os.path.exists(i):
-                                self.fatal('libpath does not exist')
-        return sout
-    self.cmd_and_log = wrap_cmd_and_log
+    if re.match(winRegex, sys_platform):
+        real_cmd_and_log = self.cmd_and_log
+        def wrap_cmd_and_log(*k, **kw):
+            sout = real_cmd_and_log(*k, **kw)
+            if sout:
+                lines=sout.splitlines()
+                if not lines[0]:lines=lines[1:]
+                for line in lines[1:]:
+                    if line.startswith('LIB='):
+                        for i in line[4:].split(';'):
+                            if i:
+                                if not os.path.exists(i):
+                                    self.fatal('libpath does not exist')
+            return sout
+        self.cmd_and_log = wrap_cmd_and_log
+        
+        # If we're in the Windows SDK or VS command prompt, having these set can mess things up.
+        env_lib = os.environ.get('LIB', None)
+        if 'LIB' in os.environ: del os.environ['LIB']
+        env_cl = os.environ.get('CL', None)
+        if 'CL' in os.environ: del os.environ['CL']
     
     if Options.options.enable64 or ('64' in platform.machine() and not Options.options.enable32):
         self.env['MSVC_TARGETS'] = ['x64']
@@ -854,7 +865,10 @@ def configure(self):
     self.load('waf_unit_test')
     
     # Reset cmd_and_log
-    self.cmd_and_log = real_cmd_and_log
+    if re.match(winRegex, sys_platform):
+        self.cmd_and_log = real_cmd_and_log
+        if env_lib is not None: os.environ['LIB'] = env_lib
+        if env_cl is not None: os.environ['CL'] = env_cl
     
     cxxCompiler = self.env["COMPILER_CXX"]
     ccCompiler = self.env["COMPILER_CC"]
@@ -954,11 +968,6 @@ def configure(self):
         env.append_unique('LINKFLAGS', Options.options.linkflags.split())
     if Options.options._defs:
         env.append_unique('DEFINES', Options.options._defs.split(','))
-
-    appleRegex = r'i.86-apple-.*'
-    linuxRegex = r'.*-.*-linux-.*|i686-pc-.*|linux'
-    solarisRegex = r'sparc-sun.*|i.86-pc-solaris.*'
-    winRegex = r'win32'
     
     config = {'cxx':{}, 'cc':{}}
 
