@@ -1,4 +1,4 @@
-import sys, os, types, re, fnmatch, subprocess, shutil
+import sys, os, types, re, fnmatch, subprocess, shutil, platform
 from os.path import split, isdir, isfile, exists, splitext, abspath, join, \
                     basename, dirname
 
@@ -816,7 +816,7 @@ def configure(self):
     if self.env['DETECTED_BUILD_PY']:
         return
     
-    platform = getPlatform(default=Options.platform)
+    sys_platform = getPlatform(default=Options.platform)
     
     # build packages is a map of maps
     self.env['BUILD_PACKAGES'] = {}
@@ -843,7 +843,12 @@ def configure(self):
         return sout
     self.cmd_and_log = wrap_cmd_and_log
     
-    self.msg('Platform', platform, color='GREEN')
+    if Options.options.enable64 or ('64' in platform.machine() and not Options.options.enable32):
+        self.env['MSVC_TARGETS'] = ['x64']
+    else:
+        self.env['MSVC_TARGETS'] = ['x86']
+    
+    self.msg('Platform', sys_platform, color='GREEN')
     self.check_tool('compiler_cc')
     self.check_tool('compiler_cxx')
     self.load('waf_unit_test')
@@ -937,7 +942,7 @@ def configure(self):
         self.define(k.upper(), v)
     
     env = self.env
-    env['PLATFORM'] = platform
+    env['PLATFORM'] = sys_platform
     
     env['LIB_TYPE'] = Options.options.shared_libs and 'shlib' or 'stlib'
 
@@ -958,7 +963,7 @@ def configure(self):
     config = {'cxx':{}, 'cc':{}}
 
     #apple
-    if re.match(appleRegex, platform):
+    if re.match(appleRegex, sys_platform):
         env.append_value('LIB_DL', 'dl')
         env.append_value('LIB_NSL', 'nsl')
         env.append_value('LIB_THREAD', 'pthread')
@@ -991,7 +996,7 @@ def configure(self):
         env.append_value('CFLAGS_THREAD', '-D_REENTRANT')
 
     #linux
-    elif re.match(linuxRegex, platform):
+    elif re.match(linuxRegex, sys_platform):
         env.append_value('LIB_DL', 'dl')
         env.append_value('LIB_NSL', 'nsl')
         env.append_value('LIB_THREAD', 'pthread')
@@ -1037,7 +1042,7 @@ def configure(self):
             env.append_value('CFLAGS_THREAD', '-D_REENTRANT')
     
     #Solaris
-    elif re.match(solarisRegex, platform):
+    elif re.match(solarisRegex, sys_platform):
         env.append_value('LIB_DL', 'dl')
         env.append_value('LIB_NSL', 'nsl')
         env.append_value('LIB_SOCKET', 'socket')
@@ -1084,7 +1089,7 @@ def configure(self):
             env.append_value('CFLAGS', '-KPIC'.split())
             env.append_value('CFLAGS_THREAD', '-mt')
 
-    elif re.match(winRegex, platform):
+    elif re.match(winRegex, sys_platform):
 #        if Options.options.enable64:
 #            platform = 'win'
 
@@ -1137,7 +1142,7 @@ def configure(self):
         env.append_value('CFLAGS_THREAD', threadFlags)
     
     else:
-        self.fatal('OS/platform currently unsupported: %s' % platform)
+        self.fatal('OS/platform currently unsupported: %s' % sys_platform)
     
     #CXX
     if Options.options.warnings:
@@ -1153,22 +1158,22 @@ def configure(self):
     
     variant = env.copy() 
     if Options.options.debugging:
-        variantName = '%s-debug' % platform
+        variantName = '%s-debug' % sys_platform
         variant.append_value('CXXFLAGS', config['cxx'].get('debug', ''))
         variant.append_value('CFLAGS', config['cc'].get('debug', ''))
     else:
-        variantName = '%s-release' % platform
+        variantName = '%s-release' % sys_platform
         optz = Options.options.with_optz
         variant.append_value('CXXFLAGS', config['cxx'].get('optz_%s' % optz, ''))
         variant.append_value('CFLAGS', config['cc'].get('optz_%s' % optz, ''))
     
     is64Bit = False
     #check if the system is 64-bit capable
-    if re.match(winRegex, platform):
+    if re.match(winRegex, sys_platform):
         is64Bit = Options.options.enable64
     if not Options.options.enable32:
         #ifdef _WIN64
-        if re.match(winRegex, platform):
+        if re.match(winRegex, sys_platform):
             frag64 = '''
 #include <stdio.h>
 int main() {
@@ -1193,7 +1198,7 @@ int main() {
                 is64Bit = self.check_cc(cflags=config['cc']['64'], linkflags=config['cc'].get('linkflags_64', ''), mandatory=False)
 
     if is64Bit:
-        if re.match(winRegex, platform):
+        if re.match(winRegex, sys_platform):
             variantName = variantName.replace('32', '64')
         else:
             variantName = '%s-64' % variantName
@@ -1293,7 +1298,7 @@ def ant(self):
         self.defines = [self.defines]
     defines = ''.join(map(lambda x: ' -D%s' % x, self.defines))
     # Source file is build.xml
-    self.rule = '"' + self.env['ANT'] + '" -file "${SRC[0].abspath()}" -Dtarget="${TGT[0].abspath()}"' + defines
+    self.rule = self.env['ANT'] + ' -file ${SRC[0].abspath()} -Dtarget=${TGT[0].abspath()}' + defines
 
 @task_gen
 @feature('m4subst')
