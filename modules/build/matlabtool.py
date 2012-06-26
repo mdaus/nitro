@@ -88,9 +88,9 @@ def configure(self):
             # self.check(lib='%smat' % libPrefix, libpath=libDirs, uselib_store='MEX', uselib='MEX',
                        # type='cshlib', mandatory=True, env=env)
             self.check(lib='%smex' % libPrefix, libpath=libDirs, uselib_store='MEX', uselib='MEX',
-                       type='cshlib', mandatory=True, env=env)
+                       mandatory=True, env=env)
             self.check(lib='%smx' % libPrefix, libpath=libDirs, uselib_store='MEX', uselib='MEX',
-                       type='cshlib', mandatory=True, env=env)
+                       mandatory=True, env=env)
             
             if re.match(winRegex, platform):
                 self.env.append_value('LINKFLAGS_MEX', '/EXPORT:mexFunction'.split())
