@@ -1,4 +1,5 @@
 import Options
+import os, re
 
 def options(opt):
     opt.tool_options('python')
@@ -28,6 +29,12 @@ def configure(conf):
         if pyver:
             pyver = map(int, pyver.split('.'))
         conf.check_python_version(minver=pyver)
+        
+        # The waf python tool uses distutils.msvccompiler, tell it that we've already setup msvc.
+        winRegex = r'win32'
+        if re.match(winRegex, conf.env['PLATFORM']):
+            os.environ['DISTUTILS_USE_SDK'] = '1'
+            os.environ['MSSdk'] = '1'
         
         try:
             conf.check_python_headers()
