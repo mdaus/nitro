@@ -46,3 +46,10 @@ def configure(conf):
                 conf.fatal(err)
             else:
                 conf.msg('Python lib/headers', err, color='YELLOW')
+        
+        # The python config tool in waf 1.6.11 tries to override our msvc config..
+        if re.match(winRegex, conf.env['PLATFORM']):
+            conf.env['CFLAGS_PYEXT'] = []
+            conf.env['CXXFLAGS_PYEXT'] = []
+            conf.env['LINKFLAGS_PYEXT'] = []
+            
