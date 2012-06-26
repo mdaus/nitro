@@ -1305,10 +1305,14 @@ def ant(self):
         self.defines = []
     if isinstance(self.defines, str):
         self.defines = [self.defines]
-    defines = ''.join(map(lambda x: ' -D%s' % x, self.defines))
-    # Source file is build.xml
-    self.rule = '"' + self.env['ANT'] + '" -file "${SRC[0].abspath()}" -Dtarget="${TGT[0].abspath()}"' + defines
+    self.env.defines = map(lambda x: '-D%s' % x, self.defines)
+    self.rule = ant_exec
 
+def ant_exec(tsk):
+    # Source file is build.xml
+    cmd = [tsk.env['ANT'], '-file', tsk.inputs[0].abspath(), '-Dtarget=' + tsk.outputs[0].abspath(), tsk.env.defines]
+    return tsk.generator.bld.exec_command(cmd)
+    
 @task_gen
 @feature('m4subst')
 def m4subst(tsk):
