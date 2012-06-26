@@ -1298,7 +1298,7 @@ def ant(self):
         self.defines = [self.defines]
     defines = ''.join(map(lambda x: ' -D%s' % x, self.defines))
     # Source file is build.xml
-    self.rule = self.env['ANT'] + ' -file ${SRC[0].abspath()} -Dtarget=${TGT[0].abspath()}' + defines
+    self.rule = '"' + self.env['ANT'] + '" -file "${SRC[0].abspath()}" -Dtarget="${TGT[0].abspath()}"' + defines
 
 @task_gen
 @feature('m4subst')
