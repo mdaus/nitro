@@ -1305,12 +1305,12 @@ def ant(self):
         self.defines = []
     if isinstance(self.defines, str):
         self.defines = [self.defines]
-    self.env.defines = map(lambda x: '-D%s' % x, self.defines)
+    self.env.ant_defines = map(lambda x: '-D%s' % x, self.defines)
     self.rule = ant_exec
 
 def ant_exec(tsk):
     # Source file is build.xml
-    cmd = [tsk.env['ANT'], '-file', tsk.inputs[0].abspath(), '-Dtarget=' + tsk.outputs[0].abspath(), tsk.env.defines]
+    cmd = [tsk.env['ANT'], '-file', tsk.inputs[0].abspath(), '-Dtarget=' + tsk.outputs[0].abspath()] + tsk.env.ant_defines
     return tsk.generator.bld.exec_command(cmd)
     
 @task_gen
