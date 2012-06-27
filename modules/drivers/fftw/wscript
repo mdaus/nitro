@@ -153,10 +153,7 @@ def build(bld):
                                 target='fftw', path=driverNode,
                                 includes=['fftw'],
                                 name='FFT', defines=env['DEFINES'], env=env.copy())
-        
-        bld(features='install_tgt', install_path='${PREFIX}/include',
-                      dir=driverNode, pattern='fftw/fftw.h')
-        
+
         NOTW_CODELETS = 'frc_1.c frc_2.c frc_3.c frc_4.c frc_5.c frc_6.c frc_7.c frc_8.c frc_9.c frc_10.c frc_11.c frc_12.c frc_13.c frc_14.c frc_15.c frc_16.c frc_32.c frc_64.c frc_128.c'
         TWID_CODELETS = 'fhf_2.c fhf_3.c fhf_4.c fhf_5.c fhf_6.c fhf_7.c fhf_8.c fhf_9.c fhf_10.c fhf_16.c fhf_32.c'
         NOTWI_CODELETS = 'fcr_1.c fcr_2.c fcr_3.c fcr_4.c fcr_5.c fcr_6.c fcr_7.c fcr_8.c fcr_9.c fcr_10.c fcr_11.c fcr_12.c fcr_13.c fcr_14.c fcr_15.c fcr_16.c fcr_32.c fcr_64.c fcr_128.c'
@@ -171,9 +168,9 @@ def build(bld):
                                 includes=['fftw', 'rfftw'],
                                 use='FFT',
                                 name='RFFT', defines=env['DEFINES'], env=env.copy())
-        
+
         bld(features='install_tgt', install_path='${PREFIX}/include',
-                      dir=driverNode, pattern='rfftw/rfftw.h')
+            dir=driverNode, files=['fftw/fftw.h', 'rfftw/rfftw.h'], name='pcre_install')
 
 def distclean(context):
     #remove the untarred directories

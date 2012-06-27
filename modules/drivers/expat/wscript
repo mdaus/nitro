@@ -98,10 +98,9 @@ def build(bld):
                              target='expat', path=driverNode,
                              uselib='XML', name='XML', env=env.copy(),
                              defines=env['DEFINES'] + expatDefs)
-            
-            for f in ['expat.h', 'expat_external.h']:
-                bld(features='install_tgt', install_path='${PREFIX}/include',
-                              dir=driverNode, pattern='lib/%s' % f)
+
+            bld(features='install_tgt', install_path='${PREFIX}/include',
+                dir=driverNode, files=['lib/expat.h', 'lib/expat_external.h'], name='expat_install')
         else:
             raise Exception('Invalid XML driver: %s' % driver)
 
