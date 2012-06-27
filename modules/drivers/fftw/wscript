@@ -170,7 +170,7 @@ def build(bld):
                                 name='RFFT', defines=env['DEFINES'], env=env.copy())
 
         bld(features='install_tgt', install_path='${PREFIX}/include',
-            dir=driverNode, files=['fftw/fftw.h', 'rfftw/rfftw.h'], name='pcre_install')
+            dir=driverNode, files=['fftw/fftw.h', 'rfftw/rfftw.h'], name='fftw_install')
 
 def distclean(context):
     #remove the untarred directories
