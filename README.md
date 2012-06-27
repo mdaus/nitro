@@ -130,4 +130,4 @@ Enabling a debugger
 SVN Issues
 ----------
 Please DONT POLLUTE SVN!  Don't put binaries in there,
-unless you have a very good reason
+unless you have a very good reason.
