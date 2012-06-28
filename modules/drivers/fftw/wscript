@@ -145,29 +145,35 @@ def build(bld):
         OTHERSRC = 'timer.c config.c planner.c twiddle.c executor.c ' \
                'generic.c fftwnd.c malloc.c wisdom.c wisdomio.c putils.c rader.c ' \
                    'fftwf77.c'
-    
+        
+        if env['CC_NAME'] == 'msvc' and env['LIB_TYPE'] == 'shlib':
+            defs = ['BUILD_FFTW_DLL']
+        else:
+            defs = []
+        
         sources = map(lambda s: 'fftw/%s' % s,
                       ' '.join([NOTW_CODELETS, TWID_CODELETS, NOTWI_CODELETS, TWIDI_CODELETS, OTHERSRC]).split())
         fftw = bld.new_task_gen(features='c c%s' % env['LIB_TYPE'] or 'stlib', source=sources,
                                 export_includes=['fftw'],
                                 target='fftw', path=driverNode,
-                                includes=['fftw'],
-                                name='FFT', defines=env['DEFINES'], env=env.copy())
+                                includes=['fftw'], install_path='${PREFIX}/lib',
+                                name='FFT', defines=env['DEFINES'] + defs, env=env.copy())
 
         NOTW_CODELETS = 'frc_1.c frc_2.c frc_3.c frc_4.c frc_5.c frc_6.c frc_7.c frc_8.c frc_9.c frc_10.c frc_11.c frc_12.c frc_13.c frc_14.c frc_15.c frc_16.c frc_32.c frc_64.c frc_128.c'
         TWID_CODELETS = 'fhf_2.c fhf_3.c fhf_4.c fhf_5.c fhf_6.c fhf_7.c fhf_8.c fhf_9.c fhf_10.c fhf_16.c fhf_32.c'
         NOTWI_CODELETS = 'fcr_1.c fcr_2.c fcr_3.c fcr_4.c fcr_5.c fcr_6.c fcr_7.c fcr_8.c fcr_9.c fcr_10.c fcr_11.c fcr_12.c fcr_13.c fcr_14.c fcr_15.c fcr_16.c fcr_32.c fcr_64.c fcr_128.c'
         TWIDI_CODELETS = 'fhb_2.c fhb_3.c fhb_4.c fhb_5.c fhb_6.c fhb_7.c fhb_8.c fhb_9.c fhb_10.c fhb_16.c fhb_32.c'
         OTHERSRC = 'rconfig.c rplanner.c rexec.c rexec2.c rfftwnd.c rgeneric.c  rfftwf77.c'
-    
+        
         sources = map(lambda s: 'rfftw/%s' % s,
                       ' '.join([NOTW_CODELETS, TWID_CODELETS, NOTWI_CODELETS, TWIDI_CODELETS, OTHERSRC]).split())
         rfftw = bld.new_task_gen(features='c c%s' % env['LIB_TYPE'] or 'stlib', source=sources,
                                 export_includes=['fftw', 'rfftw'],
                                 target='rfftw', path=driverNode,
                                 includes=['fftw', 'rfftw'],
-                                use='FFT',
-                                name='RFFT', defines=env['DEFINES'], env=env.copy())
+                                use='FFT', name='RFFT',
+                                defines=env['DEFINES'] + defs, env=env.copy(),
+                                install_path='${PREFIX}/lib')
 
         bld(features='install_tgt', install_path='${PREFIX}/include',
             dir=driverNode, files=['fftw/fftw.h', 'rfftw/rfftw.h'], name='fftw_install')

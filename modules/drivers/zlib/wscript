@@ -57,6 +57,11 @@ def build(bld):
         
         driverNode = driversNode.make_node(fname)
         
+        if env['CC_NAME'] == 'msvc' and env['LIB_TYPE'] == 'shlib':
+            defs = ['ZLIB_DLL']
+        else:
+            defs = []
+        
         zlib = bld.new_task_gen(features='c c%s' % env['LIB_TYPE'] or 'stlib',
                          includes=['.'],
                          export_includes='.',
@@ -64,8 +69,10 @@ def build(bld):
                          source='adler32.c compress.c crc32.c gzio.c uncompr.c deflate.c trees.c ' \
                                 'zutil.c inflate.c infback.c inftrees.c inffast.c',
                          path=driverNode,
+                         defines=env['DEFINES'] + defs,
                          env=env.copy(),
-                         name='ZIP')
+                         name='ZIP',
+                         install_path='${PREFIX}/lib')
         
         bld(features='install_tgt', install_path='${PREFIX}/include',
                           dir=driverNode, pattern='zlib.h')

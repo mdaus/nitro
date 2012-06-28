@@ -97,8 +97,12 @@ def build(bld):
                              includes='.', export_includes='lib',
                              target='expat', path=driverNode,
                              uselib='XML', name='XML', env=env.copy(),
-                             defines=env['DEFINES'] + expatDefs)
+                             defines=env['DEFINES'] + expatDefs,
+                             install_path='${PREFIX}/lib')
 
+            if env['CC_NAME'] == 'msvc' and env['LIB_TYPE'] == 'shlib':
+                expat.defs = 'lib/libexpat.def'
+            
             bld(features='install_tgt', install_path='${PREFIX}/include',
                 dir=driverNode, files=['lib/expat.h', 'lib/expat_external.h'], name='expat_install')
         else:

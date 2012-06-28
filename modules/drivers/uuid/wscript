@@ -63,7 +63,8 @@ def build(bld):
                                 includes='lib',
                                 target='uuid',
                                 name='UUID', path=driverNode,
-                                env=env.copy(), defines=env['DEFINES'])
+                                env=env.copy(), defines=env['DEFINES'],
+                                install_path='${PREFIX}/lib')
         
         bld(features='install_tgt', install_path='${PREFIX}/include/uuid',
                           dir=driverNode, pattern='lib/uuid/uuid.h')

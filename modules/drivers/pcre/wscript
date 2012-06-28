@@ -95,11 +95,12 @@ def build(bld):
                                       env=env.copy(), targets_to_add='dftables')
         #bld.add_group()
         
-        
         pcreposix = bld.new_task_gen(features='c c%s' % env['LIB_TYPE'] or 'stlib',
                          includes=['.'], env=env.copy(),
                          target='pcreposix', source='pcreposix.c',
-                         path=driverNode, export_includes='.')
+                         path=driverNode, export_includes='.',
+                         defines=env['DEFINES'],
+                         use='PCRE', install_path='${PREFIX}/lib')
         
         pcre = bld.new_task_gen(features='c c%s add_targets' % env['LIB_TYPE'] or 'stlib',
                          includes=['.'],
@@ -111,8 +112,13 @@ def build(bld):
                          name='PCRE',
                          use='chartables.c',
                          targets_to_add=['pcre_install', 'config_h', 'pcre_in'],
-                         install_path='${PREFIX}/lib')
+                         install_path='${PREFIX}/lib',
+                         defines=env['DEFINES'])
         #bld.add_group()
+        
+        if env['CC_NAME'] == 'msvc' and env['LIB_TYPE'] == 'shlib':
+            pcre.defs='libpcre.def'
+            pcreposix.defs='libpcreposix.def'
         
         bld(features='install_tgt', install_path='${PREFIX}/include',
                       dir=driverNode, files=['pcre.h', 'pcreposix.h'], name='pcre_install')

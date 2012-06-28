@@ -434,12 +434,15 @@ class CPPContext(Context.Context):
                 glob_patterns.append(join(dir, '*%s' % ext))
         
         #build the lib
-        lib = bld.stlib(features='add_targets includes', includes=includes,
+        lib = bld(features='%s %s%s add_targets includes'% (libExeType, libExeType, env['LIB_TYPE'] or 'stlib'), includes=includes,
                 target=targetName, name=libName, export_includes=exportIncludes,
                 use=uselib_local, uselib=uselib, env=env.copy(),
                 defines=defines, path=path, install_path=installPath or '${PREFIX}/lib',
                 source=path.ant_glob(glob_patterns), targets_to_add=[])
         lib.source = filter(modArgs.get('source_filter', None), lib.source)
+        
+        if not lib.source:
+            lib.features = 'add_targets includes'
         
         pattern = env['%s%s_PATTERN' % (libExeType, env['LIB_TYPE'] or 'stlib')]
         if libVersion is not None and sys.platform != 'win32' and Options.options.symlinks and lib.source:
@@ -537,7 +540,7 @@ class CPPContext(Context.Context):
         exportIncludes = listify(modArgs.get('export_includes', 'include'))
         source = listify(modArgs.get('source', '')) or None
         
-        lib = bld.new_task_gen(features='%s %sshlib' % (libExeType, libExeType), includes=includes, source=source,
+        lib = bld.new_task_gen(features='%s %sshlib no_implib' % (libExeType, libExeType), includes=includes, source=source,
                 target=libName, name=libName, export_includes=exportIncludes,
                 use=uselib_local, uselib=uselib, env=env.copy(),
                 defines=defines, path=path,
@@ -1312,7 +1315,15 @@ def ant_exec(tsk):
     # Source file is build.xml
     cmd = [tsk.env['ANT'], '-file', tsk.inputs[0].abspath(), '-Dtarget=' + tsk.outputs[0].abspath()] + tsk.env.ant_defines
     return tsk.generator.bld.exec_command(cmd)
-    
+
+# When building a DLL, don't install the implib.
+@task_gen
+@feature('no_implib')
+@after('apply_implib')
+def no_implib(tsk):
+    if hasattr(tsk, 'implib_install_task'):
+        tsk.implib_install_task.exec_task = Utils.nada
+
 @task_gen
 @feature('m4subst')
 def m4subst(tsk):
