@@ -1321,7 +1321,7 @@ def ant_exec(tsk):
 @feature('no_implib')
 @after('apply_implib')
 def no_implib(tsk):
-    if hasattr(tsk, 'implib_install_task'):
+    if getattr(tsk, 'implib_install_task'):
         tsk.implib_install_task.exec_task = Utils.nada
 
 @task_gen
