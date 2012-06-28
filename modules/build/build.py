@@ -552,7 +552,7 @@ class CPPContext(Context.Context):
             
         confNode = bld.path.make_node('conf/desc')
         bld(features='install_tgt', pattern='*',
-            dir=confNode, install_path='${PREFIX}/share/%s/conf' % plugin)
+            dir=confNode, install_path='${PREFIX}/share/%s/conf/desc' % plugin)
     
     def program_helper(self, **modArgs):
         """
