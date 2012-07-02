@@ -854,8 +854,8 @@ def configure(self):
         self.cmd_and_log = wrap_cmd_and_log
         
         # If we're in the Windows SDK or VS command prompt, having these set can mess things up.
-        env_lib = os.environ.get('LIB', None)
-        if 'LIB' in os.environ: del os.environ['LIB']
+        env_lib = self.environ.get('LIB', None)
+        if 'LIB' in self.environ: del self.environ['LIB']
         env_cl = os.environ.get('CL', None)
         if 'CL' in os.environ: del os.environ['CL']
     
@@ -863,7 +863,7 @@ def configure(self):
         self.env['MSVC_TARGETS'] = ['x64']
     else:
         self.env['MSVC_TARGETS'] = ['x86']
-    
+
     self.msg('Platform', sys_platform, color='GREEN')
     self.check_tool('compiler_cc')
     self.check_tool('compiler_cxx')
@@ -872,7 +872,7 @@ def configure(self):
     # Reset cmd_and_log
     if re.match(winRegex, sys_platform):
         self.cmd_and_log = real_cmd_and_log
-        if env_lib is not None: os.environ['LIB'] = env_lib
+        if env_lib is not None: self.environ['LIB'] = env_lib
         if env_cl is not None: os.environ['CL'] = env_cl
     
     cxxCompiler = self.env["COMPILER_CXX"]
