@@ -97,12 +97,22 @@ public:
     /*!
      *  Wait on a condition
      *  \return true upon success, false on failure
+     *
+     *  WARNING: The user is responsible for locking the mutex prior 
+     *           to using this method. There will be no check and on 
+     *           certain systems, undefined/unfavorable behavior may 
+     *           result.
      */
     virtual bool wait();
 
     /*!
      *  Timed wait on a condition
      *  \param seconds  The number of seconds to wait as a fraction
+     *
+     *  WARNING: The user is responsible for locking the mutex prior 
+     *           to using this method. There will be no check and on 
+     *           certain systems, undefined/unfavorable behavior may 
+     *           result.
      */
     virtual bool wait(double seconds);
 

@@ -57,21 +57,21 @@ private:
 
 private:
     // # of waiting threads
-	size_t           mNumWaiters;
-	CRITICAL_SECTION mNumWaitersCS;
+    size_t           mNumWaiters;
+    CRITICAL_SECTION mNumWaitersCS;
 
     // Semaphore used to queue up threads waiting for the condition to
     // become signaled
-	HANDLE mSemaphore;
+    HANDLE mSemaphore;
 
     // Auto-reset event used by the broadcast/signal thread to wait for
     // all the waiting thread(s) to wake up and be released from the
     // semaphore
-	HANDLE mWaitersAreDone;
+    HANDLE mWaitersAreDone;
 
     // Keep track of whether we were broadcasting or signaling.  This
     // allows us to optimize the code if we're just signaling.
-	bool mWasBroadcast;
+    bool mWasBroadcast;
 };
 
 class ConditionVarWin32 :
@@ -93,20 +93,43 @@ public:
     {}
     virtual ~ConditionVarWin32()
     {}
+
     /*!
-     *  Wait for on a signal for a time interval.  
-     *  This should eventually have
-     *  a class TimeInterval as the second argument, which takes
-     *  any time interval as a right-hand-side
-     *  \param timeout How long to wait.  This is only temporarily
-     *  a double
-     *  \todo  Create a TimeInterval class, and use it as parameter
-     *  \return true upon success
+     *  Signal using pthread_cond_signal
+     *  \return true if success
      */
-    bool wait(double timeout);
-    bool wait();
-    bool signal();
-    bool broadcast();
+    virtual bool signal();
+
+    /*!
+     *  Wait using pthread_cond_wait
+     *  \return true if success
+     *
+     *  WARNING: The user is responsible for locking the mutex prior 
+     *           to using this method. There will be no check and on 
+     *           certain systems, undefined/unfavorable behavior may 
+     *           result.
+     */
+    virtual bool wait();
+
+    /*!
+     *  Wait using pthread_cond_timed_wait.  I kept this and the above
+     *  function separate only to be explicit.
+     *  \param seconds Fraction of a second to wait.  
+     *  \todo Want a TimeInterval
+     *  \return true if success
+     *
+     *  WARNING: The user is responsible for locking the mutex prior 
+     *           to using this method. There will be no check and on 
+     *           certain systems, undefined/unfavorable behavior may 
+     *           result.
+     */
+    virtual bool wait(double seconds);
+
+    /*!
+     *  Broadcast (notify all)
+     *  \return true if success
+     */
+    virtual bool broadcast();
 
 };
 }

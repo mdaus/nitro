@@ -112,12 +112,22 @@ public:
      *  a double
      *  \todo  Create a TimeInterval class, and use it as parameter
      *  \return true upon success
+     *
+     *  WARNING: The user is responsible for locking the mutex prior 
+     *           to using this method. There will be no check and on 
+     *           certain systems, undefined/unfavorable behavior may 
+     *           result.
      */
     virtual bool wait(double timeout) = 0;
 
     /*!
      *  Wait on a signal
      *  \return true upon success
+     *
+     *  WARNING: The user is responsible for locking the mutex prior 
+     *           to using this method. There will be no check and on 
+     *           certain systems, undefined/unfavorable behavior may 
+     *           result.
      */
     virtual bool wait() = 0;
 

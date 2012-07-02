@@ -71,6 +71,11 @@ public:
     /*!
      *  Wait using cond_wait
      *  \return true if success
+     *
+     *  WARNING: The user is responsible for locking the mutex prior 
+     *           to using this method. There will be no check and on 
+     *           certain systems, undefined/unfavorable behavior may 
+     *           result.
      */
     virtual bool wait();
 
@@ -80,6 +85,11 @@ public:
      *  \param seconds Fraction of a second to wait.  Want a TimeInterval
      *  \todo  Make a parameter initializer that does wait()
      *  \return true if success
+     *
+     *  WARNING: The user is responsible for locking the mutex prior 
+     *           to using this method. There will be no check and on 
+     *           certain systems, undefined/unfavorable behavior may 
+     *           result.
      */
     virtual bool wait(double seconds);
 
