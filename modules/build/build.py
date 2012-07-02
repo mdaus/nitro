@@ -9,7 +9,6 @@ from TaskGen import task_gen, feature, after, before
 from Utils import to_list as listify
 from waflib.Tools import waf_unit_test
 from waflib import Context, Errors
-from msvs import msvs_generator
 
 COMMON_EXCLUDES = '.bzr .bzrignore .git .gitignore .svn CVS .cvsignore .arch-ids {arch} SCCS BitKeeper .hg _MTN _darcs Makefile Makefile.in config.log'.split()
 COMMON_EXCLUDES_EXT ='~ .rej .orig .pyc .pyo .bak .tar.bz2 tar.gz .zip .swp'.split()
@@ -749,7 +748,9 @@ def options(opt):
     opt.tool_options('compiler_cc')
     opt.tool_options('compiler_cxx')
     opt.tool_options('waf_unit_test')
-    opt.load('msvs')
+
+    if sys.version_info >= (2,5,0):
+    	opt.load('msvs')
     
     if Options.platform == 'win32':
         opt.tool_options('msvc')
@@ -1439,10 +1440,14 @@ class CPPCleanContext(CleanContext, CPPContext):
     pass
 class CPPInstallContext(InstallContext, CPPContext):
     pass
-class CPPMSVSGenContext(msvs_generator, CPPContext):
-    def __init__(self, **kw):
-        self.waf_command = 'python waf'
-        super(CPPMSVSGenContext, self).__init__(**kw)
+
+# VS config generator needs Python 2.5
+if sys.version_info >= (2,5,0):
+    from msvs import msvs_generator
+    class CPPMSVSGenContext(msvs_generator, CPPContext):
+        def __init__(self, **kw):
+            self.waf_command = 'python waf'
+            super(CPPMSVSGenContext, self).__init__(**kw)
 
 # Tell waf to ignore any build.xml files, the 'ant' feature will take care of them.
 TaskGen.extension('build.xml')(Utils.nada)
