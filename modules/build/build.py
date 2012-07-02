@@ -9,6 +9,7 @@ from TaskGen import task_gen, feature, after, before
 from Utils import to_list as listify
 from waflib.Tools import waf_unit_test
 from waflib import Context, Errors
+from msvs import msvs_generator
 
 COMMON_EXCLUDES = '.bzr .bzrignore .git .gitignore .svn CVS .cvsignore .arch-ids {arch} SCCS BitKeeper .hg _MTN _darcs Makefile Makefile.in config.log'.split()
 COMMON_EXCLUDES_EXT ='~ .rej .orig .pyc .pyo .bak .tar.bz2 tar.gz .zip .swp'.split()
@@ -748,6 +749,7 @@ def options(opt):
     opt.tool_options('compiler_cc')
     opt.tool_options('compiler_cxx')
     opt.tool_options('waf_unit_test')
+    opt.load('msvs')
     
     if Options.platform == 'win32':
         opt.tool_options('msvc')
@@ -1436,6 +1438,8 @@ class CPPListContext(ListContext, CPPContext):
 class CPPCleanContext(CleanContext, CPPContext):
     pass
 class CPPInstallContext(InstallContext, CPPContext):
+    pass
+class CPPMSVCGenContext(msvs_generator, CPPContext):
     pass
 
 # Tell waf to ignore any build.xml files, the 'ant' feature will take care of them.
