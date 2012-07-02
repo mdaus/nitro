@@ -1439,8 +1439,10 @@ class CPPCleanContext(CleanContext, CPPContext):
     pass
 class CPPInstallContext(InstallContext, CPPContext):
     pass
-class CPPMSVCGenContext(msvs_generator, CPPContext):
-    pass
+class CPPMSVSGenContext(msvs_generator, CPPContext):
+    def __init__(self, **kw):
+        self.waf_command = 'python waf'
+        super(CPPMSVSGenContext, self).__init__(**kw)
 
 # Tell waf to ignore any build.xml files, the 'ant' feature will take care of them.
 TaskGen.extension('build.xml')(Utils.nada)
