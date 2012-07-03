@@ -504,9 +504,9 @@ class CPPContext(Context.Context):
             #                             path=self.getBuildDir(testNode)))
 
         descDir = path.make_node('conf/desc')
-        if descDir:
-            bld(feautes='install_tgt', install_path='${PREFIX}/share/%s/conf/desc' % modArgs['name'],
-                    dir=descDir, pattern='*')
+        if exists(descDir.abspath()):
+            lib.targets_to_add.append(bld(features='install_tgt', install_path='${PREFIX}/share/%s/conf/desc' % modArgs['name'],
+                    dir=descDir, pattern='*'))
 
         return env
     
