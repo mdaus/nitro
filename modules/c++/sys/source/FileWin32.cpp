@@ -22,6 +22,8 @@
 
 #ifdef WIN32
 
+#include <limits>
+#include <cmath>
 #include "sys/File.h"
 
 void sys::File::create(const std::string& str,
@@ -54,42 +56,59 @@ void sys::File::create(const std::string& str,
 
 void sys::File::readInto(char *buffer, Size_T size)
 {
-    /****************************
-     *** Variable Declarations ***
-     ****************************/
-    DWORD bytesRead = 0; /* Number of bytes read during last read operation */
-    DWORD totalBytesRead = 0; /* Total bytes read thus far */
+    static const DWORD MAX_READ_SIZE = std::numeric_limits<DWORD>::max();
+    size_t bytesRead = 0;
+    size_t bytesRemaining = size;
 
-    /* Make the next read */
-    if (!ReadFile(mHandle, buffer, size, &bytesRead, 0))
+    while (bytesRead < size)
     {
-        throw sys::SystemException(Ctxt("Error reading from file"));
+        // Determine how many bytes to read
+        const DWORD bytesToRead =
+            std::min<DWORD>(MAX_READ_SIZE, bytesRemaining);
+
+        // Read from file
+        DWORD bytesThisRead = 0;
+        if (!ReadFile(mHandle,
+                      buffer + bytesRead,
+                      bytesToRead,
+                      &bytesThisRead,
+                      NULL))
+        {
+            throw sys::SystemException(Ctxt("Error reading from file"));
+        }
+
+        bytesRead += bytesThisRead;
+        bytesRemaining -= bytesThisRead;
     }
 }
 
 void sys::File::writeFrom(const char *buffer, Size_T size)
 {
-    DWORD actuallyWritten = 0;
+    static const DWORD MAX_WRITE_SIZE = std::numeric_limits<DWORD>::max();
+    size_t bytesRemaining = size;
+    size_t bytesWritten = 0;
 
-    do
+    while (bytesWritten < size)
     {
-        /* Keep track of the bytes we read */
-        DWORD bytesWritten;
-        /* Write the data */
-        const BOOL ok = WriteFile(mHandle,
-                                  buffer + actuallyWritten,
-                                  size - actuallyWritten,
-                                  &bytesWritten,
-                                  NULL);
-        if (!ok)
+        // Determine how many bytes to write
+        const DWORD bytesToWrite =
+            std::min<DWORD>(MAX_WRITE_SIZE, bytesRemaining);
+
+        // Write the data
+        DWORD bytesThisWrite = 0;
+        if (!WriteFile(mHandle,
+                       buffer + bytesWritten,
+                       bytesToWrite,
+                       &bytesThisWrite,
+                       NULL))
         {
-            /* If the function failed, we want to get the last error */
             throw sys::SystemException(Ctxt("Writing from file"));
         }
-        /* Otherwise, we want to accumulate this write until we are done */
-        actuallyWritten += bytesWritten;
+
+        // Accumulate this write until we are done
+        bytesRemaining -= bytesThisWrite;
+        bytesWritten += bytesThisWrite;
     }
-    while (actuallyWritten < size);
 }
 
 sys::Off_T sys::File::seekTo(sys::Off_T offset, int whence)
