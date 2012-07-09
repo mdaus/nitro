@@ -449,7 +449,7 @@ class CPPContext(Context.Context):
             symlinkLoc = '%s/%s' % (lib.install_path, pattern % libName)
             lib.targets_to_add.append(bld(features='symlink_as_tgt', dest=symlinkLoc, src=pattern % lib.target, name='%s-symlink' % libName))
         
-        if Options.options.install_headers:
+        if env['install_headers']:
             incNode = path.make_node('include')
             relpath = incNode.relpath_gen(path)
             lib.targets_to_add.append(bld(features='install_tgt', pattern='**/*',
@@ -968,6 +968,8 @@ def configure(self):
     env['PLATFORM'] = sys_platform
     
     env['LIB_TYPE'] = Options.options.shared_libs and 'shlib' or 'stlib'
+    
+    env['install_headers'] = Options.options.install_headers
 
     if Options.options.cxxflags:
         env.append_unique('CXXFLAGS', Options.options.cxxflags.split())
