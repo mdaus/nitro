@@ -755,7 +755,7 @@ def options(opt):
     if Options.platform == 'win32':
         opt.tool_options('msvc')
         opt.add_option('--with-crt', action='store', choices=['MD', 'MT'],
-                       dest='crt', default='MT', help='Specify Windows CRT library - MT (default) or MD')
+                       dest='crt', default='MD', help='Specify Windows CRT library - MT or MD (default)')
     
     opt.add_option('--packages', action='store', dest='packages',
                    help='Target packages to build (common-separated list)')
