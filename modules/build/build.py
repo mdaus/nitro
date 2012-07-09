@@ -414,7 +414,7 @@ class CPPContext(Context.Context):
 
         module_deps = map(lambda x: '%s-%s' % (x, lang), listify(modArgs.get('module_deps', '')))
         defines = self.__getDefines(env) + listify(modArgs.get('defines', ''))
-        uselib_local = module_deps + listify(modArgs.get('uselib_local', '')) + ['%s-headers' % libName]
+        uselib_local = module_deps + listify(modArgs.get('uselib_local', ''))
         uselib = listify(modArgs.get('uselib', '')) + ['CSTD', 'CRUN']
         includes = listify(modArgs.get('includes', 'include'))
         exportIncludes = listify(modArgs.get('export_includes', 'include'))
@@ -448,11 +448,12 @@ class CPPContext(Context.Context):
         if libVersion is not None and sys.platform != 'win32' and Options.options.symlinks and lib.source:
             symlinkLoc = '%s/%s' % (lib.install_path, pattern % libName)
             lib.targets_to_add.append(bld(features='symlink_as_tgt', dest=symlinkLoc, src=pattern % lib.target, name='%s-symlink' % libName))
-
-        incNode = path.make_node('include')
-        relpath = incNode.relpath_gen(path)
-        lib.targets_to_add.append(bld(features='install_tgt', name='%s-headers' % libName, pattern='**/*',
-                dir=incNode, install_path='${PREFIX}/%s' % relpath))
+        
+        if Options.options.install_headers:
+            incNode = path.make_node('include')
+            relpath = incNode.relpath_gen(path)
+            lib.targets_to_add.append(bld(features='install_tgt', pattern='**/*',
+                    dir=incNode, install_path='${PREFIX}/%s' % relpath))
         
         testNode = path.make_node('tests')
         if os.path.exists(testNode.abspath()) and not Options.options.libs_only:
@@ -793,7 +794,9 @@ def options(opt):
     opt.add_option('--unittests', action='store_true', dest='unittests',
                    help='Build-time option to run unit tests after the build has completed')
     opt.add_option('--with-ant-home', action='store', dest='ant_home',
-                help='Specify the Apache Ant Home - where Ant is installed')
+                    help='Specify the Apache Ant Home - where Ant is installed')
+    opt.add_option('--no-headers', action='store_false', dest='install_headers',
+                    default=True, help='Don\'t install module headers')
     
 
 types_str = '''
