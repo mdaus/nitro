@@ -20,37 +20,40 @@
  *
  */
 
+#include <string.h>
 #include "net/NetConnectionClientFactory.h"
 
-namespace net
+namespace
 {
-static net::HostEnt_T* getHostByName(const std::string& hostname)
+net::HostEnt_T* getHostByName(const std::string& hostname)
 {
     return gethostbyname(hostname.c_str());
 }
 }
 
-net::NetConnection *net::NetConnectionClientFactory::create(const net::URL& url)
+net::NetConnection* net::NetConnectionClientFactory::create(const net::URL& url)
 {
-    net::HostEnt_T *hostent;
-
     mUrl = url;
 
-    std::string asStr = url.getHost();
-    hostent = net::getHostByName(asStr.c_str());
-    if (!hostent)
+    // NOTE: This needs to be constructed prior to getHostByName() so that
+    //       its constructor initializes the necessary socket stuff.
+    net::TCPClientSocketFactory factory;
+
+    const net::HostEnt_T* const hostEnt = getHostByName(url.getHost());
+    if (!hostEnt)
     {
-        throw sys::SocketException(Ctxt(FmtX(
-                "net::getHostByName() failed for creation \"%s\"",
-                url.toString().c_str())));
+        throw sys::SocketException(Ctxt(
+                "net::getHostByName() failed for creation \"" +
+                url.toString() + "\""));
     }
 
     net::SocketAddress sa;
     sa.setPort(url.getPort());
     // Add this to class???
-    ::memcpy(&(sa.getAddress().sin_addr.s_addr), hostent->h_addr,
-            hostent->h_length);
-    return create(sa);
+    ::memcpy(&(sa.getAddress().sin_addr.s_addr), hostEnt->h_addr,
+             hostEnt->h_length);
+
+    return newConnection(factory.create(sa));
 }
 
 net::NetConnection* net::NetConnectionClientFactory::newConnection(
@@ -62,8 +65,6 @@ net::NetConnection* net::NetConnectionClientFactory::newConnection(
 net::NetConnection * net::NetConnectionClientFactory::create(
         const net::SocketAddress& address)
 {
-    std::auto_ptr<net::Socket> socket = net::TCPClientSocketFactory().create(address);
-    return newConnection(socket);
-    //     return new net::NetConnection(socket);
+    return newConnection(net::TCPClientSocketFactory().create(address));
 
 }
