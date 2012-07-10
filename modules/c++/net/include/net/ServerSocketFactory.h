@@ -126,7 +126,7 @@ public:
      *
      *  \return The produced socket
      */
-    virtual std::auto_ptr<Socket> create(SocketAddress& address)
+    virtual std::auto_ptr<Socket> create(const SocketAddress& address)
     {
         std::auto_ptr<Socket> s (new Socket(mProto));
 

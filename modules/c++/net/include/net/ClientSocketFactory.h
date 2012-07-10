@@ -80,17 +80,22 @@ public:
      *
      *  \return A socket
      */
-    virtual std::auto_ptr<Socket> create(const SocketAddress& address)
+    std::auto_ptr<Socket> create(const SocketAddress& address)
     {
         std::auto_ptr<Socket> s (new Socket(mProto));
 
-        // Make sure we're set up for broadcasting if necessary
-        int on = 1;
-        s->setOption(SOL_SOCKET, SO_BROADCAST, on);
+        setOptions(*s);
 
         s->connect(address);
         return s;
     }
+
+    /*!
+     * Sets socket options for the protocol (none by default).
+     * \param s The socket
+     */
+    virtual void setOptions(Socket& s)
+    {}
 
 protected:
     int mProto;
@@ -123,6 +128,17 @@ class UDPClientSocketFactory : public ClientSocketFactory
 public:
     UDPClientSocketFactory() : ClientSocketFactory(UDP_PROTO)
     {}
+
+    /*!
+     * Sets SO_BROADCAST socket option.
+     * \param s The socket
+     */
+    virtual void setOptions(Socket& s)
+    {
+        // Make sure we're set up for broadcasting if necessary
+        int on = 1;
+        s.setOption(SOL_SOCKET, SO_BROADCAST, on);
+    }
 
 };
 
