@@ -115,7 +115,7 @@ class CPPContext(Context.Context):
         dist_exts.extend(COMMON_EXCLUDES_EXT)
 
         for ex in pkgExcludes :
-            excludes.append(join(str(self.path), ex))	
+            excludes.append(join(str(self.path), ex))
         dist_exts.extend(pkgExcludes)
         
         if (name.startswith(',,') or name.startswith('++') or name.startswith('.waf-1.') or \
@@ -175,7 +175,7 @@ class CPPContext(Context.Context):
 
             dir = join(self.path.abspath(), dir)
             relPath = self.__computeRelPath(dir, wafDir)
-            
+
             # find things in env
             deliverSource = env['DELIVER_SOURCE']
             prefix = env['PREFIX']
@@ -195,12 +195,21 @@ class CPPContext(Context.Context):
             
             if self.is_install and exists(dir) and deliverSource is True : 
                 relPath = self.__computeRelPath(dir, wafDir)
-                
+
+                # convert relative excluded paths to full paths
+                parsedExcludes = []
+                for pkgEx in pkgsExcludes:
+                    dir = abspath(join(wafDir, pkgEx))
+                    if exists(dir) :
+                        parsedExcludes.append(dir)
+                    else :
+                        parsedExcludes.append(pkgEx)
+
                 # deliver all source from relPath recursively
                 # TODO: add excludes
                 self.copyTree(join(wafDir, relPath), 
-                                join (prefix, 'source', relPath), 
-                                pkgsExcludes, prefix)
+                              join (prefix, 'source', relPath), 
+                              parsedExcludes, prefix)
 
 
     # wrapper function for delivering everything below a wscript pickup
