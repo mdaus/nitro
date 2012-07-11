@@ -840,6 +840,8 @@ def configure(self):
     # the top level wscript
     self.env['DELIVER_SOURCE'] = Options.options.dist_source
     
+    self.msg('Platform', sys_platform, color='GREEN')
+    
     # Dirty fix to get around libpath problems..
     if re.match(winRegex, sys_platform):
         real_cmd_and_log = self.cmd_and_log
@@ -863,13 +865,23 @@ def configure(self):
         env_cl = os.environ.get('CL', None)
         if 'CL' in os.environ: del os.environ['CL']
     
-    if Options.options.enable64 or ('64' in platform.machine() and not Options.options.enable32):
-        self.env['MSVC_TARGETS'] = ['x64']
-    else:
-        self.env['MSVC_TARGETS'] = ['x86']
+        if Options.options.enable64 or ('64' in platform.machine() and not Options.options.enable32):
+            self.env['MSVC_TARGETS'] = ['x64']
+            
+            # Look for 32-bit msvc if we don't find 64-bit.
+            if not Options.options.enable64:
+                self.options.check_c_compiler = self.options.check_cxx_compiler = 'msvc'
+                try:
+                    self.check_tool('compiler_c')
+                except self.errors.ConfigurationError:
+                    self.env['MSVC_TARGETS'] = None
+                    self.tool_cache.remove(('msvc',id(self.env),None))
+                    self.tool_cache.remove(('compiler_c',id(self.env),None))
+                    self.msg('Checking for \'msvc\'', 'Warning: cound not find x64 msvc, looking for others', color='RED')
+        else:
+            self.env['MSVC_TARGETS'] = ['x86']
 
-    self.msg('Platform', sys_platform, color='GREEN')
-    self.check_tool('compiler_cc')
+    self.check_tool('compiler_c')
     self.check_tool('compiler_cxx')
     self.load('waf_unit_test')
     
