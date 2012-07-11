@@ -59,13 +59,18 @@ def configure(conf):
         if fftDouble:
             makeFFT = True
             conf.env['MAKE_FFT_DOUBLE'] = True
-            conf.env.defines['ENABLE_FFT_DOUBLE'] = 1
+            conf.env['DEFINES'].append('ENABLE_FFT_DOUBLE=1')
         else:
             conf.env['MAKE_FFT_DOUBLE'] = False
 
         if makeFFT and not foundLocal:
             conf.env['MAKE_FFT'] = True
             conf.msg('Building local lib', 'fftw')
+            if conf.env['MAKE_FFT_DOUBLE']:
+                double_fft = 'yes'
+            else:
+                double_fft = 'no'
+            conf.msg('Building double precision fft library', double_fft)
 
         # FFTW3
         if not fft3Home:
