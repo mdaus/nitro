@@ -206,7 +206,6 @@ class CPPContext(Context.Context):
                         parsedExcludes.append(pkgEx)
 
                 # deliver all source from relPath recursively
-                # TODO: add excludes
                 self.copyTree(join(wafDir, relPath), 
                               join (prefix, 'source', relPath), 
                               parsedExcludes, prefix)
