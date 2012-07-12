@@ -120,7 +120,7 @@ class CPPContext(Context.Context):
         
         if (name.startswith(',,') or name.startswith('++') or name.startswith('.waf-1.') or \
            (src=='.' and name == Options.lockfile) or name in excludes or name == build_dir or \
-            join(src, name) in excludes):
+            join(src, name) in excludes or name == "" and src in excludes):
             return True
         for ext in dist_exts :
             if name.endswith(ext) :
@@ -132,6 +132,9 @@ class CPPContext(Context.Context):
     # this takes walking over individual elements    	
     def copyTree(self, src, dst, pkgExcludes, build_dir):
 
+        if self.__dontDist("", src, pkgExcludes, build_dir):
+            return
+        
         names = os.listdir(src)
         if not exists(dst) :
             os.makedirs(dst)
@@ -212,7 +215,7 @@ class CPPContext(Context.Context):
 
 
     # wrapper function for delivering everything below a wscript pickup
-    def add_subdirs_withSource(self, dirs) :
+    def __add_subdirs_withSource(self, dirs) :
     
         if dirs is None :
             return
@@ -229,7 +232,7 @@ class CPPContext(Context.Context):
                 self.add_subdirs(dir)
         
     # wrapper function for delivering everything below a project.cfg pickup
-    def fromConfig_withSource(self, dirs, **overrides) :
+    def __fromConfig_withSource(self, dirs, **overrides) :
     
         if dirs is None :
             return
@@ -376,7 +379,7 @@ class CPPContext(Context.Context):
         pkgsExcludes = self.removeDuplicates(pkgsExcludes)
         
         # add sub_dirs
-        self.add_subdirs_withSource(pkgsDirs)
+        self.__add_subdirs_withSource(pkgsDirs)
         
         # add targets
         targets = self.targets.split(',')

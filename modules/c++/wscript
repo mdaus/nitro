@@ -26,12 +26,12 @@ def build(bld):
     # build these modules from their project.cfg file
     configBuilds = filter(lambda m: not exists(join(bld.path.abspath(), m, 'wscript')), modules)
     for config in configBuilds :
-        bld.fromConfig_withSource(join(bld.path.abspath(), config))
+        bld.fromConfig(join(bld.path.abspath(), config))
 
     # build the rest with the wscript
     modules = set(modules) - set(configBuilds)
     for mod in modules :
-        bld.add_subdirs_withSource(mod)
+        bld.add_subdirs(mod)
 
 def distclean(context):
     context.recurse(filter(lambda x: exists(join(context.path.abspath(), x, 'wscript')),
