@@ -379,7 +379,7 @@ class CPPContext(Context.Context):
         pkgsExcludes = self.removeDuplicates(pkgsExcludes)
         
         # add sub_dirs
-        self.__add_subdirs_withSource(pkgsDirs)
+        self.__add_subdirs_withSource(filter(lambda x: exists(join(self.path.abspath(), x)), pkgsDirs))
         
         # add targets
         targets = self.targets.split(',')
