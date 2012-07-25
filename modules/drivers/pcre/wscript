@@ -56,9 +56,9 @@ def build(bld):
         #these taken from the configure.in in the package
         pcreDict = dict(PCRE_MAJOR=5, PCRE_MINOR=0, PCRE_DATE='13-Sep-2004',
                         MATCH_LIMIT=10000000, POSIX_MALLOC_THRESHOLD=10,
-                        HAVE_STRERROR=env['HAVE_STRERROR'],
-                        HAVE_MEMMOVE=env['HAVE_MEMMOVE'],
-                        HAVE_BCOPY=env['HAVE_BCOPY'],
+                        HAVE_STRERROR=bld.is_defined('HAVE_STRERROR') and 1 or 0,
+                        HAVE_MEMMOVE=bld.is_defined('HAVE_MEMMOVE') and 1 or 0,
+                        HAVE_BCOPY=bld.is_defined('HAVE_BCOPY') and 1 or 0,
                         EBCDIC=0, NEWLINE="'\\n'", LINK_SIZE=2,
                         EXPORT=None)
         

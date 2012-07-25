@@ -623,7 +623,7 @@ class CPPContext(Context.Context):
             variant = modArgs.get('variant', bld.env['VARIANT'] or 'default')
             env = bld.all_envs[variant]
         
-        if env['HAVE_MEX_H']:
+        if self.is_defined('HAVE_MEX_H'):
         
             modArgs = dict((k.lower(), v) for k, v in modArgs.iteritems())
             lang = modArgs.get('lang', 'c++')
@@ -749,22 +749,6 @@ def unzipper(inFile, outDir):
         outFile.write(zf.read(name))
         outFile.flush()
         outFile.close()
-
-from waflib import Configure
-from waflib.Tools import c_config
-old_define=Configure.ConfigurationContext.__dict__['define']
-@Configure.conf
-def define(self,key,val,quote=True):
-	old_define(self,key,val,quote)
-	if key.startswith('HAVE_'):
-		self.env[key]=1
-        
-old_undefine=Configure.ConfigurationContext.__dict__['undefine']
-@Configure.conf
-def undefine(self,key):
-	old_undefine(self,key)
-	if key.startswith('HAVE_'):
-		self.env[key]=0
         
 def options(opt):
     opt.load('compiler_cc')
@@ -1211,7 +1195,8 @@ def configure(self):
         env.append_value('CFLAGS', config['cc'].get('verbose', ''))
     
     
-    variant = env.derive() 
+    # We don't really use variants right now, so keep the default environment linked to the variant.
+    variant = env
     if Options.options.debugging:
         variantName = '%s-debug' % sys_platform
         variant.append_value('CXXFLAGS', config['cxx'].get('debug', ''))

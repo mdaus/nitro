@@ -102,7 +102,7 @@ def configure(self):
             if mandatory:
                 self.fatal(err)
             else:
-                self.env['HAVE_MEX_H'] = None
+                self.undefine('HAVE_MEX_H')
                 self.msg('matlab/mex lib/headers', err, color='YELLOW')
         
 
