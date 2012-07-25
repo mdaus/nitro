@@ -759,6 +759,13 @@ def define(self,key,val,quote=True):
 	if key.startswith('HAVE_'):
 		self.env[key]=1
         
+old_undefine=Configure.ConfigurationContext.__dict__['undefine']
+@Configure.conf
+def undefine(self,key):
+	old_undefine(self,key)
+	if key.startswith('HAVE_'):
+		self.env[key]=0
+        
 def options(opt):
     opt.load('compiler_cc')
     opt.load('compiler_cxx')
