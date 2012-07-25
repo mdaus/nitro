@@ -16,7 +16,7 @@ def configure(conf):
     if Options.options.python:
     
         try:
-            conf.check_tool('python')
+            conf.load('python')
             if not conf.env['PYTHON']:
                 raise Exception('python not found')
         except Exception, e:

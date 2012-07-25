@@ -26,7 +26,7 @@ def configure(self):
         self.environ['JAVA_HOME'] = Options.options.java_home 
     
     try:
-        self.check_tool('java')
+        self.load('java')
     except Exception, e:
         if Options.options.force_java:
             raise e
