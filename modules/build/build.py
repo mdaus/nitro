@@ -750,7 +750,15 @@ def unzipper(inFile, outDir):
         outFile.flush()
         outFile.close()
 
-
+from waflib import Configure
+from waflib.Tools import c_config
+old_define=Configure.ConfigurationContext.__dict__['define']
+@Configure.conf
+def define(self,key,val,quote=True):
+	old_define(self,key,val,quote)
+	if key.startswith('HAVE_'):
+		self.env[key]=1
+        
 def options(opt):
     opt.load('compiler_cc')
     opt.load('compiler_cxx')
