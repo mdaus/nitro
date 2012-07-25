@@ -1,11 +1,11 @@
 import os
 from os.path import join, isdir, abspath, dirname
-import Options
-from Configure import ConfigurationError
+from waflib import Options
+from waflib.Errors import ConfigurationError
 
 
 def options(opt):
-    opt.tool_options('java')
+    opt.load('java')
     opt.add_option('--disable-java', action='store_false', dest='java',
                    help='Disable java', default=True)
     opt.add_option('--with-java-home', action='store', dest='java_home',

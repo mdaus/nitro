@@ -1,6 +1,7 @@
 import os
-import Options
-from TaskGen import feature, before, task_gen
+from waflib import Options
+from waflib.TaskGen import feature, before, task_gen
+from build import untarFile
 
 def options(opt):
     opt.add_option('--disable-xml', action='store_false', dest='enable_xml', default=True,
@@ -61,12 +62,12 @@ def configure(conf):
         if makeXML:
             conf.env['MAKE_XML'] = xmlLayer
             conf.env.append_unique('CXXFLAGS_XML', expatDefines.split())
-            conf.msg('Building local lib', xmlLayer) 
+            conf.msg('Building local lib', xmlLayer)
+            untarFile(path=conf.path, fname='expat-2.0.0.tar')
 
 def build(bld):
     variant = bld.env['VARIANT']
-    env = bld.env_of_name(variant)
-    env.set_variant(variant)
+    env = bld.all_envs[variant]
 
     driversNode = bld.path
     
@@ -76,12 +77,6 @@ def build(bld):
         
         if driver == 'expat':
             fname = 'expat-2.0.0'
-            bld.set_group(0)
-            ut = bld.new_task_gen(path=bld.path, fname='%s.tar' % fname,
-                                  env=env.copy())
-            bld.set_group(1)
-            ut.features = ['untar']
-            #bld.add_group()
             
             driverNode = driversNode.make_node(fname)
         
@@ -93,10 +88,10 @@ def build(bld):
                          'XML_STATIC=1']
             
             sources = 'lib/xmlparse.c lib/xmltok.c lib/xmlrole.c'
-            expat = bld.new_task_gen(features='c c%s' % env['LIB_TYPE'] or 'stlib', source=sources,
+            expat = bld(features='c c%s' % env['LIB_TYPE'] or 'stlib', source=sources,
                              includes='.', export_includes='lib',
                              target='expat', path=driverNode,
-                             uselib='XML', name='XML', env=env.copy(),
+                             uselib='XML', name='XML', env=env.derive(),
                              defines=env['DEFINES'] + expatDefs,
                              install_path='${PREFIX}/lib')
 

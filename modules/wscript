@@ -1,7 +1,7 @@
 import os
-import Scripting, Options
+from waflib import Scripting, Options
 from os.path import join, exists
-from Build import BuildContext
+from waflib.Build import BuildContext
 from waflib.Tools import waf_unit_test
 
 VERSION = '2.0-dev' # This has no meaning, but its built into the waf system
@@ -17,15 +17,15 @@ PACKAGE_ALL = { 'SUB_DIRS' : ['drivers', 'c++'],
               } 
 
 def options(opt):
-    opt.tool_options('build', tooldir='./build')
+    opt.load('build', tooldir='./build')
     
     # always set_options on all
     allDirs = PACKAGE_ALL['SUB_DIRS']
     allDirs = filter(lambda x: exists(join(opt.path.abspath(), x)), allDirs)
-    opt.sub_options(allDirs)
+    opt.recurse(allDirs)
 
 def configure(conf):
-    conf.check_tool('build', tooldir='./build')
+    conf.load('build', tooldir='./build')
     
     # store the packages in the env
     conf.env['BUILD_PACKAGES']['ALL'] = PACKAGE_ALL
@@ -34,12 +34,12 @@ def configure(conf):
     allDirs = PACKAGE_ALL['SUB_DIRS']
     allDirs = filter(lambda x: exists(join(conf.path.abspath(), x)), allDirs)
 
-    conf.sub_config(allDirs)
+    conf.recurse(allDirs)
 
 def build(bld):
 
     variant = bld.env['VARIANT'] or 'default'
-    env = bld.env_of_name(variant)
+    env = bld.all_envs[variant]
     
     bld.add_group()
     bld.add_group()

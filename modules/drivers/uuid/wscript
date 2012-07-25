@@ -1,6 +1,7 @@
 import os
-import Options
-from TaskGen import feature, before, task_gen
+from waflib import Options
+from waflib.TaskGen import feature, before, task_gen
+from build import untarFile
 
 
 def options(opt):
@@ -29,42 +30,46 @@ def configure(conf):
                 includes=os.path.join(uuid_home, 'include')):
             conf.env['MAKE_UUID'] = True
             conf.msg('Building local lib', 'uuid')
+            
+            untarFile(path=conf.path, fname='e2fsprogs-1.40-uuid.tar')
 
 def build(bld):
     variant = bld.env['VARIANT']
-    env = bld.env_of_name(variant)
-    env.set_variant(variant)
+    env = bld.all_envs[variant]
 
     driversNode = bld.path
         
     if 'MAKE_UUID' in env:
         
         fname = 'e2fsprogs-1.40-uuid'
-        bld.set_group(0)
-        ut = bld.new_task_gen(path=bld.path, fname='%s.tar' % fname, env=env.copy())
-        bld.set_group(1)
-        ut.features = ['untar']
-        #bld.add_group()
         
         driverNode = driversNode.make_node(fname)
         
-        uuidH = bld.new_task_gen(input='lib/uuid/uuid_types.h.in',
+        d = {}
+        for line in env['DEFINES']:
+            split = line.split('=')
+            k = split[0]
+            v = len(split) == 2 and split[1] or '1'
+            if v:
+                d[k] = v
+        
+        uuidH = bld(input='lib/uuid/uuid_types.h.in',
                                  output='lib/uuid/uuid_types.h',
-                                 dict=env['defines'], path=driverNode,
-                                 env=env.copy())
+                                 dict=d, path=driverNode,
+                                 env=env.derive())
         uuidH.features = ['m4subst']
     
         sources = map(lambda x: 'lib/uuid/%s' % x,
                     'clear.c compare.c copy.c gen_uuid.c isnull.c pack.c parse.c ' \
                       'unpack.c unparse.c uuid_time.c'.split())
-        uuid = bld.new_task_gen(features='c c%s' % env['LIB_TYPE'] or 'stlib',
+        uuid = bld(features='c c%s add_targets' % env['LIB_TYPE'] or 'stlib',
                                 source=sources,
                                 export_includes='lib',
                                 includes='lib',
                                 target='uuid',
                                 name='UUID', path=driverNode,
-                                env=env.copy(), defines=env['DEFINES'],
-                                install_path='${PREFIX}/lib')
+                                env=env.derive(), defines=env['DEFINES'],
+                                install_path='${PREFIX}/lib', targets_to_add=[uuidH])
         
         bld(features='install_tgt', install_path='${PREFIX}/include/uuid',
                           dir=driverNode, pattern='lib/uuid/uuid.h')

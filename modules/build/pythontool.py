@@ -1,8 +1,8 @@
-import Options
+from waflib import Options
 import os, re
 
 def options(opt):
-    opt.tool_options('python')
+    opt.load('python')
     opt.add_option('--disable-python', action='store_false', dest='python',
                    help='Disable python', default=True)
     opt.add_option('--python-version', action='store', dest='python_version',

@@ -1,6 +1,6 @@
 import os
-import Options
-from TaskGen import feature, before, task_gen
+from waflib import Options
+from waflib.TaskGen import feature, before, task_gen
 
 build = distclean = lambda x: None
 

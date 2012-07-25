@@ -1,6 +1,7 @@
 import os
-import Options
-from TaskGen import feature, before, task_gen
+from waflib import Options
+from waflib.TaskGen import feature, before, task_gen
+from build import untarFile, commentUndefsFile
 
 
 def options(opt):
@@ -71,6 +72,9 @@ def configure(conf):
             else:
                 double_fft = 'no'
             conf.msg('Building double precision fft library', double_fft)
+            
+            untarFile(path=conf.path, fname='fftw-2.1.5.tar')
+            commentUndefsFile(input='fftw/fftw.h.in', output='fftw/fftw.h', path=conf.path.make_node('fftw-2.1.5'))
 
         # FFTW3
         if not fft3Home:
@@ -94,29 +98,15 @@ def configure(conf):
 
 def build(bld):
     variant = bld.env['VARIANT']
-    env = bld.env_of_name(variant)
-    env.set_variant(variant)
+    env = bld.all_envs[variant]
 
     driversNode = bld.path
     
     if 'MAKE_FFT' in env:
         
         fname = 'fftw-2.1.5'
-        bld.set_group(0)
-        ut = bld.new_task_gen(path=bld.path, env=env.copy(),
-                              fname='%s.tar' % fname)
-        bld.set_group(1)
-        ut.features = ['untar']
-        #bld.add_group()
         
         driverNode = driversNode.make_node(fname)
-        
-        #create fftw.h
-        fftwH = bld.new_task_gen(input='fftw/fftw.h.in',
-                                 output='fftw/fftw.h',
-                                 path=driverNode,
-                                 env=env.copy())
-        fftwH.features = ['commentUndefs']
         
         envDefs = env['DEFINES']
         d, u = {}, []
@@ -133,10 +123,10 @@ def build(bld):
         if not env['MAKE_FFT_DOUBLE']:
             d['FFTW_ENABLE_FLOAT'] = '1'
 
-        configH = bld.new_task_gen(output='fftw/config.h',
+        configH = bld(output='fftw/config.h',
                                    path=driverNode,
                                    defs=d,
-                                   env=env.copy(),
+                                   env=env.derive(),
                                    undefs=u)
         configH.features = ['makeHeader']
         
@@ -158,11 +148,11 @@ def build(bld):
         
         sources = map(lambda s: 'fftw/%s' % s,
                       ' '.join([NOTW_CODELETS, TWID_CODELETS, NOTWI_CODELETS, TWIDI_CODELETS, OTHERSRC]).split())
-        fftw = bld.new_task_gen(features='c c%s' % env['LIB_TYPE'] or 'stlib', source=sources,
+        fftw = bld(features='c c%s add_targets' % env['LIB_TYPE'] or 'stlib', source=sources,
                                 export_includes=['fftw'],
                                 target='fftw', path=driverNode,
                                 includes=['fftw'], install_path='${PREFIX}/lib',
-                                name='FFT', defines=env['DEFINES'] + defs, env=env.copy())
+                                name='FFT', defines=env['DEFINES'] + defs, env=env.derive(), targets_to_add=[configH])
 
         NOTW_CODELETS = 'frc_1.c frc_2.c frc_3.c frc_4.c frc_5.c frc_6.c frc_7.c frc_8.c frc_9.c frc_10.c frc_11.c frc_12.c frc_13.c frc_14.c frc_15.c frc_16.c frc_32.c frc_64.c frc_128.c'
         TWID_CODELETS = 'fhf_2.c fhf_3.c fhf_4.c fhf_5.c fhf_6.c fhf_7.c fhf_8.c fhf_9.c fhf_10.c fhf_16.c fhf_32.c'
@@ -172,13 +162,13 @@ def build(bld):
         
         sources = map(lambda s: 'rfftw/%s' % s,
                       ' '.join([NOTW_CODELETS, TWID_CODELETS, NOTWI_CODELETS, TWIDI_CODELETS, OTHERSRC]).split())
-        rfftw = bld.new_task_gen(features='c c%s' % env['LIB_TYPE'] or 'stlib', source=sources,
+        rfftw = bld(features='c c%s add_targets' % env['LIB_TYPE'] or 'stlib', source=sources,
                                 export_includes=['fftw', 'rfftw'],
                                 target='rfftw', path=driverNode,
                                 includes=['fftw', 'rfftw'],
                                 use='FFT', name='RFFT',
-                                defines=env['DEFINES'] + defs, env=env.copy(),
-                                install_path='${PREFIX}/lib')
+                                defines=env['DEFINES'] + defs, env=env.derive(),
+                                install_path='${PREFIX}/lib', targets_to_add=[configH])
         
         # When building RFFTW as a DLL on Windows we need to include FFTW sources as well.
         if env['CC_NAME'] == 'msvc' and env['LIB_TYPE'] == 'shlib':

@@ -1,5 +1,5 @@
-import Options, Build
-from Configure import ConfigurationError
+from waflib import Options, Build
+from waflib.Errors import ConfigurationError
 import os, subprocess, re
 from os.path import join, dirname, abspath
 
@@ -75,7 +75,7 @@ def configure(self):
         self.env.append_value('CFLAGS_MEX', '-DMATLAB_MEX_FILE'.split())
 #        self.env.append_value('LINKFLAGS_MEX', '-Wl,-rpath-link,%s' % ':'.join(libDirs))
         try:
-            env = self.env.copy()
+            env = self.env.derive()
             
             self.check(header_name='mex.h', define_name='HAVE_MEX_H',
                        includes=incDirs, uselib_store='MEX', uselib='MEX',

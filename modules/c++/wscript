@@ -1,5 +1,5 @@
 from os.path import join, exists
-import Utils
+from waflib import Utils
 from build import CPPBuildContext
 
 #override the default build context with our own
@@ -11,12 +11,12 @@ MODULES = 'cli dbi except io logging mem mt net net.ssl plugin re str ' \
           'sys tiff unique xml.lite zip math.linear math.poly'
           
 def options(opt):
-    opt.sub_options(filter(lambda x: exists(join(opt.path.abspath(), x, 'wscript')),
+    opt.recurse(filter(lambda x: exists(join(opt.path.abspath(), x, 'wscript')),
                            MODULES.split()))
 
 def configure(conf):
     conf.env.append_value('CPPPATH_UNITTEST', join(conf.path.abspath(), 'include'))
-    conf.sub_config(filter(lambda x: exists(join(conf.path.abspath(), x, 'wscript')),
+    conf.recurse(filter(lambda x: exists(join(conf.path.abspath(), x, 'wscript')),
                            MODULES.split()))
     
 def build(bld):
@@ -31,7 +31,7 @@ def build(bld):
     # build the rest with the wscript
     modules = set(modules) - set(configBuilds)
     for mod in modules :
-        bld.add_subdirs(mod)
+        bld.recurse(mod)
 
 def distclean(context):
     context.recurse(filter(lambda x: exists(join(context.path.abspath(), x, 'wscript')),

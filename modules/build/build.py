@@ -2,11 +2,11 @@ import sys, os, types, re, fnmatch, subprocess, shutil, platform
 from os.path import split, isdir, isfile, exists, splitext, abspath, join, \
                     basename, dirname
 
-import Options, Utils, Logs, TaskGen
-from Configure import conf, ConfigurationContext
-from Build import BuildContext, ListContext, CleanContext, InstallContext
-from TaskGen import task_gen, feature, after, before
-from Utils import to_list as listify
+from waflib import Options, Utils, Logs, TaskGen
+from waflib.Configure import conf, ConfigurationContext
+from waflib.Build import BuildContext, ListContext, CleanContext, InstallContext
+from waflib.TaskGen import task_gen, feature, after, before
+from waflib.Utils import to_list as listify
 from waflib.Tools import waf_unit_test
 from waflib import Context, Errors
 
@@ -167,7 +167,7 @@ class CPPContext(Context.Context):
     def __makeSourceDelivery(self, dirs) :
 
         variant = self.env['VARIANT'] or 'default'
-        env = self.env_of_name(variant)
+        env = self.all_envs[variant]
 
         wafDir = abspath('./')
         if isinstance(dirs, str):
@@ -229,7 +229,7 @@ class CPPContext(Context.Context):
             if not exists(join(self.path.abspath(), dir, 'wscript')) :
                 self.fromConfig(dir)
             else :
-                self.add_subdirs(dir)
+                self.recurse(dir)
         
     # wrapper function for delivering everything below a project.cfg pickup
     def __fromConfig_withSource(self, dirs, **overrides) :
@@ -282,8 +282,7 @@ class CPPContext(Context.Context):
             env = args['env']
         else:
             variant = args.get('variant', bld.env['VARIANT'] or 'default')
-            env = bld.env_of_name(variant)
-            env.set_variant(variant)
+            env = bld.all_envs[variant]
         
         # do some special processing for the module
         excludes = args.pop('exclude', None)
@@ -351,7 +350,7 @@ class CPPContext(Context.Context):
     def build_packages(self, packages) :
 
         variant = self.env['VARIANT'] or 'default'
-        env = self.env_of_name(variant)
+        env = self.all_envs[variant]
 
         if isinstance(packages, str):
             packages = packages.split(',')
@@ -405,8 +404,7 @@ class CPPContext(Context.Context):
             env = modArgs['env']
         else:
             variant = modArgs.get('variant', bld.env['VARIANT'] or 'default')
-            env = bld.env_of_name(variant)
-            env.set_variant(variant)
+            env = bld.all_envs[variant]
     
         modArgs = dict((k.lower(), v) for k, v in modArgs.iteritems())
         
@@ -447,7 +445,7 @@ class CPPContext(Context.Context):
         #build the lib
         lib = bld(features='%s %s%s add_targets includes'% (libExeType, libExeType, env['LIB_TYPE'] or 'stlib'), includes=includes,
                 target=targetName, name=libName, export_includes=exportIncludes,
-                use=uselib_local, uselib=uselib, env=env.copy(),
+                use=uselib_local, uselib=uselib, env=env.derive(),
                 defines=defines, path=path, install_path=installPath or '${PREFIX}/lib',
                 source=path.ant_glob(glob_patterns), targets_to_add=[])
         lib.source = filter(modArgs.get('source_filter', None), lib.source)
@@ -462,7 +460,7 @@ class CPPContext(Context.Context):
         
         if env['install_headers']:
             incNode = path.make_node('include')
-            relpath = incNode.relpath_gen(path)
+            relpath = incNode.path_from(path)
             lib.targets_to_add.append(bld(features='install_tgt', pattern='**/*',
                     dir=incNode, install_path='${PREFIX}/%s' % relpath))
         
@@ -477,7 +475,7 @@ class CPPContext(Context.Context):
             for test in testNode.ant_glob('*%s' % sourceExt):
                 if modArgs.get('test_filter', lambda x: True)(str(test)):
                     testName = splitext(str(test))[0]
-                    self.program(env=env.copy(), name=testName, target=testName, source=str(test),
+                    self.program(env=env.derive(), name=testName, target=testName, source=str(test),
                                  use=test_deps,
                                  uselib=modArgs.get('test_uselib', modArgs.get('uselib', '')),
                                  lang=lang, path=testNode, includes=includes, defines=defines,
@@ -499,7 +497,7 @@ class CPPContext(Context.Context):
             for test in testNode.ant_glob('*%s' % sourceExt):
                 if modArgs.get('unittest_filter', lambda x: True)(str(test)):
                     testName = splitext(str(test))[0]
-                    exe = self(features='%s %sprogram' % (libExeType, libExeType), env=env.copy(), name=testName, target=testName, source=str(test), use=test_deps,
+                    exe = self(features='%s %sprogram' % (libExeType, libExeType), env=env.derive(), name=testName, target=testName, source=str(test), use=test_deps,
                                  uselib = modArgs.get('unittest_uselib', modArgs.get('uselib', '')),
                                  lang=lang, path=testNode, defines=defines,
                                  includes=includes)
@@ -533,8 +531,7 @@ class CPPContext(Context.Context):
             env = modArgs['env']
         else:
             variant = modArgs.get('variant', bld.env['VARIANT'] or 'default')
-            env = bld.env_of_name(variant)
-            env.set_variant(variant)
+            env = bld.all_envs[variant]
         
         modArgs = dict((k.lower(), v) for k, v in modArgs.iteritems())
         lang = modArgs.get('lang', 'c++')
@@ -552,9 +549,9 @@ class CPPContext(Context.Context):
         exportIncludes = listify(modArgs.get('export_includes', 'include'))
         source = listify(modArgs.get('source', '')) or None
         
-        lib = bld.new_task_gen(features='%s %sshlib no_implib' % (libExeType, libExeType), includes=includes, source=source,
+        lib = bld(features='%s %sshlib no_implib' % (libExeType, libExeType), includes=includes, source=source,
                 target=libName, name=libName, export_includes=exportIncludes,
-                use=uselib_local, uselib=uselib, env=env.copy(),
+                use=uselib_local, uselib=uselib, env=env.derive(),
                 defines=defines, path=path,
                 install_path='${PREFIX}/share/%s/plugins' % plugin)
         if not source:
@@ -578,8 +575,7 @@ class CPPContext(Context.Context):
             env = modArgs['env']
         else:
             variant = modArgs.get('variant', bld.env['VARIANT'] or 'default')
-            env = bld.env_of_name(variant)
-            env.set_variant(variant)
+            env = bld.all_envs[variant]
         
         modArgs = dict((k.lower(), v) for k, v in modArgs.iteritems())
         lang = modArgs.get('lang', 'c++')
@@ -602,7 +598,7 @@ class CPPContext(Context.Context):
         exe = bld.program(source=source, name=progName,
                                includes=includes, defines=defines,
                                use=uselib_local, uselib=uselib,
-                               env=env.copy(), target=progName, path=path,
+                               env=env.derive(), target=progName, path=path,
                                install_path=install_path)
             
         return exe
@@ -625,8 +621,7 @@ class CPPContext(Context.Context):
             env = modArgs['env']
         else:
             variant = modArgs.get('variant', bld.env['VARIANT'] or 'default')
-            env = bld.env_of_name(variant)
-            env.set_variant(variant)
+            env = bld.all_envs[variant]
         
         if env['HAVE_MEX_H']:
         
@@ -637,7 +632,7 @@ class CPPContext(Context.Context):
                                'dir' in modArgs and bld.path.find_dir(modArgs['dir']) or bld.path)
                                
             #override the shlib pattern
-            env = env.copy()
+            env = env.derive()
             shlib_pattern = '%sshlib_PATTERN' % libExeType
             if env[shlib_pattern].startswith('lib'):
                 env[shlib_pattern] = env[shlib_pattern][3:]
@@ -656,9 +651,9 @@ class CPPContext(Context.Context):
             if source:
                 name = splitext(split(source)[1])[0]
             
-            mex = bld.new_task_gen(features='%s %sshlib'%(libExeType, libExeType), target=targetName or name,
+            mex = bld(features='%s %sshlib'%(libExeType, libExeType), target=targetName or name,
                                    name=name, use=uselib_local,
-                                   uselib=uselib, env=env.copy(), defines=defines,
+                                   uselib=uselib, env=env.derive(), defines=defines,
                                    path=path, source=source, includes=includes,
                                    install_path=installPath or '${PREFIX}/bin/mex')
             if not source:
@@ -757,15 +752,15 @@ def unzipper(inFile, outDir):
 
 
 def options(opt):
-    opt.tool_options('compiler_cc')
-    opt.tool_options('compiler_cxx')
-    opt.tool_options('waf_unit_test')
+    opt.load('compiler_cc')
+    opt.load('compiler_cxx')
+    opt.load('waf_unit_test')
 
     if sys.version_info >= (2,5,0):
     	opt.load('msvs')
     
     if Options.platform == 'win32':
-        opt.tool_options('msvc')
+        opt.load('msvc')
         opt.add_option('--with-crt', action='store', choices=['MD', 'MT'],
                        dest='crt', default='MD', help='Specify Windows CRT library - MT or MD (default)')
     
@@ -883,7 +878,7 @@ def configure(self):
             if not Options.options.enable64:
                 self.options.check_c_compiler = self.options.check_cxx_compiler = 'msvc'
                 try:
-                    self.check_tool('compiler_c')
+                    self.load('compiler_c')
                 except self.errors.ConfigurationError:
                     self.env['MSVC_TARGETS'] = None
                     self.tool_cache.remove(('msvc',id(self.env),None))
@@ -892,8 +887,8 @@ def configure(self):
         else:
             self.env['MSVC_TARGETS'] = ['x86']
 
-    self.check_tool('compiler_c')
-    self.check_tool('compiler_cxx')
+    self.load('compiler_c')
+    self.load('compiler_cxx')
     self.load('waf_unit_test')
     
     # Reset cmd_and_log
@@ -1201,7 +1196,7 @@ def configure(self):
         env.append_value('CFLAGS', config['cc'].get('verbose', ''))
     
     
-    variant = env.copy() 
+    variant = env.derive() 
     if Options.options.debugging:
         variantName = '%s-debug' % sys_platform
         variant.append_value('CXXFLAGS', config['cxx'].get('debug', ''))
@@ -1264,9 +1259,7 @@ int main() {
     env['HAVE_ANT'] = self.find_program('ant', var='ANT', path_list=ant_paths, mandatory=False)
     
     env['IS64BIT'] = is64Bit
-    self.set_env_name(variantName, variant)
-    variant.set_variant(variantName)
-    env.set_variant(variantName)
+    self.all_envs[variantName] = variant
     self.setenv(variantName)
     
     env['VARIANT'] = variant['VARIANT'] = variantName
@@ -1277,14 +1270,16 @@ int main() {
 @task_gen
 @feature('untar')
 def untar(tsk):
+    untarDriver(tsk.path, tsk.fname)
+
+def untarFile(path, fname):
     import tarfile
-    f = tsk.path.find_or_declare(tsk.fname)
+    f = path.find_or_declare(fname)
     tf = tarfile.open(f.abspath(), 'r')
-    p = tsk.path.abspath()
+    p = path.abspath()
     for x in tf:
         tf.extract(x, p)
     tf.close()
-
 
 @task_gen
 @feature('unzip')
@@ -1303,7 +1298,7 @@ def install_tgt(tsk):
             tsk.pattern = [tsk.pattern]
         for pattern in tsk.pattern:
             for file in tsk.dir.ant_glob(pattern):
-                tsk.bld.install_files(os.path.join(tsk.install_path, file.parent.relpath_gen(tsk.dir)), file)
+                tsk.bld.install_files(os.path.join(tsk.install_path, file.parent.path_from(tsk.dir)), file)
         if not hasattr(tsk, 'files'):
             tsk.files = []
         if isinstance(tsk.files, str):
@@ -1360,13 +1355,15 @@ def no_implib(tsk):
 @task_gen
 @feature('m4subst')
 def m4subst(tsk):
+    m4substFile(input=tsk.input, output=tsk.output, path=tsk.path, dict=tsk.dict, env=tsk.env, chmod=getattr(tsk, 'chmod', None))
+
+def m4substFile(input, output, path, dict={}, env=None, chmod=None):
     import re
     #similar to the subst in misc.py - but outputs to the src directory
     m4_re = re.compile('@(\w+)@', re.M)
 
-    env = tsk.env
-    infile = join(tsk.path.abspath(), tsk.input)
-    outfile = join(tsk.path.abspath(), tsk.output)
+    infile = join(path.abspath(), input)
+    outfile = join(path.abspath(), output)
     
     file = open(infile, 'r')
     code = file.read()
@@ -1377,25 +1374,25 @@ def m4subst(tsk):
 
     s = m4_re.sub(r'%(\1)s', code)
 
-    di = tsk.dict or {}
-    if not di:
+    if not dict:
         names = m4_re.findall(code)
         for i in names:
-            di[i] = env.get_flat(i) or env.get_flat(i.upper())
+            dict[i] = env.get_flat(i) or env.get_flat(i.upper())
     
     file = open(outfile, 'w')
-    file.write(s % di)
+    file.write(s % dict)
     file.close()
-    if getattr(tsk, 'chmod', None): os.chmod(outfile, tsk.chmod)
-
+    if chmod: os.chmod(outfile, chmod)
 
 @task_gen
 @feature('commentUndefs')
 def commentUndefs(tsk):
+    commentUndefsFile(input=tsk.input, output=tsk.output, path=tsk.path, chmod=getattr(tsk, 'chmod', None))
+
+def commentUndefsFile(input, output, path, chmod=None):
     import re
-    env = tsk.env
-    infile = join(tsk.path.abspath(), tsk.input)
-    outfile = join(tsk.path.abspath(), tsk.output)
+    infile = join(path.abspath(), input)
+    outfile = join(path.abspath(), output)
     
     file = open(infile, 'r')
     code = file.read()
@@ -1405,31 +1402,32 @@ def commentUndefs(tsk):
     file = open(outfile, 'w')
     file.write(code)
     file.close()
-    if getattr(tsk, 'chmod', None): os.chmod(outfile, tsk.chmod)
-
+    if chmod: os.chmod(outfile, chmod)
 
 @task_gen
 @feature('makeHeader')
 def makeHeader(tsk):
-    outfile = join(tsk.path.abspath(), tsk.output)
+    makeHeaderFile(output=tsk.output, path=tsk.path, defs=tsk.defs, undefs=getattr(tsk, 'undefs', None), chmod=getattr(tsk, 'chmod', None))
+    
+def makeHeaderFile(output, path, defs, undefs=None, chmod=None):
+    outfile = join(path.abspath(), output)
     dest = open(outfile, 'w')
     guard = '__CONFIG_H__'
     dest.write('#ifndef %s\n#define %s\n\n' % (guard, guard))
 
-    for k in tsk.defs.keys():
-        v = tsk.defs[k]
+    for k in defs.keys():
+        v = defs[k]
         if v is None:
             v = ''
         dest.write('\n#ifndef %s\n#define %s %s\n#endif\n' % (k, k, v))
     
-    if hasattr(tsk, 'undefs'):
-        for u in tsk.undefs:
+    if undefs:
+        for u in undefs:
             dest.write('\n#undef %s\n' % u)
 
     dest.write('\n#endif /* %s */\n' % guard)
     dest.close()
-    if getattr(tsk, 'chmod', None): os.chmod(outfile, tsk.chmod)
-
+    if chmod: os.chmod(outfile, chmod)
 
 def getSolarisFlags(compilerName):
     # Newer Solaris compilers use -m32 and -m64, so check to see if these flags exist
