@@ -41,9 +41,6 @@ def build(bld):
     variant = bld.env['VARIANT'] or 'default'
     env = bld.all_envs[variant]
     
-    bld.add_group()
-    bld.add_group()
-    
     # repeat from detect in build.py, but this
     # allows build time user specification 
     env['DELIVER_SOURCE'] = Options.options.dist_source
