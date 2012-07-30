@@ -90,11 +90,11 @@ bool xml::lite::Element::hasElement(const std::string& localName) const
 void xml::lite::Element::getElementsByTagName(const std::string& uri,
                                               const std::string& localName,
                                               std::vector<Element*>& elements,
-                                              bool recurse)
+                                              bool recurse) const
 {
     for (unsigned int i = 0; i < mChildren.size(); i++)
     {
-        if (mChildren[i]->getUri() == uri&& mChildren[i]->getLocalName()
+        if (mChildren[i]->getUri() == uri && mChildren[i]->getLocalName()
                 == localName)
             elements.push_back(mChildren[i]);
         if (recurse)
@@ -104,7 +104,7 @@ void xml::lite::Element::getElementsByTagName(const std::string& uri,
 
 void xml::lite::Element::getElementsByTagName(const std::string& localName,
                                               std::vector<Element*>& elements,
-                                              bool recurse)
+                                              bool recurse) const 
 {
     for (unsigned int i = 0; i < mChildren.size(); i++)
     {
@@ -117,7 +117,7 @@ void xml::lite::Element::getElementsByTagName(const std::string& localName,
 
 void xml::lite::Element::getElementsByTagNameNS(const std::string& qname,
                                                 std::vector<Element*>& elements,
-                                                bool recurse)
+                                                bool recurse) const
 {
     for (unsigned int i = 0; i < mChildren.size(); i++)
     {

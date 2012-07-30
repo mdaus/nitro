@@ -142,14 +142,14 @@ public:
      */
     void getElementsByTagNameNS(const std::string& qname,
                                 std::vector<Element*>& elements,
-                                bool recurse = false);
+                                bool recurse = false) const;
 
     /*!
      *  Utility for people that dont like to pass by reference
      *
      */
     std::vector<Element*> getElementsByTagNameNS(const std::string& qname,
-                                                 bool recurse = false)
+                                                 bool recurse = false) const
     {
         std::vector<Element*> v;
         getElementsByTagNameNS(qname, v, recurse);
@@ -164,27 +164,18 @@ public:
      */
     void getElementsByTagName(const std::string& localName,
                               std::vector<Element*>& elements,
-                              bool recurse = false);
+                              bool recurse = false) const;
 
     /*!
      *  Utility for people that dont like to pass by reference
      */
     std::vector<Element*> getElementsByTagName(const std::string& localName,
-                                               bool recurse = false)
+                                               bool recurse = false) const
     {
         std::vector<Element*> v;
         getElementsByTagName(localName, v, recurse);
         return v;
     }
-
-    /*!
-     *  1)  Find this child's attribute and change it
-     *  2)  Recursively descend over children and fix all
-     *  namespaces below using fixNodeNamespace()
-     */
-    void setNamespacePrefix(std::string prefix, std::string uri);
-
-    void setNamespaceURI(std::string prefix, std::string uri);
 
     /*!
      *  Get the elements by tag name
@@ -195,8 +186,17 @@ public:
     void getElementsByTagName(const std::string& uri,
                               const std::string& localName,
                               std::vector<Element*>& elements,
-                              bool recurse = false);
-    
+                              bool recurse = false) const;
+
+    /*!
+     *  1)  Find this child's attribute and change it
+     *  2)  Recursively descend over children and fix all
+     *  namespaces below using fixNodeNamespace()
+     */
+    void setNamespacePrefix(std::string prefix, std::string uri);
+
+    void setNamespaceURI(std::string prefix, std::string uri);
+
     /*!
      *  Prints the element to the specified OutputStream
      *  \param stream the OutputStream to write to
