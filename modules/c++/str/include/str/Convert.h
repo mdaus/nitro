@@ -31,6 +31,8 @@
 #include <iomanip>
 #include <typeinfo>
 #include <iostream>
+#include <cstdlib>
+#include <cerrno>
 #include <import/except.h>
 
 namespace str
@@ -90,6 +92,46 @@ template<typename T> T toType(const std::string& s)
 
 template<> bool toType<bool> (const std::string& s);
 template<> std::string toType<std::string> (const std::string& s);
+
+/**
+ *  Templated version of strtoll, strtoull, etc.
+ */
+template<typename T> T strToT(const char* str, char** endptr, int base);
+
+template<> long long strToT<long long>(const char* str, char** endptr, int base);
+template<> unsigned long long strToT<unsigned long long>(const char* str, char** endptr, int base);
+
+/**
+ *  Convert a string containing a number in any base to a numerical type.
+ *
+ *  @param s a string containing a number in base base
+ *  @param base the base of the number in s
+ *  @return a numberical representation of the number
+ *  @throw BadCastException thrown if cast cannot be performed.
+ */
+template<typename T> T toType(const std::string& s, int base)
+{
+    char* end;
+    errno = 0;
+    const char* str = s.c_str();
+    T result;
+    
+    result = strToT<T>(str, &end, base);
+    
+    if (errno == ERANGE)
+        throw except::BadCastException(except::Context(__FILE__, __LINE__,
+            std::string(""), std::string(""),
+            std::string("Overflow: '")
+                + s + std::string("' -> ") + typeid(T).name()));
+    // If the end pointer is at the start of the string, we didn't convert anything.
+    else if (end == str)
+        throw except::BadCastException(except::Context(__FILE__, __LINE__,
+            std::string(""), std::string(""),
+            std::string("Conversion failed: '")
+                + s + std::string("' -> ") + typeid(T).name()));
+    
+    return result;
+}
 
 /**
  *  Determine the precision required for the data type.

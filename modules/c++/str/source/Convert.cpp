@@ -23,6 +23,12 @@
 #include "str/Convert.h"
 #include "str/Manip.h"
 
+// MSVC doesn't have strtoll or strtoull.
+#if defined(_MSC_VER)
+#define strtoll _strtoi64
+#define strtoull _strtoui64
+#endif
+
 template<> std::string str::toType<std::string>(const std::string& s)
 {
     return s;
@@ -55,6 +61,15 @@ template<> bool str::toType<bool>(const std::string& s)
     }
 
     return false;
+}
+
+template<> long long str::strToT<long long>(const char* str, char** endptr, int base)
+{
+    return strtoll(str, endptr, base);
+}
+template<> unsigned long long str::strToT<unsigned long long>(const char* str, char** endptr, int base)
+{
+    return strtoull(str, endptr, base);
 }
 
 template<> int str::getPrecision(const float& type)
