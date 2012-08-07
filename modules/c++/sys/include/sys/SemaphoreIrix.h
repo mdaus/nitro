@@ -32,13 +32,23 @@
 
 namespace sys
 {
-class SemaphoreIrix : public SemaphoreInterface<usema_t*>
+class SemaphoreIrix : public SemaphoreInterface
 {
 public:
     SemaphoreIrix(unsigned int count = 0);
     virtual ~SemaphoreIrix();
-    bool wait();
-    bool signal();
+    void wait();
+    void signal();
+    usema_t*& getNative();
+    
+    /*!
+     *  Return the type name.  This function is essentially free,
+     *  because it is static RTTI.
+     */
+    const char* getNativeType() const
+    {
+        return typeid(mNative).name();
+    }
 };
 }
 

@@ -46,32 +46,30 @@ namespace sys
  *  This class provides the wrapper for a pthread_t.  
  *
  */
-class ThreadSolaris : public ThreadInterface<thread_t>
+class ThreadSolaris : public ThreadInterface
 {
 public:
 
-    typedef ThreadInterface<thread_t> Parent_T;
     //!  Default constructor.  Allows ThreadInterface to bind this to target
-    ThreadSolaris(const std::string& name = "") : Parent_T(name)
+    ThreadSolaris(const std::string& name = "") : ThreadInterface(name)
     {}
 
     /*!
      *  Alternate constructor
      *  \param target  What to run
-            *  \param name  The name
+     *  \param name  The name
      */
     ThreadSolaris(Runnable *target,
                   const std::string& name = "") :
-            Parent_T(target, name)
+            ThreadInterface(target, name)
     {}
 
     ThreadSolaris(Runnable *target,
                   const std::string& name,
                   int level,
                   int priority) :
-            Parent_T(target, name, level, priority)
+            ThreadInterface(target, name, level, priority)
     {}
-
 
     //! Destructor
     virtual ~ThreadSolaris()
@@ -82,22 +80,43 @@ public:
      */
     virtual void start();
 
-
     /*!
      *  Calls the native destroy stuff
      */
-    virtual bool kill();
+    virtual void kill();
 
     /*!
      *  Join the pthread
      */
-    virtual bool join();
+    virtual void join();
 
     /*!
      *  Calls sched_yield to yield the thread of control
      */
     static void yield();
+    
+    /*!
+     *  Returns the native type.  You probably should not use this
+     *  unless you have specific constraints on which package you use
+     *  Use of this function may defeat the purpose of these classes:
+     *  to provide thread implementation in an abstract interface.
+     */
+    thread_t& getNative()
+    {
+        return mNative;
+    }
 
+    /*!
+     *  Return the type name.  This function is essentially free,
+     *  because it is static RTTI.
+     */
+    const char* getNativeType() const
+    {
+        return typeid(mNative).name();
+    }
+
+private:
+    thread_t mNative;
 };
 
 }

@@ -25,24 +25,54 @@
 #include <pthread.h>
 #include "sys/ConditionVarPosix.h"
 
+sys::ConditionVarPosix::ConditionVarPosix() :
+    mMutexOwned(new sys::MutexPosix()),
+    mMutex(mMutexOwned.get())
+{
+    if ( ::pthread_cond_init(&mNative, NULL) != 0)
+        throw SystemException("ConditionVar initialization failed");
+}
+
+sys::ConditionVarPosix::ConditionVarPosix(sys::MutexPosix* theLock, bool isOwner)
+{
+    mMutex = theLock;
+    if (isOwner)
+        mMutexOwned.reset(theLock);
+    
+    if ( ::pthread_cond_init(&mNative, NULL) != 0)
+        throw SystemException("ConditionVar initialization failed");
+}
+
 sys::ConditionVarPosix::~ConditionVarPosix()
 {
     ::pthread_cond_destroy(&mNative);
 }
 
-bool sys::ConditionVarPosix::signal()
+void sys::ConditionVarPosix::acquireLock()
+{
+    mMutex->lock();
+}
+
+void sys::ConditionVarPosix::dropLock()
+{
+    mMutex->unlock();
+}
+
+void sys::ConditionVarPosix::signal()
 {
     dbg_printf("Signaling condition\n");
-    return (::pthread_cond_signal(&mNative) == 0);
+    if (::pthread_cond_signal(&mNative) != 0)
+        throw sys::SystemException("ConditionVar signal failed");
 }
-bool sys::ConditionVarPosix::wait()
+
+void sys::ConditionVarPosix::wait()
 {
     dbg_printf("Waiting on condition\n");
-    return (::pthread_cond_wait(&mNative,
-                                &(mMutex->getNative())) == 0);
+    if (::pthread_cond_wait(&mNative, &(mMutex->getNative())) != 0)
+        throw sys::SystemException("ConditionVar wait failed");
 }
-// Implement this
-bool sys::ConditionVarPosix::wait(double seconds)
+
+void sys::ConditionVarPosix::wait(double seconds)
 {
     dbg_printf("Timed waiting on condition [%f]\n", seconds);
 
@@ -51,17 +81,26 @@ bool sys::ConditionVarPosix::wait(double seconds)
         timespec tout;
         tout.tv_sec = time(NULL) + (int)seconds;
         tout.tv_nsec = (int)((seconds - (int)(seconds)) * 1e9);
-        return
-            (::pthread_cond_timedwait(&mNative,
-                                      &(mMutex->getNative()),
-                                      &tout) == 0);
+        if (::pthread_cond_timedwait(&mNative,
+                                     &(mMutex->getNative()),
+                                     &tout) != 0)
+            throw sys::SystemException("ConditionVar wait failed");
     }
-    else return wait();
+    else
+        wait();
 }
-bool sys::ConditionVarPosix::broadcast()
+
+void sys::ConditionVarPosix::broadcast()
 {
     dbg_printf("Broadcasting condition\n");
-    return (::pthread_cond_broadcast(&mNative) == 0);
+    if (::pthread_cond_broadcast(&mNative) != 0)
+        throw sys::SystemException("ConditionVar broadcast failed");
 }
+
+pthread_cond_t& sys::ConditionVarPosix::getNative()
+{
+    return mNative;
+}
+
 #endif
 

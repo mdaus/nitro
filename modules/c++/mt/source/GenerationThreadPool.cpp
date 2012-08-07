@@ -63,7 +63,7 @@ void mt::TiedRequestHandler::run()
 	
 	// Signal to the thread pool that we are done
 	// This will allow 1 wait() to complete
-	while( !mSem->signal() );
+	mSem->signal();
     }
 }
 
@@ -84,7 +84,7 @@ void mt::GenerationThreadPool::waitGroup()
 {
     while (mGenSize)
     {
-	while(!mGenerationSync.wait());
+	mGenerationSync.wait();
 	//std::cout << "Waited" << std::endl;
 	--mGenSize;
     }

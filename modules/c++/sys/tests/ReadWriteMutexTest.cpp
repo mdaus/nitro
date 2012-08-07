@@ -59,9 +59,9 @@ protected:
          for(int i=0; i < 5; ++i)
          {
              rwLock.lockWrite();
-             BUFFER[0] = mName.substr(7);
+             BUFFER[0] = getName().substr(7);
              mutexCout.lock();
-             std::cout << mName << " write " << BUFFER[0] << std::endl;
+             std::cout << getName() << " write " << BUFFER[0] << std::endl;
              mutexCout.unlock();
              sleep(1);
              rwLock.unlockWrite();
@@ -75,7 +75,7 @@ protected:
            assert(b == BUFFER[0]);
            b = BUFFER[0];
            mutexCout.lock();
-	   std::cout << mName << " read " << b << std::endl;
+	   std::cout << getName() << " read " << b << std::endl;
            mutexCout.unlock();
            sleep(1);
          }

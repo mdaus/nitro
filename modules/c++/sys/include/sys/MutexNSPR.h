@@ -53,15 +53,21 @@ public:
     ~MutexNSPR();
     /*!
      *  Lock a NSPR mutex
-     *  \return true only, because PR native method is void
      */
-    bool lock();
+    void lock();
 
     /*!
-     *  Unlock NSPR mutex
-     *  \return true if success, false if failure
+     *  Unlock NSPR mutex.
      */
-    bool unlock();
+    virtual void unlock();
+    
+    /*!
+     *  Returns the native type.
+     */
+    virtual PRLock*& getNative();
+    
+private:
+    PRLock* mNative;
 };
 
 }

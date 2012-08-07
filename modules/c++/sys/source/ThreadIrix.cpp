@@ -33,7 +33,7 @@
 //     return sys::SyncFactoryIrix()->killThread(*this);
 // }
 
-bool sys::ThreadIrix::join()
+void sys::ThreadIrix::join()
 {
     dbg_printf("Joining on thread\n");
     int lStatus;
@@ -44,7 +44,6 @@ bool sys::ThreadIrix::join()
     }
     while ( WIFEXITED(lStatus) == 0 );
     dbg_printf("Done joining on thread\n");
-    return true;
 }
 
 void sys::ThreadIrix::yield()

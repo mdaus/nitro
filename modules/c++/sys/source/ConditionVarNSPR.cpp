@@ -24,33 +24,70 @@
 #if defined(USE_NSPR_THREADS)
 #include "sys/ConditionVarNSPR.h"
 
+sys::ConditionVarNSPR::ConditionVarNSPR() :
+    mMutexOwned(new sys::MutexNSPR()),
+    mMutex(mMutexOwned.get())
+{
+    mNative = PR_NewCondVar( (mMutex->getNative()) );
+    if (mNative == NULL)
+        throw sys::SystemException("Condition Variable initialization failed");
+}
+
+sys::CondtionVarNSPR::ConditionVarNSPR(sys::MutexNSPR *theLock, bool isOwner)
+{
+    mMutex = theLock;
+    if (isOwner)
+        mMutexOwned.reset(theLock);
+    
+    mNative = PR_NewCondVar( (mMutex->getNative()) );
+    if (mNative == NULL)
+        throw sys::SystemException("Condition Variable initialization failed");
+}
+
 sys::ConditionVarNSPR::~ConditionVarNSPR()
 {
     PR_DestroyCondVar(mNative);
 }
 
-bool sys::ConditionVarNSPR::signal()
+void sys::ConditionVarNSPR::acquireLock()
 {
-    return (PR_NotifyCondVar(mNative) == PR_SUCCESS);
+    mMutex->lock();
+}
+
+void sys::ConditionVarNSPR::dropLock()
+{
+    mMutex->unlock();
+}
+
+void sys::ConditionVarNSPR::signal()
+{
+    if (PR_NotifyCondVar(mNative) != PR_SUCCESS)
+        throw sys::SystemException("Condition Variable signal failed");
 
 }
 
-bool sys::ConditionVarNSPR::wait()
+void sys::ConditionVarNSPR::wait()
 {
-    return (PR_WaitCondVar(mNative,
-                           PR_INTERVAL_NO_WAIT) == PR_SUCCESS);
+    if (PR_WaitCondVar(mNative, PR_INTERVAL_NO_WAIT) != PR_SUCCESS)
+        throw sys::SystemException("Condition Variable wait failed");
 }
 
-bool sys::ConditionVarNSPR::wait(double seconds)
+void sys::ConditionVarNSPR::wait(double seconds)
 {
     double milli = seconds * 1000;
-    return (PR_WaitCondVar(mNative,
-                           PR_MillisecondsToInterval((PRUint32)milli)) == PR_SUCCESS);
+    if (PR_WaitCondVar(mNative, PR_MillisecondsToInterval((PRUint32) milli)) != PR_SUCCESS)
+        throw sys::SystemException("Condition Variable wait failed");
 }
 
-bool sys::ConditionVarNSPR::broadcast()
+void sys::ConditionVarNSPR::broadcast()
 {
-    return ( PR_NotifyAllCondVar(mNative) == PR_SUCCESS );
+    if (PR_NotifyAllCondVar(mNative) != PR_SUCCESS)
+        throw sys::SystemException("Condition Variable broadcast failed");
+}
+
+PRCondVar*& sys::ConditionVarNSPR::getNative()
+{
+    return mNative;
 }
 
 #endif

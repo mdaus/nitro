@@ -35,19 +35,21 @@ sys::MutexNSPR::~MutexNSPR()
     if (mNative != NULL)
         PR_DestroyLock(mNative);
 }
-bool sys::MutexNSPR::lock()
+void sys::MutexNSPR::lock()
 {
     PR_Lock(mNative);
-    return true;
 }
 
-
-bool sys::MutexNSPR::unlock()
+void sys::MutexNSPR::unlock()
 {
     PRStatus status = PR_Unlock(mNative);
     if (status == PR_FAILURE)
-        return false;
-    return true;
+        throw sys::SystemException("Mutex unlock failed");
+}
+
+PRLock*& sys::MutexNSPR::getNative()
+{
+    return mNative;
 }
 
 #endif

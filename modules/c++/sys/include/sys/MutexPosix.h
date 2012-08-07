@@ -39,7 +39,7 @@ namespace sys
  *  Implements a pthread mutex and wraps the outcome
  *
  */
-class MutexPosix : public MutexInterface<pthread_mutex_t>
+class MutexPosix : public MutexInterface
 {
 public:
     //!  Constructor
@@ -50,14 +50,30 @@ public:
 
     /*!
      *  Lock the mutex.
-     *  \return true if success
      */
-    virtual bool lock();
+    virtual void lock();
+    
     /*!
      *  Unlock the mutex.
-     *  \return true if success
      */
-    virtual bool unlock();
+    virtual void unlock();
+    
+    /*!
+     *  Returns the native type.
+     */
+    virtual pthread_mutex_t& getNative();
+    
+    /*!
+     *  Return the type name.  This function is essentially free,
+     *  because it is static RTTI.
+     */
+    const char* getNativeType() const
+    {
+        return typeid(mNative).name();
+    }
+    
+private:
+    pthread_mutex_t mNative;
 };
 }
 

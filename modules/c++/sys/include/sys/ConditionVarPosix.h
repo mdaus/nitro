@@ -40,70 +40,80 @@ namespace sys
  *  This class is the wrapper implementation for a pthread_cond_t
  *  (Pthread condition variable)
  */
-class ConditionVarPosix :
-            public ConditionVarInterface < pthread_cond_t,
-            MutexPosix >
+class ConditionVarPosix : public ConditionVarInterface
 {
 public:
-    typedef ConditionVarInterface < pthread_cond_t, MutexPosix > Parent_T;
 
-    ConditionVarPosix()
-    {
-        mMutex = new MutexPosix();
-        assert( ::pthread_cond_init(&mNative, NULL) == 0);
-        /*      if ( ::pthread_cond_init(&mNative, NULL) != 0) */
-        /*   throw SystemException("ConditionVar initialization failed"); */
-
-    }
+    ConditionVarPosix();
 
     //!  Constructor
-    ConditionVarPosix(MutexPosix* theLock, bool isOwner = false) :
-            Parent_T(theLock, isOwner)
-    {
-        assert( ::pthread_cond_init(&mNative, NULL) == 0);
-        /*      if ( ::pthread_cond_init(&mNative, NULL) != 0) */
-        /*   throw SystemException("ConditionVar initialization failed"); */
-    }
+    ConditionVarPosix(MutexPosix* theLock, bool isOwner = false);
 
     //!  Destructor
     virtual ~ConditionVarPosix();
 
     /*!
-     *  Signal using pthread_cond_signal
-     *  \return true if success
+     *  Acquire the lock
      */
-    virtual bool signal();
+    virtual void acquireLock();
+
+    /*!
+     *  Drop (release) the lock
+     */
+    virtual void dropLock();
+    
+    /*!
+     *  Signal using pthread_cond_signal
+     */
+    virtual void signal();
 
     /*!
      *  Wait using pthread_cond_wait
-     *  \return true if success
      *
      *  WARNING: The user is responsible for locking the mutex prior 
      *           to using this method. There will be no check and on 
      *           certain systems, undefined/unfavorable behavior may 
      *           result.
      */
-    virtual bool wait();
+    virtual void wait();
 
     /*!
      *  Wait using pthread_cond_timed_wait.  I kept this and the above
      *  function separate only to be explicit.
      *  \param seconds Fraction of a second to wait.  
      *  \todo Want a TimeInterval
-     *  \return true if success
      *
      *  WARNING: The user is responsible for locking the mutex prior 
      *           to using this method. There will be no check and on 
      *           certain systems, undefined/unfavorable behavior may 
      *           result.
      */
-    virtual bool wait(double seconds);
+    virtual void wait(double seconds);
 
     /*!
      *  Broadcast (notify all)
-     *  \return true if success
      */
-    virtual bool broadcast();
+    virtual void broadcast();
+    
+    /*!
+     *  Returns the native type.
+     */
+    virtual pthread_cond_t& getNative();
+    
+    /*!
+     *  Return the type name.  This function is essentially free,
+     *  because it is static RTTI.
+     */
+    const char* getNativeType() const
+    {
+        return typeid(mNative).name();
+    }
+    
+private:
+    pthread_cond_t mNative;
+    MutexPosix *mMutex;
+    // This is set if we own the mutex, to make sure it gets deleted.
+    std::auto_ptr<MutexPosix> mMutexOwned;
 };
 }
 

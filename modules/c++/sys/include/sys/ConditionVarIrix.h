@@ -41,13 +41,9 @@ namespace sys
  *
  *  Class using PRCondVar* to implement a condition variable
  */
-class ConditionVarIrix :
-            public ConditionVarInterface < std::vector< pid_t >,
-            MutexIrix >
+class ConditionVarIrix : public ConditionVarInterface
 {
 public:
-    typedef ConditionVarInterface < std::vector< pid_t >, MutexIrix > Parent_T;
-
 
     /*!
      *  This constructor means that you are creating the lock
@@ -55,11 +51,7 @@ public:
      *  The base class destructor will remove this mutex when we
      *  are destroyed.
      */
-    ConditionVarIrix()
-    {
-        dbg_ln("Creating a default condition variable");
-        mMutex = new MutexIrix();
-    }
+    ConditionVarIrix();
 
     /*!
      *  This is the sharing constructor.  In synchronized buffers, etc.,
@@ -76,34 +68,37 @@ public:
      *  a lock, but this class will STILL delete it.
      *
      */
-    ConditionVarIrix(MutexIrix *theLock, bool isOwner = false) :
-            Parent_T(theLock, isOwner)
-    {
-        dbg_ln("Creating a cv given a mutex");
-    }
+    ConditionVarIrix(MutexIrix *theLock, bool isOwner = false);
 
     /*!
      *  Destroy the native CV
-    B
      */
     virtual ~ConditionVarIrix();
 
     /*!
-     *  Signal a condition
-     *  \return true upon success, false on failure
+     *  Acquire the lock
      */
-    virtual bool signal();
+    virtual void acquireLock();
+
+    /*!
+     *  Drop (release) the lock
+     */
+    virtual void dropLock();
+    
+    /*!
+     *  Signal a condition
+     */
+    virtual void signal();
 
     /*!
      *  Wait on a condition
-     *  \return true upon success, false on failure
      *
      *  WARNING: The user is responsible for locking the mutex prior 
      *           to using this method. There will be no check and on 
      *           certain systems, undefined/unfavorable behavior may 
      *           result.
      */
-    virtual bool wait();
+    virtual void wait();
 
     /*!
      *  Timed wait on a condition
@@ -114,15 +109,33 @@ public:
      *           certain systems, undefined/unfavorable behavior may 
      *           result.
      */
-    virtual bool wait(double seconds);
+    virtual void wait(double seconds);
 
 
     /*!
      *  Broadcast operation
-     *  \return bool true on success, false on failure
      */
-    virtual bool broadcast();
+    virtual void broadcast();
 
+    /*!
+     *  Returns the native type.
+     */
+    virtual std::vector<pid_t>& getNative();
+    
+    /*!
+     *  Return the type name.  This function is essentially free,
+     *  because it is static RTTI.
+     */
+    const char* getNativeType() const
+    {
+        return typeid(mNative).name();
+    }
+    
+private:
+    std::vector<pid_t> mNative;
+    MutexIrix *mMutex;
+    // This is set if we own the mutex, to make sure it gets deleted.
+    std::auto_ptr<MutexIrix> mMutexOwned;
 };
 
 }

@@ -21,50 +21,45 @@
  */
 
 
-#ifndef __SYS_MUTEX_WIN32_H__
-#define __SYS_MUTEX_WIN32_H__
-
 #if defined(WIN32) && defined(_REENTRANT)
+
 #if !defined(USE_NSPR_THREADS) && !defined(__POSIX)
 
-#include "sys/MutexInterface.h"
+#include "sys/SemaphoreWin32.h"
 
-namespace sys
+sys::SemaphoreWin32::SemaphoreWin32(unsigned int count)
 {
-class MutexWin32 : public MutexInterface
-{
-public:
-    //! \todo Add string name option
-    MutexWin32();
-    virtual ~MutexWin32();
-    /*!
-     *  Lock the mutex.
-     */
-    virtual void lock();
+    mNative = CreateSemaphore(NULL, count, MAX_COUNT, NULL);
+    if (mNative == NULL)
+        throw sys::SystemException("CreateSempaphore Failed");
 
-    /*!
-     *  Unlock the mutex.
-     */
-    virtual void unlock();
-    
-    /*!
-     *  Returns the native type.
-     */
-    virtual HANDLE& getNative();
-    
-    /*!
-     *  Return the type name.  This function is essentially free,
-     *  because it is static RTTI.
-     */
-    const char* getNativeType() const
-    {
-        return typeid(mNative).name();
-    }
-    
-private:
-    HANDLE mNative;
-};
 }
-#endif
+
+void sys::SemaphoreWin32::wait()
+{
+    DWORD waitResult = WaitForSingleObject(
+                           mNative,
+                           INFINITE);
+    if (waitResult != WAIT_OBJECT_0)
+    {
+        throw sys::SystemException("Semaphore wait failed");
+    }
+}
+
+void sys::SemaphoreWin32::signal()
+{
+    if (!ReleaseSemaphore(mNative,
+                          1,
+                          NULL) )
+    {
+        throw sys::SystemException("Semaphore signal failed");
+    }
+}
+
+HANDLE& sys::SemaphoreWin32::getNative()
+{
+    return mNative;
+}
+
 #endif
 #endif

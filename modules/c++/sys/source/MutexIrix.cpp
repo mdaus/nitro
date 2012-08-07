@@ -38,16 +38,23 @@ sys::MutexIrix::~MutexIrix()
     sys::SyncFactoryIrix().destroyLock(*this);
 }
 
-bool sys::MutexIrix::lock()
+void sys::MutexIrix::lock()
 {
     dbg_printf("MutexIrix::lock()\n");
-    return sys::SyncFactoryIrix().setLock(*this);
+    if (!sys::SyncFactoryIrix().setLock(*this))
+        throw sys::SystemException("Mutex lock failed");
 }
 
-bool sys::MutexIrix::unlock()
+void sys::MutexIrix::unlock()
 {
     dbg_printf("MutexIrix::unlock()\n");
-    return sys::SyncFactoryIrix().unsetLock(*this);
+    if (!sys::SyncFactoryIrix().unsetLock(*this))
+        throw sys::SystemException("Mutex unlock failed");
+}
+
+ulock_t*& sys::MutexIrix::getNative()
+{
+    return mNative;
 }
 
 #endif // __sgi && _REENTRANT && !__POSIX

@@ -52,9 +52,10 @@ void sys::ThreadWin32::start()
 }
 
 
-bool sys::ThreadWin32::join()
+void sys::ThreadWin32::join()
 {
-    return (WaitForSingleObject(mNative, INFINITE) != WAIT_FAILED);
+    if (WaitForSingleObject(mNative, INFINITE) == WAIT_FAILED)
+        throw sys::SystemException("Thread join failed");
 
 }
 

@@ -33,7 +33,7 @@
 
 namespace sys
 {
-class SemaphoreNSPR : public SemaphoreInterface<void*>
+class SemaphoreNSPR : public SemaphoreInterface
 {
 public:
     SemaphoreNSPR(unsigned count = 0)
@@ -43,14 +43,12 @@ public:
     ~SemaphoreNSPR()
     {}
 
-    bool wait()
-    {
-        return false;
-    }
-    bool signal()
-    {
-        return false;
-    }
+    void wait()
+    {}
+    
+    void signal()
+    {}
+
 };
 }
 

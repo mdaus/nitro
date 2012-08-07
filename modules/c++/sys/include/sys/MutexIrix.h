@@ -38,7 +38,7 @@ namespace sys
  *  Implements a pthread mutex and wraps the outcome
  *
  */
-class MutexIrix : public MutexInterface<ulock_t*>
+class MutexIrix : public MutexInterface
 {
 public:
     //!  Constructor
@@ -49,14 +49,30 @@ public:
 
     /*!
      *  Lock the mutex.
-     *  \return true if success
      */
-    virtual bool lock();
+    virtual void lock();
+    
     /*!
      *  Unlock the mutex.
-     *  \return true if success
      */
-    virtual bool unlock();
+    virtual void unlock();
+    
+    /*!
+     *  Returns the native type.
+     */
+    virtual ulock_t*& getNative();
+    
+    /*!
+     *  Return the type name.  This function is essentially free,
+     *  because it is static RTTI.
+     */
+    const char* getNativeType() const
+    {
+        return typeid(mNative).name();
+    }
+    
+private:
+    ulock_t* mNative;
 };
 
 }

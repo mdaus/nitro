@@ -40,7 +40,7 @@ namespace sys
  *  Implements a solaris thread mutex and wraps the outcome
  *
  */
-class MutexSolaris : public MutexInterface<mutex_t>
+class MutexSolaris : public MutexInterface
 {
 public:
     //!  Constructor
@@ -51,14 +51,30 @@ public:
 
     /*!
      *  Lock the mutex.
-     *  \return true if success
      */
-    virtual bool lock();
+    virtual void lock();
+    
     /*!
      *  Unlock the mutex.
-     *  \return true if success
      */
-    virtual bool unlock();
+    virtual void unlock();
+    
+    /*!
+     *  Returns the native type.
+     */
+    virtual mutex_t& getNative();
+    
+    /*!
+     *  Return the type name.  This function is essentially free,
+     *  because it is static RTTI.
+     */
+    const char* getNativeType() const
+    {
+        return typeid(mNative).name();
+    }
+    
+private:
+    mutex_t mNative;
 };
 }
 

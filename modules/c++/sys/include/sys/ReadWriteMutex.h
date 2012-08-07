@@ -59,15 +59,13 @@ namespace sys
 
 	/*!
 	 *  Lock for reading (no writes allowed)
-	 *  \return true upon success
 	 */
-	virtual bool lockRead();
+	virtual void lockRead();
 	
 	/*!
 	 *  Unlock for reading (writes allowed)
-	 *  \return true upon success
 	 */
-	virtual bool unlockRead();
+	virtual void unlockRead();
 
         /*!
          *  Lock for writing (no reads/other writes allowed)

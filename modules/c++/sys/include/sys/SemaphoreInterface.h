@@ -30,7 +30,6 @@
 
 namespace sys
 {
-template <typename T>
 class SemaphoreInterface
 {
 
@@ -42,33 +41,10 @@ public:
     virtual ~SemaphoreInterface()
     {}
 
-    virtual bool signal() = 0;
+    virtual void signal() = 0;
 
-    virtual bool wait() = 0;
+    virtual void wait() = 0;
 
-    /*!
-     *  Returns the native type.  You probably should not use this
-     *  unless you have specific constraints on which package you use
-     *  Use of this function may defeat the purpose of these classes:
-     *  to provide thread implementation in an abstract interface.
-     */
-    T& getNative()
-    {
-        return mNative;
-    }
-
-    /*!
-     *  Return the type name.  This function is essentially free,
-     *  because it is static RTTI due to its template implementation
-     */
-    const char* getNativeType() const
-    {
-        return typeid(mNative).name();
-    }
-
-protected:
-
-    T mNative;
 };
 
 }

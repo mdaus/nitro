@@ -60,8 +60,7 @@ void mt::ThreadGroup::joinAll()
     {
         try
         {
-            if (!mThreads[mLastJoined]->join())
-                failed = true;
+            mThreads[mLastJoined]->join();
         }
         catch (...)
         {

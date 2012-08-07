@@ -29,7 +29,6 @@
 
 sys::MutexWin32::MutexWin32()
 {
-
     mNative = CreateMutex(NULL, FALSE, NULL);
     if (mNative == NULL)
         throw sys::SystemException("Mutex initializer failed");
@@ -40,14 +39,21 @@ sys::MutexWin32::~MutexWin32()
     CloseHandle(mNative);
 }
 
-bool sys::MutexWin32::lock()
+void sys::MutexWin32::lock()
 {
-    return (WaitForSingleObject(mNative, INFINITE) != WAIT_FAILED);
+    if (WaitForSingleObject(mNative, INFINITE) == WAIT_FAILED)
+        throw sys::SystemException("Mutex lock failed");
 }
 
-bool sys::MutexWin32::unlock()
+void sys::MutexWin32::unlock()
 {
-    return (ReleaseMutex(mNative) == TRUE);
+    if (ReleaseMutex(mNative) != TRUE)
+        throw sys::SystemException("Mutex unlock failed");
+}
+
+HANDLE& sys::MutexWin32::getNative()
+{
+    return mNative;
 }
 
 #endif // Not some other thread package

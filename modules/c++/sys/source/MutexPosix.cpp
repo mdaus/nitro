@@ -38,20 +38,29 @@ sys::MutexPosix::~MutexPosix()
         ::pthread_mutex_destroy(&mNative);
     }
 }
-bool sys::MutexPosix::lock()
+
+void sys::MutexPosix::lock()
 {
 #ifdef THREAD_DEBUG
     dbg_printf("Locking mutex\n");
 #endif
-    return (::pthread_mutex_lock(&mNative) == 0);
+    if (::pthread_mutex_lock(&mNative) != 0)
+        throw new sys::SystemException("Mutex lock failed");
 }
-bool sys::MutexPosix::unlock()
+
+void sys::MutexPosix::unlock()
 {
 #ifdef THREAD_DEBUG
     dbg_printf("Unlocking mutex\n");
 #endif
-    return (::pthread_mutex_unlock(&mNative) == 0);
+    if (::pthread_mutex_unlock(&mNative) != 0)
+        throw sys::SystemException("Mutex unlock failed");
 
+}
+
+pthread_mutex_t& sys::MutexPosix::getNative()
+{
+    return mNative;
 }
 
 #endif // __POSIX && _REENTRANT

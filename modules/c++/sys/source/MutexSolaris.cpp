@@ -39,20 +39,27 @@ sys::MutexSolaris::~MutexSolaris()
     }
 }
 
-bool sys::MutexSolaris::lock()
+void sys::MutexSolaris::lock()
 {
 #ifdef THREAD_DEBUG
     dbg_printf("Locking mutex\n");
 #endif
-    return (::mutex_lock(&mNative) == 0);
+    if (::mutex_lock(&mNative) != 0)
+        throw sys::SystemException("Mutex lock failed");
 }
 
-bool sys::MutexSolaris::unlock()
+void sys::MutexSolaris::unlock()
 {
 #ifdef THREAD_DEBUG
     dbg_printf("Unlocking mutex\n");
 #endif
-    return (::mutex_unlock(&mNative) == 0);
+    if (::mutex_unlock(&mNative) != 0)
+        throw sys::SystemException("Mutex unlock failed");
+}
+
+mutex_t& sys::MutexSolaris::getNative()
+{
+    return mNative;
 }
 
 #endif

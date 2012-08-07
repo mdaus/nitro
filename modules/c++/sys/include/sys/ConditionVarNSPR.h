@@ -41,11 +41,9 @@ namespace sys
  *
  *  Class using PRCondVar* to implement a condition variable
  */
-class ConditionVarNSPR :
-            public ConditionVarInterface < PRCondVar *, MutexNSPR >
+class ConditionVarNSPR : public ConditionVarInterface
 {
 public:
-    typedef ConditionVarInterface<PRCondVar *, MutexNSPR> Parent_T;
 
     /*!
      *  This constructor means that you are creating the lock
@@ -53,14 +51,7 @@ public:
      *  The base class destructor will remove this mutex when we
      *  are destroyed.
      */
-    ConditionVarNSPR()
-    {
-        mMutex = new MutexNSPR();
-        mNative = PR_NewCondVar( (mMutex->getNative()) );
-        if (mNative == NULL)
-            throw SystemException("Condition Variable initialization failed");
-
-    }
+    ConditionVarNSPR();
 
     /*!
      *  This is the sharing constructor.  In synchronized buffers, etc.,
@@ -77,35 +68,37 @@ public:
      *  a lock, but this class will STILL delete it.
      *
      */
-    ConditionVarNSPR(MutexNSPR *theLock, bool isOwner = false) :
-            Parent_T(theLock, isOwner)
-    {
-        mNative = PR_NewCondVar( (mMutex->getNative()) );
-        if (mNative == NULL)
-            throw SystemException("Condition Variable initialization failed");
-    }
+    ConditionVarNSPR(MutexNSPR *theLock, bool isOwner = false);
 
     /*!
      *  Destroy the native CV
      */
     virtual ~ConditionVarNSPR();
+    
+    /*!
+     *  Acquire the lock
+     */
+    virtual void acquireLock();
+
+    /*!
+     *  Drop (release) the lock
+     */
+    virtual void dropLock();
 
     /*!
      *  Signal a condition
-     *  \return true upon success, false on failure
      */
-    virtual bool signal();
+    virtual void signal();
 
     /*!
      *  Wait on a condition
-     *  \return true upon success, false on failure
      *
      *  WARNING: The user is responsible for locking the mutex prior 
      *           to using this method. There will be no check and on 
      *           certain systems, undefined/unfavorable behavior may 
      *           result.
      */
-    virtual bool wait();
+    virtual void wait();
 
     /*!
      *  Timed wait on a condition
@@ -116,13 +109,32 @@ public:
      *           certain systems, undefined/unfavorable behavior may 
      *           result.
      */
-    virtual bool wait(double seconds);
+    virtual void wait(double seconds);
 
     /*!
      *  Broadcast operation
-     *  \return bool true on success, false on failure
      */
-    virtual bool broadcast();
+    virtual void broadcast();
+    
+    /*!
+     *  Returns the native type.
+     */
+    virtual PRCondVar*& getNative();
+    
+    /*!
+     *  Return the type name.  This function is essentially free,
+     *  because it is static RTTI.
+     */
+    const char* getNativeType() const
+    {
+        return typeid(mNative).name();
+    }
+    
+private:
+    PRCondVar *mNative;
+    MutexNSPR *mMutex;
+    // This is set if we own the mutex, to make sure it gets deleted.
+    std::auto_ptr<MutexNSPR> mMutexOwned;
 };
 
 

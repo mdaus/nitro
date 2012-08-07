@@ -26,24 +26,54 @@
 #include <synch.h>
 #include "sys/ConditionVarSolaris.h"
 
+sys::ConditionVarSolaris::ConditionVarSolaris() :
+    mMutexOwned(new sys::MutexSolaris()),
+    mMutex(mMutexOwned.get())
+{
+    if ( ::cond_init(&mNative, NULL, NULL) != 0)
+        throw sys::SystemException("ConditionVar initialization failed");
+}
+
+sys::ConditionVarSolaris::ConditionVarSolaris(sys::MutexSolaris* theLock, bool isOwner)
+{
+    mMutex = theLock;
+    if (isOwner)
+        mMutexOwned.reset(theLock);
+    
+    if ( ::cond_init(&mNative, NULL, NULL) != 0)
+        throw sys::SystemException("ConditionVar initialization failed");
+}
+
 sys::ConditionVarSolaris::~ConditionVarSolaris()
 {
     ::cond_destroy(&mNative);
 }
 
-bool sys::ConditionVarSolaris::signal()
+void sys::ConditionVarSolaris::acquireLock()
+{
+    mMutex->lock();
+}
+
+void sys::ConditionVarSolaris::dropLock()
+{
+    mMutex->unlock();
+}
+
+void sys::ConditionVarSolaris::signal()
 {
     dbg_printf("Signaling condition\n");
-    return (::cond_signal(&mNative) == 0);
+    if (::cond_signal(&mNative) != 0)
+        throw sys::SystemException("ConditionVar signal failed");
 }
-bool sys::ConditionVarSolaris::wait()
+
+void sys::ConditionVarSolaris::wait()
 {
     dbg_printf("Waiting on condition\n");
-    return (::cond_wait(&mNative,
-                        &(mMutex->getNative())) == 0);
+    if (::cond_wait(&mNative, &(mMutex->getNative())) != 0)
+        throw sys::SystemException("ConditionVar wait failed");
 }
-// Implement this
-bool sys::ConditionVarSolaris::wait(double seconds)
+
+void sys::ConditionVarSolaris::wait(double seconds)
 {
     dbg_printf("Timed waiting on condition [%f]\n", seconds);
     if ( seconds > 0 )
@@ -51,17 +81,25 @@ bool sys::ConditionVarSolaris::wait(double seconds)
         timestruc_t tout;
         tout.tv_sec = time(NULL) + (int)seconds;
         tout.tv_nsec = (int)((seconds - (int)(seconds)) * 1e9);
-        return
-            (::cond_timedwait(&mNative,
-                              &(mMutex->getNative()),
-                              &tout) == 0);
+        if (::cond_timedwait(&mNative,
+                             &(mMutex->getNative()),
+                             &tout) != 0)
+            throw sys::SystemException("ConditionVar wait failed");
     }
-    else return wait();
+    else
+        wait();
 }
-bool sys::ConditionVarSolaris::broadcast()
+
+void sys::ConditionVarSolaris::broadcast()
 {
     dbg_printf("Broadcasting condition\n");
-    return (::cond_broadcast(&mNative) == 0);
+    if (::cond_broadcast(&mNative) != 0)
+        throw sys::SystemException("ConditionVar broadcast failed");
+}
+
+cond_t& sys::ConditionVarSolaris::getNative()
+{
+    return mNative;
 }
 
 #endif

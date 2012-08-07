@@ -24,15 +24,15 @@
 #if defined(_REENTRANT) && !defined(__APPLE_CC__)
 #include "sys/ReadWriteMutex.h"
 
-bool sys::ReadWriteMutex::lockRead()
+void sys::ReadWriteMutex::lockRead()
 {
-        // Count up one reader
-	return mSem.wait();
+    // Count up one reader
+	mSem.wait();
 }
-bool sys::ReadWriteMutex::unlockRead()
+void sys::ReadWriteMutex::unlockRead()
 {
-        // Count down one reader
-	return mSem.signal();
+    // Count down one reader
+	mSem.signal();
 }
 
 void sys::ReadWriteMutex::lockWrite()

@@ -69,8 +69,7 @@ namespace sys
  *
  */
 
-template <typename T> class ThreadInterface
-            : public Runnable
+class ThreadInterface : public Runnable
 {
 public:
     enum { DEFAULT_LEVEL, KERNEL_LEVEL, USER_LEVEL };
@@ -204,7 +203,7 @@ public:
     /*!
      *  Destroy the thread
      */
-    virtual bool kill() = 0;
+    virtual void kill() = 0;
 
     // You could say Thread(new MyThread()).start();
     /*!
@@ -218,7 +217,7 @@ public:
     /*!
      *  Join the thread
      */
-    virtual bool join() = 0;
+    virtual void join() = 0;
 
     /*!
      *  Yield the current thread of control
@@ -244,30 +243,9 @@ public:
         mIsRunning = isRunning;
     }
 
-    /*!
-     *  Returns the native type.  You probably should not use this
-     *  unless you have specific constraints on which package you use
-     *  Use of this function may defeat the purpose of these classes:
-     *  to provide thread implementation in an abstract interface.
-     */
-    T& getNative()
-    {
-        return mNative;
-    }
-
-    /*!
-     *  Return the type name.  This function is essentially free,
-     *  because it is static RTTI due to its template implementation
-     */
-    const char* getNativeType() const
-    {
-        return typeid(mNative).name();
-    }
-
-protected:
+private:
     bool mIsSelf;
 
-    T mNative;
     /*!
      *  Generic initialization routine for constructors
      *  to call.  These arguments always need to be
@@ -295,7 +273,7 @@ protected:
     //!  The level at which this thread runs
     int mLevel;
     bool mIsRunning;
-private:
+    
     // Noncopyable
     ThreadInterface(const ThreadInterface& );
     const ThreadInterface& operator=(const ThreadInterface& );

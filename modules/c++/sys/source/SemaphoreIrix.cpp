@@ -39,17 +39,25 @@ sys::SemaphoreIrix::~SemaphoreIrix()
     dbg_printf("done.\n");
 }
 
-bool sys::SemaphoreIrix::wait()
+void sys::SemaphoreIrix::wait()
 {
     dbg_printf("SemaphoreIrix::wait()\n");
-    return sys::SyncFactoryIrix().waitSemaphore(*this);
+    if (!sys::SyncFactoryIrix().waitSemaphore(*this))
+        throw SystemException("Semaphore wait failed");
 
 }
 
-bool sys::SemaphoreIrix::signal(void)
+void sys::SemaphoreIrix::signal()
 {
     dbg_printf("SemaphoreIrix::signal()\n");
-    return sys::SyncFactoryIrix().signalSemaphore(*this);
+    if (!sys::SyncFactoryIrix().signalSemaphore(*this))
+        throw SystemException("Semaphore signal failed");
+}
+
+usema_t*& sys::SemaphoreIrix::getNative()
+{
+    // We don't actually use this, but SemaphoreIrix uses usema_t* as its template..
+    return (usema_t*) NULL;
 }
 
 #endif // __sgi && _REENTRANT && !__POSIX

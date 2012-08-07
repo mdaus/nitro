@@ -34,43 +34,31 @@
 namespace sys
 {
 
-class SemaphoreWin32 : public SemaphoreInterface<HANDLE>
+class SemaphoreWin32 : public SemaphoreInterface
 {
 public:
     enum { MAX_COUNT = 10 };
-    SemaphoreWin32(unsigned int count = 0)
-    {
-        mNative = CreateSemaphore(NULL, count, MAX_COUNT, NULL);
-        if (mNative == NULL)
-            throw sys::SystemException("CreateSempaphore Failed");
-
-    }
+    SemaphoreWin32(unsigned int count = 0);
+    
     virtual ~SemaphoreWin32()
-    {
-    }
+    {}
 
-    bool wait()
+    void wait();
+    
+    void signal();
+    
+    HANDLE& getNative();
+    
+    /*!
+     *  Return the type name.  This function is essentially free,
+     *  because it is static RTTI.
+     */
+    const char* getNativeType() const
     {
-        DWORD waitResult = WaitForSingleObject(
-                               mNative,
-                               INFINITE);
-        if (waitResult != WAIT_OBJECT_0)
-        {
-            return false;
-        }
-        return true;
-
+        return typeid(mNative).name();
     }
-    bool signal()
-    {
-        if (!ReleaseSemaphore(mNative,
-                              1,
-                              NULL) )
-        {
-            return false;
-        }
-        return true;
-    }
+private:
+    HANDLE mNative;
 };
 
 }

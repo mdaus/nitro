@@ -74,63 +74,80 @@ private:
     bool mWasBroadcast;
 };
 
-class ConditionVarWin32 :
-            public ConditionVarInterface < ConditionVarDataWin32,
-            MutexWin32 >
+class ConditionVarWin32 : public ConditionVarInterface
 
 {
 public:
-    typedef ConditionVarInterface < ConditionVarDataWin32,
-    MutexWin32 > Parent_T;
 
-    ConditionVarWin32()
-    {
-        mMutex = new MutexWin32();
-
-    }
-    ConditionVarWin32(MutexWin32 *theLock, bool isOwner = false) :
-            Parent_T(theLock, isOwner)
-    {}
+    ConditionVarWin32();
+    
+    ConditionVarWin32(MutexWin32 *theLock, bool isOwner = false);
+    
     virtual ~ConditionVarWin32()
     {}
+    
+    /*!
+     *  Acquire the lock
+     */
+    virtual void acquireLock();
+
+    /*!
+     *  Drop (release) the lock
+     */
+    virtual void dropLock();
 
     /*!
      *  Signal using pthread_cond_signal
-     *  \return true if success
      */
-    virtual bool signal();
+    virtual void signal();
 
     /*!
      *  Wait using pthread_cond_wait
-     *  \return true if success
      *
      *  WARNING: The user is responsible for locking the mutex prior 
      *           to using this method. There will be no check and on 
      *           certain systems, undefined/unfavorable behavior may 
      *           result.
      */
-    virtual bool wait();
+    virtual void wait();
 
     /*!
      *  Wait using pthread_cond_timed_wait.  I kept this and the above
      *  function separate only to be explicit.
      *  \param seconds Fraction of a second to wait.  
      *  \todo Want a TimeInterval
-     *  \return true if success
      *
      *  WARNING: The user is responsible for locking the mutex prior 
      *           to using this method. There will be no check and on 
      *           certain systems, undefined/unfavorable behavior may 
      *           result.
      */
-    virtual bool wait(double seconds);
+    virtual void wait(double seconds);
 
     /*!
      *  Broadcast (notify all)
-     *  \return true if success
      */
-    virtual bool broadcast();
+    virtual void broadcast();
+    
+    /*!
+     *  Returns the native type.
+     */
+    virtual ConditionVarDataWin32& getNative();
+    
+    /*!
+     *  Return the type name.  This function is essentially free,
+     *  because it is static RTTI.
+     */
+    const char* getNativeType() const
+    {
+        return typeid(mNative).name();
+    }
 
+private:
+    ConditionVarDataWin32 mNative;
+    MutexWin32 *mMutex;
+    // This is set if we own the mutex, to make sure it gets deleted.
+    std::auto_ptr<MutexWin32> mMutexOwned;
 };
 }
 #endif

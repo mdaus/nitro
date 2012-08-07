@@ -57,26 +57,25 @@ namespace sys
  *  This class provides the wrapper for a pthread_t.  
  *
  */
-class ThreadPosix : public ThreadInterface<pthread_t>
+class ThreadPosix : public ThreadInterface
 {
 
 public:
-    typedef ThreadInterface<pthread_t> Parent_T;
     /*!
-            *  Default constructor.  Allows ThreadInterface to bind this to target
-            *  \param name  The name
-            */
+    *  Default constructor.  Allows ThreadInterface to bind this to target
+    *  \param name  The name
+    */
     ThreadPosix(const std::string& name = "") :
-            Parent_T(name)
+            ThreadInterface(name)
     {}
     /*!
      *  Alternate constructor
      *  \param target  What to run
-            *  \param name  The name
+    *  \param name  The name
      */
     ThreadPosix(Runnable *target,
                 const std::string& name = "") :
-            Parent_T(target, name)
+            ThreadInterface(target, name)
     {}
 
 
@@ -84,7 +83,7 @@ public:
                 const std::string& name,
                 int level,
                 int priority) :
-            Parent_T(target, name, level, priority)
+            ThreadInterface(target, name, level, priority)
     {}
 
     //! Destructor
@@ -108,20 +107,40 @@ public:
     /*!
      *  Calls the native destroy stuff
      */
-    virtual bool kill();
+    virtual void kill();
 
     /*!
      *  Join the pthread
      */
-    virtual bool join();
+    virtual void join();
 
     /*!
      *  Calls sched_yield to yield the thread of control
      */
     static void yield();
+    
+    /*!
+     *  Returns the native type.  You probably should not use this
+     *  unless you have specific constraints on which package you use
+     *  Use of this function may defeat the purpose of these classes:
+     *  to provide thread implementation in an abstract interface.
+     */
+    pthread_t& getNative()
+    {
+        return mNative;
+    }
 
+    /*!
+     *  Return the type name.  This function is essentially free,
+     *  because it is static RTTI.
+     */
+    const char* getNativeType() const
+    {
+        return typeid(mNative).name();
+    }
 
-protected:
+private:
+    pthread_t mNative;
 
 };
 

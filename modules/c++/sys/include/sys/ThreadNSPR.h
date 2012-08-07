@@ -54,12 +54,9 @@ namespace sys
  *  just because pthreads or Caspr dont support them
  *
  */
-class ThreadNSPR : public ThreadInterface<PRThread *>
+class ThreadNSPR : public ThreadInterface
 {
 public:
-    typedef ThreadInterface<PRThread *> Parent_T;
-
-
     /*!
      *  The default constructor.  When called with no args,
      *  produce a user-level local thread
@@ -68,7 +65,7 @@ public:
      */
     ThreadNSPR(const std::string& name = "",
                bool isLocal = true) :
-            Parent_T(name)
+            ThreadInterface(name)
     {
         mIsLocal = isLocal;
     }
@@ -84,7 +81,7 @@ public:
     ThreadNSPR(Runnable *target,
                const std::string& name = "",
                bool isLocal = true) :
-            Parent_T(target, name)
+            ThreadInterface(target, name)
     {
         mIsLocal = isLocal;
     }
@@ -94,7 +91,7 @@ public:
                int level,
                int priority,
                bool isLocal = true) :
-            Parent_T(target, name, level, priority)
+            ThreadInterface(target, name, level, priority)
     {
         mIsLocal = isLocal;
     }
@@ -121,25 +118,46 @@ public:
      *  http://www.mozilla.org/projects/nspr/tech-notes/abruptexit.html
      *  for more information
      */
-    virtual bool kill()
+    virtual void kill()
     {
-
-        return false;
+        throw sys::SystemException("kill() not implemented on NSPR");
     }
     /*!
      *  Join the thread
-     *  \return false if failure, true if ok
      *
      */
-    virtual bool join();
+    virtual void join();
     /*!
      *  Yield the thread.  Calls PR_Sleep with an interval of
      *  PR_INTERVAL_NO_WAIT
      *
      */
     static void yield();
+    
+    /*!
+     *  Returns the native type.  You probably should not use this
+     *  unless you have specific constraints on which package you use
+     *  Use of this function may defeat the purpose of these classes:
+     *  to provide thread implementation in an abstract interface.
+     */
+    PRThread *& getNative()
+    {
+        return mNative;
+    }
+
+    /*!
+     *  Return the type name.  This function is essentially free,
+     *  because it is static RTTI.
+     */
+    const char* getNativeType() const
+    {
+        return typeid(mNative).name();
+    }
+    
 protected:
     bool mIsLocal;
+private:
+    PRThread * mNative;
 };
 }
 

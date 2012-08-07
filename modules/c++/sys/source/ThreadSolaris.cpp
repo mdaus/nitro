@@ -30,11 +30,11 @@ void sys::ThreadSolaris::start()
 {
 
     long flags = 0;
-    if (mLevel == KERNEL_LEVEL )
+    if (getLevel() == KERNEL_LEVEL )
         flags |= THR_BOUND;
 
     dbg_printf("Starting thread and is kernel? [%d]\n",
-               mLevel == KERNEL_LEVEL);
+               getLevel() == KERNEL_LEVEL);
     // \todo Kernel level
 
     int p = thr_create(NULL,
@@ -61,23 +61,23 @@ extern "C" void *__sys_ThreadSolaris_start(void *v)
 
 }
 
-bool sys::ThreadSolaris::kill()
+void sys::ThreadSolaris::kill()
 {
     dbg_printf("Killing thread\n");
     if ( thr_kill(mNative, SIGKILL) != 0)
     {
-        return false;
+        throw sys::SystemException("thr_kill()");
     }
-    mIsRunning = false;
-    return true;
-
+    setIsRunning(false);
 }
-bool sys::ThreadSolaris::join()
+
+void sys::ThreadSolaris::join()
 {
     dbg_printf("Joining thread\n");
-    return ( ::thr_join(mNative, NULL, NULL) == 0 );
-
+    if (::thr_join(mNative, NULL, NULL) != 0 )
+        throw sys::SystemException("thr_join()");
 }
+
 void sys::ThreadSolaris::yield()
 {
     dbg_printf("Yielding thread\n");
@@ -85,4 +85,3 @@ void sys::ThreadSolaris::yield()
 }
 
 #endif
-

@@ -35,14 +35,21 @@ sys::SemaphorePosix::~SemaphorePosix()
     sem_destroy(&mNative);
 }
 
-bool sys::SemaphorePosix::wait()
+void sys::SemaphorePosix::wait()
 {
-    return ( sem_wait(&mNative) == 0 );
+    if (sem_wait(&mNative) != 0)
+        throw sys::SystemException("Semaphore wait failed");
 }
 
-bool sys::SemaphorePosix::signal()
+void sys::SemaphorePosix::signal()
 {
-    return ( sem_post(&mNative) == 0 );
+    if (sem_post(&mNative) != 0)
+        throw sys::SystemException("Semaphore signal failed");
+}
+
+sem_t& sys::SemaphorePosix::getNative()
+{
+    return mNative;
 }
 
 #endif

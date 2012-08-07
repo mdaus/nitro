@@ -35,14 +35,21 @@ sys::SemaphoreSolaris::~SemaphoreSolaris()
     sema_destroy(&mNative);
 }
 
-bool sys::SemaphoreSolaris::wait()
+void sys::SemaphoreSolaris::wait()
 {
-    return ( sema_wait(&mNative) == 0 );
+    if (sema_wait(&mNative) != 0)
+        throw sys::SystemException("Semaphore wait failed");
 }
 
-bool sys::SemaphoreSolaris::signal()
+void sys::SemaphoreSolaris::signal()
 {
-    return ( sema_post(&mNative) == 0 );
+    if (sema_post(&mNative) != 0)
+        throw sys::SystemException("Semaphore signal failed");
+}
+
+sema_t& sys::SemaphoreSolaris::getNative()
+{
+    return mNative;
 }
 
 #endif

@@ -197,32 +197,56 @@ void sys::ConditionVarDataWin32::broadcast()
     }
 }
 
-bool sys::ConditionVarWin32::wait(double timeout)
+sys::ConditionVarWin32::ConditionVarWin32() :
+    mMutexOwned(new sys::MutexWin32()),
+    mMutex(mMutexOwned.get())
+{}
+
+sys::ConditionVarWin32::ConditionVarWin32(sys::MutexWin32 *theLock, bool isOwner) :
+    mMutex(theLock)
 {
-    dbg_printf("Timed waiting on condition [%f]\n", timeout);
-    return mNative.wait(mMutex->getNative(), timeout);
+    if (isOwner)
+        mMutexOwned.reset(theLock);
 }
 
-bool sys::ConditionVarWin32::wait()
+void sys::ConditionVarWin32::acquireLock()
+{
+    mMutex->lock();
+}
+
+void sys::ConditionVarWin32::dropLock()
+{
+    mMutex->unlock();
+}
+
+void sys::ConditionVarWin32::wait(double timeout)
+{
+    dbg_printf("Timed waiting on condition [%f]\n", timeout);
+    if (!mNative.wait(mMutex->getNative(), timeout))
+        throw sys::SystemException("Condition Variable wait failed");
+}
+
+void sys::ConditionVarWin32::wait()
 {
     dbg_printf("Waiting on condition\n");
     mNative.wait(mMutex->getNative());
-    return true;
 }
 
-bool sys::ConditionVarWin32::signal()
+void sys::ConditionVarWin32::signal()
 {
     dbg_printf("Signalling condition\n");
     mNative.signal();
-    return true;
 }
 
-
-bool sys::ConditionVarWin32::broadcast()
+void sys::ConditionVarWin32::broadcast()
 {
     dbg_printf("Broadcasting condition\n");
     mNative.broadcast();
-    return true;
+}
+
+sys::ConditionVarDataWin32& sys::ConditionVarWin32::getNative()
+{
+    return mNative;
 }
 
 #endif // No other thread package

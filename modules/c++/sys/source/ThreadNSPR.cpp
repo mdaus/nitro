@@ -30,18 +30,18 @@ void sys::ThreadNSPR::__start(void *v)
 void sys::ThreadNSPR::start()
 {
 
-    PRThreadType type = (mLevel == sys::ThreadNSPR::KERNEL_LEVEL) ?
+    PRThreadType type = (getLevel() == sys::ThreadNSPR::KERNEL_LEVEL) ?
                         (PR_SYSTEM_THREAD) : (PR_USER_THREAD);
 
     PRThreadScope scope = (mIsLocal) ? (PR_LOCAL_THREAD) :
                           (PR_GLOBAL_THREAD);
 
     PRThreadPriority priority;
-    if (mPriority == sys::ThreadNSPR::NORM_PRIORITY)
+    if (getPriority() == sys::ThreadNSPR::NORM_PRIORITY)
         priority = PR_PRIORITY_NORMAL;
-    else if (mPriority == sys::ThreadNSPR::MAX_PRIORITY)
+    else if (getPriority() == sys::ThreadNSPR::MAX_PRIORITY)
         priority = PR_PRIORITY_HIGH;
-    else if (mPriority == sys::ThreadNSPR::MIN_PRIORITY)
+    else if (getPriority() == sys::ThreadNSPR::MIN_PRIORITY)
         priority = PR_PRIORITY_LOW;
     mNative = PR_CreateThread(type,
                               (void (*)(void *))this->__start,
@@ -52,9 +52,10 @@ void sys::ThreadNSPR::start()
                               0);
 }
 
-bool sys::ThreadNSPR::join()
+void sys::ThreadNSPR::join()
 {
-    return PR_JoinThread(mNative);
+    if (!PR_JoinThread(mNative))
+        throw sys::SystemException("join()");
 }
 
 void sys::ThreadNSPR::yield()

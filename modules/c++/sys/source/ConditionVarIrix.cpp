@@ -28,6 +28,21 @@
 using std::sigsend;
 #endif
 
+sys::ConditionVarIrix::ConditionVarIrix() :
+    mMutexOwned(new sys::MutexIrix()),
+    mMutex(mMutexOwned.get())
+{
+    dbg_ln("Creating a default condition variable");
+}
+
+sys::ConditionVarIrix::ConditionVarIrix(sys::MutexIrix *theLock, bool isOwner)
+{
+    dbg_ln("Creating a cv given a mutex");
+    mMutex = theLock;
+    if (isOwner)
+        mMutexOwned.reset(theLock);
+}
+
 sys::ConditionVarIrix::~ConditionVarIrix()
 {
     dbg_printf("BEGIN ~ConditionVarIrix\n");
@@ -36,9 +51,18 @@ sys::ConditionVarIrix::~ConditionVarIrix()
     dbg_printf("END ~ConditionVarIrix\n");
 }
 
-bool sys::ConditionVarIrix::signal()
+void sys::ConditionVarIrix::acquireLock()
 {
+    mMutex->lock();
+}
 
+void sys::ConditionVarIrix::dropLock()
+{
+    mMutex->unlock();
+}
+
+void sys::ConditionVarIrix::signal()
+{
     dbg_printf("ConditionVarIrix::signal()\n");
     int lStatus = 0;
     if ( mNative.size() > 0 )
@@ -46,17 +70,17 @@ bool sys::ConditionVarIrix::signal()
         lStatus = sigsend(P_PID, mNative.back(), SIGUSR1);
         mNative.pop_back();
     }
-    return (lStatus == 0);
+    if (lStatus != 0)
+        throw sys::SystemException("Condition Variable signal failed");
 }
 
-bool sys::ConditionVarIrix::wait()
+void sys::ConditionVarIrix::wait()
 {
-
     dbg_printf("ConditionVarIrix::wait()\n");
-    return sys::ConditionVarIrix::wait(0);
+    sys::ConditionVarIrix::wait(0);
 }
 
-bool sys::ConditionVarIrix::wait(double timeout)
+void sys::ConditionVarIrix::wait(double timeout)
 {
     dbg_printf("Timed waiting on condition [%f]\n", timeout);
     sigset_t lSignalSet;
@@ -90,10 +114,11 @@ bool sys::ConditionVarIrix::wait(double timeout)
     if (lTimeout != NULL)
         delete lTimeout;
 
-    return (lSignalInfo.si_signo == SIGUSR1);
+    if (lSignalInfo.si_signo != SIGUSR1)
+        throw sys::SystemException("Condition Variable wait failed");
 }
 
-bool sys::ConditionVarIrix::broadcast()
+void sys::ConditionVarIrix::broadcast()
 {
     dbg_printf("ConditionVarIrix::broadcast()\n");
     int lStatus = 0;
@@ -102,7 +127,14 @@ bool sys::ConditionVarIrix::broadcast()
         lStatus |= sigsend(P_PID, mNative.back(), SIGUSR1);
         mNative.pop_back();
     }
-    return (lStatus == 0);
+    if (lStatus != 0)
+        throw sys::SystemException("Condition Variable broadcast failed");
 }
+
+std::vector<pid_t>& sys::ConditionVarIrix::getNative()
+{
+    return mNative;
+}
+
 #endif
 

@@ -67,24 +67,23 @@ namespace sys
 	return (long)GetCurrentThreadId();
     }
 
-class ThreadWin32 : public ThreadInterface<HANDLE>
+class ThreadWin32 : public ThreadInterface
 {
 public:
-    typedef ThreadInterface<HANDLE> Parent_T;
 
-    ThreadWin32(const std::string& name = "") : Parent_T(name)
+    ThreadWin32(const std::string& name = "") : ThreadInterface(name)
     {}
 
     ThreadWin32(sys::Runnable *target,
                 const std::string& name = "") :
-            Parent_T(target, name)
+            ThreadInterface(target, name)
     {}
 
     ThreadWin32(sys::Runnable *target,
                 const std::string& name,
                 int level,
                 int priority) :
-            Parent_T(target, name, level, priority)
+            ThreadInterface(target, name, level, priority)
     {}
 
 
@@ -92,27 +91,49 @@ public:
     virtual void start();
     static DWORD WINAPI __start(void *v)
     {
-
         STANDARD_START_CALL(ThreadWin32, v);
 
         return 0;
     }
 
     //! Not implemented
-    virtual bool kill()
+    virtual void kill()
     {
-        return false;
+        throw sys::SystemException("kill() no implemented in ThreadWin32");
     }
-    virtual bool join();
+    virtual void join();
     static void yield()
     {
 #ifdef USING_WINNT
         SwitchToThread();
 #else
-        throw SystemException("Thread::yield() only supported in windows NT 4.0 or greater!");
+        throw sys::SystemException("Thread::yield() only supported in windows NT 4.0 or greater!");
 #endif
 
     }
+    
+    /*!
+     *  Returns the native type.  You probably should not use this
+     *  unless you have specific constraints on which package you use
+     *  Use of this function may defeat the purpose of these classes:
+     *  to provide thread implementation in an abstract interface.
+     */
+    HANDLE & getNative()
+    {
+        return mNative;
+    }
+
+    /*!
+     *  Return the type name.  This function is essentially free,
+     *  because it is static RTTI.
+     */
+    const char* getNativeType() const
+    {
+        return typeid(mNative).name();
+    }
+    
+private:
+    HANDLE mNative;
 };
 
 }

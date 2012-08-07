@@ -42,18 +42,10 @@ public:
 
             std::cout << "Getter::run: " << std::endl;
             std::cout << typeid(this).name() << std::endl;
-            if ( !syncBy->lock() )
-            {
-                cout << "Err: " << sys::Err().toString() << endl;
-                assert(0);
-            }
+            syncBy->lock();
             int x = get();
             cout << "Thread id: "<< id << " got back " << x << endl;
-            if ( !syncBy->unlock() )
-            {
-                cout << "Err: " << sys::Err().toString() << endl;
-                assert(0);
-            }
+            syncBy->unlock();
             sys::Thread::yield();
         }
     }
@@ -84,19 +76,10 @@ public:
 
         for (int i = 0; i < 250; i++)
         {
-            if ( !syncBy->lock() )
-            {
-                cout << "Err: " << sys::Err().toString() << endl;
-                assert(0);
-            }
-
+            syncBy->lock();
             set(i);
             cout << "Thread id: "<< id << " set to " << i << endl;
-            if ( !syncBy->unlock() )
-            {
-                cout << "Err: " << sys::Err().toString() << endl;
-                assert(0);
-            }
+            syncBy->unlock();
 
             sys::Thread::yield();
 

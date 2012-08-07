@@ -47,12 +47,12 @@ protected:
    void run() {
       for (int i = 0 ; i < THREAD_LOOPS ; i++ ) {
          mutexCout.lock();
-         std::cout << mName + " is running" << std::endl;
+         std::cout << getName() + " is running" << std::endl;
          mutexCout.unlock();
          sleep(1);
       }
       mutexCout.lock();
-      std::cout << mName + " is finished" << std::endl;
+      std::cout << getName() + " is finished" << std::endl;
       mutexCout.unlock();
    }
 

@@ -38,66 +38,79 @@ namespace sys
  *  This class is the wrapper implementation for a solaris cond_t
  *  (Solaris condition variable)
  */
-class ConditionVarSolaris :
-            public sys::ConditionVarInterface < cond_t,
-            sys::MutexSolaris >
+class ConditionVarSolaris : public sys::ConditionVarInterface
 {
 public:
-    typedef ConditionVarInterface < cond_t, MutexSolaris > Parent_T;
-    ConditionVarSolaris()
-    {
-        mMutex = new MutexSolaris();
-        if ( ::cond_init(&mNative, NULL, NULL) != 0)
-            throw sys::SystemException("ConditionVar initialization failed");
-    }
+    ConditionVarSolaris();
 
     //!  Constructor
-    ConditionVarSolaris(MutexSolaris* theLock, bool isOwner = false) :
-            Parent_T(theLock, isOwner)
-    {
-        if ( ::cond_init(&mNative, NULL, NULL) != 0)
-            throw sys::SystemException("ConditionVar initialization failed");
-    }
+    ConditionVarSolaris(MutexSolaris* theLock, bool isOwner = false);
 
     //!  Destructor
     virtual ~ConditionVarSolaris();
 
     /*!
-     *  Signal using solaris cond_signal
-     *  \return true if success
+     *  Acquire the lock
      */
-    virtual bool signal();
+    virtual void acquireLock();
+
+    /*!
+     *  Drop (release) the lock
+     */
+    virtual void dropLock();
+    
+    /*!
+     *  Signal using solaris cond_signal
+     */
+    virtual void signal();
 
     /*!
      *  Wait using cond_wait
-     *  \return true if success
      *
      *  WARNING: The user is responsible for locking the mutex prior 
      *           to using this method. There will be no check and on 
      *           certain systems, undefined/unfavorable behavior may 
      *           result.
      */
-    virtual bool wait();
+    virtual void wait();
 
     /*!
      *  Wait using cond_timed_wait.  I kept this and the above
      *  function separate only to be explicit.
      *  \param seconds Fraction of a second to wait.  Want a TimeInterval
      *  \todo  Make a parameter initializer that does wait()
-     *  \return true if success
      *
      *  WARNING: The user is responsible for locking the mutex prior 
      *           to using this method. There will be no check and on 
      *           certain systems, undefined/unfavorable behavior may 
      *           result.
      */
-    virtual bool wait(double seconds);
+    virtual void wait(double seconds);
 
     /*!
      *  Broadcast (notify all)
-     *  \return true if success
      */
-    virtual bool broadcast();
+    virtual void broadcast();
+    
+    /*!
+     *  Returns the native type.
+     */
+    virtual cond_t& getNative();
+    
+    /*!
+     *  Return the type name.  This function is essentially free,
+     *  because it is static RTTI.
+     */
+    const char* getNativeType() const
+    {
+        return typeid(mNative).name();
+    }
+    
+private:
+    cond_t mNative;
+    MutexSolaris *mMutex;
+    // This is set if we own the mutex, to make sure it gets deleted.
+    std::auto_ptr<MutexSolaris> mMutexOwned;
 };
 
 }

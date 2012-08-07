@@ -41,7 +41,7 @@ namespace sys
  *  This class defines the interface for any mutex in any package that
  *  is wrapped herein
  */
-template <typename T> class MutexInterface
+class MutexInterface
 {
 public:
     //!  Constructor
@@ -64,38 +64,13 @@ public:
 
     /*!
      *  Lock the mutex up.
-     *  \return true upon success
      */
-    virtual bool lock() = 0;
+    virtual void lock() = 0;
 
     /*!
      *  Unlock the mutex.
-     *  \return true upon success
      */
-    virtual bool unlock() = 0;
-
-    /*!
-     *  Returns the native type.  You probably should not use this
-     *  unless you have specific constraints on which package you use
-     *  Use of this function may defeat the purpose of these classes:
-     *  to provide thread implementation in an abstract interface.
-     */
-    T& getNative()
-    {
-        return mNative;
-    }
-
-    /*!
-     *  Return the type name.  This function is essentially free,
-     *  because it is static RTTI due to its template implementation
-     */
-    const char* getNativeType() const
-    {
-        return typeid(mNative).name();
-    }
-
-protected:
-    T mNative;
+    virtual void unlock() = 0;
 
 };
 

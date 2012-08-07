@@ -30,13 +30,25 @@
 
 namespace sys
 {
-class SemaphoreSolaris : public SemaphoreInterface<sema_t>
+class SemaphoreSolaris : public SemaphoreInterface
 {
 public:
     SemaphoreSolaris(unsigned int count = 0);
     virtual ~SemaphoreSolaris();
-    bool wait();
-    bool signal();
+    void wait();
+    void signal();
+    sema_t& getNative();
+    
+    /*!
+     *  Return the type name.  This function is essentially free,
+     *  because it is static RTTI.
+     */
+    const char* getNativeType() const
+    {
+        return typeid(mNative).name();
+    }
+private:
+    sema_t mNative;
 };
 }
 

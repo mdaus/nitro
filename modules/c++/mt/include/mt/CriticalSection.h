@@ -62,7 +62,14 @@ public:
     //!  Destructor
     ~CriticalSection()
     {
-        manualUnlock();
+        try
+        {
+            manualUnlock();
+        }
+        catch (...)
+        {
+            // Don't throw out of the destructor.
+        }
     }
 
     //!  Manual unlock the CS.  You probably dont want to use this

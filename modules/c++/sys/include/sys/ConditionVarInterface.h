@@ -27,6 +27,7 @@
 #if defined(_REENTRANT)
 #include <typeinfo>
 #include "sys/SystemException.h"
+#include "sys/Mutex.h"
 namespace sys
 {
 /*!
@@ -35,7 +36,7 @@ namespace sys
  *
  *  Provide the API for condition variables in this thread wrapper
  */
-template <typename NativeConditionVar_T, typename Mutex_T>
+
 class ConditionVarInterface
 {
 public:
@@ -49,7 +50,7 @@ public:
      *  option is only necessary for CASPR condition variables.  It
      *  is not the recommended behavior but it may be useful.
      */
-    ConditionVarInterface() : mMutex(NULL), mIsOwner(true)
+    ConditionVarInterface()
     {}
 
     /*!
@@ -67,41 +68,22 @@ public:
      *  a lock, but this class will STILL delete it.
      *
      */
-    ConditionVarInterface(Mutex_T *theLock, bool isOwner = false) :
-            mMutex(NULL)
-    {
-        mIsOwner = isOwner;
-        mMutex = theLock;
-    }
+    ConditionVarInterface(Mutex *theLock, bool isOwner = false)
+    {}
 
     //!  Destructor
     virtual ~ConditionVarInterface()
-    {
-        if (mIsOwner && mMutex != NULL)
-        {
-            delete mMutex;
-            mMutex = NULL;
-        }
-
-    }
+    {}
 
     /*!
      *  Acquire the lock
-     *  \return true upon success
      */
-    virtual bool acquireLock()
-    {
-        return mMutex->lock();
-    }
+    virtual void acquireLock() = 0;
 
     /*!
      *  Drop (release) the lock
-     *  \return true upon success
      */
-    virtual bool dropLock()
-    {
-        return mMutex->unlock();
-    }
+    virtual void dropLock() = 0;
 
     /*!
      *  Wait for on a signal for a time interval.  
@@ -111,62 +93,33 @@ public:
      *  \param timeout How long to wait.  This is only temporarily
      *  a double
      *  \todo  Create a TimeInterval class, and use it as parameter
-     *  \return true upon success
      *
      *  WARNING: The user is responsible for locking the mutex prior 
      *           to using this method. There will be no check and on 
      *           certain systems, undefined/unfavorable behavior may 
      *           result.
      */
-    virtual bool wait(double timeout) = 0;
+    virtual void wait(double timeout) = 0;
 
     /*!
      *  Wait on a signal
-     *  \return true upon success
      *
      *  WARNING: The user is responsible for locking the mutex prior 
      *           to using this method. There will be no check and on 
      *           certain systems, undefined/unfavorable behavior may 
      *           result.
      */
-    virtual bool wait() = 0;
+    virtual void wait() = 0;
 
     /*!
      *  Signal (notify)
-     *  \return true upon success
-         */
-    virtual bool signal() = 0;
+     */
+    virtual void signal() = 0;
 
     /*!
      *  Broadcast (notify all)
-     *  \return true upon success
      */
-    virtual bool broadcast() = 0;
-
-    /*!
-     *  Returns the native type.  You probably should not use this
-     *  unless you have specific constraints on which package you use
-     *  Use of this function may defeat the purpose of these classes:
-     *  to provide thread implementation in an abstract interface.
-     */
-    NativeConditionVar_T& getNative()
-    {
-        return mNative;
-    }
-
-    /*!
-     *  Return the type name.  This function is essentially free,
-     *  because it is static RTTI due to its template implementation
-     */
-    const char* getNativeType() const
-    {
-        return typeid(mNative).name();
-    }
-
-protected:
-    NativeConditionVar_T mNative;
-    Mutex_T *mMutex;
-    bool mIsOwner;
+    virtual void broadcast() = 0;
 
 };
 

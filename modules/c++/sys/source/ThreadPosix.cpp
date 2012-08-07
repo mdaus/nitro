@@ -31,19 +31,19 @@
 void sys::ThreadPosix::start()
 {
 
-    if (mLevel != DEFAULT_LEVEL)
+    if (getLevel() != DEFAULT_LEVEL)
     {
         throw sys::SystemException("Cannot determine upfront wheteher pthread threads are implemented using kernel or user level threads.  Set the level to DEFAULT_LEVEL");
     }
 
-    if (mPriority != NORM_PRIORITY)
+    if (getPriority() != NORM_PRIORITY)
     {
         sched_param sp;
 
-        if (mPriority == MAX_PRIORITY)
+        if (getPriority() == MAX_PRIORITY)
             sp.sched_priority = sched_get_priority_max(SCHED_OTHER);
 
-        else if (mPriority == MIN_PRIORITY)
+        else if (getPriority() == MIN_PRIORITY)
             sp.sched_priority = sched_get_priority_min(SCHED_OTHER);
 
         pthread_attr_t attr;
@@ -69,8 +69,6 @@ void sys::ThreadPosix::start()
 }
 void *sys::ThreadPosix::__start(void *v)
 {
-
-
     STANDARD_START_CALL(ThreadPosix, v);
     /*
     sys::Runnable *runnable = 
@@ -87,20 +85,18 @@ void *sys::ThreadPosix::__start(void *v)
     return NULL;
 }
 
-bool sys::ThreadPosix::kill()
+void sys::ThreadPosix::kill()
 {
-    if ( pthread_kill(mNative, SIGKILL) != 0)
+    if (pthread_kill(mNative, SIGKILL) != 0)
     {
-        return false;
+        throw sys::SystemException("pthread_kill()");
     }
-    mIsRunning = false;
-    return true;
+    setIsRunning(false);
 }
-bool sys::ThreadPosix::join()
+void sys::ThreadPosix::join()
 {
-
-    return ( ::pthread_join(mNative, NULL) == 0);
-
+    if (::pthread_join(mNative, NULL) != 0)
+        throw sys::SystemException("pthread_join()");
 }
 void sys::ThreadPosix::yield()
 {
@@ -108,4 +104,3 @@ void sys::ThreadPosix::yield()
 }
 
 #endif
-
