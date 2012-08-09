@@ -33,7 +33,17 @@
 #include <iostream>
 #include <cstdlib>
 #include <cerrno>
+#include <limits>
 #include <import/except.h>
+
+// MSVC doesn't have strtoll or strtoull.
+#if defined(_MSC_VER)
+# define STRTOLL _strtoi64
+# define STRTOULL _strtoui64
+#else
+# define STRTOLL strtoll
+# define STRTOULL strtoull
+#endif
 
 namespace str
 {
@@ -94,14 +104,6 @@ template<> bool toType<bool> (const std::string& s);
 template<> std::string toType<std::string> (const std::string& s);
 
 /**
- *  Templated version of strtoll, strtoull, etc.
- */
-template<typename T> T strToT(const char* str, char** endptr, int base);
-
-template<> long long strToT<long long>(const char* str, char** endptr, int base);
-template<> unsigned long long strToT<unsigned long long>(const char* str, char** endptr, int base);
-
-/**
  *  Convert a string containing a number in any base to a numerical type.
  *
  *  @param s a string containing a number in base base
@@ -114,11 +116,25 @@ template<typename T> T toType(const std::string& s, int base)
     char* end;
     errno = 0;
     const char* str = s.c_str();
-    T result;
     
-    result = strToT<T>(str, &end, base);
+    T res;
+    bool overflow = false;
+    if (std::numeric_limits<T>::is_signed)
+    {
+        long long longRes = STRTOLL(str, &end, base);
+        if (longRes < std::numeric_limits<T>::min() || longRes > std::numeric_limits<T>::max())
+            overflow = true;
+        res = static_cast<T>(longRes);
+    }
+    else
+    {
+        unsigned long long longRes = STRTOULL(str, &end, base);
+        if (longRes < std::numeric_limits<T>::min() || longRes > std::numeric_limits<T>::max())
+            overflow = true;
+        res = static_cast<T>(longRes);
+    }
     
-    if (errno == ERANGE)
+    if (overflow || errno == ERANGE)
         throw except::BadCastException(except::Context(__FILE__, __LINE__,
             std::string(""), std::string(""),
             std::string("Overflow: '")
@@ -130,7 +146,7 @@ template<typename T> T toType(const std::string& s, int base)
             std::string("Conversion failed: '")
                 + s + std::string("' -> ") + typeid(T).name()));
     
-    return result;
+    return res;
 }
 
 /**

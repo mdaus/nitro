@@ -30,12 +30,14 @@ TEST_CASE(testConvert)
     TEST_ASSERT_EQ(str::toType<long long>("231", 5), (long long) 66);
     TEST_ASSERT_EQ(str::toType<unsigned long long>("0xFFFFFFFFFFFFFFFF", 16), (unsigned long long) 0xFFFFFFFFFFFFFFFF);
     TEST_ASSERT_EQ(str::toType<unsigned long long>("-10", 10), (unsigned long long) -10);
+    TEST_ASSERT_EQ(str::toType<short>("13", 4), (short) 7);
 }
 
 TEST_CASE(testBadConvert)
 {
     TEST_EXCEPTION(str::toType<long long>("Not a number", 10));
     TEST_EXCEPTION(str::toType<long long>("0xFFFFFFFFFFFFFFFF", 16));
+    TEST_EXCEPTION(str::toType<short>("0xFFFFF", 16));
 }
 
 int main(int argc, char* argv[])

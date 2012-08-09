@@ -26,7 +26,6 @@
 #include <string.h>
 #include <errno.h>
 #include "sys/TimeStamp.h"
-#include "sys/Conf.h"
 #include "sys/DateTime.h"
 #include "except/Exception.h"
 

@@ -26,6 +26,7 @@
 
 #include <string>
 #include "str/Format.h"
+#include "sys/Conf.h"
 
 /*!
  *  \file  TimeStamp.h

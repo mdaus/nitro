@@ -78,10 +78,6 @@
 
 
 #if defined(WIN32) || defined(_WIN32)
-#  ifndef WIN32_LEAN_AND_MEAN
-#      define WIN32_LEAN_AND_MEAN
-#  endif
-#  define NOMINMAX
 #  include <malloc.h>
 #  include <windows.h>
 #  include <process.h>
