@@ -28,8 +28,10 @@ TEST_CASE(testConvert)
     TEST_ASSERT_EQ(str::toType<long long>("0x3BC7", 16), (long long) 0x3BC7);
     TEST_ASSERT_EQ(str::toType<long long>("1101", 2), (long long) 13);
     TEST_ASSERT_EQ(str::toType<long long>("231", 5), (long long) 66);
-    TEST_ASSERT_EQ(str::toType<unsigned long long>("0xFFFFFFFFFFFFFFFF", 16), (unsigned long long) 0xFFFFFFFFFFFFFFFF);
-    TEST_ASSERT_EQ(str::toType<unsigned long long>("-10", 10), (unsigned long long) -10);
+    TEST_ASSERT_EQ(str::toType<unsigned long long>("0xFFFFFFFFFFFFFFFF", 16),
+                   (unsigned long long) 0xFFFFFFFFFFFFFFFF);
+    TEST_ASSERT_EQ(str::toType<unsigned long long>("-10", 10),
+                   (unsigned long long) -10);
     TEST_ASSERT_EQ(str::toType<short>("13", 4), (short) 7);
 }
 

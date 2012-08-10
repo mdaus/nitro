@@ -57,6 +57,24 @@ template<> bool str::toType<bool>(const std::string& s)
     return false;
 }
 
+long long str::strtoll(const char *str, char **endptr, int base)
+{
+#if defined(_MSC_VER)
+    return _strtoi64(str, endptr, base);
+#else
+    return ::strtoll(str, endptr, base);
+#endif
+}
+
+unsigned long long str::strtoull(const char *str, char **endptr, int base)
+{
+#if defined(_MSC_VER)
+    return _strtoui64(str, endptr, base);
+#else
+    return ::strtoull(str, endptr, base);
+#endif
+}
+
 template<> int str::getPrecision(const float& type)
 {
     return std::numeric_limits<float>::digits10 + 1;

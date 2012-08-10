@@ -36,15 +36,6 @@
 #include <limits>
 #include <import/except.h>
 
-// MSVC doesn't have strtoll or strtoull.
-#if defined(_MSC_VER)
-# define STRTOLL _strtoi64
-# define STRTOULL _strtoui64
-#else
-# define STRTOLL strtoll
-# define STRTOULL strtoull
-#endif
-
 namespace str
 {
 
@@ -121,16 +112,22 @@ template<typename T> T toType(const std::string& s, int base)
     bool overflow = false;
     if (std::numeric_limits<T>::is_signed)
     {
-        long long longRes = STRTOLL(str, &end, base);
-        if (longRes < std::numeric_limits<T>::min() || longRes > std::numeric_limits<T>::max())
+        const long long longRes = str::strtoll(str, &end, base);
+        if (longRes < std::numeric_limits<T>::min() ||
+            longRes > std::numeric_limits<T>::max())
+        {
             overflow = true;
+        }
         res = static_cast<T>(longRes);
     }
     else
     {
-        unsigned long long longRes = STRTOULL(str, &end, base);
-        if (longRes < std::numeric_limits<T>::min() || longRes > std::numeric_limits<T>::max())
+        const unsigned long long longRes = str::strtoull(str, &end, base);
+        if (longRes < std::numeric_limits<T>::min() ||
+            longRes > std::numeric_limits<T>::max())
+        {
             overflow = true;
+        }
         res = static_cast<T>(longRes);
     }
     
@@ -148,6 +145,15 @@ template<typename T> T toType(const std::string& s, int base)
     
     return res;
 }
+
+/**
+ *  strtoll wrapper for msvc compatibility.
+ */
+long long strtoll(const char *str, char **endptr, int base);
+/**
+ *  strtoull wrapper for msvc compatibility.
+ */
+unsigned long long strtoull(const char *str, char **endptr, int base);
 
 /**
  *  Determine the precision required for the data type.
