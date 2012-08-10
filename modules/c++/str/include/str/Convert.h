@@ -95,6 +95,15 @@ template<> bool toType<bool> (const std::string& s);
 template<> std::string toType<std::string> (const std::string& s);
 
 /**
+ *  strtoll wrapper for msvc compatibility.
+ */
+long long strtoll(const char *str, char **endptr, int base);
+/**
+ *  strtoull wrapper for msvc compatibility.
+ */
+unsigned long long strtoull(const char *str, char **endptr, int base);
+
+/**
  *  Convert a string containing a number in any base to a numerical type.
  *
  *  @param s a string containing a number in base base
@@ -145,15 +154,6 @@ template<typename T> T toType(const std::string& s, int base)
     
     return res;
 }
-
-/**
- *  strtoll wrapper for msvc compatibility.
- */
-long long strtoll(const char *str, char **endptr, int base);
-/**
- *  strtoull wrapper for msvc compatibility.
- */
-unsigned long long strtoull(const char *str, char **endptr, int base);
 
 /**
  *  Determine the precision required for the data type.
