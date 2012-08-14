@@ -776,8 +776,6 @@ def options(opt):
                    help='Enable 64bit builds')
     opt.add_option('--enable-32bit', action='store_true', dest='enable32',
                    help='Enable 32bit builds')
-    opt.add_option('--enable-doxygen', action='store_true', dest='doxygen',
-                   help='Enable running doxygen')
     opt.add_option('--with-cflags', action='store', nargs=1, dest='cflags',
                    help='Set non-standard CFLAGS', metavar='FLAGS')
     opt.add_option('--with-cxxflags', action='store', nargs=1, dest='cxxflags',
@@ -904,9 +902,6 @@ def configure(self):
         
     if not cxxCompiler or not ccCompiler:
         self.fatal('Unable to find C/C++ compiler')
-
-    if Options.options.doxygen:
-        self.find_program('doxygen', var='DOXYGEN')
     
     #Look for a ton of headers
     self.check_cc(header_name="inttypes.h", mandatory=False)
