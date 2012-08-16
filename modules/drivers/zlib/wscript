@@ -27,8 +27,8 @@ def configure(conf):
             makeZip = True
         elif zipHome:
             conf.msg('Setting zip home', zipHome)
-            conf.env.append_value('LIBPATH_ZIP', os.path.join(zipHome, 'lib'))
-            conf.env.append_value('CPPPATH_ZIP', os.path.join(zipHome, 'include'))
+            conf.env.append_value('STLIBPATH_ZIP', os.path.join(zipHome, 'lib'))
+            conf.env.append_value('INCLUDES_ZIP', os.path.join(zipHome, 'include'))
         else:
             if not conf.check(header_name='zlib.h', define_name='HAVE_ZLIB_H',
                               lib='z', uselib_store='ZIP'):

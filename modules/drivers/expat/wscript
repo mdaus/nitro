@@ -29,8 +29,8 @@ def configure(conf):
         
         if xmlHome and not makeXML:
             conf.msg('Setting xml home', xmlHome)
-            conf.env.append_value('LIBPATH_XML', os.path.join(xmlHome, 'lib'))
-            conf.env.append_value('CPPPATH_XML', os.path.join(xmlHome, 'include'))
+            conf.env.append_value('STLIBPATH_XML', os.path.join(xmlHome, 'lib'))
+            conf.env.append_value('INCLUDES_XML', os.path.join(xmlHome, 'include'))
         
         expatDefines = '-DUSE_EXPAT -DXML_STATIC'
         if not makeXML:

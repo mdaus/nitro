@@ -26,8 +26,8 @@ def configure(conf):
             makePCRE = True
         elif pcreHome:
             conf.msg('Setting pcre home', pcreHome)
-            conf.env.append_value('LIBPATH_PCRE', os.path.join(pcreHome, 'lib'))
-            conf.env.append_value('CPPPATH_PCRE', os.path.join(pcreHome, 'include'))
+            conf.env.append_value('STLIBPATH_PCRE', os.path.join(pcreHome, 'lib'))
+            conf.env.append_value('INCLUDES_PCRE', os.path.join(pcreHome, 'include'))
         else:
             if not conf.check_cxx(lib='pcre', mandatory=False,
                                   uselib_store='PCRE'):

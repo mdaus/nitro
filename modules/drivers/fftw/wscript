@@ -51,8 +51,8 @@ def configure(conf):
             makeFFT = False
             if fftHome:
                 conf.msg('Setting fft home', fftHome)
-                conf.env.append_value('LIBPATH_FFT', os.path.join(fftHome, 'lib'))
-                conf.env.append_value('CPPPATH_FFT', os.path.join(fftHome, 'include'))
+                conf.env.append_value('STLIBPATH_FFT', os.path.join(fftHome, 'lib'))
+                conf.env.append_value('INCLUDES_FFT', os.path.join(fftHome, 'include'))
             else:
                 #we must use/build the local one
                 makeFFT = True
@@ -90,8 +90,8 @@ def configure(conf):
         if not foundLocalFFT3:
             if fft3Home:
                 conf.msg('Setting fft3 home', fft3Home)
-                conf.env.append_value('LIBPATH_FFT3', os.path.join(fft3Home, 'lib'))
-                conf.env.append_value('CPPPATH_FFT3', os.path.join(fft3Home, 'include'))
+                conf.env.append_value('STLIBPATH_FFT3', os.path.join(fft3Home, 'lib'))
+                conf.env.append_value('INCLUDES_FFT3', os.path.join(fft3Home, 'include'))
                 conf.env.append_value('LIB_FFT3', 'fftw3f')
                 conf.env.append_unique('CXXDEFINES_FFT3', ['HAVE_FFTW3'])
                 conf.define('HAVE_FFTW3', True)

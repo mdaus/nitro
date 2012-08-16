@@ -22,16 +22,16 @@ def configure(conf):
         if sqlHome:
             conf.msg('Setting sql home', sqlHome)
             if sqlLayer == 'mysql':
-                conf.env.append_value('LIBPATH_SQL', os.path.join(sqlHome, 'lib/mysql'))
-                conf.env.append_value('CPPPATH_SQL', os.path.join(sqlHome, 'include/mysql'))
+                conf.env.append_value('STLIBPATH_SQL', os.path.join(sqlHome, 'lib/mysql'))
+                conf.env.append_value('INCLUDES_SQL', os.path.join(sqlHome, 'include/mysql'))
             else:
-                conf.env.append_value('LIBPATH_SQL', os.path.join(sqlHome, 'lib'))
-                conf.env.append_value('CPPPATH_SQL', os.path.join(sqlHome, 'include'))
+                conf.env.append_value('STLIBPATH_SQL', os.path.join(sqlHome, 'lib'))
+                conf.env.append_value('INCLUDES_SQL', os.path.join(sqlHome, 'include'))
         
         if sqlLayer == 'mysql':
             if not sqlHome:
-                conf.env.append_value('LIBPATH_SQL', os.path.join('/usr/lib', 'mysql'))
-                conf.env.append_value('CPPPATH_SQL', os.path.join('/usr/include', 'mysql'))
+                conf.env.append_value('STLIBPATH_SQL', os.path.join('/usr/lib', 'mysql'))
+                conf.env.append_value('INCLUDES_SQL', os.path.join('/usr/include', 'mysql'))
             conf.env.append_value('CXXFLAGS_SQL', '-DUSE_MYSQL')
             conf.env['LIB_SQL'] = ['mysqlclient_r']
         elif sqlLayer == 'psql':
