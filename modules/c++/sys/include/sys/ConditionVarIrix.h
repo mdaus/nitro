@@ -120,7 +120,7 @@ public:
     /*!
      *  Returns the native type.
      */
-    virtual std::vector<pid_t>& getNative();
+    std::vector<pid_t>& getNative();
     
     /*!
      *  Return the type name.  This function is essentially free,

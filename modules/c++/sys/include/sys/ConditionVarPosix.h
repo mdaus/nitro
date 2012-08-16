@@ -98,7 +98,7 @@ public:
     /*!
      *  Returns the native type.
      */
-    virtual pthread_cond_t& getNative();
+    pthread_cond_t& getNative();
     
     /*!
      *  Return the type name.  This function is essentially free,

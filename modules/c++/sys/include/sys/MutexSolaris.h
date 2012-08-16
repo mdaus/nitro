@@ -62,7 +62,7 @@ public:
     /*!
      *  Returns the native type.
      */
-    virtual mutex_t& getNative();
+    mutex_t& getNative();
     
     /*!
      *  Return the type name.  This function is essentially free,

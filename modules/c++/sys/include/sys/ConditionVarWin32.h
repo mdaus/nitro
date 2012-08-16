@@ -132,7 +132,7 @@ public:
     /*!
      *  Returns the native type.
      */
-    virtual ConditionVarDataWin32& getNative();
+    ConditionVarDataWin32& getNative();
     
     /*!
      *  Return the type name.  This function is essentially free,

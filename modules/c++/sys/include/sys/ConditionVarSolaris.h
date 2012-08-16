@@ -95,7 +95,7 @@ public:
     /*!
      *  Returns the native type.
      */
-    virtual cond_t& getNative();
+    cond_t& getNative();
     
     /*!
      *  Return the type name.  This function is essentially free,

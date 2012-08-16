@@ -119,7 +119,7 @@ public:
     /*!
      *  Returns the native type.
      */
-    virtual PRCondVar*& getNative();
+    PRCondVar*& getNative();
     
     /*!
      *  Return the type name.  This function is essentially free,

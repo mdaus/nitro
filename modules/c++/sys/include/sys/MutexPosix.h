@@ -61,7 +61,7 @@ public:
     /*!
      *  Returns the native type.
      */
-    virtual pthread_mutex_t& getNative();
+    pthread_mutex_t& getNative();
     
     /*!
      *  Return the type name.  This function is essentially free,

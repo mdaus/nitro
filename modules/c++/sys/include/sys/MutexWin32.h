@@ -50,7 +50,7 @@ public:
     /*!
      *  Returns the native type.
      */
-    virtual HANDLE& getNative();
+    HANDLE& getNative();
     
     /*!
      *  Return the type name.  This function is essentially free,

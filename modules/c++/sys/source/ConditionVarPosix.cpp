@@ -33,9 +33,9 @@ sys::ConditionVarPosix::ConditionVarPosix() :
         throw SystemException("ConditionVar initialization failed");
 }
 
-sys::ConditionVarPosix::ConditionVarPosix(sys::MutexPosix* theLock, bool isOwner)
+sys::ConditionVarPosix::ConditionVarPosix(sys::MutexPosix* theLock, bool isOwner) :
+    mMutex(theLock)
 {
-    mMutex = theLock;
     if (isOwner)
         mMutexOwned.reset(theLock);
     

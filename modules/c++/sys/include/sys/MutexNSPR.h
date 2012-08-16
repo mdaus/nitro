@@ -64,7 +64,7 @@ public:
     /*!
      *  Returns the native type.
      */
-    virtual PRLock*& getNative();
+    PRLock*& getNative();
     
 private:
     PRLock* mNative;

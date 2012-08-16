@@ -99,7 +99,7 @@ public:
     //! Not implemented
     virtual void kill()
     {
-        throw sys::SystemException("kill() no implemented in ThreadWin32");
+        throw sys::SystemException("kill() not implemented in ThreadWin32");
     }
     virtual void join();
     static void yield()
