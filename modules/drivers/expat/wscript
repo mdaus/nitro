@@ -1,4 +1,4 @@
-import os
+import os, sys
 from waflib import Options
 from waflib.TaskGen import feature, before, task_gen
 from build import untarFile
@@ -32,10 +32,10 @@ def configure(conf):
             conf.env.append_value('STLIBPATH_XML', os.path.join(xmlHome, 'lib'))
             conf.env.append_value('INCLUDES_XML', os.path.join(xmlHome, 'include'))
         
-        expatDefines = '-DUSE_EXPAT -DXML_STATIC'
+        expatDefines = 'USE_EXPAT XML_STATIC'
         if not makeXML:
             if xmlLayer == 'expat':
-                conf.env.append_value('CXXFLAGS_XML', expatDefines.split())
+                conf.env.append_value('DEFINES_XML', expatDefines.split())
                 if not xmlHome:
                     #look for it on the system
                     if not conf.check_cc(lib='expat', mandatory=False, uselib_store='XML') \
@@ -46,7 +46,7 @@ def configure(conf):
                     conf.env['LIB_XML'] = ['expat']
 
             elif xmlLayer == 'libxml':
-                conf.env.append_value('CXXFLAGS_XML', '-DUSE_LIBXML')
+                conf.env.append_value('DEFINES_XML', 'USE_LIBXML')
                 conf.env['LIB_XML'] = ['xml2']
                 if not xmlHome:
                     conf.check_cxx(lib='xml2', mandatory=True, uselib_store='XML')
@@ -54,14 +54,19 @@ def configure(conf):
                 conf.env.append_value('CPPPATH_XML', os.path.join(xmlHome, 'include/libxml2'))
 
             elif xmlLayer == 'xerces':
-                conf.env.append_value('CXXFLAGS_XML', '-DUSE_XERCES')
+                conf.env.append_value('DEFINES_XML', 'USE_XERCES')
+                conf.env.append_value('DEFINES_XML', 'XERCES_STATIC_LIBRARY')
                 conf.env['LIB_XML'] = ['xerces-c']
+                if sys.platform == 'win32':
+                    # Xerces also requires this standard Windows library for
+                    # Windows builds
+                    conf.env.append_value('LIB_XML', 'advapi32')
                 if not xmlHome:
                     conf.check_cxx(lib='xerces-c', mandatory=True, uselib_store='XML')
     
         if makeXML:
             conf.env['MAKE_XML'] = xmlLayer
-            conf.env.append_unique('CXXFLAGS_XML', expatDefines.split())
+            conf.env.append_unique('DEFINES_XML', expatDefines.split())
             conf.msg('Building local lib', xmlLayer)
             untarFile(path=conf.path, fname='expat-2.0.0.tar')
 
