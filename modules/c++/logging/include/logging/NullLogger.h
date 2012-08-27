@@ -27,6 +27,7 @@
 #ifndef __LOGGING_NULL_LOGGER_H__
 #define __LOGGING_NULL_LOGGER_H__
 
+#include "logging/Logger.h"
 #include "logging/Handler.h"
 
 namespace logging
@@ -67,7 +68,7 @@ protected:
 class NullLogger : public Logger
 {
 public:
-    NullLogger(std::string name = "") :
+    NullLogger(const std::string& name = "") :
         Logger(name)
     {
         addHandler(new NullHandler, true);
