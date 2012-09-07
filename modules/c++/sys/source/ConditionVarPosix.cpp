@@ -34,11 +34,15 @@ sys::ConditionVarPosix::ConditionVarPosix() :
 }
 
 sys::ConditionVarPosix::ConditionVarPosix(sys::MutexPosix* theLock, bool isOwner) :
+    mMutexOwned(),
     mMutex(theLock)
 {
+    if (!theLock)
+        throw SystemException("ConditionVar received NULL mutex");
+
     if (isOwner)
         mMutexOwned.reset(theLock);
-    
+
     if ( ::pthread_cond_init(&mNative, NULL) != 0)
         throw SystemException("ConditionVar initialization failed");
 }

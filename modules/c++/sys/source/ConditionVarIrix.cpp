@@ -35,10 +35,14 @@ sys::ConditionVarIrix::ConditionVarIrix() :
     dbg_ln("Creating a default condition variable");
 }
 
-sys::ConditionVarIrix::ConditionVarIrix(sys::MutexIrix *theLock, bool isOwner)
+sys::ConditionVarIrix::ConditionVarIrix(sys::MutexIrix *theLock, bool isOwner) :
+    mMutexOwned(),
+    mMutex(theLock)
 {
+    if (!theLock)
+        throw SystemException("ConditionVar received NULL mutex");
+
     dbg_ln("Creating a cv given a mutex");
-    mMutex = theLock;
     if (isOwner)
         mMutexOwned.reset(theLock);
 }

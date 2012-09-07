@@ -203,8 +203,12 @@ sys::ConditionVarWin32::ConditionVarWin32() :
 {}
 
 sys::ConditionVarWin32::ConditionVarWin32(sys::MutexWin32 *theLock, bool isOwner) :
+    mMutexOwned(),
     mMutex(theLock)
 {
+    if (!theLock)
+        throw SystemException("ConditionVar received NULL mutex");
+
     if (isOwner)
         mMutexOwned.reset(theLock);
 }

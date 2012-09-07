@@ -35,11 +35,15 @@ sys::ConditionVarSolaris::ConditionVarSolaris() :
 }
 
 sys::ConditionVarSolaris::ConditionVarSolaris(sys::MutexSolaris* theLock, bool isOwner) :
+    mMutexOwned(),
     mMutex(theLock)
 {
+    if (!theLock)
+        throw SystemException("ConditionVar received NULL mutex");
+
     if (isOwner)
         mMutexOwned.reset(theLock);
-    
+
     if ( ::cond_init(&mNative, NULL, NULL) != 0)
         throw sys::SystemException("ConditionVar initialization failed");
 }
