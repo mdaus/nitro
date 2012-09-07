@@ -107,10 +107,10 @@ public:
     }
     
 private:
-    cond_t mNative;
-    MutexSolaris *mMutex;
     // This is set if we own the mutex, to make sure it gets deleted.
     std::auto_ptr<MutexSolaris> mMutexOwned;
+    MutexSolaris *mMutex;
+    cond_t mNative;
 };
 
 }

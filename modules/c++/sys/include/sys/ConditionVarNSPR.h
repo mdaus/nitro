@@ -131,10 +131,10 @@ public:
     }
     
 private:
-    PRCondVar *mNative;
-    MutexNSPR *mMutex;
     // This is set if we own the mutex, to make sure it gets deleted.
     std::auto_ptr<MutexNSPR> mMutexOwned;
+    MutexNSPR *mMutex;
+    PRCondVar *mNative;
 };
 
 

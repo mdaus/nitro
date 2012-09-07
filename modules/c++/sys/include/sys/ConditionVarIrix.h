@@ -132,10 +132,10 @@ public:
     }
     
 private:
-    std::vector<pid_t> mNative;
-    MutexIrix *mMutex;
     // This is set if we own the mutex, to make sure it gets deleted.
     std::auto_ptr<MutexIrix> mMutexOwned;
+    MutexIrix *mMutex;
+    std::vector<pid_t> mNative;
 };
 
 }
