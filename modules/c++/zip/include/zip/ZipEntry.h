@@ -19,6 +19,12 @@ class ZipEntry
         COMP_STORED = 0, COMP_DEFLATED = 8
     };
 
+    sys::ubyte* mCompressedData;
+    sys::Size_T mCompressedSize;
+    sys::Size_T mUncompressedSize;
+    std::string mFileName;
+    std::string mFileComment;
+
     sys::Uint16_T mVersionMadeBy;
     sys::Uint16_T mVersionToExtract;
     sys::Uint16_T mGeneralPurposeBitFlag;
@@ -28,12 +34,6 @@ class ZipEntry
     sys::Uint32_T mCRC32;
     sys::Uint16_T mInternalAttrs;
     sys::Uint32_T mExternalAttrs;
-
-    sys::ubyte* mCompressedData;
-    sys::Size_T mCompressedSize;
-    sys::Size_T mUncompressedSize;
-    std::string mFileName;
-    std::string mFileComment;
 
     static void inflate(sys::ubyte* out, sys::Size_T outLen, sys::ubyte* in,
             sys::Size_T inLen);
