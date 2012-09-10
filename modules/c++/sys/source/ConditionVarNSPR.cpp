@@ -34,7 +34,6 @@ sys::ConditionVarNSPR::ConditionVarNSPR() :
 }
 
 sys::CondtionVarNSPR::ConditionVarNSPR(sys::MutexNSPR *theLock, bool isOwner) :
-    mMutexOwned(),
     mMutex(theLock)
 {
     if (!theLock)

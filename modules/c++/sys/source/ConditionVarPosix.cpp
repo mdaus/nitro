@@ -34,7 +34,6 @@ sys::ConditionVarPosix::ConditionVarPosix() :
 }
 
 sys::ConditionVarPosix::ConditionVarPosix(sys::MutexPosix* theLock, bool isOwner) :
-    mMutexOwned(),
     mMutex(theLock)
 {
     if (!theLock)

@@ -203,7 +203,6 @@ sys::ConditionVarWin32::ConditionVarWin32() :
 {}
 
 sys::ConditionVarWin32::ConditionVarWin32(sys::MutexWin32 *theLock, bool isOwner) :
-    mMutexOwned(),
     mMutex(theLock)
 {
     if (!theLock)

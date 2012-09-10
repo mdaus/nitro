@@ -35,7 +35,6 @@ sys::ConditionVarSolaris::ConditionVarSolaris() :
 }
 
 sys::ConditionVarSolaris::ConditionVarSolaris(sys::MutexSolaris* theLock, bool isOwner) :
-    mMutexOwned(),
     mMutex(theLock)
 {
     if (!theLock)

@@ -36,7 +36,6 @@ sys::ConditionVarIrix::ConditionVarIrix() :
 }
 
 sys::ConditionVarIrix::ConditionVarIrix(sys::MutexIrix *theLock, bool isOwner) :
-    mMutexOwned(),
     mMutex(theLock)
 {
     if (!theLock)
