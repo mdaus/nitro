@@ -767,8 +767,8 @@ def options(opt):
                    help='Target packages to build (common-separated list)')
     opt.add_option('--dist-source', action='store_true', dest='dist_source', default='False',
                    help='Distribute source into the installation area (for delivering source)')
-    opt.add_option('--enable-warnings', action='store_true', dest='warnings',
-                   help='Enable warnings')
+    opt.add_option('--disable-warnings', action='store_false', dest='warnings',
+                   default='True', help='Disable warnings')
     opt.add_option('--enable-debugging', action='store_true', dest='debugging',
                    help='Enable debugging')
     #TODO - get rid of enable64 - it's useless now
