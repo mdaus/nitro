@@ -25,6 +25,7 @@
 #define __SYS_DATE_TIME_H__
 
 #include <string>
+#include <time.h>
 
 namespace sys
 {
