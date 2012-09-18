@@ -220,15 +220,15 @@ public:
      *  \param vec Vector to dot with
      *  \return The magnitude
      */
-    _T dot(const Vector& vec) const
+    _T dot(const Vector& vec_) const
     {
         _T acc(0);
         size_t sz = mRaw.mRaw.size();
-        if (vec.size() != sz)
+        if (vec_.size() != sz)
             throw except::Exception(Ctxt("Dot product requires equal size vectors"));
         for (size_t i = 0; i < sz; ++i)
         {
-            acc += mRaw.mRaw[i] * mRaw.mRaw[i];
+            acc += vec_.mRaw[i] * mRaw.mRaw[i];
         }
         return acc;
     }
