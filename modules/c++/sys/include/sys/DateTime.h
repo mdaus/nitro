@@ -2,7 +2,7 @@
  * This file is part of sys-c++ 
  * =========================================================================
  * 
- * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
+ * (C) Copyright 2004 - 2012, General Dynamics - Advanced Information Systems
  *
  * sys-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -21,11 +21,10 @@
  */
 
 
-#ifndef __SYS_DATETIME_H__
-#define __SYS_DATETIME_H__
+#ifndef __SYS_DATE_TIME_H__
+#define __SYS_DATE_TIME_H__
 
 #include <string>
-#include <time.h>
 
 namespace sys
 {
@@ -45,53 +44,33 @@ protected:
     int mMinute;
     double mSecond;
     double mTimeInMillis;
-    int mDST;
-    
-    // Set members from the millis value
-    void fromMillis();
-    // Set the millis value from the members
-    void toMillis();
+
     // Turn a tm struct into a double
     double toMillis(tm t) const;
+
     /*! 
      * Set the time to right now.  
      * Uses time() or if HAVE_SYS_TIME_H is defined, 
      * gettimeofday() for usec precision.
      */
     void setNow();
-    // Provides the local time as a 'tm'
-    void getLocalTime(tm &localTime) const;
-    // Provides the GM time as a 'tm'
-    void getGMTime(tm &gmTime) const;
+
+    /**
+     * @brief Set members from the millis value.
+     */
+    virtual void fromMillis() = 0;
+
+    /**
+     * @brief Set the millis value from the members
+     */
+    virtual void toMillis() = 0;
+
+    // Provides the time as a 'tm'
+    virtual void getTime(tm &localTime) const = 0;
 
 public:
-    static const char DEFAULT_DATETIME_FORMAT[];
-    static const char FORMAT_ISO_8601[];
-
-    /*!
-     *  Construct as current date and time (localtime).
-     */
     DateTime();
-
-    ~DateTime(){}
-
-    /*!
-     *  Construct with time values.  Date will be today.
-     */
-    DateTime(int hour, int minute, double second);
-    /*!
-     *  Construct with date values.  Time will be 00:00:00.
-     */
-    DateTime(int year, int month, int day);
-    /*!
-     *  Construct with date and time values.
-     */
-    DateTime(int year, int month, int day, 
-             int hour, int minute, double second);
-    /*!
-     *  Construct with time in milliseconds.
-     */
-    DateTime(double timeInMillis);
+    virtual ~DateTime();
 
     //! Return month {1,12}
     int getMonth() const { return mMonth; }
@@ -107,19 +86,10 @@ public:
     int getMinute() const { return mMinute; }
     //! Return second {0,59}
     double getSecond() const { return mSecond; }
-    //! Return millis since 1 Jan 1970 localtime
+    //! Return millis since 1 Jan 1970
     double getTimeInMillis() const { return mTimeInMillis; }
-    //! Return millis since 1 Jan 1970 GMT
-    double getGMTimeInMillis() const;
     //! Return the current year
     int getYear() const { return mYear; }
-    //! Return the Timezone (in hours)
-    float getTimezoneOffset()
-    {
-        return (float)(getTimeInMillis() - getGMTimeInMillis()) / 3600000;
-    }
-    //! Return the Daylight Savings Time flag (true = on, false = off)
-    bool getDST() const { return mDST == 1; }
 
     // ! Given the {1,12} month return the alphabetic equivalent
     static std::string monthToString(int month);
@@ -138,13 +108,6 @@ public:
     // Acceptable input "Wednesday" or "Wed" would return 4
     static int dayOfWeekToValue(const std::string& dayOfWeek);
 
-    // ! Given seconds since the epoch, provides the local time
-    static
-    void getLocalTime(time_t numSecondsSinceEpoch, tm &localTime);
-    // ! Given seconds since the epoch, provides the GM time
-    static
-    void getGMTime(time_t numSecondsSinceEpoch, tm &gmTime);
-
     // Setters
     void setMonth(int month);
     void setDayOfMonth(int dayOfMonth);
@@ -153,8 +116,6 @@ public:
     void setSecond(double second);
     void setTimeInMillis(double time);
     void setYear(int year);
-    void setTimezoneOffset(float offsetInHours);
-    void setDST(bool isDST);
 
     /*!
      *  format the DateTime string
@@ -164,15 +125,50 @@ public:
      *  H = hour (hh)
      *  m = minute (mm)
      *  s = second (ss)
-     *
-     *  The default format looks like this:
-     *  %y%-M%-d_%H:%m:%s
-     *  2011-10-19_11:59:46
      */
-    std::string format(const std::string& formatStr = DEFAULT_DATETIME_FORMAT) const;
+    std::string format(const std::string& formatStr) const;
 
+    /**
+     * @name Logical Operators.
+     * @brief Logical comparison operators.
+     *
+     * @param rhs The object to compare against.
+     *
+     * @return true if comparison holds, false otherwise.
+     */
+    //@{
+    bool operator<(const DateTime& rhs) const
+    {
+        return (mTimeInMillis < rhs.mTimeInMillis);
+    }
+
+    bool operator<=(const DateTime& rhs) const
+    {
+        return (mTimeInMillis <= rhs.mTimeInMillis);
+    }
+
+    bool operator>(const DateTime& rhs) const
+    {
+        return (mTimeInMillis > rhs.mTimeInMillis);
+    }
+
+    bool operator>=(const DateTime& rhs) const
+    {
+        return (mTimeInMillis >= rhs.mTimeInMillis);
+    }
+
+    bool operator==(const DateTime& rhs) const
+    {
+        return (mTimeInMillis == rhs.mTimeInMillis);
+    }
+
+    bool operator!=(const DateTime& rhs) const
+    {
+        return !operator==(rhs);
+    }
+    //@}
 };
 
 }
 
-#endif
+#endif//__SYS_DATE_TIME_H__

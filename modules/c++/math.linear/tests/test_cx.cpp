@@ -65,7 +65,7 @@ int main()
 
     // PA = LU
     const unsigned int seed =
-        static_cast<unsigned int>(sys::DateTime().getTimeInMillis());
+        static_cast<unsigned int>(sys::LocalDateTime().getTimeInMillis());
     ::srand(seed);
     A(0, 0) = _Cf((float)rand()/RAND_MAX, (float)rand()/RAND_MAX);
     A(0, 1) = _Cf((float)rand()/RAND_MAX, (float)rand()/RAND_MAX);

@@ -33,7 +33,7 @@ sys::RealTimeStopWatch::~RealTimeStopWatch()
 
 double sys::RealTimeStopWatch::start()
 {
-    sys::DateTime now;
+    sys::LocalDateTime now;
     double nowInMillis = now.getTimeInMillis();
     
     // If we are in a paused state
@@ -52,7 +52,7 @@ double sys::RealTimeStopWatch::start()
 
 double sys::RealTimeStopWatch::stop()
 {
-    sys::DateTime now;
+    sys::LocalDateTime now;
     double nowInMillis = now.getTimeInMillis();
     // If in a paused state, accumulate paused time
     if(mPaused)
@@ -77,7 +77,7 @@ double sys::RealTimeStopWatch::pause()
     // pause start time to be now
     if(!mPaused)
     {
-	sys::DateTime now;
+	sys::LocalDateTime now;
 	mPauseStartTime = now.getTimeInMillis();
 	mPaused = true;
     }

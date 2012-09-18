@@ -24,7 +24,7 @@
 #ifndef __SYS_STOPWATCH_H__
 #define __SYS_STOPWATCH_H__
 
-#include "sys/DateTime.h"
+#include "sys/LocalDateTime.h"
 
 namespace sys
 {

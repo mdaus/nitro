@@ -26,7 +26,8 @@
 #include <string.h>
 #include <errno.h>
 #include "sys/TimeStamp.h"
-#include "sys/DateTime.h"
+#include "sys/LocalDateTime.h"
+#include "sys/UTCDateTime.h"
 #include "except/Exception.h"
 
 std::string sys::TimeStamp::local()
@@ -42,7 +43,7 @@ std::string sys::TimeStamp::local()
 
     // Convert it to local time
     tm localTime;
-    sys::DateTime::getLocalTime(numSecondsSinceEpoch, localTime);
+    sys::LocalDateTime::getTime(numSecondsSinceEpoch, localTime);
 
     // Format it
     char timeStamp[MAX_TIME_STAMP];
@@ -63,7 +64,7 @@ std::string sys::TimeStamp::gmt()
 
     // Convert it to GMT
     tm gmTime;
-    sys::DateTime::getGMTime(numSecondsSinceEpoch, gmTime);
+    sys::UTCDateTime::getTime(numSecondsSinceEpoch, gmTime);
 
     // Format it
     char timeStamp[MAX_TIME_STAMP];

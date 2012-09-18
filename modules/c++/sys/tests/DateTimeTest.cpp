@@ -24,6 +24,8 @@
 #include <fstream>
 #include <iomanip>
 #include "sys/StopWatch.h"
+#include "sys/LocalDateTime.h"
+#include "sys/UTCDateTime.h"
 
 using namespace sys;
 
@@ -31,13 +33,22 @@ int main(int argc, char **argv)
 {
     try
     {
-        sys::DateTime now;
+        sys::LocalDateTime now;
         std::cout << "Today is: " << now.getMonth() << "/"
                 << now.getDayOfMonth() << "/" << now.getYear() << std::endl;
-        std::cout << "The Time is: " << now.getHour() << ":" << now.getMinute()
+        std::cout << "Time is: " << now.getHour() << ":" << now.getMinute()
                 << ":" << std::setprecision(50) << now.getSecond() << std::endl;
         if (now.getDST())
             std::cout << "Daylight Savings Time is in effect" << std::endl;
+        std::cout << "formatted: " << now.format() << std::endl;
+
+        sys::UTCDateTime gmnow;
+        std::cout << "Today (UTC) is: " << gmnow.getMonth() << "/"
+                << gmnow.getDayOfMonth() << "/" << gmnow.getYear() << std::endl;
+        std::cout << "Time (UTC) is: " << gmnow.getHour() << ":"
+            << gmnow.getMinute() << ":" << std::setprecision(50)
+            << gmnow.getSecond() << std::endl;
+        std::cout << "formatted: " << gmnow.format() << std::endl;
 
         sys::RealTimeStopWatch sw;
         sys::CPUStopWatch csw;
