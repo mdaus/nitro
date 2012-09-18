@@ -112,7 +112,6 @@ void sys::UTCDateTime::toMillis()
     {
         mTimeInMillis = 0.0;
         mDayOfYear = mDayOfWeek = 0;
-        printf("***** NOT YET ******\n");
         return;
     }
 
