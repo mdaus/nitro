@@ -261,10 +261,10 @@ std::string sys::DateTime::format(const std::string& formatStr) const
 
     tm localTime;
     getTime(localTime);
-    if (!strftime(expanded.data(), maxSize, formatStr.c_str(), &localTime))
+    if (!strftime(&expanded.at(0), maxSize, formatStr.c_str(), &localTime))
         throw except::InvalidFormatException(
             "The format string was unable to be expanded");
 
-    return std::string(expanded.data());
+    return std::string(&expanded.at(0));
 }
 
