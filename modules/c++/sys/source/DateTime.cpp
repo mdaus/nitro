@@ -81,7 +81,7 @@ void sys::DateTime::setNow()
     // We could add an additional flag here if the user
     // does not need millisecond accuracy
     SYSTEMTIME now;
-    GetUTCTime(&now);
+    GetLocalTime(&now);
     mTimeInMillis = (double)time(NULL) * 1000 + now.wMilliseconds;
 #else
     mTimeInMillis = (double)time(NULL) * 1000;
