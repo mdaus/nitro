@@ -26,6 +26,36 @@
 #include "str/Manip.h"
 #include <vector>
 
+#if defined(HAVE_SYS_TIME_H)
+#include <sys/time.h>
+#elif defined(_WIN32)
+#include <windows.h>
+#endif
+
+void sys::DateTime::fromMillis()
+{
+    tm t;
+    getTime(t);
+    fromMillis(t);
+}
+
+
+void sys::DateTime::fromMillis(const tm& t)
+{
+    // this is year since 1900 so need to add that
+    mYear = t.tm_year + 1900;
+    // 0-based so add 1
+    mMonth = t.tm_mon + 1;
+    mDayOfMonth = t.tm_mday;
+    mDayOfWeek = t.tm_wday + 1;
+    mDayOfYear = t.tm_yday + 1;
+    mHour = t.tm_hour;
+    mMinute = t.tm_min;
+
+    const size_t timeInSeconds = (mTimeInMillis / 1000);
+    const double timediff = ((double)mTimeInMillis / 1000.0) - timeInSeconds;
+    mSecond = t.tm_sec + timediff;
+}
 
 double sys::DateTime::toMillis(tm t) const
 {

@@ -31,25 +31,11 @@
 
 const char sys::LocalDateTime::DEFAULT_DATETIME_FORMAT[] = "%Y-%m-%d_%H:%M:%S";
 
-void sys::LocalDateTime::fromMillis()
+
+void sys::LocalDateTime::fromMillis(const tm& t)
 {
-    tm t;
-    getTime(t);
-
-    // this is year since 1900 so need to add that
-    mYear = t.tm_year + 1900;
-    // 0-based so add 1
-    mMonth = t.tm_mon + 1;
-    mDayOfMonth = t.tm_mday;
-    mDayOfWeek = t.tm_wday + 1;
-    mDayOfYear = t.tm_yday + 1;
-    mHour = t.tm_hour;
-    mMinute = t.tm_min;
+    DateTime::fromMillis(t);
     mDST = t.tm_isdst;
-
-    const size_t timeInSeconds = (mTimeInMillis / 1000);
-    const double timediff = (mTimeInMillis / 1000) - timeInSeconds;
-    mSecond = t.tm_sec + timediff;
 }
 
 void sys::LocalDateTime::toMillis()
@@ -68,7 +54,7 @@ void sys::LocalDateTime::toMillis()
     mTimeInMillis = DateTime::toMillis(t);
 }
 
-void sys::LocalDateTime::getTime(tm &localTime) const
+void sys::LocalDateTime::getTime(tm& localTime) const
 {
     getTime(static_cast<time_t>(mTimeInMillis / 1000), localTime);
 }
@@ -100,7 +86,7 @@ sys::LocalDateTime::LocalDateTime(int year, int month, int day) :
     mDayOfMonth = day;
 
     toMillis();
-    fromMillis();
+    DateTime::fromMillis();
 }
 
 sys::LocalDateTime::LocalDateTime(int year, int month, int day,
@@ -115,14 +101,14 @@ sys::LocalDateTime::LocalDateTime(int year, int month, int day,
     mSecond = second;
 
     toMillis();
-    fromMillis();
+    DateTime::fromMillis();
 }
 
 sys::LocalDateTime::LocalDateTime(double timeInMillis) :
     mDST(-1) // Tell mktime() we're not sure
 {
     mTimeInMillis = timeInMillis;
-    fromMillis();
+    DateTime::fromMillis();
 }
 
 void sys::LocalDateTime::setDST(bool isDST)
@@ -133,7 +119,7 @@ void sys::LocalDateTime::setDST(bool isDST)
         mDST = 0;
 }
 
-void sys::LocalDateTime::getTime(time_t numSecondsSinceEpoch, tm &localTime)
+void sys::LocalDateTime::getTime(time_t numSecondsSinceEpoch, tm& localTime)
 {
     // Would like to use the reentrant version.  If we don't have one, cross
     // our fingers and hope the regular function actually is reentrant

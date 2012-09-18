@@ -55,18 +55,17 @@ protected:
      */
     void setNow();
 
-    /**
-     * @brief Set members from the millis value.
-     */
-    virtual void fromMillis() = 0;
+    //! @brief Set members from the millis value.
+    void fromMillis();
 
-    /**
-     * @brief Set the millis value from the members
-     */
+    //! @brief Set members from the tm struct value.
+    virtual void fromMillis(const tm& t);
+
+    //! @brief Set the millis value from the members
     virtual void toMillis() = 0;
 
-    // Provides the time as a 'tm'
-    virtual void getTime(tm &localTime) const = 0;
+    //! @brief Provides the time as a 'tm'
+    virtual void getTime(tm& localTime) const = 0;
 
 public:
     DateTime();

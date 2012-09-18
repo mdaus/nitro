@@ -34,19 +34,13 @@ namespace sys
 class UTCDateTime : public DateTime
 {
 protected:
-
-    /**
-     * @brief Set members from the millis value.
-     */
-    virtual void fromMillis();
-
     /**
      * @brief Set the millis value from the members
      */
     virtual void toMillis();
 
     // Provides the time as a 'tm'
-    virtual void getTime(tm &gmTime) const;
+    virtual void getTime(tm& gmTime) const;
 
 public:
     static const char DEFAULT_DATETIME_FORMAT[];
@@ -76,7 +70,7 @@ public:
 
 
     // ! Given seconds since the epoch, provides the UTC time
-    static void getTime(time_t numSecondsSinceEpoch, tm &gmTime);
+    static void getTime(time_t numSecondsSinceEpoch, tm& gmTime);
 
     /*!
      *  The default formatting looks like this:

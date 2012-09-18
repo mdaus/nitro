@@ -81,26 +81,6 @@ int getNumFullDaysInYearSoFar(int year, int month, int dayOfMonth)
 const char sys::UTCDateTime::DEFAULT_DATETIME_FORMAT[] = "%Y-%m-%dT%H:%M:%SZ";
 
 
-void sys::UTCDateTime::fromMillis()
-{
-    tm t;
-    getTime(t);
-
-    // this is year since 1900 so need to add that
-    mYear = t.tm_year + 1900;
-    // 0-based so add 1
-    mMonth = t.tm_mon + 1;
-    mDayOfMonth = t.tm_mday;
-    mDayOfWeek = t.tm_wday + 1;
-    mDayOfYear = t.tm_yday + 1;
-    mHour = t.tm_hour;
-    mMinute = t.tm_min;
-
-    const size_t timeInSeconds = (mTimeInMillis / 1000);
-    const double timediff = ((double)mTimeInMillis / 1000.0) - timeInSeconds;
-    mSecond = t.tm_sec + timediff;
-}
-
 void sys::UTCDateTime::toMillis()
 {
     if (mSecond < 0.0 || mSecond >= 60.0 ||
@@ -150,7 +130,7 @@ void sys::UTCDateTime::toMillis()
 
 
 
-void sys::UTCDateTime::getTime(tm &gmTime) const
+void sys::UTCDateTime::getTime(tm& gmTime) const
 {
     getTime(static_cast<time_t>(mTimeInMillis / 1000), gmTime);
 }
@@ -208,7 +188,7 @@ sys::UTCDateTime::UTCDateTime(double timeInMillis)
 }
 
 
-void sys::UTCDateTime::getTime(time_t numSecondsSinceEpoch, tm &gmTime)
+void sys::UTCDateTime::getTime(time_t numSecondsSinceEpoch, tm& gmTime)
 {
     // Would like to use the reentrant version.  If we don't have one, cross
     // our fingers and hope the regular function actually is reentrant

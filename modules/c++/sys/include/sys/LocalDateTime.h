@@ -37,10 +37,8 @@ class LocalDateTime : public DateTime
 protected:
     int mDST;
 
-    /**
-     * @brief Set members from the millis value.
-     */
-    virtual void fromMillis();
+    //! @brief Set members from the tm struct value.
+    virtual void fromMillis(const tm& t);
 
     /**
      * @brief Set the millis value from the members
@@ -48,7 +46,7 @@ protected:
     virtual void toMillis();
 
     // Provides the time as a 'tm'
-    virtual void getTime(tm &localTime) const;
+    virtual void getTime(tm& localTime) const;
 
 public:
     static const char DEFAULT_DATETIME_FORMAT[];
@@ -82,7 +80,7 @@ public:
     void setDST(bool isDST);
 
     // ! Given seconds since the epoch, provides the local time
-    static void getTime(time_t numSecondsSinceEpoch, tm &localTime);
+    static void getTime(time_t numSecondsSinceEpoch, tm& localTime);
 
     /*!
      *  The default formatting looks like this:
