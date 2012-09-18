@@ -96,6 +96,25 @@ public:
     _T operator () (double atX, double atY) const;
     _T integrate(double xStart, double xEnd, double yStart, double yEnd) const;
 
+    //! Must check the size of the OneD coming in because
+    //  the dimensions of the TwoD is rigid, and all OneD
+    //  polys must be of the same size
+    void set(size_t i, const OneD<_T>& p)
+    {
+        if (i > orderX())
+            throw except::Exception(
+                Ctxt("Index [" + str::toString<size_t>(i) + 
+                "] is out of bounds for orderX [" + 
+                str::toString<size_t>(orderX()) + "]"));
+        else if (p.order() != orderY())
+            throw except::Exception(
+                Ctxt("OneD poly [" + str::toString<size_t>(p.order()) + 
+                "] is of the incorrect size for orderY [" + 
+                str::toString<size_t>(orderY()) + "]"));
+        else
+            mCoef[i] = p;
+    }
+
     /*!
      *  Transposes the coefficients so that X is Y and Y is X
      *
