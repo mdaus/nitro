@@ -228,7 +228,7 @@ public:
             throw except::Exception(Ctxt("Dot product requires equal size vectors"));
         for (size_t i = 0; i < sz; ++i)
         {
-            acc += vec_.mRaw[i] * mRaw.mRaw[i];
+            acc += vec_[i] * mRaw.mRaw[i];
         }
         return acc;
     }
