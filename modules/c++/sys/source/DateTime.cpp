@@ -258,13 +258,14 @@ std::string sys::DateTime::format(const std::string& formatStr) const
     // which is an expansion of 22 characters
     size_t maxSize = formatStr.length() * 22 + 1;
     std::vector<char> expanded(maxSize);
+    char* str = &expanded[0];
 
     tm localTime;
     getTime(localTime);
-    if (!strftime(&expanded.at(0), maxSize, formatStr.c_str(), &localTime))
+    if (!strftime(str, maxSize, formatStr.c_str(), &localTime))
         throw except::InvalidFormatException(
             "The format string was unable to be expanded");
 
-    return std::string(&expanded.at(0));
+    return std::string(str);
 }
 
