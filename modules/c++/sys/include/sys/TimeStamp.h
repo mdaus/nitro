@@ -67,7 +67,7 @@ public:
     std::string local() const
     {
         sys::LocalDateTime dt;
-        return dt.format(std::string(getFormat()));
+        return dt.format(getFormat());
     }
 
     /*!
@@ -77,7 +77,7 @@ public:
     std::string gmt() const
     {
         sys::UTCDateTime dt;
-        return dt.format(std::string(getFormat()));
+        return dt.format(getFormat());
     }
 
 private:
