@@ -54,9 +54,28 @@ void sys::LocalDateTime::toMillis()
     mTimeInMillis = DateTime::toMillis(t);
 }
 
-void sys::LocalDateTime::getTime(tm& localTime) const
+void sys::LocalDateTime::getTime(time_t numSecondsSinceEpoch, tm& t) const
 {
-    getTime(static_cast<time_t>(mTimeInMillis / 1000), localTime);
+    // Would like to use the reentrant version.  If we don't have one, cross
+    // our fingers and hope the regular function actually is reentrant
+    // (supposedly this is the case on Windows).
+#ifdef HAVE_LOCALTIME_R
+    if (::localtime_r(&numSecondsSinceEpoch, &t) == NULL)
+    {
+        int const errnum = errno;
+        throw except::Exception(Ctxt("localtime_r() failed (" +
+            std::string(::strerror(errnum)) + ")"));
+    }
+#else
+    tm const * const localTimePtr = ::localtime(&numSecondsSinceEpoch);
+    if (localTimePtr == NULL)
+    {
+        int const errnum = errno;
+        throw except::Exception(Ctxt("localtime failed (" +
+            std::string(::strerror(errnum)) + ")"));
+    }
+    t = *localTimePtr;
+#endif
 }
 
 sys::LocalDateTime::LocalDateTime() :
@@ -117,30 +136,6 @@ void sys::LocalDateTime::setDST(bool isDST)
         mDST = 1;
     else
         mDST = 0;
-}
-
-void sys::LocalDateTime::getTime(time_t numSecondsSinceEpoch, tm& localTime)
-{
-    // Would like to use the reentrant version.  If we don't have one, cross
-    // our fingers and hope the regular function actually is reentrant
-    // (supposedly this is the case on Windows).
-#ifdef HAVE_LOCALTIME_R
-    if (::localtime_r(&numSecondsSinceEpoch, &localTime) == NULL)
-    {
-        int const errnum = errno;
-        throw except::Exception(Ctxt("localtime_r() failed (" +
-            std::string(::strerror(errnum)) + ")"));
-    }
-#else
-    tm const * const localTimePtr = ::localtime(&numSecondsSinceEpoch);
-    if (localTimePtr == NULL)
-    {
-        int const errnum = errno;
-        throw except::Exception(Ctxt("localtime failed (" +
-            std::string(::strerror(errnum)) + ")"));
-    }
-    localTime = *localTimePtr;
-#endif
 }
 
 std::string sys::LocalDateTime::format() const

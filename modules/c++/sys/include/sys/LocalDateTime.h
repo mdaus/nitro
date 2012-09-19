@@ -45,8 +45,8 @@ protected:
      */
     virtual void toMillis();
 
-    // Provides the time as a 'tm'
-    virtual void getTime(tm& localTime) const;
+    // ! Given seconds since the epoch, provides the local time
+    virtual void getTime(time_t numSecondsSinceEpoch, tm& t) const;
 
 public:
     static const char DEFAULT_DATETIME_FORMAT[];
@@ -78,9 +78,6 @@ public:
 
     //! Set the Daylight Savings Time flag (true = on, false = off)
     void setDST(bool isDST);
-
-    // ! Given seconds since the epoch, provides the local time
-    static void getTime(time_t numSecondsSinceEpoch, tm& localTime);
 
     // unhide in the base class format method
     using DateTime::format;

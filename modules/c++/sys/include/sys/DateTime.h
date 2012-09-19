@@ -66,7 +66,10 @@ protected:
     virtual void toMillis() = 0;
 
     //! @brief Provides the time as a 'tm'
-    virtual void getTime(tm& localTime) const = 0;
+    void getTime(tm& t) const;
+
+    //! @brief Given seconds since the epoch, provides the time
+    virtual void getTime(time_t numSecondsSinceEpoch, tm& t) const = 0;
 
 public:
     DateTime();

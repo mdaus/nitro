@@ -128,11 +128,28 @@ void sys::UTCDateTime::toMillis()
     mDayOfWeek = (numDaysSinceEpoch + 5) % 7;
 }
 
-
-
-void sys::UTCDateTime::getTime(tm& gmTime) const
+void sys::UTCDateTime::getTime(time_t numSecondsSinceEpoch, tm& t) const
 {
-    getTime(static_cast<time_t>(mTimeInMillis / 1000), gmTime);
+    // Would like to use the reentrant version.  If we don't have one, cross
+    // our fingers and hope the regular function actually is reentrant
+    // (supposedly this is the case on Windows).
+#ifdef HAVE_GMTIME_R
+    if (::gmtime_r(&numSecondsSinceEpoch, &t) == NULL)
+    {
+        int const errnum = errno;
+        throw except::Exception(Ctxt("gmtime_r() failed (" +
+            std::string(::strerror(errnum)) + ")"));
+    }
+#else
+    tm const * const gmTimePtr = ::gmtime(&numSecondsSinceEpoch);
+    if (gmTimePtr == NULL)
+    {
+        int const errnum = errno;
+        throw except::Exception(Ctxt("gmtime failed (" +
+            std::string(::strerror(errnum)) + ")"));
+    }
+    t = *gmTimePtr;
+#endif
 }
 
 sys::UTCDateTime::UTCDateTime()
@@ -185,31 +202,6 @@ sys::UTCDateTime::UTCDateTime(double timeInMillis)
     mTimeInMillis = timeInMillis;
 
     fromMillis();
-}
-
-
-void sys::UTCDateTime::getTime(time_t numSecondsSinceEpoch, tm& gmTime)
-{
-    // Would like to use the reentrant version.  If we don't have one, cross
-    // our fingers and hope the regular function actually is reentrant
-    // (supposedly this is the case on Windows).
-#ifdef HAVE_GMTIME_R
-    if (::gmtime_r(&numSecondsSinceEpoch, &gmTime) == NULL)
-    {
-        int const errnum = errno;
-        throw except::Exception(Ctxt("gmtime_r() failed (" +
-            std::string(::strerror(errnum)) + ")"));
-    }
-#else
-    tm const * const gmTimePtr = ::gmtime(&numSecondsSinceEpoch);
-    if (gmTimePtr == NULL)
-    {
-        int const errnum = errno;
-        throw except::Exception(Ctxt("gmtime failed (" +
-            std::string(::strerror(errnum)) + ")"));
-    }
-    gmTime = *gmTimePtr;
-#endif
 }
 
 std::string sys::UTCDateTime::format() const

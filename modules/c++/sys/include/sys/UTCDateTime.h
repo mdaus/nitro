@@ -39,8 +39,8 @@ protected:
      */
     virtual void toMillis();
 
-    // Provides the time as a 'tm'
-    virtual void getTime(tm& gmTime) const;
+    //! Given seconds since the epoch, provides the UTC time
+    virtual void getTime(time_t numSecondsSinceEpoch, tm& t) const;
 
 public:
     static const char DEFAULT_DATETIME_FORMAT[];
@@ -67,9 +67,6 @@ public:
      *  Construct with time in milliseconds.
      */
     UTCDateTime(double timeInMillis);
-
-    // ! Given seconds since the epoch, provides the UTC time
-    static void getTime(time_t numSecondsSinceEpoch, tm& gmTime);
 
     // unhide in the base class format method
     using DateTime::format;

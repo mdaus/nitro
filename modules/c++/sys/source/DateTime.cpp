@@ -39,7 +39,6 @@ void sys::DateTime::fromMillis()
     fromMillis(t);
 }
 
-
 void sys::DateTime::fromMillis(const tm& t)
 {
     // this is year since 1900 so need to add that
@@ -87,6 +86,11 @@ void sys::DateTime::setNow()
     mTimeInMillis = (double)time(NULL) * 1000;
 #endif
     fromMillis();
+}
+
+void sys::DateTime::getTime(tm& t) const
+{
+    getTime(static_cast<time_t>(mTimeInMillis / 1000), t);
 }
 
 sys::DateTime::DateTime() :
