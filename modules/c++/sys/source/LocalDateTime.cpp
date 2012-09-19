@@ -145,6 +145,6 @@ void sys::LocalDateTime::getTime(time_t numSecondsSinceEpoch, tm& localTime)
 
 std::string sys::LocalDateTime::format() const
 {
-    return DateTime::format(DEFAULT_DATETIME_FORMAT);
+    return format(DEFAULT_DATETIME_FORMAT);
 }
 

@@ -214,6 +214,6 @@ void sys::UTCDateTime::getTime(time_t numSecondsSinceEpoch, tm& gmTime)
 
 std::string sys::UTCDateTime::format() const
 {
-    return DateTime::format(DEFAULT_DATETIME_FORMAT);
+    return format(DEFAULT_DATETIME_FORMAT);
 }
 

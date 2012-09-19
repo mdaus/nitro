@@ -27,6 +27,8 @@
 #include <string>
 #include "str/Format.h"
 #include "sys/Conf.h"
+#include "sys/LocalDateTime.h"
+#include "sys/UTCDateTime.h"
 
 /*!
  *  \file  TimeStamp.h
@@ -62,19 +64,36 @@ public:
      *  Produces a local-time string timestamp
      *  \return local-time
      */
-    std::string local();
+    std::string local() const
+    {
+        sys::LocalDateTime dt;
+        return dt.format(std::string(getFormat()));
+    }
 
     /*!
      *  Produces a gmt string timestamp
      *  \return gmt
      */
-    std::string gmt();
+    std::string gmt() const
+    {
+        sys::UTCDateTime dt;
+        return dt.format(std::string(getFormat()));
+    }
+
 private:
     /*!
      *  Sets up string in desired format
      *  \return The string format for printing
      */
-    const char* getFormat();
+    const char* getFormat() const
+    {
+        if (m24HourTime)
+        {
+            return "%m/%d/%Y, %H:%M:%S";
+        }
+        return "%m/%d/%Y, %I:%M:%S%p";
+    }
+
     //!  Military time???
     bool m24HourTime;
 };

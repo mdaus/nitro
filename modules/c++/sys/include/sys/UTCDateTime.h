@@ -68,9 +68,11 @@ public:
      */
     UTCDateTime(double timeInMillis);
 
-
     // ! Given seconds since the epoch, provides the UTC time
     static void getTime(time_t numSecondsSinceEpoch, tm& gmTime);
+
+    // unhide in the base class format method
+    using DateTime::format;
 
     /*!
      *  The default formatting looks like this:

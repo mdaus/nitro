@@ -82,6 +82,9 @@ public:
     // ! Given seconds since the epoch, provides the local time
     static void getTime(time_t numSecondsSinceEpoch, tm& localTime);
 
+    // unhide in the base class format method
+    using DateTime::format;
+
     /*!
      *  The default formatting looks like this:
      *  %y%-M%-d_%H:%m:%s
