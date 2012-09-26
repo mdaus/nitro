@@ -40,6 +40,7 @@ namespace str
 {
 
 template<typename T> int getPrecision(const T& type);
+template<typename T> int getPrecision(const std::complex<T>& type);
 
 template<typename T> std::string toString(const T& value)
 {
@@ -49,23 +50,9 @@ template<typename T> std::string toString(const T& value)
     return buf.str();
 }
 
-template<typename T> std::string toString(const std::complex<T>& value)
-{
-    std::ostringstream buf;
-
-    buf.precision(str::getPrecision(value.real()));
-    buf << value;
-    return buf.str();
-}
-
 template<typename T> std::string toString(const T& real, const T& imag)
 {
-    std::complex<T> cpx(real, imag);
-    std::ostringstream buf;
-
-    buf.precision(str::getPrecision(real));
-    buf << cpx;
-    return buf.str();
+    return toString(std::complex<T>(real, imag));
 }
 
 template<typename T> T toType(const std::string& s)
@@ -165,6 +152,10 @@ template<typename T> T toType(const std::string& s, int base)
 template<typename T> int getPrecision(const T& type)
 {
     return 0;
+}
+template<typename T> int getPrecision(const std::complex<T>& type)
+{
+    return getPrecision(type.real());
 }
 
 template<> int getPrecision(const float& type);
