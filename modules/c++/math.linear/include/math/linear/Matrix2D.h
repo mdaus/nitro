@@ -182,6 +182,7 @@ public:
         mM = 1;
         mN = 1;
         mRaw.resize(1, sv);
+        mRaw[0] = sv;
         return *this;
     }
 
@@ -293,11 +294,11 @@ public:
      *  \param i The row index
      *  \param vec The row vector to copy from
      */
-    inline void row(size_t i, const _T* vec)
+    inline void row(size_t i, const _T* vec_)
     {
         for (size_t j = 0; j < mN; j++)
         {
-            mRaw[i * mN + j] = vec[j];
+            mRaw[i * mN + j] = vec_[j];
         }
     }
     /*!
@@ -313,9 +314,9 @@ public:
      *  \param i The row index
      *  \param vec The row vector to copy from
      */
-    inline void row(size_t i, const std::vector<_T>& vec)
+    inline void row(size_t i, const std::vector<_T>& vec_)
     {
-        row(i, &vec[0]);
+        row(i, &vec_[0]);
     }
 
     /*!
@@ -350,11 +351,11 @@ public:
      *  \param j The column index
      *  \param vec The vector to copy from
      */
-    void col(size_t j, const _T* vec)
+    void col(size_t j, const _T* vec_)
     {
         for (size_t i = 0; i < mM; ++i)
         {
-            mRaw[i * mN + j] = vec[i];
+            mRaw[i * mN + j] = vec_[i];
         }
     }
 
@@ -370,9 +371,9 @@ public:
      *  \param j The column index
      *  \param vec The vector to copy from
      */
-    void col(size_t j, std::vector<_T>& vec)
+    void col(size_t j, std::vector<_T>& vec_)
     {
-        col(j, &vec[0]);
+        col(j, &vec_[0]);
     }
 
     //!  Return number of rows (M)
