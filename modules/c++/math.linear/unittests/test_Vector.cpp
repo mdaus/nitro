@@ -147,7 +147,9 @@ TEST_CASE(testNorm)
     stdvec.push_back(12);
     Vector<double> vnorm1(stdvec);
     const double norm(vnorm1.norm());
-    TEST_ASSERT_EQ(norm, sqrt(10*10 + 11*11 + 12*12));
+    const double arg(10.*10 + 11.*11 + 12.*12);
+    const double expectedValue(::sqrt(arg));
+    TEST_ASSERT_EQ(norm, expectedValue);
 }
 
 
