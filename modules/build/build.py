@@ -1098,7 +1098,7 @@ def configure(self):
             config['cxx']['linkflags_64']   = bitFlag64
             config['cxx']['optz_med']       = '-xO3'
             config['cxx']['optz_fast']      = '-xO4'
-            config['cxx']['optz_fastest']   = '-fast'
+            config['cxx']['optz_fastest']   = '-xO5'
             env['CXXFLAGS_cxxshlib']        = ['-KPIC', '-DPIC']
 
             env.append_value('DEFINES', '_FILE_OFFSET_BITS=64 _LARGEFILE_SOURCE'.split())
@@ -1114,9 +1114,9 @@ def configure(self):
             config['cc']['linkflags_64']   = bitFlag64
             config['cc']['linkflags_32']   = bitFlag32
             config['cc']['32']             = bitFlag32
-            config['cc']['optz_med']       = '-xO2'
-            config['cc']['optz_fast']      = '-xO3'
-            config['cc']['optz_fastest']   = '-fast'
+            config['cc']['optz_med']       = '-xO3'
+            config['cc']['optz_fast']      = '-xO4'
+            config['cc']['optz_fastest']   = '-xO5'
             env['CFLAGS_cshlib']           = ['-KPIC', '-DPIC']
 
             #env.append_value('DEFINES', '_FILE_OFFSET_BITS=64 _LARGEFILE_SOURCE'.split())
