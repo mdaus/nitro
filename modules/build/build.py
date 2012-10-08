@@ -796,8 +796,6 @@ def options(opt):
                    default=True, help='Disable creating symlinks for libs')
     opt.add_option('--unittests', action='store_true', dest='unittests',
                    help='Build-time option to run unit tests after the build has completed')
-    opt.add_option('--with-ant-home', action='store', dest='ant_home',
-                    help='Specify the Apache Ant Home - where Ant is installed')
     opt.add_option('--no-headers', action='store_false', dest='install_headers',
                     default=True, help='Don\'t install module headers')
     
@@ -1245,14 +1243,6 @@ int main() {
         variant.append_value('CFLAGS', config['cc'].get('32', ''))
         variant.append_value('LINKFLAGS', config['cc'].get('linkflags_32', ''))
 
-    ant_home = Options.options.ant_home or self.environ.get('ANT_HOME', None)
-    if ant_home is not None:
-        ant_paths = [join(self.environ['ANT_HOME'], 'bin'), self.environ['ANT_HOME']]
-    else:
-        ant_paths = []
-    
-    env['HAVE_ANT'] = self.find_program('ant', var='ANT', path_list=ant_paths, mandatory=False)
-    
     env['IS64BIT'] = is64Bit
     self.all_envs[variantName] = variant
     self.setenv(variantName)
@@ -1322,22 +1312,6 @@ def add_targets(self):
             target.post()
         else:
             self.bld.get_tgen_by_name(target).post()
-
-# Used to call ant. Assumes the ant script respects a target property.
-@task_gen
-@feature('ant')
-def ant(self):
-    if not hasattr(self, 'defines'):
-        self.defines = []
-    if isinstance(self.defines, str):
-        self.defines = [self.defines]
-    self.env.ant_defines = map(lambda x: '-D%s' % x, self.defines)
-    self.rule = ant_exec
-
-def ant_exec(tsk):
-    # Source file is build.xml
-    cmd = [tsk.env['ANT'], '-file', tsk.inputs[0].abspath(), '-Dtarget=' + tsk.outputs[0].abspath()] + tsk.env.ant_defines
-    return tsk.generator.bld.exec_command(cmd)
 
 # When building a DLL, don't install the implib.
 @task_gen
@@ -1472,5 +1446,3 @@ if sys.version_info >= (2,5,0):
             self.waf_command = 'python waf'
             super(CPPMSVSGenContext, self).__init__(**kw)
 
-# Tell waf to ignore any build.xml files, the 'ant' feature will take care of them.
-TaskGen.extension('build.xml')(Utils.nada)

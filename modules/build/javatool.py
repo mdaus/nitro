@@ -1,8 +1,8 @@
 import os
 from os.path import join, isdir, abspath, dirname
-from waflib import Options
+from waflib import Options, Utils, Logs, TaskGen, Errors
 from waflib.Errors import ConfigurationError
-
+from waflib.TaskGen import task_gen, feature, after, before
 
 def options(opt):
     opt.load('java')
@@ -14,7 +14,10 @@ def options(opt):
                help='Require Java (configure option)', default=False)
     opt.add_option('--require-jni', action='store_true', dest='force_jni',
                help='Require Java lib/headers (configure option)', default=False)
-    
+    opt.add_option('--require-ant', action='store_true', dest='force_ant',
+               help='Require Ant (configure option)', default=False)
+    opt.add_option('--with-ant-home', action='store', dest='ant_home',
+                    help='Specify the Apache Ant Home - where Ant is installed')    
 
 def configure(self):
     if not Options.options.java:
@@ -22,6 +25,18 @@ def configure(self):
     
     from build import recursiveGlob
     
+    ant_home = Options.options.ant_home or self.environ.get('ANT_HOME', None)
+    if ant_home is not None:
+        ant_paths = [join(self.environ['ANT_HOME'], 'bin'), self.environ['ANT_HOME']]
+    else:
+        ant_paths = []
+
+    env = self.env
+    env['HAVE_ANT'] = self.find_program('ant', var='ANT', path_list=ant_paths, mandatory=False)
+
+    if not env['ANT'] and  Options.options.force_ant:
+        raise Errors.WafError('Cannot find ant!')
+
     if Options.options.java_home:
         self.environ['JAVA_HOME'] = Options.options.java_home 
     
@@ -71,3 +86,23 @@ def configure(self):
             self.fatal(err)
         else:
             self.msg('Java lib/headers', err, color='YELLOW')
+
+# Used to call ant. Assumes the ant script respects a target property.
+@task_gen
+@feature('ant')
+def ant(self):
+    if not hasattr(self, 'defines'):
+        self.defines = []
+    if isinstance(self.defines, str):
+        self.defines = [self.defines]
+    self.env.ant_defines = map(lambda x: '-D%s' % x, self.defines)
+    self.rule = ant_exec
+
+def ant_exec(tsk):
+    # Source file is build.xml
+    cmd = [tsk.env['ANT'], '-file', tsk.inputs[0].abspath(), '-Dtarget=' + tsk.outputs[0].abspath()] + tsk.env.ant_defines
+    return tsk.generator.bld.exec_command(cmd)
+
+# Tell waf to ignore any build.xml files, the 'ant' feature will take care of them.
+TaskGen.extension('build.xml')(Utils.nada)
+
