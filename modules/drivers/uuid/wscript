@@ -69,7 +69,9 @@ def build(bld):
                                 target='uuid',
                                 name='UUID', path=driverNode,
                                 env=env.derive(), defines=env['DEFINES'],
-                                install_path='${PREFIX}/lib', targets_to_add=[uuidH])
+                                targets_to_add=[uuidH])
+        if env['install_libs']:
+            uuid.install_path = '${PREFIX}/lib'
         
         # TODO: This is currently installing to 
         #       PREFIX/install/include/uuid/lib/uuid/uuid.h

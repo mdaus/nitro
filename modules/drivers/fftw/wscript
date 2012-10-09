@@ -151,8 +151,11 @@ def build(bld):
         fftw = bld(features='c c%s add_targets' % env['LIB_TYPE'] or 'stlib', source=sources,
                                 export_includes=['fftw'],
                                 target='fftw', path=driverNode,
-                                includes=['fftw'], install_path='${PREFIX}/lib',
-                                name='FFT', defines=env['DEFINES'] + defs, env=env.derive(), targets_to_add=[configH])
+                                includes=['fftw'],
+                                name='FFT', defines=env['DEFINES'] + defs,
+                                env=env.derive(), targets_to_add=[configH])
+        if env['install_libs']:
+            fftw.install_path = '${PREFIX}/lib'
 
         NOTW_CODELETS = 'frc_1.c frc_2.c frc_3.c frc_4.c frc_5.c frc_6.c frc_7.c frc_8.c frc_9.c frc_10.c frc_11.c frc_12.c frc_13.c frc_14.c frc_15.c frc_16.c frc_32.c frc_64.c frc_128.c'
         TWID_CODELETS = 'fhf_2.c fhf_3.c fhf_4.c fhf_5.c fhf_6.c fhf_7.c fhf_8.c fhf_9.c fhf_10.c fhf_16.c fhf_32.c'
@@ -168,7 +171,9 @@ def build(bld):
                                 includes=['fftw', 'rfftw'],
                                 use='FFT', name='RFFT',
                                 defines=env['DEFINES'] + defs, env=env.derive(),
-                                install_path='${PREFIX}/lib', targets_to_add=[configH])
+                                targets_to_add=[configH])
+        if env['install_libs']:
+            rfftw.install_path = '${PREFIX}/lib'
         
         # When building RFFTW as a DLL on Windows we need to include FFTW sources as well.
         if env['CC_NAME'] == 'msvc' and env['LIB_TYPE'] == 'shlib':

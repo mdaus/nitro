@@ -67,8 +67,9 @@ def build(bld):
                          path=driverNode,
                          defines=env['DEFINES'] + defs,
                          env=env.derive(),
-                         name='ZIP',
-                         install_path='${PREFIX}/lib')
+                         name='ZIP')
+        if env['install_libs']:
+            zlib.install_path = '${PREFIX}/lib'
         
         if env['install_headers']:
             bld(features='install_tgt', install_path='${PREFIX}/include',

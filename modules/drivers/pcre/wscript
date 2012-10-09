@@ -95,7 +95,9 @@ def build(bld):
                          target='pcreposix', source='pcreposix.c',
                          path=driverNode, export_includes='.',
                          defines=env['DEFINES'],
-                         use='PCRE', install_path='${PREFIX}/lib')
+                         use='PCRE')
+        if env['install_libs']:
+            pcreposix.install_path = '${PREFIX}/lib'
 
         pcre_targets_to_add = ['config_h', 'pcre_in']
         if env['install_headers']:
@@ -111,8 +113,9 @@ def build(bld):
                          name='PCRE',
                          use='chartables.c',
                          targets_to_add=pcre_targets_to_add,
-                         install_path='${PREFIX}/lib',
                          defines=env['DEFINES'])
+        if env['install_libs']:
+            pcre.install_path = '${PREFIX}/lib'
         
         if env['CC_NAME'] == 'msvc' and env['LIB_TYPE'] == 'shlib':
             pcre.defs='libpcre.def'

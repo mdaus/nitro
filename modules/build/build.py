@@ -446,15 +446,17 @@ class CPPContext(Context.Context):
         lib = bld(features='%s %s%s add_targets includes'% (libExeType, libExeType, env['LIB_TYPE'] or 'stlib'), includes=includes,
                 target=targetName, name=libName, export_includes=exportIncludes,
                 use=uselib_local, uselib=uselib, env=env.derive(),
-                defines=defines, path=path, install_path=installPath or '${PREFIX}/lib',
+                defines=defines, path=path,
                 source=path.ant_glob(glob_patterns), targets_to_add=[])
         lib.source = filter(modArgs.get('source_filter', None), lib.source)
+        if env['install_libs']:
+            lib.install_path = installPath or '${PREFIX}/lib'
         
         if not lib.source:
             lib.features = 'add_targets includes'
         
         pattern = env['%s%s_PATTERN' % (libExeType, env['LIB_TYPE'] or 'stlib')]
-        if libVersion is not None and sys.platform != 'win32' and Options.options.symlinks and lib.source:
+        if libVersion is not None and sys.platform != 'win32' and Options.options.symlinks and env['install_libs'] and lib.source:
             symlinkLoc = '%s/%s' % (lib.install_path, pattern % libName)
             lib.targets_to_add.append(bld(features='symlink_as_tgt', dest=symlinkLoc, src=pattern % lib.target, name='%s-symlink' % libName))
         
@@ -798,6 +800,8 @@ def options(opt):
                    help='Build-time option to run unit tests after the build has completed')
     opt.add_option('--no-headers', action='store_false', dest='install_headers',
                     default=True, help='Don\'t install module headers')
+    opt.add_option('--no-libs', action='store_false', dest='install_libs',
+                    default=True, help='Don\'t install module libraries')
     
 
 types_str = '''
@@ -982,6 +986,7 @@ def configure(self):
     env['LIB_TYPE'] = Options.options.shared_libs and 'shlib' or 'stlib'
     
     env['install_headers'] = Options.options.install_headers
+    env['install_libs'] = Options.options.install_libs
 
     if Options.options.cxxflags:
         env.append_unique('CXXFLAGS', Options.options.cxxflags.split())
