@@ -174,8 +174,10 @@ def build(bld):
         if env['CC_NAME'] == 'msvc' and env['LIB_TYPE'] == 'shlib':
             rfftw.source += fftw.source
 
-        bld(features='install_tgt', install_path='${PREFIX}/include',
-            dir=driverNode, files=['fftw/fftw.h', 'rfftw/rfftw.h'], name='fftw_install')
+        if env['install_headers']:
+            bld(features='install_tgt', install_path='${PREFIX}/include',
+                dir=driverNode, files=['fftw/fftw.h', 'rfftw/rfftw.h'],
+                name='fftw_install')
 
 def distclean(context):
     #remove the untarred directories

@@ -70,8 +70,9 @@ def build(bld):
                          name='ZIP',
                          install_path='${PREFIX}/lib')
         
-        bld(features='install_tgt', install_path='${PREFIX}/include',
-                          dir=driverNode, pattern='zlib.h')
+        if env['install_headers']:
+            bld(features='install_tgt', install_path='${PREFIX}/include',
+                dir=driverNode, pattern='zlib.h')
 
 def distclean(context):
     #remove the untarred directories

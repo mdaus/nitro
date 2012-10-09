@@ -71,8 +71,12 @@ def build(bld):
                                 env=env.derive(), defines=env['DEFINES'],
                                 install_path='${PREFIX}/lib', targets_to_add=[uuidH])
         
-        bld(features='install_tgt', install_path='${PREFIX}/include/uuid',
-                          dir=driverNode, pattern='lib/uuid/uuid.h')
+        # TODO: This is currently installing to 
+        #       PREFIX/install/include/uuid/lib/uuid/uuid.h
+        #       I assume the extra lib/uuid in there is unintended
+        if env['install_headers']:
+            bld(features='install_tgt', install_path='${PREFIX}/include/uuid',
+                dir=driverNode, pattern='lib/uuid/uuid.h')
 
 def distclean(context):
     #remove the untarred directories

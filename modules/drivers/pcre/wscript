@@ -81,7 +81,7 @@ def build(bld):
                                     path=driverNode,
                                     install_path=None,
                                     env=env.derive(), name='dftables')
-        #bld.add_group()
+
         # waf complains if dfTablesNode doesn't have a signature, just use the tar file's sig.
         if not os.path.exists(dfTablesNode.abspath()):
             dfTablesNode.sig = Utils.h_file(os.path.join(bld.path.abspath(), '%s.tar' % fname))
@@ -89,7 +89,6 @@ def build(bld):
                                       rule='${SRC} ${TGT}', target='chartables.c',
                                       install_path=None, deps=appName,
                                       env=env.derive(), targets_to_add='dftables')
-        #bld.add_group()
         
         pcreposix = bld(features='c c%s' % env['LIB_TYPE'] or 'stlib',
                          includes=['.'], env=env.derive(),
@@ -97,6 +96,10 @@ def build(bld):
                          path=driverNode, export_includes='.',
                          defines=env['DEFINES'],
                          use='PCRE', install_path='${PREFIX}/lib')
+
+        pcre_targets_to_add = ['config_h', 'pcre_in']
+        if env['install_headers']:
+            pcre_targets_to_add += ['pcre_install']
         
         pcre = bld(features='c c%s add_targets' % env['LIB_TYPE'] or 'stlib',
                          includes=['.'],
@@ -107,17 +110,18 @@ def build(bld):
                          env=env.derive(),
                          name='PCRE',
                          use='chartables.c',
-                         targets_to_add=['pcre_install', 'config_h', 'pcre_in'],
+                         targets_to_add=pcre_targets_to_add,
                          install_path='${PREFIX}/lib',
                          defines=env['DEFINES'])
-        #bld.add_group()
         
         if env['CC_NAME'] == 'msvc' and env['LIB_TYPE'] == 'shlib':
             pcre.defs='libpcre.def'
             pcreposix.defs='libpcreposix.def'
-        
-        bld(features='install_tgt', install_path='${PREFIX}/include',
-                      dir=driverNode, files=['pcre.h', 'pcreposix.h'], name='pcre_install')
+
+        if env['install_headers']:
+            bld(features='install_tgt', install_path='${PREFIX}/include',
+                dir=driverNode, files=['pcre.h', 'pcreposix.h'], 
+                name='pcre_install')
 
 def distclean(context):
     #remove the untarred directories

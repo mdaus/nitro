@@ -103,8 +103,10 @@ def build(bld):
             if env['CC_NAME'] == 'msvc' and env['LIB_TYPE'] == 'shlib':
                 expat.defs = 'lib/libexpat.def'
             
-            bld(features='install_tgt', install_path='${PREFIX}/include',
-                dir=driverNode, files=['lib/expat.h', 'lib/expat_external.h'], name='expat_install')
+            if env['install_headers']:
+                bld(features='install_tgt', install_path='${PREFIX}/include',
+                    dir=driverNode, files=['lib/expat.h', 'lib/expat_external.h'], 
+                    name='expat_install')
         else:
             raise Exception('Invalid XML driver: %s' % driver)
 
