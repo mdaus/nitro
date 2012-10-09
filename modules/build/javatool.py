@@ -100,7 +100,7 @@ def ant(self):
 
 def ant_exec(tsk):
     # Source file is build.xml
-    cmd = [tsk.env['ANT'], '-file', tsk.inputs[0].abspath(), '-Dtarget=' + tsk.outputs[0].abspath()] + tsk.env.ant_defines
+    cmd = ['\"' + tsk.env['ANT'] + '\"', '-file', tsk.inputs[0].abspath(), '-Dtarget=' + tsk.outputs[0].abspath()] + tsk.env.ant_defines
     return tsk.generator.bld.exec_command(cmd)
 
 # Tell waf to ignore any build.xml files, the 'ant' feature will take care of them.
