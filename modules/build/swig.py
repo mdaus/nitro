@@ -166,7 +166,7 @@ def check_swig_version(self, minver=None):
 	"""Check for a minimum swig version like conf.check_swig_version('1.3.28')
 	or conf.check_swig_version((1,3,28)) """
 	reg_swig = re.compile(r'SWIG Version\s(.*)', re.M)
-	swig_out = self.cmd_and_log('%s -version' % self.env['SWIG'])
+	swig_out = self.cmd_and_log('"%s" -version' % self.env['SWIG'])
 
 	swigver = [int(s) for s in reg_swig.findall(swig_out)[0].split('.')]
 	if isinstance(minver, basestring):
