@@ -771,6 +771,8 @@ def options(opt):
                    help='Distribute source into the installation area (for delivering source)')
     opt.add_option('--disable-warnings', action='store_false', dest='warnings',
                    default=True, help='Disable warnings')
+    opt.add_option('--warnings-as-errors', action='store_true', dest='warningsAsErrors',
+                   default=False, help='Treat compiler warnings as errors')
     opt.add_option('--enable-debugging', action='store_true', dest='debugging',
                    help='Enable debugging')
     #TODO - get rid of enable64 - it's useless now
@@ -1041,9 +1043,13 @@ def configure(self):
 
         self.check_cc(lib='pthread', mandatory=True)
 
+        warningFlags = '-Wall'
+        if Options.options.warningsAsErrors:
+            warningFlags += ' -Wfatal-errors'
+
         if cxxCompiler == 'g++':
             config['cxx']['debug']          = '-g'
-            config['cxx']['warn']           = '-Wall'
+            config['cxx']['warn']           = warningFlags.split()
             config['cxx']['verbose']        = '-v'
             config['cxx']['64']             = '-m64'
             config['cxx']['32']             = '-m32'
@@ -1062,7 +1068,7 @@ def configure(self):
         
         if ccCompiler == 'gcc':
             config['cc']['debug']          = '-g'
-            config['cc']['warn']           = '-Wall'
+            config['cc']['warn']           = warningFlags.split()
             config['cc']['verbose']        = '-v'
             config['cc']['64']             = '-m64'
             config['cc']['32']             = '-m32'
@@ -1089,11 +1095,16 @@ def configure(self):
         env.append_value('LIB_CSTD', 'Cstd')
         self.check_cc(lib='thread', mandatory=True)
         self.check_cc(header_name="atomic.h")
+        
+        warningFlags = ''
+        if Options.options.warningsAsErrors:
+            warningFlags = '-errwarn=%all'
 
         if cxxCompiler == 'sunc++':
             (bitFlag32, bitFlag64) = getSolarisFlags(env['CXX'][0])
             config['cxx']['debug']          = '-g'
-            config['cxx']['warn']           = ''
+            config['cxx']['warn']           = warningFlags.split()
+            config['cxx']['nowarn']         = '-erroff=%all'
             config['cxx']['verbose']        = '-v'
             config['cxx']['64']             = bitFlag64
             config['cxx']['32']             = bitFlag32
@@ -1111,7 +1122,8 @@ def configure(self):
         if ccCompiler == 'suncc':
             (bitFlag32, bitFlag64) = getSolarisFlags(env['CC'][0])
             config['cc']['debug']          = '-g'
-            config['cc']['warn']           = ''
+            config['cc']['warn']           = warningFlags.split()
+            config['cc']['nowarn']         = '-erroff=%all'
             config['cc']['verbose']        = '-v'
             config['cc']['64']             = bitFlag64
             config['cc']['linkflags_64']   = bitFlag64
@@ -1143,10 +1155,14 @@ def configure(self):
         # Skipping warning 4290 about how VS doesn't implement exception
         # specifications properly.  For warnings, use /W4 because /Wall
         # gives us tons of warnings in the VS headers themselves
+        warningFlags = '/W4 /wd4290'
+        if Options.options.warningsAsErrors:
+            warningFlags += ' /WX'
+
         vars = {}
         vars['debug']          = ['/Zi', crtDebug]
-        vars['warn']           = '/W4 /wd4290'.split()
-        vars['nowarn']         = '/wd4290'.split()
+        vars['warn']           = warningFlags.split()
+        vars['nowarn']         = '/w'
         vars['verbose']        = ''
         vars['optz_med']       = ['-O2', crtFlag]
         vars['optz_fast']      = ['-O2', crtFlag]
