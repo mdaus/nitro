@@ -1139,10 +1139,13 @@ def configure(self):
 
         # Sets the size of the stack (in bytes)
         stackFlag = '/STACK:80000000'
-        
+
+        # Skipping warning 4290 about how VS doesn't implement exception
+        # specifications properly.  For warnings, use /W4 because /Wall
+        # gives us tons of warnings in the VS headers themselves
         vars = {}
         vars['debug']          = ['/Zi', crtDebug]
-        vars['warn']           = '/Wall'
+        vars['warn']           = '/W4 /wd4290'.split()
         vars['nowarn']         = '/wd4290'.split()
         vars['verbose']        = ''
         vars['optz_med']       = ['-O2', crtFlag]
