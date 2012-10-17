@@ -51,7 +51,7 @@ void sys::DateTime::fromMillis(const tm& t)
     mHour = t.tm_hour;
     mMinute = t.tm_min;
 
-    const size_t timeInSeconds = (mTimeInMillis / 1000);
+    const size_t timeInSeconds = (size_t)(mTimeInMillis / 1000);
     const double timediff = ((double)mTimeInMillis / 1000.0) - timeInSeconds;
     mSecond = t.tm_sec + timediff;
 }

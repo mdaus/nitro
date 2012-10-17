@@ -920,7 +920,7 @@ public:
 
                 size_t kmax = std::min<size_t>(i, j);
                 _T s(0);
-                for (int k = 0; k < kmax; k++)
+                for (size_t k = 0; k < kmax; k++)
                 {
                     s += rowi[k] * colj[k];
                 }
@@ -1168,7 +1168,7 @@ template<size_t _MD, size_t _ND, size_t _PD, typename _T>
             x(k, j) /= lu(k, k);
         }
 
-        for (size_t i = 0; i < k; i++) 
+        for (sys::SSize_T i = 0; i < k; i++) 
         {
             // This one could be _Q
             for (size_t j = 0; j < _PD; j++) 

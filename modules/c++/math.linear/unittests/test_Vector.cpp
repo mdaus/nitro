@@ -127,9 +127,10 @@ TEST_CASE(testDotProduct)
     TEST_ASSERT_EQ(dotprod, 2*3*5);
 
     bool threw(false);
-    try {
+    try 
+    {
         Vector<double> wrongSize(2);
-        double neverGetsComputed(vd1.dot(wrongSize));
+        vd1.dot(wrongSize);
     }
     catch(...)
     {

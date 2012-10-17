@@ -161,7 +161,7 @@ TEST_CASE(testThreadedIncrement)
     std::sort(values.begin(), values.end());
     for (size_t ii = 0; ii < values.size(); ++ii)
     {
-        TEST_ASSERT_EQ(values[ii], ii);
+        TEST_ASSERT_EQ(values[ii], (sys::SSize_T)ii);
     }
 }
 
@@ -238,7 +238,7 @@ TEST_CASE(testThreadedDecrement)
     std::sort(values.begin(), values.end());
     for (size_t ii = 0; ii < values.size(); ++ii)
     {
-        TEST_ASSERT_EQ(values[ii], ii);
+        TEST_ASSERT_EQ(values[ii], (sys::SSize_T)ii);
     }
 }
 }

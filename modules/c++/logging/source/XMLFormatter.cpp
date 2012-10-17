@@ -83,13 +83,13 @@ void logging::XMLFormatter::format(const logging::LogRecord* record, io::OutputS
 
 
     // update record with SGML escape characters
-    for (int chr = 4; chr < logRecord.size(); chr++)
+    for (size_t chr = 4; chr < logRecord.size(); chr++)
     { 
         // every non-safe xml character pair
-        for (int xml = 0; xml < xmlSafeConvert.size(); xml += 2)          
+        for (size_t xml = 0; xml < xmlSafeConvert.size(); xml += 2)          
         {
             // convert until no more cases are found
-            unsigned int start = 0;
+            size_t start = 0;
             while (start < logRecord[chr].length())
             {
                 start = str::replace(logRecord[chr], 

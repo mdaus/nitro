@@ -156,7 +156,7 @@ void net::Socket::send(const sys::byte* b, sys::Size_T len, int flags)
 
     numBytes = ::send(mNative, (const char*) b, len, flags);
 
-    if (numBytes != len)
+    if (numBytes == -1 || (sys::Size_T)numBytes != len)
     {
         sys::Err err;
         std::ostringstream oss;
@@ -175,7 +175,7 @@ void net::Socket::sendTo(const SocketAddress& address, const sys::byte* b,
             (net::SockLen_T) sizeof(address.getAddress()));
 
     // Maybe shouldnt even bother with this
-    if (numBytes != len)
+    if (numBytes == -1 || (sys::Size_T)numBytes != len)
     {
         sys::Err err;
         std::ostringstream oss;

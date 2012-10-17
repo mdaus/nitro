@@ -28,9 +28,9 @@ TwoD<double>cascade(TwoD<double>oldP, TwoD<double>gx, TwoD<double>gy)
 
     TwoD<double>newP(oldP.orderX(), oldP.orderY());
 
-    for (int i = 0; i <= oldP.orderX(); i++)
+    for (size_t i = 0; i <= oldP.orderX(); i++)
     {
-        for (int j = 0; j <= oldP.orderY(); j++)
+        for (size_t j = 0; j <= oldP.orderY(); j++)
         {
             newP += (gx.power(i) * (gy.power(j) * oldP[i][j]));
         }

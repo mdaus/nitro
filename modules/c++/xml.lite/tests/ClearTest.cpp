@@ -30,7 +30,7 @@ const char
 void printCD(std::string tag, std::vector<xml::lite::Element*>& e)
 {
     std::cout << tag << ": ";
-    for (int i = 0; i < e.size(); ++i)
+    for (size_t i = 0; i < e.size(); ++i)
     {
         std::cout << e[i]->getCharacterData();
         std::cout << " ";

@@ -65,7 +65,7 @@ int main(int argc, char* argv[])
 
         std::cout << "ERROR MSG " << myConn->getLastErrorMessage() << std::endl;
 
-        for (int i = 0; i < resultSet->getNumRows(); i++)
+        for (unsigned int i = 0; i < resultSet->getNumRows(); i++)
         {
             myRow = resultSet->fetchRow();
             std::cout << "Row " << i << std::endl;

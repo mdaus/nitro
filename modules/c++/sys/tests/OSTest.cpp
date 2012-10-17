@@ -113,22 +113,23 @@ int main(int argc, char **argv)
         //std::cout << "CPS: " << CLOCKS_PER_SEC << std::endl;
         //	std::cout << "Clock: " << clock() << std::endl;
         std::cout << "Start: " << sw.start() << std::endl;
+        int x = 0;
         for (int i = 0; i < 1000000000; ++i)
         {
-            int x = 1 * 2 * 3;
+            x = 1 * 2 * 3;
         }
         std::cout << "Finish Loop 1" << std::endl;
         sw.pause();
         for (int i = 0; i < 1000000000; ++i)
         {
-            int x = 1 * 2 * 3;
+            x = 1 * 2 * 3;
         }
         std::cout << "Finish Loop 2" << std::endl;
         //sw.start();
         //sw.clear();
         for (int i = 0; i < 1000000000; ++i)
         {
-            int x = 1 * 2 * 3;
+            x = 1 * 2 * 3;
         }
         std::cout << "Finish Loop 3" << std::endl;
         std::cout << "Stop: " << std::setprecision(50) << sw.stop()

@@ -48,8 +48,8 @@ sys::SSize_T io::ByteStream::read(sys::byte *b, sys::Size_T len)
 
     if (len <= 0) return 0;
 
-    sys::SSize_T bytesRead(0);
 #if defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x530)
+    sys::SSize_T bytesRead(0);
     while (bytesRead < len && mData.good())
     {
         b[bytesRead++] = mData.get();

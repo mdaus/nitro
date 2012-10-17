@@ -61,7 +61,7 @@ int main()
 
             cout << "'request' matches." << endl;
 
-            for (int i = 1; i < matches.size(); i++)
+            for (size_t i = 1; i < matches.size(); i++)
                 cout << "subs[" << i << "] " << matches[i] << endl;
 
             std::string rest = matches[4];
@@ -75,7 +75,7 @@ int main()
                 {
                     cout << "'kv' matches." << endl;
 
-                    for (int i = 1; i < matches3.size(); i++)
+                    for (size_t i = 1; i < matches3.size(); i++)
                         cout << "subs[" << i << "] " << matches3[i] << endl;
                     rest = matches3[3];
                 }

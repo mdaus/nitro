@@ -89,7 +89,6 @@ public:
 int main (int argc, char* argv[])
 {
    Thread *threads[MAX_THREADS];
-   int numWriters(0);
    for (int i = 0 ; i < MAX_THREADS ; i++ ) {
       threads[i] = new ReadWriteThread( "Thread " + itos(i) );
       threads[i]->start();

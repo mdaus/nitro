@@ -208,7 +208,7 @@ std::vector<std::string> str::split(const std::string& s,
     while (pos < str_l && maxSplit != 1)
     {
         nextPos = (int) s.find(splitter, pos);
-        if (nextPos == std::string::npos)
+        if (nextPos == (int)std::string::npos)
             nextPos = str_l;
         if (nextPos != pos)
             vec.push_back(s.substr(pos, nextPos - pos));

@@ -62,7 +62,7 @@ sys::SSize_T io::InputStream::readln(sys::byte *cStr, const sys::Size_T strLenPl
     // Put a null byte at the end by default
     ::memset(cStr, 0, strLenPlusNullByte);
     // Read length - 1 bytes, because we need a null-byte
-    int i;
+    size_t i;
     for (i = 0; i < strLenPlusNullByte - 1; i++)
     {
         // If we got nothing
@@ -71,5 +71,5 @@ sys::SSize_T io::InputStream::readln(sys::byte *cStr, const sys::Size_T strLenPl
         if (*(cStr + i) == '\n') return i + 1;
         // Otherwise, append c;
     }
-    return i;
+    return (sys::SSize_T)i;
 }

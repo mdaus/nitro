@@ -37,7 +37,7 @@ std::vector<std::string> net::urlSplit(std::string url)
     {
         size_t matchLen = match.size();
         std::vector < std::string > parts(6, "");
-        for (int i = 1; i <= 6; ++i)
+        for (size_t i = 1; i <= 6; ++i)
         {
             if (i < matchLen)
                 parts[i - 1] = match[i];

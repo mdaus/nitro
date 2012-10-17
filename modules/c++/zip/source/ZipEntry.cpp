@@ -13,7 +13,6 @@ void ZipEntry::inflate(sys::ubyte* out, sys::Size_T outLen, sys::ubyte* in,
         sys::Size_T inLen)
 {
     z_stream zstream;
-    unsigned long crc;
     memset(&zstream, 0, sizeof(zstream));
     zstream.zalloc = Z_NULL;
     zstream.zfree = Z_NULL;

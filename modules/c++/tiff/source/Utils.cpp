@@ -93,12 +93,10 @@ tiff::IFD* tiff::Utils::createGeoTiffIFD(tiff::IFD* ifd)
     std::vector<tiff::TypeInterface*> geoVals = geoDir->getValues();
     size_t idx = 0;
 
-    const unsigned short keyDirVersion =
-        str::toType<unsigned short>(geoVals[idx++]->toString());
-    const unsigned short keyRevision =
-        str::toType<unsigned short>(geoVals[idx++]->toString());
-    const unsigned short keyRevisionMinor =
-        str::toType<unsigned short>(geoVals[idx++]->toString());
+    
+    str::toType<unsigned short>(geoVals[idx++]->toString()); // skipping keyDirVersion
+    str::toType<unsigned short>(geoVals[idx++]->toString()); // skipping keyRevision 
+    str::toType<unsigned short>(geoVals[idx++]->toString()); // skipping keyRevisionMinor
     const unsigned short numKeys =
         str::toType<unsigned short>(geoVals[idx++]->toString());
 

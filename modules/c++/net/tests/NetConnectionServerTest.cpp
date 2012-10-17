@@ -53,12 +53,12 @@ public:
     void operator()(net::NetConnection* conn)
     {
         char buf[MAX_BUF_SIZE];
-        int length;
-        conn->read((char*) &length, 4);
+        unsigned int length;
+        conn->read((char*) &length, sizeof(unsigned int));
         assert(length <= (MAX_BUF_SIZE - strlen(RET_STR)));
         conn->read(buf, length);
         buf[length] = 0;
-        std::cout << "Recieved: " << buf << std::endl;
+        std::cout << "Received: " << buf << std::endl;
         std::cout << "returning it to client..." << std::endl;
         memcpy(&buf[length], RET_STR, strlen(RET_STR));
         length = length + strlen(RET_STR);

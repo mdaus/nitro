@@ -133,7 +133,7 @@ ZipEntry* ZipFile::newCentralDirEntry(sys::ubyte** buf, sys::SSize_T len)
     sys::Uint16_T fileNameLength = Z_READ_SHORT_INC(p, off);
     sys::Uint16_T extraFieldLength = Z_READ_SHORT_INC(p, off);
     sys::Uint16_T fileCommentLength = Z_READ_SHORT_INC(p, off);
-    sys::Uint16_T diskNumberStart = Z_READ_SHORT_INC(p, off);
+    Z_READ_SHORT_INC(p, off); // skipping diskNumberStart
     sys::Uint16_T internalAttrs = Z_READ_SHORT_INC(p, off);
     sys::Uint16_T externalAttrs = Z_READ_INT_INC(p, off);
     sys::Uint32_T localHeaderRelOffset = readInt(&p[off]);

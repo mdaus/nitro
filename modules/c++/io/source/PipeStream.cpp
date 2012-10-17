@@ -30,7 +30,7 @@ sys::SSize_T io::PipeStream::read(sys::byte *cStr,
     char* tmp = cStr;
     while (bytesLeft)
     {
-        size_t bytesRead = readln(tmp, bytesLeft);
+        sys::SSize_T bytesRead = readln(tmp, bytesLeft);
         if (bytesRead != -1)
         {
             // take off null terminated byte in count
@@ -44,6 +44,7 @@ sys::SSize_T io::PipeStream::read(sys::byte *cStr,
             return (bytesLeft + 1) - strLenPlusNullByte;
         }
     }
+    return -1;
 }
 
 sys::SSize_T io::PipeStream::readln(sys::byte *cStr,

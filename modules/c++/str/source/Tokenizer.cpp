@@ -32,12 +32,12 @@ str::Tokenizer::Tokenizer(const std::string& str, const std::string& delim)
     while (true)
     {
         start = (int)str.find_first_not_of(delim, pos);
-        if (start == std::string::npos)
+        if (start == (int)std::string::npos)
         {
             break;
         }
         end = (int)str.find_first_of(delim, start);
-        if (end == std::string::npos)
+        if (end == (int)std::string::npos)
         {
             end = str_l;
         }
