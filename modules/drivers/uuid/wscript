@@ -11,11 +11,12 @@ def options(opt):
         opt.add_option('--enable-uuid', action='store_true',
                        default=True, help='will build the uuid library if not found on the system (default)')
         opt.add_option('--build-uuid', action='store_true', dest='build_uuid',
-                       default=True, help='force building libuuid from scratch')
+                       help='force building libuuid from scratch',
+                       default=os.path.exists(os.path.join(opt.path.abspath(), 'e2fsprogs-1.40-uuid.tar')))
         opt.add_option('--nobuild-uuid', action='store_false', dest='build_uuid',
-                       help='force building libuuid from scratch')
+                       help='force not building libuuid from scratch')
         opt.add_option('--with-uuid-home', action='store', dest='uuid_home',
-                   help='Specify the UUID lib/headers home')
+                       help='Specify the UUID lib/headers home')
 
 
 def configure(conf):

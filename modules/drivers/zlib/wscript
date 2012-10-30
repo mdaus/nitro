@@ -12,9 +12,10 @@ def options(opt):
     opt.add_option('--enable-zip', action='store_true',
                    default=True, help='will build the zip (libz) library if not found on the system (default)')
     opt.add_option('--build-zip', action='store_true', dest="build_zip",
-                   default=True, help='force building zip (zlib) library from scratch')
+                   help='force building zip (zlib) library from scratch',
+                   default=os.path.exists(os.path.join(opt.path.abspath(), 'zlib-1.2.3.tar')))
     opt.add_option('--nobuild-zip', action='store_false', dest="build_zip",
-                   help='force building zip (zlib) library from scratch')
+                   help='force not building zip (zlib) library from scratch')
 
 def configure(conf):
     #-- ZIP --------------------------------------------------------------------

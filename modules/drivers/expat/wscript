@@ -11,7 +11,8 @@ def options(opt):
     opt.add_option('--with-xml-home', action='store', dest='xml_home',
                    help='Specify the XML Home - where the XML library is installed to')
     opt.add_option('--build-xml', action='store_true', dest="build_xml",
-                   default=True, help='force building XML library (expat) from scratch')
+                   help='force building XML library (expat) from scratch',
+                   default=os.path.exists(os.path.join(opt.path.abspath(), 'expat-2.0.0.tar')))
     opt.add_option('--nobuild-xml', action='store_false', dest="build_xml",
                    help='force not building XML library from scratch')
 
