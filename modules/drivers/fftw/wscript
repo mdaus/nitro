@@ -18,53 +18,37 @@ def options(opt):
 
     # changed this to be the default, so we always build statically
     opt.add_option('--build-fft', action='store_true', dest="build_fft",
-                   default=True, help='force building FFT library (fftw) from scratch')
+                   help='force building FFT library (fftw) from scratch',
+                   default=os.path.exists(os.path.join(opt.path.abspath(), 'fftw-2.1.5.tar')))
     opt.add_option('--nobuild-fft', action='store_false', dest="build_fft",
-                   help='force building FFT library (fftw) from scratch')
+                   help='force not building FFT library (fftw) from scratch')
 
 def configure(conf):
     #-- FFT --------------------------------------------------------------------
-    enableFFT = Options.options.enable_fft
-    if not enableFFT:
-        if Options.options.fft_home or Options.options.fft3_home:
-            enableFFT = True
-    
-    if enableFFT:
-        makeFFT = Options.options.build_fft
+    if Options.options.enable_fft:
         fftHome = Options.options.fft_home
-        fft3Home = Options.options.fft3_home
-        fftDouble = Options.options.fft_double
-        foundLocal = False
-        foundLocalFFT3 = False
+        fft3Home = Options.options.fft3_home or os.environ.get('FFT3_HOME', None)
+        fftEnv = os.environ.get('FFT_HOME', None)
 
+        # see if they defined env var, but did not set option
+        if not fftHome and fftEnv and not Options.options.build_fft:
+            fftHome = fftEnv
 
-        # FFTW2
-        if not fftHome:
-            if not makeFFT:
-                if not conf.check_cc(lib='fftw', mandatory=False, uselib_store='FFT'):
-                    #see if they defined env vars
-                    fftHome = os.environ.get('FFT_HOME', None)
-                else:
-                    foundLocal = True
-
-        if not foundLocal:
-            makeFFT = False
-            if fftHome:
-                conf.msg('Setting fft home', fftHome)
-                conf.env.append_value('STLIBPATH_FFT', os.path.join(fftHome, 'lib'))
-                conf.env.append_value('INCLUDES_FFT', os.path.join(fftHome, 'include'))
-            else:
-                #we must use/build the local one
-                makeFFT = True
-
-        if fftDouble:
-            makeFFT = True
+        if Options.options.fft_double:
             conf.env['MAKE_FFT_DOUBLE'] = True
             conf.env['DEFINES'].append('ENABLE_FFT_DOUBLE=1')
         else:
             conf.env['MAKE_FFT_DOUBLE'] = False
 
-        if makeFFT and not foundLocal:
+        # FFTW2
+        if fftHome:
+            conf.msg('Setting fft home', fftHome)
+            conf.env.append_value('STLIBPATH_FFT', os.path.join(fftHome, 'lib'))
+            conf.env.append_value('INCLUDES_FFT', os.path.join(fftHome, 'include'))
+            conf.env.append_value('STLIB_FFT', 'fftw')
+            conf.env.append_value('STLIB_FFT', 'rfftw')
+
+        elif Options.options.build_fft:
             conf.env['MAKE_FFT'] = True
             conf.msg('Building local lib', 'fftw')
             if conf.env['MAKE_FFT_DOUBLE']:
@@ -76,25 +60,21 @@ def configure(conf):
             untarFile(path=conf.path, fname='fftw-2.1.5.tar')
             commentUndefsFile(input='fftw/fftw.h.in', output='fftw/fftw.h', path=conf.path.make_node('fftw-2.1.5'))
 
-        # FFTW3
-        if not fft3Home:
-            if not conf.check_cc(header_name='fftw/fftw3.h', lib='fftw3f', mandatory=False, uselib_store='FFT3'):
-                #see if they defined env vars
-                fft3Home = os.environ.get('FFT3_HOME', None)
-            else:
-                foundLocalFFT3 = True
-                conf.env.append_value('LIB_FFT3', 'fftw3f')
-                conf.env.append_unique('CXXDEFINES_FFT3', ['HAVE_FFTW3'])
-                conf.define('HAVE_FFTW3', True)
+        elif conf.check_cc(lib='fftw', uselib_store='FFT', mandatory=False):
+            conf.env.append_value('LIB_FFT', 'rfftw')
 
-        if not foundLocalFFT3:
-            if fft3Home:
-                conf.msg('Setting fft3 home', fft3Home)
-                conf.env.append_value('STLIBPATH_FFT3', os.path.join(fft3Home, 'lib'))
-                conf.env.append_value('INCLUDES_FFT3', os.path.join(fft3Home, 'include'))
-                conf.env.append_value('LIB_FFT3', 'fftw3f')
-                conf.env.append_unique('CXXDEFINES_FFT3', ['HAVE_FFTW3'])
-                conf.define('HAVE_FFTW3', True)
+        # FFTW3
+        if fft3Home:
+            conf.msg('Setting fft3 home', fft3Home)
+            conf.env.append_value('STLIBPATH_FFT3', os.path.join(fft3Home, 'lib'))
+            conf.env.append_value('INCLUDES_FFT3', os.path.join(fft3Home, 'include'))
+            conf.env.append_value('STLIB_FFT3', 'fftw3f')
+            conf.env.append_unique('CXXDEFINES_FFT3', ['HAVE_FFTW3'])
+            conf.define('HAVE_FFTW3', True)
+
+        elif conf.check_cc(lib='fftw3f', header_name='fftw/fftw3.h', uselib_store='FFT3', mandatory=False):
+            conf.env.append_unique('CXXDEFINES_FFT3', ['HAVE_FFTW3'])
+            conf.define('HAVE_FFTW3', True)
 
 def build(bld):
     variant = bld.env['VARIANT']

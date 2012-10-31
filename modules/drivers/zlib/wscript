@@ -3,7 +3,6 @@ from waflib import Options
 from waflib.TaskGen import feature, before, task_gen
 from build import untarFile
 
-
 def options(opt):
     opt.add_option('--with-zip-home', action='store', dest='zip_home',
                    help='Specify the ZIP Home - where the ZIP library is installed')
@@ -19,29 +18,24 @@ def options(opt):
 
 def configure(conf):
     #-- ZIP --------------------------------------------------------------------
-    enableZip = Options.options.enable_zip
-    
-    if enableZip:
+    if Options.options.enable_zip:
+
         zipHome = Options.options.zip_home
-        makeZip = False
-        if Options.options.build_zip:
-            makeZip = True
-        elif zipHome:
+        if zipHome:
             conf.msg('Setting zip home', zipHome)
             conf.env.append_value('STLIBPATH_ZIP', os.path.join(zipHome, 'lib'))
             conf.env.append_value('INCLUDES_ZIP', os.path.join(zipHome, 'include'))
-        else:
-            if not conf.check(header_name='zlib.h', define_name='HAVE_ZLIB_H',
-                              lib='z', uselib_store='ZIP'):
-                #default to building locally
-                makeZip = True
-        if makeZip:
-            conf.env['MAKE_ZIP'] = makeZip
+            conf.env.append_value('STLIB_ZIP', 'z')
+
+        elif Options.options.build_zip:
+            conf.env['MAKE_ZIP'] = True
             conf.msg('Building local lib', 'zip (zlib)')
             
             untarFile(path=conf.path, fname='zlib-1.2.3.tar')
+
         else:
-            conf.env['LIB_ZIP'] = ['z']
+            conf.check(header_name='zlib.h', define_name='HAVE_ZLIB_H',
+                       lib='z', uselib_store='ZIP', mandatory=False)
 
 def build(bld):
     variant = bld.env['VARIANT']

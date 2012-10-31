@@ -7,7 +7,7 @@ def options(opt):
     opt.add_option('--disable-xml', action='store_false', dest='enable_xml', default=True,
                    help='turn off XML')
     opt.add_option('--enable-xml-layer', action='store', choices=['expat', 'libxml', 'xerces'],
-                   dest='xml_layer', default='expat', help='Specify the XML layer')
+                   dest='xml_layer', default='expat', help='Specify the XML layer (default=expat)')
     opt.add_option('--with-xml-home', action='store', dest='xml_home',
                    help='Specify the XML Home - where the XML library is installed to')
     opt.add_option('--build-xml', action='store_true', dest="build_xml",
@@ -18,58 +18,49 @@ def options(opt):
 
 def configure(conf):
     #-- XML --------------------------------------------------------------------
-    enableXML = Options.options.enable_xml
-    
-    if enableXML:
+    if Options.options.enable_xml:
         xmlHome = Options.options.xml_home
         xmlLayer = Options.options.xml_layer
-        makeXML = Options.options.build_xml
-        
-        if makeXML:
-            xmlLayer = 'expat'
-        
-        if xmlHome and not makeXML:
-            conf.msg('Setting xml home', xmlHome)
-            conf.env.append_value('STLIBPATH_XML', os.path.join(xmlHome, 'lib'))
-            conf.env.append_value('INCLUDES_XML', os.path.join(xmlHome, 'include'))
-        
+
         expatDefines = 'USE_EXPAT XML_STATIC'
-        if not makeXML:
+        if Options.options.build_xml and not xmlHome:
+            conf.env['MAKE_XML'] = True
+            conf.env.append_unique('DEFINES_XML', expatDefines.split())
+            conf.msg('Building local lib', xmlLayer)
+            untarFile(path=conf.path, fname='expat-2.0.0.tar')
+
+        else:
+            if xmlHome:
+                conf.msg('Setting xml home', xmlHome)
+                conf.env.append_value('STLIBPATH_XML', os.path.join(xmlHome, 'lib'))
+                conf.env.append_value('INCLUDES_XML', os.path.join(xmlHome, 'include'))
+        
             if xmlLayer == 'expat':
                 conf.env.append_value('DEFINES_XML', expatDefines.split())
                 if not xmlHome:
                     #look for it on the system
-                    if not conf.check_cc(lib='expat', mandatory=False, uselib_store='XML') \
-                        or not conf.check_cc(header_name='expat.h'):
-                        #we must use/build the local one
-                        makeXML = True
+                    conf.check_cc(lib='expat', mandatory=False, uselib_store='XML')
                 else:
-                    conf.env['LIB_XML'] = ['expat']
+                    conf.env['STLIB_XML'] = ['expat']
 
             elif xmlLayer == 'libxml':
                 conf.env.append_value('DEFINES_XML', 'USE_LIBXML')
-                conf.env['LIB_XML'] = ['xml2']
+                conf.env['STLIB_XML'] = ['xml2']
                 if not xmlHome:
-                    conf.check_cxx(lib='xml2', mandatory=True, uselib_store='XML')
+                    conf.check_cxx(lib='xml2', mandatory=False, uselib_store='XML')
                     xmlHome = '/usr/'                    
-                conf.env.append_value('CPPPATH_XML', os.path.join(xmlHome, 'include/libxml2'))
+                conf.env.append_value('INCLUDES_XML', os.path.join(xmlHome, 'include/libxml2'))
 
             elif xmlLayer == 'xerces':
                 conf.env.append_value('DEFINES_XML', 'USE_XERCES')
                 conf.env.append_value('DEFINES_XML', 'XERCES_STATIC_LIBRARY')
-                conf.env['LIB_XML'] = ['xerces-c']
+                conf.env['STLIB_XML'] = ['xerces-c']
                 if sys.platform == 'win32':
                     # Xerces also requires this standard Windows library for
                     # Windows builds
                     conf.env.append_value('LIB_XML', 'advapi32')
                 if not xmlHome:
-                    conf.check_cxx(lib='xerces-c', mandatory=True, uselib_store='XML')
-    
-        if makeXML:
-            conf.env['MAKE_XML'] = xmlLayer
-            conf.env.append_unique('DEFINES_XML', expatDefines.split())
-            conf.msg('Building local lib', xmlLayer)
-            untarFile(path=conf.path, fname='expat-2.0.0.tar')
+                    conf.check_cxx(lib='xerces-c', mandatory=False, uselib_store='XML')
 
 def build(bld):
     variant = bld.env['VARIANT']

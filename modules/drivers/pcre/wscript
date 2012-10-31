@@ -8,7 +8,7 @@ def options(opt):
                    help='turn off PCRE')
     opt.add_option('--enable-pcre', action='store_true',
                    default=True, help='turn on PCRE (default)')
-    opt.add_option('--with-pcre-home', action='store',
+    opt.add_option('--with-pcre-home', action='store', dest='pcre_home',
                    help='Specify the PCRE Home - where PCRE is installed to')
     opt.add_option('--build-pcre', action='store_true', dest='build_pcre',
                    help='force building PCRE from scratch',
@@ -18,29 +18,23 @@ def options(opt):
 
 def configure(conf):
     #-- PCRE -------------------------------------------------------------------
-    enablePCRE = Options.options.enable_pcre
-    
-    if enablePCRE:
-        pcreHome = Options.options.with_pcre_home
-        makePCRE = False
-        if Options.options.build_pcre:
-            makePCRE = True
-        elif pcreHome:
+    if Options.options.enable_pcre:
+
+        pcreHome = Options.options.pcre_home
+        if pcreHome:
             conf.msg('Setting pcre home', pcreHome)
             conf.env.append_value('STLIBPATH_PCRE', os.path.join(pcreHome, 'lib'))
             conf.env.append_value('INCLUDES_PCRE', os.path.join(pcreHome, 'include'))
-        else:
-            if not conf.check_cxx(lib='pcre', mandatory=False,
-                                  uselib_store='PCRE'):
-                #default to building locally
-                makePCRE = True
-        if makePCRE:
-            conf.env['MAKE_PCRE'] = makePCRE
+            conf.env.append_value('STLIB_PCRE', 'pcre')
+
+        elif Options.options.build_pcre:
+            conf.env['MAKE_PCRE'] = True
             conf.msg('Building local lib', 'pcre')
             
             untarFile(path=conf.path, fname='pcre-5.0.tar')
+
         else:
-            conf.env['LIB_PCRE'] = ['pcre']
+            conf.check(lib='pcre', uselib_store='PCRE', mandatory=False)
 
 def build(bld):
     variant = bld.env['VARIANT']

@@ -3,7 +3,6 @@ from waflib import Options
 from waflib.TaskGen import feature, before, task_gen
 from build import untarFile
 
-
 def options(opt):
     if Options.platform != 'win32':
         opt.add_option('--disable-uuid', action='store_false', dest='enable_uuid',
@@ -22,17 +21,24 @@ def options(opt):
 def configure(conf):
     #-- UUID -------------------------------------------------------------------
     if Options.platform != 'win32' and Options.options.enable_uuid:
-        uuid_home = Options.options.uuid_home or '/usr'
-        
-        if Options.options.build_uuid or not conf.check(
-                header_name='uuid/uuid.h', lib='uuid',
-                function_name='uuid_generate', uselib_store='UUID',
-                libpath=os.path.join(uuid_home, 'lib'),
-                includes=os.path.join(uuid_home, 'include')):
+
+        uuidHome = Options.options.uuid_home
+        if uuidHome:
+            conf.msg('Setting uuid home', uuidHome)
+            conf.env.append_value('STLIBPATH_UUID', os.path.join(uuidHome, 'lib'))
+            conf.env.append_value('INCLUDES_UUID', os.path.join(uuidHome, 'include'))
+            conf.env.append_value('STLIB_UUID', 'uuid')
+
+        elif Options.options.build_uuid:
             conf.env['MAKE_UUID'] = True
             conf.msg('Building local lib', 'uuid')
             
             untarFile(path=conf.path, fname='e2fsprogs-1.40-uuid.tar')
+
+        else:
+            conf.check(lib='uuid', header_name='uuid/uuid.h',
+                       function_name='uuid_generate', uselib_store='UUID',
+                       mandatory=False)
 
 def build(bld):
     variant = bld.env['VARIANT']
