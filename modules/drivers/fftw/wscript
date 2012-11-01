@@ -75,7 +75,7 @@ def configure(conf):
             if not os.path.exists(os.path.join(conf.path.abspath(), 'fftw-2.1.5.tar')):
                 conf.fatal('Missing fftw tarfile')
 
-			defs = {}
+            defs = {}
 				
             conf.env['MAKE_FFT'] = True
             conf.msg('Building local lib', 'fftw')
@@ -83,7 +83,7 @@ def configure(conf):
                 double_fft = 'yes'
             else:
                 double_fft = 'no'
-				defs['FFTW_ENABLE_FLOAT'] = '1'
+                defs['FFTW_ENABLE_FLOAT'] = '1'
             conf.msg('Building double precision fft library', double_fft)
             
             untarFile(path=conf.path, fname='fftw-2.1.5.tar')

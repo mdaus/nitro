@@ -1391,11 +1391,11 @@ def handleDefsFile(input, output, path, defs, chmod=None):
     code = file.read()
     file.close()
 
-	for k in defs.keys():
-	    v = defs[k]
-		if v is None:
-		    v = ''
-	    code = re.sub(r'#undef %s(\n)' % k, r'#define %s %s\1' % (k,v), code)
+    for k in defs.keys():
+        v = defs[k]
+        if v is None:
+            v = ''
+        code = re.sub(r'#undef %s(\n)' % k, r'#define %s %s\1' % (k,v), code)
     code = re.sub(r'(#undef[^\n]*)(\n)', r'/* \1 */\2', code)
     file = open(outfile, 'w')
     file.write(code)
