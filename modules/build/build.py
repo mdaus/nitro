@@ -1378,11 +1378,11 @@ def m4substFile(input, output, path, dict={}, env=None, chmod=None):
     if chmod: os.chmod(outfile, chmod)
 
 @task_gen
-@feature('commentUndefs')
-def commentUndefs(tsk):
-    commentUndefsFile(input=tsk.input, output=tsk.output, path=tsk.path, chmod=getattr(tsk, 'chmod', None))
+@feature('handleDefs')
+def handleDefs(tsk):
+    handleDefsFile(input=tsk.input, output=tsk.output, path=tsk.path, defs=tsk.defs, chmod=getattr(tsk, 'chmod', None))
 
-def commentUndefsFile(input, output, path, chmod=None):
+def handleDefsFile(input, output, path, defs, chmod=None):
     import re
     infile = join(path.abspath(), input)
     outfile = join(path.abspath(), output)
@@ -1391,6 +1391,11 @@ def commentUndefsFile(input, output, path, chmod=None):
     code = file.read()
     file.close()
 
+	for k in defs.keys():
+	    v = defs[k]
+		if v is None:
+		    v = ''
+	    code = re.sub(r'#undef %s(\n)' % k, r'#define %s %s\1' % (k,v), code)
     code = re.sub(r'(#undef[^\n]*)(\n)', r'/* \1 */\2', code)
     file = open(outfile, 'w')
     file.write(code)

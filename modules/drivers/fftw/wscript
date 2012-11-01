@@ -1,7 +1,7 @@
 import os
 from waflib import Options
 from waflib.TaskGen import feature, before, task_gen
-from build import untarFile, commentUndefsFile
+from build import untarFile, handleDefsFile
 
 
 def options(opt):
@@ -75,16 +75,19 @@ def configure(conf):
             if not os.path.exists(os.path.join(conf.path.abspath(), 'fftw-2.1.5.tar')):
                 conf.fatal('Missing fftw tarfile')
 
+			defs = {}
+				
             conf.env['MAKE_FFT'] = True
             conf.msg('Building local lib', 'fftw')
             if conf.env['MAKE_FFT_DOUBLE']:
                 double_fft = 'yes'
             else:
                 double_fft = 'no'
+				defs['FFTW_ENABLE_FLOAT'] = '1'
             conf.msg('Building double precision fft library', double_fft)
             
             untarFile(path=conf.path, fname='fftw-2.1.5.tar')
-            commentUndefsFile(input='fftw/fftw.h.in', output='fftw/fftw.h',
+            handleDefsFile(input='fftw/fftw.h.in', output='fftw/fftw.h', defs=defs,
                               path=conf.path.make_node('fftw-2.1.5'))
 
         elif conf.check(lib='fftw', uselib_store='FFT',
