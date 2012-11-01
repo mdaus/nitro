@@ -22,19 +22,28 @@ def configure(conf):
 
         pcreHome = Options.options.pcre_home
         if pcreHome:
-            conf.msg('Setting pcre home', pcreHome)
-            conf.env.append_value('STLIBPATH_PCRE', os.path.join(pcreHome, 'lib'))
-            conf.env.append_value('INCLUDES_PCRE', os.path.join(pcreHome, 'include'))
-            conf.env.append_value('STLIB_PCRE', 'pcre')
+            conf.check(lib='pcre', uselib_store='PCRE',
+                       header_name='pcre.h', function_name='pcre_version',
+                       libpath=os.path.join(pcreHome, 'lib'),
+                       includes=os.path.join(pcreHome, 'include'),
+                       msg='Checking for library pcre', okmsg=pcreHome,
+                       mandatory=False)
 
         elif Options.options.build_pcre:
+            # Build is off by default when tarfile not found, fail if forced on
+            if not os.path.exists(os.path.join(conf.path.abspath(), 'pcre-5.0.tar')):
+                conf.fatal('Missing pcre tarfile')
+
             conf.env['MAKE_PCRE'] = True
             conf.msg('Building local lib', 'pcre')
             
             untarFile(path=conf.path, fname='pcre-5.0.tar')
 
         else:
-            conf.check(lib='pcre', uselib_store='PCRE', mandatory=False)
+            conf.check(lib='pcre', uselib_store='PCRE',
+                       header_name='pcre.h', function_name='pcre_version',
+                       msg='Checking for library pcre',
+                       mandatory=False)
 
 def build(bld):
     variant = bld.env['VARIANT']

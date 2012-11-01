@@ -24,20 +24,27 @@ def configure(conf):
 
         uuidHome = Options.options.uuid_home
         if uuidHome:
-            conf.msg('Setting uuid home', uuidHome)
-            conf.env.append_value('STLIBPATH_UUID', os.path.join(uuidHome, 'lib'))
-            conf.env.append_value('INCLUDES_UUID', os.path.join(uuidHome, 'include'))
-            conf.env.append_value('STLIB_UUID', 'uuid')
+            conf.check(lib='uuid', uselib_store='UUID',
+                       header_name='uuid/uuid.h', function_name='uuid_generate',
+                       libpath=os.path.join(uuidHome, 'lib'),
+                       includes=os.path.join(uuidHome, 'include'),
+                       msg='Checking for library uuid', okmsg=uuidHome,
+                       mandatory=False)
 
         elif Options.options.build_uuid:
+            # Build is off by default when tarfile not found, fail if forced on
+            if not os.path.exists(os.path.join(conf.path.abspath(), 'e2fsprogs-1.40-uuid.tar')):
+                conf.fatal('Missing uuid tarfile')
+
             conf.env['MAKE_UUID'] = True
             conf.msg('Building local lib', 'uuid')
-            
+           
             untarFile(path=conf.path, fname='e2fsprogs-1.40-uuid.tar')
 
         else:
-            conf.check(lib='uuid', header_name='uuid/uuid.h',
-                       function_name='uuid_generate', uselib_store='UUID',
+            conf.check(lib='uuid', uselib_store='UUID',
+                       header_name='uuid/uuid.h', function_name='uuid_generate',
+                       msg='Checking for library uuid',
                        mandatory=False)
 
 def build(bld):

@@ -24,43 +24,71 @@ def configure(conf):
 
         expatDefines = 'USE_EXPAT XML_STATIC'
         if Options.options.build_xml and not xmlHome:
+            # Build is off by default when tarfile not found, fail if forced on
+            if not os.path.exists(os.path.join(conf.path.abspath(), 'expat-2.0.0.tar')):
+                conf.fatal('Missing expat tarfile')
+
             conf.env['MAKE_XML'] = True
             conf.env.append_unique('DEFINES_XML', expatDefines.split())
             conf.msg('Building local lib', xmlLayer)
             untarFile(path=conf.path, fname='expat-2.0.0.tar')
 
-        else:
+        elif xmlLayer == 'expat':
+            conf.env.append_value('DEFINES_XML', expatDefines.split())
             if xmlHome:
-                conf.msg('Setting xml home', xmlHome)
-                conf.env.append_value('STLIBPATH_XML', os.path.join(xmlHome, 'lib'))
-                conf.env.append_value('INCLUDES_XML', os.path.join(xmlHome, 'include'))
-        
-            if xmlLayer == 'expat':
-                conf.env.append_value('DEFINES_XML', expatDefines.split())
-                if not xmlHome:
-                    #look for it on the system
-                    conf.check_cc(lib='expat', mandatory=False, uselib_store='XML')
-                else:
-                    conf.env['STLIB_XML'] = ['expat']
+                conf.check(lib='expat', uselib_store='XML',
+                           header_name='expat.h',
+                           function_name='XML_ExpatVersion',
+                           libpath=os.path.join(xmlHome, 'lib'),
+                           includes=os.path.join(xmlHome, 'include'),
+                           msg='Checking for library expat', okmsg=xmlHome,
+                           mandatory=False)
+            else:
+                conf.check(lib='expat', uselib_store='XML',
+                           header_name='expat.h',
+                           function_name='XML_ExpatVersion',
+                           msg='Checking for library expat',
+                           mandatory=False)
 
-            elif xmlLayer == 'libxml':
-                conf.env.append_value('DEFINES_XML', 'USE_LIBXML')
-                conf.env['STLIB_XML'] = ['xml2']
-                if not xmlHome:
-                    conf.check_cxx(lib='xml2', mandatory=False, uselib_store='XML')
-                    xmlHome = '/usr/'                    
-                conf.env.append_value('INCLUDES_XML', os.path.join(xmlHome, 'include/libxml2'))
+        elif xmlLayer == 'libxml':
+            conf.env.append_value('DEFINES_XML', 'USE_LIBXML')
+            if xmlHome:
+                conf.check(lib='xml2', uselib_store='XML',
+                           header_name='libxml/parser.h',
+                           function_name='xmlSAXVersion',
+                           libpath=os.path.join(xmlHome, 'lib'),
+                           includes=os.path.join(xmlHome, 'include'),
+                           msg='Checking for library libxml', okmsg=xmlHome,
+                           mandatory=False)
+            else:
+                conf.check(lib='xml2', uselib_store='XML',
+                           header_name='libxml/parser.h',
+                           function_name='xmlSAXVersion',
+                           includes='/usr/include/libxml2',
+                           msg='Checking for library libxml',
+                           mandatory=False)
 
-            elif xmlLayer == 'xerces':
-                conf.env.append_value('DEFINES_XML', 'USE_XERCES')
-                conf.env.append_value('DEFINES_XML', 'XERCES_STATIC_LIBRARY')
-                conf.env['STLIB_XML'] = ['xerces-c']
-                if sys.platform == 'win32':
-                    # Xerces also requires this standard Windows library for
-                    # Windows builds
-                    conf.env.append_value('LIB_XML', 'advapi32')
-                if not xmlHome:
-                    conf.check_cxx(lib='xerces-c', mandatory=False, uselib_store='XML')
+        elif xmlLayer == 'xerces':
+            conf.env.append_value('DEFINES_XML', 'USE_XERCES')
+            conf.env.append_value('DEFINES_XML', 'XERCES_STATIC_LIBRARY')
+            if sys.platform == 'win32':
+                # Xerces also requires this standard Windows library for
+                # Windows builds
+                conf.env.append_value('LIB_XML', 'advapi32')
+            if xmlHome:
+                conf.check(lib='xerces-c', uselib_store='XML',
+                           header_name='xercesc/sax/XMLTranscoder.hpp',
+                           function_name='XMLString::transcode',
+                           libpath=os.path.join(xmlHome, 'lib'),
+                           includes=os.path.join(xmlHome, 'include'),
+                           msg='Checking for library xerces', okmsg=xmlHome,
+                           mandatory=False)
+            else:
+                conf.check(lib='xerces-c', uselib_store='XML',
+                           header_name='xercesc/sax/XMLTranscoder.hpp',
+                           function_name='XMLString::transcode',
+                           msg='Checking for library xerces',
+                           mandatory=False)
 
 def build(bld):
     variant = bld.env['VARIANT']

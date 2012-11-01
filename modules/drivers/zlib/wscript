@@ -22,20 +22,28 @@ def configure(conf):
 
         zipHome = Options.options.zip_home
         if zipHome:
-            conf.msg('Setting zip home', zipHome)
-            conf.env.append_value('STLIBPATH_ZIP', os.path.join(zipHome, 'lib'))
-            conf.env.append_value('INCLUDES_ZIP', os.path.join(zipHome, 'include'))
-            conf.env.append_value('STLIB_ZIP', 'z')
+            conf.check(lib='z', uselib_store='ZIP',
+                       header_name='zlib.h', function_name='inflate',
+                       libpath=os.path.join(zipHome, 'lib'),
+                       includes=os.path.join(zipHome, 'include'),
+                       msg='Checking for library zlib', okmsg=zipHome,
+                       mandatory=False)
 
         elif Options.options.build_zip:
+            # Build is off by default when tarfile not found, fail if forced on
+            if not os.path.exists(os.path.join(conf.path.abspath(), 'zlib-1.2.3.tar')):
+                conf.fatal('Missing zlib tarfile')
+
             conf.env['MAKE_ZIP'] = True
             conf.msg('Building local lib', 'zip (zlib)')
             
             untarFile(path=conf.path, fname='zlib-1.2.3.tar')
 
         else:
-            conf.check(header_name='zlib.h', define_name='HAVE_ZLIB_H',
-                       lib='z', uselib_store='ZIP', mandatory=False)
+            conf.check(lib='z', uselib_store='ZIP',
+                       header_name='zlib.h', function_name='inflate',
+                       msg='Checking for library zlib',
+                       mandatory=False)
 
 def build(bld):
     variant = bld.env['VARIANT']

@@ -40,15 +40,41 @@ def configure(conf):
         else:
             conf.env['MAKE_FFT_DOUBLE'] = False
 
-        # FFTW2
-        if fftHome:
-            conf.msg('Setting fft home', fftHome)
-            conf.env.append_value('STLIBPATH_FFT', os.path.join(fftHome, 'lib'))
-            conf.env.append_value('INCLUDES_FFT', os.path.join(fftHome, 'include'))
-            conf.env.append_value('STLIB_FFT', 'fftw')
-            conf.env.append_value('STLIB_FFT', 'rfftw')
+        # FFTW3 - always use fftw3 when available
+        if fft3Home:
+            if conf.check(lib='fftw3f', uselib_store='FFT3',
+                          header_name='fftw/fftw3.h',
+                          function_name='fftwf_execute',
+                          libpath=os.path.join(fft3Home, 'lib'),
+                          includes=os.path.join(fft3Home, 'include'),
+                          msg='Checking for library fftw3', okmsg=fft3Home,
+                          mandatory=False):
+                conf.env.append_unique('CXXDEFINES_FFT3', ['HAVE_FFTW3'])
+                conf.define('HAVE_FFTW3', True)
+
+        elif conf.check(lib='fftw3f', uselib_store='FFT3',
+                        header_name='fftw/fftw3.h',
+                        function_name='fftwf_execute',
+                        msg='Checking for library fftw3',
+                        mandatory=False):
+            conf.env.append_unique('CXXDEFINES_FFT3', ['HAVE_FFTW3'])
+            conf.define('HAVE_FFTW3', True)
+
+        # FFTW2 - fallback when fftw3 not available
+        elif fftHome:
+            if conf.check(lib='fftw', uselib_store='FFT',
+                          header_name='fftw.h',
+                          function_name='fftw_print_max_memory_usage',
+                          libpath=os.path.join(fftHome, 'lib'),
+                          includes=os.path.join(fftHome, 'include'),
+                          msg='Checking for library fftw2', okmsg=fftHome,
+                          mandatory=False):
+                conf.env.append_value('LIB_FFT', 'rfftw')
 
         elif Options.options.build_fft:
+            if not os.path.exists(os.path.join(conf.path.abspath(), 'fftw-2.1.5.tar')):
+                conf.fatal('Missing fftw tarfile')
+
             conf.env['MAKE_FFT'] = True
             conf.msg('Building local lib', 'fftw')
             if conf.env['MAKE_FFT_DOUBLE']:
@@ -58,23 +84,15 @@ def configure(conf):
             conf.msg('Building double precision fft library', double_fft)
             
             untarFile(path=conf.path, fname='fftw-2.1.5.tar')
-            commentUndefsFile(input='fftw/fftw.h.in', output='fftw/fftw.h', path=conf.path.make_node('fftw-2.1.5'))
+            commentUndefsFile(input='fftw/fftw.h.in', output='fftw/fftw.h',
+                              path=conf.path.make_node('fftw-2.1.5'))
 
-        elif conf.check_cc(lib='fftw', uselib_store='FFT', mandatory=False):
+        elif conf.check(lib='fftw', uselib_store='FFT',
+                        header_name='fftw.h',
+                        function_name='fftw_print_max_memory_usage',
+                        msg='Checking for library fftw2',
+                        mandatory=False):
             conf.env.append_value('LIB_FFT', 'rfftw')
-
-        # FFTW3
-        if fft3Home:
-            conf.msg('Setting fft3 home', fft3Home)
-            conf.env.append_value('STLIBPATH_FFT3', os.path.join(fft3Home, 'lib'))
-            conf.env.append_value('INCLUDES_FFT3', os.path.join(fft3Home, 'include'))
-            conf.env.append_value('STLIB_FFT3', 'fftw3f')
-            conf.env.append_unique('CXXDEFINES_FFT3', ['HAVE_FFTW3'])
-            conf.define('HAVE_FFTW3', True)
-
-        elif conf.check_cc(lib='fftw3f', header_name='fftw/fftw3.h', uselib_store='FFT3', mandatory=False):
-            conf.env.append_unique('CXXDEFINES_FFT3', ['HAVE_FFTW3'])
-            conf.define('HAVE_FFTW3', True)
 
 def build(bld):
     variant = bld.env['VARIANT']
@@ -163,6 +181,13 @@ def build(bld):
             bld(features='install_tgt', install_path='${PREFIX}/include',
                 dir=driverNode, files=['fftw/fftw.h', 'rfftw/rfftw.h'],
                 name='fftw_install')
+
+#    elif 'STLIBPATH_FFT' in env and 'INCLUDES_FFT' in env:
+        # Check defined path
+#        bld.check(header_name='fftw.h', lib='fftw',
+#                  libpath=env['STLIBPATH_FFT'],
+#                  includes=env['INCLUDES_FFT'])
+
 
 def distclean(context):
     #remove the untarred directories
