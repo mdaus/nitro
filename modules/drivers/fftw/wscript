@@ -1,4 +1,4 @@
-qimport os
+import os
 from waflib import Options
 from waflib.TaskGen import feature, before, task_gen
 from build import untarFile, handleDefsFile
