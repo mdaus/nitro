@@ -1,4 +1,4 @@
-import os
+qimport os
 from waflib import Options
 from waflib.TaskGen import feature, before, task_gen
 from build import untarFile, handleDefsFile
@@ -76,7 +76,7 @@ def configure(conf):
                 conf.fatal('Missing fftw tarfile')
 
             defs = {}
-				
+
             conf.env['MAKE_FFT'] = True
             conf.msg('Building local lib', 'fftw')
             if conf.env['MAKE_FFT_DOUBLE']:
@@ -184,13 +184,6 @@ def build(bld):
             bld(features='install_tgt', install_path='${PREFIX}/include',
                 dir=driverNode, files=['fftw/fftw.h', 'rfftw/rfftw.h'],
                 name='fftw_install')
-
-#    elif 'STLIBPATH_FFT' in env and 'INCLUDES_FFT' in env:
-        # Check defined path
-#        bld.check(header_name='fftw.h', lib='fftw',
-#                  libpath=env['STLIBPATH_FFT'],
-#                  includes=env['INCLUDES_FFT'])
-
 
 def distclean(context):
     #remove the untarred directories
