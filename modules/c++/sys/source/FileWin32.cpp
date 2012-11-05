@@ -78,8 +78,8 @@ void sys::File::readInto(char *buffer, Size_T size)
         }
         else if (bytesThisRead == 0)
         {
-            //! CreateFile does not fail when finding the EOF --
-            //  instead it reports 0 bytes read, so this stops a inifinite loop
+            //! ReadFile does not fail when finding the EOF --
+            //  instead it reports 0 bytes read, so this stops an infinite loop
             //  from Unexpected EOF
             throw sys::SystemException(Ctxt("Unexpected end of file"));
         }
