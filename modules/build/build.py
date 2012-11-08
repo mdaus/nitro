@@ -490,7 +490,7 @@ class CPPContext(Context.Context):
             
             test_deps.append(modArgs['name'])
             
-            includes.append(env['CPPPATH_UNITTEST'][0])
+            includes.append(env['INCLUDES_UNITTEST'][0])
 
             test_deps = map(lambda x: '%s-%s' % (x, lang), test_deps + listify(modArgs.get('test_uselib_local', '')))
             
