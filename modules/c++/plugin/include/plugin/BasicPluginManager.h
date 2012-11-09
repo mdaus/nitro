@@ -197,6 +197,27 @@ public:
     }
 
     /*!
+     *  Get all the names associated with this handler
+     *
+     *  \param handler Pointer to a handler owned by this object
+     *  \param names All the names associated with this handler
+     */
+    void getNames(const T* handler, std::vector<std::string>& names) const
+    {
+        names.clear();
+
+        for (typename HandlerRegistry::const_iterator iter = mHandlers.begin();
+             iter != mHandlers.end();
+             ++iter)
+        {
+            if (iter->second.first == handler)
+            {
+                names.push_back(iter->first);
+            }
+        }
+    }
+
+    /*!
      *  Check if a plugin by this name exists in the registry.
      *
      *  \param name The name of the plugin
