@@ -19,7 +19,7 @@ def configure(conf):
             conf.load('python')
             if not conf.env['PYTHON']:
                 raise Exception('python not found')
-        except Exception, e:
+        except Exception as e:
             if Options.options.force_python:
                 raise e
             else:
@@ -38,7 +38,7 @@ def configure(conf):
         
         try:
             conf.check_python_headers()
-        except Exception, ex:
+        except Exception as ex:
             err = str(ex).strip()
             if err.startswith('error: '):
                 err = err[7:]

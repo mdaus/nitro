@@ -95,7 +95,7 @@ def configure(self):
             if re.match(winRegex, platform):
                 self.env.append_value('LINKFLAGS_MEX', '/EXPORT:mexFunction'.split())
 
-        except ConfigurationError, ex:
+        except ConfigurationError as ex:
             err = str(ex).strip()
             if err.startswith('error: '):
                 err = err[7:]

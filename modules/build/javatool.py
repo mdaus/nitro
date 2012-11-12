@@ -42,7 +42,7 @@ def configure(self):
     
     try:
         self.load('java')
-    except Exception, e:
+    except Exception as e:
         if Options.options.force_java:
             raise e
         else:
@@ -78,7 +78,7 @@ def configure(self):
                     function_name='JNI_GetCreatedJavaVMs'):
             if Options.options.force_jni:
                 self.fatal('could not find lib jvm in %r (see config.log)' % libDirs)
-    except ConfigurationError, ex:
+    except ConfigurationError as ex:
         err = str(ex).strip()
         if err.startswith('error: '):
             err = err[7:]
