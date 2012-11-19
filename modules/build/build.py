@@ -835,7 +835,7 @@ def configure(self):
     sys_platform = getPlatform(default=Options.platform)
     appleRegex = r'i.86-apple-.*'
     linuxRegex = r'.*-.*-linux-.*|i686-pc-.*|linux'
-    solarisRegex = r'sparc-sun.*|i.86-pc-solaris.*'
+    solarisRegex = r'sparc-sun.*|i.86-pc-solaris.*|sunos'
     winRegex = r'win32'
     
     # build packages is a map of maps
