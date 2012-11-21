@@ -557,6 +557,7 @@ class CPPContext(Context.Context):
                 defines=defines, path=path,
                 install_path='${PREFIX}/share/%s/plugins' % plugin)
 
+        sourceExt = {'c++':'.cpp', 'c':'.c'}.get(lang, 'cxx')
         allSourceExt = listify(modArgs.get('source_ext', '')) + [sourceExt]
         sourcedirs = listify(modArgs.get('source_dir', modArgs.get('sourcedir', 'source')))
         glob_patterns = []
