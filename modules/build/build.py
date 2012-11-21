@@ -556,8 +556,16 @@ class CPPContext(Context.Context):
                 use=uselib_local, uselib=uselib, env=env.derive(),
                 defines=defines, path=path,
                 install_path='${PREFIX}/share/%s/plugins' % plugin)
+
+        allSourceExt = listify(modArgs.get('source_ext', '')) + [sourceExt]
+        sourcedirs = listify(modArgs.get('source_dir', modArgs.get('sourcedir', 'source')))
+        glob_patterns = []
+        for dir in sourcedirs:
+            for ext in allSourceExt:
+                glob_patterns.append(join(dir, '*%s' % ext))
+
         if not source:
-            lib.source = path.ant_glob(modArgs.get('source_dir', modArgs.get('sourcedir', 'source')) + '/*')
+            lib.source = path.ant_glob(glob_patterns)
             lib.source = filter(modArgs.get('source_filter', None), lib.source)
         
         confNode = bld.path.make_node('conf')
