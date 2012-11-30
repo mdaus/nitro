@@ -481,7 +481,7 @@ class CPPContext(Context.Context):
                                  use=test_deps,
                                  uselib=modArgs.get('test_uselib', modArgs.get('uselib', '')),
                                  lang=lang, path=testNode, includes=includes, defines=defines,
-                                 install_path='${PREFIX}/share/%s/tests' % modArgs['name'])
+                                 install_path='${PREFIX}/tests/%s' % modArgs['name'])
 
         testNode = path.make_node('unittests')
         if os.path.exists(testNode.abspath()) and not Options.options.libs_only:
@@ -505,7 +505,7 @@ class CPPContext(Context.Context):
                                  uselib = modArgs.get('unittest_uselib', modArgs.get('uselib', '')),
                                  lang=lang, path=testNode, defines=defines,
                                  includes=includes,
-                                 install_path='${PREFIX}/share/%s/unittests' % modArgs['name'])
+                                 install_path='${PREFIX}/unittests/%s' % modArgs['name'])
                     if Options.options.unittests or Options.options.all_tests:
                         exe.features += ' test'
 
@@ -669,7 +669,7 @@ class CPPContext(Context.Context):
                                    name=name, use=uselib_local,
                                    uselib=uselib, env=env.derive(), defines=defines,
                                    path=path, source=source, includes=includes,
-                                   install_path=installPath or '${PREFIX}/bin/mex')
+                                   install_path=installPath or '${PREFIX}/mex')
             if not source:
                 mex.source = path.ant_glob(modArgs.get('source_dir', modArgs.get('sourcedir', 'source')) + '/*')
                 mex.source = filter(modArgs.get('source_filter', None), mex.source)
