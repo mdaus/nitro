@@ -52,20 +52,24 @@ def configure(self):
                       recursiveGlob(matlabBin, searches))
         libDirs.extend(map(lambda x: os.path.dirname(x),
                       recursiveGlob(abspath(join(matlabHome, 'extern', 'lib')), searches)))
-        
+
+        mexExtCmd = os.path.join(matlabBin, 'mexext')        
         if re.match(winRegex, platform):
             archdir = self.env['IS64BIT'] and 'win64' or 'win32'
-            arch = self.env['IS64BIT'] and 'w64' or 'w32'
+            mexExtCmd += '.bat'
         else:
             #retrieve the matlab environment
             matlabEnvCmd = '%s -nojvm -nosplash -nodisplay -e' % self.env['matlab']
             out, err = subprocess.Popen(matlabEnvCmd.split(), stdout=subprocess.PIPE,
                                         stderr=subprocess.PIPE).communicate()
             matlabEnv = dict(map(lambda x: x.split('=', 1), filter(None, out.split('\n'))))
-            #self.env['matlab_env'] = matlabEnv
             archdir = matlabEnv['ARCH']
-            arch = archdir[-3:]
-        self.env['MEX_EXT'] = '.mex%s' % arch
+
+        # Get the appropriate mex extension.  Matlab provides a script to
+        # tell us this.
+        out, err = subprocess.Popen(mexExtCmd, stdout=subprocess.PIPE,
+                                        stderr=subprocess.PIPE).communicate()
+        self.env['MEX_EXT'] = '.' + out.rstrip()
         
         filtered = filter(lambda x: archdir in x, libDirs)
         if filtered:
