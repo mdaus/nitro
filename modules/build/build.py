@@ -481,7 +481,7 @@ class CPPContext(Context.Context):
                                  use=test_deps,
                                  uselib=modArgs.get('test_uselib', modArgs.get('uselib', '')),
                                  lang=lang, path=testNode, includes=includes, defines=defines,
-                                 install_path='${PREFIX}/share/%s/test' % modArgs['name'])
+                                 install_path='${PREFIX}/share/%s/tests' % modArgs['name'])
 
         testNode = path.make_node('unittests')
         if os.path.exists(testNode.abspath()) and not Options.options.libs_only:
@@ -490,7 +490,8 @@ class CPPContext(Context.Context):
             
             test_deps.append(modArgs['name'])
             
-            includes.append(env['INCLUDES_UNITTEST'][0])
+            if 'INCLUDES_UNITTEST' in env:
+                includes.append(env['INCLUDES_UNITTEST'][0])
 
             test_deps = map(lambda x: '%s-%s' % (x, lang), test_deps + listify(modArgs.get('test_uselib_local', '')))
             
@@ -499,10 +500,12 @@ class CPPContext(Context.Context):
             for test in testNode.ant_glob('*%s' % sourceExt):
                 if modArgs.get('unittest_filter', lambda x: True)(str(test)):
                     testName = splitext(str(test))[0]
-                    exe = self(features='%s %sprogram' % (libExeType, libExeType), env=env.derive(), name=testName, target=testName, source=str(test), use=test_deps,
+                    exe = self(features='%s %sprogram' % (libExeType, libExeType), 
+                                 env=env.derive(), name=testName, target=testName, source=str(test), use=test_deps,
                                  uselib = modArgs.get('unittest_uselib', modArgs.get('uselib', '')),
                                  lang=lang, path=testNode, defines=defines,
-                                 includes=includes)
+                                 includes=includes,
+                                 install_path='${PREFIX}/share/%s/unittests' % modArgs['name'])
                     if Options.options.unittests or Options.options.all_tests:
                         exe.features += ' test'
 
