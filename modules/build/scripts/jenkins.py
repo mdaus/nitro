@@ -7,7 +7,10 @@ parser = OptionParser()
 parser.add_option("-p", "--package", dest="package_name", help="Package name")
 parser.add_option("-d", "--build-dir", dest="build_dir", help="Build Directory", default=".")
 parser.add_option("-c", "--config-options", dest="config_options", help="Configure Options", default="--require-ant,--require-java")
-parser.add_option("-b", "--build-options", dest="build_options", help="Build Options")
+parser.add_option("-b", "--build-options", dest="build_options", help="Build Options", default="")
+parser.add_option("--studio11-path", dest="studio11_path", help="Sun Studio 11 Compiler Path", default="/var/studio11/SUNWspro")
+parser.add_option("--studio12-path", dest="studio12_path", help="Sun Studio 12 Compiler Path", default="/var/studio12/SUNWspro")
+parser.add_option("--python27-path", dest="python27_path", help="Python 2.7.x Path", default="/opt/python/v2.7.3")
 
 (options, args) = parser.parse_args()
 
@@ -28,15 +31,15 @@ print 'Config Options: %s' % config_options
 print 'Build Options: %s' % build_options
 
 if 'studio11' in os.environ.get('JOB_NAME'):
-    os.environ['PATH'] += os.pathsep + '/var/studio11/SUNWspro/bin'
-    os.environ['LD_LIBRARY_PATH'] += os.pathsep + '/var/studio11/SUNWspro/lib'
+    os.environ['PATH'] += os.pathsep + ('%s/bin' % options.studio11_path)
+    os.environ['LD_LIBRARY_PATH'] += os.pathsep + ('%s/lib' % options.studio11_path)
     install_suffix = 'sparc-sun-solaris2.10-64-studio11'
 elif 'studio12' in os.environ.get('JOB_NAME'):
-    os.environ['PATH'] += os.pathsep + '/var/studio12/SUNWspro/bin'
-    os.environ['LD_LIBRARY_PATH'] += os.pathsep + '/var/studio12/SUNWspro/lib'
+    os.environ['PATH'] += os.pathsep + ('%s/bin' % options.studio12_path)
+    os.environ['LD_LIBRARY_PATH'] += os.pathsep + ('%s/lib' % options.studio12_path)
     install_suffix = 'sparc-sun-solaris2.10-64-studio12'
 elif 'linux' in os.environ.get('JOB_NAME'):
-    os.environ['PATH'] += os.pathsep + '/opt/python/v2.7.3/bin'
+    os.environ['PATH'] += os.pathsep + ('%s/bin' % options.python27_path)
     install_suffix = 'x86_64-linux-gnu-64'
 elif 'win32' in os.environ.get('JOB_NAME'):
     install_suffix = 'win32'
