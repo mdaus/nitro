@@ -60,7 +60,6 @@ for f in glob.glob('%s-*' % package_name):
 
 check_call(["python", "waf", "distclean"])
 check_call(["python", "waf", "configure", "--prefix=%s" % install_path] + config_options)
-check_call(["python", "waf", "build"])
 check_call(["python", "waf", "install"] + build_options)
 
 if os.path.isdir(install_path):
