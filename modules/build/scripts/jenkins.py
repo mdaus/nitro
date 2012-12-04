@@ -51,9 +51,9 @@ elif 'win32' in os.environ.get('JOB_NAME'):
     install_suffix = 'win32'
 elif 'win64' in os.environ.get('JOB_NAME'):
     install_suffix = 'win64'
-if '-md' in os.environ.get('JOB_NAME'):
-    install_suffix += '-md'
-    config_options += ["--with-crt=MD"]
+if '-mt' in os.environ.get('JOB_NAME'):
+    install_suffix += '-mt'
+    config_options += ["--with-crt=MT"]
 
 print 'Job: %s' % os.environ.get('JOB_NAME', '')
 print "Revision: %s" % os.environ.get('SVN_REVISION', '')
