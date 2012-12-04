@@ -6,8 +6,8 @@ from optparse import OptionParser
 parser = OptionParser()
 parser.add_option("-p", "--package", dest="package_name", help="Package name")
 parser.add_option("-d", "--build-dir", dest="build_dir", help="Build Directory", default=".")
-parser.add_option("-c", "--config-options", dest="config_options", help="Configure Options", default="--require-ant,--require-java")
-parser.add_option("-b", "--build-options", dest="build_options", help="Build Options", default="")
+parser.add_option("-c", "--config-options", dest="config_options", help="Configure Options")
+parser.add_option("-b", "--build-options", dest="build_options", help="Build Options")
 parser.add_option("--studio11-path", dest="studio11_path", help="Sun Studio 11 Compiler Path", default="/var/studio11/SUNWspro")
 parser.add_option("--studio12-path", dest="studio12_path", help="Sun Studio 12 Compiler Path", default="/var/studio12/SUNWspro")
 parser.add_option("--python27-path", dest="python27_path", help="Python 2.7.x Path", default="/opt/python/v2.7.3")
@@ -22,8 +22,14 @@ install_suffix = ''
 
 package_name = options.package_name
 build_dir = options.build_dir
-config_options = options.config_options.split(',')
-build_options = options.build_options.split(',')
+if options.config_options is not None:
+    config_options = options.config_options.split(',')
+else:
+    config_options = []
+if options.build_options is not None:
+    build_options = options.build_options.split(',')
+else:
+    build_options = []
 
 print 'Package Name: %s' % package_name
 print 'Build Dir: %s' % build_dir
