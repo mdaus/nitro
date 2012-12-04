@@ -5,8 +5,9 @@ from optparse import OptionParser
 
 parser = OptionParser()
 parser.add_option("-p", "--package", dest="package_name", help="Package name")
-parser.add_option("-b", "--build-dir", dest="build_dir", help="Build Directory", default=".")
+parser.add_option("-d", "--build-dir", dest="build_dir", help="Build Directory", default=".")
 parser.add_option("-c", "--config-options", dest="config_options", help="Configure Options", default="--require-ant,--require-java")
+parser.add_options("-b", "--build-options", dest="build_options", help="Build Options", default="")
 
 (options, args) = parser.parse_args()
 
@@ -19,10 +20,12 @@ install_suffix = ''
 package_name = options.package_name
 build_dir = options.build_dir
 config_options = options.config_options.split(',')
+build_options = options.build_options.split(',')
 
 print 'Package Name: %s' % package_name
 print 'Build Dir: %s' % build_dir
 print 'Config Options: %s' % config_options
+print 'Build Options: %s' % build_options
 
 if 'studio11' in os.environ.get('JOB_NAME'):
     os.environ['PATH'] += os.pathsep + '/var/studio11/SUNWspro/bin'
@@ -58,7 +61,7 @@ for f in glob.glob('%s-*' % package_name):
 check_call(["python", "waf", "distclean"])
 check_call(["python", "waf", "configure", "--prefix=%s" % install_path] + config_options)
 check_call(["python", "waf", "build"])
-check_call(["python", "waf", "install"])
+check_call(["python", "waf", "install"] + build_options)
 
 if os.path.isdir(install_path):
     shutil.make_archive(install_path, "zip", install_path)
