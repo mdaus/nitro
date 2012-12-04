@@ -7,7 +7,7 @@ parser = OptionParser()
 parser.add_option("-p", "--package", dest="package_name", help="Package name")
 parser.add_option("-d", "--build-dir", dest="build_dir", help="Build Directory", default=".")
 parser.add_option("-c", "--config-options", dest="config_options", help="Configure Options", default="--require-ant,--require-java")
-parser.add_options("-b", "--build-options", dest="build_options", help="Build Options", default="")
+parser.add_option("-b", "--build-options", dest="build_options", help="Build Options")
 
 (options, args) = parser.parse_args()
 
