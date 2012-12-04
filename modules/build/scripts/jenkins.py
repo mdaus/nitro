@@ -37,10 +37,13 @@ print 'Config Options: %s' % config_options
 print 'Build Options: %s' % build_options
 
 if 'studio11' in os.environ.get('JOB_NAME'):
+    print 'Studio 11 Path: %s' % options.studio11_path
     os.environ['PATH'] += os.pathsep + ('%s/bin' % options.studio11_path)
     os.environ['LD_LIBRARY_PATH'] += os.pathsep + ('%s/lib' % options.studio11_path)
     install_suffix = 'sparc-sun-solaris2.10-64-studio11'
-elif 'studio12' in os.environ.get('JOB_NAME'):
+    print 'Path: %s' % os.environ['PATH']
+elif 'studio12' in os.environ.get('JOB_NAME') or 'solaris' in os.environ.get('JOB_NAME'):
+    print 'Studio 12 Path: %s' % options.studio12_path
     os.environ['PATH'] += os.pathsep + ('%s/bin' % options.studio12_path)
     os.environ['LD_LIBRARY_PATH'] += os.pathsep + ('%s/lib' % options.studio12_path)
     install_suffix = 'sparc-sun-solaris2.10-64-studio12'
