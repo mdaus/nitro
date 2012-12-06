@@ -301,7 +301,7 @@ class CPPContext(Context.Context):
         uselibCheck = args.pop('uselib_check', None)
         if uselibCheck:
             if ('MAKE_%s' % uselibCheck) in env:
-                args['uselib_local'] = ' '.join([uselibCheck, args.get('uselib_local', '')])
+                args['uselib_local'] = ' '.join([uselibCheck, args.get('uselib_local', ''), args.get('use','')])
             else:
                 args['uselib'] = ' '.join([uselibCheck, args.get('uselib', '')])
         
@@ -423,7 +423,7 @@ class CPPContext(Context.Context):
 
         module_deps = map(lambda x: '%s-%s' % (x, lang), listify(modArgs.get('module_deps', '')))
         defines = self.__getDefines(env) + listify(modArgs.get('defines', ''))
-        uselib_local = module_deps + listify(modArgs.get('uselib_local', ''))
+        uselib_local = module_deps + listify(modArgs.get('uselib_local', '')) + listify(modArgs.get('use',''))
         uselib = listify(modArgs.get('uselib', '')) + ['CSTD', 'CRUN']
         includes = listify(modArgs.get('includes', 'include'))
         exportIncludes = listify(modArgs.get('export_includes', 'include'))
@@ -472,7 +472,7 @@ class CPPContext(Context.Context):
             
             test_deps.append(modArgs['name'])
                 
-            test_deps = map(lambda x: '%s-%s' % (x, lang), test_deps + listify(modArgs.get('test_uselib_local', '')))
+            test_deps = map(lambda x: '%s-%s' % (x, lang), test_deps + listify(modArgs.get('test_uselib_local', '')) + listify(modArgs.get('test_use','')))
             
             for test in testNode.ant_glob('*%s' % sourceExt):
                 if modArgs.get('test_filter', lambda x: True)(str(test)):
@@ -493,7 +493,7 @@ class CPPContext(Context.Context):
             if 'INCLUDES_UNITTEST' in env:
                 includes.append(env['INCLUDES_UNITTEST'][0])
 
-            test_deps = map(lambda x: '%s-%s' % (x, lang), test_deps + listify(modArgs.get('test_uselib_local', '')))
+            test_deps = map(lambda x: '%s-%s' % (x, lang), test_deps + listify(modArgs.get('test_uselib_local', '')) + listify(modArgs.get('test_use','')))
             
             sourceExt = {'c++':'.cpp', 'c':'.c'}.get(lang, 'cxx')
             tests = []
@@ -548,7 +548,7 @@ class CPPContext(Context.Context):
 
         module_deps = map(lambda x: '%s-%s' % (x, lang), listify(modArgs.get('module_deps', '')))
         defines = self.__getDefines(env) + listify(modArgs.get('defines', '')) + ['PLUGIN_MODULE_EXPORTS']
-        uselib_local = module_deps + listify(modArgs.get('uselib_local', ''))
+        uselib_local = module_deps + listify(modArgs.get('uselib_local', '')) + listify(modArgs.get('use',''))
         uselib = listify(modArgs.get('uselib', '')) + ['CSTD', 'CRUN']
         includes = listify(modArgs.get('includes', 'include'))
         exportIncludes = listify(modArgs.get('export_includes', 'include'))
@@ -600,7 +600,7 @@ class CPPContext(Context.Context):
 
         module_deps = map(lambda x: '%s-%s' % (x, lang), listify(modArgs.get('module_deps', '')))
         defines = self.__getDefines(env) + listify(modArgs.get('defines', ''))
-        uselib_local = module_deps + listify(modArgs.get('uselib_local', ''))
+        uselib_local = module_deps + listify(modArgs.get('uselib_local', '')) + listify(modArgs.get('use',''))
         uselib = listify(modArgs.get('uselib', '')) + ['CSTD', 'CRUN']
         includes = listify(modArgs.get('includes', 'include'))
         source = listify(modArgs.get('source', '')) or None
@@ -654,7 +654,7 @@ class CPPContext(Context.Context):
 
             module_deps = map(lambda x: '%s-%s' % (x, lang), listify(modArgs.get('module_deps', '')))
             defines = self.__getDefines(env) + listify(modArgs.get('defines', ''))
-            uselib_local = module_deps + listify(modArgs.get('uselib_local', ''))
+            uselib_local = module_deps + listify(modArgs.get('uselib_local', '')) + listify(modArgs.get('use',''))
             uselib = listify(modArgs.get('uselib', '')) + ['CSTD', 'CRUN', 'MEX']
             includes = listify(modArgs.get('includes', 'include'))
             installPath = modArgs.get('install_path', None)
