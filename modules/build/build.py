@@ -611,7 +611,8 @@ class CPPContext(Context.Context):
         if not source:
             source = bld.path.make_node(modArgs.get('source_dir', modArgs.get('sourcedir', 'source'))).ant_glob('*.c*', excl=modArgs.get('source_filter', ''))
             
-        exe = bld.program(source=source, name=progName,
+        exe = bld.program(features = 'add_targets',
+                               source=source, name=progName,
                                includes=includes, defines=defines,
                                use=uselib_local, uselib=uselib,
                                env=env.derive(), target=progName, path=path,
