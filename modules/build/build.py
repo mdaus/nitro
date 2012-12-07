@@ -425,6 +425,7 @@ class CPPContext(Context.Context):
         defines = self.__getDefines(env) + listify(modArgs.get('defines', ''))
         uselib_local = module_deps + listify(modArgs.get('uselib_local', '')) + listify(modArgs.get('use',''))
         uselib = listify(modArgs.get('uselib', '')) + ['CSTD', 'CRUN']
+        targets_to_add = listify(modArgs.get('targets_to_add', ''))
         includes = listify(modArgs.get('includes', 'include'))
         exportIncludes = listify(modArgs.get('export_includes', 'include'))
         libVersion = modArgs.get('version', None)
@@ -447,7 +448,7 @@ class CPPContext(Context.Context):
                 target=targetName, name=libName, export_includes=exportIncludes,
                 use=uselib_local, uselib=uselib, env=env.derive(),
                 defines=defines, path=path,
-                source=path.ant_glob(glob_patterns), targets_to_add=[])
+                source=path.ant_glob(glob_patterns), targets_to_add=targets_to_add)
         lib.source = filter(modArgs.get('source_filter', None), lib.source)
         if env['install_libs']:
             lib.install_path = installPath or '${PREFIX}/lib'
@@ -602,6 +603,7 @@ class CPPContext(Context.Context):
         defines = self.__getDefines(env) + listify(modArgs.get('defines', ''))
         uselib_local = module_deps + listify(modArgs.get('uselib_local', '')) + listify(modArgs.get('use',''))
         uselib = listify(modArgs.get('uselib', '')) + ['CSTD', 'CRUN']
+        targets_to_add = listify(modArgs.get('targets_to_add', ''))
         includes = listify(modArgs.get('includes', 'include'))
         source = listify(modArgs.get('source', '')) or None
         install_path = modArgs.get('install_path', '${PREFIX}/bin')
@@ -613,7 +615,8 @@ class CPPContext(Context.Context):
                                includes=includes, defines=defines,
                                use=uselib_local, uselib=uselib,
                                env=env.derive(), target=progName, path=path,
-                               install_path=install_path)
+                               install_path=install_path,
+                               targets_to_add=targets_to_add)
             
         return exe
 
