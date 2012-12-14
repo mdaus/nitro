@@ -75,15 +75,15 @@ unsigned long long str::strtoull(const char *str, char **endptr, int base)
 #endif
 }
 
-template<> int str::getPrecision(const float& type)
+template<> int str::getPrecision(const float& )
 {
     return std::numeric_limits<float>::digits10 + 1;
 }
-template<> int str::getPrecision(const double& type)
+template<> int str::getPrecision(const double& )
 {
     return std::numeric_limits<double>::digits10 + 1;
 }
-template<> int str::getPrecision(const long double& type)
+template<> int str::getPrecision(const long double& )
 {
     return std::numeric_limits<long double>::digits10 + 1;
 }

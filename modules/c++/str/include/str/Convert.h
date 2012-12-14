@@ -149,7 +149,7 @@ template<typename T> T toType(const std::string& s, int base)
  *  @return The integer argument required by ios::precision() to represent
  *  this type.
  */
-template<typename T> int getPrecision(const T& type)
+template<typename T> int getPrecision(const T& )
 {
     return 0;
 }
