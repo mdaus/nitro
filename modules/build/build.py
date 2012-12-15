@@ -519,10 +519,11 @@ class CPPContext(Context.Context):
             #                             tests=tests,
             #                             path=self.getBuildDir(testNode)))
 
-        descDir = path.make_node('conf/desc')
-        if exists(descDir.abspath()):
-            lib.targets_to_add.append(bld(features='install_tgt', install_path='${PREFIX}/share/%s/conf/desc' % modArgs['name'],
-                    dir=descDir, pattern='*'))
+        confDir = path.make_node('conf')
+        if exists(confDir.abspath()):
+            lib.targets_to_add.append(
+                    bld(features='install_tgt', dir=confDir, pattern='**',
+                        install_path='${PREFIX}/share/%s/conf' % modArgs['name']))
 
         return env
     
@@ -551,14 +552,16 @@ class CPPContext(Context.Context):
         defines = self.__getDefines(env) + listify(modArgs.get('defines', '')) + ['PLUGIN_MODULE_EXPORTS']
         uselib_local = module_deps + listify(modArgs.get('uselib_local', '')) + listify(modArgs.get('use',''))
         uselib = listify(modArgs.get('uselib', '')) + ['CSTD', 'CRUN']
+        targets_to_add = listify(modArgs.get('targets_to_add', ''))
         includes = listify(modArgs.get('includes', 'include'))
         exportIncludes = listify(modArgs.get('export_includes', 'include'))
         source = listify(modArgs.get('source', '')) or None
         
-        lib = bld(features='%s %sshlib no_implib' % (libExeType, libExeType), includes=includes, source=source,
-                target=libName, name=libName, export_includes=exportIncludes,
+        lib = bld(features='%s %sshlib add_targets no_implib' % (libExeType, libExeType),
+                target=libName, name=libName, source=source,
+                includes=includes, export_includes=exportIncludes,
                 use=uselib_local, uselib=uselib, env=env.derive(),
-                defines=defines, path=path,
+                defines=defines, path=path, targets_to_add=targets_to_add,
                 install_path='${PREFIX}/share/%s/plugins' % plugin)
 
         sourceExt = {'c++':'.cpp', 'c':'.c'}.get(lang, 'cxx')
@@ -573,14 +576,19 @@ class CPPContext(Context.Context):
             lib.source = path.ant_glob(glob_patterns)
             lib.source = filter(modArgs.get('source_filter', None), lib.source)
         
-        confNode = bld.path.make_node('conf')
-        bld(features='install_tgt', pattern='*',
-            dir=confNode, install_path='${PREFIX}/share/%s/conf' % plugin)
-            
-        confNode = bld.path.make_node('conf/desc')
-        bld(features='install_tgt', pattern='*',
-            dir=confNode, install_path='${PREFIX}/share/%s/conf/desc' % plugin)
-    
+        confDir = path.make_node('conf')
+        if exists(confDir.abspath()):
+            lib.targets_to_add.append(
+                    bld(features='install_tgt', dir=confDir, pattern='**',
+                        install_path='${PREFIX}/share/%s/conf' % plugin))
+
+        pluginsTarget = '%s-plugins'
+        try:
+            bld.get_tgen_by_name(pluginsTarget).targets_to_add.append(lib)
+        except:
+            bld(target=pluginsTarget,
+                features='add_targets', targets_to_add=[libName])
+
     def program_helper(self, **modArgs):
         """
         Builds a program (exe)
