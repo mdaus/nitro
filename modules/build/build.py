@@ -582,7 +582,7 @@ class CPPContext(Context.Context):
                     bld(features='install_tgt', dir=confDir, pattern='**',
                         install_path='${PREFIX}/share/%s/conf' % plugin))
 
-        pluginsTarget = '%s-plugins'
+        pluginsTarget = '%s-plugins' % plugin
         try:
             bld.get_tgen_by_name(pluginsTarget).targets_to_add.append(lib)
         except:
