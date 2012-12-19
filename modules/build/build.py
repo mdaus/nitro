@@ -584,7 +584,7 @@ class CPPContext(Context.Context):
 
         pluginsTarget = '%s-plugins' % plugin
         try:
-            bld.get_tgen_by_name(pluginsTarget).targets_to_add.append(lib)
+            bld.get_tgen_by_name(pluginsTarget).targets_to_add.append(libName)
         except:
             bld(target=pluginsTarget,
                 features='add_targets', targets_to_add=[libName])
