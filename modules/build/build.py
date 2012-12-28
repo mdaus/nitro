@@ -474,9 +474,11 @@ class CPPContext(Context.Context):
                     'source/*','include/**/*','shared/*','apps/*'],
                     dir=path, install_path='${PREFIX}/%s' % relpath, relative_trick=True))
             lib.targets_to_add.append(bld(features='install_tgt', dir=path.make_node('../../../'), 
-                    pattern=['waf','modules/build/*.py','modules/build/config.guess','modules/build/waf',
+                    pattern=['modules/build/*.py','modules/build/config.guess','modules/build/waf',
                              'wscript','modules/wscript','modules/%s/wscript' % lang], 
                     install_path='${PREFIX}/%s' % relpath, relative_trick=True))
+            lib.targets_to_add.append(bld(features='install_tgt', dir=path.make_node('../../../'),
+                    pattern=['waf','modules/waf'], install_path='${PREFIX}/%s' % relpath, relative_trick=True, chmod=Utils.O755))
 
         testNode = path.make_node('tests')
         if os.path.exists(testNode.abspath()) and not Options.options.libs_only:
@@ -1362,15 +1364,19 @@ def install_tgt(tsk):
                     dest = tsk.install_path
                 else:
                     dest = os.path.join(tsk.install_path, file.parent.path_from(tsk.dir))
-                tsk.bld.install_files(dest, file, 
+                inst = tsk.bld.install_files(dest, file, 
                                       relative_trick=tsk.relative_trick)
+                if hasattr(tsk, 'chmod'):
+                    inst.chmod = tsk.chmod
         if not hasattr(tsk, 'files'):
             tsk.files = []
         if isinstance(tsk.files, str):
             tsk.files = [tsk.files]
         for file in tsk.files:
-            tsk.bld.install_files(tsk.install_path, tsk.dir.make_node(file), 
+            inst = tsk.bld.install_files(tsk.install_path, tsk.dir.make_node(file), 
                                   relative_trick=tsk.relative_trick)
+            if hasattr(tsk, 'chmod'):
+                inst.chmod = tsk.chmod
 
 @task_gen
 @feature('install_as_tgt')
