@@ -466,7 +466,18 @@ class CPPContext(Context.Context):
             relpath = incNode.path_from(path)
             lib.targets_to_add.append(bld(features='install_tgt', pattern='**/*',
                     dir=incNode, install_path='${PREFIX}/%s' % relpath))
-        
+
+        if Options.options.install_source:
+            sourceNode = path.make_node('source')
+            relpath = sourceNode.path_from(path)
+            lib.targets_to_add.append(bld(features='install_tgt', pattern=['project.cfg','wscript',
+                    'source/*','include/**/*','shared/*','apps/*'],
+                    dir=path, install_path='${PREFIX}/%s' % relpath, relative_trick=True))
+            lib.targets_to_add.append(bld(features='install_tgt', dir=path.make_node('../../../'), 
+                    pattern=['waf','modules/build/*.py','modules/build/config.guess','modules/build/waf',
+                             'wscript','modules/wscript','modules/%s/wscript' % lang], 
+                    install_path='${PREFIX}/%s' % relpath, relative_trick=True))
+
         testNode = path.make_node('tests')
         if os.path.exists(testNode.abspath()) and not Options.options.libs_only:
             test_deps = listify(modArgs.get('test_deps', modArgs.get('module_deps', '')))
@@ -564,6 +575,11 @@ class CPPContext(Context.Context):
                 defines=defines, path=path, targets_to_add=targets_to_add,
                 install_path='${PREFIX}/share/%s/plugins' % plugin)
 
+        if Options.options.install_source:
+            lib.targets_to_add.append(bld(features='install_tgt', pattern=['shared/*','shared/**/source/*','shared/**/include/*','shared/**/wscript'],
+                    dir=path, install_path='${PREFIX}/source', relative_trick=True))
+
+
         sourceExt = {'c++':'.cpp', 'c':'.c'}.get(lang, 'cxx')
         allSourceExt = listify(modArgs.get('source_ext', '')) + [sourceExt]
         sourcedirs = listify(modArgs.get('source_dir', modArgs.get('sourcedir', 'source')))
@@ -618,7 +634,7 @@ class CPPContext(Context.Context):
         
         if not source:
             source = bld.path.make_node(modArgs.get('source_dir', modArgs.get('sourcedir', 'source'))).ant_glob('*.c*', excl=modArgs.get('source_filter', ''))
-            
+        
         exe = bld.program(features = 'add_targets',
                                source=source, name=progName,
                                includes=includes, defines=defines,
@@ -627,6 +643,13 @@ class CPPContext(Context.Context):
                                install_path=install_path,
                                targets_to_add=targets_to_add)
             
+
+        if Options.options.install_source:
+            sourceNode = path.make_node('source')
+            relpath = sourceNode.path_from(path)
+            exe.targets_to_add.append(bld(features='install_tgt', pattern='**/*',
+                    dir=path, install_path='${PREFIX}/%s' % relpath, relative_trick=True))
+
         return exe
 
     
@@ -828,6 +851,8 @@ def options(opt):
                     default=True, help='Don\'t install module headers')
     opt.add_option('--no-libs', action='store_false', dest='install_libs',
                     default=True, help='Don\'t install module libraries')
+    opt.add_option('--install-source', action='store_true', dest='install_source', default=False,
+                   help='Distribute source into the installation area (for delivering source)')
     
 
 types_str = '''
@@ -1327,17 +1352,25 @@ def install_tgt(tsk):
     if os.path.exists(tsk.dir.abspath()):
         if not hasattr(tsk, 'pattern'):
             tsk.pattern = []
+        if not hasattr(tsk, 'relative_trick'):
+            tsk.relative_trick = False
         if isinstance(tsk.pattern, str):
             tsk.pattern = [tsk.pattern]
         for pattern in tsk.pattern:
             for file in tsk.dir.ant_glob(pattern):
-                tsk.bld.install_files(os.path.join(tsk.install_path, file.parent.path_from(tsk.dir)), file)
+                if tsk.relative_trick:
+                    dest = tsk.install_path
+                else:
+                    dest = os.path.join(tsk.install_path, file.parent.path_from(tsk.dir))
+                tsk.bld.install_files(dest, file, 
+                                      relative_trick=tsk.relative_trick)
         if not hasattr(tsk, 'files'):
             tsk.files = []
         if isinstance(tsk.files, str):
             tsk.files = [tsk.files]
         for file in tsk.files:
-            tsk.bld.install_files(tsk.install_path, tsk.dir.make_node(file))
+            tsk.bld.install_files(tsk.install_path, tsk.dir.make_node(file), 
+                                  relative_trick=tsk.relative_trick)
 
 @task_gen
 @feature('install_as_tgt')
