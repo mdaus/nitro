@@ -1,0 +1,23 @@
+from os.path import basename
+
+try:
+    from functools import partial
+except:
+    def partial(fn, *cargs, **ckwargs):
+        def call_fn(*fargs, **fkwargs):
+            d = ckwargs.copy()
+            d.update(fkwargs)
+            return fn(*(cargs + fargs), **d)
+        return call_fn
+
+NAME            = 'io'
+MAINTAINER      = 'jmrandol@users.sourceforge.net'
+VERSION         = '1.0'
+MODULE_DEPS     = 'sys'
+SOURCE_FILTER   = partial(lambda x, t: basename(str(t)) not in x, 'MMapInputStream.cpp'.split())
+TEST_FILTER     = lambda x : x not in 'mmByteStreamTest.cpp'.split()
+
+options = configure = distclean = lambda p: None
+
+def build(bld):
+    bld.module(**globals())
