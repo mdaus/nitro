@@ -3,7 +3,7 @@ MAINTAINER      = 'jmrandol@users.sourceforge.net'
 VERSION         = '1.2'
 MODULE_DEPS     = 'io'
 USELIB_CHECK    = 'XML'
-TEST_FILTER     = lambda x : x not in 'MMParserTest1.cpp MinidomParserTest2.cpp'.split()
+TEST_FILTER     = 'MMParserTest1.cpp MinidomParserTest2.cpp'
 
 options = configure = distclean = lambda p: None
 
