@@ -202,6 +202,12 @@ def build(bld):
             name='FFT_SOURCE_INSTALL',
             targets_to_add='drivers_wscript')
 
+        # TODO: This is a hack to make USELIB_CHECK happy.  Not sure how to
+        #       cleanly get around this.
+        bld(features = 'install_tgt',
+            dir = driversNode,
+            name='RFFT_SOURCE_INSTALL')
+
 def distclean(context):
     #remove the untarred directories
     import shutil
