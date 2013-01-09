@@ -42,22 +42,22 @@ def configure(conf):
 
         # FFTW3 - always use fftw3 when available
         if fft3Home:
-            if conf.check(lib='fftw3f', uselib_store='FFT3',
+            if conf.check(lib='fftw3f', uselib_store='FFT',
                           header_name='fftw/fftw3.h',
                           function_name='fftwf_execute',
                           libpath=os.path.join(fft3Home, 'lib'),
                           includes=os.path.join(fft3Home, 'include'),
                           msg='Checking for library fftw3', okmsg=fft3Home,
                           mandatory=False):
-                conf.env.append_unique('CXXDEFINES_FFT3', ['HAVE_FFTW3'])
+                conf.env.append_unique('CXXDEFINES_FFT', ['HAVE_FFTW3'])
                 conf.define('HAVE_FFTW3', True)
 
-        elif conf.check(lib='fftw3f', uselib_store='FFT3',
+        elif conf.check(lib='fftw3f', uselib_store='FFT',
                         header_name='fftw/fftw3.h',
                         function_name='fftwf_execute',
                         msg='Checking for library fftw3',
                         mandatory=False):
-            conf.env.append_unique('CXXDEFINES_FFT3', ['HAVE_FFTW3'])
+            conf.env.append_unique('CXXDEFINES_FFT', ['HAVE_FFTW3'])
             conf.define('HAVE_FFTW3', True)
 
         # FFTW2 - fallback when fftw3 not available
