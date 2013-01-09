@@ -430,13 +430,14 @@ class CPPContext(Context.Context):
         # the external library.
         uselibCheck = modArgs.get('uselib_check', None)
         if uselibCheck:
-            if ('MAKE_%s' % uselibCheck) in env:
-                uselib_local += [uselibCheck]
-            else:
-                uselib += [uselibCheck]
-                if env['install_source']:
-                    sourceTarget = '%s_SOURCE_INSTALL' % uselibCheck
-                    targets_to_add += [sourceTarget]
+            for currentLib in listify(uselibCheck):
+                if ('MAKE_%s' % currentLib) in env:
+                    uselib_local += [currentLib]
+                else:
+                    uselib += [currentLib]
+                    if env['install_source']:
+                        sourceTarget = '%s_SOURCE_INSTALL' % currentLib
+                        targets_to_add += [sourceTarget]
         
         if libVersion is not None and sys.platform != 'win32':
             targetName = '%s.%s' % (libName, self.safeVersion(libVersion))
