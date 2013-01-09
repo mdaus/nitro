@@ -100,6 +100,8 @@ def build(bld):
     env = bld.all_envs[variant]
 
     driversNode = bld.path
+
+    sourceFiles = ['wscript']
     
     if 'MAKE_XML' in env:
         
@@ -118,11 +120,16 @@ def build(bld):
                          'XML_STATIC=1']
             
             sources = 'lib/xmlparse.c lib/xmltok.c lib/xmlrole.c'
-            expat = bld(features='c c%s' % env['LIB_TYPE'] or 'stlib', source=sources,
+            features = 'c c%s' % env['LIB_TYPE'] or 'stlib'
+            if env['install_headers'] or env['install_source']:
+                features += ' add_targets'
+            
+            expat = bld(features=features, source=sources,
                              includes='.', export_includes='lib',
                              target='expat', path=driverNode,
                              uselib='XML', name='XML', env=env.derive(),
                              defines=env['DEFINES'] + expatDefs)
+            expat.targets_to_add = []
             if env['install_libs']:
                 expat.install_path = '${PREFIX}/lib'
 
@@ -132,9 +139,25 @@ def build(bld):
             if env['install_headers']:
                 bld(features='install_tgt', install_path='${PREFIX}/include',
                     dir=driverNode, files=['lib/expat.h', 'lib/expat_external.h'], 
-                    name='expat_install')
+                    name='EXPAT_HEADERS_INSTALL')
+                expat.targets_to_add += ['EXPAT_HEADERS_INSTALL']
+
+            if env['install_source']:
+                sourceFiles += [fname + '.tar']
+                expat.targets_to_add += ['EXPAT_SOURCE_INSTALL']
+            
         else:
             raise Exception('Invalid XML driver: %s' % driver)
+
+        if env['install_source']:
+            sourceNode = driversNode.make_node('source')
+            bld(features = 'install_tgt add_targets',
+                files = sourceFiles,
+                dir = driversNode,
+                install_path = os.path.join('${PREFIX}', sourceNode.path_from(driversNode)),
+                relative_trick=True,
+                name='EXPAT_SOURCE_INSTALL',
+                targets_to_add='drivers_wscript')
 
 def distclean(context):
     #remove the untarred directories

@@ -296,16 +296,23 @@ class CPPContext(Context.Context):
                 args['source_filter'] = partial(lambda x, t: basename(t) in x,
                                                 source.split())
         
-        # this specifies that we need to check if it is a USELIB or USELIB_LOCAL
-        # if MAKE_%% is defined, then it is local; otherwise, it's a uselib
+        # This specifies that we need to check if it is a USELIB or USELIB_LOCAL
+        # If MAKE_%% is defined, then it is local; otherwise, it's a uselib
+        # If we're doing a source installation and we built it locally, the
+        # source target already got added on as a dependency.  If we didn't
+        # build it locally, we need to add the source target on here since
+        # in that case this module doesn't depend on a task associated with
+        # the external library.
         uselibCheck = args.pop('uselib_check', None)
         if uselibCheck:
             if ('MAKE_%s' % uselibCheck) in env:
                 args['uselib_local'] = ' '.join([uselibCheck, args.get('uselib_local', ''), args.get('use','')])
             else:
                 args['uselib'] = ' '.join([uselibCheck, args.get('uselib', '')])
-        
-        
+                if env['install_source']:
+                    sourceTarget = '%s_SOURCE_INSTALL' % uselibCheck
+                    args['targets_to_add'] = ' '.join([sourceTarget, args.get('targets_to_add', '')])
+
         try:
             testArgs = sectionDict('tests')
             excludes = testArgs.pop('exclude', None)
@@ -467,7 +474,7 @@ class CPPContext(Context.Context):
             lib.targets_to_add.append(bld(features='install_tgt', pattern='**/*',
                     dir=incNode, install_path='${PREFIX}/%s' % relpath))
 
-        if Options.options.install_source:
+        if env['install_source']:
             sourceNode = path.make_node('source')
             relpath = sourceNode.path_from(path)
             lib.targets_to_add.append(bld(features='install_tgt', pattern=['project.cfg','wscript',
@@ -577,7 +584,7 @@ class CPPContext(Context.Context):
                 defines=defines, path=path, targets_to_add=targets_to_add,
                 install_path='${PREFIX}/share/%s/plugins' % plugin)
 
-        if Options.options.install_source:
+        if env['install_source']:
             lib.targets_to_add.append(bld(features='install_tgt', pattern=['shared/*','shared/**/source/*','shared/**/include/*','shared/**/wscript'],
                     dir=path, install_path='${PREFIX}/source', relative_trick=True))
 
@@ -646,7 +653,7 @@ class CPPContext(Context.Context):
                                targets_to_add=targets_to_add)
             
 
-        if Options.options.install_source:
+        if env['install_source']:
             sourceNode = path.make_node('source')
             relpath = sourceNode.path_from(path)
             exe.targets_to_add.append(bld(features='install_tgt', pattern='**/*',
@@ -1040,6 +1047,7 @@ def configure(self):
     
     env['install_headers'] = Options.options.install_headers
     env['install_libs'] = Options.options.install_libs
+    env['install_source'] = Options.options.install_source
 
     if Options.options.cxxflags:
         env.append_unique('CXXFLAGS', Options.options.cxxflags.split())

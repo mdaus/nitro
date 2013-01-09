@@ -102,9 +102,10 @@ def build(bld):
     env = bld.all_envs[variant]
 
     driversNode = bld.path
+
+    sourceFiles = ['wscript']
     
     if 'MAKE_FFT' in env:
-        
         fname = 'fftw-2.1.5'
         
         driverNode = driversNode.make_node(fname)
@@ -155,6 +156,7 @@ def build(bld):
                                 includes=['fftw'],
                                 name='FFT', defines=env['DEFINES'] + defs,
                                 env=env.derive(), targets_to_add=[configH])
+
         if env['install_libs']:
             fftw.install_path = '${PREFIX}/lib'
 
@@ -183,7 +185,22 @@ def build(bld):
         if env['install_headers']:
             bld(features='install_tgt', install_path='${PREFIX}/include',
                 dir=driverNode, files=['fftw/fftw.h', 'rfftw/rfftw.h'],
-                name='fftw_install')
+                name='FFT_HEADERS_INSTALL')
+            fftw.targets_to_add += ['FFT_HEADERS_INSTALL']
+
+        if env['install_source']:
+            sourceFiles += [fname + '.tar']
+            fftw.targets_to_add += ['FFT_SOURCE_INSTALL']
+
+    if env['install_source']:
+        sourceNode = driversNode.make_node('source')
+        bld(features = 'install_tgt add_targets',
+            files = sourceFiles,
+            dir = driversNode,
+            install_path = os.path.join('${PREFIX}', sourceNode.path_from(driversNode)),
+            relative_trick=True,
+            name='FFT_SOURCE_INSTALL',
+            targets_to_add='drivers_wscript')
 
 def distclean(context):
     #remove the untarred directories
