@@ -78,6 +78,7 @@ def configure(conf):
             defs = {}
 
             conf.env['MAKE_FFT'] = True
+            conf.env['MAKE_RFFT'] = True
             conf.msg('Building local lib', 'fftw')
             if conf.env['MAKE_FFT_DOUBLE']:
                 double_fft = 'yes'
