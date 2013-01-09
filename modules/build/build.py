@@ -295,23 +295,6 @@ class CPPContext(Context.Context):
             if type(source) == str:
                 args['source_filter'] = partial(lambda x, t: basename(t) in x,
                                                 source.split())
-        
-        # This specifies that we need to check if it is a USELIB or USELIB_LOCAL
-        # If MAKE_%% is defined, then it is local; otherwise, it's a uselib
-        # If we're doing a source installation and we built it locally, the
-        # source target already got added on as a dependency.  If we didn't
-        # build it locally, we need to add the source target on here since
-        # in that case this module doesn't depend on a task associated with
-        # the external library.
-        uselibCheck = args.pop('uselib_check', None)
-        if uselibCheck:
-            if ('MAKE_%s' % uselibCheck) in env:
-                args['uselib_local'] = ' '.join([uselibCheck, args.get('uselib_local', ''), args.get('use','')])
-            else:
-                args['uselib'] = ' '.join([uselibCheck, args.get('uselib', '')])
-                if env['install_source']:
-                    sourceTarget = '%s_SOURCE_INSTALL' % uselibCheck
-                    args['targets_to_add'] = ' '.join([sourceTarget, args.get('targets_to_add', '')])
 
         try:
             testArgs = sectionDict('tests')
@@ -437,6 +420,23 @@ class CPPContext(Context.Context):
         exportIncludes = listify(modArgs.get('export_includes', 'include'))
         libVersion = modArgs.get('version', None)
         installPath = modArgs.get('install_path', None)
+
+        # This specifies that we need to check if it is a USELIB or USELIB_LOCAL
+        # If MAKE_%% is defined, then it is local; otherwise, it's a uselib
+        # If we're doing a source installation and we built it locally, the
+        # source target already got added on as a dependency.  If we didn't
+        # build it locally, we need to add the source target on here since
+        # in that case this module doesn't depend on a task associated with
+        # the external library.
+        uselibCheck = modArgs.get('uselib_check', None)
+        if uselibCheck:
+            if ('MAKE_%s' % uselibCheck) in env:
+                uselib_local += [uselibCheck]
+            else:
+                uselib += [uselibCheck]
+                if env['install_source']:
+                    sourceTarget = '%s_SOURCE_INSTALL' % uselibCheck
+                    targets_to_add += [sourceTarget]
         
         if libVersion is not None and sys.platform != 'win32':
             targetName = '%s.%s' % (libName, self.safeVersion(libVersion))
