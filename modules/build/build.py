@@ -72,7 +72,7 @@ class CPPContext(Context.Context):
 #        else :
 #            packages = self.__extendPackages(env, packages, iter+1)
 #            
-#        return packages			        
+#        return packages                 
 
 #    # expand package definitions into targets    
 #    def extendPackages(self, env, pkgs) :
@@ -129,7 +129,7 @@ class CPPContext(Context.Context):
         return False
 
     # copy the entire directory minus certain things excluded --
-    # this takes walking over individual elements    	
+    # this takes walking over individual elements     
     def copyTree(self, src, dst, pkgExcludes, build_dir):
 
         if self.__dontDist("", src, pkgExcludes, build_dir):
@@ -544,7 +544,8 @@ class CPPContext(Context.Context):
         if exists(confDir.abspath()):
             lib.targets_to_add.append(
                     bld(features='install_tgt', dir=confDir, pattern='**',
-                        install_path='${PREFIX}/share/%s/conf' % modArgs['name']))
+                        install_path='${PREFIX}/share/%s/conf' % modArgs['name'],
+                        copy_to_source_dir=True))
 
         return env
     
@@ -586,7 +587,7 @@ class CPPContext(Context.Context):
                 install_path='${PREFIX}/share/%s/plugins' % plugin)
 
         if env['install_source']:
-            lib.targets_to_add.append(bld(features='install_tgt', pattern=['shared/*','shared/**/source/*','shared/**/include/*','shared/**/wscript'],
+            lib.targets_to_add.append(bld(features='install_tgt', pattern=['wscript', 'source/*', 'include/**/*'],
                     dir=path, install_path='${PREFIX}/source', relative_trick=True))
 
 
@@ -606,7 +607,8 @@ class CPPContext(Context.Context):
         if exists(confDir.abspath()):
             lib.targets_to_add.append(
                     bld(features='install_tgt', dir=confDir, pattern='**',
-                        install_path='${PREFIX}/share/%s/conf' % plugin))
+                        install_path='${PREFIX}/share/%s/conf' % plugin,
+                        copy_to_source_dir=True))
 
         pluginsTarget = '%s-plugins' % plugin
         try:
@@ -815,7 +817,7 @@ def options(opt):
     opt.load('waf_unit_test')
 
     if sys.version_info >= (2,5,0):
-    	opt.load('msvs')
+      opt.load('msvs')
     
     if Options.platform == 'win32':
         opt.load('msvc')
@@ -1361,6 +1363,8 @@ def unzip(tsk):
 @feature('install_tgt')
 def install_tgt(tsk):
     if os.path.exists(tsk.dir.abspath()):
+        if not hasattr(tsk, 'copy_to_source_dir') or not tsk.env['install_source']:
+            tsk.copy_to_source_dir = False
         if not hasattr(tsk, 'pattern'):
             tsk.pattern = []
         if not hasattr(tsk, 'relative_trick'):
@@ -1377,6 +1381,13 @@ def install_tgt(tsk):
                                       relative_trick=tsk.relative_trick)
                 if hasattr(tsk, 'chmod'):
                     inst.chmod = tsk.chmod
+
+                if tsk.copy_to_source_dir:
+                    dest = os.path.join('${PREFIX}', 'source')
+                    inst = tsk.bld.install_files(dest, file, 
+                                                 relative_trick=True)
+                if hasattr(tsk, 'chmod'):
+                    inst.chmod = tsk.chmod
         if not hasattr(tsk, 'files'):
             tsk.files = []
         if isinstance(tsk.files, str):
@@ -1384,6 +1395,13 @@ def install_tgt(tsk):
         for file in tsk.files:
             inst = tsk.bld.install_files(tsk.install_path, tsk.dir.make_node(file), 
                                   relative_trick=tsk.relative_trick)
+            if hasattr(tsk, 'chmod'):
+                inst.chmod = tsk.chmod
+
+            if tsk.copy_to_source_dir:
+                dest = os.path.join('${PREFIX}', 'source')
+                inst = tsk.bld.install_files(dest, tsk.dir.make_node(file), 
+                                             relative_trick=True)
             if hasattr(tsk, 'chmod'):
                 inst.chmod = tsk.chmod
 
