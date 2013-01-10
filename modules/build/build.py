@@ -479,7 +479,7 @@ class CPPContext(Context.Context):
             sourceNode = path.make_node('source')
             relpath = sourceNode.path_from(path)
             lib.targets_to_add.append(bld(features='install_tgt', pattern=['project.cfg','wscript','*.py',
-                    'source/*','include/**/*','shared/*','apps/*'],
+                    'source/*','include/**/*','apps/*'],
                     dir=path, install_path='${PREFIX}/%s' % relpath, relative_trick=True))
             lib.targets_to_add.append(bld(features='install_tgt', dir=path.make_node('../../../'), 
                     pattern=['modules/build/*.py','modules/build/config.guess','modules/build/waf',
@@ -565,7 +565,7 @@ class CPPContext(Context.Context):
         modArgs = dict((k.lower(), v) for k, v in modArgs.iteritems())
         lang = modArgs.get('lang', 'c++')
         libExeType = {'c++':'cxx', 'c':'c'}.get(lang, 'cxx')
-        libName = '%s-%s' % (modArgs['name'], lang)
+        libName = modArgs.get('libname', '%s-%s' % (modArgs['name'], lang))
         plugin = modArgs.get('plugin', '')
         path = modArgs.get('path',
                            'dir' in modArgs and bld.path.find_dir(modArgs['dir']) or bld.path)
