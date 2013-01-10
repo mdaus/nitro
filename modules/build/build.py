@@ -478,7 +478,7 @@ class CPPContext(Context.Context):
         if env['install_source']:
             sourceNode = path.make_node('source')
             relpath = sourceNode.path_from(path)
-            lib.targets_to_add.append(bld(features='install_tgt', pattern=['project.cfg','wscript',
+            lib.targets_to_add.append(bld(features='install_tgt', pattern=['project.cfg','wscript','*.py',
                     'source/*','include/**/*','shared/*','apps/*'],
                     dir=path, install_path='${PREFIX}/%s' % relpath, relative_trick=True))
             lib.targets_to_add.append(bld(features='install_tgt', dir=path.make_node('../../../'), 
