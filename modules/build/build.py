@@ -1379,15 +1379,15 @@ def install_tgt(tsk):
                     dest = os.path.join(tsk.install_path, file.parent.path_from(tsk.dir))
                 inst = tsk.bld.install_files(dest, file, 
                                       relative_trick=tsk.relative_trick)
-                if hasattr(tsk, 'chmod'):
+                if inst and hasattr(tsk, 'chmod'):
                     inst.chmod = tsk.chmod
 
                 if tsk.copy_to_source_dir:
                     dest = os.path.join('${PREFIX}', 'source')
-                    inst = tsk.bld.install_files(dest, file, 
-                                                 relative_trick=True)
-                if hasattr(tsk, 'chmod'):
-                    inst.chmod = tsk.chmod
+                    inst2 = tsk.bld.install_files(dest, file, 
+                                                  relative_trick=True)
+                    if inst2 and hasattr(tsk, 'chmod'):
+                        inst2.chmod = tsk.chmod
         if not hasattr(tsk, 'files'):
             tsk.files = []
         if isinstance(tsk.files, str):
@@ -1395,15 +1395,15 @@ def install_tgt(tsk):
         for file in tsk.files:
             inst = tsk.bld.install_files(tsk.install_path, tsk.dir.make_node(file), 
                                   relative_trick=tsk.relative_trick)
-            if hasattr(tsk, 'chmod'):
+            if inst and hasattr(tsk, 'chmod'):
                 inst.chmod = tsk.chmod
 
             if tsk.copy_to_source_dir:
                 dest = os.path.join('${PREFIX}', 'source')
-                inst = tsk.bld.install_files(dest, tsk.dir.make_node(file), 
-                                             relative_trick=True)
-            if hasattr(tsk, 'chmod'):
-                inst.chmod = tsk.chmod
+                inst2 = tsk.bld.install_files(dest, tsk.dir.make_node(file), 
+                                              relative_trick=True)
+                if inst2 and hasattr(tsk, 'chmod'):
+                    inst2.chmod = tsk.chmod
 
 @task_gen
 @feature('install_as_tgt')
