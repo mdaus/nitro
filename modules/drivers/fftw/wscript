@@ -43,7 +43,7 @@ def configure(conf):
         # FFTW3 - always use fftw3 when available
         if fft3Home:
             if conf.check(lib='fftw3f', uselib_store='FFT',
-                          header_name='fftw/fftw3.h',
+                          header_name='fftw3.h',
                           function_name='fftwf_execute',
                           libpath=os.path.join(fft3Home, 'lib'),
                           includes=os.path.join(fft3Home, 'include'),
@@ -53,7 +53,7 @@ def configure(conf):
                 conf.define('HAVE_FFTW3', True)
 
         elif conf.check(lib='fftw3f', uselib_store='FFT',
-                        header_name='fftw/fftw3.h',
+                        header_name='fftw3.h',
                         function_name='fftwf_execute',
                         msg='Checking for library fftw3',
                         mandatory=False):
