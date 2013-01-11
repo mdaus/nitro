@@ -144,20 +144,20 @@ def build(bld):
 
             if env['install_source']:
                 sourceFiles += [fname + '.tar']
-                expat.targets_to_add += ['EXPAT_SOURCE_INSTALL']
+                expat.targets_to_add += ['XML_SOURCE_INSTALL']
             
         else:
             raise Exception('Invalid XML driver: %s' % driver)
 
-        if env['install_source']:
-            sourceNode = driversNode.make_node('source')
-            bld(features = 'install_tgt add_targets',
-                files = sourceFiles,
-                dir = driversNode,
-                install_path = os.path.join('${PREFIX}', sourceNode.path_from(driversNode)),
-                relative_trick=True,
-                name='EXPAT_SOURCE_INSTALL',
-                targets_to_add='drivers_wscript')
+    if env['install_source']:
+        sourceNode = driversNode.make_node('source')
+        bld(features = 'install_tgt add_targets',
+            files = sourceFiles,
+            dir = driversNode,
+            install_path = os.path.join('${PREFIX}', sourceNode.path_from(driversNode)),
+            relative_trick=True,
+            name='XML_SOURCE_INSTALL',
+            targets_to_add='drivers_wscript')
 
 def distclean(context):
     #remove the untarred directories
