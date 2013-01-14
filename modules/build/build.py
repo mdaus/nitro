@@ -522,30 +522,30 @@ class CPPContext(Context.Context):
             if 'INCLUDES_UNITTEST' in env:
                 includes.append(env['INCLUDES_UNITTEST'][0])
 
-            test_deps = map(lambda x: '%s-%s' % (x, lang), test_deps + listify(modArgs.get('test_uselib_local', '')) + listify(modArgs.get('test_use','')))
+                test_deps = map(lambda x: '%s-%s' % (x, lang), test_deps + listify(modArgs.get('test_uselib_local', '')) + listify(modArgs.get('test_use','')))
             
-            sourceExt = {'c++':'.cpp', 'c':'.c'}.get(lang, 'cxx')
-            tests = []
-            for test in testNode.ant_glob('*%s' % sourceExt):
-                if modArgs.get('unittest_filter', lambda x: True)(str(test)):
-                    testName = splitext(str(test))[0]
-                    exe = self(features='%s %sprogram' % (libExeType, libExeType), 
-                                 env=env.derive(), name=testName, target=testName, source=str(test), use=test_deps,
-                                 uselib = modArgs.get('unittest_uselib', modArgs.get('uselib', '')),
-                                 lang=lang, path=testNode, defines=defines,
-                                 includes=includes,
-                                 install_path='${PREFIX}/unittests/%s' % modArgs['name'])
-                    if Options.options.unittests or Options.options.all_tests:
-                        exe.features += ' test'
+                sourceExt = {'c++':'.cpp', 'c':'.c'}.get(lang, 'cxx')
+                tests = []
+                for test in testNode.ant_glob('*%s' % sourceExt):
+                    if modArgs.get('unittest_filter', lambda x: True)(str(test)):
+                        testName = splitext(str(test))[0]
+                        exe = self(features='%s %sprogram' % (libExeType, libExeType), 
+                                     env=env.derive(), name=testName, target=testName, source=str(test), use=test_deps,
+                                     uselib = modArgs.get('unittest_uselib', modArgs.get('uselib', '')),
+                                     lang=lang, path=testNode, defines=defines,
+                                     includes=includes,
+                                     install_path='${PREFIX}/unittests/%s' % modArgs['name'])
+                        if Options.options.unittests or Options.options.all_tests:
+                            exe.features += ' test'
 
-                    tests.append(testName)
+                        tests.append(testName)
                 
-            # add a post-build hook to run the unit tests
-            # I use partial so I can pass arguments to a post build hook
-            #if Options.options.unittests:
-            #    bld.add_post_fun(partial(CPPBuildContext.runUnitTests,
-            #                             tests=tests,
-            #                             path=self.getBuildDir(testNode)))
+                # add a post-build hook to run the unit tests
+                # I use partial so I can pass arguments to a post build hook
+                #if Options.options.unittests:
+                #    bld.add_post_fun(partial(CPPBuildContext.runUnitTests,
+                #                             tests=tests,
+                #                             path=self.getBuildDir(testNode)))
 
         confDir = path.make_node('conf')
         if exists(confDir.abspath()):
