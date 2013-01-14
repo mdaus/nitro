@@ -1,4 +1,4 @@
-import sys, os, types, re, fnmatch, subprocess, shutil, platform
+import sys, os, types, re, fnmatch, subprocess, shutil, platform, inspect
 from os.path import split, isdir, isfile, exists, splitext, abspath, join, \
                     basename, dirname
 
@@ -383,7 +383,25 @@ class CPPContext(Context.Context):
                     self.copyTree(join(self.path.abspath(), x), join(env['PREFIX'], 'source', x), pkgsExcludes, env['PREFIX'])
                 else :
                     self.install_files(join(env['PREFIX'], 'source', os.path.split(x)[0]), x)
-    
+
+    def install_tgt(tsk, **modArgs):
+        # The main purpose this serves is to recursively copy all the wscript's
+        # involved when we have a wscript whose sole job is to install files
+        modArgs = dict((k.lower(), v) for k, v in modArgs.iteritems())
+        if 'env' in modArgs:
+            env = modArgs['env']
+        else:
+            variant = modArgs.get('variant', tsk.env['VARIANT'] or 'default')
+            env = tsk.all_envs[variant]
+
+        features = 'install_tgt'
+        if env['install_source']:
+            targetsToAdd = modArgs.get('targets_to_add', [])
+            targetsToAdd = targetsToAdd + getWscriptTargets(tsk, env, tsk.path)
+            modArgs['targets_to_add'] = targetsToAdd
+            features += ' add_targets'
+        tsk(features = features, **modArgs)
+
     def module(self, **modArgs):
         """
         Builds a module, along with optional tests.
@@ -475,18 +493,7 @@ class CPPContext(Context.Context):
             lib.targets_to_add.append(bld(features='install_tgt', pattern='**/*',
                     dir=incNode, install_path='${PREFIX}/%s' % relpath))
 
-        if env['install_source']:
-            sourceNode = path.make_node('source')
-            relpath = sourceNode.path_from(path)
-            lib.targets_to_add.append(bld(features='install_tgt', pattern=['project.cfg','wscript','*.py',
-                    'source/*','include/**/*','apps/*'],
-                    dir=path, install_path='${PREFIX}/%s' % relpath, relative_trick=True))
-            lib.targets_to_add.append(bld(features='install_tgt', dir=path.make_node('../../../'), 
-                    pattern=['modules/build/*.py','modules/build/config.guess','modules/build/waf',
-                             'wscript','modules/wscript','modules/%s/wscript' % lang], 
-                    install_path='${PREFIX}/%s' % relpath, relative_trick=True))
-            lib.targets_to_add.append(bld(features='install_tgt', dir=path.make_node('../../../'),
-                    pattern=['waf','modules/waf'], install_path='${PREFIX}/%s' % relpath, relative_trick=True, chmod=Utils.O755))
+        addSourceTargets(bld, env, path, lib)
 
         testNode = path.make_node('tests')
         if os.path.exists(testNode.abspath()) and not Options.options.libs_only:
@@ -586,11 +593,6 @@ class CPPContext(Context.Context):
                 defines=defines, path=path, targets_to_add=targets_to_add,
                 install_path='${PREFIX}/share/%s/plugins' % plugin)
 
-        if env['install_source']:
-            lib.targets_to_add.append(bld(features='install_tgt', pattern=['wscript', 'source/*', 'include/**/*'],
-                    dir=path, install_path='${PREFIX}/source', relative_trick=True))
-
-
         sourceExt = {'c++':'.cpp', 'c':'.c'}.get(lang, 'cxx')
         allSourceExt = listify(modArgs.get('source_ext', '')) + [sourceExt]
         sourcedirs = listify(modArgs.get('source_dir', modArgs.get('sourcedir', 'source')))
@@ -602,6 +604,8 @@ class CPPContext(Context.Context):
         if not source:
             lib.source = path.ant_glob(glob_patterns)
             lib.source = filter(modArgs.get('source_filter', None), lib.source)
+
+        addSourceTargets(self, env, path, lib)
         
         confDir = path.make_node('conf')
         if exists(confDir.abspath()):
@@ -654,13 +658,8 @@ class CPPContext(Context.Context):
                                env=env.derive(), target=progName, path=path,
                                install_path=install_path,
                                targets_to_add=targets_to_add)
-            
 
-        if env['install_source']:
-            sourceNode = path.make_node('source')
-            relpath = sourceNode.path_from(path)
-            exe.targets_to_add.append(bld(features='install_tgt', pattern='**/*',
-                    dir=path, install_path='${PREFIX}/%s' % relpath, relative_trick=True))
+        addSourceTargets(bld, env, path, exe)
 
         return exe
 
@@ -1532,6 +1531,69 @@ def getSolarisFlags(compilerName):
             bitFlag64 = '-m64'
 
     return (bitFlag32, bitFlag64)
+
+def getWscriptTargets(bld, env, path):
+    # Here we're taking a look at the current stack and adding on all the
+    # wscript's that got us to this point.
+    # The main additional difficulty here is that we can't just add these
+    # pathnames on because then the same file will be marked to be installed by
+    # multiple other targets (i.e. modules/c++/A and modules/c++/B will both
+    # try to install modules/c++/wscript).  The way around this is to create
+    # a named target for all these wscript's based on their full pathname.   
+    wscriptTargets = []
+    for item in inspect.stack():
+        pathname = item[1]
+        filename = os.path.basename(pathname)
+        if filename in ['wscript', 'waf']:
+            try:
+                # If this succeeds, somebody else has already made this target
+                # for us
+                wscriptTargets.append(bld.get_tgen_by_name(pathname))
+            except:
+                # If we got here, no one has made the target yet, so we'll
+                # make it
+                # TODO: Not sure if there's a more efficient way to set
+                #       dir below
+                dirname = os.path.dirname(pathname)
+                relpath = os.path.relpath(dirname, path.abspath())
+                wscriptTargets.append(bld(features='install_tgt',
+                                    target=pathname,
+                                    pattern=['wscript', 'waf', '*.py', 'include/**/*', 'config.guess'],
+                                    dir=path.make_node(relpath),
+                                    install_path='${PREFIX}/source',
+                                    relative_trick=True))
+    return wscriptTargets
+
+def addSourceTargets(bld, env, path, target):
+    if env['install_source']:
+        wscriptTargets = getWscriptTargets(bld, env, path)
+
+        # We don't ever go into the project.cfg files, we call fromConfig on
+        # them from a wscript, so we have to call these out separately.
+        for targetName in path.ant_glob(['project.cfg']):
+            try:
+                wscriptTargets.append(bld.get_tgen_by_name(targetName))
+            except:
+                wscriptTargets.append(bld(features='install_tgt',
+                                    target=targetName,
+                                    files = 'project.cfg',
+                                    pattern=['include/**/*'],
+                                    dir=path, install_path='${PREFIX}/source',
+                                    relative_trick=True))
+
+        source = []
+        for file in target.source:
+            if type(file) is str:
+                source.append(file)
+            else:
+                source.append(file.path_from(path))
+
+        target.targets_to_add.append(bld(features='install_tgt',
+                                         files = source,
+                                         dir=path, install_path='${PREFIX}/source',
+                                         relative_trick=True))
+
+        target.targets_to_add += wscriptTargets
 
 class SwitchContext(Context.Context):
     """

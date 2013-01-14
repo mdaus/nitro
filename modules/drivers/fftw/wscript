@@ -195,13 +195,12 @@ def build(bld):
 
     if env['install_source']:
         sourceNode = driversNode.make_node('source')
-        bld(features = 'install_tgt add_targets',
-            files = sourceFiles,
-            dir = driversNode,
-            install_path = os.path.join('${PREFIX}', sourceNode.path_from(driversNode)),
-            relative_trick=True,
-            name='FFT_SOURCE_INSTALL',
-            targets_to_add='drivers_wscript')
+        bld.install_tgt(files = sourceFiles,
+                        dir = driversNode,
+                        install_path = os.path.join('${PREFIX}',
+                        sourceNode.path_from(driversNode)),
+                        relative_trick=True,
+                        name='FFT_SOURCE_INSTALL')
 
         # TODO: This is a hack to make USELIB_CHECK happy.  Not sure how to
         #       cleanly get around this.

@@ -15,18 +15,6 @@ def build(bld):
     bld.recurse(filter(lambda x: exists(join(bld.path.abspath(), x, 'wscript')),
                        BLD_DIRS.split()))
 
-    variant = bld.env['VARIANT']
-    env = bld.all_envs[variant]
-
-    if env['install_source']:
-        sourceNode = bld.path.make_node('source')
-        bld(features = 'install_tgt',
-            files = 'wscript',
-            dir = bld.path,
-            install_path = join('${PREFIX}', sourceNode.path_from(bld.path)),
-            relative_trick=True,
-            name='drivers_wscript')
-
 def distclean(ctx):
     ctx.recurse(filter(lambda x: exists(join(ctx.path.abspath(), x, 'wscript')),
                        BLD_DIRS.split()))

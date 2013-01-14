@@ -104,13 +104,12 @@ def build(bld):
 
     if env['install_source']:
         sourceNode = driversNode.make_node('source')
-        bld(features = 'install_tgt add_targets',
-            files = sourceFiles,
-            dir = driversNode,
-            install_path = os.path.join('${PREFIX}', sourceNode.path_from(driversNode)),
-            relative_trick=True,
-            name='UUID_SOURCE_INSTALL',
-            targets_to_add='drivers_wscript')
+        bld.install_tgt(files = sourceFiles,
+                        dir = driversNode,
+                        install_path = os.path.join('${PREFIX}',
+                        sourceNode.path_from(driversNode)),
+                        relative_trick=True,
+                        name='UUID_SOURCE_INSTALL')
 
 def distclean(context):
     #remove the untarred directories
