@@ -53,7 +53,7 @@ def build(bld):
 
     driversNode = bld.path
 
-    sourceFiles = ['wscript']
+    sourceFiles = []
 
     if 'MAKE_UUID' in env:
         

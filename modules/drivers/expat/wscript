@@ -101,7 +101,7 @@ def build(bld):
 
     driversNode = bld.path
 
-    sourceFiles = ['wscript']
+    sourceFiles = []
     
     if 'MAKE_XML' in env:
         
