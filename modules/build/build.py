@@ -605,6 +605,12 @@ class CPPContext(Context.Context):
             lib.source = path.ant_glob(glob_patterns)
             lib.source = filter(modArgs.get('source_filter', None), lib.source)
 
+        if env['install_headers']:
+            incNode = path.make_node('include')
+            relpath = incNode.path_from(path)
+            lib.targets_to_add.append(bld(features='install_tgt', pattern='**/*',
+                    dir=incNode, install_path='${PREFIX}/%s' % relpath))
+
         addSourceTargets(self, env, path, lib)
         
         confDir = path.make_node('conf')
