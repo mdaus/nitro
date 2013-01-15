@@ -457,6 +457,15 @@ class CPPContext(Context.Context):
                         sourceTarget = '%s_SOURCE_INSTALL' % currentLib
                         targets_to_add += [sourceTarget]
         
+        # this specifies that we need to check if it is a USELIB or USELIB_LOCAL
+        # if MAKE_%% is defined, then it is local; otherwise, it's a uselib
+        uselibCheck = modArgs.pop('uselib_check', None)
+        if uselibCheck:
+            if ('MAKE_%s' % uselibCheck) in env:
+                uselib_local.append(uselibCheck)
+            else:
+                uselib.append(uselibCheck)
+
         if libVersion is not None and sys.platform != 'win32':
             targetName = '%s.%s' % (libName, self.safeVersion(libVersion))
         else:
@@ -475,7 +484,8 @@ class CPPContext(Context.Context):
                 use=uselib_local, uselib=uselib, env=env.derive(),
                 defines=defines, path=path,
                 source=path.ant_glob(glob_patterns), targets_to_add=targets_to_add)
-        lib.source = filter(modArgs.get('source_filter', None), lib.source)
+        lib.source = filter(partial(lambda x, t: basename(str(t)) not in x, modArgs.get('source_filter', '').split()), lib.source)
+        
         if env['install_libs']:
             lib.install_path = installPath or '${PREFIX}/lib'
         
@@ -504,18 +514,18 @@ class CPPContext(Context.Context):
             test_deps = map(lambda x: '%s-%s' % (x, lang), test_deps + listify(modArgs.get('test_uselib_local', '')) + listify(modArgs.get('test_use','')))
             
             for test in testNode.ant_glob('*%s' % sourceExt):
-                if modArgs.get('test_filter', lambda x: True)(str(test)):
+                if str(test) not in listify(modArgs.get('test_filter', '')):
                     testName = splitext(str(test))[0]
                     self.program(env=env.derive(), name=testName, target=testName, source=str(test),
                                  use=test_deps,
-                                 uselib=modArgs.get('test_uselib', modArgs.get('uselib', '')),
+                                 uselib=modArgs.get('test_uselib', uselib),
                                  lang=lang, path=testNode, includes=includes, defines=defines,
                                  install_path='${PREFIX}/tests/%s' % modArgs['name'])
 
         testNode = path.make_node('unittests')
         if os.path.exists(testNode.abspath()) and not Options.options.libs_only:
             test_deps = listify(modArgs.get('unittest_deps', modArgs.get('module_deps', '')))
-            test_uselib = listify(modArgs.get('unittest_uselib', modArgs.get('uselib', '')))
+            test_uselib = listify(modArgs.get('unittest_uselib', uselib))
             
             test_deps.append(modArgs['name'])
             
@@ -527,7 +537,7 @@ class CPPContext(Context.Context):
                 sourceExt = {'c++':'.cpp', 'c':'.c'}.get(lang, 'cxx')
                 tests = []
                 for test in testNode.ant_glob('*%s' % sourceExt):
-                    if modArgs.get('unittest_filter', lambda x: True)(str(test)):
+                    if str(test) not in listify(modArgs.get('unittest_filter', '')):
                         testName = splitext(str(test))[0]
                         exe = self(features='%s %sprogram' % (libExeType, libExeType), 
                                      env=env.derive(), name=testName, target=testName, source=str(test), use=test_deps,
