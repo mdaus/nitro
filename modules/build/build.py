@@ -613,8 +613,7 @@ class CPPContext(Context.Context):
 
         if not source:
             lib.source = path.ant_glob(glob_patterns)
-            lib.source = filter(modArgs.get('source_filter', None), lib.source)
-
+            lib.source = filter(partial(lambda x, t: basename(str(t)) not in x, modArgs.get('source_filter', '').split()), lib.source)
         if env['install_headers']:
             incNode = path.make_node('include')
             relpath = incNode.path_from(path)
@@ -734,8 +733,7 @@ class CPPContext(Context.Context):
                                    install_path=installPath or '${PREFIX}/mex')
             if not source:
                 mex.source = path.ant_glob(modArgs.get('source_dir', modArgs.get('sourcedir', 'source')) + '/*')
-                mex.source = filter(modArgs.get('source_filter', None), mex.source)
-            
+                mex.source = filter(partial(lambda x, t: basename(str(t)) not in x, modArgs.get('source_filter', '').split()), lib.source)            
             pattern = env['%s_PATTERN' % (env['LIB_TYPE'] or 'staticlib')]
     
 
