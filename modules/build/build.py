@@ -1,4 +1,4 @@
-import sys, os, types, re, fnmatch, subprocess, shutil, platform
+import sys, os, types, re, fnmatch, subprocess, shutil, platform, inspect
 from os.path import split, isdir, isfile, exists, splitext, abspath, join, \
                     basename, dirname
 
@@ -72,7 +72,7 @@ class CPPContext(Context.Context):
 #        else :
 #            packages = self.__extendPackages(env, packages, iter+1)
 #            
-#        return packages			        
+#        return packages                 
 
 #    # expand package definitions into targets    
 #    def extendPackages(self, env, pkgs) :
@@ -129,7 +129,7 @@ class CPPContext(Context.Context):
         return False
 
     # copy the entire directory minus certain things excluded --
-    # this takes walking over individual elements    	
+    # this takes walking over individual elements     
     def copyTree(self, src, dst, pkgExcludes, build_dir):
 
         if self.__dontDist("", src, pkgExcludes, build_dir):
@@ -295,17 +295,7 @@ class CPPContext(Context.Context):
             if type(source) == str:
                 args['source_filter'] = partial(lambda x, t: basename(t) in x,
                                                 source.split())
-        
-        # this specifies that we need to check if it is a USELIB or USELIB_LOCAL
-        # if MAKE_%% is defined, then it is local; otherwise, it's a uselib
-        uselibCheck = args.pop('uselib_check', None)
-        if uselibCheck:
-            if ('MAKE_%s' % uselibCheck) in env:
-                args['uselib_local'] = ' '.join([uselibCheck, args.get('uselib_local', ''), args.get('use','')])
-            else:
-                args['uselib'] = ' '.join([uselibCheck, args.get('uselib', '')])
-        
-        
+
         try:
             testArgs = sectionDict('tests')
             excludes = testArgs.pop('exclude', None)
@@ -393,7 +383,25 @@ class CPPContext(Context.Context):
                     self.copyTree(join(self.path.abspath(), x), join(env['PREFIX'], 'source', x), pkgsExcludes, env['PREFIX'])
                 else :
                     self.install_files(join(env['PREFIX'], 'source', os.path.split(x)[0]), x)
-    
+
+    def install_tgt(tsk, **modArgs):
+        # The main purpose this serves is to recursively copy all the wscript's
+        # involved when we have a wscript whose sole job is to install files
+        modArgs = dict((k.lower(), v) for k, v in modArgs.iteritems())
+        if 'env' in modArgs:
+            env = modArgs['env']
+        else:
+            variant = modArgs.get('variant', tsk.env['VARIANT'] or 'default')
+            env = tsk.all_envs[variant]
+
+        features = 'install_tgt'
+        if env['install_source']:
+            targetsToAdd = modArgs.get('targets_to_add', [])
+            targetsToAdd = targetsToAdd + getWscriptTargets(tsk, env, tsk.path)
+            modArgs['targets_to_add'] = targetsToAdd
+            features += ' add_targets'
+        tsk(features = features, **modArgs)
+
     def module(self, **modArgs):
         """
         Builds a module, along with optional tests.
@@ -430,6 +438,24 @@ class CPPContext(Context.Context):
         exportIncludes = listify(modArgs.get('export_includes', 'include'))
         libVersion = modArgs.get('version', None)
         installPath = modArgs.get('install_path', None)
+
+        # This specifies that we need to check if it is a USELIB or USELIB_LOCAL
+        # If MAKE_%% is defined, then it is local; otherwise, it's a uselib
+        # If we're doing a source installation and we built it locally, the
+        # source target already got added on as a dependency.  If we didn't
+        # build it locally, we need to add the source target on here since
+        # in that case this module doesn't depend on a task associated with
+        # the external library.
+        uselibCheck = modArgs.get('uselib_check', None)
+        if uselibCheck:
+            for currentLib in listify(uselibCheck):
+                if ('MAKE_%s' % currentLib) in env:
+                    uselib_local += [currentLib]
+                else:
+                    uselib += [currentLib]
+                    if env['install_source']:
+                        sourceTarget = '%s_SOURCE_INSTALL' % currentLib
+                        targets_to_add += [sourceTarget]
         
         # this specifies that we need to check if it is a USELIB or USELIB_LOCAL
         # if MAKE_%% is defined, then it is local; otherwise, it's a uselib
@@ -477,18 +503,7 @@ class CPPContext(Context.Context):
             lib.targets_to_add.append(bld(features='install_tgt', pattern='**/*',
                     dir=incNode, install_path='${PREFIX}/%s' % relpath))
 
-        if Options.options.install_source:
-            sourceNode = path.make_node('source')
-            relpath = sourceNode.path_from(path)
-            lib.targets_to_add.append(bld(features='install_tgt', pattern=['project.cfg','wscript',
-                    'source/*','include/**/*','shared/*','apps/*'],
-                    dir=path, install_path='${PREFIX}/%s' % relpath, relative_trick=True))
-            lib.targets_to_add.append(bld(features='install_tgt', dir=path.make_node('../../../'), 
-                    pattern=['modules/build/*.py','modules/build/config.guess','modules/build/waf',
-                             'wscript','modules/wscript','modules/%s/wscript' % lang], 
-                    install_path='${PREFIX}/%s' % relpath, relative_trick=True))
-            lib.targets_to_add.append(bld(features='install_tgt', dir=path.make_node('../../../'),
-                    pattern=['waf','modules/waf'], install_path='${PREFIX}/%s' % relpath, relative_trick=True, chmod=Utils.O755))
+        addSourceTargets(bld, env, path, lib)
 
         testNode = path.make_node('tests')
         if os.path.exists(testNode.abspath()) and not Options.options.libs_only:
@@ -517,36 +532,37 @@ class CPPContext(Context.Context):
             if 'INCLUDES_UNITTEST' in env:
                 includes.append(env['INCLUDES_UNITTEST'][0])
 
-            test_deps = map(lambda x: '%s-%s' % (x, lang), test_deps + listify(modArgs.get('test_uselib_local', '')) + listify(modArgs.get('test_use','')))
+                test_deps = map(lambda x: '%s-%s' % (x, lang), test_deps + listify(modArgs.get('test_uselib_local', '')) + listify(modArgs.get('test_use','')))
             
-            sourceExt = {'c++':'.cpp', 'c':'.c'}.get(lang, 'cxx')
-            tests = []
-            for test in testNode.ant_glob('*%s' % sourceExt):
-                if str(test) not in listify(modArgs.get('unittest_filter', '')):
-                    testName = splitext(str(test))[0]
-                    exe = self(features='%s %sprogram' % (libExeType, libExeType), 
-                               env=env.derive(), name=testName, target=testName, source=str(test), use=test_deps,
-                               uselib = modArgs.get('unittest_uselib', uselib),
-                               lang=lang, path=testNode, defines=defines,
-                               includes=includes,
-                               install_path='${PREFIX}/unittests/%s' % modArgs['name'])
-                    if Options.options.unittests or Options.options.all_tests:
-                        exe.features += ' test'
+                sourceExt = {'c++':'.cpp', 'c':'.c'}.get(lang, 'cxx')
+                tests = []
+                for test in testNode.ant_glob('*%s' % sourceExt):
+                    if str(test) not in listify(modArgs.get('unittest_filter', '')):
+                        testName = splitext(str(test))[0]
+                        exe = self(features='%s %sprogram' % (libExeType, libExeType), 
+                                     env=env.derive(), name=testName, target=testName, source=str(test), use=test_deps,
+                                     uselib = modArgs.get('unittest_uselib', modArgs.get('uselib', '')),
+                                     lang=lang, path=testNode, defines=defines,
+                                     includes=includes,
+                                     install_path='${PREFIX}/unittests/%s' % modArgs['name'])
+                        if Options.options.unittests or Options.options.all_tests:
+                            exe.features += ' test'
 
-                    tests.append(testName)
+                        tests.append(testName)
                 
-            # add a post-build hook to run the unit tests
-            # I use partial so I can pass arguments to a post build hook
-            #if Options.options.unittests:
-            #    bld.add_post_fun(partial(CPPBuildContext.runUnitTests,
-            #                             tests=tests,
-            #                             path=self.getBuildDir(testNode)))
+                # add a post-build hook to run the unit tests
+                # I use partial so I can pass arguments to a post build hook
+                #if Options.options.unittests:
+                #    bld.add_post_fun(partial(CPPBuildContext.runUnitTests,
+                #                             tests=tests,
+                #                             path=self.getBuildDir(testNode)))
 
         confDir = path.make_node('conf')
         if exists(confDir.abspath()):
             lib.targets_to_add.append(
                     bld(features='install_tgt', dir=confDir, pattern='**',
-                        install_path='${PREFIX}/share/%s/conf' % modArgs['name']))
+                        install_path='${PREFIX}/share/%s/conf' % modArgs['name'],
+                        copy_to_source_dir=True))
 
         return env
     
@@ -566,7 +582,7 @@ class CPPContext(Context.Context):
         modArgs = dict((k.lower(), v) for k, v in modArgs.iteritems())
         lang = modArgs.get('lang', 'c++')
         libExeType = {'c++':'cxx', 'c':'c'}.get(lang, 'cxx')
-        libName = '%s-%s' % (modArgs['name'], lang)
+        libName = modArgs.get('libname', '%s-%s' % (modArgs['name'], lang))
         plugin = modArgs.get('plugin', '')
         path = modArgs.get('path',
                            'dir' in modArgs and bld.path.find_dir(modArgs['dir']) or bld.path)
@@ -587,11 +603,6 @@ class CPPContext(Context.Context):
                 defines=defines, path=path, targets_to_add=targets_to_add,
                 install_path='${PREFIX}/share/%s/plugins' % plugin)
 
-        if Options.options.install_source:
-            lib.targets_to_add.append(bld(features='install_tgt', pattern=['shared/*','shared/**/source/*','shared/**/include/*','shared/**/wscript'],
-                    dir=path, install_path='${PREFIX}/source', relative_trick=True))
-
-
         sourceExt = {'c++':'.cpp', 'c':'.c'}.get(lang, 'cxx')
         allSourceExt = listify(modArgs.get('source_ext', '')) + [sourceExt]
         sourcedirs = listify(modArgs.get('source_dir', modArgs.get('sourcedir', 'source')))
@@ -603,12 +614,21 @@ class CPPContext(Context.Context):
         if not source:
             lib.source = path.ant_glob(glob_patterns)
             lib.source = filter(modArgs.get('source_filter', None), lib.source)
+
+        if env['install_headers']:
+            incNode = path.make_node('include')
+            relpath = incNode.path_from(path)
+            lib.targets_to_add.append(bld(features='install_tgt', pattern='**/*',
+                    dir=incNode, install_path='${PREFIX}/%s' % relpath))
+
+        addSourceTargets(self, env, path, lib)
         
         confDir = path.make_node('conf')
         if exists(confDir.abspath()):
             lib.targets_to_add.append(
                     bld(features='install_tgt', dir=confDir, pattern='**',
-                        install_path='${PREFIX}/share/%s/conf' % plugin))
+                        install_path='${PREFIX}/share/%s/conf' % plugin,
+                        copy_to_source_dir=True))
 
         pluginsTarget = '%s-plugins' % plugin
         try:
@@ -654,13 +674,8 @@ class CPPContext(Context.Context):
                                env=env.derive(), target=progName, path=path,
                                install_path=install_path,
                                targets_to_add=targets_to_add)
-            
 
-        if Options.options.install_source:
-            sourceNode = path.make_node('source')
-            relpath = sourceNode.path_from(path)
-            exe.targets_to_add.append(bld(features='install_tgt', pattern='**/*',
-                    dir=path, install_path='${PREFIX}/%s' % relpath, relative_trick=True))
+        addSourceTargets(bld, env, path, exe)
 
         return exe
 
@@ -817,7 +832,7 @@ def options(opt):
     opt.load('waf_unit_test')
 
     if sys.version_info >= (2,5,0):
-    	opt.load('msvs')
+      opt.load('msvs')
     
     if Options.platform == 'win32':
         opt.load('msvc')
@@ -1050,6 +1065,7 @@ def configure(self):
     
     env['install_headers'] = Options.options.install_headers
     env['install_libs'] = Options.options.install_libs
+    env['install_source'] = Options.options.install_source
 
     if Options.options.cxxflags:
         env.append_unique('CXXFLAGS', Options.options.cxxflags.split())
@@ -1362,6 +1378,8 @@ def unzip(tsk):
 @feature('install_tgt')
 def install_tgt(tsk):
     if os.path.exists(tsk.dir.abspath()):
+        if not hasattr(tsk, 'copy_to_source_dir') or not tsk.env['install_source']:
+            tsk.copy_to_source_dir = False
         if not hasattr(tsk, 'pattern'):
             tsk.pattern = []
         if not hasattr(tsk, 'relative_trick'):
@@ -1376,8 +1394,15 @@ def install_tgt(tsk):
                     dest = os.path.join(tsk.install_path, file.parent.path_from(tsk.dir))
                 inst = tsk.bld.install_files(dest, file, 
                                       relative_trick=tsk.relative_trick)
-                if hasattr(tsk, 'chmod'):
+                if inst and hasattr(tsk, 'chmod'):
                     inst.chmod = tsk.chmod
+
+                if tsk.copy_to_source_dir:
+                    dest = os.path.join('${PREFIX}', 'source')
+                    inst2 = tsk.bld.install_files(dest, file, 
+                                                  relative_trick=True)
+                    if inst2 and hasattr(tsk, 'chmod'):
+                        inst2.chmod = tsk.chmod
         if not hasattr(tsk, 'files'):
             tsk.files = []
         if isinstance(tsk.files, str):
@@ -1385,8 +1410,15 @@ def install_tgt(tsk):
         for file in tsk.files:
             inst = tsk.bld.install_files(tsk.install_path, tsk.dir.make_node(file), 
                                   relative_trick=tsk.relative_trick)
-            if hasattr(tsk, 'chmod'):
+            if inst and hasattr(tsk, 'chmod'):
                 inst.chmod = tsk.chmod
+
+            if tsk.copy_to_source_dir:
+                dest = os.path.join('${PREFIX}', 'source')
+                inst2 = tsk.bld.install_files(dest, tsk.dir.make_node(file), 
+                                              relative_trick=True)
+                if inst2 and hasattr(tsk, 'chmod'):
+                    inst2.chmod = tsk.chmod
 
 @task_gen
 @feature('install_as_tgt')
@@ -1515,6 +1547,69 @@ def getSolarisFlags(compilerName):
             bitFlag64 = '-m64'
 
     return (bitFlag32, bitFlag64)
+
+def getWscriptTargets(bld, env, path):
+    # Here we're taking a look at the current stack and adding on all the
+    # wscript's that got us to this point.
+    # The main additional difficulty here is that we can't just add these
+    # pathnames on because then the same file will be marked to be installed by
+    # multiple other targets (i.e. modules/c++/A and modules/c++/B will both
+    # try to install modules/c++/wscript).  The way around this is to create
+    # a named target for all these wscript's based on their full pathname.   
+    wscriptTargets = []
+    for item in inspect.stack():
+        pathname = item[1]
+        filename = os.path.basename(pathname)
+        if filename in ['wscript', 'waf']:
+            try:
+                # If this succeeds, somebody else has already made this target
+                # for us
+                wscriptTargets.append(bld.get_tgen_by_name(pathname))
+            except:
+                # If we got here, no one has made the target yet, so we'll
+                # make it
+                # TODO: Not sure if there's a more efficient way to set
+                #       dir below
+                dirname = os.path.dirname(pathname)
+                relpath = os.path.relpath(dirname, path.abspath())
+                wscriptTargets.append(bld(features='install_tgt',
+                                    target=pathname,
+                                    pattern=['wscript', 'waf', '*.py', 'include/**/*', 'config.guess'],
+                                    dir=path.make_node(relpath),
+                                    install_path='${PREFIX}/source',
+                                    relative_trick=True))
+    return wscriptTargets
+
+def addSourceTargets(bld, env, path, target):
+    if env['install_source']:
+        wscriptTargets = getWscriptTargets(bld, env, path)
+
+        # We don't ever go into the project.cfg files, we call fromConfig on
+        # them from a wscript, so we have to call these out separately.
+        for targetName in path.ant_glob(['project.cfg']):
+            try:
+                wscriptTargets.append(bld.get_tgen_by_name(targetName))
+            except:
+                wscriptTargets.append(bld(features='install_tgt',
+                                    target=targetName,
+                                    files = 'project.cfg',
+                                    pattern=['include/**/*'],
+                                    dir=path, install_path='${PREFIX}/source',
+                                    relative_trick=True))
+
+        source = []
+        for file in target.source:
+            if type(file) is str:
+                source.append(file)
+            else:
+                source.append(file.path_from(path))
+
+        target.targets_to_add.append(bld(features='install_tgt',
+                                         files = source,
+                                         dir=path, install_path='${PREFIX}/source',
+                                         relative_trick=True))
+
+        target.targets_to_add += wscriptTargets
 
 class SwitchContext(Context.Context):
     """

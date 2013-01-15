@@ -42,22 +42,22 @@ def configure(conf):
 
         # FFTW3 - always use fftw3 when available
         if fft3Home:
-            if conf.check(lib='fftw3f', uselib_store='FFT3',
-                          header_name='fftw/fftw3.h',
+            if conf.check(lib='fftw3f', uselib_store='FFT',
+                          header_name='fftw3.h',
                           function_name='fftwf_execute',
                           libpath=os.path.join(fft3Home, 'lib'),
                           includes=os.path.join(fft3Home, 'include'),
                           msg='Checking for library fftw3', okmsg=fft3Home,
                           mandatory=False):
-                conf.env.append_unique('CXXDEFINES_FFT3', ['HAVE_FFTW3'])
+                conf.env.append_unique('CXXDEFINES_FFT', ['HAVE_FFTW3'])
                 conf.define('HAVE_FFTW3', True)
 
-        elif conf.check(lib='fftw3f', uselib_store='FFT3',
-                        header_name='fftw/fftw3.h',
+        elif conf.check(lib='fftw3f', uselib_store='FFT',
+                        header_name='fftw3.h',
                         function_name='fftwf_execute',
                         msg='Checking for library fftw3',
                         mandatory=False):
-            conf.env.append_unique('CXXDEFINES_FFT3', ['HAVE_FFTW3'])
+            conf.env.append_unique('CXXDEFINES_FFT', ['HAVE_FFTW3'])
             conf.define('HAVE_FFTW3', True)
 
         # FFTW2 - fallback when fftw3 not available
@@ -78,6 +78,7 @@ def configure(conf):
             defs = {}
 
             conf.env['MAKE_FFT'] = True
+            conf.env['MAKE_RFFT'] = True
             conf.msg('Building local lib', 'fftw')
             if conf.env['MAKE_FFT_DOUBLE']:
                 double_fft = 'yes'
@@ -102,9 +103,10 @@ def build(bld):
     env = bld.all_envs[variant]
 
     driversNode = bld.path
+
+    sourceFiles = []
     
     if 'MAKE_FFT' in env:
-        
         fname = 'fftw-2.1.5'
         
         driverNode = driversNode.make_node(fname)
@@ -155,6 +157,7 @@ def build(bld):
                                 includes=['fftw'],
                                 name='FFT', defines=env['DEFINES'] + defs,
                                 env=env.derive(), targets_to_add=[configH])
+
         if env['install_libs']:
             fftw.install_path = '${PREFIX}/lib'
 
@@ -183,7 +186,27 @@ def build(bld):
         if env['install_headers']:
             bld(features='install_tgt', install_path='${PREFIX}/include',
                 dir=driverNode, files=['fftw/fftw.h', 'rfftw/rfftw.h'],
-                name='fftw_install')
+                name='FFT_HEADERS_INSTALL')
+            fftw.targets_to_add += ['FFT_HEADERS_INSTALL']
+
+        if env['install_source']:
+            sourceFiles += [fname + '.tar']
+            fftw.targets_to_add += ['FFT_SOURCE_INSTALL']
+
+    if env['install_source']:
+        sourceNode = driversNode.make_node('source')
+        bld.install_tgt(files = sourceFiles,
+                        dir = driversNode,
+                        install_path = os.path.join('${PREFIX}',
+                        sourceNode.path_from(driversNode)),
+                        relative_trick=True,
+                        name='FFT_SOURCE_INSTALL')
+
+        # TODO: This is a hack to make USELIB_CHECK happy.  Not sure how to
+        #       cleanly get around this.
+        bld(features = 'install_tgt',
+            dir = driversNode,
+            name='RFFT_SOURCE_INSTALL')
 
 def distclean(context):
     #remove the untarred directories

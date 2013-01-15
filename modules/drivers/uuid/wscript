@@ -52,7 +52,9 @@ def build(bld):
     env = bld.all_envs[variant]
 
     driversNode = bld.path
-        
+
+    sourceFiles = []
+
     if 'MAKE_UUID' in env:
         
         fname = 'e2fsprogs-1.40-uuid'
@@ -87,12 +89,27 @@ def build(bld):
         if env['install_libs']:
             uuid.install_path = '${PREFIX}/lib'
         
-        # TODO: This is currently installing to 
-        #       PREFIX/install/include/uuid/lib/uuid/uuid.h
-        #       I assume the extra lib/uuid in there is unintended
         if env['install_headers']:
-            bld(features='install_tgt', install_path='${PREFIX}/include/uuid',
-                dir=driverNode, pattern='lib/uuid/uuid.h')
+            includeNode = driverNode.make_node(os.path.join('lib', 'uuid'))
+            bld(features='install_tgt', 
+                install_path='${PREFIX}/include/uuid',
+                dir=includeNode,
+                files=['uuid.h'],
+                name='UUID_HEADERS_INSTALL')
+            uuid.targets_to_add += ['UUID_HEADERS_INSTALL']
+
+        if env['install_source']:
+            sourceFiles += [fname + '.tar']
+            uuid.targets_to_add += ['UUID_SOURCE_INSTALL']
+
+    if env['install_source']:
+        sourceNode = driversNode.make_node('source')
+        bld.install_tgt(files = sourceFiles,
+                        dir = driversNode,
+                        install_path = os.path.join('${PREFIX}',
+                        sourceNode.path_from(driversNode)),
+                        relative_trick=True,
+                        name='UUID_SOURCE_INSTALL')
 
 def distclean(context):
     #remove the untarred directories

@@ -39,8 +39,30 @@ public:
     //! Parse and execute command line option (start/stop/restart)
     void daemonize(int& argc, char**& argv)
     {
-        throw except::NotImplementedException(
-            Ctxt("Windows service not yet implemented."));
+        bool foreground = false;
+
+        /*! 
+         * Use the --foreground argument to allow running from
+         * within the console. Windows Services may still be the 
+         * best way to daemonize the process, but this will allow 
+         * that to be possible.
+         *
+         * TODO: Implement this class for daemonizing the process
+         *       from within the executable
+         */
+        for (int i = 1; i < argc; ++i)
+        {
+            std::string arg = argv[i];
+            if (arg == "--foreground")
+            {
+                foreground = true;
+            }
+        }
+        if (!foreground)
+        {
+            throw except::NotImplementedException(
+                Ctxt("Windows service not yet implemented."));
+        }
     }
 
     void setTracefile(const std::string& tracefile) {}

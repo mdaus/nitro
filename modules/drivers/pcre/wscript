@@ -51,6 +51,8 @@ def build(bld):
 
     driversNode = bld.path
     
+    sourceFiles = []
+
     if 'MAKE_PCRE' in env:
         fname = 'pcre-5.0'
 
@@ -74,7 +76,6 @@ def build(bld):
         pcreH = bld(name='pcre_in', input='pcre.in', output='pcre.h', env=env.derive(),
                                  dict=pcreDict, path=driverNode)
         pcreH.features = ['m4subst']
-        #bld.add_group()
         
         #make the dftables executable
         appName = Options.platform.startswith('win32') and 'dftables.exe' or 'dftables'
@@ -102,10 +103,6 @@ def build(bld):
                          use='PCRE')
         if env['install_libs']:
             pcreposix.install_path = '${PREFIX}/lib'
-
-        pcre_targets_to_add = ['config_h', 'pcre_in']
-        if env['install_headers']:
-            pcre_targets_to_add += ['pcre_install']
         
         pcre = bld(features='c c%s add_targets' % env['LIB_TYPE'] or 'stlib',
                          includes=['.'],
@@ -116,7 +113,7 @@ def build(bld):
                          env=env.derive(),
                          name='PCRE',
                          use='chartables.c',
-                         targets_to_add=pcre_targets_to_add,
+                         targets_to_add=['config_h', 'pcre_in'],
                          defines=env['DEFINES'])
         if env['install_libs']:
             pcre.install_path = '${PREFIX}/lib'
@@ -128,7 +125,21 @@ def build(bld):
         if env['install_headers']:
             bld(features='install_tgt', install_path='${PREFIX}/include',
                 dir=driverNode, files=['pcre.h', 'pcreposix.h'], 
-                name='pcre_install')
+                name='PCRE_HEADERS_INSTALL')
+            pcre.targets_to_add += ['PCRE_HEADERS_INSTALL']
+
+        if env['install_source']:
+            sourceFiles += [fname + '.tar']
+            pcre.targets_to_add += ['PCRE_SOURCE_INSTALL']
+
+    if env['install_source']:
+        sourceNode = driversNode.make_node('source')
+        bld.install_tgt(files = sourceFiles,
+                        dir = driversNode,
+                        install_path = os.path.join('${PREFIX}',
+                        sourceNode.path_from(driversNode)),
+                        relative_trick=True,
+                        name='PCRE_SOURCE_INSTALL')
 
 def distclean(context):
     #remove the untarred directories
