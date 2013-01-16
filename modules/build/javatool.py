@@ -3,6 +3,7 @@ from os.path import join, isdir, abspath, dirname
 from waflib import Options, Utils, Logs, TaskGen, Errors
 from waflib.Errors import ConfigurationError
 from waflib.TaskGen import task_gen, feature, after, before
+from waflib.Utils import to_list as listify
 
 def options(opt):
     opt.load('java')
@@ -72,10 +73,8 @@ def configure(self):
         if not libDirs:
             libDirs = list(set(map(lambda x: dirname(x),
                           recursiveGlob(javaHome, ['*jvm.so', '*jvm.dll']))))
-    
-        if not self.check(header_name='jni.h', define_name='HAVE_JNI_H', lib='jvm',
-                    libpath=libDirs, includes=incDirs, uselib_store='JAVA', uselib='JAVA',
-                    function_name='JNI_GetCreatedJavaVMs'):
+ 
+        if not self.check_jni_headers():
             if Options.options.force_jni:
                 self.fatal('could not find lib jvm in %r (see config.log)' % libDirs)
     except ConfigurationError as ex:
@@ -102,7 +101,79 @@ def ant_exec(tsk):
     # Source file is build.xml
     cmd = [tsk.env['ANT'], '-file', tsk.inputs[0].abspath(), '-Dtarget=' + tsk.outputs[0].abspath()] + tsk.env.ant_defines
     return tsk.generator.bld.exec_command(cmd)
+	
+def java_module(bld, **modArgs):
+    """
+    Builds a module, along with optional tests.
+    It makes assumptions, but most can be overridden by passing in args.
+    """
+    if 'env' in modArgs:
+        env = modArgs['env']
+    else:
+        variant = modArgs.get('variant', bld.env['VARIANT'] or 'default')
+        env = bld.all_envs[variant]
+    
+    modArgs = dict((k.lower(), v) for k, v in modArgs.iteritems())
+        
+    lang = modArgs.get('lang', 'java')
+    nlang = modArgs.get('native_lang', 'c')
+    libExeType = {'java':'javac'}.get(lang, 'java')
+    nsourceExt = {'cxx':'.cpp','c':'.c'}.get(nlang, 'c')
+    libName = '%s.jar' % (modArgs['name'])
+		
+    path = modArgs.get('path',
+                       'dir' in modArgs and bld.path.find_dir(modArgs['dir']) or bld.path)
 
+    module_deps = map(lambda x: '%s-%s' % (x, lang), listify(modArgs.get('module_deps', '')))
+    uselib_local = module_deps + listify(modArgs.get('uselib_local', '')) + listify(modArgs.get('use',''))
+    uselib = listify(modArgs.get('uselib', '')) + ['JAVA']
+    targets_to_add = listify(modArgs.get('targets_to_add', ''))
+    classpath = listify(modArgs.get('classpath', ''))
+    compat = modArgs.get('compat', '1.5')
+    libVersion = modArgs.get('version', None)
+    installPath = modArgs.get('install_path', None)
+    
+    targetName = '%s-%s' % (modArgs['name'], lang)
+        
+    sourcedir = modArgs.get('sourcedir', 'src/java')
+    native_sourcedir = modArgs.get('native_sourcedir', 'src/jni')
+
+    cp_targets = []
+    real_classpath = []
+    classpathDirs = [bld.path.find_dir('lib'), bld.path.find_dir('libs'), bld.path.find_dir('../libs')]
+    for cp in classpath:
+        for dir in classpathDirs:
+            if dir is not None and os.path.exists(join(dir.abspath(), cp)):
+                real_classpath.append(join(dir.abspath(), cp))
+                if env['install_libs']:
+                    cp_targets.append(bld(name=cp, features='install_tgt', install_path=installPath or '${PREFIX}/lib', dir=dir, files=[cp]))
+
+    for dep in module_deps:
+        tsk = bld.get_tgen_by_name(dep)
+        for cp in tsk.classpath:
+            real_classpath.append(cp)
+		
+    #build the jar
+    jar = bld(features='javac jar add_targets install_tgt', srcdir=sourcedir, classpath=real_classpath, targets_to_add=targets_to_add + cp_targets, 
+		      use=module_deps, name=targetName, target=targetName, basedir='classes', outdir='classes', destfile=libName, compat=compat, dir=bld.path.get_bld(), files=[libName])
+
+    if env['install_libs']:
+        jar.install_path = installPath or '${PREFIX}/lib'
+        
+
+    if bld.is_defined('HAVE_JNI_H') and bld.path.find_dir(native_sourcedir) is not None:
+        lib = bld(features='%s %sshlib' % (nlang, nlang), includes='%s/include' % native_sourcedir,
+                               target='%s.jni-%s' % (modArgs['name'], nlang), env=env.derive(),
+                               uselib=uselib, use=uselib_local,
+    						   source=bld.path.find_dir(native_sourcedir).ant_glob('source/*%s' % nsourceExt))
+
+        jar.targets_to_add.append(lib)
+		
+        if env['install_libs']:
+            lib.install_path = installPath or '${PREFIX}/lib'
+			
+    return env
+	
 # Tell waf to ignore any build.xml files, the 'ant' feature will take care of them.
 TaskGen.extension('build.xml')(Utils.nada)
 
