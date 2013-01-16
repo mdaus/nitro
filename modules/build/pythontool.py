@@ -35,13 +35,16 @@ def configure(conf):
         if re.match(winRegex, conf.env['PLATFORM']):
             os.environ['DISTUTILS_USE_SDK'] = '1'
             os.environ['MSSdk'] = '1'
-        
+
         try:
             conf.check_python_headers()
+            conf.msg('Can build python bindings', 'yes', color='GREEN')
         except Exception as ex:
+            print ex
             err = str(ex).strip()
             if err.startswith('error: '):
                 err = err[7:]
+            err = err + ' (Is python built with -fPIC?)'
             if Options.options.python_dev:
                 conf.fatal(err)
             else:
