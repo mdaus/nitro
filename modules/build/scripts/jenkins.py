@@ -11,6 +11,7 @@ parser.add_option("-b", "--build-options", dest="build_options", help="Build Opt
 parser.add_option("--studio11-path", dest="studio11_path", help="Sun Studio 11 Compiler Path", default="/var/studio11/SUNWspro")
 parser.add_option("--studio12-path", dest="studio12_path", help="Sun Studio 12 Compiler Path", default="/var/studio12/SUNWspro")
 parser.add_option("--python27-path", dest="python27_path", help="Python 2.7.x Path", default="/opt/python/v2.7.3")
+parser.add_option("--no-distclean", dest="do_distclean", help="No distclean at the end of the build", action="store_false", default=True)
 
 (options, args) = parser.parse_args()
 
@@ -73,7 +74,8 @@ for f in glob.glob('%s-*' % package_name):
 check_call(["python", "waf", "distclean"])
 check_call(["python", "waf", "configure", "--prefix=%s" % install_path] + config_options)
 check_call(["python", "waf", "install"] + build_options)
-check_call(["python", "waf", "distclean"])
+if options.do_distclean:
+    check_call(["python", "waf", "distclean"])
 
 if os.path.isdir(install_path):
     shutil.make_archive(install_path, "zip", install_path)
