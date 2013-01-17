@@ -151,8 +151,7 @@ def java_module(bld, **modArgs):
         for dir in classpathDirs:
             if dir is not None and os.path.exists(join(dir.abspath(), cp)):
                 real_classpath.append(join(dir.abspath(), cp))
-                if env['install_libs']:
-                    cp_targets.append(bld(name=cp, features='install_tgt', install_path=libInstallPath or '${PREFIX}/lib', dir=dir, files=[cp]))
+                cp_targets.append(bld(name=cp, features='install_tgt', install_path=libInstallPath or '${PREFIX}/lib', dir=dir, files=[cp]))
 
     for dep in module_deps:
         tsk = bld.get_tgen_by_name(dep)
@@ -163,8 +162,7 @@ def java_module(bld, **modArgs):
     jar = bld(features='javac jar add_targets install_tgt', manifest=manifest, jarcreate=jarcreate, srcdir=sourcedir, classpath=real_classpath, targets_to_add=targets_to_add + cp_targets, 
 		      use=module_deps, name=targetName, target=targetName, basedir='classes', outdir='classes', destfile=libName, compat=compat, dir=bld.path.get_bld(), files=[libName])
 
-    if env['install_libs']:
-        jar.install_path = installPath or '${PREFIX}/lib'
+    jar.install_path = installPath or '${PREFIX}/lib'
         
 
     if bld.is_defined('HAVE_JNI_H') and bld.path.find_dir(native_sourcedir) is not None:
@@ -175,8 +173,7 @@ def java_module(bld, **modArgs):
 
         jar.targets_to_add.append(lib)
 		
-        if env['install_libs']:
-            lib.install_path = installPath or '${PREFIX}/lib'
+        lib.install_path = installPath or '${PREFIX}/lib'
 			
     return jar
 	
