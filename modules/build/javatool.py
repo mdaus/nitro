@@ -101,7 +101,7 @@ def ant_exec(tsk):
     # Source file is build.xml
     cmd = [tsk.env['ANT'], '-file', tsk.inputs[0].abspath(), '-Dtarget=' + tsk.outputs[0].abspath()] + tsk.env.ant_defines
     return tsk.generator.bld.exec_command(cmd)
-	
+
 def java_module(bld, **modArgs):
     """
     Builds a module, along with optional tests.
@@ -132,8 +132,14 @@ def java_module(bld, **modArgs):
     compat = modArgs.get('compat', '1.5')
     libVersion = modArgs.get('version', None)
     installPath = modArgs.get('install_path', None)
-    
-    targetName = '%s-%s' % (modArgs['name'], lang)
+    libInstallPath = modArgs.get('lib_install_path', None)
+    manifest = modArgs.get('manifest', None)
+    jarcreate = modArgs.get('jarcreate', None)
+
+    if modArgs.get('nosuffix', False) :
+        targetName = modArgs['name']
+    else :    
+        targetName = '%s-%s' % (modArgs['name'], lang)
         
     sourcedir = modArgs.get('sourcedir', 'src/java')
     native_sourcedir = modArgs.get('native_sourcedir', 'src/jni')
@@ -146,7 +152,7 @@ def java_module(bld, **modArgs):
             if dir is not None and os.path.exists(join(dir.abspath(), cp)):
                 real_classpath.append(join(dir.abspath(), cp))
                 if env['install_libs']:
-                    cp_targets.append(bld(name=cp, features='install_tgt', install_path=installPath or '${PREFIX}/lib', dir=dir, files=[cp]))
+                    cp_targets.append(bld(name=cp, features='install_tgt', install_path=libInstallPath or '${PREFIX}/lib', dir=dir, files=[cp]))
 
     for dep in module_deps:
         tsk = bld.get_tgen_by_name(dep)
@@ -154,7 +160,7 @@ def java_module(bld, **modArgs):
             real_classpath.append(cp)
 		
     #build the jar
-    jar = bld(features='javac jar add_targets install_tgt', srcdir=sourcedir, classpath=real_classpath, targets_to_add=targets_to_add + cp_targets, 
+    jar = bld(features='javac jar add_targets install_tgt', manifest=manifest, jarcreate=jarcreate, srcdir=sourcedir, classpath=real_classpath, targets_to_add=targets_to_add + cp_targets, 
 		      use=module_deps, name=targetName, target=targetName, basedir='classes', outdir='classes', destfile=libName, compat=compat, dir=bld.path.get_bld(), files=[libName])
 
     if env['install_libs']:
@@ -172,7 +178,7 @@ def java_module(bld, **modArgs):
         if env['install_libs']:
             lib.install_path = installPath or '${PREFIX}/lib'
 			
-    return env
+    return jar
 	
 # Tell waf to ignore any build.xml files, the 'ant' feature will take care of them.
 TaskGen.extension('build.xml')(Utils.nada)
