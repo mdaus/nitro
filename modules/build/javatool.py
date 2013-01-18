@@ -74,7 +74,10 @@ def configure(self):
             libDirs = list(set(map(lambda x: dirname(x),
                           recursiveGlob(javaHome, ['*jvm.so', '*jvm.dll']))))
  
-        if not self.check_jni_headers():
+        #if not self.check_jni_headers():
+        if not self.check(header_name='jni.h', define_name='HAVE_JNI_H', lib='jvm',
+                libpath=libDirs, includes=incDirs, uselib_store='JAVA', uselib='JAVA',
+                function_name='JNI_GetCreatedJavaVMs'):
             if Options.options.force_jni:
                 self.fatal('could not find lib jvm in %r (see config.log)' % libDirs)
     except ConfigurationError as ex:
