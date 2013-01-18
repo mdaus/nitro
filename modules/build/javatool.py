@@ -112,70 +112,71 @@ def java_module(bld, **modArgs):
     else:
         variant = modArgs.get('variant', bld.env['VARIANT'] or 'default')
         env = bld.all_envs[variant]
-    
-    modArgs = dict((k.lower(), v) for k, v in modArgs.iteritems())
-        
-    lang = modArgs.get('lang', 'java')
-    nlang = modArgs.get('native_lang', 'c')
-    libExeType = {'java':'javac'}.get(lang, 'java')
-    nsourceExt = {'cxx':'.cpp','c':'.c'}.get(nlang, 'c')
-    libName = '%s.jar' % (modArgs['name'])
-		
-    path = modArgs.get('path',
-                       'dir' in modArgs and bld.path.find_dir(modArgs['dir']) or bld.path)
 
-    module_deps = map(lambda x: '%s-%s' % (x, lang), listify(modArgs.get('module_deps', '')))
-    uselib_local = module_deps + listify(modArgs.get('uselib_local', '')) + listify(modArgs.get('use',''))
-    uselib = listify(modArgs.get('uselib', '')) + ['JAVA']
-    targets_to_add = listify(modArgs.get('targets_to_add', ''))
-    classpath = listify(modArgs.get('classpath', ''))
-    compat = modArgs.get('compat', '1.5')
-    libVersion = modArgs.get('version', None)
-    installPath = modArgs.get('install_path', None)
-    libInstallPath = modArgs.get('lib_install_path', None)
-    manifest = modArgs.get('manifest', None)
-    jarcreate = modArgs.get('jarcreate', None)
-
-    if modArgs.get('nosuffix', False) :
-        targetName = modArgs['name']
-    else :    
-        targetName = '%s-%s' % (modArgs['name'], lang)
-        
-    sourcedir = modArgs.get('sourcedir', 'src/java')
-    native_sourcedir = modArgs.get('native_sourcedir', 'src/jni')
-
-    cp_targets = []
-    real_classpath = []
-    classpathDirs = [bld.path.find_dir('lib'), bld.path.find_dir('libs'), bld.path.find_dir('../libs')]
-    for cp in classpath:
-        for dir in classpathDirs:
-            if dir is not None and os.path.exists(join(dir.abspath(), cp)):
-                real_classpath.append(join(dir.abspath(), cp))
-                cp_targets.append(bld(name=cp, features='install_tgt', install_path=libInstallPath or '${PREFIX}/lib', dir=dir, files=[cp]))
-
-    for dep in module_deps:
-        tsk = bld.get_tgen_by_name(dep)
-        for cp in tsk.classpath:
-            real_classpath.append(cp)
-		
-    #build the jar
-    jar = bld(features='javac jar add_targets install_tgt', manifest=manifest, jarcreate=jarcreate, srcdir=sourcedir, classpath=real_classpath, targets_to_add=targets_to_add + cp_targets, 
-		      use=module_deps, name=targetName, target=targetName, basedir='classes', outdir='classes', destfile=libName, compat=compat, dir=bld.path.get_bld(), files=[libName])
-
-    jar.install_path = installPath or '${PREFIX}/lib'
-        
-
-    if bld.is_defined('HAVE_JNI_H') and bld.path.find_dir(native_sourcedir) is not None:
-        lib = bld(features='%s %sshlib' % (nlang, nlang), includes='%s/include' % native_sourcedir,
-                               target='%s.jni-%s' % (modArgs['name'], nlang), env=env.derive(),
-                               uselib=uselib, use=uselib_local,
-    						   source=bld.path.find_dir(native_sourcedir).ant_glob('source/*%s' % nsourceExt))
-
-        jar.targets_to_add.append(lib)
-		
-        lib.install_path = installPath or '${PREFIX}/lib'
-			
-    return jar
+    if env['JAVAC'] and env['JAR']:
+       modArgs = dict((k.lower(), v) for k, v in modArgs.iteritems())
+           
+       lang = modArgs.get('lang', 'java')
+       nlang = modArgs.get('native_lang', 'c')
+       libExeType = {'java':'javac'}.get(lang, 'java')
+       nsourceExt = {'cxx':'.cpp','c':'.c'}.get(nlang, 'c')
+       libName = '%s.jar' % (modArgs['name'])
+   		
+       path = modArgs.get('path',
+                          'dir' in modArgs and bld.path.find_dir(modArgs['dir']) or bld.path)
+   
+       module_deps = map(lambda x: '%s-%s' % (x, lang), listify(modArgs.get('module_deps', '')))
+       uselib_local = module_deps + listify(modArgs.get('uselib_local', '')) + listify(modArgs.get('use',''))
+       uselib = listify(modArgs.get('uselib', '')) + ['JAVA']
+       targets_to_add = listify(modArgs.get('targets_to_add', ''))
+       classpath = listify(modArgs.get('classpath', ''))
+       compat = modArgs.get('compat', '1.5')
+       libVersion = modArgs.get('version', None)
+       installPath = modArgs.get('install_path', None)
+       libInstallPath = modArgs.get('lib_install_path', None)
+       manifest = modArgs.get('manifest', None)
+       jarcreate = modArgs.get('jarcreate', None)
+   
+       if modArgs.get('nosuffix', False) :
+           targetName = modArgs['name']
+       else :    
+           targetName = '%s-%s' % (modArgs['name'], lang)
+           
+       sourcedir = modArgs.get('sourcedir', 'src/java')
+       native_sourcedir = modArgs.get('native_sourcedir', 'src/jni')
+   
+       cp_targets = []
+       real_classpath = []
+       classpathDirs = [bld.path.find_dir('lib'), bld.path.find_dir('libs'), bld.path.find_dir('../libs')]
+       for cp in classpath:
+           for dir in classpathDirs:
+               if dir is not None and os.path.exists(join(dir.abspath(), cp)):
+                   real_classpath.append(join(dir.abspath(), cp))
+                   cp_targets.append(bld(name=cp, features='install_tgt', install_path=libInstallPath or '${PREFIX}/lib', dir=dir, files=[cp]))
+   
+       for dep in module_deps:
+           tsk = bld.get_tgen_by_name(dep)
+           for cp in tsk.classpath:
+               real_classpath.append(cp)
+   		
+       #build the jar
+       jar = bld(features='javac jar add_targets install_tgt', manifest=manifest, jarcreate=jarcreate, srcdir=sourcedir, classpath=real_classpath, targets_to_add=targets_to_add + cp_targets, 
+   		      use=module_deps, name=targetName, target=targetName, basedir='classes', outdir='classes', destfile=libName, compat=compat, dir=bld.path.get_bld(), files=[libName])
+   
+       jar.install_path = installPath or '${PREFIX}/lib'
+           
+   
+       if bld.is_defined('HAVE_JNI_H') and bld.path.find_dir(native_sourcedir) is not None:
+           lib = bld(features='%s %sshlib' % (nlang, nlang), includes='%s/include' % native_sourcedir,
+                                  target='%s.jni-%s' % (modArgs['name'], nlang), env=env.derive(),
+                                  uselib=uselib, use=uselib_local,
+       						   source=bld.path.find_dir(native_sourcedir).ant_glob('source/*%s' % nsourceExt))
+   
+           jar.targets_to_add.append(lib)
+   		
+           lib.install_path = installPath or '${PREFIX}/lib'
+   			
+       return jar
 	
 # Tell waf to ignore any build.xml files, the 'ant' feature will take care of them.
 TaskGen.extension('build.xml')(Utils.nada)
