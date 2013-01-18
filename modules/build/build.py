@@ -574,10 +574,10 @@ class CPPContext(Context.Context):
         """
         bld = self
         if 'env' in modArgs:
-            env = modArgs['env']
+            env = modArgs['env'].derive()
         else:
             variant = modArgs.get('variant', bld.env['VARIANT'] or 'default')
-            env = bld.all_envs[variant]
+            env = bld.all_envs[variant].derive()
         
         modArgs = dict((k.lower(), v) for k, v in modArgs.iteritems())
         lang = modArgs.get('lang', 'c++')
@@ -595,6 +595,14 @@ class CPPContext(Context.Context):
         includes = listify(modArgs.get('includes', 'include'))
         exportIncludes = listify(modArgs.get('export_includes', 'include'))
         source = listify(modArgs.get('source', '')) or None
+        removePluginPrefix = modArgs.get('removepluginprefix', False)
+
+        # This is so that on Unix we name the plugins without the 'lib' prefix
+        if removePluginPrefix:
+            if env['cshlib_PATTERN'].startswith('lib'):
+                env['cshlib_PATTERN'] = env['cshlib_PATTERN'][3:]
+            if env['cxxshlib_PATTERN'].startswith('lib'):
+                env['cxxshlib_PATTERN'] = env['cxxshlib_PATTERN'][3:]
         
         lib = bld(features='%s %sshlib add_targets no_implib' % (libExeType, libExeType),
                 target=libName, name=libName, source=source,
