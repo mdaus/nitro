@@ -1,0 +1,172 @@
+import os, sys
+from waflib import Options
+from waflib.TaskGen import feature, before, task_gen
+from build import untarFile
+
+def options(opt):
+    opt.add_option('--disable-xml', action='store_false', dest='enable_xml', default=True,
+                   help='turn off XML')
+    opt.add_option('--enable-xml-layer', action='store', choices=['expat', 'libxml', 'xerces'],
+                   dest='xml_layer', default='expat', help='Specify the XML layer (default=expat)')
+    opt.add_option('--with-xml-home', action='store', dest='xml_home',
+                   help='Specify the XML Home - where the XML library is installed to')
+    opt.add_option('--build-xml', action='store_true', dest="build_xml",
+                   help='force building XML library (expat) from scratch',
+                   default=os.path.exists(os.path.join(opt.path.abspath(), 'expat-2.0.0.tar')))
+    opt.add_option('--nobuild-xml', action='store_false', dest="build_xml",
+                   help='force not building XML library from scratch')
+
+def configure(conf):
+    #-- XML --------------------------------------------------------------------
+    if Options.options.enable_xml:
+        xmlHome = Options.options.xml_home
+        xmlLayer = Options.options.xml_layer
+
+        expatDefines = 'USE_EXPAT XML_STATIC'
+        if Options.options.build_xml and not xmlHome:
+            # Build is off by default when tarfile not found, fail if forced on
+            if not os.path.exists(os.path.join(conf.path.abspath(), 'expat-2.0.0.tar')):
+                conf.fatal('Missing expat tarfile')
+
+            conf.env['MAKE_XML'] = True
+            conf.env.append_unique('DEFINES_XML', expatDefines.split())
+            conf.msg('Building local lib', xmlLayer)
+            untarFile(path=conf.path, fname='expat-2.0.0.tar')
+
+        elif xmlLayer == 'expat':
+            conf.env.append_value('DEFINES_XML', expatDefines.split())
+            if xmlHome:
+                conf.check(lib='expat', uselib_store='XML',
+                           header_name='expat.h',
+                           function_name='XML_ExpatVersion',
+                           libpath=os.path.join(xmlHome, 'lib'),
+                           includes=os.path.join(xmlHome, 'include'),
+                           msg='Checking for library expat', okmsg=xmlHome,
+                           mandatory=True)
+            else:
+                conf.check(lib='expat', uselib_store='XML',
+                           header_name='expat.h',
+                           function_name='XML_ExpatVersion',
+                           msg='Checking for library expat',
+                           mandatory=True)
+
+        elif xmlLayer == 'libxml':
+            conf.env.append_value('DEFINES_XML', 'USE_LIBXML')
+            if xmlHome:
+                conf.check(lib='xml2', uselib_store='XML',
+                           header_name='libxml/parser.h',
+                           function_name='xmlSAXVersion',
+                           libpath=os.path.join(xmlHome, 'lib'),
+                           includes=os.path.join(xmlHome, 'include'),
+                           msg='Checking for library libxml', okmsg=xmlHome,
+                           mandatory=True)
+            else:
+                conf.check(lib='xml2', uselib_store='XML',
+                           header_name='libxml/parser.h',
+                           function_name='xmlSAXVersion',
+                           includes='/usr/include/libxml2',
+                           msg='Checking for library libxml',
+                           mandatory=True)
+
+        elif xmlLayer == 'xerces':
+            conf.env.append_value('DEFINES_XML', 'USE_XERCES')
+            conf.env.append_value('DEFINES_XML', 'XERCES_STATIC_LIBRARY')
+            uselibs = 'THREAD'
+            if sys.platform == 'win32':
+                # Xerces also requires this standard Windows library for
+                # Windows builds
+                conf.check_cc(lib='advapi32', uselib_store='ADVAPI32')
+                conf.env.append_value('LIB_XML', 'ADVAPI32')
+                uselibs += ' ADVAPI32'
+            if xmlHome:
+                conf.check(lib='xerces-c', uselib_store='XML',
+                           header_name='xercesc/util/PlatformUtils.hpp',
+                           function_name='xercesc::XMLPlatformUtils::Terminate',
+                           defines='XERCES_STATIC_LIBRARY', uselib=uselibs,
+                           libpath=os.path.join(xmlHome, 'lib'),
+                           includes=os.path.join(xmlHome, 'include'),
+                           msg='Checking for library xerces', okmsg=xmlHome,
+                           mandatory=True)
+            else:
+                conf.check(lib='xerces-c', uselib_store='XML',
+                           header_name='xercesc/util/PlatformUtils.hpp',
+                           function_name='xercesc::XMLPlatformUtils::Terminate',
+                           defines='XERCES_STATIC_LIBRARY', uselib=uselibs,
+                           msg='Checking for library xerces',
+                           mandatory=True)
+
+def build(bld):
+    variant = bld.env['VARIANT']
+    env = bld.all_envs[variant]
+
+    driversNode = bld.path
+
+    sourceFiles = []
+    
+    if 'MAKE_XML' in env:
+        
+        driver = Options.options.xml_layer
+        
+        if driver == 'expat':
+            fname = 'expat-2.0.0'
+            
+            driverNode = driversNode.make_node(fname)
+        
+            expatDefs = ['PACKAGE_VERSION="2.0.0"',
+                         'XML_CONTEXT_BYTES=1024',
+                         'XML_DTD=1',
+                         'XML_NS=1',
+                         'PACKAGE_STRING="expat 2.0.0"',
+                         'XML_STATIC=1']
+            
+            sources = 'lib/xmlparse.c lib/xmltok.c lib/xmlrole.c'
+            features = 'c c%s' % env['LIB_TYPE'] or 'stlib'
+            if env['install_headers'] or env['install_source']:
+                features += ' add_targets'
+            
+            expat = bld(features=features, source=sources,
+                             includes='.', export_includes='lib',
+                             target='expat', path=driverNode,
+                             uselib='XML', name='XML', env=env.derive(),
+                             defines=env['DEFINES'] + expatDefs)
+            expat.targets_to_add = []
+            if env['install_libs']:
+                expat.install_path = '${PREFIX}/lib'
+
+            if env['CC_NAME'] == 'msvc' and env['LIB_TYPE'] == 'shlib':
+                expat.defs = 'lib/libexpat.def'
+            
+            if env['install_headers']:
+                bld(features='install_tgt', install_path='${PREFIX}/include',
+                    dir=driverNode, files=['lib/expat.h', 'lib/expat_external.h'], 
+                    name='EXPAT_HEADERS_INSTALL')
+                expat.targets_to_add += ['EXPAT_HEADERS_INSTALL']
+
+            if env['install_source']:
+                sourceFiles += [fname + '.tar']
+                expat.targets_to_add += ['XML_SOURCE_INSTALL']
+            
+        else:
+            raise Exception('Invalid XML driver: %s' % driver)
+
+    if env['install_source']:
+        sourceNode = driversNode.make_node('source')
+        bld.install_tgt(files = sourceFiles,
+                        dir = driversNode,
+                        install_path = os.path.join('${PREFIX}',
+                        sourceNode.path_from(driversNode)),
+                        relative_trick=True,
+                        name='XML_SOURCE_INSTALL')
+
+def distclean(context):
+    #remove the untarred directories
+    import shutil
+    
+    dirs = map(lambda d: os.path.join(context.path.abspath(), d),
+               ['expat-1.95.7','expat-2.0.0'])
+    for d in dirs:
+        try:
+            if os.path.exists(d):
+                shutil.rmtree(d, ignore_errors=True)
+        except:{}
+    
