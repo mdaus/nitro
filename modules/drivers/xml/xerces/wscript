@@ -59,6 +59,15 @@ def configure(conf):
 
             conf.check_cc(header_name="string.h", mandatory=False)
             conf.check_cc(header_name="strings.h", mandatory=False)
+            conf.check_cc(function_name='strchr', header_name="string.h", mandatory=False)
+            conf.check_cc(function_name='strdup', header_name="string.h", mandatory=False)
+            conf.check_cc(function_name='stricmp', header_name="string.h", mandatory=False)
+            conf.check_cc(function_name='strrcmp', header_name="string.h", mandatory=False)
+            conf.check_cc(function_name='strrchr', header_name="string.h", mandatory=False)
+            conf.check_cc(function_name='strstr', header_name="string.h", mandatory=False)
+            conf.check_cc(function_name='strtol', header_name="string.h", mandatory=False)
+            conf.check_cc(function_name='strtoul', header_name="string.h", mandatory=False)
+            conf.check_cc(function_name='strcasecmp', header_name="strings.h", mandatory=False)
            
             conf.check_cc(header_name="locale.h", mandatory=False)
             conf.check_cc(function_name='localeconv', header_name="locale.h", mandatory=False)
@@ -81,13 +90,11 @@ def configure(conf):
             conf.check_cc(function_name='wcsrtombs', header_name="stdlib.h", mandatory=False)
 
             conf.check_cc(function_name='getaddrinfo', header_name="netdb.h", mandatory=False)
-            conf.check_cc(function_name='getaddrinfo', header_name="netdb.h", mandatory=False)
 
             conf.check_cc(header_name="cpuid.h", mandatory=False)
             conf.check_cc(header_name="endian.h", mandatory=False)
             conf.check_cc(header_name="machine/endian.h", mandatory=False)
             conf.check_cc(header_name="errno.h", mandatory=False)
-            conf.check_cc(header_name="float.h", mandatory=False)
             conf.check_cc(header_name="float.h", mandatory=False)
 
             # untar and setup env
@@ -137,29 +144,20 @@ def build(bld):
                 d[k] = v
 
         # extra defines for config.h
-        if 'HAVE_STRING_H=1' in env['DEFINES'] :
-            d['HAVE_STRCHR'] = '1'
-            d['HAVE_STRDUP'] = '1'
-            d['HAVE_STRICMP'] = '1'
-            d['HAVE_STRRCHR'] = '1'
-            d['HAVE_STRSTR'] = '1'
-            d['HAVE_STRTOL'] = '1'
-            d['HAVE_STRTOUL'] = '1'
-        if 'HAVE_STRINGS_H=1' in env['DEFINES'] :
-            d['HAVE_STRCASECMP'] = '1'
         if 'HAVE_ICONV_H=1' in env['DEFINES'] :
             d['ICONV_USES_CONST_POINTER'] = '0'
         if 'HAVE_SYS_TIME_H=1' in env['DEFINES'] and 'HAVE_TIME_H=1' in env['DEFINES']:
             d['TIME_WITH_SYS_TIME'] = '1'
-
-        if 'HAVE_SYS_TYPES_H=1HAVE_SYS_TYPES=1' in env['DEFINES'] :
+        if 'HAVE_SYS_TYPES_H=1' in env['DEFINES'] :
             d['XERCES_HAVE_SYS_TYPES_H'] = '1'
+            d['XERCES_SSIZE_T'] = 'ssize_t'
+        else :
+            if 'SIZEOF_SIZE_T=8' in env['DEFINES'] :
+                d['XERCES_SSIZE_T']    = '__int64'
+            else :
+                d['XERCES_SSIZE_T']    = '__int32'
         if 'HAVE_INTTYPES_H=1' in env['DEFINES'] :
             d['XERCES_HAVE_INTTYPES_H'] = '1'
-            d['XERCES_SSIZE_T']    = 'ssize_t'
-        else :
-            d['XERCES_HAVE_INTTYPES_H'] = '0'
-            d['XERCES_SSIZE_T']    = 'long'
         if 'HAVE_INTRIN_H=1' in env['DEFINES'] :
             d['XERCES_HAVE_INTRIN_H'] = '1'
         if 'HAVE_EMMINTRIN_H=1' in env['DEFINES'] :
@@ -220,7 +218,6 @@ def build(bld):
             d['HAVE_CATCLOSE'] = '1'
             d['HAVE_CATGETS']  = '1'
             d['HAVE_CATOPEN']  = '1'
-
         print d
 
         # first setup the configurable headers
@@ -310,10 +307,10 @@ def build(bld):
             features += ' add_targets'
 
         xerces = bld(features=features, source=sources,
-                    includes='src', export_includes='src',
+                    includes=['.', 'src'], export_includes='src',
                     target='xerces-c', path=xercesNode,
                     uselib='XML SOCKET', name='XML', env=env.derive(),
-                    defines=env['DEFINES'])
+                    defines=env['DEFINES'] + ['HAVE_CONFIG_H'])
         xerces.targets_to_add = [xercesAutoH, xercesConfigH]
         if env['install_libs']:
             xerces.install_path = '${PREFIX}/lib'
