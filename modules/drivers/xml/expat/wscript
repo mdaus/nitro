@@ -1,4 +1,5 @@
 import os, sys
+from os.path import join, exists
 from waflib import Options
 from waflib.TaskGen import feature, before, task_gen
 from build import untarFile
@@ -19,7 +20,7 @@ def configure(conf):
         # build it with waf
         if not xmlHome :
             # check for the source tarball
-            if not os.path.exists(os.path.join(conf.path.abspath(), SOURCE + '.tar')):
+            if not exists(join(conf.path.abspath(), SOURCE + '.tar')):
                 conf.fatal('Missing expat tarfile')
 
             # untar and setup env
@@ -35,8 +36,8 @@ def configure(conf):
             conf.check(lib='expat', uselib_store='XML',
                        header_name='expat.h',
                        function_name='XML_ExpatVersion',
-                       libpath=os.path.join(xmlHome, 'lib'),
-                       includes=os.path.join(xmlHome, 'include'),
+                       libpath=join(xmlHome, 'lib'),
+                       includes=join(xmlHome, 'include'),
                        msg='Checking for library expat', okmsg=xmlHome,
                        mandatory=True)
 
@@ -85,7 +86,7 @@ def build(bld):
             sourceNode = bld.path.make_node('source')
             bld.install_tgt(files=SOURCE + '.tar',
                             dir=bld.path,
-                            install_path=os.path.join('${PREFIX}',
+                            install_path=join('${PREFIX}',
                             sourceNode.path_from(bld.path)),
                             relative_trick=True,
                             name='XML_SOURCE_INSTALL')            
@@ -95,10 +96,9 @@ def distclean(context):
 
     # remove the untarred directories
     import shutil
-    dirs = filter(lambda x: exists(join(opt.path.abspath(), x)), 
+    dirs = filter(lambda x: exists(join(context.path.abspath(), x)), 
                   ['expat-1.95.7','expat-2.0.0'])
     for d in dirs:
         try:
-            shutil.rmtree(d, ignore_errors=True)
+            shutil.rmtree(join(context.path.abspath(), d), ignore_errors=True)
         except:{}
-    
