@@ -285,7 +285,6 @@ def build(bld):
         xercesDefines = env['DEFINES'] + ['HAVE_CONFIG_H']
         if sys.platform == 'win32' :
             xercesDefines.append('XERCES_USE_WIN32_MSGLOADER')
-        print xercesDefines
         xerces = bld(features=features, source=sources,
                      includes=['.', 'src'], export_includes='src',
                      target='xerces-c', path=xercesNode,
