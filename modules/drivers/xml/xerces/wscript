@@ -78,6 +78,8 @@ def configure(conf):
             conf.check_cc(function_name='iconv', header_name="iconv.h", mandatory=False)
             conf.check_cc(function_name='iconv_close', header_name="iconv.h", mandatory=False)
             conf.check_cc(function_name='iconv_open', header_name="iconv.h", mandatory=False)
+            conf.check_cc(function_name='towupper', header_name="wctype.h", mandatory=False)
+            conf.check_cc(function_name='towlower', header_name="wctype.h", mandatory=False)
             conf.check_cc(function_name='catclose', header_name="nl_types.h", mandatory=False)
             conf.check_cc(function_name='catclose', header_name="nl_types.h", mandatory=False)
             conf.check_cc(function_name='catgets', header_name="nl_types.h", mandatory=False)
