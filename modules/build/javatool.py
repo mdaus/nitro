@@ -116,7 +116,14 @@ def java_module(bld, **modArgs):
         variant = modArgs.get('variant', bld.env['VARIANT'] or 'default')
         env = bld.all_envs[variant]
 
-    if env['JAVAC'] and env['JAR']:
+    # Basically, if this Java target depends on a JNI target, and for whatever
+    # reason we don't have JNI, we don't want to even add the Java target onto
+    # the build queue since we won't be able to build it
+    native_sourcedir = modArgs.get('native_sourcedir', 'src/jni')
+    have_native_sourcedir = bld.path.find_dir(native_sourcedir) is not None
+    jni_ok = bld.is_defined('HAVE_JNI_H') or not have_native_sourcedir
+
+    if env['JAVAC'] and env['JAR'] and jni_ok:
        modArgs = dict((k.lower(), v) for k, v in modArgs.iteritems())
            
        lang = modArgs.get('lang', 'java')
@@ -124,7 +131,7 @@ def java_module(bld, **modArgs):
        libExeType = {'java':'javac'}.get(lang, 'java')
        nsourceExt = {'cxx':'.cpp','c':'.c'}.get(nlang, 'c')
        libName = '%s.jar' % (modArgs['name'])
-   		
+         
        path = modArgs.get('path',
                           'dir' in modArgs and bld.path.find_dir(modArgs['dir']) or bld.path)
    
@@ -146,7 +153,6 @@ def java_module(bld, **modArgs):
            targetName = '%s-%s' % (modArgs['name'], lang)
            
        sourcedir = modArgs.get('sourcedir', 'src/java')
-       native_sourcedir = modArgs.get('native_sourcedir', 'src/jni')
    
        cp_targets = []
        real_classpath = []
@@ -156,31 +162,40 @@ def java_module(bld, **modArgs):
                if dir is not None and os.path.exists(join(dir.abspath(), cp)):
                    real_classpath.append(join(dir.abspath(), cp))
                    cp_targets.append(bld(name=cp, features='install_tgt', install_path=libInstallPath or '${PREFIX}/lib', dir=dir, files=[cp]))
-   
+
+       # We need a try/catch here for the rare case where we have javac but
+       # not JNI, we're a module that doesn't depend on JNI, but we depend on
+       # another module that DOES depend on JNI.  In that case, the module we
+       # depend on won't exist so get_tgen_by_name() will throw.  There's no
+       # way to build this module, which is fine - we're just trying not to
+       # stop the whole build when something else is targetted.
        for dep in module_deps:
-           tsk = bld.get_tgen_by_name(dep)
-           for cp in tsk.classpath:
-               real_classpath.append(cp)
-   		
+           try:
+               tsk = bld.get_tgen_by_name(dep)
+               for cp in tsk.classpath:
+                   real_classpath.append(cp)
+           except:
+               pass
+         
        #build the jar
        jar = bld(features='javac jar add_targets install_tgt', manifest=manifest, jarcreate=jarcreate, srcdir=sourcedir, classpath=real_classpath, targets_to_add=targets_to_add + cp_targets, 
-   		      use=module_deps, name=targetName, target=targetName, basedir='classes', outdir='classes', destfile=libName, compat=compat, dir=bld.path.get_bld(), files=[libName])
+               use=module_deps, name=targetName, target=targetName, basedir='classes', outdir='classes', destfile=libName, compat=compat, dir=bld.path.get_bld(), files=[libName])
    
        jar.install_path = installPath or '${PREFIX}/lib'
            
    
-       if bld.is_defined('HAVE_JNI_H') and bld.path.find_dir(native_sourcedir) is not None:
+       if have_native_sourcedir:
            lib = bld(features='%s %sshlib' % (nlang, nlang), includes='%s/include' % native_sourcedir,
                                   target='%s.jni-%s' % (modArgs['name'], nlang), env=env.derive(),
                                   uselib=uselib, use=uselib_local,
-       						   source=bld.path.find_dir(native_sourcedir).ant_glob('source/*%s' % nsourceExt))
+                           source=bld.path.find_dir(native_sourcedir).ant_glob('source/*%s' % nsourceExt))
    
            jar.targets_to_add.append(lib)
-   		
+         
            lib.install_path = installPath or '${PREFIX}/lib'
-   			
+            
        return jar
-	
+   
 # Tell waf to ignore any build.xml files, the 'ant' feature will take care of them.
 TaskGen.extension('build.xml')(Utils.nada)
 
