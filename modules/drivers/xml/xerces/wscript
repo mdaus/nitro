@@ -36,11 +36,8 @@ def configure(conf):
             conf.check_cc(header_name="intrin.h", mandatory=False)
             conf.check_cc(header_name="emmintrin.h", mandatory=False)
             conf.check_cc(header_name="wchar.h", mandatory=False)
-            conf.check_cc(header_name="arpa/nameser_compat.h", mandatory=False)
             conf.check_cc(header_name="stdint.h", mandatory=False)
             conf.check_cc(header_name="stdio.h", mandatory=False)
-            conf.check_cc(header_name="string.h", mandatory=False)
-            conf.check_cc(header_name="strings.h", mandatory=False)
             conf.check_cc(header_name="langinfo.h", mandatory=False)
             conf.check_cc(header_name="iconv.h", mandatory=False)
             conf.check_cc(header_name="nl_types.h", mandatory=False)
@@ -49,6 +46,7 @@ def configure(conf):
             conf.check_cc(header_name="cpuid.h", mandatory=False)
             conf.check_cc(header_name="endian.h", mandatory=False)
             conf.check_cc(header_name="machine/endian.h", mandatory=False)
+            conf.check_cc(header_name="arpa/nameser_compat.h", mandatory=False)
             conf.check_cc(header_name="errno.h", mandatory=False)
             conf.check_cc(header_name="float.h", mandatory=False)
             conf.check_cc(header_name="locale.h", mandatory=False)
@@ -57,7 +55,6 @@ def configure(conf):
             conf.check_cc(header_name="sys/stat.h", mandatory=False)
             conf.check_cc(header_name="sys/timeb.h", mandatory=False)
             conf.check_cc(header_name="sys/types.h", mandatory=False)
-            conf.check_cc(header_name="unicode/ustring.h", mandatory=False)
 
             conf.check_cc(function_name='mblen', header_name="stdlib.h", mandatory=False)
             conf.check_cc(function_name='mbrlen', header_name="stdlib.h", mandatory=False)
@@ -92,7 +89,6 @@ def configure(conf):
             conf.check_cc(function_name='getaddrinfo', header_name="netdb.h", mandatory=False)
 
             conf.check_cc(lib="nsl", mandatory=False, uselib_store='NSL')
-            conf.check_cc(lib="icuuc", mandatory=False, uselib_store='ICUUC')
 
             # untar and setup env
             conf.env['MAKE_XERCES'] = True
@@ -127,9 +123,6 @@ def build(bld):
         if sys.platform == 'win32':
             # Xerces requires this standard Windows library
             xercesUselibs += ' ADVAPI32'
-        if 'HAVE_UNICODE_USTRING_H=1' in env['DEFINES'] :
-            # ICU has additional depencies
-            xercesUselibs += ' ICUUC'
 
         d = {}
         for line in env['DEFINES']:
@@ -182,14 +175,10 @@ def build(bld):
         else :
             d['HAVE_PTHREAD'] = '1'
 
-            if 'HAVE_UNICODE_USTRING_H=1' in env['DEFINES'] :
-                d['XERCES_USE_TRANSCODER_ICU'] = '1'
-            else :
-                d['XERCES_USE_TRANSCODER_GNUICONV'] = '1'
-    
-            d['XERCES_USE_MSGLOADER_INMEMORY'] = '1'
             d['XERCES_USE_FILEMGR_POSIX'] = '1'
             d['XERCES_USE_MUTEXMGR_POSIX'] = '1'
+            d['XERCES_USE_TRANSCODER_ICONV'] = '1'
+            d['XERCES_USE_MSGLOADER_INMEMORY'] = '1'
 
             d['XERCES_S16BIT_INT'] = 'int16_t'
             d['XERCES_S32BIT_INT'] = 'int32_t'
@@ -248,17 +237,17 @@ def build(bld):
         xercesConfigH.features = ['handleDefs']
 
         # setup some known excludes per platform
-        GENERAL_EXCLUDES = ['IconvTransService.cpp', 'MacOSUnicodeConverter.cpp', 
-                            'MacOSURLAccessCF.cpp', 'URLAccessCFBinInputStream.cpp',
+        GENERAL_EXCLUDES = ['URLAccessCFBinInputStream.cpp', 
+                            'MacOSURLAccessCF.cpp', 'IconvGNUTransService.cpp',
+                            'MacOSUnicodeConverter.cpp',
                             'CurlURLInputStream.cpp', 'CurlNetAccessor.cpp',
-                            'ICUMsgLoader.cpp']
-
-        ICU_SPECIFIC       = ['ICUTransService.cpp', 'InMemMsgLoader.cpp']
-        ICONV_GNU_SPECIFIC = ['IconvGNUTransService.cpp', 'MsgCatalogLoader.cpp']
-        UNIX_SPECIFIC = ['SocketNetAccessor.cpp','UnixHTTPURLInputStream.cpp', 
-                         'PosixFileMgr.cpp', 'PosixMutexMgr.cpp']
+                            'ICUMsgLoader.cpp', 'ICUTransService.cpp']
+        UNIX_SPECIFIC = ['SocketNetAccessor.cpp','UnixHTTPURLInputStream.cpp',
+                         'PosixFileMgr.cpp', 'PosixMutexMgr.cpp', 
+                         'InMemMsgLoader.cpp', 'IconvTransService.cpp']
         WIN_SPECIFIC  = ['Win32TransService.cpp', 'WinSockNetAccessor.cpp',
-                         'BinHTTPURLInputStream.cpp', 'BinHTTPInputStreamCommon.cpp',
+                         'BinHTTPURLInputStream.cpp', 
+                         'BinHTTPInputStreamCommon.cpp',
                          'WindowsFileMgr.cpp', 'WindowsMutexMgr.cpp', 
                          'Win32MsgLoader.cpp']
 
@@ -266,13 +255,9 @@ def build(bld):
         # MacOS could be supported here as well
         EXCLUDES = GENERAL_EXCLUDES
         if sys.platform == 'win32' :
-            EXCLUDES += UNIX_SPECIFIC + ICU_SPECIFIC + ICONV_GNU_SPECIFIC
+            EXCLUDES += UNIX_SPECIFIC
         else :
             EXCLUDES += WIN_SPECIFIC
-            if 'HAVE_UNICODE_USTRING_H=1' in env['DEFINES'] :
-                EXCLUDES += ICONV_GNU_SPECIFIC
-            else :
-                EXCLUDES += ICU_SPECIFIC
 
         # walk the directory of files --
         # this sorts files based on the filtering above, and
