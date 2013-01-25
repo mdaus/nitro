@@ -9,9 +9,13 @@ from waflib.TaskGen import task_gen, feature, after, before
 from waflib.Utils import to_list as listify
 from waflib.Tools import waf_unit_test
 from waflib import Context, Errors
+from msvs import msvs_generator
 
 COMMON_EXCLUDES = '.bzr .bzrignore .git .gitignore .svn CVS .cvsignore .arch-ids {arch} SCCS BitKeeper .hg _MTN _darcs Makefile Makefile.in config.log'.split()
 COMMON_EXCLUDES_EXT ='~ .rej .orig .pyc .pyo .bak .tar.bz2 tar.gz .zip .swp'.split()
+
+if sys.version_info < (2,6,0):
+    raise Errors.WafError('Build system requires at least Python 2.6')
 
 # provide a partial function if we don't have one
 try:
@@ -1647,11 +1651,7 @@ class CPPCleanContext(CleanContext, CPPContext):
 class CPPInstallContext(InstallContext, CPPContext):
     pass
 
-# VS config generator needs Python 2.5
-if sys.version_info >= (2,5,0):
-    from msvs import msvs_generator
-    class CPPMSVSGenContext(msvs_generator, CPPContext):
-        def __init__(self, **kw):
-            self.waf_command = 'python waf'
-            super(CPPMSVSGenContext, self).__init__(**kw)
-
+class CPPMSVSGenContext(msvs_generator, CPPContext):
+    def __init__(self, **kw):
+        self.waf_command = 'python waf'
+        super(CPPMSVSGenContext, self).__init__(**kw)
