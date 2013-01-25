@@ -175,7 +175,7 @@ def java_module(bld, **modArgs):
                for cp in tsk.classpath:
                    real_classpath.append(cp)
            except:
-               pass
+               return
          
        #build the jar
        jar = bld(features='javac jar add_targets install_tgt', manifest=manifest, jarcreate=jarcreate, srcdir=sourcedir, classpath=real_classpath, targets_to_add=targets_to_add + cp_targets, 
