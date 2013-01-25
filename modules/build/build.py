@@ -1027,6 +1027,7 @@ def configure(self):
     self.check_cc(lib="sqrt", mandatory=False, uselib_store='SQRT')
     self.check_cc(function_name='erf', header_name="math.h", use = "MATH", mandatory=False)
     self.check_cc(function_name='erff', header_name="math.h", use = "MATH", mandatory=False)
+    self.check_cc(function_name='setenv', header_name="stdlib.h", mandatory=False)
     
     self.check_cc(function_name='gettimeofday', header_name='sys/time.h', mandatory=False)
     if self.check_cc(lib='rt', function_name='clock_gettime', header_name='time.h', mandatory=False):
@@ -1182,7 +1183,7 @@ def configure(self):
         env.append_value('LIB_CRUN', 'Crun')
         env.append_value('LIB_CSTD', 'Cstd')
         self.check_cc(lib='thread', mandatory=True)
-        self.check_cc(header_name="atomic.h")
+        self.check_cc(header_name="atomic.h", mandatory=False)
         
         warningFlags = ''
         if Options.options.warningsAsErrors:
