@@ -955,7 +955,12 @@ def configure(self):
         if 'CL' in os.environ: del os.environ['CL']
     
         if Options.options.enable64 or ('64' in platform.machine() and not Options.options.enable32):
-            self.env['MSVC_TARGETS'] = ['x64']
+            # x64 is the native 64-bit compiler, so prefer this one.  If we
+            # just have VS Express though, we won't have it, so fall back on
+            # x86_amd64 - this is a 32-bit compiler that cross-compiles to
+            # 64-bit.  VS 2012 Express ships with this one, and earlier VS
+            # Express versions can get this via the Windows SDK.
+            self.env['MSVC_TARGETS'] = ['x64', 'x86_amd64']
             
             # Look for 32-bit msvc if we don't find 64-bit.
             if not Options.options.enable64:
