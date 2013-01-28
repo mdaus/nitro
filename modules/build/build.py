@@ -909,6 +909,8 @@ int main()
     printf("sizeof_long_long=%d\\n", sizeof(long long));
     printf("sizeof_float=%d\\n", sizeof(float));
     printf("sizeof_double=%d\\n", sizeof(double));
+    printf("sizeof_size_t=%d\\n", sizeof(double));
+    printf("sizeof_wchar_t=%d\\n", sizeof(double));
     return 0;
 }
 '''
@@ -1004,6 +1006,7 @@ def configure(self):
     self.check_cc(header_name="getopt.h", mandatory=False)
     self.check_cc(header_name="malloc.h", mandatory=False)
     self.check_cc(header_name="sys/time.h", mandatory=False)
+    self.check_cc(header_name="limits.h", mandatory=False)
     self.check_cc(header_name="dlfcn.h", mandatory=False)
     self.check_cc(header_name="fcntl.h", mandatory=False)
     self.check_cc(header_name="check.h", mandatory=False)
@@ -1017,9 +1020,11 @@ def configure(self):
     self.check_cc(function_name='gmtime_r', header_name="time.h", mandatory=False)
     self.check_cc(function_name='mmap', header_name="sys/mman.h", mandatory=False)
     self.check_cc(function_name='memmove', header_name="string.h", mandatory=False)
+    self.check_cc(function_name='memset', header_name="string.h", mandatory=False)
     self.check_cc(function_name='strerror', header_name="string.h", mandatory=False)
     self.check_cc(function_name='bcopy', header_name="strings.h", mandatory=False)
     self.check_cc(type_name='size_t', header_name='stddef.h', mandatory=False)
+    self.check_cc(type_name='ssize_t', header_name='stddef.h', mandatory=False)
     self.check_cc(fragment='int main(){const int i = 0; return 0;}',
                   define_name='HAVE_CONST', msg='Checking for const keyword', mandatory=False)
     self.check_cc(fragment='int main(){unsigned short; return 0;}',
@@ -1071,7 +1076,7 @@ def configure(self):
             elif v == 'False':
                 v = False
         #v = eval(v)
-        self.msg(k.replace('_', ' '), str(v))
+        self.msg(k.replace('_', ' ', 1), str(v))
         self.define(k.upper(), v)
     
     env = self.env

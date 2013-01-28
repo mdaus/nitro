@@ -1,0 +1,32 @@
+import os, sys
+from waflib import Options
+from waflib.TaskGen import feature, before, task_gen
+from build import untarFile
+
+LIBXML_DEFINES = 'USE_LIBXML'
+
+options = build = distclean = lambda x : None
+
+def configure(conf):
+
+    xmlHome = Options.options.xml_home
+    xmlLayer = Options.options.xml_layer
+
+    if xmlLayer == 'libxml' :
+        conf.env.append_value('DEFINES_XML', LIBXML_DEFINES.split())
+
+        # we don't currently support building within waf
+        if not xmlHome :
+            conf.fatal('Please define --with-xml-home=<path> when defining --xml-layer=libxml')
+
+        # use an already built version
+        else :
+            # attempt to test the third party library --
+            # if test fails then fail the configure
+                conf.check(lib='xml2', uselib_store='XML',
+                           header_name='libxml/parser.h',
+                           function_name='xmlSAXVersion',
+                           libpath=os.path.join(xmlHome, 'lib'),
+                           includes=os.path.join(xmlHome, 'include'),
+                           msg='Checking for library libxml', okmsg=xmlHome,
+                           mandatory=True)
