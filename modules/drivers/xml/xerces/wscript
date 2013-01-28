@@ -254,7 +254,7 @@ def build(bld):
         # platforms. -- for more information see note above --
         GENERAL_EXCLUDES = ['URLAccessCFBinInputStream.cpp', 
                             'MacOSURLAccessCF.cpp', 'IconvGNUTransService.cpp',
-                            'MacOSUnicodeConverter.cpp',
+                            'MacOSUnicodeConverter.cpp', 'MsgCatalogLoader.cpp',
                             'CurlURLInputStream.cpp', 'CurlNetAccessor.cpp',
                             'ICUMsgLoader.cpp', 'ICUTransService.cpp']
         UNIX_SPECIFIC = ['SocketNetAccessor.cpp','UnixHTTPURLInputStream.cpp',
