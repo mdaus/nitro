@@ -9,9 +9,13 @@ from waflib.TaskGen import task_gen, feature, after, before
 from waflib.Utils import to_list as listify
 from waflib.Tools import waf_unit_test
 from waflib import Context, Errors
+from msvs import msvs_generator
 
 COMMON_EXCLUDES = '.bzr .bzrignore .git .gitignore .svn CVS .cvsignore .arch-ids {arch} SCCS BitKeeper .hg _MTN _darcs Makefile Makefile.in config.log'.split()
 COMMON_EXCLUDES_EXT ='~ .rej .orig .pyc .pyo .bak .tar.bz2 tar.gz .zip .swp'.split()
+
+if sys.version_info < (2,6,0):
+    raise Errors.WafError('Build system requires at least Python 2.6')
 
 # provide a partial function if we don't have one
 try:
@@ -957,7 +961,12 @@ def configure(self):
         if 'CL' in os.environ: del os.environ['CL']
     
         if Options.options.enable64 or ('64' in platform.machine() and not Options.options.enable32):
-            self.env['MSVC_TARGETS'] = ['x64']
+            # x64 is the native 64-bit compiler, so prefer this one.  If we
+            # just have VS Express though, we won't have it, so fall back on
+            # x86_amd64 - this is a 32-bit compiler that cross-compiles to
+            # 64-bit.  VS 2012 Express ships with this one, and earlier VS
+            # Express versions can get this via the Windows SDK.
+            self.env['MSVC_TARGETS'] = ['x64', 'x86_amd64']
             
             # Look for 32-bit msvc if we don't find 64-bit.
             if not Options.options.enable64:
@@ -1027,6 +1036,7 @@ def configure(self):
     self.check_cc(lib="sqrt", mandatory=False, uselib_store='SQRT')
     self.check_cc(function_name='erf', header_name="math.h", use = "MATH", mandatory=False)
     self.check_cc(function_name='erff', header_name="math.h", use = "MATH", mandatory=False)
+    self.check_cc(function_name='setenv', header_name="stdlib.h", mandatory=False)
     
     self.check_cc(function_name='gettimeofday', header_name='sys/time.h', mandatory=False)
     if self.check_cc(lib='rt', function_name='clock_gettime', header_name='time.h', mandatory=False):
@@ -1182,7 +1192,7 @@ def configure(self):
         env.append_value('LIB_CRUN', 'Crun')
         env.append_value('LIB_CSTD', 'Cstd')
         self.check_cc(lib='thread', mandatory=True)
-        self.check_cc(header_name="atomic.h")
+        self.check_cc(header_name="atomic.h", mandatory=False)
         
         warningFlags = ''
         if Options.options.warningsAsErrors:
@@ -1646,11 +1656,7 @@ class CPPCleanContext(CleanContext, CPPContext):
 class CPPInstallContext(InstallContext, CPPContext):
     pass
 
-# VS config generator needs Python 2.5
-if sys.version_info >= (2,5,0):
-    from msvs import msvs_generator
-    class CPPMSVSGenContext(msvs_generator, CPPContext):
-        def __init__(self, **kw):
-            self.waf_command = 'python waf'
-            super(CPPMSVSGenContext, self).__init__(**kw)
-
+class CPPMSVSGenContext(msvs_generator, CPPContext):
+    def __init__(self, **kw):
+        self.waf_command = 'python waf'
+        super(CPPMSVSGenContext, self).__init__(**kw)

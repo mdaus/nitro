@@ -22,6 +22,9 @@
 
 #if !defined(WIN32)
 
+#include <stdio.h>
+#include <stdlib.h>
+
 #include "sys/OSUnix.h"
 #include "sys/File.h"
 
@@ -214,9 +217,32 @@ void sys::OSUnix::setEnv(const std::string& var,
 			 const std::string& val,
 			 bool overwrite)
 {
-    int ret = setenv(var.c_str(), val.c_str(), overwrite);
+    int ret;
+
+#ifdef HAVE_SETENV
+    ret = setenv(var.c_str(), val.c_str(), overwrite);
+#else
+    // putenv() will overwrite the value if it already exists, so if we don't
+    // want to overwrite, we do nothing when getenv() indicates the variable's
+    // already set
+    if (overwrite || getenv(var.c_str()) == NULL)
+    {
+        // putenv() isn't guaranteed to make a copy of the string, so we need
+        // to allocate it and let it leak.  Ugh.
+        char* const strBuffer = new char[var.length() + 1 + val.length() + 1];
+        ::sprintf(strBuffer, "%s=%s", var.c_str(), val.c_str());
+        ret = putenv(strBuffer);
+    }
+    else
+    {
+        ret = 0;
+    }
+#endif
     if(ret != 0)
-      throw sys::SystemException(Ctxt(FmtX("Unable to set unix environment variable %s", var.c_str())));
+    {
+        throw sys::SystemException(Ctxt(
+                "Unable to set unix environment variable " + var));
+    }
 }
 
 

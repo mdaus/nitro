@@ -62,8 +62,11 @@ def configure(self):
             matlabEnvCmd = '%s -nojvm -nosplash -nodisplay -e' % self.env['matlab']
             out, err = subprocess.Popen(matlabEnvCmd.split(), stdout=subprocess.PIPE,
                                         stderr=subprocess.PIPE).communicate()
-            matlabEnv = dict(map(lambda x: x.split('=', 1), filter(None, out.split('\n'))))
-            archdir = matlabEnv['ARCH']
+            for line in out.split('\n'):
+                keyVal = line.split('=')
+                if len(keyVal) == 2 and keyVal[0] == 'ARCH':
+                    archdir = keyVal[1]
+                    break
 
         # Get the appropriate mex extension.  Matlab provides a script to
         # tell us this.
