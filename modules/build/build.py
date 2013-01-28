@@ -1015,6 +1015,7 @@ def configure(self):
     self.check_cc(function_name='strerror', header_name="string.h", mandatory=False)
     self.check_cc(function_name='bcopy', header_name="strings.h", mandatory=False)
     self.check_cc(type_name='size_t', header_name='stddef.h', mandatory=False)
+    self.check_cc(type_name='ssize_t', header_name='stddef.h', mandatory=False)
     self.check_cc(fragment='int main(){const int i = 0; return 0;}',
                   define_name='HAVE_CONST', msg='Checking for const keyword', mandatory=False)
     self.check_cc(fragment='int main(){unsigned short; return 0;}',
@@ -1065,7 +1066,7 @@ def configure(self):
             elif v == 'False':
                 v = False
         #v = eval(v)
-        self.msg(k.replace('_', ' '), str(v))
+        self.msg(k.replace('_', ' ', 1), str(v))
         self.define(k.upper(), v)
     
     env = self.env

@@ -5,7 +5,7 @@ from waflib.TaskGen import feature, before, task_gen
 from build import untarFile
 
 SOURCE         = 'xerces-c-3.1.1'
-XERCES_DEFINES = 'USE_XERCES XERCES_STATIC_LIBRARY'
+XERCES_DEFINES = ['USE_XERCES']
 XERCES_USELIBS = 'XML THREAD SOCKET'
 
 options = lambda x : None
@@ -16,7 +16,13 @@ def configure(conf):
     xmlLayer = Options.options.xml_layer
 
     if xmlLayer == 'xerces' :
-        conf.env.append_value('DEFINES_XML', XERCES_DEFINES.split())
+
+        # add defines -- 
+        # XERCESC_STATIC_LIBRARY depends on the --shared option
+        xercesDefines = XERCES_DEFINES
+        if Options.options.shared_libs is True :
+            xercesDefines.append('XERCES_STATIC_LIBRARY')
+        conf.env.append_value('DEFINES_XML', xercesDefines)
 
         xercesUselibs = XERCES_USELIBS
         if sys.platform == 'win32':
@@ -169,11 +175,19 @@ def build(bld):
                 d['XERCES_XMLCH_T'] = 'wchar_t'
             else :
                 d['XERCES_XMLCH_T'] = 'unsigned __int16'
-            if 'SIZEOF_SIZE_T=8' in env['DEFINES'] :
-                d['XERCES_SSIZE_T']    = '__int64'
+            if 'HAVE_SSIZE_T=1' in env['DEFINES'] :
+                d['XERCES_SSIZE_T'] = 'ssize_t'
             else :
-                d['XERCES_SSIZE_T']    = '__int32'
+                if 'SIZEOF_SIZE_T=8' in env['DEFINES'] :
+                    d['XERCES_SSIZE_T']    = '__int64'
+                else :
+                    d['XERCES_SSIZE_T']    = '__int32'
 
+        # -- please note -- we diverge from the xerces-c make 
+        # system and treat all unix platforms similarly. Solaris 
+        # was make configured to use ICU and Linux the GNUICONV, 
+        # but here we use the regular ICONV for both to avoid 
+        # having complicated checks and additional build logic.
         else :
             d['HAVE_PTHREAD'] = '1'
 
@@ -190,11 +204,7 @@ def build(bld):
             d['XERCES_U64BIT_INT'] = 'uint64_t'
             d['XERCES_XMLCH_T']    = 'uint16_t'
             d['XERCES_SIZE_T']     = 'size_t'
-            if 'SIZEOF_SIZE_T=8' in env['DEFINES'] :
-                d['XERCES_SSIZE_T']    = 'int64_t'
-            else :
-                d['XERCES_SSIZE_T']    = 'int32_t'
-
+            d['XERCES_SSIZE_T']    = 'ssize_t'
 
         d['LT_OBJDIR'] = '.libs/'
         d['PACKAGE'] = 'xerces-c' 
@@ -238,7 +248,10 @@ def build(bld):
         xercesAutoH.features = ['handleDefs']
         xercesConfigH.features = ['handleDefs']
 
-        # setup some known excludes per platform
+        # setup some known excludes per platform --
+        # we avoid building the system specific files
+        # and instead build the safely cross-platform files for all unix
+        # platforms. -- for more information see note above --
         GENERAL_EXCLUDES = ['URLAccessCFBinInputStream.cpp', 
                             'MacOSURLAccessCF.cpp', 'IconvGNUTransService.cpp',
                             'MacOSUnicodeConverter.cpp',
@@ -301,13 +314,16 @@ def build(bld):
         if env['install_headers']:
             # install all hpp, h, and c files into the include directory in a relative structure
             srcNode = xercesNode.make_node('src')
-            xerces.targets_to_add.append(bld(features='install_tgt', pattern='**/*.hpp **/*.h xercesc/**/*.c',
+
+            # add the config.h file to the install
+            bld(features='install_tgt', pattern='*.h', 
+                dir=xercesNode, install_path='${PREFIX}/include',
+                name='XML_INCLUDE_CONFIG_H_INSTALL')
+            xerces.targets_to_add.append(bld(features='install_tgt add_targets', 
+                                             pattern='**/*.hpp **/*.h xercesc/**/*.c',
                                              dir=srcNode, install_path='${PREFIX}/include', 
-                                             name='XML_INCLUDE_INSTALL'))
-            # additionally include the config.h file
-            xerces.targets_to_add.append(bld(features='install_tgt', pattern='*.h', 
-                                             dir=xercesNode, install_path='${PREFIX}/include',
-                                             name='XML_INCLUDE_INSTALL'))
+                                             name='XML_INCLUDE_INSTALL',
+                                             targets_to_add=['XML_INCLUDE_CONFIG_H_INSTALL']))
 
         # install source target if necessary
         if env['install_source']:

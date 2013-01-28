@@ -100,17 +100,17 @@ namespace sys
     typedef DWORD             Pid_T;
 #   ifndef _SIZE_T_DEFINED
 #       ifdef  _WIN64
-            typedef unsigned __int64    Size_T;
+            typedef unsigned __int64   Size_T;
 #       else
-            typedef _W64 unsigned int   Size_T;
+            typedef unsigned __int32   Size_T;
 #       endif
 #   else
         typedef size_t Size_T;
 #   endif
-#   ifdef  _WIN64
-        typedef __int64    SSize_T;
+#   if SIZEOF_SIZE_T == 8
+        typedef __int64   SSize_T;
 #   else
-        typedef _W64 int   SSize_T;
+        typedef __int32   SSize_T;
 #   endif
 }
 #else // !windows
