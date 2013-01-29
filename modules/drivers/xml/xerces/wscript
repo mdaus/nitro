@@ -237,16 +237,18 @@ def build(bld):
             d['HAVE_CATOPEN']  = '1'
 
         # first setup the configurable headers
-        xercesAutoH = bld(input='src/xercesc/util/Xerces_autoconf_config.hpp.in',
+        xercesAutoH = bld(name='xercesAutoH',
+                          features='handleDefs',
+                          input='src/xercesc/util/Xerces_autoconf_config.hpp.in',
                           output='src/xercesc/util/Xerces_autoconf_config.hpp',
                           defs=d, path=xercesNode,
                           env=env.derive())
-        xercesConfigH = bld(input='config.h.in',
+        xercesConfigH = bld(name='xercesConfigH',
+                            features='handleDefs',
+                            input='config.h.in',
                             output='config.h',
                             defs=d, path=xercesNode,
                             env=env.derive())
-        xercesAutoH.features = ['handleDefs']
-        xercesConfigH.features = ['handleDefs']
 
         # setup some known excludes per platform --
         # we avoid building the system specific files
@@ -291,19 +293,16 @@ def build(bld):
         sources = ' '.join(sources)
 
         # build the library
-        features = 'c c%s' % env['LIB_TYPE'] or 'stlib'
-        if env['install_headers'] or env['install_source']:
-            features += ' add_targets'
-
         xercesDefines = env['DEFINES'] + ['HAVE_CONFIG_H']
         if sys.platform == 'win32' :
             xercesDefines.append('XERCES_USE_WIN32_MSGLOADER')
-        xerces = bld(features=features, source=sources,
+        xerces = bld(features='c c%s add_targets' % env['LIB_TYPE'] or 'stlib',
+                     source=sources,
                      includes=['.', 'src'], export_includes='src',
                      target='xerces-c', path=xercesNode,
                      uselib=xercesUselibs, name='XML', env=env.derive(),
-                     defines=xercesDefines)
-        xerces.targets_to_add = [xercesAutoH, xercesConfigH]
+                     defines=xercesDefines,
+                     targets_to_add=[xercesAutoH, xercesConfigH])
         if env['install_libs']:
             xerces.install_path = '${PREFIX}/lib'
 
