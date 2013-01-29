@@ -16,6 +16,7 @@ def options(opt):
 def configure(conf):
 
     if Options.options.enable_xml:
+        conf.msg('Configuring with XML layer', Options.options.xml_layer)
         conf.recurse(APIS)
 
 def build(bld):
