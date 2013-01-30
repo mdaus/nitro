@@ -31,12 +31,8 @@ def configure(self):
         platform = self.env['PLATFORM']
         
         #TODO put these in a utility somewhere
-        appleRegex = r'i.86-apple-.*'
-        linuxRegex = r'.*-.*-linux-.*|i686-pc-.*|linux'
-        sparcRegex = r'sparc-sun.*'
         winRegex = r'win32'
-        
-        
+
         incDirs = map(lambda x: os.path.dirname(x),
                       recursiveGlob(abspath(join(matlabHome, 'extern')), ['mex.h']))
         
@@ -63,7 +59,7 @@ def configure(self):
             out, err = subprocess.Popen(matlabEnvCmd.split(), stdout=subprocess.PIPE,
                                         stderr=subprocess.PIPE).communicate()
             for line in out.split('\n'):
-                keyVal = line.split('=')
+                keyVal = line.split('=', 1)
                 if len(keyVal) == 2 and keyVal[0] == 'ARCH':
                     archdir = keyVal[1]
                     break
