@@ -405,6 +405,7 @@ class CPPContext(Context.Context):
             modArgs['targets_to_add'] = targetsToAdd
             features += ' add_targets'
         tsk(features = features, **modArgs)
+        return tsk
 
     def module(self, **modArgs):
         """
