@@ -404,8 +404,7 @@ class CPPContext(Context.Context):
             targetsToAdd = targetsToAdd + getWscriptTargets(tsk, env, tsk.path)
             modArgs['targets_to_add'] = targetsToAdd
             features += ' add_targets'
-        tsk(features = features, **modArgs)
-        return tsk
+        return tsk(features = features, **modArgs)
 
     def module(self, **modArgs):
         """
