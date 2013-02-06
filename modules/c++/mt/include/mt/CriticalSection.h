@@ -31,7 +31,8 @@
  *  This object locks when it is created and unlocks
  *  as soon as it goes out of scope.  This should be used
  *  You should never new allocate this object, lest you
- *  should forget to delete it.
+ *  should forget to delete it.  You should also never modify the state of
+ *  the mutex it owns while this object exists.
  *
  */
 namespace mt
@@ -40,7 +41,7 @@ namespace mt
  *  \class CriticalSection
  *  \brief Scope-based critical section object
  *  This object locks when it is created and unlocks
- *  as soon as it goes out of scope. 
+ *  as soon as it goes out of scope.
  *
  *  \code
  *  void performCSOp(Info& specialInfo)
@@ -53,37 +54,52 @@ namespace mt
 template <typename T> class CriticalSection
 {
 public:
-
-    //!  Constructor
-    CriticalSection(T* mutex) : mMutex(mutex)
+    //!  Constructor.  Lock the mutex.
+    CriticalSection(T* mutex) :
+        mMutex(mutex),
+        mIsLocked(false)
     {
         manualLock();
     }
-    //!  Destructor
+
+    //!  Destructor.  Unlock the mutex (if necessary).
     ~CriticalSection()
     {
-        try
+        if (mIsLocked)
         {
-            manualUnlock();
-        }
-        catch (...)
-        {
-            // Don't throw out of the destructor.
+            try
+            {
+                manualUnlock();
+            }
+            catch (...)
+            {
+                // Don't throw out of the destructor.
+            }
         }
     }
 
-    //!  Manual unlock the CS.  You probably dont want to use this
+    //!  Manual unlock the CS.  You probably don't want to use this.
     void manualUnlock()
     {
         mMutex->unlock();
+        mIsLocked = false;
     }
-    //!  Manual lock the CS.  You probably dont want to use this
+
+    //!  Manual lock the CS.  You probably don't want to use this.
     void manualLock()
     {
         mMutex->lock();
+        mIsLocked = true;
     }
+
 private:
-    T* mMutex;
+    // Noncopyable
+    CriticalSection(const CriticalSection& );
+    const CriticalSection& operator=(const CriticalSection& );
+
+private:
+    T* const mMutex;
+    bool mIsLocked;
 
 };
 }
