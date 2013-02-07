@@ -240,6 +240,17 @@ void xml::lite::XMLReaderXerces::destroy()
         delete mNative;
         mNative = NULL;
     }
+
+    try
+    {
+        XMLPlatformUtils::Terminate();
+    }
+    catch (const ::XMLException& toCatch)
+    {
+        xml::lite::XercesLocalString local(toCatch.getMessage());
+        except::Error e(Ctxt(local.str() + " (Termination error)"));
+        throw (e);
+    }
 }
 
 #endif
