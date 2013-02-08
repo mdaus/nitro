@@ -328,6 +328,53 @@ public:
 };
 
 /*!
+ *  \class XercesContext
+ *  \brief This class safely creates and destroys Xerces
+ */
+class XercesContext
+{
+public:
+
+    //! Constructor
+    XercesContext()
+    {
+        //! XMLPlatformUtils::Initialize is not thread safe!
+        try
+        {
+            mt::CriticalSection<sys::Mutex> cs(&mMutex);
+            XMLPlatformUtils::Initialize();
+        }
+        catch (const ::XMLException& toCatch)
+        {
+            xml::lite::XercesLocalString local(toCatch.getMessage());
+            except::Error e(Ctxt(local.str() + " (Initialization error)"));
+            throw (e);
+        }
+    }
+    
+    //! Destructor
+    ~XercesContext()
+    {
+        //! XMLPlatformUtils::Terminate is not thread safe!
+        try
+        {
+            mt::CriticalSection<sys::Mutex> cs(&mMutex);
+            XMLPlatformUtils::Terminate();
+        }
+        catch (const ::XMLException& toCatch)
+        {
+            xml::lite::XercesLocalString local(toCatch.getMessage());
+            except::Error e(Ctxt(local.str() + " (Termination error)"));
+            throw (e);
+        }
+    }
+    
+protected:
+
+    static sys::Mutex mMutex;
+};
+
+/*!
  *  \class XMLReaderXerces
  *  \brief SAX 2.0 XML Parsing class, replaces 1.0 Parser class
  *
@@ -340,10 +387,10 @@ class XMLReaderXerces : public XMLReaderInterface
 
 private:
 
+    XercesContext mCtxt;    //! this must be the first member listed
     std::auto_ptr<SAX2XMLReader>        mNative;
     std::auto_ptr<XercesContentHandler> mDriverContentHandler;
     std::auto_ptr<XercesErrorHandler>   mErrorHandler;
-    static sys::Mutex mMutex;
 
 public:
 

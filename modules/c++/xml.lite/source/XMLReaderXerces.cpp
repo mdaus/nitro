@@ -24,7 +24,7 @@
 
 #if defined(USE_XERCES)
 
-sys::Mutex xml::lite::XMLReaderXerces::mMutex;
+sys::Mutex xml::lite::XercesContext::mMutex;
 
 xml::lite::XercesLocalString::XercesLocalString(const XMLCh *xmlStr)
 {
@@ -172,18 +172,6 @@ fatalError(const SAXParseException &exception)
 
 xml::lite::XMLReaderXerces::XMLReaderXerces()
 {
-    //! XMLPlatformUtils::Initialize is not thread safe!
-    try
-    {
-        mt::CriticalSection<sys::Mutex> cs(&mMutex);
-        XMLPlatformUtils::Initialize();
-    }
-    catch (const ::XMLException& toCatch)
-    {
-        xml::lite::XercesLocalString local(toCatch.getMessage());
-        except::Error e(Ctxt(local.str() + " (Initialization error)"));
-        throw(e);
-    }
     create();
 }
 
@@ -242,23 +230,9 @@ void xml::lite::XMLReaderXerces::create()
 // This function destroys the parser
 void xml::lite::XMLReaderXerces::destroy()
 {
-    //! this memory must be deleted before the terminate below
     mNative.reset(NULL);
     mDriverContentHandler.reset(NULL);
     mErrorHandler.reset(NULL);
-
-    //! XMLPlatformUtils::Terminate is not thread safe!
-    try
-    {
-        mt::CriticalSection<sys::Mutex> cs(&mMutex);
-        XMLPlatformUtils::Terminate();
-    }
-    catch (const ::XMLException& toCatch)
-    {
-        xml::lite::XercesLocalString local(toCatch.getMessage());
-        except::Error e(Ctxt(local.str() + " (Termination error)"));
-        throw (e);
-    }
 }
 
 #endif
