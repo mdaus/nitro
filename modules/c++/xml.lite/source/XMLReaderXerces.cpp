@@ -24,6 +24,8 @@
 
 #if defined(USE_XERCES)
 
+sys::Mutex xml::lite::XMLReaderXerces::mMutex;
+
 xml::lite::XercesLocalString::XercesLocalString(const XMLCh *xmlStr)
 {
     mLocal = toLocal(xmlStr);
@@ -170,8 +172,10 @@ fatalError(const SAXParseException &exception)
 
 xml::lite::XMLReaderXerces::XMLReaderXerces()
 {
+    //! XMLPlatformUtils::Initialize is not thread safe!
     try
     {
+        mt::CriticalSection<sys::Mutex> cs(&mMutex);
         XMLPlatformUtils::Initialize();
     }
     catch (const ::XMLException& toCatch)
@@ -211,8 +215,8 @@ void xml::lite::XMLReaderXerces::setValidation(bool validate)
 {
     mNative->setFeature(XMLUni::fgSAX2CoreNameSpacePrefixes, true);
     mNative->setFeature(XMLUni::fgXercesSchema, validate);
-    mNative->setFeature(XMLUni::fgSAX2CoreValidation, validate);   // optional
-    mNative->setFeature(XMLUni::fgSAX2CoreNameSpaces, true);   // optional
+    mNative->setFeature(XMLUni::fgSAX2CoreValidation, validate); // optional
+    mNative->setFeature(XMLUni::fgSAX2CoreNameSpaces, true);     // optional
 }
 
 bool xml::lite::XMLReaderXerces::getValidation()
@@ -224,25 +228,29 @@ bool xml::lite::XMLReaderXerces::getValidation()
 // This function creates the parser
 void xml::lite::XMLReaderXerces::create()
 {
-    mNative = XMLReaderFactory::createXMLReader();
+    mDriverContentHandler.reset(new XercesContentHandler());
+    mErrorHandler.reset(new XercesErrorHandler());
+
+    mNative.reset(XMLReaderFactory::createXMLReader());
     mNative->setFeature(XMLUni::fgSAX2CoreNameSpacePrefixes, true);
     mNative->setFeature(XMLUni::fgSAX2CoreValidation, false);   // optional
-    mNative->setFeature(XMLUni::fgSAX2CoreNameSpaces, true);   // optional
+    mNative->setFeature(XMLUni::fgSAX2CoreNameSpaces, true);    // optional
     mNative->setFeature(XMLUni::fgXercesSchema, false);
-    mNative->setContentHandler(&mDriverContentHandler);
-    mNative->setErrorHandler(&mErrorHandler);
+    mNative->setContentHandler(mDriverContentHandler.get());
+    mNative->setErrorHandler(mErrorHandler.get());
 }
 // This function destroys the parser
 void xml::lite::XMLReaderXerces::destroy()
 {
-    if (mNative != NULL)
-    {
-        delete mNative;
-        mNative = NULL;
-    }
+    //! this memory must be deleted before the terminate below
+    mNative.reset(NULL);
+    mDriverContentHandler.reset(NULL);
+    mErrorHandler.reset(NULL);
 
+    //! XMLPlatformUtils::Terminate is not thread safe!
     try
     {
+        mt::CriticalSection<sys::Mutex> cs(&mMutex);
         XMLPlatformUtils::Terminate();
     }
     catch (const ::XMLException& toCatch)

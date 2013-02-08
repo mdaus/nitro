@@ -52,6 +52,8 @@
 #include <io/ByteStream.h>
 #include <io/OutputStream.h>
 #include <io/InputStream.h>
+#include <sys/Mutex.h>
+#include <mt/CriticalSection.h>
 #include "xml/lite/XMLException.h"
 #include "xml/lite/ContentHandler.h"
 #include "xml/lite/Attributes.h"
@@ -337,7 +339,12 @@ class XMLReaderXerces : public XMLReaderInterface
 {
 
 private:
-    SAX2XMLReader* mNative;
+
+    std::auto_ptr<SAX2XMLReader>        mNative;
+    std::auto_ptr<XercesContentHandler> mDriverContentHandler;
+    std::auto_ptr<XercesErrorHandler>   mErrorHandler;
+    static sys::Mutex mMutex;
+
 public:
 
     //! Constructor.  Creates a new XML parser
@@ -360,7 +367,7 @@ public:
      */
     xml::lite::ContentHandler *getContentHandler()
     {
-        return mDriverContentHandler.retrieveXMLLiteContentHandler();
+        return mDriverContentHandler->retrieveXMLLiteContentHandler();
     }
 
     virtual void setValidation(bool validate);
@@ -373,7 +380,7 @@ public:
      */
     void setContentHandler(xml::lite::ContentHandler* handler)
     {
-        mDriverContentHandler.setXMLLiteContentHandler(handler);
+        mDriverContentHandler->setXMLLiteContentHandler(handler);
     }
 
     void parse(io::InputStream& is, int size = io::InputStream::IS_END);
@@ -391,10 +398,6 @@ private:
     {
         throw xml::lite::XMLException(Ctxt("Im not sure how you got here!"));
     }
-
-    //! Underlying parser implementation (Currently expat);
-    XercesContentHandler mDriverContentHandler;
-    XercesErrorHandler   mErrorHandler;
 };
 
 }
