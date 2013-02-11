@@ -20,7 +20,7 @@ def configure(conf):
         # add defines -- 
         # XERCESC_STATIC_LIBRARY depends on the --shared option
         xercesDefines = XERCES_DEFINES
-        if Options.options.shared_libs is False:
+        if not Options.options.shared_libs:
             xercesDefines.append('XERCES_STATIC_LIBRARY')
         conf.env.append_value('DEFINES_XML', xercesDefines)
 
