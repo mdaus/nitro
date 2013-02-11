@@ -12,9 +12,12 @@ def options(opt):
                    dest='xml_layer', default='xerces', help='Specify the XML layer (default=xerces)')
     opt.add_option('--with-xml-home', action='store', dest='xml_home',
                    help='Specify the XML Home - where the XML library is installed to')
+    opt.add_option('--build-xml', action='store_true', dest='build_xml',
+                   help='force building XML layer from scratch', default=True)
+    opt.add_option('--nobuild-xml', action='store_false', dest='build_xml',
+                   help='force not building XML layer from scratch')
 
 def configure(conf):
-
     if Options.options.enable_xml:
         conf.msg('Configuring with XML layer', Options.options.xml_layer)
         conf.recurse(APIS)
