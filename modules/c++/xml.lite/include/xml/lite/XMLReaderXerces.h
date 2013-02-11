@@ -336,42 +336,17 @@ class XercesContext
 public:
 
     //! Constructor
-    XercesContext()
-    {
-        //! XMLPlatformUtils::Initialize is not thread safe!
-        try
-        {
-            mt::CriticalSection<sys::Mutex> cs(&mMutex);
-            XMLPlatformUtils::Initialize();
-        }
-        catch (const ::XMLException& toCatch)
-        {
-            xml::lite::XercesLocalString local(toCatch.getMessage());
-            except::Error e(Ctxt(local.str() + " (Initialization error)"));
-            throw (e);
-        }
-    }
+    XercesContext();
     
     //! Destructor
-    ~XercesContext()
-    {
-        //! XMLPlatformUtils::Terminate is not thread safe!
-        try
-        {
-            mt::CriticalSection<sys::Mutex> cs(&mMutex);
-            XMLPlatformUtils::Terminate();
-        }
-        catch (const ::XMLException& toCatch)
-        {
-            xml::lite::XercesLocalString local(toCatch.getMessage());
-            except::Error e(Ctxt(local.str() + " (Termination error)"));
-            throw (e);
-        }
-    }
+    ~XercesContext();
+
+    void destroy();
     
-protected:
+private:
 
     static sys::Mutex mMutex;
+    bool mIsDestroyed;
 };
 
 /*!
@@ -400,7 +375,6 @@ public:
     //! Destructor.
     ~XMLReaderXerces()
     {
-        destroy();
     }
 
     static const char* MEM_BUFFER_ID()
@@ -431,14 +405,15 @@ public:
     }
 
     void parse(io::InputStream& is, int size = io::InputStream::IS_END);
+    
     //! Method to create an xml reader
-
     void create();
 
     //! Method to destroy an xml reader
     void destroy();
 
     std::string getDriverName() const { return "xerces"; }
+
 private:
 
     void write(const sys::byte *b, sys::Size_T len)

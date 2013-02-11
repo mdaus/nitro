@@ -170,6 +170,58 @@ fatalError(const SAXParseException &exception)
     throw except::Error(Ctxt(xex.getMessage()));
 }
 
+xml::lite::XercesContext::XercesContext() :
+    mIsDestroyed(false)
+{
+    //! XMLPlatformUtils::Initialize is not thread safe!
+    try
+    {
+        mt::CriticalSection<sys::Mutex> cs(&mMutex);
+        XMLPlatformUtils::Initialize();
+        mIsDestroyed = true;
+    }
+    catch (const ::XMLException& toCatch)
+    {
+        mIsDestroyed = false;
+        xml::lite::XercesLocalString local(toCatch.getMessage());
+        except::Error e(Ctxt(local.str() + " (Initialization error)"));
+        throw (e);
+    }
+}
+
+xml::lite::XercesContext::~XercesContext()
+{
+    try
+    {
+        destroy();
+    }
+    catch (...)
+    {
+    }
+}
+
+void xml::lite::XercesContext::destroy()
+{
+    // wrapping it here saves the mutex lock
+    if (!mIsDestroyed)
+    {
+        //! XMLPlatformUtils::Terminate is not thread safe!
+        try
+        {
+            mt::CriticalSection<sys::Mutex> cs(&mMutex);
+            XMLPlatformUtils::Terminate();
+            mIsDestroyed = true;
+        }
+        catch (const ::XMLException& toCatch)
+        {
+            mIsDestroyed = false;
+            xml::lite::XercesLocalString local(toCatch.getMessage());
+            except::Error e(Ctxt(local.str() + " (Termination error)"));
+            throw (e);
+        }
+    }
+}
+
 xml::lite::XMLReaderXerces::XMLReaderXerces()
 {
     create();
@@ -230,9 +282,11 @@ void xml::lite::XMLReaderXerces::create()
 // This function destroys the parser
 void xml::lite::XMLReaderXerces::destroy()
 {
-    mNative.reset(NULL);
-    mDriverContentHandler.reset(NULL);
-    mErrorHandler.reset(NULL);
+    mNative.reset();
+    mDriverContentHandler.reset();
+    mErrorHandler.reset();
+
+    mCtxt.destroy();
 }
 
 #endif
