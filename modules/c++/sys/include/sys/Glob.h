@@ -20,32 +20,66 @@
  *
  */
 
-#ifndef __SYS_FILE_FINDER_H__
-#define __SYS_FILE_FINDER_H__
+#ifndef __SYS_GLOB_H__
+#define __SYS_GLOB_H__
 
-#include "sys/OS.h"
 #include <functional>
+#include <vector>
 
 namespace sys
 {
 
 /**
- * Predicate interface for filenames
+ * Predicate interface for all entries
  */
-struct FilePredicate: std::unary_function<std::string, bool>
+struct GlobPredicate : std::unary_function<std::string, bool>
 {
-    virtual ~FilePredicate() {}
-    virtual bool operator()(const std::string& obj) = 0;
+    virtual ~GlobPredicate() {}
+    virtual bool operator()(const std::string& entry) = 0;
+};
+
+/**
+ * Predicate interface for existance
+ */
+struct ExistsPredicate : GlobPredicate
+{
+    virtual ~ExistsPredicate() {}
+    virtual bool operator()(const std::string& entry);
 };
 
 /**
  * Predicate that matches files only (no directories)
  */
-struct FileOnlyPredicate: public FilePredicate
+struct FileOnlyPredicate: public GlobPredicate
 {
     virtual ~FileOnlyPredicate() {}
-    virtual bool operator()(const std::string& filename);
+    virtual bool operator()(const std::string& entry);
 };
+
+/**
+ * Predicate that matches directories only (no files)
+ */
+struct DirectoryOnlyPredicate: public GlobPredicate
+{
+    virtual ~DirectoryOnlyPredicate() {}
+    virtual bool operator()(const std::string& entry);
+};
+
+/**
+ * Predicate that matches directories only (no files)
+ */
+struct FragmentPredicate : public GlobPredicate
+{
+public:
+    FragmentPredicate(const std::string& ext, bool ignoreCase = true);
+    bool operator()(const std::string& filename);
+
+private:
+    std::string mFragment;
+    bool mIgnoreCase;
+
+};
+
 
 /**
  * Predicate interface for filtering files with a specific extension
@@ -56,64 +90,66 @@ struct FileOnlyPredicate: public FilePredicate
 class ExtensionPredicate: public FileOnlyPredicate
 {
 public:
-    ExtensionPredicate(std::string ext, bool ignoreCase = true);
+    ExtensionPredicate(const std::string& ext, bool ignoreCase = true);
     bool operator()(const std::string& filename);
+
 private:
     std::string mExt;
     bool mIgnoreCase;
 };
 
-class MultiFilePredicate: public FilePredicate
+class MultiGlobPredicate : public GlobPredicate
 {
 public:
-    MultiFilePredicate(bool orOperator = true);
-    virtual ~MultiFilePredicate();
+    MultiGlobPredicate(bool orOperator = true);
+    virtual ~MultiGlobPredicate();
 
-    virtual bool operator()(const std::string& filename);
-    MultiFilePredicate& addPredicate(FilePredicate* filter, bool ownIt = false);
+    virtual bool operator()(const std::string& entry);
+    MultiGlobPredicate& addPredicate(GlobPredicate* filter, bool ownIt = false);
+
 protected:
     bool mOrOperator;
-    typedef std::pair<FilePredicate*, bool> PredicatePair;
+
+    typedef std::pair<GlobPredicate*, bool> PredicatePair;
     std::vector<PredicatePair> mPredicates;
 };
 
 
 /**
- * \class FileFinder
+ * \class Glob
  *
- * The FileFinder class allows you to search for files/directories in a
- * clean way.
+ *  The Glob class allows you to search for 
+ *  files/directories in a clean way.
  */
-class FileFinder
+class Glob
 {
 public:
-    FileFinder(){}
-    FileFinder(const std::vector<std::string>& searchPaths);
-    ~FileFinder();
+    Glob(){}
+    Glob(const std::vector<std::string>& searchPaths);
+    ~Glob();
 
     /**
      * Add a search path
      */
-    FileFinder& addSearchPath(std::string path);
+    Glob& addSearchPath(std::string path);
 
     /**
      * Add a predicate/filter to use when searching
      */
-    FileFinder& addPredicate(FilePredicate* filter, bool ownIt = false);
+    Glob& addPredicate(GlobPredicate* filter, bool ownIt = false);
 
     /**
      * Perform the search
      * \return a std::vector<std::string> of paths that match
      */
-    std::vector<std::string> findFiles(bool recursive = false) const;
+    std::vector<std::string> search(bool recursive = false) const;
 
 protected:
-    typedef std::pair<FilePredicate*, bool> PredicatePair;
-    sys::OS mOS;
     std::vector<std::string> mPaths;
+
+    typedef std::pair<GlobPredicate*, bool> PredicatePair;
     std::vector<PredicatePair> mPredicates;
 };
-
 
 }
 
