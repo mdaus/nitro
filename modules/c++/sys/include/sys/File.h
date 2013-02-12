@@ -98,8 +98,8 @@ public:
      *  \param accessFlags File access flags
      *  \param creationFlags File creation flags
      */
-    File(const Path& path, int accessFlags = READ_ONLY, int creationFlags =
-            EXISTING) throw (sys::SystemException)
+    File(const Path& path, int accessFlags = READ_ONLY, 
+         int creationFlags = EXISTING) throw (sys::SystemException)
     {
         create(path.getPath(), accessFlags, creationFlags);
     }
@@ -116,8 +116,8 @@ public:
      *  \param accessFlags File access flags
      *  \param creationFlags File creation flags
      */
-    File(std::string str, int accessFlags = READ_ONLY, int creationFlags =
-            EXISTING) throw (sys::SystemException)
+    File(std::string str, int accessFlags = READ_ONLY, 
+         int creationFlags = EXISTING) throw (sys::SystemException)
     {
         create(str, accessFlags, creationFlags);
     }
@@ -165,9 +165,8 @@ public:
      *  \param accessFlags File access flags
      *  \param creationFlags File creation flags
      */
-    void
-            create(const std::string& str, int accessFlags, int creationFlags)
-                                                                               throw (sys::SystemException);
+    void create(const std::string& str, int accessFlags, 
+                int creationFlags) throw (sys::SystemException);
 
     /*!
      *  Read from the File into a buffer 'size' bytes.
@@ -191,9 +190,8 @@ public:
      *  \param buffer The buffer to read from
      *  \param size The number of bytes to write out
      */
-    void
-            writeFrom(const char* buffer, Size_T size)
-                                                       throw (sys::SystemException);
+    void writeFrom(const char* buffer, 
+                   Size_T size) throw (sys::SystemException);
 
     /*!
      *  Seek to the specified offset, relative to 'whence.'
@@ -202,8 +200,8 @@ public:
      *  \return Global offset location.
      */
 
-    sys::Off_T
-            seekTo(sys::Off_T offset, int whence) throw (sys::SystemException);
+    sys::Off_T seekTo(sys::Off_T offset, 
+                      int whence) throw (sys::SystemException);
 
     /*!
      *  Report current offset within file.
