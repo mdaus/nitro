@@ -1,15 +1,16 @@
-#ifndef __RE_GLOB_FILE_PREDICATE_H__
-#define __RE_GLOB_FILE_PREDICATE_H__
+#ifndef __RE_REGEX_FILE_PREDICATE_H__
+#define __RE_REGEX_FILE_PREDICATE_H__
 
-#include "sys/FileFinder.h"
+#include "sys/Glob.h"
 #include "re/PCRE.h"
 
 namespace re
 {
 
-struct GlobFilePredicate : sys::FilePredicate
+struct RegexPredicate : sys::GlobPredicate
 {
-    GlobFilePredicate(std::string match)
+public:
+    RegexPredicate(const std::string& match)
     {
         mRegex.compile(match);
     }
@@ -18,9 +19,9 @@ struct GlobFilePredicate : sys::FilePredicate
     {
         return mRegex.matches(filename);
     }
-    private:
+
+private:
     re::PCRE mRegex;
-    
 
 };
 
