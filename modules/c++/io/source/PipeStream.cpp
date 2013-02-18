@@ -58,20 +58,21 @@ sys::SSize_T io::PipeStream::readln(sys::byte *cStr,
     }
 
     // get the next line or return null
-    if (!feof((FILE*)mExecPipe.getPipe()) &&
-        fgets(mCharString.get(), (int)readLength, (FILE*)mExecPipe.getPipe()) != NULL )
+    while (!feof((FILE*)mExecPipe.getPipe()))
     {
-        strcpy(cStr, mCharString.get());
+        if (fgets(mCharString.get(), (int)readLength, 
+                  (FILE*)mExecPipe.getPipe()) != NULL)
+        {
+            strcpy(cStr, mCharString.get());
 
-        // add 1 because of null termination
-        return strlen(cStr) + 1;
+            // add 1 because of null termination
+            return strlen(cStr) + 1;
+        }
     }
-    else
-    {
-        // no byte read --
-        // either none left or eof reached
-        return -1;
-    }
+    
+    // no byte read --
+    // either none left or eof reached
+    return -1;
 }
 
 sys::SSize_T io::PipeStream::streamTo(OutputStream& soi,
