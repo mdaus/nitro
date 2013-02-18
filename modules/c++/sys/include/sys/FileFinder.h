@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef __SYS_GLOB_H__
-#define __SYS_GLOB_H__
+#ifndef __SYS_FILE_FINDER_H__
+#define __SYS_FILE_FINDER_H__
 
 #include <functional>
 #include <vector>
@@ -32,16 +32,16 @@ namespace sys
 /**
  * Predicate interface for all entries
  */
-struct GlobPredicate : std::unary_function<std::string, bool>
+struct FilePredicate : std::unary_function<std::string, bool>
 {
-    virtual ~GlobPredicate() {}
+    virtual ~FilePredicate() {}
     virtual bool operator()(const std::string& entry) = 0;
 };
 
 /**
  * Predicate interface for existance
  */
-struct ExistsPredicate : GlobPredicate
+struct ExistsPredicate : FilePredicate
 {
     virtual ~ExistsPredicate() {}
     virtual bool operator()(const std::string& entry);
@@ -50,7 +50,7 @@ struct ExistsPredicate : GlobPredicate
 /**
  * Predicate that matches files only (no directories)
  */
-struct FileOnlyPredicate: public GlobPredicate
+struct FileOnlyPredicate: public FilePredicate
 {
     virtual ~FileOnlyPredicate() {}
     virtual bool operator()(const std::string& entry);
@@ -59,7 +59,7 @@ struct FileOnlyPredicate: public GlobPredicate
 /**
  * Predicate that matches directories only (no files)
  */
-struct DirectoryOnlyPredicate: public GlobPredicate
+struct DirectoryOnlyPredicate: public FilePredicate
 {
     virtual ~DirectoryOnlyPredicate() {}
     virtual bool operator()(const std::string& entry);
@@ -68,11 +68,11 @@ struct DirectoryOnlyPredicate: public GlobPredicate
 /**
  * Predicate that matches directories only (no files)
  */
-struct FragmentPredicate : public GlobPredicate
+struct FragmentPredicate : public FilePredicate
 {
 public:
-    FragmentPredicate(const std::string& ext, bool ignoreCase = true);
-    bool operator()(const std::string& filename);
+    FragmentPredicate(const std::string& fragment, bool ignoreCase = true);
+    bool operator()(const std::string& entry);
 
 private:
     std::string mFragment;
@@ -84,7 +84,7 @@ private:
 /**
  * Predicate interface for filtering files with a specific extension
  * This method will not match '.xxx.yyy' type patterns, since the 
- * splitting routines will only find '.yyy'.  See re::GlobFilePredicate
+ * splitting routines will only find '.yyy'.  See re::RegexPredicate
  * for a more useful finder.
  */
 class ExtensionPredicate: public FileOnlyPredicate
@@ -98,45 +98,68 @@ private:
     bool mIgnoreCase;
 };
 
-class MultiGlobPredicate : public GlobPredicate
+/**
+ * Predicate that does logical not of another predicate (ie !)
+ */
+class NotPredicate : public FilePredicate
 {
 public:
-    MultiGlobPredicate(bool orOperator = true);
-    virtual ~MultiGlobPredicate();
+    NotPredicate(FilePredicate* filter, bool ownIt = false);
+    virtual ~NotPredicate();
 
     virtual bool operator()(const std::string& entry);
-    MultiGlobPredicate& addPredicate(GlobPredicate* filter, bool ownIt = false);
 
 protected:
-    bool mOrOperator;
-
-    typedef std::pair<GlobPredicate*, bool> PredicatePair;
-    std::vector<PredicatePair> mPredicates;
+    typedef std::pair<FilePredicate*, bool> PredicatePair;
+    PredicatePair mPredicate;
 };
 
 
 /**
- * \class Glob
+ * \class FileFinder
  *
- *  The Glob class allows you to search for 
+ *  The FileFinder class allows you to search for 
  *  files/directories in a clean way.
  */
-class Glob
+class LogicalPredicate : public FilePredicate
 {
 public:
-    Glob(){}
-    Glob(const std::vector<std::string>& searchPaths);
-    ~Glob();
+    LogicalPredicate(bool orOperator = true);
+    virtual ~LogicalPredicate();
+
+    sys::LogicalPredicate& addPredicate(FilePredicate* filter, 
+                                        bool ownIt = false);
+
+    virtual bool operator()(const std::string& entry);
+
+protected:
+    bool mOrOperator;
+    typedef std::pair<FilePredicate*, bool> PredicatePair;
+    std::vector<PredicatePair> mPredicates;
+};
+
+/**
+ * \class FileFinder
+ *
+ *  The FileFinder class allows you to search for 
+ *  files/directories in a clean way.
+ */
+class FileFinder
+{
+public:
+    FileFinder(){}
+    FileFinder(const std::vector<std::string>& searchPaths);
+    ~FileFinder();
 
     /**
      * Add a search path
      */
-    Glob& addSearchPath(std::string path);
+    FileFinder& addSearchPath(std::string path);
 
     /**
      * Add a predicate/filter to use when searching
      */
-    Glob& addPredicate(GlobPredicate* filter, bool ownIt = false);
+    FileFinder& addPredicate(FilePredicate* filter, bool ownIt = false);
 
     /**
      * Perform the search
@@ -147,7 +170,7 @@ public:
 protected:
     std::vector<std::string> mPaths;
 
-    typedef std::pair<GlobPredicate*, bool> PredicatePair;
+    typedef std::pair<FilePredicate*, bool> PredicatePair;
     std::vector<PredicatePair> mPredicates;
 };
 

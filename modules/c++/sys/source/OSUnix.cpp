@@ -47,40 +47,6 @@ std::string sys::OSUnix::getNodeName() const
     return std::string(name.nodename);
 }
 
-void sys::OSUnix::search(std::vector<std::string>& exhaustiveEnumerations,
-        const std::string& fragment, std::string filter, std::string pathList) const
-{
-    std::vector < std::string > paths = str::Tokenizer(pathList, ":");
-
-    for (unsigned int x = 0; x < paths.size(); x++)
-    {
-        DIR *directory = opendir(paths[x].c_str());
-        dirent *entry = NULL;
-
-        if (directory == NULL)
-            continue;
-
-        // This should shut gcc up for linux
-        while ((entry = (readdir(directory))))
-        {
-            // Filename contains the file string.
-            if (strstr(entry->d_name, fragment.c_str()) != NULL)
-            {
-                std::string fullPath(entry->d_name);
-                std::string::size_type lpos = fullPath.find_last_of(".");
-                if (lpos == std::string::npos || lpos + 1 == std::string::npos)
-                    continue;
-
-                if (fullPath.substr(lpos + 1) == filter)
-                {
-                    exhaustiveEnumerations.push_back(fullPath);
-                }
-            }
-        }
-
-        closedir(directory);
-    }
-}
 
 bool sys::OSUnix::exists(const std::string& path) const
 {
@@ -105,7 +71,8 @@ bool sys::OSUnix::remove(const std::string& path) const
     return false;
 }
 
-bool sys::OSUnix::move(const std::string& path, const std::string& newPath) const
+bool sys::OSUnix::move(const std::string& path, 
+                       const std::string& newPath) const
 {
     return rename(path.c_str(), newPath.c_str()) == 0;
 }
@@ -153,7 +120,8 @@ bool sys::OSUnix::changeDirectory(const std::string& path) const
     return chdir(path.c_str()) == 0 ? true : false;
 }
 
-std::string sys::OSUnix::getTempName(std::string path, std::string prefix) const
+std::string sys::OSUnix::getTempName(const std::string& path, 
+                                     const std::string& prefix) const
 {
     std::string name;
 #if defined(_USE_MKSTEMP) || defined(__linux__) || defined(__linux) || defined(linux__)
@@ -209,13 +177,15 @@ std::string sys::OSUnix::getEnv(const std::string& s) const
 {
     const char* p = getenv(s.c_str());
     if (p == NULL)
-      throw sys::SystemException(Ctxt(FmtX("Unable to get unix environment variable %s", s.c_str())));
+        throw sys::SystemException(
+            Ctxt(FmtX("Unable to get unix environment variable %s", 
+            s.c_str())));
     return std::string(p); 
 }
 
 void sys::OSUnix::setEnv(const std::string& var, 
-			 const std::string& val,
-			 bool overwrite)
+                         const std::string& val,
+                         bool overwrite)
 {
     int ret;
 
@@ -254,22 +224,21 @@ void sys::DirectoryUnix::close()
         mDir = NULL;
     }
 }
-const char* sys::DirectoryUnix::findFirstFile(const char* dir)
+std::string sys::DirectoryUnix::findFirstFile(const std::string& dir)
 {
     // First file is always . on Unix
-    mDir = ::opendir(dir);
+    mDir = ::opendir(dir.c_str());
     if (mDir == NULL)
-        return NULL;
+        return "";
     return findNextFile();
-
 }
 
-const char* sys::DirectoryUnix::findNextFile()
+std::string sys::DirectoryUnix::findNextFile()
 {
     struct dirent* entry = NULL;
     entry = ::readdir(mDir);
     if (entry == NULL)
-        return NULL;
+        return "";
     return entry->d_name;
 }
 

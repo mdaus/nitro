@@ -21,7 +21,7 @@
  */
 
 #include <iterator>
-#include "sys/Glob.h"
+#include "sys/FileFinder.h"
 #include "sys/DirectoryEntry.h"
 #include "sys/Path.h"
 
@@ -82,30 +82,55 @@ bool sys::ExtensionPredicate::operator()(const std::string& filename)
         str::lower(ext);
         return ext == matchExt;
     }
-    return ext == mExt;
+    else
+        return ext == mExt;
 }
 
-sys::MultiGlobPredicate::MultiGlobPredicate(bool orOperator) :
+sys::NotPredicate::NotPredicate(FilePredicate* filter, bool ownIt) :
+    mPredicate(sys::NotPredicate::PredicatePair(filter, ownIt))
+{
+}
+
+sys::NotPredicate::~NotPredicate()
+{
+    if (mPredicate.second && mPredicate.first)
+    {
+        FilePredicate* tmp = mPredicate.first;
+        mPredicate.first = NULL;
+        delete tmp;
+    }
+}
+
+bool sys::NotPredicate::operator()(const std::string& entry)
+{
+    return !(*mPredicate.first)(entry);
+}
+
+sys::LogicalPredicate::LogicalPredicate(bool orOperator) :
     mOrOperator(orOperator)
 {
 }
 
-sys::MultiGlobPredicate::~MultiGlobPredicate()
+sys::LogicalPredicate::~LogicalPredicate()
 {
-    for (size_t i = 0, n = mPredicates.size(); i < n; ++i)
+    for (size_t i = 0; i < mPredicates.size(); ++i)
     {
-        sys::MultiGlobPredicate::PredicatePair& p = mPredicates[i];
+        sys::LogicalPredicate::PredicatePair& p = mPredicates[i];
         if (p.first && p.second)
-            delete p.first;
+        {
+            sys::FilePredicate* tmp = p.first;
+            p.first = NULL;
+            delete tmp;
+        }
     }
 }
 
-bool sys::MultiGlobPredicate::operator()(const std::string& entry)
+bool sys::LogicalPredicate::operator()(const std::string& entry)
 {
     bool ok = !mOrOperator;
     for (size_t i = 0, n = mPredicates.size(); i < n && ok != mOrOperator; ++i)
     {
-        sys::MultiGlobPredicate::PredicatePair& p = mPredicates[i];
+        sys::LogicalPredicate::PredicatePair& p = mPredicates[i];
         if (mOrOperator)
             ok |= (p.first && (*p.first)(entry));
         else
@@ -114,45 +139,45 @@ bool sys::MultiGlobPredicate::operator()(const std::string& entry)
     return ok;
 }
 
-sys::MultiGlobPredicate& sys::MultiGlobPredicate::addPredicate(
-    GlobPredicate* filter,
+sys::LogicalPredicate& sys::LogicalPredicate::addPredicate(
+    FilePredicate* filter,
     bool ownIt)
 {
     mPredicates.push_back(
-        sys::MultiGlobPredicate::PredicatePair(
+        sys::LogicalPredicate::PredicatePair(
             filter, ownIt));
     return *this;
 }
 
-sys::Glob::Glob(const std::vector<std::string>& searchPaths) :
+sys::FileFinder::FileFinder(const std::vector<std::string>& searchPaths) :
     mPaths(searchPaths)
 {
 }
 
-sys::Glob::~Glob()
+sys::FileFinder::~FileFinder()
 {
     for (size_t i = 0; i < mPredicates.size(); ++i)
     {
-        sys::Glob::PredicatePair& p = mPredicates[i];
+        sys::FileFinder::PredicatePair& p = mPredicates[i];
         if (p.first && p.second)
             delete p.first;
     }
 }
 
-sys::Glob& sys::Glob::addSearchPath(std::string path)
+sys::FileFinder& sys::FileFinder::addSearchPath(std::string path)
 {
     mPaths.push_back(path);
     return *this;
 }
 
-sys::Glob& sys::Glob::addPredicate(sys::GlobPredicate* filter,
-                                   bool ownIt)
+sys::FileFinder& sys::FileFinder::addPredicate(sys::FilePredicate* filter,
+                                               bool ownIt)
 {
-    mPredicates.push_back(sys::Glob::PredicatePair(filter, ownIt));
+    mPredicates.push_back(sys::FileFinder::PredicatePair(filter, ownIt));
     return *this;
 }
 
-std::vector<std::string> sys::Glob::search(bool recursive) const
+std::vector<std::string> sys::FileFinder::search(bool recursive) const
 {
     // turn it into a list so we can queue additional entries
     std::list < std::string > paths;
@@ -171,7 +196,7 @@ std::vector<std::string> sys::Glob::search(bool recursive) const
             // check it against all predicates
             for (size_t i = 0; i < mPredicates.size(); ++i)
             {
-                const sys::Glob::PredicatePair& p = mPredicates[i];
+                const sys::FileFinder::PredicatePair& p = mPredicates[i];
                 if (p.first)
                 {
                     // check if this meets the criteria -- 

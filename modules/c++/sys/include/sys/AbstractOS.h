@@ -25,8 +25,9 @@
 
 #include <vector>
 #include <string>
-#include "sys/SystemException.h"
 #include "sys/Conf.h"
+#include "sys/FileFinder.h"
+#include "sys/SystemException.h"
 #include "str/Tokenizer.h"
 
 /*!
@@ -83,15 +84,46 @@ public:
     virtual const char* getDelimiter() const = 0;
 
     /*!
-     *  Search for *fragment*filter recursively over path
-     *  \param exhaustiveEnumerations  All retrieved enumerations
-     *  \param fragment  The fragment to search for
-     *  \param filter  What to use as an extension
-     *  \param pathList  The path list (colon delimited)
+     *  Search recursively for some fragment with the directory.
+     *  This will return both directories and files with the 
+     *  fragment, unless the user specifies the extension.
+     *
+     *  \param elementsFound  All retrieved enumerations
+     *  \param fragment       The fragment to search for
+     *  \param extension      extensions should only be used for files
+     *  \param pathList       The path list (colon delimited)
      */
-    virtual void search(std::vector<std::string>& exhaustiveEnumerations,
-                        const std::string& fragment, std::string filter = "",
-                        std::string pathList = ".") const = 0;
+    virtual void search(std::vector<std::string>& elementsFound,
+                        const std::vector<std::string>& searchPaths,
+                        const std::string& fragment = "", 
+                        const std::string& extension = "",
+                        bool recursive = true)
+    {
+        // add the search paths
+        sys::FileFinder glob(searchPaths);
+
+        // add the search criteria
+        sys::LogicalPredicate logicPred(false);
+        sys::ExtensionPredicate extPred(extension);
+        sys::FragmentPredicate fragPred(fragment);
+        if (!fragment.empty() && !extension.empty())
+        {
+            logicPred.addPredicate(&extPred);
+            logicPred.addPredicate(&fragPred);
+            glob.addPredicate(&logicPred);
+        }
+        else if (!extension.empty())
+        {
+            glob.addPredicate(&extPred);
+        }
+        else if (!fragment.empty())
+        {
+            glob.addPredicate(&fragPred);
+        }
+
+        // do search
+        elementsFound = glob.search(recursive);
+    }
 
     /*!
      *  Does this path exist?
@@ -110,8 +142,8 @@ public:
      *  Move file with this path name to the newPath
      *  \return True upon success, false if failure
      */
-    virtual bool
-            move(const std::string& path, const std::string& newPath) const = 0;
+    virtual bool move(const std::string& path, 
+                      const std::string& newPath) const = 0;
 
     /*!
      *  Does this path resolve to a file?
@@ -152,8 +184,8 @@ public:
      *  \return The file name
      *
      */
-    virtual std::string getTempName(std::string path = "", std::string prefix =
-            "") const = 0;
+    virtual std::string getTempName(const std::string& path = "", 
+                                    const std::string& prefix = "") const = 0;
 
     /*!
      *  Return the size in bytes of a file
@@ -188,8 +220,8 @@ public:
      *  Set an environment variable
      */
     virtual void setEnv(const std::string& var, 
-			const std::string& val,
-			bool overwrite) = 0;
+                        const std::string& val,
+                        bool overwrite) = 0;
 
     virtual Pid_T getProcessId() const = 0;
 
@@ -206,8 +238,8 @@ public:
     {
     }
     virtual void close() = 0;
-    virtual const char* findFirstFile(const char* dir) = 0;
-    virtual const char* findNextFile() = 0;
+    virtual std::string findFirstFile(const std::string& dir) = 0;
+    virtual std::string findNextFile() = 0;
 
 };
 

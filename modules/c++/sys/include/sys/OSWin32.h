@@ -68,18 +68,6 @@ public:
     }
 
     /*!
-     *  Search for *fragment*filter recursively over path
-     *  \param exhaustiveEnumerations  All retrieved enumerations
-     *  \param fragment The fragment to search for
-     *  \param filter What to use as an extension
-     *  \param pathList  The path list (colon delimited)
-     */
-    virtual void search(std::vector<std::string>& exhaustiveEnumerations,
-                        const std::string& fragment,
-                        std::string filter = "",
-                        std::string pathList = ".") const;
-
-    /*!
      *  Determine the username
      *  \return The username
      */ 
@@ -88,6 +76,8 @@ public:
 
     /*!
      *  Does this path exist?
+     *  NOTE: On Windows a path specifying a directory should not
+     *  end in '\\' or '/' or it will always fail this check
      *  \param path The path to check for
      *  \return True if it does, false otherwise
      */
@@ -108,7 +98,8 @@ public:
      * 
      *  \return True upon success, false if failure
      */
-    virtual bool move(const std::string& path, const std::string& newPath) const;
+    virtual bool move(const std::string& path, 
+                      const std::string& newPath) const;
 
     /*!
      *  Does this path resolve to a file?
@@ -153,8 +144,8 @@ public:
      *  \return The file name
      *
      */
-    virtual std::string getTempName(std::string path = ".",
-                                    std::string prefix = "TMP") const;
+    virtual std::string getTempName(const std::string& path = ".",
+                                    const std::string& prefix = "TMP") const;
     /*!
      *  Return the size in bytes of a file
      *  \return The file size
@@ -183,10 +174,8 @@ public:
      *  Set an environment variable
      */
     virtual void setEnv(const std::string& var, 
-			const std::string& val,
-			bool overwrite);
-
-
+                        const std::string& val,
+                        bool overwrite);
 };
 
 
@@ -202,9 +191,9 @@ public:
     }
     virtual void close();
 
-    virtual const char* findFirstFile(const char* dir);
+    virtual std::string findFirstFile(const std::string& dir);
 
-    virtual const char* findNextFile();
+    virtual std::string findNextFile();
 
     HANDLE mHandle;
     WIN32_FIND_DATA mFileData;
