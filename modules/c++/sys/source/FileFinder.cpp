@@ -174,7 +174,6 @@ std::vector<std::string> sys::FileFinder::search(
             if (filter(path.getPath()))
             {
                 files.push_back(path.getPath());
-                break;
             }
 
             // if it's a directory we need to search its contents
