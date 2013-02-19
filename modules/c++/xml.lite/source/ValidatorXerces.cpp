@@ -51,8 +51,8 @@ bool xml::lite::ValidationErrorHandler::handleError(
     char* mChar = xercesc::XMLString::transcode(
                             err.getMessage());
 
-    std::string file = fChar;
-    std::string message = mChar;
+    std::string file = (fChar) ? fChar : "";
+    std::string message = (mChar) ? mChar : "";
 
     // clean up
     xercesc::XMLString::release(&fChar);
@@ -80,10 +80,6 @@ ValidatorXerces::ValidatorXerces(
     const XMLCh ls_id [] = {xercesc::chLatin_L, 
                             xercesc::chLatin_S, 
                             xercesc::chNull};
-
-    std::auto_ptr<xercesc::DOMImplementation> impl (
-        xercesc::DOMImplementationRegistry::
-            getDOMImplementation (ls_id));
 
     // create the validator
     mValidator.reset(
@@ -128,8 +124,8 @@ ValidatorXerces::ValidatorXerces(
     // load our schemas --
     // search each directory for schemas
     sys::OS os;
-    std::vector<std::string> schemas;
-    os.search(schemas, schemaPaths, "", ".xsd", recursive);
+    std::vector<std::string> schemas = 
+        os.search(schemaPaths, "", ".xsd", recursive);
 
     //  add the schema to the validator
     for (size_t i = 0; i < schemas.size(); ++i)

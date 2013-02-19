@@ -93,36 +93,43 @@ public:
      *  \param extension      extensions should only be used for files
      *  \param pathList       The path list (colon delimited)
      */
-    virtual void search(std::vector<std::string>& elementsFound,
-                        const std::vector<std::string>& searchPaths,
-                        const std::string& fragment = "", 
-                        const std::string& extension = "",
-                        bool recursive = true)
+    virtual std::vector<std::string> 
+            search(const std::vector<std::string>& searchPaths,
+                   const std::string& fragment = "", 
+                   const std::string& extension = "",
+                   bool recursive = true)
     {
-        // add the search paths
-        sys::FileFinder glob(searchPaths);
-
+        std::vector<std::string> elementsFound;
+    
         // add the search criteria
-        sys::LogicalPredicate logicPred(false);
-        sys::ExtensionPredicate extPred(extension);
-        sys::FragmentPredicate fragPred(fragment);
         if (!fragment.empty() && !extension.empty())
         {
+            sys::ExtensionPredicate extPred(extension);
+            sys::FragmentPredicate fragPred(fragment);
+
+            sys::LogicalPredicate logicPred(false);
             logicPred.addPredicate(&extPred);
             logicPred.addPredicate(&fragPred);
-            glob.addPredicate(&logicPred);
+            
+            elementsFound = sys::FileFinder::search(logicPred, 
+                                                    searchPaths, 
+                                                    recursive);
         }
         else if (!extension.empty())
         {
-            glob.addPredicate(&extPred);
+            sys::ExtensionPredicate extPred(extension);
+            elementsFound = sys::FileFinder::search(extPred, 
+                                                    searchPaths, 
+                                                    recursive);
         }
         else if (!fragment.empty())
         {
-            glob.addPredicate(&fragPred);
+            sys::FragmentPredicate fragPred(fragment);
+            elementsFound = sys::FileFinder::search(fragPred, 
+                                                    searchPaths, 
+                                                    recursive);
         }
-
-        // do search
-        elementsFound = glob.search(recursive);
+        return elementsFound;
     }
 
     /*!

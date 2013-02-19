@@ -35,7 +35,7 @@ namespace sys
 struct FilePredicate : std::unary_function<std::string, bool>
 {
     virtual ~FilePredicate() {}
-    virtual bool operator()(const std::string& entry) = 0;
+    virtual bool operator()(const std::string& entry) const = 0;
 };
 
 /**
@@ -44,7 +44,7 @@ struct FilePredicate : std::unary_function<std::string, bool>
 struct ExistsPredicate : FilePredicate
 {
     virtual ~ExistsPredicate() {}
-    virtual bool operator()(const std::string& entry);
+    virtual bool operator()(const std::string& entry) const;
 };
 
 /**
@@ -53,7 +53,7 @@ struct ExistsPredicate : FilePredicate
 struct FileOnlyPredicate: public FilePredicate
 {
     virtual ~FileOnlyPredicate() {}
-    virtual bool operator()(const std::string& entry);
+    virtual bool operator()(const std::string& entry) const;
 };
 
 /**
@@ -62,7 +62,7 @@ struct FileOnlyPredicate: public FilePredicate
 struct DirectoryOnlyPredicate: public FilePredicate
 {
     virtual ~DirectoryOnlyPredicate() {}
-    virtual bool operator()(const std::string& entry);
+    virtual bool operator()(const std::string& entry) const;
 };
 
 /**
@@ -72,7 +72,7 @@ struct FragmentPredicate : public FilePredicate
 {
 public:
     FragmentPredicate(const std::string& fragment, bool ignoreCase = true);
-    bool operator()(const std::string& entry);
+    bool operator()(const std::string& entry) const;
 
 private:
     std::string mFragment;
@@ -91,7 +91,7 @@ class ExtensionPredicate: public FileOnlyPredicate
 {
 public:
     ExtensionPredicate(const std::string& ext, bool ignoreCase = true);
-    bool operator()(const std::string& filename);
+    bool operator()(const std::string& filename) const;
 
 private:
     std::string mExt;
@@ -107,7 +107,7 @@ public:
     NotPredicate(FilePredicate* filter, bool ownIt = false);
     virtual ~NotPredicate();
 
-    virtual bool operator()(const std::string& entry);
+    virtual bool operator()(const std::string& entry) const;
 
 protected:
     typedef std::pair<FilePredicate*, bool> PredicatePair;
@@ -116,10 +116,8 @@ protected:
 
 
 /**
- * \class FileFinder
- *
- *  The FileFinder class allows you to search for 
- *  files/directories in a clean way.
+ *  The LogicalPredicate class allows you to chain many 
+ *  predicates using the logical && or ||
  */
 class LogicalPredicate : public FilePredicate
 {
@@ -130,7 +128,7 @@ public:
     sys::LogicalPredicate& addPredicate(FilePredicate* filter, 
                                         bool ownIt = false);
 
-    virtual bool operator()(const std::string& entry);
+    virtual bool operator()(const std::string& entry) const;
 
 protected:
     bool mOrOperator;
@@ -147,31 +145,17 @@ protected:
 class FileFinder
 {
 public:
-    FileFinder(){}
-    FileFinder(const std::vector<std::string>& searchPaths);
-    ~FileFinder();
-
-    /**
-     * Add a search path
-     */
-    FileFinder& addSearchPath(std::string path);
-
-    /**
-     * Add a predicate/filter to use when searching
-     */
-    FileFinder& addPredicate(FilePredicate* filter, bool ownIt = false);
+    FileFinder() {}
+    ~FileFinder() {}
 
     /**
      * Perform the search
      * \return a std::vector<std::string> of paths that match
      */
-    std::vector<std::string> search(bool recursive = false) const;
-
-protected:
-    std::vector<std::string> mPaths;
-
-    typedef std::pair<FilePredicate*, bool> PredicatePair;
-    std::vector<PredicatePair> mPredicates;
+    static std::vector<std::string> search(
+        const FilePredicate& filter,
+        const std::vector<std::string>& searchPaths, 
+        bool recursive = false);
 };
 
 }

@@ -25,17 +25,17 @@
 #include "sys/DirectoryEntry.h"
 #include "sys/Path.h"
 
-bool sys::ExistsPredicate::operator()(const std::string& entry)
+bool sys::ExistsPredicate::operator()(const std::string& entry) const
 {
     return sys::Path(entry).exists();
 }
 
-bool sys::FileOnlyPredicate::operator()(const std::string& entry)
+bool sys::FileOnlyPredicate::operator()(const std::string& entry) const
 {
     return sys::Path(entry).isFile();
 }
 
-bool sys::DirectoryOnlyPredicate::operator()(const std::string& entry)
+bool sys::DirectoryOnlyPredicate::operator()(const std::string& entry) const
 {
     return sys::Path(entry).isDirectory();
 }
@@ -46,7 +46,7 @@ sys::FragmentPredicate::FragmentPredicate(const std::string& fragment,
 {
 }
 
-bool sys::FragmentPredicate::operator()(const std::string& entry)
+bool sys::FragmentPredicate::operator()(const std::string& entry) const
 {
     if (mIgnoreCase)
     {
@@ -69,7 +69,7 @@ sys::ExtensionPredicate::ExtensionPredicate(const std::string& ext,
 {
 }
 
-bool sys::ExtensionPredicate::operator()(const std::string& filename)
+bool sys::ExtensionPredicate::operator()(const std::string& filename) const
 {
     if (!sys::FileOnlyPredicate::operator()(filename))
         return false;
@@ -101,7 +101,7 @@ sys::NotPredicate::~NotPredicate()
     }
 }
 
-bool sys::NotPredicate::operator()(const std::string& entry)
+bool sys::NotPredicate::operator()(const std::string& entry) const
 {
     return !(*mPredicate.first)(entry);
 }
@@ -125,12 +125,12 @@ sys::LogicalPredicate::~LogicalPredicate()
     }
 }
 
-bool sys::LogicalPredicate::operator()(const std::string& entry)
+bool sys::LogicalPredicate::operator()(const std::string& entry) const
 {
     bool ok = !mOrOperator;
     for (size_t i = 0, n = mPredicates.size(); i < n && ok != mOrOperator; ++i)
     {
-        sys::LogicalPredicate::PredicatePair& p = mPredicates[i];
+        const sys::LogicalPredicate::PredicatePair& p = mPredicates[i];
         if (mOrOperator)
             ok |= (p.first && (*p.first)(entry));
         else
@@ -149,42 +149,18 @@ sys::LogicalPredicate& sys::LogicalPredicate::addPredicate(
     return *this;
 }
 
-sys::FileFinder::FileFinder(const std::vector<std::string>& searchPaths) :
-    mPaths(searchPaths)
-{
-}
-
-sys::FileFinder::~FileFinder()
-{
-    for (size_t i = 0; i < mPredicates.size(); ++i)
-    {
-        sys::FileFinder::PredicatePair& p = mPredicates[i];
-        if (p.first && p.second)
-            delete p.first;
-    }
-}
-
-sys::FileFinder& sys::FileFinder::addSearchPath(std::string path)
-{
-    mPaths.push_back(path);
-    return *this;
-}
-
-sys::FileFinder& sys::FileFinder::addPredicate(sys::FilePredicate* filter,
-                                               bool ownIt)
-{
-    mPredicates.push_back(sys::FileFinder::PredicatePair(filter, ownIt));
-    return *this;
-}
-
-std::vector<std::string> sys::FileFinder::search(bool recursive) const
+std::vector<std::string> sys::FileFinder::search(
+    const FilePredicate& filter,
+    const std::vector<std::string>& searchPaths, 
+    bool recursive)
 {
     // turn it into a list so we can queue additional entries
     std::list < std::string > paths;
-    std::copy(mPaths.begin(), mPaths.end(), std::back_inserter(paths));
+    std::copy(searchPaths.begin(), searchPaths.end(), 
+              std::back_inserter(paths));
 
-    std::vector < std::string > files;
-    size_t numInputPaths = mPaths.size();
+    std::vector <std::string> files;
+    size_t numInputPaths = searchPaths.size();
     for (size_t pathIdx = 0; !paths.empty(); ++pathIdx)
     {
         sys::Path path(paths.front());
@@ -193,20 +169,12 @@ std::vector<std::string> sys::FileFinder::search(bool recursive) const
         //! check if it exists
         if (path.exists())
         {
-            // check it against all predicates
-            for (size_t i = 0; i < mPredicates.size(); ++i)
+            // check if this meets the criteria -- 
+            // we only need one to add it
+            if (filter(path.getPath()))
             {
-                const sys::FileFinder::PredicatePair& p = mPredicates[i];
-                if (p.first)
-                {
-                    // check if this meets the criteria -- 
-                    // we only need one to add it
-                    if ((*p.first)(path.getPath()))
-                    {
-                        files.push_back(path.getPath());
-                        break;
-                    }
-                }
+                files.push_back(path.getPath());
+                break;
             }
 
             // if it's a directory we need to search its contents
