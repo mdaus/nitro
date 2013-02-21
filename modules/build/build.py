@@ -1277,6 +1277,14 @@ def configure(self):
             # compilation flag and the /DEBUG linker flag
             vars['linkflags_32'].append('/DEBUG')
             vars['linkflags_64'].append('/DEBUG')
+        else:
+            # Forcing the linker to not link incrementally.  Hoping this will
+            # avoid an intermittent race condition we're having where manifest
+            # generation fails.
+            # Incremental is implied with /DEBUG so no reason to bother
+            # setting it there
+            vars['linkflags_32'].append('/INCREMENTAL:NO')
+            vars['linkflags_64'].append('/INCREMENTAL:NO')
 
         # choose the runtime to link against
         # [/MD /MDd /MT /MTd]
