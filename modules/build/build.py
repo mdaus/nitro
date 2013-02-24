@@ -10,6 +10,7 @@ from waflib.Utils import to_list as listify
 from waflib.Tools import waf_unit_test
 from waflib import Context, Errors
 from msvs import msvs_generator
+from dumpenv import dumpenv
 
 COMMON_EXCLUDES = '.bzr .bzrignore .git .gitignore .svn CVS .cvsignore .arch-ids {arch} SCCS BitKeeper .hg _MTN _darcs Makefile Makefile.in config.log'.split()
 COMMON_EXCLUDES_EXT ='~ .rej .orig .pyc .pyo .bak .tar.bz2 tar.gz .zip .swp'.split()
@@ -1104,6 +1105,7 @@ def configure(self):
         env.append_value('LIB_DL', 'dl')
         env.append_value('LIB_NSL', 'nsl')
         env.append_value('LIB_THREAD', 'pthread')
+        env.append_value('DEFINES_THREAD', '_REENTRANT')
         self.check_cc(lib='pthread', mandatory=True)
 
         config['cxx']['debug']          = '-g'
@@ -1118,7 +1120,6 @@ def configure(self):
         #env.append_value('LINKFLAGS', '-fPIC -dynamiclib'.split())
         env.append_value('LINKFLAGS', '-fPIC'.split())
         env.append_value('CXXFLAGS', '-fPIC')
-        env.append_value('CXXFLAGS_THREAD', '-D_REENTRANT')
 
         config['cc']['debug']          = config['cxx']['debug']
         config['cc']['warn']           = config['cxx']['warn']
@@ -1130,13 +1131,13 @@ def configure(self):
 
         env.append_value('DEFINES', '_FILE_OFFSET_BITS=64 _LARGEFILE_SOURCE __POSIX'.split())
         env.append_value('CFLAGS', '-fPIC -dynamiclib'.split())
-        env.append_value('CFLAGS_THREAD', '-D_REENTRANT')
 
     #linux
     elif re.match(linuxRegex, sys_platform):
         env.append_value('LIB_DL', 'dl')
         env.append_value('LIB_NSL', 'nsl')
         env.append_value('LIB_THREAD', 'pthread')
+        env.append_value('DEFINES_THREAD', '_REENTRANT')
         env.append_value('LIB_MATH', 'm')
 
         self.check_cc(lib='pthread', mandatory=True)
@@ -1156,13 +1157,12 @@ def configure(self):
             config['cxx']['optz_med']       = '-O1'
             config['cxx']['optz_fast']      = '-O2'
             config['cxx']['optz_fastest']   = '-O3'
-            
+
+            env.append_value('CXXFLAGS', '-fPIC')
+
+            # DEFINES and LINKFLAGS will apply to both gcc and g++
             env.append_value('DEFINES', '_FILE_OFFSET_BITS=64 _LARGEFILE_SOURCE __POSIX'.split())
             env.append_value('LINKFLAGS', '-Wl,-E -fPIC'.split())
-            env.append_value('CXXFLAGS', '-fPIC')
-            
-            #for some reason using CXXDEFINES_THREAD won't work w/uselib... so using FLAGS instead
-            env.append_value('CXXFLAGS_THREAD', '-D_REENTRANT')
         
         if ccCompiler == 'gcc':
             config['cc']['debug']          = '-g'
@@ -1175,12 +1175,8 @@ def configure(self):
             config['cc']['optz_med']       = '-O1'
             config['cc']['optz_fast']      = '-O2'
             config['cc']['optz_fastest']   = '-O3'
-            
-            #env.append_value('DEFINES', '_FILE_OFFSET_BITS=64 _LARGEFILE_SOURCE __POSIX'.split())
+
             env.append_value('CFLAGS', '-fPIC'.split())
-            
-            #for some reason using CXXDEFINES_THREAD won't work w/uselib... so using FLAGS instead
-            env.append_value('CFLAGS_THREAD', '-D_REENTRANT')
     
     #Solaris
     elif re.match(solarisRegex, sys_platform):
@@ -1213,6 +1209,7 @@ def configure(self):
             config['cxx']['optz_fastest']   = '-xO5'
             env['CXXFLAGS_cxxshlib']        = ['-KPIC', '-DPIC']
 
+            # DEFINES apply to both suncc and sunc++
             env.append_value('DEFINES', '_FILE_OFFSET_BITS=64 _LARGEFILE_SOURCE'.split())
             env.append_value('CXXFLAGS', '-KPIC -instances=global'.split())
             env.append_value('CXXFLAGS_THREAD', '-mt')
@@ -1232,18 +1229,14 @@ def configure(self):
             config['cc']['optz_fastest']   = '-xO5'
             env['CFLAGS_cshlib']           = ['-KPIC', '-DPIC']
 
-            #env.append_value('DEFINES', '_FILE_OFFSET_BITS=64 _LARGEFILE_SOURCE'.split())
             env.append_value('CFLAGS', '-KPIC'.split())
             env.append_value('CFLAGS_THREAD', '-mt')
 
     elif re.match(winRegex, sys_platform):
-#        if Options.options.enable64:
-#            platform = 'win'
 
         env.append_value('LIB_RPC', 'rpcrt4')
         env.append_value('LIB_SOCKET', 'Ws2_32')
-        
-        winRegex
+
         crtFlag = '/%s' % Options.options.crt
         crtDebug = '%sd' % crtFlag
 
@@ -1294,14 +1287,11 @@ def configure(self):
 
         defines = '_CRT_SECURE_NO_WARNINGS _FILE_OFFSET_BITS=64 _LARGEFILE_SOURCE WIN32 _USE_MATH_DEFINES NOMINMAX WIN32_LEAN_AND_MEAN'.split()
         flags = '/UUNICODE /U_UNICODE /EHs /GR'.split()
-        threadFlags = '/D_REENTRANT'
         
         env.append_value('DEFINES', defines)
+        env.append_value('DEFINES_THREAD', '_REENTRANT')
         env.append_value('CXXFLAGS', flags)
-        env.append_value('CXXFLAGS_THREAD', threadFlags)
-        
         env.append_value('CFLAGS', flags)
-        env.append_value('CFLAGS_THREAD', threadFlags)
     
     else:
         self.fatal('OS/platform currently unsupported: %s' % sys_platform)
@@ -1668,3 +1658,8 @@ class CPPMSVSGenContext(msvs_generator, CPPContext):
     def __init__(self, **kw):
         self.waf_command = 'python waf'
         super(CPPMSVSGenContext, self).__init__(**kw)
+
+class CPPDumpEnvContext(dumpenv, CPPContext):
+    def __init__(self, **kw):
+        self.waf_command = 'python waf'
+        super(CPPDumpEnvContext, self).__init__(**kw)

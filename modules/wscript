@@ -17,7 +17,7 @@ PACKAGE_ALL = { 'SUB_DIRS' : ['drivers', 'c++'],
               } 
 
 def options(opt):
-    opt.load('build', tooldir='./build')
+    opt.load('build msvs dumpenv', tooldir='./build')
     
     # always set_options on all
     allDirs = PACKAGE_ALL['SUB_DIRS']
