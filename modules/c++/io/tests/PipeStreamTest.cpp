@@ -40,6 +40,7 @@ int main(int argc, char **argv)
         io::StandardOutStream stdo;
         ps.streamTo(stdo);
         stdo.writeln("");
+        stdo.close();
 
         if (ps.close() != 0)
         {
