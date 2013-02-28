@@ -27,6 +27,7 @@
 #include <str/Convert.h>
 #include <sys/Err.h>
 #include <sys/Exec.h>
+#include <mem/ScopedArray.h>
 
 #include "io/InputStream.h"
 
@@ -104,7 +105,7 @@ public:
 protected:
 
     sys::ExecPipe mExecPipe;
-    std::auto_ptr<char> mCharString;
+    mem::ScopedArray<char> mCharString;
     size_t mMaxLength;
 
 private:
