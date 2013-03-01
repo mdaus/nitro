@@ -37,6 +37,7 @@
 #include "mt/GenerationThreadPool.h"
 #include "mt/ThreadGroup.h"
 #include "mt/ThreadPlanner.h"
+#include "mt/Runnable1D.h"
 
 #include "mt/CPUAffinityInitializer.h"
 #include "mt/CPUAffinityThreadInitializer.h"

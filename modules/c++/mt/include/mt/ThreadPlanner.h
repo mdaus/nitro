@@ -23,6 +23,8 @@
 #ifndef __MT_THREAD_PLANNER_H__
 #define __MT_THREAD_PLANNER_H__
 
+#include <algorithm>
+
 namespace mt
 {
     class ThreadPlanner
@@ -43,16 +45,19 @@ namespace mt
             return mNumElementsPerThread;
         }
 
-        void getThreadInfo(size_t threadNum, size_t& startElement, size_t& numElementsThisThread) const
+        bool getThreadInfo(size_t threadNum, size_t& startElement, size_t& numElementsThisThread) const
         {
             startElement = threadNum * mNumElementsPerThread;
             if(startElement > mNumElements)
+            {
                 numElementsThisThread = 0;
+            }
             else
             {
                 size_t numElementsRemaining = mNumElements - startElement; 
                 numElementsThisThread = std::min<size_t>(mNumElementsPerThread, numElementsRemaining);
             }
+            return (numElementsThisThread != 0);
         }
     };
 }
