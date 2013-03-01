@@ -1065,6 +1065,9 @@ def configure(self):
     
     
     #find out the size of some types, etc.
+    # TODO: This is not using the 32 vs. 64 bit linker flags, so if you're
+    #       building with --enable-32bit on 64 bit Linux, sizeof(size_t) will
+    #       erroneously be 8 here.
     output = self.check(fragment=types_str, execute=1, msg='Checking system type sizes', define_ret=True)
     t = Utils.str_to_dict(output or '')
     for k, v in t.iteritems():
@@ -1319,36 +1322,35 @@ def configure(self):
         optz = Options.options.with_optz
         variant.append_value('CXXFLAGS', config['cxx'].get('optz_%s' % optz, ''))
         variant.append_value('CFLAGS', config['cc'].get('optz_%s' % optz, ''))
-    
-    is64Bit = False
-    #check if the system is 64-bit capable
+
+    # Check if the system is 64-bit capable
     if re.match(winRegex, sys_platform):
-        is64Bit = Options.options.enable64
-    if not Options.options.enable32:
-        #ifdef _WIN64
-        if re.match(winRegex, sys_platform):
-            frag64 = '''
+        # For Windows, this is a function of what VS compiler we ended up
+        # finding above (regardless of if we asked for 32 vs. 64 bit on the
+        # configure line)
+        frag64 = '''
 #include <stdio.h>
 int main() {
-    #ifdef _WIN64
+#ifdef _WIN64
     printf("1");
-    #else
+#else
     printf("0");
-    #endif
+#endif
     return 0; }
 '''         
-            output = self.check(fragment=frag64, define_ret=True,
-                                execute=1, msg='Checking for 64-bit system')
-            try:
-                is64Bit = bool(int(output))
-                if is64Bit:
-                    self.msg('System size', '64-bit')
-                else:
-                    self.msg('System size', '32-bit')
-            except:{}
-        elif '64' in config['cxx']:
-            if self.check_cxx(cxxflags=config['cxx']['64'], linkflags=config['cc'].get('linkflags_64', ''), mandatory=False):
-                is64Bit = self.check_cc(cflags=config['cc']['64'], linkflags=config['cc'].get('linkflags_64', ''), mandatory=False)
+        output = self.check(fragment=frag64, define_ret=True,
+                            execute=1, msg='Checking for 64-bit system')
+        is64Bit = bool(int(output))
+    elif Options.options.enable32 or not '64' in config['cxx']:
+        is64Bit = False
+    else:
+        is64Bit = self.check_cxx(cxxflags=config['cxx']['64'],
+                                 linkflags=config['cc'].get('linkflags_64', ''),
+                                 mandatory=False) and \
+                  self.check_cc(cflags=config['cc']['64'],
+                                linkflags=config['cc'].get('linkflags_64', ''),
+                                mandatory=False)
+    self.msg('System size', '64-bit' if is64Bit else '32-bit')
 
     if is64Bit:
         if re.match(winRegex, sys_platform):
