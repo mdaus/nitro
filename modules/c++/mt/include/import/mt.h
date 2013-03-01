@@ -36,6 +36,7 @@
 #include "mt/TiedWorkerThread.h"
 #include "mt/GenerationThreadPool.h"
 #include "mt/ThreadGroup.h"
+#include "mt/ThreadPlanner.h"
 
 #include "mt/CPUAffinityInitializer.h"
 #include "mt/CPUAffinityThreadInitializer.h"
