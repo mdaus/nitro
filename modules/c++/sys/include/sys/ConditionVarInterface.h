@@ -68,7 +68,7 @@ public:
      *  a lock, but this class will STILL delete it.
      *
      */
-    ConditionVarInterface(Mutex *theLock, bool isOwner = false)
+    ConditionVarInterface(Mutex *, bool = false)
     {}
 
     //!  Destructor
