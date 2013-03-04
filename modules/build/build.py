@@ -1247,9 +1247,12 @@ def configure(self):
         stackFlag = '/STACK:80000000'
 
         # Skipping warning 4290 about how VS doesn't implement exception
-        # specifications properly.  For warnings, use /W4 because /Wall
+        # specifications properly.
+        # Skipping warning 4512 about being unable to generate an assignment
+        # operator (since we often do this intentionally).
+        # For warnings, use /W4 because /Wall
         # gives us tons of warnings in the VS headers themselves
-        warningFlags = '/W4 /wd4290'
+        warningFlags = '/W4 /wd4290 /wd4512'
         if Options.options.warningsAsErrors:
             warningFlags += ' /WX'
 
