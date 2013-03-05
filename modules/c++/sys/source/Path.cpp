@@ -134,6 +134,22 @@ std::string sys::Path::joinPaths(const std::string& path1,
     return out.str();
 }
 
+std::vector<std::string> sys::Path::separate(const std::string& path)
+{
+    sys::Path workingPath = path;
+    std::vector<std::string> pathList;
+    sys::Path::StringPair pair;
+    while ((pair = workingPath.split()).first != workingPath.getPath())
+    {
+        if (!pair.second.empty())
+            pathList.push_back(pair.second);
+        workingPath = pair.first;
+    }
+
+    std::reverse(pathList.begin(), pathList.end());
+    return pathList;
+}
+
 std::string sys::Path::absolutePath(const std::string& path)
 {
     std::string osDelimStr(sys::Path::delimiter());

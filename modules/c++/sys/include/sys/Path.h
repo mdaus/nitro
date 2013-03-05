@@ -90,6 +90,17 @@ public:
     }
 
     /*!
+     *  Separates a path into its components, and returns a vector of
+     *  them. This splits on both '/' and '\\'.
+     */
+    static std::vector<std::string> separate(const std::string& path);
+
+    inline std::vector<std::string> separate() const
+    {
+        return separate(mPathName);
+    }
+
+    /*!
      * Splits the path into two components: head & tail.
      * 
      * The tail part will never contain the delim; if path ends in the delim,
@@ -177,9 +188,39 @@ public:
 
     std::vector<std::string> list() const;
 
-    inline bool mkdir() const
+    /*!
+     *  Creates the directory 
+     *  \param makeParents - flag for making any non-existant parent 
+     *                       directories
+     */
+    inline bool makeDirectory(bool makeParents = false) const
     {
-        return mOS.makeDirectory(mPathName);
+        if (makeParents)
+        {
+            std::vector<std::string> pathList = separate(mPathName);
+            Path workingPath;
+            bool createDir = true;
+            size_t i = 0;
+
+            // unix puts slash before any path making cwd == root
+            if (pathList.size() && pathList[0] == ".")
+            {
+                workingPath = pathList[0];
+                i++;
+            }
+
+            while (createDir && i < pathList.size())
+            {
+                // create each
+                workingPath = workingPath.join(pathList[i]);
+                if (!mOS.exists(workingPath))
+                    createDir = mOS.makeDirectory(workingPath);
+                i++;
+            }
+            return createDir;
+        }
+        else
+            return mOS.makeDirectory(mPathName);
     }
 
     inline bool remove() const
