@@ -21,6 +21,7 @@
  */
 
 #include "sys/Path.h"
+#include <algorithm>
 
 sys::Path::Path()
 {
