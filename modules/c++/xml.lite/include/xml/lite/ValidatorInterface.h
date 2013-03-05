@@ -81,7 +81,7 @@ public:
         return oss.str();
     }
 
-protected:
+private:
     std::string mMessage;
     std::string mLevel;
     std::string mFile;
@@ -101,7 +101,7 @@ public:
 
     enum ValidationErrorType
     {
-        VALIDATION_WARNING = 1,
+        VALIDATION_WARNING = 0,
         VALIDATION_ERROR,
         VALIDATION_FATAL,
     };
@@ -120,6 +120,7 @@ public:
      *  \param size    This is the size of the stream to feed the parser
      */
     virtual bool validate(std::vector<ValidationInfo>& errors,
+                          const std::string& xmlID,
                           io::InputStream& xml, 
                           sys::SSize_T size = io::InputStream::IS_END);
 

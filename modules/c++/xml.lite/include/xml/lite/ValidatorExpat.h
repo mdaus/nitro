@@ -58,6 +58,7 @@ public:
      *  \param size    This is the size of the stream to feed the parser
      */
     virtual bool validate(std::vector<ValidationInfo>& errors,
+                          const std::string& xmlID,
                           io::InputStream& xml, 
                           sys::SSize_T size = io::InputStream::IS_END)
     {

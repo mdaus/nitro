@@ -46,21 +46,11 @@ bool xml::lite::ValidationErrorHandler::handleError(
     }
 
     // transcode the file and message
-    char* fChar = xercesc::XMLString::transcode(
-                            err.getLocation()->getURI());
-    char* mChar = xercesc::XMLString::transcode(
-                            err.getMessage());
-
-    std::string file = (fChar) ? fChar : "";
-    std::string message = (mChar) ? mChar : "";
-
-    // clean up
-    xercesc::XMLString::release(&fChar);
-    xercesc::XMLString::release(&mChar);
+    xml::lite::XercesLocalString message(err.getMessage());
 
     // create o
     xml::lite::ValidationInfo info (
-        message, level, file, 
+        message.str(), level, mID, 
         (size_t)err.getLocation()->getLineNumber());
     mErrorLog.push_back(info);
 
@@ -145,10 +135,10 @@ ValidatorXerces::ValidatorXerces(
 
 ValidatorXerces::~ValidatorXerces()
 {
-    
 }
 
 bool ValidatorXerces::validate(std::vector<ValidationInfo>& errors,
+                               const std::string& xmlID,
                                io::InputStream& xml,
                                sys::SSize_T size)
 {
@@ -156,6 +146,10 @@ bool ValidatorXerces::validate(std::vector<ValidationInfo>& errors,
     // however we do not clear the users 'errors' because 
     // they might want an accumulation of errors
     mErrorHandler->clearErrorLog();
+
+    // set the id so all errors coming from this session 
+    // get a matching id
+    mErrorHandler->setID(xmlID);
 
     // get a vehicle to validate data
     xercesc::DOMLSInputImpl input(
@@ -176,6 +170,9 @@ bool ValidatorXerces::validate(std::vector<ValidationInfo>& errors,
     errors.insert(errors.end(), 
                   mErrorHandler->getErrorLog().begin(), 
                   mErrorHandler->getErrorLog().end());
+
+    // reset the id
+    mErrorHandler->setID("");
 
     return (mErrorHandler->getErrorLog().size() > 0);
 }

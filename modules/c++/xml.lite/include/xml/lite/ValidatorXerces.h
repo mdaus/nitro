@@ -25,6 +25,9 @@
 
 #ifdef USE_XERCES
 
+#include <memory>
+#include <vector>
+
 #include "xml/lite/UtilitiesXerces.h"
 #include "xml/lite/ValidatorInterface.h"
 
@@ -62,6 +65,9 @@ public:
 
     void clearErrorLog() { mErrorLog.clear(); }
 
+    //! set the id to differentiate between errors
+    void setID(const std::string& id) { mID = id; }
+
     //! stream the entire log -- newline separated
     std::ostream& operator<< (std::ostream& out) const
     {
@@ -82,7 +88,7 @@ public:
 
 protected:
     std::vector<ValidationInfo> mErrorLog;
-
+    std::string mID;
 };
 
 /*!
@@ -111,6 +117,7 @@ public:
      *  \param size    This is the size of the stream to feed the parser
      */
     virtual bool validate(std::vector<ValidationInfo>& errors,
+                          const std::string& xmlID,
                           io::InputStream& xml, 
                           sys::SSize_T size = io::InputStream::IS_END);
 
