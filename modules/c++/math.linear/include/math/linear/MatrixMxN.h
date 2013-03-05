@@ -1411,7 +1411,7 @@ template<typename Matrix_T> Matrix_T tidy(const Matrix_T& constMatrix,
             if (math::linear::equals(std::abs(mx(i, j) - lower), 0.0, eps))
                 mx(i, j) = lower;
 
-            else if (equals(std::abs(higher - mx(i, j)), 0.0, eps))
+            else if (math::linear::equals(std::abs(higher - mx(i, j)), 0.0, eps))
                 mx(i, j) = higher;
             
             if (mx(i, j) == -0)

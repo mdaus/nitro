@@ -51,23 +51,19 @@ sys::SSize_T io::PipeStream::readln(sys::byte *cStr,
                                     const sys::Size_T strLenPlusNullByte)
 {
     // validation
-    sys::Size_T readLength = 0;
-    if (!strLenPlusNullByte || strLenPlusNullByte > mMaxLength)
+    sys::Size_T readLength = strLenPlusNullByte;
+    if (!readLength || readLength > mMaxLength)
     {
         readLength = mMaxLength;
     }
 
     // get the next line or return null
-    while (!feof((FILE*)mExecPipe.getPipe()))
+    while (!feof(mExecPipe.getPipe()) && 
+           fgets(cStr, (int)readLength, 
+                 mExecPipe.getPipe()) != NULL)
     {
-        if (fgets(mCharString.get(), (int)readLength, 
-                  (FILE*)mExecPipe.getPipe()) != NULL)
-        {
-            strcpy(cStr, mCharString.get());
-
-            // add 1 because of null termination
-            return strlen(cStr) + 1;
-        }
+        // add 1 because of null termination
+        return strlen(cStr) + 1;
     }
     
     // no byte read --
@@ -82,17 +78,15 @@ sys::SSize_T io::PipeStream::streamTo(OutputStream& soi,
     if (numBytes == IS_END)
     {
         // read line by line
-        while (!feof((FILE*)mExecPipe.getPipe()))
+        while (!feof(mExecPipe.getPipe()) &&
+               fgets(mCharString.get(), (int)mMaxLength, 
+                     mExecPipe.getPipe()) != NULL)
         {
-            if (fgets(mCharString.get(), (int)mMaxLength, 
-                        (FILE*)mExecPipe.getPipe()) != NULL)
-            {
-                size_t bytesRead = strlen(mCharString.get());
+            size_t bytesRead = strlen(mCharString.get());
 
-                // write without null termination
-                soi.write(mCharString.get(), bytesRead - 1);
-                totalBytesRead += bytesRead - 1;
-            }
+            // write without null termination
+            soi.write(mCharString.get(), bytesRead - 1);
+            totalBytesRead += bytesRead - 1;
         }
     }
     else
@@ -101,9 +95,9 @@ sys::SSize_T io::PipeStream::streamTo(OutputStream& soi,
         while (bytesLeft)
         {
             // read line by line
-            if (!feof((FILE*)mExecPipe.getPipe()) && 
+            if (!feof(mExecPipe.getPipe()) && 
                 fgets(mCharString.get(), (int)mMaxLength, 
-                        (FILE*)mExecPipe.getPipe()) != NULL)
+                      mExecPipe.getPipe()) != NULL)
             {
                 size_t bytesRead = strlen(mCharString.get());
 

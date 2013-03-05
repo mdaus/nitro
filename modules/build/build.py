@@ -10,6 +10,7 @@ from waflib.Utils import to_list as listify
 from waflib.Tools import waf_unit_test
 from waflib import Context, Errors
 from msvs import msvs_generator
+from dumpenv import dumpenv
 
 COMMON_EXCLUDES = '.bzr .bzrignore .git .gitignore .svn CVS .cvsignore .arch-ids {arch} SCCS BitKeeper .hg _MTN _darcs Makefile Makefile.in config.log'.split()
 COMMON_EXCLUDES_EXT ='~ .rej .orig .pyc .pyo .bak .tar.bz2 tar.gz .zip .swp'.split()
@@ -1064,6 +1065,9 @@ def configure(self):
     
     
     #find out the size of some types, etc.
+    # TODO: This is not using the 32 vs. 64 bit linker flags, so if you're
+    #       building with --enable-32bit on 64 bit Linux, sizeof(size_t) will
+    #       erroneously be 8 here.
     output = self.check(fragment=types_str, execute=1, msg='Checking system type sizes', define_ret=True)
     t = Utils.str_to_dict(output or '')
     for k, v in t.iteritems():
@@ -1104,6 +1108,7 @@ def configure(self):
         env.append_value('LIB_DL', 'dl')
         env.append_value('LIB_NSL', 'nsl')
         env.append_value('LIB_THREAD', 'pthread')
+        env.append_value('DEFINES_THREAD', '_REENTRANT')
         self.check_cc(lib='pthread', mandatory=True)
 
         config['cxx']['debug']          = '-g'
@@ -1118,7 +1123,6 @@ def configure(self):
         #env.append_value('LINKFLAGS', '-fPIC -dynamiclib'.split())
         env.append_value('LINKFLAGS', '-fPIC'.split())
         env.append_value('CXXFLAGS', '-fPIC')
-        env.append_value('CXXFLAGS_THREAD', '-D_REENTRANT')
 
         config['cc']['debug']          = config['cxx']['debug']
         config['cc']['warn']           = config['cxx']['warn']
@@ -1130,13 +1134,13 @@ def configure(self):
 
         env.append_value('DEFINES', '_FILE_OFFSET_BITS=64 _LARGEFILE_SOURCE __POSIX'.split())
         env.append_value('CFLAGS', '-fPIC -dynamiclib'.split())
-        env.append_value('CFLAGS_THREAD', '-D_REENTRANT')
 
     #linux
     elif re.match(linuxRegex, sys_platform):
         env.append_value('LIB_DL', 'dl')
         env.append_value('LIB_NSL', 'nsl')
         env.append_value('LIB_THREAD', 'pthread')
+        env.append_value('DEFINES_THREAD', '_REENTRANT')
         env.append_value('LIB_MATH', 'm')
 
         self.check_cc(lib='pthread', mandatory=True)
@@ -1156,13 +1160,12 @@ def configure(self):
             config['cxx']['optz_med']       = '-O1'
             config['cxx']['optz_fast']      = '-O2'
             config['cxx']['optz_fastest']   = '-O3'
-            
+
+            env.append_value('CXXFLAGS', '-fPIC')
+
+            # DEFINES and LINKFLAGS will apply to both gcc and g++
             env.append_value('DEFINES', '_FILE_OFFSET_BITS=64 _LARGEFILE_SOURCE __POSIX'.split())
             env.append_value('LINKFLAGS', '-Wl,-E -fPIC'.split())
-            env.append_value('CXXFLAGS', '-fPIC')
-            
-            #for some reason using CXXDEFINES_THREAD won't work w/uselib... so using FLAGS instead
-            env.append_value('CXXFLAGS_THREAD', '-D_REENTRANT')
         
         if ccCompiler == 'gcc':
             config['cc']['debug']          = '-g'
@@ -1175,12 +1178,8 @@ def configure(self):
             config['cc']['optz_med']       = '-O1'
             config['cc']['optz_fast']      = '-O2'
             config['cc']['optz_fastest']   = '-O3'
-            
-            #env.append_value('DEFINES', '_FILE_OFFSET_BITS=64 _LARGEFILE_SOURCE __POSIX'.split())
+
             env.append_value('CFLAGS', '-fPIC'.split())
-            
-            #for some reason using CXXDEFINES_THREAD won't work w/uselib... so using FLAGS instead
-            env.append_value('CFLAGS_THREAD', '-D_REENTRANT')
     
     #Solaris
     elif re.match(solarisRegex, sys_platform):
@@ -1213,6 +1212,7 @@ def configure(self):
             config['cxx']['optz_fastest']   = '-xO5'
             env['CXXFLAGS_cxxshlib']        = ['-KPIC', '-DPIC']
 
+            # DEFINES apply to both suncc and sunc++
             env.append_value('DEFINES', '_FILE_OFFSET_BITS=64 _LARGEFILE_SOURCE'.split())
             env.append_value('CXXFLAGS', '-KPIC -instances=global'.split())
             env.append_value('CXXFLAGS_THREAD', '-mt')
@@ -1232,18 +1232,14 @@ def configure(self):
             config['cc']['optz_fastest']   = '-xO5'
             env['CFLAGS_cshlib']           = ['-KPIC', '-DPIC']
 
-            #env.append_value('DEFINES', '_FILE_OFFSET_BITS=64 _LARGEFILE_SOURCE'.split())
             env.append_value('CFLAGS', '-KPIC'.split())
             env.append_value('CFLAGS_THREAD', '-mt')
 
     elif re.match(winRegex, sys_platform):
-#        if Options.options.enable64:
-#            platform = 'win'
 
         env.append_value('LIB_RPC', 'rpcrt4')
         env.append_value('LIB_SOCKET', 'Ws2_32')
-        
-        winRegex
+
         crtFlag = '/%s' % Options.options.crt
         crtDebug = '%sd' % crtFlag
 
@@ -1251,9 +1247,12 @@ def configure(self):
         stackFlag = '/STACK:80000000'
 
         # Skipping warning 4290 about how VS doesn't implement exception
-        # specifications properly.  For warnings, use /W4 because /Wall
+        # specifications properly.
+        # Skipping warning 4512 about being unable to generate an assignment
+        # operator (since we often do this intentionally).
+        # For warnings, use /W4 because /Wall
         # gives us tons of warnings in the VS headers themselves
-        warningFlags = '/W4 /wd4290'
+        warningFlags = '/W4 /wd4290 /wd4512'
         if Options.options.warningsAsErrors:
             warningFlags += ' /WX'
 
@@ -1277,6 +1276,14 @@ def configure(self):
             # compilation flag and the /DEBUG linker flag
             vars['linkflags_32'].append('/DEBUG')
             vars['linkflags_64'].append('/DEBUG')
+        else:
+            # Forcing the linker to not link incrementally.  Hoping this will
+            # avoid an intermittent race condition we're having where manifest
+            # generation fails.
+            # Incremental is implied with /DEBUG so no reason to bother
+            # setting it there
+            vars['linkflags_32'].append('/INCREMENTAL:NO')
+            vars['linkflags_64'].append('/INCREMENTAL:NO')
 
         # choose the runtime to link against
         # [/MD /MDd /MT /MTd]
@@ -1286,14 +1293,11 @@ def configure(self):
 
         defines = '_CRT_SECURE_NO_WARNINGS _FILE_OFFSET_BITS=64 _LARGEFILE_SOURCE WIN32 _USE_MATH_DEFINES NOMINMAX WIN32_LEAN_AND_MEAN'.split()
         flags = '/UUNICODE /U_UNICODE /EHs /GR'.split()
-        threadFlags = '/D_REENTRANT'
         
         env.append_value('DEFINES', defines)
+        env.append_value('DEFINES_THREAD', '_REENTRANT')
         env.append_value('CXXFLAGS', flags)
-        env.append_value('CXXFLAGS_THREAD', threadFlags)
-        
         env.append_value('CFLAGS', flags)
-        env.append_value('CFLAGS_THREAD', threadFlags)
     
     else:
         self.fatal('OS/platform currently unsupported: %s' % sys_platform)
@@ -1321,36 +1325,35 @@ def configure(self):
         optz = Options.options.with_optz
         variant.append_value('CXXFLAGS', config['cxx'].get('optz_%s' % optz, ''))
         variant.append_value('CFLAGS', config['cc'].get('optz_%s' % optz, ''))
-    
-    is64Bit = False
-    #check if the system is 64-bit capable
+
+    # Check if the system is 64-bit capable
     if re.match(winRegex, sys_platform):
-        is64Bit = Options.options.enable64
-    if not Options.options.enable32:
-        #ifdef _WIN64
-        if re.match(winRegex, sys_platform):
-            frag64 = '''
+        # For Windows, this is a function of what VS compiler we ended up
+        # finding above (regardless of if we asked for 32 vs. 64 bit on the
+        # configure line)
+        frag64 = '''
 #include <stdio.h>
 int main() {
-    #ifdef _WIN64
+#ifdef _WIN64
     printf("1");
-    #else
+#else
     printf("0");
-    #endif
+#endif
     return 0; }
 '''         
-            output = self.check(fragment=frag64, define_ret=True,
-                                execute=1, msg='Checking for 64-bit system')
-            try:
-                is64Bit = bool(int(output))
-                if is64Bit:
-                    self.msg('System size', '64-bit')
-                else:
-                    self.msg('System size', '32-bit')
-            except:{}
-        elif '64' in config['cxx']:
-            if self.check_cxx(cxxflags=config['cxx']['64'], linkflags=config['cc'].get('linkflags_64', ''), mandatory=False):
-                is64Bit = self.check_cc(cflags=config['cc']['64'], linkflags=config['cc'].get('linkflags_64', ''), mandatory=False)
+        output = self.check(fragment=frag64, define_ret=True,
+                            execute=1, msg='Checking for 64-bit system')
+        is64Bit = bool(int(output))
+    elif Options.options.enable32 or not '64' in config['cxx']:
+        is64Bit = False
+    else:
+        is64Bit = self.check_cxx(cxxflags=config['cxx']['64'],
+                                 linkflags=config['cc'].get('linkflags_64', ''),
+                                 mandatory=False) and \
+                  self.check_cc(cflags=config['cc']['64'],
+                                linkflags=config['cc'].get('linkflags_64', ''),
+                                mandatory=False)
+    self.msg('System size', '64-bit' if is64Bit else '32-bit')
 
     if is64Bit:
         if re.match(winRegex, sys_platform):
@@ -1660,3 +1663,8 @@ class CPPMSVSGenContext(msvs_generator, CPPContext):
     def __init__(self, **kw):
         self.waf_command = 'python waf'
         super(CPPMSVSGenContext, self).__init__(**kw)
+
+class CPPDumpEnvContext(dumpenv, CPPContext):
+    def __init__(self, **kw):
+        self.waf_command = 'python waf'
+        super(CPPDumpEnvContext, self).__init__(**kw)

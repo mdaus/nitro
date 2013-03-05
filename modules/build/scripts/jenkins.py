@@ -9,7 +9,7 @@ parser.add_option("-d", "--build-dir", dest="build_dir", help="Build Directory",
 parser.add_option("-c", "--config-options", dest="config_options", help="Configure Options")
 parser.add_option("-b", "--build-options", dest="build_options", help="Build Options")
 parser.add_option("--studio11-path", dest="studio11_path", help="Sun Studio 11 Compiler Path", default="/var/studio11/SUNWspro")
-parser.add_option("--studio12-path", dest="studio12_path", help="Sun Studio 12 Compiler Path", default="/var/studio12/SUNWspro")
+parser.add_option("--studio12-path", dest="studio12_path", help="Sun Studio 12 Compiler Path", default="/opt/solarisstudio12.3")
 parser.add_option("--python27-path", dest="python27_path", help="Python 2.7.x Path", default="/opt/python/v2.7.3")
 parser.add_option("--no-distclean", dest="do_distclean", help="No distclean at the end of the build", action="store_false", default=True)
 

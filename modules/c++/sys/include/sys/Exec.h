@@ -134,7 +134,10 @@ public:
     }
     
     //! make available the pipe
-    virtual const FILE* getPipe() const { return mOutStream; }
+    const FILE* getPipe() const { return mOutStream; }
+
+    //! make available the pipe
+    FILE* getPipe() { return mOutStream; }
 
     //! closes the stream connected to the child process --
     //! platform specific implementation 
