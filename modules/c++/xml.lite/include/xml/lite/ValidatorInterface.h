@@ -77,7 +77,7 @@ public:
     std::string toString() const
     {
         std::ostringstream oss;
-        oss << this;
+        oss << this->operator<<(oss);
         return oss.str();
     }
 
