@@ -34,7 +34,7 @@ int main(int argc, char** argv)
         {
             for (size_t i = 0; i < errors.size(); ++i)
             {
-                std::cout << errors[i].toString() << std::endl;
+                std::cout << errors[i] << std::endl;
             }
         }
         fis.close();
