@@ -64,20 +64,14 @@ public:
     std::string getFile() const { return mFile; }
     size_t getLine() const { return mLine; }
 
-    std::ostream& operator<< (std::ostream& out) const
-    {
-        out << "[" << this->getLevel() << "]" << 
-            " from File: " << this->getFile() << 
-            " on Line: " << str::toString(this->getLine()) << 
-            " with Message: " << this->getMessage();
-        return out;
-    }
-
     //! stream to a string
     std::string toString() const
     {
         std::ostringstream oss;
-        oss << this->operator<<(oss);
+        oss << "[" << this->getLevel() << "]" << 
+            " from File: " << this->getFile() << 
+            " on Line: " << str::toString(this->getLine()) << 
+            " with Message: " << this->getMessage();
         return oss.str();
     }
 
@@ -87,7 +81,6 @@ private:
     std::string mFile;
     size_t mLine;
 };
-
 
 /*!
  * \class ValidatorInterface
@@ -126,6 +119,14 @@ public:
 
 };
 }
+}
+
+inline std::ostream& operator<< (
+    std::ostream& out, 
+    const xml::lite::ValidationInfo& info)
+{
+    out << info.toString();
+    return out;
 }
 
 #endif

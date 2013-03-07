@@ -68,16 +68,6 @@ public:
     //! set the id to differentiate between errors
     void setID(const std::string& id) { mID = id; }
 
-    //! stream the entire log -- newline separated
-    std::ostream& operator<< (std::ostream& out) const
-    {
-        for (size_t i = 0; i < mErrorLog.size(); ++i)
-        {
-            out << mErrorLog[i].operator<<(out) << std::endl;
-        }
-        return out;
-    }
-
     //! stream to a string
     std::string toString() const
     {
@@ -130,6 +120,11 @@ protected:
 };
 }
 }
+
+//! stream the entire log -- newline separated
+std::ostream& operator<< (
+    std::ostream& out, 
+    const xml::lite::ValidationErrorHandler& errorHandler);
 
 #endif
 

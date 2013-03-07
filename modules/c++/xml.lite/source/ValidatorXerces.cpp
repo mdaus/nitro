@@ -28,6 +28,17 @@
 
 using namespace xml::lite;
 
+std::ostream& operator<< (std::ostream& out, 
+                          const ValidationErrorHandler& errorHandler)
+{
+    const std::vector<ValidationInfo>& errorLog = errorHandler.getErrorLog();
+    for (size_t i = 0; i < errorLog.size(); ++i)
+    {
+        out << errorLog[i] << std::endl;
+    }
+    return out;
+}
+
 bool xml::lite::ValidationErrorHandler::handleError(
         const ValidationError& err)
 {
