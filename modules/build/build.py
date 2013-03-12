@@ -1534,12 +1534,14 @@ def handleDefsFile(input, output, path, defs, chmod=None):
 @task_gen
 @feature('makeHeader')
 def makeHeader(tsk):
-    makeHeaderFile(output=tsk.output, path=tsk.path, defs=tsk.defs, undefs=getattr(tsk, 'undefs', None), chmod=getattr(tsk, 'chmod', None))
+    makeHeaderFile(output=tsk.output, path=tsk.path, defs=tsk.defs,
+                   undefs=getattr(tsk, 'undefs', None),
+                   chmod=getattr(tsk, 'chmod', None),
+                   guard=getattr(tsk, 'guard', '__CONFIG_H__'))
     
-def makeHeaderFile(output, path, defs, undefs=None, chmod=None):
+def makeHeaderFile(output, path, defs, undefs, chmod, guard):
     outfile = join(path.abspath(), output)
     dest = open(outfile, 'w')
-    guard = '__CONFIG_H__'
     dest.write('#ifndef %s\n#define %s\n\n' % (guard, guard))
 
     for k in defs.keys():
