@@ -178,11 +178,9 @@ xml::lite::XercesContext::XercesContext() :
     {
         mt::CriticalSection<sys::Mutex> cs(&mMutex);
         XMLPlatformUtils::Initialize();
-        mIsDestroyed = true;
     }
     catch (const ::XMLException& toCatch)
     {
-        mIsDestroyed = false;
         xml::lite::XercesLocalString local(toCatch.getMessage());
         except::Error e(Ctxt(local.str() + " (Initialization error)"));
         throw (e);
@@ -214,7 +212,6 @@ void xml::lite::XercesContext::destroy()
         }
         catch (const ::XMLException& toCatch)
         {
-            mIsDestroyed = false;
             xml::lite::XercesLocalString local(toCatch.getMessage());
             except::Error e(Ctxt(local.str() + " (Termination error)"));
             throw (e);
