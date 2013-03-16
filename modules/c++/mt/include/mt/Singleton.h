@@ -69,6 +69,32 @@ namespace mt
  * memory address.
  * 
  */
+template <bool AutoDestroy> struct SingletonAutoDestroyer
+{
+    static void registerAtExit(void (*)(void))
+    {
+        /* When AutoDestroy is false, we want to do nothing */
+    }
+};
+
+template <> struct SingletonAutoDestroyer<true>
+{
+    static void registerAtExit(void (*function)(void))
+    {
+#if defined(__SunOS_5_10)
+/*
+ * Fix for Solaris bug where atexit is not extern C++
+ * http://bugs.opensolaris.org/bugdatabase/view_bug.do;jsessionid=9c8c03419fb896b730de20cd53ae?bug_id=6455603
+ */
+#   if !defined(ELIMINATE_BROKEN_LINKAGE)
+        atexit(function);
+#   endif
+#else
+        std::atexit(function);
+#endif
+    }
+};
+
 template<typename T, bool AutoDestroy = false>
 class Singleton
 {
@@ -113,20 +139,7 @@ T& Singleton<T, AutoDestroy>::getInstance()
         if (mInstance == 0)
         {
             mInstance = new T; //create the instance
-            if (AutoDestroy)
-            {
-#if defined(__SunOS_5_10)
-/* 
- * Fix for Solaris bug where atexit is not extern C++
- * http://bugs.opensolaris.org/bugdatabase/view_bug.do;jsessionid=9c8c03419fb896b730de20cd53ae?bug_id=6455603
- */
-#   if !defined(ELIMINATE_BROKEN_LINKAGE)
-                atexit(destroy);
-#   endif
-#else
-                std::atexit(destroy);
-#endif
-            }
+            SingletonAutoDestroyer<AutoDestroy>::registerAtExit(destroy);
         }
     }
     return *mInstance;
