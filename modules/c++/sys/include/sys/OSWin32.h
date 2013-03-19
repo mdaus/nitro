@@ -186,7 +186,7 @@ public:
 			const std::string& val,
 			bool overwrite);
 
-
+    virtual size_t getNumCPUs() const;
 };
 
 

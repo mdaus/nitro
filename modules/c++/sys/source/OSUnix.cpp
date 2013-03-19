@@ -24,6 +24,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #include "sys/OSUnix.h"
 #include "sys/File.h"
@@ -245,6 +246,10 @@ void sys::OSUnix::setEnv(const std::string& var,
     }
 }
 
+size_t sys::OSUnix::getNumCPUs() const
+{
+    return sysconf(_SC_NPROCESSORS_ONLN);
+}
 
 void sys::DirectoryUnix::close()
 {

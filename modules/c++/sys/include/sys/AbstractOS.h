@@ -194,6 +194,8 @@ public:
     virtual Pid_T getProcessId() const = 0;
 
     virtual std::string getDSOSuffix() const = 0;
+
+    virtual size_t getNumCPUs() const = 0;
 };
 
 class AbstractDirectory
