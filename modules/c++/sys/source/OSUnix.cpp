@@ -248,7 +248,11 @@ void sys::OSUnix::setEnv(const std::string& var,
 
 size_t sys::OSUnix::getNumCPUs() const
 {
+#ifdef _SC_NPROCESSORS_ONLN
     return sysconf(_SC_NPROCESSORS_ONLN);
+#else
+    throw except::NotImplementedException(Ctxt("Unable to get the number of CPUs"));
+#endif
 }
 
 void sys::DirectoryUnix::close()
