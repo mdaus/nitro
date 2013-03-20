@@ -54,6 +54,9 @@ bool xml::lite::ValidationErrorHandler::handleError(
     case xercesc::DOMError::DOM_SEVERITY_FATAL_ERROR : 
         level = "FATAL"; 
         break;
+    default :
+        level = "WARNING"; 
+        break;
     }
 
     // transcode the file and message
@@ -144,14 +147,9 @@ ValidatorXerces::ValidatorXerces(
     mSchemaPool->lockPool();
 }
 
-ValidatorXerces::~ValidatorXerces()
-{
-}
-
-bool ValidatorXerces::validate(std::vector<ValidationInfo>& errors,
+bool ValidatorXerces::validate(const std::string& xml,
                                const std::string& xmlID,
-                               io::InputStream& xml,
-                               sys::SSize_T size)
+                               std::vector<ValidationInfo>& errors) const
 {
     // clear the log before its use -- 
     // however we do not clear the users 'errors' because 
@@ -167,12 +165,8 @@ bool ValidatorXerces::validate(std::vector<ValidationInfo>& errors,
         xercesc::XMLPlatformUtils::fgMemoryManager);
 
     // expand to the wide character data for use with xerces
-    io::ByteStream bs;
-    xml.streamTo(bs);
-
-    input.setStringData(
-        xercesc::XMLString::transcode(
-            bs.stream().str().c_str()));
+    xml::lite::XercesLocalString xmlWide(xml.c_str());
+    input.setStringData(xmlWide.toXMLCh());
 
     // validate the document
     mValidator->parse(&input);
@@ -185,7 +179,17 @@ bool ValidatorXerces::validate(std::vector<ValidationInfo>& errors,
     // reset the id
     mErrorHandler->setID("");
 
-    return (mErrorHandler->getErrorLog().size() > 0);
+    return (!mErrorHandler->getErrorLog().empty());
+}
+
+bool ValidatorXerces::validate(io::InputStream& xml,
+                               const std::string& xmlID,
+                               std::vector<ValidationInfo>& errors) const
+{
+    // convert to std::string
+    io::ByteStream bs;
+    xml.streamTo(bs);
+    return validate(bs.stream().str(), xmlID, errors);
 }
 
 #endif

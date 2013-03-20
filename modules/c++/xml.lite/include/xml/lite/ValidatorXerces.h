@@ -97,21 +97,26 @@ public:
     ValidatorXerces(const std::vector<std::string>& schemaPaths, 
                     bool recursive = true);
 
-    //! Destructor.
-    virtual ~ValidatorXerces();
-
     /*!
-     *  Validation against the internal schema
-     *  \param errors  Object for returning errors found
-     *  \param is      This is the input stream to feed the parser
-     *  \param size    This is the size of the stream to feed the parser
+     *  Validation against the internal schema pool
+     *  \param xml     Input stream to the xml document to validate
+     *  \param xmlID   Identifier for this input xml within the error log
+     *  \param errors  Object for returning errors found (errors are appended)
      */
-    virtual bool validate(std::vector<ValidationInfo>& errors,
+    virtual bool validate(io::InputStream& xml,
                           const std::string& xmlID,
-                          io::InputStream& xml, 
-                          sys::SSize_T size = io::InputStream::IS_END);
+                          std::vector<ValidationInfo>& errors) const;
+    /*!
+     *  Validation against the internal schema pool
+     *  \param xml     The xml document string to validate
+     *  \param xmlID   Identifier for this input xml within the error log
+     *  \param errors  Object for returning errors found (errors are appended)
+     */
+    virtual bool validate(const std::string& xml,
+                          const std::string& xmlID,
+                          std::vector<ValidationInfo>& errors) const;
 
-protected:
+private:
 
     std::auto_ptr<xercesc::XMLGrammarPool> mSchemaPool;
     std::auto_ptr<xml::lite::ValidationErrorHandler> mErrorHandler;

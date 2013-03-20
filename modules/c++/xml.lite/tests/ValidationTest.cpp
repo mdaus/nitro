@@ -30,7 +30,7 @@ int main(int argc, char** argv)
         sys::Path path(options->get<std::string> ("xml"));
 
         io::FileInputStream fis(path.getPath());
-        if (validator.validate(errors, path.getPath(), fis))
+        if (validator.validate(fis, path.getPath(), errors))
         {
             for (size_t i = 0; i < errors.size(); ++i)
             {
