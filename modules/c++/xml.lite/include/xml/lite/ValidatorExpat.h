@@ -47,7 +47,7 @@ public:
         ValidatorInterface()
     {
         throw except::Exception(Ctxt(
-            "Expat does not supported Schema Validation"));
+            "Expat does not support Schema Validation"));
     }
 
     using ValidatorInterface::validate;
@@ -63,7 +63,7 @@ public:
                           std::vector<ValidationInfo>& errors) const
     {
         throw except::Exception(Ctxt(
-            "Expat does not supported Schema Validation"));
+            "Expat does not support Schema Validation"));
     }
 
 };
