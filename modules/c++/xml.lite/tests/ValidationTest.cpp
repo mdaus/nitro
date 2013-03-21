@@ -3,6 +3,7 @@
 #include <import/io.h>
 #include <import/mem.h>
 #include <import/sys.h>
+#include <import/logging.h>
 
 int main(int argc, char** argv)
 {
@@ -20,10 +21,13 @@ int main(int argc, char** argv)
         // parse!
         const std::auto_ptr<cli::Results>
             options(parser.parse(argc, (const char**) argv));
+        std::auto_ptr<logging::Logger> log(
+            logging::setupLogger("ValidationTest"));
 
         std::vector<std::string> schemaPaths;
         schemaPaths.push_back(options->get<std::string> ("schema"));
-        xml::lite::Validator validator(schemaPaths, 
+        xml::lite::Validator validator(schemaPaths,
+                                       log.get(),
                                        options->get<bool> ("recursive"));
 
         std::vector<xml::lite::ValidationInfo> errors;

@@ -42,6 +42,8 @@
 #include <xercesc/util/PlatformUtils.hpp>
 #include <xercesc/util/XMLString.hpp>
 
+#include <logging/Logger.h>
+
 namespace xml
 {
 namespace lite
@@ -72,11 +74,14 @@ public:
     std::string toString() const
     {
         std::ostringstream oss;
-        oss << this;
+        for (size_t i = 0; i < mErrorLog.size(); ++i)
+        {
+            oss << mErrorLog[i] << std::endl;
+        }
         return oss.str();
     }
 
-protected:
+private:
     std::vector<ValidationInfo> mErrorLog;
     std::string mID;
 };
@@ -87,7 +92,7 @@ protected:
  *
  * This class is the Xercesc schema validator
  */
-class ValidatorXerces
+class ValidatorXerces : public ValidatorInterface
 {
 private:
     XercesContext mCtxt;    //! this must be the first member listed
@@ -95,17 +100,11 @@ private:
 public:
 
     ValidatorXerces(const std::vector<std::string>& schemaPaths, 
+                    logging::Logger* log,
                     bool recursive = true);
 
-    /*!
-     *  Validation against the internal schema pool
-     *  \param xml     Input stream to the xml document to validate
-     *  \param xmlID   Identifier for this input xml within the error log
-     *  \param errors  Object for returning errors found (errors are appended)
-     */
-    virtual bool validate(io::InputStream& xml,
-                          const std::string& xmlID,
-                          std::vector<ValidationInfo>& errors) const;
+    using ValidatorInterface::validate;
+
     /*!
      *  Validation against the internal schema pool
      *  \param xml     The xml document string to validate

@@ -31,11 +31,7 @@ using namespace xml::lite;
 std::ostream& operator<< (std::ostream& out, 
                           const ValidationErrorHandler& errorHandler)
 {
-    const std::vector<ValidationInfo>& errorLog = errorHandler.getErrorLog();
-    for (size_t i = 0; i < errorLog.size(); ++i)
-    {
-        out << errorLog[i] << std::endl;
-    }
+    out << errorHandler.toString() << std::endl;
     return out;
 }
 
@@ -73,7 +69,10 @@ bool xml::lite::ValidationErrorHandler::handleError(
 
 
 ValidatorXerces::ValidatorXerces(
-    const std::vector<std::string>& schemaPaths, bool recursive)
+    const std::vector<std::string>& schemaPaths, 
+    logging::Logger* log,
+    bool recursive) :
+    ValidatorInterface()
 {
     // add each schema into a grammar pool --
     // this allows reuse
@@ -138,8 +137,9 @@ ValidatorXerces::ValidatorXerces(
                                      xercesc::Grammar::SchemaGrammarType,
                                      true))
         {
-            std::cout << "Error: Failure to load schema " << 
-                schemas[i] << std::endl;
+            std::ostringstream oss;
+            oss << "Error: Failure to load schema " << schemas[i];
+            log->warn(Ctxt(oss.str()));
         }
     }
 
@@ -181,15 +181,4 @@ bool ValidatorXerces::validate(const std::string& xml,
 
     return (!mErrorHandler->getErrorLog().empty());
 }
-
-bool ValidatorXerces::validate(io::InputStream& xml,
-                               const std::string& xmlID,
-                               std::vector<ValidationInfo>& errors) const
-{
-    // convert to std::string
-    io::ByteStream bs;
-    xml.streamTo(bs);
-    return validate(bs.stream().str(), xmlID, errors);
-}
-
 #endif

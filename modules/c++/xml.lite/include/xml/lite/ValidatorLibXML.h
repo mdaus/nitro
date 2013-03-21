@@ -39,28 +39,18 @@ namespace lite
  * This class is the LibXML schema validator
  * TODO: Implement this solution
  */
-class ValidatorLibXML
+class ValidatorLibXML : public ValidatorInterface
 {
 public:
 
     ValidatorLibXML(const std::vector<std::string>& schemaPaths, 
-                    bool recursive = true)
-    {
-        throw except::Exception(Ctxt("LibXML Validation Unimplemented"));
-    }               
-
-    /*!
-     *  Validation against the internal schema pool
-     *  \param xml     Input stream to the xml document to validate
-     *  \param xmlID   Identifier for this input xml within the error log
-     *  \param errors  Object for returning errors found (errors are appended)
-     */
-    virtual bool validate(io::InputStream& xml,
-                          const std::string& xmlID,
-                          std::vector<ValidationInfo>& errors) const
+                    bool recursive = true) :
+        ValidatorInterface()
     {
         throw except::Exception(Ctxt("LibXML Validation Unimplemented"));
     }
+
+    using ValidatorInterface::validate;
 
     /*!
      *  Validation against the internal schema pool

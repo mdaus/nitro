@@ -100,8 +100,7 @@ public:
     };
 
     //! Constructor.
-    ValidatorInterface(const std::vector<std::string>& schemaPaths, 
-                       bool recursive = true) {}
+    ValidatorInterface() {}
 
     //! Destructor.
     virtual ~ValidatorInterface() {}
@@ -112,9 +111,15 @@ public:
      *  \param xmlID   Identifier for this input xml within the error log
      *  \param errors  Object for returning errors found (errors are appended)
      */
-    virtual bool validate(io::InputStream& xml,
-                          const std::string& xmlID,
-                          std::vector<ValidationInfo>& errors) const = 0;
+    bool validate(io::InputStream& xml,
+                  const std::string& xmlID,
+                  std::vector<ValidationInfo>& errors) const
+    {
+        // convert to std::string
+        io::ByteStream bs;
+        xml.streamTo(bs);
+        return validate(bs.stream().str(), xmlID, errors);
+    }
 
     /*!
      *  Validation against the internal schema pool

@@ -38,28 +38,19 @@ namespace lite
  *
  * This class is the Expat schema validator
  */
-class ValidatorExpat
+class ValidatorExpat : public ValidatorInterface
 {
 public:
 
     ValidatorExpat(const std::vector<std::string>& schemaPaths, 
-                   bool recursive = true)
+                   bool recursive = true) :
+        ValidatorInterface()
     {
-        throw except::Exception(Ctxt("Expat Validation is Unsupported"));
+        throw except::Exception(Ctxt(
+            "Expat does not supported Schema Validation"));
     }
 
-    /*!
-     *  Validation against the internal schema pool
-     *  \param xml     Input stream to the xml document to validate
-     *  \param xmlID   Identifier for this input xml within the error log
-     *  \param errors  Object for returning errors found (errors are appended)
-     */
-    virtual bool validate(io::InputStream& xml,
-                          const std::string& xmlID,
-                          std::vector<ValidationInfo>& errors) const
-    {
-        throw except::Exception(Ctxt("Expat Validation is Unsupported"));
-    }
+    using ValidatorInterface::validate;
 
     /*!
      *  Validation against the internal schema pool
@@ -71,7 +62,8 @@ public:
                           const std::string& xmlID,
                           std::vector<ValidationInfo>& errors) const
     {
-        throw except::Exception(Ctxt("Expat Validation is Unsupported"));
+        throw except::Exception(Ctxt(
+            "Expat does not supported Schema Validation"));
     }
 
 };
