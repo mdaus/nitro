@@ -42,8 +42,6 @@
 #include <xercesc/util/PlatformUtils.hpp>
 #include <xercesc/util/XMLString.hpp>
 
-#include <logging/Logger.h>
-
 namespace xml
 {
 namespace lite
@@ -99,6 +97,14 @@ private:
 
 public:
 
+    /*! 
+     *  Constructor
+     *  \param schemaPaths  Vector of both paths and singular schemas
+     *                      Note: All schemas must end in *.xsd
+     *  \param log          Logger for reporting errors
+     *  \param recursive    Do a recursive search for schemas on directory 
+     *                      input
+     */
     ValidatorXerces(const std::vector<std::string>& schemaPaths, 
                     logging::Logger* log,
                     bool recursive = true);

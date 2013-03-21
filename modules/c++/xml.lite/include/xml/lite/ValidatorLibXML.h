@@ -43,9 +43,18 @@ class ValidatorLibXML : public ValidatorInterface
 {
 public:
 
+    /*! 
+     *  Constructor
+     *  \param schemaPaths  Vector of both paths and singular schemas
+     *                      Note: All schemas must end in *.xsd
+     *  \param log          Logger for reporting errors
+     *  \param recursive    Do a recursive search for schemas on directory 
+     *                      input
+     */
     ValidatorLibXML(const std::vector<std::string>& schemaPaths, 
+                    logging::Logger* log,
                     bool recursive = true) :
-        ValidatorInterface()
+        ValidatorInterface(schemaPaths, log, recursive)
     {
         throw except::Exception(Ctxt("LibXML Validation Unimplemented"));
     }

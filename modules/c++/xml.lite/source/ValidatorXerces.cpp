@@ -72,7 +72,7 @@ ValidatorXerces::ValidatorXerces(
     const std::vector<std::string>& schemaPaths, 
     logging::Logger* log,
     bool recursive) :
-    ValidatorInterface()
+    ValidatorInterface(schemaPaths, log, recursive)
 {
     // add each schema into a grammar pool --
     // this allows reuse
