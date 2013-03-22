@@ -386,28 +386,20 @@ public:
     {
         sys::OS os;
 
+        //! throw if not present
         if ( !os.exists( dirName ) )
         {
             eh->onPluginDirectoryNotFound(dirName);
-            return;
         }
 
-        sys::Directory dir;
-        const char* file = dir.findFirstFile( dirName.c_str() );
-
-        do
+        //! load all the shared libraries found (non-recursive)
+        std::vector<std::string> paths(1, dirName);
+        std::vector<std::string> sharedLibs = 
+            os.search(paths, "", PLUGIN_DSO_EXTENSION, false);
+        for (size_t i = 0; i < sharedLibs.size(); ++i)
         {
-            std::string x = dirName + "/" + std::string(file);
-            // Load this...
-            if ( str::endsWith( x, PLUGIN_DSO_EXTENSION ) )
-            {
-                loadPlugin(x, eh);
-            }
-
-            file = dir.findNextFile();
+            loadPlugin(sharedLibs[i], eh);
         }
-        while ( file != NULL );
-
     }
 
 protected:
