@@ -86,9 +86,6 @@ public:
         return mDriverContentHandler->retrieveXMLLiteContentHandler();
     }
 
-    virtual void setValidation(bool validate);
-    virtual bool getValidation();
-
     /*!
      *  This method should be handed a new-allocated ContentHandler.
      *  It will set this internally.

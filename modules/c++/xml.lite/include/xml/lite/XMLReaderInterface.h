@@ -69,9 +69,6 @@ public:
     //! Method to destroy an xml reader
     virtual void destroy() = 0;
 
-    virtual void setValidation(bool validate) = 0;
-    virtual bool getValidation() = 0;
-
     virtual std::string getDriverName() const = 0;
 
 private:

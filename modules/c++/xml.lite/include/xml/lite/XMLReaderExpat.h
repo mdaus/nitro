@@ -156,15 +156,6 @@ public:
         return XML_GetCurrentByteIndex(mNative);
     }
 
-    virtual void setValidation(bool validate)
-    {
-    }
-    virtual bool getValidation()
-    {
-        return false;
-    }
-
-
     std::string getDriverName() const { return "expat"; }
 
 private:

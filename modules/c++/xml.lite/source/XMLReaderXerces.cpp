@@ -53,20 +53,6 @@ void xml::lite::XMLReaderXerces::parse(io::InputStream & is, int size)
     delete [] buffer;
 }
 
-void xml::lite::XMLReaderXerces::setValidation(bool validate)
-{
-    mNative->setFeature(XMLUni::fgSAX2CoreNameSpacePrefixes, true);
-    mNative->setFeature(XMLUni::fgXercesSchema, validate);
-    mNative->setFeature(XMLUni::fgSAX2CoreValidation, validate); // optional
-    mNative->setFeature(XMLUni::fgSAX2CoreNameSpaces, true);     // optional
-}
-
-bool xml::lite::XMLReaderXerces::getValidation()
-{
-    return mNative->getFeature(XMLUni::fgSAX2CoreValidation);
-}
-
-
 // This function creates the parser
 void xml::lite::XMLReaderXerces::create()
 {
