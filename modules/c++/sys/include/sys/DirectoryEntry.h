@@ -42,7 +42,7 @@ public:
         if (!path.exists() || !path.isDirectory())
             throw except::FileNotFoundException(Ctxt(path.getPath()));
 
-        mCurrent = mDir.findFirstFile(path.getPath().c_str());
+        mCurrent = mDir.findFirstFile(path.getPath());
         mFirst.reset(this);
         mLast.reset(NULL);
 
@@ -61,9 +61,10 @@ public:
     }
     */
 
-    DirectoryEntry(const std::string& dirName) : mDirName(dirName)
+    DirectoryEntry(const std::string& dirName) : 
+        mDirName(dirName)
     {
-        mCurrent = mDir.findFirstFile(dirName.c_str());
+        mCurrent = mDir.findFirstFile(dirName);
         mFirst.reset(this);
         mLast.reset(NULL);
     }
@@ -73,7 +74,7 @@ public:
     {
         mCurrent = mDir.findNextFile();
     }
-    virtual const char* getCurrent() const
+    virtual std::string getCurrent() const
     {
         return mCurrent;
     }
@@ -98,13 +99,15 @@ public:
         Iterator& operator++()
         {
             mEntry->next();
-            if (mEntry->mCurrent == NULL) mEntry = NULL;
+            if (mEntry->mCurrent.empty()) 
+                mEntry = NULL;
             return *this;
         }
         std::string operator*() const
         {
-            if (!mEntry->mCurrent)
-                throw except::NullPointerReference(Ctxt("DirectoryEntry::Iterator NULL entry not allowed"));
+            if (mEntry->mCurrent.empty())
+                throw except::NullPointerReference(Ctxt(
+                    "DirectoryEntry::Iterator NULL entry not allowed"));
             return std::string(mEntry->mCurrent);
         }
         DirectoryEntry* get() const
@@ -135,7 +138,7 @@ public:
 private:
     Iterator mFirst;
     Iterator mLast;
-    const char* mCurrent;
+    std::string mCurrent;
     std::string mDirName;
     Directory mDir;
     //   DirectoryEntry mDirLast;

@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of re-c++ 
+ * This file is part of xml.lite-c++ 
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
  *
- * re-c++ is free software; you can redistribute it and/or modify
+ * xml.lite-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -20,11 +20,42 @@
  *
  */
 
-#ifndef __IMPORT_RE_H__
-#define __IMPORT_RE_H__
+#ifndef __XML_LITE_VALIDATOR_H__
+#define __XML_LITE_VALIDATOR_H__
 
-#include "re/PCREException.h"
-#include "re/PCRE.h"
-#include "re/RegexPredicate.h"
+
+#if defined(USE_XERCES)
+#  include "xml/lite/ValidatorXerces.h"
+namespace xml
+{
+namespace lite
+{
+
+typedef ValidatorXerces Validator;
+}
+
+}
+#elif defined(USE_LIBXML)
+#  include "xml/lite/ValidatorLibXML.h"
+namespace xml
+{
+namespace lite
+{
+typedef ValidatorLibXML Validator;
+}
+}
+#else
+#  if !defined(USE_EXPAT)
+#    define USE_EXPAT 1
+#  endif
+#  include "xml/lite/ValidatorExpat.h"
+namespace xml
+{
+namespace lite
+{
+typedef ValidatorExpat Validator;
+}
+}
+#endif
 
 #endif

@@ -156,13 +156,17 @@ std::string sys::Path::absolutePath(const std::string& path)
     std::string osDelimStr(sys::Path::delimiter());
 
     sys::Path::StringPair driveParts = sys::Path::splitDrive(path);
-    if (!str::startsWith(path, osDelimStr) && !str::startsWith(path, "/")
-            && driveParts.first.empty())
-        return sys::Path::normalizePath(
-                                        sys::Path::joinPaths(
-                                                             sys::OS().getCurrentWorkingDirectory(),
-                                                             path));
-    return sys::Path::normalizePath(path);
+    if (!str::startsWith(path, osDelimStr) && 
+        !str::startsWith(path, "/") && 
+        driveParts.first.empty())
+    {
+        return sys::Path::normalizePath(sys::Path::joinPaths(
+            sys::OS().getCurrentWorkingDirectory(), path));
+    }
+    else
+    {
+        return sys::Path::normalizePath(path);
+    }
 }
 
 sys::Path::StringPair sys::Path::splitPath(const std::string& path)
@@ -251,8 +255,8 @@ std::vector<std::string> sys::Path::list() const
     }
     std::vector<std::string> listing;
     sys::Directory directory;
-    const char* p = directory.findFirstFile(mPathName.c_str());
-    while (p != NULL)
+    std::string p = directory.findFirstFile(mPathName.c_str());
+    while (!p.empty())
     {
         listing.push_back(p);
         p = directory.findNextFile();

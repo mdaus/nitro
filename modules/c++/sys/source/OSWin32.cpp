@@ -61,52 +61,34 @@ std::string sys::OSWin32::getNodeName() const
     char buffer[512];
     size_t size = 512;
     if (GetComputerName(buffer, (LPDWORD)&size))
-	return std::string(buffer, size);
+        return std::string(buffer, size);
     else return std::string("Unknown");
-}
-
-void sys::OSWin32::search(std::vector<std::string>& exhaustiveEnumerations,
-                          const std::string& fragment,
-                          std::string filter,
-                          std::string pathList) const
-{
-#if 0
-    std::vector<std::string> paths =
-        str::Tokenizer(pathList, ";");
-
-    for (unsigned int x = 0; x < paths.size(); x++)
-    {
-        WIN32_FIND_DATA fileData;
-        std::string fullPath = paths[x] +
-                               std::string("\\*") +
-                               std::string(fragment) +
-                               std::string("*.") +
-                               std::string(filter);
-
-        if (FindFirstFile(fullPath.c_str(),
-                          &fileData) != INVALID_HANDLE_VALUE)
-            return std::string(paths[x] +
-                               "\\" + std::string(fileData.cFileName));
-    }
-    return std::string("");
-#else
-    throw except::Exception("This function is not implemented yet");
-#endif
 }
 
 bool sys::OSWin32::exists(const std::string& path) const
 {
-    bool doesExist = true;
-    WIN32_FIND_DATA fileData;
+    const DWORD what = GetFileAttributes(path.c_str());
 
-    HANDLE handle = FindFirstFile(path.c_str(), &fileData);
-    if (handle == INVALID_HANDLE_VALUE)
-        doesExist = false;
-    else
-        FindClose(handle);
-    return doesExist;
+    if (what == INVALID_FILE_ATTRIBUTES)
+    {
+        DWORD errCode = GetLastError();
+        if (errCode != ERROR_FILE_NOT_FOUND)
+        {
+            char* err = NULL;
+            FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | 
+                          FORMAT_MESSAGE_FROM_SYSTEM,
+                          NULL, errCode,
+                          MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+                          (LPTSTR) &err, 0, NULL);
+            throw except::Exception(Ctxt(
+                "Problem while testing file existence for " + path +
+                " with Error: " + std::string(err)));
+        }
+        return false;
+    }
+
+    return true;
 }
-
 
 sys::Pid_T sys::OSWin32::getProcessId() const
 {
@@ -116,13 +98,14 @@ sys::Pid_T sys::OSWin32::getProcessId() const
 bool sys::OSWin32::remove(const std::string& path) const
 {
     if (isDirectory(path))
-	return (RemoveDirectory(path.c_str())) ? (true): (false);
+        return (RemoveDirectory(path.c_str())) ? (true): (false);
 
     return (DeleteFile(path.c_str() )) ? (true) : (false);
 }
 
 
-bool sys::OSWin32::move(const std::string& path, const std::string& newPath) const
+bool sys::OSWin32::move(const std::string& path, 
+                        const std::string& newPath) const
 {
     return (MoveFile(path.c_str(), newPath.c_str())) ? (true) : (false);
 }
@@ -168,8 +151,8 @@ bool sys::OSWin32::changeDirectory(const std::string& path) const
     return SetCurrentDirectory(path.c_str()) ? true : false;
 }
 
-std::string sys::OSWin32::getTempName(std::string path,
-                                      std::string prefix) const
+std::string sys::OSWin32::getTempName(const std::string& path,
+                                      const std::string& prefix) const
 {
     char buffer[MAX_PATH];
     if (GetTempFileName(path.c_str(),
@@ -209,7 +192,8 @@ std::string sys::OSWin32::getEnv(const std::string& s) const
     std::string result;
     DWORD size = GetEnvironmentVariable(s.c_str(), NULL, 0);
     if (size == 0)
-      throw sys::SystemException(Ctxt(FmtX("Unable to get windows environment variable %s", s.c_str())));
+        throw sys::SystemException(Ctxt(FmtX(
+            "Unable to get windows environment variable %s", s.c_str())));
 
     // If we can use a normal size buffer, lets not bother to malloc
 
@@ -222,12 +206,13 @@ std::string sys::OSWin32::getEnv(const std::string& s) const
 }
 
 void sys::OSWin32::setEnv(const std::string& var, 
-			 const std::string& val,
-			 bool overwrite)
+                          const std::string& val,
+                          bool overwrite)
 {
     BOOL ret = SetEnvironmentVariable(var.c_str(), val.c_str());
     if(!ret)
-      throw sys::SystemException(Ctxt(FmtX("Unable to set windows environment variable %s", var.c_str())));
+        throw sys::SystemException(Ctxt(FmtX(
+            "Unable to set windows environment variable %s", var.c_str())));
 }
 
 size_t sys::OSWin32::getNumCPUs() const
@@ -244,19 +229,20 @@ void sys::DirectoryWin32::close()
     mHandle = INVALID_HANDLE_VALUE;
 }
 
-const char* sys::DirectoryWin32::findFirstFile(const char* dir)
+std::string sys::DirectoryWin32::findFirstFile(const std::string& dir)
 {
     std::string plusWC = dir;
     plusWC += std::string("\\*");
     mHandle = ::FindFirstFile(plusWC.c_str(), &mFileData);
-    if (mHandle == INVALID_HANDLE_VALUE) return NULL;
+    if (mHandle == INVALID_HANDLE_VALUE) 
+        return "";
     return mFileData.cFileName;
 }
 
-const char* sys::DirectoryWin32::findNextFile()
+std::string sys::DirectoryWin32::findNextFile()
 {
     if (::FindNextFile(mHandle, &mFileData) == 0)
-        return NULL;
+        return "";
     return mFileData.cFileName;
 }
 

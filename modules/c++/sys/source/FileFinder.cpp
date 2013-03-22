@@ -25,17 +25,51 @@
 #include "sys/DirectoryEntry.h"
 #include "sys/Path.h"
 
-bool sys::FileOnlyPredicate::operator()(const std::string& filename)
+bool sys::ExistsPredicate::operator()(const std::string& entry) const
 {
-    return sys::Path(filename).isFile();
+    return sys::Path(entry).exists();
 }
 
-sys::ExtensionPredicate::ExtensionPredicate(std::string ext, bool ignoreCase) :
+bool sys::FileOnlyPredicate::operator()(const std::string& entry) const
+{
+    return sys::Path(entry).isFile();
+}
+
+bool sys::DirectoryOnlyPredicate::operator()(const std::string& entry) const
+{
+    return sys::Path(entry).isDirectory();
+}
+
+sys::FragmentPredicate::FragmentPredicate(const std::string& fragment,
+                                          bool ignoreCase) :
+    mFragment(fragment), mIgnoreCase(ignoreCase)
+{
+}
+
+bool sys::FragmentPredicate::operator()(const std::string& entry) const
+{
+    if (mIgnoreCase)
+    {
+        std::string base = entry;
+        str::lower(base);
+
+        std::string match = mFragment;
+        str::lower(match);
+
+        return str::contains(base, match);
+    }
+    else
+        return str::contains(entry, mFragment);
+}
+
+
+sys::ExtensionPredicate::ExtensionPredicate(const std::string& ext, 
+                                            bool ignoreCase) :
     mExt(ext), mIgnoreCase(ignoreCase)
 {
 }
 
-bool sys::ExtensionPredicate::operator()(const std::string& filename)
+bool sys::ExtensionPredicate::operator()(const std::string& filename) const
 {
     if (!sys::FileOnlyPredicate::operator()(filename))
         return false;
@@ -48,111 +82,121 @@ bool sys::ExtensionPredicate::operator()(const std::string& filename)
         str::lower(ext);
         return ext == matchExt;
     }
-    return ext == mExt;
+    else
+        return ext == mExt;
 }
 
-sys::MultiFilePredicate::MultiFilePredicate(bool orOperator) :
-    mOrOperator(orOperator)
+sys::NotPredicate::NotPredicate(FilePredicate* filter, bool ownIt) :
+    mPredicate(sys::NotPredicate::PredicatePair(filter, ownIt))
 {
 }
-sys::MultiFilePredicate::~MultiFilePredicate()
+
+sys::NotPredicate::~NotPredicate()
 {
-    for (size_t i = 0, n = mPredicates.size(); i < n; ++i)
+    if (mPredicate.second && mPredicate.first)
     {
-        sys::MultiFilePredicate::PredicatePair& p = mPredicates[i];
-        if (p.first && p.second)
-            delete p.first;
+        FilePredicate* tmp = mPredicate.first;
+        mPredicate.first = NULL;
+        delete tmp;
     }
 }
 
-bool sys::MultiFilePredicate::operator()(const std::string& filename)
+bool sys::NotPredicate::operator()(const std::string& entry) const
+{
+    return !(*mPredicate.first)(entry);
+}
+
+sys::LogicalPredicate::LogicalPredicate(bool orOperator) :
+    mOrOperator(orOperator)
+{
+}
+
+sys::LogicalPredicate::~LogicalPredicate()
+{
+    for (size_t i = 0; i < mPredicates.size(); ++i)
+    {
+        sys::LogicalPredicate::PredicatePair& p = mPredicates[i];
+        if (p.first && p.second)
+        {
+            sys::FilePredicate* tmp = p.first;
+            p.first = NULL;
+            delete tmp;
+        }
+    }
+}
+
+bool sys::LogicalPredicate::operator()(const std::string& entry) const
 {
     bool ok = !mOrOperator;
     for (size_t i = 0, n = mPredicates.size(); i < n && ok != mOrOperator; ++i)
     {
-        sys::MultiFilePredicate::PredicatePair& p = mPredicates[i];
+        const sys::LogicalPredicate::PredicatePair& p = mPredicates[i];
         if (mOrOperator)
-            ok |= (p.first && (*p.first)(filename));
+            ok |= (p.first && (*p.first)(entry));
         else
-            ok &= (p.first && (*p.first)(filename));
+            ok &= (p.first && (*p.first)(entry));
     }
     return ok;
 }
 
-sys::MultiFilePredicate& sys::MultiFilePredicate::addPredicate(
-                                                               FilePredicate* filter,
-                                                               bool ownIt)
+sys::LogicalPredicate& sys::LogicalPredicate::addPredicate(
+    FilePredicate* filter,
+    bool ownIt)
 {
-    mPredicates.push_back(sys::MultiFilePredicate::PredicatePair(filter, ownIt));
+    mPredicates.push_back(
+        sys::LogicalPredicate::PredicatePair(
+            filter, ownIt));
     return *this;
 }
 
-sys::FileFinder::FileFinder(const std::vector<std::string>& searchPaths) :
-    mPaths(searchPaths)
+std::vector<std::string> sys::FileFinder::search(
+    const FilePredicate& filter,
+    const std::vector<std::string>& searchPaths, 
+    bool recursive)
 {
-}
-sys::FileFinder::~FileFinder()
-{
-    for (size_t i = 0, n = mPredicates.size(); i < n; ++i)
-    {
-        sys::FileFinder::PredicatePair& p = mPredicates[i];
-        if (p.first && p.second)
-            delete p.first;
-    }
-}
-
-sys::FileFinder& sys::FileFinder::addSearchPath(std::string path)
-{
-    mPaths.push_back(path);
-    return *this;
-}
-
-sys::FileFinder& sys::FileFinder::addPredicate(sys::FilePredicate* filter,
-                                               bool ownIt)
-{
-    mPredicates.push_back(sys::FileFinder::PredicatePair(filter, ownIt));
-    return *this;
-}
-
-std::vector<std::string> sys::FileFinder::findFiles(bool recursive) const
-{
+    // turn it into a list so we can queue additional entries
     std::list < std::string > paths;
-    std::copy(mPaths.begin(), mPaths.end(), std::back_inserter(paths));
-    std::vector < std::string > files;
-    size_t numInputPaths = mPaths.size();
+    std::copy(searchPaths.begin(), searchPaths.end(), 
+              std::back_inserter(paths));
 
+    std::vector <std::string> files;
+    size_t numInputPaths = searchPaths.size();
     for (size_t pathIdx = 0; !paths.empty(); ++pathIdx)
     {
         sys::Path path(paths.front());
         paths.pop_front();
 
-        if (path.isDirectory())
+        //! check if it exists
+        if (path.exists())
         {
-            if (pathIdx < numInputPaths || recursive)
+            // check if this meets the criteria -- 
+            // we only need one to add it
+            if (filter(path.getPath()))
             {
-                sys::DirectoryEntry d(path.getPath());
-                for (sys::DirectoryEntry::Iterator p = d.begin(); p != d.end(); ++p)
+                files.push_back(path.getPath());
+            }
+
+            // if it's a directory we need to search its contents
+            if (path.isDirectory())
+            {
+                // If its an original directory or we are recursively searching
+                if (pathIdx < numInputPaths || recursive)
                 {
-                    std::string fname(*p);
-                    if (fname != "." && fname != "..")
+                    sys::DirectoryEntry d(path.getPath());
+                    for (sys::DirectoryEntry::Iterator p = d.begin(); 
+                         p != d.end(); ++p)
                     {
-                        paths.push_back(sys::Path::joinPaths(path.getPath(),
-                                                             fname));
+                        std::string fname(*p);
+                        if (fname != "." && fname != "..")
+                        {
+                            // add it to the list
+                            paths.push_back(sys::Path::joinPaths(path.getPath(),
+                                                                 fname));
+                        }
                     }
                 }
             }
-        }
-        else if (path.exists())
-        {
-            bool addIt = true;
-            for (size_t i = 0, n = mPredicates.size(); addIt && i < n; ++i)
-            {
-                const sys::FileFinder::PredicatePair& p = mPredicates[i];
-                if (p.first)
-                    addIt = (*p.first)(path.getPath());
-            }
-            if (addIt)
-                files.push_back(path.getPath());
+
         }
     }
     return files;

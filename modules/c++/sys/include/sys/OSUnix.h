@@ -57,18 +57,6 @@ public:
     }
 
     /*!
-     *  Search for *fragment*filter recursively over path
-     *  \param exhaustiveEnumerations  All retrieved enumerations
-     *  \param fragment The fragment to search for
-     *  \param filter What to use as an extension
-     *  \param pathList  The path list (colon delimited)
-     */
-    virtual void search(std::vector<std::string>& exhaustiveEnumerations,
-                        const std::string& fragment,
-                        std::string filter = "",
-                        std::string pathList = ".") const;
-
-    /*!
      *  Gets the username for windows users
      *  \return The string name of the user
      */ 
@@ -91,7 +79,8 @@ public:
      *  Move file with this path name to the newPath
      *  \return True upon success, false if failure
      */
-    virtual bool move(const std::string& path, const std::string& newPath) const;
+    virtual bool move(const std::string& path, 
+                      const std::string& newPath) const;
 
     /*!
      *  Does this path resolve to a file?
@@ -129,8 +118,8 @@ public:
      *  Get a suitable temporary file name
      *  \return The file name
      */
-    virtual std::string getTempName(std::string path = ".",
-                                    std::string prefix = "TMP") const;
+    virtual std::string getTempName(const std::string& path = ".",
+                                    const std::string& prefix = "TMP") const;
 
     /*!
      *  Return the size in bytes of a file
@@ -163,8 +152,8 @@ public:
      *  Set an environment variable
      */
     virtual void setEnv(const std::string& var, 
-			const std::string& val,
-			bool overwrite);
+                        const std::string& val, 
+                        bool overwrite);
 
     virtual std::string getDSOSuffix() const;
 
@@ -182,8 +171,8 @@ public:
         close();
     }
     virtual void close();
-    virtual const char* findFirstFile(const char* dir);
-    virtual const char* findNextFile();
+    virtual std::string findFirstFile(const std::string& dir);
+    virtual std::string findNextFile();
     DIR* mDir;
 
 };

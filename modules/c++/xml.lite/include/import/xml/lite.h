@@ -34,6 +34,7 @@
 #include "xml/lite/MinidomHandler.h"
 #include "xml/lite/MinidomParser.h"
 #include "xml/lite/Serializable.h"
+#include "xml/lite/Validator.h"
 
 /*!
  *  \file lite.h

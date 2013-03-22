@@ -105,14 +105,6 @@ public:
         return xmlSAX2GetColumnNumber(mContextLibXML);
     }
 
-    virtual void setValidation(bool validate)
-    {
-    }
-    virtual bool getValidation()
-    {
-        return false;
-    }
-
     std::string getDriverName() const { return "libxml"; }
 
 private:

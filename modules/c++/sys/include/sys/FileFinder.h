@@ -23,19 +23,28 @@
 #ifndef __SYS_FILE_FINDER_H__
 #define __SYS_FILE_FINDER_H__
 
-#include "sys/OS.h"
 #include <functional>
+#include <vector>
 
 namespace sys
 {
 
 /**
- * Predicate interface for filenames
+ * Predicate interface for all entries
  */
-struct FilePredicate: std::unary_function<std::string, bool>
+struct FilePredicate : std::unary_function<std::string, bool>
 {
     virtual ~FilePredicate() {}
-    virtual bool operator()(const std::string& obj) = 0;
+    virtual bool operator()(const std::string& entry) const = 0;
+};
+
+/**
+ * Predicate interface for existance
+ */
+struct ExistsPredicate : FilePredicate
+{
+    virtual ~ExistsPredicate() {}
+    virtual bool operator()(const std::string& entry) const;
 };
 
 /**
@@ -44,76 +53,110 @@ struct FilePredicate: std::unary_function<std::string, bool>
 struct FileOnlyPredicate: public FilePredicate
 {
     virtual ~FileOnlyPredicate() {}
-    virtual bool operator()(const std::string& filename);
+    virtual bool operator()(const std::string& entry) const;
 };
+
+/**
+ * Predicate that matches directories only (no files)
+ */
+struct DirectoryOnlyPredicate: public FilePredicate
+{
+    virtual ~DirectoryOnlyPredicate() {}
+    virtual bool operator()(const std::string& entry) const;
+};
+
+/**
+ * Predicate that matches directories only (no files)
+ */
+struct FragmentPredicate : public FilePredicate
+{
+public:
+    FragmentPredicate(const std::string& fragment, bool ignoreCase = true);
+    bool operator()(const std::string& entry) const;
+
+private:
+    std::string mFragment;
+    bool mIgnoreCase;
+
+};
+
 
 /**
  * Predicate interface for filtering files with a specific extension
  * This method will not match '.xxx.yyy' type patterns, since the 
- * splitting routines will only find '.yyy'.  See re::GlobFilePredicate
+ * splitting routines will only find '.yyy'.  See re::RegexPredicate
  * for a more useful finder.
  */
 class ExtensionPredicate: public FileOnlyPredicate
 {
 public:
-    ExtensionPredicate(std::string ext, bool ignoreCase = true);
-    bool operator()(const std::string& filename);
+    ExtensionPredicate(const std::string& ext, bool ignoreCase = true);
+    bool operator()(const std::string& filename) const;
+
 private:
     std::string mExt;
     bool mIgnoreCase;
 };
 
-class MultiFilePredicate: public FilePredicate
+/**
+ * Predicate that does logical not of another predicate (ie !)
+ */
+class NotPredicate : public FilePredicate
 {
 public:
-    MultiFilePredicate(bool orOperator = true);
-    virtual ~MultiFilePredicate();
+    NotPredicate(FilePredicate* filter, bool ownIt = false);
+    virtual ~NotPredicate();
 
-    virtual bool operator()(const std::string& filename);
-    MultiFilePredicate& addPredicate(FilePredicate* filter, bool ownIt = false);
+    virtual bool operator()(const std::string& entry) const;
+
+protected:
+    typedef std::pair<FilePredicate*, bool> PredicatePair;
+    PredicatePair mPredicate;
+};
+
+
+/**
+ *  The LogicalPredicate class allows you to chain many 
+ *  predicates using the logical && or ||
+ */
+class LogicalPredicate : public FilePredicate
+{
+public:
+    LogicalPredicate(bool orOperator = true);
+    virtual ~LogicalPredicate();
+
+    sys::LogicalPredicate& addPredicate(FilePredicate* filter, 
+                                        bool ownIt = false);
+
+    virtual bool operator()(const std::string& entry) const;
+
 protected:
     bool mOrOperator;
     typedef std::pair<FilePredicate*, bool> PredicatePair;
     std::vector<PredicatePair> mPredicates;
 };
 
-
 /**
  * \class FileFinder
  *
- * The FileFinder class allows you to search for files/directories in a
- * clean way.
+ *  The FileFinder class allows you to search for 
+ *  files/directories in a clean way.
  */
 class FileFinder
 {
 public:
-    FileFinder(){}
-    FileFinder(const std::vector<std::string>& searchPaths);
-    ~FileFinder();
-
-    /**
-     * Add a search path
-     */
-    FileFinder& addSearchPath(std::string path);
-
-    /**
-     * Add a predicate/filter to use when searching
-     */
-    FileFinder& addPredicate(FilePredicate* filter, bool ownIt = false);
+    FileFinder() {}
+    ~FileFinder() {}
 
     /**
      * Perform the search
      * \return a std::vector<std::string> of paths that match
      */
-    std::vector<std::string> findFiles(bool recursive = false) const;
-
-protected:
-    typedef std::pair<FilePredicate*, bool> PredicatePair;
-    sys::OS mOS;
-    std::vector<std::string> mPaths;
-    std::vector<PredicatePair> mPredicates;
+    static std::vector<std::string> search(
+        const FilePredicate& filter,
+        const std::vector<std::string>& searchPaths, 
+        bool recursive = false);
 };
-
 
 }
 
