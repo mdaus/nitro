@@ -157,6 +157,7 @@ public:
 
     virtual std::string getDSOSuffix() const;
 
+    virtual size_t getNumCPUs() const;
 };
 
 

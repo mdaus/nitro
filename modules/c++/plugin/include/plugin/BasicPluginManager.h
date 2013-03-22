@@ -305,14 +305,14 @@ public:
             sys::DLL *dso = NULL;
             bool loadDSO = true;
 
-            std::string baseFile = sys::Path::basename(file);
+            std::string baseFile = sys::Path(file).getBasePath();
 
             // First check if the DSO is already loaded
             for (unsigned int i = 0; i < mDSOs.size(); ++i)
             {
 
                 std::string baseLib =
-                    sys::Path::basename(mDSOs[i]->getLibName());
+                    sys::Path(mDSOs[i]->getLibName()).getBasePath();
 
                 if (baseLib == baseFile)
                 {

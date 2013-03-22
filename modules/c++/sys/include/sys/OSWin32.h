@@ -176,6 +176,8 @@ public:
     virtual void setEnv(const std::string& var, 
                         const std::string& val,
                         bool overwrite);
+
+    virtual size_t getNumCPUs() const;
 };
 
 

@@ -43,6 +43,7 @@ int main(int argc, char **argv)
         std::cout << "Host: " << os.getNodeName() << std::endl;
         std::cout << "User path: " << os["PATH"] << std::endl;
         std::cout << "Platform: " << os.getPlatformName() << std::endl;
+        std::cout << "Num CPUs: " << os.getNumCPUs() << std::endl;
         std::cout << "The delimiter on this platform: " << os.getDelimiter()
                 << std::endl;
         std::cout << "The process id: " << os.getProcessId() << std::endl;
