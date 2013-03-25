@@ -134,14 +134,31 @@ public:
     /*!
      *  Load a set of plugins from the path specified.
      *
-     *  \param path The path of directories to load plugins from
-     *  \param eh An error handler to pass
+     *  \param path      The path of directories to load plugins from
+     *  \param eh        An error handler to pass
+     *  \param recursive Perform recursive search
      */
-    void load(const std::vector<std::string>& path, ErrorHandler* eh)
+    void load(const std::vector<std::string>& path, 
+              ErrorHandler* eh, 
+              bool recursive = false)
     {
+        sys::OS os;
+
+        //! throw if not present
         for (int i = 0; i < path.size(); ++i)
         {
-            loadDir(path[i], eh);
+            if (!os.exists(path[i]))
+            {
+                eh->onPluginDirectoryNotFound(path[i]);
+            }
+        }
+
+        //! load all the shared libraries found
+        std::vector<std::string> sharedLibs = 
+            os.search(path, "", PLUGIN_DSO_EXTENSION, recursive);
+        for (size_t i = 0; i < sharedLibs.size(); ++i)
+        {
+            loadPlugin(sharedLibs[i], eh);
         }
     }
 
@@ -371,35 +388,20 @@ public:
         }
     }
 
-
-
     /*!
      *  Load the directory identified by name.  This function is called
      *  by load() for each directory in the path.
      *
-     *  \param dirName the name of the directory
-     *  \param eh The error handler to pass in, in case something
-     *  fails.
-     *
+     *  \param dirName   The name of the directory
+     *  \param eh        The error handler to pass in, in case something
+     *                   fails.
+     *  \param recursive Perform recursive search
      */
-    virtual void loadDir(std::string dirName, ErrorHandler* eh)
+    virtual void loadDir(std::string dirName, 
+                         ErrorHandler* eh, 
+                         bool recursive = false)
     {
-        sys::OS os;
-
-        //! throw if not present
-        if ( !os.exists( dirName ) )
-        {
-            eh->onPluginDirectoryNotFound(dirName);
-        }
-
-        //! load all the shared libraries found (non-recursive)
-        std::vector<std::string> paths(1, dirName);
-        std::vector<std::string> sharedLibs = 
-            os.search(paths, "", PLUGIN_DSO_EXTENSION, false);
-        for (size_t i = 0; i < sharedLibs.size(); ++i)
-        {
-            loadPlugin(sharedLibs[i], eh);
-        }
+        load(std::vector<std::string>(1, dirName), eh, recursive);
     }
 
 protected:

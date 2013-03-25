@@ -7,7 +7,7 @@
 namespace re
 {
 
-struct RegexPredicate : sys::FilePredicate
+struct RegexPredicate : public sys::FilePredicate
 {
 public:
     RegexPredicate(const std::string& match)
@@ -15,7 +15,7 @@ public:
         mRegex.compile(match);
     }
     
-    bool operator()(const std::string& filename)
+    bool operator()(const std::string& filename) const
     {
         return mRegex.matches(filename);
     }

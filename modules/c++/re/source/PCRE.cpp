@@ -100,10 +100,15 @@ const std::string& re::PCRE::getPattern() const
 {
     return mPattern;
 }
+
 bool re::PCRE::matches(const std::string& str, int flags)
 {
-
     mMatchString = str;
+    return matches(str, flags);
+}
+
+bool re::PCRE::matches(const std::string& str, int flags) const
+{
     int x = pcre_exec(mPCRE, NULL, mMatchString.c_str(), mMatchString.length(), 0, flags, NULL, 0);
     /* zero if there is a match */
     return ( (x == -1) ? (false) : (true) );

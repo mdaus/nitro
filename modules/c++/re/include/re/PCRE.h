@@ -121,6 +121,7 @@ public:
                PCREMatch & matchObject,
                int flags = 0);
     bool matches(const std::string& str, int flags = 0);
+    bool matches(const std::string& str, int flags = 0) const;
 
 
     /*!
