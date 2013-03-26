@@ -120,16 +120,8 @@ public:
     bool match(const std::string& str,
                PCREMatch & matchObject,
                int flags = 0);
-    bool matches(const std::string& str, int flags = 0);
+
     bool matches(const std::string& str, int flags = 0) const;
-
-
-    /*!
-     *  \todo Be consistent with const/non-const accessor paradigm
-     *  Get the string we are matching
-     *  \return The string we are matching
-     */
-    std::string getMatchString() const;
 
     /*!
      *  Search the matchString
@@ -175,15 +167,12 @@ public:
      *  \param str  The string to escape
      *  \return  The escaped string
      */
-    std::string escape(const std::string& str);
+    std::string escape(const std::string& str) const;
 
 protected:
     std::string mPattern;
-    std::string mMatchString;
     //! The pcre object
     pcre *      mPCRE;
-    //! The number of matches on last match/search
-    int         mNumMatches;
     //! The output/offset vector
     int         mOvector[OVECCOUNT];
 };

@@ -25,7 +25,7 @@
 #include "re/PCRE.h"
 
 re::PCRE::PCRE(const std::string& pattern, int flags) :
-    mPattern(pattern), mMatchString(""), mPCRE(NULL), mNumMatches(0)
+    mPattern(pattern), mPCRE(NULL)
 {
     if (!mPattern.empty())
         compile(mPattern, flags);
@@ -48,10 +48,10 @@ re::PCRE::PCRE(const re::PCRE& rhs)
 {
     mPCRE = NULL;
     mPattern = rhs.mPattern;
-    mMatchString = rhs.mMatchString;
 
     compile(mPattern);
 }
+
 re::PCRE& re::PCRE::operator=(const re::PCRE& rhs)
 {
     if (this != &rhs)
@@ -59,7 +59,6 @@ re::PCRE& re::PCRE::operator=(const re::PCRE& rhs)
         destroy();
 
         mPattern = rhs.mPattern;
-        mMatchString = rhs.mMatchString;
 
         compile(mPattern);
     }
@@ -101,15 +100,9 @@ const std::string& re::PCRE::getPattern() const
     return mPattern;
 }
 
-bool re::PCRE::matches(const std::string& str, int flags)
-{
-    mMatchString = str;
-    return matches(str, flags);
-}
-
 bool re::PCRE::matches(const std::string& str, int flags) const
 {
-    int x = pcre_exec(mPCRE, NULL, mMatchString.c_str(), mMatchString.length(), 0, flags, NULL, 0);
+    int x = pcre_exec(mPCRE, NULL, str.c_str(), str.length(), 0, flags, NULL, 0);
     /* zero if there is a match */
     return ( (x == -1) ? (false) : (true) );
 }
@@ -118,25 +111,21 @@ bool re::PCRE::match(const std::string& str,
                      PCREMatch & matchObject,
                      int flags)
 {
-    mNumMatches = 0;
-    mMatchString = str;
-
+    int numMatches(0);
     int result(0);
     int startOffset(0);
 
     // Clear the output vector
     memset(mOvector, 0, OVECCOUNT);
-    mNumMatches =    pcre_exec(mPCRE,                // the compiled pattern
+    numMatches =    pcre_exec(mPCRE,                // the compiled pattern
                                NULL,                 // no extra data - not studied
-                               mMatchString.c_str(), // the subject string
-                               mMatchString.length(),// the subject length
+                               str.c_str(), // the subject string
+                               str.length(),// the subject length
                                startOffset,          // the starting offset in subject
                                flags,                // options
                                mOvector,             // the output vector
                                OVECCOUNT);           // the output vector size
-
-    result = mNumMatches;
-
+    result = numMatches;
     /**************************************************************************
      * (From pcre source code, pcredemo.c)                                    *
      * We have found the first match within the subject string. If the output *
@@ -146,20 +135,20 @@ bool re::PCRE::match(const std::string& str,
 
     /* The output vector wasn't big enough */
 
-    if (mNumMatches == 0)
+    if (numMatches == 0)
     {
-        mNumMatches = OVECCOUNT / 3;
+        numMatches = OVECCOUNT / 3;
     }
 
     // Load up the match object
-    for (int i = 0; i < mNumMatches; i++)
+    for (int i = 0; i < numMatches; i++)
     {
         int index = mOvector[2*i];
         int subStringLength = mOvector[2*i+1] - index;
         int subStringCheck = index + subStringLength;
-        if (subStringCheck > (int)mMatchString.length())
+        if (subStringCheck > (int)str.length())
         {
-            throw PCREException(Ctxt(FmtX("Match: Match substring out of range (%d,%d) for string of length %d", index, subStringCheck, mMatchString.length())));
+            throw PCREException(Ctxt(FmtX("Match: Match substring out of range (%d,%d) for string of length %d", index, subStringCheck, str.length())));
         }
         else if (subStringLength == 0)
         {
@@ -167,7 +156,7 @@ bool re::PCRE::match(const std::string& str,
         }
         else if (index >= 0)
         {
-            matchObject.push_back(mMatchString.substr(index, subStringLength));
+            matchObject.push_back(str.substr(index, subStringLength));
         }
         //otherwise, it was likely a non-capturing group
     }
@@ -183,28 +172,21 @@ bool re::PCRE::match(const std::string& str,
     else
     {
         throw PCREException
-        (Ctxt(FmtX("Error in matching %s", mMatchString.c_str())));
+        (Ctxt(FmtX("Error in matching %s", str.c_str())));
     }
-}
-
-std::string re::PCRE::getMatchString() const
-{
-    return mMatchString;
 }
 
 std::string re::PCRE::search(const std::string& matchString,
                              int startIndex,
                              int flags)
 {
-    mNumMatches = 0;
-    mMatchString = matchString;
-
+    int numMatches(0);
     int result(0);
     int startOffset(0);
 
     // Clear the output vector
     memset(mOvector, 0, OVECCOUNT);
-    mNumMatches =    pcre_exec(mPCRE,                     // the compiled pattern
+    numMatches =    pcre_exec(mPCRE,                     // the compiled pattern
                                NULL,                      // no extra data
                                matchString.c_str() + startIndex, // the subject string
                                matchString.length(),             // the subject length
@@ -213,18 +195,18 @@ std::string re::PCRE::search(const std::string& matchString,
                                mOvector,                         // output vector
                                OVECCOUNT);                       // output vector size
 
-    result = mNumMatches;
+    result = numMatches;
 
     if (result == 0)
     {
-        mNumMatches = OVECCOUNT / 3;
+        numMatches = OVECCOUNT / 3;
     }
 
     if (result >= 0)
     {
         if (((mOvector[0] + startIndex) +
                 (mOvector[1] - mOvector[0])) >
-                (int)mMatchString.length() )
+                (int)matchString.length() )
         {
             result = PCRE_ERROR_NOMATCH;
         }
@@ -238,11 +220,11 @@ std::string re::PCRE::search(const std::string& matchString,
         int index = mOvector[0] + startIndex;
         int subStringLength = mOvector[1] - mOvector[0];
         int subStringCheck = index + subStringLength;
-        if (subStringCheck > (int)mMatchString.length())
+        if (subStringCheck > (int)matchString.length())
         {
-            throw PCREException(Ctxt(FmtX("Search: Match substring out of range (%d,%d) for string of length %d", index, subStringCheck, mMatchString.length())));
+            throw PCREException(Ctxt(FmtX("Search: Match substring out of range (%d,%d) for string of length %d", index, subStringCheck, matchString.length())));
         }
-        return mMatchString.substr(index, subStringLength);
+        return matchString.substr(index, subStringLength);
     }
     else if (result == PCRE_ERROR_NOMATCH)
     {
@@ -251,7 +233,7 @@ std::string re::PCRE::search(const std::string& matchString,
     else
     {
         throw PCREException
-        (Ctxt(FmtX("Error in searching for %s", mMatchString.c_str())));
+        (Ctxt(FmtX("Error in searching for %s", matchString.c_str())));
     }
 }
 
@@ -303,7 +285,7 @@ std::string re::PCRE::sub(const std::string& str,
     return toReplace;
 }
 
-std::string re::PCRE::escape(const std::string& str)
+std::string re::PCRE::escape(const std::string& str) const
 {
     std::string r;
     for (unsigned int i = 0; i < str.length(); i++)
