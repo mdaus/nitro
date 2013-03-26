@@ -136,16 +136,14 @@ public:
      *
      *  \param path      The path of directories to load plugins from
      *  \param eh        An error handler to pass
-     *  \param recursive Perform recursive search
      */
     void load(const std::vector<std::string>& path, 
-              ErrorHandler* eh, 
-              bool recursive = false)
+              ErrorHandler* eh)
     {
         sys::OS os;
 
         //! throw if not present
-        for (int i = 0; i < path.size(); ++i)
+        for (size_t i = 0; i < path.size(); ++i)
         {
             if (!os.exists(path[i]))
             {
@@ -155,7 +153,7 @@ public:
 
         //! load all the shared libraries found
         std::vector<std::string> sharedLibs = 
-            os.search(path, "", PLUGIN_DSO_EXTENSION, recursive);
+            os.search(path, "", PLUGIN_DSO_EXTENSION, false);
         for (size_t i = 0; i < sharedLibs.size(); ++i)
         {
             loadPlugin(sharedLibs[i], eh);
@@ -395,13 +393,11 @@ public:
      *  \param dirName   The name of the directory
      *  \param eh        The error handler to pass in, in case something
      *                   fails.
-     *  \param recursive Perform recursive search
      */
-    virtual void loadDir(std::string dirName, 
-                         ErrorHandler* eh, 
-                         bool recursive = false)
+    void loadDir(const std::string& dirName, 
+                 ErrorHandler* eh)
     {
-        load(std::vector<std::string>(1, dirName), eh, recursive);
+        load(std::vector<std::string>(1, dirName), eh);
     }
 
 protected:
