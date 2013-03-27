@@ -26,6 +26,7 @@
 #ifdef USE_EXPAT
 
 #include <except/Exception.h>
+#include <xml/lite/ValidatorInterface.h>
 
 namespace xml
 {
