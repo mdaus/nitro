@@ -37,6 +37,7 @@
 #include <io/InputStream.h>
 #include <str/Convert.h>
 #include <logging/Logger.h>
+#include <xml/lite/Element.h>
 
 namespace xml
 {
@@ -130,6 +131,23 @@ public:
         xml.streamTo(bs);
         return validate(bs.stream().str(), xmlID, errors);
     }
+
+    /*!
+     *  Validation against the internal schema pool
+     *  \param xml     Input stream to the xml document to validate
+     *  \param xmlID   Identifier for this input xml within the error log
+     *  \param errors  Object for returning errors found (errors are appended)
+     */
+    bool validate(const Element* xml,
+                  const std::string& xmlID,
+                  std::vector<ValidationInfo>& errors) const
+    {
+        // convert to stream
+        io::ByteStream bs;
+        xml->print(bs);
+        return validate(bs.stream().str(), xmlID, errors);
+    }
+
 
     /*!
      *  Validation against the internal schema pool

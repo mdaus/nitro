@@ -142,13 +142,13 @@ void xml::lite::Element::destroyChildren()
     }
 }
 
-void xml::lite::Element::print(io::OutputStream& stream)
+void xml::lite::Element::print(io::OutputStream& stream) const
 {
     depthPrint(stream, 0, "");
 }
 
 void xml::lite::Element::prettyPrint(io::OutputStream& stream,
-                                     std::string formatter)
+                                     std::string formatter) const
 {
     depthPrint(stream, 0, formatter);
     stream.writeln("");
@@ -156,7 +156,7 @@ void xml::lite::Element::prettyPrint(io::OutputStream& stream,
 
 void xml::lite::Element::depthPrint(io::OutputStream& stream,
                                     int depth,
-                                    std::string formatter)
+                                    std::string formatter) const
 {
     std::string prefix = "";
     for (int i = 0; i < depth; ++i)

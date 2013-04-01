@@ -203,10 +203,10 @@ public:
      *  \param formatter  The formatter
      *  \todo Add format capability
      */
-    void print(io::OutputStream& stream);
+    void print(io::OutputStream& stream) const;
 
     void prettyPrint(io::OutputStream& stream,
-                     std::string formatter = "    ");
+                     std::string formatter = "    ") const;
 
     /*!
      *  Determines if a child element exists
@@ -337,7 +337,7 @@ protected:
     void changeURI(Element* element, std::string prefix, std::string uri);
 
     void depthPrint(io::OutputStream& stream, int depth,
-                    std::string formatter);
+                    std::string formatter) const;
     
     Element* mParent;
     //! The children of this element
