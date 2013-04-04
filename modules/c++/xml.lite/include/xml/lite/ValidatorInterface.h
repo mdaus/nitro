@@ -98,7 +98,7 @@ public:
     {
         VALIDATION_WARNING = 0,
         VALIDATION_ERROR,
-        VALIDATION_FATAL,
+        VALIDATION_FATAL
     };
 
     /*! 
