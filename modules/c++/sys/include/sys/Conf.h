@@ -109,8 +109,10 @@ namespace sys
 #   endif
 #   if SIZEOF_SIZE_T == 8
         typedef __int64   SSize_T;
-#   else
+#   elif SIZEOF_SIZE_T == 4
         typedef __int32   SSize_T;
+#   else
+        #error SIZEOF_SIZE_T must be set at configure time
 #   endif
 }
 #else // !windows
