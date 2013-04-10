@@ -910,8 +910,8 @@ int main()
     printf("sizeof_long_long=%d\\n", sizeof(long long));
     printf("sizeof_float=%d\\n", sizeof(float));
     printf("sizeof_double=%d\\n", sizeof(double));
-    printf("sizeof_size_t=%d\\n", sizeof(double));
-    printf("sizeof_wchar_t=%d\\n", sizeof(double));
+    printf("sizeof_size_t=%d\\n", sizeof(size_t));
+    printf("sizeof_wchar_t=%d\\n", sizeof(wchar_t));
     return 0;
 }
 '''
