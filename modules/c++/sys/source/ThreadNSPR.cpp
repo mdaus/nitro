@@ -37,11 +37,11 @@ void sys::ThreadNSPR::start()
                           (PR_GLOBAL_THREAD);
 
     PRThreadPriority priority;
-    if (getPriority() == sys::ThreadNSPR::NORM_PRIORITY)
+    if (getPriority() == sys::ThreadNSPR::NORMAL_PRIORITY)
         priority = PR_PRIORITY_NORMAL;
-    else if (getPriority() == sys::ThreadNSPR::MAX_PRIORITY)
+    else if (getPriority() == sys::ThreadNSPR::MAXIMUM_PRIORITY)
         priority = PR_PRIORITY_HIGH;
-    else if (getPriority() == sys::ThreadNSPR::MIN_PRIORITY)
+    else if (getPriority() == sys::ThreadNSPR::MINIMUM_PRIORITY)
         priority = PR_PRIORITY_LOW;
     mNative = PR_CreateThread(type,
                               (void (*)(void *))this->__start,

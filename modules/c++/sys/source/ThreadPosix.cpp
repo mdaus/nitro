@@ -36,14 +36,14 @@ void sys::ThreadPosix::start()
         throw sys::SystemException("Cannot determine upfront wheteher pthread threads are implemented using kernel or user level threads.  Set the level to DEFAULT_LEVEL");
     }
 
-    if (getPriority() != NORM_PRIORITY)
+    if (getPriority() != NORMAL_PRIORITY)
     {
         sched_param sp;
 
-        if (getPriority() == MAX_PRIORITY)
+        if (getPriority() == MAXIMUM_PRIORITY)
             sp.sched_priority = sched_get_priority_max(SCHED_OTHER);
 
-        else if (getPriority() == MIN_PRIORITY)
+        else if (getPriority() == MINIMUM_PRIORITY)
             sp.sched_priority = sched_get_priority_min(SCHED_OTHER);
 
         pthread_attr_t attr;

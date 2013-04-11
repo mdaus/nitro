@@ -73,12 +73,12 @@ class ThreadInterface : public Runnable
 {
 public:
     enum { DEFAULT_LEVEL, KERNEL_LEVEL, USER_LEVEL };
-    enum { MIN_PRIORITY, NORM_PRIORITY, MAX_PRIORITY };
+    enum { MINIMUM_PRIORITY, NORMAL_PRIORITY, MAXIMUM_PRIORITY };
 
     //! Default constructor
     ThreadInterface() : mIsSelf(true)
     {
-        initialize(this, NORM_PRIORITY, DEFAULT_LEVEL, "");
+        initialize(this, NORMAL_PRIORITY, DEFAULT_LEVEL, "");
     }
     /*!
      *  This, in C++, may seem redundant, since
@@ -89,7 +89,7 @@ public:
      */
     ThreadInterface(const std::string& name) : mIsSelf(true)
     {
-        initialize(this, NORM_PRIORITY, DEFAULT_LEVEL, name);
+        initialize(this, NORMAL_PRIORITY, DEFAULT_LEVEL, name);
     }
 
 
@@ -99,7 +99,7 @@ public:
      */
     ThreadInterface(Runnable *target) : mIsSelf(false)
     {
-        initialize(target, NORM_PRIORITY, DEFAULT_LEVEL, "");
+        initialize(target, NORMAL_PRIORITY, DEFAULT_LEVEL, "");
     }
 
     /*!
@@ -113,7 +113,7 @@ public:
     ThreadInterface(Runnable *target,
                     const std::string& name) : mIsSelf(false)
     {
-        initialize(target, NORM_PRIORITY, DEFAULT_LEVEL, name);
+        initialize(target, NORMAL_PRIORITY, DEFAULT_LEVEL, name);
     }
 
     ThreadInterface(Runnable *target,
