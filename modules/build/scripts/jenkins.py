@@ -58,6 +58,9 @@ elif 'win64' in os.environ.get('JOB_NAME'):
 if '-mt' in os.environ.get('JOB_NAME'):
     install_suffix += '-mt'
     config_options += ["--with-crt=MT"]
+if '-vc9' in os.environ.get('JOB_NAME'):
+	install_suffix += '-vc9'
+	config_options += ["--msvc_version=\"msvc 9.0\""]
 
 print 'Job: %s' % os.environ.get('JOB_NAME', '')
 print "Revision: %s" % os.environ.get('SVN_REVISION', '')
