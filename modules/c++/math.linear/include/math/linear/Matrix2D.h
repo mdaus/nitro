@@ -316,7 +316,10 @@ public:
      */
     inline void row(size_t i, const std::vector<_T>& vec_)
     {
-        row(i, &vec_[0]);
+        if (!vec_.empty())
+        {
+            row(i, &vec_[0]);
+        }
     }
 
     /*!
@@ -371,9 +374,12 @@ public:
      *  \param j The column index
      *  \param vec The vector to copy from
      */
-    void col(size_t j, std::vector<_T>& vec_)
+    void col(size_t j, const std::vector<_T>& vec_)
     {
-        col(j, &vec_[0]);
+        if (!vec_.empty())
+        {
+            col(j, &vec_[0]);
+        }
     }
 
     //!  Return number of rows (M)
