@@ -20,6 +20,9 @@
  *
  */
 
+#include <sstream>
+#include <stdio.h>
+
 #include "import/sys.h"
 #include "import/mt.h"
 #include "TestCase.h"
@@ -28,6 +31,8 @@ using namespace sys;
 using namespace mt;
 using namespace std;
 
+namespace
+{
 class AddOp
 {
 public:
@@ -37,8 +42,35 @@ public:
 
     void operator()(size_t element) const
     {
-        std::cout << element << std::endl;
+        std::ostringstream ostr;
+        ostr << element << std::endl;
+
+        // This SHOULD result in not getting the printouts garbled between
+        // threads
+        ::fprintf(stderr, "%s", ostr.str().c_str());
     }
+};
+
+class LocalStorage
+{
+public:
+    LocalStorage() :
+        mValue(0)
+    {
+    }
+
+    void operator()(size_t element) const
+    {
+        // All we're really showing here is that we never print out the same
+        // value twice due to the threads colliding
+        mValue = element;
+        std::ostringstream ostr;
+        ostr << mValue << std::endl;
+        ::fprintf(stderr, "%s", ostr.str().c_str());
+    }
+
+private:
+    mutable size_t mValue;
 };
 
 TEST_CASE(Runnable1DTest)
@@ -51,12 +83,13 @@ TEST_CASE(Runnable1DTest)
 
 TEST_CASE(Runnable1DWithCopiesTest)
 {
-    // TODO: Need an actual test case that shows the threads all truly have
-    //       their own local storage which isn't colliding
+    // TODO: Have LocalStorage actually store its values off in a vector, then
+    //       show we got all those values.
     std::cout << "Running test case" << std::endl;
-    const AddOp op;
+    const LocalStorage op;
     std::cout << "Calling run1D" << std::endl;
-    run1DWithCopies(10, 16, op);
+    run1DWithCopies(47, 16, op);
+}
 }
 
 int main(int argc, char *argv[])
