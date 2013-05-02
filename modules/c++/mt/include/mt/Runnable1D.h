@@ -1,6 +1,8 @@
 #ifndef __MT_RUNNABLE_1D_H__
 #define __MT_RUNNABLE_1D_H__
 
+#include <vector>
+
 #include <sys/Runnable.h>
 #include "mt/ThreadPlanner.h"
 #include "mt/ThreadGroup.h"
@@ -53,6 +55,35 @@ void run1D(size_t numElements, size_t numThreads, const OpT& op)
         {
             threads.createThread(new Runnable1D<OpT>(
                 startElement, numElementsThisThread, op));
+        }
+        threads.joinAll();
+    }
+}
+
+// Same as above but each thread gets their own copy-constructed copy of 'op'
+// This is useful when each thread needs its own local storage (make this
+// scratch space mutable since operator() is const).
+template <typename OpT>
+void run1DWithCopies(size_t numElements, size_t numThreads, const OpT& op)
+{
+    if (numThreads <= 1)
+    {
+        Runnable1D<OpT>(0, numElements, op).run();
+    }
+    else
+    {
+        std::vector<OpT> ops(numThreads, op);
+
+        ThreadGroup threads;
+        const ThreadPlanner planner(numElements, numThreads);
+
+        size_t threadNum(0);
+        size_t startElement(0);
+        size_t numElementsThisThread(0);
+        while(planner.getThreadInfo(threadNum, startElement, numElementsThisThread))
+        {
+            threads.createThread(new Runnable1D<OpT>(
+                startElement, numElementsThisThread, ops[threadNum++]));
         }
         threads.joinAll();
     }

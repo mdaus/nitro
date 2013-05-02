@@ -31,6 +31,10 @@ using namespace std;
 class AddOp
 {
 public:
+    AddOp()
+    {
+    }
+
     void operator()(size_t element) const
     {
         std::cout << element << std::endl;
@@ -40,14 +44,25 @@ public:
 TEST_CASE(Runnable1DTest)
 {
     std::cout << "Running test case" << std::endl;
-    AddOp op;
+    const AddOp op;
     std::cout << "Calling run1D" << std::endl;
     run1D(10, 16, op);
+}
+
+TEST_CASE(Runnable1DWithCopiesTest)
+{
+    // TODO: Need an actual test case that shows the threads all truly have
+    //       their own local storage which isn't colliding
+    std::cout << "Running test case" << std::endl;
+    const AddOp op;
+    std::cout << "Calling run1D" << std::endl;
+    run1DWithCopies(10, 16, op);
 }
 
 int main(int argc, char *argv[])
 {
     TEST_CHECK(Runnable1DTest);
+    TEST_CHECK(Runnable1DWithCopiesTest);
 
     return 0;
 }
