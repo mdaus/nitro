@@ -208,7 +208,9 @@ std::string sys::Path::basename(const std::string& path, bool removeExt)
 {
     std::string baseWithExtension = sys::Path::splitPath(path).second;
     if (removeExt)
-        return splitExt(baseWithExtension).first;
+    {
+        return sys::Path::splitExt(baseWithExtension).first;
+    }
     return baseWithExtension;
 
 }
