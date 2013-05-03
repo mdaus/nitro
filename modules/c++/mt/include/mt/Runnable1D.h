@@ -2,8 +2,11 @@
 #define __MT_RUNNABLE_1D_H__
 
 #include <vector>
+#include <sstream>
 
+#include <sys/Conf.h>
 #include <sys/Runnable.h>
+#include <except/Exception.h>
 #include "mt/ThreadPlanner.h"
 #include "mt/ThreadGroup.h"
 
@@ -60,20 +63,27 @@ void run1D(size_t numElements, size_t numThreads, const OpT& op)
     }
 }
 
-// Same as above but each thread gets their own copy-constructed copy of 'op'
-// This is useful when each thread needs its own local storage (make this
-// scratch space mutable since operator() is const).
+// Same as above but each thread gets their own 'op'
+// This is useful when each thread needs its own local storage and/or you
+// need access to a per-thread result afterwards (make these member variables
+// mutable since operator() is const).
 template <typename OpT>
-void run1DWithCopies(size_t numElements, size_t numThreads, const OpT& op)
+void run1D(size_t numElements, size_t numThreads, const std::vector<OpT>& ops)
 {
+    if (ops.size() != numThreads)
+    {
+        std::ostringstream ostr;
+        ostr << "Got " << numThreads << " threads but " << ops.size()
+             << " functors";
+        throw except::Exception(Ctxt(ostr.str()));
+    }
+
     if (numThreads <= 1)
     {
-        Runnable1D<OpT>(0, numElements, op).run();
+        Runnable1D<OpT>(0, numElements, ops[0]).run();
     }
     else
     {
-        std::vector<OpT> ops(numThreads, op);
-
         ThreadGroup threads;
         const ThreadPlanner planner(numElements, numThreads);
 
@@ -87,6 +97,16 @@ void run1DWithCopies(size_t numElements, size_t numThreads, const OpT& op)
         }
         threads.joinAll();
     }
+}
+
+// Same as above but each thread gets their own copy-constructed copy of 'op'
+// This is useful when each thread needs its own local storage (make this
+// scratch space mutable since operator() is const).
+template <typename OpT>
+void run1DWithCopies(size_t numElements, size_t numThreads, const OpT& op)
+{
+    const std::vector<OpT> ops(numThreads, op);
+    run1D(numElements, numThreads, ops);
 }
 }
 
