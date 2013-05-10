@@ -30,6 +30,7 @@
 #include "mt/RequestQueue.h"
 #include "mt/ThreadPoolException.h"
 #include "mt/WorkerThread.h"
+#include "mem/SharedPtr.h"
 
 namespace mt
 {
@@ -53,7 +54,7 @@ public:
     *  Constructor.  Set up the thread pool.  
     *  \param numThreads the number of threads
     */
-    AbstractThreadPool(unsigned short numThreads = 0) :
+    AbstractThreadPool(size_t numThreads = 0) :
             mNumThreads(numThreads)
     {}
 
@@ -61,7 +62,7 @@ public:
     //! Destructor
     virtual ~AbstractThreadPool()
     {
-        destroy();
+        join();//destroy();
     }
 
     /*!
@@ -72,10 +73,9 @@ public:
     */
     void start()
     {
-        for (unsigned short i = 0; i < mNumThreads; i++)
+        for (size_t i = 0; i < mNumThreads; i++)
         {
-            WorkerThread<Request_T> *thread = newWorker();
-            mPool.push_back(thread);
+            mPool.push_back(mem::SharedPtr<sys::Thread>(newWorker()));
             mPool[i]->start();
         }
     }
@@ -96,18 +96,16 @@ public:
     */
     void join()
     {
-        for (unsigned short i = 0; i < mPool.size(); i++)
+        for (size_t i = 0; i < mPool.size(); i++)
         {
             dbg_printf("mPool[%d]->join()\n", i);
             mPool[i]->join();
 
         }
         destroy();
-
-
     }
 
-    void setNumThreads(unsigned short numThreads)
+    void setNumThreads(size_t numThreads)
     {
         mNumThreads = numThreads;
     }
@@ -130,17 +128,11 @@ protected:
 
     void destroy()
     {
-        size_t size = mPool.size();
-        for (unsigned short i = 0; i < size; i++)
-        {
-            sys::Thread *t = mPool.back();
-            mPool.pop_back();
-            delete t;
-        }
+        mPool.clear();
     }
 
-    unsigned short mNumThreads;
-    std::vector<sys::Thread *> mPool;
+    size_t mNumThreads;
+    std::vector<mem::SharedPtr<sys::Thread> > mPool;
     mt::RequestQueue<Request_T> mRequestQueue;
 };
 }

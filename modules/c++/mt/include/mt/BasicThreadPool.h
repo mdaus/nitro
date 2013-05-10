@@ -30,6 +30,7 @@
 #include "mt/RequestQueue.h"
 #include "mt/GenericRequestHandler.h"
 #include "mt/ThreadPoolException.h"
+#include "mem/SharedPtr.h"
 
 namespace mt
 {
@@ -41,7 +42,7 @@ public:
     /*! Constructor.  Set up the thread pool.
      *  \param numThreads the number of threads
      */
-    BasicThreadPool(unsigned short numThreads = 0) :
+    BasicThreadPool(size_t numThreads = 0) :
         mStarted(false)
     {
         mNumThreads = numThreads;
@@ -50,41 +51,41 @@ public:
     //! Deconstructor
     virtual ~BasicThreadPool()
     {
-        destroy(static_cast<unsigned short>(mPool.size()));
+        //destroy(static_cast<unsigned short>(mPool.size()));
+        shutdown();
     }
 
-    virtual void start()
+    void start()
     {
         if (mStarted)
             throw(ThreadPoolException("The thread pool is already started."));
 
         mStarted = true;
 
-        for (unsigned short i = 0; i < mNumThreads; i++)
+        for (size_t i = 0; i < mNumThreads; i++)
         {
-            sys::Thread *thread = new sys::Thread(newRequestHandler());
-            mPool.push_back(thread);
+            mPool.push_back(mem::SharedPtr<sys::Thread>(new sys::Thread(newRequestHandler())));
             mPool[i]->start();
         }
     }
 
-    virtual void join()
+    void join()
     {
         for (size_t i = 0; i < mPool.size(); i++)
         {
             dbg_printf("mPool[%d]->join()\n", i);
             mPool[i]->join();
         }
-        destroy(static_cast<unsigned short>(mPool.size()));
+        destroy();
         mStarted = false;
     }
 
-    virtual void grow(unsigned short bySize)
+    void grow(size_t bySize)
     {
         mNumThreads += bySize;
     }
 
-    virtual void shrink(unsigned short bySize)
+    void shrink(size_t bySize)
     {
         if (mStarted)
             join();
@@ -97,12 +98,12 @@ public:
         mHandlerQueue.enqueue(handler);
     }
 
-    virtual size_t getSize() const
+    size_t getSize() const
     {
         return mPool.size();
     }
 
-    virtual void shutdown()
+    void shutdown()
     {
         // Add requests that signal the thread should stop
         static sys::Runnable *stopSignal = NULL;
@@ -125,22 +126,14 @@ protected:
         return new RequestHandler_T(&mHandlerQueue);
     }
 
-    virtual void destroy(unsigned short bySize)
+    void destroy()
     {
-        if (bySize > mPool.size())
-            bySize = static_cast<unsigned short>(mPool.size());
-
-        for (unsigned short i = 0; i < bySize; i++)
-        {
-            sys::Thread *t = mPool.back();
-            mPool.pop_back();
-            delete t;
-        }
+        mPool.clear();
     }
 
     bool mStarted;
-    unsigned short mNumThreads;
-    std::vector<sys::Thread *> mPool;
+    size_t mNumThreads;
+    std::vector<mem::SharedPtr<sys::Thread> > mPool;
     mt::RunnableRequestQueue mHandlerQueue;
 };
 }

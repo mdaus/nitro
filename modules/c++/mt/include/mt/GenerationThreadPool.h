@@ -87,17 +87,16 @@ namespace mt
 	}
     
 	// Not set up for multiple producers 
-	virtual void addGroup(std::vector<sys::Runnable*>& toRun);
+	void addGroup(std::vector<sys::Runnable*>& toRun);
 	
 	// Not set up for multiple producers 
-	virtual void waitGroup();
+	void waitGroup();
 	
-	virtual void addAndWaitGroup(std::vector<sys::Runnable*>& toRun)
+	void addAndWaitGroup(std::vector<sys::Runnable*>& toRun)
 	{
 	    addGroup(toRun);
 	    waitGroup();
 	}
-	virtual void shutdown();
 
     };
 }

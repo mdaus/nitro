@@ -90,14 +90,15 @@ void mt::GenerationThreadPool::waitGroup()
     }
 }
 
-void mt::GenerationThreadPool::shutdown()
+/*void mt::GenerationThreadPool::shutdown()
 {
     size_t size = mPool.size();
     static sys::Runnable* shutdown = NULL;
     for(unsigned int i=0; i < size; i++)
     {
 	addRequest(shutdown);
-    }
-}
+    }  
+}*/
+
 #endif
 
