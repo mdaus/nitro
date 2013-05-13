@@ -1065,7 +1065,7 @@ def configure(self):
     env['install_includedir'] = Options.options.includedir if Options.options.includedir else join(Options.options.prefix, 'include')
     env['install_libdir'] = Options.options.libdir if Options.options.libdir else join(Options.options.prefix, 'lib')
     env['install_bindir'] = Options.options.libdir if Options.options.bindir else join(Options.options.prefix, 'bin')
-    env['install_sharedir'] = Options.options.libdir if Options.options.sharedir else join(Options.options.prefix, 'share')
+    env['install_sharedir'] = Options.options.sharedir if Options.options.sharedir else join(Options.options.prefix, 'share')
 
     if Options.options.cxxflags:
         env.append_unique('CXXFLAGS', Options.options.cxxflags.split())
