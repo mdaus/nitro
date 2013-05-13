@@ -100,19 +100,19 @@ public:
     {
     }
 
-    void write(sys::byte b)
+    void write(sys::byte )
     {
     }
 
-    void write(const std::string& str)
+    void write(const std::string& )
     {
     }
 
-    void writeln(const std::string& str)
+    void writeln(const std::string& )
     {
     }
 
-    virtual void write(const sys::byte* b, sys::Size_T len)
+    virtual void write(const sys::byte* , sys::Size_T )
     {
     }
 
