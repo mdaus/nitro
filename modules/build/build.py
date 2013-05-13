@@ -58,42 +58,6 @@ class CPPContext(Context.Context):
         for i, s in enumerate(strs):
             sys.stderr.write("%s%s " % (Logs.colors(colors[i % len(colors)]), s))
         sys.stderr.write("%s%s" % (Logs.colors.NORMAL, os.linesep))
-
-        
-#    # recursively expand packages
-#    def __extendPackages(self, env, pkgs, iter) :
-#
-#        packages = pkgs
-#        
-#        if iter == len(packages) :
-#            return packages
-#
-#        if packages[iter].isupper() :
-#            p = 'PACKAGE_' + packages[iter]
-#            packages.remove(packages[iter])
-#            if p in env :
-#                packages.extend(env[p])
-#            packages = self.__extendPackages(env, packages, iter)
-#        else :
-#            packages = self.__extendPackages(env, packages, iter+1)
-#            
-#        return packages                 
-
-#    # expand package definitions into targets    
-#    def extendPackages(self, env, pkgs) :
-#        return self.__extendPackages(env, pkgs, 0)
-
-                    
-#    # updates the targets based on packages defined
-#    def addPackageList(self, packages, env) :
-#        targets = Options.options.compile_targets.split(',')
-#        pkgsTargets = self.extendPackages(env, packages)
-#        targets.extend(pkgsTargets)
-#        
-#        # remove duplicates
-#        targets = self.removeDuplicates(targets)
-#        Options.options.compile_targets = ','.join(targets)
-
         
     # because we can't assume python 2.6
     def __computeRelPath(self, rel, frm) :
@@ -492,7 +456,7 @@ class CPPContext(Context.Context):
         lib.source = filter(partial(lambda x, t: basename(str(t)) not in x, modArgs.get('source_filter', '').split()), lib.source)
         
         if env['install_libs']:
-            lib.install_path = installPath or '${PREFIX}/lib'
+            lib.install_path = installPath or env['install_libdir']
         
         if not lib.source:
             lib.features = 'add_targets includes'
@@ -503,10 +467,9 @@ class CPPContext(Context.Context):
             lib.targets_to_add.append(bld(features='symlink_as_tgt', dest=symlinkLoc, src=pattern % lib.target, name='%s-symlink' % libName))
         
         if env['install_headers']:
-            incNode = path.make_node('include')
-            relpath = incNode.path_from(path)
             lib.targets_to_add.append(bld(features='install_tgt', pattern='**/*',
-                    dir=incNode, install_path='${PREFIX}/%s' % relpath))
+                                          dir=path.make_node('include'),
+                                          install_path=env['install_includedir']))
 
         addSourceTargets(bld, env, path, lib)
 
@@ -614,7 +577,7 @@ class CPPContext(Context.Context):
                 includes=includes, export_includes=exportIncludes,
                 use=uselib_local, uselib=uselib, env=env.derive(),
                 defines=defines, path=path, targets_to_add=targets_to_add,
-                install_path='${PREFIX}/share/%s/plugins' % plugin)
+                install_path=join(env['install_sharedir'], plugin, 'plugins'))
 
         sourceExt = {'c++':'.cpp', 'c':'.c'}.get(lang, 'cxx')
         allSourceExt = listify(modArgs.get('source_ext', '')) + [sourceExt]
@@ -628,10 +591,9 @@ class CPPContext(Context.Context):
             lib.source = path.ant_glob(glob_patterns)
             lib.source = filter(partial(lambda x, t: basename(str(t)) not in x, modArgs.get('source_filter', '').split()), lib.source)
         if env['install_headers']:
-            incNode = path.make_node('include')
-            relpath = incNode.path_from(path)
             lib.targets_to_add.append(bld(features='install_tgt', pattern='**/*',
-                    dir=incNode, install_path='${PREFIX}/%s' % relpath))
+                                          dir=path.make_node('include'),
+                                          install_path=env['install_includedir']))
 
         addSourceTargets(self, env, path, lib)
         
@@ -674,7 +636,7 @@ class CPPContext(Context.Context):
         targets_to_add = listify(modArgs.get('targets_to_add', ''))
         includes = listify(modArgs.get('includes', 'include'))
         source = listify(modArgs.get('source', '')) or None
-        install_path = modArgs.get('install_path', '${PREFIX}/bin')
+        install_path = modArgs.get('install_path', env['install_bindir'])
         
         if not source:
             source = bld.path.make_node(modArgs.get('source_dir', modArgs.get('sourcedir', 'source'))).ant_glob('*.c*', excl=modArgs.get('source_filter', ''))
@@ -889,6 +851,14 @@ def options(opt):
                     default=True, help='Don\'t install module headers')
     opt.add_option('--no-libs', action='store_false', dest='install_libs',
                     default=True, help='Don\'t install module libraries')
+    opt.add_option('--includedir', action='store', nargs=1, dest='includedir',
+                    help='Override installation include directory')
+    opt.add_option('--libdir', action='store', nargs=1, dest='libdir',
+                    help='Override installation lib directory')
+    opt.add_option('--bindir', action='store', nargs=1, dest='bindir',
+                    help='Override installation bin directory')
+    opt.add_option('--sharedir', action='store', nargs=1, dest='sharedir',
+                    help='Override installation share directory')
     opt.add_option('--install-source', action='store_true', dest='install_source', default=False,
                    help='Distribute source into the installation area (for delivering source)')
     
@@ -1091,6 +1061,11 @@ def configure(self):
     env['install_headers'] = Options.options.install_headers
     env['install_libs'] = Options.options.install_libs
     env['install_source'] = Options.options.install_source
+
+    env['install_includedir'] = Options.options.includedir if Options.options.includedir else join(Options.options.prefix, 'include')
+    env['install_libdir'] = Options.options.libdir if Options.options.libdir else join(Options.options.prefix, 'lib')
+    env['install_bindir'] = Options.options.libdir if Options.options.bindir else join(Options.options.prefix, 'bin')
+    env['install_sharedir'] = Options.options.libdir if Options.options.sharedir else join(Options.options.prefix, 'share')
 
     if Options.options.cxxflags:
         env.append_unique('CXXFLAGS', Options.options.cxxflags.split())

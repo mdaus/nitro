@@ -102,7 +102,7 @@ def build(bld):
                          defines=env['DEFINES'],
                          use='PCRE')
         if env['install_libs']:
-            pcreposix.install_path = '${PREFIX}/lib'
+            pcreposix.install_path = env['install_libdir']
         
         pcre = bld(features='c c%s add_targets' % env['LIB_TYPE'] or 'stlib',
                          includes=['.'],
@@ -116,14 +116,14 @@ def build(bld):
                          targets_to_add=['config_h', 'pcre_in'],
                          defines=env['DEFINES'])
         if env['install_libs']:
-            pcre.install_path = '${PREFIX}/lib'
+            pcre.install_path = env['install_libdir']
         
         if env['CC_NAME'] == 'msvc' and env['LIB_TYPE'] == 'shlib':
             pcre.defs='libpcre.def'
             pcreposix.defs='libpcreposix.def'
 
         if env['install_headers']:
-            bld(features='install_tgt', install_path='${PREFIX}/include',
+            bld(features='install_tgt', install_path=env['install_includedir'],
                 dir=driverNode, files=['pcre.h', 'pcreposix.h'], 
                 name='PCRE_HEADERS_INSTALL')
             pcre.targets_to_add += ['PCRE_HEADERS_INSTALL']

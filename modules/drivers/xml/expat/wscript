@@ -86,13 +86,13 @@ def build(bld):
                     defines=env['DEFINES'] + expatDefs)
         expat.targets_to_add = []
         if env['install_libs']:
-            expat.install_path = '${PREFIX}/lib'
+            expat.install_path = env['install_libdir']
 
         if env['CC_NAME'] == 'msvc' and env['LIB_TYPE'] == 'shlib':
             expat.defs = 'lib/libexpat.def'
         
         if env['install_headers']:
-            bld(features='install_tgt', install_path='${PREFIX}/include',
+            bld(features='install_tgt', install_path=env['install_includedir'],
                 dir=expatNode, files=['lib/expat.h', 'lib/expat_external.h'], 
                 name='XML_HEADERS_INSTALL')
             expat.targets_to_add += ['XML_HEADERS_INSTALL']

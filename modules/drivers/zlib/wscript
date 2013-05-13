@@ -72,10 +72,10 @@ def build(bld):
                          env=env.derive(),
                          name='ZIP')
         if env['install_libs']:
-            zlib.install_path = '${PREFIX}/lib'
+            zlib.install_path = env['install_libdir']
         
         if env['install_headers']:
-            bld(features='install_tgt', install_path='${PREFIX}/include',
+            bld(features='install_tgt', install_path=env['install_includedir'],
                 dir=driverNode, pattern='zlib.h')
 
 def distclean(context):

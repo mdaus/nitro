@@ -87,12 +87,12 @@ def build(bld):
                                 env=env.derive(), defines=env['DEFINES'],
                                 targets_to_add=[uuidH])
         if env['install_libs']:
-            uuid.install_path = '${PREFIX}/lib'
+            uuid.install_path = env['install_libdir']
         
         if env['install_headers']:
             includeNode = driverNode.make_node(os.path.join('lib', 'uuid'))
             bld(features='install_tgt', 
-                install_path='${PREFIX}/include/uuid',
+                install_path=os.path.join(env['install_includedir'], 'uuid'),
                 dir=includeNode,
                 files=['uuid.h'],
                 name='UUID_HEADERS_INSTALL')

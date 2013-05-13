@@ -313,7 +313,7 @@ def build(bld):
                      defines=xercesDefines,
                      targets_to_add=[xercesAutoH, xercesConfigH])
         if env['install_libs']:
-            xerces.install_path = '${PREFIX}/lib'
+            xerces.install_path = env['install_libdir']
 
         if env['CC_NAME'] == 'msvc' and env['LIB_TYPE'] == 'shlib':
             xerces.defs = 'lib/libxerces.def'
@@ -325,11 +325,11 @@ def build(bld):
 
             # add the config.h file to the install
             bld(features='install_tgt', pattern='*.h', 
-                dir=xercesNode, install_path='${PREFIX}/include',
+                dir=xercesNode, install_path=env['install_includedir'],
                 name='XML_INCLUDE_CONFIG_H_INSTALL')
             xerces.targets_to_add.append(bld(features='install_tgt add_targets', 
                                              pattern='**/*.hpp **/*.h xercesc/**/*.c',
-                                             dir=srcNode, install_path='${PREFIX}/include', 
+                                             dir=srcNode, install_path=env['install_includedir'], 
                                              name='XML_INCLUDE_INSTALL',
                                              targets_to_add=['XML_INCLUDE_CONFIG_H_INSTALL']))
 
