@@ -42,7 +42,7 @@ public:
      *  \param message A message to take
             *  \param errorId  The error id
      */
-    PCREException(const char *message, int errorId = 0) : except::Exception(message)
+    PCREException(const char *message, int /*errorId*/ = 0) : except::Exception(message)
     {}
 
     /*!
@@ -50,7 +50,7 @@ public:
      *  \param message A message to take
             *  \param errorId  The error id
      */
-    PCREException(const std::string& message, int errorId = 0) : except::Exception(message)
+    PCREException(const std::string& message, int /*errorId*/ = 0) : except::Exception(message)
     {}
 
     /*!
@@ -58,7 +58,7 @@ public:
      *  \param c A Context to take
             *  \param errorId  The error id
      */
-    PCREException(const except::Context& c, int errorId = 0) : except::Exception(c)
+    PCREException(const except::Context& c, int /*errorId*/ = 0) : except::Exception(c)
     {}
 };
 
