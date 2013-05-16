@@ -99,6 +99,14 @@ public:
     Results* parse(int argc, const char** argv);
 
     /**
+     * Parses the given arguments
+     */
+    Results* parse(int argc, char** argv)
+    {
+        return parse(argc, reinterpret_cast<const char**>(argv));
+    }
+
+    /**
      * Parses the arguments. args[0] is NOT used as the program name, so you
      * will need to specify it explicitly using setProgramName().
      */
