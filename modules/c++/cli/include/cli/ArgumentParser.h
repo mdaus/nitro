@@ -103,7 +103,7 @@ public:
      */
     Results* parse(int argc, char** argv)
     {
-        return parse(argc, reinterpret_cast<const char**>(argv));
+        return parse(argc, const_cast<const char**>(argv));
     }
 
     /**
