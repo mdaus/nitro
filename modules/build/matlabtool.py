@@ -1,8 +1,7 @@
 from waflib import Options, Build
 from waflib.Errors import ConfigurationError
-import os, subprocess, re
+import os, subprocess, re, platform
 from os.path import join, dirname, abspath
-
 
 def options(opt):
     opt.add_option('--disable-matlab', action='store_false', dest='matlab',
@@ -21,14 +20,18 @@ def configure(self):
     matlabHome = Options.options.matlab_home or self.env['MATLAB_HOME']
     matlabBin = matlabHome and join(matlabHome, 'bin')
     mandatory=Options.options.force_matlab
+
+    # If you're on a 64-bit machine building 32-bit, you're not going to have
+    # the right Mex files sitting around
+    skipMatlab = '64' in platform.machine() and not self.env['IS64BIT']
+    if skipMatlab and mandatory:
+        self.fatal('32-bit Matlab not available on 64-bit machines')
     
-    if self.find_program('matlab', var='matlab', path_list=filter(None, [matlabBin]),
-                      mandatory=mandatory):
+    if not skipMatlab and self.find_program('matlab', var='matlab', path_list=filter(None, [matlabBin]),
+                                            mandatory=mandatory):
         matlabBin = dirname(self.env['matlab'])
         if not matlabHome:
             matlabHome = join(matlabBin, os.pardir)
-        
-        platform = self.env['PLATFORM']
         
         #TODO put these in a utility somewhere
         winRegex = r'win32'
@@ -50,7 +53,7 @@ def configure(self):
                       recursiveGlob(abspath(join(matlabHome, 'extern', 'lib')), searches)))
 
         mexExtCmd = os.path.join(matlabBin, 'mexext')        
-        if re.match(winRegex, platform):
+        if re.match(winRegex, self.env['PLATFORM']):
             archdir = self.env['IS64BIT'] and 'win64' or 'win32'
             mexExtCmd += '.bat'
         else:
@@ -85,7 +88,7 @@ def configure(self):
                        mandatory=True, env=env)
             
             libPrefix = ''
-            if re.match(winRegex, platform):
+            if re.match(winRegex, self.env['PLATFORM']):
                 libPrefix = 'lib'
             
             # self.check(lib='%smat' % libPrefix, libpath=libDirs, uselib_store='MEX', uselib='MEX',
@@ -95,7 +98,7 @@ def configure(self):
             self.check(lib='%smx' % libPrefix, libpath=libDirs, uselib_store='MEX', uselib='MEX',
                        mandatory=True, env=env)
             
-            if re.match(winRegex, platform):
+            if re.match(winRegex, self.env['PLATFORM']):
                 self.env.append_value('LINKFLAGS_MEX', '/EXPORT:mexFunction'.split())
 
         except ConfigurationError as ex:
@@ -107,5 +110,3 @@ def configure(self):
             else:
                 self.undefine('HAVE_MEX_H')
                 self.msg('matlab/mex lib/headers', err, color='YELLOW')
-        
-
