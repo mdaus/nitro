@@ -2,6 +2,7 @@ import zipfile, glob, sys
 import os, platform, shutil
 from subprocess import check_call
 from optparse import OptionParser
+import platform
 
 parser = OptionParser()
 parser.add_option("-p", "--package", dest="package_name", help="Package name")
@@ -53,6 +54,9 @@ elif 'linux' in os.environ.get('JOB_NAME'):
     install_suffix = 'x86_64-linux-gnu-64'
 elif 'win32' in os.environ.get('JOB_NAME'):
     install_suffix = 'win32'
+    if platform.architecture()[0] == '64bit':
+        # We're a 64-bit machine but running a 32-bit job
+        config_options += ['--enable-32bit']
 elif 'win64' in os.environ.get('JOB_NAME'):
     install_suffix = 'win64'
 if '-mt' in os.environ.get('JOB_NAME'):
