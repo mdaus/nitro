@@ -56,7 +56,10 @@ elif 'win32' in os.environ.get('JOB_NAME'):
     install_suffix = 'win32'
     if platform.architecture()[0] == '64bit':
         # We're a 64-bit machine but running a 32-bit job
-        config_options += ['--enable-32bit', '--with-java-home=' + os.environ.get('JAVA_HOME_32')]
+        java_home32 = os.environ.get('JAVA_HOME_32')
+        if java_home32:
+            os['JAVA_HOME'] = java_home32
+        config_options += ['--enable-32bit']
 elif 'win64' in os.environ.get('JOB_NAME'):
     install_suffix = 'win64'
 if '-mt' in os.environ.get('JOB_NAME'):
