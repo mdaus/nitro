@@ -25,6 +25,7 @@
 
 #include <cstddef>
 #include <vector>
+#include "mem/SharedPtr.h"
 
 namespace mem
 {
@@ -86,6 +87,51 @@ namespace mem
     private:
         std::vector<T*> mVec;
     };
+
+    template <typename T>
+        class VectorOfSharedPointers
+    {
+    public:
+        void push_back(T* value)
+        {
+            std::auto_ptr<T> scopedValue(value);
+            push_back(scopedValue);
+        }
+        
+        template <typename OtherT>
+            void push_back(OtherT* value)
+        {
+            std::auto_ptr<OtherT> scopedValue(value);
+            push_back(scopedValue);
+        }
+        
+        void push_back(std::auto_ptr<T> value)
+        {
+            mValues.resize(mValues.size() + 1);
+            mValues.back().reset(value.release());
+        }
+        
+        template <typename OtherT>
+            void push_back(std::auto_ptr<OtherT> value)
+        {
+            mValues.resize(mValues.size() + 1);
+            mValues.back().reset(value.release());
+        }
+        
+        std::vector<T*> get() const
+        {
+            std::vector<T*> values(mValues.size());
+            for (size_t ii = 0; ii < mValues.size(); ++ii)
+            {
+                values[ii] = mValues[ii].get();
+            }
+            return values;
+        }
+        
+    private:
+        std::vector<mem::SharedPtr<T> > mValues;
+    };
+
 }
 
 #endif
