@@ -28,5 +28,6 @@
 #include <mem/ScopedCloneablePtr.h>
 #include <mem/ScopedCopyablePtr.h>
 #include <mem/SharedPtr.h>
+#include <mem/VectorOfPointers.h>
 
 #endif
