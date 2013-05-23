@@ -31,8 +31,9 @@ namespace io
 class NullInputStream : public InputStream
 {
 public:
-    NullInputStream(long size) :
-        mSize(size), mAvailable(size)
+    NullInputStream(sys::SSize_T size) :
+        mSize(size),
+        mAvailable(size)
     {
     }
 
@@ -48,9 +49,9 @@ public:
     virtual sys::SSize_T read(sys::byte* b, sys::Size_T len)
     {
         sys::Size_T numToRead =
-                (mAvailable >= (long) len ? len : (sys::Size_T) mAvailable);
+                (mAvailable >= (sys::SSize_T) len ? len : (sys::Size_T) mAvailable);
 
-        mAvailable -= (long) numToRead;
+        mAvailable -= (sys::SSize_T) numToRead;
 
         if (numToRead == 0)
             throw except::IOException(Ctxt("EOF - no more data to read"));
@@ -77,7 +78,8 @@ public:
     }
 
 protected:
-    long mSize, mAvailable;
+    sys::SSize_T mSize;
+    sys::SSize_T mAvailable;
 
     virtual sys::byte processByte() const
     {
