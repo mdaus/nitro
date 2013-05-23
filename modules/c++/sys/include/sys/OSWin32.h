@@ -84,12 +84,6 @@ public:
     virtual bool exists(const std::string& path) const;
 
     /*!
-     *  Remove file with this path name
-     *  \return True upon success, false if failure
-     */
-    virtual bool remove(const std::string& path) const;
-
-    /*!
      *  Move file with this path name to the newPath
      *  Note: this will move (rename) either a file or a directory
      * (including its children) either in the same directory or across
@@ -178,6 +172,19 @@ public:
                         bool overwrite);
 
     virtual size_t getNumCPUs() const;
+
+protected:
+    /*!
+     *  Remove file with this pathname
+     *  \return True upon success, false if failure
+     */
+    virtual bool removeFile(const std::string& pathname) const;
+
+    /*!
+     *  Remove directory with this pathname
+     *  \return True upon success, false if failure
+     */
+    virtual bool removeDirectory(const std::string& pathname) const;
 };
 
 

@@ -95,14 +95,15 @@ sys::Pid_T sys::OSWin32::getProcessId() const
     return GetCurrentProcessId();
 }
 
-bool sys::OSWin32::remove(const std::string& path) const
+bool sys::OSWin32::removeFile(const std::string& pathname) const
 {
-    if (isDirectory(path))
-        return (RemoveDirectory(path.c_str())) ? (true): (false);
-
-    return (DeleteFile(path.c_str() )) ? (true) : (false);
+    return (DeleteFile(pathname.c_str() )) ? (true) : (false);
 }
 
+bool sys::OSWin32::removeDirectory(const std::string& pathname) const
+{
+    return (RemoveDirectory(pathname.c_str())) ? (true): (false);
+}
 
 bool sys::OSWin32::move(const std::string& path, 
                         const std::string& newPath) const

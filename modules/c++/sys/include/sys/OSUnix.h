@@ -70,12 +70,6 @@ public:
     virtual bool exists(const std::string& path) const;
 
     /*!
-     *  Remove file with this path name
-     *  \return True upon success, false if failure
-     */
-    virtual bool remove(const std::string& path) const;
-
-    /*!
      *  Move file with this path name to the newPath
      *  \return True upon success, false if failure
      */
@@ -158,6 +152,19 @@ public:
     virtual std::string getDSOSuffix() const;
 
     virtual size_t getNumCPUs() const;
+
+protected:
+    /*!
+     *  Remove file with this pathname
+     *  \return True upon success, false if failure
+     */
+    virtual bool removeFile(const std::string& pathname) const;
+
+    /*!
+     *  Remove directory with this pathname
+     *  \return True upon success, false if failure
+     */
+    virtual bool removeDirectory(const std::string& pathname) const;
 };
 
 

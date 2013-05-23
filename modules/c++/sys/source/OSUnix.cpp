@@ -57,25 +57,20 @@ bool sys::OSUnix::exists(const std::string& path) const
     return true;
 }
 
-bool sys::OSUnix::remove(const std::string& path) const
+bool sys::OSUnix::removeFile(const std::string& pathname) const
 {
-    if (isDirectory(path))
-    {
-        if (::rmdir(path.c_str()) == 0)
-            return true;
-    }
-    else
-    {
-        if (::unlink(path.c_str()) == 0)
-            return true;
-    }
-    return false;
+    return (::unlink(pathname.c_str()) == 0);
+}
+
+bool sys::OSUnix::removeDirectory(const std::string& pathname) const
+{
+    return (::rmdir(pathname.c_str()) == 0);
 }
 
 bool sys::OSUnix::move(const std::string& path, 
                        const std::string& newPath) const
 {
-    return rename(path.c_str(), newPath.c_str()) == 0;
+    return (::rename(path.c_str(), newPath.c_str()) == 0);
 }
 
 sys::Pid_T sys::OSUnix::getProcessId() const

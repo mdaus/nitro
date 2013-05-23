@@ -50,13 +50,9 @@ namespace sys
 class AbstractOS
 {
 public:
+    AbstractOS();
 
-    AbstractOS()
-    {
-    }
-    virtual ~AbstractOS()
-    {
-    }
+    virtual ~AbstractOS();
 
     /*!
      *  Get the name of the platform this was compiled for
@@ -93,44 +89,11 @@ public:
      *  \param extension      extensions should only be used for files
      *  \param pathList       The path list (colon delimited)
      */
-    virtual std::vector<std::string> 
-            search(const std::vector<std::string>& searchPaths,
-                   const std::string& fragment = "", 
-                   const std::string& extension = "",
-                   bool recursive = true)
-    {
-        std::vector<std::string> elementsFound;
-    
-        // add the search criteria
-        if (!fragment.empty() && !extension.empty())
-        {
-            sys::ExtensionPredicate extPred(extension);
-            sys::FragmentPredicate fragPred(fragment);
-
-            sys::LogicalPredicate logicPred(false);
-            logicPred.addPredicate(&extPred);
-            logicPred.addPredicate(&fragPred);
-            
-            elementsFound = sys::FileFinder::search(logicPred, 
-                                                    searchPaths, 
-                                                    recursive);
-        }
-        else if (!extension.empty())
-        {
-            sys::ExtensionPredicate extPred(extension);
-            elementsFound = sys::FileFinder::search(extPred, 
-                                                    searchPaths, 
-                                                    recursive);
-        }
-        else if (!fragment.empty())
-        {
-            sys::FragmentPredicate fragPred(fragment);
-            elementsFound = sys::FileFinder::search(fragPred, 
-                                                    searchPaths, 
-                                                    recursive);
-        }
-        return elementsFound;
-    }
+    std::vector<std::string>
+    search(const std::vector<std::string>& searchPaths,
+           const std::string& fragment = "",
+           const std::string& extension = "",
+           bool recursive = true) const;
 
     /*!
      *  Does this path exist?
@@ -143,7 +106,7 @@ public:
      *  Remove file with this path name
      *  \return True upon success, false if failure
      */
-    virtual bool remove(const std::string& path) const = 0;
+    virtual bool remove(const std::string& path, bool recursive = true) const;
 
     /*!
      *  Move file with this path name to the newPath
@@ -235,6 +198,19 @@ public:
     virtual std::string getDSOSuffix() const = 0;
 
     virtual size_t getNumCPUs() const = 0;
+
+protected:
+    /*!
+     *  Remove file with this pathname
+     *  \return True upon success, false if failure
+     */
+    virtual bool removeFile(const std::string& pathname) const = 0;
+
+    /*!
+     *  Remove directory with this pathname
+     *  \return True upon success, false if failure
+     */
+    virtual bool removeDirectory(const std::string& pathname) const = 0;
 };
 
 class AbstractDirectory
