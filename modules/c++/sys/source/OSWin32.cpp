@@ -71,8 +71,8 @@ bool sys::OSWin32::exists(const std::string& path) const
 
     if (what == INVALID_FILE_ATTRIBUTES)
     {
-        DWORD errCode = GetLastError();
-        if (errCode != ERROR_FILE_NOT_FOUND)
+        const DWORD errCode = GetLastError();
+        if (errCode != ERROR_FILE_NOT_FOUND && errCode != ERROR_PATH_NOT_FOUND)
         {
             char* err = NULL;
             FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | 
