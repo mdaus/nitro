@@ -165,11 +165,11 @@ bool ValidatorXerces::validate(const std::string& xml,
         xercesc::XMLPlatformUtils::fgMemoryManager);
 
     // expand to the wide character data for use with xerces
-    xml::lite::XercesLocalString xmlWide(xml.c_str());
+    xml::lite::XercesLocalString xmlWide(xml);
     input.setStringData(xmlWide.toXMLCh());
 
     // validate the document
-    mValidator->parse(&input);
+    mValidator->parse(&input)->release();
 
     // add the new errors to the vector 
     errors.insert(errors.end(), 

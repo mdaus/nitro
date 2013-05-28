@@ -93,8 +93,15 @@ typedef xml::lite::Attributes     LiteAttributes_T;
 typedef xml::lite::AttributeNode  LiteAttributesNode_T;
 
 /*!
- *  Interface to Xerces-C XMLCh*.  This is a string conversion
- *  class allowing unicode/native transparency
+ *  Interface to Xerces-C XMLCh*.  This is an RAII converter
+ *  between xerces-c 16bit chars to 8bit chars.
+ *
+ *  This class works off of the assumption that Xerces-c passes
+ *  around pointers as const or non-const depending on the 
+ *  ownership limitations of the memory and reacts accordingly.
+ *  This object always accepts the memory internally, but for
+ *  non-const it takes ownership, and for const memory (assumed
+ *  to be owned elsewhere) it makes a deep copy for its own use.
  */
 class XercesLocalString
 {
@@ -102,69 +109,146 @@ public:
 
     /*!
      *  Constructor from XMLCh*
+     *  Takes ownership of the memory and will clean it up
      *  \param xmlStr   An XMLCh*
      */
-    XercesLocalString(const XMLCh *xmlStr);
+    XercesLocalString(XMLCh* xmlStr);
+
+    /*!
+     *  Constructor from const XMLCh*
+     *  Performs a deep copy of the memory for internal use and cleanup
+     *  \param xmlStr   An XMLCh*
+     */
+    XercesLocalString(const XMLCh* xmlStr);
+
 
     /*!
      *  Constructor from c_str*
      *  \param c_str   A c_str*
      */
-    XercesLocalString(const char *c_str);
+    XercesLocalString(const char* c_str);
+
+    /*!
+     *  Constructor from std::string
+     *  \param str   A std::string*
+     */
+    XercesLocalString(const std::string& str);
+
 
     /*!
      *  Copy Constructor
+     *  Performs a deep copy of the objects internal memory
      *  \param rhs the right-hand side operand of the operation
      */
     XercesLocalString(const XercesLocalString& rhs);
 
     //! Destructor
     ~XercesLocalString()
-    { }
+    {
+        try
+        {
+            destroyXMLCh(&mLocal);
+        }
+        catch(...)
+        {
+        }
+    }
 
     /*!
-     *  Convert a XercesLocalString to an XMLCh*
+     *  Gives back a const XMLCh*
+     *    
+     *  returning it as const is important so other classes
+     *  know its owned by this object
+     *
+     *  \return          a const XMLCh*
+     */
+    const XMLCh* toXMLCh() const
+    {
+        return mLocal;
+    }
+    
+    /*!
+     *  Gives back an XMLCh*
+     *
+     *  Performs a deep copy and releases ownership of it
+     *
+     *  This is return as non-const so others know they need
+     *  to clean it up.
+     *
      *  \return          an XMLCh*
      */
-    XMLCh *toXMLCh() const;
+    XMLCh* clone() const
+    {
+        return XMLString::replicate(mLocal);
+    }
 
     /*!
      *  Assign from an XMLCh*
+     *  Takes ownership of the memory and will clean it up
      *  \param xmlStr    An XMLCh*
      *  \return          A reference to *this
      */
-    XercesLocalString& operator=(const XMLCh *xmlStr);
+    XercesLocalString& operator=(XMLCh* xmlStr);
+
+    /*!
+     *  Assign from a const XMLCh*
+     *  Performs a deep copy of the memory for internal use and cleanup
+     *  \param xmlStr    An XMLCh*
+     *  \return          A reference to *this
+     */
+    XercesLocalString& operator=(const XMLCh* xmlStr);
 
     /*!
      *  Assign from a XercesLocalString
+     *  Performs a deep copy of the objects internal memory
      *  \param rhs    A XercesLocalString*
      *  \return       A reference to *this
      */
     XercesLocalString& operator=(const XercesLocalString& rhs);
 
-    /*! Return a native c string */
-    const char *c_str() const
-    {
-        return mLocal.c_str();
-    }
-
     /*! Return a native std::string */
-    std::string str()
+    std::string str() const
     {
-        return mLocal;
+        return toStr(mLocal);
     }
 
-protected:
+    /*! Return a native c string */
+    const char* c_str() const
+    {
+        return str().c_str();
+    }
 
     /*!
-     *  Convert a string from XMLCh* to std::string
+     *  Convert from const XMLCh* to std::string
      *  \param  xmlStr    an XMLCh* string
      *  \return           a local std::string
      */
-    std::string toLocal(const XMLCh *xmlStr);
+    static std::string toStr(const XMLCh* xmlStr)
+    {
+        return std::string(XMLString::transcode(xmlStr));
+    }
+
+    static void destroyXMLCh(XMLCh** a)
+    {
+        if (*a != NULL)
+        {
+            try 
+            {
+                XMLString::release(a);
+                *a = NULL;
+            }
+            catch (...)
+            {
+                throw except::Exception(Ctxt(
+                    "XercesLocalString unsuccessful in destroying memory"));
+            }
+        }
+    }
+
+private:
 
     //! The local string
-    std::string mLocal;
+    XMLCh* mLocal;
 };
 
 
@@ -190,8 +274,7 @@ protected:
  *  Xerces use as well as Expat (and ultimately MSXML as well)
  *
  */
-class XercesContentHandler :
-            public XercesContentHandlerInterface_T
+class XercesContentHandler : public XercesContentHandlerInterface_T
 {
 public:
     /*!
@@ -207,13 +290,13 @@ public:
     ~XercesContentHandler()
     {}
 
-    virtual void ignorableWhitespace(const XMLCh *const chars,
+    virtual void ignorableWhitespace(const XMLCh* const chars,
                                      const XercesSize_T length)
     {}
-    virtual void  processingInstruction(const XMLCh *const target,
-                                        const XMLCh *const data)
+    virtual void  processingInstruction(const XMLCh* const target,
+                                        const XMLCh* const data)
     {}
-    virtual void  setDocumentLocator(const Locator *const locator)
+    virtual void  setDocumentLocator(const Locator* const locator)
     {}
 
     /*!
@@ -238,11 +321,11 @@ public:
      *  \param localName The local (unprefixed name)
      *  \param qname The fully qualified name
      */
-    virtual void endElement(const XMLCh *const uri,
-                            const XMLCh *const localName,
-                            const XMLCh *const qname);
+    virtual void endElement(const XMLCh* const uri,
+                            const XMLCh* const localName,
+                            const XMLCh* const qname);
 
-    virtual void skippedEntity (const XMLCh *const name)
+    virtual void skippedEntity (const XMLCh* const name)
     {}
 
     //! Fire off the start document notification
@@ -257,19 +340,18 @@ public:
      *  \param qname The fully qualified name
      *  \param attrs The attributes in Xerces form
      */
-    virtual void startElement(const XMLCh *const uri,
-                              const XMLCh *const localName,
-                              const XMLCh *const qname,
-                              const
-                              XercesAttributesInterface_T &attrs);
+    virtual void startElement(const XMLCh* const uri,
+                              const XMLCh* const localName,
+                              const XMLCh* const qname,
+                              const XercesAttributesInterface_T &attrs);
 
     /*!
      *  Begin prefix mapping.  Transfer string types
      *  \param prefix The prefix to start mapping
      *  \param uri The corresponding uri
      */
-    virtual void startPrefixMapping (const XMLCh *const prefix,
-                                     const XMLCh *const uri)
+    virtual void startPrefixMapping (const XMLCh* const prefix,
+                                     const XMLCh* const uri)
     {
     }
 
@@ -277,7 +359,7 @@ public:
      *  End prefix mapping.  Transfer string types
      *  \param prefix The prefix to stop mapping
      */
-    virtual void endPrefixMapping (const XMLCh *const prefix)
+    virtual void endPrefixMapping (const XMLCh* const prefix)
     {
     }
 
@@ -308,8 +390,7 @@ protected:
 *  Our error handler implementation, then, simply calls the raise,
 *  and warning macros in the factory.
 */
-class XercesErrorHandler :
-            public XercesErrorHandlerInterface_T
+class XercesErrorHandler : public XercesErrorHandlerInterface_T
 {
 public:
     /*!

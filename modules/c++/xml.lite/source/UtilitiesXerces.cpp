@@ -26,31 +26,53 @@
 
 sys::Mutex xml::lite::XercesContext::mMutex;
 
-xml::lite::XercesLocalString::XercesLocalString(const XMLCh *xmlStr)
+xml::lite::XercesLocalString::XercesLocalString(XMLCh* xmlStr) :
+    mLocal(xmlStr)
 {
-    mLocal = toLocal(xmlStr);
 }
 
-xml::lite::XercesLocalString::XercesLocalString(const char *c_str)
+xml::lite::XercesLocalString::XercesLocalString(const XMLCh* xmlStr) :
+    mLocal(XMLString::replicate(xmlStr))
 {
-    mLocal = c_str;
+}
+
+xml::lite::XercesLocalString::XercesLocalString(const char* c_str) :
+    mLocal(XMLString::transcode(c_str))
+{
+}
+
+xml::lite::XercesLocalString::XercesLocalString(const std::string& str) :
+    mLocal(XMLString::transcode(str.c_str()))
+{
 }
 
 xml::lite::XercesLocalString::
 XercesLocalString(const XercesLocalString& rhs)
 {
-    mLocal = rhs.mLocal;
-}
-
-XMLCh *xml::lite::XercesLocalString::toXMLCh() const
-{
-    return XMLString::transcode(mLocal.c_str());
+    mLocal = rhs.clone();
 }
 
 xml::lite::XercesLocalString& xml::lite::XercesLocalString::
-operator=(const XMLCh *xmlStr)
+operator=(XMLCh* xmlStr)
 {
-    mLocal = toLocal(xmlStr);
+    // clean up old memory first
+    if (xmlStr != mLocal)
+    {
+        destroyXMLCh(&mLocal);
+        mLocal = xmlStr;
+    }
+    return *this;
+}
+
+xml::lite::XercesLocalString& xml::lite::XercesLocalString::
+operator=(const XMLCh* xmlStr)
+{
+    // clean up old memory first
+    if (xmlStr != mLocal)
+    {
+        destroyXMLCh(&mLocal);
+        mLocal = XMLString::replicate(xmlStr);
+    }
     return *this;
 }
 
@@ -59,21 +81,14 @@ operator=(const xml::lite::XercesLocalString& rhs)
 {
     if (this != &rhs)
     {
-        mLocal = rhs.mLocal;
+        destroyXMLCh(&mLocal);
+        mLocal = rhs.clone();
     }
     return *this;
 }
 
-std::string xml::lite::XercesLocalString::toLocal(const XMLCh *xmlStr)
-{
-    char *localCStr = XMLString::transcode(xmlStr);
-    std::string local = localCStr;
-    XMLString::release(&localCStr);
-    return local;
-}
-
 void xml::lite::XercesContentHandler::characters(const XMLCh* const chars,
-        const XercesSize_T length)
+                                                 const XercesSize_T length)
 {
     xml::lite::XercesLocalString xstr(chars);
     mLiteHandler->characters(xstr.c_str(), (int)length);
@@ -89,9 +104,9 @@ void xml::lite::XercesContentHandler::endDocument()
     mLiteHandler->endDocument();
 }
 
-void xml::lite::XercesContentHandler::endElement(const XMLCh *const uri,
-        const XMLCh *const localName,
-        const XMLCh *const qname)
+void xml::lite::XercesContentHandler::endElement(const XMLCh* const uri,
+                                                 const XMLCh* const localName,
+                                                 const XMLCh* const qname)
 {
     xml::lite::XercesLocalString xuri(uri);
     xml::lite::XercesLocalString xlocalName(localName);
@@ -102,12 +117,11 @@ void xml::lite::XercesContentHandler::endElement(const XMLCh *const uri,
                              xqname.str());
 }
 
-void xml::lite::XercesContentHandler::
-startElement(const XMLCh *const uri,
-             const XMLCh *const localName,
-             const XMLCh *const qname,
-             const XercesAttributesInterface_T &attrs)
-
+void xml::lite::XercesContentHandler::startElement(
+        const XMLCh* const uri,
+        const XMLCh* const localName,
+        const XMLCh* const qname,
+        const XercesAttributesInterface_T &attrs)
 {
     // We have to copy the whole array
     LiteAttributes_T attributes;
@@ -118,21 +132,16 @@ startElement(const XMLCh *const uri,
             XercesLocalString(attrs.getQName(i)).str()
         );
 
-        assert(attributeNode.getLocalName() ==
-               XercesLocalString(attrs.getLocalName(i)).str()
-              );
+        assert(attributeNode.getLocalName() == 
+               XercesLocalString(attrs.getLocalName(i)).str());
 
-        attributeNode.setUri(
-            XercesLocalString(attrs.getURI(i)).str()
-        );
+        attributeNode.setUri(XercesLocalString(attrs.getURI(i)).str());
 
-        attributeNode.setValue(
-            XercesLocalString(attrs.getValue(i)).str()
-        );
+        attributeNode.setValue(XercesLocalString(attrs.getValue(i)).str());
 
         //don't add duplicate attributes
         if (attributes.getIndex(attributeNode.getUri(),
-                                  attributeNode.getLocalName()) == -1)
+                                attributeNode.getLocalName()) == -1)
             attributes.add(attributeNode);
     }
 
