@@ -123,10 +123,10 @@ public:
 
 
     /*!
-     *  Constructor from c_str*
-     *  \param c_str   A c_str*
+     *  Constructor from const char*
+     *  \param str   A const char*
      */
-    XercesLocalString(const char* c_str);
+    XercesLocalString(const char* str);
 
     /*!
      *  Constructor from std::string
@@ -167,21 +167,6 @@ public:
         return mLocal;
     }
     
-    /*!
-     *  Gives back an XMLCh*
-     *
-     *  Performs a deep copy and releases ownership of it
-     *
-     *  This is return as non-const so others know they need
-     *  to clean it up.
-     *
-     *  \return          an XMLCh*
-     */
-    XMLCh* clone() const
-    {
-        return XMLString::replicate(mLocal);
-    }
-
     /*!
      *  Assign from an XMLCh*
      *  Takes ownership of the memory and will clean it up
@@ -230,7 +215,7 @@ public:
 
     static void destroyXMLCh(XMLCh** a)
     {
-        if (*a != NULL)
+        if (a != NULL && *a != NULL)
         {
             try 
             {

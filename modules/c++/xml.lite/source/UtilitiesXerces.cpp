@@ -36,8 +36,8 @@ xml::lite::XercesLocalString::XercesLocalString(const XMLCh* xmlStr) :
 {
 }
 
-xml::lite::XercesLocalString::XercesLocalString(const char* c_str) :
-    mLocal(XMLString::transcode(c_str))
+xml::lite::XercesLocalString::XercesLocalString(const char* str) :
+    mLocal(XMLString::transcode(str))
 {
 }
 
@@ -49,7 +49,7 @@ xml::lite::XercesLocalString::XercesLocalString(const std::string& str) :
 xml::lite::XercesLocalString::
 XercesLocalString(const XercesLocalString& rhs)
 {
-    mLocal = rhs.clone();
+    mLocal = XMLString::replicate(rhs.toXMLCh());
 }
 
 xml::lite::XercesLocalString& xml::lite::XercesLocalString::
@@ -82,7 +82,7 @@ operator=(const xml::lite::XercesLocalString& rhs)
     if (this != &rhs)
     {
         destroyXMLCh(&mLocal);
-        mLocal = rhs.clone();
+        mLocal = XMLString::replicate(rhs.toXMLCh());
     }
     return *this;
 }
