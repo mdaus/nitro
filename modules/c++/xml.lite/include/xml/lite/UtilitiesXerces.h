@@ -197,12 +197,6 @@ public:
         return toStr(mLocal);
     }
 
-    /*! Return a native c string */
-    const char* c_str() const
-    {
-        return str().c_str();
-    }
-
     /*!
      *  Convert from const XMLCh* to std::string
      *  \param  xmlStr    an XMLCh* string

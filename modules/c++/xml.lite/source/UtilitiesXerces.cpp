@@ -91,7 +91,7 @@ void xml::lite::XercesContentHandler::characters(const XMLCh* const chars,
                                                  const XercesSize_T length)
 {
     xml::lite::XercesLocalString xstr(chars);
-    mLiteHandler->characters(xstr.c_str(), (int)length);
+    mLiteHandler->characters(xstr.str().c_str(), (int)length);
 }
 
 void xml::lite::XercesContentHandler::startDocument()

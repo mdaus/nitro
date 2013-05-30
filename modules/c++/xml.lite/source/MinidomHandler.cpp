@@ -77,14 +77,13 @@ std::string xml::lite::MinidomHandler::adjustCharacterData()
 
     int diff = (int) (currentCharacterData.length()) - bytesForElement.top();
 
-    std::string
-            newCharacterData(currentCharacterData.substr(
+    std::string newCharacterData(currentCharacterData.substr(
                                  diff,
                                  currentCharacterData.length())
                 );
     assert(diff >= 0);
     currentCharacterData.erase(diff, currentCharacterData.length());
-    if (!mPreserveCharData)
+    if (!mPreserveCharData && !newCharacterData.empty())
         trim(newCharacterData);
 
     return newCharacterData;
