@@ -65,7 +65,10 @@ template<typename Vector_T> OneD<double> fit(const Vector_T& x,
     math::linear::Matrix2D<double> inv = inverse(At * A);
     math::linear::Matrix2D<double> B = inv * At;
     math::linear::Vector<double> c(B * vy.matrix());
-    return math::poly::OneD<double>(c.vec());
+    // use the vector constructor
+    std::vector<double> cv(c.size());
+    std::copy(c.get(), c.get()+c.size(), cv.begin());
+    return math::poly::OneD<double>(cv);
 }
 
 

@@ -25,12 +25,17 @@
 #include <cmath>
 #include <algorithm>
 #include <import/sys.h>
+#include <mem/ScopedArray.h>
 #include "math/linear/MatrixMxN.h"
 
 namespace math
 {
 namespace linear
 {
+
+// Forward declare friend class
+template <typename _T>
+class Vector;
 
 /*!
  *  \class Matrix2D
@@ -43,17 +48,14 @@ namespace linear
  *  matrix dimensions are known a priori).
  *
  *  This class is assumed to be a mathematical matrix of small to moderate size.  Memory
- *  allocation is managed by the STL vector used underneath.
+ *  allocation is managed by the ScopedArray used underneath.
  *
  *
  */
 template <typename _T=double>
 class Matrix2D
 {
-    
-public:
-    //!  The raw storage
-    std::vector<_T> mRaw;
+    friend class Vector<_T>;
 
     //!  Matrix dimension in rows
     size_t mM;
@@ -61,8 +63,21 @@ public:
     //!  Matrix dimension in cols
     size_t mN;
 
+    //! Length of storage
+    size_t mMN;
+
+    //! storage owned by the object
+    mem::ScopedArray<_T> mStorage;
+
+    //!  pointer to the raw storage
+    _T *mRaw;
+
+public:
     //! Default constructor (does nothing)
-    Matrix2D() { mM = mN = 0; }
+    Matrix2D() :
+        mM(0), mN(0), mMN(0), mRaw(NULL)
+    {
+    }
 
     /*!
      *  Create a matrix with a constant value for
@@ -75,12 +90,12 @@ public:
      *  \endcode
      *
      */
-    Matrix2D(size_t M, size_t N, _T cv = 0)
+    Matrix2D(size_t M, size_t N, _T cv = 0) :
+        mM(M), mN(N), mMN(M*N),
+        mStorage(new _T[mMN]),
+        mRaw(mStorage.get())
     {
-
-        mRaw.resize(M * N, cv);
-        mM = M;
-        mN = N;
+        std::fill_n(mRaw, mMN, cv);
     }
    /*!
      *  Construct a matrix from a 1D raw M*N pointer.
@@ -98,16 +113,12 @@ public:
      *  
      *  \param raw A raw pointer to copy internally
      */
-    Matrix2D(size_t M, size_t N, const _T* raw)
+    Matrix2D(size_t M, size_t N, const _T* raw) :
+        mM(M), mN(N), mMN(M*N),
+        mStorage(new _T[mMN]),
+        mRaw(mStorage.get())
     {
-        size_t sz = M * N;
-        mRaw.resize(sz);
-        for (size_t i = 0; i < sz; ++i)
-        {
-           mRaw[i] = raw[i];
-        }
-        mM = M;
-        mN = N;
+        std::copy(raw, raw+mMN, mRaw);
     }
     /*!
      *  Construct a matrix from a 1D M*N vector.
@@ -119,11 +130,13 @@ public:
      *
      *
      */
-    Matrix2D(size_t M, size_t N, const std::vector<_T>& raw)
+    Matrix2D(size_t M, size_t N, const std::vector<_T>& raw) :
+        mM(M), mN(N), mMN(M*N),
+        mStorage(new _T[mMN]),
+        mRaw(mStorage.get())
     {
-        mRaw = raw;
-        mM = M;
-        mN = N;
+        // use mMN endpoint, since mMN can be less than raw.size()
+        std::copy(raw.begin(), raw.begin()+mMN, mRaw);
     }
     /*!
      *  Supports explicit assignment from
@@ -135,14 +148,34 @@ public:
           Matrix2D<> At(A.transpose());
      *  \endcode
      */
-    Matrix2D(const Matrix2D& mx)
+    Matrix2D(const Matrix2D& mx) :
+        mM(mx.mM), mN(mx.mN), mMN(mx.mMN),
+        mStorage(new _T[mMN]),
+        mRaw(mStorage.get())
     {
-        mRaw = mx.mRaw;
-        mM = mx.mM;
-        mN = mx.mN;
+        std::copy(mx.mRaw, mx.mRaw+mMN, mRaw);
     }
-   
-
+    /*!
+     *  Supports use of the class as a decorator
+     *  for an existing pointer. The object
+     *  may adopt the pointer, taking responsibility
+     *  for its destruction.
+     *
+     *  \code
+          std::vector<double> vec9(9, 42.0);
+          Matrix2D<> At(3, 3, &vec9[0], false);
+     *  \endcode
+     */
+    Matrix2D(size_t M, size_t N, _T* raw, bool adopt) :
+        mM(M), mN(N), mMN(M*N), mRaw(raw)
+    {
+        if (adopt)
+        {
+            // pointer will be destroyed by us
+            mStorage.reset(raw);
+            mRaw = mStorage.get();
+        }
+    }
   
     /*!
      *  Assignment operator from one matrix to another
@@ -158,9 +191,14 @@ public:
     {
         if (this != &mx)
         {
-            mRaw = mx.mRaw;
-            mM = mx.mM;
-            mN = mx.mN;
+            mM  = mx.mM;
+            mN  = mx.mN;
+            mMN = mx.mMN;
+
+            mStorage.reset(new _T[mMN]),
+            mRaw = mStorage.get();
+
+            std::copy(mx.mRaw, mx.mRaw+mMN, mRaw);
         }
         return *this;
     }
@@ -179,9 +217,11 @@ public:
      */
     Matrix2D& operator=(const _T& sv)
     {
-        mM = 1;
-        mN = 1;
-        mRaw.resize(1, sv);
+        mM  = 1;
+        mN  = 1;
+        mMN = 1;
+        mStorage.reset(new _T[1]);
+        mRaw = mStorage.get();
         mRaw[0] = sv;
         return *this;
     }
@@ -389,10 +429,10 @@ public:
     size_t cols() const { return mN; }
 
     //!  Return total size (M x N)
-    size_t size() const { return mRaw.size(); }
+    size_t size() const { return mMN; }
 
     //! Get a constant ref to the underlying vector
-    const std::vector<_T>& vec() const { return mRaw; }
+    const _T* get() const { return mRaw; }
  
     /*!
      *  Equality operator test
@@ -471,8 +511,7 @@ public:
      */
     Matrix2D& scale(_T scalar)
     {
-        size_t sz = mRaw.size();
-        for (size_t i = 0; i < sz; ++i)
+        for (size_t i = 0; i < mMN; ++i)
             mRaw[i] *= scalar;
         return *this;
     }
@@ -496,10 +535,9 @@ public:
      */
     Matrix2D multiply(_T scalar) const
     {
-        size_t sz = mRaw.size();
         Matrix2D mx = *this;
        
-        for (size_t i = 0; i < sz; ++i)
+        for (size_t i = 0; i < mMN; ++i)
         {
             mx.mRaw[i] *= scalar;
         }
@@ -529,30 +567,65 @@ public:
         multiply(const Matrix2D& mx) const
     {
         if (mN != mx.mM)
-            throw except::Exception(Ctxt("Invalid size for multiply"));
+            throw except::Exception(Ctxt(
+                "Invalid inner dimension sizes for multiply"));
 
         size_t M = mM;
-        size_t N = mN;
         size_t P = mx.mN;
 
         Matrix2D newM(M, P);
-        
-        size_t i, j, k;
+        multiply(mx, newM);
+        return newM;
+    }
 
+    /*!
+     *  Multiply an NxP matrix to a MxN matrix (this) to
+     *  produce an MxP matrix output.
+     *
+     *  This function accesses the inner arrays for
+     *  (potential, though slight) performance reasons.
+     *
+     *  \param mx An NxP matrix
+     *  \param out An MxP matrix
+     *
+     *  \code
+           Matrix2D<> a3x1(3, 1, 42.0);
+           Matrix2D<> a1x3(1, 3, 1.0);
+           Matrix2D<> a3x3(3, 3, 0);
+           A.multiply(B, a3x3);
+     *  \endcode
+     *
+     */
+    void
+    multiply(const Matrix2D& mx, Matrix2D &out) const
+    {
+        size_t M(mM);
+        size_t N(mN);
+        size_t P(mx.mN);
+
+        if (mN != mx.mM)
+            throw except::Exception(Ctxt(
+                "Invalid inner dimension sizes for multiply"));
+        if (out.mM != M)
+            throw except::Exception(Ctxt(
+                "Invalid output row size for multiply"));
+        if (out.mN != P)
+            throw except::Exception(Ctxt(
+                "Invalid output column size for multiply"));
+
+        size_t i, j, k;
         for (i = 0; i < M; i++)
         {
             for (j = 0; j < P; j++)
             {
-		        newM(i, j) = 0;
+                out(i, j) = 0;
 
                 for (k = 0; k < N; k++)
                 {
-                    newM(i, j) += mRaw[i * N + k] * mx(k, j);
+                    out(i, j) += mRaw[i * N + k] * mx(k, j);
                 }
             }
         }
-        return newM;
-
     }
 
 
@@ -663,8 +736,7 @@ public:
         if (mM != mx.mM || mN != mx.mN)
             throw except::Exception(Ctxt("Required to equally size matrices for element-wise add"));
 
-        size_t sz = mRaw.size();
-        for (size_t i = 0; i < sz; ++i)
+        for (size_t i = 0; i < mMN; ++i)
         {
             mRaw[i] += mx.mRaw[i];
         }
@@ -1028,8 +1100,8 @@ template<typename _T>
     // If we dont have something in the diagonal, we can't solve this
     math::linear::Matrix2D<_T> x = b.permute(pivotsM);
 
-    const size_t P = b.mN;
-    const size_t N = lu.mN;
+    const size_t P = b.cols();
+    const size_t N = lu.cols();
     for (size_t kk = 0; kk < N; kk++) 
     {
         for (size_t ii = kk + 1; ii < N; ii++) 
@@ -1143,8 +1215,8 @@ template<typename _T> inline
 {
    
 
-    size_t M = mx.mM;
-    size_t N = mx.mN;
+    size_t M = mx.rows();
+    size_t N = mx.cols();
     Matrix2D<_T> a(M, M, (_T)0);
 
     for (size_t i = 0; i < M; i++)
@@ -1176,11 +1248,11 @@ template<typename _T> inline
     Matrix2D<_T> inverse(const Matrix2D<_T>& mx)
 {
     // Try to speed this up
-    if (mx.mM != mx.mN)
+    if (mx.rows() != mx.cols())
         throw except::Exception(Ctxt("Expected a square matrix"));
-    if (mx.mM == 2)
+    if (mx.rows() == 2)
         return inverse2x2<_T>(mx);
-    if (mx.mM == 3)
+    if (mx.rows() == 3)
         return inverse3x3<_T>(mx);
         // TODO Add 4x4
     
@@ -1206,10 +1278,10 @@ template<typename _T>
 
 
     size_t i, j;
-    os << "(" << m.mM << ',' << m.mN << ")" << std::endl;
-    for (i = 0; i < m.mM; ++i)
+    os << "(" << m.rows() << ',' << m.cols() << ")" << std::endl;
+    for (i = 0; i < m.rows(); ++i)
     {
-        for (j = 0; j < m.mN; ++j)
+        for (j = 0; j < m.cols(); ++j)
         {
             os << std::setw(10) << m(i, j) << " ";
         }

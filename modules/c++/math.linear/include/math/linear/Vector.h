@@ -180,7 +180,7 @@ public:
      *  Get the number of components in the vector
      *  \return size
      */
-    size_t size() const { return mRaw.mRaw.size(); }
+    size_t size() const { return mRaw.size(); }
 
     //!  Get back the raw matrix implementation
     Matrix2D<_T>& matrix() { return mRaw; }
@@ -189,7 +189,7 @@ public:
     const Matrix2D<_T>& matrix() const { return mRaw; }
 
     //!  Get back a const-vector
-    const std::vector<_T>& vec() const { return mRaw.mRaw; }
+    const _T* get() const { return mRaw.get(); }
 
     //!  Const dereference operator
     inline _T operator[](size_t i) const
@@ -197,7 +197,7 @@ public:
 #if defined(MATH_LINEAR_BOUNDS)
         assert( i < _ND );
 #endif
-        return mRaw.mRaw[i];
+        return mRaw.get()[i];
     }
 
     //!  Non-const reference operator
@@ -223,7 +223,7 @@ public:
     _T dot(const Vector& vec_) const
     {
         _T acc(0);
-        size_t sz = mRaw.mRaw.size();
+        size_t sz = mRaw.size();
         if (vec_.size() != sz)
             throw except::Exception(Ctxt("Dot product requires equal size vectors"));
         for (size_t i = 0; i < sz; ++i)

@@ -1,7 +1,7 @@
 NAME            = 'math.linear'
 MAINTAINER      = 'jmrandol@users.sourceforge.net'
 VERSION         = '0.2'
-MODULE_DEPS     = 'sys'
+MODULE_DEPS     = 'sys mem'
 
 options = configure = distclean = lambda p: None
 

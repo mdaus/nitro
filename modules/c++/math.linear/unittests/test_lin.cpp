@@ -52,11 +52,9 @@ TEST_CASE(testEquality)
         TEST_ASSERT(false);
     if (v3 != v1)
         TEST_ASSERT(false);
-
     
     TEST_ASSERT_EQ(v2, v3);
     TEST_ASSERT_EQ(v3, v2);
-    
 }
 
 TEST_CASE(testPtrAssign)
@@ -68,8 +66,8 @@ TEST_CASE(testPtrAssign)
     if (v2 != v1)
         TEST_ASSERT(false);
     TEST_ASSERT_EQ(v2, v3);
-
 }
+
 TEST_CASE(testSTLVectorAssign)
 {
     std::vector<double> v1(3, 42);
@@ -81,10 +79,34 @@ TEST_CASE(testSTLVectorAssign)
     TEST_ASSERT_EQ(v2, v3);
 }
 
+TEST_CASE(testEmptyDim)
+{
+    Matrix2D<double> AScale(3, 0);
+}
+
+TEST_CASE(testPtrDecorator)
+{
+    std::vector<double> v1(9, 1);
+    Matrix2D<double> AScale(3, 3, &v1[0], false);
+
+    AScale.scale(5);
+    std::vector<double> v5(9, 5);
+
+    // validate that the underlying memory has been mutated
+    for (size_t i = 0; i < v1.size(); ++i)
+        TEST_ASSERT_EQ(v1[i], v5[i]);
+}
+
+TEST_CASE(testPtrAdopt)
+{
+    // valgrind to ensure that we don't have a leak
+    Matrix2D<double> AScale(3, 3, new double[9], true);
+}
+
 TEST_CASE(testArithmetic)
 {
     Matrix2D<double> A = identityMatrix<double>(3);
-    Matrix3x3 A2( A.mRaw );
+    Matrix3x3 A2( &(A.get())[0] );
 
     Vector<double> x = constantVector<double>(3, 1.2);
     x[2] = 2;
@@ -97,7 +119,6 @@ TEST_CASE(testArithmetic)
 
     Vector<double> b = A * x;
     TEST_ASSERT_EQ(b, x);
-    
 }
 
 TEST_CASE(testLinear)
@@ -136,9 +157,7 @@ TEST_CASE(testLinear)
     Vector3 zeros((double)0);
 
     TEST_ASSERT_EQ(w3, zeros);
-
 }
-
 
 TEST_CASE(testNormalize)
 {
@@ -168,6 +187,9 @@ int main()
     TEST_CHECK(testNormalize);
     TEST_CHECK(testPtrAssign);
     TEST_CHECK(testSTLVectorAssign);
+    TEST_CHECK(testEmptyDim);
+    TEST_CHECK(testPtrDecorator);
+    TEST_CHECK(testPtrAdopt);
     TEST_CHECK(testArithmetic);
     TEST_CHECK(testLinear);
     /*
