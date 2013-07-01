@@ -204,10 +204,30 @@ public:
      */
     static std::string toStr(const XMLCh* xmlStr)
     {
-        return std::string(XMLString::transcode(xmlStr));
+        char* transcodedStr = XMLString::transcode(xmlStr);
+        std::string ret = transcodedStr;
+        destroyChArray(&transcodedStr);
+        return ret;
     }
 
     static void destroyXMLCh(XMLCh** a)
+    {
+        if (a != NULL && *a != NULL)
+        {
+            try 
+            {
+                XMLString::release(a);
+                *a = NULL;
+            }
+            catch (...)
+            {
+                throw except::Exception(Ctxt(
+                    "XercesLocalString unsuccessful in destroying memory"));
+            }
+        }
+    }
+
+    static void destroyChArray(char** a)
     {
         if (a != NULL && *a != NULL)
         {
