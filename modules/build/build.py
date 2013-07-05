@@ -551,6 +551,7 @@ class CPPContext(Context.Context):
         lang = modArgs.get('lang', 'c++')
         libExeType = {'c++':'cxx', 'c':'c'}.get(lang, 'cxx')
         libName = modArgs.get('libname', '%s-%s' % (modArgs['name'], lang))
+        targetName = modArgs.get('targetname', libName)
         plugin = modArgs.get('plugin', '')
         path = modArgs.get('path',
                            'dir' in modArgs and bld.path.find_dir(modArgs['dir']) or bld.path)
@@ -571,9 +572,9 @@ class CPPContext(Context.Context):
                 env['cshlib_PATTERN'] = env['cshlib_PATTERN'][3:]
             if env['cxxshlib_PATTERN'].startswith('lib'):
                 env['cxxshlib_PATTERN'] = env['cxxshlib_PATTERN'][3:]
-        
+
         lib = bld(features='%s %sshlib add_targets no_implib' % (libExeType, libExeType),
-                target=libName, name=libName, source=source,
+                target=libName, name=targetName, source=source,
                 includes=includes, export_includes=exportIncludes,
                 use=uselib_local, uselib=uselib, env=env.derive(),
                 defines=defines, path=path, targets_to_add=targets_to_add,
