@@ -995,7 +995,6 @@ def configure(self):
     self.check_cc(function_name='memset', header_name="string.h", mandatory=False)
     self.check_cc(function_name='strerror', header_name="string.h", mandatory=False)
     self.check_cc(function_name='bcopy', header_name="strings.h", mandatory=False)
-    self.check_cc(type_name='size_t', header_name='stddef.h', mandatory=False)
     self.check_cc(type_name='ssize_t', header_name='sys/types.h', mandatory=False)
     self.check_cc(fragment='int main(){const int i = 0; return 0;}',
                   define_name='HAVE_CONST', msg='Checking for const keyword', mandatory=False)
