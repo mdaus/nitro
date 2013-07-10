@@ -123,6 +123,12 @@ public:
     TwoD<_T> derivativeY() const;
     TwoD<_T> derivativeX() const;
     TwoD<_T> derivativeXY() const;
+    /*!
+     * This evaluates y in the 2D polynomial, leaving a 1D polynomial in x
+     * That is, poly(x, y) == poly.atY(y)(x)
+     * If you want the equivalent of an atX() method so that you get a 1D
+     * polynomial in y, you can do poly.flipXY().atY(x)
+     */
     OneD<_T> atY(double y) const;
     OneD<_T> operator [] (size_t i) const;
     /*! In case you are curious about the return value, this guarantees that
