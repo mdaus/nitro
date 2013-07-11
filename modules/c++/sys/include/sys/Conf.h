@@ -204,7 +204,7 @@ namespace sys
             return;
 
         unsigned short half = elemSize >> 1;
-        long offset = 0, innerOff = 0, innerSwap = 0;
+        size_t offset = 0, innerOff = 0, innerSwap = 0;
 
         for(size_t i = 0; i < numElems; ++i, offset += elemSize)
         {
