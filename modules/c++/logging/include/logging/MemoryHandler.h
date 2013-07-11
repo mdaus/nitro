@@ -28,7 +28,7 @@
 #define __LOGGING_MEMORY_HANDLER_H__
 
 #include <string>
-#include <list>
+#include <vector>
 #include <map>
 #include "logging/LogRecord.h"
 #include "logging/Handler.h"
@@ -44,21 +44,18 @@ class MemoryHandler : public Handler
 
 public:
     MemoryHandler(LogLevel level = LogLevel::LOG_NOTSET);
-    virtual ~MemoryHandler();
 
-    std::list<std::string>& getLogs(LogLevel level = LogLevel::LOG_NOTSET);
+    const std::vector<std::string>&
+    getLogs(LogLevel level = LogLevel::LOG_NOTSET) const;
 
 protected:
-    std::map<LogLevel, std::list<std::string> > mLogMap;
+    virtual void write(const std::string& str);
 
-    virtual void write(const std::string& str)
-    {
-        // TODO: Update function to push 
-        // prologue and epilogue into LogMap 
-    }
-
-    //! Emits the LogRecord
     virtual void emitRecord(const LogRecord* record);
+
+private:
+    typedef std::map<LogLevel, std::vector<std::string> > LogMap;
+    LogMap mLogMap;
 };
 
 }

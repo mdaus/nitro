@@ -20,52 +20,52 @@
  *
  */
 
-///////////////////////////////////////////////////////////
-//  MemoryHandler.cpp
-///////////////////////////////////////////////////////////
+#include <io/StringStream.h>
+#include <logging/MemoryHandler.h>
 
-#include "logging/MemoryHandler.h"
-
-using namespace logging;
-
-
+namespace logging
+{
 MemoryHandler::MemoryHandler(LogLevel level) : Handler(level)
 {
     //might as well setup the map -- we could let emit take care of it,
     //but this would allow for less chance of an exception getting thrown
-    mLogMap[LogLevel::LOG_NOTSET] = std::list<std::string>();
-    mLogMap[LogLevel::LOG_DEBUG] = std::list<std::string>();
-    mLogMap[LogLevel::LOG_INFO] = std::list<std::string>();
-    mLogMap[LogLevel::LOG_WARNING] = std::list<std::string>();
-    mLogMap[LogLevel::LOG_ERROR] = std::list<std::string>();
-    mLogMap[LogLevel::LOG_CRITICAL] = std::list<std::string>();
+    for (size_t logLevel = 0; logLevel <= LogLevel::LOG_CRITICAL; ++logLevel)
+    {
+        mLogMap[logLevel];
+    }
 }
-MemoryHandler::~MemoryHandler() {}
 
-std::list<std::string>& MemoryHandler::getLogs(LogLevel level)
+const std::vector<std::string>& MemoryHandler::getLogs(LogLevel level) const
 {
-    if (mLogMap.find(level) == mLogMap.end())
-        throw except::NoSuchKeyException(Ctxt(FmtX("LogLevel: %d", level.toString().c_str())));
-    return mLogMap[level];
+    const LogMap::const_iterator iter = mLogMap.find(level);
+    if (iter == mLogMap.end())
+    {
+        throw except::NoSuchKeyException(Ctxt(
+                "LogLevel: " + level.toString()));
+    }
+    return iter->second;
+}
+
+void MemoryHandler::write(const std::string& str)
+{
+    for (LogMap::iterator iter = mLogMap.begin();
+         iter != mLogMap.end();
+         ++iter)
+    {
+        iter->second.push_back(str);
+    }
 }
 
 void MemoryHandler::emitRecord(const LogRecord* record)
 {
-    // TODO: The base handler no longer has a function
-    //       to format to a string, so we will need to 
-    //       update this to send a buffered output 
-    //       stream to emit, and then read this into the
-    //       log map when it get returned.
+    io::StringStream ostr;
+    mFormatter->format(record, ostr);
 
-    //LogLevel level = record->getLevel();
-    //if (mLogMap.find(level) == mLogMap.end())
-    //    mLogMap[level] = std::list<std::string>();
-    //std::string formatted = format(record);
-    //mLogMap[level].push_back(formatted);
-    //if (level != LogLevel::LOG_NOTSET)
-    //{
-    //    if (mLogMap.find(LogLevel::LOG_NOTSET) == mLogMap.end())
-    //        mLogMap[LogLevel::LOG_NOTSET] = std::list<std::string>();
-    //    mLogMap[LogLevel::LOG_NOTSET].push_back(formatted);
-    //}
+    const std::string recordStr(ostr.stream().str());
+    mLogMap[record->getLevel()].push_back(recordStr);
+    if (record->getLevel() != LogLevel::LOG_NOTSET)
+    {
+        mLogMap[LogLevel::LOG_NOTSET].push_back(recordStr);
+    }
+}
 }
