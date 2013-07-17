@@ -1421,6 +1421,19 @@ def install_tgt(tsk):
                     inst2.chmod = tsk.chmod
 
 @task_gen
+@feature('copytree_tgt')
+def copytree_tgt(tsk):
+    dest = Utils.subst_vars(tsk.dest, tsk.bld.env)
+    shutil.rmtree(dest, True)
+    symlinks = False
+    ignore = None
+    if hasattr(tsk, 'symlinks'):
+        symlinks = tsk.symlinks
+    if hasattr(tsk, 'ignore'):
+        ignore = tsk.ignore
+    shutil.copytree(tsk.src, dest, symlinks, ignore)
+
+@task_gen
 @feature('install_as_tgt')
 def install_as_tgt(tsk):
     tsk.bld.install_as(tsk.install_as, tsk.file, cwd=tsk.dir)
