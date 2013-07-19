@@ -25,113 +25,160 @@
 
 #include <cstddef>
 #include <vector>
-#include "mem/SharedPtr.h"
+#include <memory>
+
+#include <mem/SharedPtr.h>
 
 namespace mem
 {
-    /*!
-     *  \class VectorOfPointers
-     *  \brief This class provides safe cleanup for vectors of pointers
-     */
-    template <typename T>
-    class VectorOfPointers
+/*!
+ *  \class VectorOfPointers
+ *  \brief This class provides safe cleanup for vectors of pointers
+ */
+template <typename T>
+class VectorOfPointers
+{
+public:
+    VectorOfPointers()
     {
-    public:
-        VectorOfPointers()
-        {
-        }
+    }
 
-        ~VectorOfPointers()
-        {
-            clear();
-        }
-
-        void clear()
-        {
-            for(size_t i=0; i < mVec.size(); ++i)
-                if(mVec[i])
-                    delete mVec[i];
-            mVec.clear();
-        }
-
-        std::vector<T*>& get() const
-        {
-            return mVec;
-        }
-
-        T* operator[](std::ptrdiff_t idx) const
-        {
-            return mVec[idx];
-        }
-
-        void push_back(T* elem)
-        {
-            mVec.push_back(elem);
-        }
-
-        T* back()
-        {
-            return mVec.back();
-        }
-
-        const T* back() const
-        {
-            return mVec.back();
-        }
-
-    private:
-        // Noncopyable
-        VectorOfPointers(const VectorOfPointers& );
-        const VectorOfPointers& operator=(const VectorOfPointers& );
-
-    private:
-        std::vector<T*> mVec;
-    };
-
-    template <typename T>
-        class VectorOfSharedPointers
+    ~VectorOfPointers()
     {
-    public:
-        void push_back(T* value)
-        {
-            std::auto_ptr<T> scopedValue(value);
-            push_back(scopedValue);
-        }
-        
-        template <typename OtherT>
-            void push_back(OtherT* value)
-        {
-            std::auto_ptr<OtherT> scopedValue(value);
-            push_back(scopedValue);
-        }
-        
-        void push_back(std::auto_ptr<T> value)
-        {
-            mValues.resize(mValues.size() + 1);
-            mValues.back().reset(value.release());
-        }
-        
-        template <typename OtherT>
-            void push_back(std::auto_ptr<OtherT> value)
-        {
-            mValues.resize(mValues.size() + 1);
-            mValues.back().reset(value.release());
-        }
-        
-        std::vector<T*> get() const
-        {
-            std::vector<T*> values(mValues.size());
-            for (size_t ii = 0; ii < mValues.size(); ++ii)
-            {
-                values[ii] = mValues[ii].get();
-            }
-            return values;
-        }
-        
-    private:
-        std::vector<mem::SharedPtr<T> > mValues;
-    };
+        clear();
+    }
 
+    void clear()
+    {
+        for (size_t ii = 0; ii < mValues.size(); ++ii)
+        {
+            delete mValues[ii];
+        }
+        mValues.clear();
+    }
+
+    const std::vector<T*>& get() const
+    {
+        return mValues;
+    }
+
+    size_t size() const
+    {
+        return mValues.size();
+    }
+
+    bool empty() const
+    {
+        return mValues.empty();
+    }
+
+    T* operator[](std::ptrdiff_t idx) const
+    {
+        return mValues[idx];
+    }
+
+    T* back() const
+    {
+        return mValues.back();
+    }
+
+    void push_back(T* value)
+    {
+        std::auto_ptr<T> scopedValue(value);
+        push_back(scopedValue);
+    }
+
+    template <typename OtherT>
+        void push_back(OtherT* value)
+    {
+        std::auto_ptr<OtherT> scopedValue(value);
+        push_back(scopedValue);
+    }
+
+    void push_back(std::auto_ptr<T> value)
+    {
+        mValues.resize(mValues.size() + 1);
+        mValues.back() = value.release();
+    }
+
+    template <typename OtherT>
+        void push_back(std::auto_ptr<OtherT> value)
+    {
+        mValues.resize(mValues.size() + 1);
+        mValues.back() = value.release();
+    }
+
+private:
+    // Noncopyable
+    VectorOfPointers(const VectorOfPointers& );
+    const VectorOfPointers& operator=(const VectorOfPointers& );
+
+private:
+    std::vector<T*> mValues;
+};
+
+template <typename T>
+    class VectorOfSharedPointers
+{
+public:
+    VectorOfSharedPointers()
+    {
+    }
+
+    void clear()
+    {
+        mValues.clear();
+    }
+
+    std::vector<T*> get() const
+    {
+        std::vector<T*> values(mValues.size());
+        for (size_t ii = 0; ii < mValues.size(); ++ii)
+        {
+            values[ii] = mValues[ii].get();
+        }
+        return values;
+    }
+
+    size_t size() const
+    {
+        return mValues.size();
+    }
+
+    bool empty() const
+    {
+        return mValues.empty();
+    }
+
+    void push_back(T* value)
+    {
+        std::auto_ptr<T> scopedValue(value);
+        push_back(scopedValue);
+    }
+
+    template <typename OtherT>
+        void push_back(OtherT* value)
+    {
+        std::auto_ptr<OtherT> scopedValue(value);
+        push_back(scopedValue);
+    }
+
+    void push_back(std::auto_ptr<T> value)
+    {
+        mValues.resize(mValues.size() + 1);
+        mValues.back().reset(value.release());
+    }
+
+    template <typename OtherT>
+        void push_back(std::auto_ptr<OtherT> value)
+    {
+        mValues.resize(mValues.size() + 1);
+        mValues.back().reset(value.release());
+    }
+
+private:
+    std::vector<mem::SharedPtr<T> > mValues;
+};
 }
 
 #endif
