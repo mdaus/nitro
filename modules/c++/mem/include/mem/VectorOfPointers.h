@@ -150,6 +150,11 @@ public:
         return mValues.empty();
     }
 
+    mem::SharedPtr<T> operator[](std::ptrdiff_t idx) const
+    {
+        return mValues[idx];
+    }
+
     void push_back(T* value)
     {
         std::auto_ptr<T> scopedValue(value);
