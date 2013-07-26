@@ -26,7 +26,7 @@
 #if defined(USE_XERCES)
 
 #include <string>
-#include <io/ByteStream.h>
+#include <io/StringStream.h>
 #include <io/OutputStream.h>
 #include <io/InputStream.h>
 #include <sys/Mutex.h>

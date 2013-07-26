@@ -127,9 +127,9 @@ public:
                   std::vector<ValidationInfo>& errors) const
     {
         // convert to std::string
-        io::ByteStream bs;
-        xml.streamTo(bs);
-        return validate(bs.stream().str(), xmlID, errors);
+        io::StringStream oss;
+        xml.streamTo(oss);
+        return validate(oss.stream().str(), xmlID, errors);
     }
 
     /*!
@@ -143,9 +143,9 @@ public:
                   std::vector<ValidationInfo>& errors) const
     {
         // convert to stream
-        io::ByteStream bs;
-        xml->print(bs);
-        return validate(bs.stream().str(), xmlID, errors);
+        io::StringStream oss;
+        xml->print(oss);
+        return validate(oss.stream().str(), xmlID, errors);
     }
 
 

@@ -24,20 +24,43 @@
 
 sys::Off_T io::StringStream::available()
 {
-    return mStream.available();
+    sys::Off_T where = (sys::Off_T)mData.tellg();
+
+    mData.seekg( 0, std::ios::end );
+    sys::Off_T until = (sys::Off_T)mData.tellg();
+
+    mData.seekg( where, std::ios::beg );
+    return (until - where);
 }
 
-void io::StringStream::write(const sys::byte* data, sys::Size_T size)
+void io::StringStream::write(const sys::byte *b, sys::Size_T size)
 {
-    mStream.write(data, size);
+    mData.write((const char*)b, size);
 }
 
-void io::StringStream::write(const std::string& s)
+sys::SSize_T io::StringStream::read(sys::byte *b, sys::Size_T len)
 {
-    mStream.write((sys::byte*)s.c_str(), (sys::Size_T)s.length());
+    sys::Off_T maxSize = available();
+    if (maxSize <= 0) return io::InputStream::IS_END;
+
+    if (maxSize < (sys::Off_T)len)
+        len = maxSize;
+
+    if (len <= 0) return 0;
+
+#if defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x530)
+    sys::SSize_T bytesRead(0);
+    while (bytesRead < len && mData.good())
+    {
+        b[bytesRead++] = mData.get();
+    }
+    len = bytesRead;
+#else
+    mData.read((char *)b, len);
+#endif
+    // Could be problem if streams are broken
+    // alternately could return gcount in else
+    // case above
+    return len;
 }
 
-sys::SSize_T io::StringStream::read(sys::byte *data, sys::Size_T size)
-{
-    return mStream.read(data, size);
-}

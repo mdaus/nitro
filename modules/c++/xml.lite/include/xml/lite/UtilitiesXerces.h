@@ -49,7 +49,7 @@
 #include <xercesc/util/XercesDefs.hpp>
 #include <xercesc/sax/ErrorHandler.hpp>
 
-#include <io/ByteStream.h>
+#include <io/StringStream.h>
 #include <io/OutputStream.h>
 #include <io/InputStream.h>
 #include <sys/Mutex.h>

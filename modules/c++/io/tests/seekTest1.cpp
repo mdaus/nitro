@@ -25,20 +25,20 @@
 const int LENGTH_STR = 26;
 
 
-void testSeekCurrent(io::ByteStream& bs)
+void testSeekCurrent(io::StringStream& oss)
 {
     char buffer[ LENGTH_STR + 1 ];
     buffer[ LENGTH_STR ] = 0;
     // Simple scan through....
     int readVal = 0;
-    bs.seek(0, io::ByteStream::START);
+    oss.seek(0, io::StringStream::START);
     
 
     
-    for (int i = 0; readVal != io::ByteStream::IS_END ; i++)
+    for (int i = 0; readVal != io::StringStream::IS_END ; i++)
     {
-	bs.seek(0, io::ByteStream::CURRENT);
-	readVal = bs.read(&buffer[i], 1);
+	oss.seek(0, io::StringStream::CURRENT);
+	readVal = oss.read(&buffer[i], 1);
 	std::cout << i << std::endl;
 	std::cout << readVal << std::endl;
     }
@@ -56,20 +56,20 @@ int main()
 	const std::string str = "abcdefghijklmnopqrstuvwxyz";
 	std::cout << "Operating on string: '" << str << "'" << std::endl;
 	
-	io::ByteStream bs;
-	bs.write(str.c_str(), str.length());
+	io::StringStream oss;
+	oss.write(str.c_str(), str.length());
 	
-//	testSeekCurrent(bs);
+//	testSeekCurrent(oss);
 	char buffer[ LENGTH_STR + 1 ];
 	buffer[ LENGTH_STR ] = 0;
 	// Simple scan through....
 	int readVal = 0;
-	bs.seek(0, io::ByteStream::START);
+	oss.seek(0, io::StringStream::START);
 		
-	for (int i = 0; readVal != io::ByteStream::IS_END ; i++)
+	for (int i = 0; readVal != io::StringStream::IS_END ; i++)
 	{
-	    bs.seek(0, io::ByteStream::CURRENT);
-	    readVal = bs.read(&buffer[i], 1);
+	    oss.seek(0, io::StringStream::CURRENT);
+	    readVal = oss.read(&buffer[i], 1);
 	}
 	
 	std::cout << "'" << buffer << "'" << std::endl;
@@ -95,7 +95,7 @@ int main()
 
 	}
 	std::cout << "'" << buffer << "'" << std::endl;
-	io::ByteStream bwd;
+	io::StringStream bwd;
 	bwd.write(buffer, LENGTH_STR);
 	avail = bwd.available();
 	if ( avail != LENGTH_STR )
@@ -107,7 +107,7 @@ int main()
 	for (int i = avail; i > 0; --i)
 	{
 	    int d = avail - i;
-	    bwd.seek(i - 1, io::ByteStream::START);
+	    bwd.seek(i - 1, io::StringStream::START);
 	    bwd.read(&buffer[d], 1);
 	    //std::cout << "At: " << d << ": " << buffer[d] << std::endl;
 	}

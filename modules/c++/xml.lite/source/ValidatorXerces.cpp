@@ -23,7 +23,7 @@
 
 #include "xml/lite/ValidatorXerces.h"
 #include <sys/OS.h>
-#include <io/ByteStream.h>
+#include <io/StringStream.h>
 #include <mem/ScopedArray.h>
 
 using namespace xml::lite;

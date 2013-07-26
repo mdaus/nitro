@@ -24,18 +24,19 @@
 
 sys::Off_T io::ByteStream::available()
 {
-    sys::Off_T where = (sys::Off_T)mData.tellg();
-
-    mData.seekg( 0, std::ios::end );
-    sys::Off_T until = (sys::Off_T)mData.tellg();
-
-    mData.seekg( where, std::ios::beg );
-    return (until - where);
+    sys::Off_T where = mPosition;
+    sys::Off_T until = static_cast<sys::Off_T>(mData.size());
+    sys::Off_T diff = until - where;
+    return (diff < 0) ? 0 : diff;
 }
 
 void io::ByteStream::write(const sys::byte *b, sys::Size_T size)
 {
-    mData.write((const char*)b, size);
+    // append the data to the end of the vector
+    size_t writePosition(mData.size());
+    size_t newSize(mData.size() + size);
+    mData.resize(newSize);
+    std::copy(b, b+size, &mData[writePosition]);
 }
 
 sys::SSize_T io::ByteStream::read(sys::byte *b, sys::Size_T len)
@@ -43,24 +44,11 @@ sys::SSize_T io::ByteStream::read(sys::byte *b, sys::Size_T len)
     sys::Off_T maxSize = available();
     if (maxSize <= 0) return io::InputStream::IS_END;
 
-    if (maxSize < (sys::Off_T)len)
-        len = maxSize;
+    if (maxSize <  static_cast<sys::Off_T>(len)) len = maxSize;
+    if (len     <= 0)                            return 0;
 
-    if (len <= 0) return 0;
-
-#if defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x530)
-    sys::SSize_T bytesRead(0);
-    while (bytesRead < len && mData.good())
-    {
-        b[bytesRead++] = mData.get();
-    }
-    len = bytesRead;
-#else
-    mData.read((char *)b, len);
-#endif
-    // Could be problem if streams are broken
-    // alternately could return gcount in else
-    // case above
+    std::copy(&mData[mPosition], &mData[mPosition+len], b);
+    mPosition += len;
     return len;
 }
 

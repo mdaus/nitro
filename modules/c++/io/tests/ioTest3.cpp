@@ -33,10 +33,10 @@ public:
     {
         FileInputStream in(src);
         FileOutputStream out(dest);
-        ByteStream bs;
+        StringStream oss;
 
-        in.streamTo(bs);
-        bs.streamTo(out);
+        in.streamTo(oss);
+        oss.streamTo(out);
 
         in.close();
         out.close();

@@ -34,7 +34,6 @@
 
 #include <sstream>
 #include "io/BidirectionalStream.h"
-#include "io/ByteStream.h"
 #include "sys/Conf.h"
 #include "io/SeekableStreams.h"
 
@@ -49,42 +48,12 @@ class StringStream : public SeekableBidirectionalStream
 {
 public:
 
-    //!  Default constructor.
-    StringStream()
-    {}
-
-    //!  Destructor.
-    virtual ~StringStream()
-    {}
-
-    /*!
-            *  Returns the number of available bytes to read from the stream
-            *  \return the number of available bytes
-            */
-    virtual sys::Off_T available();
-
-    /*!
-     *  This method is inherited from OutputStream.  It must be overloaded
-     *  for the class to work properly.
-     *  \param data The data to write
-     *  \param size The size of the data to write
-     */
-    virtual void write(const sys::byte* data, sys::Size_T size);
-
-    virtual void write(const std::string& s);
-
-    /*!
-     *  This is the read method from ByteStream.  It has an added member
-     *  for GCC < 3.0, and for sun forte compilers.  The older compilers
-     *  have some problems with their read/write operations for stringstreams.
-     *  If you have an old version of gcc, or sun, make sure that either
-     *  __GCC_LESS_THAN_3_0 or __SUN is defined, and the hack will be used
-     *  (it will probably have worse performance, however).
-     *  \param  data  The data to read
-     *  \param  size  The size of the data to read
-     *  \return Size.
-     */
-    virtual sys::SSize_T read(sys::byte *data, sys::Size_T size);
+    //! Default constructor
+    StringStream() :
+        mData(std::stringstream::in | std::stringstream::out
+                | std::stringstream::binary)
+    {
+    }
 
     /*!
      *  Returns the stringstream associated with this StringStream
@@ -92,22 +61,76 @@ public:
      */
     const std::stringstream& stream() const
     {
-        return mStream.stream();
+        return mData;
     }
 
     sys::Off_T tell()
     {
-        return mStream.tell();
+        return mData.tellg();
     }
 
     sys::Off_T seek(sys::Off_T offset, Whence whence)
     {
-        return mStream.seek(offset, whence);
+        std::ios::seekdir flags;
+        switch (whence)
+        {
+        case START:
+            flags = std::ios::beg;
+            break;
+        case END:
+            flags = std::ios::end;
+            break;
+        default:
+            flags = std::ios::cur;
+            break;
+        }
+
+        // off_t orig = tell();
+        mData.seekg(offset, flags);
+        return tell();
     }
 
-protected:
-    ByteStream mStream;
+    /*!
+     *  Returns the available bytes to read from the stream
+     *  \return the available bytes to read
+     */
+    sys::Off_T available();
 
+    using OutputStream::write;
+
+    /*!
+     *  Writes the bytes in data to the stream.
+     *  \param b the data to write to the stream
+     *  \param size the number of bytes to write to the stream
+     */
+    void write(const sys::byte *b, sys::Size_T size);
+
+    /*!
+     * Read up to len bytes of data from this buffer into an array
+     * update the mark
+     * \param b   Buffer to read into
+     * \param len The length to read
+     * \throw IoException
+     * \return  The number of bytes read
+     */
+    virtual sys::SSize_T read(sys::byte *b, sys::Size_T len);
+
+    //! Returns the internal std::stringstream
+    std::stringstream& stream()
+    {
+        return mData;
+    }
+
+    void reset()
+    {
+        mData.str("");
+        // clear eof/errors/etc.
+        mData.clear();
+    }
+
+private:
+    std::stringstream mData;
 };
+
 }
 #endif //__STRING_STREAM_H__

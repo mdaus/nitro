@@ -23,7 +23,7 @@
 #ifndef __IO_BYTE_STREAM_H__
 #define __IO_BYTE_STREAM_H__
 
-#include <sstream>
+#include <vector>
 #include "io/BidirectionalStream.h"
 #include "sys/Conf.h"
 #include "except/Error.h"
@@ -32,7 +32,8 @@
 
 /*!
  *  \file
- *  \brief  Class for buffering data, inherits from BidirectionalStream.
+ *  \brief  Class for buffering data, inherits from
+ *      SeekableBidirectionalStream
  *
  *  This type exists to handle piped data.  If all of your
  *  data is ascii, it is easy just to use a std::string from
@@ -48,7 +49,7 @@ namespace io
 {
 /*!
  *  \class ByteStream
- *  \brief  Class for buffering data, inherits from BidirectionalStream.
+ *  \brief  Class for buffering data
  *
  *  This type exists to handle piped data.  If all of your
  *  data is ascii, it is easy just to use a std::string from
@@ -56,56 +57,50 @@ namespace io
  *  0's can be anywhere (Null-bytes) making it impossible to use
  *  strings as containers.  
  */
-class ByteStream: public SeekableBidirectionalStream
+class ByteStream : public SeekableBidirectionalStream
 {
 public:
 
     //! Default constructor
-    ByteStream() :
-        mData(std::stringstream::in | std::stringstream::out
-                | std::stringstream::binary)
+    ByteStream(sys::Size_T len = 0) :
+        mData(len), mPosition(0)
     {
     }
 
     //! Destructor
-    ~ByteStream()
+    virtual ~ByteStream()
     {
-    }
-
-    /*!
-     *  Returns the stringstream associated with this ByteStream
-     *  \return the stringstream
-     */
-    const std::stringstream& stream() const
-    {
-        return mData;
     }
 
     sys::Off_T tell()
     {
-        return mData.tellg();
+        return mPosition;
     }
 
     sys::Off_T seek(sys::Off_T offset, Whence whence)
     {
-        std::ios::seekdir flags;
         switch (whence)
         {
         case START:
-            flags = std::ios::beg;
+            mPosition = offset;
             break;
-
         case END:
-            flags = std::ios::end;
+            if (offset > static_cast<sys::Off_T>(mData.size()))
+            {
+                mPosition = 0;
+            }
+            else
+            {
+                mPosition = mData.size() - offset;
+            }
             break;
-
         default:
-            flags = std::ios::cur;
-
+            mPosition += offset;
+            break;
         }
 
-        // off_t orig = tell();
-        mData.seekg(offset, flags);
+        if (mPosition >= static_cast<sys::Off_T>(mData.size()))
+            mPosition = io::InputStream::IS_END;
         return tell();
     }
 
@@ -116,6 +111,7 @@ public:
     sys::Off_T available();
 
     using OutputStream::write;
+    using InputStream::streamTo;
 
     /*!
      *  Writes the bytes in data to the stream.
@@ -134,19 +130,37 @@ public:
      */
     virtual sys::SSize_T read(sys::byte *b, sys::Size_T len);
 
-    //! Returns the internal std::stringstream
-    std::stringstream& stream()
-    {
-        return mData;
-    }
-
     void reset()
     {
-        mData.str("");
+        mPosition  = 0;
+        mData.resize(0);
+    }
+    
+    /*!
+     * Resize the internal buffer
+     * \param len the new buffer length
+     */
+    void
+    resize(sys::Size_T len)
+    {
+        mData.resize(len);
+        if (mPosition >= static_cast<sys::Off_T>(len))
+            mPosition = len - 1;
     }
 
-protected:
-    std::stringstream mData;
+    /*!
+     * Get a point to the internal buffer 
+     * \return pointer to the internal buffer
+     */
+    sys::ubyte *
+    get()
+    {
+        return mData.empty() ? NULL : &mData[0];
+    }
+
+private:
+    std::vector<sys::ubyte> mData;
+    sys::Off_T mPosition;
 };
 }
 

@@ -23,13 +23,14 @@
 #ifndef __DATA_STREAM_H__
 #define __DATA_STREAM_H__
 
+#include "io/StringStream.h"
 #include "io/Serializable.h"
 
 /*!
  *  \file DataStream.h
- *  \brief  Wrap a ByteStream with a Serializable interface.
+ *  \brief  Wrap a StringStream with a Serializable interface.
  *
- *  This class is actually hiding an internal ByteStream, but it
+ *  This class is actually hiding an internal StringStream, but it
  *  is also considered to be Serializable, meaning that it conforms to
  *  the interface for a SerializableConnection
  */
@@ -37,9 +38,9 @@ namespace io
 {
 /*!
  *  \class DataStream
- *  \brief Wraps a ByteStream with a Serializable interface.
+ *  \brief Wraps a StringStream with a Serializable interface.
  *
- *  This class is actually hiding an internal ByteStream, but it
+ *  This class is actually hiding an internal StringStream, but it
  *  is also considered to be Serializable, meaning that it conforms to
  *  the interface for a SerializableConnection
  */
@@ -58,7 +59,7 @@ public:
     //! Returns the number of bytes available to read.
     virtual sys::Off_T available()
     {
-        return mByteStream.available();
+        return mStringStream.available();
     }
 
     /*!
@@ -68,7 +69,7 @@ public:
      */
     virtual sys::SSize_T read(sys::byte* data, sys::Size_T size)
     {
-        return mByteStream.read(data, size);
+        return mStringStream.read(data, size);
     }
 
     /*!
@@ -78,7 +79,7 @@ public:
      */
     virtual void write(const sys::byte* data, sys::Size_T size)
     {
-        mByteStream.write(data, size);
+        mStringStream.write(data, size);
     }
 
     /*!
@@ -87,7 +88,7 @@ public:
      */
     virtual void serialize(io::OutputStream& os)
     {
-        mByteStream.streamTo(os);
+        mStringStream.streamTo(os);
     }
 
     /*!
@@ -96,19 +97,19 @@ public:
      */
     virtual void deserialize(io::InputStream& is)
     {
-        is.streamTo(mByteStream);
+        is.streamTo(mStringStream);
     }
 
-    io::ByteStream& getStream()
+    io::StringStream& getStream()
     {
-        return mByteStream;
+        return mStringStream;
     }
-    const io::ByteStream& getStream() const
+    const io::StringStream& getStream() const
     {
-        return mByteStream;
+        return mStringStream;
     }
 protected:
-    io::ByteStream mByteStream;
+    io::StringStream mStringStream;
 };
 }
 

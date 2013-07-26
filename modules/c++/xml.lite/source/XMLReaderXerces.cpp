@@ -31,16 +31,16 @@ xml::lite::XMLReaderXerces::XMLReaderXerces()
 
 void xml::lite::XMLReaderXerces::parse(io::InputStream & is, int size)
 {
-    io::ByteStream byteStream;
-    is.streamTo(byteStream, size);
+    io::StringStream oss;
+    is.streamTo(oss, size);
 
-    off_t available = byteStream.available();
+    off_t available = oss.available();
     if ( available <= 0 )
     {
         throw xml::lite::XMLParseException(Ctxt("No stream available"));
     }
     sys::byte* buffer = new sys::byte[available];
-    byteStream.read(buffer, available);
+    oss.read(buffer, available);
 
     // Adopt my buffer, and delete it for me
     MemBufInputSource memBuffer((const unsigned char *)buffer,
