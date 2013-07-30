@@ -47,7 +47,7 @@ sys::SSize_T io::ByteStream::read(sys::byte *b, sys::Size_T len)
     if (maxSize <  static_cast<sys::Off_T>(len)) len = maxSize;
     if (len     <= 0)                            return 0;
 
-    std::copy(&mData[mPosition], &mData[mPosition+len], b);
+    memcpy(b, &mData[mPosition], len);
     mPosition += len;
     return len;
 }
