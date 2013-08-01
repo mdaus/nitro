@@ -24,7 +24,6 @@
 #define __IO_BYTE_STREAM_H__
 
 #include <vector>
-#include "io/BidirectionalStream.h"
 #include "sys/Conf.h"
 #include "except/Error.h"
 #include "except/Exception.h"
@@ -33,7 +32,7 @@
 /*!
  *  \file
  *  \brief  Class for buffering data, inherits from
- *      SeekableBidirectionalStream
+ *      SeekableInputStream, SeekableOutputStream
  *
  *  This type exists to handle piped data.  If all of your
  *  data is ascii, it is easy just to use a std::string from
@@ -57,7 +56,7 @@ namespace io
  *  0's can be anywhere (Null-bytes) making it impossible to use
  *  strings as containers.  
  */
-class ByteStream : public SeekableBidirectionalStream
+class ByteStream : public SeekableInputStream, public SeekableOutputStream
 {
 public:
 

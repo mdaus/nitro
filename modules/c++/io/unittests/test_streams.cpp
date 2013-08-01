@@ -23,12 +23,52 @@
 #include <import/io.h>
 #include "TestCase.h"
 
+TEST_CASE(testStringStream)
+{
+    io::StringStream stream;
+    stream.writeln("test");
+    stream.writeln("test");
+    TEST_ASSERT_EQ(stream.available(), 10);
+    stream.seek(1, io::Seekable::START);
+    TEST_ASSERT_EQ(stream.available(), 9);
+
+    stream.write("0123456789");
+
+    TEST_ASSERT_EQ(stream.available(), 19);
+    TEST_ASSERT_EQ(stream.tell(), 1);
+
+    stream.seek(22, io::Seekable::CURRENT);
+    TEST_ASSERT_EQ(stream.tell(), static_cast<int>(io::InputStream::IS_END));
+    stream.seek(0, io::Seekable::START);
+
+    stream.reset();
+    TEST_ASSERT_EQ(stream.available(), 0);
+    stream.write("test");
+    TEST_ASSERT_EQ(stream.available(), 4);
+    sys::byte buf[255];
+    stream.read(buf, 4);
+    buf[4] = 0;
+    TEST_ASSERT_EQ(std::string(buf), "test");
+}
+
 TEST_CASE(testByteStream)
 {
     io::ByteStream stream;
     stream.writeln("test");
+    stream.writeln("test");
+    TEST_ASSERT_EQ(stream.available(), 10);
+    stream.seek(1, io::Seekable::START);
+    TEST_ASSERT_EQ(stream.available(), 9);
+
+    stream.write("0123456789");
+
+    TEST_ASSERT_EQ(stream.available(), 19);
+    TEST_ASSERT_EQ(stream.tell(), 1);
+
+    stream.seek(22, io::Seekable::CURRENT);
+    TEST_ASSERT_EQ(stream.tell(), static_cast<int>(io::InputStream::IS_END));
     stream.seek(0, io::Seekable::START);
-    TEST_ASSERT_EQ(stream.available(), 5);
+
     stream.reset();
     TEST_ASSERT_EQ(stream.available(), 0);
     stream.write("test");
@@ -155,10 +195,11 @@ TEST_CASE(testRotateReset)
 
 int main(int argc, char* argv[])
 {
-    TEST_CHECK( testByteStream);
-    TEST_CHECK( testProxyOutputStream);
-    TEST_CHECK( testCountingOutputStream);
-    TEST_CHECK( testRotate);
-    TEST_CHECK( testNeverRotate);
-    TEST_CHECK( testRotateReset);
+    TEST_CHECK(testStringStream);
+    TEST_CHECK(testByteStream);
+    TEST_CHECK(testProxyOutputStream);
+    TEST_CHECK(testCountingOutputStream);
+    TEST_CHECK(testRotate);
+    TEST_CHECK(testNeverRotate);
+    TEST_CHECK(testRotateReset);
 }
