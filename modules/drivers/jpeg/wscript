@@ -1,0 +1,110 @@
+import os, sys, shutil
+from waflib import Options
+from build import untarFile
+from os.path import join, exists
+
+sourcepath = 'jpeg-6b'
+tarfile = 'jpegsrc.v6b.tar'
+
+def options(opt):
+    opt.add_option('--with-jpeg-home', action='store', dest='jpeg_home',
+                   help='Specify the JPEG Home - where the JPEG library is installed')
+    opt.add_option('--disable-jpeg', action='store_false', dest='enable_jpeg',
+                   help='will not build the jpeg (libjpeg) library')
+    opt.add_option('--enable-jpeg', action='store_true',
+                   default=True, help='will build the jpeg (libjpeg) library if not found on the system (default)')
+    opt.add_option('--build-jpeg', action='store_true', dest="build_jpeg",
+                   help='force building jpeg (libjpeg) library from scratch',
+                   default=os.path.exists(join(opt.path.abspath(), tarfile)))
+    opt.add_option('--nobuild-jpeg', action='store_false', dest="build_jpeg",
+                   help='force not building jpeg (libjpeg) library from scratch')
+
+def configure(conf):
+    if Options.options.enable_jpeg:
+
+        jpegHome = Options.options.jpeg_home
+        if jpegHome:
+            conf.check(lib='libjpeg', uselib_store='JPEG',
+                       header_name='jpeglib.h', function_name='jpeg_create_decompress',
+                       libpath=join(zipHome, 'lib'),
+                       includes=join(zipHome, 'include'),
+                       msg='Checking for library libjpeg', okmsg=jpegHome,
+                       mandatory=False)
+
+        elif Options.options.build_jpeg:
+            # Build is off by default when tarfile not found, fail if forced on
+            if not os.path.exists(join(conf.path.abspath(), tarfile)):
+                conf.fatal('Missing libjpeg tarfile')
+
+            conf.env['MAKE_JPEG'] = True
+            conf.msg('Building local lib', 'jpeg (libjpeg)')
+            
+            untarFile(path=conf.path, fname=tarfile)
+
+        else:
+            conf.check(lib='libjpeg', uselib_store='JPEG',
+                       header_name='jpeglib.h', function_name='jpeg_create_decompress',
+                       msg='Checking for library libjpeg',
+                       mandatory=False)
+
+def build(bld):
+    variant = bld.env['VARIANT']
+    env = bld.all_envs[variant]
+        
+    driversNode = bld.path
+    
+    if 'MAKE_JPEG' in env:
+        
+        driverNode = driversNode.make_node(sourcepath)
+
+        # create the jconfig.h needed for library wellness
+        defs = {}
+        if sys.platform == 'win32' :
+            defs['HAVE_PROTOTYPES'] = '1' 
+        jpegConfigH = bld(name='jpegConfigH',
+                          features='handleDefs',
+                          input='jconfig.cfg',
+                          output='jconfig.h',
+                          defs=defs, path=driverNode,
+                          env=env.derive())
+            
+        sources = ('jcapimin.c', 'jccoefct.c', 'jccolor.c',  'jcdctmgr.c',
+                   'jchuff.c',   'jcinit.c',   'jcmainct.c', 'jcmarker.c',
+                   'jcmaster.c', 'jcomapi.c',  'jcparam.c',  'jcphuff.c',
+                   'jcprepct.c', 'jcsample.c', 'jctrans.c',  'jdapimin.c',
+                   'jdapistd.c', 'jdatadst.c', 'jdatasrc.c', 'jdcoefct.c',
+                   'jdcolor.c',  'jddctmgr.c', 'jdhuff.c',   'jdinput.c',
+                   'jdmainct.c', 'jdmarker.c', 'jdmaster.c', 'jdmerge.c',
+                   'jdphuff.c',  'jdpostct.c', 'jdsample.c', 'jdtrans.c',
+                   'jerror.c',   'jfdctflt.c', 'jfdctfst.c', 'jfdctint.c',
+                   'jidctflt.c', 'jidctfst.c', 'jidctint.c', 'jidctred.c',
+                   'jmemansi.c', 'jmemmgr.c',  'jquant1.c',  'jquant2.c',
+                   'jutils.c')
+        
+        jpeglib = bld(features='c c%s add_targets' % env['LIB_TYPE'] or 'stlib',
+                      export_includes='.',
+                      target='libjpeg',
+                      source=sources,
+                      path=driverNode,
+                      defines=env['DEFINES'],
+                      uselib='SOCKET',
+                      env=env.derive(),
+                      name='JPEG',
+                      targets_to_add=[jpegConfigH])
+
+        if env['install_libs']:
+            jpeglib.install_path = env['install_libdir']
+        
+        if env['install_headers']:
+            bld(features='install_tgt', install_path=env['install_includedir'],
+                dir=driverNode, pattern=['libjpeg.h', 'jmorecfg.h'])
+        
+def distclean(context):
+    # remove the untarred directories
+    import shutil
+    dirs = filter(lambda x: exists(join(context.path.abspath(), x)), 
+                  [sourcepath])
+    for d in dirs:
+        try:
+            shutil.rmtree(join(context.path.abspath(), d), ignore_errors=True)
+        except:{}
