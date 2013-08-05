@@ -3,8 +3,8 @@ from waflib import Options
 from build import untarFile
 from os.path import join, exists
 
-sourcepath = 'jpeg-6b'
-tarfile = 'jpegsrc.v6b.tar'
+sourcepath = 'jpeg-9'
+tarfile = 'jpegsrc.v9.tar'
 
 def options(opt):
     opt.add_option('--with-jpeg-home', action='store', dest='jpeg_home',
@@ -52,15 +52,13 @@ def build(bld):
     env = bld.all_envs[variant]
         
     driversNode = bld.path
+    sourceFiles = []
+    driverNode = driversNode.make_node(sourcepath)
     
     if 'MAKE_JPEG' in env:
         
-        driverNode = driversNode.make_node(sourcepath)
-
         # create the jconfig.h needed for library wellness
-        defs = {}
-        if sys.platform == 'win32' :
-            defs['HAVE_PROTOTYPES'] = '1' 
+        defs = {'HAVE_PROTOTYPES':'1'}
         jpegConfigH = bld(name='jpegConfigH',
                           features='handleDefs',
                           input='jconfig.cfg',
@@ -68,18 +66,21 @@ def build(bld):
                           defs=defs, path=driverNode,
                           env=env.derive())
             
-        sources = ('jcapimin.c', 'jccoefct.c', 'jccolor.c',  'jcdctmgr.c',
-                   'jchuff.c',   'jcinit.c',   'jcmainct.c', 'jcmarker.c',
-                   'jcmaster.c', 'jcomapi.c',  'jcparam.c',  'jcphuff.c',
-                   'jcprepct.c', 'jcsample.c', 'jctrans.c',  'jdapimin.c',
-                   'jdapistd.c', 'jdatadst.c', 'jdatasrc.c', 'jdcoefct.c',
-                   'jdcolor.c',  'jddctmgr.c', 'jdhuff.c',   'jdinput.c',
-                   'jdmainct.c', 'jdmarker.c', 'jdmaster.c', 'jdmerge.c',
-                   'jdphuff.c',  'jdpostct.c', 'jdsample.c', 'jdtrans.c',
-                   'jerror.c',   'jfdctflt.c', 'jfdctfst.c', 'jfdctint.c',
-                   'jidctflt.c', 'jidctfst.c', 'jidctint.c', 'jidctred.c',
-                   'jmemansi.c', 'jmemmgr.c',  'jquant1.c',  'jquant2.c',
-                   'jutils.c')
+        sources = ('cdjpeg.c',   'jaricom.c',  'jcapimin.c', 'jcapistd.c', 
+                   'jcarith.c',  'jccoefct.c', 'jccolor.c',  'jcdctmgr.c', 
+                   'jchuff.c',   'jcinit.c',   'jcmainct.c', 'jcmarker.c', 
+                   'jcmaster.c', 'jcomapi.c',  'jcparam.c',  'jcprepct.c', 
+                   'jcsample.c', 'jctrans.c',  'jdapimin.c', 'jdapistd.c', 
+                   'jdarith.c',  'jdatadst.c', 'jdatasrc.c', 'jdcoefct.c', 
+                   'jdcolor.c',  'jddctmgr.c', 'jdhuff.c',   'jdinput.c',  
+                   'jdmainct.c', 'jdmarker.c', 'jdmaster.c', 'jdmerge.c',  
+                   'jdpostct.c', 'jdsample.c', 'jdtrans.c',  'jerror.c',   
+                   'jfdctflt.c', 'jfdctfst.c', 'jfdctint.c', 'jidctflt.c', 
+                   'jidctfst.c', 'jidctint.c', 'jmemmgr.c',  'jmemnobs.c', 
+                   'jquant1.c',  'jquant2.c',  'jutils.c',   'rdbmp.c',    
+                   'rdcolmap.c', 'rdgif.c',    'rdppm.c',    'rdrle.c',    
+                   'rdswitch.c', 'rdtarga.c',  'transupp.c', 'wrbmp.c',    
+                   'wrgif.c',    'wrppm.c',    'wrrle.c',    'wrtarga.c')
         
         jpeglib = bld(features='c c%s add_targets' % env['LIB_TYPE'] or 'stlib',
                       export_includes='.',
@@ -97,8 +98,21 @@ def build(bld):
         
         if env['install_headers']:
             bld(features='install_tgt', install_path=env['install_includedir'],
-                dir=driverNode, pattern=['libjpeg.h', 'jmorecfg.h'])
-        
+                dir=driverNode, pattern=('jpeglib.h', 'jconfig.h', 'jmorecfg.h'), 
+                name='JPEG_HEADERS_INSTALL')
+            jpeglib.targets_to_add += ['JPEG_HEADERS_INSTALL']
+                
+        if env['install_source']:
+            sourceFiles.append(tarfile)
+            jpeglib.targets_to_add += ['JPEG_SOURCE_INSTALL']
+
+    if env['install_source']:
+        bld.install_tgt(files=sourceFiles,
+                        dir=driversNode,
+                        install_path=os.path.join('${PREFIX}', 'source'),
+                        relative_trick=True,
+                        name='JPEG_SOURCE_INSTALL')
+
 def distclean(context):
     # remove the untarred directories
     import shutil
