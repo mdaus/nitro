@@ -573,6 +573,33 @@ class CPPContext(Context.Context):
             if env['cxxshlib_PATTERN'].startswith('lib'):
                 env['cxxshlib_PATTERN'] = env['cxxshlib_PATTERN'][3:]
 
+        # This specifies that we need to check if it is a USELIB or USELIB_LOCAL
+        # If MAKE_%% is defined, then it is local; otherwise, it's a uselib
+        # If we're doing a source installation and we built it locally, the
+        # source target already got added on as a dependency.  If we didn't
+        # build it locally, we need to add the source target on here since
+        # in that case this module doesn't depend on a task associated with
+        # the external library.
+        uselibCheck = modArgs.get('uselib_check', None)
+        if uselibCheck:
+            for currentLib in listify(uselibCheck):
+                if ('MAKE_%s' % currentLib) in env:
+                    uselib_local += [currentLib]
+                else:
+                    uselib += [currentLib]
+                    if env['install_source']:
+                        sourceTarget = '%s_SOURCE_INSTALL' % currentLib
+                        targets_to_add += [sourceTarget]
+
+        # this specifies that we need to check if it is a USELIB or USELIB_LOCAL
+        # if MAKE_%% is defined, then it is local; otherwise, it's a uselib
+        uselibCheck = modArgs.pop('uselib_check', None)
+        if uselibCheck:
+            if ('MAKE_%s' % uselibCheck) in env:
+                uselib_local.append(uselibCheck)
+            else:
+                uselib.append(uselibCheck)
+
         lib = bld(features='%s %sshlib add_targets no_implib' % (libExeType, libExeType),
                 target=libName, name=targetName, source=source,
                 includes=includes, export_includes=exportIncludes,
@@ -1514,7 +1541,7 @@ def handleDefsFile(input, output, path, defs, chmod=None):
         if v is None:
             v = ''
         code = re.sub(r'#undef %s(\n)' % k, r'#define %s %s\1' % (k,v), code)
-    code = re.sub(r'(#undef[^\n]*)(\n)', r'/* \1 */\2', code)
+    code = re.sub(r'(#undef[^\n\/\**]*)(\/\*.+\*\/)?(\n)', r'/* \1 */\3', code)
     file = open(outfile, 'w')
     file.write(code)
     file.close()
