@@ -56,22 +56,34 @@ TEST_CASE(testByteStream)
     io::ByteStream stream;
     stream.writeln("test");
     stream.writeln("test");
+
+    TEST_ASSERT_EQ(stream.available(), 0);
+    stream.seek(0, io::Seekable::START);
     TEST_ASSERT_EQ(stream.available(), 10);
-    stream.seek(1, io::Seekable::START);
-    TEST_ASSERT_EQ(stream.available(), 9);
 
+    stream.seek(10, io::Seekable::START);
     stream.write("0123456789");
-
-    TEST_ASSERT_EQ(stream.available(), 19);
-    TEST_ASSERT_EQ(stream.tell(), 1);
+    TEST_ASSERT_EQ(stream.tell(), 20);
+    TEST_ASSERT_EQ(stream.available(), 0);
 
     stream.seek(22, io::Seekable::CURRENT);
-    TEST_ASSERT_EQ(stream.tell(), static_cast<int>(io::InputStream::IS_END));
-    stream.seek(0, io::Seekable::START);
-
+    TEST_ASSERT_EQ(stream.tell(), -1);
     stream.reset();
+    TEST_ASSERT_EQ(stream.tell(), 0);
+    stream.seek(0, io::Seekable::START);
+    TEST_ASSERT_EQ(stream.tell(), 0);
+
+    stream.seek(2, io::Seekable::END);
+    TEST_ASSERT_EQ(stream.tell(), 18);
+    TEST_ASSERT_EQ(stream.getSize(), 20);
+
+    stream.write("abcdef");
+    TEST_ASSERT_EQ(stream.getSize(), 24);
+
+    stream.clear();
     TEST_ASSERT_EQ(stream.available(), 0);
     stream.write("test");
+    stream.seek(0, io::Seekable::START);
     TEST_ASSERT_EQ(stream.available(), 4);
     sys::byte buf[255];
     stream.read(buf, 4);
@@ -81,7 +93,7 @@ TEST_CASE(testByteStream)
 
 TEST_CASE(testProxyOutputStream)
 {
-    io::ByteStream stream;
+    io::StringStream stream;
     io::ProxyOutputStream proxy(&stream);
     proxy.write("test1");
     sys::byte buf[255];

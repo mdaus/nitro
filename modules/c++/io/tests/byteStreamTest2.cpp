@@ -39,11 +39,14 @@ int main(int argc, char *argv[])
 
     ByteStream bStream;
     bStream.write((const sys::byte*)input.c_str(), 5);
+    bStream.seek(0, Seekable::START);
     bStream.read((sys::byte*)buffer, 3);
     cout << "1:" << buffer << endl;
 
     memset(buffer, 0, 32);
+    bStream.seek(5, Seekable::START);
     bStream.write((const sys::byte*)input.c_str(), 10);
+    bStream.seek(3, Seekable::START);
     bStream.read((sys::byte*)buffer, 11);
     cout << "2:" << buffer << endl;
 

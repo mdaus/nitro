@@ -22,8 +22,41 @@
 
 #include "io/ByteStream.h"
 
+sys::Off_T io::ByteStream::seek(sys::Off_T offset, Whence whence)
+{
+    if (mPosition < 0)
+        throw except::Exception(Ctxt("Invalid seek on eof"));
+
+    switch (whence)
+    {
+    case START:
+        mPosition = offset;
+        break;
+    case END:
+        if (offset > static_cast<sys::Off_T>(mData.size()))
+        {
+            mPosition = 0;
+        }
+        else
+        {
+            mPosition = mData.size() - offset;
+        }
+        break;
+    default:
+        mPosition += offset;
+        break;
+    }
+
+    if (mPosition > static_cast<sys::Off_T>(mData.size()))
+        mPosition = -1;
+    return tell();
+}
+
 sys::Off_T io::ByteStream::available()
 {
+    if (mPosition < 0)
+        throw except::Exception(Ctxt("Invalid available bytes on eof"));
+
     sys::Off_T where = mPosition;
     sys::Off_T until = static_cast<sys::Off_T>(mData.size());
     sys::Off_T diff = until - where;
@@ -32,22 +65,28 @@ sys::Off_T io::ByteStream::available()
 
 void io::ByteStream::write(const sys::byte *b, sys::Size_T size)
 {
-    // append the data to the end of the vector
-    size_t writePosition(mData.size());
-    size_t newSize(mData.size() + size);
-    mData.resize(newSize);
-    std::copy(b, b+size, &mData[writePosition]);
+    if (mPosition < 0)
+        throw except::Exception(Ctxt("Invalid write on eof"));
+
+    sys::Size_T newPos = mPosition + size;
+    if (newPos >= mData.size())
+        mData.resize(newPos);
+    std::copy(b, b+size, &mData[mPosition]);
+    mPosition = newPos;
 }
 
 sys::SSize_T io::ByteStream::read(sys::byte *b, sys::Size_T len)
 {
+    if (mPosition < 0)
+        throw except::Exception(Ctxt("Invalid read on eof"));
+
     sys::Off_T maxSize = available();
     if (maxSize <= 0) return io::InputStream::IS_END;
 
     if (maxSize <  static_cast<sys::Off_T>(len)) len = maxSize;
     if (len     <= 0)                            return 0;
 
-    memcpy(b, &mData[mPosition], len);
+    ::memcpy(b, &mData[mPosition], len);
     mPosition += len;
     return len;
 }

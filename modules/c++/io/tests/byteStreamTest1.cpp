@@ -36,6 +36,7 @@ int main(int argc, char *argv[])
     ByteStream bStream;
 
     iStream.streamTo(bStream);
+    bStream.seek(0, Seekable::START);
     bStream.streamTo(oStream);
 
     iStream.close();

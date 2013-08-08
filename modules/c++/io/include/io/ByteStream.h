@@ -71,42 +71,20 @@ public:
     {
     }
 
+    virtual
     sys::Off_T tell()
     {
         return mPosition;
     }
 
-    sys::Off_T seek(sys::Off_T offset, Whence whence)
-    {
-        switch (whence)
-        {
-        case START:
-            mPosition = offset;
-            break;
-        case END:
-            if (offset > static_cast<sys::Off_T>(mData.size()))
-            {
-                mPosition = 0;
-            }
-            else
-            {
-                mPosition = mData.size() - offset;
-            }
-            break;
-        default:
-            mPosition += offset;
-            break;
-        }
-
-        if (mPosition >= static_cast<sys::Off_T>(mData.size()))
-            mPosition = io::InputStream::IS_END;
-        return tell();
-    }
+    virtual
+    sys::Off_T seek(sys::Off_T offset, Whence whence);
 
     /*!
      *  Returns the available bytes to read from the stream
      *  \return the available bytes to read
      */
+    virtual
     sys::Off_T available();
 
     using OutputStream::write;
@@ -117,6 +95,7 @@ public:
      *  \param b the data to write to the stream
      *  \param size the number of bytes to write to the stream
      */
+    virtual
     void write(const sys::byte *b, sys::Size_T size);
 
     /*!
@@ -131,30 +110,31 @@ public:
 
     void reset()
     {
-        mPosition  = 0;
-        mData.resize(0);
+        mPosition = 0;
+    }
+
+    void clear()
+    {
+        mPosition = 0;
+        mData.clear();
     }
     
     /*!
-     * Resize the internal buffer
-     * \param len the new buffer length
-     */
-    void
-    resize(sys::Size_T len)
-    {
-        mData.resize(len);
-        if (mPosition >= static_cast<sys::Off_T>(len))
-            mPosition = len - 1;
-    }
-
-    /*!
-     * Get a point to the internal buffer 
+     * Get a pointer to the internal buffer 
+     * This pointer should not be treated as valid
+     * after a call to the seek, write, or reset methods
      * \return pointer to the internal buffer
      */
     sys::ubyte *
     get()
     {
         return mData.empty() ? NULL : &mData[0];
+    }
+
+    sys::Size_T
+    getSize()
+    {
+        return mData.size();
     }
 
 private:
