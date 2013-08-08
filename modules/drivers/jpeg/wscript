@@ -9,7 +9,7 @@ tarfile = 'jpegsrc.v9.tar'
 # this fragment is needed because jpeglib.h doesn't include
 # the required headers on its own
 frag = '''
-#include <stdlib.h>
+#include <stddef.h>
 #include <stdio.h>
 #include <jpeglib.h>
 
