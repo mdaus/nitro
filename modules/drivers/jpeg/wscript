@@ -6,6 +6,21 @@ from os.path import join, exists
 sourcepath = 'jpeg-9'
 tarfile = 'jpegsrc.v9.tar'
 
+# this fragment is needed because jpeglib.h doesn't include
+# the required headers on its own
+frag = '''
+#include <stdlib.h>
+#include <stdio.h>
+#include <jpeglib.h>
+
+int main(int argc, char **argv)
+{
+    void *p;
+    (void)argc; (void)argv;
+    p=(void*)(jpeg_destroy_decompress);
+    return 0;
+}
+'''
 def options(opt):
     opt.add_option('--with-jpeg-home', action='store', dest='jpeg_home',
                    help='Specify the JPEG Home - where the JPEG library is installed')
@@ -24,10 +39,11 @@ def configure(conf):
 
         jpegHome = Options.options.jpeg_home
         if jpegHome:
-            conf.check(lib='libjpeg', uselib_store='JPEG',
-                       header_name='jpeglib.h', function_name='jpeg_create_decompress',
-                       libpath=join(zipHome, 'lib'),
-                       includes=join(zipHome, 'include'),
+            conf.check(lib='jpeg' if sys.platform != 'win32' else 'libjpeg', 
+                       uselib_store='JPEG', 
+                       header_name='jpeglib.h', fragment=frag,
+                       libpath=join(jpegHome, 'lib'),
+                       includes=join(jpegHome, 'include'),
                        msg='Checking for library libjpeg', okmsg=jpegHome,
                        mandatory=False)
 
@@ -42,10 +58,13 @@ def configure(conf):
             untarFile(path=conf.path, fname=tarfile)
 
         else:
-            conf.check(lib='libjpeg', uselib_store='JPEG',
-                       header_name='jpeglib.h', function_name='jpeg_create_decompress',
+            conf.check(lib='jpeg' if sys.platform != 'win32' else 'libjpeg', 
+                       uselib_store='JPEG',
+                       header_name='jpeglib.h', fragment=frag,
                        msg='Checking for library libjpeg',
                        mandatory=False)
+
+        conf.env['HAVE_JPEG'] = True
 
 def build(bld):
     variant = bld.env['VARIANT']
