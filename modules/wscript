@@ -1,63 +1,30 @@
 import os
 from waflib import Scripting, Options
-from os.path import join, exists
-from waflib.Build import BuildContext
-from waflib.Tools import waf_unit_test
+from os.path import join, exists 
 
-VERSION = '2.0-dev' # This has no meaning, but its built into the waf system
+VERSION = '2.0-dev'
 APPNAME = 'CODA'
 top  = '.'
 out  = 'target'
 
-ALWAYS_INSTALLED = ['waf', 'wscript', 'build', 'c++/wscript']
-PACKAGE_ALL = { 'SUB_DIRS' : ['drivers', 'c++'],
-                'SOURCE_INCLUDES' : ALWAYS_INSTALLED,
-                'SOURCE_EXCLUDES' : [],
-                'TARGETS' : []
-              } 
+DIRS = 'drivers c++'
 
 def options(opt):
-    opt.load('build msvs dumpenv', tooldir='./build')
-    
+    opt.load('build matlabtool', tooldir='./build/')
     # always set_options on all
-    allDirs = PACKAGE_ALL['SUB_DIRS']
-    allDirs = filter(lambda x: exists(join(opt.path.abspath(), x)), allDirs)
-    opt.recurse(allDirs)
+    opt.recurse(filter(lambda x: exists(join(opt.path.abspath(), x, 'wscript')),
+                           DIRS.split()))
 
 def configure(conf):
-    conf.load('build', tooldir='./build')
-    
-    # store the packages in the env
-    conf.env['BUILD_PACKAGES']['ALL'] = PACKAGE_ALL
-
-    # always configure on all 
-    allDirs = PACKAGE_ALL['SUB_DIRS']
-    allDirs = filter(lambda x: exists(join(conf.path.abspath(), x)), allDirs)
-
-    conf.recurse(allDirs)
+    conf.load('build matlabtool', tooldir='./build/')
+    conf.recurse(filter(lambda x: exists(join(conf.path.abspath(), x, 'wscript')),
+                           DIRS.split()))
 
 def build(bld):
-
-    variant = bld.env['VARIANT'] or 'default'
-    env = bld.all_envs[variant]
-    
-    # repeat from detect in build.py, but this
-    # allows build time user specification 
-    env['DELIVER_SOURCE'] = Options.options.dist_source
-
-    # build all by default        
-    if Options.options.packages is None :
-        Options.options.packages = 'ALL'
-
-    bld.build_packages(Options.options.packages)
-    
-    bld.add_post_fun(waf_unit_test.summary)
-
+    bld.recurse(filter(lambda x: exists(join(bld.path.abspath(), x, 'wscript')),
+                           DIRS.split()))
+        
 def distclean(context):
-
-    # always distclean on all
-    allDirs = PACKAGE_ALL['SUB_DIRS']
-    allDirs = filter(lambda x: exists(join(context.path.abspath(), x)), allDirs)
-    context.recurse(allDirs)
-
+    context.recurse(filter(lambda x: exists(join(context.path.abspath(), x, 'wscript')),
+                           DIRS.split()))    
     Scripting.distclean(context)

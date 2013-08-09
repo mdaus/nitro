@@ -131,86 +131,7 @@ class CPPContext(Context.Context):
                 else:
                     last = lst[i]
         return lst
-        
-    # copies source to the output location
-    def __makeSourceDelivery(self, dirs) :
 
-        variant = self.env['VARIANT'] or 'default'
-        env = self.all_envs[variant]
-
-        wafDir = abspath('./')
-        if isinstance(dirs, str):
-            dirs = dirs.split()
-        for dir in dirs :
-            if dir is None :
-                continue
-
-            dir = join(self.path.abspath(), dir)
-            relPath = self.__computeRelPath(dir, wafDir)
-
-            # find things in env
-            deliverSource = env['DELIVER_SOURCE']
-            prefix = env['PREFIX']
-
-            # parse package excludes
-            pkgs = []
-            if Options.options.packages :
-                pkgs = Options.options.packages.split(',')
-            pkgsExcludes = []
-            for pkg in pkgs :
-                pkg = pkg.upper()
-                pkg = pkg.strip()
-                if pkg in env['BUILD_PACKAGES'] :
-                    pkgsExcludes.extend(env['BUILD_PACKAGES'][pkg]['SOURCE_EXCLUDES'])
-
-            pkgsExcludes = self.removeDuplicates(pkgsExcludes)
-            
-            if self.is_install and exists(dir) and deliverSource is True : 
-                relPath = self.__computeRelPath(dir, wafDir)
-
-                # convert relative excluded paths to full paths
-                parsedExcludes = []
-                for pkgEx in pkgsExcludes:
-                    dir = abspath(join(wafDir, pkgEx))
-                    if exists(dir) :
-                        parsedExcludes.append(dir)
-                    else :
-                        parsedExcludes.append(pkgEx)
-
-                # deliver all source from relPath recursively
-                self.copyTree(join(wafDir, relPath), 
-                              join (prefix, 'source', relPath), 
-                              parsedExcludes, prefix)
-
-
-    # wrapper function for delivering everything below a wscript pickup
-    def __add_subdirs_withSource(self, dirs) :
-    
-        if dirs is None :
-            return
-        if isinstance(dirs, str):
-            dirs = dirs.split()
-        for dir in dirs :
-            if dir is None :
-                continue
-                
-            self.__makeSourceDelivery(dir)
-            if not exists(join(self.path.abspath(), dir, 'wscript')) :
-                self.fromConfig(dir)
-            else :
-                self.recurse(dir)
-        
-    # wrapper function for delivering everything below a project.cfg pickup
-    def __fromConfig_withSource(self, dirs, **overrides) :
-    
-        if dirs is None :
-            return
-        self.__makeSourceDelivery(dirs)
-        self.fromConfig(dirs, **overrides)
-        
-        
-        
-        
     def fromConfig(self, path, **overrides):
         bld = self
         from ConfigParser import SafeConfigParser as Parser
@@ -305,53 +226,6 @@ class CPPContext(Context.Context):
                              name=basename(splitext(len(parts) == 2 and parts[1] or parts[0])[0]))
 
         except Exception:{}
-    
-    def build_packages(self, packages) :
-
-        variant = self.env['VARIANT'] or 'default'
-        env = self.all_envs[variant]
-
-        if isinstance(packages, str):
-            packages = packages.split(',')
-            
-        # parse packages        
-        pkgsDirs = []
-        pkgsTargets = []
-        pkgsIncludes = []
-        pkgsExcludes = []
-        for package in packages :
-            if package is None :
-                continue
-            package = package.upper()
-            package = package.strip()
-
-            pkgsDirs.extend(env['BUILD_PACKAGES'][package]['SUB_DIRS'])
-            pkgsTargets.extend(env['BUILD_PACKAGES'][package]['TARGETS'])
-            pkgsIncludes.extend(env['BUILD_PACKAGES'][package]['SOURCE_INCLUDES'])
-            pkgsExcludes.extend(env['BUILD_PACKAGES'][package]['SOURCE_EXCLUDES'])
-            
-        # make sure there weren't repeats between packages
-#        pkgsDirs = self.removeDuplicates(pkgsDirs) # this depends on order
-        pkgsTargets = self.removeDuplicates(pkgsTargets)
-        pkgsIncludes = self.removeDuplicates(pkgsIncludes)
-        pkgsExcludes = self.removeDuplicates(pkgsExcludes)
-        
-        # add sub_dirs
-        self.__add_subdirs_withSource(filter(lambda x: exists(join(self.path.abspath(), x)), pkgsDirs))
-        
-        # add targets
-        targets = self.targets.split(',')
-        targets.extend(pkgsTargets)
-        targets = self.removeDuplicates(targets)
-        self.targets = ','.join(targets)
-        
-        # deliver certain things in main directory regarless
-        if env['DELIVER_SOURCE'] is True: 
-            for x in pkgsIncludes :
-                if os.path.isdir(join(self.path.abspath(), x)) :
-                    self.copyTree(join(self.path.abspath(), x), join(env['PREFIX'], 'source', x), pkgsExcludes, env['PREFIX'])
-                else :
-                    self.install_files(join(env['PREFIX'], 'source', os.path.split(x)[0]), x)
 
     def install_tgt(tsk, **modArgs):
         # The main purpose this serves is to recursively copy all the wscript's
@@ -924,15 +798,6 @@ def configure(self):
     linuxRegex = r'.*-.*-linux-.*|i686-pc-.*|linux'
     solarisRegex = r'sparc-sun.*|i.86-pc-solaris.*|sunos'
     winRegex = r'win32'
-    
-    # build packages is a map of maps
-    self.env['BUILD_PACKAGES'] = {}
-
-    # store in the environment whether the user wants to
-    # deliver source into the installation area --
-    # this can also be a build time argument if placed in
-    # the top level wscript
-    self.env['DELIVER_SOURCE'] = Options.options.dist_source
     
     self.msg('Platform', sys_platform, color='GREEN')
     
