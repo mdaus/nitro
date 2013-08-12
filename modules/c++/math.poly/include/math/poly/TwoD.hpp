@@ -20,6 +20,9 @@
  *
  */
 
+#include <cmath>
+#include <limits>
+
 #include <import/except.h>
 #include <import/sys.h>
 #include "math/poly/OneD.h"
@@ -400,5 +403,101 @@ TwoD<_T>::operator != (const TwoD<_T>& p) const
     return !(*this == p);
 }
 
+template<typename _T>
+TwoD<_T> TwoD<_T>::scaleVariable(double scale) const
+{
+    return scaleVariable(scale, scale);
+}
+
+template<typename _T>
+TwoD<_T> TwoD<_T>::scaleVariable(double scaleX, double scaleY) const
+{
+    // Here is an elegant way to scale everything, except you'll end up with
+    // a polynomial that's of an order twice as high as you have now with a
+    // bunch of terms with a coefficient of 0.
+    /*
+    math::poly::TwoD<double> px(1, 1);
+    math::poly::TwoD<double> py(1, 1);
+
+    px[1][0] = scaleX;
+    py[0][1] = scaleY;
+    return transformVariable(px, py);
+    */
+
+    math::poly::TwoD<double> newP = *this;
+
+    double xCoeff = 1.0;
+    for (size_t ii = 0; ii <= orderX(); ++ii)
+    {
+        double yCoeff = 1.0;
+        for (size_t jj = 0; jj <= orderY(); ++jj)
+        {
+            newP[ii][jj] *= xCoeff * yCoeff;
+            yCoeff *= scaleY;
+        }
+        xCoeff *= scaleX;
+    }
+
+    return newP;
+}
+
+template<typename _T>
+TwoD<_T> TwoD<_T>::truncateTo(size_t orderX, size_t orderY) const
+{
+    orderX = std::min(this->orderX(), orderX);
+    orderY = std::min(this->orderY(), orderY);
+
+    TwoD<_T> newP(orderX, orderY);
+    for (size_t ii = 0; ii <= orderX; ++ii)
+    {
+        for (size_t jj = 0; jj <= orderY; ++jj)
+        {
+            newP[ii][jj] = (*this)[ii][jj];
+        }
+    }
+
+    return newP;
+}
+
+template<typename _T>
+TwoD<_T> TwoD<_T>::truncateToNonZeros(double zeroEpsilon) const
+{
+    zeroEpsilon = std::abs(zeroEpsilon);
+    static const size_t NOT_FOUND(std::numeric_limits<size_t>::max());
+    size_t newOrderX(NOT_FOUND);
+    size_t newOrderY(NOT_FOUND);
+
+    // Find the highest order non-zero coefficient.
+    for (size_t ii = 0, xi = orderX(); ii <= orderX(); ++ii, --xi)
+    {
+        for (size_t jj = 0, yi = orderY(); jj <= orderY(); ++jj, --yi)
+        {
+            if (std::abs((*this)[xi][yi]) > zeroEpsilon)
+            {
+                if (newOrderX == NOT_FOUND)
+                {
+                    newOrderX = xi;
+                }
+                if (newOrderY == NOT_FOUND || yi > newOrderY)
+                {
+                    newOrderY = yi;
+                }
+                break;
+            }
+        }
+    }
+
+    // In case we never found a non-zero term, don't go lower than zero order
+    if (newOrderX == NOT_FOUND)
+    {
+        newOrderX = 0;
+    }
+    if (newOrderY == NOT_FOUND)
+    {
+        newOrderY = 0;
+    }
+
+    return truncateTo(newOrderX, newOrderY);
+}
 } // poly
 } // math

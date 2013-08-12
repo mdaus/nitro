@@ -123,6 +123,54 @@ public:
     TwoD<_T> derivativeY() const;
     TwoD<_T> derivativeX() const;
     TwoD<_T> derivativeXY() const;
+
+    /*!
+     * Returns a scaled polynomial such that
+     * P'(x, y) = P(x * scaleX, y * scaleY)
+     *
+     * \param scaleX The factor to apply to x
+     * \param scaleY The factor to apply to y
+     *
+     * \return Scaled polynomial of the same order as the original polynomial
+     */
+    TwoD<_T> scaleVariable(double scaleX, double scaleY) const;
+
+    /*!
+     * Returns a scaled polynomial such that
+     * P'(x, y) = P(x * scale, y * scale)
+     *
+     * If you had a polynomial in units of feet that you wanted in units of
+     * meters, you would pass in a scale value of METERS_TO_FEET (since this
+     * is what you would scale all your inputs by if you were using the
+     * original polynomial in feet).
+     *
+     * \param scale The factor to apply to both x and y
+     *
+     * \return Scaled polynomial of the same order as the original polynomial
+     */
+    TwoD<_T> scaleVariable(double scale) const;
+
+    /*!
+     * Returns a truncated polynomial of the specified order.  All
+     * higher-order terms are simply removed.
+     *
+     * \param orderX Order to truncate to for x
+     * \param orderY Order to truncate to for y
+     *
+     * \return Truncated polynomial of order orderX x orderY
+     */
+    TwoD<_T> truncateTo(size_t orderX, size_t orderY) const;
+
+    /*!
+     * Returns a polynomial truncated to smallest order to retain only
+     * non-zero coefficients.
+     *
+     * \param zeroEpsilon Tolerance for what a "zero" coefficient is
+     *
+     * \return Truncated polynomial
+     */
+    TwoD<_T> truncateToNonZeros(double zeroEpsilon = 0.0) const;
+
     /*!
      * This evaluates y in the 2D polynomial, leaving a 1D polynomial in x
      * That is, poly(x, y) == poly.atY(y)(x)
