@@ -108,11 +108,10 @@ public:
     }
 
 private:
+    const size_t mNumBytes;
 
-    size_t mNumBytes;
-
-    ScopedAlignedArray<sys::byte> mAlignedValid;
-    ScopedAlignedArray<sys::byte> mAlignedScratch;
+    const ScopedAlignedArray<sys::byte> mAlignedValid;
+    const ScopedAlignedArray<sys::byte> mAlignedScratch;
 
     void* mValid;
     void* mScratch;
