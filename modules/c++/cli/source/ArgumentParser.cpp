@@ -441,7 +441,8 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
                         // it's another flag, so we break out
                         break;
                     }
-                    if (maxArgs >= 0 && v->size() >= maxArgs)
+                    if (maxArgs >= 0 &&
+                        v->size() >= static_cast<size_t>(maxArgs))
                     {
                         // it's another positional argument, so we break out
                         break;
@@ -523,7 +524,7 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
                 {
                     cli::Value *posVal = lastPosVal
                             = currentResults->getValue(argVar);
-                    if (posVal->size() >= maxArgs)
+                    if (static_cast<int>(posVal->size()) >= maxArgs)
                         continue;
                     break;
                 }
@@ -575,9 +576,9 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
             std::string val = results->getValue(argVar)->toString();
             str::lower(val);
 
-            for (int i = 0; i < choices.size(); i++)
+            for (size_t ii = 0; ii < choices.size(); ++ii)
             {
-                std::string choice = choices[i];
+                std::string choice = choices[ii];
                 str::lower(choice);
                 if (str::containsOnly(val, choice))
                 {
@@ -601,10 +602,10 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
 
         if (arg->isRequired() || numGiven > 0)
         {
-            if (minArgs > 0 && numGiven < minArgs)
+            if (minArgs > 0 && numGiven < static_cast<size_t>(minArgs))
                 parseError(FmtX("not enough arguments, %d required: [%s]",
                                 minArgs, argId.c_str()));
-            if (maxArgs >= 0 && numGiven > maxArgs)
+            if (maxArgs >= 0 && numGiven > static_cast<size_t>(maxArgs))
                 parseError(FmtX("too many arguments, %d supported: [%s]",
                                 maxArgs, argId.c_str()));
         }

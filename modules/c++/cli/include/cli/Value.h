@@ -122,7 +122,7 @@ public:
     /**
      * Returns the size of the value.
      */
-    unsigned int size() const
+    size_t size() const
     {
         return mValues.size();
     }
