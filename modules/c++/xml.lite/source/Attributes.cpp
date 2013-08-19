@@ -41,8 +41,7 @@ xml::lite::AttributeNode::operator=(const xml::lite::AttributeNode& node)
 
 int xml::lite::Attributes::getIndex(const std::string& qname) const
 {
-
-    for (int i = 0; i < (int) mAttributes.size(); i++)
+    for (size_t i = 0; i < mAttributes.size(); i++)
     {
         if (qname == mAttributes[i].getQName())
             return i;
@@ -53,38 +52,38 @@ int xml::lite::Attributes::getIndex(const std::string& qname) const
 int xml::lite::Attributes::getIndex(const std::string& uri,
                                     const std::string& localName) const
 {
-    for (int i = 0; i < (int) mAttributes.size(); i++)
+    for (size_t i = 0; i < mAttributes.size(); i++)
     {
         if ((uri == mAttributes[i].getUri()) && (localName
                 == mAttributes[i].getLocalName()))
             return i;
     }
     return -1;
-
 }
 
 std::string xml::lite::Attributes::getValue(int i) const
 {
-    return mAttributes[i].getValue();
+    return mAttributes.at(i).getValue();
 }
 
 std::string xml::lite::Attributes::getUri(int i) const
 {
-    return mAttributes[i].getUri();
+    return mAttributes.at(i).getUri();
 }
+
 std::string xml::lite::Attributes::getLocalName(int i) const
 {
-    return mAttributes[i].getLocalName();
+    return mAttributes.at(i).getLocalName();
 }
 
 std::string xml::lite::Attributes::getQName(int i) const
 {
-    return mAttributes[i].getQName();
+    return mAttributes.at(i).getQName();
 }
 
 std::string xml::lite::Attributes::getValue(const std::string& qname) const
 {
-    for (int i = 0; i < (int) mAttributes.size(); i++)
+    for (size_t i = 0; i < mAttributes.size(); i++)
     {
         if (qname == mAttributes[i].getQName())
             return mAttributes[i].getValue();
@@ -93,14 +92,14 @@ std::string xml::lite::Attributes::getValue(const std::string& qname) const
                                                qname.c_str())));
 
     // We don't ever reach this but it keeps the compiler from complaining...
-    return mAttributes[(int) mAttributes.size() - 1].getValue();
+    return mAttributes[mAttributes.size() - 1].getValue();
 }
 
 std::string xml::lite::Attributes::getValue(
     const std::string& uri,
     const std::string& localName) const
 {
-    for (int i = 0; i < (int) mAttributes.size(); i++)
+    for (size_t i = 0; i < mAttributes.size(); i++)
     {
         if ((uri == mAttributes[i].getUri()) && (localName
                 == mAttributes[i].getLocalName()))
@@ -110,7 +109,7 @@ std::string xml::lite::Attributes::getValue(
                                                uri.c_str(), localName.c_str())));
 
     // We don't ever reach this but it keeps the compiler from complaining...
-    return mAttributes[(int) mAttributes.size() - 1].getValue();
+    return mAttributes[mAttributes.size() - 1].getValue();
 }
 
 void xml::lite::Attributes::add(const AttributeNode& attribute)
@@ -185,10 +184,10 @@ xml::lite::Attributes::operator=(const xml::lite::Attributes& attributes)
 
 const xml::lite::AttributeNode& xml::lite::Attributes::getNode(int i) const
 {
-    return mAttributes[i];
+    return mAttributes.at(i);
 }
 
 xml::lite::AttributeNode& xml::lite::Attributes::getNode(int i)
 {
-    return mAttributes[i];
+    return mAttributes.at(i);
 }
