@@ -31,6 +31,7 @@
 #include <assert.h>
 #include <iostream>
 #include <stdio.h>
+#include <algorithm>
 
 #if defined(__sgi) || defined(__sgi__)
 #   include <stdarg.h>
@@ -196,11 +197,12 @@ namespace sys
      *  \param elemSize
      *  \param numElems
      */
-    inline void byteSwap(sys::byte *buffer,
-                         const unsigned short elemSize,
-                         const size_t numElems)
+    inline void byteSwap(void* buffer,
+                         unsigned short elemSize,
+                         size_t numElems)
     {
-        if (!buffer || elemSize < 2 || !numElems)
+        sys::byte* bufferPtr = static_cast<sys::byte*>(buffer);
+        if (!bufferPtr || elemSize < 2 || !numElems)
             return;
 
         unsigned short half = elemSize >> 1;
@@ -213,9 +215,7 @@ namespace sys
                 innerOff = offset + j;
                 innerSwap = offset + elemSize - 1 - j;
                 
-                sys::byte tmp       = buffer[innerOff];
-                buffer[innerOff]    = buffer[innerSwap];
-                buffer[innerSwap]   = tmp;
+                std::swap(bufferPtr[innerOff], bufferPtr[innerSwap]);
             }
         }
     }
