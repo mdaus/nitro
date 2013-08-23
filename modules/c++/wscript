@@ -1,7 +1,6 @@
 from os.path import join, exists
-from waflib import Utils
 
-MODULES = 'cli dbi except io logging mem mt net net.ssl plugin re str ' \
+MODULES = 'cli dbi except io logging mem math mt net net.ssl plugin re str ' \
           'sys tiff unique xml.lite zip math.linear math.poly'
           
 def options(opt):
@@ -14,18 +13,8 @@ def configure(conf):
                            MODULES.split()))
     
 def build(bld):
-
-    modules = filter(lambda x: exists(join(bld.path.abspath(), x)), MODULES.split())
-                          
-    # build these modules from their project.cfg file
-    configBuilds = filter(lambda m: not exists(join(bld.path.abspath(), m, 'wscript')), modules)
-    for config in configBuilds :
-        bld.fromConfig(join(bld.path.abspath(), config))
-
-    # build the rest with the wscript
-    modules = set(modules) - set(configBuilds)
-    for mod in modules :
-        bld.recurse(mod)
+    bld.recurse(filter(lambda x: exists(join(bld.path.abspath(), x, 'wscript')),
+                           MODULES.split()))
 
 def distclean(context):
     context.recurse(filter(lambda x: exists(join(context.path.abspath(), x, 'wscript')),
