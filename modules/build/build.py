@@ -1016,7 +1016,13 @@ def configure(self):
         if Options.options.warningsAsErrors:
             warningFlags += ' -Wfatal-errors'
 
-        if cxxCompiler == 'g++':
+        # TODO: Verify there aren't any additional/different Intel compiler
+        #       flags to set.  By default, the Intel compiler will link its
+        #       libraries in statically for executables but not for plugins.
+        #       If you want the plugins to not depend on Intel libraries,
+        #       configure with:
+        #       --with-cflags=-static-intel --with-cxxflags=-static-intel --with-linkflags=-static-intel
+        if cxxCompiler == 'g++' or cxxCompiler == 'icpc':
             config['cxx']['debug']          = '-g'
             config['cxx']['warn']           = warningFlags.split()
             config['cxx']['verbose']        = '-v'
@@ -1034,7 +1040,7 @@ def configure(self):
             env.append_value('DEFINES', '_FILE_OFFSET_BITS=64 _LARGEFILE_SOURCE __POSIX'.split())
             env.append_value('LINKFLAGS', '-Wl,-E -fPIC'.split())
         
-        if ccCompiler == 'gcc':
+        if ccCompiler == 'gcc' or ccCompiler == 'icc':
             config['cc']['debug']          = '-g'
             config['cc']['warn']           = warningFlags.split()
             config['cc']['verbose']        = '-v'
