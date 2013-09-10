@@ -40,7 +40,7 @@ def configure(self):
 
     if Options.options.java_home:
         self.environ['JAVA_HOME'] = Options.options.java_home 
-    
+
     try:
         self.load('java')
     except Exception as e:
@@ -55,17 +55,17 @@ def configure(self):
     try:
         if not self.env.JAVA_HOME:
             self.fatal('set JAVA_HOME in the system environment')
-    
+
         # jni requires the jvm
         javaHome = abspath(self.env['JAVA_HOME'][0])
-        
+
         if not isdir(javaHome):
             self.fatal('could not find JAVA_HOME directory %r (see config.log)' % javaHome)
-    
+
         incDir = abspath(join(javaHome, 'include'))
         if not isdir(incDir):
             self.fatal('could not find include directory in %r (see config.log)' % javaHome)
-        
+
         incDirs = list(set(map(lambda x: dirname(x),
                       recursiveGlob(incDir, ['jni.h', 'jni_md.h']))))
         libDirs = list(set(map(lambda x: dirname(x),
@@ -73,7 +73,7 @@ def configure(self):
         if not libDirs:
             libDirs = list(set(map(lambda x: dirname(x),
                           recursiveGlob(javaHome, ['*jvm.so', '*jvm.dll']))))
- 
+
         #if not self.check_jni_headers():
         if not self.check(header_name='jni.h', define_name='HAVE_JNI_H', lib='jvm',
                 libpath=libDirs, includes=incDirs, uselib_store='JAVA', uselib='JAVA',
@@ -125,16 +125,16 @@ def java_module(bld, **modArgs):
 
     if env['JAVAC'] and env['JAR'] and jni_ok:
        modArgs = dict((k.lower(), v) for k, v in modArgs.iteritems())
-           
+
        lang = modArgs.get('lang', 'java')
        nlang = modArgs.get('native_lang', 'c')
        libExeType = {'java':'javac'}.get(lang, 'java')
        nsourceExt = {'cxx':'.cpp','c':'.c'}.get(nlang, 'c')
        libName = '%s.jar' % (modArgs['name'])
-         
+
        path = modArgs.get('path',
                           'dir' in modArgs and bld.path.find_dir(modArgs['dir']) or bld.path)
-   
+
        module_deps = map(lambda x: '%s-%s' % (x, lang), listify(modArgs.get('module_deps', '')))
        uselib_local = module_deps + listify(modArgs.get('uselib_local', '')) + listify(modArgs.get('use',''))
        uselib = listify(modArgs.get('uselib', '')) + ['JAVA']
@@ -146,14 +146,14 @@ def java_module(bld, **modArgs):
        libInstallPath = modArgs.get('lib_install_path', None)
        manifest = modArgs.get('manifest', None)
        jarcreate = modArgs.get('jarcreate', None)
-   
+
        if modArgs.get('nosuffix', False) :
            targetName = modArgs['name']
-       else :    
+       else :
            targetName = '%s-%s' % (modArgs['name'], lang)
-           
+
        sourcedir = modArgs.get('sourcedir', 'src/java')
-   
+
        cp_targets = []
        real_classpath = []
        classpathDirs = [bld.path.find_dir('lib'), bld.path.find_dir('libs'), bld.path.find_dir('../libs')]
@@ -162,13 +162,15 @@ def java_module(bld, **modArgs):
                if dir is not None and os.path.exists(join(dir.abspath(), cp)):
                    real_classpath.append(join(dir.abspath(), cp))
                    cp_targets.append(bld(name=cp, features='install_tgt', install_path=libInstallPath or '${PREFIX}/lib', dir=dir, files=[cp]))
+           if os.path.exists(cp):
+               real_classpath.append(cp)
 
        # We need a try/catch here for the rare case where we have javac but
        # not JNI, we're a module that doesn't depend on JNI, but we depend on
        # another module that DOES depend on JNI.  In that case, the module we
        # depend on won't exist so get_tgen_by_name() will throw.  There's no
        # way to build this module, which is fine - we're just trying not to
-       # stop the whole build when something else is targetted.
+       # stop the whole build when something else is targeted.
        for dep in module_deps:
            try:
                tsk = bld.get_tgen_by_name(dep)
@@ -176,26 +178,26 @@ def java_module(bld, **modArgs):
                    real_classpath.append(cp)
            except:
                return
-         
+
        #build the jar
        jar = bld(features='javac jar add_targets install_tgt', manifest=manifest, jarcreate=jarcreate, srcdir=sourcedir, classpath=real_classpath, targets_to_add=targets_to_add + cp_targets, 
                use=module_deps, name=targetName, target=targetName, basedir='classes', outdir='classes', destfile=libName, compat=compat, dir=bld.path.get_bld(), files=[libName])
-   
+
        jar.install_path = installPath or '${PREFIX}/lib'
-           
-   
+
+
        if have_native_sourcedir:
            lib = bld(features='%s %sshlib' % (nlang, nlang), includes='%s/include' % native_sourcedir,
                                   target='%s.jni-%s' % (modArgs['name'], nlang), env=env.derive(),
                                   uselib=uselib, use=uselib_local,
                            source=bld.path.find_dir(native_sourcedir).ant_glob('source/*%s' % nsourceExt))
-   
+
            jar.targets_to_add.append(lib)
-         
+
            lib.install_path = installPath or '${PREFIX}/lib'
-            
+
        return jar
-   
+
 # Tell waf to ignore any build.xml files, the 'ant' feature will take care of them.
 TaskGen.extension('build.xml')(Utils.nada)
 
