@@ -274,7 +274,7 @@ void xml::lite::XMLReaderLibXML::errorCallback(void *ctx,
                                                const char* msg,
                                                ...)
 {
-    throw new xml::lite::XMLException(Ctxt(FmtX("LibXML parse exception: %s", msg)));
+    throw xml::lite::XMLException(Ctxt(FmtX("LibXML parse exception: %s", msg)));
 }
 
 

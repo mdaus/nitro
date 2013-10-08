@@ -124,7 +124,7 @@ std::string sys::DateTime::monthToString(int month)
         case 10: { return "October"; }break;
         case 11: { return "November"; }break;
         case 12: { return "December"; }break;
-        default: throw new except::InvalidArgumentException(
+        default: throw except::InvalidArgumentException(
                         "Value not in the valid range {1:12}");
     }
 }
@@ -140,7 +140,7 @@ std::string sys::DateTime::dayOfWeekToString(int dayOfWeek)
         case 5: { return "Thursday"; }break;
         case 6: { return "Friday"; }break;
         case 7: { return "Saturday"; }break;
-        default: throw new except::InvalidArgumentException(
+        default: throw except::InvalidArgumentException(
                         "Value not in the valid range {1:7}");
     }
 }
@@ -185,7 +185,7 @@ int monthToValue(const std::string& month)
     else if (str::startsWith(m, "dec"))
         return 12;
     else
-        throw new except::InvalidArgumentException(
+        throw except::InvalidArgumentException(
                         "Value not in the valid range {Jan:Dec}");
 }
 
@@ -209,7 +209,7 @@ int dayOfWeekToValue(const std::string& dayOfWeek)
     else if (str::startsWith(d, "sat"))
         return 7;
     else
-        throw new except::InvalidArgumentException(
+        throw except::InvalidArgumentException(
                         "Value not in the valid range {Sun:Sat}");
 }
 

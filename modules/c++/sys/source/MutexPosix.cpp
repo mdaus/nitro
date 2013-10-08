@@ -45,7 +45,7 @@ void sys::MutexPosix::lock()
     dbg_printf("Locking mutex\n");
 #endif
     if (::pthread_mutex_lock(&mNative) != 0)
-        throw new sys::SystemException("Mutex lock failed");
+        throw sys::SystemException("Mutex lock failed");
 }
 
 void sys::MutexPosix::unlock()
