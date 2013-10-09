@@ -30,6 +30,43 @@
 namespace io
 {
 
+/*!
+ *  Copy a file or directory to a new path. 
+ *  Source and destination cannot be the same location
+ *
+ *  \param path      - source location
+ *  \param newath    - destination location
+ *  \param blockSize - files are copied in blocks (1MB default)
+ *  \param recurse   - recursively copy
+ *  \return True upon success, false if failure
+ */
+bool copy(const std::string& path, 
+          const std::string& newPath,
+          size_t blockSize = 1048576,
+          bool recurse = true);
+
+/*!
+ *  Move file with this path name to the newPath
+ *  \return True upon success, false if failure
+ */
+inline bool move(const std::string& path, 
+                 const std::string& newPath)
+{
+    sys::OS os;
+    os.move(path, newPath);
+}
+
+/*!
+ *  Remove file with this path name
+ *  \return True upon success, false if failure
+ */
+inline bool remove(const std::string& path, bool recursive = true)
+{
+    sys::OS os;
+    os.remove(path, recursive);
+}
+
+
 /**
  * Static file manipulation utilities.
  */

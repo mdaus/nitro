@@ -246,18 +246,19 @@ const char* sys::Path::separator()
 #endif
 }
 
-std::vector<std::string> sys::Path::list() const
+std::vector<std::string> sys::Path::list(const std::string& path)
 {
-    if (!mOS.exists(mPathName) || !mOS.isDirectory(mPathName))
+    sys::OS os;
+    if (!os.exists(path) || !os.isDirectory(path))
     {
         std::ostringstream oss;
-        oss << "'" << mPathName
+        oss << "'" << path
                 << "' does not exist or is not a valid directory";
         throw except::Exception(Ctxt(oss.str()));
     }
     std::vector<std::string> listing;
     sys::Directory directory;
-    std::string p = directory.findFirstFile(mPathName.c_str());
+    std::string p = directory.findFirstFile(path.c_str());
     while (!p.empty())
     {
         listing.push_back(p);
@@ -278,3 +279,4 @@ std::istream& operator>>(std::istream& is, sys::Path& path)
     path.reset(str);
     return is;
 }
+

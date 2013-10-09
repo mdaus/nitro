@@ -20,8 +20,116 @@
  *
  */
 
-#include "io/FileUtils.h"
-#include "io/FileOutputStream.h"
+#include <io/FileUtils.h>
+#include <io/FileInputStream.h>
+#include <io/FileOutputStream.h>
+
+/*!
+ *  Copy a file or directory permissions and ownership.
+ *
+ *  NOTE: This is not exposed to the user because windows 
+ *        functionality is unsupported. Once this is
+ *        implemented copyPermissions() and setPermissions() 
+ *        functions should be promoted to the header.
+ *
+ *  \param src      - source location
+ *  \param dest     - destination location
+ *  \return True upon success, false if failure
+ */
+void copyPermissions(const std::string& src, 
+                     const std::string& dest)
+{
+#ifndef WIN32
+    // set up permissions on unix --
+    // copy the source's permissions
+    struct stat statBuf;
+    if (stat(src.c_str(), &statBuf) == -1)
+    {
+        throw except::Exception(Ctxt(
+            "Copy Failed: Could not obtain the statistics of the input"));
+    }
+
+    // set the file with the appropriate access --
+    // permissions should exactly match that of the source file
+    // NOTE: this will be ignored on Windows-based mapped file systems
+    if (chmod(dest.c_str(), statBuf.st_mode) == -1)
+    {
+        throw except::Exception(Ctxt(
+            "Copy Failed: Could not set the permissions of the output"));
+    }
+
+    // set the file ownership --
+    // ownership should exactly match that of the source file
+    // NOTE: ownership can only change to groups the user belongs to
+    //       and will fail otherwise
+    if (chown(dest.c_str(), statBuf.st_uid, statBuf.st_gid) == -1)
+    {
+        throw except::Exception(Ctxt(
+            "Copy Failed: Could not set the ownership of the output"));
+    }
+#endif
+}
+
+bool io::copy(const std::string& path, 
+              const std::string& newPath,
+              size_t blockSize,
+              bool recurse)
+{
+    //! list will find '.' and '..' in the directory
+    const std::string item = sys::Path::splitPath(path).second;
+    if (item == "." || item == "..")
+    {
+        return true;
+    }
+
+    sys::OS os;
+    if(os.isDirectory(path))
+    {
+        std::string destDir = sys::Path::joinPaths(newPath, item);
+
+        // make the destination directory if it doesn't exist
+        if (!os.exists(destDir))
+        {
+            os.makeDirectory(destDir);
+        }
+        copyPermissions(path, destDir);
+
+        // recursively copy directories
+        if (recurse)
+        {
+            std::vector<std::string> contents = sys::Path::list(path);
+            for (size_t ii = 0; ii < contents.size(); ++ii)
+            {
+                std::string srcFile  = sys::Path::joinPaths(path, contents[ii]);
+
+                const bool status = 
+                        io::copy(srcFile, destDir, blockSize, recurse);
+                if (!status)
+                {
+                    std::ostringstream oss;
+                    oss << "Copy Failed: Could not copy source [" <<
+                        srcFile << "] to destination [" <<
+                        destDir << "]";
+                    except::Exception(Ctxt(oss.str()));
+                }
+            }
+        }
+    }
+    else
+    {
+        std::string newFile = sys::Path::joinPaths(newPath, item);
+        io::FileInputStream fis(path);
+        io::FileOutputStream fos(newFile);
+        const sys::SSize_T numBytes = fis.streamTo(fos);
+        fis.close();
+        fos.close();
+
+        copyPermissions(path, newFile);
+
+        return (numBytes > 0) ? true : false;
+    }
+    return true;
+}
 
 std::string io::FileUtils::createFile(std::string dirname,
         std::string filename, bool overwrite) throw (except::IOException)

@@ -186,7 +186,11 @@ public:
         return mPathName;
     }
 
-    std::vector<std::string> list() const;
+    static std::vector<std::string> list(const std::string& path);
+    std::vector<std::string> list() const
+    {
+        return sys::Path::list(mPathName);
+    }
 
     /*!
      *  Creates the directory 
