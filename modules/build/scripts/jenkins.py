@@ -68,6 +68,9 @@ if '-mt' in os.environ.get('JOB_NAME'):
 if '-vc9' in os.environ.get('JOB_NAME'):
 	install_suffix += '-vc9'
 	config_options += ["--msvc_version=msvc 9.0,msvc 9.0Exp"]
+elif '-vc10' in os.environ.get('JOB_NAME'):
+	install_suffix += '-vc10'
+	config_options += ["--msvc_version=msvc 10.0,msvc 10.0Exp"]
 
 print 'Job: %s' % os.environ.get('JOB_NAME', '')
 print "Revision: %s" % os.environ.get('SVN_REVISION', '')
