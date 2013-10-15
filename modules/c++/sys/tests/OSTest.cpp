@@ -99,15 +99,7 @@ int main(int argc, char **argv)
         {
             std::cout << "Created test directory: TEST_DIRECTORY" << std::endl;
         }
-        if (!os.remove("TEST_DIRECTORY"))
-        {
-            std::cout << "test directory removal failed:"
-                    << sys::Err().toString() << std::endl;
-        }
-        else
-        {
-            std::cout << "Killed test directory" << std::endl;
-        }
+        os.remove("TEST_DIRECTORY");
 
         std::cout << "Time Now: " << time(NULL) << std::endl;
         sys::RealTimeStopWatch sw;

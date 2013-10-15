@@ -32,7 +32,14 @@ TEST_CASE(testRecursiveRemove)
     createFile(subdir3.join("tempFile5"));
 
     // Try to recursively remove from the top level
-    TEST_ASSERT( os.remove(subdir1) );
+    try
+    {
+        os.remove(subdir1);
+    }
+    catch (...)
+    {
+        TEST_ASSERT(false);
+    }
     TEST_ASSERT( !os.exists(subdir1) );
 }
 }
