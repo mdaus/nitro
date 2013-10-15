@@ -37,33 +37,39 @@ namespace io
  *  \param path      - source location
  *  \param newath    - destination location
  *  \param blockSize - files are copied in blocks (1MB default)
- *  \param recurse   - recursively copy
+ *                     NOTE: This is a placeholder and is unused currently
  *  \return True upon success, false if failure
  */
-bool copy(const std::string& path, 
+void copy(const std::string& path, 
           const std::string& newPath,
-          size_t blockSize = 1048576,
-          bool recurse = true);
+          size_t blockSize = 1048576);
 
 /*!
  *  Move file with this path name to the newPath
  *  \return True upon success, false if failure
  */
-inline bool move(const std::string& path, 
+inline void move(const std::string& path, 
                  const std::string& newPath)
 {
     sys::OS os;
-    os.move(path, newPath);
+    if (os.move(path, newPath) == false)
+    {
+        std::ostringstream oss;
+        oss << "Move Failed: Could not move source [" <<
+            path << "] to destination [" <<
+            newPath << "]";
+        throw except::Exception(Ctxt(oss.str()));
+    }
 }
 
 /*!
  *  Remove file with this path name
  *  \return True upon success, false if failure
  */
-inline bool remove(const std::string& path, bool recursive = true)
+inline void remove(const std::string& path)
 {
     sys::OS os;
-    os.remove(path, recursive);
+    os.remove(path);
 }
 
 

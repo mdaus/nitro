@@ -51,45 +51,29 @@ AbstractOS::search(const std::vector<std::string>& searchPaths,
     return elementsFound;
 }
 
-bool AbstractOS::remove(const std::string& path, bool recursive) const
+void AbstractOS::remove(const std::string& path) const
 {
-    bool success = true;
-
     if (isDirectory(path))
     {
-        if (recursive)
+        // Iterate through each entry in the directory and remove it too
+        DirectoryEntry dirEntry(path);
+        for (DirectoryEntry::Iterator iter = dirEntry.begin();
+                iter != dirEntry.end();
+                ++iter)
         {
-            // Iterate through each entry in the directory and remove it too
-            DirectoryEntry dirEntry(path);
-            for (DirectoryEntry::Iterator iter = dirEntry.begin();
-                 iter != dirEntry.end();
-                 ++iter)
+            const std::string filename(*iter);
+            if (filename != "." && filename != "..")
             {
-                const std::string filename(*iter);
-                if (filename != "." && filename != "..")
-                {
-                    if (!remove(sys::Path::joinPaths(path, filename), true))
-                    {
-                        success = false;
-                    }
-                }
+                remove(sys::Path::joinPaths(path, filename));
             }
         }
 
         // Directory should be empty, so remove it
-        if (!removeDirectory(path))
-        {
-            success = false;
-        }
+        removeDirectory(path);
     }
     else
     {
-        if (!removeFile(path))
-        {
-            success = false;
-        }
+        removeFile(path);
     }
-
-    return success;
 }
 }

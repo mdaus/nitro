@@ -104,9 +104,8 @@ public:
 
     /*!
      *  Remove file with this path name
-     *  \return True upon success, false if failure
      */
-    virtual bool remove(const std::string& path, bool recursive = true) const;
+    virtual void remove(const std::string& path) const;
 
     /*!
      *  Move file with this path name to the newPath
@@ -202,15 +201,14 @@ public:
 protected:
     /*!
      *  Remove file with this pathname
-     *  \return True upon success, false if failure
      */
-    virtual bool removeFile(const std::string& pathname) const = 0;
+    virtual void removeFile(const std::string& pathname) const = 0;
 
     /*!
      *  Remove directory with this pathname
-     *  \return True upon success, false if failure
+     *  NOTE: This will throw if the directory is not empty
      */
-    virtual bool removeDirectory(const std::string& pathname) const = 0;
+    virtual void removeDirectory(const std::string& pathname) const = 0;
 };
 
 class AbstractDirectory

@@ -227,9 +227,9 @@ public:
             return mOS.makeDirectory(mPathName);
     }
 
-    inline bool remove() const
+    inline void remove() const
     {
-        return mOS.remove(mPathName);
+        mOS.remove(mPathName);
     }
 
     inline bool renameTo(std::string dest)

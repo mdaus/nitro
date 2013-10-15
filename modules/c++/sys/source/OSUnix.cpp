@@ -25,6 +25,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <sstream>
 
 #include "sys/OSUnix.h"
 #include "sys/File.h"
@@ -57,14 +58,30 @@ bool sys::OSUnix::exists(const std::string& path) const
     return true;
 }
 
-bool sys::OSUnix::removeFile(const std::string& pathname) const
+void sys::OSUnix::removeFile(const std::string& pathname) const
 {
-    return (::unlink(pathname.c_str()) == 0);
+    if (::unlink(pathname.c_str()) != 0)
+    {
+        sys::Err err;
+        std::ostringstream oss;
+        oss << "Failure removing file [" <<  pathname << 
+            "] with error [" << err.toString() << "]";
+
+        throw except::Exception(Ctxt(oss.str()));
+    }
 }
 
-bool sys::OSUnix::removeDirectory(const std::string& pathname) const
+void sys::OSUnix::removeDirectory(const std::string& pathname) const
 {
-    return (::rmdir(pathname.c_str()) == 0);
+    if (::rmdir(pathname.c_str()) != 0)
+    {
+        sys::Err err;
+        std::ostringstream oss;
+        oss << "Failure removing directory [" <<  pathname << 
+            "] with error [" << err.toString() << "]";
+
+        throw except::Exception(Ctxt(oss.str()));
+    }
 }
 
 bool sys::OSUnix::move(const std::string& path, 

@@ -20,6 +20,7 @@
  *
  */
 
+#include <sstream>
 #include <io/FileUtils.h>
 #include <io/FileInputStream.h>
 #include <io/FileOutputStream.h>
@@ -70,16 +71,15 @@ void copyPermissions(const std::string& src,
 #endif
 }
 
-bool io::copy(const std::string& path, 
+void io::copy(const std::string& path, 
               const std::string& newPath,
-              size_t blockSize,
-              bool recurse)
+              size_t blockSize)
 {
     //! list will find '.' and '..' in the directory
     const std::string item = sys::Path::splitPath(path).second;
     if (item == "." || item == "..")
     {
-        return true;
+        return;
     }
 
     sys::OS os;
@@ -95,24 +95,11 @@ bool io::copy(const std::string& path,
         copyPermissions(path, destDir);
 
         // recursively copy directories
-        if (recurse)
+        std::vector<std::string> contents = sys::Path::list(path);
+        for (size_t ii = 0; ii < contents.size(); ++ii)
         {
-            std::vector<std::string> contents = sys::Path::list(path);
-            for (size_t ii = 0; ii < contents.size(); ++ii)
-            {
-                std::string srcFile  = sys::Path::joinPaths(path, contents[ii]);
-
-                const bool status = 
-                        io::copy(srcFile, destDir, blockSize, recurse);
-                if (!status)
-                {
-                    std::ostringstream oss;
-                    oss << "Copy Failed: Could not copy source [" <<
-                        srcFile << "] to destination [" <<
-                        destDir << "]";
-                    except::Exception(Ctxt(oss.str()));
-                }
-            }
+            std::string srcFile  = sys::Path::joinPaths(path, contents[ii]);
+            io::copy(srcFile, destDir, blockSize);
         }
     }
     else
@@ -126,9 +113,15 @@ bool io::copy(const std::string& path,
 
         copyPermissions(path, newFile);
 
-        return (numBytes > 0) ? true : false;
+        if (numBytes < 0)
+        {
+            std::ostringstream oss;
+            oss << "Copy Failed: Could not copy source [" <<
+                path << "] to destination [" <<
+                newFile << "]";
+            throw except::Exception(Ctxt(oss.str()));
+        }
     }
-    return true;
 }
 
 std::string io::FileUtils::createFile(std::string dirname,
@@ -201,9 +194,8 @@ void io::FileUtils::forceMkdir(std::string dirname) throw (except::IOException)
     if (os.exists(dirname))
     {
         if (!os.isDirectory(dirname))
-            throw except::IOException(
-                                      Ctxt(
-                                           "Cannot create directory - file already exists"));
+            throw except::IOException(Ctxt(
+                    "Cannot create directory - file already exists"));
     }
     else
     {

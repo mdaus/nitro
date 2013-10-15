@@ -176,15 +176,14 @@ public:
 protected:
     /*!
      *  Remove file with this pathname
-     *  \return True upon success, false if failure
      */
-    virtual bool removeFile(const std::string& pathname) const;
+    virtual void removeFile(const std::string& pathname) const;
 
     /*!
      *  Remove directory with this pathname
-     *  \return True upon success, false if failure
+     *  NOTE: This will throw if the directory is not empty
      */
-    virtual bool removeDirectory(const std::string& pathname) const;
+    virtual void removeDirectory(const std::string& pathname) const;
 };
 
 

@@ -23,6 +23,7 @@
 
 #if defined(WIN32)
 
+#include <sstream>
 #include "sys/OSWin32.h"
 #include "sys/File.h"
 
@@ -95,14 +96,30 @@ sys::Pid_T sys::OSWin32::getProcessId() const
     return GetCurrentProcessId();
 }
 
-bool sys::OSWin32::removeFile(const std::string& pathname) const
+void sys::OSWin32::removeFile(const std::string& pathname) const
 {
-    return (DeleteFile(pathname.c_str() )) ? (true) : (false);
+    if (DeleteFile(pathname.c_str()) != true)
+    {
+        sys::Err err;
+        std::ostringstream oss;
+        oss << "Failure removing file [" <<  pathname << 
+            "] with error [" << err.toString() << "]";
+
+        throw except::Exception(Ctxt(oss.str()));
+    }
 }
 
-bool sys::OSWin32::removeDirectory(const std::string& pathname) const
+void sys::OSWin32::removeDirectory(const std::string& pathname) const
 {
-    return (RemoveDirectory(pathname.c_str())) ? (true): (false);
+    if (RemoveDirectory(pathname.c_str()) != true)
+    {
+        sys::Err err;
+        std::ostringstream oss;
+        oss << "Failure removing directory [" <<  pathname << 
+            "] with error [" << err.toString() << "]";
+
+        throw except::Exception(Ctxt(oss.str()));
+    }
 }
 
 bool sys::OSWin32::move(const std::string& path, 
