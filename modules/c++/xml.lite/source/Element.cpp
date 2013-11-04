@@ -148,7 +148,7 @@ void xml::lite::Element::print(io::OutputStream& stream) const
 }
 
 void xml::lite::Element::prettyPrint(io::OutputStream& stream,
-                                     std::string formatter) const
+                                     const std::string& formatter) const
 {
     depthPrint(stream, 0, formatter);
     stream.writeln("");
@@ -156,7 +156,7 @@ void xml::lite::Element::prettyPrint(io::OutputStream& stream,
 
 void xml::lite::Element::depthPrint(io::OutputStream& stream,
                                     int depth,
-                                    std::string formatter) const
+                                    const std::string& formatter) const
 {
     std::string prefix = "";
     for (int i = 0; i < depth; ++i)
@@ -210,8 +210,16 @@ void xml::lite::Element::addChild(xml::lite::Element * node)
     node->setParent(this);
 }
 
+void xml::lite::Element::addChild(std::auto_ptr<xml::lite::Element> node)
+{
+    // Always take ownership
+    std::auto_ptr<xml::lite::Element> scopedValue(node);
+    addChild(scopedValue.get());
+    scopedValue.release();
+}
+
 void xml::lite::Element::changePrefix(Element* element,
-    std::string prefix, std::string uri)
+    const std::string& prefix, const std::string& uri)
 {
     if (element->mName.getAssociatedUri() == uri)
     {
@@ -240,7 +248,7 @@ void xml::lite::Element::changePrefix(Element* element,
 }
 
 void xml::lite::Element::changeURI(Element* element,
-    std::string prefix, std::string uri)
+    const std::string& prefix, const std::string& uri)
 {
     if (element->mName.getPrefix() == prefix)
     {
@@ -269,7 +277,8 @@ void xml::lite::Element::changeURI(Element* element,
     }
 }
 
-void xml::lite::Element::setNamespacePrefix(std::string prefix, std::string uri)
+void xml::lite::Element::setNamespacePrefix(
+    std::string prefix, std::string uri)
 {
     str::trim(prefix);
     changePrefix(this, prefix, uri);
@@ -283,7 +292,8 @@ void xml::lite::Element::setNamespacePrefix(std::string prefix, std::string uri)
     attr[p] = uri;
 }
 
-void xml::lite::Element::setNamespaceURI(std::string prefix, std::string uri)
+void xml::lite::Element::setNamespaceURI(
+    std::string prefix, std::string uri)
 {
     str::trim(prefix);
     changeURI(this, prefix, uri);

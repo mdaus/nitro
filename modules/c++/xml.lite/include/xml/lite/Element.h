@@ -108,7 +108,7 @@ public:
         return mAttributes;
     }
 
-    std::string& attribute(std::string s)
+    std::string& attribute(const std::string& s)
     {
         return mAttributes[s];
     }
@@ -206,7 +206,7 @@ public:
     void print(io::OutputStream& stream) const;
 
     void prettyPrint(io::OutputStream& stream,
-                     std::string formatter = "    ") const;
+                     const std::string& formatter = "    ") const;
 
     /*!
      *  Determines if a child element exists
@@ -303,6 +303,12 @@ public:
     virtual void addChild(Element * node);
 
     /*!
+     *  Adds a child element to this element
+     *  \param node the child element to add
+     */
+    virtual void addChild(std::auto_ptr<Element> node);
+
+    /*!
      *  Returns all of the children of this element
      *  \return the children of this element
      */
@@ -332,12 +338,16 @@ public:
 
 protected:
 
-    void changePrefix(Element* element, std::string prefix, std::string uri);
+    void changePrefix(Element* element,
+                      const std::string& prefix,
+                      const std::string& uri);
 
-    void changeURI(Element* element, std::string prefix, std::string uri);
+    void changeURI(Element* element,
+                   const std::string& prefix,
+                   const std::string& uri);
 
     void depthPrint(io::OutputStream& stream, int depth,
-                    std::string formatter) const;
+                    const std::string& formatter) const;
     
     Element* mParent;
     //! The children of this element
