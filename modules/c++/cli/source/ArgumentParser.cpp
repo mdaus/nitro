@@ -25,12 +25,26 @@
 
 #define _MAX_ARG_LINE_LEN 21
 
-namespace cli
+namespace
 {
-void _writeArgumentHelp(std::ostream& out, const std::string heading,
-                        size_t maxFlagsWidth,
-                        const std::vector<std::string>& flags,
-                        const std::vector<std::string>& helps)
+bool containsOnly(const std::string& str,
+                  const std::map<std::string, cli::Argument*>& flags)
+{
+    for (size_t ii = 0; ii < str.length(); ++ii)
+    {
+        if (flags.find(str.substr(ii, 1)) == flags.end())
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+void writeArgumentHelp(std::ostream& out, const std::string heading,
+                       size_t maxFlagsWidth,
+                       const std::vector<std::string>& flags,
+                       const std::vector<std::string>& helps)
 {
     std::ostringstream s;
     out << heading << std::endl;
@@ -196,15 +210,15 @@ void cli::ArgumentParser::printHelp(std::ostream& out, bool andExit) const
     if (posFlags.size() > 0)
     {
         out << std::endl;
-        cli::_writeArgumentHelp(out, "positional arguments:", maxFlagsWidth,
-                                posFlags, posHelps);
+        writeArgumentHelp(out, "positional arguments:", maxFlagsWidth,
+                          posFlags, posHelps);
     }
 
     if (opFlags.size() > 0)
     {
         out << std::endl;
-        cli::_writeArgumentHelp(out, "optional arguments:", maxFlagsWidth,
-                                opFlags, opHelps);
+        writeArgumentHelp(out, "optional arguments:", maxFlagsWidth,
+                          opFlags, opHelps);
     }
 
     if (!mEpilog.empty())
@@ -311,14 +325,25 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
                     }
                     else
                     {
-                        // split up each char as separate options
-                        // only the last will get any additional args
-                        for (size_t j = 0, n = flag.size(); j < n; ++j)
+                        // Check if every single character in this flag is
+                        // one of the short flags
+                        if (containsOnly(flag, shortFlags))
                         {
-                            std::string charFlag = flag.substr(j, 1);
-                            std::ostringstream oss;
-                            oss << mPrefixChar << charFlag;
-                            explodedArgs.push_back(oss.str());
+                            // Split up each char as separate options
+                            // Only the last will get any additional args
+                            const std::string prefixStr(1, mPrefixChar);
+                            for (size_t jj = 0; jj < flag.length(); ++jj)
+                            {
+                                explodedArgs.push_back(prefixStr + flag[jj]);
+                            }
+                        }
+                        else
+                        {
+                            // If we find a character that isn't one of the
+                            // short flags, then it's probably just an
+                            // argument that happens to start with a dash,
+                            // like "-1", and we want to leave it alone
+                            explodedArgs.push_back(argStr);
                         }
                     }
                 }
@@ -438,8 +463,15 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
                     std::string nextArg(explodedArgs[i + 1]);
                     if (nextArg.size() > 1 && nextArg[0] == mPrefixChar)
                     {
-                        // it's another flag, so we break out
-                        break;
+                        // It might be another flag, but it might just be a
+                        // value that starts with a negative sign
+                        if ((nextArg.size() > 2 && nextArg[1] == mPrefixChar) ||
+                            str::contains(nextArg, ":") ||
+                            containsOnly(nextArg.substr(1), shortFlags))
+                        {
+                            // Fine, it's another flag
+                            break;
+                        }
                     }
                     if (maxArgs >= 0 &&
                         v->size() >= static_cast<size_t>(maxArgs))
@@ -779,4 +811,3 @@ void cli::ArgumentParser::processFlags(std::vector<std::string>& posFlags,
     }
     maxFlagsWidth = std::min<size_t>(maxFlagsWidth, _MAX_ARG_LINE_LEN);
 }
-
