@@ -54,6 +54,13 @@ def configure(conf):
 
             conf.env['MAKE_JPEG'] = True
             conf.msg('Building local lib', 'jpeg (libjpeg)')
+
+            # These are needed by jmorecfg.h.  We could just set these defines
+            # rather than bothering with the conf check.
+            conf.check_cc(fragment='int main(){unsigned short; return 0;}',
+                  define_name='HAVE_UNSIGNED_SHORT', msg='Checking for unsigned short', mandatory=False)
+            conf.check_cc(fragment='int main(){unsigned char i; return 0;}',
+                  define_name='HAVE_UNSIGNED_CHAR', msg='Checking for unsigned char', mandatory=False)
             
             untarFile(path=conf.path, fname=tarfile)
 
