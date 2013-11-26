@@ -53,7 +53,7 @@ public:
 
     ValueType get() const
     {
-        return static_cast<const volatile long&>(mValue);
+        return static_cast<const volatile ValueType&>(mValue);
     }
 
 private:
