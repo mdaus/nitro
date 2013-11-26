@@ -612,8 +612,6 @@ class CPPContext(Context.Context):
                 mex.source = path.ant_glob(modArgs.get('source_dir', modArgs.get('sourcedir', 'source')) + '/*')
                 mex.source = filter(partial(lambda x, t: basename(str(t)) not in x, modArgs.get('source_filter', '').split()), lib.source)            
             pattern = env['%s_PATTERN' % (env['LIB_TYPE'] or 'staticlib')]
-    
-
 
 class GlobDirectoryWalker:
     """ recursively walk a directory, matching filenames """
@@ -763,9 +761,356 @@ def options(opt):
                     help='Override installation share directory')
     opt.add_option('--install-source', action='store_true', dest='install_source', default=False,
                    help='Distribute source into the installation area (for delivering source)')
-    
 
-types_str = '''
+def configureCompilerOptions(self):
+    sys_platform = getPlatform(default=Options.platform)
+    appleRegex = r'i.86-apple-.*'
+    linuxRegex = r'.*-.*-linux-.*|i686-pc-.*|linux'
+    solarisRegex = r'sparc-sun.*|i.86-pc-solaris.*|sunos'
+    winRegex = r'win32'
+
+    cxxCompiler = self.env['COMPILER_CXX']
+    ccCompiler = self.env['COMPILER_CC']
+    
+    if ccCompiler == 'msvc':
+        cxxCompiler = ccCompiler
+        
+    if not cxxCompiler or not ccCompiler:
+        self.fatal('Unable to find C/C++ compiler')
+    
+    config = {'cxx':{}, 'cc':{}}
+
+    #apple
+    if re.match(appleRegex, sys_platform):
+        self.env.append_value('LIB_DL', 'dl')
+        self.env.append_value('LIB_NSL', 'nsl')
+        self.env.append_value('LIB_THREAD', 'pthread')
+        self.env.append_value('DEFINES_THREAD', '_REENTRANT')
+        self.check_cc(lib='pthread', mandatory=True)
+
+        config['cxx']['debug']          = '-g'
+        config['cxx']['warn']           = '-Wall'
+        config['cxx']['verbose']        = '-v'
+        config['cxx']['64']             = '-m64'
+        config['cxx']['32']             = '-m32'
+        config['cxx']['optz_med']       = '-O1'
+        config['cxx']['optz_fast']      = '-O2'
+        config['cxx']['optz_fastest']   = '-O3'
+
+        #self.env.append_value('LINKFLAGS', '-fPIC -dynamiclib'.split())
+        self.env.append_value('LINKFLAGS', '-fPIC'.split())
+        self.env.append_value('CXXFLAGS', '-fPIC')
+
+        config['cc']['debug']          = config['cxx']['debug']
+        config['cc']['warn']           = config['cxx']['warn']
+        config['cc']['verbose']        = config['cxx']['verbose']
+        config['cc']['64']             = config['cxx']['64']
+        config['cc']['optz_med']       = config['cxx']['optz_med']
+        config['cc']['optz_fast']      = config['cxx']['optz_fast']
+        config['cc']['optz_fastest']   = config['cxx']['optz_fastest']
+
+        self.env.append_value('DEFINES', '_FILE_OFFSET_BITS=64 _LARGEFILE_SOURCE __POSIX'.split())
+        self.env.append_value('CFLAGS', '-fPIC -dynamiclib'.split())
+
+    #linux
+    elif re.match(linuxRegex, sys_platform):
+        self.env.append_value('LIB_DL', 'dl')
+        self.env.append_value('LIB_NSL', 'nsl')
+        self.env.append_value('LIB_THREAD', 'pthread')
+        self.env.append_value('DEFINES_THREAD', '_REENTRANT')
+        self.env.append_value('LIB_MATH', 'm')
+
+        self.check_cc(lib='pthread', mandatory=True)
+
+        warningFlags = '-Wall'
+        if Options.options.warningsAsErrors:
+            warningFlags += ' -Wfatal-errors'
+
+        # TODO: Verify there aren't any additional/different Intel compiler
+        #       flags to set.  By default, the Intel compiler will link its
+        #       libraries in statically for executables but not for plugins.
+        #       If you want the plugins to not depend on Intel libraries,
+        #       configure with:
+        #       --with-cflags=-static-intel --with-cxxflags=-static-intel --with-linkflags=-static-intel
+        if cxxCompiler == 'g++' or cxxCompiler == 'icpc':
+            config['cxx']['debug']          = '-g'
+            config['cxx']['warn']           = warningFlags.split()
+            config['cxx']['verbose']        = '-v'
+            config['cxx']['64']             = '-m64'
+            config['cxx']['32']             = '-m32'
+            config['cxx']['linkflags_64']   = '-m64'
+            config['cxx']['linkflags_32']   = '-m32'
+            config['cxx']['optz_med']       = '-O1'
+            config['cxx']['optz_fast']      = '-O2'
+            config['cxx']['optz_fastest']   = '-O3'
+
+            self.env.append_value('CXXFLAGS', '-fPIC')
+
+            # DEFINES and LINKFLAGS will apply to both gcc and g++
+            self.env.append_value('DEFINES', '_FILE_OFFSET_BITS=64 _LARGEFILE_SOURCE __POSIX'.split())
+            self.env.append_value('LINKFLAGS', '-Wl,-E -fPIC'.split())
+        
+        if ccCompiler == 'gcc' or ccCompiler == 'icc':
+            config['cc']['debug']          = '-g'
+            config['cc']['warn']           = warningFlags.split()
+            config['cc']['verbose']        = '-v'
+            config['cc']['64']             = '-m64'
+            config['cc']['32']             = '-m32'
+            config['cc']['linkflags_64']   = '-m64'
+            config['cc']['linkflags_32']   = '-m32'
+            config['cc']['optz_med']       = '-O1'
+            config['cc']['optz_fast']      = '-O2'
+            config['cc']['optz_fastest']   = '-O3'
+
+            self.env.append_value('CFLAGS', '-fPIC'.split())
+    
+    #Solaris
+    elif re.match(solarisRegex, sys_platform):
+        self.env.append_value('LIB_DL', 'dl')
+        self.env.append_value('LIB_NSL', 'nsl')
+        self.env.append_value('LIB_SOCKET', 'socket')
+        self.env.append_value('LIB_THREAD', 'thread')
+        self.env.append_value('LIB_MATH', 'm')
+        self.env.append_value('LIB_CRUN', 'Crun')
+        self.env.append_value('LIB_CSTD', 'Cstd')
+        self.check_cc(lib='thread', mandatory=True)
+        self.check_cc(header_name="atomic.h", mandatory=False)
+        
+        warningFlags = ''
+        if Options.options.warningsAsErrors:
+            warningFlags = '-errwarn=%all'
+
+        if cxxCompiler == 'sunc++':
+            (bitFlag32, bitFlag64) = getSolarisFlags(self.env['CXX'][0])
+            config['cxx']['debug']          = '-g'
+            config['cxx']['warn']           = warningFlags.split()
+            config['cxx']['nowarn']         = '-erroff=%all'
+            config['cxx']['verbose']        = '-v'
+            config['cxx']['64']             = bitFlag64
+            config['cxx']['32']             = bitFlag32
+            config['cxx']['linkflags_32']   = bitFlag32
+            config['cxx']['linkflags_64']   = bitFlag64
+            config['cxx']['optz_med']       = '-xO3'
+            config['cxx']['optz_fast']      = '-xO4'
+            config['cxx']['optz_fastest']   = '-xO5'
+            self.env['CXXFLAGS_cxxshlib']        = ['-KPIC', '-DPIC']
+
+            # DEFINES apply to both suncc and sunc++
+            self.env.append_value('DEFINES', '_FILE_OFFSET_BITS=64 _LARGEFILE_SOURCE'.split())
+            self.env.append_value('CXXFLAGS', '-KPIC -instances=global'.split())
+            self.env.append_value('CXXFLAGS_THREAD', '-mt')
+            
+        if ccCompiler == 'suncc':
+            (bitFlag32, bitFlag64) = getSolarisFlags(self.env['CC'][0])
+            config['cc']['debug']          = '-g'
+            config['cc']['warn']           = warningFlags.split()
+            config['cc']['nowarn']         = '-erroff=%all'
+            config['cc']['verbose']        = '-v'
+            config['cc']['64']             = bitFlag64
+            config['cc']['linkflags_64']   = bitFlag64
+            config['cc']['linkflags_32']   = bitFlag32
+            config['cc']['32']             = bitFlag32
+            config['cc']['optz_med']       = '-xO3'
+            config['cc']['optz_fast']      = '-xO4'
+            config['cc']['optz_fastest']   = '-xO5'
+            self.env['CFLAGS_cshlib']           = ['-KPIC', '-DPIC']
+
+            self.env.append_value('CFLAGS', '-KPIC'.split())
+            self.env.append_value('CFLAGS_THREAD', '-mt')
+
+    elif re.match(winRegex, sys_platform):
+
+        self.env.append_value('LIB_RPC', 'rpcrt4')
+        self.env.append_value('LIB_SOCKET', 'Ws2_32')
+
+        crtFlag = '/%s' % Options.options.crt
+        crtDebug = '%sd' % crtFlag
+
+        # Sets the size of the stack (in bytes)
+        stackFlag = '/STACK:80000000'
+
+        # Skipping warning 4290 about how VS doesn't implement exception
+        # specifications properly.
+        # Skipping warning 4512 about being unable to generate an assignment
+        # operator (since we often do this intentionally).
+        # For warnings, use /W4 because /Wall
+        # gives us tons of warnings in the VS headers themselves
+        warningFlags = '/W4 /wd4290 /wd4512'
+        if Options.options.warningsAsErrors:
+            warningFlags += ' /WX'
+
+        vars = {}
+        vars['debug']          = ['/Zi', crtDebug]
+        vars['warn']           = warningFlags.split()
+        vars['nowarn']         = '/w'
+        vars['verbose']        = ''
+        vars['optz_med']       = ['-O2', crtFlag]
+        vars['optz_fast']      = ['-O2', crtFlag]
+        vars['optz_fastest']   = ['-Ox', crtFlag]
+        # The MACHINE flag is is probably not actually necessary
+        # The linker should be able to infer it from the object files
+        # But doing this just to make sure we're really building 32/64 bit
+        # applications
+        vars['linkflags_32'] = [stackFlag, '/MACHINE:X86']
+        vars['linkflags_64'] = [stackFlag, '/MACHINE:X64']
+
+        if Options.options.debugging:
+            # In order to generate a .pdb file, we need both the /Zi 
+            # compilation flag and the /DEBUG linker flag
+            vars['linkflags_32'].append('/DEBUG')
+            vars['linkflags_64'].append('/DEBUG')
+        else:
+            # Forcing the linker to not link incrementally.  Hoping this will
+            # avoid an intermittent race condition we're having where manifest
+            # generation fails.
+            # Incremental is implied with /DEBUG so no reason to bother
+            # setting it there
+            vars['linkflags_32'].append('/INCREMENTAL:NO')
+            vars['linkflags_64'].append('/INCREMENTAL:NO')
+
+        # choose the runtime to link against
+        # [/MD /MDd /MT /MTd]
+        
+        config['cxx'].update(vars)
+        config['cc'].update(vars)
+
+        defines = '_CRT_SECURE_NO_WARNINGS _SCL_SECURE_NO_WARNINGS _FILE_OFFSET_BITS=64 ' \
+                  '_LARGEFILE_SOURCE WIN32 _USE_MATH_DEFINES NOMINMAX WIN32_LEAN_AND_MEAN'.split()
+        flags = '/UUNICODE /U_UNICODE /EHs /GR'.split()
+        
+        self.env.append_value('DEFINES', defines)
+        self.env.append_value('DEFINES_THREAD', '_REENTRANT')
+        self.env.append_value('CXXFLAGS', flags)
+        self.env.append_value('CFLAGS', flags)
+    
+    else:
+        self.fatal('OS/platform currently unsupported: %s' % sys_platform)
+    
+    #CXX
+    if Options.options.warnings:
+        self.env.append_value('CXXFLAGS', config['cxx'].get('warn', ''))
+        self.env.append_value('CFLAGS', config['cc'].get('warn', ''))
+    else:
+        self.env.append_value('CXXFLAGS', config['cxx'].get('nowarn', ''))
+        self.env.append_value('CFLAGS', config['cc'].get('nowarn', ''))
+    if Options.options.verbose:
+        self.env.append_value('CXXFLAGS', config['cxx'].get('verbose', ''))
+        self.env.append_value('CFLAGS', config['cc'].get('verbose', ''))
+    
+    
+    # We don't really use variants right now, so keep the default environment linked to the variant.
+    variant = self.env
+    if Options.options.debugging:
+        variantName = '%s-debug' % sys_platform
+        variant.append_value('CXXFLAGS', config['cxx'].get('debug', ''))
+        variant.append_value('CFLAGS', config['cc'].get('debug', ''))
+    else:
+        variantName = '%s-release' % sys_platform
+        optz = Options.options.with_optz
+        variant.append_value('CXXFLAGS', config['cxx'].get('optz_%s' % optz, ''))
+        variant.append_value('CFLAGS', config['cc'].get('optz_%s' % optz, ''))
+
+    # Check if the system is 64-bit capable
+    if re.match(winRegex, sys_platform):
+        # For Windows, this is a function of what VS compiler we ended up
+        # finding above (regardless of if we asked for 32 vs. 64 bit on the
+        # configure line)
+        frag64 = '''
+#include <stdio.h>
+int main() {
+#ifdef _WIN64
+    printf("1");
+#else
+    printf("0");
+#endif
+    return 0; }
+'''         
+        output = self.check(fragment=frag64, define_ret=True,
+                            execute=1, msg='Checking for 64-bit system')
+        is64Bit = bool(int(output))
+    elif Options.options.enable32 or not '64' in config['cxx']:
+        is64Bit = False
+    else:
+        is64Bit = self.check_cxx(cxxflags=config['cxx']['64'],
+                                 linkflags=config['cc'].get('linkflags_64', ''),
+                                 mandatory=False) and \
+                  self.check_cc(cflags=config['cc']['64'],
+                                linkflags=config['cc'].get('linkflags_64', ''),
+                                mandatory=False)
+    self.msg('System size', '64-bit' if is64Bit else '32-bit')
+
+    if is64Bit:
+        if re.match(winRegex, sys_platform):
+            variantName = variantName.replace('32', '64')
+        else:
+            variantName = '%s-64' % variantName
+        variant.append_value('CXXFLAGS', config['cxx'].get('64', ''))
+        variant.append_value('CFLAGS', config['cc'].get('64', ''))
+        variant.append_value('LINKFLAGS', config['cc'].get('linkflags_64', ''))
+    else:
+        variant.append_value('CXXFLAGS', config['cxx'].get('32', ''))
+        variant.append_value('CFLAGS', config['cc'].get('32', ''))
+        variant.append_value('LINKFLAGS', config['cc'].get('linkflags_32', ''))
+
+    self.env['IS64BIT'] = is64Bit
+    self.all_envs[variantName] = variant
+    self.setenv(variantName)
+    
+    self.env['VARIANT'] = variant['VARIANT'] = variantName
+
+def configureFunctionsAndTypes(self):
+    # Look for a ton of headers
+    # TODO: Some of these can likely be removed
+    self.check_cc(header_name="inttypes.h", mandatory=False)
+    self.check_cc(header_name="unistd.h", mandatory=False)
+    self.check_cc(header_name="getopt.h", mandatory=False)
+    self.check_cc(header_name="malloc.h", mandatory=False)
+    self.check_cc(header_name="sys/time.h", mandatory=False)
+    self.check_cc(header_name="limits.h", mandatory=False)
+    self.check_cc(header_name="dlfcn.h", mandatory=False)
+    self.check_cc(header_name="fcntl.h", mandatory=False)
+    self.check_cc(header_name="check.h", mandatory=False)
+    self.check_cc(header_name="memory.h", mandatory=False)
+    self.check_cc(header_name="strings.h", mandatory=False)
+    self.check_cc(header_name="stdbool.h", mandatory=False)
+    self.check_cc(function_name='localtime_r', header_name="time.h", mandatory=False)
+    self.check_cc(function_name='gmtime_r', header_name="time.h", mandatory=False)
+    self.check_cc(function_name='mmap', header_name="sys/mman.h", mandatory=False)
+    self.check_cc(function_name='strerror', header_name="string.h", mandatory=False)
+    self.check_cc(function_name='bcopy', header_name="strings.h", mandatory=False)
+    self.check_cc(type_name='ssize_t', header_name='sys/types.h', mandatory=False)
+    self.check_cc(lib="m", mandatory=False, uselib_store='MATH')
+    self.check_cc(lib="rt", mandatory=False, uselib_store='RT')
+    self.check_cc(lib="sqrt", mandatory=False, uselib_store='SQRT')
+    self.check_cc(function_name='erf', header_name="math.h", use = "MATH", mandatory=False)
+    self.check_cc(function_name='erff', header_name="math.h", use = "MATH", mandatory=False)
+    self.check_cc(function_name='setenv', header_name="stdlib.h", mandatory=False)
+    
+    self.check_cc(function_name='gettimeofday', header_name='sys/time.h', mandatory=False)
+    if self.check_cc(lib='rt', function_name='clock_gettime', header_name='time.h', mandatory=False):
+        self.env.DEFINES.append('USE_CLOCK_GETTIME')
+    self.check_cc(function_name='BSDgettimeofday', header_name='sys/time.h', mandatory=False)
+    self.check_cc(function_name='gethrtime', header_name='sys/time.h', mandatory=False)
+    self.check_cc(function_name='getpagesize', header_name='unistd.h', mandatory=False)
+    self.check_cc(function_name='getopt', header_name='unistd.h', mandatory=False)
+    self.check_cc(function_name='getopt_long', header_name='getopt.h', mandatory=False)
+    
+    self.check_cc(fragment='#include <math.h>\nint main(){if (!isnan(3.14159)) isnan(2.7183);}',
+            define_name='HAVE_ISNAN', msg='Checking for function isnan',
+            errmsg='not found', mandatory=False)
+    
+    # Check for hrtime_t data type; some systems (AIX) seem to have
+    # a function called gethrtime but no hrtime_t!
+    frag = '''
+    #ifdef HAVE_SYS_TIME_H
+    #include <sys/time.h>
+    int main(){hrtime_t foobar;}
+    #endif
+    '''
+    self.check_cc(fragment=frag, define_name='HAVE_HRTIME_T',
+            msg='Checking for type hrtime_t', errmsg='not found', mandatory=False)
+    
+    types_str = '''
 #include <stdio.h>
 int isBigEndian()
 {
@@ -787,6 +1132,25 @@ int main()
     return 0;
 }
 '''
+    
+    #find out the size of some types, etc.
+    # TODO: This is not using the 32 vs. 64 bit linker flags, so if you're
+    #    building with --enable-32bit on 64 bit Linux, sizeof(size_t) will
+    #    erroneously be 8 here.
+    output = self.check(fragment=types_str, execute=1, msg='Checking system type sizes', define_ret=True)
+    t = Utils.str_to_dict(output or '')
+    for k, v in t.iteritems():
+        try:
+         v = int(v)
+        except:
+         v = v.strip()
+         if v == 'True':
+             v = True
+         elif v == 'False':
+             v = False
+        #v = eval(v)
+        self.msg(k.replace('_', ' ', 1), str(v))
+        self.define(k.upper(), v)
 
 def configure(self):
     
@@ -794,9 +1158,6 @@ def configure(self):
         return
     
     sys_platform = getPlatform(default=Options.platform)
-    appleRegex = r'i.86-apple-.*'
-    linuxRegex = r'.*-.*-linux-.*|i686-pc-.*|linux'
-    solarisRegex = r'sparc-sun.*|i.86-pc-solaris.*|sunos'
     winRegex = r'win32'
     
     self.msg('Platform', sys_platform, color='GREEN')
@@ -854,98 +1215,25 @@ def configure(self):
         self.cmd_and_log = real_cmd_and_log
         if env_lib is not None: self.environ['LIB'] = env_lib
         if env_cl is not None: os.environ['CL'] = env_cl
-    
-    cxxCompiler = self.env["COMPILER_CXX"]
-    ccCompiler = self.env["COMPILER_CC"]
-    
-    if ccCompiler == 'msvc':
-        cxxCompiler = ccCompiler
-        
-    if not cxxCompiler or not ccCompiler:
-        self.fatal('Unable to find C/C++ compiler')
-    
-    #Look for a ton of headers
-    self.check_cc(header_name="inttypes.h", mandatory=False)
-    self.check_cc(header_name="unistd.h", mandatory=False)
-    self.check_cc(header_name="getopt.h", mandatory=False)
-    self.check_cc(header_name="malloc.h", mandatory=False)
-    self.check_cc(header_name="sys/time.h", mandatory=False)
-    self.check_cc(header_name="limits.h", mandatory=False)
-    self.check_cc(header_name="dlfcn.h", mandatory=False)
-    self.check_cc(header_name="fcntl.h", mandatory=False)
-    self.check_cc(header_name="check.h", mandatory=False)
-    self.check_cc(header_name="memory.h", mandatory=False)
-    self.check_cc(header_name="string.h", mandatory=False)
-    self.check_cc(header_name="strings.h", mandatory=False)
-    self.check_cc(header_name="stdbool.h", mandatory=False)
-    self.check_cc(header_name="stdlib.h", mandatory=False)
-    self.check_cc(header_name="stddef.h", mandatory=False)
-    self.check_cc(function_name='localtime_r', header_name="time.h", mandatory=False)
-    self.check_cc(function_name='gmtime_r', header_name="time.h", mandatory=False)
-    self.check_cc(function_name='mmap', header_name="sys/mman.h", mandatory=False)
-    self.check_cc(function_name='memmove', header_name="string.h", mandatory=False)
-    self.check_cc(function_name='memset', header_name="string.h", mandatory=False)
-    self.check_cc(function_name='strerror', header_name="string.h", mandatory=False)
-    self.check_cc(function_name='bcopy', header_name="strings.h", mandatory=False)
-    self.check_cc(type_name='ssize_t', header_name='sys/types.h', mandatory=False)
-    self.check_cc(fragment='int main(){const int i = 0; return 0;}',
-                  define_name='HAVE_CONST', msg='Checking for const keyword', mandatory=False)
-    self.check_cc(fragment='int main(){unsigned short; return 0;}',
-                  define_name='HAVE_UNSIGNED_SHORT', msg='Checking for unsigned short', mandatory=False)
-    self.check_cc(fragment='int main(){unsigned char i; return 0;}',
-                  define_name='HAVE_UNSIGNED_CHAR', msg='Checking for unsigned char', mandatory=False)
-    self.check_cc(lib="m", mandatory=False, uselib_store='MATH')
-    self.check_cc(lib="rt", mandatory=False, uselib_store='RT')
-    self.check_cc(lib="sqrt", mandatory=False, uselib_store='SQRT')
-    self.check_cc(function_name='erf', header_name="math.h", use = "MATH", mandatory=False)
-    self.check_cc(function_name='erff', header_name="math.h", use = "MATH", mandatory=False)
-    self.check_cc(function_name='setenv', header_name="stdlib.h", mandatory=False)
-    
-    self.check_cc(function_name='gettimeofday', header_name='sys/time.h', mandatory=False)
-    if self.check_cc(lib='rt', function_name='clock_gettime', header_name='time.h', mandatory=False):
-        self.env.DEFINES.append('USE_CLOCK_GETTIME')
-    self.check_cc(function_name='BSDgettimeofday', header_name='sys/time.h', mandatory=False)
-    self.check_cc(function_name='gethrtime', header_name='sys/time.h', mandatory=False)
-    self.check_cc(function_name='getpagesize', header_name='unistd.h', mandatory=False)
-    self.check_cc(function_name='getopt', header_name='unistd.h', mandatory=False)
-    self.check_cc(function_name='getopt_long', header_name='getopt.h', mandatory=False)
-    
-    self.check_cc(fragment='#include <math.h>\nint main(){if (!isnan(3.14159)) isnan(2.7183);}',
-                  define_name='HAVE_ISNAN', msg='Checking for function isnan',
-                  errmsg='not found', mandatory=False)
-    
-    # Check for hrtime_t data type; some systems (AIX) seem to have
-    # a function called gethrtime but no hrtime_t!
-    frag = '''
-    #ifdef HAVE_SYS_TIME_H
-    #include <sys/time.h>
-    int main(){hrtime_t foobar;}
-    #endif
-    '''
-    self.check_cc(fragment=frag, define_name='HAVE_HRTIME_T',
-                  msg='Checking for type hrtime_t', errmsg='not found', mandatory=False)
-    
-    
-    #find out the size of some types, etc.
-    # TODO: This is not using the 32 vs. 64 bit linker flags, so if you're
-    #       building with --enable-32bit on 64 bit Linux, sizeof(size_t) will
-    #       erroneously be 8 here.
-    output = self.check(fragment=types_str, execute=1, msg='Checking system type sizes', define_ret=True)
-    t = Utils.str_to_dict(output or '')
-    for k, v in t.iteritems():
-        try:
-            v = int(v)
-        except:
-            v = v.strip()
-            if v == 'True':
-                v = True
-            elif v == 'False':
-                v = False
-        #v = eval(v)
-        self.msg(k.replace('_', ' ', 1), str(v))
-        self.define(k.upper(), v)
-    
+
+    # NOTE: The order is important here.  We need to set up all 
+    #       compiler-specific flags (via both the options immediately below
+    #       and configureCompilerOptions()) before we check for any functions
+    #       or types in case these flags have an impact (most noticeably this
+    #       will impact 32 vs. 64-bit specific checks like sizeof(size_t))
     env = self.env
+    if Options.options.cxxflags:
+        env.append_unique('CXXFLAGS', Options.options.cxxflags.split())
+    if Options.options.cflags:
+        env.append_unique('CFLAGS', Options.options.cflags.split())
+    if Options.options.linkflags:
+        env.append_unique('LINKFLAGS', Options.options.linkflags.split())
+    if Options.options._defs:
+        env.append_unique('DEFINES', Options.options._defs.split(','))
+
+    configureCompilerOptions(self)
+    configureFunctionsAndTypes(self)
+
     env['PLATFORM'] = sys_platform
     
     env['LIB_TYPE'] = Options.options.shared_libs and 'shlib' or 'stlib'
@@ -958,295 +1246,6 @@ def configure(self):
     env['install_libdir'] = Options.options.libdir if Options.options.libdir else join(Options.options.prefix, 'lib')
     env['install_bindir'] = Options.options.bindir if Options.options.bindir else join(Options.options.prefix, 'bin')
     env['install_sharedir'] = Options.options.sharedir if Options.options.sharedir else join(Options.options.prefix, 'share')
-
-    if Options.options.cxxflags:
-        env.append_unique('CXXFLAGS', Options.options.cxxflags.split())
-    if Options.options.cflags:
-        env.append_unique('CFLAGS', Options.options.cflags.split())
-    if Options.options.linkflags:
-        env.append_unique('LINKFLAGS', Options.options.linkflags.split())
-    if Options.options._defs:
-        env.append_unique('DEFINES', Options.options._defs.split(','))
-    
-    config = {'cxx':{}, 'cc':{}}
-
-    #apple
-    if re.match(appleRegex, sys_platform):
-        env.append_value('LIB_DL', 'dl')
-        env.append_value('LIB_NSL', 'nsl')
-        env.append_value('LIB_THREAD', 'pthread')
-        env.append_value('DEFINES_THREAD', '_REENTRANT')
-        self.check_cc(lib='pthread', mandatory=True)
-
-        config['cxx']['debug']          = '-g'
-        config['cxx']['warn']           = '-Wall'
-        config['cxx']['verbose']        = '-v'
-        config['cxx']['64']             = '-m64'
-        config['cxx']['32']             = '-m32'
-        config['cxx']['optz_med']       = '-O1'
-        config['cxx']['optz_fast']      = '-O2'
-        config['cxx']['optz_fastest']   = '-O3'
-
-        #env.append_value('LINKFLAGS', '-fPIC -dynamiclib'.split())
-        env.append_value('LINKFLAGS', '-fPIC'.split())
-        env.append_value('CXXFLAGS', '-fPIC')
-
-        config['cc']['debug']          = config['cxx']['debug']
-        config['cc']['warn']           = config['cxx']['warn']
-        config['cc']['verbose']        = config['cxx']['verbose']
-        config['cc']['64']             = config['cxx']['64']
-        config['cc']['optz_med']       = config['cxx']['optz_med']
-        config['cc']['optz_fast']      = config['cxx']['optz_fast']
-        config['cc']['optz_fastest']   = config['cxx']['optz_fastest']
-
-        env.append_value('DEFINES', '_FILE_OFFSET_BITS=64 _LARGEFILE_SOURCE __POSIX'.split())
-        env.append_value('CFLAGS', '-fPIC -dynamiclib'.split())
-
-    #linux
-    elif re.match(linuxRegex, sys_platform):
-        env.append_value('LIB_DL', 'dl')
-        env.append_value('LIB_NSL', 'nsl')
-        env.append_value('LIB_THREAD', 'pthread')
-        env.append_value('DEFINES_THREAD', '_REENTRANT')
-        env.append_value('LIB_MATH', 'm')
-
-        self.check_cc(lib='pthread', mandatory=True)
-
-        warningFlags = '-Wall'
-        if Options.options.warningsAsErrors:
-            warningFlags += ' -Wfatal-errors'
-
-        # TODO: Verify there aren't any additional/different Intel compiler
-        #       flags to set.  By default, the Intel compiler will link its
-        #       libraries in statically for executables but not for plugins.
-        #       If you want the plugins to not depend on Intel libraries,
-        #       configure with:
-        #       --with-cflags=-static-intel --with-cxxflags=-static-intel --with-linkflags=-static-intel
-        if cxxCompiler == 'g++' or cxxCompiler == 'icpc':
-            config['cxx']['debug']          = '-g'
-            config['cxx']['warn']           = warningFlags.split()
-            config['cxx']['verbose']        = '-v'
-            config['cxx']['64']             = '-m64'
-            config['cxx']['32']             = '-m32'
-            config['cxx']['linkflags_64']   = '-m64'
-            config['cxx']['linkflags_32']   = '-m32'
-            config['cxx']['optz_med']       = '-O1'
-            config['cxx']['optz_fast']      = '-O2'
-            config['cxx']['optz_fastest']   = '-O3'
-
-            env.append_value('CXXFLAGS', '-fPIC')
-
-            # DEFINES and LINKFLAGS will apply to both gcc and g++
-            env.append_value('DEFINES', '_FILE_OFFSET_BITS=64 _LARGEFILE_SOURCE __POSIX'.split())
-            env.append_value('LINKFLAGS', '-Wl,-E -fPIC'.split())
-        
-        if ccCompiler == 'gcc' or ccCompiler == 'icc':
-            config['cc']['debug']          = '-g'
-            config['cc']['warn']           = warningFlags.split()
-            config['cc']['verbose']        = '-v'
-            config['cc']['64']             = '-m64'
-            config['cc']['32']             = '-m32'
-            config['cc']['linkflags_64']   = '-m64'
-            config['cc']['linkflags_32']   = '-m32'
-            config['cc']['optz_med']       = '-O1'
-            config['cc']['optz_fast']      = '-O2'
-            config['cc']['optz_fastest']   = '-O3'
-
-            env.append_value('CFLAGS', '-fPIC'.split())
-    
-    #Solaris
-    elif re.match(solarisRegex, sys_platform):
-        env.append_value('LIB_DL', 'dl')
-        env.append_value('LIB_NSL', 'nsl')
-        env.append_value('LIB_SOCKET', 'socket')
-        env.append_value('LIB_THREAD', 'thread')
-        env.append_value('LIB_MATH', 'm')
-        env.append_value('LIB_CRUN', 'Crun')
-        env.append_value('LIB_CSTD', 'Cstd')
-        self.check_cc(lib='thread', mandatory=True)
-        self.check_cc(header_name="atomic.h", mandatory=False)
-        
-        warningFlags = ''
-        if Options.options.warningsAsErrors:
-            warningFlags = '-errwarn=%all'
-
-        if cxxCompiler == 'sunc++':
-            (bitFlag32, bitFlag64) = getSolarisFlags(env['CXX'][0])
-            config['cxx']['debug']          = '-g'
-            config['cxx']['warn']           = warningFlags.split()
-            config['cxx']['nowarn']         = '-erroff=%all'
-            config['cxx']['verbose']        = '-v'
-            config['cxx']['64']             = bitFlag64
-            config['cxx']['32']             = bitFlag32
-            config['cxx']['linkflags_32']   = bitFlag32
-            config['cxx']['linkflags_64']   = bitFlag64
-            config['cxx']['optz_med']       = '-xO3'
-            config['cxx']['optz_fast']      = '-xO4'
-            config['cxx']['optz_fastest']   = '-xO5'
-            env['CXXFLAGS_cxxshlib']        = ['-KPIC', '-DPIC']
-
-            # DEFINES apply to both suncc and sunc++
-            env.append_value('DEFINES', '_FILE_OFFSET_BITS=64 _LARGEFILE_SOURCE'.split())
-            env.append_value('CXXFLAGS', '-KPIC -instances=global'.split())
-            env.append_value('CXXFLAGS_THREAD', '-mt')
-            
-        if ccCompiler == 'suncc':
-            (bitFlag32, bitFlag64) = getSolarisFlags(env['CC'][0])
-            config['cc']['debug']          = '-g'
-            config['cc']['warn']           = warningFlags.split()
-            config['cc']['nowarn']         = '-erroff=%all'
-            config['cc']['verbose']        = '-v'
-            config['cc']['64']             = bitFlag64
-            config['cc']['linkflags_64']   = bitFlag64
-            config['cc']['linkflags_32']   = bitFlag32
-            config['cc']['32']             = bitFlag32
-            config['cc']['optz_med']       = '-xO3'
-            config['cc']['optz_fast']      = '-xO4'
-            config['cc']['optz_fastest']   = '-xO5'
-            env['CFLAGS_cshlib']           = ['-KPIC', '-DPIC']
-
-            env.append_value('CFLAGS', '-KPIC'.split())
-            env.append_value('CFLAGS_THREAD', '-mt')
-
-    elif re.match(winRegex, sys_platform):
-
-        env.append_value('LIB_RPC', 'rpcrt4')
-        env.append_value('LIB_SOCKET', 'Ws2_32')
-
-        crtFlag = '/%s' % Options.options.crt
-        crtDebug = '%sd' % crtFlag
-
-        # Sets the size of the stack (in bytes)
-        stackFlag = '/STACK:80000000'
-
-        # Skipping warning 4290 about how VS doesn't implement exception
-        # specifications properly.
-        # Skipping warning 4512 about being unable to generate an assignment
-        # operator (since we often do this intentionally).
-        # For warnings, use /W4 because /Wall
-        # gives us tons of warnings in the VS headers themselves
-        warningFlags = '/W4 /wd4290 /wd4512'
-        if Options.options.warningsAsErrors:
-            warningFlags += ' /WX'
-
-        vars = {}
-        vars['debug']          = ['/Zi', crtDebug]
-        vars['warn']           = warningFlags.split()
-        vars['nowarn']         = '/w'
-        vars['verbose']        = ''
-        vars['optz_med']       = ['-O2', crtFlag]
-        vars['optz_fast']      = ['-O2', crtFlag]
-        vars['optz_fastest']   = ['-Ox', crtFlag]
-        # The MACHINE flag is is probably not actually necessary
-        # The linker should be able to infer it from the object files
-        # But doing this just to make sure we're really building 32/64 bit
-        # applications
-        vars['linkflags_32'] = [stackFlag, '/MACHINE:X86']
-        vars['linkflags_64'] = [stackFlag, '/MACHINE:X64']
-
-        if Options.options.debugging:
-            # In order to generate a .pdb file, we need both the /Zi 
-            # compilation flag and the /DEBUG linker flag
-            vars['linkflags_32'].append('/DEBUG')
-            vars['linkflags_64'].append('/DEBUG')
-        else:
-            # Forcing the linker to not link incrementally.  Hoping this will
-            # avoid an intermittent race condition we're having where manifest
-            # generation fails.
-            # Incremental is implied with /DEBUG so no reason to bother
-            # setting it there
-            vars['linkflags_32'].append('/INCREMENTAL:NO')
-            vars['linkflags_64'].append('/INCREMENTAL:NO')
-
-        # choose the runtime to link against
-        # [/MD /MDd /MT /MTd]
-        
-        config['cxx'].update(vars)
-        config['cc'].update(vars)
-
-        defines = '_CRT_SECURE_NO_WARNINGS _SCL_SECURE_NO_WARNINGS _FILE_OFFSET_BITS=64 ' \
-                  '_LARGEFILE_SOURCE WIN32 _USE_MATH_DEFINES NOMINMAX WIN32_LEAN_AND_MEAN'.split()
-        flags = '/UUNICODE /U_UNICODE /EHs /GR'.split()
-        
-        env.append_value('DEFINES', defines)
-        env.append_value('DEFINES_THREAD', '_REENTRANT')
-        env.append_value('CXXFLAGS', flags)
-        env.append_value('CFLAGS', flags)
-    
-    else:
-        self.fatal('OS/platform currently unsupported: %s' % sys_platform)
-    
-    #CXX
-    if Options.options.warnings:
-        env.append_value('CXXFLAGS', config['cxx'].get('warn', ''))
-        env.append_value('CFLAGS', config['cc'].get('warn', ''))
-    else:
-        env.append_value('CXXFLAGS', config['cxx'].get('nowarn', ''))
-        env.append_value('CFLAGS', config['cc'].get('nowarn', ''))
-    if Options.options.verbose:
-        env.append_value('CXXFLAGS', config['cxx'].get('verbose', ''))
-        env.append_value('CFLAGS', config['cc'].get('verbose', ''))
-    
-    
-    # We don't really use variants right now, so keep the default environment linked to the variant.
-    variant = env
-    if Options.options.debugging:
-        variantName = '%s-debug' % sys_platform
-        variant.append_value('CXXFLAGS', config['cxx'].get('debug', ''))
-        variant.append_value('CFLAGS', config['cc'].get('debug', ''))
-    else:
-        variantName = '%s-release' % sys_platform
-        optz = Options.options.with_optz
-        variant.append_value('CXXFLAGS', config['cxx'].get('optz_%s' % optz, ''))
-        variant.append_value('CFLAGS', config['cc'].get('optz_%s' % optz, ''))
-
-    # Check if the system is 64-bit capable
-    if re.match(winRegex, sys_platform):
-        # For Windows, this is a function of what VS compiler we ended up
-        # finding above (regardless of if we asked for 32 vs. 64 bit on the
-        # configure line)
-        frag64 = '''
-#include <stdio.h>
-int main() {
-#ifdef _WIN64
-    printf("1");
-#else
-    printf("0");
-#endif
-    return 0; }
-'''         
-        output = self.check(fragment=frag64, define_ret=True,
-                            execute=1, msg='Checking for 64-bit system')
-        is64Bit = bool(int(output))
-    elif Options.options.enable32 or not '64' in config['cxx']:
-        is64Bit = False
-    else:
-        is64Bit = self.check_cxx(cxxflags=config['cxx']['64'],
-                                 linkflags=config['cc'].get('linkflags_64', ''),
-                                 mandatory=False) and \
-                  self.check_cc(cflags=config['cc']['64'],
-                                linkflags=config['cc'].get('linkflags_64', ''),
-                                mandatory=False)
-    self.msg('System size', '64-bit' if is64Bit else '32-bit')
-
-    if is64Bit:
-        if re.match(winRegex, sys_platform):
-            variantName = variantName.replace('32', '64')
-        else:
-            variantName = '%s-64' % variantName
-        variant.append_value('CXXFLAGS', config['cxx'].get('64', ''))
-        variant.append_value('CFLAGS', config['cc'].get('64', ''))
-        variant.append_value('LINKFLAGS', config['cc'].get('linkflags_64', ''))
-    else:
-        variant.append_value('CXXFLAGS', config['cxx'].get('32', ''))
-        variant.append_value('CFLAGS', config['cc'].get('32', ''))
-        variant.append_value('LINKFLAGS', config['cc'].get('linkflags_32', ''))
-
-    env['IS64BIT'] = is64Bit
-    self.all_envs[variantName] = variant
-    self.setenv(variantName)
-    
-    env['VARIANT'] = variant['VARIANT'] = variantName
 
     #flag that we already detected
     self.env['DETECTED_BUILD_PY'] = True
