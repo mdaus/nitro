@@ -68,7 +68,7 @@ void mt::TiedRequestHandler::run()
 }
 
 // Not set up for multiple producers 
-void mt::GenerationThreadPool::addGroup(std::vector<sys::Runnable*>& toRun)
+void mt::GenerationThreadPool::addGroup(const std::vector<sys::Runnable*>& toRun)
 {
     
     if (mGenSize)

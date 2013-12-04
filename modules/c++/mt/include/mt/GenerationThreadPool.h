@@ -87,12 +87,12 @@ namespace mt
 	}
     
 	// Not set up for multiple producers 
-	void addGroup(std::vector<sys::Runnable*>& toRun);
+	void addGroup(const std::vector<sys::Runnable*>& toRun);
 	
 	// Not set up for multiple producers 
 	void waitGroup();
 	
-	void addAndWaitGroup(std::vector<sys::Runnable*>& toRun)
+	void addAndWaitGroup(const std::vector<sys::Runnable*>& toRun)
 	{
 	    addGroup(toRun);
 	    waitGroup();
