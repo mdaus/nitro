@@ -43,12 +43,12 @@ public:
      *  \param numThreads the number of threads
      */
     BasicThreadPool(size_t numThreads = 0) :
-        mStarted(false)
+        mStarted(false),
+        mNumThreads(numThreads)
     {
-        mNumThreads = numThreads;
     }
 
-    //! Deconstructor
+    //! Destructor
     virtual ~BasicThreadPool()
     {
         //destroy(static_cast<unsigned short>(mPool.size()));
@@ -58,15 +58,12 @@ public:
     void start()
     {
         if (mStarted)
+        {
             throw(ThreadPoolException("The thread pool is already started."));
+        }
 
         mStarted = true;
-
-        for (size_t i = 0; i < mNumThreads; i++)
-        {
-            mPool.push_back(mem::SharedPtr<sys::Thread>(new sys::Thread(newRequestHandler())));
-            mPool[i]->start();
-        }
+        addThreads(mNumThreads);
     }
 
     void join()
@@ -80,15 +77,31 @@ public:
         mStarted = false;
     }
 
+    // This adds new threads immediately and is safe to call even after
+    // start() has been called
     void grow(size_t bySize)
     {
         mNumThreads += bySize;
+
+        if (mStarted)
+        {
+            // It's safe to add new threads on the fly - they'll all get a
+            // pointer to the same thread-safe request queue and start pulling
+            // off requests once they start
+            // This does assume that newRequestHandler() itself is safe to
+            // call once the pool has been started
+            addThreads(bySize);
+        }
     }
 
+    // This stops the pool to shrink the threads but does NOT restart the
+    // pool - start() must be called again
     void shrink(size_t bySize)
     {
         if (mStarted)
+        {
             join();
+        }
 
         mNumThreads = (bySize > mNumThreads) ? 0 : mNumThreads - bySize;
     }
@@ -135,6 +148,23 @@ protected:
     size_t mNumThreads;
     std::vector<mem::SharedPtr<sys::Thread> > mPool;
     mt::RunnableRequestQueue mHandlerQueue;
+
+private:
+    void addThread()
+    {
+        mem::SharedPtr<sys::Thread>
+                thread(new sys::Thread(newRequestHandler()));
+        mPool.push_back(thread);
+        thread->start();
+    }
+
+    void addThreads(size_t numThreads)
+    {
+        for (size_t ii = 0; ii < numThreads; ++ii)
+        {
+            addThread();
+        }
+    }
 };
 }
 
