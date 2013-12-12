@@ -125,12 +125,26 @@ protected:
     char mPrefixChar;
 
     void parseError(const std::string& msg);
-    void processFlags(std::vector<std::string>& posFlags, std::vector<
-            std::string>& opFlags, std::vector<std::string>&posHelps,
-                      std::vector<std::string>&opHelps,
-                      std::vector<std::string>&opUsage,
-                      std::vector<std::string>&posUsage,
-                      size_t& maxFlagsWidth) const;
+
+    struct FlagInfo
+    {
+        FlagInfo() :
+            maxFlagsWidth(0)
+        {
+        }
+
+        std::vector<std::string> posFlags;
+        std::vector<std::string> requiredFlags;
+        std::vector<std::string> opFlags;
+        std::vector<std::string> posHelps;
+        std::vector<std::string> requiredHelps;
+        std::vector<std::string> opHelps;
+        std::vector<std::string> opUsage;
+        std::vector<std::string> posUsage;
+        size_t maxFlagsWidth;
+    };
+
+    void processFlags(FlagInfo& info) const;
 };
 
 }

@@ -23,10 +23,10 @@
 #include "cli/ArgumentParser.h"
 #include <iterator>
 
-#define _MAX_ARG_LINE_LEN 21
-
 namespace
 {
+static const size_t MAX_ARG_LINE_LENGTH = 21;
+
 bool containsOnly(const std::string& str,
                   const std::map<std::string, cli::Argument*>& flags)
 {
@@ -180,12 +180,8 @@ cli::ArgumentParser& cli::ArgumentParser::setProgram(const std::string program)
 
 void cli::ArgumentParser::printHelp(std::ostream& out, bool andExit) const
 {
-    std::vector<std::string> posFlags, opFlags, posHelps, opHelps, opUsage,
-            posUsage;
-    size_t maxFlagsWidth = 0;
-
-    processFlags(posFlags, opFlags, posHelps, opHelps, opUsage, posUsage,
-                 maxFlagsWidth);
+    FlagInfo flagInfo;
+    processFlags(flagInfo);
 
     if (!mProlog.empty())
         out << mProlog << std::endl << std::endl;
@@ -195,10 +191,10 @@ void cli::ArgumentParser::printHelp(std::ostream& out, bool andExit) const
     {
         std::string progName = mProgram;
         out << (progName.empty() ? "program" : progName);
-        if (!opUsage.empty())
-            out << " " << str::join(opUsage, " ");
-        if (!posUsage.empty())
-            out << " " << str::join(posUsage, " ");
+        if (!flagInfo.opUsage.empty())
+            out << " " << str::join(flagInfo.opUsage, " ");
+        if (!flagInfo.posUsage.empty())
+            out << " " << str::join(flagInfo.posUsage, " ");
         out << std::endl;
     }
     else
@@ -207,18 +203,25 @@ void cli::ArgumentParser::printHelp(std::ostream& out, bool andExit) const
     if (!mDescription.empty())
         out << std::endl << mDescription << std::endl;
 
-    if (posFlags.size() > 0)
+    if (!flagInfo.posFlags.empty())
     {
         out << std::endl;
-        writeArgumentHelp(out, "positional arguments:", maxFlagsWidth,
-                          posFlags, posHelps);
+        writeArgumentHelp(out, "positional arguments:", flagInfo.maxFlagsWidth,
+                          flagInfo.posFlags, flagInfo.posHelps);
     }
 
-    if (opFlags.size() > 0)
+    if (!flagInfo.requiredFlags.empty())
     {
         out << std::endl;
-        writeArgumentHelp(out, "optional arguments:", maxFlagsWidth,
-                          opFlags, opHelps);
+        writeArgumentHelp(out, "required arguments:", flagInfo.maxFlagsWidth,
+                          flagInfo.requiredFlags, flagInfo.requiredHelps);
+    }
+
+    if (!flagInfo.opFlags.empty())
+    {
+        out << std::endl;
+        writeArgumentHelp(out, "optional arguments:", flagInfo.maxFlagsWidth,
+                          flagInfo.opFlags, flagInfo.opHelps);
     }
 
     if (!mEpilog.empty())
@@ -652,19 +655,14 @@ void cli::ArgumentParser::printUsage(std::ostream& out, bool andExit,
     out << "usage: ";
     if (mUsage.empty())
     {
-        std::vector<std::string> posFlags, opFlags, posHelps, opHelps, opUsage,
-                posUsage;
-        size_t maxFlagsWidth = 0;
+        FlagInfo flagInfo;
+        processFlags(flagInfo);
 
-        processFlags(posFlags, opFlags, posHelps, opHelps, opUsage, posUsage,
-                     maxFlagsWidth);
-
-        std::string progName = mProgram;
-        out << (progName.empty() ? "program" : progName);
-        if (!opUsage.empty())
-            out << " " << str::join(opUsage, " ");
-        if (!posUsage.empty())
-            out << " " << str::join(posUsage, " ");
+        out << (mProgram.empty() ? "program" : mProgram);
+        if (!flagInfo.opUsage.empty())
+            out << " " << str::join(flagInfo.opUsage, " ");
+        if (!flagInfo.posUsage.empty())
+            out << " " << str::join(flagInfo.posUsage, " ");
     }
     else
         out << mUsage;
@@ -681,19 +679,14 @@ void cli::ArgumentParser::parseError(const std::string& msg)
     s << "usage: ";
     if (mUsage.empty())
     {
-        std::vector<std::string> posFlags, opFlags, posHelps, opHelps, opUsage,
-                posUsage;
-        size_t maxFlagsWidth = 0;
+        FlagInfo flagInfo;
+        processFlags(flagInfo);
 
-        processFlags(posFlags, opFlags, posHelps, opHelps, opUsage, posUsage,
-                     maxFlagsWidth);
-
-        std::string progName = mProgram;
-        s << (progName.empty() ? "program" : progName);
-        if (!opUsage.empty())
-            s << " " << str::join(opUsage, " ");
-        if (!posUsage.empty())
-            s << " " << str::join(posUsage, " ");
+        s << (mProgram.empty() ? "program" : mProgram);
+        if (!flagInfo.opUsage.empty())
+            s << " " << str::join(flagInfo.opUsage, " ");
+        if (!flagInfo.posUsage.empty())
+            s << " " << str::join(flagInfo.posUsage, " ");
     }
     else
         s << mUsage;
@@ -701,23 +694,20 @@ void cli::ArgumentParser::parseError(const std::string& msg)
     throw except::ParseException(s.str());
 }
 
-void cli::ArgumentParser::processFlags(std::vector<std::string>& posFlags,
-                                       std::vector<std::string>& opFlags,
-                                       std::vector<std::string>&posHelps,
-                                       std::vector<std::string>&opHelps,
-                                       std::vector<std::string>&opUsage,
-                                       std::vector<std::string>&posUsage,
-                                       size_t& maxFlagsWidth) const
+void cli::ArgumentParser::processFlags(FlagInfo& info) const
 {
     std::ostringstream s;
 
     if (mHelpEnabled)
     {
-        std::string helpMsg = FmtX("%ch, %c%chelp", mPrefixChar, mPrefixChar,
-                                   mPrefixChar);
-        maxFlagsWidth = std::max<size_t>(helpMsg.size(), maxFlagsWidth);
-        opFlags.push_back(helpMsg);
-        opHelps.push_back("show this help message and exit");
+        const std::string prefixStr(1, mPrefixChar);
+        const std::string helpMsg =
+                std::string(1, mPrefixChar) + "h, " +
+                std::string(2, mPrefixChar) + "help";
+
+        info.maxFlagsWidth = std::max(helpMsg.size(), info.maxFlagsWidth);
+        info.opFlags.push_back(helpMsg);
+        info.opHelps.push_back("show this help message and exit");
     }
 
     for (std::vector<cli::Argument*>::const_iterator it = mArgs.begin(); it
@@ -748,12 +738,12 @@ void cli::ArgumentParser::processFlags(std::vector<std::string>& posFlags,
         {
             //positional argument
             std::string op = meta.empty() ? argName : meta;
-            maxFlagsWidth = std::max<size_t>(op.size(), maxFlagsWidth);
-            posFlags.push_back(op);
+            info.maxFlagsWidth = std::max(op.size(), info.maxFlagsWidth);
+            info.posFlags.push_back(op);
             if (arg->showsHelp())
             {
-                posHelps.push_back(helpMsg);
-                posUsage.push_back(op);
+                info.posHelps.push_back(helpMsg);
+                info.posUsage.push_back(op);
             }
         }
         else
@@ -795,19 +785,38 @@ void cli::ArgumentParser::processFlags(std::vector<std::string>& posFlags,
             if (!ops.empty())
             {
                 s.str("");
-                s << "[" << ops[0] << "]";
-                if (arg->showsHelp())
-                    opUsage.push_back(s.str());
+                if (arg->isRequired())
+                {
+                    s << ops[0];
+                }
+                else
+                {
+                    s << "[" << ops[0] << "]";
+                }
 
-                std::string opMsg = str::join(ops, ", ");
-                maxFlagsWidth = std::max<size_t>(opMsg.size(), maxFlagsWidth);
                 if (arg->showsHelp())
                 {
-                    opFlags.push_back(opMsg);
-                    opHelps.push_back(helpMsg);
+                    info.opUsage.push_back(s.str());
+                }
+
+                const std::string opMsg = str::join(ops, ", ");
+                info.maxFlagsWidth =
+                        std::max(opMsg.size(), info.maxFlagsWidth);
+                if (arg->showsHelp())
+                {
+                    if (arg->isRequired())
+                    {
+                        info.requiredFlags.push_back(opMsg);
+                        info.requiredHelps.push_back(helpMsg);
+                    }
+                    else
+                    {
+                        info.opFlags.push_back(opMsg);
+                        info.opHelps.push_back(helpMsg);
+                    }
                 }
             }
         }
     }
-    maxFlagsWidth = std::min<size_t>(maxFlagsWidth, _MAX_ARG_LINE_LEN);
+    info.maxFlagsWidth = std::min(info.maxFlagsWidth, MAX_ARG_LINE_LENGTH);
 }
