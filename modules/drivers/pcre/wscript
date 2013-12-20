@@ -34,6 +34,8 @@ def configure(conf):
             if not os.path.exists(os.path.join(conf.path.abspath(), 'pcre-5.0.tar')):
                 conf.fatal('Missing pcre tarfile')
 
+            conf.check_cc(function_name='memmove', header_name="string.h", mandatory=False)
+
             conf.env['MAKE_PCRE'] = True
             conf.msg('Building local lib', 'pcre')
             
