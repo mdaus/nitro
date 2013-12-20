@@ -116,7 +116,7 @@ bool re::PCRE::match(const std::string& str,
     int startOffset(0);
 
     // Clear the output vector
-    memset(mOvector, 0, OVECCOUNT);
+    memset(mOvector, 0, OVECCOUNT * sizeof(int));
     numMatches = pcre_exec(mPCRE,        // the compiled pattern
                            NULL,         // no extra data - not studied
                            str.c_str(),  // the subject string
@@ -185,7 +185,7 @@ std::string re::PCRE::search(const std::string& matchString,
     int startOffset(0);
 
     // Clear the output vector
-    memset(mOvector, 0, OVECCOUNT);
+    memset(mOvector, 0, OVECCOUNT * sizeof(int));
     numMatches = pcre_exec(mPCRE,                             // the compiled pattern
                            NULL,                              // no extra data
                            matchString.c_str() + startIndex,  // the subject string
