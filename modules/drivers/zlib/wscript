@@ -3,6 +3,8 @@ from waflib import Options
 from waflib.TaskGen import feature, before, task_gen
 from build import untarFile
 
+ZLIB_VERSION = 'zlib-1.2.7'
+
 def options(opt):
     opt.add_option('--with-zip-home', action='store', dest='zip_home',
                    help='Specify the ZIP Home - where the ZIP library is installed')
@@ -12,7 +14,7 @@ def options(opt):
                    default=True, help='will build the zip (libz) library if not found on the system (default)')
     opt.add_option('--build-zip', action='store_true', dest="build_zip",
                    help='force building zip (zlib) library from scratch',
-                   default=os.path.exists(os.path.join(opt.path.abspath(), 'zlib-1.2.3.tar')))
+                   default=os.path.exists(os.path.join(opt.path.abspath(), ZLIB_VERSION + '.tar')))
     opt.add_option('--nobuild-zip', action='store_false', dest="build_zip",
                    help='force not building zip (zlib) library from scratch')
 
@@ -31,13 +33,13 @@ def configure(conf):
 
         elif Options.options.build_zip:
             # Build is off by default when tarfile not found, fail if forced on
-            if not os.path.exists(os.path.join(conf.path.abspath(), 'zlib-1.2.3.tar')):
+            if not os.path.exists(os.path.join(conf.path.abspath(), ZLIB_VERSION + '.tar')):
                 conf.fatal('Missing zlib tarfile')
 
             conf.env['MAKE_ZIP'] = True
             conf.msg('Building local lib', 'zip (zlib)')
             
-            untarFile(path=conf.path, fname='zlib-1.2.3.tar')
+            untarFile(path=conf.path, fname=ZLIB_VERSION + '.tar')
 
         else:
             conf.check(lib='z', uselib_store='ZIP',
@@ -52,7 +54,7 @@ def build(bld):
     driversNode = bld.path
     
     if 'MAKE_ZIP' in env:
-        fname = 'zlib-1.2.3'
+        fname = ZLIB_VERSION
         
         driverNode = driversNode.make_node(fname)
         
@@ -65,8 +67,8 @@ def build(bld):
                          includes=['.'],
                          export_includes='.',
                          target='z',
-                         source='adler32.c compress.c crc32.c gzio.c uncompr.c deflate.c trees.c ' \
-                                'zutil.c inflate.c infback.c inftrees.c inffast.c',
+                         source='adler32.c crc32.c deflate.c infback.c inffast.c inflate.c inftrees.c trees.c zutil.c ' \
+                                'compress.c uncompr.c gzclose.c gzlib.c gzread.c gzwrite.c',
                          path=driverNode,
                          defines=env['DEFINES'] + defs,
                          env=env.derive(),
@@ -83,7 +85,7 @@ def distclean(context):
     import shutil
     
     dirs = map(lambda d: os.path.join(context.path.abspath(), d),
-               ['zlib-1.2.3'])
+               [ZLIB_VERSION])
     for d in dirs:
         try:
             if os.path.exists(d):
