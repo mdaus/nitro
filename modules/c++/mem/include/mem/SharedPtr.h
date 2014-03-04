@@ -66,13 +66,17 @@ public:
         ptr.release();
     }
 
-    ~SharedPtr()
+    template <typename OtherT>
+    explicit SharedPtr(std::auto_ptr<OtherT> ptr) :
+        mPtr(ptr.get())
     {
-        if (mRefCtr->decrementThenGet() == 0)
-        {
-            delete mRefCtr;
-            delete mPtr;
-        }
+        // Initially we have a reference count of 1
+        // If this throws, the auto_ptr will clean up the input pointer
+        // for us
+        mRefCtr = new sys::AtomicCounter(1);
+
+        // We now own the pointer
+        ptr.release();
     }
 
     SharedPtr(const SharedPtr& rhs) :
@@ -82,15 +86,22 @@ public:
         mRefCtr->increment();
     }
 
-    // This allows derived classes to be used for construction
-    template <typename B>
-    SharedPtr(const SharedPtr<B>& rhs) :
+    template <typename OtherT>
+    SharedPtr(const SharedPtr<OtherT>& rhs) :
         mRefCtr(rhs.mRefCtr),
         mPtr(rhs.mPtr)
     {
         mRefCtr->increment();
     }
-    template <class B> friend class SharedPtr;
+
+    ~SharedPtr()
+    {
+        if (mRefCtr->decrementThenGet() == 0)
+        {
+            delete mRefCtr;
+            delete mPtr;
+        }
+    }
 
     const SharedPtr&
     operator=(const SharedPtr& rhs)
@@ -156,6 +167,9 @@ public:
         mRefCtr = newRefCtr;
         mPtr = ptr;
     }
+
+    // This allows derived classes to be used for construction/assignment
+    template <class OtherT> friend class SharedPtr;
 
 private:
     sys::AtomicCounter* mRefCtr;

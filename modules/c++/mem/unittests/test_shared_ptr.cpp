@@ -26,6 +26,43 @@
 
 namespace
 {
+struct Foo
+{
+    Foo(size_t val) :
+        mVal(val)
+    {
+    }
+
+    size_t mVal;
+};
+
+struct Bar : public Foo
+{
+    Bar(size_t val) : Foo(val)
+    {
+    }
+};
+
+struct FooPtrTest
+{
+    FooPtrTest(mem::SharedPtr<Foo> ptr) :
+        mFooPtr(ptr)
+    {
+    }
+
+    mem::SharedPtr<Foo> mFooPtr;
+};
+
+struct BarPtrTest : public FooPtrTest
+{
+    BarPtrTest(mem::SharedPtr<Bar> ptr) :
+        FooPtrTest(ptr), mBarPtr(ptr)
+    {
+    }
+
+    mem::SharedPtr<Bar> mBarPtr;
+};
+
 TEST_CASE(testNullCopying)
 {
     mem::SharedPtr<int> ptr1;
@@ -135,16 +172,6 @@ TEST_CASE(testAssigning)
     TEST_ASSERT_EQ(ptr3.getCount(), 1);
 }
 
-struct Foo
-{
-    Foo(size_t val) :
-        mVal(val)
-    {
-    }
-
-    size_t mVal;
-};
-
 TEST_CASE(testSyntax)
 {
     Foo* const rawPtr(new Foo(123));
@@ -153,6 +180,55 @@ TEST_CASE(testSyntax)
     TEST_ASSERT_EQ(ptr.get(), rawPtr);
     TEST_ASSERT_EQ(&*ptr, rawPtr);
     TEST_ASSERT_EQ(&(ptr->mVal), &(rawPtr->mVal));
+}
+
+TEST_CASE(testCasting)
+{
+    {
+        // Test creating SharedPtr of base class from raw pointer of derived
+        Bar* const rawBar(new Bar(456));
+        const mem::SharedPtr<Foo> fooPtr(rawBar);
+        TEST_ASSERT_EQ(fooPtr.get(), rawBar);
+        TEST_ASSERT_EQ(fooPtr.getCount(), 1);
+    }
+
+    {
+        // Test creating SharedPtr of base class from auto pointer of derived
+        Bar* const rawBar(new Bar(456));
+        std::auto_ptr<Bar> autoBar(rawBar);
+        const mem::SharedPtr<Foo> fooPtr(autoBar);
+        TEST_ASSERT_EQ(fooPtr.get(), rawBar);
+        TEST_ASSERT_EQ(autoBar.get(), static_cast<Bar *>(NULL));
+        TEST_ASSERT_EQ(fooPtr.getCount(), 1);
+    }
+
+    {
+        // Test creating SharedPtr of base class from SharedPtr of derived
+        Bar* const rawBar(new Bar(456));
+        const mem::SharedPtr<Bar> barPtr(rawBar);
+        TEST_ASSERT_EQ(barPtr.getCount(), 1);
+        const mem::SharedPtr<Foo> fooPtr(barPtr);
+        TEST_ASSERT_EQ(fooPtr.get(), rawBar);
+        TEST_ASSERT_EQ(fooPtr.getCount(), 2);
+        TEST_ASSERT_EQ(barPtr.get(), rawBar);
+        TEST_ASSERT_EQ(barPtr.getCount(), 2);
+
+        const mem::SharedPtr<Foo> fooPtr2 = barPtr;
+        TEST_ASSERT_EQ(fooPtr2.get(), rawBar);
+        TEST_ASSERT_EQ(fooPtr2.getCount(), 3);
+    }
+
+    {
+        // Test creating a class with a SharedPtr of base class as parameter
+        // from a class with a SharedPtr of derived as parameter
+        Bar* const rawBar(new Bar(456));
+        const mem::SharedPtr<Bar> barPtr(rawBar);
+        TEST_ASSERT_EQ(barPtr.getCount(), 1);
+        const BarPtrTest barTest(barPtr);
+        TEST_ASSERT_EQ(barTest.mFooPtr.get(), rawBar);
+        TEST_ASSERT_EQ(barTest.mBarPtr.get(), rawBar);
+        TEST_ASSERT_EQ(barPtr.getCount(), 3);
+    }
 }
 }
 
@@ -163,6 +239,7 @@ int main(int argc, char **argv)
    TEST_CHECK(testCopying);
    TEST_CHECK(testAssigning);
    TEST_CHECK(testSyntax);
+   TEST_CHECK(testCasting);
 
    return 0;
 }
