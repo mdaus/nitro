@@ -82,6 +82,16 @@ public:
         mRefCtr->increment();
     }
 
+    // This allows derived classes to be used for construction
+    template <typename B>
+    SharedPtr(const SharedPtr<B>& rhs) :
+        mRefCtr(rhs.mRefCtr),
+        mPtr(rhs.mPtr)
+    {
+        mRefCtr->increment();
+    }
+    template <class B> friend class SharedPtr;
+
     const SharedPtr&
     operator=(const SharedPtr& rhs)
     {
