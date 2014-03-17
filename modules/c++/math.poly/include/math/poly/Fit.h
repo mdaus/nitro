@@ -1,6 +1,10 @@
 #ifndef __MATH_POLY_FIT_H__
 #define __MATH_POLY_FIT_H__
 
+#include <math/poly/OneD.h>
+#include <math/poly/TwoD.h>
+#include <math/linear/Matrix2D.h>
+
 namespace math
 {
 namespace poly
@@ -246,10 +250,7 @@ inline math::poly::TwoD<double> fit(size_t numRows,
 
     return fit(xm, ym, zm, nx, ny);
 }
- 
-
 }
-
 }
 
 #endif
