@@ -204,8 +204,28 @@ sys::UTCDateTime::UTCDateTime(double timeInMillis)
     fromMillis();
 }
 
+sys::UTCDateTime::UTCDateTime(const std::string& time,
+                              const std::string& format)
+{
+    setTime(time, format);
+    fromMillis();
+}
+
 std::string sys::UTCDateTime::format() const
 {
     return format(DEFAULT_DATETIME_FORMAT);
 }
 
+std::ostream& operator<<(std::ostream& os, const sys::UTCDateTime& dateTime)
+{
+    os << dateTime.format().c_str();
+    return os;
+}
+
+std::istream& operator>>(std::istream& is, sys::UTCDateTime& dateTime)
+{
+    std::string str;
+    is >> str;
+    dateTime.setTime(str, sys::UTCDateTime::DEFAULT_DATETIME_FORMAT);
+    return is;
+}

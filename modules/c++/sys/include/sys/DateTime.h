@@ -120,6 +120,9 @@ public:
     void setTimeInMillis(double time);
     void setYear(int year);
 
+    //! @brief Set members from a string/format.
+    void setTime(const std::string& time, const std::string& format);
+
     /*!
      *  format the DateTime string
      *  y = year (YYYY)

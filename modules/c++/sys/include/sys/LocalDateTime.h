@@ -72,6 +72,11 @@ public:
      *  Construct with time in milliseconds.
      */
     LocalDateTime(double timeInMillis);
+    /*!
+     *  Construct with string/format.
+     */
+    LocalDateTime(const std::string& time,
+            const std::string& format = DEFAULT_DATETIME_FORMAT);
 
     //! Return the Daylight Savings Time flag (true = on, false = off)
     bool getDST() const { return mDST == 1; }
@@ -91,5 +96,8 @@ public:
 };
 
 }
+
+std::ostream& operator<<(std::ostream& os, const sys::LocalDateTime& dateTime);
+std::istream& operator>>(std::istream& is, sys::LocalDateTime& dateTime);
 
 #endif//__SYS_LOCAL_DATE_TIME_H__

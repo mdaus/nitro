@@ -130,6 +130,14 @@ sys::LocalDateTime::LocalDateTime(double timeInMillis) :
     DateTime::fromMillis();
 }
 
+sys::LocalDateTime::LocalDateTime(const std::string& time,
+                                  const std::string& format) :
+    mDST(-1) // Tell mktime() we're not sure
+{
+    setTime(time, format);
+    DateTime::fromMillis();
+}
+
 void sys::LocalDateTime::setDST(bool isDST)
 {
     if(isDST)
@@ -143,3 +151,16 @@ std::string sys::LocalDateTime::format() const
     return format(DEFAULT_DATETIME_FORMAT);
 }
 
+std::ostream& operator<<(std::ostream& os, const sys::LocalDateTime& dateTime)
+{
+    os << dateTime.format().c_str();
+    return os;
+}
+
+std::istream& operator>>(std::istream& is, sys::LocalDateTime& dateTime)
+{
+    std::string str;
+    is >> str;
+    dateTime.setTime(str, sys::LocalDateTime::DEFAULT_DATETIME_FORMAT);
+    return is;
+}

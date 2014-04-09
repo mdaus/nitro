@@ -135,6 +135,26 @@ TEST_CASE(testParameterizedConstructor)
     TEST_ASSERT_EQ(u4.getHour(), 8);
     TEST_ASSERT_EQ(u4.getMinute(), 22);
     TEST_ASSERT_EQ(u4.getSecond(), 43.0);
+
+    // test string/format constructor
+    sys::LocalDateTime l5(l4.format());
+    TEST_ASSERT_EQ(l5.getYear(), l4.getYear());
+    TEST_ASSERT_EQ(l5.getMonth(), l4.getMonth());
+    TEST_ASSERT_EQ(l5.getDayOfMonth(), l4.getDayOfMonth());
+    TEST_ASSERT_EQ(l5.getDayOfYear(), l4.getDayOfYear());
+    TEST_ASSERT_EQ(l5.getHour(), l4.getHour());
+    TEST_ASSERT_EQ(l5.getMinute(), l4.getMinute());
+    TEST_ASSERT_EQ(l5.getSecond(), l4.getSecond());
+
+    // test string/format constructor
+    sys::UTCDateTime u5(u4.format());
+    TEST_ASSERT_EQ(u5.getYear(), u4.getYear());
+    TEST_ASSERT_EQ(u5.getMonth(), u4.getMonth());
+    TEST_ASSERT_EQ(u5.getDayOfMonth(), u4.getDayOfMonth());
+    TEST_ASSERT_EQ(u5.getDayOfYear(), u4.getDayOfYear());
+    TEST_ASSERT_EQ(u5.getHour(), u4.getHour());
+    TEST_ASSERT_EQ(u5.getMinute(), u4.getMinute());
+    TEST_ASSERT_EQ(u5.getSecond(), u4.getSecond());
 }
 
 }
@@ -146,4 +166,3 @@ int main(int argc, char* argv[])
 
     return 0;
 }
-

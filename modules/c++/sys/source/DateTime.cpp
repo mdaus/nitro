@@ -22,15 +22,312 @@
 
 #include "except/Exception.h"
 #include "sys/DateTime.h"
+#include "sys/Conf.h"
 #include "str/Convert.h"
 #include "str/Manip.h"
 #include <vector>
+#include <ctype.h>
 
 #if defined(HAVE_SYS_TIME_H)
 #include <sys/time.h>
 #elif defined(_WIN32)
 #include <windows.h>
 #endif
+
+namespace
+{
+#define TM_YEAR_BASE 1900
+
+bool conv_num(const char*& buf, int& result, int llim, int ulim)
+{
+    result = 0;
+
+    // The limit also determines the number of valid digits.
+    int rulim = ulim;
+    std::string numStr("");
+
+    do
+    {
+        if (!isdigit(*buf))
+            return false;
+
+        numStr.push_back(*buf++);
+        rulim /= 10;
+    }
+    while (rulim);
+
+    result = str::toType<int>(numStr);
+
+    return (result >= llim && result <= ulim);
+}
+
+// http://social.msdn.microsoft.com/forums/en-US/vcgeneral/thread/25a654f9-b6b6-490a-8f36-c87483bb36b7
+
+char* strptime(const char *buf, const char *fmt, struct tm& tm, double& millis)
+{
+    const char *DAY[7] = {
+        "Sunday", "Monday", "Tuesday", "Wednesday",
+        "Thursday", "Friday", "Saturday"
+    };
+    const char *AB_DAY[7] = {
+        "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"
+    };
+
+    const char *MONTH[12] = {
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    };
+    const char *AB_MONTH[12] = {
+        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    };
+
+    char bc, fc;
+    size_t len = 0;
+    int i, split_year = 0;
+
+    const char* bp = buf;
+
+    // Eat up initial white-space.
+    while (isspace(*bp))
+        bp++;
+
+    while (bp != '\0' && (fc = *fmt) != '\0')
+    {
+        if ((fc = *fmt++) != '%')
+        {
+            bc = *bp++;
+            if (bc != fc)
+                throw except::Exception(Ctxt(
+                        "Value does not match format (" + str::toString(fc) +
+                        "):  " + str::toString(bc)));
+            continue;
+        }
+
+        // "Alternative" modifiers. Ignore for now and continue.
+        if (*fmt == 'E' || *fmt == 'O')
+        {
+            *fmt++;
+        }
+
+        switch (fc = *fmt++)
+        {
+        case '%':              // "%%" is converted to "%".
+            bc = *bp++;
+            if (bc != '%')
+                throw except::Exception(Ctxt(
+                        "Value does not match format (%%):  " + bc));
+            break;
+
+        /* 
+         * "Complex" conversion rules, implemented through recursion.
+         */
+        case 'c':              // Date and time, using the locale's format.
+            bp = strptime(bp, "%x %X", tm, millis);
+            break;
+
+        case 'D':              // The date as "%m/%d/%y".
+            bp = strptime(bp, "%m/%d/%y", tm, millis);
+            break;
+
+        case 'R':              // The time as "%H:%M".
+            bp = strptime(bp, "%H:%M", tm, millis);
+            break;
+
+        case 'r':              // The time in 12-hour clock representation.
+            bp = strptime(bp, "%I:%M:%S %p", tm, millis);
+            break;
+
+        case 'T':              // The time as "%H:%M:%S".
+            bp = strptime(bp, "%H:%M:%S", tm, millis);
+            break;
+
+        case 'X':              // The time, using the locale's format.
+            bp = strptime(bp, "%H:%M:%S", tm, millis);
+            break;
+
+        case 'x':              // The date, using the locale's format.
+            bp = strptime(bp, "%m/%d/%y", tm, millis);
+            break;
+
+        /*
+         * "Elementary" conversion rules.
+         */
+        case 'A':              // The day of week, using the locale's form.
+        case 'a':
+            for (i = 0; i < 7; i++)
+            {
+                // Full name.
+                len = strlen(DAY[i]);
+                if (strncasecmp(DAY[i], bp, len) == 0)
+                    break;
+
+                // Abbreviated name.
+                len = strlen(AB_DAY[i]);
+                if (strncasecmp(AB_DAY[i], bp, len) == 0)
+                    break;
+            }
+
+            // Nothing matched.
+            if (i == 7)
+                throw except::Exception(Ctxt("Invalid day of week"));
+
+            tm.tm_wday = i;
+            bp += len;
+            break;
+
+        case 'B':              // The month, using the locale's form.
+        case 'b':
+        case 'h':
+            for (i = 0; i < 12; i++)
+            {
+                // Full name.
+                len = strlen(MONTH[i]);
+                if (strncasecmp(MONTH[i], bp, len) == 0)
+                    break;
+
+                // Abbreviated name.
+                len = strlen(AB_MONTH[i]);
+                if (strncasecmp(AB_MONTH[i], bp, len) == 0)
+                    break;
+            }
+
+            // Nothing matched.
+            if (i == 12)
+                throw except::Exception(Ctxt("Invalid month"));
+
+            tm.tm_mon = i;
+            bp += len;
+            break;
+
+        case 'C':              // The century number.
+            if (!(conv_num(bp, i, 0, 99)))
+                throw except::Exception(Ctxt("Invalid year"));
+
+            if (split_year)
+            {
+                tm.tm_year = (tm.tm_year % 100) + (i * 100);
+            }
+            else
+            {
+                tm.tm_year = i * 100;
+                split_year = 1;
+            }
+            break;
+
+        case 'd':              // The day of month.
+        case 'e':
+            if (!(conv_num(bp, tm.tm_mday, 1, 31)))
+                throw except::Exception(Ctxt("Invalid day of month"));
+            break;
+
+        case 'k':              // The hour (24-hour clock representation).
+        case 'H':
+            if (!(conv_num(bp, tm.tm_hour, 0, 23)))
+                throw except::Exception(Ctxt("Invalid time"));
+            break;
+
+        case 'l':              // The hour (12-hour clock representation).
+        case 'I':
+            if (!(conv_num(bp, tm.tm_hour, 1, 12)))
+                throw except::Exception(Ctxt("Invalid time"));
+            if (tm.tm_hour == 12)
+                tm.tm_hour = 0;
+            break;
+
+        case 'j':              // The day of year.
+            if (!(conv_num(bp, i, 1, 366)))
+                throw except::Exception(Ctxt("Invalid day of year"));
+            tm.tm_yday = i - 1;
+            break;
+
+        case 'M':              // The minute.
+            if (!(conv_num(bp, tm.tm_min, 0, 59)))
+                throw except::Exception(Ctxt("Invalid minutes"));
+            break;
+
+        case 'm':              // The month.
+            if (!(conv_num(bp, i, 1, 12)))
+                throw except::Exception(Ctxt("Invalid month"));
+            tm.tm_mon = i - 1;
+            break;
+
+        case 'S':              // The seconds.
+            if (!(conv_num(bp, tm.tm_sec, 0, 61)))
+                throw except::Exception(Ctxt("Invalid seconds"));
+
+            // Determine if the next character is a decimal...
+            if (*bp == '.')
+            {
+                std::string milliStr("0.");
+                bp++;
+
+                // Get the fractional seconds value
+                while (isdigit(*bp))
+                {
+                    milliStr.push_back(*bp++);
+                }
+
+                millis = str::toType<double>(milliStr) * 1000;
+            }
+            break;
+
+        case 'U':              // The week of year, beginning on sunday.
+        case 'W':              // The week of year, beginning on monday.
+            /* 
+             * XXX This is bogus, as we can not assume any valid
+             * information present in the tm structure at this
+             * point to calculate a real value, so just check the
+             * range for now.
+             */
+            if (!(conv_num(bp, i, 0, 53)))
+                throw except::Exception(Ctxt("Invalid week of year"));
+            break;
+
+        case 'w':              // The day of week, beginning on sunday.
+            if (!(conv_num(bp, tm.tm_wday, 0, 6)))
+                throw except::Exception(Ctxt("Invalid day of week"));
+            break;
+
+        case 'Y':              // The year.
+            i = TM_YEAR_BASE;
+            if (!(conv_num(bp, i, 0, 9999)))
+                throw except::Exception(Ctxt("Invalid year: " + str::toString(i)));
+            tm.tm_year = i - TM_YEAR_BASE;
+            break;
+
+        case 'y':              // The year within 100 years of the epoch.
+            if (!(conv_num(bp, i, 0, 99)))
+                throw except::Exception(Ctxt("Invalid year"));
+
+            if (split_year)
+            {
+                tm.tm_year = ((tm.tm_year / 100) * 100) + i;
+                break;
+            }
+            split_year = 1;
+            if (i <= 68)
+                tm.tm_year = i + 2000 - TM_YEAR_BASE;
+            else
+                tm.tm_year = i + 1900 - TM_YEAR_BASE;
+            break;
+
+        case 'n':              // Any kind of white-space.
+        case 't':
+            while (isspace(*bp))
+                bp++;
+            break;
+
+        default:               // Unknown/unsupported conversion.
+            throw except::Exception(Ctxt(
+                    "Unknown/unsupported format type:  %" + fc));
+        }
+    }
+
+    // LINTED functional specification
+    return ((char *) bp);
+};
+}
 
 void sys::DateTime::fromMillis()
 {
@@ -41,8 +338,7 @@ void sys::DateTime::fromMillis()
 
 void sys::DateTime::fromMillis(const tm& t)
 {
-    // this is year since 1900 so need to add that
-    mYear = t.tm_year + 1900;
+    mYear = t.tm_year + TM_YEAR_BASE;
     // 0-based so add 1
     mMonth = t.tm_mon + 1;
     mDayOfMonth = t.tm_mday;
@@ -255,6 +551,19 @@ void sys::DateTime::setYear(int year)
     toMillis();
 }
 
+void sys::DateTime::setTime(const std::string& time, const std::string& format)
+{
+    // init
+    struct tm t;
+    t.tm_sec = t.tm_min = t.tm_hour = t.tm_mday = t.tm_mon =
+            t.tm_year = t.tm_wday = t.tm_yday = 0;
+    t.tm_isdst = -1;
+
+    strptime(time.c_str(), format.c_str(), t, mTimeInMillis);
+    fromMillis(t);
+    toMillis();
+}
+
 std::string sys::DateTime::format(const std::string& formatStr) const
 {
     // the longest string expansion is 
@@ -272,4 +581,3 @@ std::string sys::DateTime::format(const std::string& formatStr) const
 
     return std::string(str);
 }
-

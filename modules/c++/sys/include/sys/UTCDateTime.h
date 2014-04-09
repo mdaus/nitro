@@ -24,6 +24,7 @@
 #define __SYS_UTC_DATE_TIME_H__
 
 #include <sys/DateTime.h>
+#include <iostream>
 
 namespace sys
 {
@@ -67,6 +68,11 @@ public:
      *  Construct with time in milliseconds.
      */
     UTCDateTime(double timeInMillis);
+    /*!
+     *  Construct with string/format.
+     */
+    UTCDateTime(const std::string& time,
+            const std::string& format = DEFAULT_DATETIME_FORMAT);
 
     // unhide in the base class format method
     using DateTime::format;
@@ -81,5 +87,8 @@ public:
 };
 
 }
+
+std::ostream& operator<<(std::ostream& os, const sys::UTCDateTime& dateTime);
+std::istream& operator>>(std::istream& is, sys::UTCDateTime& dateTime);
 
 #endif//__SYS_UTC_DATE_TIME_H__
