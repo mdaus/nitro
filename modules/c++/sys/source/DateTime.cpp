@@ -38,6 +38,26 @@ namespace
 {
 #define TM_YEAR_BASE 1900
 
+#if defined(__POSIX)
+#include <strings.h>
+#else
+int strncasecmp(const char *s1, const char *s2, size_t n)
+{
+    if (n == 0)
+        return 0;
+
+    while (n-- != 0 && tolower(*s1) == tolower(*s2))
+    {
+        if (n == 0 || *s1 == '\0' || *s2 == '\0')
+            break;
+        s1++;
+        s2++;
+    }
+
+    return tolower(*s1) - tolower(*s2);
+}
+#endif
+
 bool conv_num(const char*& buf, int& result, int llim, int ulim)
 {
     result = 0;
