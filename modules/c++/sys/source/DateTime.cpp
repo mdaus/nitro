@@ -38,26 +38,6 @@ namespace
 {
 #define TM_YEAR_BASE 1900
 
-#if defined(__POSIX)
-#include <strings.h>
-#else
-int strncasecmp(const char *s1, const char *s2, size_t n)
-{
-    if (n == 0)
-        return 0;
-
-    while (n-- != 0 && tolower(*s1) == tolower(*s2))
-    {
-        if (n == 0 || *s1 == '\0' || *s2 == '\0')
-            break;
-        s1++;
-        s2++;
-    }
-
-    return tolower(*s1) - tolower(*s2);
-}
-#endif
-
 bool conv_num(const char*& buf, int& result, int llim, int ulim)
 {
     result = 0;
@@ -85,21 +65,21 @@ bool conv_num(const char*& buf, int& result, int llim, int ulim)
 
 char* strptime(const char *buf, const char *fmt, struct tm& tm, double& millis)
 {
-    const char *DAY[7] = {
-        "Sunday", "Monday", "Tuesday", "Wednesday",
-        "Thursday", "Friday", "Saturday"
+    const std::string DAY[7] = {
+        "sunday", "monday", "tuesday", "wednesday",
+        "thursday", "friday", "saturday"
     };
-    const char *AB_DAY[7] = {
-        "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"
+    const std::string AB_DAY[7] = {
+        "sun", "mon", "tue", "wed", "thu", "fri", "sat"
     };
 
-    const char *MONTH[12] = {
-        "January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
+    const std::string MONTH[12] = {
+        "january", "february", "march", "april", "may", "june",
+        "july", "august", "september", "october", "november", "december"
     };
-    const char *AB_MONTH[12] = {
-        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    const std::string AB_MONTH[12] = {
+        "jan", "feb", "mar", "apr", "may", "jun",
+        "jul", "aug", "sep", "oct", "nov", "dec"
     };
 
     char bc, fc;
@@ -175,16 +155,25 @@ char* strptime(const char *buf, const char *fmt, struct tm& tm, double& millis)
          */
         case 'A':              // The day of week, using the locale's form.
         case 'a':
+            /*
+             *  The tm structure does not use this information to represent
+             *  the real date.  For now, parse any valid value, but
+             *  recalculate day from the rest of the date string.
+             */
             for (i = 0; i < 7; i++)
             {
                 // Full name.
-                len = strlen(DAY[i]);
-                if (strncasecmp(DAY[i], bp, len) == 0)
+                len = DAY[i].size();
+                std::string day(bp, len);
+                str::lower(day);
+                if (day == DAY[i])
                     break;
 
                 // Abbreviated name.
-                len = strlen(AB_DAY[i]);
-                if (strncasecmp(AB_DAY[i], bp, len) == 0)
+                len = AB_DAY[i].size();
+                day = std::string(bp, len);
+                str::lower(day);
+                if (day == AB_DAY[i])
                     break;
             }
 
@@ -199,16 +188,25 @@ char* strptime(const char *buf, const char *fmt, struct tm& tm, double& millis)
         case 'B':              // The month, using the locale's form.
         case 'b':
         case 'h':
+            /*
+             *  The tm structure does not use this information to represent
+             *  the real date.  For now, parse any valid value, but
+             *  recalculate month from the rest of the date string.
+             */
             for (i = 0; i < 12; i++)
             {
                 // Full name.
-                len = strlen(MONTH[i]);
-                if (strncasecmp(MONTH[i], bp, len) == 0)
+                len = MONTH[i].size();
+                std::string month(bp, len);
+                str::lower(month);
+                if (month == MONTH[i])
                     break;
 
                 // Abbreviated name.
-                len = strlen(AB_MONTH[i]);
-                if (strncasecmp(AB_MONTH[i], bp, len) == 0)
+                len = AB_MONTH[i].size();
+                month = std::string(bp, len);
+                str::lower(month);
+                if (month == AB_MONTH[i])
                     break;
             }
 
