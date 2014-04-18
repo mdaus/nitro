@@ -75,9 +75,9 @@ public:
     void set(T* value, size_t size, bool own = false)
     {
         cleanup();
-        mValues.resize(size);
+        mValues.reserve(size);
         for (size_t i = 0; i < size; ++i)
-            mValues[i] = str::toString(value[i]);
+            add(value[i]);
         if (own)
             delete[] value;
     }
@@ -86,7 +86,9 @@ public:
     void setContainer(const std::vector<T>& c)
     {
         cleanup();
-        std::copy(c.begin(), c.end(), std::back_inserter(mValues));
+        mValues.reserve(c.size());
+        for (size_t i = 0; i < c.size(); ++i)
+            add(c[i]);
     }
 
     template<typename T>

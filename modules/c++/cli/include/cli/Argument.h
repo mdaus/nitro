@@ -48,16 +48,16 @@ public:
 
     ~Argument();
 
-    Argument* addFlag(std::string flag);
+    Argument* addFlag(const std::string& flag);
     Argument* setAction(Action action);
     Argument* setMinArgs(int num);
     Argument* setMaxArgs(int num);
     Argument* setDefault(Value* val, bool own = false);
-    Argument* setChoices(std::vector<std::string> choices);
-    Argument* addChoice(std::string choice);
-    Argument* setHelp(std::string help);
-    Argument* setMetavar(std::string metavar);
-    Argument* setDestination(std::string dest);
+    Argument* setChoices(const std::vector<std::string>& choices);
+    Argument* addChoice(const std::string& choice);
+    Argument* setHelp(const std::string& help);
+    Argument* setMetavar(const std::string& metavar);
+    Argument* setDestination(const std::string& dest);
     Argument* setConst(Value* val, bool own = false);
     Argument* setRequired(bool flag);
     Argument* setShowsHelp(bool flag);
@@ -88,8 +88,8 @@ public:
     inline const std::string& getHelp() const { return mHelp; }
     inline const std::string& getMetavar() const { return mMetavar; }
     inline const std::string& getDestination() const { return mDestination; }
-    inline const Value* getConst() { return mConstValue; }
-    inline const bool showsHelp() { return mShowsHelp; }
+    inline const Value* getConst() const { return mConstValue; }
+    inline bool showsHelp() const { return mShowsHelp; }
 
     std::string getVariable() const;
     bool isPositional() const;
@@ -114,9 +114,9 @@ protected:
     ArgumentParser* mParser;
 
     friend class ArgumentParser;
-    Argument(std::string nameOrFlags, ArgumentParser* parser);
+    Argument(const std::string& nameOrFlags, ArgumentParser* parser);
 
-    std::string validateFlag(std::string flag) const;
+    std::string validateFlag(const std::string& flag) const;
 };
 
 }

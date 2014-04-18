@@ -96,6 +96,28 @@ public:
         return p->second;
     }
 
+    void put(const std::string& key, cli::Value *value)
+    {
+        if (hasValue(key))
+        {
+            cli::Value* existing = getValue(key);
+            if (existing != value)
+                delete getValue(key);
+        }
+        mValues[key] = value;
+    }
+
+    void put(const std::string& key, cli::Results *args)
+    {
+        if (hasSubResults(key))
+        {
+            cli::Results *existing = getSubResults(key);
+            if (existing != args)
+                delete existing;
+        }
+        mResults[key] = args;
+    }
+
     typedef ValueStorage_T::iterator iterator;
     typedef ValueStorage_T::const_iterator const_iterator;
 
@@ -117,30 +139,6 @@ protected:
             delete it->second;
         mValues.clear();
         mResults.clear();
-    }
-
-    friend class ArgumentParser;
-
-    void put(const std::string& key, cli::Value *value)
-    {
-        if (hasValue(key))
-        {
-            cli::Value* existing = getValue(key);
-            if (existing != value)
-                delete getValue(key);
-        }
-        mValues[key] = value;
-    }
-
-    void put(const std::string& key, cli::Results *results)
-    {
-        if (hasSubResults(key))
-        {
-            cli::Results *existing = getSubResults(key);
-            if (existing != results)
-                delete existing;
-        }
-        mResults[key] = results;
     }
 };
 

@@ -22,6 +22,7 @@
 
 #include <import/cli.h>
 #include "TestCase.h"
+#include <sstream>
 
 TEST_CASE(testValue)
 {
@@ -32,16 +33,16 @@ TEST_CASE(testValue)
     TEST_ASSERT_ALMOST_EQ(3.14f, v.get<float>());
     TEST_ASSERT_EQ(3, v.get<int>());
 
-    float floats[10];
-    std::string strings[10];
+    std::vector<float> floats;
+    std::vector<std::string> strings;
     for(int i = 0; i < 10; ++i)
     {
-        floats[i] = 10.0f * i;
-        strings[i] = str::toString(i);
+        floats.push_back(10.0f * i);
+        strings.push_back(str::toString(i));
     }
 
     // floats
-    v.set((float*)&floats, 10, false);
+    v.setContainer(floats);
     for(int i = 0; i < 10; ++i)
     {
         TEST_ASSERT_ALMOST_EQ(v.at<float>(i), 10.0f * i);
@@ -49,7 +50,7 @@ TEST_CASE(testValue)
     TEST_ASSERT_EQ(v.size(), 10);
 
     // strings
-    v.set((std::string*)&strings, 10, false);
+    v.setContainer(strings);
     for(int i = 0; i < 10; ++i)
     {
         TEST_ASSERT_EQ(v.at<std::string>(i), str::toString(i));
@@ -70,7 +71,8 @@ TEST_CASE(testChoices)
     parser.setDescription("This program is kind of pointless, but have fun!");
     parser.setProlog("========= (c) COPYRIGHT BANNER ========= ");
     parser.setEpilog("And that's the usage of the program!");
-    parser.printHelp();
+    std::ostringstream buf;
+    parser.printHelp(buf);
 
     std::auto_ptr<cli::Results> results(parser.parse(str::split("-v", " ")));
     TEST_ASSERT(results->hasValue("verbose"));
@@ -121,7 +123,8 @@ TEST_CASE(testSubOptions)
     parser.addArgument("-c --config", "Specify a config file", cli::STORE);
     parser.addArgument("-x --extra", "Extra options", cli::SUB_OPTIONS);
     parser.addArgument("-c --config", "Config options", cli::SUB_OPTIONS);
-    parser.printHelp();
+    std::ostringstream buf;
+    parser.printHelp(buf);
 
     std::auto_ptr<cli::Results> results(parser.parse(str::split("-x:special")));
     TEST_ASSERT(results->hasSubResults("extra"));
@@ -151,7 +154,7 @@ TEST_CASE(testIterate)
             results(parser.parse(str::split("-v -c config.xml")));
     std::vector<std::string> keys;
     for(cli::Results::const_iterator it = results->begin(); it != results->end(); ++it)
-    keys.push_back(it->first);
+        keys.push_back(it->first);
     TEST_ASSERT_EQ(keys.size(), 2);
     // std::map returns keys in alphabetical order...
     TEST_ASSERT_EQ(keys[0], "config");

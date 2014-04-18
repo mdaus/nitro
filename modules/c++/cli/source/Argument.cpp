@@ -24,7 +24,7 @@
 #include "cli/ArgumentParser.h"
 #include <iterator>
 
-cli::Argument::Argument(std::string nameOrFlags, cli::ArgumentParser* parser) :
+cli::Argument::Argument(const std::string& nameOrFlags, cli::ArgumentParser* parser):
     mAction(cli::STORE), mMinArgs(0), mMaxArgs(1), mDefaultValue(NULL),
             mOwnDefault(false), mConstValue(NULL), mOwnConst(false),
             mRequired(false), mShowsHelp(true), mParser(parser)
@@ -50,7 +50,7 @@ cli::Argument::~Argument()
         delete mConstValue;
 }
 
-cli::Argument* cli::Argument::addFlag(std::string flag)
+cli::Argument* cli::Argument::addFlag(const std::string& flag)
 {
     char p = mParser->mPrefixChar;
     std::string p2 = FmtX("%c%c", p, p);
@@ -60,7 +60,7 @@ cli::Argument* cli::Argument::addFlag(std::string flag)
         mShortFlags.push_back(validateFlag(flag.substr(1)));
     return this;
 }
-std::string cli::Argument::validateFlag(std::string flag) const
+std::string cli::Argument::validateFlag(const std::string& flag) const
 {
     const static std::string idChars =
             "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ012345789-_";
@@ -100,28 +100,29 @@ cli::Argument* cli::Argument::setDefault(Value* val, bool own)
     mOwnDefault = own;
     return this;
 }
-cli::Argument* cli::Argument::setChoices(std::vector<std::string> choices)
+cli::Argument* cli::Argument::setChoices(
+    const std::vector<std::string>& choices)
 {
     mChoices.clear();
     mChoices = choices;
     return this;
 }
-cli::Argument* cli::Argument::addChoice(std::string choice)
+cli::Argument* cli::Argument::addChoice(const std::string& choice)
 {
     mChoices.push_back(choice);
     return this;
 }
-cli::Argument* cli::Argument::setHelp(std::string help)
+cli::Argument* cli::Argument::setHelp(const std::string& help)
 {
     mHelp = help;
     return this;
 }
-cli::Argument* cli::Argument::setMetavar(std::string metavar)
+cli::Argument* cli::Argument::setMetavar(const std::string& metavar)
 {
     mMetavar = metavar;
     return this;
 }
-cli::Argument* cli::Argument::setDestination(std::string dest)
+cli::Argument* cli::Argument::setDestination(const std::string& dest)
 {
     mDestination = dest;
     return this;

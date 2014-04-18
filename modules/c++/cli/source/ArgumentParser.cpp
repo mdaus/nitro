@@ -21,6 +21,7 @@
  */
 
 #include "cli/ArgumentParser.h"
+#include <algorithm>
 #include <iterator>
 
 namespace
@@ -41,7 +42,7 @@ bool containsOnly(const std::string& str,
     return true;
 }
 
-void writeArgumentHelp(std::ostream& out, const std::string heading,
+void writeArgumentHelp(std::ostream& out, const std::string& heading,
                        size_t maxFlagsWidth,
                        const std::vector<std::string>& flags,
                        const std::vector<std::string>& helps)
@@ -85,24 +86,21 @@ cli::ArgumentParser::ArgumentParser() :
 
 cli::ArgumentParser::~ArgumentParser()
 {
-    for (std::vector<cli::Argument*>::iterator it = mArgs.begin(); it
-            != mArgs.end(); ++it)
-        if (*it)
-            delete *it;
 }
 
 /**
  * Shortcut for adding an argument
  */
-cli::Argument* cli::ArgumentParser::addArgument(std::string nameOrFlags,
-                                                std::string help,
-                                                cli::Action action,
-                                                std::string dest,
-                                                std::string metavar,
-                                                int minArgs, int maxArgs,
-                                                bool required)
+mem::SharedPtr<cli::Argument>
+cli::ArgumentParser::addArgument(const std::string& nameOrFlags,
+                           const std::string& help,
+                           cli::Action action,
+                           const std::string& dest,
+                           const std::string& metavar,
+                           int minArgs, int maxArgs,
+                           bool required)
 {
-    cli::Argument *arg = new cli::Argument(nameOrFlags, this);
+    mem::SharedPtr<cli::Argument> arg(new cli::Argument(nameOrFlags, this));
 
     if (arg->isPositional())
     {
@@ -142,25 +140,25 @@ cli::Argument* cli::ArgumentParser::addArgument(std::string nameOrFlags,
     return arg;
 }
 
-cli::ArgumentParser& cli::ArgumentParser::setDescription(const std::string d)
+cli::ArgumentParser& cli::ArgumentParser::setDescription(const std::string& d)
 {
     mDescription = d;
     return *this;
 }
 
-cli::ArgumentParser& cli::ArgumentParser::setProlog(const std::string prolog)
+cli::ArgumentParser& cli::ArgumentParser::setProlog(const std::string& prolog)
 {
     mProlog = prolog;
     return *this;
 }
 
-cli::ArgumentParser& cli::ArgumentParser::setEpilog(const std::string epilog)
+cli::ArgumentParser& cli::ArgumentParser::setEpilog(const std::string& epilog)
 {
     mEpilog = epilog;
     return *this;
 }
 
-cli::ArgumentParser& cli::ArgumentParser::setUsage(const std::string usage)
+cli::ArgumentParser& cli::ArgumentParser::setUsage(const std::string& usage)
 {
     mUsage = usage;
     return *this;
@@ -172,7 +170,7 @@ cli::ArgumentParser& cli::ArgumentParser::enableHelp(bool flag)
     return *this;
 }
 
-cli::ArgumentParser& cli::ArgumentParser::setProgram(const std::string program)
+cli::ArgumentParser& cli::ArgumentParser::setProgram(const std::string& program)
 {
     mProgram = program;
     return *this;
@@ -252,10 +250,10 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
     std::vector<Argument*> positionalArgs;
 
     // first, validate the arguments
-    for (std::vector<cli::Argument*>::const_iterator it = mArgs.begin(); it
-            != mArgs.end(); ++it)
+    for (mem::VectorOfSharedPointers<cli::Argument>::const_iterator it =
+            mArgs.begin(); it != mArgs.end(); ++it)
     {
-        cli::Argument *arg = *it;
+        cli::Argument *arg = it->get();
         std::string argVar = arg->getVariable();
 
         if (arg->isPositional())
@@ -371,11 +369,11 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
         }
     }
 
-    cli::Results *results = new Results;
+    std::auto_ptr<cli::Results> results(new Results);
     cli::Results *currentResults = NULL;
     for (size_t i = 0, s = explodedArgs.size(); i < s; ++i)
     {
-        currentResults = results; // set the pointer
+        currentResults = results.get(); // set the pointer
         std::string argStr = explodedArgs[i];
         cli::Argument *arg = NULL;
         std::string optionsStr("");
@@ -578,10 +576,10 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
     }
 
     // add the defaults
-    for (std::vector<cli::Argument*>::const_iterator it = mArgs.begin(); it
-            != mArgs.end(); ++it)
+    for (mem::VectorOfSharedPointers<cli::Argument>::const_iterator it =
+            mArgs.begin(); it != mArgs.end(); ++it)
     {
-        cli::Argument *arg = *it;
+        cli::Argument *arg = it->get();
         std::string argMeta = arg->getMetavar();
         std::string argVar = arg->getVariable();
         std::string argId = arg->isPositional() && !argMeta.empty() ? argMeta
@@ -602,32 +600,6 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
         }
 
 
-        // validate the argument value against the choices
-        // TODO: add option to make case sensitive
-        std::vector<std::string> choices = arg->getChoices();
-        if (!choices.empty())
-        {
-            bool isValid = false;
-            std::string val = results->getValue(argVar)->toString();
-            str::lower(val);
-
-            for (size_t ii = 0; ii < choices.size(); ++ii)
-            {
-                std::string choice = choices[ii];
-                str::lower(choice);
-                if (str::containsOnly(val, choice))
-                {
-                    isValid = true;
-                    break;
-                }
-            }
-            if (!isValid)
-            {
-                parseError(FmtX("invalid option for [%s]", argVar.c_str()));
-            }
-        }
-
-
         // validate # of args
         int minArgs = arg->getMinArgs();
         int maxArgs = arg->getMaxArgs();
@@ -644,13 +616,37 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
                 parseError(FmtX("too many arguments, %d supported: [%s]",
                                 maxArgs, argId.c_str()));
         }
+
+
+        // validate the argument value against the choices
+        // TODO: add option to make case insensitive
+        std::vector<std::string> choices = arg->getChoices();
+        if (numGiven > 0 && !choices.empty())
+        {
+            bool isValid = false;
+            cli::Value *vals = results->getValue(argVar);
+
+            for (size_t ii = 0; ii < numGiven; ++ii)
+            {
+                if (std::find(choices.begin(), choices.end(),
+                              vals->at<std::string>(ii)) != choices.end())
+                {
+                    isValid = true;
+                    break;
+                }
+            }
+            if (!isValid)
+            {
+                parseError(FmtX("invalid option for [%s]", argVar.c_str()));
+            }
+        }
     }
 
-    return results;
+    return results.release();
 }
 
 void cli::ArgumentParser::printUsage(std::ostream& out, bool andExit,
-                                     const std::string message) const
+                                     const std::string& message) const
 {
     out << "usage: ";
     if (mUsage.empty())
@@ -710,10 +706,10 @@ void cli::ArgumentParser::processFlags(FlagInfo& info) const
         info.opHelps.push_back("show this help message and exit");
     }
 
-    for (std::vector<cli::Argument*>::const_iterator it = mArgs.begin(); it
-            != mArgs.end(); ++it)
+    for (mem::VectorOfSharedPointers<cli::Argument>::const_iterator it =
+            mArgs.begin(); it != mArgs.end(); ++it)
     {
-        cli::Argument *arg = *it;
+        cli::Argument *arg = it->get();
         const std::string& argName = arg->getName();
         const cli::Action& argAction = arg->getAction();
         const std::vector<std::string>& argChoices = arg->getChoices();
