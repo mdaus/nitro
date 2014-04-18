@@ -108,6 +108,14 @@ public:
         mValues.back() = value.release();
     }
 
+    typedef typename std::vector<T*>::iterator iterator;
+    typedef typename std::vector<T*>::const_iterator const_iterator;
+
+    iterator begin() { return mValues.begin(); }
+    const_iterator begin() const { return mValues.begin(); }
+    iterator end() { return mValues.end(); }
+    const_iterator end() const { return mValues.end(); }
+
 private:
     // Noncopyable
     VectorOfPointers(const VectorOfPointers& );
@@ -120,6 +128,9 @@ private:
 template <typename T>
     class VectorOfSharedPointers
 {
+protected:
+    typedef mem::SharedPtr<T> SharedPtr_T;
+
 public:
     VectorOfSharedPointers()
     {
@@ -174,12 +185,31 @@ public:
         mValues.back().reset(value.release());
     }
 
+    void push_back(mem::SharedPtr<T> value)
+    {
+        mValues.push_back(value);
+    }
+
     template <typename OtherT>
         void push_back(std::auto_ptr<OtherT> value)
     {
         mValues.resize(mValues.size() + 1);
         mValues.back().reset(value.release());
     }
+
+    template <typename OtherT>
+        void push_back(mem::SharedPtr<OtherT> value)
+    {
+        mValues.push_back(value);
+    }
+
+    typedef typename std::vector<SharedPtr_T>::iterator iterator;
+    typedef typename std::vector<SharedPtr_T>::const_iterator const_iterator;
+
+    iterator begin() { return mValues.begin(); }
+    const_iterator begin() const { return mValues.begin(); }
+    iterator end() { return mValues.end(); }
+    const_iterator end() const { return mValues.end(); }
 
 private:
     std::vector<mem::SharedPtr<T> > mValues;
