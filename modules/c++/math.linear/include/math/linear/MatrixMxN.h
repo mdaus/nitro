@@ -1003,7 +1003,7 @@ public:
                 acc += mRaw[i][j] * mRaw[i][j];
             }
         }
-        return (_T)::sqrt((const _T)acc);
+        return static_cast<_T>(::sqrt(acc));
     }
 
     /*!
