@@ -128,9 +128,6 @@ private:
 template <typename T>
     class VectorOfSharedPointers
 {
-protected:
-    typedef mem::SharedPtr<T> SharedPtr_T;
-
 public:
     VectorOfSharedPointers()
     {
@@ -161,7 +158,7 @@ public:
         return mValues.empty();
     }
 
-    mem::SharedPtr<T> operator[](std::ptrdiff_t idx) const
+    SharedPtr<T> operator[](std::ptrdiff_t idx) const
     {
         return mValues[idx];
     }
@@ -185,7 +182,7 @@ public:
         mValues.back().reset(value.release());
     }
 
-    void push_back(mem::SharedPtr<T> value)
+    void push_back(SharedPtr<T> value)
     {
         mValues.push_back(value);
     }
@@ -198,13 +195,13 @@ public:
     }
 
     template <typename OtherT>
-        void push_back(mem::SharedPtr<OtherT> value)
+        void push_back(SharedPtr<OtherT> value)
     {
         mValues.push_back(value);
     }
 
-    typedef typename std::vector<SharedPtr_T>::iterator iterator;
-    typedef typename std::vector<SharedPtr_T>::const_iterator const_iterator;
+    typedef typename std::vector<SharedPtr<T> >::iterator iterator;
+    typedef typename std::vector<SharedPtr<T> >::const_iterator const_iterator;
 
     iterator begin() { return mValues.begin(); }
     const_iterator begin() const { return mValues.begin(); }
@@ -212,7 +209,7 @@ public:
     const_iterator end() const { return mValues.end(); }
 
 private:
-    std::vector<mem::SharedPtr<T> > mValues;
+    std::vector<SharedPtr<T> > mValues;
 };
 }
 
