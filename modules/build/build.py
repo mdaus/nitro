@@ -1191,7 +1191,9 @@ def configure(self):
             # x86_amd64 - this is a 32-bit compiler that cross-compiles to
             # 64-bit.  VS 2012 Express ships with this one, and earlier VS
             # Express versions can get this via the Windows SDK.
-            self.env['MSVC_TARGETS'] = ['x64', 'x86_amd64']
+            # TODO: Temporary hack - see #357
+            #self.env['MSVC_TARGETS'] = ['x64', 'x86_amd64']
+            self.env['MSVC_TARGETS'] = ['x86_amd64', 'x64']
             
             # Look for 32-bit msvc if we don't find 64-bit.
             if not Options.options.enable64:
