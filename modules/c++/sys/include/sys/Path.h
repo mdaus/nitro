@@ -201,7 +201,7 @@ public:
     {
         if (makeParents)
         {
-            std::vector<std::string> pathList = separate(mPathName);
+            std::vector<std::string> pathList = separate(getAbsolutePath());
             Path workingPath;
             bool createDir = true;
             size_t i = 0;
@@ -224,7 +224,7 @@ public:
             return createDir;
         }
         else
-            return mOS.makeDirectory(mPathName);
+            return mOS.makeDirectory(getAbsolutePath());
     }
 
     inline void remove() const
