@@ -424,7 +424,10 @@ public:
      */
     inline void row(size_t i, const std::vector<_T>& vec)
     {
-        row(i, &vec[0]);
+        if (!vec.empty())
+        {
+            row(i, &vec[0]);
+        }
     }
 
   
@@ -463,7 +466,6 @@ public:
      */
     void col(size_t j, const _T* vec)
     {
-        
         for (size_t i = 0; i < _MD; ++i)
         {
             mRaw[i][j] = vec[i];
@@ -482,10 +484,33 @@ public:
      *  \param j The column index
      *  \param vec The vector to copy from
      */
-    void col(size_t j, std::vector<_T>& vec)
+    void col(size_t j, const std::vector<_T>& vec)
     {
-        col(j, &vec[0]);
+        if (!vec.empty())
+        {
+            col(j, &vec[0]);
+        }
     }
+
+    /*!
+     *  Set column from matrix at index colIdx
+     *
+     *  \code
+          Matrix<3, 3> A(42.0);
+          Matrix<3, 1> colVec(31.0);
+          A.col(0, colVec);
+     *  \endcode
+     *
+     *  \param colIdx The column index
+     *  \param vec The matrix to copy from
+     */
+     void col(size_t colIdx, const MatrixMxN<_MD, 1, _T>& vec)
+     {
+         for (size_t row = 0; row < _MD; ++row)
+         {
+             mRaw[row][colIdx] = vec(row, 0);
+         }
+     }
 
 
     /*!
@@ -825,6 +850,36 @@ public:
         newM += mx;
         return newM;
     }
+
+    /*!
+     *  Add an MxN matrix to this matrix starting at position (row, col)
+     *
+     *  This method assumes the MxN matrix fits inside this matrix
+     *
+     *  \param rhs The matrix to add to this
+     *  \param rowOffset The row offset when indexing into this matrix
+     *  \param colOffset The column offset when indexing into this matrix
+     *
+     *  \code
+     *     MatrixMxN<3,3> A(42.0);
+     *     MatrixMxN<2,2> B(31.0);
+     *     A.addInPlace(B,1,1);
+     *  \endcode
+     *
+     */
+     template <size_t _Mmx, size_t _Nmx, typename _Tmx>
+     void addInPlace(const MatrixMxN<_Mmx, _Nmx, _Tmx>& rhs,
+                     size_t rowOffset = 0,
+                     size_t colOffset = 0)
+     {
+         for (size_t row = 0; row < _Mmx; ++row)
+         {
+             for (size_t col = 0; col < _Nmx; ++col)
+             {
+                 mRaw[row + rowOffset][col + colOffset] += rhs(row, col);
+             }
+         }
+     }
 
     /*!
      *  Subtract an MxN matrix to another and return a third
