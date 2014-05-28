@@ -173,6 +173,16 @@ public:
 
     virtual size_t getNumCPUs() const;
 
+    /*!
+     *  Create a symlink, pathnames can be either absolute or relative
+     */
+    virtual void createSymlink(const std::string& origPathname, 
+                               const std::string& symlinkPathname);
+
+    virtual size_t totalMemory();
+
+    virtual size_t freeMemory();
+
 protected:
     /*!
      *  Remove file with this pathname

@@ -30,6 +30,7 @@
 #include "sys/Conf.h"
 #include <dirent.h>
 #include <sys/utsname.h>
+#include "sys/sysinfo.h"
 
 namespace sys
 {
@@ -152,6 +153,16 @@ public:
     virtual std::string getDSOSuffix() const;
 
     virtual size_t getNumCPUs() const;
+
+    /*!
+     *  Create a symlink, pathnames can be either absolute or relative
+     */
+    virtual void createSymlink(const std::string& origPathname, 
+                               const std::string& symlinkPathname);
+
+    virtual size_t totalMemory();
+
+    virtual size_t freeMemory();
 
 protected:
     /*!

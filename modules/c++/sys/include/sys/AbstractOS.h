@@ -198,6 +198,22 @@ public:
 
     virtual size_t getNumCPUs() const = 0;
 
+    /*!
+     *  Create a symlink, pathnames can be either absolute or relative
+     */
+    virtual void createSymlink(const std::string& origPathname, 
+                               const std::string& symlinkPathname) = 0;
+
+    /*!
+     *  Returns the total RAM on the system in megabytes
+     */
+    virtual size_t totalMemory() = 0;
+
+    /*!
+     *  Returns the total available RAM on the system in megabytes
+     */
+    virtual size_t freeMemory() = 0;
+
 protected:
     /*!
      *  Remove file with this pathname

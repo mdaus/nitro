@@ -27,6 +27,7 @@
 #include "sys/OSWin32.h"
 #include "sys/File.h"
 
+#include <iostream>
 
 std::string sys::OSWin32::getPlatformName() const
 {
@@ -44,7 +45,7 @@ std::string sys::OSWin32::getPlatformName() const
     {
         platform = "Windows on Win32 95";
     }
-    else if (info.dwPlatformId = VER_PLATFORM_WIN32_NT)
+    else if (info.dwPlatformId == VER_PLATFORM_WIN32_NT)
     {
         platform = "Windows on Win32 NT";
     }
@@ -238,6 +239,53 @@ size_t sys::OSWin32::getNumCPUs() const
     SYSTEM_INFO info;
     GetSystemInfo(&info);
     return info.dwNumberOfProcessors;
+}
+
+void sys::OSWin32::createSymlink(const std::string& origPathname, 
+                                 const std::string& symlinkPathname)
+{
+    OSVERSIONINFO vi;
+    memset(&vi, 0, sizeof(vi));
+    vi.dwOSVersionInfoSize = sizeof(vi);
+    GetVersionEx(&vi);
+    // Symlinks were not available on versions of windows prior to Windows Vista
+    if(vi.dwPlatformId == VER_PLATFORM_WIN32_NT  &&  vi.dwMajorVersion >= 6)
+    {
+        LPSTR L_origPathname = const_cast<char*>(origPathname.c_str());
+        LPSTR L_symlinkPathname = const_cast<char*>(symlinkPathname.c_str());
+        CreateSymbolicLink(L_symlinkPathname, L_origPathname, true);
+    }
+    else
+    {
+        throw sys::SystemException(Ctxt(FmtX(
+            "Windows version does not support symlinks")));
+    }
+}
+
+size_t sys::OSWin32::totalMemory()
+{
+    MEMORYSTATUSEX memInfo;
+    memInfo.dwLength = sizeof(MEMORYSTATUSEX);
+    GlobalMemoryStatusEx(&memInfo);
+    DWORDLONG totalPhysMem = memInfo.ullTotalPhys;
+
+    // adjust to megabytes
+    totalPhysMem /= (1024*1024);
+
+    return totalPhysMem;
+}
+
+size_t sys::OSWin32::freeMemory()
+{
+    MEMORYSTATUSEX memInfo;
+    memInfo.dwLength = sizeof(MEMORYSTATUSEX);
+    GlobalMemoryStatusEx(&memInfo);
+    DWORDLONG freePhysMem = memInfo.ullAvailPhys;
+
+    // adjust to megabytes
+    freePhysMem /= (1024*1024);
+
+    return freePhysMem;
 }
 
 void sys::DirectoryWin32::close()

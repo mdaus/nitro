@@ -30,6 +30,12 @@ int main(int argc, char **argv)
 {
     try
     {
+        sys::Path p("../this/that");
+        std::cout << p.getPath() << std::endl;
+        p.makeDirectory(false);
+        std::cout << "Path exists: " << p.exists() << std::endl;
+        std::cout << "Path: " << p.getAbsolutePath() << std::endl;
+
         sys::OS os;
         std::string fileName = os.getCurrentWorkingDirectory()
                 + os.getDelimiter() + ".." + os.getDelimiter() + "blah.txt";

@@ -237,6 +237,38 @@ size_t sys::OSUnix::getNumCPUs() const
 #endif
 }
 
+void sys::OSUnix::createSymlink(const std::string& origPathname, 
+                                const std::string& symlinkPathname)
+{
+    symlink(origPathname.c_str(), symlinkPathname.c_str());
+}
+
+size_t sys::OSUnix::totalMemory()
+{
+    struct sysinfo memInfo;
+    sysinfo (&memInfo);
+    long long totalPhysMem = memInfo.totalram;
+    totalPhysMem *= memInfo.mem_unit;
+
+    // convert to megabytes
+    totalPhysMem /= (1024*1024);
+
+    return totalPhysMem;
+}
+
+size_t sys::OSUnix::freeMemory()
+{
+    struct sysinfo memInfo;
+    sysinfo (&memInfo);
+    long long freePhysMem = memInfo.freeram;
+    freePhysMem *= memInfo.mem_unit;
+
+    // convert to megabytes
+    freePhysMem /= (1024*1024);
+
+    return freePhysMem;
+}
+
 void sys::DirectoryUnix::close()
 {
     if (mDir)
