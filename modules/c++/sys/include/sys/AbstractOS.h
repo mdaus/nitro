@@ -205,14 +205,9 @@ public:
                                const std::string& symlinkPathname) = 0;
 
     /*!
-     *  Returns the total RAM on the system in megabytes
+     *  Get the total RAM and available RAM on the system in megabytes
      */
-    virtual size_t totalMemory() = 0;
-
-    /*!
-     *  Returns the total available RAM on the system in megabytes
-     */
-    virtual size_t freeMemory() = 0;
+    virtual void getMemInfo(size_t& totalPhysMem, size_t& freePhysMem) const = 0;
 
 protected:
     /*!

@@ -1,7 +1,7 @@
 /* =========================================================================
- * This file is part of sys-c++ 
+ * This file is part of sys-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2009, General Dynamics - Advanced Information Systems
  *
  * sys-c++ is free software; you can redistribute it and/or modify
@@ -14,32 +14,43 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
 
 #include <import/sys.h>
-#include <fstream>
 #include <iostream>
-#include <iomanip>
-#include "sys/StopWatch.h"
 
 using namespace sys;
 
-int main(int argc, char **argv)
+int main(int argc, char** argv)
 {
     try
     {
         sys::OS os;
-        std::cout << "Total system memory: " << os.totalMemory() << std::endl;
-        std::cout << "Free system memory: " << os.freeMemory() << std::endl;
-
+        size_t freePhysMem=0, totalPhysMem=0;
+        os.getMemInfo(totalPhysMem, freePhysMem);
+        std::cout << "Total system memory: " << totalPhysMem << " MB" << std::endl;
+        std::cout << "Free system memory: " << freePhysMem << " MB" << std::endl;
     }
-    catch (...)
+    catch (const std::exception& ex)
     {
-        std::cerr << "Caught unnamed exception" << std::endl;
+        std::cerr << "Caught std::exception: " << ex.what() << std::endl;
+        return 1;
     }
+    catch (const except::Exception& ex)
+    {
+        std::cerr << "Caught except::exception: " << ex.getMessage()
+                  << std::endl;
+        return 1;
+    }
+    catch(...)
+    {
+        std::cerr << "Caught unknown exception\n";
+        return 1;
+    }
+
     return 0;
 }

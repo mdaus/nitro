@@ -262,30 +262,24 @@ void sys::OSWin32::createSymlink(const std::string& origPathname,
     }
 }
 
-size_t sys::OSWin32::totalMemory()
+void sys::OSWin32::getMemInfo(size_t& totalPhysMem, size_t& freePhysMem) const
 {
     MEMORYSTATUSEX memInfo;
     memInfo.dwLength = sizeof(MEMORYSTATUSEX);
-    GlobalMemoryStatusEx(&memInfo);
-    DWORDLONG totalPhysMem = memInfo.ullTotalPhys;
+    if(GlobalMemoryStatusEx(&memInfo))
+    {
+        totalPhysMem = memInfo.ullTotalPhys;
+        freePhysMem = memInfo.ullAvailPhys;
 
-    // adjust to megabytes
-    totalPhysMem /= (1024*1024);
-
-    return totalPhysMem;
-}
-
-size_t sys::OSWin32::freeMemory()
-{
-    MEMORYSTATUSEX memInfo;
-    memInfo.dwLength = sizeof(MEMORYSTATUSEX);
-    GlobalMemoryStatusEx(&memInfo);
-    DWORDLONG freePhysMem = memInfo.ullAvailPhys;
-
-    // adjust to megabytes
-    freePhysMem /= (1024*1024);
-
-    return freePhysMem;
+        // convert to megabytes
+        totalPhysMem /= (1024*1024);
+        freePhysMem /= (1024*1024);
+    }
+    else
+    {
+        throw sys::SystemException(Ctxt(
+            "Call to GlobalMemoryStatusEx() has failed"));
+    }
 }
 
 void sys::DirectoryWin32::close()

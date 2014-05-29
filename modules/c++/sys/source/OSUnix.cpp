@@ -243,30 +243,24 @@ void sys::OSUnix::createSymlink(const std::string& origPathname,
     symlink(origPathname.c_str(), symlinkPathname.c_str());
 }
 
-size_t sys::OSUnix::totalMemory()
+void sys::OSUnix::getMemInfo(size_t& totalPhysMem, size_t& freePhysMem) const
 {
     struct sysinfo memInfo;
-    sysinfo (&memInfo);
-    long long totalPhysMem = memInfo.totalram;
-    totalPhysMem *= memInfo.mem_unit;
+    if(!sysinfo(&memInfo))
+    {
+        totalPhysMem = memInfo.totalram;
+        totalPhysMem *= memInfo.mem_unit;
+        freePhysMem = memInfo.freeram;
+        freePhysMem *= memInfo.mem_unit;
 
-    // convert to megabytes
-    totalPhysMem /= (1024*1024);
-
-    return totalPhysMem;
-}
-
-size_t sys::OSUnix::freeMemory()
-{
-    struct sysinfo memInfo;
-    sysinfo (&memInfo);
-    long long freePhysMem = memInfo.freeram;
-    freePhysMem *= memInfo.mem_unit;
-
-    // convert to megabytes
-    freePhysMem /= (1024*1024);
-
-    return freePhysMem;
+        // convert to megabytes
+        totalPhysMem /= (1024*1024);
+        freePhysMem /= (1024*1024);
+    }
+    else
+    {
+        throw sys::SystemException(Ctxt("Call to sysinfo() has failed"));
+    }
 }
 
 void sys::DirectoryUnix::close()

@@ -179,9 +179,7 @@ public:
     virtual void createSymlink(const std::string& origPathname, 
                                const std::string& symlinkPathname);
 
-    virtual size_t totalMemory();
-
-    virtual size_t freeMemory();
+    virtual void getMemInfo(size_t& totalPhysMem, size_t& freePhysMem) const;
 
 protected:
     /*!
