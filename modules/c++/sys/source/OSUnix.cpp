@@ -243,11 +243,21 @@ void sys::OSUnix::createSymlink(const std::string& origPathname,
     symlink(origPathname.c_str(), symlinkPathname.c_str());
 }
 
-void sys::OSUnix::getMemInfo(size_t& totalPhysMem, size_t& freePhysMem) const
+size_t sysconfCaller(int name)
 {
-    size_t pageSize = sysconf(_SC_PAGESIZE);
-    size_t totalNumPages = sysconf(_SC_PHYS_PAGES);
-    size_t availNumPages = sysconf(_SC_AVPHYS_PAGES);
+    long long returnVal = sysconf(name);
+    if(returnVal == -1){
+        throw sys::SystemException(Ctxt(
+                "Call to sysconf() has failed"));
+    }
+    return returnVal;
+}
+
+void sys::OSUnix::getMemInfo(size_t &totalPhysMem, size_t &freePhysMem) const
+{
+    long long pageSize = sysconfCaller(_SC_PAGESIZE);
+    long long totalNumPages = sysconfCaller(_SC_PHYS_PAGES);
+    long long availNumPages = sysconfCaller(_SC_AVPHYS_PAGES);
 
     totalPhysMem = (pageSize*totalNumPages/1024)/1024;
     freePhysMem = (pageSize*availNumPages/1024)/1024;
