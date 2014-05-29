@@ -242,23 +242,31 @@ size_t sys::OSWin32::getNumCPUs() const
 }
 
 void sys::OSWin32::createSymlink(const std::string& origPathname, 
-                                 const std::string& symlinkPathname)
+                                 const std::string& symlinkPathname) const
 {
     OSVERSIONINFO vi;
     memset(&vi, 0, sizeof(vi));
     vi.dwOSVersionInfoSize = sizeof(vi);
-    GetVersionEx(&vi);
+    if(!GetVersionEx(&vi))
+    {
+        throw sys::SystemException(Ctxt(
+            "Call to GetVersionEx() has failed"));
+    }
+
     // Symlinks were not available on versions of windows prior to Windows Vista
     if(vi.dwPlatformId == VER_PLATFORM_WIN32_NT  &&  vi.dwMajorVersion >= 6)
     {
-        LPSTR L_origPathname = const_cast<char*>(origPathname.c_str());
-        LPSTR L_symlinkPathname = const_cast<char*>(symlinkPathname.c_str());
-        CreateSymbolicLink(L_symlinkPathname, L_origPathname, true);
+        if(!CreateSymbolicLink(const_cast<char*>(symlinkPathname.c_str()), 
+                               const_cast<char*>(origPathname.c_str()), true))
+        {
+            throw sys::SystemException(Ctxt(
+                "Call to CreateSymbolicLink() has failed"));
+        }
     }
     else
     {
-        throw sys::SystemException(Ctxt(FmtX(
-            "Windows version does not support symlinks")));
+        throw sys::SystemException(Ctxt(
+            "Windows version does not support symlinks"));
     }
 }
 

@@ -37,9 +37,22 @@ int main(int argc, char **argv)
         p.makeDirectory(true);
         os.createSymlink(p.getAbsolutePath(), "symlink");
     }
+    catch (const std::exception& ex)
+    {
+        std::cerr << "Caught std::exception: " << ex.what() << std::endl;
+        return 1;
+    }
+    catch (const except::Exception& ex)
+    {
+        std::cerr << "Caught except::exception: " << ex.getMessage()
+                  << std::endl;
+        return 1;
+    }
     catch (...)
     {
-        std::cerr << "Caught unnamed exception" << std::endl;
+        std::cerr << "Caught unknown exception\n";
+        return 1;
     }
+
     return 0;
 }

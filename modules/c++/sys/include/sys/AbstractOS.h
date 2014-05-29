@@ -202,7 +202,7 @@ public:
      *  Create a symlink, pathnames can be either absolute or relative
      */
     virtual void createSymlink(const std::string& origPathname, 
-                               const std::string& symlinkPathname) = 0;
+                               const std::string& symlinkPathname) const = 0;
 
     /*!
      *  Get the total RAM and available RAM on the system in megabytes

@@ -157,8 +157,11 @@ public:
      *  Create a symlink, pathnames can be either absolute or relative
      */
     virtual void createSymlink(const std::string& origPathname, 
-                               const std::string& symlinkPathname);
+                               const std::string& symlinkPathname) const;
 
+    /*!
+     *  Get the total RAM and available RAM on the system in megabytes
+     */
     virtual void getMemInfo(size_t& totalPhysMem, size_t& freePhysMem) const;
 
 protected:

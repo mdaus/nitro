@@ -238,9 +238,13 @@ size_t sys::OSUnix::getNumCPUs() const
 }
 
 void sys::OSUnix::createSymlink(const std::string& origPathname, 
-                                const std::string& symlinkPathname)
+                                const std::string& symlinkPathname) const
 {
-    symlink(origPathname.c_str(), symlinkPathname.c_str());
+    if(symlink(origPathname.c_str(), symlinkPathname.c_str()))
+    {
+        throw sys::SystemException(Ctxt(
+                "Symlink creation has failed"));
+    }
 }
 
 size_t sysconfCaller(int name)
