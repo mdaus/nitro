@@ -36,10 +36,6 @@ int main(int argc, char **argv)
         sys::Path p("this/that");
         p.makeDirectory(true);
         os.createSymlink(p.getAbsolutePath(), "symlink");
-
-        std::cout << "readSymlink(): " << os.readSymlink("symlink") << std::endl;
-
-
     }
     catch (...)
     {
