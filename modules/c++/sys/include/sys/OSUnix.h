@@ -30,7 +30,6 @@
 #include "sys/Conf.h"
 #include <dirent.h>
 #include <sys/utsname.h>
-#include "sys/sysinfo.h"
 
 namespace sys
 {

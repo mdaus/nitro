@@ -245,22 +245,12 @@ void sys::OSUnix::createSymlink(const std::string& origPathname,
 
 void sys::OSUnix::getMemInfo(size_t& totalPhysMem, size_t& freePhysMem) const
 {
-    struct sysinfo memInfo;
-    if(!sysinfo(&memInfo))
-    {
-        totalPhysMem = memInfo.totalram;
-        totalPhysMem *= memInfo.mem_unit;
-        freePhysMem = memInfo.freeram;
-        freePhysMem *= memInfo.mem_unit;
+    size_t pageSize = sysconf(_SC_PAGESIZE);
+    size_t totalNumPages = sysconf(_SC_PHYS_PAGES);
+    size_t availNumPages = sysconf(_SC_AVPHYS_PAGES);
 
-        // convert to megabytes
-        totalPhysMem /= (1024*1024);
-        freePhysMem /= (1024*1024);
-    }
-    else
-    {
-        throw sys::SystemException(Ctxt("Call to sysinfo() has failed"));
-    }
+    totalPhysMem = (pageSize*totalNumPages/1024)/1024;
+    freePhysMem = (pageSize*availNumPages/1024)/1024;
 }
 
 void sys::DirectoryUnix::close()
