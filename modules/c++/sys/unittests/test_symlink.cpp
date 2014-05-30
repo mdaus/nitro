@@ -52,8 +52,8 @@ TEST_CASE(testCreateSymlink)
 
         std::ifstream fin;
         fin.open("symlink/test.txt");
-        std::string input((std::istreambuf_iterator<char>(fin)),
-                         std::istreambuf_iterator<char>());
+        std::string input;
+        std::getline(fin, input);
         fin.close();
 
         TEST_ASSERT_EQ(input, output);
