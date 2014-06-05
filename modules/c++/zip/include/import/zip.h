@@ -5,5 +5,6 @@
 #include "zip/GZipOutputStream.h"
 #include "zip/ZipEntry.h"
 #include "zip/ZipFile.h"
+#include "zip/ZipOutputStream.h"
 
 #endif
