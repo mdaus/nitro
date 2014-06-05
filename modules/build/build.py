@@ -1160,6 +1160,10 @@ def configure(self):
     sys_platform = getPlatform(default=Options.platform)
     winRegex = r'win32'
     
+    path = Utils.to_list(self.path.abspath())
+    if path.__len__() > 1 and sys_platform != 'win32':
+        raise Errors.WafError('Path "%s" contains spaces which cannot be resolved by the system.'%self.path.abspath())
+    
     self.msg('Platform', sys_platform, color='GREEN')
     
     # Dirty fix to get around libpath problems..
