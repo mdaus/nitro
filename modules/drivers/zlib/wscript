@@ -118,6 +118,24 @@ def build(bld):
             bld(features='install_tgt', install_path=env['install_includedir'],
                 dir=minizipNode, pattern=['zip.h', 'ioapi.h'])
 
+        if env['install_source']:
+            zlib.features += ' add_targets'
+            zlib.targets_to_add = ['ZIP_SOURCE_INSTALL']
+
+            sourceNode = driversNode.make_node('source')
+            bld.install_tgt(files = fname + '.tar',
+                            dir = driversNode,
+                            install_path = os.path.join('${PREFIX}',
+                            sourceNode.path_from(driversNode)),
+                            relative_trick=True,
+                            name='ZIP_SOURCE_INSTALL')
+
+            # TODO: This is a hack to make USELIB_CHECK happy.  Not sure how
+            #       to cleanly get around this.
+            bld(features = 'install_tgt',
+                dir = driversNode,
+                name='MINIZIP_SOURCE_INSTALL')
+
 def distclean(context):
     #remove the untarred directories
     import shutil
