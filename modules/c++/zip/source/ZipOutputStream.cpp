@@ -20,6 +20,8 @@ void ZipOutputStream::createFileInZip(const std::string& filename,
     sys::Int32_T results = 0;
     zip_fileinfo zipFileInfo;
 
+    memset(&zipFileInfo, 0, sizeof(zipFileInfo));
+
     // Add the file
     results = zipOpenNewFileInZip3_64(
             mZip,
