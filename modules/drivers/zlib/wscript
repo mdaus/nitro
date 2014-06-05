@@ -46,6 +46,7 @@ def configure(conf):
                 conf.fatal('Missing zlib tarfile')
 
             conf.env['MAKE_ZIP'] = True
+            conf.env['MAKE_MINIZIP'] = True
             conf.msg('Building local lib', 'zip (zlib)')
             
             untarFile(path=conf.path, fname=ZLIB_VERSION + '.tar')
@@ -96,7 +97,7 @@ def build(bld):
         # think this is needed.  Note that here I am building just enough to
         # get compression to work, not decompression.
         minizipDir = os.path.join('contrib', 'minizip')
-        minizipIncludes = ['.', minizipDir]
+        minizipIncludes = ['.', minizipDir, 'foo']
         minizip = bld(features='c c%s' % env['LIB_TYPE'] or 'stlib',
                          includes=minizipIncludes,
                          export_includes=minizipIncludes,
