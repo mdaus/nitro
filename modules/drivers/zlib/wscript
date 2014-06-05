@@ -31,6 +31,15 @@ def configure(conf):
                        msg='Checking for library zlib', okmsg=zipHome,
                        mandatory=False)
 
+            # TODO: This is a little hokey since in reality if someone just
+            #       built zlib from a tarball they would not get this library
+            conf.check(lib='minizip', uselib_store='MINIZIP',
+                       header_name='zip.h', function_name='zipOpen',
+                       libpath=os.path.join(zipHome, 'lib'),
+                       includes=os.path.join(zipHome, 'include'),
+                       msg='Checking for library minizip', okmsg=zipHome,
+                       mandatory=False)
+
         elif Options.options.build_zip:
             # Build is off by default when tarfile not found, fail if forced on
             if not os.path.exists(os.path.join(conf.path.abspath(), ZLIB_VERSION + '.tar')):
@@ -47,6 +56,11 @@ def configure(conf):
                        msg='Checking for library zlib',
                        mandatory=False)
 
+            conf.check(lib='minizip', uselib_store='MINIZIP',
+                       header_name='zip.h', function_name='zipOpen',
+                       msg='Checking for library minizip',
+                       mandatory=False)
+
 def build(bld):
     variant = bld.env['VARIANT']
     env = bld.all_envs[variant]
@@ -57,11 +71,10 @@ def build(bld):
         fname = ZLIB_VERSION
         
         driverNode = driversNode.make_node(fname)
-        
+
+        defs = env['DEFINES']
         if env['CC_NAME'] == 'msvc' and env['LIB_TYPE'] == 'shlib':
-            defs = ['ZLIB_DLL']
-        else:
-            defs = []
+            defs += ['ZLIB_DLL']
         
         zlib = bld(features='c c%s' % env['LIB_TYPE'] or 'stlib',
                          includes=['.'],
@@ -70,15 +83,40 @@ def build(bld):
                          source='adler32.c crc32.c deflate.c infback.c inffast.c inflate.c inftrees.c trees.c zutil.c ' \
                                 'compress.c uncompr.c gzclose.c gzlib.c gzread.c gzwrite.c',
                          path=driverNode,
-                         defines=env['DEFINES'] + defs,
+                         defines=defs,
                          env=env.derive(),
                          name='ZIP')
+
+        # Minizip is included in the zlib tarball but is not built when you
+        # just run configure.  Beyond that, when you build minizip, you just
+        # get two binaries and no actual library.
+        # There is a configure.ac that looks like it would do a check for
+        # unistd.h but this configure does not appear to ever actually get run
+        # and a check for that header doesn't appear in the code, so I don't
+        # think this is needed.  Note that here I am building just enough to
+        # get compression to work, not decompression.
+        minizipDir = os.path.join('contrib', 'minizip')
+        minizipIncludes = ['.', minizipDir]
+        minizip = bld(features='c c%s' % env['LIB_TYPE'] or 'stlib',
+                         includes=minizipIncludes,
+                         export_includes=minizipIncludes,
+                         target='minizip',
+                         source=[os.path.join(minizipDir, 'ioapi.c'), 
+                                 os.path.join(minizipDir, 'zip.c')],
+                         path=driverNode,
+                         name='MINIZIP')
+
         if env['install_libs']:
             zlib.install_path = env['install_libdir']
-        
+            minizip.install_path = env['install_libdir']
+
         if env['install_headers']:
             bld(features='install_tgt', install_path=env['install_includedir'],
                 dir=driverNode, pattern='zlib.h')
+
+            minizipNode = driverNode.find_dir(minizipDir)
+            bld(features='install_tgt', install_path=env['install_includedir'],
+                dir=minizipNode, pattern=['zip.h', 'ioapi.h'])
 
 def distclean(context):
     #remove the untarred directories
