@@ -1,31 +1,52 @@
+/* =========================================================================
+ * This file is part of zip-c++
+ * =========================================================================
+ *
+ * (C) Copyright 2004 - 2014, General Dynamics - Advanced Information Systems
+ *
+ * zip-c++ is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
+ * see <http://www.gnu.org/licenses/>.
+ *
+ */
+
 #include <zip/ZipOutputStream.h>
 #include <io/FileInputStream.h>
 #include <except/Exception.h>
 
 namespace zip
 {
-ZipOutputStream::ZipOutputStream(const std::string& file)
+ZipOutputStream::ZipOutputStream(const std::string& pathname)
 {
-    mZip = zipOpen64(file.c_str(), APPEND_STATUS_CREATE);
+    mZip = zipOpen64(pathname.c_str(), APPEND_STATUS_CREATE);
     if (mZip == NULL)
-        throw except::IOException(Ctxt(FmtX("Failed to open zip stream [%s].",
-                file.c_str())));
+        throw except::IOException(Ctxt("Failed to open zip stream " + 
+                pathname));
 
 }
 
-void ZipOutputStream::createFileInZip(const std::string& filename,
+void ZipOutputStream::createFileInZip(const std::string& pathname,
                                       const std::string& comment,
                                       const std::string& password)
 {
-    sys::Int32_T results = 0;
     zip_fileinfo zipFileInfo;
 
     memset(&zipFileInfo, 0, sizeof(zipFileInfo));
 
     // Add the file
-    results = zipOpenNewFileInZip3_64(
+    sys::Int32_T results = zipOpenNewFileInZip3_64(
             mZip,
-            filename.c_str(),
+            pathname.c_str(),
             &zipFileInfo,
             NULL,
             0,
@@ -43,8 +64,8 @@ void ZipOutputStream::createFileInZip(const std::string& filename,
             0);
 
     if (results != Z_OK)
-         throw except::IOException(Ctxt(FmtX("Failed to create file [%s].",
-                filename.c_str())));
+         throw except::IOException(Ctxt("Failed to create file " + 
+                pathname));
 }
 
 void ZipOutputStream::closeFileInZip()
@@ -54,12 +75,12 @@ void ZipOutputStream::closeFileInZip()
          throw except::IOException(Ctxt("Failed to close file at zip location."));
 }
 
-void ZipOutputStream::write(const std::string& inputFile,
-                            const std::string& zipFilepath)
+void ZipOutputStream::write(const std::string& inputPathname,
+                            const std::string& zipPathname)
 {
-    io::FileInputStream input(inputFile);
+    io::FileInputStream input(inputPathname);
 
-    createFileInZip(zipFilepath);
+    createFileInZip(zipPathname);
     input.streamTo(*this);
     closeFileInZip();
 }
@@ -75,8 +96,7 @@ void ZipOutputStream::write(const sys::byte* b, sys::Size_T len)
 
 void ZipOutputStream::close()
 {
-    sys::Int32_T results = 0;
-    results = zipClose(mZip, NULL);
+    sys::Int32_T results = zipClose(mZip, NULL);
     if (results != Z_OK)
         throw except::IOException(Ctxt("Failed to save zip file."));
 }

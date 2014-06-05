@@ -1,3 +1,25 @@
+/* =========================================================================
+ * This file is part of zip-c++
+ * =========================================================================
+ *
+ * (C) Copyright 2004 - 2014, General Dynamics - Advanced Information Systems
+ *
+ * zip-c++ is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
+ * see <http://www.gnu.org/licenses/>.
+ *
+ */
+
 #ifndef __ZIP_ZIP_OUTPUT_STREAM_H__
 #define __ZIP_ZIP_OUTPUT_STREAM_H__
 
@@ -20,43 +42,39 @@ public:
      *  \func Constructor
      *  \brief Sets up the internal structure of the class.
      *
-     *  \param file The path and filename of the zip.
+     *  \param pathname The path and filename of the zip.
      */
-    ZipOutputStream(const std::string& file);
-
-    virtual ~ZipOutputStream()
-    {
-    }
+    ZipOutputStream(const std::string& pathname);
 
     /*
      *  \func createFileInZip
      *  \brief Creates a new file within the zip which can be written to.
      *
-     *  \filename The directory path and filename as it will appear in the zip.
+     *  \pathname The directory path and filename as it will appear in the zip.
      *  \comment An optional comment.
      *  \password An optional password for the file.
      */
-    void createFileInZip(const std::string& filename,
+    void createFileInZip(const std::string& pathname,
                          const std::string& comment = "",
                          const std::string& password = "");
 
     /*
      *  \func closeFileInZip
-     *  \brief Closes a file that was openned by createFileInZip. This will
+     *  \brief Closes a file that was opened by createFileInZip. This will
      *         throw if a file was not created.
      */
     void closeFileInZip();
 
     /*
      *  \func write
-     *  \brief Convience function which will create, write, and close a file.
+     *  \brief Convenience function which will create, write, and close a file.
      *
-     *  \inputFile The path to the file that you want added to the zip.
-     *  \zipFilepath The path and file name you want the inputFile to appear
-     *               as in the zip file.
+     *  \inputPathname The path to the file that you want added to the zip.
+     *  \zipPathname The path and file name you want the inputPathname to 
+     *               appear as in the zip file.
      */
-    void write(const std::string& inputFile,
-               const std::string& zipFilepath);
+    void write(const std::string& inputPathname,
+               const std::string& zipPathname);
 
     virtual void write(const sys::byte* b, sys::Size_T len);
 
