@@ -26,33 +26,26 @@
 
 #include "logging/LoggerFactory.h"
 
-
-logging::LoggerManager::~LoggerManager()
-{
-    for (std::map<std::string, logging::Logger*>::iterator it =  mLoggerMap.begin();
-            it != mLoggerMap.end(); ++it)
-    {
-        if (it->second)
-        {
-            delete it->second;
-        }
-    }
-}
-
-logging::Logger* logging::LoggerManager::getLogger(std::string name)
+mem::SharedPtr<logging::Logger>
+logging::LoggerManager::getLoggerSharedPtr(const std::string& name)
 {
     mt::CriticalSection<sys::Mutex> obtainLock(&mMutex);
-    if (mLoggerMap.find(name) == mLoggerMap.end())
+
+    const std::map<std::string, mem::SharedPtr<Logger> >::const_iterator iter =
+            mLoggerMap.find(name);
+
+    if (iter == mLoggerMap.end())
     {
-        logging::Logger* logger = new logging::DefaultLogger(name);
+        mem::SharedPtr<logging::Logger>
+                logger(new logging::DefaultLogger(name));
         mLoggerMap[name] = logger;
+        return logger;
     }
-    return mLoggerMap[name];
+    else
+    {
+        return iter->second;
+    }
 }
-
-
-
-
 
 void logging::debug(const std::string& msg)
 { logging::LoggerFactory::getInstance().getLogger()->debug(msg); }
@@ -91,7 +84,13 @@ void logging::setLogLevel(logging::LogLevel level)
     logging::LoggerFactory::getInstance().getLogger()->setLevel(level);
 }
 
-logging::Logger* logging::getLogger(std::string name)
+logging::Logger* logging::getLogger(const std::string& name)
 {
     return logging::LoggerFactory::getInstance().getLogger(name);
+}
+
+mem::SharedPtr<logging::Logger>
+logging::getLoggerSharedPtr(const std::string& name)
+{
+    return logging::LoggerFactory::getInstance().getLoggerSharedPtr(name);
 }

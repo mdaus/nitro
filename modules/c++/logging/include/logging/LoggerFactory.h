@@ -8,6 +8,7 @@
 #include <map>
 #include <import/sys.h>
 #include <import/mt.h>
+#include <mem/SharedPtr.h>
 #include "logging/DefaultLogger.h"
 
 namespace logging
@@ -23,12 +24,21 @@ namespace logging
 class LoggerManager
 {
 private:
-    std::map<std::string, Logger*> mLoggerMap; //! map for storing Loggers
+    std::map<std::string, mem::SharedPtr<Logger> > mLoggerMap; //! map for storing Loggers
     sys::Mutex mMutex; //! mutex used for locking the map
 
 public:
-    LoggerManager() {}
-    ~LoggerManager();
+    LoggerManager()
+    {
+    }
+
+    /*!
+     * Returns the Logger with the specified name. If a logger with the
+     * given name does not exist, a new Logger is created, loaded with the
+     * default values in the sytem. If the name is not supplied, the root logger
+     * is used by default.
+     */
+    mem::SharedPtr<Logger> getLoggerSharedPtr(const std::string& name = "root");
 
     /*!
      * Returns the Logger with the specified name. If a logger with the
@@ -36,7 +46,10 @@ public:
      * default values in the sytem. If the name is not supplied, the root logger
      * is used by default.
      */
-    Logger* getLogger(std::string name = "root");
+    Logger* getLogger(const std::string& name = "root")
+    {
+        return getLoggerSharedPtr(name).get();
+    }
 };
 
 /*!
@@ -89,7 +102,8 @@ void critical(except::Throwable& t);
 void setLogLevel(LogLevel level);
 
 //! get a Logger of the given name
-Logger* getLogger(std::string name = "root");
+Logger* getLogger(const std::string& name = "root");
+mem::SharedPtr<Logger> getLoggerSharedPtr(const std::string& name = "root");
 
 }
 #endif
