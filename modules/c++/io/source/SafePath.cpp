@@ -23,14 +23,17 @@
 #include <io/SafePath.h>
 #include <unique/UUID.hpp>
 #include <sys/OS.h>
+#include <sys/Path.h>
 
 namespace io
 {
 
 SafePath::SafePath(const std::string& realPathname) :
     mRealPathname(realPathname),
-    mTempPathname(unique::generateUUID() + ".tmp"),
-    moved(false)
+    mTempPathname(sys::Path::joinPaths(
+                  sys::Path::splitPath(realPathname).first, 
+                  unique::generateUUID() + ".tmp")),
+    mMoved(false)
 {
 }
 
@@ -38,40 +41,50 @@ SafePath::~SafePath()
 {
     try
     {
-        sys::OS os;
-        moveFile();
-        if(!moved)
+        try
         {
-            os.remove(mTempPathname);
+            moveFile();
+        }
+        catch(...)
+        {
+            sys::OS os;
+            if(os.exists(mTempPathname))
+            {
+                os.remove(mTempPathname);
+            }
         }
     }
-    catch(...){}
+    catch(...)
+    {
+        /* do nothing */
+    }
 }
 
 std::string SafePath::getTempPathname() const
 {
-    if(moved)
+    if(mMoved)
     {
         throw except::Exception(Ctxt(
-                "File has already been moved, use of getTemp() is invalid."));
+            "File has already been moved, \
+             use of getTempPathname() is invalid."));
     }
     return mTempPathname;
 }
 
 void SafePath::moveFile()
 {
-    if(!moved)
+    if(!mMoved)
     {
         sys::OS os;
         if(os.move(mTempPathname, mRealPathname))
         {
-            moved = true;
+            mMoved = true;
         }
         else
         {
             throw except::Exception(Ctxt(
-                           "Error renaming file from " + mTempPathname + " to " 
-                           + mRealPathname + " in moveFile()."));
+                "Error renaming file from " + mTempPathname + " to " 
+                + mRealPathname + " in moveFile()."));
         }
     }
 }

@@ -66,7 +66,7 @@ private:
 
     const std::string mRealPathname;
     const std::string mTempPathname;
-    bool moved;
+    bool mMoved;
 };
 
 }

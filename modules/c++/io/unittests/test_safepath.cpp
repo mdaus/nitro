@@ -16,15 +16,19 @@ TEST_CASE(TempFileTest)
     try
     {
         sys::OS os;
-        std::string realFileName = "that.txt";
+        os.makeDirectory("this");
+        os.makeDirectory("this/that");
+        std::string realFileName = "this/that/theother.txt";
         std::string tempFileName;
-        std::string fileContents = "hello, world. please enjoy my test message.";
+        std::string fileContents = "hello, world. please enjoy my test message";
         {
             io::SafePath temp(realFileName);
             tempFileName = temp.getTempPathname();
-            io::FileOutputStreamOS fout(temp.getTempPathname(), sys::File::CREATE);
+            io::FileOutputStreamOS fout(temp.getTempPathname(), 
+                                        sys::File::CREATE);
             fout.write(fileContents);
             fout.close();
+            std::cout << tempFileName << std::endl;
             temp.moveFile();
             temp.moveFile();
         }
@@ -39,7 +43,7 @@ TEST_CASE(TempFileTest)
 
         TEST_ASSERT_EQ(input, fileContents);
 
-        os.remove(realFileName);
+        os.remove("this");
     }
     catch (except::Exception& e)
     {
