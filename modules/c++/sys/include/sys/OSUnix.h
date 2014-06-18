@@ -160,6 +160,11 @@ public:
                                const std::string& symlinkPathname) const;
 
     /*!
+     * Remove a symlink, pathname can be absolute or relative
+     */
+    virtual void removeSymlink(const std::string& symlinkPathname) const;
+
+    /*!
      *  Get the total RAM and available RAM on the system in megabytes
      */
     virtual void getMemInfo(size_t& totalPhysMem, size_t& freePhysMem) const;

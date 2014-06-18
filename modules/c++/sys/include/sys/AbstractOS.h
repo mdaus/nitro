@@ -104,6 +104,7 @@ public:
 
     /*!
      *  Remove file with this path name
+     *  This method will not remove symlinks, use removeSymlink()
      */
     virtual void remove(const std::string& path) const;
 
@@ -203,6 +204,11 @@ public:
      */
     virtual void createSymlink(const std::string& origPathname, 
                                const std::string& symlinkPathname) const = 0;
+
+    /*!
+     * Remove a symlink, pathname can be absolute or relative
+     */
+    virtual void removeSymlink(const std::string& symlinkPathname) const = 0;
 
     /*!
      *  Get the total RAM and available RAM on the system in megabytes
