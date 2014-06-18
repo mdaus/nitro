@@ -33,7 +33,7 @@ namespace
 
 TEST_CASE(testCreateSymlink)
 {
-	try
+    try
     {
         sys::OS os;
         sys::Path p("this/that");
@@ -59,12 +59,7 @@ TEST_CASE(testCreateSymlink)
         TEST_ASSERT_EQ(input, output);
 
         os.remove("this");
-
-#if defined(WIN32)
-        RemoveDirectory("symlink");
-#else
-        unlink("symlink");
-#endif
+        os.removeSymlink("symlink");
 
         TEST_ASSERT(!os.exists("symlink"));
         TEST_ASSERT(!os.exists("this/that"));
@@ -92,7 +87,7 @@ TEST_CASE(testCreateSymlink)
 
 int main(int argc, char** argv)
 {
-	TEST_CHECK(testCreateSymlink);
+    TEST_CHECK(testCreateSymlink);
 
-	return 0;
+    return 0;
 }
