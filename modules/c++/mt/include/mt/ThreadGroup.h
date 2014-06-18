@@ -25,10 +25,14 @@
 
 #include <vector>
 #include <memory>
+#include <exception>
 #include "sys/Runnable.h"
 #include "sys/Thread.h"
 #include "mem/SharedPtr.h"
 #include "except/Error.h"
+#include <sys/Mutex.h>
+
+
 
 namespace mt
 {
@@ -42,7 +46,6 @@ namespace mt
  * sys::Runnable objects and wait for all threads to complete.
  *
  */
-
 class ThreadGroup
 {
 public:
@@ -68,14 +71,47 @@ public:
     void createThread(std::auto_ptr<sys::Runnable> runnable);
     
     /*!
-    *  Waits for all threads to complete.
-    */
+     * Waits for all threads to complete.
+     */
     void joinAll();
 
 private:
     std::vector<mem::SharedPtr<sys::Thread> > mThreads;
     size_t mLastJoined;
+    std::vector<except::Exception> mExceptions;
+    sys::Mutex mMutex;
+
+    /*!
+     * Adds an exception to the mExceptions vector
+     */
+    void addException(const except::Exception& ex);
+
+    /*!
+     * \class ThreadGroupRunnable
+     *
+     * \brief Internal runnable class to safeguard against running
+     * threads who throw exceptions
+     */
+    class ThreadGroupRunnable : public sys::Runnable
+    {
+    public:
+
+        //! Constructor.
+        ThreadGroupRunnable(std::auto_ptr<sys::Runnable> runnable,
+                            mt::ThreadGroup& parentThreadGroup);
+
+        /*!
+         *  Call run() on the Runnable passed to createThread
+         */
+        virtual void run();
+
+    private:
+        std::auto_ptr<sys::Runnable> mRunnable;
+        mt::ThreadGroup& mParentThreadGroup;
+
+    };
 };
+
 }
 
 #endif

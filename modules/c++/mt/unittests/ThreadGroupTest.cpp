@@ -75,7 +75,7 @@ TEST_CASE(ThreadGroupTest)
     state = 3;
 
     TEST_ASSERT_EQ(numDeleted, 0);
-    
+
     delete threads;
     TEST_ASSERT_EQ(numDeleted, 3);
 }

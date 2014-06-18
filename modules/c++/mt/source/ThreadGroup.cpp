@@ -20,7 +20,8 @@
  *
  */
 
-#include "mt/ThreadGroup.h"
+#include <mt/ThreadGroup.h>
+#include <mt/CriticalSection.h>
 
 mt::ThreadGroup::ThreadGroup() :
     mLastJoined(0)
@@ -46,8 +47,9 @@ void mt::ThreadGroup::createThread(sys::Runnable *runnable)
 
 void mt::ThreadGroup::createThread(std::auto_ptr<sys::Runnable> runnable)
 {
-    mem::SharedPtr<sys::Thread> thread(new sys::Thread(runnable.get()));
-    runnable.release();
+    std::auto_ptr<sys::Runnable> internalRunnable(new ThreadGroupRunnable(runnable, *this));
+    mem::SharedPtr<sys::Thread> thread(new sys::Thread(internalRunnable.get()));
+    internalRunnable.release();
     mThreads.push_back(thread);
     thread->start();
 }
@@ -68,6 +70,56 @@ void mt::ThreadGroup::joinAll()
         }
     }
     
+    if (!mExceptions.empty())
+    {
+        std::string messageString("Exceptions thrown from ThreadGroup in the following order:\n");
+        for (size_t ii=0; ii<mExceptions.size(); ++ii)
+        {
+            messageString += mExceptions.at(ii).toString();
+        }
+        throw except::Exception(Ctxt(messageString));
+    }
+
     if (failed)
         throw except::Error(Ctxt("ThreadGroup could not be joined"));
+}
+
+void mt::ThreadGroup::addException(const except::Exception& ex)
+{
+    try
+    {
+        mt::CriticalSection<sys::Mutex> pushLock(&mMutex);
+        mExceptions.push_back(ex);
+    }
+    catch(...)
+    {
+        fprintf(stderr, "Error adding exception from a thread to mExceptions.\n");
+    }
+}
+
+mt::ThreadGroup::ThreadGroupRunnable::ThreadGroupRunnable
+    (std::auto_ptr<sys::Runnable> runnable, mt::ThreadGroup& parentThreadGroup):
+        mRunnable(runnable), mParentThreadGroup(parentThreadGroup)
+{
+}
+
+void mt::ThreadGroup::ThreadGroupRunnable::run()
+{
+    try
+    {
+        mRunnable->run();
+    }
+    catch(const except::Exception& ex)
+    {
+        mParentThreadGroup.addException(ex);
+    }
+    catch(const std::exception& ex)
+    {
+        mParentThreadGroup.addException(except::Exception(Ctxt(ex.what())));
+    }
+    catch(...)
+    {
+        mParentThreadGroup.addException(
+            except::Exception(Ctxt("Unknown ThreadGroup exception.")));
+    }
 }
