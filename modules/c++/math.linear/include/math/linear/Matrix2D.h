@@ -1140,13 +1140,15 @@ template<typename _T>
  */
 template<typename _T> inline Matrix2D<_T> inverse2x2(const Matrix2D<_T>& mx)
 {
-    Matrix2D<_T> inv(2, 2);
-    double determinant = mx(1,1) * mx(0,0) - mx(1,0)*mx(0,1);
+    const double determinant = mx(1,1) * mx(0,0) - mx(1,0)*mx(0,1);
     
-    if (equals(determinant, 0.0))
+    if (almostZero(determinant))
+    {
         throw except::Exception(Ctxt("Non-invertible matrix!"));
+    }
 
     // Standard 2x2 inverse
+    Matrix2D<_T> inv(2, 2);
     inv(0,0) =  mx(1,1);
     inv(0,1) = -mx(0,1);
     inv(1,0) = -mx(1,0);
@@ -1165,8 +1167,6 @@ template<typename _T> inline Matrix2D<_T> inverse2x2(const Matrix2D<_T>& mx)
 template<typename _T> inline Matrix2D<_T> 
     inverse3x3(const Matrix2D<_T>& mx)
 {
-    Matrix2D<double> inv(3, 3);
-
     double a = mx(0,0);
     double b = mx(0,1);
     double c = mx(0,2);
@@ -1183,13 +1183,14 @@ template<typename _T> inline Matrix2D<_T>
     double g2 = d*i - f*g;
     double g3 = d*h - e*g;
 
-    double determinant = 
-        a*g1 - b*g2 + c*g3;
+    const double determinant = a*g1 - b*g2 + c*g3;
     
-    if (equals(determinant, 0.0))
+    if (almostZero(determinant))
+    {
         throw except::Exception(Ctxt("Non-invertible matrix!"));
+    }
 
-
+    Matrix2D<double> inv(3, 3);
     inv(0,0) =  g1; inv(0,1) =  c*h - b*i; inv(0,2) =  b*f - c*e;
     inv(1,0) = -g2; inv(1,1) =  a*i - c*g; inv(1,2) =  c*d - a*f;
     inv(2,0) =  g3; inv(2,1) =  b*g - a*h; inv(2,2) =  a*e - b*d;
@@ -1213,8 +1214,6 @@ template<typename _T> inline Matrix2D<_T>
 template<typename _T> inline
     Matrix2D<_T> inverseLU(const Matrix2D<_T>& mx)
 {
-   
-
     size_t M = mx.rows();
     size_t N = mx.cols();
     Matrix2D<_T> a(M, M, (_T)0);
@@ -1227,12 +1226,13 @@ template<typename _T> inline
     
     for (size_t i = 0; i < N; i++)
     {
-        if ( equals<_T>(lu(i, i), 0) )
+        if (almostZero(lu(i, i)))
+        {
             throw except::Exception(Ctxt("Non-invertible matrix!"));
+        }
     }
 
     return solveLU(pivots, lu, a);
-
 }
 
 /*!

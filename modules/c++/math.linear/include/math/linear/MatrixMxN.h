@@ -47,8 +47,22 @@ template<> inline bool equals(const float& e1, const float& e2)
 }
 template<> inline bool equals(const double& e1, const double& e2)
 {
-    // Its a really bold assertion here to say numeric_limits<double>
+    // It's a really bold assertion here to say numeric_limits<double>
     return equals<double>(e1, e2, std::numeric_limits<float>::epsilon());
+}
+
+template <typename T>
+bool almostZero(const T& value)
+{
+    // Note that for double's this will differ from using equals(0, value)
+    // since we'll use numeric_limits<double>::epsilon() here.
+    // We're trying to assess if something is close to 0, and using epsilon()
+    // is in some sense just picking a magic number, but it's a number that
+    // will force double's to be closer to 0 than float's.  Had problems in
+    // the past using equals(0, value) for double's with the matrix inversion
+    // logic below when the determinant was close to 0 but still valid but
+    // equals was returning true.
+    return (std::abs(value) < std::numeric_limits<T>::epsilon());
 }
 
 /*!
@@ -1260,8 +1274,10 @@ template<size_t _ND, typename _T> inline
     
     for (size_t i = 0; i < _ND; i++)
     {
-        if ( equals<_T>(lu(i, i), 0) )
+        if (almostZero(lu(i, i)))
+        {
             throw except::Exception(Ctxt("Non-invertible matrix!"));
+        }
     }
 
     return solveLU<_ND, _ND, _ND, _T>(pivots, lu, a);
@@ -1314,13 +1330,15 @@ template<> inline
 math::linear::MatrixMxN<2, 2, double> 
 math::linear::inverse<2, double>(const math::linear::MatrixMxN<2, 2, double>& mx)
 {
-    math::linear::MatrixMxN<2, 2, double> inv;
-    double determinant = mx[1][1] * mx[0][0] - mx[1][0]*mx[0][1];
+    const double determinant = mx[1][1] * mx[0][0] - mx[1][0]*mx[0][1];
     
-    if (equals(determinant, 0.0))
+    if (math::linear::almostZero(determinant))
+    {
         throw except::Exception(Ctxt("Non-invertible matrix!"));
+    }
 
     // Standard 2x2 inverse
+    math::linear::MatrixMxN<2, 2, double> inv;
     inv[0][0] =  mx[1][1];
     inv[0][1] = -mx[0][1];
     inv[1][0] = -mx[1][0];
@@ -1334,8 +1352,6 @@ template<> inline
 math::linear::MatrixMxN<3, 3, double> 
 math::linear::inverse<3, double>(const math::linear::MatrixMxN<3, 3, double>& mx)
 {
-    math::linear::MatrixMxN<3, 3> inv;
-
     double a = mx[0][0];
     double b = mx[0][1];
     double c = mx[0][2];
@@ -1352,13 +1368,15 @@ math::linear::inverse<3, double>(const math::linear::MatrixMxN<3, 3, double>& mx
     double g2 = d*i - f*g;
     double g3 = d*h - e*g;
 
-    double determinant = 
+    const double determinant =
         a*g1 - b*g2 + c*g3;
     
-    if (math::linear::equals(determinant, 0.0))
+    if (math::linear::almostZero(determinant))
+    {
         throw except::Exception(Ctxt("Non-invertible matrix!"));
+    }
 
-
+    math::linear::MatrixMxN<3, 3> inv;
     inv[0][0] =  g1; inv[0][1] =  c*h - b*i; inv[0][2] =  b*f - c*e;
     inv[1][0] = -g2; inv[1][1] =  a*i - c*g; inv[1][2] =  c*d - a*f;
     inv[2][0] =  g3; inv[2][1] =  b*g - a*h; inv[2][2] =  a*e - b*d;
@@ -1373,13 +1391,15 @@ template<> inline
 math::linear::MatrixMxN<2, 2, float> 
 math::linear::inverse<2, float>(const math::linear::MatrixMxN<2, 2, float>& mx)
 {
-    math::linear::MatrixMxN<2, 2, float> inv;
-    float determinant = mx[1][1] * mx[0][0] - mx[1][0]*mx[0][1];
+    const float determinant = mx[1][1] * mx[0][0] - mx[1][0]*mx[0][1];
     
-    if (math::linear::equals(determinant, 0.0f))
+    if (math::linear::almostZero(determinant))
+    {
         throw except::Exception(Ctxt("Non-invertible matrix!"));
+    }
 
     // Standard 2x2 inverse
+    math::linear::MatrixMxN<2, 2, float> inv;
     inv[0][0] =  mx[1][1];
     inv[0][1] = -mx[0][1];
     inv[1][0] = -mx[1][0];
@@ -1393,8 +1413,6 @@ template<> inline
 math::linear::MatrixMxN<3, 3, float> 
 math::linear::inverse<3, float>(const math::linear::MatrixMxN<3, 3, float>& mx)
 {
-    math::linear::MatrixMxN<3, 3, float> inv;
-
     float a = mx[0][0];
     float b = mx[0][1];
     float c = mx[0][2];
@@ -1411,13 +1429,14 @@ math::linear::inverse<3, float>(const math::linear::MatrixMxN<3, 3, float>& mx)
     float g2 = d*i - f*g;
     float g3 = d*h - e*g;
 
-    float determinant = 
-        a*g1 - b*g2 + c*g3;
+    const float determinant = a*g1 - b*g2 + c*g3;
     
-    if (equals(determinant, 0.0f))
+    if (math::linear::almostZero(determinant))
+    {
         throw except::Exception(Ctxt("Non-invertible matrix!"));
+    }
 
-
+    math::linear::MatrixMxN<3, 3, float> inv;
     inv[0][0] =  g1; inv[0][1] =  c*h - b*i; inv[0][2] =  b*f - c*e;
     inv[1][0] = -g2; inv[1][1] =  a*i - c*g; inv[1][2] =  c*d - a*f;
     inv[2][0] =  g3; inv[2][1] =  b*g - a*h; inv[2][2] =  a*e - b*d;
