@@ -270,6 +270,19 @@ void sys::OSWin32::createSymlink(const std::string& origPathname,
     }
 }
 
+void sys::OSWin32::removeSymlink(const std::string& symlinkPathname) const
+{
+	if (RemoveDirectory(symlinkPathname.c_str()) != true)
+    {
+        sys::Err err;
+        std::ostringstream oss;
+        oss << "Failure removing symlink [" <<  symlinkPathname <<
+            "] with error [" << err.toString() << "]";
+
+        throw except::Exception(Ctxt(oss.str()));
+    }
+}
+
 void sys::OSWin32::getMemInfo(size_t& totalPhysMem, size_t& freePhysMem) const
 {
     MEMORYSTATUSEX memInfo;

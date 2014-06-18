@@ -247,6 +247,19 @@ void sys::OSUnix::createSymlink(const std::string& origPathname,
     }
 }
 
+void sys::OSUnix::removeSymlink(const std::string& symlinkPathname) const
+{
+	if (::unlink(symlinkPathname.c_str()) != 0)
+	{
+		sys::Err err;
+		std::ostringstream oss;
+		oss << "Failure removing symlink [" <<  symlinkPathname <<
+			"] with error [" << err.toString() << "]";
+
+		throw except::Exception(Ctxt(oss.str()));
+	}
+}
+
 size_t sysconfCaller(int name)
 {
     long long returnVal = sysconf(name);
