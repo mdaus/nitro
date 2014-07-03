@@ -3,6 +3,7 @@ import os, platform, shutil
 from subprocess import check_call
 from optparse import OptionParser
 import platform
+from makeInstallPath import installPath
 
 parser = OptionParser()
 parser.add_option("-p", "--package", dest="package_name", help="Package name")
@@ -42,18 +43,14 @@ if 'studio11' in os.environ.get('JOB_NAME'):
     print 'Studio 11 Path: %s' % options.studio11_path
     os.environ['PATH'] += os.pathsep + ('%s/bin' % options.studio11_path)
     os.environ['LD_LIBRARY_PATH'] += os.pathsep + ('%s/lib' % options.studio11_path)
-    install_suffix = 'sparc-sun-solaris2.10-64-studio11'
     print 'Path: %s' % os.environ['PATH']
 elif 'studio12' in os.environ.get('JOB_NAME') or 'solaris' in os.environ.get('JOB_NAME'):
     print 'Studio 12 Path: %s' % options.studio12_path
     os.environ['PATH'] += os.pathsep + ('%s/bin' % options.studio12_path)
     os.environ['LD_LIBRARY_PATH'] += os.pathsep + ('%s/lib' % options.studio12_path)
-    install_suffix = 'sparc-sun-solaris2.10-64-studio12'
 elif 'linux' in os.environ.get('JOB_NAME'):
     os.environ['PATH'] += os.pathsep + ('%s/bin' % options.python27_path)
-    install_suffix = 'x86_64-linux-gnu-64'
 elif 'win32' in os.environ.get('JOB_NAME'):
-    install_suffix = 'win32'
     if platform.architecture()[0] == '64bit':
         # We're a 64-bit machine but running a 32-bit job
         java_home32 = os.environ.get('JAVA_HOME_32')
@@ -61,21 +58,18 @@ elif 'win32' in os.environ.get('JOB_NAME'):
             os.environ['JAVA_HOME'] = java_home32
         config_options += ['--enable-32bit']
 elif 'win64' in os.environ.get('JOB_NAME'):
-    install_suffix = 'win64'
 if '-mt' in os.environ.get('JOB_NAME'):
-    install_suffix += '-mt'
     config_options += ["--with-crt=MT"]
 if '-vc9' in os.environ.get('JOB_NAME'):
-	install_suffix += '-vc9'
-	config_options += ["--msvc_version=msvc 9.0,msvc 9.0Exp"]
+    config_options += ["--msvc_version=msvc 9.0,msvc 9.0Exp"]
 elif '-vc10' in os.environ.get('JOB_NAME'):
-	install_suffix += '-vc10'
-	config_options += ["--msvc_version=msvc 10.0,msvc 10.0Exp"]
+    config_options += ["--msvc_version=msvc 10.0,msvc 10.0Exp"]
 
 print 'Job: %s' % os.environ.get('JOB_NAME', '')
 print "Revision: %s" % os.environ.get('SVN_REVISION', '')
 print "LD_LIBRARY_PATH: %s" % os.environ.get('LD_LIBRARY_PATH','')
-install_path = "%s-%s-r%s" % (package_name,install_suffix,os.environ.get('SVN_REVISION', ''))
+
+install_path = installPath(package_name)
 
 os.chdir(build_dir)
 for f in glob.glob('%s-*' % package_name):
