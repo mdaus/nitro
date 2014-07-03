@@ -57,7 +57,7 @@ elif 'win32' in os.environ.get('JOB_NAME'):
         if java_home32:
             os.environ['JAVA_HOME'] = java_home32
         config_options += ['--enable-32bit']
-elif 'win64' in os.environ.get('JOB_NAME'):
+
 if '-mt' in os.environ.get('JOB_NAME'):
     config_options += ["--with-crt=MT"]
 if '-vc9' in os.environ.get('JOB_NAME'):
