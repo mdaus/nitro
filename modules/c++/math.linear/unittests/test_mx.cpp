@@ -81,6 +81,31 @@ TEST_CASE(testScaleMultiplyMxN)
     TEST_ASSERT_EQ(B, C);
 }
 
+TEST_CASE(testInvert2x2Complex)
+{
+    std::complex<double> q[4];
+    q[0] = std::complex<double>(-0.326773864841957, -0.326773864841957);
+    q[1] = std::complex<double>( 0.945102555946311,  0.945102555946311);
+    q[2] = std::complex<double>( 0.945102555946311,  0.945102555946311);
+    q[3] = std::complex<double>( 0.326773864841957,  0.326773864841957);
+
+    std::complex<double> correct[4];
+    correct[0] = std::complex<double>(-0.163387,  0.163387);
+    correct[1] = std::complex<double>( 0.472551, -0.472551);
+    correct[2] = std::complex<double>( 0.472551, -0.472551);
+    correct[3] = std::complex<double>( 0.163387, -0.163387);
+
+    MatrixMxN<2, 2, std::complex<double> > Q(q);
+
+    MatrixMxN<2, 2, std::complex<double> > Qinv = inverse(Q);
+
+    MatrixMxN<2, 2, std::complex<double> > C(correct);
+
+    foreach_ij(2, 2)
+    {
+        TEST_ASSERT_ALMOST_EQ_EPS(std::abs(Qinv(i, j)), std::abs(C(i, j)), .0001);
+    }
+}
 TEST_CASE(testInvert2x2)
 {
     double q[] = 
@@ -524,6 +549,7 @@ int main()
     TEST_CHECK(testGrabCols);
     TEST_CHECK(testArithmeticMxN);
     TEST_CHECK(testPermuteInvert2x2);
+    TEST_CHECK(testInvert2x2Complex);
     TEST_CHECK(testInvert2x2);
     TEST_CHECK(testInvert3x3);
     TEST_CHECK(testInvert4x4);

@@ -51,17 +51,24 @@ template<> inline bool equals(const double& e1, const double& e2)
     return equals<double>(e1, e2, std::numeric_limits<float>::epsilon());
 }
 
+/*!
+ *  Note that for double's this will differ from using equals(0, value)
+ *  since we'll use numeric_limits<double>::epsilon() here.
+ *  We're trying to assess if something is close to 0, and using epsilon()
+ *  is in some sense just picking a magic number, but it's a number that
+ *  will force double's to be closer to 0 than float's.  Had problems in
+ *  the past using equals(0, value) for double's with the matrix inversion
+ *  logic below when the determinant was close to 0 but still valid but
+ *  equals was returning true.
+ */
+template <typename T>
+bool almostZero(const std::complex<T>& value)
+{
+    return (std::abs(value) < std::numeric_limits<T>::epsilon());
+}
 template <typename T>
 bool almostZero(const T& value)
 {
-    // Note that for double's this will differ from using equals(0, value)
-    // since we'll use numeric_limits<double>::epsilon() here.
-    // We're trying to assess if something is close to 0, and using epsilon()
-    // is in some sense just picking a magic number, but it's a number that
-    // will force double's to be closer to 0 than float's.  Had problems in
-    // the past using equals(0, value) for double's with the matrix inversion
-    // logic below when the determinant was close to 0 but still valid but
-    // equals was returning true.
     return (std::abs(value) < std::numeric_limits<T>::epsilon());
 }
 
