@@ -89,6 +89,9 @@ TEST_CASE(testInvert2x2Complex)
     q[2] = std::complex<double>( 0.945102555946311,  0.945102555946311);
     q[3] = std::complex<double>( 0.326773864841957,  0.326773864841957);
 
+    //! TODO: Verify these numbers with an external tool --
+    //        These numbers are inbred and a result of the
+    //        module itself.
     std::complex<double> correct[4];
     correct[0] = std::complex<double>(-0.163387,  0.163387);
     correct[1] = std::complex<double>( 0.472551, -0.472551);
