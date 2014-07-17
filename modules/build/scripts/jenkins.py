@@ -61,7 +61,7 @@ elif 'win32' in os.environ.get('JOB_NAME'):
 if '-mt' in os.environ.get('JOB_NAME'):
     config_options += ["--with-crt=MT"]
 if '-vc9' in os.environ.get('JOB_NAME'):
-    config_options += ["--msvc_version=msvc 9.0,msvc 9.0Exp"]
+    config_options += ["--msvc_version=msvc 9.0,msvc 9.0Exp,wsdk 6.1"]
 elif '-vc10' in os.environ.get('JOB_NAME'):
     config_options += ["--msvc_version=msvc 10.0,msvc 10.0Exp"]
 
