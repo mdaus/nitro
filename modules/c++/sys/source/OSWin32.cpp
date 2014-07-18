@@ -126,7 +126,12 @@ void sys::OSWin32::removeDirectory(const std::string& pathname) const
 bool sys::OSWin32::move(const std::string& path, 
                         const std::string& newPath) const
 {
-    return (MoveFile(path.c_str(), newPath.c_str())) ? (true) : (false);
+    // MOVEFILE_REPLACE_EXISTING - forcefully move the file
+    // MOVEFILE_WRITE_THROUGH    - report status after performing a flush
+    return (MoveFileEx(path.c_str(), 
+                       newPath.c_str(), 
+                       MOVEFILE_REPLACE_EXISTING | 
+                       MOVEFILE_WRITE_THROUGH)) ? (true) : (false);
 }
 
 
