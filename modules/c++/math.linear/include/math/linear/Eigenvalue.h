@@ -133,13 +133,13 @@ public:
     }
 
     // Return the real parts of the eigenvalues
-    const Vector<RealT>& getRealEigenvalues()
+    const Vector<RealT>& getRealEigenvalues() const
     {
         return mD;
     }
 
     // Return the imaginary parts of the eigenvalues
-    const Vector<RealT>& getImagEigenvalues()
+    const Vector<RealT>& getImagEigenvalues() const
     {
         return mE;
     }
