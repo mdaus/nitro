@@ -176,6 +176,23 @@ public:
             mRaw = mStorage.get();
         }
     }
+
+    template <size_t _MD, size_t _ND>
+    Matrix2D(const MatrixMxN<_MD, _ND>& input) :
+        mM(_MD),
+        mN(_ND),
+        mMN(_MD * _ND),
+        mStorage(new _T[mMN]),
+        mRaw(mStorage.get())
+    {
+        for (size_t idx = 0, mm = 0; mm < _MD; ++mm)
+        {
+            for (size_t nn = 0; nn < _ND; ++nn, ++idx)
+            {
+                mRaw[idx] = input[mm][nn];
+            }
+        }
+    }
   
     /*!
      *  Assignment operator from one matrix to another
