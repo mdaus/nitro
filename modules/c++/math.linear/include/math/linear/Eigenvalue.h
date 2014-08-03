@@ -176,7 +176,7 @@ public:
      \param D: upon return, the matrix is filled with the block diagonal
      eigenvalue matrix.
      */
-    void getD(Matrix2D<RealT>& D)
+    void getD(Matrix2D<RealT>& D) const
     {
         D = Matrix2D<RealT>(mN, mN, static_cast<RealT>(0));
         for (int i = 0; i < mN; i++)
