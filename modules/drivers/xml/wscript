@@ -17,11 +17,11 @@ def options(opt):
                    help='force building XML layer from scratch', default=True)
     opt.add_option('--nobuild-xml', action='store_false', dest='build_xml',
                    help='force not building XML layer from scratch')
-
+        
     existingDirs = filter(lambda x: exists(join(opt.path.abspath(), x)), APIS.split())
     opt.recurse(existingDirs)
 
-def configure(conf):
+def configure(conf):    
     if Options.options.enable_xml:
         conf.msg('Configuring with XML layer', Options.options.xml_layer)
         existingDirs = filter(lambda x: exists(join(conf.path.abspath(), x)), APIS.split())

@@ -24,7 +24,7 @@
 #ifndef __SYS_CONDITION_VAR_IRIX_H__
 #define __SYS_CONDITION_VAR_IRIX_H__
 
-#if defined(__sgi) && defined(_REENTRANT) && !defined(__POSIX)
+#if defined(__sgi)
 
 #include <vector>
 #include "sys/SyncFactoryIrix.h"

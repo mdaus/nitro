@@ -348,7 +348,26 @@ class CPPContext(Context.Context):
             lib.targets_to_add.append(bld(features='install_tgt', pattern='**/*',
                                           dir=path.make_node('include'),
                                           install_path=env['install_includedir']))
-
+            
+            # copy config headers from target dir to install dir
+            moduleName = modArgs['name']
+            installPath = moduleName.replace('.', os.sep)
+            
+            d = {}
+            for line in env['header_builddir']:
+                split = line.split('=')
+                k = split[0]
+                v = join(self.bldnode.abspath(), split[1])
+                d[k] = v
+                
+            if moduleName in d:
+                configFilename = getConfigFilename(moduleName)
+                targetPath = bld.root.find_dir(d[moduleName]).path_from(path)
+                moduleNode = bld.path.make_node(targetPath)
+                lib.targets_to_add.append(bld(features='install_tgt', files=[configFilename],
+                                          dir=moduleNode,
+                                          install_path=join(env['install_includedir'], installPath)))
+            
         addSourceTargets(bld, env, path, lib)
 
         testNode = path.make_node('tests')
@@ -579,8 +598,8 @@ class CPPContext(Context.Context):
             variant = modArgs.get('variant', bld.env['VARIANT'] or 'default')
             env = bld.all_envs[variant]
         
-        if self.is_defined('HAVE_MEX_H'):
-        
+        if self.is_defined('HAVE_MATLAB'):
+            
             modArgs = dict((k.lower(), v) for k, v in modArgs.iteritems())
             lang = modArgs.get('lang', 'c++')
             libExeType = {'c++':'cxx', 'c':'c'}.get(lang, 'cxx')
@@ -788,8 +807,7 @@ def configureCompilerOptions(self):
     if re.match(appleRegex, sys_platform):
         self.env.append_value('LIB_DL', 'dl')
         self.env.append_value('LIB_NSL', 'nsl')
-        self.env.append_value('LIB_THREAD', 'pthread')
-        self.env.append_value('DEFINES_THREAD', '_REENTRANT')
+        self.env.append_value('LINKFLAGS_THREAD', '-pthread')
         self.check_cc(lib='pthread', mandatory=True)
 
         config['cxx']['debug']          = '-g'
@@ -813,17 +831,15 @@ def configureCompilerOptions(self):
         config['cc']['optz_fast']      = config['cxx']['optz_fast']
         config['cc']['optz_fastest']   = config['cxx']['optz_fastest']
 
-        self.env.append_value('DEFINES', '_FILE_OFFSET_BITS=64 _LARGEFILE_SOURCE __POSIX'.split())
+        self.env.append_value('DEFINES', '_FILE_OFFSET_BITS=64 _LARGEFILE_SOURCE'.split())
         self.env.append_value('CFLAGS', '-fPIC -dynamiclib'.split())
 
     #linux
     elif re.match(linuxRegex, sys_platform):
         self.env.append_value('LIB_DL', 'dl')
         self.env.append_value('LIB_NSL', 'nsl')
-        self.env.append_value('LIB_THREAD', 'pthread')
-        self.env.append_value('DEFINES_THREAD', '_REENTRANT')
         self.env.append_value('LIB_MATH', 'm')
-
+        self.env.append_value('LINKFLAGS_THREAD', '-pthread')
         self.check_cc(lib='pthread', mandatory=True)
 
         warningFlags = '-Wall'
@@ -851,7 +867,7 @@ def configureCompilerOptions(self):
             self.env.append_value('CXXFLAGS', '-fPIC')
 
             # DEFINES and LINKFLAGS will apply to both gcc and g++
-            self.env.append_value('DEFINES', '_FILE_OFFSET_BITS=64 _LARGEFILE_SOURCE __POSIX'.split())
+            self.env.append_value('DEFINES', '_FILE_OFFSET_BITS=64 _LARGEFILE_SOURCE'.split())
             self.env.append_value('LINKFLAGS', '-Wl,-E -fPIC'.split())
         
         if ccCompiler == 'gcc' or ccCompiler == 'icc':
@@ -878,7 +894,6 @@ def configureCompilerOptions(self):
         self.env.append_value('LIB_CRUN', 'Crun')
         self.env.append_value('LIB_CSTD', 'Cstd')
         self.check_cc(lib='thread', mandatory=True)
-        self.check_cc(header_name="atomic.h", mandatory=False)
         
         warningFlags = ''
         if Options.options.warningsAsErrors:
@@ -983,7 +998,7 @@ def configureCompilerOptions(self):
         flags = '/UUNICODE /U_UNICODE /EHs /GR'.split()
         
         self.env.append_value('DEFINES', defines)
-        self.env.append_value('DEFINES_THREAD', '_REENTRANT')
+        self.env.append_value('LINKFLAGS_THREAD', '-pthread')
         self.env.append_value('CXXFLAGS', flags)
         self.env.append_value('CFLAGS', flags)
     
@@ -1062,99 +1077,62 @@ int main() {
     
     self.env['VARIANT'] = variant['VARIANT'] = variantName
 
-def configureFunctionsAndTypes(self):
-    # Look for a ton of headers
-    # TODO: Some of these can likely be removed
-    self.check_cc(header_name="inttypes.h", mandatory=False)
-    self.check_cc(header_name="unistd.h", mandatory=False)
-    self.check_cc(header_name="getopt.h", mandatory=False)
-    self.check_cc(header_name="malloc.h", mandatory=False)
-    self.check_cc(header_name="sys/time.h", mandatory=False)
-    self.check_cc(header_name="limits.h", mandatory=False)
-    self.check_cc(header_name="dlfcn.h", mandatory=False)
-    self.check_cc(header_name="fcntl.h", mandatory=False)
-    self.check_cc(header_name="check.h", mandatory=False)
-    self.check_cc(header_name="memory.h", mandatory=False)
-    self.check_cc(header_name="strings.h", mandatory=False)
-    self.check_cc(header_name="stdbool.h", mandatory=False)
-    self.check_cc(function_name='localtime_r', header_name="time.h", mandatory=False)
-    self.check_cc(function_name='gmtime_r', header_name="time.h", mandatory=False)
-    self.check_cc(function_name='mmap', header_name="sys/mman.h", mandatory=False)
-    self.check_cc(function_name='strerror', header_name="string.h", mandatory=False)
-    self.check_cc(function_name='bcopy', header_name="strings.h", mandatory=False)
-    self.check_cc(type_name='ssize_t', header_name='sys/types.h', mandatory=False)
-    self.check_cc(lib="m", mandatory=False, uselib_store='MATH')
-    self.check_cc(lib="rt", mandatory=False, uselib_store='RT')
-    self.check_cc(lib="sqrt", mandatory=False, uselib_store='SQRT')
-    self.check_cc(function_name='erf', header_name="math.h", use = "MATH", mandatory=False)
-    self.check_cc(function_name='erff', header_name="math.h", use = "MATH", mandatory=False)
-    self.check_cc(function_name='setenv', header_name="stdlib.h", mandatory=False)
+def getConfigFilename(moduleName):
+    return moduleName.replace('.', '_') + '_config.h'
+
+def listToTuple(defines):
+    d, u = {}, []
+    for line in defines:
+        split = line.split('=')
+        k = split[0]
+        
+        #v = len(split) == 2 and split[1] or ' '
+        v = ' '
+        if len(split) == 2:
+            v = split[1]
+        
+        if v != 0:
+            d[k] = v
+        else:
+            u.append(k)
+    return d,u
     
-    self.check_cc(function_name='gettimeofday', header_name='sys/time.h', mandatory=False)
-    if self.check_cc(lib='rt', function_name='clock_gettime', header_name='time.h', mandatory=False):
-        self.env.DEFINES.append('USE_CLOCK_GETTIME')
-    self.check_cc(function_name='BSDgettimeofday', header_name='sys/time.h', mandatory=False)
-    self.check_cc(function_name='gethrtime', header_name='sys/time.h', mandatory=False)
-    self.check_cc(function_name='getpagesize', header_name='unistd.h', mandatory=False)
-    self.check_cc(function_name='getopt', header_name='unistd.h', mandatory=False)
-    self.check_cc(function_name='getopt_long', header_name='getopt.h', mandatory=False)
+def writeConfig(conf, callback, guardTag, infile=None, outfile=None, path=None, feature=None, substDict=None):
+    if path is None:
+        path = join('include', guardTag.replace('.', os.sep))
+        tempPath = join(str(conf.path.relpath()), path)
+        conf.env.append_value('header_builddir', guardTag + '=' + tempPath)
+    if outfile is None:
+        outfile = getConfigFilename(guardTag)
+    if feature is None:
+        path = join(path,'%s'%outfile)
     
-    self.check_cc(fragment='#include <math.h>\nint main(){if (!isnan(3.14159)) isnan(2.7183);}',
-            define_name='HAVE_ISNAN', msg='Checking for function isnan',
-            errmsg='not found', mandatory=False)
+    conf.setenv('%s_config_env'%guardTag, conf.env.derive())
+    conf.env['define_key'] = []
+    callback(conf)
     
-    # Check for hrtime_t data type; some systems (AIX) seem to have
-    # a function called gethrtime but no hrtime_t!
-    frag = '''
-    #ifdef HAVE_SYS_TIME_H
-    #include <sys/time.h>
-    int main(){hrtime_t foobar;}
-    #endif
-    '''
-    self.check_cc(fragment=frag, define_name='HAVE_HRTIME_T',
-            msg='Checking for type hrtime_t', errmsg='not found', mandatory=False)
+    bldpath = conf.bldnode.abspath()
     
-    types_str = '''
-#include <stdio.h>
-int isBigEndian()
-{
-    long one = 1;
-    return !(*((char *)(&one)));
-}
-int main()
-{
-    if (isBigEndian()) printf("bigendian=True\\n");
-    else printf("bigendian=False\\n");
-    printf("sizeof_int=%d\\n", sizeof(int));
-    printf("sizeof_short=%d\\n", sizeof(short));
-    printf("sizeof_long=%d\\n", sizeof(long));
-    printf("sizeof_long_long=%d\\n", sizeof(long long));
-    printf("sizeof_float=%d\\n", sizeof(float));
-    printf("sizeof_double=%d\\n", sizeof(double));
-    printf("sizeof_size_t=%d\\n", sizeof(size_t));
-    printf("sizeof_wchar_t=%d\\n", sizeof(wchar_t));
-    return 0;
-}
-'''
-    
-    #find out the size of some types, etc.
-    # TODO: This is not using the 32 vs. 64 bit linker flags, so if you're
-    #    building with --enable-32bit on 64 bit Linux, sizeof(size_t) will
-    #    erroneously be 8 here.
-    output = self.check(fragment=types_str, execute=1, msg='Checking system type sizes', define_ret=True)
-    t = Utils.str_to_dict(output or '')
-    for k, v in t.iteritems():
-        try:
-         v = int(v)
-        except:
-         v = v.strip()
-         if v == 'True':
-             v = True
-         elif v == 'False':
-             v = False
-        #v = eval(v)
-        self.msg(k.replace('_', ' ', 1), str(v))
-        self.define(k.upper(), v)
+    if feature is None:
+        conf.write_config_header(configfile=path, 
+                                 guard='_%s_CONFIG_H_'%guardTag.upper().replace('.', '_'), 
+                                 top=False, env=None, defines=True, 
+                                 headers=False, remove=True)
+    else:
+        tuple = listToTuple(conf.env['DEFINES'])
+        defs = tuple[0]
+        undefs = tuple[1]
+                
+        if feature is 'handleDefs':
+            handleDefsFile(input=infile, output=outfile, path=path, defs=defs, conf=conf)
+        elif feature is 'makeHeader':
+            makeHeaderFile(bldpath, output=outfile, path=path, defs=defs, undefs=undefs, chmod=None,
+                           guard='_%s_CONFIG_H_'%guardTag.upper().replace('.', '_'))
+        elif feature is 'm4subst':
+            m4substFile(input=infile, output=outfile, path=path, 
+                        dict=substDict, env=conf.env.derive(), chmod=None)
+            
+    conf.setenv('')
 
 def configure(self):
     
@@ -1242,7 +1220,6 @@ def configure(self):
         env.append_unique('DEFINES', Options.options._defs.split(','))
 
     configureCompilerOptions(self)
-    configureFunctionsAndTypes(self)
 
     env['PLATFORM'] = sys_platform
     
@@ -1381,8 +1358,12 @@ def m4substFile(input, output, path, dict={}, env=None, chmod=None):
     m4_re = re.compile('@(\w+)@', re.M)
 
     infile = join(path.abspath(), input)
-    outfile = join(path.abspath(), output)
+    dir = path.relpath()
+    outfile = join(dir, output)
     
+    if not os.path.exists(dir):
+        os.makedirs(dir)
+        
     file = open(infile, 'r')
     code = file.read()
     file.close()
@@ -1407,7 +1388,7 @@ def m4substFile(input, output, path, dict={}, env=None, chmod=None):
 def handleDefs(tsk):
     handleDefsFile(input=tsk.input, output=tsk.output, path=tsk.path, defs=tsk.defs, chmod=getattr(tsk, 'chmod', None))
 
-def handleDefsFile(input, output, path, defs, chmod=None):
+def handleDefsFile(input, output, path, defs, chmod=None, conf=None):
     import re
     infile = join(path.abspath(), input)
     outfile = join(path.abspath(), output)
@@ -1420,7 +1401,8 @@ def handleDefsFile(input, output, path, defs, chmod=None):
         v = defs[k]
         if v is None:
             v = ''
-        code = re.sub(r'#undef %s(\n)' % k, r'#define %s %s\1' % (k,v), code)
+        code = re.sub(r'#undef %s' % k, r'#define %s %s' % (k,v), code)
+        code = re.sub(r'#define %s 0(\n)' % k, r'#define %s %s\1' % (k,v), code)
     code = re.sub(r'(#undef[^\n\/\**]*)(\/\*.+\*\/)?(\n)', r'/* \1 */\3', code)
     file = open(outfile, 'w')
     file.write(code)
@@ -1435,7 +1417,7 @@ def makeHeader(tsk):
                    chmod=getattr(tsk, 'chmod', None),
                    guard=getattr(tsk, 'guard', '__CONFIG_H__'))
     
-def makeHeaderFile(output, path, defs, undefs, chmod, guard):
+def makeHeaderFile(bldpath, output, path, defs, undefs, chmod, guard):
     outfile = join(path.abspath(), output)
     dest = open(outfile, 'w')
     dest.write('#ifndef %s\n#define %s\n\n' % (guard, guard))

@@ -21,7 +21,7 @@
  */
 
 
-#if defined(__sgi) && defined(_REENTRANT) && !defined(__POSIX)
+#if defined(__sgi)
 #include "sys/ConditionVarIrix.h"
 
 #ifdef __SGI_LIBC_BEGIN_NAMESPACE_STD 

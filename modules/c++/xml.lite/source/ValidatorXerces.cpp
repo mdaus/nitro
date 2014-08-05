@@ -19,9 +19,12 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+
+#include <xml/lite/xml_lite_config.h>
+
 #ifdef USE_XERCES
 
-#include "xml/lite/ValidatorXerces.h"
+#include <xml/lite/ValidatorXerces.h>
 #include <sys/OS.h>
 #include <io/StringStream.h>
 #include <mem/ScopedArray.h>

@@ -21,7 +21,7 @@
  */
 
 
-#if defined(__sun) && defined(_REENTRANT) && !defined(__POSIX)
+#if defined(__sun)
 #include "sys/MutexSolaris.h"
 
 sys::MutexSolaris::MutexSolaris()

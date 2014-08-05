@@ -23,6 +23,8 @@
 #ifndef __XML_LITE_EXPAT_XML_READER_H__
 #define __XML_LITE_EXPAT_XML_READER_H__
 
+#include "xml/lite/xml_lite_config.h"
+
 #if defined(USE_EXPAT)
 #include <expat.h>
 #include <io/OutputStream.h>

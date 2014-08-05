@@ -24,7 +24,7 @@
 #ifndef __SYS_THREAD_IRIX_H__
 #define __SYS_THREAD_IRIX_H__
 
-#if defined(__sgi) && defined(_REENTRANT) && !defined(__POSIX)
+#if defined(__sgi)
 #include "sys/SyncFactoryIrix.h"
 #include "sys/ThreadInterface.h"
 #include <string>

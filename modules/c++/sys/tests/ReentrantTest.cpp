@@ -24,7 +24,6 @@
 #include <import/sys.h>
 using namespace sys;
 
-#if defined(_REENTRANT)
 class NoteThread : public Thread
 {
 public:
@@ -37,10 +36,9 @@ public:
     {   std::cout << "Completed a thread. Destroying..." << std::endl;}
 
 };
-#endif
+
 int main()
 {
-#if defined(_REENTRANT)
     try
     {
         std::cout << "Your implementation of sys is multi-threaded" << std::endl;
@@ -66,11 +64,6 @@ int main()
     {
         std::cout << "Caught unknown exception" << std::endl;
     }
-#else
 
-    std::cout << "Your implementation of sys is single-threaded" << std::endl;
-#endif
     return 0;
-
 }
-

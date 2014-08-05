@@ -20,10 +20,9 @@
  *
  */
 
+#include <sys/ThreadPosix.h>
 
-#include "sys/ThreadPosix.h"
-
-#if defined(__POSIX) && defined(_REENTRANT)
+#if defined(HAVE_PTHREAD_H)
 
 #ifdef WIN32
 #   define SIGKILL 0

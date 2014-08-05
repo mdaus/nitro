@@ -24,12 +24,14 @@ def configure(conf):
 
         zipHome = Options.options.zip_home
         if zipHome:
-            conf.check(lib='z', uselib_store='ZIP',
+            if conf.check(lib='z', uselib_store='ZIP',
                        header_name='zlib.h', function_name='inflate',
+                       define_name='HAVE_INFLATE',
                        libpath=os.path.join(zipHome, 'lib'),
                        includes=os.path.join(zipHome, 'include'),
                        msg='Checking for library zlib', okmsg=zipHome,
-                       mandatory=False)
+                       mandatory=False):
+                           conf.undefine('HAVE_INFLATE')
 
             # TODO: This is a little hokey since in reality if someone just
             #       built zlib from a tarball they would not get this library
@@ -52,10 +54,12 @@ def configure(conf):
             untarFile(path=conf.path, fname=ZLIB_VERSION + '.tar')
 
         else:
-            conf.check(lib='z', uselib_store='ZIP',
+            if conf.check(lib='z', uselib_store='ZIP',
                        header_name='zlib.h', function_name='inflate',
+                       define_name='HAVE_INFLATE',
                        msg='Checking for library zlib',
-                       mandatory=False)
+                       mandatory=False):
+                           conf.undefine('HAVE_INFLATE')
 
             conf.check(lib='minizip', uselib_store='MINIZIP',
                        header_name='zip.h', function_name='zipOpen',

@@ -24,7 +24,7 @@
 #ifndef __SYS_SEMAPHORE_NSPR_H__
 #define __SYS_SEMAPHORE_NSPR_H__
 
-#if defined(USE_NSPR_THREADS) && defined(_REENTRANT)
+#if defined(USE_NSPR_THREADS)
 
 #include "except/Exception.h"
 

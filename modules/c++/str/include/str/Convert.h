@@ -109,8 +109,8 @@ template<typename T> T toType(const std::string& s, int base)
     if (std::numeric_limits<T>::is_signed)
     {
         const long long longRes = str::strtoll(str, &end, base);
-        if ((T)longRes < std::numeric_limits<T>::min() ||
-            (T)longRes > std::numeric_limits<T>::max())
+        if (longRes < std::numeric_limits<T>::min() ||
+            longRes > std::numeric_limits<T>::max())
         {
             overflow = true;
         }
@@ -119,8 +119,8 @@ template<typename T> T toType(const std::string& s, int base)
     else
     {
         const unsigned long long longRes = str::strtoull(str, &end, base);
-        if ((T)longRes < std::numeric_limits<T>::min() ||
-            (T)longRes > std::numeric_limits<T>::max())
+        if (longRes < std::numeric_limits<T>::min() ||
+            longRes > std::numeric_limits<T>::max())
         {
             overflow = true;
         }

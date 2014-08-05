@@ -1,11 +1,10 @@
 import os, sys
 from os.path import join, exists
-from waflib import Options
+from waflib import Options, Utils
 from waflib.TaskGen import feature, before, task_gen
-from build import untarFile
+from build import untarFile, writeConfig
 
 SOURCE        = 'expat-2.0.0'
-EXPAT_DEFINES = ['USE_EXPAT']
 
 options = lambda x : None
 
@@ -15,12 +14,6 @@ def configure(conf):
     xmlLayer = Options.options.xml_layer
 
     if xmlLayer == 'expat':
-        # add defines
-        # XML_STATIC depends on the --shared option
-        expatDefines = EXPAT_DEFINES
-        if not Options.options.shared_libs:
-            expatDefines.append('XML_STATIC')
-        conf.env.append_value('DEFINES_XML', expatDefines)
 
         # use an already built version
         if xmlHome:
@@ -33,19 +26,95 @@ def configure(conf):
                        includes=join(xmlHome, 'include'),
                        msg='Checking for library expat', okmsg=xmlHome,
                        mandatory=True)        
-        
+            conf.env.append_value('DEFINES_XML', 'XML_STATIC')
+            
         # build it with waf
         elif Options.options.build_xml:
             # check for the source tarball
             if not exists(join(conf.path.abspath(), SOURCE + '.tar')):
                 conf.fatal('Missing expat tarfile')
-
+            
+            def expat_callback(conf):
+                # expat pack version details
+                conf.define('PACKAGE_VERSION', '2.0.0')
+                conf.define('XML_CONTEXT_BYTES', 1024)
+                conf.define('XML_DTD', 1)
+                conf.define('XML_NS', 1)
+                conf.define('PACKAGE_STRING', 'expat 2.0.0')
+                
+                conf.define('PACKAGE_NAME', 'expat')
+                conf.define('PACKAGE_TARNAME', 'expat')
+                conf.define('PACKAGE_BUGREPORT', 'expat-bugs@libexpat.org')
+                
+                types_str = '''
+                    #include <stdio.h>
+                    int isBigEndian()
+                    {
+                        long one = 1;
+                        return !(*((char *)(&one)));
+                    }
+                    int main()
+                    {
+                        if (isBigEndian()) printf("bigendian=True\\n");
+                        else printf("bigendian=False\\n");
+                        return 0;
+                    }
+                    '''
+                
+                #find out the size of some types, etc.
+                # TODO: This is not using the 32 vs. 64 bit linker flags, so if you're
+                #    building with --enable-32bit on 64 bit Linux, sizeof(size_t) will
+                #    erroneously be 8 here.
+                output = conf.check(fragment=types_str, execute=1, msg='Checking system type sizes', define_ret=True)
+                t = Utils.str_to_dict(output or '')
+                for k, v in t.iteritems():
+                    try:
+                     v = int(v)
+                    except:
+                     v = v.strip()
+                     if v == 'True':
+                         v = True
+                     elif v == 'False':
+                         v = False
+                    #v = eval(v)
+                    conf.msg(k.replace('_', ' ', 1), str(v))
+                    conf.define(k.upper(), v)
+                    
+                if 'BIGENDIAN' in conf.env['DEFINES']:
+                    conf.define('BYTEORDER', 4321)
+                else:
+                    conf.define('BYTEORDER', 1234)
+                
+                conf.check_cc(function_name='bcopy', header_name="strings.h", mandatory=False)
+                conf.check_cc(header_name="dlfcn.h", mandatory=False)
+                conf.check_cc(header_name="fcntl.h", mandatory=False)
+                conf.check_cc(function_name='getpagesize', header_name='unistd.h', mandatory=False)
+                conf.check_cc(header_name="inttypes.h", mandatory=False)
+                conf.check_cc(function_name='memmove', header_name="string.h", mandatory=False)
+                conf.check_cc(header_name="memory.h", mandatory=False)
+                conf.check_cc(function_name='mmap', header_name="sys/mman.h", mandatory=False)
+                conf.check_cc(header_name="stdint.h", mandatory=False)
+                conf.check_cc(header_name="stdlib.h", mandatory=False)
+                conf.check_cc(header_name="strings.h", mandatory=False)
+                conf.check_cc(header_name="string.h", mandatory=False)
+                conf.check_cc(header_name="sys/stat.h", mandatory=False)
+                conf.check_cc(header_name="sys/types.h", mandatory=False)
+                conf.check_cc(header_name="unistd.h", mandatory=False)
+                
+                conf.check_cc(type_name='size_t', header_name='sys/types.h', mandatory=False)
+                
+                
             # untar and setup env
             conf.env['MAKE_EXPAT'] = True
             conf.env['MAKE_XML']   = True
             conf.msg('Building local lib', xmlLayer)
             untarFile(path=conf.path, fname=SOURCE + '.tar')
-
+            
+            expatNode = conf.path.make_node(SOURCE)
+            writeConfig(conf, expat_callback, 'expatConfigH', 
+                        infile='expat_config.h.in', outfile='expat_config.h', 
+                        path=expatNode, feature='handleDefs')
+            
         # use an already built version that's on the system
         else:
             # if test fails then fail the configure
@@ -54,7 +123,7 @@ def configure(conf):
                        function_name='XML_ExpatVersion',
                        msg='Checking for library expat',
                        mandatory=True)
-
+            conf.env.append_value('DEFINES_XML', 'XML_STATIC')
 
 def build(bld):
 
@@ -65,37 +134,35 @@ def build(bld):
     if 'MAKE_EXPAT' in env:
     
         expatNode = bld.path.make_node(SOURCE)
-    
-        expatDefs = ['PACKAGE_VERSION="2.0.0"',
-                     'XML_CONTEXT_BYTES=1024',
-                     'XML_DTD=1',
-                     'XML_NS=1',
-                     'PACKAGE_STRING="expat 2.0.0"']
-        if not Options.options.shared_libs:
-            expatDefs.append('XML_STATIC=1')
         
         sources = 'lib/xmlparse.c lib/xmltok.c lib/xmlrole.c'
         features = 'c c%s' % env['LIB_TYPE'] or 'stlib'
         if env['install_headers'] or env['install_source']:
             features += ' add_targets'
-
+        
+        # build the library
+        libType = env['LIB_TYPE'] or 'stlib'
+        expatDefines = env['DEFINES'] + ['HAVE_EXPAT_CONFIG_H']
         expat = bld(features=features, source=sources,
                     includes='.', export_includes='lib',
                     target='expat', path=expatNode,
                     uselib='XML', name='XML', env=env.derive(),
-                    defines=env['DEFINES'] + expatDefs)
-        expat.targets_to_add = []
+                    defines=expatDefines)
+        if libType == 'stlib':
+            expat.export_defines='XML_STATIC'
+        
         if env['install_libs']:
             expat.install_path = env['install_libdir']
 
         if env['CC_NAME'] == 'msvc' and env['LIB_TYPE'] == 'shlib':
             expat.defs = 'lib/libexpat.def'
         
+        # install header target if necessary
         if env['install_headers']:
             bld(features='install_tgt', install_path=env['install_includedir'],
                 dir=expatNode, files=['lib/expat.h', 'lib/expat_external.h'], 
                 name='XML_HEADERS_INSTALL')
-            expat.targets_to_add += ['XML_HEADERS_INSTALL']
+            expat.targets_to_add = ['XML_HEADERS_INSTALL']
 
         if env['install_source']:
             sourceFiles += [SOURCE + '.tar']

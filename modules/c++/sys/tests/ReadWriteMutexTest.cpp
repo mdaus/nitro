@@ -75,7 +75,7 @@ protected:
            assert(b == BUFFER[0]);
            b = BUFFER[0];
            mutexCout.lock();
-	   std::cout << getName() << " read " << b << std::endl;
+       std::cout << getName() << " read " << b << std::endl;
            mutexCout.unlock();
            sleep(1);
          }

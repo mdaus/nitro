@@ -24,7 +24,6 @@
 #ifndef __SYS_CONDITION_VAR_INTERFACE_H__
 #define __SYS_CONDITION_VAR_INTERFACE_H__
 
-#if defined(_REENTRANT)
 #include <typeinfo>
 #include "sys/SystemException.h"
 #include "sys/Mutex.h"
@@ -124,5 +123,4 @@ public:
 };
 
 }
-#endif
 #endif

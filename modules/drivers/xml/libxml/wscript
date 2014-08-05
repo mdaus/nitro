@@ -3,8 +3,6 @@ from waflib import Options
 from waflib.TaskGen import feature, before, task_gen
 from build import untarFile
 
-LIBXML_DEFINES = 'USE_LIBXML'
-
 options = build = distclean = lambda x : None
 
 def configure(conf):
@@ -13,7 +11,6 @@ def configure(conf):
     xmlLayer = Options.options.xml_layer
 
     if xmlLayer == 'libxml' :
-        conf.env.append_value('DEFINES_XML', LIBXML_DEFINES.split())
 
         # use an already built version
         if xmlHome:

@@ -1,5 +1,5 @@
 import os, sys, shutil
-from waflib import Options
+from waflib import Options, Utils
 from build import untarFile
 from os.path import join, exists
 
@@ -34,42 +34,59 @@ def options(opt):
     opt.add_option('--nobuild-jpeg', action='store_false', dest="build_jpeg",
                    help='force not building jpeg (libjpeg) library from scratch')
 
-def configure(conf):
+from build import writeConfig
+
+def configure(conf):    
     if Options.options.enable_jpeg:
 
         jpegHome = Options.options.jpeg_home
         if jpegHome:
-            conf.check(lib='jpeg' if sys.platform != 'win32' else 'libjpeg', 
+            if conf.check(lib='jpeg' if sys.platform != 'win32' else 'libjpeg', 
                        uselib_store='JPEG', 
                        header_name='jpeglib.h', fragment=frag,
                        libpath=join(jpegHome, 'lib'),
                        includes=join(jpegHome, 'include'),
                        msg='Checking for library libjpeg', okmsg=jpegHome,
-                       mandatory=False)
+                       mandatory=False):
+                           conf.undefine('HAVE_JPEGLIB_H')
 
         elif Options.options.build_jpeg:
             # Build is off by default when tarfile not found, fail if forced on
             if not os.path.exists(join(conf.path.abspath(), tarfile)):
                 conf.fatal('Missing libjpeg tarfile')
-
+            
+            # callback function to check for all #defines used by the jpeg driver
+            def jpeg_callback(conf):
+                # These are needed by jmorecfg.h.  We could just set these defines
+                # rather than bothering with the conf check.
+                conf.define('HAVE_PROTOTYPES', 1)
+                conf.check_cc(fragment='int main(){unsigned short; return 0;}',
+                    define_name='HAVE_UNSIGNED_SHORT', msg='Checking for unsigned short', 
+                    mandatory=False)
+                conf.check_cc(fragment='int main(){unsigned char i; return 0;}',
+                    define_name='HAVE_UNSIGNED_CHAR', msg='Checking for unsigned char', 
+                    mandatory=False)
+                conf.check_cc(header_name="stddef.h", mandatory=False)
+                conf.check_cc(header_name="stdlib.h", mandatory=False)
+                conf.check_cc(header_name="locale.h", mandatory=False)
+                
             conf.env['MAKE_JPEG'] = True
             conf.msg('Building local lib', 'jpeg (libjpeg)')
-
-            # These are needed by jmorecfg.h.  We could just set these defines
-            # rather than bothering with the conf check.
-            conf.check_cc(fragment='int main(){unsigned short; return 0;}',
-                  define_name='HAVE_UNSIGNED_SHORT', msg='Checking for unsigned short', mandatory=False)
-            conf.check_cc(fragment='int main(){unsigned char i; return 0;}',
-                  define_name='HAVE_UNSIGNED_CHAR', msg='Checking for unsigned char', mandatory=False)
             
             untarFile(path=conf.path, fname=tarfile)
-
+            
+            # make jconfig.h
+            driverNode = conf.path.make_node(sourcepath)
+            writeConfig(conf, jpeg_callback, 'jpeg', infile='jconfig.cfg',
+                        outfile='jconfig.h', path=driverNode, feature='handleDefs')
+            
         else:
-            conf.check(lib='jpeg' if sys.platform != 'win32' else 'libjpeg', 
+            if conf.check(lib='jpeg' if sys.platform != 'win32' else 'libjpeg', 
                        uselib_store='JPEG',
                        header_name='jpeglib.h', fragment=frag,
                        msg='Checking for library libjpeg',
-                       mandatory=False)
+                       mandatory=False):
+                           conf.undefine('HAVE_JPEGLIB_H')
 
         conf.env['HAVE_JPEG'] = True
 
@@ -82,16 +99,6 @@ def build(bld):
     driverNode = driversNode.make_node(sourcepath)
     
     if 'MAKE_JPEG' in env:
-        
-        # create the jconfig.h needed for library wellness
-        defs = {'HAVE_PROTOTYPES':'1'}
-        jpegConfigH = bld(name='jpegConfigH',
-                          features='handleDefs',
-                          input='jconfig.cfg',
-                          output='jconfig.h',
-                          defs=defs, path=driverNode,
-                          env=env.derive())
-            
         sources = ('cdjpeg.c',   'jaricom.c',  'jcapimin.c', 'jcapistd.c', 
                    'jcarith.c',  'jccoefct.c', 'jccolor.c',  'jcdctmgr.c', 
                    'jchuff.c',   'jcinit.c',   'jcmainct.c', 'jcmarker.c', 
@@ -109,7 +116,8 @@ def build(bld):
                    'wrgif.c',    'wrppm.c',    'wrrle.c',    'wrtarga.c')
         
         jpeglib = bld(features='c c%s add_targets' % env['LIB_TYPE'] or 'stlib',
-                      export_includes='.',
+                      includes=['.'],
+                      export_includes=['.'],
                       target='libjpeg',
                       source=sources,
                       path=driverNode,
@@ -117,8 +125,8 @@ def build(bld):
                       uselib='SOCKET',
                       env=env.derive(),
                       name='JPEG',
-                      targets_to_add=[jpegConfigH])
-
+                      targets_to_add=[])
+        
         if env['install_libs']:
             jpeglib.install_path = env['install_libdir']
         

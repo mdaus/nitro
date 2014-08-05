@@ -33,20 +33,12 @@
  *  because that is how it determines reentrance!
  *
  */
-#  if defined(_REENTRANT)
 
 #    if defined(USE_NSPR_THREADS)
 #        include "sys/MutexNSPR.h"
 namespace sys
 {
 typedef MutexNSPR Mutex;
-}
-// If they explicitly want posix
-#    elif defined(__POSIX)
-#        include "sys/MutexPosix.h"
-namespace sys
-{
-typedef MutexPosix Mutex;
 }
 #    elif defined(WIN32)
 #        include "sys/MutexWin32.h"
@@ -58,18 +50,19 @@ typedef MutexWin32 Mutex;
 /* #    elif defined(USE_BOOST) */
 /* #        include "MutexBoost.h" */
 /*          typedef MutexBoost Mutex; */
-#    elif defined(__sun) && !defined(__POSIX)
+#    elif defined(__sun)
 #        include "sys/MutexSolaris.h"
 namespace sys
 {
 typedef MutexSolaris Mutex;
 }
-#    elif defined(__sgi) && !defined(__POSIX)
+#    elif defined(__sgi)
 #        include "sys/MutexIrix.h"
 namespace sys
 {
 typedef MutexIrix Mutex;
 }
+// Give 'em POSIX
 #    else
 #        include "sys/MutexPosix.h"
 namespace sys
@@ -77,7 +70,5 @@ namespace sys
 typedef MutexPosix Mutex;
 }
 #    endif // Which thread package?
-
-#  endif // Are we reentrant?
 
 #endif // End of header

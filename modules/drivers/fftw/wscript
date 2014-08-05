@@ -1,8 +1,7 @@
 import os
-from waflib import Options
+from waflib import Options, Utils
 from waflib.TaskGen import feature, before, task_gen
-from build import untarFile, handleDefsFile
-
+from build import untarFile, handleDefsFile, writeConfig
 
 def options(opt):
     opt.add_option('--with-fft-home', action='store', dest='fft_home',
@@ -23,7 +22,7 @@ def options(opt):
     opt.add_option('--nobuild-fft', action='store_false', dest="build_fft",
                    help='force not building FFT library (fftw) from scratch')
 
-def configure(conf):
+def configure(conf):    
     #-- FFT --------------------------------------------------------------------
     if Options.options.enable_fft:
         fftHome = Options.options.fft_home
@@ -36,7 +35,6 @@ def configure(conf):
 
         if Options.options.fft_double:
             conf.env['MAKE_FFT_DOUBLE'] = True
-            conf.env['DEFINES'].append('ENABLE_FFT_DOUBLE=1')
         else:
             conf.env['MAKE_FFT_DOUBLE'] = False
 
@@ -49,16 +47,16 @@ def configure(conf):
                           includes=os.path.join(fft3Home, 'include'),
                           msg='Checking for library fftw3', okmsg=fft3Home,
                           mandatory=False):
-                conf.env.append_unique('CXXDEFINES_FFT', ['HAVE_FFTW3'])
-                conf.define('HAVE_FFTW3', True)
+                conf.env['HAVE_FFTW3'] = True
+                conf.undefine('HAVE_FFTWF_EXECUTE')
 
         elif conf.check(lib='fftw3f', uselib_store='FFT',
                         header_name='fftw3.h',
                         function_name='fftwf_execute',
                         msg='Checking for library fftw3',
                         mandatory=False):
-            conf.env.append_unique('CXXDEFINES_FFT', ['HAVE_FFTW3'])
-            conf.define('HAVE_FFTW3', True)
+            conf.env['HAVE_FFTW3'] = True
+            conf.undefine('HAVE_FFTWF_EXECUTE')
 
         # FFTW2 - fallback when fftw3 not available
         elif fftHome:
@@ -74,8 +72,66 @@ def configure(conf):
         elif Options.options.build_fft:
             if not os.path.exists(os.path.join(conf.path.abspath(), 'fftw-2.1.5.tar')):
                 conf.fatal('Missing fftw tarfile')
-
-            defs = {}
+            
+            # callback function to check for all #defines used by the fftw driver
+            def fftw_callback(conf):
+                conf.define('FFTW_VERSION', '"2.1.5"', quote=False)
+                if conf.env['MAKE_FFT_DOUBLE']:
+                    conf.define('ENABLE_FFT_DOUBLE', True)
+                else:
+                    conf.define('FFTW_ENABLE_FLOAT', True)
+                conf.check_cc(header_name="unistd.h", mandatory=False)
+                conf.check_cc(header_name="getopt.h", mandatory=False)
+                conf.check_cc(header_name="malloc.h", mandatory=False)
+                conf.check_cc(header_name="sys/time.h", mandatory=False)
+                conf.check_cc(function_name='gettimeofday', header_name='sys/time.h', mandatory=False)
+                conf.check_cc(function_name='BSDgettimeofday', header_name='sys/time.h', mandatory=False)
+                conf.check_cc(function_name='gethrtime', header_name='sys/time.h', mandatory=False)
+                
+                # Check for hrtime_t data type; some systems (AIX) seem to have
+                # a function called gethrtime but no hrtime_t!
+                frag = '''
+                    #ifdef HAVE_SYS_TIME_H
+                    #include <sys/time.h>
+                    int main(){hrtime_t foobar;}
+                    #endif
+                    '''            
+                conf.check_cc(fragment=frag, define_name='HAVE_HRTIME_T',
+                        msg='Checking for type hrtime_t', errmsg='not found', mandatory=False)
+                
+                types_str = '''
+                    #include <stdio.h>
+                    int isBigEndian()
+                    {
+                        long one = 1;
+                        return !(*((char *)(&one)));
+                    }
+                    int main()
+                    {
+                        if (isBigEndian()) printf("bigendian=True\\n");
+                        else printf("bigendian=False\\n");
+                        printf("sizeof_int=%d\\n", sizeof(int));
+                        printf("sizeof_size_t=%d\\n", sizeof(size_t));
+                        printf("sizeof_long_long=%d\\n", sizeof(long long));
+                        return 0;
+                    }
+                    '''
+                #find out the size of some types, etc.
+                # TODO: This is not using the 32 vs. 64 bit linker flags, so if you're
+                #    building with --enable-32bit on 64 bit Linux, sizeof(size_t) will
+                #    erroneously be 8 here.
+                output = conf.check(fragment=types_str, execute=1, msg='Checking system type sizes', define_ret=True)
+                t = Utils.str_to_dict(output or '')
+                for k, v in t.iteritems():
+                    try:
+                        v = int(v)
+                    except:
+                        v = v.strip()
+                        if v == 'True':
+                            v = True
+                        elif v == 'False':
+                            v = False
+                    conf.define(k.upper(), v)
 
             conf.env['MAKE_FFT'] = True
             conf.env['MAKE_RFFT'] = True
@@ -84,12 +140,18 @@ def configure(conf):
                 double_fft = 'yes'
             else:
                 double_fft = 'no'
-                defs['FFTW_ENABLE_FLOAT'] = '1'
             conf.msg('Building double precision fft library', double_fft)
             
             untarFile(path=conf.path, fname='fftw-2.1.5.tar')
-            handleDefsFile(input='fftw/fftw.h.in', output='fftw/fftw.h', defs=defs,
-                              path=conf.path.make_node('fftw-2.1.5'))
+            
+            # make configuration headers
+            fname = 'fftw-2.1.5'
+            driverNode = conf.path.make_node(fname)
+            writeConfig(conf, fftw_callback, 'fftw_h', infile='fftw/fftw.h.in', outfile='fftw/fftw.h', 
+                        path=driverNode, feature='handleDefs')
+            
+            writeConfig(conf, fftw_callback, 'fftw', infile='fftw/config.h.in', outfile='fftw/config.h', 
+                        path=driverNode, feature='handleDefs')
 
         elif conf.check(lib='fftw', uselib_store='FFT',
                         header_name='fftw.h',
@@ -110,29 +172,7 @@ def build(bld):
         fname = 'fftw-2.1.5'
         
         driverNode = driversNode.make_node(fname)
-        
-        envDefs = env['DEFINES']
-        d, u = {}, []
-        for line in envDefs:
-            split = line.split('=')
-            k = split[0]
-            v = len(split) == 2 and split[1] or '1'
-            if v:
-                d[k] = v
-            else:
-                u.append(k)
 
-        d['FFTW_VERSION'] = '"2.1.5"'
-        if not env['MAKE_FFT_DOUBLE']:
-            d['FFTW_ENABLE_FLOAT'] = '1'
-
-        configH = bld(output='fftw/config.h',
-                                   path=driverNode,
-                                   defs=d,
-                                   env=env.derive(),
-                                   undefs=u)
-        configH.features = ['makeHeader']
-        
         #bld.add_group()
         
         #copied from fftw Makefile
@@ -152,12 +192,11 @@ def build(bld):
         sources = map(lambda s: 'fftw/%s' % s,
                       ' '.join([NOTW_CODELETS, TWID_CODELETS, NOTWI_CODELETS, TWIDI_CODELETS, OTHERSRC]).split())
         fftw = bld(features='c c%s add_targets' % env['LIB_TYPE'] or 'stlib', source=sources,
-                                export_includes=['fftw'],
+                                includes=[], export_includes=['fftw'],
                                 target='fftw', path=driverNode,
-                                includes=['fftw'],
                                 name='FFT', defines=env['DEFINES'] + defs,
-                                env=env.derive(), targets_to_add=[configH])
-
+                                env=env.derive(), targets_to_add=[])
+        
         if env['install_libs']:
             fftw.install_path = env['install_libdir']
 
@@ -175,7 +214,7 @@ def build(bld):
                                 includes=['fftw', 'rfftw'],
                                 use='FFT', name='RFFT',
                                 defines=env['DEFINES'] + defs, env=env.derive(),
-                                targets_to_add=[configH])
+                                targets_to_add=[])
         if env['install_libs']:
             rfftw.install_path = env['install_libdir']
         

@@ -24,8 +24,6 @@
 using namespace sys;
 using namespace std;
 
-#if defined(_REENTRANT)
-
 class TestThread : public Thread
 {
 public:
@@ -88,11 +86,3 @@ int main()
     }
     return 0;
 };
-#else
-int main()
-{
-    std::cout << "sys is not Multithreaded" << std::endl;
-    return 0;
-}
-
-#endif

@@ -20,9 +20,11 @@
  *
  */
 
+#include <sys/MutexPosix.h>
 
-#if defined(__POSIX) && defined(_REENTRANT)
-#include "sys/MutexPosix.h"
+#if defined(HAVE_PTHREAD_H)
+
+
 
 sys::MutexPosix::MutexPosix()
 {
@@ -63,5 +65,5 @@ pthread_mutex_t& sys::MutexPosix::getNative()
     return mNative;
 }
 
-#endif // __POSIX && _REENTRANT
+#endif
 

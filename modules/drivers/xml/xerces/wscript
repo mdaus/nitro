@@ -1,29 +1,20 @@
 import os, sys
 from os.path import join, exists
-from waflib import Options
+from waflib import Options, Utils
 from waflib.TaskGen import feature, before, task_gen
-from build import untarFile
+from build import untarFile, writeConfig
 
 SOURCE         = 'xerces-c-3.1.1'
-XERCES_DEFINES = ['USE_XERCES']
-XERCES_USELIBS = 'XML THREAD SOCKET'
+XERCES_USELIBS = 'THREAD SOCKET'
 
 options = lambda x : None
 
 def configure(conf):
-
     xmlHome = Options.options.xml_home
     xmlLayer = Options.options.xml_layer
-
+    
     if xmlLayer == 'xerces' :
-
-        # add defines -- 
-        # XERCESC_STATIC_LIBRARY depends on the --shared option
-        xercesDefines = XERCES_DEFINES
-        if not Options.options.shared_libs:
-            xercesDefines.append('XERCES_STATIC_LIBRARY')
-        conf.env.append_value('DEFINES_XML', xercesDefines)
-
+        
         xercesUselibs = XERCES_USELIBS
         if sys.platform == 'win32':
             # Xerces requires this standard Windows library
@@ -42,81 +33,199 @@ def configure(conf):
                        includes=join(xmlHome, 'include'),
                        msg='Checking for library xerces', okmsg=xmlHome,
                        mandatory=True)
-
+            conf.env.append_value('DEFINES_XML', 'XERCES_STATIC_LIBRARY')
+            
         # build it with waf
         elif Options.options.build_xml:
             # check for the source tarball
             if not exists(join(conf.path.abspath(), SOURCE + '.tar')):
                 conf.fatal('Missing xerces tarfile')
+            
+            # callback function to check for all #defines used by the xerces driver
+            def xerces_callback(conf):   
+                conf.check_cc(header_name="inttypes.h", mandatory=False)
+                conf.check_cc(header_name="netinet/in.h", mandatory=False)
+                conf.check_cc(header_name="arpa/inet.h", mandatory=False)
+                conf.check_cc(header_name="netdb.h", mandatory=False)
+                conf.check_cc(header_name="intrin.h", mandatory=False)
+                conf.check_cc(header_name="emmintrin.h", mandatory=False)
+                conf.check_cc(header_name="wchar.h", mandatory=False)
+                conf.check_cc(header_name="stdint.h", mandatory=False)
+                conf.check_cc(header_name="stdio.h", mandatory=False)
+                conf.check_cc(header_name="langinfo.h", mandatory=False)
+                conf.check_cc(header_name="iconv.h", mandatory=False)
+                conf.check_cc(header_name="nl_types.h", mandatory=False)
+                conf.check_cc(header_name="ctype.h", mandatory=False)
+                conf.check_cc(header_name="wctype.h", mandatory=False)
+                conf.check_cc(header_name="cpuid.h", mandatory=False)
+                conf.check_cc(header_name="endian.h", mandatory=False)
+                conf.check_cc(header_name="machine/endian.h", mandatory=False)
+                conf.check_cc(header_name="arpa/nameser_compat.h", mandatory=False)
+                conf.check_cc(header_name="errno.h", mandatory=False)
+                conf.check_cc(header_name="float.h", mandatory=False)
+                conf.check_cc(header_name="locale.h", mandatory=False)
+                conf.check_cc(header_name="sys/param.h", mandatory=False)
+                conf.check_cc(header_name="sys/socket.h", mandatory=False)
+                conf.check_cc(header_name="sys/stat.h", mandatory=False)
+                conf.check_cc(header_name="sys/timeb.h", mandatory=False)
+                conf.check_cc(header_name="sys/types.h", mandatory=False)
+                
+                conf.check_cc(function_name='mblen', header_name="stdlib.h", mandatory=False)
+                conf.check_cc(function_name='mbrlen', header_name="stdlib.h", mandatory=False)
+                conf.check_cc(function_name='mbsrtowcs', header_name="stdlib.h", mandatory=False)
+                conf.check_cc(function_name='mbstowcs', header_name="stdlib.h", mandatory=False)
+                conf.check_cc(function_name='wsctombs', header_name="stdlib.h", mandatory=False)
+                conf.check_cc(function_name='wcsrtombs', header_name="stdlib.h", mandatory=False)
+                conf.check_cc(function_name='realpath', header_name="stdlib.h", mandatory=False)
+                conf.check_cc(function_name='strchr', header_name="string.h", mandatory=False)
+                conf.check_cc(function_name='strdup', header_name="string.h", mandatory=False)
+                conf.check_cc(function_name='stricmp', header_name="string.h", mandatory=False)
+                conf.check_cc(function_name='strnicmp', header_name="string.h", mandatory=False)
+                conf.check_cc(function_name='strrcmp', header_name="string.h", mandatory=False)
+                conf.check_cc(function_name='strstr', header_name="string.h", mandatory=False)
+                conf.check_cc(function_name='strtol', header_name="string.h", mandatory=False)
+                conf.check_cc(function_name='strtoul', header_name="string.h", mandatory=False)
+                conf.check_cc(function_name='strcasecmp', header_name="strings.h", mandatory=False)
+                conf.check_cc(function_name='strncasecmp', header_name="strings.h", mandatory=False)
+                conf.check_cc(function_name='pathconf', header_name="unistd.h", mandatory=False)
+                conf.check_cc(function_name='nl_langinfo', header_name="langinfo.h", mandatory=False)
+                conf.check_cc(function_name='iconv', header_name="iconv.h", mandatory=False)
+                conf.check_cc(function_name='iconv_close', header_name="iconv.h", mandatory=False)
+                conf.check_cc(function_name='iconv_open', header_name="iconv.h", mandatory=False)
+                conf.check_cc(function_name='towupper', header_name="wctype.h", mandatory=False)
+                conf.check_cc(function_name='towlower', header_name="wctype.h", mandatory=False)
+                conf.check_cc(function_name='catclose', header_name="nl_types.h", mandatory=False)
+                conf.check_cc(function_name='catclose', header_name="nl_types.h", mandatory=False)
+                conf.check_cc(function_name='catgets', header_name="nl_types.h", mandatory=False)
+                conf.check_cc(function_name='catopen', header_name="nl_types.h", mandatory=False)
+                conf.check_cc(function_name='localeconv', header_name="locale.h", mandatory=False)
+                conf.check_cc(function_name='setlocale', header_name="locale.h", mandatory=False)
+                conf.check_cc(function_name='socket', header_name="sys/socket.h", mandatory=False)
+                conf.check_cc(function_name='ftime', header_name="sys/timeb.h", mandatory=False)
+                conf.check_cc(function_name='getaddrinfo', header_name="netdb.h", mandatory=False)
 
-            conf.check_cc(header_name="netinet/in.h", mandatory=False)
-            conf.check_cc(header_name="arpa/inet.h", mandatory=False)
-            conf.check_cc(header_name="netdb.h", mandatory=False)
-            conf.check_cc(header_name="intrin.h", mandatory=False)
-            conf.check_cc(header_name="emmintrin.h", mandatory=False)
-            conf.check_cc(header_name="wchar.h", mandatory=False)
-            conf.check_cc(header_name="stdint.h", mandatory=False)
-            conf.check_cc(header_name="stdio.h", mandatory=False)
-            conf.check_cc(header_name="langinfo.h", mandatory=False)
-            conf.check_cc(header_name="iconv.h", mandatory=False)
-            conf.check_cc(header_name="nl_types.h", mandatory=False)
-            conf.check_cc(header_name="ctype.h", mandatory=False)
-            conf.check_cc(header_name="wctype.h", mandatory=False)
-            conf.check_cc(header_name="cpuid.h", mandatory=False)
-            conf.check_cc(header_name="endian.h", mandatory=False)
-            conf.check_cc(header_name="machine/endian.h", mandatory=False)
-            conf.check_cc(header_name="arpa/nameser_compat.h", mandatory=False)
-            conf.check_cc(header_name="errno.h", mandatory=False)
-            conf.check_cc(header_name="float.h", mandatory=False)
-            conf.check_cc(header_name="locale.h", mandatory=False)
-            conf.check_cc(header_name="sys/param.h", mandatory=False)
-            conf.check_cc(header_name="sys/socket.h", mandatory=False)
-            conf.check_cc(header_name="sys/stat.h", mandatory=False)
-            conf.check_cc(header_name="sys/timeb.h", mandatory=False)
-            conf.check_cc(header_name="sys/types.h", mandatory=False)
+                conf.check_cc(lib="nsl", mandatory=False, uselib_store='NSL')
+                
+                conf.check_cc(header_name="unistd.h", mandatory=False)
+                conf.check_cc(header_name="sys/time.h", mandatory=False)
+                conf.check_cc(header_name="limits.h", mandatory=False)
+                conf.check_cc(header_name="strings.h", mandatory=False)
+                
+                # extra defines for config.h
+                if 'HAVE_ICONV_H=1' in conf.env['DEFINES'] :
+                    conf.define('ICONV_USES_CONST_POINTER', 0)
+                if 'HAVE_SYS_TIME_H=1' in conf.env['DEFINES'] and 'HAVE_TIME_H=1' in conf.env['DEFINES']:
+                    conf.define('TIME_WITH_SYS_TIME', 1)
+                if 'HAVE_SYS_TYPES_H=1' in conf.env['DEFINES'] :
+                    conf.define('XERCES_HAVE_SYS_TYPES_H', 1)
+                if 'HAVE_INTTYPES_H=1' in conf.env['DEFINES'] :
+                    conf.define('XERCES_HAVE_INTTYPES_H', 1)
+                if 'HAVE_INTRIN_H=1' in conf.env['DEFINES'] :
+                    conf.define('XERCES_HAVE_INTRIN_H', 1)
+                if 'HAVE_EMMINTRIN_H=1' in conf.env['DEFINES'] :
+                    conf.define('XERCES_HAVE_EMMINTRIN_H', 1)
+                if 'HAVE_WCHAR_H=1' in conf.env['DEFINES'] :
+                    conf.define('XERCES_INCLUDE_WCHAR_H', 1)
+                if 'HAVE_EMMINTRIN_H=1' in conf.env['DEFINES'] :
+                    conf.define('XERCES_HAVE_SSE2_INTRINSIC', 1)
+                if sys.platform == 'win32' :
+                    conf.define('XERCES_USE_FILEMGR_WINDOWS', 1)
+                    conf.define('XERCES_USE_MUTEXMGR_WINDOWS', 1)
+                    conf.define('XERCES_USE_NETACCESSOR_WINSOCK', 1)
+                    conf.define('XERCES_USE_TRANSCODER_WINDOWS', 1)
+                    conf.define('XERCES_PATH_DELIMITER_BACKSLASH', 1)
+                    
+                    conf.define('XERCES_S16BIT_INT', '__int16', quote=False)
+                    conf.define('XERCES_S32BIT_INT', '__int32', quote=False)
+                    conf.define('XERCES_S64BIT_INT', '__int32', quote=False)
+                    conf.define('XERCES_U16BIT_INT', 'unsigned __int16', quote=False)
+                    conf.define('XERCES_U32BIT_INT', 'unsigned __int32', quote=False)
+                    conf.define('XERCES_U64BIT_INT', 'unsigned __int64', quote=False)
+                    conf.define('XERCES_SIZE_T', 'size_t', quote=False)
+                    if 'HAVE_WCHAR_H=1' in conf.env['DEFINES'] :
+                        conf.define('XERCES_XMLCH_T', 'wchar_t', quote=False)
+                    else :
+                        conf.define('XERCES_XMLCH_T', 'unsigned __int16', quote=False)
+                    if 'HAVE_SSIZE_T=1' in conf.env['DEFINES'] :
+                        conf.define('XERCES_SSIZE_T', 'ssize_t', quote=False)
+                    else :
+                        if 'SIZEOF_SIZE_T=8' in conf.env['DEFINES'] :
+                            conf.define('XERCES_SSIZE_T', '__int64', quote=False)
+                        else :
+                            conf.define('XERCES_SSIZE_T', '__int32', quote=False)
+                    
+                # -- please note -- we diverge from the xerces-c make 
+                # system and treat all unix platforms similarly. Solaris 
+                # was make configured to use ICU and Linux the GNUICONV, 
+                # but here we use the regular ICONV for both to avoid 
+                # having complicated checks and additional build logic.
+                else :
+                    conf.define('HAVE_PTHREAD', 1)
 
-            conf.check_cc(function_name='mblen', header_name="stdlib.h", mandatory=False)
-            conf.check_cc(function_name='mbrlen', header_name="stdlib.h", mandatory=False)
-            conf.check_cc(function_name='mbsrtowcs', header_name="stdlib.h", mandatory=False)
-            conf.check_cc(function_name='mbstowcs', header_name="stdlib.h", mandatory=False)
-            conf.check_cc(function_name='wsctombs', header_name="stdlib.h", mandatory=False)
-            conf.check_cc(function_name='wcsrtombs', header_name="stdlib.h", mandatory=False)
-            conf.check_cc(function_name='realpath', header_name="stdlib.h", mandatory=False)
-            conf.check_cc(function_name='strchr', header_name="string.h", mandatory=False)
-            conf.check_cc(function_name='strdup', header_name="string.h", mandatory=False)
-            conf.check_cc(function_name='stricmp', header_name="string.h", mandatory=False)
-            conf.check_cc(function_name='strnicmp', header_name="string.h", mandatory=False)
-            conf.check_cc(function_name='strrcmp', header_name="string.h", mandatory=False)
-            conf.check_cc(function_name='strstr', header_name="string.h", mandatory=False)
-            conf.check_cc(function_name='strtol', header_name="string.h", mandatory=False)
-            conf.check_cc(function_name='strtoul', header_name="string.h", mandatory=False)
-            conf.check_cc(function_name='strcasecmp', header_name="strings.h", mandatory=False)
-            conf.check_cc(function_name='strncasecmp', header_name="strings.h", mandatory=False)
-            conf.check_cc(function_name='pathconf', header_name="unistd.h", mandatory=False)
-            conf.check_cc(function_name='nl_langinfo', header_name="langinfo.h", mandatory=False)
-            conf.check_cc(function_name='iconv', header_name="iconv.h", mandatory=False)
-            conf.check_cc(function_name='iconv_close', header_name="iconv.h", mandatory=False)
-            conf.check_cc(function_name='iconv_open', header_name="iconv.h", mandatory=False)
-            conf.check_cc(function_name='towupper', header_name="wctype.h", mandatory=False)
-            conf.check_cc(function_name='towlower', header_name="wctype.h", mandatory=False)
-            conf.check_cc(function_name='catclose', header_name="nl_types.h", mandatory=False)
-            conf.check_cc(function_name='catclose', header_name="nl_types.h", mandatory=False)
-            conf.check_cc(function_name='catgets', header_name="nl_types.h", mandatory=False)
-            conf.check_cc(function_name='catopen', header_name="nl_types.h", mandatory=False)
-            conf.check_cc(function_name='localeconv', header_name="locale.h", mandatory=False)
-            conf.check_cc(function_name='setlocale', header_name="locale.h", mandatory=False)
-            conf.check_cc(function_name='socket', header_name="sys/socket.h", mandatory=False)
-            conf.check_cc(function_name='ftime', header_name="sys/timeb.h", mandatory=False)
-            conf.check_cc(function_name='getaddrinfo', header_name="netdb.h", mandatory=False)
+                    conf.define('XERCES_USE_FILEMGR_POSIX', 1)
+                    conf.define('XERCES_USE_MUTEXMGR_POSIX', 1)
+                    conf.define('XERCES_USE_TRANSCODER_ICONV', 1)
 
-            conf.check_cc(lib="nsl", mandatory=False, uselib_store='NSL')
+                    conf.define('XERCES_S16BIT_INT', 'int16_t', quote=False)
+                    conf.define('XERCES_S32BIT_INT', 'int32_t', quote=False)
+                    conf.define('XERCES_S64BIT_INT', 'int64_t', quote=False)
+                    conf.define('XERCES_U16BIT_INT', 'uint16_t', quote=False)
+                    conf.define('XERCES_U32BIT_INT', 'uint32_t', quote=False)
+                    conf.define('XERCES_U64BIT_INT', 'uint64_t', quote=False)
+                    conf.define('XERCES_XMLCH_T', 'uint16_t', quote=False)
+                    conf.define('XERCES_SIZE_T', 'size_t', quote=False)
+                    conf.define('XERCES_SSIZE_T', 'ssize_t', quote=False)
 
+                conf.define('LT_OBJDIR', '.libs/', quote=False)
+                conf.define('PACKAGE', 'xerces-c', quote=False)
+                conf.define('PACKAGE_BUGREPORT', '', quote=False)
+                conf.define('PACKAGE_NAME', 'xerces-c', quote=False)
+                conf.define('PACKAGE_STRING', 'xerces-c 3.1.1', quote=False)
+                conf.define('PACKAGE_TARNAME', 'xerces-c', quote=False)
+                conf.define('PACKAGE_URL', '', quote=False)
+                conf.define('PACKAGE_VERSION', '3.1.1', quote=False)
+                conf.define('VERSION', '3.1.1', quote=False)
+
+                # extra defines for Xerces_autoconf_config.hpp
+                conf.define('XERCES_USE_MSGLOADER_INMEMORY', 1)
+                conf.define('XERCES_BUILDING_LIBRARY', 1)
+                conf.define('HAVE_NAMESPACES', 1)
+                conf.define('HAVE_SOCKET', 1)
+                conf.define('HAVE_STD_LIBS', 1)
+                conf.define('HAVE_STD_NAMESPACE', 1)
+                
+                conf.define('XERCES_AUTOCONF', 1)
+                conf.define('XERCES_PLATFORM_EXPORT', '', quote=False)
+                conf.define('XERCES_PLATFORM_IMPORT', '', quote=False)
+                conf.define('XERCES_HAS_CPP_NAMESPACE', 1)
+                conf.define('XERCES_STD_NAMESPACE', 1)
+                conf.define('XERCES_NEW_IOSTREAMS', 1)
+                conf.define('XERCES_LSTRSUPPORT', 1)
+                conf.define('HAVE_BOOL', 1)
+
+                if 'HAVE_NL_TYPES_H=1' in conf.env['DEFINES'] :
+                    conf.define('HAVE_CATCLOSE', 1)
+                    conf.define('HAVE_CATGETS', 1)
+                    conf.define('HAVE_CATOPEN', 1)
+                
             # untar and setup env
             conf.env['MAKE_XERCES'] = True
             conf.env['MAKE_XML']    = True
             conf.msg('Building local lib', xmlLayer)
             untarFile(path=conf.path, fname=SOURCE + '.tar')
-
+            
+            # make config.h & config.hpp
+            xercesNode = conf.path.make_node(SOURCE)
+            writeConfig(conf, xerces_callback, 'xercesConfigH', 
+                        infile='config.h.in', outfile='config.h', 
+                        path=xercesNode, feature='handleDefs')
+            
+            xercesNode = conf.path.make_node(join(SOURCE, 'src', 'xercesc', 'util'))
+            writeConfig(conf, xerces_callback, 'xercesAutoH',
+                          infile='Xerces_autoconf_config.hpp.in',
+                          outfile='Xerces_autoconf_config.hpp',
+                          path=xercesNode, feature='handleDefs')
+  
         # use an already built version that's on the system
         else :
             # if test fails then fail the configure
@@ -126,10 +235,9 @@ def configure(conf):
                        defines='XERCES_STATIC_LIBRARY', uselib=xercesUselibs,
                        msg='Checking for library xerces',
                        mandatory=True)
-
+            conf.env.append_value('DEFINES_XML', 'XERCES_STATIC_LIBRARY')
 
 def build(bld):
-
     env = bld.get_env()
     sourceFiles = []
 
@@ -141,125 +249,6 @@ def build(bld):
         if sys.platform == 'win32':
             # Xerces requires this standard Windows library
             xercesUselibs += ' ADVAPI32'
-
-        d = {}
-        for line in env['DEFINES']:
-            split = line.split('=')
-            k = split[0]
-            v = len(split) == 2 and split[1] or '1'
-            if v:
-                d[k] = v
-
-        # extra defines for config.h
-        if 'HAVE_ICONV_H=1' in env['DEFINES'] :
-            d['ICONV_USES_CONST_POINTER'] = '0'
-        if 'HAVE_SYS_TIME_H=1' in env['DEFINES'] and 'HAVE_TIME_H=1' in env['DEFINES']:
-            d['TIME_WITH_SYS_TIME'] = '1'
-        if 'HAVE_SYS_TYPES_H=1' in env['DEFINES'] :
-            d['XERCES_HAVE_SYS_TYPES_H'] = '1'
-        if 'HAVE_INTTYPES_H=1' in env['DEFINES'] :
-            d['XERCES_HAVE_INTTYPES_H'] = '1'
-        if 'HAVE_INTRIN_H=1' in env['DEFINES'] :
-            d['XERCES_HAVE_INTRIN_H'] = '1'
-        if 'HAVE_EMMINTRIN_H=1' in env['DEFINES'] :
-            d['XERCES_HAVE_EMMINTRIN_H'] = '1'
-        if 'HAVE_WCHAR_H=1' in env['DEFINES'] :
-            d['XERCES_INCLUDE_WCHAR_H'] = '1'
-        if 'HAVE_EMMINTRIN_H=1' in env['DEFINES'] :
-            d['XERCES_HAVE_SSE2_INTRINSIC'] = '1'
-        if sys.platform == 'win32' :
-            d['XERCES_USE_FILEMGR_WINDOWS']      = '1' 
-            d['XERCES_USE_MUTEXMGR_WINDOWS']     = '1'
-            d['XERCES_USE_NETACCESSOR_WINSOCK']  = '1'
-            d['XERCES_USE_TRANSCODER_WINDOWS']   = '1'
-            d['XERCES_PATH_DELIMITER_BACKSLASH'] = '1'
-
-            d['XERCES_S16BIT_INT'] = '__int16'
-            d['XERCES_S32BIT_INT'] = '__int32'
-            d['XERCES_S64BIT_INT'] = '__int32'
-            d['XERCES_U16BIT_INT'] = 'unsigned __int16'
-            d['XERCES_U32BIT_INT'] = 'unsigned __int32'
-            d['XERCES_U64BIT_INT'] = 'unsigned __int64'
-            d['XERCES_SIZE_T']     = 'size_t'
-            if 'HAVE_WCHAR_H=1' in env['DEFINES'] :
-                d['XERCES_XMLCH_T'] = 'wchar_t'
-            else :
-                d['XERCES_XMLCH_T'] = 'unsigned __int16'
-            if 'HAVE_SSIZE_T=1' in env['DEFINES'] :
-                d['XERCES_SSIZE_T'] = 'ssize_t'
-            else :
-                if 'SIZEOF_SIZE_T=8' in env['DEFINES'] :
-                    d['XERCES_SSIZE_T']    = '__int64'
-                else :
-                    d['XERCES_SSIZE_T']    = '__int32'
-
-        # -- please note -- we diverge from the xerces-c make 
-        # system and treat all unix platforms similarly. Solaris 
-        # was make configured to use ICU and Linux the GNUICONV, 
-        # but here we use the regular ICONV for both to avoid 
-        # having complicated checks and additional build logic.
-        else :
-            d['HAVE_PTHREAD'] = '1'
-
-            d['XERCES_USE_FILEMGR_POSIX'] = '1'
-            d['XERCES_USE_MUTEXMGR_POSIX'] = '1'
-            d['XERCES_USE_TRANSCODER_ICONV'] = '1'
-
-            d['XERCES_S16BIT_INT'] = 'int16_t'
-            d['XERCES_S32BIT_INT'] = 'int32_t'
-            d['XERCES_S64BIT_INT'] = 'int64_t'
-            d['XERCES_U16BIT_INT'] = 'uint16_t'
-            d['XERCES_U32BIT_INT'] = 'uint32_t'
-            d['XERCES_U64BIT_INT'] = 'uint64_t'
-            d['XERCES_XMLCH_T']    = 'uint16_t'
-            d['XERCES_SIZE_T']     = 'size_t'
-            d['XERCES_SSIZE_T']    = 'ssize_t'
-
-        d['LT_OBJDIR'] = '.libs/'
-        d['PACKAGE'] = 'xerces-c' 
-        d['PACKAGE_BUGREPORT'] = '' 
-        d['PACKAGE_NAME'] = 'xerces-c'
-        d['PACKAGE_STRING'] = 'xerces-c 3.1.1'
-        d['PACKAGE_TARNAME'] = 'xerces-c'
-        d['PACKAGE_URL'] = '' 
-        d['PACKAGE_VERSION'] = '3.1.1'
-        d['VERSION'] = '3.1.1'
-
-        # extra defines for Xerces_autoconf_config.hpp
-        d['XERCES_USE_MSGLOADER_INMEMORY'] = '1'
-        d['XERCES_BUILDING_LIBRARY'] = '1'
-        d['HAVE_NAMESPACES'] = '1'
-        d['HAVE_SOCKET'] = '1'
-        d['HAVE_STD_LIBS'] = '1'
-        d['HAVE_STD_NAMESPACE'] = '1'
-
-        d['XERCES_AUTOCONF'] = '1'
-        d['XERCES_PLATFORM_EXPORT'] = ''
-        d['XERCES_PLATFORM_IMPORT'] = ''
-        d['XERCES_HAS_CPP_NAMESPACE'] = '1'
-        d['XERCES_STD_NAMESPACE'] = '1'
-        d['XERCES_NEW_IOSTREAMS'] = '1'
-        d['XERCES_LSTRSUPPORT'] = '1'
-        d['HAVE_BOOL'] = '1'
-
-        if 'HAVE_NL_TYPES_H=1' in env['DEFINES'] :
-            d['HAVE_CATCLOSE'] = '1'
-            d['HAVE_CATGETS']  = '1'
-            d['HAVE_CATOPEN']  = '1'
-
-        # first setup the configurable headers
-        xercesAutoH = bld(name='xercesAutoH',
-                          features='handleDefs',
-                          input='src/xercesc/util/Xerces_autoconf_config.hpp.in',
-                          output='src/xercesc/util/Xerces_autoconf_config.hpp',
-                          defs=d, path=xercesNode,
-                          env=env.derive())
-        xercesConfigH = bld(name='xercesConfigH',
-                            features='handleDefs',
-                            input='config.h.in',
-                            output='config.h',
-                            defs=d, path=xercesNode,
-                            env=env.derive())
 
         # setup some known excludes per platform --
         # we avoid building the system specific files
@@ -302,16 +291,19 @@ def build(bld):
                 elif file.endswith('.h') or file.endswith('.hpp') or file.endswith('.c') :
                     headers.append(join(relativePath, file))
         sources = ' '.join(sources)
-
+        
         # build the library
+        libType = env['LIB_TYPE'] or 'stlib'
         xercesDefines = env['DEFINES'] + ['HAVE_CONFIG_H']
         xerces = bld(features='c c%s add_targets' % env['LIB_TYPE'] or 'stlib',
                      source=sources,
-                     includes=['.', 'src'], export_includes='src',
+                     includes=['.', 'src'], export_includes=['src'],
                      target='xerces-c', path=xercesNode,
                      uselib=xercesUselibs, name='XML', env=env.derive(),
-                     defines=xercesDefines,
-                     targets_to_add=[xercesAutoH, xercesConfigH])
+                     defines=xercesDefines)
+        if libType == 'stlib':
+            xerces.export_defines='XERCES_STATIC_LIBRARY'
+        
         if env['install_libs']:
             xerces.install_path = env['install_libdir']
 
@@ -327,11 +319,11 @@ def build(bld):
             bld(features='install_tgt', pattern='*.h', 
                 dir=xercesNode, install_path=env['install_includedir'],
                 name='XML_INCLUDE_CONFIG_H_INSTALL')
-            xerces.targets_to_add.append(bld(features='install_tgt add_targets', 
+            xerces.targets_to_add=[bld(features='install_tgt add_targets', 
                                              pattern='**/*.hpp **/*.h xercesc/**/*.c',
                                              dir=srcNode, install_path=env['install_includedir'], 
                                              name='XML_INCLUDE_INSTALL',
-                                             targets_to_add=['XML_INCLUDE_CONFIG_H_INSTALL']))
+                                             targets_to_add=['XML_INCLUDE_CONFIG_H_INSTALL'])]
 
         if env['install_source']:
             sourceFiles += [SOURCE + '.tar']

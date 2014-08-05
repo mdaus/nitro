@@ -20,6 +20,8 @@
  *
  */
 
+#include "sys/sys_config.h"
+
 #if !defined(WIN32)
 
 #include <stdio.h>

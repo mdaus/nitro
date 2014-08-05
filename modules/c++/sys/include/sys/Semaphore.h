@@ -33,7 +33,6 @@
  *  because that is how it determines reentrance!
  *
  */
-#  if defined(_REENTRANT)
 
 #    if defined(USE_NSPR_THREADS)
 #        include "sys/SemaphoreNSPR.h"
@@ -41,26 +40,19 @@ namespace sys
 {
 typedef SemaphoreNSPR Semaphore;
 }
-// If they explicitly want posix
-#    elif defined(__POSIX) && !defined(__APPLE_CC__)
-#        include "sys/SemaphorePosix.h"
-namespace sys
-{
-typedef SemaphorePosix Semaphore;
-}
 #    elif defined(WIN32)
 #        include "sys/SemaphoreWin32.h"
 namespace sys
 {
 typedef SemaphoreWin32 Semaphore;
 }
-#    elif defined(__sun) && !defined(__POSIX)
+#    elif defined(__sun)
 #        include "sys/SemaphoreSolaris.h"
 namespace sys
 {
 typedef SemaphoreSolaris Semaphore;
 }
-#    elif defined(__sgi) && !defined(__POSIX)
+#    elif defined(__sgi)
 #        include "sys/SemaphoreIrix.h"
 namespace sys
 {
@@ -68,6 +60,7 @@ typedef SemaphoreIrix Semaphore;
 }
 #    elif defined(__APPLE_CC__)
 typedef int Semaphore;
+// Give 'em Posix
 #    else
 #        include "sys/SemaphorePosix.h"
 namespace sys
@@ -75,7 +68,5 @@ namespace sys
 typedef SemaphorePosix Semaphore;
 }
 #    endif // Which thread package?
-
-#  endif // Are we reentrant?
 
 #endif // End of header

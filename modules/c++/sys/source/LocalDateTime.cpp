@@ -20,6 +20,8 @@
  *
  */
 
+#include "sys/sys_config.h"
+
 #include "sys/LocalDateTime.h"
 
 #include "sys/Conf.h"

@@ -24,8 +24,8 @@
 #ifndef __SYS_WIN32_CONDITION_VARIABLE_H__
 #define __SYS_WIN32_CONDITION_VARIABLE_H__
 
-#if defined(WIN32) && defined(_REENTRANT)
-#if !defined(USE_NSPR_THREADS) && !defined(__POSIX)
+#if defined(WIN32)
+#if !defined(USE_NSPR_THREADS)
 
 #include "sys/ConditionVarInterface.h"
 #include "sys/MutexWin32.h"

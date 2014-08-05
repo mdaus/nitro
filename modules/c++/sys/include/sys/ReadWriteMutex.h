@@ -25,8 +25,7 @@
 #define __SYS_READ_WRITE_MUTEX_INTERFACE_H__
 
 
-
-#if defined(_REENTRANT) && !defined(__APPLE_CC__)
+#if !defined(__APPLE_CC__)
 
 #include "sys/Dbg.h"
 #include "sys/Mutex.h"
@@ -35,57 +34,57 @@
 namespace sys
 {
     
-    /*!
-     *  \class ReadWriteMutex
-     *  \brief Locks resources exclusively during writes while allowing
-     *  simultaneous reads
-     *
-     */
-    class ReadWriteMutex
-    {
+/*!
+ *  \class ReadWriteMutex
+ *  \brief Locks resources exclusively during writes while allowing
+ *  simultaneous reads
+ *
+ */
+class ReadWriteMutex
+{
     public:
-	//!  Constructor
-	ReadWriteMutex(int maxReaders) : mSem(maxReaders)
-        {
-	    mMaxReaders = maxReaders;
-	    dbg_printf("Creating a read/write mutex\n");
-	}
-	
-	//!  Destructor
-	virtual ~ReadWriteMutex() 
-	{
-	    dbg_printf("Destroying a read/write mutex\n");
-	}
+    //!  Constructor
+    ReadWriteMutex(int maxReaders) : mSem(maxReaders)
+    {
+        mMaxReaders = maxReaders;
+        dbg_printf("Creating a read/write mutex\n");
+    }
 
-	/*!
-	 *  Lock for reading (no writes allowed)
-	 */
-	virtual void lockRead();
-	
-	/*!
-	 *  Unlock for reading (writes allowed)
-	 */
-	virtual void unlockRead();
+    //!  Destructor
+    virtual ~ReadWriteMutex()
+    {
+        dbg_printf("Destroying a read/write mutex\n");
+    }
 
-        /*!
-         *  Lock for writing (no reads/other writes allowed)
-         */
-        virtual void lockWrite();
+    /*!
+     *  Lock for reading (no writes allowed)
+     */
+    virtual void lockRead();
 
-        /*!
-         *  Unlock for writing (reads allowed)
-         */
-	virtual void unlockWrite();
+    /*!
+     *  Unlock for reading (writes allowed)
+     */
+    virtual void unlockRead();
 
-    protected:
-	sys::Semaphore mSem;
-	sys::Mutex mMutex;
-        int mMaxReaders;
-    };
+    /*!
+     *  Lock for writing (no reads/other writes allowed)
+     */
+    virtual void lockWrite();
+
+    /*!
+     *  Unlock for writing (reads allowed)
+     */
+    virtual void unlockWrite();
+
+protected:
+    sys::Semaphore mSem;
+    sys::Mutex mMutex;
+    int mMaxReaders;
+};
     
 }
 
-#endif // Are we reentrant?
+#endif // Not apple
 
 #endif
 

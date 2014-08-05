@@ -23,13 +23,15 @@
 #ifndef __XML_LITE_VALIDATOR_XERCES_H__
 #define __XML_LITE_VALIDATOR_XERCES_H__
 
+#include <xml/lite/xml_lite_config.h>
+
 #ifdef USE_XERCES
 
 #include <memory>
 #include <vector>
 
-#include "xml/lite/UtilitiesXerces.h"
-#include "xml/lite/ValidatorInterface.h"
+#include <xml/lite/UtilitiesXerces.h>
+#include <xml/lite/ValidatorInterface.h>
 
 #include <xercesc/parsers/XercesDOMParser.hpp>
 #include <xercesc/parsers/DOMLSParserImpl.hpp>

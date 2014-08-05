@@ -25,7 +25,7 @@
 #define __SYS_MUTEX_IRIX_H__
 
 
-#if defined(__sgi) && defined(_REENTRANT) && !defined(__POSIX)
+#if defined(__sgi)
 #include "sys/SyncFactoryIrix.h"
 #include "sys/MutexInterface.h"
 

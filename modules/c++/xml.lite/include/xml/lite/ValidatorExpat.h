@@ -23,6 +23,8 @@
 #ifndef __XML_LITE_VALIDATOR_EXPAT_H__
 #define __XML_LITE_VALIDATOR_EXPAT_H__
 
+#include "xml/lite/xml_lite_config.h"
+
 #ifdef USE_EXPAT
 
 #include <except/Exception.h>

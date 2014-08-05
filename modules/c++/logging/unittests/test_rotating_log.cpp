@@ -44,28 +44,29 @@ void cleanupFiles(std::string base)
 TEST_CASE(testRotate)
 {
     std::string outFile = "test_rotate.txt";
-    size_t maxFiles = 5;
+    size_t maxFiles = 1;
 
     cleanupFiles( outFile);
 
     sys::OS os;
+    {
+        std::auto_ptr<logging::Logger> log(new logging::Logger("test"));
+        std::auto_ptr<logging::Formatter>
+                formatter(new logging::StandardFormatter("%m"));
+        std::auto_ptr<logging::Handler>
+                logHandler(new logging::RotatingFileHandler(outFile, 10, maxFiles));
 
-    std::auto_ptr<logging::Logger> log(new logging::Logger("test"));
-    std::auto_ptr<logging::Formatter>
-            formatter(new logging::StandardFormatter("%m"));
-    std::auto_ptr<logging::Handler>
-            logHandler(new logging::RotatingFileHandler(outFile, 10, maxFiles));
+        logHandler->setLevel(logging::LogLevel::LOG_DEBUG);
+        logHandler->setFormatter(formatter.release());
+        log->addHandler(logHandler.release(), true);
 
-    logHandler->setLevel(logging::LogLevel::LOG_DEBUG);
-    logHandler->setFormatter(formatter.release());
-    log->addHandler(logHandler.release(), true);
+        log->debug("0123456789");
+        TEST_ASSERT(os.exists(outFile));
+        TEST_ASSERT_FALSE(os.isFile(outFile + ".1"));
 
-    log->debug("0123456789");
-    TEST_ASSERT(os.exists(outFile));
-    TEST_ASSERT_FALSE(os.isFile(outFile + ".1"));
-
-    log->debug("1");
-    TEST_ASSERT(os.isFile(outFile + ".1"));
+        log->debug("1");
+        TEST_ASSERT(os.isFile(outFile + ".1"));
+    }
 
     cleanupFiles( outFile);
 }
@@ -76,18 +77,21 @@ TEST_CASE(testNeverRotate)
     cleanupFiles( outFile);
 
     sys::OS os;
-    std::auto_ptr<logging::Logger> log(new logging::Logger("test"));
-    std::auto_ptr<logging::Formatter>
-            formatter(new logging::StandardFormatter("%m"));
-    std::auto_ptr<logging::Handler>
-            logHandler(new logging::RotatingFileHandler(outFile));
-
-    for(size_t i = 0; i < 1024; ++i)
     {
-        log->debug("test");
+        std::auto_ptr<logging::Logger> log(new logging::Logger("test"));
+        std::auto_ptr<logging::Formatter>
+                formatter(new logging::StandardFormatter("%m"));
+        std::auto_ptr<logging::Handler>
+                logHandler(new logging::RotatingFileHandler(outFile));
+
+        for(size_t i = 0; i < 1024; ++i)
+        {
+            log->debug("test");
+        }
+        TEST_ASSERT(os.exists(outFile));
+        TEST_ASSERT_FALSE(os.isFile(outFile + ".1"));
     }
-    TEST_ASSERT(os.exists(outFile));
-    TEST_ASSERT_FALSE(os.isFile(outFile + ".1"));
+
     cleanupFiles( outFile);
 }
 
@@ -97,18 +101,20 @@ TEST_CASE(testRotateReset)
     cleanupFiles( outFile);
 
     sys::OS os;
-    std::auto_ptr<logging::Logger> log(new logging::Logger("test"));
-    std::auto_ptr<logging::Formatter>
-            formatter(new logging::StandardFormatter("%m"));
-    std::auto_ptr<logging::Handler>
-            logHandler(new logging::RotatingFileHandler(outFile, 10));
-    log->debug("01234567890");
-    TEST_ASSERT(os.exists(outFile));
-    TEST_ASSERT_FALSE(os.isFile(outFile + ".1"));
+    {
+        std::auto_ptr<logging::Logger> log(new logging::Logger("test"));
+        std::auto_ptr<logging::Formatter>
+                formatter(new logging::StandardFormatter("%m"));
+        std::auto_ptr<logging::Handler>
+                logHandler(new logging::RotatingFileHandler(outFile, 10));
+        log->debug("01234567890");
+        TEST_ASSERT(os.exists(outFile));
+        TEST_ASSERT_FALSE(os.isFile(outFile + ".1"));
 
-    log->debug("0");
-    TEST_ASSERT(os.exists(outFile));
-    TEST_ASSERT_FALSE(os.isFile(outFile + ".1"));
+        log->debug("0");
+        TEST_ASSERT(os.exists(outFile));
+        TEST_ASSERT_FALSE(os.isFile(outFile + ".1"));
+    }
 
     cleanupFiles( outFile);
 }

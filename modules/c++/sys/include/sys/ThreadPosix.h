@@ -24,7 +24,9 @@
 #ifndef __SYS_THREAD_PTHREAD_THREAD_H__
 #define __SYS_THREAD_PTHREAD_THREAD_H__
 
-#if defined(__POSIX) && defined(_REENTRANT)
+#include <sys/sys_config.h>
+
+#if defined(HAVE_PTHREAD_H)
 
 #include <sched.h>
 #include <pthread.h>

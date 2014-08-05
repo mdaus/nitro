@@ -24,7 +24,7 @@
 #ifndef __SYS_SYNC_FACTORY_IRIX_H__
 #define __SYS_SYNC_FACTORY_IRIX_H__
 
-#  if defined(__sgi) && defined(_REENTRANT) && !defined(__POSIX)
+#  if defined(__sgi)
 #include <iostream>
 #include "sys/Dbg.h"
 #include <memory>

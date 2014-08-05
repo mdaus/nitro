@@ -19,10 +19,11 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
-
+ 
 #ifndef __SYS_CONF_H__
 #define __SYS_CONF_H__
+
+#include <sys/sys_config.h>
 
 #if defined (__APPLE_CC__)
 #  include <iosfwd>
@@ -45,9 +46,7 @@
 #include "str/Format.h"
 #include "sys/TimeStamp.h"
 
-#ifdef HAVE_CONFIG_H
-#  include "sys/config.h"
-#endif
+
 
 /*  Dance around the compiler to figure out  */
 /*  if we have access to function macro...   */
@@ -288,39 +287,6 @@ namespace sys
     {
         _aligned_free(p);
     }
-#elif defined(__POSIX) && !defined(__sun)
-
-    /*!
-     *  Method to create a block of memory on 16-byte boundary.
-     *  This typically reduces the amount of moves that the
-     *  OS has to do to get the data in the form that it needs
-     *  to be in.  Since this method is non-standard, we present
-     *  OS-specific alternatives.
-     *
-     *  \param sz The size (in bytes) of the buffer we wish to create
-     *  \throw Exception if a bad allocation occurs
-     *  \return a pointer to the data (this method never returns NULL)
-     */
-    inline void* alignedAlloc(size_t sz)
-    {
-        void* p = NULL;
-        if (posix_memalign(&p, 16, sz) != 0)
-            throw except::Exception("posix_memalign: bad alloc");
-        memset(p, 0, sz);
-        return p;
-    
-    }
-
-    /*!
-     *  Free memory that was allocated with alignedAlloc
-     *  This method behaves like free
-     *
-     *  \param p A pointer to the data allocated using alignedAlloc
-     */
-    inline void alignedFree(void* p)
-    {
-        free(p);
-    }
 #elif defined(__sun)
     /*!
      *  Method to create a block of memory on 16-byte boundary.
@@ -352,6 +318,40 @@ namespace sys
     {
         free(p);
     }
+#elif defined(HAVE_PTHREAD_H)
+
+    /*!
+     *  Method to create a block of memory on 16-byte boundary.
+     *  This typically reduces the amount of moves that the
+     *  OS has to do to get the data in the form that it needs
+     *  to be in.  Since this method is non-standard, we present
+     *  OS-specific alternatives.
+     *
+     *  \param sz The size (in bytes) of the buffer we wish to create
+     *  \throw Exception if a bad allocation occurs
+     *  \return a pointer to the data (this method never returns NULL)
+     */
+    inline void* alignedAlloc(size_t sz)
+    {
+        void* p = NULL;
+        if (posix_memalign(&p, 16, sz) != 0)
+            throw except::Exception("posix_memalign: bad alloc");
+        memset(p, 0, sz);
+        return p;
+
+    }
+
+    /*!
+     *  Free memory that was allocated with alignedAlloc
+     *  This method behaves like free
+     *
+     *  \param p A pointer to the data allocated using alignedAlloc
+     */
+    inline void alignedFree(void* p)
+    {
+        free(p);
+    }
+
 #else
 
     /*!
@@ -385,8 +385,6 @@ namespace sys
     }
 #endif
 
-
 }
 
 #endif
-
