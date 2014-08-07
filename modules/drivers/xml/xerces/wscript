@@ -300,7 +300,8 @@ def build(bld):
                      includes=['.', 'src'], export_includes=['src'],
                      target='xerces-c', path=xercesNode,
                      uselib=xercesUselibs, name='XML', env=env.derive(),
-                     defines=xercesDefines)
+                     defines=xercesDefines,
+                     targets_to_add=[])
         if libType == 'stlib':
             xerces.export_defines='XERCES_STATIC_LIBRARY'
         
