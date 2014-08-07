@@ -998,7 +998,6 @@ def configureCompilerOptions(self):
         flags = '/UUNICODE /U_UNICODE /EHs /GR'.split()
         
         self.env.append_value('DEFINES', defines)
-        self.env.append_value('LINKFLAGS_THREAD', '-pthread')
         self.env.append_value('CXXFLAGS', flags)
         self.env.append_value('CFLAGS', flags)
     
