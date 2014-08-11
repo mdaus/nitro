@@ -44,7 +44,10 @@ class CPPContext(Context.Context):
     def recurse(self,str=None):
         dirs = []
         if isinstance(str, basestring):
-            dirs = str.split()
+            if len(str) == 0:
+                return
+            else:
+                dirs = str.split()
         else:
             dirs = str
         
