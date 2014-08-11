@@ -3,6 +3,7 @@ from os.path import split, isdir, isfile, exists, splitext, abspath, join, \
                     basename, dirname
 
 from waflib import Options, Utils, Logs, TaskGen
+from waflib.Options import OptionsContext
 from waflib.Configure import conf, ConfigurationContext
 from waflib.Build import BuildContext, ListContext, CleanContext, InstallContext
 from waflib.TaskGen import task_gen, feature, after, before
@@ -40,6 +41,22 @@ class CPPContext(Context.Context):
     cmd='evil'
     module_hooks = []
     
+    def recurse(self,str=None):
+        dirs = []
+        if isinstance(str, basestring):
+            dirs = str.split()
+        else:
+            dirs = str
+        
+        if not dirs:
+            super(CPPContext, self).recurse(filter(
+                        lambda x: exists(join(self.path.abspath(), x, 'wscript')),
+                        os.walk(self.path.abspath()).next()[1]))
+        else:
+            super(CPPContext, self).recurse(filter(
+                        lambda x: exists(join(self.path.abspath(), x, 'wscript')),
+                        dirs))
+
     def safeVersion(self, version):
         return re.sub(r'[^\w]', '.', version)
     
@@ -1536,6 +1553,17 @@ class CPPListContext(ListContext, CPPContext):
 class CPPCleanContext(CleanContext, CPPContext):
     pass
 class CPPInstallContext(InstallContext, CPPContext):
+    pass
+class CPPConfigurationContext(ConfigurationContext, CPPContext):
+    pass
+class CPPOptionsContext(OptionsContext, CPPContext):
+    pass
+    
+class CPPBaseDistcleanContext(Context.Context):
+    cmd='distclean'
+    def __init__(self,**kw):
+        super(CPPBaseDistcleanContext,self).__init__(**kw)
+class CPPDistcleanContext(CPPBaseDistcleanContext, CPPContext):
     pass
 
 class CPPMSVSGenContext(msvs_generator, CPPContext):

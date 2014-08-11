@@ -1,4 +1,5 @@
 import os
+from build import CPPOptionsContext
 from waflib import Scripting, Options
 from os.path import join, exists 
 
@@ -12,19 +13,15 @@ DIRS = 'drivers c++'
 def options(opt):
     opt.load('build matlabtool', tooldir='./build/')
     # always set_options on all
-    opt.recurse(filter(lambda x: exists(join(opt.path.abspath(), x, 'wscript')),
-                           DIRS.split()))
+    opt.recurse(DIRS)
 
 def configure(conf):
     conf.load('build matlabtool', tooldir='./build/')
-    conf.recurse(filter(lambda x: exists(join(conf.path.abspath(), x, 'wscript')),
-                           DIRS.split()))
+    conf.recurse(DIRS)
 
 def build(bld):
-    bld.recurse(filter(lambda x: exists(join(bld.path.abspath(), x, 'wscript')),
-                           DIRS.split()))
-        
-def distclean(context):
-    context.recurse(filter(lambda x: exists(join(context.path.abspath(), x, 'wscript')),
-                           DIRS.split()))    
-    Scripting.distclean(context)
+    bld.recurse(DIRS)
+
+def distclean(ctxt):
+    ctxt.recurse(DIRS)
+    Scripting.distclean(ctxt)

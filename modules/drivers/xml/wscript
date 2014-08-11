@@ -18,22 +18,16 @@ def options(opt):
     opt.add_option('--nobuild-xml', action='store_false', dest='build_xml',
                    help='force not building XML layer from scratch')
         
-    existingDirs = filter(lambda x: exists(join(opt.path.abspath(), x)), APIS.split())
-    opt.recurse(existingDirs)
+    opt.recurse(APIS)
 
 def configure(conf):    
     if Options.options.enable_xml:
         conf.msg('Configuring with XML layer', Options.options.xml_layer)
-        existingDirs = filter(lambda x: exists(join(conf.path.abspath(), x)), APIS.split())
-        conf.recurse(existingDirs)
+        conf.recurse(APIS)
 
 def build(bld):
+    bld.recurse(APIS)
 
-    existingDirs = filter(lambda x: exists(join(bld.path.abspath(), x)), APIS.split())
-    bld.recurse(existingDirs)
-
-def distclean(context):
-
-    existingDirs = filter(lambda x: exists(join(context.path.abspath(), x)), APIS.split())
-    context.recurse(existingDirs)
-
+def distclean(ctxt):
+    existingDirs = filter(lambda x: exists(join(ctxt.path.abspath(), x)), APIS.split())
+    ctxt.recurse(APIS)
