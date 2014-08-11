@@ -29,5 +29,4 @@ def build(bld):
     bld.recurse(APIS)
 
 def distclean(ctxt):
-    existingDirs = filter(lambda x: exists(join(ctxt.path.abspath(), x)), APIS.split())
     ctxt.recurse(APIS)
