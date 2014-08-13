@@ -21,11 +21,14 @@
  */
 
 #include <sys/ConditionVar.h>
+#include <mt/CriticalSection.h>
 
 #include "TestCase.h"
 
 namespace
 {
+
+typedef mt::CriticalSection<sys::Mutex> CriticalSection;
 
 TEST_CASE(testDefaultConstructor)
 {
@@ -44,12 +47,35 @@ TEST_CASE(testParameterizedConstructor)
     cond.dropLock();
 }
 
+TEST_CASE(testMultipleTimeouts)
+{
+    sys::Mutex mutex;
+    sys::ConditionVar cond(&mutex, false);
+
+    for (size_t ii = 0; ii < 5; ++ii)
+    {
+        CriticalSection scopedLock(&mutex);
+        try
+        {
+            cond.wait(0.001);
+        }
+        catch (const except::Exception&)
+        {
+        }
+    }
+    {
+        CriticalSection scopedLock(&mutex);
+        cond.broadcast();
+    }
+}
+
 }
 
 int main(int argc, char* argv[])
 {
     TEST_CHECK(testDefaultConstructor);
     TEST_CHECK(testParameterizedConstructor);
+    TEST_CHECK(testMultipleTimeouts);
 
     return 0;
 }
