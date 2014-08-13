@@ -48,15 +48,15 @@ public:
     *  Constructor --
     *  Streams data from a pipe when available
     *
-    *  \param pipe           - pipe for reading
-    *  \param maxLineLength  - max length in bytes of one line 
-                            (new line terminate)
+    *  \param pipe             - pipe for reading
+    *  \param streamBufferSize - size of internal buffer for streaming
     */
-    PipeStream(const std::string& cmd, size_t maxLineLength = 2501) : 
+    PipeStream(const std::string& cmd,
+               size_t streamBufferSize = DEFAULT_CHUNK_SIZE) : 
         InputStream(),
         mExecPipe(cmd),
-        mCharString(new char[maxLineLength]),
-        mMaxLength(maxLineLength)
+        mCharString(new char[streamBufferSize]),
+        mBufferSize(streamBufferSize)
     {
         mExecPipe.run();
     }
@@ -106,7 +106,7 @@ protected:
 
     sys::ExecPipe mExecPipe;
     mem::ScopedArray<char> mCharString;
-    size_t mMaxLength;
+    size_t mBufferSize;
 
 private:
 

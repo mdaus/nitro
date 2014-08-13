@@ -23,96 +23,89 @@
 
 using namespace io;
 
-sys::SSize_T io::PipeStream::read(sys::byte *cStr,
-                                  const sys::Size_T strLenPlusNullByte)
+sys::SSize_T io::PipeStream::read(sys::byte *cStr, sys::Size_T numBytes)
 {
-    size_t bytesLeft = strLenPlusNullByte;
-    char* tmp = cStr;
-    while (bytesLeft)
+    FILE* pipe = mExecPipe.getPipe();
+
+    size_t bytesLeft = numBytes;
+    while (bytesLeft && !feof(pipe))
     {
-        sys::SSize_T bytesRead = readln(tmp, bytesLeft);
-        if (bytesRead != -1)
+        sys::SSize_T bytesRead = fread(cStr, 1, bytesLeft, pipe);
+        if (bytesRead > 0)
         {
-            // take off null terminated byte in count
-            bytesLeft -= bytesRead - 1;
-            tmp += bytesRead - 1;
+            bytesLeft -= bytesRead;
+            cStr += bytesRead;
         }
-        else
-        {
-            // null terminate the array
-            tmp[0] = 0;
-            return (bytesLeft + 1) - strLenPlusNullByte;
-        }
+
+        // throw if error reading stream
+        else if (ferror(pipe))
+            throw except::IOException(Ctxt("Error reading from command pipe"));
     }
-    return -1;
+
+    // check if didn't read any bytes before end of file
+    if (bytesLeft == numBytes)
+        return IS_EOF;
+
+    return numBytes - bytesLeft;
 }
 
 sys::SSize_T io::PipeStream::readln(sys::byte *cStr,
                                     const sys::Size_T strLenPlusNullByte)
 {
-    // validation
-    sys::Size_T readLength = strLenPlusNullByte;
-    if (!readLength || readLength > mMaxLength)
-    {
-        readLength = mMaxLength;
-    }
+    FILE* pipe = mExecPipe.getPipe();
 
-    // get the next line or return null
-    while (!feof(mExecPipe.getPipe()) && 
-           fgets(cStr, (int)readLength, 
-                 mExecPipe.getPipe()) != NULL)
+    while (!feof(pipe))
     {
-        // add 1 because of null termination
-        return strlen(cStr) + 1;
+        // get the next line or return null
+        if (fgets(cStr, strLenPlusNullByte, pipe) != NULL)
+        {
+            return strlen(cStr);
+        }
+
+        // throw if error reading stream
+        if (ferror(pipe))
+            throw except::IOException(Ctxt("Error reading from command pipe"));
     }
-    
-    // no byte read --
-    // either none left or eof reached
-    return -1;
+    return IS_EOF;
 }
 
 sys::SSize_T io::PipeStream::streamTo(OutputStream& soi,
                                       sys::SSize_T numBytes)
 {
-    size_t totalBytesRead = 0;
+    sys::SSize_T totalBytesRead = 0;
     if (numBytes == IS_END)
     {
-        // read line by line
-        while (!feof(mExecPipe.getPipe()) &&
-               fgets(mCharString.get(), (int)mMaxLength, 
-                     mExecPipe.getPipe()) != NULL)
+        while (!feof(mExecPipe.getPipe()))
         {
-            size_t bytesRead = strlen(mCharString.get());
-
-            // write without null termination
-            soi.write(mCharString.get(), bytesRead - 1);
-            totalBytesRead += bytesRead - 1;
+            sys::SSize_T bytesRead = read(mCharString.get(), mBufferSize);
+            if (bytesRead > 0)
+            {
+                soi.write(mCharString.get(), bytesRead);
+                totalBytesRead += bytesRead;
+            }
         }
     }
     else
     {
-        size_t bytesLeft = numBytes;
-        while (bytesLeft)
+        sys::Size_T bytesLeft = numBytes;
+        while (bytesLeft && !feof(mExecPipe.getPipe()))
         {
-            // read line by line
-            if (!feof(mExecPipe.getPipe()) && 
-                fgets(mCharString.get(), (int)mMaxLength, 
-                      mExecPipe.getPipe()) != NULL)
+            // don't read more bytes than streaming forward or buff size
+            sys::SSize_T bytesRead = read(mCharString.get(),
+                                          std::min(bytesLeft, mBufferSize));
+            if (bytesRead > 0)
             {
-                size_t bytesRead = strlen(mCharString.get());
-
-                // write without null termination
-                soi.write(mCharString.get(), bytesRead - 1);
-                totalBytesRead += bytesRead - 1;
-
-                // subtract 1 because we want to have room for the null character
-                bytesLeft = numBytes - totalBytesRead - 1;
+                soi.write(mCharString.get(), bytesRead);
+                bytesLeft -= bytesRead;
             }
         }
+
+        totalBytesRead = numBytes - bytesLeft;
     }
 
-    // null terminate the stream
-    soi.write(0);
-    return totalBytesRead + 1;
-}
+    // check if didn't read any bytes before end of file
+    if (totalBytesRead == 0)
+        return IS_EOF;
 
+    return totalBytesRead;
+}
