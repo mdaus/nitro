@@ -1441,6 +1441,14 @@ def makeHeaderFile(bldpath, output, path, defs, undefs, chmod, guard):
     dest = open(outfile, 'w')
     dest.write('#ifndef %s\n#define %s\n\n' % (guard, guard))
 
+    # Prevent the following from making it into a config header
+    toRemove = ['PYTHONDIR', 'PYTHONARCHDIR', 'NOMINMAX', '_SCL_SECURE_NO_WARNINGS', \
+               '_CRT_SECURE_NO_WARNINGS', 'WIN32_LEAN_AND_MEAN', 'WIN32', 'NOMINMAX', \
+               '_FILE_OFFSET_BITS', '_LARGEFILE_SOURCE']
+    for item in toRemove:
+        if item in defs:
+            del defs[item]
+
     for k in defs.keys():
         v = defs[k]
         if v is None:
