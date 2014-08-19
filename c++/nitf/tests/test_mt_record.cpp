@@ -1,13 +1,12 @@
-#include <import/sys.h>
 #include <import/nitf.hpp>
 
 
-class RecordThread : public sys::Thread
+class RecordThread : public mt::Thread
 {
 public:
     RecordThread() {}
     virtual ~RecordThread() {}
-    //static sys::Mutex m;
+    //static mt::Mutex m;
     
     virtual void run()
     {
@@ -30,7 +29,7 @@ public:
         //m.lock();
         nitf::TRE* acftb = new nitf::TRE(name, name);
 
-        std::string file = str::toString<long>(sys::getThreadID()) + ".ntf";
+        std::string file = str::toString<long>(mt::getThreadID()) + ".ntf";
 
         nitf::IOHandle output(file, NITF_ACCESS_WRITEONLY, NITF_CREATE);
         writer.prepare(output, record);
@@ -41,14 +40,14 @@ public:
 };
 
 
-//sys::Mutex RecordThread::m;
+//mt::Mutex RecordThread::m;
 
 const int NTHR = 2;
 int main(int argc, char** argv)
 {
     try
     {
-        sys::Thread** thrs = new sys::Thread*[NTHR];
+        mt::Thread** thrs = new mt::Thread*[NTHR];
 
         for (unsigned int i = 0; i < NTHR; ++i)
         {

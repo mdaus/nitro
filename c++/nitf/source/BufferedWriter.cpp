@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include "nitf/BufferedWriter.hpp"
+#include <nitf/BufferedWriter.hpp>
 
 namespace nitf
 {
@@ -13,7 +13,7 @@ BufferedWriter::BufferedWriter(const std::string& file, size_t bufferSize) :
     mBlocksWritten(0),
     mPartialBlocks(0),
     mElapsedTime(0),
-    mFile(file, sys::File::WRITE_ONLY, sys::File::CREATE | sys::File::TRUNCATE)
+    mFile(file, io::File::WRITE_ONLY, io::File::CREATE | io::File::TRUNCATE)
 {
     if (mBufferSize == 0)
     {
@@ -34,7 +34,7 @@ BufferedWriter::BufferedWriter(const std::string& file,
     mBlocksWritten(0),
     mPartialBlocks(0),
     mElapsedTime(0),
-    mFile(file, sys::File::WRITE_ONLY, sys::File::CREATE)
+    mFile(file, io::File::WRITE_ONLY, io::File::CREATE)
 {
     if (mBufferSize == 0)
     {
@@ -51,7 +51,7 @@ BufferedWriter::~BufferedWriter()
         {
             // If the file is still open, we may not have flushed out our
             // internal buffer.  Note that we can't just call closeImpl()
-            // here because it's virtual.  sys::File's destructor will take
+            // here because it's virtual.  io::File's destructor will take
             // care of closing the file but wouldn't flush (i.e. fsync()) so
             // we call this too.
             flushBuffer();

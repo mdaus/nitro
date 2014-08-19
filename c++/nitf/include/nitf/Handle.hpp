@@ -28,8 +28,8 @@
  *  \brief Contains handle wrapper to manage shared native objects
  */
 
-#include <import/sys.h>
-#include "nitf/System.hpp"
+#include <import/mt.h>
+#include <nitf/System.hpp>
 #include <iostream>
 
 namespace nitf
@@ -68,7 +68,7 @@ public:
     }
 
 protected:
-    static sys::Mutex mutex;
+    static mt::Mutex mutex;
     int refCount;
 };
 

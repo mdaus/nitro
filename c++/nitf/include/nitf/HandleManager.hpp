@@ -25,9 +25,8 @@
 
 #include <string>
 #include <map>
-#include <import/sys.h>
 #include <import/mt.h>
-#include "nitf/Handle.hpp"
+#include <nitf/Handle.hpp>
 
 namespace nitf
 {
@@ -37,7 +36,7 @@ private:
 typedef void* CAddress;
 
     std::map<CAddress, Handle*> mHandleMap; //! map for storing the handles
-    sys::Mutex mMutex; //! mutex used for locking the map
+    mt::Mutex mMutex; //! mutex used for locking the map
 
 public:
     HandleManager() {}
@@ -47,7 +46,7 @@ public:
     bool hasHandle(T* object)
     {
         if (!object) return false;
-        mt::CriticalSection<sys::Mutex> obtainLock(&mMutex);
+        mt::CriticalSection<mt::Mutex> obtainLock(&mMutex);
         return mHandleMap.find(object) != mHandleMap.end();
     }
 
@@ -55,7 +54,7 @@ public:
     BoundHandle<T, DestructFunctor_T>* acquireHandle(T* object)
     {
         if (!object) return NULL;
-        mt::CriticalSection<sys::Mutex> obtainLock(&mMutex);
+        mt::CriticalSection<mt::Mutex> obtainLock(&mMutex);
         if (mHandleMap.find(object) == mHandleMap.end())
         {
             BoundHandle<T, DestructFunctor_T>* handle =
@@ -73,7 +72,7 @@ public:
     template <typename T>
     void releaseHandle(T* object)
     {
-        mt::CriticalSection<sys::Mutex> obtainLock(&mMutex);
+        mt::CriticalSection<mt::Mutex> obtainLock(&mMutex);
         std::map<CAddress, Handle*>::iterator it = mHandleMap.find(object);
         if (it != mHandleMap.end())
         {

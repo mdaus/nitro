@@ -20,5 +20,5 @@
  *
  */
 
-#include "nitf/Handle.hpp"
-sys::Mutex nitf::Handle::mutex;
+#include <nitf/Handle.hpp>
+mt::Mutex nitf::Handle::mutex;

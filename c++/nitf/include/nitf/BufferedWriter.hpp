@@ -23,7 +23,7 @@
 #ifndef __NITF_BUFFERED_WRITER_HPP__
 #define __NITF_BUFFERED_WRITER_HPP__
 
-#include <sys/File.h>
+#include <io/File.h>
 #include <mem/ScopedArray.h>
 #include <nitf/CustomIO.hpp>
 
@@ -94,8 +94,8 @@ private:
     double mElapsedTime;
 
     // NOTE: This is at the end to give us a chance to adopt the buffer
-    //       in ScopedArray in case sys::File's constructor throws
-    mutable sys::File mFile;
+    //       in ScopedArray in case io::File's constructor throws
+    mutable io::File mFile;
 
     void flushBuffer(const char* buf);
 };
