@@ -109,7 +109,7 @@ char* strptime(const char *buf, const char *fmt, struct tm& tm, double& millis)
         // "Alternative" modifiers. Ignore for now and continue.
         if (*fmt == 'E' || *fmt == 'O')
         {
-            *fmt++;
+            ++fmt;
         }
 
         switch (fc = *fmt++)
@@ -381,7 +381,7 @@ double sys::DateTime::toMillis(tm t) const
 
 void sys::DateTime::setNow()
 {
-#if defined(HAVE_PTHREAD_H) && defined(HAVE_CLOCK_GETTIME)
+#ifdef HAVE_CLOCK_GETTIME
     struct timespec now;
     clock_gettime(CLOCK_REALTIME,&now);
     mTimeInMillis = (now.tv_sec + 1.0e-9 * now.tv_nsec) * 1000;
