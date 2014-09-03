@@ -39,8 +39,10 @@ namespace mem
     public:
         typedef T ElementType;
 
-        explicit ScopedAlignedArray(size_t numElements = 0) :
-            mArray(allocate(numElements))
+        explicit ScopedAlignedArray(
+            size_t numElements = 0,
+            size_t alignment = sys::SSE_INSTRUCTION_ALIGNMENT) :
+            mArray(allocate(numElements, alignment))
         {
         }
 
@@ -60,7 +62,8 @@ namespace mem
             }
         }
 
-        void reset(size_t numElements = 0)
+        void reset(size_t numElements = 0, 
+                   size_t alignment = sys::SSE_INSTRUCTION_ALIGNMENT)
         {
             if (mArray)
             {
@@ -68,7 +71,7 @@ namespace mem
                 mArray = NULL;
             }
 
-            mArray = allocate(numElements);
+            mArray = allocate(numElements, alignment);
         }
 
         T& operator[](std::ptrdiff_t idx) const
@@ -94,12 +97,13 @@ namespace mem
         const ScopedAlignedArray& operator=(const ScopedAlignedArray& );
 
         static
-        T* allocate(size_t numElements)
+        T* allocate(size_t numElements, size_t alignment)
         {
             if (numElements > 0)
             {
                 const size_t numBytes(numElements * sizeof(T));
-                return static_cast<T *>(sys::alignedAlloc(numBytes));
+                return static_cast<T *>(sys::alignedAlloc(numBytes, 
+                                                          alignment));
             }
             else
             {

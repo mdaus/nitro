@@ -26,6 +26,8 @@ def configure(conf):
         conf.check_cc(function_name='localtime_r', header_name="time.h", mandatory=False)
         conf.check_cc(function_name='gmtime_r', header_name="time.h", mandatory=False)
         conf.check_cc(function_name='setenv', header_name="stdlib.h", mandatory=False)
+        conf.check_cc(function_name='posix_memalign', header_name="stdlib.h", mandatory=False)
+        conf.check_cc(function_name='memalign', header_name="stdlib.h", mandatory=False)
         types_str = '''
             #include <stdio.h>
             int isBigEndian()

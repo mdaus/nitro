@@ -23,7 +23,6 @@
 
 #include "sys/Conf.h"
 
-
 bool sys::isBigEndianSystem()
 {
     // This is an endian test

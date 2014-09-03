@@ -58,10 +58,11 @@ public:
      *  during processing.
      *  This internally creates and manages the memory requested.
      */
-    SwapBuffer(size_t numBytes) :
+    SwapBuffer(size_t numBytes,
+               size_t alignment = sys::SSE_INSTRUCTION_ALIGNMENT) :
         mNumBytes(numBytes),
-        mAlignedValid(mNumBytes),
-        mAlignedScratch(mNumBytes),
+        mAlignedValid(mNumBytes, alignment),
+        mAlignedScratch(mNumBytes, alignment),
         mValid(mAlignedValid.get()),
         mScratch(mAlignedScratch.get())
     {

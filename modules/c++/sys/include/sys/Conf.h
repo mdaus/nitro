@@ -24,6 +24,7 @@
 #define __SYS_CONF_H__
 
 #include <sys/sys_config.h>
+#include <str/Convert.h>
 
 #if defined (__APPLE_CC__)
 #  include <iosfwd>
@@ -140,7 +141,6 @@ namespace sys
 
 namespace sys
 {
-    
     typedef char               byte;
     typedef unsigned char      ubyte;
     typedef uint8_t            Uint8_T;
@@ -179,6 +179,17 @@ namespace sys
 
 namespace sys
 {
+    /*!
+     *  32 byte alignment is safe for now. Most SSE instruction sets
+     *  require 16 byte alignment, but newer Intel chipsets require
+     *  32 byte. All 32 byte alignments inherently confirm 16 byte
+     *  alignment, so we default to 32 here to be safe.
+     *
+     *  NOTE: This should be updated as architectures require greater
+     *        intervals. Alignments require base 2 increments.
+     */
+    static const size_t SSE_INSTRUCTION_ALIGNMENT = 32;
+
     /*!
      * Returns true if the system is big-endian, otherwise false.
      * On Intel systems, we are usually small-endian, and on
@@ -255,10 +266,9 @@ namespace sys
     }
 
 
-#ifdef WIN32
-
     /*!
-     *  Method to create a block of memory on 16-byte boundary.
+     *  Method to create a block of memory on an alignment 
+     *  boundary specified by the user.
      *  This typically reduces the amount of moves that the
      *  OS has to do to get the data in the form that it needs
      *  to be in.  Since this method is non-standard, we present
@@ -268,12 +278,27 @@ namespace sys
      *  \throw Exception if a bad allocation occurs
      *  \return a pointer to the data (this method never returns NULL)
      */
-    inline void* alignedAlloc(size_t sz)
+    inline void* alignedAlloc(size_t size, 
+                              size_t alignment = SSE_INSTRUCTION_ALIGNMENT)
     {
-        void* p = _aligned_malloc(sz, 16);
+#ifdef WIN32
+        void* p = _aligned_malloc(size, alignment);
+#elif defined(HAVE_POSIX_MEMALIGN)
+        void* p = NULL;
+        if (posix_memalign(&p, alignment, size) != 0)
+        {
+            p = NULL;
+        }
+#elif defined(HAVE_MEMALIGN)
+        void* const p = memalign(alignment, size);
+#else
+        //! this is a basic unaligned allocation
+        void* p = malloc(size);
+#endif
         if (!p)
-            throw except::Exception("_aligned_malloc: bad alloc");
-        
+            throw except::Exception(Ctxt(
+                "Aligned allocation failure of size [" + 
+                str::toString(size) + "] bytes"));
         return p;
     }
     
@@ -285,105 +310,13 @@ namespace sys
      */
     inline void alignedFree(void* p)
     {
+#ifdef WIN32
         _aligned_free(p);
-    }
-#elif defined(__sun)
-    /*!
-     *  Method to create a block of memory on 16-byte boundary.
-     *  This typically reduces the amount of moves that the
-     *  OS has to do to get the data in the form that it needs
-     *  to be in.  Since this method is non-standard, we present
-     *  OS-specific alternatives.
-     *
-     *  \param sz The size (in bytes) of the buffer we wish to create
-     *  \throw Exception if a bad allocation occurs
-     *  \return a pointer to the data (this method never returns NULL)
-     */
-    inline void* alignedAlloc(size_t sz)
-    {
-        void* const p = memalign(16, sz);
-        if (p == NULL)
-            throw except::Exception("memalign: bad alloc");
-        memset(p, 0, sz);
-        return p;
-    }
-
-    /*!
-     *  Free memory that was allocated with alignedAlloc
-     *  This method behaves like free
-     *
-     *  \param p A pointer to the data allocated using alignedAlloc
-     */
-    inline void alignedFree(void* p)
-    {
-        free(p);
-    }
-#elif defined(HAVE_PTHREAD_H)
-
-    /*!
-     *  Method to create a block of memory on 16-byte boundary.
-     *  This typically reduces the amount of moves that the
-     *  OS has to do to get the data in the form that it needs
-     *  to be in.  Since this method is non-standard, we present
-     *  OS-specific alternatives.
-     *
-     *  \param sz The size (in bytes) of the buffer we wish to create
-     *  \throw Exception if a bad allocation occurs
-     *  \return a pointer to the data (this method never returns NULL)
-     */
-    inline void* alignedAlloc(size_t sz)
-    {
-        void* p = NULL;
-        if (posix_memalign(&p, 16, sz) != 0)
-            throw except::Exception("posix_memalign: bad alloc");
-        memset(p, 0, sz);
-        return p;
-
-    }
-
-    /*!
-     *  Free memory that was allocated with alignedAlloc
-     *  This method behaves like free
-     *
-     *  \param p A pointer to the data allocated using alignedAlloc
-     */
-    inline void alignedFree(void* p)
-    {
-        free(p);
-    }
-
 #else
-
-    /*!
-     *  Method to create a block of memory on 16-byte boundary.
-     *  This typically reduces the amount of moves that the
-     *  OS has to do to get the data in the form that it needs
-     *  to be in.  Since this method is non-standard, we present
-     *  OS-specific alternatives.
-     *
-     *  \param sz The size (in bytes) of the buffer we wish to create
-     *  \throw Exception if a bad allocation occurs
-     *  \return a pointer to the data (this method never returns NULL)
-     */
-    inline void* alignedAlloc(size_t sz)
-    {
-        void* p = calloc(sz, 1);
-        if (p == NULL)
-            throw except::Exception("calloc: bad alloc");
-        return p;
-    }
-
-    /*!
-     *  Free memory that was allocated with alignedAlloc
-     *  This method behaves like free
-     *
-     *  \param p A pointer to the data allocated using alignedAlloc
-     */
-    inline void alignedFree(void* p)
-    {
         free(p);
-    }
 #endif
+    }
+
 
 }
 
