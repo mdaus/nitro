@@ -450,8 +450,7 @@ class CPPContext(Context.Context):
             variant = modArgs.get('variant', bld.env['VARIANT'] or 'default')
             env = bld.all_envs[variant]
 
-        if self.is_defined('HAVE_MATLAB'):
-            
+        if 'HAVE_MATLAB' in self.env:
             modArgs = dict((k.lower(), v) for k, v in modArgs.iteritems())
             lang = modArgs.get('lang', 'c++')
             libExeType = {'c++':'cxx', 'c':'c'}.get(lang, 'cxx')
