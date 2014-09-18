@@ -249,30 +249,23 @@ size_t sys::OSWin32::getNumCPUs() const
 void sys::OSWin32::createSymlink(const std::string& origPathname, 
                                  const std::string& symlinkPathname) const
 {
-    OSVERSIONINFO vi;
-    memset(&vi, 0, sizeof(vi));
-    vi.dwOSVersionInfoSize = sizeof(vi);
-    if(!GetVersionEx(&vi))
+#ifdef NTDDI_VERSION
+#if NTDDI_VERSION >= NTDDI_VISTA
+    if(!CreateSymbolicLink(const_cast<char*>(symlinkPathname.c_str()),
+                           const_cast<char*>(origPathname.c_str()), true))
     {
         throw sys::SystemException(Ctxt(
-            "Call to GetVersionEx() has failed"));
+            "Call to CreateSymbolicLink() has failed"));
     }
-
-    // Symlinks were not available on versions of windows prior to Windows Vista
-    if(vi.dwPlatformId == VER_PLATFORM_WIN32_NT  &&  vi.dwMajorVersion >= 6)
-    {
-        if(!CreateSymbolicLink(const_cast<char*>(symlinkPathname.c_str()), 
-                               const_cast<char*>(origPathname.c_str()), true))
-        {
-            throw sys::SystemException(Ctxt(
-                "Call to CreateSymbolicLink() has failed"));
-        }
-    }
-    else
-    {
-        throw sys::SystemException(Ctxt(
-            "Windows version does not support symlinks"));
-    }
+#else
+    throw sys::SystemException(Ctxt(
+        "Windows version does not support symlinks"));
+#endif
+#else
+    // Don't think this should occur
+    throw sys::SystemException(Ctxt(
+            "NTDDI_VERSION macro not set to check Windows version"));
+#endif
 }
 
 void sys::OSWin32::removeSymlink(const std::string& symlinkPathname) const
