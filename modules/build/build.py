@@ -11,6 +11,7 @@ from waflib.Utils import to_list as listify
 from waflib.Tools import waf_unit_test
 from waflib import Context, Errors
 from msvs import msvs_generator
+from eclipse import eclipse
 from dumpenv import dumpenv
 
 COMMON_EXCLUDES = '.bzr .bzrignore .git .gitignore .svn CVS .cvsignore .arch-ids {arch} SCCS BitKeeper .hg _MTN _darcs Makefile Makefile.in config.log'.split()
@@ -1416,6 +1417,11 @@ class CPPMSVSGenContext(msvs_generator, CPPContext):
     def __init__(self, **kw):
         self.waf_command = 'python waf'
         super(CPPMSVSGenContext, self).__init__(**kw)
+
+class CPPEclipseGenContext(eclipse, CPPContext):
+    def __init__(self, **kw):
+        self.waf_command = 'python waf'
+        super(CPPEclipseGenContext, self).__init__(**kw)
 
 class CPPDumpEnvContext(dumpenv, CPPContext):
     def __init__(self, **kw):
