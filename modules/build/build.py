@@ -811,6 +811,10 @@ def configureCompilerOptions(self):
 
         vars = {}
         vars['debug']          = ['/Zi', crtDebug]
+        if self.env['MSVC_VERSION'] >= 12:
+            # Starting with Visual Studio 2013, this is needed to support
+            # multiple CL.exe's writing to the common vc*.pdb file
+            vars['debug'] += ['/FS']
         vars['warn']           = warningFlags.split()
         vars['nowarn']         = '/w'
         vars['verbose']        = ''
