@@ -249,8 +249,18 @@ size_t sys::OSWin32::getNumCPUs() const
 void sys::OSWin32::createSymlink(const std::string& origPathname, 
                                  const std::string& symlinkPathname) const
 {
+    // NTDDI_WINXPSP3 = 0x05010300
+    // NTDDI_VISTA    = 0x06000000
+    // Note that we can't actually just use the defined constants reliably
+    // below as Visual Studio 2008 did not have NTDDI_VISTA defined in it
+    // If you want to configure on a Windows 7 machine to support a build that
+    // will run on a Windows XP machine, you want to configure with the
+    // following flags (except again you may need to substitute the constants
+    // with the actual values)
+    // --with-cflags="/DNTDDI_VERSION=NTDDI_WINXPSP3 /D_WIN32_WINNT=_WIN32_WINNT_WINXP"
+    // --with-cxxflags="/DNTDDI_VERSION=NTDDI_WINXPSP3 /D_WIN32_WINNT=_WIN32_WINNT_WINXP"
 #ifdef NTDDI_VERSION
-#if NTDDI_VERSION >= NTDDI_VISTA
+#if NTDDI_VERSION >= 0x06000000
     if(!CreateSymbolicLink(const_cast<char*>(symlinkPathname.c_str()),
                            const_cast<char*>(origPathname.c_str()), true))
     {
