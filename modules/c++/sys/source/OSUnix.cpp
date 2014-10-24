@@ -28,6 +28,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <sstream>
+#include <limits.h>
 
 #include "sys/OSUnix.h"
 #include "sys/File.h"
