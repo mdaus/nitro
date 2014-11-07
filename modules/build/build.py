@@ -686,13 +686,16 @@ def configureCompilerOptions(self):
         self.env.append_value('DEFINES', '_FILE_OFFSET_BITS=64 _LARGEFILE_SOURCE'.split())
         self.env.append_value('CFLAGS', '-fPIC -dynamiclib'.split())
 
-    #linux
-    elif re.match(linuxRegex, sys_platform):
+    # GCC / ICC (for Linux or Solaris)
+    elif ccCompiler == 'gcc' or ccCompiler == 'icc':
         self.env.append_value('LIB_DL', 'dl')
         self.env.append_value('LIB_NSL', 'nsl')
         self.env.append_value('LIB_MATH', 'm')
         self.env.append_value('LINKFLAGS_THREAD', '-pthread')
         self.check_cc(lib='pthread', mandatory=True)
+        
+        if re.match(solarisRegex, sys_platform):
+            self.env.append_value('LIB_SOCKET', 'socket')
 
         warningFlags = '-Wall'
         if Options.options.warningsAsErrors:
@@ -720,7 +723,15 @@ def configureCompilerOptions(self):
 
             # DEFINES and LINKFLAGS will apply to both gcc and g++
             self.env.append_value('DEFINES', '_FILE_OFFSET_BITS=64 _LARGEFILE_SOURCE'.split())
-            self.env.append_value('LINKFLAGS', '-Wl,-E -fPIC'.split())
+
+            # TODO: Not sure why, but this flag doesn't work on Solaris
+            #       Is there an equivalent to get the same functionality or
+            #       is this an OS limitation?
+            linkFlags = '-fPIC'
+            if not re.match(solarisRegex, sys_platform):
+                linkFlags += ' -Wl,-E'
+            
+            self.env.append_value('LINKFLAGS', linkFlags.split())
 
         if ccCompiler == 'gcc' or ccCompiler == 'icc':
             config['cc']['debug']          = '-g'
@@ -734,9 +745,9 @@ def configureCompilerOptions(self):
             config['cc']['optz_fast']      = '-O2'
             config['cc']['optz_fastest']   = '-O3'
 
-            self.env.append_value('CFLAGS', '-fPIC'.split())
+            self.env.append_value('CFLAGS', '-fPIC'.split())        
 
-    #Solaris
+    # Solaris (Studio compiler)
     elif re.match(solarisRegex, sys_platform):
         self.env.append_value('LIB_DL', 'dl')
         self.env.append_value('LIB_NSL', 'nsl')
