@@ -13,6 +13,7 @@ from waflib import Context, Errors
 from msvs import msvs_generator
 from eclipse import eclipse
 from dumpenv import dumpenv
+from dumplib import dumplib
 
 COMMON_EXCLUDES = '.bzr .bzrignore .git .gitignore .svn CVS .cvsignore .arch-ids {arch} SCCS BitKeeper .hg _MTN _darcs Makefile Makefile.in config.log'.split()
 COMMON_EXCLUDES_EXT ='~ .rej .orig .pyc .pyo .bak .tar.bz2 tar.gz .zip .swp'.split()
@@ -1438,3 +1439,8 @@ class CPPDumpEnvContext(dumpenv, CPPContext):
     def __init__(self, **kw):
         self.waf_command = 'python waf'
         super(CPPDumpEnvContext, self).__init__(**kw)
+
+class CPPDumpLibContext(dumplib, CPPContext):
+    def __init__(self, **kw):
+        self.waf_command = 'python waf'
+        super(CPPDumpLibContext, self).__init__(**kw)
