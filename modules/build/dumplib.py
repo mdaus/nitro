@@ -23,6 +23,11 @@ class dumplib(BuildContext):
 
             # Now we can grab his defines
             libs += tsk.env.STLIB
+            
+            # Add use libs
+            for uselib in tsk.uselib:
+                if tsk.env['LIB_' + uselib]:
+                    libs += tsk.env['LIB_' + uselib]
 
         # Sort and uniquify it, then print them all out
         libs = sorted(list(set(libs)))
@@ -36,5 +41,5 @@ class dumplib(BuildContext):
             for lib in libs:
                 if str:
                     str += ' '
-                str += lib
+                str += tsk.env.STLIB_ST % lib
             print str

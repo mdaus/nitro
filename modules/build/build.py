@@ -166,7 +166,7 @@ class CPPContext(Context.Context):
                 uselib_local.append(uselibCheck)
             else:
                 uselib.append(uselibCheck)
-
+        
         if libVersion is not None and sys.platform != 'win32':
             targetName = '%s.%s' % (libName, self.safeVersion(libVersion))
         else:
