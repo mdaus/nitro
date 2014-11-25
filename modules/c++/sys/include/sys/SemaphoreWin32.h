@@ -37,8 +37,7 @@ namespace sys
 class SemaphoreWin32 : public SemaphoreInterface
 {
 public:
-    enum { MAX_COUNT = 10 };
-    SemaphoreWin32(unsigned int count = 0);
+    SemaphoreWin32(unsigned int count = 0, LONG maxCount = std::numeric_limits<LONG>::max());
     
     virtual ~SemaphoreWin32()
     {}

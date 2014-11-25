@@ -27,11 +27,11 @@
 
 #include "sys/SemaphoreWin32.h"
 
-sys::SemaphoreWin32::SemaphoreWin32(unsigned int count)
+sys::SemaphoreWin32::SemaphoreWin32(unsigned int count, LONG maxCount)
 {
-    mNative = CreateSemaphore(NULL, count, MAX_COUNT, NULL);
+    mNative = CreateSemaphore(NULL, count, maxCount, NULL);
     if (mNative == NULL)
-        throw sys::SystemException("CreateSempaphore Failed");
+        throw sys::SystemException("CreateSemaphore Failed");
 
 }
 
