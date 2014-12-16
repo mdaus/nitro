@@ -334,5 +334,12 @@ OneD<_T> OneD<_T>::transformInput(const OneD<_T>& gx,
     return newP.truncateToNonZeros(zeroEpsilon);
 }
 
+template<typename _T>
+void OneD<_T>::copyFrom(const OneD<_T>& p)
+{
+    const size_t numCopy(std::min(size(), p.size()));
+    std::copy(p.mCoef.begin(), p.mCoef.begin() + numCopy, mCoef.begin());
+}
+
 } // poly
 } // math

@@ -182,6 +182,17 @@ public:
      */
     OneD<_T> transformInput(const OneD<_T>& gx,
                             double zeroEpsilon = 0.0) const;
+    /*!
+     * Copies all valid data from p into the coefficients.
+     * This is used in situations where we want to assign a OneD but do
+     * not want to change the underlying order of the OneD.
+     *
+     * In general this method should only be used internally between poly
+     * classes.
+     *
+     * \param p The polynomial to copy from.
+     */
+    void copyFrom(const OneD<_T>& p);
 
     _T operator ()(double at) const;
     _T integrate(double start, double end) const;

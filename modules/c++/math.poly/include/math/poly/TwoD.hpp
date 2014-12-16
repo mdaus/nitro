@@ -269,7 +269,7 @@ TwoD<_T>::operator += (const TwoD<_T>& p)
                  std::max<int>(orderY(), p.orderY()));
     for (unsigned int i = 0, sz = mCoef.size() ; i < sz; i++)
     {
-        tmp.mCoef[i] = mCoef[i];
+        tmp.mCoef[i].copyFrom(mCoef[i]);
     }
     for (unsigned int i = 0, sz = p.mCoef.size() ; i < sz; i++)
     {
@@ -297,7 +297,7 @@ TwoD<_T>::operator-=(const TwoD<_T>& p)
 
     for (size_t i = 0, sz = mCoef.size() ; i < sz; i++)
     {
-        tmp.mCoef[i] = mCoef[i];
+        tmp.mCoef[i].copyFrom(mCoef[i]);
     }
 
     for (size_t i = 0, sz = p.mCoef.size() ; i < sz; i++)
