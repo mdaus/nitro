@@ -25,7 +25,8 @@
 
 #include <import/except.h>
 #include <import/sys.h>
-#include "math/poly/OneD.h"
+#include <math/poly/OneD.h>
+#include <math/poly/Utils.h>
 
 namespace math
 {
@@ -351,6 +352,23 @@ public:
         return copy;
     }
 
+    /*!
+     * Returns a scaled polynomial such that
+     * P'(x) = P(x * scale)
+     *
+     * If you had a polynomial in units of feet that you wanted in units of
+     * meters, you would pass in a scale value of METERS_TO_FEET (since this
+     * is what you would scale all your inputs by if you were using the
+     * original polynomial in feet).
+     *
+     * \param scale The factor to apply
+     *
+     * \return Scaled polynomial of the same order as the original polynomial
+     */
+    Fixed1D<_Order, _T> scaleVariable(double scale) const
+    {
+        return ::math::poly::scaleVariable<Fixed1D<_Order, _T> >(*this, scale);
+    }
 };
 
 /*!

@@ -25,7 +25,8 @@
 
 #include <import/except.h>
 #include <import/sys.h>
-#include "math/poly/OneD.h"
+#include <math/poly/OneD.h>
+#include <math/poly/Utils.h>
 
 namespace math
 {
@@ -156,8 +157,8 @@ TwoD<_T>::flipXY() const
     TwoD<_T> prime(oX, oY);
     
     for (size_t i = 0; i <= oX; i++)
-	for (size_t j = 0; j <= oY; j++)
-	    prime[i][j] = mCoef[j][i];
+        for (size_t j = 0; j <= oY; j++)
+            prime[i][j] = mCoef[j][i];
     return prime;
 }
 
@@ -412,33 +413,7 @@ TwoD<_T> TwoD<_T>::scaleVariable(double scale) const
 template<typename _T>
 TwoD<_T> TwoD<_T>::scaleVariable(double scaleX, double scaleY) const
 {
-    // Here is an elegant way to scale everything, except you'll end up with
-    // a polynomial that's of an order twice as high as you have now with a
-    // bunch of terms with a coefficient of 0.
-    /*
-    math::poly::TwoD<double> px(1, 1);
-    math::poly::TwoD<double> py(1, 1);
-
-    px[1][0] = scaleX;
-    py[0][1] = scaleY;
-    return transformVariable(px, py);
-    */
-
-    math::poly::TwoD<double> newP = *this;
-
-    double xCoeff = 1.0;
-    for (size_t ii = 0; ii <= orderX(); ++ii)
-    {
-        double yCoeff = 1.0;
-        for (size_t jj = 0; jj <= orderY(); ++jj)
-        {
-            newP[ii][jj] *= xCoeff * yCoeff;
-            yCoeff *= scaleY;
-        }
-        xCoeff *= scaleX;
-    }
-
-    return newP;
+    return ::math::poly::scaleVariable<TwoD<_T> >(*this, scaleX, scaleY);
 }
 
 template<typename _T>
@@ -498,6 +473,38 @@ TwoD<_T> TwoD<_T>::truncateToNonZeros(double zeroEpsilon) const
     }
 
     return truncateTo(newOrderX, newOrderY);
+}
+
+template<typename _T>
+TwoD<_T> TwoD<_T>::transformInput(
+        const math::poly::TwoD<_T>& gx,
+        const math::poly::TwoD<_T>& gy,
+        double zeroEpsilon) const
+{
+    math::poly::TwoD<_T> newP(orderX(), orderY());
+
+    for (size_t ii = 0; ii <= orderX(); ++ii)
+    {
+        for (size_t jj = 0; jj <= orderY(); ++jj)
+        {
+            newP += gx.power(ii) * gy.power(jj) * (*this)[ii][jj];
+        }
+    }
+
+    return newP.truncateToNonZeros(zeroEpsilon);
+}
+
+template<typename _T>
+TwoD<_T> TwoD<_T>::transformInput(const math::poly::TwoD<_T>& gx,
+                                  double zeroEpsilon) const
+{
+    // We want to retain our y value. So create a polynomial which
+    // is y = y.
+    TwoD<_T> gy(1, 1);
+    gy[0][1] = 1;
+    gy[0][0] = 0;
+
+    return transformInput(gx, gy, zeroEpsilon);
 }
 } // poly
 } // math

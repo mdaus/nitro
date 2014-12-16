@@ -209,6 +209,44 @@ TEST_CASE(testTruncateToNonZeros)
     TEST_ASSERT_EQ(truncatedPoly.orderY(), 0);
     TEST_ASSERT_EQ(truncatedPoly[0][0], 0.0);
 }
+
+TEST_CASE(testTransformInput)
+{
+    std::vector<double> xValues;
+    std::vector<double> yValues;
+    getRandValues(xValues, yValues);
+
+    math::poly::TwoD<double> poly(getRandPoly(4, 5));
+    math::poly::TwoD<double> gx(getRandPoly(5, 3));
+    math::poly::TwoD<double> gy(getRandPoly(3, 4));
+
+    math::poly::TwoD<double> transformedPoly = poly.transformInput(gx, gy);
+
+    for (size_t ii = 0; ii < xValues.size(); ++ii)
+    {
+        // These numbers can get big, so make an epsilon based on a percentage
+        // of the expected value
+        const double xx(xValues[ii]);
+        const double yy(yValues[ii]);
+        const double expectedValue(poly(gx(xx, yy), gy(xx, yy)));
+        TEST_ASSERT_ALMOST_EQ_EPS(transformedPoly(xx, yy),
+                                  expectedValue,
+                                  std::abs(.01 * expectedValue));
+    }
+
+    transformedPoly = poly.transformInput(gx);
+    for (size_t ii = 0; ii < xValues.size(); ++ii)
+    {
+        // These numbers can get big, so make an epsilon based on a percentage
+        // of the expected value
+        const double xx(xValues[ii]);
+        const double yy(yValues[ii]);
+        const double expectedValue(poly(gx(xx, yy), yy));
+        TEST_ASSERT_ALMOST_EQ_EPS(transformedPoly(xx, yy),
+                                  expectedValue,
+                                  std::abs(.01 * expectedValue));
+    }
+}
 }
 
 int main(int argc, char** argv)
@@ -217,4 +255,5 @@ int main(int argc, char** argv)
     TEST_CHECK(testScaleVariable);
     TEST_CHECK(testTruncateTo);
     TEST_CHECK(testTruncateToNonZeros);
+    TEST_CHECK(testTransformInput);
 }

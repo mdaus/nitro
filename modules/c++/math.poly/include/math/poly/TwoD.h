@@ -19,6 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+ 
 #ifndef __MATH_POLY_TWOD_H__
 #define __MATH_POLY_TWOD_H__
 
@@ -170,6 +171,38 @@ public:
      * \return Truncated polynomial
      */
     TwoD<_T> truncateToNonZeros(double zeroEpsilon = 0.0) const;
+
+    /*!
+     * Transforms the polynomial input so that
+     * Fx(Gx(x, y), Gy(x, y)) = F'x(x, y).
+     *
+     * \param gx The polynomial to replace the x values.
+     * \param gy The polynomial to replace the y values.
+     * \param zeroEpsilon Internally this may create a bunch of "extra"
+     *        coefficients with value of 0. This method will clean them
+     *        up. Passing in a value other 0 will change the tolerance
+     *        when looking for these coefficients.
+     *
+     * \return Fx(Gx(x, y), Gy(x, y))
+     */
+    TwoD<_T> transformInput(const math::poly::TwoD<_T>& gx,
+                            const math::poly::TwoD<_T>& gy,
+                            double zeroEpsilon = 0.0) const;
+
+    /*!
+     * Transforms the polynomial input so that
+     * Fx(Gx(x, y), y) = F'x(x, y).
+     *
+     * \param gx The polynomial to replace the x values.
+     * \param zeroEpsilon Internally this may create a bunch of "extra"
+     *        coefficients with value of 0. This method will clean them
+     *        up. Passing in a value other 0 will change the tolerance
+     *        when looking for these coefficients.
+     *
+     * \return Fx(Gx(x, y), y)
+     */
+    TwoD<_T> transformInput(const math::poly::TwoD<_T>& gx,
+                            double zeroEpsilon = 0.0) const;
 
     /*!
      * This evaluates y in the 2D polynomial, leaving a 1D polynomial in x

@@ -23,6 +23,7 @@
 #include <cmath>
 #include <import/except.h>
 #include <import/sys.h>
+#include <math/poly/Utils.h>
 
 namespace math
 {
@@ -252,6 +253,85 @@ OneD<_T>::operator / (double cv) const
     OneD<_T> ret(*this);
     ret *= (1.0/cv);
     return ret;
+}
+
+template<typename _T>
+OneD<_T> OneD<_T>::power(size_t toThe) const
+{
+    // If its 0, we have to give back a 1*x^0 poly, since
+    // we want a 2D poly out
+    if (toThe == 0)
+    {
+        OneD<_T> zero(0);
+        zero[0] = 1;
+        return zero;
+    }
+
+    OneD<double> rv = *this;
+
+    // If its 1 give it back now
+    if (toThe == 1)
+        return rv;
+
+ 
+    // Otherwise, we have to raise it   
+    for (size_t i = 2; i <= toThe; i++)
+    {
+        rv *= *this;
+    }
+    return rv;
+}
+
+template<typename _T>
+OneD<_T> OneD<_T>::scaleVariable(double scale) const
+{
+    return ::math::poly::scaleVariable<OneD<_T> >(*this, scale);
+}
+
+template<typename _T>
+OneD<_T> OneD<_T>::truncateTo(size_t order) const
+{
+    order = std::min(this->order(), order);
+
+    OneD<_T> newP(order);
+    for (size_t ii = 0; ii <= order; ++ii)
+    {
+        newP[ii] = (*this)[ii];
+    }
+    return newP;
+}
+
+template<typename _T>
+OneD<_T> OneD<_T>::truncateToNonZeros(double zeroEpsilon) const
+{
+    zeroEpsilon = std::abs(zeroEpsilon);
+    size_t newOrder(0);
+
+    // Find the highest order non-zero coefficient
+    for (size_t ii = 0, idx = order(); ii <= order(); ++ii, --idx)
+    {
+        if (std::abs((*this)[idx]) > zeroEpsilon)
+        {
+            newOrder = idx;
+            break;
+        }
+    }
+
+    return truncateTo(newOrder);
+}
+
+template<typename _T>
+OneD<_T> OneD<_T>::transformInput(const OneD<_T>& gx,
+                                  double zeroEpsilon) const
+{
+    OneD<_T> newP(order());
+
+    for (size_t ii = 0; ii <= order(); ++ii)
+    {
+        newP += gx.power(ii) * (*this)[ii];
+    }
+
+    return newP.truncateToNonZeros(zeroEpsilon);
 }
 
 } // poly

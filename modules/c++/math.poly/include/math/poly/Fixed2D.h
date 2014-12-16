@@ -19,11 +19,13 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
+ 
 #ifndef __MATH_POLY_FIXED_2D_H__
 #define __MATH_POLY_FIXED_2D_H__
 
-#include "math/poly/Fixed1D.h"
+#include <math/poly/Fixed1D.h>
+#include <math/poly/TwoD.h>
+#include <math/poly/Utils.h>
 
 namespace math
 {
@@ -300,10 +302,43 @@ public:
             copy[i] /= cv;
         }
         return copy;
-
-
     }
-/*
+
+    /*!
+     * Returns a scaled polynomial such that
+     * P'(x, y) = P(x * scale, y * scale)
+     *
+     * If you had a polynomial in units of feet that you wanted in units of
+     * meters, you would pass in a scale value of METERS_TO_FEET (since this
+     * is what you would scale all your inputs by if you were using the
+     * original polynomial in feet).
+     *
+     * \param scale The factor to apply to both x and y
+     *
+     * \return Scaled polynomial of the same order as the original polynomial
+     */
+    Fixed2D<_OrderX, _OrderY, _T> scaleVariable(double scale) const
+    {
+        return scaleVariable(scale, scale);
+    }
+
+    /*!
+     * Returns a scaled polynomial such that
+     * P'(x, y) = P(x * scaleX, y * scaleY)
+     *
+     * \param scaleX The factor to apply to x
+     * \param scaleY The factor to apply to y
+     *
+     * \return Scaled polynomial of the same order as the original polynomial
+     */
+    Fixed2D<_OrderX, _OrderY, _T> scaleVariable(
+            double scaleX, double scaleY) const
+    {
+        return ::math::poly::scaleVariable<Fixed2D<_OrderX, _OrderY, _T> >(
+                *this, scaleX, scaleY);
+    }
+
+    /*
     // Be careful that output order is high enough
     template<size_t _NewOrderX, size_t _NewOrderY>
     Fixed2D<_OrderX, _OrderY, _T> power(int toThe) const
@@ -333,12 +368,7 @@ public:
 
 
 */
-
-
-
 };
-
-
 }
 }
 

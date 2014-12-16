@@ -118,8 +118,8 @@ public:
     {
         if (empty())
             throw except::IndexOutOfRangeException(
-                                                   Ctxt(
-                                                        "Can't have an order less than zero"));
+                    Ctxt("Can't have an order less than zero"));
+
         return mCoef.size() - 1;
     }
 
@@ -132,6 +132,56 @@ public:
     {
         return mCoef.empty();
     }
+
+    /*!
+     * Returns a scaled polynomial such that
+     * P'(x) = P(x * scale)
+     *
+     * If you had a polynomial in units of feet that you wanted in units of
+     * meters, you would pass in a scale value of METERS_TO_FEET (since this
+     * is what you would scale all your inputs by if you were using the
+     * original polynomial in feet).
+     *
+     * \param scale The factor to apply
+     *
+     * \return Scaled polynomial of the same order as the original polynomial
+     */
+    OneD<_T> scaleVariable(double scale) const;
+
+    /*!
+     * Returns a truncated polynomial of the specified order.  All
+     * higher-order terms are simply removed.
+     *
+     * \param order Order to truncate to for x
+     *
+     * \return Truncated polynomial of the desired order.
+     */
+    OneD<_T> truncateTo(size_t order) const;
+
+    /*!
+     * Returns a polynomial truncated to smallest order to retain only
+     * non-zero coefficients.
+     *
+     * \param zeroEpsilon Tolerance for what a "zero" coefficient is
+     *
+     * \return Truncated polynomial
+     */
+    OneD<_T> truncateToNonZeros(double zeroEpsilon = 0.0) const;
+
+    /*!
+     * Transforms the polynomial input so that
+     * Fx(Gx(x)) = F'x(x).
+     *
+     * \param gx The polynomial to replace the x values.
+     * \param zeroEpsilon Internally this may create a bunch of "extra"
+     *        coefficients with value of 0. This method will clean them
+     *        up. Passing in a value other 0 will change the tolerance
+     *        when looking for these coefficients.
+     *
+     * \return Fx(Gx(x))
+     */
+    OneD<_T> transformInput(const OneD<_T>& gx,
+                            double zeroEpsilon = 0.0) const;
 
     _T operator ()(double at) const;
     _T integrate(double start, double end) const;
@@ -152,6 +202,8 @@ public:
     OneD<_T>operator -(const OneD<_T>& p) const;
     OneD<_T>& operator /=(double cv);
     OneD<_T>operator /(double cv) const;
+
+    OneD<_T> power(size_t toThe) const;
 
     template<typename Vector_T> bool operator==(const Vector_T& p) const
     {
