@@ -247,6 +247,178 @@ TEST_CASE(testTransformInput)
                                   std::abs(.01 * expectedValue));
     }
 }
+
+TEST_CASE(testOperators)
+{
+    math::poly::TwoD<double> p1(2, 2);
+    math::poly::TwoD<double> p2(1, 3);
+
+    // x^0*(0*y^0 1*y^1 2*y^2 )
+    // x^1*(2*y^0 3*y^1 4*y^2 )
+    // x^2*(4*y^0 5*y^1 6*y^2 )
+    for (size_t ii = 0; ii <= p1.orderX(); ++ii)
+    {
+        for (size_t jj = 0; jj <= p1.orderY(); ++jj)
+        {
+            p1[ii][jj] = ii * p1.orderY() + jj;
+        }
+    }
+
+    // x^0*(0*y^0 1*y^1 2*y^2 3*y^3 )
+    // x^1*(3*y^0 4*y^1 5*y^2 6*y^3 )
+    for (size_t ii = 0; ii <= p2.orderX(); ++ii)
+    {
+        for (size_t jj = 0; jj <= p2.orderY(); ++jj)
+        {
+            p2[ii][jj] = ii * p2.orderY() + jj;
+        }
+    }
+
+    // x^0*(0*y^0 2*y^1 4*y^2 3*y^3 )
+    // x^1*(5*y^0 7*y^1 9*y^2 6*y^3 )
+    // x^2*(4*y^0 5*y^1 6*y^2 0*y^3 )
+    math::poly::TwoD<double> op = p1 + p2;
+    math::poly::TwoD<double> opEquals(p1);
+    opEquals += p2;
+
+    TEST_ASSERT_EQ(op.orderX(), 2);
+    TEST_ASSERT_EQ(op.orderY(), 3);
+    TEST_ASSERT_EQ(opEquals.orderX(), 2);
+    TEST_ASSERT_EQ(opEquals.orderY(), 3);
+
+    TEST_ASSERT_EQ(op[0][0], 0.0);
+    TEST_ASSERT_EQ(op[0][1], 2.0);
+    TEST_ASSERT_EQ(op[0][2], 4.0);
+    TEST_ASSERT_EQ(op[0][3], 3.0);
+    TEST_ASSERT_EQ(op[1][0], 5.0);
+    TEST_ASSERT_EQ(op[1][1], 7.0);
+    TEST_ASSERT_EQ(op[1][2], 9.0);
+    TEST_ASSERT_EQ(op[1][3], 6.0);
+    TEST_ASSERT_EQ(op[2][0], 4.0);
+    TEST_ASSERT_EQ(op[2][1], 5.0);
+    TEST_ASSERT_EQ(op[2][2], 6.0);
+    TEST_ASSERT_EQ(op[2][3], 0.0);
+
+    for (size_t ii = 0; ii <= op.orderX(); ++ii)
+    {
+        for (size_t jj = 0; jj <= op.orderY(); ++jj)
+        {
+            TEST_ASSERT_EQ(op[ii][jj], opEquals[ii][jj]);
+        }
+    }
+
+    // x^0*( 0*y^0  0*y^1  0*y^2 -3*y^3 )
+    // x^1*(-1*y^0 -1*y^1 -1*y^2 -6*y^3 )
+    // x^2*( 4*y^0  5*y^1  6*y^2  0*y^3 )
+    op = p1 - p2;
+    opEquals = p1;
+    opEquals -= p2;
+
+    TEST_ASSERT_EQ(op.orderX(), 2);
+    TEST_ASSERT_EQ(op.orderY(), 3);
+    TEST_ASSERT_EQ(opEquals.orderX(), 2);
+    TEST_ASSERT_EQ(opEquals.orderY(), 3);
+
+    TEST_ASSERT_EQ(op[0][0], 0.0);
+    TEST_ASSERT_EQ(op[0][1], 0.0);
+    TEST_ASSERT_EQ(op[0][2], 0.0);
+    TEST_ASSERT_EQ(op[0][3], -3.0);
+    TEST_ASSERT_EQ(op[1][0], -1.0);
+    TEST_ASSERT_EQ(op[1][1], -1.0);
+    TEST_ASSERT_EQ(op[1][2], -1.0);
+    TEST_ASSERT_EQ(op[1][3], -6.0);
+    TEST_ASSERT_EQ(op[2][0], 4.0);
+    TEST_ASSERT_EQ(op[2][1], 5.0);
+    TEST_ASSERT_EQ(op[2][2], 6.0);
+    TEST_ASSERT_EQ(op[2][3], 0.0);
+
+    for (size_t ii = 0; ii <= op.orderX(); ++ii)
+    {
+        for (size_t jj = 0; jj <= op.orderY(); ++jj)
+        {
+            TEST_ASSERT_EQ(op[ii][jj], opEquals[ii][jj]);
+        }
+    }
+
+    // x^0*( 0*y^0  0*y^1  1*y^2  4*y^3  7*y^4  6*y^5 )
+    // x^1*( 0*y^0  5*y^1 17*y^2 29*y^3 33*y^4 24*y^5 )
+    // x^2*( 6*y^0 21*y^1 47*y^2 71*y^3 65*y^4 42*y^5 )
+    // x^3*(12*y^0 31*y^1 58*y^2 73*y^3 60*y^4 36*y^5 )
+    op = p1 * p2;
+    opEquals = p1;
+    opEquals *= p2;
+
+    TEST_ASSERT_EQ(op.orderX(), 3);
+    TEST_ASSERT_EQ(op.orderY(), 5);
+    TEST_ASSERT_EQ(opEquals.orderX(), 3);
+    TEST_ASSERT_EQ(opEquals.orderY(), 5);
+
+    TEST_ASSERT_EQ(op[0][0], 0.0);
+    TEST_ASSERT_EQ(op[0][1], 0.0);
+    TEST_ASSERT_EQ(op[0][2], 1.0);
+    TEST_ASSERT_EQ(op[0][3], 4.0);
+    TEST_ASSERT_EQ(op[0][4], 7.0);
+    TEST_ASSERT_EQ(op[0][5], 6.0);
+    TEST_ASSERT_EQ(op[1][0], 0.0);
+    TEST_ASSERT_EQ(op[1][1], 5.0);
+    TEST_ASSERT_EQ(op[1][2], 17.0);
+    TEST_ASSERT_EQ(op[1][3], 29.0);
+    TEST_ASSERT_EQ(op[1][4], 33.0);
+    TEST_ASSERT_EQ(op[1][5], 24.0);
+    TEST_ASSERT_EQ(op[2][0], 6.0);
+    TEST_ASSERT_EQ(op[2][1], 21.0);
+    TEST_ASSERT_EQ(op[2][2], 47.0);
+    TEST_ASSERT_EQ(op[2][3], 71.0);
+    TEST_ASSERT_EQ(op[2][4], 65.0);
+    TEST_ASSERT_EQ(op[2][5], 42.0);
+    TEST_ASSERT_EQ(op[3][0], 12.0);
+    TEST_ASSERT_EQ(op[3][1], 31.0);
+    TEST_ASSERT_EQ(op[3][2], 58.0);
+    TEST_ASSERT_EQ(op[3][3], 73.0);
+    TEST_ASSERT_EQ(op[3][4], 60.0);
+    TEST_ASSERT_EQ(op[3][5], 36.0);
+
+    for (size_t ii = 0; ii <= op.orderX(); ++ii)
+    {
+        for (size_t jj = 0; jj <= op.orderY(); ++jj)
+        {
+            TEST_ASSERT_EQ(op[ii][jj], opEquals[ii][jj]);
+        }
+    }
+    
+    // x^0*(0*y^0 0.5*y^1 1*y^2 )
+    // x^1*(1*y^0 1.5*y^1 2*y^2 )
+    // x^2*(2*y^0 2.5*y^1 3*y^2 )
+    op = p1 / 2.0;
+    opEquals = p1;
+    opEquals /= 2.0;
+
+    TEST_ASSERT_EQ(op.orderX(), 2);
+    TEST_ASSERT_EQ(op.orderY(), 2);
+    TEST_ASSERT_EQ(opEquals.orderX(), 2);
+    TEST_ASSERT_EQ(opEquals.orderY(), 2);
+
+    TEST_ASSERT_EQ(op[0][0], 0.0);
+    TEST_ASSERT_EQ(op[0][1], 0.5);
+    TEST_ASSERT_EQ(op[0][2], 1.0);
+    TEST_ASSERT_EQ(op[1][0], 1.0);
+    TEST_ASSERT_EQ(op[1][1], 1.5);
+    TEST_ASSERT_EQ(op[1][2], 2.0);
+    TEST_ASSERT_EQ(op[2][0], 2.0);
+    TEST_ASSERT_EQ(op[2][1], 2.5);
+    TEST_ASSERT_EQ(op[2][2], 3.0);
+
+    for (size_t ii = 0; ii <= op.orderX(); ++ii)
+    {
+        for (size_t jj = 0; jj <= op.orderY(); ++jj)
+        {
+            TEST_ASSERT_EQ(op[ii][jj], opEquals[ii][jj]);
+        }
+    }
+
+    TEST_ASSERT_TRUE(op == opEquals);
+    TEST_ASSERT_FALSE(op != opEquals);
+}
 }
 
 int main(int argc, char** argv)
@@ -256,4 +428,5 @@ int main(int argc, char** argv)
     TEST_CHECK(testTruncateTo);
     TEST_CHECK(testTruncateToNonZeros);
     TEST_CHECK(testTransformInput);
+    TEST_CHECK(testOperators);
 }

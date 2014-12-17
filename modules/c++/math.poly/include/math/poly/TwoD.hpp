@@ -265,20 +265,25 @@ template<typename _T>
 TwoD<_T>& 
 TwoD<_T>::operator += (const TwoD<_T>& p) 
 {
-    TwoD<_T> tmp(std::max<int>(orderX(), p.orderX()),
-                 std::max<int>(orderY(), p.orderY()));
-    for (unsigned int i = 0, sz = mCoef.size() ; i < sz; i++)
+    TwoD<_T> tmp(std::max<size_t>(orderX(), p.orderX()),
+                 std::max<size_t>(orderY(), p.orderY()));
+
+    for (size_t ii = 0, sz = mCoef.size(); ii < sz; ++ii)
     {
-        tmp.mCoef[i].copyFrom(mCoef[i]);
+        // We use copyFrom instead of an assignment operator here because
+        // the assignment operator can potentially change the order of
+        // our polynomial.
+        tmp.mCoef[ii].copyFrom(mCoef[ii]);
     }
-    for (unsigned int i = 0, sz = p.mCoef.size() ; i < sz; i++)
+    for (size_t ii = 0, sz = p.mCoef.size(); ii < sz; ++ii)
     {
-        tmp.mCoef[i] += p.mCoef[i];
+        tmp.mCoef[ii] += p.mCoef[ii];
     }
+
     *this = tmp;
     return *this;
 }
-    
+
 template<typename _T>
 TwoD<_T> 
 TwoD<_T>::operator + (const TwoD<_T>& p) const
@@ -290,25 +295,28 @@ TwoD<_T>::operator + (const TwoD<_T>& p) const
 
 template<typename _T>
 TwoD<_T>& 
-TwoD<_T>::operator-=(const TwoD<_T>& p) 
+TwoD<_T>::operator -= (const TwoD<_T>& p) 
 {
     TwoD<_T> tmp(std::max<size_t>(orderX() ,p.orderX()),
-                  std::max<size_t>(orderY(), p.orderY()));
+                 std::max<size_t>(orderY(), p.orderY()));
 
-    for (size_t i = 0, sz = mCoef.size() ; i < sz; i++)
+    for (size_t ii = 0, sz = mCoef.size(); ii < sz; ++ii)
     {
-        tmp.mCoef[i].copyFrom(mCoef[i]);
+        // We use copyFrom instead of an assignment operator here because
+        // the assignment operator can potentially change the order of
+        // our polynomial.
+        tmp.mCoef[ii].copyFrom(mCoef[ii]);
     }
 
-    for (size_t i = 0, sz = p.mCoef.size() ; i < sz; i++)
+    for (size_t ii = 0, sz = p.mCoef.size(); ii < sz; ++ii)
     {
-        tmp.mCoef[i] -= p.mCoef[i];
+        tmp.mCoef[ii] -= p.mCoef[ii];
     }
 
     *this = tmp;
     return *this;
 }
-    
+
 template<typename _T>
 TwoD<_T> 
 TwoD<_T>::operator-(const TwoD<_T>& p) const
