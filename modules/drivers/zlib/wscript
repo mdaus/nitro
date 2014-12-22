@@ -122,7 +122,7 @@ def build(bld):
 
         if env['install_headers']:
             bld(features='install_tgt', install_path=env['install_includedir'],
-                dir=driverNode, pattern='zlib.h', name='ZIP_HEADERS_INSTALL')
+                dir=driverNode, pattern=['zconf.h', 'zlib.h'], name='ZIP_HEADERS_INSTALL')
             zlib.targets_to_add.append('ZIP_HEADERS_INSTALL') 
 
             minizipNode = driverNode.find_dir(minizipDir)
