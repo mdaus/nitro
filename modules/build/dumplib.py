@@ -1,9 +1,18 @@
 from waflib.Build import BuildContext
+import os
 
 class dumplib(BuildContext):
     '''dumps the libs connected to the targets'''
     cmd = 'dumplib'
     fun = 'build'
+    
+    # Returns either shared or static libs depending on the
+    # waf configuration
+    def resolveLibType(self, env):
+        if env.LIB_TYPE == 'stlib':
+            return env.STLIB
+        else:
+            return env.LIB
 
     def execute(self):
 
@@ -16,6 +25,7 @@ class dumplib(BuildContext):
         
         targets = self.targets.split(',')
         libs = []
+        sharedLibs = []
         
         for target in targets:
             # Find the target
@@ -25,7 +35,7 @@ class dumplib(BuildContext):
             tsk.post()
 
             # Now we can grab his libs
-            libs += tsk.env.STLIB
+            libs += self.resolveLibType(tsk.env)
                 
         # Now run again but add all the targets we found
         # This resolves running with multiple targets
@@ -43,7 +53,9 @@ class dumplib(BuildContext):
         modArgs['MODULE_DEPS'] = moduleDeps
         
         # We need a source file here so it doesn't think it is headers only
-        modArgs['SOURCE_DIR'] = 'build'
+        topDir = tsk.bld.top_dir
+        buildDir = os.path.dirname(os.path.realpath(__file__))
+        modArgs['SOURCE_DIR'] = os.path.relpath(buildDir, topDir)
         modArgs['SOURCE_EXT'] = 'pyc'
         self.module(**modArgs)
 
@@ -52,11 +64,14 @@ class dumplib(BuildContext):
         libs = []
         tsk = self.get_tgen_by_name('dumplib-c++')
         tsk.post()
-        libs = tsk.env.STLIB
+        libs += self.resolveLibType(tsk.env)
         
-        for uselib in tsk.uselib:
-            if tsk.env['LIB_' + uselib]:
-                libs += tsk.env['LIB_' + uselib]
+        # Uselibs are only need in static build.
+        # In shared builds they are added to the LIB value automatically
+        if tsk.env.LIB_TYPE == 'stlib':
+            for uselib in tsk.uselib:
+                if tsk.env['LIB_' + uselib]:
+                    libs += tsk.env['LIB_' + uselib]
         
         if len(libs) == 0:
             # If we found nothing print that we found nothing
