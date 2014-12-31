@@ -25,7 +25,6 @@ class dumplib(BuildContext):
         
         targets = self.targets.split(',')
         libs = []
-        sharedLibs = []
         
         for target in targets:
             # Find the target
