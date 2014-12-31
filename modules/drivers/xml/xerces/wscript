@@ -33,6 +33,7 @@ def configure(conf):
                        includes=join(xmlHome, 'include'),
                        msg='Checking for library xerces', okmsg=xmlHome,
                        mandatory=True)
+            conf.undefine('HAVE_XERCESC__XMLPLATFORMUTILS__TERMINATE')
             conf.env.append_value('DEFINES_XML', 'XERCES_STATIC_LIBRARY')
             
         # build it with waf
@@ -235,6 +236,7 @@ def configure(conf):
                        defines='XERCES_STATIC_LIBRARY', uselib=xercesUselibs,
                        msg='Checking for library xerces',
                        mandatory=True)
+            conf.undefine('HAVE_XERCESC__XMLPLATFORMUTILS__TERMINATE')
             conf.env.append_value('DEFINES_XML', 'XERCES_STATIC_LIBRARY')
 
 def build(bld):
@@ -352,4 +354,3 @@ def distclean(context):
         try:
             shutil.rmtree(join(context.path.abspath(), d), ignore_errors=True)
         except:{}
-
