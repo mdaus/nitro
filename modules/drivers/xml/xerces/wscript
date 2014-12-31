@@ -266,8 +266,7 @@ def build(bld):
                          'PosixFileMgr.cpp', 'PosixMutexMgr.cpp', 
                          'IconvTransService.cpp']
         WIN_SPECIFIC  = ['Win32TransService.cpp', 'WinSockNetAccessor.cpp',
-                         'BinHTTPURLInputStream.cpp', 
-                         'BinHTTPInputStreamCommon.cpp',
+                         'BinHTTPURLInputStream.cpp',
                          'WindowsFileMgr.cpp', 'WindowsMutexMgr.cpp']
 
         # create filter for system specific files
