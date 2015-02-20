@@ -471,7 +471,7 @@ std::string sys::DateTime::dayOfWeekToStringAbbr(int dayOfWeek)
     return dayOfWeekToString(dayOfWeek).substr(0,3);
 }
 
-int monthToValue(const std::string& month)
+int sys::DateTime::monthToValue(const std::string& month)
 {
     std::string m = month;
     str::lower(m);
@@ -505,7 +505,7 @@ int monthToValue(const std::string& month)
                         "Value not in the valid range {Jan:Dec}");
 }
 
-int dayOfWeekToValue(const std::string& dayOfWeek)
+int sys::DateTime::dayOfWeekToValue(const std::string& dayOfWeek)
 {
     std::string d = dayOfWeek;
     str::lower(d);
