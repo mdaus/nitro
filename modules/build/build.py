@@ -447,18 +447,32 @@ class CPPContext(Context.Context):
 
         name = modArgs['name']
         swigSource = os.path.join('source', name.replace('.', '_') + '.i')
-        #target = '_' + name.replace('.', '') + 'py'
         target = '_' + name.replace('.', '_')
         use = modArgs['use']
         installPath = os.path.join('${PYTHONDIR}', name)
         taskName = name + '-python'
+
+        # If we have Swig, when the Swig target runs, it'll generate both the
+        # _wrap.cxx file and the .py file and then copy them both to the
+        # installation directory.  If you just clobber the install directory
+        # and re-run waf install, it'll just copy the .so over though - not
+        # the .py file.  Same problem if you don't have Swig.  This target
+        # will actually compile the .py file to a .pyc, but the other thing is
+        # it'll copy the file over to the installation directory for us.
+        # We ensure this always runs via 'add_targets'
+        copyFilesTarget = target + '_py'
+        bld(features = 'py', 
+            target = copyFilesTarget,
+            env = env.derive(),
+            install_path = installPath,
+            source = bld.path.make_node('source').ant_glob('**/*.py'))
 
         if 'SWIG' in env and env['SWIG']:
             # If Swig is available, let's use it to build the .cxx file
             # This gets generated into the source/generated folder and we'll
             # actually check it in so other developers can still use the Python
             # bindings even if they don't have Swig
-            bld(features = 'cxx cshlib pyext',
+            bld(features = 'cxx cshlib pyext add_targets',
                 source = swigSource,
                 target = target,
                 use = use,
@@ -466,16 +480,18 @@ class CPPContext(Context.Context):
                 swig_flags = '-python -c++',
                 install_path = installPath,
                 name = taskName,
+                targets_to_add = copyFilesTarget,
                 swig_install_fun = swigCopyGeneratedSources)
         else:
             # If Swig is not available, use the cxx file already sitting around
             # that Swig generated sometime in the past
-            bld(features = 'cxx cshlib pyext',
+            bld(features = 'cxx cshlib pyext add_targets',
             source = os.path.join('source', 'generated', name.replace('.', '_') + '_wrap.cxx'),
             target = target,
             use = use,
             env = env.derive(),
             name = taskName,
+            targets_to_add = copyFilesTarget,
             install_path = installPath)
 
     def getBuildDir(self, path=None):
