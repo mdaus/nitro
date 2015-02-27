@@ -32,11 +32,10 @@ namespace linear
 
 template<size_t _ND, typename _T=double> class VectorN
 {
-    typedef VectorN<_ND, _T> Like_T;
     MatrixMxN<_ND, 1, _T> mRaw;
     
 public:
-
+    typedef VectorN<_ND, _T> Like_T;
 
     //!  Default constructor (no initialization)
     VectorN() {}

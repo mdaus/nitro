@@ -105,9 +105,9 @@ bool almostZero(const T& value)
 template <size_t _MD, size_t _ND, typename _T=double>
 class MatrixMxN
 {
-
-    typedef MatrixMxN<_MD, _ND, _T> Like_T;
 public:
+    typedef MatrixMxN<_MD, _ND, _T> Like_T;
+
     //!  Public but really should be avoided
     _T mRaw[_MD][_ND];
 
