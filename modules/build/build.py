@@ -432,6 +432,51 @@ class CPPContext(Context.Context):
 
         return exe
 
+    def swigModule(self, **modArgs):
+        """
+        Builds a SWIG C++ module
+        TODO: Add support for C as well
+        """
+        bld = self
+        if 'env' in modArgs:
+            env = modArgs['env']
+        else:
+            env = bld.env
+
+        modArgs = dict((k.lower(), v) for k, v in modArgs.iteritems())
+
+        name = modArgs['name']
+        swigSource = os.path.join('source', name.replace('.', '_') + '.i')
+        #target = '_' + name.replace('.', '') + 'py'
+        target = '_' + name.replace('.', '_')
+        use = modArgs['use']
+        installPath = os.path.join('${PYTHONDIR}', name)
+        taskName = name + '-python'
+
+        if 'SWIG' in env and env['SWIG']:
+            # If Swig is available, let's use it to build the .cxx file
+            # This gets generated into the source/generated folder and we'll
+            # actually check it in so other developers can still use the Python
+            # bindings even if they don't have Swig
+            bld(features = 'cxx cshlib pyext',
+                source = swigSource,
+                target = target,
+                use = use,
+                env = env.derive(),
+                swig_flags = '-python -c++',
+                install_path = installPath,
+                name = taskName,
+                swig_install_fun = swigCopyGeneratedSources)
+        else:
+            # If Swig is not available, use the cxx file already sitting around
+            # that Swig generated sometime in the past
+            bld(features = 'cxx cshlib pyext',
+            source = os.path.join('source', 'generated', name.replace('.', '_') + '_wrap.cxx'),
+            target = target,
+            use = use,
+            env = env.derive(),
+            name = taskName,
+            install_path = installPath)
 
     def getBuildDir(self, path=None):
         """
@@ -553,7 +598,21 @@ def getPlatform(pwd=None, default=None):
                 break
     return platform
 
-
+def swigCopyGeneratedSources(tsk):
+    import shutil
+    genDir = tsk.inputs[0].parent.make_node('generated')
+    instDir = Utils.subst_vars(tsk.generator.install_path, tsk.env).replace('/', os.sep)
+    Utils.check_dir(genDir.abspath())
+    if tsk.generator.bld.is_install:
+        Utils.check_dir(instDir)
+    for file in tsk.outputs:
+        name = basename(str(file))
+        if file.suffix() in ['.c', '.cxx']:
+            shutil.copy2(file.abspath(), genDir.make_node(name.split('.')[0] + '_wrap' + file.suffix()).abspath())
+        elif file.suffix() == '.py':
+            shutil.copy2(file.abspath(), genDir.make_node(name).abspath())
+            if tsk.generator.bld.is_install:
+                shutil.copy2(file.abspath(), join(instDir, name))
 
 import zipfile
 def unzipper(inFile, outDir):

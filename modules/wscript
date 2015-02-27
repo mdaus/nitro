@@ -8,15 +8,17 @@ APPNAME = 'CODA'
 top  = '.'
 out  = 'target'
 
-DIRS = 'drivers c++'
+DIRS = 'drivers c++ python'
+
+TOOLS = 'build matlabtool pythontool swig'
 
 def options(opt):
-    opt.load('build matlabtool', tooldir='./build/')
+    opt.load(TOOLS, tooldir='./build/')
     # always set_options on all
     opt.recurse(DIRS)
 
 def configure(conf):
-    conf.load('build matlabtool', tooldir='./build/')
+    conf.load(TOOLS, tooldir='./build/')
     conf.recurse(DIRS)
 
 def build(bld):
