@@ -173,6 +173,15 @@ TEST_CASE(testScale)
     TEST_ASSERT_EQ(vscale[1], 1.0);
 }
 
+TEST_CASE(testUnit)
+{
+    Vector<double> v(4,4.0);
+    Vector<double> vunit = v.unit();
+    TEST_ASSERT_EQ(vunit[0], 0.5);
+    TEST_ASSERT_EQ(vunit[1], 0.5);
+    TEST_ASSERT_EQ(vunit[2], 0.5);
+    TEST_ASSERT_EQ(vunit[3], 0.5);
+}
 
 TEST_CASE(testOperatorPlusEquals)
 {
@@ -426,6 +435,7 @@ int main()
     TEST_CHECK(testDotProduct);
     TEST_CHECK(testNorm);
     TEST_CHECK(testNormalize);
+    TEST_CHECK(testUnit);
     TEST_CHECK(testOperatorPlusEquals);
     TEST_CHECK(testOperatorPlus);
     TEST_CHECK(testOperatorMinus);

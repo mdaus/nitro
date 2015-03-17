@@ -993,6 +993,17 @@ public:
     {
         return scale(1.0/norm());
     }
+
+    /*!
+     *  Scale the matrix by the L2 norm value. This
+     *  function performs the same operation as normalize()
+     *  except that this matrix is not mutated.
+     */
+    Matrix2D unit() const
+    {
+        return multiply(1.0/norm());
+    }
+
     /*!
      *  Alias for this->add();
      *

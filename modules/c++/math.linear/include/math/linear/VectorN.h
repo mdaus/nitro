@@ -216,6 +216,12 @@ public:
         mRaw.normalize();
     }
 
+    //! Unit vector, same as normalize() but doesn't mutate this
+    Like_T unit() const
+    {
+        return mRaw.unit();
+    }
+
     void scale(_T scalar)
     {
         mRaw.scale(scalar);

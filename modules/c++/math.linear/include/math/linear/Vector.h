@@ -254,6 +254,12 @@ public:
         mRaw.scale(scalar);
     }
 
+    //! Unit vector, same as normalize but doesn't mutate this
+    Vector unit() const
+    {
+        return mRaw.unit();
+    }
+
     //!  Add this to another vector
     Vector& 
     operator+=(const Vector& v)
