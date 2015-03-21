@@ -7796,6 +7796,28 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Matrix3x1_unit(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::linear::MatrixMxN< 3,1,double > *arg1 = (math::linear::MatrixMxN< 3,1,double > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  math::linear::MatrixMxN< 3,1,double >::Like_T result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Matrix3x1_unit",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__linear__MatrixMxNT_3_1_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Matrix3x1_unit" "', argument " "1"" of type '" "math::linear::MatrixMxN< 3,1,double > const *""'"); 
+  }
+  arg1 = reinterpret_cast< math::linear::MatrixMxN< 3,1,double > * >(argp1);
+  result = ((math::linear::MatrixMxN< 3,1,double > const *)arg1)->unit();
+  resultobj = SWIG_NewPointerObj((new math::linear::MatrixMxN< 3,1,double >::Like_T(static_cast< const math::linear::MatrixMxN< 3,1,double >::Like_T& >(result))), SWIGTYPE_p_math__linear__MatrixMxNT_3_1_double_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_Matrix3x1___add__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   math::linear::MatrixMxN< 3,1,double > *arg1 = (math::linear::MatrixMxN< 3,1,double > *) 0 ;
@@ -8375,6 +8397,28 @@ SWIGINTERN PyObject *_wrap_Vector3_normalize(PyObject *SWIGUNUSEDPARM(self), PyO
   arg1 = reinterpret_cast< math::linear::VectorN< 3,double > * >(argp1);
   (arg1)->normalize();
   resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Vector3_unit(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::linear::VectorN< 3,double > *arg1 = (math::linear::VectorN< 3,double > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  math::linear::VectorN< 3,double >::Like_T result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Vector3_unit",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__linear__VectorNT_3_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Vector3_unit" "', argument " "1"" of type '" "math::linear::VectorN< 3,double > const *""'"); 
+  }
+  arg1 = reinterpret_cast< math::linear::VectorN< 3,double > * >(argp1);
+  result = ((math::linear::VectorN< 3,double > const *)arg1)->unit();
+  resultobj = SWIG_NewPointerObj((new math::linear::VectorN< 3,double >::Like_T(static_cast< const math::linear::VectorN< 3,double >::Like_T& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -9203,6 +9247,7 @@ static PyMethodDef SwigMethods[] = {
 		""},
 	 { (char *)"Matrix3x1_norm", _wrap_Matrix3x1_norm, METH_VARARGS, (char *)"Matrix3x1_norm(Matrix3x1 self) -> double"},
 	 { (char *)"Matrix3x1_normalize", _wrap_Matrix3x1_normalize, METH_VARARGS, (char *)"Matrix3x1_normalize(Matrix3x1 self) -> Matrix3x1"},
+	 { (char *)"Matrix3x1_unit", _wrap_Matrix3x1_unit, METH_VARARGS, (char *)"Matrix3x1_unit(Matrix3x1 self) -> Like_T"},
 	 { (char *)"Matrix3x1___add__", _wrap_Matrix3x1___add__, METH_VARARGS, (char *)"Matrix3x1___add__(Matrix3x1 self, Like_T mx) -> Like_T"},
 	 { (char *)"Matrix3x1___sub__", _wrap_Matrix3x1___sub__, METH_VARARGS, (char *)"Matrix3x1___sub__(Matrix3x1 self, Like_T mx) -> Like_T"},
 	 { (char *)"Matrix3x1___mul__", _wrap_Matrix3x1___mul__, METH_VARARGS, (char *)"Matrix3x1___mul__(Matrix3x1 self, double scalar) -> Like_T"},
@@ -9226,6 +9271,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Vector3_normDot", _wrap_Vector3_normDot, METH_VARARGS, (char *)"Vector3_normDot(Vector3 self, Vector3 vec) -> double"},
 	 { (char *)"Vector3_norm", _wrap_Vector3_norm, METH_VARARGS, (char *)"Vector3_norm(Vector3 self) -> double"},
 	 { (char *)"Vector3_normalize", _wrap_Vector3_normalize, METH_VARARGS, (char *)"Vector3_normalize(Vector3 self)"},
+	 { (char *)"Vector3_unit", _wrap_Vector3_unit, METH_VARARGS, (char *)"Vector3_unit(Vector3 self) -> Like_T"},
 	 { (char *)"Vector3_scale", _wrap_Vector3_scale, METH_VARARGS, (char *)"Vector3_scale(Vector3 self, double scalar)"},
 	 { (char *)"Vector3___iadd__", _wrap_Vector3___iadd__, METH_VARARGS, (char *)"Vector3___iadd__(Vector3 self, Like_T v) -> Like_T"},
 	 { (char *)"Vector3___isub__", _wrap_Vector3___isub__, METH_VARARGS, (char *)"Vector3___isub__(Vector3 self, Like_T v) -> Like_T"},

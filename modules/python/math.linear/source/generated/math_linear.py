@@ -399,6 +399,10 @@ class Matrix3x1(_object):
         """normalize(self) -> Matrix3x1"""
         return _math_linear.Matrix3x1_normalize(*args)
 
+    def unit(*args):
+        """unit(self) -> Like_T"""
+        return _math_linear.Matrix3x1_unit(*args)
+
     def __add__(*args):
         """__add__(self, Like_T mx) -> Like_T"""
         return _math_linear.Matrix3x1___add__(*args)
@@ -465,6 +469,10 @@ class Vector3(_object):
     def normalize(*args):
         """normalize(self)"""
         return _math_linear.Vector3_normalize(*args)
+
+    def unit(*args):
+        """unit(self) -> Like_T"""
+        return _math_linear.Vector3_unit(*args)
 
     def scale(*args):
         """scale(self, double scalar)"""
