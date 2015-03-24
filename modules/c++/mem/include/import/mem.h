@@ -23,6 +23,7 @@
 #ifndef __IMPORT_MEM_H__
 #define __IMPORT_MEM_H__
 
+#include <mem/BufferView.h>
 #include <mem/ScopedAlignedArray.h>
 #include <mem/ScopedArray.h>
 #include <mem/ScopedCloneablePtr.h>
