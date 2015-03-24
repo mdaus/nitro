@@ -24,6 +24,7 @@
 #define __MEM_BUFFER_VIEW_H__
 
 #include <vector>
+#include <stddef.h>
 
 namespace mem
 {
