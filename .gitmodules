@@ -1,0 +1,7 @@
+[submodule "coda-oss"]
+	path = coda-oss
+	url = https://github.com/mdaus-oss/coda-oss
+[submodule "oss_branch"]
+	path = oss_branch
+	url = https://github.com/mdaus-oss/coda-oss
+	branch = submodule_test
