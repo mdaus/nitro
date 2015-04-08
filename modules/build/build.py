@@ -452,6 +452,12 @@ class CPPContext(Context.Context):
         installPath = os.path.join('${PYTHONDIR}', name)
         taskName = name + '-python'
 
+        # TODO: Here we're assuming we're svn:externals'ing everything in under
+        #       modules/python.  Make this more flexible... probably want to set
+        #       an environment variable for each Python module, then pull that out
+        #       here to get the include path.
+        swigIncludes = os.path.abspath(os.path.join(bld.path.abspath(), '..' ))
+
         # If we have Swig, when the Swig target runs, it'll generate both the
         # _wrap.cxx file and the .py file and then copy them both to the
         # installation directory.  If you just clobber the install directory
@@ -476,8 +482,9 @@ class CPPContext(Context.Context):
                 source = swigSource,
                 target = target,
                 use = use,
+                includes = swigIncludes,
                 env = env.derive(),
-                swig_flags = '-python -c++',
+                swig_flags = '-python -c++ -I' + swigIncludes,
                 install_path = installPath,
                 name = taskName,
                 targets_to_add = copyFilesTarget,
