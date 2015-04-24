@@ -14,6 +14,8 @@ from msvs import msvs_generator
 from eclipse import eclipse
 from dumpenv import dumpenv
 from dumplib import dumplib
+from dumplibraw import dumplibraw
+from dumpconfig import dumpconfig
 
 COMMON_EXCLUDES = '.bzr .bzrignore .git .gitignore .svn CVS .cvsignore .arch-ids {arch} SCCS BitKeeper .hg _MTN _darcs Makefile Makefile.in config.log'.split()
 COMMON_EXCLUDES_EXT ='~ .rej .orig .pyc .pyo .bak .tar.bz2 tar.gz .zip .swp'.split()
@@ -437,71 +439,69 @@ class CPPContext(Context.Context):
         Builds a SWIG C++ module
         TODO: Add support for C as well
         """
-
         bld = self
         if 'env' in modArgs:
             env = modArgs['env']
         else:
             env = bld.env
-        if 'PYTHON' in env and env['PYTHON'] and bld.is_defined('HAVE_PYTHON_H'):
 
-            modArgs = dict((k.lower(), v) for k, v in modArgs.iteritems())
+        modArgs = dict((k.lower(), v) for k, v in modArgs.iteritems())
 
-            name = modArgs['name']
-            swigSource = os.path.join('source', name.replace('.', '_') + '.i')
-            target = '_' + name.replace('.', '_')
-            use = modArgs['use']
-            installPath = os.path.join('${PYTHONDIR}', name)
-            taskName = name + '-python'
+        name = modArgs['name']
+        swigSource = os.path.join('source', name.replace('.', '_') + '.i')
+        target = '_' + name.replace('.', '_')
+        use = modArgs['use']
+        installPath = os.path.join('${PYTHONDIR}', name)
+        taskName = name + '-python'
 
-            # TODO: Here we're assuming we're svn:externals'ing everything in under
-            #       modules/python.  Make this more flexible... probably want to set
-            #       an environment variable for each Python module, then pull that out
-            #       here to get the include path.
-            swigIncludes = os.path.abspath(os.path.join(bld.path.abspath(), '..' ))
+        # TODO: Here we're assuming we're svn:externals'ing everything in under
+        #       modules/python.  Make this more flexible... probably want to set
+        #       an environment variable for each Python module, then pull that out
+        #       here to get the include path.
+        swigIncludes = os.path.abspath(os.path.join(bld.path.abspath(), '..' ))
 
-            # If we have Swig, when the Swig target runs, it'll generate both the
-            # _wrap.cxx file and the .py file and then copy them both to the
-            # installation directory.  If you just clobber the install directory
-            # and re-run waf install, it'll just copy the .so over though - not
-            # the .py file.  Same problem if you don't have Swig.  This target
-            # will actually compile the .py file to a .pyc, but the other thing is
-            # it'll copy the file over to the installation directory for us.
-            # We ensure this always runs via 'add_targets'
-            copyFilesTarget = target + '_py'
-            bld(features = 'py', 
-                target = copyFilesTarget,
-                env = env.derive(),
-                install_path = installPath,
-                source = bld.path.make_node('source').ant_glob('**/*.py'))
+        # If we have Swig, when the Swig target runs, it'll generate both the
+        # _wrap.cxx file and the .py file and then copy them both to the
+        # installation directory.  If you just clobber the install directory
+        # and re-run waf install, it'll just copy the .so over though - not
+        # the .py file.  Same problem if you don't have Swig.  This target
+        # will actually compile the .py file to a .pyc, but the other thing is
+        # it'll copy the file over to the installation directory for us.
+        # We ensure this always runs via 'add_targets'
+        copyFilesTarget = target + '_py'
+        bld(features = 'py', 
+            target = copyFilesTarget,
+            env = env.derive(),
+            install_path = installPath,
+            source = bld.path.make_node('source').ant_glob('**/*.py'))
 
-            if 'SWIG' in env and env['SWIG']:
-                # If Swig is available, let's use it to build the .cxx file
-                # This gets generated into the source/generated folder and we'll
-                # actually check it in so other developers can still use the Python
-                # bindings even if they don't have Swig
-                bld(features = 'cxx cshlib pyext add_targets',
-                    source = swigSource,
-                    target = target,
-                    use = use,
-                    includes = swigIncludes,
-                    env = env.derive(),
-                    swig_flags = '-python -c++ -I' + swigIncludes,
-                    install_path = installPath,
-                    name = taskName,
-                    targets_to_add = copyFilesTarget,
-                    swig_install_fun = swigCopyGeneratedSources)
-            else:
-                # If Swig is not available, use the cxx file already sitting around
-                # that Swig generated sometime in the past
-                bld(features = 'cxx cshlib pyext add_targets',
-                source = os.path.join('source', 'generated', name.replace('.', '_') + '_wrap.cxx'),
+        if 'SWIG' in env and env['SWIG']:
+            # If Swig is available, let's use it to build the .cxx file
+            # This gets generated into the source/generated folder and we'll
+            # actually check it in so other developers can still use the Python
+            # bindings even if they don't have Swig
+            bld(features = 'cxx cshlib pyext add_targets',
+                source = swigSource,
                 target = target,
                 use = use,
+                includes = swigIncludes,
                 env = env.derive(),
+                swig_flags = '-python -c++ -I' + swigIncludes,
+                install_path = installPath,
                 name = taskName,
                 targets_to_add = copyFilesTarget,
-                install_path = installPath)
+                swig_install_fun = swigCopyGeneratedSources)
+        else:
+            # If Swig is not available, use the cxx file already sitting around
+            # that Swig generated sometime in the past
+            bld(features = 'cxx cshlib pyext add_targets',
+            source = os.path.join('source', 'generated', name.replace('.', '_') + '_wrap.cxx'),
+            target = target,
+            use = use,
+            env = env.derive(),
+            name = taskName,
+            targets_to_add = copyFilesTarget,
+            install_path = installPath)
 
     def getBuildDir(self, path=None):
         """
@@ -721,6 +721,8 @@ def options(opt):
                     help='Override installation share directory')
     opt.add_option('--install-source', action='store_true', dest='install_source', default=False,
                    help='Distribute source into the installation area (for delivering source)')
+    opt.add_option('--with-prebuilt-config', action='store', dest='prebuilt_config',
+                   help='Specify a prebuilt modules config file (created from dumpconfig)')
 
 def configureCompilerOptions(self):
     sys_platform = getPlatform(default=Options.platform)
@@ -1184,6 +1186,18 @@ def configure(self):
     env['install_libdir'] = Options.options.libdir if Options.options.libdir else join(Options.options.prefix, 'lib')
     env['install_bindir'] = Options.options.bindir if Options.options.bindir else join(Options.options.prefix, 'bin')
     env['install_sharedir'] = Options.options.sharedir if Options.options.sharedir else join(Options.options.prefix, 'share')
+    
+    
+    # Look for prebuilt modules
+    if Options.options.prebuilt_config:
+        with open(Options.options.prebuilt_config) as f:
+            fileContents = f.readlines()
+
+        print 'Adding prebuilt modules: ' + str(fileContents)
+        env['INCLUDES'].append(fileContents[0].rstrip())
+        env.append_unique('CXXFLAGS', fileContents[1].rstrip().split())
+        env['LIB_PREBUILT'] = fileContents[2].rstrip().split()
+        env['LIBPATH_PREBUILT'] = fileContents[3].rstrip()
 
     #flag that we already detected
     self.env['DETECTED_BUILD_PY'] = True
@@ -1528,3 +1542,13 @@ class CPPDumpLibContext(dumplib, CPPContext):
     def __init__(self, **kw):
         self.waf_command = 'python waf'
         super(CPPDumpLibContext, self).__init__(**kw)
+
+class CPPDumpLibRawContext(dumplibraw, CPPContext):
+    def __init__(self, **kw):
+        self.waf_command = 'python waf raw'
+        super(CPPDumpLibRawContext, self).__init__(**kw)
+
+class CPPDumpConfigContext(dumpconfig, CPPContext):
+    def __init__(self, **kw):
+        self.waf_command = 'python waf'
+        super(CPPDumpConfigContext, self).__init__(**kw)

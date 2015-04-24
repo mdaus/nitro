@@ -1,10 +1,10 @@
 from waflib.Build import BuildContext
 from dumplibimpl import dumpLibImpl
 
-class dumplib(BuildContext):
+class dumplibraw(BuildContext):
     '''dumps the libs connected to the targets'''
-    cmd = 'dumplib'
+    cmd = 'dumplib-raw'
     fun = 'build'
 
     def execute(self):
-        dumpLibImpl(self, False)
+        dumpLibImpl(self, True)
