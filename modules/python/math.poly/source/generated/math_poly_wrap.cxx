@@ -3266,8 +3266,50 @@ SWIG_AsVal_long (PyObject *obj, long* val)
   return SWIG_TypeError;
 }
 
-SWIGINTERN double math_poly_OneD_Sl_double_Sg____getitem__(math::poly::OneD< double > *self,long i){ return (*self)[i]; }
-SWIGINTERN void math_poly_OneD_Sl_double_Sg____setitem__(math::poly::OneD< double > *self,long i,double val){ (*self)[i] = val; }
+SWIGINTERN double math_poly_OneD_Sl_double_Sg____getitem__(math::poly::OneD< double > *self,long i){ 
+        if (i > self->order()){
+            PyErr_SetString(PyExc_ValueError, "Index out of range");
+            return 0.0;
+        }
+        return (*self)[i];
+    }
+SWIGINTERN void math_poly_OneD_Sl_double_Sg____setitem__(math::poly::OneD< double > *self,long i,double val){ 
+        if (i > self->order()){
+            PyErr_SetString(PyExc_ValueError, "Index out of range");
+            return;
+        }
+        (*self)[i] = val;
+    }
+SWIGINTERN double math_poly_TwoD_Sl_double_Sg____getitem__(math::poly::TwoD< double > *self,PyObject *inObj){
+        if (!PyTuple_Check(inObj)) {
+            PyErr_SetString(PyExc_TypeError, "Expecting a tuple");
+            return 0.0;
+        }
+        Py_ssize_t xpow, ypow;
+        if (!PyArg_ParseTuple(inObj, "nn", &xpow, &ypow)){
+            return 0.0;
+        }
+        if (xpow > self->orderX() || ypow > self->orderY()){
+            PyErr_SetString(PyExc_ValueError, "Index out of range");
+            return 0.0;
+        }
+        return (*self)[xpow][ypow];
+    }
+SWIGINTERN void math_poly_TwoD_Sl_double_Sg____setitem__(math::poly::TwoD< double > *self,PyObject *inObj,double val){
+        if (!PyTuple_Check(inObj)) {
+            PyErr_SetString(PyExc_TypeError, "Expecting a tuple");
+            return;
+        }
+        Py_ssize_t xpow, ypow;
+        if (!PyArg_ParseTuple(inObj, "nn", &xpow, &ypow)){
+            return;
+        }
+        if (xpow > self->orderX() || ypow > self->orderY()){
+            PyErr_SetString(PyExc_ValueError, "Index out of range");
+            return;
+        }
+        (*self)[xpow][ypow] = val;
+    }
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -3276,7 +3318,29 @@ SWIGINTERN PyObject *_wrap_new_Poly1D__SWIG_0(PyObject *SWIGUNUSEDPARM(self), Py
   math::poly::OneD< double > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)":new_Poly1D")) SWIG_fail;
-  result = (math::poly::OneD< double > *)new math::poly::OneD< double >();
+  {
+    try{
+      result = (math::poly::OneD< double > *)new math::poly::OneD< double >();
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
@@ -3301,7 +3365,29 @@ SWIGINTERN PyObject *_wrap_new_Poly1D__SWIG_1(PyObject *SWIGUNUSEDPARM(self), Py
     SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Poly1D" "', argument " "1"" of type '" "std::vector< double > const &""'"); 
   }
   arg1 = reinterpret_cast< std::vector< double > * >(argp1);
-  result = (math::poly::OneD< double > *)new math::poly::OneD< double >((std::vector< double > const &)*arg1);
+  {
+    try{
+      result = (math::poly::OneD< double > *)new math::poly::OneD< double >((std::vector< double > const &)*arg1);
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
@@ -3323,7 +3409,29 @@ SWIGINTERN PyObject *_wrap_new_Poly1D__SWIG_2(PyObject *SWIGUNUSEDPARM(self), Py
     SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_Poly1D" "', argument " "1"" of type '" "size_t""'");
   } 
   arg1 = static_cast< size_t >(val1);
-  result = (math::poly::OneD< double > *)new math::poly::OneD< double >(arg1);
+  {
+    try{
+      result = (math::poly::OneD< double > *)new math::poly::OneD< double >(arg1);
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
@@ -3354,7 +3462,29 @@ SWIGINTERN PyObject *_wrap_new_Poly1D__SWIG_3(PyObject *SWIGUNUSEDPARM(self), Py
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_Poly1D" "', argument " "2"" of type '" "double const *""'"); 
   }
   arg2 = reinterpret_cast< double * >(argp2);
-  result = (math::poly::OneD< double > *)new math::poly::OneD< double >(arg1,(double const *)arg2);
+  {
+    try{
+      result = (math::poly::OneD< double > *)new math::poly::OneD< double >(arg1,(double const *)arg2);
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
@@ -3434,7 +3564,29 @@ SWIGINTERN PyObject *_wrap_Poly1D_order(PyObject *SWIGUNUSEDPARM(self), PyObject
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D_order" "', argument " "1"" of type '" "math::poly::OneD< double > const *""'"); 
   }
   arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  result = ((math::poly::OneD< double > const *)arg1)->order();
+  {
+    try{
+      result = ((math::poly::OneD< double > const *)arg1)->order();
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
@@ -3456,7 +3608,29 @@ SWIGINTERN PyObject *_wrap_Poly1D_size(PyObject *SWIGUNUSEDPARM(self), PyObject 
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D_size" "', argument " "1"" of type '" "math::poly::OneD< double > const *""'"); 
   }
   arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  result = ((math::poly::OneD< double > const *)arg1)->size();
+  {
+    try{
+      result = ((math::poly::OneD< double > const *)arg1)->size();
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
@@ -3478,7 +3652,29 @@ SWIGINTERN PyObject *_wrap_Poly1D_empty(PyObject *SWIGUNUSEDPARM(self), PyObject
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D_empty" "', argument " "1"" of type '" "math::poly::OneD< double > const *""'"); 
   }
   arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  result = (bool)((math::poly::OneD< double > const *)arg1)->empty();
+  {
+    try{
+      result = (bool)((math::poly::OneD< double > const *)arg1)->empty();
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
@@ -3509,7 +3705,29 @@ SWIGINTERN PyObject *_wrap_Poly1D_scaleVariable(PyObject *SWIGUNUSEDPARM(self), 
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly1D_scaleVariable" "', argument " "2"" of type '" "double""'");
   } 
   arg2 = static_cast< double >(val2);
-  result = ((math::poly::OneD< double > const *)arg1)->scaleVariable(arg2);
+  {
+    try{
+      result = ((math::poly::OneD< double > const *)arg1)->scaleVariable(arg2);
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_NewPointerObj((new math::poly::OneD< double >(static_cast< const math::poly::OneD< double >& >(result))), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
@@ -3540,7 +3758,29 @@ SWIGINTERN PyObject *_wrap_Poly1D_truncateTo(PyObject *SWIGUNUSEDPARM(self), PyO
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly1D_truncateTo" "', argument " "2"" of type '" "size_t""'");
   } 
   arg2 = static_cast< size_t >(val2);
-  result = ((math::poly::OneD< double > const *)arg1)->truncateTo(arg2);
+  {
+    try{
+      result = ((math::poly::OneD< double > const *)arg1)->truncateTo(arg2);
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_NewPointerObj((new math::poly::OneD< double >(static_cast< const math::poly::OneD< double >& >(result))), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
@@ -3571,7 +3811,29 @@ SWIGINTERN PyObject *_wrap_Poly1D_truncateToNonZeros__SWIG_0(PyObject *SWIGUNUSE
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly1D_truncateToNonZeros" "', argument " "2"" of type '" "double""'");
   } 
   arg2 = static_cast< double >(val2);
-  result = ((math::poly::OneD< double > const *)arg1)->truncateToNonZeros(arg2);
+  {
+    try{
+      result = ((math::poly::OneD< double > const *)arg1)->truncateToNonZeros(arg2);
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_NewPointerObj((new math::poly::OneD< double >(static_cast< const math::poly::OneD< double >& >(result))), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
@@ -3593,7 +3855,29 @@ SWIGINTERN PyObject *_wrap_Poly1D_truncateToNonZeros__SWIG_1(PyObject *SWIGUNUSE
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D_truncateToNonZeros" "', argument " "1"" of type '" "math::poly::OneD< double > const *""'"); 
   }
   arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  result = ((math::poly::OneD< double > const *)arg1)->truncateToNonZeros();
+  {
+    try{
+      result = ((math::poly::OneD< double > const *)arg1)->truncateToNonZeros();
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_NewPointerObj((new math::poly::OneD< double >(static_cast< const math::poly::OneD< double >& >(result))), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
@@ -3680,7 +3964,29 @@ SWIGINTERN PyObject *_wrap_Poly1D_transformInput__SWIG_0(PyObject *SWIGUNUSEDPAR
     SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Poly1D_transformInput" "', argument " "3"" of type '" "double""'");
   } 
   arg3 = static_cast< double >(val3);
-  result = ((math::poly::OneD< double > const *)arg1)->transformInput((math::poly::OneD< double > const &)*arg2,arg3);
+  {
+    try{
+      result = ((math::poly::OneD< double > const *)arg1)->transformInput((math::poly::OneD< double > const &)*arg2,arg3);
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_NewPointerObj((new math::poly::OneD< double >(static_cast< const math::poly::OneD< double >& >(result))), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
@@ -3714,7 +4020,29 @@ SWIGINTERN PyObject *_wrap_Poly1D_transformInput__SWIG_1(PyObject *SWIGUNUSEDPAR
     SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly1D_transformInput" "', argument " "2"" of type '" "math::poly::OneD< double > const &""'"); 
   }
   arg2 = reinterpret_cast< math::poly::OneD< double > * >(argp2);
-  result = ((math::poly::OneD< double > const *)arg1)->transformInput((math::poly::OneD< double > const &)*arg2);
+  {
+    try{
+      result = ((math::poly::OneD< double > const *)arg1)->transformInput((math::poly::OneD< double > const &)*arg2);
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_NewPointerObj((new math::poly::OneD< double >(static_cast< const math::poly::OneD< double >& >(result))), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
@@ -3799,7 +4127,29 @@ SWIGINTERN PyObject *_wrap_Poly1D_copyFrom(PyObject *SWIGUNUSEDPARM(self), PyObj
     SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly1D_copyFrom" "', argument " "2"" of type '" "math::poly::OneD< double > const &""'"); 
   }
   arg2 = reinterpret_cast< math::poly::OneD< double > * >(argp2);
-  (arg1)->copyFrom((math::poly::OneD< double > const &)*arg2);
+  {
+    try{
+      (arg1)->copyFrom((math::poly::OneD< double > const &)*arg2);
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -3830,7 +4180,29 @@ SWIGINTERN PyObject *_wrap_Poly1D___call__(PyObject *SWIGUNUSEDPARM(self), PyObj
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly1D___call__" "', argument " "2"" of type '" "double""'");
   } 
   arg2 = static_cast< double >(val2);
-  result = (double)((math::poly::OneD< double > const *)arg1)->operator ()(arg2);
+  {
+    try{
+      result = (double)((math::poly::OneD< double > const *)arg1)->operator ()(arg2);
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
@@ -3870,7 +4242,29 @@ SWIGINTERN PyObject *_wrap_Poly1D_integrate(PyObject *SWIGUNUSEDPARM(self), PyOb
     SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Poly1D_integrate" "', argument " "3"" of type '" "double""'");
   } 
   arg3 = static_cast< double >(val3);
-  result = (double)((math::poly::OneD< double > const *)arg1)->integrate(arg2,arg3);
+  {
+    try{
+      result = (double)((math::poly::OneD< double > const *)arg1)->integrate(arg2,arg3);
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
@@ -3892,7 +4286,29 @@ SWIGINTERN PyObject *_wrap_Poly1D_derivative(PyObject *SWIGUNUSEDPARM(self), PyO
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D_derivative" "', argument " "1"" of type '" "math::poly::OneD< double > const *""'"); 
   }
   arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  result = ((math::poly::OneD< double > const *)arg1)->derivative();
+  {
+    try{
+      result = ((math::poly::OneD< double > const *)arg1)->derivative();
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_NewPointerObj((new math::poly::OneD< double >(static_cast< const math::poly::OneD< double >& >(result))), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
@@ -3923,7 +4339,29 @@ SWIGINTERN PyObject *_wrap_Poly1D___imul____SWIG_0(PyObject *SWIGUNUSEDPARM(self
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly1D___imul__" "', argument " "2"" of type '" "double""'");
   } 
   arg2 = static_cast< double >(val2);
-  result = (math::poly::OneD< double > *) &(arg1)->operator *=(arg2);
+  {
+    try{
+      result = (math::poly::OneD< double > *) &(arg1)->operator *=(arg2);
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
@@ -3954,7 +4392,29 @@ SWIGINTERN PyObject *_wrap_Poly1D___mul____SWIG_0(PyObject *SWIGUNUSEDPARM(self)
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly1D___mul__" "', argument " "2"" of type '" "double""'");
   } 
   arg2 = static_cast< double >(val2);
-  result = ((math::poly::OneD< double > const *)arg1)->operator *(arg2);
+  {
+    try{
+      result = ((math::poly::OneD< double > const *)arg1)->operator *(arg2);
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_NewPointerObj((new math::poly::OneD< double >(static_cast< const math::poly::OneD< double >& >(result))), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
@@ -3988,7 +4448,29 @@ SWIGINTERN PyObject *_wrap_Poly1D___imul____SWIG_1(PyObject *SWIGUNUSEDPARM(self
     SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly1D___imul__" "', argument " "2"" of type '" "math::poly::OneD< double > const &""'"); 
   }
   arg2 = reinterpret_cast< math::poly::OneD< double > * >(argp2);
-  result = (math::poly::OneD< double > *) &(arg1)->operator *=((math::poly::OneD< double > const &)*arg2);
+  {
+    try{
+      result = (math::poly::OneD< double > *) &(arg1)->operator *=((math::poly::OneD< double > const &)*arg2);
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
@@ -4070,7 +4552,29 @@ SWIGINTERN PyObject *_wrap_Poly1D___mul____SWIG_1(PyObject *SWIGUNUSEDPARM(self)
     SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly1D___mul__" "', argument " "2"" of type '" "math::poly::OneD< double > const &""'"); 
   }
   arg2 = reinterpret_cast< math::poly::OneD< double > * >(argp2);
-  result = ((math::poly::OneD< double > const *)arg1)->operator *((math::poly::OneD< double > const &)*arg2);
+  {
+    try{
+      result = ((math::poly::OneD< double > const *)arg1)->operator *((math::poly::OneD< double > const &)*arg2);
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_NewPointerObj((new math::poly::OneD< double >(static_cast< const math::poly::OneD< double >& >(result))), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
@@ -4149,7 +4653,29 @@ SWIGINTERN PyObject *_wrap_Poly1D___iadd__(PyObject *SWIGUNUSEDPARM(self), PyObj
     SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly1D___iadd__" "', argument " "2"" of type '" "math::poly::OneD< double > const &""'"); 
   }
   arg2 = reinterpret_cast< math::poly::OneD< double > * >(argp2);
-  result = (math::poly::OneD< double > *) &(arg1)->operator +=((math::poly::OneD< double > const &)*arg2);
+  {
+    try{
+      result = (math::poly::OneD< double > *) &(arg1)->operator +=((math::poly::OneD< double > const &)*arg2);
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
@@ -4183,7 +4709,29 @@ SWIGINTERN PyObject *_wrap_Poly1D___add__(PyObject *SWIGUNUSEDPARM(self), PyObje
     SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly1D___add__" "', argument " "2"" of type '" "math::poly::OneD< double > const &""'"); 
   }
   arg2 = reinterpret_cast< math::poly::OneD< double > * >(argp2);
-  result = ((math::poly::OneD< double > const *)arg1)->operator +((math::poly::OneD< double > const &)*arg2);
+  {
+    try{
+      result = ((math::poly::OneD< double > const *)arg1)->operator +((math::poly::OneD< double > const &)*arg2);
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_NewPointerObj((new math::poly::OneD< double >(static_cast< const math::poly::OneD< double >& >(result))), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
@@ -4217,7 +4765,29 @@ SWIGINTERN PyObject *_wrap_Poly1D___isub__(PyObject *SWIGUNUSEDPARM(self), PyObj
     SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly1D___isub__" "', argument " "2"" of type '" "math::poly::OneD< double > const &""'"); 
   }
   arg2 = reinterpret_cast< math::poly::OneD< double > * >(argp2);
-  result = (math::poly::OneD< double > *) &(arg1)->operator -=((math::poly::OneD< double > const &)*arg2);
+  {
+    try{
+      result = (math::poly::OneD< double > *) &(arg1)->operator -=((math::poly::OneD< double > const &)*arg2);
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
@@ -4251,7 +4821,29 @@ SWIGINTERN PyObject *_wrap_Poly1D___sub__(PyObject *SWIGUNUSEDPARM(self), PyObje
     SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly1D___sub__" "', argument " "2"" of type '" "math::poly::OneD< double > const &""'"); 
   }
   arg2 = reinterpret_cast< math::poly::OneD< double > * >(argp2);
-  result = ((math::poly::OneD< double > const *)arg1)->operator -((math::poly::OneD< double > const &)*arg2);
+  {
+    try{
+      result = ((math::poly::OneD< double > const *)arg1)->operator -((math::poly::OneD< double > const &)*arg2);
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_NewPointerObj((new math::poly::OneD< double >(static_cast< const math::poly::OneD< double >& >(result))), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
@@ -4282,7 +4874,29 @@ SWIGINTERN PyObject *_wrap_Poly1D___idiv__(PyObject *SWIGUNUSEDPARM(self), PyObj
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly1D___idiv__" "', argument " "2"" of type '" "double""'");
   } 
   arg2 = static_cast< double >(val2);
-  result = (math::poly::OneD< double > *) &(arg1)->operator /=(arg2);
+  {
+    try{
+      result = (math::poly::OneD< double > *) &(arg1)->operator /=(arg2);
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
@@ -4313,7 +4927,29 @@ SWIGINTERN PyObject *_wrap_Poly1D___div__(PyObject *SWIGUNUSEDPARM(self), PyObje
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly1D___div__" "', argument " "2"" of type '" "double""'");
   } 
   arg2 = static_cast< double >(val2);
-  result = ((math::poly::OneD< double > const *)arg1)->operator /(arg2);
+  {
+    try{
+      result = ((math::poly::OneD< double > const *)arg1)->operator /(arg2);
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_NewPointerObj((new math::poly::OneD< double >(static_cast< const math::poly::OneD< double >& >(result))), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
@@ -4344,7 +4980,29 @@ SWIGINTERN PyObject *_wrap_Poly1D_power(PyObject *SWIGUNUSEDPARM(self), PyObject
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly1D_power" "', argument " "2"" of type '" "size_t""'");
   } 
   arg2 = static_cast< size_t >(val2);
-  result = ((math::poly::OneD< double > const *)arg1)->power(arg2);
+  {
+    try{
+      result = ((math::poly::OneD< double > const *)arg1)->power(arg2);
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_NewPointerObj((new math::poly::OneD< double >(static_cast< const math::poly::OneD< double >& >(result))), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
@@ -4375,7 +5033,29 @@ SWIGINTERN PyObject *_wrap_Poly1D___getitem__(PyObject *SWIGUNUSEDPARM(self), Py
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly1D___getitem__" "', argument " "2"" of type '" "long""'");
   } 
   arg2 = static_cast< long >(val2);
-  result = (double)math_poly_OneD_Sl_double_Sg____getitem__(arg1,arg2);
+  {
+    try{
+      result = (double)math_poly_OneD_Sl_double_Sg____getitem__(arg1,arg2);
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
@@ -4414,7 +5094,29 @@ SWIGINTERN PyObject *_wrap_Poly1D___setitem__(PyObject *SWIGUNUSEDPARM(self), Py
     SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Poly1D___setitem__" "', argument " "3"" of type '" "double""'");
   } 
   arg3 = static_cast< double >(val3);
-  math_poly_OneD_Sl_double_Sg____setitem__(arg1,arg2,arg3);
+  {
+    try{
+      math_poly_OneD_Sl_double_Sg____setitem__(arg1,arg2,arg3);
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -4435,7 +5137,29 @@ SWIGINTERN PyObject *_wrap_delete_Poly1D(PyObject *SWIGUNUSEDPARM(self), PyObjec
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_Poly1D" "', argument " "1"" of type '" "math::poly::OneD< double > *""'"); 
   }
   arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
-  delete arg1;
+  {
+    try{
+      delete arg1;
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -4464,7 +5188,29 @@ SWIGINTERN PyObject *_wrap_Poly2D_coeffs(PyObject *SWIGUNUSEDPARM(self), PyObjec
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D_coeffs" "', argument " "1"" of type '" "math::poly::TwoD< double > *""'"); 
   }
   arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  result = (std::vector< math::poly::OneD< double > > *) &(arg1)->coeffs();
+  {
+    try{
+      result = (std::vector< math::poly::OneD< double > > *) &(arg1)->coeffs();
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_math__poly__OneDT_double_t_t, 0 |  0 );
   return resultobj;
 fail:
@@ -4477,7 +5223,29 @@ SWIGINTERN PyObject *_wrap_new_Poly2D__SWIG_0(PyObject *SWIGUNUSEDPARM(self), Py
   math::poly::TwoD< double > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)":new_Poly2D")) SWIG_fail;
-  result = (math::poly::TwoD< double > *)new math::poly::TwoD< double >();
+  {
+    try{
+      result = (math::poly::TwoD< double > *)new math::poly::TwoD< double >();
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
@@ -4508,7 +5276,29 @@ SWIGINTERN PyObject *_wrap_new_Poly2D__SWIG_1(PyObject *SWIGUNUSEDPARM(self), Py
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_Poly2D" "', argument " "2"" of type '" "size_t""'");
   } 
   arg2 = static_cast< size_t >(val2);
-  result = (math::poly::TwoD< double > *)new math::poly::TwoD< double >(arg1,arg2);
+  {
+    try{
+      result = (math::poly::TwoD< double > *)new math::poly::TwoD< double >(arg1,arg2);
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
@@ -4569,7 +5359,29 @@ SWIGINTERN PyObject *_wrap_Poly2D_empty(PyObject *SWIGUNUSEDPARM(self), PyObject
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D_empty" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
   }
   arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  result = (bool)((math::poly::TwoD< double > const *)arg1)->empty();
+  {
+    try{
+      result = (bool)((math::poly::TwoD< double > const *)arg1)->empty();
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
@@ -4591,7 +5403,29 @@ SWIGINTERN PyObject *_wrap_Poly2D_orderX(PyObject *SWIGUNUSEDPARM(self), PyObjec
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D_orderX" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
   }
   arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  result = ((math::poly::TwoD< double > const *)arg1)->orderX();
+  {
+    try{
+      result = ((math::poly::TwoD< double > const *)arg1)->orderX();
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
@@ -4613,7 +5447,29 @@ SWIGINTERN PyObject *_wrap_Poly2D_orderY(PyObject *SWIGUNUSEDPARM(self), PyObjec
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D_orderY" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
   }
   arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  result = ((math::poly::TwoD< double > const *)arg1)->orderY();
+  {
+    try{
+      result = ((math::poly::TwoD< double > const *)arg1)->orderY();
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
@@ -4653,7 +5509,29 @@ SWIGINTERN PyObject *_wrap_Poly2D___call__(PyObject *SWIGUNUSEDPARM(self), PyObj
     SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Poly2D___call__" "', argument " "3"" of type '" "double""'");
   } 
   arg3 = static_cast< double >(val3);
-  result = (double)((math::poly::TwoD< double > const *)arg1)->operator ()(arg2,arg3);
+  {
+    try{
+      result = (double)((math::poly::TwoD< double > const *)arg1)->operator ()(arg2,arg3);
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
@@ -4711,7 +5589,29 @@ SWIGINTERN PyObject *_wrap_Poly2D_integrate(PyObject *SWIGUNUSEDPARM(self), PyOb
     SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "Poly2D_integrate" "', argument " "5"" of type '" "double""'");
   } 
   arg5 = static_cast< double >(val5);
-  result = (double)((math::poly::TwoD< double > const *)arg1)->integrate(arg2,arg3,arg4,arg5);
+  {
+    try{
+      result = (double)((math::poly::TwoD< double > const *)arg1)->integrate(arg2,arg3,arg4,arg5);
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
@@ -4753,7 +5653,29 @@ SWIGINTERN PyObject *_wrap_Poly2D_set(PyObject *SWIGUNUSEDPARM(self), PyObject *
     SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly2D_set" "', argument " "3"" of type '" "math::poly::OneD< double > const &""'"); 
   }
   arg3 = reinterpret_cast< math::poly::OneD< double > * >(argp3);
-  (arg1)->set(arg2,(math::poly::OneD< double > const &)*arg3);
+  {
+    try{
+      (arg1)->set(arg2,(math::poly::OneD< double > const &)*arg3);
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -4775,7 +5697,29 @@ SWIGINTERN PyObject *_wrap_Poly2D_flipXY(PyObject *SWIGUNUSEDPARM(self), PyObjec
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D_flipXY" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
   }
   arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  result = ((math::poly::TwoD< double > const *)arg1)->flipXY();
+  {
+    try{
+      result = ((math::poly::TwoD< double > const *)arg1)->flipXY();
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
@@ -4797,7 +5741,29 @@ SWIGINTERN PyObject *_wrap_Poly2D_derivativeY(PyObject *SWIGUNUSEDPARM(self), Py
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D_derivativeY" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
   }
   arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  result = ((math::poly::TwoD< double > const *)arg1)->derivativeY();
+  {
+    try{
+      result = ((math::poly::TwoD< double > const *)arg1)->derivativeY();
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
@@ -4819,7 +5785,29 @@ SWIGINTERN PyObject *_wrap_Poly2D_derivativeX(PyObject *SWIGUNUSEDPARM(self), Py
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D_derivativeX" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
   }
   arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  result = ((math::poly::TwoD< double > const *)arg1)->derivativeX();
+  {
+    try{
+      result = ((math::poly::TwoD< double > const *)arg1)->derivativeX();
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
@@ -4841,7 +5829,29 @@ SWIGINTERN PyObject *_wrap_Poly2D_derivativeXY(PyObject *SWIGUNUSEDPARM(self), P
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D_derivativeXY" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
   }
   arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  result = ((math::poly::TwoD< double > const *)arg1)->derivativeXY();
+  {
+    try{
+      result = ((math::poly::TwoD< double > const *)arg1)->derivativeXY();
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
@@ -4881,7 +5891,29 @@ SWIGINTERN PyObject *_wrap_Poly2D_scaleVariable__SWIG_0(PyObject *SWIGUNUSEDPARM
     SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Poly2D_scaleVariable" "', argument " "3"" of type '" "double""'");
   } 
   arg3 = static_cast< double >(val3);
-  result = ((math::poly::TwoD< double > const *)arg1)->scaleVariable(arg2,arg3);
+  {
+    try{
+      result = ((math::poly::TwoD< double > const *)arg1)->scaleVariable(arg2,arg3);
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
@@ -4912,7 +5944,29 @@ SWIGINTERN PyObject *_wrap_Poly2D_scaleVariable__SWIG_1(PyObject *SWIGUNUSEDPARM
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly2D_scaleVariable" "', argument " "2"" of type '" "double""'");
   } 
   arg2 = static_cast< double >(val2);
-  result = ((math::poly::TwoD< double > const *)arg1)->scaleVariable(arg2);
+  {
+    try{
+      result = ((math::poly::TwoD< double > const *)arg1)->scaleVariable(arg2);
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
@@ -5008,7 +6062,29 @@ SWIGINTERN PyObject *_wrap_Poly2D_truncateTo(PyObject *SWIGUNUSEDPARM(self), PyO
     SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Poly2D_truncateTo" "', argument " "3"" of type '" "size_t""'");
   } 
   arg3 = static_cast< size_t >(val3);
-  result = ((math::poly::TwoD< double > const *)arg1)->truncateTo(arg2,arg3);
+  {
+    try{
+      result = ((math::poly::TwoD< double > const *)arg1)->truncateTo(arg2,arg3);
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
@@ -5039,7 +6115,29 @@ SWIGINTERN PyObject *_wrap_Poly2D_truncateToNonZeros__SWIG_0(PyObject *SWIGUNUSE
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly2D_truncateToNonZeros" "', argument " "2"" of type '" "double""'");
   } 
   arg2 = static_cast< double >(val2);
-  result = ((math::poly::TwoD< double > const *)arg1)->truncateToNonZeros(arg2);
+  {
+    try{
+      result = ((math::poly::TwoD< double > const *)arg1)->truncateToNonZeros(arg2);
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
@@ -5061,7 +6159,29 @@ SWIGINTERN PyObject *_wrap_Poly2D_truncateToNonZeros__SWIG_1(PyObject *SWIGUNUSE
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D_truncateToNonZeros" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
   }
   arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  result = ((math::poly::TwoD< double > const *)arg1)->truncateToNonZeros();
+  {
+    try{
+      result = ((math::poly::TwoD< double > const *)arg1)->truncateToNonZeros();
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
@@ -5160,7 +6280,29 @@ SWIGINTERN PyObject *_wrap_Poly2D_transformInput__SWIG_0(PyObject *SWIGUNUSEDPAR
     SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "Poly2D_transformInput" "', argument " "4"" of type '" "double""'");
   } 
   arg4 = static_cast< double >(val4);
-  result = ((math::poly::TwoD< double > const *)arg1)->transformInput((math::poly::TwoD< double > const &)*arg2,(math::poly::TwoD< double > const &)*arg3,arg4);
+  {
+    try{
+      result = ((math::poly::TwoD< double > const *)arg1)->transformInput((math::poly::TwoD< double > const &)*arg2,(math::poly::TwoD< double > const &)*arg3,arg4);
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
@@ -5206,7 +6348,29 @@ SWIGINTERN PyObject *_wrap_Poly2D_transformInput__SWIG_1(PyObject *SWIGUNUSEDPAR
     SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly2D_transformInput" "', argument " "3"" of type '" "math::poly::TwoD< double > const &""'"); 
   }
   arg3 = reinterpret_cast< math::poly::TwoD< double > * >(argp3);
-  result = ((math::poly::TwoD< double > const *)arg1)->transformInput((math::poly::TwoD< double > const &)*arg2,(math::poly::TwoD< double > const &)*arg3);
+  {
+    try{
+      result = ((math::poly::TwoD< double > const *)arg1)->transformInput((math::poly::TwoD< double > const &)*arg2,(math::poly::TwoD< double > const &)*arg3);
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
@@ -5249,7 +6413,29 @@ SWIGINTERN PyObject *_wrap_Poly2D_transformInput__SWIG_2(PyObject *SWIGUNUSEDPAR
     SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Poly2D_transformInput" "', argument " "3"" of type '" "double""'");
   } 
   arg3 = static_cast< double >(val3);
-  result = ((math::poly::TwoD< double > const *)arg1)->transformInput((math::poly::TwoD< double > const &)*arg2,arg3);
+  {
+    try{
+      result = ((math::poly::TwoD< double > const *)arg1)->transformInput((math::poly::TwoD< double > const &)*arg2,arg3);
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
@@ -5283,7 +6469,29 @@ SWIGINTERN PyObject *_wrap_Poly2D_transformInput__SWIG_3(PyObject *SWIGUNUSEDPAR
     SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly2D_transformInput" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
   }
   arg2 = reinterpret_cast< math::poly::TwoD< double > * >(argp2);
-  result = ((math::poly::TwoD< double > const *)arg1)->transformInput((math::poly::TwoD< double > const &)*arg2);
+  {
+    try{
+      result = ((math::poly::TwoD< double > const *)arg1)->transformInput((math::poly::TwoD< double > const &)*arg2);
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
@@ -5408,7 +6616,29 @@ SWIGINTERN PyObject *_wrap_Poly2D_atY(PyObject *SWIGUNUSEDPARM(self), PyObject *
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly2D_atY" "', argument " "2"" of type '" "double""'");
   } 
   arg2 = static_cast< double >(val2);
-  result = ((math::poly::TwoD< double > const *)arg1)->atY(arg2);
+  {
+    try{
+      result = ((math::poly::TwoD< double > const *)arg1)->atY(arg2);
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_NewPointerObj((new math::poly::OneD< double >(static_cast< const math::poly::OneD< double >& >(result))), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
@@ -5439,7 +6669,29 @@ SWIGINTERN PyObject *_wrap_Poly2D___imul____SWIG_0(PyObject *SWIGUNUSEDPARM(self
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly2D___imul__" "', argument " "2"" of type '" "double""'");
   } 
   arg2 = static_cast< double >(val2);
-  result = (math::poly::TwoD< double > *) &(arg1)->operator *=(arg2);
+  {
+    try{
+      result = (math::poly::TwoD< double > *) &(arg1)->operator *=(arg2);
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
@@ -5470,7 +6722,29 @@ SWIGINTERN PyObject *_wrap_Poly2D___mul____SWIG_0(PyObject *SWIGUNUSEDPARM(self)
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly2D___mul__" "', argument " "2"" of type '" "double""'");
   } 
   arg2 = static_cast< double >(val2);
-  result = ((math::poly::TwoD< double > const *)arg1)->operator *(arg2);
+  {
+    try{
+      result = ((math::poly::TwoD< double > const *)arg1)->operator *(arg2);
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
@@ -5504,7 +6778,29 @@ SWIGINTERN PyObject *_wrap_Poly2D___imul____SWIG_1(PyObject *SWIGUNUSEDPARM(self
     SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly2D___imul__" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
   }
   arg2 = reinterpret_cast< math::poly::TwoD< double > * >(argp2);
-  result = (math::poly::TwoD< double > *) &(arg1)->operator *=((math::poly::TwoD< double > const &)*arg2);
+  {
+    try{
+      result = (math::poly::TwoD< double > *) &(arg1)->operator *=((math::poly::TwoD< double > const &)*arg2);
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
@@ -5586,7 +6882,29 @@ SWIGINTERN PyObject *_wrap_Poly2D___mul____SWIG_1(PyObject *SWIGUNUSEDPARM(self)
     SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly2D___mul__" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
   }
   arg2 = reinterpret_cast< math::poly::TwoD< double > * >(argp2);
-  result = ((math::poly::TwoD< double > const *)arg1)->operator *((math::poly::TwoD< double > const &)*arg2);
+  {
+    try{
+      result = ((math::poly::TwoD< double > const *)arg1)->operator *((math::poly::TwoD< double > const &)*arg2);
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
@@ -5665,7 +6983,29 @@ SWIGINTERN PyObject *_wrap_Poly2D___iadd__(PyObject *SWIGUNUSEDPARM(self), PyObj
     SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly2D___iadd__" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
   }
   arg2 = reinterpret_cast< math::poly::TwoD< double > * >(argp2);
-  result = (math::poly::TwoD< double > *) &(arg1)->operator +=((math::poly::TwoD< double > const &)*arg2);
+  {
+    try{
+      result = (math::poly::TwoD< double > *) &(arg1)->operator +=((math::poly::TwoD< double > const &)*arg2);
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
@@ -5699,7 +7039,29 @@ SWIGINTERN PyObject *_wrap_Poly2D___add__(PyObject *SWIGUNUSEDPARM(self), PyObje
     SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly2D___add__" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
   }
   arg2 = reinterpret_cast< math::poly::TwoD< double > * >(argp2);
-  result = ((math::poly::TwoD< double > const *)arg1)->operator +((math::poly::TwoD< double > const &)*arg2);
+  {
+    try{
+      result = ((math::poly::TwoD< double > const *)arg1)->operator +((math::poly::TwoD< double > const &)*arg2);
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
@@ -5733,7 +7095,29 @@ SWIGINTERN PyObject *_wrap_Poly2D___isub__(PyObject *SWIGUNUSEDPARM(self), PyObj
     SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly2D___isub__" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
   }
   arg2 = reinterpret_cast< math::poly::TwoD< double > * >(argp2);
-  result = (math::poly::TwoD< double > *) &(arg1)->operator -=((math::poly::TwoD< double > const &)*arg2);
+  {
+    try{
+      result = (math::poly::TwoD< double > *) &(arg1)->operator -=((math::poly::TwoD< double > const &)*arg2);
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
@@ -5767,7 +7151,29 @@ SWIGINTERN PyObject *_wrap_Poly2D___sub__(PyObject *SWIGUNUSEDPARM(self), PyObje
     SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly2D___sub__" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
   }
   arg2 = reinterpret_cast< math::poly::TwoD< double > * >(argp2);
-  result = ((math::poly::TwoD< double > const *)arg1)->operator -((math::poly::TwoD< double > const &)*arg2);
+  {
+    try{
+      result = ((math::poly::TwoD< double > const *)arg1)->operator -((math::poly::TwoD< double > const &)*arg2);
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
@@ -5798,7 +7204,29 @@ SWIGINTERN PyObject *_wrap_Poly2D___idiv__(PyObject *SWIGUNUSEDPARM(self), PyObj
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly2D___idiv__" "', argument " "2"" of type '" "double""'");
   } 
   arg2 = static_cast< double >(val2);
-  result = (math::poly::TwoD< double > *) &(arg1)->operator /=(arg2);
+  {
+    try{
+      result = (math::poly::TwoD< double > *) &(arg1)->operator /=(arg2);
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
@@ -5829,7 +7257,29 @@ SWIGINTERN PyObject *_wrap_Poly2D___div__(PyObject *SWIGUNUSEDPARM(self), PyObje
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly2D___div__" "', argument " "2"" of type '" "double""'");
   } 
   arg2 = static_cast< double >(val2);
-  result = ((math::poly::TwoD< double > const *)arg1)->operator /(arg2);
+  {
+    try{
+      result = ((math::poly::TwoD< double > const *)arg1)->operator /(arg2);
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
@@ -5863,7 +7313,29 @@ SWIGINTERN PyObject *_wrap_Poly2D___eq__(PyObject *SWIGUNUSEDPARM(self), PyObjec
     SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly2D___eq__" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
   }
   arg2 = reinterpret_cast< math::poly::TwoD< double > * >(argp2);
-  result = (bool)((math::poly::TwoD< double > const *)arg1)->operator ==((math::poly::TwoD< double > const &)*arg2);
+  {
+    try{
+      result = (bool)((math::poly::TwoD< double > const *)arg1)->operator ==((math::poly::TwoD< double > const &)*arg2);
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
@@ -5897,7 +7369,29 @@ SWIGINTERN PyObject *_wrap_Poly2D___ne__(PyObject *SWIGUNUSEDPARM(self), PyObjec
     SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Poly2D___ne__" "', argument " "2"" of type '" "math::poly::TwoD< double > const &""'"); 
   }
   arg2 = reinterpret_cast< math::poly::TwoD< double > * >(argp2);
-  result = (bool)((math::poly::TwoD< double > const *)arg1)->operator !=((math::poly::TwoD< double > const &)*arg2);
+  {
+    try{
+      result = (bool)((math::poly::TwoD< double > const *)arg1)->operator !=((math::poly::TwoD< double > const &)*arg2);
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
@@ -5928,8 +7422,132 @@ SWIGINTERN PyObject *_wrap_Poly2D_power(PyObject *SWIGUNUSEDPARM(self), PyObject
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly2D_power" "', argument " "2"" of type '" "size_t""'");
   } 
   arg2 = static_cast< size_t >(val2);
-  result = ((math::poly::TwoD< double > const *)arg1)->power(arg2);
+  {
+    try{
+      result = ((math::poly::TwoD< double > const *)arg1)->power(arg2);
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Poly2D___getitem__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
+  PyObject *arg2 = (PyObject *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  double result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Poly2D___getitem__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D___getitem__" "', argument " "1"" of type '" "math::poly::TwoD< double > *""'"); 
+  }
+  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
+  arg2 = obj1;
+  {
+    try{
+      result = (double)math_poly_TwoD_Sl_double_Sg____getitem__(arg1,arg2);
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_double(static_cast< double >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Poly2D___setitem__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
+  PyObject *arg2 = (PyObject *) 0 ;
+  double arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:Poly2D___setitem__",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D___setitem__" "', argument " "1"" of type '" "math::poly::TwoD< double > *""'"); 
+  }
+  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
+  arg2 = obj1;
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Poly2D___setitem__" "', argument " "3"" of type '" "double""'");
+  } 
+  arg3 = static_cast< double >(val3);
+  {
+    try{
+      math_poly_TwoD_Sl_double_Sg____setitem__(arg1,arg2,arg3);
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
   return NULL;
@@ -5949,7 +7567,29 @@ SWIGINTERN PyObject *_wrap_delete_Poly2D(PyObject *SWIGUNUSEDPARM(self), PyObjec
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_Poly2D" "', argument " "1"" of type '" "math::poly::TwoD< double > *""'"); 
   }
   arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
-  delete arg1;
+  {
+    try{
+      delete arg1;
+    } 
+    catch (std::exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (except::Exception& e){
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...) {
+      if (!PyErr_Occurred()){
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred()){
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -6056,6 +7696,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Poly2D___eq__", _wrap_Poly2D___eq__, METH_VARARGS, (char *)"Poly2D___eq__(Poly2D self, Poly2D p) -> bool"},
 	 { (char *)"Poly2D___ne__", _wrap_Poly2D___ne__, METH_VARARGS, (char *)"Poly2D___ne__(Poly2D self, Poly2D p) -> bool"},
 	 { (char *)"Poly2D_power", _wrap_Poly2D_power, METH_VARARGS, (char *)"Poly2D_power(Poly2D self, size_t toThe) -> Poly2D"},
+	 { (char *)"Poly2D___getitem__", _wrap_Poly2D___getitem__, METH_VARARGS, (char *)"Poly2D___getitem__(Poly2D self, PyObject * inObj) -> double"},
+	 { (char *)"Poly2D___setitem__", _wrap_Poly2D___setitem__, METH_VARARGS, (char *)"Poly2D___setitem__(Poly2D self, PyObject * inObj, double val)"},
 	 { (char *)"delete_Poly2D", _wrap_delete_Poly2D, METH_VARARGS, (char *)"delete_Poly2D(Poly2D self)"},
 	 { (char *)"Poly2D_swigregister", Poly2D_swigregister, METH_VARARGS, NULL},
 	 { NULL, NULL, 0, NULL }

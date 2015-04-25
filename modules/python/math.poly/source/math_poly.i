@@ -7,22 +7,85 @@
 #include "math/poly/TwoD.h"
 %}
 
+%exception {
+    try{
+        $action
+    } 
+    catch (std::exception& e){
+        if (!PyErr_Occurred()){
+            PyErr_SetString(PyExc_RuntimeError, e.what());
+        }
+    }
+    catch (except::Exception& e){
+        if (!PyErr_Occurred()){
+            PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+        }
+    }
+    catch (...) {
+        if (!PyErr_Occurred()){
+            PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+        }
+    }
+    if (PyErr_Occurred()){
+        SWIG_fail;
+    }
+}
+
 %include "math/poly/OneD.h"
 
 %template(Poly1D) math::poly::OneD<double>;
 
+
 %extend math::poly::OneD<double> {
-    double __getitem__(long i) { return (*self)[i]; };
-    void __setitem__(long i, double val) { (*self)[i] = val; };
+    double __getitem__(long i) { 
+        if (i > self->order()){
+            PyErr_SetString(PyExc_ValueError, "Index out of range");
+            return 0.0;
+        }
+        return (*self)[i];
+    };
+    void __setitem__(long i, double val) { 
+        if (i > self->order()){
+            PyErr_SetString(PyExc_ValueError, "Index out of range");
+            return;
+        }
+        (*self)[i] = val;
+    };
 }
 
 %include "math/poly/TwoD.h"
 
 %template(Poly2D) math::poly::TwoD<double>;
 
-#if 0
-// look into using carray.i
 %extend math::poly::TwoD<double> {
-    double* __getitem__(long i) { return (*self)[i]; };
+    double __getitem__(PyObject* inObj) {
+        if (!PyTuple_Check(inObj)) {
+            PyErr_SetString(PyExc_TypeError, "Expecting a tuple");
+            return 0.0;
+        }
+        Py_ssize_t xpow, ypow;
+        if (!PyArg_ParseTuple(inObj, "nn", &xpow, &ypow)){
+            return 0.0;
+        }
+        if (xpow > self->orderX() || ypow > self->orderY()){
+            PyErr_SetString(PyExc_ValueError, "Index out of range");
+            return 0.0;
+        }
+        return (*self)[xpow][ypow];
+    }
+    void __setitem__(PyObject* inObj, double val) {
+        if (!PyTuple_Check(inObj)) {
+            PyErr_SetString(PyExc_TypeError, "Expecting a tuple");
+            return;
+        }
+        Py_ssize_t xpow, ypow;
+        if (!PyArg_ParseTuple(inObj, "nn", &xpow, &ypow)){
+            return;
+        }
+        if (xpow > self->orderX() || ypow > self->orderY()){
+            PyErr_SetString(PyExc_ValueError, "Index out of range");
+            return;
+        }
+        (*self)[xpow][ypow] = val;
+    }
 }
-#endif

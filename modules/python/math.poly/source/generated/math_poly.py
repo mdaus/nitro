@@ -407,6 +407,16 @@ class Poly2D(_object):
         """power(Poly2D self, size_t toThe) -> Poly2D"""
         return _math_poly.Poly2D_power(self, toThe)
 
+
+    def __getitem__(self, inObj):
+        """__getitem__(Poly2D self, PyObject * inObj) -> double"""
+        return _math_poly.Poly2D___getitem__(self, inObj)
+
+
+    def __setitem__(self, inObj, val):
+        """__setitem__(Poly2D self, PyObject * inObj, double val)"""
+        return _math_poly.Poly2D___setitem__(self, inObj, val)
+
     __swig_destroy__ = _math_poly.delete_Poly2D
     __del__ = lambda self: None
 Poly2D_swigregister = _math_poly.Poly2D_swigregister
