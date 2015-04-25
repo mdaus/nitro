@@ -24,13 +24,79 @@
  *
 """
 
+import sys
 from math_poly import *
 
 if __name__ == '__main__':
-    poly1D = Poly1D(2)
-    poly1D[0] = 10
-    poly1D[1] = 20
-    poly1D[2] = 30
+    #################
+    # Basic 1D test #
+    #################
 
-    # TODO: Add str() method
-    print '%f %f %f' % (poly1D[0], poly1D[1], poly1D[2])
+    poly1D = Poly1D(2)
+    for x in range(poly1D.order() + 1):
+        poly1D[x] = (x + 1) * 10
+
+    print '1D poly:'
+    print poly1D
+
+    # Try to index out of bounds by getting
+    threw = False
+    try:
+        foo = poly1D[3]
+    except ValueError:
+        threw = True
+
+    if threw:
+        print 'Getting 1D OOB threw as expected'
+    else:
+        sys.exit('Getting 1D OOB did not throw!')
+
+    # Try to index out of bounds by setting
+    threw = False
+    try:
+        poly1D[3] = 5
+    except ValueError:
+        threw = True
+
+    if threw:
+        print 'Setting 1D OOB threw as expected'
+    else:
+        sys.exit('Setting 1D OOB did not throw!')
+
+    #################
+    # Basic 2D test #
+    #################
+
+    poly2D = Poly2D(2, 3)
+    val = 100
+    for x in range(poly2D.orderX() + 1):
+        for y in range(poly2D.orderY() + 1):
+            poly2D[(x, y)] = val
+            val += 100
+
+    print '\n2D poly:'
+    print poly2D
+
+    # Try to index out of bounds by getting
+    threw = False
+    try:
+        foo = poly2D[(3, 3)]
+    except ValueError:
+        threw = True
+
+    if threw:
+        print 'Getting 2D OOB threw as expected'
+    else:
+        sys.exit('Getting 2D OOB did not throw!')
+
+    # Try to index out of bounds by setting
+    threw = False
+    try:
+        poly2D[(3, 3)] = 5
+    except ValueError:
+        threw = True
+
+    if threw:
+        print 'Setting 2D OOB threw as expected'
+    else:
+        sys.exit('Setting 2D OOB did not throw!')
