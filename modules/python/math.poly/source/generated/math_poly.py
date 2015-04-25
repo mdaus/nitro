@@ -232,6 +232,11 @@ class Poly1D(_object):
         """__setitem__(Poly1D self, long i, double val)"""
         return _math_poly.Poly1D___setitem__(self, i, val)
 
+
+    def __str__(self):
+        """__str__(Poly1D self) -> std::string"""
+        return _math_poly.Poly1D___str__(self)
+
     __swig_destroy__ = _math_poly.delete_Poly1D
     __del__ = lambda self: None
 Poly1D_swigregister = _math_poly.Poly1D_swigregister
@@ -416,6 +421,11 @@ class Poly2D(_object):
     def __setitem__(self, inObj, val):
         """__setitem__(Poly2D self, PyObject * inObj, double val)"""
         return _math_poly.Poly2D___setitem__(self, inObj, val)
+
+
+    def __str__(self):
+        """__str__(Poly2D self) -> std::string"""
+        return _math_poly.Poly2D___str__(self)
 
     __swig_destroy__ = _math_poly.delete_Poly2D
     __del__ = lambda self: None
