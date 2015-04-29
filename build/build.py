@@ -39,6 +39,7 @@ except:
         return call_fn
         
 class CPPContext(Context.Context):
+    module_prefix_dict = dict()
     """
     Create a custom context for building C/C++ modules/plugins
     """
@@ -447,11 +448,18 @@ class CPPContext(Context.Context):
 
         modArgs = dict((k.lower(), v) for k, v in modArgs.iteritems())
 
+
         name = modArgs['name']
-        swigSource = os.path.join('source', name.replace('.', '_') + '.i')
-        target = '_' + name.replace('.', '_')
+        codename = name
+        
+        prefix = self.module_prefix_dict.get(name, None)
+        if prefix is not None:
+          codename = prefix + name
+
+        swigSource = os.path.join('source', codename.replace('.', '_') + '.i')
+        target = '_' + codename.replace('.', '_')
         use = modArgs['use']
-        installPath = os.path.join('${PYTHONDIR}', name)
+        installPath = os.path.join('${PYTHONDIR}', codename)
         taskName = name + '-python'
 
         # TODO: Here we're assuming we're svn:externals'ing everything in under
@@ -480,10 +488,11 @@ class CPPContext(Context.Context):
             # This gets generated into the source/generated folder and we'll
             # actually check it in so other developers can still use the Python
             # bindings even if they don't have Swig
-            bld(features = 'cxx cshlib pyext add_targets',
+            bld(features = 'cxx cshlib pyext add_targets swig_linkage',
                 source = swigSource,
                 target = target,
                 use = use,
+                module_prefix_dict = self.module_prefix_dict,
                 includes = swigIncludes,
                 env = env.derive(),
                 swig_flags = '-python -c++ -I' + swigIncludes,
@@ -494,10 +503,11 @@ class CPPContext(Context.Context):
         else:
             # If Swig is not available, use the cxx file already sitting around
             # that Swig generated sometime in the past
-            bld(features = 'cxx cshlib pyext add_targets',
+            bld(features = 'cxx cshlib pyext add_targets swig_linkage',
             source = os.path.join('source', 'generated', name.replace('.', '_') + '_wrap.cxx'),
             target = target,
             use = use,
+            module_prefix_dict = self.module_prefix_dict,
             env = env.derive(),
             name = taskName,
             targets_to_add = copyFilesTarget,
@@ -1201,6 +1211,33 @@ def configure(self):
 
     #flag that we already detected
     self.env['DETECTED_BUILD_PY'] = True
+
+@TaskGen.feature('swig_linkage')
+@TaskGen.after_method('process_use')
+def process_swig_linkage(tsk):
+
+  # For each python module we're using we'll
+  # need to correct our environment to reflect how the modules are 
+  # built. (ie _module_submodule.so instead of libmodule.submodule.so)
+  # step 1) find python modules we are using
+  # step 2) add correct path to module .so to link flags
+  # step 3) remove now-extraneous '_module_submodle' from LIB
+
+  for using in tsk.use.split():
+    if using.endswith('-python'):
+      base = using.replace('-python','')
+      searchstr = base
+      prefix = '_' + tsk.module_prefix_dict.get(base,'')
+      libpath = ''
+      for libdir in tsk.env.LIBPATH:
+        if libdir.endswith(searchstr):
+          libpath = libdir
+
+      baselib = prefix + base.replace('.','_')
+      libname = baselib + '.so'
+      libpath = os.path.join(str(libpath), libname)
+      tsk.env.LINKFLAGS.append(libpath)
+      tsk.env.LIB = [l for l in tsk.env.LIB if l != baselib]
 
 @task_gen
 @feature('untar')

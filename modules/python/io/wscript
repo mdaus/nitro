@@ -1,4 +1,5 @@
 distclean = options = configure = lambda p: None
 
 def build(bld):
-  bld.swigModule(name = 'coda_io', use = 'io-c++')
+  bld.module_prefix_dict['io'] = 'coda_'
+  bld.swigModule(name = 'io', use = 'io-c++')
