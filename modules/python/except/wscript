@@ -1,0 +1,8 @@
+import os
+from os.path import join, basename
+from waflib import Utils
+distclean = options = configure = lambda p: None
+
+def build(bld):
+  bld.module_prefix_dict['except'] = 'coda_'
+  bld.swigModule(name = 'except', use = 'except-c++', src_prefix = 'coda_')
