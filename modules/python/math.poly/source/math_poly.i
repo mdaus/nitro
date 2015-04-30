@@ -9,6 +9,8 @@
 #include "math/poly/TwoD.h"
 %}
 
+%import "coda_except.i"
+
 %include "std_string.i"
 
 %exception

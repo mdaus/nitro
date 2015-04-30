@@ -1,5 +1,7 @@
-distclean = options = configure = lambda p: None
+distclean = options = lambda p: None
+
+def configure(conf):
+  conf.env['prefix_logging'] = 'coda_'
 
 def build(bld):
-  bld.module_prefix_dict['logging'] = 'coda_'
   bld.swigModule(name = 'logging', use = 'logging-c++')
