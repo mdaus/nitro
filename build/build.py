@@ -454,7 +454,7 @@ class CPPContext(Context.Context):
         if prefix:
           codename = prefix + name
 
-        swigSource = os.path.join('source', codename.replace('.', '_') + '.i')
+        swigSource = os.path.join('source', name.replace('.', '_') + '.i')
         target = '_' + codename.replace('.', '_')
         use = modArgs['use']
         installPath = os.path.join('${PYTHONDIR}', codename)
@@ -1208,35 +1208,36 @@ def configure(self):
 @TaskGen.after_method('process_use')
 def process_swig_linkage(tsk):
 
-  # For each python module we're using we'll
-  # need to correct our environment to reflect how the modules are 
-  # built. (ie _module_submodule.so instead of libmodule.submodule.so)
-  # step 1) find python modules we are using
-  # step 2) add correct path to module .so to link flags
-  # step 3) remove now-extraneous '_module_submodle' from LIB
-  for using in tsk.use.split():
-    if using.endswith('-python'):
-      base = using.replace('-python','')
-      searchstr = base
-      li = tsk.env['prefix_' + base]
-      if li:
-        prefix = '_' + li
-      else:
-        prefix = '_'
+  incstr = ''
+  for nod in tsk.includes:
+    incstr += ' -I' + nod.abspath()
+  tsk.swig_flags = tsk.swig_flags + incstr
+
+  newlib = []
+  for lib in tsk.env.LIB:
+    if lib.startswith('_coda_'):
+      libname = lib + '.so'
+      searchstr = lib[6:].replace('_','.')
       libpath = ''
+      for libdir in tsk.env.LIBPATH:
+          if libdir.endswith(searchstr):
+              libpath = libdir
+      libpath = os.path.join(str(libpath), libname)
+      tsk.env.LINKFLAGS.append(libpath)
+    elif lib.startswith('_'):
+      libname = lib + '.so'
+      searchstr = lib[1:].replace('_','.')
       for libdir in tsk.env.LIBPATH:
         if libdir.endswith(searchstr):
           libpath = libdir
-
-      incstr = ''
-      for nod in tsk.includes:
-        incstr += ' -I' + nod.abspath()
-      tsk.swig_flags = tsk.swig_flags + incstr
-      baselib = prefix + base.replace('.','_')
-      libname = baselib + '.so'
       libpath = os.path.join(str(libpath), libname)
       tsk.env.LINKFLAGS.append(libpath)
-      tsk.env.LIB = [l for l in tsk.env.LIB if l != baselib]
+    else:
+      newlib.append(lib)
+
+  soname_str = '-Wl,-soname=' + tsk.target + '.so'
+  tsk.env.LINKFLAGS.append(soname_str)
+  tsk.env.LIB = newlib
 
 @task_gen
 @feature('untar')
