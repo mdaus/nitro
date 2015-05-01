@@ -1,0 +1,4 @@
+distclean = options = configure = lambda p: None
+
+def build(bld):
+  bld.swigModule(name = 'sys', use = 'sys-c++')
