@@ -2,14 +2,22 @@
 
 %feature("autodoc", "1");
 
+%ignore math::poly::OneD<Vector3>::truncateToNonZeros;
+%ignore math::poly::OneD<Vector3>::transformInput;
+%ignore math::poly::OneD<Vector3>::integrate;
+%ignore math::poly::OneD<Vector3>::power;
+
 %{
 #include <string>
 #include <sstream>
+#include "import/math/linear.h"
+typedef math::linear::VectorN<3,double> Vector3;
 #include "math/poly/OneD.h"
 #include "math/poly/TwoD.h"
 %}
 
-%import "coda_except.i"
+%import "math_linear.i"
+%import "except.i"
 
 %include "std_string.i"
 
@@ -134,3 +142,21 @@
         return ostr.str();
     }
 }
+
+typedef math::linear::VectorN<3,double> Vector3;
+%template(PolyVector3) math::poly::OneD<Vector3>;
+ 
+%extend math::poly::OneD<Vector3 >
+{
+    public:
+        Vector3 __getitem__(long i) 
+        { 
+            return (*self)[i]; 
+        }
+
+        void __setitem__(long i, Vector3 val) 
+        { 
+            (*self)[i] = val; 
+        }
+};
+ 

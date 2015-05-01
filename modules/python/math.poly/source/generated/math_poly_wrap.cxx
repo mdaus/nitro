@@ -2501,15 +2501,22 @@ SWIG_Python_MustGetPtr(PyObject *obj, swig_type_info *ty, int argnum, int flags)
 
 /* -------- TYPES TABLE (BEGIN) -------- */
 
-#define SWIGTYPE_p_char swig_types[0]
-#define SWIGTYPE_p_double swig_types[1]
-#define SWIGTYPE_p_except__NullPointerReferenceException swig_types[2]
-#define SWIGTYPE_p_math__poly__OneDT_double_t swig_types[3]
-#define SWIGTYPE_p_math__poly__TwoDT_double_t swig_types[4]
-#define SWIGTYPE_p_std__vectorT_double_t swig_types[5]
-#define SWIGTYPE_p_std__vectorT_math__poly__OneDT_double_t_t swig_types[6]
-static swig_type_info *swig_types[8];
-static swig_module_info swig_module = {swig_types, 7, 0, 0, 0, 0};
+#define SWIGTYPE_p_Like_T swig_types[0]
+#define SWIGTYPE_p_allocator_type swig_types[1]
+#define SWIGTYPE_p_char swig_types[2]
+#define SWIGTYPE_p_difference_type swig_types[3]
+#define SWIGTYPE_p_double swig_types[4]
+#define SWIGTYPE_p_except__NullPointerReferenceException swig_types[5]
+#define SWIGTYPE_p_math__linear__VectorNT_3_double_t swig_types[6]
+#define SWIGTYPE_p_math__poly__OneDT_double_t swig_types[7]
+#define SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t swig_types[8]
+#define SWIGTYPE_p_math__poly__TwoDT_double_t swig_types[9]
+#define SWIGTYPE_p_size_type swig_types[10]
+#define SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t swig_types[11]
+#define SWIGTYPE_p_std__vectorT_math__poly__OneDT_double_t_std__allocatorT_math__poly__OneDT_double_t_t_t swig_types[12]
+#define SWIGTYPE_p_value_type swig_types[13]
+static swig_type_info *swig_types[15];
+static swig_module_info swig_module = {swig_types, 14, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -2603,11 +2610,1003 @@ namespace swig {
 
 #include <string>
 #include <sstream>
+#include "import/math/linear.h"
+typedef math::linear::VectorN<3,double> Vector3;
 #include "math/poly/OneD.h"
 #include "math/poly/TwoD.h"
 
+  
+namespace swig {
+  struct stop_iteration {
+  };
 
-#include <string>
+  struct PySwigIterator {
+  private:
+    PyObject_ptr _seq;
+
+  protected:
+    PySwigIterator(PyObject *seq) : _seq(seq)
+    {
+    }
+      
+  public:
+    virtual ~PySwigIterator() {}
+
+    // Access iterator method, required by Python
+    virtual PyObject *value() const = 0;
+
+    // Forward iterator method, required by Python
+    virtual PySwigIterator *incr(size_t n = 1) = 0;
+    
+    // Backward iterator method, very common in C++, but not required in Python
+    virtual PySwigIterator *decr(size_t /*n*/ = 1)
+    {
+      throw stop_iteration();
+    }
+
+    // Random access iterator methods, but not required in Python
+    virtual ptrdiff_t distance(const PySwigIterator &/*x*/) const
+    {
+      throw std::invalid_argument("operation not supported");
+    }
+
+    virtual bool equal (const PySwigIterator &/*x*/) const
+    {
+      throw std::invalid_argument("operation not supported");
+    }
+    
+    // C++ common/needed methods
+    virtual PySwigIterator *copy() const = 0;
+
+    PyObject *next()     
+    {
+      SWIG_PYTHON_THREAD_BEGIN_BLOCK; // disable threads       
+      PyObject *obj = value();
+      incr();       
+      SWIG_PYTHON_THREAD_END_BLOCK; // re-enable threads
+      return obj;     
+    }
+
+    PyObject *previous()
+    {
+      SWIG_PYTHON_THREAD_BEGIN_BLOCK; // disable threads       
+      decr();
+      PyObject *obj = value();
+      SWIG_PYTHON_THREAD_END_BLOCK; // re-enable threads       
+      return obj;
+    }
+
+    PySwigIterator *advance(ptrdiff_t n)
+    {
+      return  (n > 0) ?  incr(n) : decr(-n);
+    }
+      
+    bool operator == (const PySwigIterator& x)  const
+    {
+      return equal(x);
+    }
+      
+    bool operator != (const PySwigIterator& x) const
+    {
+      return ! operator==(x);
+    }
+      
+    PySwigIterator& operator += (ptrdiff_t n)
+    {
+      return *advance(n);
+    }
+
+    PySwigIterator& operator -= (ptrdiff_t n)
+    {
+      return *advance(-n);
+    }
+      
+    PySwigIterator* operator + (ptrdiff_t n) const
+    {
+      return copy()->advance(n);
+    }
+
+    PySwigIterator* operator - (ptrdiff_t n) const
+    {
+      return copy()->advance(-n);
+    }
+      
+    ptrdiff_t operator - (const PySwigIterator& x) const
+    {
+      return x.distance(*this);
+    }
+      
+    static swig_type_info* descriptor() {
+      static int init = 0;
+      static swig_type_info* desc = 0;
+      if (!init) {
+	desc = SWIG_TypeQuery("swig::PySwigIterator *");
+	init = 1;
+      }	
+      return desc;
+    }    
+  };
+}
+
+
+namespace swig {  
+  template <class Type>
+  struct noconst_traits {
+    typedef Type noconst_type;
+  };
+
+  template <class Type>
+  struct noconst_traits<const Type> {
+    typedef Type noconst_type;
+  };
+
+  /*
+    type categories
+  */
+  struct pointer_category { };  
+  struct value_category { };
+
+  /*
+    General traits that provides type_name and type_info
+  */
+  template <class Type> struct traits { };
+
+  template <class Type>
+  inline const char* type_name() {
+    return traits<typename noconst_traits<Type >::noconst_type >::type_name();
+  }
+
+  template <class Type> 
+  struct traits_info {
+    static swig_type_info *type_query(std::string name) {
+      name += " *";
+      return SWIG_TypeQuery(name.c_str());
+    }    
+    static swig_type_info *type_info() {
+      static swig_type_info *info = type_query(type_name<Type>());
+      return info;
+    }
+  };
+
+  template <class Type>
+  inline swig_type_info *type_info() {
+    return traits_info<Type>::type_info();
+  }
+
+  /*
+    Partial specialization for pointers
+  */
+  template <class Type> struct traits <Type *> {
+    typedef pointer_category category;
+    static std::string make_ptr_name(const char* name) {
+      std::string ptrname = name;
+      ptrname += " *";
+      return ptrname;
+    }    
+    static const char* type_name() {
+      static std::string name = make_ptr_name(swig::type_name<Type>());
+      return name.c_str();
+    }
+  };
+
+  template <class Type, class Category> 
+  struct traits_as { };
+ 
+  template <class Type, class Category> 
+  struct traits_check { };
+
+}
+
+
+namespace swig {  
+  /*
+    Traits that provides the from method
+  */
+  template <class Type> struct traits_from_ptr {
+    static PyObject *from(Type *val, int owner = 0) {
+      return SWIG_NewPointerObj(val, type_info<Type>(), owner);
+    }
+  };
+
+  template <class Type> struct traits_from {
+    static PyObject *from(const Type& val) {
+      return traits_from_ptr<Type>::from(new Type(val), 1);
+    }
+  };
+
+  template <class Type> struct traits_from<Type *> {
+    static PyObject *from(Type* val) {
+      return traits_from_ptr<Type>::from(val, 0);
+    }
+  };
+
+  template <class Type> struct traits_from<const Type *> {
+    static PyObject *from(const Type* val) {
+      return traits_from_ptr<Type>::from(const_cast<Type*>(val), 0);
+    }
+  };
+
+
+  template <class Type>
+  inline PyObject *from(const Type& val) {
+    return traits_from<Type>::from(val);
+  }
+
+  template <class Type>
+  inline PyObject *from_ptr(Type* val, int owner) {
+    return traits_from_ptr<Type>::from(val, owner);
+  }
+
+  /*
+    Traits that provides the asval/as/check method
+  */
+  template <class Type>
+  struct traits_asptr {   
+    static int asptr(PyObject *obj, Type **val) {
+      Type *p;
+      int res = (SWIG_ConvertPtr(obj, (void**)&p, type_info<Type>(), 0) == SWIG_OK) ? SWIG_OLDOBJ : 0;
+      if (SWIG_IsOK(res)) {
+	if (val) *val = p;
+      }
+      return res;
+    }
+  }; 
+
+  template <class Type>
+  inline int asptr(PyObject *obj, Type **vptr) {
+    return traits_asptr<Type>::asptr(obj, vptr);
+  }
+
+  template <class Type> 
+  struct traits_asval {
+    static int asval(PyObject *obj, Type *val) {
+      if (val) {
+	Type *p = 0;
+	int res = traits_asptr<Type>::asptr(obj, &p);
+	if (!SWIG_IsOK(res)) return res;	
+	if (p) {
+	  typedef typename noconst_traits<Type>::noconst_type noconst_type;
+	  *(const_cast<noconst_type*>(val)) = *p;
+	  if (SWIG_IsNewObj(res)){
+	    delete p;
+	    res = SWIG_DelNewMask(res);
+	  }
+	  return res;
+	} else {
+	  return SWIG_ERROR;
+	}
+      } else {
+	return traits_asptr<Type>::asptr(obj, (Type **)(0));
+      }
+    }
+  };
+
+  template <class Type> struct traits_asval<Type*> {
+    static int asval(PyObject *obj, Type **val) {
+      if (val) {
+        typedef typename noconst_traits<Type>::noconst_type noconst_type;
+        noconst_type *p = 0;
+        int res = traits_asptr<noconst_type>::asptr(obj,  &p);
+        if (SWIG_IsOK(res)) {
+          *(const_cast<noconst_type**>(val)) = p;
+	}
+	return res;
+      } else {
+	return traits_asptr<Type>::asptr(obj, (Type **)(0));
+      }
+    }
+  };
+  
+  template <class Type>
+  inline int asval(PyObject *obj, Type *val) {
+    return traits_asval<Type>::asval(obj, val);
+  }
+
+  template <class Type> 
+  struct traits_as<Type, value_category> {
+    static Type as(PyObject *obj, bool throw_error) {
+      Type v;
+      int res = asval(obj, &v);
+      if (!obj || !SWIG_IsOK(res)) {
+	if (!PyErr_Occurred()) {
+	  ::SWIG_Error(SWIG_TypeError,  swig::type_name<Type>());
+	}
+	if (throw_error) throw std::invalid_argument("bad type");
+      }
+      return v;
+    }
+  };
+
+  template <class Type> 
+  struct traits_as<Type, pointer_category> {
+    static Type as(PyObject *obj, bool throw_error) {
+      Type *v = 0;      
+      int res = (obj ? traits_asptr<Type>::asptr(obj, &v) : SWIG_ERROR);
+      if (SWIG_IsOK(res) && v) {
+	if (SWIG_IsNewObj(res)) {
+	  Type r(*v);
+	  delete v;
+	  return r;
+	} else {
+	  return *v;
+	}
+      } else {
+	// Uninitialized return value, no Type() constructor required.
+	static Type *v_def = (Type*) malloc(sizeof(Type));
+	if (!PyErr_Occurred()) {
+	  SWIG_Error(SWIG_TypeError,  swig::type_name<Type>());
+	}
+	if (throw_error) throw std::invalid_argument("bad type");
+	memset(v_def,0,sizeof(Type));
+	return *v_def;
+      }
+    }
+  };
+
+  template <class Type> 
+  struct traits_as<Type*, pointer_category> {
+    static Type* as(PyObject *obj, bool throw_error) {
+      Type *v = 0;      
+      int res = (obj ? traits_asptr<Type>::asptr(obj, &v) : SWIG_ERROR);
+      if (SWIG_IsOK(res)) {
+	return v;
+      } else {
+	if (!PyErr_Occurred()) {
+	  SWIG_Error(SWIG_TypeError,  swig::type_name<Type>());
+	}
+	if (throw_error) throw std::invalid_argument("bad type");
+	return 0;
+      }
+    }
+  };
+    
+  template <class Type>
+  inline Type as(PyObject *obj, bool te = false) {
+    return traits_as<Type, typename traits<Type>::category>::as(obj, te);
+  }
+
+  template <class Type> 
+  struct traits_check<Type, value_category> {
+    static bool check(PyObject *obj) {
+      int res = obj ? asval(obj, (Type *)(0)) : SWIG_ERROR;
+      return SWIG_IsOK(res) ? true : false;
+    }
+  };
+
+  template <class Type> 
+  struct traits_check<Type, pointer_category> {
+    static bool check(PyObject *obj) {
+      int res = obj ? asptr(obj, (Type **)(0)) : SWIG_ERROR;
+      return SWIG_IsOK(res) ? true : false;
+    }
+  };
+
+  template <class Type>
+  inline bool check(PyObject *obj) {
+    return traits_check<Type, typename traits<Type>::category>::check(obj);
+  }
+}
+
+
+#include <functional>
+
+namespace std {
+  template <>
+  struct less <PyObject *>: public binary_function<PyObject *, PyObject *, bool>
+  {
+    bool
+    operator()(PyObject * v, PyObject *w) const
+    { 
+      bool res;
+      SWIG_PYTHON_THREAD_BEGIN_BLOCK;
+      res = PyObject_Compare(v, w) < 0;
+      SWIG_PYTHON_THREAD_END_BLOCK;
+      return res;
+    }
+  };
+
+  template <>
+  struct less <swig::PyObject_ptr>: public binary_function<swig::PyObject_ptr, swig::PyObject_ptr, bool>
+  {
+    bool
+    operator()(const swig::PyObject_ptr& v, const swig::PyObject_ptr& w) const
+    {
+      return std::less<PyObject *>()(v, w);
+    }
+  };
+
+  template <>
+  struct less <swig::PyObject_var>: public binary_function<swig::PyObject_var, swig::PyObject_var, bool>
+  {
+    bool
+    operator()(const swig::PyObject_var& v, const swig::PyObject_var& w) const
+    {
+      return std::less<PyObject *>()(v, w);
+    }
+  };
+
+}
+
+namespace swig {
+  template <> struct traits<PyObject *> {
+    typedef value_category category;
+    static const char* type_name() { return "PyObject *"; }
+  };  
+
+  template <>  struct traits_asval<PyObject * > {   
+    typedef PyObject * value_type;
+    static int asval(PyObject *obj, value_type *val) {
+      if (val) *val = obj;
+      return SWIG_OK;
+    }
+  };
+
+  template <> 
+  struct traits_check<PyObject *, value_category> {
+    static bool check(PyObject *) {
+      return true;
+    }
+  };
+
+  template <>  struct traits_from<PyObject *> {
+    typedef PyObject * value_type;
+    static PyObject *from(const value_type& val) {
+      Py_XINCREF(val);
+      return val;
+    }
+  };
+  
+}
+
+namespace swig {
+  inline size_t
+  check_index(ptrdiff_t i, size_t size, bool insert = false) {
+    if ( i < 0 ) {
+      if ((size_t) (-i) <= size)
+	return (size_t) (i + size);
+    } else if ( (size_t) i < size ) {
+      return (size_t) i;
+    } else if (insert && ((size_t) i == size)) {
+      return size;
+    }
+    
+    throw std::out_of_range("index out of range");
+  }
+
+  inline size_t
+  slice_index(ptrdiff_t i, size_t size) {
+    if ( i < 0 ) {
+      if ((size_t) (-i) <= size) {
+	return (size_t) (i + size);
+      } else {
+	throw std::out_of_range("index out of range");
+      }
+    } else {
+      return ( (size_t) i < size ) ? ((size_t) i) : size;
+    }
+  }
+
+  template <class Sequence, class Difference>
+  inline typename Sequence::iterator
+  getpos(Sequence* self, Difference i)  {
+    typename Sequence::iterator pos = self->begin();
+    std::advance(pos, check_index(i,self->size()));
+    return pos;
+  }
+
+  template <class Sequence, class Difference>
+  inline typename Sequence::const_iterator
+  cgetpos(const Sequence* self, Difference i)  {
+    typename Sequence::const_iterator pos = self->begin();
+    std::advance(pos, check_index(i,self->size()));
+    return pos;
+  }
+
+  template <class Sequence, class Difference>
+  inline Sequence*
+  getslice(const Sequence* self, Difference i, Difference j) {
+    typename Sequence::size_type size = self->size();
+    typename Sequence::size_type ii = swig::check_index(i, size);
+    typename Sequence::size_type jj = swig::slice_index(j, size);
+
+    if (jj > ii) {
+      typename Sequence::const_iterator vb = self->begin();
+      typename Sequence::const_iterator ve = self->begin();
+      std::advance(vb,ii);
+      std::advance(ve,jj);
+      return new Sequence(vb, ve);
+    } else {
+      return new Sequence();
+    }
+  }
+
+  template <class Sequence, class Difference, class InputSeq>
+  inline void
+  setslice(Sequence* self, Difference i, Difference j, const InputSeq& v) {
+    typename Sequence::size_type size = self->size();
+    typename Sequence::size_type ii = swig::check_index(i, size, true);
+    typename Sequence::size_type jj = swig::slice_index(j, size);
+    if (jj < ii) jj = ii;
+    size_t ssize = jj - ii;
+    if (ssize <= v.size()) {
+      typename Sequence::iterator sb = self->begin();
+      typename InputSeq::const_iterator vmid = v.begin();
+      std::advance(sb,ii);
+      std::advance(vmid, jj - ii);
+      self->insert(std::copy(v.begin(), vmid, sb), vmid, v.end());
+    } else {
+      typename Sequence::iterator sb = self->begin();
+      typename Sequence::iterator se = self->begin();
+      std::advance(sb,ii);
+      std::advance(se,jj);
+      self->erase(sb,se);
+      self->insert(sb, v.begin(), v.end());
+    }
+  }
+
+  template <class Sequence, class Difference>
+  inline void
+  delslice(Sequence* self, Difference i, Difference j) {
+    typename Sequence::size_type size = self->size();
+    typename Sequence::size_type ii = swig::check_index(i, size, true);
+    typename Sequence::size_type jj = swig::slice_index(j, size);
+    if (jj > ii) {
+      typename Sequence::iterator sb = self->begin();
+      typename Sequence::iterator se = self->begin();
+      std::advance(sb,ii);
+      std::advance(se,jj);
+      self->erase(sb,se);
+    }
+  }
+}
+
+
+#if defined(__SUNPRO_CC) && defined(_RWSTD_VER)
+#  if !defined(SWIG_NO_STD_NOITERATOR_TRAITS_STL)
+#    define SWIG_STD_NOITERATOR_TRAITS_STL
+#  endif
+#endif
+
+#if !defined(SWIG_STD_NOITERATOR_TRAITS_STL)
+#include <iterator>
+#else
+namespace std {
+  template <class Iterator>
+  struct iterator_traits {
+    typedef ptrdiff_t difference_type;
+    typedef typename Iterator::value_type value_type;
+  };
+
+  template <class Iterator, class Category,class T, class Reference, class Pointer, class Distance>
+  struct iterator_traits<__reverse_bi_iterator<Iterator,Category,T,Reference,Pointer,Distance> > {
+    typedef Distance difference_type;
+    typedef T value_type;
+  };
+
+  template <class T>
+  struct iterator_traits<T*> {
+    typedef T value_type;
+    typedef ptrdiff_t difference_type;
+  };
+
+  template<typename _InputIterator>
+  inline typename iterator_traits<_InputIterator>::difference_type
+  distance(_InputIterator __first, _InputIterator __last)
+  {
+    typename iterator_traits<_InputIterator>::difference_type __n = 0;
+    while (__first != __last) {
+      ++__first; ++__n;
+    }
+    return __n;
+  }
+}
+#endif
+
+
+namespace swig {
+  template<typename OutIterator>
+  class PySwigIterator_T :  public PySwigIterator
+  {
+  public:
+    typedef OutIterator out_iterator;
+    typedef typename std::iterator_traits<out_iterator>::value_type value_type;    
+    typedef PySwigIterator_T<out_iterator> self_type;
+
+    PySwigIterator_T(out_iterator curr, PyObject *seq)
+      : PySwigIterator(seq), current(curr)
+    {
+    }
+
+    const out_iterator& get_current() const
+    {
+      return current;
+    }
+
+    
+    bool equal (const PySwigIterator &iter) const
+    {
+      const self_type *iters = dynamic_cast<const self_type *>(&iter);
+      if (iters) {
+	return (current == iters->get_current());
+      } else {
+	throw std::invalid_argument("bad iterator type");
+      }
+    }
+    
+    ptrdiff_t distance(const PySwigIterator &iter) const
+    {
+      const self_type *iters = dynamic_cast<const self_type *>(&iter);
+      if (iters) {
+	return std::distance(current, iters->get_current());
+      } else {
+	throw std::invalid_argument("bad iterator type");
+      }
+    }    
+    
+  protected:
+    out_iterator current;
+  };
+  
+  template <class ValueType>
+  struct from_oper 
+  {
+    typedef const ValueType& argument_type;
+    typedef PyObject *result_type;
+    result_type operator()(argument_type v) const
+    {
+      return swig::from(v);
+    }
+  };
+
+  template<typename OutIterator, 
+	   typename ValueType = typename std::iterator_traits<OutIterator>::value_type,
+	   typename FromOper = from_oper<ValueType> >
+  class PySwigIteratorOpen_T :  public PySwigIterator_T<OutIterator>
+  {
+  public:
+    FromOper from;
+    typedef OutIterator out_iterator;
+    typedef ValueType value_type;
+    typedef PySwigIterator_T<out_iterator>  base;
+    typedef PySwigIteratorOpen_T<OutIterator, ValueType, FromOper> self_type;
+    
+    PySwigIteratorOpen_T(out_iterator curr, PyObject *seq)
+      : PySwigIterator_T<OutIterator>(curr, seq)
+    {
+    }
+    
+    PyObject *value() const {
+      return from(static_cast<const value_type&>(*(base::current)));
+    }
+    
+    PySwigIterator *copy() const
+    {
+      return new self_type(*this);
+    }
+
+    PySwigIterator *incr(size_t n = 1)
+    {
+      while (n--) {
+	++base::current;
+      }
+      return this;
+    }
+
+    PySwigIterator *decr(size_t n = 1)
+    {
+      while (n--) {
+	--base::current;
+      }
+      return this;
+    }
+  };
+
+  template<typename OutIterator, 
+	   typename ValueType = typename std::iterator_traits<OutIterator>::value_type,
+	   typename FromOper = from_oper<ValueType> >
+  class PySwigIteratorClosed_T :  public PySwigIterator_T<OutIterator>
+  {
+  public:
+    FromOper from;
+    typedef OutIterator out_iterator;
+    typedef ValueType value_type;
+    typedef PySwigIterator_T<out_iterator>  base;    
+    typedef PySwigIteratorClosed_T<OutIterator, ValueType, FromOper> self_type;
+    
+    PySwigIteratorClosed_T(out_iterator curr, out_iterator first, out_iterator last, PyObject *seq)
+      : PySwigIterator_T<OutIterator>(curr, seq), begin(first), end(last)
+    {
+    }
+    
+    PyObject *value() const {
+      if (base::current == end) {
+	throw stop_iteration();
+      } else {
+	return from(static_cast<const value_type&>(*(base::current)));
+      }
+    }
+    
+    PySwigIterator *copy() const
+    {
+      return new self_type(*this);
+    }
+
+    PySwigIterator *incr(size_t n = 1)
+    {
+      while (n--) {
+	if (base::current == end) {
+	  throw stop_iteration();
+	} else {
+	  ++base::current;
+	}
+      }
+      return this;
+    }
+
+    PySwigIterator *decr(size_t n = 1)
+    {
+      while (n--) {
+	if (base::current == begin) {
+	  throw stop_iteration();
+	} else {
+	  --base::current;
+	}
+      }
+      return this;
+    }
+
+  private:
+    out_iterator begin;
+    out_iterator end;
+  };
+
+  template<typename OutIter>
+  inline PySwigIterator*
+  make_output_iterator(const OutIter& current, const OutIter& begin,const OutIter& end, PyObject *seq = 0)
+  {
+    return new PySwigIteratorClosed_T<OutIter>(current, begin, end, seq);
+  }
+
+  template<typename OutIter>
+  inline PySwigIterator*
+  make_output_iterator(const OutIter& current, PyObject *seq = 0)
+  {
+    return new PySwigIteratorOpen_T<OutIter>(current, seq);
+  }
+}
+
+
+namespace swig
+{
+  template <class T>
+  struct PySequence_Ref
+  {
+    PySequence_Ref(PyObject* seq, int index)
+      : _seq(seq), _index(index)
+    {
+    }
+    
+    operator T () const
+    {
+      swig::PyObject_var item = PySequence_GetItem(_seq, _index);
+      try {
+	return swig::as<T>(item, true);
+      } catch (std::exception& e) {
+	char msg[1024];
+	sprintf(msg, "in sequence element %d ", _index);
+	if (!PyErr_Occurred()) {
+	  ::SWIG_Error(SWIG_TypeError,  swig::type_name<T>());
+	}
+	SWIG_Python_AddErrorMsg(msg);
+	SWIG_Python_AddErrorMsg(e.what());
+	throw;
+      }
+    }
+
+    PySequence_Ref& operator=(const T& v)
+    {
+      PySequence_SetItem(_seq, _index, swig::from<T>(v));
+      return *this;
+    }
+
+  private:
+    PyObject* _seq;
+    int _index;
+  };
+
+  template <class T>
+  struct PySequence_ArrowProxy
+  {
+    PySequence_ArrowProxy(const T& x): m_value(x) {}
+    const T* operator->() const { return &m_value; }
+    operator const T*() const { return &m_value; }
+    T m_value;
+  };
+
+  template <class T, class Reference >
+  struct PySequence_InputIterator
+  {
+    typedef PySequence_InputIterator<T, Reference > self;
+
+    typedef std::random_access_iterator_tag iterator_category;
+    typedef Reference reference;
+    typedef T value_type;
+    typedef T* pointer;
+    typedef int difference_type;
+
+    PySequence_InputIterator()
+    {
+    }
+
+    PySequence_InputIterator(PyObject* seq, int index)
+      : _seq(seq), _index(index)
+    {
+    }
+
+    reference operator*() const
+    {
+      return reference(_seq, _index);
+    }
+
+    PySequence_ArrowProxy<T>
+    operator->() const {
+      return PySequence_ArrowProxy<T>(operator*());
+    }
+
+    bool operator==(const self& ri) const
+    {
+      return (_index == ri._index) && (_seq == ri._seq);
+    }
+
+    bool operator!=(const self& ri) const
+    {
+      return !(operator==(ri));
+    }
+
+    self& operator ++ ()
+    {
+      ++_index;
+      return *this;
+    }
+
+    self& operator -- ()
+    {
+      --_index;
+      return *this;
+    }
+
+    self& operator += (difference_type n)
+    {
+      _index += n;
+      return *this;
+    }
+
+    self operator +(difference_type n) const
+    {
+      return self(_seq, _index + n);
+    }
+
+    self& operator -= (difference_type n)
+    {
+      _index -= n;
+      return *this;
+    }
+
+    self operator -(difference_type n) const
+    {
+      return self(_seq, _index - n);
+    }
+
+    difference_type operator - (const self& ri) const
+    {
+      return _index - ri._index;
+    }
+
+    bool operator < (const self& ri) const
+    {
+      return _index < ri._index;
+    }
+
+    reference
+    operator[](difference_type n) const
+    {
+      return reference(_seq, _index + n);
+    }
+
+  private:
+    PyObject* _seq;
+    difference_type _index;
+  };
+
+  template <class T>
+  struct PySequence_Cont
+  {
+    typedef PySequence_Ref<T> reference;
+    typedef const PySequence_Ref<T> const_reference;
+    typedef T value_type;
+    typedef T* pointer;
+    typedef int difference_type;
+    typedef int size_type;
+    typedef const pointer const_pointer;
+    typedef PySequence_InputIterator<T, reference> iterator;
+    typedef PySequence_InputIterator<T, const_reference> const_iterator;
+
+    PySequence_Cont(PyObject* seq) : _seq(0)
+    {
+      if (!PySequence_Check(seq)) {
+	throw std::invalid_argument("a sequence is expected");
+      }
+      _seq = seq;
+      Py_INCREF(_seq);
+    }
+
+    ~PySequence_Cont()
+    {
+      Py_XDECREF(_seq);
+    }
+
+    size_type size() const
+    {
+      return static_cast<size_type>(PySequence_Size(_seq));
+    }
+
+    bool empty() const
+    {
+      return size() == 0;
+    }
+
+    iterator begin()
+    {
+      return iterator(_seq, 0);
+    }
+
+    const_iterator begin() const
+    {
+      return const_iterator(_seq, 0);
+    }
+
+    iterator end()
+    {
+      return iterator(_seq, size());
+    }
+
+    const_iterator end() const
+    {
+      return const_iterator(_seq, size());
+    }
+
+    reference operator[](difference_type n)
+    {
+      return reference(_seq, n);
+    }
+
+    const_reference operator[](difference_type n)  const
+    {
+      return const_reference(_seq, n);
+    }
+
+    bool check(bool set_err = true) const
+    {
+      int s = size();
+      for (int i = 0; i < s; ++i) {
+	swig::PyObject_var item = PySequence_GetItem(_seq, i);
+	if (!swig::check<value_type>(item)) {
+	  if (set_err) {
+	    char msg[1024];
+	    sprintf(msg, "in sequence element %d", i);
+	    SWIG_Error(SWIG_RuntimeError, msg);
+	  }
+	  return false;
+	}
+      }
+      return true;
+    }
+
+  private:
+    PyObject* _seq;
+  };
+
+}
 
 
 SWIGINTERN int
@@ -2653,6 +3652,137 @@ SWIG_AsVal_double (PyObject *obj, double *val)
   return res;
 }
 
+
+  #define SWIG_From_double   PyFloat_FromDouble 
+
+
+namespace swig {
+  template <> struct traits<double > {
+    typedef value_category category;
+    static const char* type_name() { return"double"; }
+  };  
+  template <>  struct traits_asval<double > {   
+    typedef double value_type;
+    static int asval(PyObject *obj, value_type *val) { 
+      return SWIG_AsVal_double (obj, val);
+    }
+  };
+  template <>  struct traits_from<double > {
+    typedef double value_type;
+    static PyObject *from(const value_type& val) {
+      return SWIG_From_double  (val);
+    }
+  };
+}
+
+
+namespace swig {
+  template <class PySeq, class Seq>
+  inline void
+  assign(const PySeq& pyseq, Seq* seq) {
+    // seq->assign(pyseq.begin(), pyseq.end()); // not used as not always implemented
+    typedef typename PySeq::value_type value_type;
+    typename PySeq::const_iterator it = pyseq.begin();
+    for (;it != pyseq.end(); ++it) {
+      seq->insert(seq->end(),(value_type)(*it));
+    }
+  }
+
+  template <class Seq, class T = typename Seq::value_type >
+  struct traits_asptr_stdseq {
+    typedef Seq sequence;
+    typedef T value_type;
+
+    static int asptr(PyObject *obj, sequence **seq) {
+      if (obj == Py_None || SWIG_Python_GetSwigThis(obj)) {
+	sequence *p;
+	if (::SWIG_ConvertPtr(obj,(void**)&p,
+			      swig::type_info<sequence>(),0) == SWIG_OK) {
+	  if (seq) *seq = p;
+	  return SWIG_OLDOBJ;
+	}
+      } else if (PySequence_Check(obj)) {
+	try {
+	  PySequence_Cont<value_type> pyseq(obj);
+	  if (seq) {
+	    sequence *pseq = new sequence();
+	    assign(pyseq, pseq);
+	    *seq = pseq;
+	    return SWIG_NEWOBJ;
+	  } else {
+	    return pyseq.check() ? SWIG_OK : SWIG_ERROR;
+	  }
+	} catch (std::exception& e) {
+	  if (seq) {
+	    if (!PyErr_Occurred()) {
+	      PyErr_SetString(PyExc_TypeError, e.what());
+	    }
+	  }
+	  return SWIG_ERROR;
+	}
+      }
+      return SWIG_ERROR;
+    }
+  };
+
+  template <class Seq, class T = typename Seq::value_type >
+  struct traits_from_stdseq {
+    typedef Seq sequence;
+    typedef T value_type;
+    typedef typename Seq::size_type size_type;
+    typedef typename sequence::const_iterator const_iterator;
+
+    static PyObject *from(const sequence& seq) {
+#ifdef SWIG_PYTHON_EXTRA_NATIVE_CONTAINERS
+      swig_type_info *desc = swig::type_info<sequence>();
+      if (desc && desc->clientdata) {
+	return SWIG_NewPointerObj(new sequence(seq), desc, SWIG_POINTER_OWN);
+      }
+#endif
+      size_type size = seq.size();
+      if (size <= (size_type)INT_MAX) {
+	PyObject *obj = PyTuple_New((int)size);
+	int i = 0;
+	for (const_iterator it = seq.begin();
+	     it != seq.end(); ++it, ++i) {
+	  PyTuple_SetItem(obj,i,swig::from<value_type>(*it));
+	}
+	return obj;
+      } else {
+	PyErr_SetString(PyExc_OverflowError,"sequence size not valid in python");
+	return NULL;
+      }
+    }
+  };
+}
+
+
+  namespace swig {
+    template <class T>
+    struct traits_asptr<std::vector<T> >  {
+      static int asptr(PyObject *obj, std::vector<T> **vec) {
+	return traits_asptr_stdseq<std::vector<T> >::asptr(obj, vec);
+      }
+    };
+    
+    template <class T>
+    struct traits_from<std::vector<T> > {
+      static PyObject *from(const std::vector<T>& vec) {
+	return traits_from_stdseq<std::vector<T> >::from(vec);
+      }
+    };
+  }
+
+
+      namespace swig {
+	template <>  struct traits<std::vector<double, std::allocator< double > > > {
+	  typedef pointer_category category;
+	  static const char* type_name() {
+	    return "std::vector<" "double" "," "std::allocator< double >" " >";
+	  }
+	};
+      }
+    
 
 #include <float.h>
 
@@ -2767,9 +3897,6 @@ SWIGINTERNINLINE PyObject*
 {
   return PyBool_FromLong(value ? 1 : 0);
 }
-
-
-  #define SWIG_From_double   PyFloat_FromDouble 
 
 
 SWIGINTERN int
@@ -2913,6 +4040,12 @@ SWIGINTERN std::string math_poly_TwoD_Sl_double_Sg____str__(math::poly::TwoD< do
         ostr << *self;
         return ostr.str();
     }
+SWIGINTERN Vector3 math_poly_OneD_Sl_Vector3_Sg____getitem__(math::poly::OneD< Vector3 > *self,long i){ 
+            return (*self)[i]; 
+        }
+SWIGINTERN void math_poly_OneD_Sl_Vector3_Sg____setitem__(math::poly::OneD< Vector3 > *self,long i,Vector3 val){ 
+            (*self)[i] = val; 
+        }
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -2961,25 +4094,27 @@ fail:
 
 SWIGINTERN PyObject *_wrap_new_Poly1D__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< double > *arg1 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
+  std::vector< double,std::allocator< double > > *arg1 = 0 ;
+  int res1 = SWIG_OLDOBJ ;
   PyObject * obj0 = 0 ;
   math::poly::OneD< double > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)"O:new_Poly1D",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_std__vectorT_double_t,  0  | 0);
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_Poly1D" "', argument " "1"" of type '" "std::vector< double > const &""'"); 
+  {
+    std::vector<double,std::allocator< double > > *ptr = (std::vector<double,std::allocator< double > > *)0;
+    res1 = swig::asptr(obj0, &ptr);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_Poly1D" "', argument " "1"" of type '" "std::vector< double,std::allocator< double > > const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Poly1D" "', argument " "1"" of type '" "std::vector< double,std::allocator< double > > const &""'"); 
+    }
+    arg1 = ptr;
   }
-  if (!argp1) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Poly1D" "', argument " "1"" of type '" "std::vector< double > const &""'"); 
-  }
-  arg1 = reinterpret_cast< std::vector< double > * >(argp1);
   {
     try
     {
-      result = (math::poly::OneD< double > *)new math::poly::OneD< double >((std::vector< double > const &)*arg1);
+      result = (math::poly::OneD< double > *)new math::poly::OneD< double >((std::vector< double,std::allocator< double > > const &)*arg1);
     } 
     catch (const std::exception& e)
     {
@@ -3008,8 +4143,10 @@ SWIGINTERN PyObject *_wrap_new_Poly1D__SWIG_1(PyObject *SWIGUNUSEDPARM(self), Py
     }
   }
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_NEW |  0 );
+  if (SWIG_IsNewObj(res1)) delete arg1;
   return resultobj;
 fail:
+  if (SWIG_IsNewObj(res1)) delete arg1;
   return NULL;
 }
 
@@ -3142,20 +4279,20 @@ SWIGINTERN PyObject *_wrap_new_Poly1D(PyObject *self, PyObject *args) {
   }
   if (argc == 1) {
     int _v;
-    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_std__vectorT_double_t, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      return _wrap_new_Poly1D__SWIG_1(self, args);
-    }
-  }
-  if (argc == 1) {
-    int _v;
     {
       int res = SWIG_AsVal_size_t(argv[0], NULL);
       _v = SWIG_CheckState(res);
     }
     if (_v) {
       return _wrap_new_Poly1D__SWIG_2(self, args);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    int res = swig::asptr(argv[0], (std::vector<double,std::allocator< double > >**)(0));
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_Poly1D__SWIG_1(self, args);
     }
   }
   if (argc == 2) {
@@ -3178,7 +4315,7 @@ fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number of arguments for overloaded function 'new_Poly1D'.\n"
     "  Possible C/C++ prototypes are:\n"
     "    math::poly::OneD< double >()\n"
-    "    math::poly::OneD< double >(std::vector< double > const &)\n"
+    "    math::poly::OneD< double >(std::vector< double,std::allocator< double > > const &)\n"
     "    math::poly::OneD< double >(size_t)\n"
     "    math::poly::OneD< double >(size_t,double const *)\n");
   return NULL;
@@ -5098,7 +6235,7 @@ SWIGINTERN PyObject *_wrap_Poly2D_coeffs(PyObject *SWIGUNUSEDPARM(self), PyObjec
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  std::vector< math::poly::OneD< double > > *result = 0 ;
+  std::vector< math::poly::OneD< double >,std::allocator< math::poly::OneD< double > > > *result = 0 ;
   
   if (!PyArg_ParseTuple(args,(char *)"O:Poly2D_coeffs",&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
@@ -5110,8 +6247,8 @@ SWIGINTERN PyObject *_wrap_Poly2D_coeffs(PyObject *SWIGUNUSEDPARM(self), PyObjec
     try
     {
       {
-        std::vector< math::poly::OneD< double > > &_result_ref = (arg1)->coeffs();
-        result = (std::vector< math::poly::OneD< double > > *) &_result_ref;
+        std::vector< math::poly::OneD< double >,std::allocator< math::poly::OneD< double > > > &_result_ref = (arg1)->coeffs();
+        result = (std::vector< math::poly::OneD< double >,std::allocator< math::poly::OneD< double > > > *) &_result_ref;
       }
     } 
     catch (const std::exception& e)
@@ -5140,7 +6277,7 @@ SWIGINTERN PyObject *_wrap_Poly2D_coeffs(PyObject *SWIGUNUSEDPARM(self), PyObjec
       SWIG_fail;
     }
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_math__poly__OneDT_double_t_t, 0 |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_math__poly__OneDT_double_t_std__allocatorT_math__poly__OneDT_double_t_t_t, 0 |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -7904,10 +9041,1665 @@ SWIGINTERN PyObject *Poly2D_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObjec
   return SWIG_Py_Void();
 }
 
+SWIGINTERN PyObject *_wrap_new_PolyVector3__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::poly::OneD< Vector3 > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)":new_PolyVector3")) SWIG_fail;
+  {
+    try
+    {
+      result = (math::poly::OneD< Vector3 > *)new math::poly::OneD< Vector3 >();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_PolyVector3__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< math::linear::VectorN< 3,double >,std::allocator< math::linear::VectorN< 3,double > > > *arg1 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  math::poly::OneD< Vector3 > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_PolyVector3",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t,  0  | 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_PolyVector3" "', argument " "1"" of type '" "std::vector< math::linear::VectorN< 3,double >,std::allocator< math::linear::VectorN< 3,double > > > const &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_PolyVector3" "', argument " "1"" of type '" "std::vector< math::linear::VectorN< 3,double >,std::allocator< math::linear::VectorN< 3,double > > > const &""'"); 
+  }
+  arg1 = reinterpret_cast< std::vector< math::linear::VectorN< 3,double >,std::allocator< math::linear::VectorN< 3,double > > > * >(argp1);
+  {
+    try
+    {
+      result = (math::poly::OneD< Vector3 > *)new math::poly::OneD< Vector3 >((std::vector< math::linear::VectorN< 3,double >,std::allocator< math::linear::VectorN< 3,double > > > const &)*arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_PolyVector3__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  size_t arg1 ;
+  size_t val1 ;
+  int ecode1 = 0 ;
+  PyObject * obj0 = 0 ;
+  math::poly::OneD< Vector3 > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_PolyVector3",&obj0)) SWIG_fail;
+  ecode1 = SWIG_AsVal_size_t(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_PolyVector3" "', argument " "1"" of type '" "size_t""'");
+  } 
+  arg1 = static_cast< size_t >(val1);
+  {
+    try
+    {
+      result = (math::poly::OneD< Vector3 > *)new math::poly::OneD< Vector3 >(arg1);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_PolyVector3__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  size_t arg1 ;
+  math::linear::VectorN< 3,double > *arg2 = (math::linear::VectorN< 3,double > *) 0 ;
+  size_t val1 ;
+  int ecode1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  math::poly::OneD< Vector3 > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:new_PolyVector3",&obj0,&obj1)) SWIG_fail;
+  ecode1 = SWIG_AsVal_size_t(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_PolyVector3" "', argument " "1"" of type '" "size_t""'");
+  } 
+  arg1 = static_cast< size_t >(val1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_math__linear__VectorNT_3_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_PolyVector3" "', argument " "2"" of type '" "math::linear::VectorN< 3,double > const *""'"); 
+  }
+  arg2 = reinterpret_cast< math::linear::VectorN< 3,double > * >(argp2);
+  {
+    try
+    {
+      result = (math::poly::OneD< Vector3 > *)new math::poly::OneD< Vector3 >(arg1,(math::linear::VectorN< 3,double > const *)arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_PolyVector3(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = (int)PyObject_Length(args);
+  for (ii = 0; (ii < argc) && (ii < 2); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 0) {
+    return _wrap_new_PolyVector3__SWIG_0(self, args);
+  }
+  if (argc == 1) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_new_PolyVector3__SWIG_1(self, args);
+    }
+  }
+  if (argc == 1) {
+    int _v;
+    {
+      int res = SWIG_AsVal_size_t(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      return _wrap_new_PolyVector3__SWIG_2(self, args);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    {
+      int res = SWIG_AsVal_size_t(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_math__linear__VectorNT_3_double_t, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_new_PolyVector3__SWIG_3(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number of arguments for overloaded function 'new_PolyVector3'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    math::poly::OneD< Vector3 >()\n"
+    "    math::poly::OneD< Vector3 >(std::vector< math::linear::VectorN< 3,double >,std::allocator< math::linear::VectorN< 3,double > > > const &)\n"
+    "    math::poly::OneD< Vector3 >(size_t)\n"
+    "    math::poly::OneD< Vector3 >(size_t,math::linear::VectorN< 3,double > const *)\n");
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolyVector3_order(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::poly::OneD< Vector3 > *arg1 = (math::poly::OneD< Vector3 > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:PolyVector3_order",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolyVector3_order" "', argument " "1"" of type '" "math::poly::OneD< Vector3 > const *""'"); 
+  }
+  arg1 = reinterpret_cast< math::poly::OneD< Vector3 > * >(argp1);
+  {
+    try
+    {
+      result = ((math::poly::OneD< Vector3 > const *)arg1)->order();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolyVector3_size(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::poly::OneD< Vector3 > *arg1 = (math::poly::OneD< Vector3 > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  size_t result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:PolyVector3_size",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolyVector3_size" "', argument " "1"" of type '" "math::poly::OneD< Vector3 > const *""'"); 
+  }
+  arg1 = reinterpret_cast< math::poly::OneD< Vector3 > * >(argp1);
+  {
+    try
+    {
+      result = ((math::poly::OneD< Vector3 > const *)arg1)->size();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolyVector3_empty(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::poly::OneD< Vector3 > *arg1 = (math::poly::OneD< Vector3 > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:PolyVector3_empty",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolyVector3_empty" "', argument " "1"" of type '" "math::poly::OneD< Vector3 > const *""'"); 
+  }
+  arg1 = reinterpret_cast< math::poly::OneD< Vector3 > * >(argp1);
+  {
+    try
+    {
+      result = (bool)((math::poly::OneD< Vector3 > const *)arg1)->empty();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolyVector3_scaleVariable(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::poly::OneD< Vector3 > *arg1 = (math::poly::OneD< Vector3 > *) 0 ;
+  double arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  math::poly::OneD< math::linear::VectorN< 3,double > > result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:PolyVector3_scaleVariable",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolyVector3_scaleVariable" "', argument " "1"" of type '" "math::poly::OneD< Vector3 > const *""'"); 
+  }
+  arg1 = reinterpret_cast< math::poly::OneD< Vector3 > * >(argp1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "PolyVector3_scaleVariable" "', argument " "2"" of type '" "double""'");
+  } 
+  arg2 = static_cast< double >(val2);
+  {
+    try
+    {
+      result = ((math::poly::OneD< Vector3 > const *)arg1)->scaleVariable(arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new math::poly::OneD< math::linear::VectorN< 3,double > >(static_cast< const math::poly::OneD< math::linear::VectorN< 3,double > >& >(result))), SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolyVector3_truncateTo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::poly::OneD< Vector3 > *arg1 = (math::poly::OneD< Vector3 > *) 0 ;
+  size_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  math::poly::OneD< math::linear::VectorN< 3,double > > result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:PolyVector3_truncateTo",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolyVector3_truncateTo" "', argument " "1"" of type '" "math::poly::OneD< Vector3 > const *""'"); 
+  }
+  arg1 = reinterpret_cast< math::poly::OneD< Vector3 > * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "PolyVector3_truncateTo" "', argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  {
+    try
+    {
+      result = ((math::poly::OneD< Vector3 > const *)arg1)->truncateTo(arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new math::poly::OneD< math::linear::VectorN< 3,double > >(static_cast< const math::poly::OneD< math::linear::VectorN< 3,double > >& >(result))), SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolyVector3_copyFrom(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::poly::OneD< Vector3 > *arg1 = (math::poly::OneD< Vector3 > *) 0 ;
+  math::poly::OneD< math::linear::VectorN< 3,double > > *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:PolyVector3_copyFrom",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolyVector3_copyFrom" "', argument " "1"" of type '" "math::poly::OneD< Vector3 > *""'"); 
+  }
+  arg1 = reinterpret_cast< math::poly::OneD< Vector3 > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "PolyVector3_copyFrom" "', argument " "2"" of type '" "math::poly::OneD< math::linear::VectorN< 3,double > > const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "PolyVector3_copyFrom" "', argument " "2"" of type '" "math::poly::OneD< math::linear::VectorN< 3,double > > const &""'"); 
+  }
+  arg2 = reinterpret_cast< math::poly::OneD< math::linear::VectorN< 3,double > > * >(argp2);
+  {
+    try
+    {
+      (arg1)->copyFrom((math::poly::OneD< math::linear::VectorN< 3,double > > const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolyVector3___call__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::poly::OneD< Vector3 > *arg1 = (math::poly::OneD< Vector3 > *) 0 ;
+  double arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  math::linear::VectorN< 3,double > result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:PolyVector3___call__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolyVector3___call__" "', argument " "1"" of type '" "math::poly::OneD< Vector3 > const *""'"); 
+  }
+  arg1 = reinterpret_cast< math::poly::OneD< Vector3 > * >(argp1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "PolyVector3___call__" "', argument " "2"" of type '" "double""'");
+  } 
+  arg2 = static_cast< double >(val2);
+  {
+    try
+    {
+      result = ((math::poly::OneD< Vector3 > const *)arg1)->operator ()(arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new math::linear::VectorN< 3,double >(static_cast< const math::linear::VectorN< 3,double >& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolyVector3_derivative(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::poly::OneD< Vector3 > *arg1 = (math::poly::OneD< Vector3 > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  math::poly::OneD< math::linear::VectorN< 3,double > > result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:PolyVector3_derivative",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolyVector3_derivative" "', argument " "1"" of type '" "math::poly::OneD< Vector3 > const *""'"); 
+  }
+  arg1 = reinterpret_cast< math::poly::OneD< Vector3 > * >(argp1);
+  {
+    try
+    {
+      result = ((math::poly::OneD< Vector3 > const *)arg1)->derivative();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new math::poly::OneD< math::linear::VectorN< 3,double > >(static_cast< const math::poly::OneD< math::linear::VectorN< 3,double > >& >(result))), SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolyVector3___imul____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::poly::OneD< Vector3 > *arg1 = (math::poly::OneD< Vector3 > *) 0 ;
+  double arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  math::poly::OneD< math::linear::VectorN< 3,double > > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:PolyVector3___imul__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolyVector3___imul__" "', argument " "1"" of type '" "math::poly::OneD< Vector3 > *""'"); 
+  }
+  arg1 = reinterpret_cast< math::poly::OneD< Vector3 > * >(argp1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "PolyVector3___imul__" "', argument " "2"" of type '" "double""'");
+  } 
+  arg2 = static_cast< double >(val2);
+  {
+    try
+    {
+      {
+        math::poly::OneD< math::linear::VectorN< 3,double > > &_result_ref = (arg1)->operator *=(arg2);
+        result = (math::poly::OneD< math::linear::VectorN< 3,double > > *) &_result_ref;
+      }
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolyVector3___mul____SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::poly::OneD< Vector3 > *arg1 = (math::poly::OneD< Vector3 > *) 0 ;
+  double arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  math::poly::OneD< math::linear::VectorN< 3,double > > result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:PolyVector3___mul__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolyVector3___mul__" "', argument " "1"" of type '" "math::poly::OneD< Vector3 > const *""'"); 
+  }
+  arg1 = reinterpret_cast< math::poly::OneD< Vector3 > * >(argp1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "PolyVector3___mul__" "', argument " "2"" of type '" "double""'");
+  } 
+  arg2 = static_cast< double >(val2);
+  {
+    try
+    {
+      result = ((math::poly::OneD< Vector3 > const *)arg1)->operator *(arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new math::poly::OneD< math::linear::VectorN< 3,double > >(static_cast< const math::poly::OneD< math::linear::VectorN< 3,double > >& >(result))), SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolyVector3___imul____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::poly::OneD< Vector3 > *arg1 = (math::poly::OneD< Vector3 > *) 0 ;
+  math::poly::OneD< math::linear::VectorN< 3,double > > *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  math::poly::OneD< math::linear::VectorN< 3,double > > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:PolyVector3___imul__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolyVector3___imul__" "', argument " "1"" of type '" "math::poly::OneD< Vector3 > *""'"); 
+  }
+  arg1 = reinterpret_cast< math::poly::OneD< Vector3 > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "PolyVector3___imul__" "', argument " "2"" of type '" "math::poly::OneD< math::linear::VectorN< 3,double > > const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "PolyVector3___imul__" "', argument " "2"" of type '" "math::poly::OneD< math::linear::VectorN< 3,double > > const &""'"); 
+  }
+  arg2 = reinterpret_cast< math::poly::OneD< math::linear::VectorN< 3,double > > * >(argp2);
+  {
+    try
+    {
+      {
+        math::poly::OneD< math::linear::VectorN< 3,double > > &_result_ref = (arg1)->operator *=((math::poly::OneD< math::linear::VectorN< 3,double > > const &)*arg2);
+        result = (math::poly::OneD< math::linear::VectorN< 3,double > > *) &_result_ref;
+      }
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolyVector3___imul__(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = (int)PyObject_Length(args);
+  for (ii = 0; (ii < argc) && (ii < 2); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_PolyVector3___imul____SWIG_1(self, args);
+      }
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_double(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_PolyVector3___imul____SWIG_0(self, args);
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number of arguments for overloaded function 'PolyVector3___imul__'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    operator *=(math::poly::OneD< Vector3 > *,double)\n"
+    "    operator *=(math::poly::OneD< Vector3 > *,math::poly::OneD< math::linear::VectorN< 3,double > > const &)\n");
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolyVector3___mul____SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::poly::OneD< Vector3 > *arg1 = (math::poly::OneD< Vector3 > *) 0 ;
+  math::poly::OneD< math::linear::VectorN< 3,double > > *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  math::poly::OneD< math::linear::VectorN< 3,double > > result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:PolyVector3___mul__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolyVector3___mul__" "', argument " "1"" of type '" "math::poly::OneD< Vector3 > const *""'"); 
+  }
+  arg1 = reinterpret_cast< math::poly::OneD< Vector3 > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "PolyVector3___mul__" "', argument " "2"" of type '" "math::poly::OneD< math::linear::VectorN< 3,double > > const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "PolyVector3___mul__" "', argument " "2"" of type '" "math::poly::OneD< math::linear::VectorN< 3,double > > const &""'"); 
+  }
+  arg2 = reinterpret_cast< math::poly::OneD< math::linear::VectorN< 3,double > > * >(argp2);
+  {
+    try
+    {
+      result = ((math::poly::OneD< Vector3 > const *)arg1)->operator *((math::poly::OneD< math::linear::VectorN< 3,double > > const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new math::poly::OneD< math::linear::VectorN< 3,double > >(static_cast< const math::poly::OneD< math::linear::VectorN< 3,double > >& >(result))), SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolyVector3___mul__(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = (int)PyObject_Length(args);
+  for (ii = 0; (ii < argc) && (ii < 2); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_PolyVector3___mul____SWIG_1(self, args);
+      }
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_double(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        return _wrap_PolyVector3___mul____SWIG_0(self, args);
+      }
+    }
+  }
+  
+fail:
+  Py_INCREF(Py_NotImplemented);
+  return Py_NotImplemented;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolyVector3___iadd__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::poly::OneD< Vector3 > *arg1 = (math::poly::OneD< Vector3 > *) 0 ;
+  math::poly::OneD< math::linear::VectorN< 3,double > > *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  math::poly::OneD< math::linear::VectorN< 3,double > > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:PolyVector3___iadd__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolyVector3___iadd__" "', argument " "1"" of type '" "math::poly::OneD< Vector3 > *""'"); 
+  }
+  arg1 = reinterpret_cast< math::poly::OneD< Vector3 > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "PolyVector3___iadd__" "', argument " "2"" of type '" "math::poly::OneD< math::linear::VectorN< 3,double > > const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "PolyVector3___iadd__" "', argument " "2"" of type '" "math::poly::OneD< math::linear::VectorN< 3,double > > const &""'"); 
+  }
+  arg2 = reinterpret_cast< math::poly::OneD< math::linear::VectorN< 3,double > > * >(argp2);
+  {
+    try
+    {
+      {
+        math::poly::OneD< math::linear::VectorN< 3,double > > &_result_ref = (arg1)->operator +=((math::poly::OneD< math::linear::VectorN< 3,double > > const &)*arg2);
+        result = (math::poly::OneD< math::linear::VectorN< 3,double > > *) &_result_ref;
+      }
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolyVector3___add__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::poly::OneD< Vector3 > *arg1 = (math::poly::OneD< Vector3 > *) 0 ;
+  math::poly::OneD< math::linear::VectorN< 3,double > > *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  math::poly::OneD< math::linear::VectorN< 3,double > > result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:PolyVector3___add__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolyVector3___add__" "', argument " "1"" of type '" "math::poly::OneD< Vector3 > const *""'"); 
+  }
+  arg1 = reinterpret_cast< math::poly::OneD< Vector3 > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "PolyVector3___add__" "', argument " "2"" of type '" "math::poly::OneD< math::linear::VectorN< 3,double > > const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "PolyVector3___add__" "', argument " "2"" of type '" "math::poly::OneD< math::linear::VectorN< 3,double > > const &""'"); 
+  }
+  arg2 = reinterpret_cast< math::poly::OneD< math::linear::VectorN< 3,double > > * >(argp2);
+  {
+    try
+    {
+      result = ((math::poly::OneD< Vector3 > const *)arg1)->operator +((math::poly::OneD< math::linear::VectorN< 3,double > > const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new math::poly::OneD< math::linear::VectorN< 3,double > >(static_cast< const math::poly::OneD< math::linear::VectorN< 3,double > >& >(result))), SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolyVector3___isub__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::poly::OneD< Vector3 > *arg1 = (math::poly::OneD< Vector3 > *) 0 ;
+  math::poly::OneD< math::linear::VectorN< 3,double > > *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  math::poly::OneD< math::linear::VectorN< 3,double > > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:PolyVector3___isub__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolyVector3___isub__" "', argument " "1"" of type '" "math::poly::OneD< Vector3 > *""'"); 
+  }
+  arg1 = reinterpret_cast< math::poly::OneD< Vector3 > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "PolyVector3___isub__" "', argument " "2"" of type '" "math::poly::OneD< math::linear::VectorN< 3,double > > const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "PolyVector3___isub__" "', argument " "2"" of type '" "math::poly::OneD< math::linear::VectorN< 3,double > > const &""'"); 
+  }
+  arg2 = reinterpret_cast< math::poly::OneD< math::linear::VectorN< 3,double > > * >(argp2);
+  {
+    try
+    {
+      {
+        math::poly::OneD< math::linear::VectorN< 3,double > > &_result_ref = (arg1)->operator -=((math::poly::OneD< math::linear::VectorN< 3,double > > const &)*arg2);
+        result = (math::poly::OneD< math::linear::VectorN< 3,double > > *) &_result_ref;
+      }
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolyVector3___sub__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::poly::OneD< Vector3 > *arg1 = (math::poly::OneD< Vector3 > *) 0 ;
+  math::poly::OneD< math::linear::VectorN< 3,double > > *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  math::poly::OneD< math::linear::VectorN< 3,double > > result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:PolyVector3___sub__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolyVector3___sub__" "', argument " "1"" of type '" "math::poly::OneD< Vector3 > const *""'"); 
+  }
+  arg1 = reinterpret_cast< math::poly::OneD< Vector3 > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "PolyVector3___sub__" "', argument " "2"" of type '" "math::poly::OneD< math::linear::VectorN< 3,double > > const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "PolyVector3___sub__" "', argument " "2"" of type '" "math::poly::OneD< math::linear::VectorN< 3,double > > const &""'"); 
+  }
+  arg2 = reinterpret_cast< math::poly::OneD< math::linear::VectorN< 3,double > > * >(argp2);
+  {
+    try
+    {
+      result = ((math::poly::OneD< Vector3 > const *)arg1)->operator -((math::poly::OneD< math::linear::VectorN< 3,double > > const &)*arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new math::poly::OneD< math::linear::VectorN< 3,double > >(static_cast< const math::poly::OneD< math::linear::VectorN< 3,double > >& >(result))), SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolyVector3___idiv__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::poly::OneD< Vector3 > *arg1 = (math::poly::OneD< Vector3 > *) 0 ;
+  double arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  math::poly::OneD< math::linear::VectorN< 3,double > > *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:PolyVector3___idiv__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolyVector3___idiv__" "', argument " "1"" of type '" "math::poly::OneD< Vector3 > *""'"); 
+  }
+  arg1 = reinterpret_cast< math::poly::OneD< Vector3 > * >(argp1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "PolyVector3___idiv__" "', argument " "2"" of type '" "double""'");
+  } 
+  arg2 = static_cast< double >(val2);
+  {
+    try
+    {
+      {
+        math::poly::OneD< math::linear::VectorN< 3,double > > &_result_ref = (arg1)->operator /=(arg2);
+        result = (math::poly::OneD< math::linear::VectorN< 3,double > > *) &_result_ref;
+      }
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolyVector3___div__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::poly::OneD< Vector3 > *arg1 = (math::poly::OneD< Vector3 > *) 0 ;
+  double arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  math::poly::OneD< math::linear::VectorN< 3,double > > result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:PolyVector3___div__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolyVector3___div__" "', argument " "1"" of type '" "math::poly::OneD< Vector3 > const *""'"); 
+  }
+  arg1 = reinterpret_cast< math::poly::OneD< Vector3 > * >(argp1);
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "PolyVector3___div__" "', argument " "2"" of type '" "double""'");
+  } 
+  arg2 = static_cast< double >(val2);
+  {
+    try
+    {
+      result = ((math::poly::OneD< Vector3 > const *)arg1)->operator /(arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new math::poly::OneD< math::linear::VectorN< 3,double > >(static_cast< const math::poly::OneD< math::linear::VectorN< 3,double > >& >(result))), SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolyVector3___getitem__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::poly::OneD< Vector3 > *arg1 = (math::poly::OneD< Vector3 > *) 0 ;
+  long arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  long val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  Vector3 result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:PolyVector3___getitem__",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolyVector3___getitem__" "', argument " "1"" of type '" "math::poly::OneD< Vector3 > *""'"); 
+  }
+  arg1 = reinterpret_cast< math::poly::OneD< Vector3 > * >(argp1);
+  ecode2 = SWIG_AsVal_long(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "PolyVector3___getitem__" "', argument " "2"" of type '" "long""'");
+  } 
+  arg2 = static_cast< long >(val2);
+  {
+    try
+    {
+      result = math_poly_OneD_Sl_Vector3_Sg____getitem__(arg1,arg2);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new Vector3(static_cast< const Vector3& >(result))), SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PolyVector3___setitem__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::poly::OneD< Vector3 > *arg1 = (math::poly::OneD< Vector3 > *) 0 ;
+  long arg2 ;
+  Vector3 arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  long val2 ;
+  int ecode2 = 0 ;
+  void *argp3 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:PolyVector3___setitem__",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolyVector3___setitem__" "', argument " "1"" of type '" "math::poly::OneD< Vector3 > *""'"); 
+  }
+  arg1 = reinterpret_cast< math::poly::OneD< Vector3 > * >(argp1);
+  ecode2 = SWIG_AsVal_long(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "PolyVector3___setitem__" "', argument " "2"" of type '" "long""'");
+  } 
+  arg2 = static_cast< long >(val2);
+  {
+    res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_math__linear__VectorNT_3_double_t,  0  | 0);
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "PolyVector3___setitem__" "', argument " "3"" of type '" "Vector3""'"); 
+    }  
+    if (!argp3) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "PolyVector3___setitem__" "', argument " "3"" of type '" "Vector3""'");
+    } else {
+      Vector3 * temp = reinterpret_cast< Vector3 * >(argp3);
+      arg3 = *temp;
+      if (SWIG_IsNewObj(res3)) delete temp;
+    }
+  }
+  {
+    try
+    {
+      math_poly_OneD_Sl_Vector3_Sg____setitem__(arg1,arg2,arg3);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_PolyVector3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::poly::OneD< Vector3 > *arg1 = (math::poly::OneD< Vector3 > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_PolyVector3",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_PolyVector3" "', argument " "1"" of type '" "math::poly::OneD< Vector3 > *""'"); 
+  }
+  arg1 = reinterpret_cast< math::poly::OneD< Vector3 > * >(argp1);
+  {
+    try
+    {
+      delete arg1;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *PolyVector3_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!PyArg_ParseTuple(args,(char*)"O:swigregister", &obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
 static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_Poly1D", _wrap_new_Poly1D, METH_VARARGS, (char *)"\n"
 		"Poly1D()\n"
-		"Poly1D(std::vector<(double)> coef)\n"
+		"Poly1D(std_vector_double coef)\n"
 		"Poly1D(size_t order)\n"
 		"new_Poly1D(size_t order, double coef) -> Poly1D\n"
 		""},
@@ -7948,7 +10740,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Poly1D___str__", _wrap_Poly1D___str__, METH_VARARGS, (char *)"Poly1D___str__(Poly1D self) -> string"},
 	 { (char *)"delete_Poly1D", _wrap_delete_Poly1D, METH_VARARGS, (char *)"delete_Poly1D(Poly1D self)"},
 	 { (char *)"Poly1D_swigregister", Poly1D_swigregister, METH_VARARGS, NULL},
-	 { (char *)"Poly2D_coeffs", _wrap_Poly2D_coeffs, METH_VARARGS, (char *)"Poly2D_coeffs(Poly2D self) -> std::vector<(math::poly::OneD<(double)>)>"},
+	 { (char *)"Poly2D_coeffs", _wrap_Poly2D_coeffs, METH_VARARGS, (char *)"Poly2D_coeffs(Poly2D self) -> std::vector<(math::poly::OneD<(double)>,std::allocator<(math::poly::OneD<(double)>)>)>"},
 	 { (char *)"new_Poly2D", _wrap_new_Poly2D, METH_VARARGS, (char *)"\n"
 		"Poly2D()\n"
 		"new_Poly2D(size_t orderX, size_t orderY) -> Poly2D\n"
@@ -8004,46 +10796,106 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Poly2D___str__", _wrap_Poly2D___str__, METH_VARARGS, (char *)"Poly2D___str__(Poly2D self) -> string"},
 	 { (char *)"delete_Poly2D", _wrap_delete_Poly2D, METH_VARARGS, (char *)"delete_Poly2D(Poly2D self)"},
 	 { (char *)"Poly2D_swigregister", Poly2D_swigregister, METH_VARARGS, NULL},
+	 { (char *)"new_PolyVector3", _wrap_new_PolyVector3, METH_VARARGS, (char *)"\n"
+		"PolyVector3()\n"
+		"PolyVector3(std::vector<(math::linear::VectorN<(3,double)>,std::allocator<(math::linear::VectorN<(3,double)>)>)> coef)\n"
+		"PolyVector3(size_t order)\n"
+		"new_PolyVector3(size_t order, Vector3 coef) -> PolyVector3\n"
+		""},
+	 { (char *)"PolyVector3_order", _wrap_PolyVector3_order, METH_VARARGS, (char *)"PolyVector3_order(PolyVector3 self) -> size_t"},
+	 { (char *)"PolyVector3_size", _wrap_PolyVector3_size, METH_VARARGS, (char *)"PolyVector3_size(PolyVector3 self) -> size_t"},
+	 { (char *)"PolyVector3_empty", _wrap_PolyVector3_empty, METH_VARARGS, (char *)"PolyVector3_empty(PolyVector3 self) -> bool"},
+	 { (char *)"PolyVector3_scaleVariable", _wrap_PolyVector3_scaleVariable, METH_VARARGS, (char *)"PolyVector3_scaleVariable(PolyVector3 self, double scale) -> PolyVector3"},
+	 { (char *)"PolyVector3_truncateTo", _wrap_PolyVector3_truncateTo, METH_VARARGS, (char *)"PolyVector3_truncateTo(PolyVector3 self, size_t order) -> PolyVector3"},
+	 { (char *)"PolyVector3_copyFrom", _wrap_PolyVector3_copyFrom, METH_VARARGS, (char *)"PolyVector3_copyFrom(PolyVector3 self, PolyVector3 p)"},
+	 { (char *)"PolyVector3___call__", _wrap_PolyVector3___call__, METH_VARARGS, (char *)"PolyVector3___call__(PolyVector3 self, double at) -> Vector3"},
+	 { (char *)"PolyVector3_derivative", _wrap_PolyVector3_derivative, METH_VARARGS, (char *)"PolyVector3_derivative(PolyVector3 self) -> PolyVector3"},
+	 { (char *)"PolyVector3___imul__", _wrap_PolyVector3___imul__, METH_VARARGS, (char *)"\n"
+		"__imul__(double cv) -> PolyVector3\n"
+		"PolyVector3___imul__(PolyVector3 self, PolyVector3 p) -> PolyVector3\n"
+		""},
+	 { (char *)"PolyVector3___mul__", _wrap_PolyVector3___mul__, METH_VARARGS, (char *)"\n"
+		"__mul__(double cv) -> PolyVector3\n"
+		"PolyVector3___mul__(PolyVector3 self, PolyVector3 p) -> PolyVector3\n"
+		""},
+	 { (char *)"PolyVector3___iadd__", _wrap_PolyVector3___iadd__, METH_VARARGS, (char *)"PolyVector3___iadd__(PolyVector3 self, PolyVector3 p) -> PolyVector3"},
+	 { (char *)"PolyVector3___add__", _wrap_PolyVector3___add__, METH_VARARGS, (char *)"PolyVector3___add__(PolyVector3 self, PolyVector3 p) -> PolyVector3"},
+	 { (char *)"PolyVector3___isub__", _wrap_PolyVector3___isub__, METH_VARARGS, (char *)"PolyVector3___isub__(PolyVector3 self, PolyVector3 p) -> PolyVector3"},
+	 { (char *)"PolyVector3___sub__", _wrap_PolyVector3___sub__, METH_VARARGS, (char *)"PolyVector3___sub__(PolyVector3 self, PolyVector3 p) -> PolyVector3"},
+	 { (char *)"PolyVector3___idiv__", _wrap_PolyVector3___idiv__, METH_VARARGS, (char *)"PolyVector3___idiv__(PolyVector3 self, double cv) -> PolyVector3"},
+	 { (char *)"PolyVector3___div__", _wrap_PolyVector3___div__, METH_VARARGS, (char *)"PolyVector3___div__(PolyVector3 self, double cv) -> PolyVector3"},
+	 { (char *)"PolyVector3___getitem__", _wrap_PolyVector3___getitem__, METH_VARARGS, (char *)"PolyVector3___getitem__(PolyVector3 self, long i) -> Vector3"},
+	 { (char *)"PolyVector3___setitem__", _wrap_PolyVector3___setitem__, METH_VARARGS, (char *)"PolyVector3___setitem__(PolyVector3 self, long i, Vector3 val)"},
+	 { (char *)"delete_PolyVector3", _wrap_delete_PolyVector3, METH_VARARGS, (char *)"delete_PolyVector3(PolyVector3 self)"},
+	 { (char *)"PolyVector3_swigregister", PolyVector3_swigregister, METH_VARARGS, NULL},
 	 { NULL, NULL, 0, NULL }
 };
 
 
 /* -------- TYPE CONVERSION AND EQUIVALENCE RULES (BEGIN) -------- */
 
+static swig_type_info _swigt__p_Like_T = {"_p_Like_T", "Like_T *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_allocator_type = {"_p_allocator_type", "allocator_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_difference_type = {"_p_difference_type", "difference_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_double = {"_p_double", "double *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_except__NullPointerReferenceException = {"_p_except__NullPointerReferenceException", "except::NullPointerReferenceException *|except::NullPointerReference *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_math__linear__VectorNT_3_double_t = {"_p_math__linear__VectorNT_3_double_t", "Vector3 *|math::linear::VectorN< 3,double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_math__poly__OneDT_double_t = {"_p_math__poly__OneDT_double_t", "math::poly::OneD< double > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t = {"_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t", "math::poly::OneD< math::linear::VectorN< 3,double > > *|math::poly::OneD< Vector3 > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_math__poly__TwoDT_double_t = {"_p_math__poly__TwoDT_double_t", "math::poly::TwoD< double > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__vectorT_double_t = {"_p_std__vectorT_double_t", "std::vector< double > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__vectorT_math__poly__OneDT_double_t_t = {"_p_std__vectorT_math__poly__OneDT_double_t_t", "std::vector< math::poly::OneD< double > > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_size_type = {"_p_size_type", "size_type *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t = {"_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t", "std::vector< math::linear::VectorN< 3,double >,std::allocator< math::linear::VectorN< 3,double > > > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__vectorT_math__poly__OneDT_double_t_std__allocatorT_math__poly__OneDT_double_t_t_t = {"_p_std__vectorT_math__poly__OneDT_double_t_std__allocatorT_math__poly__OneDT_double_t_t_t", "std::vector< math::poly::OneD< double >,std::allocator< math::poly::OneD< double > > > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_value_type = {"_p_value_type", "value_type *", 0, 0, (void*)0, 0};
 
 static swig_type_info *swig_type_initial[] = {
+  &_swigt__p_Like_T,
+  &_swigt__p_allocator_type,
   &_swigt__p_char,
+  &_swigt__p_difference_type,
   &_swigt__p_double,
   &_swigt__p_except__NullPointerReferenceException,
+  &_swigt__p_math__linear__VectorNT_3_double_t,
   &_swigt__p_math__poly__OneDT_double_t,
+  &_swigt__p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t,
   &_swigt__p_math__poly__TwoDT_double_t,
-  &_swigt__p_std__vectorT_double_t,
-  &_swigt__p_std__vectorT_math__poly__OneDT_double_t_t,
+  &_swigt__p_size_type,
+  &_swigt__p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t,
+  &_swigt__p_std__vectorT_math__poly__OneDT_double_t_std__allocatorT_math__poly__OneDT_double_t_t_t,
+  &_swigt__p_value_type,
 };
 
+static swig_cast_info _swigc__p_Like_T[] = {  {&_swigt__p_Like_T, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_allocator_type[] = {  {&_swigt__p_allocator_type, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_difference_type[] = {  {&_swigt__p_difference_type, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_double[] = {  {&_swigt__p_double, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_except__NullPointerReferenceException[] = {  {&_swigt__p_except__NullPointerReferenceException, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_math__linear__VectorNT_3_double_t[] = {  {&_swigt__p_math__linear__VectorNT_3_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_math__poly__OneDT_double_t[] = {  {&_swigt__p_math__poly__OneDT_double_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t[] = {  {&_swigt__p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_math__poly__TwoDT_double_t[] = {  {&_swigt__p_math__poly__TwoDT_double_t, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_std__vectorT_double_t[] = {  {&_swigt__p_std__vectorT_double_t, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_std__vectorT_math__poly__OneDT_double_t_t[] = {  {&_swigt__p_std__vectorT_math__poly__OneDT_double_t_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_size_type[] = {  {&_swigt__p_size_type, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t[] = {  {&_swigt__p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__vectorT_math__poly__OneDT_double_t_std__allocatorT_math__poly__OneDT_double_t_t_t[] = {  {&_swigt__p_std__vectorT_math__poly__OneDT_double_t_std__allocatorT_math__poly__OneDT_double_t_t_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_value_type[] = {  {&_swigt__p_value_type, 0, 0, 0},{0, 0, 0, 0}};
 
 static swig_cast_info *swig_cast_initial[] = {
+  _swigc__p_Like_T,
+  _swigc__p_allocator_type,
   _swigc__p_char,
+  _swigc__p_difference_type,
   _swigc__p_double,
   _swigc__p_except__NullPointerReferenceException,
+  _swigc__p_math__linear__VectorNT_3_double_t,
   _swigc__p_math__poly__OneDT_double_t,
+  _swigc__p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t,
   _swigc__p_math__poly__TwoDT_double_t,
-  _swigc__p_std__vectorT_double_t,
-  _swigc__p_std__vectorT_math__poly__OneDT_double_t_t,
+  _swigc__p_size_type,
+  _swigc__p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t,
+  _swigc__p_std__vectorT_math__poly__OneDT_double_t_std__allocatorT_math__poly__OneDT_double_t_t_t,
+  _swigc__p_value_type,
 };
 
 
