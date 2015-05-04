@@ -21,39 +21,6 @@ typedef math::linear::VectorN<3,double> Vector3;
 
 %include "std_string.i"
 
-%exception
-{
-    try
-    {
-        $action
-    } 
-    catch (const std::exception& e)
-    {
-        if (!PyErr_Occurred())
-        {
-            PyErr_SetString(PyExc_RuntimeError, e.what());
-        }
-    }
-    catch (const except::Exception& e)
-    {
-        if (!PyErr_Occurred())
-        {
-            PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-        }
-    }
-    catch (...)
-    {
-        if (!PyErr_Occurred())
-        {
-            PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-        }
-    }
-    if (PyErr_Occurred())
-    {
-        SWIG_fail;
-    }
-}
-
 %include "math/poly/OneD.h"
 
 %template(Poly1D) math::poly::OneD<double>;

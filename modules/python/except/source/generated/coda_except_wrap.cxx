@@ -3351,7 +3351,37 @@ SWIGINTERN PyObject *_wrap_delete_Context(PyObject *SWIGUNUSEDPARM(self), PyObje
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_Context" "', argument " "1"" of type '" "except::Context *""'"); 
   }
   arg1 = reinterpret_cast< except::Context * >(argp1);
-  delete arg1;
+  {
+    try
+    {
+      delete arg1;
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
