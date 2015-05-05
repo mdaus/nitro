@@ -445,63 +445,66 @@ class CPPContext(Context.Context):
         else:
             env = bld.env
 
-        modArgs = dict((k.lower(), v) for k, v in modArgs.iteritems())
+        if 'PYTHON' in env and env['PYTHON'] and bld.is_defined('HAVE_PYTHON_H'):
+            modArgs = dict((k.lower(), v) for k, v in modArgs.iteritems())
 
-        name = modArgs['name']
-        swigSource = os.path.join('source', name.replace('.', '_') + '.i')
-        target = '_' + name.replace('.', '_')
-        use = modArgs['use']
-        installPath = os.path.join('${PYTHONDIR}', name)
-        taskName = name + '-python'
+            name = modArgs['name']
+            codename = name
 
-        # TODO: Here we're assuming we're svn:externals'ing everything in under
-        #       modules/python.  Make this more flexible... probably want to set
-        #       an environment variable for each Python module, then pull that out
-        #       here to get the include path.
-        swigIncludes = os.path.abspath(os.path.join(bld.path.abspath(), '..' ))
+            prefix = env['prefix_' + name]
+            if prefix:
+                codename = prefix + name
 
-        # If we have Swig, when the Swig target runs, it'll generate both the
-        # _wrap.cxx file and the .py file and then copy them both to the
-        # installation directory.  If you just clobber the install directory
-        # and re-run waf install, it'll just copy the .so over though - not
-        # the .py file.  Same problem if you don't have Swig.  This target
-        # will actually compile the .py file to a .pyc, but the other thing is
-        # it'll copy the file over to the installation directory for us.
-        # We ensure this always runs via 'add_targets'
-        copyFilesTarget = target + '_py'
-        bld(features = 'py', 
-            target = copyFilesTarget,
-            env = env.derive(),
-            install_path = installPath,
-            source = bld.path.make_node('source').ant_glob('**/*.py'))
+            swigSource = os.path.join('source', name.replace('.', '_') + '.i')
+            target = '_' + codename.replace('.', '_')
+            use = modArgs['use']
+            installPath = os.path.join('${PYTHONDIR}', codename)
+            taskName = name + '-python'
+            exportIncludes = listify(modArgs.get('export_includes', 'source'))
 
-        if 'SWIG' in env and env['SWIG']:
-            # If Swig is available, let's use it to build the .cxx file
-            # This gets generated into the source/generated folder and we'll
-            # actually check it in so other developers can still use the Python
-            # bindings even if they don't have Swig
-            bld(features = 'cxx cshlib pyext add_targets',
-                source = swigSource,
+            # If we have Swig, when the Swig target runs, it'll generate both the
+            # _wrap.cxx file and the .py file and then copy them both to the
+            # installation directory.  If you just clobber the install directory
+            # and re-run waf install, it'll just copy the .so over though - not
+            # the .py file.  Same problem if you don't have Swig.  This target
+            # will actually compile the .py file to a .pyc, but the other thing is
+            # it'll copy the file over to the installation directory for us.
+            # We ensure this always runs via 'add_targets'
+            copyFilesTarget = target + '_py'
+            bld(features = 'py', 
+                target = copyFilesTarget,
+                env = env.derive(),
+                install_path = installPath,
+                source = bld.path.make_node('source').ant_glob('**/*.py'))
+
+            if 'SWIG' in env and env['SWIG']:
+                # If Swig is available, let's use it to build the .cxx file
+                # This gets generated into the source/generated folder and we'll
+                # actually check it in so other developers can still use the Python
+                # bindings even if they don't have Swig
+                bld(features = 'cxx cshlib pyext add_targets swig_linkage includes',
+                    source = swigSource,
+                    target = target,
+                    use = use,
+                    export_includes = exportIncludes,
+                    env = env.derive(),
+                    swig_flags = '-python -c++',
+                    install_path = installPath,
+                    name = taskName,
+                    targets_to_add = copyFilesTarget,
+                    swig_install_fun = swigCopyGeneratedSources)
+            else:
+                # If Swig is not available, use the cxx file already sitting around
+                # that Swig generated sometime in the past
+                bld(features = 'cxx cshlib pyext add_targets swig_linkage includes',
+                source = os.path.join('source', 'generated', codename.replace('.', '_') + '_wrap.cxx'),
                 target = target,
                 use = use,
-                includes = swigIncludes,
+                export_include = exportIncludes,
                 env = env.derive(),
-                swig_flags = '-python -c++ -I' + swigIncludes,
-                install_path = installPath,
                 name = taskName,
                 targets_to_add = copyFilesTarget,
-                swig_install_fun = swigCopyGeneratedSources)
-        else:
-            # If Swig is not available, use the cxx file already sitting around
-            # that Swig generated sometime in the past
-            bld(features = 'cxx cshlib pyext add_targets',
-            source = os.path.join('source', 'generated', name.replace('.', '_') + '_wrap.cxx'),
-            target = target,
-            use = use,
-            env = env.derive(),
-            name = taskName,
-            targets_to_add = copyFilesTarget,
-            install_path = installPath)
+                install_path = installPath)
 
     def getBuildDir(self, path=None):
         """
@@ -1201,6 +1204,42 @@ def configure(self):
 
     #flag that we already detected
     self.env['DETECTED_BUILD_PY'] = True
+
+@TaskGen.feature('swig_linkage')
+@TaskGen.after_method('process_use')
+def process_swig_linkage(tsk):
+
+    incstr = ''
+    for nod in tsk.includes:
+        incstr += ' -I' + nod.abspath()
+    if hasattr(tsk,'swig_flags'):
+        tsk.swig_flags = tsk.swig_flags + incstr
+
+    newlib = []
+    for lib in tsk.env.LIB:
+        if lib.startswith('_coda_'):
+            libname = lib + '.so'
+            searchstr = lib[6:].replace('_','.')
+            libpath = ''
+            for libdir in tsk.env.LIBPATH:
+                if libdir.endswith(searchstr):
+                    libpath = libdir
+            libpath = os.path.join(str(libpath), libname)
+            tsk.env.LINKFLAGS.append(libpath)
+        elif lib.startswith('_'):
+            libname = lib + '.so'
+            searchstr = lib[1:].replace('_','.')
+            for libdir in tsk.env.LIBPATH:
+                if libdir.endswith(searchstr):
+                    libpath = libdir
+            libpath = os.path.join(str(libpath), libname)
+            tsk.env.LINKFLAGS.append(libpath)
+        else:
+            newlib.append(lib)
+
+    soname_str = '-Wl,-soname=' + tsk.target + '.so'
+    tsk.env.LINKFLAGS.append(soname_str)
+    tsk.env.LIB = newlib
 
 @task_gen
 @feature('untar')
