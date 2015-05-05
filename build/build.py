@@ -1214,37 +1214,37 @@ def configure(self):
 @TaskGen.after_method('process_use')
 def process_swig_linkage(tsk):
 
-  incstr = ''
-  for nod in tsk.includes:
-    incstr += ' -I' + nod.abspath()
-  if hasattr(tsk,'swig_flags'):
-    tsk.swig_flags = tsk.swig_flags + incstr
+    incstr = ''
+    for nod in tsk.includes:
+        incstr += ' -I' + nod.abspath()
+    if hasattr(tsk,'swig_flags'):
+        tsk.swig_flags = tsk.swig_flags + incstr
 
-  newlib = []
-  for lib in tsk.env.LIB:
-    if lib.startswith('_coda_'):
-      libname = lib + '.so'
-      searchstr = lib[6:].replace('_','.')
-      libpath = ''
-      for libdir in tsk.env.LIBPATH:
-          if libdir.endswith(searchstr):
-              libpath = libdir
-      libpath = os.path.join(str(libpath), libname)
-      tsk.env.LINKFLAGS.append(libpath)
-    elif lib.startswith('_'):
-      libname = lib + '.so'
-      searchstr = lib[1:].replace('_','.')
-      for libdir in tsk.env.LIBPATH:
-        if libdir.endswith(searchstr):
-          libpath = libdir
-      libpath = os.path.join(str(libpath), libname)
-      tsk.env.LINKFLAGS.append(libpath)
-    else:
-      newlib.append(lib)
+    newlib = []
+    for lib in tsk.env.LIB:
+        if lib.startswith('_coda_'):
+            libname = lib + '.so'
+            searchstr = lib[6:].replace('_','.')
+            libpath = ''
+            for libdir in tsk.env.LIBPATH:
+                if libdir.endswith(searchstr):
+                    libpath = libdir
+            libpath = os.path.join(str(libpath), libname)
+            tsk.env.LINKFLAGS.append(libpath)
+        elif lib.startswith('_'):
+            libname = lib + '.so'
+            searchstr = lib[1:].replace('_','.')
+            for libdir in tsk.env.LIBPATH:
+                if libdir.endswith(searchstr):
+                    libpath = libdir
+            libpath = os.path.join(str(libpath), libname)
+            tsk.env.LINKFLAGS.append(libpath)
+        else:
+            newlib.append(lib)
 
-  soname_str = '-Wl,-soname=' + tsk.target + '.so'
-  tsk.env.LINKFLAGS.append(soname_str)
-  tsk.env.LIB = newlib
+    soname_str = '-Wl,-soname=' + tsk.target + '.so'
+    tsk.env.LINKFLAGS.append(soname_str)
+    tsk.env.LIB = newlib
 
 @task_gen
 @feature('untar')
