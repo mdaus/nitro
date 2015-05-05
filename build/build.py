@@ -500,7 +500,7 @@ class CPPContext(Context.Context):
                 source = os.path.join('source', 'generated', codename.replace('.', '_') + '_wrap.cxx'),
                 target = target,
                 use = use,
-                export_include = exportIncludes,
+                export_includes = exportIncludes,
                 env = env.derive(),
                 name = taskName,
                 targets_to_add = copyFilesTarget,
@@ -726,6 +726,8 @@ def options(opt):
                    help='Distribute source into the installation area (for delivering source)')
     opt.add_option('--with-prebuilt-config', action='store', dest='prebuilt_config',
                    help='Specify a prebuilt modules config file (created from dumpconfig)')
+    opt.add_option('--disable-swig-silent-leak', action='store_false', dest='swig_silent_leak',
+                   default=True, help='Allow swig to print memory leaks it detects')
 
 def configureCompilerOptions(self):
     sys_platform = getPlatform(default=Options.platform)
@@ -1189,7 +1191,10 @@ def configure(self):
     env['install_libdir'] = Options.options.libdir if Options.options.libdir else join(Options.options.prefix, 'lib')
     env['install_bindir'] = Options.options.bindir if Options.options.bindir else join(Options.options.prefix, 'bin')
     env['install_sharedir'] = Options.options.sharedir if Options.options.sharedir else join(Options.options.prefix, 'share')
-    
+
+    # Swig memory leak output
+    if Options.options.swig_silent_leak:
+        env['DEFINES'].append('SWIG_PYTHON_SILENT_MEMLEAK')
     
     # Look for prebuilt modules
     if Options.options.prebuilt_config:

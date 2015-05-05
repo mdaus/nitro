@@ -2,47 +2,24 @@
 
 %feature("autodoc", "1");
 
+%ignore math::poly::OneD<Vector3>::truncateToNonZeros;
+%ignore math::poly::OneD<Vector3>::transformInput;
+%ignore math::poly::OneD<Vector3>::integrate;
+%ignore math::poly::OneD<Vector3>::power;
+
 %{
 #include <string>
 #include <sstream>
+#include "import/math/linear.h"
+typedef math::linear::VectorN<3,double> Vector3;
 #include "math/poly/OneD.h"
 #include "math/poly/TwoD.h"
 %}
 
-%include "std_string.i"
+%import "math_linear.i"
+%import "except.i"
 
-%exception
-{
-    try
-    {
-        $action
-    } 
-    catch (const std::exception& e)
-    {
-        if (!PyErr_Occurred())
-        {
-            PyErr_SetString(PyExc_RuntimeError, e.what());
-        }
-    }
-    catch (const except::Exception& e)
-    {
-        if (!PyErr_Occurred())
-        {
-            PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
-        }
-    }
-    catch (...)
-    {
-        if (!PyErr_Occurred())
-        {
-            PyErr_SetString(PyExc_RuntimeError, "Unknown error");
-        }
-    }
-    if (PyErr_Occurred())
-    {
-        SWIG_fail;
-    }
-}
+%include "std_string.i"
 
 %include "math/poly/OneD.h"
 
@@ -132,3 +109,21 @@
         return ostr.str();
     }
 }
+
+typedef math::linear::VectorN<3,double> Vector3;
+%template(PolyVector3) math::poly::OneD<Vector3>;
+ 
+%extend math::poly::OneD<Vector3 >
+{
+    public:
+        Vector3 __getitem__(long i) 
+        { 
+            return (*self)[i]; 
+        }
+
+        void __setitem__(long i, Vector3 val) 
+        { 
+            (*self)[i] = val; 
+        }
+};
+ 
