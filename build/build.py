@@ -448,18 +448,17 @@ class CPPContext(Context.Context):
         modArgs = dict((k.lower(), v) for k, v in modArgs.iteritems())
 
         name = modArgs['name']
-        codename = name
-
-        prefix = env['prefix_' + name]
-        if prefix:
-          codename = prefix + name
-
         swigSource = os.path.join('source', name.replace('.', '_') + '.i')
-        target = '_' + codename.replace('.', '_')
+        target = '_' + name.replace('.', '_')
         use = modArgs['use']
-        installPath = os.path.join('${PYTHONDIR}', codename)
+        installPath = os.path.join('${PYTHONDIR}', name)
         taskName = name + '-python'
-        exportIncludes = listify(modArgs.get('export_includes', 'source'))
+
+        # TODO: Here we're assuming we're svn:externals'ing everything in under
+        #       modules/python.  Make this more flexible... probably want to set
+        #       an environment variable for each Python module, then pull that out
+        #       here to get the include path.
+        swigIncludes = os.path.abspath(os.path.join(bld.path.abspath(), '..' ))
 
         # If we have Swig, when the Swig target runs, it'll generate both the
         # _wrap.cxx file and the .py file and then copy them both to the
@@ -481,13 +480,13 @@ class CPPContext(Context.Context):
             # This gets generated into the source/generated folder and we'll
             # actually check it in so other developers can still use the Python
             # bindings even if they don't have Swig
-            bld(features = 'cxx cshlib pyext add_targets swig_linkage includes',
+            bld(features = 'cxx cshlib pyext add_targets',
                 source = swigSource,
                 target = target,
                 use = use,
-                export_includes = exportIncludes,
+                includes = swigIncludes,
                 env = env.derive(),
-                swig_flags = '-python -c++',
+                swig_flags = '-python -c++ -I' + swigIncludes,
                 install_path = installPath,
                 name = taskName,
                 targets_to_add = copyFilesTarget,
@@ -495,11 +494,10 @@ class CPPContext(Context.Context):
         else:
             # If Swig is not available, use the cxx file already sitting around
             # that Swig generated sometime in the past
-            bld(features = 'cxx cshlib pyext add_targets swig_linkage includes',
+            bld(features = 'cxx cshlib pyext add_targets',
             source = os.path.join('source', 'generated', name.replace('.', '_') + '_wrap.cxx'),
             target = target,
             use = use,
-            export_includes = exportIncludes,
             env = env.derive(),
             name = taskName,
             targets_to_add = copyFilesTarget,
@@ -725,8 +723,6 @@ def options(opt):
                    help='Distribute source into the installation area (for delivering source)')
     opt.add_option('--with-prebuilt-config', action='store', dest='prebuilt_config',
                    help='Specify a prebuilt modules config file (created from dumpconfig)')
-    opt.add_option('--disable-swig-silent-leak', action='store_false', dest='swig_silent_leak',
-                   default=True, help='Allow swig to print memory leaks it detects')
 
 def configureCompilerOptions(self):
     sys_platform = getPlatform(default=Options.platform)
@@ -1190,10 +1186,7 @@ def configure(self):
     env['install_libdir'] = Options.options.libdir if Options.options.libdir else join(Options.options.prefix, 'lib')
     env['install_bindir'] = Options.options.bindir if Options.options.bindir else join(Options.options.prefix, 'bin')
     env['install_sharedir'] = Options.options.sharedir if Options.options.sharedir else join(Options.options.prefix, 'share')
-
-    # Swig memory leak output
-    if Options.options.swig_silent_leak:
-        env['DEFINES'].append('SWIG_PYTHON_SILENT_MEMLEAK')
+    
     
     # Look for prebuilt modules
     if Options.options.prebuilt_config:
@@ -1208,41 +1201,6 @@ def configure(self):
 
     #flag that we already detected
     self.env['DETECTED_BUILD_PY'] = True
-
-@TaskGen.feature('swig_linkage')
-@TaskGen.after_method('process_use')
-def process_swig_linkage(tsk):
-
-  incstr = ''
-  for nod in tsk.includes:
-    incstr += ' -I' + nod.abspath()
-  tsk.swig_flags = tsk.swig_flags + incstr
-
-  newlib = []
-  for lib in tsk.env.LIB:
-    if lib.startswith('_coda_'):
-      libname = lib + '.so'
-      searchstr = lib[6:].replace('_','.')
-      libpath = ''
-      for libdir in tsk.env.LIBPATH:
-          if libdir.endswith(searchstr):
-              libpath = libdir
-      libpath = os.path.join(str(libpath), libname)
-      tsk.env.LINKFLAGS.append(libpath)
-    elif lib.startswith('_'):
-      libname = lib + '.so'
-      searchstr = lib[1:].replace('_','.')
-      for libdir in tsk.env.LIBPATH:
-        if libdir.endswith(searchstr):
-          libpath = libdir
-      libpath = os.path.join(str(libpath), libname)
-      tsk.env.LINKFLAGS.append(libpath)
-    else:
-      newlib.append(lib)
-
-  soname_str = '-Wl,-soname=' + tsk.target + '.so'
-  tsk.env.LINKFLAGS.append(soname_str)
-  tsk.env.LIB = newlib
 
 @task_gen
 @feature('untar')
