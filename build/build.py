@@ -1201,7 +1201,9 @@ def configure(self):
         with open(Options.options.prebuilt_config) as f:
             fileContents = f.readlines()
 
-        print 'Adding prebuilt modules: ' + str(fileContents)
+        if not env['INCLDUES']:
+            env['INCLUDES'] = []
+
         env['INCLUDES'].append(fileContents[0].rstrip())
         env.append_unique('CXXFLAGS', fileContents[1].rstrip().split())
         env['LIB_PREBUILT'] = fileContents[2].rstrip().split()
