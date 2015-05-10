@@ -80,6 +80,8 @@ for f in glob.glob('%s-*' % package_name):
 
 check_call(["python", "waf", "distclean"])
 check_call(["python", "waf", "configure", "--prefix=%s" % install_path] + config_options)
+check_call(["python", "waf", "list"])
+check_call(["python", "waf", "msvs"])
 check_call(["python", "waf", "install"] + build_options)
 if options.do_distclean:
     check_call(["python", "waf", "distclean"])
