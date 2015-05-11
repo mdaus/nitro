@@ -1221,11 +1221,13 @@ def process_swig_linkage(tsk):
         incstr += ' -I' + nod.abspath()
     if hasattr(tsk,'swig_flags'):
         tsk.swig_flags = tsk.swig_flags + incstr
+  
+    libpattern = tsk.env['cshlib_PATTERN']
 
     newlib = []
     for lib in tsk.env.LIB:
         if lib.startswith('_coda_'):
-            libname = lib + '.so'
+            libname = libpattern % lib
             searchstr = lib[6:].replace('_','.')
             libpath = ''
             for libdir in tsk.env.LIBPATH:
@@ -1234,7 +1236,7 @@ def process_swig_linkage(tsk):
             libpath = os.path.join(str(libpath), libname)
             tsk.env.LINKFLAGS.append(libpath)
         elif lib.startswith('_'):
-            libname = lib + '.so'
+            libname = libpattern % lib
             searchstr = lib[1:].replace('_','.')
             for libdir in tsk.env.LIBPATH:
                 if libdir.endswith(searchstr):
@@ -1244,7 +1246,7 @@ def process_swig_linkage(tsk):
         else:
             newlib.append(lib)
 
-    soname_str = '-Wl,-soname=' + tsk.target + '.so'
+    soname_str = '-Wl,-soname=' + (libpattern % tsk.target)
     tsk.env.LINKFLAGS.append(soname_str)
     tsk.env.LIB = newlib
 
