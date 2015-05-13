@@ -1492,18 +1492,13 @@ def addSourceTargets(bld, env, path, target):
 
 
 
-#Basic idea: catch the flags from a build of a tester
-#  program, and look for the version number.
+#Basic idea: Look for the version number.
 def GccHasCpp11():
-    tester = 'int main(){ return 0; }'
-    with open('test_file_waf.cpp', 'wb') as tFile:
-        tFile.write(tester)
-    outs=subprocess.check_output('g++ test_file_waf.cpp -dM -E', shell=True)
-    subprocess.call('rm test_file_waf.cpp', shell=True)
+    outs=subprocess.check_output('g++ --version', shell=True)
     VERSION_REGEX = r'[0-9]\.[0-9]\.[0-9]'
-    FLAG_REGEX = re.compile(r'#define __VERSION__')
+    LINE_REGEX = re.compile(r'(GCC)')
     for line in re.split('\n', outs):
-        match= FLAG_REGEX.match(line)
+        match= LINE_REGEX.search(line)
         if match:
             vMatch = re.search(VERSION_REGEX, line)
             version = vMatch.group()
