@@ -66,7 +66,6 @@ elif '-vc10' in os.environ.get('JOB_NAME'):
     config_options += ["--msvc_version=msvc 10.0,msvc 10.0Exp"]
 
 print 'Job: %s' % os.environ.get('JOB_NAME', '')
-print 'Git Rev: %s' % os.environ.get('GIT_COMMIT', '')
 print "Revision: %s" % os.environ.get('SVN_REVISION', '')
 print "LD_LIBRARY_PATH: %s" % os.environ.get('LD_LIBRARY_PATH','')
 
