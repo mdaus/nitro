@@ -251,7 +251,8 @@ class CPPContext(Context.Context):
             test_deps.append(modArgs['name'])
 
             if 'INCLUDES_UNITTEST' in env:
-                includes.append(env['INCLUDES_UNITTEST'][0])
+                for incl_dir in env['INCLUDES_UNITTEST']:
+                    includes.append(incl_dir)
 
                 test_deps = map(lambda x: '%s-%s' % (x, lang), test_deps + listify(modArgs.get('test_uselib_local', '')) + listify(modArgs.get('test_use','')))
 
@@ -550,7 +551,7 @@ class CPPContext(Context.Context):
             targetName = modArgs.get('target', None)
 
             if source:
-                name = splitext(split(source)[1])[0]
+                name = splitext(split(str(source))[1])[0]
 
             mex = bld(features='%s %sshlib'%(libExeType, libExeType), target=targetName or name,
                                    name=name, use=uselib_local,
@@ -1216,16 +1217,31 @@ def configure(self):
 @TaskGen.after_method('process_use')
 def process_swig_linkage(tsk):
 
+    solarisRegex = r'sparc-sun.*|i.86-pc-solaris.*|sunos'
+
+    platform = getPlatform(default=Options.platform)
+    compiler = tsk.env['COMPILER_CXX']
+    if compiler == 'msvc':
+        # TODO
+        # MSVC doesn't need this feature, apperantly
+        # Not sure if cygwin/mingw does or not...
+        return
+
     incstr = ''
     for nod in tsk.includes:
         incstr += ' -I' + nod.abspath()
     if hasattr(tsk,'swig_flags'):
         tsk.swig_flags = tsk.swig_flags + incstr
 
+    libpattern = tsk.env['cshlib_PATTERN']
+    linkarg_pattern = '-Wl,%s'
+    if re.match(solarisRegex,platform) and compiler != 'g++' and compiler != 'icpc':
+      linkarg_pattern = '%s'
+
     newlib = []
     for lib in tsk.env.LIB:
         if lib.startswith('_coda_'):
-            libname = lib + '.so'
+            libname = libpattern % lib
             searchstr = lib[6:].replace('_','.')
             libpath = ''
             for libdir in tsk.env.LIBPATH:
@@ -1244,7 +1260,11 @@ def process_swig_linkage(tsk):
         else:
             newlib.append(lib)
 
-    soname_str = '-Wl,-soname=' + tsk.target + '.so'
+    # studio is a special and their compiler has an option
+    # for giving a shared object a name, rather than letting us pass
+    # in options to the linker like gcc and icc
+
+    soname_str = linkarg_pattern % ('-h ' + (libpattern % tsk.target))
     tsk.env.LINKFLAGS.append(soname_str)
     tsk.env.LIB = newlib
 
