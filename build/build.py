@@ -1365,8 +1365,6 @@ def add_targets(self):
     if isinstance(self.targets_to_add, str):
         self.targets_to_add = [self.targets_to_add]
     for target in self.targets_to_add:
-        if target == 'ReadCGM':
-            import pdb; pdb.set_trace()
         if isinstance(target, task_gen):
             target.post()
         else:
