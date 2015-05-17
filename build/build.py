@@ -1223,7 +1223,7 @@ def process_swig_linkage(tsk):
     compiler = tsk.env['COMPILER_CXX']
     if compiler == 'msvc':
         # TODO
-        # MSVC doesn't need this feature, apperantly
+        # MSVC doesn't need this feature, apparently
         # Not sure if cygwin/mingw does or not...
         return
 
@@ -1260,7 +1260,7 @@ def process_swig_linkage(tsk):
         else:
             newlib.append(lib)
 
-    # studio is a special and their compiler has an option
+    # Solaris Studio is a special case and their compiler has an option
     # for giving a shared object a name, rather than letting us pass
     # in options to the linker like gcc and icc
 
