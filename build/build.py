@@ -1233,6 +1233,10 @@ def process_swig_linkage(tsk):
     if hasattr(tsk,'swig_flags'):
         tsk.swig_flags = tsk.swig_flags + incstr
 
+    # TODO: Here we're using -Wl,_foo.so since if you just use -l_foo the linker
+    #       assumes there's a 'lib' prefix in the filename which we don't have
+    #       here.  Instead, according to the ld man page, may be able to prepend
+    #       a colon and do this instead: -l:_foo.so 
     libpattern = tsk.env['cshlib_PATTERN']
     linkarg_pattern = '-Wl,%s'
     if re.match(solarisRegex,platform) and compiler != 'g++' and compiler != 'icpc':
