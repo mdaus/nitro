@@ -2,7 +2,7 @@ import sys, os, types, re, fnmatch, subprocess, shutil, platform, inspect
 from os.path import split, isdir, isfile, exists, splitext, abspath, join, \
                     basename, dirname
 
-from waflib import Options, Utils, Logs, TaskGen
+from waflib import Options, Utils, Logs, TaskGen, Context
 from waflib.Options import OptionsContext
 from waflib.Configure import conf, ConfigurationContext
 from waflib.Build import BuildContext, ListContext, CleanContext, InstallContext
@@ -459,7 +459,7 @@ class CPPContext(Context.Context):
             swigSource = os.path.join('source', name.replace('.', '_') + '.i')
             target = '_' + codename.replace('.', '_')
             use = modArgs['use']
-            installPath = os.path.join('${PYTHONDIR}', codename)
+            installPath = os.path.join('${PYTHONDIR}', Context.APPNAME)
             taskName = name + '-python'
             exportIncludes = listify(modArgs.get('export_includes', 'source'))
 
