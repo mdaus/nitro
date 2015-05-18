@@ -1,4 +1,24 @@
+/* =========================================================================
  * This file is part of math.poly-c++ 
+ * =========================================================================
+ * 
+ * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ *
+ * math.poly-c++ is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public 
+ * License along with this program; If not, 
+ * see <http://www.gnu.org/licenses/>.
+ *
+ */
 
 #ifndef __MATH_POLY_ONED_H__
 #define __MATH_POLY_ONED_H__
@@ -112,6 +132,7 @@ public:
     {
         return mCoef.empty();
     }
+
     /*!
      * Returns a scaled polynomial such that
      * P'(x) = P(x * scale)
@@ -172,31 +193,30 @@ public:
      * \param p The polynomial to copy from.
      */
     void copyFrom(const OneD<_T>& p);
+
     _T operator ()(double at) const;
     _T integrate(double start, double end) const;
     OneD<_T>derivative() const;
-    // Additions 5-14-15
-    _T velocity(double x) const;
-    _T acceleration(double x) const;
-
     _T& operator[](size_t i);
     _T operator[](size_t i) const;
+    template<typename _TT>
+    friend std::ostream& operator <<(std::ostream& out, const OneD<_TT>& p);
     OneD<_T>& operator *=(double cv);
     OneD<_T>operator *(double cv) const;
     template<typename _TT>
     friend OneD<_TT>operator *(double cv, const OneD<_TT>& p);
     OneD<_T>& operator *=(const OneD<_T>& p);
-    OneD<_T>operator *(const math::poly::OneD<_T>& p) const;
+    OneD<_T>operator *(const OneD<_T>& p) const;
     OneD<_T>& operator +=(const OneD<_T>& p);
     OneD<_T>operator +(const OneD<_T>& p) const;
     OneD<_T>& operator -=(const OneD<_T>& p);
     OneD<_T>operator -(const OneD<_T>& p) const;
     OneD<_T>& operator /=(double cv);
     OneD<_T>operator /(double cv) const;
+
     OneD<_T> power(size_t toThe) const;
 
-    template<typename Vector_T>
-    bool operator==(const Vector_T& p) const
+    template<typename Vector_T> bool operator==(const Vector_T& p) const
     {
         size_t sz = size();
         size_t psz = p.size();
@@ -235,12 +255,9 @@ public:
         return !(*this == p);
     }
 };
+
 } // poly
 } // math
-
-template<typename _TT>
-friend std::ostream& operator <<(std::ostream& out, const math::poly::OneD<_TT>& p);
-
-
 #include "math/poly/OneD.hpp"
 #endif
+
