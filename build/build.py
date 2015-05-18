@@ -1493,6 +1493,8 @@ def addSourceTargets(bld, env, path, target):
 
 
 #Basic idea: Look for the version number.
+#We check for GCC 4.7.0 or later as this version
+#has support for all the functionality we need.
 def GccHasCpp11():
     outs=subprocess.check_output('g++ --version', shell=True)
     VERSION_REGEX = r'[0-9]\.[0-9]\.[0-9]'
@@ -1511,7 +1513,8 @@ def GccHasCpp11():
                 return False
     raise RuntimeError('gcc version not found')
 
-
+#TODO: Add a similar check for the Intel compiler
+# (adding the /Qstd=c++11 if support is found)
 
 
 class SwitchContext(Context.Context):
