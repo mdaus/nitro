@@ -66,7 +66,8 @@ elif '-vc10' in os.environ.get('JOB_NAME'):
     config_options += ["--msvc_version=msvc 10.0,msvc 10.0Exp"]
 
 print 'Job: %s' % os.environ.get('JOB_NAME', '')
-print "Revision: %s" % os.environ.get('GIT_COMMIT', '')
+str commit_id = os.environ.get('GIT_COMMIT', '')
+print "Revision: %s" % commit_id[-8:]
 print "LD_LIBRARY_PATH: %s" % os.environ.get('LD_LIBRARY_PATH','')
 
 install_path = installPath(package_name)
