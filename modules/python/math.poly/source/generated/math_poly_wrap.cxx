@@ -2941,16 +2941,18 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_difference_type swig_types[4]
 #define SWIGTYPE_p_double swig_types[5]
 #define SWIGTYPE_p_except__NullPointerReferenceException swig_types[6]
-#define SWIGTYPE_p_math__linear__VectorNT_3_double_t swig_types[7]
-#define SWIGTYPE_p_math__poly__OneDT_double_t swig_types[8]
-#define SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t swig_types[9]
-#define SWIGTYPE_p_math__poly__TwoDT_double_t swig_types[10]
-#define SWIGTYPE_p_size_type swig_types[11]
-#define SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t swig_types[12]
-#define SWIGTYPE_p_std__vectorT_math__poly__OneDT_double_t_std__allocatorT_math__poly__OneDT_double_t_t_t swig_types[13]
-#define SWIGTYPE_p_value_type swig_types[14]
-static swig_type_info *swig_types[16];
-static swig_module_info swig_module = {swig_types, 15, 0, 0, 0, 0};
+#define SWIGTYPE_p_math__linear__Matrix2DT_double_t swig_types[7]
+#define SWIGTYPE_p_math__linear__VectorNT_3_double_t swig_types[8]
+#define SWIGTYPE_p_math__linear__VectorT_double_t swig_types[9]
+#define SWIGTYPE_p_math__poly__OneDT_double_t swig_types[10]
+#define SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t swig_types[11]
+#define SWIGTYPE_p_math__poly__TwoDT_double_t swig_types[12]
+#define SWIGTYPE_p_size_type swig_types[13]
+#define SWIGTYPE_p_std__vectorT_math__linear__VectorNT_3_double_t_std__allocatorT_math__linear__VectorNT_3_double_t_t_t swig_types[14]
+#define SWIGTYPE_p_std__vectorT_math__poly__OneDT_double_t_std__allocatorT_math__poly__OneDT_double_t_t_t swig_types[15]
+#define SWIGTYPE_p_value_type swig_types[16]
+static swig_type_info *swig_types[18];
+static swig_module_info swig_module = {swig_types, 17, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -3059,8 +3061,10 @@ namespace swig {
 #include <sstream>
 #include "import/math/linear.h"
 typedef math::linear::VectorN<3,double> Vector3;
+typedef math::linear::Vector<double> VectorDouble;
 #include "math/poly/OneD.h"
 #include "math/poly/TwoD.h"
+#include "math/poly/Fit.h"
 
 
 #include <string>
@@ -4205,6 +4209,22 @@ namespace swig
 }
 
 
+  static double *new_doubleArray(size_t nelements) { 
+    return (new double[nelements]);
+  }
+
+  static void delete_doubleArray(double *ary) {
+    delete[] ary;
+  }
+
+  static double doubleArray_getitem(double *ary, size_t index) {
+    return ary[index];
+  }
+  static void doubleArray_setitem(double *ary, size_t index, double value) {
+    ary[index] = value;
+  }
+
+
 SWIGINTERN int
 SWIG_AsVal_double (PyObject *obj, double *val)
 {
@@ -4246,6 +4266,156 @@ SWIG_AsVal_double (PyObject *obj, double *val)
   }
 #endif
   return res;
+}
+
+
+#include <float.h>
+
+
+#include <math.h>
+
+
+SWIGINTERNINLINE int
+SWIG_CanCastAsInteger(double *d, double min, double max) {
+  double x = *d;
+  if ((min <= x && x <= max)) {
+   double fx = floor(x);
+   double cx = ceil(x);
+   double rd =  ((x - fx) < 0.5) ? fx : cx; /* simple rint */
+   if ((errno == EDOM) || (errno == ERANGE)) {
+     errno = 0;
+   } else {
+     double summ, reps, diff;
+     if (rd < x) {
+       diff = x - rd;
+     } else if (rd > x) {
+       diff = rd - x;
+     } else {
+       return 1;
+     }
+     summ = rd + x;
+     reps = diff/summ;
+     if (reps < 8*DBL_EPSILON) {
+       *d = rd;
+       return 1;
+     }
+   }
+  }
+  return 0;
+}
+
+
+SWIGINTERN int
+SWIG_AsVal_unsigned_SS_long (PyObject *obj, unsigned long *val) 
+{
+#if PY_VERSION_HEX < 0x03000000
+  if (PyInt_Check(obj)) {
+    long v = PyInt_AsLong(obj);
+    if (v >= 0) {
+      if (val) *val = v;
+      return SWIG_OK;
+    } else {
+      return SWIG_OverflowError;
+    }
+  } else
+#endif
+  if (PyLong_Check(obj)) {
+    unsigned long v = PyLong_AsUnsignedLong(obj);
+    if (!PyErr_Occurred()) {
+      if (val) *val = v;
+      return SWIG_OK;
+    } else {
+      PyErr_Clear();
+#if PY_VERSION_HEX >= 0x03000000
+      {
+        long v = PyLong_AsLong(obj);
+        if (!PyErr_Occurred()) {
+          if (v < 0) {
+            return SWIG_OverflowError;
+          }
+        } else {
+          PyErr_Clear();
+        }
+      }
+#endif
+    }
+  }
+#ifdef SWIG_PYTHON_CAST_MODE
+  {
+    int dispatch = 0;
+    unsigned long v = PyLong_AsUnsignedLong(obj);
+    if (!PyErr_Occurred()) {
+      if (val) *val = v;
+      return SWIG_AddCast(SWIG_OK);
+    } else {
+      PyErr_Clear();
+    }
+    if (!dispatch) {
+      double d;
+      int res = SWIG_AddCast(SWIG_AsVal_double (obj,&d));
+      if (SWIG_IsOK(res) && SWIG_CanCastAsInteger(&d, 0, ULONG_MAX)) {
+	if (val) *val = (unsigned long)(d);
+	return res;
+      }
+    }
+  }
+#endif
+  return SWIG_TypeError;
+}
+
+
+SWIGINTERNINLINE int
+SWIG_AsVal_size_t (PyObject * obj, size_t *val)
+{
+  unsigned long v;
+  int res = SWIG_AsVal_unsigned_SS_long (obj, val ? &v : 0);
+  if (SWIG_IsOK(res) && val) *val = static_cast< size_t >(v);
+  return res;
+}
+
+
+SWIGINTERN swig_type_info*
+SWIG_pchar_descriptor(void)
+{
+  static int init = 0;
+  static swig_type_info* info = 0;
+  if (!init) {
+    info = SWIG_TypeQuery("_p_char");
+    init = 1;
+  }
+  return info;
+}
+
+
+SWIGINTERNINLINE PyObject *
+SWIG_FromCharPtrAndSize(const char* carray, size_t size)
+{
+  if (carray) {
+    if (size > INT_MAX) {
+      swig_type_info* pchar_descriptor = SWIG_pchar_descriptor();
+      return pchar_descriptor ? 
+	SWIG_InternalNewPointerObj(const_cast< char * >(carray), pchar_descriptor, 0) : SWIG_Py_Void();
+    } else {
+#if PY_VERSION_HEX >= 0x03000000
+#if PY_VERSION_HEX >= 0x03010000
+      return PyUnicode_DecodeUTF8(carray, static_cast< int >(size), "surrogateescape");
+#else
+      return PyUnicode_FromStringAndSize(carray, static_cast< int >(size));
+#endif
+#else
+      return PyString_FromStringAndSize(carray, static_cast< int >(size));
+#endif
+    }
+  } else {
+    return SWIG_Py_Void();
+  }
+}
+
+
+SWIGINTERNINLINE PyObject *
+SWIG_From_std_string  (const std::string& s)
+{
+  return SWIG_FromCharPtrAndSize(s.data(), s.size());
 }
 
 
@@ -4380,111 +4550,6 @@ namespace swig {
       }
     
 
-#include <float.h>
-
-
-#include <math.h>
-
-
-SWIGINTERNINLINE int
-SWIG_CanCastAsInteger(double *d, double min, double max) {
-  double x = *d;
-  if ((min <= x && x <= max)) {
-   double fx = floor(x);
-   double cx = ceil(x);
-   double rd =  ((x - fx) < 0.5) ? fx : cx; /* simple rint */
-   if ((errno == EDOM) || (errno == ERANGE)) {
-     errno = 0;
-   } else {
-     double summ, reps, diff;
-     if (rd < x) {
-       diff = x - rd;
-     } else if (rd > x) {
-       diff = rd - x;
-     } else {
-       return 1;
-     }
-     summ = rd + x;
-     reps = diff/summ;
-     if (reps < 8*DBL_EPSILON) {
-       *d = rd;
-       return 1;
-     }
-   }
-  }
-  return 0;
-}
-
-
-SWIGINTERN int
-SWIG_AsVal_unsigned_SS_long (PyObject *obj, unsigned long *val) 
-{
-#if PY_VERSION_HEX < 0x03000000
-  if (PyInt_Check(obj)) {
-    long v = PyInt_AsLong(obj);
-    if (v >= 0) {
-      if (val) *val = v;
-      return SWIG_OK;
-    } else {
-      return SWIG_OverflowError;
-    }
-  } else
-#endif
-  if (PyLong_Check(obj)) {
-    unsigned long v = PyLong_AsUnsignedLong(obj);
-    if (!PyErr_Occurred()) {
-      if (val) *val = v;
-      return SWIG_OK;
-    } else {
-      PyErr_Clear();
-#if PY_VERSION_HEX >= 0x03000000
-      {
-        long v = PyLong_AsLong(obj);
-        if (!PyErr_Occurred()) {
-          if (v < 0) {
-            return SWIG_OverflowError;
-          }
-        } else {
-          PyErr_Clear();
-        }
-      }
-#endif
-    }
-  }
-#ifdef SWIG_PYTHON_CAST_MODE
-  {
-    int dispatch = 0;
-    unsigned long v = PyLong_AsUnsignedLong(obj);
-    if (!PyErr_Occurred()) {
-      if (val) *val = v;
-      return SWIG_AddCast(SWIG_OK);
-    } else {
-      PyErr_Clear();
-    }
-    if (!dispatch) {
-      double d;
-      int res = SWIG_AddCast(SWIG_AsVal_double (obj,&d));
-      if (SWIG_IsOK(res) && SWIG_CanCastAsInteger(&d, 0, ULONG_MAX)) {
-	if (val) *val = (unsigned long)(d);
-	return res;
-      }
-    }
-  }
-#endif
-  return SWIG_TypeError;
-}
-
-
-SWIGINTERNINLINE int
-SWIG_AsVal_size_t (PyObject * obj, size_t *val)
-{
-  unsigned long v;
-  int res = SWIG_AsVal_unsigned_SS_long (obj, val ? &v : 0);
-  if (SWIG_IsOK(res) && val) *val = static_cast< size_t >(v);
-  return res;
-}
-
-
   #define SWIG_From_long   PyLong_FromLong 
 
 
@@ -4569,51 +4634,6 @@ SWIGINTERN std::string math_poly_OneD_Sl_double_Sg____str__(math::poly::OneD< do
         ostr << *self;
         return ostr.str();
     }
-
-SWIGINTERN swig_type_info*
-SWIG_pchar_descriptor(void)
-{
-  static int init = 0;
-  static swig_type_info* info = 0;
-  if (!init) {
-    info = SWIG_TypeQuery("_p_char");
-    init = 1;
-  }
-  return info;
-}
-
-
-SWIGINTERNINLINE PyObject *
-SWIG_FromCharPtrAndSize(const char* carray, size_t size)
-{
-  if (carray) {
-    if (size > INT_MAX) {
-      swig_type_info* pchar_descriptor = SWIG_pchar_descriptor();
-      return pchar_descriptor ? 
-	SWIG_InternalNewPointerObj(const_cast< char * >(carray), pchar_descriptor, 0) : SWIG_Py_Void();
-    } else {
-#if PY_VERSION_HEX >= 0x03000000
-#if PY_VERSION_HEX >= 0x03010000
-      return PyUnicode_DecodeUTF8(carray, static_cast< int >(size), "surrogateescape");
-#else
-      return PyUnicode_FromStringAndSize(carray, static_cast< int >(size));
-#endif
-#else
-      return PyString_FromStringAndSize(carray, static_cast< int >(size));
-#endif
-    }
-  } else {
-    return SWIG_Py_Void();
-  }
-}
-
-
-SWIGINTERNINLINE PyObject *
-SWIG_From_std_string  (const std::string& s)
-{
-  return SWIG_FromCharPtrAndSize(s.data(), s.size());
-}
-
 SWIGINTERN double math_poly_TwoD_Sl_double_Sg____getitem__(math::poly::TwoD< double > *self,PyObject *inObj){
         if (!PyTuple_Check(inObj))
         {
@@ -4664,6 +4684,263 @@ SWIGINTERN void math_poly_OneD_Sl_Vector3_Sg____setitem__(math::poly::OneD< Vect
 #ifdef __cplusplus
 extern "C" {
 #endif
+SWIGINTERN PyObject *_wrap_new_doubleArray(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  size_t arg1 ;
+  size_t val1 ;
+  int ecode1 = 0 ;
+  PyObject * obj0 = 0 ;
+  double *result = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:new_doubleArray",&obj0)) SWIG_fail;
+  ecode1 = SWIG_AsVal_size_t(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_doubleArray" "', argument " "1"" of type '" "size_t""'");
+  } 
+  arg1 = static_cast< size_t >(val1);
+  {
+    try
+    {
+      try {
+        result = (double *)new_doubleArray(arg1);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_double, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_doubleArray(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  double *arg1 = (double *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:delete_doubleArray",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_double, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_doubleArray" "', argument " "1"" of type '" "double *""'"); 
+  }
+  arg1 = reinterpret_cast< double * >(argp1);
+  {
+    try
+    {
+      try {
+        delete_doubleArray(arg1);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_doubleArray_getitem(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  double *arg1 = (double *) 0 ;
+  size_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  double result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:doubleArray_getitem",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_double, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "doubleArray_getitem" "', argument " "1"" of type '" "double *""'"); 
+  }
+  arg1 = reinterpret_cast< double * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "doubleArray_getitem" "', argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  {
+    try
+    {
+      try {
+        result = (double)doubleArray_getitem(arg1,arg2);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_double(static_cast< double >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_doubleArray_setitem(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  double *arg1 = (double *) 0 ;
+  size_t arg2 ;
+  double arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  double val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:doubleArray_setitem",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_double, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "doubleArray_setitem" "', argument " "1"" of type '" "double *""'"); 
+  }
+  arg1 = reinterpret_cast< double * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "doubleArray_setitem" "', argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  ecode3 = SWIG_AsVal_double(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "doubleArray_setitem" "', argument " "3"" of type '" "double""'");
+  } 
+  arg3 = static_cast< double >(val3);
+  {
+    try
+    {
+      try {
+        doubleArray_setitem(arg1,arg2,arg3);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_new_Poly1D__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   math::poly::OneD< double > *result = 0 ;
@@ -4672,7 +4949,13 @@ SWIGINTERN PyObject *_wrap_new_Poly1D__SWIG_0(PyObject *SWIGUNUSEDPARM(self), Py
   {
     try
     {
-      result = (math::poly::OneD< double > *)new math::poly::OneD< double >();
+      try {
+        result = (math::poly::OneD< double > *)new math::poly::OneD< double >();
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -4729,7 +5012,13 @@ SWIGINTERN PyObject *_wrap_new_Poly1D__SWIG_1(PyObject *SWIGUNUSEDPARM(self), Py
   {
     try
     {
-      result = (math::poly::OneD< double > *)new math::poly::OneD< double >((std::vector< double,std::allocator< double > > const &)*arg1);
+      try {
+        result = (math::poly::OneD< double > *)new math::poly::OneD< double >((std::vector< double,std::allocator< double > > const &)*arg1);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -4783,7 +5072,13 @@ SWIGINTERN PyObject *_wrap_new_Poly1D__SWIG_2(PyObject *SWIGUNUSEDPARM(self), Py
   {
     try
     {
-      result = (math::poly::OneD< double > *)new math::poly::OneD< double >(arg1);
+      try {
+        result = (math::poly::OneD< double > *)new math::poly::OneD< double >(arg1);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -4844,7 +5139,13 @@ SWIGINTERN PyObject *_wrap_new_Poly1D__SWIG_3(PyObject *SWIGUNUSEDPARM(self), Py
   {
     try
     {
-      result = (math::poly::OneD< double > *)new math::poly::OneD< double >(arg1,(double const *)arg2);
+      try {
+        result = (math::poly::OneD< double > *)new math::poly::OneD< double >(arg1,(double const *)arg2);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -4954,7 +5255,13 @@ SWIGINTERN PyObject *_wrap_Poly1D_order(PyObject *SWIGUNUSEDPARM(self), PyObject
   {
     try
     {
-      result = ((math::poly::OneD< double > const *)arg1)->order();
+      try {
+        result = ((math::poly::OneD< double > const *)arg1)->order();
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -5006,7 +5313,13 @@ SWIGINTERN PyObject *_wrap_Poly1D_size(PyObject *SWIGUNUSEDPARM(self), PyObject 
   {
     try
     {
-      result = ((math::poly::OneD< double > const *)arg1)->size();
+      try {
+        result = ((math::poly::OneD< double > const *)arg1)->size();
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -5058,7 +5371,13 @@ SWIGINTERN PyObject *_wrap_Poly1D_empty(PyObject *SWIGUNUSEDPARM(self), PyObject
   {
     try
     {
-      result = (bool)((math::poly::OneD< double > const *)arg1)->empty();
+      try {
+        result = (bool)((math::poly::OneD< double > const *)arg1)->empty();
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -5119,7 +5438,13 @@ SWIGINTERN PyObject *_wrap_Poly1D_scaleVariable(PyObject *SWIGUNUSEDPARM(self), 
   {
     try
     {
-      result = ((math::poly::OneD< double > const *)arg1)->scaleVariable(arg2);
+      try {
+        result = ((math::poly::OneD< double > const *)arg1)->scaleVariable(arg2);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -5180,7 +5505,13 @@ SWIGINTERN PyObject *_wrap_Poly1D_truncateTo(PyObject *SWIGUNUSEDPARM(self), PyO
   {
     try
     {
-      result = ((math::poly::OneD< double > const *)arg1)->truncateTo(arg2);
+      try {
+        result = ((math::poly::OneD< double > const *)arg1)->truncateTo(arg2);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -5241,7 +5572,13 @@ SWIGINTERN PyObject *_wrap_Poly1D_truncateToNonZeros__SWIG_0(PyObject *SWIGUNUSE
   {
     try
     {
-      result = ((math::poly::OneD< double > const *)arg1)->truncateToNonZeros(arg2);
+      try {
+        result = ((math::poly::OneD< double > const *)arg1)->truncateToNonZeros(arg2);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -5293,7 +5630,13 @@ SWIGINTERN PyObject *_wrap_Poly1D_truncateToNonZeros__SWIG_1(PyObject *SWIGUNUSE
   {
     try
     {
-      result = ((math::poly::OneD< double > const *)arg1)->truncateToNonZeros();
+      try {
+        result = ((math::poly::OneD< double > const *)arg1)->truncateToNonZeros();
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -5410,7 +5753,13 @@ SWIGINTERN PyObject *_wrap_Poly1D_transformInput__SWIG_0(PyObject *SWIGUNUSEDPAR
   {
     try
     {
-      result = ((math::poly::OneD< double > const *)arg1)->transformInput((math::poly::OneD< double > const &)*arg2,arg3);
+      try {
+        result = ((math::poly::OneD< double > const *)arg1)->transformInput((math::poly::OneD< double > const &)*arg2,arg3);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -5474,7 +5823,13 @@ SWIGINTERN PyObject *_wrap_Poly1D_transformInput__SWIG_1(PyObject *SWIGUNUSEDPAR
   {
     try
     {
-      result = ((math::poly::OneD< double > const *)arg1)->transformInput((math::poly::OneD< double > const &)*arg2);
+      try {
+        result = ((math::poly::OneD< double > const *)arg1)->transformInput((math::poly::OneD< double > const &)*arg2);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -5589,7 +5944,13 @@ SWIGINTERN PyObject *_wrap_Poly1D_copyFrom(PyObject *SWIGUNUSEDPARM(self), PyObj
   {
     try
     {
-      (arg1)->copyFrom((math::poly::OneD< double > const &)*arg2);
+      try {
+        (arg1)->copyFrom((math::poly::OneD< double > const &)*arg2);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -5650,7 +6011,13 @@ SWIGINTERN PyObject *_wrap_Poly1D___call__(PyObject *SWIGUNUSEDPARM(self), PyObj
   {
     try
     {
-      result = (double)((math::poly::OneD< double > const *)arg1)->operator ()(arg2);
+      try {
+        result = (double)((math::poly::OneD< double > const *)arg1)->operator ()(arg2);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -5720,7 +6087,13 @@ SWIGINTERN PyObject *_wrap_Poly1D_integrate(PyObject *SWIGUNUSEDPARM(self), PyOb
   {
     try
     {
-      result = (double)((math::poly::OneD< double > const *)arg1)->integrate(arg2,arg3);
+      try {
+        result = (double)((math::poly::OneD< double > const *)arg1)->integrate(arg2,arg3);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -5772,7 +6145,13 @@ SWIGINTERN PyObject *_wrap_Poly1D_derivative(PyObject *SWIGUNUSEDPARM(self), PyO
   {
     try
     {
-      result = ((math::poly::OneD< double > const *)arg1)->derivative();
+      try {
+        result = ((math::poly::OneD< double > const *)arg1)->derivative();
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -5833,7 +6212,13 @@ SWIGINTERN PyObject *_wrap_Poly1D___imul____SWIG_0(PyObject *SWIGUNUSEDPARM(self
   {
     try
     {
-      result = (math::poly::OneD< double > *) &(arg1)->operator *=(arg2);
+      try {
+        result = (math::poly::OneD< double > *) &(arg1)->operator *=(arg2);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -5894,7 +6279,13 @@ SWIGINTERN PyObject *_wrap_Poly1D___mul____SWIG_0(PyObject *SWIGUNUSEDPARM(self)
   {
     try
     {
-      result = ((math::poly::OneD< double > const *)arg1)->operator *(arg2);
+      try {
+        result = ((math::poly::OneD< double > const *)arg1)->operator *(arg2);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -5958,7 +6349,13 @@ SWIGINTERN PyObject *_wrap_Poly1D___imul____SWIG_1(PyObject *SWIGUNUSEDPARM(self
   {
     try
     {
-      result = (math::poly::OneD< double > *) &(arg1)->operator *=((math::poly::OneD< double > const &)*arg2);
+      try {
+        result = (math::poly::OneD< double > *) &(arg1)->operator *=((math::poly::OneD< double > const &)*arg2);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -6070,7 +6467,13 @@ SWIGINTERN PyObject *_wrap_Poly1D___mul____SWIG_1(PyObject *SWIGUNUSEDPARM(self)
   {
     try
     {
-      result = ((math::poly::OneD< double > const *)arg1)->operator *((math::poly::OneD< double > const &)*arg2);
+      try {
+        result = ((math::poly::OneD< double > const *)arg1)->operator *((math::poly::OneD< double > const &)*arg2);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -6179,7 +6582,13 @@ SWIGINTERN PyObject *_wrap_Poly1D___iadd__(PyObject *SWIGUNUSEDPARM(self), PyObj
   {
     try
     {
-      result = (math::poly::OneD< double > *) &(arg1)->operator +=((math::poly::OneD< double > const &)*arg2);
+      try {
+        result = (math::poly::OneD< double > *) &(arg1)->operator +=((math::poly::OneD< double > const &)*arg2);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -6243,7 +6652,13 @@ SWIGINTERN PyObject *_wrap_Poly1D___add__(PyObject *SWIGUNUSEDPARM(self), PyObje
   {
     try
     {
-      result = ((math::poly::OneD< double > const *)arg1)->operator +((math::poly::OneD< double > const &)*arg2);
+      try {
+        result = ((math::poly::OneD< double > const *)arg1)->operator +((math::poly::OneD< double > const &)*arg2);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -6307,7 +6722,13 @@ SWIGINTERN PyObject *_wrap_Poly1D___isub__(PyObject *SWIGUNUSEDPARM(self), PyObj
   {
     try
     {
-      result = (math::poly::OneD< double > *) &(arg1)->operator -=((math::poly::OneD< double > const &)*arg2);
+      try {
+        result = (math::poly::OneD< double > *) &(arg1)->operator -=((math::poly::OneD< double > const &)*arg2);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -6371,7 +6792,13 @@ SWIGINTERN PyObject *_wrap_Poly1D___sub__(PyObject *SWIGUNUSEDPARM(self), PyObje
   {
     try
     {
-      result = ((math::poly::OneD< double > const *)arg1)->operator -((math::poly::OneD< double > const &)*arg2);
+      try {
+        result = ((math::poly::OneD< double > const *)arg1)->operator -((math::poly::OneD< double > const &)*arg2);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -6432,7 +6859,13 @@ SWIGINTERN PyObject *_wrap_Poly1D___idiv__(PyObject *SWIGUNUSEDPARM(self), PyObj
   {
     try
     {
-      result = (math::poly::OneD< double > *) &(arg1)->operator /=(arg2);
+      try {
+        result = (math::poly::OneD< double > *) &(arg1)->operator /=(arg2);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -6493,7 +6926,13 @@ SWIGINTERN PyObject *_wrap_Poly1D___div__(PyObject *SWIGUNUSEDPARM(self), PyObje
   {
     try
     {
-      result = ((math::poly::OneD< double > const *)arg1)->operator /(arg2);
+      try {
+        result = ((math::poly::OneD< double > const *)arg1)->operator /(arg2);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -6554,7 +6993,13 @@ SWIGINTERN PyObject *_wrap_Poly1D_power(PyObject *SWIGUNUSEDPARM(self), PyObject
   {
     try
     {
-      result = ((math::poly::OneD< double > const *)arg1)->power(arg2);
+      try {
+        result = ((math::poly::OneD< double > const *)arg1)->power(arg2);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -6615,7 +7060,13 @@ SWIGINTERN PyObject *_wrap_Poly1D___getitem__(PyObject *SWIGUNUSEDPARM(self), Py
   {
     try
     {
-      result = (double)math_poly_OneD_Sl_double_Sg____getitem__(arg1,arg2);
+      try {
+        result = (double)math_poly_OneD_Sl_double_Sg____getitem__(arg1,arg2);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -6684,7 +7135,13 @@ SWIGINTERN PyObject *_wrap_Poly1D___setitem__(PyObject *SWIGUNUSEDPARM(self), Py
   {
     try
     {
-      math_poly_OneD_Sl_double_Sg____setitem__(arg1,arg2,arg3);
+      try {
+        math_poly_OneD_Sl_double_Sg____setitem__(arg1,arg2,arg3);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -6736,7 +7193,13 @@ SWIGINTERN PyObject *_wrap_Poly1D___str__(PyObject *SWIGUNUSEDPARM(self), PyObje
   {
     try
     {
-      result = math_poly_OneD_Sl_double_Sg____str__(arg1);
+      try {
+        result = math_poly_OneD_Sl_double_Sg____str__(arg1);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -6846,7 +7309,13 @@ SWIGINTERN PyObject *_wrap_Poly2D_coeffs(PyObject *SWIGUNUSEDPARM(self), PyObjec
   {
     try
     {
-      result = (std::vector< math::poly::OneD< double >,std::allocator< math::poly::OneD< double > > > *) &(arg1)->coeffs();
+      try {
+        result = (std::vector< math::poly::OneD< double >,std::allocator< math::poly::OneD< double > > > *) &(arg1)->coeffs();
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -6889,7 +7358,13 @@ SWIGINTERN PyObject *_wrap_new_Poly2D__SWIG_0(PyObject *SWIGUNUSEDPARM(self), Py
   {
     try
     {
-      result = (math::poly::TwoD< double > *)new math::poly::TwoD< double >();
+      try {
+        result = (math::poly::TwoD< double > *)new math::poly::TwoD< double >();
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -6950,7 +7425,13 @@ SWIGINTERN PyObject *_wrap_new_Poly2D__SWIG_1(PyObject *SWIGUNUSEDPARM(self), Py
   {
     try
     {
-      result = (math::poly::TwoD< double > *)new math::poly::TwoD< double >(arg1,arg2);
+      try {
+        result = (math::poly::TwoD< double > *)new math::poly::TwoD< double >(arg1,arg2);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -7041,7 +7522,13 @@ SWIGINTERN PyObject *_wrap_Poly2D_empty(PyObject *SWIGUNUSEDPARM(self), PyObject
   {
     try
     {
-      result = (bool)((math::poly::TwoD< double > const *)arg1)->empty();
+      try {
+        result = (bool)((math::poly::TwoD< double > const *)arg1)->empty();
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -7093,7 +7580,13 @@ SWIGINTERN PyObject *_wrap_Poly2D_orderX(PyObject *SWIGUNUSEDPARM(self), PyObjec
   {
     try
     {
-      result = ((math::poly::TwoD< double > const *)arg1)->orderX();
+      try {
+        result = ((math::poly::TwoD< double > const *)arg1)->orderX();
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -7145,7 +7638,13 @@ SWIGINTERN PyObject *_wrap_Poly2D_orderY(PyObject *SWIGUNUSEDPARM(self), PyObjec
   {
     try
     {
-      result = ((math::poly::TwoD< double > const *)arg1)->orderY();
+      try {
+        result = ((math::poly::TwoD< double > const *)arg1)->orderY();
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -7215,7 +7714,13 @@ SWIGINTERN PyObject *_wrap_Poly2D___call__(PyObject *SWIGUNUSEDPARM(self), PyObj
   {
     try
     {
-      result = (double)((math::poly::TwoD< double > const *)arg1)->operator ()(arg2,arg3);
+      try {
+        result = (double)((math::poly::TwoD< double > const *)arg1)->operator ()(arg2,arg3);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -7303,7 +7808,13 @@ SWIGINTERN PyObject *_wrap_Poly2D_integrate(PyObject *SWIGUNUSEDPARM(self), PyOb
   {
     try
     {
-      result = (double)((math::poly::TwoD< double > const *)arg1)->integrate(arg2,arg3,arg4,arg5);
+      try {
+        result = (double)((math::poly::TwoD< double > const *)arg1)->integrate(arg2,arg3,arg4,arg5);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -7375,7 +7886,13 @@ SWIGINTERN PyObject *_wrap_Poly2D_set(PyObject *SWIGUNUSEDPARM(self), PyObject *
   {
     try
     {
-      (arg1)->set(arg2,(math::poly::OneD< double > const &)*arg3);
+      try {
+        (arg1)->set(arg2,(math::poly::OneD< double > const &)*arg3);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -7427,7 +7944,13 @@ SWIGINTERN PyObject *_wrap_Poly2D_flipXY(PyObject *SWIGUNUSEDPARM(self), PyObjec
   {
     try
     {
-      result = ((math::poly::TwoD< double > const *)arg1)->flipXY();
+      try {
+        result = ((math::poly::TwoD< double > const *)arg1)->flipXY();
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -7479,7 +8002,13 @@ SWIGINTERN PyObject *_wrap_Poly2D_derivativeY(PyObject *SWIGUNUSEDPARM(self), Py
   {
     try
     {
-      result = ((math::poly::TwoD< double > const *)arg1)->derivativeY();
+      try {
+        result = ((math::poly::TwoD< double > const *)arg1)->derivativeY();
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -7531,7 +8060,13 @@ SWIGINTERN PyObject *_wrap_Poly2D_derivativeX(PyObject *SWIGUNUSEDPARM(self), Py
   {
     try
     {
-      result = ((math::poly::TwoD< double > const *)arg1)->derivativeX();
+      try {
+        result = ((math::poly::TwoD< double > const *)arg1)->derivativeX();
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -7583,7 +8118,13 @@ SWIGINTERN PyObject *_wrap_Poly2D_derivativeXY(PyObject *SWIGUNUSEDPARM(self), P
   {
     try
     {
-      result = ((math::poly::TwoD< double > const *)arg1)->derivativeXY();
+      try {
+        result = ((math::poly::TwoD< double > const *)arg1)->derivativeXY();
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -7653,7 +8194,13 @@ SWIGINTERN PyObject *_wrap_Poly2D_scaleVariable__SWIG_0(PyObject *SWIGUNUSEDPARM
   {
     try
     {
-      result = ((math::poly::TwoD< double > const *)arg1)->scaleVariable(arg2,arg3);
+      try {
+        result = ((math::poly::TwoD< double > const *)arg1)->scaleVariable(arg2,arg3);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -7714,7 +8261,13 @@ SWIGINTERN PyObject *_wrap_Poly2D_scaleVariable__SWIG_1(PyObject *SWIGUNUSEDPARM
   {
     try
     {
-      result = ((math::poly::TwoD< double > const *)arg1)->scaleVariable(arg2);
+      try {
+        result = ((math::poly::TwoD< double > const *)arg1)->scaleVariable(arg2);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -7840,7 +8393,13 @@ SWIGINTERN PyObject *_wrap_Poly2D_truncateTo(PyObject *SWIGUNUSEDPARM(self), PyO
   {
     try
     {
-      result = ((math::poly::TwoD< double > const *)arg1)->truncateTo(arg2,arg3);
+      try {
+        result = ((math::poly::TwoD< double > const *)arg1)->truncateTo(arg2,arg3);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -7901,7 +8460,13 @@ SWIGINTERN PyObject *_wrap_Poly2D_truncateToNonZeros__SWIG_0(PyObject *SWIGUNUSE
   {
     try
     {
-      result = ((math::poly::TwoD< double > const *)arg1)->truncateToNonZeros(arg2);
+      try {
+        result = ((math::poly::TwoD< double > const *)arg1)->truncateToNonZeros(arg2);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -7953,7 +8518,13 @@ SWIGINTERN PyObject *_wrap_Poly2D_truncateToNonZeros__SWIG_1(PyObject *SWIGUNUSE
   {
     try
     {
-      result = ((math::poly::TwoD< double > const *)arg1)->truncateToNonZeros();
+      try {
+        result = ((math::poly::TwoD< double > const *)arg1)->truncateToNonZeros();
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -8082,7 +8653,13 @@ SWIGINTERN PyObject *_wrap_Poly2D_transformInput__SWIG_0(PyObject *SWIGUNUSEDPAR
   {
     try
     {
-      result = ((math::poly::TwoD< double > const *)arg1)->transformInput((math::poly::TwoD< double > const &)*arg2,(math::poly::TwoD< double > const &)*arg3,arg4);
+      try {
+        result = ((math::poly::TwoD< double > const *)arg1)->transformInput((math::poly::TwoD< double > const &)*arg2,(math::poly::TwoD< double > const &)*arg3,arg4);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -8158,7 +8735,13 @@ SWIGINTERN PyObject *_wrap_Poly2D_transformInput__SWIG_1(PyObject *SWIGUNUSEDPAR
   {
     try
     {
-      result = ((math::poly::TwoD< double > const *)arg1)->transformInput((math::poly::TwoD< double > const &)*arg2,(math::poly::TwoD< double > const &)*arg3);
+      try {
+        result = ((math::poly::TwoD< double > const *)arg1)->transformInput((math::poly::TwoD< double > const &)*arg2,(math::poly::TwoD< double > const &)*arg3);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -8231,7 +8814,13 @@ SWIGINTERN PyObject *_wrap_Poly2D_transformInput__SWIG_2(PyObject *SWIGUNUSEDPAR
   {
     try
     {
-      result = ((math::poly::TwoD< double > const *)arg1)->transformInput((math::poly::TwoD< double > const &)*arg2,arg3);
+      try {
+        result = ((math::poly::TwoD< double > const *)arg1)->transformInput((math::poly::TwoD< double > const &)*arg2,arg3);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -8295,7 +8884,13 @@ SWIGINTERN PyObject *_wrap_Poly2D_transformInput__SWIG_3(PyObject *SWIGUNUSEDPAR
   {
     try
     {
-      result = ((math::poly::TwoD< double > const *)arg1)->transformInput((math::poly::TwoD< double > const &)*arg2);
+      try {
+        result = ((math::poly::TwoD< double > const *)arg1)->transformInput((math::poly::TwoD< double > const &)*arg2);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -8450,7 +9045,13 @@ SWIGINTERN PyObject *_wrap_Poly2D_atY(PyObject *SWIGUNUSEDPARM(self), PyObject *
   {
     try
     {
-      result = ((math::poly::TwoD< double > const *)arg1)->atY(arg2);
+      try {
+        result = ((math::poly::TwoD< double > const *)arg1)->atY(arg2);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -8511,7 +9112,13 @@ SWIGINTERN PyObject *_wrap_Poly2D___imul____SWIG_0(PyObject *SWIGUNUSEDPARM(self
   {
     try
     {
-      result = (math::poly::TwoD< double > *) &(arg1)->operator *=(arg2);
+      try {
+        result = (math::poly::TwoD< double > *) &(arg1)->operator *=(arg2);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -8572,7 +9179,13 @@ SWIGINTERN PyObject *_wrap_Poly2D___mul____SWIG_0(PyObject *SWIGUNUSEDPARM(self)
   {
     try
     {
-      result = ((math::poly::TwoD< double > const *)arg1)->operator *(arg2);
+      try {
+        result = ((math::poly::TwoD< double > const *)arg1)->operator *(arg2);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -8636,7 +9249,13 @@ SWIGINTERN PyObject *_wrap_Poly2D___imul____SWIG_1(PyObject *SWIGUNUSEDPARM(self
   {
     try
     {
-      result = (math::poly::TwoD< double > *) &(arg1)->operator *=((math::poly::TwoD< double > const &)*arg2);
+      try {
+        result = (math::poly::TwoD< double > *) &(arg1)->operator *=((math::poly::TwoD< double > const &)*arg2);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -8748,7 +9367,13 @@ SWIGINTERN PyObject *_wrap_Poly2D___mul____SWIG_1(PyObject *SWIGUNUSEDPARM(self)
   {
     try
     {
-      result = ((math::poly::TwoD< double > const *)arg1)->operator *((math::poly::TwoD< double > const &)*arg2);
+      try {
+        result = ((math::poly::TwoD< double > const *)arg1)->operator *((math::poly::TwoD< double > const &)*arg2);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -8857,7 +9482,13 @@ SWIGINTERN PyObject *_wrap_Poly2D___iadd__(PyObject *SWIGUNUSEDPARM(self), PyObj
   {
     try
     {
-      result = (math::poly::TwoD< double > *) &(arg1)->operator +=((math::poly::TwoD< double > const &)*arg2);
+      try {
+        result = (math::poly::TwoD< double > *) &(arg1)->operator +=((math::poly::TwoD< double > const &)*arg2);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -8921,7 +9552,13 @@ SWIGINTERN PyObject *_wrap_Poly2D___add__(PyObject *SWIGUNUSEDPARM(self), PyObje
   {
     try
     {
-      result = ((math::poly::TwoD< double > const *)arg1)->operator +((math::poly::TwoD< double > const &)*arg2);
+      try {
+        result = ((math::poly::TwoD< double > const *)arg1)->operator +((math::poly::TwoD< double > const &)*arg2);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -8985,7 +9622,13 @@ SWIGINTERN PyObject *_wrap_Poly2D___isub__(PyObject *SWIGUNUSEDPARM(self), PyObj
   {
     try
     {
-      result = (math::poly::TwoD< double > *) &(arg1)->operator -=((math::poly::TwoD< double > const &)*arg2);
+      try {
+        result = (math::poly::TwoD< double > *) &(arg1)->operator -=((math::poly::TwoD< double > const &)*arg2);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -9049,7 +9692,13 @@ SWIGINTERN PyObject *_wrap_Poly2D___sub__(PyObject *SWIGUNUSEDPARM(self), PyObje
   {
     try
     {
-      result = ((math::poly::TwoD< double > const *)arg1)->operator -((math::poly::TwoD< double > const &)*arg2);
+      try {
+        result = ((math::poly::TwoD< double > const *)arg1)->operator -((math::poly::TwoD< double > const &)*arg2);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -9110,7 +9759,13 @@ SWIGINTERN PyObject *_wrap_Poly2D___idiv__(PyObject *SWIGUNUSEDPARM(self), PyObj
   {
     try
     {
-      result = (math::poly::TwoD< double > *) &(arg1)->operator /=(arg2);
+      try {
+        result = (math::poly::TwoD< double > *) &(arg1)->operator /=(arg2);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -9171,7 +9826,13 @@ SWIGINTERN PyObject *_wrap_Poly2D___div__(PyObject *SWIGUNUSEDPARM(self), PyObje
   {
     try
     {
-      result = ((math::poly::TwoD< double > const *)arg1)->operator /(arg2);
+      try {
+        result = ((math::poly::TwoD< double > const *)arg1)->operator /(arg2);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -9235,7 +9896,13 @@ SWIGINTERN PyObject *_wrap_Poly2D___eq__(PyObject *SWIGUNUSEDPARM(self), PyObjec
   {
     try
     {
-      result = (bool)((math::poly::TwoD< double > const *)arg1)->operator ==((math::poly::TwoD< double > const &)*arg2);
+      try {
+        result = (bool)((math::poly::TwoD< double > const *)arg1)->operator ==((math::poly::TwoD< double > const &)*arg2);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -9299,7 +9966,13 @@ SWIGINTERN PyObject *_wrap_Poly2D___ne__(PyObject *SWIGUNUSEDPARM(self), PyObjec
   {
     try
     {
-      result = (bool)((math::poly::TwoD< double > const *)arg1)->operator !=((math::poly::TwoD< double > const &)*arg2);
+      try {
+        result = (bool)((math::poly::TwoD< double > const *)arg1)->operator !=((math::poly::TwoD< double > const &)*arg2);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -9360,7 +10033,13 @@ SWIGINTERN PyObject *_wrap_Poly2D_power(PyObject *SWIGUNUSEDPARM(self), PyObject
   {
     try
     {
-      result = ((math::poly::TwoD< double > const *)arg1)->power(arg2);
+      try {
+        result = ((math::poly::TwoD< double > const *)arg1)->power(arg2);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -9415,7 +10094,13 @@ SWIGINTERN PyObject *_wrap_Poly2D___getitem__(PyObject *SWIGUNUSEDPARM(self), Py
   {
     try
     {
-      result = (double)math_poly_TwoD_Sl_double_Sg____getitem__(arg1,arg2);
+      try {
+        result = (double)math_poly_TwoD_Sl_double_Sg____getitem__(arg1,arg2);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -9478,7 +10163,13 @@ SWIGINTERN PyObject *_wrap_Poly2D___setitem__(PyObject *SWIGUNUSEDPARM(self), Py
   {
     try
     {
-      math_poly_TwoD_Sl_double_Sg____setitem__(arg1,arg2,arg3);
+      try {
+        math_poly_TwoD_Sl_double_Sg____setitem__(arg1,arg2,arg3);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -9530,7 +10221,13 @@ SWIGINTERN PyObject *_wrap_Poly2D___str__(PyObject *SWIGUNUSEDPARM(self), PyObje
   {
     try
     {
-      result = math_poly_TwoD_Sl_double_Sg____str__(arg1);
+      try {
+        result = math_poly_TwoD_Sl_double_Sg____str__(arg1);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -9631,7 +10328,13 @@ SWIGINTERN PyObject *_wrap_new_PolyVector3__SWIG_0(PyObject *SWIGUNUSEDPARM(self
   {
     try
     {
-      result = (math::poly::OneD< Vector3 > *)new math::poly::OneD< Vector3 >();
+      try {
+        result = (math::poly::OneD< Vector3 > *)new math::poly::OneD< Vector3 >();
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -9686,7 +10389,13 @@ SWIGINTERN PyObject *_wrap_new_PolyVector3__SWIG_1(PyObject *SWIGUNUSEDPARM(self
   {
     try
     {
-      result = (math::poly::OneD< Vector3 > *)new math::poly::OneD< Vector3 >((std::vector< math::linear::VectorN< 3,double >,std::allocator< math::linear::VectorN< 3,double > > > const &)*arg1);
+      try {
+        result = (math::poly::OneD< Vector3 > *)new math::poly::OneD< Vector3 >((std::vector< math::linear::VectorN< 3,double >,std::allocator< math::linear::VectorN< 3,double > > > const &)*arg1);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -9738,7 +10447,13 @@ SWIGINTERN PyObject *_wrap_new_PolyVector3__SWIG_2(PyObject *SWIGUNUSEDPARM(self
   {
     try
     {
-      result = (math::poly::OneD< Vector3 > *)new math::poly::OneD< Vector3 >(arg1);
+      try {
+        result = (math::poly::OneD< Vector3 > *)new math::poly::OneD< Vector3 >(arg1);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -9799,7 +10514,13 @@ SWIGINTERN PyObject *_wrap_new_PolyVector3__SWIG_3(PyObject *SWIGUNUSEDPARM(self
   {
     try
     {
-      result = (math::poly::OneD< Vector3 > *)new math::poly::OneD< Vector3 >(arg1,(math::linear::VectorN< 3,double > const *)arg2);
+      try {
+        result = (math::poly::OneD< Vector3 > *)new math::poly::OneD< Vector3 >(arg1,(math::linear::VectorN< 3,double > const *)arg2);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -9909,7 +10630,13 @@ SWIGINTERN PyObject *_wrap_PolyVector3_order(PyObject *SWIGUNUSEDPARM(self), PyO
   {
     try
     {
-      result = ((math::poly::OneD< Vector3 > const *)arg1)->order();
+      try {
+        result = ((math::poly::OneD< Vector3 > const *)arg1)->order();
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -9961,7 +10688,13 @@ SWIGINTERN PyObject *_wrap_PolyVector3_size(PyObject *SWIGUNUSEDPARM(self), PyOb
   {
     try
     {
-      result = ((math::poly::OneD< Vector3 > const *)arg1)->size();
+      try {
+        result = ((math::poly::OneD< Vector3 > const *)arg1)->size();
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -10013,7 +10746,13 @@ SWIGINTERN PyObject *_wrap_PolyVector3_empty(PyObject *SWIGUNUSEDPARM(self), PyO
   {
     try
     {
-      result = (bool)((math::poly::OneD< Vector3 > const *)arg1)->empty();
+      try {
+        result = (bool)((math::poly::OneD< Vector3 > const *)arg1)->empty();
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -10074,7 +10813,13 @@ SWIGINTERN PyObject *_wrap_PolyVector3_scaleVariable(PyObject *SWIGUNUSEDPARM(se
   {
     try
     {
-      result = ((math::poly::OneD< Vector3 > const *)arg1)->scaleVariable(arg2);
+      try {
+        result = ((math::poly::OneD< Vector3 > const *)arg1)->scaleVariable(arg2);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -10135,7 +10880,13 @@ SWIGINTERN PyObject *_wrap_PolyVector3_truncateTo(PyObject *SWIGUNUSEDPARM(self)
   {
     try
     {
-      result = ((math::poly::OneD< Vector3 > const *)arg1)->truncateTo(arg2);
+      try {
+        result = ((math::poly::OneD< Vector3 > const *)arg1)->truncateTo(arg2);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -10198,7 +10949,13 @@ SWIGINTERN PyObject *_wrap_PolyVector3_copyFrom(PyObject *SWIGUNUSEDPARM(self), 
   {
     try
     {
-      (arg1)->copyFrom((math::poly::OneD< math::linear::VectorN< 3,double > > const &)*arg2);
+      try {
+        (arg1)->copyFrom((math::poly::OneD< math::linear::VectorN< 3,double > > const &)*arg2);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -10259,7 +11016,13 @@ SWIGINTERN PyObject *_wrap_PolyVector3___call__(PyObject *SWIGUNUSEDPARM(self), 
   {
     try
     {
-      result = ((math::poly::OneD< Vector3 > const *)arg1)->operator ()(arg2);
+      try {
+        result = ((math::poly::OneD< Vector3 > const *)arg1)->operator ()(arg2);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -10311,7 +11074,13 @@ SWIGINTERN PyObject *_wrap_PolyVector3_derivative(PyObject *SWIGUNUSEDPARM(self)
   {
     try
     {
-      result = ((math::poly::OneD< Vector3 > const *)arg1)->derivative();
+      try {
+        result = ((math::poly::OneD< Vector3 > const *)arg1)->derivative();
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -10372,7 +11141,13 @@ SWIGINTERN PyObject *_wrap_PolyVector3___imul____SWIG_0(PyObject *SWIGUNUSEDPARM
   {
     try
     {
-      result = (math::poly::OneD< math::linear::VectorN< 3,double > > *) &(arg1)->operator *=(arg2);
+      try {
+        result = (math::poly::OneD< math::linear::VectorN< 3,double > > *) &(arg1)->operator *=(arg2);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -10433,7 +11208,13 @@ SWIGINTERN PyObject *_wrap_PolyVector3___mul____SWIG_0(PyObject *SWIGUNUSEDPARM(
   {
     try
     {
-      result = ((math::poly::OneD< Vector3 > const *)arg1)->operator *(arg2);
+      try {
+        result = ((math::poly::OneD< Vector3 > const *)arg1)->operator *(arg2);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -10497,7 +11278,13 @@ SWIGINTERN PyObject *_wrap_PolyVector3___imul____SWIG_1(PyObject *SWIGUNUSEDPARM
   {
     try
     {
-      result = (math::poly::OneD< math::linear::VectorN< 3,double > > *) &(arg1)->operator *=((math::poly::OneD< math::linear::VectorN< 3,double > > const &)*arg2);
+      try {
+        result = (math::poly::OneD< math::linear::VectorN< 3,double > > *) &(arg1)->operator *=((math::poly::OneD< math::linear::VectorN< 3,double > > const &)*arg2);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -10609,7 +11396,13 @@ SWIGINTERN PyObject *_wrap_PolyVector3___mul____SWIG_1(PyObject *SWIGUNUSEDPARM(
   {
     try
     {
-      result = ((math::poly::OneD< Vector3 > const *)arg1)->operator *((math::poly::OneD< math::linear::VectorN< 3,double > > const &)*arg2);
+      try {
+        result = ((math::poly::OneD< Vector3 > const *)arg1)->operator *((math::poly::OneD< math::linear::VectorN< 3,double > > const &)*arg2);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -10718,7 +11511,13 @@ SWIGINTERN PyObject *_wrap_PolyVector3___iadd__(PyObject *SWIGUNUSEDPARM(self), 
   {
     try
     {
-      result = (math::poly::OneD< math::linear::VectorN< 3,double > > *) &(arg1)->operator +=((math::poly::OneD< math::linear::VectorN< 3,double > > const &)*arg2);
+      try {
+        result = (math::poly::OneD< math::linear::VectorN< 3,double > > *) &(arg1)->operator +=((math::poly::OneD< math::linear::VectorN< 3,double > > const &)*arg2);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -10782,7 +11581,13 @@ SWIGINTERN PyObject *_wrap_PolyVector3___add__(PyObject *SWIGUNUSEDPARM(self), P
   {
     try
     {
-      result = ((math::poly::OneD< Vector3 > const *)arg1)->operator +((math::poly::OneD< math::linear::VectorN< 3,double > > const &)*arg2);
+      try {
+        result = ((math::poly::OneD< Vector3 > const *)arg1)->operator +((math::poly::OneD< math::linear::VectorN< 3,double > > const &)*arg2);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -10846,7 +11651,13 @@ SWIGINTERN PyObject *_wrap_PolyVector3___isub__(PyObject *SWIGUNUSEDPARM(self), 
   {
     try
     {
-      result = (math::poly::OneD< math::linear::VectorN< 3,double > > *) &(arg1)->operator -=((math::poly::OneD< math::linear::VectorN< 3,double > > const &)*arg2);
+      try {
+        result = (math::poly::OneD< math::linear::VectorN< 3,double > > *) &(arg1)->operator -=((math::poly::OneD< math::linear::VectorN< 3,double > > const &)*arg2);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -10910,7 +11721,13 @@ SWIGINTERN PyObject *_wrap_PolyVector3___sub__(PyObject *SWIGUNUSEDPARM(self), P
   {
     try
     {
-      result = ((math::poly::OneD< Vector3 > const *)arg1)->operator -((math::poly::OneD< math::linear::VectorN< 3,double > > const &)*arg2);
+      try {
+        result = ((math::poly::OneD< Vector3 > const *)arg1)->operator -((math::poly::OneD< math::linear::VectorN< 3,double > > const &)*arg2);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -10971,7 +11788,13 @@ SWIGINTERN PyObject *_wrap_PolyVector3___idiv__(PyObject *SWIGUNUSEDPARM(self), 
   {
     try
     {
-      result = (math::poly::OneD< math::linear::VectorN< 3,double > > *) &(arg1)->operator /=(arg2);
+      try {
+        result = (math::poly::OneD< math::linear::VectorN< 3,double > > *) &(arg1)->operator /=(arg2);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -11032,7 +11855,13 @@ SWIGINTERN PyObject *_wrap_PolyVector3___div__(PyObject *SWIGUNUSEDPARM(self), P
   {
     try
     {
-      result = ((math::poly::OneD< Vector3 > const *)arg1)->operator /(arg2);
+      try {
+        result = ((math::poly::OneD< Vector3 > const *)arg1)->operator /(arg2);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -11093,7 +11922,13 @@ SWIGINTERN PyObject *_wrap_PolyVector3___getitem__(PyObject *SWIGUNUSEDPARM(self
   {
     try
     {
-      result = math_poly_OneD_Sl_Vector3_Sg____getitem__(arg1,arg2);
+      try {
+        result = math_poly_OneD_Sl_Vector3_Sg____getitem__(arg1,arg2);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -11170,7 +12005,13 @@ SWIGINTERN PyObject *_wrap_PolyVector3___setitem__(PyObject *SWIGUNUSEDPARM(self
   {
     try
     {
-      math_poly_OneD_Sl_Vector3_Sg____setitem__(arg1,arg2,arg3);
+      try {
+        math_poly_OneD_Sl_Vector3_Sg____setitem__(arg1,arg2,arg3);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
     } 
     catch (const std::exception& e)
     {
@@ -11263,8 +12104,512 @@ SWIGINTERN PyObject *PolyVector3_swigregister(PyObject *SWIGUNUSEDPARM(self), Py
   return SWIG_Py_Void();
 }
 
+SWIGINTERN PyObject *_wrap_fit__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  size_t arg1 ;
+  double *arg2 = (double *) 0 ;
+  double *arg3 = (double *) 0 ;
+  size_t arg4 ;
+  size_t val1 ;
+  int ecode1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  size_t val4 ;
+  int ecode4 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  math::poly::OneD< double > result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOO:fit",&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  ecode1 = SWIG_AsVal_size_t(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "fit" "', argument " "1"" of type '" "size_t""'");
+  } 
+  arg1 = static_cast< size_t >(val1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_double, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "fit" "', argument " "2"" of type '" "double const *""'"); 
+  }
+  arg2 = reinterpret_cast< double * >(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_double, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "fit" "', argument " "3"" of type '" "double const *""'"); 
+  }
+  arg3 = reinterpret_cast< double * >(argp3);
+  ecode4 = SWIG_AsVal_size_t(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "fit" "', argument " "4"" of type '" "size_t""'");
+  } 
+  arg4 = static_cast< size_t >(val4);
+  {
+    try
+    {
+      try {
+        result = math::poly::fit(arg1,(double const *)arg2,(double const *)arg3,arg4);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new math::poly::OneD< double >(static_cast< const math::poly::OneD< double >& >(result))), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_fit__SWIG_2(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::linear::Matrix2D< double > *arg1 = 0 ;
+  math::linear::Matrix2D< double > *arg2 = 0 ;
+  math::linear::Matrix2D< double > *arg3 = 0 ;
+  size_t arg4 ;
+  size_t arg5 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  size_t val4 ;
+  int ecode4 = 0 ;
+  size_t val5 ;
+  int ecode5 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  math::poly::TwoD< double > result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOOO:fit",&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_math__linear__Matrix2DT_double_t,  0  | 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "fit" "', argument " "1"" of type '" "math::linear::Matrix2D< double > const &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "fit" "', argument " "1"" of type '" "math::linear::Matrix2D< double > const &""'"); 
+  }
+  arg1 = reinterpret_cast< math::linear::Matrix2D< double > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__linear__Matrix2DT_double_t,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "fit" "', argument " "2"" of type '" "math::linear::Matrix2D< double > const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "fit" "', argument " "2"" of type '" "math::linear::Matrix2D< double > const &""'"); 
+  }
+  arg2 = reinterpret_cast< math::linear::Matrix2D< double > * >(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_math__linear__Matrix2DT_double_t,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "fit" "', argument " "3"" of type '" "math::linear::Matrix2D< double > const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "fit" "', argument " "3"" of type '" "math::linear::Matrix2D< double > const &""'"); 
+  }
+  arg3 = reinterpret_cast< math::linear::Matrix2D< double > * >(argp3);
+  ecode4 = SWIG_AsVal_size_t(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "fit" "', argument " "4"" of type '" "size_t""'");
+  } 
+  arg4 = static_cast< size_t >(val4);
+  ecode5 = SWIG_AsVal_size_t(obj4, &val5);
+  if (!SWIG_IsOK(ecode5)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "fit" "', argument " "5"" of type '" "size_t""'");
+  } 
+  arg5 = static_cast< size_t >(val5);
+  {
+    try
+    {
+      try {
+        result = math::poly::fit((math::linear::Matrix2D< double > const &)*arg1,(math::linear::Matrix2D< double > const &)*arg2,(math::linear::Matrix2D< double > const &)*arg3,arg4,arg5);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_fit__SWIG_3(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  size_t arg1 ;
+  size_t arg2 ;
+  double *arg3 = (double *) 0 ;
+  double *arg4 = (double *) 0 ;
+  double *arg5 = (double *) 0 ;
+  size_t arg6 ;
+  size_t arg7 ;
+  size_t val1 ;
+  int ecode1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  void *argp4 = 0 ;
+  int res4 = 0 ;
+  void *argp5 = 0 ;
+  int res5 = 0 ;
+  size_t val6 ;
+  int ecode6 = 0 ;
+  size_t val7 ;
+  int ecode7 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  PyObject * obj5 = 0 ;
+  PyObject * obj6 = 0 ;
+  math::poly::TwoD< double > result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOOOOO:fit",&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) SWIG_fail;
+  ecode1 = SWIG_AsVal_size_t(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "fit" "', argument " "1"" of type '" "size_t""'");
+  } 
+  arg1 = static_cast< size_t >(val1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "fit" "', argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_double, 0 |  0 );
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "fit" "', argument " "3"" of type '" "double const *""'"); 
+  }
+  arg3 = reinterpret_cast< double * >(argp3);
+  res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p_double, 0 |  0 );
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "fit" "', argument " "4"" of type '" "double const *""'"); 
+  }
+  arg4 = reinterpret_cast< double * >(argp4);
+  res5 = SWIG_ConvertPtr(obj4, &argp5,SWIGTYPE_p_double, 0 |  0 );
+  if (!SWIG_IsOK(res5)) {
+    SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "fit" "', argument " "5"" of type '" "double const *""'"); 
+  }
+  arg5 = reinterpret_cast< double * >(argp5);
+  ecode6 = SWIG_AsVal_size_t(obj5, &val6);
+  if (!SWIG_IsOK(ecode6)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "fit" "', argument " "6"" of type '" "size_t""'");
+  } 
+  arg6 = static_cast< size_t >(val6);
+  ecode7 = SWIG_AsVal_size_t(obj6, &val7);
+  if (!SWIG_IsOK(ecode7)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode7), "in method '" "fit" "', argument " "7"" of type '" "size_t""'");
+  } 
+  arg7 = static_cast< size_t >(val7);
+  {
+    try
+    {
+      try {
+        result = math::poly::fit(arg1,arg2,(double const *)arg3,(double const *)arg4,(double const *)arg5,arg6,arg7);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new math::poly::TwoD< double >(static_cast< const math::poly::TwoD< double >& >(result))), SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_fit(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[8];
+  int ii;
+  
+  if (!PyTuple_Check(args)) SWIG_fail;
+  argc = args ? (int)PyObject_Length(args) : 0;
+  for (ii = 0; (ii < 7) && (ii < argc); ii++) {
+    argv[ii] = PyTuple_GET_ITEM(args,ii);
+  }
+  if (argc == 4) {
+    int _v;
+    {
+      int res = SWIG_AsVal_size_t(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_double, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        void *vptr = 0;
+        int res = SWIG_ConvertPtr(argv[2], &vptr, SWIGTYPE_p_double, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          {
+            int res = SWIG_AsVal_size_t(argv[3], NULL);
+            _v = SWIG_CheckState(res);
+          }
+          if (_v) {
+            return _wrap_fit__SWIG_1(self, args);
+          }
+        }
+      }
+    }
+  }
+  if (argc == 5) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_math__linear__Matrix2DT_double_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_math__linear__Matrix2DT_double_t, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_math__linear__Matrix2DT_double_t, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          {
+            int res = SWIG_AsVal_size_t(argv[3], NULL);
+            _v = SWIG_CheckState(res);
+          }
+          if (_v) {
+            {
+              int res = SWIG_AsVal_size_t(argv[4], NULL);
+              _v = SWIG_CheckState(res);
+            }
+            if (_v) {
+              return _wrap_fit__SWIG_2(self, args);
+            }
+          }
+        }
+      }
+    }
+  }
+  if (argc == 7) {
+    int _v;
+    {
+      int res = SWIG_AsVal_size_t(argv[0], NULL);
+      _v = SWIG_CheckState(res);
+    }
+    if (_v) {
+      {
+        int res = SWIG_AsVal_size_t(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        void *vptr = 0;
+        int res = SWIG_ConvertPtr(argv[2], &vptr, SWIGTYPE_p_double, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          void *vptr = 0;
+          int res = SWIG_ConvertPtr(argv[3], &vptr, SWIGTYPE_p_double, 0);
+          _v = SWIG_CheckState(res);
+          if (_v) {
+            void *vptr = 0;
+            int res = SWIG_ConvertPtr(argv[4], &vptr, SWIGTYPE_p_double, 0);
+            _v = SWIG_CheckState(res);
+            if (_v) {
+              {
+                int res = SWIG_AsVal_size_t(argv[5], NULL);
+                _v = SWIG_CheckState(res);
+              }
+              if (_v) {
+                {
+                  int res = SWIG_AsVal_size_t(argv[6], NULL);
+                  _v = SWIG_CheckState(res);
+                }
+                if (_v) {
+                  return _wrap_fit__SWIG_3(self, args);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'fit'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    math::poly::fit(size_t,double const *,double const *,size_t)\n"
+    "    math::poly::fit(math::linear::Matrix2D< double > const &,math::linear::Matrix2D< double > const &,math::linear::Matrix2D< double > const &,size_t,size_t)\n"
+    "    math::poly::fit(size_t,size_t,double const *,double const *,double const *,size_t,size_t)\n");
+  return 0;
+}
+
+
+SWIGINTERN PyObject *_wrap_FitVectorDouble(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::linear::Vector< double > *arg1 = 0 ;
+  math::linear::Vector< double > *arg2 = 0 ;
+  size_t arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  size_t val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  math::poly::OneD< double > result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOO:FitVectorDouble",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_math__linear__VectorT_double_t,  0  | 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "FitVectorDouble" "', argument " "1"" of type '" "math::linear::Vector< double > const &""'"); 
+  }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "FitVectorDouble" "', argument " "1"" of type '" "math::linear::Vector< double > const &""'"); 
+  }
+  arg1 = reinterpret_cast< math::linear::Vector< double > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__linear__VectorT_double_t,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "FitVectorDouble" "', argument " "2"" of type '" "math::linear::Vector< double > const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "FitVectorDouble" "', argument " "2"" of type '" "math::linear::Vector< double > const &""'"); 
+  }
+  arg2 = reinterpret_cast< math::linear::Vector< double > * >(argp2);
+  ecode3 = SWIG_AsVal_size_t(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "FitVectorDouble" "', argument " "3"" of type '" "size_t""'");
+  } 
+  arg3 = static_cast< size_t >(val3);
+  {
+    try
+    {
+      try {
+        result = math::poly::SWIGTEMPLATEDISAMBIGUATOR fit< VectorDouble >((math::linear::Vector< double > const &)*arg1,(math::linear::Vector< double > const &)*arg2,arg3);
+      }
+      catch(std::string &_e) {
+        SWIG_Python_Raise(SWIG_From_std_string(static_cast< std::string >(_e)), "std::string", 0); SWIG_fail;
+      }
+      
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new math::poly::OneD< double >(static_cast< const math::poly::OneD< double >& >(result))), SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 static PyMethodDef SwigMethods[] = {
 	 { (char *)"SWIG_PyInstanceMethod_New", (PyCFunction)SWIG_PyInstanceMethod_New, METH_O, NULL},
+	 { (char *)"new_doubleArray", _wrap_new_doubleArray, METH_VARARGS, (char *)"new_doubleArray(size_t nelements) -> double *"},
+	 { (char *)"delete_doubleArray", _wrap_delete_doubleArray, METH_VARARGS, (char *)"delete_doubleArray(double * ary)"},
+	 { (char *)"doubleArray_getitem", _wrap_doubleArray_getitem, METH_VARARGS, (char *)"doubleArray_getitem(double * ary, size_t index) -> double"},
+	 { (char *)"doubleArray_setitem", _wrap_doubleArray_setitem, METH_VARARGS, (char *)"doubleArray_setitem(double * ary, size_t index, double value)"},
 	 { (char *)"new_Poly1D", _wrap_new_Poly1D, METH_VARARGS, (char *)"\n"
 		"Poly1D()\n"
 		"Poly1D(std_vector_double coef)\n"
@@ -11393,6 +12738,12 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PolyVector3___setitem__", _wrap_PolyVector3___setitem__, METH_VARARGS, (char *)"PolyVector3___setitem__(PolyVector3 self, long i, Vector3 val)"},
 	 { (char *)"delete_PolyVector3", _wrap_delete_PolyVector3, METH_VARARGS, (char *)"delete_PolyVector3(PolyVector3 self)"},
 	 { (char *)"PolyVector3_swigregister", PolyVector3_swigregister, METH_VARARGS, NULL},
+	 { (char *)"fit", _wrap_fit, METH_VARARGS, (char *)"\n"
+		"fit(size_t numObs, double const * x, double const * y, size_t numCoeffs) -> Poly1D\n"
+		"fit(MatrixDouble x, MatrixDouble y, MatrixDouble z, size_t nx, size_t ny) -> Poly2D\n"
+		"fit(size_t numRows, size_t numCols, double const * x, double const * y, double const * z, size_t nx, size_t ny) -> Poly2D\n"
+		""},
+	 { (char *)"FitVectorDouble", _wrap_FitVectorDouble, METH_VARARGS, (char *)"FitVectorDouble(VectorDouble x, VectorDouble y, size_t numCoeffs) -> Poly1D"},
 	 { NULL, NULL, 0, NULL }
 };
 
@@ -11406,7 +12757,9 @@ static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_difference_type = {"_p_difference_type", "difference_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_double = {"_p_double", "double *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_except__NullPointerReferenceException = {"_p_except__NullPointerReferenceException", "except::NullPointerReferenceException *|except::NullPointerReference *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_math__linear__Matrix2DT_double_t = {"_p_math__linear__Matrix2DT_double_t", "math::linear::Matrix2D< double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_math__linear__VectorNT_3_double_t = {"_p_math__linear__VectorNT_3_double_t", "Vector3 *|math::linear::VectorN< 3,double > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_math__linear__VectorT_double_t = {"_p_math__linear__VectorT_double_t", "VectorDouble *|math::linear::Vector< double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_math__poly__OneDT_double_t = {"_p_math__poly__OneDT_double_t", "math::poly::OneD< double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t = {"_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t", "math::poly::OneD< math::linear::VectorN< 3,double > > *|math::poly::OneD< Vector3 > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_math__poly__TwoDT_double_t = {"_p_math__poly__TwoDT_double_t", "math::poly::TwoD< double > *", 0, 0, (void*)0, 0};
@@ -11423,7 +12776,9 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_difference_type,
   &_swigt__p_double,
   &_swigt__p_except__NullPointerReferenceException,
+  &_swigt__p_math__linear__Matrix2DT_double_t,
   &_swigt__p_math__linear__VectorNT_3_double_t,
+  &_swigt__p_math__linear__VectorT_double_t,
   &_swigt__p_math__poly__OneDT_double_t,
   &_swigt__p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t,
   &_swigt__p_math__poly__TwoDT_double_t,
@@ -11440,7 +12795,9 @@ static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0,
 static swig_cast_info _swigc__p_difference_type[] = {  {&_swigt__p_difference_type, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_double[] = {  {&_swigt__p_double, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_except__NullPointerReferenceException[] = {  {&_swigt__p_except__NullPointerReferenceException, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_math__linear__Matrix2DT_double_t[] = {  {&_swigt__p_math__linear__Matrix2DT_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_math__linear__VectorNT_3_double_t[] = {  {&_swigt__p_math__linear__VectorNT_3_double_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_math__linear__VectorT_double_t[] = {  {&_swigt__p_math__linear__VectorT_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_math__poly__OneDT_double_t[] = {  {&_swigt__p_math__poly__OneDT_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t[] = {  {&_swigt__p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_math__poly__TwoDT_double_t[] = {  {&_swigt__p_math__poly__TwoDT_double_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -11457,7 +12814,9 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_difference_type,
   _swigc__p_double,
   _swigc__p_except__NullPointerReferenceException,
+  _swigc__p_math__linear__Matrix2DT_double_t,
   _swigc__p_math__linear__VectorNT_3_double_t,
+  _swigc__p_math__linear__VectorT_double_t,
   _swigc__p_math__poly__OneDT_double_t,
   _swigc__p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t,
   _swigc__p_math__poly__TwoDT_double_t,

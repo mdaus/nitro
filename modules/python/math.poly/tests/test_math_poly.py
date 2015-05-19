@@ -25,6 +25,7 @@
 """
 
 import sys
+from math_linear import VectorDouble, MatrixDouble
 from math_poly import *
 
 if __name__ == '__main__':
@@ -100,3 +101,140 @@ if __name__ == '__main__':
         print 'Setting 2D OOB threw as expected'
     else:
         sys.exit('Setting 2D OOB did not throw!')
+
+    ############################
+    # 1D Fit test (array args) #
+    ############################
+
+    xObs = new_doubleArray(4)
+    doubleArray_setitem(xObs, 0, 1)
+    doubleArray_setitem(xObs, 1, -1)
+    doubleArray_setitem(xObs, 2, 2)
+    doubleArray_setitem(xObs, 3, -2)
+
+    yObs = new_doubleArray(4)
+    doubleArray_setitem(yObs, 0, 3)
+    doubleArray_setitem(yObs, 1, 13)
+    doubleArray_setitem(yObs, 2, 1)
+    doubleArray_setitem(yObs, 3, 33)
+
+    numObs = 4
+    numCoeff = 3
+
+    fit1D = fit(numObs, xObs, yObs, numCoeff);
+    print "\n1D Fit from arrays:"
+    print fit1D
+
+    delete_doubleArray(xObs)
+    delete_doubleArray(yObs)
+
+    #############################
+    # 1D Fit test (Vector args) #
+    #############################
+
+    xObs = VectorDouble(4)
+    xObs[0] = 1
+    xObs[1] = -1
+    xObs[2] = 2
+    xObs[3] = -2
+
+    yObs = VectorDouble(4)
+    yObs[0] = 3
+    yObs[1] = 13
+    yObs[2] = 1
+    yObs[3] = 33
+
+    numCoeff = 3
+
+    fit1D = FitVectorDouble(xObs, yObs, numCoeff)
+    print "\n1D Fit from Vectors:"
+    print fit1D
+
+    ############################
+    # 2D Fit test (array args) #
+    ############################
+
+    numRows = 3
+    numCols = 3
+
+    xObs = new_doubleArray(9)
+    doubleArray_setitem(xObs, 0, 1)
+    doubleArray_setitem(xObs, 1, 0)
+    doubleArray_setitem(xObs, 2, 1)
+    doubleArray_setitem(xObs, 3, 1)
+    doubleArray_setitem(xObs, 4, 1)
+    doubleArray_setitem(xObs, 5, 0)
+    doubleArray_setitem(xObs, 6, 0)
+    doubleArray_setitem(xObs, 7, 1)
+    doubleArray_setitem(xObs, 8, 1)
+
+    yObs = new_doubleArray(9)
+    doubleArray_setitem(yObs, 0, 1)
+    doubleArray_setitem(yObs, 1, 1)
+    doubleArray_setitem(yObs, 2, 1)
+    doubleArray_setitem(yObs, 3, 0)
+    doubleArray_setitem(yObs, 4, 1)
+    doubleArray_setitem(yObs, 5, 1)
+    doubleArray_setitem(yObs, 6, 0)
+    doubleArray_setitem(yObs, 7, 0)
+    doubleArray_setitem(yObs, 8, 1)
+
+    zObs = new_doubleArray(9)
+    doubleArray_setitem(zObs, 0, 1)
+    doubleArray_setitem(zObs, 1, 0.3)
+    doubleArray_setitem(zObs, 2, 0)
+    doubleArray_setitem(zObs, 3, 0.16)
+    doubleArray_setitem(zObs, 4, 1)
+    doubleArray_setitem(zObs, 5, 0)
+    doubleArray_setitem(zObs, 6, 0)
+    doubleArray_setitem(zObs, 7, 0)
+    doubleArray_setitem(zObs, 8, 0.85)
+
+    fit2D = fit(numRows, numCols, xObs, yObs, zObs, 1, 1)
+    print "\n2D Fit from arrays:"
+    print fit2D
+
+    delete_doubleArray(xObs)
+    delete_doubleArray(yObs)
+    delete_doubleArray(zObs)
+
+    #############################
+    # 2D Fit test (Matrix args) #
+    #############################
+
+    xObs = MatrixDouble(3,3)
+    xObs[0,0] = 1
+    xObs[0,1] = 0
+    xObs[0,2] = 1
+    xObs[1,0] = 1
+    xObs[1,1] = 1
+    xObs[1,2] = 0
+    xObs[2,0] = 0
+    xObs[2,1] = 1
+    xObs[2,2] = 1
+
+    yObs = MatrixDouble(3,3)
+    yObs[0,0] = 1
+    yObs[0,1] = 1
+    yObs[0,2] = 1
+    yObs[1,0] = 0
+    yObs[1,1] = 1
+    yObs[1,2] = 1
+    yObs[2,0] = 0
+    yObs[2,1] = 0
+    yObs[2,2] = 1
+
+    zObs = MatrixDouble(3,3)
+    zObs[0,0] = 1
+    zObs[0,1] = 0.3
+    zObs[0,2] = 0
+    zObs[1,0] = 0.16
+    zObs[1,1] = 1
+    zObs[1,2] = 0
+    zObs[2,0] = 0
+    zObs[2,1] = 0
+    zObs[2,2] = 0.85
+
+    fit2D = fit(xObs, yObs, zObs, 1, 1)
+    print "2D Fit from Matrices:"
+    print fit2D
