@@ -500,13 +500,11 @@ class CPPContext(Context.Context):
                 source = os.path.join('source', 'generated', codename.replace('.', '_') + '_wrap.cxx'),
                 target = target,
                 use = use,
-                includes = swigIncludes,
+                export_includes=exportIncludes,
                 env = env.derive(),
-                swig_flags = '-python -c++ -I' + swigIncludes,
                 install_path = installPath,
                 name = taskName,
-                targets_to_add = copyFilesTarget,
-                swig_install_fun = swigCopyGeneratedSources)
+                targets_to_add = copyFilesTarget)
 
 
     def getBuildDir(self, path=None):
