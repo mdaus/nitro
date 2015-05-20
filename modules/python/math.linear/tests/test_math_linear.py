@@ -37,6 +37,7 @@ if __name__ == '__main__':
     vec3[0] = 10
     vec3[1] = 20
     vec3[2] = 30
+    print "Vector3:"
     print vec3
 
     ################################
@@ -61,7 +62,7 @@ if __name__ == '__main__':
     try:
         foo = vecD[-1]
         print foo
-    except RuntimeError:
+    except ValueError:
         threw = True
 
     if threw:
@@ -74,7 +75,7 @@ if __name__ == '__main__':
     try:
         foo = vecD[size]
         print foo
-    except RuntimeError:
+    except ValueError:
         threw = True
 
     if threw:
@@ -87,7 +88,7 @@ if __name__ == '__main__':
     try:
         vecD[-1] = 100
         print foo
-    except RuntimeError:
+    except ValueError:
         threw = True
 
     if threw:
@@ -100,7 +101,7 @@ if __name__ == '__main__':
     try:
         vecD[size] = 100
         print foo
-    except RuntimeError:
+    except ValueError:
         threw = True
 
     if threw:
@@ -135,7 +136,7 @@ if __name__ == '__main__':
     threw = False
     try:
         foo = matrixD[-1,0]
-    except RuntimeError:
+    except ValueError:
         threw = True
 
     if threw:
@@ -147,7 +148,7 @@ if __name__ == '__main__':
     threw = False
     try:
         foo = matrixD[dim,0]
-    except RuntimeError:
+    except ValueError:
         threw = True
 
     if threw:
@@ -159,7 +160,7 @@ if __name__ == '__main__':
     threw = False
     try:
         foo = matrixD[0,-1]
-    except RuntimeError:
+    except ValueError:
         threw = True
 
     if threw:
@@ -171,7 +172,7 @@ if __name__ == '__main__':
     threw = False
     try:
         foo = matrixD[0,dim]
-    except RuntimeError:
+    except ValueError:
         threw = True
 
     if threw:
@@ -183,7 +184,7 @@ if __name__ == '__main__':
     threw = False
     try:
         foo = matrixD[0.5,0]
-    except RuntimeError:
+    except TypeError:
         threw = True
 
     if threw:
@@ -195,7 +196,7 @@ if __name__ == '__main__':
     threw = False
     try:
         foo = matrixD[0,0.5]
-    except RuntimeError:
+    except TypeError:
         threw = True
 
     if threw:
@@ -207,7 +208,7 @@ if __name__ == '__main__':
     threw = False
     try:
         foo = matrixD[0]
-    except RuntimeError:
+    except TypeError:
         threw = True
 
     if threw:
@@ -219,7 +220,7 @@ if __name__ == '__main__':
     threw = False
     try:
         foo = matrixD[0,1,2]
-    except RuntimeError:
+    except TypeError:
         threw = True
 
     if threw:
@@ -231,7 +232,7 @@ if __name__ == '__main__':
     threw = False
     try:
         matrixD[-1,0] = 100
-    except RuntimeError:
+    except ValueError:
         threw = True
 
     if threw:
@@ -243,7 +244,7 @@ if __name__ == '__main__':
     threw = False
     try:
         matrixD[dim,0] = 100
-    except RuntimeError:
+    except ValueError:
         threw = True
 
     if threw:
@@ -255,7 +256,7 @@ if __name__ == '__main__':
     threw = False
     try:
         matrixD[0,-1] = 100
-    except RuntimeError:
+    except ValueError:
         threw = True
 
     if threw:
@@ -267,7 +268,7 @@ if __name__ == '__main__':
     threw = False
     try:
         matrixD[0,dim] = 100
-    except RuntimeError:
+    except ValueError:
         threw = True
 
     if threw:
@@ -279,7 +280,7 @@ if __name__ == '__main__':
     threw = False
     try:
         matrixD[0.5,0] = 100
-    except RuntimeError:
+    except TypeError:
         threw = True
 
     if threw:
@@ -291,7 +292,7 @@ if __name__ == '__main__':
     threw = False
     try:
         matrixD[0,0.5] = 100
-    except RuntimeError:
+    except TypeError:
         threw = True
 
     if threw:
@@ -303,7 +304,7 @@ if __name__ == '__main__':
     threw = False
     try:
         matrixD[0] = 100
-    except RuntimeError:
+    except TypeError:
         threw = True
 
     if threw:
@@ -315,7 +316,7 @@ if __name__ == '__main__':
     threw = False
     try:
         matrixD[0,1,2] = 100
-    except RuntimeError:
+    except TypeError:
         threw = True
 
     if threw:

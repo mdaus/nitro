@@ -90,6 +90,7 @@ except AttributeError:
     _newclass = 0
 
 
+import coda_except
 class SwigPyIterator(_object):
     """Proxy of C++ swig::SwigPyIterator class"""
     __swig_setmethods__ = {}
@@ -905,7 +906,7 @@ class Vector3(_object):
 
 
     def __str__(self):
-        """__str__(Vector3 self) -> char *"""
+        """__str__(Vector3 self) -> std::string"""
         return _math_linear.Vector3___str__(self)
 
 

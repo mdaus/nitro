@@ -9,6 +9,8 @@
 #include "math/linear/Matrix2D.h"
 %}
 
+%import "except.i"
+
 %include "std_vector.i"
 %include "std_string.i"
 
@@ -35,10 +37,10 @@
     void __setitem__(long i, double val) { (*self)[i] = val; };
 
     // string representation in python
-    char* __str__() {
-        static char temp[256];
-        sprintf( temp, "[ %g, %g, %g ]", (*self)[0], (*self)[1], (*self)[2] );
-        return &temp[0];
+    std::string __str__() {
+        std::ostringstream strStream;
+        strStream << *self;
+        return strStream.str();
     }
 
     // helper method to facilitate creating a numpy array from Vector3
@@ -52,16 +54,15 @@
     }
 }
 
-%catches(std::string);
-
-%extend math::linear::Vector<double> {
+%extend math::linear::Vector<double>
+{
     // SWIG doesn't automatically generate [] operator
     double __getitem__(long i)
     {
         if(i < 0 || i > self->size() - 1)
         {
-            std::string errMsg = "Index out of bounds";
-            throw errMsg;
+            PyErr_SetString(PyExc_ValueError, "Index out of range");
+            return 0.0;
         }
         return (*self)[i];
     }
@@ -70,25 +71,17 @@
     
         if(i < 0 || i > self->size() - 1)
         {
-            std::string errMsg = "Index out of bounds";
-            throw errMsg;
+            PyErr_SetString(PyExc_ValueError, "Index out of range");
+            return;
         }
         (*self)[i] = val;
     }
     
     // string representation in python
-    std::string __str__() {
+    std::string __str__()
+    {
         std::ostringstream strStream;
-        strStream << "[ ";
-        if (self->size() > 0)
-        {
-            strStream << (*self)[0];
-        }
-        for (size_t i = 1; i< self->size(); i++)
-        {
-            strStream << ", " << (*self)[i];
-        }
-        strStream << " ]";
+        strStream << *self;
         return strStream.str();
     }
     
@@ -98,34 +91,33 @@
     //
     // ideally we should implement __array__() instead, which will allow it
     // to be used by most numpy functions
-    std::vector<double> vals() {
+    std::vector<double> vals()
+    {
         return self->matrix().col(0);
     }
 }
 
-%extend math::linear::Matrix2D<double> {
+%extend math::linear::Matrix2D<double>
+{
     // SWIG doesn't automatically generate [] operator
     double __getitem__(PyObject* inObj)
     {
         if (!PyTuple_Check(inObj))
         {
-            //PyErr_SetString(PyExc_TypeError, "Expecting a tuple");
-            //SWIG_exception(SWIG_TypeError, "Expecting a tuple");
-            //return 0.0;
-            std::string errMsg = "Expected a tuple";
-            throw errMsg;
+            PyErr_SetString(PyExc_TypeError, "Expected a tuple");
+            return 0.0;
         }
         Py_ssize_t m, n;
         if (!PyArg_ParseTuple(inObj, "nn", &m, &n))
         {
-            std::string errMsg = "Expected a tuple of the form (size_t, size_t)";
-            throw errMsg;
+            PyErr_SetString(PyExc_TypeError, "Expected a tuple of the form (size_t, size_t)");
+            return 0.0;
         }
         if (m < 0 || m > self->rows() - 1 ||
             n < 0 || n > self->cols() - 1)
         {
-            std::string errMsg = "Index out of bounds";
-            throw errMsg;
+            PyErr_SetString(PyExc_ValueError, "Index out of range");
+            return 0.0;
         }
         return (*self)(m,n);
     }
@@ -133,55 +125,29 @@
     {
         if (!PyTuple_Check(inObj))
         {
-            std::string errMsg = "Expected a tuple";
-            throw errMsg;
+            PyErr_SetString(PyExc_TypeError, "Expected a tuple");
+            return;
         }
         Py_ssize_t m, n;
         if (!PyArg_ParseTuple(inObj, "nn", &m, &n))
         {
-            std::string errMsg = "Expected a tuple of the form (size_t, size_t)";
-            throw errMsg;
+            PyErr_SetString(PyExc_TypeError, "Expected a tuple of the form (size_t, size_t)");
+            return;
         }
         if (m < 0 || m > self->rows() - 1 ||
             n < 0 || n > self->cols() - 1)
         {
-            std::string errMsg = "Index out of bounds";
-            throw errMsg;
+            PyErr_SetString(PyExc_ValueError, "Index out of range");
+            return;
         }
         (*self)(m,n) = val;
     }
     
     // string representation in python
-    std::string __str__() {
+    std::string __str__()
+    {
         std::ostringstream strStream;
-        strStream << "[";
-        if (self->rows() > 0)
-        {
-            strStream << "[ ";
-            if (self->cols() > 0)
-            {
-                strStream << (*self)(0,0);
-            }
-            for (size_t n = 1; n < self->cols(); n++)
-            {
-                strStream << ", " << (*self)(0,n);
-            }
-            strStream << " ]";
-        }
-        for (size_t m = 1; m < self->rows(); m++)
-        {
-            strStream << "\n [ ";
-            if (self->cols() > 0)
-            {
-                strStream << (*self)(m,0);
-            }
-            for (size_t n = 1; n < self->cols(); n++)
-            {
-                strStream << ", " << (*self)(m,n);
-            }
-            strStream << " ]";
-        }
-        strStream << "]";
+        strStream << *self;
         return strStream.str();
     }
     
@@ -191,7 +157,8 @@
     //
     // ideally we should implement __array__() instead, which will allow it
     // to be used by most numpy functions
-    std::vector<std::vector<double> > vals() {
+    std::vector<std::vector<double> > vals()
+    {
         std::vector<std::vector<double> > returnVals(self->rows());
         for (size_t m=0; m< self->rows(); m++)
         {
