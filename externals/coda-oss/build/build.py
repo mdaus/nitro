@@ -547,7 +547,7 @@ class CPPContext(Context.Context):
             targetName = modArgs.get('target', None)
 
             if source:
-                print "%s" % source
+                print "Source path! : %s" % source
                 name = splitext(split(source)[1])[0]
 
             mex = bld(features='%s %sshlib'%(libExeType, libExeType), target=targetName or name,
