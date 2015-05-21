@@ -23,6 +23,7 @@
 #define __MATH_LINEAR_VECTOR_N_H__
 
 #include "math/linear/MatrixMxN.h"
+#include <cmath>
 
 namespace math
 {
