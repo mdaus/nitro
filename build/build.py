@@ -812,7 +812,11 @@ def configureCompilerOptions(self):
             config['cxx']['optz_fast']      = '-O2'
             config['cxx']['optz_fastest']   = '-O3'
 
-            self.env.append_value('CXXFLAGS', '-fPIC')
+            gxxCompileFlags='-fPIC'
+            if gccHasCpp11():
+                gxxCompileFlags+=' -std=c++11'
+
+            self.env.append_value('CXXFLAGS', gxxCompileFlags)
 
             # DEFINES and LINKFLAGS will apply to both gcc and g++
             self.env.append_value('DEFINES', '_FILE_OFFSET_BITS=64 _LARGEFILE_SOURCE'.split())
@@ -1494,6 +1498,13 @@ def getSolarisFlags(compilerName):
             bitFlag64 = '-m64'
 
     return (bitFlag32, bitFlag64)
+
+def gccHasCpp11():
+    output = subprocess.check_output("g++ --help=c++", stderr=subprocess.STDOUT, shell=True)
+    for line in output.split('\n'):
+        if re.match(r'-std=c\+\+11', line):
+            return True
+    return False
 
 def getWscriptTargets(bld, env, path):
     # Here we're taking a look at the current stack and adding on all the
