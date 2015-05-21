@@ -12,18 +12,14 @@
 #include <sstream>
 #include "import/math/linear.h"
 typedef math::linear::VectorN<3,double> Vector3;
-typedef math::linear::Vector<double> VectorDouble;
 #include "math/poly/OneD.h"
 #include "math/poly/TwoD.h"
-#include "math/poly/Fit.h"
 %}
 
 %import "math_linear.i"
 %import "except.i"
 
 %include "std_string.i"
-%include "carrays.i"
-%array_functions(double, doubleArray);
 
 %include "math/poly/OneD.h"
 
@@ -130,8 +126,4 @@ typedef math::linear::VectorN<3,double> Vector3;
             (*self)[i] = val; 
         }
 };
-
-%include "math/poly/Fit.h"
-
-typedef math::linear::Vector<double> VectorDouble;
-%template(FitVectorDouble) math::poly::fit<VectorDouble>;
+ 

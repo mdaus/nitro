@@ -92,22 +92,6 @@ except AttributeError:
 
 import math_linear
 import coda_except
-
-def new_doubleArray(nelements):
-    """new_doubleArray(size_t nelements) -> double *"""
-    return _math_poly.new_doubleArray(nelements)
-
-def delete_doubleArray(ary):
-    """delete_doubleArray(double * ary)"""
-    return _math_poly.delete_doubleArray(ary)
-
-def doubleArray_getitem(ary, index):
-    """doubleArray_getitem(double * ary, size_t index) -> double"""
-    return _math_poly.doubleArray_getitem(ary, index)
-
-def doubleArray_setitem(ary, index, value):
-    """doubleArray_setitem(double * ary, size_t index, double value)"""
-    return _math_poly.doubleArray_setitem(ary, index, value)
 class Poly1D(_object):
     """Proxy of C++ math::poly::OneD<(double)> class"""
     __swig_setmethods__ = {}
@@ -571,18 +555,6 @@ class PolyVector3(_object):
 PolyVector3_swigregister = _math_poly.PolyVector3_swigregister
 PolyVector3_swigregister(PolyVector3)
 
-
-def fit(*args):
-    """
-    fit(size_t numObs, double const * x, double const * y, size_t numCoeffs) -> Poly1D
-    fit(MatrixDouble x, MatrixDouble y, MatrixDouble z, size_t nx, size_t ny) -> Poly2D
-    fit(size_t numRows, size_t numCols, double const * x, double const * y, double const * z, size_t nx, size_t ny) -> Poly2D
-    """
-    return _math_poly.fit(*args)
-
-def FitVectorDouble(x, y, numCoeffs):
-    """FitVectorDouble(VectorDouble x, VectorDouble y, size_t numCoeffs) -> Poly1D"""
-    return _math_poly.FitVectorDouble(x, y, numCoeffs)
 # This file is compatible with both classic and new-style classes.
 
 
