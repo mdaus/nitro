@@ -21,7 +21,12 @@ def installPath(package_name):
         install_suffix += '-vc9'
     elif '-vc10' in os.environ.get('JOB_NAME'):
         install_suffix += '-vc10'
-     
-    commit_id = os.environ.get('GIT_COMMIT', '')
-    install_path = "%s-%s-r%s" % (package_name,install_suffix, commit_id[-8:]) 
+    
+    
+    if os.environ.has_key('GIT_COMMIT')
+        commit_id = os.environ.get('GIT_COMMIT', '')
+        commit_id = commit_id[-8:]
+    elif os.environ.has_key('SVN_REVISION')
+        commit_id = os.environ.get('SVN_REVISION')
+    install_path = "%s-%s-r%s" % (package_name,install_suffix, commit_id) 
     return install_path
