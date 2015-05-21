@@ -343,3 +343,4 @@ void OneD<_T>::copyFrom(const OneD<_T>& p)
 
 } // poly
 } // math
+
