@@ -1502,7 +1502,7 @@ def getSolarisFlags(compilerName):
 def gccHasCpp11():
     output = subprocess.check_output("g++ --help=c++", stderr=subprocess.STDOUT, shell=True)
     for line in output.split('\n'):
-        if re.match(r'-std=c\+\+11', line):
+        if re.search(r'-std=c\+\+11', line):
             return True
     return False
 
