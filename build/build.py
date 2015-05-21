@@ -811,7 +811,9 @@ def configureCompilerOptions(self):
             config['cxx']['optz_fastest']   = '-O3'
 
             self.env.append_value('CXXFLAGS', '-fPIC')
-            if cxxCompiler == 'g++' and GccHasCpp11():
+            #if cxxCompiler == 'g++' and GccHasCpp11():
+            # TODO: Current check is broken on Ubuntu
+            if cxxCompiler == 'g++':
                 self.env.append_value('CXXFLAGS', '-std=c++11')
 
             # DEFINES and LINKFLAGS will apply to both gcc and g++
