@@ -446,21 +446,22 @@ class CPPContext(Context.Context):
         else:
             env = bld.env
 
-        modArgs = dict((k.lower(), v) for k, v in modArgs.iteritems())
+        if 'PYTHON' in env and env['PYTHON'] and bld.is_defined('HAVE_PYTHON_H'):
+            modArgs = dict((k.lower(), v) for k, v in modArgs.iteritems())
 
+            name = modArgs['name']
+            codename = name
 
-        name = modArgs['name']
-        codename = name
-        prefix = env['prefix_' + name]
-        if prefix:
-            codename = prefix + name
+            prefix = env['prefix_' + name]
+            if prefix:
+                codename = prefix + name
 
-        swigSource = os.path.join('source', name.replace('.', '_') + '.i')
-        target = '_' + codename.replace('.', '_')
-        use = modArgs['use']
-        installPath = os.path.join('${PYTHONDIR}', Context.APPNAME)
-        taskName = name + '-python'
-        exportIncludes = listify(modArgs.get('export_includes', 'source'))
+            swigSource = os.path.join('source', name.replace('.', '_') + '.i')
+            target = '_' + codename.replace('.', '_')
+            use = modArgs['use']
+            installPath = os.path.join('${PYTHONDIR}', Context.APPNAME)
+            taskName = name + '-python'
+            exportIncludes = listify(modArgs.get('export_includes', 'source'))
 
             # If we have Swig, when the Swig target runs, it'll generate both the
             # _wrap.cxx file and the .py file and then copy them both to the
@@ -470,14 +471,14 @@ class CPPContext(Context.Context):
             # will actually compile the .py file to a .pyc, but the other thing is
             # it'll copy the file over to the installation directory for us.
             # We ensure this always runs via 'add_targets'
-        copyFilesTarget = target + '_py'
-        bld(features = 'py', 
-        target = copyFilesTarget,
-        env = env.derive(),
-        install_path = installPath,
-        source = bld.path.make_node('source').ant_glob('**/*.py'))
+            copyFilesTarget = target + '_py'
+            bld(features = 'py', 
+                target = copyFilesTarget,
+                env = env.derive(),
+                install_path = installPath,
+                source = bld.path.make_node('source').ant_glob('**/*.py'))
 
-        if 'SWIG' in env and env['SWIG']:
+            if 'SWIG' in env and env['SWIG']:
                 # If Swig is available, let's use it to build the .cxx file
                 # This gets generated into the source/generated folder and we'll
                 # actually check it in so other developers can still use the Python
@@ -493,19 +494,18 @@ class CPPContext(Context.Context):
                     name = taskName,
                     targets_to_add = copyFilesTarget,
                     swig_install_fun = swigCopyGeneratedSources)
-        else:
+            else:
                 # If Swig is not available, use the cxx file already sitting around
                 # that Swig generated sometime in the past
                 bld(features = 'cxx cshlib pyext add_targets swig_linkage includes',
                 source = os.path.join('source', 'generated', codename.replace('.', '_') + '_wrap.cxx'),
                 target = target,
                 use = use,
-                export_includes=exportIncludes,
+                export_includes = exportIncludes,
                 env = env.derive(),
-                install_path = installPath,
                 name = taskName,
-                targets_to_add = copyFilesTarget)
-
+                targets_to_add = copyFilesTarget,
+                install_path = installPath)
 
     def getBuildDir(self, path=None):
         """
@@ -727,6 +727,8 @@ def options(opt):
                    help='Distribute source into the installation area (for delivering source)')
     opt.add_option('--with-prebuilt-config', action='store', dest='prebuilt_config',
                    help='Specify a prebuilt modules config file (created from dumpconfig)')
+    opt.add_option('--disable-swig-silent-leak', action='store_false', dest='swig_silent_leak',
+                   default=True, help='Allow swig to print memory leaks it detects')
 
 def configureCompilerOptions(self):
     sys_platform = getPlatform(default=Options.platform)
@@ -811,10 +813,6 @@ def configureCompilerOptions(self):
             config['cxx']['optz_fastest']   = '-O3'
 
             self.env.append_value('CXXFLAGS', '-fPIC')
-            #if cxxCompiler == 'g++' and GccHasCpp11():
-            # TODO: Current check is broken on Ubuntu
-            if cxxCompiler == 'g++':
-                self.env.append_value('CXXFLAGS', '-std=c++11')
 
             # DEFINES and LINKFLAGS will apply to both gcc and g++
             self.env.append_value('DEFINES', '_FILE_OFFSET_BITS=64 _LARGEFILE_SOURCE'.split())
@@ -1194,14 +1192,19 @@ def configure(self):
     env['install_libdir'] = Options.options.libdir if Options.options.libdir else join(Options.options.prefix, 'lib')
     env['install_bindir'] = Options.options.bindir if Options.options.bindir else join(Options.options.prefix, 'bin')
     env['install_sharedir'] = Options.options.sharedir if Options.options.sharedir else join(Options.options.prefix, 'share')
-    
+
+    # Swig memory leak output
+    if Options.options.swig_silent_leak:
+        env['DEFINES'].append('SWIG_PYTHON_SILENT_MEMLEAK')
     
     # Look for prebuilt modules
     if Options.options.prebuilt_config:
         with open(Options.options.prebuilt_config) as f:
             fileContents = f.readlines()
 
-        print 'Adding prebuilt modules: ' + str(fileContents)
+        if not env['INCLDUES']:
+            env['INCLUDES'] = []
+
         env['INCLUDES'].append(fileContents[0].rstrip())
         env.append_unique('CXXFLAGS', fileContents[1].rstrip().split())
         env['LIB_PREBUILT'] = fileContents[2].rstrip().split()
@@ -1209,7 +1212,6 @@ def configure(self):
 
     #flag that we already detected
     self.env['DETECTED_BUILD_PY'] = True
-
 
 @TaskGen.feature('swig_linkage')
 @TaskGen.after_method('process_use')
@@ -1269,7 +1271,6 @@ def process_swig_linkage(tsk):
     soname_str = linkarg_pattern % ('-h ' + (libpattern % tsk.target))
     tsk.env.LINKFLAGS.append(soname_str)
     tsk.env.LIB = newlib
-
 
 @task_gen
 @feature('untar')
@@ -1556,33 +1557,6 @@ def addSourceTargets(bld, env, path, target):
                                          relative_trick=True))
 
         target.targets_to_add += wscriptTargets
-
-
-
-#Basic idea: Look for the version number.
-#We check for GCC 4.7.0 or later as this version
-#has support for all the functionality we need.
-def GccHasCpp11():
-    outs=subprocess.check_output('g++ --version', shell=True)
-    VERSION_REGEX = r'[0-9]\.[0-9]\.[0-9]'
-    LINE_REGEX = re.compile(r'(GCC)')
-    for line in re.split('\n', outs):
-        match= LINE_REGEX.search(line)
-        if match:
-            vMatch = re.search(VERSION_REGEX, line)
-            version = vMatch.group()
-            splitVersion = re.split('\.',version)
-            if int(splitVersion[0]) >= 4 and int(splitVersion[1]) >= 7:
-                # "C++11 Enabled"
-                return True
-            else:
-                # "C++97 Only"
-                return False
-    raise RuntimeError('gcc version not found')
-
-#TODO: Add a similar check for the Intel compiler
-# (adding the /Qstd=c++11 if support is found)
-
 
 class SwitchContext(Context.Context):
     """
