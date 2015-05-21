@@ -28,5 +28,7 @@ def installPath(package_name):
         commit_id = commit_id[-8:]
     elif os.environ.has_key('SVN_REVISION')
         commit_id = os.environ.get('SVN_REVISION')
-    install_path = "%s-%s-r%s" % (package_name,install_suffix, commit_id) 
+    install_path = "%s-%s-r%s" % (package_name,install_suffix, commit_id)
+    if os.environ.has_key('SVN_REVISION')
+        install_path = join('..', install_path)
     return install_path
