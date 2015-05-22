@@ -366,9 +366,6 @@ template<size_t _ND, typename _T> VectorN<_ND, _T>
     return v;
 }
 
-}
-}
-
 template<size_t _MD, size_t _ND, typename _T> 
     math::linear::VectorN<_MD, _T>
     operator*(const math::linear::MatrixMxN<_MD, _ND, _T>& m, 
@@ -395,5 +392,7 @@ template<size_t _ND, typename _T>
     return os;
     
 }
+} // linear
+} // math
 
 #endif
