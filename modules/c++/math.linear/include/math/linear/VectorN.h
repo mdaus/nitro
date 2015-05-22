@@ -204,7 +204,7 @@ public:
         return std::max<_T>(std::min<_T>(dotProduct, 1.0), -1.0);
     }
 
-     /*!
+    /*!
      * Euclidean, L2 norm
      */
     _T norm() const
