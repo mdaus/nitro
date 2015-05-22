@@ -1505,7 +1505,7 @@ def gccHasCpp11():
         output = subprocess.check_output("g++ --help=c++", stderr=subprocess.STDOUT, shell=True)
     except subprocess.CalledProcessError:
         #If gcc is too old for --help=, then it is too old for C++11
-        return false
+        return False
     for line in output.split('\n'):
         if re.search(r'-std=c\+\+11', line):
             return True
