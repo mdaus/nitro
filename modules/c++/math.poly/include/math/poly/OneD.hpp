@@ -80,6 +80,20 @@ OneD<_T>::derivative() const
     }
     return ret;
 }
+template<typename _T>
+_T
+OneD<_T>::velocity(double x) const
+{
+    return derivative()(x);
+}
+
+template<typename _T>
+_T
+OneD<_T>::acceleration(double x) const
+{
+    return derivative().derivative()(x);
+    
+}
 
 template<typename _T>
 _T& 
