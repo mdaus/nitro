@@ -969,6 +969,7 @@ public:
         }
         return perm;
     }
+    
      /*
      * Find the square of the L2 norm
      * Sum of squares of the vector elements
@@ -992,6 +993,7 @@ public:
     {
         return static_cast<_T>(std::sqrt(normSq()));
     }
+    
     /*!
      *  Scale the entire matrix inplace by the L2 norm value.
      *  \return A reference to this
