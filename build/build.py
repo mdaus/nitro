@@ -816,7 +816,7 @@ def configureCompilerOptions(self):
             if gccHasCpp11():
                 gxxCompileFlags+=' -std=c++11'
 
-            self.env.append_value('CXXFLAGS', gxxCompileFlags)
+            self.env.append_value('CXXFLAGS', gxxCompileFlags.split())
 
             # DEFINES and LINKFLAGS will apply to both gcc and g++
             self.env.append_value('DEFINES', '_FILE_OFFSET_BITS=64 _LARGEFILE_SOURCE'.split())
