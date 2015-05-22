@@ -814,7 +814,7 @@ def configureCompilerOptions(self):
             config['cxx']['optz_fastest']   = '-O3'
 
             gxxCompileFlags='-fPIC'
-            if gccHasCpp11():
+            if cxxCompiler == 'g++' and gccHasCpp11():
                 gxxCompileFlags+=' -std=c++11'
 
             self.env.append_value('CXXFLAGS', gxxCompileFlags.split())
@@ -1501,7 +1501,11 @@ def getSolarisFlags(compilerName):
     return (bitFlag32, bitFlag64)
 
 def gccHasCpp11():
-    output = subprocess.check_output("g++ --help=c++", stderr=subprocess.STDOUT, shell=True)
+    try:
+        output = subprocess.check_output("g++ --help=c++", stderr=subprocess.STDOUT, shell=True)
+    except subprocess.CalledProcessError:
+        #If gcc is too old for --help=, then it is too old for C++11
+        return false
     for line in output.split('\n'):
         if re.search(r'-std=c\+\+11', line):
             return True
