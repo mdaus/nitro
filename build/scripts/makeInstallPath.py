@@ -23,12 +23,7 @@ def installPath(package_name):
         install_suffix += '-vc10'
     
     
-    if os.environ.has_key('GIT_COMMIT')
-        commit_id = os.environ.get('GIT_COMMIT', '')
-        commit_id = commit_id[-8:]
-    elif os.environ.has_key('SVN_REVISION')
-        commit_id = os.environ.get('SVN_REVISION')
-    install_path = "%s-%s-r%s" % (package_name,install_suffix, commit_id)
-    if os.environ.has_key('SVN_REVISION')
-        install_path = join('..', install_path)
+ 
+    commit_id = os.environ.get('GIT_COMMIT', '')
+    install_path = "%s-%s-r%s" % (package_name,install_suffix, commit_id[-8:])
     return install_path
