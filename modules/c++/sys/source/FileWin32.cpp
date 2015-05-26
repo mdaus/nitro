@@ -63,6 +63,7 @@ void sys::File::readInto(char *buffer, Size_T size)
     while (bytesRead < size)
     {
         // Determine how many bytes to read
+        const DWORD bytesToRead = static_cast<DWORD>(
                 std::min<size_t>(MAX_READ_SIZE, bytesRemaining));
 
         // Read from file
