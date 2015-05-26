@@ -30,9 +30,35 @@
   using namespace logging;
 %}
 
+%import "std_string.i"
+
+%include "logging/Formatter.h"
+%include "logging/StandardFormatter.h"
 %include "logging/Filterer.h"
+
+// Classes in the following includes are assumed to take ownership and handle
+// the deletion of logging::Formatter* arguments named "formatter" passed to
+// any of their methods.  If a SWIG object (Python object wrapping a C++
+// object) is passed this way, the following directive stops SWIG from garbage
+// collecting the C++ part of the object and causing a segfault on the second
+// deletion attempt.
+%apply SWIGTYPE *DISOWN { logging::Formatter* formatter };
+
 %include "logging/Handler.h"
+%include "logging/StreamHandler.h"
+
+// Clear the typemap applied above
+%clear logging::Formatter* formatter;
+
 %include "logging/Filter.h"
 %include "logging/Logger.h"
 %include "logging/NullLogger.h"
+
+%ignore LoggerManager::LoggerManager();
+%ignore LoggerManager::getLoggerSharedPtr(const std::string& name);
+%ignore LoggerManager::getLogger(const std::string& name);
+%ignore logging::setLogLevel(LogLevel level);
+%ignore logging::getLogger(const std::string& name);
+%ignore logging::getLoggerSharedPtr(const std::string& name);
+%include "logging/LoggerFactory.h"
 
