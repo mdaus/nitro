@@ -2,7 +2,7 @@ import sys, os, types, re, fnmatch, subprocess, shutil, platform, inspect
 from os.path import split, isdir, isfile, exists, splitext, abspath, join, \
                     basename, dirname
 
-from waflib import Options, Utils, Logs, TaskGen
+from waflib import Options, Utils, Logs, TaskGen, Context
 from waflib.Options import OptionsContext
 from waflib.Configure import conf, ConfigurationContext
 from waflib.Build import BuildContext, ListContext, CleanContext, InstallContext
@@ -459,7 +459,7 @@ class CPPContext(Context.Context):
             swigSource = os.path.join('source', name.replace('.', '_') + '.i')
             target = '_' + codename.replace('.', '_')
             use = modArgs['use']
-            installPath = os.path.join('${PYTHONDIR}', codename)
+            installPath = os.path.join('${PYTHONDIR}', Context.APPNAME)
             taskName = name + '-python'
             exportIncludes = listify(modArgs.get('export_includes', 'source'))
 
@@ -551,6 +551,7 @@ class CPPContext(Context.Context):
             targetName = modArgs.get('target', None)
 
             if source:
+                source = str(source)
                 name = splitext(split(str(source))[1])[0]
 
             mex = bld(features='%s %sshlib'%(libExeType, libExeType), target=targetName or name,
@@ -812,7 +813,11 @@ def configureCompilerOptions(self):
             config['cxx']['optz_fast']      = '-O2'
             config['cxx']['optz_fastest']   = '-O3'
 
-            self.env.append_value('CXXFLAGS', '-fPIC')
+            gxxCompileFlags='-fPIC'
+            if cxxCompiler == 'g++' and gccHasCpp11():
+                gxxCompileFlags+=' -std=c++11'
+
+            self.env.append_value('CXXFLAGS', gxxCompileFlags.split())
 
             # DEFINES and LINKFLAGS will apply to both gcc and g++
             self.env.append_value('DEFINES', '_FILE_OFFSET_BITS=64 _LARGEFILE_SOURCE'.split())
@@ -1292,6 +1297,7 @@ def process_swig_linkage(tsk):
     # newlib is now a list of our non-python libraries
     tsk.env.LIB = newlib
 
+
 @task_gen
 @feature('untar')
 def untar(tsk):
@@ -1514,6 +1520,17 @@ def getSolarisFlags(compilerName):
             bitFlag64 = '-m64'
 
     return (bitFlag32, bitFlag64)
+
+def gccHasCpp11():
+    try:
+        output = subprocess.check_output("g++ --help=c++", stderr=subprocess.STDOUT, shell=True)
+    except subprocess.CalledProcessError:
+        #If gcc is too old for --help=, then it is too old for C++11
+        return False
+    for line in output.split('\n'):
+        if re.search(r'-std=c\+\+11', line):
+            return True
+    return False
 
 def getWscriptTargets(bld, env, path):
     # Here we're taking a look at the current stack and adding on all the
