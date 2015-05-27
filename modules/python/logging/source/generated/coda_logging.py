@@ -208,11 +208,6 @@ class Handler(Filterer):
     __swig_destroy__ = _coda_logging.delete_Handler
     __del__ = lambda self: None
 
-    def setFormatter(self, formatter):
-        """setFormatter(Handler self, Formatter formatter)"""
-        return _coda_logging.Handler_setFormatter(self, formatter)
-
-
     def setLevel(self, level):
         """setLevel(Handler self, LogLevel level)"""
         return _coda_logging.Handler_setLevel(self, level)
@@ -231,6 +226,11 @@ class Handler(Filterer):
     def close(self):
         """close(Handler self)"""
         return _coda_logging.Handler_close(self)
+
+
+    def setFormatter(self, formatter):
+        """setFormatter(Handler self, Formatter formatter)"""
+        return _coda_logging.Handler_setFormatter(self, formatter)
 
 Handler_swigregister = _coda_logging.Handler_swigregister
 Handler_swigregister(Handler)
@@ -261,11 +261,6 @@ class StreamHandler(Handler):
             self.this = this
     __swig_destroy__ = _coda_logging.delete_StreamHandler
     __del__ = lambda self: None
-
-    def setFormatter(self, formatter):
-        """setFormatter(StreamHandler self, Formatter formatter)"""
-        return _coda_logging.StreamHandler_setFormatter(self, formatter)
-
 
     def close(self):
         """close(StreamHandler self)"""

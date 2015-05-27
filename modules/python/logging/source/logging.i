@@ -26,7 +26,6 @@
 
 %{
   #include "import/logging.h"
-
   using namespace logging;
 %}
 
@@ -36,19 +35,32 @@
 %include "logging/StandardFormatter.h"
 %include "logging/Filterer.h"
 
-// Classes in the following includes are assumed to take ownership and handle
-// the deletion of logging::Formatter* arguments named "formatter" passed to
-// any of their methods.  If a SWIG object (Python object wrapping a C++
-// object) is passed this way, the following directive stops SWIG from garbage
-// collecting the C++ part of the object and causing a segfault on the second
-// deletion attempt.
-%apply SWIGTYPE *DISOWN { logging::Formatter* formatter };
+// Ignore the setFormatter methods on include of handlers.
+%rename("$ignore", %$isfunction) setFormatter;
 
 %include "logging/Handler.h"
 %include "logging/StreamHandler.h"
 
-// Clear the typemap applied above
-%clear logging::Formatter* formatter;
+// Stop ignoring setFormatter methods
+%rename("%s", %$isfunction) setFormatter;
+
+%extend logging::Handler {
+
+    // Handlers are assumed to take ownership of Formatter objects passed to
+    // setFormatter(), and delete those objects when needed.  If a SWIG object 
+    // Python object wrapping a C++ object) is passed this way, the following
+    // directive stops SWIG from garbage collecting the C++ part of the object
+    // and causing a segfault on the second deletion.
+    %apply SWIGTYPE *DISOWN { logging::Formatter* formatter };
+    
+    void logging::Handler::setFormatter(logging::Formatter* formatter)
+    {
+        self->setFormatter(formatter);
+    }
+
+    // Clear the typemap applied above
+    %clear logging::Formatter* formatter;
+}
 
 %include "logging/Filter.h"
 %include "logging/Logger.h"
@@ -61,4 +73,3 @@
 %ignore logging::getLogger(const std::string& name);
 %ignore logging::getLoggerSharedPtr(const std::string& name);
 %include "logging/LoggerFactory.h"
-

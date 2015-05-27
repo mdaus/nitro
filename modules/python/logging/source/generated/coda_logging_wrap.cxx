@@ -3060,7 +3060,6 @@ namespace swig {
 
 
   #include "import/logging.h"
-
   using namespace logging;
 
 
@@ -3232,6 +3231,9 @@ SWIGINTERNINLINE PyObject*
   return PyBool_FromLong(value ? 1 : 0);
 }
 
+SWIGINTERN void logging_Handler_setFormatter(logging::Handler *self,logging::Formatter *formatter){
+        self->setFormatter(formatter);
+    }
 
 SWIGINTERN int
 SWIG_AsVal_double (PyObject *obj, double *val)
@@ -3928,34 +3930,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Handler_setFormatter(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  logging::Handler *arg1 = (logging::Handler *) 0 ;
-  logging::Formatter *arg2 = (logging::Formatter *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:Handler_setFormatter",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__Handler, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Handler_setFormatter" "', argument " "1"" of type '" "logging::Handler *""'"); 
-  }
-  arg1 = reinterpret_cast< logging::Handler * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&arg2), SWIGTYPE_p_logging__Formatter, SWIG_POINTER_DISOWN |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Handler_setFormatter" "', argument " "2"" of type '" "logging::Formatter *""'");
-  }
-  (arg1)->setFormatter(arg2);
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *_wrap_Handler_setLevel(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   logging::Handler *arg1 = (logging::Handler *) 0 ;
@@ -4061,6 +4035,34 @@ SWIGINTERN PyObject *_wrap_Handler_close(PyObject *SWIGUNUSEDPARM(self), PyObjec
   }
   arg1 = reinterpret_cast< logging::Handler * >(argp1);
   (arg1)->close();
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Handler_setFormatter(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  logging::Handler *arg1 = (logging::Handler *) 0 ;
+  logging::Formatter *arg2 = (logging::Formatter *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:Handler_setFormatter",&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__Handler, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Handler_setFormatter" "', argument " "1"" of type '" "logging::Handler *""'"); 
+  }
+  arg1 = reinterpret_cast< logging::Handler * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&arg2), SWIGTYPE_p_logging__Formatter, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Handler_setFormatter" "', argument " "2"" of type '" "logging::Formatter *""'");
+  }
+  logging_Handler_setFormatter(arg1,arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -4248,34 +4250,6 @@ SWIGINTERN PyObject *_wrap_delete_StreamHandler(PyObject *SWIGUNUSEDPARM(self), 
   }
   arg1 = reinterpret_cast< logging::StreamHandler * >(argp1);
   delete arg1;
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_StreamHandler_setFormatter(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  logging::StreamHandler *arg1 = (logging::StreamHandler *) 0 ;
-  logging::Formatter *arg2 = (logging::Formatter *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:StreamHandler_setFormatter",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_logging__StreamHandler, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "StreamHandler_setFormatter" "', argument " "1"" of type '" "logging::StreamHandler *""'"); 
-  }
-  arg1 = reinterpret_cast< logging::StreamHandler * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, SWIG_as_voidptrptr(&arg2), SWIGTYPE_p_logging__Formatter, SWIG_POINTER_DISOWN |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "StreamHandler_setFormatter" "', argument " "2"" of type '" "logging::Formatter *""'");
-  }
-  (arg1)->setFormatter(arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -6975,11 +6949,11 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Filterer_removeFilter", _wrap_Filterer_removeFilter, METH_VARARGS, (char *)"Filterer_removeFilter(Filterer self, Filter * filter)"},
 	 { (char *)"Filterer_swigregister", Filterer_swigregister, METH_VARARGS, NULL},
 	 { (char *)"delete_Handler", _wrap_delete_Handler, METH_VARARGS, (char *)"delete_Handler(Handler self)"},
-	 { (char *)"Handler_setFormatter", _wrap_Handler_setFormatter, METH_VARARGS, (char *)"Handler_setFormatter(Handler self, Formatter formatter)"},
 	 { (char *)"Handler_setLevel", _wrap_Handler_setLevel, METH_VARARGS, (char *)"Handler_setLevel(Handler self, LogLevel level)"},
 	 { (char *)"Handler_getLevel", _wrap_Handler_getLevel, METH_VARARGS, (char *)"Handler_getLevel(Handler self) -> LogLevel"},
 	 { (char *)"Handler_handle", _wrap_Handler_handle, METH_VARARGS, (char *)"Handler_handle(Handler self, LogRecord const * record) -> bool"},
 	 { (char *)"Handler_close", _wrap_Handler_close, METH_VARARGS, (char *)"Handler_close(Handler self)"},
+	 { (char *)"Handler_setFormatter", _wrap_Handler_setFormatter, METH_VARARGS, (char *)"Handler_setFormatter(Handler self, Formatter formatter)"},
 	 { (char *)"Handler_swigregister", Handler_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_StreamHandler", _wrap_new_StreamHandler, METH_VARARGS, (char *)"\n"
 		"StreamHandler(LogLevel level)\n"
@@ -6988,7 +6962,6 @@ static PyMethodDef SwigMethods[] = {
 		"new_StreamHandler(io::OutputStream * stream) -> StreamHandler\n"
 		""},
 	 { (char *)"delete_StreamHandler", _wrap_delete_StreamHandler, METH_VARARGS, (char *)"delete_StreamHandler(StreamHandler self)"},
-	 { (char *)"StreamHandler_setFormatter", _wrap_StreamHandler_setFormatter, METH_VARARGS, (char *)"StreamHandler_setFormatter(StreamHandler self, Formatter formatter)"},
 	 { (char *)"StreamHandler_close", _wrap_StreamHandler_close, METH_VARARGS, (char *)"StreamHandler_close(StreamHandler self)"},
 	 { (char *)"StreamHandler_swigregister", StreamHandler_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_Filter", _wrap_new_Filter, METH_VARARGS, (char *)"\n"
