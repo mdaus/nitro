@@ -1230,7 +1230,7 @@ def process_swig_linkage(tsk):
     compiler = tsk.env['COMPILER_CXX']
     if compiler == 'msvc':
         # TODO
-        # MSVC doesn't need this feature, apperantly
+        # MSVC doesn't need this feature, apparently
         # Not sure if cygwin/mingw does or not...
         return
 
@@ -1291,7 +1291,7 @@ def process_swig_linkage(tsk):
     # link to *us* in the above fashion will not be able to do it 
     # without the same path 
     # (ie python dependencies at runtime after installation)
-    soname_str = linkarg_pattern % ('-h ' + (libpattern % tsk.target))
+    soname_str = linkarg_pattern % ('-h' + (libpattern % tsk.target))
     tsk.env.LINKFLAGS.append(soname_str)
   
     # newlib is now a list of our non-python libraries
