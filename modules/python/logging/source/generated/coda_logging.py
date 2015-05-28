@@ -269,6 +269,34 @@ class StreamHandler(Handler):
 StreamHandler_swigregister = _coda_logging.StreamHandler_swigregister
 StreamHandler_swigregister(StreamHandler)
 
+class FileHandler(StreamHandler):
+    """Proxy of C++ logging::FileHandler class"""
+    __swig_setmethods__ = {}
+    for _s in [StreamHandler]:
+        __swig_setmethods__.update(getattr(_s, '__swig_setmethods__', {}))
+    __setattr__ = lambda self, name, value: _swig_setattr(self, FileHandler, name, value)
+    __swig_getmethods__ = {}
+    for _s in [StreamHandler]:
+        __swig_getmethods__.update(getattr(_s, '__swig_getmethods__', {}))
+    __getattr__ = lambda self, name: _swig_getattr(self, FileHandler, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(logging::FileHandler self, std::string const & fname, LogLevel level, int creationFlags) -> FileHandler
+        __init__(logging::FileHandler self, std::string const & fname, LogLevel level) -> FileHandler
+        __init__(logging::FileHandler self, std::string const & fname) -> FileHandler
+        """
+        this = _coda_logging.new_FileHandler(*args)
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+    __swig_destroy__ = _coda_logging.delete_FileHandler
+    __del__ = lambda self: None
+FileHandler_swigregister = _coda_logging.FileHandler_swigregister
+FileHandler_swigregister(FileHandler)
+
 class Filter(_object):
     """Proxy of C++ logging::Filter class"""
     __swig_setmethods__ = {}

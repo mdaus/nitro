@@ -40,6 +40,7 @@
 
 %include "logging/Handler.h"
 %include "logging/StreamHandler.h"
+%include "logging/FileHandler.h"
 
 // Stop ignoring setFormatter methods
 %rename("%s", %$isfunction) setFormatter;

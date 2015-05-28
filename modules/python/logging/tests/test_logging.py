@@ -52,7 +52,14 @@ if __name__ == '__main__':
 
     logger.removeHandler(handler)
     logger.warn("This text should not be displayed (No Handler)")
+    
+
     nullHandler = cl.NullHandler()
     logger.addHandler(nullHandler)
     logger.warn("This text should not be displayed (NullHandler)")
+
+    logger.removeHandler(nullHandler)
+    fileHandler = cl.FileHandler("FileHandlerTest.txt")
+    logger.addHandler(fileHandler)
+    logger.warn("This text should be written to file (FileHandler)")
 
