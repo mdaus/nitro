@@ -456,6 +456,10 @@ class CPPContext(Context.Context):
             if prefix:
                 codename = prefix + name
 
+            postfix = env['postfix_' + name]
+            if postfix:
+                codename = codename + postfix
+
             swigSource = os.path.join('source', name.replace('.', '_') + '.i')
             target = '_' + codename.replace('.', '_')
             use = modArgs['use']
@@ -498,14 +502,14 @@ class CPPContext(Context.Context):
                 # If Swig is not available, use the cxx file already sitting around
                 # that Swig generated sometime in the past
                 bld(features = 'cxx cshlib pyext add_targets swig_linkage includes',
-                source = os.path.join('source', 'generated', codename.replace('.', '_') + '_wrap.cxx'),
-                target = target,
-                use = use,
-                export_includes = exportIncludes,
-                env = env.derive(),
-                name = taskName,
-                targets_to_add = copyFilesTarget,
-                install_path = installPath)
+                    source = os.path.join('source', 'generated', codename.replace('.', '_') + '_wrap.cxx'),
+                    target = target,
+                    use = use,
+                    export_includes = exportIncludes,
+                    env = env.derive(),
+                    name = taskName,
+                    targets_to_add = copyFilesTarget,
+                    install_path = installPath)
 
     def getBuildDir(self, path=None):
         """
@@ -1261,7 +1265,7 @@ def process_swig_linkage(tsk):
         # searchstr is the module name
         if lib.startswith('_coda_'):
             libname = libpattern % lib
-            searchstr = lib[6:].replace('_','.')   
+            searchstr = lib[6:].replace('_','.')
         elif lib.startswith('_'):
             libname = lib + '.so'
             searchstr = lib[1:].replace('_','.')
@@ -1269,6 +1273,9 @@ def process_swig_linkage(tsk):
             # this isnt a python library, ignore it
             newlib.append(lib)
             continue
+
+        if searchstr.endswith(".base"):
+            searchstr = searchstr[:-5]
 
         # Python wrappers have the same module name as their associated
         # C++ modules so if waf is configured with --shared searching through
@@ -1291,6 +1298,9 @@ def process_swig_linkage(tsk):
     # link to *us* in the above fashion will not be able to do it 
     # without the same path 
     # (ie python dependencies at runtime after installation)
+    # TODO use of the -h option changes slightly sometime after ld 2.17
+    #      would be a good idea to verify that this will work with later
+    #      versions
     soname_str = linkarg_pattern % ('-h' + (libpattern % tsk.target))
     tsk.env.LINKFLAGS.append(soname_str)
   
