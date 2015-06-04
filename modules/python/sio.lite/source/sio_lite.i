@@ -51,9 +51,12 @@ def write(numpyArray, outputPathname, elementType = None):
         elif numpyArray.dtype in floatType:
             elementType = FileHeader.FLOAT
         elif numpyArray.dtype in complexFloatType:
-            elmenetType = FileHeader.COMPLEX_FLOAT
+            elementType = FileHeader.COMPLEX_FLOAT
         else:
             raise Exception("Unknown element type: " + str(numpyArray.dtype))
+    
+    if not numpyArray.flags['C_CONTIGUOUS']:
+        numpyArray = numpy.ascontiguousarray(numpyArray)
             
     header = FileHeader(numpyArray.shape[0], numpyArray.shape[1], numpyArray.strides[1], elementType);
     
