@@ -815,7 +815,8 @@ def configureCompilerOptions(self):
             config['cxx']['optz_fastest']   = '-O3'
 
             gxxCompileFlags='-fPIC'
-            if cxxCompiler == 'g++' and self.env['cpp11support'] and gccHasCpp11:
+            botherChecking = self.env['cpp11support'] or self.env['force_cpp11support']
+            if cxxCompiler == 'g++' and botherChecking and gccHasCpp11:
                 print 'why'
                 gxxCompileFlags+=' -std=c++11'
 
