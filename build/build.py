@@ -815,9 +815,7 @@ def configureCompilerOptions(self):
             config['cxx']['optz_fastest']   = '-O3'
 
             gxxCompileFlags='-fPIC'
-            botherChecking = self.env['cpp11support'] or self.env['force_cpp11support']
-            if cxxCompiler == 'g++' and botherChecking and gccHasCpp11:
-                print 'why'
+            if cxxCompiler == 'g++' and self.env['cpp11support'] and gccHasCpp11():
                 gxxCompileFlags+=' -std=c++11'
 
             self.env.append_value('CXXFLAGS', gxxCompileFlags.split())
@@ -1185,7 +1183,9 @@ def configure(self):
         env.append_unique('LINKFLAGS', Options.options.linkflags.split())
     if Options.options._defs:
         env.append_unique('DEFINES', Options.options._defs.split(','))
-    env['cpp11support'] = Options.options.enablecpp11
+    #if its already defined in a wscript, don't touch.
+    if not env['cpp11support']:
+        env['cpp11support'] = Options.options.enablecpp11
     configureCompilerOptions(self)
 
     env['PLATFORM'] = sys_platform
