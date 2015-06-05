@@ -691,6 +691,8 @@ def options(opt):
                    default=False, help='Treat compiler warnings as errors')
     opt.add_option('--enable-debugging', action='store_true', dest='debugging',
                    help='Enable debugging')
+    opt.add_option('--enable-cpp11', action='store_true', default=False, dest='enablecpp11',
+                   help='Enable C++11 features')
     #TODO - get rid of enable64 - it's useless now
     opt.add_option('--enable-64bit', action='store_true', dest='enable64',
                    help='Enable 64bit builds')
@@ -818,7 +820,7 @@ def configureCompilerOptions(self):
             config['cxx']['optz_fastest']   = '-O3'
 
             gxxCompileFlags='-fPIC'
-            if cxxCompiler == 'g++' and gccHasCpp11():
+            if cxxCompiler == 'g++' and self.env['cpp11support'] and gccHasCpp11():
                 gxxCompileFlags+=' -std=c++11'
 
             self.env.append_value('CXXFLAGS', gxxCompileFlags.split())
@@ -1106,7 +1108,7 @@ def configure(self):
 
     if self.env['DETECTED_BUILD_PY']:
         return
-
+    
     sys_platform = getPlatform(default=Options.platform)
     winRegex = r'win32'
 
@@ -1186,7 +1188,9 @@ def configure(self):
         env.append_unique('LINKFLAGS', Options.options.linkflags.split())
     if Options.options._defs:
         env.append_unique('DEFINES', Options.options._defs.split(','))
-
+    #if its already defined in a wscript, don't touch.
+    if not env['cpp11support']:
+        env['cpp11support'] = Options.options.enablecpp11
     configureCompilerOptions(self)
 
     env['PLATFORM'] = sys_platform
