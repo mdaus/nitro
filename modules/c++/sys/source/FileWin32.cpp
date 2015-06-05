@@ -64,7 +64,7 @@ void sys::File::readInto(char *buffer, Size_T size)
     {
         // Determine how many bytes to read
         const DWORD bytesToRead = static_cast<DWORD>(
-                std::min<size_t>(MAX_READ_SIZE, bytesRemaining));
+                std::min(MAX_READ_SIZE, bytesRemaining));
 
         // Read from file
         DWORD bytesThisRead = 0;
@@ -99,7 +99,7 @@ void sys::File::writeFrom(const char *buffer, Size_T size)
     {
         // Determine how many bytes to write
         const DWORD bytesToWrite = static_cast<DWORD>(
-            std::min<size_t>(MAX_WRITE_SIZE, bytesRemaining));
+            std::min(MAX_WRITE_SIZE, bytesRemaining));
 
         // Write the data
         DWORD bytesThisWrite = 0;
