@@ -19,231 +19,49 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#include <types/RowCol.h>
-#include <cmath>
-#include <except/Exception.h>
-#include <iostream>
-
 #ifndef __MATH_LINEAR_LINE_2D_H__
 #define __MATH_LINEAR_LINE_2D_H__
+
+#include <types/RowCol.h>
+#include <except/Exception.h>
+#include <sys/Conf.h>
+#include <iostream>
+#include <cmath>
 
 namespace math
 {
 namespace linear
 {
-typedef types::RowCol<double> Point2D;
-
 class Line2D
 {
 public:
+    typedef types::RowCol<double> Point;
     enum Line2DType { NORMAL, HORIZONTAL, VERTICAL };
 
-    Line2D(Point2D P1, Point2D P2)
-    {
-        double dx = P2.row - P1.row;
-        double dy = P2.col - P1.col;
-
-        // error handling: what should we do here?
-        if ((dy == 0) && (dx == 0))
-        {
-            throw except::Exception("Cannot create a line when P1 == P2");
-        }
-        //Vertical if x values are the same
-        if (dx == 0)
-         {
-             type = Line2D::VERTICAL;
-             slope = 0; // undefined
-             xIntercept = P1.row;
-             yIntercept = 0; // undefined
-             return;
-        }
-        // Horizontal if y values are the same
-        if (dy == 0)
-        {
-            type = Line2D::HORIZONTAL;
-            slope = 0;
-            yIntercept = P1.col;
-            xIntercept = 0; // undefined
-            return;
-        }
-        type = Line2D::NORMAL;
-        slope = dy / dx;
-        yIntercept = P1.col - P1.row * slope; // Maybe a better way to do this. go back
-        xIntercept = x(0.0);
-        return;
-
-    }
-
-    Line2D(Point2D P, double s): slope(s)
-    {
-        if (slope == 0)
-        {
-            type = Line2D::HORIZONTAL;
-            yIntercept = P.col;
-            xIntercept = 0; //undefined
-            return;
-        }
-        type = Line2D::NORMAL;
-        yIntercept = P.col - P.row * slope;
-        xIntercept = x(0.0);
-    }
-
-    double getSlope() const
-    {
-        if (type == Line2D::VERTICAL)
-        {
-            throw except::Exception("Vertical line, slope is undefined");
-        }
-        return slope;
-    }
-
-    double getYIntercept() const
-    {
-        if (type == Line2D::VERTICAL)
-        {
-            throw except::Exception("No return value for a vertical line with undefined yIntercept");
-        }
-        return yIntercept;
-    }
-
-    double getXIntercept() const
-    {
-        if (type == Line2D::HORIZONTAL)
-        {
-            throw except::Exception("No return value for a horizontal line with undefined xIntercept");
-        }
-        return xIntercept;
-    }
-
+    Line2D(const Point& P1, const Point& P2);
+    Line2D(Point P, double s);
+    double getSlope() const;
+    double getYIntercept() const;
+    double getXIntercept() const;
     //Evaluate for y given x:
-    double y(double x) const
-    {
-        if (type == Line2D::VERTICAL)
-        {
-            throw except::Exception("Vertical line--cannot return a single y for given x");
-        }
-        if (type == Line2D::HORIZONTAL)
-        {
-            return yIntercept;
-        }
-        return slope * x + yIntercept;
-    }
-
+    double y(double x) const;
     //Evaluate for x given y:
-    double x(double y) const
-    {
-        if (type == Line2D::HORIZONTAL)
-        {
-            throw except::Exception("Horizontal line--cannot return a single x for given y");
-        }
-        if (type == Line2D::VERTICAL)
-        {
-            return xIntercept;
-        }
-        return (y - yIntercept) / slope;
-    }
-
+    double x(double y) const;
     // Determine intersection of two lines
-    Point2D intersection(const Line2D& L) const
-    {
-        Point2D P(0.0, 0.0);
-        if ((slope == L.slope) && (type == L.type))
-        {
-            throw except::Exception("Two parallel lines--no intersecting point");
-        }
-        if (type == Line2D::VERTICAL)
-        {
-            P.row = xIntercept;
-            P.col = L.y(P.row);
-        }
-        else if (L.type == Line2D::VERTICAL)
-        {
-            P.row = L.xIntercept;
-            P.col = y(P.row);
-        }
-        else
-        {
-            P.row = (L.yIntercept - yIntercept) / (slope - L.slope);
-            P.col = y(P.row);
-        }
-        return P;
-    }
-
+    Point intersection(const Line2D& rhs) const;
     // Create a new line parallel to this line through point P
-    Line2D parallelToLine(Point2D P) const
-    {
-        if (type == Line2D::VERTICAL)
-        {
-            // create a new vertical line through our point
-            Point2D P2 = P;
-            P2.col += 1;
-            return Line2D(P, P2);
-        }
-        // other lines can just take the slope
-        return Line2D(P, slope);
-    }
-
+    Line2D parallelToLine(const Point& P) const;
     // Create a new line perpendicular to this line through point P
-    Line2D perpendicularToLine(Point2D P) const
-    {
-        if (type == Line2D::HORIZONTAL)
-        {
-            // create a new vertical line through point P
-            Point2D P2 = P;
-            P2.col += 1; // offset in y
-            return Line2D(P, P2);
-        }
-        if (type == Line2D::VERTICAL)
-        {
-            // create a new horizontal line through point P
-            Point2D P2 = P;
-            P2.row += 1; // offset in x
-            return Line2D(P, P2);
-        }
-        //Other lines can be created from the orthogonal slope and the point
-        return Line2D(P, (-1.0 / slope));
-    }
-
+    Line2D perpendicularToLine(const Point& P) const;
     // Compute the distance from this line to a point
-    double distanceToPoint(Point2D P) const
-    {
-        if (type == Line2D::HORIZONTAL)
-        {
-            return std::abs(P.col - yIntercept);
-        }
-        if (type == Line2D::VERTICAL)
-        {
-            return std::abs(P.row - xIntercept);
-        }
-        const double dist =
-                    std::abs(slope * P.row - P.col + yIntercept) /
-                    std::sqrt(slope * slope + 1);
-        return dist;
-    }
-
+    double distanceToPoint(const Point& P) const;
     //Return a point that is a distance d from the point P which is on the line
-    Point2D offsetFromPoint(Point2D P, double distance) const
-    {
-        if (type == Line2D::HORIZONTAL)
-        {
-            P.row += distance;
-            return P;
-        }
-        if (type == Line2D::VERTICAL)
-        {
-            P.col += distance;
-            return P;
-        }
-        double theta = std::atan(slope);
-        P.row += distance * std::cos(theta);
-        P.col += distance * std::sin(theta);
-        return P;
-    }
+    Point offsetFromPoint(const Point& P, double distance) const;
 private:
-    Line2DType type;
-    double slope;
-    double yIntercept;
-    double xIntercept;
+    Line2DType mType;
+    double mSlope;
+    double mYIntercept;
+    double mXIntercept;
 };
 }
 }
