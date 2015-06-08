@@ -1,33 +1,13 @@
-/* =========================================================================
  * This file is part of math.linear-c++
- * =========================================================================
- *
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
- *
- * math.linear-c++ is free software; you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this program; If not,
- * see <http://www.gnu.org/licenses/>.
- *
- */
 #include <math/linear/Line2D.h>
 #include <TestCase.h>
 
-double expectedDistToPt(const math::linear::Line2D& L, math::linear::Point2D P)
+double expectedDistToPt(const math::linear::Line2D& L, math::linear::Line2D::Point P)
 {
     return std::abs(L.getSlope() * P.row - P.col + L.getYIntercept()) /
         std::sqrt(L.getSlope() * L.getSlope() + 1);
 }
-math::linear::Point2D expectedOffSet(const math::linear::Line2D& L, math::linear::Point2D P, double distance)
+math::linear::Line2D::Point expectedOffSet(const math::linear::Line2D& L, math::linear::Line2D::Point P, double distance)
 {
     double theta = std::atan(L.getSlope());
     P.row += distance * std::cos(theta);
@@ -36,8 +16,8 @@ math::linear::Point2D expectedOffSet(const math::linear::Line2D& L, math::linear
 }
 TEST_CASE(testVertical)
 {
-    math::linear::Point2D P1(5,5);
-    math::linear::Point2D P2(5, 75);
+    math::linear::Line2D::Point P1(5,5);
+    math::linear::Line2D::Point P2(5, 75);
     math::linear::Line2D vertLine(P1, P2);
     // 1.testing getSlope()--should throw exception for vertical line
     TEST_EXCEPTION(vertLine.getSlope());
@@ -66,22 +46,22 @@ TEST_CASE(testVertical)
     TEST_EXCEPTION(vertLine.intersection(vertLine2));
 
     // Intersecting a horizontal line should give (vertLine.xIntercept, horiLine.yIntercept)
-    math::linear::Point2D P3(5,5);
-    math::linear::Point2D P4(6,5);
+    math::linear::Line2D::Point P3(5,5);
+    math::linear::Line2D::Point P4(6,5);
     math::linear::Line2D horiLine(P3, P4);
 
-    math::linear::Point2D expected1(vertLine.getXIntercept(), horiLine.getYIntercept());
-    math::linear::Point2D actual1 = vertLine.intersection(horiLine);
+    math::linear::Line2D::Point expected1(vertLine.getXIntercept(), horiLine.getYIntercept());
+    math::linear::Line2D::Point actual1 = vertLine.intersection(horiLine);
     TEST_ASSERT_EQ(actual1.row, expected1.row);
     TEST_ASSERT_EQ(actual1.col, expected1.col);
 
     // Intersecting a normal line should give (5, normLine.y(5))
-    math::linear::Point2D P5(2,4);
-    math::linear::Point2D P6(7,8);
+    math::linear::Line2D::Point P5(2,4);
+    math::linear::Line2D::Point P6(7,8);
     math::linear::Line2D normLine(P5, P6);
 
-    math::linear::Point2D expected2(5, normLine.y(5));
-    math::linear::Point2D actual2 = vertLine.intersection(normLine);
+    math::linear::Line2D::Point expected2(5, normLine.y(5));
+    math::linear::Line2D::Point actual2 = vertLine.intersection(normLine);
     TEST_ASSERT_EQ(actual2.row, expected2.row);
     TEST_ASSERT_EQ(actual2.col, expected2.col);
 
@@ -101,46 +81,46 @@ TEST_CASE(testVertical)
     math::linear::Line2D L6 = vertLine.parallelToLine(P6);
     TEST_EXCEPTION(vertLine.intersection(L6));
 
-    // 8. testing perpindicularToLine
+    // 8. testing perpendicularToLine
     // this perpendicular line should be able to intersect with the original vertLine
     // at (vertLine.getXIntercept(), P.col)
     math::linear::Line2D PL1 = vertLine.perpendicularToLine(P1);
-    math::linear::Point2D pExpected1(vertLine.getXIntercept(), P1.col);
-    math::linear::Point2D pActual1(vertLine.intersection(PL1));
+    math::linear::Line2D::Point pExpected1(vertLine.getXIntercept(), P1.col);
+    math::linear::Line2D::Point pActual1(vertLine.intersection(PL1));
     TEST_ASSERT_EQ(pActual1.row, pExpected1.row);
     TEST_ASSERT_EQ(pActual1.col, pExpected1.col);
 
     math::linear::Line2D PL2 = vertLine.perpendicularToLine(P2);
-    math::linear::Point2D pExpected2(vertLine.getXIntercept(), P2.col);
-    math::linear::Point2D pActual2(vertLine.intersection(PL2));
+    math::linear::Line2D::Point pExpected2(vertLine.getXIntercept(), P2.col);
+    math::linear::Line2D::Point pActual2(vertLine.intersection(PL2));
     TEST_ASSERT_EQ(pActual2.row, pExpected2.row);
     TEST_ASSERT_EQ(pActual2.col, pExpected2.col);
 
 
     math::linear::Line2D PL3 = vertLine.perpendicularToLine(P3);
-    math::linear::Point2D pExpected3(vertLine.getXIntercept(), P3.col);
-    math::linear::Point2D pActual3(vertLine.intersection(PL3));
+    math::linear::Line2D::Point pExpected3(vertLine.getXIntercept(), P3.col);
+    math::linear::Line2D::Point pActual3(vertLine.intersection(PL3));
     TEST_ASSERT_EQ(pActual3.row, pExpected3.row);
     TEST_ASSERT_EQ(pActual3.col, pExpected3.col);
 
 
     math::linear::Line2D PL4 = vertLine.perpendicularToLine(P4);
-    math::linear::Point2D pExpected4(vertLine.getXIntercept(), P4.col);
-    math::linear::Point2D pActual4(vertLine.intersection(PL4));
+    math::linear::Line2D::Point pExpected4(vertLine.getXIntercept(), P4.col);
+    math::linear::Line2D::Point pActual4(vertLine.intersection(PL4));
     TEST_ASSERT_EQ(pActual4.row, pExpected4.row);
     TEST_ASSERT_EQ(pActual4.col, pExpected4.col);
 
 
     math::linear::Line2D PL5 = vertLine.perpendicularToLine(P5);
-    math::linear::Point2D pExpected5(vertLine.getXIntercept(), P5.col);
-    math::linear::Point2D pActual5(vertLine.intersection(PL5));
+    math::linear::Line2D::Point pExpected5(vertLine.getXIntercept(), P5.col);
+    math::linear::Line2D::Point pActual5(vertLine.intersection(PL5));
     TEST_ASSERT_EQ(pActual5.row, pExpected5.row);
     TEST_ASSERT_EQ(pActual5.col, pExpected5.col);
 
 
     math::linear::Line2D PL6 = vertLine.perpendicularToLine(P6);
-    math::linear::Point2D pExpected6(vertLine.getXIntercept(), P6.col);
-    math::linear::Point2D pActual6(vertLine.intersection(PL6));
+    math::linear::Line2D::Point pExpected6(vertLine.getXIntercept(), P6.col);
+    math::linear::Line2D::Point pActual6(vertLine.intersection(PL6));
     TEST_ASSERT_EQ(pActual6.row, pExpected6.row);
     TEST_ASSERT_EQ(pActual6.col, pExpected6.col);
 
@@ -171,71 +151,71 @@ TEST_CASE(testVertical)
 
     // 10. Testing offsetFromPoint, should return (P.row, P.col + distance)
     double d = 4.5; // distance > 0
-    math::linear::Point2D oExpected1(P1.row, P1.col + d);
-    math::linear::Point2D oActual1 = vertLine.offsetFromPoint(P1, d);
+    math::linear::Line2D::Point oExpected1(P1.row, P1.col + d);
+    math::linear::Line2D::Point oActual1 = vertLine.offsetFromPoint(P1, d);
     TEST_ASSERT_EQ(oActual1.row, oExpected1.row);
     TEST_ASSERT_EQ(oActual1.col, oExpected1.col);
 
-    math::linear::Point2D oExpected2(P2.row, P2.col + d);
-    math::linear::Point2D oActual2 = vertLine.offsetFromPoint(P2, d);
+    math::linear::Line2D::Point oExpected2(P2.row, P2.col + d);
+    math::linear::Line2D::Point oActual2 = vertLine.offsetFromPoint(P2, d);
     TEST_ASSERT_EQ(oActual2.row, oExpected2.row);
     TEST_ASSERT_EQ(oActual2.col, oExpected2.col);
 
-    math::linear::Point2D oExpected3(P3.row, P3.col + d);
-    math::linear::Point2D oActual3 = vertLine.offsetFromPoint(P3, d);
+    math::linear::Line2D::Point oExpected3(P3.row, P3.col + d);
+    math::linear::Line2D::Point oActual3 = vertLine.offsetFromPoint(P3, d);
     TEST_ASSERT_EQ(oActual3.row, oExpected3.row);
     TEST_ASSERT_EQ(oActual3.col, oExpected3.col);
 
-    math::linear::Point2D oExpected4(P4.row, P4.col + d);
-    math::linear::Point2D oActual4 = vertLine.offsetFromPoint(P4, d);
+    math::linear::Line2D::Point oExpected4(P4.row, P4.col + d);
+    math::linear::Line2D::Point oActual4 = vertLine.offsetFromPoint(P4, d);
     TEST_ASSERT_EQ(oActual4.row, oExpected4.row);
     TEST_ASSERT_EQ(oActual4.col, oExpected4.col);
 
-    math::linear::Point2D oExpected5(P5.row, P5.col + d);
-    math::linear::Point2D oActual5 = vertLine.offsetFromPoint(P5, d);
+    math::linear::Line2D::Point oExpected5(P5.row, P5.col + d);
+    math::linear::Line2D::Point oActual5 = vertLine.offsetFromPoint(P5, d);
     TEST_ASSERT_EQ(oActual5.row, oExpected5.row);
     TEST_ASSERT_EQ(oActual5.col, oExpected5.col);
 
-    math::linear::Point2D oExpected6(P6.row, P6.col + d);
-    math::linear::Point2D oActual6 = vertLine.offsetFromPoint(P6, d);
+    math::linear::Line2D::Point oExpected6(P6.row, P6.col + d);
+    math::linear::Line2D::Point oActual6 = vertLine.offsetFromPoint(P6, d);
     TEST_ASSERT_EQ(oActual6.row, oExpected6.row);
     TEST_ASSERT_EQ(oActual6.col, oExpected6.col);
     // testing when d < 0
     d = -0.5; // distance > 0
-    math::linear::Point2D o2Expected1(P1.row, P1.col + d);
-    math::linear::Point2D o2Actual1 = vertLine.offsetFromPoint(P1, d);
+    math::linear::Line2D::Point o2Expected1(P1.row, P1.col + d);
+    math::linear::Line2D::Point o2Actual1 = vertLine.offsetFromPoint(P1, d);
     TEST_ASSERT_EQ(o2Actual1.row, o2Expected1.row);
     TEST_ASSERT_EQ(o2Actual1.col, o2Expected1.col);
 
-    math::linear::Point2D o2Expected2(P2.row, P2.col + d);
-    math::linear::Point2D o2Actual2 = vertLine.offsetFromPoint(P2, d);
+    math::linear::Line2D::Point o2Expected2(P2.row, P2.col + d);
+    math::linear::Line2D::Point o2Actual2 = vertLine.offsetFromPoint(P2, d);
     TEST_ASSERT_EQ(o2Actual2.row, o2Expected2.row);
     TEST_ASSERT_EQ(o2Actual2.col, o2Expected2.col);
 
-    math::linear::Point2D o2Expected3(P3.row, P3.col + d);
-    math::linear::Point2D o2Actual3 = vertLine.offsetFromPoint(P3, d);
+    math::linear::Line2D::Point o2Expected3(P3.row, P3.col + d);
+    math::linear::Line2D::Point o2Actual3 = vertLine.offsetFromPoint(P3, d);
     TEST_ASSERT_EQ(o2Actual3.row, o2Expected3.row);
     TEST_ASSERT_EQ(o2Actual3.col, o2Expected3.col);
 
-    math::linear::Point2D o2Expected4(P4.row, P4.col + d);
-    math::linear::Point2D o2Actual4 = vertLine.offsetFromPoint(P4, d);
+    math::linear::Line2D::Point o2Expected4(P4.row, P4.col + d);
+    math::linear::Line2D::Point o2Actual4 = vertLine.offsetFromPoint(P4, d);
     TEST_ASSERT_EQ(o2Actual4.row, o2Expected4.row);
     TEST_ASSERT_EQ(o2Actual4.col, o2Expected4.col);
 
-    math::linear::Point2D o2Expected5(P5.row, P5.col + d);
-    math::linear::Point2D o2Actual5 = vertLine.offsetFromPoint(P5, d);
+    math::linear::Line2D::Point o2Expected5(P5.row, P5.col + d);
+    math::linear::Line2D::Point o2Actual5 = vertLine.offsetFromPoint(P5, d);
     TEST_ASSERT_EQ(o2Actual5.row, o2Expected5.row);
     TEST_ASSERT_EQ(o2Actual5.col, o2Expected5.col);
 
-    math::linear::Point2D o2Expected6(P6.row, P6.col + d);
-    math::linear::Point2D o2Actual6 = vertLine.offsetFromPoint(P6, d);
+    math::linear::Line2D::Point o2Expected6(P6.row, P6.col + d);
+    math::linear::Line2D::Point o2Actual6 = vertLine.offsetFromPoint(P6, d);
     TEST_ASSERT_EQ(o2Actual6.row, o2Expected6.row);
     TEST_ASSERT_EQ(o2Actual6.col, o2Expected6.col);
 }
 TEST_CASE(testHorizontal)
 {
-    math::linear::Point2D P1(6, 7.5);
-    math::linear::Point2D P2(2, 7.5);
+    math::linear::Line2D::Point P1(6, 7.5);
+    math::linear::Line2D::Point P2(2, 7.5);
     math::linear::Line2D horiLine(P1, P2);
     // 1. Testing getSlope()--should return 0
     TEST_ASSERT_EQ(horiLine.getSlope(), 0);
@@ -265,21 +245,21 @@ TEST_CASE(testHorizontal)
     TEST_EXCEPTION(horiLine.intersection(horiLine2));
 
     // Testing with a vertical line--should return (veriLine.getXIntercept(), horiLine.getYIntercept())
-    math::linear::Point2D P3(2, 8);
-    math::linear::Point2D P4(2, 9);
+    math::linear::Line2D::Point P3(2, 8);
+    math::linear::Line2D::Point P4(2, 9);
     math::linear::Line2D veriLine(P3, P4);
-    math::linear::Point2D expected1(veriLine.getXIntercept(),
+    math::linear::Line2D::Point expected1(veriLine.getXIntercept(),
             horiLine.getYIntercept());
-    math::linear::Point2D actual1 = horiLine.intersection(veriLine);
+    math::linear::Line2D::Point actual1 = horiLine.intersection(veriLine);
     TEST_ASSERT_EQ(actual1.row, expected1.row);
     TEST_ASSERT_EQ(actual1.col, expected1.col);
 
     // Testing with a normal line--should return (normLine.x(yIntercept), yIntercept)
-    math::linear::Point2D P5(2, 9);
-    math::linear::Point2D P6(1, 4);
+    math::linear::Line2D::Point P5(2, 9);
+    math::linear::Line2D::Point P6(1, 4);
     math::linear::Line2D normLine(P5, P6);
-    math::linear::Point2D expected2(normLine.x(horiLine.getYIntercept()), horiLine.getYIntercept());
-    math::linear::Point2D actual2 = horiLine.intersection(normLine);
+    math::linear::Line2D::Point expected2(normLine.x(horiLine.getYIntercept()), horiLine.getYIntercept());
+    math::linear::Line2D::Point actual2 = horiLine.intersection(normLine);
 
     TEST_ASSERT_EQ(actual2.row, expected2.row);
     TEST_ASSERT_EQ(actual2.col, expected2.col);
@@ -296,33 +276,33 @@ TEST_CASE(testHorizontal)
     TEST_EXCEPTION(horiLine.intersection(horiLine.parallelToLine(P6)));
 
     // 8. testing perpendicularToLine -- should intersect at (P.row, horiLine.getYIntercept())
-    math::linear::Point2D pExpected1(P1.row, horiLine.getYIntercept());
-    math::linear::Point2D pActual1 = horiLine.intersection(horiLine.perpendicularToLine(P1));
+    math::linear::Line2D::Point pExpected1(P1.row, horiLine.getYIntercept());
+    math::linear::Line2D::Point pActual1 = horiLine.intersection(horiLine.perpendicularToLine(P1));
     TEST_ASSERT_EQ(pActual1.row, pExpected1.row);
     TEST_ASSERT_EQ(pActual1.col, pExpected1.col);
 
-    math::linear::Point2D pExpected2(P2.row, horiLine.getYIntercept());
-    math::linear::Point2D pActual2 = horiLine.intersection(horiLine.perpendicularToLine(P2));
+    math::linear::Line2D::Point pExpected2(P2.row, horiLine.getYIntercept());
+    math::linear::Line2D::Point pActual2 = horiLine.intersection(horiLine.perpendicularToLine(P2));
     TEST_ASSERT_EQ(pActual2.row, pExpected2.row);
     TEST_ASSERT_EQ(pActual2.col, pExpected2.col);
 
-    math::linear::Point2D pExpected3(P3.row, horiLine.getYIntercept());
-    math::linear::Point2D pActual3 = horiLine.intersection(horiLine.perpendicularToLine(P3));
+    math::linear::Line2D::Point pExpected3(P3.row, horiLine.getYIntercept());
+    math::linear::Line2D::Point pActual3 = horiLine.intersection(horiLine.perpendicularToLine(P3));
     TEST_ASSERT_EQ(pActual3.row, pExpected3.row);
     TEST_ASSERT_EQ(pActual3.col, pExpected3.col);
 
-    math::linear::Point2D pExpected4(P4.row, horiLine.getYIntercept());
-    math::linear::Point2D pActual4 = horiLine.intersection(horiLine.perpendicularToLine(P4));
+    math::linear::Line2D::Point pExpected4(P4.row, horiLine.getYIntercept());
+    math::linear::Line2D::Point pActual4 = horiLine.intersection(horiLine.perpendicularToLine(P4));
     TEST_ASSERT_EQ(pActual4.row, pExpected4.row);
     TEST_ASSERT_EQ(pActual4.col, pExpected4.col);
 
-    math::linear::Point2D pExpected5(P5.row, horiLine.getYIntercept());
-    math::linear::Point2D pActual5 = horiLine.intersection(horiLine.perpendicularToLine(P5));
+    math::linear::Line2D::Point pExpected5(P5.row, horiLine.getYIntercept());
+    math::linear::Line2D::Point pActual5 = horiLine.intersection(horiLine.perpendicularToLine(P5));
     TEST_ASSERT_EQ(pActual5.row, pExpected5.row);
     TEST_ASSERT_EQ(pActual5.col, pExpected5.col);
 
-    math::linear::Point2D pExpected6(P6.row, horiLine.getYIntercept());
-    math::linear::Point2D pActual6 = horiLine.intersection(horiLine.perpendicularToLine(P6));
+    math::linear::Line2D::Point pExpected6(P6.row, horiLine.getYIntercept());
+    math::linear::Line2D::Point pActual6 = horiLine.intersection(horiLine.perpendicularToLine(P6));
     TEST_ASSERT_EQ(pActual6.row, pExpected6.row);
     TEST_ASSERT_EQ(pActual6.col, pExpected6.col);
 
@@ -354,41 +334,41 @@ TEST_CASE(testHorizontal)
 
     // 10. offsetFromPoint
     double d = 4.5;
-    math::linear::Point2D oExpected1(P1.row + d, P1.col);
-    math::linear::Point2D oActual1 = horiLine.offsetFromPoint(P1, d);
+    math::linear::Line2D::Point oExpected1(P1.row + d, P1.col);
+    math::linear::Line2D::Point oActual1 = horiLine.offsetFromPoint(P1, d);
     TEST_ASSERT_EQ(oActual1.row, oExpected1.row);
     TEST_ASSERT_EQ(oActual1.col, oExpected1.col);
 
-    math::linear::Point2D oExpected2(P2.row + d, P2.col);
-    math::linear::Point2D oActual2 = horiLine.offsetFromPoint(P2, d);
+    math::linear::Line2D::Point oExpected2(P2.row + d, P2.col);
+    math::linear::Line2D::Point oActual2 = horiLine.offsetFromPoint(P2, d);
     TEST_ASSERT_EQ(oActual2.row, oExpected2.row);
     TEST_ASSERT_EQ(oActual2.col, oExpected2.col);
 
-    math::linear::Point2D oExpected3(P3.row + d, P3.col);
-    math::linear::Point2D oActual3 = horiLine.offsetFromPoint(P3, d);
+    math::linear::Line2D::Point oExpected3(P3.row + d, P3.col);
+    math::linear::Line2D::Point oActual3 = horiLine.offsetFromPoint(P3, d);
     TEST_ASSERT_EQ(oActual3.row, oExpected3.row);
     TEST_ASSERT_EQ(oActual3.col, oExpected3.col);
 
-    math::linear::Point2D oExpected4(P4.row + d, P4.col);
-    math::linear::Point2D oActual4 = horiLine.offsetFromPoint(P4, d);
+    math::linear::Line2D::Point oExpected4(P4.row + d, P4.col);
+    math::linear::Line2D::Point oActual4 = horiLine.offsetFromPoint(P4, d);
     TEST_ASSERT_EQ(oActual4.row, oExpected4.row);
     TEST_ASSERT_EQ(oActual4.col, oExpected4.col);
 
-    math::linear::Point2D oExpected5(P5.row + d, P5.col);
-    math::linear::Point2D oActual5 = horiLine.offsetFromPoint(P5, d);
+    math::linear::Line2D::Point oExpected5(P5.row + d, P5.col);
+    math::linear::Line2D::Point oActual5 = horiLine.offsetFromPoint(P5, d);
     TEST_ASSERT_EQ(oActual5.row, oExpected5.row);
     TEST_ASSERT_EQ(oActual5.col, oExpected5.col);
 
-    math::linear::Point2D oExpected6(P6.row + d, P6.col);
-    math::linear::Point2D oActual6 = horiLine.offsetFromPoint(P6, d);
+    math::linear::Line2D::Point oExpected6(P6.row + d, P6.col);
+    math::linear::Line2D::Point oActual6 = horiLine.offsetFromPoint(P6, d);
     TEST_ASSERT_EQ(oActual6.row, oExpected6.row);
     TEST_ASSERT_EQ(oActual6.col, oExpected6.col);
 }
 
 TEST_CASE(testNormal)
 {
-    math::linear::Point2D P1(2.7, 6);
-    math::linear::Point2D P2(4, 1);
+    math::linear::Line2D::Point P1(2.7, 6);
+    math::linear::Line2D::Point P2(4, 1);
     math::linear::Line2D normLine(P1,P2);
 
     // 1. test getSlope
@@ -424,30 +404,30 @@ TEST_CASE(testNormal)
     }
     // 6. testing intersection
     // with another normal line:
-    math::linear::Point2D P3(34, 9.3);
-    math::linear::Point2D P4(3, 90);
+    math::linear::Line2D::Point P3(34, 9.3);
+    math::linear::Line2D::Point P4(3, 90);
     math::linear::Line2D normLine2(P3, P4);
     TEST_EXCEPTION(normLine.intersection(normLine));
     double expectedRow = (normLine2.getYIntercept() - normLine.getYIntercept())
             / (normLine.getSlope() - normLine2.getSlope());
     double expectedCol = normLine.y(expectedRow);
-    math::linear::Point2D actualIntersection = normLine.intersection(normLine2);
+    math::linear::Line2D::Point actualIntersection = normLine.intersection(normLine2);
     TEST_ASSERT_EQ(actualIntersection.row, expectedRow);
     TEST_ASSERT_EQ(actualIntersection.col, expectedCol);
 
     // with a vertical line:
-    math::linear::Line2D vertLine(math::linear::Point2D(4, 8), math::linear::Point2D(4, 5));
+    math::linear::Line2D vertLine(math::linear::Line2D::Point(4, 8), math::linear::Line2D::Point(4, 5));
     double expectedRow2 = 4;
     double expectedCol2 = normLine.y(4);
-    math::linear::Point2D actualIntersection2 = normLine.intersection(vertLine);
+    math::linear::Line2D::Point actualIntersection2 = normLine.intersection(vertLine);
     TEST_ASSERT_EQ(actualIntersection2.row, expectedRow2);
     TEST_ASSERT_EQ(actualIntersection2.col, expectedCol2);
 
     // with a horizontal line:
-    math::linear::Line2D horiLine(math::linear::Point2D(2, 9), math::linear::Point2D(4, 9));
+    math::linear::Line2D horiLine(math::linear::Line2D::Point(2, 9), math::linear::Line2D::Point(4, 9));
     double expectedRow3 = normLine.x(9);
     double expectedCol3 = 9;
-    math::linear::Point2D actualIntersection3 = normLine.intersection(horiLine);
+    math::linear::Line2D::Point actualIntersection3 = normLine.intersection(horiLine);
     TEST_ASSERT_EQ(actualIntersection3.row, expectedRow3);
     TEST_ASSERT_EQ(actualIntersection3.col, expectedCol3);
 
@@ -461,7 +441,7 @@ TEST_CASE(testNormal)
     TEST_EXCEPTION(normLine.intersection(L3));
     TEST_EXCEPTION(normLine.intersection(L4));
 
-    // 8. testing perpindicularToLine
+    // 8. testing perpendicularToLine
     math::linear::Line2D pL1 = normLine.perpendicularToLine(P1);
     math::linear::Line2D pL2 = normLine.perpendicularToLine(P2);
     math::linear::Line2D pL3 = normLine.perpendicularToLine(P3);
@@ -488,8 +468,8 @@ TEST_CASE(testNormal)
     m = 0;
     for (size_t i = 0; i < 100; ++i, m += 0.1)
     {
-        math::linear::Point2D expectedO = expectedOffSet(normLine, P1, m);
-        math::linear::Point2D actualO = normLine.offsetFromPoint(P1, m);
+        math::linear::Line2D::Point expectedO = expectedOffSet(normLine, P1, m);
+        math::linear::Line2D::Point actualO = normLine.offsetFromPoint(P1, m);
         TEST_ASSERT_EQ(actualO.row, expectedO.row);
         TEST_ASSERT_EQ(actualO.col, expectedO.col);
     }
@@ -497,8 +477,8 @@ TEST_CASE(testNormal)
     m = 0;
     for (size_t i = 0; i < 100; ++i, m += 0.1)
     {
-        math::linear::Point2D expectedO = expectedOffSet(normLine, P2, m);
-        math::linear::Point2D actualO = normLine.offsetFromPoint(P2, m);
+        math::linear::Line2D::Point expectedO = expectedOffSet(normLine, P2, m);
+        math::linear::Line2D::Point actualO = normLine.offsetFromPoint(P2, m);
         TEST_ASSERT_EQ(actualO.row, expectedO.row);
         TEST_ASSERT_EQ(actualO.col, expectedO.col);
     }
@@ -506,8 +486,8 @@ TEST_CASE(testNormal)
     m = 0;
     for (size_t i = 0; i < 100; ++i, m += 0.1)
     {
-        math::linear::Point2D expectedO = expectedOffSet(normLine, P3, m);
-        math::linear::Point2D actualO = normLine.offsetFromPoint(P3, m);
+        math::linear::Line2D::Point expectedO = expectedOffSet(normLine, P3, m);
+        math::linear::Line2D::Point actualO = normLine.offsetFromPoint(P3, m);
         TEST_ASSERT_EQ(actualO.row, expectedO.row);
         TEST_ASSERT_EQ(actualO.col, expectedO.col);
     }
@@ -515,8 +495,8 @@ TEST_CASE(testNormal)
     m = 0;
     for (size_t i = 0; i < 100; ++i, m += 0.1)
     {
-        math::linear::Point2D expectedO = expectedOffSet(normLine, P4, m);
-        math::linear::Point2D actualO = normLine.offsetFromPoint(P4, m);
+        math::linear::Line2D::Point expectedO = expectedOffSet(normLine, P4, m);
+        math::linear::Line2D::Point actualO = normLine.offsetFromPoint(P4, m);
         TEST_ASSERT_EQ(actualO.row, expectedO.row);
         TEST_ASSERT_EQ(actualO.col, expectedO.col);
     }
