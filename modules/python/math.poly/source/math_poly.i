@@ -8,6 +8,9 @@
 %ignore math::poly::OneD<Vector3>::power;
 
 %{
+#ifndef SWIGPY_SLICE_ARG(obj)
+# define SWIGPY_SLICE_ARG(obj) ((PySliceObject*) (obj))
+#endif
 #include <string>
 #include <sstream>
 #include "import/math/linear.h"
@@ -22,6 +25,7 @@ typedef math::linear::Vector<double> VectorDouble;
 %import "except.i"
 
 %include "std_string.i"
+%include "std_vector.i"
 %include "carrays.i"
 %array_functions(double, doubleArray);
 
@@ -129,9 +133,46 @@ typedef math::linear::VectorN<3,double> Vector3;
         { 
             (*self)[i] = val; 
         }
+
+        std::string __str__()
+        {
+            std::ostringstream ostr;
+            ostr << *self;
+            return ostr.str();
+        }
 };
 
 %include "math/poly/Fit.h"
 
 typedef math::linear::Vector<double> VectorDouble;
 %template(FitVectorDouble) math::poly::fit<VectorDouble>;
+
+%template(StdVectorDouble) std::vector<double>;
+
+%extend std::vector<double>
+{
+    public:
+        double __getitem__(long i) 
+        { 
+            return (*self)[i]; 
+        }
+
+        void __setitem__(long i, double val) 
+        { 
+            (*self)[i] = val; 
+        }
+
+        std::string __str__()
+        {
+            std::ostringstream ostr;
+            
+            ostr << "std::vector<double>[ ";
+            for (int i = 0; i < self->size(); i++)
+            {
+                ostr << (*self)[i] << " ";
+            }
+            ostr << "]";
+
+            return ostr.str();
+        }
+};

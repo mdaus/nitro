@@ -4,6 +4,7 @@
 #include <math/poly/OneD.h>
 #include <math/poly/TwoD.h>
 #include <math/linear/Matrix2D.h>
+#include <math/linear/VectorN.h>
 
 namespace math
 {
@@ -81,7 +82,7 @@ template<typename Vector_T> OneD<double> fit(const Vector_T& x,
  *  pointers
  */
 inline OneD<double> fit(size_t numObs, const double* x, const double* y, 
-			size_t numCoeffs)
+            size_t numCoeffs)
 {
     math::linear::Vector<double> xv(numObs, x);
     math::linear::Vector<double> yv(numObs, y);
@@ -107,10 +108,10 @@ inline OneD<double> fit(size_t numObs, const double* x, const double* y,
  */
 
 inline math::poly::TwoD<double> fit(const math::linear::Matrix2D<double>& x,
-				    const math::linear::Matrix2D<double>& y,
-				    const math::linear::Matrix2D<double>& z,
-				    size_t nx,
-				    size_t ny)
+                    const math::linear::Matrix2D<double>& y,
+                    const math::linear::Matrix2D<double>& z,
+                    size_t nx,
+                    size_t ny)
 {
     // Normalize the values in the matrix
     size_t m = x.rows();
@@ -237,18 +238,94 @@ inline math::poly::TwoD<double> fit(const math::linear::Matrix2D<double>& x,
 }
 
 inline math::poly::TwoD<double> fit(size_t numRows,
-				    size_t numCols,
-				    const double* x,
-				    const double* y,
-				    const double* z,
-				    size_t nx,
-				    size_t ny)
+                    size_t numCols,
+                    const double* x,
+                    const double* y,
+                    const double* z,
+                    size_t nx,
+                    size_t ny)
 {
     math::linear::Matrix2D<double> xm(numRows, numCols, x);
     math::linear::Matrix2D<double> ym(numRows, numCols, y);
     math::linear::Matrix2D<double> zm(numRows, numCols, z);
 
     return fit(xm, ym, zm, nx, ny);
+}
+
+typedef math::linear::VectorN<3, double> Vector3;
+
+inline math::poly::OneD<Vector3> fit(
+    const math::linear::Vector<double> xObs,
+    const math::linear::Matrix2D<double> yObs,
+    size_t numCoeffs)
+{
+    size_t numObs = xObs.size();
+    if (numObs != yObs.cols())
+    {
+        throw except::Exception(Ctxt("Must have the same number of observed y values as observed x values"));
+    }
+    if (numCoeffs < 1)
+    {
+        throw except::Exception(Ctxt("Must have an order >0"));
+    }
+
+    math::poly::OneD<double> fit0 = fit(xObs, math::linear::Vector<double>(numObs, yObs.row(0)), numCoeffs);
+    math::poly::OneD<double> fit1 = fit(xObs, math::linear::Vector<double>(numObs, yObs.row(1)), numCoeffs);
+    math::poly::OneD<double> fit2 = fit(xObs, math::linear::Vector<double>(numObs, yObs.row(2)), numCoeffs);
+
+    math::poly::OneD<Vector3> polyVector3 = math::poly::OneD<Vector3>(numCoeffs-1);
+    for (size_t i = 0; i< numCoeffs; i++)
+    {
+        Vector3 coeffs = Vector3();
+        coeffs[0] = fit0[i];
+        coeffs[1] = fit1[i];
+        coeffs[2] = fit2[i];
+        polyVector3[i] = coeffs;
+    }
+
+    return polyVector3;
+}
+
+inline math::poly::OneD<Vector3> fit(
+        const std::vector<double> xObs,
+        const std::vector<double> yObs0,
+        const std::vector<double> yObs1,
+        const std::vector<double> yObs2,
+        size_t  numCoeffs)
+{
+    if (yObs0.size() != xObs.size())
+    {
+        throw except::Exception(Ctxt("Must have the same number of observed y values as observed x values"));
+    }
+    if (yObs1.size() != xObs.size())
+    {
+        throw except::Exception(Ctxt("Must have the same number of observed y values as observed x values"));
+    }
+    if (yObs2.size() != xObs.size())
+    {
+        throw except::Exception(Ctxt("Must have the same number of observed y values as observed x values"));
+    }
+    if (numCoeffs < 1)
+    {
+        throw except::Exception(Ctxt("Must have an order >0"));
+    }
+
+    math::linear::Vector<double> xObsVector = math::linear::Vector<double>(xObs);
+    math::poly::OneD<double> fit0 = fit(xObsVector, math::linear::Vector<double>(yObs0), numCoeffs);
+    math::poly::OneD<double> fit1 = fit(xObsVector, math::linear::Vector<double>(yObs1), numCoeffs);
+    math::poly::OneD<double> fit2 = fit(xObsVector, math::linear::Vector<double>(yObs2), numCoeffs);
+
+    math::poly::OneD<Vector3> polyVector3 = math::poly::OneD<Vector3>(numCoeffs-1);
+    for (size_t i = 0; i< numCoeffs; i++)
+    {
+        Vector3 coeffs = Vector3();
+        coeffs[0] = fit0[i];
+        coeffs[1] = fit1[i];
+        coeffs[2] = fit2[i];
+        polyVector3[i] = coeffs;
+    }
+
+    return polyVector3;
 }
 }
 }
