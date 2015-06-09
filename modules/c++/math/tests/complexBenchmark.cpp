@@ -13,6 +13,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
+#include <fstream>
 #include <iomanip>
 #include <sstream>
 #include <complex>
@@ -76,14 +77,15 @@ int main(int argc, char** argv)
     long long sze = atoi(argv[1]);
     size_t growthFactor = atoi(argv[2]);
     size_t numIter = atoi(argv[3]); 
+    std::ofstream outFile("out.txt");
     std::ostringstream out;
     out << std::setprecision(5);
     out.setf(std::ios::fixed);
     out.setf(std::ios::left);
     
-    std::cout << std::setprecision(5);
-    std::cout.setf(std::ios::fixed);
-    std::cout.setf(std::ios::left);
+    outFile << std::setprecision(5);
+    outFile.setf(std::ios::fixed);
+    outFile.setf(std::ios::left);
 
     
     for(long long i = 0; i < numIter; ++i)
@@ -131,13 +133,13 @@ int main(int argc, char** argv)
 
         double cmplxDuration;
         double dblDuration;
-        for(size_t j = 0; j < 2; ++j)
+        for(size_t j = 0; j < 4; ++j)
         {
             std::complex<float> cmplxMean = getMeanWComplex(cmplxWatch, arr, sze, cmplxDuration);
 
             std::complex<float> dblMean = getMeanWDouble(dblWatch, arr, sze, dblDuration);
 
-            print(std::cout, sze, cmplxMean, dblMean, cmplxDuration, dblDuration);
+            print(out, sze, cmplxMean, dblMean, cmplxDuration, dblDuration);
         }
         delete [] arr;
         
@@ -149,5 +151,6 @@ int main(int argc, char** argv)
             break;
         }
     }
-    std::cout << out.str() << std::endl;
+    outFile << out.str() << std::endl;
+    outFile.close();
 }
