@@ -19,14 +19,11 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+
 #ifndef __MATH_LINEAR_LINE_2D_H__
 #define __MATH_LINEAR_LINE_2D_H__
 
 #include <types/RowCol.h>
-#include <except/Exception.h>
-#include <sys/Conf.h>
-#include <iostream>
-#include <cmath>
 
 namespace math
 {
@@ -39,7 +36,7 @@ public:
     enum Line2DType { NORMAL, HORIZONTAL, VERTICAL };
 
     Line2D(const Point& P1, const Point& P2);
-    Line2D(Point P, double s);
+    Line2D(const Point& P, double s);
     double getSlope() const;
     double getYIntercept() const;
     double getXIntercept() const;
