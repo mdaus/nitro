@@ -21,10 +21,12 @@
  */
 
 #include <TestCase.h>
-#include <import/math/linear.h>
+#include <math/linear/Vector.h>
+#include <math/linear/VectorN.h>
 #include <math.h>
 
-
+namespace
+{
 //Vector3D norm()--> normSq()
 TEST_CASE(VaryingDimension)
 {
@@ -118,6 +120,7 @@ TEST_CASE(VaryingComponentVal)
     double expectedNorm8 = std::sqrt(expectedNormSq8);
     double actualNorm8 = v8.norm();
     TEST_ASSERT_ALMOST_EQ(expectedNorm8, actualNorm8);
+}
 }
 
 int main ()
