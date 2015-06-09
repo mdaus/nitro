@@ -62,7 +62,7 @@ Line2D::Line2D(const Point& P1, const Point& P2)
     }
 }
 
-Line2D::Line2D(const Point& P, double s): mSlope(s)
+Line2D::Line2D(const Point& P, double slope): mSlope(slope)
 {
     if (mSlope == 0)
     {
