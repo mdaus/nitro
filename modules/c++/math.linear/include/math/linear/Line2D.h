@@ -36,7 +36,7 @@ public:
     enum Line2DType { NORMAL, HORIZONTAL, VERTICAL };
 
     Line2D(const Point& P1, const Point& P2);
-    Line2D(const Point& P, double s);
+    Line2D(const Point& P, double slope);
     double getSlope() const;
     double getYIntercept() const;
     double getXIntercept() const;
