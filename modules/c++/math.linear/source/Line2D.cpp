@@ -19,7 +19,11 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+
+#include <cmath>
 #include <math/linear/Line2D.h>
+#include <except/Exception.h>
+#include <sys/Conf.h>
 
 namespace math
 {
@@ -53,23 +57,24 @@ Line2D::Line2D(const Point& P1, const Point& P2)
     else {
         mType = Line2D::NORMAL;
         mSlope = dy / dx;
-        mYIntercept = P1.col - P1.row * mSlope; // Maybe a better way to do this. go back
+        mYIntercept = P1.col - P1.row * mSlope;
         mXIntercept = x(0.0);
     }
 }
 
-Line2D::Line2D(Point P, double s): mSlope(s)
+Line2D::Line2D(const Point& P, double s): mSlope(s)
 {
     if (mSlope == 0)
     {
         mType = Line2D::HORIZONTAL;
         mYIntercept = P.col;
         mXIntercept = 0; //undefined
-        return;
     }
-    mType = Line2D::NORMAL;
-    mYIntercept = P.col - P.row * mSlope;
-    mXIntercept = x(0.0);
+    else {
+        mType = Line2D::NORMAL;
+        mYIntercept = P.col - P.row * mSlope;
+        mXIntercept = x(0.0);
+    }
 }
 
 double Line2D::getSlope() const
@@ -85,7 +90,8 @@ double Line2D::getYIntercept() const
 {
     if (mType == Line2D::VERTICAL)
     {
-        throw except::Exception(Ctxt("No return value for a vertical line with undefined mYIntercept"));
+        throw except::Exception(Ctxt("No return value for a vertical line with "
+                "undefined mYIntercept"));
     }
     return mYIntercept;
 }
@@ -94,17 +100,18 @@ double Line2D::getXIntercept() const
 {
     if (mType == Line2D::HORIZONTAL)
     {
-        throw except::Exception(Ctxt("No return value for a horizontal line with undefined mXIntercept"));
+        throw except::Exception(Ctxt("No return value for a horizontal line "
+                "with undefined mXIntercept"));
     }
     return mXIntercept;
 }
 
-//Evaluate for y given x:
 double Line2D::y(double x) const
 {
     if (mType == Line2D::VERTICAL)
     {
-        throw except::Exception(Ctxt("Vertical line--cannot return a single y for given x"));
+        throw except::Exception(Ctxt("Vertical line--cannot return a single"
+                " y for given x"));
     }
     if (mType == Line2D::HORIZONTAL)
     {
@@ -113,12 +120,12 @@ double Line2D::y(double x) const
     return mSlope * x + mYIntercept;
 }
 
-//Evaluate for x given y:
 double Line2D::x(double y) const
 {
     if (mType == Line2D::HORIZONTAL)
     {
-        throw except::Exception(Ctxt("Horizontal line--cannot return a single x for given y"));
+        throw except::Exception(Ctxt("Horizontal line--cannot return a single"
+                " x for given y"));
     }
     if (mType == Line2D::VERTICAL)
     {
@@ -127,7 +134,6 @@ double Line2D::x(double y) const
     return (y - mYIntercept) / mSlope;
 }
 
-// Determine intersection of two lines
 Line2D::Point Line2D::intersection(const Line2D& rhs) const
 {
     Point P(0.0, 0.0);
@@ -153,7 +159,6 @@ Line2D::Point Line2D::intersection(const Line2D& rhs) const
     return P;
 }
 
-// Create a new line parallel to this line through point P
 Line2D Line2D::parallelToLine(const Point& P) const
 {
     if (mType == Line2D::VERTICAL)
@@ -167,7 +172,6 @@ Line2D Line2D::parallelToLine(const Point& P) const
     return Line2D(P, mSlope);
 }
 
-// Create a new line perpendicular to this line through point P
 Line2D Line2D::perpendicularToLine(const Point& P) const
 {
     if (mType == Line2D::HORIZONTAL)
@@ -188,7 +192,6 @@ Line2D Line2D::perpendicularToLine(const Point& P) const
     return Line2D(P, (-1.0 / mSlope));
 }
 
-// Compute the distance from this line to a point
 double Line2D::distanceToPoint(const Point& P) const
 {
     if (mType == Line2D::HORIZONTAL)
