@@ -24,6 +24,8 @@
 #include <math/linear/Vector.h>
 #include <math.h>
 
+namespace
+{
 TEST_CASE(VaryingDimension)
 {
     // Test case1: Control variable--components values
@@ -117,7 +119,7 @@ TEST_CASE(VaryingComponentVal)
     double actualNorm4 = v4.norm();
     TEST_ASSERT_ALMOST_EQ(expectedNorm4, actualNorm4);
 }
-
+}
 int main ()
 {
     TEST_CHECK(VaryingDimension);
