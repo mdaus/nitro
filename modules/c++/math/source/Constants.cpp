@@ -23,6 +23,24 @@
 #include <math.h>
 #include <math/Constants.h>
 
+#ifdef __CODA_CPP11
+namespace math
+{
+constexpr double Constants::FEET_TO_METERS = 0.3048;
+constexpr double Constants::METERS_TO_FEET = 1.0 / Constants::FEET_TO_METERS;
+constexpr double Constants::RADIANS_TO_DEGREES = 180.0 / M_PI;
+constexpr double Constants::DEGREES_TO_RADIANS = M_PI / 180.0;
+constexpr double Constants::NAUTICAL_MILES_TO_METERS = 1852.0;
+constexpr double Constants::METERS_TO_NAUTICAL_MILES =
+            1.0 / Constants::NAUTICAL_MILES_TO_METERS;
+constexpr double Constants::NAUTICAL_MILES_TO_FEET =
+            Constants::NAUTICAL_MILES_TO_METERS * Constants::FEET_TO_METERS;
+constexpr double Constants::SPEED_OF_LIGHT_METERS_PER_SEC = 299792458.0;
+constexpr double Constants::SPEED_OF_LIGHT_FEET_PER_SEC =
+        Constants::SPEED_OF_LIGHT_METERS_PER_SEC * Constants::METERS_TO_FEET;
+}
+
+#else
 namespace math
 {
 const double Constants::FEET_TO_METERS = 0.3048;
@@ -38,3 +56,4 @@ const double Constants::SPEED_OF_LIGHT_METERS_PER_SEC = 299792458.0;
 const double Constants::SPEED_OF_LIGHT_FEET_PER_SEC =
         Constants::SPEED_OF_LIGHT_METERS_PER_SEC * Constants::METERS_TO_FEET;
 }
+#endif
