@@ -12288,56 +12288,70 @@ fail:
 
 SWIGINTERN PyObject *_wrap_fit__SWIG_4(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  math::linear::Vector< double > arg1 ;
-  math::linear::Matrix2D< double > arg2 ;
-  size_t arg3 ;
-  void *argp1 ;
+  math::linear::Vector< double > *arg1 = 0 ;
+  math::linear::Vector< double > *arg2 = 0 ;
+  math::linear::Vector< double > *arg3 = 0 ;
+  math::linear::Vector< double > *arg4 = 0 ;
+  size_t arg5 ;
+  void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
+  void *argp2 = 0 ;
   int res2 = 0 ;
-  size_t val3 ;
-  int ecode3 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  void *argp4 = 0 ;
+  int res4 = 0 ;
+  size_t val5 ;
+  int ecode5 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
   math::poly::OneD< math::poly::Vector3 > result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOO:fit",&obj0,&obj1,&obj2)) SWIG_fail;
-  {
-    res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_math__linear__VectorT_double_t,  0  | 0);
-    if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "fit" "', argument " "1"" of type '" "math::linear::Vector< double > const""'"); 
-    }  
-    if (!argp1) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "fit" "', argument " "1"" of type '" "math::linear::Vector< double > const""'");
-    } else {
-      math::linear::Vector< double > * temp = reinterpret_cast< math::linear::Vector< double > * >(argp1);
-      arg1 = *temp;
-      if (SWIG_IsNewObj(res1)) delete temp;
-    }
+  if (!PyArg_ParseTuple(args,(char *)"OOOOO:fit",&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_math__linear__VectorT_double_t,  0  | 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "fit" "', argument " "1"" of type '" "math::linear::Vector< double > const &""'"); 
   }
-  {
-    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__linear__Matrix2DT_double_t,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "fit" "', argument " "2"" of type '" "math::linear::Matrix2D< double > const""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "fit" "', argument " "2"" of type '" "math::linear::Matrix2D< double > const""'");
-    } else {
-      math::linear::Matrix2D< double > * temp = reinterpret_cast< math::linear::Matrix2D< double > * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "fit" "', argument " "1"" of type '" "math::linear::Vector< double > const &""'"); 
   }
-  ecode3 = SWIG_AsVal_size_t(obj2, &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "fit" "', argument " "3"" of type '" "size_t""'");
+  arg1 = reinterpret_cast< math::linear::Vector< double > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__linear__VectorT_double_t,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "fit" "', argument " "2"" of type '" "math::linear::Vector< double > const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "fit" "', argument " "2"" of type '" "math::linear::Vector< double > const &""'"); 
+  }
+  arg2 = reinterpret_cast< math::linear::Vector< double > * >(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_math__linear__VectorT_double_t,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "fit" "', argument " "3"" of type '" "math::linear::Vector< double > const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "fit" "', argument " "3"" of type '" "math::linear::Vector< double > const &""'"); 
+  }
+  arg3 = reinterpret_cast< math::linear::Vector< double > * >(argp3);
+  res4 = SWIG_ConvertPtr(obj3, &argp4, SWIGTYPE_p_math__linear__VectorT_double_t,  0  | 0);
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "fit" "', argument " "4"" of type '" "math::linear::Vector< double > const &""'"); 
+  }
+  if (!argp4) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "fit" "', argument " "4"" of type '" "math::linear::Vector< double > const &""'"); 
+  }
+  arg4 = reinterpret_cast< math::linear::Vector< double > * >(argp4);
+  ecode5 = SWIG_AsVal_size_t(obj4, &val5);
+  if (!SWIG_IsOK(ecode5)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "fit" "', argument " "5"" of type '" "size_t""'");
   } 
-  arg3 = static_cast< size_t >(val3);
+  arg5 = static_cast< size_t >(val5);
   {
     try
     {
-      result = math::poly::fit(arg1,arg2,arg3);
+      result = math::poly::fit((math::linear::Vector< double > const &)*arg1,(math::linear::Vector< double > const &)*arg2,(math::linear::Vector< double > const &)*arg3,(math::linear::Vector< double > const &)*arg4,arg5);
     } 
     catch (const std::exception& e)
     {
@@ -12374,66 +12388,46 @@ fail:
 
 SWIGINTERN PyObject *_wrap_fit__SWIG_5(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  std::vector< double,std::allocator< double > > arg1 ;
-  std::vector< double,std::allocator< double > > arg2 ;
-  std::vector< double,std::allocator< double > > arg3 ;
-  std::vector< double,std::allocator< double > > arg4 ;
-  size_t arg5 ;
-  size_t val5 ;
-  int ecode5 = 0 ;
+  math::linear::Vector< double > *arg1 = 0 ;
+  math::linear::Matrix2D< double > *arg2 = 0 ;
+  size_t arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  size_t val3 ;
+  int ecode3 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
-  PyObject * obj3 = 0 ;
-  PyObject * obj4 = 0 ;
   math::poly::OneD< math::poly::Vector3 > result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOOOO:fit",&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
-  {
-    std::vector<double,std::allocator< double > > *ptr = (std::vector<double,std::allocator< double > > *)0;
-    int res = swig::asptr(obj0, &ptr);
-    if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "fit" "', argument " "1"" of type '" "std::vector< double,std::allocator< double > > const""'"); 
-    }
-    arg1 = *ptr;
-    if (SWIG_IsNewObj(res)) delete ptr;
+  if (!PyArg_ParseTuple(args,(char *)"OOO:fit",&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_math__linear__VectorT_double_t,  0  | 0);
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "fit" "', argument " "1"" of type '" "math::linear::Vector< double > const &""'"); 
   }
-  {
-    std::vector<double,std::allocator< double > > *ptr = (std::vector<double,std::allocator< double > > *)0;
-    int res = swig::asptr(obj1, &ptr);
-    if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "fit" "', argument " "2"" of type '" "std::vector< double,std::allocator< double > > const""'"); 
-    }
-    arg2 = *ptr;
-    if (SWIG_IsNewObj(res)) delete ptr;
+  if (!argp1) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "fit" "', argument " "1"" of type '" "math::linear::Vector< double > const &""'"); 
   }
-  {
-    std::vector<double,std::allocator< double > > *ptr = (std::vector<double,std::allocator< double > > *)0;
-    int res = swig::asptr(obj2, &ptr);
-    if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "fit" "', argument " "3"" of type '" "std::vector< double,std::allocator< double > > const""'"); 
-    }
-    arg3 = *ptr;
-    if (SWIG_IsNewObj(res)) delete ptr;
+  arg1 = reinterpret_cast< math::linear::Vector< double > * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__linear__Matrix2DT_double_t,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "fit" "', argument " "2"" of type '" "math::linear::Matrix2D< double > const &""'"); 
   }
-  {
-    std::vector<double,std::allocator< double > > *ptr = (std::vector<double,std::allocator< double > > *)0;
-    int res = swig::asptr(obj3, &ptr);
-    if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "fit" "', argument " "4"" of type '" "std::vector< double,std::allocator< double > > const""'"); 
-    }
-    arg4 = *ptr;
-    if (SWIG_IsNewObj(res)) delete ptr;
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "fit" "', argument " "2"" of type '" "math::linear::Matrix2D< double > const &""'"); 
   }
-  ecode5 = SWIG_AsVal_size_t(obj4, &val5);
-  if (!SWIG_IsOK(ecode5)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "fit" "', argument " "5"" of type '" "size_t""'");
+  arg2 = reinterpret_cast< math::linear::Matrix2D< double > * >(argp2);
+  ecode3 = SWIG_AsVal_size_t(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "fit" "', argument " "3"" of type '" "size_t""'");
   } 
-  arg5 = static_cast< size_t >(val5);
+  arg3 = static_cast< size_t >(val3);
   {
     try
     {
-      result = math::poly::fit(arg1,arg2,arg3,arg4,arg5);
+      result = math::poly::fit((math::linear::Vector< double > const &)*arg1,(math::linear::Matrix2D< double > const &)*arg2,arg3);
     } 
     catch (const std::exception& e)
     {
@@ -12468,6 +12462,122 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_fit__SWIG_6(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  std::vector< double,std::allocator< double > > *arg1 = 0 ;
+  std::vector< double,std::allocator< double > > *arg2 = 0 ;
+  std::vector< double,std::allocator< double > > *arg3 = 0 ;
+  std::vector< double,std::allocator< double > > *arg4 = 0 ;
+  size_t arg5 ;
+  int res1 = SWIG_OLDOBJ ;
+  int res2 = SWIG_OLDOBJ ;
+  int res3 = SWIG_OLDOBJ ;
+  int res4 = SWIG_OLDOBJ ;
+  size_t val5 ;
+  int ecode5 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  math::poly::OneD< math::poly::Vector3 > result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OOOOO:fit",&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  {
+    std::vector<double,std::allocator< double > > *ptr = (std::vector<double,std::allocator< double > > *)0;
+    res1 = swig::asptr(obj0, &ptr);
+    if (!SWIG_IsOK(res1)) {
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "fit" "', argument " "1"" of type '" "std::vector< double,std::allocator< double > > const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "fit" "', argument " "1"" of type '" "std::vector< double,std::allocator< double > > const &""'"); 
+    }
+    arg1 = ptr;
+  }
+  {
+    std::vector<double,std::allocator< double > > *ptr = (std::vector<double,std::allocator< double > > *)0;
+    res2 = swig::asptr(obj1, &ptr);
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "fit" "', argument " "2"" of type '" "std::vector< double,std::allocator< double > > const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "fit" "', argument " "2"" of type '" "std::vector< double,std::allocator< double > > const &""'"); 
+    }
+    arg2 = ptr;
+  }
+  {
+    std::vector<double,std::allocator< double > > *ptr = (std::vector<double,std::allocator< double > > *)0;
+    res3 = swig::asptr(obj2, &ptr);
+    if (!SWIG_IsOK(res3)) {
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "fit" "', argument " "3"" of type '" "std::vector< double,std::allocator< double > > const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "fit" "', argument " "3"" of type '" "std::vector< double,std::allocator< double > > const &""'"); 
+    }
+    arg3 = ptr;
+  }
+  {
+    std::vector<double,std::allocator< double > > *ptr = (std::vector<double,std::allocator< double > > *)0;
+    res4 = swig::asptr(obj3, &ptr);
+    if (!SWIG_IsOK(res4)) {
+      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "fit" "', argument " "4"" of type '" "std::vector< double,std::allocator< double > > const &""'"); 
+    }
+    if (!ptr) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "fit" "', argument " "4"" of type '" "std::vector< double,std::allocator< double > > const &""'"); 
+    }
+    arg4 = ptr;
+  }
+  ecode5 = SWIG_AsVal_size_t(obj4, &val5);
+  if (!SWIG_IsOK(ecode5)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "fit" "', argument " "5"" of type '" "size_t""'");
+  } 
+  arg5 = static_cast< size_t >(val5);
+  {
+    try
+    {
+      result = math::poly::fit((std::vector< double,std::allocator< double > > const &)*arg1,(std::vector< double,std::allocator< double > > const &)*arg2,(std::vector< double,std::allocator< double > > const &)*arg3,(std::vector< double,std::allocator< double > > const &)*arg4,arg5);
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_NewPointerObj((new math::poly::OneD< math::poly::Vector3 >(static_cast< const math::poly::OneD< math::poly::Vector3 >& >(result))), SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, SWIG_POINTER_OWN |  0 );
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  if (SWIG_IsNewObj(res3)) delete arg3;
+  if (SWIG_IsNewObj(res4)) delete arg4;
+  return resultobj;
+fail:
+  if (SWIG_IsNewObj(res1)) delete arg1;
+  if (SWIG_IsNewObj(res2)) delete arg2;
+  if (SWIG_IsNewObj(res3)) delete arg3;
+  if (SWIG_IsNewObj(res4)) delete arg4;
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_fit(PyObject *self, PyObject *args) {
   int argc;
   PyObject *argv[8];
@@ -12491,7 +12601,7 @@ SWIGINTERN PyObject *_wrap_fit(PyObject *self, PyObject *args) {
           _v = SWIG_CheckState(res);
         }
         if (_v) {
-          return _wrap_fit__SWIG_4(self, args);
+          return _wrap_fit__SWIG_5(self, args);
         }
       }
     }
@@ -12517,6 +12627,32 @@ SWIGINTERN PyObject *_wrap_fit(PyObject *self, PyObject *args) {
           }
           if (_v) {
             return _wrap_fit__SWIG_1(self, args);
+          }
+        }
+      }
+    }
+  }
+  if (argc == 5) {
+    int _v;
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_math__linear__VectorT_double_t, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_math__linear__VectorT_double_t, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_math__linear__VectorT_double_t, 0);
+        _v = SWIG_CheckState(res);
+        if (_v) {
+          int res = SWIG_ConvertPtr(argv[3], 0, SWIGTYPE_p_math__linear__VectorT_double_t, 0);
+          _v = SWIG_CheckState(res);
+          if (_v) {
+            {
+              int res = SWIG_AsVal_size_t(argv[4], NULL);
+              _v = SWIG_CheckState(res);
+            }
+            if (_v) {
+              return _wrap_fit__SWIG_4(self, args);
+            }
           }
         }
       }
@@ -12569,7 +12705,7 @@ SWIGINTERN PyObject *_wrap_fit(PyObject *self, PyObject *args) {
               _v = SWIG_CheckState(res);
             }
             if (_v) {
-              return _wrap_fit__SWIG_5(self, args);
+              return _wrap_fit__SWIG_6(self, args);
             }
           }
         }
@@ -12626,8 +12762,9 @@ fail:
     "    math::poly::fit(size_t,double const *,double const *,size_t)\n"
     "    math::poly::fit(math::linear::Matrix2D< double > const &,math::linear::Matrix2D< double > const &,math::linear::Matrix2D< double > const &,size_t,size_t)\n"
     "    math::poly::fit(size_t,size_t,double const *,double const *,double const *,size_t,size_t)\n"
-    "    math::poly::fit(math::linear::Vector< double > const,math::linear::Matrix2D< double > const,size_t)\n"
-    "    math::poly::fit(std::vector< double,std::allocator< double > > const,std::vector< double,std::allocator< double > > const,std::vector< double,std::allocator< double > > const,std::vector< double,std::allocator< double > > const,size_t)\n");
+    "    math::poly::fit(math::linear::Vector< double > const &,math::linear::Vector< double > const &,math::linear::Vector< double > const &,math::linear::Vector< double > const &,size_t)\n"
+    "    math::poly::fit(math::linear::Vector< double > const &,math::linear::Matrix2D< double > const &,size_t)\n"
+    "    math::poly::fit(std::vector< double,std::allocator< double > > const &,std::vector< double,std::allocator< double > > const &,std::vector< double,std::allocator< double > > const &,std::vector< double,std::allocator< double > > const &,size_t)\n");
   return 0;
 }
 
@@ -16289,7 +16426,8 @@ static PyMethodDef SwigMethods[] = {
 		"fit(size_t numObs, double const * x, double const * y, size_t numCoeffs) -> Poly1D\n"
 		"fit(MatrixDouble x, MatrixDouble y, MatrixDouble z, size_t nx, size_t ny) -> Poly2D\n"
 		"fit(size_t numRows, size_t numCols, double const * x, double const * y, double const * z, size_t nx, size_t ny) -> Poly2D\n"
-		"fit(VectorDouble xObs, MatrixDouble yObs, size_t numCoeffs) -> PolyVector3\n"
+		"fit(VectorDouble xObs, VectorDouble yObs0, VectorDouble yObs1, VectorDouble yObs2, size_t numCoeffs) -> PolyVector3\n"
+		"fit(VectorDouble xObsVector, MatrixDouble yObsMatrix, size_t numCoeffs) -> PolyVector3\n"
 		"fit(std_vector_double xObs, std_vector_double yObs0, std_vector_double yObs1, std_vector_double yObs2, size_t numCoeffs) -> PolyVector3\n"
 		""},
 	 { (char *)"FitVectorDouble", _wrap_FitVectorDouble, METH_VARARGS, (char *)"FitVectorDouble(VectorDouble x, VectorDouble y, size_t numCoeffs) -> Poly1D"},

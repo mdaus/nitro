@@ -255,23 +255,25 @@ inline math::poly::TwoD<double> fit(size_t numRows,
 typedef math::linear::VectorN<3, double> Vector3;
 
 inline math::poly::OneD<Vector3> fit(
-    const math::linear::Vector<double> xObs,
-    const math::linear::Matrix2D<double> yObs,
+    const math::linear::Vector<double>& xObs,
+    const math::linear::Vector<double>& yObs0,
+    const math::linear::Vector<double>& yObs1,
+    const math::linear::Vector<double>& yObs2,
     size_t numCoeffs)
 {
     size_t numObs = xObs.size();
-    if (numObs != yObs.cols())
+    if (yObs0.size() != numObs || yObs1.size() != numObs || yObs2.size() != numObs)
     {
         throw except::Exception(Ctxt("Must have the same number of observed y values as observed x values"));
     }
     if (numCoeffs < 1)
     {
-        throw except::Exception(Ctxt("Must have an order >0"));
+        throw except::Exception(Ctxt("Number of coefficients must be >= 1"));
     }
 
-    math::poly::OneD<double> fit0 = fit(xObs, math::linear::Vector<double>(numObs, yObs.row(0)), numCoeffs);
-    math::poly::OneD<double> fit1 = fit(xObs, math::linear::Vector<double>(numObs, yObs.row(1)), numCoeffs);
-    math::poly::OneD<double> fit2 = fit(xObs, math::linear::Vector<double>(numObs, yObs.row(2)), numCoeffs);
+    math::poly::OneD<double> fit0 = fit(xObs, yObs0, numCoeffs);
+    math::poly::OneD<double> fit1 = fit(xObs, yObs1, numCoeffs);
+    math::poly::OneD<double> fit2 = fit(xObs, yObs2, numCoeffs);
 
     math::poly::OneD<Vector3> polyVector3 = math::poly::OneD<Vector3>(numCoeffs-1);
     for (size_t i = 0; i< numCoeffs; i++)
@@ -287,44 +289,39 @@ inline math::poly::OneD<Vector3> fit(
 }
 
 inline math::poly::OneD<Vector3> fit(
-        const std::vector<double> xObs,
-        const std::vector<double> yObs0,
-        const std::vector<double> yObs1,
-        const std::vector<double> yObs2,
-        size_t  numCoeffs)
+    const math::linear::Vector<double>& xObsVector,
+    const math::linear::Matrix2D<double>& yObsMatrix,
+    size_t numCoeffs)
 {
-    if (yObs0.size() != xObs.size())
-    {
-        throw except::Exception(Ctxt("Must have the same number of observed y values as observed x values"));
-    }
-    if (yObs1.size() != xObs.size())
-    {
-        throw except::Exception(Ctxt("Must have the same number of observed y values as observed x values"));
-    }
-    if (yObs2.size() != xObs.size())
-    {
-        throw except::Exception(Ctxt("Must have the same number of observed y values as observed x values"));
-    }
-    if (numCoeffs < 1)
-    {
-        throw except::Exception(Ctxt("Must have an order >0"));
-    }
+    // Vector size error checking will be done by the base fit() function
+    size_t numObs = yObsMatrix.cols();
+    math::linear::Vector<double> yObsVector0 = math::linear::Vector<double>(numObs, yObsMatrix.row(0));
+    math::linear::Vector<double> yObsVector1 = math::linear::Vector<double>(numObs, yObsMatrix.row(1));
+    math::linear::Vector<double> yObsVector2 = math::linear::Vector<double>(numObs, yObsMatrix.row(2));
 
-    math::linear::Vector<double> xObsVector = math::linear::Vector<double>(xObs);
-    math::poly::OneD<double> fit0 = fit(xObsVector, math::linear::Vector<double>(yObs0), numCoeffs);
-    math::poly::OneD<double> fit1 = fit(xObsVector, math::linear::Vector<double>(yObs1), numCoeffs);
-    math::poly::OneD<double> fit2 = fit(xObsVector, math::linear::Vector<double>(yObs2), numCoeffs);
+    math::poly::OneD<Vector3> polyVector3 = fit(
+        xObsVector,
+        yObsVector0,
+        yObsVector1,
+        yObsVector2,
+        numCoeffs);
+    return polyVector3;
+}
 
-    math::poly::OneD<Vector3> polyVector3 = math::poly::OneD<Vector3>(numCoeffs-1);
-    for (size_t i = 0; i< numCoeffs; i++)
-    {
-        Vector3 coeffs = Vector3();
-        coeffs[0] = fit0[i];
-        coeffs[1] = fit1[i];
-        coeffs[2] = fit2[i];
-        polyVector3[i] = coeffs;
-    }
-
+inline math::poly::OneD<Vector3> fit(
+        const std::vector<double>& xObs,
+        const std::vector<double>& yObs0,
+        const std::vector<double>& yObs1,
+        const std::vector<double>& yObs2,
+        size_t numCoeffs)
+{
+    // Vector size error checking will be done by the base fit() function
+    math::poly::OneD<Vector3> polyVector3 = fit(
+        math::linear::Vector<double>(xObs),
+        math::linear::Vector<double>(yObs0),
+        math::linear::Vector<double>(yObs1),
+        math::linear::Vector<double>(yObs2),
+        numCoeffs);
     return polyVector3;
 }
 }
