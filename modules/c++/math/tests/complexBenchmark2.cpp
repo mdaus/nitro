@@ -19,36 +19,42 @@
 #include <complex>
 #include <sys/StopWatch.h>
 
-std::complex<float> getMeanWComplex(sys::RealTimeStopWatch& wtch, std::complex<float>* in, long long sze, double& duration)
+std::complex<float> getMeanWComplex(sys::RealTimeStopWatch& wtch, std::complex<float>* in, long long sze, long long numLoops, double& duration)
 {
     std::complex<double> tmp(0.0,0.0);
     wtch.start();
     
-    for (long long i = 0; i < sze; ++i)
+    for(long long k = 0; k < numLoops; ++k)
     {
-        tmp += in[i];
+        for (long long i = 0; i < sze; ++i)
+        {
+            tmp += in[i];
+        }
     }
 
-    tmp /= sze;
+    tmp /= (sze * numLoops);
     duration = wtch.stop();
     
     return std::complex<float>(static_cast<float>(tmp.real()), static_cast<float>(tmp.imag()));
 }
 
-std::complex<float> getMeanWDouble(sys::RealTimeStopWatch& wtch, std::complex<float>* in, long long sze, double& duration)
+std::complex<float> getMeanWDouble(sys::RealTimeStopWatch& wtch, std::complex<float>* in, long long sze, long long numLoops, double& duration)
 {
     double meanI = 0.0;
     double meanQ = 0.0;
 
     wtch.start();
-    for (long long i = 0; i < sze; ++i)
+    for(long long k = 0; k < numLoops; ++k)
     {
-        meanI += in[i].real();
-        meanQ += in[i].imag();
+        for (long long i = 0; i < sze; ++i)
+        {
+            meanI += in[i].real();
+            meanQ += in[i].imag();
+        }
     }
 
-    meanI /= sze;
-    meanQ /= sze;
+    meanI /= (sze * numLoops);
+    meanQ /= (sze * numLoops);
     
     duration = wtch.stop();
     std::complex<float> tmp(meanI, meanQ);
@@ -77,7 +83,7 @@ int main(int argc, char** argv)
     long long sze = atoi(argv[1]);
     size_t growthFactor = atoi(argv[2]);
     size_t numIter = atoi(argv[3]); 
-    std::ofstream outFile("out.txt");
+    std::ofstream outFile("out2.txt");
     std::ostringstream out;
     out << std::setprecision(5);
     out.setf(std::ios::fixed);
@@ -88,8 +94,7 @@ int main(int argc, char** argv)
     outFile.setf(std::ios::left);
 
     //Initialize the array ahead of time and then fill it incrementally
-    const unsigned long long MAX_SIZE = 10E10 / (sizeof( std::complex<float>));
-    std::complex<float>* arr = new std::complex<float> [MAX_SIZE];
+    std::complex<float>* arr = new std::complex<float> [sze];
     srand(time(NULL));
 
     //std::cout << "seeded " << std::endl;
@@ -99,53 +104,48 @@ int main(int argc, char** argv)
 
     //std::cout << "Assigning first spot" << std::endl;
     arr[0] = std::complex<float>(Real, Imag);
-    long long j = 1;    
+
+    //std::cout << "creating array" << std::endl;
+
+    //std::cout << "created array" << std::endl;
+
+    for (long long j = 1; j < sze; ++j)
+    {
+        Real += (arr[j-1].real() + arr[j-1].imag());
+        Imag += (arr[j-1].imag() * arr[j-1].real());
+        
+        //DJS: limit the range of the variables
+        while(100 < Real)
+        {
+            Real /= 10;
+        }
+        while(100 < Imag)
+        {
+            Imag /= 10;
+        }
+
+        arr[j] = std::complex<float>(Real, Imag);
+    }
+    
+    sys::RealTimeStopWatch cmplxWatch;
+    sys::RealTimeStopWatch dblWatch;
+    long long numLoops = 1;
+    
     for (long long i = 0; i < numIter; ++i)
     {
-
-        //std::cout << "creating array" << std::endl;
-
-        //std::cout << "created array" << std::endl;
-
-        for (; j < sze; ++j)
-        {
-            Real += (arr[j-1].real() + arr[j-1].imag());
-            Imag += (arr[j-1].imag() * arr[j-1].real());
-            
-            //DJS: limit the range of the variables
-            while(100 < Real)
-            {
-                Real /= 10;
-            }
-            while(100 < Imag)
-            {
-                Imag /= 10;
-            }
-
-            arr[j] = std::complex<float>(Real, Imag);
-            //if( i % ( sze/10) == 0)
-                //std::cerr << i << std::endl;
-        }
-        
-        //for (size_t i = 0; i < sze; ++i)
-        //    std::cout << arr[i] << std::endl;
-        
-        sys::RealTimeStopWatch cmplxWatch;
-        sys::RealTimeStopWatch dblWatch;
-
         double cmplxDuration;
         double dblDuration;
         for (size_t k = 0; k < 4; ++k)
         {
-            std::complex<float> cmplxMean = getMeanWComplex(cmplxWatch, arr, sze, cmplxDuration);
+            std::complex<float> cmplxMean = getMeanWComplex(cmplxWatch, arr, sze, numLoops, cmplxDuration);
 
-            std::complex<float> dblMean = getMeanWDouble(dblWatch, arr, sze, dblDuration);
+            std::complex<float> dblMean = getMeanWDouble(dblWatch, arr, sze, numLoops, dblDuration);
 
-            print(out, sze, cmplxMean, dblMean, cmplxDuration, dblDuration);
+            print(out, sze* numLoops, cmplxMean, dblMean, cmplxDuration, dblDuration);
         }
         //delete [] arr;
         
-        sze *= growthFactor;
+        numLoops *= growthFactor;
 
         if (sizeof(std::complex<float>) * sze > 10E10)
         {
@@ -153,6 +153,7 @@ int main(int argc, char** argv)
             break;
         }
     }
+
     delete [] arr;
     outFile << out.str() << std::endl;
     outFile.close();
