@@ -288,6 +288,98 @@ class RowColDouble(_object):
 RowColDouble_swigregister = _coda_types.RowColDouble_swigregister
 RowColDouble_swigregister(RowColDouble)
 
+class RowColSizeT(_object):
+    """Proxy of C++ types::RowCol<(size_t)> class"""
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, RowColSizeT, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, RowColSizeT, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["row"] = _coda_types.RowColSizeT_row_set
+    __swig_getmethods__["row"] = _coda_types.RowColSizeT_row_get
+    if _newclass:
+        row = _swig_property(_coda_types.RowColSizeT_row_get, _coda_types.RowColSizeT_row_set)
+    __swig_setmethods__["col"] = _coda_types.RowColSizeT_col_set
+    __swig_getmethods__["col"] = _coda_types.RowColSizeT_col_get
+    if _newclass:
+        col = _swig_property(_coda_types.RowColSizeT_col_get, _coda_types.RowColSizeT_col_set)
+
+    def __init__(self, *args):
+        """
+        __init__(types::RowCol<(size_t)> self) -> RowColSizeT
+        __init__(types::RowCol<(size_t)> self, size_t r, size_t c) -> RowColSizeT
+        __init__(types::RowCol<(size_t)> self, std::pair< size_t,size_t > const & p) -> RowColSizeT
+        """
+        this = _coda_types.new_RowColSizeT(*args)
+        try:
+            self.this.append(this)
+        except:
+            self.this = this
+
+    def __iadd__(self, scalar):
+        """__iadd__(RowColSizeT self, size_t scalar) -> RowColSizeT"""
+        return _coda_types.RowColSizeT___iadd__(self, scalar)
+
+
+    def __add__(self, scalar):
+        """__add__(RowColSizeT self, size_t scalar) -> RowColSizeT"""
+        return _coda_types.RowColSizeT___add__(self, scalar)
+
+
+    def __isub__(self, scalar):
+        """__isub__(RowColSizeT self, size_t scalar) -> RowColSizeT"""
+        return _coda_types.RowColSizeT___isub__(self, scalar)
+
+
+    def __sub__(self, scalar):
+        """__sub__(RowColSizeT self, size_t scalar) -> RowColSizeT"""
+        return _coda_types.RowColSizeT___sub__(self, scalar)
+
+
+    def __imul__(self, scalar):
+        """__imul__(RowColSizeT self, size_t scalar) -> RowColSizeT"""
+        return _coda_types.RowColSizeT___imul__(self, scalar)
+
+
+    def __mul__(self, scalar):
+        """__mul__(RowColSizeT self, size_t scalar) -> RowColSizeT"""
+        return _coda_types.RowColSizeT___mul__(self, scalar)
+
+
+    def __idiv__(self, scalar):
+        """__idiv__(RowColSizeT self, size_t scalar) -> RowColSizeT"""
+        return _coda_types.RowColSizeT___idiv__(self, scalar)
+
+
+    def __div__(self, scalar):
+        """__div__(RowColSizeT self, size_t scalar) -> RowColSizeT"""
+        return _coda_types.RowColSizeT___div__(self, scalar)
+
+
+    def __eq__(self, p):
+        """__eq__(RowColSizeT self, RowColSizeT p) -> bool"""
+        return _coda_types.RowColSizeT___eq__(self, p)
+
+
+    def __ne__(self, p):
+        """__ne__(RowColSizeT self, RowColSizeT p) -> bool"""
+        return _coda_types.RowColSizeT___ne__(self, p)
+
+
+    def normL1(self):
+        """normL1(RowColSizeT self) -> size_t"""
+        return _coda_types.RowColSizeT_normL1(self)
+
+
+    def normL2(self):
+        """normL2(RowColSizeT self) -> size_t"""
+        return _coda_types.RowColSizeT_normL2(self)
+
+    __swig_destroy__ = _coda_types.delete_RowColSizeT
+    __del__ = lambda self: None
+RowColSizeT_swigregister = _coda_types.RowColSizeT_swigregister
+RowColSizeT_swigregister(RowColSizeT)
+
 class RgAzDouble(_object):
     """Proxy of C++ types::RgAz<(double)> class"""
     __swig_setmethods__ = {}
