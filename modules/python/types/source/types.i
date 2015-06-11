@@ -37,4 +37,5 @@
 %include "types/RowCol.h"
 %include "types/RgAz.h"
 %template(RowColDouble) types::RowCol<double>;
+%template(RowColSizeT) types::RowCol<size_t>;
 %template(RgAzDouble) types::RgAz<double>;
