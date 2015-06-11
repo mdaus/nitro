@@ -254,6 +254,19 @@ inline math::poly::TwoD<double> fit(size_t numRows,
 
 typedef math::linear::VectorN<3, double> Vector3;
 
+/*!
+ *  Perform three 1D fits using the same set of observed X values, and return a 1D polynomial with
+ *  a Vector of 3 coefficients for each term.
+ *
+ *  \param xObs Observed x values
+ *  \param yObs0 First set of observed y values
+ *  \param yObs1 Second set of observed y values
+ *  \param yObs2 Third set of observed y values
+ *  \param numCoeffs The number of terms in the output poly (order + 1)
+ *  \throw Exception if all input Vectors are not equally sized
+ *  \return A polynomial (B01, B02, B03)x^0 + (B11, B12, B13)x^1 + ... + (Bn1, Bn2, Bn3)x^n
+ */
+
 inline math::poly::OneD<Vector3> fit(
     const math::linear::Vector<double>& xObs,
     const math::linear::Vector<double>& yObs0,
@@ -271,30 +284,45 @@ inline math::poly::OneD<Vector3> fit(
         throw except::Exception(Ctxt("Number of coefficients must be >= 1"));
     }
 
-    math::poly::OneD<double> fit0 = fit(xObs, yObs0, numCoeffs);
-    math::poly::OneD<double> fit1 = fit(xObs, yObs1, numCoeffs);
-    math::poly::OneD<double> fit2 = fit(xObs, yObs2, numCoeffs);
+    const math::poly::OneD<double> fit0 = fit(xObs, yObs0, numCoeffs);
+    const math::poly::OneD<double> fit1 = fit(xObs, yObs1, numCoeffs);
+    const math::poly::OneD<double> fit2 = fit(xObs, yObs2, numCoeffs);
 
     math::poly::OneD<Vector3> polyVector3 = math::poly::OneD<Vector3>(numCoeffs-1);
-    for (size_t i = 0; i< numCoeffs; i++)
+    for (size_t term = 0; term < numCoeffs; term++)
     {
-        Vector3 coeffs = Vector3();
-        coeffs[0] = fit0[i];
-        coeffs[1] = fit1[i];
-        coeffs[2] = fit2[i];
-        polyVector3[i] = coeffs;
+        Vector3& coeffs = polyVector3[term];
+        coeffs[0] = fit0[term];
+        coeffs[1] = fit1[term];
+        coeffs[2] = fit2[term];
     }
 
     return polyVector3;
 }
+
+/*!
+ *  Perform three 1D fits using the same set of observed X values, and return a 1D polynomial with
+ *  a Vector of 3 coefficients for each term.
+ *
+ *  \param xObsVector Observed x values
+ *  \param yObsMatrix Matrix with each row as a set of observed y values
+ *  \param numCoeffs The number of terms in the output poly (order + 1)
+ *  \throw Exception if the matrix doesn't have 3 sets of values, i.e. 3 rows
+ *  \return A polynomial (B01, B02, B03)x^0 + (B11, B12, B13)x^1 + ... + (Bn1, Bn2, Bn3)x^n
+ */
 
 inline math::poly::OneD<Vector3> fit(
     const math::linear::Vector<double>& xObsVector,
     const math::linear::Matrix2D<double>& yObsMatrix,
     size_t numCoeffs)
 {
+    if (yObsMatrix.rows() != 3)
+    {
+        throw except::Exception(Ctxt("Matrix of observed Y values must have 3 rows"));
+    }
+
     // Vector size error checking will be done by the base fit() function
-    size_t numObs = yObsMatrix.cols();
+    const size_t numObs = yObsMatrix.cols();
     math::linear::Vector<double> yObsVector0 = math::linear::Vector<double>(numObs, yObsMatrix.row(0));
     math::linear::Vector<double> yObsVector1 = math::linear::Vector<double>(numObs, yObsMatrix.row(1));
     math::linear::Vector<double> yObsVector2 = math::linear::Vector<double>(numObs, yObsMatrix.row(2));
@@ -307,6 +335,18 @@ inline math::poly::OneD<Vector3> fit(
         numCoeffs);
     return polyVector3;
 }
+
+/*!
+ *  Perform three 1D fits using the same set of observed X values, and return a 1D polynomial with
+ *  a Vector of 3 coefficients for each term.
+ *
+ *  \param xObs Observed x values
+ *  \param yObs0 First set of observed y values
+ *  \param yObs1 Second set of observed y values
+ *  \param yObs2 Third set of observed y values
+ *  \param numCoeffs The number of terms in the output poly (order + 1)
+ *  \return A polynomial (B01, B02, B03)x^0 + (B11, B12, B13)x^1 + ... + (Bn1, Bn2, Bn3)x^n
+ */
 
 inline math::poly::OneD<Vector3> fit(
         const std::vector<double>& xObs,
