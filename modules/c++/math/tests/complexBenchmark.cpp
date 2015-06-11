@@ -369,13 +369,13 @@ int main(int argc, char** argv)
     }
 
     //read in commandline arguements
-    size_t sze = atoi(argv[1]);
-    size_t growthFactor = atoi(argv[2]);
-    size_t numIter = atoi(argv[3]);
+    size_t sze = str::toType<size_t>(argv[1]);
+    size_t growthFactor = str::toType<size_t>(argv[2]);
+    size_t numIter = str::toType<size_t>(argv[3]);
     size_t toLoop = 0;
     if (argc == 5)
     {
-        toLoop = atoi(argv[4]);
+        toLoop = str::toType<size_t>(argv[4]);
     }
 
     //setup ostringstream
