@@ -256,7 +256,7 @@ size_t decideSize(size_t initSize, size_t growthFactor, size_t numGrowths)
 {
     //setup size calculation variables
     const size_t MAX_SIZE = 10E10 / (sizeof( std::complex<float>));
-    size_t largestPosGrowth = initSize * std::pow(growthFactor, numGrowths);
+    size_t largestPosGrowth = initSize * std::pow<double>(growthFactor, numGrowths);
     size_t largestPosSize = std::min(largestPosGrowth, MAX_SIZE);
 
     //if growth is too high, find last growth less than MaxSize
