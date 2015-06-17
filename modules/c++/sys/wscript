@@ -43,12 +43,15 @@ def configure(conf):
                 return 0;
             }
             '''
+
+   # Visual Studio 2013 has nullptr but not constexpr.  Need to check for
+   # both in here to make sure we have full C++11 support... otherwise,
+   # long-term we may need multiple separate configure checks and
+   # corresponding defines
 	cpp11_str = '''
-		#include <iostream>
 		int main()
 		{
-			int* s = nullptr;
-			std::cout << s;
+			constexpr void* FOO = nullptr;
 		}
 		'''
         #find out the size of some types, etc.
