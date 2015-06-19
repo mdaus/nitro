@@ -163,7 +163,8 @@ Line2D::Point Line2D::intersection(const Line2D& rhs) const
     {
         throw except::Exception(Ctxt("Lines do not intersect"));
     }
-    else {
+    else 
+    {
         return P;
     }
 }
