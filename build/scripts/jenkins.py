@@ -25,7 +25,6 @@ install_suffix = ''
 
 package_name = options.package_name
 build_dir = options.build_dir
-
 if options.config_options is not None:
     config_options = options.config_options.split(',')
 else:
