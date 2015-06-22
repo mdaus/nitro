@@ -25,10 +25,11 @@ install_suffix = ''
 
 package_name = options.package_name
 build_dir = options.build_dir
+
 if options.config_options is not None:
     config_options = options.config_options.split(',')
 else:
-    config_options = []
+    config_options = "--enable-swig"
 if options.build_options is not None:
     build_options = options.build_options.split(',')
 else:
