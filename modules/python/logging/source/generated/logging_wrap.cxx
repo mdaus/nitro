@@ -2968,16 +2968,16 @@ static swig_module_info swig_module = {swig_types, 20, 0, 0, 0, 0};
 #endif
 
 /*-----------------------------------------------
-              @(target):= _coda_logging.so
+              @(target):= _logging.so
   ------------------------------------------------*/
 #if PY_VERSION_HEX >= 0x03000000
-#  define SWIG_init    PyInit__coda_logging
+#  define SWIG_init    PyInit__logging
 
 #else
-#  define SWIG_init    init_coda_logging
+#  define SWIG_init    init_logging
 
 #endif
-#define SWIG_name    "_coda_logging"
+#define SWIG_name    "_logging"
 
 #define SWIGVERSION 0x030005 
 #define SWIG_VERSION SWIGVERSION
