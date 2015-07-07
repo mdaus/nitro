@@ -373,6 +373,11 @@ class StringStream(SeekableBidirectionalStream):
         """reset(StringStream self)"""
         return _io.StringStream_reset(self)
 
+
+    def str(self):
+        """str(StringStream self) -> std::string"""
+        return _io.StringStream_str(self)
+
     __swig_destroy__ = _io.delete_StringStream
     __del__ = lambda self: None
 StringStream_swigregister = _io.StringStream_swigregister

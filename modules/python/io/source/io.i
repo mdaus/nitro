@@ -44,6 +44,13 @@ from __future__ import absolute_import
 
 %feature("notabstract") io::StringStream;
 %include "io/StringStream.h"
+%extend io::StringStream
+{
+	std::string str()
+	{
+		return $self->stream().str();
+	}
+}
 %include "io/NullStreams.h"
 
 %feature("notabstract") io::FileOutputStreamOS;
