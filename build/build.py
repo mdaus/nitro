@@ -473,7 +473,7 @@ class CPPContext(Context.Context):
             swigSource = os.path.join('source', name.replace('.', '_') + '.i')
             target = '_' + codename.replace('.', '_')
             use = modArgs['use'] + ' ' + init_tgen_name
-            installPath = os.path.join('${PYTHONDIR}', package_name)
+            installPath = os.path.join(env['install_pydir'], package_name)
             taskName = name + '-python'
             exportIncludes = listify(modArgs.get('export_includes', 'source'))
 
@@ -777,6 +777,8 @@ def options(opt):
                     help='Override installation bin directory')
     opt.add_option('--sharedir', action='store', nargs=1, dest='sharedir',
                     help='Override installation share directory')
+    opt.add_option('--pydir', action='store', nargs=1, dest='pydir',
+                    help='Override installation python directory')
     opt.add_option('--install-source', action='store_true', dest='install_source', default=False,
                    help='Distribute source into the installation area (for delivering source)')
     opt.add_option('--with-prebuilt-config', action='store', dest='prebuilt_config',
@@ -1252,6 +1254,7 @@ def configure(self):
     env['install_libdir'] = Options.options.libdir if Options.options.libdir else join(Options.options.prefix, 'lib')
     env['install_bindir'] = Options.options.bindir if Options.options.bindir else join(Options.options.prefix, 'bin')
     env['install_sharedir'] = Options.options.sharedir if Options.options.sharedir else join(Options.options.prefix, 'share')
+    env['install_pydir'] = Options.options.pydir if Options.options.pydir else '${PYTHONDIR}'
 
     # Swig memory leak output
     if Options.options.swig_silent_leak:
