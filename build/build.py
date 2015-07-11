@@ -461,6 +461,8 @@ class CPPContext(Context.Context):
                 codename = codename + postfix
 
             swigSource = os.path.join('source', name.replace('.', '_') + '.i')
+            if env['install_headers']:
+                self.install_files(os.path.join(env['install_includedir'], 'swig'), swigSource)
             target = '_' + codename.replace('.', '_')
             use = modArgs['use']
             installPath = os.path.join('${PYTHONDIR}', Context.APPNAME)
