@@ -7,6 +7,7 @@ from waflib.Options import OptionsContext
 from waflib.Configure import conf, ConfigurationContext
 from waflib.Build import BuildContext, ListContext, CleanContext, InstallContext
 from waflib.TaskGen import task_gen, feature, after, before
+from waflib.Task import Task
 from waflib.Utils import to_list as listify
 from waflib.Tools import waf_unit_test
 from waflib import Context, Errors
@@ -483,15 +484,14 @@ class CPPContext(Context.Context):
             #
             # The try/except guarantees that there will only be one task
             # to generate the file
-            # TODO: generating multiple packages
-            try:
-                bld.get_tgen_by_name(init_tgen_name)
-            except:
-                bld(rule   = 'touch ${TGT}', 
-                    target = '__init__.py',
-                    name = init_tgen_name,
-                    install_path = installPath
-                    )
+            #try:
+            #    bld.get_tgen_by_name(init_tgen_name)
+            #except:
+            #    bld(rule   = 'touch ${TGT}', 
+            #        target = '__init__.py',
+            #        name = init_tgen_name,
+            #        install_path = installPath
+            #        )
 
             # If we have Swig, when the Swig target runs, it'll generate both the
             # _wrap.cxx file and the .py file and then copy them both to the
@@ -534,7 +534,7 @@ class CPPContext(Context.Context):
                 # This gets generated into the source/generated folder and we'll
                 # actually check it in so other developers can still use the Python
                 # bindings even if they don't have Swig
-                bld(features = 'cxx cshlib pyext add_targets swig_linkage includes',
+                bld(features = 'cxx cshlib pyext add_targets swig_linkage includes python_package',
                     source = swigSource,
                     target = target,
                     use = use,
@@ -548,7 +548,7 @@ class CPPContext(Context.Context):
             else:
                 # If Swig is not available, use the cxx file already sitting around
                 # that Swig generated sometime in the past
-                bld(features = 'cxx cshlib pyext add_targets swig_linkage includes',
+                bld(features = 'cxx cshlib pyext add_targets swig_linkage includes python_package',
                     source = os.path.join('source', 'generated', codename.replace('.', '_') + '_wrap.cxx'),
                     target = target,
                     use = use,
@@ -1377,6 +1377,20 @@ def process_swig_linkage(tsk):
     # newlib is now a list of our non-python libraries
     tsk.env.LIB = newlib
 
+
+@task_gen
+@feature('python_package')
+def python_package(tsk):
+    actual_path = tsk.install_path
+    actual_path = actual_path.replace('${PYTHONDIR}',tsk.env.PYTHONDIR)
+
+    try:
+        os.makedirs(actual_path)
+    except OSError as e:
+        if not e.errno == 17: # we don't care if the folder already exists
+            raise e
+
+    open(os.path.join(actual_path,'__init__.py'),'a').close()
 
 @task_gen
 @feature('untar')
