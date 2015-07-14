@@ -481,21 +481,6 @@ class CPPContext(Context.Context):
             taskName = name + '-python'
             exportIncludes = listify(modArgs.get('export_includes', 'source'))
 
-            # We need to add the __init__.py file to our package to make
-            # it a legitimate python package. There's nothing in it for now
-            # so we'll just generate one.
-            #
-            # The try/except guarantees that there will only be one task
-            # to generate the file
-            #try:
-            #    bld.get_tgen_by_name(init_tgen_name)
-            #except:
-            #    bld(rule   = 'touch ${TGT}', 
-            #        target = '__init__.py',
-            #        name = init_tgen_name,
-            #        install_path = installPath
-            #        )
-
             # If we have Swig, when the Swig target runs, it'll generate both the
             # _wrap.cxx file and the .py file and then copy them both to the
             # installation directory.  If you just clobber the install directory
@@ -514,9 +499,6 @@ class CPPContext(Context.Context):
             # this turns the folder at the destination path into a package
             
             initTarget = init_tgen_name
-#            try:
-#               bld.get_tgen_by_name(init_tgen_name)
-#            except:
             bld(features = 'python_package',
                 name = initTarget,
                 target='__init__.py',
