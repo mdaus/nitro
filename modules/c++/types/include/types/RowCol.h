@@ -219,8 +219,11 @@ template<typename T> struct RowCol
     }
     T normL2() const
     {
-        return sqrt(row * row + col * col);
-    }
+        //! VC++ 2010 compiler get confused on the cast --
+        //  this is more explicit
+        return static_cast<T>(
+            std::sqrt(static_cast<double>(row * row) + 
+                      static_cast<double>(col * col)));    }
 
 };
 
