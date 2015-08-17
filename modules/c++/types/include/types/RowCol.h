@@ -219,11 +219,14 @@ template<typename T> struct RowCol
     }
     T normL2() const
     {
-        //! VC++ 2010 compiler get confused on the cast --
-        //  this is more explicit
+        //! Should be able to just use sqrt() here but VC++ 2010 compiler
+        //  appears to (incorrectly) be calling std::sqrt() in this scenario
+        //  and then complaining it can't find an overloading for some types
+        //  (like size_t)
+        //  So, cast to double and at that point we might as well just call
+        //  std::sqrt()
         return static_cast<T>(
-            std::sqrt(static_cast<double>(row * row) + 
-                      static_cast<double>(col * col)));
+            std::sqrt(static_cast<double>(row * row + col * col)));
     }
 };
 
