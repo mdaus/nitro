@@ -223,8 +223,8 @@ template<typename T> struct RowCol
         //  this is more explicit
         return static_cast<T>(
             std::sqrt(static_cast<double>(row * row) + 
-                      static_cast<double>(col * col)));    }
-
+                      static_cast<double>(col * col)));
+    }
 };
 
 template <>
