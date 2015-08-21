@@ -24,7 +24,9 @@
 #define __MEM_BUFFER_VIEW_H__
 
 #include <vector>
-#include <string>
+#include <sys/Conf.h>
+#include <sstream>
+#include <except/Exception.h>
 #include <stddef.h>
 
 namespace mem
@@ -56,46 +58,42 @@ struct BufferView
     // section with sectionSize = 10, section() would return a new BufferView
     // of size 10 and the original BufferView would be left with 90 ints.
     // throws std::string if there is not enough space 
-    mem::BufferView<T> section(size_t sectionSize);
+    mem::BufferView<T> section(size_t sectionSize)
+    {
+        if(size < sectionSize)
+        {   
+            std::stringstream ss;
+            ss << "BufferView::section() called with sectionSize: " << sectionSize << " when";
+            ss << " there were only " << size << " elements in the BufferView";
+            throw except::Exception(Ctxt(ss.str()));
+        } 
+
+        mem::BufferView<T> newSection(data, sectionSize);
+
+        size -= sectionSize;
+        data += sectionSize;
+
+        return newSection;
+    }
 
     // returns a vector of as many n-sized BufferViews as possible
     // the last BufferView will have the remainder (size % n) elements if
     // size % n != 0
-    std::vector<BufferView> split(size_t n);
+    std::vector<BufferView> split(size_t n)
+    {
+        const size_t newSize = size / n;
+        const size_t lastSize = size - (n - 1) * newSize;
+        T *head = data;
+
+        std::vector<BufferView> buffers(n); 
+        for (size_t ii = 0, last_ii = n - 1; ii < n; ++ii, head += newSize)
+        {
+            buffers[ii] = BufferView(head, (ii == last_ii) ? lastSize : newSize);
+        }             
+        return buffers;
+    }
 
 };
-
-
-template <typename T>
-mem::BufferView<T> mem::BufferView<T>::section(size_t sectionSize)
-{
-    if(size < sectionSize)
-    {
-        throw std::string("section tried to take more space than available");
-    } 
-
-    mem::BufferView<T> newSection(data, sectionSize);
-
-    size -= size;
-    data += size;
-
-    return newSection;
-}
-
-template <typename T>
-std::vector<BufferView<T>> mem::BufferView<T>::split(size_t n)
-{
-    const size_t newSize = size / n;
-    const size_t lastSize = size - (n - 1) * newSize;
-    T *head = data;
-
-    std::vector<BufferView> buffers(n); 
-    for (size_t ii = 0, last_ii = n - 1; ii < n; ++ii, head += newSize)
-    {
-        buffers[ii] = BufferView(head, (ii == last_ii) ? lastSize : newSize);
-    }             
-    return buffers;
-}
 
 }
 
