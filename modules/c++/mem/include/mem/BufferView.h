@@ -63,8 +63,10 @@ struct BufferView
         if(size < sectionSize)
         {   
             std::stringstream ss;
+
             ss << "BufferView::section() called with sectionSize: " << sectionSize << " when";
             ss << " there were only " << size << " elements in the BufferView";
+            
             throw except::Exception(Ctxt(ss.str()));
         } 
 
