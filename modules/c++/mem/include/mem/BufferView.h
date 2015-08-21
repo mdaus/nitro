@@ -53,21 +53,27 @@ struct BufferView
     T* data;
     size_t size;
 
-    // returns a new bufferView that "takes" sectionSize T from the bufferView
-    // For instance, if the current bufferView had 100 ints, and you called 
-    // section with sectionSize = 10, section() would return a new BufferView
-    // of size 10 and the original BufferView would be left with 90 ints.
-    // throws std::string if there is not enough space 
+    /**
+      Returns a new bufferView that "takes" sectionSize T from the bufferView
+      For instance, if the current bufferView had 100 ints, and you called 
+      section with sectionSize = 10, section() would return a new BufferView
+      of size 10 and the original BufferView would be left with 90 ints.
+
+      @sectionSize size of the new section
+    
+      @throws except::Exception if there is not enough space 
+
+     */
     mem::BufferView<T> section(size_t sectionSize)
     {
         if(size < sectionSize)
         {   
-            std::stringstream ss;
+            std::ostringstream oss;
 
-            ss << "BufferView::section() called with sectionSize: " << sectionSize << " when";
-            ss << " there were only " << size << " elements in the BufferView";
+            oss << "BufferView::section() called with sectionSize: " << sectionSize << " when";
+            oss << " there were only " << size << " elements in the BufferView";
             
-            throw except::Exception(Ctxt(ss.str()));
+            throw except::Exception(Ctxt(oss.str()));
         } 
 
         mem::BufferView<T> newSection(data, sectionSize);
@@ -78,9 +84,14 @@ struct BufferView
         return newSection;
     }
 
-    // returns a vector of as many n-sized BufferViews as possible
-    // the last BufferView will have the remainder (size % n) elements if
-    // size % n != 0
+    /**
+      returns a vector of as many n-sized BufferViews as possible
+      the last BufferView will have the remainder (size % n) elements if
+      size % n != 0
+
+      @n target size of each BufferView fragment
+
+     */
     std::vector<BufferView> split(size_t n)
     {
         const size_t newSize = size / n;
