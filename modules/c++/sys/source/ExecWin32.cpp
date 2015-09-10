@@ -23,10 +23,101 @@
 
 #if defined(WIN32)
 
-#include "sys/Err.h"
-#include "sys/Exec.h"
+#include <sys/Exec.h>
+#include <str/Manip.h>
 
-int sys::ExecPipe::closePipe()
+#define READ_PIPE  0
+#define WRITE_PIPE 1
+
+#include <fcntl.h>
+#include <io.h>
+typedef int pid_t;
+#define pipe(phandles)  _pipe(phandles, 4096, _O_BINARY)
+#define pclose _pclose
+#define fileno _fileno
+
+namespace sys
+{
+
+FILE* ExecPipe::openPipe(const std::string& command,
+                         const std::string& type)
+{
+    register FILE* ioFile;
+    HANDLE pIO[2] = {NULL, NULL};
+
+    //! inherit the pipe handles
+    SECURITY_ATTRIBUTES saAttr; 
+    saAttr.nLength = sizeof(saAttr);
+    saAttr.bInheritHandle = TRUE;
+    saAttr.lpSecurityDescriptor = NULL; 
+    if (!CreatePipe(&pIO[READ_PIPE], &pIO[WRITE_PIPE], &saAttr, 0))
+    {
+        return NULL;
+    }
+
+    // check the pipes themselves are not inherited
+    if (!SetHandleInformation(pIO[READ_PIPE], HANDLE_FLAG_INHERIT, 0) ||
+        !SetHandleInformation(pIO[WRITE_PIPE], HANDLE_FLAG_INHERIT, 0))
+    {
+        return NULL;
+    }
+
+    // the startInfo structure is where the pipes are connected 
+    ZeroMemory(&mProcessInfo, sizeof(PROCESS_INFORMATION));
+    ZeroMemory(&mStartInfo, sizeof(STARTUPINFO));
+    mStartInfo.cb = sizeof(STARTUPINFO); 
+    mStartInfo.hStdInput = pIO[READ_PIPE];
+    mStartInfo.hStdOutput = pIO[WRITE_PIPE];
+    mStartInfo.dwFlags |= STARTF_USESTDHANDLES;
+
+    //! create the subprocess --
+    //  this is equivalent to a fork + exec
+    if (CreateProcessA(NULL, const_cast<char*>(command.c_str()),
+                       NULL, NULL, TRUE, 0, NULL, NULL,
+                       &mStartInfo, &mProcessInfo) == 0)
+    {
+        return NULL;
+    }
+
+    //  connect the pipes currently connected in the subprocess
+    //  to the FILE* handle. Close the unwanted handle.
+    if (type == "r")
+    {
+        int readDescriptor = 0;
+        if ((readDescriptor = _open_osfhandle(
+                (intptr_t)pIO[READ_PIPE], _O_RDONLY)) == -1)
+        {
+            return NULL;
+        }
+        ioFile = fdopen(readDescriptor, type.c_str());
+        CloseHandle(pIO[WRITE_PIPE]);
+    }
+    else
+    {
+        int writeDescriptor = 0;;
+        if ((writeDescriptor = _open_osfhandle(
+                (intptr_t)pIO[WRITE_PIPE], _O_WRONLY)) == -1)
+        {
+            return NULL;
+        }
+        ioFile = fdopen(writeDescriptor, type.c_str());
+        CloseHandle(pIO[READ_PIPE]);
+    }
+    return ioFile;
+}
+
+int ExecPipe::killProcess()
+{
+    //! issue a forceful removal of the process
+    TerminateProcess(mProcessInfo.hProcess, PROCESS_TERMINATE);
+
+    //! now clean up the process --
+    //  wait needs to be called to remove the
+    //  zombie process.
+    return closePipe();
+}
+
+int ExecPipe::closePipe()
 {
     if (!mOutStream)
     {
@@ -38,7 +129,14 @@ int sys::ExecPipe::closePipe()
     FILE* tmp = mOutStream;
     mOutStream = NULL;
 
-    const int exitStatus  = pclose(tmp);
+    DWORD dwMillisec = INFINITE;
+    DWORD dwWaitStatus = 
+        WaitForSingleObject(mProcessInfo.hProcess, dwMillisec);
+
+    //! get the exit code
+    DWORD exitCode = NULL;
+    GetExitCodeProcess(mProcessInfo.hProcess, &exitCode);
+    const int exitStatus = static_cast<int>(exitCode);
     if (exitStatus == -1)
     {
         sys::SocketErr err;
@@ -49,6 +147,8 @@ int sys::ExecPipe::closePipe()
     }
 
     return exitStatus;
+}
+
 }
 
 #endif
