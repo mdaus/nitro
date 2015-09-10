@@ -97,7 +97,7 @@ FILE* ExecPipe::openPipe(const std::string& command,
             //! call our command --
             //  this command replaces the forked process with
             //  command the user specified
-            execv(splitCmd[0].c_str(), &args[0]);
+            execvp(splitCmd[0].c_str(), &args[0]);
 
             //! exit the subprocess once it has completed
             exit(127);
