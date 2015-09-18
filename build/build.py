@@ -842,7 +842,7 @@ def configureCompilerOptions(self):
         if re.match(solarisRegex, sys_platform):
             self.env.append_value('LIB_SOCKET', 'socket')
 
-        warningFlags = '-Wall'
+        warningFlags = '-Wall -Wno-deprecated-declarations'
         if Options.options.warningsAsErrors:
             warningFlags += ' -Wfatal-errors'
 
