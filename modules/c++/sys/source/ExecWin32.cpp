@@ -43,21 +43,29 @@ FILE* ExecPipe::openPipe(const std::string& command,
                          const std::string& type)
 {
     register FILE* ioFile;
-    HANDLE pIO[2] = {NULL, NULL};
+    HANDLE outIO[2] = {NULL, NULL};
+    HANDLE inIO[2]  = { NULL, NULL };
 
     //! inherit the pipe handles
     SECURITY_ATTRIBUTES saAttr; 
-    saAttr.nLength = sizeof(saAttr);
+    saAttr.nLength = sizeof(SECURITY_ATTRIBUTES);
     saAttr.bInheritHandle = TRUE;
     saAttr.lpSecurityDescriptor = NULL; 
-    if (!CreatePipe(&pIO[READ_PIPE], &pIO[WRITE_PIPE], &saAttr, 0))
+    if (!CreatePipe(&outIO[READ_PIPE], &outIO[WRITE_PIPE], &saAttr, 0))
+    {
+        return NULL;
+    }
+    if (!CreatePipe(&inIO[READ_PIPE], &inIO[WRITE_PIPE], &saAttr, 0))
     {
         return NULL;
     }
 
     // check the pipes themselves are not inherited
-    if (!SetHandleInformation(pIO[READ_PIPE], HANDLE_FLAG_INHERIT, 0) ||
-        !SetHandleInformation(pIO[WRITE_PIPE], HANDLE_FLAG_INHERIT, 0))
+    if (!SetHandleInformation(outIO[READ_PIPE], HANDLE_FLAG_INHERIT, 0))
+    {
+        return NULL;
+    }
+    if (!SetHandleInformation(inIO[WRITE_PIPE], HANDLE_FLAG_INHERIT, 0))
     {
         return NULL;
     }
@@ -66,8 +74,9 @@ FILE* ExecPipe::openPipe(const std::string& command,
     ZeroMemory(&mProcessInfo, sizeof(PROCESS_INFORMATION));
     ZeroMemory(&mStartInfo, sizeof(STARTUPINFO));
     mStartInfo.cb = sizeof(STARTUPINFO); 
-    mStartInfo.hStdInput = pIO[READ_PIPE];
-    mStartInfo.hStdOutput = pIO[WRITE_PIPE];
+    mStartInfo.hStdInput = inIO[READ_PIPE];
+    mStartInfo.hStdOutput = outIO[WRITE_PIPE];
+    mStartInfo.hStdError = outIO[WRITE_PIPE];
     mStartInfo.dwFlags |= STARTF_USESTDHANDLES;
 
     //! create the subprocess --
@@ -83,26 +92,43 @@ FILE* ExecPipe::openPipe(const std::string& command,
     //  to the FILE* handle. Close the unwanted handle.
     if (type == "r")
     {
+        //int BUFSIZE = 1024;
+        //DWORD dwRead, dwWritten;
+        //CHAR chBuf[1024];
+        //BOOL bSuccess = FALSE;
+        //HANDLE hParentStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
+
+        //for (;;)
+        //{
+        //    bSuccess = ReadFile(outIO[READ_PIPE], chBuf, BUFSIZE, &dwRead, NULL);
+        //    if (!bSuccess || dwRead == 0) break;
+
+        //    bSuccess = WriteFile(hParentStdOut, chBuf,
+        //        dwRead, &dwWritten, NULL);
+        //    if (!bSuccess) break;
+        //}
+
         int readDescriptor = 0;
         if ((readDescriptor = _open_osfhandle(
-                (intptr_t)pIO[READ_PIPE], _O_RDONLY)) == -1)
+                (intptr_t)outIO[READ_PIPE], _O_RDONLY)) == -1)
         {
             return NULL;
         }
         ioFile = fdopen(readDescriptor, type.c_str());
-        CloseHandle(pIO[WRITE_PIPE]);
+        CloseHandle(outIO[WRITE_PIPE]);
     }
     else
     {
         int writeDescriptor = 0;;
         if ((writeDescriptor = _open_osfhandle(
-                (intptr_t)pIO[WRITE_PIPE], _O_WRONLY)) == -1)
+                (intptr_t)inIO[WRITE_PIPE], _O_WRONLY)) == -1)
         {
             return NULL;
         }
         ioFile = fdopen(writeDescriptor, type.c_str());
-        CloseHandle(pIO[READ_PIPE]);
+        CloseHandle(inIO[READ_PIPE]);
     }
+
     return ioFile;
 }
 
