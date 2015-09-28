@@ -44,7 +44,7 @@ FILE* ExecPipe::openPipe(const std::string& command,
 {
     register FILE* ioFile;
     HANDLE outIO[2] = {NULL, NULL};
-    HANDLE inIO[2]  = { NULL, NULL };
+    HANDLE inIO[2]  = {NULL, NULL};
 
     //! inherit the pipe handles
     SECURITY_ATTRIBUTES saAttr; 
@@ -100,6 +100,8 @@ FILE* ExecPipe::openPipe(const std::string& command,
         }
         ioFile = _fdopen(readDescriptor, type.c_str());
         CloseHandle(outIO[WRITE_PIPE]);
+        CloseHandle(inIO[READ_PIPE]);
+        CloseHandle(inIO[WRITE_PIPE]);
     }
     else
     {
@@ -111,6 +113,8 @@ FILE* ExecPipe::openPipe(const std::string& command,
         }
         ioFile = _fdopen(writeDescriptor, type.c_str());
         CloseHandle(inIO[READ_PIPE]);
+        CloseHandle(outIO[READ_PIPE]);
+        CloseHandle(outIO[WRITE_PIPE]);
     }
 
     return ioFile;
