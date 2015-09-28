@@ -92,29 +92,13 @@ FILE* ExecPipe::openPipe(const std::string& command,
     //  to the FILE* handle. Close the unwanted handle.
     if (type == "r")
     {
-        //int BUFSIZE = 1024;
-        //DWORD dwRead, dwWritten;
-        //CHAR chBuf[1024];
-        //BOOL bSuccess = FALSE;
-        //HANDLE hParentStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
-
-        //for (;;)
-        //{
-        //    bSuccess = ReadFile(outIO[READ_PIPE], chBuf, BUFSIZE, &dwRead, NULL);
-        //    if (!bSuccess || dwRead == 0) break;
-
-        //    bSuccess = WriteFile(hParentStdOut, chBuf,
-        //        dwRead, &dwWritten, NULL);
-        //    if (!bSuccess) break;
-        //}
-
         int readDescriptor = 0;
         if ((readDescriptor = _open_osfhandle(
                 (intptr_t)outIO[READ_PIPE], _O_RDONLY)) == -1)
         {
             return NULL;
         }
-        ioFile = fdopen(readDescriptor, type.c_str());
+        ioFile = _fdopen(readDescriptor, type.c_str());
         CloseHandle(outIO[WRITE_PIPE]);
     }
     else
@@ -125,7 +109,7 @@ FILE* ExecPipe::openPipe(const std::string& command,
         {
             return NULL;
         }
-        ioFile = fdopen(writeDescriptor, type.c_str());
+        ioFile = _fdopen(writeDescriptor, type.c_str());
         CloseHandle(inIO[READ_PIPE]);
     }
 

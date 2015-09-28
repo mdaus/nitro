@@ -36,7 +36,7 @@ int main(int argc, char **argv)
         else
             cmd = "echo " + testMessage;
 
-        io::PipeStream ps(cmd);
+        io::PipeStream ps(cmd, 1);
 
         io::StandardOutStream stdo;
         size_t ioSize = ps.streamTo(stdo);
