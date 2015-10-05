@@ -44,7 +44,6 @@ FILE* ExecPipe::openPipe(const std::string& command,
 {
     register FILE* ioFile;
     HANDLE outIO[2] = {NULL, NULL};
-    HANDLE inIO[2]  = {NULL, NULL};
 
     //! inherit the pipe handles
     SECURITY_ATTRIBUTES saAttr; 
@@ -55,17 +54,9 @@ FILE* ExecPipe::openPipe(const std::string& command,
     {
         return NULL;
     }
-    if (!CreatePipe(&inIO[READ_PIPE], &inIO[WRITE_PIPE], &saAttr, 0))
-    {
-        return NULL;
-    }
 
     // check the pipes themselves are not inherited
     if (!SetHandleInformation(outIO[READ_PIPE], HANDLE_FLAG_INHERIT, 0))
-    {
-        return NULL;
-    }
-    if (!SetHandleInformation(inIO[WRITE_PIPE], HANDLE_FLAG_INHERIT, 0))
     {
         return NULL;
     }
@@ -74,9 +65,13 @@ FILE* ExecPipe::openPipe(const std::string& command,
     ZeroMemory(&mProcessInfo, sizeof(PROCESS_INFORMATION));
     ZeroMemory(&mStartInfo, sizeof(STARTUPINFO));
     mStartInfo.cb = sizeof(STARTUPINFO); 
-    mStartInfo.hStdInput = inIO[READ_PIPE];
     mStartInfo.hStdOutput = outIO[WRITE_PIPE];
     mStartInfo.hStdError = outIO[WRITE_PIPE];
+
+    //! attach the parent's stdin pipe --
+    //  it is assumed all (other than command line arguments) will
+    //  be provided via the parent's stdin pipe.
+    mStartInfo.hStdInput = GetStdHandle(STD_INPUT_HANDLE);
     mStartInfo.dwFlags |= STARTF_USESTDHANDLES;
 
     //! create the subprocess --
@@ -90,6 +85,8 @@ FILE* ExecPipe::openPipe(const std::string& command,
 
     //  connect the pipes currently connected in the subprocess
     //  to the FILE* handle. Close the unwanted handle.
+    //  NOTE: we do not support the 'w' modes and instead assume
+    //        the stdin will come from the parent's stdin pipe
     if (type == "r")
     {
         int readDescriptor = 0;
@@ -100,19 +97,6 @@ FILE* ExecPipe::openPipe(const std::string& command,
         }
         ioFile = _fdopen(readDescriptor, type.c_str());
         CloseHandle(outIO[WRITE_PIPE]);
-        CloseHandle(inIO[WRITE_PIPE]);
-    }
-    else
-    {
-        int writeDescriptor = 0;
-        if ((writeDescriptor = _open_osfhandle(
-                (intptr_t)inIO[WRITE_PIPE], _O_WRONLY)) == -1)
-        {
-            return NULL;
-        }
-        ioFile = _fdopen(writeDescriptor, type.c_str());
-        CloseHandle(inIO[READ_PIPE]);
-        CloseHandle(outIO[READ_PIPE]);
     }
 
     return ioFile;
