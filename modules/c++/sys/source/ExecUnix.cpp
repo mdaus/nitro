@@ -50,8 +50,8 @@ FILE* ExecPipe::openPipe(const std::string& command,
         case -1:
         {
             // there was an error while forking
-            close(pIO[0]);
-            close(pIO[1]);
+            close(pIO[READ_PIPE]);
+            close(pIO[WRITE_PIPE]);
             return NULL;
         }break;
         case 0:
