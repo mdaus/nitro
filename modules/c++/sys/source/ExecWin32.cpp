@@ -100,12 +100,11 @@ FILE* ExecPipe::openPipe(const std::string& command,
         }
         ioFile = _fdopen(readDescriptor, type.c_str());
         CloseHandle(outIO[WRITE_PIPE]);
-        CloseHandle(inIO[READ_PIPE]);
         CloseHandle(inIO[WRITE_PIPE]);
     }
     else
     {
-        int writeDescriptor = 0;;
+        int writeDescriptor = 0;
         if ((writeDescriptor = _open_osfhandle(
                 (intptr_t)inIO[WRITE_PIPE], _O_WRONLY)) == -1)
         {
@@ -114,7 +113,6 @@ FILE* ExecPipe::openPipe(const std::string& command,
         ioFile = _fdopen(writeDescriptor, type.c_str());
         CloseHandle(inIO[READ_PIPE]);
         CloseHandle(outIO[READ_PIPE]);
-        CloseHandle(outIO[WRITE_PIPE]);
     }
 
     return ioFile;
