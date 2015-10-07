@@ -27,8 +27,11 @@
 #include <str/Manip.h>
 #include <sys/Exec.h>
 
-#define READ_PIPE  0
-#define WRITE_PIPE 1
+namespace 
+{
+const size_t readPipe = 0;
+const size_t writePipe = 1;
+}
 
 namespace sys
 {
@@ -36,22 +39,26 @@ namespace sys
 FILE* ExecPipe::openPipe(const std::string& command,
                          const std::string& type)
 {
-    register FILE* ioFile = NULL;
+    FILE* ioFile = NULL;
     int pIO[2];
 
     //! create the IO pipes for stdin/out
-    if (pipe(pIO) < 0) { return NULL; }
+    if (pipe(pIO) < 0)
+    {
+        return NULL;
+    }
 
     //! fork a subprocess for running our command --
     //  here we use the user-defined pid, which is one major
     //  differences between this and the normal popen()
-    switch (mProcess = fork())
+    mProcess = fork();
+    switch (mProcess)
     {
         case -1:
         {
             // there was an error while forking
-            close(pIO[READ_PIPE]);
-            close(pIO[WRITE_PIPE]);
+            close(pIO[readPipe]);
+            close(pIO[writePipe]);
             return NULL;
         }break;
         case 0:
@@ -63,26 +70,26 @@ FILE* ExecPipe::openPipe(const std::string& command,
             if (type == "r")
             {
                 // reset stdout to the outpipe if it isn't already
-                if (pIO[WRITE_PIPE] != fileno(stdout))
+                if (pIO[writePipe] != fileno(stdout))
                 {
-                    dup2(pIO[WRITE_PIPE], fileno(stdout));
-                    close(pIO[WRITE_PIPE]);
+                    dup2(pIO[writePipe], fileno(stdout));
+                    close(pIO[writePipe]);
                 }
 
                 // close the in pipe accordingly
-                close(pIO[READ_PIPE]);
+                close(pIO[readPipe]);
             }
             else
             {
                 // reset stdin to the inpipe if it isn't already
-                if (pIO[READ_PIPE] != fileno(stdin))
+                if (pIO[readPipe] != fileno(stdin))
                 {
-                    dup2(pIO[READ_PIPE], fileno(stdin));
-                    close(pIO[READ_PIPE]);
+                    dup2(pIO[readPipe], fileno(stdin));
+                    close(pIO[readPipe]);
                 }
 
                 // close the out pipe accordingly
-                close(pIO[WRITE_PIPE]);
+                close(pIO[writePipe]);
             }
 
             //! prepare the command and its arguments
@@ -110,13 +117,13 @@ FILE* ExecPipe::openPipe(const std::string& command,
     //  to the FILE* handle. Close the unwanted handle.
     if (type == "r")
     {
-        ioFile = fdopen(pIO[READ_PIPE], type.c_str());
-        close(pIO[WRITE_PIPE]);
+        ioFile = fdopen(pIO[readPipe], type.c_str());
+        close(pIO[writePipe]);
     }
     else
     {
-        ioFile = fdopen(pIO[WRITE_PIPE], type.c_str());
-        close(pIO[READ_PIPE]);
+        ioFile = fdopen(pIO[writePipe], type.c_str());
+        close(pIO[readPipe]);
     }
     return ioFile;
 }
