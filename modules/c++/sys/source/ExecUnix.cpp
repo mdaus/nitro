@@ -55,12 +55,10 @@ FILE* ExecPipe::openPipe(const std::string& command,
     switch (mProcess)
     {
         case -1:
-        {
             // there was an error while forking
             close(pIO[readPipe]);
             close(pIO[writePipe]);
             return NULL;
-        }break;
         case 0:
         {
             // we are now in the forked process --
