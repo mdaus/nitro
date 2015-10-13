@@ -29,8 +29,8 @@
 
 namespace 
 {
-const size_t readPipe = 0;
-const size_t writePipe = 1;
+const size_t READ_PIPE = 0;
+const size_t WRITE_PIPE = 1;
 }
 
 namespace sys
@@ -56,8 +56,8 @@ FILE* ExecPipe::openPipe(const std::string& command,
     {
         case -1:
             // there was an error while forking
-            close(pIO[readPipe]);
-            close(pIO[writePipe]);
+            close(pIO[READ_PIPE]);
+            close(pIO[WRITE_PIPE]);
             return NULL;
         case 0:
         {
@@ -68,26 +68,26 @@ FILE* ExecPipe::openPipe(const std::string& command,
             if (type == "r")
             {
                 // reset stdout to the outpipe if it isn't already
-                if (pIO[writePipe] != fileno(stdout))
+                if (pIO[WRITE_PIPE] != fileno(stdout))
                 {
-                    dup2(pIO[writePipe], fileno(stdout));
-                    close(pIO[writePipe]);
+                    dup2(pIO[WRITE_PIPE], fileno(stdout));
+                    close(pIO[WRITE_PIPE]);
                 }
 
                 // close the in pipe accordingly
-                close(pIO[readPipe]);
+                close(pIO[READ_PIPE]);
             }
             else
             {
                 // reset stdin to the inpipe if it isn't already
-                if (pIO[readPipe] != fileno(stdin))
+                if (pIO[READ_PIPE] != fileno(stdin))
                 {
-                    dup2(pIO[readPipe], fileno(stdin));
-                    close(pIO[readPipe]);
+                    dup2(pIO[READ_PIPE], fileno(stdin));
+                    close(pIO[READ_PIPE]);
                 }
 
                 // close the out pipe accordingly
-                close(pIO[writePipe]);
+                close(pIO[WRITE_PIPE]);
             }
 
             //! prepare the command and its arguments
@@ -115,13 +115,13 @@ FILE* ExecPipe::openPipe(const std::string& command,
     //  to the FILE* handle. Close the unwanted handle.
     if (type == "r")
     {
-        ioFile = fdopen(pIO[readPipe], type.c_str());
-        close(pIO[writePipe]);
+        ioFile = fdopen(pIO[READ_PIPE], type.c_str());
+        close(pIO[WRITE_PIPE]);
     }
     else
     {
-        ioFile = fdopen(pIO[writePipe], type.c_str());
-        close(pIO[readPipe]);
+        ioFile = fdopen(pIO[WRITE_PIPE], type.c_str());
+        close(pIO[READ_PIPE]);
     }
     return ioFile;
 }

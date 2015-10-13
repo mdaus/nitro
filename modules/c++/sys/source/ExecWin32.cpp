@@ -31,8 +31,8 @@
 
 namespace
 {
-    const size_t readPipe = 0;
-    const size_t writePipe = 1;
+    const size_t READ_PIPE = 0;
+    const size_t WRITE_PIPE = 1;
 }
 
 namespace sys
@@ -49,13 +49,13 @@ FILE* ExecPipe::openPipe(const std::string& command,
     saAttr.nLength = sizeof(SECURITY_ATTRIBUTES);
     saAttr.bInheritHandle = TRUE;
     saAttr.lpSecurityDescriptor = NULL; 
-    if (!CreatePipe(&outIO[readPipe], &outIO[writePipe], &saAttr, 0))
+    if (!CreatePipe(&outIO[READ_PIPE], &outIO[WRITE_PIPE], &saAttr, 0))
     {
         return NULL;
     }
 
     // check the pipes themselves are not inherited
-    if (!SetHandleInformation(outIO[readPipe], HANDLE_FLAG_INHERIT, 0))
+    if (!SetHandleInformation(outIO[READ_PIPE], HANDLE_FLAG_INHERIT, 0))
     {
         return NULL;
     }
@@ -64,8 +64,8 @@ FILE* ExecPipe::openPipe(const std::string& command,
     ZeroMemory(&mProcessInfo, sizeof(PROCESS_INFORMATION));
     ZeroMemory(&mStartInfo, sizeof(STARTUPINFO));
     mStartInfo.cb = sizeof(STARTUPINFO); 
-    mStartInfo.hStdOutput = outIO[writePipe];
-    mStartInfo.hStdError = outIO[writePipe];
+    mStartInfo.hStdOutput = outIO[WRITE_PIPE];
+    mStartInfo.hStdError = outIO[WRITE_PIPE];
 
     //! attach the parent's stdin pipe --
     //  it is assumed all (other than command line arguments) will
@@ -90,12 +90,12 @@ FILE* ExecPipe::openPipe(const std::string& command,
     {
         int readDescriptor = 0;
         if ((readDescriptor = _open_osfhandle(
-                (intptr_t)outIO[readPipe], _O_RDONLY)) == -1)
+                (intptr_t)outIO[READ_PIPE], _O_RDONLY)) == -1)
         {
             return NULL;
         }
         ioFile = _fdopen(readDescriptor, type.c_str());
-        CloseHandle(outIO[writePipe]);
+        CloseHandle(outIO[WRITE_PIPE]);
     }
 
     return ioFile;
