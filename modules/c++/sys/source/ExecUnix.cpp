@@ -29,8 +29,8 @@
 
 namespace 
 {
-const size_t READ_PIPE = 0;
-const size_t WRITE_PIPE = 1;
+static const size_t READ_PIPE = 0;
+static const size_t WRITE_PIPE = 1;
 }
 
 namespace sys
