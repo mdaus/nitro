@@ -1,7 +1,7 @@
 NAME            = 'math.poly'
 MAINTAINER      = 'jmrandol@users.sourceforge.net'
 VERSION         = '0.2'
-MODULE_DEPS     = 'sys math.linear'
+MODULE_DEPS     = 'sys math.linear serialize'
 
 options = configure = distclean = lambda p: None
 

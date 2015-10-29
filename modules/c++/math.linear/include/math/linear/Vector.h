@@ -22,7 +22,8 @@
 #ifndef __MATH_LINEAR_VECTOR_H__
 #define __MATH_LINEAR_VECTOR_H__
 
-#include "math/linear/Matrix2D.h"
+#include <math/linear/Matrix2D.h>
+#include <serialize/Conf.h>
 #include <cmath>
 
 namespace math
@@ -402,6 +403,14 @@ public:
         return !(*this == v); 
     }
 
+    /*!
+     *  serialize out to a stream
+     */
+    template <class Archive>
+    void serialize(Archive& ar, const unsigned int version)
+    {
+        ar & mRaw;
+    }
 };
 
 /*!

@@ -28,6 +28,7 @@
 #include <vector>
 #include <iterator>
 #include <math/linear/Vector.h>
+#include <serialize/Conf.h>
 
 namespace math
 {
@@ -255,6 +256,15 @@ public:
     template<typename Vector_T> bool operator!=(const Vector_T& p) const
     {
         return !(*this == p);
+    }
+
+    /*!
+     *  serialize out to a stream
+     */
+    template <class Archive>
+    void serialize(Archive& ar, const unsigned int version)
+    {
+        ar & mCoef;
     }
 };
 

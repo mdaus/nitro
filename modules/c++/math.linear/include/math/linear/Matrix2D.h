@@ -26,7 +26,8 @@
 #include <algorithm>
 #include <import/sys.h>
 #include <mem/ScopedArray.h>
-#include "math/linear/MatrixMxN.h"
+#include <math/linear/MatrixMxN.h>
+#include <serialize/Conf.h>
 
 namespace math
 {
@@ -1081,7 +1082,25 @@ public:
         return multiply(mx);
     }
 
-
+    /*!
+     *  serialize out to a stream
+     */
+    template <class Archive>
+    void serialize(Archive& ar, const unsigned int version)
+    {
+        ar & mM;
+        ar & mN;
+        ar & mMN;
+        if (Archive::is_loading::value)
+        {
+            mStorage.reset(new _T[mMN]);
+            mRaw = mStorage.get();
+        }
+        for (size_t ii = 0; ii < mMN; ++ii)
+        {
+            ar & mRaw[ii];
+        }
+    }
 };
 
 /*!
