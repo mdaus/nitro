@@ -23,7 +23,6 @@
 #define __MATH_LINEAR_VECTOR_H__
 
 #include <math/linear/Matrix2D.h>
-#include <serialize/Conf.h>
 #include <cmath>
 
 namespace math
@@ -404,10 +403,10 @@ public:
     }
 
     /*!
-     *  serialize out to a stream
+     *  serialize out to a boost stream
      */
     template <class Archive>
-    void serialize(Archive& ar, const unsigned int version)
+    void serialize(Archive& ar, const unsigned int  /*version*/)
     {
         ar & mRaw;
     }

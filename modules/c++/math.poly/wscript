@@ -1,9 +1,16 @@
 NAME            = 'math.poly'
 MAINTAINER      = 'jmrandol@users.sourceforge.net'
 VERSION         = '0.2'
-MODULE_DEPS     = 'sys math.linear serialize'
+MODULE_DEPS     = 'sys math.linear'
 
 options = configure = distclean = lambda p: None
 
 def build(bld):
-    bld.module(**globals())
+    globs = globals()
+    if 'HAVE_BOOST' not in bld.env or bld.env['HAVE_BOOST'] is False :
+        globs['UNITTEST_FILTER'] = 'test_1d_poly_serialize.cpp ' + \
+                                   'test_2d_poly_serialize.cpp'
+    else :
+        globs['UNITTEST_DEPS'] = 'serialize'
+        globs['UNITTEST_USELIB'] = 'BOOST_SERIALIZATION'
+    bld.module(**globs)

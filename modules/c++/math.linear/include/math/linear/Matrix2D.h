@@ -27,7 +27,6 @@
 #include <import/sys.h>
 #include <mem/ScopedArray.h>
 #include <math/linear/MatrixMxN.h>
-#include <serialize/Conf.h>
 
 namespace math
 {
@@ -1083,10 +1082,10 @@ public:
     }
 
     /*!
-     *  serialize out to a stream
+     *  serialize out to a boost stream
      */
     template <class Archive>
-    void serialize(Archive& ar, const unsigned int version)
+    void serialize(Archive& ar, const unsigned int  /*version*/)
     {
         ar & mM;
         ar & mN;

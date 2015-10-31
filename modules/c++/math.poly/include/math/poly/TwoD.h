@@ -25,7 +25,6 @@
 
 #include <math/poly/OneD.h>
 #include <math/linear/Matrix2D.h>
-#include <serialize/Conf.h>
 
 namespace math
 {
@@ -246,10 +245,10 @@ public:
         friend std::ostream& operator << (std::ostream& out, const TwoD<_TT> p);
 
     /*!
-     *  serialize out to a stream
+     *  serialize out to a boost stream
      */
     template <class Archive>
-    void serialize(Archive& ar, const unsigned int version)
+    void serialize(Archive& ar, const unsigned int  /*version*/)
     {
         ar & mCoef;
     }

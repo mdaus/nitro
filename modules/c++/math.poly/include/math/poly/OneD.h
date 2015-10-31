@@ -28,7 +28,6 @@
 #include <vector>
 #include <iterator>
 #include <math/linear/Vector.h>
-#include <serialize/Conf.h>
 
 namespace math
 {
@@ -259,10 +258,10 @@ public:
     }
 
     /*!
-     *  serialize out to a stream
+     *  serialize out to a boost stream
      */
     template <class Archive>
-    void serialize(Archive& ar, const unsigned int version)
+    void serialize(Archive& ar, const unsigned int /*version*/)
     {
         ar & mCoef;
     }
