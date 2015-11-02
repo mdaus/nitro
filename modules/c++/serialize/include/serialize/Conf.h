@@ -23,8 +23,10 @@
 #ifndef __SERIALIZE_CONF_H__
 #define __SERIALIZE_CONF_H__
 
+#include <boost/boost_config.h>
+
 #ifdef HAVE_BOOST
-#include <boost/config.hpp>
+#include <boost/serialization/config.hpp>
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/array.hpp>
 #include <boost/serialization/vector.hpp>

@@ -1,3 +1,5 @@
+from os.path import join
+
 NAME            = 'serialize'
 MAINTAINER      = 'micah.bojrab@mdaus.com'
 VERSION         = '1.0'
@@ -5,4 +7,14 @@ VERSION         = '1.0'
 options = configure = distclean = lambda p: None
 
 def build(bld):
-    bld.module(**globals())
+
+    globs = globals()
+
+    # add the boost config path 
+    if 'HAVE_BOOST' in bld.env and bld.env['HAVE_BOOST'] is True :
+        b = [x.split('=') for x in bld.env['header_builddir'] if x.startswith('boost')][0]
+        boostConfig = bld.root.find_dir(join(bld.bldnode.abspath(), b[1])).path_from(bld.path)
+        globs['includes'] = ['include', boostConfig]
+        globs['targets_to_add'] = ['boost_config']
+        globs['uselib'] = 'BOOST_SERIALIZATION'
+    bld.module(**globs)
