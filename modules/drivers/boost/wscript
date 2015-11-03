@@ -31,10 +31,14 @@ def configure(conf):
                             ('10.0', 'vc100', '2010'),
                             ('9.0',  'vc90',  '2008'),
                             ('8.0',  'vc80',  '2005')]
+            staticLink = '/MT' in conf.env['CXXFLAGS'] or '/MTd' in conf.env['CXXFLAGS']
             msvcVer = [x for x in msvcVersions if x[0] in ccbin][0]
-            libType = 'gd-' if debug else 's-'
+            linkType = 's' if staticLink else ''
+            libType = 'gd' if debug else ''
             boostVer = Options.options.boost_version
-            libName = 'libboost_serialization-' + msvcVer[1] + '-mt-' + libType + boostVer
+            libName = ['libboost_serialization', msvcVer[1], 'mt', 
+                       linkType + libType, boostVer]
+            libName = '-'.join(filter(lambda x: x is not '', libName))
             incPath = boostHome
             libPath = join(boostHome, arch + msvcVer[0])
         else :
@@ -52,21 +56,21 @@ def configure(conf):
                             msg='Checking for library boost serialization',
                             okmsg=boostHome,
                             mandatory=False)
-
-        # create a config.h for the define we created
-        def boost_callback (conf) :
-            conf.define('HAVE_BOOST', 1)
-        writeConfig(conf, boost_callback, boost_guard)
-
-        # add breadcrumbs for later
+        # leave a breadcrumb
         conf.env['HAVE_BOOST'] = True
+    else :
+        conf.env['HAVE_BOOST'] = False
+
+    # create a boost_config.h for the define we created
+    def boost_callback (conf) :
+        conf.define('HAVE_BOOST', 1 if conf.env['HAVE_BOOST'] else 0)
+    writeConfig(conf, boost_callback, boost_guard)
 
 def build (bld) :
-    if 'HAVE_BOOST' in bld.env and bld.env['HAVE_BOOST'] is True :
-        # install the boost_config.h file
-        b = [x.split('=') for x in bld.env['header_builddir'] if x.startswith(boost_guard)][0]
-        targetPath = bld.root.find_dir(join(bld.bldnode.abspath(), b[1])).path_from(bld.path)
-        bld(name='boost_config', features='install_tgt',
-            files=[getConfigFilename(boost_guard)],
-            dir=bld.path.make_node(targetPath),
-            install_path=join(bld.env['install_includedir'], boost_guard))
+    # install the boost_config.h file
+    b = [x.split('=') for x in bld.env['header_builddir'] if x.startswith(boost_guard)][0]
+    targetPath = bld.root.find_dir(join(bld.bldnode.abspath(), b[1])).path_from(bld.path)
+    bld(name='boost_config', features='install_tgt',
+        files=[getConfigFilename(boost_guard)],
+        dir=bld.path.make_node(targetPath),
+        install_path=join(bld.env['install_includedir'], boost_guard))
