@@ -10,7 +10,7 @@
 
 %extend sio::lite::FileWriter
 {
-    void write(sio::lite::FileHeader* header, size_t data)
+    void write(sio::lite::FileHeader* header, long long data)
     {
         const void* buffer = reinterpret_cast<const void*>(data);
         $self->write(header, buffer);
@@ -19,7 +19,7 @@
 
 %extend sio::lite::StreamReader
 {
-    sys::SSize_T read(size_t data, size_t size)
+    sys::SSize_T read(long long data, size_t size)
     {
         sys::byte* buffer = reinterpret_cast<sys::byte*>(data);
         return $self->read(buffer, size);
