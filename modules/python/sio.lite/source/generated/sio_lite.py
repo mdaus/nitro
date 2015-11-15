@@ -886,7 +886,7 @@ class StreamReader(InputStream):
     def read(self, *args):
         """
         read(StreamReader self, sys::byte * b, size_t size) -> sys::SSize_T
-        read(StreamReader self, long long data, size_t size) -> sys::SSize_T
+        read(StreamReader self, long long data, long long size) -> sys::SSize_T
         """
         return _sio_lite.StreamReader_read(self, *args)
 

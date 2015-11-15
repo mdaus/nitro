@@ -3654,7 +3654,7 @@ SWIGINTERN void sio_lite_FileWriter_write__SWIG_6(sio::lite::FileWriter *self,si
         const void* buffer = reinterpret_cast<const void*>(data);
         self->write(header, buffer);
     }
-SWIGINTERN sys::SSize_T sio_lite_StreamReader_read__SWIG_1(sio::lite::StreamReader *self,long long data,size_t size){
+SWIGINTERN sys::SSize_T sio_lite_StreamReader_read__SWIG_1(sio::lite::StreamReader *self,long long data,long long size){
         sys::byte* buffer = reinterpret_cast<sys::byte*>(data);
         return self->read(buffer, size);
     }
@@ -9473,12 +9473,12 @@ SWIGINTERN PyObject *_wrap_StreamReader_read__SWIG_1(PyObject *SWIGUNUSEDPARM(se
   PyObject *resultobj = 0;
   sio::lite::StreamReader *arg1 = (sio::lite::StreamReader *) 0 ;
   long long arg2 ;
-  size_t arg3 ;
+  long long arg3 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   long long val2 ;
   int ecode2 = 0 ;
-  size_t val3 ;
+  long long val3 ;
   int ecode3 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -9496,11 +9496,11 @@ SWIGINTERN PyObject *_wrap_StreamReader_read__SWIG_1(PyObject *SWIGUNUSEDPARM(se
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "StreamReader_read" "', argument " "2"" of type '" "long long""'");
   } 
   arg2 = static_cast< long long >(val2);
-  ecode3 = SWIG_AsVal_size_t(obj2, &val3);
+  ecode3 = SWIG_AsVal_long_SS_long(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "StreamReader_read" "', argument " "3"" of type '" "size_t""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "StreamReader_read" "', argument " "3"" of type '" "long long""'");
   } 
-  arg3 = static_cast< size_t >(val3);
+  arg3 = static_cast< long long >(val3);
   result = sio_lite_StreamReader_read__SWIG_1(arg1,arg2,arg3);
   {
     resultobj = PyInt_FromSsize_t(result);
@@ -9535,7 +9535,7 @@ SWIGINTERN PyObject *_wrap_StreamReader_read(PyObject *self, PyObject *args) {
       }
       if (_v) {
         {
-          int res = SWIG_AsVal_size_t(argv[2], NULL);
+          int res = SWIG_AsVal_long_SS_long(argv[2], NULL);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
@@ -9568,7 +9568,7 @@ fail:
   SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'StreamReader_read'.\n"
     "  Possible C/C++ prototypes are:\n"
     "    sio::lite::StreamReader::read(sys::byte *,size_t)\n"
-    "    sio::lite::StreamReader::read(long long,size_t)\n");
+    "    sio::lite::StreamReader::read(long long,long long)\n");
   return 0;
 }
 
@@ -10041,7 +10041,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"StreamReader_available", _wrap_StreamReader_available, METH_VARARGS, (char *)"StreamReader_available(StreamReader self) -> sys::Off_T"},
 	 { (char *)"StreamReader_read", _wrap_StreamReader_read, METH_VARARGS, (char *)"\n"
 		"read(sys::byte * b, size_t size) -> sys::SSize_T\n"
-		"StreamReader_read(StreamReader self, long long data, size_t size) -> sys::SSize_T\n"
+		"StreamReader_read(StreamReader self, long long data, long long size) -> sys::SSize_T\n"
 		""},
 	 { (char *)"StreamReader_swigregister", StreamReader_swigregister, METH_VARARGS, NULL},
 	 { (char *)"delete_FileReader", _wrap_delete_FileReader, METH_VARARGS, (char *)"delete_FileReader(FileReader self)"},
