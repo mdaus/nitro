@@ -4650,9 +4650,9 @@ SWIGINTERN PyObject *math_poly_OneD_Sl_double_Sg____call____SWIG_1(math::poly::O
             PyErr_SetString(PyExc_TypeError,"Expecting a sequence");
             return NULL;
         }
-        int N = PyObject_Length(input);
+        Py_ssize_t N = PyObject_Length(input);
         PyObject* pyresult = PyList_New(N);
-        for (int i = 0; i < N; ++i)
+        for (Py_ssize_t i = 0; i < N; ++i)
         {
             PyObject* o = PySequence_GetItem(input, i);
             double val = (*self)(PyFloat_AsDouble(o));
@@ -4715,14 +4715,14 @@ SWIGINTERN PyObject *math_poly_TwoD_Sl_double_Sg____call____SWIG_1(math::poly::T
             PyErr_SetString(PyExc_TypeError,"Expecting a sequence");
             return NULL;
         }
-        int N = PyObject_Length(x_input);
+        Py_ssize_t N = PyObject_Length(x_input);
         if (N != PyObject_Length(y_input))
         {
             PyErr_SetString(PyExc_ValueError,"Input sequences must have same length");
             return NULL;
         }
         PyObject* pyresult = PyList_New(N);
-        for (int i = 0; i < N; ++i)
+        for (Py_ssize_t i = 0; i < N; ++i)
         {
             PyObject* ox = PySequence_GetItem(x_input, i);
             PyObject* oy = PySequence_GetItem(y_input, i);
@@ -4753,9 +4753,9 @@ SWIGINTERN PyObject *math_poly_OneD_Sl_Vector3_Sg____call____SWIG_1(math::poly::
             }
             Vector3* vec_ptr;
             PyObject* pytmp = 0;
-            int N = PyObject_Length(input);
+            Py_ssize_t N = PyObject_Length(input);
             PyObject* pyresult = PyList_New(N);
-            for (int i = 0; i < N; ++i)
+            for (Py_ssize_t i = 0; i < N; ++i)
             {
                 PyObject* o = PySequence_GetItem(input, i);
                 vec_ptr = (Vector3*)new Vector3( (*self)(PyFloat_AsDouble(o)) );

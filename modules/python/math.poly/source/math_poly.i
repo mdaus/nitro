@@ -78,9 +78,9 @@ typedef math::linear::Vector<double> VectorDouble;
             PyErr_SetString(PyExc_TypeError,"Expecting a sequence");
             return NULL;
         }
-        int N = PyObject_Length(input);
+        Py_ssize_t N = PyObject_Length(input);
         PyObject* pyresult = PyList_New(N);
-        for (int i = 0; i < N; ++i)
+        for (Py_ssize_t i = 0; i < N; ++i)
         {
             PyObject* o = PySequence_GetItem(input, i);
             double val = (*self)(PyFloat_AsDouble(o));
@@ -160,14 +160,14 @@ typedef math::linear::Vector<double> VectorDouble;
             PyErr_SetString(PyExc_TypeError,"Expecting a sequence");
             return NULL;
         }
-        int N = PyObject_Length(x_input);
+        Py_ssize_t N = PyObject_Length(x_input);
         if (N != PyObject_Length(y_input))
         {
             PyErr_SetString(PyExc_ValueError,"Input sequences must have same length");
             return NULL;
         }
         PyObject* pyresult = PyList_New(N);
-        for (int i = 0; i < N; ++i)
+        for (Py_ssize_t i = 0; i < N; ++i)
         {
             PyObject* ox = PySequence_GetItem(x_input, i);
             PyObject* oy = PySequence_GetItem(y_input, i);
@@ -217,9 +217,9 @@ typedef math::linear::Vector<double> VectorDouble;
             }
             Vector3* vec_ptr;
             PyObject* pytmp = 0;
-            int N = PyObject_Length(input);
+            Py_ssize_t N = PyObject_Length(input);
             PyObject* pyresult = PyList_New(N);
-            for (int i = 0; i < N; ++i)
+            for (Py_ssize_t i = 0; i < N; ++i)
             {
                 PyObject* o = PySequence_GetItem(input, i);
                 vec_ptr = (Vector3*)new Vector3( (*self)(PyFloat_AsDouble(o)) );
