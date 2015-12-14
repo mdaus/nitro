@@ -27,7 +27,7 @@
 using namespace logging;
 using namespace std;
 
-int main(int argc, char **argv)
+int main()
 {
     std::cout << LoggerFactory::getInstance().getLogger("test")->getName() << std::endl;
 

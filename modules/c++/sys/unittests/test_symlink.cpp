@@ -85,7 +85,7 @@ TEST_CASE(testCreateSymlink)
 }
 
 
-int main(int argc, char** argv)
+int main()
 {
     TEST_CHECK(testCreateSymlink);
 

@@ -75,7 +75,7 @@ TEST_CASE(testExceptionLogger)
     TEST_ASSERT(counter == 1);
 }
 
-int main(int argc, char* argv[])
+int main()
 {
     TEST_CHECK(testExceptionLogger);
 }

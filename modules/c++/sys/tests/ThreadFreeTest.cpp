@@ -44,7 +44,7 @@ public:
     }
 };
 
-int main(int argc, char *argv[])
+int main()
 {
     Thread *thread;
     MyRunTask *task1;

@@ -76,7 +76,7 @@ TEST_CASE(testAlignedAlloc128)
 
 }
 
-int main(int argc, char** argv)
+int main()
 {
     TEST_CHECK(testAlignedAlloc8);
     TEST_CHECK(testAlignedAlloc16);

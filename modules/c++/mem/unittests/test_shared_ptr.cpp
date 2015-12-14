@@ -232,7 +232,7 @@ TEST_CASE(testCasting)
 }
 }
 
-int main(int argc, char **argv)
+int main()
 {
    TEST_CHECK(testNullCopying);
    TEST_CHECK(testAutoPtrConstructor);

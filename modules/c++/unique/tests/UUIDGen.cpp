@@ -22,7 +22,7 @@
 
 #include <import/unique.h>
 
-int main(int argc, char** argv)
+int main()
 {
     std::string uuid = unique::generateUUID();
     std::cout << uuid << std::endl;

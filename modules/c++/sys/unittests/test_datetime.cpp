@@ -159,7 +159,7 @@ TEST_CASE(testParameterizedConstructor)
 
 }
 
-int main(int argc, char* argv[])
+int main()
 {
     TEST_CHECK(testDefaultConstructor);
     TEST_CHECK(testParameterizedConstructor);

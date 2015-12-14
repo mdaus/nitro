@@ -243,7 +243,7 @@ TEST_CASE(testThreadedDecrement)
 }
 }
 
-int main(int argc, char** argv)
+int main()
 {
     TEST_CHECK(testConstructor);
     TEST_CHECK(testIncrement);

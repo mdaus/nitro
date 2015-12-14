@@ -113,7 +113,7 @@ protected:
     float vec[3];
 };
 
-int main(int argc, char **argv)
+int main()
 {
     StandardOutStream out;
     A a;

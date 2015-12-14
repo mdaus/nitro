@@ -50,7 +50,7 @@ TEST_CASE(ThreadPlannerTest)
     }
 }
 
-int main(int argc, char *argv[])
+int main()
 {
     TEST_CHECK(ThreadPlannerTest);
 
