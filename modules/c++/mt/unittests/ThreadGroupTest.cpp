@@ -80,7 +80,7 @@ TEST_CASE(ThreadGroupTest)
     TEST_ASSERT_EQ(numDeleted, 3);
 }
 
-int main()
+int main(int, char**)
 {
     TEST_CHECK(ThreadGroupTest);
 
