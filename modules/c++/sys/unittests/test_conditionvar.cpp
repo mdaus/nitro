@@ -71,7 +71,7 @@ TEST_CASE(testMultipleTimeouts)
 
 }
 
-int main()
+int main(int, char**)
 {
     TEST_CHECK(testDefaultConstructor);
     TEST_CHECK(testParameterizedConstructor);

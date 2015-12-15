@@ -44,7 +44,7 @@ public:
     }
 };
 
-int main()
+int main(int, char**)
 {
     Thread *thread;
     MyRunTask *task1;

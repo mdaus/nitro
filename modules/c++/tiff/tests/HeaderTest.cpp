@@ -27,7 +27,7 @@
 
 using namespace sys;
 
-int main()
+int main(int, char**)
 {
     try
     {
