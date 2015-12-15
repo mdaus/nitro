@@ -31,7 +31,7 @@ using namespace sys;
 
 
 
-int main()
+int main(int, char**)
 {
     std::string input("abcdefghijklmnopqrstuvwxyz");
     char buffer[32];
