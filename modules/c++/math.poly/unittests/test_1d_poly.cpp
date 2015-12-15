@@ -144,7 +144,7 @@ TEST_CASE(testTransformInput)
 }
 }
 
-int main()
+int main(int, char**)
 {
     srand(176);
     TEST_CHECK(testScaleVariable);
