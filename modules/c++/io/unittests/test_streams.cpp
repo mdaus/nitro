@@ -209,7 +209,7 @@ TEST_CASE(testRotateReset)
     cleanupFiles( outFile);
 }
 
-int main()
+int main(int, char**)
 {
     TEST_CHECK(testStringStream);
     TEST_CHECK(testByteStream);
