@@ -24,7 +24,7 @@
 #include <import/str.h>
 #include <import/sys.h>
 
-int main()
+int main(int, char**)
 {
     try
     {
