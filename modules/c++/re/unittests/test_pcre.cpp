@@ -61,7 +61,7 @@ TEST_CASE(testSplit)
     TEST_ASSERT_EQ(vec[2], "THREE");
 }
 
-int main()
+int main(int, char**)
 {
     TEST_CHECK( testMatches);
     TEST_CHECK( testSearch);
