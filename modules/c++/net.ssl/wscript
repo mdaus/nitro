@@ -2,8 +2,86 @@ NAME            = 'net.ssl'
 MAINTAINER      = 'jmrandol@users.sourceforge.net'
 VERSION         = '1.0'
 MODULE_DEPS     = 'net'
+USELIB          = 'SSL'
 
-options = configure = distclean = lambda p: None
+from waflib import Options
+
+distclean = lambda p: None
+
+def options(opt):
+    opt.add_option('--with-ssl-home', action='store', dest='ssl_home',
+                   help='Specify the OpenSSL home directory')
+
+def configure(conf):
+    sslHome = Options.options.ssl_home
+    sslLib = 'ssl'
+    sslUselib = 'SSL'
+    sslHeader = 'openssl/ssl.h'
+    sslFunction = 'SSL_library_init'
+    sslDef = 'USE_OPENSSL'
+    sslOldDef = 'OPENSSL_0_9_8'
+    sslFragment098 = '''
+        #include "openssl/ssl.h"
+        int main()
+        {
+            SSL_library_init();
+            SSL_load_error_strings();
+
+            SSL_METHOD *method = SSLv23_client_method();
+            SSL_CTX* ctx = SSL_CTX_new(method);
+            return 0;
+        }
+        '''
+    sslFragment100 = '''
+        #include "openssl/ssl.h"
+        int main()
+        {
+            SSL_library_init();
+            SSL_load_error_strings();
+
+            const SSL_METHOD *method = SSLv23_client_method();
+            SSL_CTX* ctx = SSL_CTX_new(method);
+            return 0;
+        }
+        '''
+
+    if sslHome:
+        if conf.check(lib=sslLib, uselib_store=sslUselib,
+                      header_name=sslHeader,
+                      function_name=sslFunction,
+                      fragment=sslFragment098,
+                      libpath=os.path.join(sslHome, 'lib'),
+                      includes=os.path.join(sslHome, 'include'),
+                      msg='Checking for version 0.9.8 ssl library',
+                      okmsg=sslHome,
+                      mandatory=False):
+            conf.define(sslOldDef, True)
+        else:
+            conf.check(lib=sslLib, uselib_store=sslUselib,
+                       header_name=sslHeader,
+                       function_name=sslFunction,
+                       fragment=sslFragment100,
+                       libpath=os.path.join(sslHome, 'lib'),
+                       includes=os.path.join(sslHome, 'include'),
+                       msg='Checking for version library',
+                       okmsg=sslHome,
+                       mandatory=True)
+        conf.define(sslDef, True)
+    elif conf.check(lib=sslLib, uselib_store=sslUselib,
+                    header_name=sslHeader,
+                    function_name=sslFunction,
+                    fragment=sslFragment098,
+                    msg='Checking for version 0.9.8 ssl library',
+                    mandatory=False):
+        conf.define(sslDef, True)
+        conf.define(sslOldDef, True)
+    elif conf.check(lib=sslLib, uselib_store=sslUselib,
+                    header_name=sslHeader,
+                    function_name=sslFunction,
+                    fragment=sslFragment100,
+                    msg='Checking for version library',
+                    mandatory=False):
+        conf.define(sslDef, True)
 
 def build(bld):
     bld.module(**globals())
