@@ -175,7 +175,7 @@ TEST_CASE(testRequired)
     TEST_ASSERT_EQ(results->get<std::string>("config"), "configFile");
 }
 
-int main()
+int main(int, char**)
 {
     TEST_CHECK( testValue);
     TEST_CHECK( testChoices);
