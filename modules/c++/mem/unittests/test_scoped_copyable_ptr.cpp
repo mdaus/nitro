@@ -143,7 +143,7 @@ TEST_CASE(testSyntax)
 }
 }
 
-int main()
+int main(int, char**)
 {
     TEST_CHECK(testCopyConstructor);
     TEST_CHECK(testAssignmentOperator);
