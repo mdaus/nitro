@@ -148,10 +148,12 @@ private:
     void form(int row, int column, int errNum = 0)
     {
         std::ostringstream oss;
-		if (errNum > 0)
-		{
-			oss << "Error #" << errNum << ":";
-		}
+	    if (errNum > 0)
+	    {
+
+	        oss << "Error #" << errNum << ":";
+
+	    }
         oss << " (" << row << ',' << column << "): " << mMessage;
         mMessage = oss.str();
     }
