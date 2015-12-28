@@ -93,14 +93,13 @@ mem::ScopedCloneablePtr< namespace##::##CppType > makeScopedCloneable##PyType();
 
 
 
-%define SCOPED_COPYABLE(namespace, tpe)
-SCOPED_COPYABLE_RENAME(namespace, tpe, tpe)
+%define SCOPED_COPYABLE(namespace, type)
+SCOPED_COPYABLE_RENAME(namespace, type, type)
 %enddef
 
 /*
  * Same as above but for ScopedCloneablePtr
  */
-%define SCOPED_CLONEABLE(namespace, tpe)
-SCOPED_CLONEABLE_RENAME(namespace, tpe, tpe)
+%define SCOPED_CLONEABLE(namespace, type)
+SCOPED_CLONEABLE_RENAME(namespace, type, type)
 %enddef
-
