@@ -174,7 +174,9 @@ void net::Socket::sendTo(const SocketAddress& address,
                          size_t len,
                          int flags)
 {
-    int numBytes = ::sendto(mNative, b, len, flags,
+    // sendto() second parameter is const void* on Unix but const char* on
+    // Windows
+    int numBytes = ::sendto(mNative, static_cast<const char*>(b), len, flags,
             (const struct sockaddr *) &(address.getAddress()),
             (net::SockLen_T) sizeof(address.getAddress()));
 
