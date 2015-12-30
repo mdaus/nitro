@@ -83,7 +83,8 @@ size_t net::Socket::recv(void* b, size_t len, int flags)
     if (len == 0)
         return -1;
 
-    numBytes = ::recv(mNative, b, len, flags);
+    // recv() takes buffer in as void* on Unix but char* on Windows
+    numBytes = ::recv(mNative, static_cast<char*>(b), len, flags);
 
 #if defined(__DEBUG_SOCKET)
     std::cout << "========== READ FROM CONNECTION =============" << std::endl;
@@ -131,7 +132,9 @@ size_t net::Socket::recvFrom(net::SocketAddress& address,
 
     net::SockAddrIn_T& in = address.getAddress();
     net::SockLen_T addrLen = sizeof(in);
-    sys::SSize_T bytes = ::recvfrom(mNative, b, len, flags,
+
+    // recvfrom() takes in buffer as void* on Unix but char* on Windows
+    sys::SSize_T bytes = ::recvfrom(mNative, static_cast<char*>(b), len, flags,
             (struct sockaddr *) &in, &addrLen);
     if (bytes == -1)
     {
@@ -156,7 +159,9 @@ void net::Socket::send(const void* b, size_t len, int flags)
     std::cout << "=============================================" << std::endl << std::endl;
 #endif
 
-    numBytes = ::send(mNative, b, len, flags);
+    // send() takes in buffer as const void* on Unix but const char* on
+    // Windows
+    numBytes = ::send(mNative, static_cast<const char*>(b), len, flags);
 
     if (numBytes == -1 || (sys::Size_T)numBytes != len)
     {
