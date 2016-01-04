@@ -67,6 +67,8 @@ void io::ByteStream::write(const sys::byte *b, sys::Size_T size)
 {
     if (mPosition < 0)
         throw except::Exception(Ctxt("Invalid write on eof"));
+    if (size == 0)
+        return;
 
     sys::Size_T newPos = mPosition + size;
     if (newPos >= mData.size())
