@@ -40,7 +40,7 @@ namespace poly
  *
  *  \param x The observable x points
  *  \param y The observable y solutions
- *  \param order The desired order of the polynomial to fit
+ *  \param order The desired order of the polynomial fit
  *  \return A one dimensional polynomial that fits the curve
  */
  
@@ -261,7 +261,7 @@ inline math::poly::TwoD<double> fit(size_t numRows,
  *  \param yObs0 First set of observed y values
  *  \param yObs1 Second set of observed y values
  *  \param yObs2 Third set of observed y values
- *  \param order The order of the output poly
+ *  \param order The desired order of the polynomial fit
  *  \throw Exception if all input Vectors are not equally sized
  *  \return A polynomial (B01, B02, B03)x^0 + (B11, B12, B13)x^1 + ... + (Bn1, Bn2, Bn3)x^n
  */
@@ -302,7 +302,7 @@ inline math::poly::OneD< math::linear::VectorN< 3, double > > fit(
  *
  *  \param xObsVector Observed x values
  *  \param yObsMatrix Matrix with each row as a set of observed y values
- *  \param order The number of terms in the output poly (order + 1)
+ *  \param order The desired order of the polynomial fit
  *  \throw Exception if the matrix doesn't have 3 sets of values, i.e. 3 rows
  *  \return A polynomial (B01, B02, B03)x^0 + (B11, B12, B13)x^1 + ... + (Bn1, Bn2, Bn3)x^n
  */
@@ -340,7 +340,7 @@ inline math::poly::OneD< math::linear::VectorN< 3, double > > fit(
  *  \param yObs0 First set of observed y values
  *  \param yObs1 Second set of observed y values
  *  \param yObs2 Third set of observed y values
- *  \param order The number of terms in the output poly (order + 1)
+ *  \param order The desired order of the polynomial fit
  *  \return A polynomial (B01, B02, B03)x^0 + (B11, B12, B13)x^1 + ... + (Bn1, Bn2, Bn3)x^n
  */
 
