@@ -842,7 +842,10 @@ def configureCompilerOptions(self):
         if re.match(solarisRegex, sys_platform):
             self.env.append_value('LIB_SOCKET', 'socket')
 
-        warningFlags = '-Wall -Wno-deprecated-declarations'
+        warningFlags = '-Wall'
+        if ccCompiler == 'gcc':
+            # icc doesn't have this flag
+            warningFlags += ' -Wno-deprecated-declarations'
         if Options.options.warningsAsErrors:
             warningFlags += ' -Wfatal-errors'
 
