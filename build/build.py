@@ -865,7 +865,9 @@ def configureCompilerOptions(self):
             config['cxx']['optz_fastest']   = '-O3'
 
             gxxCompileFlags='-fPIC'
-            if cxxCompiler == 'g++' and self.env['cpp11support'] and gccHasCpp11():
+            if self.env['cpp11support'] and \
+            ((cxxCompiler == 'g++' and gccHasCpp11()) or \
+             (cxxCompiler == 'icpc' and iccHasCpp11())):
                 gxxCompileFlags+=' -std=c++11'
 
             self.env.append_value('CXXFLAGS', gxxCompileFlags.split())
@@ -1670,10 +1672,21 @@ def gccHasCpp11():
     try:
         output = subprocess.check_output("g++ --help=c++", stderr=subprocess.STDOUT, shell=True)
     except subprocess.CalledProcessError:
-        #If gcc is too old for --help=, then it is too old for C++11
+        # If gcc is too old for --help=, then it is too old for C++11
         return False
     for line in output.split('\n'):
         if re.search(r'-std=c\+\+11', line):
+            return True
+    return False
+
+def iccHasCpp11():
+    try:
+        output = subprocess.check_output("icpc -help", stderr=subprocess.STDOUT, shell=True)
+    except subprocess.CalledProcessError:
+        # If icc is too old for -help, then it is too old for C++11
+        return False
+    for line in output.split('\n'):
+        if re.search(r'c\+\+11', line):
             return True
     return False
 
