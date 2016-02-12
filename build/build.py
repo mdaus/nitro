@@ -844,8 +844,9 @@ def configureCompilerOptions(self):
 
         warningFlags = '-Wall'
         if ccCompiler == 'gcc':
-            # icc doesn't have this flag
             warningFlags += ' -Wno-deprecated-declarations'
+        else:
+            warningFlags += ' -Wno-deprecated'
         if Options.options.warningsAsErrors:
             warningFlags += ' -Wfatal-errors'
 
