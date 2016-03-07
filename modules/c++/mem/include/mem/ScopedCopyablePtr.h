@@ -87,6 +87,26 @@ public:
         return *this;
     }
 
+    bool operator==(const ScopedCopyablePtr<T>& rhs) const
+    {
+        if (this->get() == NULL && rhs.get() == NULL)
+        {
+            return true;
+        }
+
+        if (this->get() == NULL || rhs.get() == NULL)
+        {
+            return false;
+        }
+
+        return (*(this->mPtr) == *rhs);
+    }
+
+    bool operator!=(const ScopedCopyablePtr<T>& rhs) const
+    {
+        return !(*this == rhs);
+    }
+
     T* get() const
     {
         return mPtr.get();
