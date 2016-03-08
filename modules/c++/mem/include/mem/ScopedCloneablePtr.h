@@ -89,12 +89,12 @@ public:
 
     bool operator==(const ScopedCloneablePtr<T>& rhs) const
     {
-        if (this->get() == NULL && rhs.get() == NULL)
+        if (get() == NULL && rhs.get() == NULL)
         {
             return true;
         }
 
-        if (this->get() == NULL || rhs.get() == NULL)
+        if (get() == NULL || rhs.get() == NULL)
         {
             return false;
         }
