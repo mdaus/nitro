@@ -141,13 +141,13 @@ int ExecPipe::closePipe()
     mOutStream = NULL;
 
     int exitStatus = 0;
-    const int encodedStatus = pclose(tmp);
+    int encodedStatus = 0;
+    waitpid(mProcess, &encodedStatus, 1);
 
     if (WIFEXITED(encodedStatus))
     {
         // get exit code from child process
         exitStatus = WEXITSTATUS(encodedStatus);
-
     }
     else
     {
