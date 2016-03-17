@@ -130,7 +130,7 @@ int ExecPipe::killProcess()
 
 int ExecPipe::closePipe()
 {
-    if (!mOutStream)
+    if (mOutStream)
     {
         fclose(mOutStream);
         mOutStream = NULL;
