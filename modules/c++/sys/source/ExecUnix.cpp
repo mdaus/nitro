@@ -132,17 +132,13 @@ int ExecPipe::closePipe()
 {
     if (!mOutStream)
     {
-        throw except::IOException(
-            Ctxt("The stream is already closed"));
+        fclose(mOutStream);
+        mOutStream = NULL;
     }
-
-    // in case it fails
-    FILE* tmp = mOutStream;
-    mOutStream = NULL;
 
     int exitStatus = 0;
     int encodedStatus = 0;
-    waitpid(mProcess, &encodedStatus, 1);
+    waitpid(mProcess, &encodedStatus, 0);
 
     if (WIFEXITED(encodedStatus))
     {
