@@ -229,6 +229,29 @@ std::string sys::OSWin32::getEnv(const std::string& s) const
     return result;
 }
 
+bool sys::OSWin32::isEnvSet(const std::string& s) const
+{
+    try
+    {
+        getEnv(s);
+    }
+    catch(sys::SystemException)
+    {
+        return false;
+    }
+    return true;
+}
+
+bool sys::OSWin32:getEnvIfSet(const std::string& envVar, std::string& value) const
+{
+    if(isEnvSet(envVar))
+    {
+        value = getEnv(value);
+        return true;
+    }
+    return false;
+}
+
 void sys::OSWin32::setEnv(const std::string& var, 
                           const std::string& val,
 			  bool overwrite)

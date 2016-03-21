@@ -210,6 +210,30 @@ std::string sys::OSUnix::getEnv(const std::string& s) const
     return std::string(p); 
 }
 
+bool sys::OSUnix::isEnvSet(const std::string& s) const
+{
+    try
+    {
+        getEnv(s);
+    }
+    catch(sys::SystemException)
+    {
+        return false;
+    }
+    return true;
+}
+
+bool sys::OSUnix::getEnvIfSet(const std::string& envVar, std::string& value) const
+{
+    if(isEnvSet(envVar))
+    {
+        value = getEnv(value);
+        return true;
+    }
+    return false;
+}
+
+
 void sys::OSUnix::setEnv(const std::string& var, 
                          const std::string& val,
                          bool overwrite)
