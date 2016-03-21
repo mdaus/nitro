@@ -242,7 +242,7 @@ bool sys::OSWin32::isEnvSet(const std::string& s) const
     return true;
 }
 
-bool sys::OSWin32:getEnvIfSet(const std::string& envVar, std::string& value) const
+bool sys::OSWin32::getEnvIfSet(const std::string& envVar, std::string& value) const
 {
     if(isEnvSet(envVar))
     {
