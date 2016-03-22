@@ -28,6 +28,7 @@
 #include "sys/File.h"
 
 #include <iostream>
+#include <vector>
 
 std::string sys::OSWin32::getPlatformName() const
 {
@@ -221,11 +222,10 @@ std::string sys::OSWin32::getEnv(const std::string& s) const
 
     // If we can use a normal size buffer, lets not bother to malloc
 
-    vector<char> buffer;
+    std::vector<char> buffer;
     buffer.resize(size+1);
-    DWORD retVal = GetEnvironmentVariable(s.c_str(), buffer, size);
-    result = buffer;
-
+    DWORD retVal = GetEnvironmentVariable(s.c_str(), static_cast<char*>(&buffer[0]), size);
+    result = static_cast<char*>(&buffer[0]);
     return result;
 }
 
