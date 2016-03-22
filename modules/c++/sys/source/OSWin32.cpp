@@ -221,35 +221,20 @@ std::string sys::OSWin32::getEnv(const std::string& s) const
 
     // If we can use a normal size buffer, lets not bother to malloc
 
-    char *buffer = new char[size + 1];
+    vector<char> buffer;
+    buffer.resize(size+1);
     DWORD retVal = GetEnvironmentVariable(s.c_str(), buffer, size);
     result = buffer;
-    delete [] buffer;
 
     return result;
 }
 
 bool sys::OSWin32::isEnvSet(const std::string& s) const
 {
-    try
-    {
-        getEnv(s);
-    }
-    catch(sys::SystemException)
-    {
+    DWORD size = GetEnvironmentVariable(s.c_str(), NULL, 0);
+    if (size == 0)
         return false;
-    }
     return true;
-}
-
-bool sys::OSWin32::getEnvIfSet(const std::string& envVar, std::string& value) const
-{
-    if(isEnvSet(envVar))
-    {
-        value = getEnv(value);
-        return true;
-    }
-    return false;
 }
 
 void sys::OSWin32::setEnv(const std::string& var, 

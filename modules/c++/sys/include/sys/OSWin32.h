@@ -170,11 +170,6 @@ public:
     virtual bool isEnvSet(const std::string& s) const;
 
     /*!
-     * Gets environment variable, if set
-     */
-    virtual bool getEnvIfSet(const std::string& envVar, std::string& value) const;
-
-    /*!
      *  Set an environment variable
      */
     virtual void setEnv(const std::string& var, 

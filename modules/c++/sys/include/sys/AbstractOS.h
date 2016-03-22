@@ -192,9 +192,10 @@ public:
     virtual bool isEnvSet(const std::string& s) const = 0;
 
     /*!
-     *  Get an environment variable, if set
+     *  Get an environment variable and updates value, but only if set.
+     *  Returns true if environment variable is set, false otherwise
      */
-    virtual bool getEnvIfSet(const std::string& envVar, std::string& value) const = 0;
+    bool getEnvIfSet(const std::string& envVar, std::string& value) const;
 
     /*!
      *  Set an environment variable
