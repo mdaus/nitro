@@ -220,21 +220,19 @@ std::string sys::OSWin32::getEnv(const std::string& s) const
         throw sys::SystemException(Ctxt(FmtX(
             "Unable to get windows environment variable %s", s.c_str())));
 
-    // If we can use a normal size buffer, lets not bother to malloc
-
-    std::vector<char> buffer;
-    buffer.resize(size+1);
-    DWORD retVal = GetEnvironmentVariable(s.c_str(), static_cast<char*>(&buffer[0]), size);
-    result = static_cast<char*>(&buffer[0]);
+    std::vector<char> buffer(size + 1);
+    DWORD retVal = GetEnvironmentVariable(s.c_str(), &buffer[0], size);
+    if (retVal != size)
+        throw sys::SystemException(Ctxt(FmtX(
+           "Environment variable size does not match allocated size for %s", s.c_str())));
+    result = &buffer[0];
     return result;
 }
 
 bool sys::OSWin32::isEnvSet(const std::string& s) const
 {
     DWORD size = GetEnvironmentVariable(s.c_str(), NULL, 0);
-    if (size == 0)
-        return false;
-    return true;
+    return (size != 0)
 }
 
 void sys::OSWin32::setEnv(const std::string& var, 
