@@ -202,12 +202,18 @@ std::string sys::OSUnix::operator[](const std::string& s) const
 
 std::string sys::OSUnix::getEnv(const std::string& s) const
 {
-    const char* p = getenv(s.c_str());
-    if (p == NULL)
+    const char* envVal = getenv(s.c_str());
+    if (envVal == NULL)
         throw sys::SystemException(
             Ctxt(FmtX("Unable to get unix environment variable %s", 
             s.c_str())));
-    return std::string(p); 
+    return std::string(envVal); 
+}
+
+bool sys::OSUnix::isEnvSet(const std::string& s) const
+{
+    const char* envVal = getenv(s.c_str());
+    return (envVal != NULL);
 }
 
 void sys::OSUnix::setEnv(const std::string& var, 
