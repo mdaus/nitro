@@ -232,7 +232,7 @@ std::string sys::OSWin32::getEnv(const std::string& s) const
 bool sys::OSWin32::isEnvSet(const std::string& s) const
 {
     DWORD size = GetEnvironmentVariable(s.c_str(), NULL, 0);
-    return (size != 0)
+    return (size != 0);
 }
 
 void sys::OSWin32::setEnv(const std::string& var, 
