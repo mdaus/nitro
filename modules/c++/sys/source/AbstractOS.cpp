@@ -81,7 +81,7 @@ bool AbstractOS::getEnvIfSet(const std::string& envVar, std::string& value) cons
 {
     if (isEnvSet(envVar))
     {
-        value = getEnv(value);
+        value = getEnv(envVar);
         return true;
     }
     return false;
