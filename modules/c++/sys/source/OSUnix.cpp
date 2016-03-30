@@ -248,6 +248,11 @@ void sys::OSUnix::setEnv(const std::string& var,
     }
 }
 
+void sys::OSUnix::unsetEnv(const std::string& var)
+{
+    unsetenv(var.c_str());
+}
+
 size_t sys::OSUnix::getNumCPUs() const
 {
 #ifdef _SC_NPROCESSORS_ONLN

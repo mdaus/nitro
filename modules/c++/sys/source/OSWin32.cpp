@@ -245,6 +245,11 @@ void sys::OSWin32::setEnv(const std::string& var,
             "Unable to set windows environment variable %s", var.c_str())));
 }
 
+void sys::OsWin32::unsetEnv(const std::string& var)
+{
+    SetEnvironmentVariable(var.c_str(), NULL);
+}
+
 size_t sys::OSWin32::getNumCPUs() const
 {
     SYSTEM_INFO info;

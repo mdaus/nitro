@@ -81,12 +81,70 @@ TEST_CASE(testForcefulMove)
     TEST_ASSERT( !os.exists(subdir1) );
 }
 
+TEST_CASE(testEnvVariables)
+{
+    sys::OS os;
+    const std::string testvar = "TESTVARIABLE";
+    const std::string testvalue = "TESTVALUE";
+    const std::string testvalue2 = "TESTVALUE2";
+
+    // Start by clearing the environment variable, if set.
+    os.unsetEnv(testvar);    
+    TEST_ASSERT(!os.isEnvSet(testvar));
+
+    // Check getEnv throws an sys::SystemException exception when trying unset var
+    try
+    {
+        os.getEnv(testvar);
+        TEST_ASSERT(false);
+    }
+    catch(sys::SystemException)
+    {
+        TEST_ASSERT(true);
+    }
+    catch(...)
+    {
+        TEST_ASSERT(false);   
+    }
+
+    // Test getEnvIfSet doesn't update value and returns false on unset var.
+    std::string candidatevalue="Unset";
+
+    TEST_ASSERT(!os.getEnvIfSet(testvar, candidatevalue));
+    TEST_ASSERT(candidatevalue == "Unset");
+
+    // Set the environment variable
+    os.setEnv(testvar, testvalue, true);
+
+    TEST_ASSERT(os.isEnvSet(testvar));
+
+    TEST_ASSERT(os.getEnvIfSet(testvar, candidatevalue));
+    TEST_ASSERT(candidatevalue == testvalue);
+    std::string getEnvVar = os.getEnv(testvar);
+    TEST_ASSERT(getEnvVar == testvalue);
+
+
+    // Set the environment variable without overwrite. (Should not update).
+    os.setEnv(testvar, testvalue2,  false);
+
+    TEST_ASSERT(os.getEnvIfSet(testvar, candidatevalue));
+    TEST_ASSERT(candidatevalue == testvalue);
+    getEnvVar = os.getEnv(testvar);
+    TEST_ASSERT(getEnvVar == testvalue);
+
+    // Finally unset the variable again.
+    os.unsetEnv(testvar);
+    
+    TEST_ASSERT(os.isEnvSet(testvar));
+
+}
+
 }
 
 int main(int, char**)
 {
     TEST_CHECK(testRecursiveRemove);
     TEST_CHECK(testForcefulMove);
-
+    TEST_CHECK(testEnvVariables);
     return 0;
 }
