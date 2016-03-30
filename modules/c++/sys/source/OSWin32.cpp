@@ -221,7 +221,7 @@ std::string sys::OSWin32::getEnv(const std::string& s) const
             "Unable to get windows environment variable %s", s.c_str())));
 
     std::vector<char> buffer(size + 1);
-    DWORD retVal = GetEnvironmentVariable(s.c_str(), &buffer[0], size);
+    DWORD retVal = GetEnvironmentVariable(s.c_str(), &buffer[0], 0);
     if (retVal != size)
         throw sys::SystemException(Ctxt(FmtX(
            "Environment variable size does not match allocated size for %s", s.c_str())));
