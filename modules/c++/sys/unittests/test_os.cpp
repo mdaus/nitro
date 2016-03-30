@@ -135,7 +135,7 @@ TEST_CASE(testEnvVariables)
     // Finally unset the variable again.
     os.unsetEnv(testvar);
     
-    TEST_ASSERT(os.isEnvSet(testvar));
+    TEST_ASSERT(!os.isEnvSet(testvar));
 
 }
 
