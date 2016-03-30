@@ -221,8 +221,8 @@ std::string sys::OSWin32::getEnv(const std::string& s) const
             "Unable to get windows environment variable %s", s.c_str())));
 
     std::vector<char> buffer(size + 1);
-    DWORD retVal = GetEnvironmentVariable(s.c_str(), &buffer[0], 0);
-    if (retVal != size)
+    DWORD retVal = GetEnvironmentVariable(s.c_str(), &buffer[0], size);
+    if (retVal + 1 != size) // yay for Win32 API, see: https://msdn.microsoft.com/en-us/libary/windows/desktop/ms683188%28v=vs.85%29.aspx
         throw sys::SystemException(Ctxt(FmtX(
            "Environment variable size does not match allocated size for %s", s.c_str())));
     result = &buffer[0];
@@ -239,10 +239,13 @@ void sys::OSWin32::setEnv(const std::string& var,
                           const std::string& val,
 			  bool overwrite)
 {
-    BOOL ret = SetEnvironmentVariable(var.c_str(), val.c_str());
-    if(!ret)
-        throw sys::SystemException(Ctxt(FmtX(
-            "Unable to set windows environment variable %s", var.c_str())));
+    if (overwrite || !isEnvSet(var))
+    {
+        BOOL ret = SetEnvironmentVariable(var.c_str(), val.c_str());
+        if (!ret)
+            throw sys::SystemException(Ctxt(FmtX(
+                "Unable to set windows environment variable %s", var.c_str())));
+    }
 }
 
 void sys::OSWin32::unsetEnv(const std::string& var)
