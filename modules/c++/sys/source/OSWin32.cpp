@@ -245,7 +245,7 @@ void sys::OSWin32::setEnv(const std::string& var,
             "Unable to set windows environment variable %s", var.c_str())));
 }
 
-void sys::OsWin32::unsetEnv(const std::string& var)
+void sys::OSWin32::unsetEnv(const std::string& var)
 {
     SetEnvironmentVariable(var.c_str(), NULL);
 }
