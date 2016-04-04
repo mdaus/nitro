@@ -205,8 +205,7 @@ std::string sys::OSUnix::getEnv(const std::string& s) const
     const char* envVal = getenv(s.c_str());
     if (envVal == NULL)
         throw sys::SystemException(
-            Ctxt(FmtX("Unable to get unix environment variable %s", 
-            s.c_str())));
+            Ctxt("Unable to get unix environment variable " + s));
     return std::string(envVal); 
 }
 
@@ -245,6 +244,18 @@ void sys::OSUnix::setEnv(const std::string& var,
     {
         throw sys::SystemException(Ctxt(
                 "Unable to set unix environment variable " + var));
+    }
+}
+
+void sys::OSUnix::unsetEnv(const std::string& var)
+{
+    const int ret = unsetenv(var.c_str());
+    // by definition, unsetenv does not consider a missing environment variable
+    // to be an error condition, so this should only throw if the environment
+    // variable could not be changed
+    if (ret == -1)
+    {
+      throw sys::SystemException(Ctxt("Unable to unset unix environment variable " + var));
     }
 }
 
