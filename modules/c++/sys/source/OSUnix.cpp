@@ -250,7 +250,12 @@ void sys::OSUnix::setEnv(const std::string& var,
 
 void sys::OSUnix::unsetEnv(const std::string& var)
 {
-    unsetenv(var.c_str());
+    int ret = unsetenv(var.c_str());
+    // by definition, unsetenv does not consider a missing environment variable
+    // to be an error condition, so this should only throw if the environment
+    // variable could not be changed
+    if(ret == -1)
+      throw sys::SystemException(Ctxt("Unable to unset unix environment variable " + var));
 }
 
 size_t sys::OSUnix::getNumCPUs() const

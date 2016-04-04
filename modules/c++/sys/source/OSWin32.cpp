@@ -222,9 +222,16 @@ std::string sys::OSWin32::getEnv(const std::string& s) const
 
     std::vector<char> buffer(size + 1);
     DWORD retVal = GetEnvironmentVariable(s.c_str(), &buffer[0], size);
-    if (retVal + 1 != size) // yay for Win32 API, see: https://msdn.microsoft.com/en-us/libary/windows/desktop/ms683188%28v=vs.85%29.aspx
-        throw sys::SystemException(Ctxt(FmtX(
+    // Win32 API weirdness -- see https://msdn.microsoft.com/en-us/libary/windows/desktop/ms683188%28v=vs.85%29.aspx
+    // When less then the size of the buffer is allocated, it returns the required size, including the null character
+    // Otherwise, it returns the size of the variable, not including the null character
+    if (retVal + 1 != size) 
+       throw sys::SystemException(Ctxt(FmtX(
            "Environment variable size does not match allocated size for %s", s.c_str())));
+    if (reVal == 0)
+       throw sys:SystemException(Ctxt(FmtX(
+           "Environment variable size changed unexpectedly to zero \
+            following buffer allocation %s", s.c_str())));
     result = &buffer[0];
     return result;
 }
@@ -250,7 +257,9 @@ void sys::OSWin32::setEnv(const std::string& var,
 
 void sys::OSWin32::unsetEnv(const std::string& var)
 {
-    SetEnvironmentVariable(var.c_str(), NULL);
+    BOOL ret = SetEnvironmentVariable(var.c_str(), NULL);
+    if(!ret)
+         throw sys::SystemException(Ctxt(FmtX("Unable to unset windows environment variable %s", var.c_str())));
 }
 
 size_t sys::OSWin32::getNumCPUs() const
