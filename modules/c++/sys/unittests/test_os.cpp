@@ -2,7 +2,6 @@
 
 #include <sys/OS.h>
 #include <sys/Path.h>
-
 #include "TestCase.h"
 
 namespace
@@ -90,28 +89,17 @@ TEST_CASE(testEnvVariables)
 
     // Start by clearing the environment variable, if set.
     os.unsetEnv(testvar);    
-    TEST_ASSERT(!os.isEnvSet(testvar));
+    TEST_ASSERT_FALSE(os.isEnvSet(testvar));
 
     // Check getEnv throws an sys::SystemException exception when trying unset var
-    try
-    {
-        os.getEnv(testvar);
-        TEST_ASSERT(false);
-    }
-    catch(sys::SystemException)
-    {
-        TEST_ASSERT(true);
-    }
-    catch(...)
-    {
-        TEST_ASSERT(false);   
-    }
+    
+    TEST_SPECIFIC_EXCEPTION(os.getEnv(testvar),sys::SystemException);
 
     // Test getEnvIfSet doesn't update value and returns false on unset var.
     std::string candidatevalue="Unset";
 
-    TEST_ASSERT(!os.getEnvIfSet(testvar, candidatevalue));
-    TEST_ASSERT(candidatevalue == "Unset");
+    TEST_ASSERT_FALSE(os.getEnvIfSet(testvar, candidatevalue));
+    TEST_ASSERT_EQ(candidatevalue,"Unset");
 
     // Set the environment variable
     os.setEnv(testvar, testvalue, true);
@@ -119,24 +107,22 @@ TEST_CASE(testEnvVariables)
     TEST_ASSERT(os.isEnvSet(testvar));
 
     TEST_ASSERT(os.getEnvIfSet(testvar, candidatevalue));
-    TEST_ASSERT(candidatevalue == testvalue);
+    TEST_ASSERT_EQ(candidatevalue,testvalue);
     std::string getEnvVar = os.getEnv(testvar);
-    TEST_ASSERT(getEnvVar == testvalue);
-
+    TEST_ASSERT_EQ(getEnvVar,testvalue);
 
     // Set the environment variable without overwrite. (Should not update).
     os.setEnv(testvar, testvalue2,  false);
 
     TEST_ASSERT(os.getEnvIfSet(testvar, candidatevalue));
-    TEST_ASSERT(candidatevalue == testvalue);
+    TEST_ASSERT_EQ(candidatevalue,testvalue);
     getEnvVar = os.getEnv(testvar);
-    TEST_ASSERT(getEnvVar == testvalue);
+    TEST_ASSERT_EQ(getEnvVar,testvalue);
 
     // Finally unset the variable again.
     os.unsetEnv(testvar);
     
-    TEST_ASSERT(!os.isEnvSet(testvar));
-
+    TEST_ASSERT_FALSE(os.isEnvSet(testvar));
 }
 
 }
