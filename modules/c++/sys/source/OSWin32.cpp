@@ -228,8 +228,8 @@ std::string sys::OSWin32::getEnv(const std::string& s) const
     if (retVal + 1 != size) 
        throw sys::SystemException(Ctxt(FmtX(
            "Environment variable size does not match allocated size for %s", s.c_str())));
-    if (reVal == 0)
-       throw sys:SystemException(Ctxt(FmtX(
+    if (retVal == 0)
+       throw sys::SystemException(Ctxt(FmtX(
            "Environment variable size changed unexpectedly to zero \
             following buffer allocation %s", s.c_str())));
     result = &buffer[0];
