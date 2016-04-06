@@ -25,6 +25,7 @@
 
 #include <import/except.h>
 #include <import/sys.h>
+#include <import/logging.h>
 
 namespace plugin
 {
@@ -44,8 +45,7 @@ public:
 class DefaultErrorHandler : public ErrorHandler
 {
 public:
-    DefaultErrorHandler();
-    virtual ~DefaultErrorHandler();
+    DefaultErrorHandler(logging::Logger* = NULL);
 
     virtual void onPluginDirectoryNotFound(const std::string& dir);
 
@@ -56,6 +56,9 @@ public:
     virtual void onPluginVersionUnsupported(const std::string& message);
 
     virtual void onPluginError(except::Context& c);
+
+protected:
+    logging::Logger* mLogger;
 };
 
 }
