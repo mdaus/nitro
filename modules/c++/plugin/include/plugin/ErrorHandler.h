@@ -45,7 +45,7 @@ public:
 class DefaultErrorHandler : public ErrorHandler
 {
 public:
-    DefaultErrorHandler(logging::Logger* = NULL);
+    DefaultErrorHandler(logging::Logger* logger = NULL);
 
     virtual void onPluginDirectoryNotFound(const std::string& dir);
 
