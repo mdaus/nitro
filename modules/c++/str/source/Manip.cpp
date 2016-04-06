@@ -24,6 +24,8 @@
 #include <iostream>
 #include <sstream>
 #include <algorithm>
+#include <climits>
+#include <cstdio>
 
 void str::trim(std::string & s)
 {
