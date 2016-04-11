@@ -58,7 +58,7 @@ public:
     virtual void onPluginError(except::Context& c);
 
 protected:
-    logging::Logger* mLogger;
+    mem::SharedPtr<logging::Logger> mLogger;
 };
 
 }
