@@ -22,8 +22,8 @@
 
 #include "plugin/ErrorHandler.h"
 
-plugin::DefaultErrorHandler::DefaultErrorHandler(logging::Logger* logger) :
-	mLogger(mem::SharedPtr<logging::Logger>(logger))
+plugin::DefaultErrorHandler::DefaultErrorHandler(logging::LoggerPtr logger) :
+	mLogger(logger)
 {
 }
 

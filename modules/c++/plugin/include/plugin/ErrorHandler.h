@@ -33,32 +33,37 @@ class ErrorHandler
 {
 public:
     ErrorHandler() {}
+
     virtual ~ErrorHandler() {}
 
     virtual void onPluginDirectoryNotFound(const std::string& dir) = 0;
+
     virtual void onPluginLoadedAlready(const std::string& file) = 0;
+
     virtual void onPluginLoadFailed(const std::string& file) = 0;
+
     virtual void onPluginVersionUnsupported(const std::string& message) = 0;
+
     virtual void onPluginError(except::Context& c) = 0;
 };
 
 class DefaultErrorHandler : public ErrorHandler
 {
 public:
-    DefaultErrorHandler(logging::Logger* logger = NULL);
+    DefaultErrorHandler(logging::LoggerPtr logger = logging::LoggerPtr());
 
-    virtual void onPluginDirectoryNotFound(const std::string& dir);
+    void onPluginDirectoryNotFound(const std::string& dir);
 
-    virtual void onPluginLoadFailed(const std::string& file);
+    void onPluginLoadedAlready(const std::string& file);
 
-    virtual void onPluginLoadedAlready(const std::string& file);
+    void onPluginLoadFailed(const std::string& file);
 
-    virtual void onPluginVersionUnsupported(const std::string& message);
+    void onPluginVersionUnsupported(const std::string& message);
 
-    virtual void onPluginError(except::Context& c);
+    void onPluginError(except::Context& c);
 
 protected:
-    mem::SharedPtr<logging::Logger> mLogger;
+    logging::LoggerPtr mLogger;
 };
 
 }
