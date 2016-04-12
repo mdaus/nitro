@@ -47,3 +47,4 @@ int main(int, char**)
     TEST_CHECK(negativeInfinityEq);
     TEST_CHECK(differentSignsNe);
 }
+
