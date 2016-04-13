@@ -38,35 +38,23 @@ template<typename _T> bool equals(const _T& e1, const _T& e2)
 
 template<typename _T> inline bool equals(const _T& e1, const _T& e2, _T eps)
 {
+    if (std::numeric_limits<_T>::has_infinity)
+    {
+        if (e1 == std::numeric_limits<_T>::infinity() ||
+            e1 == -std::numeric_limits<_T>::infinity())
+        {
+            return e1 == e2;
+        }
+    }
     return std::abs(e1 - e2) < eps;
 }
 
 template<> inline bool equals(const float& e1, const float& e2)
 {
-    if (e1 == std::numeric_limits<float>::infinity() &&
-        e2 == std::numeric_limits<float>::infinity())
-    {
-        return true;
-    }
-    if (e1 == -std::numeric_limits<float>::infinity() &&
-        e2 == -std::numeric_limits<float>::infinity())
-    {
-        return true;
-    }
     return equals<float>(e1, e2, std::numeric_limits<float>::epsilon());
 }
 template<> inline bool equals(const double& e1, const double& e2)
 {
-    if (e1 == std::numeric_limits<double>::infinity() &&
-        e2 == std::numeric_limits<double>::infinity())
-    {
-        return true;
-    }
-    if (e1 == -std::numeric_limits<double>::infinity() &&
-        e2 == -std::numeric_limits<double>::infinity())
-    {
-        return true;
-    }
     // It's a really bold assertion here to say numeric_limits<double>
     return equals<double>(e1, e2, std::numeric_limits<float>::epsilon());
 }
