@@ -30,7 +30,7 @@
 
 #include "logging/Setup.h"
 
-logging::LoggerPtr
+std::auto_ptr<logging::Logger>
 logging::setupLogger(const std::string& program, 
                      const std::string& logLevel, 
                      const std::string& logFile,
@@ -38,7 +38,7 @@ logging::setupLogger(const std::string& program,
                      size_t logCount,
                      size_t logBytes)
 {
-    LoggerPtr log(new logging::Logger(program));
+    std::auto_ptr<logging::Logger> log(new logging::Logger(program));
 
     // setup logging level
     std::string lev = logLevel;
