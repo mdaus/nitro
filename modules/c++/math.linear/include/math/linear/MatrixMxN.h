@@ -23,6 +23,7 @@
 #define __MATH_LINEAR_MATRIX_M_X_N_H__
 
 #include <cmath>
+#include <limits>
 #include <import/sys.h>
 
 namespace math
