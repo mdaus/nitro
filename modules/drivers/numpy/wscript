@@ -45,8 +45,8 @@ def configure(cfg):
             cfg.check(
                         lib='npymath',
                         header_name='numpy/numpyconfig.h',
-                        msg='Checking for library numpy FAILED'
-                     ) 
+                        msg='Checking for library numpy FAILED',
+                        mandatory=False) 
 
 
 
