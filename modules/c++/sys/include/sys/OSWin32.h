@@ -176,6 +176,11 @@ public:
                         const std::string& val,
                         bool overwrite);
 
+    /*!
+     * Unset an environment variable
+     */
+    virtual void unsetEnv(const std::string& var);
+
     virtual size_t getNumCPUs() const;
 
     /*!

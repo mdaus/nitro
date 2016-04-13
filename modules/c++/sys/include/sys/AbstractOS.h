@@ -204,6 +204,11 @@ public:
                         const std::string& val,
                         bool overwrite) = 0;
 
+    /*!
+     * Unset an environment variable
+     */
+    virtual void unsetEnv(const std::string& var) = 0;
+
     virtual Pid_T getProcessId() const = 0;
 
     virtual std::string getDSOSuffix() const = 0;
