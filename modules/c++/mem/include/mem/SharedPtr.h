@@ -151,7 +151,6 @@ public:
         //       guarantee (i.e. the operation either succeeds or throws - the
         //       underlying object is always in a good state).
         sys::AtomicCounter* const newRefCtr = new sys::AtomicCounter(1);
-        T* ptr = scopedPtr.release();
 
         if (mRefCtr->decrementThenGet() == 0)
         {
@@ -162,14 +161,14 @@ public:
         }
 
         mRefCtr = newRefCtr;
-        mPtr = ptr;
+        mPtr = scopedPtr.release();
     }
 
     void reset(T* ptr = NULL)
     {
         // We take ownership of the pointer no matter what, so
         // temporarily wrap it in an auto_ptr in case creating
-        // the atomic counter throws later on.
+        // the atomic counter throws in the underlying method.
         reset(std::auto_ptr<T>(ptr));
     }
 
