@@ -55,25 +55,6 @@ TEST_CASE(testVecOfRawPointers)
 
     myVec.erase(myVec.begin());
     TEST_ASSERT_TRUE(myVec.empty());
-
-    // Now make sure everything works fine with constant iterators too
-    mem::VectorOfPointers<int>::const_iterator cBegin = myVec.begin();
-
-    myVec.push_back(new int(1));
-    myVec.push_back(new int(2));
-    myVec.push_back(new int(3));
-    myVec.push_back(new int(4));
-    myVec.push_back(new int(5));
-    myVec.push_back(new int(6));
-
-    myVec.erase(cBegin, cBegin + 5);
-
-    TEST_ASSERT_EQ(myVec.size(), 1);
-    TEST_ASSERT_EQ(*myVec[0], 6);
-
-    cBegin = myVec.begin();
-    myVec.erase(cBegin);
-    TEST_ASSERT_TRUE(myVec.empty());
 }
 
 TEST_CASE(testVecOfSharedPointers)
@@ -103,25 +84,6 @@ TEST_CASE(testVecOfSharedPointers)
     TEST_ASSERT_EQ(*myVec[0], 6);
 
     myVec.erase(myVec.begin());
-    TEST_ASSERT_TRUE(myVec.empty());
-
-    // Now make sure everything works fine with constant iterators too
-    mem::VectorOfSharedPointers<int>::const_iterator cBegin = myVec.begin();
-
-    myVec.push_back(new int(1));
-    myVec.push_back(new int(2));
-    myVec.push_back(new int(3));
-    myVec.push_back(new int(4));
-    myVec.push_back(new int(5));
-    myVec.push_back(new int(6));
-
-    myVec.erase(cBegin, cBegin + 5);
-
-    TEST_ASSERT_EQ(myVec.size(), 1);
-    TEST_ASSERT_EQ(*myVec[0], 6);
-
-    cBegin = myVec.begin();
-    myVec.erase(cBegin);
     TEST_ASSERT_TRUE(myVec.empty());
 }
 }

@@ -26,6 +26,7 @@
 #include <cstddef>
 #include <vector>
 #include <memory>
+#include <algorithm>
 
 #include <mem/SharedPtr.h>
 
@@ -122,19 +123,7 @@ public:
         return mValues.erase(pos);
     }
 
-    const_iterator erase(const const_iterator &pos)
-    {
-        delete *pos;
-        return mValues.erase(pos);
-    }
-
     iterator erase(const iterator &first, const iterator &last)
-    {
-        std::for_each(first, last, Deleter());
-        return mValues.erase(first, last);
-    }
-
-    const_iterator erase(const const_iterator &first, const const_iterator &last)
     {
         std::for_each(first, last, Deleter());
         return mValues.erase(first, last);
@@ -239,17 +228,7 @@ public:
         return mValues.erase(pos);
     }
 
-    const_iterator erase(const const_iterator &pos)
-    {
-        return mValues.erase(pos);
-    }
-
     iterator erase(const iterator &first, const iterator &last)
-    {
-        return mValues.erase(first, last);
-    }
-
-    const_iterator erase(const const_iterator &first, const const_iterator &last)
     {
         return mValues.erase(first, last);
     }
