@@ -27,7 +27,7 @@ def configure(self):
     if skipMatlab and mandatory:
         self.fatal('32-bit Matlab not available on 64-bit machines')
 
-    if not skipMatlab and self.find_program('matlab', var='matlab', path_list=filter(None, [matlabBin]),
+    if not skipMatlab and self.find_program('matlab', var='matlab', path_list=[_f for _f in [matlabBin] if _f],
                                             mandatory=mandatory):
         matlabBin = dirname(self.env['matlab'])
         if not matlabHome:
@@ -36,8 +36,7 @@ def configure(self):
         #TODO put these in a utility somewhere
         winRegex = r'win32'
 
-        incDirs = map(lambda x: os.path.dirname(x),
-                      recursiveGlob(abspath(join(matlabHome, 'extern')), ['mex.h']))
+        incDirs = [os.path.dirname(x) for x in recursiveGlob(abspath(join(matlabHome, 'extern')), ['mex.h'])]
 
         exts = 'so dll lib'.split()
         libs = 'mx mex mat'.split()
@@ -47,10 +46,8 @@ def configure(self):
             for l in libs:
                 searches.append('*%s.%s' % (l, x))
 
-        libDirs = list(map(lambda x: os.path.dirname(x),
-                      recursiveGlob(matlabBin, searches)))
-        libDirs.extend(map(lambda x: os.path.dirname(x),
-                      recursiveGlob(abspath(join(matlabHome, 'extern', 'lib')), searches)))
+        libDirs = [os.path.dirname(x) for x in recursiveGlob(matlabBin, searches)]
+        libDirs.extend([os.path.dirname(x) for x in recursiveGlob(abspath(join(matlabHome, 'extern', 'lib')), searches)])
 
         mexExtCmd = os.path.join(matlabBin, 'mexext')
         if re.match(winRegex, self.env['PLATFORM']):
@@ -61,6 +58,7 @@ def configure(self):
             matlabEnvCmd = '%s -nojvm -nosplash -nodisplay -e' % self.env['matlab']
             out, err = subprocess.Popen(matlabEnvCmd.split(), stdout=subprocess.PIPE,
                                         stderr=subprocess.PIPE).communicate()
+            out = out.decode()
             for line in out.split('\n'):
                 keyVal = line.split('=', 1)
                 if len(keyVal) == 2 and keyVal[0] == 'ARCH':
@@ -71,9 +69,10 @@ def configure(self):
         # tell us this.
         out, err = subprocess.Popen(mexExtCmd, stdout=subprocess.PIPE,
                                         stderr=subprocess.PIPE).communicate()
+        out = out.decode()
         self.env['MEX_EXT'] = '.' + out.rstrip()
 
-        filtered = filter(lambda x: archdir in x, libDirs)
+        filtered = [x for x in libDirs if archdir in x]
         if filtered:
             libDirs = filtered
         libDirs = list(set(libDirs))
