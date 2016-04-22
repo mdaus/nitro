@@ -619,9 +619,9 @@ class GlobDirectoryWalker:
         self.index = 0
 
     def __iter__(self):
-        return next(self)
+        return self.next()
 
-    def __next__(self):
+    def next(self):
         while True:
             try:
                 file = self.files[self.index]
