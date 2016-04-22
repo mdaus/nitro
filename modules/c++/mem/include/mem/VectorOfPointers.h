@@ -26,7 +26,6 @@
 #include <cstddef>
 #include <vector>
 #include <memory>
-#include <algorithm>
 
 #include <mem/SharedPtr.h>
 
@@ -129,7 +128,7 @@ public:
         while (iter != last)
         {
             delete *iter;
-            iter++;
+            ++iter;
         }
 
         return mValues.erase(first, last);
