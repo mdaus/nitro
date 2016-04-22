@@ -117,15 +117,21 @@ public:
     iterator end() { return mValues.end(); }
     const_iterator end() const { return mValues.end(); }
 
-    iterator erase(const iterator &pos)
+    iterator erase(iterator pos)
     {
         delete *pos;
         return mValues.erase(pos);
     }
 
-    iterator erase(const iterator &first, const iterator &last)
+    iterator erase(iterator first, iterator last)
     {
-        std::for_each(first, last, Deleter());
+        iterator iter = first;
+        while (iter != last)
+        {
+            delete *iter;
+            iter++;
+        }
+
         return mValues.erase(first, last);
     }
 
@@ -133,8 +139,6 @@ private:
     // Noncopyable
     VectorOfPointers(const VectorOfPointers& );
     const VectorOfPointers& operator=(const VectorOfPointers& );
-    
-    struct Deleter { void operator()(T* elem) { delete elem; } };
 
 private:
     std::vector<T*> mValues;
@@ -223,12 +227,12 @@ public:
     iterator end() { return mValues.end(); }
     const_iterator end() const { return mValues.end(); }
 
-    iterator erase(const iterator &pos)
+    iterator erase(iterator pos)
     {
         return mValues.erase(pos);
     }
 
-    iterator erase(const iterator &first, const iterator &last)
+    iterator erase(iterator first, iterator last)
     {
         return mValues.erase(first, last);
     }
