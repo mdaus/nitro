@@ -116,10 +116,36 @@ public:
     iterator end() { return mValues.end(); }
     const_iterator end() const { return mValues.end(); }
 
+    iterator erase(const iterator &pos)
+    {
+        delete *pos;
+        return mValues.erase(pos);
+    }
+
+    const_iterator erase(const const_iterator &pos)
+    {
+        delete *pos;
+        return mValues.erase(pos);
+    }
+
+    iterator erase(const iterator &first, const iterator &last)
+    {
+        std::for_each(first, last, Deleter());
+        return mValues.erase(first, last);
+    }
+
+    const_iterator erase(const const_iterator &first, const const_iterator &last)
+    {
+        std::for_each(first, last, Deleter());
+        return mValues.erase(first, last);
+    }
+
 private:
     // Noncopyable
     VectorOfPointers(const VectorOfPointers& );
     const VectorOfPointers& operator=(const VectorOfPointers& );
+    
+    struct Deleter { void operator()(T* elem) { delete elem; } };
 
 private:
     std::vector<T*> mValues;
@@ -207,6 +233,26 @@ public:
     const_iterator begin() const { return mValues.begin(); }
     iterator end() { return mValues.end(); }
     const_iterator end() const { return mValues.end(); }
+
+    iterator erase(const iterator &pos)
+    {
+        return mValues.erase(pos);
+    }
+
+    const_iterator erase(const const_iterator &pos)
+    {
+        return mValues.erase(pos);
+    }
+
+    iterator erase(const iterator &first, const iterator &last)
+    {
+        return mValues.erase(first, last);
+    }
+
+    const_iterator erase(const const_iterator &first, const const_iterator &last)
+    {
+        return mValues.erase(first, last);
+    }
 
 private:
     std::vector<SharedPtr<T> > mValues;
