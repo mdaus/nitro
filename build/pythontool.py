@@ -1,9 +1,13 @@
 from waflib import Options
-import os, re
+import os, sys, re
 
 def options(opt):
     opt.load('python')
-    opt.add_option('--disable-python', action='store_false', dest='python',
+    if sys.platform == 'sunos5':
+        opt.add_option('--disable-python', action='store_true', 
+                dest='python', help='Disable python', default=False)
+    else:
+        opt.add_option('--disable-python', action='store_false', dest='python',
                    help='Disable python', default=True)
     opt.add_option('--python-version', action='store', dest='python_version',
                    default=None, help='Specify the minimum python version')

@@ -619,9 +619,9 @@ class GlobDirectoryWalker:
         self.index = 0
 
     def __iter__(self):
-        return next(self)
+        return self.next()
 
-    def __next__(self):
+    def next(self):
         while True:
             try:
                 file = self.files[self.index]
@@ -658,14 +658,15 @@ def getPlatform(pwd=None, default=None):
             pwd = os.getcwd()
 
         locs = recursiveGlob(pwd, patterns=['config.guess'])
+
         for loc in locs:
             if not exists(loc): continue
             try:
-                out = os.popen('chmod +x %s' % loc)
+                out = subprocess.Popen('chmod +x %s' % loc, shell=True)
                 out.close()
             except:{}
             try:
-                out = os.popen(loc, 'r')
+                out = subprocess.Popen(loc, shell=True, stdout=PIPE).stdout
                 platform = out.readline()
                 platform = platform.strip('\n')
                 out.close()
