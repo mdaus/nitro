@@ -4,13 +4,14 @@ from waflib import Options
 from waflib.TaskGen import feature, before, task_gen
 from build import untarFile
 
+build = distclean = lambda x: None
 
 def options(opt):
     opt.add_option('--disable-numpy', action='store_false', dest='enable_numpy', default=True,
-                   help='turn off Numpy C headers/libs')
+                   help='Turn off Numpy C headers/libs')
         
 
-def configure(cfg):    
+def configure(conf):    
     if Options.options.enable_numpy:
         
         # a little magic borrowed from python-config and extended for numpy and -L flags
@@ -30,28 +31,18 @@ def configure(cfg):
             inc_dir = np_info['include_dirs'][0]
             lib_dir = np_info['library_dirs'][0]
 
-            cfg.check(
-                        uselib_store='NUMPY',
+            conf.check(
+                        uselib_store='numpy',
                         lib='npymath',  
                         header_name='numpy/numpyconfig.h', 
                         includes=inc_dir,
                         libpath=lib_dir,
                         msg='Checking for library numpy' + warningmessage, 
                         mandatory=False) 
-
-            cfg.env['PY_IMPORT_NUMPY'] = True
+            
+            conf.undefine("HAVE_NUMPY_NUMPYCONFIG_H")
+            conf.env['PY_HAVE_NUMPY'] = True
         except:
-            cfg.env['PY_IMPORT_NUMPY'] = False
-            cfg.check(
-                        lib='npymath',
-                        header_name='numpy/numpyconfig.h',
-                        msg='Checking for library numpy FAILED',
-                        mandatory=False) 
-
-
-
-def build(bld):
-    1
-
-def distclean(ctxt):
-    1 
+            conf.env['PY_HAVE_NUMPY'] = False
+            conf.msg("Checking for library numpy", "FAILED", color="YELLOW")
+            conf.undefine("HAVE_NUMPY_NUMPYCONFIG_H")
