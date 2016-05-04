@@ -4,11 +4,12 @@ import os, sys, re
 def options(opt):
     opt.load('python')
     if sys.platform == 'sunos5':
-        opt.add_option('--disable-python', action='store_true', 
+        opt.add_option('--enable-python', action='store_true',
                 dest='python', help='Disable python', default=False)
     else:
-        opt.add_option('--disable-python', action='store_false', dest='python',
-                   help='Disable python', default=True)
+        opt.add_option('--disable-python', action='store_false',
+                dest='python', help='Disable python', default=True)
+
     opt.add_option('--python-version', action='store', dest='python_version',
                    default=None, help='Specify the minimum python version')
     opt.add_option('--require-python', action='store_true', dest='force_python',
