@@ -20,116 +20,113 @@
  *
  */
 
-#ifndef __NPUTILS_NUMPYHELPER_H
-#define __NPUTILS_NUMPYHELPER_H
+#ifndef __NUMPYUTILS_NUMPYUTILS_H__
+#define __NUMPYUTILS_NUMPYUTILS_H__
 
 #include <numpy/arrayobject.h>
 #include <types/RowCol.h>
-#include <except/Exception.h>
 
-namespace nputils
+namespace numpyutils
 {
 
-/*! Verifies that the input object is a PyArray object */
-void verifyArray(PyObject *pyObject)
-{
-    if (!PyArray_Check(pyObject))
-    {
-        throw except::Exception("Invalid data type (expected numpy array)");
-    }
-}
+/*! Verifies that the input object is a PyArray object
+ * \param pyObject object to test
+ * \throws except::Exception if pyObject isn't an instance of PyArray
+ */
+void verifyArray(PyObject *pyObject);
 
-/* Verifies that the input object element type matches the input typeNum) */
-void verifyType(PyObject* pyObject, int typeNum)
-{
-    if (PyArray_TYPE(reinterpret_cast<PyArrayObject*>(pyObject)) != typeNum)
-    {
-        throw except::Exception("Unexpected numpy array element type");
-    }
-}
+/* Verifies that the input object element type matches the input typeNum) 
+ * \param pyObject Instance of PyArrayObject to test
+ * \param typeNum python type number of desired type (see python API docs)
+ * \throws except::Exception if pyObject's typeNum != typeNum
+ */
+void verifyType(PyObject* pyObject, int typeNum);
 
-/*! Verifies both that the input object is a PyArray and that its element type matches the input typeNume */
-void verifyArrayType(PyObject *pyObject, int typeNum)
-{
-    verifyArray(pyObject);
-    verifyType(pyObject, typeNum);
-}
+/*! Verifies both that the input object is a PyArray and that its element type
+ *      matches the input typeNume
+ * \param pyObject object to test
+ * \param typeNum desired python type num
+ * \throws except::Exception if pyObject isn't a PyArray or if types do not match
+ */
+void verifyArrayType(PyObject *pyObject, int typeNum);
 
-/*! Returns array dimensions and enforces a dimension check of two*/
-const npy_intp* const getDimensions(PyObject* pyArrayObject)
-{
-    verifyArray(pyArrayObject);
-    int ndims = PyArray_NDIM(reinterpret_cast<PyArrayObject*>(pyArrayObject));
-    if (ndims != 2)
-    {
-        throw except::Exception("Numpy array has dimensions different than 2");
-        return 0;
-    }
-    return PyArray_DIMS(reinterpret_cast<PyArrayObject*>(pyArrayObject));
-}
+/*! Returns array dimensions and enforces a dimension check of two
+ * \param pyArrayObject array object to inspect
+ * \returns read only pointer to the dimensions of array
+ * \throws except::Exception if not a 2D array
+ */
+const npy_intp* const getDimensions(PyObject* pyArrayObject);
 
-/*! Variant returning types::RowCol<size_t> version of dimensions for convenience */
-types::RowCol<size_t> getDimensionsRC(PyObject* pyArrayObject)
-{
-   const npy_intp* dims = getDimensions(pyArrayObject);
-   return types::RowCol<size_t>(dims[0], dims[1]);
-}
+/*! Variant returning types::RowCol<size_t> version of dimensions
+ * \param pyArrayObject array object to inspect
+ * \returns row col of dimensions
+ * \throws except::Exception if not a 2D array
+ */
+types::RowCol<size_t> getDimensionsRC(PyObject* pyArrayObject);
 
+/*! Verifies that the objects are of the same dimensions 
+ * \param pObject1 lhs object
+ * \param pObject2 rhs object
+ * \throws except::Exception if objects dimensions don't match
+ * */
+void verifyObjectsAreOfSameDimensions(PyObject* pObject1, PyObject* pObject2);
 
-/*! Verifies that the objects are of the same dimensions */
-void verifyObjectsAreOfSameDimensions(PyObject* pObject1, PyObject* pObject2)
-{
-    const npy_intp* const dimObj1 = getDimensions(pObject1);
-    const npy_intp* const dimObj2 = getDimensions(pObject2);
+/*! 
+ * Helper function used to either verify that an object is either 
+ * an array with the requested dimensions and type OR create a 
+ * new array of the requested dimensions and type, if not. 
+ * \param pyObject None or array to verify
+ * \param typeNum desired type number
+ * \param dims desired dimensions of array
+ * \throws except::Exception if pyObject is not None and doesn't match
+ *              specified parameters
+ */
+void createOrVerify(PyObject*& pyObject, int typeNum, types::RowCol<size_t> dims);
 
-    if(dimObj1[0] != dimObj2[0] || dimObj1[1] != dimObj2[1])
-    {
-        throw except::Exception("Numpy arrays are of differing dimensions");
-    }
-}
+/*! 
+ * Verifies Array Type and TypeNum for input and output.  If output 
+ * array is Py_None, constructs a new PyArray of the desired specifications
+ * \param pyInObject array to verify
+ * \param pyOutObject either None or array to verify
+ * \param inputTypeNum input type
+ * \param outputTypeNum output type
+ * \param dims Desired output dimensions.
+ * \throws except::Exception if input/output types don't match,
+ *                           if output isn't None and doesn't match input 
+ *                                type and dims
+ */
+void prepareInputAndOutputArray(PyObject* pyInObject, 
+                                PyObject*& pyOutObject, 
+                                int inputTypeNum, 
+                                int outputTypeNum, 
+                                types::RowCol<size_t> dims);
 
+/*! 
+ * Verifies Array Type and TypeNum for input and output.  If output 
+ * array is Py_None, constructs a new PyArray of the desired specifications.
+ * Uses the dimensions of the input object for the output object.
+ * \param pyInObject array to verify
+ * \param pyOutObject either None or array to verify
+ * \param inputTypeNum input type
+ * \param outputTypeNum output type
+ * \throws except::Exception if input type doesn't match,
+ *                           if output isn't None and doesn't match input 
+ *                                type and dims
+ */
+void prepareInputAndOutputArray(PyObject* pyInObject, 
+                                PyObject*& pyOutObject, 
+                                int inputTypeNum, 
+                                int outputTypeNum);
 
-/*! Helper function used to either verify that an object is either an array with the requested dimensions and type
- * OR create a new array of the requested dimensions and type, if not. */
-void createOrVerify(PyObject*& pyObject, int typeNum, size_t rows, size_t cols)
-{
-    if (pyObject == Py_None) // none passed in-- so create new
-    {
-        npy_intp odims[2] = {rows, cols};
-        pyObject = PyArray_SimpleNew(2, odims, typeNum);
-    }
-    else
-    {
-        verifyArrayType(pyObject, typeNum);
-        const npy_intp* const outdims = getDimensions(pyObject);
-        if (outdims[0] != rows  || outdims[1] != cols)
-        {
-            throw except::Exception("Desired array does not match required row, cols");
-        }
-    }
-}
-
-
-
-/*! Verifies Array Type and TypeNum for input and output.  If output array is Py_None, constructs a new PyArray of the desired specifications
- *  If rows and cols are default (-1) the output PyArray will be constructed with the size of the input PyArray. */
-void prepareInputAndOutputArray(PyObject* pyInObject, PyObject*& pyOutObject, int inputTypeNum, int outputTypeNum, int rows = -1, int cols = -1)
-{
-    verifyArrayType(pyInObject, inputTypeNum);
-
-    const npy_intp* const dims = getDimensions(pyInObject);
-
-    int desired_rows = (rows != -1) ? rows : dims[0];
-    int desired_cols = (cols != -1) ? cols : dims[1];
-
-    createOrVerify(pyOutObject, outputTypeNum, desired_rows, desired_cols);
-}
-
-/*! Extract PyArray Buffer as raw array of type T* */
+/*! Extract PyArray Buffer as raw array of type T* 
+ * \param pyObject object to turn into raw pointer
+ */
 template<typename T>
 T* getBuffer(PyObject* pyObject)
 {
-    return reinterpret_cast<T*>(PyArray_BYTES(reinterpret_cast<PyArrayObject*>(pyObject)));
+    return reinterpret_cast<T*>(
+            PyArray_BYTES(
+                reinterpret_cast<PyArrayObject*>(pyObject)));
 }
 
 }

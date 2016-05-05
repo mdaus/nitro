@@ -1,13 +1,10 @@
 NAME            = 'numpyutils'
 MAINTAINER      = 'anuraag.pakanati@mdaus.com'
 VERSION         = '1.0'
-MODULE_DEPS     = 'numpy types-c++ except-c++'
-USELIB          = 'numpy'
+MODULE_DEPS     = 'types except sys'
+USELIB          = 'NUMPY PYEXT'
 
-import os, sys
-from os.path import join, exists
 from waflib import Options
-from waflib.TaskGen import feature, before, task_gen
 
 distclean = options = configure = lambda x: None
 
