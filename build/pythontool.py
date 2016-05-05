@@ -4,8 +4,10 @@ import os, sys, re
 def options(opt):
     opt.load('python')
     if sys.platform == 'sunos5':
+        # The generated .cxx files don't compile on Solaris, so Python
+        # bindings are off by default, so the build doesn't fail.
         opt.add_option('--enable-python', action='store_true',
-                dest='python', help='Disable python', default=False)
+                dest='python', help='Enable python', default=False)
     else:
         opt.add_option('--disable-python', action='store_false',
                 dest='python', help='Disable python', default=True)
