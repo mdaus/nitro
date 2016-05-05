@@ -25,7 +25,10 @@
 #include <except/Exception.h>
 #include <sys/Conf.h>
 
-void numpyutils::verifyArray(PyObject *pyObject)
+namespace numpyutils
+{
+
+void verifyArray(PyObject *pyObject)
 {
     if (!PyArray_Check(pyObject))
     {
@@ -34,7 +37,7 @@ void numpyutils::verifyArray(PyObject *pyObject)
     }
 }
 
-void numpyutils::verifyType(PyObject* pyObject, int typeNum)
+void verifyType(PyObject* pyObject, int typeNum)
 {
     if (PyArray_TYPE(reinterpret_cast<PyArrayObject*>(pyObject)) != typeNum)
     {
@@ -42,13 +45,13 @@ void numpyutils::verifyType(PyObject* pyObject, int typeNum)
     }
 }
 
-void numpyutils::verifyArrayType(PyObject *pyObject, int typeNum)
+void verifyArrayType(PyObject *pyObject, int typeNum)
 {
     verifyArray(pyObject);
     verifyType(pyObject, typeNum);
 }
 
-const npy_intp* const numpyutils::getDimensions(PyObject* pyArrayObject)
+const npy_intp* const getDimensions(PyObject* pyArrayObject)
 {
     verifyArray(pyArrayObject);
     int ndims = PyArray_NDIM(reinterpret_cast<PyArrayObject*>(pyArrayObject));
@@ -61,29 +64,25 @@ const npy_intp* const numpyutils::getDimensions(PyObject* pyArrayObject)
     return PyArray_DIMS(reinterpret_cast<PyArrayObject*>(pyArrayObject));
 }
 
-types::RowCol<size_t> numpyutils::getDimensionsRC(PyObject* pyArrayObject)
+types::RowCol<size_t> getDimensionsRC(PyObject* pyArrayObject)
 {
    const npy_intp* dims = getDimensions(pyArrayObject);
    return types::RowCol<size_t>(dims[0], dims[1]);
 }
 
-
-void numpyutils::verifyObjectsAreOfSameDimensions(PyObject* pObject1, 
-                                                  PyObject* pObject2)
+void verifyObjectsAreOfSameDimensions(PyObject* lhs, 
+                                                  PyObject* rhs)
 {
-    const npy_intp* const dimObj1 = getDimensions(pObject1);
-    const npy_intp* const dimObj2 = getDimensions(pObject2);
-
-    if(dimObj1[0] != dimObj2[0] || dimObj1[1] != dimObj2[1])
+    if(getDimensionsRC(lhs) != getDimensionsRC(rhs))
     {
         throw except::Exception(Ctxt(
                     "Numpy arrays are of differing dimensions"));
     }
 }
 
-void numpyutils::createOrVerify(PyObject*& pyObject,
+void createOrVerify(PyObject*& pyObject,
                                 int typeNum, 
-                                types::RowCol<size_t> dims)
+                                const types::RowCol<size_t>& dims)
 {
     if (pyObject == Py_None) // none passed in-- so create new
     {
@@ -102,7 +101,7 @@ void numpyutils::createOrVerify(PyObject*& pyObject,
     }
 }
 
-void numpyutils::prepareInputAndOutputArray(PyObject* pyInObject, 
+void prepareInputAndOutputArray(PyObject* pyInObject, 
                                             PyObject*& pyOutObject, 
                                             int inputTypeNum, 
                                             int outputTypeNum, 
@@ -112,7 +111,7 @@ void numpyutils::prepareInputAndOutputArray(PyObject* pyInObject,
     createOrVerify(pyOutObject, outputTypeNum, dims);
 }
 
-void numpyutils::prepareInputAndOutputArray(PyObject* pyInObject,
+void prepareInputAndOutputArray(PyObject* pyInObject,
                                             PyObject*& pyOutObject,
                                             int inputTypeNum,
                                             int outputTypeNum)
@@ -123,4 +122,6 @@ void numpyutils::prepareInputAndOutputArray(PyObject* pyInObject,
                                outputTypeNum,
                                getDimensionsRC(pyInObject));
 }
-                                            
+                     
+}
+

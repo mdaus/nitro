@@ -65,11 +65,11 @@ const npy_intp* const getDimensions(PyObject* pyArrayObject);
 types::RowCol<size_t> getDimensionsRC(PyObject* pyArrayObject);
 
 /*! Verifies that the objects are of the same dimensions 
- * \param pObject1 lhs object
- * \param pObject2 rhs object
+ * \param lhs comparison object
+ * \param rhs comparison object
  * \throws except::Exception if objects dimensions don't match
  * */
-void verifyObjectsAreOfSameDimensions(PyObject* pObject1, PyObject* pObject2);
+void verifyObjectsAreOfSameDimensions(PyObject* lhs, PyObject* rhs);
 
 /*! 
  * Helper function used to either verify that an object is either 
@@ -81,7 +81,7 @@ void verifyObjectsAreOfSameDimensions(PyObject* pObject1, PyObject* pObject2);
  * \throws except::Exception if pyObject is not None and doesn't match
  *              specified parameters
  */
-void createOrVerify(PyObject*& pyObject, int typeNum, types::RowCol<size_t> dims);
+void createOrVerify(PyObject*& pyObject, int typeNum, const types::RowCol<size_t>& dims);
 
 /*! 
  * Verifies Array Type and TypeNum for input and output.  If output 
@@ -120,6 +120,7 @@ void prepareInputAndOutputArray(PyObject* pyInObject,
 
 /*! Extract PyArray Buffer as raw array of type T* 
  * \param pyObject object to turn into raw pointer
+ * \returns a pointer to the array's buffer interpreted as an array of type T
  */
 template<typename T>
 T* getBuffer(PyObject* pyObject)
