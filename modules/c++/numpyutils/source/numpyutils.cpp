@@ -20,6 +20,10 @@
  *
  */
 
+#define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
+// The numpy/array object should come before the numpyutils include
+// Because NO_IMPORT is defined in the header.
+#include <numpy/arrayobject.h> 
 #include <numpyutils/numpyutils.h>
 
 #include <except/Exception.h>
@@ -77,7 +81,7 @@ struct InitializeNumPy
 {
     InitializeNumPy()
     {
-        Py_Initialize;
+        Py_Initialize();
         init_numpy();
     }
 };
@@ -145,14 +149,14 @@ void createOrVerify(PyObject*& pyObject,
 {
     if (pyObject == Py_None) // none passed in-- so create new
     {
-        npy_intp odims[2] = {dims.row, dims.col};
+        npy_intp odims[2] = {static_cast<npy_intp>(dims.row), static_cast<npy_intp>(dims.col)};
         pyObject = PyArray_SimpleNew(2, odims, typeNum);
     }
     else
     {
         verifyArrayType(pyObject, typeNum);
         const npy_intp* const outdims = getDimensions(pyObject);
-        if (outdims[0] != dims.row  || outdims[1] != dims.col)
+        if (outdims[0] != static_cast<npy_intp>(dims.row)  || outdims[1] != static_cast<npy_intp>(dims.col))
         {
             throw except::Exception(Ctxt(
                         "Desired array does not match required row, cols"));
@@ -181,6 +185,5 @@ void prepareInputAndOutputArray(PyObject* pyInObject,
                                outputTypeNum,
                                getDimensionsRC(pyInObject));
 }
-                     
+                    
 }
-

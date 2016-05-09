@@ -23,6 +23,11 @@
 #ifndef __NUMPYUTILS_NUMPYUTILS_H__
 #define __NUMPYUTILS_NUMPYUTILS_H__
 
+#ifdef NO_IMPORT_ARRAY
+#define NUMPYUTILS_NO_IMPORT_ARRAY_ALREADY_SET
+#endif
+#define NO_IMPORT_ARRAY
+#define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
 #include <numpy/arrayobject.h>
 #include <types/RowCol.h>
 
@@ -131,4 +136,9 @@ T* getBuffer(PyObject* pyObject)
 }
 
 }
+
+#ifndef NUMPYUTILS_NO_IMPORT_ARRAY_ALREADY_SET
+#undef NO_IMPORT_ARRAY
+#endif
+
 #endif

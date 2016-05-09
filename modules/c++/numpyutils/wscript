@@ -6,7 +6,7 @@ USELIB          = 'NUMPY PYEXT'
 
 from waflib import Options
 
-distclean = options = configure = lambda x: None
+distclean = options = lambda x: None
 
 def configure(conf):
     conf.recurse(['examples'])
