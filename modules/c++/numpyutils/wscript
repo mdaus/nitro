@@ -8,6 +8,10 @@ from waflib import Options
 
 distclean = options = configure = lambda x: None
 
+def configure(conf):
+    conf.recurse(['examples'])
+
 def build(bld):
     if bld.env['PY_HAVE_NUMPY'] and Options.options.enable_numpy:
        bld.module(**globals())
+       bld.recurse(['examples'])

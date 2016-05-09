@@ -25,6 +25,65 @@
 #include <except/Exception.h>
 #include <sys/Conf.h>
 
+/*
+ * import_array is actually a macro and will return differently depending on
+ * the python version.  See 
+ * https://mail.scipy.org/pipermail/numpy-discussion/2010-December/054350.html  
+ * for the source and some discussion 
+ */
+#if PY_MAJOR_VERSION >= 3
+int init_numpy()
+{
+    import_array();
+}
+#else
+void init_numpy()
+{
+    import_array();
+}
+#endif
+
+/* Numpy uses some static variables which are per-compilation
+ * unit and if import_arrays is not called, will segfault on using any of 
+ * the numpy functions.  This is a run-time issue, not a compile time issue
+ * so it can be painful to detect.
+ *
+ * The basic mechanism used here should also be followed in other numpyutil 
+ * source files.  The idea is to use a static declaration to force a constructor
+ * call which in turn calls import_array() and sets up the requisite run time 
+ * variables.
+ *
+ * This implementation has been tested on Linux/Windows, but in case it
+ * breaks down in the future for any reason, there are some alternatives:
+ * 
+ * (1) Go to header-only and rely on import_array() in any dependencies 
+ * [all c++ files and any .i files]
+ *
+ * (2) Instead of importing in every compilation unit we could just do in 
+ * numpyutils.cpp  * with PY_ARRAY_UNIQUE_SYMBOL defined and add that #define
+ * NO_IMPORT_ARRAY everywhere else.  
+ *
+ * See: http://docs.scipy.org/doc/numpy/reference/c-api.array.html#importing-the-api
+ * 
+ * This could manifest as something like
+ * 
+ * #define NO_IMPORT_ARRAY
+ * #define PY_ARRAY_UNIQUE_SYMBOL CODA_ARRAY_API
+ * in numpyutils.h and an import_array somewhere once.
+ *
+ */
+
+struct InitializeNumPy
+{
+    InitializeNumPy()
+    {
+        Py_Initialize;
+        init_numpy();
+    }
+};
+
+static InitializeNumPy npyinit;
+
 namespace numpyutils
 {
 
