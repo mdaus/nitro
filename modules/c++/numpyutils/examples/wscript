@@ -1,0 +1,14 @@
+
+import os
+from os.path import join, basename
+from waflib import Utils
+
+distclean = options = lambda p: None
+
+def configure(conf):
+     1
+def build(bld):
+  bld.swigModule(name = 'numpyutilstest',
+                 use = 'types-python except-python numpyutils-c++' ,
+                 package = 'coda')
+
