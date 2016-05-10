@@ -6,7 +6,7 @@ from waflib import Utils
 distclean = options = configure = lambda p: None
 
 def build(bld):
-  bld.swigModule(name = 'numpyutilstest',
-                 use = 'types-python except-python numpyutils-c++' ,
-                 package = 'coda')
+    bld.swigModule(name = 'numpyutilstest',
+                   use = 'types-python except-python numpyutils-c++',
+                   package = 'coda')
 

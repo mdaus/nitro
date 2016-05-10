@@ -20,12 +20,7 @@
  *
  */
 
-#define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
-// The numpy/array object should come before the numpyutils include
-// Because NO_IMPORT is defined in the header.
-#include <numpy/arrayobject.h> 
 #include <numpyutils/numpyutils.h>
-
 #include <except/Exception.h>
 #include <sys/Conf.h>
 
@@ -184,6 +179,11 @@ void prepareInputAndOutputArray(PyObject* pyInObject,
                                inputTypeNum,
                                outputTypeNum,
                                getDimensionsRC(pyInObject));
+}
+
+char* getDataBuffer(PyArrayObject* pyInObject)
+{
+   return PyArray_BYTES(pyInObject);
 }
                     
 }

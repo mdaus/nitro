@@ -29,7 +29,6 @@ import numpy
 # SWIG interface.  This is the python version calling the C implementation
 # in source/numpyutilstest.i
 
-
 print(coda.numpyutilstest.elementDoubleTest.__doc__)
 
 numpyarray = numpy.zeros((2,3), dtype=numpy.float32)
@@ -38,5 +37,3 @@ print("Before Doubling", numpyarray)
 
 numpyarray = coda.numpyutilstest.elementDoubleTest(numpyarray)
 print("After Doubling", numpyarray)
-
-
