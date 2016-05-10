@@ -4493,7 +4493,7 @@ namespace swig
         const float* input = numpyutils::getBuffer<float>(inputNPArray);
         float* output = numpyutils::getBuffer<float >(outputNPArray);
 
-        for(int i=0;i<dims.area();i++)
+        for(size_t i=0;i<dims.area();i++)
         {
             output[i] = input[i] * 2;
         }

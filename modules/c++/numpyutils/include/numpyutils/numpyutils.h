@@ -23,6 +23,7 @@
 #ifndef __NUMPYUTILS_NUMPYUTILS_H__
 #define __NUMPYUTILS_NUMPYUTILS_H__
 
+#define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
 #include <numpy/arrayobject.h>
 #include <types/RowCol.h>
 
@@ -118,6 +119,13 @@ void prepareInputAndOutputArray(PyObject* pyInObject,
                                 int inputTypeNum, 
                                 int outputTypeNum);
 
+/*! 
+ * Helper function to get data array.  
+ * \param pyInObject array to get data buffer of
+ * \returns a pointer to the array's buffer interpreted as an array of type char*
+ * */
+char* getDataBuffer(PyArrayObject* pyInObject);
+
 /*! Extract PyArray Buffer as raw array of type T* 
  * \param pyObject object to turn into raw pointer
  * \returns a pointer to the array's buffer interpreted as an array of type T
@@ -126,9 +134,10 @@ template<typename T>
 T* getBuffer(PyObject* pyObject)
 {
     return reinterpret_cast<T*>(
-            PyArray_BYTES(
+            getDataBuffer(
                 reinterpret_cast<PyArrayObject*>(pyObject)));
 }
 
 }
+
 #endif
