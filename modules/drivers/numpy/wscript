@@ -10,7 +10,7 @@ def options(opt):
                    help='Turn off Numpy C headers/libs')
 
 def configure(conf):    
-    if Options.options.enable_numpy:
+    if Options.options.enable_numpy and Options.options.python:
         # a little magic borrowed from python-config and extended for numpy and -L flags
         try:
             from distutils import sysconfig
@@ -34,10 +34,9 @@ def configure(conf):
                        includes=inc_dir,
                        libpath=lib_dir,
                        msg='Checking for library numpy' + warningmessage, 
-                       mandatory=False) 
-            
+                       mandatory=True)
+
             conf.undefine("HAVE_NUMPY_NUMPYCONFIG_H")
             conf.env['PY_HAVE_NUMPY'] = True
         except:
             conf.env['PY_HAVE_NUMPY'] = False
-            conf.msg("Checking for library numpy", "FAILED", color="YELLOW")
