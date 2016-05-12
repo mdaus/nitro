@@ -114,30 +114,63 @@ inline math::poly::TwoD<double> fit(const math::linear::Matrix2D<double>& x,
                     size_t nx,
                     size_t ny)
 {
-    // Normalize the values in the matrix
     size_t m = x.rows();
     size_t n = x.cols();
-    
+    size_t mxn = x.size();
+
     if (m != y.rows())
         throw except::Exception(Ctxt("Matrices must be equally sized"));
 
     if (n != y.cols())
         throw except::Exception(Ctxt("Matrices must be equally sized"));
-    
+
+    // Compute min and max values for centering
+    double xmin = x(0,0);
+    double xmax = x(0,0);
+    double ymin = y(0,0);
+    double ymax = y(0,0);
+    for (size_t i = 0; i < m; i++)
+    {
+        for (size_t j = 0; j < n; j++)
+        {
+            double xij(x(i, j));
+            double yij(y(i, j));
+
+            if (xij < xmin)
+                xmin = xij;
+            if (xij > xmax)
+                xmax = xij;
+            if (yij < ymin)
+                ymin = yij;
+            if (yij > ymax)
+                ymax = yij;
+        }
+    }
+
+    // center the matrices at mean values
+    double xoff = (xmin + xmax) / 2.0;
+    double yoff = (ymin + ymax) / 2.0;
+
+    math::linear::Matrix2D<double> xoffm(m, n, xoff);
+    math::linear::Matrix2D<double> yoffm(m, n, yoff);
+
+    // centered matrices
+    math::linear::Matrix2D<double> xc = x - xoffm;
+    math::linear::Matrix2D<double> yc = y - yoffm;
+
+    // Normalize the values in the matrix
     double xacc = 0.0;
     double yacc = 0.0;
     for (size_t i = 0; i < m; i++)
     {
         for (size_t j = 0; j < n; j++)
         {
-            xacc += x(i, j) * x(i, j);
-            yacc += y(i, j) * y(i, j);
+            xacc += xc(i, j) * xc(i, j);
+            yacc += yc(i, j) * yc(i, j);
         }
     }
     
     // by num elements
-    size_t mxn = m*n;
-    
     xacc /= (double)mxn;
     yacc /= (double)mxn;
     
@@ -146,8 +179,8 @@ inline math::poly::TwoD<double> fit(const math::linear::Matrix2D<double>& x,
     
     // Scalar division
     
-    math::linear::Matrix2D<double> xp = x * rxrms;
-    math::linear::Matrix2D<double> yp = y * ryrms;
+    math::linear::Matrix2D<double> xp = xc * rxrms;
+    math::linear::Matrix2D<double> yp = yc * ryrms;
 
     size_t acols = (nx+1) * (ny+1);
 
@@ -160,9 +193,8 @@ inline math::poly::TwoD<double> fit(const math::linear::Matrix2D<double>& x,
     for (size_t i = 0; i < m; i++)
     {
         size_t xidx = i*n;
-        for (size_t j = 0; j < n; j++)
+        for (size_t j = 0; j < n; j++, xidx++)
         {
-
             // We are doing an accumulation of pow()s to get this
 
             // Pre-calculate these
@@ -182,12 +214,9 @@ inline math::poly::TwoD<double> fit(const math::linear::Matrix2D<double>& x,
                     A(xidx, yidx) = xacc * yacc;
                     yacc *= yij;
                     ++yidx;
-
                 }
                 xacc *= xij;
             }
-            // xidx: i*n + j;
-            xidx++;
         }
     }
     
@@ -196,9 +225,10 @@ inline math::poly::TwoD<double> fit(const math::linear::Matrix2D<double>& x,
 
     for (size_t i = 0; i < m; i++)
     {
-        for (size_t j = 0; j < n; j++)
+        size_t xidx = i*n;
+        for (size_t j = 0; j < n; j++, xidx++)
         {
-            tmp(i*n + j, 0) = z(i, j);
+            tmp(xidx, 0) = z(i, j);
         }
     }
     
@@ -233,9 +263,15 @@ inline math::poly::TwoD<double> fit(const math::linear::Matrix2D<double>& x,
         }
         xacc *= rxrms;
     }
-    return coeffs;
 
+    math::poly::TwoD<double> shift_x(1, 1);
+    math::poly::TwoD<double> shift_y(1, 1);
+    shift_x[0][0] = -xoff;
+    shift_x[1][0] = 1;
+    shift_y[0][0] = -yoff;
+    shift_y[0][1] = 1;
 
+    return coeffs.transformInput(shift_x, shift_y);
 }
 
 inline math::poly::TwoD<double> fit(size_t numRows,
