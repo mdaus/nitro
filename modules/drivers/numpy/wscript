@@ -29,8 +29,9 @@ def configure(conf):
             lib_dir = np_info['library_dirs'][0]
 
             conf.check(uselib_store='NUMPY',
+                       use='PYEXT',
                        lib='npymath',  
-                       header_name='numpy/numpyconfig.h', 
+                       header_name='numpy/arrayobject.h',
                        includes=inc_dir,
                        libpath=lib_dir,
                        msg='Checking for library numpy' + warningmessage, 

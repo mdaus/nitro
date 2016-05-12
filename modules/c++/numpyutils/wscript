@@ -12,6 +12,6 @@ def configure(conf):
     conf.recurse(['examples'])
 
 def build(bld):
-    if bld.env['PY_HAVE_NUMPY'] and Options.options.enable_numpy:
+    if bld.env['PY_HAVE_NUMPY']:
        bld.module(**globals())
        bld.recurse(['examples'])
