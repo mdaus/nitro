@@ -37,7 +37,7 @@ def configure(conf):
                        msg='Checking for library numpy' + warningmessage, 
                        mandatory=True)
 
-            conf.undefine("HAVE_NUMPY_NUMPYCONFIG_H")
+            conf.undefine("HAVE_NUMPY_ARRAYOBJECT_H")
             conf.env['PY_HAVE_NUMPY'] = True
         except:
             conf.env['PY_HAVE_NUMPY'] = False
