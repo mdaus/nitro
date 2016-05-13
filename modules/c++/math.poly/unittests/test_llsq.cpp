@@ -90,9 +90,82 @@ TEST_CASE(test2DPolyfit)
     TEST_ASSERT_EQ(poly, truth);
 }
 
+TEST_CASE(test2DPolyfitLarge)
+{
+    // Use a defined polynomial to generate mapped values.  This ensures
+    // it is possible to fit the points using at least as many coefficients.
+    const double coeffs[] =
+    {
+        -1.021e-12, 7.5,    2.2,   5.5,
+         0.88,      4.825,  .52,   .69,
+         5.5,       1.0,    .62,   1.01,
+         .012,      6.32,   1.56,  .376
+    };
+
+    TwoD<double> truth(3, 3, coeffs);
+
+    // Specifically sampling points far from (0,0) to verify an issue
+    // identified when fitting non-centered input.
+
+    size_t gridSize = 9; // 9x9
+    size_t xOffset = 25000;
+    size_t xSpacing = 2134;
+    size_t yOffset = 42000;
+    size_t ySpacing = 3214;
+
+    Matrix2D<double> x(gridSize, gridSize);
+    for (size_t i = 0; i < gridSize; i++)
+    {
+        double xidx = xOffset + i * xSpacing;
+        for (size_t j = 0; j < gridSize; j++)
+        {
+            x(i, j) = xidx;
+        }
+    }
+
+    Matrix2D<double> y(gridSize, gridSize);
+    for (size_t j = 0; j < gridSize; j++)
+    {
+        double yidx = yOffset + j * ySpacing;
+        for (size_t i = 0; i < gridSize; i++)
+        {
+            y(i, j) = yidx;
+        }
+    }
+
+    Matrix2D<double> z(gridSize, gridSize);
+    for (size_t i = 0; i < gridSize; i++)
+    {
+        for (size_t j = 0; j < gridSize; j++)
+        {
+            z(i, j) = truth(i, j);
+        }
+    }
+
+    // Fit polynomial
+    TwoD<double> poly = fit(x, y, z, 5, 5);
+
+    // Calculate the mean residual error to determine goodness of fit.
+    double errorSum(0.0);
+    for (size_t i = 0; i < gridSize; i++)
+    {
+        for (size_t j = 0; j < gridSize; j++)
+        {
+            double diff = z(i, j) - poly(x(i, j), y(i, j));
+            errorSum += diff * diff;
+        }
+    }
+    double meanResidualError = errorSum / (gridSize * gridSize);
+
+    //std::cout << "meanResidualError: " << meanResidualError << std::endl;
+
+    TEST_ASSERT_ALMOST_EQ(meanResidualError, 0.0);
+}
+
 int main(int, char**)
 {
 
     TEST_CHECK(test1DPolyfit);
     TEST_CHECK(test2DPolyfit);
+    TEST_CHECK(test2DPolyfitLarge);
 }
