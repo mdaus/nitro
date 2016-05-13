@@ -5,6 +5,7 @@
 #include <math/poly/TwoD.h>
 #include <math/linear/Matrix2D.h>
 #include <math/linear/VectorN.h>
+#include <numeric>
 
 namespace math
 {
@@ -124,25 +125,18 @@ inline math::poly::TwoD<double> fit(const math::linear::Matrix2D<double>& x,
     if (n != y.cols())
         throw except::Exception(Ctxt("Matrices must be equally sized"));
 
-    // Compute min and max values for centering
-    double xmin;
-    double xmax;
-    double ymin;
-    double ymax;
-    x.minMax(xmin, xmax);
-    y.minMax(ymin, ymax);
+    // Compute mean values
+    double xoff = std::accumulate(x.get(), x.get() + mxn, 0.0) / mxn;
+    double yoff = std::accumulate(y.get(), y.get() + mxn, 0.0) / mxn;
 
-    // center the matrices' value ranges around zero
-    double xoff = (xmin + xmax) / 2.0;
-    double yoff = (ymin + ymax) / 2.0;
-
+    // Shift the matrix values by mean to center around zero
     math::linear::Matrix2D<double> xoffm(m, n, xoff);
     math::linear::Matrix2D<double> yoffm(m, n, yoff);
 
     math::linear::Matrix2D<double> xp = x - xoffm;
     math::linear::Matrix2D<double> yp = y - yoffm;
 
-    // Normalize the values in the matrix
+    // Normalize the values in the matrix using standard deviation
     double rxrms = 1 / std::sqrt(xp.normSq() / mxn);
     double ryrms = 1 / std::sqrt(yp.normSq() / mxn);
     xp.scale(rxrms);
