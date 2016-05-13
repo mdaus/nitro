@@ -1014,28 +1014,6 @@ public:
     }
 
     /*!
-     *  Find the minumum and maximum values of all elements in this matrix.
-     *
-     *  \param minVal Output minumum value
-     *  \param maxVal Output maximum value
-     */
-    void minMax(_T& minVal, _T& maxVal) const
-    {
-        if (mMN == 0)
-            throw except::Exception(Ctxt(
-                    "Non-zero matrix size required for minMax"));
-
-        minVal = maxVal = mRaw[0];
-        for (size_t i = 1; i < mMN; ++i)
-        {
-            if (mRaw[i] < minVal)
-                minVal = mRaw[i];
-            if (mRaw[i] > maxVal)
-                maxVal = mRaw[i];
-        }
-    }
-
-    /*!
      *  Alias for this->add();
      *
      *  \code
