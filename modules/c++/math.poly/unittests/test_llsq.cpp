@@ -94,7 +94,7 @@ TEST_CASE(test2DPolyfitLarge)
 {
     // Use a defined polynomial to generate mapped values.  This ensures
     // it is possible to fit the points using at least as many coefficients.
-    double coeffs[] =
+    const double coeffs[] =
     {
         -1.021e-12, 7.5,    2.2,   5.5,
          0.88,      4.825,  .52,   .69,
@@ -108,15 +108,15 @@ TEST_CASE(test2DPolyfitLarge)
     // identified when fitting non-centered input.
 
     size_t gridSize = 9; // 9x9
-    size_t x_offset = 25000;
-    size_t x_sample = 2134;
-    size_t y_offset = 42000;
-    size_t y_sample = 3214;
+    size_t xOffset = 25000;
+    size_t xSpacing = 2134;
+    size_t yOffset = 42000;
+    size_t ySpacing = 3214;
 
     Matrix2D<double> x(gridSize, gridSize);
     for (size_t i = 0; i < gridSize; i++)
     {
-        double xidx = x_offset + i * x_sample;
+        double xidx = xOffset + i * xSpacing;
         for (size_t j = 0; j < gridSize; j++)
         {
             x(i, j) = xidx;
@@ -126,7 +126,7 @@ TEST_CASE(test2DPolyfitLarge)
     Matrix2D<double> y(gridSize, gridSize);
     for (size_t j = 0; j < gridSize; j++)
     {
-        double yidx = y_offset + j * y_sample;
+        double yidx = yOffset + j * ySpacing;
         for (size_t i = 0; i < gridSize; i++)
         {
             y(i, j) = yidx;

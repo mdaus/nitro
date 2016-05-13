@@ -125,62 +125,28 @@ inline math::poly::TwoD<double> fit(const math::linear::Matrix2D<double>& x,
         throw except::Exception(Ctxt("Matrices must be equally sized"));
 
     // Compute min and max values for centering
-    double xmin = x(0,0);
-    double xmax = x(0,0);
-    double ymin = y(0,0);
-    double ymax = y(0,0);
-    for (size_t i = 0; i < m; i++)
-    {
-        for (size_t j = 0; j < n; j++)
-        {
-            double xij(x(i, j));
-            double yij(y(i, j));
+    double xmin;
+    double xmax;
+    double ymin;
+    double ymax;
+    x.minMax(xmin, xmax);
+    y.minMax(ymin, ymax);
 
-            if (xij < xmin)
-                xmin = xij;
-            if (xij > xmax)
-                xmax = xij;
-            if (yij < ymin)
-                ymin = yij;
-            if (yij > ymax)
-                ymax = yij;
-        }
-    }
-
-    // center the matrices at mean values
+    // center the matrices' value ranges around zero
     double xoff = (xmin + xmax) / 2.0;
     double yoff = (ymin + ymax) / 2.0;
 
     math::linear::Matrix2D<double> xoffm(m, n, xoff);
     math::linear::Matrix2D<double> yoffm(m, n, yoff);
 
-    // centered matrices
-    math::linear::Matrix2D<double> xc = x - xoffm;
-    math::linear::Matrix2D<double> yc = y - yoffm;
+    math::linear::Matrix2D<double> xp = x - xoffm;
+    math::linear::Matrix2D<double> yp = y - yoffm;
 
     // Normalize the values in the matrix
-    double xacc = 0.0;
-    double yacc = 0.0;
-    for (size_t i = 0; i < m; i++)
-    {
-        for (size_t j = 0; j < n; j++)
-        {
-            xacc += xc(i, j) * xc(i, j);
-            yacc += yc(i, j) * yc(i, j);
-        }
-    }
-    
-    // by num elements
-    xacc /= (double)mxn;
-    yacc /= (double)mxn;
-    
-    double rxrms = 1/std::sqrt(xacc);
-    double ryrms = 1/std::sqrt(yacc);
-    
-    // Scalar division
-    
-    math::linear::Matrix2D<double> xp = xc * rxrms;
-    math::linear::Matrix2D<double> yp = yc * ryrms;
+    double rxrms = 1 / std::sqrt(xp.normSq() / mxn);
+    double ryrms = 1 / std::sqrt(yp.normSq() / mxn);
+    xp.scale(rxrms);
+    yp.scale(ryrms);
 
     size_t acols = (nx+1) * (ny+1);
 
@@ -201,12 +167,12 @@ inline math::poly::TwoD<double> fit(const math::linear::Matrix2D<double>& x,
             double xij = xp(i, j);
             double yij = yp(i, j);
 
-            xacc = 1;
+            double xacc = 1;
 
             for (size_t k = 0; k <= nx; k++)
             {
                 size_t yidx = k * (ny + 1);
-                yacc = 1;
+                double yacc = 1;
                 
                 for (size_t l = 0; l <= ny; l++)
                 {
@@ -250,11 +216,12 @@ inline math::poly::TwoD<double> fit(const math::linear::Matrix2D<double>& x,
     // and NY+1 components out for our y coeffs
     math::poly::TwoD<double> coeffs(nx, ny);
 
-    xacc = 1;
+    // Remove the normalization scaling
+    double xacc = 1;
     size_t p = 0;
     for (size_t i = 0; i <= nx; i++)
     {
-        yacc = 1;
+        double yacc = 1;
         for (size_t j = 0; j <= ny; j++)
         {
             coeffs[i][j] = C(p, 0)*(xacc * yacc);
@@ -264,14 +231,15 @@ inline math::poly::TwoD<double> fit(const math::linear::Matrix2D<double>& x,
         xacc *= rxrms;
     }
 
-    math::poly::TwoD<double> shift_x(1, 1);
-    math::poly::TwoD<double> shift_y(1, 1);
-    shift_x[0][0] = -xoff;
-    shift_x[1][0] = 1;
-    shift_y[0][0] = -yoff;
-    shift_y[0][1] = 1;
+    // Shift the polynomial back from its centered offset
+    math::poly::TwoD<double> xShift(1, 1);
+    math::poly::TwoD<double> yShift(1, 1);
+    xShift[0][0] = -xoff;
+    xShift[1][0] = 1;
+    yShift[0][0] = -yoff;
+    yShift[0][1] = 1;
 
-    return coeffs.transformInput(shift_x, shift_y);
+    return coeffs.transformInput(xShift, yShift);
 }
 
 inline math::poly::TwoD<double> fit(size_t numRows,
