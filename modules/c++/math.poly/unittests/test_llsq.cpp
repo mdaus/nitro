@@ -57,6 +57,54 @@ TEST_CASE(test1DPolyfit)
     TEST_ASSERT_EQ(polyFromSTL, truth);
 }
 
+TEST_CASE(test1DPolyfitLarge)
+{
+    // Fit a polynomial
+    static const size_t NUM_OBS = 4;
+    double xObs[] = { 1, -1, 2, -2 };
+    const double yObs[] = { 3, 13, 1, 33 };
+    const OneD<double> polyUnshifted = fit(NUM_OBS, xObs, yObs, 3);
+
+    // Now shift all the x values and fit another polynomial
+    static const size_t OFFSET = 10000;
+    double xObsShifted[NUM_OBS];
+    for (size_t ii = 0; ii < NUM_OBS; ++ii)
+    {
+        xObsShifted[ii] = xObs[ii] + OFFSET;
+    }
+
+    const OneD<double> polyShifted = fit(NUM_OBS, xObsShifted, yObs, 3);
+
+    // If we evaluate the polynomials at equivalent x positions, we better
+    // have almost the same values
+    // TODO: This isn't close enough to pass right now
+    for (size_t ii = 0; ii < NUM_OBS; ++ii)
+    {
+        //TEST_ASSERT_ALMOST_EQ(polyUnshifted(xObs[ii]),
+        //                      polyShifted(xObsShifted[ii]));
+    }
+
+    // Calculate the mean residual error to determine goodness of fit.
+    double errorSumUnshifted = 0.0;
+    double errorSumShifted = 0.0;
+    for (size_t ii = 0; ii < NUM_OBS; ++ii)
+    {
+        errorSumUnshifted += std::abs(polyUnshifted(xObs[ii]) - yObs[ii]);
+        errorSumShifted += std::abs(polyShifted(xObsShifted[ii]) - yObs[ii]);
+    }
+    const double meanResidualErrorUnshifted = errorSumUnshifted / NUM_OBS;
+    const double meanResidualErrorShifted = errorSumShifted / NUM_OBS;
+
+    std::cout << "meanResidualErrorUnshifted: "
+              << meanResidualErrorUnshifted
+              << "\nmeanResidualErrorShifted: "
+              << meanResidualErrorShifted
+              << std::endl;
+
+    TEST_ASSERT_ALMOST_EQ(meanResidualErrorUnshifted, 0.0);
+    TEST_ASSERT_ALMOST_EQ(meanResidualErrorShifted, 0.0);
+}
+
 TEST_CASE(test2DPolyfit)
 {
     const double coeffs[] =
@@ -154,7 +202,7 @@ TEST_CASE(test2DPolyfitLarge)
     }
     double meanResidualError = errorSum / (gridSize * gridSize);
 
-    //std::cout << "meanResidualError: " << meanResidualError << std::endl;
+    std::cout << "meanResidualError: " << meanResidualError << std::endl;
 
     TEST_ASSERT_ALMOST_EQ(meanResidualError, 0.0);
 }
@@ -162,6 +210,7 @@ TEST_CASE(test2DPolyfitLarge)
 int main(int, char**)
 {
     TEST_CHECK(test1DPolyfit);
+    TEST_CHECK(test1DPolyfitLarge);
     TEST_CHECK(test2DPolyfit);
     TEST_CHECK(test2DPolyfitLarge);
 }
