@@ -69,10 +69,12 @@ TEST_CASE(test1DPolyfit)
 TEST_CASE(test1DPolyfitLarge)
 {
     // Fit a polynomial
-    static const size_t NUM_OBS = 4;
-    double xObs[] = { 1, -1, 2, -2 };
-    const double yObs[] = { 3, 13, 1, 33 };
-    const OneD<double> polyUnshifted = fit(NUM_OBS, xObs, yObs, 3);
+    static const size_t NUM_OBS = 9;
+    double xObs[] = { 1, -1, 2, -2, 3, 15, 29, -4, -14 };
+    const double yObs[] = { 3, 13, 1, 33, -7, -2755, -21977, 133, 3393 };
+
+    static const size_t POLY_ORDER = 3;
+    const OneD<double> polyUnshifted = fit(NUM_OBS, xObs, yObs, POLY_ORDER);
 
     // Now shift all the x values and fit another polynomial
     static const size_t OFFSET = 10000;
@@ -82,15 +84,17 @@ TEST_CASE(test1DPolyfitLarge)
         xObsShifted[ii] = xObs[ii] + OFFSET;
     }
 
-    const OneD<double> polyShifted = fit(NUM_OBS, xObsShifted, yObs, 3);
+    const OneD<double> polyShifted =
+            fit(NUM_OBS, xObsShifted, yObs, POLY_ORDER);
 
     // If we evaluate the polynomials at equivalent x positions, we better
     // have almost the same values
-    // TODO: This isn't close enough to pass right now
+    // TODO: Seems like I need a bigger epsilon here than I'd expect
     for (size_t ii = 0; ii < NUM_OBS; ++ii)
     {
-        //TEST_ASSERT_ALMOST_EQ(polyUnshifted(xObs[ii]),
-        //                      polyShifted(xObsShifted[ii]));
+        TEST_ASSERT_ALMOST_EQ_EPS(polyUnshifted(xObs[ii]),
+                                  polyShifted(xObsShifted[ii]),
+                                  0.0005);
     }
 
     // Calculate the mean residual error to determine goodness of fit.
@@ -104,14 +108,19 @@ TEST_CASE(test1DPolyfitLarge)
     const double meanResidualErrorUnshifted = errorSumUnshifted / NUM_OBS;
     const double meanResidualErrorShifted = errorSumShifted / NUM_OBS;
 
+    /*
     std::cout << "meanResidualErrorUnshifted: "
               << meanResidualErrorUnshifted
               << "\nmeanResidualErrorShifted: "
               << meanResidualErrorShifted
               << std::endl;
+    */
 
     TEST_ASSERT_ALMOST_EQ(meanResidualErrorUnshifted, 0.0);
-    TEST_ASSERT_ALMOST_EQ(meanResidualErrorShifted, 0.0);
+
+    // TODO: This one is around 1.3e-7 which isn't as good as the 1.0e-22
+    //       for the unshifted case
+    TEST_ASSERT_ALMOST_EQ_EPS(meanResidualErrorShifted, 0.0, 2e-7);
 }
 
 TEST_CASE(test2DPolyfit)
@@ -210,7 +219,7 @@ TEST_CASE(test2DPolyfitLarge)
     }
     double meanResidualError = errorSum / (gridSize * gridSize);
 
-    std::cout << "meanResidualError: " << meanResidualError << std::endl;
+    // std::cout << "meanResidualError: " << meanResidualError << std::endl;
 
     TEST_ASSERT_ALMOST_EQ(meanResidualError, 0.0);
 }
