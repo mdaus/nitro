@@ -27,6 +27,15 @@
 using namespace math::linear;
 using namespace math::poly;
 
+namespace
+{
+inline
+double diffSq(double lhs, double rhs)
+{
+    const double diff = lhs - rhs;
+    return (diff * diff);
+}
+
 TEST_CASE(test1DPolyfit)
 {
     const double xObs[] = { 1, -1, 2, -2 };
@@ -89,8 +98,8 @@ TEST_CASE(test1DPolyfitLarge)
     double errorSumShifted = 0.0;
     for (size_t ii = 0; ii < NUM_OBS; ++ii)
     {
-        errorSumUnshifted += std::abs(polyUnshifted(xObs[ii]) - yObs[ii]);
-        errorSumShifted += std::abs(polyShifted(xObsShifted[ii]) - yObs[ii]);
+        errorSumUnshifted += diffSq(polyUnshifted(xObs[ii]), yObs[ii]);
+        errorSumShifted += diffSq(polyShifted(xObsShifted[ii]), yObs[ii]);
     }
     const double meanResidualErrorUnshifted = errorSumUnshifted / NUM_OBS;
     const double meanResidualErrorShifted = errorSumShifted / NUM_OBS;
@@ -196,8 +205,7 @@ TEST_CASE(test2DPolyfitLarge)
     {
         for (size_t j = 0; j < gridSize; j++)
         {
-            double diff = z(i, j) - poly(x(i, j), y(i, j));
-            errorSum += diff * diff;
+            errorSum += diffSq(z(i, j), poly(x(i, j), y(i, j)));
         }
     }
     double meanResidualError = errorSum / (gridSize * gridSize);
@@ -205,6 +213,7 @@ TEST_CASE(test2DPolyfitLarge)
     std::cout << "meanResidualError: " << meanResidualError << std::endl;
 
     TEST_ASSERT_ALMOST_EQ(meanResidualError, 0.0);
+}
 }
 
 int main(int, char**)
