@@ -29,26 +29,25 @@ using namespace math::poly;
 
 TEST_CASE(test1DPolyfit)
 {
-    double x_obs[] = { 1, -1, 2, -2 };
-    double y_obs[] = { 3, 13, 1, 33 };
-    double z_poly[] = { 5, -4, 3, -1 };
+    const double xObs[] = { 1, -1, 2, -2 };
+    const double yObs[] = { 3, 13, 1, 33 };
+    const double zPoly[] = { 5, -4, 3, -1 };
 
-    std::vector<double> truthSTLVec(4);
-    memcpy(&truthSTLVec[0], z_poly, sizeof(double)*4);
+    const std::vector<double> truthSTLVec(zPoly, zPoly + 4);
 
-    OneD<double> truth(3, z_poly);
+    const OneD<double> truth(3, zPoly);
     // First test the raw pointer signature
-    OneD<double> polyFromRaw = fit(4, x_obs, y_obs, 3);
+    const OneD<double> polyFromRaw = fit(4, xObs, yObs, 3);
     
     // Now call the other one
-    Vector<double> xv(4, x_obs);
-    Vector<double> yv(4, y_obs);
+    const Vector<double> xv(4, xObs);
+    const Vector<double> yv(4, yObs);
 
-    OneD<double> polyFromVec = fit(xv, yv, 3);
+    const OneD<double> polyFromVec = fit(xv, yv, 3);
 
-    Fixed1D<3> fixed = fit(xv, yv, 3);
+    const Fixed1D<3> fixed = fit(xv, yv, 3);
 
-    OneD<double> polyFromSTL(truthSTLVec);
+    const OneD<double> polyFromSTL(truthSTLVec);
 
     // Polys better match
     TEST_ASSERT_EQ(polyFromRaw, polyFromVec);
@@ -56,13 +55,11 @@ TEST_CASE(test1DPolyfit)
     TEST_ASSERT_EQ(polyFromRaw, fixed);
     assert(polyFromRaw == truthSTLVec);
     TEST_ASSERT_EQ(polyFromSTL, truth);
-    
-
 }
 
 TEST_CASE(test2DPolyfit)
 {
-    double coeffs[] = 
+    const double coeffs[] =
     {
         -1.02141e-16, 0.15,
          0.08,        0.4825,
@@ -164,7 +161,6 @@ TEST_CASE(test2DPolyfitLarge)
 
 int main(int, char**)
 {
-
     TEST_CHECK(test1DPolyfit);
     TEST_CHECK(test2DPolyfit);
     TEST_CHECK(test2DPolyfitLarge);
