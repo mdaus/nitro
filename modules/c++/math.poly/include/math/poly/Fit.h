@@ -49,18 +49,29 @@ template<typename Vector_T> OneD<double> fit(const Vector_T& x,
                                              const Vector_T& y,
                                              size_t order)
 {
-        
+    math::linear::Vector<double> vx(x);
     math::linear::Vector<double> vy(y);
     // n is polynomial order
-    size_t sizeX = x.size();
+    size_t sizeX = vx.size();
 
-    math::linear::Matrix2D<double> A(x.size(), order + 1);
+    // Compute mean value
+    double mean = std::accumulate(vx.get(), vx.get() + sizeX, 0.0) / sizeX;
+
+    // Shift the vector values by mean to center around zero
+    math::linear::Vector<double> offv(sizeX, mean);
+    math::linear::Vector<double> xp = vx - offv;
+
+    // Normalize the values in the vector using standard deviation
+    double rxrms = 1 / std::sqrt(xp.normSq() / sizeX);
+    xp.scale(rxrms);
+
+    math::linear::Matrix2D<double> A(sizeX, order + 1);
 
     for (size_t i = 0; i < sizeX; i++)
     {
         // The c0 coefficient is a freebie
         A(i, 0) = 1;
-        double v = x[i];
+        double v = xp[i];
         A(i, 1) = v;
         for (size_t j = 2; j <= order; j++)
         {
@@ -72,10 +83,24 @@ template<typename Vector_T> OneD<double> fit(const Vector_T& x,
     math::linear::Matrix2D<double> inv = inverse(At * A);
     math::linear::Matrix2D<double> B = inv * At;
     math::linear::Vector<double> c(B * vy.matrix());
-    // use the vector constructor
-    std::vector<double> cv(c.size());
-    std::copy(c.get(), c.get()+c.size(), cv.begin());
-    return math::poly::OneD<double>(cv);
+
+    // Now we need the order+1 components out for our poly
+    math::poly::OneD<double> poly(c.size());
+
+    // Remove the normalization scaling
+    double xacc = 1;
+    for (size_t i = 0; i < c.size(); i++)
+    {
+        poly[i] = c[i] * xacc;
+        xacc *= rxrms;
+    }
+
+    // Shift the polynomial back from its centered offset
+    math::poly::OneD<double> shift(1);
+    shift[0] = -mean;
+    shift[1] = 1;
+
+    return poly.transformInput(shift);
 }
 
 
