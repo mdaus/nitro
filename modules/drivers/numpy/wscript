@@ -10,7 +10,8 @@ def options(opt):
                    help='Turn off Numpy C headers/libs')
 
 def configure(conf):    
-    if Options.options.enable_numpy and Options.options.python:
+    if Options.options.enable_numpy and \
+        hasattr(Options.options, 'python') and Options.options.python:
         # a little magic borrowed from python-config and extended for numpy and -L flags
         try:
             from distutils import sysconfig
