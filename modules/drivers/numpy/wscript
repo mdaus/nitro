@@ -32,7 +32,7 @@ def configure(conf):
             conf.check(uselib_store='NUMPY',
                        use='PYEXT',
                        lib='npymath',  
-                       header_name='numpy/arrayobject.h',
+                       header_name=['Python.h','numpy/arrayobject.h'],
                        includes=inc_dir,
                        libpath=lib_dir,
                        msg='Checking for library numpy' + warningmessage, 
