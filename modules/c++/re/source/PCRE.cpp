@@ -20,9 +20,9 @@
  *
  */
 
-#if defined(USE_PCRE)
+#include "re/PCRE.h" // this has to come before the #ifdef checks below
 
-#include "re/PCRE.h"
+#if defined(USE_PCRE) && !defined(__CODA_CPP11)
 
 re::PCRE::PCRE(const std::string& pattern, int flags) :
     mPattern(pattern), mPCRE(NULL)

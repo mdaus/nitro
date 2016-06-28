@@ -29,10 +29,18 @@
 #define USE_PCRE
 #endif
 
+#include <sys/sys_config.h>
+
 #include "sys/Err.h"
 #include "re/PCREException.h"
+
+#ifdef __CODA_CPP11
+#include <regex>
+#else
 #include <pcre.h>
 #include <pcreposix.h>
+#endif
+
 #include <string>
 #include <vector>
 
@@ -63,7 +71,12 @@ public:
     /*!
      *  The default constructor
      */
+
+#ifdef __CODA_CPP11
+    PCRE(const std::string& pattern = "", int flags = std::regex_constants::ECMAScript);
+#else
     PCRE(const std::string& pattern = "", int flags = PCRE_DOTALL);
+#endif
 
     //!  Destructor
     ~PCRE();
@@ -97,7 +110,11 @@ public:
      *  match newlines with the .)
      *  \throw  PCREException on fatal error
      */
+#ifdef __CODA_CPP11
+    PCRE& compile(const std::string& pattern, int flags = std::regex_constants::ECMAScript);
+#else
     PCRE& compile(const std::string& pattern, int flags = PCRE_DOTALL);
+#endif
 
     /*!
      *  \todo Add non-const reference
@@ -171,10 +188,15 @@ public:
 
 protected:
     std::string mPattern;
+
+#ifdef __CODA_CPP11
+    std::regex mRegex;
+#else
     //! The pcre object
     pcre *      mPCRE;
     //! The output/offset vector
     int         mOvector[OVECCOUNT];
+#endif
 };
 }
 
