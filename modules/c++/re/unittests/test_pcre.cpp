@@ -39,6 +39,28 @@ TEST_CASE(testSearch)
     TEST_ASSERT_EQ(matches.size(), 7);
 }
 
+TEST_CASE(testDotAllFlag)
+{
+    // This should match both the "3.3" and "4\n2"
+    re::PCREMatch matches1;
+    re::PCRE rx1("\\d.\\d", re::PCRE::PCRE_DOTALL);
+    rx1.searchAll("3.3 4\n2", matches1);
+    TEST_ASSERT_EQ(matches1.size(), 2);
+
+    // This should only match the "3.3"
+    re::PCREMatch matches2;
+    re::PCRE rx2("\\d.\\d", re::PCRE::PCRE_NONE);
+    rx2.searchAll("3.3 4\n2", matches2);
+    TEST_ASSERT_EQ(matches2.size(), 1);
+
+    // This should only match the "3.3" if the replace_dot() function
+    // is working correctly
+    re::PCREMatch matches3;
+    re::PCRE rx3("\\d\\.\\d", re::PCRE::PCRE_DOTALL);
+    rx3.searchAll("3.3 4\n2", matches3);
+    TEST_ASSERT_EQ(matches3.size(), 1);
+}
+
 TEST_CASE(testSub)
 {
     re::PCREMatch matches;
@@ -65,6 +87,7 @@ int main(int, char**)
 {
     TEST_CHECK( testMatches);
     TEST_CHECK( testSearch);
+    TEST_CHECK( testDotAllFlag);
     TEST_CHECK( testSub);
     TEST_CHECK( testSplit);
 }
