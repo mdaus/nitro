@@ -25,11 +25,11 @@
 // we use this file if we're not using actual PCRE itself
 #if defined(USE_PCRE) && defined(__CODA_CPP11)
 
-re::PCRE::PCRE(const std::string& pattern, int) :
+re::PCRE::PCRE(const std::string& pattern, int flags) :
     mPattern(pattern)
 {
     if (!mPattern.empty())
-        compile(mPattern);
+        compile(mPattern, flags);
 }
 
 void re::PCRE::destroy()
@@ -62,9 +62,9 @@ re::PCRE& re::PCRE::operator=(const re::PCRE& rhs)
 }
 
 re::PCRE& re::PCRE::compile(const std::string& pattern,
-                            int)
+                            int flags)
 {
-    mPattern = pattern;
+    mPattern = (flags==PCRE_DOTALL) ? replace_dot(pattern) : pattern;
     try 
     {
         mRegex = std::regex(mPattern);
@@ -98,8 +98,11 @@ bool re::PCRE::match(const std::string& str,
 
     // copy resulting substrings into matchObject
     matchObject.resize( matches.size() );
+
+    // This causes a crash for some reason
     //std::copy(matches.begin(), matches.end(), matchObject.begin());
-    for(int i=0; i<matches.size(); ++i) {
+
+    for(size_t i=0; i<matches.size(); ++i) {
         matchObject[i] = matches[i].str();
     }
 
@@ -113,8 +116,8 @@ std::string re::PCRE::search(const std::string& matchString,
     std::smatch matches;
 
     // search the string starting at index "startIndex"
-    bool result = std::regex_search(matchString.begin()+startIndex, matchString.end(), matches, 
-                                    mRegex);
+    bool result = std::regex_search(matchString.begin()+startIndex, 
+                                    matchString.end(), matches, mRegex);
     
     // if successful, return the substring matching the regex,
     // otherwise return empty string
@@ -204,6 +207,13 @@ std::string re::PCRE::escape(const std::string& str) const
         r += str.at(i);
     }
     return r;
+}
+
+std::string re::PCRE::replace_dot(const std::string& str) const
+{
+    std::regex reg("([^\\\\])\\.");
+    std::string newstr = std::regex_replace(str, reg, "$1[\\s\\S]");
+    return newstr;
 }
 
 #endif

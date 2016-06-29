@@ -73,10 +73,13 @@ public:
      */
 
 #ifdef __CODA_CPP11
-    PCRE(const std::string& pattern = "", int flags = std::regex_constants::ECMAScript);
-#else
-    PCRE(const std::string& pattern = "", int flags = PCRE_DOTALL);
+    enum Flags {
+        PCRE_NONE=0,
+        PCRE_DOTALL=1
+    };
 #endif
+
+    PCRE(const std::string& pattern = "", int flags = PCRE_DOTALL);
 
     //!  Destructor
     ~PCRE();
@@ -110,11 +113,7 @@ public:
      *  match newlines with the .)
      *  \throw  PCREException on fatal error
      */
-#ifdef __CODA_CPP11
-    PCRE& compile(const std::string& pattern, int flags = std::regex_constants::ECMAScript);
-#else
     PCRE& compile(const std::string& pattern, int flags = PCRE_DOTALL);
-#endif
 
     /*!
      *  \todo Add non-const reference
@@ -190,6 +189,13 @@ protected:
     std::string mPattern;
 
 #ifdef __CODA_CPP11
+    /*!
+     *  Replace non-escaped "." with "[\s\S]" to get PCRE_DOTALL newline behavior
+     *  \param str  The string to modify
+     *  \return  The modified string
+     */
+    std::string replace_dot(const std::string& str) const;
+
     std::regex mRegex;
 #else
     //! The pcre object
