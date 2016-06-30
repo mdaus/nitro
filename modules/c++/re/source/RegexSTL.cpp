@@ -61,7 +61,7 @@ re::Regex& re::Regex::operator=(const re::Regex& rhs)
 }
 
 re::Regex& re::Regex::compile(const std::string& pattern,
-                              int flags)
+                              Flag flags)
 {
     mPattern = (flags==Regex_DOTALL) ? replaceDot(pattern) : pattern;
     try 
@@ -216,7 +216,15 @@ std::string re::Regex::escape(const std::string& str) const
 
 std::string re::Regex::replaceDot(const std::string& str) const
 {
-    std::regex reg("([^\\\\])\\.");
+    // Match beginning-of-string or a non-\ character,
+    // followed by 0 or more "\\",
+    // followed by "."
+    // This makes sure we're not grabbing "\."
+
+    // This is a raw literal, so ignore the R"lit( )lit"
+    std::regex reg(R"lit(((^|[^\\])(\\\\)*)\.)lit");
+
+    // Replace just the "." with "[\s\S]"
     std::string newstr = std::regex_replace(str, reg, "$1[\\s\\S]");
     return newstr;
 }

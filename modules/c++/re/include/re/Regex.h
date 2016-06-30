@@ -103,7 +103,7 @@ namespace re
          *  match newlines with the .)
          *  \throw  RegexException on fatal error
          */
-        Regex& compile(const std::string& pattern, int flags = Regex_DOTALL);
+        Regex& compile(const std::string& pattern, Flag flags = Regex_DOTALL);
 
         /*!
          *  \todo Add non-const reference
