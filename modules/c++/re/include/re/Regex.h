@@ -175,7 +175,7 @@ namespace re
          */
         std::string escape(const std::string& str) const;
 
-    protected:
+    private:
         std::string mPattern;
 
         // Size of the output vector, must be a multiple of 3
