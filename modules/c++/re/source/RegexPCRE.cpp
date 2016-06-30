@@ -20,12 +20,14 @@
  *
  */
 
-#include "re/PCRE.h" // this has to come before the #ifdef checks below
+#include "re/Regex.h" // this has to come before the #ifdef checks below
 
 #if !defined(__CODA_CPP11)
 
-re::PCRE::PCRE(const std::string& pattern, Flag flags) :
-    OVECCOUNT(999), mOvector(OVECCOUNT), mPattern(pattern), mPCRE(NULL)
+#include <sstream>
+
+re::Regex::Regex(const std::string& pattern, Flag flags) :
+    mPattern(pattern), OVECCOUNT(999), mPCRE(NULL), mOvector(OVECCOUNT)
 {
     if (!mPattern.empty())
     {
@@ -33,7 +35,7 @@ re::PCRE::PCRE(const std::string& pattern, Flag flags) :
     }
 }
 
-void re::PCRE::destroy()
+void re::Regex::destroy()
 {
     if (mPCRE != NULL)
     {
@@ -41,20 +43,18 @@ void re::PCRE::destroy()
     }
 }
 
-re::PCRE::~PCRE()
+re::Regex::~Regex()
 {
     destroy();
 }
 
-re::PCRE::PCRE(const re::PCRE& rhs)
+re::Regex::Regex(const re::Regex& rhs) :
+    mPattern(rhs.mPattern), OVECCOUNT(999), mPCRE(NULL), mOvector(OVECCOUNT)
 {
-    mPCRE = NULL;
-    mPattern = rhs.mPattern;
-
     compile(mPattern);
 }
 
-re::PCRE& re::PCRE::operator=(const re::PCRE& rhs)
+re::Regex& re::Regex::operator=(const re::Regex& rhs)
 {
     if (this != &rhs)
     {
@@ -68,8 +68,8 @@ re::PCRE& re::PCRE::operator=(const re::PCRE& rhs)
     return *this;
 }
 
-re::PCRE& re::PCRE::compile(const std::string& pattern,
-                            int flags)
+re::Regex& re::Regex::compile(const std::string& pattern,
+                              int flags)
 {
     mPattern = pattern;
 
@@ -89,29 +89,31 @@ re::PCRE& re::PCRE::compile(const std::string& pattern,
 
     if (mPCRE == NULL)
     {
-        throw PCREException(Ctxt("PCRE compile error at offset " +
-                                 std::to_string(erroffset) + ": " + errorptr)));
+        std::stringstream ss;
+        ss << "Regex compile error at offset "
+           << erroffset << ": " << errorptr;
+        throw RegexException(Ctxt(ss.str()));
     }
 
     return *this;
 }
 
 
-const std::string& re::PCRE::getPattern() const
+const std::string& re::Regex::getPattern() const
 {
     return mPattern;
 }
 
-bool re::PCRE::matches(const std::string& str, int flags) const
+bool re::Regex::matches(const std::string& str, int flags) const
 {
     int x = pcre_exec(mPCRE, NULL, str.c_str(), str.length(), 0, flags, NULL, 0);
     /* zero if there is a match */
     return ( (x == -1) ? (false) : (true) );
 }
 
-bool re::PCRE::match(const std::string& str,
-                     PCREMatch & matchObject,
-                     int flags)
+bool re::Regex::match(const std::string& str,
+                      RegexMatch & matchObject,
+                      int flags)
 {
     int numMatches(0);
     int result(0);
@@ -150,7 +152,7 @@ bool re::PCRE::match(const std::string& str,
         int subStringCheck = index + subStringLength;
         if (subStringCheck > (int)str.length())
         {
-            throw PCREException(Ctxt(FmtX("Match: Match substring out of range (%d,%d) for string of length %d", index, subStringCheck, str.length())));
+            throw RegexException(Ctxt(FmtX("Match: Match substring out of range (%d,%d) for string of length %d", index, subStringCheck, str.length())));
         }
         else if (subStringLength == 0)
         {
@@ -173,14 +175,14 @@ bool re::PCRE::match(const std::string& str,
     }
     else
     {
-        throw PCREException
-        (Ctxt(FmtX("Error in matching %s", str.c_str())));
+        throw RegexException
+            (Ctxt(FmtX("Error in matching %s", str.c_str())));
     }
 }
 
-std::string re::PCRE::search(const std::string& matchString,
-                             int startIndex,
-                             int flags)
+std::string re::Regex::search(const std::string& matchString,
+                              int startIndex,
+                              int flags)
 {
     int numMatches(0);
     int result(0);
@@ -207,8 +209,8 @@ std::string re::PCRE::search(const std::string& matchString,
     if (result >= 0)
     {
         if (((mOvector[0] + startIndex) +
-                (mOvector[1] - mOvector[0])) >
-                (int)matchString.length() )
+             (mOvector[1] - mOvector[0])) >
+            (int)matchString.length() )
         {
             result = PCRE_ERROR_NOMATCH;
         }
@@ -224,7 +226,7 @@ std::string re::PCRE::search(const std::string& matchString,
         int subStringCheck = index + subStringLength;
         if (subStringCheck > (int)matchString.length())
         {
-            throw PCREException(Ctxt(FmtX("Search: Match substring out of range (%d,%d) for string of length %d", index, subStringCheck, matchString.length())));
+            throw RegexException(Ctxt(FmtX("Search: Match substring out of range (%d,%d) for string of length %d", index, subStringCheck, matchString.length())));
         }
         return matchString.substr(index, subStringLength);
     }
@@ -234,13 +236,13 @@ std::string re::PCRE::search(const std::string& matchString,
     }
     else
     {
-        throw PCREException
-        (Ctxt(FmtX("Error in searching for %s", matchString.c_str())));
+        throw RegexException
+            (Ctxt(FmtX("Error in searching for %s", matchString.c_str())));
     }
 }
 
-void re::PCRE::searchAll(const std::string& matchString,
-                         PCREMatch & v)
+void re::Regex::searchAll(const std::string& matchString,
+                          RegexMatch & v)
 {
     std::string result = search(matchString);
 
@@ -253,8 +255,8 @@ void re::PCRE::searchAll(const std::string& matchString,
     }
 }
 
-void re::PCRE::split(const std::string& str,
-                     std::vector<std::string> & v)
+void re::Regex::split(const std::string& str,
+                      std::vector<std::string> & v)
 {
     size_t idx = 0;
     std::string result = search(str);
@@ -271,8 +273,8 @@ void re::PCRE::split(const std::string& str,
     }
 }
 
-std::string re::PCRE::sub(const std::string& str,
-                          const std::string& repl)
+std::string re::Regex::sub(const std::string& str,
+                           const std::string& repl)
 {
     std::string toReplace = str;
     std::string result = search(str);
@@ -287,7 +289,7 @@ std::string re::PCRE::sub(const std::string& str,
     return toReplace;
 }
 
-std::string re::PCRE::escape(const std::string& str) const
+std::string re::Regex::escape(const std::string& str) const
 {
     std::string r;
     for (size_t i = 0; i < str.length(); i++)

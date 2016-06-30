@@ -20,12 +20,12 @@
  *
  */
 
-#include "re/PCRE.h" // this has to come before the #ifdef checks below
+#include "re/Regex.h" // this has to come before the #ifdef checks below
 
 // we use this file if we're not using actual PCRE itself
 #if defined(__CODA_CPP11)
 
-re::PCRE::PCRE(const std::string& pattern, Flag flags) :
+re::Regex::Regex(const std::string& pattern, Flag flags) :
     mPattern(pattern)
 {
     if (!mPattern.empty())
@@ -34,21 +34,21 @@ re::PCRE::PCRE(const std::string& pattern, Flag flags) :
     }
 }
 
-void re::PCRE::destroy()
+void re::Regex::destroy()
 {
 }
 
-re::PCRE::~PCRE()
+re::Regex::~Regex()
 {
 }
 
-re::PCRE::PCRE(const re::PCRE& rhs)
+re::Regex::Regex(const re::Regex& rhs)
 {
     mPattern = rhs.mPattern;
     compile(mPattern);
 }
 
-re::PCRE& re::PCRE::operator=(const re::PCRE& rhs)
+re::Regex& re::Regex::operator=(const re::Regex& rhs)
 {
     if (this != &rhs)
     {
@@ -60,37 +60,37 @@ re::PCRE& re::PCRE::operator=(const re::PCRE& rhs)
     return *this;
 }
 
-re::PCRE& re::PCRE::compile(const std::string& pattern,
-                            int flags)
+re::Regex& re::Regex::compile(const std::string& pattern,
+                              int flags)
 {
-    mPattern = (flags==PCRE_DOTALL) ? replace_dot(pattern) : pattern;
+    mPattern = (flags==Regex_DOTALL) ? replace_dot(pattern) : pattern;
     try 
     {
         mRegex = std::regex(mPattern);
     }
     catch (const std::regex_error& e)
     {
-        throw PCREException(Ctxt("PCRE std::regex constructor error: "
-                                 + e.what()));
+        throw RegexException(Ctxt("Regex std::regex constructor error: "
+                                  + e.what()));
     }
 
     return *this;
 }
 
 
-const std::string& re::PCRE::getPattern() const
+const std::string& re::Regex::getPattern() const
 {
     return mPattern;
 }
 
-bool re::PCRE::matches(const std::string& str, int) const
+bool re::Regex::matches(const std::string& str, int) const
 {
     return std::regex_match(str, mRegex);
 }
 
-bool re::PCRE::match(const std::string& str,
-                     PCREMatch & matchObject,
-                     int )
+bool re::Regex::match(const std::string& str,
+                      RegexMatch & matchObject,
+                      int )
 {
     std::smatch matches;
     bool result = std::regex_search(str, matches, mRegex);
@@ -109,9 +109,9 @@ bool re::PCRE::match(const std::string& str,
     return result;
 }
 
-std::string re::PCRE::search(const std::string& matchString,
-                             int startIndex,
-                             int)
+std::string re::Regex::search(const std::string& matchString,
+                              int startIndex,
+                              int)
 {
     std::smatch matches;
 
@@ -131,8 +131,8 @@ std::string re::PCRE::search(const std::string& matchString,
     }
 }
 
-void re::PCRE::searchAll(const std::string& matchString,
-                         PCREMatch& v)
+void re::Regex::searchAll(const std::string& matchString,
+                          RegexMatch& v)
 {
     // this iterates mRegex over the input string, returning an
     // iterator to the match objects
@@ -149,8 +149,8 @@ void re::PCRE::searchAll(const std::string& matchString,
     }
 }
 
-void re::PCRE::split(const std::string& str,
-                     std::vector<std::string> & v)
+void re::Regex::split(const std::string& str,
+                      std::vector<std::string> & v)
 {
     size_t idx = 0;
     auto flags = std::regex_constants::match_default;
@@ -176,8 +176,8 @@ void re::PCRE::split(const std::string& str,
     }
 }
 
-std::string re::PCRE::sub(const std::string& str,
-                          const std::string& repl)
+std::string re::Regex::sub(const std::string& str,
+                           const std::string& repl)
 {
     std::string toReplace = str;
 
@@ -200,7 +200,7 @@ std::string re::PCRE::sub(const std::string& str,
     return toReplace;
 }
 
-std::string re::PCRE::escape(const std::string& str) const
+std::string re::Regex::escape(const std::string& str) const
 {
     std::string r;
     for (size_t ii = 0; ii < str.length(); ii++)
@@ -214,7 +214,7 @@ std::string re::PCRE::escape(const std::string& str) const
     return r;
 }
 
-std::string re::PCRE::replaceDot(const std::string& str) const
+std::string re::Regex::replaceDot(const std::string& str) const
 {
     std::regex reg("([^\\\\])\\.");
     std::string newstr = std::regex_replace(str, reg, "$1[\\s\\S]");

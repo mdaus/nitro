@@ -25,16 +25,16 @@
 
 TEST_CASE(testMatches)
 {
-    re::PCREMatch matches;
-    re::PCRE rx("^([^:]+):[ ]*([^\r\n]+)\r\n(.*)");
+    re::RegexMatch matches;
+    re::Regex rx("^([^:]+):[ ]*([^\r\n]+)\r\n(.*)");
     TEST_ASSERT(rx.match("Proxy-Connection: Keep-Alive\r\n", matches));
     TEST_ASSERT_EQ(matches.size(), 4);
 }
 
 TEST_CASE(testSearch)
 {
-    re::PCREMatch matches;
-    re::PCRE rx("ar");
+    re::RegexMatch matches;
+    re::Regex rx("ar");
     rx.searchAll("arabsdsarbjudarc34ardnjfsdveqvare3arfarg", matches);
     TEST_ASSERT_EQ(matches.size(), 7);
 }
@@ -42,29 +42,29 @@ TEST_CASE(testSearch)
 TEST_CASE(testDotAllFlag)
 {
     // This should match both the "3.3" and "4\n2"
-    re::PCREMatch matches1;
-    re::PCRE rx1("\\d.\\d", re::PCRE::PCRE_DOTALL);
+    re::RegexMatch matches1;
+    re::Regex rx1("\\d.\\d", re::Regex::Regex_DOTALL);
     rx1.searchAll("3.3 4\n2", matches1);
     TEST_ASSERT_EQ(matches1.size(), 2);
 
     // This should only match the "3.3"
-    re::PCREMatch matches2;
-    re::PCRE rx2("\\d.\\d", re::PCRE::PCRE_NONE);
+    re::RegexMatch matches2;
+    re::Regex rx2("\\d.\\d", re::Regex::Regex_NONE);
     rx2.searchAll("3.3 4\n2", matches2);
     TEST_ASSERT_EQ(matches2.size(), 1);
 
     // This should only match the "3.3" if the replace_dot() function
     // is working correctly
-    re::PCREMatch matches3;
-    re::PCRE rx3("\\d\\.\\d", re::PCRE::PCRE_DOTALL);
+    re::RegexMatch matches3;
+    re::Regex rx3("\\d\\.\\d", re::Regex::Regex_DOTALL);
     rx3.searchAll("3.3 4\n2", matches3);
     TEST_ASSERT_EQ(matches3.size(), 1);
 }
 
 TEST_CASE(testSub)
 {
-    re::PCREMatch matches;
-    re::PCRE rx("ar");
+    re::RegexMatch matches;
+    re::Regex rx("ar");
     std::string subst = rx.sub("Hearo", "ll");
     TEST_ASSERT_EQ(subst, "Hello");
     subst = rx.sub("Hearo Keary!", "ll");
@@ -73,8 +73,8 @@ TEST_CASE(testSub)
 
 TEST_CASE(testSplit)
 {
-    re::PCREMatch matches;
-    re::PCRE rx("ar");
+    re::RegexMatch matches;
+    re::Regex rx("ar");
     std::vector<std::string> vec;
     rx.split("ONEarTWOarTHREE", vec);
     TEST_ASSERT_EQ(vec.size(), 3);

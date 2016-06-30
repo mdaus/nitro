@@ -27,7 +27,7 @@
 #include <sys/sys_config.h>
 
 #include "sys/Err.h"
-#include "re/PCREException.h"
+#include "re/RegexException.h"
 
 #ifdef __CODA_CPP11
 #include <regex>
@@ -40,166 +40,166 @@
 #include <vector>
 
 /*!
- *  \file PCRE.h
+ *  \file Regex.h
  *  \brief C++ wrapper for the PCRE library
  */
 
 namespace re
 {
 
-typedef std::vector< std::string > PCREMatch;
-/*!
- *  \class PCRE
- *  \brief C++ wrapper object for the PCRE library, 
- *  further documentation regarding the underlying C 
- *  library, especially for flag information, can 
- *  be found at http://www.pcre.org.
- */
-class PCRE
-{
-public:
+    typedef std::vector<std::string> RegexMatch;
     /*!
-     *  The default constructor
+     *  \class Regex
+     *  \brief C++ wrapper object for the PCRE library, 
+     *  further documentation regarding the underlying C 
+     *  library, especially for flag information, can 
+     *  be found at http://www.pcre.org.
      */
+    class Regex
+    {
+    public:
+        /*!
+         *  The default constructor
+         */
 
-    //#ifdef __CODA_CPP11
-    enum Flag {
-        PCRE_NONE=0,
-        PCRE_DOTALL=1
-    };
-    //#endif
+        //#ifdef __CODA_CPP11
+        enum Flag {
+            Regex_NONE=0,
+            Regex_DOTALL=1
+        };
+        //#endif
 
-    PCRE(const std::string& pattern = "", Flag flags = PCRE_DOTALL);
+        Regex(const std::string& pattern = "", Flag flags = Regex_DOTALL);
 
-    //!  Destructor
-    ~PCRE();
+        //!  Destructor
+        ~Regex();
 
-    /*!
-     *  Copy constructor
-     *  \param rhs The PCRE to copy from
-     */
-    PCRE(const PCRE& rhs);
+        /*!
+         *  Copy constructor
+         *  \param rhs The Regex to copy from
+         */
+        Regex(const Regex& rhs);
 
-    /*!
-     *  Assignment operator.  Check for self assignment
-     *  \param rhs The PCRE to copy from
-     *  \return This
-     */
+        /*!
+         *  Assignment operator.  Check for self assignment
+         *  \param rhs The Regex to copy from
+         *  \return This
+         */
 
-    PCRE& operator=(const PCRE& rhs);
+        Regex& operator=(const Regex& rhs);
 
-    /*!
-     *  Destroy all data used for matching.
-     */
-    void destroy();
+        /*!
+         *  Destroy all data used for matching.
+         */
+        void destroy();
 
-    /*!
-     *  Set the match pattern
-     *  See the pcre man pages (pcre_compile) for 
-     *  further info
-     *  on the parameterized flags.
-     *  \param pattern A pattern to match
-     *  \param flags  Any flags to pass (default of PCRE_DOTALL to
-     *  match newlines with the .)
-     *  \throw  PCREException on fatal error
-     */
-    PCRE& compile(const std::string& pattern, int flags = PCRE_DOTALL);
+        /*!
+         *  Set the match pattern
+         *  See the pcre man pages (pcre_compile) for 
+         *  further info
+         *  on the parameterized flags.
+         *  \param pattern A pattern to match
+         *  \param flags  Any flags to pass (default of Regex_DOTALL to
+         *  match newlines with the .)
+         *  \throw  RegexException on fatal error
+         */
+        Regex& compile(const std::string& pattern, int flags = Regex_DOTALL);
 
-    /*!
-     *  \todo Add non-const reference
-     *  A const reference return for the pattern
-     *  \return the pattern
-     */
-    const std::string& getPattern() const;
+        /*!
+         *  \todo Add non-const reference
+         *  A const reference return for the pattern
+         *  \return the pattern
+         */
+        const std::string& getPattern() const;
 
-    /*!
-     *  Match this input string against our pattern and populate the
-     *  data structure
-     *  See the pcre man pages (pcre_exec) for further 
-     *  info on the optional flags.
-     *  \param str The string to match against our pattern
-     *  \param matches PCREMatch container to fill
-     *  \param flags  Any flags
-     *  \return  True on success, False otherwise
-     *  \throw  PCREException on fatal error
-     */
-    bool match(const std::string& str,
-               PCREMatch & matchObject,
-               int flags = 0);
+        /*!
+         *  Match this input string against our pattern and populate the
+         *  data structure
+         *  See the pcre man pages (pcre_exec) for further 
+         *  info on the optional flags.
+         *  \param str The string to match against our pattern
+         *  \param matches RegexMatch container to fill
+         *  \param flags  Any flags
+         *  \return  True on success, False otherwise
+         *  \throw  RegexException on fatal error
+         */
+        bool match(const std::string& str,
+                   RegexMatch& matchObject,
+                   int flags = 0);
 
-    bool matches(const std::string& str, int flags = 0) const;
+        bool matches(const std::string& str, int flags = 0) const;
 
-    /*!
-     *  Search the matchString
-     *  See the pcre man pages (pcre_exec) for further
-     *  info on the optional flags.
-     *  \param matchString The string to try and match
-     *  \param startIndex Starting where?
-     *  \param flags  Any flags
-     *  \return  Matched substring
-     *  \throw  PCREException on fatal error
-     */
-    std::string search(const std::string& matchString,
-                       int startIndex = 0,
-                       int flags = 0);
+        /*!
+         *  Search the matchString
+         *  See the pcre man pages (pcre_exec) for further
+         *  info on the optional flags.
+         *  \param matchString The string to try and match
+         *  \param startIndex Starting where?
+         *  \param flags  Any flags
+         *  \return  Matched substring
+         *  \throw  RegexException on fatal error
+         */
+        std::string search(const std::string& matchString,
+                           int startIndex = 0,
+                           int flags = 0);
 
-    /*!
-     *  Search the matchString and get the sub-expressions, by ref
-     *  \param matchString The string to match
-     *  \param v The sub-expression
-     */
-    void searchAll(const std::string& matchString,
-                   PCREMatch & v);
+        /*!
+         *  Search the matchString and get the sub-expressions, by ref
+         *  \param matchString The string to match
+         *  \param v The sub-expression
+         */
+        void searchAll(const std::string& matchString,
+                       RegexMatch& v);
 
-    /*!
-     *  Split the string by occurrences of the pattern
-     *  \param str  The string to split
-     *  \param v    The resulting container of matches split from str
-     */
-    void split(const std::string& str,
-               std::vector< std::string > & v);
+        /*!
+         *  Split the string by occurrences of the pattern
+         *  \param str  The string to split
+         *  \param v    The resulting container of matches split from str
+         */
+        void split(const std::string& str,
+                   std::vector<std::string>& v);
 
-    /*!
-     *  Replace occurrences of the pattern in the string
-     *  \param str  The string in which to replace the pattern
-     *  \param repl  The replacement
-     *  \return  The resulting string
-     */
-    std::string sub(const std::string& str,
-                    const std::string& repl);
+        /*!
+         *  Replace occurrences of the pattern in the string
+         *  \param str  The string in which to replace the pattern
+         *  \param repl  The replacement
+         *  \return  The resulting string
+         */
+        std::string sub(const std::string& str,
+                        const std::string& repl);
 
-    /*!
-     *  Backslash all non-alphanumeric characters
-     *  \param str  The string to escape
-     *  \return  The escaped string
-     */
-    std::string escape(const std::string& str) const;
+        /*!
+         *  Backslash all non-alphanumeric characters
+         *  \param str  The string to escape
+         *  \return  The escaped string
+         */
+        std::string escape(const std::string& str) const;
 
-protected:
-    std::string mPattern;
+    protected:
+        std::string mPattern;
 
-    // Size of the output vector, must be a multiple of 3
-    // The output vector is filled up to 2/3 (666) full for matches
-    // so the maximum number of substrings is 333 (333 start
-    // offsets and 333 end offsets)
-    const int OVECCOUNT;
+        // Size of the output vector, must be a multiple of 3
+        // The output vector is filled up to 2/3 (666) full for matches
+        // so the maximum number of substrings is 333 (333 start
+        // offsets and 333 end offsets)
+        const int OVECCOUNT;
     
 #ifdef __CODA_CPP11
-    /*!
-     *  Replace non-escaped "." with "[\s\S]" to get PCRE_DOTALL newline behavior
-     *  \param str  The string to modify
-     *  \return  The modified string
-     */
-    std::string replaceDot(const std::string& str) const;
+        /*!
+         *  Replace non-escaped "." with "[\s\S]" to get Regex_DOTALL newline behavior
+         *  \param str  The string to modify
+         *  \return  The modified string
+         */
+        std::string replaceDot(const std::string& str) const;
 
-    std::regex mRegex;
+        std::regex mRegex;
 #else
-    //! The pcre object
-    pcre* mPCRE;
-    //! The output/offset vector
-    std::vector<int> mOvector;
+        //! The pcre object
+        pcre* mPCRE;
+        //! The output/offset vector
+        std::vector<int> mOvector;
 #endif
-};
+    };
 }
 
 #endif
