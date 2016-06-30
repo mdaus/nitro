@@ -63,14 +63,14 @@ re::Regex& re::Regex::operator=(const re::Regex& rhs)
 re::Regex& re::Regex::compile(const std::string& pattern,
                               int flags)
 {
-    mPattern = (flags==Regex_DOTALL) ? replace_dot(pattern) : pattern;
+    mPattern = (flags==Regex_DOTALL) ? replaceDot(pattern) : pattern;
     try 
     {
         mRegex = std::regex(mPattern);
     }
     catch (const std::regex_error& e)
     {
-        throw RegexException(Ctxt("Regex std::regex constructor error: "
+        throw RegexException(Ctxt(std::string("Regex std::regex constructor error: ")
                                   + e.what()));
     }
 
@@ -103,7 +103,7 @@ bool re::Regex::match(const std::string& str,
 
     for(size_t ii = 0; ii < matches.size(); ++ii)
     {
-        matchObject[i] = matches[i].str();
+        matchObject[ii] = matches[ii].str();
     }
 
     return result;
@@ -205,11 +205,11 @@ std::string re::Regex::escape(const std::string& str) const
     std::string r;
     for (size_t ii = 0; ii < str.length(); ii++)
     {
-        if (!isalpha(str[i]) && !isspace(str[i]))
+        if (!isalpha(str[ii]) && !isspace(str[ii]))
         {
             r += '\\';
         }
-        r += str[i];
+        r += str[ii];
     }
     return r;
 }
