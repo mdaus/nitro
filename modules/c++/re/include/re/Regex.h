@@ -178,12 +178,6 @@ namespace re
     private:
         std::string mPattern;
 
-        // Size of the output vector, must be a multiple of 3
-        // The output vector is filled up to 2/3 (666) full for matches
-        // so the maximum number of substrings is 333 (333 start
-        // offsets and 333 end offsets)
-        const int OVECCOUNT;
-    
 #ifdef __CODA_CPP11
         /*!
          *  Replace non-escaped "." with "[\s\S]" to get Regex_DOTALL newline behavior
@@ -194,8 +188,15 @@ namespace re
 
         std::regex mRegex;
 #else
+        // Size of the output vector, must be a multiple of 3
+        // The output vector is filled up to 2/3 (666) full for matches
+        // so the maximum number of substrings is 333 (333 start
+        // offsets and 333 end offsets)
+        const int OVECCOUNT;
+
         //! The pcre object
         pcre* mPCRE;
+
         //! The output/offset vector
         std::vector<int> mOvector;
 #endif
