@@ -24,11 +24,6 @@
 #ifndef __RE_PCRE_H__
 #define __RE_PCRE_H__
 
-#if !defined(USE_PCRE)
-// Why would this be included if it wasn't intended to be used?
-#define USE_PCRE
-#endif
-
 #include <sys/sys_config.h>
 
 #include "sys/Err.h"
@@ -51,11 +46,6 @@
 
 namespace re
 {
-// Size of the output vector, must be a multiple of 3
-// The output vector is filled up to 2/3 (666) full for matches
-// so the maximum number of substrings is 333 (333 start
-// offsets and 333 end offsets)
-const int OVECCOUNT = 999;
 
 typedef std::vector< std::string > PCREMatch;
 /*!
@@ -72,14 +62,14 @@ public:
      *  The default constructor
      */
 
-#ifdef __CODA_CPP11
-    enum Flags {
+    //#ifdef __CODA_CPP11
+    enum Flag {
         PCRE_NONE=0,
         PCRE_DOTALL=1
     };
-#endif
+    //#endif
 
-    PCRE(const std::string& pattern = "", int flags = PCRE_DOTALL);
+    PCRE(const std::string& pattern = "", Flag flags = PCRE_DOTALL);
 
     //!  Destructor
     ~PCRE();
@@ -188,20 +178,26 @@ public:
 protected:
     std::string mPattern;
 
+    // Size of the output vector, must be a multiple of 3
+    // The output vector is filled up to 2/3 (666) full for matches
+    // so the maximum number of substrings is 333 (333 start
+    // offsets and 333 end offsets)
+    const int OVECCOUNT;
+    
 #ifdef __CODA_CPP11
     /*!
      *  Replace non-escaped "." with "[\s\S]" to get PCRE_DOTALL newline behavior
      *  \param str  The string to modify
      *  \return  The modified string
      */
-    std::string replace_dot(const std::string& str) const;
+    std::string replaceDot(const std::string& str) const;
 
     std::regex mRegex;
 #else
     //! The pcre object
-    pcre *      mPCRE;
+    pcre* mPCRE;
     //! The output/offset vector
-    int         mOvector[OVECCOUNT];
+    std::vector<int> mOvector;
 #endif
 };
 }
