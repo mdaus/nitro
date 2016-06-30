@@ -22,13 +22,15 @@
 
 #include "re/PCRE.h" // this has to come before the #ifdef checks below
 
-#if defined(USE_PCRE) && !defined(__CODA_CPP11)
+#if !defined(__CODA_CPP11)
 
-re::PCRE::PCRE(const std::string& pattern, int flags) :
-    mPattern(pattern), mPCRE(NULL)
+re::PCRE::PCRE(const std::string& pattern, Flag flags) :
+    OVECCOUNT(999), mOvector(OVECCOUNT), mPattern(pattern), mPCRE(NULL)
 {
     if (!mPattern.empty())
+    {
         compile(mPattern, flags);
+    }
 }
 
 void re::PCRE::destroy()
@@ -87,8 +89,8 @@ re::PCRE& re::PCRE::compile(const std::string& pattern,
 
     if (mPCRE == NULL)
     {
-        throw PCREException(Ctxt(FmtX("PCRE compile error at offset %d: %s",
-                                      erroffset, errorptr)));
+        throw PCREException(Ctxt("PCRE compile error at offset " +
+                                 std::to_string(erroffset) + ": " + errorptr)));
     }
 
     return *this;
@@ -116,14 +118,14 @@ bool re::PCRE::match(const std::string& str,
     int startOffset(0);
 
     // Clear the output vector
-    memset(mOvector, 0, OVECCOUNT * sizeof(int));
+    mOvector.assign(mOvector.size(), 0);
     numMatches = pcre_exec(mPCRE,        // the compiled pattern
                            NULL,         // no extra data - not studied
                            str.c_str(),  // the subject string
                            str.length(), // the subject length
                            startOffset,  // the starting offset in subject
                            flags,        // options
-                           mOvector,     // the output vector
+                           &mOvector[0],     // the output vector
                            OVECCOUNT);   // the output vector size
     result = numMatches;
     /**************************************************************************
@@ -185,14 +187,14 @@ std::string re::PCRE::search(const std::string& matchString,
     int startOffset(0);
 
     // Clear the output vector
-    memset(mOvector, 0, OVECCOUNT * sizeof(int));
+    mOvector.assign(mOvector.size(), 0);
     numMatches = pcre_exec(mPCRE,                             // the compiled pattern
                            NULL,                              // no extra data
                            matchString.c_str() + startIndex,  // the subject string
                            matchString.length() - startIndex, // the subject length
                            startOffset,                       // starting offset
                            flags,                             // options
-                           mOvector,                          // output vector
+                           &mOvector[0],                      // output vector
                            OVECCOUNT);                        // output vector size
 
     result = numMatches;
@@ -252,9 +254,9 @@ void re::PCRE::searchAll(const std::string& matchString,
 }
 
 void re::PCRE::split(const std::string& str,
-                     std::vector< std::string > & v)
+                     std::vector<std::string> & v)
 {
-    int idx = 0;
+    size_t idx = 0;
     std::string result = search(str);
     while (result.size() != 0)
     {
@@ -263,7 +265,7 @@ void re::PCRE::split(const std::string& str,
         result = search(str, idx, PCRE_NOTBOL);
     }
     // Push on last bit if there is some
-    if (str.substr(idx).length() > 0)
+    if (!str.substr(idx).empty())
     {
         v.push_back(str.substr(idx));
     }
@@ -274,7 +276,7 @@ std::string re::PCRE::sub(const std::string& str,
 {
     std::string toReplace = str;
     std::string result = search(str);
-    int idx = 0;
+    size_t idx = 0;
     while (result.size() != 0)
     {
         toReplace.replace(idx + mOvector[0], (int)result.size(), repl);
@@ -288,13 +290,13 @@ std::string re::PCRE::sub(const std::string& str,
 std::string re::PCRE::escape(const std::string& str) const
 {
     std::string r;
-    for (unsigned int i = 0; i < str.length(); i++)
+    for (size_t i = 0; i < str.length(); i++)
     {
-        if (!isalpha(str.at(i)) && !isspace(str.at(i)))
+        if (!isalpha(str[i]) && !isspace(str[i]))
         {
             r += '\\';
         }
-        r += str.at(i);
+        r += str[i];
     }
     return r;
 }
