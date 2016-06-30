@@ -23,13 +23,15 @@
 #include "re/PCRE.h" // this has to come before the #ifdef checks below
 
 // we use this file if we're not using actual PCRE itself
-#if defined(USE_PCRE) && defined(__CODA_CPP11)
+#if defined(__CODA_CPP11)
 
-re::PCRE::PCRE(const std::string& pattern, int flags) :
+re::PCRE::PCRE(const std::string& pattern, Flag flags) :
     mPattern(pattern)
 {
     if (!mPattern.empty())
+    {
         compile(mPattern, flags);
+    }
 }
 
 void re::PCRE::destroy()
@@ -38,7 +40,6 @@ void re::PCRE::destroy()
 
 re::PCRE::~PCRE()
 {
-    destroy();
 }
 
 re::PCRE::PCRE(const re::PCRE& rhs)
@@ -51,8 +52,6 @@ re::PCRE& re::PCRE::operator=(const re::PCRE& rhs)
 {
     if (this != &rhs)
     {
-        destroy();
-
         mPattern = rhs.mPattern;
 
         compile(mPattern);
@@ -71,8 +70,8 @@ re::PCRE& re::PCRE::compile(const std::string& pattern,
     }
     catch (const std::regex_error& e)
     {
-        throw PCREException(Ctxt(FmtX("PCRE std::regex constructor error: %s",
-                                      e.what())));
+        throw PCREException(Ctxt("PCRE std::regex constructor error: "
+                                 + e.what()));
     }
 
     return *this;
@@ -97,12 +96,13 @@ bool re::PCRE::match(const std::string& str,
     bool result = std::regex_search(str, matches, mRegex);
 
     // copy resulting substrings into matchObject
-    matchObject.resize( matches.size() );
+    matchObject.resize(matches.size());
 
     // This causes a crash for some reason
     //std::copy(matches.begin(), matches.end(), matchObject.begin());
 
-    for(size_t i=0; i<matches.size(); ++i) {
+    for(size_t ii = 0; ii < matches.size(); ++ii)
+    {
         matchObject[i] = matches[i].str();
     }
 
@@ -121,13 +121,13 @@ std::string re::PCRE::search(const std::string& matchString,
     
     // if successful, return the substring matching the regex,
     // otherwise return empty string
-    if (result && matches.size() > 0)
+    if (result && !matches.empty())
     {
         return matches[0].str();
     }
     else
     {
-        return std::string("");
+        return "";
     }
 }
 
@@ -136,23 +136,23 @@ void re::PCRE::searchAll(const std::string& matchString,
 {
     // this iterates mRegex over the input string, returning an
     // iterator to the match objects
-    auto words_begin = 
+    auto wordsBegin = 
         std::sregex_iterator(matchString.begin(), matchString.end(), mRegex);
-    auto words_end = std::sregex_iterator();
+    auto wordsEnd = std::sregex_iterator();
  
     // copy the matches into v
-    for (std::sregex_iterator match_iter = words_begin; 
-         match_iter != words_end;++match_iter)
+    for (std::sregex_iterator matchIter = wordsBegin; 
+         matchIter != wordsEnd; ++matchIter)
     {
-        std::string match_str = match_iter->str(); 
-        v.push_back(match_str);
+        std::string matchStr = matchIter->str(); 
+        v.push_back(matchStr);
     }
 }
 
 void re::PCRE::split(const std::string& str,
-                     std::vector< std::string > & v)
+                     std::vector<std::string> & v)
 {
-    int idx = 0;
+    size_t idx = 0;
     auto flags = std::regex_constants::match_default;
     std::smatch match;
     while (std::regex_search(str.begin()+idx, str.end(), match, mRegex, flags))
@@ -163,12 +163,14 @@ void re::PCRE::split(const std::string& str,
         // not sure this will ever be needed for a split() operation,
         // but we'll be safe (matches after first match will not match
         // beginning-of-line))
-        if(flags == std::regex_constants::match_default)
+        if (flags == std::regex_constants::match_default)
+        {
             flags = std::regex_constants::match_not_bol;
+        }
     }
 
     // Push on last bit if there is some
-    if (str.substr(idx).length() > 0)
+    if (!str.substr(idx).empty())
     {
         v.push_back(str.substr(idx));
     }
@@ -179,17 +181,20 @@ std::string re::PCRE::sub(const std::string& str,
 {
     std::string toReplace = str;
 
-    int idx = 0;
+    size_t idx = 0;
     auto flags = std::regex_constants::match_default;
     std::smatch match;
-    while (std::regex_search(toReplace.cbegin()+idx, toReplace.cend(), match, mRegex, flags))
+    while (std::regex_search(toReplace.cbegin()+idx, toReplace.cend(), 
+                             match, mRegex, flags))
     {
         toReplace.replace(idx + match.position(), match.length(), repl);
         idx += (match.position() + match.length());
 
         // matches after first match will not match beginning-of-line
-        if(flags == std::regex_constants::match_default)
+        if (flags == std::regex_constants::match_default)
+        {
             flags = std::regex_constants::match_not_bol;
+        }
     }
 
     return toReplace;
@@ -198,18 +203,18 @@ std::string re::PCRE::sub(const std::string& str,
 std::string re::PCRE::escape(const std::string& str) const
 {
     std::string r;
-    for (unsigned int i = 0; i < str.length(); i++)
+    for (size_t ii = 0; ii < str.length(); ii++)
     {
-        if (!isalpha(str.at(i)) && !isspace(str.at(i)))
+        if (!isalpha(str[i]) && !isspace(str[i]))
         {
             r += '\\';
         }
-        r += str.at(i);
+        r += str[i];
     }
     return r;
 }
 
-std::string re::PCRE::replace_dot(const std::string& str) const
+std::string re::PCRE::replaceDot(const std::string& str) const
 {
     std::regex reg("([^\\\\])\\.");
     std::string newstr = std::regex_replace(str, reg, "$1[\\s\\S]");
