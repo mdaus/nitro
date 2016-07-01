@@ -85,7 +85,9 @@ const std::string& re::Regex::getPattern() const
 
 bool re::Regex::matches(const std::string& str, int) const
 {
-    return std::regex_match(str, mRegex);
+    // return std::regex_search(str, mRegex);
+    std::smatch matches;
+    return searchWithContext(str.cbegin(), str.cend(), matches);
 }
 
 bool re::Regex::match(const std::string& str,
@@ -93,7 +95,8 @@ bool re::Regex::match(const std::string& str,
                       int )
 {
     std::smatch matches;
-    bool result = std::regex_search(str, matches, mRegex);
+    bool result = searchWithContext(str.cbegin(), str.cend(), matches);
+    //std::regex_search(str, matches, mRegex);
 
     // copy resulting substrings into matchObject
     matchObject.resize(matches.size());
@@ -116,8 +119,10 @@ std::string re::Regex::search(const std::string& matchString,
     std::smatch matches;
 
     // search the string starting at index "startIndex"
-    bool result = std::regex_search(matchString.begin()+startIndex, 
-                                    matchString.end(), matches, mRegex);
+    bool result = searchWithContext(matchString.begin()+startIndex, 
+                                    matchString.end(), matches);
+    // std::regex_search(matchString.begin()+startIndex, 
+    //                                 matchString.end(), matches, mRegex);
     
     // if successful, return the substring matching the regex,
     // otherwise return empty string
@@ -155,7 +160,7 @@ void re::Regex::split(const std::string& str,
     size_t idx = 0;
     auto flags = std::regex_constants::match_default;
     std::smatch match;
-    while (std::regex_search(str.begin()+idx, str.end(), match, mRegex, flags))
+    while (searchWithContext(str.begin()+idx, str.end(), match))
     {
         v.push_back( str.substr(idx, match.position()) );
         idx += (match.position() + match.length());
@@ -184,8 +189,9 @@ std::string re::Regex::sub(const std::string& str,
     size_t idx = 0;
     auto flags = std::regex_constants::match_default;
     std::smatch match;
-    while (std::regex_search(toReplace.cbegin()+idx, toReplace.cend(), 
-                             match, mRegex, flags))
+    while (searchWithContext(toReplace.cbegin()+idx, toReplace.cend(), match))
+// std::regex_search(toReplace.cbegin()+idx, toReplace.cend(), 
+//                              match, mRegex, flags))
     {
         toReplace.replace(idx + match.position(), match.length(), repl);
         idx += (match.position() + match.length());
@@ -227,6 +233,44 @@ std::string re::Regex::replaceDot(const std::string& str) const
     // Replace just the "." with "[\s\S]"
     std::string newstr = std::regex_replace(str, reg, "$1[\\s\\S]");
     return newstr;
+}
+
+
+bool re::Regex::searchWithContext(std::string::const_iterator inputIterBegin,
+                                  std::string::const_iterator inputIterEnd,
+                                  std::smatch& match) const
+{
+    bool b(false);
+    auto flags = std::regex_constants::match_default;
+
+    if (!mPattern.empty() && mPattern.front() == '^')
+    {
+        if (mPattern.length() >= 2 && mPattern.back() == '$')
+        {
+            b = std::regex_match(inputIterBegin, inputIterEnd, 
+                                 match, mRegex, flags);
+        }
+        else
+        {
+            flags |= std::regex_constants::match_continuous;
+            b = std::regex_search(inputIterBegin, inputIterEnd,
+                                  match, mRegex, flags);
+        }
+    }
+    else if (!mPattern.empty() && mPattern.back() == '$')
+    {
+        std::string msg("RegexSTL: trailing '$' will not be handled correctly!");
+        msg += " Try adding a '^' at the beginning and matching the entire string.";
+        throw RegexException(Ctxt(msg));
+    }
+
+    else
+    {
+        b = std::regex_search(inputIterBegin, inputIterEnd,
+                              match, mRegex, flags);
+    }
+
+    return b;
 }
 
 #endif

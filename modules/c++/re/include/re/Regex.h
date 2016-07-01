@@ -186,6 +186,10 @@ namespace re
          */
         std::string replaceDot(const std::string& str) const;
 
+        bool searchWithContext(std::string::const_iterator inputIterBegin,
+                               std::string::const_iterator inputIterEnd,
+                               std::smatch& match) const;
+
         std::regex mRegex;
 #else
         // Size of the output vector, must be a multiple of 3
