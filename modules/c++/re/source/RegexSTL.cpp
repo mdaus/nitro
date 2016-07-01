@@ -85,7 +85,6 @@ const std::string& re::Regex::getPattern() const
 
 bool re::Regex::matches(const std::string& str, int) const
 {
-    // return std::regex_search(str, mRegex);
     std::smatch matches;
     return searchWithContext(str.cbegin(), str.cend(), matches);
 }
@@ -96,7 +95,6 @@ bool re::Regex::match(const std::string& str,
 {
     std::smatch matches;
     bool result = searchWithContext(str.cbegin(), str.cend(), matches);
-    //std::regex_search(str, matches, mRegex);
 
     // copy resulting substrings into matchObject
     matchObject.resize(matches.size());
@@ -121,8 +119,6 @@ std::string re::Regex::search(const std::string& matchString,
     // search the string starting at index "startIndex"
     bool result = searchWithContext(matchString.begin()+startIndex, 
                                     matchString.end(), matches);
-    // std::regex_search(matchString.begin()+startIndex, 
-    //                                 matchString.end(), matches, mRegex);
     
     // if successful, return the substring matching the regex,
     // otherwise return empty string
@@ -190,8 +186,6 @@ std::string re::Regex::sub(const std::string& str,
     auto flags = std::regex_constants::match_default;
     std::smatch match;
     while (searchWithContext(toReplace.cbegin()+idx, toReplace.cend(), match))
-// std::regex_search(toReplace.cbegin()+idx, toReplace.cend(), 
-//                              match, mRegex, flags))
     {
         toReplace.replace(idx + match.position(), match.length(), repl);
         idx += (match.position() + match.length());
@@ -241,8 +235,39 @@ bool re::Regex::searchWithContext(std::string::const_iterator inputIterBegin,
                                   std::smatch& match) const
 {
     bool b(false);
+    std::smatch tmpmatch;
     auto flags = std::regex_constants::match_default;
 
+    // Because VS2015 and gcc handle ^ and $ differently, we'll throw
+    // exceptions if they're in the middle of the pattern somewhere
+
+    // Look for ^ in the middle, but ignore \^ and [^
+    if(std::regex_search(mPattern, tmpmatch, 
+                         std::regex(R"lit([\s\S]*([^\[\\]|[^\\](\\\\)+)\^)lit"),
+                         std::regex_constants::match_continuous))
+    {
+        std::string msg(
+            "RegexSTL: '^' in mid-string is not handled the same by gcc and VS2015!");
+        msg += " So we don't allow it :(";
+        throw RegexException(Ctxt(msg));
+    }
+
+    // Look for $ in the middle, but ignore \$
+    if(std::regex_match(mPattern, tmpmatch,
+                        std::regex(R"lit(^([\s\S]*[^\\](\\\\)*)?\$[\s\S]+$)lit")))
+    {
+        std::string msg(
+            "RegexSTL: '$' in mid-string is not handled the same by gcc and VS2015!");
+        msg += " So we don't allow it :(";
+        throw RegexException(Ctxt(msg));
+    }
+
+
+    // Now we look for our 4 cases:
+    // 1) "^...$" -> use std::regex_match() to force match at beginning and end
+    // 2) "^..."  -> use std::regex_constants::continuous_match to force match at start
+    // 3) "...$"  -> throw exception
+    // 4) "..."   -> use plain std::regex_search()
     if (!mPattern.empty() && mPattern.front() == '^')
     {
         if (mPattern.length() >= 2 && mPattern.back() == '$')
