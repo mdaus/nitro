@@ -88,36 +88,43 @@ TEST_CASE(testDotAllFlag)
 
 TEST_CASE(testMultilineBehavior)
 {
-    re::RegexMatch matches1;
-    re::Regex rx1;
+    re::RegexMatch matches;
+    re::Regex rx;
     std::string inputString = 
         "3.3 4\n2\nx\r\ns\r\n;sjf sfkgsdkie\n shfihfoisu\nha hosd\nhvfoef\n";
 
     // This should match just the beginning
-    rx1.compile("^.");
-    rx1.searchAll(inputString, matches1);
-    TEST_ASSERT_EQ(matches1.size(), 1);
+    rx.compile("^.");
+    rx.searchAll(inputString, matches);
+    TEST_ASSERT_EQ(matches.size(), 1);
 
     // This should match nothing
-    rx1.compile("^.$");
-    rx1.match(inputString, matches1);
-    TEST_ASSERT_EQ(matches1.size(), 0);
+    matches.clear();
+    rx.compile("^.$");
+    TEST_ASSERT_FALSE(rx.match(inputString, matches));
+    TEST_ASSERT_EQ(matches.size(), 0);
 
     // This should match the whole inputString
-    rx1.compile("^.*$");
-    rx1.match(inputString, matches1);
-    TEST_ASSERT_EQ(matches1.size(), 1);
-    TEST_ASSERT_EQ(matches1[0].length(), inputString.length());
+    matches.clear();
+    rx.compile("^.*$");
+    TEST_ASSERT_TRUE(rx.match(inputString, matches));
+    TEST_ASSERT_EQ(matches.size(), 1);
+    TEST_ASSERT_EQ(matches[0].length(), inputString.length());
 
+#ifdef __CODA_CPP11
     // These exercise our limitations and should all throw exceptions (sigh)
-    rx1.compile(".$");
-    TEST_EXCEPTION(rx1.match(inputString, matches1));
+    matches.clear();
+    rx.compile(".$");
+    TEST_EXCEPTION(rx.match(inputString, matches));
 
-    rx1.compile("foo^bar");
-    TEST_EXCEPTION(rx1.match(inputString, matches1));
+    matches.clear();
+    rx.compile("foo^bar");
+    TEST_EXCEPTION(rx.match(inputString, matches));
 
-    rx1.compile("^foo$bar");
-    TEST_EXCEPTION(rx1.match(inputString, matches1));
+    matches.clear();
+    rx.compile("^foo$bar");
+    TEST_EXCEPTION(rx.match(inputString, matches));
+#endif
 }
 
 TEST_CASE(testSub)
