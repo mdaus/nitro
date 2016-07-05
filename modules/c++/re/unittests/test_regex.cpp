@@ -87,11 +87,36 @@ TEST_CASE(testDotAllFlag)
 
 TEST_CASE(testMultilineBehavior)
 {
-    // This should match both the "3.3" and "4\n2"
     re::RegexMatch matches1;
-    re::Regex rx1("^.");
-    rx1.searchAll("3.3 4\n2xs;sjf sfkgsdkie\n shfihfoisu\nha hosd\nhvfoef\n", matches1);
+    re::Regex rx1;
+    std::string inputString = 
+        "3.3 4\n2\nx\r\ns\r\n;sjf sfkgsdkie\n shfihfoisu\nha hosd\nhvfoef\n";
+
+    // This should match just the beginning
+    rx1.compile("^.");
+    rx1.searchAll(inputString, matches1);
     TEST_ASSERT_EQ(matches1.size(), 1);
+
+    // This should match nothing
+    rx1.compile("^.$");
+    rx1.match(inputString, matches1);
+    TEST_ASSERT_EQ(matches1.size(), 0);
+
+    // This should match the whole inputString
+    rx1.compile("^.*$");
+    rx1.match(inputString, matches1);
+    TEST_ASSERT_EQ(matches1.size(), 1);
+    TEST_ASSERT_EQ(matches1[0].length(), inputString.length());
+
+    // These exercise our limitations and should all throw exceptions (sigh)
+    rx1.compile(".$");
+    TEST_EXCEPTION(rx1.match(inputString, matches1));
+
+    rx1.compile("foo^bar");
+    TEST_EXCEPTION(rx1.match(inputString, matches1));
+
+    rx1.compile("^foo$bar");
+    TEST_EXCEPTION(rx1.match(inputString, matches1));
 }
 
 TEST_CASE(testSub)
