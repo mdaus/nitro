@@ -188,7 +188,8 @@ namespace re
 
         bool searchWithContext(std::string::const_iterator inputIterBegin,
                                std::string::const_iterator inputIterEnd,
-                               std::smatch& match) const;
+                               std::smatch& match,
+                               bool matchBeginning=true) const;
 
         std::regex mRegex;
 #else

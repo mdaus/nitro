@@ -135,18 +135,17 @@ std::string re::Regex::search(const std::string& matchString,
 void re::Regex::searchAll(const std::string& matchString,
                           RegexMatch& v)
 {
-    // this iterates mRegex over the input string, returning an
-    // iterator to the match objects
-    auto wordsBegin = 
-        std::sregex_iterator(matchString.begin(), matchString.end(), mRegex);
-    auto wordsEnd = std::sregex_iterator();
- 
-    // copy the matches into v
-    for (std::sregex_iterator matchIter = wordsBegin; 
-         matchIter != wordsEnd; ++matchIter)
+    std::smatch matches;
+    size_t startIndex = 0;
+    bool matchBeginning = true;
+
+    // search the string starting at index "startIndex"
+    while(searchWithContext(matchString.begin()+startIndex, 
+                            matchString.end(), matches, matchBeginning))
     {
-        std::string matchStr = matchIter->str(); 
-        v.push_back(matchStr);
+        v.push_back(matches[0].str());
+        startIndex += (matches.position(0) + matches.length(0));
+        matchBeginning = false; // don't match BOL after first match
     }
 }
 
@@ -232,11 +231,16 @@ std::string re::Regex::replaceDot(const std::string& str) const
 
 bool re::Regex::searchWithContext(std::string::const_iterator inputIterBegin,
                                   std::string::const_iterator inputIterEnd,
-                                  std::smatch& match) const
+                                  std::smatch& match,
+                                  bool matchBeginning) const
 {
     bool b(false);
     std::smatch tmpmatch;
     auto flags = std::regex_constants::match_default;
+    if(!matchBeginning)
+    {
+        flags |= std::regex_constants::match_not_bol;
+    }
 
     // Because VS2015 and gcc handle ^ and $ differently, we'll throw
     // exceptions if they're in the middle of the pattern somewhere
