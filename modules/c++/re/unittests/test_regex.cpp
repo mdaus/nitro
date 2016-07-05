@@ -23,6 +23,23 @@
 #include <import/re.h>
 #include "TestCase.h"
 
+TEST_CASE(testCompile)
+{
+    re::Regex rx;
+    // test that an invalid regexp throws an exception
+    TEST_EXCEPTION(rx.compile("^("));
+
+    // test that a valid regexp compiles
+    try
+    {
+        rx.compile("^(foo)");
+    }
+    catch (...)
+    {
+        TEST_FAIL("Compiling a valid regexp should not have thrown exception!");
+    }
+}
+
 TEST_CASE(testMatches)
 {
     re::RegexMatch matches;
@@ -32,6 +49,13 @@ TEST_CASE(testMatches)
 }
 
 TEST_CASE(testSearch)
+{
+    re::Regex rx("jud");
+    std::string result = rx.search("arabsdsarbjudarc34ardnjfsdveqvare3arfarg");
+    TEST_ASSERT_EQ(result, "jud");
+}
+
+TEST_CASE(testSearchAll)
 {
     re::RegexMatch matches;
     re::Regex rx("ar");
@@ -61,6 +85,15 @@ TEST_CASE(testDotAllFlag)
     TEST_ASSERT_EQ(matches3.size(), 1);
 }
 
+TEST_CASE(testMultilineBehavior)
+{
+    // This should match both the "3.3" and "4\n2"
+    re::RegexMatch matches1;
+    re::Regex rx1("^.");
+    rx1.searchAll("3.3 4\n2xs;sjf sfkgsdkie\n shfihfoisu\nha hosd\nhvfoef\n", matches1);
+    TEST_ASSERT_EQ(matches1.size(), 1);
+}
+
 TEST_CASE(testSub)
 {
     re::RegexMatch matches;
@@ -85,9 +118,12 @@ TEST_CASE(testSplit)
 
 int main(int, char**)
 {
+    TEST_CHECK( testCompile);
     TEST_CHECK( testMatches);
     TEST_CHECK( testSearch);
+    TEST_CHECK( testSearchAll);
     TEST_CHECK( testDotAllFlag);
+    TEST_CHECK( testMultilineBehavior);
     TEST_CHECK( testSub);
     TEST_CHECK( testSplit);
 }
