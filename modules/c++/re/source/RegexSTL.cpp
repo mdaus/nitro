@@ -100,7 +100,7 @@ bool re::Regex::match(const std::string& str,
     // This causes a crash for some reason
     //std::copy(matches.begin(), matches.end(), matchObject.begin());
 
-    for(size_t ii = 0; ii < matches.size(); ++ii)
+    for (size_t ii = 0; ii < matches.size(); ++ii)
     {
         matchObject[ii] = matches[ii].str();
     }
@@ -137,8 +137,8 @@ void re::Regex::searchAll(const std::string& matchString,
     bool matchBeginning = true;
 
     // search the string starting at index "startIndex"
-    while(searchWithContext(matchString.begin()+startIndex, 
-                            matchString.end(), match, matchBeginning))
+    while( searchWithContext(matchString.begin()+startIndex, 
+                             matchString.end(), match, matchBeginning))
     {
         v.push_back(match[0].str());
         startIndex += (match.position(0) + match.length(0));
@@ -224,7 +224,7 @@ bool re::Regex::searchWithContext(std::string::const_iterator inputIterBegin,
     bool b(false);
     std::smatch tmpmatch;
     auto flags = std::regex_constants::match_default;
-    if(!matchBeginning)
+    if (!matchBeginning)
     {
         flags |= std::regex_constants::match_not_bol;
     }
@@ -233,9 +233,9 @@ bool re::Regex::searchWithContext(std::string::const_iterator inputIterBegin,
     // exceptions if they're in the middle of the pattern somewhere
 
     // Look for ^ in the middle, but ignore \^ and [^
-    if(std::regex_search(mPattern, tmpmatch, 
-                         std::regex(R"lit([\s\S]*([^\[\\]|[^\\](\\\\)+)\^)lit"),
-                         std::regex_constants::match_continuous))
+    if (std::regex_search(mPattern, tmpmatch, 
+                          std::regex(R"lit([\s\S]*([^\[\\]|[^\\](\\\\)+)\^)lit"),
+                          std::regex_constants::match_continuous))
     {
         std::string msg(
             "RegexSTL: '^' in mid-string is not handled the same by gcc and VS2015!");
@@ -244,8 +244,8 @@ bool re::Regex::searchWithContext(std::string::const_iterator inputIterBegin,
     }
 
     // Look for $ in the middle, but ignore \$
-    if(std::regex_match(mPattern, tmpmatch,
-                        std::regex(R"lit(^([\s\S]*[^\\](\\\\)*)?\$[\s\S]+$)lit")))
+    if (std::regex_match(mPattern, tmpmatch,
+                         std::regex(R"lit(^([\s\S]*[^\\](\\\\)*)?\$[\s\S]+$)lit")))
     {
         std::string msg(
             "RegexSTL: '$' in mid-string is not handled the same by gcc and VS2015!");
