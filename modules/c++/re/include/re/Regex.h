@@ -61,15 +61,7 @@ namespace re
         /*!
          *  The default constructor
          */
-
-        //#ifdef __CODA_CPP11
-        enum Flag {
-            Regex_NONE=0,
-            Regex_DOTALL=1
-        };
-        //#endif
-
-        Regex(const std::string& pattern = "", Flag flags = Regex_DOTALL);
+        Regex(const std::string& pattern = "");
 
         //!  Destructor
         ~Regex();
@@ -99,11 +91,9 @@ namespace re
          *  further info
          *  on the parameterized flags.
          *  \param pattern A pattern to match
-         *  \param flags  Any flags to pass (default of Regex_DOTALL to
-         *  match newlines with the .)
          *  \throw  RegexException on fatal error
          */
-        Regex& compile(const std::string& pattern, Flag flags = Regex_DOTALL);
+        Regex& compile(const std::string& pattern);
 
         /*!
          *  \todo Add non-const reference

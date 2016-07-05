@@ -25,12 +25,12 @@
 // we use this file if we're not using actual PCRE itself
 #if defined(__CODA_CPP11)
 
-re::Regex::Regex(const std::string& pattern, Flag flags) :
+re::Regex::Regex(const std::string& pattern) :
     mPattern(pattern)
 {
     if (!mPattern.empty())
     {
-        compile(mPattern, flags);
+        compile(mPattern);
     }
 }
 
@@ -60,10 +60,9 @@ re::Regex& re::Regex::operator=(const re::Regex& rhs)
     return *this;
 }
 
-re::Regex& re::Regex::compile(const std::string& pattern,
-                              Flag flags)
+re::Regex& re::Regex::compile(const std::string& pattern)
 {
-    mPattern = (flags==Regex_DOTALL) ? replaceDot(pattern) : pattern;
+    mPattern = replaceDot(pattern);
     try 
     {
         mRegex = std::regex(mPattern);

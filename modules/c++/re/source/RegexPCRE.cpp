@@ -26,12 +26,12 @@
 
 #include <sstream>
 
-re::Regex::Regex(const std::string& pattern, Flag flags) :
+re::Regex::Regex(const std::string& pattern) :
     mPattern(pattern), OVECCOUNT(999), mPCRE(NULL), mOvector(OVECCOUNT)
 {
     if (!mPattern.empty())
     {
-        compile(mPattern, flags);
+        compile(mPattern);
     }
 }
 
@@ -68,10 +68,10 @@ re::Regex& re::Regex::operator=(const re::Regex& rhs)
     return *this;
 }
 
-re::Regex& re::Regex::compile(const std::string& pattern,
-                              int flags)
+re::Regex& re::Regex::compile(const std::string& pattern)
 {
     mPattern = pattern;
+    int flags = PCRE_DOTALL;
 
     int erroffset;
     const char *errorptr;
