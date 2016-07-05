@@ -249,7 +249,7 @@ std::string re::Regex::search(const std::string& matchString,
 void re::Regex::searchAll(const std::string& matchString,
                           RegexMatch & v)
 {
-    std::string result = search(matchString);
+    std::string result = search(matchString, 0, 0);
 
     int idx = 0;
     while (result.size() != 0)
@@ -264,7 +264,7 @@ void re::Regex::split(const std::string& str,
                       std::vector<std::string> & v)
 {
     size_t idx = 0;
-    std::string result = search(str);
+    std::string result = search(str, 0, 0);
     while (result.size() != 0)
     {
         v.push_back(str.substr(idx, mOvector[0]));
@@ -282,7 +282,7 @@ std::string re::Regex::sub(const std::string& str,
                            const std::string& repl)
 {
     std::string toReplace = str;
-    std::string result = search(str);
+    std::string result = search(str, 0, 0);
     size_t idx = 0;
     while (result.size() != 0)
     {
