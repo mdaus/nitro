@@ -22,6 +22,7 @@
 
 #include <import/re.h>
 #include "TestCase.h"
+#include <map>
 
 TEST_CASE(testCompile)
 {
@@ -141,6 +142,155 @@ TEST_CASE(testSplit)
     TEST_ASSERT_EQ(vec[2], "THREE");
 }
 
+// This was copied out of re/tests/RegexTest3.cpp
+TEST_CASE(testHttpResponse)
+{
+    const char
+        *request =
+        "GET http://pluto.beseen.com:1113 HTTP/1.0\r\nProxy-Connection: Keep-Alive\r\nUser-Agent: Mozilla/4.75 [en] (X11; U; SunOS 5.6 sun4u)\r\nAccept: image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, image/png, */*\r\nAccept-Encoding: gzip\r\nAccept-Language: en\r\nAccept-Charset: iso-8859-1,*,utf-8\r\nContent-Type: application/x-www-form-urlencoded\r\nContent-Length: 96\r\n\r\n";
+
+    class HttpParser
+    {
+    public:
+
+        HttpParser()
+        {
+            mMatchRequest.compile(
+                "^([^ ]+) (http:[^ ]+) HTTP/([0-9]+\\.[0-9]+)\r\n(.*)");
+            mMatchPair.compile("^([^:]+):[ ]*([^\r\n]+)\r\n(.*)");
+            mMatchEndOfHeader.compile("^\r\n");
+            mMatchResponse.compile("^HTTP/([^ ]+) ([^\r\n]+)\r\n(.*)");
+        }
+
+        void parse(const char* header, size_t length)
+        {
+            mHeader = std::string(header, length);
+            if (!parseRequest())
+                if (!parseResponse())
+                    assert(0);
+        }
+
+        void parseRest(const std::string& restOfChunk)
+        {
+            std::string rest = restOfChunk;
+
+            re::RegexMatch matches;
+            while (!mMatchEndOfHeader.match(rest, matches))
+            {
+                re::RegexMatch keyVals;
+                if (mMatchPair.match(rest, keyVals))
+                {
+                    mKeyValuePair[keyVals[1]] = keyVals[2];
+
+                    rest = keyVals[3];
+                }
+                else
+                {
+                    std::cout << "'rest' doesn't match." << std::endl;
+                }
+            }
+        }
+
+        bool parseResponse()
+        {
+            re::RegexMatch responseVals;
+            if (mMatchResponse.match(mHeader, responseVals))
+            {
+                mVersion = responseVals[1];
+                mReturnVal = responseVals[2];
+
+                parseRest(responseVals[3]);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        bool parseRequest()
+        {
+            re::RegexMatch requestVals;
+            if (mMatchRequest.match(mHeader, requestVals))
+            {
+                mMethod = requestVals[1];
+                mUrl = requestVals[2];
+                mVersion = requestVals[3];
+
+                parseRest(requestVals[4]);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        std::string getReturnVal()
+        {
+            return mReturnVal;
+        }
+        std::string getUrl()
+        {
+            return mUrl;
+        }
+        std::string getVersion()
+        {
+            return mVersion;
+        }
+        std::string getMethod()
+        {
+            return mMethod;
+        }
+
+        std::string getContentType()
+        {
+            std::string key = "Content-Type";
+            return getAssociatedValue(key);
+        }
+        std::string getContentLength()
+        {
+            std::string key = "Content-Length";
+            return getAssociatedValue(key);
+        }
+
+        std::string getAssociatedValue(const std::string& key)
+        {
+            std::map<std::string, std::string>::const_iterator p = mKeyValuePair.find(key);
+            if (p == mKeyValuePair.end())
+            {
+                return std::string("");
+            }
+            return mKeyValuePair[key];
+        }
+
+    protected:
+        re::Regex mMatchRequest;
+        re::Regex mMatchPair;
+        re::Regex mMatchEndOfHeader;
+        re::Regex mMatchResponse;
+        std::map<std::string, std::string>mKeyValuePair;
+
+        std::string mReturnVal;
+        std::string mUrl;
+        std::string mVersion;
+        std::string mMethod;
+        std::string mHeader;
+    };
+
+    HttpParser p;
+    p.parse(request, strlen(request));
+
+    TEST_ASSERT_EQ(p.getReturnVal(), "");
+    TEST_ASSERT_EQ(p.getMethod(), "GET");
+    TEST_ASSERT_EQ(p.getUrl(), "http://pluto.beseen.com:1113");
+    TEST_ASSERT_EQ(p.getVersion(), "1.0");
+    TEST_ASSERT_EQ(p.getAssociatedValue("User-Agent"), "Mozilla/4.75 [en] (X11; U; SunOS 5.6 sun4u)");
+    TEST_ASSERT_EQ(p.getAssociatedValue("Accept-Encoding"), "gzip");
+    TEST_ASSERT_EQ(p.getContentType(), "application/x-www-form-urlencoded");
+    TEST_ASSERT_EQ(p.getContentLength(), "96");
+}
+
 int main(int, char**)
 {
     TEST_CHECK( testCompile);
@@ -151,4 +301,5 @@ int main(int, char**)
     TEST_CHECK( testMultilineBehavior);
     TEST_CHECK( testSub);
     TEST_CHECK( testSplit);
+    TEST_CHECK( testHttpResponse);
 }
