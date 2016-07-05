@@ -104,16 +104,15 @@ const std::string& re::Regex::getPattern() const
     return mPattern;
 }
 
-bool re::Regex::matches(const std::string& str, int flags) const
+bool re::Regex::matches(const std::string& str) const
 {
-    int x = pcre_exec(mPCRE, NULL, str.c_str(), str.length(), 0, flags, NULL, 0);
+    int x = pcre_exec(mPCRE, NULL, str.c_str(), str.length(), 0, 0, NULL, 0);
     /* zero if there is a match */
     return ( (x == -1) ? (false) : (true) );
 }
 
 bool re::Regex::match(const std::string& str,
-                      RegexMatch & matchObject,
-                      int flags)
+                      RegexMatch & matchObject)
 {
     int numMatches(0);
     int result(0);
@@ -126,8 +125,8 @@ bool re::Regex::match(const std::string& str,
                            str.c_str(),  // the subject string
                            str.length(), // the subject length
                            startOffset,  // the starting offset in subject
-                           flags,        // options
-                           &mOvector[0],     // the output vector
+                           0,            // options
+                           &mOvector[0], // the output vector
                            OVECCOUNT);   // the output vector size
     result = numMatches;
     /**************************************************************************
@@ -181,8 +180,7 @@ bool re::Regex::match(const std::string& str,
 }
 
 std::string re::Regex::search(const std::string& matchString,
-                              int startIndex,
-                              int flags)
+                              int startIndex)
 {
     int numMatches(0);
     int result(0);
@@ -195,7 +193,7 @@ std::string re::Regex::search(const std::string& matchString,
                            matchString.c_str() + startIndex,  // the subject string
                            matchString.length() - startIndex, // the subject length
                            startOffset,                       // starting offset
-                           flags,                             // options
+                           0,                                 // options
                            &mOvector[0],                      // output vector
                            OVECCOUNT);                        // output vector size
 

@@ -124,10 +124,9 @@ namespace re
          *  \throw  RegexException on fatal error
          */
         bool match(const std::string& str,
-                   RegexMatch& matchObject,
-                   int flags = 0);
+                   RegexMatch& matchObject);
 
-        bool matches(const std::string& str, int flags = 0) const;
+        bool matches(const std::string& str) const;
 
         /*!
          *  Search the matchString
@@ -140,8 +139,7 @@ namespace re
          *  \throw  RegexException on fatal error
          */
         std::string search(const std::string& matchString,
-                           int startIndex = 0,
-                           int flags = 0);
+                           int startIndex = 0);
 
         /*!
          *  Search the matchString and get the sub-expressions, by ref

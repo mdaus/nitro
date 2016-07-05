@@ -83,15 +83,14 @@ const std::string& re::Regex::getPattern() const
     return mPattern;
 }
 
-bool re::Regex::matches(const std::string& str, int) const
+bool re::Regex::matches(const std::string& str) const
 {
     std::smatch matches;
     return searchWithContext(str.cbegin(), str.cend(), matches);
 }
 
 bool re::Regex::match(const std::string& str,
-                      RegexMatch & matchObject,
-                      int )
+                      RegexMatch & matchObject)
 {
     std::smatch matches;
     bool result = searchWithContext(str.cbegin(), str.cend(), matches);
@@ -111,8 +110,7 @@ bool re::Regex::match(const std::string& str,
 }
 
 std::string re::Regex::search(const std::string& matchString,
-                              int startIndex,
-                              int)
+                              int startIndex)
 {
     std::smatch matches;
 
@@ -135,16 +133,16 @@ std::string re::Regex::search(const std::string& matchString,
 void re::Regex::searchAll(const std::string& matchString,
                           RegexMatch& v)
 {
-    std::smatch matches;
+    std::smatch match;
     size_t startIndex = 0;
     bool matchBeginning = true;
 
     // search the string starting at index "startIndex"
     while(searchWithContext(matchString.begin()+startIndex, 
-                            matchString.end(), matches, matchBeginning))
+                            matchString.end(), match, matchBeginning))
     {
-        v.push_back(matches[0].str());
-        startIndex += (matches.position(0) + matches.length(0));
+        v.push_back(match[0].str());
+        startIndex += (match.position(0) + match.length(0));
         matchBeginning = false; // don't match BOL after first match
     }
 }
@@ -153,20 +151,14 @@ void re::Regex::split(const std::string& str,
                       std::vector<std::string> & v)
 {
     size_t idx = 0;
-    auto flags = std::regex_constants::match_default;
+    bool matchBeginning = true;
     std::smatch match;
-    while (searchWithContext(str.begin()+idx, str.end(), match))
+
+    while (searchWithContext(str.begin()+idx, str.end(), match, matchBeginning))
     {
         v.push_back( str.substr(idx, match.position()) );
         idx += (match.position() + match.length());
-
-        // not sure this will ever be needed for a split() operation,
-        // but we'll be safe (matches after first match will not match
-        // beginning-of-line))
-        if (flags == std::regex_constants::match_default)
-        {
-            flags = std::regex_constants::match_not_bol;
-        }
+        matchBeginning = false; // don't match BOL after first match
     }
 
     // Push on last bit if there is some
@@ -182,18 +174,14 @@ std::string re::Regex::sub(const std::string& str,
     std::string toReplace = str;
 
     size_t idx = 0;
-    auto flags = std::regex_constants::match_default;
+    bool matchBeginning = true;
     std::smatch match;
+
     while (searchWithContext(toReplace.cbegin()+idx, toReplace.cend(), match))
     {
         toReplace.replace(idx + match.position(), match.length(), repl);
         idx += (match.position() + match.length());
-
-        // matches after first match will not match beginning-of-line
-        if (flags == std::regex_constants::match_default)
-        {
-            flags = std::regex_constants::match_not_bol;
-        }
+        matchBeginning = false; // don't match BOL after first match
     }
 
     return toReplace;
