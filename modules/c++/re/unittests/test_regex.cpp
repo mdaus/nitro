@@ -68,20 +68,20 @@ TEST_CASE(testDotAllFlag)
 {
     // This should match both the "3.3" and "4\n2"
     re::RegexMatch matches1;
-    re::Regex rx1("\\d.\\d", re::Regex::Regex_DOTALL);
+    re::Regex rx1("\\d.\\d");
     rx1.searchAll("3.3 4\n2", matches1);
     TEST_ASSERT_EQ(matches1.size(), 2);
 
     // This should only match the "3.3"
-    re::RegexMatch matches2;
-    re::Regex rx2("\\d.\\d", re::Regex::Regex_NONE);
-    rx2.searchAll("3.3 4\n2", matches2);
-    TEST_ASSERT_EQ(matches2.size(), 1);
+    // re::RegexMatch matches2;
+    // re::Regex rx2("\\d.\\d", re::Regex::Regex_NONE);
+    // rx2.searchAll("3.3 4\n2", matches2);
+    // TEST_ASSERT_EQ(matches2.size(), 1);
 
     // This should only match the "3.3" if the replace_dot() function
     // is working correctly
     re::RegexMatch matches3;
-    re::Regex rx3("\\d\\.\\d", re::Regex::Regex_DOTALL);
+    re::Regex rx3("\\d\\.\\d");
     rx3.searchAll("3.3 4\n2", matches3);
     TEST_ASSERT_EQ(matches3.size(), 1);
 }
