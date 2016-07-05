@@ -181,6 +181,10 @@ namespace re
 
         std::regex mRegex;
 #else
+        // Internal function for passing flags to pcre_exec()
+        std::string search(const std::string& matchString,
+                           int startIndex = 0, int flag = 0);
+
         // Size of the output vector, must be a multiple of 3
         // The output vector is filled up to 2/3 (666) full for matches
         // so the maximum number of substrings is 333 (333 start

@@ -182,6 +182,13 @@ bool re::Regex::match(const std::string& str,
 std::string re::Regex::search(const std::string& matchString,
                               int startIndex)
 {
+    return search(matchString, startIndex, 0);
+}
+
+std::string re::Regex::search(const std::string& matchString,
+                              int startIndex,
+                              int flags)
+{
     int numMatches(0);
     int result(0);
     int startOffset(0);
@@ -193,7 +200,7 @@ std::string re::Regex::search(const std::string& matchString,
                            matchString.c_str() + startIndex,  // the subject string
                            matchString.length() - startIndex, // the subject length
                            startOffset,                       // starting offset
-                           0,                                 // options
+                           flags,                             // options
                            &mOvector[0],                      // output vector
                            OVECCOUNT);                        // output vector size
 
