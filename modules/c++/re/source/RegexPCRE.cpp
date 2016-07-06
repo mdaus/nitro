@@ -20,14 +20,16 @@
  *
  */
 
-#include "re/Regex.h" // this has to come before the #ifdef checks below
+#include "re/Regex.h"  // __CODA_CPP11 is pulled in here
 
-#if !defined(__CODA_CPP11)
+#ifndef __CODA_CPP11
 
 #include <sstream>
 
+const int re::Regex::mOvectorCount = 999;
+
 re::Regex::Regex(const std::string& pattern) :
-    mPattern(pattern), OVECCOUNT(999), mPCRE(NULL), mOvector(OVECCOUNT)
+    mPattern(pattern), mPCRE(NULL), mOvector(mOvectorCount)
 {
     if (!mPattern.empty())
     {
@@ -49,7 +51,7 @@ re::Regex::~Regex()
 }
 
 re::Regex::Regex(const re::Regex& rhs) :
-    mPattern(rhs.mPattern), OVECCOUNT(999), mPCRE(NULL), mOvector(OVECCOUNT)
+    mPattern(rhs.mPattern), mPCRE(NULL), mOvector(mOvectorCount)
 {
     compile(mPattern);
 }
@@ -90,7 +92,7 @@ re::Regex& re::Regex::compile(const std::string& pattern)
     if (mPCRE == NULL)
     {
         std::stringstream ss;
-        ss << "Regex compile error at offset "
+        ss << "PCRE compile error at offset "
            << erroffset << ": " << errorptr;
         throw RegexException(Ctxt(ss.str()));
     }
@@ -120,14 +122,14 @@ bool re::Regex::match(const std::string& str,
 
     // Clear the output vector
     mOvector.assign(mOvector.size(), 0);
-    numMatches = pcre_exec(mPCRE,        // the compiled pattern
-                           NULL,         // no extra data - not studied
-                           str.c_str(),  // the subject string
-                           str.length(), // the subject length
-                           startOffset,  // the starting offset in subject
-                           0,            // options
-                           &mOvector[0], // the output vector
-                           OVECCOUNT);   // the output vector size
+    numMatches = pcre_exec(mPCRE,          // the compiled pattern
+                           NULL,           // no extra data - not studied
+                           str.c_str(),    // the subject string
+                           str.length(),   // the subject length
+                           startOffset,    // the starting offset in subject
+                           0,              // options
+                           &mOvector[0],   // the output vector
+                           mOvectorCount); // the output vector size
     result = numMatches;
     /**************************************************************************
      * (From pcre source code, pcredemo.c)                                    *
@@ -140,7 +142,7 @@ bool re::Regex::match(const std::string& str,
 
     if (numMatches == 0)
     {
-        numMatches = OVECCOUNT / 3;
+        numMatches = mOvectorCount / 3;
     }
 
     // Load up the match object
@@ -202,13 +204,13 @@ std::string re::Regex::search(const std::string& matchString,
                            startOffset,                       // starting offset
                            flags,                             // options
                            &mOvector[0],                      // output vector
-                           OVECCOUNT);                        // output vector size
+                           mOvectorCount);                    // output vector size
 
     result = numMatches;
 
     if (result == 0)
     {
-        numMatches = OVECCOUNT / 3;
+        numMatches = mOvectorCount / 3;
     }
 
     if (result >= 0)
