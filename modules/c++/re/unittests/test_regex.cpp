@@ -72,12 +72,6 @@ TEST_CASE(testDotAllFlag)
     rx1.searchAll("3.3 4\n2", matches1);
     TEST_ASSERT_EQ(matches1.size(), 2);
 
-    // This should only match the "3.3"
-    // re::RegexMatch matches2;
-    // re::Regex rx2("\\d.\\d", re::Regex::Regex_NONE);
-    // rx2.searchAll("3.3 4\n2", matches2);
-    // TEST_ASSERT_EQ(matches2.size(), 1);
-
     // This should only match the "3.3" if the replace_dot() function
     // is working correctly
     re::RegexMatch matches3;
@@ -309,4 +303,5 @@ int main(int, char**)
     TEST_CHECK( testSub);
     TEST_CHECK( testSplit);
     TEST_CHECK( testHttpResponse);
+    return 0;
 }
