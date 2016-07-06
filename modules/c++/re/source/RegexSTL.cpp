@@ -20,10 +20,10 @@
  *
  */
 
-#include "re/Regex.h" // this has to come before the #ifdef checks below
+#include "re/Regex.h" // __CODA_CPP11 is pulled in here, so it has to come first
 
-// we use this file if we're not using actual PCRE itself
-#if defined(__CODA_CPP11)
+// we use this file if we're using C++11 and not using PCRE
+#ifdef __CODA_CPP11
 
 re::Regex::Regex(const std::string& pattern) :
     mPattern(pattern)
@@ -63,19 +63,9 @@ re::Regex& re::Regex::operator=(const re::Regex& rhs)
 re::Regex& re::Regex::compile(const std::string& pattern)
 {
     mPattern = replaceDot(pattern);
-    try 
-    {
-        mRegex = std::regex(mPattern);
-    }
-    catch (const std::regex_error& e)
-    {
-        throw RegexException(Ctxt(std::string("Regex std::regex constructor error: ")
-                                  + e.what()));
-    }
-
+    mRegex = std::regex(mPattern);
     return *this;
 }
-
 
 const std::string& re::Regex::getPattern() const
 {
@@ -137,7 +127,7 @@ void re::Regex::searchAll(const std::string& matchString,
     bool matchBeginning = true;
 
     // search the string starting at index "startIndex"
-    while( searchWithContext(matchString.begin()+startIndex, 
+    while (searchWithContext(matchString.begin()+startIndex, 
                              matchString.end(), match, matchBeginning))
     {
         v.push_back(match[0].str());
@@ -238,7 +228,7 @@ bool re::Regex::searchWithContext(std::string::const_iterator inputIterBegin,
                           std::regex_constants::match_continuous))
     {
         std::string msg(
-            "RegexSTL: '^' in mid-string is not handled the same by gcc and VS2015!");
+            "'^' in mid-string is not handled the same by gcc and VS2015!");
         msg += " So we don't allow it :(";
         throw RegexException(Ctxt(msg));
     }
@@ -248,7 +238,7 @@ bool re::Regex::searchWithContext(std::string::const_iterator inputIterBegin,
                          std::regex(R"lit(^([\s\S]*[^\\](\\\\)*)?\$[\s\S]+$)lit")))
     {
         std::string msg(
-            "RegexSTL: '$' in mid-string is not handled the same by gcc and VS2015!");
+            "'$' in mid-string is not handled the same by gcc and VS2015!");
         msg += " So we don't allow it :(";
         throw RegexException(Ctxt(msg));
     }
@@ -275,7 +265,7 @@ bool re::Regex::searchWithContext(std::string::const_iterator inputIterBegin,
     }
     else if (!mPattern.empty() && mPattern.back() == '$')
     {
-        std::string msg("RegexSTL: trailing '$' will not be handled correctly!");
+        std::string msg("Trailing '$' will not be handled correctly!");
         msg += " Try adding a '^' at the beginning and matching the entire string.";
         throw RegexException(Ctxt(msg));
     }
