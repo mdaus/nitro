@@ -21,8 +21,8 @@
  */
 
 
-#ifndef __RE_PCRE_H__
-#define __RE_PCRE_H__
+#ifndef __RE_REGEX_H__
+#define __RE_REGEX_H__
 
 #include <sys/sys_config.h>
 
@@ -41,7 +41,7 @@
 
 /*!
  *  \file Regex.h
- *  \brief C++ wrapper for the PCRE library
+ *  \brief C++ wrapper for the PCRE library or std::regex if C++11 is available
  */
 
 namespace re
@@ -50,10 +50,11 @@ namespace re
     typedef std::vector<std::string> RegexMatch;
     /*!
      *  \class Regex
-     *  \brief C++ wrapper object for the PCRE library, 
-     *  further documentation regarding the underlying C 
-     *  library, especially for flag information, can 
-     *  be found at http://www.pcre.org.
+     *  \brief C++ wrapper object for regular expressions. If C++11 is
+     *  available, std::regex is used, otherwise the PCRE library is
+     *  used.  For further documentation regarding the underlying PCRE
+     *  library, especially for flag information, can be found at
+     *  http://www.pcre.org.
      */
     class Regex
     {
@@ -77,7 +78,6 @@ namespace re
          *  \param rhs The Regex to copy from
          *  \return This
          */
-
         Regex& operator=(const Regex& rhs);
 
         /*!
@@ -87,11 +87,8 @@ namespace re
 
         /*!
          *  Set the match pattern
-         *  See the pcre man pages (pcre_compile) for 
-         *  further info
-         *  on the parameterized flags.
-         *  \param pattern A pattern to match
-         *  \throw  RegexException on fatal error
+         *  \param pattern  A pattern to match
+         *  \throw  exception on error
          */
         Regex& compile(const std::string& pattern);
 
@@ -105,11 +102,8 @@ namespace re
         /*!
          *  Match this input string against our pattern and populate the
          *  data structure
-         *  See the pcre man pages (pcre_exec) for further 
-         *  info on the optional flags.
-         *  \param str The string to match against our pattern
-         *  \param matches RegexMatch container to fill
-         *  \param flags  Any flags
+         *  \param str  The string to match against our pattern
+         *  \param matches  RegexMatch container to fill
          *  \return  True on success, False otherwise
          *  \throw  RegexException on fatal error
          */
@@ -120,11 +114,8 @@ namespace re
 
         /*!
          *  Search the matchString
-         *  See the pcre man pages (pcre_exec) for further
-         *  info on the optional flags.
-         *  \param matchString The string to try and match
-         *  \param startIndex Starting where?
-         *  \param flags  Any flags
+         *  \param matchString  The string to try and match
+         *  \param startIndex  Starting where?
          *  \return  Matched substring
          *  \throw  RegexException on fatal error
          */
@@ -133,8 +124,8 @@ namespace re
 
         /*!
          *  Search the matchString and get the sub-expressions, by ref
-         *  \param matchString The string to match
-         *  \param v The sub-expression
+         *  \param matchString  The string to match
+         *  \param v  The vector to fill with sub-expressions
          */
         void searchAll(const std::string& matchString,
                        RegexMatch& v);
@@ -168,17 +159,32 @@ namespace re
 
 #ifdef __CODA_CPP11
         /*!
-         *  Replace non-escaped "." with "[\s\S]" to get Regex_DOTALL newline behavior
+         *  Replace non-escaped "." with "[\s\S]" to get PCRE_DOTALL newline behavior
          *  \param str  The string to modify
          *  \return  The modified string
          */
         std::string replaceDot(const std::string& str) const;
 
+        /*!
+         *  Search using std::regex appropriately based on input string:
+         *   regexps starting with ^ are forced to match at beginning
+         *   regexps ending with $ (and no ^ at beginning) cause exception
+         *   regexps bracketed with ^ and $ match beginning and end
+         *   regexps with neither ^ or $ search normally
+         *   regexps with either ^ or $ in locations besides beginning and end throw excpetions
+         *  \param inputIterBegin  The beginning of the string to search
+         *  \param inputIterEnd  The end of the string to search
+         *  \param match  The match object for search results
+         *  \param matchBeginning  If false, do not match ^ to beginning of string
+         *  \return  True on success, otherwise False
+         *  \throw  RegexException on error
+         */
         bool searchWithContext(std::string::const_iterator inputIterBegin,
                                std::string::const_iterator inputIterEnd,
                                std::smatch& match,
                                bool matchBeginning=true) const;
-
+        
+        //! The regex object
         std::regex mRegex;
 #else
         // Internal function for passing flags to pcre_exec()
@@ -189,7 +195,7 @@ namespace re
         // The output vector is filled up to 2/3 (666) full for matches
         // so the maximum number of substrings is 333 (333 start
         // offsets and 333 end offsets)
-        const int OVECCOUNT;
+        static const int mOvectorCount;
 
         //! The pcre object
         pcre* mPCRE;
