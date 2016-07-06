@@ -26,10 +26,10 @@
 
 #include <sstream>
 
-const int re::Regex::mOvectorCount = 999;
+const int re::Regex::OVECTOR_COUNT = 999;
 
 re::Regex::Regex(const std::string& pattern) :
-    mPattern(pattern), mPCRE(NULL), mOvector(mOvectorCount)
+    mPattern(pattern), mPCRE(NULL), mOvector(OVECTOR_COUNT)
 {
     if (!mPattern.empty())
     {
@@ -51,7 +51,7 @@ re::Regex::~Regex()
 }
 
 re::Regex::Regex(const re::Regex& rhs) :
-    mPattern(rhs.mPattern), mPCRE(NULL), mOvector(mOvectorCount)
+    mPattern(rhs.mPattern), mPCRE(NULL), mOvector(OVECTOR_COUNT)
 {
     compile(mPattern);
 }
@@ -129,7 +129,7 @@ bool re::Regex::match(const std::string& str,
                            startOffset,    // the starting offset in subject
                            0,              // options
                            &mOvector[0],   // the output vector
-                           mOvectorCount); // the output vector size
+                           OVECTOR_COUNT); // the output vector size
     result = numMatches;
     /**************************************************************************
      * (From pcre source code, pcredemo.c)                                    *
@@ -142,7 +142,7 @@ bool re::Regex::match(const std::string& str,
 
     if (numMatches == 0)
     {
-        numMatches = mOvectorCount / 3;
+        numMatches = OVECTOR_COUNT / 3;
     }
 
     // Load up the match object
@@ -204,13 +204,13 @@ std::string re::Regex::search(const std::string& matchString,
                            startOffset,                       // starting offset
                            flags,                             // options
                            &mOvector[0],                      // output vector
-                           mOvectorCount);                    // output vector size
+                           OVECTOR_COUNT);                    // output vector size
 
     result = numMatches;
 
     if (result == 0)
     {
-        numMatches = mOvectorCount / 3;
+        numMatches = OVECTOR_COUNT / 3;
     }
 
     if (result >= 0)

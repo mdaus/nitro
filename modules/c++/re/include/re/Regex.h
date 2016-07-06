@@ -195,7 +195,7 @@ namespace re
         // The output vector is filled up to 2/3 (666) full for matches
         // so the maximum number of substrings is 333 (333 start
         // offsets and 333 end offsets)
-        static const int mOvectorCount;
+        static const int OVECTOR_COUNT;
 
         //! The pcre object
         pcre* mPCRE;
