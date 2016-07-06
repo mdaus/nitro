@@ -28,7 +28,13 @@ TEST_CASE(testCompile)
 {
     re::Regex rx;
     // test that an invalid regexp throws an exception
-    TEST_EXCEPTION(rx.compile("^("));
+    try
+    {
+        rx.compile("^(");
+        TEST_FAIL("Should have thrown an exception for this invalid regular expression!");
+    }
+    catch (...)
+    {}
 
     // test that a valid regexp compiles
     try
