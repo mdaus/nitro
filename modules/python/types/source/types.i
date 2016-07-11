@@ -40,6 +40,52 @@
 %include "types/RowCol.h"
 %include "types/RgAz.h"
 
+// Pickle utilities
+%pythoncode
+%{
+    import cPickle as pickle
+%}
+
+%extend types::RowCol
+{
+%pythoncode
+%{
+    def __getstate__(self):
+        return (self.row, self.col)
+
+    def __setstate__(self, state):
+        self.__init__(state[0], state[1])
+%}
+}
+
+%extend types::RgAz
+{
+%pythoncode
+%{
+    def __getstate__(self):
+        return (self.rg, self.az)
+
+    def __setstate__(self, state):
+        self.__init__(state[0], state[1])
+%}
+}
+
+%extend std::vector
+{
+%pythoncode
+%{
+    def __getstate__(self):
+        # Return a nonempty (thus non-false) tuple with dummy value in first position
+        return (-1, tuple(pickle.dumps(elem) for elem in self))
+        
+    def __setstate__(self, state):
+        self.__init__()
+        # State will have a dummy entry in the first position
+        for elem in state[1]:
+            self.push_back(pickle.loads(elem))
+%}
+}
+
 %template(RowColDouble) types::RowCol<double>;
 %template(RowColInt) types::RowCol<sys::SSize_T>;
 %template(RowColSizeT) types::RowCol<size_t>;
@@ -47,93 +93,3 @@
 
 %template(VectorRowColInt) std::vector<types::RowCol<sys::SSize_T> >;
 %template(VectorSizeT) std::vector<size_t>;
-
-// Pickle utilities
-%pythoncode
-%{
-    import cPickle as pickle
-%}
-
-%extend types::RowCol<double>
-{
-%pythoncode
-%{
-def __getstate__(self):
-    return (self.row, self.col)
-    
-def __setstate__(self, state):
-    self.this = _coda_types.new_RowColDouble()
-    (self.row, self.col) = state
-%}
-}
-
-%extend types::RowCol<sys::SSize_T>
-{
-%pythoncode
-%{
-def __getstate__(self):
-    return (self.row, self.col)
-    
-def __setstate__(self, state):
-    self.this = _coda_types.new_RowColInt()
-    (self.row, self.col) = state
-%}
-}
-
-%extend types::RowCol<size_t>
-{
-%pythoncode
-%{
-def __getstate__(self):
-    return (self.row, self.col)
-    
-def __setstate__(self, state):
-    self.this = _coda_types.new_RowColSizeT()
-    (self.row, self.col) = state
-%}
-}
-
-%extend types::RgAz<double>
-{
-%pythoncode
-%{
-def __getstate__(self):
-    return (self.row, self.col)
-    
-def __setstate__(self, state):
-    self.this = _coda_types.new_RgAzDouble()
-    (self.row, self.col) = state
-%}
-}
-
-%extend std::vector<types::RowCol<sys::SSize_T> >
-{
-%pythoncode
-%{
-def __getstate__(self):
-    # Return a nonempty (thus non-false) tuple with dummy value in first position
-    return (-1, tuple(pickle.dumps(elem) for elem in self))
-    
-def __setstate__(self, state):
-    self.this = _coda_types.new_VectorRowColInt()
-    # State will have a dummy entry in the first position
-    for elem in state[1]:
-        self.push_back(pickle.loads(elem))
-%}
-}
-
-%extend std::vector<size_t>
-{
-%pythoncode
-%{
-def __getstate__(self):
-    # Return a nonempty (thus non-false) tuple with dummy value in first position
-    return (-1, tuple(pickle.dumps(elem) for elem in self))
-    
-def __setstate__(self, state):
-    self.this = _coda_types.new_VectorSizeT()
-    # State will have a dummy entry in the first position
-    for elem in state[1]:
-        self.push_back(pickle.loads(elem))
-%}
-}
