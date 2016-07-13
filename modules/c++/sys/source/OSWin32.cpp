@@ -346,7 +346,10 @@ void sys::OSWin32::getMemInfo(size_t& totalPhysMem, size_t& freePhysMem) const
 std::string sys::OSWin32::getCurrentExecutable(
         const std::string& argvPathname) const
 {
-    char buffer[MAX_PATH + 1];
+    //XP doesn't always null-terminate the buffer, so taking some precautions
+    char buffer[MAX_PATH + 2];
+    memset(buffer, 0, MAX_PATH + 2);
+
     size_t bytesRead = GetModuleFileName(NULL, buffer, MAX_PATH + 1);
 
     if (bytesRead == MAX_PATH + 1 || bytesRead == 0)
@@ -356,7 +359,7 @@ std::string sys::OSWin32::getCurrentExecutable(
         return AbstractOS::getCurrentExecutable(argvPathname);
     }
     // Adding extra null-terminator because sometimes XP doesn't include one
-    return std::string(buffer + '\0');
+    return std::string(buffer);
 }
 
 void sys::DirectoryWin32::close()
