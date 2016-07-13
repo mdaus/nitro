@@ -90,6 +90,16 @@ public:
     }
 
     /*!
+     *  Return true if path is absolute. False otherwise
+     */
+    static bool isAbsolutePath(const std::string& path);
+
+    inline bool isAbsolutePath() const
+    {
+        return isAbsolutePath(mPathName);
+    }
+
+    /*!
      *  Separates a path into its components, and returns a vector of
      *  them. This splits on both '/' and '\\'.
      */

@@ -222,7 +222,7 @@ public:
                                const std::string& symlinkPathname) const = 0;
 
     /*!
-     * Remove a symlink, pathname can be absolute or relative
+     *  Remove a symlink, pathname can be absolute or relative
      */
     virtual void removeSymlink(const std::string& symlinkPathname) const = 0;
 
@@ -230,6 +230,12 @@ public:
      *  Get the total RAM and available RAM on the system in megabytes
      */
     virtual void getMemInfo(size_t& totalPhysMem, size_t& freePhysMem) const = 0;
+
+    /*!
+     *  Get the absolute path to the current executable
+     */
+    virtual std::string getCurrentExecutable(
+            const std::string& argvPathname="") const;
 
 protected:
     /*!

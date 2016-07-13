@@ -169,6 +169,15 @@ std::string sys::Path::absolutePath(const std::string& path)
     }
 }
 
+bool sys::Path::isAbsolutePath(const std::string& path)
+{
+#ifdef WIN32
+    return !sys::Path::splitDrive(path).first.empty();
+#else
+    return (!path.empty() && path[0] == sys::Path::delimiter());
+#endif
+}
+
 sys::Path::StringPair sys::Path::splitPath(const std::string& path)
 {
     std::string delimStr(sys::Path::delimiter());
