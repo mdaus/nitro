@@ -44,6 +44,26 @@
 #include "sys/OSUnix.h"
 #include "sys/File.h"
 
+
+namespace
+{
+void linkStat(const std::string& pathname, struct stat& linkStatus)
+{
+    if (lstat(pathname.c_str(), &linkStatus) != 0)
+    {
+        throw except::Exception(Ctxt(strerror(errno)));
+    }
+}
+
+int readlinkOrError(const std::string& pathname, char* buffer)
+{
+    if (readlink(pathname.c_str(), buffer, PATH_MAX) == -1)
+    {
+        throw except::Exception(Ctxt(strerror(errno)));
+    }
+}
+}
+
 std::string sys::OSUnix::getPlatformName() const
 {
     struct utsname name;
@@ -365,28 +385,20 @@ std::string sys::OSUnix::getCurrentExecutable(
     for (size_t ii = 0; ii < possibleSymlinks.size(); ++ii)
     {
         struct stat linkStatus;
-        const std::string path = possibleSymlinks[ii];
-        if (lstat(path.c_str(), &linkStatus) == 0)
+        const std::string pathname = possibleSymlinks[ii];
+        linkStat(pathname, linkStatus);
+
+        char buffer[PATH_MAX];
+
+        // readlink does not null-terminate anything
+        memset(buffer, 0, PATH_MAX);
+
+        readlinkOrError(pathname, buffer);
+        const std::string executableName(buffer);
+
+        if (isFile(executableName))
         {
-            // Guessing a sane maximum based on Windows MAX_PATH
-            // If it's not enough, handle it through the base class
-            size_t bufferSize = 260 + 1;
-            char buffer[bufferSize];
-
-            // readlink does not null-terminate anything
-            memset(buffer, 0, bufferSize);
-
-            if (readlink(path.c_str(), buffer, bufferSize) == bufferSize)
-            {
-                // Pathname almost certainly got truncated
-                return AbstractOS::getCurrentExecutable(argvPathname);
-            }
-            const std::string executableName(buffer);
-
-            if (isFile(executableName))
-            {
-                return executableName;
-            }
+            return executableName;
         }
     }
 
