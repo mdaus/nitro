@@ -55,7 +55,7 @@ void linkStat(const std::string& pathname, struct stat& linkStatus)
     }
 }
 
-int readlinkOrError(const std::string& pathname, char* buffer)
+void readlinkOrError(const std::string& pathname, char* buffer)
 {
     if (readlink(pathname.c_str(), buffer, PATH_MAX) == -1)
     {
