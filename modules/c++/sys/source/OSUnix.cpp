@@ -55,12 +55,19 @@ void linkStat(const std::string& pathname, struct stat& linkStatus)
     }
 }
 
-void readlinkOrError(const std::string& pathname, char* buffer)
+std::string readLink(const std::string& pathname)
 {
+    char buffer[PATH_MAX];
+
+    // readlink does not null-terminate anything
+    memset(buffer, 0, PATH_MAX);
+
     if (readlink(pathname.c_str(), buffer, PATH_MAX) == -1)
     {
         throw except::Exception(Ctxt(strerror(errno)));
     }
+
+    return std::string(buffer);
 }
 }
 
@@ -388,13 +395,7 @@ std::string sys::OSUnix::getCurrentExecutable(
         const std::string pathname = possibleSymlinks[ii];
         linkStat(pathname, linkStatus);
 
-        char buffer[PATH_MAX];
-
-        // readlink does not null-terminate anything
-        memset(buffer, 0, PATH_MAX);
-
-        readlinkOrError(pathname, buffer);
-        const std::string executableName(buffer);
+        const std::string executableName = readLink(pathname);
 
         if (isFile(executableName))
         {
