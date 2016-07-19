@@ -27,6 +27,11 @@
 
 namespace sys
 {
+/*! 
+ * Returns a human-readable string describing the current stack of
+ * function calls. Usefullness and format may vary depending on 
+ * your platform and what kind of symbols are compiled in.
+ */
 std::string getBacktrace();
 }
 
