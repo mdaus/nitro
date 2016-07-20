@@ -249,7 +249,7 @@ class CPPContext(Context.Context):
         pythonTestNode = path.parent.parent.make_node('python').make_node(str(path)).make_node('tests')
         if os.path.exists(pythonTestNode.abspath()) and not Options.options.libs_only:
             for test in pythonTestNode.ant_glob('*.py'):
-                if str(test) not in listify(modArgs.get('test_fileter', '')):
+                if str(test) not in listify(modArgs.get('test_filter', '')):
                     self.install_files('${PREFIX}/tests/%s' % modArgs['name'], [test])
 
         testNode = path.make_node('unittests')
