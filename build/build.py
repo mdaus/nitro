@@ -252,8 +252,6 @@ class CPPContext(Context.Context):
                 if str(test) not in listify(modArgs.get('test_fileter', '')):
                     self.install_files('${PREFIX}/tests/%s' % modArgs['name'], [test])
 
-
-
         testNode = path.make_node('unittests')
         if os.path.exists(testNode.abspath()) and not Options.options.libs_only:
             test_deps = listify(modArgs.get('unittest_deps', modArgs.get('module_deps', '')))
