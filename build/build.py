@@ -230,6 +230,7 @@ class CPPContext(Context.Context):
         addSourceTargets(bld, env, path, lib)
 
         testNode = path.make_node('tests')
+
         if os.path.exists(testNode.abspath()) and not Options.options.libs_only:
             test_deps = listify(modArgs.get('test_deps', modArgs.get('module_deps', '')))
 
@@ -245,6 +246,14 @@ class CPPContext(Context.Context):
                                  uselib=modArgs.get('test_uselib', uselib),
                                  lang=lang, path=testNode, includes=includes, defines=defines,
                                  install_path='${PREFIX}/tests/%s' % modArgs['name'])
+
+        pythonTestNode = path.parent.parent.make_node('python').make_node(str(path)).make_node('tests')
+        if os.path.exists(pythonTestNode.abspath()) and not Options.options.libs_only:
+            for test in pythonTestNode.ant_glob('*.py'):
+                if str(test) not in listify(modArgs.get('test_fileter', '')):
+                    self.install_files('${PREFIX}/tests/%s' % modArgs['name'], [test])
+
+
 
         testNode = path.make_node('unittests')
         if os.path.exists(testNode.abspath()) and not Options.options.libs_only:
@@ -288,6 +297,7 @@ class CPPContext(Context.Context):
                     bld(features='install_tgt', dir=confDir, pattern='**',
                         install_path='${PREFIX}/share/%s/conf' % modArgs['name'],
                         copy_to_source_dir=True))
+
 
         return env
 
@@ -438,6 +448,7 @@ class CPPContext(Context.Context):
 
         return exe
 
+
     def swigModule(self, **modArgs):
         """
         Builds a SWIG C++ module
@@ -468,7 +479,6 @@ class CPPContext(Context.Context):
             prefix = env['prefix_' + name]
             if prefix:
                 codename = prefix + name
-
             postfix = env['postfix_' + name]
             if postfix:
                 codename = codename + postfix
