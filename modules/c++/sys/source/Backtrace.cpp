@@ -3,7 +3,7 @@
 #include <sys/sys_config.h>
 #include <sstream>
 
-const size_t MAX_STACK_ENTRIES = 62;
+static const size_t MAX_STACK_ENTRIES = 62;
 
 #ifdef HAVE_EXECINFO_H
 

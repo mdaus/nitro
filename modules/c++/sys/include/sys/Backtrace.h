@@ -29,8 +29,12 @@ namespace sys
 {
 /*! 
  * Returns a human-readable string describing the current stack of
- * function calls. Usefullness and format may vary depending on 
+ * function calls. Usefulness and format may vary depending on 
  * your platform and what kind of symbols are compiled in.
+ *
+ * Currently only supported on *nix with glibc. This function will
+ * return with an error message instead of a backtrace if the current
+ * configuration is unsupported.
  */
 std::string getBacktrace();
 }
