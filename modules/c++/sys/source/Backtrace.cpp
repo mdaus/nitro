@@ -10,18 +10,44 @@ static const size_t MAX_STACK_ENTRIES = 62;
 #include <execinfo.h>
 #include <cstdlib>
 
+namespace
+{
+
+//! RAII wrapper for stack symbols
+class BacktraceHelper
+{
+public:
+    BacktraceHelper(char** stackSymbols)
+        : mStackSymbols(stackSymbols)
+    {}
+
+    ~BacktraceHelper()
+    {
+        std::free(mStackSymbols);
+    }
+
+    std::string operator[](size_t idx)
+    {
+        return mStackSymbols[idx];
+    }
+private:
+    char** mStackSymbols;
+};
+
+}
+
 std::string sys::getBacktrace()
 {
-    void * stackBuffer[MAX_STACK_ENTRIES];
+    void* stackBuffer[MAX_STACK_ENTRIES];
     int currentStackSize = backtrace(stackBuffer, MAX_STACK_ENTRIES);
-    char ** stackSymbols = backtrace_symbols(stackBuffer, currentStackSize);
+    BacktraceHelper stackSymbols(backtrace_symbols(stackBuffer, 
+                                                   currentStackSize));
 
     std::stringstream ss;
     for (int ii = 0; ii < currentStackSize; ++ii)
     {
         ss << stackSymbols[ii] << std::endl;
     }
-    std::free(stackSymbols);
 
     return ss.str();
 }
