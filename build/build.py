@@ -230,7 +230,6 @@ class CPPContext(Context.Context):
         addSourceTargets(bld, env, path, lib)
 
         testNode = path.make_node('tests')
-
         if os.path.exists(testNode.abspath()) and not Options.options.libs_only:
             test_deps = listify(modArgs.get('test_deps', modArgs.get('module_deps', '')))
 
@@ -297,7 +296,6 @@ class CPPContext(Context.Context):
                     bld(features='install_tgt', dir=confDir, pattern='**',
                         install_path='${PREFIX}/share/%s/conf' % modArgs['name'],
                         copy_to_source_dir=True))
-
 
         return env
 
@@ -448,7 +446,6 @@ class CPPContext(Context.Context):
 
         return exe
 
-
     def swigModule(self, **modArgs):
         """
         Builds a SWIG C++ module
@@ -479,6 +476,7 @@ class CPPContext(Context.Context):
             prefix = env['prefix_' + name]
             if prefix:
                 codename = prefix + name
+
             postfix = env['postfix_' + name]
             if postfix:
                 codename = codename + postfix
