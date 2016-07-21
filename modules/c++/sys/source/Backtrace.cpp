@@ -56,7 +56,7 @@ std::string sys::getBacktrace()
 
 std::string sys::getBacktrace()
 {
-    return "sys::getBacktrace() is not supported " +
+    return "sys::getBacktrace() is not supported "
         "on the current platform and/or libc";
 }
 
