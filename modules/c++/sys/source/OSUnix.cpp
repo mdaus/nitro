@@ -47,14 +47,6 @@
 
 namespace
 {
-void linkStat(const std::string& pathname, struct stat& linkStatus)
-{
-    if (lstat(pathname.c_str(), &linkStatus) != 0)
-    {
-        throw except::Exception(Ctxt(strerror(errno)));
-    }
-}
-
 std::string readLink(const std::string& pathname)
 {
     char buffer[PATH_MAX];
@@ -391,10 +383,7 @@ std::string sys::OSUnix::getCurrentExecutable(
 
     for (size_t ii = 0; ii < possibleSymlinks.size(); ++ii)
     {
-        struct stat linkStatus;
         const std::string pathname = possibleSymlinks[ii];
-        linkStat(pathname, linkStatus);
-
         const std::string executableName = readLink(pathname);
 
         if (isFile(executableName))
