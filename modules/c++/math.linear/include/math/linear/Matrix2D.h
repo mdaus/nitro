@@ -24,6 +24,7 @@
 
 #include <cmath>
 #include <algorithm>
+#include <functional>
 #include <import/sys.h>
 #include <mem/ScopedArray.h>
 #include <math/linear/MatrixMxN.h>

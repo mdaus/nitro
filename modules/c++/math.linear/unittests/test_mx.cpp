@@ -85,32 +85,44 @@ TEST_CASE(testNegateMxN)
 {
     Matrix3x3 A = identityMatrix<3, double>();
     Matrix3x3 B = -A;
-    Matrix3x3 C = -B;
-    TEST_ASSERT_EQ(A, C);
+    Matrix3x3 C = A;
+    for (size_t i = 0; i < A.rows(); ++i)
+    {
+        for (size_t j = 0; j < A.cols(); ++j)
+        {
+            C[i][j] = -C[i][j];
+        }
+    }
+    TEST_ASSERT_EQ(B, C);
 
     VectorN<3,double> X;
-    X[0] =  1.;
-    X[1] =  0.;
-    X[2] = -1.;
-    VectorN<3,double> Y = -X;
-    VectorN<3,double> Z = -Y;
-    TEST_ASSERT_EQ(X, Z);
+    VectorN<3,double> Y;
+    X[0] = Y[2] =  1.;
+    X[1] = Y[1] =  0.;
+    X[2] = Y[0] = -1.;
+    TEST_ASSERT_EQ(X, -Y);
 }
 
 TEST_CASE(testNegate)
 {
     Matrix2D<double> A = identityMatrix<3, double>();
     Matrix2D<double> B = -A;
-    Matrix2D<double> C = -B;
-    TEST_ASSERT_EQ(A, C);
+    Matrix2D<double> C = A;
+    for (size_t i = 0; i < A.rows(); ++i)
+    {
+        for (size_t j = 0; j < A.cols(); ++j)
+        {
+            C[i][j] = -C[i][j];
+        }
+    }
+    TEST_ASSERT_EQ(B, C);
 
     Vector<double> X(3);
-    X[0] =  1.;
-    X[1] =  0.;
-    X[2] = -1.;
-    Vector<double> Y = -X;
-    Vector<double> Z = -Y;
-    TEST_ASSERT_EQ(X, Z);
+    Vector<double> Y(3);
+    X[0] = Y[2] =  1.;
+    X[1] = Y[1] =  0.;
+    X[2] = Y[0] = -1.;
+    TEST_ASSERT_EQ(X, -Y);
 }
 
 TEST_CASE(testInvert2x2Complex)
