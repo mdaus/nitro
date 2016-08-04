@@ -81,6 +81,38 @@ TEST_CASE(testScaleMultiplyMxN)
     TEST_ASSERT_EQ(B, C);
 }
 
+TEST_CASE(testNegateMxN)
+{
+    Matrix3x3 A = identityMatrix<3, double>();
+    Matrix3x3 B = -A;
+    Matrix3x3 C = -B;
+    TEST_ASSERT_EQ(A, C);
+
+    VectorN<3,double> X;
+    X[0] =  1.;
+    X[1] =  0.;
+    X[2] = -1.;
+    VectorN<3,double> Y = -X;
+    VectorN<3,double> Z = -Y;
+    TEST_ASSERT_EQ(X, Z);
+}
+
+TEST_CASE(testNegate)
+{
+    Matrix2D<double> A = identityMatrix<3, double>();
+    Matrix2D<double> B = -A;
+    Matrix2D<double> C = -B;
+    TEST_ASSERT_EQ(A, C);
+
+    Vector<double> X(3);
+    X[0] =  1.;
+    X[1] =  0.;
+    X[2] = -1.;
+    Vector<double> Y = -X;
+    Vector<double> Z = -Y;
+    TEST_ASSERT_EQ(X, Z);
+}
+
 TEST_CASE(testInvert2x2Complex)
 {
     std::complex<double> q[4];
@@ -560,6 +592,8 @@ int main()
     TEST_CHECK(testPtrAssign);
     TEST_CHECK(testSTLVectorAssign);
     TEST_CHECK(testOrthoTranspose5x5);
+    TEST_CHECK(testNegateMxN);
+    TEST_CHECK(testNegate);
 
        
 }

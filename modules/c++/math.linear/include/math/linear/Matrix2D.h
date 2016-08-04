@@ -1082,6 +1082,21 @@ public:
     }
 
     /*!
+     *  Negation operator;
+     *
+     *  \code
+           B = -A;
+     *  \endcode
+     *
+     */
+    Matrix2D operator-() const
+    {
+        Matrix2D mneg(*this);
+        std::transform(mneg.mRaw, mneg.mRaw+mneg.mMN, mneg.mRaw, std::negate<_T>());
+        return mneg;
+    }
+
+    /*!
      *  serialize out to a boost stream
      */
     template <class Archive>
