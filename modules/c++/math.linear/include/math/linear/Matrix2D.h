@@ -1092,9 +1092,12 @@ public:
      */
     Matrix2D operator-() const
     {
-        Matrix2D mneg(*this);
-        std::transform(mneg.mRaw, mneg.mRaw+mneg.mMN, mneg.mRaw, std::negate<_T>());
-        return mneg;
+        Matrix2D neg(*this);
+        std::transform(neg.mRaw,
+                       neg.mRaw + neg.mMN,
+                       neg.mRaw,
+                       std::negate<_T>());
+        return neg;
     }
 
     /*!

@@ -1199,15 +1199,15 @@ public:
      */
     Like_T operator-() const
     {
-        Like_T mneg;
-        for (size_t i = 0; i < _MD; ++i)
+        Like_T neg;
+        for (size_t ii = 0; ii < _MD; ++ii)
         {
-            for (size_t j = 0; j < _ND; ++j)
+            for (size_t jj = 0; jj < _ND; ++jj)
             {
-                mneg.mRaw[i][j] = -mRaw[i][j];
+                neg.mRaw[ii][jj] = -mRaw[ii][jj];
             }
         }
-        return mneg;
+        return neg;
     }
 
 };

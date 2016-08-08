@@ -83,46 +83,32 @@ TEST_CASE(testScaleMultiplyMxN)
 
 TEST_CASE(testNegateMxN)
 {
-    Matrix3x3 A = identityMatrix<3, double>();
-    Matrix3x3 B = -A;
+    const Matrix3x3 A = identityMatrix<3, double>();
+    const Matrix3x3 B = -A;
     Matrix3x3 C = A;
-    for (size_t i = 0; i < A.rows(); ++i)
+    for (size_t ii = 0; ii < A.rows(); ++ii)
     {
-        for (size_t j = 0; j < A.cols(); ++j)
+        for (size_t jj = 0; jj < A.cols(); ++jj)
         {
-            C[i][j] = -C[i][j];
+            C[ii][jj] = -C[ii][jj];
         }
     }
     TEST_ASSERT_EQ(B, C);
-
-    VectorN<3,double> X;
-    VectorN<3,double> Y;
-    X[0] = Y[2] =  1.;
-    X[1] = Y[1] =  0.;
-    X[2] = Y[0] = -1.;
-    TEST_ASSERT_EQ(X, -Y);
 }
 
 TEST_CASE(testNegate)
 {
-    Matrix2D<double> A = identityMatrix<3, double>();
-    Matrix2D<double> B = -A;
+    const Matrix2D<double> A = identityMatrix<3, double>();
+    const Matrix2D<double> B = -A;
     Matrix2D<double> C = A;
-    for (size_t i = 0; i < A.rows(); ++i)
+    for (size_t ii = 0; ii < A.rows(); ++ii)
     {
-        for (size_t j = 0; j < A.cols(); ++j)
+        for (size_t jj = 0; jj < A.cols(); ++jj)
         {
-            C[i][j] = -C[i][j];
+            C[ii][jj] = -C[ii][jj];
         }
     }
     TEST_ASSERT_EQ(B, C);
-
-    Vector<double> X(3);
-    Vector<double> Y(3);
-    X[0] = Y[2] =  1.;
-    X[1] = Y[1] =  0.;
-    X[2] = Y[0] = -1.;
-    TEST_ASSERT_EQ(X, -Y);
 }
 
 TEST_CASE(testInvert2x2Complex)
@@ -587,7 +573,6 @@ TEST_CASE(testArithmeticMxN)
 int main()
 {
 
-
     TEST_CHECK(testIdentityMxN);
     TEST_CHECK(testScaleMultiplyMxN);
     TEST_CHECK(testSetRows);
@@ -607,5 +592,5 @@ int main()
     TEST_CHECK(testNegateMxN);
     TEST_CHECK(testNegate);
 
-       
+    return 0;
 }
