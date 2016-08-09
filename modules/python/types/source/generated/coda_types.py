@@ -198,7 +198,11 @@ SwigPyIterator_swigregister(SwigPyIterator)
 
 import coda.coda_sys
 
-import cPickle as pickle
+import sys
+if sys.version_info[0] == 2:
+    import cPickle as pickle
+else:
+    import pickle
 
 class RowColDouble(_object):
     """Proxy of C++ types::RowCol<(double)> class"""
