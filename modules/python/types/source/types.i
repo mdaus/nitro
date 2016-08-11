@@ -1,8 +1,8 @@
 /*
  * =========================================================================
- * This file is part of coda_types-python 
+ * This file is part of coda_types-python
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2015, MDA Information Systems LLC
  *
  * coda_types-python is free software; you can redistribute it and/or modify
@@ -15,8 +15,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  *
@@ -35,7 +35,7 @@
   #include "sys/Conf.h"
   #include "types/RowCol.h"
   #include "types/RgAz.h"
-%} 
+%}
 
 %include "types/RowCol.h"
 %include "types/RgAz.h"
@@ -43,7 +43,11 @@
 // Pickle utilities
 %pythoncode
 %{
-    import cPickle as pickle
+    import sys
+    if sys.version_info[0] == 2:
+        import cPickle as pickle
+    else:
+        import pickle
 %}
 
 %extend types::RowCol
@@ -77,7 +81,7 @@
     def __getstate__(self):
         # Return a nonempty (thus non-false) tuple with dummy value in first position
         return (-1, tuple(pickle.dumps(elem) for elem in self))
-        
+
     def __setstate__(self, state):
         self.__init__()
         # State will have a dummy entry in the first position
