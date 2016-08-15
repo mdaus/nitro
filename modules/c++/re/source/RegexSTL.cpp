@@ -25,6 +25,16 @@
 // we use this file if we're using C++11 and not using PCRE
 #ifdef __CODA_CPP11
 
+// This is a raw literal, so ignore the R"lit( )lit"
+const std::regex re::Regex::badDotRegex( R"lit(((^|[^\\])(\\\\)*)\.)lit",
+                                         std::regex::ECMAScript|std::regex::optimize );
+
+const std::regex re::Regex::invalidCaret( R"lit([\s\S]*([^\[\\]|[^\\](\\\\)+)\^)lit",
+                                          std::regex::ECMAScript|std::regex::optimize );
+
+const std::regex re::Regex::invalidDollar( R"lit(^([\s\S]*[^\\](\\\\)*)?\$[\s\S]+$)lit",
+                                           std::regex::ECMAScript|std::regex::optimize );
+    
 re::Regex::Regex(const std::string& pattern) :
     mPattern(pattern)
 {
@@ -62,8 +72,49 @@ re::Regex& re::Regex::operator=(const re::Regex& rhs)
 
 re::Regex& re::Regex::compile(const std::string& pattern)
 {
+    // We'll set these first, so that if we throw an exception we'll
+    // leave the regex in a compiled state, so if the user REALLY
+    // wants to, they can put it in a try/catch block and keep going.
+
     mPattern = replaceDot(pattern);
-    mRegex = std::regex(mPattern);
+    mRegex = std::regex(mPattern, std::regex::ECMAScript|std::regex::optimize);
+
+
+    // Because VS2015 and gcc handle ^ and $ differently, we'll throw
+    // exceptions if they're in the middle of the pattern somewhere
+
+    std::smatch tmpmatch;
+
+    // Look for ^ in the middle, but ignore \^ and [^
+    if (std::regex_search(mPattern, tmpmatch, 
+                          invalidCaret,
+                          std::regex_constants::match_continuous))
+    {
+        std::string msg(
+            "'^' in mid-string is not handled the same by gcc and VS2015!");
+        msg += " So we don't allow it :(";
+        throw RegexException(Ctxt(msg));
+    }
+
+    // Look for $ in the middle, but ignore \$
+    if (std::regex_match(mPattern, tmpmatch,
+                         invalidDollar))
+    {
+        std::string msg(
+            "'$' in mid-string is not handled the same by gcc and VS2015!");
+        msg += " So we don't allow it :(";
+        throw RegexException(Ctxt(msg));
+    }
+
+    // Also throw on trailing $ with no leading ^, since that won't be
+    // uniformly handled either
+    if (!mPattern.empty() && mPattern.front() != '^' && mPattern.back() == '$')
+    {
+        std::string msg("Trailing '$' will not be handled correctly!");
+        msg += " Try adding a '^' at the beginning and matching the entire string.";
+        throw RegexException(Ctxt(msg));
+    }
+
     return *this;
 }
 
@@ -197,11 +248,8 @@ std::string re::Regex::replaceDot(const std::string& str) const
     // followed by "."
     // This makes sure we're not grabbing "\."
 
-    // This is a raw literal, so ignore the R"lit( )lit"
-    std::regex reg(R"lit(((^|[^\\])(\\\\)*)\.)lit");
-
     // Replace just the "." with "[\s\S]"
-    std::string newstr = std::regex_replace(str, reg, "$1[\\s\\S]");
+    std::string newstr = std::regex_replace(str, badDotRegex, "$1[\\s\\S]");
     return newstr;
 }
 
@@ -212,37 +260,11 @@ bool re::Regex::searchWithContext(std::string::const_iterator inputIterBegin,
                                   bool matchBeginning) const
 {
     bool b(false);
-    std::smatch tmpmatch;
     auto flags = std::regex_constants::match_default;
     if (!matchBeginning)
     {
         flags |= std::regex_constants::match_not_bol;
     }
-
-    // Because VS2015 and gcc handle ^ and $ differently, we'll throw
-    // exceptions if they're in the middle of the pattern somewhere
-
-    // Look for ^ in the middle, but ignore \^ and [^
-    if (std::regex_search(mPattern, tmpmatch, 
-                          std::regex(R"lit([\s\S]*([^\[\\]|[^\\](\\\\)+)\^)lit"),
-                          std::regex_constants::match_continuous))
-    {
-        std::string msg(
-            "'^' in mid-string is not handled the same by gcc and VS2015!");
-        msg += " So we don't allow it :(";
-        throw RegexException(Ctxt(msg));
-    }
-
-    // Look for $ in the middle, but ignore \$
-    if (std::regex_match(mPattern, tmpmatch,
-                         std::regex(R"lit(^([\s\S]*[^\\](\\\\)*)?\$[\s\S]+$)lit")))
-    {
-        std::string msg(
-            "'$' in mid-string is not handled the same by gcc and VS2015!");
-        msg += " So we don't allow it :(";
-        throw RegexException(Ctxt(msg));
-    }
-
 
     // Now we look for our 4 cases:
     // 1) "^...$" -> use std::regex_match() to force match at beginning and end
@@ -263,13 +285,6 @@ bool re::Regex::searchWithContext(std::string::const_iterator inputIterBegin,
                                   match, mRegex, flags);
         }
     }
-    else if (!mPattern.empty() && mPattern.back() == '$')
-    {
-        std::string msg("Trailing '$' will not be handled correctly!");
-        msg += " Try adding a '^' at the beginning and matching the entire string.";
-        throw RegexException(Ctxt(msg));
-    }
-
     else
     {
         b = std::regex_search(inputIterBegin, inputIterEnd,

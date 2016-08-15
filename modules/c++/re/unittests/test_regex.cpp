@@ -108,16 +108,13 @@ TEST_CASE(testMultilineBehavior)
 #ifdef __CODA_CPP11
     // These exercise our limitations and should all throw exceptions (sigh)
     matches.clear();
-    rx.compile(".$");
-    TEST_EXCEPTION(rx.match(inputString, matches));
+    TEST_EXCEPTION(rx.compile(".$"));
 
     matches.clear();
-    rx.compile("foo^bar");
-    TEST_EXCEPTION(rx.match(inputString, matches));
+    TEST_EXCEPTION(rx.compile("foo^bar"));
 
     matches.clear();
-    rx.compile("^foo$bar");
-    TEST_EXCEPTION(rx.match(inputString, matches));
+    TEST_EXCEPTION(rx.compile("^foo$bar"));
 #endif
 }
 
