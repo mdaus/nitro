@@ -1,7 +1,6 @@
 #ifndef __MATH_POLY_FIT_H__
 #define __MATH_POLY_FIT_H__
 
-// coda-oss
 #include <math/poly/OneD.h>
 #include <math/poly/TwoD.h>
 #include <math/linear/Matrix2D.h>
@@ -9,7 +8,6 @@
 #include <sys/Conf.h>
 #include <except/Exception.h>
 
-// STL
 #include <numeric>
 #include <sstream>
 
