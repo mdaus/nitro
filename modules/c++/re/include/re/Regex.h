@@ -229,6 +229,11 @@ namespace re
 
         //! The pcre object
         pcre2_code* mPCRE;
+
+        // Internal function for passing flags to pcre2_match()
+        std::string search(const std::string& matchString,
+                           int startIndex, int flag);
+
 #else
         // Internal function for passing flags to pcre_exec()
         std::string search(const std::string& matchString,

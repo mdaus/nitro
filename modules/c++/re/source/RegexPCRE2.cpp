@@ -27,10 +27,78 @@
 
 #include <sstream>
 
-//const int re::Regex::OVECTOR_COUNT = 999;
+namespace
+{
+class ScopedMatchData
+{
+public:
+    ScopedMatchData(const pcre2_code* code) :
+        mCode(code),
+        mMatchData(pcre2_match_data_create_from_pattern(code, NULL))
+    {
+        if (mMatchData == NULL)
+        {
+            throw re::RegexException(Ctxt(
+                    "pcre2_match_data_create_from_pattern() failed to "
+                    "allocate memory"));
+        }
+    }
+
+    ~ScopedMatchData()
+    {
+        pcre2_match_data_free(mMatchData);
+    }
+
+    pcre2_match_data* get()
+    {
+        return mMatchData;
+    }
+
+    PCRE2_SIZE* getOutputVector()
+    {
+        return pcre2_get_ovector_pointer(mMatchData);
+    }
+
+    // Returns the number of matches
+    size_t match(const std::string& subject,
+                 PCRE2_SIZE startOffset = 0,
+                 sys::Uint32_T options = 0)
+    {
+        // This returns the number of matches
+        // But for no matches, it returns PCRE2_ERROR_NOMATCH
+        // Other return codes less than 0 indicate an error
+        const int returnCode =
+                pcre2_match(mCode,
+                            reinterpret_cast<PCRE2_SPTR>(subject.c_str()),
+                            subject.length(),
+                            startOffset,
+                            options,
+                            mMatchData,
+                            NULL); // Match context
+
+        if (returnCode == PCRE2_ERROR_NOMATCH)
+        {
+            return 0;
+        }
+        else if (returnCode < 0)
+        {
+            // Some error occurred
+            throw re::RegexException(Ctxt("pcre2_match() failed"));
+        }
+        else
+        {
+            return returnCode;
+        }
+    }
+
+private:
+    const pcre2_code* const mCode;
+    pcre2_match_data* const mMatchData;
+};
+}
 
 re::Regex::Regex(const std::string& pattern) :
-    mPattern(pattern), mPCRE(NULL)//, mOvector(OVECTOR_COUNT)
+    mPattern(pattern), mPCRE(NULL)
 {
     if (!mPattern.empty())
     {
@@ -54,7 +122,7 @@ re::Regex::~Regex()
 }
 
 re::Regex::Regex(const re::Regex& rhs) :
-    mPattern(rhs.mPattern), mPCRE(NULL)//, mOvector(OVECTOR_COUNT)
+    mPattern(rhs.mPattern), mPCRE(NULL)
 {
     compile(mPattern);
 }
@@ -108,89 +176,57 @@ const std::string& re::Regex::getPattern() const
     return mPattern;
 }
 
-#if 0
-
 bool re::Regex::matches(const std::string& str) const
 {
-    int x = pcre_exec(mPCRE, NULL, str.c_str(), str.length(), 0, 0, NULL, 0);
-    /* zero if there is a match */
-    return ( (x == -1) ? (false) : (true) );
+    ScopedMatchData matchData(mPCRE);
+    return (matchData.match(str) > 0);
 }
 
 bool re::Regex::match(const std::string& str,
-                      RegexMatch & matchObject)
+                      RegexMatch& matchObject)
 {
-    int numMatches(0);
-    int result(0);
-    int startOffset(0);
-
-    // Clear the output vector
-    mOvector.assign(mOvector.size(), 0);
-    numMatches = pcre_exec(mPCRE,          // the compiled pattern
-                           NULL,           // no extra data - not studied
-                           str.c_str(),    // the subject string
-                           str.length(),   // the subject length
-                           startOffset,    // the starting offset in subject
-                           0,              // options
-                           &mOvector[0],   // the output vector
-                           OVECTOR_COUNT); // the output vector size
-    result = numMatches;
-    /**************************************************************************
-     * (From pcre source code, pcredemo.c)                                    *
-     * We have found the first match within the subject string. If the output *
-     * vector wasn't big enough, set its size to the maximum. Then output any *
-     * substrings that were captured.                                         *
-     **************************************************************************/
-
-    /* The output vector wasn't big enough */
+    ScopedMatchData matchData(mPCRE);
+    const size_t numMatches = matchData.match(str);
+    matchObject.resize(numMatches);
 
     if (numMatches == 0)
     {
-        numMatches = OVECTOR_COUNT / 3;
-    }
-
-    // Load up the match object
-    for (int i = 0; i < numMatches; i++)
-    {
-        int index = mOvector[2*i];
-        int subStringLength = mOvector[2*i+1] - index;
-        int subStringCheck = index + subStringLength;
-        if (subStringCheck > (int)str.length())
-        {
-            throw RegexException(Ctxt(FmtX("Match: Match substring out of range (%d,%d) for string of length %d", index, subStringCheck, str.length())));
-        }
-        else if (subStringLength == 0)
-        {
-            matchObject.push_back("");
-        }
-        else if (index >= 0)
-        {
-            matchObject.push_back(str.substr(index, subStringLength));
-        }
-        //otherwise, it was likely a non-capturing group
-    }
-
-    if (result >= 0)
-    {
-        return true;
-    }
-    else if (result == PCRE_ERROR_NOMATCH)
-    {
         return false;
     }
-    else
+
+    const PCRE2_SIZE* const outVector = matchData.getOutputVector();
+
+    // TODO: Make this a convenience function too to get one match at a time?
+    for (size_t ii = 0; ii < numMatches; ++ii)
     {
-        throw RegexException
-            (Ctxt(FmtX("Error in matching %s", str.c_str())));
+        const size_t index = outVector[ii * 2];
+        const size_t end = outVector[ii * 2 + 1];
+
+        if (end > str.length())
+        {
+            // Presumably this never happens
+            std::ostringstream ostr;
+            ostr << "Match: Match substring out of range ("
+                 << index << ", " << end << ") for string of length "
+                 << str.length();
+            throw RegexException(Ctxt(ostr.str()));
+        }
+
+        const size_t subStringLength = end - index;
+        matchObject[ii] = str.substr(index, subStringLength);
     }
+
+    return true;
 }
 
+// TODO: Change startIndex here and in other function to be a size_t
 std::string re::Regex::search(const std::string& matchString,
                               int startIndex)
 {
     return search(matchString, startIndex, 0);
 }
 
+#if 0
 std::string re::Regex::search(const std::string& matchString,
                               int startIndex,
                               int flags)
