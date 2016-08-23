@@ -22,15 +22,15 @@
 
 #include "re/Regex.h"  // __CODA_CPP11 is pulled in here
 
-#ifndef USE_PCRE2
+#ifdef USE_PCRE2
 #ifndef __CODA_CPP11
 
 #include <sstream>
 
-const int re::Regex::OVECTOR_COUNT = 999;
+//const int re::Regex::OVECTOR_COUNT = 999;
 
 re::Regex::Regex(const std::string& pattern) :
-    mPattern(pattern), mPCRE(NULL), mOvector(OVECTOR_COUNT)
+    mPattern(pattern), mPCRE(NULL)//, mOvector(OVECTOR_COUNT)
 {
     if (!mPattern.empty())
     {
@@ -40,9 +40,11 @@ re::Regex::Regex(const std::string& pattern) :
 
 void re::Regex::destroy()
 {
+	// TODO: Use an RAII class for just this object
     if (mPCRE != NULL)
     {
-        pcre_free(mPCRE);
+        pcre2_code_free(mPCRE);
+        mPCRE = NULL;
     }
 }
 
@@ -52,7 +54,7 @@ re::Regex::~Regex()
 }
 
 re::Regex::Regex(const re::Regex& rhs) :
-    mPattern(rhs.mPattern), mPCRE(NULL), mOvector(OVECTOR_COUNT)
+    mPattern(rhs.mPattern), mPCRE(NULL)//, mOvector(OVECTOR_COUNT)
 {
     compile(mPattern);
 }
@@ -74,38 +76,39 @@ re::Regex& re::Regex::operator=(const re::Regex& rhs)
 re::Regex& re::Regex::compile(const std::string& pattern)
 {
     mPattern = pattern;
-    int flags = PCRE_DOTALL;
 
-    int erroffset;
-    const char *errorptr;
+    destroy();
 
-    if (mPCRE != NULL)
-    {
-        pcre_free(mPCRE);
-    }
-
-    mPCRE = pcre_compile(mPattern.c_str(),
-                         flags,
-                         &errorptr,
-                         &erroffset,
-                         NULL);
+    static const int FLAGS = PCRE2_DOTALL;
+    int errorCode;
+    PCRE2_SIZE errorOffset;
+    mPCRE = pcre2_compile(reinterpret_cast<PCRE2_SPTR>(mPattern.c_str()),
+    		              mPattern.length(),
+                          FLAGS,
+						  &errorCode,
+						  &errorOffset,
+                          NULL); // Use default compile context
 
     if (mPCRE == NULL)
     {
-        std::stringstream ss;
-        ss << "PCRE compile error at offset "
-           << erroffset << ": " << errorptr;
-        throw RegexException(Ctxt(ss.str()));
+    	PCRE2_UCHAR buffer[256];
+    	pcre2_get_error_message(errorCode, buffer, sizeof(buffer));
+    	std::ostringstream ostr;
+    	ostr << "PCRE compilation failed at offset " << errorOffset
+    	     << ": " << buffer;
+        throw RegexException(Ctxt(ostr.str()));
     }
 
     return *this;
 }
 
-
+// TODO: This can be inlined in the base class instead of implemented for both
 const std::string& re::Regex::getPattern() const
 {
     return mPattern;
 }
+
+#if 0
 
 bool re::Regex::matches(const std::string& str) const
 {
@@ -310,6 +313,6 @@ std::string re::Regex::escape(const std::string& str) const
     }
     return r;
 }
-
+#endif
 #endif
 #endif

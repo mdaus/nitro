@@ -1,0 +1,38 @@
+import os
+from os.path import join, split
+from waflib import Options, Utils, Context
+from waflib.TaskGen import feature, before, task_gen
+from build import untarFile
+
+def options(opt):
+    opt.add_option('--disable-pcre2', action='store_false', dest='enable_pcre2',
+                   help='turn off PCRE2')
+    opt.add_option('--enable-pcre2', action='store_true',
+                   default=True, help='turn on PCRE2 (default)')
+    opt.add_option('--with-pcre2-home', action='store', dest='pcre2_home',
+                   help='Specify the PCRE2 Home - where PCRE2 is installed to')
+    #opt.add_option('--build-pcre2', action='store_true', dest='build_pcre2',
+    #               help='force building PCRE from scratch',
+    #               default=os.path.exists(os.path.join(opt.path.abspath(), 'pcre-5.0.tar')))
+    #opt.add_option('--nobuild-pcre', action='store_false', dest='build_pcre',
+    #               help='force not building PCRE from scratch')
+
+from build import writeConfig
+
+build = distclean = lambda x: None
+
+def configure(conf):
+    # TODO: Do we want to set the code unit width define both here and in the code?
+    if Options.options.enable_pcre2:
+        pcreHome = Options.options.pcre2_home
+        includeDir = os.path.join(pcreHome, 'include')
+        if pcreHome:
+            if conf.check(lib='pcre2-8', uselib_store='PCRE2',
+                       header_name='pcre2.h', function_name='pcre2_compile',
+                       libpath=os.path.join(pcreHome, 'lib'),
+                       includes=includeDir,
+                       export_includes=includeDir,
+                       defines='PCRE2_CODE_UNIT_WIDTH=8',
+                       msg='Checking for library pcre2', okmsg=pcreHome,
+                       mandatory=False):
+                           conf.undefine('HAVE_PCRE2_COMPILE')

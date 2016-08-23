@@ -29,11 +29,20 @@
 #include "sys/Err.h"
 #include "re/RegexException.h"
 
+#define USE_PCRE2
+
 #ifdef __CODA_CPP11
 #include <regex>
 #else
+#ifdef USE_PCRE2
+// This must be defined prior to pcre2.h
+#define PCRE2_CODE_UNIT_WIDTH 8
+#include <pcre2.h>
+#include <pcre2posix.h>
+#else
 #include <pcre.h>
 #include <pcreposix.h>
+#endif
 #endif
 
 #include <string>
@@ -192,6 +201,35 @@ namespace re
         static const std::regex invalidDollar;
 
 #else
+#ifdef USE_PCRE2
+        // TODO: Not quite sure how to swing this...
+        //       Maybe it should take in the pattern as a string
+        //       Otherwise we can't provide the right error message
+        /*
+        class ScopedPCRE
+        {
+        public:
+        	ScopedPCRE(pcre2_code* code);
+
+        	~ScopedPCRE();
+
+        	ScopedPCRE(const ScopedPCRE& rhs);
+
+        	ScopedPCRE& operator=(const ScopedPCRE& rhs);
+
+        	pcre2_code* get()
+        	{
+        		return mCode;
+        	}
+
+        private:
+        	pcre2_code* const mCode;
+        };
+        */
+
+        //! The pcre object
+        pcre2_code* mPCRE;
+#else
         // Internal function for passing flags to pcre_exec()
         std::string search(const std::string& matchString,
                            int startIndex, int flag);
@@ -207,6 +245,7 @@ namespace re
 
         //! The output/offset vector
         std::vector<int> mOvector;
+#endif
 #endif
     };
 }
