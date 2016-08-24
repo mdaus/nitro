@@ -47,7 +47,7 @@ TEST_CASE(orderFive)
 }
 }
 
-int main()
+int main(int /*argc*/, char** /*argv*/)
 {
     TEST_CHECK(orderZero);
     TEST_CHECK(orderOne);
