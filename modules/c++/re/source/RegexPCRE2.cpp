@@ -54,7 +54,7 @@ public:
         return mMatchData;
     }
 
-    PCRE2_SIZE* getOutputVector()
+    const PCRE2_SIZE* getOutputVector() const
     {
         return pcre2_get_ovector_pointer(mMatchData);
     }
@@ -90,6 +90,32 @@ public:
             return returnCode;
         }
     }
+
+    std::string getMatch(const std::string& str, size_t idx) const
+    {
+    	const PCRE2_SIZE* const outVector = getOutputVector();
+
+        const size_t index = outVector[idx * 2];
+        const size_t end = outVector[idx * 2 + 1];
+
+        if (end > str.length())
+        {
+            // Presumably this never happens
+            std::ostringstream ostr;
+            ostr << "Match: Match substring out of range ("
+                 << index << ", " << end << ") for string of length "
+                 << str.length();
+            throw re::RegexException(Ctxt(ostr.str()));
+        }
+
+        const size_t subStringLength = end - index;
+        return str.substr(index, subStringLength);
+    }
+
+private:
+    // Noncopyable
+    ScopedMatchData(const ScopedMatchData& );
+    ScopedMatchData& operator=(const ScopedMatchData& );
 
 private:
     const pcre2_code* const mCode;
@@ -187,33 +213,16 @@ bool re::Regex::match(const std::string& str,
 {
     ScopedMatchData matchData(mPCRE);
     const size_t numMatches = matchData.match(str);
-    matchObject.resize(numMatches);
+    matchObject.resize(numMatches); // TODO: Are we upposed to do this or just push back??
 
     if (numMatches == 0)
     {
         return false;
     }
 
-    const PCRE2_SIZE* const outVector = matchData.getOutputVector();
-
-    // TODO: Make this a convenience function too to get one match at a time?
     for (size_t ii = 0; ii < numMatches; ++ii)
     {
-        const size_t index = outVector[ii * 2];
-        const size_t end = outVector[ii * 2 + 1];
-
-        if (end > str.length())
-        {
-            // Presumably this never happens
-            std::ostringstream ostr;
-            ostr << "Match: Match substring out of range ("
-                 << index << ", " << end << ") for string of length "
-                 << str.length();
-            throw RegexException(Ctxt(ostr.str()));
-        }
-
-        const size_t subStringLength = end - index;
-        matchObject[ii] = str.substr(index, subStringLength);
+        matchObject[ii] = matchData.getMatch(str, ii);
     }
 
     return true;
@@ -223,96 +232,64 @@ bool re::Regex::match(const std::string& str,
 std::string re::Regex::search(const std::string& matchString,
                               int startIndex)
 {
-    return search(matchString, startIndex, 0);
+	size_t begin;
+	size_t end;
+    return search(matchString, startIndex, 0, begin, end);
 }
 
-#if 0
 std::string re::Regex::search(const std::string& matchString,
-                              int startIndex,
-                              int flags)
+						      size_t startIndex,
+							  sys::Uint32_T flags,
+							  size_t& begin,
+							  size_t& end)
 {
-    int numMatches(0);
-    int result(0);
-    int startOffset(0);
+    ScopedMatchData matchData(mPCRE);
+    const size_t numMatches = matchData.match(matchString, startIndex, flags);
 
-    // Clear the output vector
-    mOvector.assign(mOvector.size(), 0);
-    numMatches = pcre_exec(mPCRE,                             // the compiled pattern
-                           NULL,                              // no extra data
-                           matchString.c_str() + startIndex,  // the subject string
-                           matchString.length() - startIndex, // the subject length
-                           startOffset,                       // starting offset
-                           flags,                             // options
-                           &mOvector[0],                      // output vector
-                           OVECTOR_COUNT);                    // output vector size
-
-    result = numMatches;
-
-    if (result == 0)
+    if (numMatches > 0)
     {
-        numMatches = OVECTOR_COUNT / 3;
-    }
-
-    if (result >= 0)
-    {
-        if (((mOvector[0] + startIndex) +
-             (mOvector[1] - mOvector[0])) >
-            (int)matchString.length() )
-        {
-            result = PCRE_ERROR_NOMATCH;
-        }
-    }
-
-    if (result >= 0)
-    {
-        // output vector start offset = i*2
-        // output vector end   offset = i*2+1
-        // i = 0
-        int index = mOvector[0] + startIndex;
-        int subStringLength = mOvector[1] - mOvector[0];
-        int subStringCheck = index + subStringLength;
-        if (subStringCheck > (int)matchString.length())
-        {
-            throw RegexException(Ctxt(FmtX("Search: Match substring out of range (%d,%d) for string of length %d", index, subStringCheck, matchString.length())));
-        }
-        return matchString.substr(index, subStringLength);
-    }
-    else if (result == PCRE_ERROR_NOMATCH)
-    {
-        return std::string("");
+    	// TODO: Does startIndex work properly with this?
+    	begin = matchData.getOutputVector()[0];
+    	end = matchData.getOutputVector()[1];
+		return matchData.getMatch(matchString, 0);
     }
     else
     {
-        throw RegexException
-            (Ctxt(FmtX("Error in searching for %s", matchString.c_str())));
+    	begin = end = 0;
+    	return "";
     }
 }
 
 void re::Regex::searchAll(const std::string& matchString,
-                          RegexMatch & v)
+                          RegexMatch& v)
 {
-    std::string result = search(matchString, 0, 0);
+	size_t begin;
+	size_t end;
+    std::string result = search(matchString, 0, 0, begin, end);
 
-    int idx = 0;
-    while (result.size() != 0)
+    size_t idx = 0;
+    while (!result.empty())
     {
         v.push_back(result);
-        idx += (int)result.size() + mOvector[0];
-        result = search(matchString, idx, PCRE_NOTBOL);
+        idx += result.size() + begin;
+        result = search(matchString, idx, PCRE2_NOTBOL, begin, end);
     }
 }
 
 void re::Regex::split(const std::string& str,
                       std::vector<std::string> & v)
 {
+	size_t begin;
+	size_t end;
     size_t idx = 0;
-    std::string result = search(str, 0, 0);
-    while (result.size() != 0)
+    std::string result = search(str, 0, 0, begin, end);
+    while (!result.empty())
     {
-        v.push_back(str.substr(idx, mOvector[0]));
-        idx += mOvector[1];
-        result = search(str, idx, PCRE_NOTBOL);
+        v.push_back(str.substr(idx, begin));
+        idx += end;
+        result = search(str, idx, PCRE2_NOTBOL, begin, end);
     }
+
     // Push on last bit if there is some
     if (!str.substr(idx).empty())
     {
@@ -323,14 +300,16 @@ void re::Regex::split(const std::string& str,
 std::string re::Regex::sub(const std::string& str,
                            const std::string& repl)
 {
+	size_t begin;
+	size_t end;
     std::string toReplace = str;
-    std::string result = search(str, 0, 0);
+    std::string result = search(str, 0, 0, begin, end);
     size_t idx = 0;
-    while (result.size() != 0)
+    while (!result.empty())
     {
-        toReplace.replace(idx + mOvector[0], (int)result.size(), repl);
-        idx += (int)repl.size() + mOvector[0];
-        result = search(toReplace, idx, PCRE_NOTBOL);
+        toReplace.replace(idx + begin, result.size(), repl);
+        idx += repl.size() + begin;
+        result = search(toReplace, idx, PCRE2_NOTBOL, begin, end);
     }
 
     return toReplace;
@@ -338,6 +317,7 @@ std::string re::Regex::sub(const std::string& str,
 
 std::string re::Regex::escape(const std::string& str) const
 {
+	// TODO: Put this in common class
     std::string r;
     for (size_t i = 0; i < str.length(); i++)
     {
@@ -349,6 +329,5 @@ std::string re::Regex::escape(const std::string& str) const
     }
     return r;
 }
-#endif
 #endif
 #endif

@@ -232,7 +232,10 @@ namespace re
 
         // Internal function for passing flags to pcre2_match()
         std::string search(const std::string& matchString,
-                           int startIndex, int flag);
+                           size_t startIndex,
+						   sys::Uint32_T flag,
+						   size_t& begin,
+						   size_t& end);
 
 #else
         // Internal function for passing flags to pcre_exec()
