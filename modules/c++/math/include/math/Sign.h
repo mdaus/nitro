@@ -23,8 +23,6 @@
 #ifndef __MATH_SIGN_H__
 #define __MATH_SIGN_H__
 
-#include <cmath>
-
 namespace math
 {
 /*!
