@@ -51,7 +51,7 @@ double besselI(size_t order, double x)
  */
 double besselIOrderZero(double x)
 {
-    double ax = std::fabs(x);
+    double ax = std::abs(x);
     double ans;
     double y;
 
@@ -89,7 +89,7 @@ double besselIOrderZero(double x)
  */
 double besselIOrderOne(double x)
 {
-    double ax = std::fabs(x);
+    double ax = std::abs(x);
     double ans;
     double y;
 
@@ -142,7 +142,7 @@ double besselIOrderN(size_t order, double x)
         return 0;
     }
 
-    double tox = 2.0 / std::fabs(x);
+    double tox = 2.0 / std::abs(x);
     double bip = 0;
     double ans = 0;
     double bi = 1.0;
@@ -160,7 +160,7 @@ double besselIOrderN(size_t order, double x)
         {
             ans = std::ldexp(ans, -IEXP);
             bi = std::ldexp(bi, -IEXP);
-            bip = ldexp(bip, -IEXP);
+            bip = std::ldexp(bip, -IEXP);
         }
         if (jj == order)
         {
