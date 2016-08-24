@@ -30,7 +30,7 @@ namespace math
 /*!
  * Find sign of input, expressed as -1, 0, or 1
  * \param val A signed number
- * return 1 if val is positive, -1 if negative, 0 if 0
+ * \return 1 if val is positive, -1 if negative, 0 otherwise
  */
 template <typename T>
 int sign(const T val)
