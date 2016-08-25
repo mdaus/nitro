@@ -213,7 +213,7 @@ bool re::Regex::match(const std::string& str,
 {
     ScopedMatchData matchData(mPCRE);
     const size_t numMatches = matchData.match(str);
-    matchObject.resize(numMatches); // TODO: Are we upposed to do this or just push back??
+    matchObject.resize(numMatches); // TODO: Are we supposed to do this or just push back??
 
     if (numMatches == 0)
     {
@@ -263,37 +263,38 @@ std::string re::Regex::search(const std::string& matchString,
 void re::Regex::searchAll(const std::string& matchString,
                           RegexMatch& v)
 {
+	size_t startIndex = 0;
+
 	size_t begin;
 	size_t end;
-    std::string result = search(matchString, 0, 0, begin, end);
+    std::string result = search(matchString, startIndex, 0, begin, end);
 
-    size_t idx = 0;
     while (!result.empty())
     {
         v.push_back(result);
-        idx += result.size() + begin;
-        result = search(matchString, idx, PCRE2_NOTBOL, begin, end);
+        startIndex = end;
+        result = search(matchString, startIndex, PCRE2_NOTBOL, begin, end);
     }
 }
 
 void re::Regex::split(const std::string& str,
-                      std::vector<std::string> & v)
+                      std::vector<std::string>& v)
 {
 	size_t begin;
 	size_t end;
-    size_t idx = 0;
-    std::string result = search(str, 0, 0, begin, end);
+    size_t startIndex = 0;
+    std::string result = search(str, startIndex, 0, begin, end);
     while (!result.empty())
     {
-        v.push_back(str.substr(idx, begin));
-        idx += end;
-        result = search(str, idx, PCRE2_NOTBOL, begin, end);
+        v.push_back(str.substr(startIndex, end - begin + 1));
+        startIndex = end;
+        result = search(str, startIndex, PCRE2_NOTBOL, begin, end);
     }
 
     // Push on last bit if there is some
-    if (!str.substr(idx).empty())
+    if (!str.substr(startIndex).empty())
     {
-        v.push_back(str.substr(idx));
+        v.push_back(str.substr(startIndex));
     }
 }
 
@@ -303,13 +304,13 @@ std::string re::Regex::sub(const std::string& str,
 	size_t begin;
 	size_t end;
     std::string toReplace = str;
-    std::string result = search(str, 0, 0, begin, end);
-    size_t idx = 0;
+    size_t startIndex = 0;
+    std::string result = search(str, startIndex, 0, begin, end);
     while (!result.empty())
     {
-        toReplace.replace(idx + begin, result.size(), repl);
-        idx += repl.size() + begin;
-        result = search(toReplace, idx, PCRE2_NOTBOL, begin, end);
+        toReplace.replace(begin, result.size(), repl);
+        startIndex = begin + result.size();
+        result = search(toReplace, startIndex, PCRE2_NOTBOL, begin, end);
     }
 
     return toReplace;
