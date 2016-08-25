@@ -209,21 +209,21 @@ namespace re
         class ScopedPCRE
         {
         public:
-        	ScopedPCRE(pcre2_code* code);
+            ScopedPCRE(pcre2_code* code);
 
-        	~ScopedPCRE();
+            ~ScopedPCRE();
 
-        	ScopedPCRE(const ScopedPCRE& rhs);
+            ScopedPCRE(const ScopedPCRE& rhs);
 
-        	ScopedPCRE& operator=(const ScopedPCRE& rhs);
+            ScopedPCRE& operator=(const ScopedPCRE& rhs);
 
-        	pcre2_code* get()
-        	{
-        		return mCode;
-        	}
+            pcre2_code* get()
+            {
+                return mCode;
+            }
 
         private:
-        	pcre2_code* const mCode;
+            pcre2_code* const mCode;
         };
         */
 
@@ -233,9 +233,9 @@ namespace re
         // Internal function for passing flags to pcre2_match()
         std::string search(const std::string& matchString,
                            size_t startIndex,
-						   sys::Uint32_T flag,
-						   size_t& begin,
-						   size_t& end);
+                           sys::Uint32_T flag,
+                           size_t& begin,
+                           size_t& end);
 
 #else
         // Internal function for passing flags to pcre_exec()

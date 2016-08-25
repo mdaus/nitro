@@ -93,7 +93,7 @@ public:
 
     std::string getMatch(const std::string& str, size_t idx) const
     {
-    	const PCRE2_SIZE* const outVector = getOutputVector();
+        const PCRE2_SIZE* const outVector = getOutputVector();
 
         const size_t index = outVector[idx * 2];
         const size_t end = outVector[idx * 2 + 1];
@@ -134,7 +134,7 @@ re::Regex::Regex(const std::string& pattern) :
 
 void re::Regex::destroy()
 {
-	// TODO: Use an RAII class for just this object
+    // TODO: Use an RAII class for just this object
     if (mPCRE != NULL)
     {
         pcre2_code_free(mPCRE);
@@ -177,19 +177,19 @@ re::Regex& re::Regex::compile(const std::string& pattern)
     int errorCode;
     PCRE2_SIZE errorOffset;
     mPCRE = pcre2_compile(reinterpret_cast<PCRE2_SPTR>(mPattern.c_str()),
-    		              mPattern.length(),
+                          mPattern.length(),
                           FLAGS,
-						  &errorCode,
-						  &errorOffset,
+                          &errorCode,
+                          &errorOffset,
                           NULL); // Use default compile context
 
     if (mPCRE == NULL)
     {
-    	PCRE2_UCHAR buffer[256];
-    	pcre2_get_error_message(errorCode, buffer, sizeof(buffer));
-    	std::ostringstream ostr;
-    	ostr << "PCRE compilation failed at offset " << errorOffset
-    	     << ": " << buffer;
+        PCRE2_UCHAR buffer[256];
+        pcre2_get_error_message(errorCode, buffer, sizeof(buffer));
+        std::ostringstream ostr;
+        ostr << "PCRE compilation failed at offset " << errorOffset
+             << ": " << buffer;
         throw RegexException(Ctxt(ostr.str()));
     }
 
@@ -232,41 +232,41 @@ bool re::Regex::match(const std::string& str,
 std::string re::Regex::search(const std::string& matchString,
                               int startIndex)
 {
-	size_t begin;
-	size_t end;
+    size_t begin;
+    size_t end;
     return search(matchString, startIndex, 0, begin, end);
 }
 
 std::string re::Regex::search(const std::string& matchString,
-						      size_t startIndex,
-							  sys::Uint32_T flags,
-							  size_t& begin,
-							  size_t& end)
+                              size_t startIndex,
+                              sys::Uint32_T flags,
+                              size_t& begin,
+                              size_t& end)
 {
     ScopedMatchData matchData(mPCRE);
     const size_t numMatches = matchData.match(matchString, startIndex, flags);
 
     if (numMatches > 0)
     {
-    	// TODO: Does startIndex work properly with this?
-    	begin = matchData.getOutputVector()[0];
-    	end = matchData.getOutputVector()[1];
-		return matchData.getMatch(matchString, 0);
+        // TODO: Does startIndex work properly with this?
+        begin = matchData.getOutputVector()[0];
+        end = matchData.getOutputVector()[1];
+        return matchData.getMatch(matchString, 0);
     }
     else
     {
-    	begin = end = 0;
-    	return "";
+        begin = end = 0;
+        return "";
     }
 }
 
 void re::Regex::searchAll(const std::string& matchString,
                           RegexMatch& v)
 {
-	size_t startIndex = 0;
+    size_t startIndex = 0;
 
-	size_t begin;
-	size_t end;
+    size_t begin;
+    size_t end;
     std::string result = search(matchString, startIndex, 0, begin, end);
 
     while (!result.empty())
@@ -280,8 +280,8 @@ void re::Regex::searchAll(const std::string& matchString,
 void re::Regex::split(const std::string& str,
                       std::vector<std::string>& v)
 {
-	size_t begin;
-	size_t end;
+    size_t begin;
+    size_t end;
     size_t startIndex = 0;
     std::string result = search(str, startIndex, 0, begin, end);
     while (!result.empty())
@@ -301,8 +301,8 @@ void re::Regex::split(const std::string& str,
 std::string re::Regex::sub(const std::string& str,
                            const std::string& repl)
 {
-	size_t begin;
-	size_t end;
+    size_t begin;
+    size_t end;
     std::string toReplace = str;
     size_t startIndex = 0;
     std::string result = search(str, startIndex, 0, begin, end);
@@ -318,7 +318,7 @@ std::string re::Regex::sub(const std::string& str,
 
 std::string re::Regex::escape(const std::string& str) const
 {
-	// TODO: Put this in common class
+    // TODO: Put this in common class
     std::string r;
     for (size_t i = 0; i < str.length(); i++)
     {
