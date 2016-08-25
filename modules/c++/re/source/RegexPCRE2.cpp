@@ -32,6 +32,12 @@ namespace
 class ScopedMatchData
 {
 public:
+    // TODO: If the reallocation is too expensive, can call
+    //       pcre2_match_data_create() and pass in the count.  In this case,
+    //       can we reuse a match data object between calls?  We then need to
+    //       handle more cases below where numMatches == 0 which indicates the
+    //       output vector wasn't large enough like the old PCRE 5.0 code used
+    //       to do.
     ScopedMatchData(const pcre2_code* code) :
         mCode(code),
         mMatchData(pcre2_match_data_create_from_pattern(code, NULL))
