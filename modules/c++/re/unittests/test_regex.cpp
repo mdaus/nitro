@@ -44,14 +44,24 @@ TEST_CASE(testCompile)
 TEST_CASE(testMatches)
 {
     re::RegexMatch matches;
-    re::Regex rx("^([^:]+):[ ]*([^\r\n]+)\r\n(.*)");
-    TEST_ASSERT(rx.match("Proxy-Connection: Keep-Alive\r\n", matches));
+
+    re::Regex rx("abc");
+    TEST_ASSERT_FALSE(rx.match("def", matches));
+    TEST_ASSERT(matches.empty());
+
+    re::Regex rx2("^([^:]+):[ ]*([^\r\n]+)\r\n(.*)");
+    TEST_ASSERT(rx2.match("Proxy-Connection: Keep-Alive\r\n", matches));
     TEST_ASSERT_EQ(matches.size(), 4);
+
+    TEST_ASSERT_EQ(matches[0], "Proxy-Connection: Keep-Alive\r\n");
+    TEST_ASSERT_EQ(matches[1], "Proxy-Connection");
+    TEST_ASSERT_EQ(matches[2], "Keep-Alive");
+    TEST_ASSERT_EQ(matches[3], "");
 }
 
 TEST_CASE(testSearch)
 {
-    re::Regex rx("jud");
+    re::Regex rx("ju.");
     std::string result = rx.search("arabsdsarbjudarc34ardnjfsdveqvare3arfarg");
     TEST_ASSERT_EQ(result, "jud");
 }
@@ -62,6 +72,21 @@ TEST_CASE(testSearchAll)
     re::Regex rx("ar");
     rx.searchAll("arabsdsarbjudarc34ardnjfsdveqvare3arfarg", matches);
     TEST_ASSERT_EQ(matches.size(), 7);
+    for (size_t ii = 0; ii < matches.size(); ++ii)
+    {
+        TEST_ASSERT_EQ(matches[ii], "ar");
+    }
+
+    matches.clear();
+    re::Regex rx2("a[bc]");
+    rx2.searchAll("abadabbaccaddaeabaac", matches);
+    //            0    1  2       3  4
+    TEST_ASSERT_EQ(matches.size(), 5);
+    TEST_ASSERT_EQ(matches[0], "ab");
+    TEST_ASSERT_EQ(matches[1], "ab");
+    TEST_ASSERT_EQ(matches[2], "ac");
+    TEST_ASSERT_EQ(matches[3], "ab");
+    TEST_ASSERT_EQ(matches[4], "ac");
 }
 
 TEST_CASE(testDotAllFlag)
@@ -120,12 +145,19 @@ TEST_CASE(testMultilineBehavior)
 
 TEST_CASE(testSub)
 {
+    // Part of the intent here is to make sure we can handle strings
+    // substituted that are longer or shorter than what they're
+    // replacing
     re::RegexMatch matches;
-    re::Regex rx("ar");
-    std::string subst = rx.sub("Hearo", "ll");
+    re::Regex rx("arb");
+    std::string subst = rx.sub("Hearbo", "ll");
     TEST_ASSERT_EQ(subst, "Hello");
-    subst = rx.sub("Hearo Keary!", "ll");
+
+    subst = rx.sub("Hearbo Kearby!", "ll");
     TEST_ASSERT_EQ(subst, "Hello Kelly!");
+
+    subst = rx.sub("Hearbo Kearby!", "llll");
+    TEST_ASSERT_EQ(subst, "Hellllo Kelllly!");
 }
 
 TEST_CASE(testSplit)
@@ -291,14 +323,14 @@ TEST_CASE(testHttpResponse)
 
 int main(int, char**)
 {
-    TEST_CHECK( testCompile);
-    TEST_CHECK( testMatches);
-    TEST_CHECK( testSearch);
-    TEST_CHECK( testSearchAll);
-    TEST_CHECK( testDotAllFlag);
-    TEST_CHECK( testMultilineBehavior);
-    TEST_CHECK( testSub);
-    TEST_CHECK( testSplit);
-    TEST_CHECK( testHttpResponse);
+    TEST_CHECK(testCompile);
+    TEST_CHECK(testMatches);
+    TEST_CHECK(testSearch);
+    TEST_CHECK(testSearchAll);
+    TEST_CHECK(testDotAllFlag);
+    TEST_CHECK(testMultilineBehavior);
+    TEST_CHECK(testSub);
+    TEST_CHECK(testSplit);
+    TEST_CHECK(testHttpResponse);
     return 0;
 }
