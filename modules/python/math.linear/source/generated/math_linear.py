@@ -773,6 +773,11 @@ class Matrix3x1(_object):
         """__div__(Matrix3x1 self, double scalar) -> Matrix3x1"""
         return _math_linear.Matrix3x1___div__(self, scalar)
 
+
+    def __neg__(self):
+        """__neg__(Matrix3x1 self) -> Matrix3x1"""
+        return _math_linear.Matrix3x1___neg__(self)
+
 Matrix3x1_swigregister = _math_linear.Matrix3x1_swigregister
 Matrix3x1_swigregister(Matrix3x1)
 
@@ -882,6 +887,11 @@ class Vector2(_object):
     def __sub__(self, v):
         """__sub__(Vector2 self, Vector2 v) -> Vector2"""
         return _math_linear.Vector2___sub__(self, v)
+
+
+    def __neg__(self):
+        """__neg__(Vector2 self) -> Vector2"""
+        return _math_linear.Vector2___neg__(self)
 
 
     def __imul__(self, *args):
@@ -1043,6 +1053,11 @@ class Vector3(_object):
     def __sub__(self, v):
         """__sub__(Vector3 self, Vector3 v) -> Vector3"""
         return _math_linear.Vector3___sub__(self, v)
+
+
+    def __neg__(self):
+        """__neg__(Vector3 self) -> Vector3"""
+        return _math_linear.Vector3___neg__(self)
 
 
     def __imul__(self, *args):
@@ -1212,6 +1227,11 @@ class VectorDouble(_object):
     def __sub__(self, v):
         """__sub__(VectorDouble self, VectorDouble v) -> VectorDouble"""
         return _math_linear.VectorDouble___sub__(self, v)
+
+
+    def __neg__(self):
+        """__neg__(VectorDouble self) -> VectorDouble"""
+        return _math_linear.VectorDouble___neg__(self)
 
 
     def __imul__(self, *args):
@@ -1448,6 +1468,11 @@ class MatrixDouble(_object):
         __mul__(MatrixDouble self, MatrixDouble mx) -> MatrixDouble
         """
         return _math_linear.MatrixDouble___mul__(self, *args)
+
+
+    def __neg__(self):
+        """__neg__(MatrixDouble self) -> MatrixDouble"""
+        return _math_linear.MatrixDouble___neg__(self)
 
 
     def __getitem__(self, inObj):
