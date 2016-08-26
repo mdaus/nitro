@@ -31,7 +31,7 @@ namespace math
  * \return 1 if val is positive, -1 if negative, 0 otherwise
  */
 template <typename T>
-int sign(const T val)
+int sign(T val)
 {
     if (val < 0)
     {
