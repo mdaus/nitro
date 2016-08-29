@@ -1,8 +1,12 @@
 import os
+import sys
 from os.path import join, split
 from waflib import Options, Utils, Context
 from waflib.TaskGen import feature, before, task_gen
 from build import untarFile
+
+FILENAME_PREFIX = 'pcre2-10.22'
+TARBALL_FILENAME = FILENAME_PREFIX + '.tar.gz'
 
 def options(opt):
     opt.add_option('--disable-pcre2', action='store_false', dest='enable_pcre2',
@@ -11,11 +15,11 @@ def options(opt):
                    default=True, help='turn on PCRE2 (default)')
     opt.add_option('--with-pcre2-home', action='store', dest='pcre2_home',
                    help='Specify the PCRE2 Home - where PCRE2 is installed to')
-    #opt.add_option('--build-pcre2', action='store_true', dest='build_pcre2',
-    #               help='force building PCRE from scratch',
-    #               default=os.path.exists(os.path.join(opt.path.abspath(), 'pcre-5.0.tar')))
-    #opt.add_option('--nobuild-pcre', action='store_false', dest='build_pcre',
-    #               help='force not building PCRE from scratch')
+    opt.add_option('--build-pcre2', action='store_true', dest='build_pcre2',
+                   help='force building PCRE from scratch',
+                   default=os.path.exists(os.path.join(opt.path.abspath(), TARBALL_FILENAME)))
+    opt.add_option('--nobuild-pcre2', action='store_false', dest='build_pcre2',
+                   help='force not building PCRE from scratch')
 
 from build import writeConfig
 
@@ -25,8 +29,8 @@ def configure(conf):
     # TODO: Do we want to set the code unit width define both here and in the code?
     if Options.options.enable_pcre2:
         pcreHome = Options.options.pcre2_home
-        includeDir = os.path.join(pcreHome, 'include')
         if pcreHome:
+            includeDir = os.path.join(pcreHome, 'include')
             if conf.check(lib='pcre2-8', uselib_store='PCRE2',
                        header_name='pcre2.h', function_name='pcre2_compile',
                        libpath=os.path.join(pcreHome, 'lib'),
@@ -36,3 +40,62 @@ def configure(conf):
                        msg='Checking for library pcre2', okmsg=pcreHome,
                        mandatory=False):
                            conf.undefine('HAVE_PCRE2_COMPILE')
+
+        elif Options.options.build_pcre2:
+            # Build is off by default when tarfile not found, fail if forced on
+            if not os.path.exists(os.path.join(conf.path.abspath(), TARBALL_FILENAME)):
+                conf.fatal('Missing PCRE tarfile')
+
+            # Callback function to check for all #defines used by the pcre driver
+            def pcre_callback(conf):
+                conf.env['DEFINES'] = []
+
+                conf.check_cc(function_name='bcopy', header_name='strings.h', mandatory=False)
+                conf.check_cc(header_name='bzlib.h', mandatory=False)
+                conf.check_cc(header_name='dirent.h', mandatory=False)
+                conf.check_cc(header_name='dlfcn.h', mandatory=False)
+                conf.check_cc(header_name='editline/readline.h', mandatory=False)
+                conf.check_cc(header_name='edit/readline/readline.h', mandatory=False)
+                conf.check_cc(header_name='inttypes.h', mandatory=False)
+                conf.check_cc(header_name='limits.h', mandatory=False)
+                conf.check_cc(function_name='memmove', header_name='string.h', mandatory=False)
+                conf.check_cc(header_name='memory.h', mandatory=False)
+                # Not bothering with HAVE_PTHREAD and HAVE_PTHREAD_PRIO_INHERIT here
+                conf.check_cc(header_name='readline/history.h', mandatory=False)
+                conf.check_cc(header_name='readline/readline.h', mandatory=False)
+                conf.check_cc(header_name='stdint.h', mandatory=False)
+                conf.check_cc(header_name='stdlib.h', mandatory=False)
+                conf.check_cc(function_name='strerror', header_name='string.h', mandatory=False)
+                conf.check_cc(header_name='strings.h', mandatory=False)
+                conf.check_cc(header_name='string.h', mandatory=False)
+                conf.check_cc(header_name='sys/stat.h', mandatory=False)
+                conf.check_cc(header_name='sys/types.h', mandatory=False)
+                conf.check_cc(header_name='sys/wait.h', mandatory=False)
+                conf.check_cc(header_name='unistd.h', mandatory=False)
+                if sys.platform != 'win32':
+                    # I'm not sure what check they actually do for this in the
+                    # configure script but this is on for gcc
+                    conf.define('HAVE_VISIBILITY', 1)
+                conf.check_cc(header_name='windows.h', mandatory=False)
+                conf.check_cc(header_name='zlib.h', mandatory=False)
+                conf.define('LINK_SIZE', 2)
+                matchLimit = 10000000
+                conf.define('MATCH_LIMIT', matchLimit)
+                conf.define('MATCH_LIMIT_RECURSION', matchLimit)
+                conf.define('MAX_NAME_COUNT', 10000)
+                # TODO: Start with MAX_NAME_SIZE
+
+            conf.env['MAKE_PCRE2'] = True
+            conf.msg('Building local lib', 'PCRE')
+            
+            untarFile(path=conf.path, fname=TARBALL_FILENAME, mode='r:gz')
+
+            # Make config.h
+            # TODO: Do we really want to start with config.h.in or just make it from scratch?
+            # I don't think we can use it as it's messing up with the reference to
+            # MATCH_LIMIT in the comments early on in this file
+            driverNode = conf.path.make_node(FILENAME_PREFIX)
+            writeConfig(conf, pcre_callback, 'pcre', 
+                        infile=os.path.join('src', 'config.h.in'), 
+                        outfile=os.path.join('src', 'config.h'), 
+                        path=driverNode, feature='handleDefs')
