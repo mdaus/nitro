@@ -25,10 +25,7 @@ def options(opt):
 
 from build import writeConfig
 
-distclean = lambda x: None
-
 def configure(conf):
-    # TODO: Do we want to set the code unit width define both here and in the code?
     if Options.options.enable_pcre2:
         pcreHome = Options.options.pcre2_home
         if pcreHome:
@@ -51,6 +48,8 @@ def configure(conf):
             # Conveniently,
             # http://www.pcre.org/current/doc/html/NON-AUTOTOOLS-BUILD.txt
             # provides a lot of details on how to build this ourselves
+            # This should be roughly analogous to doing PCRE's
+            # ./configure --disable-shared --disable-unicode
 
             # Callback function to check for all #defines used by the pcre driver
             def pcre_callback(conf):
@@ -142,6 +141,10 @@ def configure(conf):
                               conf.undefine('HAVE_PCRE2_COMPILE')
 
 def build(bld):
+
+    env = bld.env
+    sourceFiles = []
+
     if 'MAKE_PCRE2' in bld.env:
         driverNode = bld.path.make_node(join(FILENAME_PREFIX, 'src'))
     
@@ -180,6 +183,34 @@ def build(bld):
                    targets_to_add=[],
                    defines=['HAVE_CONFIG_H', CODE_UNIT_WIDTH])
 
-        # TODO: Add in install_headers, install_libs, and install_source logic
+        if env['install_libs']:
+            pcre.install_path = env['install_libdir']
 
-# TODO: distclean
+        if env['install_headers']:
+            bld(features='install_tgt', install_path=env['install_includedir'],
+                dir=driverNode, files=['pcre2.h'], 
+                name='PCRE2_HEADERS_INSTALL')
+
+            pcre.targets_to_add += ['PCRE2_HEADERS_INSTALL']
+
+        if env['install_source']:
+            sourceFiles += [TARBALL_FILENAME]
+            pcre.targets_to_add += ['PCRE2_SOURCE_INSTALL']
+
+    if env['install_source']:
+        sourceNode = driversNode.make_node('source')
+        bld.install_tgt(files = sourceFiles,
+                        dir = driversNode,
+                        install_path = os.path.join('${PREFIX}',
+                        sourceNode.path_from(driversNode)),
+                        relative_trick=True,
+                        name='PCRE2_SOURCE_INSTALL')
+
+def distclean(context):
+    # Remove the untarred directory    
+    untarredDir = join(context.path.abspath(), FILENAME_PREFIX)
+    try:
+        if os.path.exists(untarredDir):
+            shutil.rmtree(untarredDir, ignore_errors=True)
+    except:
+        pass
