@@ -96,4 +96,91 @@
 %template(RgAzDouble) types::RgAz<double>;
 
 %template(VectorRowColInt) std::vector<types::RowCol<sys::SSize_T> >;
+%template(VectorRowColDouble) std::vector<types::RowCol<double> >;
 %template(VectorSizeT) std::vector<size_t>;
+
+/* This defines a macro for pickling other generic swig types that do not
+ * require special get/set/init options. */
+
+%define EXTEND_GETSTATE(classname)
+%extend classname
+{
+%pythoncode
+%{
+def __getstate__(self):
+    """Recursive pickling method for generic SWIG-wrapped objects."""
+    # Create a dictionary of parameters and values
+    state = {}
+
+    # Use swig_setmethods to get only data we can set later
+    for a in self.__swig_setmethods__:
+        b = getattr(self, a)
+
+        # Skip unpicklable data
+        if type(b).__name__ == 'SwigPyObject':
+            print 'Ignoring unknown SwigPyObject:', b
+            continue
+        else:
+            state[a] = pickle.dumps(b)
+    return state
+%}
+}
+%enddef
+
+%define EXTEND_SETSTATE(classname)
+%extend classname
+{
+%pythoncode
+%{
+def __setstate__(self, state):
+    """Recursive unpickling method for generic SWIG-wrapped objects."""
+    self.__init__()
+    for a,b in state.iteritems():
+        setattr(self, a, pickle.loads(b))
+%}
+}
+%enddef
+
+/* This macro will replace the accessor and setter for a fixed-length 2d array member
+ * with a copy to/from a numpy array (1d arrays can be handled with szrow = 1) */
+%define FIXEDARRAY(classname,arrname,szrow,szcol,datatype,NPYtypecode)
+%extend classname
+{
+    // Make a copy of the data as a numpy array
+    PyObject* copy ## arrname()
+    {
+        types::RowCol<size_t> dims(szrow, szcol);
+        PyObject *outputNPArray = Py_None;
+        numpyutils::createOrVerify(outputNPArray, NPYtypecode, dims);
+        datatype * output = numpyutils::getBuffer<datatype>(outputNPArray);
+        memcpy(output, self->arrname, szrow * szcol * sizeof(datatype));
+        return Py_BuildValue("O", outputNPArray);
+    }
+    // Copy the data from a numpy array into the object
+    void set ## arrname(PyObject* newData)
+    {
+        numpyutils::verifyArrayType(newData, NPYtypecode);
+        const types::RowCol<size_t> dims = numpyutils::getDimensionsRC(newData);
+        if (dims.row != szrow || dims.col != szcol)
+        {
+            throw except::Exception(Ctxt("Array dimensions do not match."));
+        }
+        else if (dims.row * dims.col != 0)
+        {
+            if( self->arrname == NULL )
+            {
+                throw except::Exception(Ctxt("Data not initialized."));
+            }
+
+            datatype * input = numpyutils::getBuffer<datatype>(newData);
+            memcpy(self->arrname, input, szrow * szcol * sizeof(datatype));
+        }
+    }
+    %pythoncode
+    %{
+    __swig_getmethods__['arrname'] = copy ## arrname
+    __swig_setmethods__['arrname'] = set ## arrname
+    if _newclass: arrname = property(copy ## arrname, set ## arrname)
+    %}
+}
+%enddef
