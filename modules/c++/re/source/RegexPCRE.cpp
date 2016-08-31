@@ -2,7 +2,7 @@
  * This file is part of re-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2016, MDA Information Systems LLC
  *
  * re-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -136,7 +136,9 @@ private:
 };
 }
 
-re::Regex::Regex(const std::string& pattern) :
+namespace re
+{
+Regex::Regex(const std::string& pattern) :
     mPattern(pattern), mPCRE(NULL)
 {
     if (!mPattern.empty())
@@ -145,7 +147,7 @@ re::Regex::Regex(const std::string& pattern) :
     }
 }
 
-void re::Regex::destroy()
+void Regex::destroy()
 {
     if (mPCRE != NULL)
     {
@@ -154,18 +156,18 @@ void re::Regex::destroy()
     }
 }
 
-re::Regex::~Regex()
+Regex::~Regex()
 {
     destroy();
 }
 
-re::Regex::Regex(const re::Regex& rhs) :
+Regex::Regex(const Regex& rhs) :
     mPattern(rhs.mPattern), mPCRE(NULL)
 {
     compile(mPattern);
 }
 
-re::Regex& re::Regex::operator=(const re::Regex& rhs)
+Regex& Regex::operator=(const Regex& rhs)
 {
     if (this != &rhs)
     {
@@ -179,7 +181,7 @@ re::Regex& re::Regex::operator=(const re::Regex& rhs)
     return *this;
 }
 
-re::Regex& re::Regex::compile(const std::string& pattern)
+Regex& Regex::compile(const std::string& pattern)
 {
     mPattern = pattern;
 
@@ -212,24 +214,17 @@ re::Regex& re::Regex::compile(const std::string& pattern)
     return *this;
 }
 
-// TODO: This can be inlined in the base class instead of implemented for both
-const std::string& re::Regex::getPattern() const
-{
-    return mPattern;
-}
-
-bool re::Regex::matches(const std::string& str) const
+bool Regex::matches(const std::string& str) const
 {
     ScopedMatchData matchData(mPCRE);
     return (matchData.match(str) > 0);
 }
 
-bool re::Regex::match(const std::string& str,
-                      RegexMatch& matchObject)
+bool Regex::match(const std::string& str, RegexMatch& matchObject)
 {
     ScopedMatchData matchData(mPCRE);
     const size_t numMatches = matchData.match(str);
-    matchObject.resize(numMatches); // TODO: Are we supposed to do this or just push back??
+    matchObject.resize(numMatches);
 
     if (numMatches == 0)
     {
@@ -244,27 +239,24 @@ bool re::Regex::match(const std::string& str,
     return true;
 }
 
-// TODO: Change startIndex here and in other function to be a size_t
-std::string re::Regex::search(const std::string& matchString,
-                              int startIndex)
+std::string Regex::search(const std::string& matchString, size_t startIndex)
 {
     size_t begin;
     size_t end;
     return search(matchString, startIndex, 0, begin, end);
 }
 
-std::string re::Regex::search(const std::string& matchString,
-                              size_t startIndex,
-                              sys::Uint32_T flags,
-                              size_t& begin,
-                              size_t& end)
+std::string Regex::search(const std::string& matchString,
+                          size_t startIndex,
+                          sys::Uint32_T flags,
+                          size_t& begin,
+                          size_t& end)
 {
     ScopedMatchData matchData(mPCRE);
     const size_t numMatches = matchData.match(matchString, startIndex, flags);
 
     if (numMatches > 0)
     {
-        // TODO: Does startIndex work properly with this?
         begin = matchData.getOutputVector()[0];
         end = matchData.getOutputVector()[1];
         return matchData.getMatch(matchString, 0);
@@ -276,8 +268,7 @@ std::string re::Regex::search(const std::string& matchString,
     }
 }
 
-void re::Regex::searchAll(const std::string& matchString,
-                          RegexMatch& v)
+void Regex::searchAll(const std::string& matchString, RegexMatch& v)
 {
     size_t startIndex = 0;
 
@@ -293,8 +284,7 @@ void re::Regex::searchAll(const std::string& matchString,
     }
 }
 
-void re::Regex::split(const std::string& str,
-                      std::vector<std::string>& v)
+void Regex::split(const std::string& str, std::vector<std::string>& v)
 {
     size_t begin;
     size_t end;
@@ -314,8 +304,7 @@ void re::Regex::split(const std::string& str,
     }
 }
 
-std::string re::Regex::sub(const std::string& str,
-                           const std::string& repl)
+std::string Regex::sub(const std::string& str, const std::string& repl)
 {
     size_t begin;
     size_t end;
@@ -331,19 +320,6 @@ std::string re::Regex::sub(const std::string& str,
 
     return toReplace;
 }
-
-std::string re::Regex::escape(const std::string& str) const
-{
-    // TODO: Put this in common class
-    std::string r;
-    for (size_t i = 0; i < str.length(); i++)
-    {
-        if (!isalpha(str[i]) && !isspace(str[i]))
-        {
-            r += '\\';
-        }
-        r += str[i];
-    }
-    return r;
 }
+
 #endif

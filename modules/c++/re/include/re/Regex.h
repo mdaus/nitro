@@ -2,7 +2,7 @@
  * This file is part of re-c++ 
  * =========================================================================
  * 
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2016, MDA Information Systems LLC
  *
  * re-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,7 +19,6 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
 
 #ifndef __RE_REGEX_H__
 #define __RE_REGEX_H__
@@ -47,164 +46,175 @@
 
 namespace re
 {
-    typedef std::vector<std::string> RegexMatch;
+typedef std::vector<std::string> RegexMatch;
+/*!
+ *  \class Regex
+ *  \brief C++ wrapper object for regular expressions.  If enabled,
+ *  std::regex from C++11 is used.  Unfortunately, the performance is
+ *  significantly slower than PCRE so PCRE is the default.  For further
+ *  documentation regarding the underlying PCRE library, especially for flag
+ *  information, see http://www.pcre.org.
+ */
+class Regex
+{
+public:
     /*!
-     *  \class Regex
-     *  \brief C++ wrapper object for regular expressions.  If enabled,
-     *  std::regex from C++11 is used.  Unfortunately, the performance is
-     *  significantly slower than PCRE so PCRE is the default.  For further
-     *  documentation regarding the underlying PCRE library, especially for flag
-     *  information, see http://www.pcre.org.
+     *  The default constructor
      */
-    class Regex
+    Regex(const std::string& pattern = "");
+
+    //!  Destructor
+    ~Regex();
+
+    /*!
+     *  Copy constructor
+     *  \param rhs The Regex to copy from
+     */
+    Regex(const Regex& rhs);
+
+    /*!
+     *  Assignment operator.  Check for self assignment
+     *  \param rhs The Regex to copy from
+     *  \return This
+     */
+    Regex& operator=(const Regex& rhs);
+
+    /*!
+     *  Destroy all data used for matching.
+     */
+    void destroy();
+
+    /*!
+     *  Set the match pattern
+     *  \param pattern  A pattern to match
+     *  \throw  exception on error
+     */
+    Regex& compile(const std::string& pattern);
+
+    /*!
+     *  \todo Add non-const reference
+     *  A const reference return for the pattern
+     *  \return the pattern
+     */
+    const std::string& getPattern() const
     {
-    public:
-        /*!
-         *  The default constructor
-         */
-        Regex(const std::string& pattern = "");
+        return mPattern;
+    }
 
-        //!  Destructor
-        ~Regex();
+    /*!
+     *  Match this input string against our pattern and populate the
+     *  data structure
+     *  \param str  The string to match against our pattern
+     *  \param matchObject  RegexMatch container to fill
+     *      If false is returned, there was not a match, so this will be empty
+     *      If true is returned, there was a match.  In this case, index 0
+     *      will be the full match and subsequent indices will be the submatches
+     *      (in the case where groups were used)
+     *  \return  True on success, False otherwise
+     *  \throw  RegexException on fatal error
+     */
+    bool match(const std::string& str,
+               RegexMatch& matchObject);
 
-        /*!
-         *  Copy constructor
-         *  \param rhs The Regex to copy from
-         */
-        Regex(const Regex& rhs);
+    bool matches(const std::string& str) const;
 
-        /*!
-         *  Assignment operator.  Check for self assignment
-         *  \param rhs The Regex to copy from
-         *  \return This
-         */
-        Regex& operator=(const Regex& rhs);
+    /*!
+     *  Search the matchString
+     *  \param matchString  The string to try and match
+     *  \param startIndex  Starting where?
+     *  \return  Matched substring
+     *  \throw  RegexException on fatal error
+     */
+    std::string search(const std::string& matchString,
+                       size_t startIndex = 0);
 
-        /*!
-         *  Destroy all data used for matching.
-         */
-        void destroy();
+    /*!
+     *  Search the matchString and get the sub-expressions, by ref
+     *  \param matchString  The string to match
+     *  \param v  The vector to fill with sub-expressions
+     *      Will be sized to the number of matches
+     *      Each index will contain a match (unlike the matches() method which
+     *      uses indices 1+ to provide submatches)
+     */
+    void searchAll(const std::string& matchString,
+                   RegexMatch& v);
 
-        /*!
-         *  Set the match pattern
-         *  \param pattern  A pattern to match
-         *  \throw  exception on error
-         */
-        Regex& compile(const std::string& pattern);
+    /*!
+     *  Split the string by occurrences of the pattern
+     *  \param str  The string to split
+     *  \param v    The resulting container of matches split from str
+     */
+    void split(const std::string& str,
+               std::vector<std::string>& v);
 
-        /*!
-         *  \todo Add non-const reference
-         *  A const reference return for the pattern
-         *  \return the pattern
-         */
-        const std::string& getPattern() const;
+    /*!
+     *  Replace occurrences of the pattern in the string
+     *  \param str  The string in which to replace the pattern
+     *  \param repl  The replacement
+     *  \return  The resulting string
+     */
+    std::string sub(const std::string& str,
+                    const std::string& repl);
 
-        /*!
-         *  Match this input string against our pattern and populate the
-         *  data structure
-         *  \param str  The string to match against our pattern
-         *  \param matches  RegexMatch container to fill
-         *  \return  True on success, False otherwise
-         *  \throw  RegexException on fatal error
-         */
-        bool match(const std::string& str,
-                   RegexMatch& matchObject);
+    /*!
+     *  Backslash all non-alphanumeric characters
+     *  \param str  The string to escape
+     *  \return  The escaped string
+     */
+    static
+    std::string escape(const std::string& str);
 
-        bool matches(const std::string& str) const;
-
-        /*!
-         *  Search the matchString
-         *  \param matchString  The string to try and match
-         *  \param startIndex  Starting where?
-         *  \return  Matched substring
-         *  \throw  RegexException on fatal error
-         */
-        std::string search(const std::string& matchString,
-                           int startIndex = 0);
-
-        /*!
-         *  Search the matchString and get the sub-expressions, by ref
-         *  \param matchString  The string to match
-         *  \param v  The vector to fill with sub-expressions
-         */
-        void searchAll(const std::string& matchString,
-                       RegexMatch& v);
-
-        /*!
-         *  Split the string by occurrences of the pattern
-         *  \param str  The string to split
-         *  \param v    The resulting container of matches split from str
-         */
-        void split(const std::string& str,
-                   std::vector<std::string>& v);
-
-        /*!
-         *  Replace occurrences of the pattern in the string
-         *  \param str  The string in which to replace the pattern
-         *  \param repl  The replacement
-         *  \return  The resulting string
-         */
-        std::string sub(const std::string& str,
-                        const std::string& repl);
-
-        /*!
-         *  Backslash all non-alphanumeric characters
-         *  \param str  The string to escape
-         *  \return  The escaped string
-         */
-        std::string escape(const std::string& str) const;
-
-    private:
-        std::string mPattern;
+private:
+    std::string mPattern;
 
 #ifdef __CODA_CPP11
-        /*!
-         *  Replace non-escaped "." with "[\s\S]" to get PCRE2_DOTALL newline
-         *  behavior
-         *  \param str  The string to modify
-         *  \return  The modified string
-         */
-        std::string replaceDot(const std::string& str) const;
+    /*!
+     *  Replace non-escaped "." with "[\s\S]" to get PCRE2_DOTALL newline
+     *  behavior
+     *  \param str  The string to modify
+     *  \return  The modified string
+     */
+    std::string replaceDot(const std::string& str) const;
 
-        /*!
-         *  Search using std::regex appropriately based on input string:
-         *   regexps starting with ^ are forced to match at beginning
-         *   regexps ending with $ (and no ^ at beginning) cause exception
-         *   regexps bracketed with ^ and $ match beginning and end
-         *   regexps with neither ^ or $ search normally
-         *   regexps with either ^ or $ in locations besides beginning and end
-         *       throw excpetions
-         *  \param inputIterBegin  The beginning of the string to search
-         *  \param inputIterEnd  The end of the string to search
-         *  \param match  The match object for search results
-         *  \param matchBeginning  If false, do not match ^ to beginning of string
-         *  \return  True on success, otherwise False
-         *  \throw  RegexException on error
-         */
-        bool searchWithContext(std::string::const_iterator inputIterBegin,
-                               std::string::const_iterator inputIterEnd,
-                               std::smatch& match,
-                               bool matchBeginning=true) const;
-        
-        //! The regex object
-        std::regex mRegex;
+    /*!
+     *  Search using std::regex appropriately based on input string:
+     *   regexps starting with ^ are forced to match at beginning
+     *   regexps ending with $ (and no ^ at beginning) cause exception
+     *   regexps bracketed with ^ and $ match beginning and end
+     *   regexps with neither ^ or $ search normally
+     *   regexps with either ^ or $ in locations besides beginning and end
+     *       throw excpetions
+     *  \param inputIterBegin  The beginning of the string to search
+     *  \param inputIterEnd  The end of the string to search
+     *  \param match  The match object for search results
+     *  \param matchBeginning  If false, do not match ^ to beginning of string
+     *  \return  True on success, otherwise False
+     *  \throw  RegexException on error
+     */
+    bool searchWithContext(std::string::const_iterator inputIterBegin,
+                           std::string::const_iterator inputIterEnd,
+                           std::smatch& match,
+                           bool matchBeginning=true) const;
 
-        static const std::regex badDotRegex;
-        static const std::regex invalidCaret;
-        static const std::regex invalidDollar;
+    //! The regex object
+    std::regex mRegex;
+
+    static const std::regex badDotRegex;
+    static const std::regex invalidCaret;
+    static const std::regex invalidDollar;
 
 #else
-        // Internal function for passing flags to pcre2_match()
-        std::string search(const std::string& matchString,
-                           size_t startIndex,
-                           sys::Uint32_T flag,
-                           size_t& begin,
-                           size_t& end);
+    // Internal function for passing flags to pcre2_match()
+    std::string search(const std::string& matchString,
+                       size_t startIndex,
+                       sys::Uint32_T flag,
+                       size_t& begin,
+                       size_t& end);
 
-        //! The pcre object
-        pcre2_code* mPCRE;
+    //! The pcre object
+    pcre2_code* mPCRE;
 #endif
-    };
+};
 }
 
 #endif
