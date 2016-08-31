@@ -1,8 +1,8 @@
 NAME            = 're'
-MAINTAINER      = 'jmrandol@users.sourceforge.net'
+MAINTAINER      = 'adam.sylvester@mdaus.com matthew.wysocki@mdaus.com'
 VERSION         = '1.0'
 MODULE_DEPS     = 'sys'
-USELIB_CHECK    = 'PCRE PCRE2'
+USELIB_CHECK    = 'PCRE'
 
 options = configure = distclean = lambda p: None
 
