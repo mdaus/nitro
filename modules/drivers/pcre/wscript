@@ -11,36 +11,36 @@ TARBALL_FILENAME = FILENAME_PREFIX + '.tar.gz'
 CODE_UNIT_WIDTH = 'PCRE2_CODE_UNIT_WIDTH=8'
 
 def options(opt):
-    opt.add_option('--disable-pcre2', action='store_false', dest='enable_pcre2',
-                   help='turn off PCRE2')
-    opt.add_option('--enable-pcre2', action='store_true',
-                   default=True, help='turn on PCRE2 (default)')
-    opt.add_option('--with-pcre2-home', action='store', dest='pcre2_home',
-                   help='Specify the PCRE2 Home - where PCRE2 is installed to')
-    opt.add_option('--build-pcre2', action='store_true', dest='build_pcre2',
+    opt.add_option('--disable-pcre', action='store_false', dest='enable_pcre',
+                   help='turn off PCRE')
+    opt.add_option('--enable-pcre', action='store_true',
+                   default=True, help='turn on PCRE (default)')
+    opt.add_option('--with-pcre-home', action='store', dest='pcre_home',
+                   help='Specify the PCRE Home - where PCRE is installed to.  Note that this must be the newer PCRE2 (10.x+) version of PCRE.')
+    opt.add_option('--build-pcre', action='store_true', dest='build_pcre',
                    help='force building PCRE from scratch',
                    default=os.path.exists(os.path.join(opt.path.abspath(), TARBALL_FILENAME)))
-    opt.add_option('--nobuild-pcre2', action='store_false', dest='build_pcre2',
+    opt.add_option('--nobuild-pcre', action='store_false', dest='build_pcre',
                    help='force not building PCRE from scratch')
 
 from build import writeConfig
 
 def configure(conf):
-    if Options.options.enable_pcre2:
-        pcreHome = Options.options.pcre2_home
+    if Options.options.enable_pcre:
+        pcreHome = Options.options.pcre_home
         if pcreHome:
             includeDir = os.path.join(pcreHome, 'include')
-            if conf.check(lib='pcre2-8', uselib_store='PCRE2',
+            if conf.check(lib='pcre2-8', uselib_store='PCRE',
                        header_name='pcre2.h', function_name='pcre2_compile',
                        libpath=os.path.join(pcreHome, 'lib'),
                        includes=includeDir,
                        export_includes=includeDir,
                        defines=CODE_UNIT_WIDTH,
-                       msg='Checking for library pcre2', okmsg=pcreHome,
+                       msg='Checking for library PCRE', okmsg=pcreHome,
                        mandatory=False):
                            conf.undefine('HAVE_PCRE2_COMPILE')
 
-        elif Options.options.build_pcre2:
+        elif Options.options.build_pcre:
             # Build is off by default when tarfile not found, fail if forced on
             if not os.path.exists(os.path.join(conf.path.abspath(), TARBALL_FILENAME)):
                 conf.fatal('Missing PCRE tarfile')
@@ -101,7 +101,7 @@ def configure(conf):
                 # conf.check_cc(header_name='windows.h', mandatory=False)
                 # conf.check_cc(header_name='zlib.h', mandatory=False)
 
-            conf.env['MAKE_PCRE2'] = True
+            conf.env['MAKE_PCRE'] = True
             conf.msg('Building local lib', 'PCRE')
             
             untarFile(path=conf.path, fname=TARBALL_FILENAME, mode='r:gz')
@@ -133,19 +133,18 @@ def configure(conf):
 
         else:
             # TODO: Test this
-            if conf.check(lib='pcre2-8', uselib_store='PCRE2',
+            if conf.check(lib='pcre2-8', uselib_store='PCRE',
                           header_name='pcre2.h', function_name='pcre2_compile',
                           defines=CODE_UNIT_WIDTH,
-                          msg='Checking for library pcre2',
+                          msg='Checking for library pcre',
                           mandatory=False):
                               conf.undefine('HAVE_PCRE2_COMPILE')
 
 def build(bld):
-
     env = bld.env
     sourceFiles = []
 
-    if 'MAKE_PCRE2' in bld.env:
+    if 'MAKE_PCRE' in bld.env:
         driverNode = bld.path.make_node(join(FILENAME_PREFIX, 'src'))
     
         files = ['pcre2_auto_possess.c',
@@ -179,7 +178,7 @@ def build(bld):
                    target='pcre2-8',
                    source=files,
                    path=driverNode,
-                   name='PCRE2',
+                   name='PCRE',
                    targets_to_add=[],
                    defines=['HAVE_CONFIG_H', CODE_UNIT_WIDTH])
 
@@ -189,13 +188,13 @@ def build(bld):
         if env['install_headers']:
             bld(features='install_tgt', install_path=env['install_includedir'],
                 dir=driverNode, files=['pcre2.h'], 
-                name='PCRE2_HEADERS_INSTALL')
+                name='PCRE_HEADERS_INSTALL')
 
-            pcre.targets_to_add += ['PCRE2_HEADERS_INSTALL']
+            pcre.targets_to_add += ['PCRE_HEADERS_INSTALL']
 
         if env['install_source']:
             sourceFiles += [TARBALL_FILENAME]
-            pcre.targets_to_add += ['PCRE2_SOURCE_INSTALL']
+            pcre.targets_to_add += ['PCRE_SOURCE_INSTALL']
 
     if env['install_source']:
         sourceNode = driversNode.make_node('source')
@@ -204,7 +203,7 @@ def build(bld):
                         install_path = os.path.join('${PREFIX}',
                         sourceNode.path_from(driversNode)),
                         relative_trick=True,
-                        name='PCRE2_SOURCE_INSTALL')
+                        name='PCRE_SOURCE_INSTALL')
 
 def distclean(context):
     # Remove the untarred directory    
