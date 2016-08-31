@@ -29,20 +29,12 @@
 #include "sys/Err.h"
 #include "re/RegexException.h"
 
-#define USE_PCRE2
-
 #ifdef __CODA_CPP11
 #include <regex>
 #else
-#ifdef USE_PCRE2
 // This must be defined prior to pcre2.h
 #define PCRE2_CODE_UNIT_WIDTH 8
 #include <pcre2.h>
-#include <pcre2posix.h>
-#else
-#include <pcre.h>
-#include <pcreposix.h>
-#endif
 #endif
 
 #include <string>
@@ -50,20 +42,19 @@
 
 /*!
  *  \file Regex.h
- *  \brief C++ wrapper for the PCRE library or std::regex if C++11 is available
+ *  \brief C++ wrapper for the PCRE2 library or std::regex
  */
 
 namespace re
 {
-
     typedef std::vector<std::string> RegexMatch;
     /*!
      *  \class Regex
-     *  \brief C++ wrapper object for regular expressions. If C++11 is
-     *  available, std::regex is used, otherwise the PCRE library is
-     *  used.  For further documentation regarding the underlying PCRE
-     *  library, especially for flag information, can be found at
-     *  http://www.pcre.org.
+     *  \brief C++ wrapper object for regular expressions.  If enabled,
+     *  std::regex from C++11 is used.  Unfortunately, the performance is
+     *  significantly slower than PCRE so PCRE is the default.  For further
+     *  documentation regarding the underlying PCRE library, especially for flag
+     *  information, see http://www.pcre.org.
      */
     class Regex
     {
@@ -168,7 +159,8 @@ namespace re
 
 #ifdef __CODA_CPP11
         /*!
-         *  Replace non-escaped "." with "[\s\S]" to get PCRE_DOTALL newline behavior
+         *  Replace non-escaped "." with "[\s\S]" to get PCRE2_DOTALL newline
+         *  behavior
          *  \param str  The string to modify
          *  \return  The modified string
          */
@@ -180,7 +172,8 @@ namespace re
          *   regexps ending with $ (and no ^ at beginning) cause exception
          *   regexps bracketed with ^ and $ match beginning and end
          *   regexps with neither ^ or $ search normally
-         *   regexps with either ^ or $ in locations besides beginning and end throw excpetions
+         *   regexps with either ^ or $ in locations besides beginning and end
+         *       throw excpetions
          *  \param inputIterBegin  The beginning of the string to search
          *  \param inputIterEnd  The end of the string to search
          *  \param match  The match object for search results
@@ -201,35 +194,6 @@ namespace re
         static const std::regex invalidDollar;
 
 #else
-#ifdef USE_PCRE2
-        // TODO: Not quite sure how to swing this...
-        //       Maybe it should take in the pattern as a string
-        //       Otherwise we can't provide the right error message
-        /*
-        class ScopedPCRE
-        {
-        public:
-            ScopedPCRE(pcre2_code* code);
-
-            ~ScopedPCRE();
-
-            ScopedPCRE(const ScopedPCRE& rhs);
-
-            ScopedPCRE& operator=(const ScopedPCRE& rhs);
-
-            pcre2_code* get()
-            {
-                return mCode;
-            }
-
-        private:
-            pcre2_code* const mCode;
-        };
-        */
-
-        //! The pcre object
-        pcre2_code* mPCRE;
-
         // Internal function for passing flags to pcre2_match()
         std::string search(const std::string& matchString,
                            size_t startIndex,
@@ -237,23 +201,8 @@ namespace re
                            size_t& begin,
                            size_t& end);
 
-#else
-        // Internal function for passing flags to pcre_exec()
-        std::string search(const std::string& matchString,
-                           int startIndex, int flag);
-
-        // Size of the output vector, must be a multiple of 3
-        // The output vector is filled up to 2/3 (666) full for matches
-        // so the maximum number of substrings is 333 (333 start
-        // offsets and 333 end offsets)
-        static const int OVECTOR_COUNT;
-
         //! The pcre object
-        pcre* mPCRE;
-
-        //! The output/offset vector
-        std::vector<int> mOvector;
-#endif
+        pcre2_code* mPCRE;
 #endif
     };
 }
