@@ -279,7 +279,14 @@ void Regex::searchAll(const std::string& matchString, RegexMatch& v)
     while (!result.empty())
     {
         v.push_back(result);
-        startIndex = end;
+
+        // We can't set startIndex = end because this won't work when the second
+        // match starts inside the first match
+        // For example, suppose mPattern = "...." and matchString = "abcde"
+        // We need to find both "abcd" and "bcde"
+        // The best we can do is start one character past the match we just
+        // found
+        startIndex = begin + 1;
         result = search(matchString, startIndex, PCRE2_NOTBOL, begin, end);
     }
 }
@@ -292,7 +299,9 @@ void Regex::split(const std::string& str, std::vector<std::string>& v)
     std::string result = search(str, startIndex, 0, begin, end);
     while (!result.empty())
     {
-        v.push_back(str.substr(startIndex, end - begin + 1));
+        // We want to grab from [startIndex, begin)
+        const size_t len = begin - startIndex;
+        v.push_back(str.substr(startIndex, len));
         startIndex = end;
         result = search(str, startIndex, PCRE2_NOTBOL, begin, end);
     }
@@ -314,7 +323,10 @@ std::string Regex::sub(const std::string& str, const std::string& repl)
     while (!result.empty())
     {
         toReplace.replace(begin, result.size(), repl);
-        startIndex = begin + result.size();
+
+        // You can't skip ahead result.size() here because 'repl' may be shorter
+        // than 'result'
+        startIndex = begin + repl.size();
         result = search(toReplace, startIndex, PCRE2_NOTBOL, begin, end);
     }
 

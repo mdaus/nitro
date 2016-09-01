@@ -89,20 +89,77 @@ TEST_CASE(testSearchAll)
     TEST_ASSERT_EQ(matches[4], "ac");
 }
 
+TEST_CASE(testSearchAllWithOverlap)
+{
+    re::RegexMatch matches;
+    re::Regex rx("[aA]b[aA]");
+    rx.searchAll("abAbabAbabAbbAbAaba", matches);
+    //            0 1 2 3 4    5  6
+
+    TEST_ASSERT_EQ(matches.size(), 7);
+    TEST_ASSERT_EQ(matches[0], "abA");
+    TEST_ASSERT_EQ(matches[1], "Aba");
+    TEST_ASSERT_EQ(matches[2], "abA");
+    TEST_ASSERT_EQ(matches[3], "Aba");
+    TEST_ASSERT_EQ(matches[4], "abA");
+    TEST_ASSERT_EQ(matches[5], "AbA");
+    TEST_ASSERT_EQ(matches[6], "aba");
+}
+
+TEST_CASE(testSearchAllJokersWild)
+{
+    re::RegexMatch matches;
+    re::Regex rx1("....");
+    rx1.searchAll("0123456789", matches);
+    //            0123456
+
+    TEST_ASSERT_EQ(matches.size(), 7);
+    TEST_ASSERT_EQ(matches[0], "0123");
+    TEST_ASSERT_EQ(matches[1], "1234");
+    TEST_ASSERT_EQ(matches[2], "2345");
+    TEST_ASSERT_EQ(matches[3], "3456");
+    TEST_ASSERT_EQ(matches[4], "4567");
+    TEST_ASSERT_EQ(matches[5], "5678");
+    TEST_ASSERT_EQ(matches[6], "6789");
+
+    // We want to make sure that when we do jump because the pattern doesn't
+    // match that we pick it back up again in the right spot
+    matches.clear();
+    re::Regex rx2("[xX][xX][xX][xX]");
+    rx2.searchAll("__xXXXxxx__XXXXxxXX", matches);
+    //              0123     45678
+
+    TEST_ASSERT_EQ(matches.size(), 9);
+    TEST_ASSERT_EQ(matches[0], "xXXX");
+    TEST_ASSERT_EQ(matches[1], "XXXx");
+    TEST_ASSERT_EQ(matches[2], "XXxx");
+    TEST_ASSERT_EQ(matches[3], "Xxxx");
+
+    TEST_ASSERT_EQ(matches[4], "XXXX");
+    TEST_ASSERT_EQ(matches[5], "XXXx");
+    TEST_ASSERT_EQ(matches[6], "XXxx");
+    TEST_ASSERT_EQ(matches[7], "XxxX");
+    TEST_ASSERT_EQ(matches[8], "xxXX");
+}
+
 TEST_CASE(testDotAllFlag)
 {
-    // This should match both the "3.3" and "4\n2"
-    re::RegexMatch matches1;
+    // This should match "3.3", "3 4", and "4\n2"
+    re::RegexMatch matches;
     re::Regex rx1("\\d.\\d");
-    rx1.searchAll("3.3 4\n2", matches1);
-    TEST_ASSERT_EQ(matches1.size(), 2);
+    rx1.searchAll("3.3 4\n2", matches);
+    TEST_ASSERT_EQ(matches.size(), 3);
+    TEST_ASSERT_EQ(matches[0], "3.3");
+    TEST_ASSERT_EQ(matches[1], "3 4");
+    TEST_ASSERT_EQ(matches[2], "4\n2");
 
-    // This should only match the "3.3" if the replace_dot() function
+    // This should only match the "3.3" if the replaceDot() function
     // is working correctly
-    re::RegexMatch matches3;
-    re::Regex rx3("\\d\\.\\d");
-    rx3.searchAll("3.3 4\n2", matches3);
-    TEST_ASSERT_EQ(matches3.size(), 1);
+    matches.clear();
+    re::Regex rx2("\\d\\.\\d");
+    rx2.searchAll("3.3 4\n2", matches);
+    TEST_ASSERT_EQ(matches.size(), 1);
+    TEST_ASSERT_EQ(matches[0], "3.3");
 }
 
 TEST_CASE(testMultilineBehavior)
@@ -148,7 +205,6 @@ TEST_CASE(testSub)
     // Part of the intent here is to make sure we can handle strings
     // substituted that are longer or shorter than what they're
     // replacing
-    re::RegexMatch matches;
     re::Regex rx("arb");
     std::string subst = rx.sub("Hearbo", "ll");
     TEST_ASSERT_EQ(subst, "Hello");
@@ -158,14 +214,63 @@ TEST_CASE(testSub)
 
     subst = rx.sub("Hearbo Kearby!", "llll");
     TEST_ASSERT_EQ(subst, "Hellllo Kelllly!");
+
+    // So what happens if we're replacing a pattern with something that would
+    // also match that pattern itself?
+    subst = rx.sub("Hearbo Kearby!", "arbarb");
+    TEST_ASSERT_EQ(subst, "Hearbarbo Kearbarby!");
+
+    // And now replace it with nothing at all
+    subst = rx.sub("Hearbo Kearby!", "");
+    TEST_ASSERT_EQ(subst, "Heo Key!");
+
+    // Make sure we can replace stuff right next to each other
+    subst = rx.sub("arbarbarb!", "blah");
+    TEST_ASSERT_EQ(subst, "blahblahblah!");
 }
 
 TEST_CASE(testSplit)
 {
-    re::RegexMatch matches;
-    re::Regex rx("ar");
+    re::Regex rx1("ar");
     std::vector<std::string> vec;
-    rx.split("ONEarTWOarTHREE", vec);
+    rx1.split("ONEarTWOarTHREE", vec);
+    TEST_ASSERT_EQ(vec.size(), 3);
+    TEST_ASSERT_EQ(vec[0], "ONE");
+    TEST_ASSERT_EQ(vec[1], "TWO");
+    TEST_ASSERT_EQ(vec[2], "THREE");
+
+    vec.clear();
+    rx1.split("ONEarTWOarTHREEar", vec);
+    TEST_ASSERT_EQ(vec.size(), 3);
+    TEST_ASSERT_EQ(vec[0], "ONE");
+    TEST_ASSERT_EQ(vec[1], "TWO");
+    TEST_ASSERT_EQ(vec[2], "THREE");
+
+    re::Regex rx2("x");
+    vec.clear();
+    rx2.split("ONExTWOxTHREE", vec);
+    TEST_ASSERT_EQ(vec.size(), 3);
+    TEST_ASSERT_EQ(vec[0], "ONE");
+    TEST_ASSERT_EQ(vec[1], "TWO");
+    TEST_ASSERT_EQ(vec[2], "THREE");
+
+    vec.clear();
+    rx2.split("ONExTWOxTHREEx", vec);
+    TEST_ASSERT_EQ(vec.size(), 3);
+    TEST_ASSERT_EQ(vec[0], "ONE");
+    TEST_ASSERT_EQ(vec[1], "TWO");
+    TEST_ASSERT_EQ(vec[2], "THREE");
+
+    re::Regex rx3("xxxxxxxxxx");
+    vec.clear();
+    rx3.split("ONExxxxxxxxxxTWOxxxxxxxxxxTHREE", vec);
+    TEST_ASSERT_EQ(vec.size(), 3);
+    TEST_ASSERT_EQ(vec[0], "ONE");
+    TEST_ASSERT_EQ(vec[1], "TWO");
+    TEST_ASSERT_EQ(vec[2], "THREE");
+
+    vec.clear();
+    rx3.split("ONExxxxxxxxxxTWOxxxxxxxxxxTHREExxxxxxxxxx", vec);
     TEST_ASSERT_EQ(vec.size(), 3);
     TEST_ASSERT_EQ(vec[0], "ONE");
     TEST_ASSERT_EQ(vec[1], "TWO");
@@ -192,15 +297,21 @@ TEST_CASE(testHttpResponse)
             mMatchResponse.compile("^HTTP/([^ ]+) ([^\r\n]+)\r\n(.*)");
         }
 
-        void parse(const char* header, size_t length)
+        bool parse(const char* header, size_t length)
         {
             mHeader = std::string(header, length);
             if (!parseRequest())
+            {
                 if (!parseResponse())
-                    assert(0);
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
-        void parseRest(const std::string& restOfChunk)
+        bool parseRest(const std::string& restOfChunk)
         {
             std::string rest = restOfChunk;
 
@@ -216,9 +327,11 @@ TEST_CASE(testHttpResponse)
                 }
                 else
                 {
-                    std::cout << "'rest' doesn't match." << std::endl;
+                    return false;
                 }
             }
+
+            return true;
         }
 
         bool parseResponse()
@@ -229,8 +342,7 @@ TEST_CASE(testHttpResponse)
                 mVersion = responseVals[1];
                 mReturnVal = responseVals[2];
 
-                parseRest(responseVals[3]);
-                return true;
+                return parseRest(responseVals[3]);
             }
             else
             {
@@ -247,8 +359,7 @@ TEST_CASE(testHttpResponse)
                 mUrl = requestVals[2];
                 mVersion = requestVals[3];
 
-                parseRest(requestVals[4]);
-                return true;
+                return parseRest(requestVals[4]);
             }
             else
             {
@@ -256,42 +367,44 @@ TEST_CASE(testHttpResponse)
             }
         }
 
-        std::string getReturnVal()
+        std::string getReturnVal() const
         {
             return mReturnVal;
         }
-        std::string getUrl()
+        std::string getUrl() const
         {
             return mUrl;
         }
-        std::string getVersion()
+        std::string getVersion() const
         {
             return mVersion;
         }
-        std::string getMethod()
+        std::string getMethod() const
         {
             return mMethod;
         }
 
-        std::string getContentType()
+        std::string getContentType() const
         {
             std::string key = "Content-Type";
             return getAssociatedValue(key);
         }
-        std::string getContentLength()
+        std::string getContentLength() const
         {
             std::string key = "Content-Length";
             return getAssociatedValue(key);
         }
 
-        std::string getAssociatedValue(const std::string& key)
+        std::string getAssociatedValue(const std::string& key) const
         {
-            std::map<std::string, std::string>::const_iterator p = mKeyValuePair.find(key);
+            const std::map<std::string, std::string>::const_iterator p =
+                    mKeyValuePair.find(key);
+
             if (p == mKeyValuePair.end())
             {
                 return std::string("");
             }
-            return mKeyValuePair[key];
+            return p->second;
         }
 
     protected:
@@ -309,7 +422,7 @@ TEST_CASE(testHttpResponse)
     };
 
     HttpParser p;
-    p.parse(request, strlen(request));
+    TEST_ASSERT_TRUE(p.parse(request, strlen(request)));
 
     TEST_ASSERT_EQ(p.getReturnVal(), "");
     TEST_ASSERT_EQ(p.getMethod(), "GET");
@@ -327,6 +440,8 @@ int main(int, char**)
     TEST_CHECK(testMatches);
     TEST_CHECK(testSearch);
     TEST_CHECK(testSearchAll);
+    TEST_CHECK(testSearchAllWithOverlap);
+    TEST_CHECK(testSearchAllJokersWild);
     TEST_CHECK(testDotAllFlag);
     TEST_CHECK(testMultilineBehavior);
     TEST_CHECK(testSub);
