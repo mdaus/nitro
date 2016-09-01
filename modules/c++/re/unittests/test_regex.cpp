@@ -87,6 +87,13 @@ TEST_CASE(testSearchAll)
     TEST_ASSERT_EQ(matches[2], "ac");
     TEST_ASSERT_EQ(matches[3], "ab");
     TEST_ASSERT_EQ(matches[4], "ac");
+
+    // Test the beginning-of-line matching (should only match once)
+    matches.clear();
+    re::Regex rx3("^bar");
+    rx3.searchAll("barbar", matches);
+    TEST_ASSERT_EQ(matches.size(), 1);
+    TEST_ASSERT_EQ(matches[0], "bar");
 }
 
 TEST_CASE(testSearchAllWithOverlap)
@@ -164,6 +171,10 @@ TEST_CASE(testDotAllFlag)
 
 TEST_CASE(testMultilineBehavior)
 {
+    // These tests were put in b/c std::regex treats ^/$ differently
+    // in gcc and VS2015, and we want to make sure we've eliminated
+    // that difference.
+
     re::RegexMatch matches;
     re::Regex rx;
     std::string inputString = 
@@ -227,6 +238,11 @@ TEST_CASE(testSub)
     // Make sure we can replace stuff right next to each other
     subst = rx.sub("arbarbarb!", "blah");
     TEST_ASSERT_EQ(subst, "blahblahblah!");
+
+    // Test the matchBeginning flag (internal to sub())
+    re::Regex rx2("^bar");
+    std::string subst2 = rx2.sub("barbar", "foo");
+    TEST_ASSERT_EQ(subst2, "foobar");
 }
 
 TEST_CASE(testSplit)
@@ -275,6 +291,22 @@ TEST_CASE(testSplit)
     TEST_ASSERT_EQ(vec[0], "ONE");
     TEST_ASSERT_EQ(vec[1], "TWO");
     TEST_ASSERT_EQ(vec[2], "THREE");
+
+    // Test the case where match is at the beginning
+    vec.clear();
+    rx3.split("xxxxxxxxxxTWOxxxxxxxxxxTHREExxxxxxxxxx", vec);
+    TEST_ASSERT_EQ(vec.size(), 3);
+    TEST_ASSERT_EQ(vec[0], "");
+    TEST_ASSERT_EQ(vec[1], "TWO");
+    TEST_ASSERT_EQ(vec[2], "THREE");
+
+    // Test the beginning-of-line matching (should only match once)
+    vec.clear();
+    re::Regex rx4("^bar");
+    rx4.split("barfoobar", vec);
+    TEST_ASSERT_EQ(vec.size(), 2);
+    TEST_ASSERT_EQ(vec[0], "");
+    TEST_ASSERT_EQ(vec[1], "foobar");
 }
 
 // This was copied out of re/tests/RegexTest3.cpp

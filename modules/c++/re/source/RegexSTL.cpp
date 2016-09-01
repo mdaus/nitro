@@ -176,7 +176,7 @@ void Regex::searchAll(const std::string& matchString, RegexMatch& v)
                              matchString.end(), match, matchBeginning))
     {
         v.push_back(match[0].str());
-        startIndex += (match.position(0) + match.length(0));
+        startIndex += (match.position(0) + 1); // advance one char beyond this match
         matchBeginning = false; // don't match BOL after first match
     }
 }
@@ -209,10 +209,11 @@ std::string Regex::sub(const std::string& str, const std::string& repl)
     bool matchBeginning = true;
     std::smatch match;
 
-    while (searchWithContext(toReplace.cbegin()+idx, toReplace.cend(), match))
+    while (searchWithContext(toReplace.cbegin()+idx, toReplace.cend(), match,
+                             matchBeginning))
     {
         toReplace.replace(idx + match.position(), match.length(), repl);
-        idx += (match.position() + match.length());
+        idx += (match.position() + repl.length());
         matchBeginning = false; // don't match BOL after first match
     }
 
