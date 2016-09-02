@@ -25,6 +25,7 @@
 
 #ifdef RE_ENABLE_STD_REGEX
 
+#include <sys/Conf.h>
 #include <re/RegexException.h>
 
 namespace re
