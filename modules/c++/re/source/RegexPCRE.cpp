@@ -20,11 +20,14 @@
  *
  */
 
-#include "re/Regex.h"  // __CODA_CPP11 is pulled in here
+// This header includes <re/re_config.h> so must come before the ifndef
+#include <re/Regex.h>
 
-#ifndef __CODA_CPP11
+#ifndef RE_ENABLE_STD_REGEX
 
 #include <sstream>
+
+#include <re/RegexException.h>
 
 namespace
 {
@@ -39,7 +42,7 @@ std::string getErrorMessage(int errorCode)
 class ScopedMatchData
 {
 public:
-    // TODO: If the reallocation is too expensive, can call
+    // NOTE: If the reallocation is too expensive, can call
     //       pcre2_match_data_create() and pass in the count.  In this case,
     //       can we reuse a match data object between calls?  We then need to
     //       handle more cases below where numMatches == 0 which indicates the

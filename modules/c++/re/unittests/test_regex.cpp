@@ -198,7 +198,7 @@ TEST_CASE(testMultilineBehavior)
     TEST_ASSERT_EQ(matches.size(), 1);
     TEST_ASSERT_EQ(matches[0].length(), inputString.length());
 
-#ifdef __CODA_CPP11
+#ifdef RE_ENABLE_STD_REGEX
     // These exercise our limitations and should all throw exceptions (sigh)
     matches.clear();
     TEST_EXCEPTION(rx.compile(".$"));

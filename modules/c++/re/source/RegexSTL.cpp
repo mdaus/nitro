@@ -20,10 +20,12 @@
  *
  */
 
-#include "re/Regex.h" // __CODA_CPP11 is pulled in here, so it has to come first
+// This header includes <re/re_config.h> so must come before the ifdef
+#include <re/Regex.h>
 
-// we use this file if we're using C++11 and not using PCRE
-#ifdef __CODA_CPP11
+#ifdef RE_ENABLE_STD_REGEX
+
+#include <re/RegexException.h>
 
 namespace re
 {

@@ -23,21 +23,20 @@
 #ifndef __RE_REGEX_H__
 #define __RE_REGEX_H__
 
-#include <sys/sys_config.h>
+#include <string>
+#include <vector>
 
-#include "sys/Err.h"
-#include "re/RegexException.h"
+#include <re/re_config.h>
 
-#ifdef __CODA_CPP11
+#ifdef RE_ENABLE_STD_REGEX
 #include <regex>
 #else
 // This must be defined prior to pcre2.h
 #define PCRE2_CODE_UNIT_WIDTH 8
 #include <pcre2.h>
-#endif
 
-#include <string>
-#include <vector>
+#include <sys/Conf.h>
+#endif
 
 /*!
  *  \file Regex.h
@@ -130,6 +129,9 @@ public:
 
     /*!
      *  Search the matchString and get the sub-expressions, by ref
+     *  If there are overlapping matches, all will be provided.
+     *  For example, a pattern of "...." with a matchString of "12345"
+     *  will return both "1234" and "2345".
      *  \param matchString  The string to match
      *  \param v  The vector to fill with sub-expressions
      *      Will be sized to the number of matches
@@ -167,7 +169,7 @@ public:
 private:
     std::string mPattern;
 
-#ifdef __CODA_CPP11
+#ifdef RE_ENABLE_STD_REGEX
     /*!
      *  Replace non-escaped "." with "[\s\S]" to get PCRE2_DOTALL newline
      *  behavior
