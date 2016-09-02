@@ -49,7 +49,7 @@ def configure(conf):
             # http://www.pcre.org/current/doc/html/NON-AUTOTOOLS-BUILD.txt
             # provides a lot of details on how to build this ourselves
             # This should be roughly analogous to doing PCRE's
-            # ./configure --disable-shared --disable-unicode
+            # ./configure --disable-shared --disable-unicode --with-pic
 
             # Callback function to check for all #defines used by the pcre driver
             def pcre_callback(conf):
@@ -69,7 +69,6 @@ def configure(conf):
                 # This is '\n'
                 conf.define('NEWLINE_DEFAULT', 2)
                 conf.define('PARENS_NEST_LIMIT', 250)
-                # TODO: Test that this works on both Linux and Windows
                 if Options.options.shared_libs is None:
                     conf.define('PCRE2_STATIC', 1)
 
