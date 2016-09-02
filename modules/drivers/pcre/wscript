@@ -132,7 +132,6 @@ def configure(conf):
                             join(srcDir, 'pcre2_chartables.c'))
 
         else:
-            # TODO: Test this
             if conf.check(lib='pcre2-8', uselib_store='PCRE',
                           header_name='pcre2.h', function_name='pcre2_compile',
                           defines=CODE_UNIT_WIDTH,
@@ -197,11 +196,11 @@ def build(bld):
             pcre.targets_to_add += ['PCRE_SOURCE_INSTALL']
 
     if env['install_source']:
-        sourceNode = driversNode.make_node('source')
+        sourceNode = bld.path.make_node('source')
         bld.install_tgt(files = sourceFiles,
-                        dir = driversNode,
+                        dir = bld.path,
                         install_path = os.path.join('${PREFIX}',
-                        sourceNode.path_from(driversNode)),
+                        sourceNode.path_from(bld.path)),
                         relative_trick=True,
                         name='PCRE_SOURCE_INSTALL')
 
