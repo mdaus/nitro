@@ -1464,10 +1464,11 @@ def python_package(tg):
 def untar(tsk):
     untarDriver(tsk.path, tsk.fname)
 
-def untarFile(path, fname):
+def untarFile(path, fname, mode='r'):
     import tarfile
+    print mode
     f = path.find_or_declare(fname)
-    tf = tarfile.open(f.abspath(), 'r')
+    tf = tarfile.open(f.abspath(), mode)
     p = path.abspath()
     for x in tf:
         tf.extract(x, p)
