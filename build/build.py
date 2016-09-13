@@ -1466,7 +1466,6 @@ def untar(tsk):
 
 def untarFile(path, fname, mode='r'):
     import tarfile
-    print mode
     f = path.find_or_declare(fname)
     tf = tarfile.open(f.abspath(), mode)
     p = path.abspath()
