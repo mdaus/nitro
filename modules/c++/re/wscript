@@ -22,6 +22,12 @@ def configure(conf):
         conf.env['DEFINES'] = []
         if conf.env['enable_std_regex']:
             conf.define('RE_ENABLE_STD_REGEX', 1)
+        elif not Options.options.shared_libs:
+            # We need this in order to link properly on Windows
+            # We could get this via export_defines in the modules/drivers/pcre/wscript
+            # but that won't work if someone is trying to link in our stuff from their
+            # own build system (or if they're using a prebuilt PCRE)
+            conf.define('PCRE2_STATIC', 1)
 
     writeConfig(conf, re_callback, NAME)
 
