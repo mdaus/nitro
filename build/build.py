@@ -18,6 +18,8 @@ from dumpenv import dumpenv
 from dumplib import dumplib
 from dumplibraw import dumplibraw
 from dumpconfig import dumpconfig
+from makewheel import makewheel
+from package import package
 
 COMMON_EXCLUDES = '.bzr .bzrignore .git .gitignore .svn CVS .cvsignore .arch-ids {arch} SCCS BitKeeper .hg _MTN _darcs Makefile Makefile.in config.log'.split()
 COMMON_EXCLUDES_EXT ='~ .rej .orig .pyc .pyo .bak .tar.bz2 tar.gz .zip .swp'.split()
@@ -1831,3 +1833,14 @@ class CPPDumpConfigContext(dumpconfig, CPPContext):
     def __init__(self, **kw):
         self.waf_command = 'python waf'
         super(CPPDumpConfigContext, self).__init__(**kw)
+
+class CPPMakeWheelContext(makewheel, CPPContext):
+    def __init__(self, **kw):
+        self.waf_command = 'python waf'
+        super(CPPMakeWheelContext, self).__init__(**kw)
+
+class CPPPackageContext(package, CPPContext):
+    def __init__(self, **kw):
+        self.waf_command = 'python waf'
+        super(CPPPackageContext, self).__init__(**kw)
+
