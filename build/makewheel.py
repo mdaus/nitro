@@ -23,11 +23,6 @@ class makewheel(BuildContext):
         shutil.copyfile(os.path.join(self.env['SETUP_PY_DIR'],
             'setup.py'), 'setup.py')
         self.to_log('Creating wheel\n')
-        subprocess.call(['pip', 'wheel', '.', '--wheel-dir', '.', '--no-deps'])
+        subprocess.call(['pip', 'wheel', '.', '--wheel-dir', self.env['install_bindir'], '--no-deps'])
         os.remove('setup.py')
-
-        wheels = glob.glob('*.whl')
-        for wheel in wheels:
-            shutil.move(wheel,
-                os.path.join(self.env['install_bindir'], wheel))
 
