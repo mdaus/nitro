@@ -1843,3 +1843,4 @@ class CPPPackageContext(package, CPPContext):
     def __init__(self, **kw):
         self.waf_command = 'python waf'
         super(CPPPackageContext, self).__init__(**kw)
+
