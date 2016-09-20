@@ -25,4 +25,3 @@ class makewheel(BuildContext):
         for wheel in wheels:
             shutil.move(wheel, os.path.join(self.env['install_bindir'], wheel))
 
-
