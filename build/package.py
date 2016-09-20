@@ -6,6 +6,7 @@ import shutil
 import subprocess
 from zipfile import ZipFile
 
+
 class package(BuildContext):
     '''Creates a zip file of installation dir, and any wheels'''
     cmd='package'
