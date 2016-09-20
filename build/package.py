@@ -17,7 +17,6 @@ class package(BuildContext):
             self.load_envs()
 
         self.to_log('Zipping installation\n')
-        wheels = glob.glob('*.whl')
         installDir = os.path.dirname(self.env['install_bindir'])
 
         shutil.make_archive('install', 'zip', None, installDir)
