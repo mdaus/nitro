@@ -1,4 +1,5 @@
 from waflib.Build import BuildContext
+from waflib import Errors
 
 import glob
 import os
@@ -16,12 +17,12 @@ class makewheel(BuildContext):
         if not self.all_envs:
             self.load_envs()
 
-        targetsStr = '--targets=' + self.targets
-
-        shutil.copyfile(os.path.join(self.getBuildDir(), 'six', 'conf',
-            'setup.py'), 'setup.py')
+        if not os.path.exists('setup.py'):
+            raise Errors.WafError('Could not make wheel. setup.py not found.')
         self.to_log('Creating wheel\n')
         subprocess.call(['pip', 'wheel', '.', '--wheel-dir', '.', '--no-deps'])
-        os.remove('setup.py')
+        wheels = glob.glob('*.whl')
+        for wheel in wheels:
+            shutil.move(wheel, os.path.join(self.env['install_bindir'], wheel))
 
 

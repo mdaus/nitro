@@ -16,17 +16,7 @@ class package(BuildContext):
         if not self.all_envs:
             self.load_envs()
 
-        targetsStr = '--targets=' + self.targets
-
-        self.to_log('Zipping installation\n')
-        wheels = glob.glob('*.whl')
         installDir = os.path.dirname(self.env['install_bindir'])
-
-        for wheel in wheels:
-            shutil.copy(wheel, os.path.join(installDir, wheel))
-
+        self.to_log('Zipping installation\n')
         shutil.make_archive('install', 'zip', None, installDir)
-
-        for wheel in wheels:
-            os.remove(os.path.join(installDir, wheel))
 
