@@ -23,8 +23,5 @@ class makewheel(BuildContext):
         self.to_log('Creating wheel\n')
         subprocess.call(['pip', 'wheel', '.', '--wheel-dir', '.', '--no-deps'])
         os.remove('setup.py')
-        numpyWheels = glob.glob('numpy*whl')
-        for wheel in numpyWheels:
-            os.remove(wheel)
 
 
