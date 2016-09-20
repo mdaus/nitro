@@ -21,7 +21,7 @@ class makewheel(BuildContext):
         shutil.copyfile(os.path.join(self.getBuildDir(), 'six', 'conf',
             'setup.py'), 'setup.py')
         self.to_log('Creating wheel\n')
-        subprocess.call(['pip', 'wheel', '.', '--wheel-dir', '.'])
+        subprocess.call(['pip', 'wheel', '.', '--wheel-dir', '.', '--no-deps'])
         os.remove('setup.py')
         numpyWheels = glob.glob('numpy*whl')
         for wheel in numpyWheels:
