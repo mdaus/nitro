@@ -508,6 +508,5 @@ int main(int, char**)
     TEST_CHECK(testSub);
     TEST_CHECK(testSplit);
     TEST_CHECK(testHttpResponse);
-    TEST_CHECK(testMatchOptional);
     return 0;
 }
