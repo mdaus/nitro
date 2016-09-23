@@ -207,11 +207,7 @@ SwigPyIterator_swigregister = _math_linear.SwigPyIterator_swigregister
 SwigPyIterator_swigregister(SwigPyIterator)
 
 
-import sys
-if sys.version_info[0] == 2:
-    import cPickle as pickle
-else:
-    import pickle
+from coda.coda_types import pickle
 
 import coda.coda_types
 import coda.coda_sys
