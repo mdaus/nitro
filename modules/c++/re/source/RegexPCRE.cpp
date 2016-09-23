@@ -114,6 +114,15 @@ public:
         const size_t index = outVector[idx * 2];
         const size_t end = outVector[idx * 2 + 1];
 
+        // If index is equal to end then we need to return an empty string.
+        // It is not always the case when this happens that these values will
+        // be less than or equal to the size of the string, so we need to
+        // explicitly return "" so nothing goes out of bounds.
+        if (index == end)
+        {
+            return "";
+        }
+
         if (end > str.length())
         {
             // Presumably this never happens
