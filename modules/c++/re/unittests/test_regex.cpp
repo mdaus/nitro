@@ -78,12 +78,14 @@ TEST_CASE(testMatchOptional)
     url = "http://localhost/page.com";
     matches.clear();
     rx.match(url, matches);
-    TEST_ASSERT_GREATER_EQ(matches.size(), 5);
+    TEST_ASSERT_GREATER_EQ(matches.size(), 7);
     TEST_ASSERT_EQ(matches[0], url)
     TEST_ASSERT_EQ(matches[1], "http");
     TEST_ASSERT_EQ(matches[2], "localhost");
     TEST_ASSERT_EQ(matches[3], "");
     TEST_ASSERT_EQ(matches[4], "/page.com");
+    TEST_ASSERT_EQ(matches[5], "");
+    TEST_ASSERT_EQ(matches[6], "");
 }
 
 TEST_CASE(testSearch)
@@ -492,7 +494,6 @@ TEST_CASE(testHttpResponse)
     TEST_ASSERT_EQ(p.getContentType(), "application/x-www-form-urlencoded");
     TEST_ASSERT_EQ(p.getContentLength(), "96");
 }
-
 
 int main(int, char**)
 {
