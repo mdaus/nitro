@@ -83,7 +83,7 @@ public:
         // This returns the number of matches
         // But for no matches, it returns PCRE2_ERROR_NOMATCH
         // Other return codes less than 0 indicate an error
-        const int returnCode =
+        const int numMatches =
                 pcre2_match(mCode,
                             reinterpret_cast<PCRE2_SPTR>(subject.c_str()),
                             subject.length(),
@@ -103,6 +103,9 @@ public:
         }
         else
         {
+            // The num matches variable above won't include trailing empty
+            // matches. By returning the actual size including empty matches
+            // we now match the STL and Python versions of regex.
             return pcre2_get_ovector_count(mMatchData);
         }
     }
