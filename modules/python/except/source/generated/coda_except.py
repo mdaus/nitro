@@ -118,27 +118,27 @@ class Context(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def getMessage(self):
+    def getMessage(self) -> "std::string const &":
         """getMessage(Context self) -> std::string const &"""
         return _coda_except.Context_getMessage(self)
 
 
-    def getTime(self):
+    def getTime(self) -> "std::string const &":
         """getTime(Context self) -> std::string const &"""
         return _coda_except.Context_getTime(self)
 
 
-    def getFunction(self):
+    def getFunction(self) -> "std::string const &":
         """getFunction(Context self) -> std::string const &"""
         return _coda_except.Context_getFunction(self)
 
 
-    def getFile(self):
+    def getFile(self) -> "std::string const &":
         """getFile(Context self) -> std::string const &"""
         return _coda_except.Context_getFile(self)
 
 
-    def getLine(self):
+    def getLine(self) -> "int":
         """getLine(Context self) -> int"""
         return _coda_except.Context_getLine(self)
 
@@ -191,12 +191,12 @@ class Throwable(_object):
     __swig_destroy__ = _coda_except.delete_Throwable
     __del__ = lambda self: None
 
-    def getMessage(self):
+    def getMessage(self) -> "std::string":
         """getMessage(Throwable self) -> std::string"""
         return _coda_except.Throwable_getMessage(self)
 
 
-    def getTrace(self, *args):
+    def getTrace(self, *args) -> "Trace &":
         """
         getTrace(Throwable self) -> Trace const
         getTrace(Throwable self) -> Trace &
@@ -204,12 +204,12 @@ class Throwable(_object):
         return _coda_except.Throwable_getTrace(self, *args)
 
 
-    def getType(self):
+    def getType(self) -> "std::string":
         """getType(Throwable self) -> std::string"""
         return _coda_except.Throwable_getType(self)
 
 
-    def toString(self):
+    def toString(self) -> "std::string":
         """toString(Throwable self) -> std::string"""
         return _coda_except.Throwable_toString(self)
 
@@ -244,7 +244,7 @@ class Exception(Throwable):
     __swig_destroy__ = _coda_except.delete_Exception
     __del__ = lambda self: None
 
-    def getType(self):
+    def getType(self) -> "std::string":
         """getType(Exception self) -> std::string"""
         return _coda_except.Exception_getType(self)
 
@@ -279,7 +279,7 @@ class IOException(Exception):
     __swig_destroy__ = _coda_except.delete_IOException
     __del__ = lambda self: None
 
-    def getType(self):
+    def getType(self) -> "std::string":
         """getType(IOException self) -> std::string"""
         return _coda_except.IOException_getType(self)
 
@@ -314,7 +314,7 @@ class FileNotFoundException(IOException):
     __swig_destroy__ = _coda_except.delete_FileNotFoundException
     __del__ = lambda self: None
 
-    def getType(self):
+    def getType(self) -> "std::string":
         """getType(FileNotFoundException self) -> std::string"""
         return _coda_except.FileNotFoundException_getType(self)
 
@@ -349,7 +349,7 @@ class BadCastException(Exception):
     __swig_destroy__ = _coda_except.delete_BadCastException
     __del__ = lambda self: None
 
-    def getType(self):
+    def getType(self) -> "std::string":
         """getType(BadCastException self) -> std::string"""
         return _coda_except.BadCastException_getType(self)
 
@@ -384,7 +384,7 @@ class InvalidFormatException(Exception):
     __swig_destroy__ = _coda_except.delete_InvalidFormatException
     __del__ = lambda self: None
 
-    def getType(self):
+    def getType(self) -> "std::string":
         """getType(InvalidFormatException self) -> std::string"""
         return _coda_except.InvalidFormatException_getType(self)
 
@@ -419,7 +419,7 @@ class IndexOutOfRangeException(Exception):
     __swig_destroy__ = _coda_except.delete_IndexOutOfRangeException
     __del__ = lambda self: None
 
-    def getType(self):
+    def getType(self) -> "std::string":
         """getType(IndexOutOfRangeException self) -> std::string"""
         return _coda_except.IndexOutOfRangeException_getType(self)
 
@@ -454,7 +454,7 @@ class OutOfMemoryException(Exception):
     __swig_destroy__ = _coda_except.delete_OutOfMemoryException
     __del__ = lambda self: None
 
-    def getType(self):
+    def getType(self) -> "std::string":
         """getType(OutOfMemoryException self) -> std::string"""
         return _coda_except.OutOfMemoryException_getType(self)
 
@@ -489,7 +489,7 @@ class NullPointerReferenceException(Exception):
     __swig_destroy__ = _coda_except.delete_NullPointerReferenceException
     __del__ = lambda self: None
 
-    def getType(self):
+    def getType(self) -> "std::string":
         """getType(NullPointerReferenceException self) -> std::string"""
         return _coda_except.NullPointerReferenceException_getType(self)
 
@@ -524,7 +524,7 @@ class NoSuchKeyException(Exception):
     __swig_destroy__ = _coda_except.delete_NoSuchKeyException
     __del__ = lambda self: None
 
-    def getType(self):
+    def getType(self) -> "std::string":
         """getType(NoSuchKeyException self) -> std::string"""
         return _coda_except.NoSuchKeyException_getType(self)
 
@@ -559,7 +559,7 @@ class NoSuchReferenceException(Exception):
     __swig_destroy__ = _coda_except.delete_NoSuchReferenceException
     __del__ = lambda self: None
 
-    def getType(self):
+    def getType(self) -> "std::string":
         """getType(NoSuchReferenceException self) -> std::string"""
         return _coda_except.NoSuchReferenceException_getType(self)
 
@@ -594,7 +594,7 @@ class KeyAlreadyExistsException(Exception):
     __swig_destroy__ = _coda_except.delete_KeyAlreadyExistsException
     __del__ = lambda self: None
 
-    def getType(self):
+    def getType(self) -> "std::string":
         """getType(KeyAlreadyExistsException self) -> std::string"""
         return _coda_except.KeyAlreadyExistsException_getType(self)
 
@@ -629,7 +629,7 @@ class NotImplementedException(Exception):
     __swig_destroy__ = _coda_except.delete_NotImplementedException
     __del__ = lambda self: None
 
-    def getType(self):
+    def getType(self) -> "std::string":
         """getType(NotImplementedException self) -> std::string"""
         return _coda_except.NotImplementedException_getType(self)
 
@@ -664,7 +664,7 @@ class InvalidArgumentException(Exception):
     __swig_destroy__ = _coda_except.delete_InvalidArgumentException
     __del__ = lambda self: None
 
-    def getType(self):
+    def getType(self) -> "std::string":
         """getType(InvalidArgumentException self) -> std::string"""
         return _coda_except.InvalidArgumentException_getType(self)
 
@@ -699,7 +699,7 @@ class SerializationException(IOException):
     __swig_destroy__ = _coda_except.delete_SerializationException
     __del__ = lambda self: None
 
-    def getType(self):
+    def getType(self) -> "std::string":
         """getType(SerializationException self) -> std::string"""
         return _coda_except.SerializationException_getType(self)
 
@@ -734,7 +734,7 @@ class ParseException(IOException):
     __swig_destroy__ = _coda_except.delete_ParseException
     __del__ = lambda self: None
 
-    def getType(self):
+    def getType(self) -> "std::string":
         """getType(ParseException self) -> std::string"""
         return _coda_except.ParseException_getType(self)
 

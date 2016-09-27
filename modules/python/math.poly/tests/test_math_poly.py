@@ -2,12 +2,12 @@
 
 """
  * =========================================================================
- * This file is part of math.poly-c++
+ * This file is part of math.poly-python
  * =========================================================================
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
- * math.linear-c++ is free software; you can redistribute it and/or modify
+ * math.poly-python is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -390,5 +390,32 @@ if __name__ == '__main__':
         print(p3)
         print("input  : ", input_data)
         print("output : ", [p.vals() for p in vals3])
+
+
+    #############################
+    # 1D Numpy converstion test #
+    #############################
+    original = Poly1D([1, 2, 3])
+    converted = Poly1D.fromPolynomial(original.asPolynomial())
+    print("Converting 1D polynomial to numpy array")
+    print("Original: " + str(original))
+    print("Converted: " + str(converted))
+    if original.coeffs() == converted.coeffs():
+        print("Converstion successful")
+    else:
+        raise ValueError("Converstion to numpy array failed")
+
+    ############################
+    # 2D Numpy conversion test #
+    ############################
+    original = Poly2D(1, 1)
+    original[0,0] =  5.0
+    original[0,1] =  0.0
+    original[1,0] = -1.0
+    original[1,1] =  1.0
+    numPoly = original.asPolynomial()
+    print(original)
+    print(numPoly)
+
 
 

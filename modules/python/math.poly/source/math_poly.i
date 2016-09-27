@@ -25,6 +25,9 @@ typedef math::linear::Vector<double> VectorDouble;
 #include "math/poly/OneD.h"
 #include "math/poly/TwoD.h"
 #include "math/poly/Fit.h"
+#include "numpyutils/numpyutils.h"
+#include "Python.h"
+#include "numpy/arrayobject.h"
 %}
 
 typedef math::linear::VectorN<3,double> Vector3;
@@ -66,6 +69,7 @@ typedef math::linear::Vector<double> VectorDouble;
         # Use swig_setmethods to get only data we can set later
         state['coeffs'] = pickle.dumps(self.coeffs())
         return state
+
 %}
 }
 
@@ -123,7 +127,43 @@ typedef math::linear::Vector<double> VectorDouble;
         }
         return pyresult;
     }
+
+    PyObject* asArray()
+    {
+        PyObject* pyArray = Py_None;
+        types::RowCol<long> dims;
+        dims.row = 1;
+        dims.col = self->size();
+
+        Py_Initialize();
+        import_array();
+        numpyutils::createOrVerify(pyArray, NPY_DOUBLE, dims);
+        PyObject* ret = PyArray_SimpleNewFromData(1, &dims.col, NPY_DOUBLE, &((*self)[0]));
+        return ret;
+    }
+
+    %pythoncode
+    %{
+        @staticmethod
+        def fromArray(array):
+            return Poly1D(array.tolist())
+    %}
+
 }
+
+/**
+%typemap(in) (Poly1D polynomial) {
+    std::vector<double> coefficients(PyArray_DIM($input, 0));
+    for (size_t ii = 0; ii < PyArray_DIM($input); ++i) {
+        coefficients[ii] = PyFloat_AsDouble(PyArray_GETITEM($input, ii));
+    }
+    $1 = Poly1D(coefficients);
+}
+
+%typemap(out) (Poly1D polynomial) {
+    $result = PyArray_SimpleNewFromData(1, ($1)->size(), NPY_DOUBLE, $1);
+}
+*/
 
 %include "math/poly/TwoD.h"
 %extend math::poly::TwoD
@@ -142,6 +182,19 @@ typedef math::linear::Vector<double> VectorDouble;
         # Use swig_setmethods to get only data we can set later
         state['coeffs'] = pickle.dumps(self.coeffs())
         return state
+
+    '''
+    def asPolynomial(self):
+        import numpy
+        coefficients = []
+        for polynomial in self.coeffs():
+            coefficients.append(polynomial.coeffs())
+        return numpy.polynomial.polynomial.Polynomial(coefficients)
+
+    @staticmethod
+    def fromPolynomial(poly):
+        return Poly2D(poly.coef.tolist())
+    '''
 %}
 }
 

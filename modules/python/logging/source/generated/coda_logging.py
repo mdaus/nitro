@@ -112,17 +112,17 @@ class Formatter(_object):
     __swig_destroy__ = _coda_logging.delete_Formatter
     __del__ = lambda self: None
 
-    def format(self, record, os):
+    def format(self, record: 'LogRecord const *', os: 'io::OutputStream &') -> "void":
         """format(Formatter self, LogRecord const * record, io::OutputStream & os)"""
         return _coda_logging.Formatter_format(self, record, os)
 
 
-    def getPrologue(self):
+    def getPrologue(self) -> "std::string":
         """getPrologue(Formatter self) -> std::string"""
         return _coda_logging.Formatter_getPrologue(self)
 
 
-    def getEpilogue(self):
+    def getEpilogue(self) -> "std::string":
         """getEpilogue(Formatter self) -> std::string"""
         return _coda_logging.Formatter_getEpilogue(self)
 
@@ -157,7 +157,7 @@ class StandardFormatter(Formatter):
     __swig_destroy__ = _coda_logging.delete_StandardFormatter
     __del__ = lambda self: None
 
-    def format(self, record, os):
+    def format(self, record: 'LogRecord const *', os: 'io::OutputStream &') -> "void":
         """format(StandardFormatter self, LogRecord const * record, io::OutputStream & os)"""
         return _coda_logging.StandardFormatter_format(self, record, os)
 
@@ -185,17 +185,17 @@ class Filterer(_object):
     __swig_destroy__ = _coda_logging.delete_Filterer
     __del__ = lambda self: None
 
-    def addFilter(self, filter):
+    def addFilter(self, filter: 'Filter *') -> "void":
         """addFilter(Filterer self, Filter * filter)"""
         return _coda_logging.Filterer_addFilter(self, filter)
 
 
-    def filter(self, record):
+    def filter(self, record: 'LogRecord const *') -> "bool":
         """filter(Filterer self, LogRecord const * record) -> bool"""
         return _coda_logging.Filterer_filter(self, record)
 
 
-    def removeFilter(self, filter):
+    def removeFilter(self, filter: 'Filter *') -> "void":
         """removeFilter(Filterer self, Filter * filter)"""
         return _coda_logging.Filterer_removeFilter(self, filter)
 
@@ -220,27 +220,27 @@ class Handler(Filterer):
     __swig_destroy__ = _coda_logging.delete_Handler
     __del__ = lambda self: None
 
-    def setLevel(self, level):
+    def setLevel(self, level: 'LogLevel') -> "void":
         """setLevel(Handler self, LogLevel level)"""
         return _coda_logging.Handler_setLevel(self, level)
 
 
-    def getLevel(self):
+    def getLevel(self) -> "LogLevel":
         """getLevel(Handler self) -> LogLevel"""
         return _coda_logging.Handler_getLevel(self)
 
 
-    def handle(self, record):
+    def handle(self, record: 'LogRecord const *') -> "bool":
         """handle(Handler self, LogRecord const * record) -> bool"""
         return _coda_logging.Handler_handle(self, record)
 
 
-    def close(self):
+    def close(self) -> "void":
         """close(Handler self)"""
         return _coda_logging.Handler_close(self)
 
 
-    def setFormatter(self, formatter):
+    def setFormatter(self, formatter: 'Formatter') -> "void":
         """setFormatter(Handler self, Formatter formatter)"""
         return _coda_logging.Handler_setFormatter(self, formatter)
 
@@ -275,7 +275,7 @@ class StreamHandler(Handler):
     __swig_destroy__ = _coda_logging.delete_StreamHandler
     __del__ = lambda self: None
 
-    def close(self):
+    def close(self) -> "void":
         """close(StreamHandler self)"""
         return _coda_logging.StreamHandler_close(self)
 
@@ -333,12 +333,12 @@ class Filter(_object):
     __swig_destroy__ = _coda_logging.delete_Filter
     __del__ = lambda self: None
 
-    def filter(self, record):
+    def filter(self, record: 'LogRecord const *') -> "bool":
         """filter(Filter self, LogRecord const * record) -> bool"""
         return _coda_logging.Filter_filter(self, record)
 
 
-    def getName(self):
+    def getName(self) -> "std::string":
         """getName(Filter self) -> std::string"""
         return _coda_logging.Filter_getName(self)
 
@@ -371,7 +371,7 @@ class Logger(Filterer):
     __swig_destroy__ = _coda_logging.delete_Logger
     __del__ = lambda self: None
 
-    def log(self, *args):
+    def log(self, *args) -> "void":
         """
         log(Logger self, LogLevel level, std::string const & msg)
         log(Logger self, LogLevel level, except::Context const & ctxt)
@@ -380,7 +380,7 @@ class Logger(Filterer):
         return _coda_logging.Logger_log(self, *args)
 
 
-    def debug(self, *args):
+    def debug(self, *args) -> "void":
         """
         debug(Logger self, std::string const & msg)
         debug(Logger self, except::Context const & ctxt)
@@ -389,7 +389,7 @@ class Logger(Filterer):
         return _coda_logging.Logger_debug(self, *args)
 
 
-    def info(self, *args):
+    def info(self, *args) -> "void":
         """
         info(Logger self, std::string const & msg)
         info(Logger self, except::Context const & ctxt)
@@ -398,7 +398,7 @@ class Logger(Filterer):
         return _coda_logging.Logger_info(self, *args)
 
 
-    def warn(self, *args):
+    def warn(self, *args) -> "void":
         """
         warn(Logger self, std::string const & msg)
         warn(Logger self, except::Context const & ctxt)
@@ -407,7 +407,7 @@ class Logger(Filterer):
         return _coda_logging.Logger_warn(self, *args)
 
 
-    def error(self, *args):
+    def error(self, *args) -> "void":
         """
         error(Logger self, std::string const & msg)
         error(Logger self, except::Context const & ctxt)
@@ -416,7 +416,7 @@ class Logger(Filterer):
         return _coda_logging.Logger_error(self, *args)
 
 
-    def critical(self, *args):
+    def critical(self, *args) -> "void":
         """
         critical(Logger self, std::string const & msg)
         critical(Logger self, except::Context const & ctxt)
@@ -425,7 +425,7 @@ class Logger(Filterer):
         return _coda_logging.Logger_critical(self, *args)
 
 
-    def addHandler(self, handler, own=False):
+    def addHandler(self, handler: 'Handler', own: 'bool'=False) -> "void":
         """
         addHandler(Logger self, Handler handler, bool own=False)
         addHandler(Logger self, Handler handler)
@@ -433,27 +433,27 @@ class Logger(Filterer):
         return _coda_logging.Logger_addHandler(self, handler, own)
 
 
-    def removeHandler(self, handler):
+    def removeHandler(self, handler: 'Handler') -> "void":
         """removeHandler(Logger self, Handler handler)"""
         return _coda_logging.Logger_removeHandler(self, handler)
 
 
-    def setLevel(self, level):
+    def setLevel(self, level: 'LogLevel') -> "void":
         """setLevel(Logger self, LogLevel level)"""
         return _coda_logging.Logger_setLevel(self, level)
 
 
-    def setName(self, name):
+    def setName(self, name: 'std::string const &') -> "void":
         """setName(Logger self, std::string const & name)"""
         return _coda_logging.Logger_setName(self, name)
 
 
-    def getName(self):
+    def getName(self) -> "std::string":
         """getName(Logger self) -> std::string"""
         return _coda_logging.Logger_getName(self)
 
 
-    def reset(self):
+    def reset(self) -> "void":
         """reset(Logger self)"""
         return _coda_logging.Logger_reset(self)
 
@@ -533,7 +533,7 @@ class LoggerManager(_object):
         except __builtin__.Exception:
             self.this = this
 
-    def getLoggerSharedPtr(self, *args):
+    def getLoggerSharedPtr(self, *args) -> "mem::SharedPtr< logging::Logger >":
         """
         getLoggerSharedPtr(LoggerManager self, std::string const & name) -> mem::SharedPtr< logging::Logger >
         getLoggerSharedPtr(LoggerManager self) -> mem::SharedPtr< logging::Logger >
@@ -541,7 +541,7 @@ class LoggerManager(_object):
         return _coda_logging.LoggerManager_getLoggerSharedPtr(self, *args)
 
 
-    def getLogger(self, *args):
+    def getLogger(self, *args) -> "logging::Logger *":
         """
         getLogger(LoggerManager self, std::string const & name) -> Logger
         getLogger(LoggerManager self) -> Logger
@@ -554,7 +554,7 @@ LoggerManager_swigregister = _coda_logging.LoggerManager_swigregister
 LoggerManager_swigregister(LoggerManager)
 
 
-def debug(*args):
+def debug(*args) -> "void":
     """
     debug(std::string const & msg)
     debug(except::Context const & ctxt)
@@ -562,7 +562,7 @@ def debug(*args):
     """
     return _coda_logging.debug(*args)
 
-def info(*args):
+def info(*args) -> "void":
     """
     info(std::string const & msg)
     info(except::Context const & ctxt)
@@ -570,7 +570,7 @@ def info(*args):
     """
     return _coda_logging.info(*args)
 
-def warn(*args):
+def warn(*args) -> "void":
     """
     warn(std::string const & msg)
     warn(except::Context const & ctxt)
@@ -578,7 +578,7 @@ def warn(*args):
     """
     return _coda_logging.warn(*args)
 
-def error(*args):
+def error(*args) -> "void":
     """
     error(std::string const & msg)
     error(except::Context const & ctxt)
@@ -586,7 +586,7 @@ def error(*args):
     """
     return _coda_logging.error(*args)
 
-def critical(*args):
+def critical(*args) -> "void":
     """
     critical(std::string const & msg)
     critical(except::Context const & ctxt)
@@ -594,11 +594,11 @@ def critical(*args):
     """
     return _coda_logging.critical(*args)
 
-def getLogger(*args):
+def getLogger(*args) -> "logging::Logger *":
     """getLogger() -> Logger"""
     return _coda_logging.getLogger(*args)
 
-def getLoggerSharedPtr(*args):
+def getLoggerSharedPtr(*args) -> "mem::SharedPtr< logging::Logger >":
     """getLoggerSharedPtr() -> mem::SharedPtr< logging::Logger >"""
     return _coda_logging.getLoggerSharedPtr(*args)
 # This file is compatible with both classic and new-style classes.

@@ -101,22 +101,22 @@ except __builtin__.Exception:
 NativeLayer_func__ = _coda_sys.NativeLayer_func__
 SYS_FUNC = _coda_sys.SYS_FUNC
 
-def isBigEndianSystem():
+def isBigEndianSystem() -> "bool":
     """isBigEndianSystem() -> bool"""
     return _coda_sys.isBigEndianSystem()
 
-def byteSwap(buffer, elemSize, numElems):
+def byteSwap(buffer: 'void *', elemSize: 'unsigned short', numElems: 'size_t') -> "void":
     """byteSwap(void * buffer, unsigned short elemSize, size_t numElems)"""
     return _coda_sys.byteSwap(buffer, elemSize, numElems)
 
-def alignedAlloc(*args):
+def alignedAlloc(*args) -> "void *":
     """
     alignedAlloc(size_t size, size_t alignment)
     alignedAlloc(size_t size) -> void *
     """
     return _coda_sys.alignedAlloc(*args)
 
-def alignedFree(p):
+def alignedFree(p: 'void *') -> "void":
     """alignedFree(void * p)"""
     return _coda_sys.alignedFree(p)
 # This file is compatible with both classic and new-style classes.

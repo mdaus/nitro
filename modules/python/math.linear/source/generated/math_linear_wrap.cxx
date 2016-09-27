@@ -16006,7 +16006,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Matrix3x1___div__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Matrix3x1___truediv__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   math::linear::MatrixMxN< 3,1,double > *arg1 = (math::linear::MatrixMxN< 3,1,double > *) 0 ;
   double arg2 ;
@@ -16018,15 +16018,15 @@ SWIGINTERN PyObject *_wrap_Matrix3x1___div__(PyObject *SWIGUNUSEDPARM(self), PyO
   PyObject * obj1 = 0 ;
   math::linear::MatrixMxN< 3,1,double >::Like_T result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:Matrix3x1___div__",&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"OO:Matrix3x1___truediv__",&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__linear__MatrixMxNT_3_1_double_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Matrix3x1___div__" "', argument " "1"" of type '" "math::linear::MatrixMxN< 3,1,double > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Matrix3x1___truediv__" "', argument " "1"" of type '" "math::linear::MatrixMxN< 3,1,double > const *""'"); 
   }
   arg1 = reinterpret_cast< math::linear::MatrixMxN< 3,1,double > * >(argp1);
   ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Matrix3x1___div__" "', argument " "2"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Matrix3x1___truediv__" "', argument " "2"" of type '" "double""'");
   } 
   arg2 = static_cast< double >(val2);
   {
@@ -17892,7 +17892,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Vector2___idiv__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Vector2___itruediv__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   math::linear::VectorN< 2,double > *arg1 = (math::linear::VectorN< 2,double > *) 0 ;
   math::linear::VectorN< 2,double >::Like_T *arg2 = 0 ;
@@ -17904,18 +17904,18 @@ SWIGINTERN PyObject *_wrap_Vector2___idiv__(PyObject *SWIGUNUSEDPARM(self), PyOb
   PyObject * obj1 = 0 ;
   math::linear::VectorN< 2,double >::Like_T *result = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:Vector2___idiv__",&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"OO:Vector2___itruediv__",&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__linear__VectorNT_2_double_t, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Vector2___idiv__" "', argument " "1"" of type '" "math::linear::VectorN< 2,double > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Vector2___itruediv__" "', argument " "1"" of type '" "math::linear::VectorN< 2,double > *""'"); 
   }
   arg1 = reinterpret_cast< math::linear::VectorN< 2,double > * >(argp1);
   res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__linear__VectorNT_2_double_t,  0  | 0);
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Vector2___idiv__" "', argument " "2"" of type '" "math::linear::VectorN< 2,double >::Like_T const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Vector2___itruediv__" "', argument " "2"" of type '" "math::linear::VectorN< 2,double >::Like_T const &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Vector2___idiv__" "', argument " "2"" of type '" "math::linear::VectorN< 2,double >::Like_T const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Vector2___itruediv__" "', argument " "2"" of type '" "math::linear::VectorN< 2,double >::Like_T const &""'"); 
   }
   arg2 = reinterpret_cast< math::linear::VectorN< 2,double >::Like_T * >(argp2);
   {
@@ -18067,7 +18067,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Vector2___div__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Vector2___truediv__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   math::linear::VectorN< 2,double > *arg1 = (math::linear::VectorN< 2,double > *) 0 ;
   math::linear::VectorN< 2,double >::Like_T *arg2 = 0 ;
@@ -18079,18 +18079,18 @@ SWIGINTERN PyObject *_wrap_Vector2___div__(PyObject *SWIGUNUSEDPARM(self), PyObj
   PyObject * obj1 = 0 ;
   math::linear::VectorN< 2,double >::Like_T result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:Vector2___div__",&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"OO:Vector2___truediv__",&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__linear__VectorNT_2_double_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Vector2___div__" "', argument " "1"" of type '" "math::linear::VectorN< 2,double > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Vector2___truediv__" "', argument " "1"" of type '" "math::linear::VectorN< 2,double > const *""'"); 
   }
   arg1 = reinterpret_cast< math::linear::VectorN< 2,double > * >(argp1);
   res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__linear__VectorNT_2_double_t,  0  | 0);
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Vector2___div__" "', argument " "2"" of type '" "math::linear::VectorN< 2,double >::Like_T const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Vector2___truediv__" "', argument " "2"" of type '" "math::linear::VectorN< 2,double >::Like_T const &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Vector2___div__" "', argument " "2"" of type '" "math::linear::VectorN< 2,double >::Like_T const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Vector2___truediv__" "', argument " "2"" of type '" "math::linear::VectorN< 2,double >::Like_T const &""'"); 
   }
   arg2 = reinterpret_cast< math::linear::VectorN< 2,double >::Like_T * >(argp2);
   {
@@ -20193,7 +20193,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Vector3___idiv__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Vector3___itruediv__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   math::linear::VectorN< 3,double > *arg1 = (math::linear::VectorN< 3,double > *) 0 ;
   math::linear::VectorN< 3,double >::Like_T *arg2 = 0 ;
@@ -20205,18 +20205,18 @@ SWIGINTERN PyObject *_wrap_Vector3___idiv__(PyObject *SWIGUNUSEDPARM(self), PyOb
   PyObject * obj1 = 0 ;
   math::linear::VectorN< 3,double >::Like_T *result = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:Vector3___idiv__",&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"OO:Vector3___itruediv__",&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__linear__VectorNT_3_double_t, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Vector3___idiv__" "', argument " "1"" of type '" "math::linear::VectorN< 3,double > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Vector3___itruediv__" "', argument " "1"" of type '" "math::linear::VectorN< 3,double > *""'"); 
   }
   arg1 = reinterpret_cast< math::linear::VectorN< 3,double > * >(argp1);
   res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__linear__VectorNT_3_double_t,  0  | 0);
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Vector3___idiv__" "', argument " "2"" of type '" "math::linear::VectorN< 3,double >::Like_T const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Vector3___itruediv__" "', argument " "2"" of type '" "math::linear::VectorN< 3,double >::Like_T const &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Vector3___idiv__" "', argument " "2"" of type '" "math::linear::VectorN< 3,double >::Like_T const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Vector3___itruediv__" "', argument " "2"" of type '" "math::linear::VectorN< 3,double >::Like_T const &""'"); 
   }
   arg2 = reinterpret_cast< math::linear::VectorN< 3,double >::Like_T * >(argp2);
   {
@@ -20368,7 +20368,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Vector3___div__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Vector3___truediv__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   math::linear::VectorN< 3,double > *arg1 = (math::linear::VectorN< 3,double > *) 0 ;
   math::linear::VectorN< 3,double >::Like_T *arg2 = 0 ;
@@ -20380,18 +20380,18 @@ SWIGINTERN PyObject *_wrap_Vector3___div__(PyObject *SWIGUNUSEDPARM(self), PyObj
   PyObject * obj1 = 0 ;
   math::linear::VectorN< 3,double >::Like_T result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:Vector3___div__",&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"OO:Vector3___truediv__",&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__linear__VectorNT_3_double_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Vector3___div__" "', argument " "1"" of type '" "math::linear::VectorN< 3,double > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Vector3___truediv__" "', argument " "1"" of type '" "math::linear::VectorN< 3,double > const *""'"); 
   }
   arg1 = reinterpret_cast< math::linear::VectorN< 3,double > * >(argp1);
   res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__linear__VectorNT_3_double_t,  0  | 0);
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Vector3___div__" "', argument " "2"" of type '" "math::linear::VectorN< 3,double >::Like_T const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Vector3___truediv__" "', argument " "2"" of type '" "math::linear::VectorN< 3,double >::Like_T const &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Vector3___div__" "', argument " "2"" of type '" "math::linear::VectorN< 3,double >::Like_T const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Vector3___truediv__" "', argument " "2"" of type '" "math::linear::VectorN< 3,double >::Like_T const &""'"); 
   }
   arg2 = reinterpret_cast< math::linear::VectorN< 3,double >::Like_T * >(argp2);
   {
@@ -22755,7 +22755,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_VectorDouble___idiv__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_VectorDouble___itruediv__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   math::linear::Vector< double > *arg1 = (math::linear::Vector< double > *) 0 ;
   math::linear::Vector< double > *arg2 = 0 ;
@@ -22767,18 +22767,18 @@ SWIGINTERN PyObject *_wrap_VectorDouble___idiv__(PyObject *SWIGUNUSEDPARM(self),
   PyObject * obj1 = 0 ;
   math::linear::Vector< double > *result = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:VectorDouble___idiv__",&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorDouble___itruediv__",&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__linear__VectorT_double_t, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorDouble___idiv__" "', argument " "1"" of type '" "math::linear::Vector< double > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorDouble___itruediv__" "', argument " "1"" of type '" "math::linear::Vector< double > *""'"); 
   }
   arg1 = reinterpret_cast< math::linear::Vector< double > * >(argp1);
   res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__linear__VectorT_double_t,  0  | 0);
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VectorDouble___idiv__" "', argument " "2"" of type '" "math::linear::Vector< double > const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VectorDouble___itruediv__" "', argument " "2"" of type '" "math::linear::Vector< double > const &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorDouble___idiv__" "', argument " "2"" of type '" "math::linear::Vector< double > const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorDouble___itruediv__" "', argument " "2"" of type '" "math::linear::Vector< double > const &""'"); 
   }
   arg2 = reinterpret_cast< math::linear::Vector< double > * >(argp2);
   {
@@ -22930,7 +22930,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_VectorDouble___div__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_VectorDouble___truediv__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   math::linear::Vector< double > *arg1 = (math::linear::Vector< double > *) 0 ;
   math::linear::Vector< double > *arg2 = 0 ;
@@ -22942,18 +22942,18 @@ SWIGINTERN PyObject *_wrap_VectorDouble___div__(PyObject *SWIGUNUSEDPARM(self), 
   PyObject * obj1 = 0 ;
   math::linear::Vector< double > result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:VectorDouble___div__",&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"OO:VectorDouble___truediv__",&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__linear__VectorT_double_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorDouble___div__" "', argument " "1"" of type '" "math::linear::Vector< double > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorDouble___truediv__" "', argument " "1"" of type '" "math::linear::Vector< double > const *""'"); 
   }
   arg1 = reinterpret_cast< math::linear::Vector< double > * >(argp1);
   res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_math__linear__VectorT_double_t,  0  | 0);
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VectorDouble___div__" "', argument " "2"" of type '" "math::linear::Vector< double > const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VectorDouble___truediv__" "', argument " "2"" of type '" "math::linear::Vector< double > const &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorDouble___div__" "', argument " "2"" of type '" "math::linear::Vector< double > const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorDouble___truediv__" "', argument " "2"" of type '" "math::linear::Vector< double > const &""'"); 
   }
   arg2 = reinterpret_cast< math::linear::Vector< double > * >(argp2);
   {
@@ -26494,7 +26494,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_MatrixDouble___div__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_MatrixDouble___truediv__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   math::linear::Matrix2D< double > *arg1 = (math::linear::Matrix2D< double > *) 0 ;
   double arg2 ;
@@ -26506,15 +26506,15 @@ SWIGINTERN PyObject *_wrap_MatrixDouble___div__(PyObject *SWIGUNUSEDPARM(self), 
   PyObject * obj1 = 0 ;
   math::linear::Matrix2D< double > result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:MatrixDouble___div__",&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"OO:MatrixDouble___truediv__",&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__linear__Matrix2DT_double_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MatrixDouble___div__" "', argument " "1"" of type '" "math::linear::Matrix2D< double > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "MatrixDouble___truediv__" "', argument " "1"" of type '" "math::linear::Matrix2D< double > const *""'"); 
   }
   arg1 = reinterpret_cast< math::linear::Matrix2D< double > * >(argp1);
   ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "MatrixDouble___div__" "', argument " "2"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "MatrixDouble___truediv__" "', argument " "2"" of type '" "double""'");
   } 
   arg2 = static_cast< double >(val2);
   {
@@ -27148,7 +27148,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Matrix3x1___add__", _wrap_Matrix3x1___add__, METH_VARARGS, (char *)"Matrix3x1___add__(Matrix3x1 self, Matrix3x1 mx) -> Matrix3x1"},
 	 { (char *)"Matrix3x1___sub__", _wrap_Matrix3x1___sub__, METH_VARARGS, (char *)"Matrix3x1___sub__(Matrix3x1 self, Matrix3x1 mx) -> Matrix3x1"},
 	 { (char *)"Matrix3x1___mul__", _wrap_Matrix3x1___mul__, METH_VARARGS, (char *)"Matrix3x1___mul__(Matrix3x1 self, double scalar) -> Matrix3x1"},
-	 { (char *)"Matrix3x1___div__", _wrap_Matrix3x1___div__, METH_VARARGS, (char *)"Matrix3x1___div__(Matrix3x1 self, double scalar) -> Matrix3x1"},
+	 { (char *)"Matrix3x1___truediv__", _wrap_Matrix3x1___truediv__, METH_VARARGS, (char *)"Matrix3x1___truediv__(Matrix3x1 self, double scalar) -> Matrix3x1"},
 	 { (char *)"Matrix3x1___neg__", _wrap_Matrix3x1___neg__, METH_VARARGS, (char *)"Matrix3x1___neg__(Matrix3x1 self) -> Matrix3x1"},
 	 { (char *)"Matrix3x1_swigregister", Matrix3x1_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_Vector2", _wrap_new_Vector2, METH_VARARGS, (char *)"\n"
@@ -27184,12 +27184,12 @@ static PyMethodDef SwigMethods[] = {
 		"__imul__(Vector2 v) -> Vector2\n"
 		"Vector2___imul__(Vector2 self, double sv) -> Vector2\n"
 		""},
-	 { (char *)"Vector2___idiv__", _wrap_Vector2___idiv__, METH_VARARGS, (char *)"Vector2___idiv__(Vector2 self, Vector2 v) -> Vector2"},
+	 { (char *)"Vector2___itruediv__", _wrap_Vector2___itruediv__, METH_VARARGS, (char *)"Vector2___itruediv__(Vector2 self, Vector2 v) -> Vector2"},
 	 { (char *)"Vector2___mul__", _wrap_Vector2___mul__, METH_VARARGS, (char *)"\n"
 		"__mul__(double sv) -> Vector2\n"
 		"Vector2___mul__(Vector2 self, Vector2 v) -> Vector2\n"
 		""},
-	 { (char *)"Vector2___div__", _wrap_Vector2___div__, METH_VARARGS, (char *)"Vector2___div__(Vector2 self, Vector2 v) -> Vector2"},
+	 { (char *)"Vector2___truediv__", _wrap_Vector2___truediv__, METH_VARARGS, (char *)"Vector2___truediv__(Vector2 self, Vector2 v) -> Vector2"},
 	 { (char *)"Vector2___getitem__", _wrap_Vector2___getitem__, METH_VARARGS, (char *)"Vector2___getitem__(Vector2 self, long i) -> double"},
 	 { (char *)"Vector2___setitem__", _wrap_Vector2___setitem__, METH_VARARGS, (char *)"Vector2___setitem__(Vector2 self, long i, double val)"},
 	 { (char *)"Vector2___str__", _wrap_Vector2___str__, METH_VARARGS, (char *)"Vector2___str__(Vector2 self) -> std::string"},
@@ -27229,12 +27229,12 @@ static PyMethodDef SwigMethods[] = {
 		"__imul__(Vector3 v) -> Vector3\n"
 		"Vector3___imul__(Vector3 self, double sv) -> Vector3\n"
 		""},
-	 { (char *)"Vector3___idiv__", _wrap_Vector3___idiv__, METH_VARARGS, (char *)"Vector3___idiv__(Vector3 self, Vector3 v) -> Vector3"},
+	 { (char *)"Vector3___itruediv__", _wrap_Vector3___itruediv__, METH_VARARGS, (char *)"Vector3___itruediv__(Vector3 self, Vector3 v) -> Vector3"},
 	 { (char *)"Vector3___mul__", _wrap_Vector3___mul__, METH_VARARGS, (char *)"\n"
 		"__mul__(double sv) -> Vector3\n"
 		"Vector3___mul__(Vector3 self, Vector3 v) -> Vector3\n"
 		""},
-	 { (char *)"Vector3___div__", _wrap_Vector3___div__, METH_VARARGS, (char *)"Vector3___div__(Vector3 self, Vector3 v) -> Vector3"},
+	 { (char *)"Vector3___truediv__", _wrap_Vector3___truediv__, METH_VARARGS, (char *)"Vector3___truediv__(Vector3 self, Vector3 v) -> Vector3"},
 	 { (char *)"Vector3___getitem__", _wrap_Vector3___getitem__, METH_VARARGS, (char *)"Vector3___getitem__(Vector3 self, long i) -> double"},
 	 { (char *)"Vector3___setitem__", _wrap_Vector3___setitem__, METH_VARARGS, (char *)"Vector3___setitem__(Vector3 self, long i, double val)"},
 	 { (char *)"Vector3___str__", _wrap_Vector3___str__, METH_VARARGS, (char *)"Vector3___str__(Vector3 self) -> std::string"},
@@ -27279,12 +27279,12 @@ static PyMethodDef SwigMethods[] = {
 		"__imul__(VectorDouble v) -> VectorDouble\n"
 		"VectorDouble___imul__(VectorDouble self, double sv) -> VectorDouble\n"
 		""},
-	 { (char *)"VectorDouble___idiv__", _wrap_VectorDouble___idiv__, METH_VARARGS, (char *)"VectorDouble___idiv__(VectorDouble self, VectorDouble v) -> VectorDouble"},
+	 { (char *)"VectorDouble___itruediv__", _wrap_VectorDouble___itruediv__, METH_VARARGS, (char *)"VectorDouble___itruediv__(VectorDouble self, VectorDouble v) -> VectorDouble"},
 	 { (char *)"VectorDouble___mul__", _wrap_VectorDouble___mul__, METH_VARARGS, (char *)"\n"
 		"__mul__(double sv) -> VectorDouble\n"
 		"VectorDouble___mul__(VectorDouble self, VectorDouble v) -> VectorDouble\n"
 		""},
-	 { (char *)"VectorDouble___div__", _wrap_VectorDouble___div__, METH_VARARGS, (char *)"VectorDouble___div__(VectorDouble self, VectorDouble v) -> VectorDouble"},
+	 { (char *)"VectorDouble___truediv__", _wrap_VectorDouble___truediv__, METH_VARARGS, (char *)"VectorDouble___truediv__(VectorDouble self, VectorDouble v) -> VectorDouble"},
 	 { (char *)"VectorDouble___getitem__", _wrap_VectorDouble___getitem__, METH_VARARGS, (char *)"VectorDouble___getitem__(VectorDouble self, long i) -> double"},
 	 { (char *)"VectorDouble___setitem__", _wrap_VectorDouble___setitem__, METH_VARARGS, (char *)"VectorDouble___setitem__(VectorDouble self, long i, double val)"},
 	 { (char *)"VectorDouble___str__", _wrap_VectorDouble___str__, METH_VARARGS, (char *)"VectorDouble___str__(VectorDouble self) -> std::string"},
@@ -27345,7 +27345,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"MatrixDouble_unit", _wrap_MatrixDouble_unit, METH_VARARGS, (char *)"MatrixDouble_unit(MatrixDouble self) -> MatrixDouble"},
 	 { (char *)"MatrixDouble___add__", _wrap_MatrixDouble___add__, METH_VARARGS, (char *)"MatrixDouble___add__(MatrixDouble self, MatrixDouble mx) -> MatrixDouble"},
 	 { (char *)"MatrixDouble___sub__", _wrap_MatrixDouble___sub__, METH_VARARGS, (char *)"MatrixDouble___sub__(MatrixDouble self, MatrixDouble mx) -> MatrixDouble"},
-	 { (char *)"MatrixDouble___div__", _wrap_MatrixDouble___div__, METH_VARARGS, (char *)"MatrixDouble___div__(MatrixDouble self, double scalar) -> MatrixDouble"},
+	 { (char *)"MatrixDouble___truediv__", _wrap_MatrixDouble___truediv__, METH_VARARGS, (char *)"MatrixDouble___truediv__(MatrixDouble self, double scalar) -> MatrixDouble"},
 	 { (char *)"MatrixDouble___mul__", _wrap_MatrixDouble___mul__, METH_VARARGS, (char *)"\n"
 		"__mul__(double scalar) -> MatrixDouble\n"
 		"MatrixDouble___mul__(MatrixDouble self, MatrixDouble mx) -> MatrixDouble\n"

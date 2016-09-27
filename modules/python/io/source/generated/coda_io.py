@@ -115,22 +115,22 @@ class InputStream(_object):
     __swig_destroy__ = _coda_io.delete_InputStream
     __del__ = lambda self: None
 
-    def available(self):
+    def available(self) -> "sys::Off_T":
         """available(InputStream self) -> sys::Off_T"""
         return _coda_io.InputStream_available(self)
 
 
-    def read(self, b, len):
+    def read(self, b: 'sys::byte *', len: 'sys::Size_T') -> "sys::SSize_T":
         """read(InputStream self, sys::byte * b, sys::Size_T len) -> sys::SSize_T"""
         return _coda_io.InputStream_read(self, b, len)
 
 
-    def readln(self, cStr, strLenPlusNullByte):
+    def readln(self, cStr: 'sys::byte *', strLenPlusNullByte: 'sys::Size_T const') -> "sys::SSize_T":
         """readln(InputStream self, sys::byte * cStr, sys::Size_T const strLenPlusNullByte) -> sys::SSize_T"""
         return _coda_io.InputStream_readln(self, cStr, strLenPlusNullByte)
 
 
-    def streamTo(self, *args):
+    def streamTo(self, *args) -> "sys::SSize_T":
         """
         streamTo(InputStream self, OutputStream & soi, sys::SSize_T numBytes) -> sys::SSize_T
         streamTo(InputStream self, OutputStream & soi) -> sys::SSize_T
@@ -154,12 +154,12 @@ class OutputStream(_object):
     __swig_destroy__ = _coda_io.delete_OutputStream
     __del__ = lambda self: None
 
-    def writeln(self, str):
+    def writeln(self, str: 'std::string const &') -> "void":
         """writeln(OutputStream self, std::string const & str)"""
         return _coda_io.OutputStream_writeln(self, str)
 
 
-    def write(self, *args):
+    def write(self, *args) -> "void":
         """
         write(OutputStream self, sys::byte b)
         write(OutputStream self, std::string const & str)
@@ -168,12 +168,12 @@ class OutputStream(_object):
         return _coda_io.OutputStream_write(self, *args)
 
 
-    def flush(self):
+    def flush(self) -> "void":
         """flush(OutputStream self)"""
         return _coda_io.OutputStream_flush(self)
 
 
-    def close(self):
+    def close(self) -> "void":
         """close(OutputStream self)"""
         return _coda_io.OutputStream_close(self)
 
@@ -217,12 +217,12 @@ class Seekable(_object):
     START = _coda_io.Seekable_START
     END = _coda_io.Seekable_END
 
-    def seek(self, offset, whence):
+    def seek(self, offset: 'sys::Off_T', whence: 'io::Seekable::Whence') -> "sys::Off_T":
         """seek(Seekable self, sys::Off_T offset, io::Seekable::Whence whence) -> sys::Off_T"""
         return _coda_io.Seekable_seek(self, offset, whence)
 
 
-    def tell(self):
+    def tell(self) -> "sys::Off_T":
         """tell(Seekable self) -> sys::Off_T"""
         return _coda_io.Seekable_tell(self)
 
@@ -247,12 +247,12 @@ class SeekableInputStream(InputStream, Seekable):
     __swig_destroy__ = _coda_io.delete_SeekableInputStream
     __del__ = lambda self: None
 
-    def read(self, b, len):
+    def read(self, b: 'sys::byte *', len: 'sys::Size_T') -> "sys::SSize_T":
         """read(SeekableInputStream self, sys::byte * b, sys::Size_T len) -> sys::SSize_T"""
         return _coda_io.SeekableInputStream_read(self, b, len)
 
 
-    def streamTo(self, *args):
+    def streamTo(self, *args) -> "sys::SSize_T":
         """
         streamTo(SeekableInputStream self, OutputStream & soi, sys::SSize_T numBytes) -> sys::SSize_T
         streamTo(SeekableInputStream self, OutputStream & soi) -> sys::SSize_T
@@ -280,7 +280,7 @@ class SeekableOutputStream(OutputStream, Seekable):
     __swig_destroy__ = _coda_io.delete_SeekableOutputStream
     __del__ = lambda self: None
 
-    def write(self, b, len):
+    def write(self, b: 'sys::byte const *', len: 'sys::Size_T') -> "void":
         """write(SeekableOutputStream self, sys::byte const * b, sys::Size_T len)"""
         return _coda_io.SeekableOutputStream_write(self, b, len)
 
@@ -305,17 +305,17 @@ class SeekableBidirectionalStream(BidirectionalStream, Seekable):
     __swig_destroy__ = _coda_io.delete_SeekableBidirectionalStream
     __del__ = lambda self: None
 
-    def read(self, b, len):
+    def read(self, b: 'sys::byte *', len: 'sys::Size_T') -> "sys::SSize_T":
         """read(SeekableBidirectionalStream self, sys::byte * b, sys::Size_T len) -> sys::SSize_T"""
         return _coda_io.SeekableBidirectionalStream_read(self, b, len)
 
 
-    def write(self, b, len):
+    def write(self, b: 'sys::byte const *', len: 'sys::Size_T') -> "void":
         """write(SeekableBidirectionalStream self, sys::byte const * b, sys::Size_T len)"""
         return _coda_io.SeekableBidirectionalStream_write(self, b, len)
 
 
-    def streamTo(self, *args):
+    def streamTo(self, *args) -> "sys::SSize_T":
         """
         streamTo(SeekableBidirectionalStream self, OutputStream & soi, sys::SSize_T numBytes) -> sys::SSize_T
         streamTo(SeekableBidirectionalStream self, OutputStream & soi) -> sys::SSize_T
@@ -346,22 +346,22 @@ class StringStream(SeekableBidirectionalStream):
         except __builtin__.Exception:
             self.this = this
 
-    def tell(self):
+    def tell(self) -> "sys::Off_T":
         """tell(StringStream self) -> sys::Off_T"""
         return _coda_io.StringStream_tell(self)
 
 
-    def seek(self, offset, whence):
+    def seek(self, offset: 'sys::Off_T', whence: 'io::Seekable::Whence') -> "sys::Off_T":
         """seek(StringStream self, sys::Off_T offset, io::Seekable::Whence whence) -> sys::Off_T"""
         return _coda_io.StringStream_seek(self, offset, whence)
 
 
-    def available(self):
+    def available(self) -> "sys::Off_T":
         """available(StringStream self) -> sys::Off_T"""
         return _coda_io.StringStream_available(self)
 
 
-    def write(self, *args):
+    def write(self, *args) -> "void":
         """
         write(StringStream self, sys::byte b)
         write(StringStream self, std::string const & str)
@@ -370,12 +370,12 @@ class StringStream(SeekableBidirectionalStream):
         return _coda_io.StringStream_write(self, *args)
 
 
-    def read(self, b, len):
+    def read(self, b: 'sys::byte *', len: 'sys::Size_T') -> "sys::SSize_T":
         """read(StringStream self, sys::byte * b, sys::Size_T len) -> sys::SSize_T"""
         return _coda_io.StringStream_read(self, b, len)
 
 
-    def stream(self, *args):
+    def stream(self, *args) -> "std::stringstream &":
         """
         stream(StringStream self) -> std::stringstream const
         stream(StringStream self) -> std::stringstream &
@@ -383,12 +383,12 @@ class StringStream(SeekableBidirectionalStream):
         return _coda_io.StringStream_stream(self, *args)
 
 
-    def reset(self):
+    def reset(self) -> "void":
         """reset(StringStream self)"""
         return _coda_io.StringStream_reset(self)
 
 
-    def str(self):
+    def str(self) -> "std::string":
         """str(StringStream self) -> std::string"""
         return _coda_io.StringStream_str(self)
 
@@ -410,7 +410,7 @@ class NullInputStream(InputStream):
     __getattr__ = lambda self, name: _swig_getattr(self, NullInputStream, name)
     __repr__ = _swig_repr
 
-    def __init__(self, size):
+    def __init__(self, size: 'sys::SSize_T'):
         """__init__(io::NullInputStream self, sys::SSize_T size) -> NullInputStream"""
         this = _coda_io.new_NullInputStream(size)
         try:
@@ -420,22 +420,22 @@ class NullInputStream(InputStream):
     __swig_destroy__ = _coda_io.delete_NullInputStream
     __del__ = lambda self: None
 
-    def available(self):
+    def available(self) -> "sys::Off_T":
         """available(NullInputStream self) -> sys::Off_T"""
         return _coda_io.NullInputStream_available(self)
 
 
-    def read(self, b, len):
+    def read(self, b: 'sys::byte *', len: 'sys::Size_T') -> "sys::SSize_T":
         """read(NullInputStream self, sys::byte * b, sys::Size_T len) -> sys::SSize_T"""
         return _coda_io.NullInputStream_read(self, b, len)
 
 
-    def readln(self, cStr, strLenPlusNullByte):
+    def readln(self, cStr: 'sys::byte *', strLenPlusNullByte: 'sys::Size_T const') -> "sys::SSize_T":
         """readln(NullInputStream self, sys::byte * cStr, sys::Size_T const strLenPlusNullByte) -> sys::SSize_T"""
         return _coda_io.NullInputStream_readln(self, cStr, strLenPlusNullByte)
 
 
-    def streamTo(self, *args):
+    def streamTo(self, *args) -> "sys::SSize_T":
         """
         streamTo(NullInputStream self, OutputStream soi, sys::SSize_T numBytes) -> sys::SSize_T
         streamTo(NullInputStream self, OutputStream soi) -> sys::SSize_T
@@ -468,12 +468,12 @@ class NullOutputStream(OutputStream):
     __swig_destroy__ = _coda_io.delete_NullOutputStream
     __del__ = lambda self: None
 
-    def writeln(self, arg2):
+    def writeln(self, arg2: 'std::string const &') -> "void":
         """writeln(NullOutputStream self, std::string const & arg2)"""
         return _coda_io.NullOutputStream_writeln(self, arg2)
 
 
-    def write(self, *args):
+    def write(self, *args) -> "void":
         """
         write(NullOutputStream self, sys::byte arg2)
         write(NullOutputStream self, std::string const & arg2)
@@ -482,7 +482,7 @@ class NullOutputStream(OutputStream):
         return _coda_io.NullOutputStream_write(self, *args)
 
 
-    def flush(self):
+    def flush(self) -> "void":
         """flush(NullOutputStream self)"""
         return _coda_io.NullOutputStream_flush(self)
 
@@ -516,37 +516,37 @@ class FileInputStream(SeekableInputStream):
     __swig_destroy__ = _coda_io.delete_FileInputStream
     __del__ = lambda self: None
 
-    def available(self):
+    def available(self) -> "sys::Off_T":
         """available(FileInputStream self) -> sys::Off_T"""
         return _coda_io.FileInputStream_available(self)
 
 
-    def isOpen(self):
+    def isOpen(self) -> "bool":
         """isOpen(FileInputStream self) -> bool"""
         return _coda_io.FileInputStream_isOpen(self)
 
 
-    def create(self, str):
+    def create(self, str: 'std::string const &') -> "void":
         """create(FileInputStream self, std::string const & str)"""
         return _coda_io.FileInputStream_create(self, str)
 
 
-    def seek(self, off, whence):
+    def seek(self, off: 'sys::Off_T', whence: 'io::Seekable::Whence') -> "sys::Off_T":
         """seek(FileInputStream self, sys::Off_T off, io::Seekable::Whence whence) -> sys::Off_T"""
         return _coda_io.FileInputStream_seek(self, off, whence)
 
 
-    def tell(self):
+    def tell(self) -> "sys::Off_T":
         """tell(FileInputStream self) -> sys::Off_T"""
         return _coda_io.FileInputStream_tell(self)
 
 
-    def close(self):
+    def close(self) -> "void":
         """close(FileInputStream self)"""
         return _coda_io.FileInputStream_close(self)
 
 
-    def read(self, b, len):
+    def read(self, b: 'sys::byte *', len: 'sys::Size_T') -> "sys::SSize_T":
         """read(FileInputStream self, sys::byte * b, sys::Size_T len) -> sys::SSize_T"""
         return _coda_io.FileInputStream_read(self, b, len)
 
@@ -580,12 +580,12 @@ class FileOutputStream(SeekableOutputStream):
     __swig_destroy__ = _coda_io.delete_FileOutputStream
     __del__ = lambda self: None
 
-    def isOpen(self):
+    def isOpen(self) -> "bool":
         """isOpen(FileOutputStream self) -> bool"""
         return _coda_io.FileOutputStream_isOpen(self)
 
 
-    def create(self, *args):
+    def create(self, *args) -> "void":
         """
         create(FileOutputStream self, std::string const & str, int creationFlags)
         create(FileOutputStream self, std::string const & str)
@@ -593,27 +593,27 @@ class FileOutputStream(SeekableOutputStream):
         return _coda_io.FileOutputStream_create(self, *args)
 
 
-    def close(self):
+    def close(self) -> "void":
         """close(FileOutputStream self)"""
         return _coda_io.FileOutputStream_close(self)
 
 
-    def flush(self):
+    def flush(self) -> "void":
         """flush(FileOutputStream self)"""
         return _coda_io.FileOutputStream_flush(self)
 
 
-    def seek(self, offset, whence):
+    def seek(self, offset: 'sys::Off_T', whence: 'io::Seekable::Whence') -> "sys::Off_T":
         """seek(FileOutputStream self, sys::Off_T offset, io::Seekable::Whence whence) -> sys::Off_T"""
         return _coda_io.FileOutputStream_seek(self, offset, whence)
 
 
-    def tell(self):
+    def tell(self) -> "sys::Off_T":
         """tell(FileOutputStream self) -> sys::Off_T"""
         return _coda_io.FileOutputStream_tell(self)
 
 
-    def write(self, *args):
+    def write(self, *args) -> "void":
         """
         write(FileOutputStream self, sys::byte b)
         write(FileOutputStream self, std::string const & str)
