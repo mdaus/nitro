@@ -238,7 +238,7 @@ from coda.coda_types import pickle
     }
 }
 
-%define ExtendMatrix(name, M, N)
+%define ExtendMatrix(M, N)
 %extend math::linear::MatrixMxN<M, N, double>
 {
     // SWIG doesn't automatically generate [] operator
@@ -316,18 +316,18 @@ from coda.coda_types import pickle
 %enddef
 
 
-ExtendMatrix(Matrix1x1, 1, 1);
-ExtendMatrix(Matrix1x2, 1, 2);
-ExtendMatrix(Matrix1x3, 1, 3);
-ExtendMatrix(Matrix2x1, 2, 1);
-ExtendMatrix(Matrix2x2, 2, 2);
-ExtendMatrix(Matrix2x3, 2, 3);
-ExtendMatrix(Matrix2x7, 2, 7);
-ExtendMatrix(Matrix3x1, 3, 1);
-ExtendMatrix(Matrix3x2, 3, 2);
-ExtendMatrix(Matrix3x3, 3, 3);
-ExtendMatrix(Matrix3x7, 3, 7);
-ExtendMatrix(Matrix7x2, 7, 2);
-ExtendMatrix(Matrix7x3, 7, 3);
-ExtendMatrix(Matrix7x7, 7, 7);
+ExtendMatrix(1, 1);
+ExtendMatrix(1, 2);
+ExtendMatrix(1, 3);
+ExtendMatrix(2, 1);
+ExtendMatrix(2, 2);
+ExtendMatrix(2, 3);
+ExtendMatrix(2, 7);
+ExtendMatrix(3, 1);
+ExtendMatrix(3, 2);
+ExtendMatrix(3, 3);
+ExtendMatrix(3, 7);
+ExtendMatrix(7, 2);
+ExtendMatrix(7, 3);
+ExtendMatrix(7, 7);
 
