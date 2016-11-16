@@ -112,12 +112,12 @@ class SwigPyIterator(_object):
     __swig_destroy__ = _numpyutilstest.delete_SwigPyIterator
     __del__ = lambda self: None
 
-    def value(self) -> "PyObject *":
+    def value(self):
         """value(SwigPyIterator self) -> PyObject *"""
         return _numpyutilstest.SwigPyIterator_value(self)
 
 
-    def incr(self, n: 'size_t'=1) -> "swig::SwigPyIterator *":
+    def incr(self, n=1):
         """
         incr(SwigPyIterator self, size_t n=1) -> SwigPyIterator
         incr(SwigPyIterator self) -> SwigPyIterator
@@ -125,7 +125,7 @@ class SwigPyIterator(_object):
         return _numpyutilstest.SwigPyIterator_incr(self, n)
 
 
-    def decr(self, n: 'size_t'=1) -> "swig::SwigPyIterator *":
+    def decr(self, n=1):
         """
         decr(SwigPyIterator self, size_t n=1) -> SwigPyIterator
         decr(SwigPyIterator self) -> SwigPyIterator
@@ -133,67 +133,67 @@ class SwigPyIterator(_object):
         return _numpyutilstest.SwigPyIterator_decr(self, n)
 
 
-    def distance(self, x: 'SwigPyIterator') -> "ptrdiff_t":
+    def distance(self, x):
         """distance(SwigPyIterator self, SwigPyIterator x) -> ptrdiff_t"""
         return _numpyutilstest.SwigPyIterator_distance(self, x)
 
 
-    def equal(self, x: 'SwigPyIterator') -> "bool":
+    def equal(self, x):
         """equal(SwigPyIterator self, SwigPyIterator x) -> bool"""
         return _numpyutilstest.SwigPyIterator_equal(self, x)
 
 
-    def copy(self) -> "swig::SwigPyIterator *":
+    def copy(self):
         """copy(SwigPyIterator self) -> SwigPyIterator"""
         return _numpyutilstest.SwigPyIterator_copy(self)
 
 
-    def next(self) -> "PyObject *":
+    def next(self):
         """next(SwigPyIterator self) -> PyObject *"""
         return _numpyutilstest.SwigPyIterator_next(self)
 
 
-    def __next__(self) -> "PyObject *":
+    def __next__(self):
         """__next__(SwigPyIterator self) -> PyObject *"""
         return _numpyutilstest.SwigPyIterator___next__(self)
 
 
-    def previous(self) -> "PyObject *":
+    def previous(self):
         """previous(SwigPyIterator self) -> PyObject *"""
         return _numpyutilstest.SwigPyIterator_previous(self)
 
 
-    def advance(self, n: 'ptrdiff_t') -> "swig::SwigPyIterator *":
+    def advance(self, n):
         """advance(SwigPyIterator self, ptrdiff_t n) -> SwigPyIterator"""
         return _numpyutilstest.SwigPyIterator_advance(self, n)
 
 
-    def __eq__(self, x: 'SwigPyIterator') -> "bool":
+    def __eq__(self, x):
         """__eq__(SwigPyIterator self, SwigPyIterator x) -> bool"""
         return _numpyutilstest.SwigPyIterator___eq__(self, x)
 
 
-    def __ne__(self, x: 'SwigPyIterator') -> "bool":
+    def __ne__(self, x):
         """__ne__(SwigPyIterator self, SwigPyIterator x) -> bool"""
         return _numpyutilstest.SwigPyIterator___ne__(self, x)
 
 
-    def __iadd__(self, n: 'ptrdiff_t') -> "swig::SwigPyIterator &":
+    def __iadd__(self, n):
         """__iadd__(SwigPyIterator self, ptrdiff_t n) -> SwigPyIterator"""
         return _numpyutilstest.SwigPyIterator___iadd__(self, n)
 
 
-    def __isub__(self, n: 'ptrdiff_t') -> "swig::SwigPyIterator &":
+    def __isub__(self, n):
         """__isub__(SwigPyIterator self, ptrdiff_t n) -> SwigPyIterator"""
         return _numpyutilstest.SwigPyIterator___isub__(self, n)
 
 
-    def __add__(self, n: 'ptrdiff_t') -> "swig::SwigPyIterator *":
+    def __add__(self, n):
         """__add__(SwigPyIterator self, ptrdiff_t n) -> SwigPyIterator"""
         return _numpyutilstest.SwigPyIterator___add__(self, n)
 
 
-    def __sub__(self, *args) -> "ptrdiff_t":
+    def __sub__(self, *args):
         """
         __sub__(SwigPyIterator self, ptrdiff_t n) -> SwigPyIterator
         __sub__(SwigPyIterator self, SwigPyIterator x) -> ptrdiff_t
@@ -209,7 +209,7 @@ import coda.coda_types
 import coda.coda_sys
 import coda.coda_except
 
-def elementDoubleTest(*args) -> "PyObject *":
+def elementDoubleTest(*args):
     """
     elementDoubleTest(PyObject * inputNPArray, PyObject * outputNPArray) -> PyObject
     elementDoubleTest(PyObject * inputNPArray) -> PyObject *

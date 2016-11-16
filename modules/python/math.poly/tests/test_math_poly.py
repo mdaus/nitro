@@ -396,7 +396,7 @@ if __name__ == '__main__':
     # 1D Numpy converstion test #
     #############################
     original = Poly1D([1, 2, 3])
-    converted = Poly1D.fromPolynomial(original.asPolynomial())
+    converted = Poly1D.fromArray(original.asArray())
     print("Converting 1D polynomial to numpy array")
     print("Original: " + str(original))
     print("Converted: " + str(converted))
@@ -413,7 +413,7 @@ if __name__ == '__main__':
     original[0,1] =  0.0
     original[1,0] = -1.0
     original[1,1] =  1.0
-    numPoly = original.asPolynomial()
+    numPoly = original.asArray()
     print(original)
     print(numPoly)
 

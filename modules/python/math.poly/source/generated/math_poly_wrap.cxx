@@ -4843,16 +4843,7 @@ SWIGINTERN PyObject *math_poly_OneD_Sl_double_Sg____call____SWIG_1(math::poly::O
         return pyresult;
     }
 SWIGINTERN PyObject *math_poly_OneD_Sl_double_Sg__asArray(math::poly::OneD< double > *self){
-        PyObject* pyArray = Py_None;
-        types::RowCol<long> dims;
-        dims.row = 1;
-        dims.col = self->size();
-
-        Py_Initialize();
-        import_array();
-        numpyutils::createOrVerify(pyArray, NPY_DOUBLE, dims);
-        PyObject* ret = PyArray_SimpleNewFromData(1, &dims.col, NPY_DOUBLE, &((*self)[0]));
-        return ret;
+        return numpyutils::toNumpyArray(1, self->size(), NPY_DOUBLE, &((*self)[0]));
     }
 
   namespace swig {
@@ -7510,7 +7501,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Poly1D___itruediv__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Poly1D___idiv__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
   double arg2 ;
@@ -7522,15 +7513,15 @@ SWIGINTERN PyObject *_wrap_Poly1D___itruediv__(PyObject *SWIGUNUSEDPARM(self), P
   PyObject * obj1 = 0 ;
   math::poly::OneD< double > *result = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly1D___itruediv__",&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"OO:Poly1D___idiv__",&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D___itruediv__" "', argument " "1"" of type '" "math::poly::OneD< double > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D___idiv__" "', argument " "1"" of type '" "math::poly::OneD< double > *""'"); 
   }
   arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
   ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly1D___itruediv__" "', argument " "2"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly1D___idiv__" "', argument " "2"" of type '" "double""'");
   } 
   arg2 = static_cast< double >(val2);
   {
@@ -7571,7 +7562,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Poly1D___truediv__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Poly1D___div__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   math::poly::OneD< double > *arg1 = (math::poly::OneD< double > *) 0 ;
   double arg2 ;
@@ -7583,15 +7574,15 @@ SWIGINTERN PyObject *_wrap_Poly1D___truediv__(PyObject *SWIGUNUSEDPARM(self), Py
   PyObject * obj1 = 0 ;
   math::poly::OneD< double > result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly1D___truediv__",&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"OO:Poly1D___div__",&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_double_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D___truediv__" "', argument " "1"" of type '" "math::poly::OneD< double > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly1D___div__" "', argument " "1"" of type '" "math::poly::OneD< double > const *""'"); 
   }
   arg1 = reinterpret_cast< math::poly::OneD< double > * >(argp1);
   ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly1D___truediv__" "', argument " "2"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly1D___div__" "', argument " "2"" of type '" "double""'");
   } 
   arg2 = static_cast< double >(val2);
   {
@@ -13711,7 +13702,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Poly2D___itruediv__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Poly2D___idiv__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
   double arg2 ;
@@ -13723,15 +13714,15 @@ SWIGINTERN PyObject *_wrap_Poly2D___itruediv__(PyObject *SWIGUNUSEDPARM(self), P
   PyObject * obj1 = 0 ;
   math::poly::TwoD< double > *result = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly2D___itruediv__",&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"OO:Poly2D___idiv__",&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D___itruediv__" "', argument " "1"" of type '" "math::poly::TwoD< double > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D___idiv__" "', argument " "1"" of type '" "math::poly::TwoD< double > *""'"); 
   }
   arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
   ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly2D___itruediv__" "', argument " "2"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly2D___idiv__" "', argument " "2"" of type '" "double""'");
   } 
   arg2 = static_cast< double >(val2);
   {
@@ -13772,7 +13763,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_Poly2D___truediv__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_Poly2D___div__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
   double arg2 ;
@@ -13784,15 +13775,15 @@ SWIGINTERN PyObject *_wrap_Poly2D___truediv__(PyObject *SWIGUNUSEDPARM(self), Py
   PyObject * obj1 = 0 ;
   math::poly::TwoD< double > result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:Poly2D___truediv__",&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"OO:Poly2D___div__",&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D___truediv__" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D___div__" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
   }
   arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
   ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly2D___truediv__" "', argument " "2"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Poly2D___div__" "', argument " "2"" of type '" "double""'");
   } 
   arg2 = static_cast< double >(val2);
   {
@@ -20006,7 +19997,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_PolyVector3___itruediv__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_PolyVector3___idiv__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   math::poly::OneD< Vector3 > *arg1 = (math::poly::OneD< Vector3 > *) 0 ;
   double arg2 ;
@@ -20018,15 +20009,15 @@ SWIGINTERN PyObject *_wrap_PolyVector3___itruediv__(PyObject *SWIGUNUSEDPARM(sel
   PyObject * obj1 = 0 ;
   math::poly::OneD< math::linear::VectorN< 3,double > > *result = 0 ;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:PolyVector3___itruediv__",&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"OO:PolyVector3___idiv__",&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolyVector3___itruediv__" "', argument " "1"" of type '" "math::poly::OneD< Vector3 > *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolyVector3___idiv__" "', argument " "1"" of type '" "math::poly::OneD< Vector3 > *""'"); 
   }
   arg1 = reinterpret_cast< math::poly::OneD< Vector3 > * >(argp1);
   ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "PolyVector3___itruediv__" "', argument " "2"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "PolyVector3___idiv__" "', argument " "2"" of type '" "double""'");
   } 
   arg2 = static_cast< double >(val2);
   {
@@ -20067,7 +20058,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_PolyVector3___truediv__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_PolyVector3___div__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   math::poly::OneD< Vector3 > *arg1 = (math::poly::OneD< Vector3 > *) 0 ;
   double arg2 ;
@@ -20079,15 +20070,15 @@ SWIGINTERN PyObject *_wrap_PolyVector3___truediv__(PyObject *SWIGUNUSEDPARM(self
   PyObject * obj1 = 0 ;
   math::poly::OneD< math::linear::VectorN< 3,double > > result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OO:PolyVector3___truediv__",&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"OO:PolyVector3___div__",&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__OneDT_math__linear__VectorNT_3_double_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolyVector3___truediv__" "', argument " "1"" of type '" "math::poly::OneD< Vector3 > const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PolyVector3___div__" "', argument " "1"" of type '" "math::poly::OneD< Vector3 > const *""'"); 
   }
   arg1 = reinterpret_cast< math::poly::OneD< Vector3 > * >(argp1);
   ecode2 = SWIG_AsVal_double(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "PolyVector3___truediv__" "', argument " "2"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "PolyVector3___div__" "', argument " "2"" of type '" "double""'");
   } 
   arg2 = static_cast< double >(val2);
   {
@@ -24034,8 +24025,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Poly1D___add__", _wrap_Poly1D___add__, METH_VARARGS, (char *)"Poly1D___add__(Poly1D self, Poly1D p) -> Poly1D"},
 	 { (char *)"Poly1D___isub__", _wrap_Poly1D___isub__, METH_VARARGS, (char *)"Poly1D___isub__(Poly1D self, Poly1D p) -> Poly1D"},
 	 { (char *)"Poly1D___sub__", _wrap_Poly1D___sub__, METH_VARARGS, (char *)"Poly1D___sub__(Poly1D self, Poly1D p) -> Poly1D"},
-	 { (char *)"Poly1D___itruediv__", _wrap_Poly1D___itruediv__, METH_VARARGS, (char *)"Poly1D___itruediv__(Poly1D self, double cv) -> Poly1D"},
-	 { (char *)"Poly1D___truediv__", _wrap_Poly1D___truediv__, METH_VARARGS, (char *)"Poly1D___truediv__(Poly1D self, double cv) -> Poly1D"},
+	 { (char *)"Poly1D___idiv__", _wrap_Poly1D___idiv__, METH_VARARGS, (char *)"Poly1D___idiv__(Poly1D self, double cv) -> Poly1D"},
+	 { (char *)"Poly1D___div__", _wrap_Poly1D___div__, METH_VARARGS, (char *)"Poly1D___div__(Poly1D self, double cv) -> Poly1D"},
 	 { (char *)"Poly1D_power", _wrap_Poly1D_power, METH_VARARGS, (char *)"Poly1D_power(Poly1D self, size_t toThe) -> Poly1D"},
 	 { (char *)"Poly1D___getitem__", _wrap_Poly1D___getitem__, METH_VARARGS, (char *)"Poly1D___getitem__(Poly1D self, long i) -> double"},
 	 { (char *)"Poly1D___setitem__", _wrap_Poly1D___setitem__, METH_VARARGS, (char *)"Poly1D___setitem__(Poly1D self, long i, double val)"},
@@ -24152,8 +24143,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Poly2D___add__", _wrap_Poly2D___add__, METH_VARARGS, (char *)"Poly2D___add__(Poly2D self, Poly2D p) -> Poly2D"},
 	 { (char *)"Poly2D___isub__", _wrap_Poly2D___isub__, METH_VARARGS, (char *)"Poly2D___isub__(Poly2D self, Poly2D p) -> Poly2D"},
 	 { (char *)"Poly2D___sub__", _wrap_Poly2D___sub__, METH_VARARGS, (char *)"Poly2D___sub__(Poly2D self, Poly2D p) -> Poly2D"},
-	 { (char *)"Poly2D___itruediv__", _wrap_Poly2D___itruediv__, METH_VARARGS, (char *)"Poly2D___itruediv__(Poly2D self, double cv) -> Poly2D"},
-	 { (char *)"Poly2D___truediv__", _wrap_Poly2D___truediv__, METH_VARARGS, (char *)"Poly2D___truediv__(Poly2D self, double cv) -> Poly2D"},
+	 { (char *)"Poly2D___idiv__", _wrap_Poly2D___idiv__, METH_VARARGS, (char *)"Poly2D___idiv__(Poly2D self, double cv) -> Poly2D"},
+	 { (char *)"Poly2D___div__", _wrap_Poly2D___div__, METH_VARARGS, (char *)"Poly2D___div__(Poly2D self, double cv) -> Poly2D"},
 	 { (char *)"Poly2D___eq__", _wrap_Poly2D___eq__, METH_VARARGS, (char *)"Poly2D___eq__(Poly2D self, Poly2D p) -> bool"},
 	 { (char *)"Poly2D___ne__", _wrap_Poly2D___ne__, METH_VARARGS, (char *)"Poly2D___ne__(Poly2D self, Poly2D p) -> bool"},
 	 { (char *)"Poly2D_power", _wrap_Poly2D_power, METH_VARARGS, (char *)"Poly2D_power(Poly2D self, size_t toThe) -> Poly2D"},
@@ -24265,8 +24256,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"PolyVector3___add__", _wrap_PolyVector3___add__, METH_VARARGS, (char *)"PolyVector3___add__(PolyVector3 self, PolyVector3 p) -> PolyVector3"},
 	 { (char *)"PolyVector3___isub__", _wrap_PolyVector3___isub__, METH_VARARGS, (char *)"PolyVector3___isub__(PolyVector3 self, PolyVector3 p) -> PolyVector3"},
 	 { (char *)"PolyVector3___sub__", _wrap_PolyVector3___sub__, METH_VARARGS, (char *)"PolyVector3___sub__(PolyVector3 self, PolyVector3 p) -> PolyVector3"},
-	 { (char *)"PolyVector3___itruediv__", _wrap_PolyVector3___itruediv__, METH_VARARGS, (char *)"PolyVector3___itruediv__(PolyVector3 self, double cv) -> PolyVector3"},
-	 { (char *)"PolyVector3___truediv__", _wrap_PolyVector3___truediv__, METH_VARARGS, (char *)"PolyVector3___truediv__(PolyVector3 self, double cv) -> PolyVector3"},
+	 { (char *)"PolyVector3___idiv__", _wrap_PolyVector3___idiv__, METH_VARARGS, (char *)"PolyVector3___idiv__(PolyVector3 self, double cv) -> PolyVector3"},
+	 { (char *)"PolyVector3___div__", _wrap_PolyVector3___div__, METH_VARARGS, (char *)"PolyVector3___div__(PolyVector3 self, double cv) -> PolyVector3"},
 	 { (char *)"PolyVector3___getitem__", _wrap_PolyVector3___getitem__, METH_VARARGS, (char *)"PolyVector3___getitem__(PolyVector3 self, long i) -> Vector3"},
 	 { (char *)"PolyVector3___setitem__", _wrap_PolyVector3___setitem__, METH_VARARGS, (char *)"PolyVector3___setitem__(PolyVector3 self, long i, Vector3 val)"},
 	 { (char *)"PolyVector3___str__", _wrap_PolyVector3___str__, METH_VARARGS, (char *)"PolyVector3___str__(PolyVector3 self) -> std::string"},

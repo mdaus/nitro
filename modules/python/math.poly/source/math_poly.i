@@ -130,16 +130,7 @@ typedef math::linear::Vector<double> VectorDouble;
 
     PyObject* asArray()
     {
-        PyObject* pyArray = Py_None;
-        types::RowCol<long> dims;
-        dims.row = 1;
-        dims.col = self->size();
-
-        Py_Initialize();
-        import_array();
-        numpyutils::createOrVerify(pyArray, NPY_DOUBLE, dims);
-        PyObject* ret = PyArray_SimpleNewFromData(1, &dims.col, NPY_DOUBLE, &((*self)[0]));
-        return ret;
+        return numpyutils::toNumpyArray(1, self->size(), NPY_DOUBLE, &((*self)[0]));
     }
 
     %pythoncode
@@ -150,20 +141,6 @@ typedef math::linear::Vector<double> VectorDouble;
     %}
 
 }
-
-/**
-%typemap(in) (Poly1D polynomial) {
-    std::vector<double> coefficients(PyArray_DIM($input, 0));
-    for (size_t ii = 0; ii < PyArray_DIM($input); ++i) {
-        coefficients[ii] = PyFloat_AsDouble(PyArray_GETITEM($input, ii));
-    }
-    $1 = Poly1D(coefficients);
-}
-
-%typemap(out) (Poly1D polynomial) {
-    $result = PyArray_SimpleNewFromData(1, ($1)->size(), NPY_DOUBLE, $1);
-}
-*/
 
 %include "math/poly/TwoD.h"
 %extend math::poly::TwoD
@@ -283,6 +260,31 @@ typedef math::linear::Vector<double> VectorDouble;
         }
         return pyresult;
     }
+    /*PyObject* asArray()
+    {
+        PyOjbect* twoDArray = numpyutils::toNumpyArray(1, self->orderX() + 1,
+                NPY_DOUBLE, &((*self)[0][0]));
+
+        for (sizeIt ii = 1; ii <= self->orderY(); ++ii)
+        {
+            twoDArray
+        }
+        return numpyutils::toNumpyArray(self->orderY() + 1, self->orderX() + 1,
+                NPY_DOUBLE, &((*self)[0][0]));
+    }*/
+
+    %pythoncode
+    %{
+        def asArray(self):
+            twoDArray = []
+            for ii in range(self.orderY() + 1):
+                twoDArray.append(self.__getitem__(ii).toArray())
+            return twoDArray
+
+        @staticmethod
+        def fromArray(array):
+            return Poly2D(array.tolist())
+    %}
 
 }
 
