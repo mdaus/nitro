@@ -121,8 +121,24 @@ void prepareInputAndOutputArray(PyObject* pyInObject,
                                 int inputTypeNum,
                                 int outputTypeNum);
 
-PyObject* toNumpyArray(size_t numRows, size_t numColumns,
-        int typenum, void* data);
+/*!
+ * Copy a data buffer into a 1/2D Numpy array
+ * \param numRows number of rows. Pass 1 for a 1D array
+ * \param numColumns number of columns
+ * \param typenum value of desired datatype
+ * \param data the data to be wrapped
+ * \return a numpy array with specified dimension and type
+ */
+PyObject* toNumpyArray(size_t numRows, size_t numColumns, int typenum,
+        void* data);
+
+/*!
+ * Copy a vector of data buffers into a 2D Numpy array
+ * \param numColumns number of columns
+ * \param typenum value of desired datatype
+ * \param data the data to be wrapped
+ * \return a numpy array with specified dimension and type
+ */
 
 PyObject* toNumpyArray(size_t numColumns, int typenum, std::vector<void*> data);
 

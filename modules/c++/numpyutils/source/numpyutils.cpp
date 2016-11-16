@@ -173,7 +173,9 @@ PyObject* toNumpyArray(size_t numRows, size_t numColumns,
         dimensions[0] = numRows;
         dimensions[1] = numColumns;
     }
-    return PyArray_NewCopy((PyArrayObject*)PyArray_SimpleNewFromData(nDims, dimensions, typenum, data), NPY_CORDER);
+    return PyArray_NewCopy((PyArrayObject*)
+            PyArray_SimpleNewFromData(nDims, dimensions, typenum, data),
+            NPY_CORDER);
 
 }
 
