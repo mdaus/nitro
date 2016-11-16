@@ -269,6 +269,16 @@ class Poly1D(_object):
         return _math_poly.Poly1D_power(self, toThe)
 
 
+    def __eq__(self, p):
+        """__eq__(Poly1D self, Poly1D p) -> bool"""
+        return _math_poly.Poly1D___eq__(self, p)
+
+
+    def __ne__(self, p):
+        """__ne__(Poly1D self, Poly1D p) -> bool"""
+        return _math_poly.Poly1D___ne__(self, p)
+
+
     def __setstate__(self, state):
         """Recursive unpickling method for SWIG-wrapped Poly1D."""
         self.__init__(pickle.loads(state.pop('coeffs')))
@@ -723,19 +733,6 @@ class Poly2D(_object):
         state['coeffs'] = pickle.dumps(self.coeffs())
         return state
 
-    '''
-    def asPolynomial(self):
-        import numpy
-        coefficients = []
-        for polynomial in self.coeffs():
-            coefficients.append(polynomial.coeffs())
-        return numpy.polynomial.polynomial.Polynomial(coefficients)
-
-    @staticmethod
-    def fromPolynomial(poly):
-        return Poly2D(poly.coef.tolist())
-    '''
-
 
     def __getitem__(self, inObj):
         """__getitem__(Poly2D self, PyObject * inObj) -> double"""
@@ -766,14 +763,17 @@ class Poly2D(_object):
 
 
     def asArray(self):
-        twoDArray = []
-        for ii in range(self.orderY() + 1):
-            twoDArray.append(self.__getitem__(ii).toArray())
-        return twoDArray
+        """asArray(Poly2D self) -> PyObject *"""
+        return _math_poly.Poly2D_asArray(self)
+
 
     @staticmethod
     def fromArray(array):
-        return Poly2D(array.tolist())
+        twoD = Poly2D(array.shape[0] - 1, array.shape[1] - 1)
+        for i in range(len(array)):
+            for j in range(len(array[0])):
+                twoD[(i,j)] = array[i][j]
+        return twoD
 
     __swig_destroy__ = _math_poly.delete_Poly2D
     __del__ = lambda self: None
@@ -1127,6 +1127,16 @@ class PolyVector3(_object):
     def __div__(self, cv):
         """__div__(PolyVector3 self, double cv) -> PolyVector3"""
         return _math_poly.PolyVector3___div__(self, cv)
+
+
+    def __eq__(self, p):
+        """__eq__(PolyVector3 self, PolyVector3 p) -> bool"""
+        return _math_poly.PolyVector3___eq__(self, p)
+
+
+    def __ne__(self, p):
+        """__ne__(PolyVector3 self, PolyVector3 p) -> bool"""
+        return _math_poly.PolyVector3___ne__(self, p)
 
 
     def __setstate__(self, state):

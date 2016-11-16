@@ -25,6 +25,7 @@
 """
 
 import sys
+import numpy as np
 from coda.math_linear import VectorDouble, MatrixDouble, Vector3
 from coda.math_poly import *
 
@@ -398,24 +399,29 @@ if __name__ == '__main__':
     original = Poly1D([1, 2, 3])
     converted = Poly1D.fromArray(original.asArray())
     print("Converting 1D polynomial to numpy array")
-    print("Original: " + str(original))
-    print("Converted: " + str(converted))
-    if original.coeffs() == converted.coeffs():
+    if original == converted:
         print("Converstion successful")
     else:
         raise ValueError("Converstion to numpy array failed")
+    assert isinstance(original.asArray(), np.ndarray)
+
 
     ############################
     # 2D Numpy conversion test #
     ############################
-    original = Poly2D(1, 1)
+    original = Poly2D(1, 2)
     original[0,0] =  5.0
     original[0,1] =  0.0
+    original[0,2] =  2.6
     original[1,0] = -1.0
     original[1,1] =  1.0
-    numPoly = original.asArray()
-    print(original)
-    print(numPoly)
-
+    original[1,2] = -8.4
+    converted = Poly2D.fromArray(original.asArray())
+    print("Converting 2D polynomial to numpy array")
+    if original == converted:
+        print("Converstion successful")
+    else:
+        raise ValueError("Converstion to numpy array failed")
+    assert isinstance(original.asArray(), np.ndarray)
 
 

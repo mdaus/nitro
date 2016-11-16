@@ -1,7 +1,7 @@
 /* =========================================================================
- * This file is part of math.poly-c++ 
+ * This file is part of math.poly-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * math.poly-c++ is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -33,7 +33,7 @@ namespace math
 {
 namespace poly
 {
-/*! 
+/*!
  *  \class OneD
  *  \brief 1-D polynomial evaluation
  *
@@ -46,7 +46,7 @@ namespace poly
  *
  *   It supports evaluating the integral over a specified interval (a...b)
  *
- *   It supports computing the derivative and 
+ *   It supports computing the derivative and
  *   the multiplication/addition/subtraction of 1-D polynomials.
  */
 template<typename _T>
@@ -54,6 +54,7 @@ class OneD
 {
 protected:
     std::vector<_T> mCoef;
+    template<typename Vector_T> bool equalImpl(const Vector_T& p) const;
 
 public:
     /*!
@@ -225,6 +226,39 @@ public:
 
     template<typename Vector_T> bool operator==(const Vector_T& p) const
     {
+        return equalImpl(p);
+    }
+
+    template<typename Vector_T> bool operator!=(const Vector_T& p) const
+    {
+        return !(*this == p);
+    }
+
+    // Explicit overload to make SWIG wrap it
+    bool operator==(const OneD<_T>& p)
+    {
+        return equalImpl(p);
+    }
+
+    bool operator!=(const OneD<_T>& p)
+    {
+        return !(*this == p);
+    }
+
+    /*!
+     *  serialize out to a boost stream
+     */
+    template <class Archive>
+    void serialize(Archive& ar, const unsigned int /*version*/)
+    {
+        ar & mCoef;
+    }
+};
+
+template<typename _T>
+template<typename Vector_T>
+bool OneD<_T>::equalImpl(const Vector_T& p) const
+    {
         size_t sz = size();
         size_t psz = p.size();
         size_t minSize = std::min<size_t>(sz, psz);
@@ -256,21 +290,6 @@ public:
 
         return true;
     }
-
-    template<typename Vector_T> bool operator!=(const Vector_T& p) const
-    {
-        return !(*this == p);
-    }
-
-    /*!
-     *  serialize out to a boost stream
-     */
-    template <class Archive>
-    void serialize(Archive& ar, const unsigned int /*version*/)
-    {
-        ar & mCoef;
-    }
-};
 
 } // poly
 } // math

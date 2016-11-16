@@ -173,8 +173,22 @@ PyObject* toNumpyArray(size_t numRows, size_t numColumns,
         dimensions[0] = numRows;
         dimensions[1] = numColumns;
     }
-    return PyArray_SimpleNewFromData(nDims, dimensions, typenum, data);
+    return PyArray_NewCopy((PyArrayObject*)PyArray_SimpleNewFromData(nDims, dimensions, typenum, data), NPY_CORDER);
 
+}
+
+PyObject* toNumpyArray(size_t numColumns, int typenum, std::vector<void*> data)
+{
+    size_t numRows = data.size();
+    PyObject* list = PyList_New(numRows);
+    for (size_t ii = 0; ii < numRows; ++ii)
+    {
+        npy_intp dimensions[] = { numColumns };
+        PyObject* row =
+                PyArray_SimpleNewFromData(1, dimensions, typenum, data[ii]);
+        PyList_SET_ITEM(list, ii, row);
+    }
+    return PyArray_FROM_O(list);
 }
 
 void prepareInputAndOutputArray(PyObject* pyInObject,

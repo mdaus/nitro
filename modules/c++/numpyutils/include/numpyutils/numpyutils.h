@@ -27,6 +27,7 @@
 #include <Python.h>
 #include <numpy/arrayobject.h>
 #include <types/RowCol.h>
+#include <vector>
 
 namespace numpyutils
 {
@@ -122,6 +123,8 @@ void prepareInputAndOutputArray(PyObject* pyInObject,
 
 PyObject* toNumpyArray(size_t numRows, size_t numColumns,
         int typenum, void* data);
+
+PyObject* toNumpyArray(size_t numColumns, int typenum, std::vector<void*> data);
 
 /*!
  * Helper function to get data array.

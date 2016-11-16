@@ -130,7 +130,8 @@ typedef math::linear::Vector<double> VectorDouble;
 
     PyObject* asArray()
     {
-        return numpyutils::toNumpyArray(1, self->size(), NPY_DOUBLE, &((*self)[0]));
+        return numpyutils::toNumpyArray(1, self->size(), NPY_DOUBLE,
+                &((*self)[0]));
     }
 
     %pythoncode
@@ -145,6 +146,7 @@ typedef math::linear::Vector<double> VectorDouble;
 %include "math/poly/TwoD.h"
 %extend math::poly::TwoD
 {
+
 %pythoncode
 %{
     def __setstate__(self, state):
@@ -159,21 +161,9 @@ typedef math::linear::Vector<double> VectorDouble;
         # Use swig_setmethods to get only data we can set later
         state['coeffs'] = pickle.dumps(self.coeffs())
         return state
-
-    '''
-    def asPolynomial(self):
-        import numpy
-        coefficients = []
-        for polynomial in self.coeffs():
-            coefficients.append(polynomial.coeffs())
-        return numpy.polynomial.polynomial.Polynomial(coefficients)
-
-    @staticmethod
-    def fromPolynomial(poly):
-        return Poly2D(poly.coef.tolist())
-    '''
 %}
 }
+
 
 %template(Poly2D) math::poly::TwoD<double>;
 %template(Poly1DVector) std::vector<math::poly::OneD<double>>;
@@ -260,30 +250,27 @@ typedef math::linear::Vector<double> VectorDouble;
         }
         return pyresult;
     }
-    /*PyObject* asArray()
+
+    PyObject* asArray()
     {
-        PyOjbect* twoDArray = numpyutils::toNumpyArray(1, self->orderX() + 1,
-                NPY_DOUBLE, &((*self)[0][0]));
-
-        for (sizeIt ii = 1; ii <= self->orderY(); ++ii)
+        size_t numRows = self->orderX() + 1;
+        size_t numColumns = self->orderY() + 1;
+        std::vector<void*> rows(numRows);
+        for (size_t ii = 0; ii < rows.size(); ++ii)
         {
-            twoDArray
+            rows[ii] = &((*self)[ii][0]);
         }
-        return numpyutils::toNumpyArray(self->orderY() + 1, self->orderX() + 1,
-                NPY_DOUBLE, &((*self)[0][0]));
-    }*/
-
+        return numpyutils::toNumpyArray(numColumns, NPY_DOUBLE, rows);
+    }
     %pythoncode
     %{
-        def asArray(self):
-            twoDArray = []
-            for ii in range(self.orderY() + 1):
-                twoDArray.append(self.__getitem__(ii).toArray())
-            return twoDArray
-
         @staticmethod
         def fromArray(array):
-            return Poly2D(array.tolist())
+            twoD = Poly2D(array.shape[0] - 1, array.shape[1] - 1)
+            for i in range(len(array)):
+                for j in range(len(array[0])):
+                    twoD[(i,j)] = array[i][j]
+            return twoD
     %}
 
 }
