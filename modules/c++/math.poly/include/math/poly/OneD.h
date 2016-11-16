@@ -255,41 +255,6 @@ public:
     }
 };
 
-template<typename _T>
-template<typename Vector_T>
-bool OneD<_T>::equalImpl(const Vector_T& p) const
-    {
-        size_t sz = size();
-        size_t psz = p.size();
-        size_t minSize = std::min<size_t>(sz, psz);
-
-        // guard against uninitialized
-        if (minSize == 0 && (sz != psz))
-            return false;
-
-        for (size_t i = 0; i < minSize; i++)
-            if (!math::linear::equals(mCoef[i], p[i]))
-                return false;
-
-        _T dflt(0.0);
-
-        // Cover case where one polynomial has more
-        // coefficients than the other.
-        if (sz > psz)
-        {
-            for (size_t i = minSize; i < sz; i++)
-                if (!math::linear::equals(mCoef[i], dflt))
-                    return false;
-        }
-        else if (sz < psz)
-        {
-            for (size_t i = minSize; i < psz; i++)
-                if (!math::linear::equals(p[i], dflt))
-                    return false;
-        }
-
-        return true;
-    }
 
 } // poly
 } // math
