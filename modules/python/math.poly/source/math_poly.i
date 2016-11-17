@@ -325,7 +325,7 @@ typedef math::linear::Vector<double> VectorDouble;
                                            0 | 0);
                 PyList_SetItem(pyresult, i, pytmp);
             }
-	    return pyresult;
+            return pyresult;
         }
 };
 
