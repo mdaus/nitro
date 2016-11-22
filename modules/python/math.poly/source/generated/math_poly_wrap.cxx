@@ -13955,6 +13955,58 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Poly2D_isScalar(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  bool result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"O:Poly2D_isScalar",&obj0)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_math__poly__TwoDT_double_t, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Poly2D_isScalar" "', argument " "1"" of type '" "math::poly::TwoD< double > const *""'"); 
+  }
+  arg1 = reinterpret_cast< math::poly::TwoD< double > * >(argp1);
+  {
+    try
+    {
+      result = (bool)((math::poly::TwoD< double > const *)arg1)->isScalar();
+    } 
+    catch (const std::exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+      }
+    }
+    catch (const except::Exception& e)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.getMessage().c_str());
+      }
+    }
+    catch (...)
+    {
+      if (!PyErr_Occurred())
+      {
+        PyErr_SetString(PyExc_RuntimeError, "Unknown error");
+      }
+    }
+    if (PyErr_Occurred())
+    {
+      SWIG_fail;
+    }
+  }
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_Poly2D___getitem__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   math::poly::TwoD< double > *arg1 = (math::poly::TwoD< double > *) 0 ;
@@ -24089,6 +24141,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Poly2D___eq__", _wrap_Poly2D___eq__, METH_VARARGS, (char *)"Poly2D___eq__(Poly2D self, Poly2D p) -> bool"},
 	 { (char *)"Poly2D___ne__", _wrap_Poly2D___ne__, METH_VARARGS, (char *)"Poly2D___ne__(Poly2D self, Poly2D p) -> bool"},
 	 { (char *)"Poly2D_power", _wrap_Poly2D_power, METH_VARARGS, (char *)"Poly2D_power(Poly2D self, size_t toThe) -> Poly2D"},
+	 { (char *)"Poly2D_isScalar", _wrap_Poly2D_isScalar, METH_VARARGS, (char *)"Poly2D_isScalar(Poly2D self) -> bool"},
 	 { (char *)"Poly2D___getitem__", _wrap_Poly2D___getitem__, METH_VARARGS, (char *)"Poly2D___getitem__(Poly2D self, PyObject * inObj) -> double"},
 	 { (char *)"Poly2D___setitem__", _wrap_Poly2D___setitem__, METH_VARARGS, (char *)"Poly2D___setitem__(Poly2D self, PyObject * inObj, double val)"},
 	 { (char *)"Poly2D___str__", _wrap_Poly2D___str__, METH_VARARGS, (char *)"Poly2D___str__(Poly2D self) -> std::string"},

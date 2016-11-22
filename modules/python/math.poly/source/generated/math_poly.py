@@ -695,6 +695,11 @@ class Poly2D(_object):
         return _math_poly.Poly2D_power(self, toThe)
 
 
+    def isScalar(self):
+        """isScalar(Poly2D self) -> bool"""
+        return _math_poly.Poly2D_isScalar(self)
+
+
     def __setstate__(self, state):
         """Recursive unpickling method for SWIG-wrapped Poly2D."""
         self.__init__(pickle.loads(state.pop('coeffs')))
