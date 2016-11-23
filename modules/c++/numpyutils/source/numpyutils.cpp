@@ -162,7 +162,7 @@ void createOrVerify(PyObject*& pyObject,
 PyObject* toNumpyArray(size_t numRows, size_t numColumns,
         int typenum, void* data)
 {
-    int nDims = (numRows == 1 ? 1 : 2);
+    const int nDims = (numRows == 1 ? 1 : 2);
     npy_intp dimensions[2];
     if (nDims == 1)
     {
@@ -173,15 +173,16 @@ PyObject* toNumpyArray(size_t numRows, size_t numColumns,
         dimensions[0] = numRows;
         dimensions[1] = numColumns;
     }
-    return PyArray_NewCopy((PyArrayObject*)
-            PyArray_SimpleNewFromData(nDims, dimensions, typenum, data),
+    return PyArray_NewCopy(reinterpret_cast<PyArrayObject*>(
+            PyArray_SimpleNewFromData(nDims, dimensions, typenum, data)),
             NPY_CORDER);
 
 }
 
-PyObject* toNumpyArray(size_t numColumns, int typenum, std::vector<void*> data)
+PyObject* toNumpyArray(size_t numColumns, int typenum,
+        const std::vector<void*>& data)
 {
-    size_t numRows = data.size();
+    const size_t numRows = data.size();
     PyObject* list = PyList_New(numRows);
     for (size_t ii = 0; ii < numRows; ++ii)
     {

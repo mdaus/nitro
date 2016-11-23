@@ -140,7 +140,8 @@ PyObject* toNumpyArray(size_t numRows, size_t numColumns, int typenum,
  * \return a numpy array with specified dimension and type
  */
 
-PyObject* toNumpyArray(size_t numColumns, int typenum, std::vector<void*> data);
+PyObject* toNumpyArray(size_t numColumns, int typenum,
+        const std::vector<void*>& data);
 
 /*!
  * Helper function to get data array.
