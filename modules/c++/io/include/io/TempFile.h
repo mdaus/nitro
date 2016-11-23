@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of sys-c++
+ * This file is part of io-c++
  * =========================================================================
  *
  * (C) Copyright 2004 - 2016, MDA Information Systems LLC
  *
- * sys-c++ is free software; you can redistribute it and/or modify
+ * io-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -24,7 +24,9 @@
 #ifndef __TempFile_H__
 #define __TempFile_H__
 
-namespace sys
+#include <sys/OS.h>
+
+namespace io
 {
 /*!
  * RAII object for a temporary file that may either persist, or get deleted
@@ -33,12 +35,13 @@ namespace sys
 class TempFile
 {
 public:
-    TempFile(bool destroy=true);
+    TempFile(bool destroy=true, const std::string& path=".");
     ~TempFile();
     std::string pathname() const;
 private:
-    std::string mName;
     bool mDestroy;
+    sys::OS mOS;
+    std::string mName;
 };
 }
 

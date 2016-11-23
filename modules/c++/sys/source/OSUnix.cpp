@@ -189,6 +189,7 @@ std::string sys::OSUnix::getTempName(const std::string& path,
     else
     {
         name = tempname;
+        fclose(fopen(name));
         free(tempname);
     }
 #endif

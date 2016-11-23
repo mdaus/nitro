@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of sys-c++
+ * This file is part of io-c++
  * =========================================================================
  *
  * (C) Copyright 2004 - 2016, MDA Information Systems LLC
  *
- * sys-c++ is free software; you can redistribute it and/or modify
+ * io-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -24,7 +24,7 @@
 
 #include <sys/OS.h>
 #include <sys/Path.h>
-#include <sys/TempFile.h>
+#include <io/TempFile.h>
 #include "TestCase.h"
 
 namespace
@@ -32,7 +32,7 @@ namespace
 TEST_CASE(testTempFileCreation)
 {
     const sys::OS os;
-    const sys::TempFile tempFile;
+    const io::TempFile tempFile;
     // This should just give us a name to a file that doesn't exist yet
     TEST_ASSERT(os.exists(tempFile.pathname()));
 }
@@ -42,7 +42,7 @@ TEST_CASE(testFileDestroyed)
     const sys::OS os;
     std::string pathname;
     {
-        const sys::TempFile tempFile;
+        const io::TempFile tempFile;
         pathname = tempFile.pathname();
         std::ofstream out(pathname.c_str());
         out << "Test text";
@@ -56,7 +56,7 @@ TEST_CASE(testDestroyFlag)
     const sys::OS os;
     std::string pathname;
     {
-        const sys::TempFile tempFile(false);
+        const io::TempFile tempFile(false);
         pathname = tempFile.pathname();
         std::ofstream out(pathname.c_str());
         out << "Test text";
