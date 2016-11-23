@@ -78,7 +78,7 @@ public:
         }
     }
 
-     TwoD(const std::vector<OneD<_T> >& v) :
+    TwoD(const std::vector<OneD<_T> >& v) :
         mCoef(v)
     {
     }
