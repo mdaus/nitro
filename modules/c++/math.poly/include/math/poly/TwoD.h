@@ -252,6 +252,12 @@ public:
     {
         ar & mCoef;
     }
+
+    /*
+     * Return true if polynomial represents  scalar value
+     * That is, every element other than [0][0] is 0
+     */
+    bool isScalar() const;
 };
 
 } // poly
