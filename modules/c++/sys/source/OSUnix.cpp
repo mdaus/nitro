@@ -61,6 +61,25 @@ std::string readLink(const std::string& pathname)
 
     return std::string(buffer);
 }
+
+class CharWrapper
+{
+public:
+    CharWrapper(char* array):
+        mArray(array)
+    {
+    }
+    ~CharWrapper()
+    {
+        free(mArray);
+    }
+    inline const char* get() const
+    {
+        return mArray;
+    }
+private:
+    char* mArray;
+};
 }
 
 std::string sys::OSUnix::getPlatformName() const
@@ -182,14 +201,13 @@ std::string sys::OSUnix::getTempName(const std::string& path,
         name = &fullPath[0];
     }
 #else
-    char *tempname = tempnam(path.c_str(), prefix.c_str());
-    if (tempname == NULL)
+    CharWrapper tempname = tempnam(path.c_str(), prefix.c_str());
+    if (tempname.get() == NULL)
         name = "";
     else
     {
-        name = tempname;
-        sys::File (name, sys::File::READ_AND_WRITE, sys::File::CREATE);
-        free(tempname);
+        name = tempname.get();
+        sys::File (name, sys::File::WRITE_ONLY, sys::File::CREATE);
     }
 #endif
     if (name.empty())

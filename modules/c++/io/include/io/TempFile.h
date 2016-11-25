@@ -54,8 +54,11 @@ public:
         return mPathname;
     }
 private:
-    sys::OS mOS;
-    std::string mPathname;
+    // Noncopyable
+    TempFile(const TempFile& );
+    const TempFile& operator=(const TempFile& );
+    const sys::OS mOS;
+    const std::string mPathname;
 };
 }
 
