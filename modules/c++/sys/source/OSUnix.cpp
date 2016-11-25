@@ -171,16 +171,15 @@ std::string sys::OSUnix::getTempName(const std::string& path,
 {
     std::string name;
 #if defined(_USE_MKSTEMP) || defined(__linux__) || defined(__linux) || defined(linux__)
-    char fullPath[PATH_MAX + 1];
-    strcpy(fullPath, path.c_str());
-    strcat(fullPath, "/");
-    strcat(fullPath, prefix.c_str());
-    strcat(fullPath, "XXXXXX");
-    int ret = mkstemp(fullPath);
+    std::string pathname(path);
+    pathname += "/" + prefix + "XXXXXX";
+    std::vector<char> fullPath(pathname.size() + 1);
+    strcpy(&fullPath[0], pathname.c_str());
+    int ret = mkstemp(&fullPath[0]);
     if (ret == -1) name = "";
     else
     {
-        name = fullPath;
+        name = &fullPath[0];
     }
 #else
     char *tempname = tempnam(path.c_str(), prefix.c_str());
@@ -189,7 +188,7 @@ std::string sys::OSUnix::getTempName(const std::string& path,
     else
     {
         name = tempname;
-        sys::File newFile(name, sys::File::READ_AND_WRITE, sys::File::CREATE);
+        sys::File (name, sys::File::READ_AND_WRITE, sys::File::CREATE);
         free(tempname);
     }
 #endif

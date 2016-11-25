@@ -20,8 +20,6 @@
  *
  */
 
-#include <import/except.h>
-#include <sys/Conf.h>
 #include <io/TempFile.h>
 
 io::TempFile::TempFile(const std::string& dirname) :
