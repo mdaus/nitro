@@ -23,7 +23,6 @@
 #include <fstream>
 
 #include <sys/OS.h>
-#include <sys/Path.h>
 #include <io/TempFile.h>
 #include "TestCase.h"
 
