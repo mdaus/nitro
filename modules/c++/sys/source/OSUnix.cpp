@@ -189,10 +189,14 @@ std::string sys::OSUnix::getTempName(const std::string& path,
     else
     {
         name = tempname;
-        fclose(fopen(name));
+        sys::File newFile(name, sys::File::READ_AND_WRITE, sys::File::CREATE);
         free(tempname);
     }
 #endif
+    if (name.empty())
+    {
+        throw except::Exception(Ctxt("Unable to create a temporary file"));
+    }
     return name;
 }
 

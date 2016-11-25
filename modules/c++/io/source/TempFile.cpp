@@ -20,41 +20,28 @@
  *
  */
 
-#include <cstdio>
-#include <string>
-#include <fstream>
 #include <import/except.h>
-#include "sys/Conf.h"
-#include "io/TempFile.h"
+#include <sys/Conf.h>
+#include <io/TempFile.h>
 
-io::TempFile::TempFile(bool destroy, const std::string& path) :
-    mDestroy(destroy),
+io::TempFile::TempFile(const std::string& dirname) :
     mOS(sys::OS()),
-    mName(mOS.getTempName(path))
+    mPathname(mOS.getTempName(dirname))
 {
-    if (mName.empty())
-    {
-        throw except::Exception(Ctxt("Unable to create temporary file"));
-    }
 }
 
 io::TempFile::~TempFile()
 {
     try
     {
-        if (mDestroy && mOS.exists(mName))
+        if (mOS.exists(mPathname))
         {
-            mOS.remove(mName);
+            mOS.remove(mPathname);
         }
     }
     catch (...)
     {
         // Do nothing
     }
-}
-
-std::string io::TempFile::pathname() const
-{
-    return mName;
 }
 

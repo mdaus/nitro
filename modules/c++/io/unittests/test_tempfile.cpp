@@ -51,26 +51,12 @@ TEST_CASE(testFileDestroyed)
     TEST_ASSERT(!os.exists(pathname));
 }
 
-TEST_CASE(testDestroyFlag)
-{
-    const sys::OS os;
-    std::string pathname;
-    {
-        const io::TempFile tempFile(false);
-        pathname = tempFile.pathname();
-        std::ofstream out(pathname.c_str());
-        out << "Test text";
-    }
-    TEST_ASSERT(os.exists(pathname));
-    os.remove(pathname);
-}
 }
 
 int main(int, char**)
 {
     TEST_CHECK(testTempFileCreation);
     TEST_CHECK(testFileDestroyed);
-    TEST_CHECK(testDestroyFlag);
     return 0;
 }
 

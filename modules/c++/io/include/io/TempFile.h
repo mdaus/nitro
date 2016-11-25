@@ -21,27 +21,41 @@
  */
 
 
-#ifndef __TempFile_H__
-#define __TempFile_H__
+#ifndef __IO_TEMPFILE_H__
+#define __IO_TEMPFILE_H__
 
 #include <sys/OS.h>
 
 namespace io
 {
 /*!
- * RAII object for a temporary file that may either persist, or get deleted
- * upon destruction
+ * RAII object for a temporary file that gets deleted
+ * upon object destruction
  */
 class TempFile
 {
 public:
-    TempFile(bool destroy=true, const std::string& path=".");
+    /*!
+     * Constructor for TempFile object. Provided a directory,
+     * this will find a random, unused filename, and create a file
+     * with that in in the directory.
+     *
+     * \param dirname The directory in which to create the file
+     */
+    TempFile(const std::string& dirname=".");
     ~TempFile();
-    std::string pathname() const;
+    /*!
+     * Get pathname of temporary file.
+     *
+     * \return The pathname of the created file
+     */
+    inline std::string pathname() const
+    {
+        return mPathname;
+    }
 private:
-    bool mDestroy;
     sys::OS mOS;
-    std::string mName;
+    std::string mPathname;
 };
 }
 
