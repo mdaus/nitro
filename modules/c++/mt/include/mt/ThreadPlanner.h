@@ -23,43 +23,45 @@
 #ifndef __MT_THREAD_PLANNER_H__
 #define __MT_THREAD_PLANNER_H__
 
-#include <algorithm>
+#include <stddef.h>
 
 namespace mt
 {
-    class ThreadPlanner
+/*!
+ * \class ThreadPlanner
+ * \brief Assists with dividing up work evenly between threads
+ */
+class ThreadPlanner
+{
+public:
+    /*!
+     * Constructor
+     *
+     * \param numElements The total number of elements of work to be divided
+     * among threads
+     * \param numThreads The number of threads that will be used for the work
+     */
+    ThreadPlanner(size_t numElements, size_t numThreads);
+
+    size_t getNumElementsPerThread() const
     {
-    private:
-       size_t mNumElements;
-       size_t mNumThreads;
-       size_t mNumElementsPerThread;
-    public:
-        ThreadPlanner(size_t numElements, size_t numThreads) : 
-            mNumElements(numElements), mNumThreads(numThreads) 
-        {
-            mNumElementsPerThread = (mNumElements / mNumThreads) + (mNumElements % mNumThreads != 0);
-        }
+        return mNumElementsPerThread;
+    }
 
-        size_t getNumElementsPerThread() const
-        {
-            return mNumElementsPerThread;
-        }
+    bool getThreadInfo(size_t threadNum,
+                       size_t& startElement,
+                       size_t& numElementsThisThread) const;
 
-        bool getThreadInfo(size_t threadNum, size_t& startElement, size_t& numElementsThisThread) const
-        {
-            startElement = threadNum * mNumElementsPerThread;
-            if(startElement > mNumElements)
-            {
-                numElementsThisThread = 0;
-            }
-            else
-            {
-                size_t numElementsRemaining = mNumElements - startElement; 
-                numElementsThisThread = std::min<size_t>(mNumElementsPerThread, numElementsRemaining);
-            }
-            return (numElementsThisThread != 0);
-        }
-    };
+    // TODO: Give an example of when this will occur
+    // TODO: This isn't right if there is 1 element and > 1 thread
+    //       Should the math be floor(numElements / numElementsPerThread)?
+    size_t getNumThreadsThatWillBeUsed() const;
+
+private:
+   size_t mNumElements;
+   size_t mNumThreads;
+   size_t mNumElementsPerThread;
+};
 }
 
 #endif
