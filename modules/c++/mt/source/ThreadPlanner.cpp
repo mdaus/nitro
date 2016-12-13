@@ -5,7 +5,8 @@
 namespace mt
 {
 ThreadPlanner::ThreadPlanner(size_t numElements, size_t numThreads) :
-    mNumElements(numElements), mNumThreads(numThreads)
+    mNumElements(numElements),
+    mNumThreads(numThreads)
 {
     // If we got lucky and the work divides up evenly, every thread simply
     // gets numElements / numThreads elements of work
