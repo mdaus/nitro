@@ -3,6 +3,15 @@ from waflib.Errors import ConfigurationError
 import os, subprocess, re, platform
 from os.path import join, dirname, abspath
 
+def expandIfSymlink(pathname):
+    # os.path.realpath is supposed to do what we want, but it's buggy
+    # readlink doesn't handle nested symlinks, hence the loop
+    while os.path.islink(pathname):
+        pathname = os.readlink(pathname)
+
+    return pathname
+
+
 def options(opt):
     opt.add_option('--disable-matlab', action='store_false', dest='matlab',
                    help='Disable matlab', default=True)
@@ -29,7 +38,9 @@ def configure(self):
 
     if not skipMatlab and self.find_program('matlab', var='matlab', path_list=[_f for _f in [matlabBin] if _f],
                                             mandatory=mandatory):
-        matlabBin = dirname(self.env['matlab'])
+
+        matlabPath = expandIfSymlink('/usr/local/bin/matlab')
+        matlabBin = dirname(matlabPath)
         if not matlabHome:
             matlabHome = join(matlabBin, os.pardir)
 
