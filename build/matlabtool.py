@@ -39,7 +39,7 @@ def configure(self):
     if not skipMatlab and self.find_program('matlab', var='matlab', path_list=[_f for _f in [matlabBin] if _f],
                                             mandatory=mandatory):
 
-        matlabPath = expandIfSymlink('/usr/local/bin/matlab')
+        matlabPath = expandIfSymlink(self.env['matlab'])
         matlabBin = dirname(matlabPath)
         if not matlabHome:
             matlabHome = join(matlabBin, os.pardir)
