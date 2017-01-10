@@ -1,4 +1,4 @@
-from waflib import Options, Build
+from waflib import Options, Build, Logs
 from waflib.Errors import ConfigurationError
 import os, subprocess, re, platform
 from os.path import join, dirname, abspath
@@ -76,6 +76,10 @@ def configure(self):
                 if len(keyVal) == 2 and keyVal[0] == 'ARCH':
                     archdir = keyVal[1]
                     break
+
+        if not os.path.exists(mexExtCmd):
+            Logs.warn('Unable to find {0}. Disabling MATLAB'.format(mexExtCmd))
+            return False
 
         # Get the appropriate mex extension.  Matlab provides a script to
         # tell us this.
