@@ -52,3 +52,4 @@ int main()
     TEST_CHECK(testNLessThanK);
     return 0;
 }
+
