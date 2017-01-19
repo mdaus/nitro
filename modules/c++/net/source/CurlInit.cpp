@@ -20,10 +20,10 @@
  *
  */
 
-#include <curl/curl.h>
 #include <net/CurlInit.h>
 
 #ifdef NET_CURL_SUPPORT
+#include <curl/curl.h>
 
 namespace net
 {

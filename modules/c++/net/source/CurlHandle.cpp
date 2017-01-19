@@ -20,11 +20,11 @@
  *
  */
 
-#include <sys/Conf.h>
-#include <except/Exception.h>
 #include <net/CurlHandle.h>
 
 #ifdef NET_CURL_SUPPORT
+#include <sys/Conf.h>
+#include <except/Exception.h>
 
 namespace net
 {

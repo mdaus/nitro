@@ -24,10 +24,10 @@
 #define __NET_CURL_HANDLE_H__
 
 #include <net/net_config.h>
-#include <curl/curl.h>
-#include <string>
 
 #ifdef NET_CURL_SUPPORT
+#include <curl/curl.h>
+#include <string>
 
 namespace net
 {
