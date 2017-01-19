@@ -24,6 +24,8 @@
 #include <except/Exception.h>
 #include <net/CurlHandle.h>
 
+#ifdef NET_CURL_SUPPORT
+
 namespace net
 {
 CurlHandle::CurlHandle() :
@@ -110,3 +112,5 @@ int CurlHandle::writeCallback(char* data,
     return size * nmemb;
 }
 }
+
+#endif

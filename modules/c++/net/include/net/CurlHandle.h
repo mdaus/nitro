@@ -23,8 +23,11 @@
 #ifndef __NET_CURL_HANDLE_H__
 #define __NET_CURL_HANDLE_H__
 
+#include <net/net_config.h>
 #include <curl/curl.h>
 #include <string>
+
+#ifdef NET_CURL_SUPPORT
 
 namespace net
 {
@@ -120,4 +123,5 @@ private:
 };
 }
 
+#endif
 #endif

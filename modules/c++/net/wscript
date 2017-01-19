@@ -1,3 +1,5 @@
+from build import writeConfig
+
 NAME            = 'net'
 MAINTAINER      = 'jmrandol@users.sourceforge.net'
 VERSION         = '1.0'
@@ -10,10 +12,13 @@ TEST_FILTER     = 'AckMulticastSender.cpp ' \
                   'MulticastSubscriber.cpp ' \
                   'SerializableTestClient.cpp'
 
-options = distclean = lambda p: None
+options = configure = distclean = lambda p: None
 
 def configure(conf):
-    conf.env['LIB_CURL'] = 'curl'
+    def curl_callback(conf):
+        if 'HAVE_CURL' in conf.env and conf.env['HAVE_CURL']:
+            conf.define('NET_CURL_SUPPORT', 1)
+    writeConfig(conf, curl_callback, NAME)
 
 def build(bld):
     bld.module(**globals())

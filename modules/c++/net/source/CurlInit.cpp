@@ -23,6 +23,8 @@
 #include <curl/curl.h>
 #include <net/CurlInit.h>
 
+#ifdef NET_CURL_SUPPORT
+
 namespace net
 {
 CurlInit::CurlInit()
@@ -35,3 +37,5 @@ CurlInit::~CurlInit()
     curl_global_cleanup();
 }
 }
+
+#endif

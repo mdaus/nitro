@@ -23,6 +23,10 @@
 #ifndef __NET_CURL_INIT_H__
 #define __NET_CURL_INIT_H__
 
+#include <net/net_config.h>
+
+#ifdef NET_CURL_SUPPORT
+
 namespace net
 {
 /*
@@ -48,4 +52,5 @@ struct CurlInit
 };
 }
 
+#endif
 #endif
