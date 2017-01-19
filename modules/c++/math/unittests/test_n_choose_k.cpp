@@ -27,6 +27,7 @@ namespace
 {
 TEST_CASE(testNChooseK)
 {
+    TEST_ASSERT_EQ(math::nChooseK(0, 0), 1);
     TEST_ASSERT_EQ(math::nChooseK(1, 1), 1);
     TEST_ASSERT_EQ(math::nChooseK(3, 2), 3);
     TEST_ASSERT_EQ(math::nChooseK(10, 3), 120);

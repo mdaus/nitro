@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef __MATH_SIGN_H__
-#define __MATH_SIGN_H__
+#ifndef __MATH_UTILITIES_H__
+#define __MATH_UTILITIES_H__
 
 #include <stdlib.h>
 namespace math
@@ -53,11 +53,13 @@ inline double square(double val)
 
 /*
  * Calculate the binomial coefficient
+ * Be wary of the possibility of overflow from integer arithmetic.
+ *
  * \param n number of possibilities
  * \param k number of outcomes
  * \return n choose k
  */
-size_t nChooseK(size_t n, size_t k);
+sys::Uint64_T nChooseK(size_t n, size_t k);
 }
 
 #endif

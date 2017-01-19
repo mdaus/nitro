@@ -20,22 +20,25 @@
  *
  */
 
-#include <import/sys.h>
+#include <except/Exception.h>
+#include <sys/Conf.h>
 #include <math/Utilities.h>
 
 namespace math
 {
-size_t nChooseK(size_t n, size_t k)
+sys::Uint64_T nChooseK(size_t n, size_t k)
 {
     if (n < k)
     {
-        throw except::Exception(Ctxt("n Choose k undefined for n < k"));
+        throw except::Exception(Ctxt("n Choose k undefined for n < k.\n"
+                "n: " + str::toString(n) + " k: " + str::toString(k)));
+
     }
 
     // Algorithm to compute n Choose k without using factorials found here:
     // http://csharphelper.com/blog/2014/08/
     //         calculate-the-binomial-coefficient-n-choose-k-efficiently-in-c
-    size_t coefficient = 1;
+    sys::Uint64_T coefficient = 1;
     for (size_t ii = 1; ii <= k; ++ii)
     {
         coefficient *= (n - (k - ii));
