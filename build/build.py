@@ -1461,6 +1461,7 @@ def python_package(tg):
     if not os.path.isfile(fname):
         open(fname,'a').close()
 
+    if not os.path.isfile(os.path.join(install_path, os.path.basename(fname))):
         # to install files the 'node' associated with the file
         # needs to have a signature; the hash of the file is
         # good enough for us.
