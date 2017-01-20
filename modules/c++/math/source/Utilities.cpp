@@ -21,6 +21,7 @@
  */
 
 #include <except/Exception.h>
+#include <str/Convert.h>
 #include <sys/Conf.h>
 #include <math/Utilities.h>
 
@@ -32,7 +33,6 @@ sys::Uint64_T nChooseK(size_t n, size_t k)
     {
         throw except::Exception(Ctxt("n Choose k undefined for n < k.\n"
                 "n: " + str::toString(n) + " k: " + str::toString(k)));
-
     }
 
     // Algorithm to compute n Choose k without using factorials found here:

@@ -32,6 +32,7 @@ TEST_CASE(testNChooseK)
     TEST_ASSERT_EQ(math::nChooseK(3, 2), 3);
     TEST_ASSERT_EQ(math::nChooseK(10, 3), 120);
 }
+
 TEST_CASE(testNLessThanK)
 {
     bool exceptionCaught = false;
@@ -39,7 +40,7 @@ TEST_CASE(testNLessThanK)
     {
         math::nChooseK(3, 10);
     }
-    catch(except::Exception& /*exception*/)
+    catch(const except::Exception& /*exception*/)
     {
        exceptionCaught = true;
     }
