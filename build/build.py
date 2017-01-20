@@ -262,10 +262,11 @@ class CPPContext(Context.Context):
         if os.path.exists(pythonTestNode.abspath()) and not Options.options.libs_only:
             tests = [str(test) for test in pythonTestNode.ant_glob('*.py') if
                     str(test) not in listify(modArgs.get('test_filter', ''))]
-            lib.targets_to_add.append(bld(features='install_tgt', pattern='**/*',
-                    files=tests, dir=pythonTestNode,
-                    name=modArgs['name'], target=modArgs['name'],
-                    install_path='${PREFIX}/tests/%s' % modArgs['name']))
+            for test in tests:
+                bld(features='install_tgt',
+                        files=[test], dir=pythonTestNode,
+                        name=test, target=test,
+                        install_path='${PREFIX}/tests/%s' % modArgs['name'])
 
 
         testNode = path.make_node('unittests')
