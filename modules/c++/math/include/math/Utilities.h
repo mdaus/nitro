@@ -24,6 +24,7 @@
 #define __MATH_UTILITIES_H__
 
 #include <stdlib.h>
+#include <sys/Conf.h>
 namespace math
 {
 /*!

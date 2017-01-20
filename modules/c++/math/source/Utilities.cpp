@@ -22,7 +22,6 @@
 
 #include <except/Exception.h>
 #include <str/Convert.h>
-#include <sys/Conf.h>
 #include <math/Utilities.h>
 
 namespace math
