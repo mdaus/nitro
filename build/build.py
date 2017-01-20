@@ -260,9 +260,15 @@ class CPPContext(Context.Context):
 
         pythonTestNode = path.parent.parent.make_node('python').make_node(str(path)).make_node('tests')
         if os.path.exists(pythonTestNode.abspath()) and not Options.options.libs_only:
-            for test in pythonTestNode.ant_glob('*.py'):
-                if str(test) not in listify(modArgs.get('test_filter', '')):
-                    self.install_files('${PREFIX}/tests/%s' % modArgs['name'], [test])
+            files = [test for test in pythonTestNode.ant_glob('*.py') if
+                    str(test) not in listify(modArgs.get('test_filter', ''))]
+            for test in files:
+                lib.targets_to_add.append(bld(features='install_tgt', pattern='**/*',
+                        files=[str(test)], dir=pythonTestNode,
+                        name=str(test), target=str(test),
+                        install_path='${PREFIX}/tests/%s' % modArgs['name']))
+
+
 
         testNode = path.make_node('unittests')
         if os.path.exists(testNode.abspath()) and not Options.options.libs_only:
