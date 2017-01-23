@@ -135,6 +135,9 @@ class CPPContext(Context.Context):
             else:
                 uselib.append(uselibCheck)
 
+        if len(targets_to_add) > 0:
+            modArgs['targets_to_add'] = ' '.join(targets_to_add)
+
         return uselib_local, uselib
 
 
