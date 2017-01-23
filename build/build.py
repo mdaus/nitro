@@ -98,7 +98,7 @@ class CPPContext(Context.Context):
             env = self.all_envs[variant]
         return env
 
-    def _configureUselibs(self, modArgs):
+    def _configureUselibs(self, targets_to_add, modArgs):
         # This specifies that we need to check if it is a USELIB or USELIB_LOCAL
         # If MAKE_%% is defined, then it is local; otherwise, it's a uselib
         # If we're doing a source installation and we built it locally, the
@@ -113,7 +113,6 @@ class CPPContext(Context.Context):
         uselib_local = module_deps + (listify(modArgs.get('uselib_local', ''))
                 + listify(modArgs.get('use','')))
         uselib = listify(modArgs.get('uselib', '')) + ['CSTD', 'CRUN']
-        targets_to_add = listify(modArgs.get('targets_to_add', ''))
 
         uselibCheck = modArgs.get('uselib_check', None)
         if uselibCheck:
@@ -134,9 +133,6 @@ class CPPContext(Context.Context):
                 uselib_local.append(uselibCheck)
             else:
                 uselib.append(uselibCheck)
-
-        if len(targets_to_add) > 0:
-            modArgs['targets_to_add'] = ' '.join(targets_to_add)
 
         return uselib_local, uselib
 
@@ -191,8 +187,8 @@ class CPPContext(Context.Context):
         libVersion = modArgs.get('version', None)
         installPath = modArgs.get('install_path', None)
 
-        uselib_local, uselib = self._configureUselibs(modArgs)
         targets_to_add = listify(modArgs.get('targets_to_add', ''))
+        uselib_local, uselib = self._configureUselibs(targets_to_add, modArgs)
 
         if libVersion is not None and sys.platform != 'win32':
             targetName = '%s.%s' % (libName, self.safeVersion(libVersion))
@@ -355,9 +351,9 @@ class CPPContext(Context.Context):
             if env['cxxshlib_PATTERN'].startswith('lib'):
                 env['cxxshlib_PATTERN'] = env['cxxshlib_PATTERN'][3:]
 
-        uselib_local, use_lib = self._configureUselibs(modArgs)
-        targets_to_add = listify(modArgs.get('targets_to_add', ''))
 
+        targets_to_add = listify(modArgs.get('targets_to_add', ''))
+        uselib_local, uselib = self._configureUselibs(targets_to_add, modArgs)
 
         lib = bld(features='%s %sshlib add_targets no_implib' % (libExeType, libExeType),
                 target=libName, name=targetName, source=source,
