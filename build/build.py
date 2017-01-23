@@ -90,6 +90,54 @@ class CPPContext(Context.Context):
                     defines.append('%s=%s' % (key, value))
         return defines
 
+    def _getEnv(self, modArgs):
+        if 'env' in modArgs:
+            env = modArgs['env']
+        else:
+            variant = modArgs.get('variant', self.env['VARIANT'] or 'default')
+            env = self.all_envs[variant]
+        return env
+
+    def _configureUselibs(self, modArgs):
+        # This specifies that we need to check if it is a USELIB or USELIB_LOCAL
+        # If MAKE_%% is defined, then it is local; otherwise, it's a uselib
+        # If we're doing a source installation and we built it locally, the
+        # source target already got added on as a dependency.  If we didn't
+        # build it locally, we need to add the source target on here since
+        # in that case this module doesn't depend on a task associated with
+        # the external library.
+        env = self._getEnv(modArgs)
+        lang = modArgs.get('lang', 'c++')
+        module_deps = list(['%s-%s' % (x, lang) for x in listify(
+                modArgs.get('module_deps', ''))])
+        uselib_local = module_deps + (listify(modArgs.get('uselib_local', ''))
+                + listify(modArgs.get('use','')))
+        uselib = listify(modArgs.get('uselib', '')) + ['CSTD', 'CRUN']
+        targets_to_add = listify(modArgs.get('targets_to_add', ''))
+
+        uselibCheck = modArgs.get('uselib_check', None)
+        if uselibCheck:
+            for currentLib in listify(uselibCheck):
+                if ('MAKE_%s' % currentLib) in env:
+                    uselib_local += [currentLib]
+                else:
+                    uselib += [currentLib]
+                    if env['install_source']:
+                        sourceTarget = '%s_SOURCE_INSTALL' % currentLib
+                        targets_to_add.append(sourceTarget)
+
+        # this specifies that we need to check if it is a USELIB or USELIB_LOCAL
+        # if MAKE_%% is defined, then it is local; otherwise, it's a uselib
+        uselibCheck = modArgs.pop('uselib_check', None)
+        if uselibCheck:
+            if ('MAKE_%s' % uselibCheck) in env:
+                uselib_local.append(uselibCheck)
+            else:
+                uselib.append(uselibCheck)
+
+        return uselib_local, uselib
+
+
     def pprint(self, *strs, **kw):
         colors = listify(kw.get('colors', 'blue'))
         colors = list(map(str.upper, colors))
@@ -101,11 +149,7 @@ class CPPContext(Context.Context):
         # The main purpose this serves is to recursively copy all the wscript's
         # involved when we have a wscript whose sole job is to install files
         modArgs = dict((k.lower(), v) for k, v in list(modArgs.items()))
-        if 'env' in modArgs:
-            env = modArgs['env']
-        else:
-            variant = modArgs.get('variant', tsk.env['VARIANT'] or 'default')
-            env = tsk.all_envs[variant]
+        env = self._getEnv(modArgs)
 
         features = 'install_tgt'
         if env['install_source']:
@@ -121,11 +165,7 @@ class CPPContext(Context.Context):
         It makes assumptions, but most can be overridden by passing in args.
         """
         bld = self
-        if 'env' in modArgs:
-            env = modArgs['env']
-        else:
-            variant = modArgs.get('variant', bld.env['VARIANT'] or 'default')
-            env = bld.all_envs[variant]
+        env = self._getEnv(modArgs)
 
         modArgs = dict((k.lower(), v) for k, v in list(modArgs.items()))
 
@@ -142,42 +182,14 @@ class CPPContext(Context.Context):
         path = modArgs.get('path',
                            'dir' in modArgs and bld.path.find_dir(modArgs['dir']) or bld.path)
 
-        module_deps = list(['%s-%s' % (x, lang) for x in listify(modArgs.get('module_deps', ''))])
         defines = self.__getDefines(env) + listify(modArgs.get('defines', ''))
-        uselib_local = module_deps + listify(modArgs.get('uselib_local', '')) + listify(modArgs.get('use',''))
-        uselib = listify(modArgs.get('uselib', '')) + ['CSTD', 'CRUN']
-        targets_to_add = listify(modArgs.get('targets_to_add', ''))
         includes = listify(modArgs.get('includes', 'include'))
         exportIncludes = listify(modArgs.get('export_includes', 'include'))
         libVersion = modArgs.get('version', None)
         installPath = modArgs.get('install_path', None)
 
-        # This specifies that we need to check if it is a USELIB or USELIB_LOCAL
-        # If MAKE_%% is defined, then it is local; otherwise, it's a uselib
-        # If we're doing a source installation and we built it locally, the
-        # source target already got added on as a dependency.  If we didn't
-        # build it locally, we need to add the source target on here since
-        # in that case this module doesn't depend on a task associated with
-        # the external library.
-        uselibCheck = modArgs.get('uselib_check', None)
-        if uselibCheck:
-            for currentLib in listify(uselibCheck):
-                if ('MAKE_%s' % currentLib) in env:
-                    uselib_local += [currentLib]
-                else:
-                    uselib += [currentLib]
-                    if env['install_source']:
-                        sourceTarget = '%s_SOURCE_INSTALL' % currentLib
-                        targets_to_add += [sourceTarget]
-
-        # this specifies that we need to check if it is a USELIB or USELIB_LOCAL
-        # if MAKE_%% is defined, then it is local; otherwise, it's a uselib
-        uselibCheck = modArgs.pop('uselib_check', None)
-        if uselibCheck:
-            if ('MAKE_%s' % uselibCheck) in env:
-                uselib_local.append(uselibCheck)
-            else:
-                uselib.append(uselibCheck)
+        uselib_local, uselib = self._configureUselibs(modArgs)
+        targets_to_add = listify(modArgs.get('targets_to_add', ''))
 
         if libVersion is not None and sys.platform != 'win32':
             targetName = '%s.%s' % (libName, self.safeVersion(libVersion))
@@ -316,11 +328,7 @@ class CPPContext(Context.Context):
         plugin (via the plugin kwarg).
         """
         bld = self
-        if 'env' in modArgs:
-            env = modArgs['env'].derive()
-        else:
-            variant = modArgs.get('variant', bld.env['VARIANT'] or 'default')
-            env = bld.all_envs[variant].derive()
+        env = self._getEnv(modArgs)
 
         modArgs = dict((k.lower(), v) for k, v in list(modArgs.items()))
         lang = modArgs.get('lang', 'c++')
@@ -331,11 +339,7 @@ class CPPContext(Context.Context):
         path = modArgs.get('path',
                            'dir' in modArgs and bld.path.find_dir(modArgs['dir']) or bld.path)
 
-        module_deps = list(['%s-%s' % (x, lang) for x in listify(modArgs.get('module_deps', ''))])
         defines = self.__getDefines(env) + listify(modArgs.get('defines', '')) + ['PLUGIN_MODULE_EXPORTS']
-        uselib_local = module_deps + listify(modArgs.get('uselib_local', '')) + listify(modArgs.get('use',''))
-        uselib = listify(modArgs.get('uselib', '')) + ['CSTD', 'CRUN']
-        targets_to_add = listify(modArgs.get('targets_to_add', ''))
         includes = listify(modArgs.get('includes', 'include'))
         exportIncludes = listify(modArgs.get('export_includes', 'include'))
         source = listify(modArgs.get('source', '')) or None
@@ -348,32 +352,9 @@ class CPPContext(Context.Context):
             if env['cxxshlib_PATTERN'].startswith('lib'):
                 env['cxxshlib_PATTERN'] = env['cxxshlib_PATTERN'][3:]
 
-        # This specifies that we need to check if it is a USELIB or USELIB_LOCAL
-        # If MAKE_%% is defined, then it is local; otherwise, it's a uselib
-        # If we're doing a source installation and we built it locally, the
-        # source target already got added on as a dependency.  If we didn't
-        # build it locally, we need to add the source target on here since
-        # in that case this module doesn't depend on a task associated with
-        # the external library.
-        uselibCheck = modArgs.get('uselib_check', None)
-        if uselibCheck:
-            for currentLib in listify(uselibCheck):
-                if ('MAKE_%s' % currentLib) in env:
-                    uselib_local += [currentLib]
-                else:
-                    uselib += [currentLib]
-                    if env['install_source']:
-                        sourceTarget = '%s_SOURCE_INSTALL' % currentLib
-                        targets_to_add += [sourceTarget]
+        uselib_local, use_lib = self._configureUselibs(modArgs)
+        targets_to_add = listify(modArgs.get('targets_to_add', ''))
 
-        # this specifies that we need to check if it is a USELIB or USELIB_LOCAL
-        # if MAKE_%% is defined, then it is local; otherwise, it's a uselib
-        uselibCheck = modArgs.pop('uselib_check', None)
-        if uselibCheck:
-            if ('MAKE_%s' % uselibCheck) in env:
-                uselib_local.append(uselibCheck)
-            else:
-                uselib.append(uselibCheck)
 
         lib = bld(features='%s %sshlib add_targets no_implib' % (libExeType, libExeType),
                 target=libName, name=targetName, source=source,
@@ -419,11 +400,7 @@ class CPPContext(Context.Context):
         Builds a program (exe)
         """
         bld = self
-        if 'env' in modArgs:
-            env = modArgs['env']
-        else:
-            variant = modArgs.get('variant', bld.env['VARIANT'] or 'default')
-            env = bld.all_envs[variant]
+        env = self._getEnv(modArgs)
 
         modArgs = dict((k.lower(), v) for k, v in list(modArgs.items()))
         lang = modArgs.get('lang', 'c++')
@@ -589,11 +566,7 @@ class CPPContext(Context.Context):
         Utility for compiling a mex file (with mexFunction) to a mex shared lib
         """
         bld = self
-        if 'env' in modArgs:
-            env = modArgs['env']
-        else:
-            variant = modArgs.get('variant', bld.env['VARIANT'] or 'default')
-            env = bld.all_envs[variant]
+        env = self._getEnv(modArgs)
 
         if 'HAVE_MATLAB' in self.env:
             modArgs = dict((k.lower(), v) for k, v in list(modArgs.items()))
