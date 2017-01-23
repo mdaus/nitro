@@ -1461,16 +1461,15 @@ def python_package(tg):
     if not os.path.isfile(fname):
         open(fname,'a').close()
 
-    if not os.path.isfile(os.path.join(install_path, os.path.basename(fname))):
-        # to install files the 'node' associated with the file
-        # needs to have a signature; the hash of the file is
-        # good enough for us.
-        relpath = os.path.join(pkg_name, tg.target)
-        nod = tg.bld.bldnode.make_node(relpath)
-        nod.sig = h_file(fname)
+    # to install files the 'node' associated with the file
+    # needs to have a signature; the hash of the file is
+    # good enough for us.
+    relpath = os.path.join(pkg_name, tg.target)
+    nod = tg.bld.bldnode.make_node(relpath)
+    nod.sig = h_file(fname)
 
-        # schedule the file for installation
-        tg.bld.install_files(install_path,nod)
+    # schedule the file for installation
+    tg.bld.install_files(install_path,nod)
 
 @task_gen
 @feature('untar')
