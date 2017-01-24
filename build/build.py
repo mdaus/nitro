@@ -437,6 +437,7 @@ class CPPContext(Context.Context):
 
         return exe
 
+    _initHandled = []
     def swigModule(self, **modArgs):
         """
         Builds a SWIG C++ module
@@ -499,10 +500,12 @@ class CPPContext(Context.Context):
             # this turns the folder at the destination path into a package
 
             initTarget = init_tgen_name
-            bld(features = 'python_package',
-                name = initTarget,
-                target='__init__.py',
-                install_path = installPath)
+            if initTarget not in self._initHandled:
+                bld(features = 'python_package',
+                    name = initTarget,
+                    target='__init__.py',
+                    install_path = installPath)
+                self._initHandled.append(initTarget)
 
             targetsToAdd = [copyFilesTarget, initTarget]
 
