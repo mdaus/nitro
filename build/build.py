@@ -498,11 +498,24 @@ class CPPContext(Context.Context):
 
             # this turns the folder at the destination path into a package
 
+            # Our package might be 'coda,' and then the modules under that
+            # package would be mem, coda_sys, etc.
+            # The current function executes for each module.
+            # However, __init__.py gets installed at the package level.
+            # So we're checking for the existence of a task generator
+            # for the __init__.py for this module's package.
+            # If we omit the check and have duplicate tgens,
+            # the init's will overwrite each other and we get
+            # nasty race conditions.
             initTarget = init_tgen_name
-            bld(features = 'python_package',
-                name = initTarget,
-                target='__init__.py',
-                install_path = installPath)
+            try:
+                # This will throw if the task generator hasn't been created yet
+                bld.get_tgen_by_name(init_tgen_name)
+            except Errors.WafError:
+                bld(features = 'python_package',
+                    name = initTarget,
+                    target='__init__.py',
+                    install_path = installPath)
 
             targetsToAdd = [copyFilesTarget, initTarget]
 
@@ -1438,15 +1451,15 @@ def python_package(tg):
     if not os.path.isfile(fname):
         open(fname,'a').close()
 
-        # to install files the 'node' associated with the file
-        # needs to have a signature; the hash of the file is
-        # good enough for us.
-        relpath = os.path.join(pkg_name, tg.target)
-        nod = tg.bld.bldnode.make_node(relpath)
-        nod.sig = h_file(fname)
+    # to install files the 'node' associated with the file
+    # needs to have a signature; the hash of the file is
+    # good enough for us.
+    relpath = os.path.join(pkg_name, tg.target)
+    nod = tg.bld.bldnode.make_node(relpath)
+    nod.sig = h_file(fname)
 
-        # schedule the file for installation
-        tg.bld.install_files(install_path,nod)
+    # schedule the file for installation
+    tg.bld.install_files(install_path,nod)
 
 @task_gen
 @feature('untar')
