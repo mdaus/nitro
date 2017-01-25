@@ -498,8 +498,18 @@ class CPPContext(Context.Context):
 
             # this turns the folder at the destination path into a package
 
+            # Our package might be 'coda,' and then the modules under that
+            # package would be mem, coda_sys, etc.
+            # The current function executes for each module.
+            # However, __init__.py gets installed at the package level.
+            # So we're checking for the existence of a task generator
+            # for the __init__.py for this module's package.
+            # If we omit the check and have duplicate tgens,
+            # the init's will overwrite each other and we get
+            # nasty race conditions.
             initTarget = init_tgen_name
             try:
+                # This will throw if the task generator hasn't been created yet
                 bld.get_tgen_by_name(init_tgen_name)
             except Errors.WafError:
                 bld(features = 'python_package',
