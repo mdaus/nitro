@@ -153,10 +153,10 @@ class CPPContext(Context.Context):
         features = 'install_tgt'
         if env['install_source']:
             targetsToAdd = modArgs.get('targets_to_add', [])
-            targetsToAdd = targetsToAdd + getWscriptTargets(tsk, env, tsk.path)
+            targetsToAdd = targetsToAdd + getWscriptTargets(self, env, self.path)
             modArgs['targets_to_add'] = targetsToAdd
             features += ' add_targets'
-        return tsk(features = features, **modArgs)
+        return self(features = features, **modArgs)
 
     def module(self, **modArgs):
         """
