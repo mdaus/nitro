@@ -148,7 +148,7 @@ class CPPContext(Context.Context):
         # The main purpose this serves is to recursively copy all the wscript's
         # involved when we have a wscript whose sole job is to install files
         modArgs = dict((k.lower(), v) for k, v in list(modArgs.items()))
-        env = self._getEnv(modArgs)
+        env = tsk._getEnv(modArgs)
 
         features = 'install_tgt'
         if env['install_source']:
