@@ -98,7 +98,23 @@ class CPPContext(Context.Context):
             env = self.all_envs[variant]
         return env
 
-    def _configureUselibs(self, targets_to_add, modArgs):
+    def _extendGlobPatterns(self, globPatterns, modArgs):
+        lang = modArgs.get('lang', 'c++')
+        sourceExtensions = {'c++':'.cpp', 'c':'.c'}.get(lang, 'cxx')
+        allSourceExtensions = (listify(modArgs.get('source_ext', '')) +
+                [sourceExtensions])
+
+        # Entire source directories can also be provided via
+        # 'source_dir' or 'sourcedir'
+        sourceDirs = listify(modArgs.get('source_dir',
+                modArgs.get('sourcedir', 'source')))
+        for dir in sourceDirs:
+            for ext in allSourceExtensions:
+                globPatterns.append(join(dir, '*%s' % ext))
+
+        return globPatterns
+
+    def _configureUselibs(self, targetsToAdd, modArgs):
         # This specifies that we need to check if it is a USELIB or USELIB_LOCAL
         # If MAKE_%% is defined, then it is local; otherwise, it's a uselib
         # If we're doing a source installation and we built it locally, the
@@ -123,7 +139,7 @@ class CPPContext(Context.Context):
                     uselib += [currentLib]
                     if env['install_source']:
                         sourceTarget = '%s_SOURCE_INSTALL' % currentLib
-                        targets_to_add.append(sourceTarget)
+                        targetsToAdd.append(sourceTarget)
 
         # this specifies that we need to check if it is a USELIB or USELIB_LOCAL
         # if MAKE_%% is defined, then it is local; otherwise, it's a uselib
@@ -173,7 +189,6 @@ class CPPContext(Context.Context):
 
         lang = modArgs.get('lang', 'c++')
         libExeType = {'c++':'cxx', 'c':'c'}.get(lang, 'cxx')
-        sourceExt = {'c++':'.cpp', 'c':'.c'}.get(lang, 'cxx')
         if modArgs.get('nosuffix', False) :
             libName = modArgs['name']
         else :
@@ -187,32 +202,23 @@ class CPPContext(Context.Context):
         libVersion = modArgs.get('version', None)
         installPath = modArgs.get('install_path', None)
 
-        targets_to_add = listify(modArgs.get('targets_to_add', ''))
-        uselib_local, uselib = self._configureUselibs(targets_to_add, modArgs)
+        targetsToAdd = listify(modArgs.get('targets_to_add', ''))
+        uselib_local, uselib = self._configureUselibs(targetsToAdd, modArgs)
 
         if libVersion is not None and sys.platform != 'win32':
             targetName = '%s.%s' % (libName, self.safeVersion(libVersion))
         else:
             targetName = libName
 
-        allSourceExt = listify(modArgs.get('source_ext', '')) + [sourceExt]
-
-        # Source files can be individually listed via 'source'
         glob_patterns = listify(modArgs.get('source', '')) or []
-
-        # Entire source directories can also be provided via
-        # 'source_dir' or 'sourcedir'
-        sourcedirs = listify(modArgs.get('source_dir', modArgs.get('sourcedir', 'source')))
-        for dir in sourcedirs:
-            for ext in allSourceExt:
-                glob_patterns.append(join(dir, '*%s' % ext))
+        glob_patterns = self._extendGlobPatterns(glob_patterns, modArgs)
 
         # Build the lib
         lib = bld(features='%s %s%s add_targets includes'% (libExeType, libExeType, env['LIB_TYPE'] or 'stlib'), includes=includes,
                 target=targetName, name=libName, export_includes=exportIncludes,
                 use=uselib_local, uselib=uselib, env=env.derive(),
                 defines=defines, path=path,
-                source=path.ant_glob(glob_patterns), targets_to_add=targets_to_add)
+                source=path.ant_glob(glob_patterns), targets_to_add=targetsToAdd)
         lib.source = list(filter(partial(lambda x, t: basename(str(t)) not in x, modArgs.get('source_filter', '').split()), lib.source))
 
         if env['install_libs']:
@@ -260,7 +266,8 @@ class CPPContext(Context.Context):
 
             test_deps = list(['%s-%s' % (x, lang) for x in test_deps + listify(modArgs.get('test_uselib_local', '')) + listify(modArgs.get('test_use',''))])
 
-            for test in testNode.ant_glob('*%s' % sourceExt):
+            sourceExtension = {'c++':'.cpp', 'c':'.c'}.get(lang, 'cxx')
+            for test in testNode.ant_glob('*%s' % sourceExtension):
                 if str(test) not in listify(modArgs.get('test_filter', '')):
                     testName = splitext(str(test))[0]
                     self.program(env=env.derive(), name=testName, target=testName, source=str(test),
@@ -293,9 +300,9 @@ class CPPContext(Context.Context):
 
                 test_deps = list(['%s-%s' % (x, lang) for x in test_deps + listify(modArgs.get('test_uselib_local', '')) + listify(modArgs.get('test_use',''))])
 
-                sourceExt = {'c++':'.cpp', 'c':'.c'}.get(lang, 'cxx')
                 tests = []
-                for test in testNode.ant_glob('*%s' % sourceExt):
+                sourceExtensions = {'c++':'.cpp', 'c':'.c'}.get(lang, 'cxx')
+                for test in testNode.ant_glob('*%s' % sourceExtensions):
                     if str(test) not in listify(modArgs.get('unittest_filter', '')):
                         testName = splitext(str(test))[0]
                         exe = self(features='%s %sprogram' % (libExeType, libExeType),
@@ -357,23 +364,17 @@ class CPPContext(Context.Context):
                 env['cxxshlib_PATTERN'] = env['cxxshlib_PATTERN'][3:]
 
 
-        targets_to_add = listify(modArgs.get('targets_to_add', ''))
-        uselib_local, uselib = self._configureUselibs(targets_to_add, modArgs)
+        targetsToAdd = listify(modArgs.get('targets_to_add', ''))
+        uselib_local, uselib = self._configureUselibs(targetsToAdd, modArgs)
 
         lib = bld(features='%s %sshlib add_targets no_implib' % (libExeType, libExeType),
                 target=libName, name=targetName, source=source,
                 includes=includes, export_includes=exportIncludes,
                 use=uselib_local, uselib=uselib, env=env.derive(),
-                defines=defines, path=path, targets_to_add=targets_to_add,
+                defines=defines, path=path, targets_to_add=targetsToAdd,
                 install_path=join(env['install_sharedir'], plugin, 'plugins'))
 
-        sourceExt = {'c++':'.cpp', 'c':'.c'}.get(lang, 'cxx')
-        allSourceExt = listify(modArgs.get('source_ext', '')) + [sourceExt]
-        sourcedirs = listify(modArgs.get('source_dir', modArgs.get('sourcedir', 'source')))
-        glob_patterns = []
-        for dir in sourcedirs:
-            for ext in allSourceExt:
-                glob_patterns.append(join(dir, '*%s' % ext))
+        glob_patterns = self._extendGlobPatterns([], modArgs)
 
         if not source:
             lib.source = path.ant_glob(glob_patterns)
@@ -417,7 +418,7 @@ class CPPContext(Context.Context):
         defines = self.__getDefines(env) + listify(modArgs.get('defines', ''))
         uselib_local = module_deps + listify(modArgs.get('uselib_local', '')) + listify(modArgs.get('use',''))
         uselib = listify(modArgs.get('uselib', '')) + ['CSTD', 'CRUN']
-        targets_to_add = listify(modArgs.get('targets_to_add', ''))
+        targetsToAdd = listify(modArgs.get('targets_to_add', ''))
         includes = listify(modArgs.get('includes', 'include'))
         source = listify(modArgs.get('source', '')) or None
         install_path = modArgs.get('install_path', env['install_bindir'])
@@ -431,7 +432,7 @@ class CPPContext(Context.Context):
                                use=uselib_local, uselib=uselib,
                                env=env.derive(), target=progName, path=path,
                                install_path=install_path,
-                               targets_to_add=targets_to_add)
+                               targets_to_add=targetsToAdd)
 
         addSourceTargets(bld, env, path, exe)
 
