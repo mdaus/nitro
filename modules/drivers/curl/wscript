@@ -13,4 +13,5 @@ def configure(conf):
                   function_name='curl_global_init',
                   msg='Checking for CURL',
                   mandatory=False):
+        conf.undefine('HAVE_CURL_GLOBAL_INIT')
         conf.env['HAVE_CURL'] = True
