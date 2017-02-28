@@ -325,6 +325,8 @@ class Poly1D(_object):
 
     @staticmethod
     def fromArray(array):
+        if array.size == 0:
+            return Poly1D()
         return Poly1D(array.tolist())
 
     __swig_destroy__ = _math_poly.delete_Poly1D

@@ -138,6 +138,8 @@ typedef math::linear::Vector<double> VectorDouble;
     %{
         @staticmethod
         def fromArray(array):
+            if array.size == 0:
+                return Poly1D()
             return Poly1D(array.tolist())
     %}
 
