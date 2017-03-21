@@ -40,7 +40,8 @@ StreamHandler::StreamHandler(LogLevel level) :
 
 StreamHandler::StreamHandler(io::OutputStream* stream,
                              LogLevel level) :
-    Handler(level)
+    Handler(level),
+    mClosed(false)
 {
     mStream.reset(stream);
 
