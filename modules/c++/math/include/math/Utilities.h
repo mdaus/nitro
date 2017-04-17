@@ -57,14 +57,15 @@ inline double square(double val)
  * \param value Argument to be checked for NaN
  * \return true if value is NaN
  */
-inline bool isNaN(double value)
+template <typenameT> bool isNaN(T value)
 {
 #ifdef HAVE_ISNAN
     return isnan(value);
 #else
-    // This will fail if g++ is compiled with -ffast-math
-    // But in that case, we ought to have C99, so shouldn't even be here
-    return value != value;
+    // Make sure the compiler doesn't optimize out the call below or cache the
+    // value
+    volatile T copy = value
+    return copy != copy;
 #endif
 }
 
