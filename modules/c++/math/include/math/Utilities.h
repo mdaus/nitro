@@ -24,6 +24,7 @@
 #define __MATH_UTILITIES_H__
 
 #include <stdlib.h>
+#include <math/math_config.h>
 #include <sys/Conf.h>
 namespace math
 {
@@ -57,14 +58,14 @@ inline double square(double val)
  * \param value Argument to be checked for NaN
  * \return true if value is NaN
  */
-template <typenameT> bool isNaN(T value)
+template <typename T> bool isNaN(T value)
 {
 #ifdef HAVE_ISNAN
     return isnan(value);
 #else
     // Make sure the compiler doesn't optimize out the call below or cache the
     // value
-    volatile T copy = value
+    volatile T copy = value;
     return copy != copy;
 #endif
 }
