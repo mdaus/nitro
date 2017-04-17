@@ -61,6 +61,7 @@ inline double square(double val)
 template <typename T> bool isNaN(T value)
 {
 #ifdef HAVE_ISNAN
+    #include <math.h>
     return isnan(value);
 #else
     // Make sure the compiler doesn't optimize out the call below or cache the

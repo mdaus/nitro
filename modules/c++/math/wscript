@@ -9,11 +9,11 @@ options = distclean = lambda p: None
 
 
 def configure(conf):
-    def sys_callback(conf):
+    def math_callback(conf):
         conf.check_cc(function_name='isnan', header_name='math.h',
                 mandatory=False)
 
-    writeConfig(conf, sys_callback, NAME)
+    writeConfig(conf, math_callback, NAME)
 
 def build(bld):
     bld.module(**globals())
