@@ -3,7 +3,7 @@ NAME            = 'math'
 MAINTAINER      = 'asylvest@users.sourceforge.net'
 VERSION         = '0.1'
 USELIB          = 'MATH'
-MODULE_DEPS     = 'sys'
+MODULE_DEPS     = 'except str sys types'
 
 options = distclean = lambda p: None
 
