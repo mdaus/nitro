@@ -151,7 +151,7 @@ NRTPROT(void) nrt_Utils_decimalLatToCharArray(double decimal, char *buffer7);
 
 /*!
  *  Turn the decimal value into a string +-ddd.ddd.  You must have a buffer
- *  with 7 elements to hand in to this function, otherwise you will
+ *  with 8 elements to hand in to this function, otherwise you will
  *  have memory corruption.
  */
 NRTPROT(void) nrt_Utils_decimalLonToCharArray(double decimal, char *buffer8);

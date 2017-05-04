@@ -28,61 +28,72 @@
 
 namespace nitf
 {
-AlphaNumericFieldImpl::AlphaNumericFieldImpl(size_t size):
-    mSize(size)
+std::string StringConverter::toNitfString(const std::string& value,
+        size_t length) const
 {
-    mData.reserve(size);
-}
-
-void AlphaNumericFieldImpl::set(const std::string& value)
-{
-    if (value.size() > mSize)
+    if (length == 0)
+    {
+        length = mLength;
+    }
+    if (value.size() > length)
     {
         throw except::Exception(Ctxt(value + " is too long. Should be <= " +
-                str::toString(mData.size())));
+                str::toString(mLength)));
     }
-    const size_t padLength = mSize - value.size();
-    const std::string padding(padLength, ' ');
-    mData = value + padding;
+    if (mFieldType == NITF_BCS_N && !str::containsOnly(value, "0123456789.+-"))
+    {
+        throw except::Exception(Ctxt(value + " includes characters not in "
+                    "BCS-N"));
+    }
+    const size_t padLength = length - value.size();
+    char padCharacter = mFieldType == NITF_BCS_A ? ' ' : '0';
+    const std::string padding(padLength, padCharacter);
+    return mFieldType == NITF_BCS_A ? value + padding : padding + value;
 }
 
-void AlphaNumericFieldImpl::setReal(double value)
+std::string StringConverter::toNitfString(const DateTime& value) const
+{
+    const std::string formattedDateTime = value.format(NITF_DATE_FORMAT_21);
+    if (mLength == std::string("YYYYMMDD").size())
+    {
+        return formattedDateTime.substr(0, mLength);
+    }
+    return toNitfString(formattedDateTime);
+}
+
+std::string StringConverter::toNitfString(double value) const
+{
+    return toNitfString(realToString(value));
+}
+
+std::string StringConverter::toNitfString(float value) const
+{
+    return toNitfString(realToString(value));
+}
+
+std::string StringConverter::realToString(double value) const
 {
     const std::string integerPart =
-            str::toString(static_cast<nitf::Int64>(value));
-    if (integerPart.size() > mSize)
+            str::toString(static_cast<Int64>(value));
+    if (integerPart.size() > mLength)
     {
         throw except::Exception(Ctxt(str::toString(value) +
                     " is too long. Should be <= " +
-                    str::toString(mData.size()) + "digits long"));
+                    str::toString(mLength) + "digits long"));
     }
-    else if (integerPart.size() == mSize ||
-            integerPart.size() == mSize - 1)
+    else if (integerPart.size() == mLength ||
+            integerPart.size() == mLength - 1)
     {
-        set(str::toString(static_cast<nitf::Int64>(value + .5)));
+        return str::toString(static_cast<Int64>(value + .5));
     }
     else
     {
         std::ostringstream stream;
         stream << std::fixed
-               << std::setprecision(mSize - integerPart.size() - 1)
+               << std::setprecision(mLength - integerPart.size() - 1)
                << value;
-        set(stream.str());
-        stream.unsetf(std::ios_base::fixed);
-        stream.clear();
+        return stream.str();
     }
 }
-
-void AlphaNumericFieldImpl::setDateTime(const nitf::DateTime& value)
-{
-    set(value.format(NITF_DATE_FORMAT_21));
-}
-
-nitf::DateTime AlphaNumericFieldImpl::asDateTime(
-        const std::string& format) const
-{
-    return nitf::DateTime(mData, format);
-}
-
 }
 

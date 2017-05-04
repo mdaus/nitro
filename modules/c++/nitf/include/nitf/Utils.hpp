@@ -39,7 +39,26 @@ struct Utils
 
     static double geographicToDecimal(int degrees, int minutes, double seconds);
 
+    static double parseDecimalString(const std::string& decimal);
+
+    static double geographicStringToDecimal(const std::string& geo);
+
     static char cornersTypeAsCoordRep(nitf::CornersType type);
+
+    static std::string decimalLatToGeoString(double decimal);
+
+    static std::string decimalLonToGeoString(double decimal);
+
+    static std::string decimalLatToString(double decimal);
+
+    static std::string decimalLonToString(double decimal);
+
+    static std::pair<std::string, std::string> splitIgeolo(
+            const std::string& imageCoordinates, size_t index);
+
+    const static size_t LAT_STRING_LENGTH = 7;
+
+    const static size_t LON_STRING_LENGTH = 8;
 
 };
 

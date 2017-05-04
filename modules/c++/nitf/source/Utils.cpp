@@ -21,6 +21,7 @@
  */
 
 
+#include <sys/Conf.h>
 #include "nitf/Utils.hpp"
 
 using namespace nitf;
@@ -49,5 +50,86 @@ double Utils::geographicToDecimal(int degrees, int minutes, double seconds)
 char Utils::cornersTypeAsCoordRep(nitf::CornersType type)
 {
     return nitf_Utils_cornersTypeAsCoordRep(type);
+}
+
+std::string Utils::decimalLatToGeoString(double decimal)
+{
+    char buffer[LAT_STRING_LENGTH + 1];
+    buffer[LAT_STRING_LENGTH] = '\0';
+    nrt_Utils_decimalLatToGeoCharArray(decimal, buffer);
+    return std::string(buffer);
+}
+
+std::string Utils::decimalLonToGeoString(double decimal)
+{
+    char buffer[LON_STRING_LENGTH + 1];
+    buffer[LON_STRING_LENGTH] = '\0';
+    nitf_Utils_decimalLonToGeoCharArray(decimal, buffer);
+    return std::string(buffer);
+}
+
+std::string Utils::decimalLatToString(double decimal)
+{
+    char buffer[LAT_STRING_LENGTH + 1];
+    buffer[LAT_STRING_LENGTH] = 0;
+    nitf_Utils_decimalLatToCharArray(decimal, buffer);
+    return std::string(buffer);
+}
+
+std::string Utils::decimalLonToString(double decimal)
+{
+    char buffer[LON_STRING_LENGTH + 1];
+    buffer[LON_STRING_LENGTH] = '\0';
+    nitf_Utils_decimalLonToCharArray(decimal, buffer);
+    return std::string(buffer);
+}
+
+double Utils::geographicStringToDecimal(const std::string& geo)
+{
+    int degrees;
+    int minutes;
+    double seconds;
+    nitf_Error error;
+    if (!nitf_Utils_parseGeographicString((char*) geo.c_str(), &degrees,
+            &minutes, &seconds, &error))
+    {
+        throw except::Exception(Ctxt("Unable to parse " + geo));
+    }
+    return nitf_Utils_geographicToDecimal(degrees, minutes, seconds);
+}
+
+double Utils::parseDecimalString(const std::string& decimal)
+{
+    double result;
+    nitf_Error error;
+    if (!nitf_Utils_parseDecimalString((char*) decimal.c_str(), &result, &error))
+    {
+        throw except::Exception(Ctxt("Unable to parse " + decimal));
+    }
+    return result;
+}
+
+std::pair<std::string, std::string> Utils::splitIgeolo(
+        const std::string& imageCoordinates, size_t index)
+{
+    if (index > 3)
+    {
+        throw except::Exception(Ctxt("Index must be in [0:3]. "
+                "Got " + str::toString(index)));
+    }
+    if (imageCoordinates.size() != 60)
+    {
+        throw except::Exception(Ctxt("ImageCoordinates should be "
+                "a string of 60 characters"));
+    }
+
+    std::pair<std::string, std::string> coordinates;
+    const size_t startPosition = index *
+            (LAT_STRING_LENGTH + LON_STRING_LENGTH);
+    coordinates.first = imageCoordinates.substr(
+            startPosition, LAT_STRING_LENGTH);
+    coordinates.second = imageCoordinates.substr(
+            startPosition + LAT_STRING_LENGTH, LON_STRING_LENGTH);
+    return coordinates;
 }
 
