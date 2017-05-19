@@ -46,6 +46,7 @@ struct Constants
     static constexpr double SPEED_OF_LIGHT_METERS_PER_SEC = 299792458.0;
     static constexpr double SPEED_OF_LIGHT_FEET_PER_SEC =
             SPEED_OF_LIGHT_METERS_PER_SEC * METERS_TO_FEET;};
+};
 }
 #else
 namespace math
