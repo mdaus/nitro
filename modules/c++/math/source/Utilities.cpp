@@ -23,7 +23,6 @@
 #include <except/Exception.h>
 #include <str/Convert.h>
 #include <math/Utilities.h>
-#include <math.h>
 
 namespace math
 {

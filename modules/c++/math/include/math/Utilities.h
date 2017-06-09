@@ -63,15 +63,13 @@ template <typename T> bool isNaN(T value)
 {
 #ifdef HAVE_STD_ISNAN
     return std::isnan(value);
-#else
-  #ifdef HAVE_ISNAN
+#elif HAVE_ISNAN
     return isnan(value);
-  #else
+#else
     // Make sure the compiler doesn't optimize out the call below or cache the
     // value
     volatile T copy = value;
     return copy != copy;
-  #endif
 #endif
 }
 

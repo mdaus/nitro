@@ -25,6 +25,7 @@
 
 #ifdef __cplusplus
 
+#  include <cmath>
 #  include <limits>
 #  include <import/sys.h>
 #  include <import/str.h>
