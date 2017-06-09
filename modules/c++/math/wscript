@@ -11,7 +11,13 @@ options = distclean = lambda p: None
 def configure(conf):
     def math_callback(conf):
         conf.check_cc(function_name='isnan', header_name='math.h',
-                mandatory=False)
+                       mandatory=False)
+        # The auto-generated code would be ambiguous and not compile
+        conf.check_cxx(fragment='''
+                       #include <cmath>
+                       int main() { return std::isnan(0); } ''', 
+                       msg='Checking for function std::isnan',
+		       mandatory=False, define_name='HAVE_STD_ISNAN')
 
     writeConfig(conf, math_callback, NAME)
 

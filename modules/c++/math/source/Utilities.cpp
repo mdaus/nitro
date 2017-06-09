@@ -50,11 +50,8 @@ sys::Uint64_T nChooseK(size_t n, size_t k)
 
 template <typename T> bool isNaN(T value)
 {
-// If we have C++11, we are not gauranteed to have isnan in the global namespace
-#ifdef __CODA_CPP11
+#ifdef HAVE_ISNAN
     return std::isnan(value);
-#elseif HAVE_ISNAN
-    return isnan(value);
 #else
     // Make sure the compiler doesn't optimize out the call below or cache the
     // value
