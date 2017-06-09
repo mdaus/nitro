@@ -23,7 +23,6 @@
 #ifndef __MATH_UTILITIES_H__
 #define __MATH_UTILITIES_H__
 
-#include <math.h>
 #include <stdlib.h>
 #include <math/math_config.h>
 #include <sys/Conf.h>
@@ -62,8 +61,10 @@ inline double square(double val)
 template <typename T> bool isNaN(T value)
 {
 #ifdef HAVE_STD_ISNAN
+    #include <cmath>
     return std::isnan(value);
 #elif HAVE_ISNAN
+    #include <math.h>
     return isnan(value);
 #else
     // Make sure the compiler doesn't optimize out the call below or cache the
