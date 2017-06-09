@@ -24,7 +24,6 @@
 #include <str/Convert.h>
 #include <math/Utilities.h>
 #include <math.h>
-#include <cmath>
 
 namespace math
 {
@@ -47,20 +46,5 @@ sys::Uint64_T nChooseK(size_t n, size_t k)
     }
     return coefficient;
 }
-
-template <typename T> bool isNaN(T value)
-{
-#ifdef HAVE_ISNAN
-    return std::isnan(value);
-#else
-    // Make sure the compiler doesn't optimize out the call below or cache the
-    // value
-    volatile T copy = value;
-    return copy != copy;
-#endif
-}
-
-template bool isNaN<double>(double value);
-template bool isNaN<float>(float value);
 }
 
