@@ -169,11 +169,12 @@ TEST_CASE(testEscapeForXMLKitchenSink)
 {
     std::string message(
             "This & that with <angles> and \"quotes\" & single 'quotes' & "
-            "why not a\nnewline at the end?");
+            "why not a\nnewline & \rcarriage return at the end?");
 
     const std::string expectedMessage(
             "This &amp; that with &lt;angles&gt; and &quot;quotes&quot; &amp; "
-            "single &apos;quotes&apos; &amp; why not a newline at the end?");
+            "single &apos;quotes&apos; &amp; why not a&#10;newline &amp; "
+            "&#13;carriage return at the end?");
 
     str::escapeForXML(message);
     TEST_ASSERT_EQ(message, expectedMessage);

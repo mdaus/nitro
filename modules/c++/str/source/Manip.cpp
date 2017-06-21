@@ -274,6 +274,7 @@ void escapeForXML(std::string& str)
     replaceAll(str, ">", "&gt;");
     replaceAll(str, "\"", "&quot;");
     replaceAll(str, "'", "&apos;");
-    replaceAll(str, "\n", " ");
+    replaceAll(str, "\n", "&#10;");
+    replaceAll(str, "\r", "&#13;");
 }
 }
