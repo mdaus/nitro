@@ -20,8 +20,6 @@
  *
  */
 
-#include <stdlib.h>
-
 #include <math/linear/Matrix2D.h>
 #include "TestCase.h"
 
