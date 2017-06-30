@@ -1335,8 +1335,8 @@ template<typename _T> inline
 
 /*!
  * Calculate the left inverse
- * \param mx The matrix to find the inverse of. Mx is assumed to
- * have full row rank
+ * \param mx The matrix to find the inverse of. Mx is assumed to have more rows
+ * than columns, and that the columns are linearly independent.
  * \return Left inverse
  * \throws if matrix is not left-invertible
  */
@@ -1348,8 +1348,8 @@ template<typename _T> inline
 
 /*!
  * Calculate the right inverse
- * \param mx The matrix to find the inverse of. Mx is assumed to
- * have full column rank
+ * \param mx The matrix to find the inverse of. Mx is assumed to have more
+ * columns than rows, and that the rows are linearly independent.
  * \return Right inverse
  * \throws if matrix is not right-invertible
  */

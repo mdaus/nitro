@@ -85,7 +85,7 @@ TEST_CASE(testRightRealProperties)
 }
 }
 
-int main(int argc, char** argv)
+int main(int /*argc*/, char** /*argv*/)
 {
     TEST_CHECK(testLeftRealProperties);
     TEST_CHECK(testRightRealProperties);
