@@ -1334,27 +1334,27 @@ template<typename _T> inline
 }
 
 /*!
- * Calculate the left Moore-Penrose pseudo-inverse
+ * Calculate the left inverse
  * \param mx The matrix to find the inverse of. Mx is assumed to
  * have full row rank
- * \return Left pseudo-inverse
- * \throws if matrix is not pseudo-invertible
+ * \return Left inverse
+ * \throws if matrix is not left-invertible
  */
 template<typename _T> inline
-    Matrix2D<_T> leftPseudoInverse(const Matrix2D<_T>& mx)
+    Matrix2D<_T> leftInverse(const Matrix2D<_T>& mx)
 {
     return inverse(mx.transpose() * mx) * mx.transpose();
 }
 
 /*!
- * Calculate the right Moore-Penrose pseudo-inverse
+ * Calculate the right inverse
  * \param mx The matrix to find the inverse of. Mx is assumed to
  * have full column rank
- * \return Right pseudo-inverse
- * \throws if matrix is not pseudo-invertible
+ * \return Right inverse
+ * \throws if matrix is not right-invertible
  */
 template<typename _T> inline
-    Matrix2D<_T> rightPseudoInverse(const Matrix2D<_T>& mx)
+    Matrix2D<_T> rightInverse(const Matrix2D<_T>& mx)
 {
     return mx.transpose() * inverse(mx * mx.transpose());
 }

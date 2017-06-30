@@ -38,12 +38,12 @@ TEST_CASE(testLeftRealProperties)
     matrix(2, 1) = 8;
     matrix(3, 0) = 1.1;
     matrix(3, 1) = 3.4;
-    const Matrix2D<double> inverse = math::linear::leftPseudoInverse(matrix);
+    const Matrix2D<double> inverse = math::linear::leftInverse(matrix);
 
     // Identities that should hold
     TEST_ASSERT_EQ(matrix, matrix * inverse * matrix);
     TEST_ASSERT_EQ(inverse, inverse * matrix * inverse);
-    TEST_ASSERT_EQ(matrix, math::linear::rightPseudoInverse(inverse));
+    TEST_ASSERT_EQ(matrix, math::linear::rightInverse(inverse));
 
     // We want this to be able to solve linear equations
     Matrix2D<double> xx(2, 1);
@@ -70,10 +70,10 @@ TEST_CASE(testRightRealProperties)
     matrix = matrix.transpose();
 
     // Identities that should hold
-    const Matrix2D<double> inverse = math::linear::rightPseudoInverse(matrix);
+    const Matrix2D<double> inverse = math::linear::rightInverse(matrix);
     TEST_ASSERT_EQ(matrix, matrix * inverse * matrix);
     TEST_ASSERT_EQ(inverse, inverse * matrix * inverse);
-    TEST_ASSERT_EQ(matrix, math::linear::leftPseudoInverse(inverse));
+    TEST_ASSERT_EQ(matrix, math::linear::leftInverse(inverse));
 
     Matrix2D<double> xx(1, 2);
     xx(0, 0) = 1;
