@@ -423,7 +423,7 @@ def dtypeFromSioType(elementType, elementSize):
                FileHeader.COMPLEX_FLOAT: 'complex'}
 
     if not elementType in typeMap:
-        raise Exception("Unknown element type: " + elementType)
+        raise Exception("Unknown element type: " + str(elementType))
 
     dtypeStr = "%s%s" % (typeMap[elementType], elementSize * 8)
 
@@ -459,7 +459,7 @@ def write(numpyArray, outputPathname, elementType = None):
     if not numpyArray.flags['C_CONTIGUOUS']:
         numpyArray = numpy.ascontiguousarray(numpyArray)
 
-    header = FileHeader(numpyArray.shape[0], 
+    header = FileHeader(numpyArray.shape[0],
                         numpyArray.shape[1],
                         numpyArray.strides[1],
                         elementType);
