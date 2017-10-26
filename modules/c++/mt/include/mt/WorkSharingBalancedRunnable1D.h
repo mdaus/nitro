@@ -19,8 +19,8 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __MT_SHARED_WORK_BALANCED_RUNNABLE_1D_H__
-#define __MT_SHARED_WORK_BALANCED_RUNNABLE_1D_H__
+#ifndef __MT_WORK_SHARING_BALANCED_RUNNABLE_1D_H__
+#define __MT_WORK_SHARING_BALANCED_RUNNABLE_1D_H__
 
 #include <vector>
 #include <sstream>
@@ -56,20 +56,23 @@ typedef std::vector<mem::SharedPtr<sys::AtomicCounter> > SharedAtomicCounterVec;
  *  reference and in practice better caching.
  *
  *  \param range Range of elements for this runnable to work on
- *  \param atomicCounter Atomic counter this thread will initially use to
+ *
+ *  \param[in,out] atomicCounter Atomic counter this thread will initially use to
  *  fetch elements within its range to process
+ *
  *  \param threadPoolCounters Atomic counters of other threads - if
  *  this thread finishes processing the elements within its range, these
  *  counters will be used to grab additional work
+ *
  *  \param threadPoolEndElements Terminating indices (exclusive) for each
  *  thread
  *
  */
 template <typename OpT>
-class SharedWorkBalancedRunnable1D : public sys::Runnable
+class WorkSharingBalancedRunnable1D : public sys::Runnable
 {
 public:
-        SharedWorkBalancedRunnable1D(
+        WorkSharingBalancedRunnable1D(
                 const types::Range& range,
                 sys::AtomicCounter& counter,
                 const SharedAtomicCounterVec& threadCounters,
@@ -131,18 +134,18 @@ private:
 };
 
 /*!
- *  For each thread, runs a SharedWorkBalancedRunnable1D using the
+ *  For each thread, runs a WorkSharingBalancedRunnable1D using the
  *  provided functor.
  *
  *  \param numElements Number of elements of work
  *  \param numThreads Number of threads that will run
- *  SharedWorkRunnable1DBalanced
+ *  WorkSharingRunnable1DBalanced
  *  \param op Functor to use
  */
 template <typename OpT>
-void runSharedWorkBalanced1D(size_t numElements,
-                             size_t numThreads,
-                             const OpT& op)
+void runWorkSharingBalanced1D(size_t numElements,
+                              size_t numThreads,
+                              const OpT& op)
 {
     std::vector<size_t> threadPoolEndElements(numThreads);
     SharedAtomicCounterVec threadPoolCounters;
@@ -155,7 +158,7 @@ void runSharedWorkBalanced1D(size_t numElements,
                         new sys::AtomicCounter(0)));
 
         const types::Range range(0, numElements);
-        SharedWorkBalancedRunnable1D<OpT>(range,
+        WorkSharingBalancedRunnable1D<OpT>(range,
                                           *threadPoolCounters[0],
                                           threadPoolCounters,
                                           threadPoolEndElements,
@@ -186,7 +189,7 @@ void runSharedWorkBalanced1D(size_t numElements,
         for (size_t ii = 0; ii < threadPoolRange.size(); ++ii)
         {
             threads.createThread(
-                    new SharedWorkBalancedRunnable1D<OpT>(
+                    new WorkSharingBalancedRunnable1D<OpT>(
                             threadPoolRange[ii],
                             *threadPoolCounters[ii],
                             threadPoolCounters,
@@ -203,13 +206,13 @@ void runSharedWorkBalanced1D(size_t numElements,
  *
  *  \param numElements Number of elements of work
  *  \param numThreads Number of threads that will run
- *  SharedWorkBalancedRunnable1D
+ *  WorkSharingBalancedRunnable1D
  *  \param ops Vector of functors to use
  */
 template <typename OpT>
-void runSharedWorkBalanced1D(size_t numElements,
-                             size_t numThreads,
-                             const std::vector<OpT>& ops)
+void runWorkSharingBalanced1D(size_t numElements,
+                              size_t numThreads,
+                              const std::vector<OpT>& ops)
 {
     if (ops.size() != numThreads)
     {
@@ -230,7 +233,7 @@ void runSharedWorkBalanced1D(size_t numElements,
                         new sys::AtomicCounter(0)));
 
         const types::Range range(0, numElements);
-        SharedWorkBalancedRunnable1D<OpT>(range,
+        WorkSharingBalancedRunnable1D<OpT>(range,
                                           *threadPoolCounters[0],
                                           threadPoolCounters,
                                           threadPoolEndElements,
@@ -261,7 +264,7 @@ void runSharedWorkBalanced1D(size_t numElements,
         for (size_t ii = 0; ii < threadPoolRange.size(); ++ii)
         {
             threads.createThread(
-                    new SharedWorkBalancedRunnable1D<OpT>(
+                    new WorkSharingBalancedRunnable1D<OpT>(
                             threadPoolRange[ii],
                             *threadPoolCounters[ii],
                             threadPoolCounters,
@@ -274,21 +277,21 @@ void runSharedWorkBalanced1D(size_t numElements,
 
 /*!
  *  Convenience wrapper for providing each runnable with a copy of op.
- *  This is useful in cases where each SharedWorkBalancedRunnable1D
+ *  This is useful in cases where each WorkSharingBalancedRunnable1D
  *  should use a functor with its own local storage.
  *
  *  \param numElements Number of elements of work
  *  \param numThreads Number of threads that will run
- *  SharedWorkRunnable1DBalanced
+ *  WorkSharingRunnable1DBalanced
  *  \param op Functor to use
  */
 template <typename OpT>
-void runSharedWorkBalanced1DWithCopies(size_t numElements,
-                                       size_t numThreads,
-                                       const OpT& op)
+void runWorkSharingBalanced1DWithCopies(size_t numElements,
+                                        size_t numThreads,
+                                        const OpT& op)
 {
     const std::vector<OpT> ops(numThreads, op);
-    runSharedWorkBalanced1DWithCopies(numElements, numThreads, ops);
+    runWorkSharingBalanced1DWithCopies(numElements, numThreads, ops);
 }
 }
 

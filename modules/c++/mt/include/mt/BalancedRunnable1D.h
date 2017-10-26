@@ -44,9 +44,11 @@ namespace mt
  *  across threads leads to balancing issues i.e certain threads
  *  terminate earlier than other threads.
  *
- *  \param atomicCounter Atomic counter all threads will use to
+ *  \param[in,out] atomicCounter Atomic counter all threads will use to
  *  fetch elements to process
+ *
  *  \param numElements The global number of elements to process
+ *
  *  \param op Functor to use
  *
  */

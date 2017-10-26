@@ -19,7 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#include <mt/SharedWorkBalancedRunnable1D.h>
+#include <mt/WorkSharingBalancedRunnable1D.h>
 #include "TestCase.h"
 
 namespace
@@ -41,7 +41,7 @@ private:
     std::vector<size_t>& mGlobalWorkDone;
 };
 
-TEST_CASE(SharedWorkBalancedRunnable1DTestWorkDone)
+TEST_CASE(WorkSharingBalancedRunnable1DTestWorkDone)
 {
     const size_t numElements = 100000;
     const size_t initValue = 0;
@@ -50,7 +50,7 @@ TEST_CASE(SharedWorkBalancedRunnable1DTestWorkDone)
     const size_t numThreads = sys::OS().getNumCPUs();
     IncOp op(workVec);
 
-    mt::runSharedWorkBalanced1D(numElements, numThreads, op);
+    mt::runWorkSharingBalanced1D(numElements, numThreads, op);
 
     TEST_ASSERT_EQ(workVec.size(), numElements);
 
@@ -65,6 +65,6 @@ TEST_CASE(SharedWorkBalancedRunnable1DTestWorkDone)
 
 int main(int /*argc*/, char** /*argv*/)
 {
-    TEST_CHECK(SharedWorkBalancedRunnable1DTestWorkDone);
+    TEST_CHECK(WorkSharingBalancedRunnable1DTestWorkDone);
     return 0;
 }
