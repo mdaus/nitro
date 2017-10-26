@@ -41,7 +41,7 @@ private:
     std::vector<size_t>& mGlobalWorkDone;
 };
 
-TEST_CASE(WorkSharingBalancedRunnable1DTestWorkDone)
+TEST_CASE(WorkSharingBalancedRunnable1DTestWorkDoneMultiThreaded)
 {
     const size_t numElements = 100000;
     const size_t initValue = 0;
@@ -61,10 +61,32 @@ TEST_CASE(WorkSharingBalancedRunnable1DTestWorkDone)
         TEST_ASSERT_EQ(value, targetValue);
     }
 }
+
+TEST_CASE(WorkSharingBalancedRunnable1DTestWorkDoneSingleThreaded)
+{
+    const size_t numElements = 100000;
+    const size_t initValue = 0;
+    std::vector<size_t> workVec(numElements, initValue);
+
+    const size_t numThreads = 1;
+    IncOp op(workVec);
+
+    mt::runWorkSharingBalanced1D(numElements, numThreads, op);
+
+    TEST_ASSERT_EQ(workVec.size(), numElements);
+
+    const size_t targetValue = 1;
+    for (size_t ii = 0; ii < numElements; ++ii)
+    {
+        const size_t value = workVec[ii];
+        TEST_ASSERT_EQ(value, targetValue);
+    }
+}
 }
 
 int main(int /*argc*/, char** /*argv*/)
 {
-    TEST_CHECK(WorkSharingBalancedRunnable1DTestWorkDone);
+    TEST_CHECK(WorkSharingBalancedRunnable1DTestWorkDoneSingleThreaded);
+    TEST_CHECK(WorkSharingBalancedRunnable1DTestWorkDoneMultiThreaded);
     return 0;
 }
