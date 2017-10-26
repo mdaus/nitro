@@ -49,7 +49,7 @@ typedef std::vector<mem::SharedPtr<sys::AtomicCounter> > SharedAtomicCounterVec;
  *
  *  This runnable is useful in cases where work needs to be
  *  done across a range of elements, but when dividing these elements
- *  elements across threads leads to balancing issues i.e certain threads
+ *  across threads leads to balancing issues i.e certain threads
  *  terminate earlier than other threads. By giving each thread
  *  its own range and atomic counter rather than one shared atomic counter
  *  used to grab elements from a global range, we get better locality of
