@@ -92,7 +92,7 @@ private:
  *  functor.
  *
  *  \param numElements Number of elements of work
- *  \param numThreads Number of threads that will run BalancedRunnable1D
+ *  \param numThreads Number of threads
  *  \param op Functor to use
  */
 template <typename OpT>
@@ -122,7 +122,7 @@ void runBalanced1D(size_t numElements,
  *  each runnable will receive its own.
  *
  *  \param numElements Number of elements of work
- *  \param numThreads Number of threads that will run BalancedRunnable1D
+ *  \param numThreads Number of threads
  *  \param ops Vector of functors to use
  */
 template <typename OpT>
@@ -162,7 +162,7 @@ void runBalanced1D(size_t numElements,
  *  functor with its own local storage.
  *
  *  \param numElements Number of elements of work
- *  \param numThreads Number of threads that will run BalancedRunnable1D
+ *  \param numThreads Number of threads
  *  \param op Functor to use
  */
 template <typename OpT>
