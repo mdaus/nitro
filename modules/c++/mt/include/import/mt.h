@@ -38,6 +38,8 @@
 #include "mt/ThreadGroup.h"
 #include "mt/ThreadPlanner.h"
 #include "mt/Runnable1D.h"
+#include "mt/BalancedRunnable1D.h"
+#include "mt/SharedWorkBalancedRunnable1D.h"
 
 #include "mt/CPUAffinityInitializer.h"
 #include "mt/CPUAffinityThreadInitializer.h"

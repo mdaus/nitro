@@ -19,7 +19,6 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
 #ifndef __TYPES_RANGE_H__
 #define __TYPES_RANGE_H__
 

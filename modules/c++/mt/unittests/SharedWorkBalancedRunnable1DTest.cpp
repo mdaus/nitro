@@ -19,7 +19,6 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
 #include <mt/SharedWorkBalancedRunnable1D.h>
 #include "TestCase.h"
 
