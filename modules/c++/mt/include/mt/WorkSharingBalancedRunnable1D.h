@@ -37,14 +37,17 @@ namespace mt
 typedef std::vector<mem::SharedPtr<sys::AtomicCounter> > SharedAtomicCounterVec;
 
 /*!
- *  This runnable takes both a reference to the associated thread's atomic
- *  counter as well as atomic counter and range information for all other
- *  threads in the thread pool.
+ *  \class WorkSharingBalancedRunnable1D
+ *  \tparam OpT The type of functor that will be used to process elements
+ *
+ *  This runnable takes both a reference to the associated thread's
+ *  atomic counter as well as atomic counter and range information for all
+ *  other threads in the thread pool.
  *
  *  Each runnable will operate on a contiguous range of elements
  *  ([startElement, startElement + numElements]). Once all work has been
- *  completed in its range, the atomic counters and terminating index for
- *  the other threads will be used to grab additional work rather than let
+ *  completed in its range, the atomic counters and terminating indices of
+ *  other threads will be used to grab additional work rather than let
  *  the thread die.
  *
  *  This runnable is useful in cases where work needs to be
@@ -55,29 +58,34 @@ typedef std::vector<mem::SharedPtr<sys::AtomicCounter> > SharedAtomicCounterVec;
  *  used to grab elements from a global range, we get better locality of
  *  reference and in practice better caching.
  *
- *  \param range Range of elements for this runnable to work on
- *
- *  \param[in,out] atomicCounter Atomic counter this thread will initially use to
- *  fetch elements within its range to process
- *
- *  \param threadPoolCounters Atomic counters of other threads - if
- *  this thread finishes processing the elements within its range, these
- *  counters will be used to grab additional work
- *
- *  \param threadPoolEndElements Terminating indices (exclusive) for each
- *  thread
- *
  */
 template <typename OpT>
 class WorkSharingBalancedRunnable1D : public sys::Runnable
 {
 public:
-        WorkSharingBalancedRunnable1D(
-                const types::Range& range,
-                sys::AtomicCounter& counter,
-                const SharedAtomicCounterVec& threadCounters,
-                const std::vector<size_t>& threadPoolEndElements,
-                const OpT& op) :
+
+    /*!
+     *  Constructor
+     *
+     *  \param range Range of elements for this runnable to work on
+     *
+     *  \param[in,out] atomicCounter Atomic counter this thread will initially
+     *  use to fetch elements within its range to process
+     *
+     *  \param threadPoolCounters Atomic counters of other threads - if
+     *  this thread finishes processing the elements within its range, these
+     *  counters will be used to grab additional work
+     *
+     *  \param threadPoolEndElements Terminating indices (exclusive) for each
+     *  thread
+     *
+     */
+    WorkSharingBalancedRunnable1D(
+            const types::Range& range,
+            sys::AtomicCounter& counter,
+            const SharedAtomicCounterVec& threadCounters,
+            const std::vector<size_t>& threadPoolEndElements,
+            const OpT& op) :
         mStartElement(range.mStartElement),
         mEndElement(mStartElement + range.mNumElements),
         mCounter(counter),
@@ -90,10 +98,25 @@ public:
     virtual void run()
     {
         // Operate over this thread's range
+        processElements(mCounter, mEndElement);
+
+        // Help other threads that have yet to process every element in
+        // their range
+        for (size_t ii = 0; ii < mThreadPoolEndElements.size(); ++ii)
+        {
+            const size_t threadEndElement = mThreadPoolEndElements[ii];
+            sys::AtomicCounter& threadCounter = *mThreadPoolCounters[ii];
+            processElements(threadCounter, threadEndElement);
+        }
+    }
+
+private:
+    void processElements(sys::AtomicCounter& counter, size_t endElement)
+    {
         while (true)
         {
-            const size_t element = mCounter.getThenIncrement();
-            if (element < mEndElement)
+            const size_t element = counter.getThenIncrement();
+            if (element < endElement)
             {
                 mOp(element);
             }
@@ -102,29 +125,8 @@ public:
                 break;
             }
         }
-
-        // Help other threads that have yet to process every element in
-        // their range
-        for (size_t ii = 0; ii < mThreadPoolEndElements.size(); ++ii)
-        {
-            const size_t threadEndElement = mThreadPoolEndElements[ii];
-            sys::AtomicCounter& threadCounter = *mThreadPoolCounters[ii];
-            while (true)
-            {
-                const size_t element = threadCounter.getThenIncrement();
-                if (element < threadEndElement)
-                {
-                    mOp(element);
-                }
-                else
-                {
-                    break;
-                }
-            }
-        }
     }
 
-private:
     const size_t mStartElement;
     const size_t mEndElement;
     sys::AtomicCounter& mCounter;
@@ -134,8 +136,21 @@ private:
 };
 
 /*!
- *  For each thread, runs a WorkSharingBalancedRunnable1D using the
- *  provided functor.
+ *  This method will divide numElements across numThreads, associating with
+ *  each thread a range of elements to work on as well as an atomic counter
+ *  used to fetch those elements for processing by the provided functor.
+ *
+ *  Threads that finish working on their range will use the atomic counters
+ *  of other threads to grab additional elements. This behavior prevents
+ *  balancing issues from occurring by having certain threads that would
+ *  otherwise die grab any available work.
+ *
+ *  By supplying each thread with its own atomic counter rather than a single
+ *  atomic counter shared across threads, each thread can initially operate
+ *  over a contiguous range of elements. This behavior provides better locality
+ *  of reference and in practice better caching.
+ *
+ *  \tparam OpT The type of functor that will be used to process elements
  *
  *  \param numElements Number of elements of work
  *  \param numThreads Number of threads
@@ -158,10 +173,10 @@ void runWorkSharingBalanced1D(size_t numElements,
 
         const types::Range range(0, numElements);
         WorkSharingBalancedRunnable1D<OpT>(range,
-                                          *threadPoolCounters[0],
-                                          threadPoolCounters,
-                                          threadPoolEndElements,
-                                          op).run();
+                                           *threadPoolCounters[0],
+                                           threadPoolCounters,
+                                           threadPoolEndElements,
+                                           op).run();
     }
     else
     {
@@ -170,7 +185,7 @@ void runWorkSharingBalanced1D(size_t numElements,
         size_t numElementsThisThread = 0;
         const ThreadPlanner planner(numElements, numThreads);
         std::vector<types::Range> threadPoolRange;
-        while(planner.getThreadInfo(
+        while (planner.getThreadInfo(
                 threadNum, startElement, numElementsThisThread))
         {
             const types::Range range(startElement, numElementsThisThread);
@@ -203,6 +218,8 @@ void runWorkSharingBalanced1D(size_t numElements,
  *  Same as above, but instead of sharing a functor across runnables,
  *  each runnable will receive its own.
  *
+ *  \tparam OpT The type of functor that will be used to process elements
+ *
  *  \param numElements Number of elements of work
  *  \param numThreads Number of threads
  *  \param ops Vector of functors to use
@@ -232,10 +249,10 @@ void runWorkSharingBalanced1D(size_t numElements,
 
         const types::Range range(0, numElements);
         WorkSharingBalancedRunnable1D<OpT>(range,
-                                          *threadPoolCounters[0],
-                                          threadPoolCounters,
-                                          threadPoolEndElements,
-                                          ops[0]).run();
+                                           *threadPoolCounters[0],
+                                           threadPoolCounters,
+                                           threadPoolEndElements,
+                                           ops[0]).run();
     }
     else
     {
@@ -244,7 +261,7 @@ void runWorkSharingBalanced1D(size_t numElements,
         size_t numElementsThisThread = 0;
         const ThreadPlanner planner(numElements, numThreads);
         std::vector<types::Range> threadPoolRange;
-        while(planner.getThreadInfo(
+        while (planner.getThreadInfo(
                   threadNum, startElement, numElementsThisThread))
         {
               const types::Range range(startElement, numElementsThisThread);
@@ -275,8 +292,10 @@ void runWorkSharingBalanced1D(size_t numElements,
 
 /*!
  *  Convenience wrapper for providing each runnable with a copy of op.
- *  This is useful in cases where each WorkSharingBalancedRunnable1D
- *  should use a functor with its own local storage.
+ *  This is useful in cases where each runnable should use a functor with
+ *  its own local storage.
+ *
+ *  \tparam OpT The type of functor that will be used to process elements
  *
  *  \param numElements Number of elements of work
  *  \param numThreads Number of threads

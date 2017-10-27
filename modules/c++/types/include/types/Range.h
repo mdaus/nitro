@@ -27,9 +27,9 @@
 namespace types
 {
 /*!
- * \class Range
- * \brief Holds range information i.e a starting element and number elements
- * in a range (exclusive)
+ *  \class Range
+ *  \brief Holds range information i.e a starting element and number of
+ *  elements in a range (exclusive)
  */
 struct Range
 {
@@ -77,8 +77,8 @@ struct Range
      * \param startElement The start element
      * \param numELements The total number of elements to check
      *
-     * \return True if [startElement, startElement + numElements) is contained in this
-     * AOI, false otherwise
+     * \return True if [startElement, startElement + numElements) is contained
+     * in this AOI, false otherwise
      */
     bool containsAll(size_t startElement, size_t numElements) const
     {

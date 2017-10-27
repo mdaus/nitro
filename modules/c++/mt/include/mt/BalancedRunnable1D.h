@@ -34,31 +34,39 @@
 namespace mt
 {
 /*!
- *  Given a reference to an atomic counter, this runnable will atomically get
- *  and then increment an element, passing the fetched element to
- *  the provided functor for processing. Each runnable will operate over the
- *  full range of elements.
+ *  \class BalancedRunnable1D
+ *  \tparam OpT The type of functor that will be used to process elements
+ *
+ *  Given a reference to an atomic counter, this runnable will
+ *  atomically get and then increment an element, passing the fetched element
+ *  to the provided functor for processing. Each runnable will operate over
+ *  the full range of elements.
  *
  *  This runnable is useful in cases where work needs to be
  *  done across a range of elements, but when dividing these elements
  *  across threads leads to balancing issues i.e certain threads
  *  terminate earlier than other threads.
  *
- *  \param[in,out] atomicCounter Atomic counter all threads will use to
- *  fetch elements to process
- *
- *  \param numElements The global number of elements to process
- *
- *  \param op Functor to use
- *
  */
 template <typename OpT>
 class BalancedRunnable1D : public sys::Runnable
 {
 public:
-        BalancedRunnable1D(size_t numElements,
-                           sys::AtomicCounter& atomicCounter,
-                           const OpT& op) :
+
+    /*!
+     *  Constructor
+     *
+     *  \param[in,out] atomicCounter Atomic counter all threads will use to
+     *  fetch elements to process
+     *
+     *  \param numElements The global number of elements to process
+     *
+     *  \param op Functor to use
+     *
+     */
+    BalancedRunnable1D(size_t numElements,
+                       sys::AtomicCounter& atomicCounter,
+                       const OpT& op) :
         mNumElements(numElements),
         mCounter(atomicCounter),
         mOp(op)
@@ -88,8 +96,20 @@ private:
 };
 
 /*!
- *  For each thread, runs a BalancedRunnable1D object using the provided
- *  functor.
+ *  This method creates an atomic counter that will be shared across threads
+ *  and used to fetch elements within a global range. Each thread will
+ *  process fetched elements using the provided functor until all elements
+ *  have been processed.
+ *
+ *  Rather than divide the range of elements across threads, each thread
+ *  will remain active until every element within the global range has been
+ *  processed. This behavior prevents balancing issues from occurring by
+ *  avoiding cases where certain threads terminate earlier than others due
+ *  to having a range of elements that is less expensive to process. Instead,
+ *  all threads will participate equally in grabbing any available work
+ *  across the global range.
+ *
+ *  \tparam OpT The type of functor that will be used to process elements
  *
  *  \param numElements Number of elements of work
  *  \param numThreads Number of threads
@@ -120,6 +140,8 @@ void runBalanced1D(size_t numElements,
 /*!
  *  Same as above, but instead of sharing a functor across runnables,
  *  each runnable will receive its own.
+ *
+ *  \tparam OpT The type of functor that will be used to process elements
  *
  *  \param numElements Number of elements of work
  *  \param numThreads Number of threads
@@ -158,8 +180,10 @@ void runBalanced1D(size_t numElements,
 
 /*!
  *  Convenience wrapper for providing each runnable with a copy of op.
- *  This is useful in cases where each BalancedRunnable1D should use a
+ *  This is useful in cases where each runnable should use a
  *  functor with its own local storage.
+ *
+ *  \tparam OpT The type of functor that will be used to process elements
  *
  *  \param numElements Number of elements of work
  *  \param numThreads Number of threads
