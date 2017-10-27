@@ -61,8 +61,6 @@ TEST_CASE(WorkSharingBalancedRunnable1DTestWorkDone)
             const size_t value = workVec[ii];
             TEST_ASSERT_EQ(value, targetValue);
         }
-
-        std::fill(workVec.begin(), workVec.end(), initValue);
     }
 }
 }
