@@ -85,6 +85,12 @@ struct Range
         return (numElements == 0 ||
                 (contains(startElement) && contains(startElement + numElements - 1)));
     }
+
+    //! \return True if there are no elements in this range, false otherwise
+    bool empty() const
+    {
+        return (mNumElements == 0);
+    }
 };
 }
 
