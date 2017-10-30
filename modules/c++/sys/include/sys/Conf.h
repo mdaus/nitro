@@ -24,7 +24,6 @@
 #define __SYS_CONF_H__
 
 #include <sys/sys_config.h>
-#include <cstring>
 #include <str/Convert.h>
 
 #if defined (__APPLE_CC__)
@@ -253,17 +252,18 @@ namespace sys
             return;
         }
 
-        unsigned short half = elemSize >> 1;
-        size_t offset = 0, innerOff = 0, innerSwap = 0;
+        const unsigned short half = elemSize >> 1;
+        size_t offset = 0;
 
         for (size_t ii = 0; ii < numElems; ++ii, offset += elemSize)
         {
             for (unsigned short jj = 0; jj < half; ++jj)
             {
-                innerOff = offset + jj;
-                innerSwap = offset + elemSize - 1 - jj;
-                std::memcpy(&outputBufferPtr[innerOff], &bufferPtr[innerSwap], 1);
-                std::memcpy(&outputBufferPtr[innerSwap], &bufferPtr[innerOff], 1);
+                const size_t innerOff = offset + jj;
+                const size_t innerSwap = offset + elemSize - 1 - jj;
+
+                outputBufferPtr[innerOff] = bufferPtr[innerSwap];
+                outputBufferPtr[innerSwap] = bufferPtr[innerOff];
             }
         }
     }
