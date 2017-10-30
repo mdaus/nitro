@@ -105,9 +105,12 @@ def isBigEndianSystem():
     """isBigEndianSystem() -> bool"""
     return _coda_sys.isBigEndianSystem()
 
-def byteSwap(buffer, elemSize, numElems):
-    """byteSwap(void * buffer, unsigned short elemSize, size_t numElems)"""
-    return _coda_sys.byteSwap(buffer, elemSize, numElems)
+def byteSwap(*args):
+    """
+    byteSwap(void * buffer, unsigned short elemSize, size_t numElems)
+    byteSwap(void const * buffer, unsigned short elemSize, size_t numElems, void * outputBuffer)
+    """
+    return _coda_sys.byteSwap(*args)
 
 def alignedAlloc(*args):
     """
