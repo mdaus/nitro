@@ -22,6 +22,7 @@
 #ifndef __TYPES_RANGE_H__
 #define __TYPES_RANGE_H__
 
+#include <algorithm>
 #include <limits>
 
 namespace types
