@@ -307,7 +307,7 @@ void runWorkSharingBalanced1DWithCopies(size_t numElements,
                                         const OpT& op)
 {
     const std::vector<OpT> ops(numThreads, op);
-    runWorkSharingBalanced1DWithCopies(numElements, numThreads, ops);
+    runWorkSharingBalanced1D(numElements, numThreads, ops);
 }
 }
 
