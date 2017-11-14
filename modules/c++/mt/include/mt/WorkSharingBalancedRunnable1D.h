@@ -262,7 +262,7 @@ void runWorkSharingBalanced1D(size_t numElements,
         const ThreadPlanner planner(numElements, numThreads);
         std::vector<types::Range> threadPoolRange;
         while (planner.getThreadInfo(
-                  threadNum, startElement, numElementsThisThread))
+                  threadNum++, startElement, numElementsThisThread))
         {
               const types::Range range(startElement, numElementsThisThread);
               threadPoolRange.push_back(range);
