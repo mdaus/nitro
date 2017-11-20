@@ -37,14 +37,14 @@ sys::SSize_T InputStream::read(void* buffer,
         {
             std::ostringstream ostr;
             ostr << "Tried to read " << len << " bytes but read failed";
-            throw except::Exception(Ctxt(ostr.str()));
+            throw except::IOException(Ctxt(ostr.str()));
         }
         else if (numBytes != static_cast<sys::SSize_T>(len))
         {
             std::ostringstream ostr;
             ostr << "Tried to read " << len << " bytes but only read "
                  << numBytes << " bytes";
-            throw except::Exception(Ctxt(ostr.str()));
+            throw except::IOException(Ctxt(ostr.str()));
         }
     }
 

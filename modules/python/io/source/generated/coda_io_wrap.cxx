@@ -6771,8 +6771,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"delete_InputStream", _wrap_delete_InputStream, METH_VARARGS, (char *)"delete_InputStream(InputStream self)"},
 	 { (char *)"InputStream_available", _wrap_InputStream_available, METH_VARARGS, (char *)"InputStream_available(InputStream self) -> sys::Off_T"},
 	 { (char *)"InputStream_read", _wrap_InputStream_read, METH_VARARGS, (char *)"\n"
-		"read(void * b, size_t len, bool verifyFullRead=False) -> sys::SSize_T\n"
-		"InputStream_read(InputStream self, void * b, size_t len) -> sys::SSize_T\n"
+		"read(void * buffer, size_t len, bool verifyFullRead=False) -> sys::SSize_T\n"
+		"InputStream_read(InputStream self, void * buffer, size_t len) -> sys::SSize_T\n"
 		""},
 	 { (char *)"InputStream_readln", _wrap_InputStream_readln, METH_VARARGS, (char *)"InputStream_readln(InputStream self, sys::byte * cStr, sys::Size_T const strLenPlusNullByte) -> sys::SSize_T"},
 	 { (char *)"InputStream_streamTo", _wrap_InputStream_streamTo, METH_VARARGS, (char *)"\n"

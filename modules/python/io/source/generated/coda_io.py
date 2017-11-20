@@ -117,12 +117,12 @@ class InputStream(_object):
         return _coda_io.InputStream_available(self)
 
 
-    def read(self, b, len, verifyFullRead=False):
+    def read(self, buffer, len, verifyFullRead=False):
         """
-        read(InputStream self, void * b, size_t len, bool verifyFullRead=False) -> sys::SSize_T
-        read(InputStream self, void * b, size_t len) -> sys::SSize_T
+        read(InputStream self, void * buffer, size_t len, bool verifyFullRead=False) -> sys::SSize_T
+        read(InputStream self, void * buffer, size_t len) -> sys::SSize_T
         """
-        return _coda_io.InputStream_read(self, b, len, verifyFullRead)
+        return _coda_io.InputStream_read(self, buffer, len, verifyFullRead)
 
 
     def readln(self, cStr, strLenPlusNullByte):
