@@ -127,15 +127,6 @@ public:
         return mSocket;
     }
 
-
-    /*!
-     *  Read up to len bytes of data from input stream into an array
-     *  \param b   Buffer to read into
-     *  \param len The length to read
-     *  \throw IOException
-     *  \return  The number of bytes read, or -1 if eof
-     */
-    virtual sys::SSize_T read(sys::byte* b, sys::Size_T len);
     /*!
      *  This method defines a given OutputStream. By defining,
      *  this method, you can define the unique attributes of an OutputStream
@@ -144,12 +135,21 @@ public:
      *  \param len The length of the byte array to write to the stream
      *  \throw IOException
      */
-    virtual void write(const sys::byte* b, sys::Size_T len);
+    virtual void write(const void* buffer, size_t len);
 
     using io::BidirectionalStream::read;
     using io::BidirectionalStream::write;
 
 protected:
+    /*!
+     *  Read up to len bytes of data from input stream into an array
+     *  \param b   Buffer to read into
+     *  \param len The length to read
+     *  \throw IOException
+     *  \return  The number of bytes read, or -1 if eof
+     */
+    virtual sys::SSize_T readImpl(void* buffer, size_t len);
+
     //! The socket
     mem::SharedPtr<net::Socket> mSocket;
 };

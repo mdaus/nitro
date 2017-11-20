@@ -87,7 +87,9 @@ public:
      * \throw IOException
      * \return  The number of bytes read, or -1 if EOF
      */
-    virtual sys::SSize_T read(sys::byte* b, sys::Size_T len) = 0;
+    sys::SSize_T read(void* b,
+                      size_t len,
+                      bool verifyFullRead = false);
 
     /*!
      * Read either a buffer of len size, or up until a newline,
@@ -112,6 +114,15 @@ public:
     virtual sys::SSize_T streamTo(OutputStream& soi,
                                   sys::SSize_T numBytes = IS_END);
 
+protected:
+    /*!
+     * Read up to len bytes of data from input stream into an array
+     * \param b   Buffer to read into
+     * \param len The length to read
+     * \throw IOException
+     * \return  The number of bytes read, or -1 if EOF
+     */
+    virtual sys::SSize_T readImpl(void* b, size_t len) = 0;
 };
 }
 
