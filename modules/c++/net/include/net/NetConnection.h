@@ -131,7 +131,7 @@ public:
      *  This method defines a given OutputStream. By defining,
      *  this method, you can define the unique attributes of an OutputStream
      *  inheriting class.
-     *  \param b   The byte array to write to the stream
+     *  \param buffer The byte array to write to the stream
      *  \param len The length of the byte array to write to the stream
      *  \throw IOException
      */

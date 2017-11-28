@@ -122,7 +122,7 @@ protected:
     /*!
      * Read up to len bytes of data from this buffer into an array
      * update the mark
-     * \param b   Buffer to read into
+     * \param buffer Buffer to read into
      * \param len The length to read
      * \throw IoException
      * \return  The number of bytes read

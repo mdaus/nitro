@@ -30,11 +30,34 @@
 
 namespace io
 {
+/*!
+ * Reads the contents of a file (binary or text), putting the raw bytes in
+ * 'buffer'.  These are the exact bytes of the file, so text files will not
+ * contain a null terminator.
+ *
+ * \param pathname Pathname of the file to read in
+ * \param buffer Raw bytes of the file
+ */
 void readFileContents(const std::string& pathname,
                       std::vector<sys::byte>& buffer);
 
+/*!
+ * Reads the contents of a file into a string.  The file is assumed to be a
+ * text file.
+ *
+ * \param pathname Pathname of the file to read in
+ * \param[out] str Contents of the file
+ */
 void readFileContents(const std::string& pathname, std::string& str);
 
+/*!
+ * Reads the contents of a file into a string.  The file is assumed to be a
+ * text file.
+ *
+ * \param pathname Pathname of the file to read in
+ *
+ * \return Contents of the file
+ */
 inline
 std::string readFileContents(const std::string& pathname)
 {
