@@ -111,7 +111,7 @@ def configure(conf):
                 conf.define('_FILE_OFFSET_BITS', '64', quote=False)
 
             if '_POSIX_C_SOURCE' not in conf.env['DEFINES']:
-                if 'OPJ_HAVE_FSEEKO=ON' in conf.env['DEFINES'] or \
+                if 'OPJ_HAVE_FSEEKO=' in conf.env['DEFINES'] or \
                    'OPJ_HAVE_POSIX_MEMALIGN=' in conf.env['DEFINES']:
                     conf.define('_POSIX_C_SOURCE', '200112L', quote=False)
 
