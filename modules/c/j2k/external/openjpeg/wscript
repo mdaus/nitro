@@ -15,7 +15,8 @@ def configure(conf):
     j2kLayer = Options.options.j2k_layer
     if j2kLayer == 'openjpeg':
         
-        # callback function to check for all #defines used by the openjpg module
+        # callback function to check for opj_config.h #defines used by the
+        # openjpg module
         def opj_callback(conf):            
             # check functionality
             conf.check_cc(
@@ -46,6 +47,7 @@ def configure(conf):
                     outfile='opj_config.h', path=openjpegNode,
                     feature='makeHeader')
 
+        # callback function to check for #defines used by the openjpg module
         def opj_private_callback(conf):
             conf.check_cc(
                     header_name='inttypes.h',
