@@ -59,7 +59,7 @@ def configure(conf):
                     header_name='stdio.h',
                     define_name='OPJ_HAVE_FSEEK0',
                     mandatory=False):
-                conf.define('OPJ_HAVE_FSEEK0', 'ON', quote=False)
+                conf.define('OPJ_HAVE_FSEEK0', '', quote=False)
 
             if conf.check_cc(
                     header_name='malloc.h',
