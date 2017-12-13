@@ -110,7 +110,8 @@ def build(bld):
                       source=[os.path.join(minizipDir, 'ioapi.c'),
                               os.path.join(minizipDir, 'zip.c')],
                       path=driverNode,
-                      lib=os.path.join(os.path.join(os.getcwd(), env['install_libdir'], 'z')),
+                      lib='z',
+                      libpath=os.path.join(os.getcwd(), env['install_libdir']),
                       name='MINIZIP',
                       targets_to_add=[])
 
