@@ -103,6 +103,7 @@ def build(bld):
         # get compression to work, not decompression.
         minizipDir = os.path.join('contrib', 'minizip')
         minizipIncludes = ['.', minizipDir]
+        print('Building mijnizip')
         minizip = bld(features='c c%s add_targets' % env['LIB_TYPE'] or 'stlib',
                       includes=minizipIncludes,
                       export_includes=minizipIncludes,
@@ -110,6 +111,7 @@ def build(bld):
                       source=[os.path.join(minizipDir, 'ioapi.c'), 
                               os.path.join(minizipDir, 'zip.c')],
                       path=driverNode,
+                      lib=os.path.join(os.path.join(os.getcwd(), env['install_libdir'], 'z')),
                       name='MINIZIP',
                       targets_to_add=[])
 
@@ -117,22 +119,25 @@ def build(bld):
         zlib.targets_to_add.append('MINIZIP') 
 
         if env['install_libs']:
+            print('Installing libs')
             zlib.install_path = env['install_libdir']
             minizip.install_path = env['install_libdir']
 
         if env['install_headers']:
+            print('installing headers')
             bld(features='install_tgt', install_path=env['install_includedir'],
                 dir=driverNode, pattern=['zconf.h', 'zlib.h'], name='ZIP_HEADERS_INSTALL')
             zlib.targets_to_add.append('ZIP_HEADERS_INSTALL') 
 
             minizipNode = driverNode.find_dir(minizipDir)
             bld(features='install_tgt', install_path=env['install_includedir'],
-                dir=minizipNode, pattern=['zip.h', 'ioapi.h'], 
+                dir=minizipNode, pattern=['zip.h', 'ioapi.h'],
                 name='MINIZIP_HEADERS_INSTALL')
             minizip.targets_to_add.append('MINIZIP_HEADERS_INSTALL') 
+            print('Done with headers')
 
         if env['install_source']:
-
+            print('Installing source')
             sourceNode = driversNode.make_node('source')
             bld.install_tgt(files = fname + '.tar',
                             dir = driversNode,
