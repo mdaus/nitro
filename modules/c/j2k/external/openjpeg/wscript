@@ -15,14 +15,12 @@ def configure(conf):
     j2kLayer = Options.options.j2k_layer
     if j2kLayer == 'openjpeg':
         
-        # callback function to check for opj_config.h #defines used by the
-        # openjpg module
-        def opj_callback(conf):            
+        # callback function to check for #defines used by the openjpg module
+        def opj_callback(conf):
+
             # check functionality
-            conf.check_cc(
-                    header_name='stdint.h',
-                    define_name='OPJ_HAVE_STDINT_H',
-                    mandatory=False)
+            conf.check_cc(header_name='stdint.h', define_name='OPJ_HAVE_STDINT_H',
+                          mandatory=False)
 
             conf.define('OPJ_VERSION_MAJOR', '2', quote=False)
             conf.define('OPJ_VERSION_MINOR', '3', quote=False)
@@ -49,9 +47,11 @@ def configure(conf):
 
         # callback function to check for #defines used by the openjpg module
         def opj_private_callback(conf):
+
+            # check functionality
             if conf.check_cc(function_name='fseeko', header_name='stdio.h',
-                             define_name='OPJ_HAVE_FSEEK0', mandatory=False):
-                conf.define('OPJ_HAVE_FSEEK0', 'ON', quote=False)
+                             define_name='OPJ_HAVE_FSEEKO', mandatory=False):
+                conf.define('OPJ_HAVE_FSEEKO', '', quote=False)
 
             if conf.check_cc(header_name='sys/stat.h', mandatory=False):
                 conf.define('HAVE_SYS_STAT_H', '', quote=False)
