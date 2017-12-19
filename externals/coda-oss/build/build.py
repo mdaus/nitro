@@ -897,7 +897,7 @@ def configureCompilerOptions(self):
             #       Is there an equivalent to get the same functionality or
             #       is this an OS limitation?
             linkFlags = '-fPIC'
-            if not re.match(solarisRegex, sys_platform):
+            if not re.match(solarisRegex, sys_platform) and sys_platform != 'darwin':
                 linkFlags += ' -Wl,-E'
 
             self.env.append_value('LINKFLAGS', linkFlags.split())
