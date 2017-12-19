@@ -25,10 +25,10 @@
 NITF_CXX_GUARD
 
 static nitf_TREDescription description[] = {
-        {NITF_BCS_A, 3, "Number of Associated Image Segments", "NUMAIS", },
+        {NITF_BCS_A, 3, "Number of Associated Image Segments", "NUMAIS"},
         {NITF_IF, 0, "ne ALL", "NUMAIS"},
         {NITF_LOOP, 0, NULL, "NUMAIS"},
-        {NITF_BCS_N, 3, "Associated Image Segment Display Level", "AISDLVL" },
+        {NITF_BCS_N, 3, "Associated Image Segment Display Level", "AISDLVL"},
         {NITF_ENDLOOP, 0, NULL, NULL},  // NUMAIS
         {NITF_ENDIF, 0, NULL, NULL},  // NUMAOI ne ALL
         {NITF_BCS_A, 14, "Column Position of the Upper Left Pixel Metric Value", "ORIGIN_X"},
