@@ -13,6 +13,7 @@ cdef extern from "nitf/System.h":
     ctypedef int16_t nitf_Int16
     ctypedef int32_t nitf_Int32
     ctypedef int64_t nitf_Int64
+    ctypedef int64_t nitf_Off
     ctypedef int NITF_BOOL
     ctypedef struct nitf_List:
         pass

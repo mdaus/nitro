@@ -1,12 +1,18 @@
 #cython: language_level=3, c_string_type=unicode, c_string_encoding=ascii
 
+cimport cython
 cimport field
 cimport header
 cimport image_segment
+cimport image_source
+cimport io
 cimport record
+cimport numpy as np
 from cpython.mem cimport PyMem_Malloc, PyMem_Free
 from error cimport nitf_Error
 from types cimport *
+
+import numpy as np
 from deprecated import deprecated
 
 
@@ -52,13 +58,19 @@ cdef class Record:
     cdef record.nitf_Record* _c_record
     def __cinit__(self, version=NITF_VER_21):
         cdef nitf_Error error
-        self._c_record = record.nitf_Record_construct(version, &error)
-        if self._c_record is NULL:
-            raise NitfError(error)
+        if version != NITF_VER_UNKNOWN:
+            self._c_record = record.nitf_Record_construct(version, &error)
+            if self._c_record is NULL:
+                raise NitfError(error)
 
     def __dealloc__(self):
         if self._c_record is not NULL:
             record.nitf_Record_destruct(&self._c_record)
+
+    cdef from_ptr(self, record.nitf_Record* ptr):
+        assert(self._c_record is NULL)
+        self._c_record = ptr
+        return self  # allow chaining
 
     @property
     def version(self):
@@ -161,7 +173,7 @@ cdef class FileHeader:
     cdef from_ptr(self, header.nitf_FileHeader* ptr):
         assert(ptr is not NULL)
         self._c_header = ptr
-        return self
+        return self  # allow chaining
 
     deprecated_items = {}
     equiv_items = {}
@@ -242,7 +254,7 @@ cdef class ImageSubheader:
     cdef from_ptr(self, header.nitf_ImageSubheader* ptr):
         assert(ptr is not NULL)
         self._c_header = ptr
-        return self
+        return self  # allow chaining
 
     def insert_image_comment(self, comment, position=-1):
         cdef int rval
@@ -458,39 +470,202 @@ cdef class Field:
         if not field.nitf_Field_setRawData(self._c_field, <char*>buffer, len(buffer), &error):
             raise NitfError(error)
 
-    # def __getbuffer__(self, Py_buffer* buffer, int flags):
-    #     cdef nitf_Error error
-    #     if self._c_field is NULL:
-    #         raise MemoryError()
-    #     self._shape[0] = self._c_field.length
-    #     if self._buf_value is NULL:
-    #         self._buf_value = PyMem_Malloc(self._shape[0])
-    #         self._ref_count = 1
-    #     else:
-    #         self._ref_count += 1
-    #     buffer.buf = self._buf_value
-    #     buffer.format = 'B'
-    #     buffer.internal = NULL
-    #     buffer.itemsize = 1
-    #     buffer.len = self._shape[0]
-    #     buffer.ndim = 1
-    #     buffer.obj = self
-    #     buffer.readonly = 1
-    #     buffer.shape = self._shape
-    #     buffer.strides = self._strides
-    #     buffer.suboffsets = NULL
-    #
-    #     if not field.nitf_Field_get(self._c_field, self._buf_value, NITF_CONV_RAW, buffer.len, &error):
-    #         PyMem_Free(self._buf_value)
-    #         self._buf_value = NULL
-    #         raise NitfError(error)
-    #
-    # def __releasebuffer__(self, Py_buffer* buffer):
-    #     assert(buffer.buf == self._buf_value)
-    #     self._ref_count -= 1
-    #     if self._ref_count == 0:
-    #         PyMem_Free(self._buf_value)
-    #         self._buf_value = NULL
+    def __getbuffer__(self, Py_buffer* buffer, int flags):
+        cdef nitf_Error error
+        if self._c_field is NULL:
+            raise MemoryError()
+        self._shape[0] = self._c_field.length
+        if self._buf_value is NULL:
+            self._buf_value = PyMem_Malloc(self._shape[0])
+            self._ref_count = 1
+        else:
+            self._ref_count += 1
+        buffer.buf = self._buf_value
+        buffer.format = 'B'
+        buffer.internal = NULL
+        buffer.itemsize = 1
+        buffer.len = self._shape[0]
+        buffer.ndim = 1
+        buffer.obj = self
+        buffer.readonly = 1
+        buffer.shape = self._shape
+        buffer.strides = self._strides
+        buffer.suboffsets = NULL
+
+        if not field.nitf_Field_get(self._c_field, self._buf_value, NITF_CONV_RAW, buffer.len, &error):
+            PyMem_Free(self._buf_value)
+            self._buf_value = NULL
+            raise NitfError(error)
+
+    def __releasebuffer__(self, Py_buffer* buffer):
+        assert(buffer.buf == self._buf_value)
+        self._ref_count -= 1
+        if self._ref_count == 0:
+            PyMem_Free(self._buf_value)
+            self._buf_value = NULL
+
+
+cdef class ImageSource:
+    cdef image_source.nitf_ImageSource* _c_source
+    def __cinit__(self):
+        cdef nitf_Error error
+        self._c_source = image_source.nitf_ImageSource_construct(&error)
+        if self._c_source is NULL:
+            raise NitfError(error)
+
+    def __dealloc__(self):
+        if self._c_source is not NULL:
+            image_source.nitf_ImageSource_destruct(&self._c_source)
+
+    @deprecated("Old SWIG API")
+    def addBand(self, band):
+        return self.add_band(band)
+
+    def add_band(self, BandSource bandsource):
+        cdef nitf_Error error
+        cdef image_source.nitf_BandSource* bsptr
+        bsptr = <image_source.nitf_BandSource*>bandsource._c_source
+        if not image_source.nitf_ImageSource_addBand(self._c_source, <image_source.nitf_BandSource*>bsptr, &error):
+            raise NitfError(error)
+
+
+cdef class DataSource:
+    cdef image_source.nitf_DataSource* _c_source
+    def __cinit__(self):
+        self._c_source = NULL
+
+    def __dealloc__(self):
+        if self._c_source is not NULL:
+            image_source.nitf_DataSource_destruct(&self._c_source)
+
+
+cdef class BandSource(DataSource):
+    pass
+
+
+cdef class MemorySource(BandSource):
+    @cython.boundscheck(False)
+    @cython.wraparound(False)
+    def __cinit__(self, np.ndarray data not None, size=None, start=0, nbpp=0, pixskip=0):
+        cdef nitf_Error error
+        if size is None:
+            size = data.data.nbytes
+        self._c_source = <image_source.nitf_DataSource*>image_source.nitf_MemorySource_construct(<void*>&data.data[0], size, start, nbpp, pixskip, &error)
+        if self._c_source is NULL:
+            raise NitfError(error)
+
+
+cdef class MemoryBandSource(MemorySource):
+    pass
+
+
+cdef class IOHandle:
+    cdef io.nitf_IOHandle _c_io
+
+    # deprecated, for compatibility
+    ACCESS_READONLY=AccessFlags.NITF_ACCESS_READONLY
+    ACCESS_WRITEONLY=AccessFlags.NITF_ACCESS_WRITEONLY
+    ACCESS_READWRITE=AccessFlags.NITF_ACCESS_READWRITE
+    CREATE=CreationFlags.NITF_CREATE
+    OPEN_EXISTING=CreationFlags.NITF_OPEN_EXISTING
+    TRUNCATE=CreationFlags.NITF_TRUNCATE
+
+    def __cinit__(self, str fname, access=NITF_ACCESS_READWRITE, creation=NITF_CREATE):
+        cdef nitf_Error error
+        self._c_io = io.nitf_IOHandle_create(fname, access, creation, &error)
+        if not io.is_iohandle_valid(self._c_io):
+            raise NitfError(error)
+
+    def close(self):
+        io.nitf_IOHandle_close(self._c_io)
+
+
+cdef class Writer:
+    cdef io.nitf_Writer* _c_writer
+    def __cinit__(self):
+        cdef nitf_Error error
+        self._c_writer = io.nitf_Writer_construct(&error)
+        if self._c_writer is NULL:
+            raise NitfError(error)
+
+    def __dealloc__(self):
+        if self._c_writer is not NULL:
+            io.nitf_Writer_destruct(&self._c_writer)
+
+    def prepare(self, Record recrd, IOHandle iohandle):
+        cdef nitf_Error error
+        cdef record.nitf_Record* rec=recrd._c_record
+        cdef io.nitf_IOHandle hndl=iohandle._c_io
+
+        if not io.nitf_Writer_prepare(self._c_writer, rec, hndl, &error):
+            raise NitfError(error)
+        return True
+
+    def write(self):
+        cdef nitf_Error error
+
+        if not io.nitf_Writer_write(self._c_writer, &error):
+            raise NitfError(error)
+
+    def new_image_writer(self, index):
+        cdef nitf_Error error
+        cdef io.nitf_ImageWriter* iw
+
+        iw = io.nitf_Writer_newImageWriter(self._c_writer, index, NULL, &error)
+        if iw is NULL:
+            raise NitfError(error)
+        return ImageWriter().from_ptr(iw)
+
+    @deprecated("Old SWIG API")
+    def newImageWriter(self, index):
+        return self.new_image_writer(index)
+
+
+cdef class Reader:
+    cdef io.nitf_Reader* _c_reader
+    def __cinit__(self):
+        cdef nitf_Error error
+        self._c_reader = io.nitf_Reader_construct(&error)
+        if self._c_reader is NULL:
+            raise NitfError(error)
+
+    def __dealloc__(self):
+        if self._c_reader is not NULL:
+            io.nitf_Reader_destruct(&self._c_reader)
+
+    def read(self, IOHandle iohandle):
+        cdef nitf_Error error
+        cdef io.nitf_IOHandle hndl = iohandle._c_io
+        cdef record.nitf_Record* rec
+
+        rec = io.nitf_Reader_read(self._c_reader, hndl, &error)
+        if rec is NULL:
+            raise NitfError(error)
+        return Record(NITF_VER_UNKNOWN).from_ptr(rec)
+
+
+cdef class ImageWriter:
+    cdef io.nitf_ImageWriter* _c_writer
+
+    def __cinit__(self):
+        self._c_writer = NULL
+
+    cdef from_ptr(self, io.nitf_ImageWriter* ptr):
+        assert(self._c_writer is NULL)
+        self._c_writer = ptr
+        return self  # allow chaining
+
+    def attach_source(self, ImageSource imagesource):
+        cdef nitf_Error error
+        cdef image_source.nitf_ImageSource* src = imagesource._c_source
+
+        if not io.nitf_ImageWriter_attachSource(self._c_writer, src, &error):
+            raise NitfError(error)
+
+    @deprecated("Old SWIG API")
+    def attachSource(self, ImageSource imagesource):
+        self.attach_source(imagesource)
+
 
 cdef class ListIter:
     cdef nitf_ListIterator _c_iter
@@ -588,3 +763,13 @@ cpdef enum ErrorCode:
     NITF_ERR_PARSING_FILE
     NITF_ERR_INT_STACK_OVERFLOW
     NITF_ERR_UNK
+
+cpdef enum AccessFlags:
+    NITF_ACCESS_READONLY=0x0000
+    NITF_ACCESS_WRITEONLY=0x0001
+    NITF_ACCESS_READWRITE=0x0002
+
+cpdef enum CreationFlags:
+    NITF_CREATE=0x200
+    NITF_OPEN_EXISTING=0x000
+    NITF_TRUNCATE=0x400
