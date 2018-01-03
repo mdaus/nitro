@@ -8,7 +8,7 @@ cimport image_source
 cimport io
 cimport record
 cimport numpy as np
-from cpython.mem cimport PyMem_Malloc, PyMem_Free
+from cpython.mem cimport PyMem_Malloc, PyMem_Free, PyMem_Realloc
 from error cimport nitf_Error
 from types cimport *
 
@@ -91,6 +91,29 @@ cdef class Record:
             raise NitfError(error)
         return rval
 
+    @deprecated("Old SWIG API")
+    def getImages(self):
+        return self.images
+
+    @deprecated("Old SWIG API")
+    def getImage(self, index):
+        return self.get_image(index)
+
+    @property
+    def images(self):
+        imgs = []
+        for i in range(self.num_images):
+            imgs.append(self.get_image(i))
+        return imgs
+
+    def get_image(self, index):
+        cdef nitf_Error error
+        cdef image_segment.nitf_ImageSegment* img
+        img = <image_segment.nitf_ImageSegment*>nitf_List_get(self._c_record.images, index, &error)
+        if img is NULL:
+            raise NitfError(error)
+        return ImageSegment().from_ptr(img)
+
     @property
     def num_graphics(self):
         cdef nitf_Error error
@@ -149,6 +172,12 @@ cdef class ImageSegment:
         self._c_image = record.nitf_Record_newImageSegment(c_rec, &error)
         if self._c_image is NULL:
             raise NitfError(error)
+        return self  # allow chaining
+
+    cdef from_ptr(self, image_segment.nitf_ImageSegment* ptr):
+        assert(self._c_image is NULL)
+        self._c_image = ptr
+        return self  # allow chaining
 
     @property
     def subheader(self):
@@ -247,6 +276,18 @@ cdef class FileHeader:
         except KeyError:
             raise AttributeError(key)
 
+    def __str__(self):
+        rval = ''
+        for key, val in self.get_items().items():
+            if isinstance(val, Field):
+                rval += f"{key}({len(val)}) = '{val}'\n"
+            else:
+                rval += f"{key} = '{val}'\n"
+        return rval
+
+    def __repr__(self):
+        return f"<{self.__class__.__name__} {<unsigned long long>self._c_header:#0x}>"
+
 
 cdef class ImageSubheader:
     cdef header.nitf_ImageSubheader* _c_header
@@ -272,6 +313,20 @@ cdef class ImageSubheader:
         cdef nitf_Error error
         if not header.nitf_ImageSubheader_createBands(self._c_header, num_bands, &error):
             raise NitfError(error)
+
+    @property
+    def band_count(self):
+        cdef nitf_Error error
+        cdef nitf_Uint32 cnt
+
+        cnt = header.nitf_ImageSubheader_getBandCount(self._c_header, &error)
+        if cnt == <nitf_Uint32>-1:
+            raise NitfError(error)
+        return cnt
+
+    @deprecated("Old SWIG API")
+    def getBandCount(self):
+        return self.band_count
 
     deprecated_items = {'numrows': 'numRows', 'numcols': 'numCols'}
     equiv_items = {}
@@ -396,6 +451,10 @@ cdef class Field:
     def __repr__(self):
         return "<{} [{}]: {}>".format(self.__class__.__name__, self.type.name, self.get_string())
 
+    @deprecated("Old SWIG API")
+    def intValue(self):
+        return self.get_int()
+
     def get_uint(self):
         cdef nitf_Error error
         cdef uint64_t val
@@ -430,8 +489,8 @@ cdef class Field:
         finally:
             PyMem_Free(val)
 
-    # def get_raw(self):
-    #     return bytes(self)
+    def get_raw(self):
+        return bytes(self)
 
     def set_uint32(self, value):
         cdef nitf_Error error
@@ -507,6 +566,11 @@ cdef class Field:
 
 cdef class ImageSource:
     cdef image_source.nitf_ImageSource* _c_source
+    cpdef _band_sources
+
+    def __init__(self):
+        self._band_sources = []
+
     def __cinit__(self):
         cdef nitf_Error error
         self._c_source = image_source.nitf_ImageSource_construct(&error)
@@ -514,8 +578,11 @@ cdef class ImageSource:
             raise NitfError(error)
 
     def __dealloc__(self):
-        if self._c_source is not NULL:
-            image_source.nitf_ImageSource_destruct(&self._c_source)
+        # TODO: enabling this is causing a crash do to double free()..make sure this is still getting completely deallocated
+        # if self._c_source is not NULL:
+        #     image_source.nitf_ImageSource_destruct(&self._c_source)
+        # self._band_sources = []
+        pass
 
     @deprecated("Old SWIG API")
     def addBand(self, band):
@@ -527,6 +594,8 @@ cdef class ImageSource:
         bsptr = <image_source.nitf_BandSource*>bandsource._c_source
         if not image_source.nitf_ImageSource_addBand(self._c_source, <image_source.nitf_BandSource*>bsptr, &error):
             raise NitfError(error)
+        # Need to keep the bandsource object so that it isn't garbage collected if the caller doesn't keep their own copy
+        self._band_sources.append(bandsource)
 
 
 cdef class DataSource:
@@ -536,7 +605,9 @@ cdef class DataSource:
 
     def __dealloc__(self):
         if self._c_source is not NULL:
-            image_source.nitf_DataSource_destruct(&self._c_source)
+            import traceback
+            # traceback.print_stack(limit=5)
+            # image_source.nitf_DataSource_destruct(&self._c_source)
 
 
 cdef class BandSource(DataSource):
@@ -623,6 +694,8 @@ cdef class Writer:
 
 cdef class Reader:
     cdef io.nitf_Reader* _c_reader
+    cpdef Record _record
+
     def __cinit__(self):
         cdef nitf_Error error
         self._c_reader = io.nitf_Reader_construct(&error)
@@ -641,7 +714,24 @@ cdef class Reader:
         rec = io.nitf_Reader_read(self._c_reader, hndl, &error)
         if rec is NULL:
             raise NitfError(error)
-        return Record(NITF_VER_UNKNOWN).from_ptr(rec)
+        self._c_reader.ownInput = 0  # TODO: removing this causes a double free()..make sure this is correct behavior
+        self._record = Record(NITF_VER_UNKNOWN).from_ptr(rec)
+        return self._record
+
+    @deprecated("Old SWIG API")
+    def newImageReader(self, num, options=None):
+        return self.new_image_reader(num, options)
+
+    def new_image_reader(self, num, options=None):
+        cdef nitf_Error error
+        cdef io.nitf_ImageReader* reader
+        if options is not None:
+            raise NotImplementedError("Options are not currently implemented")
+        nbpp = int(self._record.images[num].subheader.numBitsPerPixel)
+        reader = io.nitf_Reader_newImageReader(self._c_reader, num, <io.nrt_HashTable*>NULL, &error)
+        if reader is NULL:
+            raise NitfError(error)
+        return ImageReader(nbpp).from_ptr(reader)
 
 
 cdef class ImageWriter:
@@ -665,6 +755,62 @@ cdef class ImageWriter:
     @deprecated("Old SWIG API")
     def attachSource(self, ImageSource imagesource):
         self.attach_source(imagesource)
+
+
+cdef class ImageReader:
+    cdef io.nitf_ImageReader* _c_reader
+    cdef int _nbpp
+
+    def __cinit__(self, int nbpp):
+        self._c_reader = NULL
+        self._nbpp = nbpp
+
+    cdef from_ptr(self, io.nitf_ImageReader* ptr):
+        assert(self._c_reader is NULL)
+        self._c_reader = ptr
+        return self  # allow chaining
+
+    cpdef read(self, SubWindow window, downsampler=None, dtype=None):
+        cdef nitf_Error error
+        cdef nitf_Uint8** buf
+        cdef int padded
+
+        if downsampler is not None:
+            raise NotImplementedError("Downsampling now implemented")
+
+        rowSkip, colSkip = 1, 1  # TODO: get skip factor from downsampler
+        # subimageSize = int((window.numRows // rowSkip)\
+        #              * (window.numCols // colSkip)\
+        #              * io.nitf_ImageIO_pixelSize(self._c_reader.imageDeblocker))
+        subimageSize = (window.numRows // rowSkip) * (window.numCols // colSkip)
+        if dtype is None:
+            if self._nbpp == 8:
+                dtype = np.uint8
+            elif self._nbpp == 16:
+                dtype = np.uint16
+            elif self._nbpp == 32:
+                dtype = np.uint32
+            elif self._nbpp == 64:
+                dtype = np.uint64
+        if dtype is None:
+            raise ValueError("Unable to determine dtype from nbpp, specify a dtype")
+        result = np.ndarray((window.numBands, subimageSize), dtype=dtype, order='C')
+
+        try:
+            buf = <nitf_Uint8**>PyMem_Malloc(window.numBands * sizeof(nitf_Uint8*))
+            if buf is NULL:
+                raise MemoryError("Unable to allocate buffer for image read")
+            buf[0] = <nitf_Uint8*>np.PyArray_DATA(result)
+
+            for i in range(1, window.numBands):
+                buf[i] = &(buf[0][sizeof(nitf_Uint8) * subimageSize * i])
+
+            if not io.nitf_ImageReader_read(self._c_reader, window._c_window, buf, &padded, &error):
+                raise NitfError(error)
+        finally:
+            PyMem_Free(buf)
+
+        return result
 
 
 cdef class ListIter:
@@ -724,6 +870,105 @@ cdef class List:
 
     def __iter__(self):
         return ListIter().from_ptr(self, self._c_list)
+
+
+cdef class SubWindow:
+    cdef io.nitf_SubWindow* _c_window
+
+    def __cinit__(self, image_subheader=None):
+        cdef nitf_Error error
+        self._c_window = io.nitf_SubWindow_construct(&error)
+        if self._c_window is NULL:
+            raise NitfError(error)
+        self._c_window.startRow = 0
+        self._c_window.startCol = 0
+        self._c_window.bandList = <nitf_Uint32*>NULL
+
+        if image_subheader:
+            self._c_window.numRows = int(image_subheader['numRows'])
+            self._c_window.numCols = int(image_subheader['numCols'])
+            bands = int(image_subheader['numImageBands']) + \
+                int(image_subheader['numMultispectralImageBands'])
+            self._c_window.numBands = len(bands)
+            self._c_window.bandList = <nitf_Uint32*>PyMem_Malloc(self._c_window.numBands)
+            for i in range(bands):
+                self._c_window.bandList[i] = <int>i
+        else:
+            self._c_window.numRows = 0
+            self._c_window.numCols = 0
+
+    def __dealloc__(self):
+        if self._c_window != NULL:
+            if self._c_window.bandList != NULL:
+                PyMem_Free(self._c_window.bandList)
+                io.nitf_SubWindow_destruct(&self._c_window)
+
+    @property
+    def startRow(self):
+        return self._c_window.startRow
+
+    @startRow.setter
+    def startRow(self, nitf_Uint32 value):
+        self._c_window.startRow = value
+
+    @property
+    def startCol(self):
+        return self._c_window.startCol
+
+    @startCol.setter
+    def startCol(self, nitf_Uint32 value):
+        self._c_window.startCol = value
+
+    @property
+    def numRows(self):
+        return self._c_window.numRows
+
+    @numRows.setter
+    def numRows(self, nitf_Uint32 value):
+        self._c_window.numRows = value
+
+    @property
+    def numCols(self):
+        return self._c_window.numCols
+
+    @numCols.setter
+    def numCols(self, nitf_Uint32 value):
+        self._c_window.numCols = value
+
+    @property
+    def numBands(self):
+        return self._c_window.numBands
+
+    @numBands.setter
+    def numBands(self, nitf_Uint32 value):
+        cdef nitf_Uint32* tmp
+        if value == 0:
+            self._c_window.numBands = value
+            PyMem_Free(self._c_window.bandList)
+            self._c_window.bandList = NULL
+        # realloc works like malloc if the bandList is NULL
+        tmp = <nitf_Uint32*>PyMem_Realloc(self._c_window.bandList, value)
+        if tmp is NULL:
+            raise MemoryError("Unable to reallocate bandList memory")
+        self._c_window.bandList = tmp
+        self._c_window.numBands = value
+
+    @property
+    def bandList(self):
+        tmp = []
+        for i in range(self._c_window.numBands):
+            tmp.append(self._c_window.bandList[i])
+        return tmp
+
+    @bandList.setter
+    def bandList(self, list value):
+        if len(value) != self._c_window.numBands:
+            self.numBands = len(value)
+        for i, v in enumerate(value):
+            self._c_window.bandList[i] = v
+
+    def __str__(self):
+        return f'{self.startRow}, {self.startCol}, {self.numRows}, {self.numCols}, {len(self.bandList)}'
 
 
 cpdef enum Version:

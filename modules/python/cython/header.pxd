@@ -99,3 +99,5 @@ cdef extern from "nitf/ImageSubheader.h":
 
     int nitf_ImageSubheader_insertImageComment(nitf_ImageSubheader* subhdr, const char* comment, int position, nitf_Error *error)
     NITF_BOOL nitf_ImageSubheader_createBands(nitf_ImageSubheader * subhdr, nitf_Uint32 numBands, nitf_Error * error)
+    nitf_Uint32 nitf_ImageSubheader_getBandCount(nitf_ImageSubheader* subhdr, nitf_Error* error)
+

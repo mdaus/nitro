@@ -132,6 +132,9 @@ class TestCreator(unittest.TestCase):
         segment.subheader['numPixelsPerVertBlock'] = height
 
         alldata = numpy.ascontiguousarray(alldata, dtype="int16")
+        tmp = alldata
+        tmp.shape = (height, width, numBands)
+        print(f'{tmp.shape}\n\n{tmp[:32, :32, 0]}\n{tmp[:32, :32, 1]}')
 
         # import uuid
         # csexrb = TRE('CSEXRB')
@@ -188,10 +191,12 @@ class TestCreator(unittest.TestCase):
             window.numCols = subheader['numCols'].intValue()
             window.bandList = list(range(subheader.getBandCount()))
             nbpp = subheader['numBitsPerPixel'].intValue()
-            bandData = imageReader.read(window)
+            bandData = imageReader.read(window, dtype=np.int16)
             readData = []
             for item in bandData[0]:
                 readData.append(item)
+            # print(f'{alldata[:32]}')
+            print(f'{bandData.shape}\n\n{bandData[0, :32]}\n{bandData[1, :32]}')
             assert (readData == alldata).all()
 
             handle.close()
@@ -204,9 +209,6 @@ class TestCreator(unittest.TestCase):
                 pass
             os.link(outfile, 'test.ntf')
 
-            os.unlink(outfile)
-
 
 if __name__ == '__main__':
     unittest.main(argv=sys.argv[0:1])
-

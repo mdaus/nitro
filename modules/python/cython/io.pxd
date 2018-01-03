@@ -1,7 +1,7 @@
 from error cimport nitf_Error
 from image_source cimport nitf_ImageSource
 from record cimport nitf_Record
-from types cimport NITF_BOOL
+from types cimport *
 
 
 cdef extern from "nitf/System.h":
@@ -17,6 +17,9 @@ cdef extern from "nitf/System.h":
     ctypedef enum nitf_CreationFlags:
         pass
 
+    ctypedef struct nitf_IOInterface:
+        pass
+
     nitf_IOHandle nitf_IOHandle_create(const char *fname, nitf_AccessFlags access, nitf_CreationFlags creation, nitf_Error* error)
 
 cdef inline is_iohandle_valid(nitf_IOHandle handle):
@@ -28,6 +31,26 @@ cdef extern from "nitf/ImageWriter.h":
         pass
 
     NITF_BOOL nitf_ImageWriter_attachSource(nitf_ImageWriter* writer, nitf_ImageSource* imageSource, nitf_Error* error)
+
+
+cdef extern from "nitf/SubWindow.h":
+    ctypedef struct nitf_SubWindow:
+        nitf_Uint32 startRow
+        nitf_Uint32 startCol
+        nitf_Uint32 numRows
+        nitf_Uint32 numCols
+        nitf_Uint32 *bandList
+        nitf_Uint32 numBands
+
+    nitf_SubWindow* nitf_SubWindow_construct(nitf_Error* error)
+    void nitf_SubWindow_destruct(nitf_SubWindow** subWindow)
+
+
+cdef extern from "nitf/ImageReader.h":
+    ctypedef struct nitf_ImageReader:
+        nitf_ImageIO *imageDeblocker
+
+    NITF_BOOL nitf_ImageReader_read(nitf_ImageReader* imageReader, nitf_SubWindow* subWindow, nitf_Uint8** user, int* padded, nitf_Error* error)
 
 
 cdef extern from "nitf/Writer.h":
@@ -43,8 +66,19 @@ cdef extern from "nitf/Writer.h":
 
 cdef extern from "nitf/Reader.h":
     ctypedef struct nitf_Reader:
-        pass
+        nitf_List *warningList
+        nitf_IOInterface* input
+        nitf_Record *record
+        NITF_BOOL ownInput
+
     nitf_Reader* nitf_Reader_construct(nitf_Error* error)
     void nitf_Reader_destruct(nitf_Reader** writer)
     nitf_Record* nitf_Reader_read(nitf_Reader* reader, nitf_IOHandle inputHandle, nitf_Error* error)
+    nitf_ImageReader* nitf_Reader_newImageReader(nitf_Reader* reader, int imageSegmentNumber, nrt_HashTable* options, nitf_Error* error)
 
+
+cdef extern from "nitf/ImageIO.h":
+    ctypedef struct nitf_ImageIO:
+        pass
+
+    nitf_Uint32 nitf_ImageIO_pixelSize(nitf_ImageIO * nitf)

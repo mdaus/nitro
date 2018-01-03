@@ -5,7 +5,8 @@ from header cimport nitf_FileHeader
 
 cdef extern from "nitf/Record.h":
     ctypedef struct nitf_Record:
-        nitf_FileHeader *header;
+        nitf_FileHeader *header
+        nitf_List *images
 
     ctypedef enum nitf_Version:
         pass
