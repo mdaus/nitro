@@ -21,6 +21,10 @@ cdef extern from "nitf/System.h":
     ctypedef struct nitf_ListIterator:
         pass
 
+    ctypedef struct nitf_Pair:
+        char* key
+        NITF_DATA* data
+
     nitf_ListIterator nitf_List_begin(nitf_List * chain)
     NITF_BOOL nitf_ListIterator_equals(nitf_ListIterator * it1, nitf_ListIterator * it2)
     nitf_ListIterator nitf_List_end(nitf_List * this_chain)

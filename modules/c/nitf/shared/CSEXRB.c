@@ -104,7 +104,37 @@ static nitf_TREDescription description[] = {
 
         {NITF_ENDIF,   0,  NULL, NULL},  // TIME_STAMP_LOC eq 0
         {NITF_ENDIF,   0,  NULL, NULL},  // SENSOR_TYPE eq F
-        /////////
+
+        {NITF_BCS_A,   5,  "Max Mean GSD", "MAX_GSD"},
+        {NITF_BCS_A,   5,  "Measured Along-Scan GSD", "ALONG_SCAN_GSD"},
+        {NITF_BCS_A,   5,  "Measured Cross-Scan GSD", "CROSS_SCAN_GSD"},
+        {NITF_BCS_A,   5,  "Measured Geometric Mean GSD", "GEO_MEAN_GSD"},
+        {NITF_BCS_A,   5,  "Measured Along-Scan Vertical GSD", "A_S_VERT_GSD"},
+        {NITF_BCS_A,   5,  "Measured Cross-Scan Vertical GSD", "C_S_VERT_GSD"},
+        {NITF_BCS_A,   5,  "Measured Geometric Mean Vertical GSD", "GEO_MEAN_VERT_GSD"},
+        {NITF_BCS_A,   5,  "Angle Between Along-Scan and Cross-Scan Directions", "GSD_BETA_ANGLE"},
+        {NITF_BCS_A,   5,  "Dynamic Range of Pixels", "DYNAMIC_RANGE"},
+        {NITF_BCS_N,   7,  "Number of Lines in Entire Image Plane", "NUM_LINES"},
+        {NITF_BCS_N,   5,  "Number of Samples per Line in Entire Image Plane", "NUM_SAMPLES"},
+        {NITF_BCS_A,   7,  "Nominal Angle to North", "ANGLE_TO_NORTH"},
+        {NITF_BCS_A,   6,  "Nominal Obliquity Angle", "OBLIQUITY_ANGLE"},
+        {NITF_BCS_A,   7,  "Azimuth of Obliquity", "AZ_OF_OBLIQUITY"},
+        {NITF_BCS_N,   1,  "Atmospheric Refraction Flag", "ATM_REFR_FLAG"},
+        {NITF_BCS_N,   1,  "Velocity Aberration Flag", "VEL_ABER_FLAG"},
+        {NITF_BCS_N,   1,  "Ground Cover Flag", "GRD_COVER"},
+        {NITF_BCS_N,   1,  "Snow Depth Category", "SNOW_DEPTH_CATEGORY"},
+        {NITF_BCS_A,   7,  "Sun Azimuth Angle", "SUN_AZIMUTH"},
+        {NITF_BCS_A,   7,  "Sun Elevation Angle", "SUN_ELEVATION"},
+        {NITF_BCS_A,   3,  "NIIRS Value for the Mono Collection at Principal Target", "PREDICTED_NIIRS"},
+        {NITF_BCS_A,   5,  "Circular Error", "CIRCL_ERR"},
+        {NITF_BCS_A,   5,  "Linear Error", "LINEAR_ERR"},
+        {NITF_BCS_A,   3,  "Cloud Cover", "CLOUD_COVER"},
+        {NITF_BCS_A,   1,  "Rolling Shutter Flag", "ROLLING_SHUTTER_FLAG"},
+        {NITF_BCS_A,   1,  "Time Un-Modeled Error Flag", "UE_TIME_FLAG"},
+        {NITF_BCS_N,   5,  "Length of Reserved Portion", "RESERVED_LEN"},
+        {NITF_BINARY,  NITF_TRE_CONDITIONAL_LENGTH,
+                           "Reserved Data Portion", "RESERVED", "RESERVED_LEN"},
+
         {NITF_END,     0,  NULL, NULL}
 };
 
