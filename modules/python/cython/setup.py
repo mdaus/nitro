@@ -1,5 +1,5 @@
-from distutils.core import setup
-from distutils.extension import Extension
+from setuptools import setup
+from setuptools.extension import Extension
 from Cython.Build import cythonize
 import numpy
 
@@ -17,6 +17,7 @@ ext_modules=[
 
 setup(
     name="Nitro",
+    version="0.1.dev-2",
     ext_modules=cythonize(ext_modules, gdb_debug=True)
 )
 
