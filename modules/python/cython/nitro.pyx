@@ -16,6 +16,7 @@ from types cimport *
 
 import contextlib
 import numpy as np
+import os
 from deprecated import deprecated
 
 
@@ -40,6 +41,16 @@ class NitfError(BaseException):
 
     def __str__(self):
         return "NitfError at {file}:{line} :: {func}: {message}".format(**self.nitf_error)
+
+cdef class AccessFlags:
+    NITF_ACCESS_READONLY=os.O_RDONLY
+    NITF_ACCESS_WRITEONLY=os.O_WRONLY
+    NITF_ACCESS_READWRITE=os.O_RDWR
+
+cdef class CreationFlags:
+    NITF_CREATE=os.O_CREAT
+    NITF_OPEN_EXISTING=0x000
+    NITF_TRUNCATE=os.O_TRUNC
 
 cdef class NitfData:
     cdef NITF_DATA* _c_data
@@ -308,6 +319,75 @@ cdef class FileHeader:
         return f"<{self.__class__.__name__} {<unsigned long long>self._c_header:#0x}>"
 
 
+cdef class BandInfo:
+    cdef header.nitf_BandInfo* _c_binfo
+
+    @staticmethod
+    cdef from_ptr(header.nitf_BandInfo* ptr):
+        obj = BandInfo()
+        obj._c_binfo = ptr
+        return obj
+
+    deprecated_items = {}
+    equiv_items = {'IREPBAND': 'representation',
+                   'ISUBCAT': 'subcategory',
+                   'IFC': 'imageFilterCondition',
+                   'IMFLT': 'imageFilterCode',
+                   'NLUTS': 'numLUTs'}
+
+    def get_items(self):
+        tmp = {
+            'representation':Field.from_ptr(self._c_binfo.representation),
+            'subcategory':Field.from_ptr(self._c_binfo.subcategory),
+            'imageFilterCondition':Field.from_ptr(self._c_binfo.imageFilterCondition),
+            'imageFilterCode':Field.from_ptr(self._c_binfo.imageFilterCode),
+            'numLUTs':Field.from_ptr(self._c_binfo.numLUTs),
+            }
+        return tmp
+
+    def __contains__(self, item):
+        return item in self.deprecated_items or item in self.equiv_items or item in self.get_items()
+
+    def __getattr__(self, item):
+        return self[item]
+
+    def __setattr__(self, key, value):
+        self[key] = value
+
+    def __getitem__(self, item):
+        item = self.deprecated_items.get(item, item)
+        item = self.equiv_items.get(item, item)
+        tmp = self.get_items()
+        try:
+            return tmp[item]
+        except KeyError:
+            raise AttributeError(item)
+
+    def __setitem__(self, key, value):
+        """Attempt to deduce the type. Good chance this might be wrong so be explicit if you need to."""
+        key = self.deprecated_items.get(key, key)
+        key = self.equiv_items.get(key, key)
+        try:
+            tmp = self.get_items()[key]
+            if type(value) is int:
+                if value < 0:
+                    if -value >= (2 ** 32) / 2:
+                        tmp.set_int64(value)
+                    else:
+                        tmp.set_int32(value)
+                else:
+                    if value >= (2 ** 32):
+                        tmp.set_uint64(value)
+                    else:
+                        tmp.set_uint32(value)
+            elif type(value) is float:
+                tmp.set_real(value)
+            else:
+                tmp.set_string(str(value))
+        except KeyError:
+            raise AttributeError(key)
+
+
 cdef class ImageSubheader:
     cdef header.nitf_ImageSubheader* _c_header
 
@@ -347,6 +427,21 @@ cdef class ImageSubheader:
     @deprecated("Old SWIG API")
     def getBandCount(self):
         return self.band_count
+
+    @property
+    def band_info(self):
+        cnt = self.band_count
+        for i in range(cnt):
+            yield BandInfo.from_ptr(self._c_header.bandInfo[i])
+
+    def get_band_info(self, unsigned int idx):
+        if idx >= self.band_count:
+            raise IndexError("Invalid band number")
+        return BandInfo.from_ptr(self._c_header.bandInfo[idx])
+
+    @deprecated("Old SWIG API")
+    def getBandInfo(self, idx):
+        return self.get_band_info(idx)
 
     deprecated_items = {'numrows': 'numRows', 'numcols': 'numCols'}
     equiv_items = {}
@@ -738,7 +833,7 @@ cdef class IOHandle:
     OPEN_EXISTING=CreationFlags.NITF_OPEN_EXISTING
     TRUNCATE=CreationFlags.NITF_TRUNCATE
 
-    def __cinit__(self, str fname, access=NITF_ACCESS_READWRITE, creation=NITF_CREATE):
+    def __cinit__(self, str fname, access=AccessFlags.NITF_ACCESS_READWRITE, creation=CreationFlags.NITF_CREATE):
         cdef nitf_Error error
         self._c_io = io.nitf_IOHandle_create(fname, access, creation, &error)
         if not io.is_iohandle_valid(self._c_io):
@@ -1203,12 +1298,3 @@ cpdef enum ErrorCode:
     NITF_ERR_INT_STACK_OVERFLOW
     NITF_ERR_UNK
 
-cpdef enum AccessFlags:
-    NITF_ACCESS_READONLY=0x0000
-    NITF_ACCESS_WRITEONLY=0x0001
-    NITF_ACCESS_READWRITE=0x0002
-
-cpdef enum CreationFlags:
-    NITF_CREATE=0x200
-    NITF_OPEN_EXISTING=0x000
-    NITF_TRUNCATE=0x400

@@ -46,7 +46,11 @@ cdef extern from "nitf/FileSecurity.h":
 
 cdef extern from "nitf/BandInfo.h":
     ctypedef struct nitf_BandInfo:
-        pass
+        nitf_Field *representation
+        nitf_Field *subcategory
+        nitf_Field *imageFilterCondition
+        nitf_Field *imageFilterCode
+        nitf_Field *numLUTs
 
 cdef extern from "nitf/Extensions.h":
     ctypedef struct nitf_Extensions:
