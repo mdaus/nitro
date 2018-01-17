@@ -1,6 +1,7 @@
 from field cimport nitf_Field
 from types cimport *
 from error cimport nitf_Error
+from tre cimport nitf_TRE
 
 cdef extern from "nitf/FileHeader.h":
     ctypedef struct nitf_FileHeader:
@@ -105,3 +106,16 @@ cdef extern from "nitf/ImageSubheader.h":
     NITF_BOOL nitf_ImageSubheader_createBands(nitf_ImageSubheader * subhdr, nitf_Uint32 numBands, nitf_Error * error)
     nitf_Uint32 nitf_ImageSubheader_getBandCount(nitf_ImageSubheader* subhdr, nitf_Error* error)
 
+cdef extern from "nitf/DESubheader.h":
+    ctypedef struct nitf_DESubheader:
+        nitf_Field *filePartType;
+        nitf_Field *typeID;
+        nitf_Field *version;
+        nitf_Field *securityClass;
+        nitf_FileSecurity *securityGroup;
+        nitf_Field *overflowedHeaderType;
+        nitf_Field *dataItemOverflowed;
+        nitf_Field *subheaderFieldsLength;
+        nitf_TRE *subheaderFields;
+        nitf_Uint64 dataLength;
+        nitf_Extensions *userDefinedSection

@@ -1,6 +1,7 @@
 #cython: language_level=3, c_string_type=unicode, c_string_encoding=ascii
 
 cimport cython
+cimport dataextension_segment
 cimport extensions
 cimport field
 cimport header
@@ -225,44 +226,38 @@ cdef class ImageSegment:
         self.subheader.create_bands(num)
 
 
-cdef class FileHeader:
-    cdef header.nitf_FileHeader* _c_header
+cdef class DESegment:
+    cdef dataextension_segment.nitf_DESegment* _c_des
 
     @staticmethod
-    cdef from_ptr(header.nitf_FileHeader* ptr):
-        obj = FileHeader()
-        obj._c_header = ptr
+    cdef from_record(record.nitf_Record* c_rec):
+        cdef nitf_Error error
+        obj = DESegment()
+        obj._c_des = record.nitf_Record_newDataExtensionSegment(c_rec, &error)
+        if obj._c_des is NULL:
+            raise NitfError(error)
+        return obj  # allow chaining
+
+    @staticmethod
+    cdef from_ptr(dataextension_segment.nitf_DESegment* ptr):
+        obj = DESegment()
+        obj._c_des = ptr
         return obj
 
+    @property
+    def subheader(self):
+        cdef header.nitf_DESubheader* hdr
+        hdr = self._c_des.subheader
+        h = DESubheader.from_ptr(hdr)
+        return h
+
+
+cdef class BaseFieldHeader:
     deprecated_items = {}
     equiv_items = {}
 
     def get_items(self):
-        tmp = {
-            'fileHeader':Field.from_ptr(self._c_header.fileHeader),
-            'fileVersion':Field.from_ptr(self._c_header.fileVersion),
-            'complianceLevel':Field.from_ptr(self._c_header.complianceLevel),
-            'systemType':Field.from_ptr(self._c_header.systemType),
-            'originStationID':Field.from_ptr(self._c_header.originStationID),
-            'fileDateTime':Field.from_ptr(self._c_header.fileDateTime),
-            'fileTitle':Field.from_ptr(self._c_header.fileTitle),
-            'classification':Field.from_ptr(self._c_header.classification),
-            'messageCopyNum':Field.from_ptr(self._c_header.messageCopyNum),
-            'messageNumCopies':Field.from_ptr(self._c_header.messageNumCopies),
-            'encrypted':Field.from_ptr(self._c_header.encrypted),
-            'backgroundColor':Field.from_ptr(self._c_header.backgroundColor),
-            'originatorName':Field.from_ptr(self._c_header.originatorName),
-            'originatorPhone':Field.from_ptr(self._c_header.originatorPhone),
-            'fileLength':Field.from_ptr(self._c_header.fileLength),
-            'headerLength':Field.from_ptr(self._c_header.headerLength),
-            # 'numImages':Field.from_ptr(self._c_header.numImages),
-            # 'numGraphics':Field.from_ptr(self._c_header.numGraphics),
-            # 'numLabels':Field.from_ptr(self._c_header.numLabels),
-            # 'numTexts':Field.from_ptr(self._c_header.numTexts),
-            # 'numDataExtensions':Field.from_ptr(self._c_header.numDataExtensions),
-            # 'numReservedExtension':Field.from_ptr(self._c_header.numReservedExtension),
-            }
-        return tmp
+        return {}
 
     def __contains__(self, item):
         return item in self.deprecated_items or item in self.equiv_items or item in self.get_items()
@@ -317,6 +312,37 @@ cdef class FileHeader:
 
     def __repr__(self):
         return f"<{self.__class__.__name__} {<unsigned long long>self._c_header:#0x}>"
+
+
+cdef class FileHeader(BaseFieldHeader):
+    cdef header.nitf_FileHeader* _c_header
+
+    @staticmethod
+    cdef from_ptr(header.nitf_FileHeader* ptr):
+        obj = FileHeader()
+        obj._c_header = ptr
+        return obj
+
+    def get_items(self):
+        tmp = {
+            'fileHeader':Field.from_ptr(self._c_header.fileHeader),
+            'fileVersion':Field.from_ptr(self._c_header.fileVersion),
+            'complianceLevel':Field.from_ptr(self._c_header.complianceLevel),
+            'systemType':Field.from_ptr(self._c_header.systemType),
+            'originStationID':Field.from_ptr(self._c_header.originStationID),
+            'fileDateTime':Field.from_ptr(self._c_header.fileDateTime),
+            'fileTitle':Field.from_ptr(self._c_header.fileTitle),
+            'classification':Field.from_ptr(self._c_header.classification),
+            'messageCopyNum':Field.from_ptr(self._c_header.messageCopyNum),
+            'messageNumCopies':Field.from_ptr(self._c_header.messageNumCopies),
+            'encrypted':Field.from_ptr(self._c_header.encrypted),
+            'backgroundColor':Field.from_ptr(self._c_header.backgroundColor),
+            'originatorName':Field.from_ptr(self._c_header.originatorName),
+            'originatorPhone':Field.from_ptr(self._c_header.originatorPhone),
+            'fileLength':Field.from_ptr(self._c_header.fileLength),
+            'headerLength':Field.from_ptr(self._c_header.headerLength),
+            }
+        return tmp
 
 
 cdef class BandInfo:
@@ -388,7 +414,7 @@ cdef class BandInfo:
             raise AttributeError(key)
 
 
-cdef class ImageSubheader:
+cdef class ImageSubheader(BaseFieldHeader):
     cdef header.nitf_ImageSubheader* _c_header
 
     @staticmethod
@@ -443,8 +469,15 @@ cdef class ImageSubheader:
     def getBandInfo(self, idx):
         return self.get_band_info(idx)
 
+    @deprecated("Old SWIG API")
+    def getXHD(self):
+        return self.extendedSection
+
+    @deprecated("Old SWIG API")
+    def getUDHD(self):
+        return self.userDefinedSection
+
     deprecated_items = {'numrows': 'numRows', 'numcols': 'numCols'}
-    equiv_items = {}
 
     def get_items(self):
         tmp = {
@@ -491,55 +524,41 @@ cdef class ImageSubheader:
             }
         return tmp
 
-    def __contains__(self, item):
-        return item in self.deprecated_items or item in self.equiv_items or item in self.get_items()
 
-    def __getattr__(self, item):
-        return self[item]
+cdef class DESubheader(BaseFieldHeader):
+    cdef header.nitf_DESubheader* _c_header
 
-    def __setattr__(self, key, value):
-        self[key] = value
-
-    def __getitem__(self, item):
-        item = self.deprecated_items.get(item, item)
-        item = self.equiv_items.get(item, item)
-        tmp = self.get_items()
-        try:
-            return tmp[item]
-        except KeyError:
-            raise AttributeError(item)
-
-    def __setitem__(self, key, value):
-        """Attempt to deduce the type. Good chance this might be wrong so be explicit if you need to."""
-        key = self.deprecated_items.get(key, key)
-        key = self.equiv_items.get(key, key)
-        try:
-            tmp = self.get_items()[key]
-            if type(value) is int:
-                if value < 0:
-                    if -value >= (2 ** 32) / 2:
-                        tmp.set_int64(value)
-                    else:
-                        tmp.set_int32(value)
-                else:
-                    if value >= (2 ** 32):
-                        tmp.set_uint64(value)
-                    else:
-                        tmp.set_uint32(value)
-            elif type(value) is float:
-                tmp.set_real(value)
-            else:
-                tmp.set_string(str(value))
-        except KeyError:
-            raise AttributeError(key)
-
-    @deprecated("Old SWIG API")
-    def getXHD(self):
-        return self.extendedSection
+    @staticmethod
+    cdef from_ptr(header.nitf_DESubheader* ptr):
+        obj = DESubheader()
+        obj._c_header = ptr
+        return obj
 
     @deprecated("Old SWIG API")
     def getUDHD(self):
         return self.userDefinedSection
+
+    deprecated_items = {'subheaderFields': 'subheader_fields'}
+
+    def get_items(self):
+        tmp = {
+            'filePartType':Field.from_ptr(self._c_header.filePartType),
+            'typeId':Field.from_ptr(self._c_header.imageId),
+            'version':Field.from_ptr(self._c_header.version),
+            'overflowedHeaderType':Field.from_ptr(self._c_header.overflowedHeaderType),
+            'dataItemOverflowed':Field.from_ptr(self._c_header.dataItemOverflowed),
+            'subheaderFieldsLength':Field.from_ptr(self._c_header.subheaderFieldsLength),
+            'subheaderFields':List(TRE).from_ptr(self._c_headersubheaderFields),
+            'userDefinedSection':Extensions.from_ptr(self._c_header.userDefinedSection),
+        }
+        return tmp
+
+    @property
+    def subheader_fields(self):
+        rval = []
+        for i in range(self._c_header.subheaderFieldsLength):
+            rval.append(TRE.from_ptr(self._c_header.subheaderFields[i]))
+        return rval
 
 
 cdef class Extensions:
