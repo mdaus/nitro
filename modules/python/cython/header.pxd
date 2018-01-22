@@ -1,7 +1,17 @@
 from field cimport nitf_Field
 from types cimport *
 from error cimport nitf_Error
-from tre cimport nitf_TRE
+from tre cimport nitf_TRE, nitf_Extensions
+
+
+cdef extern from "nitf/BandInfo.h":
+    ctypedef struct nitf_BandInfo:
+        nitf_Field *representation
+        nitf_Field *subcategory
+        nitf_Field *imageFilterCondition
+        nitf_Field *imageFilterCode
+        nitf_Field *numLUTs
+
 
 cdef extern from "nitf/FileHeader.h":
     ctypedef struct nitf_FileHeader:
@@ -45,17 +55,6 @@ cdef extern from "nitf/FileSecurity.h":
     ctypedef struct nitf_FileSecurity:
         pass
 
-cdef extern from "nitf/BandInfo.h":
-    ctypedef struct nitf_BandInfo:
-        nitf_Field *representation
-        nitf_Field *subcategory
-        nitf_Field *imageFilterCondition
-        nitf_Field *imageFilterCode
-        nitf_Field *numLUTs
-
-cdef extern from "nitf/Extensions.h":
-    ctypedef struct nitf_Extensions:
-        pass
 
 cdef extern from "nitf/ImageSubheader.h":
     ctypedef struct nitf_ImageSubheader:

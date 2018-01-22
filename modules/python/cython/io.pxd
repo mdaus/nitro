@@ -1,5 +1,6 @@
 from error cimport nitf_Error
 from image_source cimport nitf_ImageSource
+from segment_source cimport nitf_SegmentSource
 from record cimport nitf_Record
 from types cimport *
 
@@ -33,6 +34,13 @@ cdef extern from "nitf/ImageWriter.h":
     NITF_BOOL nitf_ImageWriter_attachSource(nitf_ImageWriter* writer, nitf_ImageSource* imageSource, nitf_Error* error)
 
 
+cdef extern from "nitf/SegmentWriter.h":
+    ctypedef struct nitf_SegmentWriter:
+        pass
+
+    NITF_BOOL nitf_SegmentWriter_attachSource(nitf_SegmentWriter* writer, nitf_SegmentSource* segmentSource, nitf_Error* error)
+
+
 cdef extern from "nitf/SubWindow.h":
     ctypedef struct nitf_SubWindow:
         nitf_Uint32 startRow
@@ -62,6 +70,7 @@ cdef extern from "nitf/Writer.h":
     NITF_BOOL nitf_Writer_write(nitf_Writer* writer, nitf_Error* error)
     void nitf_IOHandle_close(nitf_IOHandle handle)
     nitf_ImageWriter* nitf_Writer_newImageWriter(nitf_Writer* writer, int index, nrt_HashTable* options, nitf_Error* error);
+    nitf_SegmentWriter* nitf_Writer_newDEWriter(nitf_Writer *writer, int index, nitf_Error* error);
 
 
 cdef extern from "nitf/Reader.h":
