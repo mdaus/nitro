@@ -53,10 +53,7 @@ cdef class BandInfo:
         return self[item]
 
     def __setattr__(self, key, value):
-        if key in self.__dict__:
-            self.__dict__[key] = value
-        else:
-            self[key] = value
+        self[key] = value
 
     def __getitem__(self, item):
         item = self.deprecated_items.get(item, item)
@@ -243,12 +240,12 @@ cdef class ImageSubheader(BaseFieldHeader):
     def band_info(self):
         cnt = self.band_count
         for i in range(cnt):
-            yield types.BandInfo(PyCapsule_New(self._c_header.bandInfo[i], "BandInfo", NULL))
+            yield BandInfo(PyCapsule_New(self._c_header.bandInfo[i], "BandInfo", NULL))
 
     def get_band_info(self, unsigned int idx):
         if idx >= self.band_count:
             raise IndexError("Invalid band number")
-        return types.BandInfo(PyCapsule_New(self._c_header.bandInfo[idx], "BandInfo", NULL))
+        return BandInfo(PyCapsule_New(self._c_header.bandInfo[idx], "BandInfo", NULL))
 
     @deprecated("Old SWIG API")
     def getBandInfo(self, idx):

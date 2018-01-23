@@ -49,7 +49,7 @@ cdef class List:
         self._container_type = container_type
 
         if capsule is not None:
-            if not PyCapsule_IsValid(capsule, "Field"):
+            if not PyCapsule_IsValid(capsule, "List"):
                 raise TypeError("Invalid C pointer type")
             self._c_list = <types.nitf_List*>PyCapsule_GetPointer(capsule, "List")
 

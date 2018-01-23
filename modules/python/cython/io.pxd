@@ -61,6 +61,14 @@ cdef extern from "nitf/ImageReader.h":
     NITF_BOOL nitf_ImageReader_read(nitf_ImageReader* imageReader, nitf_SubWindow* subWindow, nitf_Uint8** user, int* padded, nitf_Error* error)
 
 
+cdef extern from "nitf/SegmentReader.h":
+    ctypedef struct nitf_SegmentReader:
+        pass
+
+    nitf_Off nitf_SegmentReader_getSize(nitf_SegmentReader *segmentReader, nitf_Error *error)
+    NITF_BOOL nitf_SegmentReader_read(nitf_SegmentReader *segmentReader, NITF_DATA *buffer, size_t count, nitf_Error *error)
+
+
 cdef extern from "nitf/Writer.h":
     ctypedef struct nitf_Writer:
         pass
@@ -84,6 +92,7 @@ cdef extern from "nitf/Reader.h":
     void nitf_Reader_destruct(nitf_Reader** writer)
     nitf_Record* nitf_Reader_read(nitf_Reader* reader, nitf_IOHandle inputHandle, nitf_Error* error)
     nitf_ImageReader* nitf_Reader_newImageReader(nitf_Reader* reader, int imageSegmentNumber, nrt_HashTable* options, nitf_Error* error)
+    nitf_SegmentReader* nitf_Reader_newDEReader(nitf_Reader *reader, int DESegmentNumber, nitf_Error* error)
 
 
 cdef extern from "nitf/ImageIO.h":

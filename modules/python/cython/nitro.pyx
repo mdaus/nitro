@@ -11,6 +11,7 @@ cimport record
 cimport segment_source
 cimport tre
 cimport numpy as np
+np.import_array()
 from cpython.pycapsule cimport PyCapsule_New, PyCapsule_IsValid, PyCapsule_GetPointer
 from cpython.mem cimport PyMem_Malloc, PyMem_Free, PyMem_Realloc
 from error cimport nitf_Error
@@ -281,6 +282,15 @@ cdef class IOHandle:
         self.close()
 
 
+cdef class SegmentFileSource(SegmentSource):
+    def __cinit__(self, IOHandle handle, start=0, byte_skip=0):
+        cdef nitf_Error error
+        self._c_source = <image_source.nitf_DataSource*>segment_source.nitf_SegmentFileSource_construct(
+            handle._c_io, start, byte_skip, &error)
+        if self._c_source is NULL:
+            raise NitfError(error)
+
+
 cdef class Writer:
     cdef io.nitf_Writer* _c_writer
     cpdef Record _rcrd
@@ -356,16 +366,27 @@ cdef class Writer:
 cdef class Reader:
     cdef io.nitf_Reader* _c_reader
     cpdef Record _record
+    cpdef IOHandle _iohandle
 
-    def __cinit__(self):
+    def __cinit__(self, iohandle=None):
         cdef nitf_Error error
         self._c_reader = io.nitf_Reader_construct(&error)
         if self._c_reader is NULL:
             raise NitfError(error)
+        self._iohandle = iohandle
 
     def __dealloc__(self):
         if self._c_reader is not NULL:
             io.nitf_Reader_destruct(&self._c_reader)
+
+    def __enter__(self):
+        if self._iohandle is None:
+            raise ValueError("Must construct with an iohandle to use Reader as a context manager")
+        record = self.read(self._iohandle)
+        return self, record
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        pass
 
     def read(self, IOHandle iohandle):
         cdef nitf_Error error
@@ -383,6 +404,10 @@ cdef class Reader:
     def newImageReader(self, num, options=None):
         return self.new_image_reader(num, options)
 
+    @deprecated("Old SWIG API")
+    def newDEReader(self, num, options=None):
+        return self.new_data_extension_reader(num, options)
+
     def new_image_reader(self, num, options=None):
         cdef nitf_Error error
         cdef io.nitf_ImageReader* reader
@@ -393,6 +418,14 @@ cdef class Reader:
         if reader is NULL:
             raise NitfError(error)
         return ImageReader.from_ptr(reader, nbpp)
+
+    def new_data_extension_reader(self, num):
+        cdef nitf_Error error
+        cdef io.nitf_SegmentReader* reader
+        reader = io.nitf_Reader_newDEReader(self._c_reader, num, &error)
+        if reader is NULL:
+            raise NitfError(error)
+        return SegmentReader.from_ptr(reader)
 
 
 cdef class ImageWriter:
@@ -573,6 +606,36 @@ cdef class SubWindow:
 
     def __str__(self):
         return f'{self.startRow}, {self.startCol}, {self.numRows}, {self.numCols}, {len(self.bandList)}'
+
+
+cdef class SegmentReader:
+    cdef io.nitf_SegmentReader* _c_reader
+
+    def __cinit__(self):
+        self._c_reader = NULL
+
+    @staticmethod
+    cdef from_ptr(io.nitf_SegmentReader* ptr):
+        obj = SegmentReader()
+        obj._c_reader = ptr
+        return obj
+
+    def read(self, np.npy_intp count=0):
+        cdef nitf_Error error
+
+        if count == 0:
+            count = len(self)
+        buf = np.PyArray_SimpleNew(1, &count, np.NPY_BYTE)
+        if not io.nitf_SegmentReader_read(self._c_reader, np.PyArray_DATA(buf), count, &error):
+            raise NitfError(error)
+        return buf
+
+    def __len__(self):
+        cdef nitf_Error error
+        l = io.nitf_SegmentReader_getSize(self._c_reader, &error)
+        if l < 0:
+            raise NitfError(error)
+        return l
 
 
 cdef class SegmentWriter:
