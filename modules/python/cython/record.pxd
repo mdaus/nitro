@@ -8,6 +8,11 @@ cdef extern from "nitf/Record.h":
     ctypedef struct nitf_Record:
         nitf_FileHeader *header
         nitf_List *images
+        nitf_List *graphics;
+        nitf_List *labels;
+        nitf_List *texts;
+        nitf_List *dataExtensions;
+        nitf_List *reservedExtensions;
 
     ctypedef enum nitf_Version:
         pass

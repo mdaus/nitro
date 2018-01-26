@@ -124,6 +124,21 @@ cdef class Record:
         return rval
 
     @property
+    def data_extensions(self):
+        des = []
+        for i in range(self.num_data_extensions):
+            des.append(self.get_data_extension(i))
+        return des
+
+    def get_data_extension(self, index):
+        cdef nitf_Error error
+        cdef dataextension_segment.nitf_DESegment* des
+        des = <dataextension_segment.nitf_DESegment*>nitf_List_get(self._c_record.dataExtensions, index, &error)
+        if des is NULL:
+            raise NitfError(error)
+        return dataextension_segment.DESegment.from_capsule(PyCapsule_New(des, "DESegment", NULL))
+
+    @property
     def num_labels(self):
         cdef nitf_Error error
         rval = <int>record.nitf_Record_getNumLabels(self._c_record, &error)

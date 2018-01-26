@@ -185,6 +185,8 @@ cdef class FileHeader(BaseFieldHeader):
             'originatorPhone':field.Field(PyCapsule_New(self._c_header.originatorPhone, "Field", NULL)),
             'fileLength':field.Field(PyCapsule_New(self._c_header.fileLength, "Field", NULL)),
             'headerLength':field.Field(PyCapsule_New(self._c_header.headerLength, "Field", NULL)),
+            'userDefinedSection':tre.Extensions(PyCapsule_New(self._c_header.userDefinedSection, "Extensions", NULL)),
+            'extendedSection':tre.Extensions(PyCapsule_New(self._c_header.extendedSection, "Extensions", NULL)),
             }
         return tmp
 

@@ -132,7 +132,11 @@ cdef class TRE:
         return <bint>nitf_TRE_exists(self._c_tre, item)
 
     def __getitem__(self, str item not None):
-        nitf_TRE_getField(self._c_tre, item)
+        cdef field.nitf_Field* fld
+        fld = nitf_TRE_getField(self._c_tre, item)
+        if fld is NULL:
+            raise NitfError('Field %s not found' % item)
+        return field.Field(PyCapsule_New(fld, "Field", NULL))
 
     def __getattr__(self, item):
         return self[item]

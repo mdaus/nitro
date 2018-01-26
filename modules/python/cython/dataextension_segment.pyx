@@ -29,6 +29,11 @@ cdef class DESegment:
         obj._c_des = ptr
         return obj
 
+    @staticmethod
+    def from_capsule(c):
+        assert(PyCapsule_IsValid(c, "DESegment"))
+        return DESegment.from_ptr(<nitf_DESegment*>PyCapsule_GetPointer(c, "DESegment"))
+
     @property
     def subheader(self):
         cdef header.nitf_DESubheader* hdr
