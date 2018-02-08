@@ -23,7 +23,7 @@ ext_modules = [
 
 setup(
     name="nitro",
-    version="0.1.dev3",
+    version="0.2dev1",
     packages=["nitro"],
     ext_modules=cythonize(ext_modules, gdb_debug=True)
 )
