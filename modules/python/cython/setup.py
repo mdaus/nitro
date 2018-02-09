@@ -7,7 +7,7 @@ opts = {'extra_compile_args': ["-g"],
         'extra_link_args': ["-g"],
         'include_dirs': ["../../../install/include", numpy.get_include()],
         'library_dirs': ["../../../install/lib"],
-        'runtime_library_dirs': ["../../../install/lib"],
+        'runtime_library_dirs': ["../../.."],
         'libraries': ["nitf-c", "nrt-c"],
        }
 
@@ -23,8 +23,9 @@ ext_modules = [
 
 setup(
     name="nitro",
-    version="0.2dev1",
+    version="0.2dev2",
     packages=["nitro"],
+    install_requires=["numpy>=1.14.0", "Deprecated>=1.1.0"],
     ext_modules=cythonize(ext_modules, gdb_debug=True)
 )
 
