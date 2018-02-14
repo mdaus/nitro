@@ -3,7 +3,7 @@
 from error cimport nitf_Error
 
 
-class NitfError(BaseException):
+class NitfError(Exception):
     def __init__(self, nitf_error):
         if type(nitf_error['message']) in [bytes, bytearray]:
             super().__init__(nitf_error['message'].decode(errors='replace'))
