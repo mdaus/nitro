@@ -1,0 +1,17 @@
+image: python:3.6
+
+before_script:
+  - python -V                                   # Print out python version for debugging
+  - pip install -r requirements.txt
+  - pip install cython
+
+run:
+  script:
+  - python waf configure --prefix=install --enable-debugging
+  - python waf build
+  - python waf install
+  - (cd modules/python/cython; python setup.py bdist_wheel)
+  artifacts:
+    paths:
+    - install/*
+    - modules/python/cython/dist/*.whl
