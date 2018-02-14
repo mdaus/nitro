@@ -2,8 +2,7 @@ image: python:3.6
 
 before_script:
   - python -V                                   # Print out python version for debugging
-  - pip install -r requirements.txt
-  - pip install cython
+  - pip install cython numpy>=1.13.0 Deprecated>=1.1.0
 
 run:
   script:
