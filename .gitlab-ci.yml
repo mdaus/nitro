@@ -2,7 +2,7 @@ image: python:3.6
 
 before_script:
   - python -V                                   # Print out python version for debugging
-  - pip install cython numpy>=1.13.0 Deprecated>=1.1.0
+  - pip install cython numpy==1.13 Deprecated==1.1
 
 run:
   tags:
