@@ -1,17 +1,20 @@
-image: python:3.6
+image: centos:7
 
 before_script:
   - python -V                                   # Print out python version for debugging
-  - pip install cython numpy==1.13 Deprecated==1.1
+  - yum install -y wget bzip2 openssl
+  - yum groupinstall -y 'Development Tools'
+  - sh /projects/APF/Anaconda3-5.0.1-Linux-x86_64.sh -b -p /usr/local/anaconda
+  - /usr/local/anaconda/bin/pip install cython numpy==1.13 Deprecated==1.1
 
 run:
   tags:
   - docker
   script:
-  - python waf configure --prefix=install --enable-debugging
-  - python waf build
-  - python waf install
-  - (cd modules/python/cython; python setup.py bdist_wheel)
+  - /usr/local/anaconda/bin/python waf configure --prefix=install --enable-debugging
+  - /usr/local/anaconda/bin/python waf build
+  - p/usr/local/anaconda/bin/ython waf install
+  - (cd modules/python/cython; /usr/local/anaconda/bin/python setup.py bdist_wheel)
   artifacts:
     paths:
     - install/*
