@@ -2,7 +2,7 @@ image: continuumio/anaconda3:5.0.1
 
 before_script:
   - python -V                                   # Print out python version for debugging
-  - pip install cython numpy==1.13 Deprecated==1.1
+  - pip install cython Deprecated==1.1
 
 run:
   tags:
