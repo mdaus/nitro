@@ -9,7 +9,7 @@ opts = {'extra_compile_args': ["-g"],
         'extra_link_args': ["-g"],
         'include_dirs': ["../../../install/include", numpy.get_include()],
         'library_dirs': ["../../../install/lib"],
-        'runtime_library_dirs': ["../../.."],
+        'runtime_library_dirs': ["$ORIGIN/../../.."],
         'libraries': ["nitf-c", "nrt-c"],
        }
 
@@ -30,7 +30,7 @@ if not os.path.exists("nitro/plugins"):
 
 setup(
     name="nitro",
-    version="0.2.dev3",
+    version="0.2.dev4",
     packages=find_packages(),
     install_requires=["numpy>=1.13.0", "Deprecated>=1.1.0"],
     include_package_data=True,
