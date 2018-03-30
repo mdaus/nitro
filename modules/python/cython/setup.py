@@ -30,7 +30,7 @@ if not os.path.exists("nitro/plugins"):
 
 setup(
     name="nitro",
-    version="0.2.dev4",
+    version="0.3.dev1",
     packages=find_packages(),
     install_requires=["numpy>=1.13.0", "Deprecated>=1.1.0"],
     include_package_data=True,
