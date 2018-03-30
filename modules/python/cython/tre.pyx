@@ -145,6 +145,11 @@ cdef class TRE:
         cdef nitf_Error error
         cdef char* tmp
 
+        fld = self[key]
+        if fld.type == field.FieldType.NITF_BINARY and len(value) < len(fld):
+            # we need to pad the binary
+            amt = len(fld) - len(value)
+            value = value + amt * b' '
         tmp = <char*>value
         if not nitf_TRE_setField(self._c_tre, key, <NITF_DATA*>tmp, len(value), &error):
             raise NitfError(error)

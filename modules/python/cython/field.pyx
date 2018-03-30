@@ -146,8 +146,12 @@ cdef class Field:
         if not field.nitf_Field_setReal(self._c_field, conversion, include_plus, <double>value, &error):
             raise NitfError(error)
 
-    def set_raw_data(self, buffer):
+    def set_raw_data(self, buffer, pad=b' '):
         cdef nitf_Error error
+        if pad and self.type == FieldType.NITF_BINARY and len(buffer) < len(self):
+            # we need to pad the binary
+            amt = len(self) - len(buffer)
+            buffer = buffer + amt * pad
         if not field.nitf_Field_setRawData(self._c_field, <char*>buffer, len(buffer), &error):
             raise NitfError(error)
 
