@@ -97,7 +97,7 @@ cdef class TRE:
                 raise NitfError(error)
 
     @staticmethod
-    def from_capsule(self, c):
+    def from_capsule(c):
         assert(PyCapsule_IsValid(c, "TRE"))
         return TRE.from_ptr(<nitf_TRE*>PyCapsule_GetPointer(c, "TRE"))
 
