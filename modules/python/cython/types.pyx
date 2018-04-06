@@ -95,6 +95,8 @@ cdef class NitfData:
             rval = rval.encode(errors='replace')
         elif container_type is field.Field:
             rval = field.Field(PyCapsule_New(self._c_data, "Field", NULL))
+        elif hasattr(container_type, 'from_capsule'):
+            rval = container_type.from_capsule(PyCapsule_New(self._c_data, container_type.__name__, NULL))
         else:
             rval = <unsigned long long>self._c_data
         return rval
