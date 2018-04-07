@@ -354,7 +354,7 @@ cdef class DESubheader(BaseFieldHeader):
     def __setitem__(self, key, value):
         if key == 'subheaderFields':  # special handling since it can be NULL and PyCapsule doesn't like that
             if self._c_header.subheaderFields is not NULL:
-                tre.nitf_TRE_destruct(self._c_header.subheaderFields)
+                tre.nitf_TRE_destruct(&self._c_header.subheaderFields)
             self._c_header.subheaderFields = <tre.nitf_TRE*>PyCapsule_GetPointer(value._capsule(), "TRE")
         else:
             super().__setitem__(key, value)

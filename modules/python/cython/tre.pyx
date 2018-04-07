@@ -110,6 +110,15 @@ cdef class TRE:
     def _capsule(self):
         return PyCapsule_New(self._c_tre, "TRE", NULL)
 
+    def clone(self):
+        cdef nitf_TRE* ntre
+        cdef nitf_Error error
+
+        ntre = nitf_TRE_clone(self._c_tre, &error)
+        if ntre == NULL:
+            raise NitfError(error)
+        return TRE.from_ptr(ntre)
+
     @property
     def tag(self):
         return <str>self._c_tre.tag

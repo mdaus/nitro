@@ -21,12 +21,13 @@ cdef extern from "nitf/TRE.h":
         char* tag
 
     nitf_TRE* nitf_TRE_construct(const char* tag, const char* id, nitf_Error* error)
-    void nitf_TRE_destruct(nitf_TRE* tre)
+    void nitf_TRE_destruct(nitf_TRE** tre)
     int nitf_TRE_getCurrentSize(nitf_TRE* tre, nitf_Error* error)
     NITF_BOOL nitf_TRE_exists(nitf_TRE* tre, const char* tag)
     nitf_Field* nitf_TRE_getField(nitf_TRE* tre, const char* tag)
     NITF_BOOL nitf_TRE_setField(nitf_TRE* tre, const char* tag, NITF_DATA* data, size_t dataLength, nitf_Error* error)
     nitf_TREEnumerator* nitf_TRE_begin(nitf_TRE* tre, nitf_Error* error)
+    nitf_TRE* nitf_TRE_clone(nitf_TRE* tre, nitf_Error* error)
 
 
 cdef extern from "nitf/Extensions.h":
