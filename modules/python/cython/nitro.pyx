@@ -258,12 +258,15 @@ cdef class SegmentSource(DataSource):
 
 
 cdef class SegmentMemorySource(SegmentSource):
+    cpdef _npdata
+
     @cython.boundscheck(False)
     @cython.wraparound(False)
     def __cinit__(self, np.ndarray data not None, size=None, start=0, byte_skip=0):
         cdef nitf_Error error
         if size is None:
             size = data.nbytes
+        self._npdata = data  # need to keep a reference so this isn't deleted out from under us
         self._c_source = <image_source.nitf_DataSource*>segment_source.nitf_SegmentMemorySource_construct(
                 <const char*>&data.data[0], size, start, byte_skip, False, &error)
         if self._c_source is NULL:
