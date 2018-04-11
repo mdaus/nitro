@@ -1634,6 +1634,8 @@ def handleDefsFile(input, output, path, defs, chmod=None, conf=None):
                       lambda x: '#define %s %s\n' % (k,v), code)
         code = re.sub(r'#define %s 0(\s*\n)' % k,
                       lambda x: '#define %s %s\n' % (k,v), code)
+
+    # comment out remaining #undef lines
     code = re.sub(r'(#undef[^\n\/\**]*)(\/\*.+\*\/)?(\n)',
                   r'/* \1 */\3', code)
     file = open(outfile, 'w')
