@@ -24,6 +24,8 @@
 #define __MATH_ROUND_H__
 
 #include <cmath>
+#include <except/Exception.h>
+#include <sys/Conf.h>
 
 namespace math
 {
@@ -67,6 +69,23 @@ template<typename T> inline T round(T value, size_t fractionalDigits)
 
     return (value > 0.0 ? std::floor(value * power10 + 0.5) / power10
                         : std::ceil(value * power10 - 0.5) / power10);
+}
+
+/*!
+ * Equivalent to ceil((float)numerator / denominator)
+ *
+ * \param numerator Number to divide
+ * \param denominator Non-zero number to divide by
+ * \return Result of division, rounded up
+ * \throw if denominator is 0
+ */
+inline size_t ceilingDivide(size_t numerator, size_t denominator)
+{
+    if (denominator == 0)
+    {
+        throw except::Exception(Ctxt("Attempted division by 0"));
+    }
+    return (numerator / denominator) + (numerator % denominator != 0);
 }
 }
 
