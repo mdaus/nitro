@@ -158,7 +158,7 @@ OpenJPEG_createIO(nrt_IOInterface* io,
             ioControl->length = nrt_IOInterface_getSize(io, error)
                     - ioControl->offset;
 
-        opj_stream_set_user_data(stream, ioControl);
+        opj_stream_set_user_data(stream, ioControl, NULL);
         opj_stream_set_read_function(stream, implStreamRead);
         opj_stream_set_seek_function(stream, implStreamSeek);
         opj_stream_set_skip_function(stream, implStreamSkip);

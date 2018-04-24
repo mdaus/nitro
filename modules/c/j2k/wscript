@@ -20,11 +20,11 @@ def configure(conf):
     j2kLayer = Options.options.j2k_layer
 
     def j2k_callback(conf):
-        if j2kLayer is 'openjpeg':
+        if j2kLayer == 'openjpeg':
             conf.define('HAVE_OPENJPEG_H', '', quote=False)
             conf.define('J2K_MODULE_EXPORTS', '', quote=False)
         else:
-            #j2kLayer is 'jasper':
+            #j2kLayer == 'jasper':
             conf.define('HAVE_JASPER_H', '', quote=False)
             conf.define('J2K_MODULE_EXPORTS', '', quote=False)
     writeConfig(conf, j2k_callback, 'j2k')
