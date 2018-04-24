@@ -45,8 +45,6 @@ size_t ThreadPlanner::getNumThreadsThatWillBeUsed() const
     {
         const size_t numThreads =
                 math::ceilingDivide(mNumElements, mNumElementsPerThread);
-                //(mNumElements / mNumElementsPerThread) +
-                //(mNumElements % mNumElementsPerThread != 0);
 
         return numThreads;
     }
