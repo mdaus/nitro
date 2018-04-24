@@ -79,14 +79,7 @@ template<typename T> inline T round(T value, size_t fractionalDigits)
  * \return Result of division, rounded up
  * \throw if denominator is 0
  */
-inline size_t ceilingDivide(size_t numerator, size_t denominator)
-{
-    if (denominator == 0)
-    {
-        throw except::Exception(Ctxt("Attempted division by 0"));
-    }
-    return (numerator / denominator) + (numerator % denominator != 0);
-}
+size_t ceilingDivide(size_t numerator, size_t denominator);
 }
 
 #endif

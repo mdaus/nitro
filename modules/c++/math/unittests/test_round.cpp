@@ -174,16 +174,7 @@ TEST_CASE(testCeilingDivide)
 
     size_t n3 = 1;
     size_t d3 = 0;
-    try
-    {
-        math::ceilingDivide(n3, d3);
-        std::cerr << "Division by 0 should have thrown!\n";
-        TEST_ASSERT_FALSE(true);
-    }
-    catch (const except::Exception& /*ex*/)
-    {
-        TEST_ASSERT_TRUE(true);
-    }
+    TEST_THROWS(math::ceilingDivide(n3, d3));
 }
 }
 
