@@ -28,7 +28,7 @@
 NITF_CXX_GUARD
 
 NITFPRIV(nitf_DecompressionControl*) implOpen(nitf_ImageSubheader * subheader,
-                                              nrt_HashTable * options, 
+                                              nrt_HashTable * options,
                                               nitf_Error * error);
 NITFPRIV(NITF_BOOL) implStart(nitf_DecompressionControl* control,
                               nitf_IOInterface*  io,
@@ -206,7 +206,7 @@ NITFPRIV(void) implClose(nitf_DecompressionControl** control)
 }
 
 NITFPRIV(nitf_DecompressionControl*) implOpen(nitf_ImageSubheader * subheader,
-                                              nrt_HashTable * options, 
+                                              nrt_HashTable * options,
                                               nitf_Error * error)
 {
     ImplControl *implControl = NULL;

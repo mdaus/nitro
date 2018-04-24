@@ -31,6 +31,7 @@
 #include "j2k/Writer.h"
 
 #include <openjpeg.h>
+#include <opj_includes.h>
 
 
 /******************************************************************************/
@@ -153,12 +154,17 @@ OpenJPEG_createIO(nrt_IOInterface* io,
         ioControl->io = io;
         ioControl->offset = nrt_IOInterface_tell(io, error);
         if (length > 0)
+        {
             ioControl->length = length;
+        }
         else
+        {
             ioControl->length = nrt_IOInterface_getSize(io, error)
                     - ioControl->offset;
+        }
 
-        opj_stream_set_user_data(stream, ioControl);
+        opj_stream_set_user_data(stream, ioControl, NULL);
+        opj_stream_set_user_data_length(stream, ioControl->length);
         opj_stream_set_read_function(stream, implStreamRead);
         opj_stream_set_seek_function(stream, implStreamSeek);
         opj_stream_set_skip_function(stream, implStreamSkip);
@@ -184,7 +190,7 @@ J2KPRIV(OPJ_SIZE_T) implStreamRead(void* buf, OPJ_SIZE_T bytes, void *data)
     if (toRead <= 0 || !nrt_IOInterface_read(
                     ctrl->io, (char*)buf, toRead, &ctrl->error))
     {
-        return 0;
+        return (OPJ_SIZE_T) -1;
     }
     return toRead;
 }
@@ -254,6 +260,8 @@ OpenJPEG_cleanup(opj_stream_t **stream, opj_codec_t **codec,
         *image = NULL;
     }
 }
+
+
 
 /******************************************************************************/
 /* UTILITIES                                                                  */
@@ -646,6 +654,8 @@ OpenJPEGReader_canReadTiles(J2K_USER_DATA *data, nrt_Error *error)
     return NRT_SUCCESS;
 }
 
+
+
 J2KPRIV( nrt_Uint64)
 OpenJPEGReader_readTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
                   nrt_Uint8 **buf, nrt_Error *error)
@@ -730,11 +740,11 @@ OpenJPEGReader_readTile(J2K_USER_DATA *data, nrt_Uint32 tileX, nrt_Uint32 tileY,
                         NRT_CTXT, NRT_ERR_UNK);
                     goto CATCH_ERROR;
                 }
-
                 numBitsPerPixel =
                     j2k_Container_getPrecision(impl->container, error);
                 numBytesPerPixel =
                     (numBitsPerPixel / 8) + (numBitsPerPixel % 8 != 0);
+
                 fullBufSize = tileWidth * thisTileHeight * numBytesPerPixel;
             }
             else
