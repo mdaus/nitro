@@ -32,6 +32,7 @@
 #include <nitf/ImageBlocker.hpp>
 #include <nitf/NITFBufferList.hpp>
 #include <nitf/ImageSegmentComputer.h>
+#include <io/ByteStream.h>
 
 namespace nitf
 {
@@ -180,7 +181,7 @@ public:
      *
      * \return The associated number of bytes in the NITF
      */
-    nitf::Off getNumBytes(size_t startRow, size_t numRows) const;
+    virtual nitf::Off getNumBytes(size_t startRow, size_t numRows) const;
 
     /*!
      * The caller provides an AOI of the pixel data.  This method provides back
@@ -224,11 +225,11 @@ public:
      * bytes for the NITF headers) and the lifetime of the passed-in image
      * data.
      */
-    void getBytes(const void* imageData,
-                  size_t startRow,
-                  size_t numRows,
-                  nitf::Off& fileOffset,
-                  NITFBufferList& buffers) const;
+    virtual void getBytes(const void* imageData,
+                          size_t startRow,
+                          size_t numRows,
+                          nitf::Off& fileOffset,
+                          NITFBufferList& buffers) const;
 
     /*!
      * \return ImageBlocker with settings in sync with how the image will be
@@ -260,15 +261,57 @@ protected:
                     size_t numRowsPerBlock = 0,
                     size_t numColsPerBlock = 0);
 
-private:
+    static void copyFromStreamAndClear(io::ByteStream& stream,
+                                       std::vector<sys::byte>& rawBytes);
+
+    size_t countBytesForImageData(
+            size_t seg, size_t numRowsToWrite,
+            size_t imageDataEndRow) const;
+
+    void addImageData(
+            size_t seg,
+            size_t numRowsToWrite,
+            size_t startRow,
+            size_t imageDataEndRow,
+            size_t startGlobalRowToWrite,
+            const void* imageData,
+            size_t& numPadRowsSoFar,
+            nitf::Off& fileOffset,
+            NITFBufferList& buffers) const;
+
+    size_t countBytesForHeaders(size_t seg, size_t startRow) const;
+    size_t countBytesForDES(size_t seg, size_t imageDataEndRow) const;
+
+    void addHeaders(size_t seg, size_t startRow,
+            nitf::Off& fileOffset,
+            NITFBufferList& buffers) const;
+
+    /*
+     * These functions assume that we've already checked
+     * we're writing in a range which includes seg
+     */
+    bool shouldAddHeader(size_t seg, size_t startRow) const;
+    bool shouldAddSubheader(size_t seg, size_t startRow) const;
+    bool shouldAddDES(size_t seg, size_t imageDataEndRow) const;
+
+    void addDES(size_t seg, size_t imageDataEndRow,
+                NITFBufferList& buffers) const;
+
     void getFileLayout(nitf::Record& inRecord,
                        const std::vector<PtrAndLength>& desData);
+
+    std::vector<size_t> mImageDataLengths;
 
     void checkBlocking(size_t seg,
                        size_t startGlobalRowToWrite,
                        size_t numRowsToWrite) const;
 
-private:
+    void initializeImpl(
+            Record& record,
+            const std::vector<PtrAndLength>& desData,
+            size_t numRowsPerBlock,
+            size_t numColsPerBlock);
+
     // Represents the row information for a NITF image segment
     struct SegmentInfo
     {
