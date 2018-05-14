@@ -166,6 +166,18 @@ cdef class TRE:
     def __setattr__(self, key, value):
         self[key] = value
 
+    @property
+    def raw_data(self):
+        return self['raw_data']
+
+    def set_raw_data(self, value):
+        cdef nitf_Error error
+        cdef char* tmp
+
+        tmp = <char*>value
+        if not nitf_TRE_setField(self._c_tre, 'raw_data', <NITF_DATA*>tmp, len(value), &error):
+            raise NitfError(error)
+
     def __iter__(self):
         cdef nitf_Error error
         cdef nitf_TREEnumerator* it
