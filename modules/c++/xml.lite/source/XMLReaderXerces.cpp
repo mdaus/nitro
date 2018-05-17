@@ -43,7 +43,7 @@ void xml::lite::XMLReaderXerces::parse(io::InputStream & is, int size)
     mem::ScopedArray<sys::byte> buffer(new sys::byte[available]);
     oss.read(buffer.get(), available);
 
-    // Adopt my buffer, and delete it for me
+    // Does not take ownership
     MemBufInputSource memBuffer((const unsigned char *)buffer.get(),
                                 available,
                                 XMLReaderXerces::MEM_BUFFER_ID(),
