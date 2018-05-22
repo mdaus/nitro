@@ -17,6 +17,22 @@ def configure(conf):
     j2kLayer = Options.options.j2k_layer
     j2kHome = Options.options.j2k_home
 
+    # This must be understood with relation to the following files:
+    # modules/drivers/j2k/wscript  (Referred to as 'J2K wscript')
+    # modules/drivers/j2k/jasper/wscript (Referred to as 'Jasper wscript')
+    # And in the NITRO repo
+    # modules/c/j2k/wscript        (Referred to as 'J2K wrapper wscript')
+    #
+    # The J2K wscript uses MAKE_J2K to determine whether to build a J2K library
+    # This will be false if the user has a pre-built J2K library to use.
+    # (i.e. j2kHome is set)
+    #
+    # The J2K wrapper wscript uses MAKE_OPENJPEG to determine -which- J2K lib
+    # to link to. If MAKE_OPENJPEG is set, it will link to openjpeg.
+    # If MAKE_JASPER is set, it will link to jasper. This wsciprt and the Jasper
+    # wscript also use this as a sanity check when building. I.e., if
+    # build() is called in this wscript, but HAVE_OPENJPEG is not set, nothing
+    # will happen.
     if j2kLayer == 'openjpeg':
         conf.env['MAKE_OPENJPEG'] = True
         conf.env['HAVE_J2K'] = True
