@@ -20,9 +20,9 @@ def configure(conf):
     if j2kLayer == 'openjpeg':
         conf.env['MAKE_OPENJPEG'] = True
         conf.env['HAVE_J2K'] = True
+        conf.env['MAKE_J2K'] = not j2kHome
 
         if j2kHome:
-            conf.env['MAKE_J2K'] = False
             conf.check(lib='openjp2 pthread', header_name='openjpeg.h',
                        uselib_store='J2K',
                        libpath=os.path.join(j2kHome, 'lib'),
@@ -49,7 +49,6 @@ def configure(conf):
                 conf.fatal('Missing OpenJPEG tarfile')
 
             # untar and setup env
-            conf.env['MAKE_J2K'] = True
             conf.msg('Building local lib', j2kLayer)
             untarFile(path=conf.path, fname=SOURCE + '.tar')
 
