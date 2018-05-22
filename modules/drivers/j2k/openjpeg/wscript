@@ -16,6 +16,8 @@ def options(opt):
 def configure(conf):
     j2kLayer = Options.options.j2k_layer
     j2kHome = Options.options.j2k_home
+    conf.env['HAVE_OPENJPEG_H'] = True
+
     if j2kLayer == 'openjpeg' and not j2kHome:
 
         # callback function to check for #defines used by the openjpg module
@@ -130,7 +132,7 @@ def configure(conf):
     if j2kLayer == 'openjpeg' and j2kHome:
         conf.env['MAKE_J2K'] = False
         conf.env['HAVE_J2K'] = True
-        conf.check(lib='openjp2', header_name='openjpeg.h',
+        conf.check(lib='openjp2 pthread', header_name='openjpeg.h',
                    uselib_store='J2K',
                    libpath=os.path.join(j2kHome, 'lib'),
                    includes=os.path.join(j2kHome, 'include'),
