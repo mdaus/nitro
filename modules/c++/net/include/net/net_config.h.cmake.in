@@ -1,0 +1,7 @@
+#ifndef _@TARGET_NAME@_CONFIG_H_
+#define _@TARGET_NAME@_CONFIG_H_
+
+#cmakedefine HAVE_CURL @HAVE_CURL@
+#cmakedefine NET_CURL_SUPPORT @NET_CURL_SUPPORT@
+
+#endif /* _@TARGET_NAME@_CONFIG_H_ */

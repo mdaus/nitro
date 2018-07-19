@@ -1,0 +1,7 @@
+#ifndef _@TARGET_NAME@_CONFIG_H_
+#define _@TARGET_NAME@_CONFIG_H_
+
+#cmakedefine HAVE_ISNAN @HAVE_ISNAN@
+#cmakedefine HAVE_STD_ISNAN @HAVE_STD_ISNAN@
+
+#endif /* _@TARGET_NAME@_CONFIG_H_ */
