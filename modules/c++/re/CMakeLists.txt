@@ -3,9 +3,21 @@ set("MAINTAINER"		"adam.sylvester@mdaus.com matthew.wysocki@mdaus.com")
 set("TARGET_VERSION"	"1.0")
 set("MODULE_DEPS"		"sys")
 
-#xxx Temporary hack; need to implement below logic from waf.
-set("RE_ENABLE_STD_REGEX" 1)
-#set("PCRE2_STATIC" 1)
+# Enable to use std::regex instead of PCRE.
+set("RE_ENABLE_STD_REGEX" 0)
+
+if (NOT RE_ENABLE_STD_REGEX)
+	set("MODULE_DEPS"		"${MODULE_DEPS}" "pcre2-8")
+	#set("PCRE2_STATIC" 1) # I don't think this is used anywhere
+endif()
+
+coda_add_library("${TARGET_NAME}")  # See the definition of this method for details on the variables it looks at.
+
+if (NOT RE_ENABLE_STD_REGEX)
+	# Because the pcre2-x targets just hard-path their include files instead of setting include
+	# directories, we don't get those directories automatically.  Manually add what we need here.
+	target_include_directories("${TARGET_NAME}" PUBLIC "${PCRE2_BINARY_DIR}")
+endif()
 
 #[[xxx
 distclean = lambda p: None
@@ -44,5 +56,3 @@ def build(bld):
 
     bld.module(**modArgs)
 ]]
-
-coda_add_library("${TARGET_NAME}")  # See the definition of this method for details on the variables it looks at.

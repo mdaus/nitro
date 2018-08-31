@@ -2,14 +2,14 @@ set("TARGET_NAME"		"unique")
 set("MAINTAINER"		"jmrandol@users.sourceforge.net")
 set("TARGET_VERSION"	"1.0")
 set("MODULE_DEPS"		"except")
-#[[xxx
-USELIB          = 'RPC'
-USELIB_CHECK    = 'UUID'
-TEST_USELIB     = 'RPC'
-]]
+
+# On Unix, we depend on libuuid.  On Windows, we use Rpcrt4.
+if (WIN32)
+	list(APPEND 		"MODULE_DEPS" "Rpcrt4")
+elseif (UNIX)
+	list(APPEND 		"MODULE_DEPS" "uuid")
+	set("EXTRA_DEPS"	"coda-oss_UUID")
+endif()
 
 coda_add_library("${TARGET_NAME}")  # See the definition of this method for details on the variables it looks at.
 
-if (WIN32) #xxx Adapt for X-platform
-	target_link_libraries("${TARGET_NAME}" Rpcrt4)
-endif()

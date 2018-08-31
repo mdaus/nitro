@@ -7,7 +7,8 @@ set("MODULE_DEPS"		"logging" "re" "io" "mem")
 set("TEST_FILTER"		"AckMulticastSender.cpp" "AckMulticastSubscriber.cpp" "MulticastSender.cpp" 
 						"MulticastSubscriber.cpp" "SerializableTestClient.cpp")
 
-if (HAVE_CURL)
+if (CURL_FOUND)
+	set("MODULE_DEPS" "${MODULE_DEPS}" "CURL::libcurl")  # From FindCURL
 	set("NET_CURL_SUPPORT" "1")
 endif()
 

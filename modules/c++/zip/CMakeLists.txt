@@ -1,15 +1,9 @@
 set("TARGET_NAME"		"zip")
 set("MAINTAINER"		"jmrandol@users.sourceforge.net")
 set("TARGET_VERSION"	"1.0")
-set("MODULE_DEPS"		"io" "ZLIB::ZLIB")
-#xxx set("USELIB_CHECK"		"MINIZIP" "ZIP")
-
-#[[
-set(ZLIB_ROOT "${PROJECT_SOURCE_DIR}/modules/drivers/zlib")
-message(" ${PROJECT_SOURCE_DIR}/modules/drivers/zlib/zlib-1.2.7")
-include(FindZLIB)
-find_package(ZLIB REQUIRED)
-]]
+set("MODULE_DEPS"		"io" "zlib" "coda-oss_minizip")
+#xxx If we want to use FindZLib instead:
+#set("MODULE_DEPS"		"io" "ZLIB::ZLIB" "coda-oss_minizip")
 
 coda_add_library("${TARGET_NAME}")  # See the definition of this method for details on the variables it looks at.
 
