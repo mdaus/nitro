@@ -32,6 +32,8 @@ cdef extern from "nitf/ImageWriter.h":
         pass
 
     NITF_BOOL nitf_ImageWriter_attachSource(nitf_ImageWriter* writer, nitf_ImageSource* imageSource, nitf_Error* error)
+    void nitf_ImageWriter_setDirectBlockWrite(nitf_ImageWriter* writer, int enable)
+    void nitf_ImageWriter_setWriteCaching(nitf_ImageWriter* writer, int enable)
 
 
 cdef extern from "nitf/SegmentWriter.h":
@@ -98,5 +100,8 @@ cdef extern from "nitf/Reader.h":
 cdef extern from "nitf/ImageIO.h":
     ctypedef struct nitf_ImageIO:
         pass
+
+
+
 
     nitf_Uint32 nitf_ImageIO_pixelSize(nitf_ImageIO * nitf)

@@ -458,6 +458,12 @@ cdef class ImageWriter:
         obj._c_writer = ptr
         return obj
 
+    def set_direct_block_write(self, val):
+        io.nitf_ImageWriter_setDirectBlockWrite(self._c_writer, int(bool(val)))
+
+    def set_write_caching(self, val):
+        io.nitf_ImageWriter_setWriteCaching(self._c_writer, int(bool(val)))
+
     def attach_source(self, ImageSource imagesource):
         cdef nitf_Error error
         cdef image_source.nitf_ImageSource* src = imagesource._c_source
@@ -544,7 +550,7 @@ cdef class SubWindow:
             self._c_window.numCols = int(image_subheader['numCols'])
             bands = int(image_subheader['numImageBands']) + \
                 int(image_subheader['numMultispectralImageBands'])
-            self._c_window.numBands = len(bands)
+            self._c_window.numBands = bands
             self._c_window.bandList = <nitf_Uint32*>PyMem_Malloc(self._c_window.numBands)
             for i in range(bands):
                 self._c_window.bandList[i] = <int>i
