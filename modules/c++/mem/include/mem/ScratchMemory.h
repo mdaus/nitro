@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef __MEM_SCRATCHMEMORY_H__
-#define __MEM_SCRATCHMEMORY_H__
+#ifndef __MEM_SCRATCH_MEMORY_H__
+#define __MEM_SCRATCH_MEMORY_H__
 
 #include <stddef.h>
 #include <map>
@@ -35,7 +35,6 @@
 
 namespace mem
 {
-
 /*!
  *  \class ScratchMemory
  *  \brief Handle reservation of scratch memory segments within a single buffer.
@@ -49,25 +48,23 @@ namespace mem
 class ScratchMemory
 {
 public:
-    ScratchMemory() :
-        mNumBytesNeeded(0),
-        mIsSetup(false)
-    {
-    }
+    //! Default constructor
+    ScratchMemory();
 
     /*!
      * \brief Reserve a buffer segment within this scratch memory buffer.
      *
      * \param key Identifier for scratch segment
-     * \param numBytes Size of scratch buffer
-     * \param numBuffers Number of distinct buffers to set up
-     * \param alignment Number of bytes to align segment pointer
+     * \param numElements Size of scratch buffer
+     * \param numBuffers Number of distinct buffers to set up. Defaults to 1.
+     * \param alignment Number of bytes to align segment pointer. Defaults to
+     *                  sys::SSE_INSTRUCTION_ALIGNMENT.
      *
      * \throws except::Exception if the given key has already been used
      */
     template <typename T>
     void put(const std::string& key,
-             size_t numBytes,
+             size_t numElements,
              size_t numBuffers = 1,
              size_t alignment = sys::SSE_INSTRUCTION_ALIGNMENT);
 
@@ -75,7 +72,7 @@ public:
      * \brief Get pointer to buffer segment.
      *
      * \param key Identifier for scratch segment
-     * \param indexBuffer Index of distinct buffer
+     * \param indexBuffer Index of distinct buffer. Defaults to 0.
      *
      * \return Pointer to buffer segment
      *
@@ -86,11 +83,26 @@ public:
     T* get(const std::string& key, size_t indexBuffer = 0);
 
     /*!
+     * \brief Get const pointer to buffer segment.
+     *
+     * \param key Identifier for scratch segment
+     * \param indexBuffer Index of distinct buffer. Defaults to 0.
+     *
+     * \return Const pointer to buffer segment
+     *
+     * \throws except::Exception if the scratch memory has not been set up,
+     *         the key does not exist, or index of buffer is out of bounds
+     */
+    template <typename T>
+    const T* get(const std::string& key, size_t indexBuffer = 0) const;
+
+    /*!
      * \brief Ensure underlying memory is properly set up and position segment
      *        pointers.
      *
-     * \param scratchBuffer Storage to use for scratch memory. If scratchBuffer
-     *        of size 0 is passed, memory is allocated internally.
+     * \param scratchBuffer Storage to use for scratch memory. If buffer of
+     *        size 0 is passed, memory is allocated internally. Defaults to
+     *        an empty buffer.
      *
      * \throws except::Exception if the scratchBuffer passed in is too small
      *         to hold the requested scratch memory or has size > 0 with null
@@ -114,12 +126,8 @@ private:
 
     struct Segment
     {
-        Segment(size_t numBytes, size_t numBuffers, size_t alignment) :
-            numBytes(numBytes),
-            numBuffers(numBuffers),
-            alignment(alignment)
-        {
-        }
+        Segment(size_t numBytes, size_t numBuffers, size_t alignment);
+
         size_t numBytes;
         size_t numBuffers;
         size_t alignment;
@@ -130,9 +138,7 @@ private:
     std::vector<sys::ubyte> mStorage;
     mem::BufferView<sys::ubyte> mBuffer;
     size_t mNumBytesNeeded;
-    bool mIsSetup;
 };
-
 }
 
 #include <mem/ScratchMemory.hpp>

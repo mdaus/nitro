@@ -22,24 +22,26 @@
 
 namespace mem
 {
-
 template <typename T>
 void ScratchMemory::put(const std::string& key,
-                        size_t numBytes,
+                        size_t numElements,
                         size_t numBuffers,
                         size_t alignment)
 {
-    put<sys::ubyte>(key, numBytes * sizeof(T), numBuffers, alignment);
+    put<sys::ubyte>(key, numElements * sizeof(T), numBuffers, alignment);
 }
 
 template <>
 inline void ScratchMemory::put<sys::ubyte>(const std::string& key,
-                                           size_t numBytes,
+                                           size_t numElements,
                                            size_t numBuffers,
                                            size_t alignment)
 {
+    // invalidate buffer (setup must be called before any subsequent get call)
+    mBuffer.data = NULL;
+
     alignment = std::max<size_t>(1, alignment);
-    mNumBytesNeeded += numBuffers * (numBytes + alignment - 1);
+    mNumBytesNeeded += numBuffers * (numElements + alignment - 1);
 
     std::map<std::string, Segment>::iterator iterSeg = mSegments.find(key);
     if (iterSeg != mSegments.end())
@@ -50,13 +52,20 @@ inline void ScratchMemory::put<sys::ubyte>(const std::string& key,
     }
     mSegments.insert(
             iterSeg,
-            std::make_pair(key, Segment(numBytes, numBuffers, alignment)));
+            std::make_pair(key, Segment(numElements, numBuffers, alignment)));
 }
 
 template <typename T>
 T* ScratchMemory::get(const std::string& key, size_t indexBuffer)
 {
-    if (!mIsSetup)
+    return const_cast<T*>(
+            const_cast<const ScratchMemory&>(*this).get<T>(key, indexBuffer));
+}
+
+template <typename T>
+const T* ScratchMemory::get(const std::string& key, size_t indexBuffer) const
+{
+    if (mBuffer.data == NULL)
     {
         std::ostringstream oss;
         oss << "Tried to get scratch memory for \"" << key
@@ -64,7 +73,7 @@ T* ScratchMemory::get(const std::string& key, size_t indexBuffer)
         throw except::Exception(Ctxt(oss.str()));
     }
 
-    std::map<std::string, Segment>::iterator iterSeg = mSegments.find(key);
+    std::map<std::string, Segment>::const_iterator iterSeg = mSegments.find(key);
     if (iterSeg == mSegments.end())
     {
         std::ostringstream oss;
@@ -72,7 +81,7 @@ T* ScratchMemory::get(const std::string& key, size_t indexBuffer)
         throw except::Exception(Ctxt(oss.str()));
     }
 
-    Segment& segment = iterSeg->second;
+    const Segment& segment = iterSeg->second;
     if (indexBuffer >= segment.buffers.size())
     {
         std::ostringstream oss;
@@ -81,7 +90,6 @@ T* ScratchMemory::get(const std::string& key, size_t indexBuffer)
             << " buffers";
         throw except::Exception(Ctxt(oss.str()));
     }
-    return reinterpret_cast<T*>(segment.buffers[indexBuffer]);
+    return reinterpret_cast<const T*>(segment.buffers[indexBuffer]);
 }
-
 }

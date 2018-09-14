@@ -38,9 +38,21 @@ void align(sys::ubyte*& dataPtr, size_t alignment)
 }
 }
 
-
 namespace mem
 {
+ScratchMemory::ScratchMemory() :
+    mNumBytesNeeded(0)
+{
+}
+
+ScratchMemory::Segment::Segment(size_t numBytes,
+                                size_t numBuffers,
+                                size_t alignment) :
+    numBytes(numBytes),
+    numBuffers(numBuffers),
+    alignment(alignment)
+{
+}
 
 void ScratchMemory::setup(const mem::BufferView<sys::ubyte>& scratchBuffer)
 {
@@ -81,7 +93,5 @@ void ScratchMemory::setup(const mem::BufferView<sys::ubyte>& scratchBuffer)
                     mBuffer.data;
         }
     }
-
-    mIsSetup = true;
 }
 }

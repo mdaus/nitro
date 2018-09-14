@@ -26,8 +26,8 @@
 #include <sys/Conf.h>
 #include "TestCase.h"
 
-namespace {
-
+namespace
+{
 TEST_CASE(testScratchMemory)
 {
     mem::ScratchMemory scratch;
@@ -54,7 +54,7 @@ TEST_CASE(testScratchMemory)
     mem::BufferView<sys::ubyte> buffer(storage.data(), storage.size());
 
     // first pass with external buffer, second with internal allocation
-    for (int ii = 0; ii < 2; ++ii)
+    for (size_t ii = 0; ii < 2; ++ii)
     {
         if (ii == 0)
         {
@@ -74,6 +74,11 @@ TEST_CASE(testScratchMemory)
         sys::ubyte* pBuf2_1 = scratch.get<sys::ubyte>("buf2", 1);
         sys::ubyte* pBuf2_2 = scratch.get<sys::ubyte>("buf2", 2);
         sys::ubyte* pBuf3 = scratch.get<sys::ubyte>("buf3");
+
+        // verify get works with const reference to ScratchMemory
+        const mem::ScratchMemory& constScratch = scratch;
+        const sys::ubyte* pConstBuf0 = constScratch.get<sys::ubyte>("buf0");
+        TEST_ASSERT_EQ(pBuf0, pConstBuf0)
 
         // trying to get buffer index out of range should throw
         TEST_EXCEPTION(scratch.get<sys::ubyte>("buf0", 1));
@@ -97,6 +102,12 @@ TEST_CASE(testScratchMemory)
         TEST_ASSERT_TRUE(pBuf3 - pBuf2_2 >= static_cast<ptrdiff_t>(29));
     }
 
+    // put should invalidate the scratch memory until setup is called again
+    scratch.put<sys::ubyte>("buf4", 8);
+    TEST_EXCEPTION(scratch.get<sys::ubyte>("buf0"));
+    scratch.setup();
+    scratch.get<sys::ubyte>("buf0");
+
     // calling setup with buffer that is too small should throw
     mem::BufferView<sys::ubyte> smallBuffer(buffer.data, buffer.size - 1);
     TEST_EXCEPTION(scratch.setup(smallBuffer));
@@ -105,8 +116,6 @@ TEST_CASE(testScratchMemory)
     mem::BufferView<sys::ubyte> invalidBuffer(NULL, buffer.size);
     TEST_EXCEPTION(scratch.setup(invalidBuffer));
 }
-
-
 }
 
 int main(int, char**)
