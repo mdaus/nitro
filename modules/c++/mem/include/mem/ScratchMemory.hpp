@@ -58,38 +58,14 @@ inline void ScratchMemory::put<sys::ubyte>(const std::string& key,
 template <typename T>
 T* ScratchMemory::get(const std::string& key, size_t indexBuffer)
 {
-    return const_cast<T*>(
-            const_cast<const ScratchMemory&>(*this).get<T>(key, indexBuffer));
+    return reinterpret_cast<T*>(
+            lookupSegment(key, indexBuffer).buffers[indexBuffer]);
 }
 
 template <typename T>
 const T* ScratchMemory::get(const std::string& key, size_t indexBuffer) const
 {
-    if (mBuffer.data == NULL)
-    {
-        std::ostringstream oss;
-        oss << "Tried to get scratch memory for \"" << key
-            << "\" before running setup.";
-        throw except::Exception(Ctxt(oss.str()));
-    }
-
-    std::map<std::string, Segment>::const_iterator iterSeg = mSegments.find(key);
-    if (iterSeg == mSegments.end())
-    {
-        std::ostringstream oss;
-        oss << "Scratch memory segment was not found for \"" << key << "\"";
-        throw except::Exception(Ctxt(oss.str()));
-    }
-
-    const Segment& segment = iterSeg->second;
-    if (indexBuffer >= segment.buffers.size())
-    {
-        std::ostringstream oss;
-        oss << "Trying to get buffer index " << indexBuffer << " for \""
-            << key << "\", which has only " << segment.buffers.size()
-            << " buffers";
-        throw except::Exception(Ctxt(oss.str()));
-    }
-    return reinterpret_cast<const T*>(segment.buffers[indexBuffer]);
+    return reinterpret_cast<const T*>(
+            lookupSegment(key, indexBuffer).buffers[indexBuffer]);
 }
 }

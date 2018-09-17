@@ -134,6 +134,9 @@ private:
         std::vector<sys::ubyte*> buffers;
     };
 
+    const Segment& lookupSegment(const std::string& key,
+                                 size_t indexBuffer) const;
+
     std::map<std::string, Segment> mSegments;
     std::vector<sys::ubyte> mStorage;
     mem::BufferView<sys::ubyte> mBuffer;
