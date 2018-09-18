@@ -75,10 +75,35 @@ TEST_CASE(testScratchMemory)
         sys::ubyte* pBuf2_2 = scratch.get<sys::ubyte>("buf2", 2);
         sys::ubyte* pBuf3 = scratch.get<sys::ubyte>("buf3");
 
+        // verify getBufferView matches get
+        mem::BufferView<sys::ubyte> bufView0 =
+                scratch.getBufferView<sys::ubyte>("buf0");
+        mem::BufferView<sys::ubyte> bufView1 =
+                scratch.getBufferView<sys::ubyte>("buf1");
+        mem::BufferView<sys::ubyte> bufView2_0 =
+                scratch.getBufferView<sys::ubyte>("buf2", 0);
+        mem::BufferView<sys::ubyte> bufView2_1 =
+                scratch.getBufferView<sys::ubyte>("buf2", 1);
+        TEST_ASSERT_EQ(pBuf0, bufView0.data);
+        TEST_ASSERT_EQ(pBuf1, bufView1.data);
+        TEST_ASSERT_EQ(pBuf2_0, bufView2_0.data);
+        TEST_ASSERT_EQ(pBuf2_1, bufView2_1.data);
+
+        // verify getBufferView size in bytes
+        TEST_ASSERT_EQ(bufView0.size, 11);
+        TEST_ASSERT_EQ(bufView1.size, 17 * sizeof(int));
+        TEST_ASSERT_EQ(bufView2_0.size, 29);
+        TEST_ASSERT_EQ(bufView2_1.size, 29);
+
         // verify get works with const reference to ScratchMemory
         const mem::ScratchMemory& constScratch = scratch;
         const sys::ubyte* pConstBuf0 = constScratch.get<sys::ubyte>("buf0");
-        TEST_ASSERT_EQ(pBuf0, pConstBuf0)
+        TEST_ASSERT_EQ(pBuf0, pConstBuf0);
+
+        // verify getBufferView works with const reference to ScratchMemory
+        mem::BufferView<const sys::ubyte> constBufView0 =
+                constScratch.getBufferView<sys::ubyte>("buf0");
+        TEST_ASSERT_EQ(bufView0.data, constBufView0.data);
 
         // trying to get buffer index out of range should throw
         TEST_EXCEPTION(scratch.get<sys::ubyte>("buf0", 1));

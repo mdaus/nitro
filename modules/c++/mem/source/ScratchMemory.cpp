@@ -54,7 +54,7 @@ ScratchMemory::Segment::Segment(size_t numBytes,
 {
 }
 
-void ScratchMemory::setup(const mem::BufferView<sys::ubyte>& scratchBuffer)
+void ScratchMemory::setup(const BufferView<sys::ubyte>& scratchBuffer)
 {
     if (scratchBuffer.size == 0)
     {

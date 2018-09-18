@@ -97,6 +97,35 @@ public:
     const T* get(const std::string& key, size_t indexBuffer = 0) const;
 
     /*!
+     * \brief Get buffer view of buffer segment.
+     *
+     * \param key Identifier for scratch segment
+     * \param indexBuffer Index of distinct buffer. Defaults to 0.
+     *
+     * \return Buffer view of buffer segment
+     *
+     * \throws except::Exception if the scratch memory has not been set up,
+     *         the key does not exist, or index of buffer is out of bounds
+     */
+    template <typename T>
+    BufferView<T> getBufferView(const std::string& key, size_t indexBuffer = 0);
+
+    /*!
+     * \brief Get const buffer view of buffer segment.
+     *
+     * \param key Identifier for scratch segment
+     * \param indexBuffer Index of distinct buffer. Defaults to 0.
+     *
+     * \return Const buffer view of buffer segment
+     *
+     * \throws except::Exception if the scratch memory has not been set up,
+     *         the key does not exist, or index of buffer is out of bounds
+     */
+    template <typename T>
+    BufferView<const T> getBufferView(const std::string& key,
+                                      size_t indexBuffer = 0) const;
+
+    /*!
      * \brief Ensure underlying memory is properly set up and position segment
      *        pointers.
      *
@@ -108,8 +137,8 @@ public:
      *         to hold the requested scratch memory or has size > 0 with null
      *         data pointer
      */
-    void setup(const mem::BufferView<sys::ubyte>& scratchBuffer =
-            mem::BufferView<sys::ubyte>());
+    void setup(const BufferView<sys::ubyte>& scratchBuffer =
+            BufferView<sys::ubyte>());
 
     /*!
      * \brief Get number of bytes needed to store scratch memory, including the
@@ -139,7 +168,7 @@ private:
 
     std::map<std::string, Segment> mSegments;
     std::vector<sys::ubyte> mStorage;
-    mem::BufferView<sys::ubyte> mBuffer;
+    BufferView<sys::ubyte> mBuffer;
     size_t mNumBytesNeeded;
 };
 }
