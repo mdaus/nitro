@@ -528,6 +528,7 @@ cdef class ImageReader:
         finally:
             PyMem_Free(buf)
 
+        result.shape = result.shape[0], (window.numRows // rowSkip), (window.numCols // colSkip)
         return result
 
     cpdef read_block(self, int block_number):

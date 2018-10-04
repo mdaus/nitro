@@ -11,6 +11,7 @@ DEFINES         = 'NITF_MODULE_EXPORTS'
 TEST_FILTER     = 'test_1band_rw_line.c ' \
                   'test_fileIO.c ' \
                   'test_hash_table_2.c ' \
+                  'test_writer_s.c ' \
                   'test_des_read.c ' \
                   'test_read_acftb.c ' \
                   'test_add_masks.c ' \
