@@ -203,6 +203,7 @@ CLEANUP:
     return rc;
 }
 
+
 NITFAPI(nitf_ImageWriter *) nitf_ImageWriter_construct(
     nitf_ImageSubheader *subheader,
     nrt_HashTable* options,

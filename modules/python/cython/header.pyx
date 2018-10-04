@@ -151,6 +151,43 @@ cdef class BaseFieldHeader:
         return f"<{self.__class__.__name__} {self._capsule()}>"
 
 
+cdef class FileSecurity(BaseFieldHeader):
+    cdef header.nitf_FileSecurity* _c_security
+
+    def __cinit__(self, c):
+        assert(PyCapsule_IsValid(c, "FileSecurity"))
+        self._c_security = <header.nitf_FileSecurity*>PyCapsule_GetPointer(c, "FileSecurity")
+
+    def _capsule(self):
+        return PyCapsule_New(self._c_security, "FileSecurity", NULL)
+
+    @staticmethod
+    cdef from_ptr(header.nitf_FileSecurity* ptr):
+        obj = FileSecurity()
+        obj._c_security = ptr
+        return obj
+
+    def get_items(self):
+        tmp = {
+            'classificationSystem': field.Field(PyCapsule_New(self._c_security.classificationSystem, "Field", NULL)),
+            'codewords': field.Field(PyCapsule_New(self._c_security.codewords, "Field", NULL)),
+            'controlAndHandling': field.Field(PyCapsule_New(self._c_security.controlAndHandling, "Field", NULL)),
+            'releasingInstructions': field.Field(PyCapsule_New(self._c_security.releasingInstructions, "Field", NULL)),
+            'declassificationType': field.Field(PyCapsule_New(self._c_security.declassificationType, "Field", NULL)),
+            'declassificationDate': field.Field(PyCapsule_New(self._c_security.declassificationDate, "Field", NULL)),
+            'declassificationExemption': field.Field(PyCapsule_New(self._c_security.declassificationExemption, "Field", NULL)),
+            'downgrade': field.Field(PyCapsule_New(self._c_security.downgrade, "Field", NULL)),
+            'downgradeDateTime': field.Field(PyCapsule_New(self._c_security.downgradeDateTime, "Field", NULL)),
+            'classificationText': field.Field(PyCapsule_New(self._c_security.classificationText, "Field", NULL)),
+            'classificationAuthorityType': field.Field(PyCapsule_New(self._c_security.classificationAuthorityType, "Field", NULL)),
+            'classificationAuthority': field.Field(PyCapsule_New(self._c_security.classificationAuthority, "Field", NULL)),
+            'classificationReason': field.Field(PyCapsule_New(self._c_security.classificationReason, "Field", NULL)),
+            'securitySourceDate': field.Field(PyCapsule_New(self._c_security.securitySourceDate, "Field", NULL)),
+            'securityControlNumber': field.Field(PyCapsule_New(self._c_security.securityControlNumber, "Field", NULL)),
+            }
+        return tmp
+
+
 cdef class FileHeader(BaseFieldHeader):
     cdef header.nitf_FileHeader* _c_header
 
@@ -177,6 +214,7 @@ cdef class FileHeader(BaseFieldHeader):
             'fileDateTime':field.Field(PyCapsule_New(self._c_header.fileDateTime, "Field", NULL)),
             'fileTitle':field.Field(PyCapsule_New(self._c_header.fileTitle, "Field", NULL)),
             'classification':field.Field(PyCapsule_New(self._c_header.classification, "Field", NULL)),
+            'securityGroup':FileSecurity(PyCapsule_New(self._c_header.securityGroup, "FileSecurity", NULL)),
             'messageCopyNum':field.Field(PyCapsule_New(self._c_header.messageCopyNum, "Field", NULL)),
             'messageNumCopies':field.Field(PyCapsule_New(self._c_header.messageNumCopies, "Field", NULL)),
             'encrypted':field.Field(PyCapsule_New(self._c_header.encrypted, "Field", NULL)),
@@ -263,6 +301,8 @@ cdef class ImageSubheader(BaseFieldHeader):
 
     deprecated_items = {'numrows': 'numRows', 'numcols': 'numCols'}
 
+    equiv_items = {'classification': 'imageSecurityClass'}  # so there's an equiv name to the file header version
+
     def get_items(self):
         tmp = {
             'filePartType':field.Field(PyCapsule_New(self._c_header.filePartType, "Field", NULL)),
@@ -271,6 +311,7 @@ cdef class ImageSubheader(BaseFieldHeader):
             'targetId':field.Field(PyCapsule_New(self._c_header.targetId, "Field", NULL)),
             'imageTitle':field.Field(PyCapsule_New(self._c_header.imageTitle, "Field", NULL)),
             'imageSecurityClass':field.Field(PyCapsule_New(self._c_header.imageSecurityClass, "Field", NULL)),
+            'securityGroup':FileSecurity(PyCapsule_New(self._c_header.securityGroup, "FileSecurity", NULL)),
             'encrypted':field.Field(PyCapsule_New(self._c_header.encrypted, "Field", NULL)),
             'imageSource':field.Field(PyCapsule_New(self._c_header.imageSource, "Field", NULL)),
             'numRows':field.Field(PyCapsule_New(self._c_header.numRows, "Field", NULL)),
@@ -343,6 +384,7 @@ cdef class DESubheader(BaseFieldHeader):
             'filePartType':field.Field(PyCapsule_New(self._c_header.filePartType, "Field", NULL)),
             'typeId':field.Field(PyCapsule_New(self._c_header.typeID, "Field", NULL)),
             'version':field.Field(PyCapsule_New(self._c_header.version, "Field", NULL)),
+            'securityGroup':FileSecurity(PyCapsule_New(self._c_header.securityGroup, "FileSecurity", NULL)),
             'overflowedHeaderType':field.Field(PyCapsule_New(self._c_header.overflowedHeaderType, "Field", NULL)),
             'dataItemOverflowed':field.Field(PyCapsule_New(self._c_header.dataItemOverflowed, "Field", NULL)),
             'subheaderFieldsLength':field.Field(PyCapsule_New(self._c_header.subheaderFieldsLength, "Field", NULL)),

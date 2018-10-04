@@ -23,7 +23,7 @@ cdef extern from "nitf/FileHeader.h":
         nitf_Field *fileDateTime
         nitf_Field *fileTitle
         nitf_Field *classification
-        # nitf_FileSecurity *securityGroup;
+        nitf_FileSecurity *securityGroup;
         nitf_Field *messageCopyNum
         nitf_Field *messageNumCopies
         nitf_Field *encrypted
@@ -53,7 +53,21 @@ cdef extern from "nitf/FileHeader.h":
 
 cdef extern from "nitf/FileSecurity.h":
     ctypedef struct nitf_FileSecurity:
-        pass
+        nitf_Field *classificationSystem
+        nitf_Field *codewords
+        nitf_Field *controlAndHandling
+        nitf_Field *releasingInstructions
+        nitf_Field *declassificationType
+        nitf_Field *declassificationDate
+        nitf_Field *declassificationExemption
+        nitf_Field *downgrade
+        nitf_Field *downgradeDateTime
+        nitf_Field *classificationText
+        nitf_Field *classificationAuthorityType
+        nitf_Field *classificationAuthority
+        nitf_Field *classificationReason
+        nitf_Field *securitySourceDate
+        nitf_Field *securityControlNumber
 
 
 cdef extern from "nitf/ImageSubheader.h":

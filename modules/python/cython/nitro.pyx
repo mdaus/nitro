@@ -14,6 +14,7 @@ cimport numpy as np
 np.import_array()
 from cpython.pycapsule cimport PyCapsule_New, PyCapsule_IsValid, PyCapsule_GetPointer
 from cpython.mem cimport PyMem_Malloc, PyMem_Free, PyMem_Realloc
+from libc.string cimport memcpy
 from error cimport nitf_Error
 from types cimport *
 
@@ -499,9 +500,6 @@ cdef class ImageReader:
             raise NotImplementedError("Downsampling now implemented")
 
         rowSkip, colSkip = 1, 1  # TODO: get skip factor from downsampler
-        # subimageSize = int((window.numRows // rowSkip)\
-        #              * (window.numCols // colSkip)\
-        #              * io.nitf_ImageIO_pixelSize(self._c_reader.imageDeblocker))
         subimageSize = (window.numRows // rowSkip) * (window.numCols // colSkip)
         if dtype is None:
             if self._nbpp == 8:
@@ -530,6 +528,22 @@ cdef class ImageReader:
         finally:
             PyMem_Free(buf)
 
+        return result
+
+    cpdef read_block(self, int block_number):
+        cdef nitf_Error error
+        cdef nitf_Uint64 block_size
+        cdef nitf_Uint8* buf
+        cdef nitf_Uint8* dst
+
+        print(block_number)
+        buf = io.nitf_ImageReader_readBlock(self._c_reader, block_number, &block_size, &error)
+        print(buf)
+        if buf is NULL:
+            raise NitfError(error)
+        result = np.ndarray((block_size,), dtype=np.uint8, order='C')
+        dst = <nitf_Uint8*>np.PyArray_DATA(result)
+        memcpy(dst, buf, block_size)
         return result
 
 

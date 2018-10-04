@@ -30,9 +30,9 @@ if not os.path.exists("nitro/plugins"):
 
 setup(
     name="nitro",
-    version="0.4.dev2",
+    version="0.4.dev4",
     packages=find_packages(),
-    install_requires=["numpy>=1.13.0", "Deprecated>=1.1.0"],
+    install_requires=["numpy>=1.13.0", "Deprecated~=1.1.0"],
     include_package_data=True,
     ext_modules=cythonize(ext_modules, gdb_debug=True)
 )
