@@ -576,7 +576,6 @@ cdef class SubWindow:
     def __dealloc__(self):
         if self._c_window != NULL:
             if self._c_window.bandList != NULL:
-                PyMem_Free(self._c_window.bandList)
                 io.nitf_SubWindow_destruct(&self._c_window)
 
     @property
