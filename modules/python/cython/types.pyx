@@ -73,6 +73,16 @@ cdef class List:
     def __iter__(self):
         return ListIter.from_ptr(self, self._c_list)
 
+    def append(self, obj):
+        cdef types.nitf_Error error
+        cdef NITF_DATA* data
+
+        c = obj.to_capsule()
+        assert(PyCapsule_IsValid(c, "Field"))
+        data = <NITF_DATA*>PyCapsule_GetPointer(c, "Field")
+        if not nitf_List_pushBack(self._c_list, data, &error):
+            raise NitfError(error)
+
 
 cdef class NitfData:
     cdef NITF_DATA* _c_data

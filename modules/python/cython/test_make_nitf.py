@@ -130,6 +130,9 @@ class TestCreator(unittest.TestCase):
         segment.subheader['numBlocksPerRow'] = 1
         segment.subheader['numPixelsPerHorizBlock'] = width
         segment.subheader['numPixelsPerVertBlock'] = height
+        segment.subheader['numImageComments'] = '2'
+        segment.subheader.imageComments.append(Field(value="this is a comment"))
+        segment.subheader.imageComments.append(Field(value="another comment"))
 
         alldata = numpy.ascontiguousarray(alldata, dtype="int16")
         tmp = alldata

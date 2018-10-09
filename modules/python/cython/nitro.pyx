@@ -525,11 +525,12 @@ cdef class ImageReader:
 
             if not io.nitf_ImageReader_read(self._c_reader, window._c_window, buf, &padded, &error):
                 raise NitfError(error)
-        finally:
+        except:
             PyMem_Free(buf)
+            raise
 
         result.shape = result.shape[0], (window.numRows // rowSkip), (window.numCols // colSkip)
-        return result
+        return result.copy()
 
     cpdef read_block(self, int block_number):
         cdef nitf_Error error

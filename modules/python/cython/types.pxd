@@ -32,4 +32,5 @@ cdef extern from "nitf/System.h":
     NITF_DATA * nitf_List_get(nitf_List * list, int index, nitf_Error * error)
     void nitf_ListIterator_increment(nitf_ListIterator * this_iter)
     NITF_DATA * nitf_ListIterator_get(nitf_ListIterator * this_iter)
+    NITF_BOOL nitf_List_pushBack(nitf_List * this_chain, NITF_DATA * data, nitf_Error * error)
 

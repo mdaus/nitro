@@ -24,3 +24,4 @@ cdef extern from "nitf/Field.h":
     # NITF_BOOL nitf_Field_setDateTime(nitf_Field * field, const nitf_DateTime *dateTime, const char *format, nitf_Error * error);
     NITF_BOOL nitf_Field_setReal(nitf_Field * field, const char *type, NITF_BOOL plus, double value, nitf_Error *error);
     NITF_BOOL nitf_Field_get(nitf_Field * field, NITF_DATA * outValue, nitf_ConvType convType, size_t length, nitf_Error * error);
+    nitf_Field * nitf_Field_construct(size_t length, nitf_FieldType type, nitf_Error * error)

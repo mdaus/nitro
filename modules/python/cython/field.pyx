@@ -2,13 +2,27 @@
 
 cimport field
 from cpython.mem cimport PyMem_Malloc, PyMem_Free, PyMem_Realloc
-from cpython.pycapsule cimport PyCapsule_IsValid, PyCapsule_GetPointer
+from cpython.pycapsule cimport PyCapsule_New, PyCapsule_IsValid, PyCapsule_GetPointer
 from error cimport nitf_Error
 
 import contextlib
 import numpy as np
 from deprecated import deprecated
 from .error import NitfError
+
+
+cpdef enum FieldType:
+    NITF_BCS_A
+    NITF_BCS_N
+    NITF_BINARY
+
+
+cpdef enum ConvType:
+    NITF_CONV_UINT
+    NITF_CONV_INT
+    NITF_CONV_REAL
+    NITF_CONV_STRING
+    NITF_CONV_RAW
 
 
 @contextlib.contextmanager
@@ -29,7 +43,9 @@ cdef class Field:
     cdef void* _buf_value
     cdef int _ref_count
 
-    def __cinit__(self, capsule=None):
+    def __cinit__(self, capsule=None, value=None, length=None, field_type=FieldType.NITF_BCS_A):
+        cdef nitf_Error error
+
         self._c_field = NULL
         self._buf_value = NULL
         self._strides[0] = 1
@@ -40,6 +56,24 @@ cdef class Field:
             if not PyCapsule_IsValid(capsule, "Field"):
                 raise TypeError("Invalid C pointer type")
             self._c_field = <field.nitf_Field*>PyCapsule_GetPointer(capsule, "Field")
+        elif length is not None or value is not None:
+            if length is None:
+                length = len(value)
+            self._c_field = nitf_Field_construct(length, field_type, &error)
+            if self._c_field is NULL:
+                raise NitfError(error)
+            if value is not None:
+                # make a reasonable guess about value type and range based on field type
+                # if this assumption is wrong, just use value=None and explicitly set it
+                if field_type == NITF_BCS_A:
+                    self.set_string(value)
+                elif field_type == NITF_BCS_N:
+                    if value < 0:
+                        self.set_int32(value)
+                    else:
+                        self.set_uint32(value)
+                elif field_type == NITF_BINARY:
+                    self.set_raw_data(value)
 
     @staticmethod
     cdef from_ptr(field.nitf_Field* ptr):
@@ -51,6 +85,9 @@ cdef class Field:
     def from_capsule(c):
         assert(PyCapsule_IsValid(c, "Field"))
         return Field.from_ptr(<field.nitf_Field*>PyCapsule_GetPointer(c, "Field"))
+
+    def to_capsule(self):
+        return PyCapsule_New(self._c_field, "Field", NULL)
 
     @property
     def type(self):
@@ -189,16 +226,3 @@ cdef class Field:
             PyMem_Free(self._buf_value)
             self._buf_value = NULL
 
-
-cpdef enum FieldType:
-    NITF_BCS_A
-    NITF_BCS_N
-    NITF_BINARY
-
-
-cpdef enum ConvType:
-    NITF_CONV_UINT
-    NITF_CONV_INT
-    NITF_CONV_REAL
-    NITF_CONV_STRING
-    NITF_CONV_RAW
