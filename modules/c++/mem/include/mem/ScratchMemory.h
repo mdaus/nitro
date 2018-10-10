@@ -25,6 +25,7 @@
 
 #include <stddef.h>
 #include <map>
+#include <set>
 #include <sstream>
 #include <string>
 #include <utility>
@@ -67,6 +68,13 @@ public:
              size_t numElements,
              size_t numBuffers = 1,
              size_t alignment = sys::SSE_INSTRUCTION_ALIGNMENT);
+
+    /*!
+     * \brief Release a segment so that that memory may be reused
+     *
+     * \param key Identifier for scratch segment
+     */
+    void release(const std::string& key);
 
     /*!
      * \brief Get pointer to buffer segment.
@@ -155,11 +163,12 @@ private:
 
     struct Segment
     {
-        Segment(size_t numBytes, size_t numBuffers, size_t alignment);
+        Segment(size_t numBytes, size_t numBuffers, size_t alignment, size_t offset);
 
         size_t numBytes;
         size_t numBuffers;
         size_t alignment;
+        size_t offset;
         std::vector<sys::ubyte*> buffers;
     };
 
@@ -168,8 +177,12 @@ private:
 
     std::map<std::string, Segment> mSegments;
     std::vector<sys::ubyte> mStorage;
+    std::vector<std::string> mKeyOrder;
+    std::set<std::string> mReleasedKeys;
+
     BufferView<sys::ubyte> mBuffer;
     size_t mNumBytesNeeded;
+    size_t mOffset;
 };
 }
 

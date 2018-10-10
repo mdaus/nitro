@@ -40,8 +40,12 @@ inline void ScratchMemory::put<sys::ubyte>(const std::string& key,
     // invalidate buffer (setup must be called before any subsequent get call)
     mBuffer.data = NULL;
 
+    size_t segmentOffset = mOffset;
+
     alignment = std::max<size_t>(1, alignment);
-    mNumBytesNeeded += numBuffers * (numElements + alignment - 1);
+    mOffset += numBuffers * (numElements + alignment - 1);
+
+    mNumBytesNeeded = std::max<size_t>(mNumBytesNeeded, mOffset);
 
     std::map<std::string, Segment>::iterator iterSeg = mSegments.find(key);
     if (iterSeg != mSegments.end())
@@ -52,7 +56,81 @@ inline void ScratchMemory::put<sys::ubyte>(const std::string& key,
     }
     mSegments.insert(
             iterSeg,
-            std::make_pair(key, Segment(numElements, numBuffers, alignment)));
+            std::make_pair(key, Segment(numElements, numBuffers, alignment, segmentOffset)));
+
+    mKeyOrder.push_back(key);
+}
+
+inline void ScratchMemory::release(const std::string& key)
+{
+    std::map<std::string, Segment>::const_iterator iterSeg = mSegments.find(key);
+    mReleasedKeys.insert(key);
+
+    if (mKeyOrder.back() == key)
+    {
+        const Segment& segment = iterSeg->second;
+        mOffset = segment.offset;
+    }
+    else
+    {
+        const Segment& segment = iterSeg->second;
+        mOffset = segment.offset;
+
+        std::vector<std::string>::iterator keyIter = std::find(mKeyOrder.begin(),
+                                                                     mKeyOrder.end(),
+                                                                     key);
+        std::vector<std::string>::iterator nextKeyIter = mKeyOrder.erase(keyIter);
+        mKeyOrder.push_back(key);
+
+        bool keepGoing = true;
+        std::string firstReleasedKey;
+        bool firstReleasedKeyFound = false;
+
+        while (keepGoing)
+        {
+            if (*nextKeyIter == key)
+            {
+                keepGoing = false;
+            }
+
+            //Get data for the segment that will be moved
+            std::map<std::string, Segment>::const_iterator mapIter = mSegments.find(*nextKeyIter);
+            const Segment& segmentToBeMoved = mapIter->second;
+
+            const size_t numElements = segmentToBeMoved.numBytes;
+            const size_t numBuffers = segmentToBeMoved.numBuffers;
+            const size_t alignment = segmentToBeMoved.alignment;
+
+            mSegments.erase(*nextKeyIter);
+            std::string keyToInsert = *nextKeyIter;
+            nextKeyIter = mKeyOrder.erase(nextKeyIter);
+
+            if (mReleasedKeys.find(keyToInsert) != mReleasedKeys.end())
+            {
+                if (!firstReleasedKeyFound)
+                {
+                    firstReleasedKey = keyToInsert;
+                    firstReleasedKeyFound = true;
+                }
+            }
+            else
+            {
+                if (firstReleasedKeyFound)
+                {
+                    std::map<std::string, Segment>::const_iterator iterSegNew =
+                                                                   mSegments.find(firstReleasedKey);
+                    const Segment& segmentNew = iterSegNew->second;
+                    mOffset = segmentNew.offset;
+                }
+                firstReleasedKeyFound = false;
+            }
+            put<sys::ubyte>(keyToInsert, numElements, numBuffers, alignment);
+
+        }
+        std::map<std::string, Segment>::const_iterator iterSegNew = mSegments.find(firstReleasedKey);
+        const Segment& segmentNew = iterSegNew->second;
+        mOffset = segmentNew.offset;
+    }
 }
 
 template <typename T>

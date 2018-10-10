@@ -41,16 +41,19 @@ void align(sys::ubyte*& dataPtr, size_t alignment)
 namespace mem
 {
 ScratchMemory::ScratchMemory() :
-    mNumBytesNeeded(0)
+    mNumBytesNeeded(0),
+    mOffset(0)
 {
 }
 
 ScratchMemory::Segment::Segment(size_t numBytes,
                                 size_t numBuffers,
-                                size_t alignment) :
+                                size_t alignment,
+                                size_t offset) :
     numBytes(numBytes),
     numBuffers(numBuffers),
-    alignment(alignment)
+    alignment(alignment),
+    offset(offset)
 {
 }
 
@@ -85,6 +88,7 @@ void ScratchMemory::setup(const BufferView<sys::ubyte>& scratchBuffer)
     {
         Segment& segment = iterSeg->second;
         segment.buffers.resize(segment.numBuffers);
+        currentOffset = segment.offset;
         for (size_t i = 0; i < segment.numBuffers; ++i)
         {
             segment.buffers[i] = mBuffer.data + currentOffset;
