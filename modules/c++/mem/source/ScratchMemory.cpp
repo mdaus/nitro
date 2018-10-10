@@ -57,6 +57,78 @@ ScratchMemory::Segment::Segment(size_t numBytes,
 {
 }
 
+void ScratchMemory::release(const std::string& key)
+{
+    std::map<std::string, Segment>::const_iterator iterSeg = mSegments.find(key);
+    mReleasedKeys.insert(key);
+
+    if (mKeyOrder.back() == key)
+    {
+        const Segment& segment = iterSeg->second;
+        mOffset = segment.offset;
+    }
+    else
+    {
+        const Segment& segment = iterSeg->second;
+        mOffset = segment.offset;
+
+        std::vector<std::string>::iterator keyIter = std::find(mKeyOrder.begin(),
+                                                               mKeyOrder.end(),
+                                                               key);
+        std::vector<std::string>::iterator nextKeyIter = mKeyOrder.erase(keyIter);
+        mKeyOrder.push_back(key);
+
+        bool keepGoing = true;
+        std::string firstReleasedKey;
+
+        while (keepGoing)
+        {
+            if (*nextKeyIter == key)
+            {
+                keepGoing = false;
+            }
+
+            //Get data for the segment that will be moved
+            std::map<std::string, Segment>::const_iterator mapIter =
+                    mSegments.find(*nextKeyIter);
+            const Segment& segmentToBeMoved = mapIter->second;
+
+            const size_t numElements = segmentToBeMoved.numBytes;
+            const size_t numBuffers = segmentToBeMoved.numBuffers;
+            const size_t alignment = segmentToBeMoved.alignment;
+
+            mSegments.erase(*nextKeyIter);
+            std::string keyToInsert = *nextKeyIter;
+            nextKeyIter = mKeyOrder.erase(nextKeyIter);
+
+            if (mReleasedKeys.find(keyToInsert) != mReleasedKeys.end())
+            {
+                if (firstReleasedKey.empty())
+                {
+                    firstReleasedKey = keyToInsert;
+                }
+            }
+            else
+            {
+                if (!firstReleasedKey.empty())
+                {
+                    std::map<std::string, Segment>::const_iterator iterSegNew =
+                            mSegments.find(firstReleasedKey);
+                    const Segment& segmentNew = iterSegNew->second;
+                    mOffset = segmentNew.offset;
+                }
+                firstReleasedKey.clear();
+            }
+            put<sys::ubyte>(keyToInsert, numElements, numBuffers, alignment);
+
+        }
+        std::map<std::string, Segment>::const_iterator iterSegNew =
+                mSegments.find(firstReleasedKey);
+        const Segment& segmentNew = iterSegNew->second;
+        mOffset = segmentNew.offset;
+    }
+}
+
 void ScratchMemory::setup(const BufferView<sys::ubyte>& scratchBuffer)
 {
     if (scratchBuffer.size == 0)

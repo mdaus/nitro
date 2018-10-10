@@ -29,7 +29,7 @@
 
 namespace
 {
-TEST_CASE(testRelease1)
+TEST_CASE(testReleaseSingleEndBuffer)
 {
     //A single release of the last element. Tests with different scratch templates.
     mem::ScratchMemory scratch;
@@ -60,13 +60,12 @@ TEST_CASE(testRelease1)
     sys::ubyte* pBuf0 = scratch.get<sys::ubyte>("buf0");
     sys::ubyte* pBuf1 = scratch.get<sys::ubyte>("buf1");
     sys::ubyte* pBuf2 = scratch.get<sys::ubyte>("buf2");
-    //sys::ubyte* pBuf3 = scratch.get<sys::ubyte>("buf3");
 
     TEST_ASSERT_EQ(pBuf1, pBuf2);
     TEST_ASSERT_NOT_EQ(pBuf0, pBuf2);
 }
 
-TEST_CASE(testRelease2)
+TEST_CASE(testReleaseMultipleEndBuffers)
 {
     //Tests multiple releases of the current last element
     //Also tests releases two concurrent segments
@@ -123,7 +122,7 @@ TEST_CASE(testRelease2)
     TEST_ASSERT_EQ(pBuf7, pBuf6);
 }
 
-TEST_CASE(testRelease3)
+TEST_CASE(testReleaseSequentialEndBuffers)
 {
     //Test putting then releasing then putting again and releasing again
     mem::ScratchMemory scratch;
@@ -160,7 +159,7 @@ TEST_CASE(testRelease3)
     TEST_ASSERT_EQ(pBuf5, pBuf7);
 }
 
-TEST_CASE(testRelease4)
+TEST_CASE(testReleaseInteriorBuffers)
 {
     //Tests released with filled in buffers for analysis
     mem::ScratchMemory scratch;
@@ -331,10 +330,10 @@ TEST_CASE(testScratchMemory)
 int main(int, char**)
 {
     TEST_CHECK(testScratchMemory);
-    TEST_CHECK(testRelease1);
-    TEST_CHECK(testRelease2);
-    TEST_CHECK(testRelease3);
-    TEST_CHECK(testRelease4);
+    TEST_CHECK(testReleaseSingleEndBuffer);
+    TEST_CHECK(testReleaseMultipleEndBuffers);
+    TEST_CHECK(testReleaseSequentialEndBuffers);
+    TEST_CHECK(testReleaseInteriorBuffers);
 
     return 0;
 }
