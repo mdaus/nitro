@@ -94,7 +94,8 @@ inline void ScratchMemory::release(const std::string& key)
             }
 
             //Get data for the segment that will be moved
-            std::map<std::string, Segment>::const_iterator mapIter = mSegments.find(*nextKeyIter);
+            std::map<std::string, Segment>::const_iterator mapIter = 
+                    mSegments.find(*nextKeyIter);
             const Segment& segmentToBeMoved = mapIter->second;
 
             const size_t numElements = segmentToBeMoved.numBytes;
@@ -118,7 +119,7 @@ inline void ScratchMemory::release(const std::string& key)
                 if (firstReleasedKeyFound)
                 {
                     std::map<std::string, Segment>::const_iterator iterSegNew =
-                                                                   mSegments.find(firstReleasedKey);
+                            mSegments.find(firstReleasedKey);
                     const Segment& segmentNew = iterSegNew->second;
                     mOffset = segmentNew.offset;
                 }
@@ -127,7 +128,8 @@ inline void ScratchMemory::release(const std::string& key)
             put<sys::ubyte>(keyToInsert, numElements, numBuffers, alignment);
 
         }
-        std::map<std::string, Segment>::const_iterator iterSegNew = mSegments.find(firstReleasedKey);
+        std::map<std::string, Segment>::const_iterator iterSegNew = 
+                mSegments.find(firstReleasedKey);
         const Segment& segmentNew = iterSegNew->second;
         mOffset = segmentNew.offset;
     }
