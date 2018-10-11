@@ -122,7 +122,7 @@ TEST_CASE(testReleaseMultipleEndBuffers)
     TEST_ASSERT_EQ(pBuf7, pBuf6);
 }
 
-TEST_CASE(testReleaseSequentialEndBuffers)
+TEST_CASE(testReleaseMiddleOfBuffer)
 {
     //Test putting then releasing then putting again and releasing again
     mem::ScratchMemory scratch;
@@ -194,11 +194,20 @@ TEST_CASE(testReleaseInteriorBuffers)
     for (size_t i = 0; i < bufViewC.size; ++i) {
         bufViewC.data[i] = 'c';
     }
+    for (size_t i = 0; i < bufViewB.size; ++i) {
+        TEST_ASSERT_EQ(bufViewB.data[i], 'b');
+    }
     for (size_t i = 0; i < bufViewD.size; ++i) {
         bufViewD.data[i] = 'd';
     }
-    for (size_t i = 0; i < bufViewB.size; ++i) {
-        std::cout << "D should overwrite B: " << bufViewB.data[i] << std::endl;
+    for (size_t i = 0; i < bufViewA.size; ++i) {
+        TEST_ASSERT_EQ(bufViewA.data[i], 'a');
+    }
+    for (size_t i = 0; i < bufViewC.size; ++i) {
+        TEST_ASSERT_EQ(bufViewC.data[i], 'c');
+    }
+    for (size_t i = 0; i < bufViewD.size; ++i) {
+        TEST_ASSERT_EQ(bufViewD.data[i], 'd');
     }
     for (size_t i = 0; i < bufViewE.size; ++i) {
         bufViewE.data[i] = 'e';
@@ -206,9 +215,17 @@ TEST_CASE(testReleaseInteriorBuffers)
     for (size_t i = 0; i < bufViewF.size; ++i) {
         bufViewF.data[i] = 'f';
     }
-    for (size_t i = 0; i < bufViewA.size + 1; ++i) {
-        std::cout << "E and F should overwrite A as 'eaf' due to alignment bytes: "
-                << bufViewA.data[i] << std::endl;
+    for (size_t i = 0; i < bufViewC.size; ++i) {
+        TEST_ASSERT_EQ(bufViewC.data[i], 'c');
+    }
+    for (size_t i = 0; i < bufViewD.size; ++i) {
+        TEST_ASSERT_EQ(bufViewD.data[i], 'd');
+    }
+    for (size_t i = 0; i < bufViewE.size; ++i) {
+        TEST_ASSERT_EQ(bufViewE.data[i], 'e');
+    }
+    for (size_t i = 0; i < bufViewF.size; ++i) {
+        TEST_ASSERT_EQ(bufViewF.data[i], 'f');
     }
     TEST_ASSERT_EQ(scratch.getNumBytes(), 13);
 }
@@ -332,7 +349,7 @@ int main(int, char**)
     TEST_CHECK(testScratchMemory);
     TEST_CHECK(testReleaseSingleEndBuffer);
     TEST_CHECK(testReleaseMultipleEndBuffers);
-    TEST_CHECK(testReleaseSequentialEndBuffers);
+    TEST_CHECK(testReleaseInteriorBuffers);
     TEST_CHECK(testReleaseInteriorBuffers);
 
     return 0;
