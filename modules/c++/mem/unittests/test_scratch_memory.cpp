@@ -122,7 +122,7 @@ TEST_CASE(testReleaseMultipleEndBuffers)
     TEST_ASSERT_EQ(pBuf7, pBuf6);
 }
 
-TEST_CASE(testReleaseMiddleOfBuffer)
+TEST_CASE(testReleaseNonEndBuffers)
 {
     //Test putting then releasing then putting again and releasing again
     mem::ScratchMemory scratch;
@@ -185,46 +185,60 @@ TEST_CASE(testReleaseInteriorBuffers)
     mem::BufferView<unsigned char> bufViewE = scratch.getBufferView<sys::ubyte>("e");
     mem::BufferView<unsigned char> bufViewF = scratch.getBufferView<sys::ubyte>("f");
 
-    for (size_t i = 0; i < bufViewA.size; ++i) {
+    for (size_t i = 0; i < bufViewA.size; ++i) 
+    {
         bufViewA.data[i] = 'a';
     }
-    for (size_t i = 0; i < bufViewB.size; ++i) {
+    for (size_t i = 0; i < bufViewB.size; ++i) 
+    {
         bufViewB.data[i] = 'b';
     }
-    for (size_t i = 0; i < bufViewC.size; ++i) {
+    for (size_t i = 0; i < bufViewC.size; ++i) 
+    {
         bufViewC.data[i] = 'c';
     }
-    for (size_t i = 0; i < bufViewB.size; ++i) {
+    for (size_t i = 0; i < bufViewB.size; ++i) 
+    {
         TEST_ASSERT_EQ(bufViewB.data[i], 'b');
     }
-    for (size_t i = 0; i < bufViewD.size; ++i) {
+    for (size_t i = 0; i < bufViewD.size; ++i) 
+    {
         bufViewD.data[i] = 'd';
     }
-    for (size_t i = 0; i < bufViewA.size; ++i) {
+    for (size_t i = 0; i < bufViewA.size; ++i) 
+    {
         TEST_ASSERT_EQ(bufViewA.data[i], 'a');
     }
-    for (size_t i = 0; i < bufViewC.size; ++i) {
+    for (size_t i = 0; i < bufViewC.size; ++i) 
+    {
         TEST_ASSERT_EQ(bufViewC.data[i], 'c');
     }
-    for (size_t i = 0; i < bufViewD.size; ++i) {
+    for (size_t i = 0; i < bufViewD.size; ++i) 
+    {
         TEST_ASSERT_EQ(bufViewD.data[i], 'd');
     }
-    for (size_t i = 0; i < bufViewE.size; ++i) {
+    for (size_t i = 0; i < bufViewE.size; ++i) 
+    {
         bufViewE.data[i] = 'e';
     }
-    for (size_t i = 0; i < bufViewF.size; ++i) {
+    for (size_t i = 0; i < bufViewF.size; ++i) 
+    {
         bufViewF.data[i] = 'f';
     }
-    for (size_t i = 0; i < bufViewC.size; ++i) {
+    for (size_t i = 0; i < bufViewC.size; ++i) 
+    {
         TEST_ASSERT_EQ(bufViewC.data[i], 'c');
     }
-    for (size_t i = 0; i < bufViewD.size; ++i) {
+    for (size_t i = 0; i < bufViewD.size; ++i) 
+    {
         TEST_ASSERT_EQ(bufViewD.data[i], 'd');
     }
-    for (size_t i = 0; i < bufViewE.size; ++i) {
+    for (size_t i = 0; i < bufViewE.size; ++i) 
+    {
         TEST_ASSERT_EQ(bufViewE.data[i], 'e');
     }
-    for (size_t i = 0; i < bufViewF.size; ++i) {
+    for (size_t i = 0; i < bufViewF.size; ++i) 
+    {
         TEST_ASSERT_EQ(bufViewF.data[i], 'f');
     }
     TEST_ASSERT_EQ(scratch.getNumBytes(), 13);
@@ -349,7 +363,7 @@ int main(int, char**)
     TEST_CHECK(testScratchMemory);
     TEST_CHECK(testReleaseSingleEndBuffer);
     TEST_CHECK(testReleaseMultipleEndBuffers);
-    TEST_CHECK(testReleaseInteriorBuffers);
+    TEST_CHECK(testReleaseNonEndBuffers);
     TEST_CHECK(testReleaseInteriorBuffers);
 
     return 0;
