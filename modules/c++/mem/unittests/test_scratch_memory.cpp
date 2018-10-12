@@ -24,10 +24,225 @@
 
 #include <mem/BufferView.h>
 #include <sys/Conf.h>
+#include <iostream>
 #include "TestCase.h"
 
 namespace
 {
+TEST_CASE(testReleaseSingleEndBuffer)
+{
+    //A single release of the last element. Tests with different scratch templates.
+    mem::ScratchMemory scratch;
+
+    scratch.put<sys::ubyte>("buf0", 11, 1, 13);
+    scratch.put<int>("buf1", 17, 1, 13);
+
+    size_t numBytes0 = 11 + 13 - 1;
+    size_t numBytes1 = 17 * sizeof(int) + 13 - 1;
+    TEST_ASSERT_EQ(scratch.getNumBytes(), numBytes0 + numBytes1);
+
+    scratch.release("buf1");
+    TEST_ASSERT_EQ(scratch.getNumBytes(), numBytes0 + numBytes1);
+
+    scratch.put<sys::ubyte>("buf2", 10, 1, 13);
+    TEST_ASSERT_EQ(scratch.getNumBytes(), numBytes0 + numBytes1);
+
+    scratch.put<sys::ubyte>("buf3", 60, 1, 13);
+    size_t numBytes2 = 10 + 13 - 1;
+    size_t numBytes3 = 60 + 13 - 1;
+    TEST_ASSERT_EQ(scratch.getNumBytes(), numBytes0 + numBytes2 + numBytes3);
+
+    scratch.put<char>("buf4", 4, 3, 13);
+    size_t numBytes4 = 3 * (4 + 13 - 1);
+    TEST_ASSERT_EQ(scratch.getNumBytes(), numBytes0 + numBytes2 + numBytes3 + numBytes4);
+
+    scratch.setup();
+    sys::ubyte* pBuf0 = scratch.get<sys::ubyte>("buf0");
+    sys::ubyte* pBuf1 = scratch.get<sys::ubyte>("buf1");
+    sys::ubyte* pBuf2 = scratch.get<sys::ubyte>("buf2");
+
+    TEST_ASSERT_EQ(pBuf1, pBuf2);
+    TEST_ASSERT_NOT_EQ(pBuf0, pBuf2);
+}
+
+TEST_CASE(testReleaseMultipleEndBuffers)
+{
+    //Tests multiple releases of the current last element
+    //Also tests releases two concurrent segments
+    mem::ScratchMemory scratch;
+
+    scratch.put<sys::ubyte>("buf0", 3, 1, 2);
+    TEST_ASSERT_EQ(scratch.getNumBytes(), 4);
+
+    scratch.put<sys::ubyte>("buf1", 3, 1, 2);
+    TEST_ASSERT_EQ(scratch.getNumBytes(), 8);
+
+    scratch.release("buf1");
+    TEST_ASSERT_EQ(scratch.getNumBytes(), 8);
+
+    scratch.put<sys::ubyte>("buf2", 2, 1, 2);
+    TEST_ASSERT_EQ(scratch.getNumBytes(), 8);
+
+    scratch.put<sys::ubyte>("buf3", 3, 1, 2);
+    TEST_ASSERT_EQ(scratch.getNumBytes(), 11);
+
+    scratch.release("buf3");
+    TEST_ASSERT_EQ(scratch.getNumBytes(), 11);
+
+    scratch.put<sys::ubyte>("buf4", 4, 1, 2);
+    TEST_ASSERT_EQ(scratch.getNumBytes(), 12);
+
+    scratch.release("buf4");
+    TEST_ASSERT_EQ(scratch.getNumBytes(), 12);
+
+    scratch.put<sys::ubyte>("buf5", 2, 1, 2);
+    TEST_ASSERT_EQ(scratch.getNumBytes(), 12);
+
+    scratch.put<sys::ubyte>("buf6", 3, 1, 2);
+    TEST_ASSERT_EQ(scratch.getNumBytes(), 14);
+
+    scratch.release("buf6");
+    scratch.release("buf5");
+
+    scratch.put<sys::ubyte>("buf7", 2, 1, 2);
+    TEST_ASSERT_EQ(scratch.getNumBytes(), 14);
+
+    scratch.setup();
+    sys::ubyte* pBuf1 = scratch.get<sys::ubyte>("buf1");
+    sys::ubyte* pBuf2 = scratch.get<sys::ubyte>("buf2");
+    sys::ubyte* pBuf3 = scratch.get<sys::ubyte>("buf3");
+    sys::ubyte* pBuf4 = scratch.get<sys::ubyte>("buf4");
+    sys::ubyte* pBuf6 = scratch.get<sys::ubyte>("buf6");
+    sys::ubyte* pBuf7 = scratch.get<sys::ubyte>("buf7");
+
+    TEST_ASSERT_EQ(pBuf1, pBuf2);
+    TEST_ASSERT_EQ(pBuf3, pBuf4);
+    TEST_ASSERT_EQ(pBuf4, pBuf6);
+    TEST_ASSERT_EQ(pBuf3, pBuf6);
+    TEST_ASSERT_EQ(pBuf7, pBuf6);
+}
+
+TEST_CASE(testReleaseNonEndBuffers)
+{
+    //Test putting then releasing then putting again and releasing again
+    mem::ScratchMemory scratch;
+
+    scratch.put<sys::ubyte>("buf0", 2, 1, 2);
+    scratch.put<sys::ubyte>("buf1", 2, 1, 2);
+    scratch.put<sys::ubyte>("buf2", 2, 1, 2);
+    scratch.put<sys::ubyte>("buf3", 3, 1, 2);
+
+    scratch.release("buf1");
+    scratch.release("buf3");
+    scratch.put<sys::ubyte>("buf4", 2, 1, 2);
+    TEST_ASSERT_EQ(scratch.getNumBytes(), 13);
+
+    scratch.put<sys::ubyte>("buf5", 3, 1, 2);
+    TEST_ASSERT_EQ(scratch.getNumBytes(), 13);
+
+    scratch.release("buf4");
+    scratch.release("buf5");
+
+    scratch.put<sys::ubyte>("buf6", 2, 1, 2);
+    scratch.put<sys::ubyte>("buf7", 3, 1, 2);
+
+    scratch.setup();
+    sys::ubyte* pBuf1 = scratch.get<sys::ubyte>("buf1");
+    sys::ubyte* pBuf4 = scratch.get<sys::ubyte>("buf4");
+    sys::ubyte* pBuf3 = scratch.get<sys::ubyte>("buf3");
+    sys::ubyte* pBuf5 = scratch.get<sys::ubyte>("buf5");
+    sys::ubyte* pBuf6 = scratch.get<sys::ubyte>("buf6");
+    sys::ubyte* pBuf7 = scratch.get<sys::ubyte>("buf7");
+    TEST_ASSERT_EQ(pBuf1, pBuf4);
+    TEST_ASSERT_EQ(pBuf4, pBuf6);
+    TEST_ASSERT_EQ(pBuf3, pBuf5);
+    TEST_ASSERT_EQ(pBuf5, pBuf7);
+}
+
+TEST_CASE(testReleaseInteriorBuffers)
+{
+    //Tests released with filled in buffers for analysis
+    mem::ScratchMemory scratch;
+
+    scratch.put<unsigned char>("a", 2, 1, 2);
+    scratch.put<unsigned char>("b", 2, 1, 2);
+    scratch.put<unsigned char>("c", 2, 1, 2);
+    scratch.release("b");
+    scratch.put<unsigned char>("d", 3, 1, 2);
+    TEST_ASSERT_EQ(scratch.getNumBytes(), 10);
+    scratch.release("a");
+    TEST_ASSERT_EQ(scratch.getNumBytes(), 10);
+    scratch.put<unsigned char>("e", 1, 1, 2);
+    TEST_ASSERT_EQ(scratch.getNumBytes(), 10);
+    scratch.put<unsigned char>("f", 3, 1, 2);
+
+    scratch.setup();
+
+    mem::BufferView<unsigned char> bufViewA = scratch.getBufferView<sys::ubyte>("a");
+    mem::BufferView<unsigned char> bufViewB = scratch.getBufferView<sys::ubyte>("b");
+    mem::BufferView<unsigned char> bufViewC = scratch.getBufferView<sys::ubyte>("c");
+    mem::BufferView<unsigned char> bufViewD = scratch.getBufferView<sys::ubyte>("d");
+    mem::BufferView<unsigned char> bufViewE = scratch.getBufferView<sys::ubyte>("e");
+    mem::BufferView<unsigned char> bufViewF = scratch.getBufferView<sys::ubyte>("f");
+
+    for (size_t i = 0; i < bufViewA.size; ++i) 
+    {
+        bufViewA.data[i] = 'a';
+    }
+    for (size_t i = 0; i < bufViewB.size; ++i) 
+    {
+        bufViewB.data[i] = 'b';
+    }
+    for (size_t i = 0; i < bufViewC.size; ++i) 
+    {
+        bufViewC.data[i] = 'c';
+    }
+    for (size_t i = 0; i < bufViewB.size; ++i) 
+    {
+        TEST_ASSERT_EQ(bufViewB.data[i], 'b');
+    }
+    for (size_t i = 0; i < bufViewD.size; ++i) 
+    {
+        bufViewD.data[i] = 'd';
+    }
+    for (size_t i = 0; i < bufViewA.size; ++i) 
+    {
+        TEST_ASSERT_EQ(bufViewA.data[i], 'a');
+    }
+    for (size_t i = 0; i < bufViewC.size; ++i) 
+    {
+        TEST_ASSERT_EQ(bufViewC.data[i], 'c');
+    }
+    for (size_t i = 0; i < bufViewD.size; ++i) 
+    {
+        TEST_ASSERT_EQ(bufViewD.data[i], 'd');
+    }
+    for (size_t i = 0; i < bufViewE.size; ++i) 
+    {
+        bufViewE.data[i] = 'e';
+    }
+    for (size_t i = 0; i < bufViewF.size; ++i) 
+    {
+        bufViewF.data[i] = 'f';
+    }
+    for (size_t i = 0; i < bufViewC.size; ++i) 
+    {
+        TEST_ASSERT_EQ(bufViewC.data[i], 'c');
+    }
+    for (size_t i = 0; i < bufViewD.size; ++i) 
+    {
+        TEST_ASSERT_EQ(bufViewD.data[i], 'd');
+    }
+    for (size_t i = 0; i < bufViewE.size; ++i) 
+    {
+        TEST_ASSERT_EQ(bufViewE.data[i], 'e');
+    }
+    for (size_t i = 0; i < bufViewF.size; ++i) 
+    {
+        TEST_ASSERT_EQ(bufViewF.data[i], 'f');
+    }
+    TEST_ASSERT_EQ(scratch.getNumBytes(), 13);
+}
 TEST_CASE(testScratchMemory)
 {
     mem::ScratchMemory scratch;
@@ -146,6 +361,10 @@ TEST_CASE(testScratchMemory)
 int main(int, char**)
 {
     TEST_CHECK(testScratchMemory);
+    TEST_CHECK(testReleaseSingleEndBuffer);
+    TEST_CHECK(testReleaseMultipleEndBuffers);
+    TEST_CHECK(testReleaseNonEndBuffers);
+    TEST_CHECK(testReleaseInteriorBuffers);
 
     return 0;
 }

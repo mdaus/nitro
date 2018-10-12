@@ -40,8 +40,12 @@ inline void ScratchMemory::put<sys::ubyte>(const std::string& key,
     // invalidate buffer (setup must be called before any subsequent get call)
     mBuffer.data = NULL;
 
+    size_t segmentOffset = mOffset;
+
     alignment = std::max<size_t>(1, alignment);
-    mNumBytesNeeded += numBuffers * (numElements + alignment - 1);
+    mOffset += numBuffers * (numElements + alignment - 1);
+
+    mNumBytesNeeded = std::max<size_t>(mNumBytesNeeded, mOffset);
 
     std::map<std::string, Segment>::iterator iterSeg = mSegments.find(key);
     if (iterSeg != mSegments.end())
@@ -52,7 +56,9 @@ inline void ScratchMemory::put<sys::ubyte>(const std::string& key,
     }
     mSegments.insert(
             iterSeg,
-            std::make_pair(key, Segment(numElements, numBuffers, alignment)));
+            std::make_pair(key, Segment(numElements, numBuffers, alignment, segmentOffset)));
+
+    mKeyOrder.push_back(key);
 }
 
 template <typename T>
