@@ -559,7 +559,7 @@ cdef class ImageReader:
             if subWindow is not NULL:
                 io.nitf_SubWindow_destruct(&subWindow)
 
-        nparr = np.asarray(buf, dtype=f'>{atype}')
+        nparr = np.asarray(buf, dtype=f'{atype}')
         nparr.shape = numBands, numRows, numCols
         return nparr
 
