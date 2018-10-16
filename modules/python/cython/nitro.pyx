@@ -13,13 +13,15 @@ cimport tre
 cimport numpy as np
 np.import_array()
 from cpython.pycapsule cimport PyCapsule_New, PyCapsule_IsValid, PyCapsule_GetPointer
-from cpython.mem cimport PyMem_Malloc, PyMem_Free, PyMem_Realloc
+from cpython.mem cimport PyMem_Malloc, PyMem_Free
 from libc.string cimport memcpy
+from cpython cimport array
 from error cimport nitf_Error
 from types cimport *
 
 import dataextension_segment
 from . import field, header
+import array
 import numpy as np
 import os
 import tre
@@ -491,160 +493,75 @@ cdef class ImageReader:
         obj._c_reader = ptr
         return obj
 
-    cpdef read(self, SubWindow window, downsampler=None, dtype=None):
+    cpdef read(self, ihdr):
         cdef nitf_Error error
-        cdef nitf_Uint8** buf
+        cdef io.nitf_SubWindow* subWindow = NULL
+        cdef array.array bandList
+        cdef array.array buf
+        cdef nitf_Uint8** planar = NULL
         cdef int padded
 
-        if downsampler is not None:
-            raise NotImplementedError("Downsampling now implemented")
+        pvtype = str(ihdr.pixelValueType).strip()
+        atype = None
+        if self._nbpp == 8:
+            if pvtype == "INT":
+                atype = 'B'
+            elif pvtype == "SI":
+                atype = 'b'
+        elif self._nbpp == 16:
+            if pvtype == "INT":
+                atype = 'H'
+            elif pvtype == "SI":
+                atype = 'h'
+        elif self._nbpp == 32:
+            if pvtype == "INT":
+                atype = 'L'
+            elif pvtype == "SI":
+                atype = 'l'
+            elif pvtype == "R":
+                atype = 'f'
+        elif self._nbpp == 64:
+            if pvtype == "INT":
+                atype = 'Q'
+            elif pvtype == "SI":
+                atype = 'q'
+            elif pvtype == "R":
+                atype = 'd'
+        if atype is None:
+            raise TypeError(f"PVTYPE {pvtype} and NBPP {self._nbpp} combination not supported")
 
-        rowSkip, colSkip = 1, 1  # TODO: get skip factor from downsampler
-        subimageSize = (window.numRows // rowSkip) * (window.numCols // colSkip)
-        if dtype is None:
-            if self._nbpp == 8:
-                dtype = np.uint8
-            elif self._nbpp == 16:
-                dtype = np.uint16
-            elif self._nbpp == 32:
-                dtype = np.uint32
-            elif self._nbpp == 64:
-                dtype = np.uint64
-        if dtype is None:
-            raise ValueError("Unable to determine dtype from nbpp, specify a dtype")
-        result = np.ndarray((window.numBands, subimageSize), dtype=dtype, order='C')
-
+        numRows, numCols = int(ihdr.numRows), int(ihdr.numCols)
+        numBands = int(ihdr.numImageBands) + int(ihdr.numMultispectralImageBands)
+        subImageSize = numRows * numCols * (self._nbpp // 8)
         try:
-            buf = <nitf_Uint8**>PyMem_Malloc(window.numBands * sizeof(nitf_Uint8*))
-            if buf is NULL:
-                raise MemoryError("Unable to allocate buffer for image read")
-            buf[0] = <nitf_Uint8*>np.PyArray_DATA(result)
-
-            for i in range(1, window.numBands):
-                buf[i] = &(buf[0][sizeof(nitf_Uint8) * subimageSize * i])
-
-            if not io.nitf_ImageReader_read(self._c_reader, window._c_window, buf, &padded, &error):
+            subWindow = io.nitf_SubWindow_construct(&error)
+            if subWindow is NULL:
                 raise NitfError(error)
-        except:
-            PyMem_Free(buf)
-            raise
+            subWindow.startRow = 0
+            subWindow.startCol = 0
+            subWindow.numRows = numRows
+            subWindow.numCols = numCols
 
-        result.shape = result.shape[0], (window.numRows // rowSkip), (window.numCols // colSkip)
-        return result.copy()
+            bandList = array.array('L', range(numBands))
+            subWindow.bandList = <nitf_Uint32*>bandList.data.as_ulongs
+            subWindow.numBands = numBands
+            buf = array.array(atype, [0] * (numBands * numRows * numCols))
 
-    cpdef read_block(self, int block_number):
-        cdef nitf_Error error
-        cdef nitf_Uint64 block_size
-        cdef nitf_Uint8* buf
-        cdef nitf_Uint8* dst
+            planar = <nitf_Uint8**>PyMem_Malloc(sizeof(nitf_Uint8*) * numBands)
+            for band in range(numBands):
+                planar[band] = <nitf_Uint8*>&(buf.data.as_uchars[numRows*numCols*band*(self._nbpp // 8)])
 
-        print(block_number)
-        buf = io.nitf_ImageReader_readBlock(self._c_reader, block_number, &block_size, &error)
-        print(buf)
-        if buf is NULL:
-            raise NitfError(error)
-        result = np.ndarray((block_size,), dtype=np.uint8, order='C')
-        dst = <nitf_Uint8*>np.PyArray_DATA(result)
-        memcpy(dst, buf, block_size)
-        return result
+            if not io.nitf_ImageReader_read(self._c_reader, subWindow, planar, &padded, &error):
+                raise NitfError(error)
+        finally:
+            if planar is not NULL:
+                PyMem_Free(planar)
+            if subWindow is not NULL:
+                io.nitf_SubWindow_destruct(&subWindow)
 
-
-cdef class SubWindow:
-    cdef io.nitf_SubWindow* _c_window
-
-    def __cinit__(self, image_subheader=None):
-        cdef nitf_Error error
-        self._c_window = io.nitf_SubWindow_construct(&error)
-        if self._c_window is NULL:
-            raise NitfError(error)
-        self._c_window.startRow = 0
-        self._c_window.startCol = 0
-        self._c_window.bandList = <nitf_Uint32*>NULL
-
-        if image_subheader:
-            self._c_window.numRows = int(image_subheader['numRows'])
-            self._c_window.numCols = int(image_subheader['numCols'])
-            bands = int(image_subheader['numImageBands']) + \
-                int(image_subheader['numMultispectralImageBands'])
-            self._c_window.numBands = bands
-            self._c_window.bandList = <nitf_Uint32*>PyMem_Malloc(self._c_window.numBands)
-            for i in range(bands):
-                self._c_window.bandList[i] = <int>i
-        else:
-            self._c_window.numRows = 0
-            self._c_window.numCols = 0
-
-    def __dealloc__(self):
-        if self._c_window != NULL:
-            if self._c_window.bandList != NULL:
-                io.nitf_SubWindow_destruct(&self._c_window)
-
-    @property
-    def startRow(self):
-        return self._c_window.startRow
-
-    @startRow.setter
-    def startRow(self, nitf_Uint32 value):
-        self._c_window.startRow = value
-
-    @property
-    def startCol(self):
-        return self._c_window.startCol
-
-    @startCol.setter
-    def startCol(self, nitf_Uint32 value):
-        self._c_window.startCol = value
-
-    @property
-    def numRows(self):
-        return self._c_window.numRows
-
-    @numRows.setter
-    def numRows(self, nitf_Uint32 value):
-        self._c_window.numRows = value
-
-    @property
-    def numCols(self):
-        return self._c_window.numCols
-
-    @numCols.setter
-    def numCols(self, nitf_Uint32 value):
-        self._c_window.numCols = value
-
-    @property
-    def numBands(self):
-        return self._c_window.numBands
-
-    @numBands.setter
-    def numBands(self, nitf_Uint32 value):
-        cdef nitf_Uint32* tmp
-        if value == 0:
-            self._c_window.numBands = value
-            PyMem_Free(self._c_window.bandList)
-            self._c_window.bandList = NULL
-        # realloc works like malloc if the bandList is NULL
-        tmp = <nitf_Uint32*>PyMem_Realloc(self._c_window.bandList, value)
-        if tmp is NULL:
-            raise MemoryError("Unable to reallocate bandList memory")
-        self._c_window.bandList = tmp
-        self._c_window.numBands = value
-
-    @property
-    def bandList(self):
-        tmp = []
-        for i in range(self._c_window.numBands):
-            tmp.append(self._c_window.bandList[i])
-        return tmp
-
-    @bandList.setter
-    def bandList(self, list value):
-        if len(value) != self._c_window.numBands:
-            self.numBands = len(value)
-        for i, v in enumerate(value):
-            self._c_window.bandList[i] = v
-
-    def __str__(self):
-        return f'{self.startRow}, {self.startCol}, {self.numRows}, {self.numCols}, {len(self.bandList)}'
+        nparr = np.asarray(buf, dtype=f'>{atype}')
+        nparr.shape = numBands, numRows, numCols
+        return nparr
 
 
 cdef class SegmentReader:
