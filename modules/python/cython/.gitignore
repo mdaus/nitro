@@ -104,8 +104,6 @@ venv.bak/
 
 # mypy
 .mypy_cache/
-
-*.c
 cython_debug
 
 nitro/plugins
