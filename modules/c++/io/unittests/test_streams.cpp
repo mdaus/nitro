@@ -1,7 +1,7 @@
 /* =========================================================================
- * This file is part of io-c++ 
+ * This file is part of io-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * io-c++ is free software; you can redistribute it and/or modify
@@ -14,13 +14,15 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
 
 #include <import/io.h>
+#include "mem/BufferView.h"
+#include "sys/Conf.h"
 #include "TestCase.h"
 
 TEST_CASE(testStringStream)
@@ -107,6 +109,52 @@ TEST_CASE(testCountingOutputStream)
     io::CountingOutputStream counter(&stream);
     counter.write("test1");
     TEST_ASSERT_EQ(counter.getCount(), 5);
+}
+
+TEST_CASE(testBufferViewStream)
+{
+    {
+        mem::BufferView<sys::ubyte> bufferView(NULL, 0);
+        io::BufferViewStream<sys::ubyte> stream(bufferView);
+        TEST_ASSERT_EQ(stream.tell(), 0);
+        TEST_ASSERT_EQ(stream.available(), 0);
+        TEST_ASSERT_EQ(stream.get(), NULL);
+    }
+    {
+        std::vector<sys::ubyte> data(4);
+        data[0] = 2;
+        data[1] = 4;
+        data[2] = 5;
+        data[3] = 9;
+        mem::BufferView<sys::ubyte> bufferView(data.data(), data.size());
+        io::BufferViewStream<sys::ubyte> stream(bufferView);
+        TEST_ASSERT_EQ(stream.tell(), 0);
+        TEST_ASSERT_EQ(stream.available(), 4);
+
+        std::vector<sys::ubyte> output(3);
+        stream.read(output.data(), 2);
+        TEST_ASSERT_EQ(stream.tell(), 2);
+        TEST_ASSERT_EQ(stream.available(), 2);
+        stream.seek(1, io::Seekable::CURRENT);
+        stream.read(output.data() + 2, 1);
+        TEST_ASSERT_EQ(output[0], 2);
+        TEST_ASSERT_EQ(output[1], 4);
+        TEST_ASSERT_EQ(output[2], 9);
+
+        stream.seek(1, io::Seekable::START);
+        stream.write(output.data(), output.size());
+
+        TEST_ASSERT_EQ(data[0], 2);
+        TEST_ASSERT_EQ(data[1], 2);
+        TEST_ASSERT_EQ(data[2], 4);
+        TEST_ASSERT_EQ(data[3], 9);
+
+        TEST_ASSERT_EQ(stream.available(), 0);
+        TEST_EXCEPTION(stream.write(data.data(), data.size()));
+
+        TEST_EXCEPTION(stream.seek(-1, io::Seekable::START));
+        TEST_EXCEPTION(stream.seek(-1, io::Seekable::END));
+    }
 }
 
 void cleanupFiles(std::string base)
@@ -215,6 +263,7 @@ int main(int, char**)
     TEST_CHECK(testByteStream);
     TEST_CHECK(testProxyOutputStream);
     TEST_CHECK(testCountingOutputStream);
+    TEST_CHECK(testBufferViewStream);
     TEST_CHECK(testRotate);
     TEST_CHECK(testNeverRotate);
     TEST_CHECK(testRotateReset);
