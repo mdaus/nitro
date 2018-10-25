@@ -23,11 +23,11 @@
 #ifndef __IO_BUFFER_VIEW_STREAM_H__
 #define __IO_BUFFER_VIEW_STREAM_H__
 
-#include "mem/BufferView.h"
-#include "sys/Conf.h"
-#include "except/Error.h"
-#include "except/Exception.h"
-#include "io/SeekableStreams.h"
+#include <mem/BufferView.h>
+#include <sys/Conf.h>
+#include <except/Error.h>
+#include <except/Exception.h>
+#include <io/SeekableStreams.h>
 
 /*!
  *  \file
@@ -36,7 +36,6 @@
  */
 namespace io
 {
-
 /*!
  *  \class
  *  \brief  Class for streaming preallocated data, inherits from
@@ -56,12 +55,7 @@ public:
     {
     }
 
-    //! Destructor
-    virtual ~BufferViewStream()
-    {
-    }
-
-    //! Returns current location in buffer
+    //! Returns current location in buffer in elements of T
     virtual sys::Off_T tell()
     {
         return mPosition;
@@ -77,7 +71,7 @@ public:
     virtual sys::Off_T seek(sys::Off_T offset, Whence whence);
 
     /*
-     * \return The available bytes to read from the stream
+     * \return The available elements to read from the stream
      */
     virtual sys::Off_T available()
     {
@@ -103,6 +97,32 @@ public:
     sys::ubyte* get()
     {
         return mBufferView.data;
+    }
+
+    //! Returns const pointer to internal buffer
+    const sys::ubyte* get() const
+    {
+        return mBufferView.data;
+    }
+
+    /*!
+     * Overload for reading into a typed buffer
+     * \param[out] buffer Buffer to read into
+     * \param numElements How many -elements- (not bytes) to read
+     */
+    sys::SSize_T read(T* buffer, size_t numElements)
+    {
+        return InputStream::read(buffer, numElements * sizeof(T)) / sizeof(T);
+    }
+
+    /*!
+    * Overload for writing from a typed buffer
+    * \param buffer Buffer to write from
+    * \param numElements How many -elements- (not bytes) to write
+    */
+    void write(const T* buffer, size_t numElements)
+    {
+        write(reinterpret_cast<const void*>(buffer), numElements * sizeof(T));
     }
 
 protected:
@@ -155,36 +175,38 @@ sys::Off_T BufferViewStream<T>::seek(sys::Off_T offset, Whence whence)
 }
 
 template <typename T>
-void BufferViewStream<T>::write(const void* buffer, size_t size)
+void BufferViewStream<T>::write(const void* buffer, size_t numBytes)
 {
-    const sys::Size_T newPos = mPosition + size;
+    const size_t numElements = numBytes / sizeof(T);
+    const sys::Size_T newPos = mPosition + numElements;
     if (newPos > mBufferView.size)
     {
         std::ostringstream msg;
-        msg << "Write of size " << size << " runs out of bounds.";
+        msg << "Write of size " << numBytes << " runs out of bounds.";
         throw except::Exception(Ctxt(msg.str()));
     }
 
-    const T* const bufferPtr = static_cast<const T*>(buffer);
-    std::copy(bufferPtr, bufferPtr + size, mBufferView.data + mPosition);
+    ::memcpy(mBufferView.data + mPosition, buffer, numBytes);
     mPosition = newPos;
 }
 
 template <typename T>
-sys::SSize_T BufferViewStream<T>::readImpl(void* buffer, size_t len)
+sys::SSize_T BufferViewStream<T>::readImpl(void* buffer, size_t numBytes)
 {
-    if (available() < static_cast<sys::Off_T>(len))
+    size_t numElements = numBytes / sizeof(T);
+    if (available() < static_cast<sys::Off_T>(numElements))
     {
-        len = available();
+        numElements = available();
+        numBytes = numElements * sizeof(T);
     }
-    if (len == 0)
+    if (numBytes == 0)
     {
         return 0;
     }
 
-    ::memcpy(buffer, mBufferView.data + mPosition, len);
-    mPosition += len;
-    return len;
+    ::memcpy(buffer, mBufferView.data + mPosition, numBytes);
+    mPosition += numElements;
+    return numBytes;
 }
 }
 #endif

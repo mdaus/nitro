@@ -21,9 +21,9 @@
  */
 
 #include <import/io.h>
-#include "mem/BufferView.h"
-#include "sys/Conf.h"
-#include "TestCase.h"
+#include <mem/BufferView.h>
+#include <sys/Conf.h>
+#include <TestCase.h>
 
 TEST_CASE(testStringStream)
 {
@@ -126,23 +126,23 @@ TEST_CASE(testBufferViewStream)
         data[1] = 4;
         data[2] = 5;
         data[3] = 9;
-        mem::BufferView<sys::ubyte> bufferView(data.data(), data.size());
+        mem::BufferView<sys::ubyte> bufferView(&data[0], data.size());
         io::BufferViewStream<sys::ubyte> stream(bufferView);
         TEST_ASSERT_EQ(stream.tell(), 0);
         TEST_ASSERT_EQ(stream.available(), 4);
 
         std::vector<sys::ubyte> output(3);
-        stream.read(output.data(), 2);
+        TEST_ASSERT_EQ(stream.read(&output[0], 2), 2);
         TEST_ASSERT_EQ(stream.tell(), 2);
         TEST_ASSERT_EQ(stream.available(), 2);
         stream.seek(1, io::Seekable::CURRENT);
-        stream.read(output.data() + 2, 1);
+        TEST_ASSERT_EQ(stream.read(&output[2], 1), 1);
         TEST_ASSERT_EQ(output[0], 2);
         TEST_ASSERT_EQ(output[1], 4);
         TEST_ASSERT_EQ(output[2], 9);
 
         stream.seek(1, io::Seekable::START);
-        stream.write(output.data(), output.size());
+        stream.write(&output[0], output.size());
 
         TEST_ASSERT_EQ(data[0], 2);
         TEST_ASSERT_EQ(data[1], 2);
@@ -150,11 +150,49 @@ TEST_CASE(testBufferViewStream)
         TEST_ASSERT_EQ(data[3], 9);
 
         TEST_ASSERT_EQ(stream.available(), 0);
-        TEST_EXCEPTION(stream.write(data.data(), data.size()));
+        TEST_EXCEPTION(stream.write(&data[0], data.size()));
 
         TEST_EXCEPTION(stream.seek(-1, io::Seekable::START));
         TEST_EXCEPTION(stream.seek(-1, io::Seekable::END));
     }
+}
+
+TEST_CASE(testBufferViewIntStream)
+{
+    // Test for datatype with size > 1 to make sure copies are done correctly
+    std::vector<int> data(4);
+    data[0] = 2;
+    data[1] = 4;
+    data[2] = 5;
+    data[3] = 9;
+    mem::BufferView<int> bufferView(&data[0], data.size());
+    io::BufferViewStream<int> stream(bufferView);
+    std::vector<int> output(3);
+
+    TEST_ASSERT_EQ(stream.read(&output[0], 2), 2);
+    TEST_ASSERT_EQ(stream.tell(), 2);
+    TEST_ASSERT_EQ(stream.available(), 2);
+    stream.seek(1, io::Seekable::CURRENT);
+    TEST_ASSERT_EQ(stream.read(&output[2], 1), 1);
+    TEST_ASSERT_EQ(output[0], 2);
+    TEST_ASSERT_EQ(output[1], 4);
+    TEST_ASSERT_EQ(output[2], 9);
+
+    stream.seek(1, io::Seekable::START);
+    stream.write(&output[0], output.size());
+
+    TEST_ASSERT_EQ(data[0], 2);
+    TEST_ASSERT_EQ(data[1], 2);
+    TEST_ASSERT_EQ(data[2], 4);
+    TEST_ASSERT_EQ(data[3], 9);
+
+    // Truncate properly if we ask for more elements than there are
+    std::memset(&output[0], 0, output.size() * sizeof(output[0]));
+    stream.seek(3, io::Seekable::START);
+    TEST_ASSERT_EQ(stream.read(&output[0], 2), 1);
+    TEST_ASSERT_EQ(stream.tell(), 4);
+    TEST_ASSERT_EQ(output[0], 9);
+    TEST_ASSERT_EQ(output[1], 0);
 }
 
 void cleanupFiles(std::string base)
@@ -264,6 +302,7 @@ int main(int, char**)
     TEST_CHECK(testProxyOutputStream);
     TEST_CHECK(testCountingOutputStream);
     TEST_CHECK(testBufferViewStream);
+    TEST_CHECK(testBufferViewIntStream);
     TEST_CHECK(testRotate);
     TEST_CHECK(testNeverRotate);
     TEST_CHECK(testRotateReset);
