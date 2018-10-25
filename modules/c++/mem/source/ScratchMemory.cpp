@@ -92,7 +92,7 @@ void ScratchMemory::release(const std::string& key)
             if (mConnectedKeys.find(key) != mConnectedKeys.end())
             {
                 std::map<std::string, Segment>::const_iterator iterSegOfPrevReleased =
-                                        mSegments.find(nextKey);
+                        mSegments.find(nextKey);
                 mOffset = iterSegOfPrevReleased->second.offset;
             }
             else
