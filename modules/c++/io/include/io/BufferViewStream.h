@@ -55,10 +55,10 @@ public:
     {
     }
 
-    //! Returns current location in buffer in elements of T
+    //! Returns current location in buffer in bytes
     virtual sys::Off_T tell()
     {
-        return mPosition;
+        return mPosition * sizeof(T);
     }
 
     /*!
@@ -71,11 +71,11 @@ public:
     virtual sys::Off_T seek(sys::Off_T offset, Whence whence);
 
     /*
-     * \return The available elements to read from the stream
+     * \return The available bytes to read from the stream
      */
     virtual sys::Off_T available()
     {
-        return mBufferView.size - mPosition;
+        return (mBufferView.size - mPosition) * sizeof(T);
     }
 
     using OutputStream::write;
@@ -144,6 +144,7 @@ private:
 template <typename T>
 sys::Off_T BufferViewStream<T>::seek(sys::Off_T offset, Whence whence)
 {
+    offset /= sizeof(T);
     // Let's not change anything until we know it will be valid
     sys::Off_T newPos = mPosition;
     switch (whence)
@@ -194,10 +195,10 @@ template <typename T>
 sys::SSize_T BufferViewStream<T>::readImpl(void* buffer, size_t numBytes)
 {
     size_t numElements = numBytes / sizeof(T);
-    if (available() < static_cast<sys::Off_T>(numElements))
+    if (available() < static_cast<sys::Off_T>(numBytes))
     {
-        numElements = available();
-        numBytes = numElements * sizeof(T);
+        numBytes = available();
+        numElements = numBytes / sizeof(T);
     }
     if (numBytes == 0)
     {

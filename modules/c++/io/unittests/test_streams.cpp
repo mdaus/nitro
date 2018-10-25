@@ -170,15 +170,15 @@ TEST_CASE(testBufferViewIntStream)
     std::vector<int> output(3);
 
     TEST_ASSERT_EQ(stream.read(&output[0], 2), 2);
-    TEST_ASSERT_EQ(stream.tell(), 2);
-    TEST_ASSERT_EQ(stream.available(), 2);
-    stream.seek(1, io::Seekable::CURRENT);
+    TEST_ASSERT_EQ(stream.tell(), 2 * sizeof(int));
+    TEST_ASSERT_EQ(stream.available(), 2 * sizeof(int));
+    stream.seek(1 * sizeof(int), io::Seekable::CURRENT);
     TEST_ASSERT_EQ(stream.read(&output[2], 1), 1);
     TEST_ASSERT_EQ(output[0], 2);
     TEST_ASSERT_EQ(output[1], 4);
     TEST_ASSERT_EQ(output[2], 9);
 
-    stream.seek(1, io::Seekable::START);
+    stream.seek(1 * sizeof(int), io::Seekable::START);
     stream.write(&output[0], output.size());
 
     TEST_ASSERT_EQ(data[0], 2);
@@ -188,9 +188,9 @@ TEST_CASE(testBufferViewIntStream)
 
     // Truncate properly if we ask for more elements than there are
     std::memset(&output[0], 0, output.size() * sizeof(output[0]));
-    stream.seek(3, io::Seekable::START);
+    stream.seek(3 * sizeof(int), io::Seekable::START);
     TEST_ASSERT_EQ(stream.read(&output[0], 2), 1);
-    TEST_ASSERT_EQ(stream.tell(), 4);
+    TEST_ASSERT_EQ(stream.tell(), 4 * sizeof(int));
     TEST_ASSERT_EQ(output[0], 9);
     TEST_ASSERT_EQ(output[1], 0);
 }
