@@ -24,6 +24,7 @@
 #include <mem/BufferView.h>
 #include <sys/Conf.h>
 #include <TestCase.h>
+#include <string.h>
 
 TEST_CASE(testStringStream)
 {
@@ -187,7 +188,7 @@ TEST_CASE(testBufferViewIntStream)
     TEST_ASSERT_EQ(data[3], 9);
 
     // Truncate properly if we ask for more elements than there are
-    std::memset(&output[0], 0, output.size() * sizeof(output[0]));
+    ::memset(&output[0], 0, output.size() * sizeof(output[0]));
     stream.seek(3 * sizeof(int), io::Seekable::START);
     TEST_ASSERT_EQ(stream.read(&output[0], 2), 1);
     TEST_ASSERT_EQ(stream.tell(), 4 * sizeof(int));
