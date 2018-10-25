@@ -28,6 +28,7 @@
 #include <except/Error.h>
 #include <except/Exception.h>
 #include <io/SeekableStreams.h>
+#include <string.h>
 
 /*!
  *  \file
