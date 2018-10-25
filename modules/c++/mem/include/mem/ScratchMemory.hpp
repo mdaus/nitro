@@ -59,6 +59,9 @@ inline void ScratchMemory::put<sys::ubyte>(const std::string& key,
             std::make_pair(key, Segment(numElements, numBuffers, alignment, segmentOffset)));
 
     mKeyOrder.push_back(key);
+    std::vector<std::string>::iterator searchForInsertOrder = std::find(mKeyOrder.begin(),
+                                                                        mKeyOrder.end(),
+                                                                        key);
 }
 
 template <typename T>
