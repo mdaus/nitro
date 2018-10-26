@@ -1,6 +1,7 @@
 from error cimport nitf_Error
 from types cimport *
 from dataextension_segment cimport nitf_DESegment
+from text_segment cimport nitf_TextSegment
 from image_segment cimport nitf_ImageSegment
 from header cimport nitf_FileHeader
 
@@ -26,7 +27,7 @@ cdef extern from "nitf/Record.h":
     nitf_Uint32 nitf_Record_getNumGraphics(const nitf_Record* record, nitf_Error* error);
     # nitf_GraphicSegment* nitf_Record_newGraphicSegment(nitf_Record * record, nitf_Error * error);
     nitf_Uint32 nitf_Record_getNumTexts(const nitf_Record* record, nitf_Error* error);
-    # nitf_TextSegment* nitf_Record_newTextSegment(nitf_Record * record, nitf_Error * error);
+    nitf_TextSegment* nitf_Record_newTextSegment(nitf_Record * record, nitf_Error * error);
     nitf_Uint32 nitf_Record_getNumDataExtensions(const nitf_Record* record, nitf_Error* error);
     nitf_DESegment* nitf_Record_newDataExtensionSegment(nitf_Record * record, nitf_Error * error);
     # NITF_BOOL nitf_Record_removeImageSegment(nitf_Record * record, nitf_Uint32 segmentNumber, nitf_Error * error);

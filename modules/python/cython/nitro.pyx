@@ -2,6 +2,7 @@
 
 cimport cython
 cimport dataextension_segment
+cimport text_segment
 cimport field
 cimport header
 cimport image_segment
@@ -166,6 +167,9 @@ cdef class Record:
 
     def new_data_extension_segment(self):
         return dataextension_segment.DESegment.from_record(PyCapsule_New(self._c_record, "Record", NULL))
+
+    def new_text_segment(self):
+        return TextSegment.from_record(PyCapsule_New(self._c_record, "Record", NULL))
 
 
 cdef class ImageSegment:
@@ -371,6 +375,15 @@ cdef class Writer:
         cdef io.nitf_SegmentWriter* sw
 
         sw = io.nitf_Writer_newDEWriter(self._c_writer, index, &error)
+        if sw is NULL:
+            raise NitfError(error)
+        return SegmentWriter.from_ptr(sw)
+
+    def new_text_writer(self, index):
+        cdef nitf_Error error
+        cdef io.nitf_SegmentWriter* sw
+
+        sw = io.nitf_Writer_newTextWriter(self._c_writer, index, &error)
         if sw is NULL:
             raise NitfError(error)
         return SegmentWriter.from_ptr(sw)
@@ -616,6 +629,40 @@ cdef class SegmentWriter:
     @deprecated("Old SWIG API")
     def attachSource(self, SegmentSource segmentsource):
         self.attach_source(segmentsource)
+
+
+cdef class TextSegment:
+    cdef text_segment.nitf_TextSegment* _c_text
+
+    @staticmethod
+    def from_record(c):
+        cdef record.nitf_Record* c_rec
+        cdef nitf_Error error
+        assert(PyCapsule_IsValid(c, "Record"))
+        c_rec = <record.nitf_Record*>PyCapsule_GetPointer(c, "Record")
+        obj = TextSegment()
+        obj._c_text = record.nitf_Record_newTextSegment(c_rec, &error)
+        if obj._c_text is NULL:
+            raise NitfError(error)
+        return obj  # allow chaining
+
+    @staticmethod
+    cdef from_ptr(text_segment.nitf_TextSegment* ptr):
+        obj = TextSegment()
+        obj._c_text = ptr
+        return obj
+
+    @staticmethod
+    def from_capsule(c):
+        assert(PyCapsule_IsValid(c, "TextSegment"))
+        return TextSegment.from_ptr(<text_segment.nitf_TextSegment*>PyCapsule_GetPointer(c, "TextSegment"))
+
+    @property
+    def subheader(self):
+        cdef header.nitf_TextSubheader* hdr
+        hdr = self._c_text.subheader
+        h = header.TextSubheader(PyCapsule_New(hdr, "TextSubheader", NULL))
+        return h
 
 
 cpdef enum Version:

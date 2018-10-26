@@ -132,3 +132,18 @@ cdef extern from "nitf/DESubheader.h":
         nitf_TRE *subheaderFields;
         nitf_Uint64 dataLength;
         nitf_Extensions *userDefinedSection
+
+cdef extern from "nitf/TextSubheader.h":
+    ctypedef struct nitf_TextSubheader:
+        nitf_Field *filePartType;
+        nitf_Field *textID;
+        nitf_Field *attachmentLevel;
+        nitf_Field *dateTime;
+        nitf_Field *title;
+        nitf_Field *securityClass;
+        nitf_FileSecurity *securityGroup;
+        nitf_Field *encrypted;
+        nitf_Field *format;
+        nitf_Field *extendedHeaderLength;
+        nitf_Field *extendedHeaderOverflow;
+        nitf_Extensions *extendedSection;

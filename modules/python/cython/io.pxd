@@ -82,6 +82,7 @@ cdef extern from "nitf/Writer.h":
     void nitf_IOHandle_close(nitf_IOHandle handle)
     nitf_ImageWriter* nitf_Writer_newImageWriter(nitf_Writer* writer, int index, nrt_HashTable* options, nitf_Error* error);
     nitf_SegmentWriter* nitf_Writer_newDEWriter(nitf_Writer *writer, int index, nitf_Error* error);
+    nitf_SegmentWriter* nitf_Writer_newTextWriter(nitf_Writer *writer, int index, nitf_Error * error);
 
 
 cdef extern from "nitf/Reader.h":

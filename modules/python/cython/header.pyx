@@ -400,3 +400,54 @@ cdef class DESubheader(BaseFieldHeader):
             self._c_header.subheaderFields = <tre.nitf_TRE*>PyCapsule_GetPointer(value._capsule(), "TRE")
         else:
             super().__setitem__(key, value)
+
+
+cdef class TextSubheader(BaseFieldHeader):
+    cdef header.nitf_TextSubheader* _c_header
+
+    def __cinit__(self, c):
+        assert(PyCapsule_IsValid(c, "TextSubheader"))
+        self._c_header = <header.nitf_TextSubheader*>PyCapsule_GetPointer(c, "TextSubheader")
+
+    def _capsule(self):
+        return PyCapsule_New(self._c_header, "TextSubheader", NULL)
+
+    @staticmethod
+    cdef from_ptr(header.nitf_TextSubheader* ptr):
+        obj = TextSubheader()
+        obj._c_header = ptr
+        return obj
+
+    @deprecated("Old SWIG API")
+    def getUDHD(self):
+        return self.userDefinedSection
+
+    equiv_items = {'TE': 'filePartType',
+                   'TEXTID': 'textID',
+                   'TXTALVL': 'attachmentLevel',
+                   'TXTDT': 'dateTime',
+                   'TXTITL': 'title',
+                   'TSCLAS': 'securityClass',
+                   'ENCRYP': 'encrypted',
+                   'TXTFMT': 'format',
+                   'TXSHDL': 'extendedHeaderLength',
+                   'TXSOFL': 'extendedHeaderOverflow',
+                   'TXSHD': 'extendedSection',
+                   }
+
+    def get_items(self):
+        tmp = {
+            'filePartType':field.Field(PyCapsule_New(self._c_header.filePartType, "Field", NULL)),
+            'textID':field.Field(PyCapsule_New(self._c_header.textID, "Field", NULL)),
+            'attachmentLevel':field.Field(PyCapsule_New(self._c_header.attachmentLevel, "Field", NULL)),
+            'dateTime':field.Field(PyCapsule_New(self._c_header.dateTime, "Field", NULL)),
+            'title':field.Field(PyCapsule_New(self._c_header.title, "Field", NULL)),
+            'securityClass':field.Field(PyCapsule_New(self._c_header.securityClass, "Field", NULL)),
+            'securityGroup':FileSecurity(PyCapsule_New(self._c_header.securityGroup, "FileSecurity", NULL)),
+            'encrypted':field.Field(PyCapsule_New(self._c_header.encrypted, "Field", NULL)),
+            'format':field.Field(PyCapsule_New(self._c_header.format, "Field", NULL)),
+            'extendedHeaderLength':field.Field(PyCapsule_New(self._c_header.extendedHeaderLength, "Field", NULL)),
+            'extendedHeaderOverflow':field.Field(PyCapsule_New(self._c_header.extendedHeaderOverflow, "Field", NULL)),
+            'extendedSection':tre.Extensions(PyCapsule_New(self._c_header.extendedSection, "Extensions", NULL)),
+        }
+        return tmp
