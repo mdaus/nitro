@@ -24,7 +24,6 @@
 
 #include <mem/BufferView.h>
 #include <sys/Conf.h>
-#include <iostream>
 #include <cstdlib>
 #include <vector>
 #include <set>
@@ -254,10 +253,189 @@ struct Operation
     unsigned char name;
 };
 
+TEST_CASE(testReleaseConcurrentKeys)
+{
+    srand((unsigned)time(0));
+    mem::ScratchMemory scratch;
+    std::vector<Operation> operations;
+
+    for (unsigned char ii = 'a'; ii <= 'x'; ++ii)
+    {
+        size_t numElements = (rand() % 5) + 5;
+        size_t numBuffers = (rand() % 2) + 1;
+
+        scratch.put<sys::ubyte>(std::string(1, ii), numElements, numBuffers);
+        Operation putOp;
+        putOp.op = "put";
+        putOp.bytes = numElements * numBuffers;
+        putOp.name = ii;
+        operations.push_back(putOp);
+        ++ii;
+
+        scratch.put<sys::ubyte>(std::string(1, ii), numElements, numBuffers);
+        putOp.op = "put";
+        putOp.bytes = numElements * numBuffers;
+        putOp.name = ii;
+        operations.push_back(putOp);
+        ++ii;
+
+        scratch.put<sys::ubyte>(std::string(1, ii), numElements, numBuffers);
+        putOp.op = "put";
+        putOp.bytes = numElements * numBuffers;
+        putOp.name = ii;
+        operations.push_back(putOp);
+
+        scratch.release(std::string(1, ii - 1));
+        putOp.op = "release";
+        putOp.bytes = numElements * numBuffers;
+        putOp.name = ii - 1;
+        operations.push_back(putOp);
+
+        scratch.release(std::string(1, ii));
+        putOp.op = "release";
+        putOp.bytes = numElements * numBuffers;
+        putOp.name = ii;
+        operations.push_back(putOp);
+        ++ii;
+
+        scratch.put<sys::ubyte>(std::string(1, ii), numElements, numBuffers);
+        putOp.op = "put";
+        putOp.bytes = numElements * numBuffers;
+        putOp.name = ii;
+        operations.push_back(putOp);
+
+        scratch.release(std::string(1, ii - 3));
+        putOp.op = "release";
+        putOp.bytes = numElements * numBuffers;
+        putOp.name = ii - 3;
+        operations.push_back(putOp);
+
+        scratch.setup();
+
+        std::set<std::string> keysToCheck;
+        for (size_t jj = 0; jj < operations.size(); ++jj)
+        {
+            Operation currentOp = operations.at(jj);
+            std::string key = std::string(1, currentOp.name);
+
+            if (currentOp.op == "put")
+            {
+                mem::BufferView<unsigned char> bufView = scratch.getBufferView<sys::ubyte>(key);
+                for (size_t i = 0; i < bufView.size; ++i)
+                {
+                    bufView.data[i] = currentOp.name;
+                }
+                keysToCheck.insert(key);
+            }
+            if (currentOp.op == "release")
+            {
+                keysToCheck.erase(key);
+                for (std::set<std::string>::iterator it = keysToCheck.begin(); it != keysToCheck.end(); ++it)
+                {
+                    mem::BufferView<unsigned char> bufView = scratch.getBufferView<sys::ubyte>(*it);
+                    for (size_t i = 0; i < bufView.size; ++i)
+                    {
+                        TEST_ASSERT_EQ(bufView.data[i], (*it)[0]);
+                    }
+                }
+            }
+        }
+    }
+}
+
+TEST_CASE(testReleaseConnectedKeys)
+{
+    srand((unsigned)time(0));
+    mem::ScratchMemory scratch;
+    std::vector<Operation> operations;
+
+    for (unsigned char ii = 'a'; ii <= 'x'; ++ii)
+    {
+        size_t numElements = (rand() % 5) + 5;
+        size_t numBuffers = (rand() % 2) + 1;
+
+        scratch.put<sys::ubyte>(std::string(1, ii), numElements, numBuffers);
+        Operation putOp;
+        putOp.op = "put";
+        putOp.bytes = numElements * numBuffers;
+        putOp.name = ii;
+        operations.push_back(putOp);
+        ++ii;
+
+        scratch.put<sys::ubyte>(std::string(1, ii), numElements, numBuffers);
+        putOp.op = "put";
+        putOp.bytes = numElements * numBuffers;
+        putOp.name = ii;
+        operations.push_back(putOp);
+
+        scratch.release(std::string(1, ii));
+        putOp.op = "release";
+        putOp.bytes = numElements * numBuffers;
+        putOp.name = ii;
+        operations.push_back(putOp);
+        ++ii;
+
+        scratch.put<sys::ubyte>(std::string(1, ii), numElements, numBuffers);
+        putOp.op = "put";
+        putOp.bytes = numElements * numBuffers;
+        putOp.name = ii;
+        operations.push_back(putOp);
+
+        scratch.release(std::string(1, ii - 2));
+        putOp.op = "release";
+        putOp.bytes = numElements * numBuffers;
+        putOp.name = ii - 2;
+        operations.push_back(putOp);
+        ++ii;
+
+        scratch.put<sys::ubyte>(std::string(1, ii), numElements, numBuffers);
+        putOp.op = "put";
+        putOp.bytes = numElements * numBuffers;
+        putOp.name = ii;
+        operations.push_back(putOp);
+
+        scratch.release(std::string(1, ii - 1));
+        putOp.op = "release";
+        putOp.bytes = numElements * numBuffers;
+        putOp.name = ii - 1;
+        operations.push_back(putOp);
+    }
+    scratch.setup();
+
+    std::set<std::string> keysToCheck;
+
+    for (size_t jj = 0; jj < operations.size(); ++jj)
+    {
+        Operation currentOp = operations.at(jj);
+        std::string key = std::string(1, currentOp.name);
+
+        if (currentOp.op == "put")
+        {
+            mem::BufferView<unsigned char> bufView = scratch.getBufferView<sys::ubyte>(key);
+            for (size_t i = 0; i < bufView.size; ++i)
+            {
+                bufView.data[i] = currentOp.name;
+            }
+            keysToCheck.insert(key);
+        }
+        if (currentOp.op == "release")
+        {
+            keysToCheck.erase(key);
+            for (std::set<std::string>::iterator it = keysToCheck.begin(); it != keysToCheck.end(); ++it)
+            {
+                mem::BufferView<unsigned char> bufView = scratch.getBufferView<sys::ubyte>(*it);
+                for (size_t i = 0; i < bufView.size; ++i)
+                {
+                    TEST_ASSERT_EQ(bufView.data[i], (*it)[0]);
+                }
+            }
+        }
+    }
+}
+
 TEST_CASE(testGenerateBuffersForRelease)
 {
-    unsigned seed = (unsigned)time(0);
-    srand(seed);
+    srand((unsigned)time(0));
 
     for (unsigned int run = 0; run < 50; ++run) {
         mem::ScratchMemory scratch;
@@ -450,6 +628,8 @@ int main(int, char**)
     TEST_CHECK(testReleaseMultipleEndBuffers);
     TEST_CHECK(testReleaseNonEndBuffers);
     TEST_CHECK(testReleaseInteriorBuffers);
+    TEST_CHECK(testReleaseConcurrentKeys);
+    TEST_CHECK(testReleaseConnectedKeys);
     TEST_CHECK(testGenerateBuffersForRelease);
 
     return 0;
