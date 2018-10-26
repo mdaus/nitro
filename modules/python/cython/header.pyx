@@ -427,6 +427,7 @@ cdef class TextSubheader(BaseFieldHeader):
                    'TXTALVL': 'attachmentLevel',
                    'TXTDT': 'dateTime',
                    'TXTITL': 'title',
+                   'classification': 'securityClass',
                    'TSCLAS': 'securityClass',
                    'ENCRYP': 'encrypted',
                    'TXTFMT': 'format',
