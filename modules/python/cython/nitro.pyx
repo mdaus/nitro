@@ -555,8 +555,9 @@ cdef class ImageReader:
             subWindow.numRows = numRows
             subWindow.numCols = numCols
 
-            bandList = array.array('L', range(numBands))
-            subWindow.bandList = <nitf_Uint32*>bandList.data.as_ulongs
+            subWindow.bandList = <nitf_Uint32*>PyMem_Malloc(sizeof(nitf_Uint32) * numBands)
+            for bidx in range(numBands):
+                subWindow.bandList[bidx] = bidx
             subWindow.numBands = numBands
             buf = array.array(atype, [0] * (numBands * numRows * numCols))
 
@@ -570,6 +571,8 @@ cdef class ImageReader:
             if planar is not NULL:
                 PyMem_Free(planar)
             if subWindow is not NULL:
+                if subWindow.bandList is not NULL:
+                    PyMem_Free(subWindow.bandList)
                 io.nitf_SubWindow_destruct(&subWindow)
 
         nparr = np.asarray(buf, dtype=f'{atype}')
