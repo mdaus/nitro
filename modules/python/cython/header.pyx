@@ -147,6 +147,26 @@ cdef class BaseFieldHeader:
                 rval += f"{key} = '{val}'\n"
         return rval
 
+    def __convert_item(self, val, encoding):
+        if isinstance(val, field.Field):
+            rval = val.get_pyvalue()
+            if encoding is not None and isinstance(rval, bytes):
+                rval = rval.decode(encoding)
+        elif isinstance(val, list):
+            rval = [self.__convert_item(litem, encoding) for litem in val]
+        else:
+            try:
+                rval = val.todict(encoding)
+            except AttributeError:
+                rval = str(val)  # fall back to the printable string
+        return rval
+
+    def todict(self, encoding=None):
+        rval = {}
+        for key, val in self.get_items().items():
+            rval[key] = self.__convert_item(val, encoding)
+        return rval
+
     def __repr__(self):
         return f"<{self.__class__.__name__} {self._capsule()}>"
 

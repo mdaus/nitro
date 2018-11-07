@@ -1150,6 +1150,12 @@ static CYTHON_INLINE PyObject* __Pyx_PyObject_LookupSpecial(PyObject* obj, PyObj
 #define __Pyx_PyObject_LookupSpecial(o,n) __Pyx_PyObject_GetAttrStr(o,n)
 #endif
 
+/* PySequenceContains.proto */
+static CYTHON_INLINE int __Pyx_PySequence_ContainsTF(PyObject* item, PyObject* seq, int eq) {
+    int result = PySequence_Contains(seq, item);
+    return unlikely(result < 0) ? result : (result == (eq == Py_EQ));
+}
+
 /* WriteUnraisableException.proto */
 static void __Pyx_WriteUnraisable(const char *name, int clineno,
                                   int lineno, const char *filename,
@@ -1434,9 +1440,12 @@ static const char __pyx_k_f[] = "f";
 static const char __pyx_k_v[] = "v";
 static const char __pyx_k__5[] = "<{} [{}]: {}>";
 static const char __pyx_k__6[] = "";
-static const char __pyx_k__7[] = " ";
+static const char __pyx_k__7[] = ".";
+static const char __pyx_k__8[] = "+";
+static const char __pyx_k__9[] = "-";
 static const char __pyx_k_np[] = "np";
 static const char __pyx_k_02x[] = "%02x";
+static const char __pyx_k__10[] = " ";
 static const char __pyx_k_cls[] = "cls";
 static const char __pyx_k_dct[] = "dct";
 static const char __pyx_k_doc[] = "__doc__";
@@ -1497,6 +1506,8 @@ static const char __pyx_k_replace[] = "replace";
 static const char __pyx_k_ConvType[] = "ConvType";
 static const char __pyx_k_EnumBase[] = "EnumBase";
 static const char __pyx_k_EnumType[] = "EnumType";
+static const char __pyx_k_get_real[] = "get_real";
+static const char __pyx_k_get_uint[] = "get_uint";
 static const char __pyx_k_getstate[] = "__getstate__";
 static const char __pyx_k_intValue[] = "intValue";
 static const char __pyx_k_int_kind[] = "int_kind";
@@ -1591,9 +1602,12 @@ static PyObject *__pyx_n_s_Pyx_EnumBase___str;
 static PyObject *__pyx_n_s_TypeError;
 static PyObject *__pyx_kp_s_Unknown_enum_value_s;
 static PyObject *__pyx_n_s_ValueError;
+static PyObject *__pyx_kp_b__10;
 static PyObject *__pyx_kp_u__5;
 static PyObject *__pyx_kp_u__6;
-static PyObject *__pyx_kp_b__7;
+static PyObject *__pyx_kp_u__7;
+static PyObject *__pyx_kp_u__8;
+static PyObject *__pyx_kp_u__9;
 static PyObject *__pyx_n_s_args;
 static PyObject *__pyx_n_s_buffer;
 static PyObject *__pyx_n_s_c;
@@ -1631,7 +1645,9 @@ static PyObject *__pyx_n_s_func;
 static PyObject *__pyx_n_s_get_int;
 static PyObject *__pyx_n_s_get_printoptions;
 static PyObject *__pyx_n_s_get_raw;
+static PyObject *__pyx_n_s_get_real;
 static PyObject *__pyx_n_s_get_string;
+static PyObject *__pyx_n_s_get_uint;
 static PyObject *__pyx_n_s_getstate;
 static PyObject *__pyx_n_s_import;
 static PyObject *__pyx_n_s_include_plus;
@@ -1712,17 +1728,18 @@ static PyObject *__pyx_pf_5field_5Field_16get_int(struct __pyx_obj_5field_Field 
 static PyObject *__pyx_pf_5field_5Field_18get_real(struct __pyx_obj_5field_Field *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_5field_5Field_20get_string(struct __pyx_obj_5field_Field *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_5field_5Field_22get_raw(struct __pyx_obj_5field_Field *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_5field_5Field_24set_uint32(struct __pyx_obj_5field_Field *__pyx_v_self, PyObject *__pyx_v_value); /* proto */
-static PyObject *__pyx_pf_5field_5Field_26set_uint64(struct __pyx_obj_5field_Field *__pyx_v_self, PyObject *__pyx_v_value); /* proto */
-static PyObject *__pyx_pf_5field_5Field_28set_int32(struct __pyx_obj_5field_Field *__pyx_v_self, PyObject *__pyx_v_value); /* proto */
-static PyObject *__pyx_pf_5field_5Field_30set_int64(struct __pyx_obj_5field_Field *__pyx_v_self, PyObject *__pyx_v_value); /* proto */
-static PyObject *__pyx_pf_5field_5Field_32set_string(struct __pyx_obj_5field_Field *__pyx_v_self, PyObject *__pyx_v_value); /* proto */
-static PyObject *__pyx_pf_5field_5Field_34set_real(struct __pyx_obj_5field_Field *__pyx_v_self, PyObject *__pyx_v_value, PyObject *__pyx_v_conversion, PyObject *__pyx_v_include_plus); /* proto */
-static PyObject *__pyx_pf_5field_5Field_36set_raw_data(struct __pyx_obj_5field_Field *__pyx_v_self, PyObject *__pyx_v_buffer, PyObject *__pyx_v_pad); /* proto */
-static int __pyx_pf_5field_5Field_38__getbuffer__(struct __pyx_obj_5field_Field *__pyx_v_self, Py_buffer *__pyx_v_buffer, CYTHON_UNUSED int __pyx_v_flags); /* proto */
-static void __pyx_pf_5field_5Field_40__releasebuffer__(struct __pyx_obj_5field_Field *__pyx_v_self, Py_buffer *__pyx_v_buffer); /* proto */
-static PyObject *__pyx_pf_5field_5Field_42__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_5field_Field *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_5field_5Field_44__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_5field_Field *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
+static PyObject *__pyx_pf_5field_5Field_24get_pyvalue(struct __pyx_obj_5field_Field *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_5field_5Field_26set_uint32(struct __pyx_obj_5field_Field *__pyx_v_self, PyObject *__pyx_v_value); /* proto */
+static PyObject *__pyx_pf_5field_5Field_28set_uint64(struct __pyx_obj_5field_Field *__pyx_v_self, PyObject *__pyx_v_value); /* proto */
+static PyObject *__pyx_pf_5field_5Field_30set_int32(struct __pyx_obj_5field_Field *__pyx_v_self, PyObject *__pyx_v_value); /* proto */
+static PyObject *__pyx_pf_5field_5Field_32set_int64(struct __pyx_obj_5field_Field *__pyx_v_self, PyObject *__pyx_v_value); /* proto */
+static PyObject *__pyx_pf_5field_5Field_34set_string(struct __pyx_obj_5field_Field *__pyx_v_self, PyObject *__pyx_v_value); /* proto */
+static PyObject *__pyx_pf_5field_5Field_36set_real(struct __pyx_obj_5field_Field *__pyx_v_self, PyObject *__pyx_v_value, PyObject *__pyx_v_conversion, PyObject *__pyx_v_include_plus); /* proto */
+static PyObject *__pyx_pf_5field_5Field_38set_raw_data(struct __pyx_obj_5field_Field *__pyx_v_self, PyObject *__pyx_v_buffer, PyObject *__pyx_v_pad); /* proto */
+static int __pyx_pf_5field_5Field_40__getbuffer__(struct __pyx_obj_5field_Field *__pyx_v_self, Py_buffer *__pyx_v_buffer, CYTHON_UNUSED int __pyx_v_flags); /* proto */
+static void __pyx_pf_5field_5Field_42__releasebuffer__(struct __pyx_obj_5field_Field *__pyx_v_self, Py_buffer *__pyx_v_buffer); /* proto */
+static PyObject *__pyx_pf_5field_5Field_44__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_5field_Field *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_5field_5Field_46__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_5field_Field *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
 static int __pyx_pf_8EnumBase_14__Pyx_EnumMeta___init__(struct __pyx_obj___Pyx_EnumMeta *__pyx_v_cls, PyObject *__pyx_v_name, PyObject *__pyx_v_parents, PyObject *__pyx_v_dct); /* proto */
 static PyObject *__pyx_pf_8EnumBase_14__Pyx_EnumMeta_2__iter__(struct __pyx_obj___Pyx_EnumMeta *__pyx_v_cls); /* proto */
 static PyObject *__pyx_pf_8EnumBase_14__Pyx_EnumMeta_4__getitem__(struct __pyx_obj___Pyx_EnumMeta *__pyx_v_cls, PyObject *__pyx_v_name); /* proto */
@@ -1743,22 +1760,22 @@ static PyObject *__pyx_k_;
 static PyObject *__pyx_tuple__2;
 static PyObject *__pyx_tuple__3;
 static PyObject *__pyx_tuple__4;
-static PyObject *__pyx_tuple__8;
-static PyObject *__pyx_tuple__9;
-static PyObject *__pyx_tuple__10;
+static PyObject *__pyx_tuple__11;
 static PyObject *__pyx_tuple__12;
-static PyObject *__pyx_tuple__14;
+static PyObject *__pyx_tuple__13;
 static PyObject *__pyx_tuple__15;
 static PyObject *__pyx_tuple__17;
 static PyObject *__pyx_tuple__18;
 static PyObject *__pyx_tuple__20;
-static PyObject *__pyx_tuple__22;
-static PyObject *__pyx_codeobj__11;
-static PyObject *__pyx_codeobj__13;
+static PyObject *__pyx_tuple__21;
+static PyObject *__pyx_tuple__23;
+static PyObject *__pyx_tuple__25;
+static PyObject *__pyx_codeobj__14;
 static PyObject *__pyx_codeobj__16;
 static PyObject *__pyx_codeobj__19;
-static PyObject *__pyx_codeobj__21;
-static PyObject *__pyx_codeobj__23;
+static PyObject *__pyx_codeobj__22;
+static PyObject *__pyx_codeobj__24;
+static PyObject *__pyx_codeobj__26;
 static PyObject *__pyx_gb_5field_2generator(__pyx_CoroutineObject *__pyx_generator, CYTHON_UNUSED PyThreadState *__pyx_tstate, PyObject *__pyx_sent_value); /* proto */
 
 /* "field.pyx":29
@@ -4717,7 +4734,7 @@ static PyObject *__pyx_pf_5field_5Field_22get_raw(struct __pyx_obj_5field_Field 
  *     def get_raw(self):
  *         return bytes(self)             # <<<<<<<<<<<<<<
  * 
- *     def set_uint32(self, value):
+ *     def get_pyvalue(self):
  */
   __Pyx_XDECREF(__pyx_r);
   __pyx_t_1 = PyTuple_New(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 152, __pyx_L1_error)
@@ -4755,25 +4772,406 @@ static PyObject *__pyx_pf_5field_5Field_22get_raw(struct __pyx_obj_5field_Field 
 /* "field.pyx":154
  *         return bytes(self)
  * 
- *     def set_uint32(self, value):             # <<<<<<<<<<<<<<
- *         cdef nitf_Error error
- *         if not field.nitf_Field_setUint32(self._c_field, value, &error):
+ *     def get_pyvalue(self):             # <<<<<<<<<<<<<<
+ *         if self.type  == field.NITF_BCS_A:
+ *             return self.get_string()
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_5field_5Field_25set_uint32(PyObject *__pyx_v_self, PyObject *__pyx_v_value); /*proto*/
-static PyObject *__pyx_pw_5field_5Field_25set_uint32(PyObject *__pyx_v_self, PyObject *__pyx_v_value) {
+static PyObject *__pyx_pw_5field_5Field_25get_pyvalue(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_5field_5Field_25get_pyvalue(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("set_uint32 (wrapper)", 0);
-  __pyx_r = __pyx_pf_5field_5Field_24set_uint32(((struct __pyx_obj_5field_Field *)__pyx_v_self), ((PyObject *)__pyx_v_value));
+  __Pyx_RefNannySetupContext("get_pyvalue (wrapper)", 0);
+  __pyx_r = __pyx_pf_5field_5Field_24get_pyvalue(((struct __pyx_obj_5field_Field *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_5field_5Field_24set_uint32(struct __pyx_obj_5field_Field *__pyx_v_self, PyObject *__pyx_v_value) {
+static PyObject *__pyx_pf_5field_5Field_24get_pyvalue(struct __pyx_obj_5field_Field *__pyx_v_self) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  PyObject *__pyx_t_2 = NULL;
+  PyObject *__pyx_t_3 = NULL;
+  int __pyx_t_4;
+  int __pyx_t_5;
+  int __pyx_t_6;
+  __Pyx_RefNannySetupContext("get_pyvalue", 0);
+
+  /* "field.pyx":155
+ * 
+ *     def get_pyvalue(self):
+ *         if self.type  == field.NITF_BCS_A:             # <<<<<<<<<<<<<<
+ *             return self.get_string()
+ *         elif self.type == field.NITF_BINARY:
+ */
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_type); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 155, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = __Pyx_PyInt_From_enum____pyx_t_5field_FieldType(__pyx_e_5field_NITF_BCS_A); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 155, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = PyObject_RichCompare(__pyx_t_1, __pyx_t_2, Py_EQ); __Pyx_XGOTREF(__pyx_t_3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 155, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely(__pyx_t_4 < 0)) __PYX_ERR(0, 155, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  if (__pyx_t_4) {
+
+    /* "field.pyx":156
+ *     def get_pyvalue(self):
+ *         if self.type  == field.NITF_BCS_A:
+ *             return self.get_string()             # <<<<<<<<<<<<<<
+ *         elif self.type == field.NITF_BINARY:
+ *             return self.get_raw()
+ */
+    __Pyx_XDECREF(__pyx_r);
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_get_string); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 156, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_1 = NULL;
+    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+      __pyx_t_1 = PyMethod_GET_SELF(__pyx_t_2);
+      if (likely(__pyx_t_1)) {
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+        __Pyx_INCREF(__pyx_t_1);
+        __Pyx_INCREF(function);
+        __Pyx_DECREF_SET(__pyx_t_2, function);
+      }
+    }
+    if (__pyx_t_1) {
+      __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 156, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    } else {
+      __pyx_t_3 = __Pyx_PyObject_CallNoArg(__pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 156, __pyx_L1_error)
+    }
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __pyx_r = __pyx_t_3;
+    __pyx_t_3 = 0;
+    goto __pyx_L0;
+
+    /* "field.pyx":155
+ * 
+ *     def get_pyvalue(self):
+ *         if self.type  == field.NITF_BCS_A:             # <<<<<<<<<<<<<<
+ *             return self.get_string()
+ *         elif self.type == field.NITF_BINARY:
+ */
+  }
+
+  /* "field.pyx":157
+ *         if self.type  == field.NITF_BCS_A:
+ *             return self.get_string()
+ *         elif self.type == field.NITF_BINARY:             # <<<<<<<<<<<<<<
+ *             return self.get_raw()
+ *         elif '.' in self.get_string():
+ */
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_type); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 157, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_2 = __Pyx_PyInt_From_enum____pyx_t_5field_FieldType(__pyx_e_5field_NITF_BINARY); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 157, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_1 = PyObject_RichCompare(__pyx_t_3, __pyx_t_2, Py_EQ); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 157, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_4 < 0)) __PYX_ERR(0, 157, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  if (__pyx_t_4) {
+
+    /* "field.pyx":158
+ *             return self.get_string()
+ *         elif self.type == field.NITF_BINARY:
+ *             return self.get_raw()             # <<<<<<<<<<<<<<
+ *         elif '.' in self.get_string():
+ *             return self.get_real()
+ */
+    __Pyx_XDECREF(__pyx_r);
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_get_raw); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 158, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_3 = NULL;
+    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+      __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
+      if (likely(__pyx_t_3)) {
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+        __Pyx_INCREF(__pyx_t_3);
+        __Pyx_INCREF(function);
+        __Pyx_DECREF_SET(__pyx_t_2, function);
+      }
+    }
+    if (__pyx_t_3) {
+      __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 158, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    } else {
+      __pyx_t_1 = __Pyx_PyObject_CallNoArg(__pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 158, __pyx_L1_error)
+    }
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __pyx_r = __pyx_t_1;
+    __pyx_t_1 = 0;
+    goto __pyx_L0;
+
+    /* "field.pyx":157
+ *         if self.type  == field.NITF_BCS_A:
+ *             return self.get_string()
+ *         elif self.type == field.NITF_BINARY:             # <<<<<<<<<<<<<<
+ *             return self.get_raw()
+ *         elif '.' in self.get_string():
+ */
+  }
+
+  /* "field.pyx":159
+ *         elif self.type == field.NITF_BINARY:
+ *             return self.get_raw()
+ *         elif '.' in self.get_string():             # <<<<<<<<<<<<<<
+ *             return self.get_real()
+ *         elif '+' in self.get_string() or '-' in self.get_string():
+ */
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_get_string); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 159, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_3)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_3);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
+    }
+  }
+  if (__pyx_t_3) {
+    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 159, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  } else {
+    __pyx_t_1 = __Pyx_PyObject_CallNoArg(__pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 159, __pyx_L1_error)
+  }
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_t_4 = (__Pyx_PySequence_ContainsTF(__pyx_kp_u__7, __pyx_t_1, Py_EQ)); if (unlikely(__pyx_t_4 < 0)) __PYX_ERR(0, 159, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_5 = (__pyx_t_4 != 0);
+  if (__pyx_t_5) {
+
+    /* "field.pyx":160
+ *             return self.get_raw()
+ *         elif '.' in self.get_string():
+ *             return self.get_real()             # <<<<<<<<<<<<<<
+ *         elif '+' in self.get_string() or '-' in self.get_string():
+ *             return self.get_int()
+ */
+    __Pyx_XDECREF(__pyx_r);
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_get_real); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 160, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_3 = NULL;
+    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+      __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
+      if (likely(__pyx_t_3)) {
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+        __Pyx_INCREF(__pyx_t_3);
+        __Pyx_INCREF(function);
+        __Pyx_DECREF_SET(__pyx_t_2, function);
+      }
+    }
+    if (__pyx_t_3) {
+      __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 160, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    } else {
+      __pyx_t_1 = __Pyx_PyObject_CallNoArg(__pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 160, __pyx_L1_error)
+    }
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __pyx_r = __pyx_t_1;
+    __pyx_t_1 = 0;
+    goto __pyx_L0;
+
+    /* "field.pyx":159
+ *         elif self.type == field.NITF_BINARY:
+ *             return self.get_raw()
+ *         elif '.' in self.get_string():             # <<<<<<<<<<<<<<
+ *             return self.get_real()
+ *         elif '+' in self.get_string() or '-' in self.get_string():
+ */
+  }
+
+  /* "field.pyx":161
+ *         elif '.' in self.get_string():
+ *             return self.get_real()
+ *         elif '+' in self.get_string() or '-' in self.get_string():             # <<<<<<<<<<<<<<
+ *             return self.get_int()
+ *         else:
+ */
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_get_string); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 161, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_3)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_3);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
+    }
+  }
+  if (__pyx_t_3) {
+    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 161, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  } else {
+    __pyx_t_1 = __Pyx_PyObject_CallNoArg(__pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 161, __pyx_L1_error)
+  }
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_t_4 = (__Pyx_PySequence_ContainsTF(__pyx_kp_u__8, __pyx_t_1, Py_EQ)); if (unlikely(__pyx_t_4 < 0)) __PYX_ERR(0, 161, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_6 = (__pyx_t_4 != 0);
+  if (!__pyx_t_6) {
+  } else {
+    __pyx_t_5 = __pyx_t_6;
+    goto __pyx_L4_bool_binop_done;
+  }
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_get_string); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 161, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = NULL;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_3)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_3);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
+    }
+  }
+  if (__pyx_t_3) {
+    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 161, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  } else {
+    __pyx_t_1 = __Pyx_PyObject_CallNoArg(__pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 161, __pyx_L1_error)
+  }
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_t_6 = (__Pyx_PySequence_ContainsTF(__pyx_kp_u__9, __pyx_t_1, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 161, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_4 = (__pyx_t_6 != 0);
+  __pyx_t_5 = __pyx_t_4;
+  __pyx_L4_bool_binop_done:;
+  if (__pyx_t_5) {
+
+    /* "field.pyx":162
+ *             return self.get_real()
+ *         elif '+' in self.get_string() or '-' in self.get_string():
+ *             return self.get_int()             # <<<<<<<<<<<<<<
+ *         else:
+ *             return self.get_uint()
+ */
+    __Pyx_XDECREF(__pyx_r);
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_get_int); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 162, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_3 = NULL;
+    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+      __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
+      if (likely(__pyx_t_3)) {
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+        __Pyx_INCREF(__pyx_t_3);
+        __Pyx_INCREF(function);
+        __Pyx_DECREF_SET(__pyx_t_2, function);
+      }
+    }
+    if (__pyx_t_3) {
+      __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 162, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    } else {
+      __pyx_t_1 = __Pyx_PyObject_CallNoArg(__pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 162, __pyx_L1_error)
+    }
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __pyx_r = __pyx_t_1;
+    __pyx_t_1 = 0;
+    goto __pyx_L0;
+
+    /* "field.pyx":161
+ *         elif '.' in self.get_string():
+ *             return self.get_real()
+ *         elif '+' in self.get_string() or '-' in self.get_string():             # <<<<<<<<<<<<<<
+ *             return self.get_int()
+ *         else:
+ */
+  }
+
+  /* "field.pyx":164
+ *             return self.get_int()
+ *         else:
+ *             return self.get_uint()             # <<<<<<<<<<<<<<
+ * 
+ *     def set_uint32(self, value):
+ */
+  /*else*/ {
+    __Pyx_XDECREF(__pyx_r);
+    __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_get_uint); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 164, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_3 = NULL;
+    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
+      __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
+      if (likely(__pyx_t_3)) {
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+        __Pyx_INCREF(__pyx_t_3);
+        __Pyx_INCREF(function);
+        __Pyx_DECREF_SET(__pyx_t_2, function);
+      }
+    }
+    if (__pyx_t_3) {
+      __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 164, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    } else {
+      __pyx_t_1 = __Pyx_PyObject_CallNoArg(__pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 164, __pyx_L1_error)
+    }
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __pyx_r = __pyx_t_1;
+    __pyx_t_1 = 0;
+    goto __pyx_L0;
+  }
+
+  /* "field.pyx":154
+ *         return bytes(self)
+ * 
+ *     def get_pyvalue(self):             # <<<<<<<<<<<<<<
+ *         if self.type  == field.NITF_BCS_A:
+ *             return self.get_string()
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_AddTraceback("field.Field.get_pyvalue", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "field.pyx":166
+ *             return self.get_uint()
+ * 
+ *     def set_uint32(self, value):             # <<<<<<<<<<<<<<
+ *         cdef nitf_Error error
+ *         if not field.nitf_Field_setUint32(self._c_field, value, &error):
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_5field_5Field_27set_uint32(PyObject *__pyx_v_self, PyObject *__pyx_v_value); /*proto*/
+static PyObject *__pyx_pw_5field_5Field_27set_uint32(PyObject *__pyx_v_self, PyObject *__pyx_v_value) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("set_uint32 (wrapper)", 0);
+  __pyx_r = __pyx_pf_5field_5Field_26set_uint32(((struct __pyx_obj_5field_Field *)__pyx_v_self), ((PyObject *)__pyx_v_value));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_5field_5Field_26set_uint32(struct __pyx_obj_5field_Field *__pyx_v_self, PyObject *__pyx_v_value) {
   nitf_Error __pyx_v_error;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
@@ -4786,27 +5184,27 @@ static PyObject *__pyx_pf_5field_5Field_24set_uint32(struct __pyx_obj_5field_Fie
   PyObject *__pyx_t_7 = NULL;
   __Pyx_RefNannySetupContext("set_uint32", 0);
 
-  /* "field.pyx":156
+  /* "field.pyx":168
  *     def set_uint32(self, value):
  *         cdef nitf_Error error
  *         if not field.nitf_Field_setUint32(self._c_field, value, &error):             # <<<<<<<<<<<<<<
  *             raise NitfError(error)
  * 
  */
-  __pyx_t_1 = __Pyx_PyInt_As_uint32_t(__pyx_v_value); if (unlikely((__pyx_t_1 == ((nitf_Uint32)-1)) && PyErr_Occurred())) __PYX_ERR(0, 156, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_As_uint32_t(__pyx_v_value); if (unlikely((__pyx_t_1 == ((nitf_Uint32)-1)) && PyErr_Occurred())) __PYX_ERR(0, 168, __pyx_L1_error)
   __pyx_t_2 = ((!(nitf_Field_setUint32(__pyx_v_self->_c_field, __pyx_t_1, (&__pyx_v_error)) != 0)) != 0);
   if (__pyx_t_2) {
 
-    /* "field.pyx":157
+    /* "field.pyx":169
  *         cdef nitf_Error error
  *         if not field.nitf_Field_setUint32(self._c_field, value, &error):
  *             raise NitfError(error)             # <<<<<<<<<<<<<<
  * 
  *     def set_uint64(self, value):
  */
-    __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 157, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 169, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_5 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 157, __pyx_L1_error)
+    __pyx_t_5 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 169, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __pyx_t_6 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_4))) {
@@ -4819,14 +5217,14 @@ static PyObject *__pyx_pf_5field_5Field_24set_uint32(struct __pyx_obj_5field_Fie
       }
     }
     if (!__pyx_t_6) {
-      __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 157, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 169, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       __Pyx_GOTREF(__pyx_t_3);
     } else {
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_4)) {
         PyObject *__pyx_temp[2] = {__pyx_t_6, __pyx_t_5};
-        __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 157, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 169, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
@@ -4835,20 +5233,20 @@ static PyObject *__pyx_pf_5field_5Field_24set_uint32(struct __pyx_obj_5field_Fie
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_4)) {
         PyObject *__pyx_temp[2] = {__pyx_t_6, __pyx_t_5};
-        __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 157, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 169, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       } else
       #endif
       {
-        __pyx_t_7 = PyTuple_New(1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 157, __pyx_L1_error)
+        __pyx_t_7 = PyTuple_New(1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 169, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_GIVEREF(__pyx_t_6); PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_6); __pyx_t_6 = NULL;
         __Pyx_GIVEREF(__pyx_t_5);
         PyTuple_SET_ITEM(__pyx_t_7, 0+1, __pyx_t_5);
         __pyx_t_5 = 0;
-        __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_7, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 157, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_7, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 169, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       }
@@ -4856,9 +5254,9 @@ static PyObject *__pyx_pf_5field_5Field_24set_uint32(struct __pyx_obj_5field_Fie
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __PYX_ERR(0, 157, __pyx_L1_error)
+    __PYX_ERR(0, 169, __pyx_L1_error)
 
-    /* "field.pyx":156
+    /* "field.pyx":168
  *     def set_uint32(self, value):
  *         cdef nitf_Error error
  *         if not field.nitf_Field_setUint32(self._c_field, value, &error):             # <<<<<<<<<<<<<<
@@ -4867,8 +5265,8 @@ static PyObject *__pyx_pf_5field_5Field_24set_uint32(struct __pyx_obj_5field_Fie
  */
   }
 
-  /* "field.pyx":154
- *         return bytes(self)
+  /* "field.pyx":166
+ *             return self.get_uint()
  * 
  *     def set_uint32(self, value):             # <<<<<<<<<<<<<<
  *         cdef nitf_Error error
@@ -4892,7 +5290,7 @@ static PyObject *__pyx_pf_5field_5Field_24set_uint32(struct __pyx_obj_5field_Fie
   return __pyx_r;
 }
 
-/* "field.pyx":159
+/* "field.pyx":171
  *             raise NitfError(error)
  * 
  *     def set_uint64(self, value):             # <<<<<<<<<<<<<<
@@ -4901,19 +5299,19 @@ static PyObject *__pyx_pf_5field_5Field_24set_uint32(struct __pyx_obj_5field_Fie
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_5field_5Field_27set_uint64(PyObject *__pyx_v_self, PyObject *__pyx_v_value); /*proto*/
-static PyObject *__pyx_pw_5field_5Field_27set_uint64(PyObject *__pyx_v_self, PyObject *__pyx_v_value) {
+static PyObject *__pyx_pw_5field_5Field_29set_uint64(PyObject *__pyx_v_self, PyObject *__pyx_v_value); /*proto*/
+static PyObject *__pyx_pw_5field_5Field_29set_uint64(PyObject *__pyx_v_self, PyObject *__pyx_v_value) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("set_uint64 (wrapper)", 0);
-  __pyx_r = __pyx_pf_5field_5Field_26set_uint64(((struct __pyx_obj_5field_Field *)__pyx_v_self), ((PyObject *)__pyx_v_value));
+  __pyx_r = __pyx_pf_5field_5Field_28set_uint64(((struct __pyx_obj_5field_Field *)__pyx_v_self), ((PyObject *)__pyx_v_value));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_5field_5Field_26set_uint64(struct __pyx_obj_5field_Field *__pyx_v_self, PyObject *__pyx_v_value) {
+static PyObject *__pyx_pf_5field_5Field_28set_uint64(struct __pyx_obj_5field_Field *__pyx_v_self, PyObject *__pyx_v_value) {
   nitf_Error __pyx_v_error;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
@@ -4926,27 +5324,27 @@ static PyObject *__pyx_pf_5field_5Field_26set_uint64(struct __pyx_obj_5field_Fie
   PyObject *__pyx_t_7 = NULL;
   __Pyx_RefNannySetupContext("set_uint64", 0);
 
-  /* "field.pyx":161
+  /* "field.pyx":173
  *     def set_uint64(self, value):
  *         cdef nitf_Error error
  *         if not field.nitf_Field_setUint64(self._c_field, value, &error):             # <<<<<<<<<<<<<<
  *             raise NitfError(error)
  * 
  */
-  __pyx_t_1 = __Pyx_PyInt_As_uint64_t(__pyx_v_value); if (unlikely((__pyx_t_1 == ((nitf_Uint64)-1)) && PyErr_Occurred())) __PYX_ERR(0, 161, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_As_uint64_t(__pyx_v_value); if (unlikely((__pyx_t_1 == ((nitf_Uint64)-1)) && PyErr_Occurred())) __PYX_ERR(0, 173, __pyx_L1_error)
   __pyx_t_2 = ((!(nitf_Field_setUint64(__pyx_v_self->_c_field, __pyx_t_1, (&__pyx_v_error)) != 0)) != 0);
   if (__pyx_t_2) {
 
-    /* "field.pyx":162
+    /* "field.pyx":174
  *         cdef nitf_Error error
  *         if not field.nitf_Field_setUint64(self._c_field, value, &error):
  *             raise NitfError(error)             # <<<<<<<<<<<<<<
  * 
  *     def set_int32(self, value):
  */
-    __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 162, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 174, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_5 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 162, __pyx_L1_error)
+    __pyx_t_5 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 174, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __pyx_t_6 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_4))) {
@@ -4959,14 +5357,14 @@ static PyObject *__pyx_pf_5field_5Field_26set_uint64(struct __pyx_obj_5field_Fie
       }
     }
     if (!__pyx_t_6) {
-      __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 162, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 174, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       __Pyx_GOTREF(__pyx_t_3);
     } else {
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_4)) {
         PyObject *__pyx_temp[2] = {__pyx_t_6, __pyx_t_5};
-        __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 162, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 174, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
@@ -4975,20 +5373,20 @@ static PyObject *__pyx_pf_5field_5Field_26set_uint64(struct __pyx_obj_5field_Fie
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_4)) {
         PyObject *__pyx_temp[2] = {__pyx_t_6, __pyx_t_5};
-        __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 162, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 174, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       } else
       #endif
       {
-        __pyx_t_7 = PyTuple_New(1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 162, __pyx_L1_error)
+        __pyx_t_7 = PyTuple_New(1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 174, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_GIVEREF(__pyx_t_6); PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_6); __pyx_t_6 = NULL;
         __Pyx_GIVEREF(__pyx_t_5);
         PyTuple_SET_ITEM(__pyx_t_7, 0+1, __pyx_t_5);
         __pyx_t_5 = 0;
-        __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_7, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 162, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_7, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 174, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       }
@@ -4996,9 +5394,9 @@ static PyObject *__pyx_pf_5field_5Field_26set_uint64(struct __pyx_obj_5field_Fie
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __PYX_ERR(0, 162, __pyx_L1_error)
+    __PYX_ERR(0, 174, __pyx_L1_error)
 
-    /* "field.pyx":161
+    /* "field.pyx":173
  *     def set_uint64(self, value):
  *         cdef nitf_Error error
  *         if not field.nitf_Field_setUint64(self._c_field, value, &error):             # <<<<<<<<<<<<<<
@@ -5007,7 +5405,7 @@ static PyObject *__pyx_pf_5field_5Field_26set_uint64(struct __pyx_obj_5field_Fie
  */
   }
 
-  /* "field.pyx":159
+  /* "field.pyx":171
  *             raise NitfError(error)
  * 
  *     def set_uint64(self, value):             # <<<<<<<<<<<<<<
@@ -5032,7 +5430,7 @@ static PyObject *__pyx_pf_5field_5Field_26set_uint64(struct __pyx_obj_5field_Fie
   return __pyx_r;
 }
 
-/* "field.pyx":164
+/* "field.pyx":176
  *             raise NitfError(error)
  * 
  *     def set_int32(self, value):             # <<<<<<<<<<<<<<
@@ -5041,19 +5439,19 @@ static PyObject *__pyx_pf_5field_5Field_26set_uint64(struct __pyx_obj_5field_Fie
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_5field_5Field_29set_int32(PyObject *__pyx_v_self, PyObject *__pyx_v_value); /*proto*/
-static PyObject *__pyx_pw_5field_5Field_29set_int32(PyObject *__pyx_v_self, PyObject *__pyx_v_value) {
+static PyObject *__pyx_pw_5field_5Field_31set_int32(PyObject *__pyx_v_self, PyObject *__pyx_v_value); /*proto*/
+static PyObject *__pyx_pw_5field_5Field_31set_int32(PyObject *__pyx_v_self, PyObject *__pyx_v_value) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("set_int32 (wrapper)", 0);
-  __pyx_r = __pyx_pf_5field_5Field_28set_int32(((struct __pyx_obj_5field_Field *)__pyx_v_self), ((PyObject *)__pyx_v_value));
+  __pyx_r = __pyx_pf_5field_5Field_30set_int32(((struct __pyx_obj_5field_Field *)__pyx_v_self), ((PyObject *)__pyx_v_value));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_5field_5Field_28set_int32(struct __pyx_obj_5field_Field *__pyx_v_self, PyObject *__pyx_v_value) {
+static PyObject *__pyx_pf_5field_5Field_30set_int32(struct __pyx_obj_5field_Field *__pyx_v_self, PyObject *__pyx_v_value) {
   nitf_Error __pyx_v_error;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
@@ -5066,27 +5464,27 @@ static PyObject *__pyx_pf_5field_5Field_28set_int32(struct __pyx_obj_5field_Fiel
   PyObject *__pyx_t_7 = NULL;
   __Pyx_RefNannySetupContext("set_int32", 0);
 
-  /* "field.pyx":166
+  /* "field.pyx":178
  *     def set_int32(self, value):
  *         cdef nitf_Error error
  *         if not field.nitf_Field_setInt32(self._c_field, value, &error):             # <<<<<<<<<<<<<<
  *             raise NitfError(error)
  * 
  */
-  __pyx_t_1 = __Pyx_PyInt_As_int32_t(__pyx_v_value); if (unlikely((__pyx_t_1 == ((nitf_Int32)-1)) && PyErr_Occurred())) __PYX_ERR(0, 166, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_As_int32_t(__pyx_v_value); if (unlikely((__pyx_t_1 == ((nitf_Int32)-1)) && PyErr_Occurred())) __PYX_ERR(0, 178, __pyx_L1_error)
   __pyx_t_2 = ((!(nitf_Field_setInt32(__pyx_v_self->_c_field, __pyx_t_1, (&__pyx_v_error)) != 0)) != 0);
   if (__pyx_t_2) {
 
-    /* "field.pyx":167
+    /* "field.pyx":179
  *         cdef nitf_Error error
  *         if not field.nitf_Field_setInt32(self._c_field, value, &error):
  *             raise NitfError(error)             # <<<<<<<<<<<<<<
  * 
  *     def set_int64(self, value):
  */
-    __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 167, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 179, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_5 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 167, __pyx_L1_error)
+    __pyx_t_5 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 179, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __pyx_t_6 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_4))) {
@@ -5099,14 +5497,14 @@ static PyObject *__pyx_pf_5field_5Field_28set_int32(struct __pyx_obj_5field_Fiel
       }
     }
     if (!__pyx_t_6) {
-      __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 167, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 179, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       __Pyx_GOTREF(__pyx_t_3);
     } else {
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_4)) {
         PyObject *__pyx_temp[2] = {__pyx_t_6, __pyx_t_5};
-        __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 167, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 179, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
@@ -5115,20 +5513,20 @@ static PyObject *__pyx_pf_5field_5Field_28set_int32(struct __pyx_obj_5field_Fiel
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_4)) {
         PyObject *__pyx_temp[2] = {__pyx_t_6, __pyx_t_5};
-        __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 167, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 179, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       } else
       #endif
       {
-        __pyx_t_7 = PyTuple_New(1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 167, __pyx_L1_error)
+        __pyx_t_7 = PyTuple_New(1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 179, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_GIVEREF(__pyx_t_6); PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_6); __pyx_t_6 = NULL;
         __Pyx_GIVEREF(__pyx_t_5);
         PyTuple_SET_ITEM(__pyx_t_7, 0+1, __pyx_t_5);
         __pyx_t_5 = 0;
-        __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_7, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 167, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_7, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 179, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       }
@@ -5136,9 +5534,9 @@ static PyObject *__pyx_pf_5field_5Field_28set_int32(struct __pyx_obj_5field_Fiel
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __PYX_ERR(0, 167, __pyx_L1_error)
+    __PYX_ERR(0, 179, __pyx_L1_error)
 
-    /* "field.pyx":166
+    /* "field.pyx":178
  *     def set_int32(self, value):
  *         cdef nitf_Error error
  *         if not field.nitf_Field_setInt32(self._c_field, value, &error):             # <<<<<<<<<<<<<<
@@ -5147,7 +5545,7 @@ static PyObject *__pyx_pf_5field_5Field_28set_int32(struct __pyx_obj_5field_Fiel
  */
   }
 
-  /* "field.pyx":164
+  /* "field.pyx":176
  *             raise NitfError(error)
  * 
  *     def set_int32(self, value):             # <<<<<<<<<<<<<<
@@ -5172,7 +5570,7 @@ static PyObject *__pyx_pf_5field_5Field_28set_int32(struct __pyx_obj_5field_Fiel
   return __pyx_r;
 }
 
-/* "field.pyx":169
+/* "field.pyx":181
  *             raise NitfError(error)
  * 
  *     def set_int64(self, value):             # <<<<<<<<<<<<<<
@@ -5181,19 +5579,19 @@ static PyObject *__pyx_pf_5field_5Field_28set_int32(struct __pyx_obj_5field_Fiel
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_5field_5Field_31set_int64(PyObject *__pyx_v_self, PyObject *__pyx_v_value); /*proto*/
-static PyObject *__pyx_pw_5field_5Field_31set_int64(PyObject *__pyx_v_self, PyObject *__pyx_v_value) {
+static PyObject *__pyx_pw_5field_5Field_33set_int64(PyObject *__pyx_v_self, PyObject *__pyx_v_value); /*proto*/
+static PyObject *__pyx_pw_5field_5Field_33set_int64(PyObject *__pyx_v_self, PyObject *__pyx_v_value) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("set_int64 (wrapper)", 0);
-  __pyx_r = __pyx_pf_5field_5Field_30set_int64(((struct __pyx_obj_5field_Field *)__pyx_v_self), ((PyObject *)__pyx_v_value));
+  __pyx_r = __pyx_pf_5field_5Field_32set_int64(((struct __pyx_obj_5field_Field *)__pyx_v_self), ((PyObject *)__pyx_v_value));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_5field_5Field_30set_int64(struct __pyx_obj_5field_Field *__pyx_v_self, PyObject *__pyx_v_value) {
+static PyObject *__pyx_pf_5field_5Field_32set_int64(struct __pyx_obj_5field_Field *__pyx_v_self, PyObject *__pyx_v_value) {
   nitf_Error __pyx_v_error;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
@@ -5206,27 +5604,27 @@ static PyObject *__pyx_pf_5field_5Field_30set_int64(struct __pyx_obj_5field_Fiel
   PyObject *__pyx_t_7 = NULL;
   __Pyx_RefNannySetupContext("set_int64", 0);
 
-  /* "field.pyx":171
+  /* "field.pyx":183
  *     def set_int64(self, value):
  *         cdef nitf_Error error
  *         if not field.nitf_Field_setInt64(self._c_field, value, &error):             # <<<<<<<<<<<<<<
  *             raise NitfError(error)
  * 
  */
-  __pyx_t_1 = __Pyx_PyInt_As_int64_t(__pyx_v_value); if (unlikely((__pyx_t_1 == ((nitf_Int64)-1)) && PyErr_Occurred())) __PYX_ERR(0, 171, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_As_int64_t(__pyx_v_value); if (unlikely((__pyx_t_1 == ((nitf_Int64)-1)) && PyErr_Occurred())) __PYX_ERR(0, 183, __pyx_L1_error)
   __pyx_t_2 = ((!(nitf_Field_setInt64(__pyx_v_self->_c_field, __pyx_t_1, (&__pyx_v_error)) != 0)) != 0);
   if (__pyx_t_2) {
 
-    /* "field.pyx":172
+    /* "field.pyx":184
  *         cdef nitf_Error error
  *         if not field.nitf_Field_setInt64(self._c_field, value, &error):
  *             raise NitfError(error)             # <<<<<<<<<<<<<<
  * 
  *     def set_string(self, value):
  */
-    __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 172, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 184, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_5 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 172, __pyx_L1_error)
+    __pyx_t_5 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 184, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __pyx_t_6 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_4))) {
@@ -5239,14 +5637,14 @@ static PyObject *__pyx_pf_5field_5Field_30set_int64(struct __pyx_obj_5field_Fiel
       }
     }
     if (!__pyx_t_6) {
-      __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 172, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 184, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       __Pyx_GOTREF(__pyx_t_3);
     } else {
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_4)) {
         PyObject *__pyx_temp[2] = {__pyx_t_6, __pyx_t_5};
-        __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 172, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 184, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
@@ -5255,20 +5653,20 @@ static PyObject *__pyx_pf_5field_5Field_30set_int64(struct __pyx_obj_5field_Fiel
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_4)) {
         PyObject *__pyx_temp[2] = {__pyx_t_6, __pyx_t_5};
-        __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 172, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 184, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       } else
       #endif
       {
-        __pyx_t_7 = PyTuple_New(1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 172, __pyx_L1_error)
+        __pyx_t_7 = PyTuple_New(1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 184, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_GIVEREF(__pyx_t_6); PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_6); __pyx_t_6 = NULL;
         __Pyx_GIVEREF(__pyx_t_5);
         PyTuple_SET_ITEM(__pyx_t_7, 0+1, __pyx_t_5);
         __pyx_t_5 = 0;
-        __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_7, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 172, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_7, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 184, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       }
@@ -5276,9 +5674,9 @@ static PyObject *__pyx_pf_5field_5Field_30set_int64(struct __pyx_obj_5field_Fiel
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __PYX_ERR(0, 172, __pyx_L1_error)
+    __PYX_ERR(0, 184, __pyx_L1_error)
 
-    /* "field.pyx":171
+    /* "field.pyx":183
  *     def set_int64(self, value):
  *         cdef nitf_Error error
  *         if not field.nitf_Field_setInt64(self._c_field, value, &error):             # <<<<<<<<<<<<<<
@@ -5287,7 +5685,7 @@ static PyObject *__pyx_pf_5field_5Field_30set_int64(struct __pyx_obj_5field_Fiel
  */
   }
 
-  /* "field.pyx":169
+  /* "field.pyx":181
  *             raise NitfError(error)
  * 
  *     def set_int64(self, value):             # <<<<<<<<<<<<<<
@@ -5312,7 +5710,7 @@ static PyObject *__pyx_pf_5field_5Field_30set_int64(struct __pyx_obj_5field_Fiel
   return __pyx_r;
 }
 
-/* "field.pyx":174
+/* "field.pyx":186
  *             raise NitfError(error)
  * 
  *     def set_string(self, value):             # <<<<<<<<<<<<<<
@@ -5321,19 +5719,19 @@ static PyObject *__pyx_pf_5field_5Field_30set_int64(struct __pyx_obj_5field_Fiel
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_5field_5Field_33set_string(PyObject *__pyx_v_self, PyObject *__pyx_v_value); /*proto*/
-static PyObject *__pyx_pw_5field_5Field_33set_string(PyObject *__pyx_v_self, PyObject *__pyx_v_value) {
+static PyObject *__pyx_pw_5field_5Field_35set_string(PyObject *__pyx_v_self, PyObject *__pyx_v_value); /*proto*/
+static PyObject *__pyx_pw_5field_5Field_35set_string(PyObject *__pyx_v_self, PyObject *__pyx_v_value) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("set_string (wrapper)", 0);
-  __pyx_r = __pyx_pf_5field_5Field_32set_string(((struct __pyx_obj_5field_Field *)__pyx_v_self), ((PyObject *)__pyx_v_value));
+  __pyx_r = __pyx_pf_5field_5Field_34set_string(((struct __pyx_obj_5field_Field *)__pyx_v_self), ((PyObject *)__pyx_v_value));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_5field_5Field_32set_string(struct __pyx_obj_5field_Field *__pyx_v_self, PyObject *__pyx_v_value) {
+static PyObject *__pyx_pf_5field_5Field_34set_string(struct __pyx_obj_5field_Field *__pyx_v_self, PyObject *__pyx_v_value) {
   nitf_Error __pyx_v_error;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
@@ -5348,7 +5746,7 @@ static PyObject *__pyx_pf_5field_5Field_32set_string(struct __pyx_obj_5field_Fie
   __Pyx_RefNannySetupContext("set_string", 0);
   __Pyx_INCREF(__pyx_v_value);
 
-  /* "field.pyx":176
+  /* "field.pyx":188
  *     def set_string(self, value):
  *         cdef nitf_Error error
  *         if type(value) is str:             # <<<<<<<<<<<<<<
@@ -5359,26 +5757,26 @@ static PyObject *__pyx_pf_5field_5Field_32set_string(struct __pyx_obj_5field_Fie
   __pyx_t_2 = (__pyx_t_1 != 0);
   if (__pyx_t_2) {
 
-    /* "field.pyx":177
+    /* "field.pyx":189
  *         cdef nitf_Error error
  *         if type(value) is str:
  *             value = value.encode(errors='replace')             # <<<<<<<<<<<<<<
  *         if not field.nitf_Field_setString(self._c_field, value, &error):
  *             raise NitfError(error)
  */
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_value, __pyx_n_s_encode); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 177, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_value, __pyx_n_s_encode); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 189, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_4 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 177, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 189, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_errors, __pyx_n_u_replace) < 0) __PYX_ERR(0, 177, __pyx_L1_error)
-    __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_empty_tuple, __pyx_t_4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 177, __pyx_L1_error)
+    if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_errors, __pyx_n_u_replace) < 0) __PYX_ERR(0, 189, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_empty_tuple, __pyx_t_4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 189, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_DECREF_SET(__pyx_v_value, __pyx_t_5);
     __pyx_t_5 = 0;
 
-    /* "field.pyx":176
+    /* "field.pyx":188
  *     def set_string(self, value):
  *         cdef nitf_Error error
  *         if type(value) is str:             # <<<<<<<<<<<<<<
@@ -5387,27 +5785,27 @@ static PyObject *__pyx_pf_5field_5Field_32set_string(struct __pyx_obj_5field_Fie
  */
   }
 
-  /* "field.pyx":178
+  /* "field.pyx":190
  *         if type(value) is str:
  *             value = value.encode(errors='replace')
  *         if not field.nitf_Field_setString(self._c_field, value, &error):             # <<<<<<<<<<<<<<
  *             raise NitfError(error)
  * 
  */
-  __pyx_t_6 = __Pyx_PyObject_AsString(__pyx_v_value); if (unlikely((!__pyx_t_6) && PyErr_Occurred())) __PYX_ERR(0, 178, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyObject_AsString(__pyx_v_value); if (unlikely((!__pyx_t_6) && PyErr_Occurred())) __PYX_ERR(0, 190, __pyx_L1_error)
   __pyx_t_2 = ((!(nitf_Field_setString(__pyx_v_self->_c_field, __pyx_t_6, (&__pyx_v_error)) != 0)) != 0);
   if (__pyx_t_2) {
 
-    /* "field.pyx":179
+    /* "field.pyx":191
  *             value = value.encode(errors='replace')
  *         if not field.nitf_Field_setString(self._c_field, value, &error):
  *             raise NitfError(error)             # <<<<<<<<<<<<<<
  * 
  *     def set_real(self, value, conversion='f', include_plus=True):
  */
-    __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 179, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 191, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_3 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 179, __pyx_L1_error)
+    __pyx_t_3 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 191, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __pyx_t_7 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_4))) {
@@ -5420,14 +5818,14 @@ static PyObject *__pyx_pf_5field_5Field_32set_string(struct __pyx_obj_5field_Fie
       }
     }
     if (!__pyx_t_7) {
-      __pyx_t_5 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_3); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 179, __pyx_L1_error)
+      __pyx_t_5 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_3); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 191, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __Pyx_GOTREF(__pyx_t_5);
     } else {
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_4)) {
         PyObject *__pyx_temp[2] = {__pyx_t_7, __pyx_t_3};
-        __pyx_t_5 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 179, __pyx_L1_error)
+        __pyx_t_5 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 191, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
         __Pyx_GOTREF(__pyx_t_5);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -5436,20 +5834,20 @@ static PyObject *__pyx_pf_5field_5Field_32set_string(struct __pyx_obj_5field_Fie
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_4)) {
         PyObject *__pyx_temp[2] = {__pyx_t_7, __pyx_t_3};
-        __pyx_t_5 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 179, __pyx_L1_error)
+        __pyx_t_5 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 191, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
         __Pyx_GOTREF(__pyx_t_5);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       } else
       #endif
       {
-        __pyx_t_8 = PyTuple_New(1+1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 179, __pyx_L1_error)
+        __pyx_t_8 = PyTuple_New(1+1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 191, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_8);
         __Pyx_GIVEREF(__pyx_t_7); PyTuple_SET_ITEM(__pyx_t_8, 0, __pyx_t_7); __pyx_t_7 = NULL;
         __Pyx_GIVEREF(__pyx_t_3);
         PyTuple_SET_ITEM(__pyx_t_8, 0+1, __pyx_t_3);
         __pyx_t_3 = 0;
-        __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_8, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 179, __pyx_L1_error)
+        __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_8, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 191, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
       }
@@ -5457,9 +5855,9 @@ static PyObject *__pyx_pf_5field_5Field_32set_string(struct __pyx_obj_5field_Fie
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_Raise(__pyx_t_5, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __PYX_ERR(0, 179, __pyx_L1_error)
+    __PYX_ERR(0, 191, __pyx_L1_error)
 
-    /* "field.pyx":178
+    /* "field.pyx":190
  *         if type(value) is str:
  *             value = value.encode(errors='replace')
  *         if not field.nitf_Field_setString(self._c_field, value, &error):             # <<<<<<<<<<<<<<
@@ -5468,7 +5866,7 @@ static PyObject *__pyx_pf_5field_5Field_32set_string(struct __pyx_obj_5field_Fie
  */
   }
 
-  /* "field.pyx":174
+  /* "field.pyx":186
  *             raise NitfError(error)
  * 
  *     def set_string(self, value):             # <<<<<<<<<<<<<<
@@ -5494,7 +5892,7 @@ static PyObject *__pyx_pf_5field_5Field_32set_string(struct __pyx_obj_5field_Fie
   return __pyx_r;
 }
 
-/* "field.pyx":181
+/* "field.pyx":193
  *             raise NitfError(error)
  * 
  *     def set_real(self, value, conversion='f', include_plus=True):             # <<<<<<<<<<<<<<
@@ -5503,8 +5901,8 @@ static PyObject *__pyx_pf_5field_5Field_32set_string(struct __pyx_obj_5field_Fie
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_5field_5Field_35set_real(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_pw_5field_5Field_35set_real(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_5field_5Field_37set_real(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyObject *__pyx_pw_5field_5Field_37set_real(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_value = 0;
   PyObject *__pyx_v_conversion = 0;
   PyObject *__pyx_v_include_plus = 0;
@@ -5548,7 +5946,7 @@ static PyObject *__pyx_pw_5field_5Field_35set_real(PyObject *__pyx_v_self, PyObj
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "set_real") < 0)) __PYX_ERR(0, 181, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "set_real") < 0)) __PYX_ERR(0, 193, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -5567,20 +5965,20 @@ static PyObject *__pyx_pw_5field_5Field_35set_real(PyObject *__pyx_v_self, PyObj
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("set_real", 0, 1, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 181, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("set_real", 0, 1, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 193, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("field.Field.set_real", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_5field_5Field_34set_real(((struct __pyx_obj_5field_Field *)__pyx_v_self), __pyx_v_value, __pyx_v_conversion, __pyx_v_include_plus);
+  __pyx_r = __pyx_pf_5field_5Field_36set_real(((struct __pyx_obj_5field_Field *)__pyx_v_self), __pyx_v_value, __pyx_v_conversion, __pyx_v_include_plus);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_5field_5Field_34set_real(struct __pyx_obj_5field_Field *__pyx_v_self, PyObject *__pyx_v_value, PyObject *__pyx_v_conversion, PyObject *__pyx_v_include_plus) {
+static PyObject *__pyx_pf_5field_5Field_36set_real(struct __pyx_obj_5field_Field *__pyx_v_self, PyObject *__pyx_v_value, PyObject *__pyx_v_conversion, PyObject *__pyx_v_include_plus) {
   nitf_Error __pyx_v_error;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
@@ -5595,29 +5993,29 @@ static PyObject *__pyx_pf_5field_5Field_34set_real(struct __pyx_obj_5field_Field
   PyObject *__pyx_t_9 = NULL;
   __Pyx_RefNannySetupContext("set_real", 0);
 
-  /* "field.pyx":183
+  /* "field.pyx":195
  *     def set_real(self, value, conversion='f', include_plus=True):
  *         cdef nitf_Error error
  *         if not field.nitf_Field_setReal(self._c_field, conversion, include_plus, <double>value, &error):             # <<<<<<<<<<<<<<
  *             raise NitfError(error)
  * 
  */
-  __pyx_t_1 = __Pyx_PyObject_AsString(__pyx_v_conversion); if (unlikely((!__pyx_t_1) && PyErr_Occurred())) __PYX_ERR(0, 183, __pyx_L1_error)
-  __pyx_t_2 = __Pyx_PyInt_As_NITF_BOOL(__pyx_v_include_plus); if (unlikely((__pyx_t_2 == ((NITF_BOOL)-1)) && PyErr_Occurred())) __PYX_ERR(0, 183, __pyx_L1_error)
-  __pyx_t_3 = __pyx_PyFloat_AsDouble(__pyx_v_value); if (unlikely((__pyx_t_3 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 183, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_AsString(__pyx_v_conversion); if (unlikely((!__pyx_t_1) && PyErr_Occurred())) __PYX_ERR(0, 195, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_As_NITF_BOOL(__pyx_v_include_plus); if (unlikely((__pyx_t_2 == ((NITF_BOOL)-1)) && PyErr_Occurred())) __PYX_ERR(0, 195, __pyx_L1_error)
+  __pyx_t_3 = __pyx_PyFloat_AsDouble(__pyx_v_value); if (unlikely((__pyx_t_3 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 195, __pyx_L1_error)
   __pyx_t_4 = ((!(nitf_Field_setReal(__pyx_v_self->_c_field, __pyx_t_1, __pyx_t_2, ((double)__pyx_t_3), (&__pyx_v_error)) != 0)) != 0);
   if (__pyx_t_4) {
 
-    /* "field.pyx":184
+    /* "field.pyx":196
  *         cdef nitf_Error error
  *         if not field.nitf_Field_setReal(self._c_field, conversion, include_plus, <double>value, &error):
  *             raise NitfError(error)             # <<<<<<<<<<<<<<
  * 
  *     def set_raw_data(self, buffer, pad=b' '):
  */
-    __pyx_t_6 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 184, __pyx_L1_error)
+    __pyx_t_6 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 196, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
-    __pyx_t_7 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 184, __pyx_L1_error)
+    __pyx_t_7 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 196, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     __pyx_t_8 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_6))) {
@@ -5630,14 +6028,14 @@ static PyObject *__pyx_pf_5field_5Field_34set_real(struct __pyx_obj_5field_Field
       }
     }
     if (!__pyx_t_8) {
-      __pyx_t_5 = __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_t_7); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 184, __pyx_L1_error)
+      __pyx_t_5 = __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_t_7); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 196, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       __Pyx_GOTREF(__pyx_t_5);
     } else {
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_6)) {
         PyObject *__pyx_temp[2] = {__pyx_t_8, __pyx_t_7};
-        __pyx_t_5 = __Pyx_PyFunction_FastCall(__pyx_t_6, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 184, __pyx_L1_error)
+        __pyx_t_5 = __Pyx_PyFunction_FastCall(__pyx_t_6, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 196, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
         __Pyx_GOTREF(__pyx_t_5);
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
@@ -5646,20 +6044,20 @@ static PyObject *__pyx_pf_5field_5Field_34set_real(struct __pyx_obj_5field_Field
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_6)) {
         PyObject *__pyx_temp[2] = {__pyx_t_8, __pyx_t_7};
-        __pyx_t_5 = __Pyx_PyCFunction_FastCall(__pyx_t_6, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 184, __pyx_L1_error)
+        __pyx_t_5 = __Pyx_PyCFunction_FastCall(__pyx_t_6, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 196, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
         __Pyx_GOTREF(__pyx_t_5);
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       } else
       #endif
       {
-        __pyx_t_9 = PyTuple_New(1+1); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 184, __pyx_L1_error)
+        __pyx_t_9 = PyTuple_New(1+1); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 196, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_9);
         __Pyx_GIVEREF(__pyx_t_8); PyTuple_SET_ITEM(__pyx_t_9, 0, __pyx_t_8); __pyx_t_8 = NULL;
         __Pyx_GIVEREF(__pyx_t_7);
         PyTuple_SET_ITEM(__pyx_t_9, 0+1, __pyx_t_7);
         __pyx_t_7 = 0;
-        __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_t_9, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 184, __pyx_L1_error)
+        __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_t_9, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 196, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
         __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
       }
@@ -5667,9 +6065,9 @@ static PyObject *__pyx_pf_5field_5Field_34set_real(struct __pyx_obj_5field_Field
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     __Pyx_Raise(__pyx_t_5, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __PYX_ERR(0, 184, __pyx_L1_error)
+    __PYX_ERR(0, 196, __pyx_L1_error)
 
-    /* "field.pyx":183
+    /* "field.pyx":195
  *     def set_real(self, value, conversion='f', include_plus=True):
  *         cdef nitf_Error error
  *         if not field.nitf_Field_setReal(self._c_field, conversion, include_plus, <double>value, &error):             # <<<<<<<<<<<<<<
@@ -5678,7 +6076,7 @@ static PyObject *__pyx_pf_5field_5Field_34set_real(struct __pyx_obj_5field_Field
  */
   }
 
-  /* "field.pyx":181
+  /* "field.pyx":193
  *             raise NitfError(error)
  * 
  *     def set_real(self, value, conversion='f', include_plus=True):             # <<<<<<<<<<<<<<
@@ -5703,7 +6101,7 @@ static PyObject *__pyx_pf_5field_5Field_34set_real(struct __pyx_obj_5field_Field
   return __pyx_r;
 }
 
-/* "field.pyx":186
+/* "field.pyx":198
  *             raise NitfError(error)
  * 
  *     def set_raw_data(self, buffer, pad=b' '):             # <<<<<<<<<<<<<<
@@ -5712,8 +6110,8 @@ static PyObject *__pyx_pf_5field_5Field_34set_real(struct __pyx_obj_5field_Field
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_5field_5Field_37set_raw_data(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
-static PyObject *__pyx_pw_5field_5Field_37set_raw_data(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+static PyObject *__pyx_pw_5field_5Field_39set_raw_data(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static PyObject *__pyx_pw_5field_5Field_39set_raw_data(PyObject *__pyx_v_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
   PyObject *__pyx_v_buffer = 0;
   PyObject *__pyx_v_pad = 0;
   PyObject *__pyx_r = 0;
@@ -5722,7 +6120,7 @@ static PyObject *__pyx_pw_5field_5Field_37set_raw_data(PyObject *__pyx_v_self, P
   {
     static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_buffer,&__pyx_n_s_pad,0};
     PyObject* values[2] = {0,0};
-    values[1] = ((PyObject *)__pyx_kp_b__7);
+    values[1] = ((PyObject *)__pyx_kp_b__10);
     if (unlikely(__pyx_kwds)) {
       Py_ssize_t kw_args;
       const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
@@ -5747,7 +6145,7 @@ static PyObject *__pyx_pw_5field_5Field_37set_raw_data(PyObject *__pyx_v_self, P
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "set_raw_data") < 0)) __PYX_ERR(0, 186, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "set_raw_data") < 0)) __PYX_ERR(0, 198, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -5763,20 +6161,20 @@ static PyObject *__pyx_pw_5field_5Field_37set_raw_data(PyObject *__pyx_v_self, P
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("set_raw_data", 0, 1, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 186, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("set_raw_data", 0, 1, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 198, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("field.Field.set_raw_data", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_5field_5Field_36set_raw_data(((struct __pyx_obj_5field_Field *)__pyx_v_self), __pyx_v_buffer, __pyx_v_pad);
+  __pyx_r = __pyx_pf_5field_5Field_38set_raw_data(((struct __pyx_obj_5field_Field *)__pyx_v_self), __pyx_v_buffer, __pyx_v_pad);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_5field_5Field_36set_raw_data(struct __pyx_obj_5field_Field *__pyx_v_self, PyObject *__pyx_v_buffer, PyObject *__pyx_v_pad) {
+static PyObject *__pyx_pf_5field_5Field_38set_raw_data(struct __pyx_obj_5field_Field *__pyx_v_self, PyObject *__pyx_v_buffer, PyObject *__pyx_v_pad) {
   nitf_Error __pyx_v_error;
   PyObject *__pyx_v_amt = NULL;
   PyObject *__pyx_r = NULL;
@@ -5794,70 +6192,70 @@ static PyObject *__pyx_pf_5field_5Field_36set_raw_data(struct __pyx_obj_5field_F
   __Pyx_RefNannySetupContext("set_raw_data", 0);
   __Pyx_INCREF(__pyx_v_buffer);
 
-  /* "field.pyx":188
+  /* "field.pyx":200
  *     def set_raw_data(self, buffer, pad=b' '):
  *         cdef nitf_Error error
  *         if pad and self.type == FieldType.NITF_BINARY and len(buffer) < len(self):             # <<<<<<<<<<<<<<
  *             # we need to pad the binary
  *             amt = len(self) - len(buffer)
  */
-  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_v_pad); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 188, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_v_pad); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 200, __pyx_L1_error)
   if (__pyx_t_2) {
   } else {
     __pyx_t_1 = __pyx_t_2;
     goto __pyx_L4_bool_binop_done;
   }
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_type); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 188, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_type); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 200, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = __Pyx_PyInt_From_enum____pyx_t_5field_FieldType(__pyx_e_5field_NITF_BINARY); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 188, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyInt_From_enum____pyx_t_5field_FieldType(__pyx_e_5field_NITF_BINARY); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 200, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_5 = PyObject_RichCompare(__pyx_t_3, __pyx_t_4, Py_EQ); __Pyx_XGOTREF(__pyx_t_5); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 188, __pyx_L1_error)
+  __pyx_t_5 = PyObject_RichCompare(__pyx_t_3, __pyx_t_4, Py_EQ); __Pyx_XGOTREF(__pyx_t_5); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 200, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_5); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 188, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_5); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 200, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   if (__pyx_t_2) {
   } else {
     __pyx_t_1 = __pyx_t_2;
     goto __pyx_L4_bool_binop_done;
   }
-  __pyx_t_6 = PyObject_Length(__pyx_v_buffer); if (unlikely(__pyx_t_6 == ((Py_ssize_t)-1))) __PYX_ERR(0, 188, __pyx_L1_error)
-  __pyx_t_7 = PyObject_Length(((PyObject *)__pyx_v_self)); if (unlikely(__pyx_t_7 == ((Py_ssize_t)-1))) __PYX_ERR(0, 188, __pyx_L1_error)
+  __pyx_t_6 = PyObject_Length(__pyx_v_buffer); if (unlikely(__pyx_t_6 == ((Py_ssize_t)-1))) __PYX_ERR(0, 200, __pyx_L1_error)
+  __pyx_t_7 = PyObject_Length(((PyObject *)__pyx_v_self)); if (unlikely(__pyx_t_7 == ((Py_ssize_t)-1))) __PYX_ERR(0, 200, __pyx_L1_error)
   __pyx_t_2 = ((__pyx_t_6 < __pyx_t_7) != 0);
   __pyx_t_1 = __pyx_t_2;
   __pyx_L4_bool_binop_done:;
   if (__pyx_t_1) {
 
-    /* "field.pyx":190
+    /* "field.pyx":202
  *         if pad and self.type == FieldType.NITF_BINARY and len(buffer) < len(self):
  *             # we need to pad the binary
  *             amt = len(self) - len(buffer)             # <<<<<<<<<<<<<<
  *             buffer = buffer + amt * pad
  *         if not field.nitf_Field_setRawData(self._c_field, <char*>buffer, len(buffer), &error):
  */
-    __pyx_t_7 = PyObject_Length(((PyObject *)__pyx_v_self)); if (unlikely(__pyx_t_7 == ((Py_ssize_t)-1))) __PYX_ERR(0, 190, __pyx_L1_error)
-    __pyx_t_6 = PyObject_Length(__pyx_v_buffer); if (unlikely(__pyx_t_6 == ((Py_ssize_t)-1))) __PYX_ERR(0, 190, __pyx_L1_error)
-    __pyx_t_5 = PyInt_FromSsize_t((__pyx_t_7 - __pyx_t_6)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 190, __pyx_L1_error)
+    __pyx_t_7 = PyObject_Length(((PyObject *)__pyx_v_self)); if (unlikely(__pyx_t_7 == ((Py_ssize_t)-1))) __PYX_ERR(0, 202, __pyx_L1_error)
+    __pyx_t_6 = PyObject_Length(__pyx_v_buffer); if (unlikely(__pyx_t_6 == ((Py_ssize_t)-1))) __PYX_ERR(0, 202, __pyx_L1_error)
+    __pyx_t_5 = PyInt_FromSsize_t((__pyx_t_7 - __pyx_t_6)); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 202, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __pyx_v_amt = __pyx_t_5;
     __pyx_t_5 = 0;
 
-    /* "field.pyx":191
+    /* "field.pyx":203
  *             # we need to pad the binary
  *             amt = len(self) - len(buffer)
  *             buffer = buffer + amt * pad             # <<<<<<<<<<<<<<
  *         if not field.nitf_Field_setRawData(self._c_field, <char*>buffer, len(buffer), &error):
  *             raise NitfError(error)
  */
-    __pyx_t_5 = PyNumber_Multiply(__pyx_v_amt, __pyx_v_pad); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 191, __pyx_L1_error)
+    __pyx_t_5 = PyNumber_Multiply(__pyx_v_amt, __pyx_v_pad); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 203, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_4 = PyNumber_Add(__pyx_v_buffer, __pyx_t_5); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 191, __pyx_L1_error)
+    __pyx_t_4 = PyNumber_Add(__pyx_v_buffer, __pyx_t_5); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 203, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     __Pyx_DECREF_SET(__pyx_v_buffer, __pyx_t_4);
     __pyx_t_4 = 0;
 
-    /* "field.pyx":188
+    /* "field.pyx":200
  *     def set_raw_data(self, buffer, pad=b' '):
  *         cdef nitf_Error error
  *         if pad and self.type == FieldType.NITF_BINARY and len(buffer) < len(self):             # <<<<<<<<<<<<<<
@@ -5866,28 +6264,28 @@ static PyObject *__pyx_pf_5field_5Field_36set_raw_data(struct __pyx_obj_5field_F
  */
   }
 
-  /* "field.pyx":192
+  /* "field.pyx":204
  *             amt = len(self) - len(buffer)
  *             buffer = buffer + amt * pad
  *         if not field.nitf_Field_setRawData(self._c_field, <char*>buffer, len(buffer), &error):             # <<<<<<<<<<<<<<
  *             raise NitfError(error)
  * 
  */
-  __pyx_t_8 = __Pyx_PyObject_AsWritableString(__pyx_v_buffer); if (unlikely((!__pyx_t_8) && PyErr_Occurred())) __PYX_ERR(0, 192, __pyx_L1_error)
-  __pyx_t_6 = PyObject_Length(__pyx_v_buffer); if (unlikely(__pyx_t_6 == ((Py_ssize_t)-1))) __PYX_ERR(0, 192, __pyx_L1_error)
+  __pyx_t_8 = __Pyx_PyObject_AsWritableString(__pyx_v_buffer); if (unlikely((!__pyx_t_8) && PyErr_Occurred())) __PYX_ERR(0, 204, __pyx_L1_error)
+  __pyx_t_6 = PyObject_Length(__pyx_v_buffer); if (unlikely(__pyx_t_6 == ((Py_ssize_t)-1))) __PYX_ERR(0, 204, __pyx_L1_error)
   __pyx_t_1 = ((!(nitf_Field_setRawData(__pyx_v_self->_c_field, ((char *)__pyx_t_8), __pyx_t_6, (&__pyx_v_error)) != 0)) != 0);
   if (__pyx_t_1) {
 
-    /* "field.pyx":193
+    /* "field.pyx":205
  *             buffer = buffer + amt * pad
  *         if not field.nitf_Field_setRawData(self._c_field, <char*>buffer, len(buffer), &error):
  *             raise NitfError(error)             # <<<<<<<<<<<<<<
  * 
  *     def __getbuffer__(self, Py_buffer* buffer, int flags):
  */
-    __pyx_t_5 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 193, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 205, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_3 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 193, __pyx_L1_error)
+    __pyx_t_3 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 205, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __pyx_t_9 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_5))) {
@@ -5900,14 +6298,14 @@ static PyObject *__pyx_pf_5field_5Field_36set_raw_data(struct __pyx_obj_5field_F
       }
     }
     if (!__pyx_t_9) {
-      __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 193, __pyx_L1_error)
+      __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 205, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __Pyx_GOTREF(__pyx_t_4);
     } else {
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_5)) {
         PyObject *__pyx_temp[2] = {__pyx_t_9, __pyx_t_3};
-        __pyx_t_4 = __Pyx_PyFunction_FastCall(__pyx_t_5, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 193, __pyx_L1_error)
+        __pyx_t_4 = __Pyx_PyFunction_FastCall(__pyx_t_5, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 205, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
         __Pyx_GOTREF(__pyx_t_4);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -5916,20 +6314,20 @@ static PyObject *__pyx_pf_5field_5Field_36set_raw_data(struct __pyx_obj_5field_F
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_5)) {
         PyObject *__pyx_temp[2] = {__pyx_t_9, __pyx_t_3};
-        __pyx_t_4 = __Pyx_PyCFunction_FastCall(__pyx_t_5, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 193, __pyx_L1_error)
+        __pyx_t_4 = __Pyx_PyCFunction_FastCall(__pyx_t_5, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 205, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
         __Pyx_GOTREF(__pyx_t_4);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       } else
       #endif
       {
-        __pyx_t_10 = PyTuple_New(1+1); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 193, __pyx_L1_error)
+        __pyx_t_10 = PyTuple_New(1+1); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 205, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_10);
         __Pyx_GIVEREF(__pyx_t_9); PyTuple_SET_ITEM(__pyx_t_10, 0, __pyx_t_9); __pyx_t_9 = NULL;
         __Pyx_GIVEREF(__pyx_t_3);
         PyTuple_SET_ITEM(__pyx_t_10, 0+1, __pyx_t_3);
         __pyx_t_3 = 0;
-        __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_10, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 193, __pyx_L1_error)
+        __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_10, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 205, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
         __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
       }
@@ -5937,9 +6335,9 @@ static PyObject *__pyx_pf_5field_5Field_36set_raw_data(struct __pyx_obj_5field_F
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     __Pyx_Raise(__pyx_t_4, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __PYX_ERR(0, 193, __pyx_L1_error)
+    __PYX_ERR(0, 205, __pyx_L1_error)
 
-    /* "field.pyx":192
+    /* "field.pyx":204
  *             amt = len(self) - len(buffer)
  *             buffer = buffer + amt * pad
  *         if not field.nitf_Field_setRawData(self._c_field, <char*>buffer, len(buffer), &error):             # <<<<<<<<<<<<<<
@@ -5948,7 +6346,7 @@ static PyObject *__pyx_pf_5field_5Field_36set_raw_data(struct __pyx_obj_5field_F
  */
   }
 
-  /* "field.pyx":186
+  /* "field.pyx":198
  *             raise NitfError(error)
  * 
  *     def set_raw_data(self, buffer, pad=b' '):             # <<<<<<<<<<<<<<
@@ -5975,7 +6373,7 @@ static PyObject *__pyx_pf_5field_5Field_36set_raw_data(struct __pyx_obj_5field_F
   return __pyx_r;
 }
 
-/* "field.pyx":195
+/* "field.pyx":207
  *             raise NitfError(error)
  * 
  *     def __getbuffer__(self, Py_buffer* buffer, int flags):             # <<<<<<<<<<<<<<
@@ -5984,19 +6382,19 @@ static PyObject *__pyx_pf_5field_5Field_36set_raw_data(struct __pyx_obj_5field_F
  */
 
 /* Python wrapper */
-static CYTHON_UNUSED int __pyx_pw_5field_5Field_39__getbuffer__(PyObject *__pyx_v_self, Py_buffer *__pyx_v_buffer, int __pyx_v_flags); /*proto*/
-static CYTHON_UNUSED int __pyx_pw_5field_5Field_39__getbuffer__(PyObject *__pyx_v_self, Py_buffer *__pyx_v_buffer, int __pyx_v_flags) {
+static CYTHON_UNUSED int __pyx_pw_5field_5Field_41__getbuffer__(PyObject *__pyx_v_self, Py_buffer *__pyx_v_buffer, int __pyx_v_flags); /*proto*/
+static CYTHON_UNUSED int __pyx_pw_5field_5Field_41__getbuffer__(PyObject *__pyx_v_self, Py_buffer *__pyx_v_buffer, int __pyx_v_flags) {
   int __pyx_r;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__getbuffer__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_5field_5Field_38__getbuffer__(((struct __pyx_obj_5field_Field *)__pyx_v_self), ((Py_buffer *)__pyx_v_buffer), ((int)__pyx_v_flags));
+  __pyx_r = __pyx_pf_5field_5Field_40__getbuffer__(((struct __pyx_obj_5field_Field *)__pyx_v_self), ((Py_buffer *)__pyx_v_buffer), ((int)__pyx_v_flags));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static int __pyx_pf_5field_5Field_38__getbuffer__(struct __pyx_obj_5field_Field *__pyx_v_self, Py_buffer *__pyx_v_buffer, CYTHON_UNUSED int __pyx_v_flags) {
+static int __pyx_pf_5field_5Field_40__getbuffer__(struct __pyx_obj_5field_Field *__pyx_v_self, Py_buffer *__pyx_v_buffer, CYTHON_UNUSED int __pyx_v_flags) {
   nitf_Error __pyx_v_error;
   int __pyx_r;
   __Pyx_RefNannyDeclarations
@@ -6015,7 +6413,7 @@ static int __pyx_pf_5field_5Field_38__getbuffer__(struct __pyx_obj_5field_Field 
     __Pyx_GIVEREF(__pyx_v_buffer->obj);
   }
 
-  /* "field.pyx":197
+  /* "field.pyx":209
  *     def __getbuffer__(self, Py_buffer* buffer, int flags):
  *         cdef nitf_Error error
  *         if self._c_field is NULL:             # <<<<<<<<<<<<<<
@@ -6025,16 +6423,16 @@ static int __pyx_pf_5field_5Field_38__getbuffer__(struct __pyx_obj_5field_Field 
   __pyx_t_1 = ((__pyx_v_self->_c_field == NULL) != 0);
   if (__pyx_t_1) {
 
-    /* "field.pyx":198
+    /* "field.pyx":210
  *         cdef nitf_Error error
  *         if self._c_field is NULL:
  *             raise MemoryError()             # <<<<<<<<<<<<<<
  *         self._shape[0] = self._c_field.length
  *         if self._buf_value is NULL:
  */
-    PyErr_NoMemory(); __PYX_ERR(0, 198, __pyx_L1_error)
+    PyErr_NoMemory(); __PYX_ERR(0, 210, __pyx_L1_error)
 
-    /* "field.pyx":197
+    /* "field.pyx":209
  *     def __getbuffer__(self, Py_buffer* buffer, int flags):
  *         cdef nitf_Error error
  *         if self._c_field is NULL:             # <<<<<<<<<<<<<<
@@ -6043,7 +6441,7 @@ static int __pyx_pf_5field_5Field_38__getbuffer__(struct __pyx_obj_5field_Field 
  */
   }
 
-  /* "field.pyx":199
+  /* "field.pyx":211
  *         if self._c_field is NULL:
  *             raise MemoryError()
  *         self._shape[0] = self._c_field.length             # <<<<<<<<<<<<<<
@@ -6053,7 +6451,7 @@ static int __pyx_pf_5field_5Field_38__getbuffer__(struct __pyx_obj_5field_Field 
   __pyx_t_2 = __pyx_v_self->_c_field->length;
   (__pyx_v_self->_shape[0]) = __pyx_t_2;
 
-  /* "field.pyx":200
+  /* "field.pyx":212
  *             raise MemoryError()
  *         self._shape[0] = self._c_field.length
  *         if self._buf_value is NULL:             # <<<<<<<<<<<<<<
@@ -6063,7 +6461,7 @@ static int __pyx_pf_5field_5Field_38__getbuffer__(struct __pyx_obj_5field_Field 
   __pyx_t_1 = ((__pyx_v_self->_buf_value == NULL) != 0);
   if (__pyx_t_1) {
 
-    /* "field.pyx":201
+    /* "field.pyx":213
  *         self._shape[0] = self._c_field.length
  *         if self._buf_value is NULL:
  *             self._buf_value = PyMem_Malloc(self._shape[0])             # <<<<<<<<<<<<<<
@@ -6072,7 +6470,7 @@ static int __pyx_pf_5field_5Field_38__getbuffer__(struct __pyx_obj_5field_Field 
  */
     __pyx_v_self->_buf_value = PyMem_Malloc((__pyx_v_self->_shape[0]));
 
-    /* "field.pyx":202
+    /* "field.pyx":214
  *         if self._buf_value is NULL:
  *             self._buf_value = PyMem_Malloc(self._shape[0])
  *             self._ref_count = 1             # <<<<<<<<<<<<<<
@@ -6081,7 +6479,7 @@ static int __pyx_pf_5field_5Field_38__getbuffer__(struct __pyx_obj_5field_Field 
  */
     __pyx_v_self->_ref_count = 1;
 
-    /* "field.pyx":200
+    /* "field.pyx":212
  *             raise MemoryError()
  *         self._shape[0] = self._c_field.length
  *         if self._buf_value is NULL:             # <<<<<<<<<<<<<<
@@ -6091,7 +6489,7 @@ static int __pyx_pf_5field_5Field_38__getbuffer__(struct __pyx_obj_5field_Field 
     goto __pyx_L4;
   }
 
-  /* "field.pyx":204
+  /* "field.pyx":216
  *             self._ref_count = 1
  *         else:
  *             self._ref_count += 1             # <<<<<<<<<<<<<<
@@ -6103,7 +6501,7 @@ static int __pyx_pf_5field_5Field_38__getbuffer__(struct __pyx_obj_5field_Field 
   }
   __pyx_L4:;
 
-  /* "field.pyx":205
+  /* "field.pyx":217
  *         else:
  *             self._ref_count += 1
  *         buffer.buf = self._buf_value             # <<<<<<<<<<<<<<
@@ -6113,7 +6511,7 @@ static int __pyx_pf_5field_5Field_38__getbuffer__(struct __pyx_obj_5field_Field 
   __pyx_t_3 = __pyx_v_self->_buf_value;
   __pyx_v_buffer->buf = __pyx_t_3;
 
-  /* "field.pyx":206
+  /* "field.pyx":218
  *             self._ref_count += 1
  *         buffer.buf = self._buf_value
  *         buffer.format = 'B'             # <<<<<<<<<<<<<<
@@ -6122,7 +6520,7 @@ static int __pyx_pf_5field_5Field_38__getbuffer__(struct __pyx_obj_5field_Field 
  */
   __pyx_v_buffer->format = ((char *)"B");
 
-  /* "field.pyx":207
+  /* "field.pyx":219
  *         buffer.buf = self._buf_value
  *         buffer.format = 'B'
  *         buffer.internal = NULL             # <<<<<<<<<<<<<<
@@ -6131,7 +6529,7 @@ static int __pyx_pf_5field_5Field_38__getbuffer__(struct __pyx_obj_5field_Field 
  */
   __pyx_v_buffer->internal = NULL;
 
-  /* "field.pyx":208
+  /* "field.pyx":220
  *         buffer.format = 'B'
  *         buffer.internal = NULL
  *         buffer.itemsize = 1             # <<<<<<<<<<<<<<
@@ -6140,7 +6538,7 @@ static int __pyx_pf_5field_5Field_38__getbuffer__(struct __pyx_obj_5field_Field 
  */
   __pyx_v_buffer->itemsize = 1;
 
-  /* "field.pyx":209
+  /* "field.pyx":221
  *         buffer.internal = NULL
  *         buffer.itemsize = 1
  *         buffer.len = self._shape[0]             # <<<<<<<<<<<<<<
@@ -6149,7 +6547,7 @@ static int __pyx_pf_5field_5Field_38__getbuffer__(struct __pyx_obj_5field_Field 
  */
   __pyx_v_buffer->len = (__pyx_v_self->_shape[0]);
 
-  /* "field.pyx":210
+  /* "field.pyx":222
  *         buffer.itemsize = 1
  *         buffer.len = self._shape[0]
  *         buffer.ndim = 1             # <<<<<<<<<<<<<<
@@ -6158,7 +6556,7 @@ static int __pyx_pf_5field_5Field_38__getbuffer__(struct __pyx_obj_5field_Field 
  */
   __pyx_v_buffer->ndim = 1;
 
-  /* "field.pyx":211
+  /* "field.pyx":223
  *         buffer.len = self._shape[0]
  *         buffer.ndim = 1
  *         buffer.obj = self             # <<<<<<<<<<<<<<
@@ -6171,7 +6569,7 @@ static int __pyx_pf_5field_5Field_38__getbuffer__(struct __pyx_obj_5field_Field 
   __Pyx_DECREF(__pyx_v_buffer->obj);
   __pyx_v_buffer->obj = ((PyObject *)__pyx_v_self);
 
-  /* "field.pyx":212
+  /* "field.pyx":224
  *         buffer.ndim = 1
  *         buffer.obj = self
  *         buffer.readonly = 1             # <<<<<<<<<<<<<<
@@ -6180,7 +6578,7 @@ static int __pyx_pf_5field_5Field_38__getbuffer__(struct __pyx_obj_5field_Field 
  */
   __pyx_v_buffer->readonly = 1;
 
-  /* "field.pyx":213
+  /* "field.pyx":225
  *         buffer.obj = self
  *         buffer.readonly = 1
  *         buffer.shape = self._shape             # <<<<<<<<<<<<<<
@@ -6190,7 +6588,7 @@ static int __pyx_pf_5field_5Field_38__getbuffer__(struct __pyx_obj_5field_Field 
   __pyx_t_4 = __pyx_v_self->_shape;
   __pyx_v_buffer->shape = __pyx_t_4;
 
-  /* "field.pyx":214
+  /* "field.pyx":226
  *         buffer.readonly = 1
  *         buffer.shape = self._shape
  *         buffer.strides = self._strides             # <<<<<<<<<<<<<<
@@ -6200,7 +6598,7 @@ static int __pyx_pf_5field_5Field_38__getbuffer__(struct __pyx_obj_5field_Field 
   __pyx_t_4 = __pyx_v_self->_strides;
   __pyx_v_buffer->strides = __pyx_t_4;
 
-  /* "field.pyx":215
+  /* "field.pyx":227
  *         buffer.shape = self._shape
  *         buffer.strides = self._strides
  *         buffer.suboffsets = NULL             # <<<<<<<<<<<<<<
@@ -6209,7 +6607,7 @@ static int __pyx_pf_5field_5Field_38__getbuffer__(struct __pyx_obj_5field_Field 
  */
   __pyx_v_buffer->suboffsets = NULL;
 
-  /* "field.pyx":217
+  /* "field.pyx":229
  *         buffer.suboffsets = NULL
  * 
  *         if not field.nitf_Field_get(self._c_field, self._buf_value, <field.nitf_ConvType>NITF_CONV_RAW, buffer.len, &error):             # <<<<<<<<<<<<<<
@@ -6219,7 +6617,7 @@ static int __pyx_pf_5field_5Field_38__getbuffer__(struct __pyx_obj_5field_Field 
   __pyx_t_1 = ((!(nitf_Field_get(__pyx_v_self->_c_field, __pyx_v_self->_buf_value, ((nitf_ConvType)__pyx_e_5field_NITF_CONV_RAW), __pyx_v_buffer->len, (&__pyx_v_error)) != 0)) != 0);
   if (__pyx_t_1) {
 
-    /* "field.pyx":218
+    /* "field.pyx":230
  * 
  *         if not field.nitf_Field_get(self._c_field, self._buf_value, <field.nitf_ConvType>NITF_CONV_RAW, buffer.len, &error):
  *             PyMem_Free(self._buf_value)             # <<<<<<<<<<<<<<
@@ -6228,7 +6626,7 @@ static int __pyx_pf_5field_5Field_38__getbuffer__(struct __pyx_obj_5field_Field 
  */
     PyMem_Free(__pyx_v_self->_buf_value);
 
-    /* "field.pyx":219
+    /* "field.pyx":231
  *         if not field.nitf_Field_get(self._c_field, self._buf_value, <field.nitf_ConvType>NITF_CONV_RAW, buffer.len, &error):
  *             PyMem_Free(self._buf_value)
  *             self._buf_value = NULL             # <<<<<<<<<<<<<<
@@ -6237,16 +6635,16 @@ static int __pyx_pf_5field_5Field_38__getbuffer__(struct __pyx_obj_5field_Field 
  */
     __pyx_v_self->_buf_value = NULL;
 
-    /* "field.pyx":220
+    /* "field.pyx":232
  *             PyMem_Free(self._buf_value)
  *             self._buf_value = NULL
  *             raise NitfError(error)             # <<<<<<<<<<<<<<
  * 
  *     def __releasebuffer__(self, Py_buffer* buffer):
  */
-    __pyx_t_6 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 220, __pyx_L1_error)
+    __pyx_t_6 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 232, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
-    __pyx_t_7 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 220, __pyx_L1_error)
+    __pyx_t_7 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 232, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
     __pyx_t_8 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_6))) {
@@ -6259,14 +6657,14 @@ static int __pyx_pf_5field_5Field_38__getbuffer__(struct __pyx_obj_5field_Field 
       }
     }
     if (!__pyx_t_8) {
-      __pyx_t_5 = __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_t_7); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 220, __pyx_L1_error)
+      __pyx_t_5 = __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_t_7); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 232, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       __Pyx_GOTREF(__pyx_t_5);
     } else {
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_6)) {
         PyObject *__pyx_temp[2] = {__pyx_t_8, __pyx_t_7};
-        __pyx_t_5 = __Pyx_PyFunction_FastCall(__pyx_t_6, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 220, __pyx_L1_error)
+        __pyx_t_5 = __Pyx_PyFunction_FastCall(__pyx_t_6, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 232, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
         __Pyx_GOTREF(__pyx_t_5);
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
@@ -6275,20 +6673,20 @@ static int __pyx_pf_5field_5Field_38__getbuffer__(struct __pyx_obj_5field_Field 
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_6)) {
         PyObject *__pyx_temp[2] = {__pyx_t_8, __pyx_t_7};
-        __pyx_t_5 = __Pyx_PyCFunction_FastCall(__pyx_t_6, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 220, __pyx_L1_error)
+        __pyx_t_5 = __Pyx_PyCFunction_FastCall(__pyx_t_6, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 232, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
         __Pyx_GOTREF(__pyx_t_5);
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       } else
       #endif
       {
-        __pyx_t_9 = PyTuple_New(1+1); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 220, __pyx_L1_error)
+        __pyx_t_9 = PyTuple_New(1+1); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 232, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_9);
         __Pyx_GIVEREF(__pyx_t_8); PyTuple_SET_ITEM(__pyx_t_9, 0, __pyx_t_8); __pyx_t_8 = NULL;
         __Pyx_GIVEREF(__pyx_t_7);
         PyTuple_SET_ITEM(__pyx_t_9, 0+1, __pyx_t_7);
         __pyx_t_7 = 0;
-        __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_t_9, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 220, __pyx_L1_error)
+        __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_t_9, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 232, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_5);
         __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
       }
@@ -6296,9 +6694,9 @@ static int __pyx_pf_5field_5Field_38__getbuffer__(struct __pyx_obj_5field_Field 
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     __Pyx_Raise(__pyx_t_5, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-    __PYX_ERR(0, 220, __pyx_L1_error)
+    __PYX_ERR(0, 232, __pyx_L1_error)
 
-    /* "field.pyx":217
+    /* "field.pyx":229
  *         buffer.suboffsets = NULL
  * 
  *         if not field.nitf_Field_get(self._c_field, self._buf_value, <field.nitf_ConvType>NITF_CONV_RAW, buffer.len, &error):             # <<<<<<<<<<<<<<
@@ -6307,7 +6705,7 @@ static int __pyx_pf_5field_5Field_38__getbuffer__(struct __pyx_obj_5field_Field 
  */
   }
 
-  /* "field.pyx":195
+  /* "field.pyx":207
  *             raise NitfError(error)
  * 
  *     def __getbuffer__(self, Py_buffer* buffer, int flags):             # <<<<<<<<<<<<<<
@@ -6341,7 +6739,7 @@ static int __pyx_pf_5field_5Field_38__getbuffer__(struct __pyx_obj_5field_Field 
   return __pyx_r;
 }
 
-/* "field.pyx":222
+/* "field.pyx":234
  *             raise NitfError(error)
  * 
  *     def __releasebuffer__(self, Py_buffer* buffer):             # <<<<<<<<<<<<<<
@@ -6350,22 +6748,22 @@ static int __pyx_pf_5field_5Field_38__getbuffer__(struct __pyx_obj_5field_Field 
  */
 
 /* Python wrapper */
-static CYTHON_UNUSED void __pyx_pw_5field_5Field_41__releasebuffer__(PyObject *__pyx_v_self, Py_buffer *__pyx_v_buffer); /*proto*/
-static CYTHON_UNUSED void __pyx_pw_5field_5Field_41__releasebuffer__(PyObject *__pyx_v_self, Py_buffer *__pyx_v_buffer) {
+static CYTHON_UNUSED void __pyx_pw_5field_5Field_43__releasebuffer__(PyObject *__pyx_v_self, Py_buffer *__pyx_v_buffer); /*proto*/
+static CYTHON_UNUSED void __pyx_pw_5field_5Field_43__releasebuffer__(PyObject *__pyx_v_self, Py_buffer *__pyx_v_buffer) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__releasebuffer__ (wrapper)", 0);
-  __pyx_pf_5field_5Field_40__releasebuffer__(((struct __pyx_obj_5field_Field *)__pyx_v_self), ((Py_buffer *)__pyx_v_buffer));
+  __pyx_pf_5field_5Field_42__releasebuffer__(((struct __pyx_obj_5field_Field *)__pyx_v_self), ((Py_buffer *)__pyx_v_buffer));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
 }
 
-static void __pyx_pf_5field_5Field_40__releasebuffer__(struct __pyx_obj_5field_Field *__pyx_v_self, Py_buffer *__pyx_v_buffer) {
+static void __pyx_pf_5field_5Field_42__releasebuffer__(struct __pyx_obj_5field_Field *__pyx_v_self, Py_buffer *__pyx_v_buffer) {
   __Pyx_RefNannyDeclarations
   int __pyx_t_1;
   __Pyx_RefNannySetupContext("__releasebuffer__", 0);
 
-  /* "field.pyx":223
+  /* "field.pyx":235
  * 
  *     def __releasebuffer__(self, Py_buffer* buffer):
  *         assert(buffer.buf == self._buf_value)             # <<<<<<<<<<<<<<
@@ -6376,12 +6774,12 @@ static void __pyx_pf_5field_5Field_40__releasebuffer__(struct __pyx_obj_5field_F
   if (unlikely(!Py_OptimizeFlag)) {
     if (unlikely(!((__pyx_v_buffer->buf == __pyx_v_self->_buf_value) != 0))) {
       PyErr_SetNone(PyExc_AssertionError);
-      __PYX_ERR(0, 223, __pyx_L1_error)
+      __PYX_ERR(0, 235, __pyx_L1_error)
     }
   }
   #endif
 
-  /* "field.pyx":224
+  /* "field.pyx":236
  *     def __releasebuffer__(self, Py_buffer* buffer):
  *         assert(buffer.buf == self._buf_value)
  *         self._ref_count -= 1             # <<<<<<<<<<<<<<
@@ -6390,7 +6788,7 @@ static void __pyx_pf_5field_5Field_40__releasebuffer__(struct __pyx_obj_5field_F
  */
   __pyx_v_self->_ref_count = (__pyx_v_self->_ref_count - 1);
 
-  /* "field.pyx":225
+  /* "field.pyx":237
  *         assert(buffer.buf == self._buf_value)
  *         self._ref_count -= 1
  *         if self._ref_count == 0:             # <<<<<<<<<<<<<<
@@ -6400,7 +6798,7 @@ static void __pyx_pf_5field_5Field_40__releasebuffer__(struct __pyx_obj_5field_F
   __pyx_t_1 = ((__pyx_v_self->_ref_count == 0) != 0);
   if (__pyx_t_1) {
 
-    /* "field.pyx":226
+    /* "field.pyx":238
  *         self._ref_count -= 1
  *         if self._ref_count == 0:
  *             PyMem_Free(self._buf_value)             # <<<<<<<<<<<<<<
@@ -6409,7 +6807,7 @@ static void __pyx_pf_5field_5Field_40__releasebuffer__(struct __pyx_obj_5field_F
  */
     PyMem_Free(__pyx_v_self->_buf_value);
 
-    /* "field.pyx":227
+    /* "field.pyx":239
  *         if self._ref_count == 0:
  *             PyMem_Free(self._buf_value)
  *             self._buf_value = NULL             # <<<<<<<<<<<<<<
@@ -6417,7 +6815,7 @@ static void __pyx_pf_5field_5Field_40__releasebuffer__(struct __pyx_obj_5field_F
  */
     __pyx_v_self->_buf_value = NULL;
 
-    /* "field.pyx":225
+    /* "field.pyx":237
  *         assert(buffer.buf == self._buf_value)
  *         self._ref_count -= 1
  *         if self._ref_count == 0:             # <<<<<<<<<<<<<<
@@ -6426,7 +6824,7 @@ static void __pyx_pf_5field_5Field_40__releasebuffer__(struct __pyx_obj_5field_F
  */
   }
 
-  /* "field.pyx":222
+  /* "field.pyx":234
  *             raise NitfError(error)
  * 
  *     def __releasebuffer__(self, Py_buffer* buffer):             # <<<<<<<<<<<<<<
@@ -6449,19 +6847,19 @@ static void __pyx_pf_5field_5Field_40__releasebuffer__(struct __pyx_obj_5field_F
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_5field_5Field_43__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_5field_5Field_43__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_5field_5Field_45__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_5field_5Field_45__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__reduce_cython__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_5field_5Field_42__reduce_cython__(((struct __pyx_obj_5field_Field *)__pyx_v_self));
+  __pyx_r = __pyx_pf_5field_5Field_44__reduce_cython__(((struct __pyx_obj_5field_Field *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_5field_5Field_42__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_5field_Field *__pyx_v_self) {
+static PyObject *__pyx_pf_5field_5Field_44__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_5field_Field *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -6473,7 +6871,7 @@ static PyObject *__pyx_pf_5field_5Field_42__reduce_cython__(CYTHON_UNUSED struct
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__8, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 2, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__11, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 2, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_Raise(__pyx_t_1, 0, 0, 0);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -6503,19 +6901,19 @@ static PyObject *__pyx_pf_5field_5Field_42__reduce_cython__(CYTHON_UNUSED struct
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_5field_5Field_45__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state); /*proto*/
-static PyObject *__pyx_pw_5field_5Field_45__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
+static PyObject *__pyx_pw_5field_5Field_47__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state); /*proto*/
+static PyObject *__pyx_pw_5field_5Field_47__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__setstate_cython__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_5field_5Field_44__setstate_cython__(((struct __pyx_obj_5field_Field *)__pyx_v_self), ((PyObject *)__pyx_v___pyx_state));
+  __pyx_r = __pyx_pf_5field_5Field_46__setstate_cython__(((struct __pyx_obj_5field_Field *)__pyx_v_self), ((PyObject *)__pyx_v___pyx_state));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_5field_5Field_44__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_5field_Field *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state) {
+static PyObject *__pyx_pf_5field_5Field_46__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_5field_Field *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -6526,7 +6924,7 @@ static PyObject *__pyx_pf_5field_5Field_44__setstate_cython__(CYTHON_UNUSED stru
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")             # <<<<<<<<<<<<<<
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__9, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 4, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_tuple__12, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 4, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_Raise(__pyx_t_1, 0, 0, 0);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -8211,15 +8609,16 @@ static PyMethodDef __pyx_methods_5field_Field[] = {
   {"get_real", (PyCFunction)__pyx_pw_5field_5Field_19get_real, METH_NOARGS, 0},
   {"get_string", (PyCFunction)__pyx_pw_5field_5Field_21get_string, METH_NOARGS, 0},
   {"get_raw", (PyCFunction)__pyx_pw_5field_5Field_23get_raw, METH_NOARGS, 0},
-  {"set_uint32", (PyCFunction)__pyx_pw_5field_5Field_25set_uint32, METH_O, 0},
-  {"set_uint64", (PyCFunction)__pyx_pw_5field_5Field_27set_uint64, METH_O, 0},
-  {"set_int32", (PyCFunction)__pyx_pw_5field_5Field_29set_int32, METH_O, 0},
-  {"set_int64", (PyCFunction)__pyx_pw_5field_5Field_31set_int64, METH_O, 0},
-  {"set_string", (PyCFunction)__pyx_pw_5field_5Field_33set_string, METH_O, 0},
-  {"set_real", (PyCFunction)__pyx_pw_5field_5Field_35set_real, METH_VARARGS|METH_KEYWORDS, 0},
-  {"set_raw_data", (PyCFunction)__pyx_pw_5field_5Field_37set_raw_data, METH_VARARGS|METH_KEYWORDS, 0},
-  {"__reduce_cython__", (PyCFunction)__pyx_pw_5field_5Field_43__reduce_cython__, METH_NOARGS, 0},
-  {"__setstate_cython__", (PyCFunction)__pyx_pw_5field_5Field_45__setstate_cython__, METH_O, 0},
+  {"get_pyvalue", (PyCFunction)__pyx_pw_5field_5Field_25get_pyvalue, METH_NOARGS, 0},
+  {"set_uint32", (PyCFunction)__pyx_pw_5field_5Field_27set_uint32, METH_O, 0},
+  {"set_uint64", (PyCFunction)__pyx_pw_5field_5Field_29set_uint64, METH_O, 0},
+  {"set_int32", (PyCFunction)__pyx_pw_5field_5Field_31set_int32, METH_O, 0},
+  {"set_int64", (PyCFunction)__pyx_pw_5field_5Field_33set_int64, METH_O, 0},
+  {"set_string", (PyCFunction)__pyx_pw_5field_5Field_35set_string, METH_O, 0},
+  {"set_real", (PyCFunction)__pyx_pw_5field_5Field_37set_real, METH_VARARGS|METH_KEYWORDS, 0},
+  {"set_raw_data", (PyCFunction)__pyx_pw_5field_5Field_39set_raw_data, METH_VARARGS|METH_KEYWORDS, 0},
+  {"__reduce_cython__", (PyCFunction)__pyx_pw_5field_5Field_45__reduce_cython__, METH_NOARGS, 0},
+  {"__setstate_cython__", (PyCFunction)__pyx_pw_5field_5Field_47__setstate_cython__, METH_O, 0},
   {0, 0, 0, 0}
 };
 
@@ -8260,8 +8659,8 @@ static PyBufferProcs __pyx_tp_as_buffer_Field = {
   #if PY_MAJOR_VERSION < 3
   0, /*bf_getcharbuffer*/
   #endif
-  __pyx_pw_5field_5Field_39__getbuffer__, /*bf_getbuffer*/
-  __pyx_pw_5field_5Field_41__releasebuffer__, /*bf_releasebuffer*/
+  __pyx_pw_5field_5Field_41__getbuffer__, /*bf_getbuffer*/
+  __pyx_pw_5field_5Field_43__releasebuffer__, /*bf_releasebuffer*/
 };
 
 static PyTypeObject __pyx_type_5field_Field = {
@@ -8608,9 +9007,12 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_TypeError, __pyx_k_TypeError, sizeof(__pyx_k_TypeError), 0, 0, 1, 1},
   {&__pyx_kp_s_Unknown_enum_value_s, __pyx_k_Unknown_enum_value_s, sizeof(__pyx_k_Unknown_enum_value_s), 0, 0, 1, 0},
   {&__pyx_n_s_ValueError, __pyx_k_ValueError, sizeof(__pyx_k_ValueError), 0, 0, 1, 1},
+  {&__pyx_kp_b__10, __pyx_k__10, sizeof(__pyx_k__10), 0, 0, 0, 0},
   {&__pyx_kp_u__5, __pyx_k__5, sizeof(__pyx_k__5), 0, 1, 0, 0},
   {&__pyx_kp_u__6, __pyx_k__6, sizeof(__pyx_k__6), 0, 1, 0, 0},
-  {&__pyx_kp_b__7, __pyx_k__7, sizeof(__pyx_k__7), 0, 0, 0, 0},
+  {&__pyx_kp_u__7, __pyx_k__7, sizeof(__pyx_k__7), 0, 1, 0, 0},
+  {&__pyx_kp_u__8, __pyx_k__8, sizeof(__pyx_k__8), 0, 1, 0, 0},
+  {&__pyx_kp_u__9, __pyx_k__9, sizeof(__pyx_k__9), 0, 1, 0, 0},
   {&__pyx_n_s_args, __pyx_k_args, sizeof(__pyx_k_args), 0, 0, 1, 1},
   {&__pyx_n_s_buffer, __pyx_k_buffer, sizeof(__pyx_k_buffer), 0, 0, 1, 1},
   {&__pyx_n_s_c, __pyx_k_c, sizeof(__pyx_k_c), 0, 0, 1, 1},
@@ -8648,7 +9050,9 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_get_int, __pyx_k_get_int, sizeof(__pyx_k_get_int), 0, 0, 1, 1},
   {&__pyx_n_s_get_printoptions, __pyx_k_get_printoptions, sizeof(__pyx_k_get_printoptions), 0, 0, 1, 1},
   {&__pyx_n_s_get_raw, __pyx_k_get_raw, sizeof(__pyx_k_get_raw), 0, 0, 1, 1},
+  {&__pyx_n_s_get_real, __pyx_k_get_real, sizeof(__pyx_k_get_real), 0, 0, 1, 1},
   {&__pyx_n_s_get_string, __pyx_k_get_string, sizeof(__pyx_k_get_string), 0, 0, 1, 1},
+  {&__pyx_n_s_get_uint, __pyx_k_get_uint, sizeof(__pyx_k_get_uint), 0, 0, 1, 1},
   {&__pyx_n_s_getstate, __pyx_k_getstate, sizeof(__pyx_k_getstate), 0, 0, 1, 1},
   {&__pyx_n_s_import, __pyx_k_import, sizeof(__pyx_k_import), 0, 0, 1, 1},
   {&__pyx_n_s_include_plus, __pyx_k_include_plus, sizeof(__pyx_k_include_plus), 0, 0, 1, 1},
@@ -8719,7 +9123,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
 static int __Pyx_InitCachedBuiltins(void) {
   __pyx_builtin_staticmethod = __Pyx_GetBuiltinName(__pyx_n_s_staticmethod); if (!__pyx_builtin_staticmethod) __PYX_ERR(0, 84, __pyx_L1_error)
   __pyx_builtin_TypeError = __Pyx_GetBuiltinName(__pyx_n_s_TypeError); if (!__pyx_builtin_TypeError) __PYX_ERR(0, 57, __pyx_L1_error)
-  __pyx_builtin_MemoryError = __Pyx_GetBuiltinName(__pyx_n_s_MemoryError); if (!__pyx_builtin_MemoryError) __PYX_ERR(0, 198, __pyx_L1_error)
+  __pyx_builtin_MemoryError = __Pyx_GetBuiltinName(__pyx_n_s_MemoryError); if (!__pyx_builtin_MemoryError) __PYX_ERR(0, 210, __pyx_L1_error)
   __pyx_builtin_ValueError = __Pyx_GetBuiltinName(__pyx_n_s_ValueError); if (!__pyx_builtin_ValueError) __PYX_ERR(1, 33, __pyx_L1_error)
   return 0;
   __pyx_L1_error:;
@@ -8761,18 +9165,18 @@ static int __Pyx_InitCachedConstants(void) {
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
  */
-  __pyx_tuple__8 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__8)) __PYX_ERR(1, 2, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__8);
-  __Pyx_GIVEREF(__pyx_tuple__8);
+  __pyx_tuple__11 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__11)) __PYX_ERR(1, 2, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__11);
+  __Pyx_GIVEREF(__pyx_tuple__11);
 
   /* "(tree fragment)":4
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
  * def __setstate_cython__(self, __pyx_state):
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")             # <<<<<<<<<<<<<<
  */
-  __pyx_tuple__9 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__9)) __PYX_ERR(1, 4, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__9);
-  __Pyx_GIVEREF(__pyx_tuple__9);
+  __pyx_tuple__12 = PyTuple_Pack(1, __pyx_kp_s_no_default___reduce___due_to_non); if (unlikely(!__pyx_tuple__12)) __PYX_ERR(1, 4, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__12);
+  __Pyx_GIVEREF(__pyx_tuple__12);
 
   /* "field.pyx":29
  * 
@@ -8781,10 +9185,10 @@ static int __Pyx_InitCachedConstants(void) {
  *     """Useful context manager for temporarily changing numpy print options"""
  *     original = np.get_printoptions()
  */
-  __pyx_tuple__10 = PyTuple_Pack(3, __pyx_n_s_args, __pyx_n_s_kwargs, __pyx_n_s_original); if (unlikely(!__pyx_tuple__10)) __PYX_ERR(0, 29, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__10);
-  __Pyx_GIVEREF(__pyx_tuple__10);
-  __pyx_codeobj__11 = (PyObject*)__Pyx_PyCode_New(0, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS|CO_VARARGS|CO_VARKEYWORDS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__10, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_field_pyx, __pyx_n_s_printoptions, 29, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__11)) __PYX_ERR(0, 29, __pyx_L1_error)
+  __pyx_tuple__13 = PyTuple_Pack(3, __pyx_n_s_args, __pyx_n_s_kwargs, __pyx_n_s_original); if (unlikely(!__pyx_tuple__13)) __PYX_ERR(0, 29, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__13);
+  __Pyx_GIVEREF(__pyx_tuple__13);
+  __pyx_codeobj__14 = (PyObject*)__Pyx_PyCode_New(0, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS|CO_VARARGS|CO_VARKEYWORDS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__13, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_field_pyx, __pyx_n_s_printoptions, 29, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__14)) __PYX_ERR(0, 29, __pyx_L1_error)
 
   /* "field.pyx":85
  * 
@@ -8793,10 +9197,10 @@ static int __Pyx_InitCachedConstants(void) {
  *         assert(PyCapsule_IsValid(c, "Field"))
  *         return Field.from_ptr(<field.nitf_Field*>PyCapsule_GetPointer(c, "Field"))
  */
-  __pyx_tuple__12 = PyTuple_Pack(1, __pyx_n_s_c); if (unlikely(!__pyx_tuple__12)) __PYX_ERR(0, 85, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__12);
-  __Pyx_GIVEREF(__pyx_tuple__12);
-  __pyx_codeobj__13 = (PyObject*)__Pyx_PyCode_New(1, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__12, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_field_pyx, __pyx_n_s_from_capsule, 85, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__13)) __PYX_ERR(0, 85, __pyx_L1_error)
+  __pyx_tuple__15 = PyTuple_Pack(1, __pyx_n_s_c); if (unlikely(!__pyx_tuple__15)) __PYX_ERR(0, 85, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__15);
+  __Pyx_GIVEREF(__pyx_tuple__15);
+  __pyx_codeobj__16 = (PyObject*)__Pyx_PyCode_New(1, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__15, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_field_pyx, __pyx_n_s_from_capsule, 85, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__16)) __PYX_ERR(0, 85, __pyx_L1_error)
 
   /* "field.pyx":111
  *         return "<{} [{}]: {}>".format(self.__class__.__name__, self.type.name, self.get_string())
@@ -8805,9 +9209,9 @@ static int __Pyx_InitCachedConstants(void) {
  *     def intValue(self):
  *         return self.get_int()
  */
-  __pyx_tuple__14 = PyTuple_Pack(1, __pyx_kp_u_Old_SWIG_API); if (unlikely(!__pyx_tuple__14)) __PYX_ERR(0, 111, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__14);
-  __Pyx_GIVEREF(__pyx_tuple__14);
+  __pyx_tuple__17 = PyTuple_Pack(1, __pyx_kp_u_Old_SWIG_API); if (unlikely(!__pyx_tuple__17)) __PYX_ERR(0, 111, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__17);
+  __Pyx_GIVEREF(__pyx_tuple__17);
 
   /* "EnumBase":28
  * class __Pyx_EnumBase(int):
@@ -8816,13 +9220,13 @@ static int __Pyx_InitCachedConstants(void) {
  *         for v in cls:
  *             if v == value:
  */
-  __pyx_tuple__15 = PyTuple_Pack(5, __pyx_n_s_cls, __pyx_n_s_value, __pyx_n_s_name_2, __pyx_n_s_v, __pyx_n_s_res); if (unlikely(!__pyx_tuple__15)) __PYX_ERR(1, 28, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__15);
-  __Pyx_GIVEREF(__pyx_tuple__15);
-  __pyx_codeobj__16 = (PyObject*)__Pyx_PyCode_New(3, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__15, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_stringsource, __pyx_n_s_new, 28, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__16)) __PYX_ERR(1, 28, __pyx_L1_error)
-  __pyx_tuple__17 = PyTuple_Pack(1, ((PyObject *)Py_None)); if (unlikely(!__pyx_tuple__17)) __PYX_ERR(1, 28, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__17);
-  __Pyx_GIVEREF(__pyx_tuple__17);
+  __pyx_tuple__18 = PyTuple_Pack(5, __pyx_n_s_cls, __pyx_n_s_value, __pyx_n_s_name_2, __pyx_n_s_v, __pyx_n_s_res); if (unlikely(!__pyx_tuple__18)) __PYX_ERR(1, 28, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__18);
+  __Pyx_GIVEREF(__pyx_tuple__18);
+  __pyx_codeobj__19 = (PyObject*)__Pyx_PyCode_New(3, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__18, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_stringsource, __pyx_n_s_new, 28, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__19)) __PYX_ERR(1, 28, __pyx_L1_error)
+  __pyx_tuple__20 = PyTuple_Pack(1, ((PyObject *)Py_None)); if (unlikely(!__pyx_tuple__20)) __PYX_ERR(1, 28, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__20);
+  __Pyx_GIVEREF(__pyx_tuple__20);
 
   /* "EnumBase":39
  *         cls.__members__[name] = res
@@ -8831,10 +9235,10 @@ static int __Pyx_InitCachedConstants(void) {
  *         return "<%s.%s: %d>" % (self.__class__.__name__, self.name, self)
  *     def __str__(self):
  */
-  __pyx_tuple__18 = PyTuple_Pack(1, __pyx_n_s_self); if (unlikely(!__pyx_tuple__18)) __PYX_ERR(1, 39, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__18);
-  __Pyx_GIVEREF(__pyx_tuple__18);
-  __pyx_codeobj__19 = (PyObject*)__Pyx_PyCode_New(1, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__18, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_stringsource, __pyx_n_s_repr, 39, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__19)) __PYX_ERR(1, 39, __pyx_L1_error)
+  __pyx_tuple__21 = PyTuple_Pack(1, __pyx_n_s_self); if (unlikely(!__pyx_tuple__21)) __PYX_ERR(1, 39, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__21);
+  __Pyx_GIVEREF(__pyx_tuple__21);
+  __pyx_codeobj__22 = (PyObject*)__Pyx_PyCode_New(1, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__21, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_stringsource, __pyx_n_s_repr, 39, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__22)) __PYX_ERR(1, 39, __pyx_L1_error)
 
   /* "EnumBase":41
  *     def __repr__(self):
@@ -8843,20 +9247,20 @@ static int __Pyx_InitCachedConstants(void) {
  *         return "%s.%s" % (self.__class__.__name__, self.name)
  * 
  */
-  __pyx_tuple__20 = PyTuple_Pack(1, __pyx_n_s_self); if (unlikely(!__pyx_tuple__20)) __PYX_ERR(1, 41, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__20);
-  __Pyx_GIVEREF(__pyx_tuple__20);
-  __pyx_codeobj__21 = (PyObject*)__Pyx_PyCode_New(1, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__20, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_stringsource, __pyx_n_s_str, 41, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__21)) __PYX_ERR(1, 41, __pyx_L1_error)
+  __pyx_tuple__23 = PyTuple_Pack(1, __pyx_n_s_self); if (unlikely(!__pyx_tuple__23)) __PYX_ERR(1, 41, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__23);
+  __Pyx_GIVEREF(__pyx_tuple__23);
+  __pyx_codeobj__24 = (PyObject*)__Pyx_PyCode_New(1, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__23, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_stringsource, __pyx_n_s_str, 41, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__24)) __PYX_ERR(1, 41, __pyx_L1_error)
 
   /* "(tree fragment)":1
  * def __pyx_unpickle___Pyx_EnumMeta(__pyx_type, long __pyx_checksum, __pyx_state):             # <<<<<<<<<<<<<<
  *     if __pyx_checksum != 0xd41d8cd:
  *         from pickle import PickleError as __pyx_PickleError
  */
-  __pyx_tuple__22 = PyTuple_Pack(5, __pyx_n_s_pyx_type, __pyx_n_s_pyx_checksum, __pyx_n_s_pyx_state, __pyx_n_s_pyx_PickleError, __pyx_n_s_pyx_result); if (unlikely(!__pyx_tuple__22)) __PYX_ERR(1, 1, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__22);
-  __Pyx_GIVEREF(__pyx_tuple__22);
-  __pyx_codeobj__23 = (PyObject*)__Pyx_PyCode_New(3, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__22, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_stringsource, __pyx_n_s_pyx_unpickle___Pyx_EnumMeta, 1, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__23)) __PYX_ERR(1, 1, __pyx_L1_error)
+  __pyx_tuple__25 = PyTuple_Pack(5, __pyx_n_s_pyx_type, __pyx_n_s_pyx_checksum, __pyx_n_s_pyx_state, __pyx_n_s_pyx_PickleError, __pyx_n_s_pyx_result); if (unlikely(!__pyx_tuple__25)) __PYX_ERR(1, 1, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__25);
+  __Pyx_GIVEREF(__pyx_tuple__25);
+  __pyx_codeobj__26 = (PyObject*)__Pyx_PyCode_New(3, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__25, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_stringsource, __pyx_n_s_pyx_unpickle___Pyx_EnumMeta, 1, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__26)) __PYX_ERR(1, 1, __pyx_L1_error)
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -9241,7 +9645,7 @@ static int __pyx_pymod_exec_field(PyObject *__pyx_pyinit_module)
  */
   __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_deprecated); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 111, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_tuple__14, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 111, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_tuple__17, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 111, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
@@ -9406,9 +9810,9 @@ static int __pyx_pymod_exec_field(PyObject *__pyx_pyinit_module)
  *         for v in cls:
  *             if v == value:
  */
-  __pyx_t_3 = __Pyx_CyFunction_NewEx(&__pyx_mdef_8EnumBase_14__Pyx_EnumBase_1__new__, __Pyx_CYFUNCTION_STATICMETHOD, __pyx_n_s_Pyx_EnumBase___new, NULL, __pyx_n_s_EnumBase, __pyx_d, ((PyObject *)__pyx_codeobj__16)); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 28, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_CyFunction_NewEx(&__pyx_mdef_8EnumBase_14__Pyx_EnumBase_1__new__, __Pyx_CYFUNCTION_STATICMETHOD, __pyx_n_s_Pyx_EnumBase___new, NULL, __pyx_n_s_EnumBase, __pyx_d, ((PyObject *)__pyx_codeobj__19)); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 28, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_CyFunction_SetDefaultsTuple(__pyx_t_3, __pyx_tuple__17);
+  __Pyx_CyFunction_SetDefaultsTuple(__pyx_t_3, __pyx_tuple__20);
   if (PyObject_SetItem(__pyx_t_4, __pyx_n_s_new, __pyx_t_3) < 0) __PYX_ERR(1, 28, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
@@ -9419,7 +9823,7 @@ static int __pyx_pymod_exec_field(PyObject *__pyx_pyinit_module)
  *         return "<%s.%s: %d>" % (self.__class__.__name__, self.name, self)
  *     def __str__(self):
  */
-  __pyx_t_3 = __Pyx_CyFunction_NewEx(&__pyx_mdef_8EnumBase_14__Pyx_EnumBase_3__repr__, 0, __pyx_n_s_Pyx_EnumBase___repr, NULL, __pyx_n_s_EnumBase, __pyx_d, ((PyObject *)__pyx_codeobj__19)); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 39, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_CyFunction_NewEx(&__pyx_mdef_8EnumBase_14__Pyx_EnumBase_3__repr__, 0, __pyx_n_s_Pyx_EnumBase___repr, NULL, __pyx_n_s_EnumBase, __pyx_d, ((PyObject *)__pyx_codeobj__22)); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 39, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   if (PyObject_SetItem(__pyx_t_4, __pyx_n_s_repr, __pyx_t_3) < 0) __PYX_ERR(1, 39, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -9431,7 +9835,7 @@ static int __pyx_pymod_exec_field(PyObject *__pyx_pyinit_module)
  *         return "%s.%s" % (self.__class__.__name__, self.name)
  * 
  */
-  __pyx_t_3 = __Pyx_CyFunction_NewEx(&__pyx_mdef_8EnumBase_14__Pyx_EnumBase_5__str__, 0, __pyx_n_s_Pyx_EnumBase___str, NULL, __pyx_n_s_EnumBase, __pyx_d, ((PyObject *)__pyx_codeobj__21)); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 41, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_CyFunction_NewEx(&__pyx_mdef_8EnumBase_14__Pyx_EnumBase_5__str__, 0, __pyx_n_s_Pyx_EnumBase___str, NULL, __pyx_n_s_EnumBase, __pyx_d, ((PyObject *)__pyx_codeobj__24)); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 41, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   if (PyObject_SetItem(__pyx_t_4, __pyx_n_s_str, __pyx_t_3) < 0) __PYX_ERR(1, 41, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;

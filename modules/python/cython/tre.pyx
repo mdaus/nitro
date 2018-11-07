@@ -7,6 +7,7 @@ from cpython.pycapsule cimport PyCapsule_New, PyCapsule_IsValid, PyCapsule_GetPo
 from error cimport nitf_Error
 
 import cython
+import binascii
 from deprecated import deprecated
 from .error import NitfError
 from . import field, types
@@ -38,6 +39,12 @@ cdef class Extensions:
         for tre in it:
             self.append(tre)
 
+    def todict(self, encoding):
+        rval = {}
+        for tre in iter(self):
+            rval.setdefault(tre.getTag(), []).append(tre.todict(encoding))
+        return rval
+        
     def __contains__(self, str item):
         return <bint>nitf_Extensions_exists(self._c_extensions, item)
 
@@ -135,6 +142,30 @@ cdef class TRE:
         rval = f'-----\n{self.tag}({len(self)})\n\t'
         rval += '\n\t'.join([f'{k} = {v}' for k,v in self])
         rval += '\n'
+        return rval
+
+    def __convert_item(self, val, encoding):
+        if isinstance(val, field.Field):
+            rval = val.get_pyvalue()
+            if encoding is not None and isinstance(rval, bytes):
+                try:
+                    rval = rval.decode(encoding)
+                except UnicodeDecodeError:
+                    # invalid character...try quoting it
+                    rval = binascii.b2a_qp(rval).decode(encoding)
+        elif isinstance(val, list):
+            rval = [self.__convert_item(litem, encoding) for litem in val]
+        else:
+            try:
+                rval = val.todict(encoding)
+            except AttributeError:
+                rval = str(val)  # fall back to the printable string
+        return rval
+
+    def todict(self, encoding=None):
+        rval = {}
+        for key, val in iter(self):
+            rval[key] = self.__convert_item(val, encoding)
         return rval
 
     def __contains__(self, str item):

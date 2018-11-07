@@ -151,6 +151,18 @@ cdef class Field:
     def get_raw(self):
         return bytes(self)
 
+    def get_pyvalue(self):
+        if self.type  == field.NITF_BCS_A:
+            return self.get_string()
+        elif self.type == field.NITF_BINARY:
+            return self.get_raw()
+        elif '.' in self.get_string():
+            return self.get_real()
+        elif '+' in self.get_string() or '-' in self.get_string():
+            return self.get_int()
+        else:
+            return self.get_uint()
+
     def set_uint32(self, value):
         cdef nitf_Error error
         if not field.nitf_Field_setUint32(self._c_field, value, &error):
