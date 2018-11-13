@@ -95,13 +95,13 @@ public:
      * after a call to the seek, write, or reset methods
      * \return pointer to the internal buffer
      */
-    sys::ubyte* get()
+    T* get()
     {
         return mBufferView.data;
     }
 
     //! Returns const pointer to internal buffer
-    const sys::ubyte* get() const
+    const T* get() const
     {
         return mBufferView.data;
     }
