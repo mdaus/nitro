@@ -1,3 +1,25 @@
+/* =========================================================================
+ * This file is part of mem-c++
+ * =========================================================================
+ *    
+ * (C) Copyright 2004 - 2018, MDA Information Systems LLC
+ *      
+ * mem-c++ is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *           
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *                
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
+ * see <http://www.gnu.org/licenses/>.
+ *                    
+ */
+
 #include <mem/ScratchMemory.h>
 #include <mem/BufferView.h>
 #include <cli/ArgumentParser.h>
@@ -6,10 +28,12 @@
 #include <fstream>
 #include <string>
 
+namespace
+{
 struct Operation
 {
-    Operation(const std::string op,
-              const std::string name,
+    Operation(const std::string& op,
+              const std::string& name,
               const size_t bytes) :
         op(op),
         name(name),
@@ -39,8 +63,8 @@ public:
      * \param[in,out] htmlFile Ofstream to .html file
      * \param[in,out] cssFile Ofstream to .css file
      */
-    Visualizer(const std::vector<Operation> prevOperations,
-               const size_t iteration,
+    Visualizer(const std::vector<Operation>& prevOperations,
+               size_t iteration,
                std::ofstream& htmlFile,
                std::ofstream& cssFile):
         mPrevOperations(prevOperations),
@@ -62,7 +86,7 @@ public:
      *
      * \param operations A vector of all operations
      */
-    void set_start_ptr(const std::vector<Operation>& operations)
+    void setStartPtr(const std::vector<Operation>& operations)
     {
         mStartPtr = operations.at(0).buffer.data;
         for (size_t ii = 0; ii < operations.size(); ++ii)
@@ -80,13 +104,13 @@ public:
      * \param op Operation to draw a box of
      * \param color_iter Iterator to arbitrarily select a color
      */
-    void create_box(const Operation op, const size_t color_iter)
+    void createBox(const Operation& op, size_t colorIter)
     {
-        std::string color = mColors.at(color_iter % 3);
+        std::string color = mColors.at(colorIter % 3);
         std::string height = "25px;\n";
         if (op.op == "release")
         {
-            color = mReleasedColors.at(color_iter % 3);
+            color = mReleasedColors.at(colorIter % 3);
             height = "30px;\n";
         }
 
@@ -98,6 +122,7 @@ public:
         mCSSFile << "width: " << op.buffer.size << "px;\n";
         mCSSFile << "margin-left: " << op.buffer.data - mStartPtr << "px;\n";
         mCSSFile << "border-style: solid;\n";
+        mCSSFile << "border-width: 1px;\n";
         mCSSFile << "}\n";
 
         mHTMLFile << "<div id=\"" << op.name << "\">&nbsp;" << op.name[0] << "</div>\n";
@@ -146,7 +171,6 @@ public:
     void randomTest(std::vector<Operation>& currentOperations,
                     unsigned char& bufferName,
                     std::vector<unsigned char>& notReleasedKeys,
-                    size_t& usedBufferSpace,
                     mem::ScratchMemory& scratch)
     {
         handlePrevOps(currentOperations, scratch);
@@ -173,7 +197,6 @@ public:
             notReleasedKeys.push_back(bufferName);
 
             ++bufferName;
-            usedBufferSpace += numElements;
         }
     }
 
@@ -190,31 +213,13 @@ public:
     void concurrentBlockTest(std::vector<Operation>& currentOperations,
                              unsigned char& bufferName,
                              size_t& testIter,
-                             size_t& usedBufferSpace,
                              mem::ScratchMemory& scratch)
     {
         handlePrevOps(currentOperations, scratch);
         size_t numElements = (rand() % 150) + 20;
 
-        if (testIter == 0)
-        {
-            const std::string segmentName = std::string(1, bufferName) +
-                    str::toString(mIteration);
-            scratch.put<sys::ubyte>(segmentName, numElements, 1, 1);
-            currentOperations.push_back(Operation("put", segmentName, numElements));
-            ++testIter;
-            ++bufferName;
-        }
-        else if (testIter == 1)
-        {
-            const std::string segmentName = std::string(1, bufferName) +
-                    str::toString(mIteration);
-            scratch.put<sys::ubyte>(segmentName, numElements, 1, 1);
-            currentOperations.push_back(Operation("put", segmentName, numElements));
-            ++testIter;
-            ++bufferName;
-        }
-        else if (testIter == 2)
+        // Put operations
+        if (testIter == 0 || testIter == 1 || testIter == 2 || testIter == 5)
         {
             const std::string segmentName = std::string(1, bufferName) +
                     str::toString(mIteration);
@@ -238,15 +243,6 @@ public:
             scratch.release(segmentName);
             currentOperations.push_back(Operation("release", segmentName, numElements));
             ++testIter;
-        }
-        else if (testIter == 5)
-        {
-            const std::string segmentName = std::string(1, bufferName) +
-                    str::toString(mIteration);
-            scratch.put<sys::ubyte>(segmentName, numElements, 1, 1);
-            currentOperations.push_back(Operation("put", segmentName, numElements));
-            ++testIter;
-            ++bufferName;
         }
         else if (testIter == 6)
         {
@@ -271,22 +267,12 @@ public:
     void connectedBlockTest(std::vector<Operation>& currentOperations,
                              unsigned char& bufferName,
                              size_t& testIter,
-                             size_t& usedBufferSpace,
                              mem::ScratchMemory& scratch)
     {
         handlePrevOps(currentOperations, scratch);
         size_t numElements = (rand() % 150) + 20;
 
-        if (testIter == 0)
-        {
-            const std::string segmentName = std::string(1, bufferName) +
-                    str::toString(mIteration);
-            scratch.put<sys::ubyte>(segmentName, numElements, 1, 1);
-            currentOperations.push_back(Operation("put", segmentName, numElements));
-            ++testIter;
-            ++bufferName;
-        }
-        else if (testIter == 1)
+        if (testIter == 0 || testIter == 1 || testIter == 3 || testIter == 5)
         {
             const std::string segmentName = std::string(1, bufferName) +
                     str::toString(mIteration);
@@ -303,15 +289,6 @@ public:
             currentOperations.push_back(Operation("release", segmentName, numElements));
             ++testIter;
         }
-        else if (testIter == 3)
-        {
-            const std::string segmentName = std::string(1, bufferName) +
-                    str::toString(mIteration);
-            scratch.put<sys::ubyte>(segmentName, numElements, 1, 1);
-            currentOperations.push_back(Operation("put", segmentName, numElements));
-            ++testIter;
-            ++bufferName;
-        }
         else if (testIter == 4)
         {
             const std::string segmentName = std::string(1, bufferName - 3) +
@@ -319,15 +296,6 @@ public:
             scratch.release(segmentName);
             currentOperations.push_back(Operation("release", segmentName, numElements));
             ++testIter;
-        }
-        else if (testIter == 5)
-        {
-            const std::string segmentName = std::string(1, bufferName) +
-                    str::toString(mIteration);
-            scratch.put<sys::ubyte>(segmentName, numElements, 1, 1);
-            currentOperations.push_back(Operation("put", segmentName, numElements));
-            ++testIter;
-            ++bufferName;
         }
         else if (testIter == 6)
         {
@@ -349,6 +317,7 @@ private:
     std::ofstream& mHTMLFile;
     std::ofstream& mCSSFile;
 };
+}
 
 int main(int argc, char** argv)
 {
@@ -356,8 +325,6 @@ int main(int argc, char** argv)
 
     parser.setDescription("Software to visualize scratch memory test cases in HTML/CSS");
     parser.addArgument("--test", "Select which test case to run", cli::STORE, "test")->setDefault("random");
-    parser.addArgument("--numBytes", "Determines how much memory is allocated for the buffer",
-                       cli::STORE, "bytes", "INT")->setDefault(1000);
 
     const cli::Results* options(parser.parse(argc, argv));
     const std::string testType(options->get<std::string>("test"));
@@ -380,8 +347,6 @@ int main(int argc, char** argv)
     std::vector<Operation> prevOperations;
     unsigned char bufferName = 'a';
 
-    const size_t totalBufferSpace(options->get<int>("bytes"));
-    size_t usedBufferSpace = 0;
     size_t testIter = 0;
 
     std::vector<unsigned char> notReleasedKeys;
@@ -396,7 +361,6 @@ int main(int argc, char** argv)
         {   visualize.randomTest(currentOperations,
                                  bufferName,
                                  notReleasedKeys,
-                                 usedBufferSpace,
                                  scratch);
         }
         else if (testType == "concurrent")
@@ -404,7 +368,6 @@ int main(int argc, char** argv)
             visualize.concurrentBlockTest(currentOperations,
                                           bufferName,
                                           testIter,
-                                          usedBufferSpace,
                                           scratch);
         }
         else if (testType == "connected")
@@ -412,7 +375,6 @@ int main(int argc, char** argv)
             visualize.connectedBlockTest(currentOperations,
                                          bufferName,
                                          testIter,
-                                         usedBufferSpace,
                                          scratch);
         }
         else
@@ -421,21 +383,14 @@ int main(int argc, char** argv)
             return 1;
         }
 
-        std::vector<sys::ubyte> storage(totalBufferSpace);
-        mem::BufferView<sys::ubyte> buffer(storage.data(), storage.size());
-
-        if (usedBufferSpace > totalBufferSpace)
-        {
-            break;
-        }
-        scratch.setup(buffer);
+        scratch.setup();
 
         //This draws the line. Draw one per scratch instance
         htmlFile << "<hr><br>\n";
         cssFile << "hr { \n";
         cssFile << "height: 1px;\n";
         cssFile << "float: left;\n";
-        cssFile << "width: " << buffer.size << "px;\n";
+        cssFile << "width: " << scratch.getNumBytes() << "px;\n";
         cssFile << "position: absolute;\n";
         cssFile << "}\n";
 
@@ -446,11 +401,11 @@ int main(int argc, char** argv)
                     scratch.getBufferView<sys::ubyte>(currentOperations.at(ii).name);
         }
 
-        visualize.set_start_ptr(currentOperations);
+        visualize.setStartPtr(currentOperations);
 
         for (size_t ii = 0; ii < currentOperations.size(); ++ii)
         {
-                visualize.create_box(currentOperations.at(ii), ii);
+                visualize.createBox(currentOperations.at(ii), ii);
         }
 
         htmlFile << "<br><br><br>\n";
