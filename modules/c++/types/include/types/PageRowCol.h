@@ -32,7 +32,6 @@
 
 namespace types
 {
-
 /*!
  *  \class PageRowCol
  *  \brief Templated PageRowCol type
