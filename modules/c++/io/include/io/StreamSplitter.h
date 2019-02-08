@@ -98,7 +98,7 @@ private:
      *        to the substring and remove it from the buffer.
      */
     void transferBufferSegmentToSubstring(std::string& substring,
-                                          size_t& tokenSize,
+                                          size_t& substringSize,
                                           sys::SSize_T bufferSegmentEnd);
 
     /*!
@@ -107,13 +107,14 @@ private:
     void handleStreamRead();
 
     const std::string mDelimiter;
-    const sys::SSize_T mBufferCapacity;
-    sys::SSize_T mBufferBegin;
-    sys::SSize_T mBufferEnd;
+    sys::SSize_T mBufferValidBegin;
+    sys::SSize_T mBufferValidEnd;
     size_t mNumSubstringsReturned;
     size_t mNumBytesReturned;
     size_t mNumDelimitersProcessed;
-    std::vector<sys::byte> mBuffer;
+    std::vector<sys::byte> mBufferStorage;
+    const sys::SSize_T mBufferCapacity;
+    sys::byte* const mBuffer;
     io::InputStream& mInputStream;
     bool mStreamEmpty;
 };
