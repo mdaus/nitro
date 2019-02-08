@@ -82,7 +82,7 @@ bool StreamSplitter::getNext(std::string& substring)
         {
             if (0 == mDelimiter.compare(0,
                                         mDelimiter.size(),
-                                        &mBuffer[ii],
+                                        mBuffer.data() + ii,
                                         mDelimiter.size()))
             {
                 // delimiter found starting at buffer position ii
@@ -146,7 +146,7 @@ void StreamSplitter::transferBufferSegmentToSubstring(
         substring.resize(substringSize + segmentSize);
         substring.replace(substringSize,
                           segmentSize,
-                          &mBuffer[mBufferBegin],
+                          mBuffer.data() + mBufferBegin,
                           segmentSize);
         substringSize += segmentSize;
         mBufferBegin += segmentSize;
@@ -170,7 +170,7 @@ void StreamSplitter::handleStreamRead()
     if (!mStreamEmpty && (mBufferEnd < mBufferCapacity))
     {
         const sys::SSize_T numRead =
-                mInputStream.read(&mBuffer[mBufferEnd],
+                mInputStream.read(mBuffer.data() + mBufferEnd,
                                   mBufferCapacity - mBufferEnd);
         if (numRead > 0)
         {
