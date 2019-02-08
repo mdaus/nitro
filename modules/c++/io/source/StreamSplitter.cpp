@@ -159,9 +159,9 @@ void StreamSplitter::handleStreamRead()
     {
         // first half of buffer is no longer needed, shift the rest
         // down to make space for reading in more
-        std::copy(&mBuffer[mBufferBegin],
-                  &mBuffer[mBufferEnd],
-                  &mBuffer[0]);
+        std::copy(mBuffer.data() + mBufferBegin,
+                  mBuffer.data() + mBufferEnd,
+                  mBuffer.data());
         mBufferEnd = mBufferEnd - mBufferBegin;
         mBufferBegin = 0;
     }
