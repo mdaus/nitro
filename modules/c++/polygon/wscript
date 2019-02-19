@@ -1,0 +1,9 @@
+NAME            = 'polygon'
+MAINTAINER      = 'christian.white@radiantsolutions.com'
+VERSION         = '1.0'
+MODULE_DEPS     = 'sys mem types math except'
+
+options = configure = distclean = lambda p: None
+
+def build(bld):
+    bld.module(**globals())
