@@ -1,5 +1,5 @@
 NAME            = 'polygon'
-MAINTAINER      = 'christian.white@radiantsolutions.com'
+MAINTAINER      = 'jeffrey.randolph@mdaus.com adam.sylvester@mdaus.com timothy.handy@radiantsolutions.com'
 VERSION         = '1.0'
 MODULE_DEPS     = 'sys mem types math except'
 
