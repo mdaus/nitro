@@ -29,7 +29,8 @@
 // bindings for SharedPtr.
 //
 // SWIG's default behavior is to not process includes recursively when given an
-// %include directive - including this header without the forward declaration
+// %include directive (neither SharedPtrCpp11 or SharedPtrLegacy will get
+// processed) - including this header without the forward declaration
 // as part of a SWIG interface will result in a missing template type error.
 namespace mem
 {
