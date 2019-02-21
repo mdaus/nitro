@@ -25,6 +25,12 @@
 
 #include <sys/sys_config.h>
 
+namespace mem
+{
+template<typename T>
+class SharedPtr;
+}
+
 #ifdef __CODA_CPP11
 #include <mem/SharedPtrCpp11.h>
 #else
