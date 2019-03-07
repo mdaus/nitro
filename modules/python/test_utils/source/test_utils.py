@@ -53,4 +53,3 @@ def runUnitTests(projectName, installDirName='install'):
                 success = False
 
     return success
-
