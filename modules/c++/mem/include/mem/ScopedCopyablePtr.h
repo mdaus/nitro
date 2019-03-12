@@ -25,6 +25,7 @@
 
 #include <memory>
 #include <cstddef>
+#include <sys/sys_config.h>
 
 namespace mem
 {
@@ -107,7 +108,7 @@ public:
         return !(*this == rhs);
     }
 
-    // explicit operators not suppored until C++11
+    // explicit operators not supported until C++11
     bool toBool() const
     {
         return get() == NULL ? false : true;
