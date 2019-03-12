@@ -106,11 +106,18 @@ public:
     {
         return !(*this == rhs);
     }
-    
-    explicit operator bool() const 
-    { 
-        return get() == NULL ? false : true; 
+
+    // explicit operators not suppored until C++11
+    bool toBool() const
+    {
+        return get() == NULL ? false : true;
     }
+#ifdef __CODA_CPP11
+    explicit operator bool() const
+    {
+        return toBool();
+    }
+#endif
 
     T* get() const
     {
