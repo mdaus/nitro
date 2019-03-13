@@ -10,8 +10,26 @@ from types cimport *
 from . import field
 from . import tre
 from . import types
+from collections import Mapping
 from deprecated import deprecated
 from .error import NitfError
+
+
+def __convert_item(val, encoding):
+    if isinstance(val, types.List):
+        val = list(val)
+    if isinstance(val, field.Field):
+        rval = val.get_pyvalue()
+        if encoding is not None and isinstance(rval, bytes):
+            rval = rval.decode(encoding)
+    elif isinstance(val, list):
+        rval = [__convert_item(litem, encoding) for litem in val]
+    else:
+        try:
+            rval = val.todict(encoding)
+        except AttributeError:
+            rval = str(val)  # fall back to the printable string
+    return rval
 
 
 cdef class BandInfo:
@@ -43,6 +61,13 @@ cdef class BandInfo:
             'numLUTs':field.Field(PyCapsule_New(self._c_binfo.numLUTs, "Field", NULL)),
         }
         return tmp
+
+    def todict(self, encoding=None):
+        rval = {}
+        for key, val in self.get_items().items():
+            tmp = __convert_item(val, encoding)
+            rval[key] = tmp
+        return rval
 
     def __contains__(self, item):
         if item in super():
@@ -147,24 +172,12 @@ cdef class BaseFieldHeader:
                 rval += f"{key} = '{val}'\n"
         return rval
 
-    def __convert_item(self, val, encoding):
-        if isinstance(val, field.Field):
-            rval = val.get_pyvalue()
-            if encoding is not None and isinstance(rval, bytes):
-                rval = rval.decode(encoding)
-        elif isinstance(val, list):
-            rval = [self.__convert_item(litem, encoding) for litem in val]
-        else:
-            try:
-                rval = val.todict(encoding)
-            except AttributeError:
-                rval = str(val)  # fall back to the printable string
-        return rval
-
     def todict(self, encoding=None):
         rval = {}
         for key, val in self.get_items().items():
-            rval[key] = self.__convert_item(val, encoding)
+            tmp = __convert_item(val, encoding)
+            if not isinstance(tmp, Mapping) or len(tmp) > 0:
+                rval[key] = tmp
         return rval
 
     def __repr__(self):
@@ -252,9 +265,10 @@ cdef class FileHeader(BaseFieldHeader):
 cdef class ImageSubheader(BaseFieldHeader):
     cdef header.nitf_ImageSubheader* _c_header
 
-    def __cinit__(self, c):
-        assert(PyCapsule_IsValid(c, "ImageSubheader"))
-        self._c_header = <header.nitf_ImageSubheader*>PyCapsule_GetPointer(c, "ImageSubheader")
+    def __cinit__(self, c=None):
+        if c is not None:
+            assert(PyCapsule_IsValid(c, "ImageSubheader"))
+            self._c_header = <header.nitf_ImageSubheader*>PyCapsule_GetPointer(c, "ImageSubheader")
 
     def _capsule(self):
         return PyCapsule_New(self._c_header, "ImageSubheader", NULL)
@@ -265,12 +279,18 @@ cdef class ImageSubheader(BaseFieldHeader):
         obj._c_header = ptr
         return obj
 
+    def __copy__(self):
+        cdef nitf_ImageSubheader* pObj
+        cdef nitf_Error error
+        pObj = nitf_ImageSubheader_clone(self._c_header, &error)
+        if pObj is NULL:
+            raise NitfError(error)
+        return ImageSubheader.from_ptr(pObj)
+
     def insert_image_comment(self, comment, position=-1):
         cdef int rval
         cdef nitf_Error error
         cdef char* tmp
-
-        tmp = comment
 
         rval = header.nitf_ImageSubheader_insertImageComment(self._c_header, str(comment), position, &error)
         if rval < 0:
@@ -318,6 +338,14 @@ cdef class ImageSubheader(BaseFieldHeader):
     @deprecated("Old SWIG API")
     def getUDHD(self):
         return self.userDefinedSection
+
+    def todict(self, encoding=None):
+        rval = super().todict(encoding)
+        bi = []
+        for b in self.band_info:
+            bi.append(b.todict(encoding))
+        rval["bandInfo"] = bi
+        return rval
 
     deprecated_items = {'numrows': 'numRows', 'numcols': 'numCols'}
 

@@ -8,9 +8,19 @@ from error cimport nitf_Error
 
 import cython
 import binascii
+from collections import OrderedDict
 from deprecated import deprecated
 from .error import NitfError
 from . import field, types
+
+
+def split_key(k):
+    tmp = k.split('[')
+    nums = []
+    val = tmp[0]
+    for idx in range(1, len(tmp)):
+        nums.append(int(tmp[idx][:-1]))
+    return val, nums
 
 
 cdef class Extensions:
@@ -40,9 +50,9 @@ cdef class Extensions:
             self.append(tre)
 
     def todict(self, encoding):
-        rval = {}
+        rval = OrderedDict()
         for tre in iter(self):
-            rval.setdefault(tre.getTag(), []).append(tre.todict(encoding))
+            rval.setdefault(tre.tag, []).append(tre.todict(encoding))
         return rval
         
     def __contains__(self, str item):
@@ -163,9 +173,23 @@ cdef class TRE:
         return rval
 
     def todict(self, encoding=None):
-        rval = {}
+        rval = OrderedDict()
+        loop_names = []
         for key, val in iter(self):
-            rval[key] = self.__convert_item(val, encoding)
+            key, indices = split_key(key)
+            if len(indices) < len(loop_names):
+                loop_names = loop_names[:len(indices)]
+            tmp = rval
+            for j, idx in enumerate(indices):
+                if j > len(loop_names) - 1:
+                    loop_names.append(list(tmp.keys())[-1])
+                if loop_names[j] not in tmp or type(tmp[loop_names[j]]) != list:
+                    tmp[loop_names[j]] = []
+                tmp = tmp[loop_names[j]]
+                if len(tmp) < idx + 1:
+                    tmp.append(OrderedDict())
+                tmp = tmp[idx]
+            tmp[key] = self.__convert_item(val, encoding)
         return rval
 
     def __contains__(self, str item):

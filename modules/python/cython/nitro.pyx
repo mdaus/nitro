@@ -22,6 +22,7 @@ from types cimport *
 
 import dataextension_segment
 from . import field, header
+from copy import copy
 import array
 import numpy as np
 import os
@@ -197,6 +198,16 @@ cdef class ImageSegment:
         h = header.ImageSubheader(PyCapsule_New(hdr, "ImageSubheader", NULL))
         return h
 
+    @subheader.setter
+    def subheader(self, hdr):
+        """ This will make a copy of hdr"""
+        if self._c_image.subheader is not NULL:
+            header.nitf_ImageSubheader_destruct(&self._c_image.subheader)
+        hdr_copy = copy(hdr)
+        c = hdr_copy._capsule()
+        assert(PyCapsule_IsValid(c, "ImageSubheader"))
+        self._c_image.subheader = <header.nitf_ImageSubheader*>PyCapsule_GetPointer(c, "ImageSubheader")
+
     @deprecated("Old SWIG API")
     def addBands(self, num=1):
         if num < 0:
@@ -242,6 +253,35 @@ cdef class DataSource:
 
 cdef class BandSource(DataSource):
     pass
+
+
+cdef class DirectBlockSource(BandSource):
+    def __cinit__(self, image_reader=None, nbands=0):
+        cdef nitf_Error error
+        cdef io.nitf_ImageReader* pReader
+
+        tmp = image_reader.to_capsule()
+        assert(PyCapsule_IsValid(tmp, "ImageReader"))
+        pReader = <io.nitf_ImageReader*>PyCapsule_GetPointer(tmp, "ImageReader")
+        self._c_source = <image_source.nitf_DataSource*>image_source.nitf_DirectBlockSource_construct(<void*>self, self.c_next_block, pReader, nbands, &error)
+        if self._c_source is NULL:
+            raise NitfError(error)
+
+    cpdef next_block(self, buf, block, blockNumber, blockSize):
+        cdef void* c_buf
+        cdef void* c_block
+
+        c_buf = PyCapsule_GetPointer(buf, "void")
+        c_block = PyCapsule_GetPointer(block, "void")
+        memcpy(c_buf, c_block, blockSize)
+
+    @staticmethod
+    cdef NITF_BOOL c_next_block(void* algorithm, void* buf, const void* block, nitf_Uint32 blockNumber, nitf_Uint64 blockSize, nitf_Error* error):
+        try:
+            (<object>algorithm).next_block(PyCapsule_New(buf, "void", NULL), PyCapsule_New(block, "void", NULL), blockNumber, blockSize)
+        except:
+            return False
+        return True
 
 
 cdef class MemorySource(BandSource):
@@ -505,6 +545,9 @@ cdef class ImageReader:
         obj = ImageReader(nbpp)
         obj._c_reader = ptr
         return obj
+
+    cpdef to_capsule(self):
+        return PyCapsule_New(self._c_reader, "ImageReader", NULL)
 
     cpdef read(self, ihdr):
         cdef nitf_Error error

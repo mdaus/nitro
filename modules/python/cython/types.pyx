@@ -13,17 +13,13 @@ cdef class ListIter:
     cdef types.nitf_List* _c_list
     cdef object _list
 
-    def __cinit__(self):
-        self._list = None
+    def __cinit__(self, lst=None):
+        self._list = lst
         self._c_list = NULL
 
-    @staticmethod
-    cdef from_ptr(lst, types.nitf_List* c_list):
-        obj = ListIter()
-        obj._list = lst
-        obj._c_list = c_list
-        obj._c_iter = types.nitf_List_begin(obj._c_list)
-        return obj
+    cdef init(self, types.nitf_List* c_list):
+        self._c_list = c_list
+        self._c_iter = types.nitf_List_begin(self._c_list)
 
     def __next__(self):
         cdef types.nitf_ListIterator end
@@ -71,7 +67,9 @@ cdef class List:
         return NitfData.from_ptr(rval).convert(self._container_type)
 
     def __iter__(self):
-        return ListIter.from_ptr(self, self._c_list)
+        i = ListIter(self)
+        i.init(self._c_list)
+        return i
 
     def append(self, obj):
         cdef types.nitf_Error error
