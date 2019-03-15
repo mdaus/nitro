@@ -2,7 +2,7 @@
  * This file is part of sys-c++ 
  * =========================================================================
  * 
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2019, MDA Information Systems LLC
  *
  * sys-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -47,7 +47,7 @@ namespace sys
  */
 bool canProcessFit(size_t jobMemBytes,
                    size_t systemMemBytes,
-                   size_t reservedBytes = 4294967296ul,
+                   size_t reservedBytes = static_cast<size_t>(1024)*1024*1024*4,
                    double margin = 0.95);
 
 /*!
@@ -62,7 +62,7 @@ bool canProcessFit(size_t jobMemBytes,
  * \return the number of bytes available 
  */
 size_t getAvailableMem(size_t systemMemBytes, 
-                       size_t reservedBytes = 4294967296ul, 
+                       size_t reservedBytes = static_cast<size_t>(1024)*1024*1024*4,
                        double margin = 0.95);
 
 }

@@ -2,7 +2,7 @@
  * This file is part of sys-c++ 
  * =========================================================================
  * 
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2019, MDA Information Systems LLC
  *
  * sys-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -20,8 +20,8 @@
  *
  */
 
-#include <sys/ResourceCheck.h>
 #include <algorithm>
+#include <sys/ResourceCheck.h>
 
 namespace sys
 {
@@ -40,14 +40,14 @@ size_t getAvailableMem(size_t systemMemBytes,
                        size_t reservedBytes,
                        double margin)
 {
-    size_t relativeAvailable = systemMemBytes * margin;
+    const size_t relativeAvailable = systemMemBytes * margin;
     if (reservedBytes > systemMemBytes)
     {
         return 0;
     }
 
-    size_t absAvailable = systemMemBytes - reservedBytes;
-    return std::min<size_t>(relativeAvailable, absAvailable);
+    const size_t absAvailable = systemMemBytes - reservedBytes;
+    return std::min(relativeAvailable, absAvailable);
 }
 
 }
