@@ -341,4 +341,5 @@ int main(int, char**)
     TEST_CHECK(test2DPolyfit);
     TEST_CHECK(test2DPolyfitLarge);
     TEST_CHECK(testVectorValuedOrderChange);
+    return 0;
 }
