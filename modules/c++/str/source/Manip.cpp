@@ -25,7 +25,7 @@
 #include <algorithm>
 #include <climits>
 #include <cstdio>
-#include <wctype.h>
+#include <cwctype>
 
 #include <str/Manip.h>
 
