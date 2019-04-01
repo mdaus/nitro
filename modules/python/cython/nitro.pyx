@@ -172,6 +172,11 @@ cdef class Record:
     def new_text_segment(self):
         return TextSegment.from_record(PyCapsule_New(self._c_record, "Record", NULL))
 
+    def merge_tres(self):
+        cdef nitf_Error error
+        if not record.nitf_Record_mergeTREs(self._c_record, &error):
+            raise NitfError(error)
+
 
 cdef class ImageSegment:
     cdef image_segment.nitf_ImageSegment* _c_image

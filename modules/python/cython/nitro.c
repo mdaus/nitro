@@ -1130,7 +1130,7 @@ typedef npy_clongdouble __pyx_t_5numpy_clongdouble_t;
  */
 typedef npy_cdouble __pyx_t_5numpy_complex_t;
 
-/* "nitro.pyx":714
+/* "nitro.pyx":719
  * 
  * 
  * cpdef enum Version:             # <<<<<<<<<<<<<<
@@ -1181,7 +1181,7 @@ struct __pyx_obj_5nitro_Record {
 };
 
 
-/* "nitro.pyx":176
+/* "nitro.pyx":181
  * 
  * 
  * cdef class ImageSegment:             # <<<<<<<<<<<<<<
@@ -1195,7 +1195,7 @@ struct __pyx_obj_5nitro_ImageSegment {
 };
 
 
-/* "nitro.pyx":221
+/* "nitro.pyx":226
  * 
  * 
  * cdef class ImageSource:             # <<<<<<<<<<<<<<
@@ -1209,7 +1209,7 @@ struct __pyx_obj_5nitro_ImageSource {
 };
 
 
-/* "nitro.pyx":248
+/* "nitro.pyx":253
  * 
  * 
  * cdef class DataSource:             # <<<<<<<<<<<<<<
@@ -1222,7 +1222,7 @@ struct __pyx_obj_5nitro_DataSource {
 };
 
 
-/* "nitro.pyx":254
+/* "nitro.pyx":259
  * 
  * 
  * cdef class BandSource(DataSource):             # <<<<<<<<<<<<<<
@@ -1234,7 +1234,7 @@ struct __pyx_obj_5nitro_BandSource {
 };
 
 
-/* "nitro.pyx":258
+/* "nitro.pyx":263
  * 
  * 
  * cdef class DirectBlockSource(BandSource):             # <<<<<<<<<<<<<<
@@ -1247,7 +1247,7 @@ struct __pyx_obj_5nitro_DirectBlockSource {
 };
 
 
-/* "nitro.pyx":287
+/* "nitro.pyx":292
  * 
  * 
  * cdef class MemorySource(BandSource):             # <<<<<<<<<<<<<<
@@ -1259,7 +1259,7 @@ struct __pyx_obj_5nitro_MemorySource {
 };
 
 
-/* "nitro.pyx":299
+/* "nitro.pyx":304
  * 
  * 
  * cdef class MemoryBandSource(MemorySource):             # <<<<<<<<<<<<<<
@@ -1271,7 +1271,7 @@ struct __pyx_obj_5nitro_MemoryBandSource {
 };
 
 
-/* "nitro.pyx":303
+/* "nitro.pyx":308
  * 
  * 
  * cdef class SegmentSource(DataSource):             # <<<<<<<<<<<<<<
@@ -1283,7 +1283,7 @@ struct __pyx_obj_5nitro_SegmentSource {
 };
 
 
-/* "nitro.pyx":307
+/* "nitro.pyx":312
  * 
  * 
  * cdef class SegmentMemorySource(SegmentSource):             # <<<<<<<<<<<<<<
@@ -1296,7 +1296,7 @@ struct __pyx_obj_5nitro_SegmentMemorySource {
 };
 
 
-/* "nitro.pyx":323
+/* "nitro.pyx":328
  * 
  * 
  * cdef class IOHandle:             # <<<<<<<<<<<<<<
@@ -1309,7 +1309,7 @@ struct __pyx_obj_5nitro_IOHandle {
 };
 
 
-/* "nitro.pyx":350
+/* "nitro.pyx":355
  * 
  * 
  * cdef class SegmentFileSource(SegmentSource):             # <<<<<<<<<<<<<<
@@ -1321,7 +1321,7 @@ struct __pyx_obj_5nitro_SegmentFileSource {
 };
 
 
-/* "nitro.pyx":359
+/* "nitro.pyx":364
  * 
  * 
  * cdef class Writer:             # <<<<<<<<<<<<<<
@@ -1336,7 +1336,7 @@ struct __pyx_obj_5nitro_Writer {
 };
 
 
-/* "nitro.pyx":440
+/* "nitro.pyx":445
  * 
  * 
  * cdef class Reader:             # <<<<<<<<<<<<<<
@@ -1351,7 +1351,7 @@ struct __pyx_obj_5nitro_Reader {
 };
 
 
-/* "nitro.pyx":505
+/* "nitro.pyx":510
  * 
  * 
  * cdef class ImageWriter:             # <<<<<<<<<<<<<<
@@ -1365,7 +1365,7 @@ struct __pyx_obj_5nitro_ImageWriter {
 };
 
 
-/* "nitro.pyx":535
+/* "nitro.pyx":540
  * 
  * 
  * cdef class ImageReader:             # <<<<<<<<<<<<<<
@@ -1380,7 +1380,7 @@ struct __pyx_obj_5nitro_ImageReader {
 };
 
 
-/* "nitro.pyx":626
+/* "nitro.pyx":631
  * 
  * 
  * cdef class SegmentReader:             # <<<<<<<<<<<<<<
@@ -1394,7 +1394,7 @@ struct __pyx_obj_5nitro_SegmentReader {
 };
 
 
-/* "nitro.pyx":656
+/* "nitro.pyx":661
  * 
  * 
  * cdef class SegmentWriter:             # <<<<<<<<<<<<<<
@@ -1408,7 +1408,7 @@ struct __pyx_obj_5nitro_SegmentWriter {
 };
 
 
-/* "nitro.pyx":680
+/* "nitro.pyx":685
  * 
  * 
  * cdef class TextSegment:             # <<<<<<<<<<<<<<
@@ -1449,7 +1449,7 @@ struct __pyx_vtabstruct_5nitro_Record {
 static struct __pyx_vtabstruct_5nitro_Record *__pyx_vtabptr_5nitro_Record;
 
 
-/* "nitro.pyx":176
+/* "nitro.pyx":181
  * 
  * 
  * cdef class ImageSegment:             # <<<<<<<<<<<<<<
@@ -1464,7 +1464,7 @@ struct __pyx_vtabstruct_5nitro_ImageSegment {
 static struct __pyx_vtabstruct_5nitro_ImageSegment *__pyx_vtabptr_5nitro_ImageSegment;
 
 
-/* "nitro.pyx":258
+/* "nitro.pyx":263
  * 
  * 
  * cdef class DirectBlockSource(BandSource):             # <<<<<<<<<<<<<<
@@ -1479,7 +1479,7 @@ struct __pyx_vtabstruct_5nitro_DirectBlockSource {
 static struct __pyx_vtabstruct_5nitro_DirectBlockSource *__pyx_vtabptr_5nitro_DirectBlockSource;
 
 
-/* "nitro.pyx":505
+/* "nitro.pyx":510
  * 
  * 
  * cdef class ImageWriter:             # <<<<<<<<<<<<<<
@@ -1493,7 +1493,7 @@ struct __pyx_vtabstruct_5nitro_ImageWriter {
 static struct __pyx_vtabstruct_5nitro_ImageWriter *__pyx_vtabptr_5nitro_ImageWriter;
 
 
-/* "nitro.pyx":535
+/* "nitro.pyx":540
  * 
  * 
  * cdef class ImageReader:             # <<<<<<<<<<<<<<
@@ -1509,7 +1509,7 @@ struct __pyx_vtabstruct_5nitro_ImageReader {
 static struct __pyx_vtabstruct_5nitro_ImageReader *__pyx_vtabptr_5nitro_ImageReader;
 
 
-/* "nitro.pyx":626
+/* "nitro.pyx":631
  * 
  * 
  * cdef class SegmentReader:             # <<<<<<<<<<<<<<
@@ -1523,7 +1523,7 @@ struct __pyx_vtabstruct_5nitro_SegmentReader {
 static struct __pyx_vtabstruct_5nitro_SegmentReader *__pyx_vtabptr_5nitro_SegmentReader;
 
 
-/* "nitro.pyx":656
+/* "nitro.pyx":661
  * 
  * 
  * cdef class SegmentWriter:             # <<<<<<<<<<<<<<
@@ -1537,7 +1537,7 @@ struct __pyx_vtabstruct_5nitro_SegmentWriter {
 static struct __pyx_vtabstruct_5nitro_SegmentWriter *__pyx_vtabptr_5nitro_SegmentWriter;
 
 
-/* "nitro.pyx":680
+/* "nitro.pyx":685
  * 
  * 
  * cdef class TextSegment:             # <<<<<<<<<<<<<<
@@ -2983,8 +2983,9 @@ static PyObject *__pyx_pf_5nitro_6Record_12newImageSegment(struct __pyx_obj_5nit
 static PyObject *__pyx_pf_5nitro_6Record_14new_image_segment(struct __pyx_obj_5nitro_Record *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_5nitro_6Record_16new_data_extension_segment(struct __pyx_obj_5nitro_Record *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_5nitro_6Record_18new_text_segment(struct __pyx_obj_5nitro_Record *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_5nitro_6Record_20__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_5nitro_Record *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_5nitro_6Record_22__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_5nitro_Record *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
+static PyObject *__pyx_pf_5nitro_6Record_20merge_tres(struct __pyx_obj_5nitro_Record *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_5nitro_6Record_22__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_5nitro_Record *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_5nitro_6Record_24__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_5nitro_Record *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
 static PyObject *__pyx_pf_5nitro_12ImageSegment_9subheader___get__(struct __pyx_obj_5nitro_ImageSegment *__pyx_v_self); /* proto */
 static int __pyx_pf_5nitro_12ImageSegment_9subheader_2__set__(struct __pyx_obj_5nitro_ImageSegment *__pyx_v_self, PyObject *__pyx_v_hdr); /* proto */
 static PyObject *__pyx_pf_5nitro_12ImageSegment_addBands(struct __pyx_obj_5nitro_ImageSegment *__pyx_v_self, PyObject *__pyx_v_num); /* proto */
@@ -6648,7 +6649,7 @@ static PyObject *__pyx_pf_5nitro_6Record_18new_text_segment(struct __pyx_obj_5ni
  *     def new_text_segment(self):
  *         return TextSegment.from_record(PyCapsule_New(self._c_record, "Record", NULL))             # <<<<<<<<<<<<<<
  * 
- * 
+ *     def merge_tres(self):
  */
   __Pyx_XDECREF(__pyx_r);
   __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_ptype_5nitro_TextSegment), __pyx_n_s_from_record); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 173, __pyx_L1_error)
@@ -6728,6 +6729,144 @@ static PyObject *__pyx_pf_5nitro_6Record_18new_text_segment(struct __pyx_obj_5ni
   return __pyx_r;
 }
 
+/* "nitro.pyx":175
+ *         return TextSegment.from_record(PyCapsule_New(self._c_record, "Record", NULL))
+ * 
+ *     def merge_tres(self):             # <<<<<<<<<<<<<<
+ *         cdef nitf_Error error
+ *         if not record.nitf_Record_mergeTREs(self._c_record, &error):
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_5nitro_6Record_21merge_tres(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_5nitro_6Record_21merge_tres(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("merge_tres (wrapper)", 0);
+  __pyx_r = __pyx_pf_5nitro_6Record_20merge_tres(((struct __pyx_obj_5nitro_Record *)__pyx_v_self));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_5nitro_6Record_20merge_tres(struct __pyx_obj_5nitro_Record *__pyx_v_self) {
+  nitf_Error __pyx_v_error;
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  int __pyx_t_1;
+  PyObject *__pyx_t_2 = NULL;
+  PyObject *__pyx_t_3 = NULL;
+  PyObject *__pyx_t_4 = NULL;
+  PyObject *__pyx_t_5 = NULL;
+  PyObject *__pyx_t_6 = NULL;
+  __Pyx_RefNannySetupContext("merge_tres", 0);
+
+  /* "nitro.pyx":177
+ *     def merge_tres(self):
+ *         cdef nitf_Error error
+ *         if not record.nitf_Record_mergeTREs(self._c_record, &error):             # <<<<<<<<<<<<<<
+ *             raise NitfError(error)
+ * 
+ */
+  __pyx_t_1 = ((!(nitf_Record_mergeTREs(__pyx_v_self->_c_record, (&__pyx_v_error)) != 0)) != 0);
+  if (__pyx_t_1) {
+
+    /* "nitro.pyx":178
+ *         cdef nitf_Error error
+ *         if not record.nitf_Record_mergeTREs(self._c_record, &error):
+ *             raise NitfError(error)             # <<<<<<<<<<<<<<
+ * 
+ * 
+ */
+    __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 178, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_4 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 178, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __pyx_t_5 = NULL;
+    if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
+      __pyx_t_5 = PyMethod_GET_SELF(__pyx_t_3);
+      if (likely(__pyx_t_5)) {
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
+        __Pyx_INCREF(__pyx_t_5);
+        __Pyx_INCREF(function);
+        __Pyx_DECREF_SET(__pyx_t_3, function);
+      }
+    }
+    if (!__pyx_t_5) {
+      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 178, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+      __Pyx_GOTREF(__pyx_t_2);
+    } else {
+      #if CYTHON_FAST_PYCALL
+      if (PyFunction_Check(__pyx_t_3)) {
+        PyObject *__pyx_temp[2] = {__pyx_t_5, __pyx_t_4};
+        __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 178, __pyx_L1_error)
+        __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
+        __Pyx_GOTREF(__pyx_t_2);
+        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+      } else
+      #endif
+      #if CYTHON_FAST_PYCCALL
+      if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
+        PyObject *__pyx_temp[2] = {__pyx_t_5, __pyx_t_4};
+        __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 178, __pyx_L1_error)
+        __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
+        __Pyx_GOTREF(__pyx_t_2);
+        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+      } else
+      #endif
+      {
+        __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 178, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_6);
+        __Pyx_GIVEREF(__pyx_t_5); PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_5); __pyx_t_5 = NULL;
+        __Pyx_GIVEREF(__pyx_t_4);
+        PyTuple_SET_ITEM(__pyx_t_6, 0+1, __pyx_t_4);
+        __pyx_t_4 = 0;
+        __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_6, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 178, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_2);
+        __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+      }
+    }
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __Pyx_Raise(__pyx_t_2, 0, 0, 0);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+    __PYX_ERR(0, 178, __pyx_L1_error)
+
+    /* "nitro.pyx":177
+ *     def merge_tres(self):
+ *         cdef nitf_Error error
+ *         if not record.nitf_Record_mergeTREs(self._c_record, &error):             # <<<<<<<<<<<<<<
+ *             raise NitfError(error)
+ * 
+ */
+  }
+
+  /* "nitro.pyx":175
+ *         return TextSegment.from_record(PyCapsule_New(self._c_record, "Record", NULL))
+ * 
+ *     def merge_tres(self):             # <<<<<<<<<<<<<<
+ *         cdef nitf_Error error
+ *         if not record.nitf_Record_mergeTREs(self._c_record, &error):
+ */
+
+  /* function exit code */
+  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4);
+  __Pyx_XDECREF(__pyx_t_5);
+  __Pyx_XDECREF(__pyx_t_6);
+  __Pyx_AddTraceback("nitro.Record.merge_tres", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
 /* "(tree fragment)":1
  * def __reduce_cython__(self):             # <<<<<<<<<<<<<<
  *     raise TypeError("no default __reduce__ due to non-trivial __cinit__")
@@ -6735,19 +6874,19 @@ static PyObject *__pyx_pf_5nitro_6Record_18new_text_segment(struct __pyx_obj_5ni
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_5nitro_6Record_21__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_5nitro_6Record_21__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_5nitro_6Record_23__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_5nitro_6Record_23__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__reduce_cython__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_5nitro_6Record_20__reduce_cython__(((struct __pyx_obj_5nitro_Record *)__pyx_v_self));
+  __pyx_r = __pyx_pf_5nitro_6Record_22__reduce_cython__(((struct __pyx_obj_5nitro_Record *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_5nitro_6Record_20__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_5nitro_Record *__pyx_v_self) {
+static PyObject *__pyx_pf_5nitro_6Record_22__reduce_cython__(CYTHON_UNUSED struct __pyx_obj_5nitro_Record *__pyx_v_self) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -6789,19 +6928,19 @@ static PyObject *__pyx_pf_5nitro_6Record_20__reduce_cython__(CYTHON_UNUSED struc
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_5nitro_6Record_23__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state); /*proto*/
-static PyObject *__pyx_pw_5nitro_6Record_23__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
+static PyObject *__pyx_pw_5nitro_6Record_25__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state); /*proto*/
+static PyObject *__pyx_pw_5nitro_6Record_25__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__setstate_cython__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_5nitro_6Record_22__setstate_cython__(((struct __pyx_obj_5nitro_Record *)__pyx_v_self), ((PyObject *)__pyx_v___pyx_state));
+  __pyx_r = __pyx_pf_5nitro_6Record_24__setstate_cython__(((struct __pyx_obj_5nitro_Record *)__pyx_v_self), ((PyObject *)__pyx_v___pyx_state));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_5nitro_6Record_22__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_5nitro_Record *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state) {
+static PyObject *__pyx_pf_5nitro_6Record_24__setstate_cython__(CYTHON_UNUSED struct __pyx_obj_5nitro_Record *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -6835,7 +6974,7 @@ static PyObject *__pyx_pf_5nitro_6Record_22__setstate_cython__(CYTHON_UNUSED str
   return __pyx_r;
 }
 
-/* "nitro.pyx":180
+/* "nitro.pyx":185
  * 
  *     @staticmethod
  *     cdef from_record(record.nitf_Record* c_rec):             # <<<<<<<<<<<<<<
@@ -6856,19 +6995,19 @@ static PyObject *__pyx_f_5nitro_12ImageSegment_from_record(nitf_Record *__pyx_v_
   PyObject *__pyx_t_6 = NULL;
   __Pyx_RefNannySetupContext("from_record", 0);
 
-  /* "nitro.pyx":182
+  /* "nitro.pyx":187
  *     cdef from_record(record.nitf_Record* c_rec):
  *         cdef nitf_Error error
  *         obj = ImageSegment()             # <<<<<<<<<<<<<<
  *         obj._c_image = record.nitf_Record_newImageSegment(c_rec, &error)
  *         if obj._c_image is NULL:
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_5nitro_ImageSegment), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 182, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_5nitro_ImageSegment), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 187, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_obj = ((struct __pyx_obj_5nitro_ImageSegment *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "nitro.pyx":183
+  /* "nitro.pyx":188
  *         cdef nitf_Error error
  *         obj = ImageSegment()
  *         obj._c_image = record.nitf_Record_newImageSegment(c_rec, &error)             # <<<<<<<<<<<<<<
@@ -6877,7 +7016,7 @@ static PyObject *__pyx_f_5nitro_12ImageSegment_from_record(nitf_Record *__pyx_v_
  */
   __pyx_v_obj->_c_image = nitf_Record_newImageSegment(__pyx_v_c_rec, (&__pyx_v_error));
 
-  /* "nitro.pyx":184
+  /* "nitro.pyx":189
  *         obj = ImageSegment()
  *         obj._c_image = record.nitf_Record_newImageSegment(c_rec, &error)
  *         if obj._c_image is NULL:             # <<<<<<<<<<<<<<
@@ -6887,16 +7026,16 @@ static PyObject *__pyx_f_5nitro_12ImageSegment_from_record(nitf_Record *__pyx_v_
   __pyx_t_2 = ((__pyx_v_obj->_c_image == NULL) != 0);
   if (__pyx_t_2) {
 
-    /* "nitro.pyx":185
+    /* "nitro.pyx":190
  *         obj._c_image = record.nitf_Record_newImageSegment(c_rec, &error)
  *         if obj._c_image is NULL:
  *             raise NitfError(error)             # <<<<<<<<<<<<<<
  *         return obj  # allow chaining
  * 
  */
-    __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 185, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 190, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_4 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 185, __pyx_L1_error)
+    __pyx_t_4 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 190, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __pyx_t_5 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
@@ -6909,14 +7048,14 @@ static PyObject *__pyx_f_5nitro_12ImageSegment_from_record(nitf_Record *__pyx_v_
       }
     }
     if (!__pyx_t_5) {
-      __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 185, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 190, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       __Pyx_GOTREF(__pyx_t_1);
     } else {
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_3)) {
         PyObject *__pyx_temp[2] = {__pyx_t_5, __pyx_t_4};
-        __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 185, __pyx_L1_error)
+        __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 190, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
         __Pyx_GOTREF(__pyx_t_1);
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
@@ -6925,20 +7064,20 @@ static PyObject *__pyx_f_5nitro_12ImageSegment_from_record(nitf_Record *__pyx_v_
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
         PyObject *__pyx_temp[2] = {__pyx_t_5, __pyx_t_4};
-        __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 185, __pyx_L1_error)
+        __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 190, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
         __Pyx_GOTREF(__pyx_t_1);
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       } else
       #endif
       {
-        __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 185, __pyx_L1_error)
+        __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 190, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_6);
         __Pyx_GIVEREF(__pyx_t_5); PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_5); __pyx_t_5 = NULL;
         __Pyx_GIVEREF(__pyx_t_4);
         PyTuple_SET_ITEM(__pyx_t_6, 0+1, __pyx_t_4);
         __pyx_t_4 = 0;
-        __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_6, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 185, __pyx_L1_error)
+        __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_6, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 190, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       }
@@ -6946,9 +7085,9 @@ static PyObject *__pyx_f_5nitro_12ImageSegment_from_record(nitf_Record *__pyx_v_
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_Raise(__pyx_t_1, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __PYX_ERR(0, 185, __pyx_L1_error)
+    __PYX_ERR(0, 190, __pyx_L1_error)
 
-    /* "nitro.pyx":184
+    /* "nitro.pyx":189
  *         obj = ImageSegment()
  *         obj._c_image = record.nitf_Record_newImageSegment(c_rec, &error)
  *         if obj._c_image is NULL:             # <<<<<<<<<<<<<<
@@ -6957,7 +7096,7 @@ static PyObject *__pyx_f_5nitro_12ImageSegment_from_record(nitf_Record *__pyx_v_
  */
   }
 
-  /* "nitro.pyx":186
+  /* "nitro.pyx":191
  *         if obj._c_image is NULL:
  *             raise NitfError(error)
  *         return obj  # allow chaining             # <<<<<<<<<<<<<<
@@ -6969,7 +7108,7 @@ static PyObject *__pyx_f_5nitro_12ImageSegment_from_record(nitf_Record *__pyx_v_
   __pyx_r = ((PyObject *)__pyx_v_obj);
   goto __pyx_L0;
 
-  /* "nitro.pyx":180
+  /* "nitro.pyx":185
  * 
  *     @staticmethod
  *     cdef from_record(record.nitf_Record* c_rec):             # <<<<<<<<<<<<<<
@@ -6993,7 +7132,7 @@ static PyObject *__pyx_f_5nitro_12ImageSegment_from_record(nitf_Record *__pyx_v_
   return __pyx_r;
 }
 
-/* "nitro.pyx":189
+/* "nitro.pyx":194
  * 
  *     @staticmethod
  *     cdef from_ptr(image_segment.nitf_ImageSegment* ptr):             # <<<<<<<<<<<<<<
@@ -7008,19 +7147,19 @@ static PyObject *__pyx_f_5nitro_12ImageSegment_from_ptr(nitf_ImageSegment *__pyx
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("from_ptr", 0);
 
-  /* "nitro.pyx":190
+  /* "nitro.pyx":195
  *     @staticmethod
  *     cdef from_ptr(image_segment.nitf_ImageSegment* ptr):
  *         obj = ImageSegment()             # <<<<<<<<<<<<<<
  *         obj._c_image = ptr
  *         return obj
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_5nitro_ImageSegment), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 190, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_5nitro_ImageSegment), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 195, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_obj = ((struct __pyx_obj_5nitro_ImageSegment *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "nitro.pyx":191
+  /* "nitro.pyx":196
  *     cdef from_ptr(image_segment.nitf_ImageSegment* ptr):
  *         obj = ImageSegment()
  *         obj._c_image = ptr             # <<<<<<<<<<<<<<
@@ -7029,7 +7168,7 @@ static PyObject *__pyx_f_5nitro_12ImageSegment_from_ptr(nitf_ImageSegment *__pyx
  */
   __pyx_v_obj->_c_image = __pyx_v_ptr;
 
-  /* "nitro.pyx":192
+  /* "nitro.pyx":197
  *         obj = ImageSegment()
  *         obj._c_image = ptr
  *         return obj             # <<<<<<<<<<<<<<
@@ -7041,7 +7180,7 @@ static PyObject *__pyx_f_5nitro_12ImageSegment_from_ptr(nitf_ImageSegment *__pyx
   __pyx_r = ((PyObject *)__pyx_v_obj);
   goto __pyx_L0;
 
-  /* "nitro.pyx":189
+  /* "nitro.pyx":194
  * 
  *     @staticmethod
  *     cdef from_ptr(image_segment.nitf_ImageSegment* ptr):             # <<<<<<<<<<<<<<
@@ -7061,7 +7200,7 @@ static PyObject *__pyx_f_5nitro_12ImageSegment_from_ptr(nitf_ImageSegment *__pyx
   return __pyx_r;
 }
 
-/* "nitro.pyx":195
+/* "nitro.pyx":200
  * 
  *     @property
  *     def subheader(self):             # <<<<<<<<<<<<<<
@@ -7095,7 +7234,7 @@ static PyObject *__pyx_pf_5nitro_12ImageSegment_9subheader___get__(struct __pyx_
   PyObject *__pyx_t_6 = NULL;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "nitro.pyx":197
+  /* "nitro.pyx":202
  *     def subheader(self):
  *         cdef header.nitf_ImageSubheader* hdr
  *         hdr = self._c_image.subheader             # <<<<<<<<<<<<<<
@@ -7105,19 +7244,19 @@ static PyObject *__pyx_pf_5nitro_12ImageSegment_9subheader___get__(struct __pyx_
   __pyx_t_1 = __pyx_v_self->_c_image->subheader;
   __pyx_v_hdr = __pyx_t_1;
 
-  /* "nitro.pyx":198
+  /* "nitro.pyx":203
  *         cdef header.nitf_ImageSubheader* hdr
  *         hdr = self._c_image.subheader
  *         h = header.ImageSubheader(PyCapsule_New(hdr, "ImageSubheader", NULL))             # <<<<<<<<<<<<<<
  *         return h
  * 
  */
-  __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_header); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 198, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_header); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 203, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_ImageSubheader); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 198, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_ImageSubheader); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 203, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyCapsule_New(__pyx_v_hdr, ((char *)"ImageSubheader"), NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 198, __pyx_L1_error)
+  __pyx_t_3 = PyCapsule_New(__pyx_v_hdr, ((char *)"ImageSubheader"), NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 203, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_t_5 = NULL;
   if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_4))) {
@@ -7130,14 +7269,14 @@ static PyObject *__pyx_pf_5nitro_12ImageSegment_9subheader___get__(struct __pyx_
     }
   }
   if (!__pyx_t_5) {
-    __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 198, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 203, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_GOTREF(__pyx_t_2);
   } else {
     #if CYTHON_FAST_PYCALL
     if (PyFunction_Check(__pyx_t_4)) {
       PyObject *__pyx_temp[2] = {__pyx_t_5, __pyx_t_3};
-      __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 198, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 203, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -7146,20 +7285,20 @@ static PyObject *__pyx_pf_5nitro_12ImageSegment_9subheader___get__(struct __pyx_
     #if CYTHON_FAST_PYCCALL
     if (__Pyx_PyFastCFunction_Check(__pyx_t_4)) {
       PyObject *__pyx_temp[2] = {__pyx_t_5, __pyx_t_3};
-      __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 198, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 203, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     } else
     #endif
     {
-      __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 198, __pyx_L1_error)
+      __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 203, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_GIVEREF(__pyx_t_5); PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_5); __pyx_t_5 = NULL;
       __Pyx_GIVEREF(__pyx_t_3);
       PyTuple_SET_ITEM(__pyx_t_6, 0+1, __pyx_t_3);
       __pyx_t_3 = 0;
-      __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_6, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 198, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_6, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 203, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     }
@@ -7168,7 +7307,7 @@ static PyObject *__pyx_pf_5nitro_12ImageSegment_9subheader___get__(struct __pyx_
   __pyx_v_h = __pyx_t_2;
   __pyx_t_2 = 0;
 
-  /* "nitro.pyx":199
+  /* "nitro.pyx":204
  *         hdr = self._c_image.subheader
  *         h = header.ImageSubheader(PyCapsule_New(hdr, "ImageSubheader", NULL))
  *         return h             # <<<<<<<<<<<<<<
@@ -7180,7 +7319,7 @@ static PyObject *__pyx_pf_5nitro_12ImageSegment_9subheader___get__(struct __pyx_
   __pyx_r = __pyx_v_h;
   goto __pyx_L0;
 
-  /* "nitro.pyx":195
+  /* "nitro.pyx":200
  * 
  *     @property
  *     def subheader(self):             # <<<<<<<<<<<<<<
@@ -7204,7 +7343,7 @@ static PyObject *__pyx_pf_5nitro_12ImageSegment_9subheader___get__(struct __pyx_
   return __pyx_r;
 }
 
-/* "nitro.pyx":202
+/* "nitro.pyx":207
  * 
  *     @subheader.setter
  *     def subheader(self, hdr):             # <<<<<<<<<<<<<<
@@ -7238,7 +7377,7 @@ static int __pyx_pf_5nitro_12ImageSegment_9subheader_2__set__(struct __pyx_obj_5
   void *__pyx_t_6;
   __Pyx_RefNannySetupContext("__set__", 0);
 
-  /* "nitro.pyx":204
+  /* "nitro.pyx":209
  *     def subheader(self, hdr):
  *         """ This will make a copy of hdr"""
  *         if self._c_image.subheader is not NULL:             # <<<<<<<<<<<<<<
@@ -7248,7 +7387,7 @@ static int __pyx_pf_5nitro_12ImageSegment_9subheader_2__set__(struct __pyx_obj_5
   __pyx_t_1 = ((__pyx_v_self->_c_image->subheader != NULL) != 0);
   if (__pyx_t_1) {
 
-    /* "nitro.pyx":205
+    /* "nitro.pyx":210
  *         """ This will make a copy of hdr"""
  *         if self._c_image.subheader is not NULL:
  *             header.nitf_ImageSubheader_destruct(&self._c_image.subheader)             # <<<<<<<<<<<<<<
@@ -7257,7 +7396,7 @@ static int __pyx_pf_5nitro_12ImageSegment_9subheader_2__set__(struct __pyx_obj_5
  */
     nitf_ImageSubheader_destruct((&__pyx_v_self->_c_image->subheader));
 
-    /* "nitro.pyx":204
+    /* "nitro.pyx":209
  *     def subheader(self, hdr):
  *         """ This will make a copy of hdr"""
  *         if self._c_image.subheader is not NULL:             # <<<<<<<<<<<<<<
@@ -7266,14 +7405,14 @@ static int __pyx_pf_5nitro_12ImageSegment_9subheader_2__set__(struct __pyx_obj_5
  */
   }
 
-  /* "nitro.pyx":206
+  /* "nitro.pyx":211
  *         if self._c_image.subheader is not NULL:
  *             header.nitf_ImageSubheader_destruct(&self._c_image.subheader)
  *         hdr_copy = copy(hdr)             # <<<<<<<<<<<<<<
  *         c = hdr_copy._capsule()
  *         assert(PyCapsule_IsValid(c, "ImageSubheader"))
  */
-  __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_copy); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 206, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_copy); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 211, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_t_4 = NULL;
   if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
@@ -7286,13 +7425,13 @@ static int __pyx_pf_5nitro_12ImageSegment_9subheader_2__set__(struct __pyx_obj_5
     }
   }
   if (!__pyx_t_4) {
-    __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_v_hdr); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 206, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_v_hdr); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 211, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
   } else {
     #if CYTHON_FAST_PYCALL
     if (PyFunction_Check(__pyx_t_3)) {
       PyObject *__pyx_temp[2] = {__pyx_t_4, __pyx_v_hdr};
-      __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 206, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 211, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
       __Pyx_GOTREF(__pyx_t_2);
     } else
@@ -7300,19 +7439,19 @@ static int __pyx_pf_5nitro_12ImageSegment_9subheader_2__set__(struct __pyx_obj_5
     #if CYTHON_FAST_PYCCALL
     if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
       PyObject *__pyx_temp[2] = {__pyx_t_4, __pyx_v_hdr};
-      __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 206, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 211, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
       __Pyx_GOTREF(__pyx_t_2);
     } else
     #endif
     {
-      __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 206, __pyx_L1_error)
+      __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 211, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_GIVEREF(__pyx_t_4); PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_4); __pyx_t_4 = NULL;
       __Pyx_INCREF(__pyx_v_hdr);
       __Pyx_GIVEREF(__pyx_v_hdr);
       PyTuple_SET_ITEM(__pyx_t_5, 0+1, __pyx_v_hdr);
-      __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_5, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 206, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_5, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 211, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     }
@@ -7321,14 +7460,14 @@ static int __pyx_pf_5nitro_12ImageSegment_9subheader_2__set__(struct __pyx_obj_5
   __pyx_v_hdr_copy = __pyx_t_2;
   __pyx_t_2 = 0;
 
-  /* "nitro.pyx":207
+  /* "nitro.pyx":212
  *             header.nitf_ImageSubheader_destruct(&self._c_image.subheader)
  *         hdr_copy = copy(hdr)
  *         c = hdr_copy._capsule()             # <<<<<<<<<<<<<<
  *         assert(PyCapsule_IsValid(c, "ImageSubheader"))
  *         self._c_image.subheader = <header.nitf_ImageSubheader*>PyCapsule_GetPointer(c, "ImageSubheader")
  */
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_hdr_copy, __pyx_n_s_capsule); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 207, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_hdr_copy, __pyx_n_s_capsule); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 212, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_t_5 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_3))) {
@@ -7341,17 +7480,17 @@ static int __pyx_pf_5nitro_12ImageSegment_9subheader_2__set__(struct __pyx_obj_5
     }
   }
   if (__pyx_t_5) {
-    __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_5); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 207, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_5); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 212, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   } else {
-    __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 207, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 212, __pyx_L1_error)
   }
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_v_c = __pyx_t_2;
   __pyx_t_2 = 0;
 
-  /* "nitro.pyx":208
+  /* "nitro.pyx":213
  *         hdr_copy = copy(hdr)
  *         c = hdr_copy._capsule()
  *         assert(PyCapsule_IsValid(c, "ImageSubheader"))             # <<<<<<<<<<<<<<
@@ -7362,22 +7501,22 @@ static int __pyx_pf_5nitro_12ImageSegment_9subheader_2__set__(struct __pyx_obj_5
   if (unlikely(!Py_OptimizeFlag)) {
     if (unlikely(!(PyCapsule_IsValid(__pyx_v_c, ((char *)"ImageSubheader")) != 0))) {
       PyErr_SetNone(PyExc_AssertionError);
-      __PYX_ERR(0, 208, __pyx_L1_error)
+      __PYX_ERR(0, 213, __pyx_L1_error)
     }
   }
   #endif
 
-  /* "nitro.pyx":209
+  /* "nitro.pyx":214
  *         c = hdr_copy._capsule()
  *         assert(PyCapsule_IsValid(c, "ImageSubheader"))
  *         self._c_image.subheader = <header.nitf_ImageSubheader*>PyCapsule_GetPointer(c, "ImageSubheader")             # <<<<<<<<<<<<<<
  * 
  *     @deprecated("Old SWIG API")
  */
-  __pyx_t_6 = PyCapsule_GetPointer(__pyx_v_c, ((char *)"ImageSubheader")); if (unlikely(__pyx_t_6 == ((void *)NULL) && PyErr_Occurred())) __PYX_ERR(0, 209, __pyx_L1_error)
+  __pyx_t_6 = PyCapsule_GetPointer(__pyx_v_c, ((char *)"ImageSubheader")); if (unlikely(__pyx_t_6 == ((void *)NULL) && PyErr_Occurred())) __PYX_ERR(0, 214, __pyx_L1_error)
   __pyx_v_self->_c_image->subheader = ((nitf_ImageSubheader *)__pyx_t_6);
 
-  /* "nitro.pyx":202
+  /* "nitro.pyx":207
  * 
  *     @subheader.setter
  *     def subheader(self, hdr):             # <<<<<<<<<<<<<<
@@ -7402,7 +7541,7 @@ static int __pyx_pf_5nitro_12ImageSegment_9subheader_2__set__(struct __pyx_obj_5
   return __pyx_r;
 }
 
-/* "nitro.pyx":212
+/* "nitro.pyx":217
  * 
  *     @deprecated("Old SWIG API")
  *     def addBands(self, num=1):             # <<<<<<<<<<<<<<
@@ -7439,7 +7578,7 @@ static PyObject *__pyx_pw_5nitro_12ImageSegment_1addBands(PyObject *__pyx_v_self
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "addBands") < 0)) __PYX_ERR(0, 212, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "addBands") < 0)) __PYX_ERR(0, 217, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -7453,7 +7592,7 @@ static PyObject *__pyx_pw_5nitro_12ImageSegment_1addBands(PyObject *__pyx_v_self
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("addBands", 0, 0, 1, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 212, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("addBands", 0, 0, 1, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 217, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("nitro.ImageSegment.addBands", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -7477,19 +7616,19 @@ static PyObject *__pyx_pf_5nitro_12ImageSegment_addBands(struct __pyx_obj_5nitro
   __Pyx_RefNannySetupContext("addBands", 0);
   __Pyx_INCREF(__pyx_v_num);
 
-  /* "nitro.pyx":213
+  /* "nitro.pyx":218
  *     @deprecated("Old SWIG API")
  *     def addBands(self, num=1):
  *         if num < 0:             # <<<<<<<<<<<<<<
  *             num = 0
  *         self.create_bands(num)
  */
-  __pyx_t_1 = PyObject_RichCompare(__pyx_v_num, __pyx_int_0, Py_LT); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 213, __pyx_L1_error)
-  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 213, __pyx_L1_error)
+  __pyx_t_1 = PyObject_RichCompare(__pyx_v_num, __pyx_int_0, Py_LT); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 218, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_t_1); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 218, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   if (__pyx_t_2) {
 
-    /* "nitro.pyx":214
+    /* "nitro.pyx":219
  *     def addBands(self, num=1):
  *         if num < 0:
  *             num = 0             # <<<<<<<<<<<<<<
@@ -7499,7 +7638,7 @@ static PyObject *__pyx_pf_5nitro_12ImageSegment_addBands(struct __pyx_obj_5nitro
     __Pyx_INCREF(__pyx_int_0);
     __Pyx_DECREF_SET(__pyx_v_num, __pyx_int_0);
 
-    /* "nitro.pyx":213
+    /* "nitro.pyx":218
  *     @deprecated("Old SWIG API")
  *     def addBands(self, num=1):
  *         if num < 0:             # <<<<<<<<<<<<<<
@@ -7508,14 +7647,14 @@ static PyObject *__pyx_pf_5nitro_12ImageSegment_addBands(struct __pyx_obj_5nitro
  */
   }
 
-  /* "nitro.pyx":215
+  /* "nitro.pyx":220
  *         if num < 0:
  *             num = 0
  *         self.create_bands(num)             # <<<<<<<<<<<<<<
  * 
  *     def create_bands(self, num):
  */
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_create_bands); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 215, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_create_bands); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 220, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_t_4 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_3))) {
@@ -7528,13 +7667,13 @@ static PyObject *__pyx_pf_5nitro_12ImageSegment_addBands(struct __pyx_obj_5nitro
     }
   }
   if (!__pyx_t_4) {
-    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_v_num); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 215, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_v_num); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 220, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
   } else {
     #if CYTHON_FAST_PYCALL
     if (PyFunction_Check(__pyx_t_3)) {
       PyObject *__pyx_temp[2] = {__pyx_t_4, __pyx_v_num};
-      __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 215, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 220, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
       __Pyx_GOTREF(__pyx_t_1);
     } else
@@ -7542,19 +7681,19 @@ static PyObject *__pyx_pf_5nitro_12ImageSegment_addBands(struct __pyx_obj_5nitro
     #if CYTHON_FAST_PYCCALL
     if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
       PyObject *__pyx_temp[2] = {__pyx_t_4, __pyx_v_num};
-      __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 215, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 220, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
       __Pyx_GOTREF(__pyx_t_1);
     } else
     #endif
     {
-      __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 215, __pyx_L1_error)
+      __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 220, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_GIVEREF(__pyx_t_4); PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_4); __pyx_t_4 = NULL;
       __Pyx_INCREF(__pyx_v_num);
       __Pyx_GIVEREF(__pyx_v_num);
       PyTuple_SET_ITEM(__pyx_t_5, 0+1, __pyx_v_num);
-      __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_5, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 215, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_5, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 220, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     }
@@ -7562,7 +7701,7 @@ static PyObject *__pyx_pf_5nitro_12ImageSegment_addBands(struct __pyx_obj_5nitro
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "nitro.pyx":212
+  /* "nitro.pyx":217
  * 
  *     @deprecated("Old SWIG API")
  *     def addBands(self, num=1):             # <<<<<<<<<<<<<<
@@ -7587,7 +7726,7 @@ static PyObject *__pyx_pf_5nitro_12ImageSegment_addBands(struct __pyx_obj_5nitro
   return __pyx_r;
 }
 
-/* "nitro.pyx":217
+/* "nitro.pyx":222
  *         self.create_bands(num)
  * 
  *     def create_bands(self, num):             # <<<<<<<<<<<<<<
@@ -7617,16 +7756,16 @@ static PyObject *__pyx_pf_5nitro_12ImageSegment_2create_bands(struct __pyx_obj_5
   PyObject *__pyx_t_4 = NULL;
   __Pyx_RefNannySetupContext("create_bands", 0);
 
-  /* "nitro.pyx":218
+  /* "nitro.pyx":223
  * 
  *     def create_bands(self, num):
  *         self.subheader.create_bands(num)             # <<<<<<<<<<<<<<
  * 
  * 
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_subheader); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 218, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_subheader); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 223, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_create_bands); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 218, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_create_bands); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 223, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_t_2 = NULL;
@@ -7640,13 +7779,13 @@ static PyObject *__pyx_pf_5nitro_12ImageSegment_2create_bands(struct __pyx_obj_5
     }
   }
   if (!__pyx_t_2) {
-    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_v_num); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 218, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_v_num); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 223, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
   } else {
     #if CYTHON_FAST_PYCALL
     if (PyFunction_Check(__pyx_t_3)) {
       PyObject *__pyx_temp[2] = {__pyx_t_2, __pyx_v_num};
-      __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 218, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 223, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
       __Pyx_GOTREF(__pyx_t_1);
     } else
@@ -7654,19 +7793,19 @@ static PyObject *__pyx_pf_5nitro_12ImageSegment_2create_bands(struct __pyx_obj_5
     #if CYTHON_FAST_PYCCALL
     if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
       PyObject *__pyx_temp[2] = {__pyx_t_2, __pyx_v_num};
-      __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 218, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 223, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
       __Pyx_GOTREF(__pyx_t_1);
     } else
     #endif
     {
-      __pyx_t_4 = PyTuple_New(1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 218, __pyx_L1_error)
+      __pyx_t_4 = PyTuple_New(1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 223, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_GIVEREF(__pyx_t_2); PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_2); __pyx_t_2 = NULL;
       __Pyx_INCREF(__pyx_v_num);
       __Pyx_GIVEREF(__pyx_v_num);
       PyTuple_SET_ITEM(__pyx_t_4, 0+1, __pyx_v_num);
-      __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_4, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 218, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_4, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 223, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     }
@@ -7674,7 +7813,7 @@ static PyObject *__pyx_pf_5nitro_12ImageSegment_2create_bands(struct __pyx_obj_5
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "nitro.pyx":217
+  /* "nitro.pyx":222
  *         self.create_bands(num)
  * 
  *     def create_bands(self, num):             # <<<<<<<<<<<<<<
@@ -7805,7 +7944,7 @@ static PyObject *__pyx_pf_5nitro_12ImageSegment_6__setstate_cython__(CYTHON_UNUS
   return __pyx_r;
 }
 
-/* "nitro.pyx":225
+/* "nitro.pyx":230
  *     cpdef _band_sources
  * 
  *     def __init__(self):             # <<<<<<<<<<<<<<
@@ -7835,14 +7974,14 @@ static int __pyx_pf_5nitro_11ImageSource___init__(struct __pyx_obj_5nitro_ImageS
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__init__", 0);
 
-  /* "nitro.pyx":226
+  /* "nitro.pyx":231
  * 
  *     def __init__(self):
  *         self._band_sources = []             # <<<<<<<<<<<<<<
  * 
  *     def __cinit__(self):
  */
-  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 226, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 231, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_1);
   __Pyx_GOTREF(__pyx_v_self->_band_sources);
@@ -7850,7 +7989,7 @@ static int __pyx_pf_5nitro_11ImageSource___init__(struct __pyx_obj_5nitro_ImageS
   __pyx_v_self->_band_sources = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "nitro.pyx":225
+  /* "nitro.pyx":230
  *     cpdef _band_sources
  * 
  *     def __init__(self):             # <<<<<<<<<<<<<<
@@ -7870,7 +8009,7 @@ static int __pyx_pf_5nitro_11ImageSource___init__(struct __pyx_obj_5nitro_ImageS
   return __pyx_r;
 }
 
-/* "nitro.pyx":228
+/* "nitro.pyx":233
  *         self._band_sources = []
  * 
  *     def __cinit__(self):             # <<<<<<<<<<<<<<
@@ -7906,7 +8045,7 @@ static int __pyx_pf_5nitro_11ImageSource_2__cinit__(struct __pyx_obj_5nitro_Imag
   PyObject *__pyx_t_6 = NULL;
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "nitro.pyx":230
+  /* "nitro.pyx":235
  *     def __cinit__(self):
  *         cdef nitf_Error error
  *         self._c_source = image_source.nitf_ImageSource_construct(&error)             # <<<<<<<<<<<<<<
@@ -7915,7 +8054,7 @@ static int __pyx_pf_5nitro_11ImageSource_2__cinit__(struct __pyx_obj_5nitro_Imag
  */
   __pyx_v_self->_c_source = nitf_ImageSource_construct((&__pyx_v_error));
 
-  /* "nitro.pyx":231
+  /* "nitro.pyx":236
  *         cdef nitf_Error error
  *         self._c_source = image_source.nitf_ImageSource_construct(&error)
  *         if self._c_source is NULL:             # <<<<<<<<<<<<<<
@@ -7925,16 +8064,16 @@ static int __pyx_pf_5nitro_11ImageSource_2__cinit__(struct __pyx_obj_5nitro_Imag
   __pyx_t_1 = ((__pyx_v_self->_c_source == NULL) != 0);
   if (__pyx_t_1) {
 
-    /* "nitro.pyx":232
+    /* "nitro.pyx":237
  *         self._c_source = image_source.nitf_ImageSource_construct(&error)
  *         if self._c_source is NULL:
  *             raise NitfError(error)             # <<<<<<<<<<<<<<
  * 
  *     @deprecated("Old SWIG API")
  */
-    __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 232, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 237, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_4 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 232, __pyx_L1_error)
+    __pyx_t_4 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 237, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __pyx_t_5 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
@@ -7947,14 +8086,14 @@ static int __pyx_pf_5nitro_11ImageSource_2__cinit__(struct __pyx_obj_5nitro_Imag
       }
     }
     if (!__pyx_t_5) {
-      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 232, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 237, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       __Pyx_GOTREF(__pyx_t_2);
     } else {
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_3)) {
         PyObject *__pyx_temp[2] = {__pyx_t_5, __pyx_t_4};
-        __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 232, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 237, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
@@ -7963,20 +8102,20 @@ static int __pyx_pf_5nitro_11ImageSource_2__cinit__(struct __pyx_obj_5nitro_Imag
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
         PyObject *__pyx_temp[2] = {__pyx_t_5, __pyx_t_4};
-        __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 232, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 237, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       } else
       #endif
       {
-        __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 232, __pyx_L1_error)
+        __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 237, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_6);
         __Pyx_GIVEREF(__pyx_t_5); PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_5); __pyx_t_5 = NULL;
         __Pyx_GIVEREF(__pyx_t_4);
         PyTuple_SET_ITEM(__pyx_t_6, 0+1, __pyx_t_4);
         __pyx_t_4 = 0;
-        __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_6, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 232, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_6, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 237, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       }
@@ -7984,9 +8123,9 @@ static int __pyx_pf_5nitro_11ImageSource_2__cinit__(struct __pyx_obj_5nitro_Imag
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_Raise(__pyx_t_2, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __PYX_ERR(0, 232, __pyx_L1_error)
+    __PYX_ERR(0, 237, __pyx_L1_error)
 
-    /* "nitro.pyx":231
+    /* "nitro.pyx":236
  *         cdef nitf_Error error
  *         self._c_source = image_source.nitf_ImageSource_construct(&error)
  *         if self._c_source is NULL:             # <<<<<<<<<<<<<<
@@ -7995,7 +8134,7 @@ static int __pyx_pf_5nitro_11ImageSource_2__cinit__(struct __pyx_obj_5nitro_Imag
  */
   }
 
-  /* "nitro.pyx":228
+  /* "nitro.pyx":233
  *         self._band_sources = []
  * 
  *     def __cinit__(self):             # <<<<<<<<<<<<<<
@@ -8019,7 +8158,7 @@ static int __pyx_pf_5nitro_11ImageSource_2__cinit__(struct __pyx_obj_5nitro_Imag
   return __pyx_r;
 }
 
-/* "nitro.pyx":235
+/* "nitro.pyx":240
  * 
  *     @deprecated("Old SWIG API")
  *     def addBand(self, band):             # <<<<<<<<<<<<<<
@@ -8049,7 +8188,7 @@ static PyObject *__pyx_pf_5nitro_11ImageSource_4addBand(struct __pyx_obj_5nitro_
   PyObject *__pyx_t_4 = NULL;
   __Pyx_RefNannySetupContext("addBand", 0);
 
-  /* "nitro.pyx":236
+  /* "nitro.pyx":241
  *     @deprecated("Old SWIG API")
  *     def addBand(self, band):
  *         return self.add_band(band)             # <<<<<<<<<<<<<<
@@ -8057,7 +8196,7 @@ static PyObject *__pyx_pf_5nitro_11ImageSource_4addBand(struct __pyx_obj_5nitro_
  *     def add_band(self, BandSource bandsource):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_add_band); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 236, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_add_band); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 241, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_3 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
@@ -8070,13 +8209,13 @@ static PyObject *__pyx_pf_5nitro_11ImageSource_4addBand(struct __pyx_obj_5nitro_
     }
   }
   if (!__pyx_t_3) {
-    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_v_band); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 236, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_v_band); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 241, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
   } else {
     #if CYTHON_FAST_PYCALL
     if (PyFunction_Check(__pyx_t_2)) {
       PyObject *__pyx_temp[2] = {__pyx_t_3, __pyx_v_band};
-      __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 236, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 241, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
       __Pyx_GOTREF(__pyx_t_1);
     } else
@@ -8084,19 +8223,19 @@ static PyObject *__pyx_pf_5nitro_11ImageSource_4addBand(struct __pyx_obj_5nitro_
     #if CYTHON_FAST_PYCCALL
     if (__Pyx_PyFastCFunction_Check(__pyx_t_2)) {
       PyObject *__pyx_temp[2] = {__pyx_t_3, __pyx_v_band};
-      __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 236, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 241, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
       __Pyx_GOTREF(__pyx_t_1);
     } else
     #endif
     {
-      __pyx_t_4 = PyTuple_New(1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 236, __pyx_L1_error)
+      __pyx_t_4 = PyTuple_New(1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 241, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_GIVEREF(__pyx_t_3); PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_3); __pyx_t_3 = NULL;
       __Pyx_INCREF(__pyx_v_band);
       __Pyx_GIVEREF(__pyx_v_band);
       PyTuple_SET_ITEM(__pyx_t_4, 0+1, __pyx_v_band);
-      __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_4, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 236, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_4, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 241, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     }
@@ -8106,7 +8245,7 @@ static PyObject *__pyx_pf_5nitro_11ImageSource_4addBand(struct __pyx_obj_5nitro_
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "nitro.pyx":235
+  /* "nitro.pyx":240
  * 
  *     @deprecated("Old SWIG API")
  *     def addBand(self, band):             # <<<<<<<<<<<<<<
@@ -8128,7 +8267,7 @@ static PyObject *__pyx_pf_5nitro_11ImageSource_4addBand(struct __pyx_obj_5nitro_
   return __pyx_r;
 }
 
-/* "nitro.pyx":238
+/* "nitro.pyx":243
  *         return self.add_band(band)
  * 
  *     def add_band(self, BandSource bandsource):             # <<<<<<<<<<<<<<
@@ -8142,7 +8281,7 @@ static PyObject *__pyx_pw_5nitro_11ImageSource_7add_band(PyObject *__pyx_v_self,
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("add_band (wrapper)", 0);
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_bandsource), __pyx_ptype_5nitro_BandSource, 1, "bandsource", 0))) __PYX_ERR(0, 238, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_bandsource), __pyx_ptype_5nitro_BandSource, 1, "bandsource", 0))) __PYX_ERR(0, 243, __pyx_L1_error)
   __pyx_r = __pyx_pf_5nitro_11ImageSource_6add_band(((struct __pyx_obj_5nitro_ImageSource *)__pyx_v_self), ((struct __pyx_obj_5nitro_BandSource *)__pyx_v_bandsource));
 
   /* function exit code */
@@ -8168,7 +8307,7 @@ static PyObject *__pyx_pf_5nitro_11ImageSource_6add_band(struct __pyx_obj_5nitro
   int __pyx_t_7;
   __Pyx_RefNannySetupContext("add_band", 0);
 
-  /* "nitro.pyx":241
+  /* "nitro.pyx":246
  *         cdef nitf_Error error
  *         cdef image_source.nitf_BandSource* bsptr
  *         bsptr = <image_source.nitf_BandSource*>bandsource._c_source             # <<<<<<<<<<<<<<
@@ -8177,7 +8316,7 @@ static PyObject *__pyx_pf_5nitro_11ImageSource_6add_band(struct __pyx_obj_5nitro
  */
   __pyx_v_bsptr = ((nitf_BandSource *)__pyx_v_bandsource->__pyx_base._c_source);
 
-  /* "nitro.pyx":242
+  /* "nitro.pyx":247
  *         cdef image_source.nitf_BandSource* bsptr
  *         bsptr = <image_source.nitf_BandSource*>bandsource._c_source
  *         if not image_source.nitf_ImageSource_addBand(self._c_source, <image_source.nitf_BandSource*>bsptr, &error):             # <<<<<<<<<<<<<<
@@ -8187,16 +8326,16 @@ static PyObject *__pyx_pf_5nitro_11ImageSource_6add_band(struct __pyx_obj_5nitro
   __pyx_t_1 = ((!(nitf_ImageSource_addBand(__pyx_v_self->_c_source, ((nitf_BandSource *)__pyx_v_bsptr), (&__pyx_v_error)) != 0)) != 0);
   if (__pyx_t_1) {
 
-    /* "nitro.pyx":243
+    /* "nitro.pyx":248
  *         bsptr = <image_source.nitf_BandSource*>bandsource._c_source
  *         if not image_source.nitf_ImageSource_addBand(self._c_source, <image_source.nitf_BandSource*>bsptr, &error):
  *             raise NitfError(error)             # <<<<<<<<<<<<<<
  *         # Need to keep the bandsource object so that it isn't garbage collected if the caller doesn't keep their own copy
  *         self._band_sources.append(bandsource)
  */
-    __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 243, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 248, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_4 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 243, __pyx_L1_error)
+    __pyx_t_4 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 248, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __pyx_t_5 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
@@ -8209,14 +8348,14 @@ static PyObject *__pyx_pf_5nitro_11ImageSource_6add_band(struct __pyx_obj_5nitro
       }
     }
     if (!__pyx_t_5) {
-      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 243, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 248, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       __Pyx_GOTREF(__pyx_t_2);
     } else {
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_3)) {
         PyObject *__pyx_temp[2] = {__pyx_t_5, __pyx_t_4};
-        __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 243, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 248, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
@@ -8225,20 +8364,20 @@ static PyObject *__pyx_pf_5nitro_11ImageSource_6add_band(struct __pyx_obj_5nitro
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
         PyObject *__pyx_temp[2] = {__pyx_t_5, __pyx_t_4};
-        __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 243, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 248, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       } else
       #endif
       {
-        __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 243, __pyx_L1_error)
+        __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 248, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_6);
         __Pyx_GIVEREF(__pyx_t_5); PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_5); __pyx_t_5 = NULL;
         __Pyx_GIVEREF(__pyx_t_4);
         PyTuple_SET_ITEM(__pyx_t_6, 0+1, __pyx_t_4);
         __pyx_t_4 = 0;
-        __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_6, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 243, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_6, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 248, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       }
@@ -8246,9 +8385,9 @@ static PyObject *__pyx_pf_5nitro_11ImageSource_6add_band(struct __pyx_obj_5nitro
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_Raise(__pyx_t_2, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __PYX_ERR(0, 243, __pyx_L1_error)
+    __PYX_ERR(0, 248, __pyx_L1_error)
 
-    /* "nitro.pyx":242
+    /* "nitro.pyx":247
  *         cdef image_source.nitf_BandSource* bsptr
  *         bsptr = <image_source.nitf_BandSource*>bandsource._c_source
  *         if not image_source.nitf_ImageSource_addBand(self._c_source, <image_source.nitf_BandSource*>bsptr, &error):             # <<<<<<<<<<<<<<
@@ -8257,16 +8396,16 @@ static PyObject *__pyx_pf_5nitro_11ImageSource_6add_band(struct __pyx_obj_5nitro
  */
   }
 
-  /* "nitro.pyx":245
+  /* "nitro.pyx":250
  *             raise NitfError(error)
  *         # Need to keep the bandsource object so that it isn't garbage collected if the caller doesn't keep their own copy
  *         self._band_sources.append(bandsource)             # <<<<<<<<<<<<<<
  * 
  * 
  */
-  __pyx_t_7 = __Pyx_PyObject_Append(__pyx_v_self->_band_sources, ((PyObject *)__pyx_v_bandsource)); if (unlikely(__pyx_t_7 == ((int)-1))) __PYX_ERR(0, 245, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyObject_Append(__pyx_v_self->_band_sources, ((PyObject *)__pyx_v_bandsource)); if (unlikely(__pyx_t_7 == ((int)-1))) __PYX_ERR(0, 250, __pyx_L1_error)
 
-  /* "nitro.pyx":238
+  /* "nitro.pyx":243
  *         return self.add_band(band)
  * 
  *     def add_band(self, BandSource bandsource):             # <<<<<<<<<<<<<<
@@ -8398,7 +8537,7 @@ static PyObject *__pyx_pf_5nitro_11ImageSource_10__setstate_cython__(CYTHON_UNUS
   return __pyx_r;
 }
 
-/* "nitro.pyx":250
+/* "nitro.pyx":255
  * cdef class DataSource:
  *     cdef image_source.nitf_DataSource* _c_source
  *     def __cinit__(self):             # <<<<<<<<<<<<<<
@@ -8427,7 +8566,7 @@ static int __pyx_pf_5nitro_10DataSource___cinit__(struct __pyx_obj_5nitro_DataSo
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "nitro.pyx":251
+  /* "nitro.pyx":256
  *     cdef image_source.nitf_DataSource* _c_source
  *     def __cinit__(self):
  *         self._c_source = NULL             # <<<<<<<<<<<<<<
@@ -8436,7 +8575,7 @@ static int __pyx_pf_5nitro_10DataSource___cinit__(struct __pyx_obj_5nitro_DataSo
  */
   __pyx_v_self->_c_source = NULL;
 
-  /* "nitro.pyx":250
+  /* "nitro.pyx":255
  * cdef class DataSource:
  *     cdef image_source.nitf_DataSource* _c_source
  *     def __cinit__(self):             # <<<<<<<<<<<<<<
@@ -8664,7 +8803,7 @@ static PyObject *__pyx_pf_5nitro_10BandSource_2__setstate_cython__(CYTHON_UNUSED
   return __pyx_r;
 }
 
-/* "nitro.pyx":259
+/* "nitro.pyx":264
  * 
  * cdef class DirectBlockSource(BandSource):
  *     def __cinit__(self, image_reader=None, nbands=0):             # <<<<<<<<<<<<<<
@@ -8711,7 +8850,7 @@ static int __pyx_pw_5nitro_17DirectBlockSource_1__cinit__(PyObject *__pyx_v_self
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(0, 259, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(0, 264, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -8728,7 +8867,7 @@ static int __pyx_pw_5nitro_17DirectBlockSource_1__cinit__(PyObject *__pyx_v_self
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__cinit__", 0, 0, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 259, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__cinit__", 0, 0, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 264, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("nitro.DirectBlockSource.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -8757,14 +8896,14 @@ static int __pyx_pf_5nitro_17DirectBlockSource___cinit__(struct __pyx_obj_5nitro
   PyObject *__pyx_t_8 = NULL;
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "nitro.pyx":263
+  /* "nitro.pyx":268
  *         cdef io.nitf_ImageReader* pReader
  * 
  *         tmp = image_reader.to_capsule()             # <<<<<<<<<<<<<<
  *         assert(PyCapsule_IsValid(tmp, "ImageReader"))
  *         pReader = <io.nitf_ImageReader*>PyCapsule_GetPointer(tmp, "ImageReader")
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_image_reader, __pyx_n_s_to_capsule); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 263, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_image_reader, __pyx_n_s_to_capsule); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 268, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_3 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
@@ -8777,17 +8916,17 @@ static int __pyx_pf_5nitro_17DirectBlockSource___cinit__(struct __pyx_obj_5nitro
     }
   }
   if (__pyx_t_3) {
-    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 263, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 268, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   } else {
-    __pyx_t_1 = __Pyx_PyObject_CallNoArg(__pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 263, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_CallNoArg(__pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 268, __pyx_L1_error)
   }
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_v_tmp = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "nitro.pyx":264
+  /* "nitro.pyx":269
  * 
  *         tmp = image_reader.to_capsule()
  *         assert(PyCapsule_IsValid(tmp, "ImageReader"))             # <<<<<<<<<<<<<<
@@ -8798,32 +8937,32 @@ static int __pyx_pf_5nitro_17DirectBlockSource___cinit__(struct __pyx_obj_5nitro
   if (unlikely(!Py_OptimizeFlag)) {
     if (unlikely(!(PyCapsule_IsValid(__pyx_v_tmp, ((char *)"ImageReader")) != 0))) {
       PyErr_SetNone(PyExc_AssertionError);
-      __PYX_ERR(0, 264, __pyx_L1_error)
+      __PYX_ERR(0, 269, __pyx_L1_error)
     }
   }
   #endif
 
-  /* "nitro.pyx":265
+  /* "nitro.pyx":270
  *         tmp = image_reader.to_capsule()
  *         assert(PyCapsule_IsValid(tmp, "ImageReader"))
  *         pReader = <io.nitf_ImageReader*>PyCapsule_GetPointer(tmp, "ImageReader")             # <<<<<<<<<<<<<<
  *         self._c_source = <image_source.nitf_DataSource*>image_source.nitf_DirectBlockSource_construct(<void*>self, self.c_next_block, pReader, nbands, &error)
  *         if self._c_source is NULL:
  */
-  __pyx_t_4 = PyCapsule_GetPointer(__pyx_v_tmp, ((char *)"ImageReader")); if (unlikely(__pyx_t_4 == ((void *)NULL) && PyErr_Occurred())) __PYX_ERR(0, 265, __pyx_L1_error)
+  __pyx_t_4 = PyCapsule_GetPointer(__pyx_v_tmp, ((char *)"ImageReader")); if (unlikely(__pyx_t_4 == ((void *)NULL) && PyErr_Occurred())) __PYX_ERR(0, 270, __pyx_L1_error)
   __pyx_v_pReader = ((nitf_ImageReader *)__pyx_t_4);
 
-  /* "nitro.pyx":266
+  /* "nitro.pyx":271
  *         assert(PyCapsule_IsValid(tmp, "ImageReader"))
  *         pReader = <io.nitf_ImageReader*>PyCapsule_GetPointer(tmp, "ImageReader")
  *         self._c_source = <image_source.nitf_DataSource*>image_source.nitf_DirectBlockSource_construct(<void*>self, self.c_next_block, pReader, nbands, &error)             # <<<<<<<<<<<<<<
  *         if self._c_source is NULL:
  *             raise NitfError(error)
  */
-  __pyx_t_5 = __Pyx_PyInt_As_uint32_t(__pyx_v_nbands); if (unlikely((__pyx_t_5 == ((nitf_Uint32)-1)) && PyErr_Occurred())) __PYX_ERR(0, 266, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyInt_As_uint32_t(__pyx_v_nbands); if (unlikely((__pyx_t_5 == ((nitf_Uint32)-1)) && PyErr_Occurred())) __PYX_ERR(0, 271, __pyx_L1_error)
   __pyx_v_self->__pyx_base.__pyx_base._c_source = ((nitf_DataSource *)nitf_DirectBlockSource_construct(((void *)__pyx_v_self), ((struct __pyx_vtabstruct_5nitro_DirectBlockSource *)__pyx_v_self->__pyx_vtab)->c_next_block, __pyx_v_pReader, __pyx_t_5, (&__pyx_v_error)));
 
-  /* "nitro.pyx":267
+  /* "nitro.pyx":272
  *         pReader = <io.nitf_ImageReader*>PyCapsule_GetPointer(tmp, "ImageReader")
  *         self._c_source = <image_source.nitf_DataSource*>image_source.nitf_DirectBlockSource_construct(<void*>self, self.c_next_block, pReader, nbands, &error)
  *         if self._c_source is NULL:             # <<<<<<<<<<<<<<
@@ -8833,16 +8972,16 @@ static int __pyx_pf_5nitro_17DirectBlockSource___cinit__(struct __pyx_obj_5nitro
   __pyx_t_6 = ((__pyx_v_self->__pyx_base.__pyx_base._c_source == NULL) != 0);
   if (__pyx_t_6) {
 
-    /* "nitro.pyx":268
+    /* "nitro.pyx":273
  *         self._c_source = <image_source.nitf_DataSource*>image_source.nitf_DirectBlockSource_construct(<void*>self, self.c_next_block, pReader, nbands, &error)
  *         if self._c_source is NULL:
  *             raise NitfError(error)             # <<<<<<<<<<<<<<
  * 
  *     cpdef next_block(self, buf, block, blockNumber, blockSize):
  */
-    __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 268, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 273, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_3 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 268, __pyx_L1_error)
+    __pyx_t_3 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 273, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __pyx_t_7 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_2))) {
@@ -8855,14 +8994,14 @@ static int __pyx_pf_5nitro_17DirectBlockSource___cinit__(struct __pyx_obj_5nitro
       }
     }
     if (!__pyx_t_7) {
-      __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 268, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 273, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __Pyx_GOTREF(__pyx_t_1);
     } else {
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_2)) {
         PyObject *__pyx_temp[2] = {__pyx_t_7, __pyx_t_3};
-        __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 268, __pyx_L1_error)
+        __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 273, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
         __Pyx_GOTREF(__pyx_t_1);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -8871,20 +9010,20 @@ static int __pyx_pf_5nitro_17DirectBlockSource___cinit__(struct __pyx_obj_5nitro
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_2)) {
         PyObject *__pyx_temp[2] = {__pyx_t_7, __pyx_t_3};
-        __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 268, __pyx_L1_error)
+        __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 273, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
         __Pyx_GOTREF(__pyx_t_1);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       } else
       #endif
       {
-        __pyx_t_8 = PyTuple_New(1+1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 268, __pyx_L1_error)
+        __pyx_t_8 = PyTuple_New(1+1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 273, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_8);
         __Pyx_GIVEREF(__pyx_t_7); PyTuple_SET_ITEM(__pyx_t_8, 0, __pyx_t_7); __pyx_t_7 = NULL;
         __Pyx_GIVEREF(__pyx_t_3);
         PyTuple_SET_ITEM(__pyx_t_8, 0+1, __pyx_t_3);
         __pyx_t_3 = 0;
-        __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_8, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 268, __pyx_L1_error)
+        __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_8, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 273, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
       }
@@ -8892,9 +9031,9 @@ static int __pyx_pf_5nitro_17DirectBlockSource___cinit__(struct __pyx_obj_5nitro
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_Raise(__pyx_t_1, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __PYX_ERR(0, 268, __pyx_L1_error)
+    __PYX_ERR(0, 273, __pyx_L1_error)
 
-    /* "nitro.pyx":267
+    /* "nitro.pyx":272
  *         pReader = <io.nitf_ImageReader*>PyCapsule_GetPointer(tmp, "ImageReader")
  *         self._c_source = <image_source.nitf_DataSource*>image_source.nitf_DirectBlockSource_construct(<void*>self, self.c_next_block, pReader, nbands, &error)
  *         if self._c_source is NULL:             # <<<<<<<<<<<<<<
@@ -8903,7 +9042,7 @@ static int __pyx_pf_5nitro_17DirectBlockSource___cinit__(struct __pyx_obj_5nitro
  */
   }
 
-  /* "nitro.pyx":259
+  /* "nitro.pyx":264
  * 
  * cdef class DirectBlockSource(BandSource):
  *     def __cinit__(self, image_reader=None, nbands=0):             # <<<<<<<<<<<<<<
@@ -8928,7 +9067,7 @@ static int __pyx_pf_5nitro_17DirectBlockSource___cinit__(struct __pyx_obj_5nitro
   return __pyx_r;
 }
 
-/* "nitro.pyx":270
+/* "nitro.pyx":275
  *             raise NitfError(error)
  * 
  *     cpdef next_block(self, buf, block, blockNumber, blockSize):             # <<<<<<<<<<<<<<
@@ -8955,7 +9094,7 @@ static PyObject *__pyx_f_5nitro_17DirectBlockSource_next_block(CYTHON_UNUSED str
   if (unlikely(__pyx_skip_dispatch)) ;
   /* Check if overridden in Python */
   else if (unlikely(Py_TYPE(((PyObject *)__pyx_v_self))->tp_dictoffset != 0)) {
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_next_block); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 270, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_next_block); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 275, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)__pyx_pw_5nitro_17DirectBlockSource_3next_block)) {
       __Pyx_XDECREF(__pyx_r);
@@ -8975,7 +9114,7 @@ static PyObject *__pyx_f_5nitro_17DirectBlockSource_next_block(CYTHON_UNUSED str
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_3)) {
         PyObject *__pyx_temp[5] = {__pyx_t_4, __pyx_v_buf, __pyx_v_block, __pyx_v_blockNumber, __pyx_v_blockSize};
-        __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_5, 4+__pyx_t_5); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 270, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_5, 4+__pyx_t_5); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 275, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
         __Pyx_GOTREF(__pyx_t_2);
       } else
@@ -8983,13 +9122,13 @@ static PyObject *__pyx_f_5nitro_17DirectBlockSource_next_block(CYTHON_UNUSED str
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
         PyObject *__pyx_temp[5] = {__pyx_t_4, __pyx_v_buf, __pyx_v_block, __pyx_v_blockNumber, __pyx_v_blockSize};
-        __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_5, 4+__pyx_t_5); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 270, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_5, 4+__pyx_t_5); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 275, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
         __Pyx_GOTREF(__pyx_t_2);
       } else
       #endif
       {
-        __pyx_t_6 = PyTuple_New(4+__pyx_t_5); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 270, __pyx_L1_error)
+        __pyx_t_6 = PyTuple_New(4+__pyx_t_5); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 275, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_6);
         if (__pyx_t_4) {
           __Pyx_GIVEREF(__pyx_t_4); PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_4); __pyx_t_4 = NULL;
@@ -9006,7 +9145,7 @@ static PyObject *__pyx_f_5nitro_17DirectBlockSource_next_block(CYTHON_UNUSED str
         __Pyx_INCREF(__pyx_v_blockSize);
         __Pyx_GIVEREF(__pyx_v_blockSize);
         PyTuple_SET_ITEM(__pyx_t_6, 3+__pyx_t_5, __pyx_v_blockSize);
-        __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_6, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 270, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_6, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 275, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       }
@@ -9019,37 +9158,37 @@ static PyObject *__pyx_f_5nitro_17DirectBlockSource_next_block(CYTHON_UNUSED str
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   }
 
-  /* "nitro.pyx":274
+  /* "nitro.pyx":279
  *         cdef void* c_block
  * 
  *         c_buf = PyCapsule_GetPointer(buf, "void")             # <<<<<<<<<<<<<<
  *         c_block = PyCapsule_GetPointer(block, "void")
  *         memcpy(c_buf, c_block, blockSize)
  */
-  __pyx_t_7 = PyCapsule_GetPointer(__pyx_v_buf, ((char *)"void")); if (unlikely(__pyx_t_7 == ((void *)NULL) && PyErr_Occurred())) __PYX_ERR(0, 274, __pyx_L1_error)
+  __pyx_t_7 = PyCapsule_GetPointer(__pyx_v_buf, ((char *)"void")); if (unlikely(__pyx_t_7 == ((void *)NULL) && PyErr_Occurred())) __PYX_ERR(0, 279, __pyx_L1_error)
   __pyx_v_c_buf = __pyx_t_7;
 
-  /* "nitro.pyx":275
+  /* "nitro.pyx":280
  * 
  *         c_buf = PyCapsule_GetPointer(buf, "void")
  *         c_block = PyCapsule_GetPointer(block, "void")             # <<<<<<<<<<<<<<
  *         memcpy(c_buf, c_block, blockSize)
  * 
  */
-  __pyx_t_7 = PyCapsule_GetPointer(__pyx_v_block, ((char *)"void")); if (unlikely(__pyx_t_7 == ((void *)NULL) && PyErr_Occurred())) __PYX_ERR(0, 275, __pyx_L1_error)
+  __pyx_t_7 = PyCapsule_GetPointer(__pyx_v_block, ((char *)"void")); if (unlikely(__pyx_t_7 == ((void *)NULL) && PyErr_Occurred())) __PYX_ERR(0, 280, __pyx_L1_error)
   __pyx_v_c_block = __pyx_t_7;
 
-  /* "nitro.pyx":276
+  /* "nitro.pyx":281
  *         c_buf = PyCapsule_GetPointer(buf, "void")
  *         c_block = PyCapsule_GetPointer(block, "void")
  *         memcpy(c_buf, c_block, blockSize)             # <<<<<<<<<<<<<<
  * 
  *     @staticmethod
  */
-  __pyx_t_8 = __Pyx_PyInt_As_size_t(__pyx_v_blockSize); if (unlikely((__pyx_t_8 == (size_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 276, __pyx_L1_error)
+  __pyx_t_8 = __Pyx_PyInt_As_size_t(__pyx_v_blockSize); if (unlikely((__pyx_t_8 == (size_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 281, __pyx_L1_error)
   memcpy(__pyx_v_c_buf, __pyx_v_c_block, __pyx_t_8);
 
-  /* "nitro.pyx":270
+  /* "nitro.pyx":275
  *             raise NitfError(error)
  * 
  *     cpdef next_block(self, buf, block, blockNumber, blockSize):             # <<<<<<<<<<<<<<
@@ -9111,23 +9250,23 @@ static PyObject *__pyx_pw_5nitro_17DirectBlockSource_3next_block(PyObject *__pyx
         case  1:
         if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_block)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("next_block", 1, 4, 4, 1); __PYX_ERR(0, 270, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("next_block", 1, 4, 4, 1); __PYX_ERR(0, 275, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_blockNumber)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("next_block", 1, 4, 4, 2); __PYX_ERR(0, 270, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("next_block", 1, 4, 4, 2); __PYX_ERR(0, 275, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
         if (likely((values[3] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_blockSize)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("next_block", 1, 4, 4, 3); __PYX_ERR(0, 270, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("next_block", 1, 4, 4, 3); __PYX_ERR(0, 275, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "next_block") < 0)) __PYX_ERR(0, 270, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "next_block") < 0)) __PYX_ERR(0, 275, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 4) {
       goto __pyx_L5_argtuple_error;
@@ -9144,7 +9283,7 @@ static PyObject *__pyx_pw_5nitro_17DirectBlockSource_3next_block(PyObject *__pyx
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("next_block", 1, 4, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 270, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("next_block", 1, 4, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 275, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("nitro.DirectBlockSource.next_block", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -9163,7 +9302,7 @@ static PyObject *__pyx_pf_5nitro_17DirectBlockSource_2next_block(struct __pyx_ob
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("next_block", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_f_5nitro_17DirectBlockSource_next_block(__pyx_v_self, __pyx_v_buf, __pyx_v_block, __pyx_v_blockNumber, __pyx_v_blockSize, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 270, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_5nitro_17DirectBlockSource_next_block(__pyx_v_self, __pyx_v_buf, __pyx_v_block, __pyx_v_blockNumber, __pyx_v_blockSize, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 275, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -9180,7 +9319,7 @@ static PyObject *__pyx_pf_5nitro_17DirectBlockSource_2next_block(struct __pyx_ob
   return __pyx_r;
 }
 
-/* "nitro.pyx":279
+/* "nitro.pyx":284
  * 
  *     @staticmethod
  *     cdef NITF_BOOL c_next_block(void* algorithm, void* buf, const void* block, nitf_Uint32 blockNumber, nitf_Uint64 blockSize, nitf_Error* error):             # <<<<<<<<<<<<<<
@@ -9205,7 +9344,7 @@ static NITF_BOOL __pyx_f_5nitro_17DirectBlockSource_c_next_block(void *__pyx_v_a
   PyObject *__pyx_t_12 = NULL;
   __Pyx_RefNannySetupContext("c_next_block", 0);
 
-  /* "nitro.pyx":280
+  /* "nitro.pyx":285
  *     @staticmethod
  *     cdef NITF_BOOL c_next_block(void* algorithm, void* buf, const void* block, nitf_Uint32 blockNumber, nitf_Uint64 blockSize, nitf_Error* error):
  *         try:             # <<<<<<<<<<<<<<
@@ -9221,22 +9360,22 @@ static NITF_BOOL __pyx_f_5nitro_17DirectBlockSource_c_next_block(void *__pyx_v_a
     __Pyx_XGOTREF(__pyx_t_3);
     /*try:*/ {
 
-      /* "nitro.pyx":281
+      /* "nitro.pyx":286
  *     cdef NITF_BOOL c_next_block(void* algorithm, void* buf, const void* block, nitf_Uint32 blockNumber, nitf_Uint64 blockSize, nitf_Error* error):
  *         try:
  *             (<object>algorithm).next_block(PyCapsule_New(buf, "void", NULL), PyCapsule_New(block, "void", NULL), blockNumber, blockSize)             # <<<<<<<<<<<<<<
  *         except:
  *             return False
  */
-      __pyx_t_5 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_algorithm), __pyx_n_s_next_block); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 281, __pyx_L3_error)
+      __pyx_t_5 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_algorithm), __pyx_n_s_next_block); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 286, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_5);
-      __pyx_t_6 = PyCapsule_New(__pyx_v_buf, ((char *)"void"), NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 281, __pyx_L3_error)
+      __pyx_t_6 = PyCapsule_New(__pyx_v_buf, ((char *)"void"), NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 286, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_6);
-      __pyx_t_7 = PyCapsule_New(__pyx_v_block, ((char *)"void"), NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 281, __pyx_L3_error)
+      __pyx_t_7 = PyCapsule_New(__pyx_v_block, ((char *)"void"), NULL); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 286, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_7);
-      __pyx_t_8 = __Pyx_PyInt_From_uint32_t(__pyx_v_blockNumber); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 281, __pyx_L3_error)
+      __pyx_t_8 = __Pyx_PyInt_From_uint32_t(__pyx_v_blockNumber); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 286, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_8);
-      __pyx_t_9 = __Pyx_PyInt_From_uint64_t(__pyx_v_blockSize); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 281, __pyx_L3_error)
+      __pyx_t_9 = __Pyx_PyInt_From_uint64_t(__pyx_v_blockSize); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 286, __pyx_L3_error)
       __Pyx_GOTREF(__pyx_t_9);
       __pyx_t_10 = NULL;
       __pyx_t_11 = 0;
@@ -9253,7 +9392,7 @@ static NITF_BOOL __pyx_f_5nitro_17DirectBlockSource_c_next_block(void *__pyx_v_a
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_5)) {
         PyObject *__pyx_temp[5] = {__pyx_t_10, __pyx_t_6, __pyx_t_7, __pyx_t_8, __pyx_t_9};
-        __pyx_t_4 = __Pyx_PyFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_11, 4+__pyx_t_11); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 281, __pyx_L3_error)
+        __pyx_t_4 = __Pyx_PyFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_11, 4+__pyx_t_11); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 286, __pyx_L3_error)
         __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
         __Pyx_GOTREF(__pyx_t_4);
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
@@ -9265,7 +9404,7 @@ static NITF_BOOL __pyx_f_5nitro_17DirectBlockSource_c_next_block(void *__pyx_v_a
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_5)) {
         PyObject *__pyx_temp[5] = {__pyx_t_10, __pyx_t_6, __pyx_t_7, __pyx_t_8, __pyx_t_9};
-        __pyx_t_4 = __Pyx_PyCFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_11, 4+__pyx_t_11); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 281, __pyx_L3_error)
+        __pyx_t_4 = __Pyx_PyCFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_11, 4+__pyx_t_11); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 286, __pyx_L3_error)
         __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
         __Pyx_GOTREF(__pyx_t_4);
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
@@ -9275,7 +9414,7 @@ static NITF_BOOL __pyx_f_5nitro_17DirectBlockSource_c_next_block(void *__pyx_v_a
       } else
       #endif
       {
-        __pyx_t_12 = PyTuple_New(4+__pyx_t_11); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 281, __pyx_L3_error)
+        __pyx_t_12 = PyTuple_New(4+__pyx_t_11); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 286, __pyx_L3_error)
         __Pyx_GOTREF(__pyx_t_12);
         if (__pyx_t_10) {
           __Pyx_GIVEREF(__pyx_t_10); PyTuple_SET_ITEM(__pyx_t_12, 0, __pyx_t_10); __pyx_t_10 = NULL;
@@ -9292,14 +9431,14 @@ static NITF_BOOL __pyx_f_5nitro_17DirectBlockSource_c_next_block(void *__pyx_v_a
         __pyx_t_7 = 0;
         __pyx_t_8 = 0;
         __pyx_t_9 = 0;
-        __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_12, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 281, __pyx_L3_error)
+        __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_12, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 286, __pyx_L3_error)
         __Pyx_GOTREF(__pyx_t_4);
         __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
       }
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-      /* "nitro.pyx":280
+      /* "nitro.pyx":285
  *     @staticmethod
  *     cdef NITF_BOOL c_next_block(void* algorithm, void* buf, const void* block, nitf_Uint32 blockNumber, nitf_Uint64 blockSize, nitf_Error* error):
  *         try:             # <<<<<<<<<<<<<<
@@ -9321,7 +9460,7 @@ static NITF_BOOL __pyx_f_5nitro_17DirectBlockSource_c_next_block(void *__pyx_v_a
     __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
     __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-    /* "nitro.pyx":282
+    /* "nitro.pyx":287
  *         try:
  *             (<object>algorithm).next_block(PyCapsule_New(buf, "void", NULL), PyCapsule_New(block, "void", NULL), blockNumber, blockSize)
  *         except:             # <<<<<<<<<<<<<<
@@ -9330,12 +9469,12 @@ static NITF_BOOL __pyx_f_5nitro_17DirectBlockSource_c_next_block(void *__pyx_v_a
  */
     /*except:*/ {
       __Pyx_AddTraceback("nitro.DirectBlockSource.c_next_block", __pyx_clineno, __pyx_lineno, __pyx_filename);
-      if (__Pyx_GetException(&__pyx_t_4, &__pyx_t_5, &__pyx_t_12) < 0) __PYX_ERR(0, 282, __pyx_L5_except_error)
+      if (__Pyx_GetException(&__pyx_t_4, &__pyx_t_5, &__pyx_t_12) < 0) __PYX_ERR(0, 287, __pyx_L5_except_error)
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_GOTREF(__pyx_t_12);
 
-      /* "nitro.pyx":283
+      /* "nitro.pyx":288
  *             (<object>algorithm).next_block(PyCapsule_New(buf, "void", NULL), PyCapsule_New(block, "void", NULL), blockNumber, blockSize)
  *         except:
  *             return False             # <<<<<<<<<<<<<<
@@ -9350,7 +9489,7 @@ static NITF_BOOL __pyx_f_5nitro_17DirectBlockSource_c_next_block(void *__pyx_v_a
     }
     __pyx_L5_except_error:;
 
-    /* "nitro.pyx":280
+    /* "nitro.pyx":285
  *     @staticmethod
  *     cdef NITF_BOOL c_next_block(void* algorithm, void* buf, const void* block, nitf_Uint32 blockNumber, nitf_Uint64 blockSize, nitf_Error* error):
  *         try:             # <<<<<<<<<<<<<<
@@ -9371,7 +9510,7 @@ static NITF_BOOL __pyx_f_5nitro_17DirectBlockSource_c_next_block(void *__pyx_v_a
     __pyx_L8_try_end:;
   }
 
-  /* "nitro.pyx":284
+  /* "nitro.pyx":289
  *         except:
  *             return False
  *         return True             # <<<<<<<<<<<<<<
@@ -9381,7 +9520,7 @@ static NITF_BOOL __pyx_f_5nitro_17DirectBlockSource_c_next_block(void *__pyx_v_a
   __pyx_r = 1;
   goto __pyx_L0;
 
-  /* "nitro.pyx":279
+  /* "nitro.pyx":284
  * 
  *     @staticmethod
  *     cdef NITF_BOOL c_next_block(void* algorithm, void* buf, const void* block, nitf_Uint32 blockNumber, nitf_Uint64 blockSize, nitf_Error* error):             # <<<<<<<<<<<<<<
@@ -9513,7 +9652,7 @@ static PyObject *__pyx_pf_5nitro_17DirectBlockSource_6__setstate_cython__(CYTHON
   return __pyx_r;
 }
 
-/* "nitro.pyx":290
+/* "nitro.pyx":295
  *     @cython.boundscheck(False)
  *     @cython.wraparound(False)
  *     def __cinit__(self, np.ndarray data not None, size=None, start=0, nbpp=0, pixskip=0):             # <<<<<<<<<<<<<<
@@ -9587,7 +9726,7 @@ static int __pyx_pw_5nitro_12MemorySource_1__cinit__(PyObject *__pyx_v_self, PyO
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(0, 290, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(0, 295, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -9612,13 +9751,13 @@ static int __pyx_pw_5nitro_12MemorySource_1__cinit__(PyObject *__pyx_v_self, PyO
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__cinit__", 0, 1, 5, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 290, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__cinit__", 0, 1, 5, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 295, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("nitro.MemorySource.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return -1;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_data), __pyx_ptype_5numpy_ndarray, 0, "data", 0))) __PYX_ERR(0, 290, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_data), __pyx_ptype_5numpy_ndarray, 0, "data", 0))) __PYX_ERR(0, 295, __pyx_L1_error)
   __pyx_r = __pyx_pf_5nitro_12MemorySource___cinit__(((struct __pyx_obj_5nitro_MemorySource *)__pyx_v_self), __pyx_v_data, __pyx_v_size, __pyx_v_start, __pyx_v_nbpp, __pyx_v_pixskip);
 
   /* function exit code */
@@ -9648,7 +9787,7 @@ static int __pyx_pf_5nitro_12MemorySource___cinit__(struct __pyx_obj_5nitro_Memo
   __Pyx_RefNannySetupContext("__cinit__", 0);
   __Pyx_INCREF(__pyx_v_size);
 
-  /* "nitro.pyx":292
+  /* "nitro.pyx":297
  *     def __cinit__(self, np.ndarray data not None, size=None, start=0, nbpp=0, pixskip=0):
  *         cdef nitf_Error error
  *         if size is None:             # <<<<<<<<<<<<<<
@@ -9659,22 +9798,22 @@ static int __pyx_pf_5nitro_12MemorySource___cinit__(struct __pyx_obj_5nitro_Memo
   __pyx_t_2 = (__pyx_t_1 != 0);
   if (__pyx_t_2) {
 
-    /* "nitro.pyx":293
+    /* "nitro.pyx":298
  *         cdef nitf_Error error
  *         if size is None:
  *             size = data.data.nbytes             # <<<<<<<<<<<<<<
  *         self._c_source = <image_source.nitf_DataSource*>image_source.nitf_MemorySource_construct(<void*>&data.data[0], size, start, nbpp, pixskip, &error)
  *         if self._c_source is NULL:
  */
-    __pyx_t_3 = __Pyx_PyUnicode_FromString(__pyx_v_data->data); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 293, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyUnicode_FromString(__pyx_v_data->data); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 298, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_nbytes); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 293, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_nbytes); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 298, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_DECREF_SET(__pyx_v_size, __pyx_t_4);
     __pyx_t_4 = 0;
 
-    /* "nitro.pyx":292
+    /* "nitro.pyx":297
  *     def __cinit__(self, np.ndarray data not None, size=None, start=0, nbpp=0, pixskip=0):
  *         cdef nitf_Error error
  *         if size is None:             # <<<<<<<<<<<<<<
@@ -9683,20 +9822,20 @@ static int __pyx_pf_5nitro_12MemorySource___cinit__(struct __pyx_obj_5nitro_Memo
  */
   }
 
-  /* "nitro.pyx":294
+  /* "nitro.pyx":299
  *         if size is None:
  *             size = data.data.nbytes
  *         self._c_source = <image_source.nitf_DataSource*>image_source.nitf_MemorySource_construct(<void*>&data.data[0], size, start, nbpp, pixskip, &error)             # <<<<<<<<<<<<<<
  *         if self._c_source is NULL:
  *             raise NitfError(error)
  */
-  __pyx_t_5 = __Pyx_PyInt_As_int64_t(__pyx_v_size); if (unlikely((__pyx_t_5 == ((nitf_Off)-1)) && PyErr_Occurred())) __PYX_ERR(0, 294, __pyx_L1_error)
-  __pyx_t_6 = __Pyx_PyInt_As_int64_t(__pyx_v_start); if (unlikely((__pyx_t_6 == ((nitf_Off)-1)) && PyErr_Occurred())) __PYX_ERR(0, 294, __pyx_L1_error)
-  __pyx_t_7 = __Pyx_PyInt_As_int(__pyx_v_nbpp); if (unlikely((__pyx_t_7 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 294, __pyx_L1_error)
-  __pyx_t_8 = __Pyx_PyInt_As_int(__pyx_v_pixskip); if (unlikely((__pyx_t_8 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 294, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyInt_As_int64_t(__pyx_v_size); if (unlikely((__pyx_t_5 == ((nitf_Off)-1)) && PyErr_Occurred())) __PYX_ERR(0, 299, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyInt_As_int64_t(__pyx_v_start); if (unlikely((__pyx_t_6 == ((nitf_Off)-1)) && PyErr_Occurred())) __PYX_ERR(0, 299, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyInt_As_int(__pyx_v_nbpp); if (unlikely((__pyx_t_7 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 299, __pyx_L1_error)
+  __pyx_t_8 = __Pyx_PyInt_As_int(__pyx_v_pixskip); if (unlikely((__pyx_t_8 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 299, __pyx_L1_error)
   __pyx_v_self->__pyx_base.__pyx_base._c_source = ((nitf_DataSource *)nitf_MemorySource_construct(((void *)(&(__pyx_v_data->data[0]))), __pyx_t_5, __pyx_t_6, __pyx_t_7, __pyx_t_8, (&__pyx_v_error)));
 
-  /* "nitro.pyx":295
+  /* "nitro.pyx":300
  *             size = data.data.nbytes
  *         self._c_source = <image_source.nitf_DataSource*>image_source.nitf_MemorySource_construct(<void*>&data.data[0], size, start, nbpp, pixskip, &error)
  *         if self._c_source is NULL:             # <<<<<<<<<<<<<<
@@ -9706,16 +9845,16 @@ static int __pyx_pf_5nitro_12MemorySource___cinit__(struct __pyx_obj_5nitro_Memo
   __pyx_t_2 = ((__pyx_v_self->__pyx_base.__pyx_base._c_source == NULL) != 0);
   if (__pyx_t_2) {
 
-    /* "nitro.pyx":296
+    /* "nitro.pyx":301
  *         self._c_source = <image_source.nitf_DataSource*>image_source.nitf_MemorySource_construct(<void*>&data.data[0], size, start, nbpp, pixskip, &error)
  *         if self._c_source is NULL:
  *             raise NitfError(error)             # <<<<<<<<<<<<<<
  * 
  * 
  */
-    __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 296, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 301, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_9 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 296, __pyx_L1_error)
+    __pyx_t_9 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 301, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_9);
     __pyx_t_10 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
@@ -9728,14 +9867,14 @@ static int __pyx_pf_5nitro_12MemorySource___cinit__(struct __pyx_obj_5nitro_Memo
       }
     }
     if (!__pyx_t_10) {
-      __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_9); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 296, __pyx_L1_error)
+      __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_9); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 301, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
       __Pyx_GOTREF(__pyx_t_4);
     } else {
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_3)) {
         PyObject *__pyx_temp[2] = {__pyx_t_10, __pyx_t_9};
-        __pyx_t_4 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 296, __pyx_L1_error)
+        __pyx_t_4 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 301, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
         __Pyx_GOTREF(__pyx_t_4);
         __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
@@ -9744,20 +9883,20 @@ static int __pyx_pf_5nitro_12MemorySource___cinit__(struct __pyx_obj_5nitro_Memo
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
         PyObject *__pyx_temp[2] = {__pyx_t_10, __pyx_t_9};
-        __pyx_t_4 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 296, __pyx_L1_error)
+        __pyx_t_4 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 301, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
         __Pyx_GOTREF(__pyx_t_4);
         __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
       } else
       #endif
       {
-        __pyx_t_11 = PyTuple_New(1+1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 296, __pyx_L1_error)
+        __pyx_t_11 = PyTuple_New(1+1); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 301, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_11);
         __Pyx_GIVEREF(__pyx_t_10); PyTuple_SET_ITEM(__pyx_t_11, 0, __pyx_t_10); __pyx_t_10 = NULL;
         __Pyx_GIVEREF(__pyx_t_9);
         PyTuple_SET_ITEM(__pyx_t_11, 0+1, __pyx_t_9);
         __pyx_t_9 = 0;
-        __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_11, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 296, __pyx_L1_error)
+        __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_11, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 301, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
         __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
       }
@@ -9765,9 +9904,9 @@ static int __pyx_pf_5nitro_12MemorySource___cinit__(struct __pyx_obj_5nitro_Memo
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_Raise(__pyx_t_4, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __PYX_ERR(0, 296, __pyx_L1_error)
+    __PYX_ERR(0, 301, __pyx_L1_error)
 
-    /* "nitro.pyx":295
+    /* "nitro.pyx":300
  *             size = data.data.nbytes
  *         self._c_source = <image_source.nitf_DataSource*>image_source.nitf_MemorySource_construct(<void*>&data.data[0], size, start, nbpp, pixskip, &error)
  *         if self._c_source is NULL:             # <<<<<<<<<<<<<<
@@ -9776,7 +9915,7 @@ static int __pyx_pf_5nitro_12MemorySource___cinit__(struct __pyx_obj_5nitro_Memo
  */
   }
 
-  /* "nitro.pyx":290
+  /* "nitro.pyx":295
  *     @cython.boundscheck(False)
  *     @cython.wraparound(False)
  *     def __cinit__(self, np.ndarray data not None, size=None, start=0, nbpp=0, pixskip=0):             # <<<<<<<<<<<<<<
@@ -10122,7 +10261,7 @@ static PyObject *__pyx_pf_5nitro_13SegmentSource_2__setstate_cython__(CYTHON_UNU
   return __pyx_r;
 }
 
-/* "nitro.pyx":312
+/* "nitro.pyx":317
  *     @cython.boundscheck(False)
  *     @cython.wraparound(False)
  *     def __cinit__(self, np.ndarray data not None, size=None, start=0, byte_skip=0):             # <<<<<<<<<<<<<<
@@ -10186,7 +10325,7 @@ static int __pyx_pw_5nitro_19SegmentMemorySource_1__cinit__(PyObject *__pyx_v_se
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(0, 312, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(0, 317, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -10208,13 +10347,13 @@ static int __pyx_pw_5nitro_19SegmentMemorySource_1__cinit__(PyObject *__pyx_v_se
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__cinit__", 0, 1, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 312, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__cinit__", 0, 1, 4, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 317, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("nitro.SegmentMemorySource.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return -1;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_data), __pyx_ptype_5numpy_ndarray, 0, "data", 0))) __PYX_ERR(0, 312, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_data), __pyx_ptype_5numpy_ndarray, 0, "data", 0))) __PYX_ERR(0, 317, __pyx_L1_error)
   __pyx_r = __pyx_pf_5nitro_19SegmentMemorySource___cinit__(((struct __pyx_obj_5nitro_SegmentMemorySource *)__pyx_v_self), __pyx_v_data, __pyx_v_size, __pyx_v_start, __pyx_v_byte_skip);
 
   /* function exit code */
@@ -10243,7 +10382,7 @@ static int __pyx_pf_5nitro_19SegmentMemorySource___cinit__(struct __pyx_obj_5nit
   __Pyx_RefNannySetupContext("__cinit__", 0);
   __Pyx_INCREF(__pyx_v_size);
 
-  /* "nitro.pyx":314
+  /* "nitro.pyx":319
  *     def __cinit__(self, np.ndarray data not None, size=None, start=0, byte_skip=0):
  *         cdef nitf_Error error
  *         if size is None:             # <<<<<<<<<<<<<<
@@ -10254,19 +10393,19 @@ static int __pyx_pf_5nitro_19SegmentMemorySource___cinit__(struct __pyx_obj_5nit
   __pyx_t_2 = (__pyx_t_1 != 0);
   if (__pyx_t_2) {
 
-    /* "nitro.pyx":315
+    /* "nitro.pyx":320
  *         cdef nitf_Error error
  *         if size is None:
  *             size = data.nbytes             # <<<<<<<<<<<<<<
  *         self._npdata = data  # need to keep a reference so this isn't deleted out from under us
  *         self._c_source = <image_source.nitf_DataSource*>segment_source.nitf_SegmentMemorySource_construct(
  */
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_data), __pyx_n_s_nbytes); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 315, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_data), __pyx_n_s_nbytes); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 320, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF_SET(__pyx_v_size, __pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "nitro.pyx":314
+    /* "nitro.pyx":319
  *     def __cinit__(self, np.ndarray data not None, size=None, start=0, byte_skip=0):
  *         cdef nitf_Error error
  *         if size is None:             # <<<<<<<<<<<<<<
@@ -10275,7 +10414,7 @@ static int __pyx_pf_5nitro_19SegmentMemorySource___cinit__(struct __pyx_obj_5nit
  */
   }
 
-  /* "nitro.pyx":316
+  /* "nitro.pyx":321
  *         if size is None:
  *             size = data.nbytes
  *         self._npdata = data  # need to keep a reference so this isn't deleted out from under us             # <<<<<<<<<<<<<<
@@ -10288,18 +10427,18 @@ static int __pyx_pf_5nitro_19SegmentMemorySource___cinit__(struct __pyx_obj_5nit
   __Pyx_DECREF(__pyx_v_self->_npdata);
   __pyx_v_self->_npdata = ((PyObject *)__pyx_v_data);
 
-  /* "nitro.pyx":318
+  /* "nitro.pyx":323
  *         self._npdata = data  # need to keep a reference so this isn't deleted out from under us
  *         self._c_source = <image_source.nitf_DataSource*>segment_source.nitf_SegmentMemorySource_construct(
  *                 <const char*>&data.data[0], size, start, byte_skip, False, &error)             # <<<<<<<<<<<<<<
  *         if self._c_source is NULL:
  *             raise NitfError(error)
  */
-  __pyx_t_4 = __Pyx_PyInt_As_int64_t(__pyx_v_size); if (unlikely((__pyx_t_4 == ((nitf_Off)-1)) && PyErr_Occurred())) __PYX_ERR(0, 318, __pyx_L1_error)
-  __pyx_t_5 = __Pyx_PyInt_As_int64_t(__pyx_v_start); if (unlikely((__pyx_t_5 == ((nitf_Off)-1)) && PyErr_Occurred())) __PYX_ERR(0, 318, __pyx_L1_error)
-  __pyx_t_6 = __Pyx_PyInt_As_int(__pyx_v_byte_skip); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 318, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyInt_As_int64_t(__pyx_v_size); if (unlikely((__pyx_t_4 == ((nitf_Off)-1)) && PyErr_Occurred())) __PYX_ERR(0, 323, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyInt_As_int64_t(__pyx_v_start); if (unlikely((__pyx_t_5 == ((nitf_Off)-1)) && PyErr_Occurred())) __PYX_ERR(0, 323, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyInt_As_int(__pyx_v_byte_skip); if (unlikely((__pyx_t_6 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 323, __pyx_L1_error)
 
-  /* "nitro.pyx":317
+  /* "nitro.pyx":322
  *             size = data.nbytes
  *         self._npdata = data  # need to keep a reference so this isn't deleted out from under us
  *         self._c_source = <image_source.nitf_DataSource*>segment_source.nitf_SegmentMemorySource_construct(             # <<<<<<<<<<<<<<
@@ -10308,7 +10447,7 @@ static int __pyx_pf_5nitro_19SegmentMemorySource___cinit__(struct __pyx_obj_5nit
  */
   __pyx_v_self->__pyx_base.__pyx_base._c_source = ((nitf_DataSource *)nitf_SegmentMemorySource_construct(((char const *)(&(__pyx_v_data->data[0]))), __pyx_t_4, __pyx_t_5, __pyx_t_6, 0, (&__pyx_v_error)));
 
-  /* "nitro.pyx":319
+  /* "nitro.pyx":324
  *         self._c_source = <image_source.nitf_DataSource*>segment_source.nitf_SegmentMemorySource_construct(
  *                 <const char*>&data.data[0], size, start, byte_skip, False, &error)
  *         if self._c_source is NULL:             # <<<<<<<<<<<<<<
@@ -10318,16 +10457,16 @@ static int __pyx_pf_5nitro_19SegmentMemorySource___cinit__(struct __pyx_obj_5nit
   __pyx_t_2 = ((__pyx_v_self->__pyx_base.__pyx_base._c_source == NULL) != 0);
   if (__pyx_t_2) {
 
-    /* "nitro.pyx":320
+    /* "nitro.pyx":325
  *                 <const char*>&data.data[0], size, start, byte_skip, False, &error)
  *         if self._c_source is NULL:
  *             raise NitfError(error)             # <<<<<<<<<<<<<<
  * 
  * 
  */
-    __pyx_t_7 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 320, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 325, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
-    __pyx_t_8 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 320, __pyx_L1_error)
+    __pyx_t_8 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 325, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_8);
     __pyx_t_9 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_7))) {
@@ -10340,14 +10479,14 @@ static int __pyx_pf_5nitro_19SegmentMemorySource___cinit__(struct __pyx_obj_5nit
       }
     }
     if (!__pyx_t_9) {
-      __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_7, __pyx_t_8); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 320, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_7, __pyx_t_8); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 325, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
       __Pyx_GOTREF(__pyx_t_3);
     } else {
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_7)) {
         PyObject *__pyx_temp[2] = {__pyx_t_9, __pyx_t_8};
-        __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_7, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 320, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_7, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 325, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
@@ -10356,20 +10495,20 @@ static int __pyx_pf_5nitro_19SegmentMemorySource___cinit__(struct __pyx_obj_5nit
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_7)) {
         PyObject *__pyx_temp[2] = {__pyx_t_9, __pyx_t_8};
-        __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_7, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 320, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_7, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 325, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
       } else
       #endif
       {
-        __pyx_t_10 = PyTuple_New(1+1); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 320, __pyx_L1_error)
+        __pyx_t_10 = PyTuple_New(1+1); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 325, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_10);
         __Pyx_GIVEREF(__pyx_t_9); PyTuple_SET_ITEM(__pyx_t_10, 0, __pyx_t_9); __pyx_t_9 = NULL;
         __Pyx_GIVEREF(__pyx_t_8);
         PyTuple_SET_ITEM(__pyx_t_10, 0+1, __pyx_t_8);
         __pyx_t_8 = 0;
-        __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_10, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 320, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_10, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 325, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
       }
@@ -10377,9 +10516,9 @@ static int __pyx_pf_5nitro_19SegmentMemorySource___cinit__(struct __pyx_obj_5nit
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __PYX_ERR(0, 320, __pyx_L1_error)
+    __PYX_ERR(0, 325, __pyx_L1_error)
 
-    /* "nitro.pyx":319
+    /* "nitro.pyx":324
  *         self._c_source = <image_source.nitf_DataSource*>segment_source.nitf_SegmentMemorySource_construct(
  *                 <const char*>&data.data[0], size, start, byte_skip, False, &error)
  *         if self._c_source is NULL:             # <<<<<<<<<<<<<<
@@ -10388,7 +10527,7 @@ static int __pyx_pf_5nitro_19SegmentMemorySource___cinit__(struct __pyx_obj_5nit
  */
   }
 
-  /* "nitro.pyx":312
+  /* "nitro.pyx":317
  *     @cython.boundscheck(False)
  *     @cython.wraparound(False)
  *     def __cinit__(self, np.ndarray data not None, size=None, start=0, byte_skip=0):             # <<<<<<<<<<<<<<
@@ -10520,7 +10659,7 @@ static PyObject *__pyx_pf_5nitro_19SegmentMemorySource_4__setstate_cython__(CYTH
   return __pyx_r;
 }
 
-/* "nitro.pyx":334
+/* "nitro.pyx":339
  *     TRUNCATE=CreationFlags.NITF_TRUNCATE
  * 
  *     def __cinit__(self, str fname, access=AccessFlags.NITF_ACCESS_READWRITE, creation=CreationFlags.NITF_CREATE):             # <<<<<<<<<<<<<<
@@ -10574,7 +10713,7 @@ static int __pyx_pw_5nitro_8IOHandle_1__cinit__(PyObject *__pyx_v_self, PyObject
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(0, 334, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(0, 339, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -10593,13 +10732,13 @@ static int __pyx_pw_5nitro_8IOHandle_1__cinit__(PyObject *__pyx_v_self, PyObject
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__cinit__", 0, 1, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 334, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__cinit__", 0, 1, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 339, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("nitro.IOHandle.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return -1;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_fname), (&PyUnicode_Type), 1, "fname", 1))) __PYX_ERR(0, 334, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_fname), (&PyUnicode_Type), 1, "fname", 1))) __PYX_ERR(0, 339, __pyx_L1_error)
   __pyx_r = __pyx_pf_5nitro_8IOHandle___cinit__(((struct __pyx_obj_5nitro_IOHandle *)__pyx_v_self), __pyx_v_fname, __pyx_v_access, __pyx_v_creation);
 
   /* function exit code */
@@ -10627,42 +10766,42 @@ static int __pyx_pf_5nitro_8IOHandle___cinit__(struct __pyx_obj_5nitro_IOHandle 
   PyObject *__pyx_t_10 = NULL;
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "nitro.pyx":336
+  /* "nitro.pyx":341
  *     def __cinit__(self, str fname, access=AccessFlags.NITF_ACCESS_READWRITE, creation=CreationFlags.NITF_CREATE):
  *         cdef nitf_Error error
  *         self._c_io = io.nitf_IOHandle_create(fname, access, creation, &error)             # <<<<<<<<<<<<<<
  *         if not io.is_iohandle_valid(self._c_io):
  *             raise NitfError(error)
  */
-  __pyx_t_1 = __Pyx_PyObject_AsString(__pyx_v_fname); if (unlikely((!__pyx_t_1) && PyErr_Occurred())) __PYX_ERR(0, 336, __pyx_L1_error)
-  __pyx_t_2 = ((nitf_AccessFlags)__Pyx_PyInt_As_nitf_AccessFlags(__pyx_v_access)); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 336, __pyx_L1_error)
-  __pyx_t_3 = ((nitf_CreationFlags)__Pyx_PyInt_As_nitf_CreationFlags(__pyx_v_creation)); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 336, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_AsString(__pyx_v_fname); if (unlikely((!__pyx_t_1) && PyErr_Occurred())) __PYX_ERR(0, 341, __pyx_L1_error)
+  __pyx_t_2 = ((nitf_AccessFlags)__Pyx_PyInt_As_nitf_AccessFlags(__pyx_v_access)); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 341, __pyx_L1_error)
+  __pyx_t_3 = ((nitf_CreationFlags)__Pyx_PyInt_As_nitf_CreationFlags(__pyx_v_creation)); if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 341, __pyx_L1_error)
   __pyx_v_self->_c_io = nitf_IOHandle_create(__pyx_t_1, __pyx_t_2, __pyx_t_3, (&__pyx_v_error));
 
-  /* "nitro.pyx":337
+  /* "nitro.pyx":342
  *         cdef nitf_Error error
  *         self._c_io = io.nitf_IOHandle_create(fname, access, creation, &error)
  *         if not io.is_iohandle_valid(self._c_io):             # <<<<<<<<<<<<<<
  *             raise NitfError(error)
  * 
  */
-  __pyx_t_4 = __pyx_f_2io_is_iohandle_valid(__pyx_v_self->_c_io); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 337, __pyx_L1_error)
+  __pyx_t_4 = __pyx_f_2io_is_iohandle_valid(__pyx_v_self->_c_io); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 342, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_5 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 337, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 342, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_t_6 = ((!__pyx_t_5) != 0);
   if (__pyx_t_6) {
 
-    /* "nitro.pyx":338
+    /* "nitro.pyx":343
  *         self._c_io = io.nitf_IOHandle_create(fname, access, creation, &error)
  *         if not io.is_iohandle_valid(self._c_io):
  *             raise NitfError(error)             # <<<<<<<<<<<<<<
  * 
  *     def close(self):
  */
-    __pyx_t_7 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 338, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 343, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_7);
-    __pyx_t_8 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 338, __pyx_L1_error)
+    __pyx_t_8 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 343, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_8);
     __pyx_t_9 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_7))) {
@@ -10675,14 +10814,14 @@ static int __pyx_pf_5nitro_8IOHandle___cinit__(struct __pyx_obj_5nitro_IOHandle 
       }
     }
     if (!__pyx_t_9) {
-      __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_t_7, __pyx_t_8); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 338, __pyx_L1_error)
+      __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_t_7, __pyx_t_8); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 343, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
       __Pyx_GOTREF(__pyx_t_4);
     } else {
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_7)) {
         PyObject *__pyx_temp[2] = {__pyx_t_9, __pyx_t_8};
-        __pyx_t_4 = __Pyx_PyFunction_FastCall(__pyx_t_7, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 338, __pyx_L1_error)
+        __pyx_t_4 = __Pyx_PyFunction_FastCall(__pyx_t_7, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 343, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
         __Pyx_GOTREF(__pyx_t_4);
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
@@ -10691,20 +10830,20 @@ static int __pyx_pf_5nitro_8IOHandle___cinit__(struct __pyx_obj_5nitro_IOHandle 
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_7)) {
         PyObject *__pyx_temp[2] = {__pyx_t_9, __pyx_t_8};
-        __pyx_t_4 = __Pyx_PyCFunction_FastCall(__pyx_t_7, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 338, __pyx_L1_error)
+        __pyx_t_4 = __Pyx_PyCFunction_FastCall(__pyx_t_7, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 343, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
         __Pyx_GOTREF(__pyx_t_4);
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
       } else
       #endif
       {
-        __pyx_t_10 = PyTuple_New(1+1); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 338, __pyx_L1_error)
+        __pyx_t_10 = PyTuple_New(1+1); if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 343, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_10);
         __Pyx_GIVEREF(__pyx_t_9); PyTuple_SET_ITEM(__pyx_t_10, 0, __pyx_t_9); __pyx_t_9 = NULL;
         __Pyx_GIVEREF(__pyx_t_8);
         PyTuple_SET_ITEM(__pyx_t_10, 0+1, __pyx_t_8);
         __pyx_t_8 = 0;
-        __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_10, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 338, __pyx_L1_error)
+        __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_10, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 343, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
         __Pyx_DECREF(__pyx_t_10); __pyx_t_10 = 0;
       }
@@ -10712,9 +10851,9 @@ static int __pyx_pf_5nitro_8IOHandle___cinit__(struct __pyx_obj_5nitro_IOHandle 
     __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     __Pyx_Raise(__pyx_t_4, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __PYX_ERR(0, 338, __pyx_L1_error)
+    __PYX_ERR(0, 343, __pyx_L1_error)
 
-    /* "nitro.pyx":337
+    /* "nitro.pyx":342
  *         cdef nitf_Error error
  *         self._c_io = io.nitf_IOHandle_create(fname, access, creation, &error)
  *         if not io.is_iohandle_valid(self._c_io):             # <<<<<<<<<<<<<<
@@ -10723,7 +10862,7 @@ static int __pyx_pf_5nitro_8IOHandle___cinit__(struct __pyx_obj_5nitro_IOHandle 
  */
   }
 
-  /* "nitro.pyx":334
+  /* "nitro.pyx":339
  *     TRUNCATE=CreationFlags.NITF_TRUNCATE
  * 
  *     def __cinit__(self, str fname, access=AccessFlags.NITF_ACCESS_READWRITE, creation=CreationFlags.NITF_CREATE):             # <<<<<<<<<<<<<<
@@ -10747,7 +10886,7 @@ static int __pyx_pf_5nitro_8IOHandle___cinit__(struct __pyx_obj_5nitro_IOHandle 
   return __pyx_r;
 }
 
-/* "nitro.pyx":340
+/* "nitro.pyx":345
  *             raise NitfError(error)
  * 
  *     def close(self):             # <<<<<<<<<<<<<<
@@ -10773,7 +10912,7 @@ static PyObject *__pyx_pf_5nitro_8IOHandle_2close(struct __pyx_obj_5nitro_IOHand
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("close", 0);
 
-  /* "nitro.pyx":341
+  /* "nitro.pyx":346
  * 
  *     def close(self):
  *         io.nitf_IOHandle_close(self._c_io)             # <<<<<<<<<<<<<<
@@ -10782,7 +10921,7 @@ static PyObject *__pyx_pf_5nitro_8IOHandle_2close(struct __pyx_obj_5nitro_IOHand
  */
   nitf_IOHandle_close(__pyx_v_self->_c_io);
 
-  /* "nitro.pyx":340
+  /* "nitro.pyx":345
  *             raise NitfError(error)
  * 
  *     def close(self):             # <<<<<<<<<<<<<<
@@ -10797,7 +10936,7 @@ static PyObject *__pyx_pf_5nitro_8IOHandle_2close(struct __pyx_obj_5nitro_IOHand
   return __pyx_r;
 }
 
-/* "nitro.pyx":343
+/* "nitro.pyx":348
  *         io.nitf_IOHandle_close(self._c_io)
  * 
  *     def __enter__(self):             # <<<<<<<<<<<<<<
@@ -10823,7 +10962,7 @@ static PyObject *__pyx_pf_5nitro_8IOHandle_4__enter__(struct __pyx_obj_5nitro_IO
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__enter__", 0);
 
-  /* "nitro.pyx":344
+  /* "nitro.pyx":349
  * 
  *     def __enter__(self):
  *         return self             # <<<<<<<<<<<<<<
@@ -10835,7 +10974,7 @@ static PyObject *__pyx_pf_5nitro_8IOHandle_4__enter__(struct __pyx_obj_5nitro_IO
   __pyx_r = ((PyObject *)__pyx_v_self);
   goto __pyx_L0;
 
-  /* "nitro.pyx":343
+  /* "nitro.pyx":348
  *         io.nitf_IOHandle_close(self._c_io)
  * 
  *     def __enter__(self):             # <<<<<<<<<<<<<<
@@ -10850,7 +10989,7 @@ static PyObject *__pyx_pf_5nitro_8IOHandle_4__enter__(struct __pyx_obj_5nitro_IO
   return __pyx_r;
 }
 
-/* "nitro.pyx":346
+/* "nitro.pyx":351
  *         return self
  * 
  *     def __exit__(self, exc_type, exc_val, exc_tb):             # <<<<<<<<<<<<<<
@@ -10892,17 +11031,17 @@ static PyObject *__pyx_pw_5nitro_8IOHandle_7__exit__(PyObject *__pyx_v_self, PyO
         case  1:
         if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_exc_val)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__exit__", 1, 3, 3, 1); __PYX_ERR(0, 346, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__exit__", 1, 3, 3, 1); __PYX_ERR(0, 351, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_exc_tb)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__exit__", 1, 3, 3, 2); __PYX_ERR(0, 346, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__exit__", 1, 3, 3, 2); __PYX_ERR(0, 351, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__exit__") < 0)) __PYX_ERR(0, 346, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__exit__") < 0)) __PYX_ERR(0, 351, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
       goto __pyx_L5_argtuple_error;
@@ -10917,7 +11056,7 @@ static PyObject *__pyx_pw_5nitro_8IOHandle_7__exit__(PyObject *__pyx_v_self, PyO
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__exit__", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 346, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__exit__", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 351, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("nitro.IOHandle.__exit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -10938,14 +11077,14 @@ static PyObject *__pyx_pf_5nitro_8IOHandle_6__exit__(struct __pyx_obj_5nitro_IOH
   PyObject *__pyx_t_3 = NULL;
   __Pyx_RefNannySetupContext("__exit__", 0);
 
-  /* "nitro.pyx":347
+  /* "nitro.pyx":352
  * 
  *     def __exit__(self, exc_type, exc_val, exc_tb):
  *         self.close()             # <<<<<<<<<<<<<<
  * 
  * 
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_close); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 347, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_close); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 352, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_3 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
@@ -10958,16 +11097,16 @@ static PyObject *__pyx_pf_5nitro_8IOHandle_6__exit__(struct __pyx_obj_5nitro_IOH
     }
   }
   if (__pyx_t_3) {
-    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 347, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 352, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   } else {
-    __pyx_t_1 = __Pyx_PyObject_CallNoArg(__pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 347, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_CallNoArg(__pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 352, __pyx_L1_error)
   }
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "nitro.pyx":346
+  /* "nitro.pyx":351
  *         return self
  * 
  *     def __exit__(self, exc_type, exc_val, exc_tb):             # <<<<<<<<<<<<<<
@@ -11097,7 +11236,7 @@ static PyObject *__pyx_pf_5nitro_8IOHandle_10__setstate_cython__(CYTHON_UNUSED s
   return __pyx_r;
 }
 
-/* "nitro.pyx":351
+/* "nitro.pyx":356
  * 
  * cdef class SegmentFileSource(SegmentSource):
  *     def __cinit__(self, IOHandle handle, start=0, byte_skip=0):             # <<<<<<<<<<<<<<
@@ -11151,7 +11290,7 @@ static int __pyx_pw_5nitro_17SegmentFileSource_1__cinit__(PyObject *__pyx_v_self
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(0, 351, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(0, 356, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -11170,13 +11309,13 @@ static int __pyx_pw_5nitro_17SegmentFileSource_1__cinit__(PyObject *__pyx_v_self
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__cinit__", 0, 1, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 351, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__cinit__", 0, 1, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 356, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("nitro.SegmentFileSource.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return -1;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_handle), __pyx_ptype_5nitro_IOHandle, 1, "handle", 0))) __PYX_ERR(0, 351, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_handle), __pyx_ptype_5nitro_IOHandle, 1, "handle", 0))) __PYX_ERR(0, 356, __pyx_L1_error)
   __pyx_r = __pyx_pf_5nitro_17SegmentFileSource___cinit__(((struct __pyx_obj_5nitro_SegmentFileSource *)__pyx_v_self), __pyx_v_handle, __pyx_v_start, __pyx_v_byte_skip);
 
   /* function exit code */
@@ -11202,17 +11341,17 @@ static int __pyx_pf_5nitro_17SegmentFileSource___cinit__(struct __pyx_obj_5nitro
   PyObject *__pyx_t_8 = NULL;
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "nitro.pyx":354
+  /* "nitro.pyx":359
  *         cdef nitf_Error error
  *         self._c_source = <image_source.nitf_DataSource*>segment_source.nitf_SegmentFileSource_construct(
  *             handle._c_io, start, byte_skip, &error)             # <<<<<<<<<<<<<<
  *         if self._c_source is NULL:
  *             raise NitfError(error)
  */
-  __pyx_t_1 = __Pyx_PyInt_As_int64_t(__pyx_v_start); if (unlikely((__pyx_t_1 == ((nitf_Off)-1)) && PyErr_Occurred())) __PYX_ERR(0, 354, __pyx_L1_error)
-  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_v_byte_skip); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 354, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_As_int64_t(__pyx_v_start); if (unlikely((__pyx_t_1 == ((nitf_Off)-1)) && PyErr_Occurred())) __PYX_ERR(0, 359, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_v_byte_skip); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 359, __pyx_L1_error)
 
-  /* "nitro.pyx":353
+  /* "nitro.pyx":358
  *     def __cinit__(self, IOHandle handle, start=0, byte_skip=0):
  *         cdef nitf_Error error
  *         self._c_source = <image_source.nitf_DataSource*>segment_source.nitf_SegmentFileSource_construct(             # <<<<<<<<<<<<<<
@@ -11221,7 +11360,7 @@ static int __pyx_pf_5nitro_17SegmentFileSource___cinit__(struct __pyx_obj_5nitro
  */
   __pyx_v_self->__pyx_base.__pyx_base._c_source = ((nitf_DataSource *)nitf_SegmentFileSource_construct(__pyx_v_handle->_c_io, __pyx_t_1, __pyx_t_2, (&__pyx_v_error)));
 
-  /* "nitro.pyx":355
+  /* "nitro.pyx":360
  *         self._c_source = <image_source.nitf_DataSource*>segment_source.nitf_SegmentFileSource_construct(
  *             handle._c_io, start, byte_skip, &error)
  *         if self._c_source is NULL:             # <<<<<<<<<<<<<<
@@ -11231,16 +11370,16 @@ static int __pyx_pf_5nitro_17SegmentFileSource___cinit__(struct __pyx_obj_5nitro
   __pyx_t_3 = ((__pyx_v_self->__pyx_base.__pyx_base._c_source == NULL) != 0);
   if (__pyx_t_3) {
 
-    /* "nitro.pyx":356
+    /* "nitro.pyx":361
  *             handle._c_io, start, byte_skip, &error)
  *         if self._c_source is NULL:
  *             raise NitfError(error)             # <<<<<<<<<<<<<<
  * 
  * 
  */
-    __pyx_t_5 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 356, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 361, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_6 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 356, __pyx_L1_error)
+    __pyx_t_6 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 361, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     __pyx_t_7 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_5))) {
@@ -11253,14 +11392,14 @@ static int __pyx_pf_5nitro_17SegmentFileSource___cinit__(struct __pyx_obj_5nitro
       }
     }
     if (!__pyx_t_7) {
-      __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_6); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 356, __pyx_L1_error)
+      __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_6); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 361, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       __Pyx_GOTREF(__pyx_t_4);
     } else {
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_5)) {
         PyObject *__pyx_temp[2] = {__pyx_t_7, __pyx_t_6};
-        __pyx_t_4 = __Pyx_PyFunction_FastCall(__pyx_t_5, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 356, __pyx_L1_error)
+        __pyx_t_4 = __Pyx_PyFunction_FastCall(__pyx_t_5, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 361, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
         __Pyx_GOTREF(__pyx_t_4);
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
@@ -11269,20 +11408,20 @@ static int __pyx_pf_5nitro_17SegmentFileSource___cinit__(struct __pyx_obj_5nitro
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_5)) {
         PyObject *__pyx_temp[2] = {__pyx_t_7, __pyx_t_6};
-        __pyx_t_4 = __Pyx_PyCFunction_FastCall(__pyx_t_5, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 356, __pyx_L1_error)
+        __pyx_t_4 = __Pyx_PyCFunction_FastCall(__pyx_t_5, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 361, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
         __Pyx_GOTREF(__pyx_t_4);
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       } else
       #endif
       {
-        __pyx_t_8 = PyTuple_New(1+1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 356, __pyx_L1_error)
+        __pyx_t_8 = PyTuple_New(1+1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 361, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_8);
         __Pyx_GIVEREF(__pyx_t_7); PyTuple_SET_ITEM(__pyx_t_8, 0, __pyx_t_7); __pyx_t_7 = NULL;
         __Pyx_GIVEREF(__pyx_t_6);
         PyTuple_SET_ITEM(__pyx_t_8, 0+1, __pyx_t_6);
         __pyx_t_6 = 0;
-        __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_8, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 356, __pyx_L1_error)
+        __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_8, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 361, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
       }
@@ -11290,9 +11429,9 @@ static int __pyx_pf_5nitro_17SegmentFileSource___cinit__(struct __pyx_obj_5nitro
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     __Pyx_Raise(__pyx_t_4, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __PYX_ERR(0, 356, __pyx_L1_error)
+    __PYX_ERR(0, 361, __pyx_L1_error)
 
-    /* "nitro.pyx":355
+    /* "nitro.pyx":360
  *         self._c_source = <image_source.nitf_DataSource*>segment_source.nitf_SegmentFileSource_construct(
  *             handle._c_io, start, byte_skip, &error)
  *         if self._c_source is NULL:             # <<<<<<<<<<<<<<
@@ -11301,7 +11440,7 @@ static int __pyx_pf_5nitro_17SegmentFileSource___cinit__(struct __pyx_obj_5nitro
  */
   }
 
-  /* "nitro.pyx":351
+  /* "nitro.pyx":356
  * 
  * cdef class SegmentFileSource(SegmentSource):
  *     def __cinit__(self, IOHandle handle, start=0, byte_skip=0):             # <<<<<<<<<<<<<<
@@ -11432,7 +11571,7 @@ static PyObject *__pyx_pf_5nitro_17SegmentFileSource_4__setstate_cython__(CYTHON
   return __pyx_r;
 }
 
-/* "nitro.pyx":364
+/* "nitro.pyx":369
  *     cpdef IOHandle _iohandle
  * 
  *     def __cinit__(self, Record rcrd=None, IOHandle iohandle=None):             # <<<<<<<<<<<<<<
@@ -11479,7 +11618,7 @@ static int __pyx_pw_5nitro_6Writer_1__cinit__(PyObject *__pyx_v_self, PyObject *
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(0, 364, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(0, 369, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -11496,14 +11635,14 @@ static int __pyx_pw_5nitro_6Writer_1__cinit__(PyObject *__pyx_v_self, PyObject *
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__cinit__", 0, 0, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 364, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__cinit__", 0, 0, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 369, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("nitro.Writer.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return -1;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_rcrd), __pyx_ptype_5nitro_Record, 1, "rcrd", 0))) __PYX_ERR(0, 364, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_iohandle), __pyx_ptype_5nitro_IOHandle, 1, "iohandle", 0))) __PYX_ERR(0, 364, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_rcrd), __pyx_ptype_5nitro_Record, 1, "rcrd", 0))) __PYX_ERR(0, 369, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_iohandle), __pyx_ptype_5nitro_IOHandle, 1, "iohandle", 0))) __PYX_ERR(0, 369, __pyx_L1_error)
   __pyx_r = __pyx_pf_5nitro_6Writer___cinit__(((struct __pyx_obj_5nitro_Writer *)__pyx_v_self), __pyx_v_rcrd, __pyx_v_iohandle);
 
   /* function exit code */
@@ -11527,7 +11666,7 @@ static int __pyx_pf_5nitro_6Writer___cinit__(struct __pyx_obj_5nitro_Writer *__p
   PyObject *__pyx_t_6 = NULL;
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "nitro.pyx":367
+  /* "nitro.pyx":372
  *         cdef nitf_Error error
  * 
  *         self._c_writer = io.nitf_Writer_construct(&error)             # <<<<<<<<<<<<<<
@@ -11536,7 +11675,7 @@ static int __pyx_pf_5nitro_6Writer___cinit__(struct __pyx_obj_5nitro_Writer *__p
  */
   __pyx_v_self->_c_writer = nitf_Writer_construct((&__pyx_v_error));
 
-  /* "nitro.pyx":368
+  /* "nitro.pyx":373
  * 
  *         self._c_writer = io.nitf_Writer_construct(&error)
  *         if self._c_writer is NULL:             # <<<<<<<<<<<<<<
@@ -11546,16 +11685,16 @@ static int __pyx_pf_5nitro_6Writer___cinit__(struct __pyx_obj_5nitro_Writer *__p
   __pyx_t_1 = ((__pyx_v_self->_c_writer == NULL) != 0);
   if (__pyx_t_1) {
 
-    /* "nitro.pyx":369
+    /* "nitro.pyx":374
  *         self._c_writer = io.nitf_Writer_construct(&error)
  *         if self._c_writer is NULL:
  *             raise NitfError(error)             # <<<<<<<<<<<<<<
  * 
  *         self._rcrd = rcrd
  */
-    __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 369, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 374, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_4 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 369, __pyx_L1_error)
+    __pyx_t_4 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 374, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __pyx_t_5 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
@@ -11568,14 +11707,14 @@ static int __pyx_pf_5nitro_6Writer___cinit__(struct __pyx_obj_5nitro_Writer *__p
       }
     }
     if (!__pyx_t_5) {
-      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 369, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 374, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       __Pyx_GOTREF(__pyx_t_2);
     } else {
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_3)) {
         PyObject *__pyx_temp[2] = {__pyx_t_5, __pyx_t_4};
-        __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 369, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 374, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
@@ -11584,20 +11723,20 @@ static int __pyx_pf_5nitro_6Writer___cinit__(struct __pyx_obj_5nitro_Writer *__p
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
         PyObject *__pyx_temp[2] = {__pyx_t_5, __pyx_t_4};
-        __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 369, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 374, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       } else
       #endif
       {
-        __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 369, __pyx_L1_error)
+        __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 374, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_6);
         __Pyx_GIVEREF(__pyx_t_5); PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_5); __pyx_t_5 = NULL;
         __Pyx_GIVEREF(__pyx_t_4);
         PyTuple_SET_ITEM(__pyx_t_6, 0+1, __pyx_t_4);
         __pyx_t_4 = 0;
-        __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_6, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 369, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_6, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 374, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       }
@@ -11605,9 +11744,9 @@ static int __pyx_pf_5nitro_6Writer___cinit__(struct __pyx_obj_5nitro_Writer *__p
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_Raise(__pyx_t_2, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __PYX_ERR(0, 369, __pyx_L1_error)
+    __PYX_ERR(0, 374, __pyx_L1_error)
 
-    /* "nitro.pyx":368
+    /* "nitro.pyx":373
  * 
  *         self._c_writer = io.nitf_Writer_construct(&error)
  *         if self._c_writer is NULL:             # <<<<<<<<<<<<<<
@@ -11616,7 +11755,7 @@ static int __pyx_pf_5nitro_6Writer___cinit__(struct __pyx_obj_5nitro_Writer *__p
  */
   }
 
-  /* "nitro.pyx":371
+  /* "nitro.pyx":376
  *             raise NitfError(error)
  * 
  *         self._rcrd = rcrd             # <<<<<<<<<<<<<<
@@ -11629,7 +11768,7 @@ static int __pyx_pf_5nitro_6Writer___cinit__(struct __pyx_obj_5nitro_Writer *__p
   __Pyx_DECREF(((PyObject *)__pyx_v_self->_rcrd));
   __pyx_v_self->_rcrd = __pyx_v_rcrd;
 
-  /* "nitro.pyx":372
+  /* "nitro.pyx":377
  * 
  *         self._rcrd = rcrd
  *         self._iohandle = iohandle             # <<<<<<<<<<<<<<
@@ -11642,7 +11781,7 @@ static int __pyx_pf_5nitro_6Writer___cinit__(struct __pyx_obj_5nitro_Writer *__p
   __Pyx_DECREF(((PyObject *)__pyx_v_self->_iohandle));
   __pyx_v_self->_iohandle = __pyx_v_iohandle;
 
-  /* "nitro.pyx":364
+  /* "nitro.pyx":369
  *     cpdef IOHandle _iohandle
  * 
  *     def __cinit__(self, Record rcrd=None, IOHandle iohandle=None):             # <<<<<<<<<<<<<<
@@ -11666,7 +11805,7 @@ static int __pyx_pf_5nitro_6Writer___cinit__(struct __pyx_obj_5nitro_Writer *__p
   return __pyx_r;
 }
 
-/* "nitro.pyx":374
+/* "nitro.pyx":379
  *         self._iohandle = iohandle
  * 
  *     def __enter__(self):             # <<<<<<<<<<<<<<
@@ -11700,7 +11839,7 @@ static PyObject *__pyx_pf_5nitro_6Writer_2__enter__(struct __pyx_obj_5nitro_Writ
   PyObject *__pyx_t_8 = NULL;
   __Pyx_RefNannySetupContext("__enter__", 0);
 
-  /* "nitro.pyx":375
+  /* "nitro.pyx":380
  * 
  *     def __enter__(self):
  *         if self._rcrd is None or self._iohandle is None:             # <<<<<<<<<<<<<<
@@ -11720,20 +11859,20 @@ static PyObject *__pyx_pf_5nitro_6Writer_2__enter__(struct __pyx_obj_5nitro_Writ
   __pyx_L4_bool_binop_done:;
   if (__pyx_t_1) {
 
-    /* "nitro.pyx":376
+    /* "nitro.pyx":381
  *     def __enter__(self):
  *         if self._rcrd is None or self._iohandle is None:
  *             raise ValueError("Must construct with a record and iohandle to use Writer as a context manager")             # <<<<<<<<<<<<<<
  *         self.prepare(self._rcrd, self._iohandle)
  *         return self
  */
-    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__28, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 376, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__28, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 381, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_Raise(__pyx_t_4, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __PYX_ERR(0, 376, __pyx_L1_error)
+    __PYX_ERR(0, 381, __pyx_L1_error)
 
-    /* "nitro.pyx":375
+    /* "nitro.pyx":380
  * 
  *     def __enter__(self):
  *         if self._rcrd is None or self._iohandle is None:             # <<<<<<<<<<<<<<
@@ -11742,14 +11881,14 @@ static PyObject *__pyx_pf_5nitro_6Writer_2__enter__(struct __pyx_obj_5nitro_Writ
  */
   }
 
-  /* "nitro.pyx":377
+  /* "nitro.pyx":382
  *         if self._rcrd is None or self._iohandle is None:
  *             raise ValueError("Must construct with a record and iohandle to use Writer as a context manager")
  *         self.prepare(self._rcrd, self._iohandle)             # <<<<<<<<<<<<<<
  *         return self
  * 
  */
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_prepare); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 377, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_prepare); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 382, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __pyx_t_6 = NULL;
   __pyx_t_7 = 0;
@@ -11766,7 +11905,7 @@ static PyObject *__pyx_pf_5nitro_6Writer_2__enter__(struct __pyx_obj_5nitro_Writ
   #if CYTHON_FAST_PYCALL
   if (PyFunction_Check(__pyx_t_5)) {
     PyObject *__pyx_temp[3] = {__pyx_t_6, ((PyObject *)__pyx_v_self->_rcrd), ((PyObject *)__pyx_v_self->_iohandle)};
-    __pyx_t_4 = __Pyx_PyFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_7, 2+__pyx_t_7); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 377, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_7, 2+__pyx_t_7); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 382, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
     __Pyx_GOTREF(__pyx_t_4);
   } else
@@ -11774,13 +11913,13 @@ static PyObject *__pyx_pf_5nitro_6Writer_2__enter__(struct __pyx_obj_5nitro_Writ
   #if CYTHON_FAST_PYCCALL
   if (__Pyx_PyFastCFunction_Check(__pyx_t_5)) {
     PyObject *__pyx_temp[3] = {__pyx_t_6, ((PyObject *)__pyx_v_self->_rcrd), ((PyObject *)__pyx_v_self->_iohandle)};
-    __pyx_t_4 = __Pyx_PyCFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_7, 2+__pyx_t_7); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 377, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyCFunction_FastCall(__pyx_t_5, __pyx_temp+1-__pyx_t_7, 2+__pyx_t_7); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 382, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
     __Pyx_GOTREF(__pyx_t_4);
   } else
   #endif
   {
-    __pyx_t_8 = PyTuple_New(2+__pyx_t_7); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 377, __pyx_L1_error)
+    __pyx_t_8 = PyTuple_New(2+__pyx_t_7); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 382, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_8);
     if (__pyx_t_6) {
       __Pyx_GIVEREF(__pyx_t_6); PyTuple_SET_ITEM(__pyx_t_8, 0, __pyx_t_6); __pyx_t_6 = NULL;
@@ -11791,14 +11930,14 @@ static PyObject *__pyx_pf_5nitro_6Writer_2__enter__(struct __pyx_obj_5nitro_Writ
     __Pyx_INCREF(((PyObject *)__pyx_v_self->_iohandle));
     __Pyx_GIVEREF(((PyObject *)__pyx_v_self->_iohandle));
     PyTuple_SET_ITEM(__pyx_t_8, 1+__pyx_t_7, ((PyObject *)__pyx_v_self->_iohandle));
-    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_8, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 377, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_8, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 382, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
   }
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "nitro.pyx":378
+  /* "nitro.pyx":383
  *             raise ValueError("Must construct with a record and iohandle to use Writer as a context manager")
  *         self.prepare(self._rcrd, self._iohandle)
  *         return self             # <<<<<<<<<<<<<<
@@ -11810,7 +11949,7 @@ static PyObject *__pyx_pf_5nitro_6Writer_2__enter__(struct __pyx_obj_5nitro_Writ
   __pyx_r = ((PyObject *)__pyx_v_self);
   goto __pyx_L0;
 
-  /* "nitro.pyx":374
+  /* "nitro.pyx":379
  *         self._iohandle = iohandle
  * 
  *     def __enter__(self):             # <<<<<<<<<<<<<<
@@ -11832,7 +11971,7 @@ static PyObject *__pyx_pf_5nitro_6Writer_2__enter__(struct __pyx_obj_5nitro_Writ
   return __pyx_r;
 }
 
-/* "nitro.pyx":380
+/* "nitro.pyx":385
  *         return self
  * 
  *     def __exit__(self, exc_type, exc_val, exc_tb):             # <<<<<<<<<<<<<<
@@ -11874,17 +12013,17 @@ static PyObject *__pyx_pw_5nitro_6Writer_5__exit__(PyObject *__pyx_v_self, PyObj
         case  1:
         if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_exc_val)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__exit__", 1, 3, 3, 1); __PYX_ERR(0, 380, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__exit__", 1, 3, 3, 1); __PYX_ERR(0, 385, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_exc_tb)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__exit__", 1, 3, 3, 2); __PYX_ERR(0, 380, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__exit__", 1, 3, 3, 2); __PYX_ERR(0, 385, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__exit__") < 0)) __PYX_ERR(0, 380, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__exit__") < 0)) __PYX_ERR(0, 385, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
       goto __pyx_L5_argtuple_error;
@@ -11899,7 +12038,7 @@ static PyObject *__pyx_pw_5nitro_6Writer_5__exit__(PyObject *__pyx_v_self, PyObj
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__exit__", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 380, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__exit__", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 385, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("nitro.Writer.__exit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -11923,7 +12062,7 @@ static PyObject *__pyx_pf_5nitro_6Writer_4__exit__(struct __pyx_obj_5nitro_Write
   PyObject *__pyx_t_6 = NULL;
   __Pyx_RefNannySetupContext("__exit__", 0);
 
-  /* "nitro.pyx":381
+  /* "nitro.pyx":386
  * 
  *     def __exit__(self, exc_type, exc_val, exc_tb):
  *         if exc_val is None and self._rcrd is not None and self._iohandle is not None:             # <<<<<<<<<<<<<<
@@ -11950,14 +12089,14 @@ static PyObject *__pyx_pf_5nitro_6Writer_4__exit__(struct __pyx_obj_5nitro_Write
   __pyx_L4_bool_binop_done:;
   if (__pyx_t_1) {
 
-    /* "nitro.pyx":383
+    /* "nitro.pyx":388
  *         if exc_val is None and self._rcrd is not None and self._iohandle is not None:
  *             # automatically write() when used as a context manager
  *             self.write()             # <<<<<<<<<<<<<<
  * 
  *     def __dealloc__(self):
  */
-    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_write); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 383, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_write); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 388, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __pyx_t_6 = NULL;
     if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_5))) {
@@ -11970,16 +12109,16 @@ static PyObject *__pyx_pf_5nitro_6Writer_4__exit__(struct __pyx_obj_5nitro_Write
       }
     }
     if (__pyx_t_6) {
-      __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_6); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 383, __pyx_L1_error)
+      __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_6); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 388, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     } else {
-      __pyx_t_4 = __Pyx_PyObject_CallNoArg(__pyx_t_5); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 383, __pyx_L1_error)
+      __pyx_t_4 = __Pyx_PyObject_CallNoArg(__pyx_t_5); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 388, __pyx_L1_error)
     }
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-    /* "nitro.pyx":381
+    /* "nitro.pyx":386
  * 
  *     def __exit__(self, exc_type, exc_val, exc_tb):
  *         if exc_val is None and self._rcrd is not None and self._iohandle is not None:             # <<<<<<<<<<<<<<
@@ -11988,7 +12127,7 @@ static PyObject *__pyx_pf_5nitro_6Writer_4__exit__(struct __pyx_obj_5nitro_Write
  */
   }
 
-  /* "nitro.pyx":380
+  /* "nitro.pyx":385
  *         return self
  * 
  *     def __exit__(self, exc_type, exc_val, exc_tb):             # <<<<<<<<<<<<<<
@@ -12011,7 +12150,7 @@ static PyObject *__pyx_pf_5nitro_6Writer_4__exit__(struct __pyx_obj_5nitro_Write
   return __pyx_r;
 }
 
-/* "nitro.pyx":385
+/* "nitro.pyx":390
  *             self.write()
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -12035,7 +12174,7 @@ static void __pyx_pf_5nitro_6Writer_6__dealloc__(struct __pyx_obj_5nitro_Writer 
   int __pyx_t_1;
   __Pyx_RefNannySetupContext("__dealloc__", 0);
 
-  /* "nitro.pyx":386
+  /* "nitro.pyx":391
  * 
  *     def __dealloc__(self):
  *         if self._c_writer is not NULL:             # <<<<<<<<<<<<<<
@@ -12045,7 +12184,7 @@ static void __pyx_pf_5nitro_6Writer_6__dealloc__(struct __pyx_obj_5nitro_Writer 
   __pyx_t_1 = ((__pyx_v_self->_c_writer != NULL) != 0);
   if (__pyx_t_1) {
 
-    /* "nitro.pyx":387
+    /* "nitro.pyx":392
  *     def __dealloc__(self):
  *         if self._c_writer is not NULL:
  *             io.nitf_Writer_destruct(&self._c_writer)             # <<<<<<<<<<<<<<
@@ -12054,7 +12193,7 @@ static void __pyx_pf_5nitro_6Writer_6__dealloc__(struct __pyx_obj_5nitro_Writer 
  */
     nitf_Writer_destruct((&__pyx_v_self->_c_writer));
 
-    /* "nitro.pyx":386
+    /* "nitro.pyx":391
  * 
  *     def __dealloc__(self):
  *         if self._c_writer is not NULL:             # <<<<<<<<<<<<<<
@@ -12063,7 +12202,7 @@ static void __pyx_pf_5nitro_6Writer_6__dealloc__(struct __pyx_obj_5nitro_Writer 
  */
   }
 
-  /* "nitro.pyx":385
+  /* "nitro.pyx":390
  *             self.write()
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -12075,7 +12214,7 @@ static void __pyx_pf_5nitro_6Writer_6__dealloc__(struct __pyx_obj_5nitro_Writer 
   __Pyx_RefNannyFinishContext();
 }
 
-/* "nitro.pyx":389
+/* "nitro.pyx":394
  *             io.nitf_Writer_destruct(&self._c_writer)
  * 
  *     def prepare(self, Record recrd, IOHandle iohandle):             # <<<<<<<<<<<<<<
@@ -12114,11 +12253,11 @@ static PyObject *__pyx_pw_5nitro_6Writer_9prepare(PyObject *__pyx_v_self, PyObje
         case  1:
         if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_iohandle)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("prepare", 1, 2, 2, 1); __PYX_ERR(0, 389, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("prepare", 1, 2, 2, 1); __PYX_ERR(0, 394, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "prepare") < 0)) __PYX_ERR(0, 389, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "prepare") < 0)) __PYX_ERR(0, 394, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -12131,14 +12270,14 @@ static PyObject *__pyx_pw_5nitro_6Writer_9prepare(PyObject *__pyx_v_self, PyObje
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("prepare", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 389, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("prepare", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 394, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("nitro.Writer.prepare", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_recrd), __pyx_ptype_5nitro_Record, 1, "recrd", 0))) __PYX_ERR(0, 389, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_iohandle), __pyx_ptype_5nitro_IOHandle, 1, "iohandle", 0))) __PYX_ERR(0, 389, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_recrd), __pyx_ptype_5nitro_Record, 1, "recrd", 0))) __PYX_ERR(0, 394, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_iohandle), __pyx_ptype_5nitro_IOHandle, 1, "iohandle", 0))) __PYX_ERR(0, 394, __pyx_L1_error)
   __pyx_r = __pyx_pf_5nitro_6Writer_8prepare(((struct __pyx_obj_5nitro_Writer *)__pyx_v_self), __pyx_v_recrd, __pyx_v_iohandle);
 
   /* function exit code */
@@ -12166,7 +12305,7 @@ static PyObject *__pyx_pf_5nitro_6Writer_8prepare(struct __pyx_obj_5nitro_Writer
   PyObject *__pyx_t_8 = NULL;
   __Pyx_RefNannySetupContext("prepare", 0);
 
-  /* "nitro.pyx":391
+  /* "nitro.pyx":396
  *     def prepare(self, Record recrd, IOHandle iohandle):
  *         cdef nitf_Error error
  *         cdef record.nitf_Record* rec=recrd._c_record             # <<<<<<<<<<<<<<
@@ -12176,7 +12315,7 @@ static PyObject *__pyx_pf_5nitro_6Writer_8prepare(struct __pyx_obj_5nitro_Writer
   __pyx_t_1 = __pyx_v_recrd->_c_record;
   __pyx_v_rec = __pyx_t_1;
 
-  /* "nitro.pyx":392
+  /* "nitro.pyx":397
  *         cdef nitf_Error error
  *         cdef record.nitf_Record* rec=recrd._c_record
  *         cdef io.nitf_IOHandle hndl=iohandle._c_io             # <<<<<<<<<<<<<<
@@ -12186,7 +12325,7 @@ static PyObject *__pyx_pf_5nitro_6Writer_8prepare(struct __pyx_obj_5nitro_Writer
   __pyx_t_2 = __pyx_v_iohandle->_c_io;
   __pyx_v_hndl = __pyx_t_2;
 
-  /* "nitro.pyx":394
+  /* "nitro.pyx":399
  *         cdef io.nitf_IOHandle hndl=iohandle._c_io
  * 
  *         if not io.nitf_Writer_prepare(self._c_writer, rec, hndl, &error):             # <<<<<<<<<<<<<<
@@ -12196,16 +12335,16 @@ static PyObject *__pyx_pf_5nitro_6Writer_8prepare(struct __pyx_obj_5nitro_Writer
   __pyx_t_3 = ((!(nitf_Writer_prepare(__pyx_v_self->_c_writer, __pyx_v_rec, __pyx_v_hndl, (&__pyx_v_error)) != 0)) != 0);
   if (__pyx_t_3) {
 
-    /* "nitro.pyx":395
+    /* "nitro.pyx":400
  * 
  *         if not io.nitf_Writer_prepare(self._c_writer, rec, hndl, &error):
  *             raise NitfError(error)             # <<<<<<<<<<<<<<
  *         return True
  * 
  */
-    __pyx_t_5 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 395, __pyx_L1_error)
+    __pyx_t_5 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 400, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_6 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 395, __pyx_L1_error)
+    __pyx_t_6 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 400, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     __pyx_t_7 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_5))) {
@@ -12218,14 +12357,14 @@ static PyObject *__pyx_pf_5nitro_6Writer_8prepare(struct __pyx_obj_5nitro_Writer
       }
     }
     if (!__pyx_t_7) {
-      __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_6); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 395, __pyx_L1_error)
+      __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_6); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 400, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       __Pyx_GOTREF(__pyx_t_4);
     } else {
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_5)) {
         PyObject *__pyx_temp[2] = {__pyx_t_7, __pyx_t_6};
-        __pyx_t_4 = __Pyx_PyFunction_FastCall(__pyx_t_5, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 395, __pyx_L1_error)
+        __pyx_t_4 = __Pyx_PyFunction_FastCall(__pyx_t_5, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 400, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
         __Pyx_GOTREF(__pyx_t_4);
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
@@ -12234,20 +12373,20 @@ static PyObject *__pyx_pf_5nitro_6Writer_8prepare(struct __pyx_obj_5nitro_Writer
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_5)) {
         PyObject *__pyx_temp[2] = {__pyx_t_7, __pyx_t_6};
-        __pyx_t_4 = __Pyx_PyCFunction_FastCall(__pyx_t_5, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 395, __pyx_L1_error)
+        __pyx_t_4 = __Pyx_PyCFunction_FastCall(__pyx_t_5, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 400, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
         __Pyx_GOTREF(__pyx_t_4);
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       } else
       #endif
       {
-        __pyx_t_8 = PyTuple_New(1+1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 395, __pyx_L1_error)
+        __pyx_t_8 = PyTuple_New(1+1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 400, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_8);
         __Pyx_GIVEREF(__pyx_t_7); PyTuple_SET_ITEM(__pyx_t_8, 0, __pyx_t_7); __pyx_t_7 = NULL;
         __Pyx_GIVEREF(__pyx_t_6);
         PyTuple_SET_ITEM(__pyx_t_8, 0+1, __pyx_t_6);
         __pyx_t_6 = 0;
-        __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_8, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 395, __pyx_L1_error)
+        __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_8, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 400, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
       }
@@ -12255,9 +12394,9 @@ static PyObject *__pyx_pf_5nitro_6Writer_8prepare(struct __pyx_obj_5nitro_Writer
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     __Pyx_Raise(__pyx_t_4, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-    __PYX_ERR(0, 395, __pyx_L1_error)
+    __PYX_ERR(0, 400, __pyx_L1_error)
 
-    /* "nitro.pyx":394
+    /* "nitro.pyx":399
  *         cdef io.nitf_IOHandle hndl=iohandle._c_io
  * 
  *         if not io.nitf_Writer_prepare(self._c_writer, rec, hndl, &error):             # <<<<<<<<<<<<<<
@@ -12266,7 +12405,7 @@ static PyObject *__pyx_pf_5nitro_6Writer_8prepare(struct __pyx_obj_5nitro_Writer
  */
   }
 
-  /* "nitro.pyx":396
+  /* "nitro.pyx":401
  *         if not io.nitf_Writer_prepare(self._c_writer, rec, hndl, &error):
  *             raise NitfError(error)
  *         return True             # <<<<<<<<<<<<<<
@@ -12278,7 +12417,7 @@ static PyObject *__pyx_pf_5nitro_6Writer_8prepare(struct __pyx_obj_5nitro_Writer
   __pyx_r = Py_True;
   goto __pyx_L0;
 
-  /* "nitro.pyx":389
+  /* "nitro.pyx":394
  *             io.nitf_Writer_destruct(&self._c_writer)
  * 
  *     def prepare(self, Record recrd, IOHandle iohandle):             # <<<<<<<<<<<<<<
@@ -12301,7 +12440,7 @@ static PyObject *__pyx_pf_5nitro_6Writer_8prepare(struct __pyx_obj_5nitro_Writer
   return __pyx_r;
 }
 
-/* "nitro.pyx":398
+/* "nitro.pyx":403
  *         return True
  * 
  *     def write(self):             # <<<<<<<<<<<<<<
@@ -12334,7 +12473,7 @@ static PyObject *__pyx_pf_5nitro_6Writer_10write(struct __pyx_obj_5nitro_Writer 
   PyObject *__pyx_t_6 = NULL;
   __Pyx_RefNannySetupContext("write", 0);
 
-  /* "nitro.pyx":401
+  /* "nitro.pyx":406
  *         cdef nitf_Error error
  * 
  *         if not io.nitf_Writer_write(self._c_writer, &error):             # <<<<<<<<<<<<<<
@@ -12344,16 +12483,16 @@ static PyObject *__pyx_pf_5nitro_6Writer_10write(struct __pyx_obj_5nitro_Writer 
   __pyx_t_1 = ((!(nitf_Writer_write(__pyx_v_self->_c_writer, (&__pyx_v_error)) != 0)) != 0);
   if (__pyx_t_1) {
 
-    /* "nitro.pyx":402
+    /* "nitro.pyx":407
  * 
  *         if not io.nitf_Writer_write(self._c_writer, &error):
  *             raise NitfError(error)             # <<<<<<<<<<<<<<
  * 
  *     def new_image_writer(self, index):
  */
-    __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 402, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 407, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_4 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 402, __pyx_L1_error)
+    __pyx_t_4 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 407, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __pyx_t_5 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
@@ -12366,14 +12505,14 @@ static PyObject *__pyx_pf_5nitro_6Writer_10write(struct __pyx_obj_5nitro_Writer 
       }
     }
     if (!__pyx_t_5) {
-      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 402, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 407, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       __Pyx_GOTREF(__pyx_t_2);
     } else {
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_3)) {
         PyObject *__pyx_temp[2] = {__pyx_t_5, __pyx_t_4};
-        __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 402, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 407, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
@@ -12382,20 +12521,20 @@ static PyObject *__pyx_pf_5nitro_6Writer_10write(struct __pyx_obj_5nitro_Writer 
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
         PyObject *__pyx_temp[2] = {__pyx_t_5, __pyx_t_4};
-        __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 402, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 407, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       } else
       #endif
       {
-        __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 402, __pyx_L1_error)
+        __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 407, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_6);
         __Pyx_GIVEREF(__pyx_t_5); PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_5); __pyx_t_5 = NULL;
         __Pyx_GIVEREF(__pyx_t_4);
         PyTuple_SET_ITEM(__pyx_t_6, 0+1, __pyx_t_4);
         __pyx_t_4 = 0;
-        __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_6, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 402, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_6, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 407, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       }
@@ -12403,9 +12542,9 @@ static PyObject *__pyx_pf_5nitro_6Writer_10write(struct __pyx_obj_5nitro_Writer 
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_Raise(__pyx_t_2, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __PYX_ERR(0, 402, __pyx_L1_error)
+    __PYX_ERR(0, 407, __pyx_L1_error)
 
-    /* "nitro.pyx":401
+    /* "nitro.pyx":406
  *         cdef nitf_Error error
  * 
  *         if not io.nitf_Writer_write(self._c_writer, &error):             # <<<<<<<<<<<<<<
@@ -12414,7 +12553,7 @@ static PyObject *__pyx_pf_5nitro_6Writer_10write(struct __pyx_obj_5nitro_Writer 
  */
   }
 
-  /* "nitro.pyx":398
+  /* "nitro.pyx":403
  *         return True
  * 
  *     def write(self):             # <<<<<<<<<<<<<<
@@ -12439,7 +12578,7 @@ static PyObject *__pyx_pf_5nitro_6Writer_10write(struct __pyx_obj_5nitro_Writer 
   return __pyx_r;
 }
 
-/* "nitro.pyx":404
+/* "nitro.pyx":409
  *             raise NitfError(error)
  * 
  *     def new_image_writer(self, index):             # <<<<<<<<<<<<<<
@@ -12474,17 +12613,17 @@ static PyObject *__pyx_pf_5nitro_6Writer_12new_image_writer(struct __pyx_obj_5ni
   PyObject *__pyx_t_7 = NULL;
   __Pyx_RefNannySetupContext("new_image_writer", 0);
 
-  /* "nitro.pyx":408
+  /* "nitro.pyx":413
  *         cdef io.nitf_ImageWriter* iw
  * 
  *         iw = io.nitf_Writer_newImageWriter(self._c_writer, index, NULL, &error)             # <<<<<<<<<<<<<<
  *         if iw is NULL:
  *             raise NitfError(error)
  */
-  __pyx_t_1 = __Pyx_PyInt_As_int(__pyx_v_index); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 408, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_As_int(__pyx_v_index); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 413, __pyx_L1_error)
   __pyx_v_iw = nitf_Writer_newImageWriter(__pyx_v_self->_c_writer, __pyx_t_1, NULL, (&__pyx_v_error));
 
-  /* "nitro.pyx":409
+  /* "nitro.pyx":414
  * 
  *         iw = io.nitf_Writer_newImageWriter(self._c_writer, index, NULL, &error)
  *         if iw is NULL:             # <<<<<<<<<<<<<<
@@ -12494,16 +12633,16 @@ static PyObject *__pyx_pf_5nitro_6Writer_12new_image_writer(struct __pyx_obj_5ni
   __pyx_t_2 = ((__pyx_v_iw == NULL) != 0);
   if (__pyx_t_2) {
 
-    /* "nitro.pyx":410
+    /* "nitro.pyx":415
  *         iw = io.nitf_Writer_newImageWriter(self._c_writer, index, NULL, &error)
  *         if iw is NULL:
  *             raise NitfError(error)             # <<<<<<<<<<<<<<
  *         return ImageWriter.from_ptr(iw)
  * 
  */
-    __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 410, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 415, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_5 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 410, __pyx_L1_error)
+    __pyx_t_5 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 415, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __pyx_t_6 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_4))) {
@@ -12516,14 +12655,14 @@ static PyObject *__pyx_pf_5nitro_6Writer_12new_image_writer(struct __pyx_obj_5ni
       }
     }
     if (!__pyx_t_6) {
-      __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 410, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 415, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       __Pyx_GOTREF(__pyx_t_3);
     } else {
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_4)) {
         PyObject *__pyx_temp[2] = {__pyx_t_6, __pyx_t_5};
-        __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 410, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 415, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
@@ -12532,20 +12671,20 @@ static PyObject *__pyx_pf_5nitro_6Writer_12new_image_writer(struct __pyx_obj_5ni
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_4)) {
         PyObject *__pyx_temp[2] = {__pyx_t_6, __pyx_t_5};
-        __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 410, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 415, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       } else
       #endif
       {
-        __pyx_t_7 = PyTuple_New(1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 410, __pyx_L1_error)
+        __pyx_t_7 = PyTuple_New(1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 415, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_GIVEREF(__pyx_t_6); PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_6); __pyx_t_6 = NULL;
         __Pyx_GIVEREF(__pyx_t_5);
         PyTuple_SET_ITEM(__pyx_t_7, 0+1, __pyx_t_5);
         __pyx_t_5 = 0;
-        __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_7, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 410, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_7, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 415, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       }
@@ -12553,9 +12692,9 @@ static PyObject *__pyx_pf_5nitro_6Writer_12new_image_writer(struct __pyx_obj_5ni
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __PYX_ERR(0, 410, __pyx_L1_error)
+    __PYX_ERR(0, 415, __pyx_L1_error)
 
-    /* "nitro.pyx":409
+    /* "nitro.pyx":414
  * 
  *         iw = io.nitf_Writer_newImageWriter(self._c_writer, index, NULL, &error)
  *         if iw is NULL:             # <<<<<<<<<<<<<<
@@ -12564,7 +12703,7 @@ static PyObject *__pyx_pf_5nitro_6Writer_12new_image_writer(struct __pyx_obj_5ni
  */
   }
 
-  /* "nitro.pyx":411
+  /* "nitro.pyx":416
  *         if iw is NULL:
  *             raise NitfError(error)
  *         return ImageWriter.from_ptr(iw)             # <<<<<<<<<<<<<<
@@ -12572,13 +12711,13 @@ static PyObject *__pyx_pf_5nitro_6Writer_12new_image_writer(struct __pyx_obj_5ni
  *     def new_data_extension_writer(self, index):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_3 = __pyx_f_5nitro_11ImageWriter_from_ptr(__pyx_v_iw); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 411, __pyx_L1_error)
+  __pyx_t_3 = __pyx_f_5nitro_11ImageWriter_from_ptr(__pyx_v_iw); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 416, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_r = __pyx_t_3;
   __pyx_t_3 = 0;
   goto __pyx_L0;
 
-  /* "nitro.pyx":404
+  /* "nitro.pyx":409
  *             raise NitfError(error)
  * 
  *     def new_image_writer(self, index):             # <<<<<<<<<<<<<<
@@ -12601,7 +12740,7 @@ static PyObject *__pyx_pf_5nitro_6Writer_12new_image_writer(struct __pyx_obj_5ni
   return __pyx_r;
 }
 
-/* "nitro.pyx":413
+/* "nitro.pyx":418
  *         return ImageWriter.from_ptr(iw)
  * 
  *     def new_data_extension_writer(self, index):             # <<<<<<<<<<<<<<
@@ -12636,17 +12775,17 @@ static PyObject *__pyx_pf_5nitro_6Writer_14new_data_extension_writer(struct __py
   PyObject *__pyx_t_7 = NULL;
   __Pyx_RefNannySetupContext("new_data_extension_writer", 0);
 
-  /* "nitro.pyx":417
+  /* "nitro.pyx":422
  *         cdef io.nitf_SegmentWriter* sw
  * 
  *         sw = io.nitf_Writer_newDEWriter(self._c_writer, index, &error)             # <<<<<<<<<<<<<<
  *         if sw is NULL:
  *             raise NitfError(error)
  */
-  __pyx_t_1 = __Pyx_PyInt_As_int(__pyx_v_index); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 417, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_As_int(__pyx_v_index); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 422, __pyx_L1_error)
   __pyx_v_sw = nitf_Writer_newDEWriter(__pyx_v_self->_c_writer, __pyx_t_1, (&__pyx_v_error));
 
-  /* "nitro.pyx":418
+  /* "nitro.pyx":423
  * 
  *         sw = io.nitf_Writer_newDEWriter(self._c_writer, index, &error)
  *         if sw is NULL:             # <<<<<<<<<<<<<<
@@ -12656,16 +12795,16 @@ static PyObject *__pyx_pf_5nitro_6Writer_14new_data_extension_writer(struct __py
   __pyx_t_2 = ((__pyx_v_sw == NULL) != 0);
   if (__pyx_t_2) {
 
-    /* "nitro.pyx":419
+    /* "nitro.pyx":424
  *         sw = io.nitf_Writer_newDEWriter(self._c_writer, index, &error)
  *         if sw is NULL:
  *             raise NitfError(error)             # <<<<<<<<<<<<<<
  *         return SegmentWriter.from_ptr(sw)
  * 
  */
-    __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 419, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 424, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_5 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 419, __pyx_L1_error)
+    __pyx_t_5 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 424, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __pyx_t_6 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_4))) {
@@ -12678,14 +12817,14 @@ static PyObject *__pyx_pf_5nitro_6Writer_14new_data_extension_writer(struct __py
       }
     }
     if (!__pyx_t_6) {
-      __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 419, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 424, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       __Pyx_GOTREF(__pyx_t_3);
     } else {
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_4)) {
         PyObject *__pyx_temp[2] = {__pyx_t_6, __pyx_t_5};
-        __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 419, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 424, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
@@ -12694,20 +12833,20 @@ static PyObject *__pyx_pf_5nitro_6Writer_14new_data_extension_writer(struct __py
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_4)) {
         PyObject *__pyx_temp[2] = {__pyx_t_6, __pyx_t_5};
-        __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 419, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 424, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       } else
       #endif
       {
-        __pyx_t_7 = PyTuple_New(1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 419, __pyx_L1_error)
+        __pyx_t_7 = PyTuple_New(1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 424, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_GIVEREF(__pyx_t_6); PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_6); __pyx_t_6 = NULL;
         __Pyx_GIVEREF(__pyx_t_5);
         PyTuple_SET_ITEM(__pyx_t_7, 0+1, __pyx_t_5);
         __pyx_t_5 = 0;
-        __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_7, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 419, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_7, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 424, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       }
@@ -12715,9 +12854,9 @@ static PyObject *__pyx_pf_5nitro_6Writer_14new_data_extension_writer(struct __py
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __PYX_ERR(0, 419, __pyx_L1_error)
+    __PYX_ERR(0, 424, __pyx_L1_error)
 
-    /* "nitro.pyx":418
+    /* "nitro.pyx":423
  * 
  *         sw = io.nitf_Writer_newDEWriter(self._c_writer, index, &error)
  *         if sw is NULL:             # <<<<<<<<<<<<<<
@@ -12726,7 +12865,7 @@ static PyObject *__pyx_pf_5nitro_6Writer_14new_data_extension_writer(struct __py
  */
   }
 
-  /* "nitro.pyx":420
+  /* "nitro.pyx":425
  *         if sw is NULL:
  *             raise NitfError(error)
  *         return SegmentWriter.from_ptr(sw)             # <<<<<<<<<<<<<<
@@ -12734,13 +12873,13 @@ static PyObject *__pyx_pf_5nitro_6Writer_14new_data_extension_writer(struct __py
  *     def new_text_writer(self, index):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_3 = __pyx_f_5nitro_13SegmentWriter_from_ptr(__pyx_v_sw); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 420, __pyx_L1_error)
+  __pyx_t_3 = __pyx_f_5nitro_13SegmentWriter_from_ptr(__pyx_v_sw); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 425, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_r = __pyx_t_3;
   __pyx_t_3 = 0;
   goto __pyx_L0;
 
-  /* "nitro.pyx":413
+  /* "nitro.pyx":418
  *         return ImageWriter.from_ptr(iw)
  * 
  *     def new_data_extension_writer(self, index):             # <<<<<<<<<<<<<<
@@ -12763,7 +12902,7 @@ static PyObject *__pyx_pf_5nitro_6Writer_14new_data_extension_writer(struct __py
   return __pyx_r;
 }
 
-/* "nitro.pyx":422
+/* "nitro.pyx":427
  *         return SegmentWriter.from_ptr(sw)
  * 
  *     def new_text_writer(self, index):             # <<<<<<<<<<<<<<
@@ -12798,17 +12937,17 @@ static PyObject *__pyx_pf_5nitro_6Writer_16new_text_writer(struct __pyx_obj_5nit
   PyObject *__pyx_t_7 = NULL;
   __Pyx_RefNannySetupContext("new_text_writer", 0);
 
-  /* "nitro.pyx":426
+  /* "nitro.pyx":431
  *         cdef io.nitf_SegmentWriter* sw
  * 
  *         sw = io.nitf_Writer_newTextWriter(self._c_writer, index, &error)             # <<<<<<<<<<<<<<
  *         if sw is NULL:
  *             raise NitfError(error)
  */
-  __pyx_t_1 = __Pyx_PyInt_As_int(__pyx_v_index); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 426, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_As_int(__pyx_v_index); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 431, __pyx_L1_error)
   __pyx_v_sw = nitf_Writer_newTextWriter(__pyx_v_self->_c_writer, __pyx_t_1, (&__pyx_v_error));
 
-  /* "nitro.pyx":427
+  /* "nitro.pyx":432
  * 
  *         sw = io.nitf_Writer_newTextWriter(self._c_writer, index, &error)
  *         if sw is NULL:             # <<<<<<<<<<<<<<
@@ -12818,16 +12957,16 @@ static PyObject *__pyx_pf_5nitro_6Writer_16new_text_writer(struct __pyx_obj_5nit
   __pyx_t_2 = ((__pyx_v_sw == NULL) != 0);
   if (__pyx_t_2) {
 
-    /* "nitro.pyx":428
+    /* "nitro.pyx":433
  *         sw = io.nitf_Writer_newTextWriter(self._c_writer, index, &error)
  *         if sw is NULL:
  *             raise NitfError(error)             # <<<<<<<<<<<<<<
  *         return SegmentWriter.from_ptr(sw)
  * 
  */
-    __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 428, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 433, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_5 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 428, __pyx_L1_error)
+    __pyx_t_5 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 433, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __pyx_t_6 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_4))) {
@@ -12840,14 +12979,14 @@ static PyObject *__pyx_pf_5nitro_6Writer_16new_text_writer(struct __pyx_obj_5nit
       }
     }
     if (!__pyx_t_6) {
-      __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 428, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 433, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       __Pyx_GOTREF(__pyx_t_3);
     } else {
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_4)) {
         PyObject *__pyx_temp[2] = {__pyx_t_6, __pyx_t_5};
-        __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 428, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 433, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
@@ -12856,20 +12995,20 @@ static PyObject *__pyx_pf_5nitro_6Writer_16new_text_writer(struct __pyx_obj_5nit
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_4)) {
         PyObject *__pyx_temp[2] = {__pyx_t_6, __pyx_t_5};
-        __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 428, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 433, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       } else
       #endif
       {
-        __pyx_t_7 = PyTuple_New(1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 428, __pyx_L1_error)
+        __pyx_t_7 = PyTuple_New(1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 433, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_GIVEREF(__pyx_t_6); PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_6); __pyx_t_6 = NULL;
         __Pyx_GIVEREF(__pyx_t_5);
         PyTuple_SET_ITEM(__pyx_t_7, 0+1, __pyx_t_5);
         __pyx_t_5 = 0;
-        __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_7, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 428, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_7, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 433, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       }
@@ -12877,9 +13016,9 @@ static PyObject *__pyx_pf_5nitro_6Writer_16new_text_writer(struct __pyx_obj_5nit
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __PYX_ERR(0, 428, __pyx_L1_error)
+    __PYX_ERR(0, 433, __pyx_L1_error)
 
-    /* "nitro.pyx":427
+    /* "nitro.pyx":432
  * 
  *         sw = io.nitf_Writer_newTextWriter(self._c_writer, index, &error)
  *         if sw is NULL:             # <<<<<<<<<<<<<<
@@ -12888,7 +13027,7 @@ static PyObject *__pyx_pf_5nitro_6Writer_16new_text_writer(struct __pyx_obj_5nit
  */
   }
 
-  /* "nitro.pyx":429
+  /* "nitro.pyx":434
  *         if sw is NULL:
  *             raise NitfError(error)
  *         return SegmentWriter.from_ptr(sw)             # <<<<<<<<<<<<<<
@@ -12896,13 +13035,13 @@ static PyObject *__pyx_pf_5nitro_6Writer_16new_text_writer(struct __pyx_obj_5nit
  *     @deprecated("Old SWIG API")
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_3 = __pyx_f_5nitro_13SegmentWriter_from_ptr(__pyx_v_sw); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 429, __pyx_L1_error)
+  __pyx_t_3 = __pyx_f_5nitro_13SegmentWriter_from_ptr(__pyx_v_sw); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 434, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_r = __pyx_t_3;
   __pyx_t_3 = 0;
   goto __pyx_L0;
 
-  /* "nitro.pyx":422
+  /* "nitro.pyx":427
  *         return SegmentWriter.from_ptr(sw)
  * 
  *     def new_text_writer(self, index):             # <<<<<<<<<<<<<<
@@ -12925,7 +13064,7 @@ static PyObject *__pyx_pf_5nitro_6Writer_16new_text_writer(struct __pyx_obj_5nit
   return __pyx_r;
 }
 
-/* "nitro.pyx":432
+/* "nitro.pyx":437
  * 
  *     @deprecated("Old SWIG API")
  *     def newImageWriter(self, index):             # <<<<<<<<<<<<<<
@@ -12955,7 +13094,7 @@ static PyObject *__pyx_pf_5nitro_6Writer_18newImageWriter(struct __pyx_obj_5nitr
   PyObject *__pyx_t_4 = NULL;
   __Pyx_RefNannySetupContext("newImageWriter", 0);
 
-  /* "nitro.pyx":433
+  /* "nitro.pyx":438
  *     @deprecated("Old SWIG API")
  *     def newImageWriter(self, index):
  *         return self.new_image_writer(index)             # <<<<<<<<<<<<<<
@@ -12963,7 +13102,7 @@ static PyObject *__pyx_pf_5nitro_6Writer_18newImageWriter(struct __pyx_obj_5nitr
  *     @deprecated("Old SWIG API")
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_new_image_writer); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 433, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_new_image_writer); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 438, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_3 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
@@ -12976,13 +13115,13 @@ static PyObject *__pyx_pf_5nitro_6Writer_18newImageWriter(struct __pyx_obj_5nitr
     }
   }
   if (!__pyx_t_3) {
-    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_v_index); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 433, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_v_index); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 438, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
   } else {
     #if CYTHON_FAST_PYCALL
     if (PyFunction_Check(__pyx_t_2)) {
       PyObject *__pyx_temp[2] = {__pyx_t_3, __pyx_v_index};
-      __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 433, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 438, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
       __Pyx_GOTREF(__pyx_t_1);
     } else
@@ -12990,19 +13129,19 @@ static PyObject *__pyx_pf_5nitro_6Writer_18newImageWriter(struct __pyx_obj_5nitr
     #if CYTHON_FAST_PYCCALL
     if (__Pyx_PyFastCFunction_Check(__pyx_t_2)) {
       PyObject *__pyx_temp[2] = {__pyx_t_3, __pyx_v_index};
-      __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 433, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 438, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
       __Pyx_GOTREF(__pyx_t_1);
     } else
     #endif
     {
-      __pyx_t_4 = PyTuple_New(1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 433, __pyx_L1_error)
+      __pyx_t_4 = PyTuple_New(1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 438, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_GIVEREF(__pyx_t_3); PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_3); __pyx_t_3 = NULL;
       __Pyx_INCREF(__pyx_v_index);
       __Pyx_GIVEREF(__pyx_v_index);
       PyTuple_SET_ITEM(__pyx_t_4, 0+1, __pyx_v_index);
-      __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_4, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 433, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_4, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 438, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     }
@@ -13012,7 +13151,7 @@ static PyObject *__pyx_pf_5nitro_6Writer_18newImageWriter(struct __pyx_obj_5nitr
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "nitro.pyx":432
+  /* "nitro.pyx":437
  * 
  *     @deprecated("Old SWIG API")
  *     def newImageWriter(self, index):             # <<<<<<<<<<<<<<
@@ -13034,7 +13173,7 @@ static PyObject *__pyx_pf_5nitro_6Writer_18newImageWriter(struct __pyx_obj_5nitr
   return __pyx_r;
 }
 
-/* "nitro.pyx":436
+/* "nitro.pyx":441
  * 
  *     @deprecated("Old SWIG API")
  *     def newDEWriter(self, index):             # <<<<<<<<<<<<<<
@@ -13064,7 +13203,7 @@ static PyObject *__pyx_pf_5nitro_6Writer_20newDEWriter(struct __pyx_obj_5nitro_W
   PyObject *__pyx_t_4 = NULL;
   __Pyx_RefNannySetupContext("newDEWriter", 0);
 
-  /* "nitro.pyx":437
+  /* "nitro.pyx":442
  *     @deprecated("Old SWIG API")
  *     def newDEWriter(self, index):
  *         return self.new_data_extension_writer(index)             # <<<<<<<<<<<<<<
@@ -13072,7 +13211,7 @@ static PyObject *__pyx_pf_5nitro_6Writer_20newDEWriter(struct __pyx_obj_5nitro_W
  * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_new_data_extension_writer); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 437, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_new_data_extension_writer); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 442, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_3 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
@@ -13085,13 +13224,13 @@ static PyObject *__pyx_pf_5nitro_6Writer_20newDEWriter(struct __pyx_obj_5nitro_W
     }
   }
   if (!__pyx_t_3) {
-    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_v_index); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 437, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_v_index); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 442, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
   } else {
     #if CYTHON_FAST_PYCALL
     if (PyFunction_Check(__pyx_t_2)) {
       PyObject *__pyx_temp[2] = {__pyx_t_3, __pyx_v_index};
-      __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 437, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 442, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
       __Pyx_GOTREF(__pyx_t_1);
     } else
@@ -13099,19 +13238,19 @@ static PyObject *__pyx_pf_5nitro_6Writer_20newDEWriter(struct __pyx_obj_5nitro_W
     #if CYTHON_FAST_PYCCALL
     if (__Pyx_PyFastCFunction_Check(__pyx_t_2)) {
       PyObject *__pyx_temp[2] = {__pyx_t_3, __pyx_v_index};
-      __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 437, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 442, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
       __Pyx_GOTREF(__pyx_t_1);
     } else
     #endif
     {
-      __pyx_t_4 = PyTuple_New(1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 437, __pyx_L1_error)
+      __pyx_t_4 = PyTuple_New(1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 442, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_GIVEREF(__pyx_t_3); PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_3); __pyx_t_3 = NULL;
       __Pyx_INCREF(__pyx_v_index);
       __Pyx_GIVEREF(__pyx_v_index);
       PyTuple_SET_ITEM(__pyx_t_4, 0+1, __pyx_v_index);
-      __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_4, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 437, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_4, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 442, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     }
@@ -13121,7 +13260,7 @@ static PyObject *__pyx_pf_5nitro_6Writer_20newDEWriter(struct __pyx_obj_5nitro_W
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "nitro.pyx":436
+  /* "nitro.pyx":441
  * 
  *     @deprecated("Old SWIG API")
  *     def newDEWriter(self, index):             # <<<<<<<<<<<<<<
@@ -13250,7 +13389,7 @@ static PyObject *__pyx_pf_5nitro_6Writer_24__setstate_cython__(CYTHON_UNUSED str
   return __pyx_r;
 }
 
-/* "nitro.pyx":445
+/* "nitro.pyx":450
  *     cpdef IOHandle _iohandle
  * 
  *     def __cinit__(self, iohandle=None):             # <<<<<<<<<<<<<<
@@ -13287,7 +13426,7 @@ static int __pyx_pw_5nitro_6Reader_1__cinit__(PyObject *__pyx_v_self, PyObject *
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(0, 445, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(0, 450, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -13301,7 +13440,7 @@ static int __pyx_pw_5nitro_6Reader_1__cinit__(PyObject *__pyx_v_self, PyObject *
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__cinit__", 0, 0, 1, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 445, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__cinit__", 0, 0, 1, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 450, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("nitro.Reader.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -13326,7 +13465,7 @@ static int __pyx_pf_5nitro_6Reader___cinit__(struct __pyx_obj_5nitro_Reader *__p
   PyObject *__pyx_t_6 = NULL;
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "nitro.pyx":447
+  /* "nitro.pyx":452
  *     def __cinit__(self, iohandle=None):
  *         cdef nitf_Error error
  *         self._c_reader = io.nitf_Reader_construct(&error)             # <<<<<<<<<<<<<<
@@ -13335,7 +13474,7 @@ static int __pyx_pf_5nitro_6Reader___cinit__(struct __pyx_obj_5nitro_Reader *__p
  */
   __pyx_v_self->_c_reader = nitf_Reader_construct((&__pyx_v_error));
 
-  /* "nitro.pyx":448
+  /* "nitro.pyx":453
  *         cdef nitf_Error error
  *         self._c_reader = io.nitf_Reader_construct(&error)
  *         if self._c_reader is NULL:             # <<<<<<<<<<<<<<
@@ -13345,16 +13484,16 @@ static int __pyx_pf_5nitro_6Reader___cinit__(struct __pyx_obj_5nitro_Reader *__p
   __pyx_t_1 = ((__pyx_v_self->_c_reader == NULL) != 0);
   if (__pyx_t_1) {
 
-    /* "nitro.pyx":449
+    /* "nitro.pyx":454
  *         self._c_reader = io.nitf_Reader_construct(&error)
  *         if self._c_reader is NULL:
  *             raise NitfError(error)             # <<<<<<<<<<<<<<
  *         self._iohandle = iohandle
  * 
  */
-    __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 449, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 454, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_4 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 449, __pyx_L1_error)
+    __pyx_t_4 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 454, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __pyx_t_5 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
@@ -13367,14 +13506,14 @@ static int __pyx_pf_5nitro_6Reader___cinit__(struct __pyx_obj_5nitro_Reader *__p
       }
     }
     if (!__pyx_t_5) {
-      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 449, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 454, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       __Pyx_GOTREF(__pyx_t_2);
     } else {
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_3)) {
         PyObject *__pyx_temp[2] = {__pyx_t_5, __pyx_t_4};
-        __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 449, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 454, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
@@ -13383,20 +13522,20 @@ static int __pyx_pf_5nitro_6Reader___cinit__(struct __pyx_obj_5nitro_Reader *__p
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
         PyObject *__pyx_temp[2] = {__pyx_t_5, __pyx_t_4};
-        __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 449, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 454, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       } else
       #endif
       {
-        __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 449, __pyx_L1_error)
+        __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 454, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_6);
         __Pyx_GIVEREF(__pyx_t_5); PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_5); __pyx_t_5 = NULL;
         __Pyx_GIVEREF(__pyx_t_4);
         PyTuple_SET_ITEM(__pyx_t_6, 0+1, __pyx_t_4);
         __pyx_t_4 = 0;
-        __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_6, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 449, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_6, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 454, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       }
@@ -13404,9 +13543,9 @@ static int __pyx_pf_5nitro_6Reader___cinit__(struct __pyx_obj_5nitro_Reader *__p
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_Raise(__pyx_t_2, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __PYX_ERR(0, 449, __pyx_L1_error)
+    __PYX_ERR(0, 454, __pyx_L1_error)
 
-    /* "nitro.pyx":448
+    /* "nitro.pyx":453
  *         cdef nitf_Error error
  *         self._c_reader = io.nitf_Reader_construct(&error)
  *         if self._c_reader is NULL:             # <<<<<<<<<<<<<<
@@ -13415,14 +13554,14 @@ static int __pyx_pf_5nitro_6Reader___cinit__(struct __pyx_obj_5nitro_Reader *__p
  */
   }
 
-  /* "nitro.pyx":450
+  /* "nitro.pyx":455
  *         if self._c_reader is NULL:
  *             raise NitfError(error)
  *         self._iohandle = iohandle             # <<<<<<<<<<<<<<
  * 
  *     def __dealloc__(self):
  */
-  if (!(likely(((__pyx_v_iohandle) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_iohandle, __pyx_ptype_5nitro_IOHandle))))) __PYX_ERR(0, 450, __pyx_L1_error)
+  if (!(likely(((__pyx_v_iohandle) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_iohandle, __pyx_ptype_5nitro_IOHandle))))) __PYX_ERR(0, 455, __pyx_L1_error)
   __pyx_t_2 = __pyx_v_iohandle;
   __Pyx_INCREF(__pyx_t_2);
   __Pyx_GIVEREF(__pyx_t_2);
@@ -13431,7 +13570,7 @@ static int __pyx_pf_5nitro_6Reader___cinit__(struct __pyx_obj_5nitro_Reader *__p
   __pyx_v_self->_iohandle = ((struct __pyx_obj_5nitro_IOHandle *)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "nitro.pyx":445
+  /* "nitro.pyx":450
  *     cpdef IOHandle _iohandle
  * 
  *     def __cinit__(self, iohandle=None):             # <<<<<<<<<<<<<<
@@ -13455,7 +13594,7 @@ static int __pyx_pf_5nitro_6Reader___cinit__(struct __pyx_obj_5nitro_Reader *__p
   return __pyx_r;
 }
 
-/* "nitro.pyx":452
+/* "nitro.pyx":457
  *         self._iohandle = iohandle
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -13479,7 +13618,7 @@ static void __pyx_pf_5nitro_6Reader_2__dealloc__(struct __pyx_obj_5nitro_Reader 
   int __pyx_t_1;
   __Pyx_RefNannySetupContext("__dealloc__", 0);
 
-  /* "nitro.pyx":453
+  /* "nitro.pyx":458
  * 
  *     def __dealloc__(self):
  *         if self._c_reader is not NULL:             # <<<<<<<<<<<<<<
@@ -13489,7 +13628,7 @@ static void __pyx_pf_5nitro_6Reader_2__dealloc__(struct __pyx_obj_5nitro_Reader 
   __pyx_t_1 = ((__pyx_v_self->_c_reader != NULL) != 0);
   if (__pyx_t_1) {
 
-    /* "nitro.pyx":454
+    /* "nitro.pyx":459
  *     def __dealloc__(self):
  *         if self._c_reader is not NULL:
  *             io.nitf_Reader_destruct(&self._c_reader)             # <<<<<<<<<<<<<<
@@ -13498,7 +13637,7 @@ static void __pyx_pf_5nitro_6Reader_2__dealloc__(struct __pyx_obj_5nitro_Reader 
  */
     nitf_Reader_destruct((&__pyx_v_self->_c_reader));
 
-    /* "nitro.pyx":453
+    /* "nitro.pyx":458
  * 
  *     def __dealloc__(self):
  *         if self._c_reader is not NULL:             # <<<<<<<<<<<<<<
@@ -13507,7 +13646,7 @@ static void __pyx_pf_5nitro_6Reader_2__dealloc__(struct __pyx_obj_5nitro_Reader 
  */
   }
 
-  /* "nitro.pyx":452
+  /* "nitro.pyx":457
  *         self._iohandle = iohandle
  * 
  *     def __dealloc__(self):             # <<<<<<<<<<<<<<
@@ -13519,7 +13658,7 @@ static void __pyx_pf_5nitro_6Reader_2__dealloc__(struct __pyx_obj_5nitro_Reader 
   __Pyx_RefNannyFinishContext();
 }
 
-/* "nitro.pyx":456
+/* "nitro.pyx":461
  *             io.nitf_Reader_destruct(&self._c_reader)
  * 
  *     def __enter__(self):             # <<<<<<<<<<<<<<
@@ -13552,7 +13691,7 @@ static PyObject *__pyx_pf_5nitro_6Reader_4__enter__(struct __pyx_obj_5nitro_Read
   PyObject *__pyx_t_6 = NULL;
   __Pyx_RefNannySetupContext("__enter__", 0);
 
-  /* "nitro.pyx":457
+  /* "nitro.pyx":462
  * 
  *     def __enter__(self):
  *         if self._iohandle is None:             # <<<<<<<<<<<<<<
@@ -13563,20 +13702,20 @@ static PyObject *__pyx_pf_5nitro_6Reader_4__enter__(struct __pyx_obj_5nitro_Read
   __pyx_t_2 = (__pyx_t_1 != 0);
   if (__pyx_t_2) {
 
-    /* "nitro.pyx":458
+    /* "nitro.pyx":463
  *     def __enter__(self):
  *         if self._iohandle is None:
  *             raise ValueError("Must construct with an iohandle to use Reader as a context manager")             # <<<<<<<<<<<<<<
  *         record = self.read(self._iohandle)
  *         return self, record
  */
-    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__31, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 458, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__31, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 463, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __PYX_ERR(0, 458, __pyx_L1_error)
+    __PYX_ERR(0, 463, __pyx_L1_error)
 
-    /* "nitro.pyx":457
+    /* "nitro.pyx":462
  * 
  *     def __enter__(self):
  *         if self._iohandle is None:             # <<<<<<<<<<<<<<
@@ -13585,14 +13724,14 @@ static PyObject *__pyx_pf_5nitro_6Reader_4__enter__(struct __pyx_obj_5nitro_Read
  */
   }
 
-  /* "nitro.pyx":459
+  /* "nitro.pyx":464
  *         if self._iohandle is None:
  *             raise ValueError("Must construct with an iohandle to use Reader as a context manager")
  *         record = self.read(self._iohandle)             # <<<<<<<<<<<<<<
  *         return self, record
  * 
  */
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_read); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 459, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_read); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 464, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __pyx_t_5 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
@@ -13605,13 +13744,13 @@ static PyObject *__pyx_pf_5nitro_6Reader_4__enter__(struct __pyx_obj_5nitro_Read
     }
   }
   if (!__pyx_t_5) {
-    __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_4, ((PyObject *)__pyx_v_self->_iohandle)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 459, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_4, ((PyObject *)__pyx_v_self->_iohandle)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 464, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
   } else {
     #if CYTHON_FAST_PYCALL
     if (PyFunction_Check(__pyx_t_4)) {
       PyObject *__pyx_temp[2] = {__pyx_t_5, ((PyObject *)__pyx_v_self->_iohandle)};
-      __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 459, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 464, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
       __Pyx_GOTREF(__pyx_t_3);
     } else
@@ -13619,19 +13758,19 @@ static PyObject *__pyx_pf_5nitro_6Reader_4__enter__(struct __pyx_obj_5nitro_Read
     #if CYTHON_FAST_PYCCALL
     if (__Pyx_PyFastCFunction_Check(__pyx_t_4)) {
       PyObject *__pyx_temp[2] = {__pyx_t_5, ((PyObject *)__pyx_v_self->_iohandle)};
-      __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 459, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 464, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
       __Pyx_GOTREF(__pyx_t_3);
     } else
     #endif
     {
-      __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 459, __pyx_L1_error)
+      __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 464, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_GIVEREF(__pyx_t_5); PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_5); __pyx_t_5 = NULL;
       __Pyx_INCREF(((PyObject *)__pyx_v_self->_iohandle));
       __Pyx_GIVEREF(((PyObject *)__pyx_v_self->_iohandle));
       PyTuple_SET_ITEM(__pyx_t_6, 0+1, ((PyObject *)__pyx_v_self->_iohandle));
-      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_6, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 459, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_6, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 464, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     }
@@ -13640,7 +13779,7 @@ static PyObject *__pyx_pf_5nitro_6Reader_4__enter__(struct __pyx_obj_5nitro_Read
   __pyx_v_record = __pyx_t_3;
   __pyx_t_3 = 0;
 
-  /* "nitro.pyx":460
+  /* "nitro.pyx":465
  *             raise ValueError("Must construct with an iohandle to use Reader as a context manager")
  *         record = self.read(self._iohandle)
  *         return self, record             # <<<<<<<<<<<<<<
@@ -13648,7 +13787,7 @@ static PyObject *__pyx_pf_5nitro_6Reader_4__enter__(struct __pyx_obj_5nitro_Read
  *     def __exit__(self, exc_type, exc_val, exc_tb):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 460, __pyx_L1_error)
+  __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 465, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_INCREF(((PyObject *)__pyx_v_self));
   __Pyx_GIVEREF(((PyObject *)__pyx_v_self));
@@ -13660,7 +13799,7 @@ static PyObject *__pyx_pf_5nitro_6Reader_4__enter__(struct __pyx_obj_5nitro_Read
   __pyx_t_3 = 0;
   goto __pyx_L0;
 
-  /* "nitro.pyx":456
+  /* "nitro.pyx":461
  *             io.nitf_Reader_destruct(&self._c_reader)
  * 
  *     def __enter__(self):             # <<<<<<<<<<<<<<
@@ -13683,7 +13822,7 @@ static PyObject *__pyx_pf_5nitro_6Reader_4__enter__(struct __pyx_obj_5nitro_Read
   return __pyx_r;
 }
 
-/* "nitro.pyx":462
+/* "nitro.pyx":467
  *         return self, record
  * 
  *     def __exit__(self, exc_type, exc_val, exc_tb):             # <<<<<<<<<<<<<<
@@ -13725,17 +13864,17 @@ static PyObject *__pyx_pw_5nitro_6Reader_7__exit__(PyObject *__pyx_v_self, PyObj
         case  1:
         if (likely((values[1] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_exc_val)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__exit__", 1, 3, 3, 1); __PYX_ERR(0, 462, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__exit__", 1, 3, 3, 1); __PYX_ERR(0, 467, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = PyDict_GetItem(__pyx_kwds, __pyx_n_s_exc_tb)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("__exit__", 1, 3, 3, 2); __PYX_ERR(0, 462, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("__exit__", 1, 3, 3, 2); __PYX_ERR(0, 467, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__exit__") < 0)) __PYX_ERR(0, 462, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__exit__") < 0)) __PYX_ERR(0, 467, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 3) {
       goto __pyx_L5_argtuple_error;
@@ -13750,7 +13889,7 @@ static PyObject *__pyx_pw_5nitro_6Reader_7__exit__(PyObject *__pyx_v_self, PyObj
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__exit__", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 462, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__exit__", 1, 3, 3, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 467, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("nitro.Reader.__exit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -13775,7 +13914,7 @@ static PyObject *__pyx_pf_5nitro_6Reader_6__exit__(CYTHON_UNUSED struct __pyx_ob
   return __pyx_r;
 }
 
-/* "nitro.pyx":465
+/* "nitro.pyx":470
  *         pass
  * 
  *     def read(self, IOHandle iohandle):             # <<<<<<<<<<<<<<
@@ -13789,7 +13928,7 @@ static PyObject *__pyx_pw_5nitro_6Reader_9read(PyObject *__pyx_v_self, PyObject 
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("read (wrapper)", 0);
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_iohandle), __pyx_ptype_5nitro_IOHandle, 1, "iohandle", 0))) __PYX_ERR(0, 465, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_iohandle), __pyx_ptype_5nitro_IOHandle, 1, "iohandle", 0))) __PYX_ERR(0, 470, __pyx_L1_error)
   __pyx_r = __pyx_pf_5nitro_6Reader_8read(((struct __pyx_obj_5nitro_Reader *)__pyx_v_self), ((struct __pyx_obj_5nitro_IOHandle *)__pyx_v_iohandle));
 
   /* function exit code */
@@ -13816,7 +13955,7 @@ static PyObject *__pyx_pf_5nitro_6Reader_8read(struct __pyx_obj_5nitro_Reader *_
   PyObject *__pyx_t_7 = NULL;
   __Pyx_RefNannySetupContext("read", 0);
 
-  /* "nitro.pyx":467
+  /* "nitro.pyx":472
  *     def read(self, IOHandle iohandle):
  *         cdef nitf_Error error
  *         cdef io.nitf_IOHandle hndl = iohandle._c_io             # <<<<<<<<<<<<<<
@@ -13826,7 +13965,7 @@ static PyObject *__pyx_pf_5nitro_6Reader_8read(struct __pyx_obj_5nitro_Reader *_
   __pyx_t_1 = __pyx_v_iohandle->_c_io;
   __pyx_v_hndl = __pyx_t_1;
 
-  /* "nitro.pyx":470
+  /* "nitro.pyx":475
  *         cdef record.nitf_Record* rec
  * 
  *         rec = io.nitf_Reader_read(self._c_reader, hndl, &error)             # <<<<<<<<<<<<<<
@@ -13835,7 +13974,7 @@ static PyObject *__pyx_pf_5nitro_6Reader_8read(struct __pyx_obj_5nitro_Reader *_
  */
   __pyx_v_rec = nitf_Reader_read(__pyx_v_self->_c_reader, __pyx_v_hndl, (&__pyx_v_error));
 
-  /* "nitro.pyx":471
+  /* "nitro.pyx":476
  * 
  *         rec = io.nitf_Reader_read(self._c_reader, hndl, &error)
  *         if rec is NULL:             # <<<<<<<<<<<<<<
@@ -13845,16 +13984,16 @@ static PyObject *__pyx_pf_5nitro_6Reader_8read(struct __pyx_obj_5nitro_Reader *_
   __pyx_t_2 = ((__pyx_v_rec == NULL) != 0);
   if (__pyx_t_2) {
 
-    /* "nitro.pyx":472
+    /* "nitro.pyx":477
  *         rec = io.nitf_Reader_read(self._c_reader, hndl, &error)
  *         if rec is NULL:
  *             raise NitfError(error)             # <<<<<<<<<<<<<<
  *         self._c_reader.ownInput = 0  # TODO: removing this causes a double free()..make sure this is correct behavior
  *         self._record = Record.from_ptr(rec)
  */
-    __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 472, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 477, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_5 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 472, __pyx_L1_error)
+    __pyx_t_5 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 477, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __pyx_t_6 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_4))) {
@@ -13867,14 +14006,14 @@ static PyObject *__pyx_pf_5nitro_6Reader_8read(struct __pyx_obj_5nitro_Reader *_
       }
     }
     if (!__pyx_t_6) {
-      __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 472, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 477, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       __Pyx_GOTREF(__pyx_t_3);
     } else {
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_4)) {
         PyObject *__pyx_temp[2] = {__pyx_t_6, __pyx_t_5};
-        __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 472, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 477, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
@@ -13883,20 +14022,20 @@ static PyObject *__pyx_pf_5nitro_6Reader_8read(struct __pyx_obj_5nitro_Reader *_
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_4)) {
         PyObject *__pyx_temp[2] = {__pyx_t_6, __pyx_t_5};
-        __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 472, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 477, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       } else
       #endif
       {
-        __pyx_t_7 = PyTuple_New(1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 472, __pyx_L1_error)
+        __pyx_t_7 = PyTuple_New(1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 477, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_GIVEREF(__pyx_t_6); PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_6); __pyx_t_6 = NULL;
         __Pyx_GIVEREF(__pyx_t_5);
         PyTuple_SET_ITEM(__pyx_t_7, 0+1, __pyx_t_5);
         __pyx_t_5 = 0;
-        __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_7, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 472, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_7, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 477, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       }
@@ -13904,9 +14043,9 @@ static PyObject *__pyx_pf_5nitro_6Reader_8read(struct __pyx_obj_5nitro_Reader *_
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __PYX_ERR(0, 472, __pyx_L1_error)
+    __PYX_ERR(0, 477, __pyx_L1_error)
 
-    /* "nitro.pyx":471
+    /* "nitro.pyx":476
  * 
  *         rec = io.nitf_Reader_read(self._c_reader, hndl, &error)
  *         if rec is NULL:             # <<<<<<<<<<<<<<
@@ -13915,7 +14054,7 @@ static PyObject *__pyx_pf_5nitro_6Reader_8read(struct __pyx_obj_5nitro_Reader *_
  */
   }
 
-  /* "nitro.pyx":473
+  /* "nitro.pyx":478
  *         if rec is NULL:
  *             raise NitfError(error)
  *         self._c_reader.ownInput = 0  # TODO: removing this causes a double free()..make sure this is correct behavior             # <<<<<<<<<<<<<<
@@ -13924,23 +14063,23 @@ static PyObject *__pyx_pf_5nitro_6Reader_8read(struct __pyx_obj_5nitro_Reader *_
  */
   __pyx_v_self->_c_reader->ownInput = 0;
 
-  /* "nitro.pyx":474
+  /* "nitro.pyx":479
  *             raise NitfError(error)
  *         self._c_reader.ownInput = 0  # TODO: removing this causes a double free()..make sure this is correct behavior
  *         self._record = Record.from_ptr(rec)             # <<<<<<<<<<<<<<
  *         return self._record
  * 
  */
-  __pyx_t_3 = __pyx_f_5nitro_6Record_from_ptr(__pyx_v_rec); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 474, __pyx_L1_error)
+  __pyx_t_3 = __pyx_f_5nitro_6Record_from_ptr(__pyx_v_rec); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 479, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5nitro_Record))))) __PYX_ERR(0, 474, __pyx_L1_error)
+  if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5nitro_Record))))) __PYX_ERR(0, 479, __pyx_L1_error)
   __Pyx_GIVEREF(__pyx_t_3);
   __Pyx_GOTREF(__pyx_v_self->_record);
   __Pyx_DECREF(((PyObject *)__pyx_v_self->_record));
   __pyx_v_self->_record = ((struct __pyx_obj_5nitro_Record *)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "nitro.pyx":475
+  /* "nitro.pyx":480
  *         self._c_reader.ownInput = 0  # TODO: removing this causes a double free()..make sure this is correct behavior
  *         self._record = Record.from_ptr(rec)
  *         return self._record             # <<<<<<<<<<<<<<
@@ -13952,7 +14091,7 @@ static PyObject *__pyx_pf_5nitro_6Reader_8read(struct __pyx_obj_5nitro_Reader *_
   __pyx_r = ((PyObject *)__pyx_v_self->_record);
   goto __pyx_L0;
 
-  /* "nitro.pyx":465
+  /* "nitro.pyx":470
  *         pass
  * 
  *     def read(self, IOHandle iohandle):             # <<<<<<<<<<<<<<
@@ -13975,7 +14114,7 @@ static PyObject *__pyx_pf_5nitro_6Reader_8read(struct __pyx_obj_5nitro_Reader *_
   return __pyx_r;
 }
 
-/* "nitro.pyx":478
+/* "nitro.pyx":483
  * 
  *     @deprecated("Old SWIG API")
  *     def newImageReader(self, num, options=None):             # <<<<<<<<<<<<<<
@@ -14019,7 +14158,7 @@ static PyObject *__pyx_pw_5nitro_6Reader_11newImageReader(PyObject *__pyx_v_self
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "newImageReader") < 0)) __PYX_ERR(0, 478, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "newImageReader") < 0)) __PYX_ERR(0, 483, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -14035,7 +14174,7 @@ static PyObject *__pyx_pw_5nitro_6Reader_11newImageReader(PyObject *__pyx_v_self
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("newImageReader", 0, 1, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 478, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("newImageReader", 0, 1, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 483, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("nitro.Reader.newImageReader", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -14058,7 +14197,7 @@ static PyObject *__pyx_pf_5nitro_6Reader_10newImageReader(struct __pyx_obj_5nitr
   PyObject *__pyx_t_5 = NULL;
   __Pyx_RefNannySetupContext("newImageReader", 0);
 
-  /* "nitro.pyx":479
+  /* "nitro.pyx":484
  *     @deprecated("Old SWIG API")
  *     def newImageReader(self, num, options=None):
  *         return self.new_image_reader(num, options)             # <<<<<<<<<<<<<<
@@ -14066,7 +14205,7 @@ static PyObject *__pyx_pf_5nitro_6Reader_10newImageReader(struct __pyx_obj_5nitr
  *     @deprecated("Old SWIG API")
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_new_image_reader); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 479, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_new_image_reader); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 484, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_3 = NULL;
   __pyx_t_4 = 0;
@@ -14083,7 +14222,7 @@ static PyObject *__pyx_pf_5nitro_6Reader_10newImageReader(struct __pyx_obj_5nitr
   #if CYTHON_FAST_PYCALL
   if (PyFunction_Check(__pyx_t_2)) {
     PyObject *__pyx_temp[3] = {__pyx_t_3, __pyx_v_num, __pyx_v_options};
-    __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_4, 2+__pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 479, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_4, 2+__pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 484, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_GOTREF(__pyx_t_1);
   } else
@@ -14091,13 +14230,13 @@ static PyObject *__pyx_pf_5nitro_6Reader_10newImageReader(struct __pyx_obj_5nitr
   #if CYTHON_FAST_PYCCALL
   if (__Pyx_PyFastCFunction_Check(__pyx_t_2)) {
     PyObject *__pyx_temp[3] = {__pyx_t_3, __pyx_v_num, __pyx_v_options};
-    __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_4, 2+__pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 479, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_4, 2+__pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 484, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_GOTREF(__pyx_t_1);
   } else
   #endif
   {
-    __pyx_t_5 = PyTuple_New(2+__pyx_t_4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 479, __pyx_L1_error)
+    __pyx_t_5 = PyTuple_New(2+__pyx_t_4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 484, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     if (__pyx_t_3) {
       __Pyx_GIVEREF(__pyx_t_3); PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_3); __pyx_t_3 = NULL;
@@ -14108,7 +14247,7 @@ static PyObject *__pyx_pf_5nitro_6Reader_10newImageReader(struct __pyx_obj_5nitr
     __Pyx_INCREF(__pyx_v_options);
     __Pyx_GIVEREF(__pyx_v_options);
     PyTuple_SET_ITEM(__pyx_t_5, 1+__pyx_t_4, __pyx_v_options);
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_5, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 479, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_5, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 484, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   }
@@ -14117,7 +14256,7 @@ static PyObject *__pyx_pf_5nitro_6Reader_10newImageReader(struct __pyx_obj_5nitr
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "nitro.pyx":478
+  /* "nitro.pyx":483
  * 
  *     @deprecated("Old SWIG API")
  *     def newImageReader(self, num, options=None):             # <<<<<<<<<<<<<<
@@ -14139,7 +14278,7 @@ static PyObject *__pyx_pf_5nitro_6Reader_10newImageReader(struct __pyx_obj_5nitr
   return __pyx_r;
 }
 
-/* "nitro.pyx":482
+/* "nitro.pyx":487
  * 
  *     @deprecated("Old SWIG API")
  *     def newDEReader(self, num, options=None):             # <<<<<<<<<<<<<<
@@ -14183,7 +14322,7 @@ static PyObject *__pyx_pw_5nitro_6Reader_13newDEReader(PyObject *__pyx_v_self, P
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "newDEReader") < 0)) __PYX_ERR(0, 482, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "newDEReader") < 0)) __PYX_ERR(0, 487, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -14199,7 +14338,7 @@ static PyObject *__pyx_pw_5nitro_6Reader_13newDEReader(PyObject *__pyx_v_self, P
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("newDEReader", 0, 1, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 482, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("newDEReader", 0, 1, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 487, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("nitro.Reader.newDEReader", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -14222,7 +14361,7 @@ static PyObject *__pyx_pf_5nitro_6Reader_12newDEReader(struct __pyx_obj_5nitro_R
   PyObject *__pyx_t_5 = NULL;
   __Pyx_RefNannySetupContext("newDEReader", 0);
 
-  /* "nitro.pyx":483
+  /* "nitro.pyx":488
  *     @deprecated("Old SWIG API")
  *     def newDEReader(self, num, options=None):
  *         return self.new_data_extension_reader(num, options)             # <<<<<<<<<<<<<<
@@ -14230,7 +14369,7 @@ static PyObject *__pyx_pf_5nitro_6Reader_12newDEReader(struct __pyx_obj_5nitro_R
  *     def new_image_reader(self, num, options=None):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_new_data_extension_reader); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 483, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_new_data_extension_reader); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 488, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_3 = NULL;
   __pyx_t_4 = 0;
@@ -14247,7 +14386,7 @@ static PyObject *__pyx_pf_5nitro_6Reader_12newDEReader(struct __pyx_obj_5nitro_R
   #if CYTHON_FAST_PYCALL
   if (PyFunction_Check(__pyx_t_2)) {
     PyObject *__pyx_temp[3] = {__pyx_t_3, __pyx_v_num, __pyx_v_options};
-    __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_4, 2+__pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 483, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_4, 2+__pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 488, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_GOTREF(__pyx_t_1);
   } else
@@ -14255,13 +14394,13 @@ static PyObject *__pyx_pf_5nitro_6Reader_12newDEReader(struct __pyx_obj_5nitro_R
   #if CYTHON_FAST_PYCCALL
   if (__Pyx_PyFastCFunction_Check(__pyx_t_2)) {
     PyObject *__pyx_temp[3] = {__pyx_t_3, __pyx_v_num, __pyx_v_options};
-    __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_4, 2+__pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 483, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-__pyx_t_4, 2+__pyx_t_4); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 488, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_GOTREF(__pyx_t_1);
   } else
   #endif
   {
-    __pyx_t_5 = PyTuple_New(2+__pyx_t_4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 483, __pyx_L1_error)
+    __pyx_t_5 = PyTuple_New(2+__pyx_t_4); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 488, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     if (__pyx_t_3) {
       __Pyx_GIVEREF(__pyx_t_3); PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_3); __pyx_t_3 = NULL;
@@ -14272,7 +14411,7 @@ static PyObject *__pyx_pf_5nitro_6Reader_12newDEReader(struct __pyx_obj_5nitro_R
     __Pyx_INCREF(__pyx_v_options);
     __Pyx_GIVEREF(__pyx_v_options);
     PyTuple_SET_ITEM(__pyx_t_5, 1+__pyx_t_4, __pyx_v_options);
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_5, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 483, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_5, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 488, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   }
@@ -14281,7 +14420,7 @@ static PyObject *__pyx_pf_5nitro_6Reader_12newDEReader(struct __pyx_obj_5nitro_R
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "nitro.pyx":482
+  /* "nitro.pyx":487
  * 
  *     @deprecated("Old SWIG API")
  *     def newDEReader(self, num, options=None):             # <<<<<<<<<<<<<<
@@ -14303,7 +14442,7 @@ static PyObject *__pyx_pf_5nitro_6Reader_12newDEReader(struct __pyx_obj_5nitro_R
   return __pyx_r;
 }
 
-/* "nitro.pyx":485
+/* "nitro.pyx":490
  *         return self.new_data_extension_reader(num, options)
  * 
  *     def new_image_reader(self, num, options=None):             # <<<<<<<<<<<<<<
@@ -14347,7 +14486,7 @@ static PyObject *__pyx_pw_5nitro_6Reader_15new_image_reader(PyObject *__pyx_v_se
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "new_image_reader") < 0)) __PYX_ERR(0, 485, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "new_image_reader") < 0)) __PYX_ERR(0, 490, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -14363,7 +14502,7 @@ static PyObject *__pyx_pw_5nitro_6Reader_15new_image_reader(PyObject *__pyx_v_se
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("new_image_reader", 0, 1, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 485, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("new_image_reader", 0, 1, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 490, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("nitro.Reader.new_image_reader", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -14392,7 +14531,7 @@ static PyObject *__pyx_pf_5nitro_6Reader_14new_image_reader(struct __pyx_obj_5ni
   PyObject *__pyx_t_8 = NULL;
   __Pyx_RefNannySetupContext("new_image_reader", 0);
 
-  /* "nitro.pyx":488
+  /* "nitro.pyx":493
  *         cdef nitf_Error error
  *         cdef io.nitf_ImageReader* reader
  *         if options is not None:             # <<<<<<<<<<<<<<
@@ -14403,20 +14542,20 @@ static PyObject *__pyx_pf_5nitro_6Reader_14new_image_reader(struct __pyx_obj_5ni
   __pyx_t_2 = (__pyx_t_1 != 0);
   if (__pyx_t_2) {
 
-    /* "nitro.pyx":489
+    /* "nitro.pyx":494
  *         cdef io.nitf_ImageReader* reader
  *         if options is not None:
  *             raise NotImplementedError("Options are not currently implemented")             # <<<<<<<<<<<<<<
  *         nbpp = int(self._record.images[num].subheader.numBitsPerPixel)
  *         reader = io.nitf_Reader_newImageReader(self._c_reader, num, <io.nrt_HashTable*>NULL, &error)
  */
-    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_NotImplementedError, __pyx_tuple__32, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 489, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_NotImplementedError, __pyx_tuple__32, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 494, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __PYX_ERR(0, 489, __pyx_L1_error)
+    __PYX_ERR(0, 494, __pyx_L1_error)
 
-    /* "nitro.pyx":488
+    /* "nitro.pyx":493
  *         cdef nitf_Error error
  *         cdef io.nitf_ImageReader* reader
  *         if options is not None:             # <<<<<<<<<<<<<<
@@ -14425,41 +14564,41 @@ static PyObject *__pyx_pf_5nitro_6Reader_14new_image_reader(struct __pyx_obj_5ni
  */
   }
 
-  /* "nitro.pyx":490
+  /* "nitro.pyx":495
  *         if options is not None:
  *             raise NotImplementedError("Options are not currently implemented")
  *         nbpp = int(self._record.images[num].subheader.numBitsPerPixel)             # <<<<<<<<<<<<<<
  *         reader = io.nitf_Reader_newImageReader(self._c_reader, num, <io.nrt_HashTable*>NULL, &error)
  *         if reader is NULL:
  */
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self->_record), __pyx_n_s_images); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 490, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self->_record), __pyx_n_s_images); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 495, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = PyObject_GetItem(__pyx_t_3, __pyx_v_num); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 490, __pyx_L1_error)
+  __pyx_t_4 = PyObject_GetItem(__pyx_t_3, __pyx_v_num); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 495, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_subheader); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 490, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_subheader); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 495, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_numBitsPerPixel); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 490, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_numBitsPerPixel); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 495, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = __Pyx_PyNumber_Int(__pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 490, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyNumber_Int(__pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 495, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __pyx_v_nbpp = __pyx_t_3;
   __pyx_t_3 = 0;
 
-  /* "nitro.pyx":491
+  /* "nitro.pyx":496
  *             raise NotImplementedError("Options are not currently implemented")
  *         nbpp = int(self._record.images[num].subheader.numBitsPerPixel)
  *         reader = io.nitf_Reader_newImageReader(self._c_reader, num, <io.nrt_HashTable*>NULL, &error)             # <<<<<<<<<<<<<<
  *         if reader is NULL:
  *             raise NitfError(error)
  */
-  __pyx_t_5 = __Pyx_PyInt_As_int(__pyx_v_num); if (unlikely((__pyx_t_5 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 491, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyInt_As_int(__pyx_v_num); if (unlikely((__pyx_t_5 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 496, __pyx_L1_error)
   __pyx_v_reader = nitf_Reader_newImageReader(__pyx_v_self->_c_reader, __pyx_t_5, ((nrt_HashTable *)NULL), (&__pyx_v_error));
 
-  /* "nitro.pyx":492
+  /* "nitro.pyx":497
  *         nbpp = int(self._record.images[num].subheader.numBitsPerPixel)
  *         reader = io.nitf_Reader_newImageReader(self._c_reader, num, <io.nrt_HashTable*>NULL, &error)
  *         if reader is NULL:             # <<<<<<<<<<<<<<
@@ -14469,16 +14608,16 @@ static PyObject *__pyx_pf_5nitro_6Reader_14new_image_reader(struct __pyx_obj_5ni
   __pyx_t_2 = ((__pyx_v_reader == NULL) != 0);
   if (__pyx_t_2) {
 
-    /* "nitro.pyx":493
+    /* "nitro.pyx":498
  *         reader = io.nitf_Reader_newImageReader(self._c_reader, num, <io.nrt_HashTable*>NULL, &error)
  *         if reader is NULL:
  *             raise NitfError(error)             # <<<<<<<<<<<<<<
  *         return ImageReader.from_ptr(reader, nbpp)
  * 
  */
-    __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 493, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 498, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_6 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 493, __pyx_L1_error)
+    __pyx_t_6 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 498, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     __pyx_t_7 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_4))) {
@@ -14491,14 +14630,14 @@ static PyObject *__pyx_pf_5nitro_6Reader_14new_image_reader(struct __pyx_obj_5ni
       }
     }
     if (!__pyx_t_7) {
-      __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_6); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 493, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_6); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 498, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       __Pyx_GOTREF(__pyx_t_3);
     } else {
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_4)) {
         PyObject *__pyx_temp[2] = {__pyx_t_7, __pyx_t_6};
-        __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 493, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 498, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
@@ -14507,20 +14646,20 @@ static PyObject *__pyx_pf_5nitro_6Reader_14new_image_reader(struct __pyx_obj_5ni
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_4)) {
         PyObject *__pyx_temp[2] = {__pyx_t_7, __pyx_t_6};
-        __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 493, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 498, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_7); __pyx_t_7 = 0;
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       } else
       #endif
       {
-        __pyx_t_8 = PyTuple_New(1+1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 493, __pyx_L1_error)
+        __pyx_t_8 = PyTuple_New(1+1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 498, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_8);
         __Pyx_GIVEREF(__pyx_t_7); PyTuple_SET_ITEM(__pyx_t_8, 0, __pyx_t_7); __pyx_t_7 = NULL;
         __Pyx_GIVEREF(__pyx_t_6);
         PyTuple_SET_ITEM(__pyx_t_8, 0+1, __pyx_t_6);
         __pyx_t_6 = 0;
-        __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_8, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 493, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_8, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 498, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
       }
@@ -14528,9 +14667,9 @@ static PyObject *__pyx_pf_5nitro_6Reader_14new_image_reader(struct __pyx_obj_5ni
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __PYX_ERR(0, 493, __pyx_L1_error)
+    __PYX_ERR(0, 498, __pyx_L1_error)
 
-    /* "nitro.pyx":492
+    /* "nitro.pyx":497
  *         nbpp = int(self._record.images[num].subheader.numBitsPerPixel)
  *         reader = io.nitf_Reader_newImageReader(self._c_reader, num, <io.nrt_HashTable*>NULL, &error)
  *         if reader is NULL:             # <<<<<<<<<<<<<<
@@ -14539,7 +14678,7 @@ static PyObject *__pyx_pf_5nitro_6Reader_14new_image_reader(struct __pyx_obj_5ni
  */
   }
 
-  /* "nitro.pyx":494
+  /* "nitro.pyx":499
  *         if reader is NULL:
  *             raise NitfError(error)
  *         return ImageReader.from_ptr(reader, nbpp)             # <<<<<<<<<<<<<<
@@ -14547,14 +14686,14 @@ static PyObject *__pyx_pf_5nitro_6Reader_14new_image_reader(struct __pyx_obj_5ni
  *     def new_data_extension_reader(self, num):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_5 = __Pyx_PyInt_As_int(__pyx_v_nbpp); if (unlikely((__pyx_t_5 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 494, __pyx_L1_error)
-  __pyx_t_3 = __pyx_f_5nitro_11ImageReader_from_ptr(__pyx_v_reader, __pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 494, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyInt_As_int(__pyx_v_nbpp); if (unlikely((__pyx_t_5 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 499, __pyx_L1_error)
+  __pyx_t_3 = __pyx_f_5nitro_11ImageReader_from_ptr(__pyx_v_reader, __pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 499, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_r = __pyx_t_3;
   __pyx_t_3 = 0;
   goto __pyx_L0;
 
-  /* "nitro.pyx":485
+  /* "nitro.pyx":490
  *         return self.new_data_extension_reader(num, options)
  * 
  *     def new_image_reader(self, num, options=None):             # <<<<<<<<<<<<<<
@@ -14578,7 +14717,7 @@ static PyObject *__pyx_pf_5nitro_6Reader_14new_image_reader(struct __pyx_obj_5ni
   return __pyx_r;
 }
 
-/* "nitro.pyx":496
+/* "nitro.pyx":501
  *         return ImageReader.from_ptr(reader, nbpp)
  * 
  *     def new_data_extension_reader(self, num):             # <<<<<<<<<<<<<<
@@ -14613,17 +14752,17 @@ static PyObject *__pyx_pf_5nitro_6Reader_16new_data_extension_reader(struct __py
   PyObject *__pyx_t_7 = NULL;
   __Pyx_RefNannySetupContext("new_data_extension_reader", 0);
 
-  /* "nitro.pyx":499
+  /* "nitro.pyx":504
  *         cdef nitf_Error error
  *         cdef io.nitf_SegmentReader* reader
  *         reader = io.nitf_Reader_newDEReader(self._c_reader, num, &error)             # <<<<<<<<<<<<<<
  *         if reader is NULL:
  *             raise NitfError(error)
  */
-  __pyx_t_1 = __Pyx_PyInt_As_int(__pyx_v_num); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 499, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_As_int(__pyx_v_num); if (unlikely((__pyx_t_1 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 504, __pyx_L1_error)
   __pyx_v_reader = nitf_Reader_newDEReader(__pyx_v_self->_c_reader, __pyx_t_1, (&__pyx_v_error));
 
-  /* "nitro.pyx":500
+  /* "nitro.pyx":505
  *         cdef io.nitf_SegmentReader* reader
  *         reader = io.nitf_Reader_newDEReader(self._c_reader, num, &error)
  *         if reader is NULL:             # <<<<<<<<<<<<<<
@@ -14633,16 +14772,16 @@ static PyObject *__pyx_pf_5nitro_6Reader_16new_data_extension_reader(struct __py
   __pyx_t_2 = ((__pyx_v_reader == NULL) != 0);
   if (__pyx_t_2) {
 
-    /* "nitro.pyx":501
+    /* "nitro.pyx":506
  *         reader = io.nitf_Reader_newDEReader(self._c_reader, num, &error)
  *         if reader is NULL:
  *             raise NitfError(error)             # <<<<<<<<<<<<<<
  *         return SegmentReader.from_ptr(reader)
  * 
  */
-    __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 501, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 506, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_5 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 501, __pyx_L1_error)
+    __pyx_t_5 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 506, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __pyx_t_6 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_4))) {
@@ -14655,14 +14794,14 @@ static PyObject *__pyx_pf_5nitro_6Reader_16new_data_extension_reader(struct __py
       }
     }
     if (!__pyx_t_6) {
-      __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 501, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 506, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       __Pyx_GOTREF(__pyx_t_3);
     } else {
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_4)) {
         PyObject *__pyx_temp[2] = {__pyx_t_6, __pyx_t_5};
-        __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 501, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 506, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
@@ -14671,20 +14810,20 @@ static PyObject *__pyx_pf_5nitro_6Reader_16new_data_extension_reader(struct __py
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_4)) {
         PyObject *__pyx_temp[2] = {__pyx_t_6, __pyx_t_5};
-        __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 501, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 506, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       } else
       #endif
       {
-        __pyx_t_7 = PyTuple_New(1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 501, __pyx_L1_error)
+        __pyx_t_7 = PyTuple_New(1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 506, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_GIVEREF(__pyx_t_6); PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_6); __pyx_t_6 = NULL;
         __Pyx_GIVEREF(__pyx_t_5);
         PyTuple_SET_ITEM(__pyx_t_7, 0+1, __pyx_t_5);
         __pyx_t_5 = 0;
-        __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_7, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 501, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_7, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 506, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       }
@@ -14692,9 +14831,9 @@ static PyObject *__pyx_pf_5nitro_6Reader_16new_data_extension_reader(struct __py
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __PYX_ERR(0, 501, __pyx_L1_error)
+    __PYX_ERR(0, 506, __pyx_L1_error)
 
-    /* "nitro.pyx":500
+    /* "nitro.pyx":505
  *         cdef io.nitf_SegmentReader* reader
  *         reader = io.nitf_Reader_newDEReader(self._c_reader, num, &error)
  *         if reader is NULL:             # <<<<<<<<<<<<<<
@@ -14703,7 +14842,7 @@ static PyObject *__pyx_pf_5nitro_6Reader_16new_data_extension_reader(struct __py
  */
   }
 
-  /* "nitro.pyx":502
+  /* "nitro.pyx":507
  *         if reader is NULL:
  *             raise NitfError(error)
  *         return SegmentReader.from_ptr(reader)             # <<<<<<<<<<<<<<
@@ -14711,13 +14850,13 @@ static PyObject *__pyx_pf_5nitro_6Reader_16new_data_extension_reader(struct __py
  * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_3 = __pyx_f_5nitro_13SegmentReader_from_ptr(__pyx_v_reader); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 502, __pyx_L1_error)
+  __pyx_t_3 = __pyx_f_5nitro_13SegmentReader_from_ptr(__pyx_v_reader); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 507, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_r = __pyx_t_3;
   __pyx_t_3 = 0;
   goto __pyx_L0;
 
-  /* "nitro.pyx":496
+  /* "nitro.pyx":501
  *         return ImageReader.from_ptr(reader, nbpp)
  * 
  *     def new_data_extension_reader(self, num):             # <<<<<<<<<<<<<<
@@ -14847,7 +14986,7 @@ static PyObject *__pyx_pf_5nitro_6Reader_20__setstate_cython__(CYTHON_UNUSED str
   return __pyx_r;
 }
 
-/* "nitro.pyx":508
+/* "nitro.pyx":513
  *     cdef io.nitf_ImageWriter* _c_writer
  * 
  *     def __cinit__(self):             # <<<<<<<<<<<<<<
@@ -14876,7 +15015,7 @@ static int __pyx_pf_5nitro_11ImageWriter___cinit__(struct __pyx_obj_5nitro_Image
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "nitro.pyx":509
+  /* "nitro.pyx":514
  * 
  *     def __cinit__(self):
  *         self._c_writer = NULL             # <<<<<<<<<<<<<<
@@ -14885,7 +15024,7 @@ static int __pyx_pf_5nitro_11ImageWriter___cinit__(struct __pyx_obj_5nitro_Image
  */
   __pyx_v_self->_c_writer = NULL;
 
-  /* "nitro.pyx":508
+  /* "nitro.pyx":513
  *     cdef io.nitf_ImageWriter* _c_writer
  * 
  *     def __cinit__(self):             # <<<<<<<<<<<<<<
@@ -14899,7 +15038,7 @@ static int __pyx_pf_5nitro_11ImageWriter___cinit__(struct __pyx_obj_5nitro_Image
   return __pyx_r;
 }
 
-/* "nitro.pyx":512
+/* "nitro.pyx":517
  * 
  *     @staticmethod
  *     cdef from_ptr(io.nitf_ImageWriter* ptr):             # <<<<<<<<<<<<<<
@@ -14914,19 +15053,19 @@ static PyObject *__pyx_f_5nitro_11ImageWriter_from_ptr(nitf_ImageWriter *__pyx_v
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("from_ptr", 0);
 
-  /* "nitro.pyx":513
+  /* "nitro.pyx":518
  *     @staticmethod
  *     cdef from_ptr(io.nitf_ImageWriter* ptr):
  *         obj = ImageWriter()             # <<<<<<<<<<<<<<
  *         obj._c_writer = ptr
  *         return obj
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_5nitro_ImageWriter), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 513, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_5nitro_ImageWriter), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 518, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_obj = ((struct __pyx_obj_5nitro_ImageWriter *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "nitro.pyx":514
+  /* "nitro.pyx":519
  *     cdef from_ptr(io.nitf_ImageWriter* ptr):
  *         obj = ImageWriter()
  *         obj._c_writer = ptr             # <<<<<<<<<<<<<<
@@ -14935,7 +15074,7 @@ static PyObject *__pyx_f_5nitro_11ImageWriter_from_ptr(nitf_ImageWriter *__pyx_v
  */
   __pyx_v_obj->_c_writer = __pyx_v_ptr;
 
-  /* "nitro.pyx":515
+  /* "nitro.pyx":520
  *         obj = ImageWriter()
  *         obj._c_writer = ptr
  *         return obj             # <<<<<<<<<<<<<<
@@ -14947,7 +15086,7 @@ static PyObject *__pyx_f_5nitro_11ImageWriter_from_ptr(nitf_ImageWriter *__pyx_v
   __pyx_r = ((PyObject *)__pyx_v_obj);
   goto __pyx_L0;
 
-  /* "nitro.pyx":512
+  /* "nitro.pyx":517
  * 
  *     @staticmethod
  *     cdef from_ptr(io.nitf_ImageWriter* ptr):             # <<<<<<<<<<<<<<
@@ -14967,7 +15106,7 @@ static PyObject *__pyx_f_5nitro_11ImageWriter_from_ptr(nitf_ImageWriter *__pyx_v
   return __pyx_r;
 }
 
-/* "nitro.pyx":517
+/* "nitro.pyx":522
  *         return obj
  * 
  *     def set_direct_block_write(self, val):             # <<<<<<<<<<<<<<
@@ -14994,17 +15133,17 @@ static PyObject *__pyx_pf_5nitro_11ImageWriter_2set_direct_block_write(struct __
   int __pyx_t_1;
   __Pyx_RefNannySetupContext("set_direct_block_write", 0);
 
-  /* "nitro.pyx":518
+  /* "nitro.pyx":523
  * 
  *     def set_direct_block_write(self, val):
  *         io.nitf_ImageWriter_setDirectBlockWrite(self._c_writer, int(bool(val)))             # <<<<<<<<<<<<<<
  * 
  *     def set_write_caching(self, val):
  */
-  __pyx_t_1 = __Pyx_PyObject_IsTrue(__pyx_v_val); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 518, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_IsTrue(__pyx_v_val); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 523, __pyx_L1_error)
   nitf_ImageWriter_setDirectBlockWrite(__pyx_v_self->_c_writer, ((int)(!(!__pyx_t_1))));
 
-  /* "nitro.pyx":517
+  /* "nitro.pyx":522
  *         return obj
  * 
  *     def set_direct_block_write(self, val):             # <<<<<<<<<<<<<<
@@ -15024,7 +15163,7 @@ static PyObject *__pyx_pf_5nitro_11ImageWriter_2set_direct_block_write(struct __
   return __pyx_r;
 }
 
-/* "nitro.pyx":520
+/* "nitro.pyx":525
  *         io.nitf_ImageWriter_setDirectBlockWrite(self._c_writer, int(bool(val)))
  * 
  *     def set_write_caching(self, val):             # <<<<<<<<<<<<<<
@@ -15051,17 +15190,17 @@ static PyObject *__pyx_pf_5nitro_11ImageWriter_4set_write_caching(struct __pyx_o
   int __pyx_t_1;
   __Pyx_RefNannySetupContext("set_write_caching", 0);
 
-  /* "nitro.pyx":521
+  /* "nitro.pyx":526
  * 
  *     def set_write_caching(self, val):
  *         io.nitf_ImageWriter_setWriteCaching(self._c_writer, int(bool(val)))             # <<<<<<<<<<<<<<
  * 
  *     def attach_source(self, ImageSource imagesource):
  */
-  __pyx_t_1 = __Pyx_PyObject_IsTrue(__pyx_v_val); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 521, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_IsTrue(__pyx_v_val); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 526, __pyx_L1_error)
   nitf_ImageWriter_setWriteCaching(__pyx_v_self->_c_writer, ((int)(!(!__pyx_t_1))));
 
-  /* "nitro.pyx":520
+  /* "nitro.pyx":525
  *         io.nitf_ImageWriter_setDirectBlockWrite(self._c_writer, int(bool(val)))
  * 
  *     def set_write_caching(self, val):             # <<<<<<<<<<<<<<
@@ -15081,7 +15220,7 @@ static PyObject *__pyx_pf_5nitro_11ImageWriter_4set_write_caching(struct __pyx_o
   return __pyx_r;
 }
 
-/* "nitro.pyx":523
+/* "nitro.pyx":528
  *         io.nitf_ImageWriter_setWriteCaching(self._c_writer, int(bool(val)))
  * 
  *     def attach_source(self, ImageSource imagesource):             # <<<<<<<<<<<<<<
@@ -15095,7 +15234,7 @@ static PyObject *__pyx_pw_5nitro_11ImageWriter_7attach_source(PyObject *__pyx_v_
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("attach_source (wrapper)", 0);
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_imagesource), __pyx_ptype_5nitro_ImageSource, 1, "imagesource", 0))) __PYX_ERR(0, 523, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_imagesource), __pyx_ptype_5nitro_ImageSource, 1, "imagesource", 0))) __PYX_ERR(0, 528, __pyx_L1_error)
   __pyx_r = __pyx_pf_5nitro_11ImageWriter_6attach_source(((struct __pyx_obj_5nitro_ImageWriter *)__pyx_v_self), ((struct __pyx_obj_5nitro_ImageSource *)__pyx_v_imagesource));
 
   /* function exit code */
@@ -15121,7 +15260,7 @@ static PyObject *__pyx_pf_5nitro_11ImageWriter_6attach_source(struct __pyx_obj_5
   PyObject *__pyx_t_7 = NULL;
   __Pyx_RefNannySetupContext("attach_source", 0);
 
-  /* "nitro.pyx":525
+  /* "nitro.pyx":530
  *     def attach_source(self, ImageSource imagesource):
  *         cdef nitf_Error error
  *         cdef image_source.nitf_ImageSource* src = imagesource._c_source             # <<<<<<<<<<<<<<
@@ -15131,7 +15270,7 @@ static PyObject *__pyx_pf_5nitro_11ImageWriter_6attach_source(struct __pyx_obj_5
   __pyx_t_1 = __pyx_v_imagesource->_c_source;
   __pyx_v_src = __pyx_t_1;
 
-  /* "nitro.pyx":527
+  /* "nitro.pyx":532
  *         cdef image_source.nitf_ImageSource* src = imagesource._c_source
  * 
  *         if not io.nitf_ImageWriter_attachSource(self._c_writer, src, &error):             # <<<<<<<<<<<<<<
@@ -15141,16 +15280,16 @@ static PyObject *__pyx_pf_5nitro_11ImageWriter_6attach_source(struct __pyx_obj_5
   __pyx_t_2 = ((!(nitf_ImageWriter_attachSource(__pyx_v_self->_c_writer, __pyx_v_src, (&__pyx_v_error)) != 0)) != 0);
   if (__pyx_t_2) {
 
-    /* "nitro.pyx":528
+    /* "nitro.pyx":533
  * 
  *         if not io.nitf_ImageWriter_attachSource(self._c_writer, src, &error):
  *             raise NitfError(error)             # <<<<<<<<<<<<<<
  * 
  *     @deprecated("Old SWIG API")
  */
-    __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 528, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 533, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_5 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 528, __pyx_L1_error)
+    __pyx_t_5 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 533, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __pyx_t_6 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_4))) {
@@ -15163,14 +15302,14 @@ static PyObject *__pyx_pf_5nitro_11ImageWriter_6attach_source(struct __pyx_obj_5
       }
     }
     if (!__pyx_t_6) {
-      __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 528, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 533, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       __Pyx_GOTREF(__pyx_t_3);
     } else {
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_4)) {
         PyObject *__pyx_temp[2] = {__pyx_t_6, __pyx_t_5};
-        __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 528, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 533, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
@@ -15179,20 +15318,20 @@ static PyObject *__pyx_pf_5nitro_11ImageWriter_6attach_source(struct __pyx_obj_5
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_4)) {
         PyObject *__pyx_temp[2] = {__pyx_t_6, __pyx_t_5};
-        __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 528, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 533, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       } else
       #endif
       {
-        __pyx_t_7 = PyTuple_New(1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 528, __pyx_L1_error)
+        __pyx_t_7 = PyTuple_New(1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 533, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_GIVEREF(__pyx_t_6); PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_6); __pyx_t_6 = NULL;
         __Pyx_GIVEREF(__pyx_t_5);
         PyTuple_SET_ITEM(__pyx_t_7, 0+1, __pyx_t_5);
         __pyx_t_5 = 0;
-        __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_7, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 528, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_7, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 533, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       }
@@ -15200,9 +15339,9 @@ static PyObject *__pyx_pf_5nitro_11ImageWriter_6attach_source(struct __pyx_obj_5
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __PYX_ERR(0, 528, __pyx_L1_error)
+    __PYX_ERR(0, 533, __pyx_L1_error)
 
-    /* "nitro.pyx":527
+    /* "nitro.pyx":532
  *         cdef image_source.nitf_ImageSource* src = imagesource._c_source
  * 
  *         if not io.nitf_ImageWriter_attachSource(self._c_writer, src, &error):             # <<<<<<<<<<<<<<
@@ -15211,7 +15350,7 @@ static PyObject *__pyx_pf_5nitro_11ImageWriter_6attach_source(struct __pyx_obj_5
  */
   }
 
-  /* "nitro.pyx":523
+  /* "nitro.pyx":528
  *         io.nitf_ImageWriter_setWriteCaching(self._c_writer, int(bool(val)))
  * 
  *     def attach_source(self, ImageSource imagesource):             # <<<<<<<<<<<<<<
@@ -15236,7 +15375,7 @@ static PyObject *__pyx_pf_5nitro_11ImageWriter_6attach_source(struct __pyx_obj_5
   return __pyx_r;
 }
 
-/* "nitro.pyx":531
+/* "nitro.pyx":536
  * 
  *     @deprecated("Old SWIG API")
  *     def attachSource(self, ImageSource imagesource):             # <<<<<<<<<<<<<<
@@ -15250,7 +15389,7 @@ static PyObject *__pyx_pw_5nitro_11ImageWriter_9attachSource(PyObject *__pyx_v_s
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("attachSource (wrapper)", 0);
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_imagesource), __pyx_ptype_5nitro_ImageSource, 1, "imagesource", 0))) __PYX_ERR(0, 531, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_imagesource), __pyx_ptype_5nitro_ImageSource, 1, "imagesource", 0))) __PYX_ERR(0, 536, __pyx_L1_error)
   __pyx_r = __pyx_pf_5nitro_11ImageWriter_8attachSource(((struct __pyx_obj_5nitro_ImageWriter *)__pyx_v_self), ((struct __pyx_obj_5nitro_ImageSource *)__pyx_v_imagesource));
 
   /* function exit code */
@@ -15271,14 +15410,14 @@ static PyObject *__pyx_pf_5nitro_11ImageWriter_8attachSource(struct __pyx_obj_5n
   PyObject *__pyx_t_4 = NULL;
   __Pyx_RefNannySetupContext("attachSource", 0);
 
-  /* "nitro.pyx":532
+  /* "nitro.pyx":537
  *     @deprecated("Old SWIG API")
  *     def attachSource(self, ImageSource imagesource):
  *         self.attach_source(imagesource)             # <<<<<<<<<<<<<<
  * 
  * 
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_attach_source); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 532, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_attach_source); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 537, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_3 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
@@ -15291,13 +15430,13 @@ static PyObject *__pyx_pf_5nitro_11ImageWriter_8attachSource(struct __pyx_obj_5n
     }
   }
   if (!__pyx_t_3) {
-    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, ((PyObject *)__pyx_v_imagesource)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 532, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, ((PyObject *)__pyx_v_imagesource)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 537, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
   } else {
     #if CYTHON_FAST_PYCALL
     if (PyFunction_Check(__pyx_t_2)) {
       PyObject *__pyx_temp[2] = {__pyx_t_3, ((PyObject *)__pyx_v_imagesource)};
-      __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 532, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 537, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
       __Pyx_GOTREF(__pyx_t_1);
     } else
@@ -15305,19 +15444,19 @@ static PyObject *__pyx_pf_5nitro_11ImageWriter_8attachSource(struct __pyx_obj_5n
     #if CYTHON_FAST_PYCCALL
     if (__Pyx_PyFastCFunction_Check(__pyx_t_2)) {
       PyObject *__pyx_temp[2] = {__pyx_t_3, ((PyObject *)__pyx_v_imagesource)};
-      __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 532, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 537, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
       __Pyx_GOTREF(__pyx_t_1);
     } else
     #endif
     {
-      __pyx_t_4 = PyTuple_New(1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 532, __pyx_L1_error)
+      __pyx_t_4 = PyTuple_New(1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 537, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_GIVEREF(__pyx_t_3); PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_3); __pyx_t_3 = NULL;
       __Pyx_INCREF(((PyObject *)__pyx_v_imagesource));
       __Pyx_GIVEREF(((PyObject *)__pyx_v_imagesource));
       PyTuple_SET_ITEM(__pyx_t_4, 0+1, ((PyObject *)__pyx_v_imagesource));
-      __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_4, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 532, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_4, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 537, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     }
@@ -15325,7 +15464,7 @@ static PyObject *__pyx_pf_5nitro_11ImageWriter_8attachSource(struct __pyx_obj_5n
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "nitro.pyx":531
+  /* "nitro.pyx":536
  * 
  *     @deprecated("Old SWIG API")
  *     def attachSource(self, ImageSource imagesource):             # <<<<<<<<<<<<<<
@@ -15456,7 +15595,7 @@ static PyObject *__pyx_pf_5nitro_11ImageWriter_12__setstate_cython__(CYTHON_UNUS
   return __pyx_r;
 }
 
-/* "nitro.pyx":539
+/* "nitro.pyx":544
  *     cdef int _nbpp
  * 
  *     def __cinit__(self, int nbpp):             # <<<<<<<<<<<<<<
@@ -15490,18 +15629,18 @@ static int __pyx_pw_5nitro_11ImageReader_1__cinit__(PyObject *__pyx_v_self, PyOb
         else goto __pyx_L5_argtuple_error;
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(0, 539, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__cinit__") < 0)) __PYX_ERR(0, 544, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 1) {
       goto __pyx_L5_argtuple_error;
     } else {
       values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
     }
-    __pyx_v_nbpp = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_nbpp == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 539, __pyx_L3_error)
+    __pyx_v_nbpp = __Pyx_PyInt_As_int(values[0]); if (unlikely((__pyx_v_nbpp == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 544, __pyx_L3_error)
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 1, 1, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 539, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__cinit__", 1, 1, 1, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 544, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("nitro.ImageReader.__cinit__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -15519,7 +15658,7 @@ static int __pyx_pf_5nitro_11ImageReader___cinit__(struct __pyx_obj_5nitro_Image
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "nitro.pyx":540
+  /* "nitro.pyx":545
  * 
  *     def __cinit__(self, int nbpp):
  *         self._c_reader = NULL             # <<<<<<<<<<<<<<
@@ -15528,7 +15667,7 @@ static int __pyx_pf_5nitro_11ImageReader___cinit__(struct __pyx_obj_5nitro_Image
  */
   __pyx_v_self->_c_reader = NULL;
 
-  /* "nitro.pyx":541
+  /* "nitro.pyx":546
  *     def __cinit__(self, int nbpp):
  *         self._c_reader = NULL
  *         self._nbpp = nbpp             # <<<<<<<<<<<<<<
@@ -15537,7 +15676,7 @@ static int __pyx_pf_5nitro_11ImageReader___cinit__(struct __pyx_obj_5nitro_Image
  */
   __pyx_v_self->_nbpp = __pyx_v_nbpp;
 
-  /* "nitro.pyx":539
+  /* "nitro.pyx":544
  *     cdef int _nbpp
  * 
  *     def __cinit__(self, int nbpp):             # <<<<<<<<<<<<<<
@@ -15551,7 +15690,7 @@ static int __pyx_pf_5nitro_11ImageReader___cinit__(struct __pyx_obj_5nitro_Image
   return __pyx_r;
 }
 
-/* "nitro.pyx":544
+/* "nitro.pyx":549
  * 
  *     @staticmethod
  *     cdef from_ptr(io.nitf_ImageReader* ptr, int nbpp):             # <<<<<<<<<<<<<<
@@ -15567,27 +15706,27 @@ static PyObject *__pyx_f_5nitro_11ImageReader_from_ptr(nitf_ImageReader *__pyx_v
   PyObject *__pyx_t_2 = NULL;
   __Pyx_RefNannySetupContext("from_ptr", 0);
 
-  /* "nitro.pyx":545
+  /* "nitro.pyx":550
  *     @staticmethod
  *     cdef from_ptr(io.nitf_ImageReader* ptr, int nbpp):
  *         obj = ImageReader(nbpp)             # <<<<<<<<<<<<<<
  *         obj._c_reader = ptr
  *         return obj
  */
-  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_nbpp); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 545, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_nbpp); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 550, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = PyTuple_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 545, __pyx_L1_error)
+  __pyx_t_2 = PyTuple_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 550, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_GIVEREF(__pyx_t_1);
   PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_1);
   __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_5nitro_ImageReader), __pyx_t_2, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 545, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_5nitro_ImageReader), __pyx_t_2, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 550, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_v_obj = ((struct __pyx_obj_5nitro_ImageReader *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "nitro.pyx":546
+  /* "nitro.pyx":551
  *     cdef from_ptr(io.nitf_ImageReader* ptr, int nbpp):
  *         obj = ImageReader(nbpp)
  *         obj._c_reader = ptr             # <<<<<<<<<<<<<<
@@ -15596,7 +15735,7 @@ static PyObject *__pyx_f_5nitro_11ImageReader_from_ptr(nitf_ImageReader *__pyx_v
  */
   __pyx_v_obj->_c_reader = __pyx_v_ptr;
 
-  /* "nitro.pyx":547
+  /* "nitro.pyx":552
  *         obj = ImageReader(nbpp)
  *         obj._c_reader = ptr
  *         return obj             # <<<<<<<<<<<<<<
@@ -15608,7 +15747,7 @@ static PyObject *__pyx_f_5nitro_11ImageReader_from_ptr(nitf_ImageReader *__pyx_v
   __pyx_r = ((PyObject *)__pyx_v_obj);
   goto __pyx_L0;
 
-  /* "nitro.pyx":544
+  /* "nitro.pyx":549
  * 
  *     @staticmethod
  *     cdef from_ptr(io.nitf_ImageReader* ptr, int nbpp):             # <<<<<<<<<<<<<<
@@ -15629,7 +15768,7 @@ static PyObject *__pyx_f_5nitro_11ImageReader_from_ptr(nitf_ImageReader *__pyx_v
   return __pyx_r;
 }
 
-/* "nitro.pyx":549
+/* "nitro.pyx":554
  *         return obj
  * 
  *     cpdef to_capsule(self):             # <<<<<<<<<<<<<<
@@ -15650,7 +15789,7 @@ static PyObject *__pyx_f_5nitro_11ImageReader_to_capsule(struct __pyx_obj_5nitro
   if (unlikely(__pyx_skip_dispatch)) ;
   /* Check if overridden in Python */
   else if (unlikely(Py_TYPE(((PyObject *)__pyx_v_self))->tp_dictoffset != 0)) {
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_to_capsule); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 549, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_to_capsule); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 554, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)__pyx_pw_5nitro_11ImageReader_3to_capsule)) {
       __Pyx_XDECREF(__pyx_r);
@@ -15666,10 +15805,10 @@ static PyObject *__pyx_f_5nitro_11ImageReader_to_capsule(struct __pyx_obj_5nitro
         }
       }
       if (__pyx_t_4) {
-        __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 549, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 554, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       } else {
-        __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 549, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 554, __pyx_L1_error)
       }
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -15681,7 +15820,7 @@ static PyObject *__pyx_f_5nitro_11ImageReader_to_capsule(struct __pyx_obj_5nitro
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   }
 
-  /* "nitro.pyx":550
+  /* "nitro.pyx":555
  * 
  *     cpdef to_capsule(self):
  *         return PyCapsule_New(self._c_reader, "ImageReader", NULL)             # <<<<<<<<<<<<<<
@@ -15689,13 +15828,13 @@ static PyObject *__pyx_f_5nitro_11ImageReader_to_capsule(struct __pyx_obj_5nitro
  *     cpdef read(self, ihdr):
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyCapsule_New(__pyx_v_self->_c_reader, ((char *)"ImageReader"), NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 550, __pyx_L1_error)
+  __pyx_t_1 = PyCapsule_New(__pyx_v_self->_c_reader, ((char *)"ImageReader"), NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 555, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "nitro.pyx":549
+  /* "nitro.pyx":554
  *         return obj
  * 
  *     cpdef to_capsule(self):             # <<<<<<<<<<<<<<
@@ -15736,7 +15875,7 @@ static PyObject *__pyx_pf_5nitro_11ImageReader_2to_capsule(struct __pyx_obj_5nit
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("to_capsule", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_f_5nitro_11ImageReader_to_capsule(__pyx_v_self, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 549, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_5nitro_11ImageReader_to_capsule(__pyx_v_self, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 554, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -15753,7 +15892,7 @@ static PyObject *__pyx_pf_5nitro_11ImageReader_2to_capsule(struct __pyx_obj_5nit
   return __pyx_r;
 }
 
-/* "nitro.pyx":552
+/* "nitro.pyx":557
  *         return PyCapsule_New(self._c_reader, "ImageReader", NULL)
  * 
  *     cpdef read(self, ihdr):             # <<<<<<<<<<<<<<
@@ -15807,7 +15946,7 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
   if (unlikely(__pyx_skip_dispatch)) ;
   /* Check if overridden in Python */
   else if (unlikely(Py_TYPE(((PyObject *)__pyx_v_self))->tp_dictoffset != 0)) {
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_read); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 552, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_read); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 557, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)__pyx_pw_5nitro_11ImageReader_5read)) {
       __Pyx_XDECREF(__pyx_r);
@@ -15823,13 +15962,13 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
         }
       }
       if (!__pyx_t_4) {
-        __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_v_ihdr); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 552, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_v_ihdr); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 557, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
       } else {
         #if CYTHON_FAST_PYCALL
         if (PyFunction_Check(__pyx_t_3)) {
           PyObject *__pyx_temp[2] = {__pyx_t_4, __pyx_v_ihdr};
-          __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 552, __pyx_L1_error)
+          __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 557, __pyx_L1_error)
           __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
           __Pyx_GOTREF(__pyx_t_2);
         } else
@@ -15837,19 +15976,19 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
         #if CYTHON_FAST_PYCCALL
         if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
           PyObject *__pyx_temp[2] = {__pyx_t_4, __pyx_v_ihdr};
-          __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 552, __pyx_L1_error)
+          __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 557, __pyx_L1_error)
           __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
           __Pyx_GOTREF(__pyx_t_2);
         } else
         #endif
         {
-          __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 552, __pyx_L1_error)
+          __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 557, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_5);
           __Pyx_GIVEREF(__pyx_t_4); PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_4); __pyx_t_4 = NULL;
           __Pyx_INCREF(__pyx_v_ihdr);
           __Pyx_GIVEREF(__pyx_v_ihdr);
           PyTuple_SET_ITEM(__pyx_t_5, 0+1, __pyx_v_ihdr);
-          __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_5, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 552, __pyx_L1_error)
+          __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_5, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 557, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_2);
           __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
         }
@@ -15863,7 +16002,7 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   }
 
-  /* "nitro.pyx":554
+  /* "nitro.pyx":559
  *     cpdef read(self, ihdr):
  *         cdef nitf_Error error
  *         cdef io.nitf_SubWindow* subWindow = NULL             # <<<<<<<<<<<<<<
@@ -15872,7 +16011,7 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
  */
   __pyx_v_subWindow = NULL;
 
-  /* "nitro.pyx":557
+  /* "nitro.pyx":562
  *         cdef array.array bandList
  *         cdef array.array buf
  *         cdef nitf_Uint8** planar = NULL             # <<<<<<<<<<<<<<
@@ -15881,24 +16020,24 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
  */
   __pyx_v_planar = NULL;
 
-  /* "nitro.pyx":560
+  /* "nitro.pyx":565
  *         cdef int padded
  * 
  *         pvtype = str(ihdr.pixelValueType).strip()             # <<<<<<<<<<<<<<
  *         atype = None
  *         if self._nbpp == 8:
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_ihdr, __pyx_n_s_pixelValueType); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 560, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_ihdr, __pyx_n_s_pixelValueType); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 565, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 560, __pyx_L1_error)
+  __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 565, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_GIVEREF(__pyx_t_2);
   PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_2);
   __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)(&PyUnicode_Type)), __pyx_t_3, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 560, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)(&PyUnicode_Type)), __pyx_t_3, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 565, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_strip); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 560, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_strip); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 565, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_t_2 = NULL;
@@ -15912,17 +16051,17 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
     }
   }
   if (__pyx_t_2) {
-    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 560, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 565, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   } else {
-    __pyx_t_1 = __Pyx_PyObject_CallNoArg(__pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 560, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_CallNoArg(__pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 565, __pyx_L1_error)
   }
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_v_pvtype = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "nitro.pyx":561
+  /* "nitro.pyx":566
  * 
  *         pvtype = str(ihdr.pixelValueType).strip()
  *         atype = None             # <<<<<<<<<<<<<<
@@ -15932,7 +16071,7 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
   __Pyx_INCREF(Py_None);
   __pyx_v_atype = Py_None;
 
-  /* "nitro.pyx":562
+  /* "nitro.pyx":567
  *         pvtype = str(ihdr.pixelValueType).strip()
  *         atype = None
  *         if self._nbpp == 8:             # <<<<<<<<<<<<<<
@@ -15942,17 +16081,17 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
   switch (__pyx_v_self->_nbpp) {
     case 8:
 
-    /* "nitro.pyx":563
+    /* "nitro.pyx":568
  *         atype = None
  *         if self._nbpp == 8:
  *             if pvtype == "INT":             # <<<<<<<<<<<<<<
  *                 atype = 'B'
  *             elif pvtype == "SI":
  */
-    __pyx_t_6 = (__Pyx_PyUnicode_Equals(__pyx_v_pvtype, __pyx_n_u_INT, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 563, __pyx_L1_error)
+    __pyx_t_6 = (__Pyx_PyUnicode_Equals(__pyx_v_pvtype, __pyx_n_u_INT, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 568, __pyx_L1_error)
     if (__pyx_t_6) {
 
-      /* "nitro.pyx":564
+      /* "nitro.pyx":569
  *         if self._nbpp == 8:
  *             if pvtype == "INT":
  *                 atype = 'B'             # <<<<<<<<<<<<<<
@@ -15962,7 +16101,7 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
       __Pyx_INCREF(__pyx_n_u_B);
       __Pyx_DECREF_SET(__pyx_v_atype, __pyx_n_u_B);
 
-      /* "nitro.pyx":563
+      /* "nitro.pyx":568
  *         atype = None
  *         if self._nbpp == 8:
  *             if pvtype == "INT":             # <<<<<<<<<<<<<<
@@ -15972,17 +16111,17 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
       goto __pyx_L3;
     }
 
-    /* "nitro.pyx":565
+    /* "nitro.pyx":570
  *             if pvtype == "INT":
  *                 atype = 'B'
  *             elif pvtype == "SI":             # <<<<<<<<<<<<<<
  *                 atype = 'b'
  *         elif self._nbpp == 16:
  */
-    __pyx_t_6 = (__Pyx_PyUnicode_Equals(__pyx_v_pvtype, __pyx_n_u_SI, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 565, __pyx_L1_error)
+    __pyx_t_6 = (__Pyx_PyUnicode_Equals(__pyx_v_pvtype, __pyx_n_u_SI, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 570, __pyx_L1_error)
     if (__pyx_t_6) {
 
-      /* "nitro.pyx":566
+      /* "nitro.pyx":571
  *                 atype = 'B'
  *             elif pvtype == "SI":
  *                 atype = 'b'             # <<<<<<<<<<<<<<
@@ -15992,7 +16131,7 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
       __Pyx_INCREF(__pyx_n_u_b);
       __Pyx_DECREF_SET(__pyx_v_atype, __pyx_n_u_b);
 
-      /* "nitro.pyx":565
+      /* "nitro.pyx":570
  *             if pvtype == "INT":
  *                 atype = 'B'
  *             elif pvtype == "SI":             # <<<<<<<<<<<<<<
@@ -16002,7 +16141,7 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
     }
     __pyx_L3:;
 
-    /* "nitro.pyx":562
+    /* "nitro.pyx":567
  *         pvtype = str(ihdr.pixelValueType).strip()
  *         atype = None
  *         if self._nbpp == 8:             # <<<<<<<<<<<<<<
@@ -16011,7 +16150,7 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
  */
     break;
 
-    /* "nitro.pyx":567
+    /* "nitro.pyx":572
  *             elif pvtype == "SI":
  *                 atype = 'b'
  *         elif self._nbpp == 16:             # <<<<<<<<<<<<<<
@@ -16020,17 +16159,17 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
  */
     case 16:
 
-    /* "nitro.pyx":568
+    /* "nitro.pyx":573
  *                 atype = 'b'
  *         elif self._nbpp == 16:
  *             if pvtype == "INT":             # <<<<<<<<<<<<<<
  *                 atype = 'H'
  *             elif pvtype == "SI":
  */
-    __pyx_t_6 = (__Pyx_PyUnicode_Equals(__pyx_v_pvtype, __pyx_n_u_INT, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 568, __pyx_L1_error)
+    __pyx_t_6 = (__Pyx_PyUnicode_Equals(__pyx_v_pvtype, __pyx_n_u_INT, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 573, __pyx_L1_error)
     if (__pyx_t_6) {
 
-      /* "nitro.pyx":569
+      /* "nitro.pyx":574
  *         elif self._nbpp == 16:
  *             if pvtype == "INT":
  *                 atype = 'H'             # <<<<<<<<<<<<<<
@@ -16040,7 +16179,7 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
       __Pyx_INCREF(__pyx_n_u_H);
       __Pyx_DECREF_SET(__pyx_v_atype, __pyx_n_u_H);
 
-      /* "nitro.pyx":568
+      /* "nitro.pyx":573
  *                 atype = 'b'
  *         elif self._nbpp == 16:
  *             if pvtype == "INT":             # <<<<<<<<<<<<<<
@@ -16050,17 +16189,17 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
       goto __pyx_L4;
     }
 
-    /* "nitro.pyx":570
+    /* "nitro.pyx":575
  *             if pvtype == "INT":
  *                 atype = 'H'
  *             elif pvtype == "SI":             # <<<<<<<<<<<<<<
  *                 atype = 'h'
  *         elif self._nbpp == 32:
  */
-    __pyx_t_6 = (__Pyx_PyUnicode_Equals(__pyx_v_pvtype, __pyx_n_u_SI, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 570, __pyx_L1_error)
+    __pyx_t_6 = (__Pyx_PyUnicode_Equals(__pyx_v_pvtype, __pyx_n_u_SI, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 575, __pyx_L1_error)
     if (__pyx_t_6) {
 
-      /* "nitro.pyx":571
+      /* "nitro.pyx":576
  *                 atype = 'H'
  *             elif pvtype == "SI":
  *                 atype = 'h'             # <<<<<<<<<<<<<<
@@ -16070,7 +16209,7 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
       __Pyx_INCREF(__pyx_n_u_h);
       __Pyx_DECREF_SET(__pyx_v_atype, __pyx_n_u_h);
 
-      /* "nitro.pyx":570
+      /* "nitro.pyx":575
  *             if pvtype == "INT":
  *                 atype = 'H'
  *             elif pvtype == "SI":             # <<<<<<<<<<<<<<
@@ -16080,7 +16219,7 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
     }
     __pyx_L4:;
 
-    /* "nitro.pyx":567
+    /* "nitro.pyx":572
  *             elif pvtype == "SI":
  *                 atype = 'b'
  *         elif self._nbpp == 16:             # <<<<<<<<<<<<<<
@@ -16089,7 +16228,7 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
  */
     break;
 
-    /* "nitro.pyx":572
+    /* "nitro.pyx":577
  *             elif pvtype == "SI":
  *                 atype = 'h'
  *         elif self._nbpp == 32:             # <<<<<<<<<<<<<<
@@ -16098,17 +16237,17 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
  */
     case 32:
 
-    /* "nitro.pyx":573
+    /* "nitro.pyx":578
  *                 atype = 'h'
  *         elif self._nbpp == 32:
  *             if pvtype == "INT":             # <<<<<<<<<<<<<<
  *                 atype = 'L'
  *             elif pvtype == "SI":
  */
-    __pyx_t_6 = (__Pyx_PyUnicode_Equals(__pyx_v_pvtype, __pyx_n_u_INT, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 573, __pyx_L1_error)
+    __pyx_t_6 = (__Pyx_PyUnicode_Equals(__pyx_v_pvtype, __pyx_n_u_INT, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 578, __pyx_L1_error)
     if (__pyx_t_6) {
 
-      /* "nitro.pyx":574
+      /* "nitro.pyx":579
  *         elif self._nbpp == 32:
  *             if pvtype == "INT":
  *                 atype = 'L'             # <<<<<<<<<<<<<<
@@ -16118,7 +16257,7 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
       __Pyx_INCREF(__pyx_n_u_L);
       __Pyx_DECREF_SET(__pyx_v_atype, __pyx_n_u_L);
 
-      /* "nitro.pyx":573
+      /* "nitro.pyx":578
  *                 atype = 'h'
  *         elif self._nbpp == 32:
  *             if pvtype == "INT":             # <<<<<<<<<<<<<<
@@ -16128,17 +16267,17 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
       goto __pyx_L5;
     }
 
-    /* "nitro.pyx":575
+    /* "nitro.pyx":580
  *             if pvtype == "INT":
  *                 atype = 'L'
  *             elif pvtype == "SI":             # <<<<<<<<<<<<<<
  *                 atype = 'l'
  *             elif pvtype == "R":
  */
-    __pyx_t_6 = (__Pyx_PyUnicode_Equals(__pyx_v_pvtype, __pyx_n_u_SI, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 575, __pyx_L1_error)
+    __pyx_t_6 = (__Pyx_PyUnicode_Equals(__pyx_v_pvtype, __pyx_n_u_SI, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 580, __pyx_L1_error)
     if (__pyx_t_6) {
 
-      /* "nitro.pyx":576
+      /* "nitro.pyx":581
  *                 atype = 'L'
  *             elif pvtype == "SI":
  *                 atype = 'l'             # <<<<<<<<<<<<<<
@@ -16148,7 +16287,7 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
       __Pyx_INCREF(__pyx_n_u_l);
       __Pyx_DECREF_SET(__pyx_v_atype, __pyx_n_u_l);
 
-      /* "nitro.pyx":575
+      /* "nitro.pyx":580
  *             if pvtype == "INT":
  *                 atype = 'L'
  *             elif pvtype == "SI":             # <<<<<<<<<<<<<<
@@ -16158,17 +16297,17 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
       goto __pyx_L5;
     }
 
-    /* "nitro.pyx":577
+    /* "nitro.pyx":582
  *             elif pvtype == "SI":
  *                 atype = 'l'
  *             elif pvtype == "R":             # <<<<<<<<<<<<<<
  *                 atype = 'f'
  *         elif self._nbpp == 64:
  */
-    __pyx_t_6 = (__Pyx_PyUnicode_Equals(__pyx_v_pvtype, __pyx_n_u_R, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 577, __pyx_L1_error)
+    __pyx_t_6 = (__Pyx_PyUnicode_Equals(__pyx_v_pvtype, __pyx_n_u_R, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 582, __pyx_L1_error)
     if (__pyx_t_6) {
 
-      /* "nitro.pyx":578
+      /* "nitro.pyx":583
  *                 atype = 'l'
  *             elif pvtype == "R":
  *                 atype = 'f'             # <<<<<<<<<<<<<<
@@ -16178,7 +16317,7 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
       __Pyx_INCREF(__pyx_n_u_f);
       __Pyx_DECREF_SET(__pyx_v_atype, __pyx_n_u_f);
 
-      /* "nitro.pyx":577
+      /* "nitro.pyx":582
  *             elif pvtype == "SI":
  *                 atype = 'l'
  *             elif pvtype == "R":             # <<<<<<<<<<<<<<
@@ -16188,7 +16327,7 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
     }
     __pyx_L5:;
 
-    /* "nitro.pyx":572
+    /* "nitro.pyx":577
  *             elif pvtype == "SI":
  *                 atype = 'h'
  *         elif self._nbpp == 32:             # <<<<<<<<<<<<<<
@@ -16197,7 +16336,7 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
  */
     break;
 
-    /* "nitro.pyx":579
+    /* "nitro.pyx":584
  *             elif pvtype == "R":
  *                 atype = 'f'
  *         elif self._nbpp == 64:             # <<<<<<<<<<<<<<
@@ -16206,17 +16345,17 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
  */
     case 64:
 
-    /* "nitro.pyx":580
+    /* "nitro.pyx":585
  *                 atype = 'f'
  *         elif self._nbpp == 64:
  *             if pvtype == "INT":             # <<<<<<<<<<<<<<
  *                 atype = 'Q'
  *             elif pvtype == "SI":
  */
-    __pyx_t_6 = (__Pyx_PyUnicode_Equals(__pyx_v_pvtype, __pyx_n_u_INT, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 580, __pyx_L1_error)
+    __pyx_t_6 = (__Pyx_PyUnicode_Equals(__pyx_v_pvtype, __pyx_n_u_INT, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 585, __pyx_L1_error)
     if (__pyx_t_6) {
 
-      /* "nitro.pyx":581
+      /* "nitro.pyx":586
  *         elif self._nbpp == 64:
  *             if pvtype == "INT":
  *                 atype = 'Q'             # <<<<<<<<<<<<<<
@@ -16226,7 +16365,7 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
       __Pyx_INCREF(__pyx_n_u_Q);
       __Pyx_DECREF_SET(__pyx_v_atype, __pyx_n_u_Q);
 
-      /* "nitro.pyx":580
+      /* "nitro.pyx":585
  *                 atype = 'f'
  *         elif self._nbpp == 64:
  *             if pvtype == "INT":             # <<<<<<<<<<<<<<
@@ -16236,17 +16375,17 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
       goto __pyx_L6;
     }
 
-    /* "nitro.pyx":582
+    /* "nitro.pyx":587
  *             if pvtype == "INT":
  *                 atype = 'Q'
  *             elif pvtype == "SI":             # <<<<<<<<<<<<<<
  *                 atype = 'q'
  *             elif pvtype == "R":
  */
-    __pyx_t_6 = (__Pyx_PyUnicode_Equals(__pyx_v_pvtype, __pyx_n_u_SI, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 582, __pyx_L1_error)
+    __pyx_t_6 = (__Pyx_PyUnicode_Equals(__pyx_v_pvtype, __pyx_n_u_SI, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 587, __pyx_L1_error)
     if (__pyx_t_6) {
 
-      /* "nitro.pyx":583
+      /* "nitro.pyx":588
  *                 atype = 'Q'
  *             elif pvtype == "SI":
  *                 atype = 'q'             # <<<<<<<<<<<<<<
@@ -16256,7 +16395,7 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
       __Pyx_INCREF(__pyx_n_u_q);
       __Pyx_DECREF_SET(__pyx_v_atype, __pyx_n_u_q);
 
-      /* "nitro.pyx":582
+      /* "nitro.pyx":587
  *             if pvtype == "INT":
  *                 atype = 'Q'
  *             elif pvtype == "SI":             # <<<<<<<<<<<<<<
@@ -16266,17 +16405,17 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
       goto __pyx_L6;
     }
 
-    /* "nitro.pyx":584
+    /* "nitro.pyx":589
  *             elif pvtype == "SI":
  *                 atype = 'q'
  *             elif pvtype == "R":             # <<<<<<<<<<<<<<
  *                 atype = 'd'
  *         if atype is None:
  */
-    __pyx_t_6 = (__Pyx_PyUnicode_Equals(__pyx_v_pvtype, __pyx_n_u_R, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 584, __pyx_L1_error)
+    __pyx_t_6 = (__Pyx_PyUnicode_Equals(__pyx_v_pvtype, __pyx_n_u_R, Py_EQ)); if (unlikely(__pyx_t_6 < 0)) __PYX_ERR(0, 589, __pyx_L1_error)
     if (__pyx_t_6) {
 
-      /* "nitro.pyx":585
+      /* "nitro.pyx":590
  *                 atype = 'q'
  *             elif pvtype == "R":
  *                 atype = 'd'             # <<<<<<<<<<<<<<
@@ -16286,7 +16425,7 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
       __Pyx_INCREF(__pyx_n_u_d);
       __Pyx_DECREF_SET(__pyx_v_atype, __pyx_n_u_d);
 
-      /* "nitro.pyx":584
+      /* "nitro.pyx":589
  *             elif pvtype == "SI":
  *                 atype = 'q'
  *             elif pvtype == "R":             # <<<<<<<<<<<<<<
@@ -16296,7 +16435,7 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
     }
     __pyx_L6:;
 
-    /* "nitro.pyx":579
+    /* "nitro.pyx":584
  *             elif pvtype == "R":
  *                 atype = 'f'
  *         elif self._nbpp == 64:             # <<<<<<<<<<<<<<
@@ -16307,7 +16446,7 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
     default: break;
   }
 
-  /* "nitro.pyx":586
+  /* "nitro.pyx":591
  *             elif pvtype == "R":
  *                 atype = 'd'
  *         if atype is None:             # <<<<<<<<<<<<<<
@@ -16318,14 +16457,14 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
   __pyx_t_7 = (__pyx_t_6 != 0);
   if (__pyx_t_7) {
 
-    /* "nitro.pyx":587
+    /* "nitro.pyx":592
  *                 atype = 'd'
  *         if atype is None:
  *             raise TypeError(f"PVTYPE {pvtype} and NBPP {self._nbpp} combination not supported")             # <<<<<<<<<<<<<<
  * 
  *         numRows, numCols = int(ihdr.numRows), int(ihdr.numCols)
  */
-    __pyx_t_1 = PyTuple_New(5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 587, __pyx_L1_error)
+    __pyx_t_1 = PyTuple_New(5); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 592, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __pyx_t_8 = 0;
     __pyx_t_9 = 127;
@@ -16333,7 +16472,7 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
     __pyx_t_8 += 7;
     __Pyx_GIVEREF(__pyx_kp_u_PVTYPE);
     PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_kp_u_PVTYPE);
-    __pyx_t_3 = __Pyx_PyObject_FormatSimple(__pyx_v_pvtype, __pyx_empty_unicode); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 587, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_FormatSimple(__pyx_v_pvtype, __pyx_empty_unicode); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 592, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __pyx_t_9 = (__Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_t_3) > __pyx_t_9) ? __Pyx_PyUnicode_MAX_CHAR_VALUE(__pyx_t_3) : __pyx_t_9;
     __pyx_t_8 += __Pyx_PyUnicode_GET_LENGTH(__pyx_t_3);
@@ -16344,7 +16483,7 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
     __pyx_t_8 += 10;
     __Pyx_GIVEREF(__pyx_kp_u_and_NBPP);
     PyTuple_SET_ITEM(__pyx_t_1, 2, __pyx_kp_u_and_NBPP);
-    __pyx_t_3 = __Pyx_PyUnicode_From_int(__pyx_v_self->_nbpp, 0, ' ', 'd'); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 587, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyUnicode_From_int(__pyx_v_self->_nbpp, 0, ' ', 'd'); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 592, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __pyx_t_8 += __Pyx_PyUnicode_GET_LENGTH(__pyx_t_3);
     __Pyx_GIVEREF(__pyx_t_3);
@@ -16354,22 +16493,22 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
     __pyx_t_8 += 26;
     __Pyx_GIVEREF(__pyx_kp_u_combination_not_supported);
     PyTuple_SET_ITEM(__pyx_t_1, 4, __pyx_kp_u_combination_not_supported);
-    __pyx_t_3 = __Pyx_PyUnicode_Join(__pyx_t_1, 5, __pyx_t_8, __pyx_t_9); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 587, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyUnicode_Join(__pyx_t_1, 5, __pyx_t_8, __pyx_t_9); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 592, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_1 = PyTuple_New(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 587, __pyx_L1_error)
+    __pyx_t_1 = PyTuple_New(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 592, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_GIVEREF(__pyx_t_3);
     PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_t_3);
     __pyx_t_3 = 0;
-    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_t_1, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 587, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_TypeError, __pyx_t_1, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 592, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __PYX_ERR(0, 587, __pyx_L1_error)
+    __PYX_ERR(0, 592, __pyx_L1_error)
 
-    /* "nitro.pyx":586
+    /* "nitro.pyx":591
  *             elif pvtype == "R":
  *                 atype = 'd'
  *         if atype is None:             # <<<<<<<<<<<<<<
@@ -16378,21 +16517,21 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
  */
   }
 
-  /* "nitro.pyx":589
+  /* "nitro.pyx":594
  *             raise TypeError(f"PVTYPE {pvtype} and NBPP {self._nbpp} combination not supported")
  * 
  *         numRows, numCols = int(ihdr.numRows), int(ihdr.numCols)             # <<<<<<<<<<<<<<
  *         numBands = int(ihdr.numImageBands) + int(ihdr.numMultispectralImageBands)
  *         subImageSize = numRows * numCols * (self._nbpp // 8)
  */
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_ihdr, __pyx_n_s_numRows); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 589, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_ihdr, __pyx_n_s_numRows); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 594, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_1 = __Pyx_PyNumber_Int(__pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 589, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyNumber_Int(__pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 594, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_ihdr, __pyx_n_s_numCols); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 589, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_ihdr, __pyx_n_s_numCols); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 594, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_2 = __Pyx_PyNumber_Int(__pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 589, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyNumber_Int(__pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 594, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_v_numRows = __pyx_t_1;
@@ -16400,49 +16539,49 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
   __pyx_v_numCols = __pyx_t_2;
   __pyx_t_2 = 0;
 
-  /* "nitro.pyx":590
+  /* "nitro.pyx":595
  * 
  *         numRows, numCols = int(ihdr.numRows), int(ihdr.numCols)
  *         numBands = int(ihdr.numImageBands) + int(ihdr.numMultispectralImageBands)             # <<<<<<<<<<<<<<
  *         subImageSize = numRows * numCols * (self._nbpp // 8)
  *         try:
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_ihdr, __pyx_n_s_numImageBands); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 590, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_ihdr, __pyx_n_s_numImageBands); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 595, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_1 = __Pyx_PyNumber_Int(__pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 590, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyNumber_Int(__pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 595, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_ihdr, __pyx_n_s_numMultispectralImageBands); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 590, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_v_ihdr, __pyx_n_s_numMultispectralImageBands); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 595, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyNumber_Int(__pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 590, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyNumber_Int(__pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 595, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = PyNumber_Add(__pyx_t_1, __pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 590, __pyx_L1_error)
+  __pyx_t_2 = PyNumber_Add(__pyx_t_1, __pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 595, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_v_numBands = __pyx_t_2;
   __pyx_t_2 = 0;
 
-  /* "nitro.pyx":591
+  /* "nitro.pyx":596
  *         numRows, numCols = int(ihdr.numRows), int(ihdr.numCols)
  *         numBands = int(ihdr.numImageBands) + int(ihdr.numMultispectralImageBands)
  *         subImageSize = numRows * numCols * (self._nbpp // 8)             # <<<<<<<<<<<<<<
  *         try:
  *             subWindow = io.nitf_SubWindow_construct(&error)
  */
-  __pyx_t_2 = PyNumber_Multiply(__pyx_v_numRows, __pyx_v_numCols); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 591, __pyx_L1_error)
+  __pyx_t_2 = PyNumber_Multiply(__pyx_v_numRows, __pyx_v_numCols); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 596, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyInt_From_long(__Pyx_div_long(__pyx_v_self->_nbpp, 8)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 591, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyInt_From_long(__Pyx_div_long(__pyx_v_self->_nbpp, 8)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 596, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_1 = PyNumber_Multiply(__pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 591, __pyx_L1_error)
+  __pyx_t_1 = PyNumber_Multiply(__pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 596, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __pyx_v_subImageSize = __pyx_t_1;
   __pyx_t_1 = 0;
 
-  /* "nitro.pyx":592
+  /* "nitro.pyx":597
  *         numBands = int(ihdr.numImageBands) + int(ihdr.numMultispectralImageBands)
  *         subImageSize = numRows * numCols * (self._nbpp // 8)
  *         try:             # <<<<<<<<<<<<<<
@@ -16451,7 +16590,7 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
  */
   /*try:*/ {
 
-    /* "nitro.pyx":593
+    /* "nitro.pyx":598
  *         subImageSize = numRows * numCols * (self._nbpp // 8)
  *         try:
  *             subWindow = io.nitf_SubWindow_construct(&error)             # <<<<<<<<<<<<<<
@@ -16460,7 +16599,7 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
  */
     __pyx_v_subWindow = nitf_SubWindow_construct((&__pyx_v_error));
 
-    /* "nitro.pyx":594
+    /* "nitro.pyx":599
  *         try:
  *             subWindow = io.nitf_SubWindow_construct(&error)
  *             if subWindow is NULL:             # <<<<<<<<<<<<<<
@@ -16470,16 +16609,16 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
     __pyx_t_7 = ((__pyx_v_subWindow == NULL) != 0);
     if (__pyx_t_7) {
 
-      /* "nitro.pyx":595
+      /* "nitro.pyx":600
  *             subWindow = io.nitf_SubWindow_construct(&error)
  *             if subWindow is NULL:
  *                 raise NitfError(error)             # <<<<<<<<<<<<<<
  *             subWindow.startRow = 0
  *             subWindow.startCol = 0
  */
-      __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 595, __pyx_L9_error)
+      __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 600, __pyx_L9_error)
       __Pyx_GOTREF(__pyx_t_3);
-      __pyx_t_2 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 595, __pyx_L9_error)
+      __pyx_t_2 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 600, __pyx_L9_error)
       __Pyx_GOTREF(__pyx_t_2);
       __pyx_t_5 = NULL;
       if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
@@ -16492,14 +16631,14 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
         }
       }
       if (!__pyx_t_5) {
-        __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 595, __pyx_L9_error)
+        __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 600, __pyx_L9_error)
         __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
         __Pyx_GOTREF(__pyx_t_1);
       } else {
         #if CYTHON_FAST_PYCALL
         if (PyFunction_Check(__pyx_t_3)) {
           PyObject *__pyx_temp[2] = {__pyx_t_5, __pyx_t_2};
-          __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 595, __pyx_L9_error)
+          __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 600, __pyx_L9_error)
           __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
           __Pyx_GOTREF(__pyx_t_1);
           __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -16508,20 +16647,20 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
         #if CYTHON_FAST_PYCCALL
         if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
           PyObject *__pyx_temp[2] = {__pyx_t_5, __pyx_t_2};
-          __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 595, __pyx_L9_error)
+          __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 600, __pyx_L9_error)
           __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
           __Pyx_GOTREF(__pyx_t_1);
           __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
         } else
         #endif
         {
-          __pyx_t_4 = PyTuple_New(1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 595, __pyx_L9_error)
+          __pyx_t_4 = PyTuple_New(1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 600, __pyx_L9_error)
           __Pyx_GOTREF(__pyx_t_4);
           __Pyx_GIVEREF(__pyx_t_5); PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_5); __pyx_t_5 = NULL;
           __Pyx_GIVEREF(__pyx_t_2);
           PyTuple_SET_ITEM(__pyx_t_4, 0+1, __pyx_t_2);
           __pyx_t_2 = 0;
-          __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_4, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 595, __pyx_L9_error)
+          __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_4, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 600, __pyx_L9_error)
           __Pyx_GOTREF(__pyx_t_1);
           __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
         }
@@ -16529,9 +16668,9 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __Pyx_Raise(__pyx_t_1, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      __PYX_ERR(0, 595, __pyx_L9_error)
+      __PYX_ERR(0, 600, __pyx_L9_error)
 
-      /* "nitro.pyx":594
+      /* "nitro.pyx":599
  *         try:
  *             subWindow = io.nitf_SubWindow_construct(&error)
  *             if subWindow is NULL:             # <<<<<<<<<<<<<<
@@ -16540,7 +16679,7 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
  */
     }
 
-    /* "nitro.pyx":596
+    /* "nitro.pyx":601
  *             if subWindow is NULL:
  *                 raise NitfError(error)
  *             subWindow.startRow = 0             # <<<<<<<<<<<<<<
@@ -16549,7 +16688,7 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
  */
     __pyx_v_subWindow->startRow = 0;
 
-    /* "nitro.pyx":597
+    /* "nitro.pyx":602
  *                 raise NitfError(error)
  *             subWindow.startRow = 0
  *             subWindow.startCol = 0             # <<<<<<<<<<<<<<
@@ -16558,64 +16697,64 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
  */
     __pyx_v_subWindow->startCol = 0;
 
-    /* "nitro.pyx":598
+    /* "nitro.pyx":603
  *             subWindow.startRow = 0
  *             subWindow.startCol = 0
  *             subWindow.numRows = numRows             # <<<<<<<<<<<<<<
  *             subWindow.numCols = numCols
  * 
  */
-    __pyx_t_10 = __Pyx_PyInt_As_uint32_t(__pyx_v_numRows); if (unlikely((__pyx_t_10 == ((nitf_Uint32)-1)) && PyErr_Occurred())) __PYX_ERR(0, 598, __pyx_L9_error)
+    __pyx_t_10 = __Pyx_PyInt_As_uint32_t(__pyx_v_numRows); if (unlikely((__pyx_t_10 == ((nitf_Uint32)-1)) && PyErr_Occurred())) __PYX_ERR(0, 603, __pyx_L9_error)
     __pyx_v_subWindow->numRows = __pyx_t_10;
 
-    /* "nitro.pyx":599
+    /* "nitro.pyx":604
  *             subWindow.startCol = 0
  *             subWindow.numRows = numRows
  *             subWindow.numCols = numCols             # <<<<<<<<<<<<<<
  * 
  *             subWindow.bandList = <nitf_Uint32*>PyMem_Malloc(sizeof(nitf_Uint32) * numBands)
  */
-    __pyx_t_10 = __Pyx_PyInt_As_uint32_t(__pyx_v_numCols); if (unlikely((__pyx_t_10 == ((nitf_Uint32)-1)) && PyErr_Occurred())) __PYX_ERR(0, 599, __pyx_L9_error)
+    __pyx_t_10 = __Pyx_PyInt_As_uint32_t(__pyx_v_numCols); if (unlikely((__pyx_t_10 == ((nitf_Uint32)-1)) && PyErr_Occurred())) __PYX_ERR(0, 604, __pyx_L9_error)
     __pyx_v_subWindow->numCols = __pyx_t_10;
 
-    /* "nitro.pyx":601
+    /* "nitro.pyx":606
  *             subWindow.numCols = numCols
  * 
  *             subWindow.bandList = <nitf_Uint32*>PyMem_Malloc(sizeof(nitf_Uint32) * numBands)             # <<<<<<<<<<<<<<
  *             for bidx in range(numBands):
  *                 subWindow.bandList[bidx] = bidx
  */
-    __pyx_t_1 = __Pyx_PyInt_FromSize_t((sizeof(nitf_Uint32))); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 601, __pyx_L9_error)
+    __pyx_t_1 = __Pyx_PyInt_FromSize_t((sizeof(nitf_Uint32))); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 606, __pyx_L9_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_3 = PyNumber_Multiply(__pyx_t_1, __pyx_v_numBands); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 601, __pyx_L9_error)
+    __pyx_t_3 = PyNumber_Multiply(__pyx_t_1, __pyx_v_numBands); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 606, __pyx_L9_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_11 = __Pyx_PyInt_As_size_t(__pyx_t_3); if (unlikely((__pyx_t_11 == (size_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 601, __pyx_L9_error)
+    __pyx_t_11 = __Pyx_PyInt_As_size_t(__pyx_t_3); if (unlikely((__pyx_t_11 == (size_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 606, __pyx_L9_error)
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __pyx_v_subWindow->bandList = ((nitf_Uint32 *)PyMem_Malloc(__pyx_t_11));
 
-    /* "nitro.pyx":602
+    /* "nitro.pyx":607
  * 
  *             subWindow.bandList = <nitf_Uint32*>PyMem_Malloc(sizeof(nitf_Uint32) * numBands)
  *             for bidx in range(numBands):             # <<<<<<<<<<<<<<
  *                 subWindow.bandList[bidx] = bidx
  *             subWindow.numBands = numBands
  */
-    __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 602, __pyx_L9_error)
+    __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 607, __pyx_L9_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_INCREF(__pyx_v_numBands);
     __Pyx_GIVEREF(__pyx_v_numBands);
     PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_v_numBands);
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_range, __pyx_t_3, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 602, __pyx_L9_error)
+    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_range, __pyx_t_3, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 607, __pyx_L9_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     if (likely(PyList_CheckExact(__pyx_t_1)) || PyTuple_CheckExact(__pyx_t_1)) {
       __pyx_t_3 = __pyx_t_1; __Pyx_INCREF(__pyx_t_3); __pyx_t_8 = 0;
       __pyx_t_12 = NULL;
     } else {
-      __pyx_t_8 = -1; __pyx_t_3 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 602, __pyx_L9_error)
+      __pyx_t_8 = -1; __pyx_t_3 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 607, __pyx_L9_error)
       __Pyx_GOTREF(__pyx_t_3);
-      __pyx_t_12 = Py_TYPE(__pyx_t_3)->tp_iternext; if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 602, __pyx_L9_error)
+      __pyx_t_12 = Py_TYPE(__pyx_t_3)->tp_iternext; if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 607, __pyx_L9_error)
     }
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     for (;;) {
@@ -16623,17 +16762,17 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
         if (likely(PyList_CheckExact(__pyx_t_3))) {
           if (__pyx_t_8 >= PyList_GET_SIZE(__pyx_t_3)) break;
           #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-          __pyx_t_1 = PyList_GET_ITEM(__pyx_t_3, __pyx_t_8); __Pyx_INCREF(__pyx_t_1); __pyx_t_8++; if (unlikely(0 < 0)) __PYX_ERR(0, 602, __pyx_L9_error)
+          __pyx_t_1 = PyList_GET_ITEM(__pyx_t_3, __pyx_t_8); __Pyx_INCREF(__pyx_t_1); __pyx_t_8++; if (unlikely(0 < 0)) __PYX_ERR(0, 607, __pyx_L9_error)
           #else
-          __pyx_t_1 = PySequence_ITEM(__pyx_t_3, __pyx_t_8); __pyx_t_8++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 602, __pyx_L9_error)
+          __pyx_t_1 = PySequence_ITEM(__pyx_t_3, __pyx_t_8); __pyx_t_8++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 607, __pyx_L9_error)
           __Pyx_GOTREF(__pyx_t_1);
           #endif
         } else {
           if (__pyx_t_8 >= PyTuple_GET_SIZE(__pyx_t_3)) break;
           #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-          __pyx_t_1 = PyTuple_GET_ITEM(__pyx_t_3, __pyx_t_8); __Pyx_INCREF(__pyx_t_1); __pyx_t_8++; if (unlikely(0 < 0)) __PYX_ERR(0, 602, __pyx_L9_error)
+          __pyx_t_1 = PyTuple_GET_ITEM(__pyx_t_3, __pyx_t_8); __Pyx_INCREF(__pyx_t_1); __pyx_t_8++; if (unlikely(0 < 0)) __PYX_ERR(0, 607, __pyx_L9_error)
           #else
-          __pyx_t_1 = PySequence_ITEM(__pyx_t_3, __pyx_t_8); __pyx_t_8++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 602, __pyx_L9_error)
+          __pyx_t_1 = PySequence_ITEM(__pyx_t_3, __pyx_t_8); __pyx_t_8++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 607, __pyx_L9_error)
           __Pyx_GOTREF(__pyx_t_1);
           #endif
         }
@@ -16643,7 +16782,7 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
           PyObject* exc_type = PyErr_Occurred();
           if (exc_type) {
             if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-            else __PYX_ERR(0, 602, __pyx_L9_error)
+            else __PYX_ERR(0, 607, __pyx_L9_error)
           }
           break;
         }
@@ -16652,18 +16791,18 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
       __Pyx_XDECREF_SET(__pyx_v_bidx, __pyx_t_1);
       __pyx_t_1 = 0;
 
-      /* "nitro.pyx":603
+      /* "nitro.pyx":608
  *             subWindow.bandList = <nitf_Uint32*>PyMem_Malloc(sizeof(nitf_Uint32) * numBands)
  *             for bidx in range(numBands):
  *                 subWindow.bandList[bidx] = bidx             # <<<<<<<<<<<<<<
  *             subWindow.numBands = numBands
  *             buf = array.array(atype, [0] * (numBands * numRows * numCols))
  */
-      __pyx_t_10 = __Pyx_PyInt_As_uint32_t(__pyx_v_bidx); if (unlikely((__pyx_t_10 == ((nitf_Uint32)-1)) && PyErr_Occurred())) __PYX_ERR(0, 603, __pyx_L9_error)
-      __pyx_t_13 = __Pyx_PyIndex_AsSsize_t(__pyx_v_bidx); if (unlikely((__pyx_t_13 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 603, __pyx_L9_error)
+      __pyx_t_10 = __Pyx_PyInt_As_uint32_t(__pyx_v_bidx); if (unlikely((__pyx_t_10 == ((nitf_Uint32)-1)) && PyErr_Occurred())) __PYX_ERR(0, 608, __pyx_L9_error)
+      __pyx_t_13 = __Pyx_PyIndex_AsSsize_t(__pyx_v_bidx); if (unlikely((__pyx_t_13 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 608, __pyx_L9_error)
       (__pyx_v_subWindow->bandList[__pyx_t_13]) = __pyx_t_10;
 
-      /* "nitro.pyx":602
+      /* "nitro.pyx":607
  * 
  *             subWindow.bandList = <nitf_Uint32*>PyMem_Malloc(sizeof(nitf_Uint32) * numBands)
  *             for bidx in range(numBands):             # <<<<<<<<<<<<<<
@@ -16673,40 +16812,40 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
     }
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-    /* "nitro.pyx":604
+    /* "nitro.pyx":609
  *             for bidx in range(numBands):
  *                 subWindow.bandList[bidx] = bidx
  *             subWindow.numBands = numBands             # <<<<<<<<<<<<<<
  *             buf = array.array(atype, [0] * (numBands * numRows * numCols))
  * 
  */
-    __pyx_t_10 = __Pyx_PyInt_As_uint32_t(__pyx_v_numBands); if (unlikely((__pyx_t_10 == ((nitf_Uint32)-1)) && PyErr_Occurred())) __PYX_ERR(0, 604, __pyx_L9_error)
+    __pyx_t_10 = __Pyx_PyInt_As_uint32_t(__pyx_v_numBands); if (unlikely((__pyx_t_10 == ((nitf_Uint32)-1)) && PyErr_Occurred())) __PYX_ERR(0, 609, __pyx_L9_error)
     __pyx_v_subWindow->numBands = __pyx_t_10;
 
-    /* "nitro.pyx":605
+    /* "nitro.pyx":610
  *                 subWindow.bandList[bidx] = bidx
  *             subWindow.numBands = numBands
  *             buf = array.array(atype, [0] * (numBands * numRows * numCols))             # <<<<<<<<<<<<<<
  * 
  *             planar = <nitf_Uint8**>PyMem_Malloc(sizeof(nitf_Uint8*) * numBands)
  */
-    __pyx_t_3 = PyNumber_Multiply(__pyx_v_numBands, __pyx_v_numRows); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 605, __pyx_L9_error)
+    __pyx_t_3 = PyNumber_Multiply(__pyx_v_numBands, __pyx_v_numRows); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 610, __pyx_L9_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_1 = PyNumber_Multiply(__pyx_t_3, __pyx_v_numCols); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 605, __pyx_L9_error)
+    __pyx_t_1 = PyNumber_Multiply(__pyx_t_3, __pyx_v_numCols); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 610, __pyx_L9_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = PyList_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 605, __pyx_L9_error)
+    __pyx_t_3 = PyList_New(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 610, __pyx_L9_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_INCREF(__pyx_int_0);
     __Pyx_GIVEREF(__pyx_int_0);
     PyList_SET_ITEM(__pyx_t_3, 0, __pyx_int_0);
-    { PyObject* __pyx_temp = PyNumber_InPlaceMultiply(__pyx_t_3, __pyx_t_1); if (unlikely(!__pyx_temp)) __PYX_ERR(0, 605, __pyx_L9_error)
+    { PyObject* __pyx_temp = PyNumber_InPlaceMultiply(__pyx_t_3, __pyx_t_1); if (unlikely(!__pyx_temp)) __PYX_ERR(0, 610, __pyx_L9_error)
       __Pyx_GOTREF(__pyx_temp);
       __Pyx_DECREF(__pyx_t_3);
       __pyx_t_3 = __pyx_temp;
     }
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 605, __pyx_L9_error)
+    __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 610, __pyx_L9_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_INCREF(__pyx_v_atype);
     __Pyx_GIVEREF(__pyx_v_atype);
@@ -16714,50 +16853,50 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
     __Pyx_GIVEREF(__pyx_t_3);
     PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_t_3);
     __pyx_t_3 = 0;
-    __pyx_t_3 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_7cpython_5array_array), __pyx_t_1, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 605, __pyx_L9_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_7cpython_5array_array), __pyx_t_1, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 610, __pyx_L9_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_v_buf = ((arrayobject *)__pyx_t_3);
     __pyx_t_3 = 0;
 
-    /* "nitro.pyx":607
+    /* "nitro.pyx":612
  *             buf = array.array(atype, [0] * (numBands * numRows * numCols))
  * 
  *             planar = <nitf_Uint8**>PyMem_Malloc(sizeof(nitf_Uint8*) * numBands)             # <<<<<<<<<<<<<<
  *             for band in range(numBands):
  *                 planar[band] = <nitf_Uint8*>&(buf.data.as_uchars[numRows*numCols*band*(self._nbpp // 8)])
  */
-    __pyx_t_3 = __Pyx_PyInt_FromSize_t((sizeof(nitf_Uint8 *))); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 607, __pyx_L9_error)
+    __pyx_t_3 = __Pyx_PyInt_FromSize_t((sizeof(nitf_Uint8 *))); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 612, __pyx_L9_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_1 = PyNumber_Multiply(__pyx_t_3, __pyx_v_numBands); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 607, __pyx_L9_error)
+    __pyx_t_1 = PyNumber_Multiply(__pyx_t_3, __pyx_v_numBands); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 612, __pyx_L9_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_11 = __Pyx_PyInt_As_size_t(__pyx_t_1); if (unlikely((__pyx_t_11 == (size_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 607, __pyx_L9_error)
+    __pyx_t_11 = __Pyx_PyInt_As_size_t(__pyx_t_1); if (unlikely((__pyx_t_11 == (size_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 612, __pyx_L9_error)
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_v_planar = ((nitf_Uint8 **)PyMem_Malloc(__pyx_t_11));
 
-    /* "nitro.pyx":608
+    /* "nitro.pyx":613
  * 
  *             planar = <nitf_Uint8**>PyMem_Malloc(sizeof(nitf_Uint8*) * numBands)
  *             for band in range(numBands):             # <<<<<<<<<<<<<<
  *                 planar[band] = <nitf_Uint8*>&(buf.data.as_uchars[numRows*numCols*band*(self._nbpp // 8)])
  * 
  */
-    __pyx_t_1 = PyTuple_New(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 608, __pyx_L9_error)
+    __pyx_t_1 = PyTuple_New(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 613, __pyx_L9_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_INCREF(__pyx_v_numBands);
     __Pyx_GIVEREF(__pyx_v_numBands);
     PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_v_numBands);
-    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_range, __pyx_t_1, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 608, __pyx_L9_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_range, __pyx_t_1, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 613, __pyx_L9_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     if (likely(PyList_CheckExact(__pyx_t_3)) || PyTuple_CheckExact(__pyx_t_3)) {
       __pyx_t_1 = __pyx_t_3; __Pyx_INCREF(__pyx_t_1); __pyx_t_8 = 0;
       __pyx_t_12 = NULL;
     } else {
-      __pyx_t_8 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 608, __pyx_L9_error)
+      __pyx_t_8 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 613, __pyx_L9_error)
       __Pyx_GOTREF(__pyx_t_1);
-      __pyx_t_12 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 608, __pyx_L9_error)
+      __pyx_t_12 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 613, __pyx_L9_error)
     }
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     for (;;) {
@@ -16765,17 +16904,17 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
         if (likely(PyList_CheckExact(__pyx_t_1))) {
           if (__pyx_t_8 >= PyList_GET_SIZE(__pyx_t_1)) break;
           #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-          __pyx_t_3 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_8); __Pyx_INCREF(__pyx_t_3); __pyx_t_8++; if (unlikely(0 < 0)) __PYX_ERR(0, 608, __pyx_L9_error)
+          __pyx_t_3 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_8); __Pyx_INCREF(__pyx_t_3); __pyx_t_8++; if (unlikely(0 < 0)) __PYX_ERR(0, 613, __pyx_L9_error)
           #else
-          __pyx_t_3 = PySequence_ITEM(__pyx_t_1, __pyx_t_8); __pyx_t_8++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 608, __pyx_L9_error)
+          __pyx_t_3 = PySequence_ITEM(__pyx_t_1, __pyx_t_8); __pyx_t_8++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 613, __pyx_L9_error)
           __Pyx_GOTREF(__pyx_t_3);
           #endif
         } else {
           if (__pyx_t_8 >= PyTuple_GET_SIZE(__pyx_t_1)) break;
           #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-          __pyx_t_3 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_8); __Pyx_INCREF(__pyx_t_3); __pyx_t_8++; if (unlikely(0 < 0)) __PYX_ERR(0, 608, __pyx_L9_error)
+          __pyx_t_3 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_8); __Pyx_INCREF(__pyx_t_3); __pyx_t_8++; if (unlikely(0 < 0)) __PYX_ERR(0, 613, __pyx_L9_error)
           #else
-          __pyx_t_3 = PySequence_ITEM(__pyx_t_1, __pyx_t_8); __pyx_t_8++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 608, __pyx_L9_error)
+          __pyx_t_3 = PySequence_ITEM(__pyx_t_1, __pyx_t_8); __pyx_t_8++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 613, __pyx_L9_error)
           __Pyx_GOTREF(__pyx_t_3);
           #endif
         }
@@ -16785,7 +16924,7 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
           PyObject* exc_type = PyErr_Occurred();
           if (exc_type) {
             if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-            else __PYX_ERR(0, 608, __pyx_L9_error)
+            else __PYX_ERR(0, 613, __pyx_L9_error)
           }
           break;
         }
@@ -16794,30 +16933,30 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
       __Pyx_XDECREF_SET(__pyx_v_band, __pyx_t_3);
       __pyx_t_3 = 0;
 
-      /* "nitro.pyx":609
+      /* "nitro.pyx":614
  *             planar = <nitf_Uint8**>PyMem_Malloc(sizeof(nitf_Uint8*) * numBands)
  *             for band in range(numBands):
  *                 planar[band] = <nitf_Uint8*>&(buf.data.as_uchars[numRows*numCols*band*(self._nbpp // 8)])             # <<<<<<<<<<<<<<
  * 
  *             if not io.nitf_ImageReader_read(self._c_reader, subWindow, planar, &padded, &error):
  */
-      __pyx_t_3 = PyNumber_Multiply(__pyx_v_numRows, __pyx_v_numCols); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 609, __pyx_L9_error)
+      __pyx_t_3 = PyNumber_Multiply(__pyx_v_numRows, __pyx_v_numCols); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 614, __pyx_L9_error)
       __Pyx_GOTREF(__pyx_t_3);
-      __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_v_band); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 609, __pyx_L9_error)
+      __pyx_t_4 = PyNumber_Multiply(__pyx_t_3, __pyx_v_band); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 614, __pyx_L9_error)
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __pyx_t_3 = __Pyx_PyInt_From_long(__Pyx_div_long(__pyx_v_self->_nbpp, 8)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 609, __pyx_L9_error)
+      __pyx_t_3 = __Pyx_PyInt_From_long(__Pyx_div_long(__pyx_v_self->_nbpp, 8)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 614, __pyx_L9_error)
       __Pyx_GOTREF(__pyx_t_3);
-      __pyx_t_2 = PyNumber_Multiply(__pyx_t_4, __pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 609, __pyx_L9_error)
+      __pyx_t_2 = PyNumber_Multiply(__pyx_t_4, __pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 614, __pyx_L9_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-      __pyx_t_13 = __Pyx_PyIndex_AsSsize_t(__pyx_t_2); if (unlikely((__pyx_t_13 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 609, __pyx_L9_error)
+      __pyx_t_13 = __Pyx_PyIndex_AsSsize_t(__pyx_t_2); if (unlikely((__pyx_t_13 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 614, __pyx_L9_error)
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-      __pyx_t_14 = __Pyx_PyIndex_AsSsize_t(__pyx_v_band); if (unlikely((__pyx_t_14 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 609, __pyx_L9_error)
+      __pyx_t_14 = __Pyx_PyIndex_AsSsize_t(__pyx_v_band); if (unlikely((__pyx_t_14 == (Py_ssize_t)-1) && PyErr_Occurred())) __PYX_ERR(0, 614, __pyx_L9_error)
       (__pyx_v_planar[__pyx_t_14]) = ((nitf_Uint8 *)(&(__pyx_v_buf->data.as_uchars[__pyx_t_13])));
 
-      /* "nitro.pyx":608
+      /* "nitro.pyx":613
  * 
  *             planar = <nitf_Uint8**>PyMem_Malloc(sizeof(nitf_Uint8*) * numBands)
  *             for band in range(numBands):             # <<<<<<<<<<<<<<
@@ -16827,7 +16966,7 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
     }
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "nitro.pyx":611
+    /* "nitro.pyx":616
  *                 planar[band] = <nitf_Uint8*>&(buf.data.as_uchars[numRows*numCols*band*(self._nbpp // 8)])
  * 
  *             if not io.nitf_ImageReader_read(self._c_reader, subWindow, planar, &padded, &error):             # <<<<<<<<<<<<<<
@@ -16837,16 +16976,16 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
     __pyx_t_7 = ((!(nitf_ImageReader_read(__pyx_v_self->_c_reader, __pyx_v_subWindow, __pyx_v_planar, (&__pyx_v_padded), (&__pyx_v_error)) != 0)) != 0);
     if (__pyx_t_7) {
 
-      /* "nitro.pyx":612
+      /* "nitro.pyx":617
  * 
  *             if not io.nitf_ImageReader_read(self._c_reader, subWindow, planar, &padded, &error):
  *                 raise NitfError(error)             # <<<<<<<<<<<<<<
  *         finally:
  *             if planar is not NULL:
  */
-      __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 612, __pyx_L9_error)
+      __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 617, __pyx_L9_error)
       __Pyx_GOTREF(__pyx_t_2);
-      __pyx_t_3 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 612, __pyx_L9_error)
+      __pyx_t_3 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 617, __pyx_L9_error)
       __Pyx_GOTREF(__pyx_t_3);
       __pyx_t_4 = NULL;
       if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_2))) {
@@ -16859,14 +16998,14 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
         }
       }
       if (!__pyx_t_4) {
-        __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 612, __pyx_L9_error)
+        __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 617, __pyx_L9_error)
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
         __Pyx_GOTREF(__pyx_t_1);
       } else {
         #if CYTHON_FAST_PYCALL
         if (PyFunction_Check(__pyx_t_2)) {
           PyObject *__pyx_temp[2] = {__pyx_t_4, __pyx_t_3};
-          __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 612, __pyx_L9_error)
+          __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 617, __pyx_L9_error)
           __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
           __Pyx_GOTREF(__pyx_t_1);
           __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -16875,20 +17014,20 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
         #if CYTHON_FAST_PYCCALL
         if (__Pyx_PyFastCFunction_Check(__pyx_t_2)) {
           PyObject *__pyx_temp[2] = {__pyx_t_4, __pyx_t_3};
-          __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 612, __pyx_L9_error)
+          __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 617, __pyx_L9_error)
           __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
           __Pyx_GOTREF(__pyx_t_1);
           __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
         } else
         #endif
         {
-          __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 612, __pyx_L9_error)
+          __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 617, __pyx_L9_error)
           __Pyx_GOTREF(__pyx_t_5);
           __Pyx_GIVEREF(__pyx_t_4); PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_4); __pyx_t_4 = NULL;
           __Pyx_GIVEREF(__pyx_t_3);
           PyTuple_SET_ITEM(__pyx_t_5, 0+1, __pyx_t_3);
           __pyx_t_3 = 0;
-          __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_5, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 612, __pyx_L9_error)
+          __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_5, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 617, __pyx_L9_error)
           __Pyx_GOTREF(__pyx_t_1);
           __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
         }
@@ -16896,9 +17035,9 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
       __Pyx_Raise(__pyx_t_1, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      __PYX_ERR(0, 612, __pyx_L9_error)
+      __PYX_ERR(0, 617, __pyx_L9_error)
 
-      /* "nitro.pyx":611
+      /* "nitro.pyx":616
  *                 planar[band] = <nitf_Uint8*>&(buf.data.as_uchars[numRows*numCols*band*(self._nbpp // 8)])
  * 
  *             if not io.nitf_ImageReader_read(self._c_reader, subWindow, planar, &padded, &error):             # <<<<<<<<<<<<<<
@@ -16908,7 +17047,7 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
     }
   }
 
-  /* "nitro.pyx":614
+  /* "nitro.pyx":619
  *                 raise NitfError(error)
  *         finally:
  *             if planar is not NULL:             # <<<<<<<<<<<<<<
@@ -16920,7 +17059,7 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
       __pyx_t_7 = ((__pyx_v_planar != NULL) != 0);
       if (__pyx_t_7) {
 
-        /* "nitro.pyx":615
+        /* "nitro.pyx":620
  *         finally:
  *             if planar is not NULL:
  *                 PyMem_Free(planar)             # <<<<<<<<<<<<<<
@@ -16929,7 +17068,7 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
  */
         PyMem_Free(__pyx_v_planar);
 
-        /* "nitro.pyx":614
+        /* "nitro.pyx":619
  *                 raise NitfError(error)
  *         finally:
  *             if planar is not NULL:             # <<<<<<<<<<<<<<
@@ -16938,7 +17077,7 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
  */
       }
 
-      /* "nitro.pyx":616
+      /* "nitro.pyx":621
  *             if planar is not NULL:
  *                 PyMem_Free(planar)
  *             if subWindow is not NULL:             # <<<<<<<<<<<<<<
@@ -16948,7 +17087,7 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
       __pyx_t_7 = ((__pyx_v_subWindow != NULL) != 0);
       if (__pyx_t_7) {
 
-        /* "nitro.pyx":617
+        /* "nitro.pyx":622
  *                 PyMem_Free(planar)
  *             if subWindow is not NULL:
  *                 if subWindow.bandList is not NULL:             # <<<<<<<<<<<<<<
@@ -16958,7 +17097,7 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
         __pyx_t_7 = ((__pyx_v_subWindow->bandList != NULL) != 0);
         if (__pyx_t_7) {
 
-          /* "nitro.pyx":618
+          /* "nitro.pyx":623
  *             if subWindow is not NULL:
  *                 if subWindow.bandList is not NULL:
  *                     PyMem_Free(subWindow.bandList)             # <<<<<<<<<<<<<<
@@ -16967,7 +17106,7 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
  */
           PyMem_Free(__pyx_v_subWindow->bandList);
 
-          /* "nitro.pyx":617
+          /* "nitro.pyx":622
  *                 PyMem_Free(planar)
  *             if subWindow is not NULL:
  *                 if subWindow.bandList is not NULL:             # <<<<<<<<<<<<<<
@@ -16976,7 +17115,7 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
  */
         }
 
-        /* "nitro.pyx":619
+        /* "nitro.pyx":624
  *                 if subWindow.bandList is not NULL:
  *                     PyMem_Free(subWindow.bandList)
  *                 io.nitf_SubWindow_destruct(&subWindow)             # <<<<<<<<<<<<<<
@@ -16985,7 +17124,7 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
  */
         nitf_SubWindow_destruct((&__pyx_v_subWindow));
 
-        /* "nitro.pyx":616
+        /* "nitro.pyx":621
  *             if planar is not NULL:
  *                 PyMem_Free(planar)
  *             if subWindow is not NULL:             # <<<<<<<<<<<<<<
@@ -17016,7 +17155,7 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
       __pyx_t_15 = __pyx_lineno; __pyx_t_16 = __pyx_clineno; __pyx_t_17 = __pyx_filename;
       {
 
-        /* "nitro.pyx":614
+        /* "nitro.pyx":619
  *                 raise NitfError(error)
  *         finally:
  *             if planar is not NULL:             # <<<<<<<<<<<<<<
@@ -17026,7 +17165,7 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
         __pyx_t_7 = ((__pyx_v_planar != NULL) != 0);
         if (__pyx_t_7) {
 
-          /* "nitro.pyx":615
+          /* "nitro.pyx":620
  *         finally:
  *             if planar is not NULL:
  *                 PyMem_Free(planar)             # <<<<<<<<<<<<<<
@@ -17035,7 +17174,7 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
  */
           PyMem_Free(__pyx_v_planar);
 
-          /* "nitro.pyx":614
+          /* "nitro.pyx":619
  *                 raise NitfError(error)
  *         finally:
  *             if planar is not NULL:             # <<<<<<<<<<<<<<
@@ -17044,7 +17183,7 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
  */
         }
 
-        /* "nitro.pyx":616
+        /* "nitro.pyx":621
  *             if planar is not NULL:
  *                 PyMem_Free(planar)
  *             if subWindow is not NULL:             # <<<<<<<<<<<<<<
@@ -17054,7 +17193,7 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
         __pyx_t_7 = ((__pyx_v_subWindow != NULL) != 0);
         if (__pyx_t_7) {
 
-          /* "nitro.pyx":617
+          /* "nitro.pyx":622
  *                 PyMem_Free(planar)
  *             if subWindow is not NULL:
  *                 if subWindow.bandList is not NULL:             # <<<<<<<<<<<<<<
@@ -17064,7 +17203,7 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
           __pyx_t_7 = ((__pyx_v_subWindow->bandList != NULL) != 0);
           if (__pyx_t_7) {
 
-            /* "nitro.pyx":618
+            /* "nitro.pyx":623
  *             if subWindow is not NULL:
  *                 if subWindow.bandList is not NULL:
  *                     PyMem_Free(subWindow.bandList)             # <<<<<<<<<<<<<<
@@ -17073,7 +17212,7 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
  */
             PyMem_Free(__pyx_v_subWindow->bandList);
 
-            /* "nitro.pyx":617
+            /* "nitro.pyx":622
  *                 PyMem_Free(planar)
  *             if subWindow is not NULL:
  *                 if subWindow.bandList is not NULL:             # <<<<<<<<<<<<<<
@@ -17082,7 +17221,7 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
  */
           }
 
-          /* "nitro.pyx":619
+          /* "nitro.pyx":624
  *                 if subWindow.bandList is not NULL:
  *                     PyMem_Free(subWindow.bandList)
  *                 io.nitf_SubWindow_destruct(&subWindow)             # <<<<<<<<<<<<<<
@@ -17091,7 +17230,7 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
  */
           nitf_SubWindow_destruct((&__pyx_v_subWindow));
 
-          /* "nitro.pyx":616
+          /* "nitro.pyx":621
  *             if planar is not NULL:
  *                 PyMem_Free(planar)
  *             if subWindow is not NULL:             # <<<<<<<<<<<<<<
@@ -17117,30 +17256,30 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
     __pyx_L10:;
   }
 
-  /* "nitro.pyx":621
+  /* "nitro.pyx":626
  *                 io.nitf_SubWindow_destruct(&subWindow)
  * 
  *         nparr = np.asarray(buf, dtype=f'{atype}')             # <<<<<<<<<<<<<<
  *         nparr.shape = numBands, numRows, numCols
  *         return nparr
  */
-  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 621, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 626, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_asarray); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 621, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_asarray); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 626, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = PyTuple_New(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 621, __pyx_L1_error)
+  __pyx_t_1 = PyTuple_New(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 626, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_INCREF(((PyObject *)__pyx_v_buf));
   __Pyx_GIVEREF(((PyObject *)__pyx_v_buf));
   PyTuple_SET_ITEM(__pyx_t_1, 0, ((PyObject *)__pyx_v_buf));
-  __pyx_t_5 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 621, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 626, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_3 = __Pyx_PyObject_FormatSimple(__pyx_v_atype, __pyx_empty_unicode); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 621, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_FormatSimple(__pyx_v_atype, __pyx_empty_unicode); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 626, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  if (PyDict_SetItem(__pyx_t_5, __pyx_n_s_dtype, __pyx_t_3) < 0) __PYX_ERR(0, 621, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_5, __pyx_n_s_dtype, __pyx_t_3) < 0) __PYX_ERR(0, 626, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_1, __pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 621, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_1, __pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 626, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -17148,14 +17287,14 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
   __pyx_v_nparr = __pyx_t_3;
   __pyx_t_3 = 0;
 
-  /* "nitro.pyx":622
+  /* "nitro.pyx":627
  * 
  *         nparr = np.asarray(buf, dtype=f'{atype}')
  *         nparr.shape = numBands, numRows, numCols             # <<<<<<<<<<<<<<
  *         return nparr
  * 
  */
-  __pyx_t_3 = PyTuple_New(3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 622, __pyx_L1_error)
+  __pyx_t_3 = PyTuple_New(3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 627, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_INCREF(__pyx_v_numBands);
   __Pyx_GIVEREF(__pyx_v_numBands);
@@ -17166,10 +17305,10 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
   __Pyx_INCREF(__pyx_v_numCols);
   __Pyx_GIVEREF(__pyx_v_numCols);
   PyTuple_SET_ITEM(__pyx_t_3, 2, __pyx_v_numCols);
-  if (__Pyx_PyObject_SetAttrStr(__pyx_v_nparr, __pyx_n_s_shape, __pyx_t_3) < 0) __PYX_ERR(0, 622, __pyx_L1_error)
+  if (__Pyx_PyObject_SetAttrStr(__pyx_v_nparr, __pyx_n_s_shape, __pyx_t_3) < 0) __PYX_ERR(0, 627, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "nitro.pyx":623
+  /* "nitro.pyx":628
  *         nparr = np.asarray(buf, dtype=f'{atype}')
  *         nparr.shape = numBands, numRows, numCols
  *         return nparr             # <<<<<<<<<<<<<<
@@ -17181,7 +17320,7 @@ static PyObject *__pyx_f_5nitro_11ImageReader_read(struct __pyx_obj_5nitro_Image
   __pyx_r = __pyx_v_nparr;
   goto __pyx_L0;
 
-  /* "nitro.pyx":552
+  /* "nitro.pyx":557
  *         return PyCapsule_New(self._c_reader, "ImageReader", NULL)
  * 
  *     cpdef read(self, ihdr):             # <<<<<<<<<<<<<<
@@ -17233,7 +17372,7 @@ static PyObject *__pyx_pf_5nitro_11ImageReader_4read(struct __pyx_obj_5nitro_Ima
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("read", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_f_5nitro_11ImageReader_read(__pyx_v_self, __pyx_v_ihdr, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 552, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_5nitro_11ImageReader_read(__pyx_v_self, __pyx_v_ihdr, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 557, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
@@ -17357,7 +17496,7 @@ static PyObject *__pyx_pf_5nitro_11ImageReader_8__setstate_cython__(CYTHON_UNUSE
   return __pyx_r;
 }
 
-/* "nitro.pyx":629
+/* "nitro.pyx":634
  *     cdef io.nitf_SegmentReader* _c_reader
  * 
  *     def __cinit__(self):             # <<<<<<<<<<<<<<
@@ -17386,7 +17525,7 @@ static int __pyx_pf_5nitro_13SegmentReader___cinit__(struct __pyx_obj_5nitro_Seg
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "nitro.pyx":630
+  /* "nitro.pyx":635
  * 
  *     def __cinit__(self):
  *         self._c_reader = NULL             # <<<<<<<<<<<<<<
@@ -17395,7 +17534,7 @@ static int __pyx_pf_5nitro_13SegmentReader___cinit__(struct __pyx_obj_5nitro_Seg
  */
   __pyx_v_self->_c_reader = NULL;
 
-  /* "nitro.pyx":629
+  /* "nitro.pyx":634
  *     cdef io.nitf_SegmentReader* _c_reader
  * 
  *     def __cinit__(self):             # <<<<<<<<<<<<<<
@@ -17409,7 +17548,7 @@ static int __pyx_pf_5nitro_13SegmentReader___cinit__(struct __pyx_obj_5nitro_Seg
   return __pyx_r;
 }
 
-/* "nitro.pyx":633
+/* "nitro.pyx":638
  * 
  *     @staticmethod
  *     cdef from_ptr(io.nitf_SegmentReader* ptr):             # <<<<<<<<<<<<<<
@@ -17424,19 +17563,19 @@ static PyObject *__pyx_f_5nitro_13SegmentReader_from_ptr(nitf_SegmentReader *__p
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("from_ptr", 0);
 
-  /* "nitro.pyx":634
+  /* "nitro.pyx":639
  *     @staticmethod
  *     cdef from_ptr(io.nitf_SegmentReader* ptr):
  *         obj = SegmentReader()             # <<<<<<<<<<<<<<
  *         obj._c_reader = ptr
  *         return obj
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_5nitro_SegmentReader), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 634, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_5nitro_SegmentReader), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 639, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_obj = ((struct __pyx_obj_5nitro_SegmentReader *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "nitro.pyx":635
+  /* "nitro.pyx":640
  *     cdef from_ptr(io.nitf_SegmentReader* ptr):
  *         obj = SegmentReader()
  *         obj._c_reader = ptr             # <<<<<<<<<<<<<<
@@ -17445,7 +17584,7 @@ static PyObject *__pyx_f_5nitro_13SegmentReader_from_ptr(nitf_SegmentReader *__p
  */
   __pyx_v_obj->_c_reader = __pyx_v_ptr;
 
-  /* "nitro.pyx":636
+  /* "nitro.pyx":641
  *         obj = SegmentReader()
  *         obj._c_reader = ptr
  *         return obj             # <<<<<<<<<<<<<<
@@ -17457,7 +17596,7 @@ static PyObject *__pyx_f_5nitro_13SegmentReader_from_ptr(nitf_SegmentReader *__p
   __pyx_r = ((PyObject *)__pyx_v_obj);
   goto __pyx_L0;
 
-  /* "nitro.pyx":633
+  /* "nitro.pyx":638
  * 
  *     @staticmethod
  *     cdef from_ptr(io.nitf_SegmentReader* ptr):             # <<<<<<<<<<<<<<
@@ -17477,7 +17616,7 @@ static PyObject *__pyx_f_5nitro_13SegmentReader_from_ptr(nitf_SegmentReader *__p
   return __pyx_r;
 }
 
-/* "nitro.pyx":638
+/* "nitro.pyx":643
  *         return obj
  * 
  *     def read(self, np.npy_intp count=0):             # <<<<<<<<<<<<<<
@@ -17513,7 +17652,7 @@ static PyObject *__pyx_pw_5nitro_13SegmentReader_3read(PyObject *__pyx_v_self, P
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "read") < 0)) __PYX_ERR(0, 638, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "read") < 0)) __PYX_ERR(0, 643, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -17524,14 +17663,14 @@ static PyObject *__pyx_pw_5nitro_13SegmentReader_3read(PyObject *__pyx_v_self, P
       }
     }
     if (values[0]) {
-      __pyx_v_count = __Pyx_PyInt_As_Py_intptr_t(values[0]); if (unlikely((__pyx_v_count == ((npy_intp)-1)) && PyErr_Occurred())) __PYX_ERR(0, 638, __pyx_L3_error)
+      __pyx_v_count = __Pyx_PyInt_As_Py_intptr_t(values[0]); if (unlikely((__pyx_v_count == ((npy_intp)-1)) && PyErr_Occurred())) __PYX_ERR(0, 643, __pyx_L3_error)
     } else {
       __pyx_v_count = ((npy_intp)0);
     }
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("read", 0, 0, 1, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 638, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("read", 0, 0, 1, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 643, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("nitro.SegmentReader.read", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -17558,7 +17697,7 @@ static PyObject *__pyx_pf_5nitro_13SegmentReader_2read(struct __pyx_obj_5nitro_S
   PyObject *__pyx_t_7 = NULL;
   __Pyx_RefNannySetupContext("read", 0);
 
-  /* "nitro.pyx":641
+  /* "nitro.pyx":646
  *         cdef nitf_Error error
  * 
  *         if count == 0:             # <<<<<<<<<<<<<<
@@ -17568,17 +17707,17 @@ static PyObject *__pyx_pf_5nitro_13SegmentReader_2read(struct __pyx_obj_5nitro_S
   __pyx_t_1 = ((__pyx_v_count == 0) != 0);
   if (__pyx_t_1) {
 
-    /* "nitro.pyx":642
+    /* "nitro.pyx":647
  * 
  *         if count == 0:
  *             count = len(self)             # <<<<<<<<<<<<<<
  *         buf = np.PyArray_SimpleNew(1, &count, np.NPY_BYTE)
  *         if not io.nitf_SegmentReader_read(self._c_reader, np.PyArray_DATA(buf), count, &error):
  */
-    __pyx_t_2 = PyObject_Length(((PyObject *)__pyx_v_self)); if (unlikely(__pyx_t_2 == ((Py_ssize_t)-1))) __PYX_ERR(0, 642, __pyx_L1_error)
+    __pyx_t_2 = PyObject_Length(((PyObject *)__pyx_v_self)); if (unlikely(__pyx_t_2 == ((Py_ssize_t)-1))) __PYX_ERR(0, 647, __pyx_L1_error)
     __pyx_v_count = __pyx_t_2;
 
-    /* "nitro.pyx":641
+    /* "nitro.pyx":646
  *         cdef nitf_Error error
  * 
  *         if count == 0:             # <<<<<<<<<<<<<<
@@ -17587,39 +17726,39 @@ static PyObject *__pyx_pf_5nitro_13SegmentReader_2read(struct __pyx_obj_5nitro_S
  */
   }
 
-  /* "nitro.pyx":643
+  /* "nitro.pyx":648
  *         if count == 0:
  *             count = len(self)
  *         buf = np.PyArray_SimpleNew(1, &count, np.NPY_BYTE)             # <<<<<<<<<<<<<<
  *         if not io.nitf_SegmentReader_read(self._c_reader, np.PyArray_DATA(buf), count, &error):
  *             raise NitfError(error)
  */
-  __pyx_t_3 = PyArray_SimpleNew(1, (&__pyx_v_count), NPY_BYTE); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 643, __pyx_L1_error)
+  __pyx_t_3 = PyArray_SimpleNew(1, (&__pyx_v_count), NPY_BYTE); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 648, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_v_buf = __pyx_t_3;
   __pyx_t_3 = 0;
 
-  /* "nitro.pyx":644
+  /* "nitro.pyx":649
  *             count = len(self)
  *         buf = np.PyArray_SimpleNew(1, &count, np.NPY_BYTE)
  *         if not io.nitf_SegmentReader_read(self._c_reader, np.PyArray_DATA(buf), count, &error):             # <<<<<<<<<<<<<<
  *             raise NitfError(error)
  *         return buf
  */
-  if (!(likely(((__pyx_v_buf) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_buf, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 644, __pyx_L1_error)
+  if (!(likely(((__pyx_v_buf) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_buf, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 649, __pyx_L1_error)
   __pyx_t_1 = ((!(nitf_SegmentReader_read(__pyx_v_self->_c_reader, PyArray_DATA(((PyArrayObject *)__pyx_v_buf)), __pyx_v_count, (&__pyx_v_error)) != 0)) != 0);
   if (__pyx_t_1) {
 
-    /* "nitro.pyx":645
+    /* "nitro.pyx":650
  *         buf = np.PyArray_SimpleNew(1, &count, np.NPY_BYTE)
  *         if not io.nitf_SegmentReader_read(self._c_reader, np.PyArray_DATA(buf), count, &error):
  *             raise NitfError(error)             # <<<<<<<<<<<<<<
  *         return buf
  * 
  */
-    __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 645, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 650, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_5 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 645, __pyx_L1_error)
+    __pyx_t_5 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 650, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __pyx_t_6 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_4))) {
@@ -17632,14 +17771,14 @@ static PyObject *__pyx_pf_5nitro_13SegmentReader_2read(struct __pyx_obj_5nitro_S
       }
     }
     if (!__pyx_t_6) {
-      __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 645, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 650, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       __Pyx_GOTREF(__pyx_t_3);
     } else {
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_4)) {
         PyObject *__pyx_temp[2] = {__pyx_t_6, __pyx_t_5};
-        __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 645, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 650, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
@@ -17648,20 +17787,20 @@ static PyObject *__pyx_pf_5nitro_13SegmentReader_2read(struct __pyx_obj_5nitro_S
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_4)) {
         PyObject *__pyx_temp[2] = {__pyx_t_6, __pyx_t_5};
-        __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 645, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 650, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       } else
       #endif
       {
-        __pyx_t_7 = PyTuple_New(1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 645, __pyx_L1_error)
+        __pyx_t_7 = PyTuple_New(1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 650, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_GIVEREF(__pyx_t_6); PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_6); __pyx_t_6 = NULL;
         __Pyx_GIVEREF(__pyx_t_5);
         PyTuple_SET_ITEM(__pyx_t_7, 0+1, __pyx_t_5);
         __pyx_t_5 = 0;
-        __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_7, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 645, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_7, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 650, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       }
@@ -17669,9 +17808,9 @@ static PyObject *__pyx_pf_5nitro_13SegmentReader_2read(struct __pyx_obj_5nitro_S
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __PYX_ERR(0, 645, __pyx_L1_error)
+    __PYX_ERR(0, 650, __pyx_L1_error)
 
-    /* "nitro.pyx":644
+    /* "nitro.pyx":649
  *             count = len(self)
  *         buf = np.PyArray_SimpleNew(1, &count, np.NPY_BYTE)
  *         if not io.nitf_SegmentReader_read(self._c_reader, np.PyArray_DATA(buf), count, &error):             # <<<<<<<<<<<<<<
@@ -17680,7 +17819,7 @@ static PyObject *__pyx_pf_5nitro_13SegmentReader_2read(struct __pyx_obj_5nitro_S
  */
   }
 
-  /* "nitro.pyx":646
+  /* "nitro.pyx":651
  *         if not io.nitf_SegmentReader_read(self._c_reader, np.PyArray_DATA(buf), count, &error):
  *             raise NitfError(error)
  *         return buf             # <<<<<<<<<<<<<<
@@ -17692,7 +17831,7 @@ static PyObject *__pyx_pf_5nitro_13SegmentReader_2read(struct __pyx_obj_5nitro_S
   __pyx_r = __pyx_v_buf;
   goto __pyx_L0;
 
-  /* "nitro.pyx":638
+  /* "nitro.pyx":643
  *         return obj
  * 
  *     def read(self, np.npy_intp count=0):             # <<<<<<<<<<<<<<
@@ -17716,7 +17855,7 @@ static PyObject *__pyx_pf_5nitro_13SegmentReader_2read(struct __pyx_obj_5nitro_S
   return __pyx_r;
 }
 
-/* "nitro.pyx":648
+/* "nitro.pyx":653
  *         return buf
  * 
  *     def __len__(self):             # <<<<<<<<<<<<<<
@@ -17750,7 +17889,7 @@ static Py_ssize_t __pyx_pf_5nitro_13SegmentReader_4__len__(struct __pyx_obj_5nit
   PyObject *__pyx_t_6 = NULL;
   __Pyx_RefNannySetupContext("__len__", 0);
 
-  /* "nitro.pyx":650
+  /* "nitro.pyx":655
  *     def __len__(self):
  *         cdef nitf_Error error
  *         l = io.nitf_SegmentReader_getSize(self._c_reader, &error)             # <<<<<<<<<<<<<<
@@ -17759,7 +17898,7 @@ static Py_ssize_t __pyx_pf_5nitro_13SegmentReader_4__len__(struct __pyx_obj_5nit
  */
   __pyx_v_l = nitf_SegmentReader_getSize(__pyx_v_self->_c_reader, (&__pyx_v_error));
 
-  /* "nitro.pyx":651
+  /* "nitro.pyx":656
  *         cdef nitf_Error error
  *         l = io.nitf_SegmentReader_getSize(self._c_reader, &error)
  *         if l < 0:             # <<<<<<<<<<<<<<
@@ -17769,16 +17908,16 @@ static Py_ssize_t __pyx_pf_5nitro_13SegmentReader_4__len__(struct __pyx_obj_5nit
   __pyx_t_1 = ((__pyx_v_l < 0) != 0);
   if (__pyx_t_1) {
 
-    /* "nitro.pyx":652
+    /* "nitro.pyx":657
  *         l = io.nitf_SegmentReader_getSize(self._c_reader, &error)
  *         if l < 0:
  *             raise NitfError(error)             # <<<<<<<<<<<<<<
  *         return l
  * 
  */
-    __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 652, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 657, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_4 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 652, __pyx_L1_error)
+    __pyx_t_4 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 657, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __pyx_t_5 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
@@ -17791,14 +17930,14 @@ static Py_ssize_t __pyx_pf_5nitro_13SegmentReader_4__len__(struct __pyx_obj_5nit
       }
     }
     if (!__pyx_t_5) {
-      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 652, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 657, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       __Pyx_GOTREF(__pyx_t_2);
     } else {
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_3)) {
         PyObject *__pyx_temp[2] = {__pyx_t_5, __pyx_t_4};
-        __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 652, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 657, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
@@ -17807,20 +17946,20 @@ static Py_ssize_t __pyx_pf_5nitro_13SegmentReader_4__len__(struct __pyx_obj_5nit
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
         PyObject *__pyx_temp[2] = {__pyx_t_5, __pyx_t_4};
-        __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 652, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 657, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       } else
       #endif
       {
-        __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 652, __pyx_L1_error)
+        __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 657, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_6);
         __Pyx_GIVEREF(__pyx_t_5); PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_5); __pyx_t_5 = NULL;
         __Pyx_GIVEREF(__pyx_t_4);
         PyTuple_SET_ITEM(__pyx_t_6, 0+1, __pyx_t_4);
         __pyx_t_4 = 0;
-        __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_6, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 652, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_6, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 657, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       }
@@ -17828,9 +17967,9 @@ static Py_ssize_t __pyx_pf_5nitro_13SegmentReader_4__len__(struct __pyx_obj_5nit
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_Raise(__pyx_t_2, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __PYX_ERR(0, 652, __pyx_L1_error)
+    __PYX_ERR(0, 657, __pyx_L1_error)
 
-    /* "nitro.pyx":651
+    /* "nitro.pyx":656
  *         cdef nitf_Error error
  *         l = io.nitf_SegmentReader_getSize(self._c_reader, &error)
  *         if l < 0:             # <<<<<<<<<<<<<<
@@ -17839,7 +17978,7 @@ static Py_ssize_t __pyx_pf_5nitro_13SegmentReader_4__len__(struct __pyx_obj_5nit
  */
   }
 
-  /* "nitro.pyx":653
+  /* "nitro.pyx":658
  *         if l < 0:
  *             raise NitfError(error)
  *         return l             # <<<<<<<<<<<<<<
@@ -17849,7 +17988,7 @@ static Py_ssize_t __pyx_pf_5nitro_13SegmentReader_4__len__(struct __pyx_obj_5nit
   __pyx_r = __pyx_v_l;
   goto __pyx_L0;
 
-  /* "nitro.pyx":648
+  /* "nitro.pyx":653
  *         return buf
  * 
  *     def __len__(self):             # <<<<<<<<<<<<<<
@@ -17978,7 +18117,7 @@ static PyObject *__pyx_pf_5nitro_13SegmentReader_8__setstate_cython__(CYTHON_UNU
   return __pyx_r;
 }
 
-/* "nitro.pyx":659
+/* "nitro.pyx":664
  *     cdef io.nitf_SegmentWriter* _c_writer
  * 
  *     def __cinit__(self):             # <<<<<<<<<<<<<<
@@ -18007,7 +18146,7 @@ static int __pyx_pf_5nitro_13SegmentWriter___cinit__(struct __pyx_obj_5nitro_Seg
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__cinit__", 0);
 
-  /* "nitro.pyx":660
+  /* "nitro.pyx":665
  * 
  *     def __cinit__(self):
  *         self._c_writer = NULL             # <<<<<<<<<<<<<<
@@ -18016,7 +18155,7 @@ static int __pyx_pf_5nitro_13SegmentWriter___cinit__(struct __pyx_obj_5nitro_Seg
  */
   __pyx_v_self->_c_writer = NULL;
 
-  /* "nitro.pyx":659
+  /* "nitro.pyx":664
  *     cdef io.nitf_SegmentWriter* _c_writer
  * 
  *     def __cinit__(self):             # <<<<<<<<<<<<<<
@@ -18030,7 +18169,7 @@ static int __pyx_pf_5nitro_13SegmentWriter___cinit__(struct __pyx_obj_5nitro_Seg
   return __pyx_r;
 }
 
-/* "nitro.pyx":663
+/* "nitro.pyx":668
  * 
  *     @staticmethod
  *     cdef from_ptr(io.nitf_SegmentWriter* ptr):             # <<<<<<<<<<<<<<
@@ -18045,19 +18184,19 @@ static PyObject *__pyx_f_5nitro_13SegmentWriter_from_ptr(nitf_SegmentWriter *__p
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("from_ptr", 0);
 
-  /* "nitro.pyx":664
+  /* "nitro.pyx":669
  *     @staticmethod
  *     cdef from_ptr(io.nitf_SegmentWriter* ptr):
  *         obj = SegmentWriter()             # <<<<<<<<<<<<<<
  *         obj._c_writer = ptr
  *         return obj
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_5nitro_SegmentWriter), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 664, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_5nitro_SegmentWriter), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 669, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_obj = ((struct __pyx_obj_5nitro_SegmentWriter *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "nitro.pyx":665
+  /* "nitro.pyx":670
  *     cdef from_ptr(io.nitf_SegmentWriter* ptr):
  *         obj = SegmentWriter()
  *         obj._c_writer = ptr             # <<<<<<<<<<<<<<
@@ -18066,7 +18205,7 @@ static PyObject *__pyx_f_5nitro_13SegmentWriter_from_ptr(nitf_SegmentWriter *__p
  */
   __pyx_v_obj->_c_writer = __pyx_v_ptr;
 
-  /* "nitro.pyx":666
+  /* "nitro.pyx":671
  *         obj = SegmentWriter()
  *         obj._c_writer = ptr
  *         return obj             # <<<<<<<<<<<<<<
@@ -18078,7 +18217,7 @@ static PyObject *__pyx_f_5nitro_13SegmentWriter_from_ptr(nitf_SegmentWriter *__p
   __pyx_r = ((PyObject *)__pyx_v_obj);
   goto __pyx_L0;
 
-  /* "nitro.pyx":663
+  /* "nitro.pyx":668
  * 
  *     @staticmethod
  *     cdef from_ptr(io.nitf_SegmentWriter* ptr):             # <<<<<<<<<<<<<<
@@ -18098,7 +18237,7 @@ static PyObject *__pyx_f_5nitro_13SegmentWriter_from_ptr(nitf_SegmentWriter *__p
   return __pyx_r;
 }
 
-/* "nitro.pyx":668
+/* "nitro.pyx":673
  *         return obj
  * 
  *     def attach_source(self, SegmentSource segmentsource):             # <<<<<<<<<<<<<<
@@ -18112,7 +18251,7 @@ static PyObject *__pyx_pw_5nitro_13SegmentWriter_3attach_source(PyObject *__pyx_
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("attach_source (wrapper)", 0);
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_segmentsource), __pyx_ptype_5nitro_SegmentSource, 1, "segmentsource", 0))) __PYX_ERR(0, 668, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_segmentsource), __pyx_ptype_5nitro_SegmentSource, 1, "segmentsource", 0))) __PYX_ERR(0, 673, __pyx_L1_error)
   __pyx_r = __pyx_pf_5nitro_13SegmentWriter_2attach_source(((struct __pyx_obj_5nitro_SegmentWriter *)__pyx_v_self), ((struct __pyx_obj_5nitro_SegmentSource *)__pyx_v_segmentsource));
 
   /* function exit code */
@@ -18137,7 +18276,7 @@ static PyObject *__pyx_pf_5nitro_13SegmentWriter_2attach_source(struct __pyx_obj
   PyObject *__pyx_t_6 = NULL;
   __Pyx_RefNannySetupContext("attach_source", 0);
 
-  /* "nitro.pyx":670
+  /* "nitro.pyx":675
  *     def attach_source(self, SegmentSource segmentsource):
  *         cdef nitf_Error error
  *         cdef segment_source.nitf_SegmentSource* src = <segment_source.nitf_SegmentSource*>segmentsource._c_source             # <<<<<<<<<<<<<<
@@ -18146,7 +18285,7 @@ static PyObject *__pyx_pf_5nitro_13SegmentWriter_2attach_source(struct __pyx_obj
  */
   __pyx_v_src = ((nitf_SegmentSource *)__pyx_v_segmentsource->__pyx_base._c_source);
 
-  /* "nitro.pyx":672
+  /* "nitro.pyx":677
  *         cdef segment_source.nitf_SegmentSource* src = <segment_source.nitf_SegmentSource*>segmentsource._c_source
  * 
  *         if not io.nitf_SegmentWriter_attachSource(self._c_writer, src, &error):             # <<<<<<<<<<<<<<
@@ -18156,16 +18295,16 @@ static PyObject *__pyx_pf_5nitro_13SegmentWriter_2attach_source(struct __pyx_obj
   __pyx_t_1 = ((!(nitf_SegmentWriter_attachSource(__pyx_v_self->_c_writer, __pyx_v_src, (&__pyx_v_error)) != 0)) != 0);
   if (__pyx_t_1) {
 
-    /* "nitro.pyx":673
+    /* "nitro.pyx":678
  * 
  *         if not io.nitf_SegmentWriter_attachSource(self._c_writer, src, &error):
  *             raise NitfError(error)             # <<<<<<<<<<<<<<
  * 
  *     @deprecated("Old SWIG API")
  */
-    __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 673, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 678, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_4 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 673, __pyx_L1_error)
+    __pyx_t_4 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 678, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __pyx_t_5 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
@@ -18178,14 +18317,14 @@ static PyObject *__pyx_pf_5nitro_13SegmentWriter_2attach_source(struct __pyx_obj
       }
     }
     if (!__pyx_t_5) {
-      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 673, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 678, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       __Pyx_GOTREF(__pyx_t_2);
     } else {
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_3)) {
         PyObject *__pyx_temp[2] = {__pyx_t_5, __pyx_t_4};
-        __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 673, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 678, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
@@ -18194,20 +18333,20 @@ static PyObject *__pyx_pf_5nitro_13SegmentWriter_2attach_source(struct __pyx_obj
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
         PyObject *__pyx_temp[2] = {__pyx_t_5, __pyx_t_4};
-        __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 673, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 678, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
       } else
       #endif
       {
-        __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 673, __pyx_L1_error)
+        __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 678, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_6);
         __Pyx_GIVEREF(__pyx_t_5); PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_5); __pyx_t_5 = NULL;
         __Pyx_GIVEREF(__pyx_t_4);
         PyTuple_SET_ITEM(__pyx_t_6, 0+1, __pyx_t_4);
         __pyx_t_4 = 0;
-        __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_6, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 673, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_6, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 678, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       }
@@ -18215,9 +18354,9 @@ static PyObject *__pyx_pf_5nitro_13SegmentWriter_2attach_source(struct __pyx_obj
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_Raise(__pyx_t_2, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __PYX_ERR(0, 673, __pyx_L1_error)
+    __PYX_ERR(0, 678, __pyx_L1_error)
 
-    /* "nitro.pyx":672
+    /* "nitro.pyx":677
  *         cdef segment_source.nitf_SegmentSource* src = <segment_source.nitf_SegmentSource*>segmentsource._c_source
  * 
  *         if not io.nitf_SegmentWriter_attachSource(self._c_writer, src, &error):             # <<<<<<<<<<<<<<
@@ -18226,7 +18365,7 @@ static PyObject *__pyx_pf_5nitro_13SegmentWriter_2attach_source(struct __pyx_obj
  */
   }
 
-  /* "nitro.pyx":668
+  /* "nitro.pyx":673
  *         return obj
  * 
  *     def attach_source(self, SegmentSource segmentsource):             # <<<<<<<<<<<<<<
@@ -18251,7 +18390,7 @@ static PyObject *__pyx_pf_5nitro_13SegmentWriter_2attach_source(struct __pyx_obj
   return __pyx_r;
 }
 
-/* "nitro.pyx":676
+/* "nitro.pyx":681
  * 
  *     @deprecated("Old SWIG API")
  *     def attachSource(self, SegmentSource segmentsource):             # <<<<<<<<<<<<<<
@@ -18265,7 +18404,7 @@ static PyObject *__pyx_pw_5nitro_13SegmentWriter_5attachSource(PyObject *__pyx_v
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("attachSource (wrapper)", 0);
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_segmentsource), __pyx_ptype_5nitro_SegmentSource, 1, "segmentsource", 0))) __PYX_ERR(0, 676, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_segmentsource), __pyx_ptype_5nitro_SegmentSource, 1, "segmentsource", 0))) __PYX_ERR(0, 681, __pyx_L1_error)
   __pyx_r = __pyx_pf_5nitro_13SegmentWriter_4attachSource(((struct __pyx_obj_5nitro_SegmentWriter *)__pyx_v_self), ((struct __pyx_obj_5nitro_SegmentSource *)__pyx_v_segmentsource));
 
   /* function exit code */
@@ -18286,14 +18425,14 @@ static PyObject *__pyx_pf_5nitro_13SegmentWriter_4attachSource(struct __pyx_obj_
   PyObject *__pyx_t_4 = NULL;
   __Pyx_RefNannySetupContext("attachSource", 0);
 
-  /* "nitro.pyx":677
+  /* "nitro.pyx":682
  *     @deprecated("Old SWIG API")
  *     def attachSource(self, SegmentSource segmentsource):
  *         self.attach_source(segmentsource)             # <<<<<<<<<<<<<<
  * 
  * 
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_attach_source); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 677, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_attach_source); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 682, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_3 = NULL;
   if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_2))) {
@@ -18306,13 +18445,13 @@ static PyObject *__pyx_pf_5nitro_13SegmentWriter_4attachSource(struct __pyx_obj_
     }
   }
   if (!__pyx_t_3) {
-    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, ((PyObject *)__pyx_v_segmentsource)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 677, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, ((PyObject *)__pyx_v_segmentsource)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 682, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
   } else {
     #if CYTHON_FAST_PYCALL
     if (PyFunction_Check(__pyx_t_2)) {
       PyObject *__pyx_temp[2] = {__pyx_t_3, ((PyObject *)__pyx_v_segmentsource)};
-      __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 677, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 682, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
       __Pyx_GOTREF(__pyx_t_1);
     } else
@@ -18320,19 +18459,19 @@ static PyObject *__pyx_pf_5nitro_13SegmentWriter_4attachSource(struct __pyx_obj_
     #if CYTHON_FAST_PYCCALL
     if (__Pyx_PyFastCFunction_Check(__pyx_t_2)) {
       PyObject *__pyx_temp[2] = {__pyx_t_3, ((PyObject *)__pyx_v_segmentsource)};
-      __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 677, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 682, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
       __Pyx_GOTREF(__pyx_t_1);
     } else
     #endif
     {
-      __pyx_t_4 = PyTuple_New(1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 677, __pyx_L1_error)
+      __pyx_t_4 = PyTuple_New(1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 682, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_GIVEREF(__pyx_t_3); PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_3); __pyx_t_3 = NULL;
       __Pyx_INCREF(((PyObject *)__pyx_v_segmentsource));
       __Pyx_GIVEREF(((PyObject *)__pyx_v_segmentsource));
       PyTuple_SET_ITEM(__pyx_t_4, 0+1, ((PyObject *)__pyx_v_segmentsource));
-      __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_4, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 677, __pyx_L1_error)
+      __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_4, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 682, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     }
@@ -18340,7 +18479,7 @@ static PyObject *__pyx_pf_5nitro_13SegmentWriter_4attachSource(struct __pyx_obj_
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "nitro.pyx":676
+  /* "nitro.pyx":681
  * 
  *     @deprecated("Old SWIG API")
  *     def attachSource(self, SegmentSource segmentsource):             # <<<<<<<<<<<<<<
@@ -18471,7 +18610,7 @@ static PyObject *__pyx_pf_5nitro_13SegmentWriter_8__setstate_cython__(CYTHON_UNU
   return __pyx_r;
 }
 
-/* "nitro.pyx":684
+/* "nitro.pyx":689
  * 
  *     @staticmethod
  *     def from_record(c):             # <<<<<<<<<<<<<<
@@ -18506,7 +18645,7 @@ static PyObject *__pyx_pw_5nitro_11TextSegment_1from_record(CYTHON_UNUSED PyObje
         else goto __pyx_L5_argtuple_error;
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "from_record") < 0)) __PYX_ERR(0, 684, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "from_record") < 0)) __PYX_ERR(0, 689, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 1) {
       goto __pyx_L5_argtuple_error;
@@ -18517,7 +18656,7 @@ static PyObject *__pyx_pw_5nitro_11TextSegment_1from_record(CYTHON_UNUSED PyObje
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("from_record", 1, 1, 1, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 684, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("from_record", 1, 1, 1, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 689, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("nitro.TextSegment.from_record", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -18545,7 +18684,7 @@ static PyObject *__pyx_pf_5nitro_11TextSegment_from_record(PyObject *__pyx_v_c) 
   PyObject *__pyx_t_7 = NULL;
   __Pyx_RefNannySetupContext("from_record", 0);
 
-  /* "nitro.pyx":687
+  /* "nitro.pyx":692
  *         cdef record.nitf_Record* c_rec
  *         cdef nitf_Error error
  *         assert(PyCapsule_IsValid(c, "Record"))             # <<<<<<<<<<<<<<
@@ -18556,34 +18695,34 @@ static PyObject *__pyx_pf_5nitro_11TextSegment_from_record(PyObject *__pyx_v_c) 
   if (unlikely(!Py_OptimizeFlag)) {
     if (unlikely(!(PyCapsule_IsValid(__pyx_v_c, ((char *)"Record")) != 0))) {
       PyErr_SetNone(PyExc_AssertionError);
-      __PYX_ERR(0, 687, __pyx_L1_error)
+      __PYX_ERR(0, 692, __pyx_L1_error)
     }
   }
   #endif
 
-  /* "nitro.pyx":688
+  /* "nitro.pyx":693
  *         cdef nitf_Error error
  *         assert(PyCapsule_IsValid(c, "Record"))
  *         c_rec = <record.nitf_Record*>PyCapsule_GetPointer(c, "Record")             # <<<<<<<<<<<<<<
  *         obj = TextSegment()
  *         obj._c_text = record.nitf_Record_newTextSegment(c_rec, &error)
  */
-  __pyx_t_1 = PyCapsule_GetPointer(__pyx_v_c, ((char *)"Record")); if (unlikely(__pyx_t_1 == ((void *)NULL) && PyErr_Occurred())) __PYX_ERR(0, 688, __pyx_L1_error)
+  __pyx_t_1 = PyCapsule_GetPointer(__pyx_v_c, ((char *)"Record")); if (unlikely(__pyx_t_1 == ((void *)NULL) && PyErr_Occurred())) __PYX_ERR(0, 693, __pyx_L1_error)
   __pyx_v_c_rec = ((nitf_Record *)__pyx_t_1);
 
-  /* "nitro.pyx":689
+  /* "nitro.pyx":694
  *         assert(PyCapsule_IsValid(c, "Record"))
  *         c_rec = <record.nitf_Record*>PyCapsule_GetPointer(c, "Record")
  *         obj = TextSegment()             # <<<<<<<<<<<<<<
  *         obj._c_text = record.nitf_Record_newTextSegment(c_rec, &error)
  *         if obj._c_text is NULL:
  */
-  __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_5nitro_TextSegment), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 689, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_5nitro_TextSegment), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 694, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_v_obj = ((struct __pyx_obj_5nitro_TextSegment *)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "nitro.pyx":690
+  /* "nitro.pyx":695
  *         c_rec = <record.nitf_Record*>PyCapsule_GetPointer(c, "Record")
  *         obj = TextSegment()
  *         obj._c_text = record.nitf_Record_newTextSegment(c_rec, &error)             # <<<<<<<<<<<<<<
@@ -18592,7 +18731,7 @@ static PyObject *__pyx_pf_5nitro_11TextSegment_from_record(PyObject *__pyx_v_c) 
  */
   __pyx_v_obj->_c_text = nitf_Record_newTextSegment(__pyx_v_c_rec, (&__pyx_v_error));
 
-  /* "nitro.pyx":691
+  /* "nitro.pyx":696
  *         obj = TextSegment()
  *         obj._c_text = record.nitf_Record_newTextSegment(c_rec, &error)
  *         if obj._c_text is NULL:             # <<<<<<<<<<<<<<
@@ -18602,16 +18741,16 @@ static PyObject *__pyx_pf_5nitro_11TextSegment_from_record(PyObject *__pyx_v_c) 
   __pyx_t_3 = ((__pyx_v_obj->_c_text == NULL) != 0);
   if (__pyx_t_3) {
 
-    /* "nitro.pyx":692
+    /* "nitro.pyx":697
  *         obj._c_text = record.nitf_Record_newTextSegment(c_rec, &error)
  *         if obj._c_text is NULL:
  *             raise NitfError(error)             # <<<<<<<<<<<<<<
  *         return obj  # allow chaining
  * 
  */
-    __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 692, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_NitfError); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 697, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_5 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 692, __pyx_L1_error)
+    __pyx_t_5 = __pyx_convert__to_py_nitf_Error(__pyx_v_error); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 697, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
     __pyx_t_6 = NULL;
     if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_4))) {
@@ -18624,14 +18763,14 @@ static PyObject *__pyx_pf_5nitro_11TextSegment_from_record(PyObject *__pyx_v_c) 
       }
     }
     if (!__pyx_t_6) {
-      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_5); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 692, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_5); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 697, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       __Pyx_GOTREF(__pyx_t_2);
     } else {
       #if CYTHON_FAST_PYCALL
       if (PyFunction_Check(__pyx_t_4)) {
         PyObject *__pyx_temp[2] = {__pyx_t_6, __pyx_t_5};
-        __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 692, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 697, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
@@ -18640,20 +18779,20 @@ static PyObject *__pyx_pf_5nitro_11TextSegment_from_record(PyObject *__pyx_v_c) 
       #if CYTHON_FAST_PYCCALL
       if (__Pyx_PyFastCFunction_Check(__pyx_t_4)) {
         PyObject *__pyx_temp[2] = {__pyx_t_6, __pyx_t_5};
-        __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 692, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 697, __pyx_L1_error)
         __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       } else
       #endif
       {
-        __pyx_t_7 = PyTuple_New(1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 692, __pyx_L1_error)
+        __pyx_t_7 = PyTuple_New(1+1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 697, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_7);
         __Pyx_GIVEREF(__pyx_t_6); PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_6); __pyx_t_6 = NULL;
         __Pyx_GIVEREF(__pyx_t_5);
         PyTuple_SET_ITEM(__pyx_t_7, 0+1, __pyx_t_5);
         __pyx_t_5 = 0;
-        __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_7, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 692, __pyx_L1_error)
+        __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_7, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 697, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_2);
         __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
       }
@@ -18661,9 +18800,9 @@ static PyObject *__pyx_pf_5nitro_11TextSegment_from_record(PyObject *__pyx_v_c) 
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_Raise(__pyx_t_2, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-    __PYX_ERR(0, 692, __pyx_L1_error)
+    __PYX_ERR(0, 697, __pyx_L1_error)
 
-    /* "nitro.pyx":691
+    /* "nitro.pyx":696
  *         obj = TextSegment()
  *         obj._c_text = record.nitf_Record_newTextSegment(c_rec, &error)
  *         if obj._c_text is NULL:             # <<<<<<<<<<<<<<
@@ -18672,7 +18811,7 @@ static PyObject *__pyx_pf_5nitro_11TextSegment_from_record(PyObject *__pyx_v_c) 
  */
   }
 
-  /* "nitro.pyx":693
+  /* "nitro.pyx":698
  *         if obj._c_text is NULL:
  *             raise NitfError(error)
  *         return obj  # allow chaining             # <<<<<<<<<<<<<<
@@ -18684,7 +18823,7 @@ static PyObject *__pyx_pf_5nitro_11TextSegment_from_record(PyObject *__pyx_v_c) 
   __pyx_r = ((PyObject *)__pyx_v_obj);
   goto __pyx_L0;
 
-  /* "nitro.pyx":684
+  /* "nitro.pyx":689
  * 
  *     @staticmethod
  *     def from_record(c):             # <<<<<<<<<<<<<<
@@ -18708,7 +18847,7 @@ static PyObject *__pyx_pf_5nitro_11TextSegment_from_record(PyObject *__pyx_v_c) 
   return __pyx_r;
 }
 
-/* "nitro.pyx":696
+/* "nitro.pyx":701
  * 
  *     @staticmethod
  *     cdef from_ptr(text_segment.nitf_TextSegment* ptr):             # <<<<<<<<<<<<<<
@@ -18723,19 +18862,19 @@ static PyObject *__pyx_f_5nitro_11TextSegment_from_ptr(nitf_TextSegment *__pyx_v
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("from_ptr", 0);
 
-  /* "nitro.pyx":697
+  /* "nitro.pyx":702
  *     @staticmethod
  *     cdef from_ptr(text_segment.nitf_TextSegment* ptr):
  *         obj = TextSegment()             # <<<<<<<<<<<<<<
  *         obj._c_text = ptr
  *         return obj
  */
-  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_5nitro_TextSegment), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 697, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_5nitro_TextSegment), __pyx_empty_tuple, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 702, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_obj = ((struct __pyx_obj_5nitro_TextSegment *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "nitro.pyx":698
+  /* "nitro.pyx":703
  *     cdef from_ptr(text_segment.nitf_TextSegment* ptr):
  *         obj = TextSegment()
  *         obj._c_text = ptr             # <<<<<<<<<<<<<<
@@ -18744,7 +18883,7 @@ static PyObject *__pyx_f_5nitro_11TextSegment_from_ptr(nitf_TextSegment *__pyx_v
  */
   __pyx_v_obj->_c_text = __pyx_v_ptr;
 
-  /* "nitro.pyx":699
+  /* "nitro.pyx":704
  *         obj = TextSegment()
  *         obj._c_text = ptr
  *         return obj             # <<<<<<<<<<<<<<
@@ -18756,7 +18895,7 @@ static PyObject *__pyx_f_5nitro_11TextSegment_from_ptr(nitf_TextSegment *__pyx_v
   __pyx_r = ((PyObject *)__pyx_v_obj);
   goto __pyx_L0;
 
-  /* "nitro.pyx":696
+  /* "nitro.pyx":701
  * 
  *     @staticmethod
  *     cdef from_ptr(text_segment.nitf_TextSegment* ptr):             # <<<<<<<<<<<<<<
@@ -18776,7 +18915,7 @@ static PyObject *__pyx_f_5nitro_11TextSegment_from_ptr(nitf_TextSegment *__pyx_v
   return __pyx_r;
 }
 
-/* "nitro.pyx":702
+/* "nitro.pyx":707
  * 
  *     @staticmethod
  *     def from_capsule(c):             # <<<<<<<<<<<<<<
@@ -18811,7 +18950,7 @@ static PyObject *__pyx_pw_5nitro_11TextSegment_3from_capsule(CYTHON_UNUSED PyObj
         else goto __pyx_L5_argtuple_error;
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "from_capsule") < 0)) __PYX_ERR(0, 702, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "from_capsule") < 0)) __PYX_ERR(0, 707, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 1) {
       goto __pyx_L5_argtuple_error;
@@ -18822,7 +18961,7 @@ static PyObject *__pyx_pw_5nitro_11TextSegment_3from_capsule(CYTHON_UNUSED PyObj
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("from_capsule", 1, 1, 1, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 702, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("from_capsule", 1, 1, 1, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 707, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("nitro.TextSegment.from_capsule", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -18842,7 +18981,7 @@ static PyObject *__pyx_pf_5nitro_11TextSegment_2from_capsule(PyObject *__pyx_v_c
   PyObject *__pyx_t_2 = NULL;
   __Pyx_RefNannySetupContext("from_capsule", 0);
 
-  /* "nitro.pyx":703
+  /* "nitro.pyx":708
  *     @staticmethod
  *     def from_capsule(c):
  *         assert(PyCapsule_IsValid(c, "TextSegment"))             # <<<<<<<<<<<<<<
@@ -18853,12 +18992,12 @@ static PyObject *__pyx_pf_5nitro_11TextSegment_2from_capsule(PyObject *__pyx_v_c
   if (unlikely(!Py_OptimizeFlag)) {
     if (unlikely(!(PyCapsule_IsValid(__pyx_v_c, ((char *)"TextSegment")) != 0))) {
       PyErr_SetNone(PyExc_AssertionError);
-      __PYX_ERR(0, 703, __pyx_L1_error)
+      __PYX_ERR(0, 708, __pyx_L1_error)
     }
   }
   #endif
 
-  /* "nitro.pyx":704
+  /* "nitro.pyx":709
  *     def from_capsule(c):
  *         assert(PyCapsule_IsValid(c, "TextSegment"))
  *         return TextSegment.from_ptr(<text_segment.nitf_TextSegment*>PyCapsule_GetPointer(c, "TextSegment"))             # <<<<<<<<<<<<<<
@@ -18866,14 +19005,14 @@ static PyObject *__pyx_pf_5nitro_11TextSegment_2from_capsule(PyObject *__pyx_v_c
  *     @property
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyCapsule_GetPointer(__pyx_v_c, ((char *)"TextSegment")); if (unlikely(__pyx_t_1 == ((void *)NULL) && PyErr_Occurred())) __PYX_ERR(0, 704, __pyx_L1_error)
-  __pyx_t_2 = __pyx_f_5nitro_11TextSegment_from_ptr(((nitf_TextSegment *)__pyx_t_1)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 704, __pyx_L1_error)
+  __pyx_t_1 = PyCapsule_GetPointer(__pyx_v_c, ((char *)"TextSegment")); if (unlikely(__pyx_t_1 == ((void *)NULL) && PyErr_Occurred())) __PYX_ERR(0, 709, __pyx_L1_error)
+  __pyx_t_2 = __pyx_f_5nitro_11TextSegment_from_ptr(((nitf_TextSegment *)__pyx_t_1)); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 709, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_r = __pyx_t_2;
   __pyx_t_2 = 0;
   goto __pyx_L0;
 
-  /* "nitro.pyx":702
+  /* "nitro.pyx":707
  * 
  *     @staticmethod
  *     def from_capsule(c):             # <<<<<<<<<<<<<<
@@ -18892,7 +19031,7 @@ static PyObject *__pyx_pf_5nitro_11TextSegment_2from_capsule(PyObject *__pyx_v_c
   return __pyx_r;
 }
 
-/* "nitro.pyx":707
+/* "nitro.pyx":712
  * 
  *     @property
  *     def subheader(self):             # <<<<<<<<<<<<<<
@@ -18926,7 +19065,7 @@ static PyObject *__pyx_pf_5nitro_11TextSegment_9subheader___get__(struct __pyx_o
   PyObject *__pyx_t_6 = NULL;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "nitro.pyx":709
+  /* "nitro.pyx":714
  *     def subheader(self):
  *         cdef header.nitf_TextSubheader* hdr
  *         hdr = self._c_text.subheader             # <<<<<<<<<<<<<<
@@ -18936,19 +19075,19 @@ static PyObject *__pyx_pf_5nitro_11TextSegment_9subheader___get__(struct __pyx_o
   __pyx_t_1 = __pyx_v_self->_c_text->subheader;
   __pyx_v_hdr = __pyx_t_1;
 
-  /* "nitro.pyx":710
+  /* "nitro.pyx":715
  *         cdef header.nitf_TextSubheader* hdr
  *         hdr = self._c_text.subheader
  *         h = header.TextSubheader(PyCapsule_New(hdr, "TextSubheader", NULL))             # <<<<<<<<<<<<<<
  *         return h
  * 
  */
-  __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_header); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 710, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_header); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 715, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_TextSubheader); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 710, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_TextSubheader); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 715, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_3 = PyCapsule_New(__pyx_v_hdr, ((char *)"TextSubheader"), NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 710, __pyx_L1_error)
+  __pyx_t_3 = PyCapsule_New(__pyx_v_hdr, ((char *)"TextSubheader"), NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 715, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_t_5 = NULL;
   if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_4))) {
@@ -18961,14 +19100,14 @@ static PyObject *__pyx_pf_5nitro_11TextSegment_9subheader___get__(struct __pyx_o
     }
   }
   if (!__pyx_t_5) {
-    __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 710, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 715, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_GOTREF(__pyx_t_2);
   } else {
     #if CYTHON_FAST_PYCALL
     if (PyFunction_Check(__pyx_t_4)) {
       PyObject *__pyx_temp[2] = {__pyx_t_5, __pyx_t_3};
-      __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 710, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 715, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -18977,20 +19116,20 @@ static PyObject *__pyx_pf_5nitro_11TextSegment_9subheader___get__(struct __pyx_o
     #if CYTHON_FAST_PYCCALL
     if (__Pyx_PyFastCFunction_Check(__pyx_t_4)) {
       PyObject *__pyx_temp[2] = {__pyx_t_5, __pyx_t_3};
-      __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 710, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 715, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     } else
     #endif
     {
-      __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 710, __pyx_L1_error)
+      __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 715, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_GIVEREF(__pyx_t_5); PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_5); __pyx_t_5 = NULL;
       __Pyx_GIVEREF(__pyx_t_3);
       PyTuple_SET_ITEM(__pyx_t_6, 0+1, __pyx_t_3);
       __pyx_t_3 = 0;
-      __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_6, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 710, __pyx_L1_error)
+      __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_6, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 715, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     }
@@ -18999,7 +19138,7 @@ static PyObject *__pyx_pf_5nitro_11TextSegment_9subheader___get__(struct __pyx_o
   __pyx_v_h = __pyx_t_2;
   __pyx_t_2 = 0;
 
-  /* "nitro.pyx":711
+  /* "nitro.pyx":716
  *         hdr = self._c_text.subheader
  *         h = header.TextSubheader(PyCapsule_New(hdr, "TextSubheader", NULL))
  *         return h             # <<<<<<<<<<<<<<
@@ -19011,7 +19150,7 @@ static PyObject *__pyx_pf_5nitro_11TextSegment_9subheader___get__(struct __pyx_o
   __pyx_r = __pyx_v_h;
   goto __pyx_L0;
 
-  /* "nitro.pyx":707
+  /* "nitro.pyx":712
  * 
  *     @property
  *     def subheader(self):             # <<<<<<<<<<<<<<
@@ -25201,8 +25340,9 @@ static PyMethodDef __pyx_methods_5nitro_Record[] = {
   {"new_image_segment", (PyCFunction)__pyx_pw_5nitro_6Record_15new_image_segment, METH_NOARGS, 0},
   {"new_data_extension_segment", (PyCFunction)__pyx_pw_5nitro_6Record_17new_data_extension_segment, METH_NOARGS, 0},
   {"new_text_segment", (PyCFunction)__pyx_pw_5nitro_6Record_19new_text_segment, METH_NOARGS, 0},
-  {"__reduce_cython__", (PyCFunction)__pyx_pw_5nitro_6Record_21__reduce_cython__, METH_NOARGS, 0},
-  {"__setstate_cython__", (PyCFunction)__pyx_pw_5nitro_6Record_23__setstate_cython__, METH_O, 0},
+  {"merge_tres", (PyCFunction)__pyx_pw_5nitro_6Record_21merge_tres, METH_NOARGS, 0},
+  {"__reduce_cython__", (PyCFunction)__pyx_pw_5nitro_6Record_23__reduce_cython__, METH_NOARGS, 0},
+  {"__setstate_cython__", (PyCFunction)__pyx_pw_5nitro_6Record_25__setstate_cython__, METH_O, 0},
   {0, 0, 0, 0}
 };
 
@@ -27373,11 +27513,11 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {0, 0, 0, 0, 0, 0, 0}
 };
 static int __Pyx_InitCachedBuiltins(void) {
-  __pyx_builtin_staticmethod = __Pyx_GetBuiltinName(__pyx_n_s_staticmethod); if (!__pyx_builtin_staticmethod) __PYX_ERR(0, 683, __pyx_L1_error)
+  __pyx_builtin_staticmethod = __Pyx_GetBuiltinName(__pyx_n_s_staticmethod); if (!__pyx_builtin_staticmethod) __PYX_ERR(0, 688, __pyx_L1_error)
   __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 95, __pyx_L1_error)
   __pyx_builtin_TypeError = __Pyx_GetBuiltinName(__pyx_n_s_TypeError); if (!__pyx_builtin_TypeError) __PYX_ERR(1, 2, __pyx_L1_error)
-  __pyx_builtin_ValueError = __Pyx_GetBuiltinName(__pyx_n_s_ValueError); if (!__pyx_builtin_ValueError) __PYX_ERR(0, 376, __pyx_L1_error)
-  __pyx_builtin_NotImplementedError = __Pyx_GetBuiltinName(__pyx_n_s_NotImplementedError); if (!__pyx_builtin_NotImplementedError) __PYX_ERR(0, 489, __pyx_L1_error)
+  __pyx_builtin_ValueError = __Pyx_GetBuiltinName(__pyx_n_s_ValueError); if (!__pyx_builtin_ValueError) __PYX_ERR(0, 381, __pyx_L1_error)
+  __pyx_builtin_NotImplementedError = __Pyx_GetBuiltinName(__pyx_n_s_NotImplementedError); if (!__pyx_builtin_NotImplementedError) __PYX_ERR(0, 494, __pyx_L1_error)
   __pyx_builtin_RuntimeError = __Pyx_GetBuiltinName(__pyx_n_s_RuntimeError); if (!__pyx_builtin_RuntimeError) __PYX_ERR(3, 823, __pyx_L1_error)
   __pyx_builtin_ImportError = __Pyx_GetBuiltinName(__pyx_n_s_ImportError); if (!__pyx_builtin_ImportError) __PYX_ERR(3, 1013, __pyx_L1_error)
   __pyx_builtin_MemoryError = __Pyx_GetBuiltinName(__pyx_n_s_MemoryError); if (!__pyx_builtin_MemoryError) __PYX_ERR(4, 109, __pyx_L1_error)
@@ -27618,14 +27758,14 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__27);
   __Pyx_GIVEREF(__pyx_tuple__27);
 
-  /* "nitro.pyx":376
+  /* "nitro.pyx":381
  *     def __enter__(self):
  *         if self._rcrd is None or self._iohandle is None:
  *             raise ValueError("Must construct with a record and iohandle to use Writer as a context manager")             # <<<<<<<<<<<<<<
  *         self.prepare(self._rcrd, self._iohandle)
  *         return self
  */
-  __pyx_tuple__28 = PyTuple_Pack(1, __pyx_kp_u_Must_construct_with_a_record_and); if (unlikely(!__pyx_tuple__28)) __PYX_ERR(0, 376, __pyx_L1_error)
+  __pyx_tuple__28 = PyTuple_Pack(1, __pyx_kp_u_Must_construct_with_a_record_and); if (unlikely(!__pyx_tuple__28)) __PYX_ERR(0, 381, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__28);
   __Pyx_GIVEREF(__pyx_tuple__28);
 
@@ -27648,25 +27788,25 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__30);
   __Pyx_GIVEREF(__pyx_tuple__30);
 
-  /* "nitro.pyx":458
+  /* "nitro.pyx":463
  *     def __enter__(self):
  *         if self._iohandle is None:
  *             raise ValueError("Must construct with an iohandle to use Reader as a context manager")             # <<<<<<<<<<<<<<
  *         record = self.read(self._iohandle)
  *         return self, record
  */
-  __pyx_tuple__31 = PyTuple_Pack(1, __pyx_kp_u_Must_construct_with_an_iohandle); if (unlikely(!__pyx_tuple__31)) __PYX_ERR(0, 458, __pyx_L1_error)
+  __pyx_tuple__31 = PyTuple_Pack(1, __pyx_kp_u_Must_construct_with_an_iohandle); if (unlikely(!__pyx_tuple__31)) __PYX_ERR(0, 463, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__31);
   __Pyx_GIVEREF(__pyx_tuple__31);
 
-  /* "nitro.pyx":489
+  /* "nitro.pyx":494
  *         cdef io.nitf_ImageReader* reader
  *         if options is not None:
  *             raise NotImplementedError("Options are not currently implemented")             # <<<<<<<<<<<<<<
  *         nbpp = int(self._record.images[num].subheader.numBitsPerPixel)
  *         reader = io.nitf_Reader_newImageReader(self._c_reader, num, <io.nrt_HashTable*>NULL, &error)
  */
-  __pyx_tuple__32 = PyTuple_Pack(1, __pyx_kp_u_Options_are_not_currently_implem); if (unlikely(!__pyx_tuple__32)) __PYX_ERR(0, 489, __pyx_L1_error)
+  __pyx_tuple__32 = PyTuple_Pack(1, __pyx_kp_u_Options_are_not_currently_implem); if (unlikely(!__pyx_tuple__32)) __PYX_ERR(0, 494, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__32);
   __Pyx_GIVEREF(__pyx_tuple__32);
 
@@ -27914,117 +28054,117 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__57);
   __Pyx_GIVEREF(__pyx_tuple__57);
 
-  /* "nitro.pyx":211
+  /* "nitro.pyx":216
  *         self._c_image.subheader = <header.nitf_ImageSubheader*>PyCapsule_GetPointer(c, "ImageSubheader")
  * 
  *     @deprecated("Old SWIG API")             # <<<<<<<<<<<<<<
  *     def addBands(self, num=1):
  *         if num < 0:
  */
-  __pyx_tuple__58 = PyTuple_Pack(1, __pyx_kp_u_Old_SWIG_API); if (unlikely(!__pyx_tuple__58)) __PYX_ERR(0, 211, __pyx_L1_error)
+  __pyx_tuple__58 = PyTuple_Pack(1, __pyx_kp_u_Old_SWIG_API); if (unlikely(!__pyx_tuple__58)) __PYX_ERR(0, 216, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__58);
   __Pyx_GIVEREF(__pyx_tuple__58);
 
-  /* "nitro.pyx":234
+  /* "nitro.pyx":239
  *             raise NitfError(error)
  * 
  *     @deprecated("Old SWIG API")             # <<<<<<<<<<<<<<
  *     def addBand(self, band):
  *         return self.add_band(band)
  */
-  __pyx_tuple__59 = PyTuple_Pack(1, __pyx_kp_u_Old_SWIG_API); if (unlikely(!__pyx_tuple__59)) __PYX_ERR(0, 234, __pyx_L1_error)
+  __pyx_tuple__59 = PyTuple_Pack(1, __pyx_kp_u_Old_SWIG_API); if (unlikely(!__pyx_tuple__59)) __PYX_ERR(0, 239, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__59);
   __Pyx_GIVEREF(__pyx_tuple__59);
 
-  /* "nitro.pyx":431
+  /* "nitro.pyx":436
  *         return SegmentWriter.from_ptr(sw)
  * 
  *     @deprecated("Old SWIG API")             # <<<<<<<<<<<<<<
  *     def newImageWriter(self, index):
  *         return self.new_image_writer(index)
  */
-  __pyx_tuple__60 = PyTuple_Pack(1, __pyx_kp_u_Old_SWIG_API); if (unlikely(!__pyx_tuple__60)) __PYX_ERR(0, 431, __pyx_L1_error)
+  __pyx_tuple__60 = PyTuple_Pack(1, __pyx_kp_u_Old_SWIG_API); if (unlikely(!__pyx_tuple__60)) __PYX_ERR(0, 436, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__60);
   __Pyx_GIVEREF(__pyx_tuple__60);
 
-  /* "nitro.pyx":435
+  /* "nitro.pyx":440
  *         return self.new_image_writer(index)
  * 
  *     @deprecated("Old SWIG API")             # <<<<<<<<<<<<<<
  *     def newDEWriter(self, index):
  *         return self.new_data_extension_writer(index)
  */
-  __pyx_tuple__61 = PyTuple_Pack(1, __pyx_kp_u_Old_SWIG_API); if (unlikely(!__pyx_tuple__61)) __PYX_ERR(0, 435, __pyx_L1_error)
+  __pyx_tuple__61 = PyTuple_Pack(1, __pyx_kp_u_Old_SWIG_API); if (unlikely(!__pyx_tuple__61)) __PYX_ERR(0, 440, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__61);
   __Pyx_GIVEREF(__pyx_tuple__61);
 
-  /* "nitro.pyx":477
+  /* "nitro.pyx":482
  *         return self._record
  * 
  *     @deprecated("Old SWIG API")             # <<<<<<<<<<<<<<
  *     def newImageReader(self, num, options=None):
  *         return self.new_image_reader(num, options)
  */
-  __pyx_tuple__62 = PyTuple_Pack(1, __pyx_kp_u_Old_SWIG_API); if (unlikely(!__pyx_tuple__62)) __PYX_ERR(0, 477, __pyx_L1_error)
+  __pyx_tuple__62 = PyTuple_Pack(1, __pyx_kp_u_Old_SWIG_API); if (unlikely(!__pyx_tuple__62)) __PYX_ERR(0, 482, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__62);
   __Pyx_GIVEREF(__pyx_tuple__62);
 
-  /* "nitro.pyx":481
+  /* "nitro.pyx":486
  *         return self.new_image_reader(num, options)
  * 
  *     @deprecated("Old SWIG API")             # <<<<<<<<<<<<<<
  *     def newDEReader(self, num, options=None):
  *         return self.new_data_extension_reader(num, options)
  */
-  __pyx_tuple__63 = PyTuple_Pack(1, __pyx_kp_u_Old_SWIG_API); if (unlikely(!__pyx_tuple__63)) __PYX_ERR(0, 481, __pyx_L1_error)
+  __pyx_tuple__63 = PyTuple_Pack(1, __pyx_kp_u_Old_SWIG_API); if (unlikely(!__pyx_tuple__63)) __PYX_ERR(0, 486, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__63);
   __Pyx_GIVEREF(__pyx_tuple__63);
 
-  /* "nitro.pyx":530
+  /* "nitro.pyx":535
  *             raise NitfError(error)
  * 
  *     @deprecated("Old SWIG API")             # <<<<<<<<<<<<<<
  *     def attachSource(self, ImageSource imagesource):
  *         self.attach_source(imagesource)
  */
-  __pyx_tuple__64 = PyTuple_Pack(1, __pyx_kp_u_Old_SWIG_API); if (unlikely(!__pyx_tuple__64)) __PYX_ERR(0, 530, __pyx_L1_error)
+  __pyx_tuple__64 = PyTuple_Pack(1, __pyx_kp_u_Old_SWIG_API); if (unlikely(!__pyx_tuple__64)) __PYX_ERR(0, 535, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__64);
   __Pyx_GIVEREF(__pyx_tuple__64);
 
-  /* "nitro.pyx":675
+  /* "nitro.pyx":680
  *             raise NitfError(error)
  * 
  *     @deprecated("Old SWIG API")             # <<<<<<<<<<<<<<
  *     def attachSource(self, SegmentSource segmentsource):
  *         self.attach_source(segmentsource)
  */
-  __pyx_tuple__65 = PyTuple_Pack(1, __pyx_kp_u_Old_SWIG_API); if (unlikely(!__pyx_tuple__65)) __PYX_ERR(0, 675, __pyx_L1_error)
+  __pyx_tuple__65 = PyTuple_Pack(1, __pyx_kp_u_Old_SWIG_API); if (unlikely(!__pyx_tuple__65)) __PYX_ERR(0, 680, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__65);
   __Pyx_GIVEREF(__pyx_tuple__65);
 
-  /* "nitro.pyx":684
+  /* "nitro.pyx":689
  * 
  *     @staticmethod
  *     def from_record(c):             # <<<<<<<<<<<<<<
  *         cdef record.nitf_Record* c_rec
  *         cdef nitf_Error error
  */
-  __pyx_tuple__66 = PyTuple_Pack(4, __pyx_n_s_c, __pyx_n_s_c_rec, __pyx_n_s_error, __pyx_n_s_obj); if (unlikely(!__pyx_tuple__66)) __PYX_ERR(0, 684, __pyx_L1_error)
+  __pyx_tuple__66 = PyTuple_Pack(4, __pyx_n_s_c, __pyx_n_s_c_rec, __pyx_n_s_error, __pyx_n_s_obj); if (unlikely(!__pyx_tuple__66)) __PYX_ERR(0, 689, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__66);
   __Pyx_GIVEREF(__pyx_tuple__66);
-  __pyx_codeobj__67 = (PyObject*)__Pyx_PyCode_New(1, 0, 4, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__66, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_nitro_pyx, __pyx_n_s_from_record, 684, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__67)) __PYX_ERR(0, 684, __pyx_L1_error)
+  __pyx_codeobj__67 = (PyObject*)__Pyx_PyCode_New(1, 0, 4, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__66, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_nitro_pyx, __pyx_n_s_from_record, 689, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__67)) __PYX_ERR(0, 689, __pyx_L1_error)
 
-  /* "nitro.pyx":702
+  /* "nitro.pyx":707
  * 
  *     @staticmethod
  *     def from_capsule(c):             # <<<<<<<<<<<<<<
  *         assert(PyCapsule_IsValid(c, "TextSegment"))
  *         return TextSegment.from_ptr(<text_segment.nitf_TextSegment*>PyCapsule_GetPointer(c, "TextSegment"))
  */
-  __pyx_tuple__68 = PyTuple_Pack(1, __pyx_n_s_c); if (unlikely(!__pyx_tuple__68)) __PYX_ERR(0, 702, __pyx_L1_error)
+  __pyx_tuple__68 = PyTuple_Pack(1, __pyx_n_s_c); if (unlikely(!__pyx_tuple__68)) __PYX_ERR(0, 707, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__68);
   __Pyx_GIVEREF(__pyx_tuple__68);
-  __pyx_codeobj__69 = (PyObject*)__Pyx_PyCode_New(1, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__68, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_nitro_pyx, __pyx_n_s_from_capsule, 702, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__69)) __PYX_ERR(0, 702, __pyx_L1_error)
+  __pyx_codeobj__69 = (PyObject*)__Pyx_PyCode_New(1, 0, 1, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__68, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_nitro_pyx, __pyx_n_s_from_capsule, 707, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__69)) __PYX_ERR(0, 707, __pyx_L1_error)
 
   /* "(tree fragment)":1
  * def __pyx_unpickle_AccessFlags(__pyx_type, long __pyx_checksum, __pyx_state):             # <<<<<<<<<<<<<<
@@ -28274,124 +28414,124 @@ static int __pyx_pymod_exec_nitro(PyObject *__pyx_pyinit_module)
   __pyx_vtabptr_5nitro_ImageSegment = &__pyx_vtable_5nitro_ImageSegment;
   __pyx_vtable_5nitro_ImageSegment.from_record = (PyObject *(*)(nitf_Record *))__pyx_f_5nitro_12ImageSegment_from_record;
   __pyx_vtable_5nitro_ImageSegment.from_ptr = (PyObject *(*)(nitf_ImageSegment *))__pyx_f_5nitro_12ImageSegment_from_ptr;
-  if (PyType_Ready(&__pyx_type_5nitro_ImageSegment) < 0) __PYX_ERR(0, 176, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_5nitro_ImageSegment) < 0) __PYX_ERR(0, 181, __pyx_L1_error)
   __pyx_type_5nitro_ImageSegment.tp_print = 0;
-  if (__Pyx_SetVtable(__pyx_type_5nitro_ImageSegment.tp_dict, __pyx_vtabptr_5nitro_ImageSegment) < 0) __PYX_ERR(0, 176, __pyx_L1_error)
-  if (PyObject_SetAttrString(__pyx_m, "ImageSegment", (PyObject *)&__pyx_type_5nitro_ImageSegment) < 0) __PYX_ERR(0, 176, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_5nitro_ImageSegment) < 0) __PYX_ERR(0, 176, __pyx_L1_error)
+  if (__Pyx_SetVtable(__pyx_type_5nitro_ImageSegment.tp_dict, __pyx_vtabptr_5nitro_ImageSegment) < 0) __PYX_ERR(0, 181, __pyx_L1_error)
+  if (PyObject_SetAttrString(__pyx_m, "ImageSegment", (PyObject *)&__pyx_type_5nitro_ImageSegment) < 0) __PYX_ERR(0, 181, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_5nitro_ImageSegment) < 0) __PYX_ERR(0, 181, __pyx_L1_error)
   __pyx_ptype_5nitro_ImageSegment = &__pyx_type_5nitro_ImageSegment;
-  if (PyType_Ready(&__pyx_type_5nitro_ImageSource) < 0) __PYX_ERR(0, 221, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_5nitro_ImageSource) < 0) __PYX_ERR(0, 226, __pyx_L1_error)
   __pyx_type_5nitro_ImageSource.tp_print = 0;
-  if (PyObject_SetAttrString(__pyx_m, "ImageSource", (PyObject *)&__pyx_type_5nitro_ImageSource) < 0) __PYX_ERR(0, 221, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_5nitro_ImageSource) < 0) __PYX_ERR(0, 221, __pyx_L1_error)
+  if (PyObject_SetAttrString(__pyx_m, "ImageSource", (PyObject *)&__pyx_type_5nitro_ImageSource) < 0) __PYX_ERR(0, 226, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_5nitro_ImageSource) < 0) __PYX_ERR(0, 226, __pyx_L1_error)
   __pyx_ptype_5nitro_ImageSource = &__pyx_type_5nitro_ImageSource;
-  if (PyType_Ready(&__pyx_type_5nitro_DataSource) < 0) __PYX_ERR(0, 248, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_5nitro_DataSource) < 0) __PYX_ERR(0, 253, __pyx_L1_error)
   __pyx_type_5nitro_DataSource.tp_print = 0;
-  if (PyObject_SetAttrString(__pyx_m, "DataSource", (PyObject *)&__pyx_type_5nitro_DataSource) < 0) __PYX_ERR(0, 248, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_5nitro_DataSource) < 0) __PYX_ERR(0, 248, __pyx_L1_error)
+  if (PyObject_SetAttrString(__pyx_m, "DataSource", (PyObject *)&__pyx_type_5nitro_DataSource) < 0) __PYX_ERR(0, 253, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_5nitro_DataSource) < 0) __PYX_ERR(0, 253, __pyx_L1_error)
   __pyx_ptype_5nitro_DataSource = &__pyx_type_5nitro_DataSource;
   __pyx_type_5nitro_BandSource.tp_base = __pyx_ptype_5nitro_DataSource;
-  if (PyType_Ready(&__pyx_type_5nitro_BandSource) < 0) __PYX_ERR(0, 254, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_5nitro_BandSource) < 0) __PYX_ERR(0, 259, __pyx_L1_error)
   __pyx_type_5nitro_BandSource.tp_print = 0;
-  if (PyObject_SetAttrString(__pyx_m, "BandSource", (PyObject *)&__pyx_type_5nitro_BandSource) < 0) __PYX_ERR(0, 254, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_5nitro_BandSource) < 0) __PYX_ERR(0, 254, __pyx_L1_error)
+  if (PyObject_SetAttrString(__pyx_m, "BandSource", (PyObject *)&__pyx_type_5nitro_BandSource) < 0) __PYX_ERR(0, 259, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_5nitro_BandSource) < 0) __PYX_ERR(0, 259, __pyx_L1_error)
   __pyx_ptype_5nitro_BandSource = &__pyx_type_5nitro_BandSource;
   __pyx_vtabptr_5nitro_DirectBlockSource = &__pyx_vtable_5nitro_DirectBlockSource;
   __pyx_vtable_5nitro_DirectBlockSource.next_block = (PyObject *(*)(struct __pyx_obj_5nitro_DirectBlockSource *, PyObject *, PyObject *, PyObject *, PyObject *, int __pyx_skip_dispatch))__pyx_f_5nitro_17DirectBlockSource_next_block;
   __pyx_vtable_5nitro_DirectBlockSource.c_next_block = (NITF_BOOL (*)(void *, void *, void const *, nitf_Uint32, nitf_Uint64, nitf_Error *))__pyx_f_5nitro_17DirectBlockSource_c_next_block;
   __pyx_type_5nitro_DirectBlockSource.tp_base = __pyx_ptype_5nitro_BandSource;
-  if (PyType_Ready(&__pyx_type_5nitro_DirectBlockSource) < 0) __PYX_ERR(0, 258, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_5nitro_DirectBlockSource) < 0) __PYX_ERR(0, 263, __pyx_L1_error)
   __pyx_type_5nitro_DirectBlockSource.tp_print = 0;
-  if (__Pyx_SetVtable(__pyx_type_5nitro_DirectBlockSource.tp_dict, __pyx_vtabptr_5nitro_DirectBlockSource) < 0) __PYX_ERR(0, 258, __pyx_L1_error)
-  if (PyObject_SetAttrString(__pyx_m, "DirectBlockSource", (PyObject *)&__pyx_type_5nitro_DirectBlockSource) < 0) __PYX_ERR(0, 258, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_5nitro_DirectBlockSource) < 0) __PYX_ERR(0, 258, __pyx_L1_error)
+  if (__Pyx_SetVtable(__pyx_type_5nitro_DirectBlockSource.tp_dict, __pyx_vtabptr_5nitro_DirectBlockSource) < 0) __PYX_ERR(0, 263, __pyx_L1_error)
+  if (PyObject_SetAttrString(__pyx_m, "DirectBlockSource", (PyObject *)&__pyx_type_5nitro_DirectBlockSource) < 0) __PYX_ERR(0, 263, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_5nitro_DirectBlockSource) < 0) __PYX_ERR(0, 263, __pyx_L1_error)
   __pyx_ptype_5nitro_DirectBlockSource = &__pyx_type_5nitro_DirectBlockSource;
   __pyx_type_5nitro_MemorySource.tp_base = __pyx_ptype_5nitro_BandSource;
-  if (PyType_Ready(&__pyx_type_5nitro_MemorySource) < 0) __PYX_ERR(0, 287, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_5nitro_MemorySource) < 0) __PYX_ERR(0, 292, __pyx_L1_error)
   __pyx_type_5nitro_MemorySource.tp_print = 0;
-  if (PyObject_SetAttrString(__pyx_m, "MemorySource", (PyObject *)&__pyx_type_5nitro_MemorySource) < 0) __PYX_ERR(0, 287, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_5nitro_MemorySource) < 0) __PYX_ERR(0, 287, __pyx_L1_error)
+  if (PyObject_SetAttrString(__pyx_m, "MemorySource", (PyObject *)&__pyx_type_5nitro_MemorySource) < 0) __PYX_ERR(0, 292, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_5nitro_MemorySource) < 0) __PYX_ERR(0, 292, __pyx_L1_error)
   __pyx_ptype_5nitro_MemorySource = &__pyx_type_5nitro_MemorySource;
   __pyx_type_5nitro_MemoryBandSource.tp_base = __pyx_ptype_5nitro_MemorySource;
-  if (PyType_Ready(&__pyx_type_5nitro_MemoryBandSource) < 0) __PYX_ERR(0, 299, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_5nitro_MemoryBandSource) < 0) __PYX_ERR(0, 304, __pyx_L1_error)
   __pyx_type_5nitro_MemoryBandSource.tp_print = 0;
-  if (PyObject_SetAttrString(__pyx_m, "MemoryBandSource", (PyObject *)&__pyx_type_5nitro_MemoryBandSource) < 0) __PYX_ERR(0, 299, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_5nitro_MemoryBandSource) < 0) __PYX_ERR(0, 299, __pyx_L1_error)
+  if (PyObject_SetAttrString(__pyx_m, "MemoryBandSource", (PyObject *)&__pyx_type_5nitro_MemoryBandSource) < 0) __PYX_ERR(0, 304, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_5nitro_MemoryBandSource) < 0) __PYX_ERR(0, 304, __pyx_L1_error)
   __pyx_ptype_5nitro_MemoryBandSource = &__pyx_type_5nitro_MemoryBandSource;
   __pyx_type_5nitro_SegmentSource.tp_base = __pyx_ptype_5nitro_DataSource;
-  if (PyType_Ready(&__pyx_type_5nitro_SegmentSource) < 0) __PYX_ERR(0, 303, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_5nitro_SegmentSource) < 0) __PYX_ERR(0, 308, __pyx_L1_error)
   __pyx_type_5nitro_SegmentSource.tp_print = 0;
-  if (PyObject_SetAttrString(__pyx_m, "SegmentSource", (PyObject *)&__pyx_type_5nitro_SegmentSource) < 0) __PYX_ERR(0, 303, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_5nitro_SegmentSource) < 0) __PYX_ERR(0, 303, __pyx_L1_error)
+  if (PyObject_SetAttrString(__pyx_m, "SegmentSource", (PyObject *)&__pyx_type_5nitro_SegmentSource) < 0) __PYX_ERR(0, 308, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_5nitro_SegmentSource) < 0) __PYX_ERR(0, 308, __pyx_L1_error)
   __pyx_ptype_5nitro_SegmentSource = &__pyx_type_5nitro_SegmentSource;
   __pyx_type_5nitro_SegmentMemorySource.tp_base = __pyx_ptype_5nitro_SegmentSource;
-  if (PyType_Ready(&__pyx_type_5nitro_SegmentMemorySource) < 0) __PYX_ERR(0, 307, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_5nitro_SegmentMemorySource) < 0) __PYX_ERR(0, 312, __pyx_L1_error)
   __pyx_type_5nitro_SegmentMemorySource.tp_print = 0;
-  if (PyObject_SetAttrString(__pyx_m, "SegmentMemorySource", (PyObject *)&__pyx_type_5nitro_SegmentMemorySource) < 0) __PYX_ERR(0, 307, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_5nitro_SegmentMemorySource) < 0) __PYX_ERR(0, 307, __pyx_L1_error)
+  if (PyObject_SetAttrString(__pyx_m, "SegmentMemorySource", (PyObject *)&__pyx_type_5nitro_SegmentMemorySource) < 0) __PYX_ERR(0, 312, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_5nitro_SegmentMemorySource) < 0) __PYX_ERR(0, 312, __pyx_L1_error)
   __pyx_ptype_5nitro_SegmentMemorySource = &__pyx_type_5nitro_SegmentMemorySource;
-  if (PyType_Ready(&__pyx_type_5nitro_IOHandle) < 0) __PYX_ERR(0, 323, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_5nitro_IOHandle) < 0) __PYX_ERR(0, 328, __pyx_L1_error)
   __pyx_type_5nitro_IOHandle.tp_print = 0;
-  if (PyObject_SetAttrString(__pyx_m, "IOHandle", (PyObject *)&__pyx_type_5nitro_IOHandle) < 0) __PYX_ERR(0, 323, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_5nitro_IOHandle) < 0) __PYX_ERR(0, 323, __pyx_L1_error)
+  if (PyObject_SetAttrString(__pyx_m, "IOHandle", (PyObject *)&__pyx_type_5nitro_IOHandle) < 0) __PYX_ERR(0, 328, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_5nitro_IOHandle) < 0) __PYX_ERR(0, 328, __pyx_L1_error)
   __pyx_ptype_5nitro_IOHandle = &__pyx_type_5nitro_IOHandle;
   __pyx_type_5nitro_SegmentFileSource.tp_base = __pyx_ptype_5nitro_SegmentSource;
-  if (PyType_Ready(&__pyx_type_5nitro_SegmentFileSource) < 0) __PYX_ERR(0, 350, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_5nitro_SegmentFileSource) < 0) __PYX_ERR(0, 355, __pyx_L1_error)
   __pyx_type_5nitro_SegmentFileSource.tp_print = 0;
-  if (PyObject_SetAttrString(__pyx_m, "SegmentFileSource", (PyObject *)&__pyx_type_5nitro_SegmentFileSource) < 0) __PYX_ERR(0, 350, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_5nitro_SegmentFileSource) < 0) __PYX_ERR(0, 350, __pyx_L1_error)
+  if (PyObject_SetAttrString(__pyx_m, "SegmentFileSource", (PyObject *)&__pyx_type_5nitro_SegmentFileSource) < 0) __PYX_ERR(0, 355, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_5nitro_SegmentFileSource) < 0) __PYX_ERR(0, 355, __pyx_L1_error)
   __pyx_ptype_5nitro_SegmentFileSource = &__pyx_type_5nitro_SegmentFileSource;
-  if (PyType_Ready(&__pyx_type_5nitro_Writer) < 0) __PYX_ERR(0, 359, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_5nitro_Writer) < 0) __PYX_ERR(0, 364, __pyx_L1_error)
   __pyx_type_5nitro_Writer.tp_print = 0;
-  if (PyObject_SetAttrString(__pyx_m, "Writer", (PyObject *)&__pyx_type_5nitro_Writer) < 0) __PYX_ERR(0, 359, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_5nitro_Writer) < 0) __PYX_ERR(0, 359, __pyx_L1_error)
+  if (PyObject_SetAttrString(__pyx_m, "Writer", (PyObject *)&__pyx_type_5nitro_Writer) < 0) __PYX_ERR(0, 364, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_5nitro_Writer) < 0) __PYX_ERR(0, 364, __pyx_L1_error)
   __pyx_ptype_5nitro_Writer = &__pyx_type_5nitro_Writer;
-  if (PyType_Ready(&__pyx_type_5nitro_Reader) < 0) __PYX_ERR(0, 440, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_5nitro_Reader) < 0) __PYX_ERR(0, 445, __pyx_L1_error)
   __pyx_type_5nitro_Reader.tp_print = 0;
-  if (PyObject_SetAttrString(__pyx_m, "Reader", (PyObject *)&__pyx_type_5nitro_Reader) < 0) __PYX_ERR(0, 440, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_5nitro_Reader) < 0) __PYX_ERR(0, 440, __pyx_L1_error)
+  if (PyObject_SetAttrString(__pyx_m, "Reader", (PyObject *)&__pyx_type_5nitro_Reader) < 0) __PYX_ERR(0, 445, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_5nitro_Reader) < 0) __PYX_ERR(0, 445, __pyx_L1_error)
   __pyx_ptype_5nitro_Reader = &__pyx_type_5nitro_Reader;
   __pyx_vtabptr_5nitro_ImageWriter = &__pyx_vtable_5nitro_ImageWriter;
   __pyx_vtable_5nitro_ImageWriter.from_ptr = (PyObject *(*)(nitf_ImageWriter *))__pyx_f_5nitro_11ImageWriter_from_ptr;
-  if (PyType_Ready(&__pyx_type_5nitro_ImageWriter) < 0) __PYX_ERR(0, 505, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_5nitro_ImageWriter) < 0) __PYX_ERR(0, 510, __pyx_L1_error)
   __pyx_type_5nitro_ImageWriter.tp_print = 0;
-  if (__Pyx_SetVtable(__pyx_type_5nitro_ImageWriter.tp_dict, __pyx_vtabptr_5nitro_ImageWriter) < 0) __PYX_ERR(0, 505, __pyx_L1_error)
-  if (PyObject_SetAttrString(__pyx_m, "ImageWriter", (PyObject *)&__pyx_type_5nitro_ImageWriter) < 0) __PYX_ERR(0, 505, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_5nitro_ImageWriter) < 0) __PYX_ERR(0, 505, __pyx_L1_error)
+  if (__Pyx_SetVtable(__pyx_type_5nitro_ImageWriter.tp_dict, __pyx_vtabptr_5nitro_ImageWriter) < 0) __PYX_ERR(0, 510, __pyx_L1_error)
+  if (PyObject_SetAttrString(__pyx_m, "ImageWriter", (PyObject *)&__pyx_type_5nitro_ImageWriter) < 0) __PYX_ERR(0, 510, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_5nitro_ImageWriter) < 0) __PYX_ERR(0, 510, __pyx_L1_error)
   __pyx_ptype_5nitro_ImageWriter = &__pyx_type_5nitro_ImageWriter;
   __pyx_vtabptr_5nitro_ImageReader = &__pyx_vtable_5nitro_ImageReader;
   __pyx_vtable_5nitro_ImageReader.from_ptr = (PyObject *(*)(nitf_ImageReader *, int))__pyx_f_5nitro_11ImageReader_from_ptr;
   __pyx_vtable_5nitro_ImageReader.to_capsule = (PyObject *(*)(struct __pyx_obj_5nitro_ImageReader *, int __pyx_skip_dispatch))__pyx_f_5nitro_11ImageReader_to_capsule;
   __pyx_vtable_5nitro_ImageReader.read = (PyObject *(*)(struct __pyx_obj_5nitro_ImageReader *, PyObject *, int __pyx_skip_dispatch))__pyx_f_5nitro_11ImageReader_read;
-  if (PyType_Ready(&__pyx_type_5nitro_ImageReader) < 0) __PYX_ERR(0, 535, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_5nitro_ImageReader) < 0) __PYX_ERR(0, 540, __pyx_L1_error)
   __pyx_type_5nitro_ImageReader.tp_print = 0;
-  if (__Pyx_SetVtable(__pyx_type_5nitro_ImageReader.tp_dict, __pyx_vtabptr_5nitro_ImageReader) < 0) __PYX_ERR(0, 535, __pyx_L1_error)
-  if (PyObject_SetAttrString(__pyx_m, "ImageReader", (PyObject *)&__pyx_type_5nitro_ImageReader) < 0) __PYX_ERR(0, 535, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_5nitro_ImageReader) < 0) __PYX_ERR(0, 535, __pyx_L1_error)
+  if (__Pyx_SetVtable(__pyx_type_5nitro_ImageReader.tp_dict, __pyx_vtabptr_5nitro_ImageReader) < 0) __PYX_ERR(0, 540, __pyx_L1_error)
+  if (PyObject_SetAttrString(__pyx_m, "ImageReader", (PyObject *)&__pyx_type_5nitro_ImageReader) < 0) __PYX_ERR(0, 540, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_5nitro_ImageReader) < 0) __PYX_ERR(0, 540, __pyx_L1_error)
   __pyx_ptype_5nitro_ImageReader = &__pyx_type_5nitro_ImageReader;
   __pyx_vtabptr_5nitro_SegmentReader = &__pyx_vtable_5nitro_SegmentReader;
   __pyx_vtable_5nitro_SegmentReader.from_ptr = (PyObject *(*)(nitf_SegmentReader *))__pyx_f_5nitro_13SegmentReader_from_ptr;
-  if (PyType_Ready(&__pyx_type_5nitro_SegmentReader) < 0) __PYX_ERR(0, 626, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_5nitro_SegmentReader) < 0) __PYX_ERR(0, 631, __pyx_L1_error)
   __pyx_type_5nitro_SegmentReader.tp_print = 0;
-  if (__Pyx_SetVtable(__pyx_type_5nitro_SegmentReader.tp_dict, __pyx_vtabptr_5nitro_SegmentReader) < 0) __PYX_ERR(0, 626, __pyx_L1_error)
-  if (PyObject_SetAttrString(__pyx_m, "SegmentReader", (PyObject *)&__pyx_type_5nitro_SegmentReader) < 0) __PYX_ERR(0, 626, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_5nitro_SegmentReader) < 0) __PYX_ERR(0, 626, __pyx_L1_error)
+  if (__Pyx_SetVtable(__pyx_type_5nitro_SegmentReader.tp_dict, __pyx_vtabptr_5nitro_SegmentReader) < 0) __PYX_ERR(0, 631, __pyx_L1_error)
+  if (PyObject_SetAttrString(__pyx_m, "SegmentReader", (PyObject *)&__pyx_type_5nitro_SegmentReader) < 0) __PYX_ERR(0, 631, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_5nitro_SegmentReader) < 0) __PYX_ERR(0, 631, __pyx_L1_error)
   __pyx_ptype_5nitro_SegmentReader = &__pyx_type_5nitro_SegmentReader;
   __pyx_vtabptr_5nitro_SegmentWriter = &__pyx_vtable_5nitro_SegmentWriter;
   __pyx_vtable_5nitro_SegmentWriter.from_ptr = (PyObject *(*)(nitf_SegmentWriter *))__pyx_f_5nitro_13SegmentWriter_from_ptr;
-  if (PyType_Ready(&__pyx_type_5nitro_SegmentWriter) < 0) __PYX_ERR(0, 656, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_5nitro_SegmentWriter) < 0) __PYX_ERR(0, 661, __pyx_L1_error)
   __pyx_type_5nitro_SegmentWriter.tp_print = 0;
-  if (__Pyx_SetVtable(__pyx_type_5nitro_SegmentWriter.tp_dict, __pyx_vtabptr_5nitro_SegmentWriter) < 0) __PYX_ERR(0, 656, __pyx_L1_error)
-  if (PyObject_SetAttrString(__pyx_m, "SegmentWriter", (PyObject *)&__pyx_type_5nitro_SegmentWriter) < 0) __PYX_ERR(0, 656, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_5nitro_SegmentWriter) < 0) __PYX_ERR(0, 656, __pyx_L1_error)
+  if (__Pyx_SetVtable(__pyx_type_5nitro_SegmentWriter.tp_dict, __pyx_vtabptr_5nitro_SegmentWriter) < 0) __PYX_ERR(0, 661, __pyx_L1_error)
+  if (PyObject_SetAttrString(__pyx_m, "SegmentWriter", (PyObject *)&__pyx_type_5nitro_SegmentWriter) < 0) __PYX_ERR(0, 661, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_5nitro_SegmentWriter) < 0) __PYX_ERR(0, 661, __pyx_L1_error)
   __pyx_ptype_5nitro_SegmentWriter = &__pyx_type_5nitro_SegmentWriter;
   __pyx_vtabptr_5nitro_TextSegment = &__pyx_vtable_5nitro_TextSegment;
   __pyx_vtable_5nitro_TextSegment.from_ptr = (PyObject *(*)(nitf_TextSegment *))__pyx_f_5nitro_11TextSegment_from_ptr;
-  if (PyType_Ready(&__pyx_type_5nitro_TextSegment) < 0) __PYX_ERR(0, 680, __pyx_L1_error)
+  if (PyType_Ready(&__pyx_type_5nitro_TextSegment) < 0) __PYX_ERR(0, 685, __pyx_L1_error)
   __pyx_type_5nitro_TextSegment.tp_print = 0;
-  if (__Pyx_SetVtable(__pyx_type_5nitro_TextSegment.tp_dict, __pyx_vtabptr_5nitro_TextSegment) < 0) __PYX_ERR(0, 680, __pyx_L1_error)
-  if (PyObject_SetAttrString(__pyx_m, "TextSegment", (PyObject *)&__pyx_type_5nitro_TextSegment) < 0) __PYX_ERR(0, 680, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_5nitro_TextSegment) < 0) __PYX_ERR(0, 680, __pyx_L1_error)
+  if (__Pyx_SetVtable(__pyx_type_5nitro_TextSegment.tp_dict, __pyx_vtabptr_5nitro_TextSegment) < 0) __PYX_ERR(0, 685, __pyx_L1_error)
+  if (PyObject_SetAttrString(__pyx_m, "TextSegment", (PyObject *)&__pyx_type_5nitro_TextSegment) < 0) __PYX_ERR(0, 685, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_5nitro_TextSegment) < 0) __PYX_ERR(0, 685, __pyx_L1_error)
   __pyx_ptype_5nitro_TextSegment = &__pyx_type_5nitro_TextSegment;
   __Pyx_EnumMeta.tp_base = (&PyType_Type);
   if (PyType_Ready(&__Pyx_EnumMeta) < 0) __PYX_ERR(1, 15, __pyx_L1_error)
@@ -28912,27 +29052,27 @@ static int __pyx_pymod_exec_nitro(PyObject *__pyx_pyinit_module)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   PyType_Modified(__pyx_ptype_5nitro_Record);
 
-  /* "nitro.pyx":211
+  /* "nitro.pyx":216
  *         self._c_image.subheader = <header.nitf_ImageSubheader*>PyCapsule_GetPointer(c, "ImageSubheader")
  * 
  *     @deprecated("Old SWIG API")             # <<<<<<<<<<<<<<
  *     def addBands(self, num=1):
  *         if num < 0:
  */
-  __pyx_t_5 = __Pyx_GetModuleGlobalName(__pyx_n_s_deprecated); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 211, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_GetModuleGlobalName(__pyx_n_s_deprecated); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 216, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_tuple__58, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 211, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_tuple__58, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 216, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-  /* "nitro.pyx":212
+  /* "nitro.pyx":217
  * 
  *     @deprecated("Old SWIG API")
  *     def addBands(self, num=1):             # <<<<<<<<<<<<<<
  *         if num < 0:
  *             num = 0
  */
-  __pyx_t_5 = __Pyx_GetNameInClass((PyObject *)__pyx_ptype_5nitro_ImageSegment, __pyx_n_s_addBands); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 212, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_GetNameInClass((PyObject *)__pyx_ptype_5nitro_ImageSegment, __pyx_n_s_addBands); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 217, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __pyx_t_6 = NULL;
   if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_2))) {
@@ -28945,14 +29085,14 @@ static int __pyx_pymod_exec_nitro(PyObject *__pyx_pyinit_module)
     }
   }
   if (!__pyx_t_6) {
-    __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 211, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 216, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     __Pyx_GOTREF(__pyx_t_3);
   } else {
     #if CYTHON_FAST_PYCALL
     if (PyFunction_Check(__pyx_t_2)) {
       PyObject *__pyx_temp[2] = {__pyx_t_6, __pyx_t_5};
-      __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 211, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 216, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
@@ -28961,50 +29101,50 @@ static int __pyx_pymod_exec_nitro(PyObject *__pyx_pyinit_module)
     #if CYTHON_FAST_PYCCALL
     if (__Pyx_PyFastCFunction_Check(__pyx_t_2)) {
       PyObject *__pyx_temp[2] = {__pyx_t_6, __pyx_t_5};
-      __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 211, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 216, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     } else
     #endif
     {
-      __pyx_t_4 = PyTuple_New(1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 211, __pyx_L1_error)
+      __pyx_t_4 = PyTuple_New(1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 216, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_GIVEREF(__pyx_t_6); PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_6); __pyx_t_6 = NULL;
       __Pyx_GIVEREF(__pyx_t_5);
       PyTuple_SET_ITEM(__pyx_t_4, 0+1, __pyx_t_5);
       __pyx_t_5 = 0;
-      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_4, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 211, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_4, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 216, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     }
   }
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (PyDict_SetItem((PyObject *)__pyx_ptype_5nitro_ImageSegment->tp_dict, __pyx_n_s_addBands, __pyx_t_3) < 0) __PYX_ERR(0, 212, __pyx_L1_error)
+  if (PyDict_SetItem((PyObject *)__pyx_ptype_5nitro_ImageSegment->tp_dict, __pyx_n_s_addBands, __pyx_t_3) < 0) __PYX_ERR(0, 217, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   PyType_Modified(__pyx_ptype_5nitro_ImageSegment);
 
-  /* "nitro.pyx":234
+  /* "nitro.pyx":239
  *             raise NitfError(error)
  * 
  *     @deprecated("Old SWIG API")             # <<<<<<<<<<<<<<
  *     def addBand(self, band):
  *         return self.add_band(band)
  */
-  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_deprecated); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 234, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_deprecated); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 239, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple__59, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 234, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple__59, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 239, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "nitro.pyx":235
+  /* "nitro.pyx":240
  * 
  *     @deprecated("Old SWIG API")
  *     def addBand(self, band):             # <<<<<<<<<<<<<<
  *         return self.add_band(band)
  * 
  */
-  __pyx_t_2 = __Pyx_GetNameInClass((PyObject *)__pyx_ptype_5nitro_ImageSource, __pyx_n_s_addBand); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 235, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_GetNameInClass((PyObject *)__pyx_ptype_5nitro_ImageSource, __pyx_n_s_addBand); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 240, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_5 = NULL;
   if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_4))) {
@@ -29017,14 +29157,14 @@ static int __pyx_pymod_exec_nitro(PyObject *__pyx_pyinit_module)
     }
   }
   if (!__pyx_t_5) {
-    __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 234, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 239, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_GOTREF(__pyx_t_3);
   } else {
     #if CYTHON_FAST_PYCALL
     if (PyFunction_Check(__pyx_t_4)) {
       PyObject *__pyx_temp[2] = {__pyx_t_5, __pyx_t_2};
-      __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 234, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 239, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -29033,146 +29173,146 @@ static int __pyx_pymod_exec_nitro(PyObject *__pyx_pyinit_module)
     #if CYTHON_FAST_PYCCALL
     if (__Pyx_PyFastCFunction_Check(__pyx_t_4)) {
       PyObject *__pyx_temp[2] = {__pyx_t_5, __pyx_t_2};
-      __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 234, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 239, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     } else
     #endif
     {
-      __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 234, __pyx_L1_error)
+      __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 239, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_GIVEREF(__pyx_t_5); PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_5); __pyx_t_5 = NULL;
       __Pyx_GIVEREF(__pyx_t_2);
       PyTuple_SET_ITEM(__pyx_t_6, 0+1, __pyx_t_2);
       __pyx_t_2 = 0;
-      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_6, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 234, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_6, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 239, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     }
   }
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (PyDict_SetItem((PyObject *)__pyx_ptype_5nitro_ImageSource->tp_dict, __pyx_n_s_addBand, __pyx_t_3) < 0) __PYX_ERR(0, 235, __pyx_L1_error)
+  if (PyDict_SetItem((PyObject *)__pyx_ptype_5nitro_ImageSource->tp_dict, __pyx_n_s_addBand, __pyx_t_3) < 0) __PYX_ERR(0, 240, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   PyType_Modified(__pyx_ptype_5nitro_ImageSource);
 
-  /* "nitro.pyx":327
+  /* "nitro.pyx":332
  * 
  *     # deprecated, for compatibility
  *     ACCESS_READONLY=AccessFlags.NITF_ACCESS_READONLY             # <<<<<<<<<<<<<<
  *     ACCESS_WRITEONLY=AccessFlags.NITF_ACCESS_WRITEONLY
  *     ACCESS_READWRITE=AccessFlags.NITF_ACCESS_READWRITE
  */
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_ptype_5nitro_AccessFlags), __pyx_n_s_NITF_ACCESS_READONLY); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 327, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_ptype_5nitro_AccessFlags), __pyx_n_s_NITF_ACCESS_READONLY); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 332, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  if (PyDict_SetItem((PyObject *)__pyx_ptype_5nitro_IOHandle->tp_dict, __pyx_n_s_ACCESS_READONLY, __pyx_t_3) < 0) __PYX_ERR(0, 327, __pyx_L1_error)
+  if (PyDict_SetItem((PyObject *)__pyx_ptype_5nitro_IOHandle->tp_dict, __pyx_n_s_ACCESS_READONLY, __pyx_t_3) < 0) __PYX_ERR(0, 332, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   PyType_Modified(__pyx_ptype_5nitro_IOHandle);
 
-  /* "nitro.pyx":328
+  /* "nitro.pyx":333
  *     # deprecated, for compatibility
  *     ACCESS_READONLY=AccessFlags.NITF_ACCESS_READONLY
  *     ACCESS_WRITEONLY=AccessFlags.NITF_ACCESS_WRITEONLY             # <<<<<<<<<<<<<<
  *     ACCESS_READWRITE=AccessFlags.NITF_ACCESS_READWRITE
  *     CREATE=CreationFlags.NITF_CREATE
  */
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_ptype_5nitro_AccessFlags), __pyx_n_s_NITF_ACCESS_WRITEONLY); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 328, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_ptype_5nitro_AccessFlags), __pyx_n_s_NITF_ACCESS_WRITEONLY); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 333, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  if (PyDict_SetItem((PyObject *)__pyx_ptype_5nitro_IOHandle->tp_dict, __pyx_n_s_ACCESS_WRITEONLY, __pyx_t_3) < 0) __PYX_ERR(0, 328, __pyx_L1_error)
+  if (PyDict_SetItem((PyObject *)__pyx_ptype_5nitro_IOHandle->tp_dict, __pyx_n_s_ACCESS_WRITEONLY, __pyx_t_3) < 0) __PYX_ERR(0, 333, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   PyType_Modified(__pyx_ptype_5nitro_IOHandle);
 
-  /* "nitro.pyx":329
+  /* "nitro.pyx":334
  *     ACCESS_READONLY=AccessFlags.NITF_ACCESS_READONLY
  *     ACCESS_WRITEONLY=AccessFlags.NITF_ACCESS_WRITEONLY
  *     ACCESS_READWRITE=AccessFlags.NITF_ACCESS_READWRITE             # <<<<<<<<<<<<<<
  *     CREATE=CreationFlags.NITF_CREATE
  *     OPEN_EXISTING=CreationFlags.NITF_OPEN_EXISTING
  */
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_ptype_5nitro_AccessFlags), __pyx_n_s_NITF_ACCESS_READWRITE); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 329, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_ptype_5nitro_AccessFlags), __pyx_n_s_NITF_ACCESS_READWRITE); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 334, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  if (PyDict_SetItem((PyObject *)__pyx_ptype_5nitro_IOHandle->tp_dict, __pyx_n_s_ACCESS_READWRITE, __pyx_t_3) < 0) __PYX_ERR(0, 329, __pyx_L1_error)
+  if (PyDict_SetItem((PyObject *)__pyx_ptype_5nitro_IOHandle->tp_dict, __pyx_n_s_ACCESS_READWRITE, __pyx_t_3) < 0) __PYX_ERR(0, 334, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   PyType_Modified(__pyx_ptype_5nitro_IOHandle);
 
-  /* "nitro.pyx":330
+  /* "nitro.pyx":335
  *     ACCESS_WRITEONLY=AccessFlags.NITF_ACCESS_WRITEONLY
  *     ACCESS_READWRITE=AccessFlags.NITF_ACCESS_READWRITE
  *     CREATE=CreationFlags.NITF_CREATE             # <<<<<<<<<<<<<<
  *     OPEN_EXISTING=CreationFlags.NITF_OPEN_EXISTING
  *     TRUNCATE=CreationFlags.NITF_TRUNCATE
  */
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_ptype_5nitro_CreationFlags), __pyx_n_s_NITF_CREATE); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 330, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_ptype_5nitro_CreationFlags), __pyx_n_s_NITF_CREATE); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 335, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  if (PyDict_SetItem((PyObject *)__pyx_ptype_5nitro_IOHandle->tp_dict, __pyx_n_s_CREATE, __pyx_t_3) < 0) __PYX_ERR(0, 330, __pyx_L1_error)
+  if (PyDict_SetItem((PyObject *)__pyx_ptype_5nitro_IOHandle->tp_dict, __pyx_n_s_CREATE, __pyx_t_3) < 0) __PYX_ERR(0, 335, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   PyType_Modified(__pyx_ptype_5nitro_IOHandle);
 
-  /* "nitro.pyx":331
+  /* "nitro.pyx":336
  *     ACCESS_READWRITE=AccessFlags.NITF_ACCESS_READWRITE
  *     CREATE=CreationFlags.NITF_CREATE
  *     OPEN_EXISTING=CreationFlags.NITF_OPEN_EXISTING             # <<<<<<<<<<<<<<
  *     TRUNCATE=CreationFlags.NITF_TRUNCATE
  * 
  */
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_ptype_5nitro_CreationFlags), __pyx_n_s_NITF_OPEN_EXISTING); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 331, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_ptype_5nitro_CreationFlags), __pyx_n_s_NITF_OPEN_EXISTING); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 336, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  if (PyDict_SetItem((PyObject *)__pyx_ptype_5nitro_IOHandle->tp_dict, __pyx_n_s_OPEN_EXISTING, __pyx_t_3) < 0) __PYX_ERR(0, 331, __pyx_L1_error)
+  if (PyDict_SetItem((PyObject *)__pyx_ptype_5nitro_IOHandle->tp_dict, __pyx_n_s_OPEN_EXISTING, __pyx_t_3) < 0) __PYX_ERR(0, 336, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   PyType_Modified(__pyx_ptype_5nitro_IOHandle);
 
-  /* "nitro.pyx":332
+  /* "nitro.pyx":337
  *     CREATE=CreationFlags.NITF_CREATE
  *     OPEN_EXISTING=CreationFlags.NITF_OPEN_EXISTING
  *     TRUNCATE=CreationFlags.NITF_TRUNCATE             # <<<<<<<<<<<<<<
  * 
  *     def __cinit__(self, str fname, access=AccessFlags.NITF_ACCESS_READWRITE, creation=CreationFlags.NITF_CREATE):
  */
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_ptype_5nitro_CreationFlags), __pyx_n_s_NITF_TRUNCATE); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 332, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_ptype_5nitro_CreationFlags), __pyx_n_s_NITF_TRUNCATE); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 337, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  if (PyDict_SetItem((PyObject *)__pyx_ptype_5nitro_IOHandle->tp_dict, __pyx_n_s_TRUNCATE, __pyx_t_3) < 0) __PYX_ERR(0, 332, __pyx_L1_error)
+  if (PyDict_SetItem((PyObject *)__pyx_ptype_5nitro_IOHandle->tp_dict, __pyx_n_s_TRUNCATE, __pyx_t_3) < 0) __PYX_ERR(0, 337, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   PyType_Modified(__pyx_ptype_5nitro_IOHandle);
 
-  /* "nitro.pyx":334
+  /* "nitro.pyx":339
  *     TRUNCATE=CreationFlags.NITF_TRUNCATE
  * 
  *     def __cinit__(self, str fname, access=AccessFlags.NITF_ACCESS_READWRITE, creation=CreationFlags.NITF_CREATE):             # <<<<<<<<<<<<<<
  *         cdef nitf_Error error
  *         self._c_io = io.nitf_IOHandle_create(fname, access, creation, &error)
  */
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_ptype_5nitro_AccessFlags), __pyx_n_s_NITF_ACCESS_READWRITE); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 334, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_ptype_5nitro_AccessFlags), __pyx_n_s_NITF_ACCESS_READWRITE); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 339, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_k__22 = __pyx_t_3;
   __Pyx_GIVEREF(__pyx_t_3);
   __pyx_t_3 = 0;
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_ptype_5nitro_CreationFlags), __pyx_n_s_NITF_CREATE); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 334, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_ptype_5nitro_CreationFlags), __pyx_n_s_NITF_CREATE); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 339, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_k__23 = __pyx_t_3;
   __Pyx_GIVEREF(__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "nitro.pyx":431
+  /* "nitro.pyx":436
  *         return SegmentWriter.from_ptr(sw)
  * 
  *     @deprecated("Old SWIG API")             # <<<<<<<<<<<<<<
  *     def newImageWriter(self, index):
  *         return self.new_image_writer(index)
  */
-  __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_deprecated); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 431, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_deprecated); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 436, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_tuple__60, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 431, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_tuple__60, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 436, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "nitro.pyx":432
+  /* "nitro.pyx":437
  * 
  *     @deprecated("Old SWIG API")
  *     def newImageWriter(self, index):             # <<<<<<<<<<<<<<
  *         return self.new_image_writer(index)
  * 
  */
-  __pyx_t_4 = __Pyx_GetNameInClass((PyObject *)__pyx_ptype_5nitro_Writer, __pyx_n_s_newImageWriter); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 432, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_GetNameInClass((PyObject *)__pyx_ptype_5nitro_Writer, __pyx_n_s_newImageWriter); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 437, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __pyx_t_2 = NULL;
   if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_6))) {
@@ -29185,14 +29325,14 @@ static int __pyx_pymod_exec_nitro(PyObject *__pyx_pyinit_module)
     }
   }
   if (!__pyx_t_2) {
-    __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 431, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 436, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_GOTREF(__pyx_t_3);
   } else {
     #if CYTHON_FAST_PYCALL
     if (PyFunction_Check(__pyx_t_6)) {
       PyObject *__pyx_temp[2] = {__pyx_t_2, __pyx_t_4};
-      __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_6, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 431, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_6, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 436, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
@@ -29201,50 +29341,50 @@ static int __pyx_pymod_exec_nitro(PyObject *__pyx_pyinit_module)
     #if CYTHON_FAST_PYCCALL
     if (__Pyx_PyFastCFunction_Check(__pyx_t_6)) {
       PyObject *__pyx_temp[2] = {__pyx_t_2, __pyx_t_4};
-      __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_6, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 431, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_6, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 436, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     } else
     #endif
     {
-      __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 431, __pyx_L1_error)
+      __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 436, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_GIVEREF(__pyx_t_2); PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_2); __pyx_t_2 = NULL;
       __Pyx_GIVEREF(__pyx_t_4);
       PyTuple_SET_ITEM(__pyx_t_5, 0+1, __pyx_t_4);
       __pyx_t_4 = 0;
-      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_t_5, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 431, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_t_5, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 436, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     }
   }
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  if (PyDict_SetItem((PyObject *)__pyx_ptype_5nitro_Writer->tp_dict, __pyx_n_s_newImageWriter, __pyx_t_3) < 0) __PYX_ERR(0, 432, __pyx_L1_error)
+  if (PyDict_SetItem((PyObject *)__pyx_ptype_5nitro_Writer->tp_dict, __pyx_n_s_newImageWriter, __pyx_t_3) < 0) __PYX_ERR(0, 437, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   PyType_Modified(__pyx_ptype_5nitro_Writer);
 
-  /* "nitro.pyx":435
+  /* "nitro.pyx":440
  *         return self.new_image_writer(index)
  * 
  *     @deprecated("Old SWIG API")             # <<<<<<<<<<<<<<
  *     def newDEWriter(self, index):
  *         return self.new_data_extension_writer(index)
  */
-  __pyx_t_6 = __Pyx_GetModuleGlobalName(__pyx_n_s_deprecated); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 435, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_GetModuleGlobalName(__pyx_n_s_deprecated); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 440, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
-  __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_tuple__61, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 435, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_tuple__61, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 440, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
 
-  /* "nitro.pyx":436
+  /* "nitro.pyx":441
  * 
  *     @deprecated("Old SWIG API")
  *     def newDEWriter(self, index):             # <<<<<<<<<<<<<<
  *         return self.new_data_extension_writer(index)
  * 
  */
-  __pyx_t_6 = __Pyx_GetNameInClass((PyObject *)__pyx_ptype_5nitro_Writer, __pyx_n_s_newDEWriter); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 436, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_GetNameInClass((PyObject *)__pyx_ptype_5nitro_Writer, __pyx_n_s_newDEWriter); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 441, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __pyx_t_4 = NULL;
   if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_5))) {
@@ -29257,14 +29397,14 @@ static int __pyx_pymod_exec_nitro(PyObject *__pyx_pyinit_module)
     }
   }
   if (!__pyx_t_4) {
-    __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_6); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 435, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_6); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 440, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     __Pyx_GOTREF(__pyx_t_3);
   } else {
     #if CYTHON_FAST_PYCALL
     if (PyFunction_Check(__pyx_t_5)) {
       PyObject *__pyx_temp[2] = {__pyx_t_4, __pyx_t_6};
-      __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_5, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 435, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_5, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 440, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
@@ -29273,50 +29413,50 @@ static int __pyx_pymod_exec_nitro(PyObject *__pyx_pyinit_module)
     #if CYTHON_FAST_PYCCALL
     if (__Pyx_PyFastCFunction_Check(__pyx_t_5)) {
       PyObject *__pyx_temp[2] = {__pyx_t_4, __pyx_t_6};
-      __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_5, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 435, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_5, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 440, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     } else
     #endif
     {
-      __pyx_t_2 = PyTuple_New(1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 435, __pyx_L1_error)
+      __pyx_t_2 = PyTuple_New(1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 440, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_GIVEREF(__pyx_t_4); PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_4); __pyx_t_4 = NULL;
       __Pyx_GIVEREF(__pyx_t_6);
       PyTuple_SET_ITEM(__pyx_t_2, 0+1, __pyx_t_6);
       __pyx_t_6 = 0;
-      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_2, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 435, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_2, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 440, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     }
   }
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  if (PyDict_SetItem((PyObject *)__pyx_ptype_5nitro_Writer->tp_dict, __pyx_n_s_newDEWriter, __pyx_t_3) < 0) __PYX_ERR(0, 436, __pyx_L1_error)
+  if (PyDict_SetItem((PyObject *)__pyx_ptype_5nitro_Writer->tp_dict, __pyx_n_s_newDEWriter, __pyx_t_3) < 0) __PYX_ERR(0, 441, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   PyType_Modified(__pyx_ptype_5nitro_Writer);
 
-  /* "nitro.pyx":477
+  /* "nitro.pyx":482
  *         return self._record
  * 
  *     @deprecated("Old SWIG API")             # <<<<<<<<<<<<<<
  *     def newImageReader(self, num, options=None):
  *         return self.new_image_reader(num, options)
  */
-  __pyx_t_5 = __Pyx_GetModuleGlobalName(__pyx_n_s_deprecated); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 477, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_GetModuleGlobalName(__pyx_n_s_deprecated); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 482, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_tuple__62, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 477, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_tuple__62, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 482, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-  /* "nitro.pyx":478
+  /* "nitro.pyx":483
  * 
  *     @deprecated("Old SWIG API")
  *     def newImageReader(self, num, options=None):             # <<<<<<<<<<<<<<
  *         return self.new_image_reader(num, options)
  * 
  */
-  __pyx_t_5 = __Pyx_GetNameInClass((PyObject *)__pyx_ptype_5nitro_Reader, __pyx_n_s_newImageReader); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 478, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_GetNameInClass((PyObject *)__pyx_ptype_5nitro_Reader, __pyx_n_s_newImageReader); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 483, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __pyx_t_6 = NULL;
   if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_2))) {
@@ -29329,14 +29469,14 @@ static int __pyx_pymod_exec_nitro(PyObject *__pyx_pyinit_module)
     }
   }
   if (!__pyx_t_6) {
-    __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 477, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 482, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     __Pyx_GOTREF(__pyx_t_3);
   } else {
     #if CYTHON_FAST_PYCALL
     if (PyFunction_Check(__pyx_t_2)) {
       PyObject *__pyx_temp[2] = {__pyx_t_6, __pyx_t_5};
-      __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 477, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_2, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 482, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
@@ -29345,50 +29485,50 @@ static int __pyx_pymod_exec_nitro(PyObject *__pyx_pyinit_module)
     #if CYTHON_FAST_PYCCALL
     if (__Pyx_PyFastCFunction_Check(__pyx_t_2)) {
       PyObject *__pyx_temp[2] = {__pyx_t_6, __pyx_t_5};
-      __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 477, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_2, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 482, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_6); __pyx_t_6 = 0;
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     } else
     #endif
     {
-      __pyx_t_4 = PyTuple_New(1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 477, __pyx_L1_error)
+      __pyx_t_4 = PyTuple_New(1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 482, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_4);
       __Pyx_GIVEREF(__pyx_t_6); PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_6); __pyx_t_6 = NULL;
       __Pyx_GIVEREF(__pyx_t_5);
       PyTuple_SET_ITEM(__pyx_t_4, 0+1, __pyx_t_5);
       __pyx_t_5 = 0;
-      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_4, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 477, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_4, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 482, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     }
   }
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (PyDict_SetItem((PyObject *)__pyx_ptype_5nitro_Reader->tp_dict, __pyx_n_s_newImageReader, __pyx_t_3) < 0) __PYX_ERR(0, 478, __pyx_L1_error)
+  if (PyDict_SetItem((PyObject *)__pyx_ptype_5nitro_Reader->tp_dict, __pyx_n_s_newImageReader, __pyx_t_3) < 0) __PYX_ERR(0, 483, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   PyType_Modified(__pyx_ptype_5nitro_Reader);
 
-  /* "nitro.pyx":481
+  /* "nitro.pyx":486
  *         return self.new_image_reader(num, options)
  * 
  *     @deprecated("Old SWIG API")             # <<<<<<<<<<<<<<
  *     def newDEReader(self, num, options=None):
  *         return self.new_data_extension_reader(num, options)
  */
-  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_deprecated); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 481, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_deprecated); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 486, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple__63, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 481, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple__63, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 486, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "nitro.pyx":482
+  /* "nitro.pyx":487
  * 
  *     @deprecated("Old SWIG API")
  *     def newDEReader(self, num, options=None):             # <<<<<<<<<<<<<<
  *         return self.new_data_extension_reader(num, options)
  * 
  */
-  __pyx_t_2 = __Pyx_GetNameInClass((PyObject *)__pyx_ptype_5nitro_Reader, __pyx_n_s_newDEReader); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 482, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_GetNameInClass((PyObject *)__pyx_ptype_5nitro_Reader, __pyx_n_s_newDEReader); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 487, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_5 = NULL;
   if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_4))) {
@@ -29401,14 +29541,14 @@ static int __pyx_pymod_exec_nitro(PyObject *__pyx_pyinit_module)
     }
   }
   if (!__pyx_t_5) {
-    __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 481, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 486, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_GOTREF(__pyx_t_3);
   } else {
     #if CYTHON_FAST_PYCALL
     if (PyFunction_Check(__pyx_t_4)) {
       PyObject *__pyx_temp[2] = {__pyx_t_5, __pyx_t_2};
-      __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 481, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 486, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -29417,50 +29557,50 @@ static int __pyx_pymod_exec_nitro(PyObject *__pyx_pyinit_module)
     #if CYTHON_FAST_PYCCALL
     if (__Pyx_PyFastCFunction_Check(__pyx_t_4)) {
       PyObject *__pyx_temp[2] = {__pyx_t_5, __pyx_t_2};
-      __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 481, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_4, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 486, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     } else
     #endif
     {
-      __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 481, __pyx_L1_error)
+      __pyx_t_6 = PyTuple_New(1+1); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 486, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_GIVEREF(__pyx_t_5); PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_5); __pyx_t_5 = NULL;
       __Pyx_GIVEREF(__pyx_t_2);
       PyTuple_SET_ITEM(__pyx_t_6, 0+1, __pyx_t_2);
       __pyx_t_2 = 0;
-      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_6, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 481, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_6, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 486, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     }
   }
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (PyDict_SetItem((PyObject *)__pyx_ptype_5nitro_Reader->tp_dict, __pyx_n_s_newDEReader, __pyx_t_3) < 0) __PYX_ERR(0, 482, __pyx_L1_error)
+  if (PyDict_SetItem((PyObject *)__pyx_ptype_5nitro_Reader->tp_dict, __pyx_n_s_newDEReader, __pyx_t_3) < 0) __PYX_ERR(0, 487, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   PyType_Modified(__pyx_ptype_5nitro_Reader);
 
-  /* "nitro.pyx":530
+  /* "nitro.pyx":535
  *             raise NitfError(error)
  * 
  *     @deprecated("Old SWIG API")             # <<<<<<<<<<<<<<
  *     def attachSource(self, ImageSource imagesource):
  *         self.attach_source(imagesource)
  */
-  __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_deprecated); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 530, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_deprecated); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 535, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_tuple__64, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 530, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_tuple__64, NULL); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 535, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "nitro.pyx":531
+  /* "nitro.pyx":536
  * 
  *     @deprecated("Old SWIG API")
  *     def attachSource(self, ImageSource imagesource):             # <<<<<<<<<<<<<<
  *         self.attach_source(imagesource)
  * 
  */
-  __pyx_t_4 = __Pyx_GetNameInClass((PyObject *)__pyx_ptype_5nitro_ImageWriter, __pyx_n_s_attachSource); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 531, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_GetNameInClass((PyObject *)__pyx_ptype_5nitro_ImageWriter, __pyx_n_s_attachSource); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 536, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __pyx_t_2 = NULL;
   if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_6))) {
@@ -29473,14 +29613,14 @@ static int __pyx_pymod_exec_nitro(PyObject *__pyx_pyinit_module)
     }
   }
   if (!__pyx_t_2) {
-    __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 530, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_6, __pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 535, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     __Pyx_GOTREF(__pyx_t_3);
   } else {
     #if CYTHON_FAST_PYCALL
     if (PyFunction_Check(__pyx_t_6)) {
       PyObject *__pyx_temp[2] = {__pyx_t_2, __pyx_t_4};
-      __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_6, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 530, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_6, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 535, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
@@ -29489,50 +29629,50 @@ static int __pyx_pymod_exec_nitro(PyObject *__pyx_pyinit_module)
     #if CYTHON_FAST_PYCCALL
     if (__Pyx_PyFastCFunction_Check(__pyx_t_6)) {
       PyObject *__pyx_temp[2] = {__pyx_t_2, __pyx_t_4};
-      __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_6, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 530, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_6, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 535, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_2); __pyx_t_2 = 0;
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
     } else
     #endif
     {
-      __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 530, __pyx_L1_error)
+      __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 535, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_GIVEREF(__pyx_t_2); PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_2); __pyx_t_2 = NULL;
       __Pyx_GIVEREF(__pyx_t_4);
       PyTuple_SET_ITEM(__pyx_t_5, 0+1, __pyx_t_4);
       __pyx_t_4 = 0;
-      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_t_5, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 530, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_t_5, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 535, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     }
   }
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  if (PyDict_SetItem((PyObject *)__pyx_ptype_5nitro_ImageWriter->tp_dict, __pyx_n_s_attachSource, __pyx_t_3) < 0) __PYX_ERR(0, 531, __pyx_L1_error)
+  if (PyDict_SetItem((PyObject *)__pyx_ptype_5nitro_ImageWriter->tp_dict, __pyx_n_s_attachSource, __pyx_t_3) < 0) __PYX_ERR(0, 536, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   PyType_Modified(__pyx_ptype_5nitro_ImageWriter);
 
-  /* "nitro.pyx":675
+  /* "nitro.pyx":680
  *             raise NitfError(error)
  * 
  *     @deprecated("Old SWIG API")             # <<<<<<<<<<<<<<
  *     def attachSource(self, SegmentSource segmentsource):
  *         self.attach_source(segmentsource)
  */
-  __pyx_t_6 = __Pyx_GetModuleGlobalName(__pyx_n_s_deprecated); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 675, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_GetModuleGlobalName(__pyx_n_s_deprecated); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 680, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
-  __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_tuple__65, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 675, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_tuple__65, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 680, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
 
-  /* "nitro.pyx":676
+  /* "nitro.pyx":681
  * 
  *     @deprecated("Old SWIG API")
  *     def attachSource(self, SegmentSource segmentsource):             # <<<<<<<<<<<<<<
  *         self.attach_source(segmentsource)
  * 
  */
-  __pyx_t_6 = __Pyx_GetNameInClass((PyObject *)__pyx_ptype_5nitro_SegmentWriter, __pyx_n_s_attachSource); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 676, __pyx_L1_error)
+  __pyx_t_6 = __Pyx_GetNameInClass((PyObject *)__pyx_ptype_5nitro_SegmentWriter, __pyx_n_s_attachSource); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 681, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
   __pyx_t_4 = NULL;
   if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_5))) {
@@ -29545,14 +29685,14 @@ static int __pyx_pymod_exec_nitro(PyObject *__pyx_pyinit_module)
     }
   }
   if (!__pyx_t_4) {
-    __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_6); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 675, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_5, __pyx_t_6); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 680, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     __Pyx_GOTREF(__pyx_t_3);
   } else {
     #if CYTHON_FAST_PYCALL
     if (PyFunction_Check(__pyx_t_5)) {
       PyObject *__pyx_temp[2] = {__pyx_t_4, __pyx_t_6};
-      __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_5, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 675, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyFunction_FastCall(__pyx_t_5, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 680, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
@@ -29561,94 +29701,94 @@ static int __pyx_pymod_exec_nitro(PyObject *__pyx_pyinit_module)
     #if CYTHON_FAST_PYCCALL
     if (__Pyx_PyFastCFunction_Check(__pyx_t_5)) {
       PyObject *__pyx_temp[2] = {__pyx_t_4, __pyx_t_6};
-      __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_5, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 675, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyCFunction_FastCall(__pyx_t_5, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 680, __pyx_L1_error)
       __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     } else
     #endif
     {
-      __pyx_t_2 = PyTuple_New(1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 675, __pyx_L1_error)
+      __pyx_t_2 = PyTuple_New(1+1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 680, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_2);
       __Pyx_GIVEREF(__pyx_t_4); PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_4); __pyx_t_4 = NULL;
       __Pyx_GIVEREF(__pyx_t_6);
       PyTuple_SET_ITEM(__pyx_t_2, 0+1, __pyx_t_6);
       __pyx_t_6 = 0;
-      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_2, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 675, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_2, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 680, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     }
   }
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  if (PyDict_SetItem((PyObject *)__pyx_ptype_5nitro_SegmentWriter->tp_dict, __pyx_n_s_attachSource, __pyx_t_3) < 0) __PYX_ERR(0, 676, __pyx_L1_error)
+  if (PyDict_SetItem((PyObject *)__pyx_ptype_5nitro_SegmentWriter->tp_dict, __pyx_n_s_attachSource, __pyx_t_3) < 0) __PYX_ERR(0, 681, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   PyType_Modified(__pyx_ptype_5nitro_SegmentWriter);
 
-  /* "nitro.pyx":684
+  /* "nitro.pyx":689
  * 
  *     @staticmethod
  *     def from_record(c):             # <<<<<<<<<<<<<<
  *         cdef record.nitf_Record* c_rec
  *         cdef nitf_Error error
  */
-  __pyx_t_3 = PyCFunction_NewEx(&__pyx_mdef_5nitro_11TextSegment_1from_record, NULL, __pyx_n_s_nitro); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 684, __pyx_L1_error)
+  __pyx_t_3 = PyCFunction_NewEx(&__pyx_mdef_5nitro_11TextSegment_1from_record, NULL, __pyx_n_s_nitro); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 689, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  if (PyDict_SetItem((PyObject *)__pyx_ptype_5nitro_TextSegment->tp_dict, __pyx_n_s_from_record, __pyx_t_3) < 0) __PYX_ERR(0, 684, __pyx_L1_error)
+  if (PyDict_SetItem((PyObject *)__pyx_ptype_5nitro_TextSegment->tp_dict, __pyx_n_s_from_record, __pyx_t_3) < 0) __PYX_ERR(0, 689, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   PyType_Modified(__pyx_ptype_5nitro_TextSegment);
 
-  /* "nitro.pyx":683
+  /* "nitro.pyx":688
  *     cdef text_segment.nitf_TextSegment* _c_text
  * 
  *     @staticmethod             # <<<<<<<<<<<<<<
  *     def from_record(c):
  *         cdef record.nitf_Record* c_rec
  */
-  __pyx_t_3 = __Pyx_GetNameInClass((PyObject *)__pyx_ptype_5nitro_TextSegment, __pyx_n_s_from_record); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 684, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_GetNameInClass((PyObject *)__pyx_ptype_5nitro_TextSegment, __pyx_n_s_from_record); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 689, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_5 = PyTuple_New(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 683, __pyx_L1_error)
+  __pyx_t_5 = PyTuple_New(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 688, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_GIVEREF(__pyx_t_3);
   PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_3);
   __pyx_t_3 = 0;
-  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_staticmethod, __pyx_t_5, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 683, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_staticmethod, __pyx_t_5, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 688, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  if (PyDict_SetItem((PyObject *)__pyx_ptype_5nitro_TextSegment->tp_dict, __pyx_n_s_from_record, __pyx_t_3) < 0) __PYX_ERR(0, 684, __pyx_L1_error)
+  if (PyDict_SetItem((PyObject *)__pyx_ptype_5nitro_TextSegment->tp_dict, __pyx_n_s_from_record, __pyx_t_3) < 0) __PYX_ERR(0, 689, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   PyType_Modified(__pyx_ptype_5nitro_TextSegment);
 
-  /* "nitro.pyx":702
+  /* "nitro.pyx":707
  * 
  *     @staticmethod
  *     def from_capsule(c):             # <<<<<<<<<<<<<<
  *         assert(PyCapsule_IsValid(c, "TextSegment"))
  *         return TextSegment.from_ptr(<text_segment.nitf_TextSegment*>PyCapsule_GetPointer(c, "TextSegment"))
  */
-  __pyx_t_3 = PyCFunction_NewEx(&__pyx_mdef_5nitro_11TextSegment_3from_capsule, NULL, __pyx_n_s_nitro); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 702, __pyx_L1_error)
+  __pyx_t_3 = PyCFunction_NewEx(&__pyx_mdef_5nitro_11TextSegment_3from_capsule, NULL, __pyx_n_s_nitro); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 707, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  if (PyDict_SetItem((PyObject *)__pyx_ptype_5nitro_TextSegment->tp_dict, __pyx_n_s_from_capsule, __pyx_t_3) < 0) __PYX_ERR(0, 702, __pyx_L1_error)
+  if (PyDict_SetItem((PyObject *)__pyx_ptype_5nitro_TextSegment->tp_dict, __pyx_n_s_from_capsule, __pyx_t_3) < 0) __PYX_ERR(0, 707, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   PyType_Modified(__pyx_ptype_5nitro_TextSegment);
 
-  /* "nitro.pyx":701
+  /* "nitro.pyx":706
  *         return obj
  * 
  *     @staticmethod             # <<<<<<<<<<<<<<
  *     def from_capsule(c):
  *         assert(PyCapsule_IsValid(c, "TextSegment"))
  */
-  __pyx_t_3 = __Pyx_GetNameInClass((PyObject *)__pyx_ptype_5nitro_TextSegment, __pyx_n_s_from_capsule); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 702, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_GetNameInClass((PyObject *)__pyx_ptype_5nitro_TextSegment, __pyx_n_s_from_capsule); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 707, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_5 = PyTuple_New(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 701, __pyx_L1_error)
+  __pyx_t_5 = PyTuple_New(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 706, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_GIVEREF(__pyx_t_3);
   PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_3);
   __pyx_t_3 = 0;
-  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_staticmethod, __pyx_t_5, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 701, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_staticmethod, __pyx_t_5, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 706, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  if (PyDict_SetItem((PyObject *)__pyx_ptype_5nitro_TextSegment->tp_dict, __pyx_n_s_from_capsule, __pyx_t_3) < 0) __PYX_ERR(0, 702, __pyx_L1_error)
+  if (PyDict_SetItem((PyObject *)__pyx_ptype_5nitro_TextSegment->tp_dict, __pyx_n_s_from_capsule, __pyx_t_3) < 0) __PYX_ERR(0, 707, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   PyType_Modified(__pyx_ptype_5nitro_TextSegment);
 

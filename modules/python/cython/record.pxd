@@ -44,6 +44,6 @@ cdef extern from "nitf/Record.h":
     # NITF_BOOL nitf_Record_moveTextSegment(nitf_Record * record, nitf_Uint32 oldIndex, nitf_Uint32 newIndex, nitf_Error * error);
     # NITF_BOOL nitf_Record_moveDataExtensionSegment(nitf_Record * record, nitf_Uint32 oldIndex, nitf_Uint32 newIndex, nitf_Error * error);
     # NITF_BOOL nitf_Record_moveReservedExtensionSegment(nitf_Record * record, nitf_Uint32 oldIndex, nitf_Uint32 newIndex, nitf_Error * error);
-    # NITF_BOOL nitf_Record_mergeTREs(nitf_Record * record, nitf_Error * error);
+    NITF_BOOL nitf_Record_mergeTREs(nitf_Record * record, nitf_Error * error);
     # NITF_BOOL nitf_Record_unmergeTREs(nitf_Record * record, nitf_Error * error);
 
