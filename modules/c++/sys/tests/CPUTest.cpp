@@ -21,9 +21,7 @@
  */
 #include <import/sys.h>
 
-using namespace sys;
-
-int main(int argc, char **argv)
+int main(int /*argc*/, char** /*argv*/)
 {
     try
     {
@@ -38,14 +36,15 @@ int main(int argc, char **argv)
         std::cout << "Available number of physical CPUs: "
                   << os.getNumPhysicalCPUsAvailable() << std::endl;
     }
-    catch (except::Throwable& t)
+    catch (const except::Throwable& t)
     {
         std::cerr << "Caught throwable: " << t.toString() << std::endl;
-        exit(EXIT_FAILURE);
+        return 1;
     }
     catch (...)
     {
         std::cerr << "Caught unnamed exception" << std::endl;
+        return 1;
     }
     return 0;
 }
