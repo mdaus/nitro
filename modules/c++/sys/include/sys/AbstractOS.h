@@ -215,7 +215,15 @@ public:
 
     virtual std::string getDSOSuffix() const = 0;
 
+    /*!
+     * Get the number of logical CPUs available (includes hyperthreading)
+     */
     virtual size_t getNumCPUs() const = 0;
+
+    /*!
+     * Get the number of physical CPUs available (excludes hyperthreading)
+     */
+    virtual size_t getNumPhysicalCPUs() const = 0;
 
     /*!
      *  Create a symlink, pathnames can be either absolute or relative
