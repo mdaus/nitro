@@ -281,6 +281,12 @@ size_t sys::OSWin32::getNumCPUs() const
     return info.dwNumberOfProcessors;
 }
 
+size_t sys::OSWin32::getNumPhysicalCPUs() const
+{
+    throw except::NotImplementedException(
+        Ctxt("Windows getNumPhysicalCPUs not yet implemented."));
+}
+
 void sys::OSWin32::createSymlink(const std::string& origPathname,
                                  const std::string& symlinkPathname) const
 {
