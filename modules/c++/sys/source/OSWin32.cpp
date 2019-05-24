@@ -281,6 +281,12 @@ size_t sys::OSWin32::getNumCPUs() const
     return info.dwNumberOfProcessors;
 }
 
+size_t sys::OSWin32::getNumCPUsAvailable() const
+{
+    throw except::NotImplementedException(
+        Ctxt("Windows getNumCPUsAvailable not yet implemented."));
+}
+
 size_t sys::OSWin32::getNumPhysicalCPUs() const
 {
     // TODO Need to use GetLogicalProcessorInformationEx.
@@ -288,6 +294,12 @@ size_t sys::OSWin32::getNumPhysicalCPUs() const
     //      https://devblogs.microsoft.com/oldnewthing/?p=2823
     throw except::NotImplementedException(
         Ctxt("Windows getNumPhysicalCPUs not yet implemented."));
+}
+
+size_t sys::OSWin32::getNumPhysicalCPUsAvailable() const
+{
+    throw except::NotImplementedException(
+        Ctxt("Windows getNumPhysicalCPUsAvailable not yet implemented."));
 }
 
 void sys::OSWin32::createSymlink(const std::string& origPathname,
