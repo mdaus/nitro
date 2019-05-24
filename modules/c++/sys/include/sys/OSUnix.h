@@ -162,12 +162,12 @@ public:
     virtual std::string getDSOSuffix() const;
 
     /*!
-     * Get the number of logical CPUs available (includes hyperthreading)
+     * \return the number of logical CPUs available (includes hyperthreading)
      */
     virtual size_t getNumCPUs() const;
 
     /*!
-     * Get the number of physical CPUs available (excludes hyperthreading)
+     * \return the number of physical CPUs available (excludes hyperthreading)
      */
     virtual size_t getNumPhysicalCPUs() const;
 

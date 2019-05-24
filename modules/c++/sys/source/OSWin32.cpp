@@ -283,6 +283,9 @@ size_t sys::OSWin32::getNumCPUs() const
 
 size_t sys::OSWin32::getNumPhysicalCPUs() const
 {
+    // TODO Need to use GetLogicalProcessorInformationEx.
+    //      See reference implementation at
+    //      https://devblogs.microsoft.com/oldnewthing/?p=2823
     throw except::NotImplementedException(
         Ctxt("Windows getNumPhysicalCPUs not yet implemented."));
 }
