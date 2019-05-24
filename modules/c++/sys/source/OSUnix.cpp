@@ -32,6 +32,7 @@
 #include <vector>
 #include <set>
 #include <fstream>
+#include <sched.h>
 
 #if defined(__APPLE__)
 
@@ -46,6 +47,7 @@
 
 #include "sys/OSUnix.h"
 #include "sys/File.h"
+#include "str/Tokenizer.h"
 
 
 namespace
@@ -83,6 +85,52 @@ public:
 private:
     char* mArray;
 };
+
+std::set<std::string> get_unique_thread_siblings()
+{
+    // Our goal is to count the number of unique entries that occur
+    // in the files /sys/devices/system/cpu/cpu*/topology/thread_siblings_list
+    const sys::Path sysCPUPath("/sys/devices/system/cpu");
+    if (!sysCPUPath.isDirectory())
+    {
+        throw except::Exception(
+                Ctxt("Expected dir /sys/devices/system/cpu does not exist"));
+    }
+
+    const std::vector<std::string> searchPaths(1, sysCPUPath.getPath());
+    const std::vector<std::string> subDirs =
+        sys::FileFinder::search(
+            sys::DirectoryOnlyPredicate(),
+            searchPaths,
+            false);
+
+    std::set<std::string> unique_ts;
+    for (std::vector<std::string>::const_iterator ii = subDirs.begin();
+         ii != subDirs.end();
+         ++ii)
+    {
+        const sys::Path tsPath(*ii, "topology/thread_siblings_list");
+        if (tsPath.exists())
+        {
+            std::ifstream tsIFS(tsPath.getPath().c_str());
+            if (!tsIFS.is_open())
+            {
+                std::ostringstream msg;
+                msg << "Unable to open thread siblings file "
+                    << tsPath.getPath();
+                throw except::Exception(Ctxt(msg.str()));
+            }
+
+            std::string tsContents;
+            tsIFS >> tsContents;
+            tsIFS.close();
+
+            unique_ts.insert(tsContents);
+        }
+    }
+
+    return unique_ts;
+}
 }
 
 std::string sys::OSUnix::getPlatformName() const
@@ -312,50 +360,51 @@ size_t sys::OSUnix::getNumCPUs() const
 #endif
 }
 
-size_t sys::OSUnix::getNumPhysicalCPUs() const
+size_t sys::OSUnix::getNumCPUsAvailable() const
 {
-    // Our goal is to count the number of unique entries that occur
-    // in the files /sys/devices/system/cpu/cpu*/topology/thread_siblings_list
-    const sys::Path sysCPUPath("/sys/devices/system/cpu");
-    if (!sysCPUPath.isDirectory())
+    cpu_set_t mask;
+    if (-1 == sched_getaffinity(0, sizeof(cpu_set_t), &mask))
     {
-        throw except::Exception(
-                Ctxt("Expected dir /sys/devices/system/cpu does not exist"));
+        throw except::Exception(Ctxt("Failed to get CPU affinity"));
     }
 
-    const std::vector<std::string> searchPaths(1, sysCPUPath.getPath());
-    const std::vector<std::string> subDirs =
-        sys::FileFinder::search(
-            sys::DirectoryOnlyPredicate(),
-            searchPaths,
-            false);
+    return CPU_COUNT(&mask);
+}
 
-    std::set<std::string> unique_thread_siblings;
-    for (std::vector<std::string>::const_iterator ii = subDirs.begin();
-         ii != subDirs.end();
-         ++ii)
+size_t sys::OSUnix::getNumPhysicalCPUs() const
+{
+    return get_unique_thread_siblings().size();
+}
+
+size_t sys::OSUnix::getNumPhysicalCPUsAvailable() const
+{
+    // Obtain scheduling affinity for all CPUs (including hyperthreading)
+    cpu_set_t mask;
+    if (-1 == sched_getaffinity(0, sizeof(cpu_set_t), &mask))
     {
-        const sys::Path tsPath(*ii, "topology/thread_siblings_list");
-        if (tsPath.exists())
+        throw except::Exception(Ctxt("Failed to get CPU affinity"));
+    }
+
+    // Cross-reference the thread siblings with active CPUs
+    // and count unique instances in this filtered subset
+    const std::set<std::string> unique_ts(get_unique_thread_siblings());
+    std::set<std::string> physical_ts;
+    std::set<std::string>::const_iterator tsStr;
+    for (tsStr = unique_ts.begin(); tsStr != unique_ts.end(); ++tsStr)
+    {
+        const str::Tokenizer::Tokens cpuIDs = str::Tokenizer(*tsStr, ",");
+        for (str::Tokenizer::Tokens::const_iterator cpu = cpuIDs.begin();
+             cpu != cpuIDs.end();
+             ++cpu)
         {
-            std::ifstream tsIFS(tsPath.getPath().c_str());
-            if (!tsIFS.is_open())
+            if (CPU_ISSET(str::toType<int>(*cpu), &mask))
             {
-                std::ostringstream msg;
-                msg << "Unable to open thread siblings file "
-                    << tsPath.getPath();
-                throw except::Exception(Ctxt(msg.str()));
+                physical_ts.insert(*tsStr);
             }
-
-            std::string tsContents;
-            tsIFS >> tsContents;
-            tsIFS.close();
-
-            unique_thread_siblings.insert(tsContents);
         }
     }
 
-    return unique_thread_siblings.size();
+    return physical_ts.size();
 }
 
 void sys::OSUnix::createSymlink(const std::string& origPathname,

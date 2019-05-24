@@ -216,14 +216,30 @@ public:
     virtual std::string getDSOSuffix() const = 0;
 
     /*!
-     * \return the number of logical CPUs available (includes hyperthreading)
+     * \return the number of logical CPUs present on the machine
+     *         (includes hyperthreading)
      */
     virtual size_t getNumCPUs() const = 0;
 
     /*!
-     * \return the number of physical CPUs available (excludes hyperthreading)
+     * \return the number of logical CPUs available. This will be
+     *         affected by pinning (e.g. start/affinity/numactl/taskset),
+     *         and will always be <= getNumCPUs.
+     */
+    virtual size_t getNumCPUsAvailable() const = 0;
+
+    /*!
+     * \return the number of physical CPUs present on the machine
+     *         (excludes hyperthreading)
      */
     virtual size_t getNumPhysicalCPUs() const = 0;
+
+    /*!
+     * \return the number of physical CPUs available. This will be
+     *         affected by pinning (e.g. start/affinity/numactl/taskset),
+     *         and will always be <= getNumPhysicalCPUs.
+     */
+    virtual size_t getNumPhysicalCPUsAvailable() const = 0;
 
     /*!
      *  Create a symlink, pathnames can be either absolute or relative
