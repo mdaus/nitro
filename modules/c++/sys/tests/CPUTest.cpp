@@ -41,7 +41,7 @@ int main(int argc, char **argv)
     catch (except::Throwable& t)
     {
         std::cerr << "Caught throwable: " << t.toString() << std::endl;
-        exit( EXIT_FAILURE);
+        exit(EXIT_FAILURE);
     }
     catch (...)
     {

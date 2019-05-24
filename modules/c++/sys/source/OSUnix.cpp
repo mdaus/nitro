@@ -131,6 +131,14 @@ std::set<std::string> get_unique_thread_siblings()
 
     return unique_ts;
 }
+
+void get_cpu_affinity(cpu_set_t* mask)
+{
+    if (-1 == sched_getaffinity(0, sizeof(cpu_set_t), mask))
+    {
+        throw except::Exception(Ctxt("Failed to get CPU affinity"));
+    }
+}
 }
 
 std::string sys::OSUnix::getPlatformName() const
@@ -363,11 +371,7 @@ size_t sys::OSUnix::getNumCPUs() const
 size_t sys::OSUnix::getNumCPUsAvailable() const
 {
     cpu_set_t mask;
-    if (-1 == sched_getaffinity(0, sizeof(cpu_set_t), &mask))
-    {
-        throw except::Exception(Ctxt("Failed to get CPU affinity"));
-    }
-
+    get_cpu_affinity(&mask);
     return CPU_COUNT(&mask);
 }
 
@@ -380,10 +384,7 @@ size_t sys::OSUnix::getNumPhysicalCPUsAvailable() const
 {
     // Obtain scheduling affinity for all CPUs (including hyperthreading)
     cpu_set_t mask;
-    if (-1 == sched_getaffinity(0, sizeof(cpu_set_t), &mask))
-    {
-        throw except::Exception(Ctxt("Failed to get CPU affinity"));
-    }
+    get_cpu_affinity(&mask);
 
     // Cross-reference the thread siblings with active CPUs
     // and count unique instances in this filtered subset
