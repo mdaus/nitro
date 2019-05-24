@@ -181,12 +181,21 @@ public:
      */
     virtual void unsetEnv(const std::string& var);
 
+    /*!
+     * \return the number of logical CPUs available (includes hyperthreading)
+     */
     virtual size_t getNumCPUs() const;
+
+    /*!
+     * \todo Not yet implemented
+     * \return the number of physical CPUs available (excludes hyperthreading)
+     */
+    virtual size_t getNumPhysicalCPUs() const;
 
     /*!
      *  Create a symlink, pathnames can be either absolute or relative
      */
-    virtual void createSymlink(const std::string& origPathname, 
+    virtual void createSymlink(const std::string& origPathname,
                                const std::string& symlinkPathname) const;
 
     /*!

@@ -29,6 +29,9 @@
 #include <unistd.h>
 #include <sstream>
 #include <limits.h>
+#include <vector>
+#include <set>
+#include <fstream>
 
 #if defined(__APPLE__)
 
@@ -307,6 +310,52 @@ size_t sys::OSUnix::getNumCPUs() const
 #else
     throw except::NotImplementedException(Ctxt("Unable to get the number of CPUs"));
 #endif
+}
+
+size_t sys::OSUnix::getNumPhysicalCPUs() const
+{
+    // Our goal is to count the number of unique entries that occur
+    // in the files /sys/devices/system/cpu/cpu*/topology/thread_siblings_list
+    const sys::Path sysCPUPath("/sys/devices/system/cpu");
+    if (!sysCPUPath.isDirectory())
+    {
+        throw except::Exception(
+                Ctxt("Expected dir /sys/devices/system/cpu does not exist"));
+    }
+
+    const std::vector<std::string> searchPaths(1, sysCPUPath.getPath());
+    const std::vector<std::string> subDirs =
+        sys::FileFinder::search(
+            sys::DirectoryOnlyPredicate(),
+            searchPaths,
+            false);
+
+    std::set<std::string> unique_thread_siblings;
+    for (std::vector<std::string>::const_iterator ii = subDirs.begin();
+         ii != subDirs.end();
+         ++ii)
+    {
+        const sys::Path tsPath(*ii, "topology/thread_siblings_list");
+        if (tsPath.exists())
+        {
+            std::ifstream tsIFS(tsPath.getPath().c_str());
+            if (!tsIFS.is_open())
+            {
+                std::ostringstream msg;
+                msg << "Unable to open thread siblings file "
+                    << tsPath.getPath();
+                throw except::Exception(Ctxt(msg.str()));
+            }
+
+            std::string tsContents;
+            tsIFS >> tsContents;
+            tsIFS.close();
+
+            unique_thread_siblings.insert(tsContents);
+        }
+    }
+
+    return unique_thread_siblings.size();
 }
 
 void sys::OSUnix::createSymlink(const std::string& origPathname,
