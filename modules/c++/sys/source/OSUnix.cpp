@@ -133,67 +133,86 @@ std::set<std::string> get_unique_thread_siblings()
     return unique_ts;
 }
 
+struct CPUMask
+{
+    CPUMask(int numCPUs)
+    {
+        mSize = CPU_ALLOC_SIZE(numCPUs);
+        mMask = CPU_ALLOC(numCPUs);
+
+        if (mMask == NULL)
+        {
+            std::ostringstream msg;
+            msg << "Failed to allocate CPU mask for " << numCPUs << "CPUs";
+            throw except::Exception(Ctxt(msg.str()));
+        }
+    }
+
+    ~CPUMask()
+    {
+        if (mMask != NULL)
+        {
+            CPU_FREE(mMask);
+        }
+    }
+
+    size_t mSize;
+    cpu_set_t* mMask;
+};
+
 class ScopedCPUAffinity
 {
 public:
     ScopedCPUAffinity()
     {
-        int numOnlineCPUs = sysconf(_SC_NPROCESSORS_ONLN);
-        if (numOnlineCPUs == -1)
-        {
-            throw except::Exception(Ctxt("Failed to get online CPU count"));
-        }
-
         // The number of processors in the mask must be _at least_ the number of
         // CPU's representable by the kernel's internal mask. This is given by
         // the constant CPU_SETSIZE.
-        int maxCPUs = std::max(numOnlineCPUs, CPU_SETSIZE);
-        mSize = CPU_ALLOC_SIZE(maxCPUs);
-        mMask = CPU_ALLOC(maxCPUs);
+        const size_t numOnlineCPUs = sys::OS().getNumCPUs();
+        const int maxCPUs = std::max<int>(numOnlineCPUs, CPU_SETSIZE);
+        std::auto_ptr<CPUMask> cpuMask(new CPUMask(maxCPUs));
 
-        if (-1 == sched_getaffinity(0, mSize, mMask))
+        if (sched_getaffinity(0, cpuMask->mSize, cpuMask->mMask) == -1)
         {
             std::ostringstream msg;
             msg << "Failed to get CPU affinity with"
                 << " CPU_SETSIZE=" << CPU_SETSIZE << ","
                 << " numOnlineCPUs=" << numOnlineCPUs << ","
-                << " alloc size=" << mSize << ".";
+                << " alloc size=" << cpuMask->mSize << ".";
             switch (errno)
             {
-                case (EINVAL) :
-                    msg << " Affinity mask smaller than kernel mask size.";
-                    break;
-                case (EFAULT) :
-                    msg << " Invalid mask address.";
-                    break;
-                case (ESRCH) :
-                    msg << " PID for current process is invalid.";
-                    break;
+            case EINVAL:
+                msg << " Affinity mask smaller than kernel mask size.";
+                break;
+            case EFAULT:
+                msg << " Invalid mask address.";
+                break;
+            case ESRCH:
+                msg << " PID for current process is invalid.";
+                break;
+            default:
+                msg << " Unknown cause.";
             }
             throw except::Exception(Ctxt(msg.str()));
         }
-    }
 
-    ~ScopedCPUAffinity()
-    {
-        CPU_FREE(mMask);
+        mCPUMask = cpuMask;
     }
 
     //! \returns the CPU set represeting the affinity mask
     cpu_set_t* getMask() const
     {
-        return mMask;
+        return mCPUMask->mMask;
     }
 
     //! \returns the size of the CPU set in bytes
     size_t getSize() const
     {
-        return mSize;
+        return mCPUMask->mSize;
     }
 
 private:
-    size_t mSize;
-    cpu_set_t* mMask;
+    std::auto_ptr<const CPUMask> mCPUMask;
 };
 }
 
@@ -418,7 +437,12 @@ void sys::OSUnix::unsetEnv(const std::string& var)
 size_t sys::OSUnix::getNumCPUs() const
 {
 #ifdef _SC_NPROCESSORS_ONLN
-    return sysconf(_SC_NPROCESSORS_ONLN);
+    int numOnlineCPUs = sysconf(_SC_NPROCESSORS_ONLN);
+    if (numOnlineCPUs == -1)
+    {
+        throw except::Exception(Ctxt("Failed to get online CPU count"));
+    }
+    return static_cast<size_t>(numOnlineCPUs);
 #else
     throw except::NotImplementedException(Ctxt("Unable to get the number of CPUs"));
 #endif
