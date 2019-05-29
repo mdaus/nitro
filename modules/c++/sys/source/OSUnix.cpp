@@ -133,9 +133,9 @@ std::set<std::string> get_unique_thread_siblings()
     return unique_ts;
 }
 
-struct CPUMask
+struct ScopedCPUMask
 {
-    CPUMask(int numCPUs)
+    ScopedCPUMask(int numCPUs)
     {
         mSize = CPU_ALLOC_SIZE(numCPUs);
         mMask = CPU_ALLOC(numCPUs);
@@ -148,7 +148,7 @@ struct CPUMask
         }
     }
 
-    ~CPUMask()
+    ~ScopedCPUMask()
     {
         if (mMask != NULL)
         {
@@ -170,7 +170,7 @@ public:
         // the constant CPU_SETSIZE.
         const size_t numOnlineCPUs = sys::OS().getNumCPUs();
         const int maxCPUs = std::max<int>(numOnlineCPUs, CPU_SETSIZE);
-        std::auto_ptr<CPUMask> cpuMask(new CPUMask(maxCPUs));
+        std::auto_ptr<ScopedCPUMask> cpuMask(new ScopedCPUMask(maxCPUs));
 
         if (sched_getaffinity(0, cpuMask->mSize, cpuMask->mMask) == -1)
         {
@@ -212,7 +212,7 @@ public:
     }
 
 private:
-    std::auto_ptr<const CPUMask> mCPUMask;
+    std::auto_ptr<const ScopedCPUMask> mCPUMask;
 };
 }
 
