@@ -33,6 +33,7 @@
 #include <set>
 #include <fstream>
 #include <sched.h>
+#include <errno.h>
 
 #if defined(__APPLE__)
 
@@ -132,13 +133,68 @@ std::set<std::string> get_unique_thread_siblings()
     return unique_ts;
 }
 
-void get_cpu_affinity(cpu_set_t* mask)
+class ScopedCPUAffinity
 {
-    if (-1 == sched_getaffinity(0, sizeof(cpu_set_t), mask))
+public:
+    ScopedCPUAffinity()
     {
-        throw except::Exception(Ctxt("Failed to get CPU affinity"));
+        int numOnlineCPUs = sysconf(_SC_NPROCESSORS_ONLN);
+        if (numOnlineCPUs == -1)
+        {
+            throw except::Exception(Ctxt("Failed to get online CPU count"));
+        }
+
+        // The number of processors in the mask must be _at least_ the number of
+        // CPU's representable by the kernel's internal mask. This is given by
+        // the constant CPU_SETSIZE.
+        int maxCPUs = std::max(numOnlineCPUs, CPU_SETSIZE);
+        mSize = CPU_ALLOC_SIZE(maxCPUs);
+        mMask = CPU_ALLOC(maxCPUs);
+
+        if (-1 == sched_getaffinity(0, mSize, mMask))
+        {
+            std::ostringstream msg;
+            msg << "Failed to get CPU affinity with"
+                << " CPU_SETSIZE=" << CPU_SETSIZE << ","
+                << " numOnlineCPUs=" << numOnlineCPUs << ","
+                << " alloc size=" << mSize << ".";
+            switch (errno)
+            {
+                case (EINVAL) :
+                    msg << " Affinity mask smaller than kernel mask size.";
+                    break;
+                case (EFAULT) :
+                    msg << " Invalid mask address.";
+                    break;
+                case (ESRCH) :
+                    msg << " PID for current process is invalid.";
+                    break;
+            }
+            throw except::Exception(Ctxt(msg.str()));
+        }
     }
-}
+
+    ~ScopedCPUAffinity()
+    {
+        CPU_FREE(mMask);
+    }
+
+    //! \returns the CPU set represeting the affinity mask
+    cpu_set_t* getMask() const
+    {
+        return mMask;
+    }
+
+    //! \returns the size of the CPU set in bytes
+    size_t getSize() const
+    {
+        return mSize;
+    }
+
+private:
+    size_t mSize;
+    cpu_set_t* mMask;
+};
 }
 
 std::string sys::OSUnix::getPlatformName() const
@@ -370,9 +426,8 @@ size_t sys::OSUnix::getNumCPUs() const
 
 size_t sys::OSUnix::getNumCPUsAvailable() const
 {
-    cpu_set_t mask;
-    get_cpu_affinity(&mask);
-    return CPU_COUNT(&mask);
+    const ScopedCPUAffinity mask;
+    return CPU_COUNT_S(mask.getSize(), mask.getMask());
 }
 
 size_t sys::OSUnix::getNumPhysicalCPUs() const
@@ -383,8 +438,7 @@ size_t sys::OSUnix::getNumPhysicalCPUs() const
 size_t sys::OSUnix::getNumPhysicalCPUsAvailable() const
 {
     // Obtain scheduling affinity for all CPUs (including hyperthreading)
-    cpu_set_t mask;
-    get_cpu_affinity(&mask);
+    const ScopedCPUAffinity mask;
 
     // Cross-reference the thread siblings with active CPUs
     // and count unique instances in this filtered subset
@@ -398,7 +452,9 @@ size_t sys::OSUnix::getNumPhysicalCPUsAvailable() const
              cpu != cpuIDs.end();
              ++cpu)
         {
-            if (CPU_ISSET(str::toType<int>(*cpu), &mask))
+            if (CPU_ISSET_S(str::toType<int>(*cpu),
+                            mask.getSize(),
+                            mask.getMask()))
             {
                 physical_ts.insert(*tsStr);
             }
