@@ -461,29 +461,6 @@ size_t sys::OSUnix::getNumPhysicalCPUs() const
 
 size_t sys::OSUnix::getNumPhysicalCPUsAvailable() const
 {
-    // // Obtain scheduling affinity for all CPUs (including hyperthreading)
-    // const ScopedCPUAffinity mask;
-
-    // // Cross-reference the thread siblings with active CPUs
-    // // and count unique instances in this filtered subset
-    // const std::set<std::string> unique_ts(get_unique_thread_siblings());
-    // std::set<std::string> physical_ts;
-    // std::set<std::string>::const_iterator tsStr;
-    // for (tsStr = unique_ts.begin(); tsStr != unique_ts.end(); ++tsStr)
-    // {
-    //     const str::Tokenizer::Tokens cpuIDs = str::Tokenizer(*tsStr, ",");
-    //     for (str::Tokenizer::Tokens::const_iterator cpu = cpuIDs.begin();
-    //          cpu != cpuIDs.end();
-    //          ++cpu)
-    //     {
-    //         if (CPU_ISSET_S(str::toType<int>(*cpu),
-    //                         mask.getSize(),
-    //                         mask.getMask()))
-    //         {
-    //             physical_ts.insert(*tsStr);
-    //         }
-    //     }
-    // }
     std::vector<int> physicalCPUs;
     std::vector<int> htCPUs;
     getAvailableCPUs(physicalCPUs, htCPUs);
@@ -500,7 +477,10 @@ void sys::OSUnix::getAvailableCPUs(std::vector<int>& physicalCPUs,
     const ScopedCPUAffinity mask;
 
     // Cross-reference the thread siblings with active CPUs
-    // and count unique instances in this filtered subset
+    // and separate into physical CPUs and HT CPUs. At the hardware level there
+    // is no distinction as to which CPU is the physical and which is the HT.
+    // So, we'll just say that the first masked CPU ID encountered for a core
+    // is the physical CPU, and the remainder of masked CPU IDs are the HT CPUs.
     const std::set<std::string> unique_ts(get_unique_thread_siblings());
     std::set<std::string>::const_iterator tsStr;
     for (tsStr = unique_ts.begin(); tsStr != unique_ts.end(); ++tsStr)
