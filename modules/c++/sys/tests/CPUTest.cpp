@@ -19,7 +19,28 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include <vector>
+
 #include <import/sys.h>
+
+namespace
+{
+void printCPUs(const std::string& header, const std::vector<int>& cpus)
+{
+    std::vector<int>::const_iterator cpu;
+
+    std::cout << header << ": ";
+    for (cpu = cpus.begin(); cpu != cpus.end(); ++cpu)
+    {
+        if (cpu != cpus.begin())
+        {
+            std::cout << ", ";
+        }
+        std::cout << *cpu;
+    }
+    std::cout << std::endl;
+}
+}
 
 int main(int /*argc*/, char** /*argv*/)
 {
@@ -35,6 +56,13 @@ int main(int /*argc*/, char** /*argv*/)
                   << os.getNumCPUsAvailable() << std::endl;
         std::cout << "Available number of physical CPUs: "
                   << os.getNumPhysicalCPUsAvailable() << std::endl;
+
+        std::vector<int> physicalCPUs;
+        std::vector<int> htCPUs;
+        os.getAvailableCPUs(physicalCPUs, htCPUs);
+        printCPUs("Available physical CPUs", physicalCPUs);
+        printCPUs("Available HT CPUs", htCPUs);
+
     }
     catch (const except::Throwable& t)
     {

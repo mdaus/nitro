@@ -242,6 +242,23 @@ public:
     virtual size_t getNumPhysicalCPUsAvailable() const = 0;
 
     /*!
+     * Divide the available CPUs (pinned with numactl/taskset/start/affinity)
+     * into a set of physical CPUs and a set of hyperthreaded CPUs. Note
+     * that there is no real distinction between CPUs that share a core,
+     * and the separation here is not unique. However, there will only ever
+     * be 1 entry per core in the physical CPUs list, while the remainder
+     * of CPUs present in the core will be assigned to the htCPU list.
+     *
+     * \param[out] physicalCPUs List of physical CPUs. Size of
+     *                          getNumPhysicalCPUsAvailable().
+     * \param[out] htCPUs List of CPUs that share a core with a CPU in
+     *                    'physicalCPUs'. Size of
+     *                    getNumCPUsAvailable() - getNumPhysicalCPUsAvailable().
+     */
+    virtual void getAvailableCPUs(std::vector<int>& physicalCPUs,
+                                  std::vector<int>& htCPUs) const = 0;
+
+    /*!
      *  Create a symlink, pathnames can be either absolute or relative
      */
     virtual void createSymlink(const std::string& origPathname,

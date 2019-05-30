@@ -461,31 +461,71 @@ size_t sys::OSUnix::getNumPhysicalCPUs() const
 
 size_t sys::OSUnix::getNumPhysicalCPUsAvailable() const
 {
+    // // Obtain scheduling affinity for all CPUs (including hyperthreading)
+    // const ScopedCPUAffinity mask;
+
+    // // Cross-reference the thread siblings with active CPUs
+    // // and count unique instances in this filtered subset
+    // const std::set<std::string> unique_ts(get_unique_thread_siblings());
+    // std::set<std::string> physical_ts;
+    // std::set<std::string>::const_iterator tsStr;
+    // for (tsStr = unique_ts.begin(); tsStr != unique_ts.end(); ++tsStr)
+    // {
+    //     const str::Tokenizer::Tokens cpuIDs = str::Tokenizer(*tsStr, ",");
+    //     for (str::Tokenizer::Tokens::const_iterator cpu = cpuIDs.begin();
+    //          cpu != cpuIDs.end();
+    //          ++cpu)
+    //     {
+    //         if (CPU_ISSET_S(str::toType<int>(*cpu),
+    //                         mask.getSize(),
+    //                         mask.getMask()))
+    //         {
+    //             physical_ts.insert(*tsStr);
+    //         }
+    //     }
+    // }
+    std::vector<int> physicalCPUs;
+    std::vector<int> htCPUs;
+    getAvailableCPUs(physicalCPUs, htCPUs);
+    return physicalCPUs.size();
+}
+
+void sys::OSUnix::getAvailableCPUs(std::vector<int>& physicalCPUs,
+                                   std::vector<int>& htCPUs) const
+{
+    physicalCPUs.clear();
+    htCPUs.clear();
+
     // Obtain scheduling affinity for all CPUs (including hyperthreading)
     const ScopedCPUAffinity mask;
 
     // Cross-reference the thread siblings with active CPUs
     // and count unique instances in this filtered subset
     const std::set<std::string> unique_ts(get_unique_thread_siblings());
-    std::set<std::string> physical_ts;
     std::set<std::string>::const_iterator tsStr;
     for (tsStr = unique_ts.begin(); tsStr != unique_ts.end(); ++tsStr)
     {
+        bool foundPhysical = false;
         const str::Tokenizer::Tokens cpuIDs = str::Tokenizer(*tsStr, ",");
         for (str::Tokenizer::Tokens::const_iterator cpu = cpuIDs.begin();
              cpu != cpuIDs.end();
              ++cpu)
         {
-            if (CPU_ISSET_S(str::toType<int>(*cpu),
-                            mask.getSize(),
-                            mask.getMask()))
+            const int cpuInt = str::toType<int>(*cpu);
+            if (CPU_ISSET_S(cpuInt, mask.getSize(), mask.getMask()))
             {
-                physical_ts.insert(*tsStr);
+                if (foundPhysical)
+                {
+                    htCPUs.push_back(cpuInt);
+                }
+                else
+                {
+                    physicalCPUs.push_back(cpuInt);
+                    foundPhysical = true;
+                }
             }
         }
     }
-
-    return physical_ts.size();
 }
 
 void sys::OSUnix::createSymlink(const std::string& origPathname,
