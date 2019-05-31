@@ -60,7 +60,7 @@ public:
     /*!
      * Destructor
      */
-    ~ScopedCPUMaskUnix();
+    virtual ~ScopedCPUMaskUnix();
 
     /*!
      * \returns a 0-1 string representation for the CPU mask,
@@ -89,6 +89,7 @@ public:
 private:
     void initialize(int numCPUs);
 
+protected:
     size_t mSize;
     cpu_set_t* mMask;
 };
@@ -102,7 +103,7 @@ private:
  * created cpu_set_t on Unix systems that represents the CPU affinity for
  * the current PID.
  */
-class ScopedCPUAffinityUnix
+class ScopedCPUAffinityUnix : public ScopedCPUMaskUnix
 {
 public:
     /*!
@@ -114,32 +115,8 @@ public:
      */
     ScopedCPUAffinityUnix();
 
-    /*!
-     * \returns a 0-1 string representation for the CPU mask,
-     *          where 1s represent a usable CPU and 0 an inactive CPU
-     */
-    std::string toString() const
-    {
-        return mCPUMask->toString();
-    }
-
-    //! \returns a const cpu_set_t* representing the affinity mask
-    const cpu_set_t* getMask() const
-    {
-        return mCPUMask->getMask();
-    }
-
-    //! \returns the size of the affinity mask in bytes
-    size_t getSize() const
-    {
-        return mCPUMask->getSize();
-    }
-
-    //! \returns the number of online CPUs
+       //! \returns the number of online CPUs
     static int getNumOnlineCPUs();
-
-private:
-    std::auto_ptr<const ScopedCPUMaskUnix> mCPUMask;
 };
 }
 

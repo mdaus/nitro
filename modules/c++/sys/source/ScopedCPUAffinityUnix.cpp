@@ -85,17 +85,16 @@ std::string ScopedCPUMaskUnix::toString() const
 
 //-----------------------------------------------------------------------------
 
-ScopedCPUAffinityUnix::ScopedCPUAffinityUnix()
+ScopedCPUAffinityUnix::ScopedCPUAffinityUnix() :
+    ScopedCPUMaskUnix()
 {
-    std::auto_ptr<ScopedCPUMaskUnix> cpuMask(new ScopedCPUMaskUnix());
-
-    if (sched_getaffinity(0, cpuMask->getSize(), cpuMask->getMask()) == -1)
+    if (sched_getaffinity(0, mSize, mMask) == -1)
     {
         std::ostringstream msg;
         msg << "Failed to get CPU affinity with"
             << " CPU_SETSIZE=" << CPU_SETSIZE << ","
             << " numOnlineCPUs=" << getNumOnlineCPUs() << ","
-            << " alloc size=" << cpuMask->getSize() << ".";
+            << " alloc size=" << mSize << ".";
         switch (errno)
         {
         case EINVAL:
@@ -112,8 +111,6 @@ ScopedCPUAffinityUnix::ScopedCPUAffinityUnix()
         }
         throw except::Exception(Ctxt(msg.str()));
     }
-
-    mCPUMask = cpuMask;
 }
 
 int ScopedCPUAffinityUnix::getNumOnlineCPUs()
