@@ -21,36 +21,22 @@
  */
 
 
-#ifndef __MT_LINUX_CPU_AFFINITY_THREAD_INITIALIZER_H__
-#define __MT_LINUX_CPU_AFFINITY_THREAD_INITIALIZER_H__
+#ifndef __MT_CPU_AFFINITY_THREAD_INITIALIZER_WIN32_H__
+#define __MT_CPU_AFFINITY_THREAD_INITIALIZER_WIN32_H__
 
-#if !defined(__APPLE_CC__)
-#if defined(__linux) || defined(__linux__)
+#if defined(WIN32)
 
-#include <memory>
-#include <sched.h>
-#include <sys/types.h>
-#include <unistd.h>
-#include <sys/syscall.h>
-#define gettid() syscall(SYS_gettid)
-
-#include <sys/ScopedCPUAffinityUnix.h>
 #include <mt/AbstractCPUAffinityThreadInitializer.h>
 
 namespace mt
 {
-class LinuxCPUAffinityThreadInitializer : public AbstractCPUAffinityThreadInitializer
+class CPUAffinityThreadInitializerWin32 : public AbstractCPUAffinityInitializer
 {
 public:
-    LinuxCPUAffinityThreadInitializer(std::auto_ptr<const sys::ScopedCPUMaskUnix> cpu);
-
-    virtual void initialize();
-
-private:
-    std::auto_ptr<const sys::ScopedCPUMaskUnix> mCPU;
+    CPUAffinityThreadInitializerWin32();
+    virtual void initialize() {}
 };
 }
 
-#endif
 #endif
 #endif

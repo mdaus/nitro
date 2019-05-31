@@ -29,8 +29,8 @@ namespace mt
 class AbstractCPUAffinityThreadInitializer
 {
 public:
-    CPUAffinityThreadInitializer() {}
-    virtual ~CPUAffinityThreadInitializer() {}
+    AbstractCPUAffinityThreadInitializer() {}
+    virtual ~AbstractCPUAffinityThreadInitializer() {}
     virtual void initialize() = 0;
 };
 }

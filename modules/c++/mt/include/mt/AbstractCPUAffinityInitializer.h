@@ -28,11 +28,11 @@
 
 namespace mt
 {
-class CPUAffinityInitializer
+class AbstractCPUAffinityInitializer
 {
 public:
-    CPUAffinityInitializer() {}
-    virtual ~CPUAffinityInitializer() {}
+    AbstractCPUAffinityInitializer() {}
+    virtual ~AbstractCPUAffinityInitializer() {}
     virtual AbstractCPUAffinityThreadInitializer* newThreadInitializer() = 0;
 };
 }

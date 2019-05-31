@@ -21,40 +21,28 @@
  */
 
 
-#ifndef __MT_LINUX_CPU_AFFINITY_INITIALIZER_H__
-#define __MT_LINUX_CPU_AFFINITY_INITIALIZER_H__
+#ifndef __MT_CPU_AFFINITY_INITIALIZER_WIN32_H__
+#define __MT_CPU_AFFINITY_INITIALIZER_WIN32_H__
 
-#if !defined(__APPLE_CC__)
-#if defined(__linux) || defined(__linux__)
+#if defined(WIN32)
 
-#include <memory>
-#include <vector>
-
-#include <sys/ScopedCPUAffinityUnix.h>
 #include <mt/AbstractCPUAffinityInitializer.h>
-#include <mt/LinuxCPUAffinityThreadInitializer.h>
+#include <mt/CPUAffinityThreadInitializerWin32.h>
 
 namespace mt
 {
-class LinuxCPUAffinityInitializer : public AbstractCPUAffinityInitializer
+class CPUAffinityInitializerWin32 : public AbstractCPUAffinityInitializer
 {
 public:
-    LinuxCPUAffinityInitializer();
+    CPUAffinityInitializerWin32() {}
 
-    virtual LinuxCPUAffinityThreadInitializer* newThreadInitializer()
+    virtual CPUAffinityThreadInitializerWin32* newThreadInitializer()
     {
-        return new LinuxCPUAffinityThreadInitializer(nextCPU());
+        return NULL;
     }
-
-private:
-    std::auto_ptr<const sys::ScopedCPUMaskUnix> nextCPU();
-
-    const std::vector<int> mCPUs;
-    size_t mNextCPUIndex;
 };
 }
 
-#endif
 #endif
 #endif
 

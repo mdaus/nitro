@@ -2,7 +2,7 @@
  * This file is part of mt-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2019, MDA Information Systems LLC
  *
  * mt-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -21,27 +21,40 @@
  */
 
 
-#ifndef __IMPORT_MT_H__
-#define __IMPORT_MT_H__
+#ifndef __MT_CPU_AFFINITY_INITIALIZER_LINUX_H__
+#define __MT_CPU_AFFINITY_INITIALIZER_LINUX_H__
 
-#include "mt/RequestQueue.h"
-#include "mt/ThreadPoolException.h"
-#include "mt/BasicThreadPool.h"
-#include "mt/GenericRequestHandler.h"
-#include "mt/Singleton.h"
-#include "mt/CriticalSection.h"
-#include "mt/AbstractThreadPool.h"
-#include "mt/WorkerThread.h"
-#include "mt/AbstractTiedThreadPool.h"
-#include "mt/TiedWorkerThread.h"
-#include "mt/GenerationThreadPool.h"
-#include "mt/ThreadGroup.h"
-#include "mt/ThreadPlanner.h"
-#include "mt/Runnable1D.h"
-#include "mt/BalancedRunnable1D.h"
-#include "mt/WorkSharingBalancedRunnable1D.h"
+#if !defined(__APPLE_CC__)
+#if defined(__linux) || defined(__linux__)
 
-#include "mt/CPUAffinityInitializer.h"
-#include "mt/CPUAffinityThreadInitializer.h"
+#include <memory>
+#include <vector>
+
+#include <sys/ScopedCPUAffinityUnix.h>
+#include <mt/AbstractCPUAffinityInitializer.h>
+#include <mt/CPUAffinityThreadInitializerLinux.h>
+
+namespace mt
+{
+class CPUAffinityInitializerLinux : public AbstractCPUAffinityInitializer
+{
+public:
+    CPUAffinityInitializerLinux();
+
+    virtual CPUAffinityThreadInitializerLinux* newThreadInitializer()
+    {
+        return new CPUAffinityThreadInitializerLinux(nextCPU());
+    }
+
+private:
+    std::auto_ptr<const sys::ScopedCPUMaskUnix> nextCPU();
+
+    const std::vector<int> mCPUs;
+    size_t mNextCPUIndex;
+};
+}
 
 #endif
+#endif
+#endif
+

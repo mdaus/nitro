@@ -21,28 +21,27 @@
  */
 
 
-#ifndef __MT_WIN32_CPU_AFFINITY_INITIALIZER_H__
-#define __MT_WIN32_CPU_AFFINITY_INITIALIZER_H__
+#ifndef __MT_CPU_AFFINITY_THREAD_INITIALIZER_H__
+#define __MT_CPU_AFFINITY_THREAD_INITIALIZER_H__
+
+#include <mt/AbstractCPUAffinityThreadInitializer.h>
 
 #if defined(WIN32)
-
-#include "mt/AbstractCPUAffinityInitializer.h"
-#include "mt/Win32CPUAffinityThreadInitializer.h"
-
+#include <mt/CPUAffinityThreadInitializerWin32.h>
 namespace mt
 {
-class Win32CPUAffinityInitializer : public AbstractCPUAffinityInitializer
-{
-public:
-    Win32CPUAffinityInitializer() {}
-
-    virtual Win32CPUAffinityThreadInitializer* newThreadInitializer()
-    {
-        return NULL;
-    }
-};
+typedef CPUAffinityThreadInitializerWin32 CPUAffinityThreadInitializer;
 }
+#endif
 
+#if !defined(__APPLE_CC__)
+#if defined(__linux) || defined(__linux__)
+#include <mt/CPUAffinityThreadInitializerLinux.h>
+namespace mt
+{
+typedef CPUAffinityThreadInitializerLinux CPUAffinityThreadInitializer;
+}
 #endif
 #endif
 
+#endif

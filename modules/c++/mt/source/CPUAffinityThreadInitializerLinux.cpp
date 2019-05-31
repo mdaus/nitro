@@ -2,7 +2,7 @@
  * This file is part of mt-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2019, MDA Information Systems LLC
  *
  * mt-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -21,27 +21,31 @@
  */
 
 
-#ifndef __IMPORT_MT_H__
-#define __IMPORT_MT_H__
 
-#include "mt/RequestQueue.h"
-#include "mt/ThreadPoolException.h"
-#include "mt/BasicThreadPool.h"
-#include "mt/GenericRequestHandler.h"
-#include "mt/Singleton.h"
-#include "mt/CriticalSection.h"
-#include "mt/AbstractThreadPool.h"
-#include "mt/WorkerThread.h"
-#include "mt/AbstractTiedThreadPool.h"
-#include "mt/TiedWorkerThread.h"
-#include "mt/GenerationThreadPool.h"
-#include "mt/ThreadGroup.h"
-#include "mt/ThreadPlanner.h"
-#include "mt/Runnable1D.h"
-#include "mt/BalancedRunnable1D.h"
-#include "mt/WorkSharingBalancedRunnable1D.h"
+#if !defined(__APPLE_CC__)
+#if defined(__linux) || defined(__linux__)
 
-#include "mt/CPUAffinityInitializer.h"
-#include "mt/CPUAffinityThreadInitializer.h"
+#include <sys/Conf.h>
+#include <except/Exception.h>
+#include <mt/CPUAffinityThreadInitializerLinux.h>
 
+namespace mt
+{
+CPUAffinityThreadInitializerLinux::CPUAffinityThreadInitializerLinux(
+        std::auto_ptr<const sys::ScopedCPUMaskUnix> cpu) :
+    mCPU(cpu)
+{
+}
+
+void CPUAffinityThreadInitializerLinux::initialize()
+{
+    pid_t tid = 0;
+    tid = ::gettid();
+    if (::sched_setaffinity(tid, mCPU->getSize(), mCPU->getMask()) == -1)
+    {
+	   throw except::Exception(Ctxt("Failed setting processor affinity"));
+    }
+}
+}
+#endif
 #endif

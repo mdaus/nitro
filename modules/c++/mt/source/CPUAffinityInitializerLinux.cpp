@@ -21,8 +21,6 @@
  */
 
 
-#include "mt/LinuxCPUAffinityInitializer.h"
-
 #if !defined(__APPLE_CC__)
 #if defined(__linux) || defined(__linux__)
 
@@ -31,6 +29,7 @@
 #include <sys/OS.h>
 #include <sys/Conf.h>
 #include <except/Exception.h>
+#include <mt/CPUAffinityInitializerLinux.h>
 
 namespace
 {
@@ -52,13 +51,13 @@ std::vector<int> mergeAvailableCPUs()
 
 namespace mt
 {
-LinuxCPUAffinityInitializer::LinuxCPUAffinityInitializer() :
+CPUAffinityInitializerLinux::CPUAffinityInitializerLinux() :
     mCPUs(mergeAvailableCPUs()),
     mNextCPUIndex(0)
 {
 }
 
-std::auto_ptr<const sys::ScopedCPUMaskUnix> LinuxCPUAffinityInitializer::nextCPU()
+std::auto_ptr<const sys::ScopedCPUMaskUnix> CPUAffinityInitializerLinux::nextCPU()
 {
     if (mNextCPUIndex >= mCPUs.size())
     {
@@ -67,7 +66,6 @@ std::auto_ptr<const sys::ScopedCPUMaskUnix> LinuxCPUAffinityInitializer::nextCPU
         throw except::Exception(Ctxt(msg.str()));
     }
 
-    std::cout<<"Pinning to cpu "<<mCPUs.at(mNextCPUIndex)<<std::endl;
     std::auto_ptr<sys::ScopedCPUMaskUnix> mask(new sys::ScopedCPUMaskUnix());
     CPU_SET_S(mCPUs.at(mNextCPUIndex++), mask->getSize(), mask->getMask());
     return std::auto_ptr<const sys::ScopedCPUMaskUnix>(mask);

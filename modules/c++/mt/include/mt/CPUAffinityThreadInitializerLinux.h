@@ -21,32 +21,38 @@
  */
 
 
-#include "mt/LinuxCPUAffinityThreadInitializer.h"
+#ifndef __MT_CPU_AFFINITY_THREAD_INITIALIZER_LINUX_H__
+#define __MT_CPU_AFFINITY_THREAD_INITIALIZER_LINUX_H__
 
 #if !defined(__APPLE_CC__)
 #if defined(__linux) || defined(__linux__)
 
-#include <sys/Conf.h>
-#include <except/Exception.h>
+#include <memory>
+#include <sched.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <sys/syscall.h>
+#define gettid() syscall(SYS_gettid)
+
+#include <sys/ScopedCPUAffinityUnix.h>
+#include <mt/AbstractCPUAffinityThreadInitializer.h>
 
 namespace mt
 {
-LinuxCPUAffinityThreadInitializer::
-LinuxCPUAffinityThreadInitializer(
-        std::auto_ptr<const sys::ScopedCPUMaskUnix> cpu) :
-    mCPU(cpu)
+class CPUAffinityThreadInitializerLinux :
+        public AbstractCPUAffinityThreadInitializer
 {
+public:
+    CPUAffinityThreadInitializerLinux(
+            std::auto_ptr<const sys::ScopedCPUMaskUnix> cpu);
+
+    virtual void initialize();
+
+private:
+    std::auto_ptr<const sys::ScopedCPUMaskUnix> mCPU;
+};
 }
 
-void LinuxCPUAffinityThreadInitializer::initialize()
-{
-    pid_t tid = 0;
-    tid = ::gettid();
-    if (::sched_setaffinity(tid, mCPU->getSize(), mCPU->getMask()) == -1)
-    {
-	   throw except::Exception(Ctxt("Failed setting processor affinity"));
-    }
-}
-}
+#endif
 #endif
 #endif
