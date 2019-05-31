@@ -1,7 +1,7 @@
 /* =========================================================================
- * This file is part of mt-c++ 
+ * This file is part of mt-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * mt-c++ is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -32,7 +32,8 @@
 #include "except/Error.h"
 #include <sys/Mutex.h>
 
-
+#include <mt/CPUAffinityInitializer.h>
+#include <mt/CPUAffinityThreadInitializer.h>
 
 namespace mt
 {
@@ -51,33 +52,34 @@ class ThreadGroup
 public:
 
     //! Constructor.
-    ThreadGroup();
-    
+    ThreadGroup(bool pinToCore = false);
+
     /*!
     *  Destructor. Attempts to join all threads.
     */
     ~ThreadGroup();
-    
+
     /*!
     *  Creates and starts a thread from a sys::Runnable.
     *  \param runnable pointer to sys::Runnable
     */
     void createThread(sys::Runnable *runnable);
-    
+
     /*!
     *  Creates and starts a thread from a sys::Runnable.
     *  \param runnable auto_ptr to sys::Runnable
     */
     void createThread(std::auto_ptr<sys::Runnable> runnable);
-    
+
     /*!
      * Waits for all threads to complete.
      */
     void joinAll();
 
 private:
-    std::vector<mem::SharedPtr<sys::Thread> > mThreads;
+    std::auto_ptr<CPUAffinityInitializer> mAffinityInit;
     size_t mLastJoined;
+    std::vector<mem::SharedPtr<sys::Thread> > mThreads;
     std::vector<except::Exception> mExceptions;
     sys::Mutex mMutex;
 
@@ -85,6 +87,8 @@ private:
      * Adds an exception to the mExceptions vector
      */
     void addException(const except::Exception& ex);
+
+    std::auto_ptr<CPUAffinityThreadInitializer> getNextInitializer();
 
     /*!
      * \class ThreadGroupRunnable
@@ -98,7 +102,9 @@ private:
 
         //! Constructor.
         ThreadGroupRunnable(std::auto_ptr<sys::Runnable> runnable,
-                            mt::ThreadGroup& parentThreadGroup);
+                            mt::ThreadGroup& parentThreadGroup,
+                            std::auto_ptr<CPUAffinityThreadInitializer> threadInit =
+                                std::auto_ptr<CPUAffinityThreadInitializer>(NULL));
 
         /*!
          *  Call run() on the Runnable passed to createThread
@@ -108,7 +114,7 @@ private:
     private:
         std::auto_ptr<sys::Runnable> mRunnable;
         mt::ThreadGroup& mParentThreadGroup;
-
+        std::auto_ptr<CPUAffinityThreadInitializer> mCPUInit;
     };
 };
 

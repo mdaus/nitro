@@ -1,7 +1,7 @@
 /* =========================================================================
- * This file is part of mt-c++ 
+ * This file is part of mt-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * mt-c++ is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -23,7 +23,9 @@
 #include <mt/ThreadGroup.h>
 #include <mt/CriticalSection.h>
 
-mt::ThreadGroup::ThreadGroup() :
+
+mt::ThreadGroup::ThreadGroup(bool pinToCore) :
+    mAffinityInit(pinToCore ? new CPUAffinityInitializer() : NULL),
     mLastJoined(0)
 {
 }
@@ -47,7 +49,12 @@ void mt::ThreadGroup::createThread(sys::Runnable *runnable)
 
 void mt::ThreadGroup::createThread(std::auto_ptr<sys::Runnable> runnable)
 {
-    std::auto_ptr<sys::Runnable> internalRunnable(new ThreadGroupRunnable(runnable, *this));
+    std::auto_ptr<sys::Runnable> internalRunnable(
+            new ThreadGroupRunnable(
+                    runnable,
+                    *this,
+                    getNextInitializer()));
+
     mem::SharedPtr<sys::Thread> thread(new sys::Thread(internalRunnable.get()));
     internalRunnable.release();
     mThreads.push_back(thread);
@@ -69,7 +76,7 @@ void mt::ThreadGroup::joinAll()
             failed = true;
         }
     }
-    
+
     if (!mExceptions.empty())
     {
         std::string messageString("Exceptions thrown from ThreadGroup in the following order:\n");
@@ -97,9 +104,24 @@ void mt::ThreadGroup::addException(const except::Exception& ex)
     }
 }
 
-mt::ThreadGroup::ThreadGroupRunnable::ThreadGroupRunnable
-    (std::auto_ptr<sys::Runnable> runnable, mt::ThreadGroup& parentThreadGroup):
-        mRunnable(runnable), mParentThreadGroup(parentThreadGroup)
+std::auto_ptr<mt::CPUAffinityThreadInitializer> mt::ThreadGroup::getNextInitializer()
+{
+    mt::CPUAffinityThreadInitializer* threadInit = NULL;
+    if (mAffinityInit.get())
+    {
+        threadInit = mAffinityInit->newThreadInitializer();
+    }
+
+    return std::auto_ptr<mt::CPUAffinityThreadInitializer>(threadInit);
+}
+
+mt::ThreadGroup::ThreadGroupRunnable::ThreadGroupRunnable(
+        std::auto_ptr<sys::Runnable> runnable,
+        mt::ThreadGroup& parentThreadGroup,
+        std::auto_ptr<mt::CPUAffinityThreadInitializer> threadInit) :
+        mRunnable(runnable),
+        mParentThreadGroup(parentThreadGroup),
+        mCPUInit(threadInit)
 {
 }
 
@@ -107,6 +129,10 @@ void mt::ThreadGroup::ThreadGroupRunnable::run()
 {
     try
     {
+        if (mCPUInit.get())
+        {
+            mCPUInit->initialize();
+        }
         mRunnable->run();
     }
     catch(const except::Exception& ex)
