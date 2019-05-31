@@ -20,21 +20,12 @@
  *
  */
 
-#include "mt/mt_config.h"
+
 #include <mt/ThreadGroup.h>
 #include <mt/CriticalSection.h>
 
-namespace
-{
-#if defined(MT_FORCE_PINNING)
-const bool FORCE_PINNING = true;
-#else
-const bool FORCE_PINNING = false;
-#endif
-}
-
 mt::ThreadGroup::ThreadGroup(bool pinToCore) :
-    mAffinityInit((pinToCore || FORCE_PINNING) ? new CPUAffinityInitializer() : NULL),
+    mAffinityInit(pinToCore ? new CPUAffinityInitializer() : NULL),
     mLastJoined(0)
 {
 }

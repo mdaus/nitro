@@ -26,12 +26,14 @@
 #include <vector>
 #include <memory>
 #include <exception>
-#include "sys/Runnable.h"
-#include "sys/Thread.h"
-#include "mem/SharedPtr.h"
-#include "except/Error.h"
-#include <sys/Mutex.h>
 
+#include <except/Error.h>
+#include <sys/Runnable.h>
+#include <sys/Thread.h>
+#include <sys/Mutex.h>
+#include <mem/SharedPtr.h>
+
+#include "mt/mt_config.h"
 #include <mt/CPUAffinityInitializer.h>
 #include <mt/CPUAffinityThreadInitializer.h>
 
@@ -52,7 +54,11 @@ class ThreadGroup
 public:
 
     //! Constructor.
+#if defined(MT_FORCE_PINNING)
+    ThreadGroup(bool pinToCore = true);
+#else
     ThreadGroup(bool pinToCore = false);
+#endif
 
     /*!
     *  Destructor. Attempts to join all threads.
