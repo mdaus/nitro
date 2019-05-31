@@ -74,13 +74,27 @@ ScopedCPUMaskUnix::~ScopedCPUMaskUnix()
 std::string ScopedCPUMaskUnix::toString() const
 {
     std::ostringstream str;
-    const int numCPUs = ScopedCPUAffinityUnix::getNumOnlineCPUs();
+    const int numCPUs = getNumOnlineCPUs();
     for (int cpu = 0; cpu < numCPUs; ++cpu)
     {
         str << (CPU_ISSET_S(cpu, mSize, mMask) ? "1" : "0");
     }
 
     return str.str();
+}
+
+int ScopedCPUMaskUnix::getNumOnlineCPUs()
+{
+#ifdef _SC_NPROCESSORS_ONLN
+    const int numOnlineCPUs = sysconf(_SC_NPROCESSORS_ONLN);
+    if (numOnlineCPUs == -1)
+    {
+        throw except::Exception(Ctxt("Failed to get online CPU count"));
+    }
+    return numOnlineCPUs;
+#else
+throw except::NotImplementedException(Ctxt("Unable to get the number of CPUs"));
+#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -111,20 +125,6 @@ ScopedCPUAffinityUnix::ScopedCPUAffinityUnix() :
         }
         throw except::Exception(Ctxt(msg.str()));
     }
-}
-
-int ScopedCPUAffinityUnix::getNumOnlineCPUs()
-{
-#ifdef _SC_NPROCESSORS_ONLN
-    const int numOnlineCPUs = sysconf(_SC_NPROCESSORS_ONLN);
-    if (numOnlineCPUs == -1)
-    {
-        throw except::Exception(Ctxt("Failed to get online CPU count"));
-    }
-    return numOnlineCPUs;
-#else
-throw except::NotImplementedException(Ctxt("Unable to get the number of CPUs"));
-#endif
 }
 }
 

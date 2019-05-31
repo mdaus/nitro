@@ -354,7 +354,7 @@ void sys::OSUnix::unsetEnv(const std::string& var)
 
 size_t sys::OSUnix::getNumCPUs() const
 {
-    return static_cast<size_t>(ScopedCPUAffinityUnix::getNumOnlineCPUs());
+    return static_cast<size_t>(ScopedCPUMaskUnix::getNumOnlineCPUs());
 }
 
 size_t sys::OSUnix::getNumCPUsAvailable() const

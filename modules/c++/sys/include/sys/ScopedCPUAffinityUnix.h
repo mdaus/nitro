@@ -86,6 +86,9 @@ public:
         return mSize;
     }
 
+    //! \returns the number of online CPUs
+    static int getNumOnlineCPUs();
+
 private:
     void initialize(int numCPUs);
 
@@ -114,9 +117,6 @@ public:
      * thread is generated.
      */
     ScopedCPUAffinityUnix();
-
-       //! \returns the number of online CPUs
-    static int getNumOnlineCPUs();
 };
 }
 
