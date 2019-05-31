@@ -29,22 +29,52 @@
 
 #include <memory>
 #include <sched.h>
+#include <string>
 
 namespace sys
 {
+/*!
+ * \class ScopedCPUMaskUnix
+ * \brief Class for generating a CPU mask on Unix
+ *
+ * ScopedCPUMaskUnix handles the creation/destruction of a dynamically
+ * created cpu_set_t on Unix systems. This allows for the creation of
+ * CPU masks greater than the number of CPUs reported by CPU_SETSIZE.
+ */
 class ScopedCPUMaskUnix
 {
 public:
+    /*!
+     * Constructor which automatically creates a mask that can hold
+     * at least the number of online CPUs
+     */
     ScopedCPUMaskUnix();
+
+    /*!
+     * Constructor for a given number of CPUs. Note that the resulting
+     * CPU set may be larger, as the mask must be able to hold at least
+     * CPU_SETSIZE number of CPUs.
+     */
     ScopedCPUMaskUnix(int numCPUs);
+
+    /*!
+     * Destructor
+     */
     ~ScopedCPUMaskUnix();
 
-    //! \returns the CPU set
+    /*!
+     * \returns a 0-1 string representation for the CPU mask,
+     *          where 1s represent a usable CPU and 0 an inactive CPU
+     */
+    std::string toString() const;
+
+    //! \returns a const cpu_set_t* mask
     const cpu_set_t* getMask() const
     {
         return mMask;
     }
 
+    //! \returns a mutable cpu_set_t* mask
     cpu_set_t* getMask()
     {
         return mMask;
@@ -57,25 +87,49 @@ public:
     }
 
 private:
-
     void initialize(int numCPUs);
 
     size_t mSize;
     cpu_set_t* mMask;
 };
 
+/*!
+ * \class ScopedCPUAffinityUnix
+ * \brief Class for generating a CPU mask on Unix that corresponds
+ *        to the current CPU affinity
+ *
+ * ScopedCPUAffinityUnix handles the creation/destruction of a dynamically
+ * created cpu_set_t on Unix systems that represents the CPU affinity for
+ * the current PID.
+ */
 class ScopedCPUAffinityUnix
 {
 public:
+    /*!
+     * Constructor that obtains the CPU affinity mask for the current
+     * process.
+     *
+     * Note that if called from inside a thread, the CPU affinity for that
+     * thread is generated.
+     */
     ScopedCPUAffinityUnix();
 
-    //! \returns the CPU set represeting the affinity mask
+    /*!
+     * \returns a 0-1 string representation for the CPU mask,
+     *          where 1s represent a usable CPU and 0 an inactive CPU
+     */
+    std::string toString() const
+    {
+        return mCPUMask->toString();
+    }
+
+    //! \returns a const cpu_set_t* representing the affinity mask
     const cpu_set_t* getMask() const
     {
         return mCPUMask->getMask();
     }
 
-    //! \returns the size of the CPU set in bytes
+    //! \returns the size of the affinity mask in bytes
     size_t getSize() const
     {
         return mCPUMask->getSize();
