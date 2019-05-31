@@ -1,8 +1,8 @@
 /* =========================================================================
- * This file is part of mt-c++ 
+ * This file is part of mt-c++
  * =========================================================================
- * 
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ *
+ * (C) Copyright 2004 - 2019, MDA Information Systems LLC
  *
  * mt-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -27,28 +27,31 @@
 #if !defined(__APPLE_CC__)
 #if defined(__linux) || defined(__linux__)
 
+#include <memory>
+#include <vector>
 
-#include "mt/CPUAffinityInitializer.h"
-#include "mt/LinuxCPUAffinityThreadInitializer.h"
+#include <sys/ScopedCPUAffinityUnix.h>
+#include <mt/AbstractCPUAffinityInitializer.h>
+#include <mt/LinuxCPUAffinityThreadInitializer.h>
 
 namespace mt
 {
-    class LinuxCPUAffinityInitializer : public mt::CPUAffinityInitializer
+class LinuxCPUAffinityInitializer : public AbstractCPUAffinityInitializer
+{
+public:
+    LinuxCPUAffinityInitializer();
+
+    virtual LinuxCPUAffinityThreadInitializer* newThreadInitializer()
     {
-	int mNextCPU;
-	cpu_set_t nextCPU();
-    public:
-	LinuxCPUAffinityInitializer(int initialOffset) : 
-	    mNextCPU(initialOffset) {}
-	
-	~LinuxCPUAffinityInitializer() {}
-	
-	LinuxCPUAffinityThreadInitializer* newThreadInitializer()
-	{
-	    return new LinuxCPUAffinityThreadInitializer(nextCPU());
-	}
-	
-    };
+        return new LinuxCPUAffinityThreadInitializer(nextCPU());
+    }
+
+private:
+    std::auto_ptr<const sys::ScopedCPUMaskUnix> nextCPU();
+
+    const std::vector<int> mCPUs;
+    size_t mNextCPUIndex;
+};
 }
 
 #endif

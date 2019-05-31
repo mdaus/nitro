@@ -1,8 +1,8 @@
 /* =========================================================================
- * This file is part of mt-c++ 
+ * This file is part of mt-c++
  * =========================================================================
- * 
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ *
+ * (C) Copyright 2004 - 2019, MDA Information Systems LLC
  *
  * mt-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -27,26 +27,29 @@
 #if !defined(__APPLE_CC__)
 #if defined(__linux) || defined(__linux__)
 
+#include <memory>
 #include <sched.h>
 #include <sys/types.h>
 #include <unistd.h>
 #include <sys/syscall.h>
 #define gettid() syscall(SYS_gettid)
 
-#include <import/sys.h>
-#include "mt/CPUAffinityThreadInitializer.h"
+#include <sys/ScopedCPUAffinityUnix.h>
+#include <mt/AbstractCPUAffinityThreadInitializer.h>
 
 namespace mt
 {
-    class LinuxCPUAffinityThreadInitializer : public mt::CPUAffinityThreadInitializer
-    {	
-	cpu_set_t mCPU;
-    public:
-	LinuxCPUAffinityThreadInitializer(const cpu_set_t& cpu);
-	void initialize();
-    };
+class LinuxCPUAffinityThreadInitializer : public AbstractCPUAffinityThreadInitializer
+{
+public:
+    LinuxCPUAffinityThreadInitializer(std::auto_ptr<const sys::ScopedCPUMaskUnix> cpu);
+
+    virtual void initialize();
+
+private:
+    std::auto_ptr<const sys::ScopedCPUMaskUnix> mCPU;
+};
 }
-    
 
 #endif
 #endif

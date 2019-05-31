@@ -2,7 +2,7 @@
  * This file is part of mt-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2004 - 2019, MDA Information Systems LLC
  *
  * mt-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -21,17 +21,23 @@
  */
 
 
-#ifndef __MT_ABSTRACT_CPU_AFFINITY_THREAD_INITIALIZER_H__
-#define __MT_ABSTRACT_CPU_AFFINITY_THREAD_INITIALIZER_H__
+#ifndef __MT_WIN32_CPU_AFFINITY_THREAD_INITIALIZER_H__
+#define __MT_WIN32_CPU_AFFINITY_THREAD_INITIALIZER_H__
+
+#if defined(WIN32)
+
+#include "mt/AbstractCPUAffinityThreadInitializer.h"
 
 namespace mt
 {
-class AbstractCPUAffinityThreadInitializer
+class LinuxCPUAffinityThreadInitializer : public AbstractCPUAffinityInitializer
 {
 public:
-    CPUAffinityThreadInitializer() {}
-    virtual ~CPUAffinityThreadInitializer() {}
-    virtual void initialize() = 0;
+    LinuxCPUAffinityThreadInitializer();
+
+    void initialize() {}
 };
 }
+
+#endif
 #endif
