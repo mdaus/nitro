@@ -71,6 +71,18 @@ ScopedCPUMaskUnix::~ScopedCPUMaskUnix()
     }
 }
 
+std::string ScopedCPUMaskUnix::toString() const
+{
+    std::ostringstream str;
+    const int numCPUs = ScopedCPUAffinityUnix::getNumOnlineCPUs();
+    for (int cpu = 0; cpu < numCPUs; ++cpu)
+    {
+        str << (CPU_ISSET_S(cpu, mSize, mMask) ? "1" : "0");
+    }
+
+    return str.str();
+}
+
 //-----------------------------------------------------------------------------
 
 ScopedCPUAffinityUnix::ScopedCPUAffinityUnix()
