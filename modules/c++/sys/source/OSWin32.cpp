@@ -302,14 +302,8 @@ size_t sys::OSWin32::getNumPhysicalCPUsAvailable() const
         Ctxt("Windows getNumPhysicalCPUsAvailable not yet implemented."));
 }
 
-size_t sys::OSWin32::getCPUsAvailable() const
-{
-    throw except::NotImplementedException(
-        Ctxt("Windows getNumPhysicalCPUsAvailable not yet implemented."));
-}
-
-void sys::OSWin32::getAvailableCPUs(std::vector<int>& physicalCPUs,
-                                    std::vector<int>& htCPUs) const
+void sys::OSWin32::getAvailableCPUs(std::vector<int>& /*physicalCPUs*/,
+                                    std::vector<int>& /*htCPUs*/) const
 {
     throw except::NotImplementedException(
         Ctxt("Windows getAvailableCPUs not yet implemented."));

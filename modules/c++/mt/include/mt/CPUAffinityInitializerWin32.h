@@ -39,8 +39,6 @@ namespace mt
 class CPUAffinityInitializerWin32 : public AbstractCPUAffinityInitializer
 {
 public:
-    CPUAffinityInitializerWin32() {}
-
     /*!
      * \todo Not yet implemented
      * \returns NULL
