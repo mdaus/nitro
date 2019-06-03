@@ -40,8 +40,8 @@
 namespace mt
 {
 /*!
- * \class CPUAffinityThreadInitializerWin32
- * \brief Windows-specific setting of the CPU affinity of a thread
+ * \class CPUAffinityThreadInitializerLinux
+ * \brief Linux-specific setting of the CPU affinity of a thread
  */
 class CPUAffinityThreadInitializerLinux :
         public AbstractCPUAffinityThreadInitializer
