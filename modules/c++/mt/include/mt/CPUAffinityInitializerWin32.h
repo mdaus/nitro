@@ -43,7 +43,14 @@ public:
      * \todo Not yet implemented
      * \returns NULL
      */
-    virtual CPUAffinityThreadInitializerWin32* newThreadInitializer()
+    std::auto_ptr<CPUAffinityThreadInitializerWin32> newThreadInitializer()
+    {
+        return std::auto_ptr<CPUAffinityThreadInitializerWin32>(
+                newThreadInitializerImpl());
+    }
+
+private:
+    virtual CPUAffinityThreadInitializerWin32* newThreadInitializerImpl()
     {
         return NULL;
     }

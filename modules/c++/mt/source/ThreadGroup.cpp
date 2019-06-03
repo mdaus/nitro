@@ -24,13 +24,15 @@
 #include <mt/ThreadGroup.h>
 #include <mt/CriticalSection.h>
 
-mt::ThreadGroup::ThreadGroup(bool pinToCPU) :
+namespace mt
+{
+ThreadGroup::ThreadGroup(bool pinToCPU) :
     mAffinityInit(pinToCPU ? new CPUAffinityInitializer() : NULL),
     mLastJoined(0)
 {
 }
 
-mt::ThreadGroup::~ThreadGroup()
+ThreadGroup::~ThreadGroup()
 {
     try
     {
@@ -42,12 +44,12 @@ mt::ThreadGroup::~ThreadGroup()
     }
 }
 
-void mt::ThreadGroup::createThread(sys::Runnable *runnable)
+void ThreadGroup::createThread(sys::Runnable *runnable)
 {
     createThread(std::auto_ptr<sys::Runnable>(runnable));
 }
 
-void mt::ThreadGroup::createThread(std::auto_ptr<sys::Runnable> runnable)
+void ThreadGroup::createThread(std::auto_ptr<sys::Runnable> runnable)
 {
     // Note: If getNextInitializer throws, any previously created
     //       threads may never finish if cross-thread communication is used.
@@ -63,7 +65,7 @@ void mt::ThreadGroup::createThread(std::auto_ptr<sys::Runnable> runnable)
     thread->start();
 }
 
-void mt::ThreadGroup::joinAll()
+void ThreadGroup::joinAll()
 {
     bool failed = false;
     // Keep track of which threads we've already joined.
@@ -93,11 +95,11 @@ void mt::ThreadGroup::joinAll()
         throw except::Error(Ctxt("ThreadGroup could not be joined"));
 }
 
-void mt::ThreadGroup::addException(const except::Exception& ex)
+void ThreadGroup::addException(const except::Exception& ex)
 {
     try
     {
-        mt::CriticalSection<sys::Mutex> pushLock(&mMutex);
+        CriticalSection<sys::Mutex> pushLock(&mMutex);
         mExceptions.push_back(ex);
     }
     catch(...)
@@ -106,28 +108,28 @@ void mt::ThreadGroup::addException(const except::Exception& ex)
     }
 }
 
-std::auto_ptr<mt::CPUAffinityThreadInitializer> mt::ThreadGroup::getNextInitializer()
+std::auto_ptr<CPUAffinityThreadInitializer> ThreadGroup::getNextInitializer()
 {
-    mt::CPUAffinityThreadInitializer* threadInit = NULL;
+    std::auto_ptr<CPUAffinityThreadInitializer> threadInit(NULL);
     if (mAffinityInit.get())
     {
         threadInit = mAffinityInit->newThreadInitializer();
     }
 
-    return std::auto_ptr<mt::CPUAffinityThreadInitializer>(threadInit);
+    return threadInit;
 }
 
-mt::ThreadGroup::ThreadGroupRunnable::ThreadGroupRunnable(
+ThreadGroup::ThreadGroupRunnable::ThreadGroupRunnable(
         std::auto_ptr<sys::Runnable> runnable,
-        mt::ThreadGroup& parentThreadGroup,
-        std::auto_ptr<mt::CPUAffinityThreadInitializer> threadInit) :
+        ThreadGroup& parentThreadGroup,
+        std::auto_ptr<CPUAffinityThreadInitializer> threadInit) :
         mRunnable(runnable),
         mParentThreadGroup(parentThreadGroup),
         mCPUInit(threadInit)
 {
 }
 
-void mt::ThreadGroup::ThreadGroupRunnable::run()
+void ThreadGroup::ThreadGroupRunnable::run()
 {
     try
     {
@@ -150,4 +152,5 @@ void mt::ThreadGroup::ThreadGroupRunnable::run()
         mParentThreadGroup.addException(
             except::Exception(Ctxt("Unknown ThreadGroup exception.")));
     }
+}
 }

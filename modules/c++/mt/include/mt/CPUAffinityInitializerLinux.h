@@ -52,13 +52,19 @@ public:
      * \returns a new CPUAffinityInitializerLinux for the next available
      *          CPU that can be bound to.
      */
-    virtual CPUAffinityThreadInitializerLinux* newThreadInitializer()
+    std::auto_ptr<CPUAffinityThreadInitializerLinux> newThreadInitializer()
     {
-        return new CPUAffinityThreadInitializerLinux(nextCPU());
+        return std::auto_ptr<CPUAffinityThreadInitializerLinux>(
+                newThreadInitializerImpl());
     }
 
 private:
     std::auto_ptr<const sys::ScopedCPUMaskUnix> nextCPU();
+
+    virtual CPUAffinityThreadInitializerLinux* newThreadInitializerImpl()
+    {
+        return new CPUAffinityThreadInitializerLinux(nextCPU());
+    }
 
     const std::vector<int> mCPUs;
     size_t mNextCPUIndex;
