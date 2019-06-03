@@ -4,7 +4,7 @@ VERSION         = '1.1'
 MODULE_DEPS     = 'sys except math mem types'
 TEST_DEPS       = 'cli'
 
-configure = distclean = lambda p: None
+distclean = lambda p: None
 
 def options(opt):
     opt.add_option('--force-cpu-pinning',
