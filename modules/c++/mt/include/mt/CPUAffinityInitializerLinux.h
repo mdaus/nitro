@@ -36,11 +36,22 @@
 
 namespace mt
 {
+/*!
+ * \class CPUAffinityInitializerLinux
+ * \brief Linux-specific class for providing thread-level affinity initializers.
+ */
 class CPUAffinityInitializerLinux : public AbstractCPUAffinityInitializer
 {
 public:
+
+    //! Constructor
     CPUAffinityInitializerLinux();
 
+    /*!
+     * \throws if there are no more available CPUs to bind to
+     * \returns a new CPUAffinityInitializerLinux for the next available
+     *          CPU that can be bound to.
+     */
     virtual CPUAffinityThreadInitializerLinux* newThreadInitializer()
     {
         return new CPUAffinityThreadInitializerLinux(nextCPU());

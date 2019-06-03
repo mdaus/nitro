@@ -28,11 +28,22 @@
 
 namespace mt
 {
+/*!
+ * \class AbstractCPUAffinityInitializer
+ * \brief Abstract class for providing thread-level affinity initializers.
+ *        Should be used by the primary thread to generate data for
+ *        child threads.
+ */
 class AbstractCPUAffinityInitializer
 {
 public:
     AbstractCPUAffinityInitializer() {}
     virtual ~AbstractCPUAffinityInitializer() {}
+
+    /*!
+     * \returns a new thread initializer. In general, this should return
+     *          a different affinity initializer each time it is called.
+     */
     virtual AbstractCPUAffinityThreadInitializer* newThreadInitializer() = 0;
 };
 }

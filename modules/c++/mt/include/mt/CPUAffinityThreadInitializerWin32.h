@@ -30,6 +30,11 @@
 
 namespace mt
 {
+/*!
+ * \class CPUAffinityThreadInitializerWin32
+ * \brief Windows-specific setting of the CPU affinity of a thread
+ * \todo This is a stub implementation that doesn't do anything. Make this work.
+ */
 class CPUAffinityThreadInitializerWin32 : public AbstractCPUAffinityInitializer
 {
 public:

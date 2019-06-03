@@ -39,13 +39,30 @@
 
 namespace mt
 {
+/*!
+ * \class CPUAffinityThreadInitializerWin32
+ * \brief Windows-specific setting of the CPU affinity of a thread
+ */
 class CPUAffinityThreadInitializerLinux :
         public AbstractCPUAffinityThreadInitializer
 {
 public:
+
+    /*!
+     * Constructor
+     *
+     * \param cpu A ScopedCPUMaskUnix object corresponding to the
+     *            affinity mask for the CPUs that this thread
+     *            is allowed to bind to
+     */
     CPUAffinityThreadInitializerLinux(
             std::auto_ptr<const sys::ScopedCPUMaskUnix> cpu);
 
+    /*!
+     * Attempt to bind to the affinity mask given during construction
+     *
+     * \throws if setting the thread affinity fails
+     */
     virtual void initialize();
 
 private:

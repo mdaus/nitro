@@ -53,11 +53,18 @@ class ThreadGroup
 {
 public:
 
-    //! Constructor.
+    /*!
+     * Constructor.
+     * \param pinToCPU Optional flag specifying whether CPU pinning
+     *                 should occur, using a CPUAffinityInitializer.
+     *                 If MT_FORCE_PINNING is defined, defaults to true
+     *                 (enable affinity-based thread pinning).
+     *                 Otherwise, defaults to false (no pinning).
+     */
 #if defined(MT_FORCE_PINNING)
-    ThreadGroup(bool pinToCore = true);
+    ThreadGroup(bool pinToCPU = true);
 #else
-    ThreadGroup(bool pinToCore = false);
+    ThreadGroup(bool pinToCPU = false);
 #endif
 
     /*!
@@ -94,6 +101,11 @@ private:
      */
     void addException(const except::Exception& ex);
 
+    /*!
+     * \returns the next available thread initializer provided by
+     *          the internal CPUAffinityInitializer. If no initializer
+     *          was created, will return NULL.
+     */
     std::auto_ptr<CPUAffinityThreadInitializer> getNextInitializer();
 
     /*!
@@ -106,11 +118,22 @@ private:
     {
     public:
 
-        //! Constructor.
-        ThreadGroupRunnable(std::auto_ptr<sys::Runnable> runnable,
-                            mt::ThreadGroup& parentThreadGroup,
-                            std::auto_ptr<CPUAffinityThreadInitializer> threadInit =
-                                std::auto_ptr<CPUAffinityThreadInitializer>(NULL));
+        /*!
+         * Constructor.
+         * \param runnable sys::Runnable object that will be executed by
+         *                 the current thread
+         * \param parentThreadGroup ThreadGroup object that spawned
+         *                          this ThreadGroupRunnable
+         * \param threadInit Affinity-based initializer for the thread
+         *                   that controls which CPUs the runnable is allowed
+         *                   to execute on. If NULL, no affinity preferences
+         *                   will be enforced.
+         */
+        ThreadGroupRunnable(
+                std::auto_ptr<sys::Runnable> runnable,
+                mt::ThreadGroup& parentThreadGroup,
+                std::auto_ptr<CPUAffinityThreadInitializer> threadInit =
+                        std::auto_ptr<CPUAffinityThreadInitializer>(NULL));
 
         /*!
          *  Call run() on the Runnable passed to createThread

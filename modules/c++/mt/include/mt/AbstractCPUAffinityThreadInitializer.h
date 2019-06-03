@@ -26,11 +26,19 @@
 
 namespace mt
 {
+/*!
+ * \class AbstractCPUAffinityThreadInitializer
+ * \brief Abstract class for setting the CPU affinity of a thread
+ */
 class AbstractCPUAffinityThreadInitializer
 {
 public:
     AbstractCPUAffinityThreadInitializer() {}
     virtual ~AbstractCPUAffinityThreadInitializer() {}
+
+    /*!
+     * Set the CPU affinity of the currently running thread
+     */
     virtual void initialize() = 0;
 };
 }

@@ -24,8 +24,8 @@
 #include <mt/ThreadGroup.h>
 #include <mt/CriticalSection.h>
 
-mt::ThreadGroup::ThreadGroup(bool pinToCore) :
-    mAffinityInit(pinToCore ? new CPUAffinityInitializer() : NULL),
+mt::ThreadGroup::ThreadGroup(bool pinToCPU) :
+    mAffinityInit(pinToCPU ? new CPUAffinityInitializer() : NULL),
     mLastJoined(0)
 {
 }
@@ -49,6 +49,8 @@ void mt::ThreadGroup::createThread(sys::Runnable *runnable)
 
 void mt::ThreadGroup::createThread(std::auto_ptr<sys::Runnable> runnable)
 {
+    // Note: If getNextInitializer throws, any previously created
+    //       threads may never finish if cross-thread communication is used.
     std::auto_ptr<sys::Runnable> internalRunnable(
             new ThreadGroupRunnable(
                     runnable,
