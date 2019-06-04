@@ -28,11 +28,6 @@
 #if defined(__linux) || defined(__linux__)
 
 #include <memory>
-#include <sched.h>
-#include <sys/types.h>
-#include <unistd.h>
-#include <sys/syscall.h>
-#define gettid() syscall(SYS_gettid)
 
 #include <sys/ScopedCPUAffinityUnix.h>
 #include <mt/AbstractCPUAffinityThreadInitializer.h>
