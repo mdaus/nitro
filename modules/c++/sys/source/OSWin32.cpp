@@ -302,6 +302,13 @@ size_t sys::OSWin32::getNumPhysicalCPUsAvailable() const
         Ctxt("Windows getNumPhysicalCPUsAvailable not yet implemented."));
 }
 
+void sys::OSWin32::getAvailableCPUs(std::vector<int>& /*physicalCPUs*/,
+                                    std::vector<int>& /*htCPUs*/) const
+{
+    throw except::NotImplementedException(
+        Ctxt("Windows getAvailableCPUs not yet implemented."));
+}
+
 void sys::OSWin32::createSymlink(const std::string& origPathname,
                                  const std::string& symlinkPathname) const
 {
