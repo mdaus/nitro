@@ -51,24 +51,61 @@ std::vector<int> mergeAvailableCPUs()
 
 namespace mt
 {
+class AvailableCPUProvider : public AbstractNextCPUProviderLinux
+{
+public:
+    AvailableCPUProvider() :
+        mCPUs(mergeAvailableCPUs()),
+        mNextCPUIndex(0)
+    {
+    }
+
+    virtual std::auto_ptr<const sys::ScopedCPUMaskUnix> nextCPU()
+    {
+        if (mNextCPUIndex >= mCPUs.size())
+        {
+            std::ostringstream msg;
+            msg << "No more CPUs available (size = " << mCPUs.size() << ")";
+            throw except::Exception(Ctxt(msg.str()));
+        }
+
+        std::auto_ptr<sys::ScopedCPUMaskUnix> mask(new sys::ScopedCPUMaskUnix());
+        CPU_SET_S(mCPUs.at(mNextCPUIndex++), mask->getSize(), mask->getMask());
+        return std::auto_ptr<const sys::ScopedCPUMaskUnix>(mask);
+    }
+
+private:
+    const std::vector<int> mCPUs;
+    size_t mNextCPUIndex;
+};
+
+class OffsetCPUProvider : public AbstractNextCPUProviderLinux
+{
+public:
+    OffsetCPUProvider(int initialOffset) :
+        mNextCPU(initialOffset)
+    {
+    }
+
+    virtual std::auto_ptr<const sys::ScopedCPUMaskUnix> nextCPU()
+    {
+        std::auto_ptr<sys::ScopedCPUMaskUnix> mask(new sys::ScopedCPUMaskUnix());
+        CPU_SET_S(mNextCPU++, mask->getSize(), mask->getMask());
+        return std::auto_ptr<const sys::ScopedCPUMaskUnix>(mask);
+    }
+
+private:
+    int mNextCPU;
+};
+
 CPUAffinityInitializerLinux::CPUAffinityInitializerLinux() :
-    mCPUs(mergeAvailableCPUs()),
-    mNextCPUIndex(0)
+    mCPUProvider(new AvailableCPUProvider())
 {
 }
 
-std::auto_ptr<const sys::ScopedCPUMaskUnix> CPUAffinityInitializerLinux::nextCPU()
+CPUAffinityInitializerLinux::CPUAffinityInitializerLinux(int initialOffset) :
+    mCPUProvider(new OffsetCPUProvider(initialOffset))
 {
-    if (mNextCPUIndex >= mCPUs.size())
-    {
-        std::ostringstream msg;
-        msg << "No more CPUs available (size = " << mCPUs.size() << ")";
-        throw except::Exception(Ctxt(msg.str()));
-    }
-
-    std::auto_ptr<sys::ScopedCPUMaskUnix> mask(new sys::ScopedCPUMaskUnix());
-    CPU_SET_S(mCPUs.at(mNextCPUIndex++), mask->getSize(), mask->getMask());
-    return std::auto_ptr<const sys::ScopedCPUMaskUnix>(mask);
 }
 }
 
