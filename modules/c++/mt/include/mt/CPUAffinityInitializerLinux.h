@@ -36,6 +36,11 @@
 
 namespace mt
 {
+struct AbstractNextCPUProviderLinux
+{
+    virtual std::auto_ptr<const sys::ScopedCPUMaskUnix> nextCPU() = 0;
+};
+
 /*!
  * \class CPUAffinityInitializerLinux
  * \brief Linux-specific class for providing thread-level affinity initializers.
@@ -44,8 +49,19 @@ class CPUAffinityInitializerLinux : public AbstractCPUAffinityInitializer
 {
 public:
 
-    //! Constructor
+    /*!
+     * Constructor that uses the available CPUs (possibly restricted
+     * via taskset) to set affinities
+     */
     CPUAffinityInitializerLinux();
+
+    /*!
+     * Constructor that uses all online CPUs to incrementally update
+     * to the next CPU, starting from 'initialOffset'.
+     *
+     * \param initialOffset Initial CPU to start using when pinning threads
+     */
+    CPUAffinityInitializerLinux(int initialOffset);
 
     /*!
      * \throws if there are no more available CPUs to bind to
@@ -59,15 +75,13 @@ public:
     }
 
 private:
-    std::auto_ptr<const sys::ScopedCPUMaskUnix> nextCPU();
 
     virtual CPUAffinityThreadInitializerLinux* newThreadInitializerImpl()
     {
-        return new CPUAffinityThreadInitializerLinux(nextCPU());
+        return new CPUAffinityThreadInitializerLinux(mCPUProvider->nextCPU());
     }
 
-    const std::vector<int> mCPUs;
-    size_t mNextCPUIndex;
+    std::auto_ptr<AbstractNextCPUProviderLinux> mCPUProvider;
 };
 }
 
