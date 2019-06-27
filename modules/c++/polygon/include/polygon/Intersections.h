@@ -222,8 +222,6 @@ private:
             sys::SSize_T sl1 = static_cast<sys::SSize_T>(std::floor(
                     static_cast<double>(r1)));
 
-            sl1 = std::min<sys::SSize_T>(sl1, dims.row - 1);
-
             // Skip rows where the edge intersects scan line outside of image
             // Have to do this carefully though... we can't just restrict both
             // sl0 and sl1 to be in the [0, lastRow] range because if they were
