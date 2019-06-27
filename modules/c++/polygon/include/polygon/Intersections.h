@@ -82,7 +82,8 @@ public:
     Intersections(const std::vector<types::RowCol<PointT> >& points,
                   const types::RowCol<size_t>& dims,
                   types::RowCol<sys::SSize_T> offset =
-                          types::RowCol<sys::SSize_T>(0, 0))
+                          types::RowCol<sys::SSize_T>(0, 0)) :
+        mDims(dims)
     {
         if (!points.empty())
         {
@@ -97,11 +98,13 @@ public:
      */
     void get(size_t row, std::vector<Intersection>& intersections) const
     {
+        // Clear out any old intersections in the vector we're given
+        intersections.clear();
+
         if (row >= mIntersections.size())
         {
             // Could be because of no points or this is a row greater than
             // we computed for
-            intersections.clear();
             return;
         }
 
@@ -109,22 +112,37 @@ public:
         if (interRow.empty() || interRow.size() % 2 != 0)
         {
             // No intersections on this row
-            intersections.clear();
             return;
         }
 
         const size_t numPairs = interRow.size() / 2;
-        intersections.resize(numPairs);
         for (size_t pair = 0, idx = 0; pair < numPairs; ++pair)
         {
-            Intersection& intersection(intersections[pair]);
-            const double first = static_cast<double>(interRow[idx++]);
-            const double last = static_cast<double>(interRow[idx++]);
+            double first = static_cast<double>(interRow[idx++]);
+            double last = static_cast<double>(interRow[idx++]);
 
+            // If the pair of intersections lies outside of the image,
+            // there is no intersection for this pair.
+            const double lastCol = mDims.col - 1;
+            if ((first < 0.0 && last < 0.0) ||
+                (first > lastCol && last > lastCol))
+            {
+                continue;
+            }
+
+            // Clamp the intersections to the image boundary
+            first = std::max(0.0, std::min(lastCol, first));
+            last = std::max(0.0, std::min(lastCol, last));
+
+            Intersection intersection;
             intersection.first = static_cast<size_t>(std::ceil(first));
             intersection.last = static_cast<size_t>(std::floor(last));
 
-            if (intersection.last < intersection.first)
+            if(intersection.last > intersection.first)
+            {
+                intersections.push_back(intersection);
+            }
+            else
             {
                 if (first < last)
                 {
@@ -132,13 +150,7 @@ public:
                     // Then intersection.first = 56, intersection.last = 55
                     // We should count 55 as an intersection
                     intersection.first = intersection.last;
-                }
-                else
-                {
-                    // Likely due to some weird rounding issues
-                    // Counts as no intersections
-                    intersections.clear();
-                    return;
+                    intersections.push_back(intersection);
                 }
             }
         }
@@ -210,6 +222,8 @@ private:
             sys::SSize_T sl1 = static_cast<sys::SSize_T>(std::floor(
                     static_cast<double>(r1)));
 
+            sl1 = std::min<sys::SSize_T>(sl1, dims.row - 1);
+
             // Skip rows where the edge intersects scan line outside of image
             // Have to do this carefully though... we can't just restrict both
             // sl0 and sl1 to be in the [0, lastRow] range because if they were
@@ -238,18 +252,14 @@ private:
             const PointT dcdr = (c1 - c0) / (r1 - r0);
 
             // Calculate intersections
+            // We do not clamp to the image dimensions at this time -- this is
+            // done inside get(), and allows us to determine if intersection
+            // pairs lie fully outside of the image. Clamping here ambiguates
+            // that situation.
             for (sys::SSize_T row = sl0; row <= sl1; ++row)
             {
                 const PointT delt = row - r0;
-                PointT sli = c0 + delt * dcdr;
-                if (sli < 0)
-                {
-                    sli = 0;
-                }
-                else if (static_cast<size_t>(sli) >= dims.col)
-                {
-                    sli = dims.col - 1;
-                }
+                const PointT sli = c0 + delt * dcdr;
                 mIntersections[row].push_back(sli);
             }
         }
@@ -267,6 +277,7 @@ private:
     }
 
 private:
+    const types::RowCol<size_t> mDims;
     std::vector<std::vector<PointT> > mIntersections;
 };
 }
