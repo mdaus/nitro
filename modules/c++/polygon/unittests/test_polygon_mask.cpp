@@ -163,8 +163,8 @@ TEST_CASE(testWithAllEmptyRanges)
     // Test for a polygon that is fully outside of the chip,
     // but shares rows with the chip
     std::vector<types::RowCol<double> > points;
-    points.push_back(types::RowCol<double>(-1234, -1100));
-    points.push_back(types::RowCol<double>(-1234, -100));
+    points.push_back(types::RowCol<double>(-1000, -1100));
+    points.push_back(types::RowCol<double>(-1000, -100));
     points.push_back(types::RowCol<double>(2000, -100));
     points.push_back(types::RowCol<double>(2000, -1100));
 
