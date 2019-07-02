@@ -26,7 +26,6 @@
 
 namespace mt
 {
-
 #if defined(MT_DEFAULT_PINNING)
     bool ThreadGroup::DEFAULT_PIN_TO_CPU = true;
 #else
