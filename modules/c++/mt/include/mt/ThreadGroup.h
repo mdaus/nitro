@@ -85,6 +85,13 @@ public:
      */
     void joinAll();
 
+    /*!
+     * Checks whether CPU pinning is set (i.e. whether mAffinityInit is NULL)
+     *
+     * \returns true if CPU pinning is set, false otherwise
+     */
+    bool isPinToCPUEnabled() const;
+
     static bool getDefaultPinToCPU();
 
     static void setDefaultPinToCPU(const bool newDefault);

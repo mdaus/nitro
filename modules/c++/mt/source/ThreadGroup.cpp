@@ -162,6 +162,11 @@ void ThreadGroup::ThreadGroupRunnable::run()
     }
 }
 
+bool ThreadGroup::isPinToCPUEnabled() const
+{
+    return mAffinityInit.get() != NULL;
+}
+
 bool ThreadGroup::getDefaultPinToCPU()
 {
     return defaultPinToCPU;
