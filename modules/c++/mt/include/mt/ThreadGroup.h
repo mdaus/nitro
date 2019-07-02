@@ -88,12 +88,22 @@ public:
     /*!
      * Checks whether CPU pinning is set (i.e. whether mAffinityInit is NULL)
      *
-     * \returns true if CPU pinning is set, false otherwise
+     * \return true if CPU pinning is set, false otherwise
      */
     bool isPinToCPUEnabled() const;
 
+    /*!
+     * Gets the current default value for CPU pinning
+     *
+     * \return true if CPU pinning is enabled by default, false otherwise
+     */
     static bool getDefaultPinToCPU();
 
+    /*!
+     * Sets the default value for CPU pinning
+     *
+     * \param newDefault the new default value for CPU pinning
+     */
     static void setDefaultPinToCPU(const bool newDefault);
 
 private:
