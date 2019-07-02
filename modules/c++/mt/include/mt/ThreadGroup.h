@@ -108,7 +108,7 @@ private:
      * Can't set non-const static values in the header, so set at the top of
      * the implementation
      */
-    static bool defaultPinToCPU;
+    static bool DEFAULT_PIN_TO_CPU;
 
     /*!
      * Adds an exception to the mExceptions vector

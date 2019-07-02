@@ -28,9 +28,9 @@ namespace mt
 {
 
 #if defined(MT_DEFAULT_PINNING)
-    bool ThreadGroup::defaultPinToCPU = true;
+    bool ThreadGroup::DEFAULT_PIN_TO_CPU = true;
 #else
-    bool ThreadGroup::defaultPinToCPU = false;
+    bool ThreadGroup::DEFAULT_PIN_TO_CPU = false;
 #endif
 
 
@@ -169,11 +169,11 @@ bool ThreadGroup::isPinToCPUEnabled() const
 
 bool ThreadGroup::getDefaultPinToCPU()
 {
-    return defaultPinToCPU;
+    return DEFAULT_PIN_TO_CPU;
 }
 
-void ThreadGroup::setDefaultPinToCPU(const bool newDefault)
+void ThreadGroup::setDefaultPinToCPU(bool newDefault)
 {
-    defaultPinToCPU = newDefault;
+    DEFAULT_PIN_TO_CPU = newDefault;
 }
 }
