@@ -104,7 +104,7 @@ public:
      *
      * \param newDefault the new default value for CPU pinning
      */
-    static void setDefaultPinToCPU(const bool newDefault);
+    static void setDefaultPinToCPU(bool newDefault);
 
 private:
     std::auto_ptr<CPUAffinityInitializer> mAffinityInit;
