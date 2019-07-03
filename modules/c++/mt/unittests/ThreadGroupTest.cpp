@@ -109,7 +109,6 @@ TEST_CASE(PinToCPUTest)
 int main(int, char**)
 {
     TEST_CHECK(ThreadGroupTest);
-    TEST_CHECK(PinToCPUTest)
-
+    TEST_CHECK(PinToCPUTest);
     return 0;
 }
