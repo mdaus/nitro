@@ -195,7 +195,7 @@ def options(opt):
     opt.add_option('--disable-swig', action='store_false', dest='swig',
                    help='Disable swig')
     opt.add_option('--swig-version', action='store', dest='swigver',
-                   default=None, help='Specify the minimum swig version')
+                   default='3.0.0', help='Specify the minimum swig version')
     opt.add_option('--require-swig', action='store_true', dest='require_swig',
                    help='Require swig (configure option)', default=False)
 
