@@ -124,7 +124,7 @@ struct Range
     }
 
     /*!
-     * Determine if a range touches our range. Touching ranges do not
+     * Determine if a given range touches our range. Touching ranges do not
      * overlap, but can be placed next to one another (irrespective of order)
      * with no missing values in between.
      *
