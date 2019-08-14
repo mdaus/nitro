@@ -276,15 +276,21 @@ class CPPContext(Context.Context):
                                  lang=lang, path=testNode, includes=includes, defines=defines,
                                  install_path='${PREFIX}/tests/%s' % modArgs['name'])
 
-        pythonTestNode = path.parent.parent.make_node('python').make_node(str(path)).make_node('tests')
-        if os.path.exists(pythonTestNode.abspath()) and not Options.options.libs_only:
-            tests = [str(test) for test in pythonTestNode.ant_glob('*.py') if
-                    str(test) not in listify(modArgs.get('test_filter', ''))]
-            for test in tests:
-                bld(features='install_tgt',
-                        files=[test], dir=pythonTestNode,
-                        name=test, target=test,
-                        install_path='${PREFIX}/tests/%s' % modArgs['name'])
+
+        # Create install target for python tests
+        if not Options.options.libs_only:
+            for testDirname in ['tests', 'unittests']:
+                pythonTestNode = path.parent.parent.make_node('python').\
+                        make_node(str(path)).make_node(testDirname)
+                if os.path.exists(pythonTestNode.abspath()):
+                    tests = [str(test) for test in pythonTestNode.ant_glob('*.py') if
+                             str(test) not in listify(modArgs.get('test_filter', ''))]
+                    for test in tests:
+                        installPath = '${PREFIX}/%s/%s' % (testDirname, modArgs['name'])
+                        bld(features='install_tgt',
+                            files=[test], dir=pythonTestNode,
+                            name=test, target=test,
+                            install_path=installPath)
 
 
         testNode = path.make_node('unittests')
