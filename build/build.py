@@ -551,7 +551,7 @@ class CPPContext(Context.Context):
                 # actually check it in so other developers can still use the Python
                 # bindings even if they don't have Swig
                 flags = '-python -c++'
-                if sys.version_info[0] >= 3:
+                if sys.version_info[0] >= 3 and not env['PYTHON_AGNOSTIC']:
                     flags += ' -py3'
                 bld(features = 'cxx cshlib pyext add_targets swig_linkage includes',
                     source = swigSource,
