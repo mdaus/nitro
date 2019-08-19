@@ -79,6 +79,22 @@ TEST_CASE(TestTouches)
         TEST_ASSERT_TRUE(A.touches(B));
         TEST_ASSERT_TRUE(B.touches(A));
     }
+
+    // One of the ranges is empty -- touches(...) returns false
+    {
+        const types::Range A(10, 0);  // [10, 0)
+        const types::Range B(10, 10); // [10, 20)
+        TEST_ASSERT_FALSE(A.touches(B));
+        TEST_ASSERT_FALSE(B.touches(A));
+    }
+
+    // Both of the ranges are empty -- touches(...) returns false
+    {
+        const types::Range A(10, 0);  // [10, 0)
+        const types::Range B(10, 0); // [10, 20)
+        TEST_ASSERT_FALSE(A.touches(B));
+        TEST_ASSERT_FALSE(B.touches(A));
+    }
 }
 }
 

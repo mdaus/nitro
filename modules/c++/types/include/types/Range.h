@@ -128,12 +128,19 @@ struct Range
      * overlap, but can be placed next to one another (irrespective of order)
      * with no missing values in between.
      *
+     * If either of the ranges is empty, touching is defined as always false.
+     *
      * \param rhs Range to compare with
      *
      * \return True if the ranges touch, false otherwise
      */
     bool touches(const types::Range& rhs) const
     {
+        if (empty() || rhs.empty())
+        {
+            return false;
+        }
+
         return (mStartElement == rhs.endElement()) ||
                (rhs.mStartElement == endElement());
     }
