@@ -1199,6 +1199,9 @@ def configure(self):
     if self.env['DETECTED_BUILD_PY']:
         return
 
+    if sys.version_info < (2, 7, 0):
+        self.fatal('build.py requires at least Python 2.7')
+
     sys_platform = getPlatform(default=Options.platform)
     winRegex = r'win32'
 
