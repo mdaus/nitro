@@ -649,7 +649,7 @@ class GlobDirectoryWalker:
             except IndexError:
                 # pop next directory from stack
                 if len(self.stack) == 0:
-                    raise StopIteration
+                    return
                 self.directory = self.stack.pop()
                 if isdir(self.directory):
                     self.files = os.listdir(self.directory)
