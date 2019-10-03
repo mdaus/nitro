@@ -4,6 +4,7 @@
 __pycache__/
 # Build artifacts
 
+install/
 target/
 install/
 
@@ -13,6 +14,9 @@ build_coda.csh
 # Waf
 
 .waf-*
+waf-*
+.waf3-*
+waf3-*
 .lock-waf*
 build/waf*/
 # Eclipse
