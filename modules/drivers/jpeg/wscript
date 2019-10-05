@@ -38,11 +38,7 @@ from build import writeConfig
 
 
 def toggleSharedBuild(conf, driverNode):
-    addDeclspec = Options.options.shared_libs and conf.env['COMPILER_CXX'] == 'msvc'
-    if addDeclspec:
-        decoration = '__declspec(dllexport)'
-    else:
-        decoration = ''
+    decoration = conf.env['declspec_decoration']
 
     jmorecfg = os.path.join(driverNode.relpath(), 'jmorecfg.h')
     with open(jmorecfg, 'r') as f:
@@ -50,9 +46,9 @@ def toggleSharedBuild(conf, driverNode):
     with open(jmorecfg, 'w') as f:
         for line in contents:
             if line.startswith('#define EXTERN(type)'):
-                f.write('#define EXTERN(type) extern {} type\n'.format(decoration))
+                f.write('#define EXTERN(type) extern {0} type\n'.format(decoration))
             elif line.startswith('#define GLOBAL(type)'):
-                f.write('#define GLOBAL(type) {} type\n'.format(decoration))
+                f.write('#define GLOBAL(type) {0} type\n'.format(decoration))
             else:
                 f.write(line)
 
