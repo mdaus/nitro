@@ -121,25 +121,26 @@ def build(bld):
                                                'contrib',
                                                'minizip',
                                                'minizip.def')
-            writeDefsFile(minizipDefsPathname,
-                          'zipOpen',
-                          'zipOpen64',
-                          'zipOpen2',
-                          'zipOpen2_64',
-                          'zipOpenNewFileInZip',
-                          'zipOpenNewFileInZip64',
-                          'zipOpenNewFileInZip2',
-                          'zipOpenNewFileInZip2_64',
-                          'zipOpenNewFileInZip3',
-                          'zipOpenNewFileInZip3_64',
-                          'zipOpenNewFileInZip4',
-                          'zipOpenNewFileInZip4_64',
-                          'zipWriteInFileInZip',
-                          'zipCloseFileInZip',
-                          'zipCloseFileInZipRaw',
-                          'zipCloseFileInZipRaw64',
-                          'zipClose',
-                          'zipRemoveExtraInfoBlock')
+            if not os.path.isfile(minizipDefsPathname):
+                writeDefsFile(minizipDefsPathname,
+                              'zipOpen',
+                              'zipOpen64',
+                              'zipOpen2',
+                              'zipOpen2_64',
+                              'zipOpenNewFileInZip',
+                              'zipOpenNewFileInZip64',
+                              'zipOpenNewFileInZip2',
+                              'zipOpenNewFileInZip2_64',
+                              'zipOpenNewFileInZip3',
+                              'zipOpenNewFileInZip3_64',
+                              'zipOpenNewFileInZip4',
+                              'zipOpenNewFileInZip4_64',
+                              'zipWriteInFileInZip',
+                              'zipCloseFileInZip',
+                              'zipCloseFileInZipRaw',
+                              'zipCloseFileInZipRaw64',
+                              'zipClose',
+                              'zipRemoveExtraInfoBlock')
             useDefsFile(minizipEnv, minizipDefsPathname)
 
         minizipDir = os.path.join('contrib', 'minizip')
@@ -203,4 +204,3 @@ def distclean(context):
             if os.path.exists(d):
                 shutil.rmtree(d, ignore_errors=True)
         except:{}
-
