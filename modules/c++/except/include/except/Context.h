@@ -43,7 +43,7 @@ namespace except
  * This class contains information such as the file, line,
  * function and time
  */
-class CODA_EXPORT Context
+class Context
 {
 public:
 

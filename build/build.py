@@ -311,7 +311,7 @@ class CPPContext(Context.Context):
                 for test in testNode.ant_glob('*%s' % sourceExtensions):
                     if str(test) not in listify(modArgs.get('unittest_filter', '')):
                         testName = splitext(str(test))[0]
-                        exe = self(features='%s %sprogram' % (libExeType, libExeType),
+                        exe = self(features='%s %sprogram test' % (libExeType, libExeType),
                                      env=env.derive(), name=testName, target=testName, source=str(test), use=test_deps,
                                      uselib = modArgs.get('unittest_uselib', modArgs.get('uselib', '')),
                                      lang=lang, path=testNode, defines=defines,
@@ -1811,6 +1811,19 @@ def addSourceTargets(bld, env, path, target):
 
         target.targets_to_add += wscriptTargets
 
+def enableWafUnitTests(bld, set_exit_code=True):
+    """
+    If called, run all C++ unit tests after building
+    :param set_exit_code Flag to set a non-zero exit code if a unit test fails
+    """
+    # TODO: This does not work for Python files.
+    # The "nice" way to handle this is possibly not
+    # supported in this version of Waf.
+    bld.add_post_fun(waf_unit_test.summary)
+    if set_exit_code:
+        bld.add_post_fun(waf_unit_test.set_exit_code)
+
+
 class SwitchContext(Context.Context):
     """
     Easily switch output directories without reconfiguration.
@@ -1885,4 +1898,3 @@ class CPPPackageContext(package, CPPContext):
     def __init__(self, **kw):
         self.waf_command = 'python waf'
         super(CPPPackageContext, self).__init__(**kw)
-
