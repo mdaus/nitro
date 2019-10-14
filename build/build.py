@@ -317,17 +317,7 @@ class CPPContext(Context.Context):
                                      lang=lang, path=testNode, defines=defines,
                                      includes=includes,
                                      install_path='${PREFIX}/unittests/%s' % modArgs['name'])
-                        if Options.options.unittests or Options.options.all_tests:
-                            exe.features += ' test'
-
                         tests.append(testName)
-
-                # add a post-build hook to run the unit tests
-                # I use partial so I can pass arguments to a post build hook
-                #if Options.options.unittests:
-                #    bld.add_post_fun(partial(CPPBuildContext.runUnitTests,
-                #                             tests=tests,
-                #                             path=self.getBuildDir(testNode)))
 
         confDir = path.make_node('conf')
         if exists(confDir.abspath()):
@@ -778,8 +768,6 @@ def options(opt):
                    help='Build all libs as shared libs')
     opt.add_option('--disable-symlinks', action='store_false', dest='symlinks',
                    default=True, help='Disable creating symlinks for libs')
-    opt.add_option('--unittests', action='store_true', dest='unittests',
-                   help='Build-time option to run unit tests after the build has completed')
     opt.add_option('--no-headers', action='store_false', dest='install_headers',
                     default=True, help='Don\'t install module headers')
     opt.add_option('--no-libs', action='store_false', dest='install_libs',
@@ -1446,7 +1434,6 @@ def process_swig_linkage(tsk):
 
     # newlib is now a list of our non-python libraries
     tsk.env.LIB = newlib
-
 
 
 #
