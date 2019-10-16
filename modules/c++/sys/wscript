@@ -77,7 +77,7 @@ def configure(conf):
                        msg='Checking for C++11 support',
                        define_name='__CODA_CPP11',
                        mandatory=True)
-        writeConfig(conf, sys_callback, NAME)
+    writeConfig(conf, sys_callback, NAME)
 
 def build(bld):
     bld.module(**globals())
