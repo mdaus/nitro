@@ -72,11 +72,11 @@ def configure(conf):
                     v = False
             conf.define(k.upper(), v)
 
-        # We always have C++11 now.
-        # This define is for downstream repos who still
-        # may be using it to check for C++11 features
-        conf.define('__CODA_CPP11', 1)
-
+        conf.check_cxx(fragment=cpp11_str,
+                       execute=1,
+                       msg='Checking for C++11 support',
+                       define_name='__CODA_CPP11',
+                       mandatory=True)
         writeConfig(conf, sys_callback, NAME)
 
 def build(bld):
