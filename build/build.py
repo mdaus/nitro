@@ -720,6 +720,11 @@ def unzipper(inFile, outDir):
         outFile.flush()
         outFile.close()
 
+
+def deprecated_callback(option, opt, value, parser):
+    Logs.warn('Warning: {0} is deprecated'.format(opt))
+
+
 def options(opt):
     opt.load('compiler_cc')
     opt.load('compiler_cxx')
@@ -743,8 +748,7 @@ def options(opt):
                    default=False, help='Treat compiler warnings as errors')
     opt.add_option('--enable-debugging', action='store_true', dest='debugging',
                    help='Enable debugging')
-    opt.add_option('--enable-cpp11', action='store_true', default=False, dest='enablecpp11',
-                   help='Enable C++11 features')
+    opt.add_option('--enable-cpp11', action='callback', callback=deprecated_callback)
     #TODO - get rid of enable64 - it's useless now
     opt.add_option('--enable-64bit', action='store_true', dest='enable64',
                    help='Enable 64bit builds')
@@ -878,12 +882,7 @@ def configureCompilerOptions(self):
             config['cxx']['optz_fast']      = '-O2'
             config['cxx']['optz_fastest']   = '-O3'
 
-            gxxCompileFlags='-fPIC'
-            if self.env['cpp11support'] and \
-            ((cxxCompiler == 'g++' and gccHasCpp11()) or \
-             (cxxCompiler == 'icpc' and iccHasCpp11())):
-                gxxCompileFlags+=' -std=c++11'
-
+            gxxCompileFlags='-fPIC -std=c++11'
             self.env.append_value('CXXFLAGS', gxxCompileFlags.split())
 
             # DEFINES and LINKFLAGS will apply to both gcc and g++
@@ -1278,9 +1277,7 @@ def configure(self):
         env.append_unique('LINKFLAGS', Options.options.linkflags.split())
     if Options.options._defs:
         env.append_unique('DEFINES', Options.options._defs.split(','))
-    #if its already defined in a wscript, don't touch.
-    if not env['cpp11support']:
-        env['cpp11support'] = Options.options.enablecpp11
+    env['cpp11support'] = True
     configureCompilerOptions(self)
 
     env['PLATFORM'] = sys_platform
@@ -1712,33 +1709,6 @@ def getSolarisFlags(compilerName):
 
     return (bitFlag32, bitFlag64)
 
-def gccHasCpp11():
-    try:
-        output = subprocess.check_output("g++ --help=c++",
-                                         stderr=subprocess.STDOUT,
-                                         shell=True,
-                                         universal_newlines=True)
-    except subprocess.CalledProcessError:
-        # If gcc is too old for --help=, then it is too old for C++11
-        return False
-    for line in output.split('\n'):
-        if re.search(r'-std=c\+\+11', line):
-            return True
-    return False
-
-def iccHasCpp11():
-    try:
-        output = subprocess.check_output("icpc -help",
-                                         stderr=subprocess.STDOUT,
-                                         shell=True,
-                                         universal_newlines=True)
-    except subprocess.CalledProcessError:
-        # If icc is too old for -help, then it is too old for C++11
-        return False
-    for line in output.split('\n'):
-        if re.search(r'c\+\+11', line):
-            return True
-    return False
 
 def getWscriptTargets(bld, env, path):
     # Here we're taking a look at the current stack and adding on all the

@@ -68,7 +68,11 @@ def configure(conf):
                 elif v == 'False':
                     v = False
             conf.define(k.upper(), v)
-        conf.check_cxx(fragment = cpp11_str, execute=1, msg='Checking for C++11 support', define_name='__CODA_CPP11', mandatory=False)
+        conf.check_cxx(fragment=cpp11_str,
+                       execute=1,
+                       msg='Checking for C++11 support',
+                       define_name='__CODA_CPP11',
+                       mandatory=True)
         conf.define('CODA_EXPORT', conf.env['declspec_decoration'], quote=False)
 
     writeConfig(conf, sys_callback, 'coda_oss',

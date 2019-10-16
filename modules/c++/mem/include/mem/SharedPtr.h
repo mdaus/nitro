@@ -38,10 +38,6 @@ template<typename T>
 class SharedPtr;
 }
 
-#ifdef __CODA_CPP11
 #include <mem/SharedPtrCpp11.h>
-#else
-#include <mem/SharedPtrLegacy.h>
-#endif
 
 #endif
