@@ -23,7 +23,7 @@
 #ifndef __MEM_SHARED_PTR_H__
 #define __MEM_SHARED_PTR_H__
 
-#include <sys/sys_config.h>
+#include <config/coda_oss_config.h>
 
 // Adding a forward declaration here in order to have SWIG correctly generate
 // bindings for SharedPtr.
