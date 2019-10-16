@@ -894,17 +894,7 @@ def configureCompilerOptions(self):
             config['cxx']['optz_fast']      = '-O2'
             config['cxx']['optz_fastest']   = '-O3'
 
-            gxxCompileFlags='-fPIC'
-
-            self.start_msg('Checking for C++11 support')
-            if (cxxCompiler == 'g++' and not gccHasCpp11()) or \
-                    (cxxCompiler == 'icpc' and not iccHasCpp11()):
-                self.end_msg('no', color='RED')
-                self.fatal('C++11 support is required')
-            else:
-                self.end_msg('ok', color='GREEN')
-                gxxCompileFlags+=' -std=c++11'
-
+            gxxCompileFlags='-fPIC -std=c++11'
             self.env.append_value('CXXFLAGS', gxxCompileFlags.split())
 
             # DEFINES and LINKFLAGS will apply to both gcc and g++
@@ -1732,33 +1722,6 @@ def getSolarisFlags(compilerName):
 
     return (bitFlag32, bitFlag64)
 
-def gccHasCpp11():
-    try:
-        output = subprocess.check_output("g++ --help=c++",
-                                         stderr=subprocess.STDOUT,
-                                         shell=True,
-                                         universal_newlines=True)
-    except subprocess.CalledProcessError:
-        # If gcc is too old for --help=, then it is too old for C++11
-        return False
-    for line in output.split('\n'):
-        if re.search(r'-std=c\+\+11', line):
-            return True
-    return False
-
-def iccHasCpp11():
-    try:
-        output = subprocess.check_output("icpc -help",
-                                         stderr=subprocess.STDOUT,
-                                         shell=True,
-                                         universal_newlines=True)
-    except subprocess.CalledProcessError:
-        # If icc is too old for -help, then it is too old for C++11
-        return False
-    for line in output.split('\n'):
-        if re.search(r'c\+\+11', line):
-            return True
-    return False
 
 def getWscriptTargets(bld, env, path):
     # Here we're taking a look at the current stack and adding on all the
