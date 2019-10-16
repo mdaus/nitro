@@ -23,7 +23,7 @@
 #ifndef __MATH_CONSTANTS_H__
 #define __MATH_CONSTANTS_H__
 
-#include <sys/sys_config.h>
+#include <config/coda_oss_config.h>
 
 #ifdef __CODA_CPP11
 #include <math.h>

@@ -25,7 +25,7 @@
 
 #include <memory>
 #include <cstddef>
-#include <sys/sys_config.h>
+#include <config/coda_oss_config.h>
 
 namespace mem
 {

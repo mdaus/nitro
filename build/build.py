@@ -311,23 +311,13 @@ class CPPContext(Context.Context):
                 for test in testNode.ant_glob('*%s' % sourceExtensions):
                     if str(test) not in listify(modArgs.get('unittest_filter', '')):
                         testName = splitext(str(test))[0]
-                        exe = self(features='%s %sprogram' % (libExeType, libExeType),
+                        exe = self(features='%s %sprogram test' % (libExeType, libExeType),
                                      env=env.derive(), name=testName, target=testName, source=str(test), use=test_deps,
                                      uselib = modArgs.get('unittest_uselib', modArgs.get('uselib', '')),
                                      lang=lang, path=testNode, defines=defines,
                                      includes=includes,
                                      install_path='${PREFIX}/unittests/%s' % modArgs['name'])
-                        if Options.options.unittests or Options.options.all_tests:
-                            exe.features += ' test'
-
                         tests.append(testName)
-
-                # add a post-build hook to run the unit tests
-                # I use partial so I can pass arguments to a post build hook
-                #if Options.options.unittests:
-                #    bld.add_post_fun(partial(CPPBuildContext.runUnitTests,
-                #                             tests=tests,
-                #                             path=self.getBuildDir(testNode)))
 
         confDir = path.make_node('conf')
         if exists(confDir.abspath()):
@@ -778,8 +768,6 @@ def options(opt):
                    help='Build all libs as shared libs')
     opt.add_option('--disable-symlinks', action='store_false', dest='symlinks',
                    default=True, help='Disable creating symlinks for libs')
-    opt.add_option('--unittests', action='store_true', dest='unittests',
-                   help='Build-time option to run unit tests after the build has completed')
     opt.add_option('--no-headers', action='store_false', dest='install_headers',
                     default=True, help='Don\'t install module headers')
     opt.add_option('--no-libs', action='store_false', dest='install_libs',
@@ -1453,7 +1441,6 @@ def process_swig_linkage(tsk):
     tsk.env.LIB = newlib
 
 
-
 #
 # This task generator creates tasks that install an __init__.py
 # for our python packages. Right now all it does it create an
@@ -1816,6 +1803,19 @@ def addSourceTargets(bld, env, path, target):
 
         target.targets_to_add += wscriptTargets
 
+def enableWafUnitTests(bld, set_exit_code=True):
+    """
+    If called, run all C++ unit tests after building
+    :param set_exit_code Flag to set a non-zero exit code if a unit test fails
+    """
+    # TODO: This does not work for Python files.
+    # The "nice" way to handle this is possibly not
+    # supported in this version of Waf.
+    bld.add_post_fun(waf_unit_test.summary)
+    if set_exit_code:
+        bld.add_post_fun(waf_unit_test.set_exit_code)
+
+
 class SwitchContext(Context.Context):
     """
     Easily switch output directories without reconfiguration.
@@ -1890,4 +1890,3 @@ class CPPPackageContext(package, CPPContext):
     def __init__(self, **kw):
         self.waf_command = 'python waf'
         super(CPPPackageContext, self).__init__(**kw)
-
