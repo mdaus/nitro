@@ -109,10 +109,7 @@ public:
     }
 
     // explicit operators not supported until C++11
-#ifdef __CODA_CPP11
-    explicit
-#endif
-    operator bool() const
+    explicit operator bool() const
     {
         return get() == NULL ? false : true;
     }
