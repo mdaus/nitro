@@ -25,6 +25,7 @@
 #include <mem/BufferView.h>
 #include <sys/Conf.h>
 #include <cstdlib>
+#include <algorithm>
 #include <vector>
 #include <set>
 #include "TestCase.h"
