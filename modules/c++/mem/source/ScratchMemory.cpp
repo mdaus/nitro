@@ -75,9 +75,9 @@ void ScratchMemory::release(const std::string& key)
                                                                mKeyOrder.end(),
                                                                key);
         std::vector<std::string>::iterator nextKeyIter = mKeyOrder.erase(keyIter);
+        const std::string nextKey = *nextKeyIter;
         mKeyOrder.push_back(key);
 
-        const std::string nextKey = *nextKeyIter;
 
         //  The next two if blocks handle the edge case in which there are two
         //  segments at the same offset: one that has been released
@@ -204,14 +204,13 @@ void ScratchMemory::setup(const BufferView<sys::ubyte>& scratchBuffer)
         mBuffer = scratchBuffer;
     }
 
-    size_t currentOffset = 0;
     for (std::map<std::string, Segment>::iterator iterSeg = mSegments.begin();
          iterSeg != mSegments.end();
          ++iterSeg)
     {
         Segment& segment = iterSeg->second;
         segment.buffers.resize(segment.numBuffers);
-        currentOffset = segment.offset;
+        size_t currentOffset = segment.offset;
         for (size_t i = 0; i < segment.numBuffers; ++i)
         {
             segment.buffers[i] = mBuffer.data + currentOffset;
