@@ -71,12 +71,12 @@ void ScratchMemory::release(const std::string& key)
     {
         const Segment& segment = iterSeg->second;
 
+        mKeyOrder.push_back(key);
         std::vector<std::string>::iterator keyIter = std::find(mKeyOrder.begin(),
                                                                mKeyOrder.end(),
                                                                key);
         std::vector<std::string>::iterator nextKeyIter = mKeyOrder.erase(keyIter);
         const std::string nextKey = *nextKeyIter;
-        mKeyOrder.push_back(key);
 
 
         //  The next two if blocks handle the edge case in which there are two
