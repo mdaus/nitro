@@ -60,6 +60,10 @@ ScratchMemory::Segment::Segment(size_t numBytes,
 void ScratchMemory::release(const std::string& key)
 {
     std::map<std::string, Segment>::const_iterator iterSeg = mSegments.find(key);
+    if (iterSeg == mSegments.end())
+    {
+        throw except::Exception(Ctxt("Key " + key + " does not exist"));
+    }
     mReleasedKeys.insert(key);
 
     if (mKeyOrder.back() == key)
