@@ -130,7 +130,7 @@ void prepareInputAndOutputArray(PyObject* pyInObject,
  * \return a numpy array with specified dimension and type
  */
 PyObject* toNumpyArray(size_t numRows, size_t numColumns, int typenum,
-        void* data);
+        const void* data);
 
 /*!
  * Copy a vector of data buffers into a 2D Numpy array

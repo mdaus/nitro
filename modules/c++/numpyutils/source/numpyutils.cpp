@@ -161,7 +161,7 @@ void createOrVerify(PyObject*& pyObject,
 }
 
 PyObject* toNumpyArray(size_t numRows, size_t numColumns,
-        int typenum, void* data)
+        int typenum, const void* data)
 {
     const int nDims = (numRows == 1 ? 1 : 2);
     npy_intp dimensions[2];
@@ -174,8 +174,18 @@ PyObject* toNumpyArray(size_t numRows, size_t numColumns,
         dimensions[0] = numRows;
         dimensions[1] = numColumns;
     }
-    PyObject* copy = PyArray_NewCopy(reinterpret_cast<PyArrayObject*>(
-            PyArray_SimpleNewFromData(nDims, dimensions, typenum, data)),
+
+    // PyArray_SimpleNewFromData takes a void* for the buffer it's wrapping.
+    // The buffer is non-const, and this makes sense because we're wrapping it
+    // in a numpy array which anyone else would be free to modify.
+    //
+    // Since the function shouldn't be modifying the data itself, we're casting
+    // away the const in order to get the intermediate array object.  We then
+    // immediately copy and return, so nothing is actually getting modified
+    PyObject* wrappedArray =
+            PyArray_SimpleNewFromData(nDims, dimensions, typenum,
+                                      const_cast<void*>(data));
+    PyObject* copy = PyArray_NewCopy(reinterpret_cast<PyArrayObject*>(wrappedArray),
             NPY_CORDER);
     verifyNewPyObject(copy);
     return copy;
