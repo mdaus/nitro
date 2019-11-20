@@ -129,7 +129,7 @@ types::RowCol<size_t> getDimensionsRC(PyObject* pyArrayObject)
 }
 
 void verifyObjectsAreOfSameDimensions(PyObject* lhs,
-                                                  PyObject* rhs)
+                                      PyObject* rhs)
 {
     if(getDimensionsRC(lhs) != getDimensionsRC(rhs))
     {
@@ -139,8 +139,8 @@ void verifyObjectsAreOfSameDimensions(PyObject* lhs,
 }
 
 void createOrVerify(PyObject*& pyObject,
-                                int typeNum,
-                                const types::RowCol<size_t>& dims)
+                    int typeNum,
+                    const types::RowCol<size_t>& dims)
 {
     if (pyObject == Py_None) // none passed in-- so create new
     {
@@ -210,20 +210,26 @@ PyObject* toNumpyArray(size_t numColumns, int typenum,
     return newArray;
 }
 
+size_t getNumElements(PyObject* pyArrayObject)
+{
+    verifyArray(pyArrayObject);
+    return PyArray_Size(pyArrayObject);
+}
+
 void prepareInputAndOutputArray(PyObject* pyInObject,
-                                            PyObject*& pyOutObject,
-                                            int inputTypeNum,
-                                            int outputTypeNum,
-                                            types::RowCol<size_t> dims)
+                                PyObject*& pyOutObject,
+                                int inputTypeNum,
+                                int outputTypeNum,
+                                types::RowCol<size_t> dims)
 {
     verifyArrayType(pyInObject, inputTypeNum);
     createOrVerify(pyOutObject, outputTypeNum, dims);
 }
 
 void prepareInputAndOutputArray(PyObject* pyInObject,
-                                            PyObject*& pyOutObject,
-                                            int inputTypeNum,
-                                            int outputTypeNum)
+                                PyObject*& pyOutObject,
+                                int inputTypeNum,
+                                int outputTypeNum)
 {
     prepareInputAndOutputArray(pyInObject,
                                pyOutObject,
