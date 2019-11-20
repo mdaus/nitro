@@ -37,9 +37,8 @@ TEST_CASE(testGetNumElements)
 }
 }
 
-int main()
+int main(int /*argc*/, char** /*argv*/)
 {
     TEST_CHECK(testGetNumElements);
     return 0;
 }
-
