@@ -27,9 +27,15 @@ namespace
 {
 TEST_CASE(testGetNumElements)
 {
+    // NOTE: This test leaks memory.
+    // The Python C API naturally assume you're running in a Python extension,
+    // so the "right" way to manage memory involves making sure the Python
+    // runtime as the right information about e.g. reference counting and
+    // ownership.
+    // We are just running these functions standalone to verify functionality,
+    // so we don't have anyone to do the cleanup work.
     std::vector<int> data(50);
     PyObject* pyArrayObject = numpyutils::toNumpyArray(5, 10, NPY_INT, data.data());
-
     TEST_ASSERT_EQ(50, numpyutils::getNumElements(pyArrayObject));
 
     PyObject* nonArrayObject = PyString_FromString("not an array");
