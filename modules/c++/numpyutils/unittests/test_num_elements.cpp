@@ -38,7 +38,7 @@ TEST_CASE(testGetNumElements)
     PyObject* pyArrayObject = numpyutils::toNumpyArray(5, 10, NPY_INT, data.data());
     TEST_ASSERT_EQ(50, numpyutils::getNumElements(pyArrayObject));
 
-    PyObject* nonArrayObject = PyString_FromString("not an array");
+    PyObject* nonArrayObject = PyLong_FromLong(123L);
     TEST_THROWS(numpyutils::getNumElements(nonArrayObject));
 }
 }
