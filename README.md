@@ -129,8 +129,8 @@ Enabling a debugger
 
 Common Errors
 -------------
-> Fatal Python error: initfsencoding: unable to load the file system codec
-> ModuleNotFoundError: No module named 'encodings'
+    Fatal Python error: initfsencoding: unable to load the file system codec
+    ModuleNotFoundError: No module named 'encodings'
 
 Problem: Python is unable to find its `modules` directory, necessary for using the Python C API.
 
