@@ -70,7 +70,7 @@ public:
     //! Destructor, closes the file stream.
     virtual ~FileOutputStreamOS()
     {
-        if (isOpen() )
+        if ( isOpen() )
         {
             close();
         }
