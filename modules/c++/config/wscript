@@ -81,9 +81,9 @@ def configure(conf):
             }
             '''
         conf.check_cxx(fragment=attribute_noinline_str,
-                      msg='Checking for __attribute__(noinline)',
-                      define_name='HAVE_ATTRIBUTE_NOINLINE',
-                      mandatory=False)
+                       msg='Checking for __attribute__(noinline)',
+                       define_name='HAVE_ATTRIBUTE_NOINLINE',
+                       mandatory=False)
 
         attribute_aligned_str = '''
             int main()
@@ -93,9 +93,9 @@ def configure(conf):
             }
             '''
         conf.check_cxx(fragment=attribute_aligned_str,
-                      msg='Checking for __attribute__(aligned (x))',
-                      define_name='HAVE_ATTRIBUTE_ALIGNED',
-                      mandatory=False)
+                       msg='Checking for __attribute__(aligned (x))',
+                       define_name='HAVE_ATTRIBUTE_ALIGNED',
+                       mandatory=False)
 
         conf.define('CODA_EXPORT', conf.env['declspec_decoration'], quote=False)
 
