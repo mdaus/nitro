@@ -1,10 +1,10 @@
 BasedOnStyle: Google
 AccessModifierOffset: '0'
 AlignAfterOpenBracket: Align
-# AlignConsecutiveAssignments: 'false'
-# AlignConsecutiveDeclarations: 'false'
-# AlignOperands: 'false'
-# AlignTrailingComments: 'false'
+AlignConsecutiveAssignments: 'false'
+AlignConsecutiveDeclarations: 'false'
+AlignOperands: 'false'
+AlignTrailingComments: 'false'
 AllowShortBlocksOnASingleLine: 'false'
 AllowShortCaseLabelsOnASingleLine: 'false'
 AllowShortIfStatementsOnASingleLine: 'false'
@@ -17,11 +17,12 @@ BinPackArguments: 'false'
 BinPackParameters: 'false'
 BreakConstructorInitializers: AfterColon
 BreakBeforeBraces: Allman
+PenaltyBreakBeforeFirstCallParameter: '100'
 ColumnLimit: '80'
 ContinuationIndentWidth: '8'
-ConstructorInitializerAllOnOneLineOrOnePerline: 'true'
 DerivePointerAlignment: 'false'
 FixNamespaceComments: 'false'
+IndentCaseLabels: 'false'
 IndentWidth: '4'
 Language: Cpp
 PointerAlignment: Left
