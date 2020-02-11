@@ -1,0 +1,30 @@
+BasedOnStyle: Google
+AccessModifierOffset: '0'
+AlignAfterOpenBracket: Align
+# AlignConsecutiveAssignments: 'false'
+# AlignConsecutiveDeclarations: 'false'
+# AlignOperands: 'false'
+# AlignTrailingComments: 'false'
+AllowShortBlocksOnASingleLine: 'false'
+AllowShortCaseLabelsOnASingleLine: 'false'
+AllowShortIfStatementsOnASingleLine: 'false'
+AllowShortLoopsOnASingleLine: 'false'
+AllowShortFunctionsOnASingleLine: 'false'
+AlwaysBreakAfterDefinitionReturnType: None
+AlwaysBreakAfterReturnType: None
+AlwaysBreakBeforeMultilineStrings: 'false'
+BinPackArguments: 'false'
+BinPackParameters: 'false'
+BreakConstructorInitializers: AfterColon
+BreakBeforeBraces: Allman
+ColumnLimit: '80'
+ContinuationIndentWidth: '8'
+ConstructorInitializerAllOnOneLineOrOnePerline: 'true'
+DerivePointerAlignment: 'false'
+FixNamespaceComments: 'false'
+IndentWidth: '4'
+Language: Cpp
+PointerAlignment: Left
+SpacesInAngles: 'false'
+Standard: Cpp11
+UseTab: Never
