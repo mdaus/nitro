@@ -2,6 +2,7 @@
 set("TARGET_LANG"		"c++")
 
 #xxxTODO: Replace with a glob from all subdirectories once they're all working
+add_subdirectory("config")
 add_subdirectory("except")
 add_subdirectory("str")
 add_subdirectory("sys")

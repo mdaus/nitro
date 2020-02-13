@@ -8,6 +8,10 @@ cmake_minimum_required(VERSION 3.11)
 
 project("coda-oss")
 
+add_definitions(-DCODA_CMAKE_BUILD)
+
+set(CMAKE_CXX_STANDARD 11)
+
 # Standard directory names used throughout the project.
 #set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR/target}) # Specified in CMakeSettings.json
 set(CODA_STD_BUILDUTIL_DIR			"build")
@@ -294,6 +298,8 @@ function(coda_add_library_impl tgt_name tgt_lang tgt_version tgt_deps tgt_extra_
 	# For non-INTERFACE libraries, assign a version number and an appropriate output name
 	#   and add dependencies.
 	if (NOT lib_type STREQUAL "INTERFACE")
+        target_compile_definitions("${tgt_name}" "${header_type}" -DCODA_CMAKE_BUILD)
+
 		if (tgt_lang)
 			set_target_properties("${tgt_name}" PROPERTIES OUTPUT_NAME "${tgt_name}-${tgt_lang}")
 		endif()

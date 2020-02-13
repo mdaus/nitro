@@ -2,7 +2,7 @@ set("TARGET_NAME"		"sys")
 set("MAINTAINER"		"jmrandol@users.sourceforge.net")
 set("TARGET_VERSION"	"1.2")
 set("USELIB"			"THREAD" "DL" "RT" "SOCKET")
-set("MODULE_DEPS"		"except" "str" "Threads::Threads" "${CMAKE_DL_LIBS}" "${CLOCK_GETTIME_EXTRALIBS}") 
+set("MODULE_DEPS"		"config" "except" "str" "Threads::Threads" "${CMAKE_DL_LIBS}" "${CLOCK_GETTIME_EXTRALIBS}") 
 set("UNITTEST_DEPS"		"mt")
 set("TEST_FILTER"		"MMapReadOnlyTest.cpp" "ProcessTest1.cpp")
 

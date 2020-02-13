@@ -63,3 +63,4 @@ TODO list:
 * There will need to be many configuration options added to match the waf options.
 * The config_coda.csh script needs error checking.
 * Create a "superbuild", to consolidate the two-stage build (google "cmake superbuild").
+* Fix MT_DEFAULT_PINNING, previously configured by waf-generated header.
