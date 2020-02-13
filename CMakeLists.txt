@@ -195,7 +195,7 @@ function(coda_add_driver driver_name driver_file driver_hash import_targets)
             ExternalProject_Add(${target_name}
                 SOURCE_DIR "${${target_name_lc}_SOURCE_DIR}"
                 INSTALL_DIR "${CMAKE_INSTALL_PREFIX}"
-                CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=<INSTALL_DIR>
+                CONFIGURE_COMMAND sh <SOURCE_DIR>/configure --prefix=<INSTALL_DIR>
                 BUILD_COMMAND $(MAKE)
                 INSTALL_COMMAND $(MAKE) install
             )

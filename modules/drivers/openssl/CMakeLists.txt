@@ -14,9 +14,9 @@ ExternalProject_Add("${CMAKE_PROJECT_NAME}_OPENSSL"
 	URL "${CMAKE_CURRENT_SOURCE_DIR}/openssl-0.9.8.tar"
 	URL_HASH SHA256=2aa8d603a4e4ae441417afa37bd81db2d9cf951bcfee5895b8071f558c5f9337
 	INSTALL_DIR "${CMAKE_INSTALL_PREFIX}"
-	CONFIGURE_COMMAND <SOURCE_DIR>/config no-asm --install-prefix=<INSTALL_DIR>
+	CONFIGURE_COMMAND sh <SOURCE_DIR>/config no-asm --install-prefix=<INSTALL_DIR>
 	BUILD_IN_SOURCE true
-	BUILD_COMMAND $(MAKE) -j1
-	INSTALL_COMMAND $(MAKE) install -j1
+	BUILD_COMMAND $(MAKE)
+	INSTALL_COMMAND $(MAKE) install
 )
 #xxx Maybe change build directory of above to match that of other projects?
