@@ -21,6 +21,7 @@ add_subdirectory("xml.lite")
 add_subdirectory("net")
 add_subdirectory("plugin")
 add_subdirectory("tiff")
+add_subdirectory("polygon")
 
 #Partially working
 add_subdirectory("math.linear") # Needs Boost
