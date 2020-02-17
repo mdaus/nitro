@@ -1,6 +1,11 @@
 set("TARGET_NAME"       "UUID")
 
-coda_add_driver("${TARGET_NAME}" 
-	"e2fsprogs-1.40-uuid.tar" "SHA256=3507c7e9f226656b3903651c038e9c4907a31282cc4ba86aed8a588e6cc4cec2"
-	FALSE
-)
+# for Windows we use the UuidCreateSequential function
+# (requires linking with rpcrt4)
+
+if (NOT WIN32)
+	coda_add_driver("${TARGET_NAME}" 
+		"e2fsprogs-1.40-uuid.tar" "SHA256=3507c7e9f226656b3903651c038e9c4907a31282cc4ba86aed8a588e6cc4cec2"
+		FALSE
+	)
+endif()
