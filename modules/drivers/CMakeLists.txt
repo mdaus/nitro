@@ -12,7 +12,6 @@ add_subdirectory("openssl")
 add_subdirectory("pcre")
 ##add_subdirectory("sql")
 add_subdirectory("uuid")
-##add_subdirectory("xml")
 
 if(XML_LAYER EQUAL "expat")
     add_subdirectory("xml/expat")
