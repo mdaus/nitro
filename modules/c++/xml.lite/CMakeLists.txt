@@ -11,4 +11,8 @@ set("USE_${CODA_XML_LAYER}"	TRUE)
 if (USE_XercesC)
 	list(APPEND "MODULE_DEPS" "xerces-c")
 	coda_add_library("${TARGET_NAME}")  # See the definition of this method for details on the variables it looks at.
+    target_include_directories("${TARGET_NAME}" PUBLIC
+        $<BUILD_INTERFACE:${coda-oss_xercesc_SOURCE_DIR}/src>
+        $<BUILD_INTERFACE:${coda-oss_xercesc_BINARY_DIR}/src>
+		$<INSTALL_INTERFACE:include>)
 endif()

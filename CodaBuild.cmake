@@ -2,7 +2,7 @@
 #
 # dest_name		- Destination variable name in parent's scope
 # file_list		- Input list of files (possibly with paths)
-# filter_list	- Input list of files to filter out 
+# filter_list	- Input list of files to filter out
 #					(must be bare filenames; no paths)
 #xxx Should this be a macro instead of a function?
 function(filter_files dest_name file_list filter_list)
@@ -25,12 +25,12 @@ endfunction()
 # import_targets	- If the 3P uses CMake, should its targets be brought into this one?
 #					  If this is TRUE, the caller will need to use the targets and
 #					    varaibles from the 3P's CMakeLists.txt to set dependencies, etc.
-#					  If this is FALSE, this will create a target with the name 
+#					  If this is FALSE, this will create a target with the name
 #					  ${CMAKE_PROJECT_NAME}_${driver_name}.
 #
-#  The 3P's source and build directories will be stored in 
+#  The 3P's source and build directories will be stored in
 #      	${${target_name_lc}_SOURCE_DIR}, and
-#		${${target_name_lc}_BINARY_DIR} respectively, 
+#		${${target_name_lc}_BINARY_DIR} respectively,
 #
 #		where ${target_name_lc} is the lower-cased target name.
 include(FetchContent) # Requires CMake 3.11+
@@ -47,18 +47,25 @@ function(coda_add_driver driver_name driver_file driver_hash import_targets)
     FetchContent_GetProperties(${target_name})
     # The returned properties use the lower-cased name
     string(TOLOWER ${target_name} target_name_lc)
-    if (NOT ${target_name_lc}_POPULATED) # This makes sure we only fetch once.
+	if (NOT ${target_name_lc}_POPULATED) # This makes sure we only fetch once.
+		message("Populating content for external dependency ${driver_name}")
         # Now (at configure time) unpack the content.
         FetchContent_Populate(${target_name})
 		# Remember where we put stuff
-		set("${target_name_lc}_SOURCE_DIR" "${${target_name_lc}_SOURCE_DIR}" CACHE STRING "source directory for ${target_name_lc}")
-		set("${target_name_lc}_BINARY_DIR" "${${target_name_lc}_BINARY_DIR}" CACHE STRING "source directory for ${target_name_lc}")
+		set("${target_name_lc}_SOURCE_DIR" "${${target_name_lc}_SOURCE_DIR}" CACHE INTERNAL "source directory for ${target_name_lc}")
+		set("${target_name_lc}_BINARY_DIR" "${${target_name_lc}_BINARY_DIR}" CACHE INTERNAL "source directory for ${target_name_lc}")
         # Queue a build for build-time.
 		#xxx Should we change the build directory to match that of other projects?
         if (EXISTS "${${target_name_lc}_SOURCE_DIR}/CMakeLists.txt")
             # Found a CMakeLists.txt.  Configure with CMake.
 			if (import_targets)
-            	# Bring the external project's targets into our own configuration process.
+				# disable compile warnings for external dependencies
+				if (WIN32)
+					add_compile_options("/w")
+				else()
+					add_compile_options("-w")
+				endif()
+				# Bring the external project's targets into our own configuration process.
            		add_subdirectory(${${target_name_lc}_SOURCE_DIR} ${${target_name_lc}_BINARY_DIR})
 			else()
 				# Build as an external target
@@ -101,7 +108,7 @@ function(coda_add_tests module_name dir_name deps extra_deps filter_list)
 
 	foreach(test_src ${local_tests})
 		# Use the base name of the source file as the name of the test
-		get_filename_component(test_name ${test_src} NAME_WE) 
+		get_filename_component(test_name ${test_src} NAME_WE)
 		add_executable(${test_name} "${test_src}")
 		get_filename_component(test_dir ${test_src} DIRECTORY)
 		# Do a bit of path manipulation to make sure tests in deeper subdirs retain those subdirs in their build outputs
@@ -201,7 +208,7 @@ function(coda_add_library_impl tgt_name tgt_lang tgt_version tgt_deps tgt_extra_
 	# Add our output directory to the include path, to pick up 3p headers.
 	target_include_directories("${tgt_name}" ${header_type} "${CMAKE_PREFIX_PATH}/${CODA_STD_PROJECT_INCLUDE_DIR}")
 
-	# If we find a *_config.h.cmake.in file, generate the corresponding *_config.h, and put the 
+	# If we find a *_config.h.cmake.in file, generate the corresponding *_config.h, and put the
 	#   target directory in the include path.
 	#xxx This should probably look for all *.cmake.in files and process them.
 	set(config_filename "${CMAKE_CURRENT_SOURCE_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}/${tgt_munged_dirname}/${tgt_name}_config.h.cmake.in")
@@ -254,7 +261,7 @@ endfunction()
 
 
 # Add a library and its associated tests to the build.
-# 
+#
 #   This is a wrapper function to facilitate calls to the above routines from sub-projects.
 #
 #   To simplify things for callers that don't want to use many of the potential arguments,
@@ -267,7 +274,7 @@ endfunction()
 #		EXTRA_DEPS		List of non-linkable dependencies for the library
 #		SOURCE_FILTER	Source files to ignore
 #
-#	Directories defined by the variables CODA_STD_PROJECT_TESTS_DIR and 
+#	Directories defined by the variables CODA_STD_PROJECT_TESTS_DIR and
 #	  CODA_STD_PROJECT_UNITTESTS_DIR will be searched for source files; each of these
 #	  will be compiled into test executables. The following variables affect the test
 #	  executable creation:
@@ -276,11 +283,11 @@ endfunction()
 #		TEST_FILTER		- List of source files to ignore under CODA_STD_PROJECT_TESTS_DIR
 #		UNITTEST_DEPS	- List of dependencies for the files under CODA_STD_PROJECT_UNITTESTS_DIR
 #		UNITTEST_FILTER	- List of source files to ignore under CODA_STD_PROJECT_UNITTESTS_DIR
-# 
+#
 #  The caller can then simply call coda_add_library(target_name)
 #
 function(coda_add_library tgt_name)
-	coda_add_library_impl("${tgt_name}" "${TARGET_LANG}" "${TARGET_VERSION}" 
+	coda_add_library_impl("${tgt_name}" "${TARGET_LANG}" "${TARGET_VERSION}"
 						  "${MODULE_DEPS}" "${EXTRA_DEPS}" "${SOURCE_FILTER}")
 	if (CODA_BUILD_TESTS)
 		coda_add_tests("${tgt_name}" "${CODA_STD_PROJECT_TESTS_DIR}" "${TEST_DEPS}" "${EXTRA_DEPS}" "${TEST_FILTER}")

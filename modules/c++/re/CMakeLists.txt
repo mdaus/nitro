@@ -7,7 +7,7 @@ set("MODULE_DEPS"		"sys")
 set("RE_ENABLE_STD_REGEX" 0)
 
 if (NOT RE_ENABLE_STD_REGEX)
-	set("MODULE_DEPS"		"${MODULE_DEPS}" "pcre2-8")
+	set("MODULE_DEPS" "${MODULE_DEPS}" "pcre2-8")
 	#set("PCRE2_STATIC" 1) # I don't think this is used anywhere
 endif()
 
@@ -16,7 +16,9 @@ coda_add_library("${TARGET_NAME}")  # See the definition of this method for deta
 if (NOT RE_ENABLE_STD_REGEX)
 	# Because the pcre2-x targets just hard-path their include files instead of setting include
 	# directories, we don't get those directories automatically.  Manually add what we need here.
-	target_include_directories("${TARGET_NAME}" PUBLIC "${PCRE2_BINARY_DIR}")
+    target_include_directories("${TARGET_NAME}" PUBLIC
+        $<BUILD_INTERFACE:${PCRE2_BINARY_DIR}>
+        $<INSTALL_INTERFACE:include>)
 endif()
 
 #[[xxx

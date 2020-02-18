@@ -1,16 +1,13 @@
 set("TARGET_NAME"       "PCRE")
 
-# Build as a completely external target
-# Technique 3a: Import PCRE's whole build system here.
-# set(PCRE2_BUILD_PCRE2_32 TRUE) # Uncomment if we want the 32-bit version
+option(PCRE2_BUILD_PCRE2GREP OFF)
+option(PCRE2_BUILD_TESTS OFF)
+option(PCRE2_SUPPORT_LIBBZ2 OFF)
+option(PCRE2_SUPPORT_LIBZ OFF)
+option(PCRE2_SUPPORT_LIBEDIT OFF)
+option(PCRE2_SUPPORT_LIBREADLINE OFF)
 
-set(PCRE2_BUILD_PCRE2GREP OFF)
-set(PCRE2_BUILD_TESTS OFF)
-set(PCRE2_SUPPORT_LIBBZ2 OFF)
-set(PCRE2_SUPPORT_LIBZ OFF)
-set(PCRE2_SUPPORT_LIBEDIT OFF)
-set(PCRE2_SUPPORT_LIBREADLINE OFF)
-coda_add_driver("${TARGET_NAME}" 
+coda_add_driver("${TARGET_NAME}"
     "pcre2-10.23.tar.gz" "SHA256=bd62f955146a41815d6e2ce011bb75740825c32906b06e377f478599f54ee0dd"
     TRUE
 )
