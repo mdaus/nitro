@@ -1,15 +1,12 @@
-set("TARGET_NAME"		"unique")
-set("MAINTAINER"		"jmrandol@users.sourceforge.net")
-set("TARGET_VERSION"	"1.0")
-set("MODULE_DEPS"		"except")
+set(TARGET_NAME "unique")
+set(MODULE_DEPS "except")
 
 # On Unix, we depend on libuuid.  On Windows, we use Rpcrt4.
 if (WIN32)
-	list(APPEND 		"MODULE_DEPS" "Rpcrt4")
+    list(APPEND MODULE_DEPS "Rpcrt4")
 elseif (UNIX)
-	list(APPEND 		"MODULE_DEPS" "uuid")
-	set("EXTRA_DEPS"	"coda-oss_UUID")
+    list(APPEND MODULE_DEPS "uuid")
+    set(EXTRA_DEPS "coda-oss_UUID")
 endif()
 
 coda_add_library("${TARGET_NAME}")  # See the definition of this method for details on the variables it looks at.
-

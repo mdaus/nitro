@@ -1,5 +1,5 @@
 # All directories under here contain C++ source
-set("TARGET_LANG"		"c++")
+set(TARGET_LANG "c++")
 
 #xxxTODO: Replace with a glob from all subdirectories once they're all working
 add_subdirectory("config")
@@ -28,7 +28,7 @@ add_subdirectory("math.linear") # Needs Boost
 
 # These ones aren't done yet.
 ## add_subdirectory("dbi")
-## add_subdirectory("math.poly") # Breaking due to transitive include path problem with INTERFACE libs
+add_subdirectory("math.poly") # Breaking due to transitive include path problem with INTERFACE libs
 ## add_subdirectory("net.ssl")
 ## add_subdirectory("numpyutils")
 ## add_subdirectory("serialize")

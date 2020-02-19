@@ -1,9 +1,7 @@
-set("TARGET_NAME"		"net.ssl")
-set("MAINTAINER"		"jmrandol@users.sourceforge.net")
-set("TARGET_VERSION"	"1.0")
-set("MODULE_DEPS"		"net")
-set("EXTRA_DEPS"		"coda-oss_OPENSSL")
-#set("USELIB"			"SSL")
+set(TARGET_NAME "net.ssl")
+set(MODULE_DEPS "net")
+set(EXTRA_DEPS "coda-oss_OPENSSL")
+#set(USELIB "SSL")
 
 coda_add_library("${TARGET_NAME}")  # See the definition of this method for details on the variables it looks at.
 

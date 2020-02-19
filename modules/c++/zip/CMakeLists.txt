@@ -1,9 +1,7 @@
-set("TARGET_NAME"		"zip")
-set("MAINTAINER"		"jmrandol@users.sourceforge.net")
-set("TARGET_VERSION"	"1.0")
-set("MODULE_DEPS"		"io" "zlib" "coda-oss_minizip")
+set(TARGET_NAME "zip")
+set(MODULE_DEPS "io" "zlib" "coda-oss_minizip")
 #xxx If we want to use FindZLib instead:
-#set("MODULE_DEPS"		"io" "ZLIB::ZLIB" "coda-oss_minizip")
+#set("MODULE_DEPS" "io" "ZLIB::ZLIB" "coda-oss_minizip")
 
 coda_add_library("${TARGET_NAME}")  # See the definition of this method for details on the variables it looks at.
 

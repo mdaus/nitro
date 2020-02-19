@@ -1,24 +1,29 @@
-set("TARGET_NAME"		"re")
-set("MAINTAINER"		"adam.sylvester@mdaus.com matthew.wysocki@mdaus.com")
-set("TARGET_VERSION"	"1.0")
-set("MODULE_DEPS"		"sys")
+set(TARGET_NAME "re")
+set(MODULE_DEPS "sys")
 
 # Enable to use std::regex instead of PCRE.
-set("RE_ENABLE_STD_REGEX" 0)
+set(RE_ENABLE_STD_REGEX 0)
 
 if (NOT RE_ENABLE_STD_REGEX)
-	set("MODULE_DEPS" "${MODULE_DEPS}" "pcre2-8")
-	#set("PCRE2_STATIC" 1) # I don't think this is used anywhere
+    set(MODULE_DEPS "${MODULE_DEPS}" "pcre2-8")
+    set(TEST_DEPS "pcre2-8")
+    set(UNITTEST_DEPS "pcre2-8")
 endif()
 
 coda_add_library("${TARGET_NAME}")  # See the definition of this method for details on the variables it looks at.
 
 if (NOT RE_ENABLE_STD_REGEX)
-	# Because the pcre2-x targets just hard-path their include files instead of setting include
-	# directories, we don't get those directories automatically.  Manually add what we need here.
+    # Because the pcre2-x targets just hard-path their include files instead of setting include
+    # directories, we don't get those directories automatically.  Manually add what we need here.
     target_include_directories("${TARGET_NAME}" PUBLIC
         $<BUILD_INTERFACE:${PCRE2_BINARY_DIR}>
         $<INSTALL_INTERFACE:include>)
+
+    if (NOT BUILD_SHARED_LIBS)
+        # this definition is required to statically link against pcre2
+        # see NON_AUTOTOOLS_BUILD, LINKING PROGRAMS IN WINDOWS ENVIRONMENTS section
+        target_compile_definitions("pcre2-8" INTERFACE "-DPCRE2_STATIC")
+    endif()
 endif()
 
 #[[xxx

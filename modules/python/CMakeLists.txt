@@ -1,5 +1,5 @@
 # All directories under here contain C++ source
-set("TARGET_LANG"		"python")
+set(TARGET_LANG "python")
 
 #xxxTODO: Replace with a glob from all subdirectories once they're all working
 add_subdirectory("except")
