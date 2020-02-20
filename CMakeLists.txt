@@ -8,8 +8,6 @@ cmake_minimum_required(VERSION 3.11)
 
 project("coda-oss")
 
-add_definitions(-DCODA_CMAKE_BUILD)
-
 set(CMAKE_CXX_STANDARD 11)
 
 # Standard directory names used throughout the project.

@@ -1,7 +1,7 @@
 set(TARGET_NAME "UUID")
 
 # for Windows we use the UuidCreateSequential function
-# (requires linking with rpcrt4)
+# (requires linking with Rpcrt4)
 
 if (NOT WIN32)
     coda_add_driver("${TARGET_NAME}"

@@ -33,10 +33,7 @@
 #include <sys/Mutex.h>
 #include <mem/SharedPtr.h>
 
-#ifndef CODA_CMAKE_BUILD
 #include "mt/mt_config.h"
-#endif
-
 #include <mt/CPUAffinityInitializer.h>
 #include <mt/CPUAffinityThreadInitializer.h>
 

@@ -131,7 +131,7 @@ function(coda_add_tests module_name dir_name deps extra_deps filter_list)
 #xxx This shouldn't be needed; it should come from the module.
 #       target_include_directories(${test_name}  PUBLIC "${CODA_STD_PROJECT_INCLUDE_DIR}")
         # Automatically depend on the parent module, plus any others that were specified
-        message(STATUS "target_link_libraries(${test_name} ${module_name} ${deps})")
+        #message(STATUS "target_link_libraries(${test_name} ${module_name} ${deps})")
         target_link_libraries("${test_name}" ${module_name} ${deps})
 
 #xxx This should also not be needed; if our target depends on it, we should too.
@@ -149,11 +149,10 @@ endfunction()
 #
 # tgt_name          - Name of the module
 # tgt_lang          - Language of the library
-# tgt_version       - Version number of the library
 # tgt_deps          - List of linkable dependencies for the library
 # tgt_extra_deps    - List of non-linkable dependencies for the library
 # source_filter     - Source files to ignore
-function(coda_add_library_impl tgt_name tgt_lang tgt_version tgt_deps tgt_extra_deps source_filter)
+function(coda_add_library_impl tgt_name tgt_lang tgt_deps tgt_extra_deps source_filter)
 
     # Find all the source files, relative to the module's directory
     file(GLOB_RECURSE local_sources RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" "${CODA_STD_PROJECT_SOURCE_DIR}/*.cpp")
@@ -184,21 +183,13 @@ function(coda_add_library_impl tgt_name tgt_lang tgt_version tgt_deps tgt_extra_
     string(REPLACE "." "_" tgt_munged_name ${tgt_name})
 
     # Find all the header files, relative to the module's directory, and add them.
-#   file(GLOB_RECURSE local_headers RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" "${CODA_STD_PROJECT_INCLUDE_DIR}/${tgt_munged_dirname}/*.h")
     file(GLOB_RECURSE local_headers "${CODA_STD_PROJECT_INCLUDE_DIR}/${tgt_munged_dirname}/*.h")
 #   message("tgt_name=${tgt_name}  local_headers=${local_headers}")
     target_sources("${tgt_name}" "${header_type}" ${local_headers})
 
-    # For non-INTERFACE libraries, assign a version number and an appropriate output name
-    #   and add dependencies.
     if (NOT lib_type STREQUAL "INTERFACE")
-        target_compile_definitions("${tgt_name}" "${header_type}" -DCODA_CMAKE_BUILD)
-
         if (tgt_lang)
             set_target_properties("${tgt_name}" PROPERTIES OUTPUT_NAME "${tgt_name}-${tgt_lang}")
-        endif()
-        if (tgt_version)
-            set_target_properties("${tgt_name}" PROPERTIES VERSION "${tgt_version}")
         endif()
         if (tgt_deps)
             target_link_libraries("${tgt_name}" ${tgt_deps})
@@ -206,14 +197,17 @@ function(coda_add_library_impl tgt_name tgt_lang tgt_version tgt_deps tgt_extra_
         if (tgt_extra_deps)
             add_dependencies("${tgt_name}" ${tgt_extra_deps})
         endif()
+    else()
+        if (tgt_deps)
+            target_link_libraries("${tgt_name}" INTERFACE ${tgt_deps})
+        endif()
     endif()
 
 
     # Add include directories
-    file(GLOB local_header_dirs RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" "${CODA_STD_PROJECT_INCLUDE_DIR}/*")
-    target_include_directories("${tgt_name}" ${header_type}
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}>
-        $<INSTALL_INTERFACE:${CODA_STD_PROJECT_INCLUDE_DIR}>)
+    target_include_directories("${tgt_name}"
+        "${header_type}" "${CODA_STD_PROJECT_INCLUDE_DIR}"
+        "${header_type}" "${CMAKE_CURRENT_SOURCE_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}")
 
     # Add our output directory to the include path, to pick up 3p headers.
     target_include_directories("${tgt_name}" ${header_type} "${CMAKE_PREFIX_PATH}/${CODA_STD_PROJECT_INCLUDE_DIR}")
@@ -233,12 +227,13 @@ function(coda_add_library_impl tgt_name tgt_lang tgt_version tgt_deps tgt_extra_
     # Set up install destinations for binaries
     install(TARGETS "${tgt_name}"
 #xxx        EXPORT "$tgt_name_TARGETS"
-        LIBRARY DESTINATION ${CODA_STD_PROJECT_LIB_DIR}
-        ARCHIVE DESTINATION ${CODA_STD_PROJECT_LIB_DIR}
-        RUNTIME DESTINATION ${CODA_STD_PROJECT_BIN_DIR}
+            LIBRARY DESTINATION ${CODA_STD_PROJECT_LIB_DIR}
+            ARCHIVE DESTINATION ${CODA_STD_PROJECT_LIB_DIR}
+            RUNTIME DESTINATION ${CODA_STD_PROJECT_BIN_DIR}
     )
     # Set up install destination for headers
-    install(DIRECTORY ${local_header_dirs} DESTINATION ${CODA_STD_PROJECT_INCLUDE_DIR})
+    install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}"
+            DESTINATION ${CODA_STD_PROJECT_INCLUDE_DIR})
 
     #xxx? Perhaps change the above to:
     #install(INCLUDES DESTINATION ${CODA_STD_PROJECT_INCLUDE_DIR})
@@ -279,7 +274,6 @@ endfunction()
 #     following variables to define the library:
 #
 #       TARGET_LANG     Language of the library
-#       TARGET_VERSION  Version number of the library
 #       MODULE_DEPS     List of dependencies for the library
 #       EXTRA_DEPS      List of non-linkable dependencies for the library
 #       SOURCE_FILTER   Source files to ignore
@@ -297,13 +291,12 @@ endfunction()
 #  The caller can then simply call coda_add_library(target_name)
 #
 function(coda_add_library tgt_name)
-    coda_add_library_impl("${tgt_name}" "${TARGET_LANG}" "${TARGET_VERSION}"
+    coda_add_library_impl("${tgt_name}" "${TARGET_LANG}"
                           "${MODULE_DEPS}" "${EXTRA_DEPS}" "${SOURCE_FILTER}")
     if (CODA_BUILD_TESTS)
-        #set(TEST_DEPS "${TEST_DEPS}" "${MODULE_DEPS}")
-        coda_add_tests("${tgt_name}" "${CODA_STD_PROJECT_TESTS_DIR}" "${TEST_DEPS}" "${EXTRA_DEPS}" "${TEST_FILTER}")
-
-        #set(UNITTEST_DEPS "${UNITTEST_DEPS}" "${MODULE_DEPS}")
-        coda_add_tests("${tgt_name}" "${CODA_STD_PROJECT_UNITTESTS_DIR}" "${UNITTEST_DEPS}" "${EXTRA_DEPS}" "${UNITTEST_FILTER}")
+        coda_add_tests("${tgt_name}" "${CODA_STD_PROJECT_TESTS_DIR}"
+                       "${TEST_DEPS}" "${EXTRA_DEPS}" "${TEST_FILTER}")
+        coda_add_tests("${tgt_name}" "${CODA_STD_PROJECT_UNITTESTS_DIR}"
+                       "${UNITTEST_DEPS}" "${EXTRA_DEPS}" "${UNITTEST_FILTER}")
     endif()
 endfunction()

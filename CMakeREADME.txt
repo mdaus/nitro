@@ -30,15 +30,12 @@ Instructions for Linux:
 
 Instructions for Windows:
 
-* NOTE that this worked at one time, but since then I've made a lot of changes on Linux, so the Windows build is probably broken.
 * Open the directory containing the top-level CMakeLists.txt as a project in Visual Studio.
 
 
 This system has a few differences from the waf-based system:
 
-* The waf-based system builds 3rd-party drivers during the configure stage.  CMake best practices discourage this.  Instead, a two-stage build is required.  The first time the project is configured and built, it will build all of the drivers, but will skip any modules that depend on them.  The next time the project is configured, it will find the already-build drivers, and enable builds of the dependent modules.
-
-* Rather than selectively building subsets of files from the 3rd-pary (drivers) packages, it just builds them using their normal build processes.  This should reduce the labor overhead and risk of breaking the build when updating driver package versions.  
+* Rather than selectively building subsets of files from the 3rd-pary (drivers) packages, it just builds them using their normal build processes.  This should reduce the labor overhead and risk of breaking the build when updating driver package versions.
 
 
 Implementation Notes:
@@ -49,18 +46,15 @@ On Windows, Visual Studio's configuration selector can pick the desired configur
 Most of the smarts are in the root-level CMakeLists.txt file.  See the in-code comments there for details.
 There are some utility .cmake files in the ./build directory
 
-The CODA_BUILD_TESTS varaible in the script controls whether tests will be built.
+The CODA_BUILD_TESTS variable in the script controls whether tests will be built.
 
 Currently, the scripts reduce the compile warning level to reduce distractions while working on this project; this should be reversed for production use.
 
 
 TODO list:
-* Test the Windows build and fix any problems.  Some drivers may not have Windows versions, and should just be disabled there.
 * Test other build configurations.  This should just require changing $build_type in config_coda.csh, but there will no doubt be bugs and rough edges.
 * Test the shared library build.  This should just require changing $build_lib_type in config_coda.csh, but there will no doubt be bugs and rough edges.
 * The Python modules are not currently built.
 # The SWIG bindings are not currently built.
 * There will need to be many configuration options added to match the waf options.
 * The config_coda.csh script needs error checking.
-* Create a "superbuild", to consolidate the two-stage build (google "cmake superbuild").
-* Fix MT_DEFAULT_PINNING, previously configured by waf-generated header.

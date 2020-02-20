@@ -12,6 +12,22 @@ endif()
 set(TARGET_NAME "ZLIB")
 
 # Build with ZLIB's build system
-coda_add_driver("${TARGET_NAME}" "zlib-1.2.7.tar" "SHA256=df0ba700245709ea54a18536ed266c2f0a0b3e4c3eb029abc42bf48a087901c5" TRUE)
+coda_add_driver(
+    "${TARGET_NAME}"
+    "zlib-1.2.7.tar"
+    "SHA256=df0ba700245709ea54a18536ed266c2f0a0b3e4c3eb029abc42bf48a087901c5"
+    TRUE)
 
 include("coda-oss_minizip.cmake")
+
+target_include_directories(zlib PUBLIC
+    $<BUILD_INTERFACE:${coda-oss_zlib_SOURCE_DIR}
+    $<INSTALL_INTERFACE:${CODA_STD_PROJECT_INCLUDE_DIR}>)
+target_include_directories(zlibstatic PUBLIC
+    $<BUILD_INTERFACE:${coda-oss_zlib_SOURCE_DIR}
+    $<INSTALL_INTERFACE:${CODA_STD_PROJECT_INCLUDE_DIR}>)
+
+# disable some unneeded targets from zlib
+set_target_properties(example minigzip example64 minigzip64 PROPERTIES
+    EXCLUDE_FROM_ALL 1
+    EXCLUDE_FROM_DEFAULT_BUILD 1)
