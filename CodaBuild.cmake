@@ -153,7 +153,6 @@ endfunction()
 # tgt_extra_deps    - List of non-linkable dependencies for the library
 # source_filter     - Source files to ignore
 function(coda_add_library_impl tgt_name tgt_lang tgt_deps tgt_extra_deps source_filter)
-
     set(local_include_dir ${CMAKE_CURRENT_SOURCE_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR})
 
     # Find all the source files, relative to the module's directory
@@ -188,10 +187,10 @@ function(coda_add_library_impl tgt_name tgt_lang tgt_deps tgt_extra_deps source_
     file(GLOB_RECURSE local_headers RELATIVE ${local_include_dir} *.h)
     #message("tgt_name=${tgt_name}  local_headers=${local_headers}")
 
-    set(build_interface_headers ${local_headers})
-    list(TRANSFORM build_interface_headers PREPEND "${local_include_dir}/")
-    set(install_interface_headers ${local_headers})
-    list(TRANSFORM install_interface_headers PREPEND "${CODA_STD_PROJECT_INCLUDE_DIR}/")
+    #set(build_interface_headers ${local_headers})
+    #list(TRANSFORM build_interface_headers PREPEND "${local_include_dir}/")
+    #set(install_interface_headers ${local_headers})
+    #list(TRANSFORM install_interface_headers PREPEND "${CODA_STD_PROJECT_INCLUDE_DIR}/")
 
     # If we find a *_config.h.cmake.in file, generate the corresponding *_config.h, and put the
     #   target directory in the include path.
@@ -201,15 +200,15 @@ function(coda_add_library_impl tgt_name tgt_lang tgt_deps tgt_extra_deps source_
         # message(STATUS "Processing config header: ${CMAKE_CURRENT_SOURCE_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}/${tgt_munged_dirname}/${tgt_name}_config.h.cmake.in)")
         set(config_file_out "${CODA_STD_PROJECT_INCLUDE_DIR}/${tgt_munged_dirname}/${tgt_munged_name}_config.h")
         configure_file(${config_file_template} ${config_file_out})
-        list(APPEND build_interface_headers "${CMAKE_CURRENT_BINARY_DIR}/${config_file_out}")
-        list(APPEND install_interface_headers "${config_file_out}")
         target_include_directories(${tgt_name} PUBLIC "${CMAKE_CURRENT_BINARY_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}")
+        #list(APPEND build_interface_headers "${CMAKE_CURRENT_BINARY_DIR}/${config_file_out}")
+        #list(APPEND install_interface_headers "${config_file_out}")
     endif()
 
     # Associate headers with target
-    target_sources("${tgt_name}" "${header_type}"
-        $<BUILD_INTERFACE:${build_interface_headers}>
-        $<INSTALL_INTERFACE:${install_interface_headers}>)
+    #target_sources("${tgt_name}" "${header_type}"
+    #    $<BUILD_INTERFACE:${build_interface_headers}>
+    #    $<INSTALL_INTERFACE:${install_interface_headers}>)
 
     if (NOT lib_type STREQUAL "INTERFACE")
         if (tgt_lang)

@@ -4,23 +4,14 @@ set(MODULE_DEPS "io")
 
 set(CODA_SQL_LAYER "PostgreSQL")  # "MYSQL", "PostgreSQL", or "ORACLE"
 
-set("USE_${CODA_SQL_LAYER}" TRUE)
+set("USE_${CODA_SQL_LAYER}" ON)
 
-# A few special case bits for specific libs
-if (USE_MYSQL)
-endif()
-if (USE_PostgreSQL)
-endif()
-if (USE_ORACLE)
-endif()
-
-# FInd the desired XML package and add its imported target to our dependencies
+# Find the desired XML package and add its imported target to our dependencies
 include("Find${CODA_SQL_LAYER}")
 find_package(${CODA_SQL_LAYER})
 if (${CODA_SQL_LAYER}_FOUND)
     list(APPEND "MODULE_DEPS" "${CODA_SQL_LAYER}::${CODA_SQL_LAYER}")
 endif()
-
 
 # The imported target wasn't added to FindPostgreSQL until CMake 3.12
 if (USE_PostgreSQL)

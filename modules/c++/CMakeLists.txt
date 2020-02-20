@@ -22,13 +22,11 @@ add_subdirectory("net")
 add_subdirectory("plugin")
 add_subdirectory("tiff")
 add_subdirectory("polygon")
-
-#Partially working
-add_subdirectory("math.linear") # Needs Boost
+add_subdirectory("math.linear") # Needs Boost for some tests
+add_subdirectory("math.poly") # Needs Boost for some tests
+add_subdirectory("numpyutils")
 
 # These ones aren't done yet.
 ## add_subdirectory("dbi")
-add_subdirectory("math.poly") # Breaking due to transitive include path problem with INTERFACE libs
 ## add_subdirectory("net.ssl")
-## add_subdirectory("numpyutils")
 ## add_subdirectory("serialize")
