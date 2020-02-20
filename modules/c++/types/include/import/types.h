@@ -27,5 +27,6 @@
 #include <types/RowCol.h>
 #include <types/PageRowCol.h>
 #include <types/Range.h>
+#include <types/RangeList.h>
 
 #endif
