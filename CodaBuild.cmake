@@ -154,6 +154,8 @@ endfunction()
 # source_filter     - Source files to ignore
 function(coda_add_library_impl tgt_name tgt_lang tgt_deps tgt_extra_deps source_filter)
 
+    set(local_include_dir ${CMAKE_CURRENT_SOURCE_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR})
+
     # Find all the source files, relative to the module's directory
     file(GLOB_RECURSE local_sources RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" "${CODA_STD_PROJECT_SOURCE_DIR}/*.cpp")
 
@@ -183,9 +185,31 @@ function(coda_add_library_impl tgt_name tgt_lang tgt_deps tgt_extra_deps source_
     string(REPLACE "." "_" tgt_munged_name ${tgt_name})
 
     # Find all the header files, relative to the module's directory, and add them.
-    file(GLOB_RECURSE local_headers "${CODA_STD_PROJECT_INCLUDE_DIR}/${tgt_munged_dirname}/*.h")
-#   message("tgt_name=${tgt_name}  local_headers=${local_headers}")
-    target_sources("${tgt_name}" "${header_type}" ${local_headers})
+    file(GLOB_RECURSE local_headers RELATIVE ${local_include_dir} *.h)
+    #message("tgt_name=${tgt_name}  local_headers=${local_headers}")
+
+    set(build_interface_headers ${local_headers})
+    list(TRANSFORM build_interface_headers PREPEND "${local_include_dir}/")
+    set(install_interface_headers ${local_headers})
+    list(TRANSFORM install_interface_headers PREPEND "${CODA_STD_PROJECT_INCLUDE_DIR}/")
+
+    # If we find a *_config.h.cmake.in file, generate the corresponding *_config.h, and put the
+    #   target directory in the include path.
+    #xxx This should probably look for all *.cmake.in files and process them.
+    set(config_file_template "${CMAKE_CURRENT_SOURCE_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}/${tgt_munged_dirname}/${tgt_name}_config.h.cmake.in")
+    if (EXISTS ${config_file_template})
+        # message(STATUS "Processing config header: ${CMAKE_CURRENT_SOURCE_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}/${tgt_munged_dirname}/${tgt_name}_config.h.cmake.in)")
+        set(config_file_out "${CODA_STD_PROJECT_INCLUDE_DIR}/${tgt_munged_dirname}/${tgt_munged_name}_config.h")
+        configure_file(${config_file_template} ${config_file_out})
+        list(APPEND build_interface_headers "${CMAKE_CURRENT_BINARY_DIR}/${config_file_out}")
+        list(APPEND install_interface_headers "${config_file_out}")
+        target_include_directories(${tgt_name} PUBLIC "${CMAKE_CURRENT_BINARY_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}")
+    endif()
+
+    # Associate headers with target
+    target_sources("${tgt_name}" "${header_type}"
+        $<BUILD_INTERFACE:${build_interface_headers}>
+        $<INSTALL_INTERFACE:${install_interface_headers}>)
 
     if (NOT lib_type STREQUAL "INTERFACE")
         if (tgt_lang)
@@ -203,30 +227,18 @@ function(coda_add_library_impl tgt_name tgt_lang tgt_deps tgt_extra_deps source_
         endif()
     endif()
 
-
     # Add include directories
-    target_include_directories("${tgt_name}"
-        "${header_type}" "${CODA_STD_PROJECT_INCLUDE_DIR}"
-        "${header_type}" "${CMAKE_CURRENT_SOURCE_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}")
+    target_include_directories(${tgt_name} ${header_type}
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}>
+        $<INSTALL_INTERFACE:${CODA_STD_PROJECT_INCLUDE_DIR}>)
 
     # Add our output directory to the include path, to pick up 3p headers.
-    target_include_directories("${tgt_name}" ${header_type} "${CMAKE_PREFIX_PATH}/${CODA_STD_PROJECT_INCLUDE_DIR}")
+    #target_include_directories("${tgt_name}" ${header_type} "${CMAKE_PREFIX_PATH}/${CODA_STD_PROJECT_INCLUDE_DIR}")
 
-    # If we find a *_config.h.cmake.in file, generate the corresponding *_config.h, and put the
-    #   target directory in the include path.
-    #xxx This should probably look for all *.cmake.in files and process them.
-    set(config_filename "${CMAKE_CURRENT_SOURCE_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}/${tgt_munged_dirname}/${tgt_name}_config.h.cmake.in")
-    if (EXISTS "${config_filename}")
-        # message(STATUS "Processing config header: ${CMAKE_CURRENT_SOURCE_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}/${tgt_munged_dirname}/${tgt_name}_config.h.cmake.in)")
-        configure_file("${config_filename}" "${CODA_STD_PROJECT_INCLUDE_DIR}/${tgt_munged_dirname}/${tgt_munged_name}_config.h")
-        target_include_directories("${tgt_name}" PUBLIC "${CMAKE_CURRENT_BINARY_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}")
-#xxx This is intended to put the generated header in the IDE file list, but it doesn't seem to work.
-#       target_sources("${tgt_name}" "${header_type}" "${CMAKE_CURRENT_BINARY_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}/${tgt_munged_dirname}/${tgt_munged_name}_config.h")
-    endif()
 
     # Set up install destinations for binaries
     install(TARGETS "${tgt_name}"
-#xxx        EXPORT "$tgt_name_TARGETS"
+            #EXPORT "${tgt_name}_TARGETS"
             LIBRARY DESTINATION ${CODA_STD_PROJECT_LIB_DIR}
             ARCHIVE DESTINATION ${CODA_STD_PROJECT_LIB_DIR}
             RUNTIME DESTINATION ${CODA_STD_PROJECT_BIN_DIR}
@@ -238,13 +250,14 @@ function(coda_add_library_impl tgt_name tgt_lang tgt_deps tgt_extra_deps source_
     #xxx? Perhaps change the above to:
     #install(INCLUDES DESTINATION ${CODA_STD_PROJECT_INCLUDE_DIR})
 
-#[[  #xxx TODO Export the library interface? See https://www.youtube.com/watch?v=bsXLMQ6WgIk
-    install(EXPORT "${tgt_name}_TARGETS"
-        FILE ${tgt_name}_TARGETS.cmake
-        NAMESPACE ${tgt_name}::
-        DESTINATION ${CODA_STD_PROJECT_LIB_DIR}/cmake/${tgt_name}
-    )
+    # cannot use exports until all external dependencies have their own exports defined
+    #install(EXPORT "${tgt_name}_TARGETS"
+    #    FILE ${tgt_name}_TARGETS.cmake
+    #    NAMESPACE ${tgt_name}::
+    #    DESTINATION ${CODA_STD_PROJECT_LIB_DIR}/cmake/${tgt_name}
+    #)
 
+#[[  #xxx TODO Export the library interface? See https://www.youtube.com/watch?v=bsXLMQ6WgIk
     include(CMakePackageConfigHelpers)
     write_basic_package_version_file(
         VERSION ${${tgt_name}_VERSION}

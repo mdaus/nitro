@@ -28,6 +28,10 @@ target_include_directories(zlibstatic PUBLIC
     $<INSTALL_INTERFACE:${CODA_STD_PROJECT_INCLUDE_DIR}>)
 
 # disable some unneeded targets from zlib
-set_target_properties(example minigzip example64 minigzip64 PROPERTIES
-    EXCLUDE_FROM_ALL 1
-    EXCLUDE_FROM_DEFAULT_BUILD 1)
+foreach(tgt example minigzip example64 minigzip64)
+    if(TARGET ${tgt})
+        set_target_properties(${tgt} PROPERTIES
+            EXCLUDE_FROM_ALL 1
+            EXCLUDE_FROM_DEFAULT_BUILD 1)
+    endif()
+endforeach()

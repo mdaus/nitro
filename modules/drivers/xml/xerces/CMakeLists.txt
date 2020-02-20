@@ -9,5 +9,5 @@ set(DRIVER_FILE "xerces-c-3.2.2.tar.gz")
 set(DRIVER_FILE_HASH "SHA256=dd6191f8aa256d3b4686b64b0544eea2b450d98b4254996ffdfe630e0c610413")
 coda_add_driver("${TARGET_NAME}" "${DRIVER_FILE}" "${DRIVER_FILE_HASH}" TRUE)
 
-target_include_directories(xerces-c PUBLIC 
+target_include_directories(xerces-c PUBLIC
     $<BUILD_INTERFACE:${coda-oss_xerces-c_SOURCE_DIR}/src>)

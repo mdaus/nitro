@@ -46,4 +46,6 @@ check_cxx_source_compiles("
 set(CODA_CPP11 1)
 
 configure_file(include/config/coda_oss_config.h.in include/config/coda_oss_config.h @ONLY)
-target_include_directories("${TARGET_NAME}" INTERFACE "${CMAKE_CURRENT_BINARY_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}")
+target_include_directories("${TARGET_NAME}" INTERFACE
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}>
+    $<INSTALL_INTERFACE:${CODA_STD_PROJECT_INCLUDE_DIR}>)
