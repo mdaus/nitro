@@ -166,7 +166,8 @@ struct Range
      * \param inputRange Initial Range object
      * \param numElementsReq The number elements requested to be split from
      *        the end of inputRange
-     * \returns split The resulting range formed from the removed elements of
+     *
+     * \returns The resulting range formed from the removed elements of
      *          inputRange. Has no more than numElementsReq elements,
      *          but may have fewer depending on the size of inputRange.
      */
