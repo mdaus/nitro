@@ -52,15 +52,20 @@ function(coda_add_driver driver_name driver_file driver_hash import_targets)
         # Now (at configure time) unpack the content.
         FetchContent_Populate(${target_name})
         # Remember where we put stuff
-        set("${target_name_lc}_SOURCE_DIR" "${${target_name_lc}_SOURCE_DIR}" CACHE INTERNAL "source directory for ${target_name_lc}")
-        set("${target_name_lc}_BINARY_DIR" "${${target_name_lc}_BINARY_DIR}" CACHE INTERNAL "source directory for ${target_name_lc}")
+        set("${target_name_lc}_SOURCE_DIR" "${${target_name_lc}_SOURCE_DIR}" CACHE INTERNAL
+            "source directory for ${target_name_lc}")
+        set("${target_name_lc}_BINARY_DIR" "${${target_name_lc}_BINARY_DIR}" CACHE INTERNAL
+            "source directory for ${target_name_lc}")
         # Queue a build for build-time.
         #xxx Should we change the build directory to match that of other projects?
         if (EXISTS "${${target_name_lc}_SOURCE_DIR}/CMakeLists.txt")
             # Found a CMakeLists.txt.  Configure with CMake.
             if (import_targets)
                 # Bring the external project's targets into our own configuration process.
-                add_subdirectory(${${target_name_lc}_SOURCE_DIR} ${${target_name_lc}_BINARY_DIR})
+                add_subdirectory(
+                    ${${target_name_lc}_SOURCE_DIR}
+                    ${${target_name_lc}_BINARY_DIR}
+                    EXCLUDE_FROM_ALL)
             else()
                 # Build as an external target
                 ExternalProject_Add(${target_name}
@@ -74,7 +79,7 @@ function(coda_add_driver driver_name driver_file driver_hash import_targets)
             ExternalProject_Add(${target_name}
                 SOURCE_DIR "${${target_name_lc}_SOURCE_DIR}"
                 INSTALL_DIR "${CMAKE_INSTALL_PREFIX}"
-                CONFIGURE_COMMAND cmake -E env CC=${CMAKE_C_COMPILER} CXX=${CMAKE_CXX_COMPILER} sh <SOURCE_DIR>/configure --prefix=<INSTALL_DIR>
+                CONFIGURE_COMMAND cmake -E env CC=${CMAKE_C_COMPILER} CXX=${CMAKE_CXX_COMPILER} <SOURCE_DIR>/configure --prefix=<INSTALL_DIR>
                 BUILD_COMMAND $(MAKE)
                 INSTALL_COMMAND $(MAKE) install
             )
@@ -153,8 +158,6 @@ endfunction()
 # tgt_extra_deps    - List of non-linkable dependencies for the library
 # source_filter     - Source files to ignore
 function(coda_add_library_impl tgt_name tgt_lang tgt_deps tgt_extra_deps source_filter)
-    set(local_include_dir ${CMAKE_CURRENT_SOURCE_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR})
-
     # Find all the source files, relative to the module's directory
     file(GLOB_RECURSE local_sources RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" "${CODA_STD_PROJECT_SOURCE_DIR}/*.cpp")
 
@@ -184,7 +187,7 @@ function(coda_add_library_impl tgt_name tgt_lang tgt_deps tgt_extra_deps source_
     string(REPLACE "." "_" tgt_munged_name ${tgt_name})
 
     # Find all the header files, relative to the module's directory, and add them.
-    file(GLOB_RECURSE local_headers RELATIVE ${local_include_dir} *.h)
+    #file(GLOB_RECURSE local_headers RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.h)
     #message("tgt_name=${tgt_name}  local_headers=${local_headers}")
 
     #set(build_interface_headers ${local_headers})
@@ -197,12 +200,13 @@ function(coda_add_library_impl tgt_name tgt_lang tgt_deps tgt_extra_deps source_
     #xxx This should probably look for all *.cmake.in files and process them.
     set(config_file_template "${CMAKE_CURRENT_SOURCE_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}/${tgt_munged_dirname}/${tgt_name}_config.h.cmake.in")
     if (EXISTS ${config_file_template})
-        # message(STATUS "Processing config header: ${CMAKE_CURRENT_SOURCE_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}/${tgt_munged_dirname}/${tgt_name}_config.h.cmake.in)")
         set(config_file_out "${CODA_STD_PROJECT_INCLUDE_DIR}/${tgt_munged_dirname}/${tgt_munged_name}_config.h")
+        message(STATUS "Processing config header: ${config_file_template} -> ${config_file_out}")
         configure_file(${config_file_template} ${config_file_out})
         target_include_directories(${tgt_name} PUBLIC "${CMAKE_CURRENT_BINARY_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}")
         #list(APPEND build_interface_headers "${CMAKE_CURRENT_BINARY_DIR}/${config_file_out}")
         #list(APPEND install_interface_headers "${config_file_out}")
+        install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${config_file_out}" DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}/${tgt_munged_dirname}")
     endif()
 
     # Associate headers with target
@@ -234,20 +238,19 @@ function(coda_add_library_impl tgt_name tgt_lang tgt_deps tgt_extra_deps source_
     # Add our output directory to the include path, to pick up 3p headers.
     #target_include_directories("${tgt_name}" ${header_type} "${CMAKE_PREFIX_PATH}/${CODA_STD_PROJECT_INCLUDE_DIR}")
 
-
     # Set up install destinations for binaries
     install(TARGETS "${tgt_name}"
             #EXPORT "${tgt_name}_TARGETS"
             LIBRARY DESTINATION ${CODA_STD_PROJECT_LIB_DIR}
             ARCHIVE DESTINATION ${CODA_STD_PROJECT_LIB_DIR}
-            RUNTIME DESTINATION ${CODA_STD_PROJECT_BIN_DIR}
-    )
+            RUNTIME DESTINATION ${CODA_STD_PROJECT_BIN_DIR})
+
     # Set up install destination for headers
     install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}"
-            DESTINATION ${CODA_STD_PROJECT_INCLUDE_DIR})
-
-    #xxx? Perhaps change the above to:
-    #install(INCLUDES DESTINATION ${CODA_STD_PROJECT_INCLUDE_DIR})
+            DESTINATION "."
+            FILES_MATCHING
+                PATTERN "*.h"
+                PATTERN "*.hpp")
 
     # cannot use exports until all external dependencies have their own exports defined
     #install(EXPORT "${tgt_name}_TARGETS"

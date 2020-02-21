@@ -13,5 +13,6 @@ coda_add_library("${TARGET_NAME}")  # See the definition of this method for deta
 
 if (UNIX)
     # needed to find uuid library
-    target_link_directories("${TARGET_NAME}" INTERFACE "${CMAKE_INSTALL_PREFIX}/${CODA_STD_PROJECT_LIB_DIR}")
+    target_include_directories("${TARGET_NAME}" PUBLIC "${CMAKE_INSTALL_PREFIX}/${CODA_STD_PROJECT_INCLUDE_DIR}")
+    target_link_directories("${TARGET_NAME}" PUBLIC "${CMAKE_INSTALL_PREFIX}/${CODA_STD_PROJECT_LIB_DIR}")
 endif()
