@@ -118,4 +118,4 @@ include(CodaBuild.cmake)
 
 add_subdirectory("modules/drivers")
 add_subdirectory("modules/c++")
-##add_subdirectory("modules/python")
+add_subdirectory("modules/python")

@@ -2,7 +2,7 @@ set(TARGET_NAME "re")
 set(MODULE_DEPS "sys")
 
 # Enable to use std::regex instead of PCRE.
-set(RE_ENABLE_STD_REGEX 0)
+option(RE_ENABLE_STD_REGEX "use std::regex instead of pcre" OFF)
 
 if (NOT RE_ENABLE_STD_REGEX)
     set(MODULE_DEPS "${MODULE_DEPS}" "pcre2-8")

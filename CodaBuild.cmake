@@ -315,3 +315,59 @@ function(coda_add_library tgt_name)
                        "${UNITTEST_DEPS}" "${EXTRA_DEPS}" "${UNITTEST_FILTER}")
     endif()
 endfunction()
+
+
+# coda_add_library_impl() - Add a SWIG Python module to the build
+#
+# tgt_name          - Name of the CMake target to build the module
+# module_name       - Name of the module
+# deps              - List of linkable dependencies for the library
+# input_file        - Source file (.i) from which to generate the SWIG bindings
+function(coda_add_swig_python_module_impl tgt_name module_name deps input_file)
+    set_property(SOURCE ${input_file} PROPERTY CPLUSPLUS ON)
+
+    # determine all of the necessary include dirs from the dependencies
+    set(include_dirs "")
+    foreach(dep ${deps})
+        get_property(dep_interface_include_dirs TARGET ${dep} PROPERTY INTERFACE_INCLUDE_DIRECTORIES)
+        set(include_dirs ${include_dirs} ${dep_interface_include_dirs})
+    endforeach()
+
+    #set(CMAKE_SWIG_FLAGS "${CMAKE_SWIG_FLAGS};-interface;${MODULE_NAME}")
+    set_property(SOURCE ${input_file} PROPERTY SWIG_MODULE_NAME ${module_name})
+    set(CMAKE_SWIG_OUTDIR "${CMAKE_CURRENT_SOURCE_DIR}/source/generated")
+    set(SWIG_OUTFILE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/source/generated")
+
+    swig_add_library(${tgt_name} LANGUAGE python SOURCES ${input_file})
+
+    swig_link_libraries(${tgt_name} "${deps};${Python_LIBRARIES}")
+    set_property(TARGET ${tgt_name} PROPERTY
+        SWIG_INCLUDE_DIRECTORIES "${include_dirs}")
+    set_property(TARGET ${tgt_name} PROPERTY
+        SWIG_GENERATED_INCLUDE_DIRECTORIES "${Python_INCLUDE_DIRS}")
+    set_property(TARGET ${tgt_name} PROPERTY
+        LIBRARY_OUTPUT_NAME ${module_name})
+    install(TARGETS ${tgt_name}
+            DESTINATION "${CODA_PYTHON_SITE_PACKAGES}/coda")
+endfunction()
+
+
+# Add a SWIG Python module and its associated tests to the build.
+#
+#   This is a wrapper function to facilitate calls to the above routines from sub-projects.
+#
+#   To simplify things for callers that don't want to use many of the potential arguments,
+#     this method does not take formal parameters.  Instead, callers should set any of the
+#     following variables to define the library:
+#
+#       MODULE_NAME     Name of the module within Python
+#       MODULE_DEPS     List of dependencies for the library
+#       SWIG_INPUT_FILE Source file (.i) from which to generate the SWIG bindings
+#
+#  The caller can then simply call coda_add_library(target_name)
+#
+function(coda_add_swig_python_module tgt_name)
+    coda_add_swig_python_module_impl("${tgt_name}" "${MODULE_NAME}"
+                                     "${MODULE_DEPS}" "${SWIG_INPUT_FILE}")
+    # TODO add tests
+endfunction()
