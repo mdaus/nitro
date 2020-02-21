@@ -114,7 +114,7 @@ TEST_CASE(TestSplit)
         const types::Range A(5, 10);
         const types::Range splitRange = A.split(5);
         TEST_ASSERT_EQ(splitRange.mNumElements, 5);
-        TEST_ASSERT_EQ(splitRange.mStartElement, 5);
+        TEST_ASSERT_EQ(splitRange.mStartElement, 10);
     }
 
     // Test splitting zero elements
