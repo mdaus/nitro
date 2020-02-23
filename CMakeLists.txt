@@ -3,7 +3,6 @@
 # Author:  Scott A. Colcord
 
 # We use FetchContent, which requires 3.11, in the zlib build
-#   It might be possible to rework if this has to work with older CMakes
 cmake_minimum_required(VERSION 3.11)
 
 project("coda-oss")
@@ -42,6 +41,8 @@ if(NOT CMAKE_BUILD_TYPE)
         "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
 endif()
 
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
 option(BUILD_SHARED_LIBS "Build shared libraries instead of static." OFF)
 if(BUILD_SHARED_LIBS)
     set(CODA_LIBRARY_TYPE "shared")
@@ -63,8 +64,6 @@ list(APPEND CMAKE_PREFIX_PATH "${CMAKE_INSTALL_PREFIX}")
 include(config_tests) # Code to test compiler features
 
 option(CODA_BUILD_TESTS "build tests" ON)
-
-#enable_testing()
 
 # MSVC-specific flags and options.
 if (MSVC)
@@ -100,14 +99,12 @@ endif()
 
 # Unix/Linux specific options
 if (UNIX)
-    # Remove any default settings that we don't want.
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated") #xxx Remove this eventually
-
     add_definitions(
         -D_LARGEFILE_SOURCE
         -D_FILE_OFFSET_BITS=64
     )
     add_compile_options(
+        -Wno-deprecated
         -Wno-unused-value
         -Wno-unused-but-set-variable
         -Wno-misleading-indentation
@@ -116,6 +113,41 @@ endif()
 
 include(CodaBuild.cmake)
 
+find_package(SWIG)
+if (SWIG_FOUND)
+    cmake_policy(SET CMP0078 NEW) # UseSWIG generates standard target names
+    cmake_policy(SET CMP0086 NEW) # UseSWIG honors SWIG_MODULE_NAME via -module
+    include(${SWIG_USE_FILE})
+    option(PYTHON_EXTRA_NATIVE "generate extra native containers with SWIG" ON)
+
+    set(CMAKE_SWIG_FLAGS "")
+    if (PYTHON_EXTRA_NATIVE)
+        list(APPEND CMAKE_SWIG_FLAGS "-extranative")
+    endif()
+    list(APPEND CMAKE_SWIG_FLAGS "-py3")
+else()
+    message(WARNING "SWIG could not be found, so Python modules relying on it will not be built")
+endif()
+
+if (PYTHON_HOME)
+    set(Python_ROOT_DIR ${PYTHON_HOME})
+endif()
+find_package(Python COMPONENTS Interpreter Development NumPy)
+if (Python_FOUND AND Python_Development_FOUND)
+    set(CODA_PYTHON_SITE_PACKAGES
+        "${CODA_STD_PROJECT_LIB_DIR}/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages")
+    if(NOT PYTHON_HOME)
+        message("Python installation found at ${Python_EXECUTABLE}.\n"
+                "Pass the configure option -DPYTHON_HOME=... to override this selection.")
+    endif()
+else()
+    message(WARNING "Python targets will not be built since Python libraries were not found.\n"
+            "Pass the configure option -DPYTHON_HOME=... to help locate an installation.")
+endif()
+
 add_subdirectory("modules/drivers")
+enable_testing()
 add_subdirectory("modules/c++")
-add_subdirectory("modules/python")
+if (SWIG_FOUND AND Python_FOUND AND Python_Development_FOUND)
+    add_subdirectory("modules/python")
+endif()

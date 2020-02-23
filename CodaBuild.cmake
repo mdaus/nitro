@@ -99,7 +99,8 @@ endfunction()
 #                     Each source file is assumed to create a separate executable.
 # deps              - Modules that the tests are dependent upon.
 # filter_list       - Source files to ignore
-function(coda_add_tests module_name dir_name deps extra_deps filter_list)
+# is_unit_test      - Whether test will be run automatically
+function(coda_add_tests module_name dir_name deps extra_deps filter_list is_unit_test)
     # Find all the source files, relative to the module's directory
     file(GLOB_RECURSE local_tests RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" "${dir_name}/*.cpp")
     # Filter out ignored files
@@ -142,6 +143,10 @@ function(coda_add_tests module_name dir_name deps extra_deps filter_list)
 #xxx This should also not be needed; if our target depends on it, we should too.
         if (extra_deps)
             add_dependencies("${test_name}" ${extra_deps})
+        endif()
+
+        if (${is_unit_test})
+            add_test(${test_name} ${test_name})
         endif()
 
         # Install [unit]tests to separate subtrees
@@ -310,9 +315,9 @@ function(coda_add_library tgt_name)
                           "${MODULE_DEPS}" "${EXTRA_DEPS}" "${SOURCE_FILTER}")
     if (CODA_BUILD_TESTS)
         coda_add_tests("${tgt_name}" "${CODA_STD_PROJECT_TESTS_DIR}"
-                       "${TEST_DEPS}" "${EXTRA_DEPS}" "${TEST_FILTER}")
+                       "${TEST_DEPS}" "${EXTRA_DEPS}" "${TEST_FILTER}" FALSE)
         coda_add_tests("${tgt_name}" "${CODA_STD_PROJECT_UNITTESTS_DIR}"
-                       "${UNITTEST_DEPS}" "${EXTRA_DEPS}" "${UNITTEST_FILTER}")
+                       "${UNITTEST_DEPS}" "${EXTRA_DEPS}" "${UNITTEST_FILTER}" TRUE)
     endif()
 endfunction()
 
@@ -322,15 +327,21 @@ endfunction()
 # tgt_name          - Name of the CMake target to build the module
 # module_name       - Name of the module
 # deps              - List of linkable dependencies for the library
+# python_deps       - List of Python module dependencies for the library
 # input_file        - Source file (.i) from which to generate the SWIG bindings
-function(coda_add_swig_python_module_impl tgt_name module_name deps input_file)
+function(coda_add_swig_python_module_impl tgt_name module_name deps python_deps input_file)
     set_property(SOURCE ${input_file} PROPERTY CPLUSPLUS ON)
 
     # determine all of the necessary include dirs from the dependencies
-    set(include_dirs "")
+    set(include_dirs $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/source>)
     foreach(dep ${deps})
         get_property(dep_interface_include_dirs TARGET ${dep} PROPERTY INTERFACE_INCLUDE_DIRECTORIES)
         set(include_dirs ${include_dirs} ${dep_interface_include_dirs})
+    endforeach()
+
+    foreach(dep ${python_deps})
+        get_property(dep_swig_include_dirs TARGET ${dep} PROPERTY SWIG_INCLUDE_DIRECTORIES)
+        set(include_dirs ${include_dirs} ${dep_swig_include_dirs})
     endforeach()
 
     #set(CMAKE_SWIG_FLAGS "${CMAKE_SWIG_FLAGS};-interface;${MODULE_NAME}")
@@ -362,12 +373,13 @@ endfunction()
 #
 #       MODULE_NAME     Name of the module within Python
 #       MODULE_DEPS     List of dependencies for the library
+#       PYTHON_DEPS     List of Python module dependencies for the library
 #       SWIG_INPUT_FILE Source file (.i) from which to generate the SWIG bindings
 #
 #  The caller can then simply call coda_add_library(target_name)
 #
 function(coda_add_swig_python_module tgt_name)
     coda_add_swig_python_module_impl("${tgt_name}" "${MODULE_NAME}"
-                                     "${MODULE_DEPS}" "${SWIG_INPUT_FILE}")
+                                     "${MODULE_DEPS}" "${PYTHON_DEPS}" "${SWIG_INPUT_FILE}")
     # TODO add tests
 endfunction()
