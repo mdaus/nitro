@@ -1,9 +1,8 @@
 set(TARGET_NAME "math.poly")
 set(MODULE_DEPS "sys" "math.linear")
 
-if (HAVE_BOOST) #xxx Review this test
+if (Boost_serialization_FOUND)
     set(UNITTEST_DEPS "serialize")
-    set(UNITTEST_USELIB "BOOST_SERIALIZATION")
 else()
     set(UNITTEST_FILTER "test_1d_poly_serialize.cpp" "test_2d_poly_serialize.cpp")
 endif()

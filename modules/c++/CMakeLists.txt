@@ -2,9 +2,10 @@
 set(TARGET_LANG "c++")
 
 add_subdirectory("config")
+add_subdirectory("serialize")
 add_subdirectory("except")
-add_subdirectory("str")
 add_subdirectory("sys")
+add_subdirectory("str")
 add_subdirectory("mem")
 add_subdirectory("re")  # Can optionally use STD_REGEX
 add_subdirectory("io")
@@ -28,4 +29,3 @@ add_subdirectory("numpyutils")
 
 # These ones aren't done yet.
 ## add_subdirectory("dbi")
-## add_subdirectory("serialize")

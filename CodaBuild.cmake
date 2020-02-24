@@ -122,7 +122,19 @@ function(coda_add_tests module_name dir_name deps extra_deps filter_list is_unit
 #       target_include_directories(${test_name}  PUBLIC "${CODA_STD_PROJECT_INCLUDE_DIR}")
         # Automatically depend on the parent module, plus any others that were specified
         #message(STATUS "target_link_libraries(${test_name} ${module_name} ${deps})")
-        target_link_libraries("${test_name}" ${module_name} ${deps})
+        list(APPEND deps "${module_name}")
+        foreach(dep ${deps})
+            if (NOT TARGET ${dep})
+                target_link_libraries("${test_name}" PUBLIC ${dep})
+            else()
+                get_property(lib_type TARGET ${dep} PROPERTY TYPE)
+                if (NOT ${lib_type} STREQUAL "INTERFACE_LIBRARY")
+                    target_link_libraries("${test_name}" PUBLIC ${dep})
+                else()
+                    target_link_libraries("${test_name}" INTERFACE ${dep})
+                endif()
+            endif()
+        endforeach()
 
 #xxx This should also not be needed; if our target depends on it, we should too.
         if (extra_deps)
@@ -192,7 +204,7 @@ function(coda_add_library_impl tgt_name tgt_lang tgt_deps tgt_extra_deps source_
         set(config_file_out "${CODA_STD_PROJECT_INCLUDE_DIR}/${tgt_munged_dirname}/${tgt_munged_name}_config.h")
         message(STATUS "Processing config header: ${config_file_template} -> ${config_file_out}")
         configure_file(${config_file_template} ${config_file_out})
-        target_include_directories(${tgt_name} PUBLIC "${CMAKE_CURRENT_BINARY_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}")
+        target_include_directories(${tgt_name} ${header_type} "${CMAKE_CURRENT_BINARY_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}")
         #list(APPEND build_interface_headers "${CMAKE_CURRENT_BINARY_DIR}/${config_file_out}")
         #list(APPEND install_interface_headers "${config_file_out}")
         install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${config_file_out}" DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}/${tgt_munged_dirname}")
@@ -224,9 +236,6 @@ function(coda_add_library_impl tgt_name tgt_lang tgt_deps tgt_extra_deps source_
     target_include_directories(${tgt_name} ${header_type}
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}>
         ${CMAKE_INSTALL_PREFIX}/${CODA_STD_PROJECT_INCLUDE_DIR})
-
-    # Add our output directory to the include path, to pick up 3p headers.
-    #target_include_directories("${tgt_name}" ${header_type} "${CMAKE_PREFIX_PATH}/${CODA_STD_PROJECT_INCLUDE_DIR}")
 
     # Set up install destinations for binaries
     install(TARGETS "${tgt_name}"
@@ -262,8 +271,6 @@ function(coda_add_library_impl tgt_name tgt_lang tgt_deps tgt_extra_deps source_
     include(CMakeFindDependencyMacro)
     find_dependency(mydepend 1.0) # Version#
     include("${CMAKE_CURRENT_LIST_DIR}/${tgt_munged_name}_TARGETS.cmake")
-
-    #xxx Note that it will probably also necessary to add the $<INSTALL_INTERFACE:include> to the target include dirs.
 
     #xxx Also, add_library("${tgt_name}::${tgt_name}" ALIAS ${tgt_name})
 #]]
@@ -315,8 +322,6 @@ endfunction()
 # python_deps       - List of Python module dependencies for the library
 # input_file        - Source file (.i) from which to generate the SWIG bindings
 function(coda_add_swig_python_module_impl tgt_name module_name deps python_deps input_file)
-    set_property(SOURCE ${input_file} PROPERTY CPLUSPLUS ON)
-
     # determine all of the necessary include dirs from the dependencies
     set(include_dirs $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/source>)
     foreach(dep ${deps})
@@ -329,7 +334,7 @@ function(coda_add_swig_python_module_impl tgt_name module_name deps python_deps 
         set(include_dirs ${include_dirs} ${dep_swig_include_dirs})
     endforeach()
 
-    #set(CMAKE_SWIG_FLAGS "${CMAKE_SWIG_FLAGS};-interface;${MODULE_NAME}")
+    set_property(SOURCE ${input_file} PROPERTY CPLUSPLUS ON)
     set_property(SOURCE ${input_file} PROPERTY SWIG_MODULE_NAME ${module_name})
     set(CMAKE_SWIG_OUTDIR "${CMAKE_CURRENT_SOURCE_DIR}/source/generated")
     set(SWIG_OUTFILE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/source/generated")

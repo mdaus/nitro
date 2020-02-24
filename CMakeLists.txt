@@ -113,6 +113,11 @@ endif()
 
 include(CodaBuild.cmake)
 
+if (BOOST_HOME)
+    set(BOOST_ROOT ${BOOST_HOME})
+endif()
+find_package(Boost COMPONENTS serialization)
+
 find_package(SWIG)
 if (SWIG_FOUND)
     cmake_policy(SET CMP0078 NEW) # UseSWIG generates standard target names
