@@ -9,18 +9,16 @@ if (USE_LIBJPEG_TURBO)
     # workaround for bug in libjpeg-turbo CMakeLists.txt
     set(CMAKE_INSTALL_DEFAULT_DATAROOTDIR "share")
     set(CMAKE_INSTALL_DEFAULT_DOCDIR "${CMAKE_INSTALL_DEFAULT_DATAROOTDIR}/doc")
-
+    set(EXTRA_CMAKE_ARGS -DWITH_JPEG8=ON -DWITH_TURBOJPEG=OFF)
     coda_add_driver("${TARGET_NAME}"
         "libjpeg-turbo-2.0.4.tar.gz"
         "SHA256=33DD8547EFD5543639E890EFBF2EF52D5A21DF81FAF41BB940657AF916A23406"
-        TRUE
     )
 else()
     if (NOT WIN32)
         coda_add_driver("${TARGET_NAME}"
             "jpegsrc.v9.tar"
             "SHA256=650de9b9c73b627c365c2c1617436bfdef47decddc1c6f7e006bd7655c4f8111"
-            FALSE
         )
     else()
         message(FATAL_ERROR "libjpeg not supported on Windows, use libjpeg-turbo instead")

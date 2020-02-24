@@ -1,11 +1,10 @@
 # Some of our code depends on code from a 'minizip' project that is distributed
 #   with zlib.  However, we don't want the whole project; just a couple of
 #   files, bundled into a library.
-set("OUTPUT_NAME"		"minizip")
-set("TARGET_NAME"		"${CMAKE_PROJECT_NAME}_${OUTPUT_NAME}")
-set("MAINTAINER"		"jmrandol@users-xourceforge.net")
-set("TARGET_VERSION"	"")
-set("MODULE_DEPS"		"zlib")
+set(OUTPUT_NAME "minizip")
+set(TARGET_NAME "${CMAKE_PROJECT_NAME}_${OUTPUT_NAME}")
+set(MODULE_DEPS "z")
+set(EXTRA_DEPS "coda-oss_ZLIB")
 
 # The 3P's own build process makes an executable, which we can't re-use.
 # Set up a small custom project to build a library containing the subset
@@ -31,7 +30,7 @@ target_include_directories("${TARGET_NAME}" PUBLIC
 	"${include_dir}"
 	$<BUILD_INTERFACE:${coda-oss_zlib_SOURCE_DIR}>
 	$<BUILD_INTERFACE:${coda-oss_zlib_BINARY_DIR}>
-	$<INSTALL_INTERFACE:include>)
+	$<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/include>)
 
 install(TARGETS "${TARGET_NAME}"
 	LIBRARY DESTINATION ${CODA_STD_PROJECT_LIB_DIR}

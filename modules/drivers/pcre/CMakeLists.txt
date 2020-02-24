@@ -1,16 +1,16 @@
 set(TARGET_NAME "PCRE")
 
-option(PCRE2_BUILD_PCRE2GREP "build pcre2grep utility" OFF)
-option(PCRE2_BUILD_TESTS "build pcre2 tests" OFF)
-option(PCRE2_SUPPORT_LIBBZ2 "enable pcre2 support for libbz2" OFF)
-option(PCRE2_SUPPORT_LIBZ "enable pcre2 support for libz" OFF)
-option(PCRE2_SUPPORT_LIBEDIT "enable pcre2 support for libedit" OFF)
-option(PCRE2_SUPPORT_LIBREADLINE "enable pcre2 support for libreadline" OFF)
+set(EXTRA_CMAKE_ARGS
+    -DPCRE2_BUILD_PCRE2GREP=OFF
+    -DPCRE2_BUILD_TESTS=OFF
+    -DPCRE2_SUPPORT_LIBBZ2=OFF
+    -DPCRE2_SUPPORT_LIBZ=OFF
+    -DPCRE2_SUPPORT_LIBEDIT=OFF
+    -DPCRE2_SUPPORT_LIBREADLINE=OFF)
 
 coda_add_driver("${TARGET_NAME}"
     "pcre2-10.34.tar.gz"
     "SHA256=DA6ABA7BA2509E918E41F4F744A59FA41A2425C59A298A232E7FE85691E00379"
-    TRUE
 )
 
 # Note that PCRE doesn't export targets for external use.  So dependent projects

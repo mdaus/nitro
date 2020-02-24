@@ -4,7 +4,6 @@
 # file_list     - Input list of files (possibly with paths)
 # filter_list   - Input list of files to filter out
 #                   (must be bare filenames; no paths)
-#xxx Should this be a macro instead of a function?
 function(filter_files dest_name file_list filter_list)
     foreach(test_src ${file_list})
         get_filename_component(test_src_name ${test_src} NAME)
@@ -22,11 +21,6 @@ endfunction()
 # driver_url        - Location of the driver.  This can be a path relative to
 #                     ${CMAKE_CURRENT_SOURCE_DIR}, or a URL.
 # url_hash          - hash signature in the form hashtype=hashvalue
-# import_targets    - If the 3P uses CMake, should its targets be brought into this one?
-#                     If this is TRUE, the caller will need to use the targets and
-#                     variables from the 3P's CMakeLists.txt to set dependencies, etc.
-#                     If this is FALSE, this will create a target with the name
-#                     ${CMAKE_PROJECT_NAME}_${driver_name}.
 #
 #  The 3P's source and build directories will be stored in
 #       ${${target_name_lc}_SOURCE_DIR}, and
@@ -35,7 +29,7 @@ endfunction()
 #       where ${target_name_lc} is the lower-cased target name.
 include(FetchContent) # Requires CMake 3.11+
 include(ExternalProject)
-function(coda_add_driver driver_name driver_file driver_hash import_targets)
+function(coda_add_driver driver_name driver_file driver_hash)
     set(target_name ${CMAKE_PROJECT_NAME}_${driver_name})
     # Use 'FetchContent' to download and unpack the files.  Set it up here.
     #xxx This URL could be changed to fetch from the official download site if desired.
@@ -52,28 +46,19 @@ function(coda_add_driver driver_name driver_file driver_hash import_targets)
         # Now (at configure time) unpack the content.
         FetchContent_Populate(${target_name})
         # Remember where we put stuff
-        set("${target_name_lc}_SOURCE_DIR" "${${target_name_lc}_SOURCE_DIR}" CACHE INTERNAL
-            "source directory for ${target_name_lc}")
-        set("${target_name_lc}_BINARY_DIR" "${${target_name_lc}_BINARY_DIR}" CACHE INTERNAL
-            "source directory for ${target_name_lc}")
+        set("${target_name_lc}_SOURCE_DIR" "${${target_name_lc}_SOURCE_DIR}"
+            CACHE INTERNAL "source directory for ${target_name_lc}")
+        set("${target_name_lc}_BINARY_DIR" "${${target_name_lc}_BINARY_DIR}"
+            CACHE INTERNAL "source directory for ${target_name_lc}")
         # Queue a build for build-time.
-        #xxx Should we change the build directory to match that of other projects?
         if (EXISTS "${${target_name_lc}_SOURCE_DIR}/CMakeLists.txt")
             # Found a CMakeLists.txt.  Configure with CMake.
-            if (import_targets)
-                # Bring the external project's targets into our own configuration process.
-                add_subdirectory(
-                    ${${target_name_lc}_SOURCE_DIR}
-                    ${${target_name_lc}_BINARY_DIR}
-                    EXCLUDE_FROM_ALL)
-            else()
-                # Build as an external target
-                ExternalProject_Add(${target_name}
-                    SOURCE_DIR "${${target_name_lc}_SOURCE_DIR}"
-                    INSTALL_DIR "${CMAKE_INSTALL_PREFIX}"
-                    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
-                )
-            endif()
+            ExternalProject_Add(${target_name}
+                SOURCE_DIR "${${target_name_lc}_SOURCE_DIR}"
+                BINARY_DIR "${${target_name_lc}_BINARY_DIR}"
+                PREFIX "${CMAKE_INSTALL_PREFIX}"
+                CMAKE_ARGS "-DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>" "-DCMAKE_BUILD_TYPE=Release" ${EXTRA_CMAKE_ARGS}
+            )
         elseif (EXISTS "${${target_name_lc}_SOURCE_DIR}/configure")
             # No CMakeLists.txt, but found a configure script.
             ExternalProject_Add(${target_name}
@@ -84,8 +69,7 @@ function(coda_add_driver driver_name driver_file driver_hash import_targets)
                 INSTALL_COMMAND $(MAKE) install
             )
         else()
-            message("Driver ${driver_name} unpacked to ${${target_name_lc}_SOURCE_DIR}, but no configuration method foun
-d.")
+            message("Driver ${driver_name} unpacked to ${${target_name_lc}_SOURCE_DIR}, but no configuration method found.")
         endif()
     endif()
 endfunction()
@@ -220,6 +204,7 @@ function(coda_add_library_impl tgt_name tgt_lang tgt_deps tgt_extra_deps source_
     #    $<INSTALL_INTERFACE:${install_interface_headers}>)
 
     if (NOT lib_type STREQUAL "INTERFACE")
+        target_link_directories(${tgt_name} PUBLIC "${CMAKE_INSTALL_PREFIX}/${CODA_STD_PROJECT_LIB_DIR}")
         if (tgt_lang)
             set_target_properties("${tgt_name}" PROPERTIES OUTPUT_NAME "${tgt_name}-${tgt_lang}")
         endif()
@@ -238,7 +223,7 @@ function(coda_add_library_impl tgt_name tgt_lang tgt_deps tgt_extra_deps source_
     # Add include directories
     target_include_directories(${tgt_name} ${header_type}
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}>
-        $<INSTALL_INTERFACE:${CODA_STD_PROJECT_INCLUDE_DIR}>)
+        ${CMAKE_INSTALL_PREFIX}/${CODA_STD_PROJECT_INCLUDE_DIR})
 
     # Add our output directory to the include path, to pick up 3p headers.
     #target_include_directories("${tgt_name}" ${header_type} "${CMAKE_PREFIX_PATH}/${CODA_STD_PROJECT_INCLUDE_DIR}")

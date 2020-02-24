@@ -1,9 +1,7 @@
 set(TARGET_NAME "net")
 set(MODULE_DEPS "logging" "re" "io" "mem")
-#xxx set(USELIB "NSL" "SOCKET")
-#xxx set(USE "CURL")
-set("TEST_FILTER" "AckMulticastSender.cpp" "AckMulticastSubscriber.cpp" "MulticastSender.cpp"
-                  "MulticastSubscriber.cpp" "SerializableTestClient.cpp")
+set(TEST_FILTER "AckMulticastSender.cpp" "AckMulticastSubscriber.cpp" "MulticastSender.cpp"
+                "MulticastSubscriber.cpp" "SerializableTestClient.cpp")
 
 if (CURL_FOUND)
     set("MODULE_DEPS" "${MODULE_DEPS}" "CURL::libcurl")  # From FindCURL

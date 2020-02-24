@@ -54,7 +54,4 @@ Currently, the scripts reduce the compile warning level to reduce distractions w
 TODO list:
 * Test other build configurations.  This should just require changing $build_type in config_coda.csh, but there will no doubt be bugs and rough edges.
 * Test the shared library build.  This should just require changing $build_lib_type in config_coda.csh, but there will no doubt be bugs and rough edges.
-* The Python modules are not currently built.
-# The SWIG bindings are not currently built.
 * There will need to be many configuration options added to match the waf options.
-* The config_coda.csh script needs error checking.

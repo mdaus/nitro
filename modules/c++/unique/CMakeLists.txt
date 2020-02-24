@@ -10,9 +10,3 @@ elseif (UNIX)
 endif()
 
 coda_add_library("${TARGET_NAME}")  # See the definition of this method for details on the variables it looks at.
-
-if (UNIX)
-    # needed to find uuid library
-    target_include_directories("${TARGET_NAME}" PUBLIC "${CMAKE_INSTALL_PREFIX}/${CODA_STD_PROJECT_INCLUDE_DIR}")
-    target_link_directories("${TARGET_NAME}" PUBLIC "${CMAKE_INSTALL_PREFIX}/${CODA_STD_PROJECT_LIB_DIR}")
-endif()

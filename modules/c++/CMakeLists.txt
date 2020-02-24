@@ -1,7 +1,6 @@
 # All directories under here contain C++ source
 set(TARGET_LANG "c++")
 
-#xxxTODO: Replace with a glob from all subdirectories once they're all working
 add_subdirectory("config")
 add_subdirectory("except")
 add_subdirectory("str")
@@ -19,6 +18,7 @@ add_subdirectory("mt")
 add_subdirectory("logging")
 add_subdirectory("xml.lite")
 add_subdirectory("net")
+add_subdirectory("net.ssl")
 add_subdirectory("plugin")
 add_subdirectory("tiff")
 add_subdirectory("polygon")
@@ -28,5 +28,4 @@ add_subdirectory("numpyutils")
 
 # These ones aren't done yet.
 ## add_subdirectory("dbi")
-## add_subdirectory("net.ssl")
 ## add_subdirectory("serialize")
