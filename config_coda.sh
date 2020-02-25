@@ -1,6 +1,6 @@
 #!/bin/sh
 
-build_type="RelWithDebInfo"  # Debug|Release|RelWithDebInfo|MinSizeRel
+build_type="Release"  # Debug|Release|RelWithDebInfo|MinSizeRel
 build_lib_type="Static"      # Static|Shared
 
 builddir_basename="target"
@@ -34,7 +34,7 @@ cd -
 build_script_name="build_coda.sh"
 echo '#\!/bin/sh' > "${build_script_name}"
 echo "cd ${build_root}" >> "${build_script_name}"
-echo 'cmake --build . "$@"' >> "${build_script_name}"
+echo 'cmake --build . --config Release "$@"' >> "${build_script_name}"
 echo 'cd -' >> "${build_script_name}"
 chmod u+x "${build_script_name}"
 echo "CODA configuration ${config_name} set."

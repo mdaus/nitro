@@ -20,7 +20,7 @@ endfunction()
 # driver_name       - Name of the driver
 # driver_url        - Location of the driver.  This can be a path relative to
 #                     ${CMAKE_CURRENT_SOURCE_DIR}, or a URL.
-# url_hash          - hash signature in the form hashtype=hashvalue
+# driver_hash       - hash signature in the form hashtype=hashvalue
 #
 #  The 3P's source and build directories will be stored in
 #       ${${target_name_lc}_SOURCE_DIR}, and
@@ -32,8 +32,6 @@ include(ExternalProject)
 function(coda_add_driver driver_name driver_file driver_hash)
     set(target_name ${CMAKE_PROJECT_NAME}_${driver_name})
     # Use 'FetchContent' to download and unpack the files.  Set it up here.
-    #xxx This URL could be changed to fetch from the official download site if desired.
-    #xxx This function could be improved to allow an absolute path.
     FetchContent_Declare(${target_name}
         URL "${CMAKE_CURRENT_SOURCE_DIR}/${driver_file}"
         URL_HASH ${driver_hash}
@@ -52,13 +50,35 @@ function(coda_add_driver driver_name driver_file driver_hash)
             CACHE INTERNAL "source directory for ${target_name_lc}")
         # Queue a build for build-time.
         if (EXISTS "${${target_name_lc}_SOURCE_DIR}/CMakeLists.txt")
-            # Found a CMakeLists.txt.  Configure with CMake.
-            ExternalProject_Add(${target_name}
-                SOURCE_DIR "${${target_name_lc}_SOURCE_DIR}"
-                BINARY_DIR "${${target_name_lc}_BINARY_DIR}"
-                PREFIX "${CMAKE_INSTALL_PREFIX}"
-                CMAKE_ARGS "-DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>" "-DCMAKE_BUILD_TYPE=Release" ${EXTRA_CMAKE_ARGS}
-            )
+            # Found CMakeLists.txt
+            set(target_cmake_args
+                "-DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>"
+                "-DBUILD_SHARED_LIBS:BOOL=${BUILD_SHARED_LIBS}"
+                ${EXTRA_CMAKE_ARGS})
+            if (MSVC)
+                # For MSVC, ExternalProject_Add needs custom install command to
+                # properly set CMAKE_BUILD_TYPE
+                ExternalProject_Add(${target_name}
+                    SOURCE_DIR "${${target_name_lc}_SOURCE_DIR}"
+                    BINARY_DIR "${${target_name_lc}_BINARY_DIR}"
+                    PREFIX "${CMAKE_INSTALL_PREFIX}"
+                    CMAKE_ARGS ${target_cmake_args}
+                    BUILD_COMMAND ""
+                    INSTALL_COMMAND ${CMAKE_COMMAND} --build .
+                        --config ${CMAKE_BUILD_TYPE}
+                        --target install
+                )
+            else()
+                list(APPEND target_cmake_args
+                    "-DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}"
+                )
+                ExternalProject_Add(${target_name}
+                    SOURCE_DIR "${${target_name_lc}_SOURCE_DIR}"
+                    BINARY_DIR "${${target_name_lc}_BINARY_DIR}"
+                    PREFIX "${CMAKE_INSTALL_PREFIX}"
+                    CMAKE_ARGS ${target_cmake_args}
+                )
+            endif()
         elseif (EXISTS "${${target_name_lc}_SOURCE_DIR}/configure")
             # No CMakeLists.txt, but found a configure script.
             ExternalProject_Add(${target_name}
@@ -69,7 +89,7 @@ function(coda_add_driver driver_name driver_file driver_hash)
                 INSTALL_COMMAND $(MAKE) install
             )
         else()
-            message("Driver ${driver_name} unpacked to ${${target_name_lc}_SOURCE_DIR}, but no configuration method found.")
+            message(WARNING "Driver ${driver_name} unpacked to ${${target_name_lc}_SOURCE_DIR}, but no configuration method found.")
         endif()
     endif()
 endfunction()
@@ -125,8 +145,11 @@ function(coda_add_tests module_name dir_name deps extra_deps filter_list is_unit
         list(APPEND deps "${module_name}")
         foreach(dep ${deps})
             if (NOT TARGET ${dep})
+                # dep must be an external library
                 target_link_libraries("${test_name}" PUBLIC ${dep})
             else()
+                get_property(dep_includes TARGET ${dep} PROPERTY INTERFACE_INCLUDE_DIRECTORIES)
+                target_include_directories("${test_name}" PUBLIC ${dep_includes})
                 get_property(lib_type TARGET ${dep} PROPERTY TYPE)
                 if (NOT ${lib_type} STREQUAL "INTERFACE_LIBRARY")
                     target_link_libraries("${test_name}" PUBLIC ${dep})

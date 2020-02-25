@@ -1,5 +1,5 @@
 set(TARGET_NAME "zip")
-set(MODULE_DEPS "io" "z" "coda-oss_minizip")
+set(MODULE_DEPS "io" ${LIBZ_LIBRARY} "coda-oss_minizip")
 
 coda_add_library("${TARGET_NAME}")  # See the definition of this method for details on the variables it looks at.
 

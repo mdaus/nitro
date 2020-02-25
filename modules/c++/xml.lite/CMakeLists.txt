@@ -9,7 +9,7 @@ set("USE_${CODA_XML_LAYER}" TRUE)
 
 if (USE_XercesC)
     set(EXTRA_DEPS "coda-oss_XercesC")
-    list(APPEND MODULE_DEPS "xerces-c")
+    list(APPEND MODULE_DEPS ${XERCESC_LIBRARY})
 endif()
 
 coda_add_library("${TARGET_NAME}")  # See the definition of this method for details on the variables it looks at.

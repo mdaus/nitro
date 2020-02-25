@@ -35,11 +35,11 @@ if(NOT CODA_BUILD_BITSIZE)
     set_property(CACHE CODA_BUILD_BITSIZE PROPERTY STRINGS "64" "32")
 endif()
 
-if(NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "Select Build Type" FORCE)
-    set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS
-        "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
-endif()
+#if(NOT CMAKE_BUILD_TYPE)
+#    set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "Select Build Type" FORCE)
+#    set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS
+#        "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
+#endif()
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
