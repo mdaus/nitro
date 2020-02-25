@@ -238,8 +238,6 @@ function(coda_add_library_impl tgt_name tgt_lang tgt_deps tgt_extra_deps source_
     #    $<BUILD_INTERFACE:${build_interface_headers}>
     #    $<INSTALL_INTERFACE:${install_interface_headers}>)
 
-    link_directories(${CMAKE_INSTALL_PREFIX}/${CODA_STD_PROJECT_LIB_DIR})
-
     if (NOT lib_type STREQUAL "INTERFACE")
         if (tgt_lang)
             set_target_properties("${tgt_name}" PROPERTIES OUTPUT_NAME "${tgt_name}-${tgt_lang}")
@@ -346,16 +344,26 @@ endfunction()
 # python_deps       - List of Python module dependencies for the library
 # input_file        - Source file (.i) from which to generate the SWIG bindings
 function(coda_add_swig_python_module_impl tgt_name module_name deps python_deps input_file)
-    # determine all of the necessary include dirs from the dependencies
+    # determine all of the necessary include dirs and link libs from the dependencies
     set(include_dirs $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/source>)
+    set(libs "")
     foreach(dep ${deps})
         get_property(dep_interface_include_dirs TARGET ${dep} PROPERTY INTERFACE_INCLUDE_DIRECTORIES)
-        set(include_dirs ${include_dirs} ${dep_interface_include_dirs})
-    endforeach()
+        list(APPEND include_dirs ${dep_interface_include_dirs})
 
+        list(APPEND libs ${dep})
+        # get any transitive dependencies
+        if (TARGET ${dep})
+            get_property(dep_interface_link_libs TARGET ${dep} PROPERTY INTERFACE_LINK_LIBRARIES)
+            list(APPEND libs ${dep_interface_link_libs})
+        endif()
+    endforeach()
+    list(APPEND libs ${Python_LIBRARIES})
+
+    # get SWIG include directories from the Python dependencies
     foreach(dep ${python_deps})
         get_property(dep_swig_include_dirs TARGET ${dep} PROPERTY SWIG_INCLUDE_DIRECTORIES)
-        set(include_dirs ${include_dirs} ${dep_swig_include_dirs})
+        list(APPEND include_dirs ${dep_swig_include_dirs})
     endforeach()
 
     set_property(SOURCE ${input_file} PROPERTY CPLUSPLUS ON)
@@ -365,7 +373,7 @@ function(coda_add_swig_python_module_impl tgt_name module_name deps python_deps 
 
     swig_add_library(${tgt_name} LANGUAGE python SOURCES ${input_file})
 
-    swig_link_libraries(${tgt_name} "${deps};${Python_LIBRARIES}")
+    swig_link_libraries(${tgt_name} "${libs}")
     set_property(TARGET ${tgt_name} PROPERTY
         SWIG_INCLUDE_DIRECTORIES "${include_dirs}")
     set_property(TARGET ${tgt_name} PROPERTY

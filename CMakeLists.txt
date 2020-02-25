@@ -64,6 +64,9 @@ list(APPEND CMAKE_PREFIX_PATH "${CMAKE_INSTALL_PREFIX}")
 include(config_tests) # Code to test compiler features
 
 option(CODA_BUILD_TESTS "build tests" ON)
+if (CODA_BUILD_TESTS)
+    enable_testing()
+endif()
 
 # MSVC-specific flags and options.
 if (MSVC)
@@ -113,50 +116,21 @@ endif()
 
 include(CodaBuild.cmake)
 
-if (BOOST_HOME)
-    set(BOOST_ROOT ${BOOST_HOME})
-endif()
-find_package(Boost COMPONENTS serialization)
+add_subdirectory("modules/drivers")
 
-find_package(SWIG)
-if (SWIG_FOUND)
-    if (${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.13")
-        cmake_policy(SET CMP0078 NEW) # UseSWIG generates standard target names
-    endif()
-    if (${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.14")
-        cmake_policy(SET CMP0086 NEW) # UseSWIG honors SWIG_MODULE_NAME via -module
-    endif()
-    include(${SWIG_USE_FILE})
+# let internal modules find the installed external dependencies
+link_directories(${CMAKE_INSTALL_PREFIX}/${CODA_STD_PROJECT_LIB_DIR})
+include_directories(${CMAKE_INSTALL_PREFIX}/${CODA_STD_PROJECT_INCLUDE_DIR})
+
+add_subdirectory("modules/c++")
+if (SWIG_FOUND AND Python_FOUND AND Python_Development_FOUND)
     option(PYTHON_EXTRA_NATIVE "generate extra native containers with SWIG" ON)
-
     set(CMAKE_SWIG_FLAGS "")
     if (PYTHON_EXTRA_NATIVE)
         list(APPEND CMAKE_SWIG_FLAGS "-extranative")
     endif()
-    list(APPEND CMAKE_SWIG_FLAGS "-py3")
-else()
-    message(WARNING "SWIG could not be found, so Python modules relying on it will not be built")
-endif()
-
-if (PYTHON_HOME)
-    set(Python_ROOT_DIR ${PYTHON_HOME})
-endif()
-find_package(Python COMPONENTS Interpreter Development NumPy)
-if (Python_FOUND AND Python_Development_FOUND)
-    set(CODA_PYTHON_SITE_PACKAGES
-        "${CODA_STD_PROJECT_LIB_DIR}/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages")
-    if(NOT PYTHON_HOME)
-        message("Python installation found at ${Python_EXECUTABLE}.\n"
-                "Pass the configure option -DPYTHON_HOME=... to override this selection.")
+    if (Python_VERSION_MAJOR GREATER_EQUAL 3)
+        list(APPEND CMAKE_SWIG_FLAGS "-py3")
     endif()
-else()
-    message(WARNING "Python targets will not be built since Python libraries were not found.\n"
-            "Pass the configure option -DPYTHON_HOME=... to help locate an installation.")
-endif()
-
-add_subdirectory("modules/drivers")
-enable_testing()
-add_subdirectory("modules/c++")
-if (SWIG_FOUND AND Python_FOUND AND Python_Development_FOUND)
     add_subdirectory("modules/python")
 endif()

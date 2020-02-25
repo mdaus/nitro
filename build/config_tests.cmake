@@ -1,4 +1,4 @@
-include(CheckIncludeFiles)
+include(CheckIncludeFile)
 include(CheckTypeSize)
 include(CheckSymbolExists)
 include(CheckLibraryExists)
@@ -21,40 +21,40 @@ if (${CMAKE_VERSION} VERSION_LESS "3.12.0")
 endif()
 
 
-#include(FindZLIB)
-
 # Configure compiler checks.
 # These work in conjunction with the *_config.h.cmake.in files in the
 #   various projects' include directories.
-check_include_files("pthread.h"						HAVE_PTHREAD_H)
-check_include_files("execinfo.h"					HAVE_EXECINFO_H)
-check_symbol_exists("clock_gettime"		"time.h"	HAVE_CLOCK_GETTIME)
+check_include_file("pthread.h" HAVE_PTHREAD_H)
+check_include_file("execinfo.h" HAVE_EXECINFO_H)
+check_symbol_exists("clock_gettime" "time.h" HAVE_CLOCK_GETTIME)
 if (NOT HAVE_CLOCK_GETTIME) # On old systems this was in librt, not libc
-	unset("HAVE_CLOCK_GETTIME" CACHE) # check_xxx_exists set CACHE variables, which cannot be re-used without being unset.
-	check_library_exists(rt clock_gettime "time.h" 	HAVE_CLOCK_GETTIME)
-	if (HAVE_CLOCK_GETTIME) # Record the necessary extra link library
-		set(CLOCK_GETTIME_EXTRALIBS "rt" CACHE INTERNAL "")
-	endif()
+    unset("HAVE_CLOCK_GETTIME" CACHE) # check_xxx_exists set CACHE variables, which cannot be re-used without being unset.
+    check_library_exists(rt clock_gettime "time.h" HAVE_CLOCK_GETTIME)
+    if (HAVE_CLOCK_GETTIME) # Record the necessary extra link library
+        set(CLOCK_GETTIME_EXTRALIBS "rt" CACHE INTERNAL "")
+    endif()
 endif()
-check_include_files("atomic.h"						HAVE_ATOMIC_H)
-check_include_files("sys/time.h"					HAVE_SYS_TIME_H)
-check_symbol_exists("localtime_r"		"time.h"	HAVE_LOCALTIME_R)
-check_symbol_exists("gmtime_r"			"time.h"	HAVE_GMTIME_R)
-check_symbol_exists("setenv"			"stdlib.h"	HAVE_SETENV)
-check_symbol_exists("posix_memalign"	"stdlib.h"	HAVE_POSIX_MEMALIGN)
-check_symbol_exists("memalign"			"stdlib.h"	HAVE_MEMALIGN)
-test_big_endian(									BIGENDIAN)
-check_type_size(	"size_t"						SIZEOF_SIZE_T)
+check_include_file("atomic.h" HAVE_ATOMIC_H)
+check_include_file("sys/time.h" HAVE_SYS_TIME_H)
+check_symbol_exists("localtime_r" "time.h" HAVE_LOCALTIME_R)
+check_symbol_exists("gmtime_r" "time.h" HAVE_GMTIME_R)
+check_symbol_exists("setenv" "stdlib.h" HAVE_SETENV)
+check_symbol_exists("posix_memalign" "stdlib.h" HAVE_POSIX_MEMALIGN)
+check_symbol_exists("memalign" "stdlib.h" HAVE_MEMALIGN)
+test_big_endian(BIGENDIAN)
+check_type_size("size_t" SIZEOF_SIZE_T)
 
-#xxxTODO: Test this
-find_package(Boost)
+if (BOOST_HOME)
+    set(BOOST_ROOT ${BOOST_HOME})
+endif()
+find_package(Boost COMPONENTS serialization)
 
 set(THREADS_PREFER_PTHREAD_FLAG TRUE)
 find_package(Threads)
 
 find_package(CURL)
 #xxx No longer needed?
-#check_library_exists("curl" "curl_global_init" "" 	HAVE_CURL)  #xxx Need 'curl/curl.h'?
+#check_library_exists("curl" "curl_global_init" "" HAVE_CURL)  #xxx Need 'curl/curl.h'?
 
 #find_package(ZLIB::ZLIB)
 
@@ -64,10 +64,58 @@ find_package(CURL)
 # corresponding defines
 #xxx This probably isn't the right way to test c++11; see cmake-compile-features()
 check_cxx_source_compiles(
-    "int main() { constexpr void* FOO = nullptr; }"	__CODA_CPP11)
+    "int main() { constexpr void* FOO = nullptr; }" __CODA_CPP11)
 
-check_symbol_exists("isnan"				"math.h"	HAVE_ISNAN)
+check_symbol_exists("isnan" "math.h" HAVE_ISNAN)
 # The auto-generated test code doesn't work for overloaded functions
 check_cxx_source_compiles(
-	"#include <cmath>\n    int main() { return std::isnan(0.0); }"
-													HAVE_STD_ISNAN)
+    "#include <cmath>
+    int main() { return std::isnan(0.0); }
+" HAVE_STD_ISNAN)
+
+check_cxx_source_compiles("
+    int __attribute__((noinline)) fn() { return 0; }
+    int main()
+    {
+        return fn();
+    }
+" HAVE_ATTRIBUTE_NOINLINE)
+
+check_cxx_source_compiles("
+    int main()
+    {
+        int var __attribute__((aligned (32)));
+        return var;
+    }
+" HAVE_ATTRIBUTE_ALIGNED)
+
+
+if (PYTHONHOME)
+    set(Python_ROOT_DIR ${PYTHONHOME})
+endif()
+find_package(Python COMPONENTS Interpreter Development NumPy)
+if (Python_FOUND AND Python_Development_FOUND)
+    set(CODA_PYTHON_SITE_PACKAGES
+        "${CODA_STD_PROJECT_LIB_DIR}/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages")
+    if(NOT PYTHONHOME)
+        message("Python installation found at ${Python_EXECUTABLE}.\n"
+                "Pass the configure option -DPYTHONHOME=... to override this selection.")
+    endif()
+else()
+    message(WARNING "Python targets will not be built since Python libraries were not found.\n"
+            "Pass the configure option -DPYTHONHOME=... to help locate an installation.")
+endif()
+
+
+find_package(SWIG)
+if (SWIG_FOUND)
+    if (${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.13")
+        cmake_policy(SET CMP0078 NEW) # UseSWIG generates standard target names
+    endif()
+    if (${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.14")
+        cmake_policy(SET CMP0086 NEW) # UseSWIG honors SWIG_MODULE_NAME via -module
+    endif()
+    include(${SWIG_USE_FILE})
+else()
+    message(WARNING "SWIG could not be found, so modules relying on it will not be built")
+endif()
