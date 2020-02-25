@@ -120,8 +120,12 @@ find_package(Boost COMPONENTS serialization)
 
 find_package(SWIG)
 if (SWIG_FOUND)
-    cmake_policy(SET CMP0078 NEW) # UseSWIG generates standard target names
-    cmake_policy(SET CMP0086 NEW) # UseSWIG honors SWIG_MODULE_NAME via -module
+    if (${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.13")
+        cmake_policy(SET CMP0078 NEW) # UseSWIG generates standard target names
+    endif()
+    if (${CMAKE_VERSION} VERSION_GREATER_EQUAL "3.14")
+        cmake_policy(SET CMP0086 NEW) # UseSWIG honors SWIG_MODULE_NAME via -module
+    endif()
     include(${SWIG_USE_FILE})
     option(PYTHON_EXTRA_NATIVE "generate extra native containers with SWIG" ON)
 

@@ -1,8 +1,9 @@
 set(TARGET_NAME "math.poly")
 set(MODULE_DEPS "sys" "math.linear")
-
+set(TEST_DEPS ${MODULE_DEPS}) # TODO: fix transitive dependency resolution
+set(UNITTEST_DEPS ${MODULE_DEPS}) # TODO: fix transitive dependency resolution
 if (Boost_serialization_FOUND)
-    set(UNITTEST_DEPS "serialize")
+    list(APPEND UNITTEST_DEPS "serialize")
 else()
     set(UNITTEST_FILTER "test_1d_poly_serialize.cpp" "test_2d_poly_serialize.cpp")
 endif()

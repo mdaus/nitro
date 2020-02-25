@@ -238,13 +238,14 @@ function(coda_add_library_impl tgt_name tgt_lang tgt_deps tgt_extra_deps source_
     #    $<BUILD_INTERFACE:${build_interface_headers}>
     #    $<INSTALL_INTERFACE:${install_interface_headers}>)
 
+    link_directories(${CMAKE_INSTALL_PREFIX}/${CODA_STD_PROJECT_LIB_DIR})
+
     if (NOT lib_type STREQUAL "INTERFACE")
-        target_link_directories(${tgt_name} PUBLIC "${CMAKE_INSTALL_PREFIX}/${CODA_STD_PROJECT_LIB_DIR}")
         if (tgt_lang)
             set_target_properties("${tgt_name}" PROPERTIES OUTPUT_NAME "${tgt_name}-${tgt_lang}")
         endif()
         if (tgt_deps)
-            target_link_libraries("${tgt_name}" ${tgt_deps})
+            target_link_libraries("${tgt_name}" PUBLIC ${tgt_deps})
         endif()
         if (tgt_extra_deps)
             add_dependencies("${tgt_name}" ${tgt_extra_deps})

@@ -34,7 +34,7 @@ cd -
 build_script_name="build_coda.sh"
 echo '#\!/bin/sh' > "${build_script_name}"
 echo "cd ${build_root}" >> "${build_script_name}"
-echo 'cmake --build . --config Release "$@"' >> "${build_script_name}"
+echo "cmake --build . --config ${build_type} \"\$@\"" >> "${build_script_name}"
 echo 'cd -' >> "${build_script_name}"
 chmod u+x "${build_script_name}"
 echo "CODA configuration ${config_name} set."

@@ -5,7 +5,7 @@ set(TEST_FILTER "MMapReadOnlyTest.cpp" "ProcessTest1.cpp")
 coda_add_library("${TARGET_NAME}")  # See the definition of this method for details on the variables it looks at.
 
 if (WIN32)
-    target_link_libraries("${TARGET_NAME}" ws2_32)
+    target_link_libraries("${TARGET_NAME}" PUBLIC ws2_32)
 elseif (UNIX)
-    target_link_libraries("${TARGET_NAME}" pthread)
+    target_link_libraries("${TARGET_NAME}" PUBLIC pthread)
 endif()

@@ -8,7 +8,7 @@ if (USE_SSL)
     if (OPENSSL_FOUND)
         coda_add_library("${TARGET_NAME}")  # See the definition of this method for details on the variables it looks at.
         target_include_directories("${TARGET_NAME}" PUBLIC ${OPENSSL_INCLUDE_DIR})
-        target_link_libraries("${TARGET_NAME}" ${OPENSSL_SSL_LIBRARY})
+        target_link_libraries("${TARGET_NAME}" PUBLIC ${OPENSSL_SSL_LIBRARY})
     else()
         message("OpenSSL installation not found, net.ssl will not be built")
     endif()

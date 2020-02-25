@@ -3,8 +3,8 @@
 #   files, bundled into a library.
 set(OUTPUT_NAME "minizip")
 set(TARGET_NAME "${CMAKE_PROJECT_NAME}_${OUTPUT_NAME}")
-set(MODULE_DEPS "z")
-set(EXTRA_DEPS "coda-oss_ZLIB")
+set(MODULE_DEPS ${ZLIB_LIBRARY})
+set(EXTRA_DEPS "coda-oss_ZLIB")  # force ZLIB build to complete before us
 
 # The 3P's own build process makes an executable, which we can't re-use.
 # Set up a small custom project to build a library containing the subset
