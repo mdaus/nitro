@@ -1,5 +1,7 @@
 set(TARGET_NAME "XercesC")
 
+# set XercesC configure options
+# see https://xerces.apache.org/xerces-c/build-3.html
 if (WIN32)
     set(EXTRA_CMAKE_ARGS
         -Dnetwork-accessor=winsock
@@ -7,7 +9,15 @@ if (WIN32)
         -Dmutex-manager=windows
         -Dxmlch-type=char16_t
     )
+else()
+    set(EXTRA_CMAKE_ARGS
+        -Dnetwork-accessor=socket
+        -Dtranscoder=iconv
+    )
 endif()
+list(APPEND EXTRA_CMAKE_ARGS
+    -Dmessage-loader=inmemory
+)
 
 coda_add_driver(
     "${TARGET_NAME}"

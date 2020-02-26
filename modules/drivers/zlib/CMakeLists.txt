@@ -17,10 +17,10 @@ coda_add_driver(
     "zlib-1.2.7.tar"
     "SHA256=df0ba700245709ea54a18536ed266c2f0a0b3e4c3eb029abc42bf48a087901c5")
 
-include("coda-oss_minizip.cmake")
-
 if (WIN32)
     set(ZLIB_LIBRARY "zlib" CACHE STRING "name of the zlib library")
 else()
     set(ZLIB_LIBRARY "z" CACHE STRING "name of the zlib library")
 endif()
+
+include("coda-oss_minizip.cmake")

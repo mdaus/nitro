@@ -1,25 +1,9 @@
-include(CheckIncludeFile)
-include(CheckTypeSize)
-include(CheckSymbolExists)
-include(CheckLibraryExists)
 include(CheckCXXSourceCompiles)
-
+include(CheckLibraryExists)
+include(CheckIncludeFile)
+include(CheckSymbolExists)
+include(CheckTypeSize)
 include(TestBigEndian)
-include(FindBoost)
-include(FindThreads)
-
-include(FindCURL)
-if (${CMAKE_VERSION} VERSION_LESS "3.12.0")
-#xxx FindCurl didn't create a target until CMake 3.12
-    if(CURL_FOUND)
-        if(NOT TARGET CURL::libcurl)
-            add_library(CURL::libcurl UNKNOWN IMPORTED)
-            set_target_properties(CURL::libcurl PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${CURL_INCLUDE_DIRS}")
-            set_property(TARGET CURL::libcurl APPEND PROPERTY IMPORTED_LOCATION "${CURL_LIBRARY}")
-        endif()
-    endif()
-endif()
-
 
 # Configure compiler checks.
 # These work in conjunction with the *_config.h.cmake.in files in the
@@ -44,27 +28,6 @@ check_symbol_exists("memalign" "stdlib.h" HAVE_MEMALIGN)
 test_big_endian(BIGENDIAN)
 check_type_size("size_t" SIZEOF_SIZE_T)
 
-if (BOOST_HOME)
-    set(BOOST_ROOT ${BOOST_HOME})
-endif()
-find_package(Boost COMPONENTS serialization)
-
-set(THREADS_PREFER_PTHREAD_FLAG TRUE)
-find_package(Threads)
-
-find_package(CURL)
-#xxx No longer needed?
-#check_library_exists("curl" "curl_global_init" "" HAVE_CURL)  #xxx Need 'curl/curl.h'?
-
-#find_package(ZLIB::ZLIB)
-
-# Visual Studio 2013 has nullptr but not constexpr.  Need to check for
-# both in here to make sure we have full C++11 support... otherwise,
-# long-term we may need multiple separate configure checks and
-# corresponding defines
-#xxx This probably isn't the right way to test c++11; see cmake-compile-features()
-check_cxx_source_compiles(
-    "int main() { constexpr void* FOO = nullptr; }" __CODA_CPP11)
 
 check_symbol_exists("isnan" "math.h" HAVE_ISNAN)
 # The auto-generated test code doesn't work for overloaded functions
@@ -89,6 +52,34 @@ check_cxx_source_compiles("
     }
 " HAVE_ATTRIBUTE_ALIGNED)
 
+set(THREADS_PREFER_PTHREAD_FLAG TRUE)
+find_package(Threads)
+
+
+find_package(CURL)
+#xxx No longer needed?
+#check_library_exists("curl" "curl_global_init" "" HAVE_CURL)  #xxx Need 'curl/curl.h'?
+
+if (${CMAKE_VERSION} VERSION_LESS "3.12.0")
+#xxx FindCurl didn't create a target until CMake 3.12
+    if(CURL_FOUND)
+        if(NOT TARGET CURL::libcurl)
+            add_library(CURL::libcurl UNKNOWN IMPORTED)
+            set_target_properties(CURL::libcurl PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${CURL_INCLUDE_DIRS}")
+            set_property(TARGET CURL::libcurl APPEND PROPERTY IMPORTED_LOCATION "${CURL_LIBRARY}")
+        endif()
+    endif()
+endif()
+
+
+#find_package(ZLIB::ZLIB)
+
+
+if (BOOST_HOME)
+    set(BOOST_ROOT ${BOOST_HOME})
+endif()
+find_package(Boost COMPONENTS serialization)
+set(HAVE_BOOST ${Boost_FOUND})
 
 if (PYTHONHOME)
     set(Python_ROOT_DIR ${PYTHONHOME})

@@ -7,8 +7,6 @@ if (MSVC AND BUILD_SHARED_LIBS)
     set(CODA_EXPORT "__declspec(dllexport)")
 endif()
 
-set(CODA_CPP11 1)
-
 set(config_file_out "include/config/coda_oss_config.h")
 configure_file("include/config/coda_oss_config.h.in" "${config_file_out}" @ONLY)
 target_include_directories("${TARGET_NAME}" INTERFACE

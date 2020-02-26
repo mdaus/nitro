@@ -1,4 +1,4 @@
-##add_subdirectory("boost")
+add_subdirectory("boost")
 ## Unnecessary; it's in the system libs
 #add_subdirectory("curl")
 ##add_subdirectory("j2k")

@@ -13,6 +13,5 @@
 #cmakedefine HAVE_MEMALIGN @HAVE_MEMALIGN@
 #cmakedefine BIGENDIAN @BIGENDIAN@
 #cmakedefine SIZEOF_SIZE_T @SIZEOF_SIZE_T@
-#cmakedefine __CODA_CPP11 @__CODA_CPP11@
 
 #endif /* _@tgt_munged_name@_CONFIG_H_ */

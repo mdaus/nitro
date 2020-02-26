@@ -102,6 +102,7 @@ endfunction()
 #                     All source files beneath this directory will be used.
 #                     Each source file is assumed to create a separate executable.
 # deps              - Modules that the tests are dependent upon.
+# extra_deps        - Additional non-link dependencies
 # filter_list       - Source files to ignore
 # is_unit_test      - Whether test will be run automatically
 function(coda_add_tests module_name dir_name deps extra_deps filter_list is_unit_test)

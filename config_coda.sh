@@ -20,6 +20,7 @@ then
 else
     build_shared_libs="OFF"
 fi
+echo "BUILD_SHARED_LIBS=${build_shared_libs}"
 
 extra_args=""
 echo "${build_root}"
