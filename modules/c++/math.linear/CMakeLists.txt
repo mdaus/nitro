@@ -1,7 +1,7 @@
 set(TARGET_NAME "math.linear")
 set(MODULE_DEPS "sys" "mem" "types")
 
-if (Boost_serialization_FOUND) #xxx Review this test
+if (TARGET serialize)
     set(UNITTEST_DEPS "serialize")
 else()
     set(UNITTEST_FILTER "test_Matrix2D_serialize.cpp" "test_Vector_serialize.cpp")

@@ -31,25 +31,18 @@ check_type_size("size_t" SIZEOF_SIZE_T)
 
 check_symbol_exists("isnan" "math.h" HAVE_ISNAN)
 # The auto-generated test code doesn't work for overloaded functions
-check_cxx_source_compiles(
-    "#include <cmath>
+check_cxx_source_compiles("
+    #include <cmath>
     int main() { return std::isnan(0.0); }
 " HAVE_STD_ISNAN)
 
 check_cxx_source_compiles("
     int __attribute__((noinline)) fn() { return 0; }
-    int main()
-    {
-        return fn();
-    }
+    int main() { return fn(); }
 " HAVE_ATTRIBUTE_NOINLINE)
 
 check_cxx_source_compiles("
-    int main()
-    {
-        int var __attribute__((aligned (32)));
-        return var;
-    }
+    int main() { int var __attribute__((aligned (32))); return var; }
 " HAVE_ATTRIBUTE_ALIGNED)
 
 set(THREADS_PREFER_PTHREAD_FLAG TRUE)

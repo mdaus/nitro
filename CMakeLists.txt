@@ -120,7 +120,6 @@ add_subdirectory("modules/drivers")
 
 # let internal modules find the installed external dependencies
 link_directories(${CMAKE_INSTALL_PREFIX}/${CODA_STD_PROJECT_LIB_DIR})
-include_directories(${CMAKE_INSTALL_PREFIX}/${CODA_STD_PROJECT_INCLUDE_DIR})
 
 add_subdirectory("modules/c++")
 if (SWIG_FOUND AND Python_FOUND AND Python_Development_FOUND)

@@ -111,6 +111,7 @@ function(coda_add_tests module_name dir_name deps extra_deps filter_list is_unit
     # Filter out ignored files
     filter_files(local_tests "${local_tests}" "${filter_list}")
 
+    # make a group target to build all tests for the current module
     set(test_group_tgt "${module_name}_tests")
     if (NOT TARGET ${test_group_tgt})
         add_custom_target(${test_group_tgt})
@@ -120,51 +121,44 @@ function(coda_add_tests module_name dir_name deps extra_deps filter_list is_unit
         add_compile_options(/W3) # change this to /W4 later
     endif()
 
+    list(APPEND deps ${module_name})
+
+    # we need the parent directory include for TestCase.h
+    set(include_dirs "${CMAKE_CURRENT_SOURCE_DIR}/../${CODA_STD_PROJECT_INCLUDE_DIR}")
+    set(link_libs "")
+
+    # get all interface libraries and include directories from the dependencies
+    foreach(dep ${deps})
+        list(APPEND link_libs ${dep})
+        if (TARGET ${dep})
+            get_property(dep_includes TARGET ${dep} PROPERTY INTERFACE_INCLUDE_DIRECTORIES)
+            list(APPEND include_dirs ${dep_includes})
+        endif()
+    endforeach()
+
     foreach(test_src ${local_tests})
         # Use the base name of the source file as the name of the test
-        get_filename_component(test_name ${test_src} NAME_WE)
+        get_filename_component(test_name "${test_src}" NAME_WE)
         add_executable(${test_name} "${test_src}")
         add_dependencies(${test_group_tgt} ${test_name})
-        get_filename_component(test_dir ${test_src} DIRECTORY)
+        get_filename_component(test_dir "${test_src}" DIRECTORY)
         # Do a bit of path manipulation to make sure tests in deeper subdirs retain those subdirs in their build outputs
 #xxxTODO double-check this
         file(RELATIVE_PATH test_subdir "${CMAKE_CURRENT_SOURCE_DIR}/${dir_name}" "${CMAKE_CURRENT_SOURCE_DIR}/${test_dir}")
         # message(STATUS "Generating Test: module_name=${module_name} test_src=${test_src}  test_name=${test_name}  test_dir=${test_dir}  test_subdir= ${test_subdir} deps=${deps}")
+
         # Set IDE subfolder so that tests appear in their own tree
-        set_target_properties("${test_name}" PROPERTIES FOLDER "${dir_name}/${module_name}/${test_subdir}")
+        set_target_properties(${test_name} PROPERTIES FOLDER "${dir_name}/${module_name}/${test_subdir}")
 
-        # Add our output directory to the include path, to pick up 3p headers.
-        target_include_directories("${test_name}" PUBLIC "${CMAKE_PREFIX_PATH}/${CODA_STD_PROJECT_INCLUDE_DIR}")
+        target_link_libraries(${test_name} PRIVATE ${link_libs})
+        target_include_directories(${test_name} PRIVATE ${include_dirs})
 
-#xxx This shouldn't be needed; it should come from the module.
-        # We need the parent directory include for TestCase.h
-        target_include_directories("${test_name}"  PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/../${CODA_STD_PROJECT_INCLUDE_DIR}")
-#xxx This shouldn't be needed; it should come from the module.
-#       target_include_directories(${test_name}  PUBLIC "${CODA_STD_PROJECT_INCLUDE_DIR}")
-        # Automatically depend on the parent module, plus any others that were specified
-        #message(STATUS "target_link_libraries(${test_name} ${module_name} ${deps})")
-        list(APPEND deps "${module_name}")
-        foreach(dep ${deps})
-            if (NOT TARGET ${dep})
-                # dep must be an external library
-                target_link_libraries("${test_name}" PUBLIC ${dep})
-            else()
-                get_property(dep_includes TARGET ${dep} PROPERTY INTERFACE_INCLUDE_DIRECTORIES)
-                target_include_directories("${test_name}" PUBLIC ${dep_includes})
-                get_property(lib_type TARGET ${dep} PROPERTY TYPE)
-                if (NOT ${lib_type} STREQUAL "INTERFACE_LIBRARY")
-                    target_link_libraries("${test_name}" PUBLIC ${dep})
-                else()
-                    target_link_libraries("${test_name}" INTERFACE ${dep})
-                endif()
-            endif()
-        endforeach()
-
-#xxx This should also not be needed; if our target depends on it, we should too.
+        # additional (non-link) dependencies which must be resolved before building
         if (extra_deps)
-            add_dependencies("${test_name}" ${extra_deps})
+            add_dependencies(${test_name} ${extra_deps})
         endif()
 
+        # add unit tests to automatic test suite
         if (${is_unit_test})
             add_test(${test_name} ${test_name})
         endif()
@@ -189,36 +183,12 @@ function(coda_add_library_impl tgt_name tgt_lang tgt_deps tgt_extra_deps source_
     # Filter out ignored files
     filter_files(local_sources "${local_sources}" "${source_filter}")
 
-    # Libraries without sources must be declared to CMake as INTERFACE libraries
-    if (NOT local_sources)
-        set(lib_type "INTERFACE")  # No sources; make it an INTERFACE library
-        set(header_type "INTERFACE")
-    else()
-        set(lib_type "")  # Allow default
-        set(header_type "PUBLIC")
-    endif()
-
-    if (MSVC)
-        add_compile_options(/W3) # change this to /W4 later
-    endif()
-
-    add_library("${tgt_name}" ${lib_type} ${local_sources})
-
     # Periods in target names for dirs are replaced with slashes (subdirectories).
     string(REPLACE "." "/" tgt_munged_dirname ${tgt_name})
 
     # Periods in target names for files are replaced with underscores.
     # Note that this variable name is used in the *.cmake.in files.
     string(REPLACE "." "_" tgt_munged_name ${tgt_name})
-
-    # Find all the header files, relative to the module's directory, and add them.
-    #file(GLOB_RECURSE local_headers RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.h)
-    #message("tgt_name=${tgt_name}  local_headers=${local_headers}")
-
-    #set(build_interface_headers ${local_headers})
-    #list(TRANSFORM build_interface_headers PREPEND "${local_include_dir}/")
-    #set(install_interface_headers ${local_headers})
-    #list(TRANSFORM install_interface_headers PREPEND "${CODA_STD_PROJECT_INCLUDE_DIR}/")
 
     # If we find a *_config.h.cmake.in file, generate the corresponding *_config.h, and put the
     #   target directory in the include path.
@@ -227,45 +197,57 @@ function(coda_add_library_impl tgt_name tgt_lang tgt_deps tgt_extra_deps source_
     if (EXISTS ${config_file_template})
         set(config_file_out "${CODA_STD_PROJECT_INCLUDE_DIR}/${tgt_munged_dirname}/${tgt_munged_name}_config.h")
         message(STATUS "Processing config header: ${config_file_template} -> ${config_file_out}")
-        configure_file(${config_file_template} ${config_file_out})
-        target_include_directories(${tgt_name} ${header_type} "${CMAKE_CURRENT_BINARY_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}")
-        #list(APPEND build_interface_headers "${CMAKE_CURRENT_BINARY_DIR}/${config_file_out}")
-        #list(APPEND install_interface_headers "${config_file_out}")
+        configure_file("${config_file_template}" "${config_file_out}")
         install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${config_file_out}" DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}/${tgt_munged_dirname}")
     endif()
 
-    # Associate headers with target
-    #target_sources("${tgt_name}" "${header_type}"
-    #    $<BUILD_INTERFACE:${build_interface_headers}>
-    #    $<INSTALL_INTERFACE:${install_interface_headers}>)
-
-    if (NOT lib_type STREQUAL "INTERFACE")
-        if (tgt_lang)
-            set_target_properties("${tgt_name}" PROPERTIES OUTPUT_NAME "${tgt_name}-${tgt_lang}")
-        endif()
+    if (NOT local_sources)
+        # Libraries without sources must be declared to CMake as INTERFACE libraries
+        set(header_type INTERFACE)
+        add_library(${tgt_name} INTERFACE)
         if (tgt_deps)
-            target_link_libraries("${tgt_name}" PUBLIC ${tgt_deps})
-        endif()
-        if (tgt_extra_deps)
-            add_dependencies("${tgt_name}" ${tgt_extra_deps})
+            target_link_libraries(${tgt_name} INTERFACE ${tgt_deps})
         endif()
     else()
+        set(header_type PUBLIC)
+        add_library(${tgt_name} ${local_sources})
+        if (tgt_lang)
+            set_target_properties(${tgt_name} PROPERTIES OUTPUT_NAME "${tgt_name}-${tgt_lang}")
+        endif()
         if (tgt_deps)
-            target_link_libraries("${tgt_name}" INTERFACE ${tgt_deps})
+            target_link_libraries(${tgt_name} PUBLIC ${tgt_deps})
         endif()
     endif()
 
-    # Add include directories
-    target_include_directories(${tgt_name} ${header_type}
+    # set our include directories
+    set(include_dirs
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}>
-        ${CMAKE_INSTALL_PREFIX}/${CODA_STD_PROJECT_INCLUDE_DIR})
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}>
+        "${CMAKE_INSTALL_PREFIX}/${CODA_STD_PROJECT_INCLUDE_DIR}")
+    # add interface include directories from the dependencies to our interface
+    foreach (dep ${tgt_deps})
+        if (TARGET ${dep})
+            get_property(dep_include_dirs TARGET ${dep} PROPERTY INTERFACE_INCLUDE_DIRECTORIES)
+            list(APPEND include_dirs ${dep_include_dirs})
+        endif()
+    endforeach()
+    list(REMOVE_DUPLICATES include_dirs)
+    target_include_directories(${tgt_name} ${header_type} ${include_dirs})
+
+    if (tgt_extra_deps)
+        add_dependencies(${tgt_name} ${tgt_extra_deps})
+    endif()
+
+    if (MSVC)
+        add_compile_options(/W3) # change this to /W4 later
+    endif()
 
     # Set up install destinations for binaries
-    install(TARGETS "${tgt_name}"
+    install(TARGETS ${tgt_name}
             #EXPORT "${tgt_name}_TARGETS"
-            LIBRARY DESTINATION ${CODA_STD_PROJECT_LIB_DIR}
-            ARCHIVE DESTINATION ${CODA_STD_PROJECT_LIB_DIR}
-            RUNTIME DESTINATION ${CODA_STD_PROJECT_BIN_DIR})
+            LIBRARY DESTINATION "${CODA_STD_PROJECT_LIB_DIR}"
+            ARCHIVE DESTINATION "${CODA_STD_PROJECT_LIB_DIR}"
+            RUNTIME DESTINATION "${CODA_STD_PROJECT_BIN_DIR}")
 
     # Set up install destination for headers
     install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}"
