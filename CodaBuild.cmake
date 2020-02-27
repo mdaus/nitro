@@ -53,7 +53,7 @@ function(coda_add_driver driver_name driver_file driver_hash)
             # Found CMakeLists.txt
             set(target_cmake_args
                 "-DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>"
-                "-DBUILD_SHARED_LIBS:BOOL=${BUILD_SHARED_LIBS}"
+                "-DBUILD_SHARED_LIBS:BOOL=OFF"
                 ${EXTRA_CMAKE_ARGS})
             if (MSVC)
                 # For MSVC, ExternalProject_Add needs custom install command to
@@ -102,10 +102,9 @@ endfunction()
 #                     All source files beneath this directory will be used.
 #                     Each source file is assumed to create a separate executable.
 # deps              - Modules that the tests are dependent upon.
-# extra_deps        - Additional non-link dependencies
 # filter_list       - Source files to ignore
 # is_unit_test      - Whether test will be run automatically
-function(coda_add_tests module_name dir_name deps extra_deps filter_list is_unit_test)
+function(coda_add_tests_impl module_name dir_name deps filter_list is_unit_test)
     # Find all the source files, relative to the module's directory
     file(GLOB_RECURSE local_tests RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" "${dir_name}/*.cpp")
     # Filter out ignored files
@@ -125,11 +124,9 @@ function(coda_add_tests module_name dir_name deps extra_deps filter_list is_unit
 
     # we need the parent directory include for TestCase.h
     set(include_dirs "${CMAKE_CURRENT_SOURCE_DIR}/../${CODA_STD_PROJECT_INCLUDE_DIR}")
-    set(link_libs "")
 
     # get all interface libraries and include directories from the dependencies
     foreach(dep ${deps})
-        list(APPEND link_libs ${dep})
         if (TARGET ${dep})
             get_property(dep_includes TARGET ${dep} PROPERTY INTERFACE_INCLUDE_DIRECTORIES)
             list(APPEND include_dirs ${dep_includes})
@@ -150,13 +147,8 @@ function(coda_add_tests module_name dir_name deps extra_deps filter_list is_unit
         # Set IDE subfolder so that tests appear in their own tree
         set_target_properties(${test_name} PROPERTIES FOLDER "${dir_name}/${module_name}/${test_subdir}")
 
-        target_link_libraries(${test_name} PRIVATE ${link_libs})
+        target_link_libraries(${test_name} PRIVATE ${deps})
         target_include_directories(${test_name} PRIVATE ${include_dirs})
-
-        # additional (non-link) dependencies which must be resolved before building
-        if (extra_deps)
-            add_dependencies(${test_name} ${extra_deps})
-        endif()
 
         # add unit tests to automatic test suite
         if (${is_unit_test})
@@ -166,6 +158,19 @@ function(coda_add_tests module_name dir_name deps extra_deps filter_list is_unit
         # Install [unit]tests to separate subtrees
         install(TARGETS ${test_name} RUNTIME DESTINATION "${dir_name}/${module_name}/${test_subdir}")
     endforeach()
+endfunction()
+
+
+function(coda_add_tests module_name deps filter_list)
+    if (CODA_BUILD_TESTS)
+        coda_add_tests_impl(${module_name} "${CODA_STD_PROJECT_TESTS_DIR}" "${deps}" "${filter_list}" FALSE)
+    endif()
+endfunction()
+
+function(coda_add_unittests module_name deps filter_list)
+    if (CODA_BUILD_TESTS)
+        coda_add_tests_impl(${module_name} "${CODA_STD_PROJECT_UNITTESTS_DIR}" "${deps}" "${filter_list}" TRUE)
+    endif()
 endfunction()
 
 
@@ -244,7 +249,7 @@ function(coda_add_library_impl tgt_name tgt_lang tgt_deps tgt_extra_deps source_
 
     # Set up install destinations for binaries
     install(TARGETS ${tgt_name}
-            #EXPORT "${tgt_name}_TARGETS"
+            EXPORT "${tgt_name}_TARGETS"
             LIBRARY DESTINATION "${CODA_STD_PROJECT_LIB_DIR}"
             ARCHIVE DESTINATION "${CODA_STD_PROJECT_LIB_DIR}"
             RUNTIME DESTINATION "${CODA_STD_PROJECT_BIN_DIR}")
@@ -310,12 +315,6 @@ endfunction()
 function(coda_add_library tgt_name)
     coda_add_library_impl("${tgt_name}" "${TARGET_LANG}"
                           "${MODULE_DEPS}" "${EXTRA_DEPS}" "${SOURCE_FILTER}")
-    if (CODA_BUILD_TESTS)
-        coda_add_tests("${tgt_name}" "${CODA_STD_PROJECT_TESTS_DIR}"
-                       "${TEST_DEPS}" "${EXTRA_DEPS}" "${TEST_FILTER}" FALSE)
-        coda_add_tests("${tgt_name}" "${CODA_STD_PROJECT_UNITTESTS_DIR}"
-                       "${UNITTEST_DEPS}" "${EXTRA_DEPS}" "${UNITTEST_FILTER}" TRUE)
-    endif()
 endfunction()
 
 

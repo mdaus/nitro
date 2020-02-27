@@ -24,5 +24,7 @@ endif()
 
 
 if (${CODA_SQL_LAYER}_FOUND) # Don't bother building if we've got no implementation.
-    coda_add_library("${TARGET_NAME}")  # See the definition of this method for details on the variables it looks at.
+    coda_add_library(${TARGET_NAME})  # See the definition of this method for details on the variables it looks at.
 endif()
+
+coda_add_tests(${TARGET_NAME} "${TEST_DEPS}" "${TEST_FILTER}")

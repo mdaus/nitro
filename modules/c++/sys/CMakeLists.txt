@@ -3,10 +3,13 @@ set(MODULE_DEPS "config" "except" "str" "${CMAKE_DL_LIBS}" "${CLOCK_GETTIME_EXTR
 set(UNITTEST_DEPS "mt")
 set(TEST_FILTER "MMapReadOnlyTest.cpp" "ProcessTest1.cpp")
 
-coda_add_library("${TARGET_NAME}")  # See the definition of this method for details on the variables it looks at.
+coda_add_library(${TARGET_NAME})  # See the definition of this method for details on the variables it looks at.
 
 if (WIN32)
-    target_link_libraries("${TARGET_NAME}" PUBLIC ws2_32)
+    target_link_libraries(${TARGET_NAME} PUBLIC ws2_32)
 elseif (UNIX)
-    target_link_libraries("${TARGET_NAME}" PUBLIC pthread)
+    target_link_libraries(${TARGET_NAME} PUBLIC pthread)
 endif()
+
+coda_add_tests(${TARGET_NAME} "${TEST_DEPS}" "${TEST_FILTER}")
+coda_add_unittests(${TARGET_NAME} "${UNITTEST_DEPS}" "${UNITTEST_FILTER}")

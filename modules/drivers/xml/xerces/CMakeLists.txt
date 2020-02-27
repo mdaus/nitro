@@ -20,7 +20,7 @@ list(APPEND EXTRA_CMAKE_ARGS
 )
 
 coda_add_driver(
-    "${TARGET_NAME}"
+    ${TARGET_NAME}
     "xerces-c-3.2.2.tar.gz"
     "SHA256=dd6191f8aa256d3b4686b64b0544eea2b450d98b4254996ffdfe630e0c610413"
 )

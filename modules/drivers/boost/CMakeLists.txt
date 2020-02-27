@@ -8,5 +8,5 @@ add_library(${TARGET_NAME} INTERFACE)
 target_include_directories(${TARGET_NAME} INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}>
     ${Boost_INCLUDE_DIRS})
+target_link_libraries(${TARGET_NAME} INTERFACE ${Boost_SERIALIZATION_LIBRARY})
 target_link_directories(${TARGET_NAME} INTERFACE ${Boost_LIBRARY_DIRS})
-target_compile_definitions(${TARGET_NAME} INTERFACE -DHAVE_BOOST=1)

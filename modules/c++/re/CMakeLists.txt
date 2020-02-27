@@ -11,7 +11,7 @@ if (NOT RE_ENABLE_STD_REGEX)
     #set(UNITTEST_DEPS "pcre2-8")
 endif()
 
-coda_add_library("${TARGET_NAME}")  # See the definition of this method for details on the variables it looks at.
+coda_add_library(${TARGET_NAME})  # See the definition of this method for details on the variables it looks at.
 
 if (NOT RE_ENABLE_STD_REGEX)
     if (NOT BUILD_SHARED_LIBS)
@@ -20,3 +20,6 @@ if (NOT RE_ENABLE_STD_REGEX)
         target_compile_definitions(${TARGET_NAME} PUBLIC -DPCRE2_STATIC)
     endif()
 endif()
+
+coda_add_tests(${TARGET_NAME} "${TEST_DEPS}" "${TEST_FILTER}")
+coda_add_unittests(${TARGET_NAME} "${UNITTEST_DEPS}" "${UNITTEST_FILTER}")
