@@ -9,7 +9,7 @@ def options(opt):
     opt.add_option('--disable-numpy', action='store_false', dest='enable_numpy', default=True,
                    help='Turn off Numpy C headers/libs')
 
-def configure(conf):    
+def configure(conf):
     if Options.options.enable_numpy and \
         hasattr(Options.options, 'python') and Options.options.python:
         # a little magic borrowed from python-config and extended for numpy and -L flags
@@ -17,8 +17,25 @@ def configure(conf):
             from distutils import sysconfig
             import numpy.distutils
             import os
-            
+
             np_info = numpy.distutils.misc_util.get_info('npymath')
+
+            # In certain environments, we need link against libpython
+            # as well as npymath.
+            # `INSTSTONAME` is the closest way I can figure to ask Python
+            # what this is called.
+            python_lib = sysconfig.get_config_var('INSTSONAME')
+
+            # It returns something like `libpython3.7m.so.1.0`,
+            # or None on Windows, so we need to clean it up before asking
+            # waf to link against it.
+            if python_lib.startswith('lib'):
+                python_lib = python_lib[3:]
+            extension_index = python_lib.find('.so')
+            if extension_index != -1:
+                python_lib = python_lib[:extension_index]
+            if python_lib is None:
+                python_lib = ""
 
             warningmessage = ""
             if(len(np_info['include_dirs']) > 1):
@@ -31,11 +48,11 @@ def configure(conf):
 
             conf.check(uselib_store='NUMPY',
                        use='PYEXT',
-                       lib='npymath',  
+                       lib='npymath {0}'.format(python_lib),
                        header_name=['Python.h','numpy/arrayobject.h'],
                        includes=inc_dir,
                        libpath=lib_dir,
-                       msg='Checking for library numpy' + warningmessage, 
+                       msg='Checking for library numpy' + warningmessage,
                        mandatory=True)
 
             conf.undefine("HAVE_NUMPY_ARRAYOBJECT_H")
