@@ -25,8 +25,20 @@ coda_add_driver(
     "SHA256=dd6191f8aa256d3b4686b64b0544eea2b450d98b4254996ffdfe630e0c610413"
 )
 
-if (WIN32)
-    set(XERCESC_LIBRARY "xerces-c_3" CACHE STRING "name of the XercesC library")
-else()
-    set(XERCESC_LIBRARY "xerces-c" CACHE STRING "name of the XercesC library")
+# replace Xerces' CMakeLists.txt with our patched version
+ExternalProject_Add_Step(${PROJECT_NAME}_${TARGET_NAME} patchbuild
+    COMMAND cmake -E copy ${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists-patched.txt
+                          ${coda-oss_xercesc_SOURCE_DIR}/CMakeLists.txt
+    DEPENDEES patch
+    DEPENDERS configure
+)
+
+# remove problematic symlink from Xerces' CMake install step
+if (UNIX AND NOT BUILD_SHARED)
+    add_custom_command(TARGET ${PROJECT_NAME}_${TARGET_NAME}
+        COMMAND cmake -E remove "${CMAKE_INSTALL_PREFIX}/${CODA_STD_PROJECT_LIB_DIR}/libxerces-c.so"
+        DEPENDS ${PROJECT_NAME}_${TARGET_NAME}
+    )
 endif()
+
+set(XERCESC_LIBRARY "xerces-c" CACHE STRING "name of the XercesC library")

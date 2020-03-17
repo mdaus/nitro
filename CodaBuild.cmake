@@ -47,7 +47,7 @@ function(coda_add_driver driver_name driver_file driver_hash)
         set("${target_name_lc}_SOURCE_DIR" "${${target_name_lc}_SOURCE_DIR}"
             CACHE INTERNAL "source directory for ${target_name_lc}")
         set("${target_name_lc}_BINARY_DIR" "${${target_name_lc}_BINARY_DIR}"
-            CACHE INTERNAL "source directory for ${target_name_lc}")
+            CACHE INTERNAL "binary directory for ${target_name_lc}")
         # Queue a build for build-time.
         if (EXISTS "${${target_name_lc}_SOURCE_DIR}/CMakeLists.txt")
             # Found CMakeLists.txt
