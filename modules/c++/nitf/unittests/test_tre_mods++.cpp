@@ -42,14 +42,7 @@ TEST_CASE(setFields)
                    std::string("1.2345678 "));
 
     // try setting an invalid tag
-    try
-    {
-        tre.setField("invalid-tag", "some data");
-    }
-    catch (const except::Throwable& t)
-    {
-        TEST_ASSERT(false);
-    }
+    TEST_EXCEPTION(tre.setField("invalid-tag", "some data"));
 }
 
 TEST_CASE(cloneTRE)

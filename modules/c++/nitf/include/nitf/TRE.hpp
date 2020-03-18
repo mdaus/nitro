@@ -239,7 +239,9 @@ DECLARE_CLASS(TRE)
                                (NITF_DATA*)s.c_str(),
                                s.size(),
                                &error))
-            ;
+        {
+            throw NITFException(&error);
+        }
     }
 
     /*!
