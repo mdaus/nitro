@@ -362,8 +362,14 @@ function(coda_add_swig_python_module_impl tgt_name module_name deps python_deps 
         SWIG_GENERATED_INCLUDE_DIRECTORIES "${Python_INCLUDE_DIRS}")
     set_property(TARGET ${tgt_name} PROPERTY
         LIBRARY_OUTPUT_NAME ${module_name})
-    install(TARGETS ${tgt_name}
-            DESTINATION "${CODA_PYTHON_SITE_PACKAGES}/coda")
+    file(GLOB generated_py "${CMAKE_CURRENT_SOURCE_DIR}/source/generated/*.py")
+
+    # install the Python extension library
+    install(TARGETS ${tgt_name} DESTINATION "${CODA_PYTHON_SITE_PACKAGES}/coda")
+
+    # install the generate python to load the Python extension
+    install(FILES ${generated_py} DESTINATION "${CODA_PYTHON_SITE_PACKAGES}/coda")
+
 endfunction()
 
 
