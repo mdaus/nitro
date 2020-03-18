@@ -28,20 +28,20 @@ namespace
 {
 TEST_CASE(setFields)
 {
-    //create an ACFTA TRE
+    // create an ACFTA TRE
     nitf::TRE tre("ACFTA");
 
-    //set a field
+    // set a field
     tre.setField("AC_MSN_ID", "fly-by");
     TEST_ASSERT_EQ(tre.getField("AC_MSN_ID").toString(),
                    std::string("fly-by    "));
 
-    //re-set the field
+    // re-set the field
     tre.setField("AC_MSN_ID", 1.2345678);
     TEST_ASSERT_EQ(tre.getField("AC_MSN_ID").toString(),
                    std::string("1.2345678 "));
 
-    //try setting an invalid tag
+    // try setting an invalid tag
     try
     {
         tre.setField("invalid-tag", "some data");
@@ -60,10 +60,9 @@ TEST_CASE(cloneTRE)
     // try cloning the tre
     nitf::TRE dolly = tre.clone();
 
-    //the two should NOT be equal -- underlying object is different
+    // the two should NOT be equal -- underlying object is different
     TEST_ASSERT(tre != dolly);
-    TEST_ASSERT_EQ(tre.getField("FILCMT").toString(),
-                   std::string("fyi"));
+    TEST_ASSERT_EQ(tre.getField("FILCMT").toString(), std::string("fyi"));
 }
 
 TEST_CASE(basicIteration)
