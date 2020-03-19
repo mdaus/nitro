@@ -124,7 +124,7 @@ int main(int /*argc*/, char** /*argv*/)
     TEST_CHECK(setFields);
     TEST_CHECK(setBinaryFields);
     TEST_CHECK(cloneTRE);
-    // TEST_CHECK(basicIteration);
+    TEST_CHECK(basicIteration);
     TEST_CHECK(populateWhileIterating);
     return 0;
 }
