@@ -183,10 +183,9 @@ add_subdirectory(src)
 #add_subdirectory(tests)
 #add_subdirectory(samples)
 
-# remove any version numbers from the lib name and include "lib" prefix on Windows
+# remove any version numbers from the lib name
 set_target_properties(xerces-c PROPERTIES OUTPUT_NAME "xerces-c")
 set_target_properties(xerces-c PROPERTIES RUNTIME_OUTPUT_NAME "xerces-c")
-set_target_properties(xerces-c PROPERTIES PREFIX "lib")
 
 # Display configuration summary
 message(STATUS "")
