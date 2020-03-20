@@ -122,7 +122,6 @@ nitf::Field TRE::getField(const std::string& key)
 
 void TRE::updateFields()
 {
-    nitf_Error error;
     if (!nitf_TREUtils_fillData(
                 getNative(),
                 ((nitf_TREPrivateData*)getNative()->priv)->description,
