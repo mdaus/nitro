@@ -518,6 +518,7 @@ NITFPRIV(NITF_BOOL) fillEmptyTREField(nitf_TRECursor* cursor, nitf_Pair* pair, n
         memset(tempBuf, 0, fieldLength);
         nitf_Field_setRawData(field, (NITF_DATA *) tempBuf,
                 fieldLength, error);
+        NITF_FREE(tempBuf);
     }
     else if (cursor->desc_ptr->data_type == NITF_BCS_N)
     {
