@@ -45,6 +45,17 @@ TEST_CASE(setFields)
     TEST_EXCEPTION(tre.setField("invalid-tag", "some data"));
 }
 
+TEST_CASE(setBinaryFields)
+{
+    nitf::TRE tre("RPFHDR");
+    const int value = 123;
+    tre.setField("LOCSEC", value);
+
+    nitf::Field field = tre.getField("LOCSEC");
+    const int readValue = *reinterpret_cast<int*>(field.getRawData());
+    TEST_ASSERT_EQ(readValue, value);
+}
+
 TEST_CASE(cloneTRE)
 {
     nitf::TRE tre("JITCID");
@@ -73,7 +84,7 @@ TEST_CASE(basicIteration)
     TEST_ASSERT_EQ(numFields, 1);
 
     numFields = 0;
-    tre.setField("NUMACPO", 2);
+    tre.setField("NUMACPO", 2, true);
     tre.setField("NUMPTS[0]", 3);
     tre.setField("NUMPTS[1]", 2);
     for (nitf::TRE::Iterator it = tre.begin(); it != tre.end(); ++it)
@@ -111,6 +122,7 @@ TEST_CASE(populateWhileIterating)
 int main(int /*argc*/, char** /*argv*/)
 {
     TEST_CHECK(setFields);
+    TEST_CHECK(setBinaryFields);
     TEST_CHECK(cloneTRE);
     TEST_CHECK(basicIteration);
     TEST_CHECK(populateWhileIterating);
