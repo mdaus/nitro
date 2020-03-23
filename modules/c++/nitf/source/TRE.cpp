@@ -173,3 +173,23 @@ std::string TRE::getID() const
     const char* id = nitf_TRE_getID(getNativeOrThrow());
     return id ? std::string(id) : "";
 }
+
+std::string TRE::truncate(const std::string& value, size_t maxDigits)
+{
+    const size_t decimalIndex = value.find('.');
+    if (decimalIndex == std::string::npos)
+    {
+        return value;
+    }
+
+    const std::string truncated = value.substr(0, maxDigits);
+    if (str::endsWith(truncated, "."))
+    {
+        return truncated.substr(0, truncated.size() - 1);
+    }
+    if (truncated.size() > decimalIndex)
+    {
+        return truncated;
+    }
+    return value;
+}

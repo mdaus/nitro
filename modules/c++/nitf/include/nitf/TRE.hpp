@@ -286,7 +286,7 @@ DECLARE_CLASS(TRE)
         }
         else
         {
-            std::string s = str::toString<T>(value);
+            std::string s = truncate(str::toString(value), field->length);
             if (!nitf_TRE_setField(getNative(),
                                    key.c_str(),
                                    (NITF_DATA*)s.c_str(),
@@ -327,6 +327,8 @@ DECLARE_CLASS(TRE)
     std::string getID() const;
 
     private:
+    std::string truncate(const std::string& value, size_t maxDigits);
+
     nitf_Error error;
 };
 }
