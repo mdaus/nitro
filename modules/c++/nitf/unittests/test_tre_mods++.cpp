@@ -117,6 +117,32 @@ TEST_CASE(populateWhileIterating)
     }
     TEST_ASSERT_EQ(numFields, 29);
 }
+
+TEST_CASE(overflowingNumericFields)
+{
+    nitf::TRE tre("CSCRNA");
+
+    // This field has a length of 9, so check that it's properly
+    // truncated
+    tre.setField("ULCNR_LAT", 1.0 / 9);
+    TEST_ASSERT_EQ(tre.getField("ULCNR_LAT").toString(), "0.1111111");
+
+    tre.setField("ULCNR_LAT", 123456789);
+    TEST_ASSERT_EQ(tre.getField("ULCNR_LAT").toString(), "123456789");
+
+    tre.setField("ULCNR_LAT", 12345678.);
+    TEST_ASSERT_EQ(tre.getField("ULCNR_LAT").toString(), "012345678");
+
+    tre.setField("ULCNR_LAT", 12345678.9);
+    TEST_ASSERT_EQ(tre.getField("ULCNR_LAT").toString(), "012345678");
+
+    tre.setField("ULCNR_LAT", 1);
+    TEST_ASSERT_EQ(tre.getField("ULCNR_LAT").toString(), "000000001");
+
+    // If we run out of digits before hitting the decimal, there's no
+    // saving it
+    TEST_EXCEPTION(tre.setField("ULCNR_LAT", 123456789012LL));
+}
 }
 
 int main(int /*argc*/, char** /*argv*/)
@@ -126,5 +152,6 @@ int main(int /*argc*/, char** /*argv*/)
     TEST_CHECK(cloneTRE);
     TEST_CHECK(basicIteration);
     TEST_CHECK(populateWhileIterating);
+    TEST_CHECK(overflowingNumericFields);
     return 0;
 }
