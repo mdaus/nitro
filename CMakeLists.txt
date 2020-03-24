@@ -7,6 +7,9 @@ cmake_minimum_required(VERSION 3.11)
 
 project("coda-oss")
 
+set(CODA_OSS_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR} CACHE INTERNAL
+    "path to coda-oss source")
+
 set(CMAKE_CXX_STANDARD 11)
 
 if (${CMAKE_PROJECT_NAME} STREQUAL coda-oss)

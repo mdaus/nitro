@@ -5,7 +5,7 @@ set(MODULE_DEPS "sys")
 option(RE_ENABLE_STD_REGEX "use std::regex instead of pcre" OFF)
 
 if (NOT RE_ENABLE_STD_REGEX)
-    set(EXTRA_DEPS "coda-oss_PCRE")
+    set(EXTRA_DEPS "${CMAKE_PROJECT_NAME}_PCRE")
     set(MODULE_DEPS "${MODULE_DEPS}" "pcre2-8")
     #set(TEST_DEPS "pcre2-8")
     #set(UNITTEST_DEPS "pcre2-8")

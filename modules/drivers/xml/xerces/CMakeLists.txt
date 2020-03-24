@@ -26,18 +26,18 @@ coda_add_driver(
 )
 
 # replace Xerces' CMakeLists.txt with our patched version
-ExternalProject_Add_Step(${PROJECT_NAME}_${TARGET_NAME} patchbuild
+ExternalProject_Add_Step(${CMAKE_PROJECT_NAME}_${TARGET_NAME} patchbuild
     COMMAND cmake -E copy ${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists-patched.txt
-                          ${coda-oss_xercesc_SOURCE_DIR}/CMakeLists.txt
+                          ${${CMAKE_PROJECT_NAME}_xercesc_SOURCE_DIR}/CMakeLists.txt
     DEPENDEES patch
     DEPENDERS configure
 )
 
 # remove problematic symlink from Xerces' CMake install step
 if (UNIX AND NOT BUILD_SHARED)
-    add_custom_command(TARGET ${PROJECT_NAME}_${TARGET_NAME}
+    add_custom_command(TARGET ${CMAKE_PROJECT_NAME}_${TARGET_NAME}
         COMMAND cmake -E remove "${CMAKE_INSTALL_PREFIX}/${CODA_STD_PROJECT_LIB_DIR}/libxerces-c.so"
-        DEPENDS ${PROJECT_NAME}_${TARGET_NAME}
+        DEPENDS ${CMAKE_PROJECT_NAME}_${TARGET_NAME}
     )
 endif()
 

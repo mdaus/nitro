@@ -8,7 +8,7 @@ set(CODA_XML_LAYER "XercesC")
 set("USE_${CODA_XML_LAYER}" TRUE)
 
 if (USE_XercesC)
-    set(EXTRA_DEPS "coda-oss_XercesC")
+    set(EXTRA_DEPS "${CMAKE_PROJECT_NAME}_XercesC")
     list(APPEND MODULE_DEPS ${XERCESC_LIBRARY})
 endif()
 

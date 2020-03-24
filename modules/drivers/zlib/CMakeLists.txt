@@ -23,4 +23,4 @@ else()
     set(ZLIB_LIBRARY "z" CACHE STRING "name of the zlib library")
 endif()
 
-include("coda-oss_minizip.cmake")
+include("minizip.cmake")

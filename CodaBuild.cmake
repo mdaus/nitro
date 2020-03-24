@@ -164,7 +164,9 @@ function(coda_add_driver driver_name driver_file driver_hash)
         set("${target_name_lc}_BINARY_DIR" "${${target_name_lc}_BINARY_DIR}"
             CACHE INTERNAL "binary directory for ${target_name_lc}")
         # Queue a build for build-time.
-        if (EXISTS "${${target_name_lc}_SOURCE_DIR}/CMakeLists.txt")
+        if (DISABLE_DRIVER_BUILD)
+            # don't build
+        elseif (EXISTS "${${target_name_lc}_SOURCE_DIR}/CMakeLists.txt")
             # Found CMakeLists.txt
             set(target_cmake_args
                 "-DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>"
@@ -237,8 +239,8 @@ function(coda_add_tests_impl module_name dir_name deps filter_list is_unit_test)
 
     list(APPEND deps ${module_name})
 
-    # we need the parent directory include for TestCase.h
-    set(include_dirs "${CMAKE_CURRENT_SOURCE_DIR}/../${CODA_STD_PROJECT_INCLUDE_DIR}")
+    # needed for TestCase.h
+    set(include_dirs "${CODA_OSS_SOURCE_DIR}/modules/c++/include")
 
     # get all interface libraries and include directories from the dependencies
     foreach(dep ${deps})

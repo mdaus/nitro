@@ -6,7 +6,7 @@ if (WIN32)
     list(APPEND MODULE_DEPS "Rpcrt4")
 elseif (UNIX)
     list(APPEND MODULE_DEPS "uuid")
-    set(EXTRA_DEPS "coda-oss_UUID")
+    set(EXTRA_DEPS "${CMAKE_PROJECT_NAME}_UUID")
 endif()
 
 coda_add_library(${TARGET_NAME})  # See the definition of this method for details on the variables it looks at.
