@@ -41,7 +41,8 @@ ImageWriter::~ImageWriter()
 void ImageWriter::attachSource(nitf::ImageSource imageSource)
 {
     if (!nitf_ImageWriter_attachSource(getNativeOrThrow(),
-                                       imageSource.getNative(), &error))
+                                       imageSource.getNative(),
+                                       &error))
         throw nitf::NITFException(&error);
     imageSource.setManaged(true);
     //    imageSource->incRef();
@@ -56,7 +57,9 @@ void ImageWriter::setWriteCaching(int enable)
 
 void ImageWriter::setDirectBlockWrite(int enable)
 {
-    if (!nitf_ImageWriter_setDirectBlockWrite(getNativeOrThrow(), enable, &error))
+    if (!nitf_ImageWriter_setDirectBlockWrite(getNativeOrThrow(),
+                                              enable,
+                                              &error))
     {
         throw nitf::NITFException(&error);
     }
@@ -64,6 +67,7 @@ void ImageWriter::setDirectBlockWrite(int enable)
 
 void ImageWriter::setPadPixel(nitf::Uint8* value, nitf::Uint32 length)
 {
-    if (!nitf_ImageWriter_setPadPixel(getNativeOrThrow(), value, length, &error))
+    if (!nitf_ImageWriter_setPadPixel(
+                getNativeOrThrow(), value, length, &error))
         throw nitf::NITFException(&error);
 }
