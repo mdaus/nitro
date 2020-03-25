@@ -268,10 +268,11 @@ nitf_TREUtils_getRawData(nitf_TRE* tre,
             }
             else
             {
-                nitf_Error_init(error,
-                                "Failed due to missing TRE field(s)",
-                                NITF_CTXT,
-                                NITF_ERR_INVALID_OBJECT);
+                nitf_Error_initf(error,
+                                 NITF_CTXT,
+                                 NITF_ERR_INVALID_OBJECT,
+                                 "Failed due to missing TRE field(s): %s",
+                                 cursor.tag_str);
                 goto CATCH_ERROR;
             }
         }
