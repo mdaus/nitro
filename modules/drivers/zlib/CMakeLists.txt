@@ -9,18 +9,18 @@ if (ZLIB_FOUND)
 endif()
 #]]
 
-set(TARGET_NAME "ZLIB")
+set(TARGET_NAME ZLIB)
 
 # Build with ZLIB's build system
 coda_add_driver(
-    "${TARGET_NAME}"
+    ${TARGET_NAME}
     "zlib-1.2.7.tar"
     "SHA256=df0ba700245709ea54a18536ed266c2f0a0b3e4c3eb029abc42bf48a087901c5")
 
 if (WIN32)
-    set(ZLIB_LIBRARY "zlib" CACHE STRING "name of the zlib library")
+    set(ZLIB_LIBRARY zlib CACHE STRING "name of the zlib library")
 else()
-    set(ZLIB_LIBRARY "z" CACHE STRING "name of the zlib library")
+    set(ZLIB_LIBRARY z CACHE STRING "name of the zlib library")
 endif()
 
 include("minizip.cmake")

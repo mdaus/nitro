@@ -1,6 +1,7 @@
-set(TARGET_NAME "config")
+set(MODULE_NAME config)
+set(TARGET_NAME ${MODULE_NAME}-c++)
 
-coda_add_library(${TARGET_NAME})  # See the definition of this method for details on the variables it looks at.
+coda_add_library(${MODULE_NAME})  # See the definition of this method for details on the variables it looks at.
 
 set(CODA_EXPORT " ")
 if (MSVC AND BUILD_SHARED_LIBS)

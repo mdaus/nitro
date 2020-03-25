@@ -133,8 +133,8 @@ endfunction()
 # coda_add_driver() - Add a driver (3rd-party library) to the build.
 #
 # driver_name       - Name of the driver
-# driver_url        - Location of the driver.  This can be a path relative to
-#                     ${CMAKE_CURRENT_SOURCE_DIR}, or a URL.
+# driver_file       - Location of the driver.  This can be a path relative to
+#                     ${CMAKE_CURRENT_SOURCE_DIR}.
 # driver_hash       - hash signature in the form hashtype=hashvalue
 #
 #  The 3P's source and build directories will be stored in
@@ -218,10 +218,10 @@ endfunction()
 # dir_name          - Subdirectory containing the tests' source code
 #                     All source files beneath this directory will be used.
 #                     Each source file is assumed to create a separate executable.
-# deps              - Modules that the tests are dependent upon.
+# module_deps       - Modules that the tests are dependent upon.
 # filter_list       - Source files to ignore
 # is_unit_test      - Whether test will be run automatically
-function(coda_add_tests_impl module_name dir_name deps filter_list is_unit_test)
+function(coda_add_tests_impl module_name dir_name module_deps filter_list is_unit_test)
     # Find all the source files, relative to the module's directory
     file(GLOB_RECURSE local_tests RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" "${dir_name}/*.cpp")
     # Filter out ignored files
@@ -237,13 +237,20 @@ function(coda_add_tests_impl module_name dir_name deps filter_list is_unit_test)
         add_compile_options(/W3) # change this to /W4 later
     endif()
 
-    list(APPEND deps ${module_name})
+    list(APPEND module_deps ${module_name})
 
     # needed for TestCase.h
     set(include_dirs "${CODA_OSS_SOURCE_DIR}/modules/c++/include")
 
+    set(module_dep_targets "")
+    foreach(dep ${module_deps})
+        if (NOT ${dep} STREQUAL "")
+            list(APPEND module_dep_targets "${dep}-c++")
+        endif()
+    endforeach()
+
     # get all interface libraries and include directories from the dependencies
-    foreach(dep ${deps})
+    foreach(dep ${module_dep_targets})
         if (TARGET ${dep})
             get_property(dep_includes TARGET ${dep} PROPERTY INTERFACE_INCLUDE_DIRECTORIES)
             list(APPEND include_dirs ${dep_includes})
@@ -259,12 +266,12 @@ function(coda_add_tests_impl module_name dir_name deps filter_list is_unit_test)
         # Do a bit of path manipulation to make sure tests in deeper subdirs retain those subdirs in their build outputs
 #xxxTODO double-check this
         file(RELATIVE_PATH test_subdir "${CMAKE_CURRENT_SOURCE_DIR}/${dir_name}" "${CMAKE_CURRENT_SOURCE_DIR}/${test_dir}")
-        # message(STATUS "Generating Test: module_name=${module_name} test_src=${test_src}  test_name=${test_name}  test_dir=${test_dir}  test_subdir= ${test_subdir} deps=${deps}")
+        # message(STATUS "Generating Test: module_name=${module_name} test_src=${test_src}  test_name=${test_name}  test_dir=${test_dir}  test_subdir= ${test_subdir} module_deps=${module_deps}")
 
         # Set IDE subfolder so that tests appear in their own tree
         set_target_properties(${test_name} PROPERTIES FOLDER "${dir_name}/${module_name}/${test_subdir}")
 
-        target_link_libraries(${test_name} PRIVATE ${deps})
+        target_link_libraries(${test_name} PRIVATE ${module_dep_targets})
         target_include_directories(${test_name} PRIVATE ${include_dirs})
 
         # add unit tests to automatic test suite
@@ -278,44 +285,46 @@ function(coda_add_tests_impl module_name dir_name deps filter_list is_unit_test)
 endfunction()
 
 
-function(coda_add_tests module_name deps filter_list)
+function(coda_add_tests module_name module_deps filter_list)
     if (CODA_BUILD_TESTS)
-        coda_add_tests_impl(${module_name} "${CODA_STD_PROJECT_TESTS_DIR}" "${deps}" "${filter_list}" FALSE)
+        coda_add_tests_impl(${module_name} "${CODA_STD_PROJECT_TESTS_DIR}" "${module_deps}" "${filter_list}" FALSE)
     endif()
 endfunction()
 
-function(coda_add_unittests module_name deps filter_list)
+function(coda_add_unittests module_name module_deps filter_list)
     if (CODA_BUILD_TESTS)
-        coda_add_tests_impl(${module_name} "${CODA_STD_PROJECT_UNITTESTS_DIR}" "${deps}" "${filter_list}" TRUE)
+        coda_add_tests_impl(${module_name} "${CODA_STD_PROJECT_UNITTESTS_DIR}" "${module_deps}" "${filter_list}" TRUE)
     endif()
 endfunction()
 
 
 # coda_add_library_impl() - Add a library to the build
 #
-# tgt_name          - Name of the module
+# module_name       - Name of the module
 # tgt_lang          - Language of the library
-# tgt_deps          - List of linkable dependencies for the library
-# tgt_extra_deps    - List of non-linkable dependencies for the library
+# module_deps       - List of internal module dependencies for the library
+# external_deps     - List of linkable external dependencies for the library
+# extra_deps        - List of non-linkable dependencies for the library
 # source_filter     - Source files to ignore
-function(coda_add_library_impl tgt_name tgt_lang tgt_deps tgt_extra_deps source_filter)
+function(coda_add_library_impl module_name tgt_lang module_deps external_deps extra_deps source_filter)
+    set(target_name "${module_name}-${tgt_lang}")
+
     # Find all the source files, relative to the module's directory
     file(GLOB_RECURSE local_sources RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" "${CODA_STD_PROJECT_SOURCE_DIR}/*.cpp")
 
     # Filter out ignored files
     filter_files(local_sources "${local_sources}" "${source_filter}")
-
     # Periods in target names for dirs are replaced with slashes (subdirectories).
-    string(REPLACE "." "/" tgt_munged_dirname ${tgt_name})
+    string(REPLACE "." "/" tgt_munged_dirname ${module_name})
 
     # Periods in target names for files are replaced with underscores.
     # Note that this variable name is used in the *.cmake.in files.
-    string(REPLACE "." "_" tgt_munged_name ${tgt_name})
+    string(REPLACE "." "_" tgt_munged_name ${module_name})
 
     # If we find a *_config.h.cmake.in file, generate the corresponding *_config.h, and put the
     #   target directory in the include path.
     #xxx This should probably look for all *.cmake.in files and process them.
-    set(config_file_template "${CMAKE_CURRENT_SOURCE_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}/${tgt_munged_dirname}/${tgt_name}_config.h.cmake.in")
+    set(config_file_template "${CMAKE_CURRENT_SOURCE_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}/${tgt_munged_dirname}/${module_name}_config.h.cmake.in")
     if (EXISTS ${config_file_template})
         set(config_file_out "${CODA_STD_PROJECT_INCLUDE_DIR}/${tgt_munged_dirname}/${tgt_munged_name}_config.h")
         message(STATUS "Processing config header: ${config_file_template} -> ${config_file_out}")
@@ -325,20 +334,27 @@ function(coda_add_library_impl tgt_name tgt_lang tgt_deps tgt_extra_deps source_
 
     if (NOT local_sources)
         # Libraries without sources must be declared to CMake as INTERFACE libraries
-        set(header_type INTERFACE)
-        add_library(${tgt_name} INTERFACE)
-        if (tgt_deps)
-            target_link_libraries(${tgt_name} INTERFACE ${tgt_deps})
-        endif()
+        set(lib_type INTERFACE)
+        add_library(${target_name} INTERFACE)
     else()
-        set(header_type PUBLIC)
-        add_library(${tgt_name} ${local_sources})
-        if (tgt_lang)
-            set_target_properties(${tgt_name} PROPERTIES OUTPUT_NAME "${tgt_name}-${tgt_lang}")
+        set(lib_type PUBLIC)
+        add_library(${target_name} ${local_sources})
+    endif()
+
+    # convert module dependency names to the corresponding target names
+    set(module_dep_targets "")
+    foreach(dep ${module_deps})
+        if (NOT ${dep} STREQUAL "")
+            list(APPEND module_dep_targets "${dep}-c++")
         endif()
-        if (tgt_deps)
-            target_link_libraries(${tgt_name} PUBLIC ${tgt_deps})
-        endif()
+    endforeach()
+
+    # link the dependencies
+    if (module_dep_targets)
+        target_link_libraries(${target_name} ${lib_type} ${module_dep_targets})
+    endif()
+    if (external_deps)
+        target_link_libraries(${target_name} ${lib_type} ${external_deps})
     endif()
 
     # set our include directories
@@ -347,17 +363,17 @@ function(coda_add_library_impl tgt_name tgt_lang tgt_deps tgt_extra_deps source_
         $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}>
         "${CMAKE_INSTALL_PREFIX}/${CODA_STD_PROJECT_INCLUDE_DIR}")
     # add interface include directories from the dependencies to our interface
-    foreach (dep ${tgt_deps})
+    foreach (dep ${module_dep_targets})
         if (TARGET ${dep})
             get_property(dep_include_dirs TARGET ${dep} PROPERTY INTERFACE_INCLUDE_DIRECTORIES)
             list(APPEND include_dirs ${dep_include_dirs})
         endif()
     endforeach()
     list(REMOVE_DUPLICATES include_dirs)
-    target_include_directories(${tgt_name} ${header_type} ${include_dirs})
+    target_include_directories(${target_name} ${lib_type} ${include_dirs})
 
-    if (tgt_extra_deps)
-        add_dependencies(${tgt_name} ${tgt_extra_deps})
+    if (extra_deps)
+        add_dependencies(${target_name} ${extra_deps})
     endif()
 
     if (MSVC)
@@ -365,8 +381,8 @@ function(coda_add_library_impl tgt_name tgt_lang tgt_deps tgt_extra_deps source_
     endif()
 
     # Set up install destinations for binaries
-    install(TARGETS ${tgt_name}
-            EXPORT "${tgt_name}_TARGETS"
+    install(TARGETS ${target_name}
+            EXPORT "${module_name}_TARGETS"
             LIBRARY DESTINATION "${CODA_STD_PROJECT_LIB_DIR}"
             ARCHIVE DESTINATION "${CODA_STD_PROJECT_LIB_DIR}"
             RUNTIME DESTINATION "${CODA_STD_PROJECT_BIN_DIR}")
@@ -379,16 +395,16 @@ function(coda_add_library_impl tgt_name tgt_lang tgt_deps tgt_extra_deps source_
                 PATTERN "*.hpp")
 
     # cannot use exports until all external dependencies have their own exports defined
-    #install(EXPORT "${tgt_name}_TARGETS"
-    #    FILE ${tgt_name}_TARGETS.cmake
-    #    NAMESPACE ${tgt_name}::
-    #    DESTINATION ${CODA_STD_PROJECT_LIB_DIR}/cmake/${tgt_name}
+    #install(EXPORT "${target_name}_TARGETS"
+    #    FILE ${target_name}_TARGETS.cmake
+    #    NAMESPACE ${target_name}::
+    #    DESTINATION ${CODA_STD_PROJECT_LIB_DIR}/cmake/${target_name}
     #)
 
 #[[  #xxx TODO Export the library interface? See https://www.youtube.com/watch?v=bsXLMQ6WgIk
     include(CMakePackageConfigHelpers)
     write_basic_package_version_file(
-        VERSION ${${tgt_name}_VERSION}
+        VERSION ${${target_name}_VERSION}
         COMPATIBILITY SameMajorVersion
     )
     install(FILES "${tgt_munged_name}_config.cmake" "${tgt_munged_name}_config_version.cmake"
@@ -399,7 +415,7 @@ function(coda_add_library_impl tgt_name tgt_lang tgt_deps tgt_extra_deps source_
     find_dependency(mydepend 1.0) # Version#
     include("${CMAKE_CURRENT_LIST_DIR}/${tgt_munged_name}_TARGETS.cmake")
 
-    #xxx Also, add_library("${tgt_name}::${tgt_name}" ALIAS ${tgt_name})
+    #xxx Also, add_library("${target_name}::${target_name}" ALIAS ${target_name})
 #]]
 endfunction()
 
@@ -413,7 +429,8 @@ endfunction()
 #     following variables to define the library:
 #
 #       TARGET_LANG     Language of the library
-#       MODULE_DEPS     List of dependencies for the library
+#       MODULE_DEPS     List of internal dependencies for the library
+#       EXTERNAL_DEPS   List of linkable external dependencies for the library
 #       EXTRA_DEPS      List of non-linkable dependencies for the library
 #       SOURCE_FILTER   Source files to ignore
 #
@@ -429,23 +446,25 @@ endfunction()
 #
 #  The caller can then simply call coda_add_library(target_name)
 #
-function(coda_add_library tgt_name)
-    coda_add_library_impl("${tgt_name}" "${TARGET_LANG}"
-                          "${MODULE_DEPS}" "${EXTRA_DEPS}" "${SOURCE_FILTER}")
+function(coda_add_library module_name)
+    coda_add_library_impl("${module_name}" "${TARGET_LANG}"
+                          "${MODULE_DEPS}" "${EXTERNAL_DEPS}" "${EXTRA_DEPS}"
+                          "${SOURCE_FILTER}")
 endfunction()
 
 
-# coda_add_library_impl() - Add a SWIG Python module to the build
+# coda_add_swig_python_module_impl() - Add a SWIG Python module to the build
 #
-# tgt_name          - Name of the CMake target to build the module
+# target_name       - Name of the CMake target to build the module
 # module_name       - Name of the module
 # deps              - List of linkable dependencies for the library
 # python_deps       - List of Python module dependencies for the library
 # input_file        - Source file (.i) from which to generate the SWIG bindings
-function(coda_add_swig_python_module_impl tgt_name module_name deps python_deps input_file)
+function(coda_add_swig_python_module_impl target_name module_name deps python_deps input_file)
     # determine all of the necessary include dirs and link libs from the dependencies
     set(include_dirs $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/source>)
     set(libs "")
+    list(TRANSFORM deps APPEND "-c++")
     foreach(dep ${deps})
         get_property(dep_interface_include_dirs TARGET ${dep} PROPERTY INTERFACE_INCLUDE_DIRECTORIES)
         list(APPEND include_dirs ${dep_interface_include_dirs})
@@ -470,19 +489,19 @@ function(coda_add_swig_python_module_impl tgt_name module_name deps python_deps 
     set(CMAKE_SWIG_OUTDIR "${CMAKE_CURRENT_SOURCE_DIR}/source/generated")
     set(SWIG_OUTFILE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/source/generated")
 
-    swig_add_library(${tgt_name} LANGUAGE python SOURCES ${input_file})
+    swig_add_library(${target_name} LANGUAGE python SOURCES ${input_file})
 
-    swig_link_libraries(${tgt_name} "${libs}")
-    set_property(TARGET ${tgt_name} PROPERTY
+    swig_link_libraries(${target_name} "${libs}")
+    set_property(TARGET ${target_name} PROPERTY
         SWIG_INCLUDE_DIRECTORIES "${include_dirs}")
-    set_property(TARGET ${tgt_name} PROPERTY
+    set_property(TARGET ${target_name} PROPERTY
         SWIG_GENERATED_INCLUDE_DIRECTORIES "${Python_INCLUDE_DIRS}")
-    set_property(TARGET ${tgt_name} PROPERTY
+    set_property(TARGET ${target_name} PROPERTY
         LIBRARY_OUTPUT_NAME ${module_name})
     file(GLOB generated_py "${CMAKE_CURRENT_SOURCE_DIR}/source/generated/*.py")
 
     # install the Python extension library
-    install(TARGETS ${tgt_name} DESTINATION "${CODA_PYTHON_SITE_PACKAGES}/coda")
+    install(TARGETS ${target_name} DESTINATION "${CODA_PYTHON_SITE_PACKAGES}/coda")
 
     # install the generate python to load the Python extension
     install(FILES ${generated_py} DESTINATION "${CODA_PYTHON_SITE_PACKAGES}/coda")
@@ -498,15 +517,16 @@ endfunction()
 #     this method does not take formal parameters.  Instead, callers should set any of the
 #     following variables to define the library:
 #
+#       TARGET_NAME     Name of the CMake target to build the Python module
 #       MODULE_NAME     Name of the module within Python
 #       MODULE_DEPS     List of dependencies for the library
 #       PYTHON_DEPS     List of Python module dependencies for the library
 #       SWIG_INPUT_FILE Source file (.i) from which to generate the SWIG bindings
 #
-#  The caller can then simply call coda_add_library(target_name)
+#  The caller can then simply call coda_add_swig_python_module()
 #
-function(coda_add_swig_python_module tgt_name)
-    coda_add_swig_python_module_impl("${tgt_name}" "${MODULE_NAME}"
+function(coda_add_swig_python_module)
+    coda_add_swig_python_module_impl("${TARGET_NAME}" "${MODULE_NAME}"
                                      "${MODULE_DEPS}" "${PYTHON_DEPS}" "${SWIG_INPUT_FILE}")
     # TODO add tests
 endfunction()

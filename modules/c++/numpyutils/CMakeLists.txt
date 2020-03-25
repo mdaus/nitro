@@ -1,11 +1,11 @@
-set(TARGET_NAME "numpyutils")
-set(MODULE_DEPS "types" "except" "sys")
+set(MODULE_NAME numpyutils)
+set(MODULE_DEPS types except sys)
 
 if(Python_FOUND AND Python_Development_FOUND AND Python_NumPy_FOUND)
-    coda_add_library(${TARGET_NAME})  # See the definition of this method for details on the variables it looks at.
-    target_include_directories(${TARGET_NAME} PUBLIC
+    set(EXTERNAL_DEPS ${Python_LIBRARIES})
+    coda_add_library(${MODULE_NAME})  # See the definition of this method for details on the variables it looks at.
+    target_include_directories(${MODULE_NAME}-c++ PUBLIC
         ${Python_INCLUDE_DIRS} ${Python_NumPy_INCLUDE_DIRS})
-    target_link_libraries(${TARGET_NAME} PUBLIC ${Python_LIBRARIES})
 
-    coda_add_unittests(${TARGET_NAME} "${UNITTEST_DEPS}" "${UNITTEST_FILTER}")
+    coda_add_unittests(${MODULE_NAME} "${UNITTEST_DEPS}" "${UNITTEST_FILTER}")
 endif()

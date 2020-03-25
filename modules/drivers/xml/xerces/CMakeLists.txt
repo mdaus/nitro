@@ -1,4 +1,4 @@
-set(TARGET_NAME "XercesC")
+set(TARGET_NAME XercesC)
 
 # set XercesC configure options
 # see https://xerces.apache.org/xerces-c/build-3.html

@@ -1,7 +1,7 @@
 # Some of our code depends on code from a 'minizip' project that is distributed
 #   with zlib.  However, we don't want the whole project; just a couple of
 #   files, bundled into a library.
-set(OUTPUT_NAME "minizip")
+set(OUTPUT_NAME minizip)
 set(TARGET_NAME "${CMAKE_PROJECT_NAME}_${OUTPUT_NAME}")
 set(MODULE_DEPS ${ZLIB_LIBRARY})
 set(EXTRA_DEPS "${CMAKE_PROJECT_NAME}_ZLIB")  # force ZLIB build to complete before us

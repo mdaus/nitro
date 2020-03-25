@@ -1,4 +1,4 @@
-set(TARGET_NAME "boost-config")
+set(TARGET_NAME boost-config)
 
 set(config_file_out "include/boost/boost_config.h")
 configure_file("include/boost/boost_config.h.in" "${config_file_out}" @ONLY)
