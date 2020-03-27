@@ -260,8 +260,10 @@ function(coda_add_tests_impl module_name dir_name module_deps filter_list is_uni
     foreach(test_src ${local_tests})
         # Use the base name of the source file as the name of the test
         get_filename_component(test_name "${test_src}" NAME_WE)
-        add_executable(${test_name} "${test_src}")
-        add_dependencies(${test_group_tgt} ${test_name})
+        set(test_target "${module_name}_${test_name}")
+        add_executable(${test_target} "${test_src}")
+        set_target_properties(${test_target} PROPERTIES OUTPUT_NAME ${test_name})
+        add_dependencies(${test_group_tgt} ${test_target})
         get_filename_component(test_dir "${test_src}" DIRECTORY)
         # Do a bit of path manipulation to make sure tests in deeper subdirs retain those subdirs in their build outputs
 #xxxTODO double-check this
@@ -269,18 +271,18 @@ function(coda_add_tests_impl module_name dir_name module_deps filter_list is_uni
         # message(STATUS "Generating Test: module_name=${module_name} test_src=${test_src}  test_name=${test_name}  test_dir=${test_dir}  test_subdir= ${test_subdir} module_deps=${module_deps}")
 
         # Set IDE subfolder so that tests appear in their own tree
-        set_target_properties(${test_name} PROPERTIES FOLDER "${dir_name}/${module_name}/${test_subdir}")
+        set_target_properties(${test_target} PROPERTIES FOLDER "${dir_name}/${module_name}/${test_subdir}")
 
-        target_link_libraries(${test_name} PRIVATE ${module_dep_targets})
-        target_include_directories(${test_name} PRIVATE ${include_dirs})
+        target_link_libraries(${test_target} PRIVATE ${module_dep_targets})
+        target_include_directories(${test_target} PRIVATE ${include_dirs})
 
         # add unit tests to automatic test suite
         if (${is_unit_test})
-            add_test(${test_name} ${test_name})
+            add_test(${test_target} ${test_target})
         endif()
 
         # Install [unit]tests to separate subtrees
-        install(TARGETS ${test_name} RUNTIME DESTINATION "${dir_name}/${module_name}/${test_subdir}")
+        install(TARGETS ${test_target} RUNTIME DESTINATION "${dir_name}/${module_name}/${test_subdir}")
     endforeach()
 endfunction()
 
@@ -341,16 +343,12 @@ function(coda_add_library_impl module_name tgt_lang module_deps external_deps ex
         add_library(${target_name} ${local_sources})
     endif()
 
-    # convert module dependency names to the corresponding target names
-    set(module_dep_targets "")
-    foreach(dep ${module_deps})
-        if (NOT ${dep} STREQUAL "")
-            list(APPEND module_dep_targets "${dep}-c++")
-        endif()
-    endforeach()
-
     # link the dependencies
-    if (module_dep_targets)
+    if (module_deps)
+        # convert module dependency names to the corresponding target names
+        foreach(dep ${module_deps})
+            list(APPEND module_dep_targets "${dep}-c++")
+        endforeach()
         target_link_libraries(${target_name} ${lib_type} ${module_dep_targets})
     endif()
     if (external_deps)
@@ -394,6 +392,12 @@ function(coda_add_library_impl module_name tgt_lang module_deps external_deps ex
                 PATTERN "*.h"
                 PATTERN "*.hpp")
 
+    # install conf directory, if present
+    if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/conf")
+        install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/conf"
+                DESTINATION "share/${module_name}")
+    endif()
+
     # cannot use exports until all external dependencies have their own exports defined
     #install(EXPORT "${target_name}_TARGETS"
     #    FILE ${target_name}_TARGETS.cmake
@@ -417,6 +421,63 @@ function(coda_add_library_impl module_name tgt_lang module_deps external_deps ex
 
     #xxx Also, add_library("${target_name}::${target_name}" ALIAS ${target_name})
 #]]
+endfunction()
+
+
+function(coda_add_plugin)
+    cmake_parse_arguments(
+        ARG                          # prefix
+        ""                           # options
+        "PLUGIN_NAME;PLUGIN;VERSION" # single args
+        "MODULE_DEPS;SOURCES"        # multi args
+        "${ARGN}"
+    )
+    if (ARG_UNPARSED_ARGUMENTS)
+        message(FATAL_ERROR "received unexpected argument(s): ${ARG_UNPARSED_ARGUMENTS}")
+    endif()
+
+    set(OUTPUT_NAME "${ARG_PLUGIN_NAME}-c++")
+    set(TARGET_NAME "${ARG_PLUGIN}_${OUTPUT_NAME}")
+
+    if (NOT ARG_SOURCES)
+        file(GLOB SOURCES "source/*.cpp")
+    else()
+        set(SOURCES "${ARG_SOURCES}")
+    endif()
+
+    add_library(${TARGET_NAME} MODULE "${SOURCES}")
+    set_target_properties(${TARGET_NAME} PROPERTIES OUTPUT_NAME ${OUTPUT_NAME})
+
+    if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/include")
+        target_include_directories(${TARGET_NAME}
+            PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
+                   "$<INSTALL_INTERFACE:${CODA_STD_PROJECT_INCLUDE_DIR}>")
+    endif()
+
+    foreach(dep ${ARG_MODULE_DEPS})
+        list(APPEND MODULE_DEP_TARGETS "${dep}-c++")
+    endforeach()
+    target_link_libraries(${TARGET_NAME} PUBLIC ${MODULE_DEP_TARGETS})
+
+    target_compile_definitions(${TARGET_NAME} PRIVATE PLUGIN_MODULE_EXPORTS)
+
+    install(TARGETS ${TARGET_NAME}
+            LIBRARY DESTINATION "share/${ARG_PLUGIN}/plugins"
+            ARCHIVE DESTINATION "share/${ARG_PLUGIN}/plugins"
+            RUNTIME DESTINATION "share/${ARG_PLUGIN}/plugins")
+
+    # install headers
+    install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}"
+            DESTINATION "."
+            FILES_MATCHING
+                PATTERN "*.h"
+                PATTERN "*.hpp")
+
+    # install conf directory, if present
+    if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/conf")
+        install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/conf"
+                DESTINATION "share/${ARG_PLUGIN}")
+    endif()
 endfunction()
 
 
