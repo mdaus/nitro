@@ -5,8 +5,7 @@ set(MODULE_DEPS sys)
 option(RE_ENABLE_STD_REGEX "use std::regex instead of pcre" OFF)
 
 if (NOT RE_ENABLE_STD_REGEX)
-    set(EXTRA_DEPS "${CMAKE_PROJECT_NAME}_PCRE")
-    set(EXTERNAL_DEPS pcre2-8)
+    set(EXTERNAL_DEPS pcre2)
 endif()
 
 coda_add_library(${MODULE_NAME})  # See the definition of this method for details on the variables it looks at.
