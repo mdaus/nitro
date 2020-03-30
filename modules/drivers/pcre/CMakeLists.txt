@@ -114,7 +114,8 @@ if (ENABLE_PCRE)
                                                           HAVE_CONFIG_H)
         target_include_directories(${TARGET_NAME}
             PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>"
-                   "$<BUILD_INTERFACE:${SOURCE_DIR}/src>")
+                   "$<BUILD_INTERFACE:${SOURCE_DIR}/src>"
+                   "$<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/${CODA_STD_PROJECT_INCLUDE_DIR}>")
         install(TARGETS ${TARGET_NAME}
                 LIBRARY DESTINATION "${CODA_STD_PROJECT_LIB_DIR}"
                 ARCHIVE DESTINATION "${CODA_STD_PROJECT_LIB_DIR}")

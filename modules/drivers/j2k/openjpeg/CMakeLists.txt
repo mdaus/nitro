@@ -1,6 +1,67 @@
-set(TARGET_NAME OPENJPEG)
+set(TARGET_NAME openjpeg)
 
-coda_add_driver(${TARGET_NAME}
-    "openjpeg-2.3.0_mod.tar"
-    "SHA256=1ddcff11ac2522fffd51693002bab5ddc690adf735d86a5e4c60eade4468bd19"
-)
+option(ENABLE_J2K "enable J2K library" ON)
+set(PCRE_HOME "" CACHE STRING "path to PCRE installation")
+
+if (ENABLE_J2K)
+    set(DISABLE_DRIVER_BUILD ON) # custom build is used instead, below
+    coda_add_driver(${TARGET_NAME}
+        "openjpeg-2.3.0_mod.tar"
+        "SHA256=1ddcff11ac2522fffd51693002bab5ddc690adf735d86a5e4c60eade4468bd19"
+    )
+
+    set(SOURCE_DIR "${${CMAKE_PROJECT_NAME}_${TARGET_NAME}_SOURCE_DIR}")
+
+    check_include_file("stdint.h" OPJ_HAVE_STDINT_H)
+    set(OPENJPEG_VERSION_MAJOR 2)
+    set(OPENJPEG_VERSION_MINOR 3)
+    set(OPENJPEG_VERSION_BUILD 0)
+
+    check_include_file("inttypes.h" OPJ_HAVE_INTTYPES_H)
+    set(PACKAGE_VERSION 2.3.0)
+    set(_FILE_OFFSET_BITS 64)
+    set(_LARGEFILE_SOURCE 1)
+    set(_LARGE_FILES 1)
+    set(CMAKE_REQUIRED_DEFINITIONS -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE)
+    check_symbol_exists("fseeko" "stdio.h" OPJ_HAVE_FSEEKO)
+    unset(CMAKE_REQUIRED_DEFINITIONS)
+    check_include_file("malloc.h" OPJ_HAVE_MALLOC_H)
+    check_symbol_exists("aligned_alloc" "malloc.h" OPJ_HAVE_ALIGNED_ALLOC)
+    check_symbol_exists("_aligned_malloc" "malloc.h" OPJ_HAVE__ALIGNED_MALLOC)
+    check_symbol_exists("memalign" "malloc.h" OPJ_HAVE_MEMALIGN)
+    check_symbol_exists("posix_memalign" "stdlib.h" OPJ_HAVE_POSIX_MEMALIGN)
+    test_big_endian(OPJ_BIG_ENDIAN)
+
+    set(SOURCE_DIR "${${CMAKE_PROJECT_NAME}_${TARGET_NAME}_SOURCE_DIR}")
+    configure_file("${SOURCE_DIR}/src/lib/openjp2/opj_config.h.cmake.in"
+                   "opj_config.h")
+    configure_file("${SOURCE_DIR}/src/lib/openjp2/opj_config_private.h.cmake.in"
+                   "opj_config_private.h")
+
+    foreach(src "bio.c" "cio.c" "dwt.c" "event.c" "image.c" "invert.c"
+                "j2k.c" "jp2.c" "mct.c" "mqc.c" "openjpeg.c"
+                "opj_clock.c" "opj_malloc.c" "pi.c" "sparse_array.c"
+                "t1.c" "t2.c" "tcd.c" "thread.c" "tgt.c"
+                "function_list.c")
+        list(APPEND SOURCES "${SOURCE_DIR}/src/lib/openjp2/${src}")
+    endforeach()
+
+    add_library(${TARGET_NAME} ${SOURCES})
+    if (NOT BUILD_SHARED_LIBS)
+        target_compile_definitions(${TARGET_NAME} PUBLIC OPJ_STATIC)
+    endif()
+    target_include_directories(${TARGET_NAME}
+        PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>"
+               "$<BUILD_INTERFACE:${SOURCE_DIR}/src/lib/openjp2>"
+               "$<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/${CODA_STD_PROJECT_INCLUDE_DIR}>")
+    install(TARGETS ${TARGET_NAME}
+            LIBRARY DESTINATION "${CODA_STD_PROJECT_LIB_DIR}"
+            ARCHIVE DESTINATION "${CODA_STD_PROJECT_LIB_DIR}")
+
+    install(FILES
+                "${SOURCE_DIR}/src/lib/openjp2/openjpeg.h"
+                "${SOURCE_DIR}/src/lib/openjp2/opj_stdint.h"
+                "${CMAKE_CURRENT_BINARY_DIR}/opj_config.h"
+                "${CMAKE_CURRENT_BINARY_DIR}/opj_config_private.h"
+            DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}")
+endif()

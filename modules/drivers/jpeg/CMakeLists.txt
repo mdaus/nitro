@@ -44,9 +44,9 @@ if (ENABLE_JPEG)
         configure_file("jconfig.h.in" ${JCONFIG})
         add_library(jpeg ${SOURCES})
         target_include_directories(${TARGET_NAME}
-            PUBLIC "$<INSTALL_INTERFACE:${CODA_STD_PROJECT_INCLUDE_DIR}>"
-                   "$<BUILD_INTERFACE:${SOURCE_DIR}>"
-                   "$<BUILD_INTERFACE:${${CMAKE_PROJECT_NAME}_${TARGET_NAME}_BINARY_DIR}>")
+            PUBLIC "$<BUILD_INTERFACE:${SOURCE_DIR}>"
+                   "$<BUILD_INTERFACE:${${CMAKE_PROJECT_NAME}_${TARGET_NAME}_BINARY_DIR}>"
+                   "$<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/${CODA_STD_PROJECT_INCLUDE_DIR}>")
         install(TARGETS jpeg
                 LIBRARY DESTINATION "${CODA_STD_PROJECT_LIB_DIR}"
                 ARCHIVE DESTINATION "${CODA_STD_PROJECT_LIB_DIR}")
