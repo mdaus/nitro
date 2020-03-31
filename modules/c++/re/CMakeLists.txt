@@ -1,5 +1,4 @@
 set(MODULE_NAME re)
-set(MODULE_DEPS sys)
 
 # Enable to use std::regex instead of PCRE.
 option(RE_ENABLE_STD_REGEX "use std::regex instead of pcre" OFF)
@@ -8,7 +7,10 @@ if (NOT RE_ENABLE_STD_REGEX)
     set(EXTERNAL_DEPS pcre2)
 endif()
 
-coda_add_library(${MODULE_NAME})  # See the definition of this method for details on the variables it looks at.
+coda_add_module(
+    NAME ${MODULE_NAME}
+    DEPS sys
+    EXTERNAL_DEPS ${EXTERNAL_DEPS})
 
 if (NOT RE_ENABLE_STD_REGEX)
     if (NOT BUILD_SHARED_LIBS)
@@ -18,5 +20,10 @@ if (NOT RE_ENABLE_STD_REGEX)
     endif()
 endif()
 
-coda_add_tests(${MODULE_NAME} "${TEST_DEPS}" "${TEST_FILTER}")
-coda_add_unittests(${MODULE_NAME} "${UNITTEST_DEPS}" "${UNITTEST_FILTER}")
+coda_add_tests(
+    MODULE_NAME ${MODULE_NAME}
+    DIRECTORY "tests")
+coda_add_tests(
+    MODULE_NAME ${MODULE_NAME}
+    DIRECTORY "unittests"
+    UNITTEST)

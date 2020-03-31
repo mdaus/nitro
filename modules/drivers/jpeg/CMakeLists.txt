@@ -7,10 +7,10 @@ if (ENABLE_JPEG)
     if (JPEG_HOME STREQUAL "")
         message("JPEG_HOME not specified, so it will be built")
 
-        set(DISABLE_DRIVER_BUILD ON) # custom build is used instead, below
-        coda_add_driver(${TARGET_NAME}
-            "jpegsrc.v9.tar"
-            "SHA256=650de9b9c73b627c365c2c1617436bfdef47decddc1c6f7e006bd7655c4f8111"
+        coda_add_driver(
+            NAME ${TARGET_NAME}
+            ARCHIVE "jpegsrc.v9.tar"
+            HASH "SHA256=650de9b9c73b627c365c2c1617436bfdef47decddc1c6f7e006bd7655c4f8111"
         )
         set(HAVE_PROTOTYPES 1)
         check_cxx_source_compiles("int main() { unsigned short; return 0; }"

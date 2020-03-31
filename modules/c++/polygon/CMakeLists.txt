@@ -1,8 +1,14 @@
 set(MODULE_NAME polygon)
-set(MODULE_DEPS sys mem types math except)
-set(TEST_DEPS sio.lite)
 
-coda_add_library(${MODULE_NAME})  # See the definition of this method for details on the variables it looks at.
+coda_add_module(
+    NAME ${MODULE_NAME}
+    DEPS sys mem types math except)
 
-coda_add_tests(${MODULE_NAME} "${TEST_DEPS}" "${TEST_FILTER}")
-coda_add_unittests(${MODULE_NAME} "${UNITTEST_DEPS}" "${UNITTEST_FILTER}")
+coda_add_tests(
+    MODULE_NAME ${MODULE_NAME}
+    DIRECTORY "tests"
+    DEPS sio.lite)
+coda_add_tests(
+    MODULE_NAME ${MODULE_NAME}
+    DIRECTORY "unittests"
+    UNITTEST)

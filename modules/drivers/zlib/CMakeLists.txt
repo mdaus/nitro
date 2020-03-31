@@ -13,9 +13,10 @@ set(TARGET_NAME ZLIB)
 
 # Build with ZLIB's build system
 coda_add_driver(
-    ${TARGET_NAME}
-    "zlib-1.2.7.tar"
-    "SHA256=df0ba700245709ea54a18536ed266c2f0a0b3e4c3eb029abc42bf48a087901c5")
+    NAME ${TARGET_NAME}
+    ARCHIVE "zlib-1.2.7.tar"
+    HASH "SHA256=df0ba700245709ea54a18536ed266c2f0a0b3e4c3eb029abc42bf48a087901c5"
+    BUILD)
 
 if (WIN32)
     set(ZLIB_LIBRARY zlib CACHE STRING "name of the zlib library")

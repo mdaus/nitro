@@ -4,10 +4,10 @@ option(ENABLE_J2K "enable J2K library" ON)
 set(PCRE_HOME "" CACHE STRING "path to PCRE installation")
 
 if (ENABLE_J2K)
-    set(DISABLE_DRIVER_BUILD ON) # custom build is used instead, below
-    coda_add_driver(${TARGET_NAME}
-        "openjpeg-2.3.0_mod.tar"
-        "SHA256=1ddcff11ac2522fffd51693002bab5ddc690adf735d86a5e4c60eade4468bd19"
+    coda_add_driver(
+        NAME ${TARGET_NAME}
+        ARCHIVE "openjpeg-2.3.0_mod.tar"
+        HASH "SHA256=1ddcff11ac2522fffd51693002bab5ddc690adf735d86a5e4c60eade4468bd19"
     )
 
     set(SOURCE_DIR "${${CMAKE_PROJECT_NAME}_${TARGET_NAME}_SOURCE_DIR}")

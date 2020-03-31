@@ -1,16 +1,55 @@
 set(TARGET_NAME xerces-c)
 
-set(XML_HOME "" CACHE STRING "path to Xerces XML library installation")
+if (WIN32)
+    set(EXTERNAL_DEPS ws2_32 advapi32)
+elseif (UNIX)
+    set(EXTERNAL_DEPS pthread)
+endif()
 
-set(DISABLE_DRIVER_BUILD ON) # custom build is used instead, below
 coda_add_driver(
-    ${TARGET_NAME}
-    "xerces-c-3.1.1.tar"
-    "SHA256=1F57A27DD1B3806DF42D5AE638C362358CD16519578D7D395FC77FFD35F4DBCB"
+    NAME ${TARGET_NAME}
+    ARCHIVE "xerces-c-3.1.1.tar"
+    HASH "SHA256=1F57A27DD1B3806DF42D5AE638C362358CD16519578D7D395FC77FFD35F4DBCB"
 )
 
 if (NOT XML_HOME STREQUAL "")
-    # TODO
+    find_library(${TARGET_NAME}_PATH
+                 ${TARGET_NAME}
+                 PATHS ${XML_HOME}
+                 PATH_SUFFIXES lib lib64
+                 NO_DEFAULT_PATH)
+    if ("${${TARGET_NAME}_PATH}" STREQUAL "${TARGET_NAME}_PATH-NOTFOUND")
+        message(FATAL_ERROR "Xerces not found at XML_HOME ${XML_HOME}")
+    else()
+        message("Found Xerces at ${${TARGET_NAME}_PATH}")
+    endif()
+
+    # verify we can link this library
+    string(REGEX MATCH ".*\.(a|lib)$" XERCES_IS_STATIC ${${TARGET_NAME}_PATH})
+    if (XERCES_IS_STATIC)
+        set(CMAKE_REQUIRED_DEFINITIONS -DXERCES_STATIC_LIBRARY)
+    endif()
+    set(CMAKE_REQUIRED_INCLUDES "${XML_HOME}/include")
+    set(CMAKE_REQUIRED_LIBRARIES ${${TARGET_NAME}_PATH} ${EXTERNAL_DEPS})
+    unset(XERCES_HOME_VALID CACHE)
+    check_cxx_source_compiles("
+        #include <xercesc/util/PlatformUtils.hpp>
+        int main() { xercesc::XMLPlatformUtils::Terminate(); return 0; }"
+        XERCES_HOME_VALID)
+    unset(CMAKE_REQUIRED_LIBRARIES)
+    unset(CMAKE_REQUIRED_INCLUDES)
+    unset(CMAKE_REQUIRED_DEFINITIONS)
+    if (NOT XERCES_HOME_VALID)
+        message(FATAL_ERROR "Could not link with Xerces from XML_HOME ${XML_HOME}")
+    endif()
+
+    # create interface library pointing to the external Xerces
+    add_library(${TARGET_NAME} INTERFACE)
+    target_include_directories(${TARGET_NAME} INTERFACE "${XML_HOME}/include")
+    target_link_libraries(${TARGET_NAME} INTERFACE ${${TARGET_NAME}_PATH} ${EXTERNAL_DEPS})
+    if (XERCES_IS_STATIC)
+        target_compile_definitions(${TARGET_NAME} INTERFACE XERCES_STATIC_LIBRARY)
+    endif()
 else()
     check_include_file("inttypes.h" HAVE_INTTYPES_H)
     check_include_file("netinet/in.h" HAVE_NETINET_IN_H)
@@ -235,11 +274,7 @@ else()
     endif()
 
     add_library(${TARGET_NAME} ${SOURCES})
-    if (WIN32)
-        target_link_libraries(${TARGET_NAME} PUBLIC ws2_32 advapi32)
-    elseif (UNIX)
-        target_link_libraries(${TARGET_NAME} PUBLIC pthread)
-    endif()
+    target_link_libraries(${TARGET_NAME} PUBLIC ${EXTERNAL_DEPS})
 
     set(COMPILE_DEFS_PRIVATE HAVE_CONFIG_H XERCES_BUILDING_LIBRARY)
     if (BUILD_SHARED)
@@ -250,7 +285,6 @@ else()
     target_compile_definitions(${TARGET_NAME}
         PUBLIC ${COMPILE_DEFS_PUBLIC}
         PRIVATE ${COMPILE_DEFS_PRIVATE})
-
     target_include_directories(${TARGET_NAME}
         PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>"
                "$<BUILD_INTERFACE:${SOURCE_DIR}/src>"

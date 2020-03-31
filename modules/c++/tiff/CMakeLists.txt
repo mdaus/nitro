@@ -1,6 +1,9 @@
 set(MODULE_NAME tiff)
-set(MODULE_DEPS mt io)
 
-coda_add_library(${MODULE_NAME})  # See the definition of this method for details on the variables it looks at.
+coda_add_module(
+    NAME ${MODULE_NAME}
+    DEPS mt io)
 
-coda_add_tests(${MODULE_NAME} "${TEST_DEPS}" "${TEST_FILTER}")
+coda_add_tests(
+    MODULE_NAME ${MODULE_NAME}
+    DIRECTORY "tests")

@@ -1,6 +1,5 @@
-set(MODULE_NAME serialize)
-set(EXTERNAL_DEPS boost-config)
-
 if (Boost_SERIALIZATION_FOUND)
-    coda_add_library(${MODULE_NAME})
+    coda_add_module(
+        NAME serialize
+        EXTERNAL_DEPS boost-config)
 endif()

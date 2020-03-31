@@ -1,6 +1,5 @@
-set(TARGET_NAME sys-python)
-set(MODULE_NAME coda_sys)
-set(MODULE_DEPS sys)
-set(SWIG_INPUT_FILE "source/sys.i")
-
-coda_add_swig_python_module()
+coda_add_swig_python_module(
+    TARGET sys-python
+    MODULE_NAME coda_sys
+    MODULE_DEPS sys
+    INPUT "source/sys.i")

@@ -7,10 +7,10 @@ if (ENABLE_PCRE)
     if (PCRE_HOME STREQUAL "")
         message("PCRE_HOME not specified, so it will be built")
 
-        set(DISABLE_DRIVER_BUILD ON) # custom build is used instead, below
-        coda_add_driver(${TARGET_NAME}
-            "pcre2-10.22.tar.gz"
-            "SHA256=6677C66014EBA5610B8FBD8196FD4E5904DB4116CFF1B5A0D14E91121EDA4377"
+        coda_add_driver(
+            NAME ${TARGET_NAME}
+            ARCHIVE "pcre2-10.22.tar.gz"
+            HASH "SHA256=6677C66014EBA5610B8FBD8196FD4E5904DB4116CFF1B5A0D14E91121EDA4377"
         )
 
         check_symbol_exists("bcopy" "strings.h" HAVE_BCOPY)
