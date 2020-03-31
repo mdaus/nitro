@@ -278,7 +278,7 @@ function(coda_add_tests_impl module_name dir_name module_deps filter_list is_uni
 
         # add unit tests to automatic test suite
         if (${is_unit_test})
-            add_test(${test_target} ${test_target})
+            add_test(NAME ${test_target} COMMAND ${test_target})
         endif()
 
         # Install [unit]tests to separate subtrees

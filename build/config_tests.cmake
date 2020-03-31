@@ -13,9 +13,12 @@ check_include_file("execinfo.h" HAVE_EXECINFO_H)
 check_symbol_exists("clock_gettime" "time.h" HAVE_CLOCK_GETTIME)
 if (NOT HAVE_CLOCK_GETTIME) # On old systems this was in librt, not libc
     unset("HAVE_CLOCK_GETTIME" CACHE) # check_xxx_exists set CACHE variables, which cannot be re-used without being unset.
-    check_library_exists(rt clock_gettime "time.h" HAVE_CLOCK_GETTIME)
-    if (HAVE_CLOCK_GETTIME) # Record the necessary extra link library
-        set(CLOCK_GETTIME_EXTRALIBS "rt" CACHE INTERNAL "")
+    find_library(RT_LIB rt)
+    if (RT_LIB)
+        check_library_exists(rt clock_gettime ${RT_LIB} HAVE_CLOCK_GETTIME)
+        if (HAVE_CLOCK_GETTIME) # Record the necessary extra link library
+            set(CLOCK_GETTIME_EXTRALIBS "rt" CACHE INTERNAL "")
+        endif()
     endif()
 endif()
 check_include_file("atomic.h" HAVE_ATOMIC_H)

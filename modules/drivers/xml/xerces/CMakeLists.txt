@@ -1,44 +1,273 @@
-set(TARGET_NAME XercesC)
+set(TARGET_NAME xerces-c)
 
-# set XercesC configure options
-# see https://xerces.apache.org/xerces-c/build-3.html
-if (WIN32)
-    set(EXTRA_CMAKE_ARGS
-        -Dnetwork-accessor=winsock
-        -Dtranscoder=windows
-        -Dmutex-manager=windows
-        -Dxmlch-type=char16_t
-    )
-else()
-    set(EXTRA_CMAKE_ARGS
-        -Dnetwork-accessor=socket
-        -Dtranscoder=iconv
-    )
-endif()
-list(APPEND EXTRA_CMAKE_ARGS
-    -Dmessage-loader=inmemory
-)
+set(XML_HOME "" CACHE STRING "path to Xerces XML library installation")
 
+set(DISABLE_DRIVER_BUILD ON) # custom build is used instead, below
 coda_add_driver(
     ${TARGET_NAME}
-    "xerces-c-3.2.2.tar.gz"
-    "SHA256=dd6191f8aa256d3b4686b64b0544eea2b450d98b4254996ffdfe630e0c610413"
+    "xerces-c-3.1.1.tar"
+    "SHA256=1F57A27DD1B3806DF42D5AE638C362358CD16519578D7D395FC77FFD35F4DBCB"
 )
 
-# replace Xerces' CMakeLists.txt with our patched version
-ExternalProject_Add_Step(${CMAKE_PROJECT_NAME}_${TARGET_NAME} patchbuild
-    COMMAND cmake -E copy ${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists-patched.txt
-                          ${${CMAKE_PROJECT_NAME}_xercesc_SOURCE_DIR}/CMakeLists.txt
-    DEPENDEES patch
-    DEPENDERS configure
-)
+if (NOT XML_HOME STREQUAL "")
+    # TODO
+else()
+    check_include_file("inttypes.h" HAVE_INTTYPES_H)
+    check_include_file("netinet/in.h" HAVE_NETINET_IN_H)
+    check_include_file("arpa/inet.h" HAVE_ARPA_INET_H)
+    check_include_file("netdb.h" HAVE_NETDB_H)
+    check_include_file("intrin.h" HAVE_INTRIN_H)
+    check_include_file("emmintrin.h" HAVE_EMMINTRIN_H)
+    check_include_file("wchar.h" HAVE_WCHAR_H)
+    check_include_file("stdint.h" HAVE_STDINT_H)
+    check_include_file("stdio.h" HAVE_STDIO_H)
+    check_include_file("langinfo.h" HAVE_LANGINFO_H)
+    check_include_file("iconv.h" HAVE_ICONV_H)
+    check_include_file("nl_types.h" HAVE_NL_TYPES_H)
+    check_include_file("ctype.h" HAVE_CTYPE_H)
+    check_include_file("wctype.h" HAVE_WCTYPE_H)
+    check_include_file("cpuid.h" HAVE_CPUID_H)
+    check_include_file("endian.h" HAVE_ENDIAN_H)
+    check_include_file("machine/endian.h" HAVE_MACHINE_ENDIAN_H)
+    check_include_file("arpa/nameser_compat.h" HAVE_ARPA_NAMESER_COMPAT_H)
+    check_include_file("errno.h" HAVE_ERRNO_H)
+    check_include_file("float.h" HAVE_FLOAT_H)
+    check_include_file("locale.h" HAVE_LOCALE_H)
+    check_include_file("sys/param.h" HAVE_SYS_PARAM_H)
+    check_include_file("sys/socket.h" HAVE_SYS_SOCKET_H)
+    check_include_file("sys/stat.h" HAVE_SYS_STAT_H)
+    check_include_file("sys/timeb.h" HAVE_SYS_TIMEB_H)
+    check_include_file("sys/types.h" HAVE_SYS_TYPES_H)
 
-# remove problematic symlink from Xerces' CMake install step
-if (UNIX AND NOT BUILD_SHARED)
-    add_custom_command(TARGET ${CMAKE_PROJECT_NAME}_${TARGET_NAME}
-        COMMAND cmake -E remove "${CMAKE_INSTALL_PREFIX}/${CODA_STD_PROJECT_LIB_DIR}/libxerces-c.so"
-        DEPENDS ${CMAKE_PROJECT_NAME}_${TARGET_NAME}
-    )
+    check_symbol_exists("mblen" "stdlib.h" HAVE_MBLEN)
+    check_symbol_exists("mbrlen" "stdlib.h" HAVE_MBRLEN)
+    check_symbol_exists("mbsrtowcs" "stdlib.h" HAVE_MBSRTOWCS)
+    check_symbol_exists("mbstowcs" "stdlib.h" HAVE_MBSTOWCS)
+    check_symbol_exists("wsctombs" "stdlib.h" HAVE_WCSTOMBS)
+    check_symbol_exists("wcsrtombs" "stdlib.h" HAVE_WCSRTOMBS)
+    check_symbol_exists("realpath" "stdlib.h" HAVE_REALPATH)
+    check_symbol_exists("strchr" "string.h" HAVE_STRCHR)
+    check_symbol_exists("strdup" "string.h" HAVE_STRDUP)
+    check_symbol_exists("stricmp" "string.h" HAVE_STRICMP)
+    check_symbol_exists("strnicmp" "string.h" HAVE_STRNICMP)
+    check_symbol_exists("strrcmp" "string.h" HAVE_STRRCMP)
+    check_symbol_exists("strstr" "string.h" HAVE_STRSTR)
+    check_symbol_exists("strtol" "string.h" HAVE_STRTOL)
+    check_symbol_exists("strtoul" "string.h" HAVE_STRTOUL)
+    check_symbol_exists("strcasecmp" "strings.h" HAVE_STRCASECMP)
+    check_symbol_exists("strncasecmp" "strings.h" HAVE_STRNCASECMP)
+    check_symbol_exists("pathconf" "unistd.h" HAVE_PATHCONF)
+    check_symbol_exists("nl_langinfo" "langinfo.h" HAVE_NL_LANGINFO)
+    check_symbol_exists("iconv" "iconv.h" HAVE_ICONV)
+    check_symbol_exists("iconv_close" "iconv.h" HAVE_ICONV_CLOSE)
+    check_symbol_exists("iconv_open" "iconv.h" HAVE_ICONV_OPEN)
+    check_symbol_exists("towupper" "wctype.h" HAVE_TOWUPPER)
+    check_symbol_exists("towlower" "wctype.h" HAVE_TOWLOWER)
+    check_symbol_exists("catclose" "nl_types.h" HAVE_CATCLOSE)
+    check_symbol_exists("catgets" "nl_types.h" HAVE_CATGETS)
+    check_symbol_exists("catopen" "nl_types.h" HAVE_CATOPEN)
+    check_symbol_exists("localeconv" "locale.h" HAVE_LOCALECONV)
+    check_symbol_exists("setlocale" "locale.h" HAVE_SETLOCALE)
+    check_symbol_exists("socket" "sys/socket.h" HAVE_SOCKET)
+    check_symbol_exists("ftime" "sys/timeb.h" HAVE_FTIME)
+    check_symbol_exists("getaddrinfo" "netdb.h" HAVE_GETADDRINFO)
+
+    find_library(NSL_LIB nsl)
+    if (NOT NSL_LIB STREQUAL NSL_LIB-NOTFOUND)
+        set(HAVE_NSL 1)
+    endif()
+
+    check_include_file("unistd.h" HAVE_UNISTD_H)
+    check_include_file("sys/time.h" HAVE_SYS_TIME_H)
+    check_include_file("limits.h" HAVE_LIMITS_H)
+    check_include_file("strings.h" HAVE_STRINGS_H)
+
+    # extra defines for config.h
+    if (HAVE_ICONV_H)
+        set(ICONV_USES_CONST_POINTER 0)
+    endif()
+    if (HAVE_SYS_TIME_H AND HAVE_TIME_H)
+        set(TIME_WITH_SYS_TIME 1)
+    endif()
+    if (HAVE_SYS_TYPES_H)
+        set(XERCES_HAVE_SYS_TYPES_H 1)
+    endif()
+    if (HAVE_INTTYPES_H)
+        set(XERCES_HAVE_INTTYPES_H 1)
+    endif()
+    if (HAVE_INTRIN_H)
+        set(XERCES_HAVE_INTRIN_H 1)
+    endif()
+    if (HAVE_EMMINTRIN_H)
+        set(XERCES_HAVE_EMMINTRIN_H 1)
+    endif()
+    if (HAVE_WCHAR_H)
+        set(XERCES_INCLUDE_WCHAR_H 1)
+    endif()
+    if (HAVE_EMMINTRIN_H)
+        set(XERCES_HAVE_SSE2_INTRINSIC 1)
+    endif()
+    if (WIN32)
+        set(XERCES_USE_FILEMGR_WINDOWS 1)
+        set(XERCES_USE_MUTEXMGR_WINDOWS 1)
+        set(XERCES_USE_NETACCESSOR_WINSOCK 1)
+        set(XERCES_USE_TRANSCODER_WINDOWS 1)
+        set(XERCES_PATH_DELIMITER_BACKSLASH 1)
+
+        set(XERCES_S16BIT_INT "__int16")
+        set(XERCES_S32BIT_INT "__int32")
+        set(XERCES_S64BIT_INT "__int32")
+        set(XERCES_U16BIT_INT "unsigned __int16")
+        set(XERCES_U32BIT_INT "unsigned __int32")
+        set(XERCES_U64BIT_INT "unsigned __int64")
+        set(XERCES_SIZE_T "size_t")
+        if (HAVE_WCHAR_H)
+            set(XERCES_XMLCH_T "wchar_t")
+        else()
+            set(XERCES_XMLCH_T "unsigned __int16")
+        endif()
+        if (HAVE_SSIZE_T)
+            set(XERCES_SSIZE_T "ssize_t")
+        else()
+            if (SIZEOF_SIZE_T STREQUAL 8)
+                set(XERCES_SSIZE_T "__int64")
+            else()
+                set(XERCES_SSIZE_T "__int32")
+            endif()
+        endif()
+
+    # -- please note -- we diverge from the xerces-c make
+    # system and treat all unix platforms similarly. Solaris
+    # was make configured to use ICU and Linux the GNUICONV,
+    # but here we use the regular ICONV for both to avoid
+    # having complicated checks and additional build logic.
+    else()
+        set(HAVE_PTHREAD 1)
+
+        set(XERCES_USE_FILEMGR_POSIX 1)
+        set(XERCES_USE_MUTEXMGR_POSIX 1)
+        set(XERCES_USE_TRANSCODER_ICONV 1)
+
+        set(XERCES_S16BIT_INT "int16_t")
+        set(XERCES_S32BIT_INT "int32_t")
+        set(XERCES_S64BIT_INT "int64_t")
+        set(XERCES_U16BIT_INT "uint16_t")
+        set(XERCES_U32BIT_INT "uint32_t")
+        set(XERCES_U64BIT_INT "uint64_t")
+        set(XERCES_XMLCH_T "uint16_t")
+        set(XERCES_SIZE_T "size_t")
+        set(XERCES_SSIZE_T "ssize_t")
+    endif()
+
+    set(LT_OBJDIR .libs/)
+    set(PACKAGE xerces-c)
+    set(PACKAGE_BUGREPORT "")
+    set(PACKAGE_NAME "xerces-c")
+    set(PACKAGE_STRING "xerces-c 3.1.1")
+    set(PACKAGE_TARNAME "xerces-c")
+    set(PACKAGE_URL "")
+    set(PACKAGE_VERSION "3.1.1")
+    set(VERSION "3.1.1")
+
+    # extra defines for Xerces_autoconf_config.hpp
+    set(XERCES_USE_MSGLOADER_INMEMORY 1)
+    set(XERCES_BUILDING_LIBRARY 1)
+    set(HAVE_NAMESPACES 1)
+    set(HAVE_SOCKET 1)
+    set(HAVE_STD_LIBS 1)
+    set(HAVE_STD_NAMESPACE 1)
+
+    set(XERCES_AUTOCONF 1)
+    set(XERCES_PLATFORM_EXPORT "")
+    if (MSVC AND BUILD_SHARED_LIBS)
+        set(XERCES_PLATFORM_EXPORT "__declspec(dllexport)")
+    endif()
+    set(XERCES_PLATFORM_IMPORT "")
+    set(XERCES_HAS_CPP_NAMESPACE 1)
+    set(XERCES_STD_NAMESPACE 1)
+    set(XERCES_NEW_IOSTREAMS 1)
+    set(XERCES_LSTRSUPPORT 1)
+    set(HAVE_BOOL 1)
+
+    if (HAVE_NL_TYPES_H)
+        set(HAVE_CATCLOSE 1)
+        set(HAVE_CATGETS 1)
+        set(HAVE_CATOPEN 1)
+    endif()
+
+    set(SOURCE_DIR "${${CMAKE_PROJECT_NAME}_${TARGET_NAME}_SOURCE_DIR}")
+    configure_file("config.h.in" "config.h")
+    configure_file("Xerces_autoconf_config.hpp.in" "xercesc/util/Xerces_autoconf_config.hpp")
+    # setup some known excludes per platform --
+    # we avoid building the system specific files
+    # and instead build the safely cross-platform files for all unix
+    # platforms. -- for more information see note above --
+    set(EXCLUDES "URLAccessCFBinInputStream.cpp"
+                 "MacOSURLAccessCF.cpp" "IconvGNUTransService.cpp"
+                 "MacOSUnicodeConverter.cpp" "MsgCatalogLoader.cpp"
+                 "CurlURLInputStream.cpp" "CurlNetAccessor.cpp"
+                 "ICUMsgLoader.cpp" "ICUTransService.cpp"
+                 "Win32MsgLoader.cpp")
+    set(UNIX_SPECIFIC "SocketNetAccessor.cpp" "UnixHTTPURLInputStream.cpp"
+                      "PosixFileMgr.cpp" "PosixMutexMgr.cpp"
+                      "IconvTransService.cpp")
+    set(WIN_SPECIFIC "Win32TransService.cpp" "WinSockNetAccessor.cpp"
+                     "BinHTTPURLInputStream.cpp"
+                     "WindowsFileMgr.cpp" "WindowsMutexMgr.cpp")
+
+    # create filter for system specific files
+    # MacOS could be supported here as well
+    if (WIN32)
+        list(APPEND EXCLUDES ${UNIX_SPECIFIC})
+    else()
+        list(APPEND EXCLUDES ${WIN_SPECIFIC})
+    endif()
+
+    file(GLOB_RECURSE SOURCES ${SOURCE_DIR} "*.cpp")
+    list(FILTER SOURCES EXCLUDE REGEX ".*Test.*")
+    foreach(exclude_file ${EXCLUDES})
+        list(FILTER SOURCES EXCLUDE REGEX ".*${exclude_file}.*")
+    endforeach()
+
+    if (NOT WIN32)
+        file(GLOB C_SOURCES "${SOURCE_DIR}/src/*.c")
+        list(APPEND SOURCES ${C_SOURCES})
+    endif()
+
+    add_library(${TARGET_NAME} ${SOURCES})
+    if (WIN32)
+        target_link_libraries(${TARGET_NAME} PUBLIC ws2_32 advapi32)
+    elseif (UNIX)
+        target_link_libraries(${TARGET_NAME} PUBLIC pthread)
+    endif()
+
+    set(COMPILE_DEFS_PRIVATE HAVE_CONFIG_H XERCES_BUILDING_LIBRARY)
+    if (BUILD_SHARED)
+        list(APPEND COMPILE_DEFS_PRIVATE DLL_EXPORT)
+    else()
+        list(APPEND COMPILE_DEFS_PUBLIC XERCES_STATIC_LIBRARY)
+    endif()
+    target_compile_definitions(${TARGET_NAME}
+        PUBLIC ${COMPILE_DEFS_PUBLIC}
+        PRIVATE ${COMPILE_DEFS_PRIVATE})
+
+    target_include_directories(${TARGET_NAME}
+        PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>"
+               "$<BUILD_INTERFACE:${SOURCE_DIR}/src>"
+               "$<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/${CODA_STD_PROJECT_INCLUDE_DIR}>")
+    install(TARGETS ${TARGET_NAME}
+            LIBRARY DESTINATION "${CODA_STD_PROJECT_LIB_DIR}"
+            ARCHIVE DESTINATION "${CODA_STD_PROJECT_LIB_DIR}")
+
+    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/config.h"
+            DESTINATION "${CMAKE_INSTALL_PREFIX}/${CODA_STD_PROJECT_INCLUDE_DIR}")
+    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/xercesc/util/Xerces_autoconf_config.hpp"
+            DESTINATION "${CMAKE_INSTALL_PREFIX}/${CODA_STD_PROJECT_INCLUDE_DIR}/xercesc/util")
+    configure_file("Xerces_autoconf_config.hpp.in" "")
+    install(DIRECTORY "${SOURCE_DIR}/src/xercesc"
+            DESTINATION "${CMAKE_INSTALL_PREFIX}/${CODA_STD_PROJECT_INCLUDE_DIR}"
+            FILES_MATCHING
+                PATTERN "*.h"
+                PATTERN "*.hpp"
+                PATTERN "*.c")
 endif()
-
-set(XERCESC_LIBRARY "xerces-c" CACHE STRING "name of the XercesC library")

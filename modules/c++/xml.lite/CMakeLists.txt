@@ -8,8 +8,7 @@ set(CODA_XML_LAYER XercesC)
 set("USE_${CODA_XML_LAYER}" TRUE)
 
 if (USE_XercesC)
-    set(EXTRA_DEPS "${CMAKE_PROJECT_NAME}_XercesC")
-    set(EXTERNAL_DEPS ${XERCESC_LIBRARY})
+    set(EXTERNAL_DEPS "xerces-c")
 endif()
 
 coda_add_library(${MODULE_NAME})  # See the definition of this method for details on the variables it looks at.
