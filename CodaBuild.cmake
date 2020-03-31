@@ -594,6 +594,4 @@ function(coda_add_swig_python_module)
 
     # install the generate python to load the Python extension
     install(FILES ${generated_py} DESTINATION "${CODA_PYTHON_SITE_PACKAGES}/coda")
-
-    # TODO add tests to CTest
 endfunction()

@@ -6,12 +6,6 @@ elseif (UNIX)
     set(EXTERNAL_DEPS pthread)
 endif()
 
-coda_add_driver(
-    NAME ${TARGET_NAME}
-    ARCHIVE "xerces-c-3.1.1.tar"
-    HASH "SHA256=1F57A27DD1B3806DF42D5AE638C362358CD16519578D7D395FC77FFD35F4DBCB"
-)
-
 if (NOT XML_HOME STREQUAL "")
     find_library(${TARGET_NAME}_PATH
                  ${TARGET_NAME}
@@ -51,6 +45,13 @@ if (NOT XML_HOME STREQUAL "")
         target_compile_definitions(${TARGET_NAME} INTERFACE XERCES_STATIC_LIBRARY)
     endif()
 else()
+    message("XML_HOME not specified, so XercesC will be built")
+    coda_add_driver(
+        NAME ${TARGET_NAME}
+        ARCHIVE "xerces-c-3.1.1.tar"
+        HASH "SHA256=1F57A27DD1B3806DF42D5AE638C362358CD16519578D7D395FC77FFD35F4DBCB"
+    )
+
     check_include_file("inttypes.h" HAVE_INTTYPES_H)
     check_include_file("netinet/in.h" HAVE_NETINET_IN_H)
     check_include_file("arpa/inet.h" HAVE_ARPA_INET_H)

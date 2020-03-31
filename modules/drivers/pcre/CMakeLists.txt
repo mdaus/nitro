@@ -4,7 +4,40 @@ option(ENABLE_PCRE "enable PCRE library" ON)
 set(PCRE_HOME "" CACHE STRING "path to PCRE installation")
 
 if (ENABLE_PCRE)
-    if (PCRE_HOME STREQUAL "")
+    if (NOT PCRE_HOME STREQUAL "")
+        find_library(pcre2_PATH
+                    pcre2-8
+                    PATHS ${PCRE_HOME}
+                    PATH_SUFFIXES lib lib64
+                    NO_DEFAULT_PATH)
+        if ("${pcre2_PATH}" STREQUAL "pcre2_PATH-NOTFOUND")
+            message(FATAL_ERROR "pcre2 not found at PCRE_HOME ${PCRE_HOME}")
+        else()
+            message("Found pcre2 at ${pcre2_PATH}")
+        endif()
+
+        # verify we can link pcre
+        set(CMAKE_REQUIRED_INCLUDES "${PCRE_HOME}/include")
+        set(CMAKE_REQUIRED_LIBRARIES ${pcre2_PATH})
+        set(CMAKE_REQUIRED_DEFINITIONS -DPCRE2_CODE_UNIT_WIDTH=8)
+        unset(PCRE_HOME_VALID CACHE)
+        check_cxx_source_compiles("
+            #include <pcre2.h>
+            int main() { pcre2_code* p; return 0; };"
+            PCRE_HOME_VALID)
+        unset(CMAKE_REQUIRED_DEFINITIONS)
+        unset(CMAKE_REQUIRED_LIBRARIES)
+        unset(CMAKE_REQUIRED_INCLUDES)
+        if (NOT PCRE_HOME_VALID)
+            message(FATAL_ERROR "Could not link with pcre2 from PCRE_HOME ${PCRE_HOME}")
+        endif()
+
+        # create interface library pointing to the external pcre2
+        add_library(pcre2 INTERFACE)
+        target_include_directories(pcre2 INTERFACE "${PCRE_HOME}/include")
+        target_link_libraries(pcre2 INTERFACE ${pcre2_PATH})
+        target_compile_definitions(pcre2 INTERFACE -DPCRE2_CODE_UNIT_WIDTH=8)
+    else()
         message("PCRE_HOME not specified, so it will be built")
 
         coda_add_driver(
@@ -110,8 +143,8 @@ if (ENABLE_PCRE)
 
         add_library(${TARGET_NAME} ${SOURCES})
         set_target_properties(${TARGET_NAME} PROPERTIES OUTPUT_NAME pcre2-8)
-        target_compile_definitions(${TARGET_NAME} PRIVATE PCRE2_CODE_UNIT_WIDTH=8
-                                                          HAVE_CONFIG_H)
+        target_compile_definitions(${TARGET_NAME} PUBLIC PCRE2_CODE_UNIT_WIDTH=8
+                                                  PRIVATE HAVE_CONFIG_H)
         target_include_directories(${TARGET_NAME}
             PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>"
                    "$<BUILD_INTERFACE:${SOURCE_DIR}/src>"
@@ -122,9 +155,6 @@ if (ENABLE_PCRE)
 
         install(FILES "${CMAKE_CURRENT_BINARY_DIR}/pcre2.h"
                 DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}")
-
-    else()
-        #TODO
     endif()
 endif()
 

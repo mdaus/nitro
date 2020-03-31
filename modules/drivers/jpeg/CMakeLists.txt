@@ -4,7 +4,40 @@ option(ENABLE_JPEG "Enable use of libjpeg" ON)
 set(JPEG_HOME "" CACHE STRING "path to libjpeg installation")
 
 if (ENABLE_JPEG)
-    if (JPEG_HOME STREQUAL "")
+    if (NOT JPEG_HOME STREQUAL "")
+        find_library(${TARGET_NAME}_PATH
+                    ${TARGET_NAME}
+                    PATHS ${JPEG_HOME}
+                    PATH_SUFFIXES lib lib64
+                    NO_DEFAULT_PATH)
+        if ("${${TARGET_NAME}_PATH}" STREQUAL "${TARGET_NAME}_PATH-NOTFOUND")
+            message(FATAL_ERROR "jpeg not found at JPEG_HOME ${JPEG_HOME}")
+        else()
+            message("Found jpeg at ${${TARGET_NAME}_PATH}")
+        endif()
+
+        # verify we can link the found library
+        set(CMAKE_REQUIRED_INCLUDES "${JPEG_HOME}/include")
+        set(CMAKE_REQUIRED_LIBRARIES ${${TARGET_NAME}_PATH})
+        unset(JPEG_HOME_VALID CACHE)
+        check_cxx_source_compiles("
+            #include <stddef.h>
+            #include <stdio.h>
+            #include <jpeglib.h>
+            int main() { void *p = (void*)(jpeg_destroy_decompress); return 0; }"
+            JPEG_HOME_VALID)
+        unset(CMAKE_REQUIRED_LIBRARIES)
+        unset(CMAKE_REQUIRED_INCLUDES)
+        if (NOT JPEG_HOME_VALID)
+            message(FATAL_ERROR "Could not link with jpeg from JPEG_HOME ${JPEG_HOME}")
+        endif()
+
+        # create interface library pointing to the external library
+        add_library(${TARGET_NAME} INTERFACE)
+        target_include_directories(${TARGET_NAME} INTERFACE "${JPEG_HOME}/include")
+        target_link_libraries(${TARGET_NAME} INTERFACE ${${TARGET_NAME}_PATH})
+
+    else()
         message("JPEG_HOME not specified, so it will be built")
 
         coda_add_driver(
@@ -56,20 +89,6 @@ if (ENABLE_JPEG)
                       "${SOURCE_DIR}/jerror.h"
                       "${JCONFIG}"
                 DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}")
-    else()
-        set(frag "
-            #include <stddef.h>
-            #include <stdio.h>
-            #include <jpeglib.h>
-
-            int main(int argc, char **argv)
-            {
-                void *p;
-                (void)argc; (void)argv;
-                p=(void*)(jpeg_destroy_decompress);
-                return 0;
-            }")
-        # TODO
     endif()
 endif()
 
