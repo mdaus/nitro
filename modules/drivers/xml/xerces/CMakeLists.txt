@@ -310,3 +310,6 @@ else()
                 PATTERN "*.hpp"
                 PATTERN "*.c")
 endif()
+
+# add alias library
+add_library(XML ALIAS xerces-c)

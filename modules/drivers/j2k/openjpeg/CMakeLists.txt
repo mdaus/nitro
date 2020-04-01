@@ -106,4 +106,8 @@ if (ENABLE_J2K)
                 DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}"
                 OPTIONAL)
     endif()
+
+    # add alias library
+    add_library(J2K ALIAS ${TARGET_NAME})
+
 endif()
