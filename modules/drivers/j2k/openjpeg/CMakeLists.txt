@@ -95,6 +95,7 @@ if (ENABLE_J2K)
                    "$<BUILD_INTERFACE:${SOURCE_DIR}/src/lib/openjp2>"
                    "$<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/${CODA_STD_PROJECT_INCLUDE_DIR}>")
         install(TARGETS ${TARGET_NAME}
+                OPTIONAL
                 LIBRARY DESTINATION "${CODA_STD_PROJECT_LIB_DIR}"
                 ARCHIVE DESTINATION "${CODA_STD_PROJECT_LIB_DIR}")
 
@@ -102,6 +103,7 @@ if (ENABLE_J2K)
                       "${SOURCE_DIR}/src/lib/openjp2/opj_stdint.h"
                       "${CMAKE_CURRENT_BINARY_DIR}/opj_config.h"
                       "${CMAKE_CURRENT_BINARY_DIR}/opj_config_private.h"
-                DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}")
+                DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}"
+                OPTIONAL)
     endif()
 endif()

@@ -13,4 +13,4 @@ configure_file("include/config/coda_oss_config.h.in" "${config_file_out}" @ONLY)
 target_include_directories("${TARGET_NAME}" INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}>
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/${CODA_STD_PROJECT_INCLUDE_DIR}>)
-install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${config_file_out}" DESTINATION "include/config")
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${config_file_out}" DESTINATION "include/config" OPTIONAL)

@@ -1,3 +1,31 @@
+
+# This setting, along with setting all install commands as "OPTIONAL", allows
+# installing a subset of the targets.
+#
+# CMake's default forces everything to be built before the install target is run.
+# This override allows one to build a subset of the project and then run the
+# install target to install only what has been built (the build and install must
+# be run as separate steps). For example:
+#
+#   cmake --build . --target target1
+#   cmake --build . --target target2
+#   cmake --build . --target install
+#
+# or in CMake 3.15+
+#   cmake --build . --target target1 target2
+#   cmake --build . --target install
+#
+# to build and install everything, run
+#   cmake --build . --target ALL
+#   cmake --build . --target install
+#
+# This feature still has some rough edges, in that files and directories that
+# are installed from the source tree are always installed (because they always
+# exist regardless of what was built). This could be fixed by copying them from
+# the source tree to the build directory during the build stage and then
+# pointing the install commands at the file paths within the build directory.
+set(CMAKE_SKIP_INSTALL_ALL_DEPENDENCY ON)
+
 # Standard directory names used throughout the project.
 #set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR/target}) # Specified in CMakeSettings.json
 set(CODA_STD_BUILDUTIL_DIR          "build")
@@ -321,7 +349,7 @@ function(coda_add_tests)
         endif()
 
         # Install [unit]tests to separate subtrees
-        install(TARGETS ${test_target} RUNTIME DESTINATION "${ARG_DIRECTORY}/${ARG_MODULE_NAME}/${test_subdir}")
+        install(TARGETS ${test_target} OPTIONAL RUNTIME DESTINATION "${ARG_DIRECTORY}/${ARG_MODULE_NAME}/${test_subdir}")
     endforeach()
 endfunction()
 
@@ -369,7 +397,7 @@ function(coda_add_module)
         set(config_file_out "${CODA_STD_PROJECT_INCLUDE_DIR}/${tgt_munged_dirname}/${tgt_munged_name}_config.h")
         message(STATUS "Processing config header: ${config_file_template} -> ${config_file_out}")
         configure_file("${config_file_template}" "${config_file_out}")
-        install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${config_file_out}" DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}/${tgt_munged_dirname}")
+        install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${config_file_out}" DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}/${tgt_munged_dirname}" OPTIONAL)
     endif()
 
     if (NOT local_sources)
@@ -419,6 +447,7 @@ function(coda_add_module)
     # Set up install destinations for binaries
     install(TARGETS ${target_name}
             EXPORT "${ARG_NAME}_TARGETS"
+            OPTIONAL
             LIBRARY DESTINATION "${CODA_STD_PROJECT_LIB_DIR}"
             ARCHIVE DESTINATION "${CODA_STD_PROJECT_LIB_DIR}"
             RUNTIME DESTINATION "${CODA_STD_PROJECT_BIN_DIR}")
@@ -426,6 +455,7 @@ function(coda_add_module)
     # Set up install destination for headers
     install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}"
             DESTINATION "."
+            OPTIONAL
             FILES_MATCHING
                 PATTERN "*.h"
                 PATTERN "*.hpp")
@@ -433,7 +463,8 @@ function(coda_add_module)
     # install conf directory, if present
     if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/conf")
         install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/conf"
-                DESTINATION "share/${ARG_NAME}")
+                DESTINATION "share/${ARG_NAME}"
+                OPTIONAL)
     endif()
 
     # cannot use exports until all external dependencies have their own exports defined
@@ -512,6 +543,7 @@ function(coda_add_plugin)
     target_compile_definitions(${TARGET_NAME} PRIVATE PLUGIN_MODULE_EXPORTS)
 
     install(TARGETS ${TARGET_NAME}
+            OPTIONAL
             LIBRARY DESTINATION "share/${ARG_PLUGIN}/plugins"
             ARCHIVE DESTINATION "share/${ARG_PLUGIN}/plugins"
             RUNTIME DESTINATION "share/${ARG_PLUGIN}/plugins")
@@ -521,12 +553,14 @@ function(coda_add_plugin)
             DESTINATION "."
             FILES_MATCHING
                 PATTERN "*.h"
-                PATTERN "*.hpp")
+                PATTERN "*.hpp"
+            OPTIONAL)
 
     # install conf directory, if present
     if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/conf")
         install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/conf"
-                DESTINATION "share/${ARG_PLUGIN}")
+                DESTINATION "share/${ARG_PLUGIN}"
+                OPTIONAL)
     endif()
 endfunction()
 
@@ -590,8 +624,8 @@ function(coda_add_swig_python_module)
     file(GLOB generated_py "${CMAKE_CURRENT_SOURCE_DIR}/source/generated/*.py")
 
     # install the Python extension library
-    install(TARGETS ${ARG_TARGET} DESTINATION "${CODA_PYTHON_SITE_PACKAGES}/coda")
+    install(TARGETS ${ARG_TARGET} DESTINATION "${CODA_PYTHON_SITE_PACKAGES}/coda" OPTIONAL)
 
     # install the generate python to load the Python extension
-    install(FILES ${generated_py} DESTINATION "${CODA_PYTHON_SITE_PACKAGES}/coda")
+    install(FILES ${generated_py} DESTINATION "${CODA_PYTHON_SITE_PACKAGES}/coda" OPTIONAL)
 endfunction()

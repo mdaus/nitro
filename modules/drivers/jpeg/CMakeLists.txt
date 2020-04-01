@@ -81,6 +81,7 @@ if (ENABLE_JPEG)
                    "$<BUILD_INTERFACE:${${CMAKE_PROJECT_NAME}_${TARGET_NAME}_BINARY_DIR}>"
                    "$<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/${CODA_STD_PROJECT_INCLUDE_DIR}>")
         install(TARGETS jpeg
+                OPTIONAL
                 LIBRARY DESTINATION "${CODA_STD_PROJECT_LIB_DIR}"
                 ARCHIVE DESTINATION "${CODA_STD_PROJECT_LIB_DIR}")
 
@@ -88,7 +89,8 @@ if (ENABLE_JPEG)
                       "${SOURCE_DIR}/jmorecfg.h"
                       "${SOURCE_DIR}/jerror.h"
                       "${JCONFIG}"
-                DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}")
+                DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}"
+                OPTIONAL)
     endif()
 endif()
 
