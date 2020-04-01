@@ -1,153 +1,162 @@
+# this file contains common functions and macros for initializing and adding
+# components to the build
 
-# This setting, along with setting all install commands as "OPTIONAL", allows
-# installing a subset of the targets.
-#
-# CMake's default forces everything to be built before the install target is run.
-# This override allows one to build a subset of the project and then run the
-# install target to install only what has been built (the build and install must
-# be run as separate steps). For example:
-#
-#   cmake --build . --target target1
-#   cmake --build . --target target2
-#   cmake --build . --target install
-#
-# or in CMake 3.15+
-#   cmake --build . --target target1 target2
-#   cmake --build . --target install
-#
-# to build and install everything, run
-#   cmake --build . --target ALL
-#   cmake --build . --target install
-#
-# This feature still has some rough edges, in that files and directories that
-# are installed from the source tree are always installed (because they always
-# exist regardless of what was built). This could be fixed by copying them from
-# the source tree to the build directory during the build stage and then
-# pointing the install commands at the file paths within the build directory.
-set(CMAKE_SKIP_INSTALL_ALL_DEPENDENCY ON)
 
-# Standard directory names used throughout the project.
-#set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR/target}) # Specified in CMakeSettings.json
-set(CODA_STD_BUILDUTIL_DIR          "build")
-set(CODA_STD_BUILD_DIR              "target")
-set(CODA_STD_INSTALL_DIR            "install")
-set(CODA_STD_PROJECT_SOURCE_DIR     "source")
-set(CODA_STD_PROJECT_INCLUDE_DIR    "include")
-set(CODA_STD_PROJECT_IMPORT_DIR     "import")
-set(CODA_STD_PROJECT_LIB_DIR        "lib")
-set(CODA_STD_PROJECT_BIN_DIR        "bin")
-set(CODA_STD_PROJECT_TESTS_DIR      "tests")
-set(CODA_STD_PROJECT_UNITTESTS_DIR  "unittests")
+# Set up the global build configuration
+macro(coda_initialize_build)
+    option(CODA_PARTIAL_INSTALL "Allow building and installing a subset of the targets" OFF)
+    if (CODA_PARTIAL_INSTALL)
+        # This setting, along with setting all install commands as "OPTIONAL",
+        # allows installing a subset of the targets.
+        #
+        # CMake's default forces everything to be built before the install target is
+        # run. This override allows one to build a subset of the project and then
+        # run the install target to install only what has been built (the build and
+        # install must be run as separate steps). For example:
+        #
+        #   cmake --build . --target target1
+        #   cmake --build . --target target2
+        #   cmake --build . --target install
+        #
+        # or in CMake 3.15+
+        #   cmake --build . --target target1 target2
+        #   cmake --build . --target install
+        #
+        # to build and install everything, run (with Unix Makefiles)
+        #   cmake --build . --target all
+        #   cmake --build . --target install
+        #
+        # and for MSVC:
+        #   cmake --build . --target ALL_BUILD
+        #   cmake --build . --target install
+        #
+        # This feature still has some rough edges, in that files and directories
+        # that are installed from the source tree are always installed (because they
+        # always exist regardless of what was built). This could be fixed by copying
+        # them from the source tree to the build directory during the build stage
+        # and then pointing the install commands at the file paths within the build
+        # directory.
+        set(CMAKE_SKIP_INSTALL_ALL_DEPENDENCY ON)
+        set(CODA_INSTALL_OPTION OPTIONAL)
+    endif()
 
-set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+    # Standard directory names used throughout the project.
+    set(CODA_STD_PROJECT_INCLUDE_DIR    "include")
+    set(CODA_STD_PROJECT_LIB_DIR        "lib")
+    set(CODA_STD_PROJECT_BIN_DIR        "bin")
 
-# Detect 32/64-bit architecture
-#xxx Might still need to set -m32 or -m64 compiler and linker flags if not done automatically
-if(NOT CODA_BUILD_BITSIZE)
-    if (CMAKE_SIZEOF_VOID_P EQUAL 8)
-        set(CODA_BUILD_BITSIZE "64" CACHE STRING "Select Architecture" FORCE)
-    elseif (CMAKE_SIZEOF_VOID_P EQUAL 4)
-        set(CODA_BUILD_BITSIZE "32" CACHE STRING "Select Architecture" FORCE)
+    set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
+    # Detect 32/64-bit architecture
+    if(NOT CODA_BUILD_BITSIZE)
+        if (CMAKE_SIZEOF_VOID_P EQUAL 8)
+            set(CODA_BUILD_BITSIZE "64" CACHE STRING "Select Architecture" FORCE)
+        elseif (CMAKE_SIZEOF_VOID_P EQUAL 4)
+            set(CODA_BUILD_BITSIZE "32" CACHE STRING "Select Architecture" FORCE)
+        else()
+            message(FATAL_ERROR "Unknown Pointer Size: ${CMAKE_SIZEOF_VOID_P} Bytes")
+        endif()
+        set_property(CACHE CODA_BUILD_BITSIZE PROPERTY STRINGS "64" "32")
+    endif()
+
+    if(NOT CMAKE_BUILD_TYPE)
+        set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Select Build Type" FORCE)
+        set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS
+            "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
+    endif()
+
+    option(BUILD_SHARED_LIBS "Build shared libraries instead of static." OFF)
+    if(BUILD_SHARED_LIBS)
+        set(CODA_LIBRARY_TYPE "shared")
     else()
-        message(FATAL_ERROR "Unknown Pointer Size: ${CMAKE_SIZEOF_VOID_P} Bytes")
+        set(CODA_LIBRARY_TYPE "static")
     endif()
-    set_property(CACHE CODA_BUILD_BITSIZE PROPERTY STRINGS "64" "32")
-endif()
 
-#if(NOT CMAKE_BUILD_TYPE)
-#    set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "Select Build Type" FORCE)
-#    set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS
-#        "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
-#endif()
+    list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/build")
+    include(config_tests) # Code to test compiler features
 
-option(BUILD_SHARED_LIBS "Build shared libraries instead of static." OFF)
-if(BUILD_SHARED_LIBS)
-    set(CODA_LIBRARY_TYPE "shared")
-else()
-    set(CODA_LIBRARY_TYPE "static")
-endif()
-
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/${CODA_STD_BUILDUTIL_DIR}")
-include(config_tests) # Code to test compiler features
-
-option(CODA_BUILD_TESTS "build tests" ON)
-if (CODA_BUILD_TESTS)
-    enable_testing()
-endif()
-
-# Set default install directory
-if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-    message("Overriding default CMAKE_INSTALL_PREFIX of ${CMAKE_INSTALL_PREFIX}")
-    set(CMAKE_INSTALL_PREFIX "${CODA_STD_INSTALL_DIR}/${CMAKE_SYSTEM_NAME}${CODA_BUILD_BITSIZE}-${CMAKE_BUILD_TYPE}-${CODA_LIBRARY_TYPE}" CACHE PATH "Install directory" FORCE)
-endif()
-
-# Look for things in our own install location first.
-list(APPEND CMAKE_PREFIX_PATH "${CMAKE_INSTALL_PREFIX}")
-
-# MSVC-specific flags and options.
-if (MSVC)
-    set_property(GLOBAL PROPERTY USE_FOLDERS ON)
-
-    # Remove any default settings that we don't want.
-    string(REGEX REPLACE "/W[0-3]" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-    string(REGEX REPLACE "/W[0-3]" "" CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
-    string(REGEX REPLACE "/EHsc" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-
-    add_definitions(
-        -DWIN32_LEAN_AND_MEAN
-        -DNOMINMAX
-        -D_CRT_SECURE_NO_WARNINGS
-        -D_SCL_SECURE_NO_WARNINGS
-        -D_USE_MATH_DEFINES
-    )
-    add_compile_options(
-        /wd4290
-        /wd4512
-        /EHs        # Needed when exceptions might bubble through a C-linkage layer
-#       /MP         # Parallel Build
-    )
-
-    link_libraries(    # CMake uses this for both libraries and linker options
-        -STACK:80000000
-    )
-
-    # This should probably be replaced by GenerateExportHeader
-    set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
-    set(CMAKE_VS_INCLUDE_INSTALL_TO_DEFAULT_BUILD TRUE)
-endif()
-
-# Unix/Linux specific options
-if (UNIX)
-    add_definitions(
-        -D_LARGEFILE_SOURCE
-        -D_FILE_OFFSET_BITS=64
-    )
-    add_compile_options(
-        -Wno-deprecated
-        -Wno-unused-value
-        -Wno-unused-but-set-variable
-        -Wno-misleading-indentation
-    )
-endif()
-
-if (SWIG_FOUND AND Python_FOUND AND Python_Development_FOUND)
-    option(PYTHON_EXTRA_NATIVE "generate extra native containers with SWIG" ON)
-    set(CMAKE_SWIG_FLAGS "")
-    if (PYTHON_EXTRA_NATIVE)
-        list(APPEND CMAKE_SWIG_FLAGS "-extranative")
+    option(CODA_BUILD_TESTS "build tests" ON)
+    if (CODA_BUILD_TESTS)
+        enable_testing()
     endif()
-    if (Python_VERSION_MAJOR GREATER_EQUAL 3)
-        list(APPEND CMAKE_SWIG_FLAGS "-py3")
+
+    # Set default install directory
+    if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+        message("Overriding default CMAKE_INSTALL_PREFIX of ${CMAKE_INSTALL_PREFIX}")
+        set(CMAKE_INSTALL_PREFIX
+            "install/${CMAKE_SYSTEM_NAME}${CODA_BUILD_BITSIZE}-${CMAKE_BUILD_TYPE}-${CODA_LIBRARY_TYPE}"
+            CACHE PATH "Install directory" FORCE)
     endif()
-endif()
+
+    # Look for things in our own install location first.
+    list(APPEND CMAKE_PREFIX_PATH "${CMAKE_INSTALL_PREFIX}")
+
+    # MSVC-specific flags and options.
+    if (MSVC)
+        set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
+        # Remove any default settings that we don't want.
+        string(REGEX REPLACE "/W[0-3]" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+        string(REGEX REPLACE "/W[0-3]" "" CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
+        string(REGEX REPLACE "/EHsc" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+
+        add_definitions(
+            -DWIN32_LEAN_AND_MEAN
+            -DNOMINMAX
+            -D_CRT_SECURE_NO_WARNINGS
+            -D_SCL_SECURE_NO_WARNINGS
+            -D_USE_MATH_DEFINES
+        )
+        add_compile_options(
+            /wd4290
+            /wd4512
+            /EHs        # Needed when exceptions might bubble through a C-linkage layer
+            #/MP        # Parallel Build
+        )
+
+        link_libraries(    # CMake uses this for both libraries and linker options
+            -STACK:80000000
+        )
+
+        # This should probably be replaced by GenerateExportHeader
+        set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
+        set(CMAKE_VS_INCLUDE_INSTALL_TO_DEFAULT_BUILD TRUE)
+    endif()
+
+    # Unix/Linux specific options
+    if (UNIX)
+        add_definitions(
+            -D_LARGEFILE_SOURCE
+            -D_FILE_OFFSET_BITS=64
+        )
+        add_compile_options(
+            -Wno-deprecated
+            -Wno-unused-value
+            -Wno-unused-but-set-variable
+            -Wno-misleading-indentation
+        )
+    endif()
+
+    if (SWIG_FOUND AND Python_FOUND AND Python_Development_FOUND)
+        option(PYTHON_EXTRA_NATIVE "generate extra native containers with SWIG" ON)
+        set(CMAKE_SWIG_FLAGS "")
+        if (PYTHON_EXTRA_NATIVE)
+            list(APPEND CMAKE_SWIG_FLAGS "-extranative")
+        endif()
+        if (Python_VERSION_MAJOR GREATER_EQUAL 3)
+            list(APPEND CMAKE_SWIG_FLAGS "-py3")
+        endif()
+    endif()
+endmacro()
 
 
-# filter_files()- Utility to filter a list of files.
+# Utility to filter a list of files.
 #
 # dest_name     - Destination variable name in parent's scope
 # file_list     - Input list of files (possibly with paths)
 # filter_list   - Input list of files to filter out
 #                   (must be bare filenames; no paths)
+#
 function(filter_files dest_name file_list filter_list)
     foreach(test_src ${file_list})
         get_filename_component(test_src_name ${test_src} NAME)
@@ -159,7 +168,7 @@ function(filter_files dest_name file_list filter_list)
 endfunction()
 
 
-# coda_add_driver() - Add a driver (3rd-party library) to the build.
+# Add a driver (3rd-party library) to the build.
 #
 # Single value arguments:
 #   NAME        - Name of the driver
@@ -177,6 +186,7 @@ endfunction()
 #       ${${target_name_lc}_BINARY_DIR} respectively,
 #
 #       where ${target_name_lc} is the lower-cased target name.
+#
 include(FetchContent) # Requires CMake 3.11+
 include(ExternalProject)
 function(coda_add_driver)
@@ -274,6 +284,7 @@ endfunction()
 # Option arguments:
 #   UNITTEST        - If present, the test will be added to the CTest suite for
 #                     automated running.
+#
 function(coda_add_tests)
     cmake_parse_arguments(
         ARG                         # prefix
@@ -301,10 +312,6 @@ function(coda_add_tests)
     set(test_group_tgt "${ARG_MODULE_NAME}_tests")
     if (NOT TARGET ${test_group_tgt})
         add_custom_target(${test_group_tgt})
-    endif()
-
-    if (MSVC)
-        add_compile_options(/W3) # change this to /W4 later
     endif()
 
     list(APPEND ARG_DEPS ${ARG_MODULE_NAME})
@@ -349,12 +356,39 @@ function(coda_add_tests)
         endif()
 
         # Install [unit]tests to separate subtrees
-        install(TARGETS ${test_target} OPTIONAL RUNTIME DESTINATION "${ARG_DIRECTORY}/${ARG_MODULE_NAME}/${test_subdir}")
+        install(TARGETS ${test_target} ${CODA_INSTALL_OPTION} RUNTIME DESTINATION "${ARG_DIRECTORY}/${ARG_MODULE_NAME}/${test_subdir}")
     endforeach()
 endfunction()
 
 
-# coda_add_module() - Add a C++ module to the build
+# Generate a configuration header file for a coda module.
+#
+# Arguments:
+#   MODULE_NAME     - Name of the module to which the configuration file belongs
+#
+function(coda_generate_module_config_header MODULE_NAME)
+    # Periods in target names for dirs are replaced with slashes (subdirectories).
+    string(REPLACE "." "/" tgt_munged_dirname ${MODULE_NAME})
+
+    # Periods in target names for files are replaced with underscores.
+    # Note that this variable name is used in the *.cmake.in files.
+    string(REPLACE "." "_" tgt_munged_name ${MODULE_NAME})
+
+    # If we find a *_config.h.cmake.in file, generate the corresponding *_config.h, and put the
+    #   target directory in the include path.
+    set(config_file_template "${CMAKE_CURRENT_SOURCE_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}/${tgt_munged_dirname}/${MODULE_NAME}_config.h.cmake.in")
+    if (EXISTS ${config_file_template})
+        set(config_file_out "${CODA_STD_PROJECT_INCLUDE_DIR}/${tgt_munged_dirname}/${tgt_munged_name}_config.h")
+        message(STATUS "Processing config header: ${config_file_template} -> ${config_file_out}")
+        configure_file("${config_file_template}" "${config_file_out}")
+        install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${config_file_out}"
+                DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}/${tgt_munged_dirname}"
+                ${CODA_INSTALL_OPTION})
+    endif()
+endfunction()
+
+
+# Add a C++ module to the build
 #
 # Single value arguments:
 #   MODULE_NAME     - Name of the module
@@ -364,6 +398,7 @@ endfunction()
 #   EXTERNAL_DEPS   - List of linkable external dependencies for the library
 #   EXTRA_DEPS      - List of non-linkable dependencies for the library
 #   SOURCE_FILTER   - Source files to ignore
+#
 function(coda_add_module)
     cmake_parse_arguments(
         ARG                                             # prefix
@@ -378,27 +413,12 @@ function(coda_add_module)
     set(target_name "${ARG_NAME}-c++")
 
     # Find all the source files, relative to the module's directory
-    file(GLOB_RECURSE local_sources RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" "${CODA_STD_PROJECT_SOURCE_DIR}/*.cpp")
+    file(GLOB_RECURSE local_sources RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" "source/*.cpp")
 
     # Filter out ignored files
     filter_files(local_sources "${local_sources}" "${ARG_SOURCE_FILTER}")
-    # Periods in target names for dirs are replaced with slashes (subdirectories).
-    string(REPLACE "." "/" tgt_munged_dirname ${ARG_NAME})
 
-    # Periods in target names for files are replaced with underscores.
-    # Note that this variable name is used in the *.cmake.in files.
-    string(REPLACE "." "_" tgt_munged_name ${ARG_NAME})
-
-    # If we find a *_config.h.cmake.in file, generate the corresponding *_config.h, and put the
-    #   target directory in the include path.
-    #xxx This should probably look for all *.cmake.in files and process them.
-    set(config_file_template "${CMAKE_CURRENT_SOURCE_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}/${tgt_munged_dirname}/${ARG_NAME}_config.h.cmake.in")
-    if (EXISTS ${config_file_template})
-        set(config_file_out "${CODA_STD_PROJECT_INCLUDE_DIR}/${tgt_munged_dirname}/${tgt_munged_name}_config.h")
-        message(STATUS "Processing config header: ${config_file_template} -> ${config_file_out}")
-        configure_file("${config_file_template}" "${config_file_out}")
-        install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${config_file_out}" DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}/${tgt_munged_dirname}" OPTIONAL)
-    endif()
+    coda_generate_module_config_header(${ARG_NAME})
 
     if (NOT local_sources)
         # Libraries without sources must be declared to CMake as INTERFACE libraries
@@ -409,45 +429,28 @@ function(coda_add_module)
         add_library(${target_name} ${local_sources})
     endif()
 
-    # link the dependencies
-    if (ARG_DEPS)
-        # convert module dependency names to the corresponding target names
-        foreach(dep ${ARG_DEPS})
-            list(APPEND module_dep_targets "${dep}-c++")
-        endforeach()
-        target_link_libraries(${target_name} ${lib_type} ${module_dep_targets})
-    endif()
-    if (ARG_EXTERNAL_DEPS)
-        target_link_libraries(${target_name} ${lib_type} ${ARG_EXTERNAL_DEPS})
-    endif()
-
-    # set our include directories
-    set(include_dirs
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}>
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}>
-        "${CMAKE_INSTALL_PREFIX}/${CODA_STD_PROJECT_INCLUDE_DIR}")
-    # add interface include directories from the dependencies to our interface
-    foreach (dep ${module_dep_targets})
-        if (TARGET ${dep})
-            get_property(dep_include_dirs TARGET ${dep} PROPERTY INTERFACE_INCLUDE_DIRECTORIES)
-            list(APPEND include_dirs ${dep_include_dirs})
-        endif()
+    # convert module dependency names to target names (append "-c++")
+    foreach(dep ${ARG_DEPS})
+        list(APPEND module_dep_targets "${dep}-c++")
     endforeach()
-    list(REMOVE_DUPLICATES include_dirs)
-    target_include_directories(${target_name} ${lib_type} ${include_dirs})
+
+    target_link_libraries(${target_name} ${lib_type}
+        ${module_dep_targets}
+        ${ARG_EXTERNAL_DEPS})
+
+    target_include_directories(${target_name} ${lib_type}
+        "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}>"
+        "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}>"
+        "${CMAKE_INSTALL_PREFIX}/${CODA_STD_PROJECT_INCLUDE_DIR}")
 
     if (ARG_EXTRA_DEPS)
         add_dependencies(${target_name} ${ARG_EXTRA_DEPS})
     endif()
 
-    if (MSVC)
-        add_compile_options(/W3) # change this to /W4 later
-    endif()
-
     # Set up install destinations for binaries
     install(TARGETS ${target_name}
             EXPORT "${ARG_NAME}_TARGETS"
-            OPTIONAL
+            ${CODA_INSTALL_OPTION}
             LIBRARY DESTINATION "${CODA_STD_PROJECT_LIB_DIR}"
             ARCHIVE DESTINATION "${CODA_STD_PROJECT_LIB_DIR}"
             RUNTIME DESTINATION "${CODA_STD_PROJECT_BIN_DIR}")
@@ -455,7 +458,7 @@ function(coda_add_module)
     # Set up install destination for headers
     install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}"
             DESTINATION "."
-            OPTIONAL
+            ${CODA_INSTALL_OPTION}
             FILES_MATCHING
                 PATTERN "*.h"
                 PATTERN "*.hpp")
@@ -464,7 +467,7 @@ function(coda_add_module)
     if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/conf")
         install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/conf"
                 DESTINATION "share/${ARG_NAME}"
-                OPTIONAL)
+                ${CODA_INSTALL_OPTION})
     endif()
 
     # cannot use exports until all external dependencies have their own exports defined
@@ -543,7 +546,7 @@ function(coda_add_plugin)
     target_compile_definitions(${TARGET_NAME} PRIVATE PLUGIN_MODULE_EXPORTS)
 
     install(TARGETS ${TARGET_NAME}
-            OPTIONAL
+            ${CODA_INSTALL_OPTION}
             LIBRARY DESTINATION "share/${ARG_PLUGIN}/plugins"
             ARCHIVE DESTINATION "share/${ARG_PLUGIN}/plugins"
             RUNTIME DESTINATION "share/${ARG_PLUGIN}/plugins")
@@ -554,13 +557,13 @@ function(coda_add_plugin)
             FILES_MATCHING
                 PATTERN "*.h"
                 PATTERN "*.hpp"
-            OPTIONAL)
+            ${CODA_INSTALL_OPTION})
 
     # install conf directory, if present
     if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/conf")
         install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/conf"
                 DESTINATION "share/${ARG_PLUGIN}"
-                OPTIONAL)
+                ${CODA_INSTALL_OPTION})
     endif()
 endfunction()
 
@@ -584,26 +587,22 @@ function(coda_add_swig_python_module)
         "MODULE_DEPS;PYTHON_DEPS"   # multi args
         "${ARGN}"
     )
-    # determine all of the necessary include dirs and link libs from the dependencies
+    # determine the necessary includes and libs from the compiled dependencies
     set(include_dirs "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/source>")
-    set(libs "")
-    list(TRANSFORM ARG_MODULE_DEPS APPEND "-c++")
+    set(libs ${Python_LIBRARIES})
     foreach(dep ${ARG_MODULE_DEPS})
-        get_property(dep_interface_include_dirs TARGET ${dep} PROPERTY INTERFACE_INCLUDE_DIRECTORIES)
-        list(APPEND include_dirs ${dep_interface_include_dirs})
+        set(dep_target "${dep}-c++")
+        list(APPEND libs ${dep_target})
 
-        list(APPEND libs ${dep})
-        # get any transitive dependencies
-        if (TARGET ${dep})
-            get_property(dep_interface_link_libs TARGET ${dep} PROPERTY INTERFACE_LINK_LIBRARIES)
-            list(APPEND libs ${dep_interface_link_libs})
-        endif()
+        get_property(dep_interface_include_dirs TARGET ${dep_target}
+                     PROPERTY INTERFACE_INCLUDE_DIRECTORIES)
+        list(APPEND include_dirs ${dep_interface_include_dirs})
     endforeach()
-    list(APPEND libs ${Python_LIBRARIES})
 
     # get SWIG include directories from the Python dependencies
     foreach(dep ${ARG_PYTHON_DEPS})
-        get_property(dep_swig_include_dirs TARGET ${dep} PROPERTY SWIG_INCLUDE_DIRECTORIES)
+        get_property(dep_swig_include_dirs TARGET ${dep}
+                     PROPERTY SWIG_INCLUDE_DIRECTORIES)
         list(APPEND include_dirs ${dep_swig_include_dirs})
     endforeach()
 
@@ -614,7 +613,7 @@ function(coda_add_swig_python_module)
 
     swig_add_library(${ARG_TARGET} LANGUAGE python SOURCES ${ARG_INPUT})
 
-    swig_link_libraries(${ARG_TARGET} "${libs}")
+    target_link_libraries(${ARG_TARGET} PRIVATE "${libs}")
     set_property(TARGET ${ARG_TARGET} PROPERTY
         SWIG_INCLUDE_DIRECTORIES "${include_dirs}")
     set_property(TARGET ${ARG_TARGET} PROPERTY
@@ -623,9 +622,13 @@ function(coda_add_swig_python_module)
         LIBRARY_OUTPUT_NAME ${ARG_MODULE_NAME})
     file(GLOB generated_py "${CMAKE_CURRENT_SOURCE_DIR}/source/generated/*.py")
 
-    # install the Python extension library
-    install(TARGETS ${ARG_TARGET} DESTINATION "${CODA_PYTHON_SITE_PACKAGES}/coda" OPTIONAL)
+    # install the compiled extension library
+    install(TARGETS ${ARG_TARGET}
+            DESTINATION "${CODA_PYTHON_SITE_PACKAGES}/coda"
+            ${CODA_INSTALL_OPTION})
 
-    # install the generate python to load the Python extension
-    install(FILES ${generated_py} DESTINATION "${CODA_PYTHON_SITE_PACKAGES}/coda" OPTIONAL)
+    # install the python script which loads the compiled extension
+    install(FILES ${generated_py}
+            DESTINATION "${CODA_PYTHON_SITE_PACKAGES}/coda"
+            ${CODA_INSTALL_OPTION})
 endfunction()

@@ -22,28 +22,18 @@ Files:
 Instructions for Linux:
 
 * Execute config_coda.csh.
-* config_coda.csh will run the configure stage, and create 'build_coda.csh'.
-* build_coda.csh will launch the build.  -j<n> can be specified to parallelize the build.
-* Note that as described below, the first configure+build will build the drivers, but not the dependent modules.  Subsequent configure+builds will use the already-built drivers to build the dependent modules.
-** Consequently, users should generally not clean the driver build outputs (and shouldn't need to, since the drivers don't usually change).
-
+* config_coda.sh will run the configure stage, and create 'build_coda.csh'.
+* build_coda.sh will launch the build.  -j<n> can be specified to parallelize the build.
 
 Instructions for Windows:
-
 * Open the directory containing the top-level CMakeLists.txt as a project in Visual Studio.
-
-
-This system has a few differences from the waf-based system:
-
-* Rather than selectively building subsets of files from the 3rd-pary (drivers) packages, it just builds them using their normal build processes.  This should reduce the labor overhead and risk of breaking the build when updating driver package versions.
-
 
 Implementation Notes:
 
 Build configuration selection on Linux is awkward, and requires editing the script.  The Qt-based GUI for CMake may be able to help with this (needs investigation)
 On Windows, Visual Studio's configuration selector can pick the desired configuration.
 
-Most of the smarts are in the root-level CMakeLists.txt file.  See the in-code comments there for details.
+Most of the smarts are in the root-level CMakeLists.txt and CodaBuild.cmake files. See the in-code comments there for details.
 There are some utility .cmake files in the ./build directory
 
 The CODA_BUILD_TESTS variable in the script controls whether tests will be built.

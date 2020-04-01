@@ -150,13 +150,13 @@ if (ENABLE_PCRE)
                    "$<BUILD_INTERFACE:${SOURCE_DIR}/src>"
                    "$<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/${CODA_STD_PROJECT_INCLUDE_DIR}>")
         install(TARGETS ${TARGET_NAME}
-                OPTIONAL
+                ${CODA_INSTALL_OPTION}
                 LIBRARY DESTINATION "${CODA_STD_PROJECT_LIB_DIR}"
                 ARCHIVE DESTINATION "${CODA_STD_PROJECT_LIB_DIR}")
 
         install(FILES "${CMAKE_CURRENT_BINARY_DIR}/pcre2.h"
                 DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}"
-                OPTIONAL)
+                ${CODA_INSTALL_OPTION})
     endif()
 endif()
 

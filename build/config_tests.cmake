@@ -53,22 +53,18 @@ find_package(Threads)
 
 
 find_package(CURL)
-#xxx No longer needed?
-#check_library_exists("curl" "curl_global_init" "" HAVE_CURL)  #xxx Need 'curl/curl.h'?
-
 if (${CMAKE_VERSION} VERSION_LESS "3.12.0")
-#xxx FindCurl didn't create a target until CMake 3.12
+    #FindCurl didn't create a target until CMake 3.12
     if(CURL_FOUND)
         if(NOT TARGET CURL::libcurl)
             add_library(CURL::libcurl UNKNOWN IMPORTED)
-            set_target_properties(CURL::libcurl PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${CURL_INCLUDE_DIRS}")
-            set_property(TARGET CURL::libcurl APPEND PROPERTY IMPORTED_LOCATION "${CURL_LIBRARY}")
+            set_target_properties(CURL::libcurl
+                PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${CURL_INCLUDE_DIRS}")
+            set_property(TARGET CURL::libcurl
+                APPEND PROPERTY IMPORTED_LOCATION "${CURL_LIBRARY}")
         endif()
     endif()
 endif()
-
-
-#find_package(ZLIB::ZLIB)
 
 
 if (BOOST_HOME)
@@ -76,6 +72,7 @@ if (BOOST_HOME)
 endif()
 find_package(Boost COMPONENTS serialization)
 set(HAVE_BOOST ${Boost_FOUND})
+
 
 if (PYTHONHOME)
     set(Python_ROOT_DIR ${PYTHONHOME})

@@ -291,20 +291,20 @@ else()
                "$<BUILD_INTERFACE:${SOURCE_DIR}/src>"
                "$<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/${CODA_STD_PROJECT_INCLUDE_DIR}>")
     install(TARGETS ${TARGET_NAME}
-            OPTIONAL
+            ${CODA_INSTALL_OPTION}
             LIBRARY DESTINATION "${CODA_STD_PROJECT_LIB_DIR}"
             ARCHIVE DESTINATION "${CODA_STD_PROJECT_LIB_DIR}")
 
     install(FILES "${CMAKE_CURRENT_BINARY_DIR}/config.h"
             DESTINATION "${CMAKE_INSTALL_PREFIX}/${CODA_STD_PROJECT_INCLUDE_DIR}"
-            OPTIONAL)
+            ${CODA_INSTALL_OPTION})
     install(FILES "${CMAKE_CURRENT_BINARY_DIR}/xercesc/util/Xerces_autoconf_config.hpp"
             DESTINATION "${CMAKE_INSTALL_PREFIX}/${CODA_STD_PROJECT_INCLUDE_DIR}/xercesc/util"
-            OPTIONAL)
+            ${CODA_INSTALL_OPTION})
     configure_file("Xerces_autoconf_config.hpp.in" "")
     install(DIRECTORY "${SOURCE_DIR}/src/xercesc"
             DESTINATION "${CMAKE_INSTALL_PREFIX}/${CODA_STD_PROJECT_INCLUDE_DIR}"
-            OPTIONAL
+            ${CODA_INSTALL_OPTION}
             FILES_MATCHING
                 PATTERN "*.h"
                 PATTERN "*.hpp"

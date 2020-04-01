@@ -98,9 +98,9 @@ else()
                   "${SOURCE_DIR}/contrib/minizip/zip.h"
                   "${SOURCE_DIR}/contrib/minizip/ioapi.h"
             DESTINATION "${CMAKE_INSTALL_PREFIX}/${CODA_STD_PROJECT_INCLUDE_DIR}"
-            OPTIONAL)
+            ${CODA_INSTALL_OPTION})
     install(TARGETS z minizip
-            OPTIONAL
+            ${CODA_INSTALL_OPTION}
             LIBRARY DESTINATION "${CODA_STD_PROJECT_LIB_DIR}"
             ARCHIVE DESTINATION "${CODA_STD_PROJECT_LIB_DIR}")
 endif()
