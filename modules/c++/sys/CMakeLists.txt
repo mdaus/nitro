@@ -5,10 +5,11 @@ if (WIN32)
 elseif (UNIX)
     set(EXTERNAL_DEPS pthread)
 endif()
+list(APPEND EXTERNAL_DEPS "${CMAKE_DL_LIBS}" "${CLOCK_GETTIME_EXTRALIBS}")
 
 coda_add_module(
     NAME ${MODULE_NAME}
-    DEPS config except str "${CMAKE_DL_LIBS}" "${CLOCK_GETTIME_EXTRALIBS}"
+    DEPS config except str
     EXTERNAL_DEPS ${EXTERNAL_DEPS})
 
 coda_add_tests(

@@ -5,14 +5,12 @@ if (WIN32)
     set(EXTERNAL_DEPS Rpcrt4)
 elseif (UNIX)
     set(EXTERNAL_DEPS uuid)
-    set(EXTRA_DEPS "${CMAKE_PROJECT_NAME}_UUID")
 endif()
 
 coda_add_module(
     NAME ${MODULE_NAME}
     DEPS except
-    EXTERNAL_DEPS ${EXTERNAL_DEPS}
-    EXTRA_DEPS ${EXTRA_DEPS})
+    EXTERNAL_DEPS ${EXTERNAL_DEPS})
 
 coda_add_tests(
     MODULE_NAME ${MODULE_NAME}

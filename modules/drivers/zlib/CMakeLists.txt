@@ -1,7 +1,6 @@
 set(TARGET_NAME z)
 
-set(ZIP_HOME "" CACHE STRING "path to pre-existing zlib installation, \
-                              if not provided zlib will be built")
+set(ZIP_HOME "" CACHE STRING "path to pre-existing zlib installation, if not provided zlib will be built")
 
 if (NOT ZIP_HOME STREQUAL "")
     find_library(${TARGET_NAME}_PATH

@@ -263,7 +263,7 @@ else()
         list(APPEND EXCLUDES ${WIN_SPECIFIC})
     endif()
 
-    file(GLOB_RECURSE SOURCES ${SOURCE_DIR} "*.cpp")
+    file(GLOB_RECURSE SOURCES "${SOURCE_DIR}/src/*.cpp")
     list(FILTER SOURCES EXCLUDE REGEX ".*Test.*")
     foreach(exclude_file ${EXCLUDES})
         list(FILTER SOURCES EXCLUDE REGEX ".*${exclude_file}.*")

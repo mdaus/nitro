@@ -59,11 +59,23 @@ macro(coda_initialize_build)
         set_property(CACHE CODA_BUILD_BITSIZE PROPERTY STRINGS "64" "32")
     endif()
 
-    if(NOT CMAKE_BUILD_TYPE)
-        set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Select Build Type" FORCE)
-        set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS
-            "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
+    if (MSVC)
+        # MSVC is a multi-configuration generator, which typically allows build
+        # type to be selected at build time rather than configure time. However,
+        # we don't support that currently as it will take some work to be able
+        # to get the install step working with multiple configurations.
+        set(CMAKE_BUILD_TYPE "" CACHE STRING "Select Build Type")
+        if((NOT CMAKE_BUILD_TYPE STREQUAL "Release") AND
+           (NOT CMAKE_BUILD_TYPE STREQUAL "Debug") AND
+           (NOT CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo") AND
+           (NOT CMAKE_BUILD_TYPE STREQUAL "MinSizeRel"))
+            message(FATAL_ERROR "must specify CMAKE_BUILD_TYPE as one of [Release, Debug, RelWithDebInfo, MinSizeRel]")
+        endif()
+    else()
+        set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "Select Build Type" FORCE)
     endif()
+    set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS
+        "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
 
     option(BUILD_SHARED_LIBS "Build shared libraries instead of static." OFF)
     if(BUILD_SHARED_LIBS)
@@ -72,8 +84,7 @@ macro(coda_initialize_build)
         set(CODA_LIBRARY_TYPE "static")
     endif()
 
-    list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/build")
-    include(config_tests) # Code to test compiler features
+    include("${CODA_OSS_SOURCE_DIR}/build/config_tests.cmake") # Code to test compiler features
 
     option(CODA_BUILD_TESTS "build tests" ON)
     if (CODA_BUILD_TESTS)
@@ -82,10 +93,10 @@ macro(coda_initialize_build)
 
     # Set default install directory
     if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-        message("Overriding default CMAKE_INSTALL_PREFIX of ${CMAKE_INSTALL_PREFIX}")
         set(CMAKE_INSTALL_PREFIX
-            "install/${CMAKE_SYSTEM_NAME}${CODA_BUILD_BITSIZE}-${CMAKE_BUILD_TYPE}-${CODA_LIBRARY_TYPE}"
+            "${PROJECT_SOURCE_DIR}/install/${CMAKE_SYSTEM_NAME}${CODA_BUILD_BITSIZE}-${CMAKE_CXX_COMPILER_ID}-${CODA_LIBRARY_TYPE}-${CMAKE_BUILD_TYPE}"
             CACHE PATH "Install directory" FORCE)
+        message("CMAKE_INSTALL_PREFIX was not specified, defaulting to ${CMAKE_INSTALL_PREFIX}")
     endif()
 
     # Look for things in our own install location first.
@@ -95,10 +106,22 @@ macro(coda_initialize_build)
     if (MSVC)
         set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-        # Remove any default settings that we don't want.
-        string(REGEX REPLACE "/W[0-3]" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-        string(REGEX REPLACE "/W[0-3]" "" CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
+        # change default dynamic linked CRT (/MD or /MDd) to static linked CRT
+        # (/MT or /MTd) if requested
+        option(STATIC_CRT "use static CRT library /MT (or /MTd for Debug)" OFF)
+        foreach(build_config DEBUG RELEASE RELWITHDEBINFO MINSIZEREL)
+            string(REGEX REPLACE "/MD" "/MT" CMAKE_CXX_FLAGS_${build_config} "${CMAKE_CXX_FLAGS_${build_config}}")
+            string(REGEX REPLACE "/MD" "/MT" CMAKE_C_FLAGS_${build_config} "${CMAKE_C_FLAGS_${build_config}}")
+        endforeach()
+
+        # set default warning level to /W3
+        string(REGEX REPLACE "/W[0-4]" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+        string(REGEX REPLACE "/W[0-4]" "" CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
+        add_compile_options(/W3)
+
+        # catch exceptions that bubble through a C-linkage layer
         string(REGEX REPLACE "/EHsc" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+        add_compile_options(/EHs)
 
         add_definitions(
             -DWIN32_LEAN_AND_MEAN
@@ -110,7 +133,6 @@ macro(coda_initialize_build)
         add_compile_options(
             /wd4290
             /wd4512
-            /EHs        # Needed when exceptions might bubble through a C-linkage layer
             #/MP        # Parallel Build
         )
 
@@ -147,6 +169,21 @@ macro(coda_initialize_build)
             list(APPEND CMAKE_SWIG_FLAGS "-py3")
         endif()
     endif()
+
+    # show the compile options for the project directory
+    get_property(tmp_compile_options DIRECTORY "./" PROPERTY COMPILE_OPTIONS)
+    message("COMPILE OPTIONS=${tmp_compile_options}")
+    unset(tmp_compile_options)
+
+    message("CMAKE_C_FLAGS=${CMAKE_C_FLAGS}")
+    message("CMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}")
+    message("CMAKE_C_FLAGS_DEBUG=${CMAKE_C_FLAGS_DEBUG}")
+    message("CMAKE_CXX_FLAGS_DEBUG=${CMAKE_CXX_FLAGS_DEBUG}")
+    message("CMAKE_C_FLAGS_RELWITHDEBINFO=${CMAKE_C_FLAGS_RELWITHDEBINFO}")
+    message("CMAKE_CXX_FLAGS_RELWITHDEBINFO=${CMAKE_CXX_FLAGS_RELWITHDEBINFO}")
+    message("CMAKE_C_FLAGS_RELEASE=${CMAKE_C_FLAGS_RELEASE}")
+    message("CMAKE_CXX_FLAGS_RELEASE=${CMAKE_CXX_FLAGS_RELEASE}")
+    message("CMAKE_SWIG_FLAGS=${CMAKE_SWIG_FLAGS}")
 endmacro()
 
 
@@ -175,11 +212,6 @@ endfunction()
 #   ARCHIVE     - Location of the archive containing the driver.
 #                 This can be a path relative to ${CMAKE_CURRENT_SOURCE_DIR}.
 #   HASH        - hash signature in the form hashtype=hashvalue
-#
-# Option arguments:
-#   BUILD       - If supplied, the driver will be built automatically if it has
-#                 a CMake or autotools build system. Otherwise, the driver will
-#                 only be unpacked.
 #
 #  The 3P's source and build directories will be stored in
 #       ${${target_name_lc}_SOURCE_DIR}, and
@@ -219,51 +251,6 @@ function(coda_add_driver)
             CACHE INTERNAL "source directory for ${target_name_lc}")
         set("${target_name_lc}_BINARY_DIR" "${${target_name_lc}_BINARY_DIR}"
             CACHE INTERNAL "binary directory for ${target_name_lc}")
-        if (ARG_BUILD)
-            # Queue a build for build-time.
-            if (EXISTS "${${target_name_lc}_SOURCE_DIR}/CMakeLists.txt")
-                # Found CMakeLists.txt
-                set(target_cmake_args
-                    "-DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>"
-                    "-DBUILD_SHARED_LIBS:BOOL=OFF"
-                    ${EXTRA_CMAKE_ARGS})
-                if (MSVC)
-                    # For MSVC, ExternalProject_Add needs custom install command to
-                    # properly set CMAKE_BUILD_TYPE
-                    ExternalProject_Add(${target_name}
-                        SOURCE_DIR "${${target_name_lc}_SOURCE_DIR}"
-                        BINARY_DIR "${${target_name_lc}_BINARY_DIR}"
-                        PREFIX "${CMAKE_INSTALL_PREFIX}"
-                        CMAKE_ARGS ${target_cmake_args}
-                        BUILD_COMMAND ""
-                        INSTALL_COMMAND ${CMAKE_COMMAND} --build .
-                            --config ${CMAKE_BUILD_TYPE}
-                            --target install
-                    )
-                else()
-                    list(APPEND target_cmake_args
-                        "-DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}"
-                    )
-                    ExternalProject_Add(${target_name}
-                        SOURCE_DIR "${${target_name_lc}_SOURCE_DIR}"
-                        BINARY_DIR "${${target_name_lc}_BINARY_DIR}"
-                        PREFIX "${CMAKE_INSTALL_PREFIX}"
-                        CMAKE_ARGS ${target_cmake_args}
-                    )
-                endif()
-            elseif (EXISTS "${${target_name_lc}_SOURCE_DIR}/configure")
-                # No CMakeLists.txt, but found a configure script.
-                ExternalProject_Add(${target_name}
-                    SOURCE_DIR "${${target_name_lc}_SOURCE_DIR}"
-                    INSTALL_DIR "${CMAKE_INSTALL_PREFIX}"
-                    CONFIGURE_COMMAND cmake -E env CC=${CMAKE_C_COMPILER} CXX=${CMAKE_CXX_COMPILER} <SOURCE_DIR>/configure --prefix=<INSTALL_DIR>
-                    BUILD_COMMAND $(MAKE)
-                    INSTALL_COMMAND $(MAKE) install
-                )
-            else()
-                message(WARNING "Driver ${driver_name} unpacked to ${${target_name_lc}_SOURCE_DIR}, but no configuration method found.")
-            endif()
-        endif()
     endif()
 endfunction()
 
@@ -286,78 +273,85 @@ endfunction()
 #                     automated running.
 #
 function(coda_add_tests)
-    cmake_parse_arguments(
-        ARG                         # prefix
-        "UNITTEST"                  # options
-        "MODULE_NAME;DIRECTORY"     # single args
-        "DEPS;FILTER_LIST"          # multi args
-        "${ARGN}"
-    )
-    if (ARG_UNPARSED_ARGUMENTS)
-        message(FATAL_ERROR "received unexpected argument(s): ${ARG_UNPARSED_ARGUMENTS}")
-    endif()
-
-    if (NOT ARG_DIRECTORY)
-        message(FATAL_ERROR "Must give a test directory")
-    endif()
-    if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${ARG_DIRECTORY}")
-        message(FATAL_ERROR "Directory ${CMAKE_CURRENT_SOURCE_DIR}/${ARG_DIRECTORY} does not exist")
-    endif()
-    # Find all the source files, relative to the module's directory
-    file(GLOB_RECURSE local_tests RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" "${ARG_DIRECTORY}/*.cpp")
-    # Filter out ignored files
-    filter_files(local_tests "${local_tests}" "${ARG_FILTER_LIST}")
-
-    # make a group target to build all tests for the current module
-    set(test_group_tgt "${ARG_MODULE_NAME}_tests")
-    if (NOT TARGET ${test_group_tgt})
-        add_custom_target(${test_group_tgt})
-    endif()
-
-    list(APPEND ARG_DEPS ${ARG_MODULE_NAME})
-
-    set(module_dep_targets TestCase)
-    foreach(dep ${ARG_DEPS})
-        if (NOT ${dep} STREQUAL "")
-            list(APPEND module_dep_targets "${dep}-c++")
-        endif()
-    endforeach()
-
-    # get all interface libraries and include directories from the dependencies
-    foreach(dep ${module_dep_targets})
-        if (TARGET ${dep})
-            get_property(dep_includes TARGET ${dep} PROPERTY INTERFACE_INCLUDE_DIRECTORIES)
-            list(APPEND include_dirs ${dep_includes})
-        endif()
-    endforeach()
-
-    foreach(test_src ${local_tests})
-        # Use the base name of the source file as the name of the test
-        get_filename_component(test_name "${test_src}" NAME_WE)
-        set(test_target "${ARG_MODULE_NAME}_${test_name}")
-        add_executable(${test_target} "${test_src}")
-        set_target_properties(${test_target} PROPERTIES OUTPUT_NAME ${test_name})
-        add_dependencies(${test_group_tgt} ${test_target})
-        get_filename_component(test_dir "${test_src}" DIRECTORY)
-        # Do a bit of path manipulation to make sure tests in deeper subdirs retain those subdirs in their build outputs
-#xxxTODO double-check this
-        file(RELATIVE_PATH test_subdir "${CMAKE_CURRENT_SOURCE_DIR}/${ARG_DIRECTORY}" "${CMAKE_CURRENT_SOURCE_DIR}/${test_dir}")
-        # message(STATUS "Generating Test: module_name=${ARG_MODULE_NAME} test_src=${test_src}  test_name=${test_name}  test_dir=${test_dir}  test_subdir= ${test_subdir} module_deps=${ARG_DEPS}")
-
-        # Set IDE subfolder so that tests appear in their own tree
-        set_target_properties(${test_target} PROPERTIES FOLDER "${ARG_DIRECTORY}/${ARG_MODULE_NAME}/${test_subdir}")
-
-        target_link_libraries(${test_target} PRIVATE ${module_dep_targets})
-        target_include_directories(${test_target} PRIVATE ${include_dirs})
-
-        # add unit tests to automatic test suite
-        if (${ARG_UNITTEST})
-            add_test(NAME ${test_target} COMMAND ${test_target})
+    if (CODA_BUILD_TESTS)
+        cmake_parse_arguments(
+            ARG                         # prefix
+            "UNITTEST"                  # options
+            "MODULE_NAME;DIRECTORY"     # single args
+            "DEPS;FILTER_LIST"          # multi args
+            "${ARGN}"
+        )
+        if (ARG_UNPARSED_ARGUMENTS)
+            message(FATAL_ERROR "received unexpected argument(s): ${ARG_UNPARSED_ARGUMENTS}")
         endif()
 
-        # Install [unit]tests to separate subtrees
-        install(TARGETS ${test_target} ${CODA_INSTALL_OPTION} RUNTIME DESTINATION "${ARG_DIRECTORY}/${ARG_MODULE_NAME}/${test_subdir}")
-    endforeach()
+        if (NOT ARG_DIRECTORY)
+            message(FATAL_ERROR "Must give a test directory")
+        endif()
+        if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${ARG_DIRECTORY}")
+            message(FATAL_ERROR "Directory ${CMAKE_CURRENT_SOURCE_DIR}/${ARG_DIRECTORY} does not exist")
+        endif()
+        # Find all the source files, relative to the module's directory
+        file(GLOB_RECURSE local_tests RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}"
+             "${ARG_DIRECTORY}/*.cpp")
+        # Filter out ignored files
+        filter_files(local_tests "${local_tests}" "${ARG_FILTER_LIST}")
+
+        # make a group target to build all tests for the current module
+        set(test_group_tgt "${ARG_MODULE_NAME}_tests")
+        if (NOT TARGET ${test_group_tgt})
+            add_custom_target(${test_group_tgt})
+        endif()
+
+        list(APPEND ARG_DEPS ${ARG_MODULE_NAME})
+
+        set(module_dep_targets TestCase)
+        foreach(dep ${ARG_DEPS})
+            if (NOT ${dep} STREQUAL "")
+                list(APPEND module_dep_targets "${dep}-c++")
+            endif()
+        endforeach()
+
+        # get all interface libraries and include directories from the dependencies
+        foreach(dep ${module_dep_targets})
+            if (TARGET ${dep})
+                get_property(dep_includes TARGET ${dep}
+                             PROPERTY INTERFACE_INCLUDE_DIRECTORIES)
+                list(APPEND include_dirs ${dep_includes})
+            endif()
+        endforeach()
+
+        foreach(test_src ${local_tests})
+            # Use the base name of the source file as the name of the test
+            get_filename_component(test_name "${test_src}" NAME_WE)
+            set(test_target "${ARG_MODULE_NAME}_${test_name}")
+            add_executable(${test_target} "${test_src}")
+            set_target_properties(${test_target} PROPERTIES OUTPUT_NAME ${test_name})
+            add_dependencies(${test_group_tgt} ${test_target})
+            get_filename_component(test_dir "${test_src}" DIRECTORY)
+            # Do a bit of path manipulation to make sure tests in deeper subdirs retain those subdirs in their build outputs
+            file(RELATIVE_PATH test_subdir
+                 "${CMAKE_CURRENT_SOURCE_DIR}/${ARG_DIRECTORY}"
+                 "${CMAKE_CURRENT_SOURCE_DIR}/${test_dir}")
+            # message(STATUS "Generating Test: module_name=${ARG_MODULE_NAME} test_src=${test_src}  test_name=${test_name}  test_dir=${test_dir}  test_subdir= ${test_subdir} module_deps=${ARG_DEPS}")
+
+            # Set IDE subfolder so that tests appear in their own tree
+            set_target_properties(${test_target}
+                PROPERTIES FOLDER "${ARG_DIRECTORY}/${ARG_MODULE_NAME}/${test_subdir}")
+
+            target_link_libraries(${test_target} PRIVATE ${module_dep_targets})
+            target_include_directories(${test_target} PRIVATE ${include_dirs})
+
+            # add unit tests to automatic test suite
+            if (${ARG_UNITTEST})
+                add_test(NAME ${test_target} COMMAND ${test_target})
+            endif()
+
+            # Install [unit]tests to separate subtrees
+            install(TARGETS ${test_target} ${CODA_INSTALL_OPTION}
+                    RUNTIME DESTINATION "${ARG_DIRECTORY}/${ARG_MODULE_NAME}/${test_subdir}")
+        endforeach()
+    endif()
 endfunction()
 
 
