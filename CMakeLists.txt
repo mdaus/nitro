@@ -12,7 +12,7 @@ endif()
 
 find_package(Python COMPONENTS Interpreter Development NumPy)
 list(APPEND coda_modules except-c++ io-c++ sys-c++ mt-c++ str-c++
-                         math-c++ xml.lite-c++ JPEG J2K)
+                         math-c++ xml.lite-c++ jpeg J2K)
 
 if (Python_NumPy_FOUND AND NOT MSVC)
     list(APPEND coda_modules numpyutils-c++)
@@ -23,19 +23,33 @@ else()
     set(PYTHON python)
 endif()
 
-if (NOT DEFINED CODA_INSTALL_DIR)
-    include(CMakeLists-CODA.txt)
-else()
-    add_library(coda-oss INTERFACE)
+
+if (${CMAKE_PROJECT_NAME} STREQUAL nitro)
+    include(externals/coda-oss/CodaBuild.cmake)
+    coda_initialize_build()
 endif()
+if (${CMAKE_PROJECT_NAME} STREQUAL ${PROJECT_NAME})
+    # this is the top-level project
+    add_subdirectory(externals/coda-oss)
+else()
+    # don't add externals, the top-level project is responsible for that
+endif()
+add_library(coda-oss INTERFACE)
+add_library(coda_oss_config ALIAS config-c++)
 
-foreach(module ${coda_modules})
-    add_coda_module(${module})
-endforeach()
+# if (NOT DEFINED CODA_INSTALL_DIR)
+#     include(CMakeLists-CODA.txt)
+# else()
+#     add_library(coda-oss INTERFACE)
+# endif()
 
-add_library(coda_oss_config INTERFACE)
-target_include_directories(coda_oss_config INTERFACE ${CODA_DIR}/target/moudules/c++/config/include/)
-add_dependencies(coda_oss_config coda-oss)
+# foreach(module ${coda_modules})
+#     import_coda_module(${module})
+# endforeach()
+
+# add_library(coda_oss_config INTERFACE)
+# target_include_directories(coda_oss_config INTERFACE ${CODA_DIR}/target/moudules/c++/config/include/)
+# add_dependencies(coda_oss_config coda-oss)
 
 # Everyone can include coda's headers
 include_directories(${CODA_INSTALL_DIR}/include)
