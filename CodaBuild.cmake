@@ -1,6 +1,8 @@
 # this file contains common functions and macros for initializing and adding
 # components to the build
 
+set(CODA_OSS_SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR} CACHE INTERNAL
+    "path to coda-oss directory")
 
 # Set up the global build configuration
 macro(coda_initialize_build)
