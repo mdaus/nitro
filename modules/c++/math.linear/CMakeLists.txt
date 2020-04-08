@@ -1,6 +1,6 @@
 set(MODULE_NAME math.linear)
 
-if (TARGET serialize)
+if (TARGET Boost::serialization)
     set(UNITTEST_DEPS serialize)
 else()
     set(UNITTEST_FILTER "test_Matrix2D_serialize.cpp" "test_Vector_serialize.cpp")

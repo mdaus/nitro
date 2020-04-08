@@ -92,6 +92,7 @@ if (ENABLE_JPEG)
                 DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}"
                 ${CODA_INSTALL_OPTION})
     endif()
+    set(HAVE_JPEG ON CACHE INTERNAL "Flag indicating whether jpeg support is available")
 endif()
 
 

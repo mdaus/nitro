@@ -108,6 +108,6 @@ if (ENABLE_J2K)
     endif()
 
     # add alias library
-    add_library(J2K ALIAS ${TARGET_NAME})
+    add_library(coda-oss::driver::j2k ALIAS ${TARGET_NAME})
 
 endif()

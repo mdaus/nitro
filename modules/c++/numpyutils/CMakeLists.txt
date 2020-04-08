@@ -1,10 +1,14 @@
 set(MODULE_NAME numpyutils)
 
 if(Python_FOUND AND Python_Development_FOUND AND Python_NumPy_FOUND)
+    set(EXTERNAL_DEPS ${Python_LIBRARIES})
+    if (UNIX)
+        list(APPEND EXTERNAL_DEPS util)
+    endif()
     coda_add_module(
         NAME ${MODULE_NAME}
         DEPS types except sys
-        EXTERNAL_DEPS ${Python_LIBRARIES})
+        EXTERNAL_DEPS ${EXTERNAL_DEPS})
     target_include_directories(${MODULE_NAME}-c++ PUBLIC
         ${Python_INCLUDE_DIRS} ${Python_NumPy_INCLUDE_DIRS})
 

@@ -1,6 +1,6 @@
 set(MODULE_NAME math.poly)
 
-if (TARGET serialize)
+if (TARGET Boost::serialization)
     set(UNITTEST_DEPS serialize)
 else()
     set(UNITTEST_FILTER "test_1d_poly_serialize.cpp" "test_2d_poly_serialize.cpp")

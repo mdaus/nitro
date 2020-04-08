@@ -157,7 +157,6 @@ macro(coda_initialize_build)
             -Wno-deprecated
             -Wno-unused-value
             -Wno-unused-but-set-variable
-            -Wno-misleading-indentation
         )
     endif()
 
@@ -399,7 +398,7 @@ function(coda_add_module)
     cmake_parse_arguments(
         ARG                                             # prefix
         ""                                              # options
-        "NAME"                                          # single args
+        "NAME;VERSION"                                  # single args
         "DEPS;EXTERNAL_DEPS;EXTRA_DEPS;SOURCE_FILTER"   # multi args
         "${ARGN}"
     )

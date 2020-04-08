@@ -70,24 +70,26 @@ endif()
 if (BOOST_HOME)
     set(BOOST_ROOT ${BOOST_HOME})
 endif()
+# if boost serialization is found, the imported target Boost::serialization
+# will be created to allow linking it
 find_package(Boost COMPONENTS serialization)
 set(HAVE_BOOST ${Boost_FOUND})
 
 
-if (PYTHONHOME)
-    set(Python_ROOT_DIR ${PYTHONHOME})
+if (PYTHON_HOME)
+    set(Python_ROOT_DIR ${PYTHON_HOME})
 endif()
 find_package(Python COMPONENTS Interpreter Development NumPy)
 if (Python_FOUND AND Python_Development_FOUND)
     set(CODA_PYTHON_SITE_PACKAGES
         "${CODA_STD_PROJECT_LIB_DIR}/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages")
-    if(NOT PYTHONHOME)
+    if(NOT PYTHON_HOME)
         message("Python installation found at ${Python_EXECUTABLE}.\n"
-                "Pass the configure option -DPYTHONHOME=... to override this selection.")
+                "Pass the configure option -DPYTHON_HOME=... to override this selection.")
     endif()
 else()
     message(WARNING "Python targets will not be built since Python libraries were not found.\n"
-            "Pass the configure option -DPYTHONHOME=... to help locate an installation.")
+            "Pass the configure option -DPYTHON_HOME=... to help locate an installation.")
 endif()
 
 

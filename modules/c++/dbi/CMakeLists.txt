@@ -1,9 +1,9 @@
 set(MODULE_NAME dbi)
-#xxx set(USELIB "SQL")
 
-set(CODA_SQL_LAYER "PostgreSQL")  # "MYSQL", "PostgreSQL", or "ORACLE"
+set(CODA_SQL_LAYER "PostgreSQL" CACHE STRING
+    "the database to use, one of [PostgreSQL, MYSQL, ORACLE]")
 
-set("USE_${CODA_SQL_LAYER}" ON)
+set("USE_${CODA_SQL_LAYER}" ON CACHE INTERNAL "whether this SQL layer is used")
 
 # Find the desired XML package and add its imported target to our dependencies
 include("Find${CODA_SQL_LAYER}")
@@ -21,12 +21,11 @@ if (USE_PostgreSQL)
     endif()
 endif()
 
-
-if (${CODA_SQL_LAYER}_FOUND) # Don't bother building if we've got no implementation.
-    coda_add_module(NAME ${MODULE_NAME})  # See the definition of this method for details on the variables it looks at.
-endif()
+coda_add_module(
+    NAME ${MODULE_NAME}
+    VERSION 1.0
+    DEPS io)  # See the definition of this method for details on the variables it looks at.
 
 coda_add_tests(
     MODULE_NAME ${MODULE_NAME}
-    DIRECTORY "tests"
-    MODULE_DEPS io)
+    DIRECTORY "tests")
