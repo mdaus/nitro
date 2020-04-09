@@ -12,8 +12,3 @@ add_subdirectory("math.poly")
 add_subdirectory("xml.lite")
 
 add_subdirectory("test_utils")
-
-# the main __init__.py for the coda package
-install(FILES "types/source/__init__.py"
-        DESTINATION "${CODA_PYTHON_SITE_PACKAGES}/coda"
-        ${CODA_INSTALL_OPTION})

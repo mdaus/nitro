@@ -1,6 +1,3 @@
-# All directories under here contain C++ source
-set(TARGET_LANG "c++")
-
 # add an interface library for unittests
 add_library(TestCase INTERFACE)
 target_link_libraries(TestCase INTERFACE sys-c++ str-c++)

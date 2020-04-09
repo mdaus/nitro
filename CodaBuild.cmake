@@ -410,6 +410,11 @@ function(coda_add_module)
     # Find all the source files, relative to the module's directory
     file(GLOB_RECURSE local_sources RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" "source/*.cpp")
 
+    if (GPU_ENABLED AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/kernels")
+        file(GLOB_RECURSE cuda_sources RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" "kernels/*.cu")
+        list(APPEND local_sources ${cuda_sources})
+    endif()
+
     # Filter out ignored files
     filter_files(local_sources "${local_sources}" "${ARG_SOURCE_FILTER}")
 
@@ -436,10 +441,18 @@ function(coda_add_module)
     target_include_directories(${target_name} ${lib_type}
         "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}>"
         "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}>"
-        "${CMAKE_INSTALL_PREFIX}/${CODA_STD_PROJECT_INCLUDE_DIR}")
+        "$<INSTALL_INTERFACE:${CODA_STD_PROJECT_INCLUDE_DIR}>")
 
     if (ARG_EXTRA_DEPS)
         add_dependencies(${target_name} ${ARG_EXTRA_DEPS})
+    endif()
+
+    if (cuda_sources)
+        get_property(tmp TARGET ${target_name} PROPERTY COMPILE_OPTIONS)
+        set_target_properties(${target_name} PROPERTIES
+            CUDA_SEPARABLE_COMPILATION ON
+            COMPILE_OPTIONS $<IF:$<STREQUAL:$<COMPILE_LANGUAGE>,CUDA>,-rdc=true,>
+        )
     endif()
 
     # Set up install destinations for binaries
@@ -569,6 +582,7 @@ endfunction()
 #   TARGET          - Name of the CMake target to build the Python module
 #   MODULE_NAME     - Name of the module within Python
 #   INPUT           - Source file (.i) from which to generate the SWIG bindings
+#   PACKAGE         - Name of the package to which this module is added
 #
 # Multi value arguments:
 #   DEPS            - List of compiled module dependencies for the library
@@ -576,20 +590,21 @@ endfunction()
 #
 function(coda_add_swig_python_module)
     cmake_parse_arguments(
-        "ARG"                       # prefix
-        ""                          # options
-        "TARGET;MODULE_NAME;INPUT"  # single args
-        "MODULE_DEPS;PYTHON_DEPS"   # multi args
+        "ARG"                               # prefix
+        ""                                  # options
+        "TARGET;MODULE_NAME;INPUT;PACKAGE"  # single args
+        "MODULE_DEPS;PYTHON_DEPS"           # multi args
         "${ARGN}"
     )
-    # determine the necessary includes and libs from the compiled dependencies
+    if (NOT ARG_PACKAGE)
+        message(FATAL_ERROR "package must be specified for Python module ${ARG_TARGET}")
+    endif()
+
+    # determine the necessary includes from the compiled dependencies
     set(include_dirs "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/source>")
     set(libs ${Python_LIBRARIES})
     foreach(dep ${ARG_MODULE_DEPS})
-        set(dep_target "${dep}-c++")
-        list(APPEND libs ${dep_target})
-
-        get_property(dep_interface_include_dirs TARGET ${dep_target}
+        get_property(dep_interface_include_dirs TARGET ${dep}
                      PROPERTY INTERFACE_INCLUDE_DIRECTORIES)
         list(APPEND include_dirs ${dep_interface_include_dirs})
     endforeach()
@@ -608,22 +623,24 @@ function(coda_add_swig_python_module)
 
     swig_add_library(${ARG_TARGET} LANGUAGE python SOURCES ${ARG_INPUT})
 
-    target_link_libraries(${ARG_TARGET} PRIVATE "${libs}")
+    target_link_libraries(${ARG_TARGET} PRIVATE "${ARG_MODULE_DEPS}")
     set_property(TARGET ${ARG_TARGET} PROPERTY
         SWIG_INCLUDE_DIRECTORIES "${include_dirs}")
     set_property(TARGET ${ARG_TARGET} PROPERTY
         SWIG_GENERATED_INCLUDE_DIRECTORIES "${Python_INCLUDE_DIRS}")
     set_property(TARGET ${ARG_TARGET} PROPERTY
         LIBRARY_OUTPUT_NAME ${ARG_MODULE_NAME})
-    file(GLOB generated_py "${CMAKE_CURRENT_SOURCE_DIR}/source/generated/*.py")
+    file(GLOB sources_py
+        "${CMAKE_CURRENT_SOURCE_DIR}/source/*.py"
+        "${CMAKE_CURRENT_SOURCE_DIR}/source/generated/*.py")
 
     # install the compiled extension library
     install(TARGETS ${ARG_TARGET}
-            DESTINATION "${CODA_PYTHON_SITE_PACKAGES}/coda"
+            DESTINATION "${CODA_PYTHON_SITE_PACKAGES}/${ARG_PACKAGE}"
             ${CODA_INSTALL_OPTION})
 
-    # install the python script which loads the compiled extension
-    install(FILES ${generated_py}
-            DESTINATION "${CODA_PYTHON_SITE_PACKAGES}/coda"
+    # install the python scripts
+    install(FILES ${sources_py}
+            DESTINATION "${CODA_PYTHON_SITE_PACKAGES}/${ARG_PACKAGE}"
             ${CODA_INSTALL_OPTION})
 endfunction()
