@@ -1,13 +1,13 @@
 set(MODULE_NAME polygon)
 
 coda_add_module(
-    NAME ${MODULE_NAME}
-    DEPS sys mem types math except)
+    ${MODULE_NAME}
+    DEPS sys-c++ mem-c++ types-c++ math-c++ except-c++)
 
 coda_add_tests(
     MODULE_NAME ${MODULE_NAME}
     DIRECTORY "tests"
-    DEPS sio.lite)
+    DEPS sio.lite-c++)
 coda_add_tests(
     MODULE_NAME ${MODULE_NAME}
     DIRECTORY "unittests"

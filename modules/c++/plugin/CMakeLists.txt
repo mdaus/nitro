@@ -1,3 +1,3 @@
 coda_add_module(
-    NAME plugin
-    DEPS io mem logging)
+    plugin
+    DEPS io-c++ mem-c++ logging-c++)

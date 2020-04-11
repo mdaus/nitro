@@ -1,8 +1,8 @@
 set(MODULE_NAME logging)
 
 coda_add_module(
-    NAME ${MODULE_NAME}
-    DEPS io mt)
+    ${MODULE_NAME}
+    DEPS io-c++ mt-c++)
 
 coda_add_tests(
     MODULE_NAME ${MODULE_NAME}

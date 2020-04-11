@@ -1,8 +1,8 @@
 set(MODULE_NAME math)
 
 coda_add_module(
-    NAME ${MODULE_NAME}
-    DEPS except str sys types)
+    ${MODULE_NAME}
+    DEPS except-c++ str-c++ sys-c++ types-c++)
 
 coda_add_tests(
     MODULE_NAME ${MODULE_NAME}

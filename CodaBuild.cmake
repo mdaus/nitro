@@ -171,6 +171,9 @@ macro(coda_initialize_build)
         endif()
     endif()
 
+    install(EXPORT ${CMAKE_PROJECT_NAME}
+            DESTINATION "${CODA_STD_PROJECT_LIB_DIR}/cmake")
+
     # show the compile options for the project directory
     get_property(tmp_compile_options DIRECTORY "./" PROPERTY COMPILE_OPTIONS)
     message("COMPILE OPTIONS=${tmp_compile_options}")
@@ -225,7 +228,7 @@ include(ExternalProject)
 function(coda_add_driver)
     cmake_parse_arguments(
         ARG                          # prefix
-        "BUILD"                      # options
+        ""                           # options
         "NAME;ARCHIVE;HASH"          # single args
         ""                           # multi args
         "${ARGN}"
@@ -304,17 +307,10 @@ function(coda_add_tests)
             add_custom_target(${test_group_tgt})
         endif()
 
-        list(APPEND ARG_DEPS ${ARG_MODULE_NAME})
-
-        set(module_dep_targets TestCase)
-        foreach(dep ${ARG_DEPS})
-            if (NOT ${dep} STREQUAL "")
-                list(APPEND module_dep_targets "${dep}-c++")
-            endif()
-        endforeach()
+        list(APPEND ARG_DEPS ${ARG_MODULE_NAME}-c++ TestCase)
 
         # get all interface libraries and include directories from the dependencies
-        foreach(dep ${module_dep_targets})
+        foreach(dep ${ARG_DEPS})
             if (TARGET ${dep})
                 get_property(dep_includes TARGET ${dep}
                              PROPERTY INTERFACE_INCLUDE_DIRECTORIES)
@@ -334,13 +330,12 @@ function(coda_add_tests)
             file(RELATIVE_PATH test_subdir
                  "${CMAKE_CURRENT_SOURCE_DIR}/${ARG_DIRECTORY}"
                  "${CMAKE_CURRENT_SOURCE_DIR}/${test_dir}")
-            # message(STATUS "Generating Test: module_name=${ARG_MODULE_NAME} test_src=${test_src}  test_name=${test_name}  test_dir=${test_dir}  test_subdir= ${test_subdir} module_deps=${ARG_DEPS}")
 
             # Set IDE subfolder so that tests appear in their own tree
             set_target_properties(${test_target}
                 PROPERTIES FOLDER "${ARG_DIRECTORY}/${ARG_MODULE_NAME}/${test_subdir}")
 
-            target_link_libraries(${test_target} PRIVATE ${module_dep_targets})
+            target_link_libraries(${test_target} PRIVATE ${ARG_DEPS})
             target_include_directories(${test_target} PRIVATE ${include_dirs})
 
             # add unit tests to automatic test suite
@@ -385,40 +380,48 @@ endfunction()
 
 # Add a C++ module to the build
 #
-# Single value arguments:
+# Positional arguments:
 #   MODULE_NAME     - Name of the module
 #
+# Single value arguments:
+#   VERSION         - Version of the module (currently unused)
+#
 # Multi value arguments:
-#   DEPS            - List of internal module dependencies for the library
-#   EXTERNAL_DEPS   - List of linkable external dependencies for the library
-#   EXTRA_DEPS      - List of non-linkable dependencies for the library
+#   DEPS            - List of linkable dependencies for the library
+#   SOURCES         - List of source files to link into this library. If not
+#                     provided, the source subdirectory will be globbed for
+#                     source files.
 #   SOURCE_FILTER   - Source files to ignore
 #
-function(coda_add_module)
+function(coda_add_module MODULE_NAME)
     cmake_parse_arguments(
-        ARG                                             # prefix
-        ""                                              # options
-        "NAME;VERSION"                                  # single args
-        "DEPS;EXTERNAL_DEPS;EXTRA_DEPS;SOURCE_FILTER"   # multi args
+        ARG                                 # prefix
+        ""                                  # options
+        "VERSION"                           # single args
+        "DEPS;SOURCES;SOURCE_FILTER"        # multi args
         "${ARGN}"
     )
     if (ARG_UNPARSED_ARGUMENTS)
         message(FATAL_ERROR "received unexpected argument(s): ${ARG_UNPARSED_ARGUMENTS}")
     endif()
-    set(target_name "${ARG_NAME}-c++")
+    set(target_name "${MODULE_NAME}-c++")
 
-    # Find all the source files, relative to the module's directory
-    file(GLOB_RECURSE local_sources RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" "source/*.cpp")
+    if (ARG_SOURCES)
+        set(local_source ${ARG_SOURCES})
+    else()
+        # Find all the source files, relative to the module's directory
+        file(GLOB_RECURSE local_sources RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" "source/*.cpp" "source/*.c")
 
-    if (GPU_ENABLED AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/kernels")
-        file(GLOB_RECURSE cuda_sources RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" "kernels/*.cu")
-        list(APPEND local_sources ${cuda_sources})
+        if (GPU_ENABLED AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/kernels")
+            file(GLOB_RECURSE cuda_sources RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" "kernels/*.cu")
+            list(APPEND local_sources ${cuda_sources})
+        endif()
     endif()
 
     # Filter out ignored files
     filter_files(local_sources "${local_sources}" "${ARG_SOURCE_FILTER}")
 
-    coda_generate_module_config_header(${ARG_NAME})
+    coda_generate_module_config_header(${MODULE_NAME})
 
     if (NOT local_sources)
         # Libraries without sources must be declared to CMake as INTERFACE libraries
@@ -429,23 +432,12 @@ function(coda_add_module)
         add_library(${target_name} ${local_sources})
     endif()
 
-    # convert module dependency names to target names (append "-c++")
-    foreach(dep ${ARG_DEPS})
-        list(APPEND module_dep_targets "${dep}-c++")
-    endforeach()
-
-    target_link_libraries(${target_name} ${lib_type}
-        ${module_dep_targets}
-        ${ARG_EXTERNAL_DEPS})
+    target_link_libraries(${target_name} ${lib_type} ${ARG_DEPS})
 
     target_include_directories(${target_name} ${lib_type}
         "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}>"
         "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}>"
         "$<INSTALL_INTERFACE:${CODA_STD_PROJECT_INCLUDE_DIR}>")
-
-    if (ARG_EXTRA_DEPS)
-        add_dependencies(${target_name} ${ARG_EXTRA_DEPS})
-    endif()
 
     if (cuda_sources)
         get_property(tmp TARGET ${target_name} PROPERTY COMPILE_OPTIONS)
@@ -457,7 +449,7 @@ function(coda_add_module)
 
     # Set up install destinations for binaries
     install(TARGETS ${target_name}
-            EXPORT "${ARG_NAME}_TARGETS"
+            EXPORT ${CMAKE_PROJECT_NAME}
             ${CODA_INSTALL_OPTION}
             LIBRARY DESTINATION "${CODA_STD_PROJECT_LIB_DIR}"
             ARCHIVE DESTINATION "${CODA_STD_PROJECT_LIB_DIR}"
@@ -474,16 +466,9 @@ function(coda_add_module)
     # install conf directory, if present
     if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/conf")
         install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/conf"
-                DESTINATION "share/${ARG_NAME}"
+                DESTINATION "share/${MODULE_NAME}"
                 ${CODA_INSTALL_OPTION})
     endif()
-
-    # cannot use exports until all external dependencies have their own exports defined
-    #install(EXPORT "${target_name}_TARGETS"
-    #    FILE ${target_name}_TARGETS.cmake
-    #    NAMESPACE ${target_name}::
-    #    DESTINATION ${CODA_STD_PROJECT_LIB_DIR}/cmake/${target_name}
-    #)
 
 #[[  #xxx TODO Export the library interface? See https://www.youtube.com/watch?v=bsXLMQ6WgIk
     include(CMakePackageConfigHelpers)
@@ -498,38 +483,38 @@ function(coda_add_module)
     include(CMakeFindDependencyMacro)
     find_dependency(mydepend 1.0) # Version#
     include("${CMAKE_CURRENT_LIST_DIR}/${tgt_munged_name}_TARGETS.cmake")
-
-    #xxx Also, add_library("${target_name}::${target_name}" ALIAS ${target_name})
 #]]
 endfunction()
 
 
 # Add a plugin (dynamically loaded library) to the build
 #
+# Positional arguments:
+#   PLUGIN_NAME     - The name of this plugin
+#   MODULE_NAME     - The module associated with this plugin
+#
 # Single value arguments:
-#   PLUGIN_NAME     - Name of the plugin
-#   PLUGIN          - The module to which this plugin attaches
 #   VERSION         - Version number of this plugin
 #
 # Multi value arguments:
-#   MODULE_DEPS     - List of module dependencies for the plugin
+#   DEPS            - List of dependencies for the plugin
 #   SOURCES         - Optional list of source files for compiling the plugin.
 #                     If not provided, the source files will be globbed.
 #
-function(coda_add_plugin)
+function(coda_add_plugin PLUGIN_NAME MODULE_NAME)
     cmake_parse_arguments(
-        ARG                          # prefix
-        ""                           # options
-        "PLUGIN_NAME;PLUGIN;VERSION" # single args
-        "MODULE_DEPS;SOURCES"        # multi args
+        ARG                         # prefix
+        ""                          # options
+        "VERSION"                   # single args
+        "DEPS;SOURCES"              # multi args
         "${ARGN}"
     )
     if (ARG_UNPARSED_ARGUMENTS)
         message(FATAL_ERROR "received unexpected argument(s): ${ARG_UNPARSED_ARGUMENTS}")
     endif()
 
-    set(OUTPUT_NAME "${ARG_PLUGIN_NAME}-c++")
-    set(TARGET_NAME "${ARG_PLUGIN}_${OUTPUT_NAME}")
+    set(OUTPUT_NAME "${PLUGIN_NAME}-c++")
+    set(TARGET_NAME "${ARG_MODULE_NAME}_${OUTPUT_NAME}")
 
     if (NOT ARG_SOURCES)
         file(GLOB SOURCES "source/*.cpp")
@@ -546,18 +531,16 @@ function(coda_add_plugin)
                    "$<INSTALL_INTERFACE:${CODA_STD_PROJECT_INCLUDE_DIR}>")
     endif()
 
-    foreach(dep ${ARG_MODULE_DEPS})
-        list(APPEND MODULE_DEP_TARGETS "${dep}-c++")
-    endforeach()
-    target_link_libraries(${TARGET_NAME} PUBLIC ${MODULE_DEP_TARGETS})
+    target_link_libraries(${TARGET_NAME} PUBLIC ${ARG_DEPS})
 
     target_compile_definitions(${TARGET_NAME} PRIVATE PLUGIN_MODULE_EXPORTS)
 
     install(TARGETS ${TARGET_NAME}
+            EXPORT ${CMAKE_PROJECT_NAME}
             ${CODA_INSTALL_OPTION}
-            LIBRARY DESTINATION "share/${ARG_PLUGIN}/plugins"
-            ARCHIVE DESTINATION "share/${ARG_PLUGIN}/plugins"
-            RUNTIME DESTINATION "share/${ARG_PLUGIN}/plugins")
+            LIBRARY DESTINATION "share/${ARG_MODULE_NAME}/plugins"
+            ARCHIVE DESTINATION "share/${ARG_MODULE_NAME}/plugins"
+            RUNTIME DESTINATION "share/${ARG_MODULE_NAME}/plugins")
 
     # install headers
     install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}"
@@ -570,7 +553,7 @@ function(coda_add_plugin)
     # install conf directory, if present
     if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/conf")
         install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/conf"
-                DESTINATION "share/${ARG_PLUGIN}"
+                DESTINATION "share/${ARG_MODULE_NAME}"
                 ${CODA_INSTALL_OPTION})
     endif()
 endfunction()
@@ -585,7 +568,7 @@ endfunction()
 #   PACKAGE         - Name of the package to which this module is added
 #
 # Multi value arguments:
-#   DEPS            - List of compiled module dependencies for the library
+#   MODULE_DEPS     - List of compiled module dependencies for the library
 #   PYTHON_DEPS     - List of Python module dependencies for the library
 #
 function(coda_add_swig_python_module)
@@ -602,7 +585,6 @@ function(coda_add_swig_python_module)
 
     # determine the necessary includes from the compiled dependencies
     set(include_dirs "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/source>")
-    set(libs ${Python_LIBRARIES})
     foreach(dep ${ARG_MODULE_DEPS})
         get_property(dep_interface_include_dirs TARGET ${dep}
                      PROPERTY INTERFACE_INCLUDE_DIRECTORIES)

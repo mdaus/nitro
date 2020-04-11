@@ -1,8 +1,8 @@
 set(MODULE_NAME io)
 
 coda_add_module(
-    NAME ${MODULE_NAME}
-    DEPS sys mem
+    ${MODULE_NAME}
+    DEPS sys-c++ mem-c++
     SOURCE_FILTER "MMapInputStream.cpp")
 
 coda_add_tests(

@@ -1,8 +1,8 @@
 set(MODULE_NAME str)
 
 coda_add_module(
-    NAME ${MODULE_NAME}
-    DEPS except)
+    ${MODULE_NAME}
+    DEPS except-c++)
 
 coda_add_tests(
     MODULE_NAME ${MODULE_NAME}
@@ -10,5 +10,5 @@ coda_add_tests(
 coda_add_tests(
     MODULE_NAME ${MODULE_NAME}
     DIRECTORY "unittests"
-    DEPS sys
+    DEPS sys-c++
     UNITTEST)

@@ -1,16 +1,15 @@
 set(MODULE_NAME unique)
-
+set(MODULE_DEPS except-c++)
 # On Unix, we depend on libuuid.  On Windows, we use Rpcrt4.
 if (WIN32)
-    set(EXTERNAL_DEPS Rpcrt4)
+    list(APPEND MODULE_DEPS Rpcrt4)
 elseif (UNIX)
-    set(EXTERNAL_DEPS uuid)
+    list(APPEND MODULE_DEPS uuid)
 endif()
 
 coda_add_module(
-    NAME ${MODULE_NAME}
-    DEPS except
-    EXTERNAL_DEPS ${EXTERNAL_DEPS})
+    ${MODULE_NAME}
+    DEPS ${MODULE_DEPS})
 
 coda_add_tests(
     MODULE_NAME ${MODULE_NAME}

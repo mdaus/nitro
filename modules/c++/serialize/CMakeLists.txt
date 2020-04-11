@@ -1,5 +1,5 @@
 if (TARGET Boost::serialization)
     coda_add_module(
-        NAME serialize
-        EXTERNAL_DEPS Boost::serialization)
+        serialize
+        DEPS Boost::serialization)
 endif()

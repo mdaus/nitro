@@ -1,8 +1,8 @@
 set(MODULE_NAME tiff)
 
 coda_add_module(
-    NAME ${MODULE_NAME}
-    DEPS mt io)
+    ${MODULE_NAME}
+    DEPS mt-c++ io-c++)
 
 coda_add_tests(
     MODULE_NAME ${MODULE_NAME}

@@ -22,9 +22,9 @@ if (USE_PostgreSQL)
 endif()
 
 coda_add_module(
-    NAME ${MODULE_NAME}
+    ${MODULE_NAME}
     VERSION 1.0
-    DEPS io)  # See the definition of this method for details on the variables it looks at.
+    DEPS io-c++)
 
 coda_add_tests(
     MODULE_NAME ${MODULE_NAME}

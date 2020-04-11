@@ -1,16 +1,15 @@
 set(MODULE_NAME xml.lite)
-
+set(MODULE_DEPS io-c++ mem-c++ mt-c++ logging-c++)
 if (USE_XercesC)
-    set(EXTERNAL_DEPS xerces-c)
+    list(APPEND MODULE_DEPS xerces-c)
 endif()
 
 coda_add_module(
-    NAME ${MODULE_NAME}
-    DEPS io mem mt logging
-    EXTERNAL_DEPS ${EXTERNAL_DEPS})
+    ${MODULE_NAME}
+    DEPS ${MODULE_DEPS})
 
 coda_add_tests(
     MODULE_NAME ${MODULE_NAME}
     DIRECTORY "tests"
-    DEPS cli
+    DEPS cli-c++
     FILTER_LIST "MMParserTest1.cpp" "MinidomParserTest2.cpp")

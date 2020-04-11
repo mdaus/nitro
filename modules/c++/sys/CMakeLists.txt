@@ -1,16 +1,15 @@
 set(MODULE_NAME sys)
-
+set(MODULE_DEPS config-c++ except-c++ str-c++)
 if (WIN32)
-    set(EXTERNAL_DEPS ws2_32)
+    list(APPEND MODULE_DEPS ws2_32)
 elseif (UNIX)
-    set(EXTERNAL_DEPS pthread)
+    list(APPEND MODULE_DEPS pthread)
 endif()
-list(APPEND EXTERNAL_DEPS "${CMAKE_DL_LIBS}" "${CLOCK_GETTIME_EXTRALIBS}")
+list(APPEND MODULE_DEPS "${CMAKE_DL_LIBS}" "${CLOCK_GETTIME_EXTRALIBS}")
 
 coda_add_module(
-    NAME ${MODULE_NAME}
-    DEPS config except str
-    EXTERNAL_DEPS ${EXTERNAL_DEPS})
+    ${MODULE_NAME}
+    DEPS ${MODULE_DEPS})
 
 coda_add_tests(
     MODULE_NAME ${MODULE_NAME}
@@ -19,5 +18,5 @@ coda_add_tests(
 coda_add_tests(
     MODULE_NAME ${MODULE_NAME}
     DIRECTORY "unittests"
-    DEPS mt
+    DEPS mt-c++
     UNITTEST)

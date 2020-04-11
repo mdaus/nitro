@@ -1,14 +1,13 @@
 set(MODULE_NAME net)
-
+set(MODULE_DEPS logging-c++ re-c++ io-c++ mem-c++)
 if (CURL_FOUND)
-    set(EXTERNAL_DEPS "CURL::libcurl")  # From FindCURL
+    list(APPEND MODULE_DEPS CURL::libcurl)  # From FindCURL
     set(NET_CURL_SUPPORT "1")
 endif()
 
 coda_add_module(
-    NAME ${MODULE_NAME}
-    DEPS logging re io mem
-    EXTERNAL_DEPS ${EXTERNAL_DEPS})
+    ${MODULE_NAME}
+    DEPS ${MODULE_DEPS})
 
 coda_add_tests(
     MODULE_NAME ${MODULE_NAME}

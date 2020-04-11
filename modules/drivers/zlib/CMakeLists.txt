@@ -79,7 +79,7 @@ else()
     add_library(${TARGET_NAME} ${SOURCES})
     target_include_directories(${TARGET_NAME}
         PUBLIC "$<BUILD_INTERFACE:${SOURCE_DIR}>"
-               "$<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/${CODA_STD_PROJECT_INCLUDE_DIR}>")
+               "$<INSTALL_INTERFACE:${CODA_STD_PROJECT_INCLUDE_DIR}>")
 
     foreach(src "ioapi.c" "zip.c")
         list(APPEND MINIZIP_SOURCES "${SOURCE_DIR}/contrib/minizip/${src}")
@@ -87,18 +87,19 @@ else()
     add_library(minizip ${MINIZIP_SOURCES})
     target_link_libraries(minizip PUBLIC z)
     target_include_directories(${TARGET_NAME}
-        PUBLIC "$<BUILD_INTERFACE:${SOURCE_DIR}"
+        PUBLIC "$<BUILD_INTERFACE:${SOURCE_DIR}>"
                "$<BUILD_INTERFACE:${SOURCE_DIR}/contrib/minizip>"
-               "$<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/${CODA_STD_PROJECT_INCLUDE_DIR}>")
+               "$<INSTALL_INTERFACE:${CODA_STD_PROJECT_INCLUDE_DIR}>")
 
 
     install(FILES "${SOURCE_DIR}/zconf.h"
                   "${SOURCE_DIR}/zlib.h"
                   "${SOURCE_DIR}/contrib/minizip/zip.h"
                   "${SOURCE_DIR}/contrib/minizip/ioapi.h"
-            DESTINATION "${CMAKE_INSTALL_PREFIX}/${CODA_STD_PROJECT_INCLUDE_DIR}"
+            DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}"
             ${CODA_INSTALL_OPTION})
     install(TARGETS z minizip
+            EXPORT ${CMAKE_PROJECT_NAME}
             ${CODA_INSTALL_OPTION}
             LIBRARY DESTINATION "${CODA_STD_PROJECT_LIB_DIR}"
             ARCHIVE DESTINATION "${CODA_STD_PROJECT_LIB_DIR}")

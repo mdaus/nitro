@@ -1,16 +1,15 @@
 set(MODULE_NAME re)
-
+set(MODULE_DEPS sys-c++)
 # Enable to use std::regex instead of PCRE.
 option(RE_ENABLE_STD_REGEX "use std::regex instead of pcre" OFF)
 
 if (NOT RE_ENABLE_STD_REGEX)
-    set(EXTERNAL_DEPS pcre2)
+    list(APPEND MODULE_DEPS pcre2)
 endif()
 
 coda_add_module(
-    NAME ${MODULE_NAME}
-    DEPS sys
-    EXTERNAL_DEPS ${EXTERNAL_DEPS})
+    ${MODULE_NAME}
+    DEPS ${MODULE_DEPS})
 
 if (NOT RE_ENABLE_STD_REGEX)
     if (NOT BUILD_SHARED_LIBS)
