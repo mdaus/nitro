@@ -7,6 +7,7 @@ if(Python_FOUND AND Python_Development_FOUND AND Python_NumPy_FOUND)
     endif()
     coda_add_module(
         ${MODULE_NAME}
+        VERSION 1.0
         DEPS ${MODULE_DEPS})
     target_include_directories(${MODULE_NAME}-c++ PUBLIC
         ${Python_INCLUDE_DIRS} ${Python_NumPy_INCLUDE_DIRS})

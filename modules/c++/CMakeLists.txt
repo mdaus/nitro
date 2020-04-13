@@ -1,3 +1,5 @@
+set(TARGET_LANGUAGE c++)
+
 # add an interface library for unittests
 add_library(TestCase INTERFACE)
 target_link_libraries(TestCase INTERFACE sys-c++ str-c++)

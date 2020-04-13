@@ -9,6 +9,7 @@ endif()
 
 coda_add_module(
     ${MODULE_NAME}
+    VERSION 1.0
     DEPS ${MODULE_DEPS})
 
 coda_add_tests(

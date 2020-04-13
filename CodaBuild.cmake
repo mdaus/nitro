@@ -270,6 +270,9 @@ endfunction()
 #
 # Multi value arguments:
 #   DEPS            - Modules that the tests are dependent upon.
+#   SOURCES         - List of test source files, one for each test. If not
+#                     provided, the specified directory will be globbed for
+#                     source files.
 #   FILTER_LIST     - Source files to ignore
 #
 # Option arguments:
@@ -282,7 +285,7 @@ function(coda_add_tests)
             ARG                         # prefix
             "UNITTEST"                  # options
             "MODULE_NAME;DIRECTORY"     # single args
-            "DEPS;FILTER_LIST"          # multi args
+            "DEPS;SOURCES;FILTER_LIST"  # multi args
             "${ARGN}"
         )
         if (ARG_UNPARSED_ARGUMENTS)
@@ -295,9 +298,16 @@ function(coda_add_tests)
         if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${ARG_DIRECTORY}")
             message(FATAL_ERROR "Directory ${CMAKE_CURRENT_SOURCE_DIR}/${ARG_DIRECTORY} does not exist")
         endif()
-        # Find all the source files, relative to the module's directory
-        file(GLOB_RECURSE local_tests RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}"
-             "${ARG_DIRECTORY}/*.cpp")
+
+        if (ARG_SOURCES)
+            foreach(src ${ARG_SOURCES})
+                list(APPEND local_tests "${ARG_DIRECTORY}/${src}")
+            endforeach()
+        else()
+            # Find all the source files, relative to the module's directory
+            file(GLOB_RECURSE local_tests RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}"
+                 "${ARG_DIRECTORY}/*.cpp")
+        endif()
         # Filter out ignored files
         filter_files(local_tests "${local_tests}" "${ARG_FILTER_LIST}")
 
@@ -307,7 +317,7 @@ function(coda_add_tests)
             add_custom_target(${test_group_tgt})
         endif()
 
-        list(APPEND ARG_DEPS ${ARG_MODULE_NAME}-c++ TestCase)
+        list(APPEND ARG_DEPS ${ARG_MODULE_NAME}-${TARGET_LANGUAGE} TestCase)
 
         # get all interface libraries and include directories from the dependencies
         foreach(dep ${ARG_DEPS})
@@ -380,6 +390,8 @@ endfunction()
 
 # Add a C++ module to the build
 #
+# The CMake target for the module is named "${MODULE_NAME}-${TARGET_LANGUAGE}"
+#
 # Positional arguments:
 #   MODULE_NAME     - Name of the module
 #
@@ -393,6 +405,9 @@ endfunction()
 #                     source files.
 #   SOURCE_FILTER   - Source files to ignore
 #
+# Implicit arguments from parent scope:
+#   TARGET_LANGUAGE - module target language (c or c++)
+#
 function(coda_add_module MODULE_NAME)
     cmake_parse_arguments(
         ARG                                 # prefix
@@ -404,10 +419,13 @@ function(coda_add_module MODULE_NAME)
     if (ARG_UNPARSED_ARGUMENTS)
         message(FATAL_ERROR "received unexpected argument(s): ${ARG_UNPARSED_ARGUMENTS}")
     endif()
-    set(target_name "${MODULE_NAME}-c++")
+    if (NOT TARGET_LANGUAGE)
+        message(FATAL_ERROR "must set TARGET_LANGUAGE before calling this function (c or c++)")
+    endif()
+    set(target_name "${MODULE_NAME}-${TARGET_LANGUAGE}")
 
     if (ARG_SOURCES)
-        set(local_source ${ARG_SOURCES})
+        set(local_sources ${ARG_SOURCES})
     else()
         # Find all the source files, relative to the module's directory
         file(GLOB_RECURSE local_sources RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}" "source/*.cpp" "source/*.c")
@@ -420,8 +438,6 @@ function(coda_add_module MODULE_NAME)
 
     # Filter out ignored files
     filter_files(local_sources "${local_sources}" "${ARG_SOURCE_FILTER}")
-
-    coda_generate_module_config_header(${MODULE_NAME})
 
     if (NOT local_sources)
         # Libraries without sources must be declared to CMake as INTERFACE libraries
@@ -513,11 +529,11 @@ function(coda_add_plugin PLUGIN_NAME MODULE_NAME)
         message(FATAL_ERROR "received unexpected argument(s): ${ARG_UNPARSED_ARGUMENTS}")
     endif()
 
-    set(OUTPUT_NAME "${PLUGIN_NAME}-c++")
+    set(OUTPUT_NAME "${PLUGIN_NAME}-${TARGET_LANGUAGE}")
     set(TARGET_NAME "${ARG_MODULE_NAME}_${OUTPUT_NAME}")
 
     if (NOT ARG_SOURCES)
-        file(GLOB SOURCES "source/*.cpp")
+        file(GLOB SOURCES "source/*.cpp" "source/*.c")
     else()
         set(SOURCES "${ARG_SOURCES}")
     endif()

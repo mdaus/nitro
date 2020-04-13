@@ -2,6 +2,7 @@ set(MODULE_NAME logging)
 
 coda_add_module(
     ${MODULE_NAME}
+    VERSION 1.1
     DEPS io-c++ mt-c++)
 
 coda_add_tests(

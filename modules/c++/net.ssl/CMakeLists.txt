@@ -13,6 +13,7 @@ if (OPENSSL_FOUND)
 else()
     message(WARNING "OpenSSL installation not found")
 endif()
+coda_generate_module_config_header(${MODULE_NAME})
 
 coda_add_module(
     ${MODULE_NAME}

@@ -1,7 +1,10 @@
 set(MODULE_NAME math)
 
+coda_generate_module_config_header(${MODULE_NAME})
+
 coda_add_module(
     ${MODULE_NAME}
+    VERSION 0.1
     DEPS except-c++ str-c++ sys-c++ types-c++)
 
 coda_add_tests(

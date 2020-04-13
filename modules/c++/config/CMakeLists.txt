@@ -1,8 +1,10 @@
 set(MODULE_NAME config)
 set(TARGET_NAME ${MODULE_NAME}-c++)
 
-coda_add_module(${MODULE_NAME})
+coda_add_module(${MODULE_NAME}
+                VERSION 1.2)
 
+# setting for the config header
 set(CODA_EXPORT " ")
 if (MSVC AND BUILD_SHARED_LIBS)
     set(CODA_EXPORT "__declspec(dllexport)")

@@ -8,6 +8,7 @@ endif()
 
 coda_add_module(
     ${MODULE_NAME}
+    VERSION 0.2
     DEPS sys-c++ math.linear-c++)
 
 coda_add_tests(

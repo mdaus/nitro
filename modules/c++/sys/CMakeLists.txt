@@ -7,8 +7,11 @@ elseif (UNIX)
 endif()
 list(APPEND MODULE_DEPS "${CMAKE_DL_LIBS}" "${CLOCK_GETTIME_EXTRALIBS}")
 
+coda_generate_module_config_header(${MODULE_NAME})
+
 coda_add_module(
     ${MODULE_NAME}
+    VERSION 1.2
     DEPS ${MODULE_DEPS})
 
 coda_add_tests(

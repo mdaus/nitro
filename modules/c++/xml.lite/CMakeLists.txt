@@ -4,8 +4,11 @@ if (USE_XercesC)
     list(APPEND MODULE_DEPS xerces-c)
 endif()
 
+coda_generate_module_config_header(${MODULE_NAME})
+
 coda_add_module(
     ${MODULE_NAME}
+    VERSION 1.2
     DEPS ${MODULE_DEPS})
 
 coda_add_tests(
