@@ -1,6 +1,6 @@
 set(TARGET_NAME z)
 
-set(ZIP_HOME "" CACHE STRING "path to pre-existing zlib installation, if not provided zlib will be built")
+set(ZIP_HOME "" CACHE PATH "path to pre-existing zlib installation, if not provided zlib will be built")
 
 if (NOT ZIP_HOME STREQUAL "")
     find_library(${TARGET_NAME}_PATH
@@ -99,7 +99,7 @@ else()
             DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}"
             ${CODA_INSTALL_OPTION})
     install(TARGETS z minizip
-            EXPORT ${CMAKE_PROJECT_NAME}
+            EXPORT ${CODA_EXPORT_SET_NAME}
             ${CODA_INSTALL_OPTION}
             LIBRARY DESTINATION "${CODA_STD_PROJECT_LIB_DIR}"
             ARCHIVE DESTINATION "${CODA_STD_PROJECT_LIB_DIR}")

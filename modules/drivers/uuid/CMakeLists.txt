@@ -3,8 +3,9 @@ set(TARGET_NAME uuid)
 if (WIN32)
     # for Windows we use the UuidCreateSequential function, which requires
     # linking with the system library rpcrt4
+    set(UUID_LIB rpcrt4 CACHE INTERNAL "library for providing UUID")
 else()
-    set(UUID_HOME "" CACHE STRING "path to UUID installation")
+    set(UUID_HOME "" CACHE PATH "path to UUID installation")
     if (NOT UUID_HOME STREQUAL "")
         find_library(${TARGET_NAME}_PATH
                      ${TARGET_NAME}
@@ -68,7 +69,7 @@ else()
                    "$<BUILD_INTERFACE:${SOURCE_DIR}/lib>"
                    "$<INSTALL_INTERFACE:${CODA_STD_PROJECT_INCLUDE_DIR}>")
         install(TARGETS ${TARGET_NAME}
-                EXPORT ${CMAKE_PROJECT_NAME}
+                EXPORT ${CODA_EXPORT_SET_NAME}
                 ${CODA_INSTALL_OPTION}
                 LIBRARY DESTINATION "${CODA_STD_PROJECT_LIB_DIR}"
                 ARCHIVE DESTINATION "${CODA_STD_PROJECT_LIB_DIR}")
@@ -77,4 +78,5 @@ else()
                 DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}/uuid"
                 ${CODA_INSTALL_OPTION})
     endif()
+    set(UUID_LIB ${TARGET_NAME} CACHE INTERNAL "library for providing UUID")
 endif()

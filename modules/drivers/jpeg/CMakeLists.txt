@@ -1,7 +1,7 @@
 set(TARGET_NAME jpeg)
 
-option(ENABLE_JPEG "Enable use of libjpeg" ON)
-set(JPEG_HOME "" CACHE STRING "path to libjpeg installation")
+set(ENABLE_JPEG ON CACHE BOOL "Enable use of libjpeg")
+set(JPEG_HOME "" CACHE PATH "path to libjpeg installation")
 
 if (ENABLE_JPEG)
     if (NOT JPEG_HOME STREQUAL "")
@@ -81,7 +81,7 @@ if (ENABLE_JPEG)
                    "$<BUILD_INTERFACE:${${CMAKE_PROJECT_NAME}_${TARGET_NAME}_BINARY_DIR}>"
                    "$<INSTALL_INTERFACE:${CODA_STD_PROJECT_INCLUDE_DIR}>")
         install(TARGETS jpeg
-                EXPORT ${CMAKE_PROJECT_NAME}
+                EXPORT ${CODA_EXPORT_SET_NAME}
                 ${CODA_INSTALL_OPTION}
                 LIBRARY DESTINATION "${CODA_STD_PROJECT_LIB_DIR}"
                 ARCHIVE DESTINATION "${CODA_STD_PROJECT_LIB_DIR}")

@@ -1,0 +1,5 @@
+@PACKAGE_INIT@
+
+include("${CMAKE_CURRENT_LIST_DIR}/coda-ossTargets.cmake")
+
+set(J2K_LIB @J2K_LIB@ CACHE INTERNAL "library providing J2K support")

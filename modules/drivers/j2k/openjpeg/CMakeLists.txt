@@ -1,7 +1,7 @@
 set(TARGET_NAME openjpeg)
 
-option(ENABLE_J2K "enable J2K library" ON)
-set(J2K_HOME "" CACHE STRING "path to J2K installation")
+set(ENABLE_J2K ON CACHE BOOL "enable J2K library")
+set(J2K_HOME "" CACHE PATH "path to J2K installation")
 
 if (ENABLE_J2K)
     if (NOT J2K_HOME STREQUAL "")
@@ -95,7 +95,7 @@ if (ENABLE_J2K)
                    "$<BUILD_INTERFACE:${SOURCE_DIR}/src/lib/openjp2>"
                    "$<INSTALL_INTERFACE:${CODA_STD_PROJECT_INCLUDE_DIR}>")
         install(TARGETS ${TARGET_NAME}
-                EXPORT ${CMAKE_PROJECT_NAME}
+                EXPORT ${CODA_EXPORT_SET_NAME}
                 ${CODA_INSTALL_OPTION}
                 LIBRARY DESTINATION "${CODA_STD_PROJECT_LIB_DIR}"
                 ARCHIVE DESTINATION "${CODA_STD_PROJECT_LIB_DIR}")
@@ -108,7 +108,5 @@ if (ENABLE_J2K)
                 ${CODA_INSTALL_OPTION})
     endif()
 
-    # add alias library
-    add_library(coda-oss::driver::j2k ALIAS ${TARGET_NAME})
-
+    set(J2K_LIB ${TARGET_NAME} CACHE INTERNAL "library providing J2K support")
 endif()

@@ -1,5 +1,5 @@
 set(SQL_LAYER "" CACHE STRING "SQL backend [mysql, psql, oracle]")
-set(SQL_HOME "" CACHE STRING "Path to SQL installation")
+set(SQL_HOME "" CACHE PATH "Path to SQL installation")
 
 if (SQL_LAYER)
     if (NOT SQL_HOME STREQUAL "")
@@ -10,6 +10,7 @@ if (SQL_LAYER)
             set(STLIBPATH_SQL "${SQL_HOME}/lib")
             set(INCLUDES_SQL "${SQL_HOME}/include")
         endif()
+        set(DEFAULT_PATH_OPTION NO_DEFAULT_PATHS)
     endif()
 
     if (SQL_LAYER STREQUAL "mysql")
@@ -24,11 +25,19 @@ if (SQL_LAYER)
         set(LIB_SQL psql)
     elseif (SQL_LAYER STREQUAL "oracle")
         set(CXX_FLAGS_SQL -DUSE_ORACLE)
-        set(LIB_SQL psql)
+        set(LIB_SQL clntsh)
+    else()
+        message(FATAL_ERROR "Invalid SQL layer, must be one of [mysql, psql, oracle]")
     endif()
-endif()
 
-set(STLIBPATH_SQL ${STLIBPATH_SQL} CACHE INTERNAL "")
-set(INCLUDES_SQL ${INCLUDES_SQL} CACHE INTERNAL "")
-set(CXX_FLAGS_SQL ${CXX_FLAGS_SQL} CACHE INTERNAL "")
-set(LIB_SQL ${LIB_SQL} CACHE INTERNAL "")
+    find_library(${SQL_LIB_PATH}
+        ${LIB_SQL}
+        PATHS ${STLIBPATH_SQL}
+        ${DEFAULT_PATH_OPTION})
+
+    add_library(sql UNKNOWN IMPORTED GLOBAL)
+    set_property(TARGET sql PROPERTY IMPORTED_LOCATION "${SQL_LIB_PATH}")
+    target_include_directories(sql INTERFACE ${INCLUDES_SQL})
+    target_compile_definitions(sql INTERFACE ${CXX_FLAGS_SQL})
+    set(SQL_LIB sql CACHE INTERNAL "")
+endif()

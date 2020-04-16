@@ -1,11 +1,22 @@
 # this file contains common functions and macros for initializing and adding
 # components to the build
 
-set(CODA_OSS_SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR} CACHE INTERNAL
+get_filename_component(CODA_OSS_SOURCE_DIR "${CMAKE_CURRENT_LIST_DIR}/../" ABSOLUTE)
+# make it a cache variable (globally accessible)
+set(CODA_OSS_SOURCE_DIR "${CODA_OSS_SOURCE_DIR}" CACHE INTERNAL
     "path to coda-oss directory")
+
 
 # Set up the global build configuration
 macro(coda_initialize_build)
+    # Set default install directory
+    if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+        set(CMAKE_INSTALL_PREFIX
+            "${PROJECT_SOURCE_DIR}/install/${CMAKE_SYSTEM_NAME}${CODA_BUILD_BITSIZE}-${CMAKE_CXX_COMPILER_ID}-${CODA_LIBRARY_TYPE}-${CMAKE_BUILD_TYPE}"
+            CACHE PATH "Install directory" FORCE)
+        message("CMAKE_INSTALL_PREFIX was not specified, defaulting to ${CMAKE_INSTALL_PREFIX}")
+    endif()
+
     option(CODA_PARTIAL_INSTALL "Allow building and installing a subset of the targets" OFF)
     if (CODA_PARTIAL_INSTALL)
         # This setting, along with setting all install commands as "OPTIONAL",
@@ -47,8 +58,6 @@ macro(coda_initialize_build)
     set(CODA_STD_PROJECT_LIB_DIR        "lib")
     set(CODA_STD_PROJECT_BIN_DIR        "bin")
 
-    set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-
     # Detect 32/64-bit architecture
     if(NOT CODA_BUILD_BITSIZE)
         if (CMAKE_SIZEOF_VOID_P EQUAL 8)
@@ -56,10 +65,12 @@ macro(coda_initialize_build)
         elseif (CMAKE_SIZEOF_VOID_P EQUAL 4)
             set(CODA_BUILD_BITSIZE "32" CACHE STRING "Select Architecture" FORCE)
         else()
-            message(FATAL_ERROR "Unknown Pointer Size: ${CMAKE_SIZEOF_VOID_P} Bytes")
+            message(FATAL_ERROR "Unexpected Pointer Size: ${CMAKE_SIZEOF_VOID_P} Bytes")
         endif()
         set_property(CACHE CODA_BUILD_BITSIZE PROPERTY STRINGS "64" "32")
     endif()
+
+    set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
     if (MSVC)
         # MSVC is a multi-configuration generator, which typically allows build
@@ -86,19 +97,11 @@ macro(coda_initialize_build)
         set(CODA_LIBRARY_TYPE "static")
     endif()
 
-    include("${CODA_OSS_SOURCE_DIR}/build/config_tests.cmake") # Code to test compiler features
+    include("${CODA_OSS_SOURCE_DIR}/cmake/CodaConfigTests.cmake") # Code to test compiler features
 
     option(CODA_BUILD_TESTS "build tests" ON)
     if (CODA_BUILD_TESTS)
         enable_testing()
-    endif()
-
-    # Set default install directory
-    if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-        set(CMAKE_INSTALL_PREFIX
-            "${PROJECT_SOURCE_DIR}/install/${CMAKE_SYSTEM_NAME}${CODA_BUILD_BITSIZE}-${CMAKE_CXX_COMPILER_ID}-${CODA_LIBRARY_TYPE}-${CMAKE_BUILD_TYPE}"
-            CACHE PATH "Install directory" FORCE)
-        message("CMAKE_INSTALL_PREFIX was not specified, defaulting to ${CMAKE_INSTALL_PREFIX}")
     endif()
 
     # Look for things in our own install location first.
@@ -162,7 +165,6 @@ macro(coda_initialize_build)
 
     if (SWIG_FOUND AND Python_FOUND AND Python_Development_FOUND)
         option(PYTHON_EXTRA_NATIVE "generate extra native containers with SWIG" ON)
-        set(CMAKE_SWIG_FLAGS "")
         if (PYTHON_EXTRA_NATIVE)
             list(APPEND CMAKE_SWIG_FLAGS "-extranative")
         endif()
@@ -171,7 +173,9 @@ macro(coda_initialize_build)
         endif()
     endif()
 
-    install(EXPORT ${CMAKE_PROJECT_NAME}
+    set(CODA_EXPORT_SET_NAME "${CMAKE_PROJECT_NAME}Targets")
+    # create a script to import this project's targets into downstream projects
+    install(EXPORT ${CODA_EXPORT_SET_NAME}
             DESTINATION "${CODA_STD_PROJECT_LIB_DIR}/cmake")
 
     # show the compile options for the project directory
@@ -206,6 +210,33 @@ function(filter_files dest_name file_list filter_list)
         endif()
     endforeach()
     set(${dest_name} ${good_names} PARENT_SCOPE)
+endfunction()
+
+
+# Generate a package config file to help downstream projects import our targets.
+function(coda_generate_package_config)
+    include(CMakePackageConfigHelpers)
+
+    configure_package_config_file(
+        "cmake/${CMAKE_PROJECT_NAME}Config.cmake.in"
+        "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}Config.cmake"
+        INSTALL_DESTINATION "${CODA_STD_PROJECT_LIB_DIR}/cmake"
+        #PATH_VARS INCLUDE_INSTALL_DIR SYSCONFIG_INSTALL_DIR
+    )
+    #write_basic_package_version_file(
+    #    ${CMAKE_CURRENT_BINARY_DIR}/FooConfigVersion.cmake
+    #    VERSION 1.2.3
+    #    COMPATIBILITY SameMajorVersion )
+    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}Config.cmake"
+            #"${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}ConfigVersion.cmake"
+            DESTINATION "${CODA_STD_PROJECT_LIB_DIR}/cmake")
+
+#[[
+    # Then, pull in:
+    include(CMakeFindDependencyMacro)
+    find_dependency(mydepend 1.0) # Version#
+    include("${CMAKE_CURRENT_LIST_DIR}/${tgt_munged_name}_TARGETS.cmake")
+]]#
 endfunction()
 
 
@@ -465,7 +496,7 @@ function(coda_add_module MODULE_NAME)
 
     # Set up install destinations for binaries
     install(TARGETS ${target_name}
-            EXPORT ${CMAKE_PROJECT_NAME}
+            EXPORT ${CODA_EXPORT_SET_NAME}
             ${CODA_INSTALL_OPTION}
             LIBRARY DESTINATION "${CODA_STD_PROJECT_LIB_DIR}"
             ARCHIVE DESTINATION "${CODA_STD_PROJECT_LIB_DIR}"
@@ -485,21 +516,6 @@ function(coda_add_module MODULE_NAME)
                 DESTINATION "share/${MODULE_NAME}"
                 ${CODA_INSTALL_OPTION})
     endif()
-
-#[[  #xxx TODO Export the library interface? See https://www.youtube.com/watch?v=bsXLMQ6WgIk
-    include(CMakePackageConfigHelpers)
-    write_basic_package_version_file(
-        VERSION ${${target_name}_VERSION}
-        COMPATIBILITY SameMajorVersion
-    )
-    install(FILES "${tgt_munged_name}_config.cmake" "${tgt_munged_name}_config_version.cmake"
-        DESTINATION ${CODA_STD_PROJECT_LIB_DIR/cmake/${tgt_munged_dirname}
-    )
-    # Then, pull in:
-    include(CMakeFindDependencyMacro)
-    find_dependency(mydepend 1.0) # Version#
-    include("${CMAKE_CURRENT_LIST_DIR}/${tgt_munged_name}_TARGETS.cmake")
-#]]
 endfunction()
 
 
@@ -552,7 +568,7 @@ function(coda_add_plugin PLUGIN_NAME MODULE_NAME)
     target_compile_definitions(${TARGET_NAME} PRIVATE PLUGIN_MODULE_EXPORTS)
 
     install(TARGETS ${TARGET_NAME}
-            EXPORT ${CMAKE_PROJECT_NAME}
+            EXPORT ${CODA_EXPORT_SET_NAME}
             ${CODA_INSTALL_OPTION}
             LIBRARY DESTINATION "share/${ARG_MODULE_NAME}/plugins"
             ARCHIVE DESTINATION "share/${ARG_MODULE_NAME}/plugins"

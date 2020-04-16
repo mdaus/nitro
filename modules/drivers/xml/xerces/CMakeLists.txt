@@ -291,7 +291,7 @@ else()
                "$<BUILD_INTERFACE:${SOURCE_DIR}/src>"
                "$<INSTALL_INTERFACE:${CODA_STD_PROJECT_INCLUDE_DIR}>")
     install(TARGETS ${TARGET_NAME}
-            EXPORT ${CMAKE_PROJECT_NAME}
+            EXPORT ${CODA_EXPORT_SET_NAME}
             ${CODA_INSTALL_OPTION}
             LIBRARY DESTINATION "${CODA_STD_PROJECT_LIB_DIR}"
             ARCHIVE DESTINATION "${CODA_STD_PROJECT_LIB_DIR}")
@@ -312,5 +312,4 @@ else()
                 PATTERN "*.c")
 endif()
 
-# add alias library
-add_library(XML ALIAS xerces-c)
+set(XML_LIB xerces-c CACHE INTERNAL "library providing XML support")

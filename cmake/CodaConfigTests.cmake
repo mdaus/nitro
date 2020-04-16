@@ -66,7 +66,7 @@ if (${CMAKE_VERSION} VERSION_LESS "3.12.0")
     endif()
 endif()
 
-
+set(BOOST_HOME "" CACHE PATH "path to boost installation")
 if (BOOST_HOME)
     set(BOOST_ROOT ${BOOST_HOME})
 endif()

@@ -3,7 +3,11 @@ set(TARGET_LANGUAGE c++)
 # add an interface library for unittests
 add_library(TestCase INTERFACE)
 target_link_libraries(TestCase INTERFACE sys-c++ str-c++)
-target_include_directories(TestCase INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/include")
+target_include_directories(TestCase INTERFACE
+    "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
+    "$<INSTALL_INTERFACE:include>")
+install(FILES "include/TestCase.h" DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}")
+install(TARGETS TestCase EXPORT ${CODA_EXPORT_SET_NAME})
 
 add_subdirectory("config")
 add_subdirectory("serialize")

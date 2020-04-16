@@ -1,0 +1,5 @@
+add_subdirectory("drivers")
+add_subdirectory("c++")
+if (SWIG_FOUND AND Python_FOUND AND Python_Development_FOUND)
+    add_subdirectory("python")
+endif()

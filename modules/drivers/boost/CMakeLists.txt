@@ -4,7 +4,10 @@ install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${config_file_out}"
         DESTINATION "include/boost"
         ${CODA_INSTALL_OPTION})
 if (TARGET Boost::serialization)
-    target_include_directories(Boost::serialization INTERFACE 
-        "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>"
-        "$<INSTALL_INTERFACE:${CODA_STD_PROJECT_INCLUDE_DIR}>")
+    get_property(inc_dirs TARGET Boost::serialization PROPERTY INTERFACE_INCLUDE_DIRECTORIES)
+    list(APPEND inc_dirs 
+         "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>"
+         "$<INSTALL_INTERFACE:${CODA_STD_PROJECT_INCLUDE_DIR}>")
+    set_property(TARGET Boost::serialization PROPERTY INTERFACE_INCLUDE_DIRECTORIES
+                 ${inc_dirs})
 endif()

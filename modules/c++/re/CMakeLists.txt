@@ -2,7 +2,7 @@ set(MODULE_NAME re)
 set(MODULE_DEPS sys-c++)
 
 # Enable to use std::regex instead of PCRE.
-option(RE_ENABLE_STD_REGEX "use std::regex instead of pcre" OFF)
+set(RE_ENABLE_STD_REGEX OFF CACHE BOOL "use std::regex instead of pcre")
 coda_generate_module_config_header(${MODULE_NAME})
 
 if (NOT RE_ENABLE_STD_REGEX)

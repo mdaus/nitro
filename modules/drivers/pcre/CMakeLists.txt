@@ -1,7 +1,7 @@
 set(TARGET_NAME pcre2)
 
-option(ENABLE_PCRE "enable PCRE library" ON)
-set(PCRE_HOME "" CACHE STRING "path to PCRE installation")
+set(ENABLE_PCRE ON CACHE BOOL "enable PCRE library")
+set(PCRE_HOME "" CACHE PATH "path to PCRE installation")
 
 if (ENABLE_PCRE)
     if (NOT PCRE_HOME STREQUAL "")
@@ -150,7 +150,7 @@ if (ENABLE_PCRE)
                    "$<BUILD_INTERFACE:${SOURCE_DIR}/src>"
                    "$<INSTALL_INTERFACE:${CODA_STD_PROJECT_INCLUDE_DIR}>")
         install(TARGETS ${TARGET_NAME}
-                EXPORT ${CMAKE_PROJECT_NAME}
+                EXPORT ${CODA_EXPORT_SET_NAME}
                 ${CODA_INSTALL_OPTION}
                 LIBRARY DESTINATION "${CODA_STD_PROJECT_LIB_DIR}"
                 ARCHIVE DESTINATION "${CODA_STD_PROJECT_LIB_DIR}")
