@@ -1,5 +1,4 @@
-add_library(jpeg-c source/LibjpegDecompress.c)
-add_dependencies(jpeg-c coda-oss)
-target_link_libraries(jpeg-c jpeg nitf-c)
-target_include_directories(jpeg-c PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
-install(TARGETS jpeg-c)
+coda_add_module(
+    jpeg
+    DEPS jpeg nitf-c
+    SOURCES source/LibjpegDecompress.c)

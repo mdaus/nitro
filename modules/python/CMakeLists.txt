@@ -1,5 +1,3 @@
-set(TARGET_LANG "python")
-
 find_package(SWIG)
 
 if(SWIG_FOUND AND Python_FOUND)

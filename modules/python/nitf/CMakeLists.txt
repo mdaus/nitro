@@ -22,10 +22,9 @@ if (Python_FOUND)
     target_include_directories(nitropy PRIVATE ${Python_INCLUDE_DIRS}
                                                ${Python_NumPy_INCLUDE_DIRS})
     target_link_libraries(nitropy nitf-c numpyutils-c++ sys-c++ except-c++ io-c++ str-c++)
-    install(TARGETS nitropy DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/site-packages/)
+    install(TARGETS nitropy DESTINATION "lib/site-packages")
     install(FILES source/__init__.py source/generated/nitropy.py
-            DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/site-packages/)
-    add_dependencies(nitropy coda-oss)
+            DESTINATION "lib/site-packages")
 else()
     message(FATAL_ERROR "Can't find PYTHON_HOME")
 endif()

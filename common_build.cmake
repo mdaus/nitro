@@ -2,17 +2,6 @@ set(CMAKE_C_STANDARD 90)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-if (NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Select Build Type")
-    set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS
-        "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
-endif()
-
-if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-    message("Overriding default CMAKE_INSTALL_PREFIX of ${CMAKE_INSTALL_PREFIX}")
-    set(CMAKE_INSTALL_PREFIX "${CMAKE_CURRENT_SOURCE_DIR}/install${CMAKE_SYSTEM_NAME}-${CMAKE_BUILD_TYPE}" CACHE PATH "Install directory" FORCE)
-endif()
-
 if (UNIX)
     add_compile_options(-Wno-deprecated -Wno-deprecated-declarations)
 elseif(MSVC)
@@ -22,23 +11,6 @@ elseif(MSVC)
                     -D_SCL_SECURE_NO_WARNINGS
                     -D_USE_MATH_DEFINES)
 endif()
-
-function(common_module_config module)
-    target_include_directories(${module} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include
-                                                ${CMAKE_CURRENT_BINARY_DIR}/include)
-    install(TARGETS ${module})
-    install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/
-            DESTINATION include)
-endfunction()
-
-function(add_unittests unittests ext deps module)
-    foreach(TEST_NAME ${unittests})
-        add_executable(${TEST_NAME} unittests/${TEST_NAME}.${ext})
-        target_link_libraries(${TEST_NAME} ${deps} TestCase)
-        add_test(${TEST_NAME} ${TEST_NAME})
-        install(TARGETS ${TEST_NAME} DESTINATION unittests/${module})
-    endforeach()
-endfunction()
 
 function(import_coda_module module)
     add_library(${module} STATIC IMPORTED)
