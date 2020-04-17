@@ -1,0 +1,7 @@
+add_subdirectory("c")
+add_subdirectory("c++")
+if (NOT MSVC)
+    add_subdirectory("python")
+endif()
+add_subdirectory("java")
+add_subdirectory("mex")
