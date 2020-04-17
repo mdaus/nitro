@@ -1,3 +1,4 @@
-# Originally used by build/javatool.py
-#xxx Should these get copied to and used from the target/install trees?
-set(JARS_DIR "${CMAKE_CURRENT_SOURCE_DIR}" CACHE INTERNAL "")
+set(CODA-OSS_JARS_DIR "${CMAKE_CURRENT_SOURCE_DIR}" CACHE INTERNAL "")
+install(DIRECTORY "${CODA-OSS_JARS_DIR}/"
+        DESTINATION "${CODA_STD_PROJECT_LIB_DIR}/"
+        FILES_MATCHING PATTERN "*.jar")

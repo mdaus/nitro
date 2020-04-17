@@ -105,3 +105,7 @@ if (SWIG_FOUND)
 else()
     message(WARNING "SWIG could not be found, so modules relying on it will not be built")
 endif()
+
+# sets OPENSSL_FOUND to TRUE if found, and creates targets
+# OpenSSL:SSL and OpenSSL::Crypto
+find_package(OpenSSL)

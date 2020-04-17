@@ -9,14 +9,6 @@ set(CODA_OSS_SOURCE_DIR "${CODA_OSS_SOURCE_DIR}" CACHE INTERNAL
 
 # Set up the global build configuration
 macro(coda_initialize_build)
-    # Set default install directory
-    if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-        set(CMAKE_INSTALL_PREFIX
-            "${PROJECT_SOURCE_DIR}/install/${CMAKE_SYSTEM_NAME}${CODA_BUILD_BITSIZE}-${CMAKE_CXX_COMPILER_ID}-${CODA_LIBRARY_TYPE}-${CMAKE_BUILD_TYPE}"
-            CACHE PATH "Install directory" FORCE)
-        message("CMAKE_INSTALL_PREFIX was not specified, defaulting to ${CMAKE_INSTALL_PREFIX}")
-    endif()
-
     option(CODA_PARTIAL_INSTALL "Allow building and installing a subset of the targets" OFF)
     if (CODA_PARTIAL_INSTALL)
         # This setting, along with setting all install commands as "OPTIONAL",
@@ -70,8 +62,6 @@ macro(coda_initialize_build)
         set_property(CACHE CODA_BUILD_BITSIZE PROPERTY STRINGS "64" "32")
     endif()
 
-    set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-
     if (MSVC)
         # MSVC is a multi-configuration generator, which typically allows build
         # type to be selected at build time rather than configure time. However,
@@ -96,6 +86,16 @@ macro(coda_initialize_build)
     else()
         set(CODA_LIBRARY_TYPE "static")
     endif()
+
+    # Set default install directory
+    if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+        set(CMAKE_INSTALL_PREFIX
+            "${PROJECT_SOURCE_DIR}/install/${CMAKE_SYSTEM_NAME}${CODA_BUILD_BITSIZE}-${CMAKE_CXX_COMPILER_ID}-${CODA_LIBRARY_TYPE}-${CMAKE_BUILD_TYPE}"
+            CACHE PATH "Install directory" FORCE)
+        message("CMAKE_INSTALL_PREFIX was not specified, defaulting to ${CMAKE_INSTALL_PREFIX}")
+    endif()
+
+    set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
     include("${CODA_OSS_SOURCE_DIR}/cmake/CodaConfigTests.cmake") # Code to test compiler features
 
@@ -214,29 +214,34 @@ endfunction()
 
 
 # Generate a package config file to help downstream projects import our targets.
+#
+# All arguments are forwarded as PATH_VARS for configure_package_config_file
 function(coda_generate_package_config)
-    include(CMakePackageConfigHelpers)
+    # only run if we are the top level project
+    if ("${CMAKE_PROJECT_NAME}" STREQUAL "${PROJECT_NAME}")
+        include(CMakePackageConfigHelpers)
 
-    configure_package_config_file(
-        "cmake/${CMAKE_PROJECT_NAME}Config.cmake.in"
-        "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}Config.cmake"
-        INSTALL_DESTINATION "${CODA_STD_PROJECT_LIB_DIR}/cmake"
-        #PATH_VARS INCLUDE_INSTALL_DIR SYSCONFIG_INSTALL_DIR
-    )
-    #write_basic_package_version_file(
-    #    ${CMAKE_CURRENT_BINARY_DIR}/FooConfigVersion.cmake
-    #    VERSION 1.2.3
-    #    COMPATIBILITY SameMajorVersion )
-    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}Config.cmake"
-            #"${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}ConfigVersion.cmake"
-            DESTINATION "${CODA_STD_PROJECT_LIB_DIR}/cmake")
+        configure_package_config_file(
+            "cmake/${CMAKE_PROJECT_NAME}Config.cmake.in"
+            "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}Config.cmake"
+            INSTALL_DESTINATION "lib/cmake"
+            PATH_VARS ${ARGN}
+        )
+        #write_basic_package_version_file(
+        #    ${CMAKE_CURRENT_BINARY_DIR}/FooConfigVersion.cmake
+        #    VERSION 1.2.3
+        #    COMPATIBILITY SameMajorVersion )
+        install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}Config.cmake"
+                #"${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}ConfigVersion.cmake"
+                DESTINATION "lib/cmake")
 
-#[[
-    # Then, pull in:
-    include(CMakeFindDependencyMacro)
-    find_dependency(mydepend 1.0) # Version#
-    include("${CMAKE_CURRENT_LIST_DIR}/${tgt_munged_name}_TARGETS.cmake")
-]]#
+        #[[
+        # Then, pull in:
+        include(CMakeFindDependencyMacro)
+        find_dependency(mydepend 1.0) # Version#
+        include("${CMAKE_CURRENT_LIST_DIR}/${tgt_munged_name}_TARGETS.cmake")
+        ]]#
+    endif()
 endfunction()
 
 
@@ -419,7 +424,7 @@ function(coda_generate_module_config_header MODULE_NAME)
 endfunction()
 
 
-# Add a C++ module to the build
+# Add a C or C++ module to the build
 #
 # The CMake target for the module is named "${MODULE_NAME}-${TARGET_LANGUAGE}"
 #
@@ -503,8 +508,8 @@ function(coda_add_module MODULE_NAME)
             RUNTIME DESTINATION "${CODA_STD_PROJECT_BIN_DIR}")
 
     # Set up install destination for headers
-    install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}"
-            DESTINATION "."
+    install(DIRECTORY "${CODA_STD_PROJECT_INCLUDE_DIR}/"
+            DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}/"
             ${CODA_INSTALL_OPTION}
             FILES_MATCHING
                 PATTERN "*.h"
@@ -575,8 +580,8 @@ function(coda_add_plugin PLUGIN_NAME MODULE_NAME)
             RUNTIME DESTINATION "share/${ARG_MODULE_NAME}/plugins")
 
     # install headers
-    install(DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}"
-            DESTINATION "."
+    install(DIRECTORY "${CODA_STD_PROJECT_INCLUDE_DIR}/"
+            DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}/"
             FILES_MATCHING
                 PATTERN "*.h"
                 PATTERN "*.hpp"
@@ -615,46 +620,51 @@ function(coda_add_swig_python_module)
         message(FATAL_ERROR "package must be specified for Python module ${ARG_TARGET}")
     endif()
 
-    # determine the necessary includes from the compiled dependencies
-    set(include_dirs "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/source>")
-    foreach(dep ${ARG_MODULE_DEPS})
-        get_property(dep_interface_include_dirs TARGET ${dep}
-                     PROPERTY INTERFACE_INCLUDE_DIRECTORIES)
-        list(APPEND include_dirs ${dep_interface_include_dirs})
-    endforeach()
-
-    # get SWIG include directories from the Python dependencies
+    set(swig_include_dirs
+        "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/source>"
+        "$<BUILD_INTERFACE:${CODA-OSS_SWIG_INCLUDE_DIR}>" # this one is for downstream projects
+    )
+    # determine the necessary SWIG include directories from the Python dependencies
     foreach(dep ${ARG_PYTHON_DEPS})
         get_property(dep_swig_include_dirs TARGET ${dep}
                      PROPERTY SWIG_INCLUDE_DIRECTORIES)
-        list(APPEND include_dirs ${dep_swig_include_dirs})
+        list(APPEND swig_include_dirs ${dep_swig_include_dirs})
     endforeach()
 
+    set_property(SOURCE ${ARG_INPUT} PROPERTY USE_TARGET_INCLUDE_DIRECTORIES ON)
     set_property(SOURCE ${ARG_INPUT} PROPERTY CPLUSPLUS ON)
     set_property(SOURCE ${ARG_INPUT} PROPERTY SWIG_MODULE_NAME ${ARG_MODULE_NAME})
+    # where the generated Python files are written
     set(CMAKE_SWIG_OUTDIR "${CMAKE_CURRENT_SOURCE_DIR}/source/generated")
+    # where the generated C/C++ files are written
     set(SWIG_OUTFILE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/source/generated")
 
     swig_add_library(${ARG_TARGET} LANGUAGE python SOURCES ${ARG_INPUT})
 
-    target_link_libraries(${ARG_TARGET} PRIVATE "${ARG_MODULE_DEPS}")
+    target_link_libraries(${ARG_TARGET} PRIVATE ${ARG_MODULE_DEPS})
     set_property(TARGET ${ARG_TARGET} PROPERTY
-        SWIG_INCLUDE_DIRECTORIES "${include_dirs}")
+        SWIG_INCLUDE_DIRECTORIES ${swig_include_dirs})
     set_property(TARGET ${ARG_TARGET} PROPERTY
-        SWIG_GENERATED_INCLUDE_DIRECTORIES "${Python_INCLUDE_DIRS}")
+        SWIG_GENERATED_INCLUDE_DIRECTORIES ${Python_INCLUDE_DIRS})
     set_property(TARGET ${ARG_TARGET} PROPERTY
         LIBRARY_OUTPUT_NAME ${ARG_MODULE_NAME})
-    file(GLOB sources_py
-        "${CMAKE_CURRENT_SOURCE_DIR}/source/*.py"
-        "${CMAKE_CURRENT_SOURCE_DIR}/source/generated/*.py")
 
     # install the compiled extension library
     install(TARGETS ${ARG_TARGET}
+            EXPORT ${CODA_EXPORT_SET_NAME}
             DESTINATION "${CODA_PYTHON_SITE_PACKAGES}/${ARG_PACKAGE}"
             ${CODA_INSTALL_OPTION})
 
     # install the python scripts
+    file(GLOB sources_py
+        "${CMAKE_CURRENT_SOURCE_DIR}/source/*.py"
+        "${CMAKE_CURRENT_SOURCE_DIR}/source/generated/*.py")
     install(FILES ${sources_py}
             DESTINATION "${CODA_PYTHON_SITE_PACKAGES}/${ARG_PACKAGE}"
+            ${CODA_INSTALL_OPTION})
+
+    # install the swig interface file, may be needed by downstream projects
+    install(FILES ${ARG_INPUT}
+            DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}/swig"
             ${CODA_INSTALL_OPTION})
 endfunction()
