@@ -5,7 +5,7 @@ class NitroConan(ConanFile):
     url = "https://github.com/mdaus/nitro"
     description = "library for reading and writing the National Imagery Transmission Format (NITF)"
     settings = "os", "compiler", "build_type", "arch"
-    requires = ("coda-oss/CMake_update_win_12c8a1574ed4694c@user/testing", )
+    requires = ("coda-oss/CMake_update_win_b71f5a2ec26e09e9@user/testing", )
     options = {"shared": [True, False],
                }
     default_options = {"shared": False,

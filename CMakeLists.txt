@@ -5,7 +5,8 @@ set(CMAKE_C_STANDARD 90)
 set(CMAKE_CXX_STANDARD 11)
 
 if (${CMAKE_PROJECT_NAME} STREQUAL nitro)
-    # this is the top-level project
+    # we are the top-level project and are responsible for configuration
+
     set(CODA_OSS_HOME "" CACHE PATH "location of coda-oss install, if not provided we will build it")
 
     if (EXISTS ${CMAKE_BINARY_DIR}/conan_paths.cmake)
@@ -17,17 +18,32 @@ if (${CMAKE_PROJECT_NAME} STREQUAL nitro)
     elseif (CODA_OSS_HOME)
         # use pre-built coda-oss from specified install location
         list(APPEND CMAKE_PREFIX_PATH "${CODA_OSS_HOME}/lib/cmake")
-        find_package(coda-oss)
+        find_package(coda-oss REQUIRED)
         include(CodaBuild)
         coda_initialize_build()
     else()
         # build coda-oss ourselves
-        include("externals/coda-oss/cmake/CodaBuild.cmake")
+        list(APPEND CMAKE_MODULE_PATH
+             "${CMAKE_CURRENT_SOURCE_DIR}/externals/coda-oss/cmake")
+        include(CodaBuild)
         coda_initialize_build()
         add_subdirectory("externals/coda-oss")
     endif()
-else()
-    # don't initialize or add externals, the top-level project is responsible for that
+
+    # set up warnings
+    if (MSVC)
+        # set warning level to /W3
+        string(REGEX REPLACE "/W[0-4]" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+        string(REGEX REPLACE "/W[0-4]" "" CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
+        add_compile_options(/W3 /wd4290 /wd4512)
+        add_definitions(-D_CRT_SECURE_NO_WARNINGS -D_SCL_SECURE_NO_WARNINGS)
+    elseif (UNIX)
+        add_compile_options(
+            -Wno-deprecated
+            -Wno-unused-value
+            -Wno-unused-but-set-variable
+        )
+    endif()
 endif()
 
 set(NITRO_C_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/modules/c)
