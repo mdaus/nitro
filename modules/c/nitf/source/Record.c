@@ -1654,6 +1654,10 @@ nitf_Record_removeDataExtensionSegment(nitf_Record* record,
         }
     }
 
+    /* Destruct removed nitf_ComponentInfo */
+    nitf_ComponentInfo_destruct(
+            &record->header->dataExtensionInfo[segmentNumber]);
+
     /* Update the num field in the header */
     num--;
 
