@@ -1,13 +1,9 @@
 add_subdirectory("boost")
-## Unnecessary; it's in the system libs
-#add_subdirectory("curl")
-##add_subdirectory("j2k")
-#xxx From comments in jasper, this isn't much used.
-##add_subdirectory("j2k/jasper")
-add_subdirectory("j2k/openjpeg")
+#add_subdirectory("curl") # this is handled in coda_find_system_dependencies
+add_subdirectory("j2k")
 add_subdirectory("jars")
 add_subdirectory("jpeg")
-##add_subdirectory("numpy")
+#add_subdirectory("numpy") # this is handled in coda_find_system_dependencies
 add_subdirectory("pcre")
 add_subdirectory("sql")
 add_subdirectory("uuid")

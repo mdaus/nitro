@@ -1,10 +1,43 @@
-# this file contains common functions and macros for initializing and adding
+# this file contains common functions and macros for configuring and adding
 # components to the build
+#
+#   coda_initialize_build               - set up global configuration
+#   coda_generate_package_config        - generate CMake module used to import
+#                                         targets into downstream projects
+#   coda_fetch_driver                   - external dependencies
+#   coda_add_tests                      - tests/unittests for C or C++ modules
+#   coda_generate_module_config_header  - generate headers for C or C++ modules
+#   coda_add_module                     - C or C++ modules
+#   coda_add_plugin                     - dynamic library plugins
+#   coda_add_swig_python_module         - SWIG Python modules
 
-get_filename_component(CODA_OSS_SOURCE_DIR "${CMAKE_CURRENT_LIST_DIR}/../" ABSOLUTE)
-# make it a cache variable (globally accessible)
-set(CODA_OSS_SOURCE_DIR "${CODA_OSS_SOURCE_DIR}" CACHE INTERNAL
-    "path to coda-oss directory")
+include(CheckCXXSourceCompiles)
+include(CheckIncludeFile)
+include(CheckLibraryExists)
+include(CheckSymbolExists)
+include(CheckTypeSize)
+include(ExternalProject)
+include(FetchContent) # Requires CMake 3.11+
+include(TestBigEndian)
+
+# print out some compile options/flags, for debugging purposes
+function(coda_show_compile_options)
+    # show the compile options for the project directory
+    get_property(tmp_compile_options DIRECTORY "./" PROPERTY COMPILE_OPTIONS)
+    message("COMPILE OPTIONS=${tmp_compile_options}")
+    unset(tmp_compile_options)
+
+    # show some global settings
+    message("CMAKE_C_FLAGS=${CMAKE_C_FLAGS}")
+    message("CMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}")
+    message("CMAKE_C_FLAGS_DEBUG=${CMAKE_C_FLAGS_DEBUG}")
+    message("CMAKE_CXX_FLAGS_DEBUG=${CMAKE_CXX_FLAGS_DEBUG}")
+    message("CMAKE_C_FLAGS_RELWITHDEBINFO=${CMAKE_C_FLAGS_RELWITHDEBINFO}")
+    message("CMAKE_CXX_FLAGS_RELWITHDEBINFO=${CMAKE_CXX_FLAGS_RELWITHDEBINFO}")
+    message("CMAKE_C_FLAGS_RELEASE=${CMAKE_C_FLAGS_RELEASE}")
+    message("CMAKE_CXX_FLAGS_RELEASE=${CMAKE_CXX_FLAGS_RELEASE}")
+    message("CMAKE_SWIG_FLAGS=${CMAKE_SWIG_FLAGS}")
+endfunction()
 
 
 # Set up the global build configuration
@@ -12,12 +45,16 @@ macro(coda_initialize_build)
     option(CODA_PARTIAL_INSTALL "Allow building and installing a subset of the targets" OFF)
     if (CODA_PARTIAL_INSTALL)
         # This setting, along with setting all install commands as "OPTIONAL",
-        # allows installing a subset of the targets.
+        # allows installing a subset of the targets. It is off by default
+        # because it forces the developer to run separate build and install
+        # steps, and could result in installing stale targets if code is updated
+        # and install is run without rebuilding.
         #
-        # CMake's default forces everything to be built before the install target is
-        # run. This override allows one to build a subset of the project and then
-        # run the install target to install only what has been built (the build and
-        # install must be run as separate steps). For example:
+        # CMake's default behavior forces everything to be built when the
+        # install target is run. This override allows one to build a subset of
+        # the project and then run the install target to install only what has
+        # been built (the build and install must be run as separate steps).
+        # For example:
         #
         #   cmake --build . --target target1
         #   cmake --build . --target target2
@@ -75,6 +112,7 @@ macro(coda_initialize_build)
             message(FATAL_ERROR "must specify CMAKE_BUILD_TYPE as one of [Release, Debug, RelWithDebInfo, MinSizeRel]")
         endif()
     else()
+        # default configuration is RelWithDebInfo for non-MSVC builds
         set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "Select Build Type" FORCE)
     endif()
     set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS
@@ -95,17 +133,14 @@ macro(coda_initialize_build)
         message("CMAKE_INSTALL_PREFIX was not specified, defaulting to ${CMAKE_INSTALL_PREFIX}")
     endif()
 
-    set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-
-    include("${CODA_OSS_SOURCE_DIR}/cmake/CodaConfigTests.cmake") # Code to test compiler features
-
     option(CODA_BUILD_TESTS "build tests" ON)
     if (CODA_BUILD_TESTS)
         enable_testing()
     endif()
 
-    # Look for things in our own install location first.
-    list(APPEND CMAKE_PREFIX_PATH "${CMAKE_INSTALL_PREFIX}")
+    set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+    set(CMAKE_CXX_STANDARD_REQUIRED ON)
+    set(CMAKE_CXX_EXTENSIONS OFF)
 
     # MSVC-specific flags and options.
     if (MSVC)
@@ -113,16 +148,11 @@ macro(coda_initialize_build)
 
         # change default dynamic linked CRT (/MD or /MDd) to static linked CRT
         # (/MT or /MTd) if requested
-        option(STATIC_CRT "use static CRT library /MT (or /MTd for Debug)" OFF)
+        option(STATIC_CRT "use static CRT library /MT, or /MTd for Debug (/MD or /MDd if off)" OFF)
         foreach(build_config DEBUG RELEASE RELWITHDEBINFO MINSIZEREL)
             string(REGEX REPLACE "/MD" "/MT" CMAKE_CXX_FLAGS_${build_config} "${CMAKE_CXX_FLAGS_${build_config}}")
             string(REGEX REPLACE "/MD" "/MT" CMAKE_C_FLAGS_${build_config} "${CMAKE_C_FLAGS_${build_config}}")
         endforeach()
-
-        # set default warning level to /W3
-        string(REGEX REPLACE "/W[0-4]" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-        string(REGEX REPLACE "/W[0-4]" "" CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
-        add_compile_options(/W3)
 
         # catch exceptions that bubble through a C-linkage layer
         string(REGEX REPLACE "/EHsc" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
@@ -131,14 +161,7 @@ macro(coda_initialize_build)
         add_definitions(
             -DWIN32_LEAN_AND_MEAN
             -DNOMINMAX
-            -D_CRT_SECURE_NO_WARNINGS
-            -D_SCL_SECURE_NO_WARNINGS
             -D_USE_MATH_DEFINES
-        )
-        add_compile_options(
-            /wd4290
-            /wd4512
-            #/MP        # Parallel Build
         )
 
         link_libraries(    # CMake uses this for both libraries and linker options
@@ -156,42 +179,14 @@ macro(coda_initialize_build)
             -D_LARGEFILE_SOURCE
             -D_FILE_OFFSET_BITS=64
         )
-        add_compile_options(
-            -Wno-deprecated
-            -Wno-unused-value
-            -Wno-unused-but-set-variable
-        )
     endif()
 
-    if (SWIG_FOUND AND Python_FOUND AND Python_Development_FOUND)
-        option(PYTHON_EXTRA_NATIVE "generate extra native containers with SWIG" ON)
-        if (PYTHON_EXTRA_NATIVE)
-            list(APPEND CMAKE_SWIG_FLAGS "-extranative")
-        endif()
-        if (Python_VERSION_MAJOR GREATER_EQUAL 3)
-            list(APPEND CMAKE_SWIG_FLAGS "-py3")
-        endif()
-    endif()
-
+    # all targets should be installed using this export set
     set(CODA_EXPORT_SET_NAME "${CMAKE_PROJECT_NAME}Targets")
-    # create a script to import this project's targets into downstream projects
-    install(EXPORT ${CODA_EXPORT_SET_NAME}
-            DESTINATION "${CODA_STD_PROJECT_LIB_DIR}/cmake")
 
-    # show the compile options for the project directory
-    get_property(tmp_compile_options DIRECTORY "./" PROPERTY COMPILE_OPTIONS)
-    message("COMPILE OPTIONS=${tmp_compile_options}")
-    unset(tmp_compile_options)
-
-    message("CMAKE_C_FLAGS=${CMAKE_C_FLAGS}")
-    message("CMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}")
-    message("CMAKE_C_FLAGS_DEBUG=${CMAKE_C_FLAGS_DEBUG}")
-    message("CMAKE_CXX_FLAGS_DEBUG=${CMAKE_CXX_FLAGS_DEBUG}")
-    message("CMAKE_C_FLAGS_RELWITHDEBINFO=${CMAKE_C_FLAGS_RELWITHDEBINFO}")
-    message("CMAKE_CXX_FLAGS_RELWITHDEBINFO=${CMAKE_CXX_FLAGS_RELWITHDEBINFO}")
-    message("CMAKE_C_FLAGS_RELEASE=${CMAKE_C_FLAGS_RELEASE}")
-    message("CMAKE_CXX_FLAGS_RELEASE=${CMAKE_CXX_FLAGS_RELEASE}")
-    message("CMAKE_SWIG_FLAGS=${CMAKE_SWIG_FLAGS}")
+    include(CodaFindSystemDependencies)
+    coda_find_system_dependencies()
+    coda_show_compile_options()
 endmacro()
 
 
@@ -215,12 +210,19 @@ endfunction()
 
 # Generate a package config file to help downstream projects import our targets.
 #
-# All arguments are forwarded as PATH_VARS for configure_package_config_file
+# The package can be loaded by calling find_package(package_name REQUIRED) after
+# adding the package config file directory to CMAKE_PREFIX_PATH.
+#
+# All arguments are forwarded as PATH_VARS to configure_package_config_file.
 function(coda_generate_package_config)
     # only run if we are the top level project
     if ("${CMAKE_PROJECT_NAME}" STREQUAL "${PROJECT_NAME}")
-        include(CMakePackageConfigHelpers)
+        # generate a CMake module to import this project's targets into downstream projects
+        install(EXPORT ${CODA_EXPORT_SET_NAME}
+                DESTINATION "${CODA_STD_PROJECT_LIB_DIR}/cmake")
 
+        # create a wrapper module for the above to allow additional configuration
+        include(CMakePackageConfigHelpers)
         configure_package_config_file(
             "cmake/${CMAKE_PROJECT_NAME}Config.cmake.in"
             "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}Config.cmake"
@@ -234,13 +236,6 @@ function(coda_generate_package_config)
         install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}Config.cmake"
                 #"${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}ConfigVersion.cmake"
                 DESTINATION "lib/cmake")
-
-        #[[
-        # Then, pull in:
-        include(CMakeFindDependencyMacro)
-        find_dependency(mydepend 1.0) # Version#
-        include("${CMAKE_CURRENT_LIST_DIR}/${tgt_munged_name}_TARGETS.cmake")
-        ]]#
     endif()
 endfunction()
 
@@ -259,9 +254,7 @@ endfunction()
 #
 #       where ${target_name_lc} is the lower-cased target name.
 #
-include(FetchContent) # Requires CMake 3.11+
-include(ExternalProject)
-function(coda_add_driver)
+function(coda_fetch_driver)
     cmake_parse_arguments(
         ARG                          # prefix
         ""                           # options
@@ -372,7 +365,8 @@ function(coda_add_tests)
             set_target_properties(${test_target} PROPERTIES OUTPUT_NAME ${test_name})
             add_dependencies(${test_group_tgt} ${test_target})
             get_filename_component(test_dir "${test_src}" DIRECTORY)
-            # Do a bit of path manipulation to make sure tests in deeper subdirs retain those subdirs in their build outputs
+            # Do a bit of path manipulation to make sure tests in deeper subdirs
+            # retain those subdirs in their build outputs.
             file(RELATIVE_PATH test_subdir
                  "${CMAKE_CURRENT_SOURCE_DIR}/${ARG_DIRECTORY}"
                  "${CMAKE_CURRENT_SOURCE_DIR}/${test_dir}")
@@ -390,7 +384,8 @@ function(coda_add_tests)
             endif()
 
             # Install [unit]tests to separate subtrees
-            install(TARGETS ${test_target} ${CODA_INSTALL_OPTION}
+            install(TARGETS ${test_target}
+                    ${CODA_INSTALL_OPTION}
                     RUNTIME DESTINATION "${ARG_DIRECTORY}/${ARG_MODULE_NAME}/${test_subdir}")
         endforeach()
     endif()
@@ -476,7 +471,9 @@ function(coda_add_module MODULE_NAME)
     filter_files(local_sources "${local_sources}" "${ARG_SOURCE_FILTER}")
 
     if (NOT local_sources)
-        # Libraries without sources must be declared to CMake as INTERFACE libraries
+        # Libraries without sources must be declared to CMake as INTERFACE libraries.
+        # When "linked" to another target, their interface include directories
+        # and interface link libraries are propagated.
         set(lib_type INTERFACE)
         add_library(${target_name} INTERFACE)
     else()
@@ -488,7 +485,7 @@ function(coda_add_module MODULE_NAME)
 
     target_include_directories(${target_name} ${lib_type}
         "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}>"
-        "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}>"
+        "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}>"    # for generated include headers
         "$<INSTALL_INTERFACE:${CODA_STD_PROJECT_INCLUDE_DIR}>")
 
     if (cuda_sources)

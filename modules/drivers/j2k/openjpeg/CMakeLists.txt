@@ -44,7 +44,7 @@ if (ENABLE_J2K)
         endif()
 
     else()
-        coda_add_driver(
+        coda_fetch_driver(
             NAME ${TARGET_NAME}
             ARCHIVE "openjpeg-2.3.0_mod.tar"
             HASH "SHA256=1ddcff11ac2522fffd51693002bab5ddc690adf735d86a5e4c60eade4468bd19"

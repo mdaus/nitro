@@ -40,7 +40,7 @@ if (ENABLE_PCRE)
     else()
         message("PCRE_HOME not specified, so it will be built")
 
-        coda_add_driver(
+        coda_fetch_driver(
             NAME ${TARGET_NAME}
             ARCHIVE "pcre2-10.22.tar.gz"
             HASH "SHA256=6677C66014EBA5610B8FBD8196FD4E5904DB4116CFF1B5A0D14E91121EDA4377"

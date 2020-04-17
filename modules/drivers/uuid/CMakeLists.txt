@@ -39,7 +39,7 @@ else()
     else()
         message("UUID_HOME not specified, so it will be built")
 
-        coda_add_driver(
+        coda_fetch_driver(
             NAME ${TARGET_NAME}
             ARCHIVE "e2fsprogs-1.40-uuid.tar"
             HASH "SHA256=3507c7e9f226656b3903651c038e9c4907a31282cc4ba86aed8a588e6cc4cec2"

@@ -6,7 +6,7 @@ __pycache__/
 
 install/
 target/
-install/
+test_package/build/
 
 # This is generated
 build_coda.csh

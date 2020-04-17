@@ -1,8 +1,13 @@
 set(MODULE_NAME config)
 set(TARGET_NAME ${MODULE_NAME}-c++)
 
+if (WIN32)
+    set(SOCKET_LIB ws2_32)
+endif()
+
 coda_add_module(${MODULE_NAME}
-                VERSION 1.2)
+                VERSION 1.2
+                DEPS Threads::Threads ${CMAKE_DL_LIBS} ${CLOCK_GETTIME_EXTRALIBS} ${SOCKET_LIB})
 
 # setting for the config header
 set(CODA_EXPORT " ")

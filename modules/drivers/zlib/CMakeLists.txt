@@ -65,7 +65,7 @@ if (NOT ZIP_HOME STREQUAL "")
     target_link_libraries(minizip INTERFACE ${minizip_PATH})
 else()
     message("ZIP_HOME not specified, so zlib and minizip will be built")
-    coda_add_driver(
+    coda_fetch_driver(
         NAME ${TARGET_NAME}
         ARCHIVE "zlib-1.2.7.tar"
         HASH "SHA256=df0ba700245709ea54a18536ed266c2f0a0b3e4c3eb029abc42bf48a087901c5")
