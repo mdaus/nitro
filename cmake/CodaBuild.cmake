@@ -20,6 +20,10 @@ include(ExternalProject)
 include(FetchContent) # Requires CMake 3.11+
 include(TestBigEndian)
 
+if (WIN32 AND BUILD_SHARED_LIBS)
+    include(GenerateExportHeader)
+endif()
+
 # print out some compile options/flags, for debugging purposes
 function(coda_show_compile_options)
     # show the compile options for the project directory
@@ -27,15 +31,12 @@ function(coda_show_compile_options)
     message("COMPILE OPTIONS=${tmp_compile_options}")
     unset(tmp_compile_options)
 
-    # show some global settings
-    message("CMAKE_C_FLAGS=${CMAKE_C_FLAGS}")
-    message("CMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}")
-    message("CMAKE_C_FLAGS_DEBUG=${CMAKE_C_FLAGS_DEBUG}")
-    message("CMAKE_CXX_FLAGS_DEBUG=${CMAKE_CXX_FLAGS_DEBUG}")
-    message("CMAKE_C_FLAGS_RELWITHDEBINFO=${CMAKE_C_FLAGS_RELWITHDEBINFO}")
-    message("CMAKE_CXX_FLAGS_RELWITHDEBINFO=${CMAKE_CXX_FLAGS_RELWITHDEBINFO}")
-    message("CMAKE_C_FLAGS_RELEASE=${CMAKE_C_FLAGS_RELEASE}")
-    message("CMAKE_CXX_FLAGS_RELEASE=${CMAKE_CXX_FLAGS_RELEASE}")
+    # show the global compile flags
+    foreach(suffix "" "_DEBUG" "_RELWITHDEBINFO" "_RELEASE")
+        message("CMAKE_C_FLAGS${suffix}=${CMAKE_C_FLAGS${suffix}}")
+        message("CMAKE_CXX_FLAGS${suffix}=${CMAKE_CXX_FLAGS${suffix}}")
+    endforeach()
+
     message("CMAKE_SWIG_FLAGS=${CMAKE_SWIG_FLAGS}")
 endfunction()
 
@@ -112,7 +113,7 @@ macro(coda_initialize_build)
             message(FATAL_ERROR "must specify CMAKE_BUILD_TYPE as one of [Release, Debug, RelWithDebInfo, MinSizeRel]")
         endif()
     else()
-        # default configuration is RelWithDebInfo for non-MSVC builds
+        # default configuration to RelWithDebInfo for non-MSVC builds
         set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "Select Build Type" FORCE)
     endif()
     set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS
@@ -146,17 +147,27 @@ macro(coda_initialize_build)
     if (MSVC)
         set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-        # change default dynamic linked CRT (/MD or /MDd) to static linked CRT
-        # (/MT or /MTd) if requested
-        option(STATIC_CRT "use static CRT library /MT, or /MTd for Debug (/MD or /MDd if off)" OFF)
-        foreach(build_config DEBUG RELEASE RELWITHDEBINFO MINSIZEREL)
-            string(REGEX REPLACE "/MD" "/MT" CMAKE_CXX_FLAGS_${build_config} "${CMAKE_CXX_FLAGS_${build_config}}")
-            string(REGEX REPLACE "/MD" "/MT" CMAKE_C_FLAGS_${build_config} "${CMAKE_C_FLAGS_${build_config}}")
-        endforeach()
+        if (CONAN_LINK_RUNTIME)
+            # let conan determine the runtime to link
+            foreach(build_config DEBUG RELEASE RELWITHDEBINFO MINSIZEREL)
+                string(REGEX REPLACE "/M[DT]d?" "${CONAN_LINK_RUNTIME}" CMAKE_CXX_FLAGS_${build_config} "${CMAKE_CXX_FLAGS_${build_config}}")
+                string(REGEX REPLACE "/M[DT]d?" "${CONAN_LINK_RUNTIME}" CMAKE_C_FLAGS_${build_config} "${CMAKE_C_FLAGS_${build_config}}")
+            endforeach()
+        else()
+            option(STATIC_CRT "use static CRT library /MT, or /MTd for Debug (/MD or /MDd if off)" OFF)
+            set(LINK_RUNTIME "/MD")
+            if (STATIC_CRT)
+                set(LINK_RUNTIME "/MT")
+            endif()
+            foreach(build_config DEBUG RELEASE RELWITHDEBINFO MINSIZEREL)
+                string(REGEX REPLACE "/M[DT]" "${LINK_RUNTIME}" CMAKE_CXX_FLAGS_${build_config} "${CMAKE_CXX_FLAGS_${build_config}}")
+                string(REGEX REPLACE "/M[DT]" "${LINK_RUNTIME}" CMAKE_C_FLAGS_${build_config} "${CMAKE_C_FLAGS_${build_config}}")
+            endforeach()
+        endif()
 
         # catch exceptions that bubble through a C-linkage layer
         string(REGEX REPLACE "/EHsc" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-        add_compile_options(/EHs)
+        add_compile_options(/EHs /bigobj)
 
         add_definitions(
             -DWIN32_LEAN_AND_MEAN
@@ -169,7 +180,7 @@ macro(coda_initialize_build)
         )
 
         # This should probably be replaced by GenerateExportHeader
-        set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
+        #set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
         set(CMAKE_VS_INCLUDE_INSTALL_TO_DEFAULT_BUILD TRUE)
     endif()
 
@@ -180,6 +191,10 @@ macro(coda_initialize_build)
             -D_FILE_OFFSET_BITS=64
         )
     endif()
+
+    # add Conan flags
+    #list(APPEND CMAKE_C_FLAGS ${CONAN_C_FLAGS})
+    #list(APPEND CMAKE_CXX_FLAGS ${CONAN_CXX_FLAGS})
 
     # all targets should be installed using this export set
     set(CODA_EXPORT_SET_NAME "${CMAKE_PROJECT_NAME}Targets")
@@ -518,6 +533,13 @@ function(coda_add_module MODULE_NAME)
                 DESTINATION "share/${MODULE_NAME}"
                 ${CODA_INSTALL_OPTION})
     endif()
+
+    # needs some work to get shared build working on Windows
+    #if (WIN32 AND BUILD_SHARED_LIBS AND "${lib_type}" STREQUAL PUBLIC)
+    #    generate_export_header(${target_name})
+    #    install(FILES ${PROJECT_BINARY_DIR}/${target_name}_export.h
+    #            DESTINATION ${CODA_STD_PROJECT_INCLUDE_DIR})
+    #endif()
 endfunction()
 
 
@@ -638,7 +660,9 @@ function(coda_add_swig_python_module)
 
     swig_add_library(${ARG_TARGET} LANGUAGE python SOURCES ${ARG_INPUT})
 
-    target_link_libraries(${ARG_TARGET} PRIVATE ${ARG_MODULE_DEPS})
+    target_link_libraries(${ARG_TARGET} PRIVATE
+        ${ARG_MODULE_DEPS}
+        ${Python_LIBRARIES})
     set_property(TARGET ${ARG_TARGET} PROPERTY
         SWIG_INCLUDE_DIRECTORIES ${swig_include_dirs})
     set_property(TARGET ${ARG_TARGET} PROPERTY

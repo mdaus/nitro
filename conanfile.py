@@ -7,11 +7,11 @@ class CodaOssConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False],
                "BOOST_HOME": "ANY",
-               "MT_DEFAULT_PINNING": [True, False, None],
+               "MT_DEFAULT_PINNING": [True, False],
                }
     default_options = {"shared": False,
                        "BOOST_HOME": "",
-                       "MT_DEFAULT_PINNING": None, # None means use CMake default
+                       "MT_DEFAULT_PINNING": False,
                        }
     exports_sources = ("CMakeLists.txt",
                        "LICENSE",
@@ -32,6 +32,8 @@ class CodaOssConan(ConanFile):
         for name, val in self.options.iteritems():
             if name.isupper() and val is not None:
                 cmake.definitions[name] = val
+        if self.settings.compiler == "Visual Studio":
+            cmake.definitions["CMAKE_BUILD_TYPE"] = self.settings.build_type
         cmake.configure()
         return cmake
 

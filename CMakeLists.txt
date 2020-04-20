@@ -9,16 +9,7 @@ project(coda-oss)
 set(CMAKE_CXX_STANDARD 11)
 
 if (${CMAKE_PROJECT_NAME} STREQUAL coda-oss)
-    # this is the top level module
-
-    list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-    include(CodaBuild)
-    coda_initialize_build()
-
-    # install our cmake build modules for downstream use
-    install(DIRECTORY "cmake/"
-            DESTINATION "${CODA_STD_PROJECT_LIB_DIR}/cmake/"
-            FILES_MATCHING PATTERN "*.cmake")
+    # this is the top level project
 
     # set up warnings
     if (MSVC)
@@ -34,6 +25,19 @@ if (${CMAKE_PROJECT_NAME} STREQUAL coda-oss)
             -Wno-unused-but-set-variable
         )
     endif()
+
+    list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+    include(CodaBuild)
+
+    message("Initial compile options:")
+    coda_show_compile_options()
+
+    coda_initialize_build()
+
+    # install our cmake build modules for downstream use
+    install(DIRECTORY "cmake/"
+            DESTINATION "${CODA_STD_PROJECT_LIB_DIR}/cmake/"
+            FILES_MATCHING PATTERN "*.cmake")
 endif()
 
 add_subdirectory("modules")
