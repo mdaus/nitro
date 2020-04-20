@@ -5,7 +5,7 @@ class NitroConan(ConanFile):
     url = "https://github.com/mdaus/nitro"
     description = "library for reading and writing the National Imagery Transmission Format (NITF)"
     settings = "os", "compiler", "build_type", "arch"
-    requires = ("coda-oss/CMake_update_win_b71f5a2ec26e09e9@user/testing", )
+    requires = ("coda-oss/CMake_update_win_ede7427059e489bc@user/testing", )
     options = {"shared": [True, False],
                }
     default_options = {"shared": False,
@@ -26,6 +26,8 @@ class NitroConan(ConanFile):
     def _configure_cmake(self):
         cmake = CMake(self)
         cmake.definitions["ENABLE_STATIC_TRES"] = True # always build static TRES
+        if self.settings.compiler == "Visual Studio":
+            cmake.definitions["CMAKE_BUILD_TYPE"] = self.settings.build_type
         cmake.configure()
         return cmake
 
