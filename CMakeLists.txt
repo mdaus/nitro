@@ -29,9 +29,6 @@ if (${CMAKE_PROJECT_NAME} STREQUAL coda-oss)
     list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
     include(CodaBuild)
 
-    message("Initial compile options:")
-    coda_show_compile_options()
-
     coda_initialize_build()
 
     # install our cmake build modules for downstream use

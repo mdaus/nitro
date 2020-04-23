@@ -8,23 +8,19 @@ install/
 target/
 test_package/build/
 
-# This is generated
-build_coda.csh
-
 # Waf
-
 .waf-*
 waf-*
 .waf3-*
 waf3-*
 .lock-waf*
 build/waf*/
+
 # Eclipse
 .project
 .cproject
 
 # Drivers
-
 modules/drivers/fftw/fftw-2.1.5/
 modules/drivers/jpeg/jpeg-9/
 modules/drivers/j2k/openjpeg/openjpeg-2.3.0_mod/
