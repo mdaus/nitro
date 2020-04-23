@@ -3,8 +3,8 @@ set(TARGET_NAME jpeg)
 set(ENABLE_JPEG ON CACHE BOOL "Enable use of libjpeg")
 set(JPEG_HOME "" CACHE PATH "path to libjpeg installation")
 
-if (ENABLE_JPEG)
-    if (NOT JPEG_HOME STREQUAL "")
+if (ENABLE_JPEG OR JPEG_HOME)
+    if (JPEG_HOME)
         find_library(${TARGET_NAME}_PATH
                     ${TARGET_NAME}
                     PATHS ${JPEG_HOME}
@@ -75,16 +75,11 @@ if (ENABLE_JPEG)
 
         set(JCONFIG "${${CMAKE_PROJECT_NAME}_${TARGET_NAME}_BINARY_DIR}/jconfig.h")
         configure_file("jconfig.h.in" ${JCONFIG})
-        add_library(jpeg ${SOURCES})
+        add_library(${TARGET_NAME} ${SOURCES})
         target_include_directories(${TARGET_NAME}
             PUBLIC "$<BUILD_INTERFACE:${SOURCE_DIR}>"
                    "$<BUILD_INTERFACE:${${CMAKE_PROJECT_NAME}_${TARGET_NAME}_BINARY_DIR}>"
                    "$<INSTALL_INTERFACE:${CODA_STD_PROJECT_INCLUDE_DIR}>")
-        install(TARGETS jpeg
-                EXPORT ${CODA_EXPORT_SET_NAME}
-                ${CODA_INSTALL_OPTION}
-                LIBRARY DESTINATION "${CODA_STD_PROJECT_LIB_DIR}"
-                ARCHIVE DESTINATION "${CODA_STD_PROJECT_LIB_DIR}")
 
         install(FILES "${SOURCE_DIR}/jpeglib.h"
                       "${SOURCE_DIR}/jmorecfg.h"
@@ -93,6 +88,11 @@ if (ENABLE_JPEG)
                 DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}"
                 ${CODA_INSTALL_OPTION})
     endif()
+    install(TARGETS ${TARGET_NAME}
+            EXPORT ${CODA_EXPORT_SET_NAME}
+            ${CODA_INSTALL_OPTION}
+            LIBRARY DESTINATION "${CODA_STD_PROJECT_LIB_DIR}"
+            ARCHIVE DESTINATION "${CODA_STD_PROJECT_LIB_DIR}")
     set(HAVE_JPEG ON CACHE INTERNAL "Flag indicating whether jpeg support is available")
 endif()
 

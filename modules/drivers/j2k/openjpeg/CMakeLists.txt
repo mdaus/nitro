@@ -3,8 +3,8 @@ set(TARGET_NAME openjpeg)
 set(ENABLE_J2K ON CACHE BOOL "enable J2K library")
 set(J2K_HOME "" CACHE PATH "path to J2K installation")
 
-if (ENABLE_J2K)
-    if (NOT J2K_HOME STREQUAL "")
+if (ENABLE_J2K OR J2K_HOME)
+    if (J2K_HOME)
         find_library(${TARGET_NAME}_PATH
                     ${TARGET_NAME}
                     PATHS ${J2K_HOME}
@@ -94,12 +94,6 @@ if (ENABLE_J2K)
             PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>"
                    "$<BUILD_INTERFACE:${SOURCE_DIR}/src/lib/openjp2>"
                    "$<INSTALL_INTERFACE:${CODA_STD_PROJECT_INCLUDE_DIR}>")
-        install(TARGETS ${TARGET_NAME}
-                EXPORT ${CODA_EXPORT_SET_NAME}
-                ${CODA_INSTALL_OPTION}
-                LIBRARY DESTINATION "${CODA_STD_PROJECT_LIB_DIR}"
-                ARCHIVE DESTINATION "${CODA_STD_PROJECT_LIB_DIR}")
-
         install(FILES "${SOURCE_DIR}/src/lib/openjp2/openjpeg.h"
                       "${SOURCE_DIR}/src/lib/openjp2/opj_stdint.h"
                       "${CMAKE_CURRENT_BINARY_DIR}/opj_config.h"
@@ -107,6 +101,11 @@ if (ENABLE_J2K)
                 DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}"
                 ${CODA_INSTALL_OPTION})
     endif()
+    install(TARGETS ${TARGET_NAME}
+            EXPORT ${CODA_EXPORT_SET_NAME}
+            ${CODA_INSTALL_OPTION}
+            LIBRARY DESTINATION "${CODA_STD_PROJECT_LIB_DIR}"
+            ARCHIVE DESTINATION "${CODA_STD_PROJECT_LIB_DIR}")
 
     set(J2K_LIB ${TARGET_NAME} CACHE INTERNAL "library providing J2K support")
 endif()

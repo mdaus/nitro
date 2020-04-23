@@ -3,8 +3,8 @@ set(TARGET_NAME pcre2)
 set(ENABLE_PCRE ON CACHE BOOL "enable PCRE library")
 set(PCRE_HOME "" CACHE PATH "path to PCRE installation")
 
-if (ENABLE_PCRE)
-    if (NOT PCRE_HOME STREQUAL "")
+if (ENABLE_PCRE OR PCRE_HOME)
+    if (PCRE_HOME)
         find_library(pcre2_PATH
                     pcre2-8
                     PATHS ${PCRE_HOME}
@@ -33,10 +33,10 @@ if (ENABLE_PCRE)
         endif()
 
         # create interface library pointing to the external pcre2
-        add_library(pcre2 INTERFACE)
-        target_include_directories(pcre2 INTERFACE "${PCRE_HOME}/include")
-        target_link_libraries(pcre2 INTERFACE ${pcre2_PATH})
-        target_compile_definitions(pcre2 INTERFACE -DPCRE2_CODE_UNIT_WIDTH=8)
+        add_library(${TARGET_NAME} INTERFACE)
+        target_include_directories(${TARGET_NAME} INTERFACE "${PCRE_HOME}/include")
+        target_link_libraries(${TARGET_NAME} INTERFACE ${pcre2_PATH})
+        target_compile_definitions(${TARGET_NAME} INTERFACE -DPCRE2_CODE_UNIT_WIDTH=8)
     else()
         message("PCRE_HOME not specified, so it will be built")
 
@@ -149,15 +149,14 @@ if (ENABLE_PCRE)
             PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>"
                    "$<BUILD_INTERFACE:${SOURCE_DIR}/src>"
                    "$<INSTALL_INTERFACE:${CODA_STD_PROJECT_INCLUDE_DIR}>")
-        install(TARGETS ${TARGET_NAME}
-                EXPORT ${CODA_EXPORT_SET_NAME}
-                ${CODA_INSTALL_OPTION}
-                LIBRARY DESTINATION "${CODA_STD_PROJECT_LIB_DIR}"
-                ARCHIVE DESTINATION "${CODA_STD_PROJECT_LIB_DIR}")
-
         install(FILES "${CMAKE_CURRENT_BINARY_DIR}/pcre2.h"
                 DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}"
                 ${CODA_INSTALL_OPTION})
     endif()
+    install(TARGETS ${TARGET_NAME}
+            EXPORT ${CODA_EXPORT_SET_NAME}
+            ${CODA_INSTALL_OPTION}
+            LIBRARY DESTINATION "${CODA_STD_PROJECT_LIB_DIR}"
+            ARCHIVE DESTINATION "${CODA_STD_PROJECT_LIB_DIR}")
 endif()
 

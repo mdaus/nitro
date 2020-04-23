@@ -6,7 +6,7 @@ elseif (UNIX)
     set(EXTERNAL_DEPS pthread)
 endif()
 
-if (NOT XML_HOME STREQUAL "")
+if (XML_HOME)
     find_library(${TARGET_NAME}_PATH
                  ${TARGET_NAME}
                  PATHS ${XML_HOME}
@@ -290,12 +290,6 @@ else()
         PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>"
                "$<BUILD_INTERFACE:${SOURCE_DIR}/src>"
                "$<INSTALL_INTERFACE:${CODA_STD_PROJECT_INCLUDE_DIR}>")
-    install(TARGETS ${TARGET_NAME}
-            EXPORT ${CODA_EXPORT_SET_NAME}
-            ${CODA_INSTALL_OPTION}
-            LIBRARY DESTINATION "${CODA_STD_PROJECT_LIB_DIR}"
-            ARCHIVE DESTINATION "${CODA_STD_PROJECT_LIB_DIR}")
-
     install(FILES "${CMAKE_CURRENT_BINARY_DIR}/config.h"
             DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}"
             ${CODA_INSTALL_OPTION})
@@ -311,5 +305,10 @@ else()
                 PATTERN "*.hpp"
                 PATTERN "*.c")
 endif()
+install(TARGETS ${TARGET_NAME}
+        EXPORT ${CODA_EXPORT_SET_NAME}
+        ${CODA_INSTALL_OPTION}
+        LIBRARY DESTINATION "${CODA_STD_PROJECT_LIB_DIR}"
+        ARCHIVE DESTINATION "${CODA_STD_PROJECT_LIB_DIR}")
 
 set(XML_LIB xerces-c CACHE INTERNAL "library providing XML support")

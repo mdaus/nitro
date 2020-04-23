@@ -2,7 +2,7 @@ set(TARGET_NAME z)
 
 set(ZIP_HOME "" CACHE PATH "path to pre-existing zlib installation, if not provided zlib will be built")
 
-if (NOT ZIP_HOME STREQUAL "")
+if (ZIP_HOME)
     find_library(${TARGET_NAME}_PATH
                  ${TARGET_NAME}
                  PATHS ${ZIP_HOME}
@@ -91,16 +91,16 @@ else()
                "$<BUILD_INTERFACE:${SOURCE_DIR}/contrib/minizip>"
                "$<INSTALL_INTERFACE:${CODA_STD_PROJECT_INCLUDE_DIR}>")
 
-
     install(FILES "${SOURCE_DIR}/zconf.h"
                   "${SOURCE_DIR}/zlib.h"
                   "${SOURCE_DIR}/contrib/minizip/zip.h"
                   "${SOURCE_DIR}/contrib/minizip/ioapi.h"
             DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}"
             ${CODA_INSTALL_OPTION})
-    install(TARGETS z minizip
-            EXPORT ${CODA_EXPORT_SET_NAME}
-            ${CODA_INSTALL_OPTION}
-            LIBRARY DESTINATION "${CODA_STD_PROJECT_LIB_DIR}"
-            ARCHIVE DESTINATION "${CODA_STD_PROJECT_LIB_DIR}")
 endif()
+
+install(TARGETS z minizip
+        EXPORT ${CODA_EXPORT_SET_NAME}
+        ${CODA_INSTALL_OPTION}
+        LIBRARY DESTINATION "${CODA_STD_PROJECT_LIB_DIR}"
+        ARCHIVE DESTINATION "${CODA_STD_PROJECT_LIB_DIR}")

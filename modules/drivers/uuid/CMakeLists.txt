@@ -6,7 +6,7 @@ if (WIN32)
     set(UUID_LIB rpcrt4 CACHE INTERNAL "library for providing UUID")
 else()
     set(UUID_HOME "" CACHE PATH "path to UUID installation")
-    if (NOT UUID_HOME STREQUAL "")
+    if (UUID_HOME)
         find_library(${TARGET_NAME}_PATH
                      ${TARGET_NAME}
                      PATHS ${UUID_HOME}
@@ -68,15 +68,17 @@ else()
             PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>"
                    "$<BUILD_INTERFACE:${SOURCE_DIR}/lib>"
                    "$<INSTALL_INTERFACE:${CODA_STD_PROJECT_INCLUDE_DIR}>")
-        install(TARGETS ${TARGET_NAME}
-                EXPORT ${CODA_EXPORT_SET_NAME}
-                ${CODA_INSTALL_OPTION}
-                LIBRARY DESTINATION "${CODA_STD_PROJECT_LIB_DIR}"
-                ARCHIVE DESTINATION "${CODA_STD_PROJECT_LIB_DIR}")
 
         install(FILES "${SOURCE_DIR}/lib/uuid/uuid.h"
                 DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}/uuid"
                 ${CODA_INSTALL_OPTION})
     endif()
+
+    install(TARGETS ${TARGET_NAME}
+            EXPORT ${CODA_EXPORT_SET_NAME}
+            ${CODA_INSTALL_OPTION}
+            LIBRARY DESTINATION "${CODA_STD_PROJECT_LIB_DIR}"
+            ARCHIVE DESTINATION "${CODA_STD_PROJECT_LIB_DIR}")
+
     set(UUID_LIB ${TARGET_NAME} CACHE INTERNAL "library for providing UUID")
 endif()

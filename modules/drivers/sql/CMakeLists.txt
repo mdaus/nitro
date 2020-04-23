@@ -1,8 +1,8 @@
 set(SQL_LAYER "" CACHE STRING "SQL backend [mysql, psql, oracle]")
 set(SQL_HOME "" CACHE PATH "Path to SQL installation")
 
-if (SQL_LAYER)
-    if (NOT SQL_HOME STREQUAL "")
+if (SQL_LAYER OR SQL_HOME)
+    if (SQL_HOME)
         if (SQL_LAYER STREQUAL mysql)
             set(STLIBPATH_SQL "${SQL_HOME}/lib/mysql")
             set(INCLUDES_SQL "${SQL_HOME}/include/mysql")

@@ -1,5 +1,5 @@
 add_subdirectory("drivers")
 add_subdirectory("c++")
-if (SWIG_FOUND AND Python_FOUND AND Python_Development_FOUND)
+if (BUILD_PYTHON_MODULES)
     add_subdirectory("python")
 endif()

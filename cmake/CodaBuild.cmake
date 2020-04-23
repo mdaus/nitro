@@ -100,38 +100,21 @@ macro(coda_initialize_build)
         set_property(CACHE CODA_BUILD_BITSIZE PROPERTY STRINGS "64" "32")
     endif()
 
-    if (MSVC)
-        # MSVC is a multi-configuration generator, which typically allows build
-        # type to be selected at build time rather than configure time. However,
-        # we don't support that currently as it will take some work to be able
-        # to get the install step working with multiple configurations.
-        set(CMAKE_BUILD_TYPE "" CACHE STRING "Select Build Type")
-        if((NOT CMAKE_BUILD_TYPE STREQUAL "Release") AND
-           (NOT CMAKE_BUILD_TYPE STREQUAL "Debug") AND
-           (NOT CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo") AND
-           (NOT CMAKE_BUILD_TYPE STREQUAL "MinSizeRel"))
-            message(FATAL_ERROR "must specify CMAKE_BUILD_TYPE as one of [Release, Debug, RelWithDebInfo, MinSizeRel]")
-        endif()
-    else()
-        # default configuration to RelWithDebInfo for non-MSVC builds
-        set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "Select Build Type" FORCE)
+    if (NOT MSVC)
+        # default configuration is RelWithDebInfo for non-MSVC builds
+        # MSVC is a multi-configuration generator, so configuration is not
+        # known until build time (CMAKE_BUILD_TYPE is never set, must not be
+        # relied on)
+        set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "Select Build Type")
+        set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS
+            "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
     endif()
-    set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS
-        "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
 
     option(BUILD_SHARED_LIBS "Build shared libraries instead of static." OFF)
     if(BUILD_SHARED_LIBS)
         set(CODA_LIBRARY_TYPE "shared")
     else()
         set(CODA_LIBRARY_TYPE "static")
-    endif()
-
-    # Set default install directory
-    if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-        set(CMAKE_INSTALL_PREFIX
-            "${PROJECT_SOURCE_DIR}/install/${CMAKE_SYSTEM_NAME}${CODA_BUILD_BITSIZE}-${CMAKE_CXX_COMPILER_ID}-${CODA_LIBRARY_TYPE}-${CMAKE_BUILD_TYPE}"
-            CACHE PATH "Install directory" FORCE)
-        message("CMAKE_INSTALL_PREFIX was not specified, defaulting to ${CMAKE_INSTALL_PREFIX}")
     endif()
 
     option(CODA_BUILD_TESTS "build tests" ON)
@@ -147,23 +130,19 @@ macro(coda_initialize_build)
     if (MSVC)
         set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-        if (CONAN_LINK_RUNTIME)
-            # let conan determine the runtime to link
-            foreach(build_config DEBUG RELEASE RELWITHDEBINFO MINSIZEREL)
-                string(REGEX REPLACE "/M[DT]d?" "${CONAN_LINK_RUNTIME}" CMAKE_CXX_FLAGS_${build_config} "${CMAKE_CXX_FLAGS_${build_config}}")
-                string(REGEX REPLACE "/M[DT]d?" "${CONAN_LINK_RUNTIME}" CMAKE_C_FLAGS_${build_config} "${CMAKE_C_FLAGS_${build_config}}")
-            endforeach()
-        else()
-            option(STATIC_CRT "use static CRT library /MT, or /MTd for Debug (/MD or /MDd if off)" OFF)
-            set(LINK_RUNTIME "/MD")
-            if (STATIC_CRT)
-                set(LINK_RUNTIME "/MT")
-            endif()
-            foreach(build_config DEBUG RELEASE RELWITHDEBINFO MINSIZEREL)
-                string(REGEX REPLACE "/M[DT]" "${LINK_RUNTIME}" CMAKE_CXX_FLAGS_${build_config} "${CMAKE_CXX_FLAGS_${build_config}}")
-                string(REGEX REPLACE "/M[DT]" "${LINK_RUNTIME}" CMAKE_C_FLAGS_${build_config} "${CMAKE_C_FLAGS_${build_config}}")
-            endforeach()
+        set(STATIC_CRT OFF CACHE BOOL "use static CRT library /MT, or /MTd for Debug (/MD or /MDd if off)")
+        if (CONAN_LINK_RUNTIME MATCHES "/MT") # will also match /MTd
+            set(STATIC_CRT ON CACHE BOOL "" FORCE)
         endif()
+        if (STATIC_CRT)
+            set(CODA_MSVC_RUNTIME "/MT")
+        else()
+            set(CODA_MSVC_RUNTIME "/MD")
+        endif()
+        foreach(build_config DEBUG RELEASE RELWITHDEBINFO MINSIZEREL)
+            string(REGEX REPLACE "/M[DT]" "${CODA_MSVC_RUNTIME}" CMAKE_CXX_FLAGS_${build_config} "${CMAKE_CXX_FLAGS_${build_config}}")
+            string(REGEX REPLACE "/M[DT]" "${CODA_MSVC_RUNTIME}" CMAKE_C_FLAGS_${build_config} "${CMAKE_C_FLAGS_${build_config}}")
+        endforeach()
 
         # catch exceptions that bubble through a C-linkage layer
         string(REGEX REPLACE "/EHsc" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
@@ -191,10 +170,6 @@ macro(coda_initialize_build)
             -D_FILE_OFFSET_BITS=64
         )
     endif()
-
-    # add Conan flags
-    #list(APPEND CMAKE_C_FLAGS ${CONAN_C_FLAGS})
-    #list(APPEND CMAKE_CXX_FLAGS ${CONAN_CXX_FLAGS})
 
     # all targets should be installed using this export set
     set(CODA_EXPORT_SET_NAME "${CMAKE_PROJECT_NAME}Targets")
@@ -317,6 +292,8 @@ endfunction()
 #   SOURCES         - List of test source files, one for each test. If not
 #                     provided, the specified directory will be globbed for
 #                     source files.
+#   ARGS            - Additional command line arguments to pass to unit tests,
+#                     may help in locating input data files.
 #   FILTER_LIST     - Source files to ignore
 #
 # Option arguments:
@@ -329,7 +306,7 @@ function(coda_add_tests)
             ARG                         # prefix
             "UNITTEST"                  # options
             "MODULE_NAME;DIRECTORY"     # single args
-            "DEPS;SOURCES;FILTER_LIST"  # multi args
+            "DEPS;SOURCES;ARGS;FILTER_LIST"  # multi args
             "${ARGN}"
         )
         if (ARG_UNPARSED_ARGUMENTS)
@@ -395,7 +372,7 @@ function(coda_add_tests)
 
             # add unit tests to automatic test suite
             if (${ARG_UNITTEST})
-                add_test(NAME ${test_target} COMMAND ${test_target})
+                add_test(NAME ${test_target} COMMAND ${test_target} ${ARG_ARGS})
             endif()
 
             # Install [unit]tests to separate subtrees
