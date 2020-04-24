@@ -72,14 +72,16 @@ These options may be passed in the cmake configure step as `-DOPTION_NAME="optio
 |----------------|---------------|-------------|
 |CMAKE_BUILD_TYPE|RelWithDebInfo|build type (Release, Debug, RelWithDebInfo); not used for MSVC builds (should be specified at build time instead)|
 |BUILD_SHARED_LIBS|OFF|build shared libraries if on, static if off (note: not working on Windows)|
+|STATIC_CRT|OFF|for Windows MSVC builds only, link with /MT (or /MTd for Debug builds) if on, or with /MD (or /MDd for Debug builds) if off|
 |CODA_BUILD_TESTS| ON      |build tests if on|
 |CODA_PARTIAL_INSTALL|OFF|make the install target not depend on all defined targets, only the targets which have already been built will be installed; cmake/CodaBuild.cmake for further information and caveats|
 |MT_DEFAULT_PINNING|OFF|use affinity-based CPU pinning by default in MT|
+|ENABLE_BOOST|OFF|build modules dependent on Boost if enabled|
 |ENABLE_PYTHON|ON|build Python modules if enabled|
 |ENABLE_JPEG|ON|build libjpeg driver and modules depending on it|
 |ENABLE_J2K|ON|build openjpeg (jpeg2000) driver and modules depending on it|
 |ENABLE_PCRE|ON|build PCRE (PERL Compatible Regular Expressions) library and modules dependent on it|
-|BOOST_HOME||path to existing Boost installation|
+|BOOST_HOME||path to existing Boost installation (implies ENABLE_BOOST=ON)|
 |PYTHON_HOME||path to existing Python installation (implies ENABLE_PYTHON=ON)|
 |JPEG_HOME||path to existing libjpeg installation; if not provided, it will be built from source (implies ENABLE_JPEG=ON)|
 |J2K_HOME||path to existing openjpeg installation; if not provided, it will be built from source (implies ENABLE_J2K=ON)|

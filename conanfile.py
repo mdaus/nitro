@@ -1,3 +1,14 @@
+"""Conan recipe for CODA-oss
+
+Note: building packages on Windows usually requires enabling Conan's short_path
+workaround due to issues handling paths longer than 260 characters on Windows.
+To do so, set use_always_short_paths = True in ~/.conan/conan.conf, or set the
+environment variable CONAN_USE_ALWAYS_SHORT_PATHS=1. To control where the build
+directories are placed, set user_home_short in ~/.conan/conan.conf, or set the
+environment variable CONAN_USER_HOME_SHORT. For further information see
+https://docs.conan.io/en/latest/reference/conanfile/attributes.html#short-paths
+"""
+
 from conans import ConanFile, CMake, tools
 
 class CodaOssConan(ConanFile):
@@ -8,11 +19,15 @@ class CodaOssConan(ConanFile):
     options = {"shared": [True, False],
                "BOOST_HOME": "ANY",
                "PYTHON_HOME": "ANY",
+               "ENABLE_BOOST": [True, False],
+               "ENABLE_PYTHON": [True, False],
                "MT_DEFAULT_PINNING": [True, False],
                }
     default_options = {"shared": False,
                        "BOOST_HOME": "",
                        "PYTHON_HOME": "",
+                       "ENABLE_BOOST": False,
+                       "ENABLE_PYTHON": True,
                        "MT_DEFAULT_PINNING": False,
                        }
     exports_sources = ("CMakeLists.txt",
@@ -48,6 +63,16 @@ class CodaOssConan(ConanFile):
     def package_id(self):
         # Make any change in our dependencies' version require a new binary
         self.info.requires.full_version_mode()
+
+        if len(self.info.options.BOOST_HOME) > 0:
+            self.info.options.ENABLE_BOOST = True
+        if len(self.info.options.PYTHON_HOME) > 0:
+            self.info.options.ENABLE_PYTHON = True
+
+        # make ABI independent of specific paths
+        for name, val in self.info.options.as_list():
+            if name.endswith("_HOME"):
+                self.info.options.remove(name)
 
     def package_info(self):
         self.cpp_info.builddirs = ["lib/cmake"]

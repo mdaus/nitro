@@ -40,6 +40,22 @@ function(coda_show_compile_options)
     message("CMAKE_SWIG_FLAGS=${CMAKE_SWIG_FLAGS}")
 endfunction()
 
+# set the appropriate CRT link flags for MSVC builds
+macro(coda_setup_msvc_crt)
+    set(STATIC_CRT OFF CACHE BOOL "use static CRT library /MT, or /MTd for Debug (/MD or /MDd if off)")
+    if (CONAN_LINK_RUNTIME MATCHES "MT") # will also match MTd
+        set(STATIC_CRT ON CACHE BOOL "" FORCE)
+    endif()
+    if (STATIC_CRT)
+        set(CODA_MSVC_RUNTIME "/MT")
+    else()
+        set(CODA_MSVC_RUNTIME "/MD")
+    endif()
+    foreach(build_config DEBUG RELEASE RELWITHDEBINFO MINSIZEREL)
+        string(REGEX REPLACE "/M[DT]" "${CODA_MSVC_RUNTIME}" CMAKE_CXX_FLAGS_${build_config} "${CMAKE_CXX_FLAGS_${build_config}}")
+        string(REGEX REPLACE "/M[DT]" "${CODA_MSVC_RUNTIME}" CMAKE_C_FLAGS_${build_config} "${CMAKE_C_FLAGS_${build_config}}")
+    endforeach()
+endmacro()
 
 # Set up the global build configuration
 macro(coda_initialize_build)
@@ -130,19 +146,7 @@ macro(coda_initialize_build)
     if (MSVC)
         set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-        set(STATIC_CRT OFF CACHE BOOL "use static CRT library /MT, or /MTd for Debug (/MD or /MDd if off)")
-        if (CONAN_LINK_RUNTIME MATCHES "/MT") # will also match /MTd
-            set(STATIC_CRT ON CACHE BOOL "" FORCE)
-        endif()
-        if (STATIC_CRT)
-            set(CODA_MSVC_RUNTIME "/MT")
-        else()
-            set(CODA_MSVC_RUNTIME "/MD")
-        endif()
-        foreach(build_config DEBUG RELEASE RELWITHDEBINFO MINSIZEREL)
-            string(REGEX REPLACE "/M[DT]" "${CODA_MSVC_RUNTIME}" CMAKE_CXX_FLAGS_${build_config} "${CMAKE_CXX_FLAGS_${build_config}}")
-            string(REGEX REPLACE "/M[DT]" "${CODA_MSVC_RUNTIME}" CMAKE_C_FLAGS_${build_config} "${CMAKE_C_FLAGS_${build_config}}")
-        endforeach()
+        coda_setup_msvc_crt()
 
         # catch exceptions that bubble through a C-linkage layer
         string(REGEX REPLACE "/EHsc" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
