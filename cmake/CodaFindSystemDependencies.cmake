@@ -57,21 +57,32 @@ macro(coda_find_system_dependencies)
     #
     # see https://cmake.org/cmake/help/latest/module/FindPython.html
     set(ENABLE_PYTHON ON CACHE BOOL "Enable building Python modules")
-    set(ENABLE_SWIG OFF CACHE BOOL "Enable generation of SWIG bindings.")
+    set(PYTHON_VERSION "" CACHE STRING "Hint for which version of Python to find")
+    set(PYTHON_HOME "" CACHE PATH "Path to existing Python installation")
+    set(ENABLE_SWIG OFF CACHE BOOL "Enable generation of SWIG bindings")
     if (PYTHON_HOME)
-        set(Python_ROOT_DIR ${PYTHON_HOME})
-
         # specifying PYTHON_HOME implies ENABLE_PYTHON
         set(ENABLE_PYTHON ON CACHE BOOL "Enable building Python modules" FORCE)
     endif()
-    if (ENABLE_PYTHON)
-        find_package(Python COMPONENTS Interpreter Development NumPy)
+    if (ENABLE_PYTHON OR PYTHON_HOME)
+        set(Python_FIND_STRATEGY LOCATION)
+        if (PYTHON_HOME)
+            set(Python_ROOT_DIR ${PYTHON_HOME})
+            set(Python_FIND_VIRTUALENV STANDARD)
+            set(Python_FIND_REGISTRY NEVER)
+        else()
+            set(Python_FIND_VIRTUALENV FIRST)
+            set(Python_FIND_REGISTRY LAST)
+        endif()
+        find_package(Python ${PYTHON_VERSION}
+                     COMPONENTS Interpreter Development NumPy)
         if (Python_Development_FOUND)
             set(CODA_PYTHON_SITE_PACKAGES
                 "${CODA_STD_PROJECT_LIB_DIR}/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages")
             if(NOT PYTHON_HOME)
                 message("Python installation found at ${Python_EXECUTABLE}.\n"
-                        "Pass the configure option -DPYTHON_HOME=... to override this selection.")
+                        "Pass the configure options -DPYTHON_HOME=... or "
+                        "-DPYTHON_VERSION=... to override this selection.")
             endif()
             if (Python_Interpreter_FOUND)
                 message("Python_EXECUTABLE=${Python_EXECUTABLE}")
@@ -115,8 +126,8 @@ macro(coda_find_system_dependencies)
         else()
             message(FATAL_ERROR "Python targets will not be built since Python "
                     "development artifacts were not found. Pass the configure "
-                    "option -DPYTHON_HOME=... to help locate an installation, "
-                    "or set ENABLE_PYTHON=OFF")
+                    "option -DPYTHON_HOME=... or build inside a virtualenv to \
+                    help locate an installation, or set ENABLE_PYTHON=OFF")
         endif()
     endif()
 

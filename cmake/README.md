@@ -81,6 +81,7 @@ These options may be passed in the cmake configure step as `-DOPTION_NAME="optio
 |ENABLE_JPEG|ON|build libjpeg driver and modules depending on it|
 |ENABLE_J2K|ON|build openjpeg (jpeg2000) driver and modules depending on it|
 |ENABLE_PCRE|ON|build PCRE (PERL Compatible Regular Expressions) library and modules dependent on it|
+|PYTHON_VERSION||indicate which version of Python to prefer, e.g. "3" or "3.7"|
 |BOOST_HOME||path to existing Boost installation (implies ENABLE_BOOST=ON)|
 |PYTHON_HOME||path to existing Python installation (implies ENABLE_PYTHON=ON)|
 |JPEG_HOME||path to existing libjpeg installation; if not provided, it will be built from source (implies ENABLE_JPEG=ON)|
