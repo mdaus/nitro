@@ -639,15 +639,40 @@ function(coda_add_swig_python_module)
     # where the generated C/C++ files are written
     set(SWIG_OUTFILE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/source/generated")
 
-    swig_add_library(${ARG_TARGET} LANGUAGE python SOURCES ${ARG_INPUT})
+    if (SWIG_FOUND)
+        swig_add_library(${ARG_TARGET} LANGUAGE python SOURCES ${ARG_INPUT})
+        set_property(TARGET ${ARG_TARGET} PROPERTY
+            SWIG_INCLUDE_DIRECTORIES ${swig_include_dirs})
+        set_property(TARGET ${ARG_TARGET} PROPERTY
+            SWIG_GENERATED_INCLUDE_DIRECTORIES ${Python_INCLUDE_DIRS})
+    else()
+        # use saved SWIG outputs in repo
+
+        # this is the naming convention for waf, use for now since the
+        # waf generated sources are committed to the repo
+        set(source "source/generated/${ARG_MODULE_NAME}_wrap.cxx")
+        if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${source}")
+            # this is the naming convention for CMake
+            # maybe switch this to the default in the future
+            string(REPLACE "-python" "" source ${ARG_TARGET})
+            string(REPLACE "." "_" source ${source})
+            set(source "source/generated/${source}PYTHON_wrap.cxx")
+        endif()
+        message("using pre-generated SWIG source for ${ARG_TARGET}: ${source}")
+        add_library(${ARG_TARGET} MODULE ${source})
+        target_include_directories(${ARG_TARGET} PRIVATE ${Python_INCLUDE_DIRS})
+
+        # extra settings from UseSWIG.cmake
+        set_target_properties(${ARG_TARGET} PROPERTIES NO_SONAME ON)
+        set_target_properties(${ARG_TARGET} PROPERTIES PREFIX "_")
+        if(WIN32 AND NOT CYGWIN)
+            set_target_properties(${ARG_TARGET} PROPERTIES SUFFIX ".pyd")
+        endif()
+    endif()
 
     target_link_libraries(${ARG_TARGET} PRIVATE
         ${ARG_MODULE_DEPS}
         ${Python_LIBRARIES})
-    set_property(TARGET ${ARG_TARGET} PROPERTY
-        SWIG_INCLUDE_DIRECTORIES ${swig_include_dirs})
-    set_property(TARGET ${ARG_TARGET} PROPERTY
-        SWIG_GENERATED_INCLUDE_DIRECTORIES ${Python_INCLUDE_DIRS})
     set_property(TARGET ${ARG_TARGET} PROPERTY
         LIBRARY_OUTPUT_NAME ${ARG_MODULE_NAME})
 
