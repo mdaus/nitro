@@ -41,6 +41,11 @@ class CodaOssConan(ConanFile):
                        )
     license = "GNU LESSER GENERAL PUBLIC LICENSE Version 3"
 
+    # default to short_paths mode (Windows only)
+    # check .conan/conan.conf in your home directory to make sure the setting
+    # user_home_short points to a writable location
+    short_paths = True
+
     def set_version(self):
         git = tools.Git(folder=self.recipe_folder)
         self.version = "%s_%s" % (git.get_branch(), git.get_revision()[:16])
