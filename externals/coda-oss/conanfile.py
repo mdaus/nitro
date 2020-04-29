@@ -10,6 +10,8 @@ https://docs.conan.io/en/latest/reference/conanfile/attributes.html#short-paths
 """
 
 from conans import ConanFile, CMake, tools
+import os
+import sys
 
 class CodaOssConan(ConanFile):
     name = "coda-oss"
@@ -42,9 +44,13 @@ class CodaOssConan(ConanFile):
     license = "GNU LESSER GENERAL PUBLIC LICENSE Version 3"
 
     # default to short_paths mode (Windows only)
-    # check .conan/conan.conf in your home directory to make sure the setting
-    # user_home_short points to a writable location
     short_paths = True
+    # default the short_paths home to ~/.conan_short
+    # this may be overridden by setting the environment variable
+    # CONAN_USER_HOME_SHORT or setting user_home_short in ~/.conan/conan.conf
+    if sys.platform.startswith('win32') and os.getenv("CONAN_USER_HOME_SHORT") is None:
+        os.environ["CONAN_USER_HOME_SHORT"] = os.path.join(
+            os.path.expanduser("~"), ".conan_short")
 
     def set_version(self):
         git = tools.Git(folder=self.recipe_folder)
