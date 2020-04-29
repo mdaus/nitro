@@ -9,7 +9,7 @@ class NitroConan(ConanFile):
     url = "https://github.com/mdaus/nitro"
     description = "library for reading and writing the National Imagery Transmission Format (NITF)"
     settings = "os", "compiler", "build_type", "arch"
-    requires = ("coda-oss/master_312e46dc5e0735a2", )
+    requires = ("coda-oss/master_67d6362bcfcf07e2", )
     options = {"shared": [True, False],
                "PYTHON_HOME": "ANY",
                "PYTHON_VERSION": "ANY",

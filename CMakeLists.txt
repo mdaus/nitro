@@ -31,7 +31,8 @@ if (${CMAKE_PROJECT_NAME} STREQUAL nitro)
     else()
         # build coda-oss ourselves
 
-        # disable some unneeded drivers
+        # disable some unneeded drivers from coda-oss
+        set(ENABLE_JARS OFF CACHE BOOL "" FORCE)
         set(ENABLE_PCRE OFF CACHE BOOL "enable PCRE library" FORCE)
         set(ENABLE_UUID OFF CACHE BOOL "enable uuid library" FORCE)
         set(ENABLE_ZIP OFF CACHE BOOL "enable ZIP library" FORCE)
