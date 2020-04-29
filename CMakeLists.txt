@@ -7,29 +7,6 @@ set(CMAKE_CXX_STANDARD 11)
 if (${CMAKE_PROJECT_NAME} STREQUAL nitro)
     # we are the top-level project and are responsible for configuration
 
-    set(CODA_OSS_HOME "" CACHE PATH "location of coda-oss install, if not provided we will build it")
-
-    if (EXISTS ${CMAKE_BINARY_DIR}/conan_paths.cmake)
-        # use pre-built coda-oss from conan package
-        include(${CMAKE_BINARY_DIR}/conan_paths.cmake)
-        find_package(coda-oss REQUIRED)
-        include(CodaBuild)
-        coda_initialize_build()
-    elseif (CODA_OSS_HOME)
-        # use pre-built coda-oss from specified install location
-        list(APPEND CMAKE_PREFIX_PATH "${CODA_OSS_HOME}/lib/cmake")
-        find_package(coda-oss REQUIRED)
-        include(CodaBuild)
-        coda_initialize_build()
-    else()
-        # build coda-oss ourselves
-        list(APPEND CMAKE_MODULE_PATH
-             "${CMAKE_CURRENT_SOURCE_DIR}/externals/coda-oss/cmake")
-        include(CodaBuild)
-        coda_initialize_build()
-        add_subdirectory("externals/coda-oss")
-    endif()
-
     # set up warnings
     if (MSVC)
         # set warning level to /W3
@@ -43,6 +20,21 @@ if (${CMAKE_PROJECT_NAME} STREQUAL nitro)
             -Wno-unused-value
             -Wno-unused-but-set-variable
         )
+    endif()
+
+    if (EXISTS "${CMAKE_BINARY_DIR}/conan_paths.cmake")
+        # use pre-built coda-oss from conan package
+        include("${CMAKE_BINARY_DIR}/conan_paths.cmake")
+        find_package(coda-oss REQUIRED)
+        include(CodaBuild)
+        coda_initialize_build()
+    else()
+        # build coda-oss ourselves
+        list(APPEND CMAKE_MODULE_PATH
+             "${CMAKE_CURRENT_SOURCE_DIR}/externals/coda-oss/cmake")
+        include(CodaBuild)
+        coda_initialize_build()
+        add_subdirectory("externals/coda-oss")
     endif()
 endif()
 

@@ -1,6 +1,6 @@
 add_subdirectory("c")
 add_subdirectory("c++")
-if (NOT MSVC)
+if (BUILD_PYTHON_MODULES)
     add_subdirectory("python")
 endif()
 add_subdirectory("java")
