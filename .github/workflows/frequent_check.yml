@@ -27,7 +27,7 @@ jobs:
     - name: test
       run: |
         cd build
-        ctest
+        ctest -C Release
 
 
   build-linux:

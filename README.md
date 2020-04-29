@@ -25,9 +25,9 @@ Problems and Configurations
   - Java, MATLAB, Python, C++ bindings all build. Just make sure the relevant tools
     are on your PATH
 
-  - See (externals/coda-oss/cmake/README.md) for further build configuration
-  information, particularly for Python-related details. The same options there
-  may be passed to Nitro.
+  - See the [coda-oss CMake build README](externals/coda-oss/cmake/README.md)
+    for further build configuration information, particularly for Python-related
+    details. The same options there may be passed to Nitro.
 
   - Build types `Release`, `RelWithDebInfo`, and `Debug` may be chosen
     - On Linux, debug symbols are available by default (`RelWithDebInfo`). Configure build type with [-DCMAKE_BUILD_TYPE](https://cmake.org/cmake/help/v3.0/variable/CMAKE_BUILD_TYPE.html)
