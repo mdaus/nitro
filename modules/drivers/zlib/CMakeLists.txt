@@ -1,13 +1,11 @@
 set(TARGET_NAME z)
 
-set(ZIP_HOME "" CACHE PATH "path to pre-existing zlib installation, if not provided zlib will be built")
-
 if (ZIP_HOME)
     find_library(${TARGET_NAME}_PATH
-                 ${TARGET_NAME}
-                 PATHS ${ZIP_HOME}
-                 PATH_SUFFIXES lib lib64
-                 NO_DEFAULT_PATH)
+                    ${TARGET_NAME}
+                    PATHS ${ZIP_HOME}
+                    PATH_SUFFIXES lib lib64
+                    NO_DEFAULT_PATH)
     if ("${${TARGET_NAME}_PATH}" STREQUAL "${TARGET_NAME}_PATH-NOTFOUND")
         message(FATAL_ERROR "zlib not found at ZIP_HOME ${ZIP_HOME}")
     else()
@@ -35,10 +33,10 @@ if (ZIP_HOME)
 
 
     find_library(minizip_PATH
-                 minizip
-                 PATHS ${ZIP_HOME}
-                 PATH_SUFFIXES lib lib64
-                 NO_DEFAULT_PATH)
+                minizip
+                PATHS ${ZIP_HOME}
+                PATH_SUFFIXES lib lib64
+                NO_DEFAULT_PATH)
     if ("${minizip_PATH}" STREQUAL "minizip_PATH-NOTFOUND")
         message(FATAL_ERROR "minizip not found at ZIP_HOME ${ZIP_HOME}")
     else()
@@ -63,7 +61,7 @@ if (ZIP_HOME)
     add_library(minizip INTERFACE)
     target_include_directories(minizip INTERFACE "${ZIP_HOME}/include")
     target_link_libraries(minizip INTERFACE ${minizip_PATH})
-else()
+elseif(ENABLE_ZIP)
     message("ZIP_HOME not specified, so zlib and minizip will be built")
     coda_fetch_driver(
         NAME ${TARGET_NAME}
@@ -79,7 +77,7 @@ else()
     add_library(${TARGET_NAME} ${SOURCES})
     target_include_directories(${TARGET_NAME}
         PUBLIC "$<BUILD_INTERFACE:${SOURCE_DIR}>"
-               "$<INSTALL_INTERFACE:${CODA_STD_PROJECT_INCLUDE_DIR}>")
+            "$<INSTALL_INTERFACE:${CODA_STD_PROJECT_INCLUDE_DIR}>")
 
     foreach(src "ioapi.c" "zip.c")
         list(APPEND MINIZIP_SOURCES "${SOURCE_DIR}/contrib/minizip/${src}")
@@ -88,13 +86,13 @@ else()
     target_link_libraries(minizip PUBLIC z)
     target_include_directories(${TARGET_NAME}
         PUBLIC "$<BUILD_INTERFACE:${SOURCE_DIR}>"
-               "$<BUILD_INTERFACE:${SOURCE_DIR}/contrib/minizip>"
-               "$<INSTALL_INTERFACE:${CODA_STD_PROJECT_INCLUDE_DIR}>")
+            "$<BUILD_INTERFACE:${SOURCE_DIR}/contrib/minizip>"
+            "$<INSTALL_INTERFACE:${CODA_STD_PROJECT_INCLUDE_DIR}>")
 
     install(FILES "${SOURCE_DIR}/zconf.h"
-                  "${SOURCE_DIR}/zlib.h"
-                  "${SOURCE_DIR}/contrib/minizip/zip.h"
-                  "${SOURCE_DIR}/contrib/minizip/ioapi.h"
+                "${SOURCE_DIR}/zlib.h"
+                "${SOURCE_DIR}/contrib/minizip/zip.h"
+                "${SOURCE_DIR}/contrib/minizip/ioapi.h"
             DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}"
             ${CODA_INSTALL_OPTION})
 endif()
