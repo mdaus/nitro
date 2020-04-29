@@ -1,7 +1,5 @@
 set(TARGET_NAME z)
 
-set(ZIP_HOME "" CACHE PATH "path to pre-existing zlib installation, if not provided zlib will be built")
-
 if (ZIP_HOME)
     find_library(${TARGET_NAME}_PATH
                  ${TARGET_NAME}
@@ -63,7 +61,7 @@ if (ZIP_HOME)
     add_library(minizip INTERFACE)
     target_include_directories(minizip INTERFACE "${ZIP_HOME}/include")
     target_link_libraries(minizip INTERFACE ${minizip_PATH})
-else()
+elseif(ENABLE_ZIP)
     message("ZIP_HOME not specified, so zlib and minizip will be built")
     coda_fetch_driver(
         NAME ${TARGET_NAME}
