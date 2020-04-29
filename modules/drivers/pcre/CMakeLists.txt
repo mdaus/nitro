@@ -2,10 +2,10 @@ set(TARGET_NAME pcre2)
 
 if (PCRE_HOME)
     find_library(pcre2_PATH
-                pcre2-8
-                PATHS ${PCRE_HOME}
-                PATH_SUFFIXES lib lib64
-                NO_DEFAULT_PATH)
+                 pcre2-8
+                 PATHS ${PCRE_HOME}
+                 PATH_SUFFIXES lib lib64
+                 NO_DEFAULT_PATH)
     if ("${pcre2_PATH}" STREQUAL "pcre2_PATH-NOTFOUND")
         message(FATAL_ERROR "pcre2 not found at PCRE_HOME ${PCRE_HOME}")
     else()
@@ -92,12 +92,12 @@ else()
 
     # make config.h
     configure_file("${SOURCE_DIR}/config-cmake.h.in"
-                    "config.h")
+                   "config.h")
 
     # Slide pcre2.h.generic into place as pcre2.h
     configure_file("${SOURCE_DIR}/src/pcre2.h.generic"
-                    "pcre2.h"
-                    COPYONLY)
+                   "pcre2.h"
+                   COPYONLY)
 
     # Slide pcre2_chartables.c.dist into place as pcre2_chartables.c
     # NOTE: Older versions of PCRE used to be more complicated because
@@ -143,8 +143,8 @@ else()
                                                 PRIVATE HAVE_CONFIG_H)
     target_include_directories(${TARGET_NAME}
         PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>"
-                "$<BUILD_INTERFACE:${SOURCE_DIR}/src>"
-                "$<INSTALL_INTERFACE:${CODA_STD_PROJECT_INCLUDE_DIR}>")
+               "$<BUILD_INTERFACE:${SOURCE_DIR}/src>"
+               "$<INSTALL_INTERFACE:${CODA_STD_PROJECT_INCLUDE_DIR}>")
     install(FILES "${CMAKE_CURRENT_BINARY_DIR}/pcre2.h"
             DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}"
             ${CODA_INSTALL_OPTION})

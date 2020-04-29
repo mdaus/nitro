@@ -8,10 +8,10 @@ else()
     set(UUID_HOME "" CACHE PATH "path to UUID installation")
     if (UUID_HOME)
         find_library(${TARGET_NAME}_PATH
-                    ${TARGET_NAME}
-                    PATHS ${UUID_HOME}
-                    PATH_SUFFIXES lib lib64
-                    NO_DEFAULT_PATH)
+                     ${TARGET_NAME}
+                     PATHS ${UUID_HOME}
+                     PATH_SUFFIXES lib lib64
+                     NO_DEFAULT_PATH)
         if ("${${TARGET_NAME}_PATH}" STREQUAL "${TARGET_NAME}_PATH-NOTFOUND")
             message(FATAL_ERROR "${TARGET_NAME} not found at UUID_HOME ${UUID_HOME}")
         else()
@@ -53,8 +53,8 @@ else()
         check_type_size("long" SIZEOF_LONG)
         check_type_size("long long" SIZEOF_LONG_LONG)
         configure_file("${SOURCE_DIR}/lib/uuid/uuid_types.h.in"
-                    "uuid/uuid_types.h"
-                    @ONLY)
+                       "uuid/uuid_types.h"
+                       @ONLY)
 
         foreach(src "clear.c" "compare.c" "copy.c" "gen_uuid.c" "isnull.c"
                     "pack.c" "parse.c" "unpack.c" "unparse.c" "uuid_time.c")
@@ -66,8 +66,8 @@ else()
             HAVE_INTTYPES_H=${HAVE_INTTYPES_H})
         target_include_directories(${TARGET_NAME}
             PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>"
-                "$<BUILD_INTERFACE:${SOURCE_DIR}/lib>"
-                "$<INSTALL_INTERFACE:${CODA_STD_PROJECT_INCLUDE_DIR}>")
+                   "$<BUILD_INTERFACE:${SOURCE_DIR}/lib>"
+                   "$<INSTALL_INTERFACE:${CODA_STD_PROJECT_INCLUDE_DIR}>")
 
         install(FILES "${SOURCE_DIR}/lib/uuid/uuid.h"
                 DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}/uuid"

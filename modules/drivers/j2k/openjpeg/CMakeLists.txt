@@ -2,10 +2,10 @@ set(TARGET_NAME openjpeg)
 
 if (J2K_HOME)
     find_library(${TARGET_NAME}_PATH
-                ${TARGET_NAME}
-                PATHS ${J2K_HOME}
-                PATH_SUFFIXES lib lib64
-                NO_DEFAULT_PATH)
+                 ${TARGET_NAME}
+                 PATHS ${J2K_HOME}
+                 PATH_SUFFIXES lib lib64
+                 NO_DEFAULT_PATH)
     if ("${${TARGET_NAME}_PATH}" STREQUAL "${TARGET_NAME}_PATH-NOTFOUND")
         message(FATAL_ERROR "openjpeg not found at J2K_HOME ${J2K_HOME}")
     else()
@@ -70,9 +70,9 @@ else()
 
     set(SOURCE_DIR "${${CMAKE_PROJECT_NAME}_${TARGET_NAME}_SOURCE_DIR}")
     configure_file("${SOURCE_DIR}/src/lib/openjp2/opj_config.h.cmake.in"
-                    "opj_config.h")
+                   "opj_config.h")
     configure_file("${SOURCE_DIR}/src/lib/openjp2/opj_config_private.h.cmake.in"
-                    "opj_config_private.h")
+                   "opj_config_private.h")
 
     foreach(src "bio.c" "cio.c" "dwt.c" "event.c" "image.c" "invert.c"
                 "j2k.c" "jp2.c" "mct.c" "mqc.c" "openjpeg.c"
@@ -88,12 +88,12 @@ else()
     endif()
     target_include_directories(${TARGET_NAME}
         PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>"
-                "$<BUILD_INTERFACE:${SOURCE_DIR}/src/lib/openjp2>"
-                "$<INSTALL_INTERFACE:${CODA_STD_PROJECT_INCLUDE_DIR}>")
+               "$<BUILD_INTERFACE:${SOURCE_DIR}/src/lib/openjp2>"
+               "$<INSTALL_INTERFACE:${CODA_STD_PROJECT_INCLUDE_DIR}>")
     install(FILES "${SOURCE_DIR}/src/lib/openjp2/openjpeg.h"
-                    "${SOURCE_DIR}/src/lib/openjp2/opj_stdint.h"
-                    "${CMAKE_CURRENT_BINARY_DIR}/opj_config.h"
-                    "${CMAKE_CURRENT_BINARY_DIR}/opj_config_private.h"
+                  "${SOURCE_DIR}/src/lib/openjp2/opj_stdint.h"
+                  "${CMAKE_CURRENT_BINARY_DIR}/opj_config.h"
+                  "${CMAKE_CURRENT_BINARY_DIR}/opj_config_private.h"
             DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}"
             ${CODA_INSTALL_OPTION})
 endif()

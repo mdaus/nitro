@@ -2,10 +2,10 @@ set(TARGET_NAME jpeg)
 
 if (JPEG_HOME)
     find_library(${TARGET_NAME}_PATH
-                ${TARGET_NAME}
-                PATHS ${JPEG_HOME}
-                PATH_SUFFIXES lib lib64
-                NO_DEFAULT_PATH)
+                 ${TARGET_NAME}
+                 PATHS ${JPEG_HOME}
+                 PATH_SUFFIXES lib lib64
+                 NO_DEFAULT_PATH)
     if ("${${TARGET_NAME}_PATH}" STREQUAL "${TARGET_NAME}_PATH-NOTFOUND")
         message(FATAL_ERROR "jpeg not found at JPEG_HOME ${JPEG_HOME}")
     else()
@@ -74,13 +74,13 @@ else()
     add_library(${TARGET_NAME} ${SOURCES})
     target_include_directories(${TARGET_NAME}
         PUBLIC "$<BUILD_INTERFACE:${SOURCE_DIR}>"
-                "$<BUILD_INTERFACE:${${CMAKE_PROJECT_NAME}_${TARGET_NAME}_BINARY_DIR}>"
-                "$<INSTALL_INTERFACE:${CODA_STD_PROJECT_INCLUDE_DIR}>")
+               "$<BUILD_INTERFACE:${${CMAKE_PROJECT_NAME}_${TARGET_NAME}_BINARY_DIR}>"
+               "$<INSTALL_INTERFACE:${CODA_STD_PROJECT_INCLUDE_DIR}>")
 
     install(FILES "${SOURCE_DIR}/jpeglib.h"
-                    "${SOURCE_DIR}/jmorecfg.h"
-                    "${SOURCE_DIR}/jerror.h"
-                    "${JCONFIG}"
+                  "${SOURCE_DIR}/jmorecfg.h"
+                  "${SOURCE_DIR}/jerror.h"
+                  "${JCONFIG}"
             DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}"
             ${CODA_INSTALL_OPTION})
 endif()

@@ -32,7 +32,6 @@ if (SQL_LAYER OR SQL_HOME)
     add_subdirectory("sql")
 endif()
 
-
 set(ENABLE_UUID ON CACHE BOOL "enable UUID library")
 if (ENABLE_UUID OR UUID_HOME)
     add_subdirectory("uuid")
