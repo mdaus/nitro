@@ -78,9 +78,12 @@ These options may be passed in the cmake configure step as `-DOPTION_NAME="optio
 |MT_DEFAULT_PINNING|OFF|use affinity-based CPU pinning by default in MT|
 |ENABLE_BOOST|OFF|build modules dependent on Boost if enabled|
 |ENABLE_PYTHON|ON|build Python modules if enabled|
+|ENABLE_JARS|ON|include jars with the install|
 |ENABLE_JPEG|ON|build libjpeg driver and modules depending on it|
 |ENABLE_J2K|ON|build openjpeg (jpeg2000) driver and modules depending on it|
 |ENABLE_PCRE|ON|build PCRE (PERL Compatible Regular Expressions) library and modules dependent on it|
+|ENABLE_UUID|ON|build uuid library and modules dependent on it|
+|ENABLE_ZIP|ON|build zlib and modules dependent on it|
 |PYTHON_VERSION||indicate which version of Python to prefer, e.g. "3" or "3.7"|
 |BOOST_HOME||path to existing Boost installation (implies ENABLE_BOOST=ON)|
 |PYTHON_HOME||path to existing Python installation (implies ENABLE_PYTHON=ON)|
@@ -88,4 +91,5 @@ These options may be passed in the cmake configure step as `-DOPTION_NAME="optio
 |J2K_HOME||path to existing openjpeg installation; if not provided, it will be built from source (implies ENABLE_J2K=ON)|
 |PCRE_HOME||path to existing pcre installation; if not provided, it will be built from source (implies ENABLE_PCRE=ON)|
 |XML_HOME||path to existing Xerces installation; if not provided, it will be built from source|
+|UUID_HOME||path to existing uuid library installation; if not provided, it will be built from source (Linux only)|
 |ZIP_HOME||path to existing zlib installation; if not provided, it will be built from source|
