@@ -137,6 +137,7 @@ macro(coda_initialize_build)
     if (CODA_BUILD_TESTS)
         enable_testing()
     endif()
+    option(CODA_INSTALL_TESTS "install tests" ON)
 
     set(CMAKE_POSITION_INDEPENDENT_CODE ON)
     set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -379,10 +380,12 @@ function(coda_add_tests)
                 add_test(NAME ${test_target} COMMAND ${test_target} ${ARG_ARGS})
             endif()
 
-            # Install [unit]tests to separate subtrees
-            install(TARGETS ${test_target}
-                    ${CODA_INSTALL_OPTION}
-                    RUNTIME DESTINATION "${ARG_DIRECTORY}/${ARG_MODULE_NAME}/${test_subdir}")
+            if (CODA_INSTALL_TESTS)
+                # Install [unit]tests to separate subtrees
+                install(TARGETS ${test_target}
+                        ${CODA_INSTALL_OPTION}
+                        RUNTIME DESTINATION "${ARG_DIRECTORY}/${ARG_MODULE_NAME}/${test_subdir}")
+            endif()
         endforeach()
     endif()
 endfunction()
