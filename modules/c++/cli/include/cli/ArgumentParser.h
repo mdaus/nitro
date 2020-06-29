@@ -41,6 +41,7 @@ class ArgumentParser
 {
 public:
     ArgumentParser();
+    ArgumentParser(bool ignoreUnknown, std::string iuOStream);
     ~ArgumentParser();
 
     /**
@@ -85,6 +86,19 @@ public:
     ArgumentParser& setProgram(const std::string& program);
 
     /**
+     * Set the flag to ignore unknown arguments (default is false)
+     */
+    ArgumentParser& setIgnoreUnknownArgumentsFlag(bool uaFlag);
+
+    /**
+     * Set the output stream name if ignoring unknown arguments (default is 
+     * cerr).  Note:  This will only be used if the flag for ignoring
+     * unknown arguments is true.
+     */
+    ArgumentParser& setIgnoreUnknownArgumentsOutputStreamName(
+            const std::string& osName);
+
+    /**
      * Prints the help and optionally exits.
      */
     void printHelp(std::ostream& out = std::cerr, bool andExit = false) const;
@@ -125,6 +139,8 @@ protected:
     std::string mProgram;
     bool mHelpEnabled;
     char mPrefixChar;
+    bool mIgnoreUnknownArguments;
+    std::string mIgnoreUnknownOStreamName;
 
     void parseError(const std::string& msg);
 

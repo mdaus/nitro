@@ -175,6 +175,28 @@ TEST_CASE(testRequired)
     TEST_ASSERT_EQ(results->get<std::string>("config"), "configFile");
 }
 
+TEST_CASE(testUnknownArgumentsOptions)
+{
+    cli::ArgumentParser parser(true, "cerr");
+    parser.setProgram("tester");
+    parser.addArgument("-v --verbose", "Toggle verbose", cli::STORE_TRUE);
+    parser.addArgument("-x --extra", "Extra options", cli::SUB_OPTIONS);
+
+    // Use a flag that is incorrect
+    std::auto_ptr<cli::Results> results(parser.parse(str::split("-z", " ")));
+
+    TEST_ASSERT_FALSE(results->get<bool>("verbose"));
+
+    // Set the output stream to "/dev/null"
+    parser.setIgnoreUnknownArgumentsOutputStreamName("/dev/null");
+    results.reset(parser.parse(str::split("-z", " ")));
+    TEST_ASSERT_FALSE(results->get<bool>("verbose"));
+
+    // Test setting flag
+    parser.setIgnoreUnknownArgumentsFlag(false);
+    TEST_EXCEPTION(results.reset(parser.parse(str::split("-z", " "))));
+}
+
 int main(int, char**)
 {
     TEST_CHECK( testValue);
@@ -183,4 +205,5 @@ int main(int, char**)
     TEST_CHECK( testSubOptions);
     TEST_CHECK( testIterate);
     TEST_CHECK( testRequired);
+    TEST_CHECK( testUnknownArgumentsOptions);
 }

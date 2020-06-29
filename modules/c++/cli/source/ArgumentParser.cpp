@@ -78,9 +78,20 @@ void writeArgumentHelp(std::ostream& out, const std::string& heading,
     }
 }
 }
-
 cli::ArgumentParser::ArgumentParser() :
-    mHelpEnabled(true), mPrefixChar('-')
+    mHelpEnabled(true),
+    mPrefixChar('-'),
+    mIgnoreUnknownArguments(false),
+    mIgnoreUnknownOStreamName("cerr")
+{
+}
+
+cli::ArgumentParser::ArgumentParser(bool ignoreUnknownArguments = false,
+                                    std::string iuOStreamName = "cerr") :
+    mHelpEnabled(true),
+    mPrefixChar('-'),
+    mIgnoreUnknownArguments(ignoreUnknownArguments),
+    mIgnoreUnknownOStreamName(iuOStreamName)
 {
 }
 
@@ -176,7 +187,22 @@ cli::ArgumentParser& cli::ArgumentParser::setProgram(const std::string& program)
     return *this;
 }
 
-void cli::ArgumentParser::printHelp(std::ostream& out, bool andExit) const
+cli::ArgumentParser& cli::ArgumentParser::setIgnoreUnknownArgumentsFlag(bool iuFlag)
+{
+    mIgnoreUnknownArguments = iuFlag;
+    return *this;
+}
+
+cli::ArgumentParser&
+cli::ArgumentParser::setIgnoreUnknownArgumentsOutputStreamName(
+        const std::string& osName)
+{
+    mIgnoreUnknownOStreamName = osName;
+    return *this;
+}
+
+        void
+        cli::ArgumentParser::printHelp(std::ostream& out, bool andExit) const
 {
     FlagInfo flagInfo;
     processFlags(flagInfo);
@@ -404,8 +430,29 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
                 }
                 else
                 {
-                    throw except::Exception(Ctxt(FmtX("Invalid option: [%s]",
-                                                      argStr.c_str())));
+                    if (mIgnoreUnknownArguments)
+                    {
+                        // Check to see if the output stream should be
+                        // redirected
+                        if (mIgnoreUnknownOStreamName.compare("cerr") != 0)
+                        {
+                            std::cerr << "Unknown arg: " << argStr.c_str()
+                                      << std::endl;
+                        }
+                        else
+                        {
+                            std::ostringstream outStream(
+                                    mIgnoreUnknownOStreamName);
+                            outStream << "Unknown arg: " << argStr.c_str()
+                                      << std::endl;
+                        }
+                        break;
+                    }
+                    else
+                    {
+                        throw except::Exception(Ctxt(
+                                FmtX("Invalid option: [%s]", argStr.c_str())));
+                    }
                 }
             }
         }
@@ -437,12 +484,32 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
                 }
                 else
                 {
-                    throw except::Exception(Ctxt(FmtX("Invalid option: [%s]",
-                                                      argStr.c_str())));
+                    if (mIgnoreUnknownArguments)
+                    {
+                        // Check to see if the output stream should be redirected
+                        if (mIgnoreUnknownOStreamName.compare("cerr") == 0)
+                        {
+                            std::cerr << "Unknown arg: " << argStr.c_str()
+                                      << std::endl;
+                        }
+                        else
+                        {
+                            std::ostringstream outStream(mIgnoreUnknownOStreamName);
+                            outStream << "Unknown arg: " << flag << std::endl;
+                        }
+                        break;
+                    }
+                    else
+                    {
+                        throw except::Exception(Ctxt(
+                                FmtX("Invalid option: [%s]", argStr.c_str())));
+                    }
+                    
                 }
             }
         }
 
+        
         if (arg != NULL)
         {
             std::string argVar = arg->getVariable();
@@ -450,11 +517,9 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
             {
             case cli::STORE:
             {
-                cli::Value
-                        *v =
-                                currentResults->hasValue(argVar) ? currentResults->getValue(
-                                                                                            argVar)
-                                                                 : new cli::Value;
+                cli::Value* v = currentResults->hasValue(argVar)
+                        ? currentResults->getValue(argVar)
+                        : new cli::Value;
                 int maxArgs = arg->getMaxArgs();
                 // risky, I know...
                 bool added = false;
