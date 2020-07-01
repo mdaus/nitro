@@ -23,6 +23,8 @@
 #include <import/cli.h>
 #include "TestCase.h"
 #include <sstream>
+#include <fstream>
+#include <stdio.h>
 
 TEST_CASE(testValue)
 {
@@ -177,7 +179,7 @@ TEST_CASE(testRequired)
 
 TEST_CASE(testUnknownArgumentsOptions)
 {
-    cli::ArgumentParser parser(true, "cerr");
+    cli::ArgumentParser parser(true, std::cerr);
     parser.setProgram("tester");
     parser.addArgument("-v --verbose", "Toggle verbose", cli::STORE_TRUE);
     parser.addArgument("-x --extra", "Extra options", cli::SUB_OPTIONS);
@@ -188,13 +190,38 @@ TEST_CASE(testUnknownArgumentsOptions)
     TEST_ASSERT_FALSE(results->get<bool>("verbose"));
 
     // Set the output stream to "/dev/null"
-    parser.setIgnoreUnknownArgumentsOutputStreamName("/dev/null");
+    std::ostringstream outStream("/dev/null");
+    parser.setIgnoreUnknownArgumentsOutputStream(outStream);
     results.reset(parser.parse(str::split("-z", " ")));
     TEST_ASSERT_FALSE(results->get<bool>("verbose"));
+
+    // Test a file
+    std::string testFilename = "test_failed_parser_arg.log";
+    std::ofstream outFStream(testFilename);
+    parser.setIgnoreUnknownArgumentsOutputStream(outFStream);
+    results.reset(parser.parse(str::split("-z", " ")));
+    outFStream.close();
+    // Open the file and make sure it has the appropriate line
+    std::ifstream inFStream(testFilename);
+    std::string line;
+    if (inFStream.is_open())
+    {
+        std::getline(inFStream, line);
+        TEST_ASSERT(line.compare("Unknown arg: -z") == 0);
+    }
+    // Close the stream and remove the file.
+    inFStream.close();
+    if (remove(testFilename.c_str()) != 0)
+    {
+        std::cerr << "Error deleting file: " << testFilename << std::endl;
+    }
 
     // Test setting flag
     parser.setIgnoreUnknownArgumentsFlag(false);
     TEST_EXCEPTION(results.reset(parser.parse(str::split("-z", " "))));
+
+    // Verify that cerr did not get messed up
+    std::cerr << "cerr is still working as expected" << std::endl;
 }
 
 int main(int, char**)

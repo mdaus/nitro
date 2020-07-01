@@ -82,16 +82,16 @@ cli::ArgumentParser::ArgumentParser() :
     mHelpEnabled(true),
     mPrefixChar('-'),
     mIgnoreUnknownArguments(false),
-    mIgnoreUnknownOStreamName("cerr")
+    mIgnoreUnknownOStream(std::cerr.rdbuf())
 {
 }
 
 cli::ArgumentParser::ArgumentParser(bool ignoreUnknownArguments = false,
-                                    std::string iuOStreamName = "cerr") :
+                                    std::ostream& iuOStream = std::cerr) :
     mHelpEnabled(true),
     mPrefixChar('-'),
     mIgnoreUnknownArguments(ignoreUnknownArguments),
-    mIgnoreUnknownOStreamName(iuOStreamName)
+    mIgnoreUnknownOStream(iuOStream.rdbuf())
 {
 }
 
@@ -194,15 +194,15 @@ cli::ArgumentParser& cli::ArgumentParser::setIgnoreUnknownArgumentsFlag(bool iuF
 }
 
 cli::ArgumentParser&
-cli::ArgumentParser::setIgnoreUnknownArgumentsOutputStreamName(
-        const std::string& osName)
+cli::ArgumentParser::setIgnoreUnknownArgumentsOutputStream(
+        const std::ostream& iuaOutstream)
 {
-    mIgnoreUnknownOStreamName = osName;
+    mIgnoreUnknownOStream.set_rdbuf(iuaOutstream.rdbuf());
+    // mIgnoreUnknownOStream = iuaOutstream;
     return *this;
 }
 
-        void
-        cli::ArgumentParser::printHelp(std::ostream& out, bool andExit) const
+void cli::ArgumentParser::printHelp(std::ostream& out, bool andExit) const
 {
     FlagInfo flagInfo;
     processFlags(flagInfo);
@@ -432,21 +432,9 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
                 {
                     if (mIgnoreUnknownArguments)
                     {
-                        // Check to see if the output stream should be
-                        // redirected
-                        if (mIgnoreUnknownOStreamName.compare("cerr") != 0)
-                        {
-                            std::cerr << "Unknown arg: " << argStr.c_str()
-                                      << std::endl;
-                        }
-                        else
-                        {
-                            std::ostringstream outStream(
-                                    mIgnoreUnknownOStreamName);
-                            outStream << "Unknown arg: " << argStr.c_str()
-                                      << std::endl;
-                        }
-                        break;
+                        mIgnoreUnknownOStream
+                                << "Unknown arg: " << argStr.c_str()
+                                << std::endl;      
                     }
                     else
                     {
@@ -486,17 +474,9 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
                 {
                     if (mIgnoreUnknownArguments)
                     {
-                        // Check to see if the output stream should be redirected
-                        if (mIgnoreUnknownOStreamName.compare("cerr") == 0)
-                        {
-                            std::cerr << "Unknown arg: " << argStr.c_str()
-                                      << std::endl;
-                        }
-                        else
-                        {
-                            std::ostringstream outStream(mIgnoreUnknownOStreamName);
-                            outStream << "Unknown arg: " << flag << std::endl;
-                        }
+                        mIgnoreUnknownOStream
+                                << "Unknown arg: " << argStr.c_str()
+                                << std::endl;
                         break;
                     }
                     else
