@@ -78,20 +78,13 @@ void writeArgumentHelp(std::ostream& out, const std::string& heading,
     }
 }
 }
-cli::ArgumentParser::ArgumentParser() :
-    mHelpEnabled(true),
-    mPrefixChar('-'),
-    mIgnoreUnknownArguments(false),
-    mIgnoreUnknownOStream(std::cerr.rdbuf())
-{
-}
 
-cli::ArgumentParser::ArgumentParser(bool ignoreUnknownArguments = false,
-                                    std::ostream& iuOStream = std::cerr) :
+cli::ArgumentParser::ArgumentParser(bool ignoreUnknownArguments,
+                                    std::ostream* iuOStream ) :
     mHelpEnabled(true),
     mPrefixChar('-'),
     mIgnoreUnknownArguments(ignoreUnknownArguments),
-    mIgnoreUnknownOStream(iuOStream.rdbuf())
+    mIgnoreUnknownOStream(iuOStream)
 {
 }
 
@@ -193,12 +186,10 @@ cli::ArgumentParser& cli::ArgumentParser::setIgnoreUnknownArgumentsFlag(bool iuF
     return *this;
 }
 
-cli::ArgumentParser&
-cli::ArgumentParser::setIgnoreUnknownArgumentsOutputStream(
-        const std::ostream& iuaOutstream)
+cli::ArgumentParser& cli::ArgumentParser::setIgnoreUnknownArgumentsOutputStream(
+         std::ostream* iuaOutstream)
 {
-    mIgnoreUnknownOStream.set_rdbuf(iuaOutstream.rdbuf());
-    // mIgnoreUnknownOStream = iuaOutstream;
+    mIgnoreUnknownOStream = iuaOutstream;
     return *this;
 }
 
@@ -432,9 +423,9 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
                 {
                     if (mIgnoreUnknownArguments)
                     {
-                        mIgnoreUnknownOStream
-                                << "Unknown arg: " << argStr.c_str()
-                                << std::endl;      
+                        *mIgnoreUnknownOStream << "Unknown arg: " << argStr
+                                               << std::endl;
+                        continue;
                     }
                     else
                     {
@@ -474,10 +465,9 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
                 {
                     if (mIgnoreUnknownArguments)
                     {
-                        mIgnoreUnknownOStream
-                                << "Unknown arg: " << argStr.c_str()
-                                << std::endl;
-                        break;
+                        *mIgnoreUnknownOStream << "Unknown arg: " << argStr
+                                               << std::endl;
+                        continue;
                     }
                     else
                     {
@@ -554,11 +544,9 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
             {
                 if (optionsStr.empty())
                     parseError(FmtX("invalid sub option: [%s]", argVar.c_str()));
-                cli::Value
-                        *v =
-                                currentResults->hasValue(optionsStr) ? currentResults->getValue(
-                                                                                                optionsStr)
-                                                                     : new cli::Value;
+                cli::Value* v = currentResults->hasValue(optionsStr)
+                        ? currentResults->getValue(optionsStr)
+                        : new cli::Value;
                 if (i < s - 1)
                 {
                     std::string nextArg = explodedArgs[i + 1];

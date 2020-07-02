@@ -40,8 +40,8 @@ enum
 class ArgumentParser
 {
 public:
-    ArgumentParser();
-    ArgumentParser(bool ignoreUnknown, std::ostream& iuOStream);
+    explicit ArgumentParser(bool ignoreUnknown = false,
+                            std::ostream* iuOStream = &std::cerr);
     ~ArgumentParser();
 
     /**
@@ -96,7 +96,7 @@ public:
      * unknown arguments is true.
      */
     ArgumentParser& setIgnoreUnknownArgumentsOutputStream(
-            const std::ostream& iuaOutstream);
+             std::ostream* iuaOutstream);
 
     /**
      * Prints the help and optionally exits.
@@ -140,7 +140,7 @@ protected:
     bool mHelpEnabled;
     char mPrefixChar;
     bool mIgnoreUnknownArguments;
-    std::ostream mIgnoreUnknownOStream;
+    std::ostream* mIgnoreUnknownOStream;
 
     void parseError(const std::string& msg);
 
