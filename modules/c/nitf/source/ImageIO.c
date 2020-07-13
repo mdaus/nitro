@@ -4957,11 +4957,13 @@ nitf_Uint32 nitf_ImageIO_updateMyResidual(
         }
         else
         {
-            myResidual = cntl->column + numColsFR - nitf->numColumns;
-
-            if (myResidual < 0)
+            if (cntl->column + numColsFR < nitf->numColumns)
             {
                 myResidual = 0;
+            }
+            else
+            {
+                myResidual = cntl->column + numColsFR - nitf->numColumns;
             }
         }
     }
