@@ -1268,7 +1268,7 @@ readTRE(nitf_Reader* reader, nitf_Extensions* ext, nitf_Error* error)
     char etag[NITF_ETAG_SZ + 1];
 
     /* tre object */
-    nitf_TRE* tre;
+    nitf_TRE* tre = NULL;
 
     /* length of the TRE object */
     nitf_Uint32 length;
