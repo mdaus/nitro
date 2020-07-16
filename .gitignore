@@ -12,6 +12,7 @@ test_package/build/
 *.swp
 .depproj
 .vs
+*.vcxproj.user
 
 # Drivers
 modules/c/j2k/external/openjpeg/openjpeg-2.0.0/
