@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{f06550ad-cfc7-40b8-8727-6c82c69a8982}</ProjectGuid>
+    <RootNamespace>nitro</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>nitro-c</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="c\cgm\include\cgm\BasicTypes.h" />
+    <ClInclude Include="c\cgm\include\cgm\CircleElement.h" />
+    <ClInclude Include="c\cgm\include\cgm\CircularArcCloseElement.h" />
+    <ClInclude Include="c\cgm\include\cgm\CircularArcElement.h" />
+    <ClInclude Include="c\cgm\include\cgm\Color.h" />
+    <ClInclude Include="c\cgm\include\cgm\Element.h" />
+    <ClInclude Include="c\cgm\include\cgm\EllipseElement.h" />
+    <ClInclude Include="c\cgm\include\cgm\EllipticalArcCloseElement.h" />
+    <ClInclude Include="c\cgm\include\cgm\EllipticalArcElement.h" />
+    <ClInclude Include="c\cgm\include\cgm\FillAttributes.h" />
+    <ClInclude Include="c\cgm\include\cgm\LineAttributes.h" />
+    <ClInclude Include="c\cgm\include\cgm\Metafile.h" />
+    <ClInclude Include="c\cgm\include\cgm\MetafileReader.h" />
+    <ClInclude Include="c\cgm\include\cgm\MetafileWriter.h" />
+    <ClInclude Include="c\cgm\include\cgm\NITFWriteHandler.h" />
+    <ClInclude Include="c\cgm\include\cgm\Picture.h" />
+    <ClInclude Include="c\cgm\include\cgm\PictureBody.h" />
+    <ClInclude Include="c\cgm\include\cgm\PolygonElement.h" />
+    <ClInclude Include="c\cgm\include\cgm\PolyLineElement.h" />
+    <ClInclude Include="c\cgm\include\cgm\PolySetElement.h" />
+    <ClInclude Include="c\cgm\include\cgm\Rectangle.h" />
+    <ClInclude Include="c\cgm\include\cgm\RectangleElement.h" />
+    <ClInclude Include="c\cgm\include\cgm\Text.h" />
+    <ClInclude Include="c\cgm\include\cgm\TextAttributes.h" />
+    <ClInclude Include="c\cgm\include\cgm\TextElement.h" />
+    <ClInclude Include="c\cgm\include\cgm\Vertex.h" />
+    <ClInclude Include="c\cgm\include\cgm\VertexClose.h" />
+    <ClInclude Include="c\cgm\include\import\cgm.h" />
+    <ClInclude Include="c\j2k\include\import\j2k.h" />
+    <ClInclude Include="c\j2k\include\j2k\Component.h" />
+    <ClInclude Include="c\j2k\include\j2k\Container.h" />
+    <ClInclude Include="c\j2k\include\j2k\Defines.h" />
+    <ClInclude Include="c\j2k\include\j2k\Reader.h" />
+    <ClInclude Include="c\j2k\include\j2k\Writer.h" />
+    <ClInclude Include="c\nitf\include\import\nitf.h" />
+    <ClInclude Include="c\nitf\include\nitf\BandInfo.h" />
+    <ClInclude Include="c\nitf\include\nitf\BandSource.h" />
+    <ClInclude Include="c\nitf\include\nitf\ComplexityLevel.h" />
+    <ClInclude Include="c\nitf\include\nitf\ComponentInfo.h" />
+    <ClInclude Include="c\nitf\include\nitf\DataSource.h" />
+    <ClInclude Include="c\nitf\include\nitf\DefaultTRE.h" />
+    <ClInclude Include="c\nitf\include\nitf\Defines.h" />
+    <ClInclude Include="c\nitf\include\nitf\DESegment.h" />
+    <ClInclude Include="c\nitf\include\nitf\DESubheader.h" />
+    <ClInclude Include="c\nitf\include\nitf\DirectBlockSource.h" />
+    <ClInclude Include="c\nitf\include\nitf\DownSampler.h" />
+    <ClInclude Include="c\nitf\include\nitf\Extensions.h" />
+    <ClInclude Include="c\nitf\include\nitf\Field.h" />
+    <ClInclude Include="c\nitf\include\nitf\FieldWarning.h" />
+    <ClInclude Include="c\nitf\include\nitf\FileHeader.h" />
+    <ClInclude Include="c\nitf\include\nitf\FileSecurity.h" />
+    <ClInclude Include="c\nitf\include\nitf\GraphicSegment.h" />
+    <ClInclude Include="c\nitf\include\nitf\GraphicSubheader.h" />
+    <ClInclude Include="c\nitf\include\nitf\ImageIO.h" />
+    <ClInclude Include="c\nitf\include\nitf\ImageReader.h" />
+    <ClInclude Include="c\nitf\include\nitf\ImageSegment.h" />
+    <ClInclude Include="c\nitf\include\nitf\ImageSource.h" />
+    <ClInclude Include="c\nitf\include\nitf\ImageSubheader.h" />
+    <ClInclude Include="c\nitf\include\nitf\ImageWriter.h" />
+    <ClInclude Include="c\nitf\include\nitf\LabelSegment.h" />
+    <ClInclude Include="c\nitf\include\nitf\LabelSubheader.h" />
+    <ClInclude Include="c\nitf\include\nitf\LookupTable.h" />
+    <ClInclude Include="c\nitf\include\nitf\PluginIdentifier.h" />
+    <ClInclude Include="c\nitf\include\nitf\PluginRegistry.h" />
+    <ClInclude Include="c\nitf\include\nitf\Reader.h" />
+    <ClInclude Include="c\nitf\include\nitf\Record.h" />
+    <ClInclude Include="c\nitf\include\nitf\RESegment.h" />
+    <ClInclude Include="c\nitf\include\nitf\RESubheader.h" />
+    <ClInclude Include="c\nitf\include\nitf\RowSource.h" />
+    <ClInclude Include="c\nitf\include\nitf\SegmentReader.h" />
+    <ClInclude Include="c\nitf\include\nitf\SegmentSource.h" />
+    <ClInclude Include="c\nitf\include\nitf\SegmentWriter.h" />
+    <ClInclude Include="c\nitf\include\nitf\StreamIOWriteHandler.h" />
+    <ClInclude Include="c\nitf\include\nitf\SubWindow.h" />
+    <ClInclude Include="c\nitf\include\nitf\System.h" />
+    <ClInclude Include="c\nitf\include\nitf\TextSegment.h" />
+    <ClInclude Include="c\nitf\include\nitf\TextSubheader.h" />
+    <ClInclude Include="c\nitf\include\nitf\TRE.h" />
+    <ClInclude Include="c\nitf\include\nitf\TRECursor.h" />
+    <ClInclude Include="c\nitf\include\nitf\TREDescription.h" />
+    <ClInclude Include="c\nitf\include\nitf\TREPrivateData.h" />
+    <ClInclude Include="c\nitf\include\nitf\TREUtils.h" />
+    <ClInclude Include="c\nitf\include\nitf\Types.h" />
+    <ClInclude Include="c\nitf\include\nitf\WriteHandler.h" />
+    <ClInclude Include="c\nitf\include\nitf\Writer.h" />
+    <ClInclude Include="c\nitf\include\nitf\WriterOptions.h" />
+    <ClInclude Include="c\nrt\include\import\nrt.h" />
+    <ClInclude Include="c\nrt\include\nrt\DateTime.h" />
+    <ClInclude Include="c\nrt\include\nrt\Debug.h" />
+    <ClInclude Include="c\nrt\include\nrt\Defines.h" />
+    <ClInclude Include="c\nrt\include\nrt\Directory.h" />
+    <ClInclude Include="c\nrt\include\nrt\DLL.h" />
+    <ClInclude Include="c\nrt\include\nrt\Error.h" />
+    <ClInclude Include="c\nrt\include\nrt\HashTable.h" />
+    <ClInclude Include="c\nrt\include\nrt\IntStack.h" />
+    <ClInclude Include="c\nrt\include\nrt\IOHandle.h" />
+    <ClInclude Include="c\nrt\include\nrt\IOInterface.h" />
+    <ClInclude Include="c\nrt\include\nrt\List.h" />
+    <ClInclude Include="c\nrt\include\nrt\Memory.h" />
+    <ClInclude Include="c\nrt\include\nrt\Pair.h" />
+    <ClInclude Include="c\nrt\include\nrt\Sync.h" />
+    <ClInclude Include="c\nrt\include\nrt\System.h" />
+    <ClInclude Include="c\nrt\include\nrt\Tree.h" />
+    <ClInclude Include="c\nrt\include\nrt\Types.h" />
+    <ClInclude Include="c\nrt\include\nrt\Utils.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="c\cgm\source\CircleElement.c" />
+    <ClCompile Include="c\cgm\source\CircularArcCloseElement.c" />
+    <ClCompile Include="c\cgm\source\CircularArcElement.c" />
+    <ClCompile Include="c\cgm\source\Color.c" />
+    <ClCompile Include="c\cgm\source\Element.c" />
+    <ClCompile Include="c\cgm\source\EllipseElement.c" />
+    <ClCompile Include="c\cgm\source\EllipticalArcCloseElement.c" />
+    <ClCompile Include="c\cgm\source\EllipticalArcElement.c" />
+    <ClCompile Include="c\cgm\source\FillAttributes.c" />
+    <ClCompile Include="c\cgm\source\LineAttributes.c" />
+    <ClCompile Include="c\cgm\source\Metafile.c" />
+    <ClCompile Include="c\cgm\source\MetafileReader.c" />
+    <ClCompile Include="c\cgm\source\MetafileWriter.c" />
+    <ClCompile Include="c\cgm\source\NITFWriteHandler.c" />
+    <ClCompile Include="c\cgm\source\Picture.c" />
+    <ClCompile Include="c\cgm\source\PictureBody.c" />
+    <ClCompile Include="c\cgm\source\PolygonElement.c" />
+    <ClCompile Include="c\cgm\source\PolyLineElement.c" />
+    <ClCompile Include="c\cgm\source\PolySetElement.c" />
+    <ClCompile Include="c\cgm\source\Rectangle.c" />
+    <ClCompile Include="c\cgm\source\RectangleElement.c" />
+    <ClCompile Include="c\cgm\source\Text.c" />
+    <ClCompile Include="c\cgm\source\TextAttributes.c" />
+    <ClCompile Include="c\cgm\source\TextElement.c" />
+    <ClCompile Include="c\cgm\source\Vertex.c" />
+    <ClCompile Include="c\cgm\source\VertexClose.c" />
+    <ClCompile Include="c\j2k\source\Component.c" />
+    <ClCompile Include="c\j2k\source\Container.c" />
+    <ClCompile Include="c\j2k\source\JasPerImpl.c" />
+    <ClCompile Include="c\j2k\source\KakaduImpl.cpp" />
+    <ClCompile Include="c\j2k\source\OpenJPEGImpl.c" />
+    <ClCompile Include="c\j2k\source\Reader.c" />
+    <ClCompile Include="c\j2k\source\SimpleComponentImpl.c" />
+    <ClCompile Include="c\j2k\source\SimpleContainerImpl.c" />
+    <ClCompile Include="c\j2k\source\Writer.c" />
+    <ClCompile Include="c\jpeg\source\LibjpegDecompress.c" />
+    <ClCompile Include="c\nitf\source\BandInfo.c" />
+    <ClCompile Include="c\nitf\source\BandSource.c" />
+    <ClCompile Include="c\nitf\source\ComplexityLevel.c" />
+    <ClCompile Include="c\nitf\source\ComponentInfo.c" />
+    <ClCompile Include="c\nitf\source\DataSource.c" />
+    <ClCompile Include="c\nitf\source\DefaultTRE.c" />
+    <ClCompile Include="c\nitf\source\DESegment.c" />
+    <ClCompile Include="c\nitf\source\DESubheader.c" />
+    <ClCompile Include="c\nitf\source\DirectBlockSource.c" />
+    <ClCompile Include="c\nitf\source\DownSampler.c" />
+    <ClCompile Include="c\nitf\source\Extensions.c" />
+    <ClCompile Include="c\nitf\source\Field.c" />
+    <ClCompile Include="c\nitf\source\FieldWarning.c" />
+    <ClCompile Include="c\nitf\source\FileHeader.c" />
+    <ClCompile Include="c\nitf\source\FileSecurity.c" />
+    <ClCompile Include="c\nitf\source\GraphicSegment.c" />
+    <ClCompile Include="c\nitf\source\GraphicSubheader.c" />
+    <ClCompile Include="c\nitf\source\ImageIO.c" />
+    <ClCompile Include="c\nitf\source\ImageReader.c" />
+    <ClCompile Include="c\nitf\source\ImageSegment.c" />
+    <ClCompile Include="c\nitf\source\ImageSource.c" />
+    <ClCompile Include="c\nitf\source\ImageSubheader.c" />
+    <ClCompile Include="c\nitf\source\ImageWriter.c" />
+    <ClCompile Include="c\nitf\source\LabelSegment.c" />
+    <ClCompile Include="c\nitf\source\LabelSubheader.c" />
+    <ClCompile Include="c\nitf\source\LookupTable.c" />
+    <ClCompile Include="c\nitf\source\PluginRegistry.c" />
+    <ClCompile Include="c\nitf\source\Reader.c" />
+    <ClCompile Include="c\nitf\source\Record.c" />
+    <ClCompile Include="c\nitf\source\RESegment.c" />
+    <ClCompile Include="c\nitf\source\RESubheader.c" />
+    <ClCompile Include="c\nitf\source\RowSource.c" />
+    <ClCompile Include="c\nitf\source\SegmentReader.c" />
+    <ClCompile Include="c\nitf\source\SegmentSource.c" />
+    <ClCompile Include="c\nitf\source\SegmentWriter.c" />
+    <ClCompile Include="c\nitf\source\StreamIOWriteHandler.c" />
+    <ClCompile Include="c\nitf\source\SubWindow.c" />
+    <ClCompile Include="c\nitf\source\TextSegment.c" />
+    <ClCompile Include="c\nitf\source\TextSubheader.c" />
+    <ClCompile Include="c\nitf\source\TRE.c" />
+    <ClCompile Include="c\nitf\source\TRECursor.c" />
+    <ClCompile Include="c\nitf\source\TREPrivateData.c" />
+    <ClCompile Include="c\nitf\source\TREUtils.c" />
+    <ClCompile Include="c\nitf\source\WriteHandler.c" />
+    <ClCompile Include="c\nitf\source\Writer.c" />
+    <ClCompile Include="c\nrt\source\DateTime.c" />
+    <ClCompile Include="c\nrt\source\Debug.c" />
+    <ClCompile Include="c\nrt\source\DirectoryUnix.c" />
+    <ClCompile Include="c\nrt\source\DirectoryWin32.c" />
+    <ClCompile Include="c\nrt\source\DLLUnix.c" />
+    <ClCompile Include="c\nrt\source\DLLWin32.c" />
+    <ClCompile Include="c\nrt\source\Error.c" />
+    <ClCompile Include="c\nrt\source\HashTable.c" />
+    <ClCompile Include="c\nrt\source\IntStack.c" />
+    <ClCompile Include="c\nrt\source\IOHandleUnix.c" />
+    <ClCompile Include="c\nrt\source\IOHandleWin32.c" />
+    <ClCompile Include="c\nrt\source\IOInterface.c" />
+    <ClCompile Include="c\nrt\source\List.c" />
+    <ClCompile Include="c\nrt\source\Pair.c" />
+    <ClCompile Include="c\nrt\source\SyncIrix.c" />
+    <ClCompile Include="c\nrt\source\SyncUnix.c" />
+    <ClCompile Include="c\nrt\source\SyncWin32.c" />
+    <ClCompile Include="c\nrt\source\System.c" />
+    <ClCompile Include="c\nrt\source\Tree.c" />
+    <ClCompile Include="c\nrt\source\Utils.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="c\nitf\include\nitf\nitf_config.h.cmake.in" />
+    <None Include="c\nitf\source\wscript_build" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
