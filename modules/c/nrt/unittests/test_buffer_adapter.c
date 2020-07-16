@@ -70,7 +70,6 @@ TEST_CASE(testReadOutOfBounds)
     char buffer[TEST_BUF_SIZE];
     char output[5];
     nrt_Error error;
-    size_t ii;
     NRT_BOOL success;
 
     memset(buffer, 0, 3);

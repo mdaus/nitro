@@ -4,6 +4,9 @@
 
 # Build artifacts
 target/
+install/
+out/build/
+out/install/
 test_package/build/
 *.pyc
 *.swp

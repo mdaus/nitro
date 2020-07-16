@@ -5666,7 +5666,6 @@ nitf_ImageIOControl_construct(_nitf_ImageIO * nitf,
                               nitf_Error * error)
 {
     _nitf_ImageIOControl *cntl; /* The result */
-    nitf_Uint32 bandIdx;
 
     cntl =
         (_nitf_ImageIOControl *) NITF_MALLOC(sizeof(_nitf_ImageIOControl));

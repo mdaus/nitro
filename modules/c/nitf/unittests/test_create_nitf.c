@@ -1057,7 +1057,6 @@ NITF_BOOL addImageSegment(nitf_Record *record, nitf_Error *error)
     nitf_ImageSubheader *header = NULL;
     nitf_BandInfo **bands = NULL;
 
-    double corners[4][2];
     int i;
 
     segment = nitf_Record_newImageSegment(record, error);

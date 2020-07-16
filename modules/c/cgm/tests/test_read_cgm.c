@@ -33,7 +33,6 @@ void printCGM(cgm_Metafile *mf, nitf_Error *error)
 {
     nitf_ListIterator iter;
     nitf_ListIterator end;
-    int i;
     
     printf("metafile:\n");
     printf("    name        : %s\n", mf->name);
