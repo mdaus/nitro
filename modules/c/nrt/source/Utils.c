@@ -20,7 +20,8 @@
  *
  */
 
-#include "nrt/nrt_config.h"
+ //#include "nrt/nrt_config.h"
+#define NRT_LIB_VERSION "2.9"
 #include "nrt/Utils.h"
 
 NRTAPI(nrt_List *) nrt_Utils_splitString(const char *str, unsigned int max,
