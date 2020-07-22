@@ -20,8 +20,6 @@
  *
  */
 
-#define  _CRT_SECURE_NO_WARNINGS // Error	C4996	'...': This function or variable may be unsafe.Consider using ... instead.To disable deprecation, use _CRT_SECURE_NO_WARNINGS.See online help for details.
-
 #include "nitf/PluginRegistry.h"
 
 NITFPRIV(nitf_PluginRegistry*) implicitConstruct(nitf_Error* error);
@@ -184,6 +182,20 @@ insertPlugin(nitf_PluginRegistry* reg,
     return NITF_SUCCESS;
 }
 
+static char* nitf_PluginRegistry_getenv(char const* varName)
+{
+#ifdef _MSC_VER // Visual Studio
+#pragma warning(push)
+#pragma warning(disable: 4996) // '...' : This function or variable may be unsafe. Consider using ... instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+#endif
+    return getenv(varName);
+#ifdef _MSC_VER // Visual Studio
+#pragma warning(pop)
+#endif
+
+}
+#define getenv(varName) nitf_PluginRegistry_getenv(varName)
+
 NITFPRIV(nitf_PluginRegistry*) implicitConstruct(nitf_Error* error)
 {
     size_t pathLen;
@@ -260,6 +272,7 @@ NITFPRIV(nitf_PluginRegistry*) implicitConstruct(nitf_Error* error)
     memset(reg->path, 0, NITF_MAX_PATH);
 
     /*  Take the environment variable, or...  */
+
     pluginEnvVar = getenv(NITF_PLUGIN_PATH);
     if (!pluginEnvVar)
     {

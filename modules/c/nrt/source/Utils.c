@@ -20,8 +20,6 @@
  *
  */
 
-#define  _CRT_SECURE_NO_WARNINGS // Error	C4996	'...': This function or variable may be unsafe.Consider using ... instead.To disable deprecation, use _CRT_SECURE_NO_WARNINGS.See online help for details.
-
  //#include "nrt/nrt_config.h"
 #define NRT_LIB_VERSION "2.9"
 #include "nrt/Utils.h"
@@ -593,6 +591,10 @@ NRTAPI(void) nrt_Utils_byteSwap(nrt_Uint8 *value, size_t size)
         break;
     }
 }
+
+#ifdef _MSC_VER // Visual Studio
+#pragma warning(disable: 4996) // '...' : This function or variable may be unsafe. Consider using ... instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+#endif
 
 NRTAPI(char*) nrt_Utils_strcpy(char* destination, char const* source)
 {
