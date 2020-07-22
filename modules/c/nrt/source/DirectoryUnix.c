@@ -20,7 +20,7 @@
  *
  */
 
-#ifndef WIN32
+#if ! (defined(WIN32) || defined(_WIN32))
 
 #include "nrt/Directory.h"
 
