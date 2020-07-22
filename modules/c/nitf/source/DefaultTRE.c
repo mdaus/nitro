@@ -238,18 +238,20 @@ NITFPRIV(const char*) defaultGetFieldDescription(nitf_TREEnumerator* it,
 NITFPRIV(nitf_TREEnumerator*) defaultBegin(nitf_TRE* tre, nitf_Error* error)
 {
 	nitf_TREEnumerator* it = (nitf_TREEnumerator*)NITF_MALLOC(sizeof(nitf_TREEnumerator));
-	/* Check rv here */
-	it->next = defaultIncrement;
-	it->hasNext = defaultHasNext;
-	it->getFieldDescription = defaultGetFieldDescription;
-	it->data = tre->priv;
+    if (it != NULL)
+    {
+        it->next = defaultIncrement;
+        it->hasNext = defaultHasNext;
+        it->getFieldDescription = defaultGetFieldDescription;
+        it->data = tre->priv;
 
-	if (!it->data || !nitf_HashTable_find(
-	        ((nitf_TREPrivateData*)it->data)->hash, NITF_TRE_RAW))
-	{
-		nitf_Error_init(error, "No raw_data in default!", NITF_CTXT, NITF_ERR_INVALID_OBJECT);
-		return NITF_FAILURE;
-	}
+        if (!it->data || !nitf_HashTable_find(
+            ((nitf_TREPrivateData*)it->data)->hash, NITF_TRE_RAW))
+        {
+            nitf_Error_init(error, "No raw_data in default!", NITF_CTXT, NITF_ERR_INVALID_OBJECT);
+            return NITF_FAILURE;
+        }
+    }
 	return it;
 }
 
