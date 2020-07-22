@@ -966,7 +966,8 @@ nitf_TREUtils_basicClone(nitf_TRE* source, nitf_TRE* tre, nitf_Error* error)
     sourcePriv = (nitf_TREPrivateData*)source->priv;
 
     /* this clones the hash */
-    if (!(trePriv = nitf_TREPrivateData_clone(sourcePriv, error)))
+    trePriv = nitf_TREPrivateData_clone(sourcePriv, error);
+    if (!trePriv)
         return NITF_FAILURE;
 
     /* just copy over the optional length and static description */

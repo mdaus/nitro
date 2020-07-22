@@ -352,7 +352,8 @@ NITFPRIV(NITF_BOOL) defaultClone(nitf_TRE *source,
     sourcePriv = (nitf_TREPrivateData*)source->priv;
 
     /* this clones the hash */
-    if (!(trePriv = nitf_TREPrivateData_clone(sourcePriv, error)))
+    trePriv = nitf_TREPrivateData_clone(sourcePriv, error);
+    if (!trePriv)
         return NITF_FAILURE;
 
     /* just copy over the optional length */
