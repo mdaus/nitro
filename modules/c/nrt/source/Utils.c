@@ -446,6 +446,8 @@ NRTAPI(char) nrt_Utils_cornersTypeAsCoordRep(nrt_CornersType type)
     case NRT_CORNERS_DECIMAL:
         cornerRep = 'D';
         break;
+
+    case NRT_CORNERS_UNKNOWN:
     default:
         break;
     }
