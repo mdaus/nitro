@@ -20,6 +20,8 @@
  *
  */
 
+#define  _CRT_SECURE_NO_WARNINGS // Error	C4996	'...': This function or variable may be unsafe.Consider using ... instead.To disable deprecation, use _CRT_SECURE_NO_WARNINGS.See online help for details.
+
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>

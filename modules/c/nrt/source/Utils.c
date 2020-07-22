@@ -20,6 +20,8 @@
  *
  */
 
+#define  _CRT_SECURE_NO_WARNINGS // Error	C4996	'...': This function or variable may be unsafe.Consider using ... instead.To disable deprecation, use _CRT_SECURE_NO_WARNINGS.See online help for details.
+
  //#include "nrt/nrt_config.h"
 #define NRT_LIB_VERSION "2.9"
 #include "nrt/Utils.h"
@@ -590,4 +592,22 @@ NRTAPI(void) nrt_Utils_byteSwap(nrt_Uint8 *value, size_t size)
         /* Not handled */
         break;
     }
+}
+
+NRTAPI(char*) nrt_Utils_strcpy(char* destination, char const* source)
+{
+    #undef strcpy
+    return strcpy(destination, source);
+}
+
+NRTAPI(char*) nrt_Utils_strncpy(char* destination, char const* source, size_t count)
+{
+#undef strncpy
+    return strncpy(destination, source, count);
+}
+
+NRTAPI(char*) nrt_Utils_strcat(char* destination, char const* source)
+{
+    #undef strcat
+    return strcat(destination, source);
 }

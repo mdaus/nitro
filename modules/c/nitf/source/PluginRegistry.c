@@ -20,6 +20,8 @@
  *
  */
 
+#define  _CRT_SECURE_NO_WARNINGS // Error	C4996	'...': This function or variable may be unsafe.Consider using ... instead.To disable deprecation, use _CRT_SECURE_NO_WARNINGS.See online help for details.
+
 #include "nitf/PluginRegistry.h"
 
 NITFPRIV(nitf_PluginRegistry*) implicitConstruct(nitf_Error* error);
