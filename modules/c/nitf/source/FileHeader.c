@@ -362,8 +362,8 @@ CATCH_ERROR:
  */
 NITFAPI(void) nitf_FileHeader_destruct(nitf_FileHeader ** fh)
 {
-    nitf_Uint32 numImages, numGraphics, numLabels;
-    nitf_Uint32 numTexts, numDES, numRES;
+    nitf_Uint32 numImages, numGraphics=0, numLabels=0;
+    nitf_Uint32 numTexts=0, numDES=0, numRES=0;
     nitf_Uint32 i;
 
     nitf_Error error;
