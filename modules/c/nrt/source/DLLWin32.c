@@ -32,8 +32,11 @@ NRTAPI(nrt_DLL *) nrt_DLL_construct(nrt_Error * error)
         nrt_Error_init(error, "Failed to alloc DLL", NRT_CTXT, NRT_ERR_MEMORY);
 
     }
-    dll->libname = NULL;
-    dll->lib = NULL;
+    else
+    {
+        dll->libname = NULL;
+        dll->lib = NULL;
+    }
     return dll;
 }
 

@@ -2090,7 +2090,7 @@ nitf_Record_unmergeTREs(nitf_Record* record, nitf_Error* error)
     nitf_Uint32 overflowIndex;
 
     /* Overflow segment */
-    nitf_DESegment* overflow;
+    nitf_DESegment* overflow = NULL;
 
     version = nitf_Record_getVersion(record);
 
