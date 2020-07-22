@@ -20,7 +20,8 @@
  *
  */
 
-#include "j2k/j2k_config.h"
+ //#include "j2k/j2k_config.h"
+//#define HAVE_OPENJPEG_H 1
 
 #ifdef HAVE_OPENJPEG_H
 
