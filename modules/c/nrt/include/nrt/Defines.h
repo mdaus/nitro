@@ -22,6 +22,26 @@
 
 #ifndef __NRT_DEFINES_H__
 #define __NRT_DEFINES_H__
+#pragma once
+
+#ifdef _MSC_VER
+#pragma warning(disable: 4668) // '...' is not defined as a preprocessor macro, replacing with '...' for '...'
+#pragma warning(disable: 4820) // '...': '...' bytes padding added after data member '...'
+#pragma warning(disable: 4710) // '...': function not inlined
+#pragma warning(disable: 4255) // '...': no function prototype given : converting '...' to '...'
+
+#pragma warning(disable: 5045) // Compiler will insert Spectre mitigation for memory load if / Qspectre switch specified
+#endif
+
+#ifdef _MSC_VER // TODO: get rid of these someday?
+#pragma warning(disable: 4100) // '...': unreferenced formal parameter
+#pragma warning(disable: 4296) // '...': expression is always false
+#pragma warning(disable: 4267) // '...': conversion from '...' to '...', possible loss of data
+#pragma warning(disable: 4244) // 	'...': conversion from '...' to '...', possible loss of data
+#pragma warning(disable: 4242) // '...': conversion from '...' to '...', possible loss of data
+#pragma warning(disable: 4018) // '...': signed / unsigned mismatch
+#pragma warning(disable: 4389) // '...': signed / unsigned mismatch
+#endif
 
 /* The version of the NRT library */
 
