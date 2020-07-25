@@ -6200,7 +6200,6 @@ NITFPRIV(int) nitf_ImageIO_mkMasks(nitf_ImageIO * img,
     size_t bytesPerBlock;       /* Total bytes in one block */
     nitf_Uint32 headerOffset;   /* File offset of masks due to mask header */
     nitf_Uint32 padOffset;      /* File offset of pad mask due to block mask */
-    nitf_Uint32 i;
 
     nitf = (_nitf_ImageIO *) img;
 
@@ -6248,7 +6247,7 @@ NITFPRIV(int) nitf_ImageIO_mkMasks(nitf_ImageIO * img,
         maskOffset = 0;
 
         maskp = nitf->blockMask;
-        for (i = 0; i < nBlocksTotal + 1; i++)
+        for (nitf_Uint32 i = 0; i < nBlocksTotal + 1; i++)
         {
             *(maskp++) = maskOffset;
             maskOffset += bytesPerBlock;
@@ -6263,7 +6262,6 @@ NITFPRIV(int) nitf_ImageIO_mkMasks(nitf_ImageIO * img,
          * byte-swapping
          */
         nitf_Uint32 *fileMask;   /* Buffer to hold file mask */
-        nitf_Uint32 i;
 
         fileMask = (nitf_Uint32 *) NITF_MALLOC(maskSizeFile);
         if (fileMask == NULL)
@@ -6290,7 +6288,7 @@ NITFPRIV(int) nitf_ImageIO_mkMasks(nitf_ImageIO * img,
         if (!nitf_ImageIO_bigEndian())
             nitf_ImageIO_swapOnly_4((nitf_Uint8 *) fileMask, nBlocksTotal, 0);
 
-        for (i = 0;i < nBlocksTotal;i++)
+        for (nitf_Uint32 i = 0;i < nBlocksTotal;i++)
             nitf->blockMask[i] = fileMask[i];
 
         nitf->blockMask[nBlocksTotal] =
@@ -6320,7 +6318,7 @@ NITFPRIV(int) nitf_ImageIO_mkMasks(nitf_ImageIO * img,
 
     if ((nitf->maskHeader.padRecordLength == 0) || !reading)
     {                           /* No mask */
-        for (i = 0;i < nBlocksTotal;i++)
+        for (nitf_Uint32 i = 0;i < nBlocksTotal;i++)
             nitf->padMask[i] = NITF_IMAGE_IO_NO_BLOCK;
     }
     else
@@ -6331,7 +6329,6 @@ NITFPRIV(int) nitf_ImageIO_mkMasks(nitf_ImageIO * img,
          * byte-swapping
          */
         nitf_Uint32 *fileMask;   /* Buffer to hold file mask */
-        nitf_Uint32 i;
 
         fileMask = (nitf_Uint32 *) NITF_MALLOC(maskSizeFile);
         if (fileMask == NULL)
@@ -6356,7 +6353,7 @@ NITFPRIV(int) nitf_ImageIO_mkMasks(nitf_ImageIO * img,
         if (nitf_ImageIO_bigEndian())
             nitf_ImageIO_swapOnly_4((nitf_Uint8 *) fileMask, nBlocksTotal, 0);
 
-        for (i = 0; i < nBlocksTotal;i++)
+        for (nitf_Uint32 i = 0; i < nBlocksTotal;i++)
             nitf->padMask[i] = fileMask[i];
 
         NITF_FREE(fileMask);

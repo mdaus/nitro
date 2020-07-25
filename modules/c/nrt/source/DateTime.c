@@ -261,7 +261,7 @@ NRTAPI(NRT_BOOL) nrt_DateTime_setDayOfYear(nrt_DateTime * dateTime,
     return NRT_FAILURE;
 }
 
-static struct tm* nrt_DateTime_gmtime(const* const t)
+static struct tm* nrt_DateTime_gmtime(const time_t* const t)
 {
 #ifdef _MSC_VER // Visual Studio
 #pragma warning(push)

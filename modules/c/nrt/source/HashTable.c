@@ -464,11 +464,10 @@ NRTAPI(void) nrt_HashTableIterator_increment(nrt_HashTableIterator * iter)
             found = 1;
         else
         {
-            int i;
-            for (i = iter->curBucket + 1; i < iter->hash->nbuckets && !found;
+            for (int i = iter->curBucket + 1; i < iter->hash->nbuckets && !found;
                  i++)
             {
-                nrt_List *l = iter->hash->buckets[i];
+                l = iter->hash->buckets[i];
                 if (l != NULL && nrt_List_size(l) > 0)
                 {
                     iter->curBucket = i;
