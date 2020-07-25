@@ -114,12 +114,6 @@
     <ClInclude Include="j2k\include\j2k\Defines.h">
       <Filter>j2k</Filter>
     </ClInclude>
-    <ClInclude Include="j2k\include\j2k\Reader.h">
-      <Filter>j2k</Filter>
-    </ClInclude>
-    <ClInclude Include="j2k\include\j2k\Writer.h">
-      <Filter>j2k</Filter>
-    </ClInclude>
     <ClInclude Include="nitf\include\nitf\BandInfo.h">
       <Filter>nitf</Filter>
     </ClInclude>
@@ -207,9 +201,6 @@
     <ClInclude Include="nitf\include\nitf\PluginRegistry.h">
       <Filter>nitf</Filter>
     </ClInclude>
-    <ClInclude Include="nitf\include\nitf\Reader.h">
-      <Filter>nitf</Filter>
-    </ClInclude>
     <ClInclude Include="nitf\include\nitf\Record.h">
       <Filter>nitf</Filter>
     </ClInclude>
@@ -265,9 +256,6 @@
       <Filter>nitf</Filter>
     </ClInclude>
     <ClInclude Include="nitf\include\nitf\WriteHandler.h">
-      <Filter>nitf</Filter>
-    </ClInclude>
-    <ClInclude Include="nitf\include\nitf\Writer.h">
       <Filter>nitf</Filter>
     </ClInclude>
     <ClInclude Include="nitf\include\nitf\WriterOptions.h">
@@ -332,6 +320,18 @@
     </ClInclude>
     <ClInclude Include="nrt\include\nrt\Utils.h">
       <Filter>nrt</Filter>
+    </ClInclude>
+    <ClInclude Include="j2k\include\j2k\j2k_Reader.h">
+      <Filter>j2k</Filter>
+    </ClInclude>
+    <ClInclude Include="j2k\include\j2k\j2k_Writer.h">
+      <Filter>j2k</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\NitfReader.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\NitfWriter.h">
+      <Filter>nitf</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -428,16 +428,10 @@
     <ClCompile Include="j2k\source\OpenJPEGImpl.c">
       <Filter>j2k</Filter>
     </ClCompile>
-    <ClCompile Include="j2k\source\Reader.c">
-      <Filter>j2k</Filter>
-    </ClCompile>
     <ClCompile Include="j2k\source\SimpleComponentImpl.c">
       <Filter>j2k</Filter>
     </ClCompile>
     <ClCompile Include="j2k\source\SimpleContainerImpl.c">
-      <Filter>j2k</Filter>
-    </ClCompile>
-    <ClCompile Include="j2k\source\Writer.c">
       <Filter>j2k</Filter>
     </ClCompile>
     <ClCompile Include="jpeg\source\LibjpegDecompress.c">
@@ -524,9 +518,6 @@
     <ClCompile Include="nitf\source\PluginRegistry.c">
       <Filter>nitf</Filter>
     </ClCompile>
-    <ClCompile Include="nitf\source\Reader.c">
-      <Filter>nitf</Filter>
-    </ClCompile>
     <ClCompile Include="nitf\source\Record.c">
       <Filter>nitf</Filter>
     </ClCompile>
@@ -573,9 +564,6 @@
       <Filter>nitf</Filter>
     </ClCompile>
     <ClCompile Include="nitf\source\WriteHandler.c">
-      <Filter>nitf</Filter>
-    </ClCompile>
-    <ClCompile Include="nitf\source\Writer.c">
       <Filter>nitf</Filter>
     </ClCompile>
     <ClCompile Include="nrt\source\DateTime.c">
@@ -637,6 +625,18 @@
     </ClCompile>
     <ClCompile Include="nrt\source\Utils.c">
       <Filter>nrt</Filter>
+    </ClCompile>
+    <ClCompile Include="j2k\source\j2k_Reader.c">
+      <Filter>j2k</Filter>
+    </ClCompile>
+    <ClCompile Include="j2k\source\j2k_Writer.c">
+      <Filter>j2k</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\NitfReader.c">
+      <Filter>nitf</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf\source\NitfWriter.c">
+      <Filter>nitf</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

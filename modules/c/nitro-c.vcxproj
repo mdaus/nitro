@@ -180,8 +180,8 @@
     <ClInclude Include="j2k\include\j2k\Component.h" />
     <ClInclude Include="j2k\include\j2k\Container.h" />
     <ClInclude Include="j2k\include\j2k\Defines.h" />
-    <ClInclude Include="j2k\include\j2k\Reader.h" />
-    <ClInclude Include="j2k\include\j2k\Writer.h" />
+    <ClInclude Include="j2k\include\j2k\j2k_Reader.h" />
+    <ClInclude Include="j2k\include\j2k\j2k_Writer.h" />
     <ClInclude Include="nitf\include\import\nitf.h" />
     <ClInclude Include="nitf\include\nitf\BandInfo.h" />
     <ClInclude Include="nitf\include\nitf\BandSource.h" />
@@ -210,9 +210,10 @@
     <ClInclude Include="nitf\include\nitf\LabelSegment.h" />
     <ClInclude Include="nitf\include\nitf\LabelSubheader.h" />
     <ClInclude Include="nitf\include\nitf\LookupTable.h" />
+    <ClInclude Include="nitf\include\nitf\NitfReader.h" />
+    <ClInclude Include="nitf\include\nitf\NitfWriter.h" />
     <ClInclude Include="nitf\include\nitf\PluginIdentifier.h" />
     <ClInclude Include="nitf\include\nitf\PluginRegistry.h" />
-    <ClInclude Include="nitf\include\nitf\Reader.h" />
     <ClInclude Include="nitf\include\nitf\Record.h" />
     <ClInclude Include="nitf\include\nitf\RESegment.h" />
     <ClInclude Include="nitf\include\nitf\RESubheader.h" />
@@ -232,7 +233,6 @@
     <ClInclude Include="nitf\include\nitf\TREUtils.h" />
     <ClInclude Include="nitf\include\nitf\Types.h" />
     <ClInclude Include="nitf\include\nitf\WriteHandler.h" />
-    <ClInclude Include="nitf\include\nitf\Writer.h" />
     <ClInclude Include="nitf\include\nitf\WriterOptions.h" />
     <ClInclude Include="nrt\include\import\nrt.h" />
     <ClInclude Include="nrt\include\nrt\DateTime.h" />
@@ -283,13 +283,13 @@
     <ClCompile Include="cgm\source\VertexClose.c" />
     <ClCompile Include="j2k\source\Component.c" />
     <ClCompile Include="j2k\source\Container.c" />
+    <ClCompile Include="j2k\source\j2k_Reader.c" />
+    <ClCompile Include="j2k\source\j2k_Writer.c" />
     <ClCompile Include="j2k\source\JasPerImpl.c" />
     <ClCompile Include="j2k\source\KakaduImpl.cpp" />
     <ClCompile Include="j2k\source\OpenJPEGImpl.c" />
-    <ClCompile Include="j2k\source\Reader.c" />
     <ClCompile Include="j2k\source\SimpleComponentImpl.c" />
     <ClCompile Include="j2k\source\SimpleContainerImpl.c" />
-    <ClCompile Include="j2k\source\Writer.c" />
     <ClCompile Include="jpeg\source\LibjpegDecompress.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
@@ -322,8 +322,9 @@
     <ClCompile Include="nitf\source\LabelSegment.c" />
     <ClCompile Include="nitf\source\LabelSubheader.c" />
     <ClCompile Include="nitf\source\LookupTable.c" />
+    <ClCompile Include="nitf\source\NitfReader.c" />
+    <ClCompile Include="nitf\source\NitfWriter.c" />
     <ClCompile Include="nitf\source\PluginRegistry.c" />
-    <ClCompile Include="nitf\source\Reader.c" />
     <ClCompile Include="nitf\source\Record.c" />
     <ClCompile Include="nitf\source\RESegment.c" />
     <ClCompile Include="nitf\source\RESubheader.c" />
@@ -340,7 +341,6 @@
     <ClCompile Include="nitf\source\TREPrivateData.c" />
     <ClCompile Include="nitf\source\TREUtils.c" />
     <ClCompile Include="nitf\source\WriteHandler.c" />
-    <ClCompile Include="nitf\source\Writer.c" />
     <ClCompile Include="nrt\source\DateTime.c" />
     <ClCompile Include="nrt\source\Debug.c" />
     <ClCompile Include="nrt\source\DirectoryUnix.c" />
