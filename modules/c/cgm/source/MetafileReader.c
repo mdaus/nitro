@@ -544,7 +544,7 @@ NITF_BOOL polyLine(cgm_Metafile* mf, cgm_ParseContext* pc, int classType,
 NITF_BOOL textElement(cgm_Metafile* mf, cgm_ParseContext* pc, int classType,
         int shortCode, char* b, int len, nitf_Error* error)
 {
-    short _1, tX, tY;
+    short tX, tY;
     int sLen;
     cgm_TextElement* te;
     cgm_Element* elem = cgm_TextElement_construct(error);

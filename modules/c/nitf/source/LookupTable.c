@@ -64,7 +64,7 @@ NITFAPI(nitf_LookupTable *) nitf_LookupTable_clone(nitf_LookupTable *
                          "Trying to clone NULL pointer");
         return NULL;
     }
-    if (!(donor->tables * donor->entries))
+    if (!(donor->tables && donor->entries))
     {
         nitf_Error_initf(error,
                          NITF_CTXT,
