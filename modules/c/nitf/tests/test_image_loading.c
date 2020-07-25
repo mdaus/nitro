@@ -301,6 +301,7 @@ int main(int argc, char **argv)
 
     /*  These iterators are for going through the image segments  */
     nitf_ListIterator iter;
+    nitf_ListIterator end;
 
     char* inputFile;
     NITF_BOOL optz = 0;

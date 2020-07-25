@@ -554,7 +554,7 @@ NITF_BOOL textElement(cgm_Metafile* mf, cgm_ParseContext* pc, int classType,
 
     short tX = readShort(b);
     short tY = readShort(&b[2]);
-    short _1 = readShort(&b[4]);
+    (void) readShort(&b[4]);
     int sLen = (int) b[6];
     te->text = cgm_Text_construct(readString(&b[7], sLen), error);
     if (!te->text)
