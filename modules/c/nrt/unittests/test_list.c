@@ -116,7 +116,7 @@ TEST_CASE(testIterate)
 {
     nrt_Uint32 i;
     nrt_Error e;
-    nrt_List *l = nrt_List_construct(&e), *dolly = NULL;
+    nrt_List *l = nrt_List_construct(&e);
     nrt_ListIterator it, end;
 
     TEST_ASSERT(l);
@@ -146,7 +146,7 @@ TEST_CASE(testIterate)
 TEST_CASE(testIterateRemove)
 {
     nrt_Error e;
-    nrt_List *l = nrt_List_construct(&e), *dolly = NULL;
+    nrt_List *l = nrt_List_construct(&e);
     nrt_ListIterator it, end;
 
     TEST_ASSERT(l);

@@ -76,7 +76,6 @@ int main(int argc, char** argv)
     nitf_Error error;
     cgm_Metafile* mf = NULL;
     cgm_MetafileReader* reader = NULL;
-    cgm_MetafileWriter* writer = NULL;
     nitf_IOInterface* io = NULL;
 
     if (argc != 2)

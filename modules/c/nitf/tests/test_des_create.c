@@ -94,7 +94,7 @@ void manuallyWriteImageBands(nitf_ImageSegment * segment,
     int padded;
     nitf_Uint8 **buffer;
     nitf_Uint32 band;
-    nitf_Uint32 *bandList;
+    nitf_Uint32* bandList = NULL;
 
     NITF_TRY_GET_UINT32(segment->subheader->numBitsPerPixel, &nBits,
                         error);
@@ -276,7 +276,7 @@ int main(int argc, char *argv[])
     nitf_IOHandle in;
     nitf_DESegment *des = NULL;
     nitf_FileSecurity *security = NULL;
-    int bad, i;
+    int i;
     nitf_IOHandle out;
     nitf_Writer *writer = NULL;
     nitf_SegmentWriter *desWriter = NULL;
