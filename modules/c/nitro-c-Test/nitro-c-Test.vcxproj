@@ -35,6 +35,7 @@
   <ItemGroup>
     <ClInclude Include="nrt_Test.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="Test.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="nrt_test_list.cpp" />
