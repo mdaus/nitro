@@ -1243,10 +1243,8 @@ TEST_CASE_ARGS(testRead)
     nitf_Record_destruct(&record);
 }
 
-int main(int argc, char **argv)
-{
+TEST_MAIN(
     CHECK_ARGS(testCreate);
     CHECK_ARGS(testRead);
-    return 0;
-}
+    )
 
