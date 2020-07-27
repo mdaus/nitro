@@ -239,13 +239,13 @@ TEST_CASE(testMillis)
     TEST_ASSERT_NULL(date);
 }
 
-int main(int argc, char **argv)
-{
+TEST_MAIN
+(
     CHECK(testNow);
     CHECK(testFromMillis);
     CHECK(testRoundTrip);
     CHECK(testSetIdentity);
     CHECK(testMillis);
     CHECK(testParseDayOfYearTimeStr)
-    return 0;
-}
+)
+

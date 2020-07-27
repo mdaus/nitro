@@ -57,10 +57,9 @@ TEST_CASE(testEightBytes)
     TEST_ASSERT(value == swappedValue);
 }
 
-int main(int argc, char **argv)
-{
+TEST_MAIN(
     CHECK(testFourBytes);
     CHECK(testTwoBytes);
     CHECK(testEightBytes);
-    return 0;
-}
+    )
+
