@@ -230,8 +230,7 @@ TEST_CASE(populateWhileIterating)
     nitf_TRE_destruct(&tre);
 }
 
-int main(int argc, char **argv)
-{
+TEST_MAIN(
     (void) argc;
     (void) argv;
 
@@ -243,5 +242,4 @@ int main(int argc, char **argv)
     CHECK(iterateUnfilled);
     CHECK(populateThenIterate);
     CHECK(populateWhileIterating);
-    return 0;
-}
+    )

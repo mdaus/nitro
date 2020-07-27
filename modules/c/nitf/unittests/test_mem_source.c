@@ -100,8 +100,6 @@ TEST_CASE(testMemorySource)
     TEST_ASSERT_NULL(bs2);
 }
 
-int main(int argc, char **argv)
-{
+TEST_MAIN(
     CHECK(testMemorySource);
-    return 0;
-}
+)
