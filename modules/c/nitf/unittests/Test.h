@@ -48,7 +48,7 @@
 #    define TEST_FUNC __PRETTY_FUNCTION__
 #elif __STDC_VERSION__ < 199901
 #    define TEST_FUNC "unknown function"
-#else /* Should be c99 */
+#else                           /* Should be c99 */
 #    define TEST_FUNC __func__
 #endif
 
@@ -78,6 +78,8 @@
 
 #define TEST_CASE(X) void X(const char* testName)
 #define TEST_CASE_ARGS(X) void X(const char* testName, int argc, char **argv)
+
+#define TEST_MAIN(X) int main(int argc, char** argv) { X; return 0; }
 
 #endif
 
