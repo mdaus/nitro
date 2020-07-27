@@ -171,12 +171,10 @@ TEST_CASE(testIterateRemove)
     TEST_ASSERT_NULL(l);
 }
 
-int main(int argc, char **argv)
-{
+TEST_MAIN(
     CHECK(testCreate);
     CHECK(testPushPop);
     CHECK(testClone);
     CHECK(testIterate);
     CHECK(testIterateRemove);
-    return 0;
-}
+)
