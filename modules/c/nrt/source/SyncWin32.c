@@ -23,7 +23,7 @@
 #include "nrt/Sync.h"
 
 NRT_CXX_GUARD
-#if defined(WIN32)
+#if defined(WIN32) || defined(_WIN32)
 NRTPROT(void) nrt_Mutex_lock(nrt_Mutex * m)
 {
     LPCRITICAL_SECTION lpCriticalSection = (LPCRITICAL_SECTION) (*m);

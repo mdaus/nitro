@@ -32,12 +32,12 @@ insertCreator(nitf_DLL* dso,
               const char* suffix,
               nitf_Error* error);
 
-#ifndef WIN32
+static long __PluginRegistryInitLock = 0;
+#if defined(WIN32) || defined(_WIN32)
 static nitf_Mutex __PluginRegistryLock = NITF_MUTEX_INIT;
 static const char DIR_DELIMITER = '/';
 #else
 static nitf_Mutex __PluginRegistryLock = NULL;
-static long __PluginRegistryInitLock = 0;
 static const char DIR_DELIMITER = '\\';
 #endif
 /*
@@ -46,7 +46,7 @@ static const char DIR_DELIMITER = '\\';
  *
  */
 
-#ifdef WIN32
+#if defined(WIN32) || defined(_WIN32)
 NITFPRIV(nitf_Mutex*) GET_MUTEX()
 {
     if (__PluginRegistryLock == NULL)
@@ -909,9 +909,6 @@ insertCreator(nitf_DLL* dso,
               const char* suffix,
               nitf_Error* error)
 {
-    /*  We are trying to find tre_main  */
-    NITF_DLL_FUNCTION_PTR dsoMain = NULL;
-
     /*  Get the name of the handler  */
     char name[NITF_MAX_PATH];
 
@@ -934,8 +931,9 @@ insertCreator(nitf_DLL* dso,
     printf("Loading function [%s] in dso at [%p]\n", name, dso);
 #endif
 
+    /*  We are trying to find tre_main  */
     /*  Retrieve the main  */
-    dsoMain = nitf_DLL_retrieve(dso, name, error);
+    NITF_DLL_FUNCTION_PTR dsoMain  = nitf_DLL_retrieve(dso, name, error);
 
     if (!dsoMain)
     {

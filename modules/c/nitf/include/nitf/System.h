@@ -23,7 +23,7 @@
 #ifndef __NITF_SYSTEM_H__
 #define __NITF_SYSTEM_H__
 
-#ifdef WIN32
+#if defined(WIN32) || defined(_WIN32)
 #      if defined(NITF_MODULE_EXPORTS)
 #          ifndef NRT_MODULE_EXPORTS
 #              define NRT_MODULE_EXPORTS

@@ -199,7 +199,7 @@ NRTAPI(char) nrt_Utils_cornersTypeAsCoordRep(nrt_CornersType type);
  * Using `__inline` for Windows instead
  */
 NRTPRIV(void)
-#ifdef WIN32
+#if defined(WIN32) || defined(_WIN32)
 __inline
 #else
 inline
