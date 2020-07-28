@@ -27,6 +27,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AIMIDB", "modules\c\nitf\AI
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JITCID", "modules\c\nitf\JITCID.vcxproj", "{D1D7FCD3-6130-4504-9DA0-9D80506BE55E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nitf-plugins", "nitf-plugins", "{27A2685A-E869-42A2-956D-92994F60C536}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -68,6 +70,13 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{730B1E6E-2469-4F9E-B093-D0C6262453C9} = {27A2685A-E869-42A2-956D-92994F60C536}
+		{53F9F908-C678-4DEE-9309-E71C1D03A45F} = {27A2685A-E869-42A2-956D-92994F60C536}
+		{51D7B426-899E-428D-9F69-5DDAC9E403FB} = {27A2685A-E869-42A2-956D-92994F60C536}
+		{12AA0752-4EE3-4E0A-85AF-0E5DEADBF343} = {27A2685A-E869-42A2-956D-92994F60C536}
+		{D1D7FCD3-6130-4504-9DA0-9D80506BE55E} = {27A2685A-E869-42A2-956D-92994F60C536}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2D7AC542-BBB6-4BAC-8BF1-7E76C714BBA4}
