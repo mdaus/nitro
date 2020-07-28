@@ -57,7 +57,7 @@
 #   define NRT_BOOL int
 #endif
 
-#ifdef WIN32
+#if defined(WIN32) || defined(_WIN32)
 /*  Negotiate the meaning of NRTAPI, NRTPROT (for public and protected)  */
 #      if defined(NRT_MODULE_EXPORTS)
 #          define NRTAPI(RT)  NRT_C __declspec(dllexport) RT
@@ -74,8 +74,6 @@
 #      define  NRT_ATOU32(A) strtoul(A, (char **)NULL, 10)
 #      define  NRT_ATOU32_BASE(A,B) strtoul(A, (char **)NULL, B)
 #      define  NRT_ATO64(A) _atoi64(A)
-#      define  NRT_SNPRINTF _snprintf
-#      define  NRT_VSNPRINTF _vsnprintf
 #else
 /*
 *  NRTAPI and NRTPROT don't mean as much on Unix since they
@@ -91,9 +89,10 @@
 #      else
 #          define  NRT_ATO64(A) atoll(A)
 #      endif
-#      define NRT_SNPRINTF snprintf
-#      define NRT_VSNPRINTF vsnprintf
 #endif
+#define NRT_SNPRINTF snprintf
+#define NRT_VSNPRINTF vsnprintf
+
 /*
  *  This section describes a set of macros to help with
  *  C++ compilation.  The 'extern C' set is required to
