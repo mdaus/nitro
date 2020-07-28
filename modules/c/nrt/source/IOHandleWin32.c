@@ -22,7 +22,7 @@
 
 #include "nrt/IOHandle.h"
 
-#ifdef WIN32
+#if defined(WIN32) || defined(_WIN32)
 
 NRTAPI(nrt_IOHandle) nrt_IOHandle_create(const char *fname,
                                          nrt_AccessFlags access,

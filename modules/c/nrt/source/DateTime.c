@@ -20,6 +20,10 @@
  *
  */
 
+#ifdef _MSC_VER
+#pragma warning(disable: 4820) // '...': '...' bytes padding added after data member '...'
+#endif
+
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
