@@ -42,12 +42,7 @@
     <ClCompile Include="nitf_test_create.cpp" />
     <ClCompile Include="nitf_test_create_nitf.cpp" />
     <ClCompile Include="nitf_test_field.cpp" />
-    <ClCompile Include="nitf_test_image_io.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="nitf_test_image_io.cpp" />
     <ClCompile Include="nitf_test_mem_source.cpp" />
     <ClCompile Include="nitf_test_tre_mods.cpp" />
     <ClCompile Include="nitf_test_zero_field.cpp" />
