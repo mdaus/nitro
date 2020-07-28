@@ -277,6 +277,9 @@ NITFPRIV(nitf_PluginRegistry*) implicitConstruct(nitf_Error* error)
     if (!pluginEnvVar)
     {
         /*  Take the default path  */
+#ifndef NITF_DEFAULT_PLUGIN_PATH
+#define NITF_DEFAULT_PLUGIN_PATH "/putenv/" NITF_PLUGIN_PATH "/" // just to compile ...
+#endif
         if (nrt_Directory_exists(NITF_DEFAULT_PLUGIN_PATH))
         {
             strncpy(reg->path, NITF_DEFAULT_PLUGIN_PATH, NITF_MAX_PATH);
