@@ -948,7 +948,7 @@ insertCreator(nitf_DLL* dso,
     }
 #endif
 
-    return nitf_HashTable_insert(hash, ident, dsoMain, error);
+    return nitf_HashTable_insert(hash, ident, (NITF_DATA*)dsoMain, error);
 }
 
 /*
