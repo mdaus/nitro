@@ -20,14 +20,6 @@
  *
  */
 
-/*
-"ACCHZB"
-"ACCPOB"
-"JITCID"
-"ACFTA"
-"AIMIDB"
-*/
-
 #include <import/nitf.h>
 #include "Test.h"
 
