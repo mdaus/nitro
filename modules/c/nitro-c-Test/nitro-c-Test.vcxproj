@@ -64,6 +64,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\nitf\ACCPOB.vcxproj">
+      <Project>{730b1e6e-2469-4f9e-b093-d0c6262453c9}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\nitro-c.vcxproj">
       <Project>{f06550ad-cfc7-40b8-8727-6c82c69a8982}</Project>
     </ProjectReference>
