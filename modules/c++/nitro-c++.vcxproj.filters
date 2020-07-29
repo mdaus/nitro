@@ -168,6 +168,7 @@
     <ClCompile Include="nitf\source\Writer.cpp">
       <Filter>nitf</Filter>
     </ClCompile>
+    <ClCompile Include="pch.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="nitf\include\import\nitf.hpp">
@@ -365,5 +366,6 @@
     <ClInclude Include="nitf\Convert.h">
       <Filter>nitf</Filter>
     </ClInclude>
+    <ClInclude Include="pch.h" />
   </ItemGroup>
 </Project>
