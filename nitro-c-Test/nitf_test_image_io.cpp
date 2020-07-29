@@ -8,4 +8,4 @@
 
 #define TEST_CASE(X) TEST(nitf_test_image_io, X)
 
-#include "../nitf/unittests/test_image_io.c"
+#include "nitf/unittests/test_image_io.c"

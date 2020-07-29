@@ -32,4 +32,4 @@ struct nitf_test_tre_mods : public ::testing::Test {
 };
 
 #define TEST_CASE(X) TEST_F(nitf_test_tre_mods, X)
-#include "../nitf/unittests/test_tre_mods.c"
+#include "nitf/unittests/test_tre_mods.c"
