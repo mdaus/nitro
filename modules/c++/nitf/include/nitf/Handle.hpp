@@ -22,15 +22,19 @@
 
 #ifndef __NITF_HANDLE_HPP__
 #define __NITF_HANDLE_HPP__
+#pragma once
+
+#include <iostream>
 
 /*!
  *  \file Handle.hpp
  *  \brief Contains handle wrapper to manage shared native objects
  */
+#include "Convert.h"
+#include "Semaphore.h"
 
 #include <import/sys.h>
 #include "nitf/System.hpp"
-#include <iostream>
 
 namespace nitf
 {

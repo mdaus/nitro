@@ -23,6 +23,8 @@
 #ifndef __NITF_SYSTEM_HPP__
 #define __NITF_SYSTEM_HPP__
 
+#pragma once
+
 /*!
  *  \file System.hpp
  */
@@ -30,6 +32,9 @@
 #include "nitf/System.h"
 #include "nitf/Field.h"
 #include "nitf/Types.h"
+
+#include "Convert.h"
+#include "Semaphore.h"
 
 namespace nitf
 {
