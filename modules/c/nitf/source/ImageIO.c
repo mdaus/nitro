@@ -6540,7 +6540,6 @@ NITFPRIV(int) nitf_ImageIO_writeMasks(_nitf_ImageIO * nitf,
     nitf_Uint8 buffer[NITF_IMAGE_IO_MASK_HEADER_LEN];
     nitf_Uint16 padCodeLength;  /* Pad code length for header */
     nitf_Uint64 maskOffset;     /* Offset of block or pad mask */
-    nitf_Uint32 maskSizeFile;   /* Block mask size in bytes in the file */
 
     /* Do not write anything if the IC is not a mask type */
 
@@ -6613,7 +6612,7 @@ NITFPRIV(int) nitf_ImageIO_writeMasks(_nitf_ImageIO * nitf,
         nitf_Uint32 *fileMask;   /* Buffer to hold file mask */
         nitf_Uint32 i;
 
-        maskSizeFile = nitf->nBlocksTotal * sizeof(nitf_Uint32);
+        size_t maskSizeFile = nitf->nBlocksTotal * sizeof(nitf_Uint32);
         fileMask = (nitf_Uint32 *) NITF_MALLOC(maskSizeFile);
         if (fileMask == NULL)
         {
@@ -6663,7 +6662,7 @@ NITFPRIV(int) nitf_ImageIO_writeMasks(_nitf_ImageIO * nitf,
         nitf_Uint32 *fileMask;   /* Buffer to hold file mask */
         nitf_Uint32 i;
 
-        maskSizeFile = nitf->nBlocksTotal * sizeof(nitf_Uint32);
+        size_t maskSizeFile = nitf->nBlocksTotal * sizeof(nitf_Uint32);
         fileMask = (nitf_Uint32 *) NITF_MALLOC(maskSizeFile);
         if (fileMask == NULL)
         {
