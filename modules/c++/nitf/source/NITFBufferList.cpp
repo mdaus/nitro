@@ -23,6 +23,9 @@
 #include <except/Exception.h>
 #include <nitf/NITFBufferList.hpp>
 
+#undef min
+#undef max
+
 namespace nitf
 {
 NITFBuffer::NITFBuffer() :

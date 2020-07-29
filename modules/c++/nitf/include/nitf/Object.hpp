@@ -22,6 +22,10 @@
 
 #ifndef __NITF_OBJECT_HPP__
 #define __NITF_OBJECT_HPP__
+#pragma once
+
+#include "Convert.h"
+#include "Semaphore.h"
 
 #include "nitf/Handle.hpp"
 #include "nitf/HandleManager.hpp"
