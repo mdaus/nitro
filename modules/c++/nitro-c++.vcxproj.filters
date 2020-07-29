@@ -362,5 +362,8 @@
     <ClInclude Include="nitf\include\nitf\WriterOptions.hpp">
       <Filter>nitf</Filter>
     </ClInclude>
+    <ClInclude Include="nitf\Convert.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

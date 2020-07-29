@@ -75,6 +75,7 @@
     <ClCompile Include="nitf\source\Writer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="nitf\Convert.h" />
     <ClInclude Include="nitf\include\import\nitf.hpp" />
     <ClInclude Include="nitf\include\nitf\BandInfo.hpp" />
     <ClInclude Include="nitf\include\nitf\BandSource.hpp" />
@@ -139,6 +140,11 @@
     <ClInclude Include="nitf\include\nitf\WriteHandler.hpp" />
     <ClInclude Include="nitf\include\nitf\Writer.hpp" />
     <ClInclude Include="nitf\include\nitf\WriterOptions.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\c\nitro-c.vcxproj">
+      <Project>{f06550ad-cfc7-40b8-8727-6c82c69a8982}</Project>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -241,7 +247,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)nitf\include;$(ProjectDir)..\c\nrt\include;$(ProjectDir)..\c\nitf\include;$(SolutionDir)externals\coda-oss\modules\c++\except\include;$(SolutionDir)externals\coda-oss\modules\c++\sys\include;$(SolutionDir)externals\coda-oss\modules\c++\mt\include;$(SolutionDir)externals\coda-oss\modules\c++\str\include;$(SolutionDir)externals\coda-oss\modules\c++\mem\include;$(SolutionDir)externals\coda-oss\modules\c++\types\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)nitf\include;$(ProjectDir)..\c\nrt\include;$(ProjectDir)..\c\nitf\include;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\import;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -257,7 +263,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)nitf\include;$(ProjectDir)..\c\nrt\include;$(ProjectDir)..\c\nitf\include;$(SolutionDir)externals\coda-oss\modules\c++\except\include;$(SolutionDir)externals\coda-oss\modules\c++\sys\include;$(SolutionDir)externals\coda-oss\modules\c++\mt\include;$(SolutionDir)externals\coda-oss\modules\c++\str\include;$(SolutionDir)externals\coda-oss\modules\c++\mem\include;$(SolutionDir)externals\coda-oss\modules\c++\types\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)nitf\include;$(ProjectDir)..\c\nrt\include;$(ProjectDir)..\c\nitf\include;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\import;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>
