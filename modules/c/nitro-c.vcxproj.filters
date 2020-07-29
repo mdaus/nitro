@@ -333,6 +333,7 @@
     <ClInclude Include="nitf\include\nitf\NitfWriter.h">
       <Filter>nitf</Filter>
     </ClInclude>
+    <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cgm\source\CircleElement.c">
@@ -420,9 +421,6 @@
       <Filter>j2k</Filter>
     </ClCompile>
     <ClCompile Include="j2k\source\JasPerImpl.c">
-      <Filter>j2k</Filter>
-    </ClCompile>
-    <ClCompile Include="j2k\source\KakaduImpl.cpp">
       <Filter>j2k</Filter>
     </ClCompile>
     <ClCompile Include="j2k\source\OpenJPEGImpl.c">
@@ -638,5 +636,6 @@
     <ClCompile Include="nitf\source\NitfWriter.c">
       <Filter>nitf</Filter>
     </ClCompile>
+    <ClCompile Include="pch.c" />
   </ItemGroup>
 </Project>
