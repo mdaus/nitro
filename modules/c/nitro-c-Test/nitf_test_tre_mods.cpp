@@ -11,7 +11,8 @@ struct nitf_test_tre_mods : public ::testing::Test {
         // initialization code here
         const std::string NITF_PLUGIN_PATH = R"(C:\Users\jdsmith\source\repos\nitro\x64\Debug\share\nitf\plugins)";
         const std::string putenv_ = "NITF_PLUGIN_PATH=" + NITF_PLUGIN_PATH;
-        putenv(putenv_.c_str());
+
+        _putenv(putenv_.c_str());
     }
 
     void SetUp() {
