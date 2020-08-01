@@ -55,10 +55,10 @@ nitf::FileSource::FileSource(const std::string& fname,
 }
 
 nitf::RowSource::RowSource(
-    nitf::Uint32 band,
-    nitf::Uint32 numRows,
-    nitf::Uint32 numCols,
-    nitf::Uint32 pixelSize,
+    uint32_t band,
+    uint32_t numRows,
+    uint32_t numCols,
+    uint32_t pixelSize,
     nitf::RowSourceCallback *callback)
     : mBand(band),
       mNumRows(numRows),
@@ -120,7 +120,7 @@ NITF_BOOL nitf::RowSource::nextRow(void* algorithm,
     return NITF_SUCCESS;
 }
 
-nitf::DirectBlockSource::DirectBlockSource(nitf::ImageReader& imageReader, nitf::Uint32 numBands)
+nitf::DirectBlockSource::DirectBlockSource(nitf::ImageReader& imageReader, uint32_t numBands)
 {
     setNative(nitf_DirectBlockSource_construct(this,
                                                &DirectBlockSource::nextBlock, 

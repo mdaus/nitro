@@ -123,15 +123,15 @@ public:
     virtual ~Decompressor() {}
 
     virtual void start(nitf::IOInterface& io,
-                       nitf::Uint64 offset,
-                       nitf::Uint64 fileLength,
+                       uint64_t offset,
+                       uint64_t fileLength,
                        nitf::BlockingInfo& blockingDefinition,
-                       nitf::Uint64* blockMask) = 0;
+                       uint64_t* blockMask) = 0;
 
-    virtual uint8_t* readBlock(nitf::Uint32 blockNumber, 
-                                  nitf::Uint64* blockSize) = 0;
+    virtual uint8_t* readBlock(uint32_t blockNumber, 
+                                  uint64_t* blockSize) = 0;
 
-    virtual void freeBlock(nitf::Uint8* block) = 0;
+    virtual void freeBlock(uint8_t* block) = 0;
 };
 
 }

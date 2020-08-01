@@ -33,14 +33,6 @@
 
 namespace nitf
 {
-typedef uint64_t Uint64;
-typedef uint32_t Uint32;
-typedef uint16_t Uint16;
-typedef uint8_t Uint8;
-typedef int64_t Int64;
-typedef int32_t Int32;
-typedef int16_t Int16;
-typedef int8_t Int8;
 typedef nitf_Off Off;
 typedef nitf_Version Version;
 typedef nitf_ConvType ConvType;

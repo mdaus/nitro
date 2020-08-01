@@ -122,7 +122,7 @@ NITFAPI(nitf_Version) nitf_Record_getVersion(const nitf_Record * record);
 /*!
  *  Utility function gets the number of images out of the record.
  *  Just goes into the FHDR and gets out NUMI and converts the
- *  field to a Uint32
+ *  field to a uint32_t
  *
  *  \param record The record
  *  \param error An error to populate on failure
@@ -148,7 +148,7 @@ NITFAPI(nitf_ImageSegment*) nitf_Record_newImageSegment(nitf_Record * record,
 /*!
  *  Utility function gets the number of graphics out of the record.
  *  Just goes into the FHDR and gets out NUMS and converts the
- *  field to a Uint32
+ *  field to a uint32_t
  *
  *  \param record The record
  *  \param error An error to populate on failure
@@ -176,7 +176,7 @@ nitf_Record_newGraphicSegment(nitf_Record * record,
 /*!
  *  Utility function gets the number of texts out of the record.
  *  Just goes into the FHDR and gets out NUMT and converts the
- *  field to a Uint32
+ *  field to a uint32_t
  *
  *  \param record The record
  *  \param error An error to populate on failure
@@ -204,7 +204,7 @@ NITFAPI(nitf_TextSegment*) nitf_Record_newTextSegment(nitf_Record * record,
 /*!
  *  Utility function gets the number of DES out of the record.
  *  Just goes into the FHDR and gets out NUMDES and converts the
- *  field to a Uint32
+ *  field to a uint32_t
  *
  *  \param record The record
  *  \param error An error to populate on failure
@@ -267,7 +267,7 @@ NITFAPI(NITF_BOOL) nitf_Record_removeGraphicSegment
 /*!
  *  Utility function gets the number of labels out of the record.
  *  Just goes into the FHDR and gets out NUMX and converts the
- *  field to a Uint32
+ *  field to a uint32_t
  *
  *  \param record The record
  *  \param error An error to populate on failure
@@ -333,7 +333,7 @@ NITFAPI(NITF_BOOL) nitf_Record_removeDataExtensionSegment
 /*!
  *  Utility function gets the number of RES out of the record.
  *  Just goes into the FHDR and gets out NUMRES and converts the
- *  field to a Uint32
+ *  field to a uint32_t
  *
  *  \param record The record
  *  \param error An error to populate on failure
