@@ -53,7 +53,7 @@ public:
         //m.lock();
         nitf::TRE* acftb = new nitf::TRE(name, name);
 
-        std::string file = str::toString<long>(sys::getThreadID()) + ".ntf";
+        std::string file = std::to_string(sys::getThreadID()) + ".ntf";
 
         nitf::IOHandle output(file, NITF_ACCESS_WRITEONLY, NITF_CREATE);
         writer.prepare(output, record);
