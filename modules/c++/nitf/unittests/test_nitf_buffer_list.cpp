@@ -112,10 +112,7 @@ TEST_CASE(testGetBlock)
 }
 }
 
-int main(int /*argc*/, char** /*argv*/)
-{
+TEST_MAIN(
     TEST_CHECK(testGetNumBlocks);
     TEST_CHECK(testGetBlock);
-
-    return 0;
-}
+    )
