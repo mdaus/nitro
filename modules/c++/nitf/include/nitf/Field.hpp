@@ -29,11 +29,11 @@
 
 #include <nitf/Field.h>
 #include <nitf/System.hpp>
-#include <nitf/NITFException.hpp>
-#include <nitf/Object.hpp>
 #include <nitf/HashTable.hpp>
 #include <nitf/List.hpp>
 #include <nitf/DateTime.hpp>
+#include <nitf/Object.hpp>
+#include <nitf/NITFException.hpp>
 
 /*!
  *  \file Field.hpp
