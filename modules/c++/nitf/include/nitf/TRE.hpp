@@ -286,7 +286,7 @@ DECLARE_CLASS(TRE)
         }
         else
         {
-            std::string s = truncate(str::toString(value), field->length);
+            std::string s = truncate(std::to_string(value), field->length);
             if (!nitf_TRE_setField(getNative(),
                                    key.c_str(),
                                    (NITF_DATA*)s.c_str(),
