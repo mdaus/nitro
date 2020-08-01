@@ -33,9 +33,6 @@
 #include "nitf/Field.h"
 #include "nitf/Types.h"
 
-#include "Convert.h"
-#include "Semaphore.h"
-
 namespace nitf
 {
 typedef nitf_Uint64 Uint64;
