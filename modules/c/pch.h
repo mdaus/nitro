@@ -16,16 +16,20 @@
 #pragma warning(disable: 4018) // '...': signed / unsigned mismatch
 #pragma warning(disable: 4389) // '...': signed / unsigned mismatch
 
-#   include <assert.h>
-#   include <stdlib.h>
-#   include <string.h>
-#   include <stdio.h>
-#   include <math.h>
-#   include <stdarg.h>
-#   include <sys/types.h>
-#   include <ctype.h>
-#   include <time.h>
+
+#include <assert.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
+#include <math.h>
+#include <stdarg.h>
+#include <ctype.h>
+#include <time.h>
 #include <memory.h>
+
+#include <sys/types.h>
+
+#include <windows.h>
 
 #pragma warning(disable: 4505) // '...': unreferenced local function has been removed
 
