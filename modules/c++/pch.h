@@ -20,6 +20,7 @@
 #include <map>
 #include <utility>
 #include <functional>
+#include <mutex>
 
 #include <sys/File.h>
 
@@ -32,6 +33,7 @@
 #include <import/except.h>
 #include <import/io.h>
 #include <import/types.h>
+#include <import/mt.h>
 
 #include "import/nitf.h"
 
