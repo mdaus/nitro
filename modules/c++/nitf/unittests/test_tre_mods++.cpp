@@ -145,13 +145,12 @@ TEST_CASE(overflowingNumericFields)
 }
 }
 
-int main(int /*argc*/, char** /*argv*/)
-{
+TEST_MAIN(
     TEST_CHECK(setFields);
     TEST_CHECK(setBinaryFields);
     TEST_CHECK(cloneTRE);
     TEST_CHECK(basicIteration);
     TEST_CHECK(populateWhileIterating);
     TEST_CHECK(overflowingNumericFields);
-    return 0;
-}
+    )
+

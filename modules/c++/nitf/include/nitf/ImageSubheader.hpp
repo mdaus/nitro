@@ -24,8 +24,6 @@
 #define __NITF_IMAGESUBHEADER_HPP__
 
 #include "nitf/ImageSubheader.h"
-#include "nitf/Object.hpp"
-#include "nitf/NITFException.hpp"
 #include "nitf/BandInfo.hpp"
 #include "nitf/List.hpp"
 #include "nitf/FileSecurity.hpp"
