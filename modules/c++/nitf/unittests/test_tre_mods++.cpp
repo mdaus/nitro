@@ -20,8 +20,10 @@
  *
  */
 
-#include <import/nitf.hpp>
 #include <iostream>
+
+#include <nitf/TRE.hpp>
+
 #include "TestCase.h"
 
 namespace
