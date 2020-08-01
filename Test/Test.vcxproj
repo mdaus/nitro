@@ -39,6 +39,9 @@
     <ClCompile Include="nitf_test_field.cpp" />
     <ClCompile Include="nitf_test_image_blocker.cpp" />
     <ClCompile Include="nitf_test_image_io.cpp" />
+    <ClCompile Include="nitf_test_image_segment_blank_nm_compression.cpp" />
+    <ClCompile Include="nitf_test_image_segment_computer.cpp" />
+    <ClCompile Include="nitf_test_image_writer.cpp" />
     <ClCompile Include="nitf_test_mem_source.cpp" />
     <ClCompile Include="nitf_test_nitf_buffer_list.cpp" />
     <ClCompile Include="nitf_test_tre_mods.cpp" />
