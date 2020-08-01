@@ -30,9 +30,6 @@
  *  \file Handle.hpp
  *  \brief Contains handle wrapper to manage shared native objects
  */
-#include "Convert.h"
-#include "Semaphore.h"
-
 #include <import/sys.h>
 #include "nitf/System.hpp"
 
