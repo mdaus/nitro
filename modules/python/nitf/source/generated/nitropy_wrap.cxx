@@ -4356,28 +4356,28 @@ extern "C" {
 #endif
 SWIGINTERN PyObject *_wrap_nrt_System_swap16(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  nrt_Uint16 arg1 ;
+  uint16_t arg1 ;
   void *argp1 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  nrt_Uint16 result;
+  uint16_t result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:nrt_System_swap16",&obj0)) SWIG_fail;
   {
     res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_uint16_t,  0  | 0);
     if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nrt_System_swap16" "', argument " "1"" of type '" "nrt_Uint16""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nrt_System_swap16" "', argument " "1"" of type '" "uint16_t""'"); 
     }  
     if (!argp1) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nrt_System_swap16" "', argument " "1"" of type '" "nrt_Uint16""'");
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nrt_System_swap16" "', argument " "1"" of type '" "uint16_t""'");
     } else {
-      nrt_Uint16 * temp = reinterpret_cast< nrt_Uint16 * >(argp1);
+      uint16_t * temp = reinterpret_cast< uint16_t * >(argp1);
       arg1 = *temp;
       if (SWIG_IsNewObj(res1)) delete temp;
     }
   }
   result = nrt_System_swap16(arg1);
-  resultobj = SWIG_NewPointerObj((new nrt_Uint16(static_cast< const nrt_Uint16& >(result))), SWIGTYPE_p_uint16_t, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_NewPointerObj((new uint16_t(static_cast< const uint16_t& >(result))), SWIGTYPE_p_uint16_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -4386,28 +4386,28 @@ fail:
 
 SWIGINTERN PyObject *_wrap_nrt_System_swap32(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  nrt_Uint32 arg1 ;
+  uint32_t arg1 ;
   void *argp1 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  nrt_Uint32 result;
+  uint32_t result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:nrt_System_swap32",&obj0)) SWIG_fail;
   {
     res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_uint32_t,  0  | 0);
     if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nrt_System_swap32" "', argument " "1"" of type '" "nrt_Uint32""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nrt_System_swap32" "', argument " "1"" of type '" "uint32_t""'"); 
     }  
     if (!argp1) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nrt_System_swap32" "', argument " "1"" of type '" "nrt_Uint32""'");
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nrt_System_swap32" "', argument " "1"" of type '" "uint32_t""'");
     } else {
-      nrt_Uint32 * temp = reinterpret_cast< nrt_Uint32 * >(argp1);
+      uint32_t * temp = reinterpret_cast< uint32_t * >(argp1);
       arg1 = *temp;
       if (SWIG_IsNewObj(res1)) delete temp;
     }
   }
   result = nrt_System_swap32(arg1);
-  resultobj = SWIG_NewPointerObj((new nrt_Uint32(static_cast< const nrt_Uint32& >(result))), SWIGTYPE_p_uint32_t, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_NewPointerObj((new uint32_t(static_cast< const uint32_t& >(result))), SWIGTYPE_p_uint32_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -4416,28 +4416,28 @@ fail:
 
 SWIGINTERN PyObject *_wrap_nrt_System_swap64(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  nrt_Uint64 arg1 ;
+  uint64_t arg1 ;
   void *argp1 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  nrt_Uint64 result;
+  uint64_t result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:nrt_System_swap64",&obj0)) SWIG_fail;
   {
     res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_uint64_t,  0  | 0);
     if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nrt_System_swap64" "', argument " "1"" of type '" "nrt_Uint64""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nrt_System_swap64" "', argument " "1"" of type '" "uint64_t""'"); 
     }  
     if (!argp1) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nrt_System_swap64" "', argument " "1"" of type '" "nrt_Uint64""'");
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nrt_System_swap64" "', argument " "1"" of type '" "uint64_t""'");
     } else {
-      nrt_Uint64 * temp = reinterpret_cast< nrt_Uint64 * >(argp1);
+      uint64_t * temp = reinterpret_cast< uint64_t * >(argp1);
       arg1 = *temp;
       if (SWIG_IsNewObj(res1)) delete temp;
     }
   }
   result = nrt_System_swap64(arg1);
-  resultobj = SWIG_NewPointerObj((new nrt_Uint64(static_cast< const nrt_Uint64& >(result))), SWIGTYPE_p_uint64_t, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_NewPointerObj((new uint64_t(static_cast< const uint64_t& >(result))), SWIGTYPE_p_uint64_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -4446,28 +4446,28 @@ fail:
 
 SWIGINTERN PyObject *_wrap_nrt_System_swap64c(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  nrt_Uint64 arg1 ;
+  uint64_t arg1 ;
   void *argp1 ;
   int res1 = 0 ;
   PyObject * obj0 = 0 ;
-  nrt_Uint64 result;
+  uint64_t result;
   
   if (!PyArg_ParseTuple(args,(char *)"O:nrt_System_swap64c",&obj0)) SWIG_fail;
   {
     res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_uint64_t,  0  | 0);
     if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nrt_System_swap64c" "', argument " "1"" of type '" "nrt_Uint64""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "nrt_System_swap64c" "', argument " "1"" of type '" "uint64_t""'"); 
     }  
     if (!argp1) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nrt_System_swap64c" "', argument " "1"" of type '" "nrt_Uint64""'");
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "nrt_System_swap64c" "', argument " "1"" of type '" "uint64_t""'");
     } else {
-      nrt_Uint64 * temp = reinterpret_cast< nrt_Uint64 * >(argp1);
+      uint64_t * temp = reinterpret_cast< uint64_t * >(argp1);
       arg1 = *temp;
       if (SWIG_IsNewObj(res1)) delete temp;
     }
   }
   result = nrt_System_swap64c(arg1);
-  resultobj = SWIG_NewPointerObj((new nrt_Uint64(static_cast< const nrt_Uint64& >(result))), SWIGTYPE_p_uint64_t, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_NewPointerObj((new uint64_t(static_cast< const uint64_t& >(result))), SWIGTYPE_p_uint64_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -33429,10 +33429,10 @@ static swig_type_info _swigt__p_f_p_void_p_q_const__void_size_t_p__NRT_Error__bo
 static swig_type_info _swigt__p_f_p_void_p_void_off_t_p__NRT_Error__bool = {"_p_f_p_void_p_void_off_t_p__NRT_Error__bool", "bool (*)(void *,void *,off_t,_NRT_Error *)|NITF_IDATASOURCE_READ", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_f_p_void_p_void_size_t_p__NRT_Error__bool = {"_p_f_p_void_p_void_size_t_p__NRT_Error__bool", "bool (*)(void *,void *,size_t,_NRT_Error *)|NRT_IO_INTERFACE_READ", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_int = {"_p_int", "int *|nrt_IOHandle *|nitf_IOHandle *|nrt_CreationFlags *|nitf_CreationFlags *|nrt_AccessFlags *|nitf_AccessFlags *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_int16_t = {"_p_int16_t", "nrt_Int16 *|nitf_Int16 *|int16_t *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_int32_t = {"_p_int32_t", "int32_t *|nrt_Int32 *|nitf_Int32 *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_int64_t = {"_p_int64_t", "int64_t *|nrt_Int64 *|nitf_Int64 *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_int8_t = {"_p_int8_t", "nrt_Int8 *|nitf_Int8 *|int8_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_int16_t = {"_p_int16_t", "int16_t *|nitf_Int16 *|int16_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_int32_t = {"_p_int32_t", "int32_t *|int32_t *|nitf_Int32 *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_int64_t = {"_p_int64_t", "int64_t *|int64_t *|nitf_Int64 *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_int8_t = {"_p_int8_t", "int8_t *|nitf_Int8 *|int8_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_nitf_BlockingInfo = {"_p_nitf_BlockingInfo", "nitf_BlockingInfo *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_nitf_CompressionInterface = {"_p_nitf_CompressionInterface", "nitf_CompressionInterface *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_nitf_FieldWarning = {"_p_nitf_FieldWarning", "nitf_FieldWarning *", 0, 0, (void*)0, 0};
@@ -33494,10 +33494,10 @@ static swig_type_info _swigt__p_p_nitf_WriteHandler = {"_p_p_nitf_WriteHandler",
 static swig_type_info _swigt__p_p_nrt_List = {"_p_p_nrt_List", "nrt_List **", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_p_uint8_t = {"_p_p_uint8_t", "uint8_t **|nitf_Uint8 **", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_p_void = {"_p_p_void", "NITF_DLL_FUNCTION_PTR *|NITF_NATIVE_DLL *|void **", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_uint16_t = {"_p_uint16_t", "nrt_Uint16 *|nitf_Uint16 *|uint16_t *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_uint32_t = {"_p_uint32_t", "uint32_t *|nrt_Uint32 *|nitf_Uint32 *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_uint64_t = {"_p_uint64_t", "uint64_t *|nrt_Uint64 *|nitf_Uint64 *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_uint8_t = {"_p_uint8_t", "nrt_Uint8 *|nitf_Uint8 *|uint8_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_uint16_t = {"_p_uint16_t", "uint16_t *|nitf_Uint16 *|uint16_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_uint32_t = {"_p_uint32_t", "uint32_t *|uint32_t *|nitf_Uint32 *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_uint64_t = {"_p_uint64_t", "uint64_t *|uint64_t *|nitf_Uint64 *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_uint8_t = {"_p_uint8_t", "uint8_t *|nitf_Uint8 *|uint8_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_void = {"_p_void", "NRT_DATA *|NITF_DATA *|void *", 0, 0, (void*)0, 0};
 
 static swig_type_info *swig_type_initial[] = {

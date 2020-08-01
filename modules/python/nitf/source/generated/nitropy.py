@@ -110,19 +110,19 @@ NRT_CORNERS_UTM_UPS_N = _nitropy.NRT_CORNERS_UTM_UPS_N
 NRT_CORNERS_GEO = _nitropy.NRT_CORNERS_GEO
 NRT_CORNERS_DECIMAL = _nitropy.NRT_CORNERS_DECIMAL
 
-def nrt_System_swap16(ins: 'nrt_Uint16') -> "nrt_Uint16":
+def nrt_System_swap16(ins: 'uint16_t') -> "uint16_t":
     return _nitropy.nrt_System_swap16(ins)
 nrt_System_swap16 = _nitropy.nrt_System_swap16
 
-def nrt_System_swap32(inl: 'nrt_Uint32') -> "nrt_Uint32":
+def nrt_System_swap32(inl: 'uint32_t') -> "uint32_t":
     return _nitropy.nrt_System_swap32(inl)
 nrt_System_swap32 = _nitropy.nrt_System_swap32
 
-def nrt_System_swap64(inl: 'nrt_Uint64') -> "nrt_Uint64":
+def nrt_System_swap64(inl: 'uint64_t') -> "uint64_t":
     return _nitropy.nrt_System_swap64(inl)
 nrt_System_swap64 = _nitropy.nrt_System_swap64
 
-def nrt_System_swap64c(inl: 'nrt_Uint64') -> "nrt_Uint64":
+def nrt_System_swap64c(inl: 'uint64_t') -> "uint64_t":
     return _nitropy.nrt_System_swap64c(inl)
 nrt_System_swap64c = _nitropy.nrt_System_swap64c
 NITF_VER_20 = _nitropy.NITF_VER_20

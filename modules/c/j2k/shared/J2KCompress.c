@@ -125,7 +125,7 @@ NITFPRIV(nitf_CompressionControl*) implOpen(nitf_ImageSubheader *subheader,
     char irep[NITF_IREP_SZ+1];
     int imageType;
     J2K_BOOL isSigned = 0;
-    nrt_Uint32 idx;
+    uint32_t idx;
 
     /* reset the options */
     memset(&options, 0, sizeof(j2k_WriterOptions));

@@ -112,8 +112,8 @@ NITFPRIV(nitf_Uint8*) implReadBlock(nitf_DecompressionControl *control,
                                     nitf_Error* error)
 {
     ImplControl *implControl = (ImplControl*)control;
-    nrt_Uint8 *buf = NULL;
-    nrt_Uint64 bufSize;
+    uint8_t *buf = NULL;
+    uint64_t bufSize;
     j2k_Container* container = NULL;
 
     if (j2k_Reader_canReadTiles(implControl->reader, error))
