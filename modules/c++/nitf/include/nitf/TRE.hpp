@@ -22,8 +22,20 @@
 
 #ifndef __NITF_TRE_HPP__
 #define __NITF_TRE_HPP__
+#pragma once
 
 #include <string>
+namespace std
+{
+    // is std:: supposed to have to_string() for "const char*"?
+    inline string to_string(const char* s) {
+        return std::string(s);
+    }
+    inline string to_string(const std::string& s) {
+        return s;
+    }
+}
+
 #include "nitf/Field.hpp"
 #include "nitf/Object.hpp"
 #include "nitf/Pair.hpp"
