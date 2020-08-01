@@ -31,7 +31,7 @@ namespace std
     inline string to_string(const char* s) {
         return std::string(s);
     }
-    inline string to_string(const std::string& s) {
+    inline string to_string(const string& s) {
         return s;
     }
 }
