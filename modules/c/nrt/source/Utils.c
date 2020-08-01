@@ -566,7 +566,7 @@ NRTPROT(void) nrt_Utils_decimalLonToGeoCharArray(double decimal, char *buffer8)
     nrt_Utils_geographicLonToCharArray(d, m, s, buffer8);
 }
 
-NRTAPI(void) nrt_Utils_byteSwap(nrt_Uint8 *value, size_t size)
+NRTAPI(void) nrt_Utils_byteSwap(uint8_t *value, size_t size)
 {
     switch(size)
     {

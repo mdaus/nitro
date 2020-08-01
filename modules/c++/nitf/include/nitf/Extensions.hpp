@@ -318,7 +318,7 @@ typedef nitf::ExtensionsIterator Iterator;
         return nitf::ExtensionsIterator(x);
     }
 
-    nitf::Uint64 computeLength(nitf::Version version)
+    uint64_t computeLength(nitf::Version version)
     {
         return nitf_Extensions_computeLength(getNative(), version, &error);
     }

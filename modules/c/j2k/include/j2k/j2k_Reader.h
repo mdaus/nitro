@@ -28,12 +28,12 @@
 J2K_CXX_GUARD
 
 typedef J2K_BOOL        (*J2K_IREADER_CAN_READ_TILES)(J2K_USER_DATA*, nrt_Error*);
-typedef nrt_Uint64      (*J2K_IREADER_READ_TILE)(J2K_USER_DATA*, nrt_Uint32 tileX,
-                                                nrt_Uint32 tileY, nrt_Uint8 **buf,
+typedef uint64_t      (*J2K_IREADER_READ_TILE)(J2K_USER_DATA*, uint32_t tileX,
+                                                uint32_t tileY, uint8_t **buf,
                                                 nrt_Error*);
-typedef nrt_Uint64      (*J2K_IREADER_READ_REGION)(J2K_USER_DATA*, nrt_Uint32 x0,
-                                                  nrt_Uint32 y0, nrt_Uint32 x1,
-                                                  nrt_Uint32 y1, nrt_Uint8 **buf,
+typedef uint64_t      (*J2K_IREADER_READ_REGION)(J2K_USER_DATA*, uint32_t x0,
+                                                  uint32_t y0, uint32_t x1,
+                                                  uint32_t y1, uint8_t **buf,
                                                   nrt_Error*);
 typedef j2k_Container*  (*J2K_IREADER_GET_CONTAINER)(J2K_USER_DATA*, nrt_Error*);
 typedef void            (*J2K_IREADER_DESTRUCT)(J2K_USER_DATA *);
@@ -71,16 +71,16 @@ J2KAPI(J2K_BOOL) j2k_Reader_canReadTiles(j2k_Reader*, nrt_Error*);
 /**
  * Reads an individual tile at the given indices
  */
-J2KAPI(nrt_Uint64) j2k_Reader_readTile(j2k_Reader*, nrt_Uint32 tileX,
-                                          nrt_Uint32 tileY, nrt_Uint8 **buf,
+J2KAPI(uint64_t) j2k_Reader_readTile(j2k_Reader*, uint32_t tileX,
+                                          uint32_t tileY, uint8_t **buf,
                                           nrt_Error*);
 
 /**
  * Reads image data from the desired region
  */
-J2KAPI(nrt_Uint64) j2k_Reader_readRegion(j2k_Reader*, nrt_Uint32 x0,
-                                          nrt_Uint32 y0, nrt_Uint32 x1,
-                                          nrt_Uint32 y1, nrt_Uint8 **buf,
+J2KAPI(uint64_t) j2k_Reader_readRegion(j2k_Reader*, uint32_t x0,
+                                          uint32_t y0, uint32_t x1,
+                                          uint32_t y1, uint8_t **buf,
                                           nrt_Error*);
 
 /**

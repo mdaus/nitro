@@ -204,10 +204,10 @@ __inline
 #else
 inline
 #endif
-nrt_Utils_swap(nrt_Uint8* value, size_t indexOne,
+nrt_Utils_swap(uint8_t* value, size_t indexOne,
         size_t indexTwo)
 {
-    nrt_Uint8 temp;
+    uint8_t temp;
     temp = value[indexOne];
     value[indexOne] = value[indexTwo];
     value[indexTwo] = temp;
@@ -220,7 +220,7 @@ nrt_Utils_swap(nrt_Uint8* value, size_t indexOne,
  *  \param value Pointer to value to be swapped
  *  \param size The size, in bytes, of each buffer element
  */
-NRTAPI(void) nrt_Utils_byteSwap(nrt_Uint8* value, size_t size);
+NRTAPI(void) nrt_Utils_byteSwap(uint8_t* value, size_t size);
 
 /*!
  *  Our own str*() routines to avoid compiler warnings.
