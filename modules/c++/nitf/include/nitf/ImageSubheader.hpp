@@ -22,14 +22,17 @@
 
 #ifndef __NITF_IMAGESUBHEADER_HPP__
 #define __NITF_IMAGESUBHEADER_HPP__
+#pragma once
+
+#include <string>
 
 #include "nitf/ImageSubheader.h"
-#include "nitf/BandInfo.hpp"
-#include "nitf/List.hpp"
-#include "nitf/FileSecurity.hpp"
-#include "nitf/Extensions.hpp"
-#include "nitf/System.hpp"
-#include <string>
+
+#include "BandInfo.hpp"
+#include "List.hpp"
+#include "FileSecurity.hpp"
+#include "Extensions.hpp"
+#include "System.hpp"
 
 /*!
  *  \file ImageSubheader.hpp
