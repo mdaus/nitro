@@ -38,20 +38,20 @@ void writeImage(nitf_ImageSegment * segment,
                 char *imageName,
                 nitf_ImageReader * deserializer,
                 int imageNumber,
-                nitf_Uint32 rowSkipFactor,
-                nitf_Uint32 columnSkipFactor,
+                uint32_t rowSkipFactor,
+                uint32_t columnSkipFactor,
                 NITF_BOOL optz,
                 nitf_Error * error)
 {
 
-    nitf_Uint32 nBits, nBands, xBands, nRows, nColumns;
+    uint32_t nBits, nBands, xBands, nRows, nColumns;
     size_t subimageSize;
     nitf_SubWindow *subimage;
     unsigned int i;
     int padded;
-    nitf_Uint8 **buffer = NULL;
-    nitf_Uint32 band;
-    nitf_Uint32 *bandList = NULL;
+    uint8_t **buffer = NULL;
+    uint32_t band;
+    uint32_t *bandList = NULL;
 
     nitf_DownSampler *pixelSkip;
 
@@ -158,7 +158,7 @@ void writeImage(nitf_ImageSegment * segment,
      *  can set the number of bands to 1, and size your buffer
      *  accordingly to receive band-interleaved by pixel data)
      */
-    buffer = (nitf_Uint8 **) NITF_MALLOC(nBands * sizeof(nitf_Uint8*));
+    buffer = (uint8_t **) NITF_MALLOC(nBands * sizeof(uint8_t*));
 
     /* An iterator for bands */
     band = 0;
@@ -170,7 +170,7 @@ void writeImage(nitf_ImageSegment * segment,
      *  have a band of magnitude and a band of phase.  If you order the
      *  bandList backwards, the phase buffer comes first in the output
      */
-    bandList = (nitf_Uint32 *) NITF_MALLOC(sizeof(nitf_Uint32 *) * nBands);
+    bandList = (uint32_t *) NITF_MALLOC(sizeof(uint32_t *) * nBands);
 
     /* This example reads all rows and cols starting at 0, 0 */
     subimage->startCol = 0;
@@ -205,7 +205,7 @@ void writeImage(nitf_ImageSegment * segment,
     assert(buffer);
     for (i = 0; i < nBands; i++)
     {
-        buffer[i] = (nitf_Uint8 *) NITF_MALLOC(subimageSize);
+        buffer[i] = (uint8_t *) NITF_MALLOC(subimageSize);
         assert(buffer[i]);
     }
     if (!nitf_ImageReader_read
@@ -283,8 +283,8 @@ int main(int argc, char **argv)
     nitf_Error e;
 
     /* Skip factors */
-    nitf_Uint32 rowSkipFactor = 1;
-    nitf_Uint32 columnSkipFactor = 1;
+    uint32_t rowSkipFactor = 1;
+    uint32_t columnSkipFactor = 1;
 
     /*  This is the reader  */
     nitf_Reader *reader;

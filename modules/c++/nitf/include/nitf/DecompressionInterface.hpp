@@ -93,19 +93,19 @@ public:
     //  and call the nitf_DecompressionControl of your choice
     static NITF_BOOL adapterStart(nitf_DecompressionControl* object,
                                   nitf_IOInterface* io,
-                                  nitf_Uint64 offset,
-                                  nitf_Uint64 fileLength,
+                                  uint64_t offset,
+                                  uint64_t fileLength,
                                   nitf_BlockingInfo* blockingDefinition,
-                                  nitf_Uint64* blockMask, 
+                                  uint64_t* blockMask, 
                                   nitf_Error* error);
 
-    static nitf_Uint8* adapterReadBlock(nitf_DecompressionControl* object,
-                                        nitf_Uint32 blockNumber, 
-                                        nitf_Uint64* blockSize, 
+    static uint8_t* adapterReadBlock(nitf_DecompressionControl* object,
+                                        uint32_t blockNumber, 
+                                        uint64_t* blockSize, 
                                         nitf_Error* error);
 
     static NITF_BOOL adapterFreeBlock(nitf_DecompressionControl* object,
-                                      nitf_Uint8* block, 
+                                      uint8_t* block, 
                                       nitf_Error* error);
 
     static void adapterDestroy(nitf_DecompressionControl** object);
@@ -128,7 +128,7 @@ public:
                        nitf::BlockingInfo& blockingDefinition,
                        nitf::Uint64* blockMask) = 0;
 
-    virtual nitf_Uint8* readBlock(nitf::Uint32 blockNumber, 
+    virtual uint8_t* readBlock(nitf::Uint32 blockNumber, 
                                   nitf::Uint64* blockSize) = 0;
 
     virtual void freeBlock(nitf::Uint8* block) = 0;

@@ -19,9 +19,9 @@
 
 extern "C"{
    NITF_BOOL nitf_ImageIO_getMaskInfo(nitf_ImageIO* nitf,
-                                      nitf_Uint32* imageDataOffset, nitf_Uint32* blockRecordLength,
-                                      nitf_Uint32* padRecordLength, nitf_Uint32* padPixelValueLength,
-                                      nitf_Uint8** padValue, nitf_Uint64** blockMask, nitf_Uint64** padMask);
+                                      uint32_t* imageDataOffset, uint32_t* blockRecordLength,
+                                      uint32_t* padRecordLength, uint32_t* padPixelValueLength,
+                                      uint8_t** padValue, uint64_t** blockMask, uint64_t** padMask);
                      
 }
 const nitf::Int64 BLOCK_LENGTH = 256;
@@ -103,7 +103,7 @@ nitf::ImageSubheader setImageSubHeader(
    return imgSubHdr;
 }
 
-nitf::Int64 getNumberBlocksPresent(const nitf_Uint64* mask,
+nitf::Int64 getNumberBlocksPresent(const uint64_t* mask,
                                    const nitf::Int64  numRows,
                                    const nitf::Int64  numCols)
 {
@@ -243,13 +243,13 @@ TEST_CASE(testBlankSegmentsValid)
       output_io.close();
 
       {
-         nitf_Uint32 imageDataOffset=0;        /* Offset to actual image data past masks */
-         nitf_Uint32 blockRecordLength=0;      /* Block mask record length */
-         nitf_Uint32 padRecordLength=0;        /* Pad mask record length */
-         nitf_Uint32 padPixelValueLength=0;    /* Pad pixel value length in bytes */
-         nitf_Uint8  *padValue = NULL;         /* Pad value */
-         nitf_Uint64 *blockMask=NULL;          /* Block mask array */
-         nitf_Uint64 *padMask=NULL;            /* Pad mask array */
+         uint32_t imageDataOffset=0;        /* Offset to actual image data past masks */
+         uint32_t blockRecordLength=0;      /* Block mask record length */
+         uint32_t padRecordLength=0;        /* Pad mask record length */
+         uint32_t padPixelValueLength=0;    /* Pad pixel value length in bytes */
+         uint8_t  *padValue = NULL;         /* Pad value */
+         uint64_t *blockMask=NULL;          /* Block mask array */
+         uint64_t *padMask=NULL;            /* Pad mask array */
          nitf::Int64 imgCtr = 0;
          nitf::IOHandle input_io(tempNitf.pathname(),
                                  NITF_ACCESS_READONLY,

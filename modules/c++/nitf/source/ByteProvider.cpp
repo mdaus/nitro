@@ -252,7 +252,7 @@ void ByteProvider::getFileLayout(nitf::Record& inRecord,
     // This initial write won't set a number of the lengths, so we'll seek
     // around to set those ourselves
     nitf_Off fileLenOff;
-    nitf_Uint32 hdrLen;
+    uint32_t hdrLen;
     record.setComplexityLevelIfUnset();
     writer.writeHeader(fileLenOff, hdrLen);
     const nitf::Off fileHeaderNumBytes = byteStream->getSize();

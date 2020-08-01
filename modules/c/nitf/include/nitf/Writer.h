@@ -199,7 +199,7 @@ NITFAPI(NITF_BOOL) nitf_Writer_write(nitf_Writer * writer, nitf_Error * error);
  */
 NITFPROT(NITF_BOOL) nitf_Writer_writeHeader(nitf_Writer* writer,
                                             nitf_Off* fileLenOff,
-                                            nitf_Uint32* hdrLen,
+                                            uint32_t* hdrLen,
                                             nitf_Error* error);
 
 /*!
@@ -238,7 +238,7 @@ nitf_Writer_writeImageSubheader(nitf_Writer* writer,
  */
 NITFPROT(NITF_BOOL) nitf_Writer_writeDESubheader(nitf_Writer* writer,
                                                  const nitf_DESubheader* subhdr,
-                                                 nitf_Uint32* userSublen,
+                                                 uint32_t* userSublen,
                                                  nitf_Version fver,
                                                  nitf_Error* error);
 
@@ -256,10 +256,10 @@ NITFPROT(NITF_BOOL) nitf_Writer_writeDESubheader(nitf_Writer* writer,
  * \return NITF_SUCCESS on success, NITF_FAILURE otherwise
  */
 NITFPROT(NITF_BOOL) nitf_Writer_writeInt64Field(nitf_Writer* writer,
-                                                nitf_Uint64 field,
-                                                nitf_Uint32 length,
+                                                uint64_t field,
+                                                uint32_t length,
                                                 char fill,
-                                                nitf_Uint32 fillDir,
+                                                uint32_t fillDir,
                                                 nitf_Error* error);
 
 NITF_CXX_ENDGUARD

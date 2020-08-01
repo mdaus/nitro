@@ -121,7 +121,7 @@ CLEVEL checkCCSExtent(nitf_Record* record, nitf_Error* error)
 
 CLEVEL checkFileSize(nitf_Record* record, nitf_Error* error)
 {
-    nitf_Int64 fl;
+    int64_t fl;
     TRY_IT( nitf_Field_get(record->header->fileLength,
                            &fl, NITF_CONV_INT, 8, error ));
     if (fl <= 52428799)

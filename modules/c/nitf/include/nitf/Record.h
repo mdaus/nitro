@@ -129,7 +129,7 @@ NITFAPI(nitf_Version) nitf_Record_getVersion(const nitf_Record * record);
  *  \return We will return a value that can be tested using
  *      NITF_INVALID_NUM_SEGMENTS(rv)
  */
-NITFAPI(nitf_Uint32) nitf_Record_getNumImages(const nitf_Record* record,
+NITFAPI(uint32_t) nitf_Record_getNumImages(const nitf_Record* record,
                                               nitf_Error* error);
 
 /*!
@@ -155,7 +155,7 @@ NITFAPI(nitf_ImageSegment*) nitf_Record_newImageSegment(nitf_Record * record,
  *  \return We will return a value that can be tested using
  *      NITF_INVALID_NUM_SEGMENTS(rv)
  */
-NITFAPI(nitf_Uint32) nitf_Record_getNumGraphics(const nitf_Record* record,
+NITFAPI(uint32_t) nitf_Record_getNumGraphics(const nitf_Record* record,
                                                 nitf_Error* error);
 
 /*!
@@ -183,7 +183,7 @@ nitf_Record_newGraphicSegment(nitf_Record * record,
  *  \return We will return a value that can be tested using
  *      NITF_INVALID_NUM_SEGMENTS(rv)
  */
-NITFAPI(nitf_Uint32) nitf_Record_getNumTexts(const nitf_Record* record,
+NITFAPI(uint32_t) nitf_Record_getNumTexts(const nitf_Record* record,
                                              nitf_Error* error);
 
 /*!
@@ -211,7 +211,7 @@ NITFAPI(nitf_TextSegment*) nitf_Record_newTextSegment(nitf_Record * record,
  *  \return We will return a value that can be tested using
  *      NITF_INVALID_NUM_SEGMENTS(rv)
  */
-NITFAPI(nitf_Uint32) nitf_Record_getNumDataExtensions(const nitf_Record* record,
+NITFAPI(uint32_t) nitf_Record_getNumDataExtensions(const nitf_Record* record,
                                                       nitf_Error* error);
 
 /*!
@@ -242,7 +242,7 @@ nitf_Record_newDataExtensionSegment(nitf_Record * record,
 NITFAPI(NITF_BOOL) nitf_Record_removeImageSegment
 (
     nitf_Record * record,
-    nitf_Uint32 segmentNumber,
+    uint32_t segmentNumber,
     nitf_Error * error
 );
 
@@ -259,7 +259,7 @@ NITFAPI(NITF_BOOL) nitf_Record_removeImageSegment
 NITFAPI(NITF_BOOL) nitf_Record_removeGraphicSegment
 (
     nitf_Record * record,
-    nitf_Uint32 segmentNumber,
+    uint32_t segmentNumber,
     nitf_Error * error
 );
 
@@ -274,7 +274,7 @@ NITFAPI(NITF_BOOL) nitf_Record_removeGraphicSegment
  *  \return We will return a value that can be tested using
  *      NITF_INVALID_NUM_SEGMENTS(rv)
  */
-NITFAPI(nitf_Uint32) nitf_Record_getNumLabels(const nitf_Record* record,
+NITFAPI(uint32_t) nitf_Record_getNumLabels(const nitf_Record* record,
                                               nitf_Error* error);
 
 
@@ -291,7 +291,7 @@ NITFAPI(nitf_Uint32) nitf_Record_getNumLabels(const nitf_Record* record,
 NITFAPI(NITF_BOOL) nitf_Record_removeLabelSegment
 (
     nitf_Record * record,
-    nitf_Uint32 segmentNumber,
+    uint32_t segmentNumber,
     nitf_Error * error
 );
 
@@ -308,7 +308,7 @@ NITFAPI(NITF_BOOL) nitf_Record_removeLabelSegment
 NITFAPI(NITF_BOOL) nitf_Record_removeTextSegment
 (
     nitf_Record * record,
-    nitf_Uint32 segmentNumber,
+    uint32_t segmentNumber,
     nitf_Error * error
 );
 
@@ -325,7 +325,7 @@ NITFAPI(NITF_BOOL) nitf_Record_removeTextSegment
 NITFAPI(NITF_BOOL) nitf_Record_removeDataExtensionSegment
 (
     nitf_Record * record,
-    nitf_Uint32 segmentNumber,
+    uint32_t segmentNumber,
     nitf_Error * error
 );
 
@@ -340,7 +340,7 @@ NITFAPI(NITF_BOOL) nitf_Record_removeDataExtensionSegment
  *  \return We will return a value that can be tested using
  *      NITF_INVALID_NUM_SEGMENTS(rv)
  */
-NITFAPI(nitf_Uint32) nitf_Record_getNumReservedExtensions(const nitf_Record* record,
+NITFAPI(uint32_t) nitf_Record_getNumReservedExtensions(const nitf_Record* record,
                                                           nitf_Error* error);
 
 /*!
@@ -356,7 +356,7 @@ NITFAPI(nitf_Uint32) nitf_Record_getNumReservedExtensions(const nitf_Record* rec
 NITFAPI(NITF_BOOL) nitf_Record_removeReservedExtensionSegment
 (
     nitf_Record * record,
-    nitf_Uint32 segmentNumber,
+    uint32_t segmentNumber,
     nitf_Error * error
 );
 
@@ -372,8 +372,8 @@ NITFAPI(NITF_BOOL) nitf_Record_removeReservedExtensionSegment
 NITFAPI(NITF_BOOL) nitf_Record_moveImageSegment
 (
     nitf_Record * record,
-    nitf_Uint32 oldIndex,
-    nitf_Uint32 newIndex,
+    uint32_t oldIndex,
+    uint32_t newIndex,
     nitf_Error * error
 );
 
@@ -389,8 +389,8 @@ NITFAPI(NITF_BOOL) nitf_Record_moveImageSegment
 NITFAPI(NITF_BOOL) nitf_Record_moveGraphicSegment
 (
     nitf_Record * record,
-    nitf_Uint32 oldIndex,
-    nitf_Uint32 newIndex,
+    uint32_t oldIndex,
+    uint32_t newIndex,
     nitf_Error * error
 );
 
@@ -406,8 +406,8 @@ NITFAPI(NITF_BOOL) nitf_Record_moveGraphicSegment
 NITFAPI(NITF_BOOL) nitf_Record_moveLabelSegment
 (
     nitf_Record * record,
-    nitf_Uint32 oldIndex,
-    nitf_Uint32 newIndex,
+    uint32_t oldIndex,
+    uint32_t newIndex,
     nitf_Error * error
 );
 
@@ -423,8 +423,8 @@ NITFAPI(NITF_BOOL) nitf_Record_moveLabelSegment
 NITFAPI(NITF_BOOL) nitf_Record_moveTextSegment
 (
     nitf_Record * record,
-    nitf_Uint32 oldIndex,
-    nitf_Uint32 newIndex,
+    uint32_t oldIndex,
+    uint32_t newIndex,
     nitf_Error * error
 );
 
@@ -440,8 +440,8 @@ NITFAPI(NITF_BOOL) nitf_Record_moveTextSegment
 NITFAPI(NITF_BOOL) nitf_Record_moveDataExtensionSegment
 (
     nitf_Record * record,
-    nitf_Uint32 oldIndex,
-    nitf_Uint32 newIndex,
+    uint32_t oldIndex,
+    uint32_t newIndex,
     nitf_Error * error
 );
 
@@ -457,8 +457,8 @@ NITFAPI(NITF_BOOL) nitf_Record_moveDataExtensionSegment
 NITFAPI(NITF_BOOL) nitf_Record_moveReservedExtensionSegment
 (
     nitf_Record * record,
-    nitf_Uint32 oldIndex,
-    nitf_Uint32 newIndex,
+    uint32_t oldIndex,
+    uint32_t newIndex,
     nitf_Error * error
 );
 

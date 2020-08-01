@@ -87,14 +87,6 @@
 /* TYPES                                                                      */
 /******************************************************************************/
 #include "nrt/Types.h"
-typedef uint8_t                   nitf_Uint8;
-typedef uint16_t                  nitf_Uint16;
-typedef uint32_t                  nitf_Uint32;
-typedef uint64_t                  nitf_Uint64;
-typedef int8_t                    nitf_Int8;
-typedef int16_t                   nitf_Int16;
-typedef int32_t                   nitf_Int32;
-typedef int64_t                   nitf_Int64;
 typedef nrt_IOHandle                nitf_IOHandle;
 typedef NRT_NATIVE_DLL              NITF_NATIVE_DLL;
 typedef NRT_DLL_FUNCTION_PTR        NITF_DLL_FUNCTION_PTR;

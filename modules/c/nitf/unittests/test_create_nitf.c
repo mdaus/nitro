@@ -1148,7 +1148,7 @@ NITF_BOOL writeNITF(nitf_Record *record, const char* filename, nitf_Error *error
     nitf_Writer *writer = NULL;
     nitf_ImageWriter *imageWriter = NULL;
     nitf_ImageSource *imageSource;
-    nitf_Uint32 i;
+    uint32_t i;
 
     /* create the IOHandle */
     out = nitf_IOHandle_create(filename, NITF_ACCESS_WRITEONLY,

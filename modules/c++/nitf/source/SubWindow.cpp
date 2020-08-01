@@ -106,7 +106,7 @@ nitf::Uint32 SubWindow::getBandList(int i)
 
 void SubWindow::setBandList(nitf::Uint32 * value)
 {
-    getNativeOrThrow()->bandList = (nitf_Uint32*)value;
+    getNativeOrThrow()->bandList = (uint32_t*)value;
 }
 
 nitf::Uint32 SubWindow::getNumBands() const

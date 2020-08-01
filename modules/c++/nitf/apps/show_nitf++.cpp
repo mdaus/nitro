@@ -42,7 +42,7 @@ void printTRE(nitf::TRE tre)
 
 
     // This is so you know how long the TRE is
-    nitf_Uint32 treLength = tre.getCurrentSize();
+    uint32_t treLength = tre.getCurrentSize();
 
     /*
      *  This is the name for the description that was selected to field

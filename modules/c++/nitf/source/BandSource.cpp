@@ -75,7 +75,7 @@ nitf::RowSource::RowSource(
 }
 
 NITF_BOOL nitf::RowSource::nextRow(void* algorithm,
-                                   nitf_Uint32 band,
+                                   uint32_t band,
                                    NITF_DATA* buffer,
                                    nitf_Error* error)
 {
@@ -132,8 +132,8 @@ nitf::DirectBlockSource::DirectBlockSource(nitf::ImageReader& imageReader, nitf:
 NITF_BOOL nitf::DirectBlockSource::nextBlock(void* callback,
                                              void* buf,
                                              const void* block,
-                                             nitf_Uint32 blockNumber,
-                                             nitf_Uint64 blockSize,
+                                             uint32_t blockNumber,
+                                             uint64_t blockSize,
                                              nitf_Error * error)
 {
     nitf::DirectBlockSource* const cb =

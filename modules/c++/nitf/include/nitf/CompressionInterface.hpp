@@ -99,7 +99,7 @@ public:
 
     static NITF_BOOL adapterWriteBlock(nitf_CompressionControl* object,
                                        nitf_IOInterface* io,
-                                       const nitf_Uint8* data,
+                                       const uint8_t* data,
                                        NITF_BOOL pad,
                                        NITF_BOOL noData,
                                        nitf_Error* error);

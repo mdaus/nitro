@@ -27,8 +27,8 @@ void writeImage(nitf::ImageSegment &segment,
                 nitf::Reader &reader,
                 const int imageNumber,
                 const char *imageName,
-                nitf_Uint32 rowSkipFactor,
-                nitf_Uint32 columnSkipFactor, bool optz)
+                uint32_t rowSkipFactor,
+                uint32_t columnSkipFactor, bool optz)
 {
     size_t subWindowSize;
     nitf::SubWindow subWindow;
@@ -162,8 +162,8 @@ void writeImage(nitf::ImageSegment &segment,
 int main(int argc, char **argv)
 {
     /* Skip factors */
-    nitf_Uint32 rowSkipFactor = 1;
-    nitf_Uint32 columnSkipFactor = 1;
+    uint32_t rowSkipFactor = 1;
+    uint32_t columnSkipFactor = 1;
 
     try
     {
