@@ -23,8 +23,8 @@
 #include <import/nrt.h>
 #include <import/j2k.h>
 
-NRT_BOOL writeFile(j2k_Container *container, nrt_Uint32 tileX,
-                   nrt_Uint32 tileY, nrt_Uint8 *buf, nrt_Uint32 bufSize,
+NRT_BOOL writeFile(j2k_Container *container, uint32_t tileX,
+                   uint32_t tileY, uint8_t *buf, uint32_t bufSize,
                    nrt_Error *error)
 {
     NRT_BOOL rc = NRT_SUCCESS;
@@ -68,10 +68,10 @@ int main(int argc, char **argv)
     j2k_Container *container = NULL;
     int argIt = 0;
     char *fname = NULL;
-    nrt_Uint32 tileX = 0;
-    nrt_Uint32 tileY = 0;
-    nrt_Uint32 bufSize;
-    nrt_Uint8 *buf = NULL;
+    uint32_t tileX = 0;
+    uint32_t tileY = 0;
+    uint32_t bufSize;
+    uint8_t *buf = NULL;
 
     for (argIt = 1; argIt < argc; ++argIt)
     {
