@@ -78,8 +78,14 @@
     <ProjectReference Include="..\modules\c\nitf\AIMIDB.vcxproj">
       <Project>{12aa0752-4ee3-4e0a-85af-0e5deadbf343}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\modules\c\nitf\CSCRNA.vcxproj">
+      <Project>{023de06d-3967-4406-b1b8-032118bb2552}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\modules\c\nitf\JITCID.vcxproj">
       <Project>{d1d7fcd3-6130-4504-9da0-9d80506be55e}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\modules\c\nitf\RPFHDR.vcxproj">
+      <Project>{cf5b4f02-364d-4117-9fb9-6c9c7938e412}</Project>
     </ProjectReference>
     <ProjectReference Include="..\modules\c\nitro-c.vcxproj">
       <Project>{f06550ad-cfc7-40b8-8727-6c82c69a8982}</Project>
