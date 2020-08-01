@@ -27,7 +27,6 @@
 #undef min
 #undef max
 
-#include <import/str.h>
 #include <import/sys.h>
 #include <import/mem.h>
 #include <import/except.h>
