@@ -6,6 +6,7 @@
 #include <stdarg.h>
 #include <ctype.h>
 #include <time.h>
+#include <stdint.h>
 
 #include <string>
 #include <numeric>

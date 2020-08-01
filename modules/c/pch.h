@@ -26,6 +26,7 @@
 #include <ctype.h>
 #include <time.h>
 #include <memory.h>
+#include <stdint.h>
 
 #include <sys/types.h>
 
