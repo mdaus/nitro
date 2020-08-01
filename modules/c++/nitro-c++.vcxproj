@@ -71,7 +71,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="nitf\Convert.h" />
     <ClInclude Include="nitf\include\import\nitf.hpp" />
     <ClInclude Include="nitf\include\nitf\BandInfo.hpp" />
     <ClInclude Include="nitf\include\nitf\BandSource.hpp" />

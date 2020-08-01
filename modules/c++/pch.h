@@ -35,8 +35,6 @@
 
 #include "import/nitf.h"
 
-#include "nitf/Convert.h"
-#include "nitf/Semaphore.h"
 #include "nitf/ImageIO.h"
 #include "nitf/System.h"
 #include "nitf/Field.h"
