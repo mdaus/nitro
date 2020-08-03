@@ -41,9 +41,8 @@ namespace nitf
  *  \class Handle
  *  \brief  This class is the base definition of a Handle
  */
-class Handle
+struct Handle
 {
-public:
     Handle() : refCount(0) {}
     virtual ~Handle() {}
 
@@ -53,19 +52,17 @@ public:
     //! Increment the ref count
     int incRef()
     {
-        mutex.lock();
+        std::lock_guard<std::mutex> lock(mutex);
         refCount++;
-        mutex.unlock();
         return refCount;
     }
 
     //! Decrement the ref count
     int decRef()
     {
-        mutex.lock();
+        std::lock_guard<std::mutex> lock(mutex);
         if (refCount > 0)
             refCount--;
-        mutex.unlock();
         return refCount;
     }
 
