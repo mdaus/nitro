@@ -292,9 +292,7 @@ TEST_CASE(testBlankSegmentsValid)
    }
 }
 
-int main(int argc, char* argv[])
-{
+TEST_MAIN(
    TEST_CHECK(testBlankSegmentsValid);
+)
 
-   return 0;
-}

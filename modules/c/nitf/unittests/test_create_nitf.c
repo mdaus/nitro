@@ -1057,7 +1057,6 @@ NITF_BOOL addImageSegment(nitf_Record *record, nitf_Error *error)
     nitf_ImageSubheader *header = NULL;
     nitf_BandInfo **bands = NULL;
 
-    double corners[4][2];
     int i;
 
     segment = nitf_Record_newImageSegment(record, error);
@@ -1244,10 +1243,8 @@ TEST_CASE_ARGS(testRead)
     nitf_Record_destruct(&record);
 }
 
-int main(int argc, char **argv)
-{
+TEST_MAIN(
     CHECK_ARGS(testCreate);
     CHECK_ARGS(testRead);
-    return 0;
-}
+    )
 
