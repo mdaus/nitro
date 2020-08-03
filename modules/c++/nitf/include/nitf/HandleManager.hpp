@@ -22,6 +22,7 @@
 
 #ifndef __NITF_HANDLE_MANAGER_HPP__
 #define __NITF_HANDLE_MANAGER_HPP__
+#pragma once
 
 #include <string>
 #include <map>
@@ -55,15 +56,13 @@ public:
     BoundHandle<T, DestructFunctor_T>* acquireHandle(T* object)
     {
         if (!object) return NULL;
+        BoundHandle<T, DestructFunctor_T>* handle;
         mt::CriticalSection<sys::Mutex> obtainLock(&mMutex);
         if (mHandleMap.find(object) == mHandleMap.end())
-        {
-            BoundHandle<T, DestructFunctor_T>* handle =
-                new BoundHandle<T, DestructFunctor_T>(object);
-            mHandleMap[object] = handle;
+        {                    
+            mHandleMap[object] = new BoundHandle<T, DestructFunctor_T>(object);
         }
-        BoundHandle<T, DestructFunctor_T>* handle =
-            (BoundHandle<T, DestructFunctor_T>*)mHandleMap[object];
+        handle = (BoundHandle<T, DestructFunctor_T>*)mHandleMap[object];
         obtainLock.manualUnlock();
 
         handle->incRef();
