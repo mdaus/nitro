@@ -27,8 +27,6 @@
 #include <stddef.h>
 #include <vector>
 
-#include <sys/Conf.h>
-
 #include "cstddef.h"
 
 namespace nitf
