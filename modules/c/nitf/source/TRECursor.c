@@ -166,7 +166,7 @@ NITFPRIV(nitf_Pair *) nitf_TRECursor_getTREPair(nitf_TRE * tre,
     /* the pair to return */
     nitf_Pair *pair = NULL;
 
-    strncpy(tag_str, descTag, sizeof(tag_str));
+    strncpy(tag_str, descTag, sizeof(tag_str)-1);
 
     /* deal with braces */
     if (strchr(descTag, '['))

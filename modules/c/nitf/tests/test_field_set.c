@@ -43,7 +43,6 @@ int main(int argc, char *argv[])
     char *valueStrBefore;           /* Value buffer */
     /* Value buffer */
     static char valueStrAfter[STR_LEN + 2];
-    uint32_t valueStrLen;        /* Value buffer */
     static nitf_Error errorObj;     /* Error object for messages */
     nitf_Error *error;              /* Pointer to the error object */
 

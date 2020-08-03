@@ -2761,7 +2761,9 @@ directly by the user.
 
 /*!< nitf_ImageIO object */
 /*!< FILE to use for print */
+#ifdef NITF_DEBUG
 NITFPRIV(void) nitf_ImageIO_print(nitf_ImageIO * nitf, FILE * file);
+#endif
 
 /*!
   \brief nitf_ImageIOControl_print Do a formatted print of a
@@ -2782,8 +2784,10 @@ directly by the user.
 
 /*!< nitf_ImageIO control object */
 /*!< FILE to use for print */
+#ifdef NITF_DEBUG
 NITFPRIV(void) nitf_ImageIOControl_print(_nitf_ImageIOControl * cntl, FILE * file, int full     /*!< Full print if TRUE */
                                         );
+#endif
 
 /*!
   \brief nitf_ImageIOBlock_print - Do a formatted print of
@@ -2801,9 +2805,10 @@ directly by the user.
 \return None
 
 */
-
+#ifdef NITF_DEBUG
 NITFPRIV(void) nitf_ImageIOBlock_print
 (_nitf_ImageIOBlock * blockIO, FILE * file, int longIndent);
+#endif
 
 /*!
   \brief nitf_ImageIO_getMaskInfo - Get block/pad mask information
@@ -9638,9 +9643,9 @@ void nitf_ImageIO_12PixelComDestroy(nitf_CompressionControl ** object)
 
 /*========================= nitf_ImageIO_print ===============================*/
 
+#ifdef NITF_DEBUG
 NITFPRIV(void) nitf_ImageIO_print(nitf_ImageIO * nitf, FILE * file)
 {
-#ifdef NITF_DEBUG
     /* Correct type for pointer */
     _nitf_ImageIO *nitfp = (_nitf_ImageIO *) nitf;
     int i;
@@ -9702,19 +9707,17 @@ NITFPRIV(void) nitf_ImageIO_print(nitf_ImageIO * nitf, FILE * file)
             nitfp->oneBand);
 
     fflush(file);
-#else
-    /* Silence compiler warnings about unused variables */
-    (void)nitf;
-    (void)file;
-#endif
-    return;
+    ///* Silence compiler warnings about unused variables */
+    //(void)nitf;
+    //(void)file;
 }
+#endif
 
 
+#ifdef NITF_DEBUG
 NITFPRIV(void) nitf_ImageIOControl_print(_nitf_ImageIOControl * cntl,
                                          FILE * file, int full)
 {
-#ifdef NITF_DEBUG
     uint32_t i;
 
     if (file == NULL)
@@ -9759,19 +9762,17 @@ NITFPRIV(void) nitf_ImageIOControl_print(_nitf_ImageIOControl * cntl,
             cntl->ioCount, cntl->ioCountDown);
 
     fflush(file);
-#else
-    /* Silence compiler warnings about unused variables */
-    (void)cntl;
-    (void)file;
-    (void)full;
-#endif
-    return;
+    ///* Silence compiler warnings about unused variables */
+    //(void)cntl;
+    //(void)file;
+    //(void)full;
 }
+#endif
 
+#ifdef NITF_BLOCK_DEBUG
 NITFPRIV(void) nitf_ImageIOBlock_print(_nitf_ImageIOBlock * blockIO,
                                        FILE * file, int longIndent)
 {
-#ifdef NITF_BLOCK_DEBUG
     char *sp;
 
     if (file == NULL)
@@ -9830,14 +9831,13 @@ NITFPRIV(void) nitf_ImageIOBlock_print(_nitf_ImageIOBlock * blockIO,
             blockIO->currentRow);
 
     fflush(file);
-#else
-    /* Silence compiler warnings about unused variables */
-    (void)blockIO;
-    (void)file;
-    (void)longIndent;
-#endif
-    return;
+    ///* Silence compiler warnings about unused variables */
+    //(void)blockIO;
+    //(void)file;
+    //(void)longIndent;
 }
+#endif
+
 
 NITFAPI(NITF_BOOL) nitf_ImageIO_getMaskInfo(nitf_ImageIO *nitf,
                                             uint32_t *imageDataOffset,
