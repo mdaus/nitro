@@ -22,6 +22,7 @@
 
 #include <except/Exception.h>
 #include <nitf/NITFBufferList.hpp>
+#include <sys/Conf.h>
 
 namespace nitf
 {

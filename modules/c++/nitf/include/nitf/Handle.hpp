@@ -22,15 +22,17 @@
 
 #ifndef __NITF_HANDLE_HPP__
 #define __NITF_HANDLE_HPP__
+#pragma once
 
 /*!
  *  \file Handle.hpp
  *  \brief Contains handle wrapper to manage shared native objects
  */
 
-#include <import/sys.h>
-#include "nitf/System.hpp"
+#include <mutex>
 #include <iostream>
+
+#include "nitf/System.hpp"
 
 namespace nitf
 {
@@ -68,7 +70,7 @@ public:
     }
 
 protected:
-    static sys::Mutex mutex;
+    static std::mutex mutex;
     int refCount;
 };
 
