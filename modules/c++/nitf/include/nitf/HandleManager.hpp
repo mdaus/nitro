@@ -72,18 +72,24 @@ public:
     template <typename T>
     void releaseHandle(T* object)
     {
+        Handle* handle = nullptr;
         mt::CriticalSection<sys::Mutex> obtainLock(&mMutex);
         std::map<CAddress, Handle*>::iterator it = mHandleMap.find(object);
         if (it != mHandleMap.end())
         {
-            Handle* handle = (Handle*)it->second;
+            handle = (Handle*)it->second;
             if (handle->decRef() <= 0)
             {
                 mHandleMap.erase(it);
                 obtainLock.manualUnlock();
-                delete handle;
+            }
+            else
+            {
+                handle = nullptr; // don't actually "delete"
             }
         }
+
+        delete handle;
     }
 };
 
