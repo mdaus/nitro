@@ -22,18 +22,18 @@
 
 #ifndef __NITF_FIELD_HPP__
 #define __NITF_FIELD_HPP__
+#pragma once
 
 #include <string>
 #include <limits>
 
-#include <import/str.h>
 #include <nitf/Field.h>
 #include <nitf/System.hpp>
-#include <nitf/NITFException.hpp>
-#include <nitf/Object.hpp>
 #include <nitf/HashTable.hpp>
 #include <nitf/List.hpp>
 #include <nitf/DateTime.hpp>
+#include <nitf/Object.hpp>
+#include <nitf/NITFException.hpp>
 
 /*!
  *  \file Field.hpp

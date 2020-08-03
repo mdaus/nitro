@@ -22,19 +22,18 @@
 
 #ifndef __NITF_RECORD_HPP__
 #define __NITF_RECORD_HPP__
+#pragma once
+
+#include <string>
 
 #include "nitf/Record.h"
-#include "nitf/System.hpp"
-#include "nitf/List.hpp"
-#include "nitf/FileHeader.hpp"
-#include "nitf/ImageSegment.hpp"
-#include "nitf/GraphicSegment.hpp"
-#include "nitf/LabelSegment.hpp"
-#include "nitf/TextSegment.hpp"
-#include "nitf/DESegment.hpp"
-#include "nitf/RESegment.hpp"
-#include "nitf/Object.hpp"
-#include <string>
+
+#include "List.hpp"
+#include "FileHeader.hpp"
+#include "ImageSegment.hpp"
+#include "GraphicSegment.hpp"
+#include "TextSegment.hpp"
+#include "DESegment.hpp"
 
 /*!
  *  \file Record.hpp
