@@ -26,6 +26,7 @@
 
 #include <string>
 #include <map>
+#include <mutex>
 #include <import/sys.h>
 #include <import/mt.h>
 #include "nitf/Handle.hpp"
@@ -38,7 +39,7 @@ private:
 typedef void* CAddress;
 
     std::map<CAddress, Handle*> mHandleMap; //! map for storing the handles
-    sys::Mutex mMutex; //! mutex used for locking the map
+    std::mutex mMutex; //! mutex used for locking the map
 
 public:
     HandleManager() {}
@@ -48,7 +49,7 @@ public:
     bool hasHandle(T* object)
     {
         if (!object) return false;
-        mt::CriticalSection<sys::Mutex> obtainLock(&mMutex);
+        std::lock_guard<std::mutex> obtainLock(mMutex);
         return mHandleMap.find(object) != mHandleMap.end();
     }
 
@@ -57,13 +58,14 @@ public:
     {
         if (!object) return NULL;
         BoundHandle<T, DestructFunctor_T>* handle;
-        mt::CriticalSection<sys::Mutex> obtainLock(&mMutex);
-        if (mHandleMap.find(object) == mHandleMap.end())
-        {                    
-            mHandleMap[object] = new BoundHandle<T, DestructFunctor_T>(object);
+        {
+            std::lock_guard<std::mutex> obtainLock(mMutex);
+            if (mHandleMap.find(object) == mHandleMap.end())
+            {
+                mHandleMap[object] = new BoundHandle<T, DestructFunctor_T>(object);
+            }
+            handle = (BoundHandle<T, DestructFunctor_T>*)mHandleMap[object];
         }
-        handle = (BoundHandle<T, DestructFunctor_T>*)mHandleMap[object];
-        obtainLock.manualUnlock();
 
         handle->incRef();
         return handle;
@@ -73,19 +75,20 @@ public:
     void releaseHandle(T* object)
     {
         Handle* handle = nullptr;
-        mt::CriticalSection<sys::Mutex> obtainLock(&mMutex);
-        std::map<CAddress, Handle*>::iterator it = mHandleMap.find(object);
-        if (it != mHandleMap.end())
         {
-            handle = (Handle*)it->second;
-            if (handle->decRef() <= 0)
+            std::lock_guard<std::mutex> obtainLock(mMutex);
+            std::map<CAddress, Handle*>::iterator it = mHandleMap.find(object);
+            if (it != mHandleMap.end())
             {
-                mHandleMap.erase(it);
-                obtainLock.manualUnlock();
-            }
-            else
-            {
-                handle = nullptr; // don't actually "delete"
+                handle = (Handle*)it->second;
+                if (handle->decRef() <= 0)
+                {
+                    mHandleMap.erase(it);
+                }
+                else
+                {
+                    handle = nullptr; // don't actually "delete"
+                }
             }
         }
 
