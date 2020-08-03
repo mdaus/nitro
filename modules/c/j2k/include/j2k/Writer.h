@@ -27,9 +27,9 @@
 
 J2K_CXX_GUARD
 
-typedef J2K_BOOL        (*J2K_IWRITER_SET_TILE)(J2K_USER_DATA*, nrt_Uint32,
-                                                nrt_Uint32, const nrt_Uint8 *,
-                                                nrt_Uint32, nrt_Error*);
+typedef J2K_BOOL        (*J2K_IWRITER_SET_TILE)(J2K_USER_DATA*, uint32_t,
+                                                uint32_t, const uint8_t *,
+                                                uint32_t, nrt_Error*);
 typedef J2K_BOOL        (*J2K_IWRITER_WRITE)(J2K_USER_DATA*, nrt_IOInterface*,
                                              nrt_Error*);
 typedef j2k_Container*  (*J2K_IWRITER_GET_CONTAINER)(J2K_USER_DATA*, nrt_Error*);
@@ -47,7 +47,7 @@ typedef struct _j2k_WriterOptions
 {
     /* TODO add more options as we see fit */
     double compressionRatio;
-    nrt_Uint32 numResolutions;
+    uint32_t numResolutions;
 } j2k_WriterOptions;
 
 typedef struct _j2k_Writer
@@ -70,9 +70,9 @@ J2KAPI(j2k_Writer*) j2k_Writer_construct(j2k_Container*, j2k_WriterOptions*,
  * It is assumed that the passed-in buffer will be available for deletion
  * immediately after the call returns.
  */
-J2KAPI(J2K_BOOL) j2k_Writer_setTile(j2k_Writer*, nrt_Uint32 tileX,
-                                    nrt_Uint32 tileY, const nrt_Uint8 *buf,
-                                    nrt_Uint32 bufSize, nrt_Error*);
+J2KAPI(J2K_BOOL) j2k_Writer_setTile(j2k_Writer*, uint32_t tileX,
+                                    uint32_t tileY, const uint8_t *buf,
+                                    uint32_t bufSize, nrt_Error*);
 
 /**
  * Writes to the IOInterface
