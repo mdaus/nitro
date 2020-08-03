@@ -5666,7 +5666,6 @@ nitf_ImageIOControl_construct(_nitf_ImageIO * nitf,
                               nitf_Error * error)
 {
     _nitf_ImageIOControl *cntl; /* The result */
-    uint32_t bandIdx;
 
     cntl =
         (_nitf_ImageIOControl *) NITF_MALLOC(sizeof(_nitf_ImageIOControl));
@@ -6201,7 +6200,6 @@ NITFPRIV(int) nitf_ImageIO_mkMasks(nitf_ImageIO * img,
     size_t bytesPerBlock;       /* Total bytes in one block */
     uint32_t headerOffset;   /* File offset of masks due to mask header */
     uint32_t padOffset;      /* File offset of pad mask due to block mask */
-    uint32_t i;
 
     nitf = (_nitf_ImageIO *) img;
 
@@ -6249,7 +6247,7 @@ NITFPRIV(int) nitf_ImageIO_mkMasks(nitf_ImageIO * img,
         maskOffset = 0;
 
         maskp = nitf->blockMask;
-        for (i = 0; i < nBlocksTotal + 1; i++)
+        for (uint32_t i = 0; i < nBlocksTotal + 1; i++)
         {
             *(maskp++) = maskOffset;
             maskOffset += bytesPerBlock;
@@ -6264,7 +6262,6 @@ NITFPRIV(int) nitf_ImageIO_mkMasks(nitf_ImageIO * img,
          * byte-swapping
          */
         uint32_t *fileMask;   /* Buffer to hold file mask */
-        uint32_t i;
 
         fileMask = (uint32_t *) NITF_MALLOC(maskSizeFile);
         if (fileMask == NULL)
@@ -6291,7 +6288,7 @@ NITFPRIV(int) nitf_ImageIO_mkMasks(nitf_ImageIO * img,
         if (!nitf_ImageIO_bigEndian())
             nitf_ImageIO_swapOnly_4((uint8_t *) fileMask, nBlocksTotal, 0);
 
-        for (i = 0;i < nBlocksTotal;i++)
+        for (uint32_t i = 0;i < nBlocksTotal;i++)
             nitf->blockMask[i] = fileMask[i];
 
         nitf->blockMask[nBlocksTotal] =
@@ -6321,7 +6318,7 @@ NITFPRIV(int) nitf_ImageIO_mkMasks(nitf_ImageIO * img,
 
     if ((nitf->maskHeader.padRecordLength == 0) || !reading)
     {                           /* No mask */
-        for (i = 0;i < nBlocksTotal;i++)
+        for (uint32_t i = 0;i < nBlocksTotal;i++)
             nitf->padMask[i] = NITF_IMAGE_IO_NO_BLOCK;
     }
     else
@@ -6332,7 +6329,6 @@ NITFPRIV(int) nitf_ImageIO_mkMasks(nitf_ImageIO * img,
          * byte-swapping
          */
         uint32_t *fileMask;   /* Buffer to hold file mask */
-        uint32_t i;
 
         fileMask = (uint32_t *) NITF_MALLOC(maskSizeFile);
         if (fileMask == NULL)
@@ -6357,7 +6353,7 @@ NITFPRIV(int) nitf_ImageIO_mkMasks(nitf_ImageIO * img,
         if (nitf_ImageIO_bigEndian())
             nitf_ImageIO_swapOnly_4((uint8_t *) fileMask, nBlocksTotal, 0);
 
-        for (i = 0; i < nBlocksTotal;i++)
+        for (uint32_t i = 0; i < nBlocksTotal;i++)
             nitf->padMask[i] = fileMask[i];
 
         NITF_FREE(fileMask);
@@ -6544,7 +6540,6 @@ NITFPRIV(int) nitf_ImageIO_writeMasks(_nitf_ImageIO * nitf,
     uint8_t buffer[NITF_IMAGE_IO_MASK_HEADER_LEN];
     uint16_t padCodeLength;  /* Pad code length for header */
     uint64_t maskOffset;     /* Offset of block or pad mask */
-    uint32_t maskSizeFile;   /* Block mask size in bytes in the file */
 
     /* Do not write anything if the IC is not a mask type */
 
@@ -6617,7 +6612,7 @@ NITFPRIV(int) nitf_ImageIO_writeMasks(_nitf_ImageIO * nitf,
         uint32_t *fileMask;   /* Buffer to hold file mask */
         uint32_t i;
 
-        maskSizeFile = nitf->nBlocksTotal * sizeof(uint32_t);
+        size_t maskSizeFile = nitf->nBlocksTotal * sizeof(uint32_t);
         fileMask = (uint32_t *) NITF_MALLOC(maskSizeFile);
         if (fileMask == NULL)
         {
@@ -6667,7 +6662,7 @@ NITFPRIV(int) nitf_ImageIO_writeMasks(_nitf_ImageIO * nitf,
         uint32_t *fileMask;   /* Buffer to hold file mask */
         uint32_t i;
 
-        maskSizeFile = nitf->nBlocksTotal * sizeof(uint32_t);
+        size_t maskSizeFile = nitf->nBlocksTotal * sizeof(uint32_t);
         fileMask = (uint32_t *) NITF_MALLOC(maskSizeFile);
         if (fileMask == NULL)
         {

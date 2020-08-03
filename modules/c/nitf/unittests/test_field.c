@@ -98,8 +98,6 @@ TEST_CASE( testField)
     TEST_ASSERT_NULL(realField);
 }
 
-int main(int argc, char **argv)
-{
+TEST_MAIN(
     CHECK(testField);
-    return 0;
-}
+)

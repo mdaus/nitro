@@ -116,7 +116,7 @@ TEST_CASE(testIterate)
 {
     uint32_t i;
     nrt_Error e;
-    nrt_List *l = nrt_List_construct(&e), *dolly = NULL;
+    nrt_List *l = nrt_List_construct(&e);
     nrt_ListIterator it, end;
 
     TEST_ASSERT(l);
@@ -146,7 +146,7 @@ TEST_CASE(testIterate)
 TEST_CASE(testIterateRemove)
 {
     nrt_Error e;
-    nrt_List *l = nrt_List_construct(&e), *dolly = NULL;
+    nrt_List *l = nrt_List_construct(&e);
     nrt_ListIterator it, end;
 
     TEST_ASSERT(l);
@@ -171,12 +171,10 @@ TEST_CASE(testIterateRemove)
     TEST_ASSERT_NULL(l);
 }
 
-int main(int argc, char **argv)
-{
+TEST_MAIN(
     CHECK(testCreate);
     CHECK(testPushPop);
     CHECK(testClone);
     CHECK(testIterate);
     CHECK(testIterateRemove);
-    return 0;
-}
+)

@@ -93,7 +93,6 @@ int main(int argc, char **argv)
 {
     nitf_Record *record = NULL;
     nitf_Reader *reader = NULL;
-    cgm_Metafile *metafile = NULL;
     nitf_Error error;
     nitf_IOHandle io;
     
