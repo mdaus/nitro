@@ -20,5 +20,7 @@
  *
  */
 
+#include <mutex>
+
 #include "nitf/Handle.hpp"
-sys::Mutex nitf::Handle::mutex;
+std::mutex nitf::Handle::mutex;
