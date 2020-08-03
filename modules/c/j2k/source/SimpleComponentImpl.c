@@ -117,7 +117,6 @@ Component_destruct(J2K_USER_DATA * data)
 {
     if (data)
     {
-        ComponentImpl *impl = (ComponentImpl*) data;
         J2K_FREE(data);
     }
 }

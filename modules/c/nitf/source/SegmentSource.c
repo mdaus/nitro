@@ -389,9 +389,10 @@ NITFAPI(nitf_SegmentSource *) nitf_SegmentFileSource_construct
                         NITF_ERR_MEMORY);
         return NULL;
     }
-    if (!(impl->io = nitf_IOHandleAdapter_construct(handle,
-                                                    NRT_ACCESS_READONLY,
-                                                    error)))
+    impl->io = nitf_IOHandleAdapter_construct(handle,
+        NRT_ACCESS_READONLY,
+        error);
+    if (!impl->io)
         return NULL;
 
     impl->byteSkip = byteSkip >= 0 ? byteSkip : 0;

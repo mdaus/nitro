@@ -64,7 +64,6 @@ int main(int argc, char **argv)
 {
     int rc = 0;
     nrt_Error error;
-    nrt_IOHandle handle;
     j2k_Reader *reader = NULL;
     j2k_Container *container = NULL;
     int argIt = 0;

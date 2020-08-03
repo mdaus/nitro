@@ -801,7 +801,7 @@ NITFPRIV(NITF_BOOL) fromStringToInt(nitf_Field * field,
                                     nitf_Error * error)
 {
     char buffer[256];
-    if (field->length > 256)
+    if (field->length >= 256)
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER,
                          "Field length too long for string conversion [%d]",
@@ -854,7 +854,7 @@ NITFPRIV(NITF_BOOL) fromStringToUint(nitf_Field * field,
                                      nitf_Error * error)
 {
     char buffer[256];
-    if (field->length > 256)
+    if (field->length >= 256)
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER,
                          "Field length too long for string conversion [%d]",
