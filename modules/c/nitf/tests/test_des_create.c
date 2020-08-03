@@ -277,6 +277,7 @@ int main(int argc, char *argv[])
     nitf_DESegment *des = NULL;
     nitf_FileSecurity *security = NULL;
     int i;
+    nitf_IOHandle out;
     nitf_Writer *writer = NULL;
     nitf_SegmentWriter *desWriter = NULL;
     nitf_SegmentSource *desData = NULL;
@@ -403,7 +404,7 @@ int main(int argc, char *argv[])
     nitf_Field_setString(des->subheader->NITF_DESCLAS, "U", &error);
 
 
-    nitf_IOHandle out = nitf_IOHandle_create(argv[2], NITF_ACCESS_WRITEONLY, NITF_CREATE, &error);
+    out = nitf_IOHandle_create(argv[2], NITF_ACCESS_WRITEONLY, NITF_CREATE, &error);
 
     writer = nitf_Writer_construct(&error);
     if (!writer)
