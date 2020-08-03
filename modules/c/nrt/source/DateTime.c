@@ -249,7 +249,7 @@ NRTAPI(NRT_BOOL) nrt_DateTime_setDayOfYear(nrt_DateTime * dateTime,
                                            int dayOfYear,
                                            nrt_Error * error)
 {
-    int month, dayOfMonth;
+    int month=0, dayOfMonth=0;
     if (nrt_DateTime_setMonthInfoFromDayOfYear(dateTime->year,
                                                dayOfYear,
                                                &month,
@@ -953,7 +953,7 @@ NRTPRIV(char *) _NRT_strptime(const char *buf, const char *fmt, struct tm *tm,
      * if either was provided */
     if (isYearSet && isDayOfYearSet)
     {
-        int month, dayOfMonth;
+        int month=0, dayOfMonth=0;
         if (!nrt_DateTime_setMonthInfoFromDayOfYear(tm->tm_year + 1900,
                                                     tm->tm_yday + 1,
                                                     &month,
