@@ -81,7 +81,7 @@ size_t NITFBufferList::getNumBytesInBlock(
 
 const void* NITFBufferList::getBlock(size_t blockSize,
                                      size_t blockIdx,
-                                     std::vector<sys::byte>& scratch,
+                                     std::vector<std::byte>& scratch,
                                      size_t& numBytes) const
 {
     const size_t startByte = blockIdx * blockSize;
@@ -98,8 +98,8 @@ const void* NITFBufferList::getBlock(size_t blockSize,
             const size_t numBytesLeftInBuffer =
                     buffer.mNumBytes - numBytesToSkip;
 
-            const sys::byte* const startPtr =
-                    static_cast<const sys::byte*>(buffer.mData) +
+            const std::byte* const startPtr =
+                    static_cast<const std::byte*>(buffer.mData) +
                     numBytesToSkip;
             if (numBytesLeftInBuffer >= numBytes)
             {
