@@ -22,20 +22,8 @@
 
 #ifndef __NITF_TRE_HPP__
 #define __NITF_TRE_HPP__
-#pragma once
 
 #include <string>
-namespace std
-{
-    // is std:: supposed to have to_string() for "const char*"?
-    inline string to_string(const char* s) {
-        return std::string(s);
-    }
-    inline string to_string(const std::string& s) {
-        return s;
-    }
-}
-
 #include "nitf/Field.hpp"
 #include "nitf/Object.hpp"
 #include "nitf/Pair.hpp"
@@ -298,7 +286,7 @@ DECLARE_CLASS(TRE)
         }
         else
         {
-            std::string s = truncate(std::to_string(value), field->length);
+            std::string s = truncate(str::toString(value), field->length);
             if (!nitf_TRE_setField(getNative(),
                                    key.c_str(),
                                    (NITF_DATA*)s.c_str(),
