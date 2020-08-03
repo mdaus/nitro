@@ -265,8 +265,8 @@ void ImageBlocker::block(const void* input,
 {
     const size_t inStride = numCols * numBytesPerPixel;
     const size_t outNumValidBytes = numValidColsInBlock * numBytesPerPixel;
-    const std::byte* inputPtr = static_cast<const std::byte*>(input);
-    std::byte* outputPtr = static_cast<std::byte*>(output);
+    const sys::byte* inputPtr = static_cast<const sys::byte*>(input);
+    sys::byte* outputPtr = static_cast<sys::byte*>(output);
 
     if (numValidColsInBlock == numColsPerBlock)
     {
@@ -306,10 +306,10 @@ void ImageBlocker::block(const void* input,
 }
 
 void ImageBlocker::blockAcrossRow(size_t seg,
-                                  const std::byte*& input,
+                                  const sys::byte*& input,
                                   size_t numValidRowsInBlock,
                                   size_t numBytesPerPixel,
-                                  std::byte*& output) const
+                                  sys::byte*& output) const
 {
     const size_t outStride =
             mNumRowsPerBlock[seg] * mNumColsPerBlock * numBytesPerPixel;
@@ -358,8 +358,8 @@ void ImageBlocker::block(const void* input,
     findSegmentRange(startRow, numRows, firstSegIdx, startBlockWithinFirstSeg,
                      lastSegIdx, lastBlockWithinLastSeg);
 
-    const std::byte* inputPtr = static_cast<const std::byte*>(input);
-    std::byte* outputPtr = static_cast<std::byte*>(output);
+    const sys::byte* inputPtr = static_cast<const sys::byte*>(input);
+    sys::byte* outputPtr = static_cast<sys::byte*>(output);
 
     for (size_t seg = firstSegIdx; seg <= lastSegIdx; ++seg)
     {

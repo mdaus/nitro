@@ -1122,7 +1122,7 @@ void writeNITF(nitf::Record& record, const std::string& filename)
     for (size_t ii = 0; ii < buffers.mBuffers.size(); ++ii)
     {
         outputStream.write(
-                static_cast<const std::byte*>(buffers.mBuffers[ii].mData),
+                static_cast<const sys::byte*>(buffers.mBuffers[ii].mData),
                 buffers.mBuffers[ii].mNumBytes);
     }
 }
