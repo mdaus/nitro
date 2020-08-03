@@ -101,7 +101,9 @@ TEST_CASE(testGetBlock)
         // Bytes should all match
         for (size_t ii = 0; ii < buffer.size(); ++ii)
         {
-            TEST_ASSERT_EQ(extracted[ii], buffer[ii]);
+            const auto extracted_ii = static_cast<uint8_t>(extracted[ii]);
+            const auto buffer_ii = static_cast<uint8_t>(buffer[ii]);
+            TEST_ASSERT_EQ(extracted_ii, buffer_ii);
         }
 
         TEST_EXCEPTION(bufferList.getBlock(blockSize, numBlocks, scratch,
