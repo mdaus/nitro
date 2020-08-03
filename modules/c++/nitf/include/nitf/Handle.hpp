@@ -43,11 +43,11 @@ namespace nitf
  */
 struct Handle
 {
-    Handle() : refCount(0) {}
+    Handle() = default;
     virtual ~Handle() {}
 
     //! Get the ref count
-    int getRef() { return refCount; }
+    int getRef() const { return refCount; }
 
     //! Increment the ref count
     int incRef()
@@ -61,14 +61,15 @@ struct Handle
     int decRef()
     {
         std::lock_guard<std::mutex> lock(mutex);
-        if (refCount > 0)
-            refCount--;
+        refCount--;
+        if (refCount < 0)
+            refCount = 0;
         return refCount;
     }
 
 protected:
     static std::mutex mutex;
-    int refCount;
+    int refCount = 0;
 };
 
 
