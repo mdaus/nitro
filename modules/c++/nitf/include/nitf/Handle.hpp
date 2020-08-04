@@ -29,7 +29,7 @@
  *  \brief Contains handle wrapper to manage shared native objects
  */
 
-#include <mutex>
+#include <atomic>
 #include <iostream>
 
 #include "nitf/System.hpp"
@@ -41,36 +41,43 @@ namespace nitf
  *  \class Handle
  *  \brief  This class is the base definition of a Handle
  */
-struct Handle
-{
-    Handle() = default;
-    virtual ~Handle() {}
-
-    //! Get the ref count
-    int getRef() const { return refCount; }
-
-    //! Increment the ref count
-    int incRef()
+    struct Handle
     {
-        std::lock_guard<std::mutex> lock(mutex);
-        refCount++;
-        return refCount;
-    }
+        Handle() = default;
+        virtual ~Handle() {}
 
-    //! Decrement the ref count
-    int decRef()
-    {
-        std::lock_guard<std::mutex> lock(mutex);
-        refCount--;
-        if (refCount < 0)
-            refCount = 0;
-        return refCount;
-    }
+        //! Get the ref count
+        int getRef() const { return refCount; }
 
-protected:
-    static std::mutex mutex;
-    int refCount = 0;
-};
+        //! Increment the ref count
+        int incRef()
+        {
+            int retval = refCount.fetch_add(1);
+            retval++;
+            if (retval <= 0)
+            {
+                retval = 1;
+                refCount.store(retval);
+            }
+            return retval;
+        }
+
+        //! Decrement the ref count
+        int decRef()
+        {
+            int retval = refCount.fetch_sub(1);
+            retval--;
+            if (retval <= 0)
+            {
+                retval = 0;
+                refCount.store(retval);
+            }
+            return retval;
+        }
+
+    protected:
+        std::atomic<int> refCount{ 0 };
+    };
 
 
 /*!
