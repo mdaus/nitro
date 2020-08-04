@@ -27,7 +27,6 @@
 #include <string>
 #include <map>
 #include <mutex>
-#include <import/sys.h>
 #include <import/mt.h>
 #include "nitf/Handle.hpp"
 
