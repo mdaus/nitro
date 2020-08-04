@@ -29,7 +29,7 @@
  *  \brief Contains handle wrapper to manage shared native objects
  */
 
-#include <atomic>
+#include <mutex>
 #include <iostream>
 
 #include "nitf/System.hpp"
@@ -52,6 +52,7 @@ struct Handle
     //! Increment the ref count
     int incRef()
     {
+        std::lock_guard<std::mutex> lock(mutex);
         refCount++;
         return refCount;
     }
@@ -59,17 +60,16 @@ struct Handle
     //! Decrement the ref count
     int decRef()
     {
+        std::lock_guard<std::mutex> lock(mutex);
         refCount--;
-        //if (refCount < 0)
-        //    refCount = 0;
-        // https://en.cppreference.com/w/cpp/atomic/atomic/compare_exchange
-        int negative_one = -1;
-        refCount.compare_exchange_strong(negative_one, 0);
+        if (refCount < 0)
+            refCount = 0;
         return refCount;
     }
 
 protected:
-    std::atomic<int> refCount{ 0 };
+    static std::mutex mutex;
+    int refCount = 0;
 };
 
 
