@@ -29,7 +29,7 @@
  *  \brief Contains handle wrapper to manage shared native objects
  */
 
-#include <atomic>
+#include <future>
 #include <iostream>
 
 #include "nitf/System.hpp"
@@ -52,31 +52,24 @@ namespace nitf
         //! Increment the ref count
         int incRef()
         {
-            int retval = refCount.fetch_add(1);
-            retval++;
-            if (retval <= 0)
-            {
-                retval = 1;
-                refCount.store(retval);
-            }
-            return retval;
+            std::lock_guard<std::mutex> lock(mutex);
+            if (refCount < 0) refCount = 0;
+            refCount++;
+            return refCount;
         }
 
         //! Decrement the ref count
         int decRef()
         {
-            int retval = refCount.fetch_sub(1);
-            retval--;
-            if (retval <= 0)
-            {
-                retval = 0;
-                refCount.store(retval);
-            }
-            return retval;
+            std::lock_guard<std::mutex> lock(mutex);
+            refCount--;
+            if (refCount < 0) refCount = 0;
+            return refCount;
         }
 
     protected:
-        std::atomic<int> refCount{ 0 };
+        std::mutex mutex;
+        int refCount{ 0 };
     };
 
 
