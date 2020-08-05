@@ -103,7 +103,7 @@ int main(int argc, char *argv[])
                    NITF_CONV_UINT, NITF_INT64_SZ, error);
     fprintf(stdout,
             "Set of FL via nitf_Field_setUint64 original %llu readback %llu\n",
-            valueU64Before, valueU64After);
+            (long long unsigned int)valueU64Before, (long long unsigned int)valueU64After);
 
     valueStrBefore = "TestStr";
     if (nitf_Field_setString(subhdr->NITF_IID2, valueStrBefore, error))
