@@ -1084,7 +1084,7 @@ NITFPROT(void) nitf_Field_print(nitf_Field * field)
     {
         case NITF_BINARY:
             /* avoid printing binary */
-            printf("<binary data, length %llu>", (unsigned long long)field->length);
+            printf("<binary data, length %llu>", (long long unsigned int) field->length);
             break;
 
         case NITF_BCS_N:
