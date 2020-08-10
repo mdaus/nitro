@@ -44,7 +44,6 @@
     <ClCompile Include="nitf_test_image_writer.cpp" />
     <ClCompile Include="nitf_test_mem_source.cpp" />
     <ClCompile Include="nitf_test_nitf_buffer_list.cpp" />
-    <ClCompile Include="nitf_test_tre_mods++.cpp" />
     <ClCompile Include="nitf_test_tre_mods.cpp" />
     <ClCompile Include="nitf_test_zero_field.cpp" />
     <ClCompile Include="nrt_test_buffer_adapter.cpp" />
