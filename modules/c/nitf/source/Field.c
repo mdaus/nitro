@@ -20,6 +20,8 @@
  *
  */
 
+#include <inttypes.h>
+
 #include "nitf/Field.h"
 
 /*  Spaces are added to the right  */
@@ -439,7 +441,6 @@ NITFAPI(NITF_BOOL) nitf_Field_setReal(nitf_Field * field,
                                       double value, nitf_Error *error)
 {
     uint32_t precision;     /* Format precision */
-    uint32_t bufferLen;     /* Length of buffer */
     char *buffer;              /* Holds intermediate and final results */
     char fmt[64];              /* Format used */
 
@@ -458,7 +459,7 @@ NITFAPI(NITF_BOOL) nitf_Field_setReal(nitf_Field * field,
     /* Allocate buffer used to build value */
 
     /* The 64 covers the puncuation and exponent and is overkill */
-    bufferLen = field->length * 2 + 64;
+    size_t bufferLen = field->length * 2 + 64;  /* Length of buffer */
     buffer = (char* )NITF_MALLOC(bufferLen + 1);
     if (buffer == NULL)
     {
@@ -1083,9 +1084,12 @@ NITFPROT(void) nitf_Field_print(nitf_Field * field)
     switch (field->type)
     {
         case NITF_BINARY:
+        {
             /* avoid printing binary */
-            printf("<binary data, length %llu>", (long long unsigned int) field->length);
+            uint64_t length = (uint64_t) field->length;
+            printf("<binary data, length %llu>", length);
             break;
+        }
 
         case NITF_BCS_N:
         case NITF_BCS_A:
