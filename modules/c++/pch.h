@@ -48,8 +48,10 @@
 #include "nitf/TRE.hpp"
 #include "nitf/Record.hpp"
 
+#pragma comment(lib, "math-c++")
 #pragma comment(lib, "str-c++")
 #pragma comment(lib, "mt-c++")
+#pragma comment(lib, "io-c++")
 #pragma comment(lib, "except-c++")
 #pragma comment(lib, "sys-c++")
 
