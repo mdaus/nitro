@@ -1,5 +1,36 @@
 #pragma once
 
+#pragma warning(disable: 4668) // '...' is not defined as a preprocessor macro, replacing with '...' for '...'
+#pragma warning(disable: 4820) // '...': '...' bytes padding added after data member '...'
+#pragma warning(disable: 4710) // '...': function not inlined
+#pragma warning(disable: 4255) // '...': no function prototype given : converting '...' to '...'
+
+#pragma warning(disable: 5045) // Compiler will insert Spectre mitigation for memory load if / Qspectre switch specified
+
+#pragma warning(disable: 4625) // '...': copy constructor was implicitly defined as deleted
+#pragma warning(disable: 4626) // '...': assignment operator was implicitly defined as deleted
+#pragma warning(disable: 5026) // '...': move constructor was implicitly defined as deleted
+#pragma warning(disable: 5027) //	'...': move assignment operator was implicitly defined as deleted
+
+// TODO: get rid of these someday?
+#pragma warning(disable: 4774) // '...' : format string expected in argument 3 is not a string literal
+#pragma warning(disable: 4100) // '...': unreferenced formal parameter
+#pragma warning(disable: 4296) // '...': expression is always false
+#pragma warning(disable: 4267) // '...': conversion from '...' to '...', possible loss of data
+#pragma warning(disable: 4244) // 	'...': conversion from '...' to '...', possible loss of data
+#pragma warning(disable: 4242) // '...': conversion from '...' to '...', possible loss of data
+#pragma warning(disable: 4018) // '...': signed / unsigned mismatch
+#pragma warning(disable: 4389) // '...': signed / unsigned mismatch
+#pragma warning(disable: 4365) // '...': conversion from '...' to '...', signed / unsigned mismatch
+#pragma warning(disable: 5219) // implicit conversion from '...' to '...', possible loss of data
+#pragma warning(disable: 5039) //	'...': pointer or reference to potentially throwing function passed to 'extern "C"' function under - EHc.Undefined behavior may occur if this function throws an exception.
+#pragma warning(disable: 4355) // '...': used in base member initializer list
+#pragma warning(disable: 4514) //	'...': unreferenced inline function has been removed
+
+
+#pragma warning(push)
+#pragma warning(disable: 5220) // '...': a non - static data member with a volatile qualified type no longer implies
+#pragma warning(disable: 5204) // 'Concurrency::details::_DefaultPPLTaskScheduler': class has virtual functions, but its trivial destructor is not virtual; instances of objects derived from this class may not be destructed correctly
 #include <assert.h>
 #include <stdlib.h>
 #include <math.h>
@@ -21,12 +52,15 @@
 #include <utility>
 #include <functional>
 #include <mutex>
+#include <atomic>
+#include <future>
 
 #include <sys/File.h>
 
 #include <windows.h>
 #undef min
 #undef max
+#pragma warning(pop)
 
 #include <import/sys.h>
 #include <import/mem.h>
