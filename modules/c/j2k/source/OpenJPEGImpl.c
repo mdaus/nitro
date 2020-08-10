@@ -27,10 +27,6 @@
 #pragma warning(disable: 4206) //	nonstandard extension used : translation unit is empty
 #endif
 
-#ifdef _MSC_VER // Visual Studio
-#pragma warning(disable: 4206) //	nonstandard extension used : translation unit is empty
-#endif
-
 #ifdef HAVE_OPENJPEG_H
 
 #include <string.h>
