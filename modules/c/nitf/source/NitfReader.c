@@ -1869,15 +1869,20 @@ nitf_Reader_newImageReader(nitf_Reader* reader,
         /*  they are talking about, so throw something at them  */
         if (nitf_ListIterator_equals(&iter, &end))
         {
-            nitf_Error_initf(error,
-                             NITF_CTXT,
-                             NITF_ERR_INVALID_OBJECT,
-                             "Index [%d] is not a valid image segment",
-                             imageSegmentNumber);
-            nitf_ImageReader_destruct(&imageReader);
-            return NULL;
+            segment = NULL;
+            break;
         }
         nitf_ListIterator_increment(&iter);
+    }
+    if (segment == NULL)
+    {
+        nitf_Error_initf(error,
+            NITF_CTXT,
+            NITF_ERR_INVALID_OBJECT,
+            "Index [%d] is not a valid image segment",
+            imageSegmentNumber);
+        nitf_ImageReader_destruct(&imageReader);
+        return NULL;
     }
 
     imageReader->input = reader->input;
@@ -1921,14 +1926,19 @@ nitf_Reader_newTextReader(nitf_Reader* reader,
         text = (nitf_TextSegment*)nitf_ListIterator_get(&iter);
         if (nitf_ListIterator_equals(&iter, &end))
         {
-            nitf_Error_initf(error,
-                             NITF_CTXT,
-                             NITF_ERR_INVALID_OBJECT,
-                             "Index [%d] is not a valid Text segment",
-                             textSegmentNumber);
-            return NULL;
+            text = NULL;
+            break;
         }
         nitf_ListIterator_increment(&iter);
+    }
+    if (text == NULL)
+    {
+        nitf_Error_initf(error,
+            NITF_CTXT,
+            NITF_ERR_INVALID_OBJECT,
+            "Index [%d] is not a valid Text segment",
+            textSegmentNumber);
+        return NULL;
     }
 
     /*    Allocate the object */
@@ -1957,7 +1967,6 @@ nitf_Reader_newGraphicReader(nitf_Reader* reader, int index, nitf_Error* error)
     nitf_SegmentReader* segmentReader;
     nitf_ListIterator iter;
     nitf_ListIterator end;
-    nitf_GraphicSegment* segment = NULL;
 
     /*    Find the associated segment */
     iter = nitf_List_at(reader->record->graphics, index);
@@ -1971,7 +1980,7 @@ nitf_Reader_newGraphicReader(nitf_Reader* reader, int index, nitf_Error* error)
                          index);
         return NULL;
     }
-    segment = (nitf_GraphicSegment*)nitf_ListIterator_get(&iter);
+    nitf_GraphicSegment* segment = (nitf_GraphicSegment*)nitf_ListIterator_get(&iter);
 
     /*    Allocate the object */
     segmentReader =
@@ -2000,7 +2009,6 @@ nitf_Reader_newDEReader(nitf_Reader* reader, int index, nitf_Error* error)
     nitf_SegmentReader* segmentReader;
     nitf_ListIterator iter;
     nitf_ListIterator end;
-    nitf_DESegment* segment = NULL;
 
     /*    Find the associated segment */
     iter = nitf_List_at(reader->record->dataExtensions, index);
@@ -2014,7 +2022,7 @@ nitf_Reader_newDEReader(nitf_Reader* reader, int index, nitf_Error* error)
                          index);
         return NULL;
     }
-    segment = (nitf_DESegment*)nitf_ListIterator_get(&iter);
+    nitf_DESegment* segment = (nitf_DESegment*)nitf_ListIterator_get(&iter);
 
     /*    Allocate the object */
     segmentReader =
