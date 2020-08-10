@@ -4,8 +4,6 @@
 
 #include "nitf_Test.h"
 
-
-
 struct nitf_test_tre_mods : public ::testing::Test {
     nitf_test_tre_mods() {
         // initialization code here
@@ -35,3 +33,8 @@ struct nitf_test_tre_mods : public ::testing::Test {
 #include "nitf/unittests/test_tre_mods.c"
 #include "nitf/unittests/test_tre_mods++.cpp"
 
+
+// Be sure this runs AFTER the tre_mods tests ... not really sure why ...
+#undef TEST_CASE
+#define TEST_CASE(X) TEST(test_image_writer, X)
+#include "nitf/unittests/test_image_writer.cpp"
