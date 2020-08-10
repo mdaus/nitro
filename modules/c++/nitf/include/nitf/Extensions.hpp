@@ -45,10 +45,7 @@ class ExtensionsIterator
 {
 public:
     //! Constructor
-    ExtensionsIterator(){}
-
-    //! Destructor
-    ~ExtensionsIterator(){}
+    ExtensionsIterator() = default;
 
     //! Copy constructor
     ExtensionsIterator(const ExtensionsIterator & x)
