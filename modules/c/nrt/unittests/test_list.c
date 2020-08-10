@@ -72,7 +72,7 @@ TEST_CASE(testPushPop)
 
 char *cloneString(char *data, nrt_Error * error)
 {
-    int data_len = strlen(data);
+    size_t data_len = strlen(data);
     char *new_data = (char *) NRT_MALLOC(data_len + 1);
     new_data[data_len] = 0;
     assert(new_data);
