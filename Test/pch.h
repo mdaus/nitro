@@ -35,7 +35,6 @@ extern int _isatty(int fd);
 #include "nitf_Test.h"
 #include "Test.h"
 
-#pragma comment(lib, "math-c++")
 #pragma comment(lib, "mt-c++")
 #pragma comment(lib, "io-c++")
 #pragma comment(lib, "except-c++")
