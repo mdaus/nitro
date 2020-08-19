@@ -65,7 +65,6 @@
 #include <import/except.h>
 #include <import/io.h>
 #include <import/types.h>
-#include <import/mt.h>
 
 #include "import/nitf.h"
 
@@ -80,7 +79,6 @@
 #include "nitf/TRE.hpp"
 #include "nitf/Record.hpp"
 
-#pragma comment(lib, "mt-c++")
 #pragma comment(lib, "io-c++")
 #pragma comment(lib, "except-c++")
 #pragma comment(lib, "sys-c++")
