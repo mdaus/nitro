@@ -62,7 +62,6 @@
 #pragma warning(pop)
 
 #include <import/sys.h>
-#include <import/mem.h>
 #include <import/except.h>
 #include <import/io.h>
 #include <import/types.h>
