@@ -73,7 +73,7 @@ public:
      *   the name to look for in the IFD.
      * @return
      *   the TIFFIFDEntry associated with the specified name, or 
-     *   NULL if the entry doesn't exist in the IFD
+     *   nullptr if the entry doesn't exist in the IFD
      *****************************************************************/
     tiff::IFDEntry *operator[](const char *name);
 
@@ -91,7 +91,7 @@ public:
      *   the tag to look for in the IFD.
      * @return
      *   the TIFFIFDEntry associated with the specified tag, or 
-     *   NULL if the entry doesn't exist in the IFD
+     *   nullptr if the entry doesn't exist in the IFD
      *****************************************************************/
     tiff::IFDEntry *operator[](unsigned short tag);
 

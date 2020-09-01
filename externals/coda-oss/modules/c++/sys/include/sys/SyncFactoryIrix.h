@@ -125,11 +125,11 @@ class SyncImplIrix : public SyncInterface
     static void destroyImpl()
     {
 
-        if (mImpl != NULL)
+        if (mImpl != nullptr)
         {
             dbg_ln("Destroying Impl");
             delete mImpl;
-            mImpl = NULL;
+            mImpl = nullptr;
         }
 
     }

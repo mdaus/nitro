@@ -39,7 +39,7 @@ sys::ConditionVarIrix::ConditionVarIrix(sys::MutexIrix *theLock, bool isOwner) :
     mMutex(theLock)
 {
     if (!theLock)
-        throw SystemException("ConditionVar received NULL mutex");
+        throw SystemException("ConditionVar received nullptr mutex");
 
     dbg_ln("Creating a cv given a mutex");
     if (isOwner)
@@ -88,7 +88,7 @@ void sys::ConditionVarIrix::wait(double timeout)
     dbg_printf("Timed waiting on condition [%f]\n", timeout);
     sigset_t lSignalSet;
     siginfo_t lSignalInfo;
-    timespec_t *lTimeout = NULL;
+    timespec_t *lTimeout = nullptr;
 
     mNative.insert(mNative.begin(), getpid());
 
@@ -114,7 +114,7 @@ void sys::ConditionVarIrix::wait(double timeout)
         }
     }
 
-    if (lTimeout != NULL)
+    if (lTimeout != nullptr)
         delete lTimeout;
 
     if (lSignalInfo.si_signo != SIGUSR1)

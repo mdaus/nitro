@@ -199,7 +199,7 @@ void loopingBenchmark(size_t size,
     std::vector<std::complex<float> > arr(size);
 
     //fill the vector based on a random number
-    srand(time(NULL));
+    srand(time(nullptr));
 
     float real = rand() % 100 + 1;
     float imag = rand() % 100 + 1;
@@ -297,7 +297,7 @@ void singlePassBenchmark(size_t size,
     std::vector<std::complex<float> > arr;
     arr.reserve(endSize);
 
-    srand(time(NULL));
+    srand(time(nullptr));
 
     float real =  rand() % 100 + 1;
     float imag =  rand() % 100 + 1;

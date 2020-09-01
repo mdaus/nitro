@@ -40,7 +40,7 @@ public:
     TiedWorkerThread(
             mt::RequestQueue<Request_T>* requestQueue,
             std::auto_ptr<CPUAffinityThreadInitializer> cpuAffinityInit =
-                    std::auto_ptr<CPUAffinityThreadInitializer>(NULL)) :
+                    std::auto_ptr<CPUAffinityThreadInitializer>(nullptr)) :
         mt::WorkerThread<Request_T>(requestQueue),
         mCPUAffinityInit(cpuAffinityInit)
     {
