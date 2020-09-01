@@ -115,7 +115,7 @@ void BandInfo::init(const std::string& representation,
                             imageFilterCode.c_str(),
                             numLUTs,
                             bandEntriesPerLUT,
-                            lut.getNative() ? lut.getNative() : NULL,
+                            lut.getNative() ? lut.getNative() : nullptr,
                             &error))
         throw nitf::NITFException(&error);
 
@@ -141,7 +141,7 @@ void BandInfo::init(const std::string& representation,
                             subcategory.c_str(),
                             imageFilterCondition.c_str(),
                             imageFilterCode.c_str(),
-                            0, 0, NULL, &error))
+                            0, 0, nullptr, &error))
         throw nitf::NITFException(&error);
 }
 

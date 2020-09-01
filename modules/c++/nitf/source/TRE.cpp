@@ -59,21 +59,21 @@ TRE& TRE::operator=(NITF_DATA* x)
 
 TRE::TRE(const char* tag)
 {
-    setNative(nitf_TRE_construct(tag, NULL, &error));
+    setNative(nitf_TRE_construct(tag, nullptr, &error));
     getNativeOrThrow();
     setManaged(false);
 }
 
 TRE::TRE(const char* tag, const char* id)
 {
-    setNative(nitf_TRE_construct(tag, (::strlen(id) > 0) ? id : NULL, &error));
+    setNative(nitf_TRE_construct(tag, (::strlen(id) > 0) ? id : nullptr, &error));
     getNativeOrThrow();
     setManaged(false);
 }
 
 TRE::TRE(const std::string& tag)
 {
-    setNative(nitf_TRE_construct(tag.c_str(), NULL, &error));
+    setNative(nitf_TRE_construct(tag.c_str(), nullptr, &error));
     getNativeOrThrow();
     setManaged(false);
 }
@@ -81,7 +81,7 @@ TRE::TRE(const std::string& tag)
 TRE::TRE(const std::string& tag, const std::string& id)
 {
     setNative(nitf_TRE_construct(tag.c_str(),
-                                 id.empty() ? NULL : id.c_str(),
+                                 id.empty() ? nullptr : id.c_str(),
                                  &error));
     getNativeOrThrow();
     setManaged(false);
