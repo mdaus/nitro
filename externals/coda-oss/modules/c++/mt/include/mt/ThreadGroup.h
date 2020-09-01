@@ -86,7 +86,7 @@ public:
     void joinAll();
 
     /*!
-     * Checks whether CPU pinning is set (i.e. whether mAffinityInit is NULL)
+     * Checks whether CPU pinning is set (i.e. whether mAffinityInit is nullptr)
      *
      * \return true if CPU pinning is set, false otherwise
      */
@@ -128,7 +128,7 @@ private:
     /*!
      * \returns the next available thread initializer provided by
      *          the internal CPUAffinityInitializer. If no initializer
-     *          was created, will return NULL.
+     *          was created, will return nullptr.
      */
     std::auto_ptr<CPUAffinityThreadInitializer> getNextInitializer();
 
@@ -150,14 +150,14 @@ private:
          *                          this ThreadGroupRunnable
          * \param threadInit Affinity-based initializer for the thread
          *                   that controls which CPUs the runnable is allowed
-         *                   to execute on. If NULL, no affinity preferences
+         *                   to execute on. If nullptr, no affinity preferences
          *                   will be enforced.
          */
         ThreadGroupRunnable(
                 std::auto_ptr<sys::Runnable> runnable,
                 mt::ThreadGroup& parentThreadGroup,
                 std::auto_ptr<CPUAffinityThreadInitializer> threadInit =
-                        std::auto_ptr<CPUAffinityThreadInitializer>(NULL));
+                        std::auto_ptr<CPUAffinityThreadInitializer>(nullptr));
 
         /*!
          *  Call run() on the Runnable passed to createThread

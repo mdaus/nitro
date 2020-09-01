@@ -33,8 +33,8 @@ sys::SemaphoreWin32::SemaphoreWin32(unsigned int count, size_t _maxCount)
     const LONG maxLong = std::numeric_limits<LONG>::max();
     LONG maxCount = (_maxCount > maxLong) ? maxLong : static_cast<LONG>(_maxCount);
 
-    mNative = CreateSemaphore(NULL, count, maxCount, NULL);
-    if (mNative == NULL)
+    mNative = CreateSemaphore(nullptr, count, maxCount, nullptr);
+    if (mNative == nullptr)
         throw sys::SystemException("CreateSemaphore Failed");
 }
 
@@ -53,7 +53,7 @@ void sys::SemaphoreWin32::signal()
 {
     if (!ReleaseSemaphore(mNative,
                           1,
-                          NULL) )
+                          nullptr) )
     {
         throw sys::SystemException("Semaphore signal failed");
     }

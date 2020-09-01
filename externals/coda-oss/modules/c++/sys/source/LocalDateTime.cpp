@@ -63,7 +63,7 @@ void LocalDateTime::getTime(time_t numSecondsSinceEpoch, tm& t) const
     // our fingers and hope the regular function actually is reentrant
     // (supposedly this is the case on Windows).
 #ifdef HAVE_LOCALTIME_R
-    if (::localtime_r(&numSecondsSinceEpoch, &t) == NULL)
+    if (::localtime_r(&numSecondsSinceEpoch, &t) == nullptr)
     {
         int const errnum = errno;
         throw except::Exception(Ctxt("localtime_r() failed (" +
@@ -71,7 +71,7 @@ void LocalDateTime::getTime(time_t numSecondsSinceEpoch, tm& t) const
     }
 #else
     tm const * const localTimePtr = ::localtime(&numSecondsSinceEpoch);
-    if (localTimePtr == NULL)
+    if (localTimePtr == nullptr)
     {
         int const errnum = errno;
         throw except::Exception(Ctxt("localtime failed (" +

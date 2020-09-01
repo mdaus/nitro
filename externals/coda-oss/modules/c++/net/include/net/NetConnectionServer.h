@@ -73,7 +73,7 @@ public:
      *
      */
     void initialize(net::RequestHandlerFactory* requestHandlerFactory,
-		    net::AllocStrategy* allocStrategy = NULL);
+		    net::AllocStrategy* allocStrategy = nullptr);
     //virtual void handleConnection(NetConnection* connection) = 0;
 
     /*!
