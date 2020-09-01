@@ -421,7 +421,7 @@ int main(int argc, char** argv)
 
     try
     {
-        system("firefox scratch_release.html");
+        (void) system("firefox scratch_release.html");
     }
     catch(const except::Exception&)
     {
