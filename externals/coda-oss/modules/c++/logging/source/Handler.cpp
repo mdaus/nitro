@@ -40,10 +40,10 @@ void Handler::close()
 {
     // delete if necessary
     if (mFormatter != &mDefaultFormatter &&
-        mFormatter != NULL)
+        mFormatter != nullptr)
     {
         delete mFormatter;
-        mFormatter = NULL;
+        mFormatter = nullptr;
     }
 }
 

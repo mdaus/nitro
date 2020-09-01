@@ -54,7 +54,8 @@ sys::Uint64_T tiff::combine(sys::Uint32_T numerator,
 void tiff::split(sys::Uint64_T value, sys::Uint32_T &numerator,
                  sys::Uint32_T &denominator)
 {
-    numerator = ((sys::Uint32_T *)&value)[0];
-    denominator = ((sys::Uint32_T *)&value)[1];
+    const sys::Uint32_T* pValue = reinterpret_cast<sys::Uint32_T*>(&value);
+    numerator = pValue[0];
+    denominator = pValue[1];
 }
 

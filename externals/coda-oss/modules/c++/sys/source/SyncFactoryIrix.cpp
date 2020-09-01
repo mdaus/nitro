@@ -30,8 +30,8 @@
 #include "sys/ThreadIrix.h"
 #include "sys/ConditionVarIrix.h"
 
-sys::SyncFactoryIrix::SyncImplIrix* sys::SyncFactoryIrix::mImpl = NULL;
-sys::SyncFactoryIrix::SyncImplIrix::SyncImplIrix() : mRef(0), mArena(NULL)
+sys::SyncFactoryIrix::SyncImplIrix* sys::SyncFactoryIrix::mImpl = nullptr;
+sys::SyncFactoryIrix::SyncImplIrix::SyncImplIrix() : mRef(0), mArena(nullptr)
 {
     // NOTE: SIGUSR1 is used in the Irix conditional
     // variable, and needs to be blocked by the process.
@@ -44,7 +44,7 @@ sys::SyncFactoryIrix::SyncImplIrix::SyncImplIrix() : mRef(0), mArena(NULL)
 
     sigemptyset(&lSignalSet);
     sigaddset(&lSignalSet, SIGUSR1);
-    sigprocmask(SIG_BLOCK, &lSignalSet, NULL);
+    sigprocmask(SIG_BLOCK, &lSignalSet, nullptr);
 
 
     // Set maximum number of sharing processes, default=8
@@ -62,10 +62,10 @@ sys::SyncFactoryIrix::SyncImplIrix::SyncImplIrix() : mRef(0), mArena(NULL)
 
     mGuard = new ulock_t;
     *mGuard = usnewlock(mArena);
-    if (*mGuard == NULL)
+    if (*mGuard == nullptr)
     {
         delete mGuard;
-        mGuard = NULL;
+        mGuard = nullptr;
     }
 
 
@@ -82,7 +82,7 @@ sys::SyncFactoryIrix::SyncImplIrix::~SyncImplIrix()
     dbg_ln("Detaching the arena");
     usdetach(mArena);
 
-    mArena = NULL;
+    mArena = nullptr;
     dbg_ln("Done destructing the SyncImpl");
 }
 
@@ -118,11 +118,11 @@ bool sys::SyncFactoryIrix::SyncImplIrix::createLock(sys::MutexIrix& mutex)
     ussetlock(*mGuard);
     mutex.getNative() = new ulock_t;
     *(mutex.getNative()) = usnewlock(mArena);
-    if (*(mutex.getNative()) == NULL)
+    if (*(mutex.getNative()) == nullptr)
     {
         dbg_ln("Lock creation failed");
         delete mutex.getNative();
-        mutex.getNative() = NULL;
+        mutex.getNative() = nullptr;
         return false;
     }
     TRACE(mRef++);
@@ -142,7 +142,7 @@ bool sys::SyncFactoryIrix::SyncImplIrix::destroyLock(sys::MutexIrix& mutex)
     EVAL( mutex.getNative() );
     TRACE( usfreelock(*(mutex.getNative()), mArena) );
     TRACE( delete mutex.getNative() );
-    mutex.getNative() = NULL;
+    mutex.getNative() = nullptr;
 
     TRACE(mRef--);
     EVAL(mRef);

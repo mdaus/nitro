@@ -27,7 +27,7 @@
 
 sys::SemaphoreSolaris::SemaphoreSolaris(unsigned int count)
 {
-    sema_init(&mNative, count, USYNC_THREAD, NULL);
+    sema_init(&mNative, count, USYNC_THREAD, nullptr);
 }
 
 sys::SemaphoreSolaris::~SemaphoreSolaris()

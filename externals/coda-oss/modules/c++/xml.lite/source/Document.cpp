@@ -41,7 +41,7 @@ void xml::lite::Document::remove(Element * toDelete)
     {
         if (mRootNode && mOwnRoot)
             delete mRootNode;
-        mRootNode = NULL;
+        mRootNode = nullptr;
     }
     else
         remove(toDelete, mRootNode);
@@ -64,14 +64,14 @@ xml::lite::Document::createElement(const std::string& qname,
 void xml::lite::Document::insert(xml::lite::Element * element,
                                  xml::lite::Element * underThis)
 {
-    if (element != NULL && underThis != NULL)
+    if (element != nullptr && underThis != nullptr)
         underThis->addChild(element);
 }
 
 void xml::lite::Document::remove(xml::lite::Element * toDelete,
                                  xml::lite::Element * fromHere)
 {
-    if (fromHere != NULL && toDelete != NULL)
+    if (fromHere != nullptr && toDelete != nullptr)
     {
         for (std::vector<xml::lite::Element *>::iterator i =
                 fromHere->getChildren().begin(); i
@@ -81,7 +81,7 @@ void xml::lite::Document::remove(xml::lite::Element * toDelete,
             {
                 fromHere->getChildren().erase(i);
                 delete toDelete;
-                toDelete = NULL;
+                toDelete = nullptr;
                 return;
             }
             else

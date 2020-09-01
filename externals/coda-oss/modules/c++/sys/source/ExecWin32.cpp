@@ -21,7 +21,7 @@
  */
 
 
-#if defined(WIN32)
+#if defined(WIN32) || defined(_WIN32)
 
 #include <sys/Exec.h>
 #include <str/Manip.h>
@@ -42,22 +42,22 @@ FILE* ExecPipe::openPipe(const std::string& command,
                          const std::string& type)
 {
     FILE* ioFile;
-    HANDLE outIO[2] = {NULL, NULL};
+    HANDLE outIO[2] = {nullptr, nullptr};
 
     //! inherit the pipe handles
     SECURITY_ATTRIBUTES saAttr; 
     saAttr.nLength = sizeof(SECURITY_ATTRIBUTES);
     saAttr.bInheritHandle = TRUE;
-    saAttr.lpSecurityDescriptor = NULL; 
+    saAttr.lpSecurityDescriptor = nullptr; 
     if (!CreatePipe(&outIO[READ_PIPE], &outIO[WRITE_PIPE], &saAttr, 0))
     {
-        return NULL;
+        return nullptr;
     }
 
     // check the pipes themselves are not inherited
     if (!SetHandleInformation(outIO[READ_PIPE], HANDLE_FLAG_INHERIT, 0))
     {
-        return NULL;
+        return nullptr;
     }
 
     // the startInfo structure is where the pipes are connected 
@@ -75,11 +75,11 @@ FILE* ExecPipe::openPipe(const std::string& command,
 
     //! create the subprocess --
     //  this is equivalent to a fork + exec
-    if (CreateProcess(NULL, const_cast<char*>(command.c_str()),
-                      NULL, NULL, TRUE, 0, NULL, NULL,
+    if (CreateProcess(nullptr, const_cast<char*>(command.c_str()),
+                      nullptr, nullptr, TRUE, 0, nullptr, nullptr,
                       &mStartInfo, &mProcessInfo) == 0)
     {
-        return NULL;
+        return nullptr;
     }
 
     //  connect the pipes currently connected in the subprocess
@@ -92,7 +92,7 @@ FILE* ExecPipe::openPipe(const std::string& command,
         if ((readDescriptor = _open_osfhandle(
                 (intptr_t)outIO[READ_PIPE], _O_RDONLY)) == -1)
         {
-            return NULL;
+            return nullptr;
         }
         ioFile = _fdopen(readDescriptor, type.c_str());
         CloseHandle(outIO[WRITE_PIPE]);
@@ -122,14 +122,14 @@ int ExecPipe::closePipe()
 
     // in case it fails
     FILE* tmp = mOutStream;
-    mOutStream = NULL;
+    mOutStream = nullptr;
 
     DWORD dwMillisec = INFINITE;
     DWORD dwWaitStatus = 
         WaitForSingleObject(mProcessInfo.hProcess, dwMillisec);
 
     //! get the exit code
-    DWORD exitCode = NULL;
+    DWORD exitCode = 0;
     GetExitCodeProcess(mProcessInfo.hProcess, &exitCode);
     const int exitStatus = static_cast<int>(exitCode);
     if (exitStatus == -1)
