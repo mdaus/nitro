@@ -96,7 +96,7 @@ sys::NotPredicate::~NotPredicate()
     if (mPredicate.second && mPredicate.first)
     {
         FilePredicate* tmp = mPredicate.first;
-        mPredicate.first = NULL;
+        mPredicate.first = nullptr;
         delete tmp;
     }
 }
@@ -119,7 +119,7 @@ sys::LogicalPredicate::~LogicalPredicate()
         if (p.first && p.second)
         {
             sys::FilePredicate* tmp = p.first;
-            p.first = NULL;
+            p.first = nullptr;
             delete tmp;
         }
     }

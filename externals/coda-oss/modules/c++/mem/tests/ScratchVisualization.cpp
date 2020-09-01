@@ -72,7 +72,7 @@ public:
         mHTMLFile(htmlFile),
         mCSSFile(cssFile)
     {
-        mStartPtr = NULL;
+        mStartPtr = nullptr;
         mColors.push_back("lightgrey");
         mColors.push_back("lightblue");
         mColors.push_back("lightcyan");
@@ -421,9 +421,10 @@ int main(int argc, char** argv)
 
     try
     {
-        system("firefox scratch_release.html");
+        int result = system("firefox scratch_release.html");
+        if (result > 0) { /*fix compiler warning*/ }
     }
-    catch(except::Exception& ex)
+    catch(const except::Exception&)
     {
         std::cout << "Failed to open html file in firefox\n";
     }

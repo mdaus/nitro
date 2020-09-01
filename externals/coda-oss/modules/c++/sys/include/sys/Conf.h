@@ -314,7 +314,7 @@ namespace sys
      *
      *  \param sz The size (in bytes) of the buffer we wish to create
      *  \throw Exception if a bad allocation occurs
-     *  \return a pointer to the data (this method never returns NULL)
+     *  \return a pointer to the data (this method never returns nullptr)
      */
     inline void* alignedAlloc(size_t size,
                               size_t alignment = SSE_INSTRUCTION_ALIGNMENT)
@@ -322,10 +322,10 @@ namespace sys
 #ifdef WIN32
         void* p = _aligned_malloc(size, alignment);
 #elif defined(HAVE_POSIX_MEMALIGN)
-        void* p = NULL;
+        void* p = nullptr;
         if (posix_memalign(&p, alignment, size) != 0)
         {
-            p = NULL;
+            p = nullptr;
         }
 #elif defined(HAVE_MEMALIGN)
         void* const p = memalign(alignment, size);

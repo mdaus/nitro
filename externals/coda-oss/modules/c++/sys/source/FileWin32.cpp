@@ -43,9 +43,9 @@ void sys::File::create(const std::string& str,
 
     mHandle = CreateFile(str.c_str(),
                          accessFlags,
-                         FILE_SHARE_READ, NULL,
+                         FILE_SHARE_READ, nullptr,
                          creationFlags,
-                         FILE_ATTRIBUTE_NORMAL, NULL);
+                         FILE_ATTRIBUTE_NORMAL, nullptr);
 
     if (mHandle == SYS_INVALID_HANDLE)
     {
@@ -74,7 +74,7 @@ void sys::File::readInto(void* buffer, size_t size)
                       bufferPtr + bytesRead,
                       bytesToRead,
                       &bytesThisRead,
-                      NULL))
+                      nullptr))
         {
             throw sys::SystemException(Ctxt("Error reading from file"));
         }
@@ -111,7 +111,7 @@ void sys::File::writeFrom(const void* buffer, size_t size)
                        bufferPtr + bytesWritten,
                        bytesToWrite,
                        &bytesThisWrite,
-                       NULL))
+                       nullptr))
         {
             throw sys::SystemException(Ctxt("Writing from file"));
         }

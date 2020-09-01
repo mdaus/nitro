@@ -34,7 +34,7 @@ namespace mt
 
 
 ThreadGroup::ThreadGroup(bool pinToCPU) :
-    mAffinityInit(pinToCPU ? new CPUAffinityInitializer() : NULL),
+    mAffinityInit(pinToCPU ? new CPUAffinityInitializer() : nullptr),
     mLastJoined(0)
 {
 }
@@ -117,7 +117,7 @@ void ThreadGroup::addException(const except::Exception& ex)
 
 std::auto_ptr<CPUAffinityThreadInitializer> ThreadGroup::getNextInitializer()
 {
-    std::auto_ptr<CPUAffinityThreadInitializer> threadInit(NULL);
+    std::auto_ptr<CPUAffinityThreadInitializer> threadInit(nullptr);
     if (mAffinityInit.get())
     {
         threadInit = mAffinityInit->newThreadInitializer();
@@ -163,7 +163,7 @@ void ThreadGroup::ThreadGroupRunnable::run()
 
 bool ThreadGroup::isPinToCPUEnabled() const
 {
-    return mAffinityInit.get() != NULL;
+    return mAffinityInit.get() != nullptr;
 }
 
 bool ThreadGroup::getDefaultPinToCPU()

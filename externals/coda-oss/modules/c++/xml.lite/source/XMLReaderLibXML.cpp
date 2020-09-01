@@ -54,29 +54,29 @@ void xml::lite::XMLReaderLibXML::create()
 
     xmlSAXVersion(&mSAXLibXML, 1);
 /*
-    mSAXLibXML.internalSubset = NULL;
-    mSAXLibXML.externalSubset = NULL;
-    mSAXLibXML.isStandalone = NULL;
-    mSAXLibXML.hasInternalSubset = NULL;
-    mSAXLibXML.hasExternalSubset = NULL;
-    mSAXLibXML.resolveEntity = NULL;
-    mSAXLibXML.getEntity = NULL;
-    mSAXLibXML.getParameterEntity = NULL;
-    mSAXLibXML.entityDecl = NULL;
-    mSAXLibXML.attributeDecl = NULL;
-    mSAXLibXML.elementDecl = NULL;
-    mSAXLibXML.notationDecl = NULL;
-    mSAXLibXML.unparsedEntityDecl = NULL;
-    mSAXLibXML.setDocumentLocator = NULL;
-    mSAXLibXML.startDocument = NULL;
-    mSAXLibXML.endDocument = NULL;
-    mSAXLibXML.reference = NULL;
-    mSAXLibXML.cdataBlock = NULL;
-    mSAXLibXML.processingInstruction = NULL;
+    mSAXLibXML.internalSubset = nullptr;
+    mSAXLibXML.externalSubset = nullptr;
+    mSAXLibXML.isStandalone = nullptr;
+    mSAXLibXML.hasInternalSubset = nullptr;
+    mSAXLibXML.hasExternalSubset = nullptr;
+    mSAXLibXML.resolveEntity = nullptr;
+    mSAXLibXML.getEntity = nullptr;
+    mSAXLibXML.getParameterEntity = nullptr;
+    mSAXLibXML.entityDecl = nullptr;
+    mSAXLibXML.attributeDecl = nullptr;
+    mSAXLibXML.elementDecl = nullptr;
+    mSAXLibXML.notationDecl = nullptr;
+    mSAXLibXML.unparsedEntityDecl = nullptr;
+    mSAXLibXML.setDocumentLocator = nullptr;
+    mSAXLibXML.startDocument = nullptr;
+    mSAXLibXML.endDocument = nullptr;
+    mSAXLibXML.reference = nullptr;
+    mSAXLibXML.cdataBlock = nullptr;
+    mSAXLibXML.processingInstruction = nullptr;
 */
 
-    mSAXLibXML.startDocument = NULL;
-    mSAXLibXML.endDocument = NULL;
+    mSAXLibXML.startDocument = nullptr;
+    mSAXLibXML.endDocument = nullptr;
     mSAXLibXML.startElement = startElementCallback;
     mSAXLibXML.endElement = endElementCallback;
     mSAXLibXML.characters = charactersCallback;
@@ -92,15 +92,15 @@ void xml::lite::XMLReaderLibXML::create()
     // 3) Chunk of data (presumably to allow it to test decoding)
     // 4) Size (of chunk)
     // 5) Filename (probably for parse error info)
-    // Returns the new parser context or NULL
+    // Returns the new parser context or nullptr
     mContextLibXML =
         xmlCreatePushParserCtxt(&mSAXLibXML,
                                 this,
-                                NULL,
+                                nullptr,
                                 0,
-                                NULL);
+                                nullptr);
     
-    if (mContextLibXML == NULL)
+    if (mContextLibXML == nullptr)
         throw except::Exception(Ctxt("Failed to create parser context"));
 
 }
@@ -119,7 +119,7 @@ void xml::lite::XMLReaderLibXML::pushNamespaceContext(const xmlChar **atts)
     mNamespaceStack.push();
 
     // Iterate through and find the mappings
-    for (int i = 0; atts && atts[i] != NULL; i += 2)
+    for (int i = 0; atts && atts[i] != nullptr; i += 2)
     {
         std::string attr((const char*)atts[i]);
         std::string::size_type x = attr.find_first_of(':');
@@ -199,7 +199,7 @@ void xml::lite::XMLReaderLibXML::startElementCallback(void *ctx,
 
     xml::lite::Attributes attrs;
     // Resolve the attributes to what we really want
-    for (int i = 0; atts && atts[i] != NULL; i += 2)
+    for (int i = 0; atts && atts[i] != nullptr; i += 2)
     {
         xml::lite::AttributeNode attr;
         std::string attrQName;

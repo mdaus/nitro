@@ -40,7 +40,7 @@ StreamSplitter::StreamSplitter(io::InputStream& inputStream,
     mNumDelimitersProcessed(0),
     mBufferStorage(bufferSize),
     mBufferCapacity(mBufferStorage.size()),
-    mBuffer(mBufferStorage.empty() ? NULL : &mBufferStorage[0]),
+    mBuffer(mBufferStorage.empty() ? nullptr : &mBufferStorage[0]),
     mInputStream(inputStream),
     mStreamEmpty(false)
 {
@@ -50,7 +50,7 @@ StreamSplitter::StreamSplitter(io::InputStream& inputStream,
                 Ctxt("delimiter must be a string with size > 0"));
     }
 
-    if (mBufferCapacity < delimiter.size() * 2 + 1)
+    if (static_cast<size_t>(mBufferCapacity) < delimiter.size() * 2 + 1)
     {
         std::ostringstream os;
         os << "bufferSize must be >= twice the delimiter size + 1 byte. "
