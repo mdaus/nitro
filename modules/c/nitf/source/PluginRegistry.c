@@ -32,9 +32,9 @@ insertCreator(nitf_DLL* dso,
               const char* suffix,
               nitf_Error* error);
 
-static long __PluginRegistryInitLock = 0;
 static nitf_Mutex __PluginRegistryLock = NITF_MUTEX_INIT;
 #if !(defined(WIN32) || defined(_WIN32))
+static long __PluginRegistryInitLock = 0;
 static const char DIR_DELIMITER = '/';
 #else
 static const char DIR_DELIMITER = '\\';
