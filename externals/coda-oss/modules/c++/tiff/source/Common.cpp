@@ -25,6 +25,8 @@
 #include <sstream>
 #include <string.h>
 
+#include "sys/cstddef.h"
+
 //! Initialize the byte count values for each TIFF type.
 short tiff::Const::mTypeSizes[tiff::Const::Type::MAX] =
 { 0, 1, 1, 2, 4, 8, 1, 1, 2, 4, 8, 4, 8 };
@@ -39,23 +41,33 @@ std::string tiff::RationalPrintStrategy::toString(const sys::Uint32_T data)
     return tempStream.str();
 }
 
+template<typename T>
+static inline void memcpy_(T* pDest, const void* pSrc)
+{
+    memcpy(pDest, pSrc, sizeof(T));
+}
+
 sys::Uint64_T tiff::combine(sys::Uint32_T numerator,
         sys::Uint32_T denominator)
 {
     sys::Uint64_T value;
-    sys::Uint32_T *ptr = (sys::Uint32_T *)&value;
 
-    memcpy(ptr, &numerator, sizeof(sys::Uint32_T));
-    ptr++;
-    memcpy(ptr, &denominator, sizeof(sys::Uint32_T));
+    //sys::Uint32_T *ptr = (sys::Uint32_T *)&value;
+    auto ptr = reinterpret_cast<std::byte*>(&value);  // reinterpret_cast<> to std::byte is allowed by the standard
+    memcpy_(ptr, &numerator);
+    memcpy_(ptr + sizeof(sys::Uint32_T), &denominator);
 
     return value;
 }
 void tiff::split(sys::Uint64_T value, sys::Uint32_T &numerator,
                  sys::Uint32_T &denominator)
 {
-    const sys::Uint32_T* pValue = reinterpret_cast<sys::Uint32_T*>(&value);
-    numerator = pValue[0];
-    denominator = pValue[1];
+    // Using casts generate a warning: dereferencing type-punned pointer will break strict-aliasing rules[-Wstrict-aliasing]
+    // Do the reverse of combine() and use memcpy().
+    //numerator = ((sys::Uint32_T*)&value)[0];
+    //denominator = ((sys::Uint32_T*)&value)[1];
+    auto ptr = reinterpret_cast<const std::byte*>(&value);  // reinterpret_cast<> to std::byte is allowed by the standard
+    memcpy_(&numerator, ptr);
+    memcpy_(&denominator, ptr + sizeof(sys::Uint32_T));
 }
 
