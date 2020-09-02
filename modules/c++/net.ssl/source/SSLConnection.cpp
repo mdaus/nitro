@@ -168,12 +168,10 @@ sys::SSize_T net::ssl::SSLConnection::read(sys::byte* b, sys::Size_T len)
 
 void net::ssl::SSLConnection::write(const sys::byte* b, sys::Size_T len)
 {
-    int numBytes(0);
     if (len <= 0) return;
     
-    numBytes = SSL_write(mSSL, (const char*)b, len);
-    
-    if (numBytes != len)
+    const auto numBytes = SSL_write(mSSL, (const char*)b, len);    
+    if (static_cast<sys::Size_T>(numBytes) != len)
     {
         throw net::ssl::SSLException(Ctxt(FmtX("Tried sending %d bytes, %d sent",
                                                len, numBytes)) );
