@@ -20,8 +20,6 @@
  *
  */
 
-#include <inttypes.h>
-
 #include "nitf/Field.h"
 
 /*  Spaces are added to the right  */
@@ -441,6 +439,7 @@ NITFAPI(NITF_BOOL) nitf_Field_setReal(nitf_Field * field,
                                       double value, nitf_Error *error)
 {
     uint32_t precision;     /* Format precision */
+    uint32_t bufferLen;     /* Length of buffer */
     char *buffer;              /* Holds intermediate and final results */
     char fmt[64];              /* Format used */
 
@@ -459,7 +458,7 @@ NITFAPI(NITF_BOOL) nitf_Field_setReal(nitf_Field * field,
     /* Allocate buffer used to build value */
 
     /* The 64 covers the puncuation and exponent and is overkill */
-    size_t bufferLen = field->length * 2 + 64;  /* Length of buffer */
+    bufferLen = field->length * 2 + 64;
     buffer = (char* )NITF_MALLOC(bufferLen + 1);
     if (buffer == NULL)
     {
@@ -802,7 +801,7 @@ NITFPRIV(NITF_BOOL) fromStringToInt(nitf_Field * field,
                                     nitf_Error * error)
 {
     char buffer[256];
-    if (field->length >= 256)
+    if (field->length > 256)
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER,
                          "Field length too long for string conversion [%d]",
@@ -855,7 +854,7 @@ NITFPRIV(NITF_BOOL) fromStringToUint(nitf_Field * field,
                                      nitf_Error * error)
 {
     char buffer[256];
-    if (field->length >= 256)
+    if (field->length > 256)
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER,
                          "Field length too long for string conversion [%d]",
@@ -1084,12 +1083,9 @@ NITFPROT(void) nitf_Field_print(nitf_Field * field)
     switch (field->type)
     {
         case NITF_BINARY:
-        {
             /* avoid printing binary */
-            uint64_t length = (uint64_t) field->length;
-            printf("<binary data, length %llu>", length);
+            printf("<binary data, length %llu>", (unsigned long long)field->length);
             break;
-        }
 
         case NITF_BCS_N:
         case NITF_BCS_A:
