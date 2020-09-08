@@ -22,12 +22,13 @@
 
 #ifndef __NITF_SYSTEM_HPP__
 #define __NITF_SYSTEM_HPP__
-
 #pragma once
 
 /*!
  *  \file System.hpp
  */
+
+#include <stdint.h>
 
 #include "nitf/System.h"
 #include "nitf/Field.h"
@@ -35,6 +36,17 @@
 
 namespace nitf
 {
+	// Keeping these here so that code using "nitf::Uint64" still compiles;
+	// we can't make others change to "uint64_t".
+	using Uint64 = uint64_t;
+	using Uint32 = uint32_t;
+	using Uint16 = uint16_t;
+	using Uint8 = uint8_t;
+	using Int64 = int64_t;
+	using Int32 = int32_t;
+	using Int16 = int16_t;
+	using Int8 = int8_t;
+
 typedef nitf_Off Off;
 typedef nitf_Version Version;
 typedef nitf_ConvType ConvType;

@@ -227,7 +227,7 @@ TEST_CASE(testBlankSegmentsValid)
       }
       writer.prepare(output_io, record);
 
-      for (int ii = 0; ii < numSegments; ++ii)
+      for (int64_t ii = 0; ii < numSegments; ++ii)
       {
          uint8_t *buf = &buffers[testIdx].front() + (ii * bytesPerSegment);
          nitf::ImageWriter imageWriter = writer.newImageWriter(ii);
@@ -250,7 +250,7 @@ TEST_CASE(testBlankSegmentsValid)
          uint8_t  *padValue = NULL;         /* Pad value */
          uint64_t *blockMask=NULL;          /* Block mask array */
          uint64_t *padMask=NULL;            /* Pad mask array */
-         int imgCtr = 0;
+         int64_t imgCtr = 0;
          nitf::IOHandle input_io(tempNitf.pathname(),
                                  NITF_ACCESS_READONLY,
                                  NITF_OPEN_EXISTING);
@@ -271,6 +271,7 @@ TEST_CASE(testBlankSegmentsValid)
                                                       &padRecordLength, &padPixelValueLength,
                                                       &padValue, &blockMask, &padMask) != 0);
 
+            const int64_t totalBlocks = blockingInfo.getNumBlocksPerRow()*blockingInfo.getNumBlocksPerCol();
             TEST_ASSERT_GREATER(blockRecordLength, 0);
 
             const int64_t nBlocksPresent = getNumberBlocksPresent(blockMask,
@@ -291,7 +292,9 @@ TEST_CASE(testBlankSegmentsValid)
    }
 }
 
-TEST_MAIN(
+int main(int argc, char* argv[])
+{
    TEST_CHECK(testBlankSegmentsValid);
-)
 
+   return 0;
+}
