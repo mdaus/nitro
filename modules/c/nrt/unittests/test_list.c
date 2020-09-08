@@ -82,7 +82,7 @@ char *cloneString(char *data, nrt_Error * error)
 
 TEST_CASE(testClone)
 {
-    nrt_Uint32 i;
+    uint32_t i;
     nrt_Error e;
     nrt_List *l = nrt_List_construct(&e), *dolly = NULL;
     TEST_ASSERT(l);
@@ -114,7 +114,7 @@ TEST_CASE(testClone)
 
 TEST_CASE(testIterate)
 {
-    nrt_Uint32 i;
+    uint32_t i;
     nrt_Error e;
     nrt_List *l = nrt_List_construct(&e), *dolly = NULL;
     nrt_ListIterator it, end;

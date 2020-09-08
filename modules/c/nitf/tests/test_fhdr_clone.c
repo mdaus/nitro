@@ -31,10 +31,10 @@
 void printHdr(nitf_FileHeader* header)
 {
     unsigned int i;
-    nitf_Uint32 num;
+    uint32_t num;
     nitf_Error error;
-    nitf_Uint32 len;
-    nitf_Uint64 dataLen;
+    uint32_t len;
+    uint64_t dataLen;
 
     SHOW_VAL( header->fileHeader );
     SHOW_VAL( header->fileVersion );

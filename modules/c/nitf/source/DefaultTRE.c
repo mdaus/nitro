@@ -68,7 +68,7 @@ NITFPRIV(const char*) defaultGetID(nitf_TRE *tre)
 
 
 NITFPRIV(NITF_BOOL) defaultRead(nitf_IOInterface *io,
-                                nitf_Uint32 length,
+                                uint32_t length,
                                 nitf_TRE * tre,
                                 struct _nitf_Record* record,
                                 nitf_Error * error)
