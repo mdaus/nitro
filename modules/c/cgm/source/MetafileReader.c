@@ -544,21 +544,18 @@ NITF_BOOL polyLine(cgm_Metafile* mf, cgm_ParseContext* pc, int classType,
 NITF_BOOL textElement(cgm_Metafile* mf, cgm_ParseContext* pc, int classType,
         int shortCode, char* b, int len, nitf_Error* error)
 {
-    short _1, tX, tY;
-    int sLen;
-    cgm_TextElement* te;
     cgm_Element* elem = cgm_TextElement_construct(error);
     if (!elem)
         return NITF_FAILURE;
-    te = (cgm_TextElement*) elem->data;
+    cgm_TextElement* te = (cgm_TextElement*) elem->data;
     te->attributes = createTextAttributes(pc, error);
     if (!te->attributes)
         return NITF_FAILURE;
 
-    tX = readShort(b);
-    tY = readShort(&b[2]);
-    _1 = readShort(&b[4]);
-    sLen = (int) b[6];
+    short tX = readShort(b);
+    short tY = readShort(&b[2]);
+    (void) readShort(&b[4]);
+    int sLen = (int) b[6];
     te->text = cgm_Text_construct(readString(&b[7], sLen), error);
     if (!te->text)
         return NITF_FAILURE;

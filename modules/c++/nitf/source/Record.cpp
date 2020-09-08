@@ -20,10 +20,16 @@
  *
  */
 
+#include "nitf/Record.hpp"
+
 #include <string.h>
 
 #include <nitf/ComplexityLevel.h>
-#include <nitf/Record.hpp>
+
+#include "nitf/System.hpp"
+#include "nitf/Object.hpp"
+#include "nitf/RESegment.hpp"
+#include "nitf/LabelSegment.hpp"
 
 namespace nitf
 {

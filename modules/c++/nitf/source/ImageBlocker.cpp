@@ -28,6 +28,9 @@
 #include <except/Exception.h>
 #include <nitf/ImageBlocker.hpp>
 
+#undef min
+#undef max
+
 namespace
 {
 void getBlockInfo(size_t numElements,

@@ -22,7 +22,7 @@
 
 #include "nrt/DLL.h"
 
-#if defined(WIN32)
+#if defined(WIN32) || defined(_WIN32)
 
 NRTAPI(nrt_DLL *) nrt_DLL_construct(nrt_Error * error)
 {
