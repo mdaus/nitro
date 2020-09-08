@@ -29,7 +29,7 @@ namespace zip
 ZipOutputStream::ZipOutputStream(const std::string& pathname)
 {
     mZip = zipOpen64(pathname.c_str(), APPEND_STATUS_CREATE);
-    if (mZip == nullptr)
+    if (mZip == NULL)
         throw except::IOException(Ctxt("Failed to open zip stream " + 
                 pathname));
 
@@ -48,18 +48,18 @@ void ZipOutputStream::createFileInZip(const std::string& pathname,
             mZip,
             pathname.c_str(),
             &zipFileInfo,
-            nullptr,
+            NULL,
             0,
-            nullptr,
+            NULL,
             0,
-            comment.empty() ? nullptr : comment.c_str(),
+            comment.empty() ? NULL : comment.c_str(),
             Z_DEFLATED,
             Z_DEFAULT_COMPRESSION,
             0,
             -MAX_WBITS,
             DEF_MEM_LEVEL,
             Z_DEFAULT_STRATEGY,
-            password.empty() ? nullptr : password.c_str(),
+            password.empty() ? NULL : password.c_str(),
             0,
             0);
 
@@ -96,7 +96,7 @@ void ZipOutputStream::write(const void* buffer, size_t len)
 
 void ZipOutputStream::close()
 {
-    sys::Int32_T results = zipClose(mZip, nullptr);
+    sys::Int32_T results = zipClose(mZip, NULL);
     if (results != Z_OK)
         throw except::IOException(Ctxt("Failed to save zip file."));
 }

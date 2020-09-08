@@ -57,7 +57,7 @@ void sys::SemaphoreIrix::signal()
 usema_t*& sys::SemaphoreIrix::getNative()
 {
     // We don't actually use this, but SemaphoreIrix uses usema_t* as its template..
-    return (usema_t*) nullptr;
+    return (usema_t*) NULL;
 }
 
 #endif // __sgi

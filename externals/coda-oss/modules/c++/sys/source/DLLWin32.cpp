@@ -58,7 +58,7 @@ void sys::DLL::unload()
         FreeLibrary( mLib );
 
         // Now we reset member data
-        mLib = nullptr;
+        mLib = NULL;
         mLibName.clear();
     }
 }
@@ -67,14 +67,14 @@ DLL_FUNCTION_PTR sys::DLL::
 retrieve(const std::string& functionName)
 {
     // Check to make sure we have a library
-    if ( mLib != nullptr )
+    if ( mLib != NULL )
     {
         // Now we get a ptr
         DLL_FUNCTION_PTR ptr = (DLL_FUNCTION_PTR)
                                GetProcAddress(mLib, functionName.c_str());
 
         // Now we check the ptr value
-        if (ptr == nullptr)
+        if (ptr == NULL)
             throw(sys::DLLException(FmtX("Failed to load function: %s",
                                          functionName.c_str())));
         return ptr;

@@ -30,7 +30,7 @@ sys::ConditionVarSolaris::ConditionVarSolaris() :
     mMutexOwned(new sys::MutexSolaris()),
     mMutex(mMutexOwned.get())
 {
-    if ( ::cond_init(&mNative, nullptr, nullptr) != 0)
+    if ( ::cond_init(&mNative, NULL, NULL) != 0)
         throw sys::SystemException("ConditionVar initialization failed");
 }
 
@@ -38,12 +38,12 @@ sys::ConditionVarSolaris::ConditionVarSolaris(sys::MutexSolaris* theLock, bool i
     mMutex(theLock)
 {
     if (!theLock)
-        throw SystemException("ConditionVar received nullptr mutex");
+        throw SystemException("ConditionVar received NULL mutex");
 
     if (isOwner)
         mMutexOwned.reset(theLock);
 
-    if ( ::cond_init(&mNative, nullptr, nullptr) != 0)
+    if ( ::cond_init(&mNative, NULL, NULL) != 0)
         throw sys::SystemException("ConditionVar initialization failed");
 }
 
@@ -82,7 +82,7 @@ void sys::ConditionVarSolaris::wait(double seconds)
     if ( seconds > 0 )
     {
         timestruc_t tout;
-        tout.tv_sec = time(nullptr) + (int)seconds;
+        tout.tv_sec = time(NULL) + (int)seconds;
         tout.tv_nsec = (int)((seconds - (int)(seconds)) * 1e9);
         if (::cond_timedwait(&mNative,
                              &(mMutex->getNative()),

@@ -94,7 +94,7 @@ tiff::ImageWriter *tiff::FileWriter::addImage()
     if (!mImages.empty())
         mIFDOffset = mImages.back()->getNextIFDOffset();
 
-    std::auto_ptr<tiff::ImageWriter>
+    std::unique_ptr<tiff::ImageWriter>
         image(new tiff::ImageWriter(&mOutput, mIFDOffset));
     mImages.push_back(image.get());
     tiff::ImageWriter* const writer = image.release();

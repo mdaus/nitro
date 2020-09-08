@@ -51,7 +51,7 @@ void xml::lite::Element::clone(const xml::lite::Element& node)
     mName = node.mName;
     mCharacterData = node.mCharacterData;
     mAttributes = node.mAttributes;
-    mParent = nullptr;
+    mParent = NULL;
 
     std::vector<xml::lite::Element *>::const_iterator iter;
     iter = node.getChildren().begin();
@@ -210,14 +210,10 @@ void xml::lite::Element::addChild(xml::lite::Element * node)
     node->setParent(this);
 }
 
-void xml::lite::Element::addChild(std::auto_ptr<xml::lite::Element> node)
+void xml::lite::Element::addChild(std::unique_ptr<xml::lite::Element>&& node)
 {
-    // Always take ownership
-    std::auto_ptr<xml::lite::Element> scopedValue(node);
-    addChild(scopedValue.get());
-    scopedValue.release();
+    addChild(node.release()); // addChild() now owns node
 }
-
 void xml::lite::Element::changePrefix(Element* element,
     const std::string& prefix, const std::string& uri)
 {
