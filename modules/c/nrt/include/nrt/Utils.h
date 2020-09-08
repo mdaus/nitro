@@ -84,7 +84,7 @@ NRTAPI(void) nrt_Utils_baseName(char *base, const char *fullName,
 NRTAPI(NRT_BOOL) nrt_Utils_parseDecimalString(const char* d, double *decimal,
                                               nrt_Error * error);
 
-NRTAPI(double) nrt_Utils_getCurrentTimeMillis(void);
+NRTAPI(double) nrt_Utils_getCurrentTimeMillis();
 
 NRTAPI(int) nrt_Utils_strncasecmp(const char *s1, const char *s2, size_t n);
 
@@ -194,7 +194,17 @@ NRTAPI(char) nrt_Utils_cornersTypeAsCoordRep(nrt_CornersType type);
  * \param indexOne Index of first byte to be swapped
  * \param indexTwo Index of second byte to be swapped
  */
-NRTPRIV(void) inline nrt_Utils_swap(uint8_t* value, size_t indexOne,
+/*
+ * Older versions of Visual Studio do not support `inline` for C
+ * Using `__inline` for Windows instead
+ */
+NRTPRIV(void)
+#ifdef WIN32
+__inline
+#else
+inline
+#endif
+nrt_Utils_swap(uint8_t* value, size_t indexOne,
         size_t indexTwo)
 {
     uint8_t temp;
