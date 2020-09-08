@@ -54,7 +54,7 @@ class Element
 public:
     //! Default constructor
     Element() :
-        mParent(nullptr)
+        mParent(NULL)
     {
     }
 
@@ -66,7 +66,7 @@ public:
      */
     Element(const std::string& qname, const std::string& uri = "",
             std::string characterData = "") :
-        mParent(nullptr), mName(uri, qname), mCharacterData(characterData)
+        mParent(NULL), mName(uri, qname), mCharacterData(characterData)
     {
     }
 
@@ -306,7 +306,7 @@ public:
      *  Adds a child element to this element
      *  \param node the child element to add
      */
-    virtual void addChild(std::auto_ptr<Element> node);
+    virtual void addChild(std::unique_ptr <Element>&& node);
 
     /*!
      *  Returns all of the children of this element

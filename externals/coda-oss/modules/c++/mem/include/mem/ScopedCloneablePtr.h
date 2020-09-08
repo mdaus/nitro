@@ -31,7 +31,7 @@ namespace mem
 /*!
  *  \class ScopedCloneablePtr
  *  \brief This class provides RAII for object allocations via new.  It is a
- *         light wrapper around std::auto_ptr and has the same semantics
+ *         light wrapper around std::unique_ptr and has the same semantics
  *         except that the copy constructor and assignment operator are deep
  *         copies (by using T's clone() method) rather than transferring
  *         ownership.
@@ -39,7 +39,7 @@ namespace mem
  *         This is useful for cases where you have a class which has a member
  *         variable that's dynamically allocated and you want to provide a
  *         valid copy constructor / assignment operator.  With raw pointers or
- *         std::auto_ptr's, you'll have to write the copy constructor /
+ *         std::unique_ptr's, you'll have to write the copy constructor /
  *         assignment operator for this class - this is tedious and
  *         error-prone since you need to include all the members in the class.
  *         Using ScopedCloneablePtr's instead, the compiler-generated copy
@@ -51,13 +51,13 @@ template <class T>
 class ScopedCloneablePtr
 {
 public:
-    explicit ScopedCloneablePtr(T* ptr = nullptr) :
+    explicit ScopedCloneablePtr(T* ptr = NULL) :
         mPtr(ptr)
     {
     }
 
-    explicit ScopedCloneablePtr(std::auto_ptr<T> ptr) :
-        mPtr(ptr)
+    explicit ScopedCloneablePtr(std::unique_ptr<T>&& ptr) :
+        mPtr(std::move(ptr))
     {
     }
 
@@ -89,12 +89,12 @@ public:
 
     bool operator==(const ScopedCloneablePtr<T>& rhs) const
     {
-        if (get() == nullptr && rhs.get() == nullptr)
+        if (get() == NULL && rhs.get() == NULL)
         {
             return true;
         }
 
-        if (get() == nullptr || rhs.get() == nullptr)
+        if (get() == NULL || rhs.get() == NULL)
         {
             return false;
         }
@@ -122,18 +122,18 @@ public:
         return mPtr.get();
     }
 
-    void reset(T* ptr = nullptr)
+    void reset(T* ptr = NULL)
     {
         mPtr.reset(ptr);
     }
 
-    void reset(std::auto_ptr<T> ptr)
+    void reset(std::unique_ptr<T>&& ptr)
     {
-        mPtr = ptr;
+        mPtr = std::move(ptr);
     }
 
 private:
-    std::auto_ptr<T> mPtr;
+    std::unique_ptr<T> mPtr;
 };
 }
 

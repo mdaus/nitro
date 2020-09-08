@@ -25,8 +25,6 @@
 #include <sstream>
 #include <string.h>
 
-#include "sys/cstddef.h"
-
 //! Initialize the byte count values for each TIFF type.
 short tiff::Const::mTypeSizes[tiff::Const::Type::MAX] =
 { 0, 1, 1, 2, 4, 8, 1, 1, 2, 4, 8, 4, 8 };
@@ -53,7 +51,7 @@ sys::Uint64_T tiff::combine(sys::Uint32_T numerator,
     sys::Uint64_T value;
 
     //sys::Uint32_T *ptr = (sys::Uint32_T *)&value;
-    auto ptr = reinterpret_cast<std::byte*>(&value);  // reinterpret_cast<> to std::byte is allowed by the standard
+    auto ptr = reinterpret_cast<sys::ubyte*>(&value);  // TODO: std::byte // reinterpret_cast<> to std::byte is allowed by the standard
     memcpy_(ptr, &numerator);
     memcpy_(ptr + sizeof(sys::Uint32_T), &denominator);
 
@@ -66,7 +64,7 @@ void tiff::split(sys::Uint64_T value, sys::Uint32_T &numerator,
     // Do the reverse of combine() and use memcpy().
     //numerator = ((sys::Uint32_T*)&value)[0];
     //denominator = ((sys::Uint32_T*)&value)[1];
-    auto ptr = reinterpret_cast<const std::byte*>(&value);  // reinterpret_cast<> to std::byte is allowed by the standard
+    auto ptr = reinterpret_cast<const sys::ubyte*>(&value);  // TODO: std::byte // reinterpret_cast<> to std::byte is allowed by the standard
     memcpy_(&numerator, ptr);
     memcpy_(&denominator, ptr + sizeof(sys::Uint32_T));
 }

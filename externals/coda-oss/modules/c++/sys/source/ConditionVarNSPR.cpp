@@ -29,7 +29,7 @@ sys::ConditionVarNSPR::ConditionVarNSPR() :
     mMutex(mMutexOwned.get())
 {
     mNative = PR_NewCondVar( (mMutex->getNative()) );
-    if (mNative == nullptr)
+    if (mNative == NULL)
         throw sys::SystemException("Condition Variable initialization failed");
 }
 
@@ -37,13 +37,13 @@ sys::CondtionVarNSPR::ConditionVarNSPR(sys::MutexNSPR *theLock, bool isOwner) :
     mMutex(theLock)
 {
     if (!theLock)
-        throw SystemException("ConditionVar received nullptr mutex");
+        throw SystemException("ConditionVar received NULL mutex");
 
     if (isOwner)
         mMutexOwned.reset(theLock);
 
     mNative = PR_NewCondVar( (mMutex->getNative()) );
-    if (mNative == nullptr)
+    if (mNative == NULL)
         throw sys::SystemException("Condition Variable initialization failed");
 }
 

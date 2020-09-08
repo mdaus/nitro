@@ -56,8 +56,8 @@ void xml::lite::XMLReaderExpat::create()
 {
     // 1. Take the default character mapping
     // 2. Note we are not using expat's NS expanding
-    if (mNative == nullptr)
-        mNative = XML_ParserCreate(nullptr);
+    if (mNative == NULL)
+        mNative = XML_ParserCreate(NULL);
     else
         dbg_printf("Tried to re-create an existing parser!\n");
 
@@ -82,7 +82,7 @@ void xml::lite::XMLReaderExpat::destroy()
     // 1. Delete the parser
     // 2. Free the parser
     XML_ParserFree(mNative);
-    mNative = nullptr;
+    mNative = NULL;
 }
 
 
@@ -92,7 +92,7 @@ void xml::lite::XMLReaderExpat::pushNamespaceContext(const char **atts)
     mNamespaceStack.push();
 
     // Iterate through and find the mappings
-    for (int i = 0; atts[i] != nullptr; i += 2)
+    for (int i = 0; atts[i] != NULL; i += 2)
     {
         std::string attr(atts[i]);
         std::string::size_type x = attr.find_first_of(':');
@@ -172,7 +172,7 @@ void xml::lite::XMLReaderExpat::startElementCallback(void *p,
 
     xml::lite::Attributes attrs;
     // Resolve the attributes to what we really want
-    for (int i = 0; atts[i] != nullptr; i += 2)
+    for (int i = 0; atts[i] != NULL; i += 2)
     {
         xml::lite::AttributeNode attr;
         std::string attrQName;
