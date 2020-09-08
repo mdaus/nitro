@@ -25,8 +25,8 @@
 #include <iterator>
 
 cli::Argument::Argument(const std::string& nameOrFlags, cli::ArgumentParser* parser):
-    mAction(cli::STORE), mMinArgs(0), mMaxArgs(1), mDefaultValue(nullptr),
-            mOwnDefault(false), mConstValue(nullptr), mOwnConst(false),
+    mAction(cli::STORE), mMinArgs(0), mMaxArgs(1), mDefaultValue(NULL),
+            mOwnDefault(false), mConstValue(NULL), mOwnConst(false),
             mRequired(false), mShowsHelp(true), mParser(parser)
 {
     std::vector < std::string > vars = str::split(nameOrFlags, " ");

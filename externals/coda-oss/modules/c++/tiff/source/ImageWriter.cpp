@@ -210,7 +210,7 @@ void tiff::ImageWriter::validate()
 
     //  if (mGeoTIFFReader)
     //  {
-    //    tiff::IFDEntry *entry = nullptr;
+    //    tiff::IFDEntry *entry = NULL;
     //    if ((entry = (*mGeoTIFFReader)["ModelPixelScaleTag"]))
     //      mIFD.addEntry(entry);
     //    if ((entry = (*mGeoTIFFReader)["ModelTiepointTag"]))

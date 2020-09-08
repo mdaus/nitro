@@ -38,7 +38,7 @@ void io::MMapInputStream::close()
 {
     _unmap();
     fclose(mFile);
-    mFile = nullptr;
+    mFile = NULL;
 }
 
 void io::MMapInputStream::_map()
@@ -50,7 +50,7 @@ void io::MMapInputStream::_unmap()
 {
     //     std::cout << "Unmapping file... ";
     mOs.unmapFile(mData, mLength);
-    mData = nullptr;
+    mData = NULL;
     //    std::cout << "done!" << std::endl;
 }
 

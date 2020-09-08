@@ -24,19 +24,19 @@
 #include <net/ssl/SSLExceptions.h>
 #if defined(USE_OPENSSL)
  
-net::ssl::SSLConnection::SSLConnection(std::auto_ptr<net::Socket> socket, 
+net::ssl::SSLConnection::SSLConnection(std::unique_ptr<net::Socket>&& socket, 
                                        SSL_CTX * ctx,
                                        bool serverAuth,
                                        const std::string& host) :
-    NetConnection(socket),
+    NetConnection(std::move(socket)),
     mServerAuthentication(serverAuth)
 {
-    mSSL = nullptr;
+    mSSL = NULL;
     
     mBioErr = BIO_new_fp(stderr, BIO_NOCLOSE);
     
     mSSL = SSL_new(ctx);
-    if(mSSL == nullptr)
+    if(mSSL == NULL)
     {
         throw net::ssl::SSLException(Ctxt(FmtX("SSL_new failed")));
     }
@@ -46,11 +46,11 @@ net::ssl::SSLConnection::SSLConnection(std::auto_ptr<net::Socket> socket,
 
 net::ssl::SSLConnection::~SSLConnection()
 {
-    if(mSSL != nullptr)
+    if(mSSL != NULL)
     {
         SSL_shutdown(mSSL);
     }
-    if(mSSL != nullptr)
+    if(mSSL != NULL)
     {
         SSL_free(mSSL);
     }

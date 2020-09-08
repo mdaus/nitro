@@ -90,7 +90,7 @@ public:
      */
     virtual void destroy(DatabaseConnection * connection)
     {
-        if (connection != nullptr)
+        if (connection != NULL)
         {
             connection->disconnect();
             delete connection;

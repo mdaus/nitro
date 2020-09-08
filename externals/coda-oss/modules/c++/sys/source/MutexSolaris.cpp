@@ -26,7 +26,7 @@
 
 sys::MutexSolaris::MutexSolaris()
 {
-    if (::mutex_init(&mNative, USYNC_THREAD, nullptr) != 0)
+    if (::mutex_init(&mNative, USYNC_THREAD, NULL) != 0)
         throw sys::SystemException("Mutex initialization failed");
 }
 
