@@ -37,7 +37,7 @@ void sys::ThreadSolaris::start()
                getLevel() == KERNEL_LEVEL);
     // \todo Kernel level
 
-    int p = thr_create(NULL,
+    int p = thr_create(nullptr,
                        0,
                        __sys_ThreadSolaris_start,
                        this,
@@ -57,7 +57,7 @@ extern "C" void *__sys_ThreadSolaris_start(void *v)
     dbg_printf("Beginning __start()\n");
     STANDARD_START_CALL(ThreadSolaris, v);
     dbg_printf("Finishing __start()\n");
-    return NULL;
+    return nullptr;
 
 }
 
@@ -74,7 +74,7 @@ void sys::ThreadSolaris::kill()
 void sys::ThreadSolaris::join()
 {
     dbg_printf("Joining thread\n");
-    if (::thr_join(mNative, NULL, NULL) != 0 )
+    if (::thr_join(mNative, nullptr, nullptr) != 0 )
         throw sys::SystemException("thr_join()");
 }
 

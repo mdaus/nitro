@@ -66,7 +66,7 @@ dbi::pResultSet dbi::PgSQLConnection::query(const std::string& q)
     // Execute the query and obtain the result set
     PGresult* res = PQexec(mDBHandle, q.c_str());
 
-    // If the result set is NULL then there is some kind of problem
+    // If the result set is nullptr then there is some kind of problem
     if (!res)
     {
         errorMessage = PQerrorMessage(mDBHandle);
@@ -97,7 +97,7 @@ dbi::pResultSet dbi::PgSQLConnection::query(const std::string& q)
         throw dbi::SQLException(Ctxt(errorMessage));
     }
 
-    return dbi::pResultSet(new PgSQLResultSet(NULL));
+    return dbi::pResultSet(new PgSQLResultSet(nullptr));
 }
 
 dbi::Row dbi::PgSQLResultSet::fetchRow()
