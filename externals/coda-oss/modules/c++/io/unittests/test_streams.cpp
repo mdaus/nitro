@@ -115,12 +115,11 @@ TEST_CASE(testCountingOutputStream)
 TEST_CASE(testBufferViewStream)
 {
     {
-        mem::BufferView<sys::ubyte> bufferView(nullptr, 0);
+        mem::BufferView<sys::ubyte> bufferView(NULL, 0);
         io::BufferViewStream<sys::ubyte> stream(bufferView);
         TEST_ASSERT_EQ(stream.tell(), 0);
         TEST_ASSERT_EQ(stream.available(), 0);
-        constexpr sys::ubyte* null_stream = nullptr;
-        TEST_ASSERT_EQ(stream.get(), null_stream);
+        TEST_ASSERT_EQ(stream.get(), NULL);
     }
     {
         std::vector<sys::ubyte> data(4);

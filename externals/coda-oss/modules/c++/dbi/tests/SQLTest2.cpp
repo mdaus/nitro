@@ -48,7 +48,7 @@ int main(int argc, char* argv[])
 
         myConn->query("DROP TABLE MyTable");
 
-        resultSet = myConn->query("CREATE TABLE MyTable (id INT NOT nullptr PRIMARY KEY, name VARCHAR(25) NOT nullptr, description TEXT NOT nullptr)");
+        resultSet = myConn->query("CREATE TABLE MyTable (id INT NOT NULL PRIMARY KEY, name VARCHAR(25) NOT NULL, description TEXT NOT NULL)");
 
         resultSet = myConn->query("SELECT TMODEL_KEY, NAME, OVERVIEW_URL FROM TMODEL");
 
