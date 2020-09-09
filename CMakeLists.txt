@@ -35,6 +35,11 @@ if (${CMAKE_PROJECT_NAME} STREQUAL nitro)
         set(ENABLE_UUID OFF CACHE BOOL "enable uuid library" FORCE)
         set(ENABLE_ZIP OFF CACHE BOOL "enable ZIP library" FORCE)
 
+        set(ENABLE_PYTHON OFF CACHE BOOL "enable Python support" FORCE)
+        set(ENABLE_JAVA OFF CACHE BOOL "enable Java support" FORCE)
+
+        set(CODA_BUILD_TESTS OFF CACHE BOOL "build CODA tests" FORCE)
+
         list(APPEND CMAKE_MODULE_PATH
              "${CMAKE_CURRENT_SOURCE_DIR}/externals/coda-oss/cmake")
         include(CodaBuild)

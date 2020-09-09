@@ -60,7 +60,7 @@ ByteProvider::~ByteProvider()
 }
 
 void ByteProvider::copyFromStreamAndClear(io::ByteStream& stream,
-                                          std::vector<std::byte>& rawBytes)
+                                          std::vector<sys::byte>& rawBytes)
 {
     rawBytes.resize(stream.getSize());
     if (!rawBytes.empty())
@@ -104,7 +104,7 @@ void ByteProvider::initializeImpl(Record& record,
     }
     else
     {
-        mNumRowsPerBlock = getImageBlocker(nullptr)->getNumRowsPerBlock();
+        mNumRowsPerBlock = getImageBlocker()->getNumRowsPerBlock();
     }
 }
 
@@ -128,7 +128,7 @@ void ByteProvider::initialize(Record& record,
 void ByteProvider::getFileLayout(nitf::Record& inRecord,
                                  const std::vector<PtrAndLength>& desData)
 {
-    std::shared_ptr<io::ByteStream> byteStream(new io::ByteStream());
+    mem::SharedPtr<io::ByteStream> byteStream(new io::ByteStream());
 
     nitf::IOStreamWriter io(byteStream);
 
@@ -309,14 +309,7 @@ void ByteProvider::getFileLayout(nitf::Record& inRecord,
     mDesSubheaderFileOffset = offset;
 }
 
-#if __cplusplus < 201703L // C++17
-std::auto_ptr<const ImageBlocker> ByteProvider::getImageBlocker() const
-{
-    auto retval = getImageBlocker(nullptr);
-    return std::auto_ptr<const ImageBlocker>(retval.release());
-}
-#endif
-std::unique_ptr<const ImageBlocker> ByteProvider::getImageBlocker(std::nullptr_t) const
+std::unique_ptr<const ImageBlocker> ByteProvider::getImageBlocker() const
 {
     std::vector<size_t> numRowsPerSegment(mImageSegmentInfo.size());
     for (size_t ii = 0; ii < mImageSegmentInfo.size(); ++ii)
@@ -410,8 +403,8 @@ void ByteProvider::addImageData(
     // Figure out what offset of 'imageData' we're writing from
     const size_t startLocalRowToWrite =
             startGlobalRowToWrite - startRow + numPadRowsSoFar;
-    const std::byte* imageDataPtr =
-            static_cast<const std::byte*>(imageData) +
+    const sys::byte* imageDataPtr =
+            static_cast<const sys::byte*>(imageData) +
             startLocalRowToWrite * mNumBytesPerRow;
 
     if (buffers.empty())
@@ -527,7 +520,6 @@ nitf::Off ByteProvider::getNumBytes(size_t startRow, size_t numRows) const
     return numBytes;
 }
 
-#undef max
 void ByteProvider::getBytes(const void* imageData,
                             size_t startRow,
                             size_t numRows,
