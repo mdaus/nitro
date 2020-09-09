@@ -77,12 +77,12 @@ bool sys::OSWin32::exists(const std::string& path) const
         const DWORD errCode = GetLastError();
         if (errCode != ERROR_FILE_NOT_FOUND && errCode != ERROR_PATH_NOT_FOUND)
         {
-            char* err = nullptr;
+            char* err = NULL;
             FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER |
                           FORMAT_MESSAGE_FROM_SYSTEM,
-                          nullptr, errCode,
+                          NULL, errCode,
                           MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-                          (LPTSTR) &err, 0, nullptr);
+                          (LPTSTR) &err, 0, NULL);
             throw except::Exception(Ctxt(
                 "Problem while testing file existence for " + path +
                 " with Error: " + std::string(err)));
@@ -158,7 +158,7 @@ bool sys::OSWin32::isDirectory(const std::string& path) const
 
 bool sys::OSWin32::makeDirectory(const std::string& path) const
 {
-    return (CreateDirectory(path.c_str(), nullptr)) ? (true): (false);
+    return (CreateDirectory(path.c_str(), NULL)) ? (true): (false);
 }
 
 std::string sys::OSWin32::getCurrentWorkingDirectory() const
@@ -218,7 +218,7 @@ std::string sys::OSWin32::operator[](const std::string& s) const
 std::string sys::OSWin32::getEnv(const std::string& s) const
 {
     std::string result;
-    const DWORD size = GetEnvironmentVariable(s.c_str(), nullptr, 0);
+    const DWORD size = GetEnvironmentVariable(s.c_str(), NULL, 0);
     if (size == 0)
     {
         throw sys::SystemException(Ctxt(
@@ -246,7 +246,7 @@ std::string sys::OSWin32::getEnv(const std::string& s) const
 
 bool sys::OSWin32::isEnvSet(const std::string& s) const
 {
-    const DWORD size = GetEnvironmentVariable(s.c_str(), nullptr, 0);
+    const DWORD size = GetEnvironmentVariable(s.c_str(), NULL, 0);
     return (size != 0);
 }
 
@@ -267,7 +267,7 @@ void sys::OSWin32::setEnv(const std::string& var,
 
 void sys::OSWin32::unsetEnv(const std::string& var)
 {
-    const BOOL ret = SetEnvironmentVariable(var.c_str(), nullptr);
+    const BOOL ret = SetEnvironmentVariable(var.c_str(), NULL);
     if (!ret)
     {
         throw sys::SystemException(Ctxt("Unable to unset windows environment variable " + var));
@@ -381,7 +381,7 @@ std::string sys::OSWin32::getCurrentExecutable(
     char buffer[MAX_PATH + 2];
     memset(buffer, 0, MAX_PATH + 2);
 
-    size_t bytesRead = GetModuleFileName(nullptr, buffer, MAX_PATH + 1);
+    size_t bytesRead = GetModuleFileName(NULL, buffer, MAX_PATH + 1);
 
     if (bytesRead == MAX_PATH + 1 || bytesRead == 0)
     {

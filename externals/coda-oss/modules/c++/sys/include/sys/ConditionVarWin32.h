@@ -145,7 +145,7 @@ public:
 
 private:
     // This is set if we own the mutex, to make sure it gets deleted.
-    std::unique_ptr<MutexWin32> mMutexOwned;
+    std::auto_ptr<MutexWin32> mMutexOwned;
     MutexWin32 *mMutex;
     ConditionVarDataWin32 mNative;
 };

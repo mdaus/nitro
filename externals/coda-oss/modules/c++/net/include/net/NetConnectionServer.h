@@ -73,7 +73,7 @@ public:
      *
      */
     void initialize(net::RequestHandlerFactory* requestHandlerFactory,
-		    net::AllocStrategy* allocStrategy = nullptr);
+		    net::AllocStrategy* allocStrategy = NULL);
     //virtual void handleConnection(NetConnection* connection) = 0;
 
     /*!
@@ -103,9 +103,9 @@ protected:
     //! The amount of backlog
     int mBacklog;
     //! The socket we are listening on
-    std::unique_ptr<net::Socket> mSocket;
+    std::auto_ptr<net::Socket> mSocket;
 
-    std::unique_ptr<net::AllocStrategy> mAllocStrategy;
+    std::auto_ptr<net::AllocStrategy> mAllocStrategy;
 };
 }
 

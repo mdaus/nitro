@@ -38,7 +38,7 @@ bool dbi::MySQLConnection::connect(const std::string& database,
     if (!mysql_real_connect(&mDBHandle, host.c_str(),
                             user.c_str(),  pass.c_str(),
                             database.c_str(), port,
-                            nullptr, 0))
+                            NULL, 0))
     {
         return false;
     }
@@ -100,7 +100,7 @@ dbi::Row dbi::MySQLResultSet::fetchRow()
     }
 
     // Create a result set auto pointer and give it to the user
-    //std::unique_ptr< Row > row(new Row);
+    //std::auto_ptr< Row > row(new Row);
     dbi::Row row;
 
     for (int i = 0; i < numFields; i++)

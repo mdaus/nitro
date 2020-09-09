@@ -58,12 +58,12 @@ void net::ssl::SSLConnectionClientFactory::initializeContext()
     const SSL_METHOD *method = SSLv23_client_method();
 #endif
 
-    if(method == nullptr)
+    if(method == NULL)
     {
         throw net::ssl::SSLException(Ctxt(FmtX("SSLv23_client_method failed")));
     }
     mCtx = SSL_CTX_new(method);
-    if(mCtx == nullptr)
+    if(mCtx == NULL)
     {
         throw net::ssl::SSLException(Ctxt(FmtX("SSL_CTX_new failed")));
     }
@@ -102,11 +102,11 @@ void net::ssl::SSLConnectionClientFactory::initializeContext()
 #endif
 }
 
-net::NetConnection * net::ssl::SSLConnectionClientFactory::newConnection(std::unique_ptr<net::Socket>&& toServer) 
+net::NetConnection * net::ssl::SSLConnectionClientFactory::newConnection(std::auto_ptr<net::Socket> toServer) 
 {
 #if defined(USE_OPENSSL)
-    return (new SSLConnection(std::move(toServer), mCtx, mServerAuthentication, mUrl.getHost())); 
+    return (new SSLConnection(toServer, mCtx, mServerAuthentication, mUrl.getHost())); 
 #else
-    return (new net::NetConnection(std::move(toServer)));
+    return (new net::NetConnection(toServer));
 #endif
 }

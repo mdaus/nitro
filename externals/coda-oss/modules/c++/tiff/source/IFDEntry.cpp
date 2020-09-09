@@ -37,7 +37,7 @@ void tiff::IFDEntry::serialize(io::OutputStream& output)
 {
     io::Seekable *seekable =
             dynamic_cast<io::Seekable *>(&output);
-    if (seekable == nullptr)
+    if (seekable == NULL)
         throw except::Exception(Ctxt("Can only serialize IFDEntry to seekable stream"));
 
     output.write((sys::byte *)&mTag, sizeof(mTag));
@@ -87,7 +87,7 @@ void tiff::IFDEntry::deserialize(io::InputStream& input, const bool reverseBytes
 {
     io::Seekable *seekable =
             dynamic_cast<io::Seekable*>(&input);
-    if (seekable == nullptr)
+    if (seekable == NULL)
         throw except::Exception(Ctxt("Can only deserialize IFDEntry from seekable stream"));
 
     input.read((char *)&mTag, sizeof(mTag));
@@ -200,9 +200,9 @@ void tiff::IFDEntry::addValues(const char* str, int tiffType)
 
     for (size_t ii = 0, len = ::strlen(str) + 1; ii < len; ++ii)
     {
-        std::unique_ptr<tiff::TypeInterface>
+        std::auto_ptr<tiff::TypeInterface>
             value(tiff::TypeFactory::create(strPtr + ii, tiffType));
-        addValue(std::move(value));
+        addValue(value);
     }
 }
 

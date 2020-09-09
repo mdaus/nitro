@@ -36,12 +36,12 @@ namespace mt
     class TiedRequestHandler : public sys::Runnable
     {
 	RunnableRequestQueue* mRequestQueue;
-	sys::Semaphore* mSem = nullptr;
+	sys::Semaphore* mSem;
 	CPUAffinityThreadInitializer* mAffinityInit;
 
     public:
 	TiedRequestHandler(RunnableRequestQueue* requestQueue) :
-	    mRequestQueue(requestQueue), mAffinityInit(nullptr) {}
+	    mRequestQueue(requestQueue), mAffinityInit(NULL) {}
 		
 	virtual ~TiedRequestHandler();
 
@@ -67,7 +67,7 @@ namespace mt
 	int mGenSize;
     public:
 	GenerationThreadPool(unsigned short numThreads = 0,
-			     CPUAffinityInitializer* affinityInit = nullptr) 
+			     CPUAffinityInitializer* affinityInit = NULL) 
 	    : BasicThreadPool<TiedRequestHandler>(numThreads), 
 	    mAffinityInit(affinityInit), mGenSize(0)
 	    {

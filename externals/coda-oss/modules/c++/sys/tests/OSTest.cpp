@@ -110,7 +110,7 @@ int main(int argc, char **argv)
         }
         os.remove("TEST_DIRECTORY");
 
-        std::cout << "Time Now: " << time(nullptr) << std::endl;
+        std::cout << "Time Now: " << time(NULL) << std::endl;
         sys::RealTimeStopWatch sw;
         //std::cout << "CPS: " << CLOCKS_PER_SEC << std::endl;
         //	std::cout << "Clock: " << clock() << std::endl;
@@ -120,7 +120,6 @@ int main(int argc, char **argv)
         {
             x = 1 * 2 * 3;
         }
-        if (x > 0) { /*remove compiler warning*/ }
         std::cout << "Finish Loop 1" << std::endl;
         sw.pause();
         for (int i = 0; i < 1000000000; ++i)
@@ -137,7 +136,7 @@ int main(int argc, char **argv)
         std::cout << "Finish Loop 3" << std::endl;
         std::cout << "Stop: " << std::setprecision(50) << sw.stop()
                 << std::endl;
-        std::cout << "Time Now: " << time(nullptr) << std::endl;
+        std::cout << "Time Now: " << time(NULL) << std::endl;
         //	std::cout << "Clock: " << clock() << std::endl;
 
     }

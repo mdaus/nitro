@@ -66,7 +66,7 @@ void SocketAddress::setHost(const std::string& host)
         struct sockaddr saddr;
         int slen = sizeof(saddr);
         struct sockaddr_in *paddr = (struct sockaddr_in *)&saddr;
-        int ok = WSAStringToAddress((LPSTR)host.c_str(), AF_INET, nullptr, &saddr, &slen);
+        int ok = WSAStringToAddress((LPSTR)host.c_str(), AF_INET, NULL, &saddr, &slen);
         mAddress.sin_addr = paddr->sin_addr;
 #else
         ::inet_pton(AF_INET, host.c_str(), &mAddress.sin_addr);

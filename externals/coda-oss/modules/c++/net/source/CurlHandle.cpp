@@ -31,7 +31,7 @@ namespace net
 CurlHandle::CurlHandle() :
     mHandle(curl_easy_init())
 {
-    if (mHandle == nullptr)
+    if (mHandle == NULL)
     {
         throw except::Exception(Ctxt("curl_easy_init() failed"));
     }
@@ -103,7 +103,7 @@ int CurlHandle::writeCallback(char* data,
                               size_t nmemb,
                               std::string* writeData)
 {
-    if (writeData == nullptr)
+    if (writeData == NULL)
     {
         return 0;
     }

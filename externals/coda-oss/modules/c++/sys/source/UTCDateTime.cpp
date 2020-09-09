@@ -137,7 +137,7 @@ void UTCDateTime::getTime(time_t numSecondsSinceEpoch, tm& t) const
     // our fingers and hope the regular function actually is reentrant
     // (supposedly this is the case on Windows).
 #ifdef HAVE_GMTIME_R
-    if (::gmtime_r(&numSecondsSinceEpoch, &t) == nullptr)
+    if (::gmtime_r(&numSecondsSinceEpoch, &t) == NULL)
     {
         int const errnum = errno;
         throw except::Exception(Ctxt("gmtime_r() failed (" +
@@ -145,7 +145,7 @@ void UTCDateTime::getTime(time_t numSecondsSinceEpoch, tm& t) const
     }
 #else
     tm const * const gmTimePtr = ::gmtime(&numSecondsSinceEpoch);
-    if (gmTimePtr == nullptr)
+    if (gmTimePtr == NULL)
     {
         int const errnum = errno;
         throw except::Exception(Ctxt("gmtime failed (" +

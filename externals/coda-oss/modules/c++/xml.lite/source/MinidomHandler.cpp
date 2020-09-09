@@ -24,7 +24,7 @@
 
 void xml::lite::MinidomHandler::setDocument(Document *newDocument, bool own)
 {
-    if (mDocument != nullptr && mOwnDocument)
+    if (mDocument != NULL && mOwnDocument)
     {
         if (newDocument != mDocument)
             delete mDocument;

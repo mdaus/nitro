@@ -106,7 +106,7 @@ public:
      * @param index
      *   the index that indicates which value to retrieve
      * @return
-     *   the value at the specified index, or nullptr
+     *   the value at the specified index, or NULL
      *****************************************************************/
     tiff::TypeInterface *operator[](const sys::Uint32_T index) const
     {
@@ -260,7 +260,7 @@ public:
      * @param value
      *   the tiff::GenericType to add as a value
      *****************************************************************/
-    void addValue(std::unique_ptr<tiff::TypeInterface>&& value)
+    void addValue(std::auto_ptr<tiff::TypeInterface> value)
     {
         mValues.push_back(value.get());
         ++mCount;

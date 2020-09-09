@@ -23,8 +23,6 @@
 #ifndef __NET_CONNECTION_CLIENT_FACTORY_H__
 #define __NET_CONNECTION_CLIENT_FACTORY_H__
 
-#include <memory>
-
 /*!
  *  \file NetConnectionClientFactory.h
  *  \brief Contains class for creating client socket connections
@@ -83,14 +81,14 @@ public:
      *
      *
      */
-    virtual NetConnection* newConnection(std::unique_ptr<Socket>&& toServer);
+    virtual NetConnection* newConnection(std::auto_ptr<Socket> toServer);
     /*!
      * Destroy a spawned connection.
      * \param connection The connection to destroy
      */
     virtual void destroy(NetConnection * connection)
     {
-        if (connection != nullptr)
+        if (connection != NULL)
         {
             delete connection;
         }

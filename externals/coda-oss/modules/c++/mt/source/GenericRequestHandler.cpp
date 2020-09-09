@@ -29,7 +29,7 @@ void mt::GenericRequestHandler::run()
     while (true)
     {
         // Pull a runnable off the queue
-        sys::Runnable* handler = nullptr;
+        sys::Runnable* handler = NULL;
         mRequest->dequeue(handler);
         if (!handler)
         {
@@ -38,7 +38,7 @@ void mt::GenericRequestHandler::run()
 
         // Run the runnable that we pulled off the queue
         // It will get deleted when it goes out of scope below
-        std::unique_ptr<sys::Runnable> scopedHandler(handler);
+        std::auto_ptr<sys::Runnable> scopedHandler(handler);
         scopedHandler->run();
     }
 }
