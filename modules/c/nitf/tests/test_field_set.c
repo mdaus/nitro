@@ -36,14 +36,14 @@ int main(int argc, char *argv[])
 {
     nitf_FileHeader *fhdr;          /* File header supplying fields */
     nitf_ImageSubheader *subhdr;    /* Subheader supplying fields */
-    nitf_Uint32 valueU32Before;     /* Value buffer */
-    nitf_Uint32 valueU32After;      /* Value buffer */
-    nitf_Uint64 valueU64Before;     /* Value buffer */
-    nitf_Uint64 valueU64After;      /* Value buffer */
+    uint32_t valueU32Before;     /* Value buffer */
+    uint32_t valueU32After;      /* Value buffer */
+    uint64_t valueU64Before;     /* Value buffer */
+    uint64_t valueU64After;      /* Value buffer */
     char *valueStrBefore;           /* Value buffer */
     /* Value buffer */
     static char valueStrAfter[STR_LEN + 2];
-    nitf_Uint32 valueStrLen;        /* Value buffer */
+    uint32_t valueStrLen;        /* Value buffer */
     static nitf_Error errorObj;     /* Error object for messages */
     nitf_Error *error;              /* Pointer to the error object */
 
