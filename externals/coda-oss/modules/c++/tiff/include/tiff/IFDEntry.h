@@ -106,7 +106,7 @@ public:
      * @param index
      *   the index that indicates which value to retrieve
      * @return
-     *   the value at the specified index, or nullptr
+     *   the value at the specified index, or NULL
      *****************************************************************/
     tiff::TypeInterface *operator[](const sys::Uint32_T index) const
     {

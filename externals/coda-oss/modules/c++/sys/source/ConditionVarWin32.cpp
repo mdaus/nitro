@@ -21,7 +21,7 @@
  */
 
 
-#if defined(WIN32)
+#if defined(WIN32) || defined(_WIN32)
 
 #if !defined(USE_NSPR_THREADS)
 
@@ -51,12 +51,12 @@ namespace
 
 sys::ConditionVarDataWin32::ConditionVarDataWin32():
     mNumWaiters(0),
-    mSemaphore(CreateSemaphore(nullptr, 0, 0x7FFFFFFF, nullptr)),
-    mWaitersAreDone(CreateEvent(nullptr, FALSE, FALSE, nullptr)),
+    mSemaphore(CreateSemaphore(NULL, 0, 0x7FFFFFFF, NULL)),
+    mWaitersAreDone(CreateEvent(NULL, FALSE, FALSE, NULL)),
     mWasBroadcast(false)
 {
     InitializeCriticalSection(&mNumWaitersCS);
-    if (mSemaphore == nullptr || mWaitersAreDone == nullptr)
+    if (mSemaphore == NULL || mWaitersAreDone == NULL)
     {
         throw sys::SystemException(
             "ConditionVarDataWin32 Initializer failed");
@@ -166,7 +166,7 @@ void sys::ConditionVarDataWin32::signal()
     // If there are waiters, increment the semaphore by 1 to wake one up
     if (haveWaiters)
     {
-        ReleaseSemaphore(mSemaphore, 1, nullptr);
+        ReleaseSemaphore(mSemaphore, 1, NULL);
     }
 }
 
@@ -210,7 +210,7 @@ sys::ConditionVarWin32::ConditionVarWin32(sys::MutexWin32 *theLock, bool isOwner
     mMutex(theLock)
 {
     if (!theLock)
-        throw SystemException("ConditionVar received nullptr mutex");
+        throw SystemException("ConditionVar received NULL mutex");
 
     if (isOwner)
         mMutexOwned.reset(theLock);

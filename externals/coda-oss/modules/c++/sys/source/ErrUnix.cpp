@@ -21,7 +21,7 @@
  */
 
 
-#if !defined(WIN32)
+#if !(defined(WIN32) || defined(_WIN32))
 
 #include "sys/Err.h"
 
@@ -33,7 +33,7 @@ int sys::Err::getLast() const
 std::string sys::Err::toString() const
 {
     char *temp = strerror(mErrId);
-    if (temp == nullptr)
+    if (temp == NULL)
         return std::string("");
 
     std::string stringError = temp;

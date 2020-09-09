@@ -21,7 +21,7 @@
  */
 
 
-#if defined(WIN32)
+#if defined(WIN32) || defined(_WIN32)
 
 #if !defined(USE_NSPR_THREADS)
 
@@ -29,8 +29,8 @@
 
 sys::MutexWin32::MutexWin32()
 {
-    mNative = CreateMutex(nullptr, FALSE, nullptr);
-    if (mNative == nullptr)
+    mNative = CreateMutex(NULL, FALSE, NULL);
+    if (mNative == NULL)
         throw sys::SystemException("Mutex initializer failed");
 }
 

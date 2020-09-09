@@ -22,7 +22,7 @@
 
 #include "config/coda_oss_config.h"
 
-#if !defined(WIN32)
+#if !(defined(WIN32) || defined(_WIN32))
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -254,7 +254,7 @@ std::string sys::OSUnix::getTempName(const std::string& path,
     }
 #else
     CharWrapper tempname = tempnam(path.c_str(), prefix.c_str());
-    if (tempname.get() == nullptr)
+    if (tempname.get() == NULL)
         name = "";
     else
     {
@@ -296,7 +296,7 @@ std::string sys::OSUnix::operator[](const std::string& s) const
 std::string sys::OSUnix::getEnv(const std::string& s) const
 {
     const char* envVal = getenv(s.c_str());
-    if (envVal == nullptr)
+    if (envVal == NULL)
         throw sys::SystemException(
             Ctxt("Unable to get unix environment variable " + s));
     return std::string(envVal);
@@ -305,7 +305,7 @@ std::string sys::OSUnix::getEnv(const std::string& s) const
 bool sys::OSUnix::isEnvSet(const std::string& s) const
 {
     const char* envVal = getenv(s.c_str());
-    return (envVal != nullptr);
+    return (envVal != NULL);
 }
 
 void sys::OSUnix::setEnv(const std::string& var,
@@ -320,7 +320,7 @@ void sys::OSUnix::setEnv(const std::string& var,
     // putenv() will overwrite the value if it already exists, so if we don't
     // want to overwrite, we do nothing when getenv() indicates the variable's
     // already set
-    if (overwrite || getenv(var.c_str()) == nullptr)
+    if (overwrite || getenv(var.c_str()) == NULL)
     {
         // putenv() isn't guaranteed to make a copy of the string, so we need
         // to allocate it and let it leak.  Ugh.
@@ -534,23 +534,23 @@ void sys::DirectoryUnix::close()
     if (mDir)
     {
         closedir( mDir);
-        mDir = nullptr;
+        mDir = NULL;
     }
 }
 std::string sys::DirectoryUnix::findFirstFile(const std::string& dir)
 {
     // First file is always . on Unix
     mDir = ::opendir(dir.c_str());
-    if (mDir == nullptr)
+    if (mDir == NULL)
         return "";
     return findNextFile();
 }
 
 std::string sys::DirectoryUnix::findNextFile()
 {
-    struct dirent* entry = nullptr;
+    struct dirent* entry = NULL;
     entry = ::readdir(mDir);
-    if (entry == nullptr)
+    if (entry == NULL)
         return "";
     return entry->d_name;
 }

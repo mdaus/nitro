@@ -54,7 +54,7 @@ class Element
 public:
     //! Default constructor
     Element() :
-        mParent(nullptr)
+        mParent(NULL)
     {
     }
 
@@ -66,7 +66,7 @@ public:
      */
     Element(const std::string& qname, const std::string& uri = "",
             std::string characterData = "") :
-        mParent(nullptr), mName(uri, qname), mCharacterData(characterData)
+        mParent(NULL), mName(uri, qname), mCharacterData(characterData)
     {
     }
 

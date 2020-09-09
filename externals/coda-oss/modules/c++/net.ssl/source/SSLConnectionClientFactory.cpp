@@ -58,12 +58,12 @@ void net::ssl::SSLConnectionClientFactory::initializeContext()
     const SSL_METHOD *method = SSLv23_client_method();
 #endif
 
-    if(method == nullptr)
+    if(method == NULL)
     {
         throw net::ssl::SSLException(Ctxt(FmtX("SSLv23_client_method failed")));
     }
     mCtx = SSL_CTX_new(method);
-    if(mCtx == nullptr)
+    if(mCtx == NULL)
     {
         throw net::ssl::SSLException(Ctxt(FmtX("SSL_CTX_new failed")));
     }

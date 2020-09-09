@@ -50,7 +50,7 @@ public:
      */
     MalformedURLException(const char *url): except::Exception(url)
     {
-        if (url != nullptr)
+        if (url != NULL)
         {
             mMessage = "In: ";
             mMessage += url;

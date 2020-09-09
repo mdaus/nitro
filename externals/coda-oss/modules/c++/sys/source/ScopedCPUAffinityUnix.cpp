@@ -22,7 +22,7 @@
 
 #include "config/coda_oss_config.h"
 
-#if !defined(WIN32)
+#if !(defined(WIN32) || defined(_WIN32))
 
 #include <errno.h>
 
@@ -53,7 +53,7 @@ void ScopedCPUMaskUnix::initialize(int numCPUs)
     mSize = CPU_ALLOC_SIZE(numCPUs);
     mMask = CPU_ALLOC(numCPUs);
 
-    if (mMask == nullptr)
+    if (mMask == NULL)
     {
         std::ostringstream msg;
         msg << "Failed to allocate CPU mask for " << numCPUs << "CPUs";
@@ -65,7 +65,7 @@ void ScopedCPUMaskUnix::initialize(int numCPUs)
 
 ScopedCPUMaskUnix::~ScopedCPUMaskUnix()
 {
-    if (mMask != nullptr)
+    if (mMask != NULL)
     {
         CPU_FREE(mMask);
     }

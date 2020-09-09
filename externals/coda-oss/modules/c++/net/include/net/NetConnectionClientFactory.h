@@ -90,7 +90,7 @@ public:
      */
     virtual void destroy(NetConnection * connection)
     {
-        if (connection != nullptr)
+        if (connection != NULL)
         {
             delete connection;
         }

@@ -52,7 +52,7 @@ class Document
 {
 public:
     //! Constructor
-    Document(Element* rootNode = nullptr, bool own = true) :
+    Document(Element* rootNode = NULL, bool own = true) :
         mRootNode(rootNode), mOwnRoot(own)
     {
     }

@@ -98,7 +98,7 @@ public:
      *  are planning on reading from it immediately
      */
     ZipFile(io::InputStream* inputStream) :
-        mCompressed(nullptr)
+        mCompressed(NULL)
     {
         mSwapBytes = sys::isBigEndianSystem();
         mCompressedLength = inputStream->available();

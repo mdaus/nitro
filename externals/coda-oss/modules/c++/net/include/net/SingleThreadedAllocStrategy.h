@@ -43,7 +43,7 @@ public:
 
     //!  Constructor
     SingleThreadedAllocStrategy() :
-        mHandler(nullptr)
+        mHandler(NULL)
     {
     }
 

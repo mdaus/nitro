@@ -21,7 +21,7 @@
  */
 
 
-#if !defined(WIN32)
+#if !(defined(WIN32) || defined(_WIN32))
 
 #include <sys/wait.h>
 #include <str/Manip.h>
@@ -39,13 +39,13 @@ namespace sys
 FILE* ExecPipe::openPipe(const std::string& command,
                          const std::string& type)
 {
-    FILE* ioFile = nullptr;
+    FILE* ioFile = NULL;
     int pIO[2];
 
     //! create the IO pipes for stdin/out
     if (pipe(pIO) < 0)
     {
-        return nullptr;
+        return NULL;
     }
 
     //! fork a subprocess for running our command --
@@ -58,7 +58,7 @@ FILE* ExecPipe::openPipe(const std::string& command,
             // there was an error while forking
             close(pIO[READ_PIPE]);
             close(pIO[WRITE_PIPE]);
-            return nullptr;
+            return NULL;
         case 0:
         {
             // we are now in the forked process --
@@ -104,7 +104,7 @@ FILE* ExecPipe::openPipe(const std::string& command,
             //  command the user specified
             execl("/bin/sh", "sh", "-c",
                   command.c_str(),
-                  static_cast<char*>(nullptr));
+                  static_cast<char*>(NULL));
 
             //! exit the subprocess once it has completed
             exit(127);
@@ -144,7 +144,7 @@ int ExecPipe::closePipe()
     if (mOutStream)
     {
         fclose(mOutStream);
-        mOutStream = nullptr;
+        mOutStream = NULL;
     }
 
     int exitStatus = 0;

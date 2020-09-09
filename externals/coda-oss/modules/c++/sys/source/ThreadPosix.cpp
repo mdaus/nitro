@@ -24,7 +24,7 @@
 
 #if defined(HAVE_PTHREAD_H)
 
-#ifdef WIN32
+#if defined(WIN32) || defined(_WIN32)
 #   define SIGKILL 0
 #endif
 void sys::ThreadPosix::start()
@@ -60,7 +60,7 @@ void sys::ThreadPosix::start()
     else
     {
         if (::pthread_create(&mNative,
-                             nullptr,
+                             NULL,
                              (void *(*)(void *))this->__start,
                              this) != 0)
             throw sys::SystemException("pthread_create()");
@@ -80,8 +80,8 @@ void *sys::ThreadPosix::__start(void *v)
     delete runnable;
     */
 
-    pthread_exit(nullptr);
-    return nullptr;
+    pthread_exit(NULL);
+    return NULL;
 }
 
 void sys::ThreadPosix::kill()
@@ -94,7 +94,7 @@ void sys::ThreadPosix::kill()
 }
 void sys::ThreadPosix::join()
 {
-    if (::pthread_join(mNative, nullptr) != 0)
+    if (::pthread_join(mNative, NULL) != 0)
         throw sys::SystemException("pthread_join()");
 }
 void sys::ThreadPosix::yield()

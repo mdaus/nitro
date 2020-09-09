@@ -78,7 +78,7 @@ public:
      */
     virtual void close() 
     { 
-        if(mSSL != nullptr)
+        if(mSSL != NULL)
         {
             SSL_shutdown(mSSL);
         } 

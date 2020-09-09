@@ -44,7 +44,7 @@ namespace sys
  *   {
  *     // declare this function. 
  *     STANDARD_START_CALL(Win32Thread, v);
- *     return nullptr;
+ *     return NULL;
  *   }
  *  \endcode
  */

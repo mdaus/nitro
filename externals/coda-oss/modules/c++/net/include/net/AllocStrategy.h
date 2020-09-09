@@ -63,11 +63,11 @@ class AllocStrategy
 public:
 
     /*!
-     *  Constructor.  Set our internal factory to nullptr.
+     *  Constructor.  Set our internal factory to NULL.
      *
      */
     AllocStrategy() :
-        mRequestHandlerFactory(nullptr)
+        mRequestHandlerFactory(NULL)
     {
     }
 

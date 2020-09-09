@@ -24,7 +24,7 @@
 #ifndef __SYS_OS_UNIX_H__
 #define __SYS_OS_UNIX_H__
 
-#if !defined(WIN32)
+#if !(defined(WIN32) || defined(_WIN32))
 
 #include "sys/AbstractOS.h"
 #include "sys/Conf.h"
@@ -243,7 +243,7 @@ protected:
 class DirectoryUnix : public AbstractDirectory
 {
 public:
-    DirectoryUnix() : mDir(nullptr)
+    DirectoryUnix() : mDir(NULL)
     {}
     virtual ~DirectoryUnix()
     {

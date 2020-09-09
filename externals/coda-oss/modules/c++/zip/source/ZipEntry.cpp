@@ -27,7 +27,7 @@ const static char* sZipFileMadeByStr[] = {
         "OpenVMS", "UNIX", "VM/CMS", "Atari ST", "OS/2 H.P.F.S.", "Macintosh",
         "Z-System", "CP/M", "Windows NTFS", "MVS (OS/390 - Z/OS)", "VSE",
         "Acorn Risc", "VFAT", "alternative MVS", "BeOS", "Tandem", "OS/400",
-        "OS/X (Darwin)", nullptr };
+        "OS/X (Darwin)", NULL };
 
 namespace zip
 {
@@ -67,7 +67,7 @@ const char* ZipEntry::getVersionMadeByString() const
 {
 
     if (mVersionMadeBy >= 20)
-        return nullptr;
+        return NULL;
 
     return sZipFileMadeByStr[mVersionMadeBy];
 }
@@ -95,7 +95,7 @@ std::ostream& operator<<(std::ostream& os, const zip::ZipEntry& ze)
 {
     const char* madeBy = ze.getVersionMadeByString();
     std::string asStr = "Unknown";
-    if (madeBy != nullptr)
+    if (madeBy != NULL)
     {
         asStr = madeBy;
     }

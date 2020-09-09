@@ -29,7 +29,7 @@ void mt::GenericRequestHandler::run()
     while (true)
     {
         // Pull a runnable off the queue
-        sys::Runnable* handler = nullptr;
+        sys::Runnable* handler = NULL;
         mRequest->dequeue(handler);
         if (!handler)
         {

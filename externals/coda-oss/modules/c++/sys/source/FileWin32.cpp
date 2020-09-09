@@ -20,7 +20,7 @@
  *
  */
 
-#ifdef WIN32
+#if defined(WIN32) || defined(_WIN32)
 
 #include <limits>
 #include <cmath>
@@ -43,9 +43,9 @@ void sys::File::create(const std::string& str,
 
     mHandle = CreateFile(str.c_str(),
                          accessFlags,
-                         FILE_SHARE_READ, nullptr,
+                         FILE_SHARE_READ, NULL,
                          creationFlags,
-                         FILE_ATTRIBUTE_NORMAL, nullptr);
+                         FILE_ATTRIBUTE_NORMAL, NULL);
 
     if (mHandle == SYS_INVALID_HANDLE)
     {
@@ -74,7 +74,7 @@ void sys::File::readInto(void* buffer, size_t size)
                       bufferPtr + bytesRead,
                       bytesToRead,
                       &bytesThisRead,
-                      nullptr))
+                      NULL))
         {
             throw sys::SystemException(Ctxt("Error reading from file"));
         }
@@ -111,7 +111,7 @@ void sys::File::writeFrom(const void* buffer, size_t size)
                        bufferPtr + bytesWritten,
                        bytesToWrite,
                        &bytesThisWrite,
-                       nullptr))
+                       NULL))
         {
             throw sys::SystemException(Ctxt("Writing from file"));
         }

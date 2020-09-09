@@ -30,7 +30,7 @@ bool tiff::Utils::hasGeoTiffIFD(tiff::IFD* ifd)
 tiff::IFD* tiff::Utils::createGeoTiffIFD(tiff::IFD* ifd)
 {
     if (!tiff::Utils::hasGeoTiffIFD(ifd))
-        return nullptr;
+        return NULL;
 
     std::map<unsigned short, std::string> keyMap;
     keyMap[1024] = "GTModelTypeGeoKey";
@@ -85,10 +85,10 @@ tiff::IFD* tiff::Utils::createGeoTiffIFD(tiff::IFD* ifd)
     tiff::IFDEntry *geoDir = (*ifd)["GeoKeyDirectoryTag"];
     tiff::IFDEntry *doubleParams =
             ifd->exists("GeoDoubleParamsTag") ? (*ifd)["GeoDoubleParamsTag"]
-                                              : nullptr;
+                                              : NULL;
     tiff::IFDEntry *asciiParams =
             ifd->exists("GeoAsciiParamsTag") ? (*ifd)["GeoAsciiParamsTag"]
-                                             : nullptr;
+                                             : NULL;
 
     std::vector<tiff::TypeInterface*> geoVals = geoDir->getValues();
     size_t idx = 0;

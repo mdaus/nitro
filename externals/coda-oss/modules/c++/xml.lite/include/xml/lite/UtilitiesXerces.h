@@ -214,12 +214,12 @@ public:
 
     static void destroyXMLCh(XMLCh** a)
     {
-        if (a != nullptr && *a != nullptr)
+        if (a != NULL && *a != NULL)
         {
             try 
             {
                 XMLString::release(a);
-                *a = nullptr;
+                *a = NULL;
             }
             catch (...)
             {
@@ -231,12 +231,12 @@ public:
 
     static void destroyChArray(char** a)
     {
-        if (a != nullptr && *a != nullptr)
+        if (a != NULL && *a != NULL)
         {
             try 
             {
                 XMLString::release(a);
-                *a = nullptr;
+                *a = NULL;
             }
             catch (...)
             {
@@ -283,7 +283,7 @@ public:
      *  We will only bind to this, not free it.
      *  \param ch  The handler to bind
      */
-    XercesContentHandler(xml::lite::ContentHandler* ch = nullptr)
+    XercesContentHandler(xml::lite::ContentHandler* ch = NULL)
     {
         mLiteHandler = ch;
     }
