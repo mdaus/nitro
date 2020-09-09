@@ -76,9 +76,9 @@ public:
 
     /*!
     *  Creates and starts a thread from a sys::Runnable.
-    *  \param runnable auto_ptr to sys::Runnable
+    *  \param runnable unique_ptr to sys::Runnable
     */
-    void createThread(std::auto_ptr<sys::Runnable> runnable);
+    void createThread(std::unique_ptr<sys::Runnable>&& runnable);
 
     /*!
      * Waits for all threads to complete.
@@ -107,7 +107,7 @@ public:
     static void setDefaultPinToCPU(bool newDefault);
 
 private:
-    std::auto_ptr<CPUAffinityInitializer> mAffinityInit;
+    std::unique_ptr<CPUAffinityInitializer> mAffinityInit;
     size_t mLastJoined;
     std::vector<mem::SharedPtr<sys::Thread> > mThreads;
     std::vector<except::Exception> mExceptions;
@@ -130,7 +130,7 @@ private:
      *          the internal CPUAffinityInitializer. If no initializer
      *          was created, will return nullptr.
      */
-    std::auto_ptr<CPUAffinityThreadInitializer> getNextInitializer();
+    std::unique_ptr<CPUAffinityThreadInitializer> getNextInitializer() const;
 
     /*!
      * \class ThreadGroupRunnable
@@ -138,10 +138,8 @@ private:
      * \brief Internal runnable class to safeguard against running
      * threads who throw exceptions
      */
-    class ThreadGroupRunnable : public sys::Runnable
+    struct ThreadGroupRunnable final : public sys::Runnable
     {
-    public:
-
         /*!
          * Constructor.
          * \param runnable sys::Runnable object that will be executed by
@@ -154,20 +152,20 @@ private:
          *                   will be enforced.
          */
         ThreadGroupRunnable(
-                std::auto_ptr<sys::Runnable> runnable,
+                std::unique_ptr<sys::Runnable>&& runnable,
                 mt::ThreadGroup& parentThreadGroup,
-                std::auto_ptr<CPUAffinityThreadInitializer> threadInit =
-                        std::auto_ptr<CPUAffinityThreadInitializer>(nullptr));
+                std::unique_ptr<CPUAffinityThreadInitializer>&& threadInit =
+                        std::unique_ptr<CPUAffinityThreadInitializer>(nullptr));
 
         /*!
          *  Call run() on the Runnable passed to createThread
          */
-        virtual void run();
+        void run() override;
 
     private:
-        std::auto_ptr<sys::Runnable> mRunnable;
+        std::unique_ptr<sys::Runnable> mRunnable;
         mt::ThreadGroup& mParentThreadGroup;
-        std::auto_ptr<CPUAffinityThreadInitializer> mCPUInit;
+        std::unique_ptr<CPUAffinityThreadInitializer> mCPUInit;
     };
 };
 
