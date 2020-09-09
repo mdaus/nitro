@@ -269,7 +269,7 @@ NRTAPI(double) nrt_Utils_getCurrentTimeMillis()
     struct timeval now;
     gettimeofday(&now, NULL);
     millis = (now.tv_sec + 1.0e-6 * now.tv_usec) * 1000;
-#elif defined(WIN32)
+#elif defined(WIN32) || defined(_WIN32)
     // Getting time twice may be inefficient but is quicker
     // than converting the SYSTEMTIME structure into milliseconds
     // We could add an additional flag here if the user
@@ -445,6 +445,8 @@ NRTAPI(char) nrt_Utils_cornersTypeAsCoordRep(nrt_CornersType type)
     case NRT_CORNERS_DECIMAL:
         cornerRep = 'D';
         break;
+
+    case NRT_CORNERS_UNKNOWN:
     default:
         break;
     }

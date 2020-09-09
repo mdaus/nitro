@@ -84,7 +84,7 @@ void printHdr(nitf_FileHeader* header)
         printf("\tThe length of IMAGE subheader [%d]: %ld bytes\n",
                i, (long)len);
         printf("\tThe length of the IMAGE data: %llu bytes\n\n",
-               dataLen);
+               (long long unsigned int) dataLen);
     }
 
     NITF_TRY_GET_UINT32(header->numGraphics, &num, &error);

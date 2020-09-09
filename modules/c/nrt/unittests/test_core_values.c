@@ -64,8 +64,6 @@ TEST_CASE(testCoreValues)
     }
 }
 
-int main(int argc, char **argv)
-{
+TEST_MAIN(
     CHECK(testCoreValues);
-    return 0;
-}
+)

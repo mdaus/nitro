@@ -27,7 +27,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <ctype.h>
-#ifdef WIN32
+#if defined(WIN32) || defined(_WIN32)
     #include <Winsock2.h>
 #else
     #include <netinet/in.h>

@@ -966,7 +966,8 @@ nitf_TREUtils_basicClone(nitf_TRE* source, nitf_TRE* tre, nitf_Error* error)
     sourcePriv = (nitf_TREPrivateData*)source->priv;
 
     /* this clones the hash */
-    if (!(trePriv = nitf_TREPrivateData_clone(sourcePriv, error)))
+    trePriv = nitf_TREPrivateData_clone(sourcePriv, error);
+    if (!trePriv)
         return NITF_FAILURE;
 
     /* just copy over the optional length and static description */
@@ -1109,15 +1110,20 @@ nitf_TREUtils_basicBegin(nitf_TRE* tre, nitf_Error* error)
 {
     nitf_TREEnumerator* it =
             (nitf_TREEnumerator*)NITF_MALLOC(sizeof(nitf_TREEnumerator));
-    nitf_TRECursor* cursor =
+    if (it != NULL)
+    {
+        nitf_TRECursor* cursor =
             (nitf_TRECursor*)NITF_MALLOC(sizeof(nitf_TRECursor));
-    *cursor = nitf_TRECursor_begin(tre);
-    /*assert(nitf_TRECursor_iterate(cursor, error));*/
-
-    it->data = cursor;
-    it->next = basicIncrement;
-    it->hasNext = basicHasNext;
-    it->getFieldDescription = basicGetFieldDescription;
+        if (cursor != NULL)
+        {
+            *cursor = nitf_TRECursor_begin(tre);
+            /*assert(nitf_TRECursor_iterate(cursor, error));*/
+        }
+        it->data = cursor;
+        it->next = basicIncrement;
+        it->hasNext = basicHasNext;
+        it->getFieldDescription = basicGetFieldDescription;
+    }
     return it;
 }
 

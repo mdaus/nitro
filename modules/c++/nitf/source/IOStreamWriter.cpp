@@ -66,7 +66,7 @@ nitf::Off IOStreamWriter::seekImpl(nitf::Off offset, int whence)
     default:
         throw except::Exception(
                 Ctxt("Unknown whence value when seeking IOStreamWriter: " +
-                     str::toString(whence)));
+                     std::to_string(whence)));
     }
 
     return mStream->seek(offset, ioWhence);

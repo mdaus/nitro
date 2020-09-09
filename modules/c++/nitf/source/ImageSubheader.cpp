@@ -22,6 +22,8 @@
 
 #include <nitf/ImageIO.h>
 #include <nitf/ImageSubheader.hpp>
+#include <nitf/Object.hpp>
+#include <nitf/NITFException.hpp>
 
 namespace nitf
 {

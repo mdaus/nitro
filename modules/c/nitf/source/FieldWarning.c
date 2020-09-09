@@ -93,8 +93,11 @@ NITFAPI(nitf_FieldWarning *) nitf_FieldWarning_construct(nitf_Off fileOffset,
     {
         strLength = strlen(expectation);
         result->expectation = (char *) NITF_MALLOC(strLength + 1);
-        strcpy(result->expectation, expectation);
-        result->expectation[strLength] = 0;
+        if (result->expectation != NULL)
+        {
+            strcpy(result->expectation, expectation);
+            result->expectation[strLength] = 0;
+        }
     }
 
     return result;
@@ -181,8 +184,11 @@ NITFAPI(nitf_FieldWarning *) nitf_FieldWarning_clone(nitf_FieldWarning *
     {
         strLength = strlen(source->expectation);
         result->expectation = (char *) NITF_MALLOC(strLength + 1);
-        strcpy(result->expectation, source->expectation);
-        result->expectation[strLength] = 0;
+        if (result->expectation != NULL)
+        {
+            strcpy(result->expectation, source->expectation);
+            result->expectation[strLength] = 0;
+        }
     }
 
     /* fieldName */

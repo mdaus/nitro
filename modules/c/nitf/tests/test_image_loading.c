@@ -301,7 +301,6 @@ int main(int argc, char **argv)
 
     /*  These iterators are for going through the image segments  */
     nitf_ListIterator iter;
-    nitf_ListIterator end;
 
     char* inputFile;
     NITF_BOOL optz = 0;
@@ -388,7 +387,7 @@ int main(int argc, char **argv)
     iter = nitf_List_begin(record->images);
 
     /*  And set this one to the end, so we'll know when we're done!  */
-    end = nitf_List_end(record->images);
+    (void) nitf_List_end(record->images);
 
     for (count = 0; count < numImages; ++count)
     {
