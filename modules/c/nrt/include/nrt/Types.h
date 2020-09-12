@@ -50,7 +50,7 @@ typedef int16_t nrt_Int16;
 typedef int32_t nrt_Int32;
 typedef int64_t nrt_Int64;
 
-#ifdef WIN32
+#if defined(WIN32) || defined(_WIN32)
 #      include <windows.h>
 
 /*  Types are defined for windows here  */
