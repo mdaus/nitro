@@ -925,7 +925,10 @@ TEST_CASE(testPBlock4BytePixels)
     }
 }
 
-TEST_MAIN(
+int main(int argc, char** argv)
+{
+    (void) argc;
+    (void) argv;
     CHECK(testPBlockOneBand);
     CHECK(testPBlockTwoBands);
     CHECK(testPBlockOffsetBand);
@@ -933,4 +936,5 @@ TEST_MAIN(
     CHECK(testInvalidReadOrderFailsGracefully);
     CHECK(testPBlock4BytePixels);
     CHECK(testTwoBandRoundTrip);
-    )
+    return 0;
+}

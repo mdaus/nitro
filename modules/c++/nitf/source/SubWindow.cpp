@@ -42,7 +42,7 @@ SubWindow::SubWindow(nitf_SubWindow * x)
     getNativeOrThrow();
 }
 
-SubWindow::SubWindow() : mDownSampler(nullptr)
+SubWindow::SubWindow() : mDownSampler(NULL)
 {
     setNative(nitf_SubWindow_construct(&error));
     getNativeOrThrow();

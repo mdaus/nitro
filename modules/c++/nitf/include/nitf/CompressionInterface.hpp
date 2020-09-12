@@ -41,7 +41,7 @@
 NITF_CXX_GUARD \
 static const char* _COMPRESSION_ID##_ident[] = \
 {\
-    NITF_PLUGIN_COMPRESSION_KEY, #_COMPRESSION_ID, nullptr\
+    NITF_PLUGIN_COMPRESSION_KEY, #_COMPRESSION_ID, NULL\
 };\
 \
 static nitf_CompressionInterface _COMPRESSION_ID##_INTERFACE_TABLE = {\
@@ -69,7 +69,7 @@ NITFAPI(void*) _COMPRESSION_ID##_construct(const char* compressionType,\
                         "Unsupported compression type",\
                         NITF_CTXT,\
                         NITF_ERR_COMPRESSION);\
-        return nullptr;\
+        return NULL;\
     }\
     return &_COMPRESSION_ID##_INTERFACE_TABLE;\
 }\

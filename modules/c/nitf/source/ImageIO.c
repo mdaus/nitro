@@ -5666,6 +5666,7 @@ nitf_ImageIOControl_construct(_nitf_ImageIO * nitf,
                               nitf_Error * error)
 {
     _nitf_ImageIOControl *cntl; /* The result */
+    uint32_t bandIdx;
 
     cntl =
         (_nitf_ImageIOControl *) NITF_MALLOC(sizeof(_nitf_ImageIOControl));
@@ -6263,6 +6264,7 @@ NITFPRIV(int) nitf_ImageIO_mkMasks(nitf_ImageIO * img,
          * byte-swapping
          */
         uint32_t *fileMask;   /* Buffer to hold file mask */
+        uint32_t i;
 
         fileMask = (uint32_t *) NITF_MALLOC(maskSizeFile);
         if (fileMask == NULL)
@@ -6330,6 +6332,7 @@ NITFPRIV(int) nitf_ImageIO_mkMasks(nitf_ImageIO * img,
          * byte-swapping
          */
         uint32_t *fileMask;   /* Buffer to hold file mask */
+        uint32_t i;
 
         fileMask = (uint32_t *) NITF_MALLOC(maskSizeFile);
         if (fileMask == NULL)

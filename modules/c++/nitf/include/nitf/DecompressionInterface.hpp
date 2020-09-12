@@ -42,7 +42,7 @@
 NITF_CXX_GUARD \
 static const char* _DECOMPRESSION_ID##_ident[] = \
 {\
-    NITF_PLUGIN_DECOMPRESSION_KEY, #_DECOMPRESSION_ID, nullptr\
+    NITF_PLUGIN_DECOMPRESSION_KEY, #_DECOMPRESSION_ID, NULL\
 };\
 \
 static nitf_DecompressionInterface _DECOMPRESSION_ID##_INTERFACE_TABLE = {\
@@ -70,7 +70,7 @@ NITFAPI(void*) _DECOMPRESSION_ID##_construct(char* decompressionType,\
                         "Unsupported decompression type",\
                         NITF_CTXT,\
                         NITF_ERR_DECOMPRESSION);\
-        return nullptr;\
+        return NULL;\
     }\
     return &_DECOMPRESSION_ID##_INTERFACE_TABLE;\
 }\

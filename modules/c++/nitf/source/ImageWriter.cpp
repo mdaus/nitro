@@ -27,7 +27,7 @@ using namespace nitf;
 ImageWriter::ImageWriter(nitf::ImageSubheader& subheader)
 {
     auto* writer =
-            nitf_ImageWriter_construct(subheader.getNative(), nullptr, &error);
+            nitf_ImageWriter_construct(subheader.getNative(), NULL, &error);
     setNativeOrThrow(writer, &error);
 }
 

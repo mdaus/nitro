@@ -46,7 +46,7 @@ static const char DIR_DELIMITER = '\\';
  */
 
 #if defined(WIN32) || defined(_WIN32)
-NITFPRIV(nitf_Mutex*) GET_MUTEX(void)
+NITFPRIV(nitf_Mutex*) GET_MUTEX()
 {
     if (__PluginRegistryLock == NULL)
     {
@@ -180,19 +180,6 @@ insertPlugin(nitf_PluginRegistry* reg,
     }
     return NITF_SUCCESS;
 }
-
-static char* nitf_PluginRegistry_getenv(char const* varName)
-{
-#ifdef _MSC_VER // Visual Studio
-#pragma warning(push)
-#pragma warning(disable: 4996) // '...' : This function or variable may be unsafe. Consider using ... instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-#endif
-    return getenv(varName);
-#ifdef _MSC_VER // Visual Studio
-#pragma warning(pop)
-#endif
-}
-#define getenv(varName) nitf_PluginRegistry_getenv(varName)
 
 NITFPRIV(nitf_PluginRegistry*) implicitConstruct(nitf_Error* error)
 {
