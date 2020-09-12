@@ -20,7 +20,6 @@
  *
  */
 
-#include <config/coda_oss_config.h>
 #include <nitf/Field.hpp>
 #include "TestCase.h"
 
@@ -100,8 +99,6 @@ TEST_CASE(testCastOperator)
 }
 }
 
-int main(int , char** )
-{
+TEST_MAIN(
     TEST_CHECK(testCastOperator);
-    return 0;
-}
+)
