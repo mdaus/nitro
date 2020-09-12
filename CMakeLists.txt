@@ -7,6 +7,9 @@ set(CMAKE_CXX_STANDARD 17)
 if (${CMAKE_PROJECT_NAME} STREQUAL nitro)
     # we are the top-level project and are responsible for configuration
 
+    # From our REAMDE "The MATLAB and JAVA layers have not been touched in years. ..."
+    set(ENABLE_JAVA OFF CACHE BOOL "enable Java support" FORCE)
+
     # set up warnings
     if (MSVC)
         # set warning level to /W3
