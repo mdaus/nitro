@@ -2,17 +2,20 @@ cmake_minimum_required(VERSION 3.14)
 project(nitro)
 
 set(CMAKE_C_STANDARD 99)
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 
 if (${CMAKE_PROJECT_NAME} STREQUAL nitro)
     # we are the top-level project and are responsible for configuration
+
+    # From our REAMDE "The MATLAB and JAVA layers have not been touched in years. ..."
+    set(ENABLE_JAVA OFF CACHE BOOL "enable Java support" FORCE)
 
     # set up warnings
     if (MSVC)
         # set warning level to /W3
         string(REGEX REPLACE "/W[0-4]" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
         string(REGEX REPLACE "/W[0-4]" "" CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
-        add_compile_options(/W3 /wd4290 /wd4512)
+        add_compile_options(/W3 /wd4290 /wd4512 /Zc:__cplusplus)
         add_definitions(-D_CRT_SECURE_NO_WARNINGS -D_SCL_SECURE_NO_WARNINGS)
     elseif (UNIX)
         add_compile_options(
@@ -35,6 +38,11 @@ if (${CMAKE_PROJECT_NAME} STREQUAL nitro)
         set(ENABLE_PCRE OFF CACHE BOOL "enable PCRE library" FORCE)
         set(ENABLE_UUID OFF CACHE BOOL "enable uuid library" FORCE)
         set(ENABLE_ZIP OFF CACHE BOOL "enable ZIP library" FORCE)
+
+        set(ENABLE_PYTHON OFF CACHE BOOL "enable Python support" FORCE)
+        set(ENABLE_JAVA OFF CACHE BOOL "enable Java support" FORCE)
+
+        set(CODA_BUILD_TESTS OFF CACHE BOOL "build CODA tests" FORCE)
 
         list(APPEND CMAKE_MODULE_PATH
              "${CMAKE_CURRENT_SOURCE_DIR}/externals/coda-oss/cmake")
