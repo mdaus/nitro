@@ -83,7 +83,7 @@ NRTAPI(void) nrt_Utils_baseName(char *base, const char *fullName,
 NRTAPI(NRT_BOOL) nrt_Utils_parseDecimalString(const char* d, double *decimal,
                                               nrt_Error * error);
 
-NRTAPI(double) nrt_Utils_getCurrentTimeMillis();
+NRTAPI(double) nrt_Utils_getCurrentTimeMillis(void);
 
 NRTAPI(int) nrt_Utils_strncasecmp(const char *s1, const char *s2, size_t n);
 
