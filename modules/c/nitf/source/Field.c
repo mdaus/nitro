@@ -801,7 +801,7 @@ NITFPRIV(NITF_BOOL) fromStringToInt(nitf_Field * field,
                                     nitf_Error * error)
 {
     char buffer[256];
-    if (field->length > 256)
+    if (field->length >= 256)
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER,
                          "Field length too long for string conversion [%d]",
@@ -854,7 +854,7 @@ NITFPRIV(NITF_BOOL) fromStringToUint(nitf_Field * field,
                                      nitf_Error * error)
 {
     char buffer[256];
-    if (field->length > 256)
+    if (field->length >= 256)
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER,
                          "Field length too long for string conversion [%d]",
@@ -1083,9 +1083,12 @@ NITFPROT(void) nitf_Field_print(nitf_Field * field)
     switch (field->type)
     {
         case NITF_BINARY:
+        {
             /* avoid printing binary */
-            printf("<binary data, length %llu>", (unsigned long long)field->length);
+            uint64_t field_length = (uint64_t)field->length;
+            printf("<binary data, length %llu>", field_length);
             break;
+        }
 
         case NITF_BCS_N:
         case NITF_BCS_A:

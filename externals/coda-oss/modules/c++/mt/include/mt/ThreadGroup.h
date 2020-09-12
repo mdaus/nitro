@@ -75,7 +75,7 @@ public:
     void createThread(sys::Runnable *runnable);
 
     /*!
-    *  Creates and starts unique_ptr thread from a sys::Runnable.
+    *  Creates and starts a thread from a sys::Runnable.
     *  \param runnable unique_ptr to sys::Runnable
     */
     void createThread(std::unique_ptr<sys::Runnable>&& runnable);
@@ -86,7 +86,7 @@ public:
     void joinAll();
 
     /*!
-     * Checks whether CPU pinning is set (i.e. whether mAffinityInit is NULL)
+     * Checks whether CPU pinning is set (i.e. whether mAffinityInit is nullptr)
      *
      * \return true if CPU pinning is set, false otherwise
      */
@@ -128,9 +128,9 @@ private:
     /*!
      * \returns the next available thread initializer provided by
      *          the internal CPUAffinityInitializer. If no initializer
-     *          was created, will return NULL.
+     *          was created, will return nullptr.
      */
-    std::unique_ptr<CPUAffinityThreadInitializer> getNextInitializer();
+    std::unique_ptr<CPUAffinityThreadInitializer> getNextInitializer() const;
 
     /*!
      * \class ThreadGroupRunnable
@@ -138,10 +138,8 @@ private:
      * \brief Internal runnable class to safeguard against running
      * threads who throw exceptions
      */
-    class ThreadGroupRunnable : public sys::Runnable
+    struct ThreadGroupRunnable final : public sys::Runnable
     {
-    public:
-
         /*!
          * Constructor.
          * \param runnable sys::Runnable object that will be executed by
@@ -150,7 +148,7 @@ private:
          *                          this ThreadGroupRunnable
          * \param threadInit Affinity-based initializer for the thread
          *                   that controls which CPUs the runnable is allowed
-         *                   to execute on. If NULL, no affinity preferences
+         *                   to execute on. If nullptr, no affinity preferences
          *                   will be enforced.
          */
         ThreadGroupRunnable(
@@ -162,7 +160,7 @@ private:
         /*!
          *  Call run() on the Runnable passed to createThread
          */
-        virtual void run();
+        void run() override;
 
     private:
         std::unique_ptr<sys::Runnable> mRunnable;

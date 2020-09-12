@@ -104,7 +104,7 @@ void ByteProvider::initializeImpl(Record& record,
     }
     else
     {
-        mNumRowsPerBlock = getImageBlocker(nullptr)->getNumRowsPerBlock();
+        mNumRowsPerBlock = getImageBlocker()->getNumRowsPerBlock();
     }
 }
 
@@ -309,14 +309,7 @@ void ByteProvider::getFileLayout(nitf::Record& inRecord,
     mDesSubheaderFileOffset = offset;
 }
 
-#if __cplusplus < 201703L // C++17
-std::auto_ptr<const ImageBlocker> ByteProvider::getImageBlocker() const
-{
-    auto retval = getImageBlocker(nullptr);
-    return std::auto_ptr<const ImageBlocker>(retval.release());
-}
-#endif
-std::unique_ptr<const ImageBlocker> ByteProvider::getImageBlocker(std::nullptr_t) const
+std::unique_ptr<const ImageBlocker> ByteProvider::getImageBlocker() const
 {
     std::vector<size_t> numRowsPerSegment(mImageSegmentInfo.size());
     for (size_t ii = 0; ii < mImageSegmentInfo.size(); ++ii)
@@ -527,7 +520,6 @@ nitf::Off ByteProvider::getNumBytes(size_t startRow, size_t numRows) const
     return numBytes;
 }
 
-#undef max
 void ByteProvider::getBytes(const void* imageData,
                             size_t startRow,
                             size_t numRows,
