@@ -30,11 +30,6 @@
           "name": "ENABLE_JAVA",
           "value": "False",
           "type": "BOOL"
-        },
-        {
-          "name": "CODA_BUILD_TESTS",
-          "value": "False",
-          "type": "BOOL"
         }
       ]
     }
