@@ -472,7 +472,7 @@ NRTAPI(NRT_BOOL) nrt_DateTime_formatMillis(double millis, const char *format,
             if (begStringLen > 0)
             {
                 /* do the first part of the format */
-                strncpy(newFmtString, format, begStringLen);
+                nrt_strncpy_s(newFmtString, newFmtLen, format, begStringLen);
 
                 if (strftime(outBuf, maxSize, newFmtString, &t) == 0)
                 {
