@@ -20,14 +20,12 @@
  *
  */
 
+#include <assert.h>
+
 #ifndef NRT_LIB_VERSION
  #include "nrt/nrt_config.h"
 #endif
 #include "nrt/Utils.h"
-
-#ifdef _MSC_VER // Visual Studio
-#pragma warning(disable: 4996) // '...' : This function or variable may be unsafe. Consider using ... instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-#endif
 
 NRTAPI(nrt_List *) nrt_Utils_splitString(const char *str, unsigned int max,
                                          nrt_Error * error)
@@ -233,9 +231,7 @@ NRTAPI(NRT_BOOL) nrt_Utils_parseDecimalString(const char *d, double *decimal,
                                               nrt_Error * error)
 {
     /* +-dd.ddd or += ddd.ddd */
-    char* decimalCopy;
     const size_t len = strlen(d);
-    const char sign = d[0];
     if (len != 7 && len != 8)
     {
         nrt_Error_initf(error, NRT_CTXT, NRT_ERR_INVALID_PARAMETER,
@@ -243,14 +239,16 @@ NRTAPI(NRT_BOOL) nrt_Utils_parseDecimalString(const char *d, double *decimal,
                         d);
         return NRT_FAILURE;
     }
-    decimalCopy = malloc(len + 1);
+
+    char* decimalCopy = nrt_malloc_strcpy(d);
     if (!decimalCopy)
     {
         nrt_Error_initf(error, NRT_CTXT, NRT_ERR_MEMORY,
                         "Could not allocate %zu bytes", len + 1);
         return NRT_FAILURE;
     }
-    decimalCopy = strcpy(decimalCopy, d);
+
+    const char sign = d[0];
     /* Now replace all spaces */
     nrt_Utils_replace(decimalCopy, ' ', '0');
     *decimal = atof(&(decimalCopy[1]));
@@ -348,7 +346,6 @@ NRTAPI(NRT_BOOL) nrt_Utils_parseGeographicString(const char *dms, int *degrees,
     int degreeOffset = 0;
     const size_t len = strlen(dms);
     char dir;
-    char* dmsCopy;
 
     char d[4];
     char m[3];
@@ -380,14 +377,13 @@ NRTAPI(NRT_BOOL) nrt_Utils_parseGeographicString(const char *dms, int *degrees,
     }
 
     /* Now replace all spaces */
-    dmsCopy = malloc(strlen(dms) + 1);
+    char* dmsCopy = nrt_malloc_strcpy(dms);
     if (!dmsCopy)
     {
         nrt_Error_initf(error, NRT_CTXT, NRT_ERR_MEMORY,
                         "Could not allocate %zu bytes.", strlen(dms) + 1);
         return NRT_FAILURE;
     }
-    dmsCopy = strcpy(dmsCopy, dms);
     nrt_Utils_replace(dmsCopy, ' ', '0');
 
     /* Now get the corners out as geographic coords */
@@ -595,4 +591,34 @@ NRTAPI(void) nrt_Utils_byteSwap(uint8_t *value, size_t size)
         /* Not handled */
         break;
     }
+}
+
+NRTAPI(void) nrt_strcpy_s(char* dest, size_t sz, const char* src)
+{
+    assert(sz > 0);
+#ifdef _MSC_VER // strcpy_s() is in C11
+    strcpy_s(dest, sz, src);
+#else
+    if (sz > 0)
+    {
+        (void)strcpy(dest, src);
+    }
+#endif       
+}
+
+
+NRTAPI(char*) nrt_malloc_strcpy(const char* str)
+{
+    if (str)
+    {
+        const size_t strLength = strlen(str);
+        char* retval = (char*)NRT_MALLOC(strLength + 1);
+        if (retval != NULL)
+        {
+            nrt_strcpy_s(retval, strLength+1, str);     
+            retval[strLength] = '\0';
+            return retval;
+        }
+    }
+    return NULL;
 }

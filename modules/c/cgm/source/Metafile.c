@@ -22,10 +22,6 @@
 
 #include "cgm/Metafile.h"
 
-#ifdef _MSC_VER // Visual Studio
-#pragma warning(disable: 4996) // '...' : This function or variable may be unsafe. Consider using ... instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-#endif
-
 NITFAPI(cgm_Metafile*) cgm_Metafile_construct(const char* name,
         const char* description,
         nitf_Error* error)
@@ -52,26 +48,10 @@ NITFAPI(cgm_Metafile*) cgm_Metafile_construct(const char* name,
         NITF_FREE(mf);
         return NULL;
     }
-    mf->description = NULL;
     mf->picture = NULL;
 
-    if (name)
-    {
-        mf->name = (char*)NITF_MALLOC( strlen( name ) + 1 );
-        if (mf->name != NULL)
-        {
-            strcpy(mf->name, name);
-        }
-    }
-
-    if (description)
-    {
-        mf->description = (char*)NITF_MALLOC( strlen( description ) + 1 );
-        if (mf->description != NULL)
-        {
-            strcpy(mf->description, description);
-        }
-    }
+    mf->name = nrt_malloc_strcpy(name);
+    mf->description = nrt_malloc_strcpy(description);
 
     return mf;
 }

@@ -24,10 +24,6 @@
 #include "nrt/IOInterface.h"
 #include "nrt/Utils.h"
 
-#ifdef _MSC_VER // Visual Studio
-#pragma warning(disable: 4996) // '...' : This function or variable may be unsafe. Consider using ... instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-#endif
-
 NRT_CXX_GUARD typedef struct _IOHandleControl
 {
     nrt_IOHandle handle;
@@ -379,7 +375,7 @@ NRTAPI(nrt_IOInterface *) nrt_IOHandleAdapter_open(const char *fname,
          * TODO: Would really like to use one of the nrt_Error print functions
          */
         char origMessage[NRT_MAX_EMESSAGE + 1];
-        strcpy(origMessage, error->message);
+        nrt_strcpy_s(origMessage, NRT_MAX_EMESSAGE +1, error->message);
 
         nrt_Error_initf(error, NRT_CTXT, NRT_ERR_INVALID_OBJECT,
                         "Invalid IO handle (%s)", origMessage);
