@@ -606,6 +606,18 @@ NRTAPI(void) nrt_strcpy_s(char* dest, size_t sz, const char* src)
 #endif       
 }
 
+NRTAPI(void) nrt_strncpy_s(char* dest, size_t dest_sz, const char* src, size_t src_chars)
+{
+    assert(dest_sz > 0);
+#ifdef _MSC_VER // strcpy_s() is in C11
+    strncpy_s(dest, dest_sz, src, src_chars);
+#else
+    if (dest_sz > 0)
+    {
+        (void)strncpy(dest, src, src_chars);
+    }
+#endif       
+}
 
 NRTAPI(char*) nrt_malloc_strcpy(const char* str)
 {
