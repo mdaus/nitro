@@ -82,7 +82,7 @@ NITFAPI(nitf_FieldWarning *) nitf_FieldWarning_construct(nitf_Off fileOffset,
         result->fieldName = (char *) NITF_MALLOC(strLength + 1);
         if (result->fieldName != NULL)
         {
-            strcpy_s(result->fieldName, strLength+1, fieldName);
+            nrt_strcpy_s(result->fieldName, strLength+1, fieldName);
             result->fieldName[strLength] = 0;
         }
     }
@@ -94,7 +94,7 @@ NITFAPI(nitf_FieldWarning *) nitf_FieldWarning_construct(nitf_Off fileOffset,
         result->expectation = (char *) NITF_MALLOC(strLength + 1);
         if (result->expectation != NULL)
         {
-            strcpy_s(result->expectation, strLength+1, expectation);
+            nrt_strcpy_s(result->expectation, strLength+1, expectation);
             result->expectation[strLength] = 0;
         }
     }
@@ -185,7 +185,7 @@ NITFAPI(nitf_FieldWarning *) nitf_FieldWarning_clone(nitf_FieldWarning *
         result->expectation = (char *) NITF_MALLOC(strLength + 1);
         if (result->expectation != NULL)
         {
-            strcpy_s(result->expectation, strLength+1, source->expectation);
+            nrt_strcpy_s(result->expectation, strLength+1, source->expectation);
             result->expectation[strLength] = 0;
         }
     }
@@ -202,7 +202,7 @@ NITFAPI(nitf_FieldWarning *) nitf_FieldWarning_clone(nitf_FieldWarning *
             goto CATCH_ERROR;
 
         }
-        strcpy_s(result->fieldName, fieldName_sz, source->fieldName);
+        nrt_strcpy_s(result->fieldName, fieldName_sz, source->fieldName);
         result->fieldName[strlen(source->fieldName)] = 0;
     }
 

@@ -57,7 +57,7 @@ NITFAPI(cgm_Metafile*) cgm_Metafile_construct(const char* name,
         mf->name = (char*)NITF_MALLOC(name_sz);
         if (mf->name != NULL)
         {
-            strcpy_s(mf->name, name_sz, name);
+            nrt_strcpy_s(mf->name, name_sz, name);
         }
     }
 
@@ -67,7 +67,7 @@ NITFAPI(cgm_Metafile*) cgm_Metafile_construct(const char* name,
         mf->description = (char*)NITF_MALLOC(description_sz);
         if (mf->description != NULL)
         {
-            strcpy_s(mf->description, description_sz, description);
+            nrt_strcpy_s(mf->description, description_sz, description);
         }
     }
 

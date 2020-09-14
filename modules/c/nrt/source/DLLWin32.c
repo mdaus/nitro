@@ -77,7 +77,7 @@ NRTAPI(NRT_BOOL) nrt_DLL_load(nrt_DLL * dll, const char *libname,
         return NRT_FAILURE;
     }
 
-    strcpy_s(dll->libname, libname_sz, libname);
+    nrt_strcpy_s(dll->libname, libname_sz, libname);
     dll->lib = LoadLibrary(dll->libname);
     if (!dll->lib)
     {

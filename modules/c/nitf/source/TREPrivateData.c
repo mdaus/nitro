@@ -232,7 +232,7 @@ NITFPROT(NITF_BOOL) nitf_TREPrivateData_setDescriptionName(
                     NITF_CTXT, NITF_ERR_MEMORY);
             return NITF_FAILURE;
         }
-        strcpy_s(priv->descriptionName, descriptionName_sz, name);
+        nrt_strcpy_s(priv->descriptionName, descriptionName_sz, name);
     }
     return NITF_SUCCESS;
 }
