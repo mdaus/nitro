@@ -22,6 +22,10 @@
 
 #include "cgm/Picture.h"
 
+#ifdef _MSC_VER // Visual Studio
+#pragma warning(disable: 4996) // '...' : This function or variable may be unsafe. Consider using ... instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+#endif
+
 NITFAPI(cgm_Picture*) cgm_Picture_construct(const char* name,
         nitf_Error* error)
 {
