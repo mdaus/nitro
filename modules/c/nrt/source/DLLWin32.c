@@ -68,16 +68,14 @@ NRTAPI(NRT_BOOL) nrt_DLL_isValid(nrt_DLL * dll)
 NRTAPI(NRT_BOOL) nrt_DLL_load(nrt_DLL * dll, const char *libname,
                               nrt_Error * error)
 {
-    const size_t libname_sz = strlen(libname) + 1;
-    dll->libname = (char *) NRT_MALLOC(libname_sz);
+    dll->libname = nrt_malloc_strcpy(libname);
     if (!dll->libname)
     {
         nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT,
-                       NRT_ERR_MEMORY);
+            NRT_ERR_MEMORY);
         return NRT_FAILURE;
     }
 
-    nrt_strcpy_s(dll->libname, libname_sz, libname);
     dll->lib = LoadLibrary(dll->libname);
     if (!dll->lib)
     {

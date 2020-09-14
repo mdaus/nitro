@@ -20,6 +20,8 @@
  *
  */
 
+#include <assert.h>
+
 #ifndef NRT_LIB_VERSION
  #include "nrt/nrt_config.h"
 #endif
@@ -229,9 +231,7 @@ NRTAPI(NRT_BOOL) nrt_Utils_parseDecimalString(const char *d, double *decimal,
                                               nrt_Error * error)
 {
     /* +-dd.ddd or += ddd.ddd */
-    char* decimalCopy;
     const size_t len = strlen(d);
-    const char sign = d[0];
     if (len != 7 && len != 8)
     {
         nrt_Error_initf(error, NRT_CTXT, NRT_ERR_INVALID_PARAMETER,
@@ -239,14 +239,16 @@ NRTAPI(NRT_BOOL) nrt_Utils_parseDecimalString(const char *d, double *decimal,
                         d);
         return NRT_FAILURE;
     }
-    decimalCopy = malloc(len + 1);
+
+    char* decimalCopy = nrt_malloc_strcpy(d);
     if (!decimalCopy)
     {
         nrt_Error_initf(error, NRT_CTXT, NRT_ERR_MEMORY,
                         "Could not allocate %zu bytes", len + 1);
         return NRT_FAILURE;
     }
-    nrt_strcpy_s(decimalCopy, len + 1, d);
+
+    const char sign = d[0];
     /* Now replace all spaces */
     nrt_Utils_replace(decimalCopy, ' ', '0');
     *decimal = atof(&(decimalCopy[1]));
@@ -344,7 +346,6 @@ NRTAPI(NRT_BOOL) nrt_Utils_parseGeographicString(const char *dms, int *degrees,
     int degreeOffset = 0;
     const size_t len = strlen(dms);
     char dir;
-    char* dmsCopy;
 
     char d[4];
     char m[3];
@@ -376,15 +377,13 @@ NRTAPI(NRT_BOOL) nrt_Utils_parseGeographicString(const char *dms, int *degrees,
     }
 
     /* Now replace all spaces */
-    const size_t dms_sz = strlen(dms) + 1;
-    dmsCopy = malloc(dms_sz);
+    char* dmsCopy = nrt_malloc_strcpy(dms);
     if (!dmsCopy)
     {
         nrt_Error_initf(error, NRT_CTXT, NRT_ERR_MEMORY,
-                        "Could not allocate %zu bytes.", dms_sz);
+                        "Could not allocate %zu bytes.", strlen(dms) + 1);
         return NRT_FAILURE;
     }
-    nrt_strcpy_s(dmsCopy, dms_sz, dms);
     nrt_Utils_replace(dmsCopy, ' ', '0');
 
     /* Now get the corners out as geographic coords */
@@ -592,4 +591,46 @@ NRTAPI(void) nrt_Utils_byteSwap(uint8_t *value, size_t size)
         /* Not handled */
         break;
     }
+}
+
+NRTAPI(void) nrt_strcpy_s(char* dest, size_t sz, const char* src)
+{
+    assert(sz > 0);
+#ifdef _MSC_VER // strcpy_s() is in C11
+    strcpy_s(dest, sz, src);
+#else
+    if (sz > 0)
+    {
+        (void)strcpy(dest, src);
+    }
+#endif       
+}
+
+NRTAPI(void) nrt_strncpy_s(char* dest, size_t dest_sz, const char* src, size_t src_chars)
+{
+    assert(dest_sz > 0);
+#ifdef _MSC_VER // strcpy_s() is in C11
+    strncpy_s(dest, dest_sz, src, src_chars);
+#else
+    if (dest_sz > 0)
+    {
+        (void)strncpy(dest, src, src_chars);
+    }
+#endif       
+}
+
+NRTAPI(char*) nrt_malloc_strcpy(const char* str)
+{
+    if (str)
+    {
+        const size_t strLength = strlen(str);
+        char* retval = (char*)NRT_MALLOC(strLength + 1);
+        if (retval != NULL)
+        {
+            nrt_strcpy_s(retval, strLength+1, str);     
+            retval[strLength] = '\0';
+            return retval;
+        }
+    }
+    return NULL;
 }

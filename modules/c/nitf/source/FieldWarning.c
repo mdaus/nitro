@@ -40,10 +40,10 @@ NITFAPI(nitf_FieldWarning *) nitf_FieldWarning_construct(nitf_Off fileOffset,
         nitf_Error *
         error)
 {
-    size_t strLength;           /* Length of a string in bytes */
+    nitf_FieldWarning *result;  /* Return value */
 
     /* Get some memory */
-    nitf_FieldWarning* result = (nitf_FieldWarning *) NITF_MALLOC(sizeof(nitf_FieldWarning));
+    result = (nitf_FieldWarning *) NITF_MALLOC(sizeof(nitf_FieldWarning));
 
     /* If we couldn't get memory */
     if (!result)
@@ -71,33 +71,8 @@ NITFAPI(nitf_FieldWarning *) nitf_FieldWarning_construct(nitf_Off fileOffset,
     /* fileOffset */
     result->fileOffset = fileOffset;
 
-    /* set these to be safe */
-    result->fieldName = NULL;
-    result->expectation = NULL;
-
-    /* field */
-    if (fieldName)
-    {
-        strLength = strlen(fieldName);
-        result->fieldName = (char *) NITF_MALLOC(strLength + 1);
-        if (result->fieldName != NULL)
-        {
-            nrt_strcpy_s(result->fieldName, strLength+1, fieldName);
-            result->fieldName[strLength] = 0;
-        }
-    }
-
-    /* expectation */
-    if (expectation)
-    {
-        strLength = strlen(expectation);
-        result->expectation = (char *) NITF_MALLOC(strLength + 1);
-        if (result->expectation != NULL)
-        {
-            nrt_strcpy_s(result->expectation, strLength+1, expectation);
-            result->expectation[strLength] = 0;
-        }
-    }
+    result->fieldName = nrt_malloc_strcpy(fieldName);
+    result->expectation = nrt_malloc_strcpy(expectation);
 
     return result;
 }
@@ -150,7 +125,6 @@ NITFAPI(nitf_FieldWarning *) nitf_FieldWarning_clone(nitf_FieldWarning *
         nitf_Error * error)
 {
     nitf_FieldWarning *result;  /* Return value */
-    size_t strLength;           /* Length of a string in bytes */
 
     if (!source)
     {
@@ -175,35 +149,17 @@ NITFAPI(nitf_FieldWarning *) nitf_FieldWarning_clone(nitf_FieldWarning *
 
     result->fileOffset = source->fileOffset;
     result->field = NULL;
-    result->fieldName = NULL;
-    result->expectation = NULL;
 
-    /* expectation */
-    if (source->expectation)
-    {
-        strLength = strlen(source->expectation);
-        result->expectation = (char *) NITF_MALLOC(strLength + 1);
-        if (result->expectation != NULL)
-        {
-            nrt_strcpy_s(result->expectation, strLength+1, source->expectation);
-            result->expectation[strLength] = 0;
-        }
-    }
+    result->expectation = nrt_malloc_strcpy(source->expectation);
 
     /* fieldName */
-    if (source->fieldName)
+    result->fieldName = nrt_malloc_strcpy(source->fieldName);
+    if (!result->fieldName)
     {
-        const size_t fieldName_sz = strlen(source->fieldName) + 1;
-        result->fieldName = (char *) NITF_MALLOC(fieldName_sz);
-        if (!result->fieldName)
-        {
-            nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
-                            NITF_CTXT, NITF_ERR_MEMORY);
-            goto CATCH_ERROR;
+        nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
+                        NITF_CTXT, NITF_ERR_MEMORY);
+        goto CATCH_ERROR;
 
-        }
-        nrt_strcpy_s(result->fieldName, fieldName_sz, source->fieldName);
-        result->fieldName[strlen(source->fieldName)] = 0;
     }
 
     /* field */

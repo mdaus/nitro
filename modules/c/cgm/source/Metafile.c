@@ -48,28 +48,10 @@ NITFAPI(cgm_Metafile*) cgm_Metafile_construct(const char* name,
         NITF_FREE(mf);
         return NULL;
     }
-    mf->description = NULL;
     mf->picture = NULL;
 
-    if (name)
-    {
-        const size_t name_sz = strlen(name) + 1;
-        mf->name = (char*)NITF_MALLOC(name_sz);
-        if (mf->name != NULL)
-        {
-            nrt_strcpy_s(mf->name, name_sz, name);
-        }
-    }
-
-    if (description)
-    {
-        const size_t description_sz = strlen(description) + 1;
-        mf->description = (char*)NITF_MALLOC(description_sz);
-        if (mf->description != NULL)
-        {
-            nrt_strcpy_s(mf->description, description_sz, description);
-        }
-    }
+    mf->name = nrt_malloc_strcpy(name);
+    mf->description = nrt_malloc_strcpy(description);
 
     return mf;
 }
