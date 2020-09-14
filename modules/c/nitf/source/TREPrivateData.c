@@ -22,10 +22,6 @@
 
 #include "nitf/TREPrivateData.h"
 
-#ifdef _MSC_VER // Visual Studio
-#pragma warning(disable: 4996) // '...' : This function or variable may be unsafe. Consider using ... instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-#endif
-
 NITFAPI(nitf_TREPrivateData *) nitf_TREPrivateData_construct(
         nitf_Error * error)
 {
@@ -225,16 +221,12 @@ NITFPROT(NITF_BOOL) nitf_TREPrivateData_setDescriptionName(
     }
 
     /* copy the description id */
-    if (name)
+    priv->descriptionName = nrt_malloc_strcpy(name);
+    if (!priv->descriptionName)
     {
-        priv->descriptionName = (char*)NITF_MALLOC(strlen(name) + 1);
-        if (!priv->descriptionName)
-        {
-            nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
-                    NITF_CTXT, NITF_ERR_MEMORY);
-            return NITF_FAILURE;
-        }
-        strcpy(priv->descriptionName, name);
+        nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
+                NITF_CTXT, NITF_ERR_MEMORY);
+        return NITF_FAILURE;
     }
     return NITF_SUCCESS;
 }

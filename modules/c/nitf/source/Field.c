@@ -22,10 +22,6 @@
 
 #include "nitf/Field.h"
 
-#ifdef _MSC_VER // Visual Studio
-#pragma warning(disable: 4996) // '...' : This function or variable may be unsafe. Consider using ... instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-#endif
-
 /*  Spaces are added to the right  */
 NITF_BOOL copyAndFillSpaces(nitf_Field * field,
                             const char *data,
@@ -657,7 +653,7 @@ NITFPRIV(NITF_BOOL) fromIntToString(nitf_Field * field, char *outValue,
                          strlen(buffer));
         return NITF_FAILURE;
     }
-    strcpy(outValue, buffer);
+    nrt_strcpy_s(outValue, length, buffer);
     return NITF_SUCCESS;
 
 CATCH_ERROR:
