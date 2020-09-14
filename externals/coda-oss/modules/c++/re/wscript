@@ -16,8 +16,7 @@ def options(opt):
                    help='turn on using STL\'s regex implementation.  Only works when C++11 support is enabled')
 
 def configure(conf):
-    conf.env['enable_std_regex'] = Options.options.enable_std_regex
-
+    conf.env['enable_std_regex'] = True
     def re_callback(conf):
         conf.env['DEFINES'] = []
         if conf.env['enable_std_regex']:
