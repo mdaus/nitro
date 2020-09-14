@@ -21,7 +21,6 @@
  */
 
 #include "nrt/DLL.h"
-#include "nrt/Utils.h"
 
 #if defined(WIN32) || defined(_WIN32)
 

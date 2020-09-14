@@ -39,8 +39,8 @@ class TiedWorkerThread : public mt::WorkerThread<Request_T>
 public:
     TiedWorkerThread(
             mt::RequestQueue<Request_T>* requestQueue,
-            std::unique_ptr<CPUAffinityThreadInitializer> cpuAffinityInit =
-                    std::unique_ptr<CPUAffinityThreadInitializer>(nullptr)) :
+            std::auto_ptr<CPUAffinityThreadInitializer> cpuAffinityInit =
+                    std::auto_ptr<CPUAffinityThreadInitializer>(NULL)) :
         mt::WorkerThread<Request_T>(requestQueue),
         mCPUAffinityInit(cpuAffinityInit)
     {
@@ -58,7 +58,7 @@ public:
 
 private:
     TiedWorkerThread();
-    std::unique_ptr<CPUAffinityThreadInitializer> mCPUAffinityInit;
+    std::auto_ptr<CPUAffinityThreadInitializer> mCPUAffinityInit;
 };
 
 }

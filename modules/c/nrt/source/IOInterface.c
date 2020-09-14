@@ -22,7 +22,6 @@
 
 
 #include "nrt/IOInterface.h"
-#include "nrt/Utils.h"
 
 NRT_CXX_GUARD typedef struct _IOHandleControl
 {
