@@ -20,6 +20,8 @@ def options(opt):
 def configure(conf):
     conf.env['APPNAME'] = APPNAME
     conf.load(TOOLS, tooldir='build')
+    conf.env.CFLAGS += [ '--std=c99' ]
+    conf.env.CXXFLAGS += [ '--std=c++11' ]
     conf.recurse(DIRS)
 
 def build(bld):
