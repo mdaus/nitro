@@ -30,7 +30,7 @@ NRTAPI(void) nrt_Pair_init(nrt_Pair * pair, const char *key, NRT_DATA * data)
     if (pair->key != NULL)
     {
         pair->key[len] = 0;
-        strcpy(pair->key, key);
+        strcpy_s(pair->key, len + 1, key);
     }
     pair->data = data;
 }

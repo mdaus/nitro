@@ -22,6 +22,8 @@
 
 #ifdef _MSC_VER
 #pragma warning(disable: 4820) // '...': '...' bytes padding added after data member '...'
+
+#pragma warning(disable: 4996) // '...': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
 #endif
 
 #include <string.h>
@@ -471,7 +473,7 @@ NRTAPI(NRT_BOOL) nrt_DateTime_formatMillis(double millis, const char *format,
             if (begStringLen > 0)
             {
                 /* do the first part of the format */
-                strncpy(newFmtString, format, begStringLen);
+                strncpy_s(newFmtString, newFmtLen, format, begStringLen);
 
                 if (strftime(outBuf, maxSize, newFmtString, &t) == 0)
                 {

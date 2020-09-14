@@ -653,7 +653,7 @@ NITFPRIV(NITF_BOOL) fromIntToString(nitf_Field * field, char *outValue,
                          strlen(buffer));
         return NITF_FAILURE;
     }
-    strcpy(outValue, buffer);
+    strcpy_s(outValue, length, buffer);
     return NITF_SUCCESS;
 
 CATCH_ERROR:

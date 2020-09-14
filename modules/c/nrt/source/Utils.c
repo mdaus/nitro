@@ -246,7 +246,7 @@ NRTAPI(NRT_BOOL) nrt_Utils_parseDecimalString(const char *d, double *decimal,
                         "Could not allocate %zu bytes", len + 1);
         return NRT_FAILURE;
     }
-    decimalCopy = strcpy(decimalCopy, d);
+    strcpy_s(decimalCopy, len + 1, d);
     /* Now replace all spaces */
     nrt_Utils_replace(decimalCopy, ' ', '0');
     *decimal = atof(&(decimalCopy[1]));
@@ -376,14 +376,15 @@ NRTAPI(NRT_BOOL) nrt_Utils_parseGeographicString(const char *dms, int *degrees,
     }
 
     /* Now replace all spaces */
-    dmsCopy = malloc(strlen(dms) + 1);
+    const size_t dms_sz = strlen(dms) + 1;
+    dmsCopy = malloc(dms_sz);
     if (!dmsCopy)
     {
         nrt_Error_initf(error, NRT_CTXT, NRT_ERR_MEMORY,
-                        "Could not allocate %zu bytes.", strlen(dms) + 1);
+                        "Could not allocate %zu bytes.", dms_sz);
         return NRT_FAILURE;
     }
-    dmsCopy = strcpy(dmsCopy, dms);
+    strcpy_s(dmsCopy, dms_sz, dms);
     nrt_Utils_replace(dmsCopy, ' ', '0');
 
     /* Now get the corners out as geographic coords */
