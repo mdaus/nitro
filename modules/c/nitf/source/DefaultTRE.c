@@ -285,42 +285,44 @@ NITFPRIV(nitf_List*) defaultFind(nitf_TRE* tre,
     return list;
 }
 
-NITFPRIV(NITF_BOOL) defaultSetField(nitf_TRE* tre,
-    const char* tag,
-    NITF_DATA* data,
-    size_t dataLength, nitf_Error* error)
+NITFPRIV(NITF_BOOL) defaultSetField(nitf_TRE * tre,
+                                    const char *tag,
+                                    NITF_DATA * data,
+                                    size_t dataLength, nitf_Error * error)
 {
-    if (strcmp(tag, NITF_TRE_RAW))
-    {
+	nitf_Field* field = NULL;
+
+	if (strcmp(tag, NITF_TRE_RAW))
+	{
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER, "Invalid param [%s]", tag);
         return NITF_FAILURE;
-    }
+	}
 
-    nitf_Field* field = nitf_Field_construct(dataLength, NITF_BINARY, error);
+	field = nitf_Field_construct(dataLength, NITF_BINARY, error);
     if (!field)
         return NITF_FAILURE;
 
     /* TODO -- likely inefficient, since we end up copying the raw data here */
-    if (!nitf_Field_setRawData(field, (NITF_DATA*)data, dataLength, error))
+    if (!nitf_Field_setRawData(field, (NITF_DATA *) data, dataLength, error))
         return NITF_FAILURE;
 
-    if (nitf_HashTable_exists(((nitf_TREPrivateData*)tre->priv)->hash, tag))
-    {
+	if (nitf_HashTable_exists(((nitf_TREPrivateData*)tre->priv)->hash, tag))
+	{
         nitf_Field* oldValue;
         nitf_Pair* pair = nitf_HashTable_find(
-            ((nitf_TREPrivateData*)tre->priv)->hash, tag);
+                ((nitf_TREPrivateData*)tre->priv)->hash, tag);
         oldValue = (nitf_Field*)pair->data;
         nitf_Field_destruct(&oldValue);
         pair->data = field;
         return NITF_SUCCESS;
-    }
+	}
 
-    /* reset the lengths in two places */
-    ((nitf_TREPrivateData*)tre->priv)->length = dataLength;
-    ((nitf_TREPrivateData*)tre->priv)->description[0].data_count = dataLength;
+	/* reset the lengths in two places */
+	((nitf_TREPrivateData*)tre->priv)->length = dataLength;
+	((nitf_TREPrivateData*)tre->priv)->description[0].data_count = dataLength;
 
-    return nitf_HashTable_insert(((nitf_TREPrivateData*)tre->priv)->hash,
-        tag, field, error);
+	return nitf_HashTable_insert(((nitf_TREPrivateData*)tre->priv)->hash,
+	        tag, field, error);
 }
 
 NITFPRIV(nitf_Field*) defaultGetField(nitf_TRE* tre, const char* tag)

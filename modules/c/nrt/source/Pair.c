@@ -29,7 +29,13 @@
 
 NRTAPI(void) nrt_Pair_init(nrt_Pair * pair, const char *key, NRT_DATA * data)
 {
-    pair->key = nrt_malloc_strcpy(key);
+    size_t len = strlen(key);
+    pair->key = (char *) NRT_MALLOC(len + 1);
+    if (pair->key != NULL)
+    {
+        pair->key[len] = 0;
+        strcpy(pair->key, key);
+    }
     pair->data = data;
 }
 

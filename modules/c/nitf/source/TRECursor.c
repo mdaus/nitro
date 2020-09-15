@@ -23,11 +23,8 @@
 #include "nitf/TRECursor.h"
 #include "nitf/TREPrivateData.h"
 
-#ifdef _MSC_VER // Visual Studio
-#pragma warning(disable: 4996) // '...' : This function or variable may be unsafe. Consider using ... instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-#endif
 
-#define TAG_BUF_LEN 256
+#define TAG_BUF_LEN NITF_TRECursor_tag_str_LEN
 
 
 
@@ -141,7 +138,7 @@ NITFAPI(nitf_TRECursor) nitf_TRECursor_clone(nitf_TRECursor *tre_cursor,
 
     cursor.prev_ptr = tre_cursor->prev_ptr;
     cursor.desc_ptr = tre_cursor->desc_ptr;
-    nrt_strcpy_s(cursor.tag_str, NITF_TRECursor_tag_str_LEN, tre_cursor->tag_str);
+    strcpy(cursor.tag_str, tre_cursor->tag_str);
     cursor.length = tre_cursor->length;
     return cursor;
 }
@@ -544,7 +541,7 @@ NITFPRIV(int) nitf_TRECursor_evalLoops(nitf_TRE* tre,
         {
             assert(strlen(desc_ptr->label) < sizeof(str));
 
-            nrt_strcpy_s(str, TAG_BUF_LEN, desc_ptr->label);
+            strcpy(str, desc_ptr->label);
             op = str;
             while (isspace(*op))
                 op++;
@@ -643,7 +640,7 @@ NITFPRIV(int) nitf_TRECursor_evalIf(nitf_TRE* tre,
     field = (nitf_Field *) pair->data;
     assert(strlen(desc_ptr->label) < sizeof(str));
 
-    nrt_strcpy_s(str, TAG_BUF_LEN, desc_ptr->label);
+    strcpy(str, desc_ptr->label);
     op = str;
 
     while (isspace(*op))
