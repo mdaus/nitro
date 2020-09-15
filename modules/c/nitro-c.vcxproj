@@ -267,7 +267,7 @@
     <ClCompile Include="nitf\source\LabelSegment.c" />
     <ClCompile Include="nitf\source\LabelSubheader.c" />
     <ClCompile Include="nitf\source\LookupTable.c" />
-    <ClCompile Include="nitf\source\System.c" />
+    <ClCompile Include="nitf\source\NitfSystem.c" />
     <ClCompile Include="nitf\source\NitfReader.c" />
     <ClCompile Include="nitf\source\NitfWriter.c" />
     <ClCompile Include="nitf\source\PluginRegistry.c" />
