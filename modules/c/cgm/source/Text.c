@@ -22,10 +22,6 @@
 
 #include "cgm/Text.h"
 
-#ifdef _MSC_VER // Visual Studio
-#pragma warning(disable: 4996) // '...' : This function or variable may be unsafe. Consider using ... instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-#endif
-
 NITFAPI(cgm_Text*) cgm_Text_construct(const char* text, nitf_Error* error)
 {
     cgm_Text* v = (cgm_Text*)NITF_MALLOC(sizeof(cgm_Text));
@@ -36,15 +32,7 @@ NITFAPI(cgm_Text*) cgm_Text_construct(const char* text, nitf_Error* error)
         return NULL;
     }
     v->x = v->y = -1;
-    v->str = NULL;
-    if (text)
-    {
-        v->str = (char*)NITF_MALLOC( strlen( text ) + 1 );
-        if (v->str != NULL)
-        {
-            strcpy(v->str, text);
-        }
-    }
+    v->str = nrt_malloc_strcpy(text);
     return v;
 }
 

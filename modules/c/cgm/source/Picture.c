@@ -22,10 +22,6 @@
 
 #include "cgm/Picture.h"
 
-#ifdef _MSC_VER // Visual Studio
-#pragma warning(disable: 4996) // '...' : This function or variable may be unsafe. Consider using ... instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-#endif
-
 NITFAPI(cgm_Picture*) cgm_Picture_construct(const char* name,
         nitf_Error* error)
 {
@@ -36,7 +32,6 @@ NITFAPI(cgm_Picture*) cgm_Picture_construct(const char* name,
                 NITF_CTXT, NITF_ERR_MEMORY);
         return NULL;
     }
-    picture->name = NULL;
     picture->colorSelectionMode = CGM_DIRECT;
     picture->edgeWidthSpec = CGM_ABSOLUTE;
     picture->lineWidthSpec = CGM_ABSOLUTE;
@@ -45,14 +40,7 @@ NITFAPI(cgm_Picture*) cgm_Picture_construct(const char* name,
 
     picture->body = NULL;
 
-    if (name)
-    {
-        picture->name = (char*)NITF_MALLOC( strlen( name ) + 1 );
-        if (picture->name != NULL)
-        {
-            strcpy(picture->name, name);
-        }
-    }
+    picture->name = nrt_malloc_strcpy(name);
 
     return picture;
 }

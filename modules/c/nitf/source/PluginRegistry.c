@@ -22,10 +22,6 @@
 
 #include "nitf/PluginRegistry.h"
 
-#ifdef _MSC_VER // Visual Studio
-#pragma warning(disable: 4996) // '...' : This function or variable may be unsafe. Consider using ... instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-#endif
-
 NITFPRIV(nitf_PluginRegistry*) implicitConstruct(nitf_Error* error);
 NITFPRIV(void) implicitDestruct(nitf_PluginRegistry** reg);
 NITFPRIV(void) exitListener(void);
@@ -283,7 +279,7 @@ NITFPRIV(nitf_PluginRegistry*) implicitConstruct(nitf_Error* error)
 #endif
         if (nrt_Directory_exists(NITF_DEFAULT_PLUGIN_PATH))
         {
-            strncpy(reg->path, NITF_DEFAULT_PLUGIN_PATH, NITF_MAX_PATH);
+            nrt_strncpy_s(reg->path, NITF_MAX_PATH, NITF_DEFAULT_PLUGIN_PATH, NITF_MAX_PATH);
             return reg;
         }
         else
@@ -298,7 +294,7 @@ NITFPRIV(nitf_PluginRegistry*) implicitConstruct(nitf_Error* error)
     }
     else
     {
-        strncpy(reg->path, pluginEnvVar, NITF_MAX_PATH);
+        nrt_strncpy_s(reg->path, NITF_MAX_PATH, pluginEnvVar, NITF_MAX_PATH);
     }
     /*
      * If the we have a user-defined path, they might not
