@@ -222,5 +222,7 @@ nrt_Utils_swap(uint8_t* value, size_t indexOne,
  */
 NRTAPI(void) nrt_Utils_byteSwap(uint8_t* value, size_t size);
 
+NRTAPI(void) nrt_strcat_s(char* dest, size_t sz, const char* src);
+
 NRT_CXX_ENDGUARD
 #endif

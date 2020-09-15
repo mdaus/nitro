@@ -20,6 +20,8 @@
  *
  */
 
+#include <assert.h>
+
 #ifndef NRT_LIB_VERSION
  #include "nrt/nrt_config.h"
 #endif
@@ -591,4 +593,14 @@ NRTAPI(void) nrt_Utils_byteSwap(uint8_t *value, size_t size)
         /* Not handled */
         break;
     }
+}
+
+NRTAPI(void) nrt_strcat_s(char* dest, size_t sz, const char* src)
+{
+    assert(sz > 0);
+    #ifdef _MSC_VER // strcpy_s() is in C11
+    (void) strcat_s(dest, sz, src);
+    #else
+    (void) strcat(dest, src);
+    #endif
 }

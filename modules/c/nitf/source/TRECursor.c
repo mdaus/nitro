@@ -24,7 +24,7 @@
 #include "nitf/TREPrivateData.h"
 
 
-#define TAG_BUF_LEN 256
+#define TAG_BUF_LEN NITF_TRECursor_tag_str_LEN
 
 
 
@@ -181,7 +181,7 @@ NITFPRIV(nitf_Pair *) nitf_TRECursor_getTREPair(nitf_TRE * tre,
         while ((bracePtr = strchr(bracePtr + 1, '[')) != NULL)
         {
             /* tack on the depth */
-            strcat(tag_str, idx_str[index++]);
+            nrt_strcat_s(tag_str, TAG_BUF_LEN, idx_str[index++]);
         }
     }
     else
@@ -194,7 +194,7 @@ NITFPRIV(nitf_Pair *) nitf_TRECursor_getTREPair(nitf_TRE * tre,
                 ((nitf_TREPrivateData*)tre->priv)->hash, tag_str);
         for (i = 0; i < looping && !pair; ++i)
         {
-            strcat(tag_str, idx_str[i]);
+            nrt_strcat_s(tag_str, TAG_BUF_LEN, idx_str[i]);
             pair = nitf_HashTable_find(
                     ((nitf_TREPrivateData*)tre->priv)->hash, tag_str);
         }
@@ -310,7 +310,7 @@ NITFAPI(int) nitf_TRECursor_iterate(nitf_TRECursor * tre_cursor,
                     {
                         char entry[64];
                         NITF_SNPRINTF(entry, 64, "[%d]", stack[index]);
-                        strcat(tre_cursor->tag_str, entry);
+                        nrt_strcat_s(tre_cursor->tag_str, NITF_TRECursor_tag_str_LEN, entry);
                     }
                 }
 
