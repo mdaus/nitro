@@ -40,7 +40,7 @@ NITFAPI(cgm_Picture*) cgm_Picture_construct(const char* name,
 
     picture->body = NULL;
 
-    picture->name = nrt_malloc_strcpy(name);
+    picture->name = nitf_strdup(name);
 
     return picture;
 }

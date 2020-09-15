@@ -225,8 +225,7 @@ NRTAPI(void) nrt_Utils_byteSwap(uint8_t* value, size_t size);
 NRTAPI(void) nrt_strcpy_s(char* dest, size_t sz, const char* src);
 NRTAPI(void) nrt_strncpy_s(char* dest, size_t dest_sz, const char* src, size_t src_chars);
 NRTAPI(void) nrt_strcat_s(char* dest, size_t sz, const char* src);
-
-NRTAPI(char*) nrt_malloc_strcpy(const char* str);
+NRTAPI(char*) nrt_strdup(const char* src);
 
 NRT_CXX_ENDGUARD
 #endif

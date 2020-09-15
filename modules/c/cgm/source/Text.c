@@ -32,7 +32,7 @@ NITFAPI(cgm_Text*) cgm_Text_construct(const char* text, nitf_Error* error)
         return NULL;
     }
     v->x = v->y = -1;
-    v->str = nrt_malloc_strcpy(text);
+    v->str = nitf_strdup(text);
     return v;
 }
 

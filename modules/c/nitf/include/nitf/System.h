@@ -84,6 +84,7 @@
 #define NITF_MALLOC NRT_MALLOC
 #define NITF_REALLOC NRT_REALLOC
 #define NITF_FREE NRT_FREE
+NITFAPI(char*) nitf_strdup(const char* src);
 
 
 /******************************************************************************/

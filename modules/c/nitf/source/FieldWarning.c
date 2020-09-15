@@ -71,8 +71,8 @@ NITFAPI(nitf_FieldWarning *) nitf_FieldWarning_construct(nitf_Off fileOffset,
     /* fileOffset */
     result->fileOffset = fileOffset;
 
-    result->fieldName = nrt_malloc_strcpy(fieldName);
-    result->expectation = nrt_malloc_strcpy(expectation);
+    result->fieldName = nitf_strdup(fieldName);
+    result->expectation = nitf_strdup(expectation);
 
     return result;
 }
@@ -149,24 +149,22 @@ NITFAPI(nitf_FieldWarning *) nitf_FieldWarning_clone(nitf_FieldWarning *
 
     result->fileOffset = source->fileOffset;
     result->field = NULL;
-
-    result->expectation = nrt_malloc_strcpy(source->expectation);
+    result->expectation = nitf_strdup(source->expectation);
 
     /* fieldName */
-    result->fieldName = nrt_malloc_strcpy(source->fieldName);
+    result->fieldName = nitf_strdup(source->fieldName);
     if (!result->fieldName)
     {
         nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
                         NITF_CTXT, NITF_ERR_MEMORY);
         goto CATCH_ERROR;
-
     }
 
     /* field */
     result->field = nitf_Field_clone(source->field, error);
 
     return result;
-
+    ;
 CATCH_ERROR:
     nitf_FieldWarning_destruct(&result);
     return NULL;

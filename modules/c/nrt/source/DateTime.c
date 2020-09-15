@@ -22,7 +22,6 @@
 
 #ifdef _MSC_VER
 #pragma warning(disable: 4820) // '...': '...' bytes padding added after data member '...'
-#pragma warning(disable: 4996) // '...' : This function or variable may be unsafe. Consider using ... instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
 #endif
 
 #include <string.h>
@@ -494,7 +493,8 @@ NRTAPI(NRT_BOOL) nrt_DateTime_formatMillis(double millis, const char *format,
                 goto CATCH_ERROR;
             }
 
-            if (strlen(buf) + bufIdx + 1 > maxSize)
+            size_t result_sz = strlen(buf) + bufIdx + 1;
+            if (result_sz > maxSize)
             {
                 nrt_Error_initf(error, NRT_CTXT, NRT_ERR_INVALID_OBJECT,
                                 "Format string will cause buffer to overflow: [%s]",
@@ -503,12 +503,13 @@ NRTAPI(NRT_BOOL) nrt_DateTime_formatMillis(double millis, const char *format,
             }
 
             /* tack it on the end */
-            strcpy(outBuf + bufIdx, buf);
+            nrt_strcpy_s(outBuf + bufIdx, result_sz, buf);
             bufIdx = strlen(outBuf);
 
             memset(buf, 0, 256);
             NRT_SNPRINTF(buf, 256, "%.*f", decimalPlaces, fractSeconds);
 
+            result_sz = strlen(buf) + bufIdx + 1;
             if (strlen(buf) + bufIdx + 1 > maxSize)
             {
                 nrt_Error_initf(error, NRT_CTXT, NRT_ERR_INVALID_OBJECT,
@@ -518,7 +519,7 @@ NRTAPI(NRT_BOOL) nrt_DateTime_formatMillis(double millis, const char *format,
             }
 
             /* tack on the fractional seconds - spare the leading 0 */
-            strcpy(outBuf + bufIdx, buf + 1);
+            nrt_strcpy_s(outBuf + bufIdx, result_sz, buf + 1);
             bufIdx = strlen(outBuf);
 
             if (endStringLen > 0)
@@ -533,6 +534,7 @@ NRTAPI(NRT_BOOL) nrt_DateTime_formatMillis(double millis, const char *format,
                     goto CATCH_ERROR;
                 }
 
+                result_sz = strlen(buf) + bufIdx + 1;
                 if (strlen(buf) + bufIdx + 1 > maxSize)
                 {
                     nrt_Error_initf(error, NRT_CTXT, NRT_ERR_INVALID_OBJECT,
@@ -540,7 +542,7 @@ NRTAPI(NRT_BOOL) nrt_DateTime_formatMillis(double millis, const char *format,
                                     format);
                     goto CATCH_ERROR;
                 }
-                strcpy(outBuf + bufIdx, buf);
+                nrt_strcpy_s(outBuf + bufIdx, result_sz, buf);
             }
         }
     }

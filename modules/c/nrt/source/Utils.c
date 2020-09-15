@@ -239,8 +239,7 @@ NRTAPI(NRT_BOOL) nrt_Utils_parseDecimalString(const char *d, double *decimal,
                         d);
         return NRT_FAILURE;
     }
-
-    char* decimalCopy = nrt_malloc_strcpy(d);
+    char* decimalCopy = nrt_strdup(d);
     if (!decimalCopy)
     {
         nrt_Error_initf(error, NRT_CTXT, NRT_ERR_MEMORY,
@@ -249,6 +248,7 @@ NRTAPI(NRT_BOOL) nrt_Utils_parseDecimalString(const char *d, double *decimal,
     }
 
     const char sign = d[0];
+
     /* Now replace all spaces */
     nrt_Utils_replace(decimalCopy, ' ', '0');
     *decimal = atof(&(decimalCopy[1]));
@@ -377,7 +377,7 @@ NRTAPI(NRT_BOOL) nrt_Utils_parseGeographicString(const char *dms, int *degrees,
     }
 
     /* Now replace all spaces */
-    char* dmsCopy = nrt_malloc_strcpy(dms);
+    char* dmsCopy = nrt_strdup(dms);
     if (!dmsCopy)
     {
         nrt_Error_initf(error, NRT_CTXT, NRT_ERR_MEMORY,
@@ -596,52 +596,43 @@ NRTAPI(void) nrt_Utils_byteSwap(uint8_t *value, size_t size)
 NRTAPI(void) nrt_strcpy_s(char* dest, size_t sz, const char* src)
 {
     assert(sz > 0);
-#ifdef _MSC_VER // strcpy_s() is in C11
-    strcpy_s(dest, sz, src);
-#else
-    if (sz > 0)
-    {
-        (void)strcpy(dest, src);
-    }
-#endif       
-}
-
-NRTAPI(void) nrt_strcat_s(char* dest, size_t sz, const char* src)
-{
-    assert(sz > 0);
-#ifdef _MSC_VER // strcpy_s() is in C11
-    strcat_s(dest, sz, src);
-#else
-    if (sz > 0)
-    {
-        (void)strcat(dest, src);
-    }
-#endif       
+    #ifdef _MSC_VER // str*_s() is in C11
+    (void) strcpy_s(dest, sz, src);
+    #else
+   (void)strcpy(dest, src);
+    #endif       
 }
 
 NRTAPI(void) nrt_strncpy_s(char* dest, size_t dest_sz, const char* src, size_t src_chars)
 {
     assert(dest_sz > 0);
-#ifdef _MSC_VER // strcpy_s() is in C11
-    strncpy_s(dest, dest_sz, src, src_chars);
-#else
-    if (dest_sz > 0)
-    {
-        (void)strncpy(dest, src, src_chars);
-    }
-#endif       
+    #ifdef _MSC_VER // str*_s() is in C11
+    (void) strncpy_s(dest, dest_sz, src, src_chars);
+    #else
+    (void)strncpy(dest, src, src_chars);
+    #endif       
 }
 
-NRTAPI(char*) nrt_malloc_strcpy(const char* str)
+NRTAPI(void) nrt_strcat_s(char* dest, size_t sz, const char* src)
 {
-    if (str)
+    assert(sz > 0);
+    #ifdef _MSC_VER // str*_s() is in C11
+    (void) strcat_s(dest, sz, src);
+    #else
+    (void) strcat(dest, src);
+    #endif
+}
+
+NRTAPI(char*) nrt_strdup(const char* src)
+{
+    if (src != NULL)
     {
-        const size_t strLength = strlen(str);
-        char* retval = (char*)NRT_MALLOC(strLength + 1);
+        const size_t len = strlen(src);
+        char* retval = NRT_MALLOC(len + 1);
         if (retval != NULL)
         {
-            nrt_strcpy_s(retval, strLength+1, str);     
-            retval[strLength] = '\0';
+            nrt_strcpy_s(retval, len + 1, src);
+            retval[len] = '\0';
             return retval;
         }
     }

@@ -50,8 +50,8 @@ NITFAPI(cgm_Metafile*) cgm_Metafile_construct(const char* name,
     }
     mf->picture = NULL;
 
-    mf->name = nrt_malloc_strcpy(name);
-    mf->description = nrt_malloc_strcpy(description);
+    mf->name = nitf_strdup(name);
+    mf->description = nitf_strdup(description);
 
     return mf;
 }

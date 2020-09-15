@@ -270,10 +270,9 @@ TEST_CASE(testBlankSegmentsValid)
                                                       &imageDataOffset, &blockRecordLength,
                                                       &padRecordLength, &padPixelValueLength,
                                                       &padValue, &blockMask, &padMask) != 0);
-            TEST_ASSERT_GREATER(blockRecordLength, 0);
 
             const int64_t totalBlocks = blockingInfo.getNumBlocksPerRow()*blockingInfo.getNumBlocksPerCol();
-            TEST_ASSERT_GREATER(totalBlocks, 0);
+            TEST_ASSERT_GREATER(blockRecordLength, 0);
 
             const int64_t nBlocksPresent = getNumberBlocksPresent(blockMask,
                                                                       blockingInfo.getNumBlocksPerRow(),
