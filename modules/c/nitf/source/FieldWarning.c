@@ -149,29 +149,22 @@ NITFAPI(nitf_FieldWarning *) nitf_FieldWarning_clone(nitf_FieldWarning *
 
     result->fileOffset = source->fileOffset;
     result->field = NULL;
-    result->fieldName = NULL;
     result->expectation = nitf_strdup(source->expectation);
 
     /* fieldName */
-    if (source->fieldName)
+    result->fieldName = nitf_strdup(source->fieldName);
+    if (!result->fieldName)
     {
-        result->fieldName = (char *) NITF_MALLOC(strlen(source->fieldName) + 1);
-        if (!result->fieldName)
-        {
-            nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
-                            NITF_CTXT, NITF_ERR_MEMORY);
-            goto CATCH_ERROR;
-
-        }
-        strcpy(result->fieldName, source->fieldName);
-        result->fieldName[strlen(source->fieldName)] = 0;
+        nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
+                        NITF_CTXT, NITF_ERR_MEMORY);
+        goto CATCH_ERROR;
     }
 
     /* field */
     result->field = nitf_Field_clone(source->field, error);
 
     return result;
-
+    ;
 CATCH_ERROR:
     nitf_FieldWarning_destruct(&result);
     return NULL;
