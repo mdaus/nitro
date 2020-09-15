@@ -36,6 +36,7 @@ coda_add_module(
         source/RESegment.c
         source/RESubheader.c
         source/NitfReader.c
+        source/NitfSystem.c
         source/Record.c
         source/RowSource.c
         source/SegmentReader.c
@@ -43,7 +44,6 @@ coda_add_module(
         source/SegmentWriter.c
         source/StreamIOWriteHandler.c
         source/SubWindow.c
-        source/System.c
         source/TRE.c
         source/TRECursor.c
         source/TREPrivateData.c
