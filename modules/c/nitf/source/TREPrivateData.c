@@ -22,6 +22,7 @@
 
 #include "nitf/TREPrivateData.h"
 
+
 NITFAPI(nitf_TREPrivateData *) nitf_TREPrivateData_construct(
         nitf_Error * error)
 {
@@ -221,12 +222,16 @@ NITFPROT(NITF_BOOL) nitf_TREPrivateData_setDescriptionName(
     }
 
     /* copy the description id */
-    priv->descriptionName = nrt_malloc_strcpy(name);
-    if (!priv->descriptionName)
+    if (name)
     {
-        nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
-                NITF_CTXT, NITF_ERR_MEMORY);
-        return NITF_FAILURE;
+        priv->descriptionName = (char*)NITF_MALLOC(strlen(name) + 1);
+        if (!priv->descriptionName)
+        {
+            nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
+                    NITF_CTXT, NITF_ERR_MEMORY);
+            return NITF_FAILURE;
+        }
+        strcpy(priv->descriptionName, name);
     }
     return NITF_SUCCESS;
 }
