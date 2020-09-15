@@ -231,9 +231,7 @@ NRTAPI(NRT_BOOL) nrt_Utils_parseDecimalString(const char *d, double *decimal,
                                               nrt_Error * error)
 {
     /* +-dd.ddd or += ddd.ddd */
-    char* decimalCopy;
     const size_t len = strlen(d);
-    const char sign = d[0];
     if (len != 7 && len != 8)
     {
         nrt_Error_initf(error, NRT_CTXT, NRT_ERR_INVALID_PARAMETER,
@@ -241,14 +239,16 @@ NRTAPI(NRT_BOOL) nrt_Utils_parseDecimalString(const char *d, double *decimal,
                         d);
         return NRT_FAILURE;
     }
-    decimalCopy = malloc(len + 1);
+    char* decimalCopy = nrt_strdup(d);
     if (!decimalCopy)
     {
         nrt_Error_initf(error, NRT_CTXT, NRT_ERR_MEMORY,
                         "Could not allocate %zu bytes", len + 1);
         return NRT_FAILURE;
     }
-    decimalCopy = strcpy(decimalCopy, d);
+
+    const char sign = d[0];
+
     /* Now replace all spaces */
     nrt_Utils_replace(decimalCopy, ' ', '0');
     *decimal = atof(&(decimalCopy[1]));
@@ -346,7 +346,6 @@ NRTAPI(NRT_BOOL) nrt_Utils_parseGeographicString(const char *dms, int *degrees,
     int degreeOffset = 0;
     const size_t len = strlen(dms);
     char dir;
-    char* dmsCopy;
 
     char d[4];
     char m[3];
@@ -378,14 +377,13 @@ NRTAPI(NRT_BOOL) nrt_Utils_parseGeographicString(const char *dms, int *degrees,
     }
 
     /* Now replace all spaces */
-    dmsCopy = malloc(strlen(dms) + 1);
+    char* dmsCopy = nrt_strdup(dms);
     if (!dmsCopy)
     {
         nrt_Error_initf(error, NRT_CTXT, NRT_ERR_MEMORY,
                         "Could not allocate %zu bytes.", strlen(dms) + 1);
         return NRT_FAILURE;
     }
-    dmsCopy = strcpy(dmsCopy, dms);
     nrt_Utils_replace(dmsCopy, ' ', '0');
 
     /* Now get the corners out as geographic coords */
@@ -623,4 +621,20 @@ NRTAPI(void) nrt_strcat_s(char* dest, size_t sz, const char* src)
     #else
     (void) strcat(dest, src);
     #endif
+}
+
+NRTAPI(char*) nrt_strdup(const char* src)
+{
+    if (src != NULL)
+    {
+        const size_t len = strlen(src);
+        char* retval = NRT_MALLOC(len + 1);
+        if (retval != NULL)
+        {
+            nrt_strcpy_s(retval, len + 1, src);
+            retval[len] = '\0';
+            return retval;
+        }
+    }
+    return NULL;
 }
