@@ -232,7 +232,7 @@ static NITF_BOOL doReadTest(TestSpec* spec, TestState* test)
         uint32_t bandIdx;
         for (bandIdx = 1; bandIdx < numBands; ++bandIdx)
         {
-            strcat(joinedBands, (const char*) bands[bandIdx]);
+            nrt_strcat_s(joinedBands, joinedBands_sz, (const char*) bands[bandIdx]);
         }
         if (strcmp((char *)joinedBands, spec->expectedRead) != 0)
         {
