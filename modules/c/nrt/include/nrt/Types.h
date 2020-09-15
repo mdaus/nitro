@@ -24,7 +24,8 @@
 #define __NRT_TYPES_H__
 #pragma once
 
-#include "nrt/nrt_config.h"
+//#include "nrt/nrt_config.h"
+#define NRT_LIB_VERSION "2.9"
 
 #   include <assert.h>
 #   include <stdlib.h>

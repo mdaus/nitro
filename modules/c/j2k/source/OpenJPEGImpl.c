@@ -20,8 +20,8 @@
  *
  */
 
-#undef J2K_MODULE_EXPORTS
-#include "j2k/j2k_config.h"
+ //#include "j2k/j2k_config.h"
+//#define HAVE_OPENJPEG_H 1
 
 #ifdef _MSC_VER // Visual Studio
 #pragma warning(disable: 4206) //	nonstandard extension used : translation unit is empty
