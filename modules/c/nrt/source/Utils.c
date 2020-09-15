@@ -638,3 +638,4 @@ NRTAPI(char*) nrt_strdup(const char* src)
     }
     return NULL;
 }
+
