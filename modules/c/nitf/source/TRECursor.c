@@ -792,7 +792,7 @@ NITFPRIV(int) nitf_TRECursor_evalCondLength(nitf_TRE* tre,
     {
         assert(strlen(desc_ptr->label) < sizeof(str));
 
-        strcpy(str, desc_ptr->label);
+        nrt_strcpy_s(str, TAG_BUF_LEN, desc_ptr->label);
         op = str;
         while (isspace(*op))
             op++;
