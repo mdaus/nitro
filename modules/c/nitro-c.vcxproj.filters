@@ -637,5 +637,8 @@
       <Filter>nitf</Filter>
     </ClCompile>
     <ClCompile Include="pch.c" />
+    <ClCompile Include="nitf\source\System.c">
+      <Filter>nitf</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
