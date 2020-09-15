@@ -138,7 +138,7 @@ NITFAPI(nitf_TRECursor) nitf_TRECursor_clone(nitf_TRECursor *tre_cursor,
 
     cursor.prev_ptr = tre_cursor->prev_ptr;
     cursor.desc_ptr = tre_cursor->desc_ptr;
-    strcpy(cursor.tag_str, tre_cursor->tag_str);
+    nrt_strcpy_s(cursor.tag_str, NITF_TRECursor_tag_str_LEN, tre_cursor->tag_str);
     cursor.length = tre_cursor->length;
     return cursor;
 }
@@ -541,7 +541,7 @@ NITFPRIV(int) nitf_TRECursor_evalLoops(nitf_TRE* tre,
         {
             assert(strlen(desc_ptr->label) < sizeof(str));
 
-            strcpy(str, desc_ptr->label);
+            nrt_strcpy_s(str, TAG_BUF_LEN, desc_ptr->label);
             op = str;
             while (isspace(*op))
                 op++;
@@ -640,7 +640,7 @@ NITFPRIV(int) nitf_TRECursor_evalIf(nitf_TRE* tre,
     field = (nitf_Field *) pair->data;
     assert(strlen(desc_ptr->label) < sizeof(str));
 
-    strcpy(str, desc_ptr->label);
+    nrt_strcpy_s(str, TAG_BUF_LEN, desc_ptr->label);
     op = str;
 
     while (isspace(*op))
