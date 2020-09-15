@@ -43,6 +43,7 @@ coda_add_module(
         source/SegmentWriter.c
         source/StreamIOWriteHandler.c
         source/SubWindow.c
+        source/System.c
         source/TRE.c
         source/TRECursor.c
         source/TREPrivateData.c
