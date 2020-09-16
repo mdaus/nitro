@@ -24,6 +24,8 @@
  *    Implementation of the direct block source object
  */
 
+#include <inttypes.h>
+
 #include "nitf/DirectBlockSource.h"
 
 /*   The instance data for the rowSource object */

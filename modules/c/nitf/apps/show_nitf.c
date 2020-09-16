@@ -20,6 +20,8 @@
  *
  */
 
+#include <inttypes.h>
+
 #include <import/nitf.h>
 
 /*

@@ -20,6 +20,8 @@
  *
  */
 
+#include <inttypes.h>
+
 /*
     Test program for reading a Text segment
 
