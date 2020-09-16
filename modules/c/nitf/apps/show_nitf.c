@@ -36,7 +36,7 @@
 #define SHOW_I(X) printf("%s=[%ld]\n", #X, X)
 #define SHOW_LLI(X) printf("%s=[%lld]\n", #X, X)
 #define SHOW_LLU(X) printf("%s=[%llu]\n", #X, X)
-#define SHOW_UINT64(X) printf("%s=[%lu]\n", #X, X)
+#define SHOW_UINT64(X) printf("%s=[%"PRIu64"]\n", #X, X)
 
 
 #define SHOW_RGB(X) \
@@ -229,7 +229,7 @@ void showFileHeader(nitf_Record * record)
         goto CATCH_ERROR;
 
 
-    printf("The number of images contained in this file [%u]\n", num);
+    printf("The number of images contained in this file [%"PRIu32"]\n", num);
     for (i = 0; i < num; i++)
     {
 
@@ -242,9 +242,9 @@ void showFileHeader(nitf_Record * record)
                             NITF_CONV_INT, NITF_INT64_SZ, &error))
             goto CATCH_ERROR;
 
-        printf("\tThe length of image subheader [%u]: %u bytes\n",
+        printf("\tThe length of image subheader [%"PRIu32"]: %"PRIu32" bytes\n",
                i, len);
-        printf("\tThe length of the image data: %lu bytes\n\n", dataLen);
+        printf("\tThe length of the image data: %"PRIu64" bytes\n\n", dataLen);
     }
 
     if (!nitf_Field_get(header->numGraphics,
@@ -252,7 +252,7 @@ void showFileHeader(nitf_Record * record)
         goto CATCH_ERROR;
 
 
-    printf("The number of graphics contained in this file [%u]\n", num);
+    printf("The number of graphics contained in this file [%"PRIu32"]\n", num);
     for (i = 0; i < num; i++)
     {
 
@@ -265,9 +265,9 @@ void showFileHeader(nitf_Record * record)
                             NITF_CONV_INT, NITF_INT32_SZ, &error))
             goto CATCH_ERROR;
 
-        printf("\tThe length of graphic subheader [%u]: %u bytes\n",
+        printf("\tThe length of graphic subheader [%"PRIu32"]: %"PRIu32" bytes\n",
                i, len);
-        printf("\tThe length of the graphic data: %u bytes\n\n",
+        printf("\tThe length of the graphic data: %"PRIu32" bytes\n\n",
                dataLen32);
     }
 
@@ -275,7 +275,7 @@ void showFileHeader(nitf_Record * record)
                         &num, NITF_CONV_INT, NITF_INT32_SZ, &error))
         goto CATCH_ERROR;
 
-    printf("The number of labels contained in this file [%u]\n", num);
+    printf("The number of labels contained in this file [%"PRIu32"]\n", num);
     for (i = 0; i < num; i++)
     {
 
@@ -287,10 +287,10 @@ void showFileHeader(nitf_Record * record)
                             &dataLen32,
                             NITF_CONV_INT, NITF_INT32_SZ, &error))
             goto CATCH_ERROR;
-        printf("\tThe length of label subheader [%u]: %u bytes\n",
+        printf("\tThe length of label subheader [%"PRIu32"]: %"PRIu32" bytes\n",
                i, len);
 
-        printf("\tThe length of the label data: %u bytes\n\n",
+        printf("\tThe length of the label data: %"PRIu32" bytes\n\n",
                dataLen32);
     }
 
@@ -298,7 +298,7 @@ void showFileHeader(nitf_Record * record)
                         &num, NITF_CONV_INT, NITF_INT32_SZ, &error))
         goto CATCH_ERROR;
 
-    printf("The number of text sections contained in this file [%u]\n",
+    printf("The number of text sections contained in this file [%"PRIu32"]\n",
            num);
 
     for (i = 0; i < num; i++)
@@ -312,10 +312,10 @@ void showFileHeader(nitf_Record * record)
                             NITF_CONV_INT, NITF_INT32_SZ, &error))
             goto CATCH_ERROR;
 
-        printf("\tThe length of text subheader [%u]: %u bytes\n",
+        printf("\tThe length of text subheader [%"PRIu32"]: %"PRIu32" bytes\n",
                i, len);
 
-        printf("\tThe length of the text data: %u bytes\n\n",
+        printf("\tThe length of the text data: %"PRIu32" bytes\n\n",
                dataLen32);
     }
 
@@ -323,7 +323,7 @@ void showFileHeader(nitf_Record * record)
                         &num, NITF_CONV_INT, NITF_INT32_SZ, &error))
         goto CATCH_ERROR;
 
-    printf("The number of DES contained in this file [%u]\n",
+    printf("The number of DES contained in this file [%"PRIu32"]\n",
            num);
 
     for (i = 0; i < num; i++)
@@ -337,9 +337,9 @@ void showFileHeader(nitf_Record * record)
                             NITF_CONV_INT, NITF_INT32_SZ, &error))
             goto CATCH_ERROR;
 
-        printf("\tThe length of DES subheader [%u]: %u bytes\n",
+        printf("\tThe length of DES subheader [%"PRIu32"]: %"PRIu32" bytes\n",
                i, len);
-        printf("\tThe length of the DES data: %u bytes\n\n",
+        printf("\tThe length of the DES data: %"PRIu32" bytes\n\n",
                dataLen32);
     }
 
@@ -348,7 +348,7 @@ void showFileHeader(nitf_Record * record)
                         &num, NITF_CONV_INT, NITF_INT32_SZ, &error))
         goto CATCH_ERROR;
 
-    printf("The number of RES contained in this file [%u]\n",
+    printf("The number of RES contained in this file [%"PRIu32"]\n",
            num);
 
     for (i = 0; i < num; i++)
@@ -365,10 +365,10 @@ void showFileHeader(nitf_Record * record)
                             NITF_CONV_INT, NITF_INT32_SZ, &error))
             goto CATCH_ERROR;
 
-        printf("\tThe length of RES subheader [%u]: %u bytes\n",
+        printf("\tThe length of RES subheader [%"PRIu32"]: %"PRIu32" bytes\n",
                i, len);
 
-        printf("\tThe length of the RES data: %u bytes\n\n",
+        printf("\tThe length of the RES data: %"PRIu32" bytes\n\n",
                dataLen32);
     }
 
@@ -376,7 +376,7 @@ void showFileHeader(nitf_Record * record)
                         NITF_CONV_INT, NITF_INT32_SZ, &error))
         goto CATCH_ERROR;
 
-    printf("The user-defined header length [%u]\n", num);
+    printf("The user-defined header length [%"PRIu32"]\n", num);
 
     if (header->userDefinedSection)
         showExtensions( header->userDefinedSection );
@@ -385,7 +385,7 @@ void showFileHeader(nitf_Record * record)
                         NITF_CONV_INT, NITF_INT32_SZ, &error))
         goto CATCH_ERROR;
 
-    printf("The extended header length [%u]\n", num);
+    printf("The extended header length [%"PRIu32"]\n", num);
 
     if (header->extendedSection)
         showExtensions( header->extendedSection );
