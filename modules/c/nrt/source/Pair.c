@@ -21,7 +21,6 @@
  */
 
 #include "nrt/Pair.h"
-#include "nrt/Utils.h"
 
 NRTAPI(void) nrt_Pair_init(nrt_Pair * pair, const char *key, NRT_DATA * data)
 {
