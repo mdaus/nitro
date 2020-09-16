@@ -20,7 +20,9 @@
  *
  */
 
-#include "nrt/nrt_config.h"
+#ifndef NRT_LIB_VERSION
+ #include "nrt/nrt_config.h"
+#endif
 #include "nrt/Utils.h"
 
 NRTAPI(nrt_List *) nrt_Utils_splitString(const char *str, unsigned int max,
@@ -258,7 +260,7 @@ NRTAPI(NRT_BOOL) nrt_Utils_parseDecimalString(const char *d, double *decimal,
     return NRT_SUCCESS;
 }
 
-NRTAPI(double) nrt_Utils_getCurrentTimeMillis()
+NRTAPI(double) nrt_Utils_getCurrentTimeMillis(void)
 {
     double millis = 0;
 #if defined(HAVE_PTHREAD_H) && defined(HAVE_CLOCK_GETTIME)
@@ -589,4 +591,26 @@ NRTAPI(void) nrt_Utils_byteSwap(uint8_t *value, size_t size)
         /* Not handled */
         break;
     }
+}
+
+#ifdef _MSC_VER // Visual Studio
+#pragma warning(disable: 4996) // '...' : This function or variable may be unsafe. Consider using ... instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+#endif
+
+NRTAPI(char*) nrt_Utils_strcpy(char* destination, char const* source)
+{
+    #undef strcpy
+    return strcpy(destination, source);
+}
+
+NRTAPI(char*) nrt_Utils_strncpy(char* destination, char const* source, size_t count)
+{
+#undef strncpy
+    return strncpy(destination, source, count);
+}
+
+NRTAPI(char*) nrt_Utils_strcat(char* destination, char const* source)
+{
+    #undef strcat
+    return strcat(destination, source);
 }
