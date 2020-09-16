@@ -20,6 +20,8 @@
  *
  */
 
+#include <inttypes.h>
+
 #include <import/nrt.h>
 #include <import/nitf.h>
 #include <import/j2k.h>

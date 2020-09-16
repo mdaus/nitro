@@ -20,6 +20,8 @@
  *
  */
 
+#include <inttypes.h>
+
 /*
   Test program for creating a DE segment
 
@@ -87,7 +89,7 @@ void manuallyWriteImageBands(nitf_ImageSegment * segment,
                              int imageNumber, nitf_Error * error)
 {
     char *file;
-    uint32_t nBits, nBands, xBands, nRows, nColumns;
+    uint32_t nBits, nBands=0, xBands, nRows, nColumns;
     size_t subimageSize;
     nitf_SubWindow *subimage;
     unsigned int i;

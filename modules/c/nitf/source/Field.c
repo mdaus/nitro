@@ -20,6 +20,8 @@
  *
  */
 
+#include <inttypes.h>
+
 #include "nitf/Field.h"
 
 /*  Spaces are added to the right  */
@@ -171,7 +173,7 @@ NITFAPI(NITF_BOOL) nitf_Field_setUint32(nitf_Field * field,
 
     /*  Convert the number to a string */
 
-    NITF_SNPRINTF(numberBuffer, 20, "%"PRIu64"", (unsigned long) number);
+    NITF_SNPRINTF(numberBuffer, 20, "%"PRIu32, number);
     numberLen = strlen(numberBuffer);
 
     /* if it's resizable and a different length, we resize */
