@@ -68,26 +68,94 @@ void printTRE(nitf::TRE tre)
      *  This is the name for the description that was selected to field
      *  this TRE by the handler.
      */
-    std::string treID = tre.getID();
+    const std::string treID = tre.getID();
+    const std::string str_treID = (treID.empty() ? "nullID" : treID);
 
-
-    std::cout << std::endl << "--------------- " << tre.getTag()
-              << " TRE (" << treLength << " - "
-              << (treID.empty() ? "nullID" : treID)
-              << ") ---------------" << std::endl;
+    if (!format_as_xml)
+    {
+        std::cout << "\n--------------- " << tre.getTag()
+            << " TRE (" << treLength << " - "
+            << str_treID
+            << ") ---------------\n";
+    }
+    else
+    {
+        std::cout << "\t";
+        std::cout << "<TRE tag='" << tre.getTag() << "'";
+        std::cout << " length='" << treLength << "'";
+        std::cout << " ID='" << str_treID << "'";
+        std::cout << ">";
+        std::cout << "\n";
+    }
 
     // Now walk the TRE
     for(nitf::TRE::Iterator it = tre.begin(); it != tre.end(); ++it)
     {
-        std::string desc = it.getFieldDescription();
-        nitf::Field field((*it).second());
+        const std::string desc = it.getFieldDescription();
+        const nitf::Field field((*it).second());
+
+        if (format_as_xml)
+        {
+            std::cout << "\t\t";
+            std::cout << "<field name='";
+        }
         std::cout << (*it).first();
+        if (format_as_xml)
+        {
+            std::cout << "'";
+        }
+
+        const nitf::Field::FieldType fieldType = field.getType();
+        if (format_as_xml)
+        {
+            std::string strType;
+            switch (fieldType)
+            {
+            case  nitf::Field::BCS_A: strType = "BCS_A"; break;
+            case  nitf::Field::BCS_N: strType = "BCS_N"; break;
+            case  nitf::Field::BINARY: strType = "BINARY"; break;
+            default: strType = "Unknown"; break;
+            }
+            std::cout << " type='" << strType << "'";
+        }
+
         if (!desc.empty())
-            std::cout << " (" << desc << ")";
-        std::cout << " = ["
-                  << field.toString() << "]" << std::endl;
+        {
+            if (!format_as_xml)
+            {
+                std::cout << " (" << desc << ")";
+            }
+            else
+            {
+                std::cout << " desc='" << desc << "'";
+            }
+        }
+
+        if (!format_as_xml)
+        {
+            std::cout << " = [" << field.toString() << "]\n";
+        }
+        else
+        {
+            std::cout << " value='";
+            std::cout << field.toString();
+            std::cout << "'";
+
+            std::cout << " />";
+            std::cout << "\n";
+        }
     }
-    std::cout << "---------------------------------------------" << std::endl;
+
+    if (!format_as_xml)
+    {
+        std::cout << "---------------------------------------------";
+    }
+    else
+    {
+        std::cout << "\t";
+        std::cout << "</TRE>";
+    }
+    std::cout << "\n";
 
 }
 
@@ -97,6 +165,13 @@ void printTRE(nitf::TRE tre)
  */
 void showExtensions(nitf::Extensions extensions)
 {
+    if (format_as_xml)
+    {
+        std::cout << "\t";
+        std::cout << "<TREs>";
+        std::cout << "\n";
+    }
+
     for (nitf::ExtensionsIterator it = extensions.begin();
          it != extensions.end(); ++it)
     {
@@ -104,6 +179,13 @@ void showExtensions(nitf::Extensions extensions)
 
         std::string treID = tre.getID();
         printTRE(tre);
+    }
+
+    if (format_as_xml)
+    {
+        std::cout << "\t";
+        std::cout << "</TREs>";
+        std::cout << "\n";
     }
 }
 
@@ -132,114 +214,117 @@ void showFileHeader(nitf::FileHeader header)
     SHOW_FILE_HEADER(OriginatorPhone);
     SHOW_FILE_HEADER(FileLength);
     SHOW_FILE_HEADER(HeaderLength);
-    if (format_as_xml)
+
+    if (!format_as_xml) // don't need XML output right now
     {
-        std::cout << "</FileHeader>\n";
+        unsigned int num = header.getNumImages();
+        std::cout << "The number of images contained in this file ["
+            << num << "]" << std::endl;
+
+        for (unsigned int i = 0; i < num; i++)
+        {
+            nitf::ComponentInfo info = header.getImageInfo(i);
+
+            std::cout << "\tThe length of image subheader [" << i << "]: "
+                << (unsigned int)info.getLengthSubheader() << std::endl;
+        }
+
+        num = header.getNumGraphics();
+
+        std::cout << "The number of graphics contained in this file ["
+            << num << "]" << std::endl;
+
+        for (unsigned int i = 0; i < num; i++)
+        {
+            nitf::ComponentInfo info = header.getGraphicInfo(i);
+
+            std::cout << "\tThe length of graphics subheader [" << i << "]: "
+                << (unsigned int)info.getLengthSubheader() << std::endl;
+
+            std::cout << "\tThe length of the graphics data: "
+                << (unsigned int)info.getLengthData()
+                << " bytes\n" << std::endl;
+        }
+
+        num = header.getNumLabels();
+
+        std::cout << "The number of labels contained in this file ["
+            << num << "]" << std::endl;
+
+        for (unsigned int i = 0; i < num; i++)
+        {
+            nitf::ComponentInfo info = header.getLabelInfo(i);
+
+            std::cout << "\tThe length of label subheader [" << i << "]: "
+                << (unsigned int)info.getLengthSubheader() << std::endl;
+
+            std::cout << "\tThe length of the label data: "
+                << (unsigned int)info.getLengthData()
+                << " bytes\n" << std::endl;
+        }
+
+        num = header.getNumTexts();
+        std::cout << "The number of texts contained in this file ["
+            << num << "]" << std::endl;
+
+        for (unsigned int i = 0; i < num; i++)
+        {
+            nitf::ComponentInfo info = header.getTextInfo(i);
+            std::cout << "\tThe length of text subheader [" << i << "]: "
+                << (unsigned int)info.getLengthSubheader() << std::endl;
+
+            std::cout << "\tThe length of the text data: "
+                << (unsigned int)info.getLengthData()
+                << " bytes\n" << std::endl;
+        }
+
+        num = header.getNumDataExtensions();
+        std::cout << "The number of DES contained in this file ["
+            << num << "]" << std::endl;
+
+        for (unsigned int i = 0; i < num; i++)
+        {
+            nitf::ComponentInfo info = header.getDataExtensionInfo(i);
+
+            std::cout << "\tThe length of DES subheader [" << i << "]: "
+                << (unsigned int)info.getLengthSubheader() << std::endl;
+
+            std::cout << "\tThe length of the DES data: "
+                << (unsigned int)info.getLengthData()
+                << " bytes\n" << std::endl;
+        }
+
+        num = header.getNumReservedExtensions();
+        std::cout << "The number of RES contained in this file ["
+            << num << "]" << std::endl;
+
+        for (unsigned int i = 0; i < num; i++)
+        {
+            nitf::ComponentInfo info = header.getReservedExtensionInfo(i);
+            std::cout << "\tThe length of RES subheader [" << i << "]: "
+                << (unsigned int)info.getLengthSubheader() << std::endl;
+
+            std::cout << "\tThe length of the RES data: "
+                << (unsigned int)info.getLengthData()
+                << " bytes\n" << std::endl;
+        }
     }
 
-    unsigned int num = header.getNumImages();
-    std::cout << "The number of images contained in this file ["
-              << num << "]" << std::endl;
-
-    for (unsigned int i = 0; i < num; i++)
-    {
-        nitf::ComponentInfo info = header.getImageInfo(i);
-
-        std::cout << "\tThe length of image subheader [" << i << "]: "
-                  << (unsigned int)info.getLengthSubheader() << std::endl;
-    }
-
-    num = header.getNumGraphics();
-
-    std::cout << "The number of graphics contained in this file ["
-              << num << "]" << std::endl;
-
-    for (unsigned int i = 0; i < num; i++)
-    {
-        nitf::ComponentInfo info = header.getGraphicInfo(i);
-
-        std::cout << "\tThe length of graphics subheader [" << i << "]: "
-                  << (unsigned int)info.getLengthSubheader() << std::endl;
-
-        std::cout << "\tThe length of the graphics data: "
-                  << (unsigned int)info.getLengthData()
-                  << " bytes\n" << std::endl;
-    }
-
-    num = header.getNumLabels();
-
-    std::cout << "The number of labels contained in this file ["
-              << num << "]" << std::endl;
-
-    for (unsigned int i = 0; i < num; i++)
-    {
-        nitf::ComponentInfo info = header.getLabelInfo(i);
-
-        std::cout << "\tThe length of label subheader [" << i << "]: "
-                  << (unsigned int)info.getLengthSubheader() << std::endl;
-
-        std::cout << "\tThe length of the label data: "
-                  << (unsigned int)info.getLengthData()
-                  << " bytes\n" << std::endl;
-    }
-
-    num = header.getNumTexts();
-    std::cout << "The number of texts contained in this file ["
-              << num << "]" << std::endl;
-
-    for (unsigned int i = 0; i < num; i++)
-    {
-        nitf::ComponentInfo info = header.getTextInfo(i);
-        std::cout << "\tThe length of text subheader [" << i << "]: "
-                  << (unsigned int)info.getLengthSubheader() << std::endl;
-
-        std::cout << "\tThe length of the text data: "
-                  << (unsigned int)info.getLengthData()
-                  << " bytes\n" << std::endl;
-    }
-
-    num = header.getNumDataExtensions();
-    std::cout << "The number of DES contained in this file ["
-              << num << "]" << std::endl;
-
-    for (unsigned int i = 0; i < num; i++)
-    {
-        nitf::ComponentInfo info = header.getDataExtensionInfo(i);
-
-        std::cout << "\tThe length of DES subheader [" << i << "]: "
-                  << (unsigned int)info.getLengthSubheader() << std::endl;
-
-        std::cout << "\tThe length of the DES data: "
-                  << (unsigned int)info.getLengthData()
-                  << " bytes\n" << std::endl;
-    }
-
-    num = header.getNumReservedExtensions();
-    std::cout << "The number of RES contained in this file ["
-              << num << "]" << std::endl;
-
-    for (unsigned int i = 0; i < num; i++)
-    {
-        nitf::ComponentInfo info = header.getReservedExtensionInfo(i);
-        std::cout << "\tThe length of RES subheader [" << i << "]: "
-                  << (unsigned int)info.getLengthSubheader() << std::endl;
-
-        std::cout << "\tThe length of the RES data: "
-                  << (unsigned int)info.getLengthData()
-                  << " bytes\n" << std::endl;
-    }
-
-    SHOW(header.getUserDefinedHeaderLength().toString());
+    SHOW_FILE_HEADER(UserDefinedHeaderLength);
 
     nitf::Extensions udExts = header.getUserDefinedSection();
 
     showExtensions(udExts);
 
-    SHOW(header.getExtendedHeaderLength().toString());
+    SHOW_FILE_HEADER(ExtendedHeaderLength);
 
     nitf::Extensions exExts = header.getExtendedSection();
     showExtensions(exExts);
 
+    if (format_as_xml)
+    {
+        std::cout << "</FileHeader>\n";
+    }
 }
 
 
@@ -321,7 +406,7 @@ void showImages(nitf::Record& record)
 {
     if (format_as_xml)
     {
-        return; // no XML output right now
+        return; // don't need XML output right now
     }
 
     if (record.getNumImages())
@@ -410,7 +495,7 @@ void showGraphics(nitf::Record& record)
 {
     if (format_as_xml)
     {
-        return; // no XML output right now
+        return; // don't need XML output right now
     }
 
     // Graphics
@@ -465,7 +550,7 @@ void showLabels(nitf::Record& record)
 {
     if (format_as_xml)
     {
-        return; // no XML output right now
+        return; // don't need XML output right now
     }
 
     if (record.getNumLabels())
@@ -522,7 +607,7 @@ void showTexts(nitf::Record& record)
 {
     if (format_as_xml)
     {
-        return; // no XML output right now
+        return; // don't need XML output right now
     }
 
     if (record.getNumTexts())
@@ -630,7 +715,7 @@ void showDataExtensions(nitf::Record& record)
 {
     if (format_as_xml)
     {
-        return; // no XML output right now
+        return; // don't need XML output right now
     }
 
     if (record.getNumDataExtensions())
@@ -700,7 +785,7 @@ void showWarnings(nitf::Reader& reader)
 {
     if (format_as_xml)
     {
-        return; // no XML output right now
+        return; // don't need XML output right now
     }
 
     nitf::List warnings = reader.getWarningList();
