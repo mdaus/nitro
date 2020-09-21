@@ -88,23 +88,23 @@ public:
     uint32_t getNumReservedExtensions() const;
 
     //! Get the images
-    nitf::List getImages();
+    nitf::List getImages() const;
 
 
     //! Get the graphics
-    nitf::List getGraphics();
+    nitf::List getGraphics() const;
 
     //! Get the labels
-    nitf::List getLabels();
+    nitf::List getLabels() const;
 
     //! Get the texts
-    nitf::List getTexts();
+    nitf::List getTexts() const;
 
     //! Get the dataExtensions
-    nitf::List getDataExtensions();
+    nitf::List getDataExtensions() const;
 
     //! Get the reservedExtensions
-    nitf::List getReservedExtensions();
+    nitf::List getReservedExtensions() const;
 
     //! Make and return a new ImageSegment
     nitf::ImageSegment newImageSegment(int index = -1);
