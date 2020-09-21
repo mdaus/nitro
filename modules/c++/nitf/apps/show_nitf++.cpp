@@ -23,7 +23,27 @@
 #include <import/nitf.hpp>
 #include <io/FileInputStream.h>
 
-#define SHOW(X) std::cout << #X << " = [" << X << "]" << std::endl
+bool format_as_xml = false;
+
+template<typename T>
+inline void show(const std::string& x_, const T& x)
+{
+    if (format_as_xml)
+    {
+        std::cout << "\t";
+        std::cout << "<" << x_ << ">";
+        std::cout << x;
+        std::cout << "</" << x_ << ">";
+    }
+    else
+    {
+        std::cout << x_ << " = [" << x << "]";
+    }
+    std::cout << "\n";
+}
+#define SHOW(X) show(#X, X)
+//#define SHOW(X) std::cout << #X << " = [" << X << "]\n"
+
 #define SHOWI(X) printf("%s=[%d]\n", #X, (int)X)
 #define SHOWRGB(X) printf("%s(R,G,B)=[%02x,%02x,%02x]\n", #X, \
        (unsigned char) X[0], (unsigned char) X[1], (unsigned char) X[2])
@@ -90,22 +110,32 @@ void showExtensions(nitf::Extensions extensions)
 
 void showFileHeader(nitf::FileHeader header)
 {
-    SHOW( header.getFileHeader().toString() );
-    SHOW( header.getFileVersion().toString() );
-    SHOW( header.getComplianceLevel().toString() );
-    SHOW( header.getSystemType().toString() );
-    SHOW( header.getOriginStationID().toString() );
-    SHOW( header.getFileDateTime().toString() );
-    SHOW( header.getFileTitle().toString() );
-    SHOW( header.getClassification().toString() );
-    SHOW( header.getMessageCopyNum().toString() );
-    SHOW( header.getMessageNumCopies().toString() );
-    SHOW( header.getEncrypted().toString() );
-    SHOW( header.getBackgroundColor().toString() );
-    SHOW( header.getOriginatorName().toString() );
-    SHOW( header.getOriginatorPhone().toString() );
-    SHOW( header.getFileLength().toString() );
-    SHOW( header.getHeaderLength().toString() );
+    if (format_as_xml)
+    {
+        std::cout << "<FileHeader>\n";
+    }
+    //#define SHOW_FILE_HEADER(X) SHOW(header.X(). toString())
+    #define SHOW_FILE_HEADER(X) show(#X, header.get ## X(). toString())
+    SHOW_FILE_HEADER(FileHeader);
+    SHOW_FILE_HEADER(FileVersion);
+    SHOW_FILE_HEADER(ComplianceLevel);
+    SHOW_FILE_HEADER(SystemType);
+    SHOW_FILE_HEADER(OriginStationID);
+    SHOW_FILE_HEADER(FileDateTime);
+    SHOW_FILE_HEADER(FileTitle);
+    SHOW_FILE_HEADER(Classification);
+    SHOW_FILE_HEADER(MessageCopyNum);
+    SHOW_FILE_HEADER(MessageNumCopies);
+    SHOW_FILE_HEADER(Encrypted);
+    SHOW_FILE_HEADER(BackgroundColor);
+    SHOW_FILE_HEADER(OriginatorName);
+    SHOW_FILE_HEADER(OriginatorPhone);
+    SHOW_FILE_HEADER(FileLength);
+    SHOW_FILE_HEADER(HeaderLength);
+    if (format_as_xml)
+    {
+        std::cout << "</FileHeader>\n";
+    }
 
     unsigned int num = header.getNumImages();
     std::cout << "The number of images contained in this file ["
@@ -495,6 +525,30 @@ void showDESubheader(nitf::DESubheader sub)
     showExtensions(exts);
 }
 
+void showDataExtensions(nitf::Record& record)
+{
+    if (format_as_xml)
+    {
+        return; // no XML output right now
+    }
+
+    if (record.getNumDataExtensions())
+    {
+        nitf::List des = record.getDataExtensions();
+
+        //  Walk each label and show
+        for (nitf::ListIterator iter = des.begin();
+            iter != des.end(); ++iter)
+        {
+            nitf::DESegment segment = *iter;
+            showDESubheader(segment.getSubheader());
+        }
+    }
+    else
+    {
+        std::cout << "No data extensions in file" << std::endl;
+    }
+}
 
 /*
  *  This section is never really populated
@@ -516,14 +570,91 @@ void showRESubheader(nitf::RESubheader sub)
     SHOWI(sub.getDataLength());
 }
 
+void showReservedExtensions(nitf::Record& record)
+{
+    if (format_as_xml)
+    {
+        return; // no XML output right now
+    }
+
+    if (record.getNumReservedExtensions())
+    {
+        nitf::List res = record.getReservedExtensions();
+
+        //  Walk each label and show
+        for (nitf::ListIterator iter = res.begin();
+            iter != res.end(); ++iter)
+        {
+            nitf::RESegment segment = *iter;
+            showRESubheader(segment.getSubheader());
+        }
+    }
+    else
+    {
+        std::cout << "No reserved extensions in file" << std::endl;
+    }
+}
+
+void showWarnings(nitf::Reader& reader)
+{
+    if (format_as_xml)
+    {
+        return; // no XML output right now
+    }
+
+    nitf::List warnings = reader.getWarningList();
+    if (!warnings.isEmpty())
+    {
+        //  Iterator to a list
+        nitf::ListIterator iter = warnings.begin();
+
+        //  Iterator to the end of list
+        nitf::ListIterator end = warnings.end();
+
+        std::cout << "WARNINGS: ";
+        std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
+
+        //  While we are not at the end
+        while (iter != end)
+        {
+            //char *p = (char *) nitf_ListIterator_get(&it);
+            char* p = (char*)*iter;
+
+            //  Make sure
+            assert(p != NULL);
+
+            //  Show the data
+            std::cout << "\tFound problem: [" << p << "]\n" << std::endl;
+
+            ++iter;
+        }
+        std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
+    }
+}
+
+const std::string str_xml_option = "--xml";
+static int usage(const std::string& argv0)
+{
+    std::cout << "Usage: " << argv0 << " <nitf-file> [" << str_xml_option << "]\n";
+    return EXIT_FAILURE;
+}
+
 static int main_(int argc, char** argv)
 {
-    if (argc != 2)
+    if ((argc != 2) && (argc != 3))
     {
-        std::cout << "Usage: " << argv[0] << " <nitf-file>\n";
-        exit(EXIT_FAILURE);
+        return usage(argv[0]);
     }
     const std::string nitfPathname(argv[1]);
+    
+    if (argc == 3)
+    {
+        if (argv[2] != str_xml_option)
+        {
+            return usage(argv[0]);
+        }
+        format_as_xml = true;
+    }
 
     io::FileInputStream fis(nitfPathname);
     nitf::IOStreamReader io(fis);
@@ -541,6 +672,12 @@ static int main_(int argc, char** argv)
 
     // Now show the header
     nitf::FileHeader fileHeader = record.getHeader();
+
+    if (format_as_xml)
+    {
+        std::cout << "<?xml version='1.0' standalone='yes' ?>" << "\n";
+        std::cout << "<NITF>" << "\n";
+    }
 
     // Now show the header
     showFileHeader(fileHeader);
@@ -617,75 +754,18 @@ static int main_(int argc, char** argv)
         std::cout << "No texts in file" << std::endl;
     }
 
-    // Data Extensions
-    if (record.getNumDataExtensions())
-    {
-        nitf::List des = record.getDataExtensions();
-
-        //  Walk each label and show
-        for (nitf::ListIterator iter = des.begin();
-            iter != des.end(); ++iter)
-        {
-            nitf::DESegment segment = *iter;
-            showDESubheader(segment.getSubheader());
-        }
-    }
-    else
-    {
-        std::cout << "No data extensions in file" << std::endl;
-    }
-
-    // Data Extensions
-    if (record.getNumReservedExtensions())
-    {
-        nitf::List res = record.getReservedExtensions();
-
-        //  Walk each label and show
-        for (nitf::ListIterator iter = res.begin();
-            iter != res.end(); ++iter)
-        {
-            nitf::RESegment segment = *iter;
-            showRESubheader(segment.getSubheader());
-        }
-    }
-    else
-    {
-        std::cout << "No reserved extensions in file" << std::endl;
-    }
+    showDataExtensions(record);
+    showReservedExtensions(record);
 
     io.close();
+    
+    showWarnings(reader);
 
-    // Warnings
-    nitf::List warnings = reader.getWarningList();
-    if (!warnings.isEmpty())
+    if (format_as_xml)
     {
-        //  Iterator to a list
-        nitf::ListIterator iter = warnings.begin();
-
-        //  Iterator to the end of list
-        nitf::ListIterator end = warnings.end();
-
-        std::cout << "WARNINGS: ";
-        std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
-
-        //  While we are not at the end
-        while (iter != end)
-        {
-            //char *p = (char *) nitf_ListIterator_get(&it);
-            char* p = (char*)*iter;
-
-            //  Make sure
-            assert(p != NULL);
-
-            //  Show the data
-            std::cout << "\tFound problem: [" << p << "]\n" << std::endl;
-
-            ++iter;
-        }
-
-        std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
+        std::cout << "</NITF>" << "\n";
     }
-    return 0;
+    return EXIT_SUCCESS;
 }
 
 int main(int argc, char** argv)
@@ -694,8 +774,8 @@ int main(int argc, char** argv)
     {
         return main_(argc, argv);
      }
-    catch (except::Throwable& t)
+    catch (const except::Throwable& t)
     {
-        std::cout << t.getTrace() << std::endl;
+        std::cerr << t.getTrace() << "\n";
     }
 }
