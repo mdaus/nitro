@@ -317,6 +317,30 @@ void showImageSubheader(nitf::ImageSubheader imsub)
 
 }
 
+void showImages(nitf::Record& record)
+{
+    if (format_as_xml)
+    {
+        return; // no XML output right now
+    }
+
+    if (record.getNumImages())
+    {
+        nitf::List images = record.getImages();
+
+        //  Walk each image and show
+        for (nitf::ListIterator iter = images.begin();
+            iter != images.end(); ++iter)
+        {
+            nitf::ImageSegment segment = *iter;
+            showImageSubheader(segment.getSubheader());
+        }
+    }
+    else
+    {
+        std::cout << "No image in file!\n" << std::endl;
+    }
+}
 
 /*
  *  This function dumps the security header.
@@ -382,6 +406,31 @@ void showGraphicSubheader(nitf::GraphicSubheader sub)
 
 }
 
+void showGraphics(nitf::Record& record)
+{
+    if (format_as_xml)
+    {
+        return; // no XML output right now
+    }
+
+    // Graphics
+    if (record.getNumGraphics())
+    {
+        nitf::List graphics = record.getGraphics();
+
+        //  Walk each graphic and show
+        for (nitf::ListIterator iter = graphics.begin();
+            iter != graphics.end(); ++iter)
+        {
+            nitf::GraphicSegment segment = *iter;
+            showGraphicSubheader(segment.getSubheader());
+        }
+    }
+    else
+    {
+        std::cout << "No graphics in file" << std::endl;
+    }
+}
 
 void showLabelSubheader(nitf::LabelSubheader sub)
 {
@@ -410,6 +459,31 @@ void showLabelSubheader(nitf::LabelSubheader sub)
     nitf::Extensions exts = sub.getExtendedSection();
     showExtensions(exts);
 
+}
+
+void showLabels(nitf::Record& record)
+{
+    if (format_as_xml)
+    {
+        return; // no XML output right now
+    }
+
+    if (record.getNumLabels())
+    {
+        nitf::List labels = record.getLabels();
+
+        //  Walk each label and show
+        for (nitf::ListIterator iter = labels.begin();
+            iter != labels.end(); ++iter)
+        {
+            nitf::LabelSegment segment = *iter;
+            showLabelSubheader(segment.getSubheader());
+        }
+    }
+    else
+    {
+        std::cout << "No label in file" << std::endl;
+    }
 }
 
 /*
@@ -443,6 +517,33 @@ void showTextSubheader(nitf::TextSubheader sub)
 
 
 }
+
+void showTexts(nitf::Record& record)
+{
+    if (format_as_xml)
+    {
+        return; // no XML output right now
+    }
+
+    if (record.getNumTexts())
+    {
+        nitf::List texts = record.getTexts();
+
+        //  Walk each label and show
+        for (nitf::ListIterator iter = texts.begin();
+            iter != texts.end(); ++iter)
+        {
+            nitf::TextSegment segment = *iter;
+            showTextSubheader(segment.getSubheader());
+        }
+    }
+    else
+    {
+        std::cout << "No texts in file" << std::endl;
+    }
+}
+
+
 
 /*
  *  This section is for dumping the Data Extension Segment (DES)
@@ -683,77 +784,11 @@ static int main_(int argc, char** argv)
     showFileHeader(fileHeader);
 
     // And now show the image information
-    if (record.getNumImages())
-    {
-        nitf::List images = record.getImages();
+    showImages(record);
 
-        //  Walk each image and show
-        for (nitf::ListIterator iter = images.begin();
-            iter != images.end(); ++iter)
-        {
-            nitf::ImageSegment segment = *iter;
-            showImageSubheader(segment.getSubheader());
-        }
-    }
-    else
-    {
-        std::cout << "No image in file!\n" << std::endl;
-    }
-
-    // Graphics
-    if (record.getNumGraphics())
-    {
-        nitf::List graphics = record.getGraphics();
-
-        //  Walk each graphic and show
-        for (nitf::ListIterator iter = graphics.begin();
-            iter != graphics.end(); ++iter)
-        {
-            nitf::GraphicSegment segment = *iter;
-            showGraphicSubheader(segment.getSubheader());
-        }
-    }
-    else
-    {
-        std::cout << "No graphics in file" << std::endl;
-    }
-
-    // Labels
-    if (record.getNumLabels())
-    {
-        nitf::List labels = record.getLabels();
-
-        //  Walk each label and show
-        for (nitf::ListIterator iter = labels.begin();
-            iter != labels.end(); ++iter)
-        {
-            nitf::LabelSegment segment = *iter;
-            showLabelSubheader(segment.getSubheader());
-        }
-    }
-    else
-    {
-        std::cout << "No label in file" << std::endl;
-    }
-
-    // Texts
-    if (record.getNumTexts())
-    {
-        nitf::List texts = record.getTexts();
-
-        //  Walk each label and show
-        for (nitf::ListIterator iter = texts.begin();
-            iter != texts.end(); ++iter)
-        {
-            nitf::TextSegment segment = *iter;
-            showTextSubheader(segment.getSubheader());
-        }
-    }
-    else
-    {
-        std::cout << "No texts in file" << std::endl;
-    }
-
+    showGraphics(record);
+    showLabels(record);
+    showTexts(record);
     showDataExtensions(record);
     showReservedExtensions(record);
 
