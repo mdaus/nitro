@@ -516,181 +516,184 @@ void showRESubheader(nitf::RESubheader sub)
     SHOWI(sub.getDataLength());
 }
 
-int main(int argc, char **argv)
+static int main_(int argc, char** argv)
 {
+    if (argc != 2)
+    {
+        std::cout << "Usage: " << argv[0] << " <nitf-file>\n";
+        exit(EXIT_FAILURE);
+    }
+    const std::string nitfPathname(argv[1]);
 
+    io::FileInputStream fis(nitfPathname);
+    nitf::IOStreamReader io(fis);
+    if (nitf::Reader::getNITFVersion(io) == NITF_VER_UNKNOWN)
+    {
+        std::cout << "This file does not appear to be a valid NITF\n";
+        exit(EXIT_FAILURE);
+    }
+
+    //  This is the reader object
+    nitf::Reader reader;
+
+    //  This parses all header data within the NITF
+    nitf::Record record = reader.readIO(io);
+
+    // Now show the header
+    nitf::FileHeader fileHeader = record.getHeader();
+
+    // Now show the header
+    showFileHeader(fileHeader);
+
+    // And now show the image information
+    if (record.getNumImages())
+    {
+        nitf::List images = record.getImages();
+
+        //  Walk each image and show
+        for (nitf::ListIterator iter = images.begin();
+            iter != images.end(); ++iter)
+        {
+            nitf::ImageSegment segment = *iter;
+            showImageSubheader(segment.getSubheader());
+        }
+    }
+    else
+    {
+        std::cout << "No image in file!\n" << std::endl;
+    }
+
+    // Graphics
+    if (record.getNumGraphics())
+    {
+        nitf::List graphics = record.getGraphics();
+
+        //  Walk each graphic and show
+        for (nitf::ListIterator iter = graphics.begin();
+            iter != graphics.end(); ++iter)
+        {
+            nitf::GraphicSegment segment = *iter;
+            showGraphicSubheader(segment.getSubheader());
+        }
+    }
+    else
+    {
+        std::cout << "No graphics in file" << std::endl;
+    }
+
+    // Labels
+    if (record.getNumLabels())
+    {
+        nitf::List labels = record.getLabels();
+
+        //  Walk each label and show
+        for (nitf::ListIterator iter = labels.begin();
+            iter != labels.end(); ++iter)
+        {
+            nitf::LabelSegment segment = *iter;
+            showLabelSubheader(segment.getSubheader());
+        }
+    }
+    else
+    {
+        std::cout << "No label in file" << std::endl;
+    }
+
+    // Texts
+    if (record.getNumTexts())
+    {
+        nitf::List texts = record.getTexts();
+
+        //  Walk each label and show
+        for (nitf::ListIterator iter = texts.begin();
+            iter != texts.end(); ++iter)
+        {
+            nitf::TextSegment segment = *iter;
+            showTextSubheader(segment.getSubheader());
+        }
+    }
+    else
+    {
+        std::cout << "No texts in file" << std::endl;
+    }
+
+    // Data Extensions
+    if (record.getNumDataExtensions())
+    {
+        nitf::List des = record.getDataExtensions();
+
+        //  Walk each label and show
+        for (nitf::ListIterator iter = des.begin();
+            iter != des.end(); ++iter)
+        {
+            nitf::DESegment segment = *iter;
+            showDESubheader(segment.getSubheader());
+        }
+    }
+    else
+    {
+        std::cout << "No data extensions in file" << std::endl;
+    }
+
+    // Data Extensions
+    if (record.getNumReservedExtensions())
+    {
+        nitf::List res = record.getReservedExtensions();
+
+        //  Walk each label and show
+        for (nitf::ListIterator iter = res.begin();
+            iter != res.end(); ++iter)
+        {
+            nitf::RESegment segment = *iter;
+            showRESubheader(segment.getSubheader());
+        }
+    }
+    else
+    {
+        std::cout << "No reserved extensions in file" << std::endl;
+    }
+
+    io.close();
+
+    // Warnings
+    nitf::List warnings = reader.getWarningList();
+    if (!warnings.isEmpty())
+    {
+        //  Iterator to a list
+        nitf::ListIterator iter = warnings.begin();
+
+        //  Iterator to the end of list
+        nitf::ListIterator end = warnings.end();
+
+        std::cout << "WARNINGS: ";
+        std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
+
+        //  While we are not at the end
+        while (iter != end)
+        {
+            //char *p = (char *) nitf_ListIterator_get(&it);
+            char* p = (char*)*iter;
+
+            //  Make sure
+            assert(p != NULL);
+
+            //  Show the data
+            std::cout << "\tFound problem: [" << p << "]\n" << std::endl;
+
+            ++iter;
+        }
+
+        std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
+    }
+    return 0;
+}
+
+int main(int argc, char** argv)
+{
     try
     {
-        //  This is the reader object
-        nitf::Reader reader;
-
-        if ( argc != 2 )
-        {
-            std::cout << "Usage: " << argv[0] << " <nitf-file>" << std::endl;
-            exit(EXIT_FAILURE);
-        }
-
-        const std::string nitfPathname(argv[1]);
-        io::FileInputStream fis(nitfPathname);
-        nitf::IOStreamReader io(fis);
-        if (nitf::Reader::getNITFVersion(io) == NITF_VER_UNKNOWN)
-        {
-            std::cout << "This file does not appear to be a valid NITF"
-                      << std::endl;
-            exit(EXIT_FAILURE);
-        }
-
-        //  This parses all header data within the NITF
-        nitf::Record record = reader.readIO(io);
-
-        // Now show the header
-        nitf::FileHeader fileHeader = record.getHeader();
-
-        // Now show the header
-        showFileHeader(fileHeader);
-
-        // And now show the image information
-        if (record.getNumImages())
-        {
-            nitf::List images = record.getImages();
-
-            //  Walk each image and show
-            for (nitf::ListIterator iter = images.begin();
-                 iter != images.end(); ++iter)
-            {
-                nitf::ImageSegment segment = *iter;
-                showImageSubheader(segment.getSubheader());
-            }
-        }
-        else
-        {
-            std::cout << "No image in file!\n" << std::endl;
-        }
-
-        // Graphics
-        if (record.getNumGraphics())
-        {
-            nitf::List graphics = record.getGraphics();
-
-            //  Walk each graphic and show
-            for (nitf::ListIterator iter = graphics.begin();
-                 iter != graphics.end(); ++iter)
-            {
-                nitf::GraphicSegment segment = *iter;
-                showGraphicSubheader(segment.getSubheader());
-            }
-        }
-        else
-        {
-            std::cout << "No graphics in file" << std::endl;
-        }
-
-        // Labels
-        if (record.getNumLabels())
-        {
-            nitf::List labels = record.getLabels();
-
-            //  Walk each label and show
-            for (nitf::ListIterator iter = labels.begin();
-                 iter != labels.end(); ++iter)
-            {
-                nitf::LabelSegment segment = *iter;
-                showLabelSubheader(segment.getSubheader());
-            }
-        }
-        else
-        {
-            std::cout << "No label in file" << std::endl;
-        }
-
-        // Texts
-        if (record.getNumTexts())
-        {
-            nitf::List texts = record.getTexts();
-
-            //  Walk each label and show
-            for (nitf::ListIterator iter = texts.begin();
-                 iter != texts.end(); ++iter)
-            {
-                nitf::TextSegment segment = *iter;
-                showTextSubheader(segment.getSubheader());
-            }
-        }
-        else
-        {
-            std::cout << "No texts in file" << std::endl;
-        }
-
-        // Data Extensions
-        if (record.getNumDataExtensions())
-        {
-            nitf::List des = record.getDataExtensions();
-
-            //  Walk each label and show
-            for (nitf::ListIterator iter = des.begin();
-                 iter != des.end(); ++iter)
-            {
-                nitf::DESegment segment = *iter;
-                showDESubheader(segment.getSubheader());
-            }
-        }
-        else
-        {
-            std::cout << "No data extensions in file" << std::endl;
-        }
-
-        // Data Extensions
-        if (record.getNumReservedExtensions())
-        {
-            nitf::List res = record.getReservedExtensions();
-
-            //  Walk each label and show
-            for (nitf::ListIterator iter = res.begin();
-                 iter != res.end(); ++iter)
-            {
-                nitf::RESegment segment = *iter;
-                showRESubheader(segment.getSubheader());
-            }
-        }
-        else
-        {
-            std::cout << "No reserved extensions in file" << std::endl;
-        }
-
-        io.close();
-
-        // Warnings
-        nitf::List warnings = reader.getWarningList();
-        if (!warnings.isEmpty())
-        {
-            //  Iterator to a list
-            nitf::ListIterator iter = warnings.begin();
-
-            //  Iterator to the end of list
-            nitf::ListIterator end = warnings.end();
-
-            std::cout << "WARNINGS: ";
-            std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
-
-            //  While we are not at the end
-            while (iter != end)
-            {
-                //char *p = (char *) nitf_ListIterator_get(&it);
-                char *p = (char *) * iter;
-
-                //  Make sure
-                assert(p != NULL);
-
-                //  Show the data
-                std::cout << "\tFound problem: [" << p << "]\n" << std::endl;
-
-                ++iter;
-            }
-
-            std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
-        }
-        return 0;
-    }
+        return main_(argc, argv);
+     }
     catch (except::Throwable& t)
     {
         std::cout << t.getTrace() << std::endl;
