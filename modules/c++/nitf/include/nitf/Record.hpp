@@ -76,7 +76,7 @@ public:
     nitf::Version getVersion() const;
 
     //! Get the header
-    nitf::FileHeader getHeader();
+    nitf::FileHeader getHeader() const;
     //! Set the header
     void setHeader(nitf::FileHeader & value);
 

@@ -74,7 +74,7 @@ nitf::Version Record::getVersion() const
     return nitf_Record_getVersion(getNativeOrThrow());
 }
 
-nitf::FileHeader Record::getHeader()
+nitf::FileHeader Record::getHeader() const
 {
     return nitf::FileHeader(getNativeOrThrow()->header);
 }
