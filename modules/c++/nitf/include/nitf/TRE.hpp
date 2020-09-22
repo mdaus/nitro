@@ -144,7 +144,7 @@ class TREFieldIterator : public nitf::Object<nitf_TREEnumerator>
         return nitf::Pair(mPair);
     }
 
-    std::string getFieldDescription()
+    std::string getFieldDescription() const
     {
         nitf_TREEnumerator* enumerator = getNative();
         if (enumerator && isValid())
@@ -158,7 +158,7 @@ class TREFieldIterator : public nitf::Object<nitf_TREEnumerator>
     }
 
     private:
-    nitf_Error error;
+    mutable nitf_Error error;
     nitf_Pair* mPair;
 };
 

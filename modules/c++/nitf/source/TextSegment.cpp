@@ -72,7 +72,7 @@ nitf::TextSegment TextSegment::clone()
 
 TextSegment::~TextSegment(){}
 
-nitf::TextSubheader TextSegment::getSubheader()
+nitf::TextSubheader TextSegment::getSubheader() const
 {
     return nitf::TextSubheader(getNativeOrThrow()->subheader);
 }

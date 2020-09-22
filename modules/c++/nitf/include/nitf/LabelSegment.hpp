@@ -65,7 +65,7 @@ public:
     ~LabelSegment();
 
     //! Get the subheader
-    nitf::LabelSubheader getSubheader();
+    nitf::LabelSubheader getSubheader() const;
 
     //! Set the subheader
     void setSubheader(nitf::LabelSubheader & value);
