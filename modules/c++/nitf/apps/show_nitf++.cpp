@@ -56,7 +56,7 @@ inline void show(const std::string& x_, const T& x)
  *
  */
 
-void printTRE(nitf::TRE tre)
+void printTRE(const nitf::TRE& tre)
 {
 
 
@@ -163,7 +163,7 @@ void printTRE(nitf::TRE tre)
  *  This function shows us the best way of walking through
  *  an extension segment (userDefined or extended)
  */
-void showExtensions(nitf::Extensions extensions)
+void showExtensions(const nitf::Extensions& extensions)
 {
     if (format_as_xml)
     {
@@ -190,7 +190,7 @@ void showExtensions(nitf::Extensions extensions)
 }
 
 
-void showFileHeader(nitf::FileHeader header)
+void showFileHeader(const nitf::FileHeader& header)
 {
     if (format_as_xml)
     {
@@ -328,7 +328,7 @@ void showFileHeader(nitf::FileHeader header)
 }
 
 
-void showImageSubheader(nitf::ImageSubheader imsub)
+void showImageSubheader(const nitf::ImageSubheader& imsub)
 {
     unsigned int i;
     std::cout << "image subheader" << std::endl;
@@ -402,7 +402,7 @@ void showImageSubheader(nitf::ImageSubheader imsub)
 
 }
 
-void showImages(nitf::Record& record)
+void showImages(const nitf::Record& record)
 {
     if (format_as_xml)
     {
@@ -431,7 +431,7 @@ void showImages(nitf::Record& record)
  *  This function dumps the security header.
  *
  */
-void showSecurityGroup(nitf::FileSecurity securityGroup)
+void showSecurityGroup(const nitf::FileSecurity& securityGroup)
 {
     SHOW(securityGroup.getClassificationSystem().toString());
     SHOW(securityGroup.getCodewords().toString());
@@ -460,7 +460,7 @@ void showSecurityGroup(nitf::FileSecurity securityGroup)
  *  from the NITF (and dump it)
  */
 
-void showGraphicSubheader(nitf::GraphicSubheader sub)
+void showGraphicSubheader(const nitf::GraphicSubheader& sub)
 {
 
     std::cout << "graphic subheader" << std::endl;
@@ -491,7 +491,7 @@ void showGraphicSubheader(nitf::GraphicSubheader sub)
 
 }
 
-void showGraphics(nitf::Record& record)
+void showGraphics(const nitf::Record& record)
 {
     if (format_as_xml)
     {
@@ -517,7 +517,7 @@ void showGraphics(nitf::Record& record)
     }
 }
 
-void showLabelSubheader(nitf::LabelSubheader sub)
+void showLabelSubheader(const nitf::LabelSubheader& sub)
 {
     printf("label subheader");
 
@@ -546,7 +546,7 @@ void showLabelSubheader(nitf::LabelSubheader sub)
 
 }
 
-void showLabels(nitf::Record& record)
+void showLabels(const nitf::Record& record)
 {
     if (format_as_xml)
     {
@@ -579,7 +579,7 @@ void showLabels(nitf::Record& record)
  *  even though that might have made more sense.  XML data is
  *  typically found in the DES segment
  */
-void showTextSubheader(nitf::TextSubheader sub)
+void showTextSubheader(const nitf::TextSubheader& sub)
 {
     std::cout << "text subheader" << std::endl;
     SHOW(sub.getFilePartType().toString());
@@ -603,7 +603,7 @@ void showTextSubheader(nitf::TextSubheader sub)
 
 }
 
-void showTexts(nitf::Record& record)
+void showTexts(const nitf::Record& record)
 {
     if (format_as_xml)
     {
@@ -668,7 +668,7 @@ void showTexts(nitf::Record& record)
  *  This function prints the DE subheader, the extended TRE described above,
  *  and additionally, if the DESDATA is TRE overflow, we dump those too.
  */
-void showDESubheader(nitf::DESubheader sub)
+void showDESubheader(const nitf::DESubheader& sub)
 {
     printf("DES subheader\n");
     SHOW(sub.getFilePartType().toString());
@@ -711,7 +711,7 @@ void showDESubheader(nitf::DESubheader sub)
     showExtensions(exts);
 }
 
-void showDataExtensions(nitf::Record& record)
+void showDataExtensions(const nitf::Record& record)
 {
     if (format_as_xml)
     {
@@ -739,7 +739,7 @@ void showDataExtensions(nitf::Record& record)
 /*
  *  This section is never really populated
  */
-void showRESubheader(nitf::RESubheader sub)
+void showRESubheader(const nitf::RESubheader& sub)
 {
     std::cout << "RES subheader\n" << std::endl;
 
@@ -756,7 +756,7 @@ void showRESubheader(nitf::RESubheader sub)
     SHOWI(sub.getDataLength());
 }
 
-void showReservedExtensions(nitf::Record& record)
+void showReservedExtensions(const nitf::Record& record)
 {
     if (format_as_xml)
     {
@@ -781,7 +781,7 @@ void showReservedExtensions(nitf::Record& record)
     }
 }
 
-void showWarnings(nitf::Reader& reader)
+void showWarnings(const nitf::Reader& reader)
 {
     if (format_as_xml)
     {
