@@ -60,7 +60,7 @@ public:
     RESegment & operator=(NITF_DATA * x);
 
     //! Clone
-    nitf::RESegment clone();
+    nitf::RESegment clone() const;
 
     ~RESegment();
 
@@ -83,7 +83,7 @@ public:
     void setEnd(uint64_t value);
 
 private:
-    nitf_Error error;
+    mutable nitf_Error error;
 };
 
 }

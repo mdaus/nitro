@@ -204,7 +204,7 @@ typedef nitf::ExtensionsIterator Iterator;
     }
 
     //! Clone
-    nitf::Extensions clone()
+    nitf::Extensions clone() const
     {
         nitf::Extensions dolly(nitf_Extensions_clone(getNativeOrThrow(), &error));
         dolly.setManaged(false);

@@ -60,7 +60,7 @@ public:
     LabelSegment & operator=(NITF_DATA * x);
 
     //! Clone
-    nitf::LabelSegment clone();
+    nitf::LabelSegment clone() const;
 
     ~LabelSegment();
 
@@ -83,7 +83,7 @@ public:
     void setEnd(uint64_t value);
 
 private:
-    nitf_Error error;
+    mutable nitf_Error error;
 };
 
 }

@@ -196,7 +196,7 @@ DECLARE_CLASS(TRE)
     TRE(const std::string& tag, const std::string& id);
 
     //! Clone
-    nitf::TRE clone();
+    nitf::TRE clone() const;
 
     ~TRE();
 
