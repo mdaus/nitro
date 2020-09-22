@@ -63,7 +63,7 @@ LabelSegment & LabelSegment::operator=(NITF_DATA * x)
 }
 
 
-nitf::LabelSegment LabelSegment::clone()
+nitf::LabelSegment LabelSegment::clone() const
 {
     nitf::LabelSegment dolly(
         nitf_LabelSegment_clone(getNativeOrThrow(), &error));

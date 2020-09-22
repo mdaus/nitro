@@ -62,7 +62,7 @@ public:
     GraphicSegment & operator=(NITF_DATA * x);
 
     //! Clone
-    nitf::GraphicSegment clone();
+    nitf::GraphicSegment clone() const;
 
     ~GraphicSegment();
 
@@ -85,7 +85,7 @@ public:
     void setEnd(uint64_t value);
 
 private:
-    nitf_Error error;
+    mutable nitf_Error error;
 };
 
 }
