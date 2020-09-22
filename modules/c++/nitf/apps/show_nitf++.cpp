@@ -351,7 +351,7 @@ void showImageSubheader(const nitf::ImageSubheader& imsub)
     SHOW( imsub.getCornerCoordinates().toString() );
 
     SHOW( (uint32_t)imsub.getNumImageComments() );
-    nitf::List comments = imsub.getImageComments();
+    const nitf::List comments = imsub.getImageComments();
     for (nitf::ListIterator it = comments.begin(); it != comments.end(); ++it)
         SHOW(((nitf::Field)*it).toString());
 
@@ -411,7 +411,7 @@ void showImages(const nitf::Record& record)
 
     if (record.getNumImages())
     {
-        nitf::List images = record.getImages();
+        const nitf::List images = record.getImages();
 
         //  Walk each image and show
         for (nitf::ListIterator iter = images.begin();
@@ -501,7 +501,7 @@ void showGraphics(const nitf::Record& record)
     // Graphics
     if (record.getNumGraphics())
     {
-        nitf::List graphics = record.getGraphics();
+        const nitf::List graphics = record.getGraphics();
 
         //  Walk each graphic and show
         for (nitf::ListIterator iter = graphics.begin();
@@ -555,7 +555,7 @@ void showLabels(const nitf::Record& record)
 
     if (record.getNumLabels())
     {
-        nitf::List labels = record.getLabels();
+        const nitf::List labels = record.getLabels();
 
         //  Walk each label and show
         for (nitf::ListIterator iter = labels.begin();
@@ -612,7 +612,7 @@ void showTexts(const nitf::Record& record)
 
     if (record.getNumTexts())
     {
-        nitf::List texts = record.getTexts();
+        const nitf::List texts = record.getTexts();
 
         //  Walk each label and show
         for (nitf::ListIterator iter = texts.begin();
@@ -720,7 +720,7 @@ void showDataExtensions(const nitf::Record& record)
 
     if (record.getNumDataExtensions())
     {
-        nitf::List des = record.getDataExtensions();
+        const nitf::List des = record.getDataExtensions();
 
         //  Walk each label and show
         for (nitf::ListIterator iter = des.begin();
@@ -765,7 +765,7 @@ void showReservedExtensions(const nitf::Record& record)
 
     if (record.getNumReservedExtensions())
     {
-        nitf::List res = record.getReservedExtensions();
+        const nitf::List res = record.getReservedExtensions();
 
         //  Walk each label and show
         for (nitf::ListIterator iter = res.begin();
@@ -788,7 +788,7 @@ void showWarnings(const nitf::Reader& reader)
         return; // don't need XML output right now
     }
 
-    nitf::List warnings = reader.getWarningList();
+    const nitf::List warnings = reader.getWarningList();
     if (!warnings.isEmpty())
     {
         //  Iterator to a list
@@ -854,10 +854,10 @@ static int main_(int argc, char** argv)
     nitf::Reader reader;
 
     //  This parses all header data within the NITF
-    nitf::Record record = reader.readIO(io);
+    const nitf::Record record = reader.readIO(io);
 
     // Now show the header
-    nitf::FileHeader fileHeader = record.getHeader();
+    const nitf::FileHeader fileHeader = record.getHeader();
 
     if (format_as_xml)
     {
