@@ -73,7 +73,7 @@ nitf::LabelSegment LabelSegment::clone()
 
 LabelSegment::~LabelSegment(){}
 
-nitf::LabelSubheader LabelSegment::getSubheader()
+nitf::LabelSubheader LabelSegment::getSubheader() const
 {
     return nitf::LabelSubheader(getNativeOrThrow()->subheader);
 }

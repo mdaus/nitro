@@ -72,7 +72,7 @@ nitf::RESegment RESegment::clone()
 
 RESegment::~RESegment(){}
 
-nitf::RESubheader RESegment::getSubheader()
+nitf::RESubheader RESegment::getSubheader() const
 {
     return nitf::RESubheader(getNativeOrThrow()->subheader);
 }

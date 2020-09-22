@@ -65,7 +65,7 @@ public:
     ~RESegment();
 
     //! Get the subheader
-    nitf::RESubheader getSubheader();
+    nitf::RESubheader getSubheader() const;
 
     //! Set the subheader
     void setSubheader(nitf::RESubheader & value);

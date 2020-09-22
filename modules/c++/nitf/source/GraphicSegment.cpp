@@ -75,7 +75,7 @@ nitf::GraphicSegment GraphicSegment::clone()
 GraphicSegment::~GraphicSegment(){}
 
 
-nitf::GraphicSubheader GraphicSegment::getSubheader()
+nitf::GraphicSubheader GraphicSegment::getSubheader() const
 {
     return nitf::GraphicSubheader(getNativeOrThrow()->subheader);
 }

@@ -67,7 +67,7 @@ public:
     ~GraphicSegment();
 
     //! Get the subheader
-    nitf::GraphicSubheader getSubheader();
+    nitf::GraphicSubheader getSubheader() const;
 
     //! Set the subheader
     void setSubheader(nitf::GraphicSubheader & value);

@@ -67,7 +67,7 @@ public:
     ~TextSegment();
 
     //! Get the subheader
-    nitf::TextSubheader getSubheader();
+    nitf::TextSubheader getSubheader() const;
 
     //! Set the subheader
     void setSubheader(nitf::TextSubheader & value);
