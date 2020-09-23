@@ -121,6 +121,13 @@ unsigned long long strtoull(const char* str, char** endptr, int base);
 template <typename T>
 T toType(const std::string& s, int base)
 {
+    // This file has issues in Windows builds,
+    // because Windows defines min and max as function-like macros.
+    // This causes syntax errors in expressions like std::numeric_limits<T>::min() .
+    // Putting parentheses around the entire class-qualified function name
+    // prevents its evaluation as a macro.
+    // This is a less intrusive solution than defining macros like NOMINMAX.
+
     char* end;
     errno = 0;
     const char* str = s.c_str();
@@ -130,8 +137,8 @@ T toType(const std::string& s, int base)
     if (std::numeric_limits<T>::is_signed)
     {
         const long long longRes = str::strtoll(str, &end, base);
-        if (longRes < static_cast<long long>(std::numeric_limits<T>::min()) ||
-            longRes > static_cast<long long>(std::numeric_limits<T>::max()))
+        if (longRes < static_cast<long long>((std::numeric_limits<T>::min)()) ||
+            longRes > static_cast<long long>((std::numeric_limits<T>::max)()))
         {
             overflow = true;
         }
@@ -141,9 +148,9 @@ T toType(const std::string& s, int base)
     {
         const unsigned long long longRes = str::strtoull(str, &end, base);
         if (longRes < static_cast<unsigned long long>(
-                              std::numeric_limits<T>::min()) ||
+                              (std::numeric_limits<T>::min)()) ||
             longRes > static_cast<unsigned long long>(
-                              std::numeric_limits<T>::max()))
+                              (std::numeric_limits<T>::max)()))
         {
             overflow = true;
         }
