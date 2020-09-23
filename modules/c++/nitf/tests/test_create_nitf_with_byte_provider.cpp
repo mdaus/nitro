@@ -1122,7 +1122,7 @@ void writeNITF(nitf::Record& record, const std::string& filename)
     for (size_t ii = 0; ii < buffers.mBuffers.size(); ++ii)
     {
         outputStream.write(
-                static_cast<const sys::byte*>(buffers.mBuffers[ii].mData),
+                static_cast<const std::byte*>(buffers.mBuffers[ii].mData),
                 buffers.mBuffers[ii].mNumBytes);
     }
 }
@@ -1176,7 +1176,7 @@ int main(int argc, char **argv)
         parser.addArgument("output", "Output filename", cli::STORE, "output",
             "OUTPUT", 1, 1, true)->setDefault("test_create.nitf");
 
-        std::auto_ptr<cli::Results> options(parser.parse(argc, argv));
+        auto options = parser.parse(argc, argv);
         // We can't actually compress. This is just for illustration.
         const bool shouldCompress(options->get<bool>("shouldCompress"));
         if (shouldCompress)
