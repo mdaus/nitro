@@ -334,6 +334,21 @@
       <Filter>nitf</Filter>
     </ClInclude>
     <ClInclude Include="pch.h" />
+    <ClInclude Include="nrt\include\nrt\Config.h">
+      <Filter>nrt</Filter>
+    </ClInclude>
+    <ClInclude Include="nrt\include\nrt\Version.h">
+      <Filter>nrt</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\Config.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\Version.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
+    <ClInclude Include="j2k\include\j2k\Config.h">
+      <Filter>j2k</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cgm\source\CircleElement.c">

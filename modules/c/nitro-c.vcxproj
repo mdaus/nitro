@@ -125,6 +125,7 @@
     <ClInclude Include="cgm\include\import\cgm.h" />
     <ClInclude Include="j2k\include\import\j2k.h" />
     <ClInclude Include="j2k\include\j2k\Component.h" />
+    <ClInclude Include="j2k\include\j2k\Config.h" />
     <ClInclude Include="j2k\include\j2k\Container.h" />
     <ClInclude Include="j2k\include\j2k\Defines.h" />
     <ClInclude Include="j2k\include\j2k\j2k_Reader.h" />
@@ -134,6 +135,7 @@
     <ClInclude Include="nitf\include\nitf\BandSource.h" />
     <ClInclude Include="nitf\include\nitf\ComplexityLevel.h" />
     <ClInclude Include="nitf\include\nitf\ComponentInfo.h" />
+    <ClInclude Include="nitf\include\nitf\Config.h" />
     <ClInclude Include="nitf\include\nitf\DataSource.h" />
     <ClInclude Include="nitf\include\nitf\DefaultTRE.h" />
     <ClInclude Include="nitf\include\nitf\Defines.h" />
@@ -179,9 +181,11 @@
     <ClInclude Include="nitf\include\nitf\TREPrivateData.h" />
     <ClInclude Include="nitf\include\nitf\TREUtils.h" />
     <ClInclude Include="nitf\include\nitf\Types.h" />
+    <ClInclude Include="nitf\include\nitf\Version.h" />
     <ClInclude Include="nitf\include\nitf\WriteHandler.h" />
     <ClInclude Include="nitf\include\nitf\WriterOptions.h" />
     <ClInclude Include="nrt\include\import\nrt.h" />
+    <ClInclude Include="nrt\include\nrt\Config.h" />
     <ClInclude Include="nrt\include\nrt\DateTime.h" />
     <ClInclude Include="nrt\include\nrt\Debug.h" />
     <ClInclude Include="nrt\include\nrt\Defines.h" />
@@ -200,6 +204,7 @@
     <ClInclude Include="nrt\include\nrt\Tree.h" />
     <ClInclude Include="nrt\include\nrt\Types.h" />
     <ClInclude Include="nrt\include\nrt\Utils.h" />
+    <ClInclude Include="nrt\include\nrt\Version.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>

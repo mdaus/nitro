@@ -3,6 +3,9 @@
 // Header for standard system include files.
 //
 
+// We're building in Visual Studio ... used to control where we get a little bit of config info
+#define NITRO_PCH 1
+
 // TODO: get rid of these someday? ... from Visual Studio code-analysis
 #pragma warning(disable: 26495) // Variable '...' is uninitialized. Always initialize a member variable(type.6).
 #pragma warning(disable: 26451) // Arithmetic overflow : Using operator '...' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow(io.2).
