@@ -79,9 +79,9 @@ void printTRE(const nitf::TRE& tre)
     else
     {
         std::cout << "\t";
-        std::cout << "<TRE tag='" << tre.getTag() << "'";
-        std::cout << " length='" << treLength << "'";
-        std::cout << " ID='" << str_treID << "'";
+        std::cout << "<TRE tag=\"" << tre.getTag() << "\"";
+        std::cout << " length=\"" << treLength << "\"";
+        std::cout << " ID=\"" << str_treID << "\"";
         std::cout << ">";
         std::cout << "\n";
     }
@@ -95,12 +95,12 @@ void printTRE(const nitf::TRE& tre)
         if (format_as_xml)
         {
             std::cout << "\t\t";
-            std::cout << "<field name='";
+            std::cout << "<field name=\"";
         }
         std::cout << (*it).first();
         if (format_as_xml)
         {
-            std::cout << "'";
+            std::cout << "\"";
         }
 
         const nitf::Field::FieldType fieldType = field.getType();
@@ -114,7 +114,7 @@ void printTRE(const nitf::TRE& tre)
             case  nitf::Field::BINARY: strType = "BINARY"; break;
             default: strType = "Unknown"; break;
             }
-            std::cout << " type='" << strType << "'";
+            std::cout << " type=\"" << strType << "\"";
         }
 
         if (!desc.empty())
@@ -125,7 +125,7 @@ void printTRE(const nitf::TRE& tre)
             }
             else
             {
-                std::cout << " desc='" << desc << "'";
+                std::cout << " desc=\"" << desc << "\"";
             }
         }
 
@@ -135,9 +135,9 @@ void printTRE(const nitf::TRE& tre)
         }
         else
         {
-            std::cout << " value='";
+            std::cout << " value=\"";
             std::cout << field.toString();
-            std::cout << "'";
+            std::cout << "\"";
 
             std::cout << " />";
             std::cout << "\n";
@@ -912,7 +912,7 @@ static int main_(int argc, char** argv)
 
     if (format_as_xml)
     {
-        std::cout << "<?xml version='1.0' standalone='yes' ?>" << "\n";
+        std::cout << "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\" ?>" << "\n";
         std::cout << "<NITF>" << "\n";
     }
 
