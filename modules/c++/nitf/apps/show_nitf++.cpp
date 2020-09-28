@@ -58,11 +58,8 @@ inline void show(const std::string& x_, const T& x)
 
 void printTRE(const nitf::TRE& tre)
 {
-
-
-
     // This is so you know how long the TRE is
-    uint32_t treLength = tre.getCurrentSize();
+    const uint32_t treLength = tre.getCurrentSize();
 
     /*
      *  This is the name for the description that was selected to field
@@ -196,7 +193,7 @@ void showFileHeader(const nitf::FileHeader& header)
     {
         std::cout << "<FileHeader>\n";
     }
-    //#define SHOW_FILE_HEADER(X) SHOW(header.X(). toString())
+    //#define SHOW_FILE_HEADER(X) SHOW(header.get ## X(). toString())
     #define SHOW_FILE_HEADER(X) show(#X, header.get ## X(). toString())
     SHOW_FILE_HEADER(FileHeader);
     SHOW_FILE_HEADER(FileVersion);
@@ -433,6 +430,11 @@ void showImages(const nitf::Record& record)
  */
 void showSecurityGroup(const nitf::FileSecurity& securityGroup)
 {
+    if (format_as_xml)
+    {
+        return; // don't need XML output right now
+    }
+
     SHOW(securityGroup.getClassificationSystem().toString());
     SHOW(securityGroup.getCodewords().toString());
     SHOW(securityGroup.getControlAndHandling().toString());
@@ -670,18 +672,29 @@ void showTexts(const nitf::Record& record)
  */
 void showDESubheader(const nitf::DESubheader& sub)
 {
-    printf("DES subheader\n");
-    SHOW(sub.getFilePartType().toString());
-    SHOW(sub.getTypeID().toString());
-    SHOW(sub.getVersion().toString());
-    SHOW(sub.getSecurityClass().toString());
+    if (!format_as_xml)
+    {
+        printf("DES subheader\n");
+    }
+    else
+    {
+        std::cout << "<DESubheader>\n";
+    }
+
+    #define SHOW_DES_SUBHEADER(X) SHOW(sub.get ## X(). toString())
+   //#define SHOW_DES_SUBHEADER(X) show(#X, sub.get ## X(). toString())
+
+    SHOW_DES_SUBHEADER(FilePartType);
+    SHOW_DES_SUBHEADER(TypeID);
+    SHOW_DES_SUBHEADER(Version);
+    SHOW_DES_SUBHEADER(SecurityClass);
 
     if (*(sub.getSecurityClass().getRawData()) != 'U')
         showSecurityGroup(sub.getSecurityGroup());
 
-    SHOW(sub.getOverflowedHeaderType().toString());
-    SHOW(sub.getDataItemOverflowed().toString());
-    SHOW(sub.getSubheaderFieldsLength().toString());
+    SHOW_DES_SUBHEADER(OverflowedHeaderType);
+    SHOW_DES_SUBHEADER(DataItemOverflowed);
+    SHOW_DES_SUBHEADER(SubheaderFieldsLength);
 
     /*
      *  This is the user defined parameter section
@@ -693,11 +706,14 @@ void showDESubheader(const nitf::DESubheader& sub)
      */
     if (((uint32_t)sub.getSubheaderFieldsLength()) > 0)
     {
-        nitf::TRE tre = sub.getSubheaderFields();
+        const nitf::TRE tre = sub.getSubheaderFields();
         printTRE( tre );
     }
 
-    SHOWI(sub.getDataLength());
+    if (!format_as_xml)
+    {
+        SHOWI(sub.getDataLength());
+    }
 
     /*
      *  NITRO only populates this object if the DESDATA contains
@@ -707,32 +723,45 @@ void showDESubheader(const nitf::DESubheader& sub)
      *  We wont bother to try and print whatever other things might
      *  have been put in here (e.g, text data or binary blobs)
      */
-    nitf::Extensions exts = sub.getUserDefinedSection();
+    const nitf::Extensions exts = sub.getUserDefinedSection();
     showExtensions(exts);
+
+    if (format_as_xml)
+    {
+        std::cout << "</DESubheader>\n";
+    }
 }
 
 void showDataExtensions(const nitf::Record& record)
 {
-    if (format_as_xml)
-    {
-        return; // don't need XML output right now
-    }
-
     if (record.getNumDataExtensions())
     {
+        if (format_as_xml)
+        {
+            std::cout << "<DataExtensions>\n";
+        }
+
         const nitf::List des = record.getDataExtensions();
 
         //  Walk each label and show
         for (nitf::ListIterator iter = des.begin();
             iter != des.end(); ++iter)
         {
-            nitf::DESegment segment = *iter;
+            const nitf::DESegment segment = *iter;
             showDESubheader(segment.getSubheader());
+        }
+
+        if (format_as_xml)
+        {
+            std::cout << "</DataExtensions>\n";
         }
     }
     else
     {
-        std::cout << "No data extensions in file" << std::endl;
+        if (!format_as_xml)
+        {
+            std::cout << "No data extensions in file\n";
+        }
     }
 }
 
