@@ -20,24 +20,56 @@
  *
  */
 
+#include <sstream>
+
 #include <import/nitf.hpp>
 #include <io/FileInputStream.h>
 
 bool format_as_xml = false;
 
+static size_t count_nul(const std::string& s)
+{
+    // Sometimes the field contains a bunch of NUL characters, which isn't valid in XML.
+    size_t nul_count = 0;
+    constexpr char nul = '\0';
+    for (const char& ch : s)
+    {
+        if (ch == nul)
+        {
+            nul_count++;
+        }
+    }
+    return nul_count;
+}
+
 template<typename T>
 inline void show(const std::string& x_, const T& x)
 {
+    std::stringstream ss;
+    ss << x;
+    const std::string str_x = ss.str();
+
     if (format_as_xml)
     {
         std::cout << "\t";
-        std::cout << "<" << x_ << ">";
-        std::cout << x;
-        std::cout << "</" << x_ << ">";
+        std::cout << "<" << x_;
+
+        // Sometimes the field contains a bunch of NUL characters, which isn't valid in XML.
+        const size_t nul_count = count_nul(str_x);
+        if (nul_count == str_x.size())
+        {
+            std::cout << " length=\"" << nul_count << "\" />";
+        }
+        else
+        {
+            std::cout << ">";
+            std::cout << str_x;
+            std::cout << "</" << x_ << ">";
+        }
     }
     else
     {
-        std::cout << x_ << " = [" << x << "]";
+        std::cout << x_ << " = [" << str_x << "]";
     }
     std::cout << "\n";
 }
@@ -56,6 +88,35 @@ inline void show(const std::string& x_, const T& x)
  *  when the TRE enumerator is expired it will be set to NULL.
  *
  */
+
+static void printTREField(const nitf::Field& field)
+{
+    const std::string strField = field.toString();
+
+    if (!format_as_xml)
+    {
+        std::cout << " = [" << strField << "]\n";
+        return;
+    }
+
+    // Sometimes the field contains a bunch of NUL characters, which isn't valid in XML.
+    const size_t nul_count = count_nul(strField);
+    if (nul_count == strField.size())
+    {
+        std::cout << " length=\"";
+        std::cout << nul_count;
+        std::cout << "\"";
+    }
+    else
+    {
+        std::cout << " value=\"";
+        std::cout << strField;
+        std::cout << "\"";
+    }
+    
+    std::cout << " />";
+    std::cout << "\n";
+}
 
 void printTRE(const nitf::TRE& tre)
 {
@@ -129,19 +190,7 @@ void printTRE(const nitf::TRE& tre)
             }
         }
 
-        if (!format_as_xml)
-        {
-            std::cout << " = [" << field.toString() << "]\n";
-        }
-        else
-        {
-            std::cout << " value=\"";
-            std::cout << field.toString();
-            std::cout << "\"";
-
-            std::cout << " />";
-            std::cout << "\n";
-        }
+        printTREField(field);
     }
 
     if (!format_as_xml)
