@@ -850,7 +850,7 @@ void showWarnings(const nitf::Reader& reader)
 const std::string str_xml_option = "--xml";
 static int usage(const std::string& argv0)
 {
-    std::cout << "Usage: " << argv0 << " <nitf-file> [" << str_xml_option << "]\n";
+    std::cout << "Usage: " << argv0 << " [ " << str_xml_option << " ] <nitf-file>\n";
     return EXIT_FAILURE;
 }
 
@@ -860,15 +860,20 @@ static int main_(int argc, char** argv)
     {
         return usage(argv[0]);
     }
-    const std::string nitfPathname(argv[1]);
     
+    std::string nitfPathname;
     if (argc == 3)
     {
-        if (argv[2] != str_xml_option)
+        if (argv[1] != str_xml_option)
         {
             return usage(argv[0]);
         }
         format_as_xml = true;
+        nitfPathname = argv[2];
+    }
+    else
+    {
+        nitfPathname = argv[1];
     }
 
     io::FileInputStream fis(nitfPathname);
