@@ -44,7 +44,8 @@ inline void show(const std::string& x_, const T& x)
 #define SHOW(X) show(#X, X)
 //#define SHOW(X) std::cout << #X << " = [" << X << "]\n"
 
-#define SHOWI(X) printf("%s=[%d]\n", #X, (int)X)
+#define SHOWI(X) show(#X, (int)X)
+//#define SHOWI(X) std::cout << #X << "=[" << (int)X << "]\n"
 #define SHOWRGB(X) printf("%s(R,G,B)=[%02x,%02x,%02x]\n", #X, \
        (unsigned char) X[0], (unsigned char) X[1], (unsigned char) X[2])
 
@@ -308,15 +309,28 @@ void showFileHeader(const nitf::FileHeader& header)
     }
 
     SHOW_FILE_HEADER(UserDefinedHeaderLength);
-
-    nitf::Extensions udExts = header.getUserDefinedSection();
-
+    const nitf::Extensions udExts = header.getUserDefinedSection();
+    if (format_as_xml)
+    {
+        std::cout << "\t<UserDefinedHeader>\n";
+    }
     showExtensions(udExts);
+    if (format_as_xml)
+    {
+        std::cout << "\t</UserDefinedHeader>\n";
+    }
 
     SHOW_FILE_HEADER(ExtendedHeaderLength);
-
-    nitf::Extensions exExts = header.getExtendedSection();
-    showExtensions(exExts);
+    const nitf::Extensions exExts = header.getExtendedSection();
+    if (format_as_xml)
+    {
+        std::cout << "\t<ExtendedHeader>\n";
+    }
+    showExtensions(udExts);
+    if (format_as_xml)
+    {
+        std::cout << "\t</ExtendedHeader>\n";
+    }
 
     if (format_as_xml)
     {
@@ -680,9 +694,10 @@ void showDESubheader(const nitf::DESubheader& sub)
     {
         std::cout << "<DESubheader>\n";
     }
-
-    #define SHOW_DES_SUBHEADER(X) SHOW(sub.get ## X(). toString())
-   //#define SHOW_DES_SUBHEADER(X) show(#X, sub.get ## X(). toString())
+    
+    //#define SHOW_DES_SUBHEADER(X) SHOW(sub.get ## X(). toString())
+   #define SHOW_DES_SUBHEADER(X) show(#X, sub.get ## X(). toString())
+    #define SHOWI_DES_SUBHEADER(X) show(#X, sub.get ## X())
 
     SHOW_DES_SUBHEADER(FilePartType);
     SHOW_DES_SUBHEADER(TypeID);
@@ -709,6 +724,8 @@ void showDESubheader(const nitf::DESubheader& sub)
         const nitf::TRE tre = sub.getSubheaderFields();
         printTRE( tre );
     }
+
+    SHOWI_DES_SUBHEADER(DataLength);
 
     if (!format_as_xml)
     {
