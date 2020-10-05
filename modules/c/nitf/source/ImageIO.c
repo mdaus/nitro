@@ -20,6 +20,8 @@
  *
  */
 
+#include <inttypes.h>
+
 #include "nitf/ImageIO.h"
 
 
@@ -4957,11 +4959,13 @@ uint32_t nitf_ImageIO_updateMyResidual(
         }
         else
         {
-            myResidual = cntl->column + numColsFR - nitf->numColumns;
-
-            if (myResidual < 0)
+            if (cntl->column + numColsFR < nitf->numColumns)
             {
                 myResidual = 0;
+            }
+            else
+            {
+                myResidual = cntl->column + numColsFR - nitf->numColumns;
             }
         }
     }
@@ -5666,7 +5670,6 @@ nitf_ImageIOControl_construct(_nitf_ImageIO * nitf,
                               nitf_Error * error)
 {
     _nitf_ImageIOControl *cntl; /* The result */
-    uint32_t bandIdx;
 
     cntl =
         (_nitf_ImageIOControl *) NITF_MALLOC(sizeof(_nitf_ImageIOControl));
@@ -6023,7 +6026,7 @@ NITFPRIV(int) nitf_ImageIO_checkSubWindow(_nitf_ImageIO * nitf,
     if (numRowsFR > (nitf->numRows + rowSkip - 1) || numRowsFR == 0)
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_READING_FROM_FILE,
-                         "Invalid number of rows %u (Full resolution) (limit is %ld)",
+                         "Invalid number of rows %"PRIu32" (Full resolution) (limit is %ld)",
                          numRowsFR, nitf->numRows);
         return NITF_FAILURE;
     }
@@ -6031,7 +6034,7 @@ NITFPRIV(int) nitf_ImageIO_checkSubWindow(_nitf_ImageIO * nitf,
     if (numColsFR > (nitf->numColumns + colSkip - 1) || numColsFR == 0)
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_READING_FROM_FILE,
-                         "Invalid number of columns %u (Full resolution) (limit is %ld)",
+                         "Invalid number of columns %"PRIu32" (Full resolution) (limit is %ld)",
                          numColsFR, nitf->numColumns);
         return NITF_FAILURE;
     }
@@ -6264,7 +6267,6 @@ NITFPRIV(int) nitf_ImageIO_mkMasks(nitf_ImageIO * img,
          * byte-swapping
          */
         uint32_t *fileMask;   /* Buffer to hold file mask */
-        uint32_t i;
 
         fileMask = (uint32_t *) NITF_MALLOC(maskSizeFile);
         if (fileMask == NULL)
@@ -6332,7 +6334,6 @@ NITFPRIV(int) nitf_ImageIO_mkMasks(nitf_ImageIO * img,
          * byte-swapping
          */
         uint32_t *fileMask;   /* Buffer to hold file mask */
-        uint32_t i;
 
         fileMask = (uint32_t *) NITF_MALLOC(maskSizeFile);
         if (fileMask == NULL)

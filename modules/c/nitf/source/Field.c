@@ -20,6 +20,8 @@
  *
  */
 
+#include <inttypes.h>
+
 #include "nitf/Field.h"
 
 /*  Spaces are added to the right  */
@@ -171,7 +173,7 @@ NITFAPI(NITF_BOOL) nitf_Field_setUint32(nitf_Field * field,
 
     /*  Convert the number to a string */
 
-    NITF_SNPRINTF(numberBuffer, 20, "%lu", (unsigned long) number);
+    NITF_SNPRINTF(numberBuffer, 20, "%"PRIu32, number);
     numberLen = strlen(numberBuffer);
 
     /* if it's resizable and a different length, we resize */
@@ -219,7 +221,7 @@ NITFAPI(NITF_BOOL) nitf_Field_setUint64(nitf_Field * field,
 
     /*  Convert thte number to a string */
 
-    NITF_SNPRINTF(numberBuffer, 20, "%llu", (unsigned long long)number);
+    NITF_SNPRINTF(numberBuffer, 20, "%"PRIu64"", number);
     numberLen = strlen(numberBuffer);
 
     /* if it's resizable and a different length, we resize */
@@ -374,7 +376,7 @@ NITFAPI(NITF_BOOL) nitf_Field_setString(nitf_Field * field,
     if (strLen > field->length)
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER,
-                        "Value %s is too long for field of length %lu",
+                        "Value %s is too long for field of length %"PRIu64"",
                         str, field->length);
         return (NITF_FAILURE);
     }
@@ -653,7 +655,7 @@ NITFPRIV(NITF_BOOL) fromIntToString(nitf_Field * field, char *outValue,
                          strlen(buffer));
         return NITF_FAILURE;
     }
-    strcpy(outValue, buffer);
+    nrt_strcpy_s(outValue, length, buffer);
     return NITF_SUCCESS;
 
 CATCH_ERROR:
@@ -1083,9 +1085,12 @@ NITFPROT(void) nitf_Field_print(nitf_Field * field)
     switch (field->type)
     {
         case NITF_BINARY:
+        {
             /* avoid printing binary */
-            printf("<binary data, length %llu>", (long long unsigned int) field->length);
+            uint64_t field_length = (uint64_t)field->length;
+            printf("<binary data, length %"PRIu64">", field_length);
             break;
+        }
 
         case NITF_BCS_N:
         case NITF_BCS_A:
