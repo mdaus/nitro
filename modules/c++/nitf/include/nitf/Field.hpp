@@ -103,16 +103,6 @@ class Field : public nitf::Object<nitf_Field>
     }
 
 public:
-    enum class FieldType
-    {
-        BCS_A = NITF_BCS_A,
-        BCS_N = NITF_BCS_N,
-        BINARY = NITF_BINARY
-    };
-    static constexpr FieldType BCS_A = FieldType::BCS_A;
-    static constexpr FieldType BCS_N = FieldType::BCS_N;
-    static constexpr FieldType BINARY = FieldType::BINARY;
-
     Field & operator=(const char * value)
     {
         set(value);

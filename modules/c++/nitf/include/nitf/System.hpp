@@ -48,11 +48,35 @@ namespace nitf
 	using Int8 = int8_t;
 
 typedef nitf_Off Off;
-typedef nitf_Version Version;
-typedef nitf_ConvType ConvType;
-typedef nitf_FieldType FieldType;
 typedef nitf_AccessFlags AccessFlags;
 typedef nitf_CreationFlags CreationFlags;
 typedef nitf_CornersType CornersType;
+
+using Version = nitf_Version;
+using FieldType = nitf_FieldType;
+using ConvType = nitf_ConvType;
 }
+
+constexpr auto NITF_VER_20 = nitf::Version::NITF_VER_20;
+constexpr auto NITF_VER_21 = nitf::Version::NITF_VER_21;
+constexpr auto NITF_VER_UNKNOWN = nitf::Version::NITF_VER_UNKNOWN;
+
+constexpr auto NITF_BCS_A = nitf::FieldType::NITF_BCS_A;
+constexpr auto NITF_BCS_N = nitf::FieldType::NITF_BCS_N;
+constexpr auto NITF_BINARY = nitf::FieldType::NITF_BINARY;
+
+constexpr auto NITF_CONV_UINT = nitf::ConvType::NITF_CONV_UINT;
+constexpr auto NITF_CONV_INT = nitf::ConvType::NITF_CONV_INT;
+constexpr auto NITF_CONV_REAL = nitf::ConvType::NITF_CONV_REAL;
+constexpr auto NITF_CONV_STRING = nitf::ConvType::NITF_CONV_STRING;
+constexpr auto NITF_CONV_RAW = nitf::ConvType::NITF_CONV_RAW;
+
+constexpr auto NITF_CLEVEL_UNKNOWN = NITF_CLEVEL::NITF_CLEVEL_UNKNOWN;
+constexpr auto NITF_CLEVEL_03 = NITF_CLEVEL::NITF_CLEVEL_03;
+constexpr auto NITF_CLEVEL_05 = NITF_CLEVEL::NITF_CLEVEL_05;
+constexpr auto NITF_CLEVEL_06 = NITF_CLEVEL::NITF_CLEVEL_06;
+constexpr auto NITF_CLEVEL_07 = NITF_CLEVEL::NITF_CLEVEL_07;
+constexpr auto NITF_CLEVEL_09 = NITF_CLEVEL::NITF_CLEVEL_09;
+constexpr auto NITF_CLEVEL_CHECK_FAILED = NITF_CLEVEL::NITF_CLEVEL_CHECK_FAILED;
+
 #endif

@@ -162,7 +162,13 @@ typedef int nrt_CreationFlags;
 #define NRT_TRUE     (1)
 #define NRT_FALSE    (0)
 
-typedef enum _nrt_CornersType
+#ifndef __cplusplus
+#define NRT_DECLARE_ENUM_BEGIN(name) typedef enum _ ## name
+#else
+#define NRT_DECLARE_ENUM_BEGIN(name) enum class name
+#endif
+
+NRT_DECLARE_ENUM_BEGIN(nrt_CornersType)
 {
     NRT_CORNERS_UNKNOWN = -1,
     NRT_CORNERS_UTM,
@@ -170,7 +176,11 @@ typedef enum _nrt_CornersType
     NRT_CORNERS_UTM_UPS_N,
     NRT_CORNERS_GEO,
     NRT_CORNERS_DECIMAL
-} nrt_CornersType;
+}
+#ifndef __cplusplus
+nrt_CornersType
+#endif
+;
 
 /*
  *  Finally, we determine what kind of system you

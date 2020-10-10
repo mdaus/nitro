@@ -22,14 +22,25 @@
 
 #ifndef __NITF_TYPES_H__
 #define __NITF_TYPES_H__
+#pragma once
+
+#ifndef __cplusplus
+#define NITF_DECLARE_ENUM_BEGIN(name) typedef enum _ ## name
+#else
+#define NITF_DECLARE_ENUM_BEGIN(name) enum class name
+#endif
 
 /* Enum for the supported version types */
-typedef enum _nitf_Version
+NITF_DECLARE_ENUM_BEGIN(nitf_Version)
 {
     NITF_VER_20 = 100,
     NITF_VER_21,
     NITF_VER_UNKNOWN
-} nitf_Version;
+}
+#ifndef __cplusplus
+nitf_Version
+#endif
+;
 
 /* These macros check the NITF Version */
 #define IS_NITF20(V) ((V) == NITF_VER_20)

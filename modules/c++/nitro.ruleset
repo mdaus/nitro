@@ -4,6 +4,7 @@
   <Include Path="concurrencyrules.ruleset" Action="Default" />
   <Include Path="cppcorecheckconcurrencyrules.ruleset" Action="Default" />
   <Include Path="cppcorecheckconstrules.ruleset" Action="Default" />
+  <Include Path="cppcorecheckenumrules.ruleset" Action="Default" />
   <Include Path="cppcorechecksharedpointerrules.ruleset" Action="Default" />
   <Include Path="cppcorechecktyperules.ruleset" Action="Default" />
   <Include Path="cppcorecheckuniquepointerrules.ruleset" Action="Default" />
