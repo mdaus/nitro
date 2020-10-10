@@ -256,7 +256,7 @@ protected:
      * \param numColsPerBlock The number of columns per block.  Defaults to no
      * blocking.
      */
-    void initialize(Record& record,
+    void initialize(const Record& record,
                     const std::vector<PtrAndLength>& desData =
                             std::vector<PtrAndLength>(),
                     size_t numRowsPerBlock = 0,
@@ -298,7 +298,7 @@ protected:
     void addDES(size_t seg, size_t imageDataEndRow,
                 NITFBufferList& buffers) const;
 
-    void getFileLayout(nitf::Record& inRecord,
+    void getFileLayout(const nitf::Record& inRecord,
                        const std::vector<PtrAndLength>& desData);
 
     std::vector<size_t> mImageDataLengths;
@@ -308,7 +308,7 @@ protected:
                        size_t numRowsToWrite) const;
 
     void initializeImpl(
-            Record& record,
+            const Record& record,
             const std::vector<PtrAndLength>& desData,
             size_t numRowsPerBlock,
             size_t numColsPerBlock);

@@ -86,7 +86,7 @@ bool nitf::ListIterator::operator==(const nitf::ListIterator& it2) const
 
 bool nitf::ListIterator::notEqualTo(const nitf::ListIterator& it2) const
 {
-    NITF_BOOL x = nitf_ListIterator_notEqualTo(&handle, &it2.getHandle());
+    const NITF_BOOL x = nitf_ListIterator_notEqualTo(&handle, &it2.getHandle());
     if (!x) return false;
     return true;
 }
@@ -154,7 +154,7 @@ void nitf::List::pushFront(NITF_DATA* data)
 
 void nitf::List::pushBack(NITF_DATA* data)
 {
-    NITF_BOOL x = nitf_List_pushBack(getNativeOrThrow(), data, &error);
+    const NITF_BOOL x = nitf_List_pushBack(getNativeOrThrow(), data, &error);
     if (!x)
         throw nitf::NITFException(&error);
 }

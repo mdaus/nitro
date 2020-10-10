@@ -88,7 +88,7 @@ void ImageSubheader::setPixelInformation(std::string pvtype,
             throw nitf::NITFException(&error);
     }
 
-    NITF_BOOL x = nitf_ImageSubheader_setPixelInformation(getNativeOrThrow(),
+    const NITF_BOOL x = nitf_ImageSubheader_setPixelInformation(getNativeOrThrow(),
         pvtype.c_str(), nbpp, abpp, justification.c_str(), irep.c_str(),
         icat.c_str(), static_cast<uint32_t>(bandCount), bandInfo, &error);
     if (!x)
@@ -101,7 +101,7 @@ void ImageSubheader::setBlocking(uint32_t numRows,
                      uint32_t numColsPerBlock,
                      const std::string& imode)
 {
-    NITF_BOOL x = nitf_ImageSubheader_setBlocking(getNativeOrThrow(),
+    const NITF_BOOL x = nitf_ImageSubheader_setBlocking(getNativeOrThrow(),
         numRows, numCols, numRowsPerBlock, numColsPerBlock, imode.c_str(),
         &error);
     if (!x)
@@ -175,7 +175,7 @@ nitf::CornersType ImageSubheader::getCornersType() const
 
 int ImageSubheader::insertImageComment(std::string comment, int index)
 {
-    int actualIndex = nitf_ImageSubheader_insertImageComment(getNativeOrThrow(),
+    const int actualIndex = nitf_ImageSubheader_insertImageComment(getNativeOrThrow(),
                   comment.c_str(), index, &error);
     if (actualIndex < 0)
         throw nitf::NITFException(&error);

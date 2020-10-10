@@ -73,7 +73,7 @@ void ByteProvider::copyFromStreamAndClear(io::ByteStream& stream,
     stream.clear();
 }
 
-void ByteProvider::initializeImpl(Record& record,
+void ByteProvider::initializeImpl(const Record& record,
                                   const std::vector<PtrAndLength>& desData,
                                   size_t numRowsPerBlock,
                                   size_t numColsPerBlock)
@@ -110,7 +110,7 @@ void ByteProvider::initializeImpl(Record& record,
     }
 }
 
-void ByteProvider::initialize(Record& record,
+void ByteProvider::initialize(const Record& record,
                               const std::vector<PtrAndLength>& desData,
                               size_t numRowsPerBlock,
                               size_t numColsPerBlock)
@@ -127,7 +127,7 @@ void ByteProvider::initialize(Record& record,
     initializeImpl(record, desData, numRowsPerBlock, numColsPerBlock);
 }
 
-void ByteProvider::getFileLayout(nitf::Record& inRecord,
+void ByteProvider::getFileLayout(const nitf::Record& inRecord,
                                  const std::vector<PtrAndLength>& desData)
 {
     std::shared_ptr<io::ByteStream> byteStream(new io::ByteStream());

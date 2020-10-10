@@ -269,7 +269,7 @@ public:
 
     void set(const char * data)
     {
-        NITF_BOOL x = nitf_Field_setString(getNativeOrThrow(), data, &error);
+        const NITF_BOOL x = nitf_Field_setString(getNativeOrThrow(), data, &error);
         if (!x)
             throw nitf::NITFException(&error);
     }
@@ -336,7 +336,7 @@ public:
     void resize(size_t length)
     {
         nitf_Field *field = getNativeOrThrow();
-        NITF_BOOL resizable = field->resizable;
+        const NITF_BOOL resizable = field->resizable;
         field->resizable = 1;
 
         if (!nitf_Field_resizeField(field, length, &error))
@@ -375,7 +375,7 @@ private:
     void get(NITF_DATA* outval, nitf::ConvType vtype, size_t length) const
     {
         nitf_Error e;
-        NITF_BOOL x = nitf_Field_get(getNativeOrThrow(), outval, vtype, length, &e);
+        const NITF_BOOL x = nitf_Field_get(getNativeOrThrow(), outval, vtype, length, &e);
         if (!x)
             throw nitf::NITFException(&e);
     }
@@ -383,7 +383,7 @@ private:
     //! set the value
     void set(NITF_DATA* inval, size_t length)
     {
-        NITF_BOOL x = nitf_Field_setRawData(getNativeOrThrow(), inval, length, &error);
+        const NITF_BOOL x = nitf_Field_setRawData(getNativeOrThrow(), inval, length, &error);
         if (!x)
             throw nitf::NITFException(&error);
     }

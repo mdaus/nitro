@@ -91,7 +91,7 @@ public:
      *  Simply calls the init method
      *  \param src  The source Pair
      */
-    void copy(nitf::Pair & src)
+    void copy(const nitf::Pair & src)
     {
         nitf_Pair_copy(getNative(), src.getNative());
     }

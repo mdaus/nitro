@@ -224,7 +224,7 @@ typedef nitf::ExtensionsIterator Iterator;
         if (tre.isManaged())
             throw nitf::NITFException(Ctxt("The given TRE is already managed by the library. Try cloning it first."));
 
-        NITF_BOOL x = nitf_Extensions_appendTRE(getNative(),
+        const NITF_BOOL x = nitf_Extensions_appendTRE(getNative(),
             tre.getNativeOrThrow(), &error);
         if (!x)
             throw nitf::NITFException(&error);

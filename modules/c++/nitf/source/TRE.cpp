@@ -132,7 +132,7 @@ bool TRE::exists(const std::string& key) const
 
 size_t TRE::getCurrentSize() const
 {
-    int size = nitf_TRE_getCurrentSize(getNativeOrThrow(), &error);
+    const int size = nitf_TRE_getCurrentSize(getNativeOrThrow(), &error);
     if (size < 0)
         throw nitf::NITFException(&error);
     return size >= 0 ? size : 0;

@@ -38,7 +38,7 @@ const uint64_t ImageSegmentComputer::NUM_BYTES_MAX = 9999999998LL;
 
 std::string ImageSegmentComputer::Segment::getILOC() const
 {
-    static const size_t COL = 0;
+    constexpr size_t COL = 0;
 
     std::ostringstream ostr;
     ostr.fill('0');
