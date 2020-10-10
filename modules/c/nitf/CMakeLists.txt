@@ -116,6 +116,7 @@ set(tre_srcs  ACCHZB
               J2KLRA
               JITCID
               MAPLOB
+              MATESA
               MENSRA
               MENSRB
               MPDSRA
