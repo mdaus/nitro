@@ -79,7 +79,7 @@ public:
             std::map<CAddress, Handle*>::iterator it = mHandleMap.find(object);
             if (it != mHandleMap.end())
             {
-                handle = (Handle*)it->second;
+                handle = static_cast<Handle*>(it->second);
                 if (handle->decRef() <= 0)
                 {
                     mHandleMap.erase(it);

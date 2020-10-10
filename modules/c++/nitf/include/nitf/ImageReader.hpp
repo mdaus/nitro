@@ -80,7 +80,7 @@ public:
 
 private:
     mutable nitf_Error error;
-    ImageReader(){}
+    ImageReader() = default;
 };
 
 }

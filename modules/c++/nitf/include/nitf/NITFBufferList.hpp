@@ -40,7 +40,7 @@ struct NITFBuffer
     /*!
      * Initializes to an empty buffer
      */
-    NITFBuffer();
+    NITFBuffer() = default;
 
     /*!
      * Initializes to the specified pointer and size.  No copy is made and
@@ -52,8 +52,8 @@ struct NITFBuffer
      */
     NITFBuffer(const void* data, size_t numBytes);
 
-    const void* mData;
-    size_t mNumBytes;
+    const void* mData = nullptr;
+    size_t mNumBytes = 0;
 };
 
 /*!
