@@ -91,6 +91,8 @@
 #include "nitf/TRE.hpp"
 #include "nitf/Record.hpp"
 
+#include "gsl/gsl.h"
+
 #pragma comment(lib, "io-c++")
 #pragma comment(lib, "except-c++")
 #pragma comment(lib, "sys-c++")
