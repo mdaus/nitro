@@ -35,6 +35,8 @@
 #include <nitf/Object.hpp>
 #include <nitf/NITFException.hpp>
 
+#include "gsl/gsl.h"
+
 /*!
  *  \file Field.hpp
  *  \brief  Contains wrapper implementation for Field
@@ -204,7 +206,7 @@ public:
     void set(uint8_t data)
     {
         if (!nitf_Field_setUint32(getNativeOrThrow(),
-                                  uint32_t(data), &error))
+                                  gsl::narrow<uint32_t>(data), &error))
             throw nitf::NITFException(&error);
     }
 
