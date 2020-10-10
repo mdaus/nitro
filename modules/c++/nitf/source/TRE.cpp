@@ -135,7 +135,7 @@ size_t TRE::getCurrentSize() const
     int size = nitf_TRE_getCurrentSize(getNativeOrThrow(), &error);
     if (size < 0)
         throw nitf::NITFException(&error);
-    return (size_t)size;
+    return size >= 0 ? size : 0;
 }
 
 std::string TRE::getTag() const

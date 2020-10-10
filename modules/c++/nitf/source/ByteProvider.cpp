@@ -31,6 +31,8 @@
 #include <nitf/IOStreamWriter.hpp>
 #include <io/ByteStream.h>
 
+#include "gsl/gsl.h"
+
 namespace nitf
 {
 ByteProvider::ByteProvider() :
@@ -301,7 +303,7 @@ void ByteProvider::getFileLayout(nitf::Record& inRecord,
     for (size_t ii = 0; ii < numImages; ++ii)
     {
          mImageSubheaderFileOffsets[ii] = offset;
-         offset += static_cast<nitf::Off>(mImageSubheaders[ii].size()) +
+         offset += gsl::narrow<nitf::Off>(mImageSubheaders[ii].size()) +
                  mImageDataLengths[ii];
     }
 
