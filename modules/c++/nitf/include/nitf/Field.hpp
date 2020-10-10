@@ -83,12 +83,15 @@ struct GetConvType<false, IsSignedT>
 class Field : public nitf::Object<nitf_Field>
 {
 public:
-enum FieldType
+    enum class FieldType
     {
         BCS_A = NITF_BCS_A,
         BCS_N = NITF_BCS_N,
         BINARY = NITF_BINARY
     };
+    static constexpr FieldType BCS_A = FieldType::BCS_A;
+    static constexpr FieldType BCS_N = FieldType::BCS_N;
+    static constexpr FieldType BINARY = FieldType::BINARY;
 
     Field & operator=(const char * value)
     {
@@ -185,13 +188,12 @@ enum FieldType
 
     Field(NITF_DATA * x)
     {
-        setNative((nitf_Field*)x);
-        getNativeOrThrow();
+        *this = x;
     }
 
     Field & operator=(NITF_DATA * x)
     {
-        setNative((nitf_Field*)x);
+        setNative(static_cast<nitf_Field*>(x));
         getNativeOrThrow();
         return *this;
     }

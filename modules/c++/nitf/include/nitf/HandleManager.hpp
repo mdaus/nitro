@@ -55,8 +55,8 @@ public:
     template <typename T, typename DestructFunctor_T>
     BoundHandle<T, DestructFunctor_T>* acquireHandle(T* object)
     {
-        if (!object) return NULL;
-        BoundHandle<T, DestructFunctor_T>* handle;
+        if (!object) return nullptr;
+        BoundHandle<T, DestructFunctor_T>* handle = nullptr;
         {
             std::lock_guard<std::mutex> obtainLock(mMutex);
             if (mHandleMap.find(object) == mHandleMap.end())
@@ -79,7 +79,7 @@ public:
             std::map<CAddress, Handle*>::iterator it = mHandleMap.find(object);
             if (it != mHandleMap.end())
             {
-                handle = static_cast<Handle*>(it->second);
+                handle = it->second;
                 if (handle->decRef() <= 0)
                 {
                     mHandleMap.erase(it);

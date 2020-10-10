@@ -152,7 +152,7 @@ nitf::Off BufferedReader::seekImpl(nitf::Off offset, int whence)
     const nitf::Off bufferEnd = mFile.getCurrentOffset();
     const nitf::Off bufferStart = bufferEnd - mBufferSize;
 
-    nitf::Off desiredPos;
+    nitf::Off desiredPos = 0;
     switch (whence)
     {
     case sys::File::FROM_START:

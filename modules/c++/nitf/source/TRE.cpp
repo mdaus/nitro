@@ -44,13 +44,13 @@ TRE::TRE(nitf_TRE* x)
     getNativeOrThrow();
 }
 
-TRE::TRE(NITF_DATA* x) : TRE((nitf_TRE*)x)
+TRE::TRE(NITF_DATA* x) : TRE(static_cast<nitf_TRE*>(x))
 {
 }
 
 TRE& TRE::operator=(NITF_DATA* x)
 {
-    setNative((nitf_TRE*)x);
+    setNative(static_cast<nitf_TRE*>(x));
     getNativeOrThrow();
     return *this;
 }

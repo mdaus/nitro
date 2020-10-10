@@ -151,7 +151,7 @@ void nitf::HashTable::forEach(HashIterator& fun, NITF_DATA* userData)
         for (nitf::ListIterator iter = l.begin();
                 iter != l.end(); ++iter)
         {
-            nitf::Pair pair = nitf::Pair((nitf_Pair*)(*iter));
+            nitf::Pair pair = nitf::Pair(*iter);
             fun(this, pair, userData);
         }
     }

@@ -89,7 +89,7 @@ NITF_BOOL nitf::RowSource::nextRow(void* algorithm,
 
     try
     {
-        callback->nextRow(band, (char*)buffer);
+        callback->nextRow(band, static_cast<char*>(buffer));
     }
     catch (const except::Exception &ex)
     {

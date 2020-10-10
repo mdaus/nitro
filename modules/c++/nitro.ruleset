@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RuleSet Name="nitro" ToolsVersion="16.0">
+  <Include Path="cppcorechecktyperules.ruleset" Action="Default" />
+  <Include Path="nativeminimumrules.ruleset" Action="Default" />
+</RuleSet>

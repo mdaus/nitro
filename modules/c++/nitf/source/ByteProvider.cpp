@@ -80,7 +80,7 @@ void ByteProvider::initializeImpl(Record& record,
     getFileLayout(record, desData);
     mOverallNumRowsPerBlock = numRowsPerBlock;
 
-    size_t numColsWithPad;
+    size_t numColsWithPad = 0;
     if (numColsPerBlock != 0)
     {
         mNumColsPerBlock = numColsPerBlock;
@@ -232,8 +232,8 @@ void ByteProvider::getFileLayout(nitf::Record& inRecord,
     {
         nitf::DESegment deSegment = record.getDataExtensions()[ii];
         nitf::DESubheader subheader = deSegment.getSubheader();
-        uint32_t userSublen;
         const size_t prevSize = byteStream->getSize();
+        uint32_t userSublen;
         writer.writeDESubheader(subheader, userSublen, record.getVersion());
         desSubheaderLengths[ii] = byteStream->getSize() - prevSize;
 

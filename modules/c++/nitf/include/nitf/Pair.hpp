@@ -67,13 +67,12 @@ public:
 
     Pair(NITF_DATA * x)
     {
-        setNative((nitf_Pair*)x);
-        getNativeOrThrow();
+        *this = x;
     }
 
     Pair & operator=(NITF_DATA * x)
     {
-        setNative((nitf_Pair*)x);
+        setNative(static_cast<nitf_Pair*>(x));
         getNativeOrThrow();
         return *this;
     }

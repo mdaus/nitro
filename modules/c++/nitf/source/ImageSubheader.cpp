@@ -74,8 +74,8 @@ void ImageSubheader::setPixelInformation(std::string pvtype,
                          std::vector<nitf::BandInfo>& bands)
 {
     const size_t bandCount = bands.size();
-    nitf_BandInfo ** bandInfo = (nitf_BandInfo **)NITF_MALLOC(
-            sizeof(nitf_BandInfo*) * bandCount);
+    auto bandInfo = static_cast<nitf_BandInfo**>(NITF_MALLOC(
+            sizeof(nitf_BandInfo*) * bandCount));
     if (!bandInfo)
     {
         throw nitf::NITFException(Ctxt(FmtX("Out of Memory")));
@@ -176,7 +176,7 @@ nitf::CornersType ImageSubheader::getCornersType() const
 int ImageSubheader::insertImageComment(std::string comment, int index)
 {
     int actualIndex = nitf_ImageSubheader_insertImageComment(getNativeOrThrow(),
-                  (char*)comment.c_str(), index, &error);
+                  comment.c_str(), index, &error);
     if (actualIndex < 0)
         throw nitf::NITFException(&error);
     return actualIndex;
