@@ -163,7 +163,7 @@ std::string TRE::getID() const
     return id ? std::string(id) : "";
 }
 
-static bool endsWith(const std::string& s, const std::string& match)
+static bool endsWith(const std::string& s, const std::string& match) noexcept
 {
     const size_t mLen = match.length();
     const size_t sLen = s.length();

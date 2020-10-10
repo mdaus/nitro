@@ -125,7 +125,7 @@ void ImageSubheader::computeBlocking(uint32_t numRows,
 
 void ImageSubheader::setDimensions(uint32_t numRows, uint32_t numCols)
 {
-    NITF_BOOL x = nitf_ImageSubheader_setDimensions(getNativeOrThrow(),
+    const NITF_BOOL x = nitf_ImageSubheader_setDimensions(getNativeOrThrow(),
         numRows, numCols, &error);
     if (!x)
         throw nitf::NITFException(&error);
@@ -133,7 +133,7 @@ void ImageSubheader::setDimensions(uint32_t numRows, uint32_t numCols)
 
 uint32_t ImageSubheader::getBandCount() const
 {
-    uint32_t x = nitf_ImageSubheader_getBandCount(getNativeOrThrow(), &error);
+    const uint32_t x = nitf_ImageSubheader_getBandCount(getNativeOrThrow(), &error);
     if (x == NITF_INVALID_BAND_COUNT)
         throw nitf::NITFException(&error);
     return x;
@@ -149,7 +149,7 @@ void ImageSubheader::createBands(uint32_t numBands)
 void ImageSubheader::setCornersFromLatLons(nitf::CornersType type,
                                            double corners[4][2])
 {
-    NITF_BOOL x = nitf_ImageSubheader_setCornersFromLatLons(getNativeOrThrow(),
+    const NITF_BOOL x = nitf_ImageSubheader_setCornersFromLatLons(getNativeOrThrow(),
                                                             type,
                                                             corners,
                                                             &error);
@@ -160,7 +160,7 @@ void ImageSubheader::setCornersFromLatLons(nitf::CornersType type,
 
 void ImageSubheader::getCornersAsLatLons(double corners[4][2]) const
 {
-    NITF_BOOL x = nitf_ImageSubheader_getCornersAsLatLons(getNativeOrThrow(),
+    const NITF_BOOL x = nitf_ImageSubheader_getCornersAsLatLons(getNativeOrThrow(),
                                                           corners,
                                                           &error);
     if (!x)
@@ -185,7 +185,7 @@ int ImageSubheader::insertImageComment(std::string comment, int index)
 
 void ImageSubheader::removeImageComment(int index)
 {
-    NITF_BOOL x = nitf_ImageSubheader_removeImageComment(getNativeOrThrow(),
+    const NITF_BOOL x = nitf_ImageSubheader_removeImageComment(getNativeOrThrow(),
                   index, &error);
     if (!x)
         throw nitf::NITFException(&error);

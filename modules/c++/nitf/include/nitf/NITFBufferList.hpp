@@ -74,7 +74,7 @@ struct NITFBufferList
     /*!
      * \return Whether or not the buffer list is empty
      */
-    bool empty() const
+    bool empty() const noexcept
     {
         return mBuffers.empty();
     }
@@ -82,7 +82,7 @@ struct NITFBufferList
     /*!
      * Clear the buffers
      */
-    void clear()
+    void clear() noexcept
     {
         mBuffers.clear();
     }

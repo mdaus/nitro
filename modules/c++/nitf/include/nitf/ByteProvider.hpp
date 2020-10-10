@@ -124,13 +124,13 @@ public:
     virtual ~ByteProvider();
 
     //! \return The total number of bytes in the NITF
-    nitf::Off getFileNumBytes() const
+    nitf::Off getFileNumBytes() const noexcept
     {
         return mFileNumBytes;
     }
 
     //! \return The raw file header bytes
-    const std::vector<std::byte>& getFileHeader() const
+    const std::vector<std::byte>& getFileHeader() const noexcept
     {
         return mFileHeader;
     }
@@ -139,7 +139,7 @@ public:
      * \return The raw bytes for each image subheader.  Vector size matches the
      * number of image segments.
      */
-    const std::vector<std::vector<std::byte> >& getImageSubheaders() const
+    const std::vector<std::vector<std::byte> >& getImageSubheaders() const noexcept
     {
         return mImageSubheaders;
     }
@@ -148,7 +148,7 @@ public:
      * \return The raw bytes for each DES (subheader immediately followed by
      * raw DES data).  Vector size matches the number of data extension segments.
      */
-    const std::vector<std::byte>& getDesSubheaderAndData() const
+    const std::vector<std::byte>& getDesSubheaderAndData() const noexcept
     {
         return mDesSubheaderAndData;
     }

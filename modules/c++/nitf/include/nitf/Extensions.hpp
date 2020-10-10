@@ -92,7 +92,7 @@ public:
      */
     bool equals(nitf::ExtensionsIterator & it2)
     {
-        NITF_BOOL x = nitf_ExtensionsIterator_equals(&handle, &it2.getHandle());
+        const NITF_BOOL x = nitf_ExtensionsIterator_equals(&handle, &it2.getHandle());
         if (!x) return false;
         return true;
     }
@@ -109,7 +109,7 @@ public:
      */
     bool notEqualTo(nitf::ExtensionsIterator & it2)
     {
-        NITF_BOOL x = nitf_ExtensionsIterator_notEqualTo(&handle, &it2.getHandle());
+        const NITF_BOOL x = nitf_ExtensionsIterator_notEqualTo(&handle, &it2.getHandle());
         if (!x) return false;
         return true;
     }
@@ -291,7 +291,7 @@ typedef nitf::ExtensionsIterator Iterator;
      */
     bool exists(const std::string& key) const
     {
-        NITF_BOOL x = nitf_Extensions_exists(getNative(), key.c_str());
+        const NITF_BOOL x = nitf_Extensions_exists(getNative(), key.c_str());
         return x ? true : false;
     }
 
@@ -301,7 +301,7 @@ typedef nitf::ExtensionsIterator Iterator;
      */
     Iterator begin() const
     {
-        nitf_ExtensionsIterator x = nitf_Extensions_begin(getNative());
+        const nitf_ExtensionsIterator x = nitf_Extensions_begin(getNative());
         return nitf::ExtensionsIterator(x);
     }
 
@@ -311,7 +311,7 @@ typedef nitf::ExtensionsIterator Iterator;
      */
     Iterator end() const
     {
-        nitf_ExtensionsIterator x = nitf_Extensions_end(getNative());
+        const nitf_ExtensionsIterator x = nitf_Extensions_end(getNative());
         return nitf::ExtensionsIterator(x);
     }
 
