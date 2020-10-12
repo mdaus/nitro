@@ -27,6 +27,7 @@
 #include <string>
 
 #include "nitf/Record.h"
+#include "nitf/ComplexityLevel.h"
 
 #include "List.hpp"
 #include "FileHeader.hpp"
