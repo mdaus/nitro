@@ -28,18 +28,13 @@
 
 NITF_CXX_GUARD
 
-NITF_DECLARE_ENUM_BEGIN(nitf_ConvType)
-{
+NITF_DECLARE_ENUM(nitf_ConvType,
     NITF_CONV_UINT,
     NITF_CONV_INT,
     NITF_CONV_REAL,
     NITF_CONV_STRING,
     NITF_CONV_RAW
-}
-#ifndef __cplusplus
-nitf_ConvType
-#endif
-;
+);
 
 #define NITF_MAX_CONV_TYPE NITF_VAL_RAW
 
@@ -62,16 +57,11 @@ nitf_ConvType
  *  If it is BCS-N, we expect zero-filled, left-aligned.
  *  If it is binary, we expect an exact fit (probably 16 or 32 bits)
  */
-NITF_DECLARE_ENUM_BEGIN(nitf_FieldType)
-{
+NITF_DECLARE_ENUM(nitf_FieldType,
     NITF_BCS_A,                 /* Field is basic character set alphanumeric */
     NITF_BCS_N,                 /* Field is basic character set numeric  */
     NITF_BINARY                 /* Field is binary data */
-}
-#ifndef __cplusplus
-nitf_FieldType
-#endif
-;
+);
 
 /*!
  *  \struct nitf_Field
