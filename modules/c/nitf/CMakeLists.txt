@@ -111,7 +111,9 @@ set(tre_srcs  ACCHZB
               GRDPSB
               HISTOA
               ICHIPB
+              IMASDA
               IMGDTA
+              IMRFCA
               IOMAPA
               J2KLRA
               JITCID
@@ -120,6 +122,7 @@ set(tre_srcs  ACCHZB
               MENSRA
               MENSRB
               MPDSRA
+              MSDIRA
               MSTGTA
               MTIRPA
               MTIRPB
@@ -140,7 +143,9 @@ set(tre_srcs  ACCHZB
               PIATGB
               PIXQLA
               PLTFMA
+              PRADAA
               PRJPSB
+              PTPRAA
               REGPTB
               RPC00B
               RPFDES
