@@ -40,6 +40,7 @@ extern int _isatty(int fd);
 #include "gtest/gtest.h"
 
 #include <import/nrt.h>
+#include <nitf/System.hpp>
 
 #include "nitf_Test.h"
 #include "Test.h"
