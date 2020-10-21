@@ -16,3 +16,9 @@ coda_add_tests(
     DIRECTORY "tests"
     DEPS cli-c++
     FILTER_LIST "MMParserTest1.cpp" "MinidomParserTest2.cpp")
+
+coda_add_tests(
+    MODULE_NAME ${MODULE_NAME}
+    DIRECTORY "unittests"
+    UNITTEST)
+
