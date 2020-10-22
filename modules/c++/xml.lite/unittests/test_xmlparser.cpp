@@ -30,7 +30,7 @@
 
 TEST_CASE(testXmlParseSimple)
 {
-    const std::string text("text");
+    const std::string text("TEXT");
     const std::string strXml = "<root><doc><a>" + text + "</a></doc></root>";
     io::StringStream ss;
     ss.stream() << strXml;
@@ -67,49 +67,45 @@ TEST_CASE(testXmlParseSimple)
 
 TEST_CASE(testXmlPreserveCharacterData)
 {
-    const std::string utf8Text("I\xc3\x89");  // UTF-8,  "IÉ"
+    const std::string utf8Text("T\xc3\x89XT");  // UTF-8,  "TÉXT"
     const std::string strXml = "<root><doc><a>" + utf8Text + "</a></doc></root>";
     io::StringStream stream;
     stream.stream() << strXml;
     TEST_ASSERT_EQ(stream.stream().str(), strXml);
 
-    // On *ix, this won't throw because the default "C" locale is UTF-8 enabled.
-    // There don't seem to be non-UTF-8 locales available (a "good thing" in 2020, I guess).
     xml::lite::MinidomParser xmlParser;
-    #ifdef _WIN32
-    // This is needed in Windows, but not *ix, because the default locale is *.1252 (more-or-less ISO8859-1)
+    // This is needed in Windows, because the default locale is *.1252 (more-or-less ISO8859-1)
     // Unfortunately, there doesn't seem to be a way of testing this ...
     // calling parse() w/o preserveCharacterData() throws ASSERTs, even after calling
     // _set_error_mode(_OUT_TO_STDERR) so there's no way to use TEST_EXCEPTION
     xmlParser.preserveCharacterData(true);
-    #endif
     xmlParser.parse(stream);
     TEST_ASSERT_TRUE(true);
 }
 
 TEST_CASE(testXmlUtf8)
 {
-    const std::string text("I\xc9");  // ISO8859-1, "IÉ"
-    const std::string utf8Text("I\xc3\x89");  // UTF-8,  "IÉ"
+    const std::string text("T\xc9XT");  // ISO8859-1, "TÉXT"
+    const std::string utf8Text("T\xc3\x89XT");  // UTF-8,  "TÉXT"
     const std::string strXml = "<root><doc><a>" + utf8Text + "</a></doc></root>";
     io::StringStream stream;
     stream.stream() << strXml;
     TEST_ASSERT_EQ(stream.stream().str(), strXml);
 
-    xml::lite::MinidomParser xmlParser;
-    //xmlParser.preserveCharacterData(true);
+    xml::lite::MinidomParser xmlParser(true /*storeEncoding*/);
+    xmlParser.preserveCharacterData(true);
     xmlParser.parse(stream);
 
     const auto aElements =
             xmlParser.getDocument()->getRootElement()->getElementsByTagName("a", true /*recurse*/);
     TEST_ASSERT_EQ(aElements.size(), 1);
     const auto& a = *(aElements[0]);
-    const std::string characterData = a.getCharacterData();
-    TEST_ASSERT_EQ(characterData.length(), 2);
-    const std::string actual = ">" + characterData + "<";
+    const auto actual = a.getCharacterData();
     #ifdef _WIN32
+    TEST_ASSERT_EQ(actual.length(), 4);
     TEST_ASSERT_EQ(actual, text);
     #else
+    TEST_ASSERT_EQ(actual.length(), 5);
     TEST_ASSERT_EQ(actual, utf8Text);
     #endif
 }
