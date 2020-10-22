@@ -20,17 +20,14 @@
  *
  */
 
+#include <stdexcept>
+
 #include "xml/lite/Element.h"
 #include <import/str.h>
 
 xml::lite::Element::Element(const xml::lite::Element& node)
 {
-    // Assign each member
-    mName = node.mName;
-    mCharacterData = node.mCharacterData;
-    mAttributes = node.mAttributes;
-    mChildren = node.mChildren;
-    mParent = node.mParent;
+    *this = node;
 }
 
 xml::lite::Element& xml::lite::Element::operator=(const xml::lite::Element& node)
@@ -39,6 +36,7 @@ xml::lite::Element& xml::lite::Element::operator=(const xml::lite::Element& node
     {
         mName = node.mName;
         mCharacterData = node.mCharacterData;
+        mpEncoding = node.mpEncoding;
         mAttributes = node.mAttributes;
         mChildren = node.mChildren;
         mParent = node.mParent;
@@ -50,6 +48,7 @@ void xml::lite::Element::clone(const xml::lite::Element& node)
 {
     mName = node.mName;
     mCharacterData = node.mCharacterData;
+    mpEncoding = node.mpEncoding;
     mAttributes = node.mAttributes;
     mParent = NULL;
 
@@ -146,6 +145,10 @@ void xml::lite::Element::print(io::OutputStream& stream) const
 {
     depthPrint(stream, 0, "");
 }
+void xml::lite::Element::print(io::OutputStream& stream, string_encoding encoding) const
+{
+    depthPrint(stream, encoding, 0, "");
+}
 
 void xml::lite::Element::prettyPrint(io::OutputStream& stream,
                                      const std::string& formatter) const
@@ -153,11 +156,39 @@ void xml::lite::Element::prettyPrint(io::OutputStream& stream,
     depthPrint(stream, 0, formatter);
     stream.writeln("");
 }
+void xml::lite::Element::prettyPrint(io::OutputStream& stream, string_encoding encoding,
+                                     const std::string& formatter) const
+{
+    depthPrint(stream, encoding, 0, formatter);
+    stream.writeln("");
+}
 
 void xml::lite::Element::depthPrint(io::OutputStream& stream,
                                     int depth,
                                     const std::string& formatter) const
 {
+    depthPrint(stream, nullptr /*pEncoding*/, depth, formatter);
+}
+void xml::lite::Element::depthPrint(io::OutputStream& stream, string_encoding encoding,
+                                    int depth,
+                                    const std::string& formatter) const
+{
+    depthPrint(stream, &encoding, depth, formatter);
+}
+void xml::lite::Element::depthPrint(io::OutputStream& stream, const string_encoding* pEncoding,
+                                    int depth,
+                                    const std::string& formatter) const
+{
+    // XML must be stored in UTF-8 (or UTF-16/32), in particular, not Windows-1252.
+    // However, existing code did this, so preserve current behavior.
+    if (pEncoding != nullptr)
+    {
+        if (*pEncoding != string_encoding::utf_8)
+        {
+            throw std::invalid_argument("'encoding' must be UTF-8");
+        }
+    }
+
     std::string prefix = "";
     for (int i = 0; i < depth; ++i)
         prefix += formatter;
@@ -191,7 +222,7 @@ void xml::lite::Element::depthPrint(io::OutputStream& stream,
         {
             if (!formatter.empty())
                 stream.write("\n");
-            mChildren[i]->depthPrint(stream, depth + 1, formatter);
+            mChildren[i]->depthPrint(stream, pEncoding, depth + 1, formatter);
         }
 
         if (!mChildren.empty() && !formatter.empty())

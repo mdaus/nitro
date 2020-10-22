@@ -22,6 +22,7 @@
 
 #ifndef __XML_LITE_DOM_DOCUMENT_H__
 #define __XML_LITE_DOM_DOCUMENT_H__
+#pragma once
 
 /*!
  * \file  Document.h
@@ -51,11 +52,13 @@ namespace lite
 class Document
 {
 public:
-    //! Constructor
-    Document(Element* rootNode = NULL, bool own = true) :
-        mRootNode(rootNode), mOwnRoot(own)
-    {
-    }
+    //! Constructors
+    Document(Element* rootNode, bool own, bool storeEncoding) :
+        mRootNode(rootNode), mOwnRoot(own), mStoreEncoding(storeEncoding) { }
+    Document(Element* rootNode, bool own) : Document(rootNode, own, false /*storeEncoding*/) { }
+    Document(bool storeEncoding) : Document(nullptr /*rootNode*/, true /*own*/, storeEncoding) { }
+    Document(Element* rootNode) : Document(rootNode, true /*own*/) { }
+    Document() : Document(nullptr /*rootNode*/) { }
 
     /*!
      * Destroy the xml tree.  This deletes the nodes if they exist
@@ -149,6 +152,7 @@ protected:
     //! The root node element
     Element *mRootNode;
     bool mOwnRoot;
+    bool mStoreEncoding;
 };
 }
 }

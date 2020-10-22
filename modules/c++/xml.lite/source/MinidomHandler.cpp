@@ -143,3 +143,7 @@ void xml::lite::MinidomHandler::preserveCharacterData(bool preserve)
     mPreserveCharData = preserve;
 }
 
+void xml::lite::MinidomHandler::setStoreEncoding(bool value)
+{
+    mStoreEncoding = value;
+}
