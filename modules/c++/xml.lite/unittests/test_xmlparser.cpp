@@ -28,10 +28,14 @@
 
 #include "xml/lite/MinidomParser.h"
 
+static const std::string text("TEXT");
+static const std::string strXml = "<root><doc><a>" + text + "</a></doc></root>";
+static const std::string iso88591Text("T\xc9XT");  // ISO8859-1, "TÉXT"
+static const std::string utf8Text("T\xc3\x89XT");  // UTF-8,  "TÉXT"
+static const auto strUtf8Xml = "<root><doc><a>" + utf8Text + "</a></doc></root>";
+
 TEST_CASE(testXmlParseSimple)
 {
-    const std::string text("TEXT");
-    const std::string strXml = "<root><doc><a>" + text + "</a></doc></root>";
     io::StringStream ss;
     ss.stream() << strXml;
     TEST_ASSERT_EQ(ss.stream().str(), strXml);
@@ -67,11 +71,9 @@ TEST_CASE(testXmlParseSimple)
 
 TEST_CASE(testXmlPreserveCharacterData)
 {
-    const std::string utf8Text("T\xc3\x89XT");  // UTF-8,  "TÉXT"
-    const std::string strXml = "<root><doc><a>" + utf8Text + "</a></doc></root>";
     io::StringStream stream;
-    stream.stream() << strXml;
-    TEST_ASSERT_EQ(stream.stream().str(), strXml);
+    stream.stream() << strUtf8Xml;
+    TEST_ASSERT_EQ(stream.stream().str(), strUtf8Xml);
 
     xml::lite::MinidomParser xmlParser;
     // This is needed in Windows, because the default locale is *.1252 (more-or-less ISO8859-1)
@@ -85,12 +87,9 @@ TEST_CASE(testXmlPreserveCharacterData)
 
 TEST_CASE(testXmlUtf8Legacy)
 {
-    const std::string text("T\xc9XT");  // ISO8859-1, "TÉXT"
-    const std::string utf8Text("T\xc3\x89XT");  // UTF-8,  "TÉXT"
-    const std::string strXml = "<root><doc><a>" + utf8Text + "</a></doc></root>";
     io::StringStream stream;
-    stream.stream() << strXml;
-    TEST_ASSERT_EQ(stream.stream().str(), strXml);
+    stream.stream() << strUtf8Xml;
+    TEST_ASSERT_EQ(stream.stream().str(), strUtf8Xml);
 
     xml::lite::MinidomParser xmlParser;
     xmlParser.preserveCharacterData(true);
@@ -104,7 +103,7 @@ TEST_CASE(testXmlUtf8Legacy)
     auto actual = a.getCharacterData();
     #ifdef _WIN32
     TEST_ASSERT_EQ(actual.length(), 4);
-    TEST_ASSERT_EQ(actual, text);
+    TEST_ASSERT_EQ(actual, iso88591Text);
     #else
     TEST_ASSERT_EQ(actual.length(), 4);
     #endif
@@ -115,12 +114,9 @@ TEST_CASE(testXmlUtf8Legacy)
 
 TEST_CASE(testXmlUtf8)
 {
-    const std::string text("T\xc9XT");  // ISO8859-1, "TÉXT"
-    const std::string utf8Text("T\xc3\x89XT");  // UTF-8,  "TÉXT"
-    const std::string strXml = "<root><doc><a>" + utf8Text + "</a></doc></root>";
     io::StringStream stream;
-    stream.stream() << strXml;
-    TEST_ASSERT_EQ(stream.stream().str(), strXml);
+    stream.stream() << strUtf8Xml;
+    TEST_ASSERT_EQ(stream.stream().str(), strUtf8Xml);
 
     xml::lite::MinidomParser xmlParser(true /*storeEncoding*/);
     xmlParser.preserveCharacterData(true);
@@ -134,12 +130,53 @@ TEST_CASE(testXmlUtf8)
     const auto pEncoding = a.getEncoding();
     TEST_ASSERT(pEncoding != nullptr);
 #ifdef _WIN32
-    TEST_ASSERT_EQ(actual, text);
+    TEST_ASSERT_EQ(actual, iso88591Text);
     TEST_ASSERT(*pEncoding == xml::lite::string_encoding::windows_1252);
 #else
     TEST_ASSERT_EQ(actual, utf8Text);
     TEST_ASSERT(*pEncoding == xml::lite::string_encoding::utf_8);
 #endif
+}
+
+TEST_CASE(testXmlPrintLegacy)
+{
+    io::StringStream input;
+    input.stream() << strUtf8Xml;
+
+    // This is LEGACY behavior, it is INCORRECT on Windows and won't even parse on Linux!
+    {
+        xml::lite::MinidomParser xmlParser;
+        xmlParser.preserveCharacterData(true);
+        xmlParser.parse(input);
+        const auto pRootElement = xmlParser.getDocument()->getRootElement();
+
+        io::StringStream output;
+        pRootElement->print(output);
+        const auto actual = output.stream().str();
+        #ifdef _WIN32
+        const auto strBadXml = "<root><doc><a>" + iso88591Text + "</a></doc></root>"; // XML must be UTF-8
+        TEST_ASSERT_EQ(actual, strBadXml);
+        #else
+        const auto strBadXml = "<root><doc><a>"; // Failed to parse UTF-8
+        TEST_ASSERT_EQ(actual.find(strBadXml), 0);
+        #endif
+    }
+}
+
+TEST_CASE(testXmlPrint)
+{
+    io::StringStream input;
+    input.stream() << strUtf8Xml;
+
+    xml::lite::MinidomParser xmlParser(true /*storeEncoding*/);
+    xmlParser.preserveCharacterData(true);
+    xmlParser.parse(input);
+    const auto pRootElement = xmlParser.getDocument()->getRootElement();
+
+    io::StringStream output;
+    pRootElement->print(output, xml::lite::string_encoding::utf_8 /*write UTF-8*/);
+    const auto actual = output.stream().str();
+    TEST_ASSERT_EQ(actual, strUtf8Xml);
 }
 
 int main(int, char**)
@@ -148,4 +185,6 @@ int main(int, char**)
     TEST_CHECK(testXmlPreserveCharacterData);
     TEST_CHECK(testXmlUtf8Legacy);
     TEST_CHECK(testXmlUtf8);
+    TEST_CHECK(testXmlPrintLegacy);
+    TEST_CHECK(testXmlPrint);
 }

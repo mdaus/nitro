@@ -163,6 +163,21 @@ void xml::lite::Element::prettyPrint(io::OutputStream& stream, string_encoding e
     stream.writeln("");
 }
 
+static void writeCharacterData(io::OutputStream& stream,
+    const std::string& characterData, const xml::lite::string_encoding* pCharacterEncoding)
+{
+    const std::string* pStringToWrite = &characterData; // already in UTF-8
+
+    sys::u8string u8CharacterData; // keep result in-scope
+    if (*pCharacterEncoding != xml::lite::string_encoding::utf_8)
+    {
+        u8CharacterData = str::toUtf8(characterData);
+        pStringToWrite = reinterpret_cast<std::string*>(&u8CharacterData);
+    }
+
+    stream.write(*pStringToWrite);
+}
+
 void xml::lite::Element::depthPrint(io::OutputStream& stream,
                                     int depth,
                                     const std::string& formatter) const
@@ -181,12 +196,9 @@ void xml::lite::Element::depthPrint(io::OutputStream& stream, const string_encod
 {
     // XML must be stored in UTF-8 (or UTF-16/32), in particular, not Windows-1252.
     // However, existing code did this, so preserve current behavior.
-    if (pEncoding != nullptr)
+    if ((pEncoding != nullptr) && (*pEncoding != string_encoding::utf_8))
     {
-        if (*pEncoding != string_encoding::utf_8)
-        {
-            throw std::invalid_argument("'encoding' must be UTF-8");
-        }
+        throw std::invalid_argument("'encoding' must be UTF-8");
     }
 
     std::string prefix = "";
@@ -216,7 +228,17 @@ void xml::lite::Element::depthPrint(io::OutputStream& stream, const string_encod
     else
     {
         stream.write(acc + rBrack);
-        stream.write(mCharacterData);
+        const auto pCharacterEncoding = getEncoding();
+        if (pEncoding != nullptr)
+        {
+            writeCharacterData(stream, mCharacterData, getEncoding());
+        }
+        else
+        {
+            // Legacy behavior, will generate incorrect XML output if there are western European
+            // characters in "mCharacterData".
+            stream.write(mCharacterData);
+        }
 
         for (unsigned int i = 0; i < mChildren.size(); i++)
         {
