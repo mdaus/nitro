@@ -20,6 +20,8 @@
  *
  */
 
+#include <codecvt>
+
 #include "str/Convert.h"
 #include "str/Manip.h"
 
@@ -133,4 +135,27 @@ sys::u8string str::toUtf8(const std::string& str)
         retval += to_utf8(ch);
     }
     return retval;
+}
+
+// https://en.cppreference.com/w/cpp/locale/codecvt_utf8
+void str::toUtf8(const std::u16string& str, std::string& result)
+{
+    // Note this is all depreicated in C++17 ... but there is no standard replacement.
+
+    // https:en.cppreference.com/w/cpp/locale/codecvt
+    std::wstring_convert<std::codecvt_utf8<char16_t>, std::u16string::value_type> conv;
+
+    // https://en.cppreference.com/w/cpp/locale/wstring_convert/to_bytes
+    result = conv.to_bytes(str);
+}
+sys::u8string str::toUtf8(const std::u16string& str)
+{
+    sys::u8string retval;
+    auto pUtf8 = reinterpret_cast<std::string*>(&retval);
+    toUtf8(str, *pUtf8);
+    return retval;
+}
+void str::toUtf8(const std::u16string& str, sys::u8string& result)
+{
+    result = toUtf8(str);
 }

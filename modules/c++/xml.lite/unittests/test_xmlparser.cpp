@@ -102,13 +102,11 @@ TEST_CASE(testXmlUtf8Legacy)
     TEST_ASSERT_EQ(aElements.size(), 1);
     const auto& a = *(aElements[0]);
     auto actual = a.getCharacterData();
-    xml::lite::MinidomHandler::trim(actual);
     #ifdef _WIN32
     TEST_ASSERT_EQ(actual.length(), 4);
     TEST_ASSERT_EQ(actual, text);
     #else
-    TEST_ASSERT_EQ(actual.length(), 0);
-    TEST_ASSERT_EQ(actual, "");
+    TEST_ASSERT_EQ(actual.length(), 4);
     #endif
 
     const auto pEncoding = a.getEncoding();

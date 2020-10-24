@@ -23,6 +23,7 @@
 #include <stdexcept>
 
 #include "str/Manip.h"
+#include "str/Convert.h"
 
 #include "xml/lite/MinidomHandler.h"
 
@@ -90,21 +91,29 @@ bool xml::lite::MinidomHandler::characters(
     #ifdef _WIN32
     const wchar_t* const value,
     #else
-    const uint16_t* const value,
+    const uint16_t* const value_,
     #endif
-    const size_t length)
+    const size_t length_)
 {
     #ifndef _WIN32
-    std::wstring strValue;
-    for (size_t i=0; i<length; i++)
-    {
-        strValue.push_back(static_cast<wchar_t>(value[i]));    
-    }
-    // characters(value, length, nullptr /*pEncoding*/);
+    // As on Windows, this comes to us already encoded ... but UTF-16
+    const auto value = reinterpret_cast<const std::u16string::value_type*>(value_);
+    const std::u16string strValue(value, length_);
+    std::string utf8Value;
+    str::toUtf8(strValue, utf8Value);
+
+    const auto length = static_cast<int>(utf8Value.length());
     static const auto encoding = string_encoding::utf_8;
-    return true;
+    characters(utf8Value.c_str(), length, &encoding);
+    return true; // all done, characters(char*) already called, above
     #else
-    return false;
+    UNREFERENCED_PARAMETER(length_);
+    // On Windows, we want std::string encoded as Windows-1252 (ISO8859-1)
+    // so that western European characters will be displayed.  We can't convert
+    // to UTF-8 (as above on Linux), because Windows doesn't have good support
+    // for displaying such strings.  Using UTF-16 would be preferred on Windows, but
+    // all existing code uses std::string instead of std::wstring.
+    return false; // call characters(char*) to get a Windows-1252 string
     #endif
 }
 

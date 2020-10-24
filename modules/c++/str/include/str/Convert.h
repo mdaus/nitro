@@ -83,6 +83,10 @@ std::string toString(const T& real, const T& imag)
 }
 
 sys::u8string toUtf8(const std::string&);
+sys::u8string toUtf8(const std::u16string&);
+
+void toUtf8(const std::u16string&, sys::u8string&);
+void toUtf8(const std::u16string&, std::string&);
 
 template <typename T>
 T toType(const std::string& s)
