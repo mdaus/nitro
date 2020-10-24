@@ -71,13 +71,47 @@ void xml::lite::MinidomHandler::characters(const char* value, int length, const 
     assert(bytesForElement.size());
     bytesForElement.top() += length;
 }
-void xml::lite::MinidomHandler::characters(const char* value, int length, string_encoding encoding)
-{
-    characters(value, length, &encoding);
-}
 void xml::lite::MinidomHandler::characters(const char *value, int length)
 {
-    characters(value, length, nullptr /*pEncoding*/);
+    const string_encoding* pEncoding = nullptr;
+    #ifdef _WIN32
+    if (use_wchar_t())
+    {
+        // If we're still here despite use_char() being "false" then the wide-character
+        // routine "failed."  On Windows, that means the char* value is encoded
+        // as Windows-1252 (more-or-less ISO8859-1).
+        static const auto encoding = string_encoding::windows_1252;
+        pEncoding = &encoding;
+    }
+    #endif
+    characters(value, length, pEncoding);
+}
+bool xml::lite::MinidomHandler::characters(
+    #ifdef _WIN32
+    const wchar_t* const value,
+    #else
+    const uint16_t* const value,
+    #endif
+    const size_t length)
+{
+    #ifndef _WIN32
+    std::wstring strValue;
+    for (size_t i=0; i<length; i++)
+    {
+        strValue.push_back(static_cast<wchar_t>(value[i]));    
+    }
+    // characters(value, length, nullptr /*pEncoding*/);
+    static const auto encoding = string_encoding::utf_8;
+    return true;
+    #else
+    return false;
+    #endif
+}
+
+bool xml::lite::MinidomHandler::use_wchar_t() const
+{
+    // if we're storing the encoding, get wchar_t so that we can convert
+    return storeEncoding();
 }
 
 void xml::lite::MinidomHandler::startElement(const std::string & uri,
@@ -166,5 +200,12 @@ bool xml::lite::MinidomHandler::storeEncoding() const
     // non-ASCII characters.  Given that, don't bother storing an encoding w/o 
     // mPreserveCharData also set.  This also further preserves existing behavior.
     // Also note that much code leaves mPreserveCharData as it's default of false.
+    if (mStoreEncoding)
+    {
+        if (!mPreserveCharData)
+        {
+            throw std::logic_error("preserveCharacterData() must be set with storeEncoding()");
+        }
+    }
     return mStoreEncoding && mPreserveCharData;
 }

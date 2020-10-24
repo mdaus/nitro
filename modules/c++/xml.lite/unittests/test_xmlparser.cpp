@@ -96,17 +96,18 @@ TEST_CASE(testXmlUtf8Legacy)
     xmlParser.preserveCharacterData(true);
     xmlParser.parse(stream);
 
-    // This is LEGACY behavior
+    // This is LEGACY behavior, it is INCORRECT on Linux!
     const auto aElements =
             xmlParser.getDocument()->getRootElement()->getElementsByTagName("a", true /*recurse*/);
     TEST_ASSERT_EQ(aElements.size(), 1);
     const auto& a = *(aElements[0]);
     auto actual = a.getCharacterData();
-    TEST_ASSERT_EQ(actual.length(), 4);
     xml::lite::MinidomHandler::trim(actual);
     #ifdef _WIN32
+    TEST_ASSERT_EQ(actual.length(), 4);
     TEST_ASSERT_EQ(actual, text);
     #else
+    TEST_ASSERT_EQ(actual.length(), 0);
     TEST_ASSERT_EQ(actual, "");
     #endif
 
@@ -127,7 +128,6 @@ TEST_CASE(testXmlUtf8)
     xmlParser.preserveCharacterData(true);
     xmlParser.parse(stream);
 
-    // This is LEGACY behavior
     const auto aElements =
             xmlParser.getDocument()->getRootElement()->getElementsByTagName("a", true /*recurse*/);
     TEST_ASSERT_EQ(aElements.size(), 1);
@@ -149,5 +149,5 @@ int main(int, char**)
     TEST_CHECK(testXmlParseSimple);
     TEST_CHECK(testXmlPreserveCharacterData);
     TEST_CHECK(testXmlUtf8Legacy);
-    //TEST_CHECK(testXmlUtf8);
+    TEST_CHECK(testXmlUtf8);
 }

@@ -107,9 +107,16 @@ public:
      * \param value The value of the char data
      * \param length The length of the char data
      */
-    virtual void characters(const char* value, int length, const string_encoding*);
-    virtual void characters(const char* value, int length, string_encoding);
-    virtual void characters(const char* value, int length);
+    virtual void characters(const char* value, int length) override;
+    #ifdef _WIN32
+    bool characters(const wchar_t* const value, const size_t length) override;
+    #else
+    // not really system dependent, but it's how the existing code works ...
+    void characters(const uint16_t* const value, const size_t length) override;
+    #endif
+
+    // Which characters() routine should be called?
+    bool use_wchar_t() const override;
 
     /*!
      * This method is fired when a new tag is entered.
@@ -175,7 +182,8 @@ public:
     virtual void storeEncoding(bool value);
 
 protected:
-    virtual bool storeEncoding() const;
+    void characters(const char* value, int length, const string_encoding*);
+    bool storeEncoding() const;
 
     std::string currentCharacterData;
     std::shared_ptr<const string_encoding> mpEncoding;
