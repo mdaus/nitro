@@ -90,7 +90,7 @@ void xml::lite::MinidomHandler::characters(const char *value, int length)
 
 static std::string toUtf8(const uint16_t* value_, const size_t length)
 {
-    const auto value = reinterpret_cast<const std::u16string::value_type*>(value_);
+    const auto value = reinterpret_cast<const std::u16string::value_type*>(value_); // UTF-16
     const std::u16string strValue(value, length);
     std::string retval;
     str::toUtf8(strValue, retval);
@@ -99,10 +99,10 @@ static std::string toUtf8(const uint16_t* value_, const size_t length)
 static std::string toUtf8(const wchar_t* value_, const size_t length)
 {
     #ifdef _WIN32
-    const auto value = reinterpret_cast<const std::u16string::value_type*>(value_);
+    const auto value = reinterpret_cast<const std::u16string::value_type*>(value_); // UTF-16
     const std::u16string strValue(value, length);
     #else
-    const auto value = reinterpret_cast<const std::u32string::value_type*>(value_);
+    const auto value = reinterpret_cast<const std::u32string::value_type*>(value_); // UTF-32
     const std::u32string strValue(value, length);
     #endif
     std::string retval;
@@ -131,9 +131,8 @@ bool xml::lite::MinidomHandler::characters(
     }
     #endif
 
-    // This is the preferred encoding: UTF-8 on both Windows and *ix.
-    // However, it's not the default on Windows as that could break
-    // existing code.
+    // This is the preferred encoding: UTF-8 on both Windows and *ix.  However,
+    // it's not the default on Windows as that could break existing code.
     const std::string utf8Value = toUtf8(value_, length_);
 
     const auto length = static_cast<int>(utf8Value.length());

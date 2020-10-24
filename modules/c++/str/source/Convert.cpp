@@ -160,24 +160,49 @@ sys::u8string str::toUtf8(const std::string& str)
 }
 
 // https://en.cppreference.com/w/cpp/locale/codecvt_utf8
-void str::toUtf8(const std::u16string& str, std::string& result)
+template<typename T>
+static void toUtf8(const T& str, std::string& result)
 {
     // Note this is all depreicated in C++17 ... but there is no standard replacement.
 
     // https:en.cppreference.com/w/cpp/locale/codecvt
-    std::wstring_convert<std::codecvt_utf8<char16_t>, std::u16string::value_type> conv;
+    using value_type = typename T::value_type;
+    std::wstring_convert<std::codecvt_utf8<value_type>, value_type> conv;
 
     // https://en.cppreference.com/w/cpp/locale/wstring_convert/to_bytes
     result = conv.to_bytes(str);
 }
-sys::u8string str::toUtf8(const std::u16string& str)
+void str::toUtf8(const std::u16string& str, std::string& result)
+{
+    return ::toUtf8(str, result);
+}
+void str::toUtf8(const std::u32string& str, std::string& result)
+{
+    return ::toUtf8(str, result);
+}
+
+template<typename T>
+static sys::u8string toUtf8(const T& str)
 {
     sys::u8string retval;
     auto& utf8 = reinterpret_cast<std::string&>(retval);
     toUtf8(str, utf8);
     return retval;
 }
+sys::u8string str::toUtf8(const std::u16string& str)
+{
+    return ::toUtf8(str);
+}
+sys::u8string str::toUtf8(const std::u32string& str)
+{
+    return ::toUtf8(str);
+}
+
 void str::toUtf8(const std::u16string& str, sys::u8string& result)
+{
+    result = toUtf8(str);
+}
+void str::toUtf8(const std::u32string& str, sys::u8string& result)
 {
     result = toUtf8(str);
 }

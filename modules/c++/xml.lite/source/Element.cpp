@@ -228,7 +228,6 @@ void xml::lite::Element::depthPrint(io::OutputStream& stream, const string_encod
     else
     {
         stream.write(acc + rBrack);
-        const auto pCharacterEncoding = getEncoding();
         if (pEncoding != nullptr)
         {
             writeCharacterData(stream, mCharacterData, getEncoding());
