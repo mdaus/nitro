@@ -52,13 +52,11 @@ namespace lite
 class Document
 {
 public:
-    //! Constructors
-    Document(Element* rootNode, bool own, bool storeEncoding) :
-        mRootNode(rootNode), mOwnRoot(own), mStoreEncoding(storeEncoding) { }
-    Document(Element* rootNode, bool own) : Document(rootNode, own, false /*storeEncoding*/) { }
-    Document(bool storeEncoding) : Document(nullptr /*rootNode*/, true /*own*/, storeEncoding) { }
-    Document(Element* rootNode) : Document(rootNode, true /*own*/) { }
-    Document() : Document(nullptr /*rootNode*/) { }
+    //! Constructor
+    Document(Element* rootNode = NULL, bool own = true) :
+        mRootNode(rootNode), mOwnRoot(own)
+    {
+    }
 
     /*!
      * Destroy the xml tree.  This deletes the nodes if they exist
@@ -88,7 +86,7 @@ public:
      */
     virtual Element *createElement(const std::string & qname,
                                    const std::string & uri,
-                                   std::string characterData = "");
+                                   std::string characterData = "", const string_encoding* pEncoding = nullptr);
 
     /*!
      * Blanket destructor.  This thing deletes everything
@@ -152,7 +150,6 @@ protected:
     //! The root node element
     Element *mRootNode;
     bool mOwnRoot;
-    bool mStoreEncoding;
 };
 }
 }

@@ -20,6 +20,10 @@
  *
  */
 
+#include <stdexcept>
+
+#include "str/Manip.h"
+
 #include "xml/lite/MinidomHandler.h"
 
 void xml::lite::MinidomHandler::setDocument(Document *newDocument, bool own)
@@ -41,8 +45,24 @@ void xml::lite::MinidomHandler::clear()
     assert(nodeStack.empty());
 }
 
-void xml::lite::MinidomHandler::characters(const char *value, int length)
+void xml::lite::MinidomHandler::characters(const char* value, int length, const string_encoding* pEncoding)
 {
+    if (pEncoding != nullptr)
+    {
+        if (mpEncoding != nullptr)
+        {
+            // be sure the given encoding matches any encoding already set
+            if (*pEncoding != *mpEncoding)
+            {
+                throw std::invalid_argument("New 'encoding' is different than value already set.");
+            }
+        }
+        else if (storeEncoding())
+        {
+            mpEncoding = std::make_shared<const string_encoding>(*pEncoding);
+        }
+    }
+
     // Append new data
     if (length)
         currentCharacterData += std::string(value, length);
@@ -50,6 +70,14 @@ void xml::lite::MinidomHandler::characters(const char *value, int length)
     // Append number of bytes added to this node's stack value
     assert(bytesForElement.size());
     bytesForElement.top() += length;
+}
+void xml::lite::MinidomHandler::characters(const char* value, int length, string_encoding encoding)
+{
+    characters(value, length, &encoding);
+}
+void xml::lite::MinidomHandler::characters(const char *value, int length)
+{
+    characters(value, length, nullptr /*pEncoding*/);
 }
 
 void xml::lite::MinidomHandler::startElement(const std::string & uri,
@@ -91,23 +119,7 @@ std::string xml::lite::MinidomHandler::adjustCharacterData()
 
 void xml::lite::MinidomHandler::trim(std::string & s)
 {
-    int i;
-
-    for (i = 0; i < (int) s.length(); i++)
-    {
-        if (!isspace(s[i]))
-            break;
-    }
-    s.erase(0, i);
-
-    for (i = (int) s.length() - 1; i >= 0; i--)
-    {
-        if (!isspace(s[i]))
-            break;
-
-    }
-    if (i + 1 < (int) s.length())
-        s.erase(i + 1);
+    str::trim(s);
 }
 
 void xml::lite::MinidomHandler::endElement(const std::string & /*uri*/,
@@ -118,7 +130,7 @@ void xml::lite::MinidomHandler::endElement(const std::string & /*uri*/,
     xml::lite::Element * current = nodeStack.top();
     nodeStack.pop();
 
-    current->setCharacterData(adjustCharacterData());
+    current->setCharacterData(adjustCharacterData(), mpEncoding.get());
 
     // Remove corresponding int on bytes stack
     bytesForElement.pop();
@@ -143,7 +155,16 @@ void xml::lite::MinidomHandler::preserveCharacterData(bool preserve)
     mPreserveCharData = preserve;
 }
 
-void xml::lite::MinidomHandler::setStoreEncoding(bool value)
+void xml::lite::MinidomHandler::storeEncoding(bool value)
 {
     mStoreEncoding = value;
+}
+
+bool xml::lite::MinidomHandler::storeEncoding() const
+{
+    // Without mPreserveCharData=true, we gets asserts when parsing text containing
+    // non-ASCII characters.  Given that, don't bother storing an encoding w/o 
+    // mPreserveCharData also set.  This also further preserves existing behavior.
+    // Also note that much code leaves mPreserveCharData as it's default of false.
+    return mStoreEncoding && mPreserveCharData;
 }

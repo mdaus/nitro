@@ -25,7 +25,7 @@
 xml::lite::MinidomParser::MinidomParser(bool storeEncoding)
 {
     mReader.setContentHandler(&mHandler);
-    mHandler.setStoreEncoding(storeEncoding);
+    mHandler.storeEncoding(storeEncoding);
 }
 
 void xml::lite::MinidomParser::parse(io::InputStream& is,
@@ -58,4 +58,9 @@ void xml::lite::MinidomParser::setDocument(xml::lite::Document* newDocument,
 void xml::lite::MinidomParser::preserveCharacterData(bool preserve)
 {
     mHandler.preserveCharacterData(preserve);
+}
+
+void xml::lite::MinidomParser::storeEncoding(bool preserve)
+{
+    mHandler.storeEncoding(preserve);
 }

@@ -46,6 +46,8 @@
  */
 
 #include <stack>
+#include <memory>
+
 #include "XMLReader.h"
 #include "io/StandardStreams.h"
 #include "io/DbgStream.h"
@@ -105,7 +107,9 @@ public:
      * \param value The value of the char data
      * \param length The length of the char data
      */
-    virtual void characters(const char *value, int length);
+    virtual void characters(const char* value, int length, const string_encoding*);
+    virtual void characters(const char* value, int length, string_encoding);
+    virtual void characters(const char* value, int length);
 
     /*!
      * This method is fired when a new tag is entered.
@@ -168,10 +172,13 @@ public:
      * on *ix, std::string will be encoding as UTF-8 thus preserving
      * the non-ASCII data.
      */
-    virtual void setStoreEncoding(bool value);
+    virtual void storeEncoding(bool value);
 
 protected:
+    virtual bool storeEncoding() const;
+
     std::string currentCharacterData;
+    std::shared_ptr<const string_encoding> mpEncoding;
     std::stack<int> bytesForElement;
     std::stack<Element *> nodeStack;
     Document *mDocument;

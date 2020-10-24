@@ -83,6 +83,37 @@ TEST_CASE(testXmlPreserveCharacterData)
     TEST_ASSERT_TRUE(true);
 }
 
+TEST_CASE(testXmlUtf8Legacy)
+{
+    const std::string text("T\xc9XT");  // ISO8859-1, "TÉXT"
+    const std::string utf8Text("T\xc3\x89XT");  // UTF-8,  "TÉXT"
+    const std::string strXml = "<root><doc><a>" + utf8Text + "</a></doc></root>";
+    io::StringStream stream;
+    stream.stream() << strXml;
+    TEST_ASSERT_EQ(stream.stream().str(), strXml);
+
+    xml::lite::MinidomParser xmlParser;
+    xmlParser.preserveCharacterData(true);
+    xmlParser.parse(stream);
+
+    // This is LEGACY behavior
+    const auto aElements =
+            xmlParser.getDocument()->getRootElement()->getElementsByTagName("a", true /*recurse*/);
+    TEST_ASSERT_EQ(aElements.size(), 1);
+    const auto& a = *(aElements[0]);
+    auto actual = a.getCharacterData();
+    TEST_ASSERT_EQ(actual.length(), 4);
+    xml::lite::MinidomHandler::trim(actual);
+    #ifdef _WIN32
+    TEST_ASSERT_EQ(actual, text);
+    #else
+    TEST_ASSERT_EQ(actual, "");
+    #endif
+
+    const auto pEncoding = a.getEncoding();
+    TEST_ASSERT_NULL(pEncoding);
+}
+
 TEST_CASE(testXmlUtf8)
 {
     const std::string text("T\xc9XT");  // ISO8859-1, "TÉXT"
@@ -96,23 +127,27 @@ TEST_CASE(testXmlUtf8)
     xmlParser.preserveCharacterData(true);
     xmlParser.parse(stream);
 
+    // This is LEGACY behavior
     const auto aElements =
             xmlParser.getDocument()->getRootElement()->getElementsByTagName("a", true /*recurse*/);
     TEST_ASSERT_EQ(aElements.size(), 1);
     const auto& a = *(aElements[0]);
     const auto actual = a.getCharacterData();
-    #ifdef _WIN32
-    TEST_ASSERT_EQ(actual.length(), 4);
+    const auto pEncoding = a.getEncoding();
+    TEST_ASSERT(pEncoding != nullptr);
+#ifdef _WIN32
     TEST_ASSERT_EQ(actual, text);
-    #else
-    TEST_ASSERT_EQ(actual.length(), 5);
+    TEST_ASSERT(*pEncoding == xml::lite::string_encoding::windows_1252);
+#else
     TEST_ASSERT_EQ(actual, utf8Text);
-    #endif
+    TEST_ASSERT(*pEncoding == xml::lite::string_encoding::utf_8);
+#endif
 }
 
 int main(int, char**)
 {
     TEST_CHECK(testXmlParseSimple);
     TEST_CHECK(testXmlPreserveCharacterData);
+    TEST_CHECK(testXmlUtf8Legacy);
     //TEST_CHECK(testXmlUtf8);
 }
