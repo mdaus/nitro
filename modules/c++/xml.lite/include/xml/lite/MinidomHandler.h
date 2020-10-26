@@ -177,15 +177,13 @@ public:
      * XML containing non-ASCII data is lost (it turns into 
      * Windows-1252 on Windows).
      * 
-     * When set, there won't be any change on Windows.  However,
-     * on *ix, std::string will be encoding as UTF-8 thus preserving
-     * the non-ASCII data.
+     * When set (highly recommended), text will be encoded as UTF-8.
      */
-    virtual void storeEncoding(bool value);
+    virtual void forceUtf8(bool forceUtf8);
 
 protected:
     void characters(const char* value, int length, const string_encoding*);
-    bool storeEncoding() const;
+    bool forceUtf8() const;
 
     std::string currentCharacterData;
     std::shared_ptr<const string_encoding> mpEncoding;
@@ -194,7 +192,7 @@ protected:
     Document *mDocument;
     bool mOwnDocument;
     bool mPreserveCharData;
-    bool mStoreEncoding = false;
+    bool mForceUtf8Encoding = true;
 };
 }
 }
