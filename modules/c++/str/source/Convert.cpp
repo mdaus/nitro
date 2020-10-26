@@ -21,6 +21,7 @@
  */
 
 #include <codecvt>
+#include <map>
 
 #include "str/Convert.h"
 #include "str/Manip.h"
@@ -116,15 +117,36 @@ static sys::u8string to_utf8(std::string::value_type ch)
         return sys::u8string{cast(ch)};
     }
 
-    if ((ch >= '\xC0' /*À*/) && (ch <= '\xFF' /*y*/))  // ISO8859-1 letters
+    // These characters can be converted from ISO8859-1 to UTF-8 with simple math
+    // See http://www.unicode.org/Public/MAPPINGS/VENDORS/MICSFT/WINDOWS/CP1252.TXT
+    if ((ch >= '\xA0' /*NO-BREAK SPACE*/) && (ch <= '\xFF' /*LATIN SMALL LETTER Y WITH DIAERESIS*/))
     {
-        sys::u8string retval{cast('\xC3')};
         ch -= 0x40;  // 0xC0 -> 0x80
-        retval.push_back(cast(ch));
-        return retval;
+        return sys::u8string {cast('\xC3'), cast(ch)};
     }
 
-    return sys::u8string{cast(ch)};  // ???
+    // Need to look up characters from \x80 (EURO SIGN) to \x9F (LATIN CAPITAL LETTER Y WITH DIAERESIS)
+    // in a map (see above).
+    static const sys::u8string undefined_character{cast(' ')};
+    static const std::map<std::string::value_type, sys::u8string> x80_x9F_to_u8string
+    {
+        {'\x81', undefined_character } // UNDEFINED
+        , {'\x8D', undefined_character } // UNDEFINED
+        , {'\x8F', undefined_character } // UNDEFINED
+        , {'\x90', undefined_character } // UNDEFINED
+        , {'\x9D', undefined_character } // UNDEFINED
+    };
+    const auto it = x80_x9F_to_u8string.find(ch);
+    if (it != x80_x9F_to_u8string.end())
+    {
+        return it->second;
+    }
+
+    // For now, return a replacement character so that the resulting UTF-8
+    // value will be valid; yes, this will **corrupt** the input data in that information
+    // is lost: https://en.wikipedia.org/wiki/Specials_(Unicode_block)#Replacement_character
+    static const sys::u8string replacement_character { cast('\xEF'), cast('\xBF'), cast('\xBD') }; // U+FFFD, in UTF-8
+    return replacement_character;
 }
 sys::u8string str::toUtf8(const std::string& str)
 {
@@ -151,8 +173,8 @@ void str::toUtf8(const std::u16string& str, std::string& result)
 sys::u8string str::toUtf8(const std::u16string& str)
 {
     sys::u8string retval;
-    auto pUtf8 = reinterpret_cast<std::string*>(&retval);
-    toUtf8(str, *pUtf8);
+    auto& utf8 = reinterpret_cast<std::string&>(retval);
+    toUtf8(str, utf8);
     return retval;
 }
 void str::toUtf8(const std::u16string& str, sys::u8string& result)
