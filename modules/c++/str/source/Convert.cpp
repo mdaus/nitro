@@ -102,6 +102,12 @@ template<> int str::getPrecision(const long double& )
     return std::numeric_limits<long double>::max_digits10;
 }
 
+static sys::u8string utf8(uint32_t ch)
+{
+    const std::u32string s{static_cast<std::u32string::value_type>(ch)};
+    return str::toUtf8(s);
+}
+
 // Convert a single ISO8859-1 character to UTF-8
 // https://en.wikipedia.org/wiki/ISO/IEC_8859-1
 static inline sys::u8string::value_type cast(std::string::value_type ch)
@@ -127,14 +133,40 @@ static sys::u8string to_utf8(std::string::value_type ch)
 
     // Need to look up characters from \x80 (EURO SIGN) to \x9F (LATIN CAPITAL LETTER Y WITH DIAERESIS)
     // in a map (see above).
-    static const sys::u8string undefined_character{cast(' ')};
     static const std::map<std::string::value_type, sys::u8string> x80_x9F_to_u8string
     {
-        {'\x81', undefined_character } // UNDEFINED
-        , {'\x8D', undefined_character } // UNDEFINED
-        , {'\x8F', undefined_character } // UNDEFINED
-        , {'\x90', undefined_character } // UNDEFINED
-        , {'\x9D', undefined_character } // UNDEFINED
+        {'\x80', utf8(0x20AC) } // EURO SIGN
+        // UNDEFINED
+        , {'\x82', utf8(0x201A) } // SINGLE LOW-9 QUOTATION MARK
+        , {'\x83', utf8(0x0192)  } // LATIN SMALL LETTER F WITH HOOK
+        , {'\x84', utf8(0x201E)  } // DOUBLE LOW-9 QUOTATION MARK
+        , {'\x85', utf8(0x2026)  } // HORIZONTAL ELLIPSIS
+        , {'\x86', utf8(0x2020)  } // DAGGER
+        , {'\x87', utf8(0x2021)  } // DOUBLE DAGGER
+        , {'\x88', utf8(0x02C6)  } // MODIFIER LETTER CIRCUMFLEX ACCENT
+        , {'\x89', utf8(0x2030)  } // PER MILLE SIGN
+        , {'\x8A', utf8(0x0160)  } // LATIN CAPITAL LETTER S WITH CARON
+        , {'\x8B', utf8(0x2039)  } // SINGLE LEFT-POINTING ANGLE QUOTATION MARK
+        , {'\x8C', utf8(0x0152)  } // LATIN CAPITAL LIGATURE OE
+        // UNDEFINED
+        , {'\x8E', utf8(0x017D)  } // LATIN CAPITAL LETTER Z WITH CARON
+        // UNDEFINED
+        // UNDEFINED
+        , {'\x91', utf8(0x017D)  } // LEFT SINGLE QUOTATION MARK
+        , {'\x92', utf8(0x2018)  } // RIGHT SINGLE QUOTATION MARK
+        , {'\x93', utf8(0x2019)  } // LEFT DOUBLE QUOTATION MARK
+        , {'\x94', utf8(0x201D)  } // RIGHT DOUBLE QUOTATION MARK
+        , {'\x95', utf8(0x2022)  } // BULLET
+        , {'\x96', utf8(0x2013)  } // EN DASH
+        , {'\x97', utf8(0x2014)  } // EM DASH
+        , {'\x98', utf8(0x02DC)  } // SMALL TILDE
+        , {'\x99', utf8(0x2122)  } // TRADE MARK SIGN
+        , {'\x9A', utf8(0x0161)  } // LATIN SMALL LETTER S WITH CARON
+        , {'\x9B', utf8(0x203A)  } // SINGLE RIGHT-POINTING ANGLE QUOTATION MARK
+        , {'\x9C', utf8(0x0153)  } // LATIN SMALL LIGATURE OE
+        // UNDEFINED
+        , {'\x9E', utf8(0x017E)  } // LATIN SMALL LETTER Z WITH CARON
+        , {'\x9F', utf8(0x0178)  } // LATIN CAPITAL LETTER Y WITH DIAERESIS
     };
     const auto it = x80_x9F_to_u8string.find(ch);
     if (it != x80_x9F_to_u8string.end())
@@ -142,10 +174,11 @@ static sys::u8string to_utf8(std::string::value_type ch)
         return it->second;
     }
 
-    // For now, return a replacement character so that the resulting UTF-8
-    // value will be valid; yes, this will **corrupt** the input data in that information
-    // is lost: https://en.wikipedia.org/wiki/Specials_(Unicode_block)#Replacement_character
-    static const sys::u8string replacement_character { cast('\xEF'), cast('\xBF'), cast('\xBD') }; // U+FFFD, in UTF-8
+    // If we make it here, the input text contains a character that isn't defined in
+    // Windows-1252; return a "replacment character."  Yes, this will **corrupt**
+    // the input data as information is lost:
+    // https://en.wikipedia.org/wiki/Specials_(Unicode_block)#Replacement_character
+    static const sys::u8string replacement_character = utf8(0xfffd);
     return replacement_character;
 }
 sys::u8string str::toUtf8(const std::string& str)
