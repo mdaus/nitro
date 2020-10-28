@@ -217,10 +217,11 @@ void str::toUtf8(const std::u32string& str, std::string& result)
 template<typename T>
 static sys::u8string toUtf8(const T& str)
 {
-    sys::u8string retval;
-    auto& utf8 = reinterpret_cast<std::string&>(retval);
+    // trying to avoid a copy by casting between std::string/sys::u8string
+    // causes a nasty crash on some platforms
+    std::string utf8;
     toUtf8(str, utf8);
-    return retval;
+    return reinterpret_cast<const sys::u8string::value_type*>(utf8.c_str()); // copy here
 }
 sys::u8string str::toUtf8(const std::u16string& str)
 {
