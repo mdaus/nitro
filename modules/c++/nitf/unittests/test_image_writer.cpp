@@ -82,17 +82,20 @@ TEST_CASE(constructValidImageWriter)
 
 TEST_CASE(changeFileHeader)
 {
-#ifndef _WIN32
-    // not setup on Linux ... yet
-    TEST_ASSERT_TRUE(true);
-    return;
-#endif
-
     std::string inputPathname;
-    TEST_ASSERT_TRUE(sys::OS().getEnvIfSet("NITF_UNIT_TEST_inputPathname_", inputPathname));
-
     std::string outputPathname;
-    TEST_ASSERT_TRUE(sys::OS().getEnvIfSet("NITF_UNIT_TEST_outputPathname_", outputPathname));
+    if (sys::OS().getEnvIfSet("NITF_UNIT_TEST_inputPathname_", inputPathname))
+    {
+        // If one is set, they both must be set
+        TEST_ASSERT_TRUE(sys::OS().getEnvIfSet("NITF_UNIT_TEST_outputPathname_", outputPathname));
+    }
+    else
+    {
+        // need env. vars. set
+        std::clog << "NITF_UNIT_TEST_inputPathname_ not set, assuming success.\n";
+        TEST_ASSERT_TRUE(true);
+        return;
+    }
 
     doChangeFileHeader(inputPathname, outputPathname);
 
