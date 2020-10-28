@@ -37,7 +37,7 @@ static bool is_install_tests(const fs::path& path)
 	return (tests == "tests") && (install == "install");
 }
 
-static fs::path buildPluginsDir()
+static fs::path buildDir(const fs::path& path)
 {
 	const auto cwd = fs::current_path();
 
@@ -49,7 +49,7 @@ static fs::path buildPluginsDir()
 		// Running GTest unit-tests in Visual Studio on Windows
 		if (is_x64_Configuration(cwd))
 		{
-			return cwd / "share" / "nitf" / "plugins";
+			return cwd / path;
 		}
 	}
 
@@ -94,12 +94,16 @@ static fs::path buildPluginsDir()
 	return cwd;
 }
 
+static fs::path buildPluginsDir()
+{
+	return buildDir(fs::path("share") / "nitf" / "plugins");
+}
+
 struct nitf_test_tre_mods : public ::testing::Test {
     nitf_test_tre_mods() {
         // initialization code here
         //const std::string NITF_PLUGIN_PATH = R"(C:\Users\jdsmith\source\repos\nitro\x64\Debug\share\nitf\plugins)";
-		const auto NITF_PLUGIN_PATH = buildPluginsDir();
-		const std::string putenv_ = "NITF_PLUGIN_PATH=" + NITF_PLUGIN_PATH.string();
+		const std::string putenv_ = "NITF_PLUGIN_PATH=" + buildPluginsDir().string();
         _putenv(putenv_.c_str());
     }
 
@@ -125,6 +129,32 @@ struct nitf_test_tre_mods : public ::testing::Test {
 
 
 // Be sure this runs AFTER the tre_mods tests ... not really sure why ...
+
+struct test_image_writer : public ::testing::Test {
+	test_image_writer() {
+		// initialization code here
+		const auto inputPathname = buildDir(fs::path("..") / ".." / "modules" / "c++" / "nitf" / "tests" / "test_blank.ntf").string();
+		sys::OS().setEnv("NITF_UNIT_TEST_inputPathname_", inputPathname, true /*overwrite*/);
+		const auto outputPathname = buildDir(fs::path("outputPathname.ntf")).string();
+		sys::OS().setEnv("NITF_UNIT_TEST_outputPathname_", outputPathname, true /*overwrite*/);
+	}
+
+	void SetUp() {
+		// code here will execute just before the test ensues 
+	}
+
+	void TearDown() {
+		// code here will be called just after the test completes
+		// ok to through exceptions from here if need be
+	}
+
+	~test_image_writer() {
+		// cleanup any pending stuff, but no exceptions allowed
+	}
+
+	// put in any custom data members that you need 
+};
+
 #undef TEST_CASE
-#define TEST_CASE(X) TEST(test_image_writer, X)
+#define TEST_CASE(X) TEST_F(test_image_writer, X)
 #include "nitf/unittests/test_image_writer.cpp"
