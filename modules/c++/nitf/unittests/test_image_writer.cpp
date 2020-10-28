@@ -34,7 +34,7 @@
 
 #include "TestCase.h"
 
-static void changeFileHeader(const std::string& inputPathname, const std::string& outputPathname)
+static void doChangeFileHeader(const std::string& inputPathname, const std::string& outputPathname)
 {
     if (nitf::Reader::getNITFVersion(inputPathname) == NITF_VER_UNKNOWN)
     {
@@ -94,7 +94,7 @@ TEST_CASE(changeFileHeader)
     std::string outputPathname;
     TEST_ASSERT_TRUE(sys::OS().getEnvIfSet("NITF_UNIT_TEST_outputPathname_", outputPathname));
 
-    changeFileHeader(inputPathname, outputPathname);
+    doChangeFileHeader(inputPathname, outputPathname);
 
     nitf::Reader reader;
     nitf::IOHandle io(outputPathname);
