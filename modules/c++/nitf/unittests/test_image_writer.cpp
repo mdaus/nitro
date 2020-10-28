@@ -20,10 +20,46 @@
  *
  */
 
+#include <fstream>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <memory>
+#include <stdexcept>
+
+#include <import/nitf.hpp>
 #include <nitf/ImageSubheader.hpp>
 #include <nitf/ImageWriter.hpp>
 #include <nitf/Record.hpp>
+
 #include "TestCase.h"
+
+static void changeFileHeader(const std::string& inputPathname, const std::string& outputPathname)
+{
+    if (nitf::Reader::getNITFVersion(inputPathname) == NITF_VER_UNKNOWN)
+    {
+        throw std::invalid_argument("Invalid NITF: " + inputPathname);
+    }
+
+    nitf::Reader reader;
+    nitf::IOHandle io(inputPathname);
+    
+    nitf::Record record = reader.read(io);
+    nitf::FileHeader fileHeader = record.getHeader();
+
+    auto fileTitle = fileHeader.getFileTitle();
+    auto strFileTitle = fileTitle.toString();
+    str::replaceAll(strFileTitle, " ", "*"); // field is fixed length
+    fileTitle.set(strFileTitle);
+
+    record.setHeader(fileHeader);
+
+    nitf::Writer writer;
+    nitf::IOHandle output(outputPathname, NITF_ACCESS_WRITEONLY, NITF_CREATE);
+    writer.prepare(output, record);
+    writer.setWriteHandlers(io, record);
+    writer.write();
+}
 
 namespace
 {
@@ -43,9 +79,38 @@ TEST_CASE(constructValidImageWriter)
     subheader.setBlocking(100, 200, 10, 10, "P");
     nitf::ImageWriter writer(subheader);
 }
+
+TEST_CASE(changeFileHeader)
+{
+#ifndef _WIN32
+    // not setup on Linux ... yet
+    TEST_ASSERT_TRUE(true);
+    return;
+#endif
+
+    std::string inputPathname;
+    TEST_ASSERT_TRUE(sys::OS().getEnvIfSet("NITF_UNIT_TEST_inputPathname_", inputPathname));
+
+    std::string outputPathname;
+    TEST_ASSERT_TRUE(sys::OS().getEnvIfSet("NITF_UNIT_TEST_outputPathname_", outputPathname));
+
+    changeFileHeader(inputPathname, outputPathname);
+
+    nitf::Reader reader;
+    nitf::IOHandle io(outputPathname);
+    nitf::Record record = reader.read(io);
+    nitf::FileHeader fileHeader = record.getHeader();
+
+    const auto fileTitle = fileHeader.getFileTitle().toString();
+    auto npos = fileTitle.find(" ");
+    TEST_ASSERT_EQ(npos, std::string::npos);
+    npos = fileTitle.find("*");
+    TEST_ASSERT(npos != std::string::npos);
+}
 }
 
 TEST_MAIN(
     TEST_CHECK(imageWriterThrowsOnFailedConstruction);
     TEST_CHECK(constructValidImageWriter);
+    TEST_CHECK(changeFileHeader);
     )
