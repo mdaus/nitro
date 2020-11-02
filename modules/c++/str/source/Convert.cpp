@@ -20,11 +20,16 @@
  *
  */
 
-#include <codecvt>
+#include <assert.h>
+
+#ifdef _WIN32
+#include <codecvt> // not available in older versions of GCC, even with --std=c++11
+#endif
 #include <map>
 
 #include "str/Convert.h"
 #include "str/Manip.h"
+#include "str/utf8.h"
 
 template<> std::string str::toType<std::string>(const std::string& s)
 {
@@ -102,11 +107,12 @@ template<> int str::getPrecision(const long double& )
     return std::numeric_limits<long double>::max_digits10;
 }
 
-static sys::u8string utf8(uint32_t ch)
+static sys::u8string utf8_(uint32_t ch)
 {
     const std::u32string s{static_cast<std::u32string::value_type>(ch)};
     return str::toUtf8(s);
 }
+#define utf8(ch) utf8_(ch)
 
 // Convert a single ISO8859-1 character to UTF-8
 // https://en.wikipedia.org/wiki/ISO/IEC_8859-1
@@ -181,6 +187,7 @@ static sys::u8string to_utf8(std::string::value_type ch)
     static const sys::u8string replacement_character = utf8(0xfffd);
     return replacement_character;
 }
+#undef utf8
 sys::u8string str::toUtf8(const std::string& str)
 {
     sys::u8string retval;
@@ -192,9 +199,10 @@ sys::u8string str::toUtf8(const std::string& str)
     return retval;
 }
 
+#ifdef _WIN32 // <codecvt> might not be available with GCC
 // https://en.cppreference.com/w/cpp/locale/codecvt_utf8
-template<typename T>
-static void toUtf8(const T& str, std::string& result)
+template <typename T>
+static void codecvt_toUtf8_(const T& str, std::string& result)
 {
     // Note this is all depreicated in C++17 ... but there is no standard replacement.
 
@@ -205,13 +213,44 @@ static void toUtf8(const T& str, std::string& result)
     // https://en.cppreference.com/w/cpp/locale/wstring_convert/to_bytes
     result = conv.to_bytes(str);
 }
+static void codecvt_toUtf8(const std::u16string& str, std::string& result)
+{
+    return codecvt_toUtf8_(str, result);
+}
+static void codecvt_toUtf8(const std::u32string& str, std::string& result)
+{
+    return codecvt_toUtf8_(str, result);
+}
+#endif
+
 void str::toUtf8(const std::u16string& str, std::string& result)
 {
-    return ::toUtf8(str, result);
+    // http://utfcpp.sourceforge.net/#introsample
+    /*
+    // Convert it to utf-16
+    vector<unsigned short> utf16line;
+    utf8::utf8to16(line.begin(), end_it, back_inserter(utf16line));
+
+    // And back to utf-8
+    string utf8line;
+    utf8::utf16to8(utf16line.begin(), utf16line.end(), back_inserter(utf8line));
+    */
+    utf8::utf16to8(str.begin(), str.end(), back_inserter(result));
+
+    #if defined(_WIN32) && defined(_DEBUG) && !defined(NDEBUG) // check utf8:: routines
+    std::string codecvt_result;
+    codecvt_toUtf8(str, codecvt_result);
+    assert(codecvt_result == result);
+    #endif
 }
 void str::toUtf8(const std::u32string& str, std::string& result)
 {
-    return ::toUtf8(str, result);
+    utf8::utf32to8(str.begin(), str.end(), back_inserter(result));
+    #if defined(_WIN32) && defined(_DEBUG) && !defined(NDEBUG) // check utf8:: routines
+    std::string codecvt_result;
+    codecvt_toUtf8(str, codecvt_result);
+    assert(codecvt_result == result);
+    #endif
 }
 
 template<typename T>
@@ -220,7 +259,7 @@ static sys::u8string toUtf8(const T& str)
     // trying to avoid a copy by casting between std::string/sys::u8string
     // causes a nasty crash on some platforms
     std::string utf8;
-    toUtf8(str, utf8);
+    str::toUtf8(str, utf8);
     return reinterpret_cast<const sys::u8string::value_type*>(utf8.c_str()); // copy here
 }
 sys::u8string str::toUtf8(const std::u16string& str)
