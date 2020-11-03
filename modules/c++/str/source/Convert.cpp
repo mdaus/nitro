@@ -21,6 +21,7 @@
  */
 
 #include <assert.h>
+#include <string.h> // strlen()
 
 #include <map>
 
@@ -111,7 +112,7 @@ static constexpr sys::u8string::value_type cast(uint8_t ch)
     static_assert(sizeof(decltype(ch)) == sizeof(sys::u8string::value_type), "sizeof(uint8_t) != sizeof(Char8_t)");
     return static_cast<sys::u8string::value_type>(ch);
 }
-static sys::u8string from_windows1252(std::string::value_type ch_)
+static sys::u8string fromWindows1252(std::string::value_type ch_)
 {
     const auto ch = static_cast<uint8_t>(ch_);
 
@@ -180,10 +181,10 @@ static sys::u8string from_windows1252(std::string::value_type ch_)
 sys::u8string str::fromWindows1252(const std::string& str)
 {
     sys::u8string retval;
-    // Assume the input string is ISO8859-1 (western European) and convert to UTF-8
+    // Assume the input string is Windows-1252 (western European) and convert to UTF-8
     for (const auto& ch : str)
     {
-        retval += from_windows1252(ch);
+        retval += ::fromWindows1252(ch);
     }
     return retval;
 }
