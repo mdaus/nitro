@@ -51,13 +51,9 @@ add_subdirectory("sio.lite")
 add_subdirectory("cli")
 add_subdirectory("dbi")
 add_subdirectory("types")
-add_subdirectory("unique")
 add_subdirectory("math")
 add_subdirectory("mt")
 add_subdirectory("logging")
-add_subdirectory("xml.lite")
-add_subdirectory("net") # must be after "re"
-add_subdirectory("net.ssl") # must be after "net"
 add_subdirectory("plugin")
 add_subdirectory("tiff")
 add_subdirectory("polygon")
