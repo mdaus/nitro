@@ -111,7 +111,7 @@ static constexpr sys::u8string::value_type cast(uint8_t ch)
     static_assert(sizeof(decltype(ch)) == sizeof(sys::u8string::value_type), "sizeof(uint8_t) != sizeof(Char8_t)");
     return static_cast<sys::u8string::value_type>(ch);
 }
-static sys::u8string windows1252_to_utf8(std::string::value_type ch_)
+static sys::u8string from_windows1252(std::string::value_type ch_)
 {
     const auto ch = static_cast<uint8_t>(ch_);
 
@@ -126,7 +126,7 @@ static sys::u8string windows1252_to_utf8(std::string::value_type ch_)
         return str::toUtf8(s);
     };
     static const sys::u8string replacement_character = utf8(0xfffd);
-    static const std::map<uint8_t, sys::u8string> x80_x9F_to_u8string
+    static const std::map<uint32_t, sys::u8string> x80_x9F_to_u8string
     {
         {0x80, utf8(0x20AC) } // EURO SIGN
         , {0x81, replacement_character } // UNDEFINED
@@ -177,13 +177,13 @@ static sys::u8string windows1252_to_utf8(std::string::value_type ch_)
     // *out++=0xc2+(*in>0xbf), *out++=(*in++&0x3f)+0x80;
     return sys::u8string{cast(0xc2 + (ch > 0xbf)), cast((ch & 0x3f) + 0x80)}; // ISO8859-1
 }
-sys::u8string str::toUtf8(const std::string& str)
+sys::u8string str::fromWindows1252(const std::string& str)
 {
     sys::u8string retval;
     // Assume the input string is ISO8859-1 (western European) and convert to UTF-8
     for (const auto& ch : str)
     {
-        retval += windows1252_to_utf8(ch);
+        retval += from_windows1252(ch);
     }
     return retval;
 }
