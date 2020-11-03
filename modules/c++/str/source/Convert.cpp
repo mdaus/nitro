@@ -209,16 +209,16 @@ void str::toUtf8(const std::u32string& str, std::string& result)
 }
 
 template <typename T,
-          typename u_bit_iterator = typename T::const_iterator, typename octet_iterator = uint8_t*>
+          typename uXbit_iterator = typename T::const_iterator, typename octet_iterator = uint8_t*>
 static inline sys::u8string toUtf8(const T& str,
-                             octet_iterator (*utf_to8)(u_bit_iterator, u_bit_iterator, octet_iterator))
+                             octet_iterator (*utfXto8)(uXbit_iterator, uXbit_iterator, octet_iterator))
 {
     // Avoiding a copy w/cast between std::string/sys::u8string causes a nasty crash on some platforms.
 
     // using utf::utf_to8() we can put the result in the desired location
     sys::u8string retval(4 * str.length(), cast('\0')); // one UTF-32 codepoint could be four UTF-8 characters
     auto pBegin = reinterpret_cast<uint8_t*>(&(retval[0]));
-    utf_to8(str.begin(), str.end(), pBegin);
+    utfXto8(str.begin(), str.end(), pBegin);
 
     const auto pRetval = reinterpret_cast<const char*>(retval.c_str());
     retval.resize(strlen(pRetval)); // get rid of any extra '\0's 
