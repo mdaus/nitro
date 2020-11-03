@@ -200,29 +200,36 @@ void str::toUtf8(const std::u16string& str, std::string& result)
     string utf8line;
     utf8::utf16to8(utf16line.begin(), utf16line.end(), back_inserter(utf8line));
     */
-    utf8::utf16to8(str.begin(), str.end(), back_inserter(result));
+    utf8::utf16to8(str.begin(), str.end(), std::back_inserter(result));
 }
 void str::toUtf8(const std::u32string& str, std::string& result)
 {
-    utf8::utf32to8(str.begin(), str.end(), back_inserter(result));
+    utf8::utf32to8(str.begin(), str.end(), std::back_inserter(result));
 }
 
-template<typename T>
-static sys::u8string toUtf8(const T& str)
+template <typename T,
+          typename u_bit_iterator = typename T::const_iterator, typename octet_iterator = uint8_t*>
+static inline sys::u8string toUtf8(const T& str,
+                             octet_iterator (*utf_to8)(u_bit_iterator, u_bit_iterator, octet_iterator))
 {
-    // trying to avoid a copy by casting between std::string/sys::u8string
-    // causes a nasty crash on some platforms
-    std::string utf8;
-    str::toUtf8(str, utf8);
-    return reinterpret_cast<const sys::u8string::value_type*>(utf8.c_str()); // copy here
+    // Avoiding a copy w/cast between std::string/sys::u8string causes a nasty crash on some platforms.
+
+    // using utf::utf_to8() we can put the result in the desired location
+    sys::u8string retval(4 * str.length(), cast('\0')); // one UTF-32 codepoint could be four UTF-8 characters
+    auto pBegin = reinterpret_cast<uint8_t*>(&(retval[0]));
+    utf_to8(str.begin(), str.end(), pBegin);
+
+    const auto pRetval = reinterpret_cast<const char*>(retval.c_str());
+    retval.resize(strlen(pRetval)); // get rid of any extra '\0's 
+    return retval;
 }
 sys::u8string str::toUtf8(const std::u16string& str)
 {
-    return ::toUtf8(str);
+    return ::toUtf8(str, utf8::utf16to8);
 }
 sys::u8string str::toUtf8(const std::u32string& str)
 {
-    return ::toUtf8(str);
+    return ::toUtf8(str, utf8::utf32to8);
 }
 
 void str::toUtf8(const std::u16string& str, sys::u8string& result)
