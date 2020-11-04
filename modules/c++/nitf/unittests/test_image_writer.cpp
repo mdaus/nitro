@@ -63,9 +63,9 @@ static fs::path buildFileDir(const fs::path& relativePath)
 		return cwd.parent_path().parent_path() / relativePath;
 	}
 
+    auto root_dir = argv0.parent_path().parent_path().parent_path().parent_path();
     if (is_linux())
     {
-        auto root_dir = argv0.parent_path().parent_path().parent_path().parent_path();
         if (root_dir.stem() == "build") // in ./build directory
         {
             root_dir = root_dir.parent_path();
@@ -73,7 +73,12 @@ static fs::path buildFileDir(const fs::path& relativePath)
         return root_dir / relativePath;
     }
 
-	return "";
+    // must be Windows w/o VS
+    if (root_dir.stem() == "build") // in ./build directory
+    {
+        root_dir = root_dir.parent_path();
+    }
+    return root_dir / relativePath;
 }
 
 static void doChangeFileHeader(const std::string& inputPathname, const std::string& outputPathname)
