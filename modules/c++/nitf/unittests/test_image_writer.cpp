@@ -74,6 +74,7 @@ static fs::path buildFileDir(const fs::path& relativePath)
     }
 
     // must be Windows w/o VS
+    root_dir = root_dir.parent_path();
     if (root_dir.stem() == "build") // in ./build directory
     {
         root_dir = root_dir.parent_path();
