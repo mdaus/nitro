@@ -1,11 +1,12 @@
 #include "pch.h"
 
 #include <string>
-#include <filesystem>
+
+#include <sys/Filesystem.h>
 
 #include "nitf_Test.h"
 
-namespace fs = std::filesystem;
+namespace fs = sys::Filesystem;
 
 static bool is_x64_Configuration(const fs::path& path) // "Configuration" is typically "Debug" or "Release"
 {

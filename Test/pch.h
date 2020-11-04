@@ -26,7 +26,6 @@
 
 #include <string>
 #include <ios>
-#include <filesystem>
 
 #include <windows.h>
 #undef min
@@ -35,6 +34,7 @@
 #  include <io.h>
 # include <sys/types.h>
 # include <sys/stat.h>
+#include <sys/Filesystem.h>
 
 extern int close(int fd);
 extern int read(int fd, void* buf, unsigned int count);
