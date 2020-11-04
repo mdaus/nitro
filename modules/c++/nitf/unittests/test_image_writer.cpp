@@ -65,7 +65,11 @@ static fs::path buildFileDir(const fs::path& relativePath)
 
     if (is_linux())
     {
-        const auto root_dir = argv0.parent_path().parent_path().parent_path().parent_path();
+        auto root_dir = argv0.parent_path().parent_path().parent_path().parent_path();
+        if (root_dir.stem() == "build") // in ./build directory
+        {
+            root_dir = root_dir.parent_path();
+        }
         return root_dir / relativePath;
     }
 
@@ -122,6 +126,7 @@ TEST_CASE(changeFileHeader)
 {
 	const auto inputPathname = buildFileDir(fs::path("modules") / "c++" / "nitf" / "tests" / "test_blank.ntf").string();
     TEST_ASSERT_NOT_EQ(inputPathname, "");
+    std::clog << inputPathname;
     TEST_ASSERT_TRUE(fs::is_regular_file(inputPathname));
 	const auto outputPathname = buildFileDir(fs::path("outputPathname.ntf")).string();
 
