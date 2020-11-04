@@ -121,6 +121,7 @@ TEST_CASE(constructValidImageWriter)
 TEST_CASE(changeFileHeader)
 {
 	const auto inputPathname = buildFileDir(fs::path("modules") / "c++" / "nitf" / "tests" / "test_blank.ntf").string();
+    TEST_ASSERT_NOT_EQ(inputPathname, "");
     TEST_ASSERT_TRUE(fs::is_regular_file(inputPathname));
 	const auto outputPathname = buildFileDir(fs::path("outputPathname.ntf")).string();
 
