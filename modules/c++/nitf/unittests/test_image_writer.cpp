@@ -27,12 +27,60 @@
 #include <memory>
 #include <stdexcept>
 
+#include <sys/Filesystem.h>
+
 #include <import/nitf.hpp>
 #include <nitf/ImageSubheader.hpp>
 #include <nitf/ImageWriter.hpp>
 #include <nitf/Record.hpp>
 
 #include "TestCase.h"
+
+namespace fs = sys::Filesystem;
+
+static fs::path argv0;
+static const fs::path file = __FILE__;
+
+static bool is_linux()
+{
+	const auto cpp = file.filename().stem(); // i.e., "test_valid_six"
+	const auto exe = argv0.filename(); // e.g., "test_valid_six.exe"
+	return cpp == exe; // no ".exe", must be Linux
+}
+
+static bool is_vs_gtest()
+{
+	return argv0.empty(); // no argv[0] in VS w/GTest
+}
+
+static fs::path buildFileDir(const fs::path& relativePath)
+{
+	if (is_vs_gtest())
+	{
+		static const auto cwd = fs::current_path();
+
+		// Running GTest unit-tests in Visual Studio on Windows
+		return cwd.parent_path().parent_path() / relativePath;
+	}
+
+    auto root_dir = argv0.parent_path().parent_path().parent_path().parent_path();
+    if (is_linux())
+    {
+        if (root_dir.stem() == "build") // in ./build directory
+        {
+            root_dir = root_dir.parent_path();
+        }
+        return root_dir / relativePath;
+    }
+
+    // must be Windows w/o VS
+    root_dir = root_dir.parent_path();
+    if (root_dir.stem() == "build") // in ./build directory
+    {
+        root_dir = root_dir.parent_path();
+    }
+    return root_dir / relativePath;
+}
 
 static void doChangeFileHeader(const std::string& inputPathname, const std::string& outputPathname)
 {
@@ -82,20 +130,11 @@ TEST_CASE(constructValidImageWriter)
 
 TEST_CASE(changeFileHeader)
 {
-    std::string inputPathname;
-    std::string outputPathname;
-    if (sys::OS().getEnvIfSet("NITF_UNIT_TEST_inputPathname_", inputPathname))
-    {
-        // If one is set, they both must be set
-        TEST_ASSERT_TRUE(sys::OS().getEnvIfSet("NITF_UNIT_TEST_outputPathname_", outputPathname));
-    }
-    else
-    {
-        // need env. vars. set
-        std::clog << "NITF_UNIT_TEST_inputPathname_ not set, assuming success.\n";
-        TEST_ASSERT_TRUE(true);
-        return;
-    }
+	const auto inputPathname = buildFileDir(fs::path("modules") / "c++" / "nitf" / "tests" / "test_blank.ntf").string();
+    TEST_ASSERT_NOT_EQ(inputPathname, "");
+    std::clog << inputPathname;
+    TEST_ASSERT_TRUE(fs::is_regular_file(inputPathname));
+	const auto outputPathname = buildFileDir(fs::path("outputPathname.ntf")).string();
 
     doChangeFileHeader(inputPathname, outputPathname);
 
@@ -113,6 +152,8 @@ TEST_CASE(changeFileHeader)
 }
 
 TEST_MAIN(
+	argv0 = sys::Path::absolutePath(argv[0]);
+
     TEST_CHECK(imageWriterThrowsOnFailedConstruction);
     TEST_CHECK(constructValidImageWriter);
     TEST_CHECK(changeFileHeader);
