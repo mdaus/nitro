@@ -75,10 +75,15 @@ static fs::path buildFileDir(const fs::path& relativePath)
 
     // must be Windows w/o VS
     root_dir = root_dir.parent_path();
-    if (root_dir.stem() == "build") // in ./build directory
+    if (root_dir.stem() == "build") // in ./build directory, CMake
     {
         root_dir = root_dir.parent_path();
     }
+    else if (root_dir.stem() == "target") // WAF
+    {
+        root_dir = root_dir.parent_path();
+    }
+
     return root_dir / relativePath;
 }
 
@@ -132,7 +137,7 @@ TEST_CASE(changeFileHeader)
 {
 	const auto inputPathname = buildFileDir(fs::path("modules") / "c++" / "nitf" / "tests" / "test_blank.ntf").string();
     TEST_ASSERT_NOT_EQ(inputPathname, "");
-    std::clog << inputPathname;
+    //std::clog << "'" << inputPathname << "'\n";
     TEST_ASSERT_TRUE(fs::is_regular_file(inputPathname));
 	const auto outputPathname = buildFileDir(fs::path("outputPathname.ntf")).string();
 
