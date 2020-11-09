@@ -66,9 +66,13 @@ static fs::path buildFileDir(const fs::path& relativePath)
     auto root_dir = argv0.parent_path().parent_path().parent_path().parent_path();
     if (is_linux())
     {
-        if (root_dir.stem() == "build") // in ./build directory
+        if (root_dir.stem() == "build") // CMake, in ./build directory
         {
             root_dir = root_dir.parent_path();
+        }
+        else if (root_dir.stem() == "modules") // WAF
+        {
+	  root_dir = root_dir.parent_path().parent_path();
         }
         return root_dir / relativePath;
     }
