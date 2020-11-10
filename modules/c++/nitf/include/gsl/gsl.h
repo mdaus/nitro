@@ -19,19 +19,19 @@
 #pragma once
 
 // Need a fairly decent C++ compiler to use the real GSL
-#if defined(_WIN32) && (_MSC_VER > 1925 /*VS 2019 16.5.1*/ ) && (__cplusplus >= 201402L /*C++14*/)
-#define NITRO_USE_GSL 1
-#else
-#define NITRO_USE_GSL 0
+#if (__cplusplus >= 201402L /*C++14*/)
+#define NITRO_USE_gsl_ 1
 #endif
 
-#if !NITRO_USE_GSL
+#if !NITRO_USE_gsl_
 
 #include "gsl_.h"
 
 #else
+#ifdef _MSC_VER
 #pragma warning(push)
 #pragma warning(disable: 4464) // relative include path contains '..'
+#endif
 
 #include "../../GSL-3.1.0/include/gsl/gsl_algorithm"	// copy
 #include  "../../GSL-3.1.0/include/gsl/gsl_assert"		// Ensures/Expects
@@ -42,5 +42,7 @@
 #include  "../../GSL-3.1.0/include/gsl/span"				// span
 #include  "../../GSL-3.1.0/include/gsl/string_span"		// zstring, string_span, zstring_builder...
 
+#ifdef _MSC_VER
 #pragma warning(pop)
+#endif
 #endif
