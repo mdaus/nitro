@@ -102,7 +102,7 @@ void nitf::ListIterator::increment()
     setMembers();
 }
 
-void nitf::ListIterator::operator++(int x) { increment(); }
+void nitf::ListIterator::operator++(int) { increment(); }
 
 nitf::ListIterator & nitf::ListIterator::operator+=(int x)
 {

@@ -309,7 +309,7 @@ NRT_BOOL CustomIO::adapterClose(NRT_DATA* data,
     }
 }
 
-void CustomIO::adapterDestruct(NRT_DATA* data)
+void CustomIO::adapterDestruct(NRT_DATA*)
 {
 }
 }

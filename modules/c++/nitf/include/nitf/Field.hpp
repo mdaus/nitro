@@ -343,12 +343,12 @@ public:
     template <typename T>
     operator T() const
     {
-        T data;
-        get(&data,
+        T retval;
+        get(&retval,
             detail::GetConvType<std::numeric_limits<T>::is_integer,
                                 std::numeric_limits<T>::is_signed>::CONV_TYPE,
             sizeof(T));
-        return data;
+        return retval;
     }
 
     //! Returns the field as a string
