@@ -453,43 +453,52 @@ NRTAPI(char) nrt_Utils_cornersTypeAsCoordRep(nrt_CornersType type)
     return cornerRep;
 }
 
-NRTPROT(void) nrt_Utils_geographicLatToCharArray(int degrees, int minutes,
-                                                 double seconds, char *buffer7)
+static void adjust_dms(int* pDegrees, int* pMinutes, double* pSeconds, char* pDir,
+    char init_dir, char adjust_dir)
 {
-    char dir = 'N';
-    if (degrees <= 0)
+    *pDir = init_dir;
+    if (*pDegrees <= 0)
     {
-        if (degrees < 0)
+        if (*pDegrees < 0)
         {
-            dir = 'S';
-            degrees *= -1;
+            *pDir = adjust_dir;
+            *pDegrees *= -1;
         }
-        else if (minutes < 0)
+        else if (*pMinutes < 0)
         {
-            dir = 'S';
-            minutes *= -1;
+            *pDir = adjust_dir;
+            *pMinutes *= -1;
         }
-        else if (minutes == 0 && seconds < 0)
+        else if (*pMinutes == 0 && *pSeconds < 0)
         {
-            dir = 'S';
-            seconds *= -1;
+            *pDir = adjust_dir;
+            *pSeconds *= -1;
         }
     }
 
     /* Round seconds. */
-    seconds += 0.5;
+    *pSeconds += 0.5;
 
     /* Ensure seconds and minutes are still within valid range. */
-    if (seconds >= 60.0)
+    if (*pSeconds >= 60.0)
     {
-        seconds -= 60.0;
+        *pSeconds -= 60.0;
 
-        if (++minutes >= 60)
+        if (++(*pMinutes) >= 60)
         {
-            minutes -= 60;
-            ++degrees;
+            *pMinutes -= 60;
+            ++(*pDegrees);
         }
     }
+}
+
+NRTPROT(void) nrt_Utils_geographicLatToCharArray(int degrees, int minutes,
+                                                 double seconds, char *buffer7)
+{
+    const char init_dir = 'N';
+    const char adjust_dir = 'S';
+    char dir = init_dir;
+    adjust_dms(&degrees, &minutes, &seconds, &dir, init_dir, adjust_dir);
 
     char degrees_buffer[11]; // "2147483647"
     NRT_SNPRINTF(degrees_buffer, 11, "%02d", degrees);
@@ -507,40 +516,10 @@ NRTPROT(void) nrt_Utils_geographicLatToCharArray(int degrees, int minutes,
 NRTPROT(void) nrt_Utils_geographicLonToCharArray(int degrees, int minutes,
                                                  double seconds, char *buffer8)
 {
-    char dir = 'E';
-    if (degrees <= 0)
-    {
-        if (degrees < 0)
-        {
-            dir = 'W';
-            degrees *= -1;
-        }
-        else if (minutes < 0)
-        {
-            minutes *= -1;
-            dir = 'W';
-        }
-        else if (minutes == 0 && seconds < 0)
-        {
-            seconds *= -1;
-            dir = 'W';
-        }
-    }
-
-    /* Round seconds. */
-    seconds += 0.5;
-
-    /* Ensure seconds and minutes are still within valid range. */
-    if (seconds >= 60.0)
-    {
-        seconds -= 60.0;
-
-        if (++minutes >= 60)
-        {
-            minutes -= 60;
-            ++degrees;
-        }
-    }
+    const char init_dir = 'E';
+    const char adjust_dir = 'W';
+    char dir = init_dir;
+    adjust_dms(&degrees, &minutes, &seconds, &dir, init_dir, adjust_dir);
 
     char degrees_buffer[11]; // "2147483647"
     NRT_SNPRINTF(degrees_buffer, 11, "%03d", degrees);
