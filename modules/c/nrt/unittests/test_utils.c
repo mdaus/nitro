@@ -190,7 +190,7 @@ TEST_CASE(testDmsToCharArrayNegativeDegrees)
     nrt_Utils_geographicLatToCharArray(-90, 0, 0, latCharArray);
     TEST_ASSERT_EQ_STR(latCharArray, "900000S");
     nrt_Utils_geographicLatToCharArray(-91, 0, 0, latCharArray);
-    TEST_ASSERT_EQ_STR(latCharArray, "010000N");
+    TEST_ASSERT_EQ_STR(latCharArray, "890000S");
 
     nrt_Utils_geographicLonToCharArray(-179, 0, 0, lonCharArray);
     TEST_ASSERT_EQ_STR(lonCharArray, "1790000W");
@@ -198,12 +198,22 @@ TEST_CASE(testDmsToCharArrayNegativeDegrees)
     nrt_Utils_geographicLonToCharArray(-180, 0, 0, lonCharArray);
     TEST_ASSERT_EQ_STR(lonCharArray, "1800000W");
     nrt_Utils_geographicLatToCharArray(-180, 0, 0, latCharArray);
-    TEST_ASSERT_EQ_STR(latCharArray, "900000N");
+    TEST_ASSERT_EQ_STR(latCharArray, "000000N");
 
     nrt_Utils_geographicLonToCharArray(-181, 0, 0, lonCharArray);
     TEST_ASSERT_EQ_STR(lonCharArray, "0010000E");
     nrt_Utils_geographicLatToCharArray(-181, 0, 0, latCharArray);
-    TEST_ASSERT_EQ_STR(latCharArray, "010000S");
+    TEST_ASSERT_EQ_STR(latCharArray, "010000N");
+
+    nrt_Utils_geographicLonToCharArray(-359, 0, 0, lonCharArray);
+    TEST_ASSERT_EQ_STR(lonCharArray, "1790000E");
+    nrt_Utils_geographicLatToCharArray(-359, 0, 0, latCharArray);
+    TEST_ASSERT_EQ_STR(latCharArray, "010000N");
+
+    nrt_Utils_geographicLonToCharArray(-360, 0, 0, lonCharArray);
+    TEST_ASSERT_EQ_STR(lonCharArray, "0000000E");
+    nrt_Utils_geographicLatToCharArray(-360, 0, 0, latCharArray);
+    TEST_ASSERT_EQ_STR(latCharArray, "000000N");
 
     nrt_Utils_geographicLonToCharArray(-361, 0, 0, lonCharArray);
     TEST_ASSERT_EQ_STR(lonCharArray, "0010000W");
@@ -216,6 +226,11 @@ TEST_CASE(testDmsToCharArrayPositiveDegrees)
     char lonCharArray[9];
     char latCharArray[8];
 
+    nrt_Utils_geographicLonToCharArray(0, 0, 0, lonCharArray);
+    TEST_ASSERT_EQ_STR(lonCharArray, "0000000E");
+    nrt_Utils_geographicLatToCharArray(0, 0, 0, latCharArray);
+    TEST_ASSERT_EQ_STR(latCharArray, "000000N");
+
     nrt_Utils_geographicLonToCharArray(1, 0, 0, lonCharArray);
     TEST_ASSERT_EQ_STR(lonCharArray, "0010000E");
     nrt_Utils_geographicLatToCharArray(1, 0, 0, latCharArray);
@@ -226,7 +241,7 @@ TEST_CASE(testDmsToCharArrayPositiveDegrees)
     nrt_Utils_geographicLatToCharArray(90, 0, 0, latCharArray);
     TEST_ASSERT_EQ_STR(latCharArray, "900000N");
     nrt_Utils_geographicLatToCharArray(91, 0, 0, latCharArray);
-    TEST_ASSERT_EQ_STR(latCharArray, "010000S");
+    TEST_ASSERT_EQ_STR(latCharArray, "890000N"); // over the north pole and back toward the equator
 
     nrt_Utils_geographicLonToCharArray(179, 0, 0, lonCharArray);
     TEST_ASSERT_EQ_STR(lonCharArray, "1790000E");
@@ -234,12 +249,22 @@ TEST_CASE(testDmsToCharArrayPositiveDegrees)
     nrt_Utils_geographicLonToCharArray(180, 0, 0, lonCharArray);
     TEST_ASSERT_EQ_STR(lonCharArray, "1800000E");
     nrt_Utils_geographicLatToCharArray(180, 0, 0, latCharArray);
-    TEST_ASSERT_EQ_STR(latCharArray, "900000S");
+    TEST_ASSERT_EQ_STR(latCharArray, "000000N"); // back at equator
 
     nrt_Utils_geographicLonToCharArray(181, 0, 0, lonCharArray);
     TEST_ASSERT_EQ_STR(lonCharArray, "0010000W");
     nrt_Utils_geographicLatToCharArray(181, 0, 0, latCharArray);
-    TEST_ASSERT_EQ_STR(latCharArray, "010000N");
+    TEST_ASSERT_EQ_STR(latCharArray, "010000S");
+
+    nrt_Utils_geographicLonToCharArray(359, 0, 0, lonCharArray);
+    TEST_ASSERT_EQ_STR(lonCharArray, "1790000W");
+    nrt_Utils_geographicLatToCharArray(359, 0, 0, latCharArray);
+    TEST_ASSERT_EQ_STR(latCharArray, "010000S");
+
+    nrt_Utils_geographicLonToCharArray(360, 0, 0, lonCharArray);
+    TEST_ASSERT_EQ_STR(lonCharArray, "0000000E");
+    nrt_Utils_geographicLatToCharArray(360, 0, 0, latCharArray);
+    TEST_ASSERT_EQ_STR(latCharArray, "000000N");
 
     nrt_Utils_geographicLonToCharArray(361, 0, 0, lonCharArray);
     TEST_ASSERT_EQ_STR(lonCharArray, "0010000E");
