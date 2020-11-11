@@ -454,8 +454,7 @@ NRTAPI(char) nrt_Utils_cornersTypeAsCoordRep(nrt_CornersType type)
     return cornerRep;
 }
 
-static void normalize_dms_values(int* pDegrees, int* pMinutes, double* pSeconds,
-    int max_degrees)
+static void normalize_dms_values(int* pDegrees, int* pMinutes, double* pSeconds)
 {
     /* Ensure seconds and minutes are still within valid range. */
     while (*pSeconds >= 60.0)
@@ -488,22 +487,12 @@ static void normalize_dms_values(int* pDegrees, int* pMinutes, double* pSeconds,
     {
         *pDegrees += 360;
     }
-    while ((*pDegrees > max_degrees) || (*pDegrees < -max_degrees))
-    {
-        if (*pDegrees > max_degrees)
-        {
-            *pDegrees = (*pDegrees - max_degrees) * -1; // 181 == -1
-        }
-        if (*pDegrees < -max_degrees)
-        {
-            *pDegrees = (*pDegrees + max_degrees) * -1; // -180 == 1
-        }
-    }
 }
-static void normalize_dms(int* pDegrees, int* pMinutes, double* pSeconds,
-    int max_degrees)
+static void normalize_dms(int* pDegrees, int* pMinutes, double* pSeconds)
 {
-    normalize_dms_values(pDegrees, pMinutes, pSeconds, max_degrees);
+    *pSeconds = round(*pSeconds);
+
+    normalize_dms_values(pDegrees, pMinutes, pSeconds);
 
     const double minutes_to_seconds = 60.0;
     const double degrees_to_seconds = 60.0 * minutes_to_seconds;
@@ -519,13 +508,9 @@ static void normalize_dms(int* pDegrees, int* pMinutes, double* pSeconds,
 }
 
 static void adjust_dms(int* pDegrees, int* pMinutes, double* pSeconds, char* pDir,
-    char positive_dir, char negative_dir, int max_degrees)
+    char positive_dir, char negative_dir)
 {
     *pDir = positive_dir;
-    *pSeconds = round(*pSeconds);
-
-    normalize_dms(pDegrees, pMinutes, pSeconds, max_degrees);
-
     if (*pDegrees < 0)
     {
         *pDir = negative_dir;
@@ -546,10 +531,24 @@ static void adjust_dms(int* pDegrees, int* pMinutes, double* pSeconds, char* pDi
 NRTPROT(void) nrt_Utils_geographicLatToCharArray(int degrees, int minutes,
                                                  double seconds, char *buffer7)
 {
-    const char init_dir = 'N';
-    const char adjust_dir = 'S';
-    char dir = init_dir;
-    adjust_dms(&degrees, &minutes, &seconds, &dir, init_dir, adjust_dir, 90 /*max_degrees*/);
+    normalize_dms(&degrees, &minutes, &seconds);
+    static const int max_degrees = 90;
+    while ((degrees > max_degrees) || (degrees < -max_degrees))
+    {
+        if (degrees > max_degrees)
+        {
+            degrees = max_degrees - (degrees - max_degrees); // 91 = 89
+        }
+        if (degrees < -max_degrees)
+        {
+            degrees = -max_degrees - (degrees - -max_degrees); // -91 = -89
+        }
+    }
+
+    const char positive_dir = 'N';
+    const char negative_dir = 'S';
+    char dir = positive_dir;
+    adjust_dms(&degrees, &minutes, &seconds, &dir, positive_dir, negative_dir);
 
     char degrees_buffer[11]; // "2147483647"
     NRT_SNPRINTF(degrees_buffer, 11, "%02d", degrees);
@@ -568,10 +567,25 @@ NRTPROT(void) nrt_Utils_geographicLatToCharArray(int degrees, int minutes,
 NRTPROT(void) nrt_Utils_geographicLonToCharArray(int degrees, int minutes,
                                                  double seconds, char *buffer8)
 {
-    const char init_dir = 'E';
-    const char adjust_dir = 'W';
-    char dir = init_dir;
-    adjust_dms(&degrees, &minutes, &seconds, &dir, init_dir, adjust_dir, 180 /*max_degrees*/);
+    normalize_dms(&degrees, &minutes, &seconds);
+    static const int max_degrees = 180;
+    while ((degrees > max_degrees) || (degrees < -max_degrees))
+    {
+        if (degrees > max_degrees)
+        {
+            degrees = (degrees - max_degrees) * -1; // 181 == -1
+        }
+        if (degrees < -max_degrees)
+        {
+            degrees = (degrees + max_degrees) * -1; // -180 == 1
+        }
+    }
+
+    const char positive_dir = 'E';
+    const char negative_dir = 'W';
+    char dir = positive_dir;
+    adjust_dms(&degrees, &minutes, &seconds, &dir, positive_dir, negative_dir);
+
 
     char degrees_buffer[11]; // "2147483647"
     NRT_SNPRINTF(degrees_buffer, 11, "%03d", degrees);
