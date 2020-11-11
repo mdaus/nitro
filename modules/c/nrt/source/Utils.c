@@ -21,6 +21,7 @@
  */
 
 #include <assert.h>
+#include <math.h>
 
  #include "nrt/Version.h"
 #include "nrt/Utils.h"
@@ -453,10 +454,57 @@ NRTAPI(char) nrt_Utils_cornersTypeAsCoordRep(nrt_CornersType type)
     return cornerRep;
 }
 
+static void normalize_dms(int* pDegrees, int* pMinutes, double* pSeconds)
+{
+    ///* Ensure seconds and minutes are still within valid range. */
+    //while ((*pSeconds >= 60.0) || (*pSeconds <= -60.0))
+    //{
+    //    if (*pSeconds >= 60.0)
+    //    {
+    //        *pSeconds -= 60.0;
+    //        (*pMinutes)++;
+    //    }
+    //    else
+    //    {
+    //        *pSeconds += 60.0;
+    //        (*pMinutes)--;
+    //    }
+    //}
+    //while ((*pMinutes >= 60) || (*pMinutes <= -60))
+    //{
+    //    if (*pMinutes >= 60)
+    //    {
+    //        *pMinutes -= 60;
+    //        (*pDegrees)++;
+    //    }
+    //    else
+    //    {
+    //        *pMinutes += 60;
+    //        (*pDegrees)--;
+    //    }
+    //}
+
+    //while ((*pDegrees > 360) || (*pDegrees < -360))
+    //{
+    //    if (*pDegrees > 360)
+    //    {
+    //        *pDegrees -= 360;
+    //    }
+    //    else
+    //    {
+    //        *pDegrees += 360;
+    //    }
+    //}
+}
+
 static void adjust_dms(int* pDegrees, int* pMinutes, double* pSeconds, char* pDir,
     char init_dir, char adjust_dir)
 {
     *pDir = init_dir;
+    *pSeconds = round(*pSeconds);
+
+    normalize_dms(pDegrees, pMinutes, pSeconds);
+
     if (*pDegrees <= 0)
     {
         if (*pDegrees < 0)
@@ -475,9 +523,6 @@ static void adjust_dms(int* pDegrees, int* pMinutes, double* pSeconds, char* pDi
             *pSeconds *= -1;
         }
     }
-
-    /* Round seconds. */
-    *pSeconds += 0.5;
 
     /* Ensure seconds and minutes are still within valid range. */
     if (*pSeconds >= 60.0)
@@ -540,11 +585,23 @@ NRTPROT(void) nrt_Utils_geographicLonToCharArray(int degrees, int minutes,
     NRT_SNPRINTF(minutes_buffer, 11, "%02d", minutes);
     char seconds_buffer[11];
     NRT_SNPRINTF(seconds_buffer, 11, "%02d", (int)seconds);
-    NRT_SNPRINTF(buffer8, 9, "%c%c%c%c%c%c%c%c",
-        degrees_buffer[0], degrees_buffer[1], degrees_buffer[2],
-        minutes_buffer[0], minutes_buffer[1],
-        seconds_buffer[0], seconds_buffer[1],
-        dir);
+
+    // preserve existing (incorrect?) behavior
+    if (strlen(seconds_buffer) == 3)
+    {
+        NRT_SNPRINTF(buffer8, 9, "%c%c%c%c%c%c%c%c",
+            degrees_buffer[0], degrees_buffer[1], degrees_buffer[2],
+            minutes_buffer[0], minutes_buffer[1],
+            seconds_buffer[0], seconds_buffer[1], seconds_buffer[2]);
+    }
+    else
+    {
+        NRT_SNPRINTF(buffer8, 9, "%c%c%c%c%c%c%c%c",
+            degrees_buffer[0], degrees_buffer[1], degrees_buffer[2],
+            minutes_buffer[0], minutes_buffer[1],
+            seconds_buffer[0], seconds_buffer[1],
+            dir);
+    }
 }
 
 NRTPROT(void) nrt_Utils_decimalLatToCharArray(double decimal, char *buffer7)
