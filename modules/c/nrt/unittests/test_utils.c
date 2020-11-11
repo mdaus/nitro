@@ -270,6 +270,12 @@ TEST_CASE(testDmsToCharArrayNegativeSeconds)
     nrt_Utils_geographicLatToCharArray(0, 0, -13, latCharArray);
     TEST_ASSERT_EQ_STR(latCharArray, "000013S");
 
+    nrt_Utils_geographicLonToCharArray(0, 1, -73, lonCharArray);
+    TEST_ASSERT_EQ_STR(lonCharArray, "00001-72");
+
+    nrt_Utils_geographicLatToCharArray(0, 1, -73, latCharArray);
+    TEST_ASSERT_EQ_STR(latCharArray, "0001-72");
+
     nrt_Utils_geographicLonToCharArray(0, 0, -73, lonCharArray);
     TEST_ASSERT_EQ_STR(lonCharArray, "0000113W");
 
