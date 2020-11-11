@@ -506,11 +506,24 @@ NRTPROT(void) nrt_Utils_geographicLatToCharArray(int degrees, int minutes,
     NRT_SNPRINTF(minutes_buffer, 11, "%02d", minutes);
     char seconds_buffer[11];
     NRT_SNPRINTF(seconds_buffer, 11, "%02d", (int)seconds);
-    NRT_SNPRINTF(buffer7, 8, "%c%c%c%c%c%c%c",
-        degrees_buffer[0], degrees_buffer[1],
-        minutes_buffer[0], minutes_buffer[1],
-        seconds_buffer[0], seconds_buffer[1],
-        dir);
+
+    // preserve existing (incorrect?) behavior
+    if (strlen(degrees_buffer) == 2)
+    {
+        NRT_SNPRINTF(buffer7, 8, "%c%c%c%c%c%c%c",
+            degrees_buffer[0], degrees_buffer[1],
+            minutes_buffer[0], minutes_buffer[1],
+            seconds_buffer[0], seconds_buffer[1],
+            dir);
+    }
+    else
+    {
+        assert(strlen(degrees_buffer) == 3);
+        NRT_SNPRINTF(buffer7, 8, "%c%c%c%c%c%c%c",
+            degrees_buffer[0], degrees_buffer[1], degrees_buffer[2],
+            minutes_buffer[0], minutes_buffer[1],
+            seconds_buffer[0], seconds_buffer[1]);
+    }
 }
 
 NRTPROT(void) nrt_Utils_geographicLonToCharArray(int degrees, int minutes,
