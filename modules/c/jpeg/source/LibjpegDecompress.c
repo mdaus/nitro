@@ -1262,15 +1262,15 @@ NITFPRIV(NITF_BOOL) findBlockSOI(JPEGImplControl* control,
 {
     nitf_ListIterator x = nitf_List_begin(control->markerList);
     nitf_ListIterator end = nitf_List_end(control->markerList);
-    int j = -1;
+    uint32_t j = blockNumber - 1;
 
     for (x = nitf_List_begin(control->markerList);
             nitf_ListIterator_notEqualTo(&x, &end);
             nitf_ListIterator_increment(&x))
     {
         JPEGMarkerItem* item = (JPEGMarkerItem*)nitf_ListIterator_get(&x);
-        if (strcmp(item->name, "SOI") == 0 &&
-            ((j = item->block) == blockNumber))
+        j = item->block;
+        if ((strcmp(item->name, "SOI") == 0) && (j == blockNumber))
         {
             *soi = (off_t)(item->off - 2);
             break;

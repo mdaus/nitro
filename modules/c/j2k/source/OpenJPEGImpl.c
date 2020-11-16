@@ -530,7 +530,7 @@ J2KPRIV( NRT_BOOL) OpenJPEG_initImage(OpenJPEGWriterImpl *impl,
         const OPJ_UINT32 minX = (OPJ_UINT32)floor(log(tileWidth) / logTwo);
         const OPJ_UINT32 minY = (OPJ_UINT32)floor(log(tileHeight) / logTwo);
         const OPJ_UINT32 minXY = (minX < minY) ? minX : minY;
-        if (minXY < encoderParams.numresolution)
+        if (minXY < (OPJ_UINT32)encoderParams.numresolution)
         {
             encoderParams.numresolution = minXY;
         }

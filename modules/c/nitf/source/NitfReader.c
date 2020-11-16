@@ -803,7 +803,6 @@ readDESubheader(nitf_Reader* reader,
     nitf_FileHeader* hdr;
     /* Length of the sub-header */
     uint32_t subLen;
-    nitf_Off currentOffset;
     /* Position where this DE Subheader begins */
     nitf_Off subheaderStart;
     /* End position of DE Subheader */
@@ -884,7 +883,7 @@ readDESubheader(nitf_Reader* reader,
     if ((strcmp(desID, "TRE_OVERFLOW") == 0) ||
         (strcmp(desID, "Controlled Extensions") == 0))
     {
-        currentOffset = segment->offset;
+        uint64_t currentOffset = segment->offset;
 
         /* loop until we are done */
         while (currentOffset < segment->end)

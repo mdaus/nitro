@@ -27,7 +27,7 @@ NITFAPI(int) nitf_TREUtils_parse(nitf_TRE* tre, char* bufptr, nitf_Error* error)
 {
     int status = 1;
     int iterStatus = NITF_SUCCESS;
-    int offset = 0;
+    uint32_t offset = 0;
     int length;
     nitf_TRECursor cursor;
     nitf_Field* field = NULL;
@@ -160,7 +160,7 @@ nitf_TREUtils_getRawData(nitf_TRE* tre,
                          nitf_Error* error)
 {
     int status = 1;
-    int offset = 0;
+    uint32_t offset = 0;
     uint32_t length;
     int tempLength;
 
