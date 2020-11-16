@@ -479,7 +479,7 @@ NITFPRIV(NITF_BOOL) writeExtras(nitf_Writer * writer,
                                 nitf_Error * error)
 {
     nitf_ExtensionsIterator iter, end;
-    size_t totalLength = 0;
+    uint32_t totalLength = 0;
     nitf_Version version;
     nitf_TRE *tre = NULL;
 
@@ -1104,7 +1104,7 @@ NITFPROT(NITF_BOOL) nitf_Writer_writeHeader(nitf_Writer* writer,
                           buf, NITF_XHDLOFL_SZ, error);
 
     /*   Get the header length */
-    *hdrLen = nitf_IOInterface_tell(writer->output, error);
+    *hdrLen = (uint32_t)nitf_IOInterface_tell(writer->output, error);
     if (!NITF_IO_SUCCESS(*hdrLen))
         goto CATCH_ERROR;
 

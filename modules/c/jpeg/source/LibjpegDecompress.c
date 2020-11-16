@@ -848,7 +848,7 @@ NITFPRIV(NITF_BOOL) scanOffsets(nitf_IOInterface* io,
             }
             else
             {
-                off_t where = nitf_IOInterface_tell(io, error);
+                off_t where = (off_t)nitf_IOInterface_tell(io, error);
 
                 uint64_t totalBytes = (fileLength - bytesRead) +
                     (where - origin);
@@ -1081,7 +1081,7 @@ NITFPRIV(NITF_BOOL) implStart(nitf_DecompressionControl* control,
     }
 
     implControl->ioInterface = io;
-    implControl->length = blockInfo->length;
+    implControl->length = (uint32_t)blockInfo->length;
     return NITF_SUCCESS;
 }
 
@@ -1144,7 +1144,7 @@ NITFPRIV(boolean) JPEGFillInputBuffer (j_decompress_ptr cinfo)
     ioOff = src->ioStart + src->bytesRead;
     if (ioOff + toRead > src->ioEnd)
     {
-        int32_t ioDiff = src->ioEnd - ioOff;
+        nitf_Off ioDiff = src->ioEnd - ioOff;
         if (ioDiff < 0)
             toRead = 0;
         else
@@ -1272,7 +1272,7 @@ NITFPRIV(NITF_BOOL) findBlockSOI(JPEGImplControl* control,
         if (strcmp(item->name, "SOI") == 0 &&
             ((j = item->block) == blockNumber))
         {
-            *soi = item->off - 2;
+            *soi = (off_t)(item->off - 2);
             break;
         }
         /*++j;

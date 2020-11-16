@@ -1114,7 +1114,7 @@ NITFAPI(int) nitf_ImageSubheader_insertImageComment
     nitf_Field* field = NULL;
     char numCommentBuf[NITF_NICOM_SZ + 1];
     char commentBuf[NITF_ICOM_SZ + 1];
-    int length;
+    size_t length;
 
     NITF_TRY_GET_UINT32(subhdr->numImageComments, &numComments, error);
     /* in case there is bad info in numImageComments */

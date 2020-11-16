@@ -1954,7 +1954,7 @@ nitf_Reader_newTextReader(nitf_Reader* reader,
 
     /* set the fields */
     textReader->input = reader->input;
-    textReader->dataLength = text->end - text->offset;
+    textReader->dataLength = (uint32_t)(text->end - text->offset);
     textReader->baseOffset = text->offset;
     textReader->virtualOffset = 0;
 
@@ -1996,7 +1996,7 @@ nitf_Reader_newGraphicReader(nitf_Reader* reader, int index, nitf_Error* error)
 
     /* set the fields */
     segmentReader->input = reader->input;
-    segmentReader->dataLength = segment->end - segment->offset;
+    segmentReader->dataLength = (uint32_t)(segment->end - segment->offset);
     segmentReader->baseOffset = segment->offset;
     segmentReader->virtualOffset = 0;
 
@@ -2038,7 +2038,7 @@ nitf_Reader_newDEReader(nitf_Reader* reader, int index, nitf_Error* error)
 
     /* set the fields */
     segmentReader->input = reader->input;
-    segmentReader->dataLength = segment->end - segment->offset;
+    segmentReader->dataLength = (uint32_t)(segment->end - segment->offset);
     segmentReader->baseOffset = segment->offset;
     segmentReader->virtualOffset = 0;
 
