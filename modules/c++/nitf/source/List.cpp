@@ -22,6 +22,8 @@
 
 #include "nitf/List.hpp"
 
+#include "gsl/gsl.h"
+
 ///////////////////////////////////////////////////////////////////////////////
 // ListNode
 
@@ -227,7 +229,7 @@ size_t nitf::List::getSize() const
 
 NITF_DATA* nitf::List::operator[] (size_t index)
 {
-    NITF_DATA* x = nitf_List_get(getNativeOrThrow(), index, &error);
+    NITF_DATA* x = nitf_List_get(getNativeOrThrow(), gsl::narrow<int>(index), &error);
     if (!x)
         throw nitf::NITFException(&error);
     return x;

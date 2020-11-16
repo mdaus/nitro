@@ -122,11 +122,11 @@ void Writer::setWriteHandlers(nitf::IOHandle& io, const nitf::Record& record)
 void Writer::setImageWriteHandlers(nitf::IOHandle& io, const nitf::Record& record)
 {
     nitf::List images = record.getImages();
-    const size_t numImages = record.getNumImages();
-    for (size_t ii = 0; ii < numImages; ++ii)
+    const auto numImages = record.getNumImages();
+    for (int ii = 0; ii < numImages; ++ii)
     {
         nitf::ImageSegment segment = images[ii];
-        const size_t offset = segment.getImageOffset();
+        const auto offset = segment.getImageOffset();
         std::shared_ptr<nitf::WriteHandler> handler(
                 new nitf::StreamIOWriteHandler(
                     io, offset, segment.getImageEnd() - offset));
@@ -137,11 +137,11 @@ void Writer::setImageWriteHandlers(nitf::IOHandle& io, const nitf::Record& recor
 void Writer::setGraphicWriteHandlers(nitf::IOHandle& io, const nitf::Record& record)
 {
     nitf::List graphics = record.getGraphics();
-    const size_t numGraphics = record.getNumGraphics();
-    for (size_t ii = 0; ii < numGraphics; ++ii)
+    const auto numGraphics = record.getNumGraphics();
+    for (int ii = 0; ii < numGraphics; ++ii)
     {
        nitf::GraphicSegment segment = graphics[ii];
-       const long offset = segment.getOffset();
+       const auto offset = segment.getOffset();
        std::shared_ptr< ::nitf::WriteHandler> handler(
            new nitf::StreamIOWriteHandler (
                io, offset, segment.getEnd() - offset));
@@ -152,11 +152,11 @@ void Writer::setGraphicWriteHandlers(nitf::IOHandle& io, const nitf::Record& rec
 void Writer::setTextWriteHandlers(nitf::IOHandle& io, const nitf::Record& record)
 {
     nitf::List texts = record.getTexts();
-    const size_t numTexts = record.getNumTexts();
-    for (size_t ii = 0; ii < numTexts; ++ii)
+    const auto numTexts = record.getNumTexts();
+    for (int ii = 0; ii < numTexts; ++ii)
     {
        nitf::TextSegment segment = texts[ii];
-       const size_t offset = segment.getOffset();
+       const auto offset = segment.getOffset();
        std::shared_ptr< ::nitf::WriteHandler> handler(
            new nitf::StreamIOWriteHandler (
                io, offset, segment.getEnd() - offset));
@@ -167,11 +167,11 @@ void Writer::setTextWriteHandlers(nitf::IOHandle& io, const nitf::Record& record
 void Writer::setDEWriteHandlers(nitf::IOHandle& io, const nitf::Record& record)
 {
     nitf::List dataExtensions = record.getDataExtensions();
-    const size_t numDEs = record.getNumDataExtensions();
-    for (size_t ii = 0; ii < numDEs; ++ii)
+    const auto numDEs = record.getNumDataExtensions();
+    for (int ii = 0; ii < numDEs; ++ii)
     {
        nitf::DESegment segment = dataExtensions[ii];
-       const size_t offset = segment.getOffset();
+       const auto offset = segment.getOffset();
        std::shared_ptr< ::nitf::WriteHandler> handler(
            new nitf::StreamIOWriteHandler (
                io, offset, segment.getEnd() - offset));

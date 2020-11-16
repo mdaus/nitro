@@ -31,6 +31,8 @@
 #include "nitf/RESegment.hpp"
 #include "nitf/LabelSegment.hpp"
 
+#include "gsl/gsl.h"
+
 namespace nitf
 {
 Record::Record(const Record & x)
@@ -189,7 +191,7 @@ nitf::ImageSegment Record::newImageSegment(int index)
     if (!x)
         throw nitf::NITFException(&error);
     if (index >= 0) //move it, if we need to
-        moveImageSegment(getImages().getSize() - 1, index);
+        moveImageSegment(gsl::narrow<uint32_t>(getImages().getSize() - 1), index);
     return nitf::ImageSegment(x);
 }
 
@@ -199,7 +201,7 @@ nitf::GraphicSegment Record::newGraphicSegment(int index)
     if (!x)
         throw nitf::NITFException(&error);
     if (index >= 0) //move it, if we need to
-        moveGraphicSegment(getGraphics().getSize() - 1, index);
+        moveGraphicSegment(gsl::narrow<uint32_t>(getGraphics().getSize() - 1), index);
     return nitf::GraphicSegment(x);
 }
 
@@ -209,7 +211,7 @@ nitf::TextSegment Record::newTextSegment(int index)
     if (!x)
         throw nitf::NITFException(&error);
     if (index >= 0) //move it, if we need to
-        moveTextSegment(getTexts().getSize() - 1, index);
+        moveTextSegment(gsl::narrow<uint32_t>(getTexts().getSize() - 1), index);
     return nitf::TextSegment(x);
 }
 
@@ -219,7 +221,7 @@ nitf::DESegment Record::newDataExtensionSegment(int index)
     if (!x)
         throw nitf::NITFException(&error);
     if (index >= 0) //move it, if we need to
-        moveDataExtensionSegment(getDataExtensions().getSize() - 1, index);
+        moveDataExtensionSegment(gsl::narrow<uint32_t>(getDataExtensions().getSize() - 1), index);
     return nitf::DESegment(x);
 }
 
