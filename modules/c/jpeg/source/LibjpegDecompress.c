@@ -484,6 +484,9 @@ NITFPRIV(int) implFreeBlock(nitf_DecompressionControl* control,
                             uint8_t* block,
                             nitf_Error* error)
 {
+    (void)control;
+    (void)error;
+
     if (block)
         NITF_FREE(block);
     return 1;
@@ -962,13 +965,12 @@ NITFPRIV(nitf_DecompressionControl*) implOpen(nitf_ImageSubheader* subheader,
                                               nrt_HashTable* options,
                                               nitf_Error* error)
 {
-    JPEGImplControl* implControl; /* This is our local storage  */
-
+    (void)subheader;
     (void)options;
     (void)error;
 
+    JPEGImplControl* implControl; /* This is our local storage  */
     implControl = (JPEGImplControl*)NITF_MALLOC(sizeof(JPEGImplControl));
-
     if (implControl == NULL)
     {
         nitf_Error_init(error,
@@ -1499,6 +1501,8 @@ NITFPRIV(void) implClose(nitf_DecompressionControl** control)
 
 NITFAPI(const char**) LibjpegDecompress_init(nitf_Error *error)
 {
+    (void)error;
+
     /*  Return the identifier structure  */
     return ident;
 }

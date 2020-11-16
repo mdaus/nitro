@@ -37,9 +37,13 @@ char *C(const char *p)
     return x;
 }
 
-NRT_BOOL deleteData(nrt_TreeNode * source, NRT_DATA * userData, int depth,
+static NRT_BOOL deleteData(nrt_TreeNode * source, NRT_DATA * userData, int depth,
                     nrt_Error * error)
 {
+    (void)userData;
+    (void)depth;
+    (void)error;
+
     char *p = (char *) source->data;
     printf("Deleting %s\n", p);
     free(p);
@@ -78,8 +82,11 @@ void makeTree(nrt_Tree * t, const char *testName)
 
 }
 
-NRT_BOOL printElement(nrt_TreeNode * t, NRT_DATA * ud, int depth, nrt_Error * e)
+static NRT_BOOL printElement(nrt_TreeNode * t, NRT_DATA * ud, int depth, nrt_Error * e)
 {
+    (void)ud;
+    (void)e;
+
     const char *p = (const char *) t->data;
     int i;
 
