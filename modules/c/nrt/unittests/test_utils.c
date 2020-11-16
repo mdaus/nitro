@@ -373,7 +373,11 @@ TEST_CASE(testDmsToCharArrayZero)
 {
     char lonCharArray[9];
     nrt_Utils_geographicLonToCharArray(0, 0, 0, lonCharArray);
-    TEST_ASSERT(strcmp(lonCharArray, "0000000E") == 0);
+    TEST_ASSERT_EQ_STR(lonCharArray, "0000000E");
+
+    char latCharArray[8];
+    nrt_Utils_geographicLatToCharArray(0, 0, 0, latCharArray);
+    TEST_ASSERT_EQ_STR(latCharArray, "000000N");
 }
 
 TEST_MAIN(
