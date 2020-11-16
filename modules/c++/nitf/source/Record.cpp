@@ -92,11 +92,16 @@ void Record::setHeader(nitf::FileHeader & value)
     value.setManaged(true);
 }
 
+inline bool INVALID_NUM_SEGMENTS(uint32_t num)
+{
+    return NITF_INVALID_NUM_SEGMENTS(gsl::narrow<int>(num));
+}
+
 uint32_t Record::getNumImages() const
 {
     const uint32_t num = nitf_Record_getNumImages(getNativeOrThrow(), &error);
     
-    if (NITF_INVALID_NUM_SEGMENTS( num ))
+    if (INVALID_NUM_SEGMENTS( num ))
         throw nitf::NITFException(&error);
     
     return num;
@@ -106,7 +111,7 @@ uint32_t Record::getNumGraphics() const
 {
     const uint32_t num = nitf_Record_getNumGraphics(getNativeOrThrow(), &error);
 
-    if (NITF_INVALID_NUM_SEGMENTS( num ))
+    if (INVALID_NUM_SEGMENTS( num ))
         throw nitf::NITFException(&error);
 
     return num;
@@ -116,7 +121,7 @@ uint32_t Record::getNumLabels() const
 {
     const uint32_t num = nitf_Record_getNumLabels(getNativeOrThrow(), &error);
 
-    if (NITF_INVALID_NUM_SEGMENTS( num ))
+    if (INVALID_NUM_SEGMENTS( num ))
         throw nitf::NITFException(&error);
 
     return num;
@@ -126,7 +131,7 @@ uint32_t Record::getNumTexts() const
 {
     const uint32_t num = nitf_Record_getNumTexts(getNativeOrThrow(), &error);
 
-    if (NITF_INVALID_NUM_SEGMENTS( num ))
+    if (INVALID_NUM_SEGMENTS( num ))
         throw nitf::NITFException(&error);
 
     return num;
@@ -137,7 +142,7 @@ uint32_t Record::getNumDataExtensions() const
     const uint32_t num = nitf_Record_getNumDataExtensions(getNativeOrThrow(), 
                                                         &error);
 
-    if (NITF_INVALID_NUM_SEGMENTS( num ))
+    if (INVALID_NUM_SEGMENTS( num ))
         throw nitf::NITFException(&error);
 
     return num;
@@ -148,7 +153,7 @@ uint32_t Record::getNumReservedExtensions() const
     const uint32_t num = nitf_Record_getNumReservedExtensions(getNativeOrThrow(), 
                                                             &error);
 
-    if (NITF_INVALID_NUM_SEGMENTS( num ))
+    if (INVALID_NUM_SEGMENTS( num ))
         throw nitf::NITFException(&error);
 
     return num;

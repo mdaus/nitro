@@ -122,8 +122,8 @@ void Writer::setWriteHandlers(nitf::IOHandle& io, const nitf::Record& record)
 void Writer::setImageWriteHandlers(nitf::IOHandle& io, const nitf::Record& record)
 {
     nitf::List images = record.getImages();
-    const auto numImages = record.getNumImages();
-    for (int ii = 0; ii < numImages; ++ii)
+    const uint32_t numImages = record.getNumImages();
+    for (uint32_t ii = 0; ii < numImages; ++ii)
     {
         nitf::ImageSegment segment = images[ii];
         const auto offset = segment.getImageOffset();
@@ -137,8 +137,8 @@ void Writer::setImageWriteHandlers(nitf::IOHandle& io, const nitf::Record& recor
 void Writer::setGraphicWriteHandlers(nitf::IOHandle& io, const nitf::Record& record)
 {
     nitf::List graphics = record.getGraphics();
-    const auto numGraphics = record.getNumGraphics();
-    for (int ii = 0; ii < numGraphics; ++ii)
+    const uint32_t numGraphics = record.getNumGraphics();
+    for (uint32_t ii = 0; ii < numGraphics; ++ii)
     {
        nitf::GraphicSegment segment = graphics[ii];
        const auto offset = segment.getOffset();
@@ -152,8 +152,8 @@ void Writer::setGraphicWriteHandlers(nitf::IOHandle& io, const nitf::Record& rec
 void Writer::setTextWriteHandlers(nitf::IOHandle& io, const nitf::Record& record)
 {
     nitf::List texts = record.getTexts();
-    const auto numTexts = record.getNumTexts();
-    for (int ii = 0; ii < numTexts; ++ii)
+    const uint32_t numTexts = record.getNumTexts();
+    for (uint32_t ii = 0; ii < numTexts; ++ii)
     {
        nitf::TextSegment segment = texts[ii];
        const auto offset = segment.getOffset();
@@ -167,8 +167,8 @@ void Writer::setTextWriteHandlers(nitf::IOHandle& io, const nitf::Record& record
 void Writer::setDEWriteHandlers(nitf::IOHandle& io, const nitf::Record& record)
 {
     nitf::List dataExtensions = record.getDataExtensions();
-    const auto numDEs = record.getNumDataExtensions();
-    for (int ii = 0; ii < numDEs; ++ii)
+    const uint32_t numDEs = record.getNumDataExtensions();
+    for (uint32_t ii = 0; ii < numDEs; ++ii)
     {
        nitf::DESegment segment = dataExtensions[ii];
        const auto offset = segment.getOffset();
