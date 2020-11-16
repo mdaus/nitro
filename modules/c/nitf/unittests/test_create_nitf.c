@@ -1244,6 +1244,8 @@ TEST_CASE_ARGS(testRead)
 }
 
 TEST_MAIN(
+    (void)argc;
+    (void)argv;
     CHECK_ARGS(testCreate);
     CHECK_ARGS(testRead);
     )

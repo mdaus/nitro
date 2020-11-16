@@ -123,5 +123,7 @@ TEST_CASE(testTree)
 }
 
 TEST_MAIN(
+    (void)argc;
+    (void)argv;
     CHECK(testTree);
 )

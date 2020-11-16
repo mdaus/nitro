@@ -101,5 +101,7 @@ TEST_CASE(testMemorySource)
 }
 
 TEST_MAIN(
+    (void)argc;
+    (void)argv;
     CHECK(testMemorySource);
 )

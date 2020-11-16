@@ -169,6 +169,9 @@ TEST_CASE(testIterateRemove)
 }
 
 TEST_MAIN(
+    (void)argc;
+    (void)argv;
+
     CHECK(testCreate);
     CHECK(testPushPop);
     CHECK(testClone);

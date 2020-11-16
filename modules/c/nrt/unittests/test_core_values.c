@@ -65,5 +65,8 @@ TEST_CASE(testCoreValues)
 }
 
 TEST_MAIN(
+    (void)argc;
+    (void)argv;
+
     CHECK(testCoreValues);
 )

@@ -36,14 +36,11 @@ std::string generateILOC(const types::RowCol<int64_t>& offset)
    return oss.str();
 }
 
-nitf::ImageSubheader setImageSubHeader(
+static nitf::ImageSubheader setImageSubHeader(
     nitf::Record&                     record,
     int64_t                       imageIndex,
-    const types::RowCol<int64_t>& fullDims,
     const types::RowCol<int64_t>& segmentDims,
-    const types::RowCol<int64_t>& segmentOffset,
-    const types::RowCol<int64_t>& globalSegmentOffset,
-    bool fileSeparate)
+    const types::RowCol<int64_t>& segmentOffset)
 {
    nitf::ImageSegment   imageSegment = record.newImageSegment();
    nitf::ImageSubheader imgSubHdr = imageSegment.getSubheader();
@@ -182,8 +179,6 @@ TEST_CASE(testBlankSegmentsValid)
    const int64_t elementSize     = 1;
    int64_t numberOfTests         = 0;
    const types::RowCol<int64_t> fullDims(numberLines, numberElements);
-   nitf::ImageSubheader img;
-   nitf::Writer writer;
    std::vector<std::vector<uint8_t> > buffers;
    nitf::ImageSegmentComputer imageSegmentComputer(numberLines,
                                                    numberElements,
@@ -223,7 +218,7 @@ TEST_CASE(testBlankSegmentsValid)
          offset = types::RowCol<int64_t>(segments[ii].rowOffset, 0);
          segmentOffsets[ii] = types::RowCol<int64_t>(segments[ii].firstRow, 0);
 
-         img = setImageSubHeader(record, ii, fullDims, dims, offset, segmentOffsets[ii], false);
+         img = setImageSubHeader(record, ii, dims, offset);
       }
       writer.prepare(output_io, record);
 
@@ -255,7 +250,7 @@ TEST_CASE(testBlankSegmentsValid)
                                  NITF_ACCESS_READONLY,
                                  NITF_OPEN_EXISTING);
          nitf::Reader reader;
-         nitf::Record record = reader.read(input_io);
+         record = reader.read(input_io);
          nitf::List images   = record.getImages();
          for (nitf::ListIterator imageIterator = images.begin();
               imageIterator != images.end();
@@ -294,5 +289,7 @@ TEST_CASE(testBlankSegmentsValid)
 }
 
 TEST_MAIN(
-   TEST_CHECK(testBlankSegmentsValid);
+    (void)argc;
+    (void)argv;
+TEST_CHECK(testBlankSegmentsValid);
 )
