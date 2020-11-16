@@ -326,8 +326,8 @@ NITFPRIV(NITF_BOOL) defaultSetField(nitf_TRE* tre,
     }
 
     /* reset the lengths in two places */
-    ((nitf_TREPrivateData*)tre->priv)->length = dataLength;
-    ((nitf_TREPrivateData*)tre->priv)->description[0].data_count = dataLength;
+    ((nitf_TREPrivateData*)tre->priv)->length = (uint32_t)dataLength;
+    ((nitf_TREPrivateData*)tre->priv)->description[0].data_count = (int)dataLength;
 
     return nitf_HashTable_insert(((nitf_TREPrivateData*)tre->priv)->hash,
         tag, field, error);

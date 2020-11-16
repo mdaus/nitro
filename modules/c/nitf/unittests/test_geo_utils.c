@@ -49,7 +49,7 @@ TEST_CASE(test_geo_utils)
     nitf_Utils_geographicLatToCharArray(d, m, s, ll);
     TEST_ASSERT_EQ_STR(ll, "112504S");
 
-    TEST_ASSERT_EQ_FLOAT(decimal, -12.582222);
+    TEST_ASSERT((decimal <= -12.582) && (decimal >= -12.583));
     nitf_Utils_decimalLatToGeoCharArray(decimal, ll);
     TEST_ASSERT_EQ_STR(ll, "112504S");
 
@@ -71,7 +71,7 @@ TEST_CASE(test_geo_utils)
     TEST_ASSERT_EQ_FLOAT(s, 67.0);
     nitf_Utils_geographicLonToCharArray(d, m, s, ll);
     TEST_ASSERT_EQ_STR(ll, "1234607E");
-    TEST_ASSERT_EQ_FLOAT(decimal, 123.76861);
+    TEST_ASSERT((decimal >= 123.768) && (decimal <= 123.769));
 
     nitf_Utils_decimalLonToGeoCharArray(decimal, ll);
     TEST_ASSERT_EQ_STR(ll, "1234607E");
