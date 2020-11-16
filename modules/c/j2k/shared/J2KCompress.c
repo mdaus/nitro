@@ -76,6 +76,7 @@ NITF_CXX_ENDGUARD
 
 NITFAPI(const char**) J2KCompress_init(nitf_Error *error)
 {
+    (void)error;
     return ident;
 }
 
@@ -342,6 +343,10 @@ NITFPRIV(NITF_BOOL) implStart(nitf_CompressionControl *control,
                               uint64_t *padMask,
                               nitf_Error *error)
 {
+    (void)blockMask;
+    (void)padMask;
+    (void)error;
+
     ImplControl *implControl = (ImplControl*)control;
 
     implControl->offset = offset;
@@ -358,6 +363,10 @@ NITFPRIV(NITF_BOOL) implWriteBlock(nitf_CompressionControl * control,
                                    NITF_BOOL noData,
                                    nitf_Error *error)
 {
+    (void)io;
+    (void)pad;
+    (void)noData;
+
     ImplControl *implControl = (ImplControl*)control;
     uint32_t tileX, tileY, tileWidth, tileHeight, tilesX;
     uint32_t nComponents, nBytes, bufSize;

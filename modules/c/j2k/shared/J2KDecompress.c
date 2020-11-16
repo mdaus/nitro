@@ -73,6 +73,7 @@ NITF_CXX_ENDGUARD
 
 NITFAPI(const char**) J2KDecompress_init(nitf_Error *error)
 {
+    (void)error;
     return ident;
 }
 
@@ -86,6 +87,9 @@ NITFPRIV(int) implFreeBlock(nitf_DecompressionControl* control,
                             uint8_t* block,
                             nitf_Error* error)
 {
+    (void)control;
+    (void)error;
+
     if (block)
         implMemFree((void*)block);
     return 1;

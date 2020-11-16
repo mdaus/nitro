@@ -113,18 +113,20 @@ NITF_BOOL writeVDC(cgm_Rectangle* r, nitf_IOInterface* io, nitf_Error* error)
     return writeRectangle(r, io, error);
 }
 
+static NITF_BOOL nitf_IOInterface_writeRGB(nitf_IOInterface* io, short rgb, nitf_Error* error)
+{
+    unsigned char c = (unsigned char)rgb;
+    return nitf_IOInterface_write(io, (const char*)&c, 1, error);
+}
 NITF_BOOL writeRGB(cgm_Color* color3, nitf_IOInterface* io, nitf_Error* error)
 {
-    unsigned char c = color3->r;
-    if (!nitf_IOInterface_write(io, (const char*)&c, 1, error))
+    if (!nitf_IOInterface_writeRGB(io, color3->r, error))
         return NITF_FAILURE;
 
-    c = color3->g;
-    if (!nitf_IOInterface_write(io, (const char*)&c, 1, error))
+    if (!nitf_IOInterface_writeRGB(io, color3->g, error))
         return NITF_FAILURE;
 
-    c = color3->b;
-    return nitf_IOInterface_write(io, (const char*)&c, 1, error);
+    return nitf_IOInterface_writeRGB(io, color3->b, error);
 }
 
 NITF_BOOL writeRGBPadded(cgm_Color *color3, nitf_IOInterface* io, nitf_Error* error)
