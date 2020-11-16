@@ -112,6 +112,7 @@ NITFPRIV(void) DirectBlockSource_destruct(NITF_DATA * data)
 
 NITFPRIV(nitf_Off) DirectBlockSource_getSize(NITF_DATA * data, nitf_Error *e)
 {
+    (void)e;
     DirectBlockSourceImpl *directBlockSource = (DirectBlockSourceImpl *) data;
     return directBlockSource ? directBlockSource->numBlocks : 0;
 }

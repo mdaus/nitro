@@ -3,8 +3,6 @@
 // We're building in Visual Studio ... used to control where we get a little bit of config info
 #define NITRO_PCH 1
 
-#define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
-
 #pragma warning(disable: 4668) // '...' is not defined as a preprocessor macro, replacing with '...' for '...'
 #pragma warning(disable: 4820) // '...': '...' bytes padding added after data member '...'
 #pragma warning(disable: 4710) // '...': function not inlined
@@ -18,7 +16,6 @@
 
 // TODO: get rid of these someday?
 #pragma warning(disable: 4774) // '...' : format string expected in argument 3 is not a string literal
-#pragma warning(disable: 4100) // '...': unreferenced formal parameter
 #pragma warning(disable: 4296) // '...': expression is always false
 #pragma warning(disable: 4267) // '...': conversion from '...' to '...', possible loss of data
 #pragma warning(disable: 4244) // 	'...': conversion from '...' to '...', possible loss of data
@@ -40,6 +37,12 @@
 #pragma warning(push)
 #pragma warning(disable: 5220) // '...': a non - static data member with a volatile qualified type no longer implies
 #pragma warning(disable: 5204) // 'Concurrency::details::_DefaultPPLTaskScheduler': class has virtual functions, but its trivial destructor is not virtual; instances of objects derived from this class may not be destructed correctly
+
+#define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
+#include <windows.h>
+#undef min
+#undef max
+
 #include <assert.h>
 #include <stdlib.h>
 #include <math.h>
@@ -65,10 +68,6 @@
 #include <future>
 
 #include <sys/File.h>
-
-#include <windows.h>
-#undef min
-#undef max
 #pragma warning(pop)
 
 #include <import/except.h>

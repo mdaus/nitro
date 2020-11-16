@@ -2,11 +2,10 @@
 // pch.h
 // Header for standard system include files.
 //
+#pragma once
 
 // We're building in Visual Studio ... used to control where we get a little bit of config info
 #define NITRO_PCH 1
-
-#define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
 
 // TODO: get rid of these someday? ... from Visual Studio code-analysis
 #pragma warning(disable: 26495) // Variable '...' is uninitialized. Always initialize a member variable(type.6).
@@ -14,7 +13,10 @@
 #pragma warning(disable: 6385) // Reading invalid data from '...':  the readable size is '...' bytes, but '...' bytes may be read.
 #pragma warning(disable: 6386) // Buffer overrun while writing to '...':  the writable size is '...' bytes, but '...' bytes might be written.
 
-#pragma once
+#define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
+#include <windows.h>
+#undef min
+#undef max
 
 #include <assert.h>
 #include <stdlib.h>
@@ -27,9 +29,7 @@
 #include <string>
 #include <ios>
 
-#include <windows.h>
-#undef min
-#undef max
+
 #  include <direct.h>
 #  include <io.h>
 # include <sys/types.h>

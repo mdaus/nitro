@@ -29,6 +29,8 @@ NITF_BOOL copyAndFillSpaces(nitf_Field * field,
                             const char *data,
                             size_t dataLength, nitf_Error * error)
 {
+    (void)error;
+
     memcpy(field->raw, data, dataLength);
     memset(field->raw + dataLength, ' ', field->length - dataLength);
     return NITF_SUCCESS;
@@ -39,6 +41,8 @@ NITF_BOOL copyAndFillZeros(nitf_Field * field,
                            const char *data,
                            size_t dataLength, nitf_Error * error)
 {
+    (void)error;
+
     size_t zeros = field->length - dataLength;
     memset(field->raw, '0', zeros);
     memcpy(field->raw + zeros, data, dataLength);
@@ -574,6 +578,8 @@ NITFAPI(nitf_Field *) nitf_Field_clone(nitf_Field * source,
 NITFPRIV(NITF_BOOL) fromStringToString(nitf_Field * field, char *outValue,
                                        size_t length, nitf_Error * error)
 {
+    (void)error;
+
     if (length)
     {
         if (length == 1)
@@ -753,6 +759,7 @@ NITFPRIV(NITF_BOOL) toReal(nitf_Field * field, NITF_DATA * outData,
 NITFPRIV(NITF_BOOL) toInt16(nitf_Field * field, int16_t * int16,
                             nitf_Error * error)
 {
+    (void)error;
     *int16 = *((int16_t *) field->raw);
     return NITF_SUCCESS;
 }
@@ -761,6 +768,7 @@ NITFPRIV(NITF_BOOL) toInt16(nitf_Field * field, int16_t * int16,
 NITFPRIV(NITF_BOOL) toInt32(nitf_Field * field, int32_t * int32,
                             nitf_Error * error)
 {
+    (void)error;
     *int32 = *((int32_t *) field->raw);
     return NITF_SUCCESS;
 }
@@ -769,6 +777,7 @@ NITFPRIV(NITF_BOOL) toInt32(nitf_Field * field, int32_t * int32,
 NITFPRIV(NITF_BOOL) toInt64(nitf_Field * field, int64_t * int64,
                             nitf_Error * error)
 {
+    (void)error;
     *int64 = *((int64_t *) field->raw);
     return NITF_SUCCESS;
 }
@@ -777,6 +786,7 @@ NITFPRIV(NITF_BOOL) toInt64(nitf_Field * field, int64_t * int64,
 NITFPRIV(NITF_BOOL) toUint16(nitf_Field * field, uint16_t * int16,
                              nitf_Error * error)
 {
+    (void)error;
     *int16 = *((uint16_t *) field->raw);
     return NITF_SUCCESS;
 }
@@ -785,6 +795,7 @@ NITFPRIV(NITF_BOOL) toUint16(nitf_Field * field, uint16_t * int16,
 NITFPRIV(NITF_BOOL) toUint32(nitf_Field * field, uint32_t * int32,
                              nitf_Error * error)
 {
+    (void)error;
     *int32 = *((uint32_t *) field->raw);
     return NITF_SUCCESS;
 }
@@ -793,6 +804,7 @@ NITFPRIV(NITF_BOOL) toUint32(nitf_Field * field, uint32_t * int32,
 NITFPRIV(NITF_BOOL) toUint64(nitf_Field * field, uint64_t * int64,
                              nitf_Error * error)
 {
+    (void)error;
     *int64 = *((uint64_t *) field->raw);
     return NITF_SUCCESS;
 }

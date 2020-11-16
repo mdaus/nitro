@@ -656,6 +656,8 @@ nitf_PluginRegistry_internalLoadDir(nitf_PluginRegistry* reg,
                                     const char* dirName,
                                     nitf_Error* error)
 {
+    (void)reg;
+
     const char* name;
     size_t sizePath;
     nitf_Directory* dir = NULL;

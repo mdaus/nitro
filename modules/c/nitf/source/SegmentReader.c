@@ -124,6 +124,7 @@ NITFAPI(nitf_Off) nitf_SegmentReader_seek(nitf_SegmentReader * segmentReader,
 NITFAPI(nitf_Off) nitf_SegmentReader_tell(nitf_SegmentReader * segmentReader,
                                        nitf_Error * error)
 {
+    (void)error;
     return (segmentReader->virtualOffset);
 }
 
@@ -132,6 +133,7 @@ NITFAPI(nitf_Off) nitf_SegmentReader_getSize(nitf_SegmentReader *
         segmentReader,
         nitf_Error * error)
 {
+    (void)error;
     return (segmentReader->dataLength);
 }
 

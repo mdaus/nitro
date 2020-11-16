@@ -668,6 +668,8 @@ J2KPRIV( NRT_BOOL) OpenJPEG_initImage(OpenJPEGWriterImpl *impl,
 J2KPRIV( NRT_BOOL)
 OpenJPEGReader_canReadTiles(J2K_USER_DATA *data, nrt_Error *error)
 {
+    (void)data;
+    (void)error;
     return NRT_SUCCESS;
 }
 
@@ -926,6 +928,8 @@ OpenJPEGReader_readRegion(J2K_USER_DATA *data, uint32_t x0, uint32_t y0,
 J2KPRIV( j2k_Container*)
 OpenJPEGReader_getContainer(J2K_USER_DATA *data, nrt_Error *error)
 {
+    (void)error;
+
     OpenJPEGReaderImpl *impl = (OpenJPEGReaderImpl*) data;
     return impl->container;
 }
@@ -1139,6 +1143,8 @@ OpenJPEGWriter_write(J2K_USER_DATA *data, nrt_IOInterface *io, nrt_Error *error)
 J2KPRIV( j2k_Container*)
 OpenJPEGWriter_getContainer(J2K_USER_DATA *data, nrt_Error *error)
 {
+    (void)error;
+
     OpenJPEGWriterImpl *impl = (OpenJPEGWriterImpl*) data;
     return impl->container;
 }

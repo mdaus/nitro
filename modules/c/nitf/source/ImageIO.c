@@ -9473,6 +9473,8 @@ nitf_ImageIO_12PixelClose(nitf_DecompressionControl **control)
 nitf_CompressionControl  *nitf_ImageIO_12PixelComOpen
 ( nitf_ImageSubheader * subheader, nrt_HashTable* options, nitf_Error * error)
 {
+    (void)options;
+
   nitf_ImageIO_12PixelComControl *icntl;   /* The result */
   uint32_t numRowsPerBlock;      /* Number of rows per block */
   uint32_t numColumnsPerBlock;   /* Number of columns per block */

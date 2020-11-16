@@ -29,7 +29,7 @@
 #define DMS_LAT_STR "123456S"
 #define DMS_LON_STR "1234567E"
 
-int main(int argc, char**argv)
+int main(void)
 {
 
     /* Try geographic stuff */
