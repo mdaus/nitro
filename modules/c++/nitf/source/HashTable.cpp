@@ -61,7 +61,7 @@ bool nitf::HashTableIterator::operator!=(const nitf::HashTableIterator& it2) con
 
 void nitf::HashTableIterator::increment() { nitf_HashTableIterator_increment(&handle); }
 
-void nitf::HashTableIterator::operator++(int x) { increment(); }
+void nitf::HashTableIterator::operator++(int) { increment(); }
 
 nitf::HashTableIterator & nitf::HashTableIterator::operator+=(int x)
 {

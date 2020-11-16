@@ -367,7 +367,7 @@ void ByteProvider::checkBlocking(size_t seg,
 }
 
 size_t ByteProvider::countPadRows(
-        size_t seg, size_t numRowsToWrite, size_t imageDataEndRow) const
+        size_t seg, size_t /*numRowsToWrite*/, size_t imageDataEndRow) const
 {
     const SegmentInfo& imageSegmentInfo(mImageSegmentInfo[seg]);
     const size_t numRowsPerBlock(mNumRowsPerBlock[seg]);
