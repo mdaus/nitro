@@ -92,7 +92,7 @@ void Record::setHeader(nitf::FileHeader & value)
     value.setManaged(true);
 }
 
-inline bool INVALID_NUM_SEGMENTS(uint32_t num)
+constexpr inline bool INVALID_NUM_SEGMENTS(uint32_t num)
 {
     return NITF_INVALID_NUM_SEGMENTS(gsl::narrow<int>(num));
 }

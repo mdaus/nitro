@@ -441,6 +441,11 @@ void JPEGBlock_reorder(JPEGBlock* block)
     off_t current = 0;
     DATA_BUFFER* bands = (DATA_BUFFER*) NITF_MALLOC(sizeof(DATA_BUFFER)
             * block->bands);
+    if (bands == NULL)
+    {
+        return;
+    }
+
     for (i = 0; i < block->bands; i++)
     {
         bands[i] = (DATA_BUFFER) NITF_MALLOC(block->rows * block->cols);
@@ -453,7 +458,10 @@ void JPEGBlock_reorder(JPEGBlock* block)
         for (i = 0; i < block->bands; i++)
         {
             DATA_BUFFER thisBand = bands[i];
-            thisBand[n] = block->uncompressed[j + i];
+            if (thisBand != NULL)
+            {
+                thisBand[n] = block->uncompressed[j + i];
+            }
         }
     }
 
@@ -1582,8 +1590,9 @@ NITFPRIV(JPEGQuantTable*) JPEGQuantTable_construct(float compressionRatio,
     {
         nitf_Error_init(error, NITF_STRERROR( NITF_ERRNO ),
                         NITF_CTXT, NITF_ERR_DECOMPRESSION);
-
+        return NULL;
     }
+
     if (compressionRatio > 0.0 && compressionRatio <= 0.1)
     {
         qt->qtablePointer = Q1;
