@@ -1022,7 +1022,6 @@ NITFPROT(NITF_BOOL) nitf_Field_resetLength(nitf_Field * field,
         NITF_BOOL keepData,
         nitf_Error * error)
 {
-    size_t diff;
     size_t oldLength;
     char *raw;
 
@@ -1057,7 +1056,7 @@ NITFPROT(NITF_BOOL) nitf_Field_resetLength(nitf_Field * field,
         /* copy the old data */
         else
         {
-            diff = newLength - field->length;
+            int64_t diff = newLength - field->length;
             if (field->type == NITF_BCS_N)
                 copyAndFillZeros(field, raw,
                                  diff < 0 ? newLength : oldLength, error);

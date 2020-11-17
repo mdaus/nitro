@@ -11,7 +11,6 @@
 
 // TODO: get rid of these someday?
 #pragma warning(disable: 4774) // '...' : format string expected in argument 3 is not a string literal
-#pragma warning(disable: 4296) // '...': expression is always false
 
 // TODO: get rid of these someday? ... from Visual Studio code-analysis
 #pragma warning(disable: 26451) // Arithmetic overflow : Using operator '...' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '*' to avoid overflow(io.2).

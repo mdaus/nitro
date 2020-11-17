@@ -873,9 +873,10 @@ readDESubheader(nitf_Reader* reader,
             error);
 
     /* set the offset and end of the segment */
-    segment->offset = nitf_IOInterface_tell(reader->input, error);
-    if (!NITF_IO_SUCCESS(segment->offset))
+    const nitf_Off offset = nitf_IOInterface_tell(reader->input, error);
+    if (!NITF_IO_SUCCESS(offset))
         goto CATCH_ERROR;
+    segment->offset = offset;
     segment->end = segment->offset + subhdr->dataLength;
     subheaderEnd = segment->offset;
 
@@ -893,9 +894,10 @@ readDESubheader(nitf_Reader* reader,
                 goto CATCH_ERROR;
 
             /* update the offset */
-            currentOffset = nitf_IOInterface_tell(reader->input, error);
-            if (!NITF_IO_SUCCESS(currentOffset))
+            const nitf_Off currentOffset_ = nitf_IOInterface_tell(reader->input, error);
+            if (!NITF_IO_SUCCESS(currentOffset_))
                 goto CATCH_ERROR;
+            currentOffset = currentOffset_;
         }
     }
     else
@@ -977,9 +979,10 @@ readRESubheader(nitf_Reader* reader,
             error);
 
     /* set the offset and end of the segment */
-    segment->offset = nitf_IOInterface_tell(reader->input, error);
-    if (!NITF_IO_SUCCESS(segment->offset))
+    const nitf_Off offset = nitf_IOInterface_tell(reader->input, error);
+    if (!NITF_IO_SUCCESS(offset))
         goto CATCH_ERROR;
+    segment->offset = offset;
     segment->end = segment->offset + subhdr->dataLength;
 
     return NITF_SUCCESS;

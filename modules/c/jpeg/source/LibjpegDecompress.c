@@ -821,8 +821,9 @@ NITFPRIV(NITF_BOOL) scanOffsets(nitf_IOInterface* io,
     uint64_t bytesRead = 0;
 
     /*  Book keeping block  */
-    uint64_t origin = nitf_IOInterface_tell(io, error);
-    assert(NITF_IO_SUCCESS(origin));
+    const nitf_Off origin_ = nitf_IOInterface_tell(io, error);
+    assert(NITF_IO_SUCCESS(origin_));
+    uint64_t origin = origin_;
     /*  End book keeping block  */
     DPRINTA1("File length: %ld\n",  fileLength);
     while (bytesRead < fileLength)
