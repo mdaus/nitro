@@ -20,17 +20,16 @@
  *
  */
 
+#include "nitf/BufferedReader.hpp"
 
 #include <stdio.h>
-
-#include <nitf/BufferedReader.hpp>
 
 #include "gsl/gsl.h"
 
 namespace nitf
 {
 BufferedReader::BufferedReader(const std::string& file, size_t bufferSize) :
-    mMaxBufferSize(bufferSize),
+    mMaxBufferSize(gsl::narrow<nitf::Off>(bufferSize)),
     mScopedBuffer(new char[bufferSize]),
     mBuffer(mScopedBuffer.get()),
     mPosition(0),
@@ -56,7 +55,7 @@ BufferedReader::BufferedReader(const std::string& file,
                                void* buffer,
                                size_t size,
                                bool adopt) :
-    mMaxBufferSize(size),
+    mMaxBufferSize(gsl::narrow<nitf::Off>(size)),
     mScopedBuffer(adopt ? static_cast<char*>(buffer) : nullptr),
     mBuffer(static_cast<char*>(buffer)),
     mPosition(0),
@@ -89,12 +88,12 @@ void BufferedReader::readNextBuffer()
     const sys::Off_T endOffsetIfPerformMaxRead =
             currentOffset + gsl::narrow<sys::Off_T>(mMaxBufferSize);
 
-    const size_t bufferSize = (endOffsetIfPerformMaxRead > mFileLen) ?
+    const nitf::Off bufferSize = (endOffsetIfPerformMaxRead > mFileLen) ?
             mFileLen - currentOffset : mMaxBufferSize;
 
     sys::RealTimeStopWatch sw;
     sw.start();
-    mFile.readInto(mBuffer, bufferSize);
+    mFile.readInto(mBuffer, gsl::narrow<size_t>(bufferSize));
     mElapsedTime += (sw.stop() / 1000.0);
 
     mPosition = 0;
@@ -108,6 +107,11 @@ void BufferedReader::readNextBuffer()
 }
 
 #undef min
+inline size_t min(size_t amountLeftToRead, nitf::Off mBufferSize_mPosition)
+{
+    return std::min(amountLeftToRead, gsl::narrow<size_t>(mBufferSize_mPosition));
+}
+
 void BufferedReader::readImpl(void* buf, size_t size)
 {
     //! Ensure there is enough data to read
@@ -124,7 +128,7 @@ void BufferedReader::readImpl(void* buf, size_t size)
     while (amountLeftToRead)
     {
         const size_t readSize =
-                std::min(amountLeftToRead, mBufferSize - mPosition);
+                min(amountLeftToRead, mBufferSize - mPosition);
 
         memcpy(bufPtr + offset, mBuffer + mPosition, readSize);
         mPosition += readSize;

@@ -25,9 +25,10 @@
 
 namespace nitf
 {
-CustomIO::CustomIO() :
-    IOInterface(createInterface(this))
+CustomIO::CustomIO()
 {
+    set_native_object(createInterface(this));
+
     setManaged(false);
 }
 

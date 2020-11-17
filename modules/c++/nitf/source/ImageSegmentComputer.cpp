@@ -221,8 +221,8 @@ void ImageSegmentComputer::computeSegmentInfo()
     {
         // NOTE: See header for why rowOffset is always set to mNumRowsLimit
         //       for image segments 1 and above
-        const size_t numIS = static_cast<size_t>(std::ceil(
-                static_cast<double>(mNumRows) / mNumRowsLimit));
+        const auto numIS = static_cast<size_t>(std::ceil(
+                static_cast<double>(mNumRows) / static_cast<double>(mNumRowsLimit)));
 
         mSegments.resize(numIS);
         mSegments[0].numRows = mNumRowsLimit;

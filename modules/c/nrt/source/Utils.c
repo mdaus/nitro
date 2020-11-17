@@ -467,7 +467,7 @@ static void normalize_dms(int* pDegrees, int* pMinutes, int* pSeconds)
 
     const int minutes_to_seconds = 60;
     const int degrees_to_seconds = 60 * minutes_to_seconds;
-    double total_seconds = (*pDegrees * degrees_to_seconds) + (*pMinutes * minutes_to_seconds) + *pSeconds;
+    int total_seconds = (*pDegrees * degrees_to_seconds) + (*pMinutes * minutes_to_seconds) + *pSeconds;
 
     *pDegrees = total_seconds / degrees_to_seconds;
     total_seconds -= (*pDegrees * degrees_to_seconds);
@@ -502,7 +502,7 @@ static void adjust_dms(int* pDegrees, int* pMinutes, int* pSeconds, char* pDir,
 NRTPROT(void) nrt_Utils_geographicLatToCharArray(int degrees, int minutes,
                                                  double seconds_, char *buffer7)
 {
-    int seconds = round(seconds_);
+    int seconds = (int) round(seconds_);
 
     normalize_dms(&degrees, &minutes, &seconds);
     const int max_degrees = 90;
@@ -540,7 +540,7 @@ NRTPROT(void) nrt_Utils_geographicLatToCharArray(int degrees, int minutes,
 NRTPROT(void) nrt_Utils_geographicLonToCharArray(int degrees, int minutes,
                                                  double seconds_, char *buffer8)
 {
-    int seconds = round(seconds_);
+    int seconds = (int)round(seconds_);
 
     normalize_dms(&degrees, &minutes, &seconds);
     const int max_degrees = 180;
@@ -676,3 +676,19 @@ NRTAPI(char*) nrt_strdup(const char* src)
     return NULL;
 }
 
+NRTAPI(size_t) nrt_strlen(const char* src)
+{
+    return strlen(src);
+}
+NRTAPI(uint32_t) nrt_strlen32(const char* src)
+{
+    return (uint32_t) strlen(src);
+}
+NRTAPI(uint16_t) nrt_strlen16(const char* src)
+{
+    return (uint16_t)strlen(src);
+}
+NRTAPI(uint8_t) nrt_strlen8(const char* src)
+{
+    return (uint8_t)strlen(src);
+}

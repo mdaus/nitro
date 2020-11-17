@@ -99,5 +99,7 @@ TEST_CASE( testField)
 }
 
 TEST_MAIN(
+    (void)argc;
+    (void)argv;
     CHECK(testField);
 )

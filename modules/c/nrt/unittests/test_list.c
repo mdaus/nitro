@@ -72,6 +72,8 @@ TEST_CASE(testPushPop)
 
 char *cloneString(char *data, nrt_Error * error)
 {
+    (void)error;
+
     char* new_data = nrt_strdup(data);
     assert(new_data);
     return new_data;
@@ -169,6 +171,9 @@ TEST_CASE(testIterateRemove)
 }
 
 TEST_MAIN(
+    (void)argc;
+    (void)argv;
+
     CHECK(testCreate);
     CHECK(testPushPop);
     CHECK(testClone);

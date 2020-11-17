@@ -656,6 +656,8 @@ nitf_PluginRegistry_internalLoadDir(nitf_PluginRegistry* reg,
                                     const char* dirName,
                                     nitf_Error* error)
 {
+    (void)reg;
+
     const char* name;
     size_t sizePath;
     nitf_Directory* dir = NULL;
@@ -686,7 +688,7 @@ nitf_PluginRegistry_internalLoadDir(nitf_PluginRegistry* reg,
             {
                 char* end;
                 char fullName[NITF_MAX_PATH];
-                int pathSize = sizePath;
+                size_t pathSize = sizePath;
                 memset(fullName, 0, NITF_MAX_PATH);
                 memcpy(fullName, dirName, sizePath);
                 if (!isDelimiter(dirName[pathSize - 1]))
