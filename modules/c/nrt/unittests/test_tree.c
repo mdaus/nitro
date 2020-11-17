@@ -50,8 +50,11 @@ static NRT_BOOL deleteData(nrt_TreeNode * source, NRT_DATA * userData, int depth
     return 1;
 }
 
-void makeTree(nrt_Tree * t)
+void makeTree(nrt_Tree * t, const char* testName_)
 {
+    (void)testName_;
+#define testName testName_ // "testName" can be a global which causes a compiler warning
+
     nrt_Error e;
     nrt_TreeNode *an, *ancho, *abso;
     t->root = nrt_TreeNode_construct(C("a"), &e);
@@ -81,6 +84,7 @@ void makeTree(nrt_Tree * t)
                           &e);
 
 }
+#undef testName
 
 static NRT_BOOL printElement(nrt_TreeNode * t, NRT_DATA * ud, int depth, nrt_Error * e)
 {
@@ -105,7 +109,7 @@ TEST_CASE(testTree)
     nrt_Tree *tc = NULL;
     TEST_ASSERT(t);
 
-    makeTree(t);
+    makeTree(t, testName);
     printf("Pre-order traversal:\n");
     printf("=======================================================\n");
     TEST_ASSERT(nrt_Tree_walk(t, &printElement, NRT_PRE_ORDER, NULL, &e));
