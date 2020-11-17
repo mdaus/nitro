@@ -50,7 +50,7 @@ static NRT_BOOL deleteData(nrt_TreeNode * source, NRT_DATA * userData, int depth
     return 1;
 }
 
-void makeTree(nrt_Tree * t, const char *testName)
+void makeTree(nrt_Tree * t)
 {
     nrt_Error e;
     nrt_TreeNode *an, *ancho, *abso;
@@ -105,7 +105,7 @@ TEST_CASE(testTree)
     nrt_Tree *tc = NULL;
     TEST_ASSERT(t);
 
-    makeTree(t, testName);
+    makeTree(t);
     printf("Pre-order traversal:\n");
     printf("=======================================================\n");
     TEST_ASSERT(nrt_Tree_walk(t, &printElement, NRT_PRE_ORDER, NULL, &e));
