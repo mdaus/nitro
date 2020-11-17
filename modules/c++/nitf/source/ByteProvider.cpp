@@ -20,6 +20,8 @@
  *
  */
 
+#include "nitf/ByteProvider.hpp"
+
 #include <string.h>
 #include <sstream>
 #include <algorithm>
@@ -27,7 +29,6 @@
 
 #include <except/Exception.h>
 #include <nitf/Writer.hpp>
-#include <nitf/ByteProvider.hpp>
 #include <nitf/IOStreamWriter.hpp>
 #include <io/ByteStream.h>
 
@@ -257,15 +258,15 @@ void ByteProvider::getFileLayout(const nitf::Record& inRecord,
     uint32_t hdrLen;
     record.setComplexityLevelIfUnset();
     writer.writeHeader(fileLenOff, hdrLen);
-    const nitf::Off fileHeaderNumBytes = byteStream->getSize();
+    const nitf::Off fileHeaderNumBytes = gsl::narrow<nitf::Off>(byteStream->getSize());
 
     // Overall file length and header length
     mFileNumBytes =
             fileHeaderNumBytes + imageSegmentsTotalNumBytes +
-            mDesSubheaderAndData.size();
+            gsl::narrow<nitf::Off>(mDesSubheaderAndData.size());
 
     byteStream->seek(fileLenOff, io::Seekable::START);
-    writer.writeInt64Field(mFileNumBytes, NITF_FL_SZ, '0', NITF_WRITER_FILL_LEFT);
+    writer.writeInt64Field(gsl::narrow<uint64_t>(mFileNumBytes), NITF_FL_SZ, '0', NITF_WRITER_FILL_LEFT);
     writer.writeInt64Field(hdrLen, NITF_HL_SZ, '0', NITF_WRITER_FILL_LEFT);
 
     // Image segments
@@ -299,7 +300,7 @@ void ByteProvider::getFileLayout(const nitf::Record& inRecord,
 
     // Figure out where the image subheader offsets are
     mImageSubheaderFileOffsets.resize(numImages);
-    nitf::Off offset = mFileHeader.size();
+    nitf::Off offset = gsl::narrow<nitf::Off>(mFileHeader.size());
     for (size_t ii = 0; ii < numImages; ++ii)
     {
          mImageSubheaderFileOffsets[ii] = offset;
@@ -414,9 +415,9 @@ void ByteProvider::addImageData(
         const size_t rowsInSegmentSkipped =
                 startRow - segStartRow;
 
-        fileOffset = mImageSubheaderFileOffsets[seg] +
+        fileOffset = gsl::narrow<nitf::Off>(mImageSubheaderFileOffsets[seg] +
                 mImageSubheaders[seg].size() +
-                rowsInSegmentSkipped * mNumBytesPerRow;
+                rowsInSegmentSkipped * mNumBytesPerRow);
     }
 
     const size_t numPadRows = countPadRows(seg, numRowsToWrite, imageDataEndRow);

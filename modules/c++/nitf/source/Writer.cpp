@@ -22,6 +22,8 @@
 
 #include "nitf/Writer.hpp"
 
+#include "gsl/gsl.h"
+
 using namespace nitf;
 
 void WriterDestructor::operator()(nitf_Writer *writer)
@@ -122,7 +124,7 @@ void Writer::setWriteHandlers(nitf::IOHandle& io, const nitf::Record& record)
 void Writer::setImageWriteHandlers(nitf::IOHandle& io, const nitf::Record& record)
 {
     nitf::List images = record.getImages();
-    const uint32_t numImages = record.getNumImages();
+    const auto numImages = record.getNumImages();
     for (uint32_t ii = 0; ii < numImages; ++ii)
     {
         nitf::ImageSegment segment = images[ii];
@@ -130,14 +132,14 @@ void Writer::setImageWriteHandlers(nitf::IOHandle& io, const nitf::Record& recor
         std::shared_ptr<nitf::WriteHandler> handler(
                 new nitf::StreamIOWriteHandler(
                     io, offset, segment.getImageEnd() - offset));
-        setImageWriteHandler(ii, handler);
+        setImageWriteHandler(gsl::narrow<int>(ii), handler);
     }
 }
 
 void Writer::setGraphicWriteHandlers(nitf::IOHandle& io, const nitf::Record& record)
 {
     nitf::List graphics = record.getGraphics();
-    const uint32_t numGraphics = record.getNumGraphics();
+    const auto numGraphics = record.getNumGraphics();
     for (uint32_t ii = 0; ii < numGraphics; ++ii)
     {
        nitf::GraphicSegment segment = graphics[ii];
@@ -145,14 +147,14 @@ void Writer::setGraphicWriteHandlers(nitf::IOHandle& io, const nitf::Record& rec
        std::shared_ptr< ::nitf::WriteHandler> handler(
            new nitf::StreamIOWriteHandler (
                io, offset, segment.getEnd() - offset));
-       setGraphicWriteHandler(ii, handler);
+       setGraphicWriteHandler(gsl::narrow<int>(ii), handler);
     }
 }
 
 void Writer::setTextWriteHandlers(nitf::IOHandle& io, const nitf::Record& record)
 {
     nitf::List texts = record.getTexts();
-    const uint32_t numTexts = record.getNumTexts();
+    const auto numTexts = record.getNumTexts();
     for (uint32_t ii = 0; ii < numTexts; ++ii)
     {
        nitf::TextSegment segment = texts[ii];
@@ -160,14 +162,14 @@ void Writer::setTextWriteHandlers(nitf::IOHandle& io, const nitf::Record& record
        std::shared_ptr< ::nitf::WriteHandler> handler(
            new nitf::StreamIOWriteHandler (
                io, offset, segment.getEnd() - offset));
-       setTextWriteHandler(ii, handler);
+       setTextWriteHandler(gsl::narrow<int>(ii), handler);
     }
 }
 
 void Writer::setDEWriteHandlers(nitf::IOHandle& io, const nitf::Record& record)
 {
     nitf::List dataExtensions = record.getDataExtensions();
-    const uint32_t numDEs = record.getNumDataExtensions();
+    const auto numDEs = record.getNumDataExtensions();
     for (uint32_t ii = 0; ii < numDEs; ++ii)
     {
        nitf::DESegment segment = dataExtensions[ii];
@@ -175,7 +177,7 @@ void Writer::setDEWriteHandlers(nitf::IOHandle& io, const nitf::Record& record)
        std::shared_ptr< ::nitf::WriteHandler> handler(
            new nitf::StreamIOWriteHandler (
                io, offset, segment.getEnd() - offset));
-       setDEWriteHandler(ii, handler);
+       setDEWriteHandler(gsl::narrow<int>(ii), handler);
     }
 }
 

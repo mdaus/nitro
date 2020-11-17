@@ -24,6 +24,8 @@
 #include <string.h>
 #include "nitf/TREUtils.h"
 
+#include "gsl/gsl.h"
+
 using namespace nitf;
 
 TRE::TRE(const TRE& x)
@@ -135,7 +137,7 @@ size_t TRE::getCurrentSize() const
     const int size = nitf_TRE_getCurrentSize(getNativeOrThrow(), &error);
     if (size < 0)
         throw nitf::NITFException(&error);
-    return size >= 0 ? size : 0;
+    return gsl::narrow<size_t>(size >= 0 ? size : 0);
 }
 
 std::string TRE::getTag() const

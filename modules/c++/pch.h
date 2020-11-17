@@ -15,7 +15,6 @@
 #pragma warning(disable: 5027) //	'...': move assignment operator was implicitly defined as deleted
 
 // TODO: get rid of these someday?
-#pragma warning(disable: 4365) // '...': conversion from '...' to '...', signed / unsigned mismatch
 #pragma warning(disable: 5039) //	'...': pointer or reference to potentially throwing function passed to 'extern "C"' function under - EHc.Undefined behavior may occur if this function throws an exception.
 #pragma warning(disable: 4514) //	'...': unreferenced inline function has been removed
 

@@ -269,42 +269,42 @@ void Record::removeReservedExtensionSegment(uint32_t segmentNumber)
 void Record::moveImageSegment(uint32_t oldIndex, int newIndex)
 {
     if (NITF_SUCCESS != nitf_Record_moveImageSegment(getNativeOrThrow(),
-        oldIndex, newIndex, &error))
+        oldIndex, gsl::narrow<uint32_t>(newIndex), &error))
         throw nitf::NITFException(&error);
 }
 
 void Record::moveTextSegment(uint32_t oldIndex, int newIndex)
 {
     if (NITF_SUCCESS != nitf_Record_moveTextSegment(getNativeOrThrow(),
-        oldIndex, newIndex, &error))
+        oldIndex, gsl::narrow<uint32_t>(newIndex), &error))
         throw nitf::NITFException(&error);
 }
 
 void Record::moveGraphicSegment(uint32_t oldIndex, int newIndex)
 {
     if (NITF_SUCCESS != nitf_Record_moveGraphicSegment(getNativeOrThrow(),
-        oldIndex, newIndex, &error))
+        oldIndex, gsl::narrow<uint32_t>(newIndex), &error))
         throw nitf::NITFException(&error);
 }
 
 void Record::moveDataExtensionSegment(uint32_t oldIndex, int newIndex)
 {
     if (NITF_SUCCESS != nitf_Record_moveDataExtensionSegment(getNativeOrThrow(),
-        oldIndex, newIndex, &error))
+        oldIndex, gsl::narrow<uint32_t>(newIndex), &error))
         throw nitf::NITFException(&error);
 }
 
 void Record::moveLabelSegment(uint32_t oldIndex, int newIndex)
 {
     if (NITF_SUCCESS != nitf_Record_moveLabelSegment(getNativeOrThrow(),
-        oldIndex, newIndex, &error))
+        oldIndex, gsl::narrow<uint32_t>(newIndex), &error))
         throw nitf::NITFException(&error);
 }
 
 void Record::moveReservedExtensionSegment(uint32_t oldIndex, int newIndex)
 {
     if (NITF_SUCCESS != nitf_Record_moveReservedExtensionSegment(getNativeOrThrow(),
-        oldIndex, newIndex, &error))
+        oldIndex, gsl::narrow<uint32_t>(newIndex), &error))
         throw nitf::NITFException(&error);
 }
 

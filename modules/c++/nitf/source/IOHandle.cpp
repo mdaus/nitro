@@ -22,6 +22,8 @@
 
 #include <nitf/IOHandle.hpp>
 
+#include "gsl/gsl.h"
+
 namespace nitf
 {
 IOHandle::IOHandle(const std::string& fname,
@@ -46,8 +48,10 @@ IOHandle::open(const char* fname,
                nitf::CreationFlags creation)
 {
     nitf_Error error;
+    const auto access_ = gsl::narrow_cast<int>(access);
+    const auto creation_ = gsl::narrow_cast<int>(creation);
     nitf_IOInterface* const ioInterface =
-            nitf_IOHandleAdapter_open(fname, access, creation, &error);
+            nitf_IOHandleAdapter_open(fname, access_, creation_, &error);
 
     if (!ioInterface)
     {
