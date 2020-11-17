@@ -109,7 +109,6 @@ int main(int argc, char** argv)
     nitf_IOHandle io;
     nitf_Error error;
     char file[NITF_MAX_PATH];
-    int i;
     uint32_t num;
 
     if ( argc != 2 )
@@ -163,7 +162,7 @@ int main(int argc, char** argv)
 
     nitf_Utils_baseName(file, argv[1], ".");
 
-    for (i = 0; i < num; i++)
+    for (uint32_t i = 0; i < num; i++)
     {
         nitf_ImageSegment* segment = nitf_List_get(record->images, i, &error);
         if (!segment)

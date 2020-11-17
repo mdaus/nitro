@@ -1219,7 +1219,8 @@ TEST_CASE_ARGS(testCreate)
     nitf_Error error;
     char* outname = argc > 1 ? argv[1] : "test_create.ntf";
 
-    TEST_ASSERT((record = nitf_Record_construct(NITF_VER_21, &error)));
+    record = nitf_Record_construct(NITF_VER_21, &error);
+    TEST_ASSERT(record);
     TEST_ASSERT(populateFileHeader(record, outname, &error));
     TEST_ASSERT(addImageSegment(record, &error));
     TEST_ASSERT(writeNITF(record, outname, &error));

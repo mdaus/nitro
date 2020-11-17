@@ -106,9 +106,8 @@ NITFPRIV(nitf_CompressionControl*) implOpen(nitf_ImageSubheader *subheader,
                                             nrt_HashTable* userOptions,
                                             nitf_Error *error)
 {
-    ImplControl *implControl = NULL;
-    j2k_Component **components = NULL;
     j2k_WriterOptions options;
+    ImplControl* implControl = NULL;
 
     uint32_t nRows;
     uint32_t nCols;
@@ -277,7 +276,8 @@ NITFPRIV(nitf_CompressionControl*) implOpen(nitf_ImageSubheader *subheader,
         imageType = J2K_TYPE_MONO;
     }
 
-    if (!(implControl = (ImplControl*)NITF_MALLOC(sizeof(ImplControl))))
+    implControl = (ImplControl*)NITF_MALLOC(sizeof(ImplControl));
+    if (!implControl)
     {
         nitf_Error_init(error, NITF_STRERROR( NITF_ERRNO ),
                         NITF_CTXT, NITF_ERR_MEMORY);
@@ -288,8 +288,9 @@ NITFPRIV(nitf_CompressionControl*) implOpen(nitf_ImageSubheader *subheader,
     implControl->comratField = subheader->NITF_COMRAT;
 
     /* initialize the container */
-    if (!(components = (j2k_Component**)J2K_MALLOC(
-            sizeof(j2k_Component*) * nBands)))
+    j2k_Component** components = (j2k_Component**)J2K_MALLOC(
+        sizeof(j2k_Component*) * nBands);
+    if (!components)
     {
         nrt_Error_init(error, NRT_STRERROR(NRT_ERRNO), NRT_CTXT,
                        NRT_ERR_MEMORY);
@@ -298,28 +299,31 @@ NITFPRIV(nitf_CompressionControl*) implOpen(nitf_ImageSubheader *subheader,
 
     for(idx = 0; idx < nBands; ++idx)
     {
-        if (!(components[idx] = j2k_Component_construct(nCols, nRows, abpp,
+        components[idx] = j2k_Component_construct(nCols, nRows, abpp,
                                                         isSigned, 0, 0, 1, 1,
-                                                        error)))
+                                                        error);
+        if (!components[idx])
         {
             goto CATCH_ERROR;
         }
     }
 
-    if (!(implControl->container = j2k_Container_construct(nCols,
+    implControl->container = j2k_Container_construct(nCols,
                                                            nRows,
                                                            nBands,
                                                            components,
                                                            nppbh,
                                                            nppbv,
                                                            imageType,
-                                                           error)))
+                                                           error);
+    if (!implControl->container)
     {
         goto CATCH_ERROR;
     }
 
-    if (!(implControl->writer = j2k_Writer_construct(implControl->container,
-                                                     &options, error)))
+    implControl->writer = j2k_Writer_construct(implControl->container,
+                                                     &options, error);
+    if (!implControl->writer)
     {
         goto CATCH_ERROR;
     }
