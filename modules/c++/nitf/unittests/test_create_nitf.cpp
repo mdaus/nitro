@@ -31,20 +31,24 @@
  * of what will change with a compressor.
  */
 
-#include <import/cli.h>
-#include <import/nitf.hpp>
-#include "io/FileOutputStream.h"
-#include "nitf/CompressedByteProvider.hpp"
 #include <string>
+
+#include <io/FileOutputStream.h>
+
+#include <import/nitf.hpp>
+#include <nitf/CompressedByteProvider.hpp>
+#include <gsl/gsl.h>
+
+#include "TestCase.h"
 
 #ifdef _MSC_VER
 #pragma warning(push)
 #pragma warning(disable: 4125) // decimal digit terminates octal escape sequence
 #endif
 static const struct {
-  size_t   width;
-  size_t   height;
-  size_t   bytesPerPixel;
+  uint32_t   width;
+  uint32_t   height;
+  uint32_t   bytesPerPixel;
   unsigned char  data[188 * 36 * 3 + 1];
 } NITRO_IMAGE = {
   188, 36, 3,
@@ -1148,7 +1152,7 @@ bool testRead(const std::string& pathname)
     nitf::Reader reader;
     nitf::Record record = reader.read(handle);
 
-    for (size_t ii = 0; ii < record.getNumImages(); ++ii)
+    for (int ii = 0; ii < gsl::narrow<int>(record.getNumImages()); ++ii)
     {
         nitf::ImageReader imageReader = reader.newImageReader(ii);
         uint64_t blockSize;
@@ -1169,48 +1173,19 @@ bool testRead(const std::string& pathname)
     return true;
 }
 
-int main(int argc, char **argv)
+TEST_CASE(test_create_nitf_with_byte_provider)
 {
-    try
-    {
-        cli::ArgumentParser parser;
-        parser.setDescription(
-            "This program creates a sample NITF file.");
-        parser.addArgument("-c --compress", "Compress file", cli::STORE_TRUE,
-            "shouldCompress");
-        parser.addArgument("output", "Output filename", cli::STORE, "output",
-            "OUTPUT", 1, 1, true)->setDefault("test_create.nitf");
+    // We can't actually compress. This is just for illustration.
+    const bool shouldCompress = false;
+    const std::string outname("test_create.nitf");
 
-        auto options = parser.parse(argc, argv);
-        // We can't actually compress. This is just for illustration.
-        const bool shouldCompress(options->get<bool>("shouldCompress"));
-        if (shouldCompress)
-        {
-            throw except::Exception(Ctxt("Compression not implemented"));
-        }
-        const std::string outname(options->get<std::string>("output"));
-
-        testCreate(outname, shouldCompress);
-        if (testRead(outname))
-        {
-            return 0;
-        }
-        return 1;
-    }
-
-    catch (const std::exception& ex)
-    {
-        std::cerr << "Caught std::exception: " << ex.what() << std::endl;
-        return 1;
-    }
-    catch (const except::Throwable & t)
-    {
-        std::cerr << "Caught throwable: " << t.toString() << std::endl;
-        return 1;
-    }
-    catch (...)
-    {
-        std::cerr << "Caught unknown exception\n";
-        return 1;
-    }
+    testCreate(outname, shouldCompress);
+    const auto result = testRead(outname);
+    TEST_ASSERT(result);
 }
+
+TEST_MAIN(
+    (void)argc;
+    (void)argv;
+    TEST_CHECK(test_create_nitf_with_byte_provider);
+)
