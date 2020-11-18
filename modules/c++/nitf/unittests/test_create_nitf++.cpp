@@ -1259,7 +1259,7 @@ namespace test_create_nitf
         /* Set the geo-corners to Ann Arbor, MI */
         setCornersFromDMSBox(header);
 
-        const size_t NUM_BANDS = isMono ? 1 : 3;
+        const auto NUM_BANDS = gsl::narrow<size_t>(isMono ? 1 : 3);
         std::vector<nitf::BandInfo> bands(NUM_BANDS, nitf::BandInfo());
         for (size_t ii = 0; ii < bands.size(); ++ii)
         {
@@ -1301,7 +1301,7 @@ namespace test_create_nitf
     void writeNITF(nitf::Record& record, const std::string& filename,
         bool isMono = false)
     {
-        const size_t NUM_BANDS = isMono ? 1 : 3;
+        const int NUM_BANDS = isMono ? 1 : 3;
         nitf::IOHandle out(filename, NITF_ACCESS_WRITEONLY, NITF_CREATE);
         nitf::Writer writer;
         writer.prepare(out, record);
@@ -1310,7 +1310,7 @@ namespace test_create_nitf
         nitf::ImageSource imageSource;
 
         /* make one bandSource per band */
-        for (size_t ii = 0; ii < NUM_BANDS; ++ii)
+        for (int ii = 0; ii < NUM_BANDS; ++ii)
         {
             nitf::BandSource bandSource = nitf::MemorySource(
                 (char*)NITRO_IMAGE.data,
@@ -1336,7 +1336,7 @@ namespace test_create_nitf
     bool testRead(const std::string& pathname, bool isMono = false,
         bool shouldCompress = false)
     {
-        const size_t NUM_BANDS = isMono ? 1 : 3;
+        const int NUM_BANDS = isMono ? 1 : 3;
         nitf::IOHandle handle(pathname, NITF_ACCESS_READONLY, NITF_OPEN_EXISTING);
         nitf::Reader reader;
         nitf::Record record = reader.read(handle);
