@@ -37,7 +37,10 @@
 #include "nitf/CompressedByteProvider.hpp"
 #include <string>
 
-
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4125) // decimal digit terminates octal escape sequence
+#endif
 static const struct {
   size_t   width;
   size_t   height;
@@ -983,7 +986,9 @@ static const struct {
   "\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377"
   "\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377",
 };
-
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 void populateFileHeader(nitf::Record& record, const std::string& title)
 {
