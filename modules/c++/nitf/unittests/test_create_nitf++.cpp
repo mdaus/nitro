@@ -994,59 +994,59 @@ static const struct {
 #pragma warning(pop)
 #endif
 
+void populateFileHeader(nitf::Record& record, const std::string& title)
+{
+    /* the file header is already created, so just grab it */
+    nitf::FileHeader header = record.getHeader();
+
+    header.getOriginStationID().set("github.com");
+    header.getFileTitle().set(title);
+}
+
+
+void setCornersFromDMSBox(nitf::ImageSubheader& header)
+{
+    /*
+     *  You could do this in degrees as easily
+     *  but this way we get to show off some new utilities
+     */
+    int latTopDMS[3] = { 42, 17, 50 };
+    int latBottomDMS[3] = { 42, 15, 14 };
+    int lonEastDMS[3] = { -83, 42, 12 };
+    int lonWestDMS[3] = { -83, 45, 44 };
+
+    double latTopDecimal =
+        nitf::Utils::geographicToDecimal(latTopDMS[0],
+            latTopDMS[1],
+            latTopDMS[2]);
+
+    double latBottomDecimal =
+        nitf::Utils::geographicToDecimal(latBottomDMS[0],
+            latBottomDMS[1],
+            latBottomDMS[2]);
+
+    double lonEastDecimal =
+        nitf::Utils::geographicToDecimal(lonEastDMS[0],
+            lonEastDMS[1],
+            lonEastDMS[2]);
+
+
+    double lonWestDecimal =
+        nitf::Utils::geographicToDecimal(lonWestDMS[0],
+            lonWestDMS[1],
+            lonWestDMS[2]);
+
+    double corners[4][2];
+    corners[0][0] = latTopDecimal;     corners[0][1] = lonWestDecimal;
+    corners[1][0] = latTopDecimal;     corners[1][1] = lonEastDecimal;
+    corners[2][0] = latBottomDecimal;  corners[2][1] = lonEastDecimal;
+    corners[3][0] = latBottomDecimal;  corners[3][1] = lonWestDecimal;
+
+    header.setCornersFromLatLons(NITF_CORNERS_DECIMAL, corners);
+}
+
 namespace test_create_nitf_with_byte_provider
 {
-    void populateFileHeader(nitf::Record& record, const std::string& title)
-    {
-        /* the file header is already created, so just grab it */
-        nitf::FileHeader header = record.getHeader();
-
-        header.getOriginStationID().set("github.com");
-        header.getFileTitle().set(title);
-    }
-
-
-    void setCornersFromDMSBox(nitf::ImageSubheader& header)
-    {
-        /*
-         *  You could do this in degrees as easily
-         *  but this way we get to show off some new utilities
-         */
-        int latTopDMS[3] = { 42, 17, 50 };
-        int latBottomDMS[3] = { 42, 15, 14 };
-        int lonEastDMS[3] = { -83, 42, 12 };
-        int lonWestDMS[3] = { -83, 45, 44 };
-
-        double latTopDecimal =
-            nitf::Utils::geographicToDecimal(latTopDMS[0],
-                latTopDMS[1],
-                latTopDMS[2]);
-
-        double latBottomDecimal =
-            nitf::Utils::geographicToDecimal(latBottomDMS[0],
-                latBottomDMS[1],
-                latBottomDMS[2]);
-
-        double lonEastDecimal =
-            nitf::Utils::geographicToDecimal(lonEastDMS[0],
-                lonEastDMS[1],
-                lonEastDMS[2]);
-
-
-        double lonWestDecimal =
-            nitf::Utils::geographicToDecimal(lonWestDMS[0],
-                lonWestDMS[1],
-                lonWestDMS[2]);
-
-        double corners[4][2];
-        corners[0][0] = latTopDecimal;     corners[0][1] = lonWestDecimal;
-        corners[1][0] = latTopDecimal;     corners[1][1] = lonEastDecimal;
-        corners[2][0] = latBottomDecimal;  corners[2][1] = lonEastDecimal;
-        corners[3][0] = latBottomDecimal;  corners[3][1] = lonWestDecimal;
-
-        header.setCornersFromLatLons(NITF_CORNERS_DECIMAL, corners);
-    }
-
     void addImageSegment(nitf::Record& record,
         bool shouldCompress = false)
     {
@@ -1176,7 +1176,7 @@ namespace test_create_nitf_with_byte_provider
     }
 }
 
-TEST_CASE(test_create_nitf_with_byte_provider)
+TEST_CASE(test_create_nitf_with_byte_provider_test)
 {
     // We can't actually compress. This is just for illustration.
     const bool shouldCompress = false;
@@ -1190,57 +1190,6 @@ TEST_CASE(test_create_nitf_with_byte_provider)
 namespace test_create_nitf
 {
     static const char* RGB[] = { "R", "G", "B" };
-
-    void populateFileHeader(nitf::Record& record, const std::string& title)
-    {
-        /* the file header is already created, so just grab it */
-        nitf::FileHeader header = record.getHeader();
-
-        header.getOriginStationID().set("github.com");
-        header.getFileTitle().set(title);
-    }
-
-
-    void setCornersFromDMSBox(nitf::ImageSubheader& header)
-    {
-        /*
-         *  You could do this in degrees as easily
-         *  but this way we get to show off some new utilities
-         */
-        int latTopDMS[3] = { 42, 17, 50 };
-        int latBottomDMS[3] = { 42, 15, 14 };
-        int lonEastDMS[3] = { -83, 42, 12 };
-        int lonWestDMS[3] = { -83, 45, 44 };
-
-        double latTopDecimal =
-            nitf::Utils::geographicToDecimal(latTopDMS[0],
-                latTopDMS[1],
-                latTopDMS[2]);
-
-        double latBottomDecimal =
-            nitf::Utils::geographicToDecimal(latBottomDMS[0],
-                latBottomDMS[1],
-                latBottomDMS[2]);
-
-        double lonEastDecimal =
-            nitf::Utils::geographicToDecimal(lonEastDMS[0],
-                lonEastDMS[1],
-                lonEastDMS[2]);
-
-
-        double lonWestDecimal =
-            nitf::Utils::geographicToDecimal(lonWestDMS[0],
-                lonWestDMS[1],
-                lonWestDMS[2]);
-
-        double corners[4][2];
-        corners[0][0] = latTopDecimal;     corners[0][1] = lonWestDecimal;
-        corners[1][0] = latTopDecimal;     corners[1][1] = lonEastDecimal;
-        corners[2][0] = latBottomDecimal;  corners[2][1] = lonEastDecimal;
-        corners[3][0] = latBottomDecimal;  corners[3][1] = lonWestDecimal;
-
-        header.setCornersFromLatLons(NITF_CORNERS_DECIMAL, corners);
-    }
 
     void addImageSegment(nitf::Record& record, bool isMono = false,
         bool shouldCompress = false)
@@ -1381,22 +1330,39 @@ namespace test_create_nitf
     }
 }
 
-TEST_CASE(test_create_nitf)
+TEST_CASE(test_create_nitf_test)
 {
-    const bool isMono = true;
-    // If we're compressing, we're using the J2K plugin, so please ensure
-    // that it is on your NITF_PLUGIN_PATH
-    const bool shouldCompress = false;
     const std::string outname("test_create.nitf");
 
+
+    bool shouldCompress = false;
+
+    bool isMono = true;
     test_create_nitf::testCreate(outname, isMono, shouldCompress);
-    const bool result = test_create_nitf::testRead(outname, isMono, shouldCompress);
+    bool result = test_create_nitf::testRead(outname, isMono, shouldCompress);
+    TEST_ASSERT(result);
+
+    isMono = false;
+    test_create_nitf::testCreate(outname, isMono, shouldCompress);
+    result = test_create_nitf::testRead(outname, isMono, shouldCompress);
+    TEST_ASSERT(result);
+
+    // If we're compressing, we're using the J2K plugin, so please ensure
+    // that it is on your NITF_PLUGIN_PATH
+    shouldCompress = false; // TODO: true
+    test_create_nitf::testCreate(outname, isMono, shouldCompress);
+    result = test_create_nitf::testRead(outname, isMono, shouldCompress);
+    TEST_ASSERT(result);
+
+    isMono = true;
+    test_create_nitf::testCreate(outname, isMono, shouldCompress);
+    result = test_create_nitf::testRead(outname, isMono, shouldCompress);
     TEST_ASSERT(result);
 }
 
 TEST_MAIN(
     (void)argc;
     (void)argv;
-    TEST_CHECK(test_create_nitf_with_byte_provider);
-    TEST_CHECK(test_create_nitf);
+    TEST_CHECK(test_create_nitf_with_byte_provider_test);
+    TEST_CHECK(test_create_nitf_test);
 )
