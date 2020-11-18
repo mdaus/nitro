@@ -2,25 +2,49 @@
 
 #include <string>
 
+#include <import/sys.h>
 #include <sys/Filesystem.h>
 
 #include "nitf_Test.h"
 
 namespace fs = sys::Filesystem;
 
+static std::string Configuration() // "Configuration" is typically "Debug" or "Release"
+{
+#if defined(NDEBUG) // i.e., release
+	return "Release";
+#else
+	return "Debug";
+#endif
+}
+
+static std::string Platform() // "Configuration" is typically "Debug" or "Release"
+{
+#ifdef _WIN64 
+	return "x64";
+#else
+	return "Win32";
+#endif
+}
+
+// https://stackoverflow.com/questions/13794130/visual-studio-how-to-check-used-c-platform-toolset-programmatically
+static std::string PlatformToolset()
+{
+	// https://docs.microsoft.com/en-us/cpp/build/how-to-modify-the-target-framework-and-platform-toolset?view=msvc-160
+	#if _MSC_FULL_VER >= 190000000
+	return "v142";
+	#else
+	#error "Don't know $(PlatformToolset) value.'"
+	#endif
+}
+
 static bool is_x64_Configuration(const fs::path& path) // "Configuration" is typically "Debug" or "Release"
 {
-	const std::string build_configuration =
-#if defined(NDEBUG) // i.e., release
-		"Release";
-#else
-		"Debug";
-#endif
-
+	const std::string build_configuration = Configuration();
 	const auto Configuration = path.filename();
 	const auto path_parent_path = path.parent_path();
 	const auto x64 = path_parent_path.filename();
-	return (Configuration == build_configuration) && (x64 == "x64");
+	return (Configuration == build_configuration) && (x64 == Platform());
 }
 
 static bool is_install_unittests(const fs::path& path)
@@ -50,7 +74,9 @@ static fs::path buildDir(const fs::path& path)
 		// Running GTest unit-tests in Visual Studio on Windows
 		if (is_x64_Configuration(cwd))
 		{
-			return cwd / path;
+			const auto root = cwd.parent_path().parent_path();
+			const auto install = "install-" + Configuration() + "-" + Platform() + "." + PlatformToolset();
+			return root / install / path;
 		}
 	}
 
@@ -104,8 +130,7 @@ struct nitf_test_create_nitf__ : public ::testing::Test {
 	nitf_test_create_nitf__() {
 		// initialization code here
 		//const std::string NITF_PLUGIN_PATH = R"(C:\Users\jdsmith\source\repos\nitro\x64\Debug\share\nitf\plugins)";
-		const std::string putenv_ = "NITF_PLUGIN_PATH=" + buildPluginsDir().string();
-		_putenv(putenv_.c_str());
+		sys::OS().setEnv("NITF_PLUGIN_PATH", buildPluginsDir().string(), true /*overwrite*/);
 	}
 
 	void SetUp() {

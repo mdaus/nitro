@@ -34,6 +34,7 @@
 #include <string>
 
 #include <io/FileOutputStream.h>
+#include <import/sys.h>
 
 #include <import/nitf.hpp>
 #include <nitf/CompressedByteProvider.hpp>
@@ -1349,15 +1350,25 @@ TEST_CASE(test_create_nitf_test)
 
     // If we're compressing, we're using the J2K plugin, so please ensure
     // that it is on your NITF_PLUGIN_PATH
-    shouldCompress = false; // TODO: true
-    test_create_nitf::testCreate(outname, isMono, shouldCompress);
-    result = test_create_nitf::testRead(outname, isMono, shouldCompress);
-    TEST_ASSERT(result);
+    std::string nitf_plugin_path;
+    if (sys::OS().getEnvIfSet("NITF_PLUGIN_PATH", nitf_plugin_path))
+    {
+        TEST_ASSERT_FALSE(nitf_plugin_path.empty());
+        shouldCompress = false; // TODO: true
 
-    isMono = true;
-    test_create_nitf::testCreate(outname, isMono, shouldCompress);
-    result = test_create_nitf::testRead(outname, isMono, shouldCompress);
-    TEST_ASSERT(result);
+        test_create_nitf::testCreate(outname, isMono, shouldCompress);
+        result = test_create_nitf::testRead(outname, isMono, shouldCompress);
+        TEST_ASSERT(result);
+
+        isMono = true;
+        test_create_nitf::testCreate(outname, isMono, shouldCompress);
+        result = test_create_nitf::testRead(outname, isMono, shouldCompress);
+        TEST_ASSERT(result);
+    }
+    else
+    {
+        TEST_ASSERT_TRUE(true);
+    }
 }
 
 TEST_MAIN(
