@@ -43,7 +43,7 @@ ComponentInfo::ComponentInfo(nitf_ComponentInfo * x)
 }
 
 ComponentInfo::ComponentInfo(uint32_t subHeaderSize, uint64_t dataSize) 
-    : ComponentInfo(nitf_ComponentInfo_construct(subHeaderSize, dataSize, &error))
+    : ComponentInfo(nitf_ComponentInfo_construct(subHeaderSize, gsl::narrow<uint32_t>(dataSize), &error))
 {
     setManaged(false);
 }

@@ -47,12 +47,19 @@ struct IOInterfaceDestructor : public nitf::MemoryDestructor<nitf_IOInterface>
  */
 class IOInterface : public nitf::Object<nitf_IOInterface, IOInterfaceDestructor>
 {
-public:
-    // Set native object
-    IOInterface(nitf_IOInterface * x)
+protected:
+    IOInterface() = default;
+    void set_native_object(nitf_IOInterface* x)
     {
         setNative(x);
         getNativeOrThrow();
+    }
+
+
+public:
+    IOInterface(nitf_IOInterface * x)
+    {
+        set_native_object(x);
     }
 
     //! Copy constructor

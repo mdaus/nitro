@@ -675,3 +675,20 @@ NRTAPI(char*) nrt_strdup(const char* src)
     }
     return NULL;
 }
+
+NRTAPI(size_t) nrt_strlen(const char* src)
+{
+    return strlen(src);
+}
+NRTAPI(uint32_t) nrt_strlen32(const char* src)
+{
+    return (uint32_t) strlen(src);
+}
+NRTAPI(uint16_t) nrt_strlen16(const char* src)
+{
+    return (uint16_t)strlen(src);
+}
+NRTAPI(uint8_t) nrt_strlen8(const char* src)
+{
+    return (uint8_t)strlen(src);
+}

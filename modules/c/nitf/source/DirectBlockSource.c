@@ -74,7 +74,7 @@ NITFPRIV(NITF_BOOL) DirectBlockSource_read(NITF_DATA * data, void *buf,
     if(!block)
         return NITF_FAILURE;
 
-    if (blockSize != size)
+    if (blockSize != (uint64_t)size)
     {
         nitf_Error_initf(error, NITF_CTXT,
                          NITF_ERR_READING_FROM_FILE,

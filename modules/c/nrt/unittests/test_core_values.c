@@ -41,7 +41,7 @@ TEST_CASE(testCoreValues)
     TEST_ASSERT_EQ_INT(sizeof(uint64_t), expected);
     TEST_ASSERT_EQ_INT(sizeof(int64_t), expected);
 
-    const int sizeof_long = sizeof(long);
+    int sizeof_long = sizeof(long);
     if (sizeof_long == 4)
     {
         const char *ok = "2147483647";

@@ -121,7 +121,7 @@ static void printTREField(const nitf::Field& field)
 void printTRE(const nitf::TRE& tre)
 {
     // This is so you know how long the TRE is
-    const uint32_t treLength = tre.getCurrentSize();
+    const auto treLength = tre.getCurrentSize();
 
     /*
      *  This is the name for the description that was selected to field

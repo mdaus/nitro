@@ -178,7 +178,7 @@ NITFAPI(NITF_BOOL) nitf_Field_setUint32(nitf_Field * field,
     /*  Convert the number to a string */
 
     NITF_SNPRINTF(numberBuffer, 20, "%"PRIu32, number);
-    numberLen = strlen(numberBuffer);
+    numberLen = nrt_strlen32(numberBuffer);
 
     /* if it's resizable and a different length, we resize */
     if (field->resizable && numberLen != field->length)
@@ -226,7 +226,7 @@ NITFAPI(NITF_BOOL) nitf_Field_setUint64(nitf_Field * field,
     /*  Convert thte number to a string */
 
     NITF_SNPRINTF(numberBuffer, 20, "%"PRIu64"", number);
-    numberLen = strlen(numberBuffer);
+    numberLen = nrt_strlen32(numberBuffer);
 
     /* if it's resizable and a different length, we resize */
     if (field->resizable && numberLen != field->length)
@@ -273,7 +273,7 @@ NITFAPI(NITF_BOOL) nitf_Field_setInt32(nitf_Field * field,
     /*  Convert the number to a string */
 
     NITF_SNPRINTF(numberBuffer, 20, "%ld", (long) number);
-    numberLen = strlen(numberBuffer);
+    numberLen = nrt_strlen32(numberBuffer);
 
     /* if it's resizable and a different length, we resize */
     if (field->resizable && numberLen != field->length)
@@ -320,7 +320,7 @@ NITFAPI(NITF_BOOL) nitf_Field_setInt64(nitf_Field * field,
     /*  Convert the number to a string */
 
     NITF_SNPRINTF(numberBuffer, 20, "%lld", (long long)number);
-    numberLen = strlen(numberBuffer);
+    numberLen = nrt_strlen32(numberBuffer);
 
     /* if it's resizable and a different length, we resize */
     if (field->resizable && numberLen != field->length)
@@ -354,10 +354,7 @@ NITFPRIV(NITF_BOOL) isBCSA(const char *str, size_t len, nitf_Error * error);
 NITFAPI(NITF_BOOL) nitf_Field_setString(nitf_Field * field,
                                         const char *str, nitf_Error * error)
 {
-    uint32_t strLen;         /* Length of input string */
-
     /*  Check the field type */
-
     if (field->type == NITF_BINARY)
     {
         nitf_Error_init(error,
@@ -368,7 +365,7 @@ NITFAPI(NITF_BOOL) nitf_Field_setString(nitf_Field * field,
 
     /*  Transfer and pad result (check for correct characters) */
 
-    strLen = strlen(str);
+    uint32_t strLen = nrt_strlen32(str); /* Length of input string */
 
     /* if it's resizable and a different length, we resize */
     if (field->resizable && strLen != field->length)
@@ -464,7 +461,7 @@ NITFAPI(NITF_BOOL) nitf_Field_setReal(nitf_Field * field,
     /* Allocate buffer used to build value */
 
     /* The 64 covers the puncuation and exponent and is overkill */
-    bufferLen = field->length * 2 + 64;
+    bufferLen = (uint32_t)(field->length * 2 + 64);
     buffer = (char* )NITF_MALLOC(bufferLen + 1);
     if (buffer == NULL)
     {
@@ -480,14 +477,14 @@ NITFAPI(NITF_BOOL) nitf_Field_setReal(nitf_Field * field,
       number of digits in the whole part of the number.
     */
 
-    precision = field->length;   /* Must be too big */
+    precision = (uint32_t)field->length;   /* Must be too big */
     if (plus)
         NITF_SNPRINTF(fmt, 64, "%%+-1.%dl%s", precision, type);
     else
         NITF_SNPRINTF(fmt, 64, "%%-1.%dl%s", precision, type);
     NITF_SNPRINTF(buffer, bufferLen + 1, fmt, value);
 
-    bufferLen = strlen(buffer);
+    bufferLen = nrt_strlen32(buffer);
 
     /* if it's resizable and a different length, we resize */
     if (field->resizable && bufferLen != field->length)
@@ -499,7 +496,7 @@ NITFAPI(NITF_BOOL) nitf_Field_setReal(nitf_Field * field,
     if (bufferLen > field->length)
     {
         if (precision > bufferLen - field->length)
-            precision -= bufferLen - field->length;
+            precision -= (uint32_t)(bufferLen - field->length);
         else
             precision = 0;
 
@@ -1025,7 +1022,6 @@ NITFPROT(NITF_BOOL) nitf_Field_resetLength(nitf_Field * field,
         NITF_BOOL keepData,
         nitf_Error * error)
 {
-    size_t diff;
     size_t oldLength;
     char *raw;
 
@@ -1060,7 +1056,7 @@ NITFPROT(NITF_BOOL) nitf_Field_resetLength(nitf_Field * field,
         /* copy the old data */
         else
         {
-            diff = newLength - field->length;
+            int64_t diff = newLength - field->length;
             if (field->type == NITF_BCS_N)
                 copyAndFillZeros(field, raw,
                                  diff < 0 ? newLength : oldLength, error);

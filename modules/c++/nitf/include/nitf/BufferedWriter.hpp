@@ -87,7 +87,7 @@ private:
     const mem::ScopedArray<char> mScopedBuffer;
     char* const mBuffer;
 
-    uint64_t mPosition;
+    nitf::Off mPosition;
     uint64_t mTotalWritten;
     uint64_t mBlocksWritten;
     uint64_t mPartialBlocks;

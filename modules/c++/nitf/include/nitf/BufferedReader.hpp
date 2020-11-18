@@ -106,12 +106,12 @@ protected:
 private:
     void readNextBuffer();
 
-    const size_t mMaxBufferSize;
+    const nitf::Off mMaxBufferSize;
     const mem::ScopedArray<char> mScopedBuffer;
     char* const mBuffer;
 
-    size_t mPosition;
-    size_t mBufferSize;
+    nitf::Off mPosition;
+    nitf::Off mBufferSize;
     size_t mTotalRead;
     size_t mBlocksRead;
     size_t mPartialBlocks;

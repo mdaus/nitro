@@ -81,7 +81,7 @@ NITFAPI(nitf_Off) nitf_SegmentReader_seek(nitf_SegmentReader * segmentReader,
         case NITF_SEEK_CUR:
             if ((offset + segmentReader->virtualOffset >
                     segmentReader->dataLength)
-                    || (offset + segmentReader->virtualOffset < 0))
+                    || ((int64_t)(offset + segmentReader->virtualOffset) < 0))
             {
                 nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER,
                                  "Seek offset out of bounds\n");

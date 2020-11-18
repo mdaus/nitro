@@ -22,6 +22,8 @@
 
 #include "nitf/DESubheader.hpp"
 
+#include "gsl/gsl.h"
+
 using namespace nitf;
 
 DESubheader::DESubheader(const DESubheader & x)
@@ -131,7 +133,7 @@ void DESubheader::setSubheaderFields(nitf::TRE fields)
 
 uint32_t DESubheader::getDataLength() const
 {
-    return getNativeOrThrow()->dataLength;
+    return gsl::narrow<uint32_t>(getNativeOrThrow()->dataLength);
 }
 
 void DESubheader::setDataLength(uint32_t value)

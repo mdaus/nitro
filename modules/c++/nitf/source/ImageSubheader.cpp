@@ -19,11 +19,13 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include "nitf/ImageSubheader.hpp"
 
 #include <nitf/ImageIO.h>
-#include <nitf/ImageSubheader.hpp>
 #include <nitf/Object.hpp>
 #include <nitf/NITFException.hpp>
+
+#include "gsl/gsl.h"
 
 namespace nitf
 {
@@ -464,7 +466,7 @@ size_t ImageSubheader::getNumBytesPerPixel_() const
 {
     const size_t numBitsPerPixel =
             nitf::Field(getNativeOrThrow()->numBitsPerPixel);
-    return NITF_NBPP_TO_BYTES(numBitsPerPixel);
+    return gsl::narrow<size_t>(NITF_NBPP_TO_BYTES(numBitsPerPixel));
 }
 
 size_t ImageSubheader::getNumBytesOfImageData() const

@@ -22,13 +22,15 @@
 
 #include "nitf/BandSource.hpp"
 
+#include "gsl/gsl.h"
+
 nitf::MemorySource::MemorySource(const void* data,
                                  size_t size,
                                  nitf::Off start,
                                  int numBytesPerPixel,
                                  int pixelSkip)
 {
-    setNative(nitf_MemorySource_construct(data, size, start, numBytesPerPixel, pixelSkip, &error));
+    setNative(nitf_MemorySource_construct(data, gsl::narrow<nitf::Off>(size), start, numBytesPerPixel, pixelSkip, &error));
     setManaged(false);
 }
 

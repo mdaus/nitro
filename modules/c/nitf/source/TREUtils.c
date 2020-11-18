@@ -27,7 +27,7 @@ NITFAPI(int) nitf_TREUtils_parse(nitf_TRE* tre, char* bufptr, nitf_Error* error)
 {
     int status = 1;
     int iterStatus = NITF_SUCCESS;
-    int offset = 0;
+    uint32_t offset = 0;
     int length;
     nitf_TRECursor cursor;
     nitf_Field* field = NULL;
@@ -160,7 +160,7 @@ nitf_TREUtils_getRawData(nitf_TRE* tre,
                          nitf_Error* error)
 {
     int status = 1;
-    int offset = 0;
+    uint32_t offset = 0;
     uint32_t length;
     int tempLength;
 
@@ -325,7 +325,7 @@ nitf_TREUtils_setValue(nitf_TRE* tre,
     nitf_FieldType type = NITF_BCS_A;
 
     /* used temporarily for storing the length */
-    int length;
+    size_t length;
 
     /* get out if TRE is null */
     if (!tre)
@@ -694,8 +694,8 @@ NITFAPI(int) nitf_TREUtils_print(nitf_TRE* tre, nitf_Error* error)
 }
 NITFAPI(int) nitf_TREUtils_computeLength(nitf_TRE* tre)
 {
-    int length = 0;
-    int tempLength;
+    size_t length = 0;
+    size_t tempLength;
     nitf_Error error;
     nitf_Pair* pair; /* temp nitf_Pair */
     nitf_Field* field; /* temp nitf_Field */
@@ -733,7 +733,7 @@ NITFAPI(int) nitf_TREUtils_computeLength(nitf_TRE* tre)
         }
     }
     nitf_TRECursor_cleanup(&cursor);
-    return length;
+    return (int)length;
 }
 
 NITFAPI(NITF_BOOL) nitf_TREUtils_isSane(nitf_TRE* tre)
