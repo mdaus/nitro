@@ -32,8 +32,9 @@
 #pragma warning(disable: 5204) // '...': class has virtual functions, but its trivial destructor is not virtual; instances of objects derived from this class may not be destructed correctly
 #pragma warning(disable: 26440) // Function '...' can be declared '...' (f.6).
 #pragma warning(disable: 26455) // Default constructor may not throw.Declare it '...' (f.6).
-#pragma warning(disable: 26432) // If you define or delete any default operation in the type '...', define or delete them all(c.21)
-
+#pragma warning(disable: 26432) // If you define or delete any default operation in the type '...', define or delete them all(c.21).
+#pragma warning(disable: 26429) // Symbol '...' is never tested for nullness, it can be marked as not_null(f.23).
+#pragma warning(disable: 26409) // Avoid calling new and delete explicitly, use std::make_unique<T> instead(r.11).
 
 #define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
 #include <windows.h>
