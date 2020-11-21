@@ -42,7 +42,7 @@ SubWindow::SubWindow(nitf_SubWindow * x)
     getNativeOrThrow();
 }
 
-SubWindow::SubWindow() : mDownSampler(NULL)
+SubWindow::SubWindow() : mDownSampler(nullptr)
 {
     setNative(nitf_SubWindow_construct(&error));
     getNativeOrThrow();
@@ -106,7 +106,7 @@ uint32_t SubWindow::getBandList(int i)
 
 void SubWindow::setBandList(uint32_t * value)
 {
-    getNativeOrThrow()->bandList = (uint32_t*)value;
+    getNativeOrThrow()->bandList = value;
 }
 
 uint32_t SubWindow::getNumBands() const

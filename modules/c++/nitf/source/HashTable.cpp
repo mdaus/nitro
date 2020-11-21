@@ -33,34 +33,35 @@ nitf::HashTableIterator & nitf::HashTableIterator::operator=(const nitf::HashTab
 }
 
 nitf_HashTableIterator & nitf::HashTableIterator::getHandle() { return handle; }
+nitf_HashTableIterator& nitf::HashTableIterator::getHandle() const { return handle; }
 
-bool nitf::HashTableIterator::equals(nitf::HashTableIterator& it2)
+bool nitf::HashTableIterator::equals(const nitf::HashTableIterator& it2) const
 {
-    NITF_BOOL x = nitf_HashTableIterator_equals(&handle, &it2.getHandle());
+    const NITF_BOOL x = nitf_HashTableIterator_equals(&handle, &it2.getHandle());
     if (!x) return false;
     return true;
 }
 
-bool nitf::HashTableIterator::operator==(const nitf::HashTableIterator& it2)
+bool nitf::HashTableIterator::operator==(const nitf::HashTableIterator& it2) const
 {
-    return this->equals((nitf::HashTableIterator&)it2);
+    return this->equals(it2);
 }
 
-bool nitf::HashTableIterator::notEqualTo(nitf::HashTableIterator& it2)
+bool nitf::HashTableIterator::notEqualTo(const nitf::HashTableIterator& it2) const
 {
-    NITF_BOOL x = nitf_HashTableIterator_notEqualTo(&handle, &it2.getHandle());
+    const NITF_BOOL x = nitf_HashTableIterator_notEqualTo(&handle, &it2.getHandle());
     if (!x) return false;
     return true;
 }
 
-bool nitf::HashTableIterator::operator!=(const nitf::HashTableIterator& it2)
+bool nitf::HashTableIterator::operator!=(const nitf::HashTableIterator& it2) const
 {
-    return this->notEqualTo((nitf::HashTableIterator&)it2);
+    return this->notEqualTo(it2);
 }
 
 void nitf::HashTableIterator::increment() { nitf_HashTableIterator_increment(&handle); }
 
-void nitf::HashTableIterator::operator++(int x) { increment(); }
+void nitf::HashTableIterator::operator++(int) { increment(); }
 
 nitf::HashTableIterator & nitf::HashTableIterator::operator+=(int x)
 {
@@ -131,26 +132,26 @@ void nitf::HashTable::initDefaults()
 
 nitf::HashTable::~HashTable(){}
 
-bool nitf::HashTable::exists(const std::string& key)
+bool nitf::HashTable::exists(const std::string& key) const
 {
     return nitf_HashTable_exists(getNative(), key.c_str());
 }
 
-void nitf::HashTable::print()
+void nitf::HashTable::print() const
 {
     nitf_HashTable_print(getNative());
 }
 
 void nitf::HashTable::forEach(HashIterator& fun, NITF_DATA* userData)
 {
-    int numBuckets = getNumBuckets();
+    const int numBuckets = getNumBuckets();
     for (int i = 0; i < numBuckets; i++)
     {
         nitf::List l = getBucket(i);
         for (nitf::ListIterator iter = l.begin();
                 iter != l.end(); ++iter)
         {
-            nitf::Pair pair = nitf::Pair((nitf_Pair*)(*iter));
+            nitf::Pair pair = nitf::Pair(*iter);
             fun(this, pair, userData);
         }
     }
@@ -160,12 +161,12 @@ void nitf::HashTable::insert(const std::string& key, NITF_DATA* data)
 {
     if (key.length() == 0)
         throw except::NoSuchKeyException(Ctxt("Empty key value"));
-    NITF_BOOL x = nitf_HashTable_insert(getNative(), key.c_str(), data, &error);
+    const NITF_BOOL x = nitf_HashTable_insert(getNative(), key.c_str(), data, &error);
     if (!x)
         throw nitf::NITFException(&error);
 }
 
-nitf::Pair nitf::HashTable::find(const std::string& key)
+nitf::Pair nitf::HashTable::find(const std::string& key) const
 {
     if (key.length() == 0)
         throw except::NoSuchKeyException(Ctxt("Empty key value"));
@@ -180,7 +181,7 @@ nitf::Pair nitf::HashTable::operator[] (const std::string& key)
     return find(key);
 }
 
-nitf::List nitf::HashTable::getBucket(int i)
+nitf::List nitf::HashTable::getBucket(int i) const
 {
     //return *mBuckets.at(i);
     if (!getNativeOrThrow()->buckets || !getNativeOrThrow()->buckets[i])
@@ -199,15 +200,15 @@ int nitf::HashTable::getAdopt() const
     return getNativeOrThrow()->adopt;
 }
 
-nitf::HashTableIterator nitf::HashTable::begin()
+nitf::HashTableIterator nitf::HashTable::begin() const
 {
-    nitf_HashTableIterator x = nitf_HashTable_begin(getNative());
+    const nitf_HashTableIterator x = nitf_HashTable_begin(getNative());
     return nitf::HashTableIterator(x);
 }
 
-nitf::HashTableIterator nitf::HashTable::end()
+nitf::HashTableIterator nitf::HashTable::end() const
 {
-    nitf_HashTableIterator x = nitf_HashTable_end(getNative());
+    const nitf_HashTableIterator x = nitf_HashTable_end(getNative());
     return nitf::HashTableIterator(x);
 }
 

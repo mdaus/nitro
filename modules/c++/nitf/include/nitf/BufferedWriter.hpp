@@ -66,28 +66,28 @@ public:
 
 protected:
 
-    virtual void readImpl(void* buf, size_t size);
+    void readImpl(void* buf, size_t size) override;
 
-    virtual void writeImpl(const void* buf, size_t size);
+    void writeImpl(const void* buf, size_t size) override;
 
-    virtual bool canSeekImpl() const;
+    bool canSeekImpl() const override;
 
-    virtual nitf::Off seekImpl(nitf::Off offset, int whence);
+    nitf::Off seekImpl(nitf::Off offset, int whence) override;
 
-    virtual nitf::Off tellImpl() const;
+    nitf::Off tellImpl() const override;
 
-    virtual nitf::Off getSizeImpl() const;
+    nitf::Off getSizeImpl() const override;
 
-    virtual int getModeImpl() const;
+    int getModeImpl() const override;
 
-    virtual void closeImpl();
+    void closeImpl() override;
 
 private:
     const size_t mBufferSize;
     const mem::ScopedArray<char> mScopedBuffer;
     char* const mBuffer;
 
-    uint64_t mPosition;
+    nitf::Off mPosition;
     uint64_t mTotalWritten;
     uint64_t mBlocksWritten;
     uint64_t mPartialBlocks;

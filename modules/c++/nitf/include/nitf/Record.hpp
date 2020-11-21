@@ -27,6 +27,7 @@
 #include <string>
 
 #include "nitf/Record.h"
+#include "nitf/ComplexityLevel.h"
 
 #include "List.hpp"
 #include "FileHeader.hpp"
@@ -76,7 +77,7 @@ public:
     nitf::Version getVersion() const;
 
     //! Get the header
-    nitf::FileHeader getHeader();
+    nitf::FileHeader getHeader() const;
     //! Set the header
     void setHeader(nitf::FileHeader & value);
 
@@ -88,23 +89,23 @@ public:
     uint32_t getNumReservedExtensions() const;
 
     //! Get the images
-    nitf::List getImages();
+    nitf::List getImages() const;
 
 
     //! Get the graphics
-    nitf::List getGraphics();
+    nitf::List getGraphics() const;
 
     //! Get the labels
-    nitf::List getLabels();
+    nitf::List getLabels() const;
 
     //! Get the texts
-    nitf::List getTexts();
+    nitf::List getTexts() const;
 
     //! Get the dataExtensions
-    nitf::List getDataExtensions();
+    nitf::List getDataExtensions() const;
 
     //! Get the reservedExtensions
-    nitf::List getReservedExtensions();
+    nitf::List getReservedExtensions() const;
 
     //! Make and return a new ImageSegment
     nitf::ImageSegment newImageSegment(int index = -1);
@@ -170,4 +171,16 @@ private:
 };
 
 }
+
+#ifndef SWIGPYTHON
+// These are already global via C-style enum for SWIG
+constexpr auto NITF_CLEVEL_UNKNOWN = complianceLevel::NITF_CLEVEL_UNKNOWN;
+constexpr auto NITF_CLEVEL_03 = complianceLevel::NITF_CLEVEL_03;
+constexpr auto NITF_CLEVEL_05 = complianceLevel::NITF_CLEVEL_05;
+constexpr auto NITF_CLEVEL_06 = complianceLevel::NITF_CLEVEL_06;
+constexpr auto NITF_CLEVEL_07 = complianceLevel::NITF_CLEVEL_07;
+constexpr auto NITF_CLEVEL_09 = complianceLevel::NITF_CLEVEL_09;
+constexpr auto NITF_CLEVEL_CHECK_FAILED = complianceLevel::NITF_CLEVEL_CHECK_FAILED;
+#endif
+
 #endif

@@ -40,7 +40,7 @@ NITF_BOOL DecompressionInterface::adapterStart(
         ioInter.setManaged(true);
         nitf::BlockingInfo blockInfo(blockingDefinition);
         blockInfo.setManaged(true);
-        reinterpret_cast<Decompressor*>(object)->start(ioInter, 
+        static_cast<Decompressor*>(object)->start(ioInter,
                                                        offset, 
                                                        fileLength, 
                                                        blockInfo,
@@ -75,26 +75,26 @@ uint8_t* DecompressionInterface::adapterReadBlock(
 {
     try
     {
-        return reinterpret_cast<Decompressor*>(object)->readBlock(blockNumber,
+        return static_cast<Decompressor*>(object)->readBlock(blockNumber,
                                                                   blockSize); 
     }
     catch (const except::Exception& ex)
     {
         nrt_Error_init(error, ex.getMessage().c_str(), NRT_CTXT,
                        NRT_ERR_DECOMPRESSION);
-        return NULL;
+        return nullptr;
     }
     catch (const std::exception& ex)
     {
         nrt_Error_init(error, ex.what(), NRT_CTXT,
                        NRT_ERR_DECOMPRESSION);
-        return NULL;
+        return nullptr;
     }
     catch (...)
     {
         nrt_Error_init(error, "Unknown error", NRT_CTXT,
                        NRT_ERR_DECOMPRESSION);
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -105,7 +105,7 @@ NITF_BOOL DecompressionInterface::adapterFreeBlock(
 {
     try
     {
-        reinterpret_cast<Decompressor*>(object)->freeBlock(block); 
+        static_cast<Decompressor*>(object)->freeBlock(block);
         return NRT_SUCCESS;
     }
     catch (const except::Exception& ex)
@@ -131,10 +131,10 @@ NITF_BOOL DecompressionInterface::adapterFreeBlock(
 void DecompressionInterface::adapterDestroy(
     nitf_DecompressionControl** object)
 {
-    if (object != NULL && *object != NULL)
+    if (object != nullptr && *object != nullptr)
     {
-        delete reinterpret_cast<Decompressor*>(*object);
-        *object = NULL;
+        delete static_cast<Decompressor*>(*object);
+        *object = nullptr;
     }
 }
 

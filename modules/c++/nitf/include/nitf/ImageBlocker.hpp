@@ -22,12 +22,13 @@
 
 #ifndef __NITF_IMAGE_BLOCKER_HPP__
 #define __NITF_IMAGE_BLOCKER_HPP__
+#pragma once
 
 #include <stddef.h>
 #include <string.h>
 #include <vector>
 
-#include <sys/Conf.h>
+#include "cstddef.h"
 
 namespace nitf
 {
@@ -166,7 +167,7 @@ public:
                void* output);
 
     //! \return The number of columns of blocks
-    size_t getNumColsOfBlocks() const
+    size_t getNumColsOfBlocks() const noexcept
     {
         return mNumBlocksAcrossCols;
     }
@@ -213,7 +214,7 @@ public:
     }
 
     //! \return The number of segments
-    size_t getNumSegments() const
+    size_t getNumSegments() const noexcept
     {
         return mNumBlocksDownRows.size();
     }
@@ -235,7 +236,7 @@ public:
      * columns in the image (i.e. no reason to bother to create blocks larger
      * than the image).
      */
-    size_t getNumColsPerBlock() const
+    size_t getNumColsPerBlock() const noexcept
     {
         return mNumColsPerBlock;
     }
@@ -252,7 +253,7 @@ private:
                      size_t& rowWithinSegment,
                      size_t& blockWithinSegment) const;
 
-    bool isFirstRowInBlock(size_t seg, size_t rowWithinSeg) const
+    bool isFirstRowInBlock(size_t seg, size_t rowWithinSeg) const noexcept
     {
         return (rowWithinSeg % mNumRowsPerBlock[seg] == 0);
     }
@@ -265,11 +266,11 @@ private:
                           size_t& lastBlockWithinLastSeg) const;
 
     void blockImpl(size_t seg,
-                   const sys::byte* input,
+                   const std::byte* input,
                    size_t numValidRowsInBlock,
                    size_t numValidColsInBlock,
                    size_t numBytesPerPixel,
-                   sys::byte* output) const
+                   std::byte* output) const
     {
         block(input, numBytesPerPixel, mNumCols, mNumRowsPerBlock[seg],
               mNumColsPerBlock, numValidRowsInBlock, numValidColsInBlock,
@@ -277,10 +278,10 @@ private:
     }
 
     void blockAcrossRow(size_t seg,
-                        const sys::byte*& input,
+                        const std::byte*& input,
                         size_t numValidRowsInBlock,
                         size_t numBytesPerPixel,
-                        sys::byte*& output) const;
+                        std::byte*& output) const;
 
 private:
     // Vectors all indexed by segment

@@ -22,11 +22,12 @@
 
 #ifndef __NITF_BUFFER_LIST_HPP__
 #define __NITF_BUFFER_LIST_HPP__
+#pragma once
 
 #include <stddef.h>
 #include <vector>
 
-#include <sys/Conf.h>
+#include "cstddef.h"
 
 namespace nitf
 {
@@ -39,7 +40,7 @@ struct NITFBuffer
     /*!
      * Initializes to an empty buffer
      */
-    NITFBuffer();
+    NITFBuffer() = default;
 
     /*!
      * Initializes to the specified pointer and size.  No copy is made and
@@ -51,8 +52,8 @@ struct NITFBuffer
      */
     NITFBuffer(const void* data, size_t numBytes);
 
-    const void* mData;
-    size_t mNumBytes;
+    const void* mData = nullptr;
+    size_t mNumBytes = 0;
 };
 
 /*!
@@ -73,7 +74,7 @@ struct NITFBufferList
     /*!
      * \return Whether or not the buffer list is empty
      */
-    bool empty() const
+    bool empty() const noexcept
     {
         return mBuffers.empty();
     }
@@ -81,7 +82,7 @@ struct NITFBufferList
     /*!
      * Clear the buffers
      */
-    void clear()
+    void clear() noexcept
     {
         mBuffers.clear();
     }
@@ -107,7 +108,7 @@ struct NITFBufferList
     template <typename DataT>
     void pushBack(const std::vector<DataT>& data)
     {
-        pushBack(data.empty() ? NULL : &data[0],
+        pushBack(data.empty() ? nullptr : &data[0],
                  data.size() * sizeof(DataT));
     }
 
@@ -160,7 +161,7 @@ struct NITFBufferList
      */
     const void* getBlock(size_t blockSize,
                          size_t blockIdx,
-                         std::vector<sys::byte>& scratch,
+                         std::vector<std::byte>& scratch,
                          size_t& numBytes) const;
 };
 }

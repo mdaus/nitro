@@ -40,37 +40,35 @@ namespace nitf
  *  \class Handle
  *  \brief  This class is the base definition of a Handle
  */
-class Handle
+struct Handle
 {
-public:
-    Handle() : refCount(0) {}
+    Handle() = default;
     virtual ~Handle() {}
 
     //! Get the ref count
-    int getRef() { return refCount; }
+    int getRef() const { return refCount; }
 
     //! Increment the ref count
     int incRef()
     {
-        mutex.lock();
+        std::lock_guard<std::mutex> lock(mutex);
+        if (refCount < 0) refCount = 0;
         refCount++;
-        mutex.unlock();
         return refCount;
     }
 
     //! Decrement the ref count
     int decRef()
     {
-        mutex.lock();
-        if (refCount > 0)
-            refCount--;
-        mutex.unlock();
+        std::lock_guard<std::mutex> lock(mutex);
+        refCount--;
+        if (refCount < 0) refCount = 0;
         return refCount;
     }
 
 protected:
-    static std::mutex mutex;
-    int refCount;
+    std::mutex mutex;
+    int refCount{ 0 };
 };
 
 
@@ -97,12 +95,13 @@ template <typename Class_T, typename DestructFunctor_T = MemoryDestructor<Class_
 class BoundHandle : public Handle
 {
 private:
-    Class_T* handle;
-    int managed;
+    Class_T* handle = nullptr;
+    int managed = 1;
 
 public:
     //! Create handle from native object
-    BoundHandle(Class_T* h = NULL) : handle(h), managed(1) {}
+    BoundHandle() = default;
+    BoundHandle(Class_T* h) : handle(h) {}
 
     //! Destructor
     virtual ~BoundHandle()
@@ -124,7 +123,7 @@ public:
     }
 
     //! Get the native object
-    Class_T* get() { return handle; }
+    Class_T* get() noexcept { return handle; }
 
     //! Get the address of then native object
     Class_T** getAddress() { return &handle; }

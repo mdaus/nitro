@@ -20,6 +20,8 @@
  *
  */
 
+#include <inttypes.h>
+
 #include <import/nrt.h>
 #include <import/nitf.h>
 #include <import/j2k.h>
@@ -95,14 +97,17 @@ int main(int argc, char **argv)
         goto CATCH_ERROR;
     }
 
-    if (!(io = nrt_IOHandleAdapter_open(fname, NRT_ACCESS_READONLY, NRT_OPEN_EXISTING,
-                                        &error)))
+    io = nrt_IOHandleAdapter_open(fname, NRT_ACCESS_READONLY, NRT_OPEN_EXISTING,
+                                        &error);
+    if (!io)
         goto CATCH_ERROR;
 
-    if (!(reader = nitf_Reader_construct(&error)))
+    reader = nitf_Reader_construct(&error);
+    if (!reader)
         goto CATCH_ERROR;
 
-    if (!(record = nitf_Reader_readIO(reader, io, &error)))
+    record = nitf_Reader_readIO(reader, io, &error);
+    if (!record)
         goto CATCH_ERROR;
 
     num = nitf_Record_getNumImages(record, &error);
@@ -123,13 +128,15 @@ int main(int argc, char **argv)
                 j2k_Container *container = NULL;
                 uint32_t cmpIt, nComponents;
                 printf("Image %d contains J2K compressed data\n", (i + 1));
-                printf("Offset: %d\n", segment->imageOffset);
+                printf("Offset: %" PRIu64 "\n", segment->imageOffset);
                 if (!nrt_IOInterface_seek(io, segment->imageOffset,
                                           NRT_SEEK_SET, &error))
                     goto CATCH_ERROR;
-                if (!(j2kReader = j2k_Reader_openIO(io, &error)))
+                j2kReader = j2k_Reader_openIO(io, &error);
+                if (!j2kReader)
                     goto CATCH_ERROR;
-                if (!(container = j2k_Reader_getContainer(j2kReader, &error)))
+                container = j2k_Reader_getContainer(j2kReader, &error);
+                if (!container)
                     goto CATCH_ERROR;
 
 

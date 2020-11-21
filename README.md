@@ -187,8 +187,8 @@ the C and C++ layers get the most support.
 
 The Python layer gets some use for scripting convenience.
 
-The MATLAB and JAVA layers have not been touched in years.
-Use at your own risk.
+The MATLAB and JAVA layers have not been touched in years; they are
+no longer built, code remains in the **archive** directory.
 
 TREs need to be coded in C (only).
 
@@ -229,3 +229,8 @@ to make sure NITRO can find them.
 
 * If you wish to use a custom TRE location, you can also specify that
   with `NITF_PLUGIN_PATH`.
+
+Contact
+---------
+
+July 2020, Dan.Smith@maxar.com
