@@ -26,7 +26,7 @@ using namespace nitf;
 
 TextSubheader::TextSubheader(const TextSubheader & x)
 {
-    setNative(x.getNative());
+    *this = x;
 }
 
 TextSubheader & TextSubheader::operator=(const TextSubheader & x)

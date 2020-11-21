@@ -26,7 +26,7 @@ using namespace nitf;
 
 SubWindow::SubWindow(const SubWindow & x)
 {
-    setNative(x.getNative());
+    *this = x;
 }
 
 SubWindow & SubWindow::operator=(const SubWindow & x)

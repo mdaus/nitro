@@ -244,7 +244,7 @@ protected:
      * this constructor, the inheriting class will call initialize() later in
      * its constructor.
      */
-    ByteProvider();
+    ByteProvider() = default;
 
     /*!
      * \param record Pre-populated NITF record.  All TREs, image subheader, and
@@ -341,13 +341,13 @@ protected:
         size_t numRows;
     };
 
-    size_t mNumCols;
-    size_t mOverallNumRowsPerBlock;
+    size_t mNumCols = 0;
+    size_t mOverallNumRowsPerBlock = 0;
 
     std::vector<size_t> mNumRowsPerBlock; // Per segment
-    size_t mNumColsPerBlock;
-    size_t mNumBytesPerRow;
-    size_t mNumBytesPerPixel;
+    size_t mNumColsPerBlock = 0;
+    size_t mNumBytesPerRow = 0;
+    size_t mNumBytesPerPixel = 0;
 
     std::vector<SegmentInfo> mImageSegmentInfo; // Per segment
 
@@ -358,8 +358,8 @@ protected:
     std::vector<std::byte> mDesSubheaderAndData;
 
     std::vector<nitf::Off> mImageSubheaderFileOffsets; // Per segment
-    nitf::Off mDesSubheaderFileOffset;
-    nitf::Off mFileNumBytes;
+    nitf::Off mDesSubheaderFileOffset = 0;
+    nitf::Off mFileNumBytes = 0;
 };
 }
 

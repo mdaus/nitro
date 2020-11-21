@@ -22,6 +22,7 @@
 
 #ifndef __NITF_SUBWINDOW_HPP__
 #define __NITF_SUBWINDOW_HPP__
+#pragma once
 
 #include "nitf/SubWindow.h"
 #include "nitf/DownSampler.hpp"
@@ -102,7 +103,7 @@ public:
 
 private:
     nitf::DownSampler* mDownSampler;
-    nitf_Error error;
+    nitf_Error error{ '\0', '\0', 0, '\0', 0 };
 };
 
 }

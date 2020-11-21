@@ -40,7 +40,7 @@
 #pragma warning(disable: 26455) // Default constructor may not throw.Declare it '...' (f.6).
 #pragma warning(disable: 26456) // Operator '...' hides a non - virtual operator '...' (c.128).
 #pragma warning(disable: 26472) // Don't use a static_cast for arithmetic conversions. Use brace initialization, gsl::narrow_cast or gsl::narrow (type.1).
-
+#pragma warning(disable: 26495) // Variable '...' is uninitialized. Always initialize a member variable(type.6).
 
 #define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
 #include <windows.h>

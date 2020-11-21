@@ -22,6 +22,7 @@
 
 #ifndef __NITF_DESEGMENT_HPP__
 #define __NITF_DESEGMENT_HPP__
+#pragma once
 
 #include "nitf/DESegment.h"
 #include "nitf/System.hpp"
@@ -87,7 +88,7 @@ public:
     void setEnd(uint64_t value);
 
 private:
-    mutable nitf_Error error;
+    mutable nitf_Error error{ '\0', '\0', 0, '\0', 0 };
 };
 
 }

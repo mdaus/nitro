@@ -26,7 +26,7 @@ using namespace nitf;
 
 FileHeader::FileHeader(const FileHeader & x)
 {
-    setNative(x.getNative());
+    *this = x;
 }
 
 FileHeader & FileHeader::operator=(const FileHeader & x)

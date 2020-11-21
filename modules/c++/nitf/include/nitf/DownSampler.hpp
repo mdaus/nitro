@@ -22,6 +22,7 @@
 
 #ifndef __NITF_DOWN_SAMPLER_HPP__
 #define __NITF_DOWN_SAMPLER_HPP__
+#pragma once
 
 #include "nitf/DownSampler.h"
 #include "nitf/IOInterface.hpp"
@@ -47,7 +48,7 @@ public:
     //! Copy constructor
     DownSampler(const DownSampler & x)
     {
-        setNative(x.getNative());
+        *this = x;
     }
 
     //! Assignment Operator
@@ -114,7 +115,7 @@ public:
 protected:
 
     DownSampler() = default;
-    mutable nitf_Error error;
+    mutable nitf_Error error{ '\0', '\0', 0, '\0', 0 };
 };
 
 

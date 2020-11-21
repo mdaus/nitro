@@ -248,7 +248,7 @@ public:
                          uint32_t fillDir);
 
 private:
-    nitf_Error error;
+    nitf_Error  error{ '\0', '\0', 0, '\0', 0 };
 
     //! c++ write handlers need to be kept in scope
     std::vector<std::shared_ptr<nitf::WriteHandler> > mWriteHandlers;

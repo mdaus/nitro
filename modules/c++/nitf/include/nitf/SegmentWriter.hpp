@@ -61,7 +61,7 @@ public:
     void attachSource(nitf::SegmentSource segmentSource);
 
 private:
-    nitf_Error error;
+    nitf_Error error{ '\0', '\0', 0, '\0', 0 };
 //    bool mAdopt;
 //    nitf::SegmentSource* mSegmentSource;
 };

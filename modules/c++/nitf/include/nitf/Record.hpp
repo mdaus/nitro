@@ -167,7 +167,7 @@ public:
     void setComplexityLevelIfUnset();
 
 private:
-    mutable nitf_Error error;
+    mutable nitf_Error error{ '\0', '\0', 0, '\0', 0 };
 };
 
 }

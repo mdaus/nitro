@@ -36,14 +36,6 @@
 
 namespace nitf
 {
-ByteProvider::ByteProvider() :
-    mNumCols(0),
-    mOverallNumRowsPerBlock(0),
-    mNumColsPerBlock(0),
-    mNumBytesPerRow(0),
-    mNumBytesPerPixel(0)
-{
-}
 
 ByteProvider::ByteProvider(Record& record,
                            const std::vector<PtrAndLength>& desData,

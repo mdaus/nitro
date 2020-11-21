@@ -22,6 +22,7 @@
 
 #ifndef __NITF_RESUBHEADER_HPP__
 #define __NITF_RESUBHEADER_HPP__
+#pragma once
 
 #include "nitf/RESubheader.h"
 #include "nitf/Object.hpp"
@@ -94,7 +95,7 @@ public:
     void setDataLength(uint32_t value);
 
 private:
-    mutable nitf_Error error;
+    mutable nitf_Error error{ '\0', '\0', 0, '\0', 0 };
 };
 
 }

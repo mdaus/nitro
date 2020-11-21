@@ -50,7 +50,7 @@ public:
     //! Copy constructor
     ExtensionsIterator(const ExtensionsIterator & x)
     {
-        handle = x.handle;
+        *this = x;
     }
 
     //! Assignment Operator
@@ -321,7 +321,7 @@ typedef nitf::ExtensionsIterator Iterator;
     }
 
 private:
-    mutable nitf_Error error;
+    mutable nitf_Error error{ '\0', '\0', 0, '\0', 0 };
 };
 }
 #endif

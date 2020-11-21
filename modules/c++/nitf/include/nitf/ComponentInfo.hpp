@@ -22,6 +22,7 @@
 
 #ifndef __NITF_COMPONENTINFO_HPP__
 #define __NITF_COMPONENTINFO_HPP__
+#pragma once
 
 #include "nitf/ComponentInfo.h"
 #include "nitf/System.hpp"
@@ -83,7 +84,7 @@ protected:
     ComponentInfo(uint32_t subHeaderSize = 0, uint64_t dataSize = 0);
 
 private:
-    mutable nitf_Error error;
+    mutable nitf_Error error{ '\0', '\0', 0, '\0', 0 };
 };
 
 }

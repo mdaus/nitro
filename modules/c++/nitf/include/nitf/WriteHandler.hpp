@@ -82,7 +82,7 @@ protected:
     //! Constructor
     WriteHandler() = default;
 
-    nitf_Error error;
+    nitf_Error error{ '\0', '\0', 0, '\0', 0 };
 };
 
 

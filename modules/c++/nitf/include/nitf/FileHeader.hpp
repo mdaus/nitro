@@ -22,6 +22,7 @@
 
 #ifndef __NITF_FILEHEADER_HPP__
 #define __NITF_FILEHEADER_HPP__
+#pragma once
 
 #include "nitf/FileHeader.h"
 #include "nitf/System.hpp"
@@ -183,7 +184,7 @@ public:
     void setExtendedSection(nitf::Extensions value);
 
 private:
-    mutable nitf_Error error;
+    mutable nitf_Error error{ '\0', '\0', 0, '\0', 0 };
 };
 
 }

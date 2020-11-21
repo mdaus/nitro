@@ -325,7 +325,7 @@ DECLARE_CLASS(TRE)
     private:
     std::string truncate(const std::string& value, size_t maxDigits) const;
 
-    mutable nitf_Error error;
+    mutable nitf_Error error{ '\0', '\0', 0, '\0', 0 };
 };
 }
 #endif
