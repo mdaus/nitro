@@ -49,7 +49,7 @@ public:
     //! Copy constructor
     WriteHandler(const WriteHandler & x)
     {
-        setNative(x.getNative());
+        *this = x;
     }
 
     //! Assignment Operator

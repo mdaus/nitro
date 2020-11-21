@@ -47,9 +47,6 @@ namespace nitf
 
 struct WriterDestructor : public nitf::MemoryDestructor<nitf_Writer>
 {
-    ~WriterDestructor()
-    {
-    }
     void operator()(nitf_Writer *writer);
 };
 
@@ -73,6 +70,8 @@ public:
     Writer();
 
     ~Writer();
+    Writer(Writer&&) = default;
+    Writer& operator=(Writer&&) = default;
 
     //! Write the record to disk
     void write();

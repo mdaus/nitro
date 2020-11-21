@@ -441,12 +441,12 @@ size_t ByteProvider::countBytesForHeaders(size_t seg, size_t startRow) const
     return numBytes;
 }
 
-bool ByteProvider::shouldAddHeader(size_t seg, size_t startRow) const
+bool ByteProvider::shouldAddHeader(size_t seg, size_t startRow) const noexcept
 {
     return seg == 0 && startRow == 0;
 }
 
-bool ByteProvider::shouldAddSubheader(size_t seg, size_t startRow) const
+bool ByteProvider::shouldAddSubheader(size_t seg, size_t startRow) const noexcept
 {
     const size_t segStartRow = mImageSegmentInfo[seg].firstRow;
     return startRow <= segStartRow;

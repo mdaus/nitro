@@ -43,19 +43,18 @@ namespace nitf
 class TREFieldIterator : public nitf::Object<nitf_TREEnumerator>
 {
     public:
-    TREFieldIterator() : mPair(nullptr)
+    TREFieldIterator()
     {
         setNative(nullptr);
     }
 
-    ~TREFieldIterator()
-    {
-    }
+    ~TREFieldIterator() = default;
+
 
     //! Copy constructor
     TREFieldIterator(const TREFieldIterator& x)
     {
-        setNative(x.getNative());
+        *this = x;
     }
 
     //! Assignment Operator
@@ -156,7 +155,7 @@ class TREFieldIterator : public nitf::Object<nitf_TREEnumerator>
 
     private:
     mutable nitf_Error error;
-    nitf_Pair* mPair;
+    nitf_Pair* mPair = nullptr;
 };
 
 /*!

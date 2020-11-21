@@ -46,7 +46,7 @@ struct Handle
     virtual ~Handle() {}
 
     //! Get the ref count
-    int getRef() const { return refCount; }
+    int getRef() const noexcept { return refCount; }
 
     //! Increment the ref count
     int incRef()

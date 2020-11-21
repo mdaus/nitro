@@ -39,15 +39,16 @@ namespace nitf
  *  \class Pair
  *  \brief  The C++ wrapper for the nitf_Pair
  */
-class Pair : public nitf::Object<nitf_Pair>
+struct Pair final : public nitf::Object<nitf_Pair>
 {
-public:
-    ~Pair(){}
+    ~Pair() = default;
+    Pair(Pair&&) = default;
+    Pair& operator=(Pair&&) = default;
 
     //! Copy constructor
     Pair(const Pair & x)
     {
-        setNative(x.getNative());
+        *this = x;
     }
 
     //! Assignment Operator

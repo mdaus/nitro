@@ -64,7 +64,10 @@ public:
     //! Clone
     nitf::GraphicSegment clone() const;
 
-    ~GraphicSegment();
+
+    ~GraphicSegment() = default;
+    GraphicSegment(GraphicSegment&&) = default;
+    GraphicSegment& operator=(GraphicSegment&&) = default;
 
     //! Get the subheader
     nitf::GraphicSubheader getSubheader() const;

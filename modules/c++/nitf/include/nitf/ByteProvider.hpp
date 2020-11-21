@@ -291,8 +291,8 @@ protected:
      * These functions assume that we've already checked
      * we're writing in a range which includes seg
      */
-    bool shouldAddHeader(size_t seg, size_t startRow) const;
-    bool shouldAddSubheader(size_t seg, size_t startRow) const;
+    bool shouldAddHeader(size_t seg, size_t startRow) const noexcept;
+    bool shouldAddSubheader(size_t seg, size_t startRow) const noexcept;
     bool shouldAddDES(size_t seg, size_t imageDataEndRow) const;
 
     void addDES(size_t seg, size_t imageDataEndRow,

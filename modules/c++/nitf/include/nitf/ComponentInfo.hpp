@@ -64,7 +64,9 @@ public:
     //! Clone
     nitf::ComponentInfo clone() const;
 
-    ~ComponentInfo();
+    ~ComponentInfo() = default;
+    ComponentInfo(ComponentInfo&&) = default;
+    ComponentInfo& operator=(ComponentInfo&&) = default;
 
     //! Get the lengthSubheader
     nitf::Field getLengthSubheader() const;

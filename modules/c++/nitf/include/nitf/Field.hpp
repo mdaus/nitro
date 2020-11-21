@@ -364,7 +364,7 @@ public:
     }
 
 private:
-    Field(){} //private -- does not make sense to construct a Field from scratch
+    Field() = default; //private -- does not make sense to construct a Field from scratch
 
     //! get the value
     void get(NITF_DATA* outval, nitf::ConvType vtype, size_t length) const

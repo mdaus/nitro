@@ -95,7 +95,7 @@ public:
      *
      * \return The associated number of bytes in the NITF
      */
-    virtual nitf::Off getNumBytes(size_t startRow, size_t numRows) const;
+    virtual nitf::Off getNumBytes(size_t startRow, size_t numRows) const override;
 
     /*!
      * The caller provides an AOI of the pixel data.  This method provides back

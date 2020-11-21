@@ -198,14 +198,11 @@ public:
  */
 
 #define DECLARE_CLASS_IN(_Name, _Package) \
-    struct _Name##Destructor : public nitf::MemoryDestructor<_Package##_##_Name> \
-  { \
-      ~_Name##Destructor(){} \
-      virtual void operator()(_Package##_##_Name *nativeObject) override \
+    struct _Name##Destructor final : public nitf::MemoryDestructor<_Package##_##_Name> \
+    { void operator()(_Package##_##_Name *nativeObject) override \
       { _Package##_##_Name##_destruct(&nativeObject); } \
-  }; \
-  \
-  class _Name : public nitf::Object<_Package##_##_Name, _Name##Destructor>
+    }; \
+    class _Name : public nitf::Object<_Package##_##_Name, _Name##Destructor>
 
 #define DECLARE_CLASS(_Name) DECLARE_CLASS_IN(_Name, nitf)
 

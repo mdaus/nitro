@@ -142,7 +142,7 @@ size_t TRE::getCurrentSize() const
 
 std::string TRE::getTag() const
 {
-    return std::string(getNativeOrThrow()->tag);
+    return getNativeOrThrow()->tag;
 }
 
 void TRE::setTag(const std::string& value)
