@@ -103,7 +103,7 @@ public:
 
 private:
     nitf::DownSampler* mDownSampler;
-    nitf_Error error{ '\0', '\0', 0, '\0', 0 };
+    nitf_Error error{};
 };
 
 }

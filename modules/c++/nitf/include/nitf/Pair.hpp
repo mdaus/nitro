@@ -131,7 +131,7 @@ struct Pair final : public nitf::Object<nitf_Pair>
 
 private:
     Pair(){}
-    nitf_Error error;
+    nitf_Error error{};
 };
 
 }

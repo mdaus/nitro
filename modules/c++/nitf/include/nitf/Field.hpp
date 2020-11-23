@@ -383,7 +383,7 @@ private:
             throw nitf::NITFException(&error);
     }
 
-    nitf_Error error{ '\0', '\0', 0, '\0', 0 };
+    nitf_Error error{};
 
     operator char*() const = delete; // Don't allow this cast ever.
 };

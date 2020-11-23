@@ -81,7 +81,7 @@ private:
     friend class List;
     friend class ListIterator;
 
-    nitf_Error error;
+    nitf_Error error{};
 };
 
 /*!
@@ -146,7 +146,7 @@ public:
     nitf::ListNode & getCurrent() { return mCurrent; }
 
 private:
-    mutable nitf_ListIterator handle;
+    mutable nitf_ListIterator handle{ };
     nitf::ListNode mCurrent;
 
     //! Set native object
@@ -299,7 +299,7 @@ public:
     NITF_DATA* operator[] (size_t index);
 
 private:
-    mutable nitf_Error error;
+    mutable nitf_Error error{};
 };
 
 }

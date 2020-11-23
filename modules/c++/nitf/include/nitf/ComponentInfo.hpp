@@ -84,7 +84,7 @@ protected:
     ComponentInfo(uint32_t subHeaderSize = 0, uint64_t dataSize = 0);
 
 private:
-    mutable nitf_Error error{ '\0', '\0', 0, '\0', 0 };
+    mutable nitf_Error error{};
 };
 
 }

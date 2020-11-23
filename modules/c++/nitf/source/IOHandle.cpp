@@ -47,7 +47,7 @@ IOHandle::open(const char* fname,
                nitf::AccessFlags access,
                nitf::CreationFlags creation)
 {
-    nitf_Error error{ 0 };
+    nitf_Error error{};
     const auto access_ = gsl::narrow_cast<int>(access);
     const auto creation_ = gsl::narrow_cast<int>(creation);
     nitf_IOInterface* const ioInterface =

@@ -110,7 +110,7 @@ public:
     nitf::Field getSecurityControlNumber() const;
 
 private:
-    mutable nitf_Error error;
+    mutable nitf_Error error{};
 };
 
 }

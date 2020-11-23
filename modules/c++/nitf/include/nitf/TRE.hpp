@@ -148,13 +148,13 @@ class TREFieldIterator : public nitf::Object<nitf_TREEnumerator>
             const char* desc =
                     enumerator->getFieldDescription(enumerator, &error);
             if (desc)
-                return std::string(desc);
+                return desc;
         }
         return "";
     }
 
     private:
-    mutable nitf_Error error;
+    mutable nitf_Error error{};
     nitf_Pair* mPair = nullptr;
 };
 
@@ -325,7 +325,7 @@ DECLARE_CLASS(TRE)
     private:
     std::string truncate(const std::string& value, size_t maxDigits) const;
 
-    mutable nitf_Error error{ '\0', '\0', 0, '\0', 0 };
+    mutable nitf_Error error{};
 };
 }
 #endif

@@ -86,7 +86,7 @@ public:
     void setEnd(uint64_t value);
 
 private:
-    mutable nitf_Error error{ '\0', '\0', 0, '\0', 0 };
+    mutable nitf_Error error{};
 };
 
 }

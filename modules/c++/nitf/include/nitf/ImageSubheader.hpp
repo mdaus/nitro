@@ -402,7 +402,7 @@ private:
 
     size_t getNumBytesPerPixel_() const;
 
-    mutable nitf_Error error;
+    mutable nitf_Error error{};
 };
 
 }

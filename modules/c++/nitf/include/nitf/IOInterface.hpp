@@ -96,7 +96,7 @@ public:
     void close();
 
 protected:
-    mutable nitf_Error error;
+    mutable nitf_Error error{};
 };
 
 }

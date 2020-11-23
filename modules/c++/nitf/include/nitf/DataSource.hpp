@@ -91,7 +91,7 @@ public:
     void setSize(nitf::Off size);
 
 protected:
-    mutable nitf_Error error{ '\0', '\0', 0, '\0', 0 };
+    mutable nitf_Error error{};
 };
 
 }

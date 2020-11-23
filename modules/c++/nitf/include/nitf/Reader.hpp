@@ -149,7 +149,7 @@ public:
     nitf::IOInterface getInput() const;
 
 private:
-    nitf_Error error;
+    nitf_Error error{};
 };
 
 }

@@ -111,7 +111,7 @@ public:
     void setUserDefinedSection(nitf::Extensions value);
 
 private:
-    mutable nitf_Error error{ '\0', '\0', 0, '\0', 0 };
+    mutable nitf_Error error{};
 };
 
 }

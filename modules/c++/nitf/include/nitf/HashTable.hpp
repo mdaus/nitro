@@ -115,7 +115,7 @@ public:
 
 
 private:
-    mutable nitf_HashTableIterator handle;
+    mutable nitf_HashTableIterator handle{};
 
     //! Set native object
     void setHandle(nitf_HashTableIterator x) { handle = x; }
@@ -244,7 +244,7 @@ public:
 private:
 
     std::vector<nitf::List *> mBuckets;
-    nitf_Error error;
+    nitf_Error error{};
 
     //! Clear the buckets
     void clearBuckets();

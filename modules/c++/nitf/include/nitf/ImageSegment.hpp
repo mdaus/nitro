@@ -85,7 +85,7 @@ public:
     void setImageEnd(uint64_t value);
 
 private:
-    mutable nitf_Error error;
+    mutable nitf_Error error{};
 };
 
 }

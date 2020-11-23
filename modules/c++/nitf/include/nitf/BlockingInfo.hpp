@@ -102,7 +102,7 @@ public:
     void print(FILE *file);
 
 private:
-    nitf_Error error{ '\0', '\0', 0, '\0', 0 };
+    nitf_Error error{};
 };
 
 }

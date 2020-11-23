@@ -79,7 +79,7 @@ public:
     void setReadCaching();
 
 private:
-    mutable nitf_Error error;
+    mutable nitf_Error error{};
     ImageReader() = default;
 };
 
