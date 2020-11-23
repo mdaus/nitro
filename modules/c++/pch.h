@@ -22,6 +22,9 @@
 #pragma warning(disable: 26456) // Operator '...' hides a non-virtual operator '...' (c.128).
 #pragma warning(disable: 26481) // Don't use pointer arithmetic. Use span instead (bounds.1).
 #pragma warning(disable: 26485) // Expression '...' : No array to pointer decay(bounds.3).
+#pragma warning(disable: 26486) // Don't pass a pointer that may be invalid to a function. Parameter 3 '...' in call to '...' may be invalid (lifetime.3).
+#pragma warning(disable: 26487) // Don't return a pointer '...' that may be invalid(lifetime.4).
+
 
 // need C++14 for std::make_unique<T>
 #pragma warning(disable: 26409) // Avoid calling new and delete explicitly, use std::make_unique<T> instead(r.11).

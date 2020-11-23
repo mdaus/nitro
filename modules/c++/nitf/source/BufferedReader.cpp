@@ -103,9 +103,10 @@ void BufferedReader::readNextBuffer()
 }
 
 #undef min
-inline size_t min(size_t amountLeftToRead, nitf::Off mBufferSize_mPosition)
+inline size_t min(size_t amountLeftToRead, nitf::Off mBufferSize_mPosition_)
 {
-    return std::min(amountLeftToRead, gsl::narrow<size_t>(mBufferSize_mPosition));
+    const auto mBufferSize_mPosition = gsl::narrow<size_t>(mBufferSize_mPosition_);
+    return std::min(amountLeftToRead, mBufferSize_mPosition);
 }
 
 void BufferedReader::readImpl(void* buf, size_t size)
