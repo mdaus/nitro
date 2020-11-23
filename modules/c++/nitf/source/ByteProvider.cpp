@@ -60,7 +60,7 @@ void ByteProvider::copyFromStreamAndClear(io::ByteStream& stream,
     rawBytes.resize(stream.getSize());
     if (!rawBytes.empty())
     {
-        ::memcpy(&rawBytes[0], stream.get(), stream.getSize());
+        ::memcpy(rawBytes.data(), stream.get(), stream.getSize());
     }
 
     stream.clear();

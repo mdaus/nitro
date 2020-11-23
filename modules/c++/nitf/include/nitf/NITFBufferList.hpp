@@ -108,7 +108,7 @@ struct NITFBufferList
     template <typename DataT>
     void pushBack(const std::vector<DataT>& data)
     {
-        pushBack(data.empty() ? nullptr : &data[0],
+        pushBack(data.empty() ? nullptr : data.data(),
                  data.size() * sizeof(DataT));
     }
 
