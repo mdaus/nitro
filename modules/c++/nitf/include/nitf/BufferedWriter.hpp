@@ -94,7 +94,7 @@ private:
     uint64_t mTotalWritten;
     uint64_t mBlocksWritten;
     uint64_t mPartialBlocks;
-    double mElapsedTime;
+    double mElapsedTime = 0.0;
 
     // NOTE: This is at the end to give us a chance to adopt the buffer
     //       in ScopedArray in case sys::File's constructor throws

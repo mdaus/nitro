@@ -24,6 +24,8 @@
 
 #include <stdio.h>
 
+#include <chrono>
+
 #include "gsl/gsl.h"
 
 namespace nitf
@@ -37,7 +39,6 @@ BufferedReader::BufferedReader(const std::string& file, size_t bufferSize) :
     mTotalRead(0),
     mBlocksRead(0),
     mPartialBlocks(0),
-    mElapsedTime(0),
     mFile(file, sys::File::READ_ONLY, sys::File::EXISTING),
     mFileLen(mFile.length())
 {
@@ -63,7 +64,6 @@ BufferedReader::BufferedReader(const std::string& file,
     mTotalRead(0),
     mBlocksRead(0),
     mPartialBlocks(0),
-    mElapsedTime(0),
     mFile(file, sys::File::READ_ONLY, sys::File::EXISTING),
     mFileLen(mFile.length())
 {
@@ -87,10 +87,11 @@ void BufferedReader::readNextBuffer()
     const nitf::Off bufferSize = (endOffsetIfPerformMaxRead > mFileLen) ?
             mFileLen - currentOffset : mMaxBufferSize;
 
-    sys::RealTimeStopWatch sw;
-    sw.start();
+    const auto start = std::chrono::steady_clock::now();
     mFile.readInto(mBuffer, gsl::narrow<size_t>(bufferSize));
-    mElapsedTime += (sw.stop() / 1000.0);
+    const auto end = std::chrono::steady_clock::now();
+    const std::chrono::duration<double> diff = end - start; // in seconds
+    mElapsedTime += diff.count();
 
     mPosition = 0;
     mBufferSize = bufferSize;

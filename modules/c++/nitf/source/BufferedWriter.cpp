@@ -37,7 +37,6 @@ BufferedWriter::BufferedWriter(const std::string& file, size_t bufferSize) :
     mTotalWritten(0),
     mBlocksWritten(0),
     mPartialBlocks(0),
-    mElapsedTime(0),
     mFile(file, sys::File::WRITE_ONLY, sys::File::CREATE | sys::File::TRUNCATE)
 {
     if (mBufferSize == 0)
@@ -58,7 +57,6 @@ BufferedWriter::BufferedWriter(const std::string& file,
     mTotalWritten(0),
     mBlocksWritten(0),
     mPartialBlocks(0),
-    mElapsedTime(0),
     mFile(file, sys::File::WRITE_ONLY, sys::File::CREATE)
 {
     if (mBufferSize == 0)
