@@ -33,9 +33,8 @@ namespace nitf
  *  \brief Adapter class that takes in any io::SeekableInputStream and creates
  *         an interface that usable by NITRO.
  */
-class IOStreamReader : public CustomIO
+struct IOStreamReader final : public CustomIO
 {
-public:
     /*
      *  \func Constructor
      *  \brief Sets up the stream reader from a seekable input stream.
@@ -44,6 +43,9 @@ public:
      *         in scope throughout the lifetime of the IOStreamReader.
      */
     IOStreamReader(io::SeekableInputStream& stream);
+
+    IOStreamReader(const IOStreamReader&) = delete;
+    IOStreamReader& operator=(const IOStreamReader&) = delete;
 
 private:
     void readImpl(void* buffer, size_t size) override;

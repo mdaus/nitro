@@ -64,6 +64,9 @@ public:
 
     ~BufferedReader() = default;
 
+    BufferedReader(const BufferedReader&) = delete;
+    BufferedReader& operator=(const BufferedReader&) = delete;
+
     size_t getTotalRead() const noexcept
     {
         return mTotalRead;

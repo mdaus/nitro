@@ -45,6 +45,9 @@ struct Handle
     Handle() = default;
     virtual ~Handle() noexcept(false) {}
 
+    Handle(const Handle&) = delete;
+    Handle& operator=(const Handle&) = delete;
+
     //! Get the ref count
     int getRef() const noexcept { return refCount; }
 
@@ -112,6 +115,9 @@ public:
             functor(handle);
         }
     }
+    
+    BoundHandle(const BoundHandle&) = delete;
+    BoundHandle& operator=(const BoundHandle&) = delete;
 
     //! Assign from native object
     Handle& operator=(Class_T* h)

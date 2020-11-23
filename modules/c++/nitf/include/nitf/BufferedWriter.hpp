@@ -41,6 +41,9 @@ public:
 
     ~BufferedWriter();
 
+    BufferedWriter(const BufferedWriter&) = delete;
+    BufferedWriter& operator=(const BufferedWriter&) = delete;
+
     void flushBuffer();
 
     uint64_t getTotalWritten() const noexcept

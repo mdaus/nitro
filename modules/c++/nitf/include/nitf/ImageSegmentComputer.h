@@ -42,9 +42,11 @@ namespace nitf
  *
  * Currently only supports segmenting in the row direction.
  */
-class ImageSegmentComputer
+struct ImageSegmentComputer final
 {
-public:
+    ImageSegmentComputer(const ImageSegmentComputer&) = delete;
+    ImageSegmentComputer& operator=(const ImageSegmentComputer&) = delete;
+
     /*!
      * Max number of rows that can fit in an image segment and still be
      * representable in the following image segment via the ILOC field

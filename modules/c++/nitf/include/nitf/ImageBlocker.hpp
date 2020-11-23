@@ -42,8 +42,11 @@ namespace nitf
  * means for multi-segment cases, there may be a different num rows / block in
  * each segment).
  */
-struct ImageBlocker
+struct ImageBlocker final
 {
+    ImageBlocker(const ImageBlocker&) = delete;
+    ImageBlocker& operator=(const ImageBlocker&) = delete;
+
     /*!
      * Use when there's a single image segment
      *

@@ -9,11 +9,6 @@
 
 #pragma warning(disable: 5045) // Compiler will insert Spectre mitigation for memory load if / Qspectre switch specified
 
-#pragma warning(disable: 4625) // '...': copy constructor was implicitly defined as deleted
-#pragma warning(disable: 4626) // '...': assignment operator was implicitly defined as deleted
-#pragma warning(disable: 5026) // '...': move constructor was implicitly defined as deleted
-#pragma warning(disable: 5027) //	'...': move assignment operator was implicitly defined as deleted
-
 // TODO: get rid of these someday?
 #pragma warning(disable: 5039) //	'...': pointer or reference to potentially throwing function passed to 'extern "C"' function under - EHc.Undefined behavior may occur if this function throws an exception.
 #pragma warning(disable: 4514) //	'...': unreferenced inline function has been removed
@@ -25,9 +20,12 @@
 
 #pragma warning(push)
 #pragma warning(disable: 4355) // '...': used in base member initializer list
-#pragma warning(disable: 5220) // '...': a non - static data member with a volatile qualified type no longer implies
+#pragma warning(disable: 4625) // '...': copy constructor was implicitly defined as deleted
+#pragma warning(disable: 4626) // '...': assignment operator was implicitly defined as deleted#pragma warning(disable: 5220) // '...': a non - static data member with a volatile qualified type no longer implies
+#pragma warning(disable: 5026) // '...': move constructor was implicitly defined as deleted
+#pragma warning(disable: 5027) //	'...': move assignment operator was implicitly defined as deleted
 #pragma warning(disable: 5204) // '...': class has virtual functions, but its trivial destructor is not virtual; instances of objects derived from this class may not be destructed correctly
-#pragma warning(disable: 26409) // Avoid calling new and delete explicitly, use std::make_unique<T> instead(r.11).
+#pragma warning(disable: 5220) // '...': a non - static data member with a volatile qualified type no longer implies#pragma warning(disable: 26409) // Avoid calling new and delete explicitly, use std::make_unique<T> instead(r.11).
 #pragma warning(disable: 26429) // Symbol '...' is never tested for nullness, it can be marked as not_null(f.23).
 #pragma warning(disable: 26426) // Global initializer calls a non-constexpr function '...' (i.22).
 #pragma warning(disable: 26432) // If you define or delete any default operation in the type '...', define or delete them all(c.21).

@@ -56,6 +56,9 @@ public:
     HandleManager() noexcept(false) {};
     virtual ~HandleManager() {}
 
+    HandleManager(const HandleManager&) = delete;
+    HandleManager& operator=(const HandleManager&) = delete;
+
     template <typename T>
     bool hasHandle(T* object) const
     {
