@@ -108,7 +108,7 @@ public:
                                       uint8_t* block, 
                                       nitf_Error* error);
 
-    static void adapterDestroy(nitf_DecompressionControl** object);
+    static void adapterDestroy(nitf_DecompressionControl** object) noexcept;
 
 };
 

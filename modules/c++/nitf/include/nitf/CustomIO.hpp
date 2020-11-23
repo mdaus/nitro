@@ -27,12 +27,10 @@
 
 namespace nitf
 {
-class CustomIO : public IOInterface
+struct CustomIO : public IOInterface
 {
-public:
     CustomIO() noexcept(false);
-
-    virtual ~CustomIO();
+    ~CustomIO();
 
 protected:
     virtual void readImpl(void* buf, size_t size) = 0;

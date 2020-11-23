@@ -103,8 +103,7 @@ public:
     BoundHandle() = default;
     BoundHandle(Class_T* h) noexcept : handle(h) {}
 
-    //! Destructor
-    virtual ~BoundHandle() noexcept(false)
+    ~BoundHandle() noexcept(false)
     {
         //call the destructor, to destroy the object
         if(handle && managed <= 0)

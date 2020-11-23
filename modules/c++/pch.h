@@ -19,7 +19,9 @@
 #pragma warning(disable: 4514) //	'...': unreferenced inline function has been removed
 
 // TODO: get rid of these someday? ... from Visual Studio code-analysis
-#pragma warning(disable: 26440) // Function '...' can be declared '...' (f.6).
+#pragma warning(disable: 26432) // If you define or delete any default operation in the type '...', define or delete them all(c.21).
+#pragma warning(disable: 26434) // Function '...' hides a non-virtual function '...' (c.128).
+#pragma warning(disable: 26456) // Operator '...' hides a non-virtual operator '...' (c.128).
 
 #pragma warning(push)
 #pragma warning(disable: 4355) // '...': used in base member initializer list
@@ -33,6 +35,7 @@
 #pragma warning(disable: 26434) // Function '...' hides a non - virtual function '...' (c.128).
 #pragma warning(disable: 26435) // Function '...' should specify exactly one of '...', '...', or '...' (c.128).
 #pragma warning(disable: 26440) // Function '...' can be declared '...' (f.6).
+#pragma warning(disable: 26443) // Overriding destructor should not use explicit '...' or '...' specifiers(c.128).
 #pragma warning(disable: 26447) // The function is declared '...' but calls function '...' which may throw exceptions(f.6).
 #pragma warning(disable: 26455) // Default constructor may not throw.Declare it '...' (f.6).
 #pragma warning(disable: 26456) // Operator '...' hides a non - virtual operator '...' (c.128).
@@ -93,11 +96,7 @@
 #include "nitf/Field.h"
 #include "nitf/Types.h"
 
-
 #include "nitf/Object.hpp"
-#include "nitf/NITFException.hpp"
-#include "nitf/TRE.hpp"
-#include "nitf/Record.hpp"
 
 #pragma comment(lib, "io-c++")
 #pragma comment(lib, "except-c++")

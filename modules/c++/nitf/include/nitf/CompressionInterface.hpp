@@ -108,7 +108,7 @@ public:
                                 nitf_IOInterface* io,
                                 nitf_Error* error);
 
-    static void adapterDestroy(nitf_CompressionControl** object);
+    static void adapterDestroy(nitf_CompressionControl** object) noexcept;
 
 };
 

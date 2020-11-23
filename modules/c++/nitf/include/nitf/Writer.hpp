@@ -47,7 +47,7 @@ namespace nitf
 
 struct WriterDestructor : public nitf::MemoryDestructor<nitf_Writer>
 {
-    void operator()(nitf_Writer *writer);
+    void operator()(nitf_Writer *writer) override;
 };
 
 /*!

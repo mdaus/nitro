@@ -39,7 +39,7 @@ public:
                    size_t size,
                    bool adopt = false);
 
-    virtual ~BufferedWriter();
+    ~BufferedWriter();
 
     void flushBuffer();
 
@@ -70,7 +70,7 @@ protected:
 
     void writeImpl(const void* buf, size_t size) override;
 
-    bool canSeekImpl() const override;
+    bool canSeekImpl() const noexcept override;
 
     nitf::Off seekImpl(nitf::Off offset, int whence) override;
 
@@ -78,7 +78,7 @@ protected:
 
     nitf::Off getSizeImpl() const override;
 
-    int getModeImpl() const override;
+    int getModeImpl() const noexcept override;
 
     void closeImpl() override;
 

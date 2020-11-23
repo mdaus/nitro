@@ -50,7 +50,7 @@ private:
 
     void writeImpl(const void* buffer, size_t size) override;
 
-    bool canSeekImpl() const override;
+    bool canSeekImpl() const noexcept override;
 
     nitf::Off seekImpl(nitf::Off offset, int whence) override;
 
@@ -58,9 +58,9 @@ private:
 
     nitf::Off getSizeImpl() const override;
 
-    int getModeImpl() const override;
+    int getModeImpl() const noexcept override;
 
-    void closeImpl() override;
+    void closeImpl() noexcept override;
 
     io::SeekableInputStream& mStream;
 };

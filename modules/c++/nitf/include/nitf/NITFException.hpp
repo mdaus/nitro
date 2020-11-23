@@ -93,7 +93,7 @@ public:
     NITFException(const except::Throwable& t, const except::Context& c) :
             except::Exception(t, c){}
 
-    virtual ~NITFException(){}
+    ~NITFException() = default;
 
 }
 ;

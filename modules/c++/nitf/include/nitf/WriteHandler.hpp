@@ -67,10 +67,7 @@ public:
         getNativeOrThrow();
     }
 
-    //! Destructor
-    virtual ~WriteHandler()
-    {
-    }
+    ~WriteHandler() = default;
 
     /*!
      *  Write to the given output IOInterface

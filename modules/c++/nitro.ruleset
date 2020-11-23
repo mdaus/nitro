@@ -5,6 +5,7 @@
   <Include Path="concurrencycheckrules.ruleset" Action="Default" />
   <Include Path="concurrencyrules.ruleset" Action="Default" />
   <Include Path="cppcorecheckarithmeticrules.ruleset" Action="Default" />
+  <Include Path="cppcorecheckclassrules.ruleset" Action="Default" />
   <Include Path="cppcorecheckconcurrencyrules.ruleset" Action="Default" />
   <Include Path="cppcorecheckconstrules.ruleset" Action="Default" />
   <Include Path="cppcorecheckdeclrules.ruleset" Action="Default" />

@@ -77,10 +77,6 @@ BufferedReader::BufferedReader(const std::string& file,
     readNextBuffer();
 }
 
-BufferedReader::~BufferedReader()
-{
-}
-
 void BufferedReader::readNextBuffer()
 {
     const sys::Off_T currentOffset = mFile.getCurrentOffset();
@@ -148,7 +144,7 @@ void BufferedReader::writeImpl(const void* , size_t )
         Ctxt("We cannot do writes on a read-only handle"));
 }
 
-bool BufferedReader::canSeekImpl() const 
+bool BufferedReader::canSeekImpl() const noexcept
 {
     return true;
 }
@@ -196,12 +192,12 @@ nitf::Off BufferedReader::tellImpl() const
     return (mFile.getCurrentOffset() - mBufferSize + mPosition);
 }
 
-nitf::Off BufferedReader::getSizeImpl() const
+nitf::Off BufferedReader::getSizeImpl() const noexcept
 {
     return mFileLen;
 }
 
-int BufferedReader::getModeImpl() const
+int BufferedReader::getModeImpl() const noexcept
 {
     return NITF_ACCESS_READONLY;
 }

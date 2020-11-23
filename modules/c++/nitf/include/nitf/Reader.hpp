@@ -42,10 +42,8 @@ namespace nitf
 
 struct ReaderDestructor : public nitf::MemoryDestructor<nitf_Reader>
 {
-    ~ReaderDestructor()
-    {
-    }
-    void operator()(nitf_Reader *reader);
+    ~ReaderDestructor() = default;
+    void operator()(nitf_Reader *reader) override;
 };
 
 /*!

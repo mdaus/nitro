@@ -66,7 +66,7 @@ public:
         getNativeOrThrow();
     }
 
-    virtual ~DownSampler(){}
+    ~DownSampler() = default;
 
     /*!
      *  Applies a sampling method while reading.
