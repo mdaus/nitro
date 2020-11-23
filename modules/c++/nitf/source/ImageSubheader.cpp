@@ -85,9 +85,21 @@ void ImageSubheader::setPixelInformation(std::string pvtype,
 
     for (size_t i = 0; i < bandCount; i++)
     {
-        bandInfo[i] = nitf_BandInfo_clone(bands[i].getNative(), &error);
-        if (!bandInfo[i])
+        auto clone = nitf_BandInfo_clone(bands[i].getNative(), &error);
+        if (!clone)
             throw nitf::NITFException(&error);
+
+        // not sure what's causing this warning
+        #ifdef _MSC_VER
+        #pragma warning(push)
+        #pragma warning(disable: 6386) // Buffer overrun while writing to '...':  the writable size is '...' bytes, but '...' bytes might be written.
+        #endif
+
+        bandInfo[i] = clone;
+
+        #ifdef _MSC_VER
+        #pragma warning(pop)
+        #endif
     }
 
     const NITF_BOOL x = nitf_ImageSubheader_setPixelInformation(getNativeOrThrow(),
