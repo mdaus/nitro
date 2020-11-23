@@ -197,11 +197,24 @@ public:
  * corresponding nitf_##_destruct method.
  */
 
+#define DECLARE_CLASS_IN_operator_function_(Name_, Package_) \
+void operator()(Package_##_##Name_ * nativeObject) override \
+      { Package_##_##Name_##_destruct(&nativeObject); }
+ 
+#ifdef _MSC_VER
+#define DECLARE_CLASS_IN_operator_function(Name_, Package_) \
+    __pragma(warning(push)) \
+    __pragma(warning(disable: 26440)) /* Function '...' can be declared '...' (f.6). */ \
+    DECLARE_CLASS_IN_operator_function_(Name_, Package_) \
+    __pragma(warning(pop))
+#else
+#define DECLARE_CLASS_IN_operator_function(Name_, Package_) \
+    DECLARE_CLASS_IN_operator_function_(Name_, Package_)
+#endif
+
 #define DECLARE_CLASS_IN(_Name, _Package) \
     struct _Name##Destructor final : public nitf::MemoryDestructor<_Package##_##_Name> \
-    { void operator()(_Package##_##_Name *nativeObject) override \
-      { _Package##_##_Name##_destruct(&nativeObject); } \
-    }; \
+    { DECLARE_CLASS_IN_operator_function(_Name, _Package) }; \
     class _Name : public nitf::Object<_Package##_##_Name, _Name##Destructor>
 
 #define DECLARE_CLASS(_Name) DECLARE_CLASS_IN(_Name, nitf)
