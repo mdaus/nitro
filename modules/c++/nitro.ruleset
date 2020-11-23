@@ -11,6 +11,7 @@
   <Include Path="cppcorecheckdeclrules.ruleset" Action="Default" />
   <Include Path="cppcorecheckenumrules.ruleset" Action="Default" />
   <Include Path="cppcorecheckfuncrules.ruleset" Action="Default" />
+  <Include Path="cppcorecheckrawpointerrules.ruleset" Action="Default" />
   <Include Path="cppcorechecksharedpointerrules.ruleset" Action="Default" />
   <Include Path="cppcorecheckstlrules.ruleset" Action="Default" />
   <Include Path="cppcorecheckstylerules.ruleset" Action="Default" />

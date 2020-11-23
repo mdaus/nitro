@@ -62,7 +62,14 @@ nitf_IOInterface* CustomIO::createInterface(CustomIO* me) noexcept
         &CustomIO::adapterDestruct
     };
 
+    #ifdef _MSC_VER
+    #pragma warning(push)
+    #pragma warning(disable: 26408) // Avoid malloc() and free(), prefer the nothrow version of new with delete (r.10).
+    #endif
     auto const impl = static_cast<nitf_IOInterface*>(NITF_MALLOC(sizeof(nitf_IOInterface)));
+    #ifdef _MSC_VER
+    #pragma warning(pop)
+    #endif
     if (impl == nullptr)
     {
         return nullptr;

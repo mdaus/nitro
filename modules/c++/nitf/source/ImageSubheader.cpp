@@ -70,8 +70,16 @@ void ImageSubheader::setPixelInformation(std::string pvtype,
                          std::vector<nitf::BandInfo>& bands)
 {
     const size_t bandCount = bands.size();
+    #ifdef _MSC_VER
+    #pragma warning(push)
+    #pragma warning(disable: 26408) // Avoid malloc() and free(), prefer the nothrow version of new with delete (r.10).
+    #endif
     auto bandInfo = static_cast<nitf_BandInfo**>(NITF_MALLOC(
             sizeof(nitf_BandInfo*) * bandCount));
+    #ifdef _MSC_VER
+    #pragma warning(pop)
+    #endif
+
     if (!bandInfo)
     {
         throw nitf::NITFException(Ctxt(FmtX("Out of Memory")));
