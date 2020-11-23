@@ -1109,7 +1109,8 @@ NITFAPI(int) nitf_ImageSubheader_insertImageComment
 {
     nitf_ListIterator iterPos;
     nitf_Field* field = NULL;
-    char numCommentBuf[NITF_NICOM_SZ + 1];
+    #define numCommentBuf_SZ NITF_NICOM_SZ+10 // sprintf() warning about "%.*d"
+    char numCommentBuf[numCommentBuf_SZ + 1];
     char commentBuf[NITF_ICOM_SZ + 1];
     size_t length;
 
@@ -1147,8 +1148,8 @@ NITFAPI(int) nitf_ImageSubheader_insertImageComment
             goto CATCH_ERROR;
 
         /* always set the numComments back */
-        NITF_SNPRINTF(numCommentBuf, NITF_NICOM_SZ + 1, "%.*d",
-                NITF_NICOM_SZ, ++numComments);
+        NITF_SNPRINTF(numCommentBuf, numCommentBuf_SZ + 1, "%.*d",
+            NITF_NICOM_SZ, ++numComments);
         nitf_Field_setRawData(subhdr->numImageComments,
                               numCommentBuf, NITF_NICOM_SZ, error);
     }
@@ -1172,7 +1173,8 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_removeImageComment
     nitf_Error * error
 )
 {
-    char commentBuf[NITF_NICOM_SZ + 1];
+    #define commentBuf_SZ NITF_NICOM_SZ+10 // sprintf() warning about "%.*d"
+    char commentBuf[commentBuf_SZ + 1];
     nitf_ListIterator iterPos;
     nitf_Field* field = NULL;
 
@@ -1192,7 +1194,7 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_removeImageComment
             goto CATCH_ERROR;
 
         /* always set the numComments back */
-        NITF_SNPRINTF(commentBuf, NITF_NICOM_SZ + 1, "%.*d",
+        NITF_SNPRINTF(commentBuf, commentBuf_SZ + 1, "%.*d",
                       NITF_NICOM_SZ, --numComments);
         nitf_Field_setRawData(subhdr->numImageComments,
                               commentBuf, NITF_NICOM_SZ, error);
