@@ -48,7 +48,7 @@ CustomIO::~CustomIO()
     mHandle->get()->data = nullptr;
 }
 
-nitf_IOInterface* CustomIO::createInterface(CustomIO* me)
+nitf_IOInterface* CustomIO::createInterface(CustomIO* me) noexcept
 {
     static nrt_IIOInterface iIOHandle = {
         &CustomIO::adapterRead,
@@ -62,7 +62,14 @@ nitf_IOInterface* CustomIO::createInterface(CustomIO* me)
         &CustomIO::adapterDestruct
     };
 
+    #ifdef _MSC_VER
+    #pragma warning(push)
+    #pragma warning(disable: 26408) // Avoid malloc() and free(), prefer the nothrow version of new with delete (r.10).
+    #endif
     auto const impl = static_cast<nitf_IOInterface*>(NITF_MALLOC(sizeof(nitf_IOInterface)));
+    #ifdef _MSC_VER
+    #pragma warning(pop)
+    #endif
     if (impl == nullptr)
     {
         return nullptr;
@@ -310,7 +317,7 @@ NRT_BOOL CustomIO::adapterClose(NRT_DATA* data,
     }
 }
 
-void CustomIO::adapterDestruct(NRT_DATA*)
+void CustomIO::adapterDestruct(NRT_DATA*) noexcept
 {
 }
 }

@@ -35,10 +35,8 @@ namespace nitf
 
 struct IOInterfaceDestructor : public nitf::MemoryDestructor<nitf_IOInterface>
 {
-    ~IOInterfaceDestructor()
-    {
-    }
-    void operator()(nitf_IOInterface *io);
+    ~IOInterfaceDestructor() = default;
+    void operator()(nitf_IOInterface *io) noexcept override;
 };
 
 /*!
@@ -68,8 +66,7 @@ public:
         setNative(lhs.getNative());
     }
 
-    //! Destructor
-    virtual ~IOInterface() { }
+    ~IOInterface() = default;
 
     //! Assignment Operator
     IOInterface & operator=(const IOInterface & x)
@@ -96,7 +93,7 @@ public:
     void close();
 
 protected:
-    mutable nitf_Error error;
+    mutable nitf_Error error{};
 };
 
 }

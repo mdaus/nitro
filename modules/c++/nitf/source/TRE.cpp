@@ -97,7 +97,7 @@ TRE::Iterator TRE::begin() const
     return TRE::Iterator(iter);
 }
 
-TRE::Iterator TRE::end() const
+TRE::Iterator TRE::end() const noexcept
 {
     return TRE::Iterator();
 }
@@ -142,7 +142,7 @@ size_t TRE::getCurrentSize() const
 
 std::string TRE::getTag() const
 {
-    return std::string(getNativeOrThrow()->tag);
+    return getNativeOrThrow()->tag;
 }
 
 void TRE::setTag(const std::string& value)

@@ -364,7 +364,7 @@ public:
     }
 
 private:
-    Field(){} //private -- does not make sense to construct a Field from scratch
+    Field() = default; //private -- does not make sense to construct a Field from scratch
 
     //! get the value
     void get(NITF_DATA* outval, nitf::ConvType vtype, size_t length) const
@@ -383,9 +383,9 @@ private:
             throw nitf::NITFException(&error);
     }
 
-    nitf_Error error;
+    nitf_Error error{};
 
-    operator char*() const; // Don't allow this cast ever.
+    operator char*() const = delete; // Don't allow this cast ever.
 };
 
 }

@@ -55,7 +55,6 @@ ComponentInfo ComponentInfo::clone() const
     return dolly;
 }
 
-ComponentInfo::~ComponentInfo(){}
 
 nitf::Field ComponentInfo::getLengthSubheader() const
 {
