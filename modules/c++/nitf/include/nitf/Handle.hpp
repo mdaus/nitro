@@ -117,7 +117,10 @@ public:
     }
     
     BoundHandle(const BoundHandle&) = delete;
+    BoundHandle(BoundHandle&&) = delete;
     BoundHandle& operator=(const BoundHandle&) = delete;
+    BoundHandle& operator=(BoundHandle&&) = delete;
+
 
     //! Assign from native object
     Handle& operator=(Class_T* h)
