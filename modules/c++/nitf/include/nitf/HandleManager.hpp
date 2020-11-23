@@ -53,7 +53,7 @@ class HandleManager
     }
 
 public:
-    HandleManager() noexcept(false) = default;
+    HandleManager() noexcept(false) {};
     virtual ~HandleManager() {}
 
     template <typename T>
