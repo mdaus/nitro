@@ -48,7 +48,7 @@ class HashTable; //forward declaration
 class HashIterator
 {
 public:
-    virtual ~HashIterator(){}
+    virtual ~HashIterator() {}
     virtual void operator()(nitf::HashTable* ht,
                             nitf::Pair& pair,
                             NITF_DATA* userData) = 0;

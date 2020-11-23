@@ -186,7 +186,7 @@ public:
  *
  *  struct RecordDestructor : public MemoryDestructor<nitf_Record> \
  *  { \
- *      ~RecordDestructor(){} \
+ *      ~RecordDestructor() = default; \
  *      virtual void operator()(nitf_Record *nativeObject) \
  *      { nitf_Record_destruct(&nativeObject); } \
  *  }; \

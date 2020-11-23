@@ -185,8 +185,6 @@ nitf::List nitf::List::clone(NITF_DATA_ITEM_CLONE cloner) const
     return dolly;
 }
 
-nitf::List::~List(){}
-
 nitf::ListIterator nitf::List::begin() const
 {
     const nitf_ListIterator x = nitf_List_begin(getNativeOrThrow());

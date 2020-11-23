@@ -211,7 +211,7 @@ typedef nitf::ExtensionsIterator Iterator;
         return dolly;
     }
 
-    ~Extensions(){}
+    ~Extensions() = default;
 
     /*!
      *  Insert a TRE into the extensions section

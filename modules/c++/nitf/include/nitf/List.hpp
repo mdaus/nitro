@@ -234,8 +234,7 @@ public:
     //! Clone
     nitf::List clone(NITF_DATA_ITEM_CLONE cloner) const;
 
-    //! Destructor
-    ~List();
+    ~List() = default;
 
     /*!
      *  Get the begin iterator

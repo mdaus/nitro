@@ -52,7 +52,7 @@ public:
     //! Set native object
     ImageReader(nitf_ImageReader * x);
 
-    ~ImageReader();
+    ~ImageReader() = default;
 
     //! Get the blocking info
     nitf::BlockingInfo getBlockingInfo() const;

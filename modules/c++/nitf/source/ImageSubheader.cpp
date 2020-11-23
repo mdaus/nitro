@@ -62,12 +62,6 @@ nitf::ImageSubheader ImageSubheader::clone() const
     return dolly;
 }
 
-/*!
- *  Destructor
- */
-ImageSubheader::~ImageSubheader(){}
-
-
 void ImageSubheader::setPixelInformation(std::string pvtype,
                          uint32_t nbpp,
                          uint32_t abpp,

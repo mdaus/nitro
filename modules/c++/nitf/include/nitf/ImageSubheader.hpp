@@ -66,10 +66,7 @@ public:
     //! Clone
     nitf::ImageSubheader clone() const;
 
-    /*!
-     *  Destructor
-     */
-    ~ImageSubheader();
+    ~ImageSubheader() = default;
 
     /*!
      *  Set the pixel type and band related information

@@ -67,7 +67,7 @@ public:
     //! Clone
     nitf::FileHeader clone() const;
 
-    ~FileHeader();
+    ~FileHeader() = default;
 
     //! Get the fileHeader
     nitf::Field getFileHeader() const;

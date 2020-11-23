@@ -61,7 +61,7 @@ public:
     //! Clone
     nitf::LabelSubheader clone() const;
 
-    ~LabelSubheader();
+    ~LabelSubheader() = default;
 
     //! Get the filePartType
     nitf::Field getFilePartType() const;

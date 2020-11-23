@@ -57,8 +57,6 @@ nitf::FileHeader FileHeader::clone() const
     return dolly;
 }
 
-FileHeader::~FileHeader(){}
-
 nitf::Field FileHeader::getFileHeader() const
 {
     return nitf::Field(getNativeOrThrow()->fileHeader);

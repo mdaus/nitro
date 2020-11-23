@@ -53,7 +53,7 @@ public:
     //! Set native object
     SegmentReader(nitf_SegmentReader * x);
 
-    ~SegmentReader();
+    ~SegmentReader() = default;
 
     /*!
      * \brief nitf_SegmentReader_read - Read segment data

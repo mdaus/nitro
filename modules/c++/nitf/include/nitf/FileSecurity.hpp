@@ -62,7 +62,7 @@ public:
     //! Clone
     nitf::FileSecurity clone() const;
 
-    ~FileSecurity();
+    ~FileSecurity() = default;
 
     //! Get the classificationSystem
     nitf::Field getClassificationSystem() const;

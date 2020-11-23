@@ -67,7 +67,7 @@ public:
     //! Clone
     nitf::DESegment clone() const;
 
-    ~DESegment();
+    ~DESegment() = default;
 
     //! Get the subheader
     nitf::DESubheader getSubheader() const;
