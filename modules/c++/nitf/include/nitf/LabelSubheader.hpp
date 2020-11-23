@@ -56,7 +56,7 @@ public:
     LabelSubheader(nitf_LabelSubheader * x);
 
     //! Default Constructor
-    LabelSubheader();
+    LabelSubheader() noexcept(false);
 
     //! Clone
     nitf::LabelSubheader clone() const;

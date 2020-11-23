@@ -66,12 +66,12 @@ public:
     Record(nitf_Record * x);
 
     //! Default Constructor
-    Record(nitf::Version version = NITF_VER_21);
+    Record(nitf::Version version = NITF_VER_21) noexcept(false);
 
     //! Clone
     nitf::Record clone() const;
 
-    ~Record();
+    ~Record() = default;
 
     //! Returns the NITF version
     nitf::Version getVersion() const;

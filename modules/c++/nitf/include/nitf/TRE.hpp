@@ -42,7 +42,7 @@ namespace nitf
  */
 struct TREFieldIterator final : public nitf::Object<nitf_TREEnumerator>
 {
-    TREFieldIterator()
+    TREFieldIterator() noexcept(false)
     {
         setNative(nullptr);
     }

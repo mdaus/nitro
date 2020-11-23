@@ -57,7 +57,7 @@ public:
     FileSecurity(nitf_FileSecurity * x);
 
     //! Constructor
-    FileSecurity();
+    FileSecurity() noexcept(false);
 
     //! Clone
     nitf::FileSecurity clone() const;

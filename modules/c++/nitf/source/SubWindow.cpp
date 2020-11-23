@@ -49,7 +49,7 @@ SubWindow::SubWindow() : mDownSampler(nullptr)
     setManaged(false);
 }
 
-SubWindow::~SubWindow()
+SubWindow::~SubWindow() noexcept(false)
 {
     if (isValid() && getNative()->downsampler)
     {

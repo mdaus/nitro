@@ -67,7 +67,7 @@ public:
     Writer(nitf_Writer * x);
 
     //! Constructor
-    Writer();
+    Writer() noexcept(false);
 
     ~Writer();
     Writer(Writer&&) = default;

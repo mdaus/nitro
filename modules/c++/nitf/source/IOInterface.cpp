@@ -22,7 +22,7 @@
 
 #include "nitf/IOInterface.hpp"
 
-void nitf::IOInterfaceDestructor::operator()(nitf_IOInterface *io)
+void nitf::IOInterfaceDestructor::operator()(nitf_IOInterface *io) noexcept
 {
     if (io)
     {

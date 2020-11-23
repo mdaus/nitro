@@ -43,7 +43,7 @@ namespace nitf
 struct Handle
 {
     Handle() = default;
-    virtual ~Handle() {}
+    virtual ~Handle() noexcept(false) {}
 
     //! Get the ref count
     int getRef() const noexcept { return refCount; }
@@ -80,8 +80,8 @@ protected:
 template <typename T>
 struct MemoryDestructor
 {
-    virtual void operator() (T* /*nativeObject*/) {}
-    virtual ~MemoryDestructor() {}
+    virtual void operator() (T* /*nativeObject*/) noexcept(false) {}
+    virtual ~MemoryDestructor() noexcept(false) {}
 };
 
 
@@ -104,7 +104,7 @@ public:
     BoundHandle(Class_T* h) noexcept : handle(h) {}
 
     //! Destructor
-    virtual ~BoundHandle()
+    virtual ~BoundHandle() noexcept(false)
     {
         //call the destructor, to destroy the object
         if(handle && managed <= 0)

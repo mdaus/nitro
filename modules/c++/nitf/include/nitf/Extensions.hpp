@@ -196,7 +196,7 @@ typedef nitf::ExtensionsIterator Iterator;
     }
 
     //! Constructor
-    Extensions()
+    Extensions() noexcept(false)
     {
         setNative(nitf_Extensions_construct(&error));
         getNativeOrThrow();

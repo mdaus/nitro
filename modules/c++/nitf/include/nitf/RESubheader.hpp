@@ -57,12 +57,12 @@ public:
     RESubheader(nitf_RESubheader * x);
 
      //! Constructor
-    RESubheader();
+    RESubheader() noexcept(false);
 
     //! Clone
     nitf::RESubheader clone() const;
 
-    ~RESubheader();
+    ~RESubheader() = default;
 
     //! Get the filePartType
     nitf::Field getFilePartType() const;

@@ -65,9 +65,9 @@ public:
     Reader(nitf_Reader * x);
 
     //! Default Constructor
-    Reader();
+    Reader() noexcept(false);
 
-    ~Reader();
+    ~Reader() = default;
 
     /*!
      * Return the Version of the file passed in by its file name.

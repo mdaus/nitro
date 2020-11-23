@@ -30,7 +30,7 @@ namespace nitf
 class CustomIO : public IOInterface
 {
 public:
-    CustomIO();
+    CustomIO() noexcept(false);
 
     virtual ~CustomIO();
 

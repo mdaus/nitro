@@ -38,7 +38,7 @@ struct IOInterfaceDestructor : public nitf::MemoryDestructor<nitf_IOInterface>
     ~IOInterfaceDestructor()
     {
     }
-    void operator()(nitf_IOInterface *io);
+    void operator()(nitf_IOInterface *io) noexcept;
 };
 
 /*!

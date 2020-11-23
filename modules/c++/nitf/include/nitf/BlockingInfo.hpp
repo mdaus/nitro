@@ -63,7 +63,7 @@ public:
     BlockingInfo(nitf_BlockingInfo * x);
 
     //! Constructor
-    BlockingInfo();
+    BlockingInfo() noexcept(false);
 
     //! Destructor
     ~BlockingInfo();

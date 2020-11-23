@@ -43,7 +43,7 @@ class DateTime
 {
 public:
     //! Sets to current date/time
-    DateTime();
+    DateTime() noexcept(false);
 
     //! Set native object - takes ownership
     DateTime(nitf_DateTime* dateTime);

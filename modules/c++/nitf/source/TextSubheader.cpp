@@ -56,8 +56,6 @@ nitf::TextSubheader TextSubheader::clone() const
     return dolly;
 }
 
-TextSubheader::~TextSubheader(){}
-
 nitf::Field TextSubheader::getFilePartType() const
 {
     return nitf::Field(getNativeOrThrow()->filePartType);
