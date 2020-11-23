@@ -148,7 +148,7 @@ void BufferedReader::writeImpl(const void* , size_t )
         Ctxt("We cannot do writes on a read-only handle"));
 }
 
-bool BufferedReader::canSeekImpl() const
+bool BufferedReader::canSeekImpl() const 
 {
     return true;
 }

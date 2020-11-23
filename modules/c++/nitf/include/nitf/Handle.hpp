@@ -80,7 +80,7 @@ protected:
 template <typename T>
 struct MemoryDestructor
 {
-    virtual void operator()(T* /*nativeObject*/) {}
+    virtual void operator() (T* /*nativeObject*/) {}
     virtual ~MemoryDestructor() {}
 };
 
@@ -101,7 +101,7 @@ private:
 public:
     //! Create handle from native object
     BoundHandle() = default;
-    BoundHandle(Class_T* h) : handle(h) {}
+    BoundHandle(Class_T* h) noexcept : handle(h) {}
 
     //! Destructor
     virtual ~BoundHandle()
@@ -126,7 +126,7 @@ public:
     Class_T* get() noexcept { return handle; }
 
     //! Get the address of then native object
-    Class_T** getAddress() { return &handle; }
+    Class_T** getAddress() noexcept { return &handle; }
 
     /*!
      * Sets whether or not the native object is "managed" by the underlying
@@ -135,10 +135,10 @@ public:
      * be passed to the DestructFunctor_T functor, and most likely destroyed,
      * depending on what the functor does.
      */
-    void setManaged(bool flag) { managed += flag ? 1 : (managed == 0 ? 0 : -1); }
+    void setManaged(bool flag) noexcept { managed += flag ? 1 : (managed == 0 ? 0 : -1); }
 
     //! Is the native object managed?
-    bool isManaged() { return managed > 0; }
+    bool isManaged() const noexcept { return managed > 0; }
 
 };
 

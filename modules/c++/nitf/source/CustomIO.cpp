@@ -48,7 +48,7 @@ CustomIO::~CustomIO()
     mHandle->get()->data = nullptr;
 }
 
-nitf_IOInterface* CustomIO::createInterface(CustomIO* me)
+nitf_IOInterface* CustomIO::createInterface(CustomIO* me) noexcept
 {
     static nrt_IIOInterface iIOHandle = {
         &CustomIO::adapterRead,
@@ -310,7 +310,7 @@ NRT_BOOL CustomIO::adapterClose(NRT_DATA* data,
     }
 }
 
-void CustomIO::adapterDestruct(NRT_DATA*)
+void CustomIO::adapterDestruct(NRT_DATA*) noexcept
 {
 }
 }

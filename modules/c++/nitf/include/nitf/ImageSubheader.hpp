@@ -182,7 +182,7 @@ public:
                          uint32_t& numRowsPerBlock,
                          uint32_t& numColsPerBlock,
                          uint32_t& numBlocksPerCol,
-                         uint32_t& numBlocksPerRow);
+                         uint32_t& numBlocksPerRow) noexcept;
 
     /*!
      * Set the image dimensions and blocking.
@@ -355,7 +355,7 @@ public:
      * an even multiple of numDimsPerBlock)
      */
     static
-    size_t getActualImageDim(size_t dim, size_t numDimsPerBlock);
+    size_t getActualImageDim(size_t dim, size_t numDimsPerBlock) noexcept;
 
     /*!
      * \return The number of bytes the image data associated with the image

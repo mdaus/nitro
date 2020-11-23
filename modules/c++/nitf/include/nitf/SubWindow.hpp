@@ -99,7 +99,7 @@ public:
      * Return the DownSampler that is referenced by this SubWindow.
      * If no DownSampler is referenced, a NITFException is thrown.
      */
-    nitf::DownSampler* getDownSampler();
+    nitf::DownSampler* getDownSampler() noexcept;
 
 private:
     nitf::DownSampler* mDownSampler;

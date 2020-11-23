@@ -73,7 +73,7 @@ Reader::~Reader()
 {
 }
 
-nitf::Version Reader::getNITFVersion(const std::string& fileName)
+nitf::Version Reader::getNITFVersion(const std::string& fileName) noexcept
 {
     return nitf_Reader_getNITFVersion(fileName.c_str());
 }

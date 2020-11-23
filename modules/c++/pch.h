@@ -19,6 +19,7 @@
 #pragma warning(disable: 4514) //	'...': unreferenced inline function has been removed
 
 // TODO: get rid of these someday? ... from Visual Studio code-analysis
+#pragma warning(disable: 26455) // Default constructor may not throw. Declare it '...' (f.6).
 
 #pragma warning(push)
 #pragma warning(disable: 4355) // '...': used in base member initializer list

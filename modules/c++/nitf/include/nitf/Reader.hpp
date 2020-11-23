@@ -74,7 +74,7 @@ public:
      * \param fileName Pathname of file to read
      * \return NITF_VER_20, NITF_VER_21, or NITF_VER_UNKNOWN
      */
-    static nitf::Version getNITFVersion(const std::string& fileName);
+    static nitf::Version getNITFVersion(const std::string& fileName) noexcept;
 
     /*!
      * Return the Version of the file

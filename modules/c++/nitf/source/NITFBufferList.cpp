@@ -29,13 +29,13 @@
 namespace nitf
 {
 
-NITFBuffer::NITFBuffer(const void* data, size_t numBytes) :
+NITFBuffer::NITFBuffer(const void* data, size_t numBytes) noexcept :
     mData(data),
     mNumBytes(numBytes)
 {
 }
 
-size_t NITFBufferList::getTotalNumBytes() const
+size_t NITFBufferList::getTotalNumBytes() const noexcept
 {
     size_t numBytes(0);
 

@@ -40,9 +40,8 @@ namespace nitf
  *  \class FieldIterator
  *  \brief  The C++ wrapper for the nitf_TREEnumerator
  */
-class TREFieldIterator : public nitf::Object<nitf_TREEnumerator>
+struct TREFieldIterator final : public nitf::Object<nitf_TREEnumerator>
 {
-    public:
     TREFieldIterator()
     {
         setNative(nullptr);
@@ -93,7 +92,7 @@ class TREFieldIterator : public nitf::Object<nitf_TREEnumerator>
      *  \param it2  The iterator to compare with
      *  \return  True if so, and False otherwise
      */
-    bool operator==(const nitf::TREFieldIterator& it2)
+    bool operator==(const nitf::TREFieldIterator& it2) const noexcept
     {
         // need to do this double-check so that the last iteration of an
         // iterator doesn't get skipped
@@ -102,7 +101,7 @@ class TREFieldIterator : public nitf::Object<nitf_TREEnumerator>
         return false;
     }
 
-    bool operator!=(const nitf::TREFieldIterator& it2)
+    bool operator!=(const nitf::TREFieldIterator& it2) const noexcept
     {
         return !this->operator==((nitf::TREFieldIterator&)it2);
     }
@@ -206,7 +205,7 @@ DECLARE_CLASS(TRE)
      *  Get an end TRE field iterator
      *  \return  A field iterator pointing PAST the last field in the TRE
      */
-    Iterator end() const;
+    Iterator end() const noexcept;
 
     /*!
      * Get the field specified by the key. Throws an exception if the field

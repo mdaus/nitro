@@ -127,7 +127,7 @@ void ImageSubheader::computeBlocking(uint32_t numRows,
                                      uint32_t& numRowsPerBlock,
                                      uint32_t& numColsPerBlock,
                                      uint32_t& numBlocksPerCol,
-                                     uint32_t& numBlocksPerRow)
+                                     uint32_t& numBlocksPerRow) noexcept
 {
     nitf_ImageSubheader_computeBlocking(numRows,
                                         numCols,
@@ -458,7 +458,7 @@ void ImageSubheader::setExtendedSection(nitf::Extensions value)
     value.setManaged(true);
 }
 
-size_t ImageSubheader::getActualImageDim(size_t dim, size_t numDimsPerBlock)
+size_t ImageSubheader::getActualImageDim(size_t dim, size_t numDimsPerBlock) noexcept
 {
     if (numDimsPerBlock == 0)
     {

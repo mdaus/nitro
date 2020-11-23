@@ -135,7 +135,7 @@ void SubWindow::setDownSampler(nitf::DownSampler* downSampler)
 }
 
 
-nitf::DownSampler* SubWindow::getDownSampler()
+nitf::DownSampler* SubWindow::getDownSampler() noexcept
 {
     return mDownSampler;
 }

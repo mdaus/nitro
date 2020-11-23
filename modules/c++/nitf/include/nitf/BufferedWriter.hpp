@@ -43,23 +43,23 @@ public:
 
     void flushBuffer();
 
-    uint64_t getTotalWritten() const
+    uint64_t getTotalWritten() const noexcept
     {
         return mTotalWritten;
     }
 
-    uint64_t getNumBlocksWritten() const
+    uint64_t getNumBlocksWritten() const noexcept
     {
         return mBlocksWritten;
     }
 
-    uint64_t getNumPartialBlocksWritten() const
+    uint64_t getNumPartialBlocksWritten() const noexcept
     {
         return mPartialBlocks;
     }
 
     //! Time spent writing to disk in seconds
-    double getTotalWriteTime()
+    double getTotalWriteTime() const noexcept
     {
         return mElapsedTime;
     }

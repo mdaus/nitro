@@ -98,25 +98,25 @@ public:
     virtual ~Object() { releaseHandle(); }
 
     //! Is the object valid (native object not null)?
-    virtual bool isValid() const
+    virtual bool isValid() const noexcept
     {
         return getNative() != nullptr;
     }
 
     //! Equality, based on handle
-    bool operator==(const Object& obj)
+    bool operator==(const Object& obj) const noexcept
     {
         return mHandle == obj.mHandle;
     }
 
     //! Inequality, based on handle
-    bool operator!=(const Object& obj)
+    bool operator!=(const Object& obj) const noexcept
     {
         return !(operator==(obj));
     }
 
     //! Get native object
-    virtual T * getNative() const
+    virtual T * getNative() const noexcept
     {
         return mHandle ? mHandle->get() : nullptr;
     }
@@ -143,7 +143,7 @@ public:
         return FmtX("%p", getNative());
     }
 
-    bool isManaged() const { return isValid() && mHandle->isManaged(); }
+    bool isManaged() const noexcept { return isValid() && mHandle->isManaged(); }
 
     /*!
      * Set the management of the underlying memory
@@ -151,7 +151,7 @@ public:
      * \param flag  if flag is true, the underlying library will adopt and manage the memory
      *              if flag is false, the memory can be freed when refcount == 0
      */
-    void setManaged(bool flag)
+    void setManaged(bool flag) noexcept
     {
         if (isValid())
             mHandle->setManaged(flag);
@@ -167,7 +167,7 @@ public:
         mHandle->incRef();
     }
 
-    void decRef()
+    void decRef() 
     {
         mHandle->decRef();
     }
