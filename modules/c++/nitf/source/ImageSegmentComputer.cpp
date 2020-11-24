@@ -31,6 +31,9 @@
 
 #include "gsl/gsl.h"
 
+#undef min
+#undef max
+
 namespace nitf
 {
 const size_t ImageSegmentComputer::ILOC_MAX = 99999;
@@ -53,7 +56,7 @@ bool ImageSegmentComputer::Segment::isInRange(
         size_t rangeStartRow,
         size_t rangeNumRows,
         size_t& firstGlobalRowInThisSegment,
-        size_t& numRowsInThisSegment)
+        size_t& numRowsInThisSegment) noexcept
 {
     const size_t startGlobalRow = std::max(firstRow, rangeStartRow);
     const size_t endGlobalRow =
@@ -77,7 +80,7 @@ bool ImageSegmentComputer::Segment::isInRange(
         size_t rangeStartRow,
         size_t rangeNumRows,
         size_t& firstGlobalRowInThisSegment,
-        size_t& numRowsInThisSegment) const
+        size_t& numRowsInThisSegment) const noexcept
 {
     return isInRange(firstRow, endRow(), rangeStartRow, rangeNumRows,
                      firstGlobalRowInThisSegment, numRowsInThisSegment);
@@ -123,7 +126,7 @@ ImageSegmentComputer::ImageSegmentComputer(size_t numRows,
     computeSegmentInfo();
 }
 
-size_t ImageSegmentComputer::getActualDim(size_t dim, size_t numDimsPerBlock)
+size_t ImageSegmentComputer::getActualDim(size_t dim, size_t numDimsPerBlock) noexcept
 {
     if (numDimsPerBlock == 0)
     {

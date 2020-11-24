@@ -37,7 +37,6 @@ BufferedWriter::BufferedWriter(const std::string& file, size_t bufferSize) :
     mTotalWritten(0),
     mBlocksWritten(0),
     mPartialBlocks(0),
-    mElapsedTime(0),
     mFile(file, sys::File::WRITE_ONLY, sys::File::CREATE | sys::File::TRUNCATE)
 {
     if (mBufferSize == 0)
@@ -58,7 +57,6 @@ BufferedWriter::BufferedWriter(const std::string& file,
     mTotalWritten(0),
     mBlocksWritten(0),
     mPartialBlocks(0),
-    mElapsedTime(0),
     mFile(file, sys::File::WRITE_ONLY, sys::File::CREATE)
 {
     if (mBufferSize == 0)
@@ -169,7 +167,7 @@ void BufferedWriter::writeImpl(const void* buf, size_t size)
     }
 }
 
-bool BufferedWriter::canSeekImpl() const
+bool BufferedWriter::canSeekImpl() const noexcept
 {
     return true;
 }
@@ -192,7 +190,7 @@ nitf::Off BufferedWriter::getSizeImpl() const
     return (mFile.length() + mPosition);
 }
 
-int BufferedWriter::getModeImpl() const
+int BufferedWriter::getModeImpl() const noexcept
 {
     return NITF_ACCESS_WRITEONLY;
 }

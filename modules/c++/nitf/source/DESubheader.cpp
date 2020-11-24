@@ -58,8 +58,6 @@ nitf::DESubheader DESubheader::clone() const
     return dolly;
 }
 
-DESubheader::~DESubheader(){}
-
 nitf::Field DESubheader::getFilePartType() const
 {
     return nitf::Field(getNativeOrThrow()->filePartType);

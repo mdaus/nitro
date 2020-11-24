@@ -71,29 +71,29 @@ nitf::ListIterator & nitf::ListIterator::operator=(const nitf::ListIterator & x)
 
 nitf::ListIterator::ListIterator(nitf_ListIterator x) { setHandle(x); }
 
-nitf_ListIterator & nitf::ListIterator::getHandle() { return handle; }
-nitf_ListIterator& nitf::ListIterator::getHandle() const { return handle; }
+nitf_ListIterator & nitf::ListIterator::getHandle() noexcept { return handle; }
+nitf_ListIterator& nitf::ListIterator::getHandle() const noexcept { return handle; }
 
-bool nitf::ListIterator::equals(const nitf::ListIterator& it2) const
+bool nitf::ListIterator::equals(const nitf::ListIterator& it2) const noexcept
 {
     const NITF_BOOL x = nitf_ListIterator_equals(&handle, &it2.getHandle());
     if (!x) return false;
     return true;
 }
 
-bool nitf::ListIterator::operator==(const nitf::ListIterator& it2) const
+bool nitf::ListIterator::operator==(const nitf::ListIterator& it2) const noexcept
 {
     return this->equals(it2);
 }
 
-bool nitf::ListIterator::notEqualTo(const nitf::ListIterator& it2) const
+bool nitf::ListIterator::notEqualTo(const nitf::ListIterator& it2) const noexcept
 {
     const NITF_BOOL x = nitf_ListIterator_notEqualTo(&handle, &it2.getHandle());
     if (!x) return false;
     return true;
 }
 
-bool nitf::ListIterator::operator!=(const nitf::ListIterator& it2) const
+bool nitf::ListIterator::operator!=(const nitf::ListIterator& it2) const noexcept
 {
     return this->notEqualTo(it2);
 }
@@ -184,8 +184,6 @@ nitf::List nitf::List::clone(NITF_DATA_ITEM_CLONE cloner) const
     dolly.setManaged(false);
     return dolly;
 }
-
-nitf::List::~List(){}
 
 nitf::ListIterator nitf::List::begin() const
 {

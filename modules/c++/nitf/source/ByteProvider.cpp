@@ -36,14 +36,6 @@
 
 namespace nitf
 {
-ByteProvider::ByteProvider() :
-    mNumCols(0),
-    mOverallNumRowsPerBlock(0),
-    mNumColsPerBlock(0),
-    mNumBytesPerRow(0),
-    mNumBytesPerPixel(0)
-{
-}
 
 ByteProvider::ByteProvider(Record& record,
                            const std::vector<PtrAndLength>& desData,
@@ -68,7 +60,7 @@ void ByteProvider::copyFromStreamAndClear(io::ByteStream& stream,
     rawBytes.resize(stream.getSize());
     if (!rawBytes.empty())
     {
-        ::memcpy(&rawBytes[0], stream.get(), stream.getSize());
+        ::memcpy(rawBytes.data(), stream.get(), stream.getSize());
     }
 
     stream.clear();
@@ -368,7 +360,7 @@ void ByteProvider::checkBlocking(size_t seg,
 }
 
 size_t ByteProvider::countPadRows(
-        size_t seg, size_t /*numRowsToWrite*/, size_t imageDataEndRow) const
+        size_t seg, size_t /*numRowsToWrite*/, size_t imageDataEndRow) const noexcept
 {
     const SegmentInfo& imageSegmentInfo(mImageSegmentInfo[seg]);
     const size_t numRowsPerBlock(mNumRowsPerBlock[seg]);
@@ -427,7 +419,7 @@ void ByteProvider::addImageData(
     buffers.pushBack(imageDataPtr, numRowsToWrite * mNumBytesPerRow);
 }
 
-size_t ByteProvider::countBytesForHeaders(size_t seg, size_t startRow) const
+size_t ByteProvider::countBytesForHeaders(size_t seg, size_t startRow) const noexcept
 {
     size_t numBytes = 0;
     if (shouldAddHeader(seg, startRow))
@@ -441,12 +433,12 @@ size_t ByteProvider::countBytesForHeaders(size_t seg, size_t startRow) const
     return numBytes;
 }
 
-bool ByteProvider::shouldAddHeader(size_t seg, size_t startRow) const
+bool ByteProvider::shouldAddHeader(size_t seg, size_t startRow) const noexcept
 {
     return seg == 0 && startRow == 0;
 }
 
-bool ByteProvider::shouldAddSubheader(size_t seg, size_t startRow) const
+bool ByteProvider::shouldAddSubheader(size_t seg, size_t startRow) const noexcept
 {
     const size_t segStartRow = mImageSegmentInfo[seg].firstRow;
     return startRow <= segStartRow;
@@ -473,7 +465,7 @@ void ByteProvider::addHeaders(size_t seg,
     }
 }
 
-bool ByteProvider::shouldAddDES(size_t seg, size_t imageDataEndRow) const
+bool ByteProvider::shouldAddDES(size_t seg, size_t imageDataEndRow) const noexcept
 {
     // When we write out the last row of the last image segment, we
     // tack on the DES(s)
@@ -481,7 +473,7 @@ bool ByteProvider::shouldAddDES(size_t seg, size_t imageDataEndRow) const
             mImageSegmentInfo[seg].endRow() == imageDataEndRow);
 }
 
-size_t ByteProvider::countBytesForDES(size_t seg, size_t imageDataEndRow) const
+size_t ByteProvider::countBytesForDES(size_t seg, size_t imageDataEndRow) const noexcept
 {
     return shouldAddDES(seg, imageDataEndRow) ? mDesSubheaderAndData.size() : 0;
 }

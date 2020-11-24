@@ -67,10 +67,6 @@ nitf::Record Record::clone() const
     return dolly;
 }
 
-Record::~Record()
-{
-}
-
 nitf::Version Record::getVersion() const
 {
     return nitf_Record_getVersion(getNativeOrThrow());

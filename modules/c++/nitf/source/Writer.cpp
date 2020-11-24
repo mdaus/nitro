@@ -45,7 +45,7 @@ void WriterDestructor::operator()(nitf_Writer *writer)
 
 Writer::Writer(const Writer & x)
 {
-    setNative(x.getNative());
+    *this = x;
 }
 
 Writer & Writer::operator=(const Writer & x)

@@ -40,22 +40,20 @@ namespace nitf
  *  \class FieldIterator
  *  \brief  The C++ wrapper for the nitf_TREEnumerator
  */
-class TREFieldIterator : public nitf::Object<nitf_TREEnumerator>
+struct TREFieldIterator final : public nitf::Object<nitf_TREEnumerator>
 {
-    public:
-    TREFieldIterator() : mPair(nullptr)
+    TREFieldIterator() noexcept(false)
     {
         setNative(nullptr);
     }
 
-    ~TREFieldIterator()
-    {
-    }
+    ~TREFieldIterator() = default;
+
 
     //! Copy constructor
     TREFieldIterator(const TREFieldIterator& x)
     {
-        setNative(x.getNative());
+        *this = x;
     }
 
     //! Assignment Operator
@@ -94,7 +92,7 @@ class TREFieldIterator : public nitf::Object<nitf_TREEnumerator>
      *  \param it2  The iterator to compare with
      *  \return  True if so, and False otherwise
      */
-    bool operator==(const nitf::TREFieldIterator& it2)
+    bool operator==(const nitf::TREFieldIterator& it2) const noexcept
     {
         // need to do this double-check so that the last iteration of an
         // iterator doesn't get skipped
@@ -103,7 +101,7 @@ class TREFieldIterator : public nitf::Object<nitf_TREEnumerator>
         return false;
     }
 
-    bool operator!=(const nitf::TREFieldIterator& it2)
+    bool operator!=(const nitf::TREFieldIterator& it2) const noexcept
     {
         return !this->operator==((nitf::TREFieldIterator&)it2);
     }
@@ -149,14 +147,14 @@ class TREFieldIterator : public nitf::Object<nitf_TREEnumerator>
             const char* desc =
                     enumerator->getFieldDescription(enumerator, &error);
             if (desc)
-                return std::string(desc);
+                return desc;
         }
         return "";
     }
 
     private:
-    mutable nitf_Error error;
-    nitf_Pair* mPair;
+    mutable nitf_Error error{};
+    nitf_Pair* mPair = nullptr;
 };
 
 /*!
@@ -207,7 +205,7 @@ DECLARE_CLASS(TRE)
      *  Get an end TRE field iterator
      *  \return  A field iterator pointing PAST the last field in the TRE
      */
-    Iterator end() const;
+    Iterator end() const noexcept;
 
     /*!
      * Get the field specified by the key. Throws an exception if the field
@@ -326,7 +324,7 @@ DECLARE_CLASS(TRE)
     private:
     std::string truncate(const std::string& value, size_t maxDigits) const;
 
-    mutable nitf_Error error;
+    mutable nitf_Error error{};
 };
 }
 #endif
