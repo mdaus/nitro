@@ -15,7 +15,6 @@
 
 // TODO: get rid of these someday? ... from Visual Studio code-analysis
 #pragma warning(disable: 26401) // Do not delete a raw pointer that is not an owner<T>(i.11).
-#pragma warning(disable: 26429) // Symbol '...' is never tested for nullness, it can be marked as not_null(f.23).
 #pragma warning(disable: 26432) // If you define or delete any default operation in the type '...', define or delete them all(c.21).
 #pragma warning(disable: 26434) // Function '...' hides a non-virtual function '...' (c.128).
 #pragma warning(disable: 26446) // Prefer to use gsl::at() instead of unchecked subscript operator (bounds.4)

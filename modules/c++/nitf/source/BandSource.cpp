@@ -137,14 +137,14 @@ NITF_BOOL nitf::DirectBlockSource::nextBlock(void* callback,
                                              uint64_t blockSize,
                                              nitf_Error * error)
 {
-    if (!callback)
+    auto const cb = static_cast<nitf::DirectBlockSource*>(callback);
+    if (!cb)
     {
         nitf_Error_init(error, "Null pointer reference",
                 NITF_CTXT, NITF_ERR_INVALID_OBJECT);
         return NITF_FAILURE;
     }
 
-    auto const cb = static_cast<nitf::DirectBlockSource*>(callback);
     try
     {
         cb->nextBlock(buf, block, blockNumber, blockSize);
