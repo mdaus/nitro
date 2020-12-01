@@ -74,7 +74,10 @@ public:
     {
         if (!object) return nullptr;
         auto handle = acquireHandle_<T, DestructFunctor_T>(object);
-        handle->incRef();
+        if (handle != nullptr)
+        {
+            handle->incRef();
+        }
         return handle;
     }
 
@@ -88,13 +91,16 @@ public:
             if (it != mHandleMap.end())
             {
                 handle = it->second;
-                if (handle->decRef() <= 0)
+                if (handle != nullptr)
                 {
-                    mHandleMap.erase(it);
-                }
-                else
-                {
-                    handle = nullptr; // don't actually "delete"
+                    if (handle->decRef() <= 0)
+                    {
+                        mHandleMap.erase(it);
+                    }
+                    else
+                    {
+                        handle = nullptr; // don't actually "delete"
+                    }
                 }
             }
         }

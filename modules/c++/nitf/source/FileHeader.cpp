@@ -185,6 +185,10 @@ nitf::Field FileHeader::getNumReservedExtensions() const
 
 static nitf::ComponentInfo make_ComponentInfo(nitf_ComponentInfo** pComponentInfo, int i)
 {
+    if (pComponentInfo == nullptr)
+    {
+        throw except::NullPointerReference(Ctxt("FileHeader"));
+    }
     return nitf::ComponentInfo(pComponentInfo[i]);
 }
 
