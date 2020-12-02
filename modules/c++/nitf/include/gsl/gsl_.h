@@ -10,6 +10,8 @@
 #include <type_traits>
 #include <utility>  
 
+#include <mem/BufferView.h>
+
 namespace gsl
 {
     namespace details
@@ -71,5 +73,32 @@ namespace gsl
     constexpr T narrow(U u) noexcept(false)
     {
         return details::narrow(narrow_cast<T>(u), u);
+    }
+}
+
+namespace gsl
+{
+    template<typename T, std::size_t unused = 0>
+    class span final
+    {
+        T* p_;
+        size_t sz_;
+
+    public:
+        span(T* p, size_t sz) : p_(p), sz_(sz) {}
+
+        template<typename TContainer>
+        span(TContainer&& c) : span(const_cast<T*>(c.data()), c.size()) {}
+
+        auto data() { return p_; }
+        auto data() const { return p_; }
+        size_t size() const { return sz_; }
+    };
+
+    template<typename TContainer>
+    inline auto make_span(TContainer& c)
+    {
+        using value_type = typename TContainer::value_type;
+        return span<value_type>(c);
     }
 }

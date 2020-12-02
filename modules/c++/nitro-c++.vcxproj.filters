@@ -376,5 +376,8 @@
     <ClInclude Include="nitf\include\gsl\gsl_.h">
       <Filter>gsl</Filter>
     </ClInclude>
+    <ClInclude Include="nitf\include\nitf\span.h">
+      <Filter>nitf</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

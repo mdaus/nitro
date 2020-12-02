@@ -129,6 +129,7 @@
     <ClInclude Include="nitf\include\nitf\SegmentReader.hpp" />
     <ClInclude Include="nitf\include\nitf\SegmentSource.hpp" />
     <ClInclude Include="nitf\include\nitf\SegmentWriter.hpp" />
+    <ClInclude Include="nitf\include\nitf\span.h" />
     <ClInclude Include="nitf\include\nitf\SubWindow.hpp" />
     <ClInclude Include="nitf\include\nitf\System.hpp" />
     <ClInclude Include="nitf\include\nitf\TextSegment.hpp" />

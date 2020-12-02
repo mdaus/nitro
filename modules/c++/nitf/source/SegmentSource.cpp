@@ -31,24 +31,22 @@ nitf::SegmentMemorySource::SegmentMemorySource(const char* data, nitf::Off size,
     		                                     copyData, &error));
     setManaged(false);
 }
-nitf::SegmentMemorySource::SegmentMemorySource(const char* data, size_t size,
-    nitf::Off start, int byteSkip, bool copyData)
-    : SegmentMemorySource(data, gsl::narrow<nitf::Off>(size), start, byteSkip, copyData)
-{
-}
+template<>
 nitf::SegmentMemorySource::SegmentMemorySource(const std::string& data,
     nitf::Off start, int byteSkip, bool copyData)
-    : SegmentMemorySource(data.c_str(), data.size(), start, byteSkip, copyData)
+    : SegmentMemorySource(data.c_str(), gsl::narrow<nitf::Off>(data.size()), start, byteSkip, copyData)
 {
 }
-nitf::SegmentMemorySource::SegmentMemorySource(const std::byte* data, size_t size, nitf::Off start,
+template<>
+nitf::SegmentMemorySource::SegmentMemorySource(const std::span<const std::byte>& data, nitf::Off start,
     int byteSkip, bool copyData)
-    : SegmentMemorySource(reinterpret_cast<const char*>(data), size, start, byteSkip, copyData)
+    : SegmentMemorySource(reinterpret_cast<const char*>(data.data()), gsl::narrow<nitf::Off>(data.size()), start, byteSkip, copyData)
 {
 }
+template<>
 nitf::SegmentMemorySource::SegmentMemorySource(const std::vector<std::byte>& data,
     nitf::Off start, int byteSkip, bool copyData)
-    : SegmentMemorySource(data.data(), data.size(), start, byteSkip, copyData)
+    : SegmentMemorySource(gsl::make_span(data), start, byteSkip, copyData)
 {
 }
 
