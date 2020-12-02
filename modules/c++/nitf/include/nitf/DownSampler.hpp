@@ -66,7 +66,7 @@ public:
         getNativeOrThrow();
     }
 
-    virtual ~DownSampler(){}
+    ~DownSampler() = default;
 
     /*!
      *  Applies a sampling method while reading.
@@ -115,7 +115,7 @@ public:
 protected:
 
     DownSampler() = default;
-    mutable nitf_Error error{ '\0', '\0', 0, '\0', 0 };
+    mutable nitf_Error error{};
 };
 
 

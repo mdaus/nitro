@@ -57,12 +57,12 @@ public:
     TextSubheader(nitf_TextSubheader * x);
 
     //! Default Constructor
-    TextSubheader();
+    TextSubheader() noexcept(false);
 
     //! Clone
     nitf::TextSubheader clone() const;
 
-    ~TextSubheader();
+    ~TextSubheader() = default;
 
     //! Get the filePartType
     nitf::Field getFilePartType() const;
@@ -107,7 +107,7 @@ public:
     void setExtendedSection(nitf::Extensions value);
 
 private:
-    mutable nitf_Error error{ '\0', '\0', 0, '\0', 0 };
+    mutable nitf_Error error{};
 };
 
 }

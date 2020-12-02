@@ -67,10 +67,7 @@ public:
         getNativeOrThrow();
     }
 
-    //! Destructor
-    virtual ~WriteHandler()
-    {
-    }
+    ~WriteHandler() = default;
 
     /*!
      *  Write to the given output IOInterface
@@ -82,7 +79,7 @@ protected:
     //! Constructor
     WriteHandler() = default;
 
-    nitf_Error error{ '\0', '\0', 0, '\0', 0 };
+    nitf_Error error{};
 };
 
 

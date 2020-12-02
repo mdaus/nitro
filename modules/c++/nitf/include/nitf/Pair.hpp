@@ -83,7 +83,7 @@ struct Pair final : public nitf::Object<nitf_Pair>
      *  \param key  The key in the pair (is copied)
      *  \param data  The data in the pair (not a copy)
      */
-    void init(const std::string& key, NITF_DATA* data)
+    void init(const std::string& key, NITF_DATA* data) noexcept
     {
         nitf_Pair_init(getNative(), key.c_str(), data);
     }
@@ -92,7 +92,7 @@ struct Pair final : public nitf::Object<nitf_Pair>
      *  Simply calls the init method
      *  \param src  The source Pair
      */
-    void copy(const nitf::Pair & src)
+    void copy(const nitf::Pair & src) noexcept
     {
         nitf_Pair_copy(getNative(), src.getNative());
     }
@@ -130,8 +130,8 @@ struct Pair final : public nitf::Object<nitf_Pair>
     }
 
 private:
-    Pair(){}
-    nitf_Error error;
+    Pair() = default;
+    nitf_Error error{};
 };
 
 }

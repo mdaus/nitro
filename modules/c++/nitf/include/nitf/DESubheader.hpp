@@ -58,12 +58,12 @@ public:
     DESubheader(nitf_DESubheader * x);
 
     //! Constructor
-    DESubheader();
+    DESubheader() noexcept(false);
 
     //! Clone
     nitf::DESubheader clone() const;
 
-    ~DESubheader();
+    ~DESubheader() = default;
 
     //! Get the filePartType
     nitf::Field getFilePartType() const;
@@ -111,7 +111,7 @@ public:
     void setUserDefinedSection(nitf::Extensions value);
 
 private:
-    mutable nitf_Error error{ '\0', '\0', 0, '\0', 0 };
+    mutable nitf_Error error{};
 };
 
 }

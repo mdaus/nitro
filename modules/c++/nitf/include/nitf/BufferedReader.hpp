@@ -62,7 +62,10 @@ public:
                    size_t size,
                    bool adopt = false);
 
-    virtual ~BufferedReader();
+    ~BufferedReader() = default;
+
+    BufferedReader(const BufferedReader&) = delete;
+    BufferedReader& operator=(const BufferedReader&) = delete;
 
     size_t getTotalRead() const noexcept
     {
@@ -91,15 +94,15 @@ protected:
 
     void writeImpl(const void* buf, size_t size) override;
 
-    bool canSeekImpl() const override;
+    bool canSeekImpl() const noexcept override;
 
     nitf::Off seekImpl(nitf::Off offset, int whence) override;
 
     nitf::Off tellImpl() const override;
 
-    nitf::Off getSizeImpl() const override;
+    nitf::Off getSizeImpl() const noexcept override;
 
-    int getModeImpl() const override;
+    int getModeImpl() const noexcept override;
 
     void closeImpl() override;
 
@@ -107,7 +110,7 @@ private:
     void readNextBuffer();
 
     const nitf::Off mMaxBufferSize;
-    const mem::ScopedArray<char> mScopedBuffer;
+    const std::shared_ptr<char[]> mScopedBuffer;
     char* const mBuffer;
 
     nitf::Off mPosition;

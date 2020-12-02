@@ -69,10 +69,10 @@ public:
     SubWindow(nitf_SubWindow * x);
 
     //! Constructor
-    SubWindow();
+    SubWindow() noexcept(false);
 
     //! Destructor
-    ~SubWindow();
+    ~SubWindow() noexcept(false);
 
     uint32_t getStartRow() const;
     uint32_t getNumRows() const;
@@ -99,11 +99,11 @@ public:
      * Return the DownSampler that is referenced by this SubWindow.
      * If no DownSampler is referenced, a NITFException is thrown.
      */
-    nitf::DownSampler* getDownSampler();
+    nitf::DownSampler* getDownSampler() noexcept;
 
 private:
     nitf::DownSampler* mDownSampler;
-    nitf_Error error{ '\0', '\0', 0, '\0', 0 };
+    nitf_Error error{};
 };
 
 }

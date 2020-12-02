@@ -55,7 +55,7 @@ public:
     GraphicSegment(nitf_GraphicSegment * x);
 
     //! Constructor
-    GraphicSegment();
+    GraphicSegment() noexcept(false);
 
     GraphicSegment(NITF_DATA * x);
 
@@ -88,7 +88,7 @@ public:
     void setEnd(uint64_t value);
 
 private:
-    mutable nitf_Error error;
+    mutable nitf_Error error{};
 };
 
 }

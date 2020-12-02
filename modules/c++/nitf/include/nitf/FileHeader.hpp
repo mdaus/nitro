@@ -62,12 +62,12 @@ public:
     FileHeader(nitf_FileHeader * x);
 
     //! Constructor
-    FileHeader();
+    FileHeader() noexcept(false);
 
     //! Clone
     nitf::FileHeader clone() const;
 
-    ~FileHeader();
+    ~FileHeader() = default;
 
     //! Get the fileHeader
     nitf::Field getFileHeader() const;
@@ -184,7 +184,7 @@ public:
     void setExtendedSection(nitf::Extensions value);
 
 private:
-    mutable nitf_Error error{ '\0', '\0', 0, '\0', 0 };
+    mutable nitf_Error error{};
 };
 
 }

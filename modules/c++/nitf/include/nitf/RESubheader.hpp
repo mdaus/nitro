@@ -57,12 +57,12 @@ public:
     RESubheader(nitf_RESubheader * x);
 
      //! Constructor
-    RESubheader();
+    RESubheader() noexcept(false);
 
     //! Clone
     nitf::RESubheader clone() const;
 
-    ~RESubheader();
+    ~RESubheader() = default;
 
     //! Get the filePartType
     nitf::Field getFilePartType() const;
@@ -95,7 +95,7 @@ public:
     void setDataLength(uint32_t value);
 
 private:
-    mutable nitf_Error error{ '\0', '\0', 0, '\0', 0 };
+    mutable nitf_Error error{};
 };
 
 }

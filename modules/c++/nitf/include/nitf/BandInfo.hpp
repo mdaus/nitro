@@ -57,7 +57,7 @@ public:
     BandInfo(nitf_BandInfo * x);
 
     //! Constructor
-    BandInfo() noexcept;
+    BandInfo() noexcept(false);
 
     //! Destructor
     ~BandInfo();
@@ -117,7 +117,7 @@ public:
               const std::string& imageFilterCode);
 
 private:
-    mutable nitf_Error error{ '\0', '\0', 0, '\0', 0 };
+    mutable nitf_Error error{};
 };
 
 }

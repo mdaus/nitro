@@ -97,7 +97,7 @@ TRE::Iterator TRE::begin() const
     return TRE::Iterator(iter);
 }
 
-TRE::Iterator TRE::end() const
+TRE::Iterator TRE::end() const noexcept
 {
     return TRE::Iterator();
 }
