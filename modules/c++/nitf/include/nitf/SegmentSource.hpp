@@ -76,6 +76,8 @@ public:
                         int byteSkip, bool copyData);
     SegmentMemorySource(const char* data, size_t size, nitf::Off start,
         int byteSkip, bool copyData);
+    SegmentMemorySource(const std::string& data, nitf::Off start,
+        int byteSkip, bool copyData);
 };
 
 /*!

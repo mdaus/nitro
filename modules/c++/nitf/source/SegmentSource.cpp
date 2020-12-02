@@ -36,11 +36,17 @@ nitf::SegmentMemorySource::SegmentMemorySource(const char* data, size_t size,
     : SegmentMemorySource(data, gsl::narrow<nitf::Off>(size), start, byteSkip, copyData)
 {
 }
+nitf::SegmentMemorySource::SegmentMemorySource(const std::string& data,
+    nitf::Off start, int byteSkip, bool copyData)
+    : SegmentMemorySource(data.c_str(), data.size(), start, byteSkip, copyData)
+{
+}
 nitf::SegmentMemorySource::SegmentMemorySource(const std::byte* data, size_t size, nitf::Off start,
     int byteSkip, bool copyData)
     : SegmentMemorySource(reinterpret_cast<const char*>(data), size, start, byteSkip, copyData)
 {
 }
+
 
 nitf::SegmentFileSource::SegmentFileSource(nitf::IOHandle & io,
         nitf::Off start, int byteSkip)
