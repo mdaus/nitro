@@ -22,6 +22,7 @@
 
 #ifndef __NITF_DOWN_SAMPLER_HPP__
 #define __NITF_DOWN_SAMPLER_HPP__
+#pragma once
 
 #include "nitf/DownSampler.h"
 #include "nitf/IOInterface.hpp"
@@ -47,7 +48,7 @@ public:
     //! Copy constructor
     DownSampler(const DownSampler & x)
     {
-        setNative(x.getNative());
+        *this = x;
     }
 
     //! Assignment Operator
@@ -65,7 +66,7 @@ public:
         getNativeOrThrow();
     }
 
-    virtual ~DownSampler(){}
+    ~DownSampler() = default;
 
     /*!
      *  Applies a sampling method while reading.
@@ -97,24 +98,24 @@ public:
      */
     virtual void apply(NITF_DATA ** inputWindow,
                        NITF_DATA ** outputWindow,
-                       nitf::Uint32 numBands,
-                       nitf::Uint32 numWindowRows,
-                       nitf::Uint32 numWindowCols,
-                       nitf::Uint32 numInputCols,
-                       nitf::Uint32 numSubWindowCols,
-                       nitf::Uint32 pixelType,
-                       nitf::Uint32 pixelSize,
-                       nitf::Uint32 rowsInLastWindow,
-                       nitf::Uint32 colsInLastWindow);
+                       uint32_t numBands,
+                       uint32_t numWindowRows,
+                       uint32_t numWindowCols,
+                       uint32_t numInputCols,
+                       uint32_t numSubWindowCols,
+                       uint32_t pixelType,
+                       uint32_t pixelSize,
+                       uint32_t rowsInLastWindow,
+                       uint32_t colsInLastWindow);
 
-    nitf::Uint32 getRowSkip();
+    uint32_t getRowSkip() const;
 
-    nitf::Uint32 getColSkip();
+    uint32_t getColSkip() const;
 
 protected:
 
-    DownSampler(){}
-    nitf_Error error;
+    DownSampler() = default;
+    mutable nitf_Error error{};
 };
 
 
@@ -141,8 +142,8 @@ public:
      *  \param rowSkip  The number of rows to skip
      *  \param colSkip  The number of columns to skip
      */
-    PixelSkip(nitf::Uint32 rowSkip,
-              nitf::Uint32 colSkip);
+    PixelSkip(uint32_t rowSkip,
+              uint32_t colSkip);
 
     //! Destructor
     ~PixelSkip();
@@ -171,8 +172,8 @@ public:
      *  \param rowSkip  The number of rows to skip
      *  \param colSkip  The number of columns to skip
      */
-    MaxDownSample(nitf::Uint32 rowSkip,
-                  nitf::Uint32 colSkip);
+    MaxDownSample(uint32_t rowSkip,
+                  uint32_t colSkip);
     //! Destructor
     ~MaxDownSample();
 };
@@ -197,8 +198,8 @@ public:
      *  \param rowSkip  The number of rows to skip
      *  \param colSkip  The number of cols to skip
      */
-    SumSq2DownSample(nitf::Uint32 rowSkip,
-                     nitf::Uint32 colSkip);
+    SumSq2DownSample(uint32_t rowSkip,
+                     uint32_t colSkip);
     //! Destructor
     ~SumSq2DownSample();
 };
@@ -222,8 +223,8 @@ public:
      *  \param rowSkip  The number of rows to skip
      *  \param colSkip  The number of cols to skip
      */
-    Select2DownSample(nitf::Uint32 rowSkip,
-                      nitf::Uint32 colSkip);
+    Select2DownSample(uint32_t rowSkip,
+                      uint32_t colSkip);
     //! Destructor
     ~Select2DownSample();
 };

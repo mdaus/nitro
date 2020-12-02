@@ -44,7 +44,7 @@ void IOStreamWriter::writeImpl(const void* buffer, size_t size)
     mStream->write(static_cast<const std::byte*>(buffer), size);
 }
 
-bool IOStreamWriter::canSeekImpl() const
+bool IOStreamWriter::canSeekImpl() const noexcept
 {
     return true;
 }
@@ -53,7 +53,7 @@ nitf::Off IOStreamWriter::seekImpl(nitf::Off offset, int whence)
 {
     // This whence does not match io::Seekable::Whence
     // We need to perform a mapping to the correct values.
-    io::Seekable::Whence ioWhence;
+    io::Seekable::Whence ioWhence = io::Seekable::START;
     switch (whence)
     {
     case SEEK_SET:
@@ -68,7 +68,7 @@ nitf::Off IOStreamWriter::seekImpl(nitf::Off offset, int whence)
     default:
         throw except::Exception(
                 Ctxt("Unknown whence value when seeking IOStreamWriter: " +
-                     str::toString(whence)));
+                     std::to_string(whence)));
     }
 
     return mStream->seek(offset, ioWhence);
@@ -88,12 +88,12 @@ nitf::Off IOStreamWriter::getSizeImpl() const
     return size;
 }
 
-int IOStreamWriter::getModeImpl() const
+int IOStreamWriter::getModeImpl() const noexcept
 {
     return NITF_ACCESS_WRITEONLY;
 }
 
-void IOStreamWriter::closeImpl()
+void IOStreamWriter::closeImpl() noexcept
 {
 }
 }

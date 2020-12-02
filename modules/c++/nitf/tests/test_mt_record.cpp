@@ -51,7 +51,7 @@ public:
         header.getOriginatorPhone().set("");
         const std::string name = "ACFTB";
         //m.lock();
-        nitf::TRE* acftb = new nitf::TRE(name, name);
+        (void) new nitf::TRE(name, name);
 
         std::string file = str::toString<long>(sys::getThreadID()) + ".ntf";
 
@@ -67,7 +67,7 @@ public:
 //sys::Mutex RecordThread::m;
 
 const int NTHR = 2;
-int main(int argc, char** argv)
+int main(int, char**)
 {
     try
     {

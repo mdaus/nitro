@@ -91,15 +91,15 @@ public:
     //! These are canned methods which turn around
     //  and call the nitf_CompressionControl of your choice
     static NITF_BOOL adapterStart(nitf_CompressionControl* object,
-                                  nitf::Uint64 offset,
-                                  nitf::Uint64 dataLength,
-                                  nitf::Uint64* blockMask,
-                                  nitf::Uint64* padMask,
+                                  uint64_t offset,
+                                  uint64_t dataLength,
+                                  uint64_t* blockMask,
+                                  uint64_t* padMask,
                                   nitf_Error* error);
 
     static NITF_BOOL adapterWriteBlock(nitf_CompressionControl* object,
                                        nitf_IOInterface* io,
-                                       const nitf_Uint8* data,
+                                       const uint8_t* data,
                                        NITF_BOOL pad,
                                        NITF_BOOL noData,
                                        nitf_Error* error);
@@ -108,7 +108,7 @@ public:
                                 nitf_IOInterface* io,
                                 nitf_Error* error);
 
-    static void adapterDestroy(nitf_CompressionControl** object);
+    static void adapterDestroy(nitf_CompressionControl** object) noexcept;
 
 };
 
@@ -116,19 +116,18 @@ public:
  *  \class Compressor
  *  \brief This is the c++ interface for nitf_CompressionControl
  */
-class Compressor
+struct Compressor
 {
-public:
-    Compressor() {}
+    Compressor() = default;
     virtual ~Compressor() {}
 
-    virtual void start(nitf::Uint64 offset,
-                       nitf::Uint64 dataLength,
-                       nitf::Uint64* blockMask,
-                       nitf::Uint64* padMask) = 0;
+    virtual void start(uint64_t offset,
+                       uint64_t dataLength,
+                       uint64_t* blockMask,
+                       uint64_t* padMask) = 0;
 
     virtual void writeBlock(nitf::IOInterface& io,
-                            const nitf::Uint8* data,
+                            const uint8_t* data,
                             bool pad,
                             bool noData) = 0;
 

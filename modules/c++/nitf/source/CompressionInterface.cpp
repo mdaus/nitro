@@ -26,15 +26,15 @@ using namespace nitf;
 
 NITF_BOOL CompressionInterface::adapterStart(
     nitf_CompressionControl* object,
-    nitf_Uint64 offset,
-    nitf_Uint64 dataLength,
-    nitf_Uint64* blockMask,
-    nitf_Uint64* padMask, 
+    uint64_t offset,
+    uint64_t dataLength,
+    uint64_t* blockMask,
+    uint64_t* padMask, 
     nitf_Error* error)
 {
     try
     {
-        reinterpret_cast<Compressor*>(object)->start(offset, 
+        static_cast<Compressor*>(object)->start(offset, 
                                                      dataLength, 
                                                      blockMask, 
                                                      padMask);
@@ -63,7 +63,7 @@ NITF_BOOL CompressionInterface::adapterStart(
 NITF_BOOL CompressionInterface::adapterWriteBlock(
     nitf_CompressionControl* object, 
     nitf_IOInterface* io,
-    const nitf_Uint8* data,
+    const uint8_t* data,
     NITF_BOOL pad,
     NITF_BOOL noData,
     nitf_Error* error)
@@ -72,7 +72,7 @@ NITF_BOOL CompressionInterface::adapterWriteBlock(
     {
         nitf::IOInterface ioInter(io);
         ioInter.setManaged(true);
-        reinterpret_cast<Compressor*>(object)->writeBlock(ioInter, 
+        static_cast<Compressor*>(object)->writeBlock(ioInter,
                                                           data, 
                                                           pad, 
                                                           noData);
@@ -107,7 +107,7 @@ NITF_BOOL CompressionInterface::adapterEnd(
     {
         nitf::IOInterface ioInter(io);
         ioInter.setManaged(true);
-        reinterpret_cast<Compressor*>(object)->end(ioInter);
+        static_cast<Compressor*>(object)->end(ioInter);
         return NRT_SUCCESS;
     }
     catch (const except::Exception& ex)
@@ -131,11 +131,11 @@ NITF_BOOL CompressionInterface::adapterEnd(
 }
 
 void CompressionInterface::adapterDestroy(
-    nitf_CompressionControl** object)
+    nitf_CompressionControl** object) noexcept
 {
     if (object != nullptr && *object != nullptr)
     {
-        delete reinterpret_cast<Compressor*>(*object);
+        delete static_cast<Compressor*>(*object);
         *object = nullptr;
     }
 }

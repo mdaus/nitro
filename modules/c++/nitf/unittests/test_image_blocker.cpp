@@ -477,8 +477,10 @@ TEST_CASE(testBlockPartialImage)
 }
 }
 
-int main(int /*argc*/, char** /*argv*/)
-{
+TEST_MAIN(
+    (void)argc;
+    (void)argv;
+
     TEST_CHECK(testSingleSegmentNoLeftovers);
     TEST_CHECK(testSingleSegmentPadCols);
     TEST_CHECK(testSingleSegmentPadRowsAndPadCols);
@@ -486,6 +488,4 @@ int main(int /*argc*/, char** /*argv*/)
     TEST_CHECK(testMultipleSegmentsPartialRowsOnSegmentBoundaries);
     TEST_CHECK(testMultipleSegmentsPartialRowsOnSegmentBoundariesWithPadCols);
     TEST_CHECK(testBlockPartialImage);
-
-    return 0;
-}
+    )

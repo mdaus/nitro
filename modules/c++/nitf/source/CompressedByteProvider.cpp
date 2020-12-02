@@ -20,18 +20,19 @@
  *
  */
 
+#include "nitf/CompressedByteProvider.hpp"
+
 #include <string.h>
 #include <sstream>
 #include <algorithm>
 #include <limits>
 
 #include <except/Exception.h>
-#include <math/Round.h>
 #include <nitf/Writer.hpp>
-#include <nitf/CompressedByteProvider.hpp>
 #include <nitf/IOStreamWriter.hpp>
 #include <io/ByteStream.h>
 
+#include "gsl/gsl.h"
 
 namespace nitf
 {
@@ -51,7 +52,7 @@ CompressedByteProvider::CompressedByteProvider(Record& record,
                numRowsPerBlock, numColsPerBlock);
 }
 
-void CompressedByteProvider::initialize(Record& record,
+void CompressedByteProvider::initialize(const Record& record,
         const std::vector<std::vector<size_t> >& bytesPerBlock,
         const std::vector<PtrAndLength>& desData,
         size_t numRowsPerBlock,
@@ -108,6 +109,15 @@ size_t CompressedByteProvider::countBytesForCompressedImageData(
     return numBytes;
 }
 
+static size_t ceilingDivide(size_t numerator, size_t denominator)
+{
+    if (denominator == 0)
+    {
+        throw except::Exception(Ctxt("Attempted division by 0"));
+    }
+    return (numerator / denominator) + (numerator % denominator != 0);
+}
+
 types::Range CompressedByteProvider::findBlocksToWrite(
         size_t seg, size_t globalStartRow, size_t numRowsToWrite) const
 {
@@ -126,18 +136,16 @@ types::Range CompressedByteProvider::findBlocksToWrite(
     const size_t startRow = globalStartRow - segmentInfo.firstRow;
     const size_t numRowsPerBlock(mNumRowsPerBlock[seg]);
 
-    const size_t numHorizontalBlocks = math::ceilingDivide(mNumCols,
-                                                           mNumColsPerBlock);
-    const size_t firstRowOfBlocks = math::ceilingDivide(startRow,
-                                                        numRowsPerBlock);
-    const size_t numRowsOfBlocks = math::ceilingDivide(numRowsToWrite,
-                                                       numRowsPerBlock);
+    const size_t numHorizontalBlocks = ceilingDivide(mNumCols, mNumColsPerBlock);
+    const size_t firstRowOfBlocks = ceilingDivide(startRow, numRowsPerBlock);
+    const size_t numRowsOfBlocks = ceilingDivide(numRowsToWrite, numRowsPerBlock);
     const size_t numBlocks = numRowsOfBlocks * numHorizontalBlocks;
     const size_t firstBlock = firstRowOfBlocks * numHorizontalBlocks;
 
     return types::Range(firstBlock, numBlocks);
 }
 
+#undef max
 size_t CompressedByteProvider::addImageData(
         size_t seg,
         size_t startRow,
@@ -150,7 +158,7 @@ size_t CompressedByteProvider::addImageData(
     // We just need to figure out -which- blocks we're writing, and then grab
     // that from the member vector
     const std::vector<size_t>& bytesPerBlock = mBytesInEachBlock[seg];
-    types::Range blockRange = findBlocksToWrite(seg, startRow, numRowsToWrite);
+    const types::Range blockRange = findBlocksToWrite(seg, startRow, numRowsToWrite);
 
     // If the file offset hasn't been set yet,
     // advance it to our starting position
@@ -164,7 +172,7 @@ size_t CompressedByteProvider::addImageData(
             throw except::Exception(Ctxt(error.str()));
         }
 
-        fileOffset = mImageSubheaderFileOffsets[seg] + mImageSubheaders[seg].size();
+        fileOffset = mImageSubheaderFileOffsets[seg] + gsl::narrow<nitf::Off>(mImageSubheaders[seg].size());
         for (size_t block = 0; block < blockRange.mStartElement; ++block)
         {
             fileOffset += mBytesInEachBlock[seg][block];
@@ -174,9 +182,8 @@ size_t CompressedByteProvider::addImageData(
     // Copy the image data into the buffer
     // Since we have it in contiguous memory, this can be added as one buffer
     size_t numBufferBytes(0);
-    for (size_t ii = blockRange.mStartElement, end = blockRange.endElement();
-         ii < end;
-         ++ii)
+    const size_t end = blockRange.endElement();
+    for (size_t ii = blockRange.mStartElement; ii < end; ++ii)
     {
         numBufferBytes += bytesPerBlock[ii];
     }

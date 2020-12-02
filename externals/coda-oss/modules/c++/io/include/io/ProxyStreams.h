@@ -63,7 +63,7 @@ protected:
         return mProxy->read(buffer, len);
     }
 
-    std::auto_ptr<InputStream> mProxy;
+    std::unique_ptr<InputStream> mProxy;
     bool mOwnPtr;
 };
 
@@ -110,7 +110,7 @@ public:
     }
 
 protected:
-    std::auto_ptr<OutputStream> mProxy;
+    std::unique_ptr<OutputStream> mProxy;
     bool mOwnPtr;
 };
 
@@ -120,11 +120,11 @@ protected:
 class ToggleOutputStream: public io::ProxyOutputStream
 {
 public:
-    ToggleOutputStream(io::OutputStream *output = NULL, bool ownPtr = false) :
-        io::ProxyOutputStream(NULL), mPtr(output),
+    ToggleOutputStream(io::OutputStream *output = nullptr, bool ownPtr = false) :
+        io::ProxyOutputStream(nullptr), mPtr(output),
                 mNullStream(new io::NullOutputStream), mOwnPtr(ownPtr)
     {
-        setEnabled(mPtr != NULL);
+        setEnabled(mPtr != nullptr);
     }
 
     virtual ~ToggleOutputStream()
