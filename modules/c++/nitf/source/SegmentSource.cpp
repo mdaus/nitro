@@ -46,6 +46,11 @@ nitf::SegmentMemorySource::SegmentMemorySource(const std::byte* data, size_t siz
     : SegmentMemorySource(reinterpret_cast<const char*>(data), size, start, byteSkip, copyData)
 {
 }
+nitf::SegmentMemorySource::SegmentMemorySource(const std::vector<std::byte>& data,
+    nitf::Off start, int byteSkip, bool copyData)
+    : SegmentMemorySource(data.data(), data.size(), start, byteSkip, copyData)
+{
+}
 
 
 nitf::SegmentFileSource::SegmentFileSource(nitf::IOHandle & io,
