@@ -152,7 +152,7 @@
     <ProjectGuid>{8F357A19-799E-4971-850E-3F28485C130B}</ProjectGuid>
     <RootNamespace>nitro</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>nitro-c++</ProjectName>
+    <ProjectName>nitf-c++</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
