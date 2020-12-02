@@ -60,6 +60,8 @@ typedef DataSource SegmentSource;
  */
 class SegmentMemorySource : public SegmentSource
 {
+    SegmentMemorySource(const char* data, nitf::Off size, nitf::Off start,
+        int byteSkip, bool copyData);
 public:
     /*!
      *  Constructor
@@ -72,6 +74,8 @@ public:
      */
     SegmentMemorySource(const std::byte* data, size_t size, nitf::Off start,
                         int byteSkip, bool copyData);
+    SegmentMemorySource(const char* data, size_t size, nitf::Off start,
+        int byteSkip, bool copyData);
 };
 
 /*!
