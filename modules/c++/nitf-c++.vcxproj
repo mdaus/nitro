@@ -142,7 +142,7 @@
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\c\nitro-c.vcxproj">
+    <ProjectReference Include="..\c\nitf-c.vcxproj">
       <Project>{f06550ad-cfc7-40b8-8727-6c82c69a8982}</Project>
     </ProjectReference>
   </ItemGroup>
@@ -179,7 +179,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <RunCodeAnalysis>true</RunCodeAnalysis>
-    <CodeAnalysisRuleSet>nitro.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>nitf.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>

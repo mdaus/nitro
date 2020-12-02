@@ -59,7 +59,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\modules\c++\nitro-c++.vcxproj">
+    <ProjectReference Include="..\modules\c++\nitf-c++.vcxproj">
       <Project>{8f357a19-799e-4971-850e-3f28485c130b}</Project>
     </ProjectReference>
     <ProjectReference Include="..\modules\c\nitf\ACCHZB.vcxproj">
@@ -83,7 +83,7 @@
     <ProjectReference Include="..\modules\c\nitf\RPFHDR.vcxproj">
       <Project>{cf5b4f02-364d-4117-9fb9-6c9c7938e412}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\modules\c\nitro-c.vcxproj">
+    <ProjectReference Include="..\modules\c\nitf-c.vcxproj">
       <Project>{f06550ad-cfc7-40b8-8727-6c82c69a8982}</Project>
     </ProjectReference>
   </ItemGroup>
