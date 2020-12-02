@@ -1084,32 +1084,53 @@ NITFPROT(NITF_BOOL) nitf_Field_resetLength(nitf_Field * field,
     return 1;
 }
 
-
-NITFPROT(void) nitf_Field_print(nitf_Field * field)
+static void nitf_Field_snprint_(char* buffer, size_t buf_size, nitf_Field* field)
 {
     if (!field || field->length <= 0)
+    {
+        if ((buffer != NULL) && (buf_size > 0))
+        {
+            buffer[0] = '\0';
+        }
         return;
+    }
 
     switch (field->type)
     {
-        case NITF_BINARY:
-        {
-            /* avoid printing binary */
-            uint64_t field_length = (uint64_t)field->length;
+    case NITF_BINARY:
+    {
+        /* avoid printing binary */
+        uint64_t field_length = (uint64_t)field->length;
+        if ((buffer == NULL) || (buf_size == 0))
             printf("<binary data, length %"PRIu64">", field_length);
-            break;
-        }
+        else
+            snprintf(buffer, buf_size, "<binary data, length %"PRIu64">", field_length);
+        break;
+    }
 
-        case NITF_BCS_N:
-        case NITF_BCS_A:
+    case NITF_BCS_N:
+    case NITF_BCS_A:
+        if ((buffer == NULL) || (buf_size == 0))
             printf("%.*s", (int)field->length, field->raw);
-            break;
-        default:
-            printf("Invalid Field type [%d]\n", (int) field->type);
-            break;
+        else
+            snprintf(buffer, buf_size, "%.*s", (int)field->length, field->raw);
+        break;
+    default:
+        if ((buffer == NULL) || (buf_size == 0))
+            printf("Invalid Field type [%d]\n", (int)field->type);
+        else
+            snprintf(buffer, buf_size, "Invalid Field type [%d]\n", (int)field->type);
+        break;
     }
 }
-
+NITFPROT(void) nitf_Field_print(nitf_Field * field)
+{
+    nitf_Field_snprint_(NULL /*buffer*/, 0 /*buf_size*/, field);
+}
+NITFPROT(void) nitf_Field_snprint(char* buffer, size_t buf_size, nitf_Field* field)
+{
+    nitf_Field_snprint_(buffer, buf_size, field);
+}
 
 NITFAPI(NITF_BOOL) nitf_Field_resizeField(nitf_Field *field,
                                           size_t newLength,

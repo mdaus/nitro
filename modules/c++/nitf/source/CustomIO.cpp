@@ -255,6 +255,13 @@ nrt_Off CustomIO::adapterGetSize(NRT_DATA* data,
 int CustomIO::adapterGetMode(NRT_DATA* data,
                              nrt_Error* error)
 {
+    if (data == nullptr)
+    {
+        nrt_Error_init(error, "Null pointer reference", NITF_CTXT,
+            NITF_ERR_INVALID_OBJECT);
+        return -1;
+    }
+
     try
     {
         return static_cast<CustomIO*>(data)->getMode();

@@ -112,10 +112,13 @@ struct TREFieldIterator final : public nitf::Object<nitf_TREEnumerator>
     void increment()
     {
         nitf_TREEnumerator* enumerator = getNative();
-        if (isValid() && enumerator->hasNext(&enumerator))
-            mPair = enumerator->next(enumerator, &error);
-        else
-            mPair = nullptr;
+        if (enumerator != nullptr)
+        {
+            if (isValid() && enumerator->hasNext(&enumerator))
+                mPair = enumerator->next(enumerator, &error);
+            else
+                mPair = nullptr;
+        }
         setNative(enumerator);  // always reset, in case it got destroyed
     }
 

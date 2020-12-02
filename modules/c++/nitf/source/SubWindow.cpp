@@ -128,9 +128,12 @@ void SubWindow::setDownSampler(nitf::DownSampler* downSampler)
         ds.decRef();
     }
 
-    //increment the reference for this DownSampler
-    getNativeOrThrow()->downsampler = downSampler->getNative();
-    downSampler->incRef();
+    if (downSampler != nullptr)
+    {
+        //increment the reference for this DownSampler
+        getNativeOrThrow()->downsampler = downSampler->getNative();
+        downSampler->incRef();
+    }
     mDownSampler = downSampler;
 }
 

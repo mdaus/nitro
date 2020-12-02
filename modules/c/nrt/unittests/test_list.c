@@ -112,7 +112,7 @@ TEST_CASE(testClone)
 
 TEST_CASE(testIterate)
 {
-    uint32_t i;
+    int32_t i;
     nrt_Error e;
     nrt_List *l = nrt_List_construct(&e);
     nrt_ListIterator it, end;
