@@ -78,7 +78,8 @@ namespace gsl
 
 namespace gsl
 {
-    template<typename T, std::size_t unused = 0>
+    // super-simple version of span
+    template<typename T>
     class span final
     {
         T* p_;
@@ -90,13 +91,13 @@ namespace gsl
         template<typename TContainer>
         span(TContainer&& c) : span(const_cast<T*>(c.data()), c.size()) {}
 
-        auto data() { return p_; }
-        auto data() const { return p_; }
+        T* data() { return p_; }
+        const T* data() const { return p_; }
         size_t size() const { return sz_; }
     };
 
     template<typename TContainer>
-    inline auto make_span(TContainer& c)
+    inline span<typename TContainer::value_type> make_span(TContainer& c)
     {
         using value_type = typename TContainer::value_type;
         return span<value_type>(c);
