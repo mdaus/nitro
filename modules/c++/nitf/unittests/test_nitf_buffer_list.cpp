@@ -83,7 +83,7 @@ TEST_CASE(testGetBlock)
 
         // Extract all the bytes
         std::vector<std::byte> extracted(numTotalBytes);
-        std::byte* ptr = &extracted[0];
+        std::byte* ptr = extracted.data();
         std::vector<std::byte> scratch;
 
         size_t numBytesInBlock;
