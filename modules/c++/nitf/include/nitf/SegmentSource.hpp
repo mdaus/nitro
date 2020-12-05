@@ -25,6 +25,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 #include "nitf/DataSource.hpp"
 #include "nitf/SegmentSource.h"
@@ -34,6 +35,7 @@
 #include "nitf/NITFException.hpp"
 #include "nitf/Object.hpp"
 #include "nitf/cstddef.h"
+#include "nitf/span.h"
 
 /*!
  *  \file SegmentSource.hpp
@@ -70,7 +72,10 @@ public:
      *  \param copyData Whether or not to make a copy of the data.  If this is
      *  false, the data must outlive the memory source.
      */
-    SegmentMemorySource(const std::byte* data, size_t size, nitf::Off start,
+    SegmentMemorySource(const char* data, nitf::Off size, nitf::Off start,
+        int byteSkip, bool copyData);
+    template<typename TContainer>
+    SegmentMemorySource(const TContainer& data, nitf::Off start,
                         int byteSkip, bool copyData);
 };
 
