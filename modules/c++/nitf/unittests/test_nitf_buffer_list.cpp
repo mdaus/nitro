@@ -32,10 +32,10 @@ TEST_CASE(testGetNumBlocks)
 {
     // 5000 total bytes
     nitf::NITFBufferList bufferList;
-    bufferList.pushBack(NULL, 1000);
-    bufferList.pushBack(NULL, 2000);
-    bufferList.pushBack(NULL, 500);
-    bufferList.pushBack(NULL, 1500);
+    bufferList.pushBack(nullptr, 1000);
+    bufferList.pushBack(nullptr, 2000);
+    bufferList.pushBack(nullptr, 500);
+    bufferList.pushBack(nullptr, 1500);
 
     // Evenly divides
     TEST_ASSERT_EQ(bufferList.getNumBlocks(1000), 5);
