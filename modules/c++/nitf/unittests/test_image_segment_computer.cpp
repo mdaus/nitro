@@ -24,6 +24,8 @@
 #include <sstream>
 
 #include <types/RowCol.h>
+#include <sys/Conf.h>
+#include <import/except.h>
 #include <nitf/ImageSegmentComputer.h>
 #include <nitf/ImageBlocker.hpp>
 
@@ -219,6 +221,9 @@ TEST_CASE(testKnownCase)
 
 TEST_MAIN
 (
+    (void)argc;
+    (void)argv;
+
     TEST_CHECK(testBlockSizedBoundaries);
     TEST_CHECK(testPerfectSplitting);
     TEST_CHECK(testOneRowOver);

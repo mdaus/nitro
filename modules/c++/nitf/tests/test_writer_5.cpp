@@ -28,13 +28,16 @@
 #include <string>
 #include <vector>
 
+#include <sys/Filesystem.h>
+namespace fs = sys::Filesystem;
+
 int main(int argc, char **argv)
 {
     try
     {
         if (argc != 3)
         {
-            std::cerr << "Usage: " << sys::Path::basename(argv[0])
+            std::cerr << "Usage: " << fs::path(argv[0]).filename().string()
                       << " <input-file> <output-file>\n\n";
             return 1;
         }
@@ -47,7 +50,7 @@ int main(int argc, char **argv)
         //create a Writer and prepare it for the Record
         uint32_t numOfBytes = (uint32_t)record.getHeader().getFileLength();
         std::vector<char> outBufVec(numOfBytes);
-        char* const outBuf(outBufVec.empty() ? NULL : &outBufVec[0]);
+        char* const outBuf(outBufVec.empty() ? nullptr : outBufVec.data());
         nitf::MemoryIO memOutput(outBuf, numOfBytes, false);
 
         nitf::Writer memWriter;
