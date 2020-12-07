@@ -36,7 +36,6 @@
 #include <thread>
 
 #include <io/FileOutputStream.h>
-#include <import/sys.h>
 
 #include <import/nitf.hpp>
 #include <nitf/CompressedByteProvider.hpp>
@@ -1374,13 +1373,7 @@ TEST_CASE(test_create_nitf_test)
 }
 
 
-struct RecordThread final : public sys::Thread
-{
-    RecordThread() {}
-    virtual ~RecordThread() {}
-    //static sys::Mutex m;
-
-    virtual void run()
+static void RecordThread_run()
     {
         nitf::Record record(NITF_VER_21);
         nitf::Writer writer;
@@ -1414,19 +1407,16 @@ struct RecordThread final : public sys::Thread
         writer.write();
     }
 
-};
-
 TEST_CASE(test_mt_record)
 {
     const int NTHR = 2;
     
     try
     {
-        sys::Thread** thrs = new sys::Thread * [NTHR];
+        std::thread** thrs = new std::thread * [NTHR];
         for (unsigned int i = 0; i < NTHR; ++i)
         {
-            thrs[i] = new RecordThread();
-            thrs[i]->start();
+            thrs[i] = new std::thread(RecordThread_run);
         }
 
         for (unsigned int i = 0; i < NTHR; ++i)
