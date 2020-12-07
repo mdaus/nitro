@@ -20,6 +20,8 @@
  *
  */
 
+#include <sstream>
+#include <thread>
 
 #include <import/sys.h>
 #include <import/nitf.hpp>
@@ -53,7 +55,12 @@ public:
         //m.lock();
         (void) new nitf::TRE(name, name);
 
-        std::string file = str::toString<long>(sys::getThreadID()) + ".ntf";
+        std::string file;
+        {
+            std::stringstream ss;
+            ss << std::this_thread::get_id();
+            file = ss.str() + ".ntf";
+        }
 
         nitf::IOHandle output(file, NITF_ACCESS_WRITEONLY, NITF_CREATE);
         writer.prepare(output, record);
