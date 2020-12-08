@@ -7,7 +7,7 @@
 
 #include "nitf_Test.h"
 
-namespace fs = sys::Filesystem;
+namespace fs = std::filesystem;
 
 static std::string Configuration() // "Configuration" is typically "Debug" or "Release"
 {
