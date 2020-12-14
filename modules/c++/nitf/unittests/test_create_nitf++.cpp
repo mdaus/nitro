@@ -34,6 +34,8 @@
 #include <string>
 #include <sstream>
 #include <thread>
+#include <array>
+#include <memory>
 
 #include <io/FileOutputStream.h>
 
@@ -1411,22 +1413,19 @@ TEST_CASE(test_mt_record)
 {
     const int NTHR = 2;
     
+    std::array<std::thread, NTHR> thrs;
     try
     {
-        std::thread** thrs = new std::thread * [NTHR];
-        for (unsigned int i = 0; i < NTHR; ++i)
+        for (auto& thrs_i : thrs)
         {
-            thrs[i] = new std::thread(RecordThread_run);
+            thrs_i = std::thread(RecordThread_run);
         }
 
-        for (unsigned int i = 0; i < NTHR; ++i)
+        for (auto& thrs_i : thrs)
         {
 
-            thrs[i]->join();
-            delete thrs[i];
-
+            thrs_i.join();
         }
-        delete[] thrs;
     }
     catch (const except::Exception&)
     {

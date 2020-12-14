@@ -22,6 +22,7 @@
 
 #include <import/nitf.hpp>
 #include <fstream>
+#include <vector>
 
 /*  For this first test case, the DATA is a simple char*   */
 /*  This case should be trivial since a data pointer is    */
@@ -69,23 +70,23 @@ int main(int argc, char **argv)
                            ("Could not find file [%s]\n", argv[1])));
         }
 
-        std::vector < char *>values;
+        std::vector<std::vector<char>> values;
         /*  Scan the configuration file, and read into the buffers  */
         while (config.good())
         {
             /*  A value buffer  */
-            values.push_back(new char[512]);
+            values.push_back(std::vector<char>(512));
 
-            config >> keyBuf >> values[values.size() - 1];
+            auto data = values[values.size() - 1].data();
+            config >> keyBuf >> data;
 
             if (keyBuf.length() > 0)
             {
 
-                printf("Read Key: %s = %s\n", keyBuf.c_str(),
-                       values[values.size() - 1]);
+                printf("Read Key: %s = %s\n", keyBuf.c_str(), data);
 
                 /*  Now comes the important part -- insert  */
-                hashTable.insert(keyBuf, values[values.size() - 1]);
+                hashTable.insert(keyBuf, data);
             }
 
             /*  Be nice -- reset buffers  */
@@ -145,9 +146,6 @@ int main(int argc, char **argv)
         }
         /*  Close the search file  */
         search.close();
-
-        for (unsigned int i = 0; i < values.size(); i++)
-            delete[]values[i];
 
         return 0;
     }
