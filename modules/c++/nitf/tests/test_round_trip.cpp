@@ -67,32 +67,18 @@ private:
 };
 
 // RAII for managing a list of RowStreamer's
-class RowStreamers
+struct RowStreamers final
 {
-public:
-    ~RowStreamers()
-    {
-        for (size_t ii = 0; ii < mStreamers.size(); ++ii)
-        {
-            delete mStreamers[ii];
-        }
-    }
-
     nitf::RowSourceCallback* add(uint32_t band,
                                  uint32_t numCols,
                                  nitf::ImageReader reader)
     {
-        std::unique_ptr<RowStreamer>
-            streamer(new RowStreamer(band, numCols, reader));
-        RowStreamer* const streamerPtr(streamer.get());
-
-        mStreamers.push_back(streamerPtr);
-        streamer.release();
-        return streamerPtr;
+        mStreamers.emplace_back(new RowStreamer(band, numCols, reader));
+        return mStreamers.back().get();
     }
 
 private:
-    std::vector<RowStreamer*> mStreamers;
+    std::vector<std::unique_ptr<RowStreamer>> mStreamers;
 };
 }
 

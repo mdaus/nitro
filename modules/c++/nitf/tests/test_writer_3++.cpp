@@ -20,9 +20,11 @@
  *
  */
 
-#include <import/nitf.hpp>
+#include <vector>
 #include <iostream>
 #include <string>
+
+#include <import/nitf.hpp>
 
 /*
  * This test tests the round-trip process of taking an input NITF
@@ -148,8 +150,8 @@ void manuallyWriteImageBands(nitf::ImageSegment & segment,
         << "IC -> " << subheader.getImageCompression().toString() << std::endl
         << "COMRAT -> " << subheader.getCompressionRate().toString() << std::endl;
 
-    uint8_t** buffer = new uint8_t*[nBands];
-    uint32_t* bandList = new uint32_t[nBands];
+    std::vector<uint8_t*> buffer(nBands);
+    std::vector<uint32_t> bandList(nBands);
 
     for (uint32_t band = 0; band < nBands; band++)
         bandList[band] = band;
@@ -160,16 +162,14 @@ void manuallyWriteImageBands(nitf::ImageSegment & segment,
     subWindow.setNumCols(nColumns);
 
     // necessary ?
-    nitf::DownSampler* pixelSkip = new nitf::PixelSkip(1, 1);
-    subWindow.setDownSampler(pixelSkip);
-    subWindow.setBandList(bandList);
+    std::unique_ptr<nitf::DownSampler> pixelSkip(new nitf::PixelSkip(1, 1));
+    subWindow.setDownSampler(pixelSkip.get());
+    subWindow.setBandList(bandList.data());
     subWindow.setNumBands(nBands);
 
-    assert(buffer);
     for (uint32_t i = 0; i < nBands; i++)
     {
         buffer[i] = new uint8_t[subWindowSize];
-        assert(buffer[i]);
     }
 
     std::vector<nitf::IOHandle> handles;
@@ -185,7 +185,7 @@ void manuallyWriteImageBands(nitf::ImageSegment & segment,
     for (uint32_t i = 0; i < nRows; ++i)
     {
         subWindow.setStartRow(i);
-        deserializer.read(subWindow, buffer, &padded);
+        deserializer.read(subWindow, buffer.data(), &padded);
         for (uint32_t j = 0; j < nBands; j++)
         {
             handles[j].write((const char*)buffer[j], subWindowSize);
@@ -199,9 +199,6 @@ void manuallyWriteImageBands(nitf::ImageSegment & segment,
     /* free buffers */
     for (uint32_t i = 0; i < nBands; i++)
         delete [] buffer[i];
-    delete [] buffer;
-    delete [] bandList;
-    delete pixelSkip;
 }
 
 

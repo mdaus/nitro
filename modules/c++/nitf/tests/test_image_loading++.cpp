@@ -20,6 +20,8 @@
  *
  */
 
+#include <vector>
+
 #include <import/nitf.hpp>
 #include <import/except.h>
 
@@ -37,9 +39,7 @@ void writeImage(nitf::ImageSegment &segment,
     nitf::SubWindow subWindow;
     unsigned int i;
     int padded;
-    uint8_t** buffer = nullptr;
     uint32_t band;
-    uint32_t * bandList;
 
     nitf::ImageReader deserializer = reader.newImageReader(imageNumber);
 
@@ -103,11 +103,10 @@ void writeImage(nitf::ImageSegment &segment,
 
     std::cout << "Allocating work buffer..." << std::endl;
 
-    buffer = new uint8_t*[nBands];
-    assert(buffer);
+    std::vector<uint8_t*> buffer(nBands);
 
     band = 0;
-    bandList = new uint32_t[nBands];
+    std::vector<uint32_t> bandList(nBands);
 
     subWindow.setStartCol(0);
     subWindow.setStartRow(0);
@@ -123,13 +122,12 @@ void writeImage(nitf::ImageSegment &segment,
     {
         bandList[band] = band;
         buffer[band] = new uint8_t[subWindowSize];
-        assert(buffer[band]);
     }
-    subWindow.setBandList(bandList);
+    subWindow.setBandList(bandList.data());
     subWindow.setNumBands(nBands);
 
     std::cout << "Reading image..." << std::endl;
-    deserializer.read(subWindow, buffer, &padded);
+    deserializer.read(subWindow, buffer.data(), &padded);
 
     std::cout << "Call completed!" << std::endl;
 
@@ -157,8 +155,6 @@ void writeImage(nitf::ImageSegment &segment,
 
     for (band = 0; band < nBands; band++)
         delete [] buffer[band];
-    delete [] buffer;
-    delete [] bandList;
 }
 
 

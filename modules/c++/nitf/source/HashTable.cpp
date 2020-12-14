@@ -217,7 +217,7 @@ void nitf::HashTable::clearBuckets()
     i = mBuckets.begin();
     for (; i != mBuckets.end(); ++i)
     {
-        if (*i) delete *i;
+        delete *i;
     }
     mBuckets.clear();
 }
