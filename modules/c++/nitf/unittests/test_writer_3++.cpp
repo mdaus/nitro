@@ -44,15 +44,20 @@ static std::string argv0;
 static fs::path findInputFile()
 {
     const fs::path inputFile = fs::path("modules") / "c++" / "nitf" / "unittests" / "sicd_50x50.nitf";
+ 
+    fs::path root;
     if (argv0.empty())
     {
-        auto root = fs::current_path().parent_path().parent_path();
         // running in Visual Studio
-        return root / inputFile;
+        root = fs::current_path().parent_path().parent_path();
+    }
+    else
+    {
+        root = fs::absolute(argv0).parent_path().parent_path().parent_path().parent_path();
+        root = root.parent_path().parent_path();
     }
 
-    std::clog << argv0 << "\n";
-    return ""; // TODO
+    return root / inputFile;
 }
 
 static nitf::Record doRead(const std::string& inFile);
@@ -136,8 +141,8 @@ static void manuallyWriteImageBands(nitf::ImageSegment & segment,
     uint32_t xBands = subheader.getNumMultispectralImageBands();
     nBands += xBands;
 
-    uint32_t nRows = subheader.getNumRows();
-    uint32_t nColumns = subheader.getNumCols();
+    const auto nRows = subheader.numRows();
+    const auto nColumns = subheader.numCols();
 
     //one row at a time
     const auto subWindowSize = gsl::narrow<size_t>(nColumns * NITF_NBPP_TO_BYTES(nBits));
@@ -146,18 +151,17 @@ static void manuallyWriteImageBands(nitf::ImageSegment & segment,
     TEST_ASSERT_EQ(0, xBands);
     TEST_ASSERT_EQ(50, nRows);
     TEST_ASSERT_EQ(50, nColumns);
-
-    std::cout << "PVTYPE -> " << subheader.getPixelValueType().toString() << std::endl
-        << "NBPP -> " << subheader.getNumBitsPerPixel().toString() << std::endl
-        << "ABPP -> " << subheader.getActualBitsPerPixel().toString() << std::endl
-        << "PJUST -> " << subheader.getPixelJustification().toString() << std::endl
-        << "IMODE -> " << subheader.getImageMode().toString() << std::endl
-        << "NBPR -> " << subheader.getNumBlocksPerRow().toString() << std::endl
-        << "NBPC -> " << subheader.getNumBlocksPerCol().toString() << std::endl
-        << "NPPBH -> " << (int)subheader.getNumPixelsPerHorizBlock() << std::endl
-        << "NPPBV -> " << (int)subheader.getNumPixelsPerVertBlock() << std::endl
-        << "IC -> " << subheader.getImageCompression().toString() << std::endl
-        << "COMRAT -> " << subheader.getCompressionRate().toString() << std::endl;
+    TEST_ASSERT_EQ("R  ", subheader.getPixelValueType().toString());
+    TEST_ASSERT_EQ(32, subheader.numBitsPerPixel());
+    TEST_ASSERT_EQ("32", subheader.getActualBitsPerPixel().toString());
+    TEST_ASSERT_EQ("R", subheader.getPixelJustification().toString());
+    TEST_ASSERT_EQ("P", subheader.getImageMode().toString());
+    TEST_ASSERT_EQ(1, subheader.numBlocksPerRow());
+    TEST_ASSERT_EQ(1, subheader.numBlocksPerCol());
+    TEST_ASSERT_EQ(50, subheader.numPixelsPerHorizBlock());
+    TEST_ASSERT_EQ(50, subheader.numPixelsPerVertBlock());
+    TEST_ASSERT_EQ("NC", subheader.imageCompression());
+    TEST_ASSERT_EQ("    ", subheader.getCompressionRate().toString());
 
     std::vector<uint8_t*> buffer(nBands);
     std::vector<std::unique_ptr<uint8_t[]>> buffer_(nBands);
@@ -169,7 +173,7 @@ static void manuallyWriteImageBands(nitf::ImageSegment & segment,
     nitf::SubWindow subWindow;
     subWindow.setStartCol(0);
     subWindow.setNumRows(1);
-    subWindow.setNumCols(nColumns);
+    subWindow.setNumCols(gsl::narrow<uint32_t>(nColumns));
 
     // necessary ?
     std::unique_ptr<nitf::DownSampler> pixelSkip(new nitf::PixelSkip(1, 1));
