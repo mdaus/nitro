@@ -52,25 +52,25 @@ static void load_plugin(const char* tre)
     TEST_ASSERT(test_main_ != nullptr);
 }
 
-TEST_CASE(test_load_all_plugins)
+static const std::vector<std::string> all_plugins
+{
+    "ACCHZB", "BANDSB", "CSDIDA", "GEOLOB", "JITCID", "NBLOCA", "PIAPEB", "REGPTB", "RSMIDA", "STEROB",
+    "ACCPOB", "BCKGDA", "CSEPHA", "GEOPSB", "MAPLOB", "OBJCTA", "PIAPRC", "RPC00B", "RSMPCA", "STREOB",
+    "ACCVTB", "BLOCKA", "CSEXRA", "GRDPSB", "MATESA", "OFFSET", "PIAPRD", "RPFDES", "RSMPIA", "TEST_DES",
+    "ACFTA", "BNDPLB", "CSPROA", "HISTOA", "MENSRA", "PATCHA", "PIATGA", "RPFHDR", "SECTGA", "TRGTA",
+    "ACFTB", "CCINFA", "CSSFAA", "ICHIPB", "MENSRB", "PATCHB", "PIATGB", "RPFIMG", "SENSRA", "USE00A",
+    "AIMIDA", "CLCTNA", "CSSHPA", "IMASDA", "MPDSRA", "PIAEQA", "PIXQLA", "RSMAPA", "SENSRB",
+    "AIMIDB", "CLCTNB", "ENGRDA", "IMGDTA", "MSDIRA", "PIAEVA", "PLTFMA", "RSMDCA", "SNSPSB",
+    "AIPBCA", "CMETAA", "EXOPTA", "IMRFCA", "MSTGTA", "PIAIMB", "PRADAA", "RSMECA", "SNSRA",
+    "ASTORA", "CSCCGA", "EXPLTA", "IOMAPA", "MTIRPA", "PIAIMC", "PRJPSB", "RSMGGA", "SOURCB",
+    "BANDSA", "CSCRNA", "EXPLTB", "J2KLRA", "MTIRPB", "PIAPEA", "PTPRAA", "RSMGIA", "STDIDC",
+};
+
+TEST_CASE(test_load_all_plugins_C)
 {
     ::testName = testName;
 
-    const std::vector<std::string> plugins
-    {
-        "ACCHZB", "BANDSB", "CSDIDA", "GEOLOB", "JITCID", "NBLOCA", "PIAPEB", "REGPTB", "RSMIDA", "STEROB",
-        "ACCPOB", "BCKGDA", "CSEPHA", "GEOPSB", "MAPLOB", "OBJCTA", "PIAPRC", "RPC00B", "RSMPCA", "STREOB",
-        "ACCVTB", "BLOCKA", "CSEXRA", "GRDPSB", "MATESA", "OFFSET", "PIAPRD", "RPFDES", "RSMPIA", "TEST_DES",
-        "ACFTA", "BNDPLB", "CSPROA", "HISTOA", "MENSRA", "PATCHA", "PIATGA", "RPFHDR", "SECTGA", "TRGTA",
-        "ACFTB", "CCINFA", "CSSFAA", "ICHIPB", "MENSRB", "PATCHB", "PIATGB", "RPFIMG", "SENSRA", "USE00A",
-        "AIMIDA", "CLCTNA", "CSSHPA", "IMASDA", "MPDSRA", "PIAEQA", "PIXQLA", "RSMAPA", "SENSRB", 
-        "AIMIDB", "CLCTNB", "ENGRDA", "IMGDTA", "MSDIRA", "PIAEVA", "PLTFMA", "RSMDCA", "SNSPSB",
-        "AIPBCA", "CMETAA", "EXOPTA", "IMRFCA", "MSTGTA", "PIAIMB", "PRADAA", "RSMECA", "SNSRA",
-        "ASTORA", "CSCCGA", "EXPLTA", "IOMAPA", "MTIRPA", "PIAIMC", "PRJPSB", "RSMGGA", "SOURCB",
-        "BANDSA", "CSCRNA", "EXPLTB", "J2KLRA", "MTIRPB", "PIAPEA", "PTPRAA", "RSMGIA", "STDIDC",
-    };
-
-    for (const auto& tre : plugins)
+    for (const auto& tre : all_plugins)
     {
         load_plugin(tre.c_str());
     }
@@ -81,9 +81,21 @@ TEST_CASE(test_load_PTPRAA)
     load_plugin("PTPRAA");
 }
 
+TEST_CASE(test_load_all_plugins)
+{
+    ::testName = testName;
+
+    for (const auto& tre : all_plugins)
+    {
+        nitf::PluginRegistry::loadPlugin(tre);
+        TEST_ASSERT(nitf::PluginRegistry::treHandlerExists(tre));
+    }
+}
+
 TEST_MAIN(
     (void)argc;
     (void)argv;
     TEST_CHECK(test_load_PTPRAA);
+    TEST_CHECK(test_load_all_plugins_C);
     TEST_CHECK(test_load_all_plugins);
 )
