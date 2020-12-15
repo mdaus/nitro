@@ -21,6 +21,7 @@
  */
 
 #include <vector>
+#include <string>
 
 #include <import/nitf.hpp>
 #include <import/except.h>
@@ -54,16 +55,10 @@ static fs::path findInputFile()
 static void writeImage(nitf::ImageSegment &segment,
                 nitf::Reader &reader,
                 const int imageNumber,
-                const char *imageName,
+                const std::string& imageName,
                 uint32_t rowSkipFactor,
                 uint32_t columnSkipFactor, bool optz)
 {
-    size_t subWindowSize;
-    nitf::SubWindow subWindow;
-    unsigned int i;
-    int padded;
-    uint32_t band;
-
     nitf::ImageReader deserializer = reader.newImageReader(imageNumber);
 
     // missing skip factor
@@ -78,7 +73,7 @@ static void writeImage(nitf::ImageSegment &segment,
 
     uint32_t nRows   = subheader.getNumRows();
     uint32_t nCols   = subheader.getNumCols();
-    subWindowSize = (size_t)(nRows / rowSkipFactor) *
+    size_t subWindowSize = (size_t)(nRows / rowSkipFactor) *
         (size_t)(nCols / columnSkipFactor) *
         (size_t)NITF_NBPP_TO_BYTES(nBits);
 
@@ -123,9 +118,10 @@ static void writeImage(nitf::ImageSegment &segment,
     std::vector<uint8_t*> buffer(nBands);
     std::vector<std::unique_ptr<uint8_t[]>> buffer_(nBands);
 
-    band = 0;
+    uint32_t band = 0;
     std::vector<uint32_t> bandList(nBands);
 
+    nitf::SubWindow subWindow;
     subWindow.setStartCol(0);
     subWindow.setStartRow(0);
 
@@ -144,9 +140,10 @@ static void writeImage(nitf::ImageSegment &segment,
     subWindow.setBandList(bandList.data());
     subWindow.setNumBands(nBands);
 
+    int padded;
     deserializer.read(subWindow, buffer.data(), &padded);
 
-    for (i = 0; i < nBands; i++)
+    for (unsigned int i = 0; i < nBands; i++)
     {
         std::string base = fs::path(imageName).filename().string();
 
@@ -172,29 +169,26 @@ static void test_image_loading_(const std::string& input_file, bool optz)
     uint32_t rowSkipFactor = 1;
     uint32_t columnSkipFactor = 1;
 
-    /*  This is the reader  */
-    nitf::Reader reader;
-
     /*  This is the io handle we will give the reader to parse  */
     nitf::IOHandle io(input_file);
+
+    /*  This is the reader  */
+    nitf::Reader reader;
 
     /*  Read the file (first pass) */
     nitf::Record record = reader.read(io);
 
     /*  These iterators are for going through the image segments  */
-    nitf::ListIterator iter;
-    nitf::ListIterator end;
-
     /*  And set this one to the end, so we'll know when we're done!  */
-    iter = record.getImages().begin();
-    end = record.getImages().end();
+    auto iter = record.getImages().begin();
+    auto end = record.getImages().end();
     /*  While we are not done...  */
     for (int count = 0; iter != end; ++iter, ++count)
     {
-        nitf::ImageSegment imageSegment((nitf_ImageSegment*)iter.get());
+        nitf::ImageSegment imageSegment(iter.get());
 
         /*  Write the thing out  */
-        writeImage(imageSegment, reader, count, input_file.c_str(),
+        writeImage(imageSegment, reader, count, input_file,
             rowSkipFactor, columnSkipFactor, optz);
     }
 }
