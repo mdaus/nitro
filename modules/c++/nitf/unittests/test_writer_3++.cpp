@@ -31,6 +31,8 @@
 
 #include "TestCase.h"
 
+static std::string testName;
+
 namespace fs = std::filesystem;
 
 /*
@@ -87,12 +89,10 @@ static nitf::ImageSource setupBands(int nbands, int imageNum, const std::string&
     return iSource;
 }
 
-static void doWrite(nitf::Record record, nitf::Reader& reader, const std::string& inRootFile, const std::string& outFile)
-{
-    nitf::Writer writer;
-    nitf::IOHandle output(outFile, NITF_ACCESS_WRITEONLY, NITF_CREATE);
-    writer.prepare(output, record);
 
+static void doWrite(const nitf::Record& record, nitf::Reader& reader, const std::string& inRootFile,
+    nitf::Writer& writer)
+{
     int numImages = record.getHeader().getNumImages();
     nitf::ListIterator end = record.getImages().end();
     nitf::ListIterator iter = record.getImages().begin();
@@ -101,7 +101,7 @@ static void doWrite(nitf::Record record, nitf::Reader& reader, const std::string
     {
         nitf::ImageSegment imseg;
         imseg = *iter;
-        int nbands = imseg.getSubheader().numImageBands();
+        const auto nbands = gsl::narrow<int>(imseg.getSubheader().numImageBands());
         nitf::ImageWriter iWriter = writer.newImageWriter(i);
         nitf::ImageSource iSource = setupBands(nbands, i, inRootFile);
         iWriter.attachSource(iSource);
@@ -117,25 +117,35 @@ static void doWrite(nitf::Record record, nitf::Reader& reader, const std::string
     }
 
     writer.write();
-    output.close();
 }
 
-static std::string testName;
-
-TEST_CASE(test_writer_3)
+namespace test_writer_3
 {
-    ::testName = testName;
 
-    std::string input_file = findInputFile().string();
-    const std::string output_file = "test_writer_3++.nitf";
+    static void doWrite(nitf::Record record, nitf::Reader& reader, const std::string& inRootFile, const std::string& outFile)
+    {
+        nitf::Writer writer;
+        nitf::IOHandle output(outFile, NITF_ACCESS_WRITEONLY, NITF_CREATE);
+        writer.prepare(output, record);
 
-    // Check that wew have a valid NITF
-    const auto version = nitf::Reader::getNITFVersion(input_file);
-    TEST_ASSERT(version != NITF_VER_UNKNOWN);
+        ::doWrite(record, reader, inRootFile, writer);
 
-    nitf::Reader reader;
-    nitf::Record record = doRead(input_file, reader);
-    doWrite(record, reader, input_file, output_file);
+        output.close();
+    }
+
+    static void main()
+    {
+        std::string input_file = findInputFile().string();
+        const std::string output_file = "test_writer_3++.nitf";
+
+        // Check that wew have a valid NITF
+        const auto version = nitf::Reader::getNITFVersion(input_file);
+        TEST_ASSERT(version != NITF_VER_UNKNOWN);
+
+        nitf::Reader reader;
+        nitf::Record record = doRead(input_file, reader);
+        doWrite(record, reader, input_file, output_file);
+    }
 }
 
 static void manuallyWriteImageBands(nitf::ImageSegment & segment,
@@ -229,24 +239,84 @@ static nitf::Record doRead(const std::string& inFile, nitf::Reader& reader)
     nitf::Record record = reader.read(io);
 
     /*  Set this to the end, so we'll know when we're done!  */
+    nitf::ListIterator end = record.getImages().end();
     nitf::ListIterator iter = record.getImages().begin();
-
-    const uint32_t num = record.getNumImages();
-    for (int i = 0; i < gsl::narrow<int>(num); i++)
+    for (int count = 0, numImages = record.getHeader().getNumImages();
+        count < numImages && iter != end; ++count, ++iter)
     {
         nitf::ImageSegment imageSegment = *iter;
-        iter++;
-        nitf::ImageReader deserializer = reader.newImageReader(i);
+        nitf::ImageReader deserializer = reader.newImageReader(count);
 
         /*  Write the thing out  */
-        manuallyWriteImageBands(imageSegment, inFile, deserializer, i);
+        manuallyWriteImageBands(imageSegment, inFile, deserializer, count);
     }
 
     return record;
 }
 
+namespace test_buffered_write
+{
+     /*
+      * This test tests the round-trip process of taking an input NITF
+      * file and writing it to a new file. This includes writing the image
+      * segments (headers, extensions, and image data).
+      *
+      * This example differs from test_writer_3 in that it tests the
+      * BufferedWriter classes, and writes the entire file as a set of
+      * configurable sized blocks.  The last block may be smaller than the others
+      * if the data does not fill the block.
+      *
+      */
+    void doWrite(nitf::Record record, nitf::Reader& reader,
+        const std::string& inRootFile,
+        const std::string& outFile,
+        size_t bufferSize)
+    {
+        nitf::BufferedWriter output(outFile, bufferSize);
+        nitf::Writer writer;
+        writer.prepareIO(output, record);
+
+        ::doWrite(record, reader, inRootFile, writer);
+
+        const auto blocksWritten = output.getNumBlocksWritten();
+        const auto partialBlocksWritten = output.getNumPartialBlocksWritten();
+        output.close();
+        TEST_ASSERT_EQ(60, blocksWritten);
+        TEST_ASSERT_EQ(53, partialBlocksWritten);
+    }
+
+    static void main()
+    {
+        std::string input_file = findInputFile().string();
+        const std::string output_file = "test_writer_3++.nitf";
+
+        size_t blockSize = 8192;
+
+        // Check that wew have a valid NITF
+        const auto version = nitf::Reader::getNITFVersion(input_file);
+        TEST_ASSERT(version != NITF_VER_UNKNOWN);
+
+        nitf::Reader reader;
+        nitf::Record record = doRead(input_file, reader);
+        doWrite(record, reader, input_file, output_file, blockSize);
+    }
+}
+
+TEST_CASE(test_writer_3_)
+{
+    ::testName = testName;
+    test_writer_3::main();
+}
+
+TEST_CASE(test_buffered_write_)
+{
+    ::testName = testName;
+    test_buffered_write::main();
+}
+
 TEST_MAIN(
     (void)argc;
     argv0 = argv[0];
-    TEST_CHECK(test_writer_3);
-)
+    TEST_CHECK(test_writer_3_);
+    TEST_CHECK(test_buffered_write_);
+    )
