@@ -20,14 +20,14 @@
  *
  */
 
-#ifndef __NITF_SUBWINDOW_HPP__
-#define __NITF_SUBWINDOW_HPP__
 #pragma once
+
+#include <string>
 
 #include "nitf/SubWindow.h"
 #include "nitf/DownSampler.hpp"
 #include "nitf/Object.hpp"
-#include <string>
+#include "gsl/gsl.h"
 
 /*!
  *  \file SubWindow.hpp
@@ -88,6 +88,7 @@ public:
     void setBandList(uint32_t * value);
     void setNumBands(uint32_t value);
 
+
     /*!
      * Reference a DownSampler within the SubWindow
      * The SubWindow does NOT own the DownSampler
@@ -106,5 +107,15 @@ private:
     nitf_Error error{};
 };
 
+// This template<template> syntax allows an arbitary TContainer<uint32_t> to be passed
+// rather than requiring that it be std::vector<uint32_t>.  Note that the container
+// must support data() and size().
+template<template<typename, typename...> typename TContainer, typename ...TAlloc>
+inline void setBands(SubWindow& subWindow,
+    TContainer<uint32_t, TAlloc...>& bandList) // std::vector<T> really has another template parameter
+{
+    subWindow.setBandList(bandList.data());
+    subWindow.setNumBands(gsl::narrow<uint32_t>(bandList.size()));
 }
-#endif
+
+}

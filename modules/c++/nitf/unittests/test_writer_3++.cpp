@@ -163,8 +163,7 @@ static void manuallyWriteImageBands(nitf::ImageSegment & segment,
     // necessary ?
     std::unique_ptr<nitf::DownSampler> pixelSkip(new nitf::PixelSkip(1, 1));
     subWindow.setDownSampler(pixelSkip.get());
-    subWindow.setBandList(bandList.data());
-    subWindow.setNumBands(nBands);
+    setBands(subWindow, bandList);
 
     for (uint32_t i = 0; i < nBands; i++)
     {

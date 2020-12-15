@@ -53,13 +53,12 @@ void doRead(const std::string& inFile,
         subWindow.setStartCol(0);
         subWindow.setNumRows(subheader.getNumRows());
         subWindow.setNumCols(subheader.getNumCols());
-        subWindow.setNumBands(subheader.getBandCount());
         std::vector<uint32_t> bandList;
         for (size_t ii = 0; ii < subWindow.getNumBands(); ++ii)
         {
             bandList.push_back(ii);
         }
-        subWindow.setBandList(bandList.data());
+        setBands(subWindow, bandList);
 
         // Read in the image
         const size_t numBitsPerPixel(static_cast<uint64_t>(subheader.getActualBitsPerPixel()));

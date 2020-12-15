@@ -52,6 +52,7 @@ static fs::path findInputFile()
 
     return root / inputFile;
 }
+
 static void writeImage(nitf::ImageSegment &segment,
                 nitf::Reader &reader,
                 const int imageNumber,
@@ -117,8 +118,6 @@ static void writeImage(nitf::ImageSegment &segment,
 
     std::vector<uint8_t*> buffer(nBands);
     std::vector<std::unique_ptr<uint8_t[]>> buffer_(nBands);
-
-    uint32_t band = 0;
     std::vector<uint32_t> bandList(nBands);
 
     nitf::SubWindow subWindow;
@@ -131,14 +130,13 @@ static void writeImage(nitf::ImageSegment &segment,
     nitf::PixelSkip pixelSkip(rowSkipFactor, columnSkipFactor);
     subWindow.setDownSampler(&pixelSkip);
 
-    for (band = 0; band < nBands; band++)
+    for (uint32_t band = 0; band < nBands; band++)
     {
         bandList[band] = band;
         buffer_[band].reset(new uint8_t[subWindowSize]);
         buffer[band] = buffer_[band].get();
     }
-    subWindow.setBandList(bandList.data());
-    subWindow.setNumBands(nBands);
+    setBands(subWindow, bandList);
 
     int padded;
     deserializer.read(subWindow, buffer.data(), &padded);
