@@ -32,15 +32,9 @@
 #include "TestCase.h"
 
 static std::string testName;
+const std::string output_file = "test_writer_3++.nitf";
 
 namespace fs = std::filesystem;
-
-/*
- * This test tests the round-trip process of taking an input NITF
- * file and writing it to a new file. This includes writing the image
- * segments (headers, extensions, and image data). This is an example
- * of how users can write the image data to their NITF file
- */
 
 static std::string argv0;
 static fs::path findInputFile()
@@ -230,7 +224,12 @@ static nitf::Record doRead(const std::string& inFile, nitf::Reader& reader)
 
 namespace test_writer_3
 {
-
+    /*
+     * This test tests the round-trip process of taking an input NITF
+     * file and writing it to a new file. This includes writing the image
+     * segments (headers, extensions, and image data). This is an example
+     * of how users can write the image data to their NITF file
+     */
     static void doWrite(nitf::Record record, nitf::Reader& reader, const std::string& inRootFile, const std::string& outFile)
     {
         nitf::Writer writer;
@@ -246,8 +245,7 @@ TEST_CASE(test_writer_3_)
 {
     ::testName = testName;
 
-    std::string input_file = findInputFile().string();
-    const std::string output_file = "test_writer_3++.nitf";
+    const auto input_file = findInputFile().string();
 
     nitf::Reader reader;
     nitf::Record record = doRead(input_file, reader);
@@ -289,8 +287,7 @@ TEST_CASE(test_buffered_write_)
 {
     ::testName = testName;
 
-    std::string input_file = findInputFile().string();
-    const std::string output_file = "test_writer_3++.nitf";
+    const auto input_file = findInputFile().string();
 
     size_t blockSize = 8192;
 
