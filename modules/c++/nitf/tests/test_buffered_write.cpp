@@ -173,6 +173,7 @@ void manuallyWriteImageBands(nitf::ImageSegment & segment,
         << "COMRAT -> " << subheader.getCompressionRate().toString() << std::endl;
 
     std::vector<uint8_t*> buffer(nBands);
+    std::vector<std::unique_ptr<uint8_t[]>> buffer_(nBands);
     std::vector<uint32_t> bandList(nBands);
 
     for (uint32_t band = 0; band < nBands; band++)
@@ -191,7 +192,8 @@ void manuallyWriteImageBands(nitf::ImageSegment & segment,
 
     for (uint32_t i = 0; i < nBands; i++)
     {
-        buffer[i] = new uint8_t[subWindowSize];
+        buffer_[i].reset(new uint8_t[subWindowSize]);
+        buffer[i] = buffer_[i].get();
     }
 
     std::vector<nitf::IOHandle> handles;
@@ -210,17 +212,13 @@ void manuallyWriteImageBands(nitf::ImageSegment & segment,
         deserializer.read(subWindow, buffer.data(), &padded);
         for (uint32_t j = 0; j < nBands; j++)
         {
-            handles[j].write((const char*)buffer[j], subWindowSize);
+            handles[j].write(buffer[j], subWindowSize);
         }
     }
 
     //close output handles
     for (uint32_t i = 0; i < nBands; i++)
         handles[i].close();
-
-    /* free buffers */
-    for (uint32_t i = 0; i < nBands; i++)
-        delete [] buffer[i];
 }
 
 
