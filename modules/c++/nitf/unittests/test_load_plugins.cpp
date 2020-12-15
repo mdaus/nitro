@@ -87,7 +87,10 @@ TEST_CASE(test_load_all_plugins)
 
     for (const auto& tre : all_plugins)
     {
+#ifdef _WIN32
+        // need the full path to load on Linux
         nitf::PluginRegistry::loadPlugin(tre);
+#endif
         TEST_ASSERT(nitf::PluginRegistry::treHandlerExists(tre));
     }
 }
