@@ -60,7 +60,7 @@ static fs::path findInputFile()
     return root / inputFile;
 }
 
-static nitf::Record doRead(const std::string& inFile);
+static nitf::Record doRead(const std::string& inFile, nitf::Reader& reader);
 
 static std::string makeBandName(const std::string& rootFile, int imageNum, int bandNum)
 {
@@ -87,7 +87,7 @@ static nitf::ImageSource setupBands(int nbands, int imageNum, const std::string&
     return iSource;
 }
 
-static void doWrite(nitf::Record record, const std::string& inRootFile, const std::string& outFile)
+static void doWrite(nitf::Record record, nitf::Reader& reader, const std::string& inRootFile, const std::string& outFile)
 {
     nitf::Writer writer;
     nitf::IOHandle output(outFile, NITF_ACCESS_WRITEONLY, NITF_CREATE);
@@ -101,11 +101,21 @@ static void doWrite(nitf::Record record, const std::string& inRootFile, const st
     {
         nitf::ImageSegment imseg;
         imseg = *iter;
-        int nbands = imseg.getSubheader().getNumImageBands();
+        int nbands = imseg.getSubheader().numImageBands();
         nitf::ImageWriter iWriter = writer.newImageWriter(i);
         nitf::ImageSource iSource = setupBands(nbands, i, inRootFile);
         iWriter.attachSource(iSource);
     }
+
+    const auto num = gsl::narrow<int>(record.getNumDataExtensions());
+    for (int i = 0; i < num; i++)
+    {
+        nitf::SegmentReaderSource readerSource(reader.newDEReader(i));
+        std::shared_ptr< ::nitf::WriteHandler> segmentWriter(
+            new nitf::SegmentWriter(readerSource));
+        writer.setDEWriteHandler(i, segmentWriter);
+    }
+
     writer.write();
     output.close();
 }
@@ -123,8 +133,9 @@ TEST_CASE(test_writer_3)
     const auto version = nitf::Reader::getNITFVersion(input_file);
     TEST_ASSERT(version != NITF_VER_UNKNOWN);
 
-    nitf::Record record = doRead(input_file);
-    doWrite(record, input_file, output_file);
+    nitf::Reader reader;
+    nitf::Record record = doRead(input_file, reader);
+    doWrite(record, reader, input_file, output_file);
 }
 
 static void manuallyWriteImageBands(nitf::ImageSegment & segment,
@@ -212,9 +223,8 @@ static void manuallyWriteImageBands(nitf::ImageSegment & segment,
         handles[i].close();
 }
 
-static nitf::Record doRead(const std::string& inFile)
+static nitf::Record doRead(const std::string& inFile, nitf::Reader& reader)
 {
-    nitf::Reader reader;
     nitf::IOHandle io(inFile);
     nitf::Record record = reader.read(io);
 
@@ -238,5 +248,5 @@ static nitf::Record doRead(const std::string& inFile)
 TEST_MAIN(
     (void)argc;
     argv0 = argv[0];
-    //TEST_CHECK(test_writer_3);
+    TEST_CHECK(test_writer_3);
 )

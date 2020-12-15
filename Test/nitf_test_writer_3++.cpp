@@ -28,4 +28,4 @@ struct nitf_test_writer_3__ : public ::testing::Test {
 };
 
 #define TEST_CASE(X) TEST_F(nitf_test_writer_3__, X)
-//#include "nitf/unittests/test_writer_3++.cpp"
+#include "nitf/unittests/test_writer_3++.cpp"
