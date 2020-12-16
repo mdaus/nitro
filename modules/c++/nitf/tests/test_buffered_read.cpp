@@ -49,8 +49,6 @@ void doRead(const std::string& inFile,
         nitf::ImageSubheader subheader(imageSegment.getSubheader());
 
         nitf::SubWindow subWindow;
-        subWindow.setStartRow(0);
-        subWindow.setStartCol(0);
         subWindow.setNumRows(subheader.getNumRows());
         subWindow.setNumCols(subheader.getNumCols());
         std::vector<uint32_t> bandList;

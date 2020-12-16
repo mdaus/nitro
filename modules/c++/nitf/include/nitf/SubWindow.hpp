@@ -95,6 +95,10 @@ public:
      * \param downSampler  The down sampler to reference
      */
     void setDownSampler(nitf::DownSampler* downSampler);
+    void setDownSampler(nitf::DownSampler& downSampler) // make it clear that ownership isn't transferred.
+    {
+        setDownSampler(&downSampler);
+    }
 
     /*!
      * Return the DownSampler that is referenced by this SubWindow.

@@ -121,14 +121,11 @@ static void writeImage(nitf::ImageSegment &segment,
     std::vector<uint32_t> bandList(nBands);
 
     nitf::SubWindow subWindow;
-    subWindow.setStartCol(0);
-    subWindow.setStartRow(0);
-
     subWindow.setNumRows(nRows / rowSkipFactor);
     subWindow.setNumCols(nCols / columnSkipFactor);
 
     nitf::PixelSkip pixelSkip(rowSkipFactor, columnSkipFactor);
-    subWindow.setDownSampler(&pixelSkip);
+    subWindow.setDownSampler(pixelSkip);
 
     for (uint32_t band = 0; band < nBands; band++)
     {

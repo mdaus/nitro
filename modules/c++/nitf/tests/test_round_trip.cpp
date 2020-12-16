@@ -45,9 +45,7 @@ public:
         mReader(reader),
         mBand(band)
     {
-        mWindow.setStartRow(0);
         mWindow.setNumRows(1);
-        mWindow.setStartCol(0);
         mWindow.setNumCols(numCols);
         mWindow.setBandList(&mBand);
         mWindow.setNumBands(1);
