@@ -20,13 +20,19 @@
  *
  */
 
-#ifndef __NITF_IMAGE_READER_HPP__
-#define __NITF_IMAGE_READER_HPP__
+#pragma once
+
+#include <assert.h>
+
+#include <vector>
+#include <string>
+#include <memory>
 
 #include "nitf/ImageReader.h"
 #include "nitf/Object.hpp"
 #include "nitf/BlockingInfo.hpp"
-#include <string>
+
+#include "cstddef.h"
 
 /*!
  *  \file ImageReader.hpp
@@ -35,6 +41,42 @@
 
 namespace nitf
 {
+    class BufferList final
+    {
+        std::vector<uint8_t*> buffer;
+        std::vector<std::unique_ptr<uint8_t[]>> buffer_;
+
+    public:
+        BufferList(size_t nBands)
+            : buffer(nBands), buffer_(nBands)
+        {
+        }
+
+        void initialize(size_t subWindowSize)
+        {
+            for (size_t i = 0; i < size(); i++)
+            {
+                buffer_[i].reset(new uint8_t[subWindowSize]);
+                buffer[i] = buffer_[i].get();
+            }
+        }
+
+        size_t size() const noexcept
+        {
+            assert(buffer.size() == buffer_.size());
+            return buffer.size();
+        }
+
+        uint8_t** data() noexcept
+        {
+            return buffer.data();
+        }
+
+        uint8_t*& operator[](size_t i)noexcept
+        {
+            return buffer[i];
+        }
+    };
 
 /*!
  *  \class ImageReader
@@ -84,4 +126,4 @@ private:
 };
 
 }
-#endif
+

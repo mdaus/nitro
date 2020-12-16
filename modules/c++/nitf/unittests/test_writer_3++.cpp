@@ -148,8 +148,7 @@ static void manuallyWriteImageBands(nitf::ImageSegment & segment,
     TEST_ASSERT_EQ("NC", subheader.imageCompression());
     TEST_ASSERT_EQ("    ", subheader.getCompressionRate().toString());
 
-    std::vector<uint8_t*> buffer(nBands);
-    std::vector<std::unique_ptr<uint8_t[]>> buffer_(nBands);
+    nitf::BufferList buffer(nBands);
     std::vector<uint32_t> bandList(nBands);
 
     for (uint32_t band = 0; band < nBands; band++)
@@ -164,11 +163,7 @@ static void manuallyWriteImageBands(nitf::ImageSegment & segment,
     subWindow.setDownSampler(pixelSkip);
     setBands(subWindow, bandList);
 
-    for (uint32_t i = 0; i < nBands; i++)
-    {
-        buffer_[i].reset(new uint8_t[subWindowSize]);
-        buffer[i] = buffer_[i].get();
-    }
+    buffer.initialize(subWindowSize);
 
     std::vector<nitf::IOHandle> handles;
     //make the files
