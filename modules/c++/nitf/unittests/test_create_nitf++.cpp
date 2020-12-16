@@ -1164,7 +1164,7 @@ namespace test_create_nitf_with_byte_provider
             uint64_t blockSize;
             // Read one block. It should match the first blockSize points of the
             // image. If it does, we got the blocking mode right.
-            const uint8_t* block = imageReader.readBlock(0, &blockSize);
+            auto block = reinterpret_cast<const unsigned char*>(imageReader.readBlock(0, &blockSize));
             const size_t imageLength = NITRO_IMAGE.width * NITRO_IMAGE.height;
 
             for (size_t jj = 0; jj < imageLength * NUM_BANDS; ++jj)
@@ -1300,7 +1300,7 @@ namespace test_create_nitf
             uint64_t blockSize;
             // Read one block. It should match the first blockSize points of the
             // image. If it does, we got the blocking mode right.
-            const uint8_t* block = imageReader.readBlock(0, &blockSize);
+            auto block = reinterpret_cast<const unsigned char*>(imageReader.readBlock(0, &blockSize));
             const size_t imageLength = NITRO_IMAGE.width * NITRO_IMAGE.height;
 
             // The image data is interleaved by pixel. When feeding it to the

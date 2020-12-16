@@ -35,7 +35,7 @@ void doRead(const std::string& inFile,
     nitf::Reader reader;
     nitf::BufferedReader io(inFile, bufferSize);
     nitf::Record record = reader.readIO(io);
-    std::vector<uint8_t> image;
+    std::vector<std::byte> image;
 
     /*  Set this to the end, so we'll know when we're done!  */
     nitf::List imageList(record.getImages());
@@ -71,8 +71,8 @@ void doRead(const std::string& inFile,
 
         if (!image.empty())
         {
-            std::vector<uint8_t *> imagePtrs;
-            uint8_t *imagePtr(image.data());
+            std::vector<std::byte*> imagePtrs;
+            std::byte*imagePtr(image.data());
             for (size_t ii = 0;
                     ii < subWindow.getNumBands();
                     ++ii, imagePtr += numBytesPerBand)

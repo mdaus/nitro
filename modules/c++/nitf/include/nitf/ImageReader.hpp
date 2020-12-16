@@ -43,8 +43,8 @@ namespace nitf
 {
     class BufferList final
     {
-        std::vector<uint8_t*> buffer;
-        std::vector<std::unique_ptr<uint8_t[]>> buffer_;
+        std::vector<std::byte*> buffer;
+        std::vector<std::unique_ptr<std::byte[]>> buffer_;
 
     public:
         BufferList(size_t nBands)
@@ -56,7 +56,7 @@ namespace nitf
         {
             for (size_t i = 0; i < size(); i++)
             {
-                buffer_[i].reset(new uint8_t[subWindowSize]);
+                buffer_[i].reset(new std::byte[subWindowSize]);
                 buffer[i] = buffer_[i].get();
             }
         }
@@ -67,12 +67,12 @@ namespace nitf
             return buffer.size();
         }
 
-        uint8_t** data() noexcept
+        std::byte** data() noexcept
         {
             return buffer.data();
         }
 
-        uint8_t*& operator[](size_t i)noexcept
+        std::byte*& operator[](size_t i)noexcept
         {
             return buffer[i];
         }
@@ -105,7 +105,7 @@ public:
      *  \param  user  User-defined data buffers for read
      *  \param  padded  Returns TRUE if pad pixels may have been read
      */
-    void read(const nitf::SubWindow & subWindow, uint8_t ** user, int * padded);
+    void read(const nitf::SubWindow & subWindow, std::byte ** user, int * padded);
 
     /*!
      *  Read a block directly from file
@@ -114,7 +114,7 @@ public:
      *  \return The read block 
      *          (something must be done with buffer before next call)
      */
-    const uint8_t* readBlock(uint32_t blockNumber, 
+    const std::byte* readBlock(uint32_t blockNumber,
                                  uint64_t* blockSize);
 
     //!  Set read caching
