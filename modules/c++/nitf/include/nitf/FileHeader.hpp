@@ -94,7 +94,7 @@ public:
     nitf::Field getClassification() const;
     std::string classification() const
     {
-        return getClassification().toString();
+        return getClassification(); // nitf::Field implicitly converts to std::string
     }
 
     //! Get the securityGroup
