@@ -178,9 +178,8 @@ int main(int argc, char** argv)
                 files.push_back(argv[i]);
         }
 
-        for (std::vector< std::string >::iterator it = files.begin(); it != files.end(); ++it)
+        for (nitf::IOHandle handle : files)
         {
-            nitf::IOHandle handle(*it);
             nitf::Reader rdr;
             nitf::Record rec = rdr.read(handle);
 
