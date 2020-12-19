@@ -220,11 +220,8 @@ void showExtensions(const nitf::Extensions& extensions)
         std::cout << "\n";
     }
 
-    for (nitf::ExtensionsIterator it = extensions.begin();
-         it != extensions.end(); ++it)
+    for (const auto& tre : extensions)
     {
-        nitf::TRE tre = *it;
-
         std::string treID = tre.getID();
         printTRE(tre);
     }
@@ -411,8 +408,8 @@ void showImageSubheader(const nitf::ImageSubheader& imsub)
 
     SHOW( (uint32_t)imsub.getNumImageComments() );
     const nitf::List comments = imsub.getImageComments();
-    for (nitf::ListIterator it = comments.begin(); it != comments.end(); ++it)
-        SHOW(((nitf::Field)*it).toString());
+    for (const auto& comment : comments)
+        SHOW(((nitf::Field)comment));
 
     SHOW( imsub.getImageCompression().toString() );
     SHOW( imsub.getCompressionRate().toString() );
@@ -473,10 +470,8 @@ void showImages(const nitf::Record& record)
         const nitf::List images = record.getImages();
 
         //  Walk each image and show
-        for (nitf::ListIterator iter = images.begin();
-            iter != images.end(); ++iter)
+        for (nitf::ImageSegment segment : images)
         {
-            nitf::ImageSegment segment = *iter;
             showImageSubheader(segment.getSubheader());
         }
     }
@@ -568,10 +563,8 @@ void showGraphics(const nitf::Record& record)
         const nitf::List graphics = record.getGraphics();
 
         //  Walk each graphic and show
-        for (nitf::ListIterator iter = graphics.begin();
-            iter != graphics.end(); ++iter)
+        for (nitf::GraphicSegment segment : graphics)
         {
-            nitf::GraphicSegment segment = *iter;
             showGraphicSubheader(segment.getSubheader());
         }
     }
@@ -622,10 +615,8 @@ void showLabels(const nitf::Record& record)
         const nitf::List labels = record.getLabels();
 
         //  Walk each label and show
-        for (nitf::ListIterator iter = labels.begin();
-            iter != labels.end(); ++iter)
+        for (nitf::LabelSegment segment : labels)
         {
-            nitf::LabelSegment segment = *iter;
             showLabelSubheader(segment.getSubheader());
         }
     }
@@ -679,10 +670,8 @@ void showTexts(const nitf::Record& record)
         const nitf::List texts = record.getTexts();
 
         //  Walk each label and show
-        for (nitf::ListIterator iter = texts.begin();
-            iter != texts.end(); ++iter)
+        for (nitf::TextSegment segment : texts)
         {
-            nitf::TextSegment segment = *iter;
             showTextSubheader(segment.getSubheader());
         }
     }
@@ -809,10 +798,8 @@ void showDataExtensions(const nitf::Record& record)
         const nitf::List des = record.getDataExtensions();
 
         //  Walk each label and show
-        for (nitf::ListIterator iter = des.begin();
-            iter != des.end(); ++iter)
+        for (nitf::DESegment segment : des)
         {
-            const nitf::DESegment segment = *iter;
             showDESubheader(segment.getSubheader());
         }
 
@@ -862,10 +849,8 @@ void showReservedExtensions(const nitf::Record& record)
         const nitf::List res = record.getReservedExtensions();
 
         //  Walk each label and show
-        for (nitf::ListIterator iter = res.begin();
-            iter != res.end(); ++iter)
+        for (nitf::RESegment segment : res)
         {
-            nitf::RESegment segment = *iter;
             showRESubheader(segment.getSubheader());
         }
     }
