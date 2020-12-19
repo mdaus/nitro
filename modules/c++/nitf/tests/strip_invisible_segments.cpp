@@ -29,7 +29,7 @@
 #include <memory>
 
 #include <sys/Filesystem.h>
-namespace fs = sys::Filesystem;
+namespace fs = std::filesystem;
 
 // Round-trip a NITF, removing any image segments with an IREP of NODISPLY
 namespace
@@ -43,8 +43,7 @@ void stripImages(nitf::Record& record)
     {
         nitf::ImageSegment image = *iter;
         nitf::ImageSubheader subheader = image.getSubheader();
-        std::string irep = subheader.getImageRepresentation().toString();
-        str::trim(irep);
+        const auto irep = subheader.imageRepresentation();
         if (irep == "NODISPLY")
         {
             invisibleImages.push_back(ii);
