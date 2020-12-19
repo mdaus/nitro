@@ -113,7 +113,7 @@ int main(int argc, char** argv)
         }
 
     }
-    catch (except::Throwable& t)
+    catch (const except::Throwable& t)
     {
         std::cout << t.getMessage() << std::endl;
         std::cout << t.getTrace() << std::endl;

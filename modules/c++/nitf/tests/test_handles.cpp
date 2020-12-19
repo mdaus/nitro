@@ -196,7 +196,7 @@ int main(int argc, char** argv)
         nitf_Field_destruct(&cField);
         nitf_BandInfo_destruct(&cBandInfo);
     }
-    catch(except::Exception& ex)
+    catch(const except::Exception& ex)
     {
         std::cerr << "ERROR: " << ex.getMessage() << std::endl;
         return 1;
