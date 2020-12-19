@@ -90,7 +90,7 @@ inline void show(const std::string& x_, const T& x)
 
 static void printTREField(const nitf::Field& field)
 {
-    const std::string strField = field.toString();
+    const std::string strField = field;
 
     if (!format_as_xml)
     {

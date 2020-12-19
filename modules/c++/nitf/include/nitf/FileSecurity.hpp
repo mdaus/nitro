@@ -73,6 +73,10 @@ public:
 
     //! Get the codewords
     nitf::Field getCodewords() const;
+    std::string codewords() const
+    {
+        return getCodewords(); // nitf::Field implicitly converts to std::string
+    }
 
     //! Get the controlAndHandling
     nitf::Field getControlAndHandling() const;

@@ -138,9 +138,9 @@ int main(int argc, char** argv)
             nitf::ImageSubheader imageSub;
 
             imageSeg.getSubheader().getImageId() = "Test Image";
-            std::cout << imageSeg.getSubheader().getImageId().toString() << std::endl;
-            nitf::Field f = imageSeg.getSubheader().getImageId();
-            std::cout << f.toString() << std::endl;
+            std::cout << imageSeg.getSubheader().imageId() << std::endl;
+            const std::string imageId = imageSeg.getSubheader().getImageId();
+            std::cout << imageId << std::endl;
 
             nitf::ImageSegment imageSeg2 = imageSeg.clone();
             nitf::ImageSubheader imageSub2(imageSub.clone());
@@ -183,12 +183,12 @@ int main(int argc, char** argv)
             nitf::Reader rdr;
             nitf::Record rec = rdr.read(handle);
 
-            std::cout << "CODEWORDS: " << rec.getHeader().getSecurityGroup().getCodewords().toString() << std::endl;
+            std::cout << "CODEWORDS: " << rec.getHeader().getSecurityGroup().codewords() << std::endl;
             rec.getHeader().getSecurityGroup().getCodewords() = "TEST";
-            std::cout << "CODEWORDS: " << rec.getHeader().getSecurityGroup().getCodewords().toString() << std::endl;
+            std::cout << "CODEWORDS: " << rec.getHeader().getSecurityGroup().codewords() << std::endl;
             nitf::FileSecurity security;
             rec.getHeader().setSecurityGroup(security);
-            std::cout << "CODEWORDS: " << rec.getHeader().getSecurityGroup().getCodewords().toString() << std::endl;
+            std::cout << "CODEWORDS: " << rec.getHeader().getSecurityGroup().codewords() << std::endl;
             std::cout << "Num Images: " << rec.getImages().getSize() << std::endl;
         }
 
