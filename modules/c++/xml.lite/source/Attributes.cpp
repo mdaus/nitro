@@ -101,6 +101,7 @@ std::string xml::lite::Attributes::getValue(const std::string& qname) const
     
     return retval;  
 }
+bool xml::lite::Attributes::getValue(const std::string& qname, std::string& result) const
 {
     for (size_t i = 0; i < mAttributes.size(); i++)
     {
