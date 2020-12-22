@@ -83,6 +83,9 @@ std::string toString(const T& real, const T& imag)
 }
 
 sys::U8string fromWindows1252(const std::string&);
+void fromWindows1252(const std::string&, sys::U8string&);
+void fromWindows1252(const std::string&, std::string&);
+
 sys::U8string toUtf8(const std::u16string&);
 sys::U8string toUtf8(const std::u32string&);
 
