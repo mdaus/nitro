@@ -27,8 +27,19 @@
 
 #include "xml/lite/MinidomParser.h"
 
-static const std::string text("TEXT");
-static const std::string strXml = "<root><doc><a>" + text + "</a><b/><b/></doc></root>";
+static const std::string text = "TEXT";
+static const std::string strXml1_ = R"(
+<root>
+    <doc name="doc">
+        <a a="a">)";
+static const std::string strXml2_ = R"(</a><b/><b/>
+        <values int="314" double="3.14" string="314"/>
+        <int>314</int>
+        <double>3.14</double>
+        <string>314</string>
+    </doc>
+</root>)";
+static const auto strXml = strXml1_ + text + strXml2_;
 
 struct test_MinidomParser final
 {
@@ -161,6 +172,65 @@ TEST_CASE(test_getElementByTagName_b)
     TEST_SPECIFIC_EXCEPTION(doc.getElementByTagName("b"), xml::lite::XMLException);
 }
 
+TEST_CASE(test_getValue)
+{
+    test_MinidomParser xmlParser;
+    const auto root = xmlParser.getRootElement();
+
+    {
+        const auto& e = root->getElementByTagName("int", true /*recurse*/);
+        int value;
+        const auto result = getValue(e, value);
+        TEST_ASSERT_TRUE(result);
+        TEST_ASSERT_EQ(314, value);
+    }
+    {
+        const auto& e = root->getElementByTagName("double", true /*recurse*/);
+        double value;
+        const auto result = getValue(e, value);
+        TEST_ASSERT_TRUE(result);
+        TEST_ASSERT_EQ(3.14, value);
+    }
+    {
+        const auto& e = root->getElementByTagName("string", true /*recurse*/);
+        std::string value;
+        const auto result = getValue(e, value);
+        TEST_ASSERT_TRUE(result);
+        TEST_ASSERT_EQ("314", value);
+    }
+}
+
+TEST_CASE(test_setValue)
+{
+    test_MinidomParser xmlParser;
+    auto root = xmlParser.getRootElement();
+
+    {
+        auto& e = root->getElementByTagName("int", true /*recurse*/);
+        setValue(e, 123);
+        int value;
+        const auto result = getValue(e, value);
+        TEST_ASSERT_TRUE(result);
+        TEST_ASSERT_EQ(123, value);
+    }
+    {
+        auto& e = root->getElementByTagName("double", true /*recurse*/);
+        setValue(e, 1.23);
+        double value;
+        const auto result = getValue(e, value);
+        TEST_ASSERT_TRUE(result);
+        TEST_ASSERT_EQ(1.23, value);
+    }
+    {
+        auto& e = root->getElementByTagName("string", true /*recurse*/);
+        setValue(e, "123");
+        std::string value;
+        const auto result = getValue(e, value);
+        TEST_ASSERT_TRUE(result);
+        TEST_ASSERT_EQ("123", value);
+    }
+}
+
 int main(int, char**)
 {
     TEST_CHECK(test_getRootElement);
@@ -169,4 +239,7 @@ int main(int, char**)
     TEST_CHECK(test_getElementByTagName);
     TEST_CHECK(test_getElementByTagName_nothrow);
     TEST_CHECK(test_getElementByTagName_b);
+
+    TEST_CHECK(test_getValue);
+    TEST_CHECK(test_setValue);
 }

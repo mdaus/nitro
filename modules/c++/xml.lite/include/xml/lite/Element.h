@@ -459,6 +459,36 @@ protected:
         void depthPrint(io::OutputStream& stream, const string_encoding*, int depth,
                 const std::string& formatter) const;
 };
+
+/*!
+ *  Returns the character data of this element converted to the specified type.
+ *  \param value the charater data as T
+ *  \return whether or not there was a value of type T
+ */
+template<typename T>
+inline bool getValue(const Element& element, T& value)
+{
+    const auto characterData = element.getCharacterData();
+    if (characterData.empty())
+    {
+        return false; // call getCharacterData() to get an empty string
+    }
+
+    value = str::toType<T>(characterData);
+    return true;
+}
+
+
+/*!
+ *  Sets the character data for this element by calling str::toString() on the value.
+ *  \param value The data to add to this element
+ */
+template <typename T>
+inline void setValue(Element& element, const T& value)
+{
+    element.setCharacterData(str::toString(value));
+}
+
 }
 }
 
