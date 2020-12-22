@@ -39,6 +39,15 @@ xml::lite::AttributeNode::operator=(const xml::lite::AttributeNode& node)
     return *this;
 }
 
+int xml::lite::Attributes::getIndex(int i) const
+{
+    if ((i >= 0) && (i < mAttributes.size()))
+    {
+        return i;
+    }
+    return -1;
+}
+
 int xml::lite::Attributes::getIndex(const std::string& qname) const
 {
     for (size_t i = 0; i < mAttributes.size(); i++)

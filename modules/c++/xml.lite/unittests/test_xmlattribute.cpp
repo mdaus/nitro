@@ -38,7 +38,7 @@ static const std::string strXml = R"(
 struct test_MinidomParser final
 {
     xml::lite::MinidomParser xmlParser;
-    const xml::lite::Element* getRootElement()
+    xml::lite::Element* getRootElement()
     {
         io::StringStream ss;
         ss.stream() << strXml;
@@ -54,13 +54,31 @@ TEST_CASE(test_getAttribute)
     test_MinidomParser xmlParser;
     const auto root = xmlParser.getRootElement();
 
-
     const auto& a = root->getElementByTagName("a", true /*recurse*/);
+    const auto& attributes = a.getAttributes();
+
     std::string value;
-    value = a.getAttributes().getValue("a");
+    value = attributes.getValue("a");
     TEST_ASSERT_EQ("a", value);
 
-    const auto result = a.getAttributes().getValue("a", value);
+    const auto result = attributes.getValue("a", value);
+    TEST_ASSERT_TRUE(result);
+    TEST_ASSERT_EQ("a", value);
+}
+
+TEST_CASE(test_getAttributeByIndex)
+{
+    test_MinidomParser xmlParser;
+    const auto root = xmlParser.getRootElement();
+
+    const auto& a = root->getElementByTagName("a", true /*recurse*/);
+    const auto& attributes = a.getAttributes();
+
+    std::string value;
+    value = attributes.getValue(0);
+    TEST_ASSERT_EQ("a", value);
+
+    const auto result = attributes.getValue(0, value);
     TEST_ASSERT_TRUE(result);
     TEST_ASSERT_EQ("a", value);
 }
@@ -71,11 +89,16 @@ TEST_CASE(test_getAttributeNotFound)
     const auto root = xmlParser.getRootElement();
 
     const auto& a = root->getElementByTagName("a", true /*recurse*/);
+    const auto& attributes = a.getAttributes();
+
     std::string value;
-    const auto result = a.getAttributes().getValue("not_found", value);
+    auto result = attributes.getValue("not_found", value);
+    TEST_ASSERT_FALSE(result);
+    result = attributes.getValue(999, value);
     TEST_ASSERT_FALSE(result);
 
-    TEST_SPECIFIC_EXCEPTION(a.getAttributes().getValue("not_found"), except::NoSuchKeyException);
+    TEST_SPECIFIC_EXCEPTION(attributes.getValue("not_found"), except::NoSuchKeyException);        
+    TEST_THROWS(attributes.getValue(999));
 }
 
 TEST_CASE(test_getAttributeValue)
@@ -84,30 +107,153 @@ TEST_CASE(test_getAttributeValue)
     const auto root = xmlParser.getRootElement();
 
     const auto& values = root->getElementByTagName("values", true /*recurse*/);
+    const auto& attributes = values.getAttributes();
 
     {
         int value;
-        const auto result = getValue(values.getAttributes(), "int", value);
+        const auto result = getValue(attributes, "int", value);
         TEST_ASSERT_TRUE(result);
         TEST_ASSERT_EQ(314, value);
     }
     {
         double value;
-        const auto result = getValue(values.getAttributes(), "double", value);
+        const auto result = getValue(attributes, "double", value);
         TEST_ASSERT_TRUE(result);
         TEST_ASSERT_EQ(3.14, value);
     }
     {
         std::string value;
-        const auto result = getValue(values.getAttributes(), "string", value);
+        const auto result = getValue(attributes, "string", value);
         TEST_ASSERT_TRUE(result);
         TEST_ASSERT_EQ("314", value);
+    }
+
+    {
+        std::string value;
+        const auto result = getValue(attributes, "not_found", value);
+        TEST_ASSERT_FALSE(result);
+    }
+}
+
+TEST_CASE(test_getAttributeValueByIndex)
+{
+    test_MinidomParser xmlParser;
+    const auto root = xmlParser.getRootElement();
+
+    const auto& values = root->getElementByTagName("values", true /*recurse*/);
+    const auto& attributes = values.getAttributes();
+
+    {
+        int value;
+        const auto result = getValue(attributes, 0, value);
+        TEST_ASSERT_TRUE(result);
+        TEST_ASSERT_EQ(314, value);
+    }
+    {
+        double value;
+        const auto result = getValue(attributes, 1, value);
+        TEST_ASSERT_TRUE(result);
+        TEST_ASSERT_EQ(3.14, value);
+    }
+    {
+        std::string value;
+        const auto result = getValue(attributes, 2, value);
+        TEST_ASSERT_TRUE(result);
+        TEST_ASSERT_EQ("314", value);
+    }
+
+    {
+        std::string value;
+        const auto result = getValue(attributes, 999, value);
+        TEST_ASSERT_FALSE(result);
+    }
+}
+
+TEST_CASE(test_setAttributeValue)
+{
+    test_MinidomParser xmlParser;
+    auto root = xmlParser.getRootElement();
+
+    auto& values = root->getElementByTagName("values", true /*recurse*/);
+    auto& attributes = values.getAttributes();
+
+    {
+        auto result = setValue(attributes, "int", 123);
+        TEST_ASSERT_TRUE(result);
+        int value;
+        result = getValue(attributes, "int", value);
+        TEST_ASSERT_TRUE(result);
+        TEST_ASSERT_EQ(123, value);
+    }
+    {
+        auto result = setValue(attributes, "double", 1.23);
+        TEST_ASSERT_TRUE(result);
+        double value;
+        result = getValue(attributes, "double", value);
+        TEST_ASSERT_TRUE(result);
+        TEST_ASSERT_EQ(1.23, value);
+    }
+    {
+        auto result = setValue(attributes, "string", "123");
+        TEST_ASSERT_TRUE(result);
+        std::string value;
+        result = getValue(attributes, "string", value);
+        TEST_ASSERT_TRUE(result);
+        TEST_ASSERT_EQ("123", value);
+    }
+
+    {
+        const auto result = setValue(attributes, "not_found", 999);
+        TEST_ASSERT_FALSE(result);
+    }
+}
+
+TEST_CASE(test_setAttributeValueByIndex)
+{
+    test_MinidomParser xmlParser;
+    auto root = xmlParser.getRootElement();
+
+    auto& values = root->getElementByTagName("values", true /*recurse*/);
+    auto& attributes = values.getAttributes();
+
+    {
+        auto result = setValue(attributes, 0, 123);
+        TEST_ASSERT_TRUE(result);
+        int value;
+        result = getValue(attributes, 0, value);
+        TEST_ASSERT_TRUE(result);
+        TEST_ASSERT_EQ(123, value);
+    }
+    {
+        auto result = setValue(attributes, 1, 1.23);
+        TEST_ASSERT_TRUE(result);
+        double value;
+        result = getValue(attributes, 1, value);
+        TEST_ASSERT_TRUE(result);
+        TEST_ASSERT_EQ(1.23, value);
+    }
+    {
+        auto result = setValue(attributes, 2, "123");
+        TEST_ASSERT_TRUE(result);
+        std::string value;
+        result = getValue(attributes, 2, value);
+        TEST_ASSERT_TRUE(result);
+        TEST_ASSERT_EQ("123", value);
+    }
+
+    {
+        const auto result = setValue(attributes, 999, 999);
+        TEST_ASSERT_FALSE(result);
     }
 }
 
 int main(int, char**)
 {
     TEST_CHECK(test_getAttribute);
+    TEST_CHECK(test_getAttributeByIndex);
     TEST_CHECK(test_getAttributeNotFound);
     TEST_CHECK(test_getAttributeValue);
+    TEST_CHECK(test_getAttributeValueByIndex);
+    TEST_CHECK(test_setAttributeValue);
+    TEST_CHECK(test_setAttributeValueByIndex);
 }
