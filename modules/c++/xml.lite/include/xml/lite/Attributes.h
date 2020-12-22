@@ -24,11 +24,14 @@
 #define __XML_LITE_ATTRIBUTES_H__
 #pragma once
 
+#include <string>
+#include <vector>
+#include <tuple>
+
 #include "sys/Conf.h"
 #include "except/Exception.h"
 #include "xml/lite/QName.h"
-#include <string>
-#include <vector>
+#include "str/Convert.h"
 
 /*!
  *  \file Attributes.h
@@ -262,8 +265,11 @@ public:
      * \param result The value, if found
      * \return If the uri/localName is not found or not
      */
-    bool getValue(const std::string& uri, const std::string& localName,
-        std::string& result) const;
+    bool getValue(const std::string& uri, const std::string& localName, std::string& result) const;
+    bool getValue(const std::tuple<std::string, std::string>& name, std::string& result) const
+    {
+        return getValue(std::get<0>(name), std::get<1>(name), result);
+    }
 
     /*!
      * Get an attribute note based on the index as a const ref
@@ -357,6 +363,67 @@ private:
     //! Underlying representation
     Attributes_T mAttributes;
 };
+
+/*!
+ * Look up an attribute's value by an arbitrary key.
+ * \param i  The index for the attribute we want
+ * \param result The value after calling std::toType(), if found
+ * \return If an attribute with the key is found or not
+ */
+template <typename T, typename K>
+inline bool getValue_(const Attributes& attributes, const K& key, T& result)
+{
+    std::string value;
+    if (!attributes.getValue(key, value))
+    {
+        return false;
+    }
+
+    result = str::toType<T>(value);
+    return true;
+}
+
+/*!
+ * Look up an attribute's value by index.
+ * \param i  The index for the attribute we want
+ * \param result The value after calling std::toType(), if found
+ * \return If the index is out of range or not
+ */
+template<typename T>
+inline bool getValue(const Attributes& attributes, int i, T& result)
+{
+    return getValue_(attributes, i, result);
+}
+
+/*!
+ * Look up an attribute's value by XML 1.0 qualified name.
+ * \param qname The qualified name
+ * \param result The value after calling std::toType(), if found
+ * \return If the qname is not found or not
+ */
+template <typename T>
+inline bool getValue(const Attributes& attributes, const std::string& qname, T& result)
+{
+    return getValue_(attributes, qname, result);
+}
+
+/*!
+ * Look up an attribute's value by Namespace name.
+ * \param uri The uri association
+ * \param localName the local name of the object
+ * \param result The value after calling std::toType(), if found
+ * \return If the uri/localName is not found or not
+ */
+template <typename T>
+inline bool getValue(const Attributes& attributes, const std::tuple<std::string, std::string>& name, T& result)
+{
+    return getValue_(attributes, name, result);
+}
+template <typename T>
+inline bool getValue(const Attributes& attributes, const std::string & uri, const std::string & localName, T& result)
+{
+    return getValue(attributes, std::make_tuple(uri, localName), result);
+}
 }
 }
 
