@@ -168,7 +168,7 @@ static void writeCharacterData(io::OutputStream& stream,
 {
     const std::string* pStringToWrite = &characterData; // already in UTF-8
 
-    sys::u8string u8CharacterData; // keep result in-scope
+    sys::U8string u8CharacterData; // keep result in-scope
     if (*pCharacterEncoding != xml::lite::string_encoding::utf_8)
     {
         u8CharacterData = str::fromWindows1252(characterData);
