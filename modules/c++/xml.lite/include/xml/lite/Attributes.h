@@ -22,6 +22,7 @@
 
 #ifndef __XML_LITE_ATTRIBUTES_H__
 #define __XML_LITE_ATTRIBUTES_H__
+#pragma once
 
 #include "sys/Conf.h"
 #include "except/Exception.h"
@@ -172,7 +173,7 @@ public:
      *  Adds an attribute to the list of attributes.
      *  \param attribute the attribute to add
      */
-    void add(const AttributeNode & attribute);
+    AttributeNode& add(const AttributeNode& attribute);
 
     /*!
      * Look up the index of an attribute by XML 1.0 qualified name.
@@ -223,6 +224,13 @@ public:
      * \throw IndexOutOfRangeException if the index is out of range
      */
     std::string getValue(int i) const;
+    /*!
+     * Look up an attribute's value by index.
+     * \param i  The index for the attribute we want
+     * \param result The value, if found
+     * \return If the index is out of range or not
+     */
+    bool getValue(int i, std::string& result) const;
 
     /*!
      * Look up an attribute's value by XML 1.0 qualified name.
@@ -231,16 +239,32 @@ public:
      * \throw NoSuchKeyException If the qname is not found
      */
     std::string getValue(const std::string & qname) const;
+    /*!
+     * Look up an attribute's value by XML 1.0 qualified name.
+     * \param qname The qualified name
+     * \param result The value, if found
+     * \return If the qname is not found or not
+     */
+    bool getValue(const std::string& qname, std::string& result) const;
 
     /*!
      * Look up an attribute's value by Namespace name.
      * \param uri The uri association
      * \param localName the local name of the object
      * \return The value
-     * \throw NoSuchKeyException If the qname is not found
+     * \throw NoSuchKeyException If the uri/localName is not found
      */
-    std::string getValue(const std::string & uri,
-                         const std::string & localName) const;
+    std::string getValue(const std::string & uri, const std::string & localName) const;
+    /*!
+     * Look up an attribute's value by Namespace name.
+     * \param uri The uri association
+     * \param localName the local name of the object
+     * \param result The value, if found
+     * \return If the uri/localName is not found or not
+     */
+    bool getValue(const std::string& uri, const std::string& localName,
+        std::string& result) const;
+
     /*!
      * Get an attribute note based on the index as a const ref
      * \param i The node index
