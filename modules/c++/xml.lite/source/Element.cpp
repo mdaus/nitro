@@ -101,6 +101,25 @@ void xml::lite::Element::getElementsByTagName(const std::string& uri,
     }
 }
 
+xml::lite::Element* xml::lite::Element::getElementByTagName(std::nothrow_t, const std::string& uri,
+                                              const std::string& localName,
+                                              bool recurse) const
+{
+    std::vector<Element*> elements;
+    getElementsByTagName(uri, localName, elements, recurse);
+    if (elements.empty())
+    {
+        return nullptr;
+    }
+    if (elements.size() > 1)
+    {
+        // Yes, this is "nothrow" ... that's for found/non-found status.  We
+        // asked for an ELEMENT, not "elements".
+        throw XMLException(Ctxt("Multiple elements returned for '" + localName + "' (uri=" + uri + ")."));    
+    }
+    return elements[0];
+}
+
 void xml::lite::Element::getElementsByTagName(const std::string& localName,
                                               std::vector<Element*>& elements,
                                               bool recurse) const 
@@ -114,6 +133,24 @@ void xml::lite::Element::getElementsByTagName(const std::string& localName,
     }
 }
 
+xml::lite::Element* xml::lite::Element::getElementByTagName(std::nothrow_t, const std::string& localName,
+                            bool recurse) const
+{
+    std::vector<Element*> elements;
+    getElementsByTagName(localName, elements, recurse);
+    if (elements.empty())
+    {
+        return nullptr;
+    }
+    if (elements.size() > 1)
+    {
+        // Yes, this is "nothrow" ... that's for found/non-found status.  We
+        // asked for an ELEMENT, not "elements".
+        throw XMLException(Ctxt("Multiple elements returned for '" + localName + "'."));
+    }
+    return elements[0];
+}
+
 void xml::lite::Element::getElementsByTagNameNS(const std::string& qname,
                                                 std::vector<Element*>& elements,
                                                 bool recurse) const
@@ -125,6 +162,24 @@ void xml::lite::Element::getElementsByTagNameNS(const std::string& qname,
         if (recurse)
             mChildren[i]->getElementsByTagNameNS(qname, elements, recurse);
     }
+}
+
+xml::lite::Element* xml::lite::Element::getElementByTagNameNS(std::nothrow_t, const std::string& qname,
+                                                bool recurse) const
+{
+    std::vector<Element*> elements;
+    getElementsByTagNameNS(qname, elements, recurse);
+    if (elements.empty())
+    {
+        return nullptr;
+    }
+    if (elements.size() > 1)
+    {
+        // Yes, this is "nothrow" ... that's for found/non-found status.  We
+        // asked for an ELEMENT, not "elements".
+        throw XMLException(Ctxt("Multiple elements returned for '" + qname + "'."));
+    }
+    return elements[0];
 }
 
 void xml::lite::Element::destroyChildren()

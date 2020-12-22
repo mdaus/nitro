@@ -25,6 +25,7 @@
 #pragma once
 
 #include <memory>
+#include <new> // std::nothrow_t
 
 #include <io/InputStream.h>
 #include <io/OutputStream.h>
@@ -168,6 +169,21 @@ public:
     void getElementsByTagNameNS(const std::string& qname,
                                 std::vector<Element*>& elements,
                                 bool recurse = false) const;
+    /*!
+     *  \param std::nothrow -- will still throw if MULTIPLE elements are found, returns NULL if none
+     */
+    Element* getElementByTagNameNS(std::nothrow_t, const std::string& qname,
+                                bool recurse = false) const;
+    Element& getElementByTagNameNS(const std::string& qname,
+                                bool recurse = false) const
+    {
+        auto pElement = getElementByTagNameNS(std::nothrow, qname, recurse);
+        if (pElement == nullptr)
+        {
+            throw XMLException(Ctxt("Element '" + qname + "' was not found."));
+        }
+        return *pElement;
+    }
 
     /*!
      *  Utility for people that dont like to pass by reference
@@ -190,6 +206,21 @@ public:
     void getElementsByTagName(const std::string& localName,
                               std::vector<Element*>& elements,
                               bool recurse = false) const;
+    /*!
+     *  \param std::nothrow -- will still throw if MULTIPLE elements are found, returns NULL if none
+     */
+    Element* getElementByTagName(std::nothrow_t, const std::string& localName,
+                              bool recurse = false) const;
+    Element& getElementByTagName(const std::string& localName,
+                                 bool recurse = false) const
+    {
+        auto pElement = getElementByTagName(std::nothrow, localName, recurse);
+        if (pElement == nullptr)
+        {
+            throw XMLException(Ctxt("Element '" + localName + "' was not found."));
+        }
+        return *pElement;
+    }
 
     /*!
      *  Utility for people that dont like to pass by reference
@@ -212,6 +243,23 @@ public:
                               const std::string& localName,
                               std::vector<Element*>& elements,
                               bool recurse = false) const;
+    /*!
+     *  \param std::nothrow -- will still throw if MULTIPLE elements are found, returns NULL if none
+     */
+    Element* getElementByTagName(std::nothrow_t, const std::string& uri,
+                                 const std::string& localName,
+                                 bool recurse = false) const;
+    Element& getElementByTagName(const std::string& uri,
+                                 const std::string& localName,
+                                 bool recurse = false) const
+    {
+        auto pElement = getElementByTagName(std::nothrow, uri, localName, recurse);
+        if (pElement == nullptr)
+        {
+            throw XMLException(Ctxt("Element '" + localName + "' was not found (uri=" + uri + ")."));
+        }
+        return *pElement;
+    }
 
     /*!
      *  1)  Find this child's attribute and change it
