@@ -163,6 +163,40 @@ void xml::lite::Element::prettyPrint(io::OutputStream& stream, string_encoding e
     stream.writeln("");
 }
 
+static void getCharacterData(const std::string& characterData, xml::lite::string_encoding encoding,
+    sys::U8string& result)
+{
+    if (encoding == xml::lite::string_encoding::utf_8)
+    {
+        // already in UTF-8, no converstion necessary
+        const auto pCharacterData = reinterpret_cast<sys::U8string::const_pointer>(characterData.c_str());
+        result = pCharacterData;
+    }
+    else if (encoding == xml::lite::string_encoding::windows_1252)
+    {
+        result = str::fromWindows1252(characterData);
+    }
+    else
+    {
+        throw std::logic_error("Unknown encoding.");
+    }
+}
+void xml::lite::Element::getCharacterData(sys::U8string& result) const
+{
+    auto pEncoding = mpEncoding.get();
+    if (pEncoding == nullptr)
+    {
+        // don't know the encoding ... assume a default based on the platform
+        #ifdef _WIN32
+        static const auto defaultEncoding = string_encoding::windows_1252;
+        #else
+        static const auto defaultEncoding = string_encoding::utf_8;
+        #endif
+        pEncoding = &defaultEncoding;
+    }
+    ::getCharacterData(mCharacterData, *pEncoding, result);
+}
+
 static void writeCharacterData(io::OutputStream& stream,
     const std::string& characterData, const xml::lite::string_encoding* pCharacterEncoding)
 {
