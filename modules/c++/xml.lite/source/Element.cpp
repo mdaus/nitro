@@ -195,7 +195,7 @@ void xml::lite::Element::getCharacterData(sys::U8string& result) const
     {
         // already in UTF-8, no converstion necessary
         const auto pCharacterData = reinterpret_cast<sys::U8string::const_pointer>(mCharacterData.c_str());
-        result = pCharacterData;
+        result = str::castToU8string(mCharacterData);
     }
     else if (encoding == xml::lite::string_encoding::windows_1252)
     {
@@ -223,25 +223,25 @@ void xml::lite::Element::depthPrint(io::OutputStream& stream,
                                     int depth,
                                     const std::string& formatter) const
 {
-    depthPrint(stream, nullptr /*pEncoding*/, depth, formatter);
+    // XML must be stored in UTF-8 (or UTF-16/32), in particular, not
+    // Windows-1252. However, existing code did this, so preserve current behavior.
+    depthPrint(stream, false /*utf8*/, depth, formatter);
 }
 void xml::lite::Element::depthPrint(io::OutputStream& stream, string_encoding encoding,
                                     int depth,
                                     const std::string& formatter) const
 {
-    depthPrint(stream, &encoding, depth, formatter);
-}
-void xml::lite::Element::depthPrint(io::OutputStream& stream, const string_encoding* pEncoding,
-                                    int depth,
-                                    const std::string& formatter) const
-{
-    // XML must be stored in UTF-8 (or UTF-16/32), in particular, not Windows-1252.
-    // However, existing code did this, so preserve current behavior.
-    if ((pEncoding != nullptr) && (*pEncoding != string_encoding::utf_8))
+    if (encoding != string_encoding::utf_8)
     {
         throw std::invalid_argument("'encoding' must be UTF-8");
     }
-
+    // THIS IS CORRECT, but may break existing code; so it must be explicitly requested.
+    depthPrint(stream, true /*utf8*/, depth, formatter);
+}
+void xml::lite::Element::depthPrint(io::OutputStream& stream, bool utf8,
+                                    int depth,
+                                    const std::string& formatter) const
+{
     std::string prefix = "";
     for (int i = 0; i < depth; ++i)
         prefix += formatter;
@@ -269,8 +269,9 @@ void xml::lite::Element::depthPrint(io::OutputStream& stream, const string_encod
     else
     {
         stream.write(acc + rBrack);
-        if (pEncoding != nullptr)
+        if (utf8)
         {
+            // Correct behavior, but may break existing code.
             writeCharacterData(stream, mCharacterData, getEncoding());
         }
         else
@@ -284,7 +285,7 @@ void xml::lite::Element::depthPrint(io::OutputStream& stream, const string_encod
         {
             if (!formatter.empty())
                 stream.write("\n");
-            mChildren[i]->depthPrint(stream, pEncoding, depth + 1, formatter);
+            mChildren[i]->depthPrint(stream, utf8, depth + 1, formatter);
         }
 
         if (!mChildren.empty() && !formatter.empty())

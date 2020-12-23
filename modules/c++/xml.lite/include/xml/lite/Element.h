@@ -294,8 +294,7 @@ public:
     }
     void setCharacterData(const sys::U8string& characters)
     {
-        const auto pCharacters = reinterpret_cast<std::string::const_pointer>(characters.c_str());
-        mCharacterData = pCharacters;
+        mCharacterData = str::toString(characters);
         static const auto encoding = string_encoding::utf_8;
         mpEncoding = std::make_shared<const string_encoding>(encoding);
     }
@@ -421,7 +420,7 @@ protected:
     std::shared_ptr<const string_encoding> mpEncoding;
 
     private:
-        void depthPrint(io::OutputStream& stream, const string_encoding*, int depth,
+        void depthPrint(io::OutputStream& stream, bool utf8, int depth,
                 const std::string& formatter) const;
 };
 }

@@ -24,6 +24,7 @@
 #include <clocale>
 
 #include "io/StringStream.h"
+#include "str/Convert.h"
 #include <TestCase.h>
 
 #include "xml/lite/MinidomParser.h"
@@ -127,7 +128,7 @@ TEST_CASE(testXmlUtf8_u8string)
 
     sys::U8string actual_;
     a.getCharacterData(actual_);
-    const std::string actual = reinterpret_cast<std::string::const_pointer>(actual_.c_str());
+    const std::string actual = str::toString(actual_);
     TEST_ASSERT_EQ(actual, utf8Text);
 }
 
@@ -167,7 +168,7 @@ TEST_CASE(testXml_setCharacterData)
     xml::lite::MinidomParser xmlParser;
     auto& a = testXmlUtf8_(xmlParser);
 
-    const sys::U8string characters = reinterpret_cast<sys::U8string::const_pointer>(utf8Text.c_str());
+    const sys::U8string characters = str::castToU8string(utf8Text);
     a.setCharacterData(characters);
     auto pEncoding = a.getEncoding();
     TEST_ASSERT(pEncoding != nullptr);

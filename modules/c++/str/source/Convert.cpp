@@ -198,7 +198,7 @@ void str::fromWindows1252(const std::string& str, std::string& result)
     for (const auto& ch : str)
     {
         const auto utf8 = ::fromWindows1252(ch);
-        result += reinterpret_cast<std::string::const_pointer>(utf8.c_str());
+        result += toString(utf8);
     }
 }
 
