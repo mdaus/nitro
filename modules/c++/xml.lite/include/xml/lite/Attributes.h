@@ -389,8 +389,18 @@ inline bool getValue_(const Attributes& attributes, const K& key, T& result)
     {
         return false;
     }
-
-    result = str::toType<T>(value);
+    if (value.empty())
+    {
+        return false;  // call Attributes::getValue() directly to get an empty string
+    }
+    try
+    {
+        result = str::toType<T>(value);
+    }
+    catch (const except::BadCastException&)
+    {
+        return false;
+    }
     return true;
 }
 

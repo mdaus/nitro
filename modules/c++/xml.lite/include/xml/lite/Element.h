@@ -487,8 +487,14 @@ inline bool getValue(const Element& element, T& value)
     {
         return false; // call getCharacterData() to get an empty string
     }
-
-    value = str::toType<T>(characterData);
+    try
+    {
+        value = str::toType<T>(characterData);
+    }
+    catch (const except::BadCastException&)
+    {
+        return false;
+    }
     return true;
 }
 

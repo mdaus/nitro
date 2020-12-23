@@ -31,7 +31,7 @@ static const std::string strXml = R"(
 <root>
     <doc name="doc">
         <a a="a">TEXT</a>
-        <values int="314" double="3.14" string="314"/>
+        <values int="314" double="3.14" string="abc" empty=""/>
     </doc>
 </root>)";
 
@@ -125,13 +125,40 @@ TEST_CASE(test_getAttributeValue)
         std::string value;
         const auto result = getValue(attributes, "string", value);
         TEST_ASSERT_TRUE(result);
-        TEST_ASSERT_EQ("314", value);
+        TEST_ASSERT_EQ("abc", value);
     }
 
     {
         std::string value;
         const auto result = getValue(attributes, "not_found", value);
         TEST_ASSERT_FALSE(result);
+    }
+}
+
+TEST_CASE(test_getAttributeValueFailure)
+{
+    test_MinidomParser xmlParser;
+    const auto root = xmlParser.getRootElement();
+
+    const auto& values = root->getElementByTagName("values", true /*recurse*/);
+    const auto& attributes = values.getAttributes();
+
+    {
+        int value;
+        const auto result = getValue(attributes, "string", value);
+        TEST_ASSERT_FALSE(result);
+    }
+    {
+        double value;
+        const auto result = getValue(attributes, "string", value);
+        TEST_ASSERT_FALSE(result);
+    }
+    {
+        std::string value;
+        const auto result = getValue(attributes, "empty", value);
+        TEST_ASSERT_FALSE(result);
+        value = attributes.getValue("empty");
+        TEST_ASSERT_TRUE(value.empty());
     }
 }
 
@@ -159,13 +186,15 @@ TEST_CASE(test_getAttributeValueByIndex)
         std::string value;
         const auto result = getValue(attributes, 2, value);
         TEST_ASSERT_TRUE(result);
-        TEST_ASSERT_EQ("314", value);
+        TEST_ASSERT_EQ("abc", value);
     }
-
     {
         std::string value;
-        const auto result = getValue(attributes, 999, value);
+        auto result = getValue(attributes, -1, value);
         TEST_ASSERT_FALSE(result);
+        result = getValue(attributes, 999, value);
+        TEST_ASSERT_FALSE(result);
+
     }
 }
 
@@ -194,12 +223,12 @@ TEST_CASE(test_setAttributeValue)
         TEST_ASSERT_EQ(1.23, value);
     }
     {
-        auto result = setValue(attributes, "string", "123");
+        auto result = setValue(attributes, "string", "xyz");
         TEST_ASSERT_TRUE(result);
         std::string value;
         result = getValue(attributes, "string", value);
         TEST_ASSERT_TRUE(result);
-        TEST_ASSERT_EQ("123", value);
+        TEST_ASSERT_EQ("xyz", value);
     }
 
     {
@@ -233,16 +262,17 @@ TEST_CASE(test_setAttributeValueByIndex)
         TEST_ASSERT_EQ(1.23, value);
     }
     {
-        auto result = setValue(attributes, 2, "123");
+        auto result = setValue(attributes, 2, "xyz");
         TEST_ASSERT_TRUE(result);
         std::string value;
         result = getValue(attributes, 2, value);
         TEST_ASSERT_TRUE(result);
-        TEST_ASSERT_EQ("123", value);
+        TEST_ASSERT_EQ("xyz", value);
     }
-
     {
-        const auto result = setValue(attributes, 999, 999);
+        auto result = setValue(attributes, -1, -1);
+        TEST_ASSERT_FALSE(result);
+        result = setValue(attributes, 999, 999);
         TEST_ASSERT_FALSE(result);
     }
 }
@@ -253,6 +283,7 @@ int main(int, char**)
     TEST_CHECK(test_getAttributeByIndex);
     TEST_CHECK(test_getAttributeNotFound);
     TEST_CHECK(test_getAttributeValue);
+    TEST_CHECK(test_getAttributeValueFailure);
     TEST_CHECK(test_getAttributeValueByIndex);
     TEST_CHECK(test_setAttributeValue);
     TEST_CHECK(test_setAttributeValueByIndex);

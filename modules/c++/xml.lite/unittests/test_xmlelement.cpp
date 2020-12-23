@@ -33,10 +33,11 @@ static const std::string strXml1_ = R"(
     <doc name="doc">
         <a a="a">)";
 static const std::string strXml2_ = R"(</a><b/><b/>
-        <values int="314" double="3.14" string="314"/>
+        <values int="314" double="3.14" string="abc"/>
         <int>314</int>
         <double>3.14</double>
-        <string>314</string>
+        <string>abc</string>
+        <empty></empty>
     </doc>
 </root>)";
 static const auto strXml = strXml1_ + text + strXml2_;
@@ -196,7 +197,35 @@ TEST_CASE(test_getValue)
         std::string value;
         const auto result = getValue(e, value);
         TEST_ASSERT_TRUE(result);
-        TEST_ASSERT_EQ("314", value);
+        TEST_ASSERT_EQ("abc", value);
+    }
+    {
+        const auto& e = root->getElementByTagName("empty", true /*recurse*/);
+        std::string value;
+        auto result = getValue(e, value);
+        TEST_ASSERT_FALSE(result);
+        value = e.getCharacterData();
+        TEST_ASSERT_TRUE(value.empty());
+    }
+}
+
+
+TEST_CASE(test_getValueFailure)
+{
+    test_MinidomParser xmlParser;
+    const auto root = xmlParser.getRootElement();
+
+    {
+        const auto& e = root->getElementByTagName("string", true /*recurse*/);
+        int value;
+        const auto result = getValue(e, value);
+        TEST_ASSERT_FALSE(result);
+    }
+    {
+        const auto& e = root->getElementByTagName("string", true /*recurse*/);
+        double value;
+        const auto result = getValue(e, value);
+        TEST_ASSERT_FALSE(result);
     }
 }
 
@@ -223,11 +252,11 @@ TEST_CASE(test_setValue)
     }
     {
         auto& e = root->getElementByTagName("string", true /*recurse*/);
-        setValue(e, "123");
+        setValue(e, "xyz");
         std::string value;
         const auto result = getValue(e, value);
         TEST_ASSERT_TRUE(result);
-        TEST_ASSERT_EQ("123", value);
+        TEST_ASSERT_EQ("xyz", value);
     }
 }
 
@@ -241,5 +270,6 @@ int main(int, char**)
     TEST_CHECK(test_getElementByTagName_b);
 
     TEST_CHECK(test_getValue);
+    TEST_CHECK(test_getValueFailure);
     TEST_CHECK(test_setValue);
 }
