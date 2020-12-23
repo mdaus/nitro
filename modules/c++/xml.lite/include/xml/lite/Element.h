@@ -173,10 +173,8 @@ public:
     /*!
      *  \param std::nothrow -- will still throw if MULTIPLE elements are found, returns NULL if none
      */
-    Element* getElementByTagNameNS(std::nothrow_t, const std::string& qname,
-                                bool recurse = false) const;
-    Element& getElementByTagNameNS(const std::string& qname,
-                                bool recurse = false) const
+    Element* getElementByTagNameNS(std::nothrow_t, const std::string& qname, bool recurse = false) const;
+    Element& getElementByTagNameNS(const std::string& qname, bool recurse = false) const
     {
         auto pElement = getElementByTagNameNS(std::nothrow, qname, recurse);
         if (pElement == nullptr)
@@ -190,8 +188,7 @@ public:
      *  Utility for people that dont like to pass by reference
      *
      */
-    std::vector<Element*> getElementsByTagNameNS(const std::string& qname,
-                                                 bool recurse = false) const
+    std::vector<Element*> getElementsByTagNameNS(const std::string& qname, bool recurse = false) const
     {
         std::vector<Element*> v;
         getElementsByTagNameNS(qname, v, recurse);
@@ -210,10 +207,8 @@ public:
     /*!
      *  \param std::nothrow -- will still throw if MULTIPLE elements are found, returns NULL if none
      */
-    Element* getElementByTagName(std::nothrow_t, const std::string& localName,
-                              bool recurse = false) const;
-    Element& getElementByTagName(const std::string& localName,
-                                 bool recurse = false) const
+    Element* getElementByTagName(std::nothrow_t, const std::string& localName, bool recurse = false) const;
+    Element& getElementByTagName(const std::string& localName, bool recurse = false) const
     {
         auto pElement = getElementByTagName(std::nothrow, localName, recurse);
         if (pElement == nullptr)
@@ -240,18 +235,15 @@ public:
      *  \param localName the local name
      *  \param elements the elements that match the QName
      */
-    void getElementsByTagName(const std::string& uri,
-                              const std::string& localName,
+    void getElementsByTagName(const std::string& uri, const std::string& localName,
                               std::vector<Element*>& elements,
                               bool recurse = false) const;
     /*!
      *  \param std::nothrow -- will still throw if MULTIPLE elements are found, returns NULL if none
      */
-    Element* getElementByTagName(std::nothrow_t, const std::string& uri,
-                                 const std::string& localName,
+    Element* getElementByTagName(std::nothrow_t, const std::string& uri, const std::string& localName,
                                  bool recurse = false) const;
-    Element& getElementByTagName(const std::string& uri,
-                                 const std::string& localName,
+    Element& getElementByTagName(const std::string& uri, const std::string& localName,
                                  bool recurse = false) const
     {
         auto pElement = getElementByTagName(std::nothrow, uri, localName, recurse);
@@ -260,6 +252,17 @@ public:
             throw XMLException(Ctxt("Element '" + localName + "' was not found (uri=" + uri + ")."));
         }
         return *pElement;
+    }
+
+    /*!
+     *  Utility for people that dont like to pass by reference
+     */
+    std::vector<Element*> getElementsByTagName(const std::string& uri, const std::string& localName,
+                                               bool recurse = false) const
+    {
+        std::vector<Element*> v;
+        getElementsByTagName(uri, localName, v, recurse);
+        return v;
     }
 
     /*!
@@ -306,8 +309,7 @@ public:
      *  \param localName the local name to search for
      *  \return true if it exists, false if not
      */
-    bool hasElement(const std::string& uri,
-                    const std::string& localName) const;
+    bool hasElement(const std::string& uri, const std::string& localName) const;
 
     /*!
      *  Returns the character data of this element.
