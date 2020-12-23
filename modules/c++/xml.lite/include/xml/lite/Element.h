@@ -28,6 +28,7 @@
 
 #include <io/InputStream.h>
 #include <io/OutputStream.h>
+#include <str/Convert.h>
 #include "xml/lite/XMLException.h"
 #include "xml/lite/Attributes.h"
 
@@ -268,11 +269,16 @@ public:
     {
         return mCharacterData;
     }
-
     const string_encoding* getEncoding() const
     {
         return mpEncoding.get();
     }
+    const string_encoding* getCharacterData(std::string& result) const
+    {
+        result = getCharacterData();
+        return getEncoding();
+    }
+    void getCharacterData(sys::U8string& result) const;
 
     /*!
      *  Sets the character data for this element.
@@ -285,6 +291,12 @@ public:
         {
             mpEncoding = std::make_shared<const string_encoding>(*pEncoding);
         }
+    }
+    void setCharacterData(const sys::U8string& characters)
+    {
+        mCharacterData = str::toString(characters);
+        static const auto encoding = string_encoding::utf_8;
+        mpEncoding = std::make_shared<const string_encoding>(encoding);
     }
 
     /*!
@@ -408,7 +420,7 @@ protected:
     std::shared_ptr<const string_encoding> mpEncoding;
 
     private:
-        void depthPrint(io::OutputStream& stream, const string_encoding*, int depth,
+        void depthPrint(io::OutputStream& stream, bool utf8, int depth,
                 const std::string& formatter) const;
 };
 }
