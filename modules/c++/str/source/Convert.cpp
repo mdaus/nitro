@@ -178,15 +178,28 @@ static sys::U8string fromWindows1252(std::string::value_type ch_)
     // *out++=0xc2+(*in>0xbf), *out++=(*in++&0x3f)+0x80;
     return sys::U8string{cast(0xc2 + (ch > 0xbf)), cast((ch & 0x3f) + 0x80)}; // ISO8859-1
 }
-sys::U8string str::fromWindows1252(const std::string& str)
+void str::fromWindows1252(const std::string& str, sys::U8string& result)
 {
-    sys::U8string retval;
     // Assume the input string is Windows-1252 (western European) and convert to UTF-8
     for (const auto& ch : str)
     {
-        retval += ::fromWindows1252(ch);
+        result += ::fromWindows1252(ch);
     }
+}
+sys::U8string str::fromWindows1252(const std::string& str)
+{
+    sys::U8string retval;
+    fromWindows1252(str, retval);
     return retval;
+}
+void str::fromWindows1252(const std::string& str, std::string& result)
+{
+    // Assume the input string is Windows-1252 (western European) and convert to UTF-8
+    for (const auto& ch : str)
+    {
+        const auto utf8 = ::fromWindows1252(ch);
+        result += toString(utf8);
+    }
 }
 
 void str::toUtf8(const std::u16string& str, std::string& result)

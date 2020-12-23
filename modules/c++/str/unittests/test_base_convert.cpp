@@ -36,6 +36,7 @@
 #error "You've got an old C++ compiler, no <codecvt> header."
 #endif
 
+
 #include <import/str.h>
 #include <str/utf8.h>
 
@@ -65,27 +66,24 @@ static void test_assert_eq(const std::string& testName,
                            const sys::U8string& actual, const sys::U8string& expected)
 {
     TEST_ASSERT(actual == expected);
-    const auto pActual = reinterpret_cast<const char*>(actual.c_str());
-    const auto pExpected = reinterpret_cast<const char*>(expected.c_str());
-    TEST_ASSERT_EQ(*pActual, *pExpected);
+    const auto actual_ = str::toString(actual);    
+    const auto expected_ = str::toString(expected);
+    TEST_ASSERT_EQ(actual_, expected_);
 }
 static void test_assert_eq(const std::string& testName,
                            const sys::U8string& actual, const std::u32string& expected_)
 {
     std::string result;
     utf8::utf32to8(expected_.begin(), expected_.end(), std::back_inserter(result));
-    const sys::U8string expected = reinterpret_cast<const sys::U8string::value_type*>(result.c_str());
+    const auto expected = str::castToU8string(result);
 
     test_assert_eq(testName, actual, expected);
     
 #ifdef CODA_OSS_have_codecvt_ 
-    const auto pActual = reinterpret_cast<const char*>(actual.c_str());
-    const auto pExpected = reinterpret_cast<const char*>(expected.c_str());
-
     std::string codecvt_expected;
     codecvt_toUtf8(expected_, codecvt_expected);
-    assert(codecvt_expected == pExpected);
-    assert(codecvt_expected == pActual);
+    TEST_ASSERT_EQ(str::toString(actual), codecvt_expected);
+    TEST_ASSERT_EQ(str::toString(expected), codecvt_expected);
 #endif
 }
 
