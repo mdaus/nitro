@@ -25,6 +25,7 @@
 #pragma once
 
 #include <memory>
+#include <new> // std::nothrow_t
 
 #include <io/InputStream.h>
 #include <io/OutputStream.h>
@@ -169,13 +170,25 @@ public:
     void getElementsByTagNameNS(const std::string& qname,
                                 std::vector<Element*>& elements,
                                 bool recurse = false) const;
+    /*!
+     *  \param std::nothrow -- will still throw if MULTIPLE elements are found, returns NULL if none
+     */
+    Element* getElementByTagNameNS(std::nothrow_t, const std::string& qname, bool recurse = false) const;
+    Element& getElementByTagNameNS(const std::string& qname, bool recurse = false) const
+    {
+        auto pElement = getElementByTagNameNS(std::nothrow, qname, recurse);
+        if (pElement == nullptr)
+        {
+            throw XMLException(Ctxt("Element '" + qname + "' was not found."));
+        }
+        return *pElement;
+    }
 
     /*!
      *  Utility for people that dont like to pass by reference
      *
      */
-    std::vector<Element*> getElementsByTagNameNS(const std::string& qname,
-                                                 bool recurse = false) const
+    std::vector<Element*> getElementsByTagNameNS(const std::string& qname, bool recurse = false) const
     {
         std::vector<Element*> v;
         getElementsByTagNameNS(qname, v, recurse);
@@ -191,6 +204,19 @@ public:
     void getElementsByTagName(const std::string& localName,
                               std::vector<Element*>& elements,
                               bool recurse = false) const;
+    /*!
+     *  \param std::nothrow -- will still throw if MULTIPLE elements are found, returns NULL if none
+     */
+    Element* getElementByTagName(std::nothrow_t, const std::string& localName, bool recurse = false) const;
+    Element& getElementByTagName(const std::string& localName, bool recurse = false) const
+    {
+        auto pElement = getElementByTagName(std::nothrow, localName, recurse);
+        if (pElement == nullptr)
+        {
+            throw XMLException(Ctxt("Element '" + localName + "' was not found."));
+        }
+        return *pElement;
+    }
 
     /*!
      *  Utility for people that dont like to pass by reference
@@ -209,10 +235,35 @@ public:
      *  \param localName the local name
      *  \param elements the elements that match the QName
      */
-    void getElementsByTagName(const std::string& uri,
-                              const std::string& localName,
+    void getElementsByTagName(const std::string& uri, const std::string& localName,
                               std::vector<Element*>& elements,
                               bool recurse = false) const;
+    /*!
+     *  \param std::nothrow -- will still throw if MULTIPLE elements are found, returns NULL if none
+     */
+    Element* getElementByTagName(std::nothrow_t, const std::string& uri, const std::string& localName,
+                                 bool recurse = false) const;
+    Element& getElementByTagName(const std::string& uri, const std::string& localName,
+                                 bool recurse = false) const
+    {
+        auto pElement = getElementByTagName(std::nothrow, uri, localName, recurse);
+        if (pElement == nullptr)
+        {
+            throw XMLException(Ctxt("Element '" + localName + "' was not found (uri=" + uri + ")."));
+        }
+        return *pElement;
+    }
+
+    /*!
+     *  Utility for people that dont like to pass by reference
+     */
+    std::vector<Element*> getElementsByTagName(const std::string& uri, const std::string& localName,
+                                               bool recurse = false) const
+    {
+        std::vector<Element*> v;
+        getElementsByTagName(uri, localName, v, recurse);
+        return v;
+    }
 
     /*!
      *  1)  Find this child's attribute and change it
@@ -258,8 +309,7 @@ public:
      *  \param localName the local name to search for
      *  \return true if it exists, false if not
      */
-    bool hasElement(const std::string& uri,
-                    const std::string& localName) const;
+    bool hasElement(const std::string& uri, const std::string& localName) const;
 
     /*!
      *  Returns the character data of this element.
@@ -423,6 +473,42 @@ protected:
         void depthPrint(io::OutputStream& stream, bool utf8, int depth,
                 const std::string& formatter) const;
 };
+
+/*!
+ *  Returns the character data of this element converted to the specified type.
+ *  \param value the charater data as T
+ *  \return whether or not there was a value of type T
+ */
+template<typename T>
+inline bool getValue(const Element& element, T& value)
+{
+    const auto characterData = element.getCharacterData();
+    if (characterData.empty())
+    {
+        return false; // call getCharacterData() to get an empty string
+    }
+    try
+    {
+        value = str::toType<T>(characterData);
+    }
+    catch (const except::BadCastException&)
+    {
+        return false;
+    }
+    return true;
+}
+
+
+/*!
+ *  Sets the character data for this element by calling str::toString() on the value.
+ *  \param value The data to add to this element
+ */
+template <typename T>
+inline void setValue(Element& element, const T& value)
+{
+    element.setCharacterData(str::toString(value));
+}
+
 }
 }
 
