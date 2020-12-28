@@ -62,8 +62,7 @@ void xml::lite::Element::clone(const xml::lite::Element& node)
     }
 }
 
-bool xml::lite::Element::hasElement(const std::string& uri,
-                                    const std::string& localName) const
+bool xml::lite::Element::hasElement(const std::string& uri, const std::string& localName) const
 {
 
     for (unsigned int i = 0; i < mChildren.size(); i++)
@@ -86,8 +85,7 @@ bool xml::lite::Element::hasElement(const std::string& localName) const
     return false;
 }
 
-void xml::lite::Element::getElementsByTagName(const std::string& uri,
-                                              const std::string& localName,
+void xml::lite::Element::getElementsByTagName(const std::string& uri, const std::string& localName,
                                               std::vector<Element*>& elements,
                                               bool recurse) const
 {
@@ -99,6 +97,32 @@ void xml::lite::Element::getElementsByTagName(const std::string& uri,
         if (recurse)
             mChildren[i]->getElementsByTagName(uri, localName, elements, recurse);
     }
+}
+
+template <typename TGetElements>
+xml::lite::Element* getElement(TGetElements getElements, const except::Context& ctxt)
+{
+    auto elements = getElements();
+    if (elements.empty())
+    {
+        return nullptr;
+    }
+    if (elements.size() > 1)
+    {
+        // Yes, this is "nothrow" ... that's for found/non-found status.  We
+        // asked for an ELEMENT, not "elements".
+        throw xml::lite::XMLException(ctxt);
+    }
+    return elements[0];
+}
+
+xml::lite::Element* xml::lite::Element::getElementByTagName(std::nothrow_t,
+    const std::string& uri, const std::string& localName,
+    bool recurse) const
+{
+    auto getElements = [&]() { return getElementsByTagName(uri, localName, recurse); };
+    const auto ctxt(Ctxt("Multiple elements returned for '" + localName + "' (uri=" + uri + ")."));
+    return getElement(getElements, ctxt);
 }
 
 void xml::lite::Element::getElementsByTagName(const std::string& localName,
@@ -114,6 +138,14 @@ void xml::lite::Element::getElementsByTagName(const std::string& localName,
     }
 }
 
+xml::lite::Element* xml::lite::Element::getElementByTagName(std::nothrow_t,
+    const std::string& localName, bool recurse) const
+{
+    auto getElements = [&]() { return getElementsByTagName(localName, recurse); };
+    const auto ctxt(Ctxt("Multiple elements returned for '" + localName + "'."));
+    return getElement(getElements, ctxt);
+}
+
 void xml::lite::Element::getElementsByTagNameNS(const std::string& qname,
                                                 std::vector<Element*>& elements,
                                                 bool recurse) const
@@ -125,6 +157,14 @@ void xml::lite::Element::getElementsByTagNameNS(const std::string& qname,
         if (recurse)
             mChildren[i]->getElementsByTagNameNS(qname, elements, recurse);
     }
+}
+
+xml::lite::Element* xml::lite::Element::getElementByTagNameNS(std::nothrow_t,
+    const std::string& qname, bool recurse) const
+{
+    auto getElements = [&]() { return getElementsByTagNameNS(qname, recurse); };
+    const auto ctxt(Ctxt("Multiple elements returned for '" + qname + "'."));
+    return getElement(getElements, ctxt);
 }
 
 void xml::lite::Element::destroyChildren()
@@ -194,7 +234,6 @@ void xml::lite::Element::getCharacterData(sys::U8string& result) const
     if (encoding == xml::lite::string_encoding::utf_8)
     {
         // already in UTF-8, no converstion necessary
-        const auto pCharacterData = reinterpret_cast<sys::U8string::const_pointer>(mCharacterData.c_str());
         result = str::castToU8string(mCharacterData);
     }
     else if (encoding == xml::lite::string_encoding::windows_1252)
