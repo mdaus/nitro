@@ -19,6 +19,13 @@ namespace sys
 // http://en.cppreference.com/w/cpp/filesystem
 namespace Filesystem
 {
+  struct path; // forward
+  namespace details
+  {
+    extern bool Equals(const path& lhs, const path& rhs) noexcept;
+    extern std::ostream& Ostream(std::ostream& os, const path& p);
+  }
+
 // http://en.cppreference.com/w/cpp/filesystem/path
 struct path // N.B. this is an INCOMPLETE implementation!
 {
@@ -53,9 +60,18 @@ struct path // N.B. this is an INCOMPLETE implementation!
     bool is_absolute() const;  // http://en.cppreference.com/w/cpp/filesystem/path/is_absrel
     bool is_relative() const;  // http://en.cppreference.com/w/cpp/filesystem/path/is_absrel
 
-    friend bool operator==(const path& lhs, const path& rhs) noexcept;  // https://en.cppreference.com/w/cpp/filesystem/path/operator_cmp
-    friend bool operator!=(const path& lhs, const path& rhs) noexcept;  // https://en.cppreference.com/w/cpp/filesystem/path/operator_cmp
-    friend std::ostream& operator<<(std::ostream&, const path&); // https://en.cppreference.com/w/cpp/filesystem/path/operator_ltltgtgt
+    friend bool operator==(const path& lhs, const path& rhs) noexcept  // https://en.cppreference.com/w/cpp/filesystem/path/operator_cmp
+    {
+      return details::Equals(lhs, rhs);
+    }
+    friend bool operator!=(const path& lhs, const path& rhs) noexcept  // https://en.cppreference.com/w/cpp/filesystem/path/operator_cmp
+    {
+      return !(lhs == rhs);
+    }
+    friend std::ostream& operator<<(std::ostream& os, const path& p) // https://en.cppreference.com/w/cpp/filesystem/path/operator_ltltgtgt
+    {
+      return details::Ostream(os, p);
+    }
 
 private:
     string_type p_;
