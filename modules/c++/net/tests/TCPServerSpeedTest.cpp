@@ -53,7 +53,7 @@ int main(int argc, char** argv)
         mem::auto_ptr<net::Socket> listener =
                 net::TCPServerSocketFactory().create(address);
         net::SocketAddress clientAddress;
-        std::auto_ptr<net::Socket> client = listener->accept(clientAddress);
+        mem::auto_ptr<net::Socket> client = listener->accept(clientAddress);
 
         // First the client sends the # of bytes they'll be sending
         sys::Uint64_T numBytes;
