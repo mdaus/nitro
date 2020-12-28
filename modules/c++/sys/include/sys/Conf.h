@@ -22,6 +22,7 @@
 
 #ifndef __SYS_CONF_H__
 #define __SYS_CONF_H__
+#pragma once
 
 #include <config/coda_oss_config.h>
 #include <str/Convert.h>
@@ -56,7 +57,7 @@
 #if defined(__GNUC__)
     /*  We get a really nice function macro  */
 #   define NativeLayer_func__ __PRETTY_FUNCTION__
-#elif defined(WIN32) && (_MSC_VER >= 1300)
+#elif (defined(WIN32) || defined(_WIN32)) && (_MSC_VER >= 1300)
 #   define NativeLayer_func__ __FUNCSIG__
 /*  Otherwise, lets look for C99 compatibility  */
 #elif defined (__STDC_VERSION__)
@@ -187,7 +188,7 @@ namespace sys
      *  NOTE: This should be updated as architectures require greater
      *        intervals. Alignments require base 2 increments.
      */
-    static const size_t SSE_INSTRUCTION_ALIGNMENT = 32;
+    static constexpr size_t SSE_INSTRUCTION_ALIGNMENT = 32;
 
     /*!
      * Returns true if the system is big-endian, otherwise false.
@@ -214,7 +215,7 @@ namespace sys
         if (!bufferPtr || elemSize < 2 || !numElems)
             return;
 
-        unsigned short half = elemSize >> 1;
+        const auto half = elemSize >> 1;
         size_t offset = 0, innerOff = 0, innerSwap = 0;
 
         for(size_t i = 0; i < numElems; ++i, offset += elemSize)
@@ -252,7 +253,7 @@ namespace sys
             return;
         }
 
-        const unsigned short half = elemSize >> 1;
+        const auto half = elemSize >> 1;
         size_t offset = 0;
 
         for (size_t ii = 0; ii < numElems; ++ii, offset += elemSize)
@@ -319,13 +320,13 @@ namespace sys
     inline void* alignedAlloc(size_t size,
                               size_t alignment = SSE_INSTRUCTION_ALIGNMENT)
     {
-#ifdef WIN32
+#if defined(WIN32) || defined(_WIN32)
         void* p = _aligned_malloc(size, alignment);
 #elif defined(HAVE_POSIX_MEMALIGN)
-        void* p = NULL;
+        void* p = nullptr;
         if (posix_memalign(&p, alignment, size) != 0)
         {
-            p = NULL;
+            p = nullptr;
         }
 #elif defined(HAVE_MEMALIGN)
         void* const p = memalign(alignment, size);
@@ -348,7 +349,7 @@ namespace sys
      */
     inline void alignedFree(void* p)
     {
-#ifdef WIN32
+#if defined(WIN32) || defined(_WIN32)
         _aligned_free(p);
 #else
         free(p);
@@ -358,4 +359,49 @@ namespace sys
 
 }
 
+#define CODA_OSS_cplusplus __cplusplus
+#if CODA_OSS_cplusplus < 201103L  // We need at least C++11
+    #undef CODA_OSS_cplusplus  // oops...try to fix
+
+    // MSVC only sets __cplusplus >199711L with the /Zc:__cplusplus command-line option.
+    // https://devblogs.microsoft.com/cppblog/msvc-now-correctly-reports-__cplusplus/
+    #if defined(_MSVC_LANG)
+    // https://docs.microsoft.com/en-us/cpp/preprocessor/predefined-macros?view=msvc-160
+    // "Defined as an integer literal that specifies the C++ language standard targeted by the compiler."
+    #define CODA_OSS_cplusplus _MSVC_LANG
+    #endif // _MSVC_LANG
+
+    #if defined(__GNUC__)
+    // ... similar things needed for other compilers ... ?
+    #endif // __GNUC__
+
+#endif // CODA_OSS_cplusplus
+static_assert(CODA_OSS_cplusplus >= 201103L, "Must compile with C++11 or greater.");
+
+// Define a few macros as that's less verbose than testing against a version number
+#if CODA_OSS_cplusplus >= 201103L
+#define CODA_OSS_cpp11 1
 #endif
+#if CODA_OSS_cplusplus >= 201402L
+#define CODA_OSS_cpp14 1
+#endif
+#if CODA_OSS_cplusplus >= 201703L
+#define CODA_OSS_cpp17 1
+#endif
+#if CODA_OSS_cplusplus >= 202002L
+#define CODA_OSS_cpp20 1
+#endif
+
+// We've got various "replacements" (to a degree) for C++ library functionality
+// only available in later releases.  Adding these names to "std" is technically
+// forbidden, but it makes for fewer (eventual) changes in client code.
+#define CODA_OSS_AUGMENT_std_namespace 0
+#ifndef CODA_OSS_AUGMENT_std_namespace
+#if CODA_OSS_cplusplus == 201103L
+#define CODA_OSS_AUGMENT_std_namespace 0  // assume we've already got everything for C++11
+#else
+#define CODA_OSS_AUGMENT_std_namespace 1
+#endif
+#endif
+
+#endif // __SYS_CONF_H__
