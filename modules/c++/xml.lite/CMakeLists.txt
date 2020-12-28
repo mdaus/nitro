@@ -1,5 +1,5 @@
 set(MODULE_NAME xml.lite)
-set(MODULE_DEPS io-c++ mem-c++ mt-c++ logging-c++)
+set(MODULE_DEPS io-c++ mem-c++ mt-c++ logging-c++ str-c++)
 if (USE_XercesC)
     list(APPEND MODULE_DEPS xerces-c)
 endif()
