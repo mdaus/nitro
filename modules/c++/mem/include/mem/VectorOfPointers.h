@@ -85,15 +85,15 @@ public:
 
     void push_back(T* value)
     {
-        std::auto_ptr<T> scopedValue(value);
-        push_back(scopedValue);
+        std::unique_ptr<T> scopedValue(value);
+        push_back(std::move(scopedValue));
     }
 
     template <typename OtherT>
         void push_back(OtherT* value)
     {
-        std::auto_ptr<OtherT> scopedValue(value);
-        push_back(scopedValue);
+        std::unique_ptr<OtherT> scopedValue(value);
+        push_back(std::move(scopedValue));
     }
 
     void push_back(std::unique_ptr<T>&& value)

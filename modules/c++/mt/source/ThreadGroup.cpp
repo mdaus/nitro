@@ -53,14 +53,14 @@ ThreadGroup::~ThreadGroup()
 
 void ThreadGroup::createThread(sys::Runnable *runnable)
 {
-    createThread(std::auto_ptr<sys::Runnable>(runnable));
+    createThread(std::unique_ptr<sys::Runnable>(runnable));
 }
 
 void ThreadGroup::createThread(std::unique_ptr<sys::Runnable>&& runnable)
 {
     // Note: If getNextInitializer throws, any previously created
     //       threads may never finish if cross-thread communication is used.
-    std::auto_ptr<sys::Runnable> internalRunnable(
+    std::unique_ptr<sys::Runnable> internalRunnable(
             new ThreadGroupRunnable(std::move(runnable), *this, getNextInitializer()));
 
     mem::SharedPtr<sys::Thread> thread(new sys::Thread(internalRunnable.get()));
