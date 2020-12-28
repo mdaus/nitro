@@ -102,6 +102,17 @@ void net::ssl::SSLConnectionClientFactory::initializeContext()
 #endif
 }
 
+net::NetConnection* net::ssl::SSLConnectionClientFactory::newConnection(
+        std::unique_ptr<net::Socket>&& toServer)
+{
+#if defined(USE_OPENSSL)
+    return (new SSLConnection(
+            toServer, mCtx, mServerAuthentication, mUrl.getHost()));
+#else
+    return (new net::NetConnection(std::move(toServer)));
+#endif
+}
+#if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
 net::NetConnection * net::ssl::SSLConnectionClientFactory::newConnection(std::auto_ptr<net::Socket> toServer) 
 {
 #if defined(USE_OPENSSL)
@@ -110,3 +121,4 @@ net::NetConnection * net::ssl::SSLConnectionClientFactory::newConnection(std::au
     return (new net::NetConnection(toServer));
 #endif
 }
+#endif
