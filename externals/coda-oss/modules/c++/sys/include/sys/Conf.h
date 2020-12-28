@@ -395,7 +395,7 @@ static_assert(CODA_OSS_cplusplus >= 201103L, "Must compile with C++11 or greater
 // We've got various "replacements" (to a degree) for C++ library functionality
 // only available in later releases.  Adding these names to "std" is technically
 // forbidden, but it makes for fewer (eventual) changes in client code.
-#define CODA_OSS_AUGMENT_std_namespace 0
+//#define CODA_OSS_AUGMENT_std_namespace 0
 #ifndef CODA_OSS_AUGMENT_std_namespace
 #if CODA_OSS_cplusplus == 201103L
 #define CODA_OSS_AUGMENT_std_namespace 0  // assume we've already got everything for C++11

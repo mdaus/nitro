@@ -60,7 +60,7 @@ namespace std
 #else
 
 // Not doing our own std::endian, can we get the real one?
-#if CODA_OSS_cpp17 && __has_include(<bit>)  // __has_include is C++17
+#if CODA_OSS_cpp20 && __has_include(<bit>)  // __has_include is C++17
 #include <bit>
 #endif // CODA_OSS_cpp20
 
