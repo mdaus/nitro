@@ -49,7 +49,7 @@ namespace sys
     #endif  // CODA_OSS_cpp20
 #endif  // CODA_OSS_DEFINE_std_endian_
 
-#if CODA_OSS_DEFINE_std_endian_
+#if CODA_OSS_DEFINE_std_endian_ == 1
     namespace std // This is slightly uncouth: we're not supposed to augment "std".
     {
         using endian = sys::Endian;
