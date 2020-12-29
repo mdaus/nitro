@@ -380,16 +380,16 @@ static_assert(CODA_OSS_cplusplus >= 201103L, "Must compile with C++11 or greater
 
 // Define a few macros as that's less verbose than testing against a version number
 #if CODA_OSS_cplusplus >= 201103L
-#define CODA_OSS_cpp11 1
+    #define CODA_OSS_cpp11 1
 #endif
 #if CODA_OSS_cplusplus >= 201402L
-#define CODA_OSS_cpp14 1
+    #define CODA_OSS_cpp14 1
 #endif
 #if CODA_OSS_cplusplus >= 201703L
-#define CODA_OSS_cpp17 1
+    #define CODA_OSS_cpp17 1
 #endif
 #if CODA_OSS_cplusplus >= 202002L
-#define CODA_OSS_cpp20 1
+    #define CODA_OSS_cpp20 1
 #endif
 
 // We've got various "replacements" (to a degree) for C++ library functionality
@@ -397,11 +397,11 @@ static_assert(CODA_OSS_cplusplus >= 201103L, "Must compile with C++11 or greater
 // forbidden, but it makes for fewer (eventual) changes in client code.
 //#define CODA_OSS_AUGMENT_std_namespace 0
 #ifndef CODA_OSS_AUGMENT_std_namespace
-#if CODA_OSS_cpp20
-#define CODA_OSS_AUGMENT_std_namespace 0  // nothing to add if we're at C++20
-#else
-#define CODA_OSS_AUGMENT_std_namespace 1
-#endif
+    #if CODA_OSS_cpp20
+        #define CODA_OSS_AUGMENT_std_namespace 0  // nothing to add if we're at C++20
+    #else
+        #define CODA_OSS_AUGMENT_std_namespace 1
+    #endif
 #endif
 
 #endif // __SYS_CONF_H__
