@@ -20,8 +20,9 @@
  *
  */
 
-#ifndef __NITF_DESUBHEADER_HPP__
-#define __NITF_DESUBHEADER_HPP__
+#pragma once
+
+#include <string>
 
 #include "nitf/DESubheader.h"
 #include "nitf/Object.hpp"
@@ -29,7 +30,6 @@
 #include "nitf/FileSecurity.hpp"
 #include "nitf/Extensions.hpp"
 #include "nitf/TRE.hpp"
-#include <string>
 
 /*!
  *  \file DESubheader.hpp
@@ -57,24 +57,40 @@ public:
     DESubheader(nitf_DESubheader * x);
 
     //! Constructor
-    DESubheader();
+    DESubheader() noexcept(false);
 
     //! Clone
     nitf::DESubheader clone() const;
 
-    ~DESubheader();
+    ~DESubheader() = default;
 
     //! Get the filePartType
     nitf::Field getFilePartType() const;
+    std::string filePartType() const
+    {
+        return getFilePartType(); // nitf::Field implicitly converts to std::string
+    }
 
     //! Get the typeID
     nitf::Field getTypeID() const;
+    std::string typeID() const
+    {
+        return getTypeID().toTrimString();
+    }
 
     //! Get the version
     nitf::Field getVersion() const;
+    std::string version() const
+    {
+        return getVersion(); // nitf::Field implicitly converts to std::string
+    }
 
     //! Get the securityClass
     nitf::Field getSecurityClass() const;
+    std::string securityClass() const
+    {
+        return getSecurityClass(); // nitf::Field implicitly converts to std::string
+    }
 
     //! Get the securityGroup
     nitf::FileSecurity getSecurityGroup() const;
@@ -110,8 +126,8 @@ public:
     void setUserDefinedSection(nitf::Extensions value);
 
 private:
-    mutable nitf_Error error;
+    mutable nitf_Error error{};
 };
 
 }
-#endif
+

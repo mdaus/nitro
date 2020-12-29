@@ -1,7 +1,9 @@
 #include "pch.h"
 
 #include <string>
-#include <filesystem>
+
+#include <sys/Filesystem.h>
+#include <sys/OS.h>
 
 #include "nitf_Test.h"
 
@@ -129,14 +131,16 @@ struct nitf_test_tre_mods : public ::testing::Test {
 
 
 // Be sure this runs AFTER the tre_mods tests ... not really sure why ...
+#undef TEST_CASE
+#define TEST_CASE(X) TEST(test_image_writer, X)
+#include "nitf/unittests/test_image_writer.cpp"
 
-struct test_image_writer : public ::testing::Test {
-	test_image_writer() {
+
+struct test_load_plugins : public ::testing::Test {
+	test_load_plugins() {
 		// initialization code here
-		const auto inputPathname = buildDir(fs::path("..") / ".." / "modules" / "c++" / "nitf" / "tests" / "test_blank.ntf").string();
-		sys::OS().setEnv("NITF_UNIT_TEST_inputPathname_", inputPathname, true /*overwrite*/);
-		const auto outputPathname = buildDir(fs::path("outputPathname.ntf")).string();
-		sys::OS().setEnv("NITF_UNIT_TEST_outputPathname_", outputPathname, true /*overwrite*/);
+		//const std::string NITF_PLUGIN_PATH = R"(C:\Users\jdsmith\source\repos\nitro\x64\Debug\share\nitf\plugins)";
+		sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
 	}
 
 	void SetUp() {
@@ -148,7 +152,7 @@ struct test_image_writer : public ::testing::Test {
 		// ok to through exceptions from here if need be
 	}
 
-	~test_image_writer() {
+	~test_load_plugins() {
 		// cleanup any pending stuff, but no exceptions allowed
 	}
 
@@ -156,5 +160,5 @@ struct test_image_writer : public ::testing::Test {
 };
 
 #undef TEST_CASE
-#define TEST_CASE(X) TEST_F(test_image_writer, X)
-#include "nitf/unittests/test_image_writer.cpp"
+#define TEST_CASE(X) TEST_F(test_load_plugins, X)
+#include "nitf/unittests/test_load_plugins.cpp"

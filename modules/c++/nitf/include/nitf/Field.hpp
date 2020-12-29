@@ -20,12 +20,12 @@
  *
  */
 
-#ifndef __NITF_FIELD_HPP__
-#define __NITF_FIELD_HPP__
 #pragma once
 
 #include <string>
 #include <limits>
+
+#include <import/str.h>
 
 #include <nitf/Field.h>
 #include <nitf/System.hpp>
@@ -82,7 +82,7 @@ struct GetConvType<false, IsSignedT>
  *  The Field is a generic type object that allows storage
  *  and casting of data amongst disparate data types.
  */
-class Field : public nitf::Object<nitf_Field>
+class Field final : public nitf::Object<nitf_Field>
 {
     void setU_(uint32_t data)
     {
@@ -213,8 +213,7 @@ public:
         return *this;
     }
 
-    //! Destructor
-    ~Field() {}
+    ~Field() = default;
 
     void set(uint8_t data)
     {
@@ -343,29 +342,35 @@ public:
     template <typename T>
     operator T() const
     {
-        T data;
-        get(&data,
+        T retval;
+        get(&retval,
             detail::GetConvType<std::numeric_limits<T>::is_integer,
                                 std::numeric_limits<T>::is_signed>::CONV_TYPE,
             sizeof(T));
-        return data;
+        return retval;
     }
 
     //! Returns the field as a string
     operator std::string() const
     {
-        return toString();
+        return std::string(getNativeOrThrow()->raw,
+            getNativeOrThrow()->length);
     }
-
     std::string toString() const
     {
-        return std::string(getNativeOrThrow()->raw,
-                           getNativeOrThrow()->length );
+        return *this;
+    }
+    std::string toTrimString() const
+    {
+        std::string retval = *this; // implicitly converted to std::string
+        str::trim(retval);
+        return retval;
     }
 
-private:
-    Field(){} //private -- does not make sense to construct a Field from scratch
+    Field() = delete; // does not make sense to construct a Field from scratch
+    operator char* () const = delete; // Don't allow this cast ever.
 
+private:
     //! get the value
     void get(NITF_DATA* outval, nitf::ConvType vtype, size_t length) const
     {
@@ -383,11 +388,8 @@ private:
             throw nitf::NITFException(&error);
     }
 
-    nitf_Error error;
-
-    operator char*() const; // Don't allow this cast ever.
+    nitf_Error error{};
 };
 
 }
 
-#endif

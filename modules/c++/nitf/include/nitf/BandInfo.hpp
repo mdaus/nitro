@@ -20,8 +20,6 @@
  *
  */
 
-#ifndef __NITF_BANDINFO_HPP__
-#define __NITF_BANDINFO_HPP__
 #pragma once
 
 #include <string>
@@ -57,7 +55,7 @@ public:
     BandInfo(nitf_BandInfo * x);
 
     //! Constructor
-    BandInfo() noexcept;
+    BandInfo() noexcept(false);
 
     //! Destructor
     ~BandInfo();
@@ -67,6 +65,10 @@ public:
 
     //! Get the subcategory
     nitf::Field getSubcategory() const;
+    std::string subcategory() const
+    {
+        return getSubcategory(); // nitf::Field implicitly converts to std::string
+    }
 
     //! Get the imageFilterCondition
     nitf::Field getImageFilterCondition() const;
@@ -117,8 +119,8 @@ public:
               const std::string& imageFilterCode);
 
 private:
-    mutable nitf_Error error;
+    mutable nitf_Error error{};
 };
 
 }
-#endif
+

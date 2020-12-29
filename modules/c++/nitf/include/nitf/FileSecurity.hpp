@@ -57,18 +57,26 @@ public:
     FileSecurity(nitf_FileSecurity * x);
 
     //! Constructor
-    FileSecurity();
+    FileSecurity() noexcept(false);
 
     //! Clone
     nitf::FileSecurity clone() const;
 
-    ~FileSecurity();
+    ~FileSecurity() = default;
 
     //! Get the classificationSystem
     nitf::Field getClassificationSystem() const;
+    std::string classificationSystem() const
+    {
+        return getClassificationSystem(); // nitf::Field implicitly converts to std::string
+    }
 
     //! Get the codewords
     nitf::Field getCodewords() const;
+    std::string codewords() const
+    {
+        return getCodewords(); // nitf::Field implicitly converts to std::string
+    }
 
     //! Get the controlAndHandling
     nitf::Field getControlAndHandling() const;
@@ -110,7 +118,7 @@ public:
     nitf::Field getSecurityControlNumber() const;
 
 private:
-    mutable nitf_Error error;
+    mutable nitf_Error error{};
 };
 
 }
