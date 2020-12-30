@@ -28,14 +28,14 @@
 #include <memory>
 
 #include <sys/Conf.h>
+#include <sys/CStdDef.h>
+#include <io/ByteStream.h>
+
 #include <nitf/System.hpp>
 #include <nitf/Record.hpp>
 #include <nitf/ImageBlocker.hpp>
 #include <nitf/NITFBufferList.hpp>
 #include <nitf/ImageSegmentComputer.h>
-#include <io/ByteStream.h>
-
-#include "cstddef.h"
 
 namespace nitf
 {

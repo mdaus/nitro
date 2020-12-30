@@ -22,11 +22,11 @@
 
 #pragma once
 
+#include <sys/CStdDef.h>
+
 #include <nitf/ImageSubheader.hpp>
 #include <nitf/IOInterface.hpp>
 #include <nitf/ImageIO.h>
-
-#include "cstddef.h"
 
 /*!
  *  This is a macro for quickly exposing hooks to a c++ layer

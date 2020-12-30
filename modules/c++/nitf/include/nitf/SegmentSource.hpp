@@ -27,6 +27,8 @@
 #include <string>
 #include <vector>
 
+#include <sys/CStdDef.h>
+
 #include "nitf/DataSource.hpp"
 #include "nitf/SegmentSource.h"
 #include "nitf/SegmentReader.hpp"
@@ -34,7 +36,6 @@
 #include "nitf/System.hpp"
 #include "nitf/NITFException.hpp"
 #include "nitf/Object.hpp"
-#include "nitf/cstddef.h"
 #include "nitf/span.h"
 
 /*!

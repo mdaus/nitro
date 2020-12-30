@@ -28,11 +28,11 @@
 #include <string>
 #include <memory>
 
+#include <sys/CStdDef.h>
+
 #include "nitf/ImageReader.h"
 #include "nitf/Object.hpp"
 #include "nitf/BlockingInfo.hpp"
-
-#include "cstddef.h"
 
 /*!
  *  \file ImageReader.hpp

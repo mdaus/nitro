@@ -20,10 +20,10 @@
  *
  */
 
-#include <nitf/IOStreamReader.hpp>
 #include <except/Exception.h>
+#include <sys/CStdDef.h>
 
-#include "nitf/cstddef.h"
+#include <nitf/IOStreamReader.hpp>
 
 namespace nitf
 {
