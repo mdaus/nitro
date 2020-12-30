@@ -100,6 +100,7 @@ bool exists(const path& p);  // https://en.cppreference.com/w/cpp/filesystem/exi
     #endif
 #endif  // CODA_OSS_DEFINE_std_filesystem_
 
+
 #if CODA_OSS_DEFINE_std_filesystem_ == 1
     namespace std // This is slightly uncouth: we're not supposed to augment "std".
     {
