@@ -53,7 +53,8 @@ namespace except
  * except::Throwable when it didn't before.
  */
 #ifndef CODA_OSS_Throwable_isa_std_exception_
-//#define CODA_OSS_Throwable_isa_std_exception_ 1
+//#define CODA_OSS_Throwable_isa_std_exception_ 0 // preserve existing behavior
+#define CODA_OSS_Throwable_isa_std_exception_ 1
 #endif
 class Throwable
 #if CODA_OSS_Throwable_isa_std_exception_
