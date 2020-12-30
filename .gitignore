@@ -9,6 +9,7 @@ _deps/
 CMakeFiles/
 *.cmake
 CMakeCache.txt
+CMakeSettings.json
 build/
 
 externals/coda-oss/modules/c++/**/Makefile
@@ -40,4 +41,3 @@ outputPathname.ntf
 *__*_band_*.man
 test_writer_3++.nitf
 *__*_band_*.out
-
