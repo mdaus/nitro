@@ -1,5 +1,6 @@
 add_subdirectory("boost")
 #add_subdirectory("numpy") # this is handled in coda_find_system_dependencies
+#add_subdirectory("gsl") # nothing to do
 
 set(ENABLE_J2K ON CACHE BOOL "enable J2K library")
 set(J2K_HOME "" CACHE PATH "path to J2K installation")
