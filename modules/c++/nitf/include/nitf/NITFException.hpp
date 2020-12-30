@@ -22,9 +22,10 @@
 
 #ifndef __NITF_EXCEPTION_HPP__
 #define __NITF_EXCEPTION_HPP__
+#pragma once
 
-#include <import/except.h>
 #include "nitf/System.hpp"
+#include "nitf/coda-oss.hpp"
 
 /*!
  *  \file NITFException.hpp

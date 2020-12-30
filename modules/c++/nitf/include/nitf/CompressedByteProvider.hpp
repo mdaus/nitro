@@ -28,9 +28,7 @@
 #include <utility>
 #include <memory>
 
-#include <sys/Conf.h>
-#include <sys/CStdDef.h>
-
+#include <nitf/coda-oss.hpp>
 #include <nitf/ByteProvider.hpp>
 #include <nitf/System.hpp>
 #include <nitf/Record.hpp>

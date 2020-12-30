@@ -28,8 +28,7 @@
 #include <string>
 #include <memory>
 
-#include <sys/CStdDef.h>
-
+#include "nitf/coda-oss.hpp"
 #include "nitf/ImageReader.h"
 #include "nitf/Object.hpp"
 #include "nitf/BlockingInfo.hpp"

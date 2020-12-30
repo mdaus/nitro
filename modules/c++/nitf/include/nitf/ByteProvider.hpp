@@ -27,10 +27,7 @@
 #include <utility>
 #include <memory>
 
-#include <sys/Conf.h>
-#include <sys/CStdDef.h>
-#include <io/ByteStream.h>
-
+#include <nitf/coda-oss.hpp>
 #include <nitf/System.hpp>
 #include <nitf/Record.hpp>
 #include <nitf/ImageBlocker.hpp>

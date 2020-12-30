@@ -22,8 +22,7 @@
 
 #pragma once
 
-#include <sys/CStdDef.h>
-
+#include <nitf/coda-oss.hpp>
 #include <nitf/ImageSubheader.hpp>
 #include <nitf/IOInterface.hpp>
 #include <nitf/BlockingInfo.hpp>

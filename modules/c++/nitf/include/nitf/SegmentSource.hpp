@@ -27,8 +27,7 @@
 #include <string>
 #include <vector>
 
-#include <sys/CStdDef.h>
-
+#include "nitf/coda-oss.hpp"
 #include "nitf/DataSource.hpp"
 #include "nitf/SegmentSource.h"
 #include "nitf/SegmentReader.hpp"

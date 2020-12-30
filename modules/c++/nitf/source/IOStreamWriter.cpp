@@ -20,9 +20,7 @@
  *
  */
 
-#include <except/Exception.h>
-#include <sys/CStdDef.h>
-
+#include <nitf/coda-oss.hpp>
 #include <nitf/IOStreamWriter.hpp>
 
 namespace nitf

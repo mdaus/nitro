@@ -45,9 +45,10 @@
 
 #  include <direct.h>
 #  include <io.h>
+
+#include "nitf/coda-oss.hpp"
 # include <sys/types.h>
 # include <sys/stat.h>
-#include <sys/Filesystem.h>
 
 #pragma warning(push)
 #pragma warning(disable: 4388) // '...': signed / unsigned mismatch

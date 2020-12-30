@@ -28,7 +28,7 @@
 #include <string.h>
 #include <vector>
 
-#include <sys/CStdDef.h>
+#include "nitf/coda-oss.hpp"
 
 namespace nitf
 {
