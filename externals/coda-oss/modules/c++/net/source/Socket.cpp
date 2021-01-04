@@ -68,12 +68,12 @@ void net::Socket::bind(const net::SocketAddress& address)
     }                               
 }
 
-std::auto_ptr<net::Socket> net::Socket::accept(net::SocketAddress& fromClient)
+mem::auto_ptr<net::Socket> net::Socket::accept(net::SocketAddress& fromClient)
 {
     net::SockAddrIn_T& in = fromClient.getAddress();
 
     net::SockLen_T addrLen = sizeof(in);
-    return std::auto_ptr<net::Socket>( 
+    return mem::auto_ptr<net::Socket>( 
         new Socket(::accept(mNative, (net::SockAddr_T *) &in, &addrLen), true) );
 }
 

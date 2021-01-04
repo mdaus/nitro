@@ -368,7 +368,7 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
         }
     }
 
-    std::auto_ptr<cli::Results> results(new Results);
+    std::unique_ptr<cli::Results> results(new Results);
     cli::Results *currentResults = NULL;
     for (size_t i = 0, s = explodedArgs.size(); i < s; ++i)
     {
