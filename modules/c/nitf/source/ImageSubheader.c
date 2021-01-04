@@ -694,7 +694,6 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_createBands(nitf_ImageSubheader *
     nitf_BandInfo **infos = NULL;       /* new BandInfo array */
     uint32_t curBandCount;   /* current band count */
     uint32_t totalBandCount; /* total band count */
-    int i;
     char buf[256];              /* temp buf */
 
     /* first, get the current number of bands */
@@ -725,14 +724,14 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_createBands(nitf_ImageSubheader *
         goto CATCH_ERROR;
     }
 
-    for (i = 0; subhdr->bandInfo && i < curBandCount; ++i)
+    for (uint32_t i = 0; subhdr->bandInfo && i < curBandCount; ++i)
     {
         /* copy over old pointers -- assuming old array == curBandCount! */
         infos[i] = subhdr->bandInfo[i];
     }
 
     /* now, create the new infos */
-    for (i = 0; i < numBands; ++i)
+    for (uint32_t i = 0; i < numBands; ++i)
     {
         bandInfo = nitf_BandInfo_construct(error);
         if (!bandInfo)
@@ -781,14 +780,12 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_removeBand(
     nitf_BandInfo *bandInfo = NULL;     /* temp BandInfo object */
     nitf_BandInfo **infos = NULL;       /* new BandInfo array */
     uint32_t curBandCount;   /* current band count */
-    int i;
     char buf[256];              /* temp buf */
 
     /* first, get the current number of bands */
     curBandCount = nitf_ImageSubheader_getBandCount(subhdr, error);
     /* check to see if this is a NEW subheader with no bands yet */
-    if (curBandCount == NITF_INVALID_BAND_COUNT || index < 0 ||
-            index >= curBandCount)
+    if (curBandCount == NITF_INVALID_BAND_COUNT || index >= curBandCount)
     {
         nitf_Error_init(error, "Invalid band index",
                         NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
@@ -819,11 +816,11 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_removeBand(
         goto CATCH_ERROR;
     }
 
-    for (i = 0; subhdr->bandInfo && i < index; ++i)
+    for (uint32_t i = 0; subhdr->bandInfo && i < index; ++i)
     {
         infos[i] = subhdr->bandInfo[i];
     }
-    for (i = index; subhdr->bandInfo && i < curBandCount; ++i)
+    for (uint32_t i = index; subhdr->bandInfo && i < curBandCount; ++i)
     {
         infos[i] = subhdr->bandInfo[i + 1];
     }
@@ -1110,13 +1107,14 @@ NITFAPI(int) nitf_ImageSubheader_insertImageComment
     nitf_Error * error
 )
 {
-    uint32_t numComments;
     nitf_ListIterator iterPos;
     nitf_Field* field = NULL;
-    char numCommentBuf[NITF_NICOM_SZ + 1];
+    #define numCommentBuf_SZ NITF_NICOM_SZ+10 // sprintf() warning about "%.*d"
+    char numCommentBuf[numCommentBuf_SZ + 1];
     char commentBuf[NITF_ICOM_SZ + 1];
-    int length;
+    size_t length;
 
+    int numComments;
     NITF_TRY_GET_UINT32(subhdr->numImageComments, &numComments, error);
     /* in case there is bad info in numImageComments */
     numComments = numComments < 0 ? 0 : numComments;
@@ -1150,8 +1148,8 @@ NITFAPI(int) nitf_ImageSubheader_insertImageComment
             goto CATCH_ERROR;
 
         /* always set the numComments back */
-        NITF_SNPRINTF(numCommentBuf, NITF_NICOM_SZ + 1, "%.*d",
-                NITF_NICOM_SZ, ++numComments);
+        NITF_SNPRINTF(numCommentBuf, numCommentBuf_SZ + 1, "%.*d",
+            NITF_NICOM_SZ, ++numComments);
         nitf_Field_setRawData(subhdr->numImageComments,
                               numCommentBuf, NITF_NICOM_SZ, error);
     }
@@ -1175,12 +1173,14 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_removeImageComment
     nitf_Error * error
 )
 {
-    uint32_t numComments;    /* number of comments */
-    char commentBuf[NITF_NICOM_SZ + 1];
+    #define commentBuf_SZ NITF_NICOM_SZ+10 // sprintf() warning about "%.*d"
+    char commentBuf[commentBuf_SZ + 1];
     nitf_ListIterator iterPos;
     nitf_Field* field = NULL;
 
+    int numComments;    /* number of comments */
     NITF_TRY_GET_UINT32(subhdr->numImageComments, &numComments, error);
+    /* in case there is bad info in numImageComments */
     numComments = numComments < 0 ? 0 : numComments;
 
     /* see if we can really remove anything */
@@ -1194,7 +1194,7 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_removeImageComment
             goto CATCH_ERROR;
 
         /* always set the numComments back */
-        NITF_SNPRINTF(commentBuf, NITF_NICOM_SZ + 1, "%.*d",
+        NITF_SNPRINTF(commentBuf, commentBuf_SZ + 1, "%.*d",
                       NITF_NICOM_SZ, --numComments);
         nitf_Field_setRawData(subhdr->numImageComments,
                               commentBuf, NITF_NICOM_SZ, error);

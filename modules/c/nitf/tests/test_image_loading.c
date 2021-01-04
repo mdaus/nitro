@@ -44,7 +44,7 @@ void writeImage(nitf_ImageSegment * segment,
                 nitf_Error * error)
 {
 
-    uint32_t nBits, nBands, xBands, nRows, nColumns;
+    uint32_t nBits, nBands=0, xBands, nRows, nColumns;
     size_t subimageSize;
     nitf_SubWindow *subimage;
     unsigned int i;
@@ -235,7 +235,7 @@ void writeImage(nitf_ImageSegment * segment,
         for (pos = strlen(file) - 1; pos; pos--)
             if (file[pos] == '.')
                 file[pos] = '_';
-        strcat(file, ".out");
+        nrt_strcat_s(file, NITF_MAX_PATH, ".out");
         printf("File: %s\n", file);
         toFile = nitf_IOHandle_create(file, NITF_ACCESS_WRITEONLY,
                                       NITF_CREATE, error);
