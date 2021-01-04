@@ -84,8 +84,8 @@
 #include <atomic>
 #include <future>
 
-#include <sys/File.h>
 
+#include "nitf/coda-oss.hpp"
 #include <import/except.h>
 #include <import/types.h>
 #pragma warning(push)

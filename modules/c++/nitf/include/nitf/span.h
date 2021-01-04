@@ -6,8 +6,10 @@
 
 #include <cstdint>
 
+#include "coda-oss.hpp"
+
 // GSL has gsl::span
-#include "gsl/gsl.h"
+#include <gsl/gsl.h>
 
 namespace std
 {
