@@ -60,7 +60,7 @@ void tiff::FileWriter::openFile(const std::string& fileName)
 void tiff::FileWriter::close()
 {
     mIFDOffset = 0;
-    memset(&mHeader, 0, sizeof(mHeader));
+    mHeader = tiff::Header{};
 
     mOutput.close();
 
