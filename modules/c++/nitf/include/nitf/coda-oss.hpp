@@ -33,22 +33,11 @@
 #include <sys/Filesystem.h> // std::filesystem
 
 //--------------------------------------------------------------
-#include <except/Exception.h>
 #include <import/except.h>
-#include <io/ByteStream.h>
-#include <mem/SharedPtr.h>
-#include <sys/Path.h>
 #include <import/mt.h>
-#include <gsl/gsl.h>
 #include <import/sys.h>
 #include <import/str.h>
-#include <sys/File.h>
-#include <mem/ScopedArray.h>
-#include <io/FileOutputStream.h>
-#include <types/RowCol.h>
-#include <import/except.h>
 #include <import/types.h>
-#include <import/sys.h>
 #include <import/io.h>
-#include <import/mt.h>
-
+#include <import/mem.h>
+#include <gsl/gsl.h>
