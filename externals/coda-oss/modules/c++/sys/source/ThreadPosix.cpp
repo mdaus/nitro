@@ -24,7 +24,7 @@
 
 #if defined(HAVE_PTHREAD_H)
 
-#if defined(WIN32) || defined(_WIN32)
+#ifdef WIN32
 #   define SIGKILL 0
 #endif
 void sys::ThreadPosix::start()

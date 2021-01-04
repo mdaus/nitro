@@ -127,7 +127,7 @@ public:
      */
     virtual sys::Off_T seek(sys::Off_T off, Whence whence)
     {
-        int from = sys::File::FROM_CURRENT;
+        int from;
         switch (whence)
         {
             case END:
@@ -138,7 +138,6 @@ public:
                 from = sys::File::FROM_START;
                 break;
 
-            case CURRENT:
             default:
                 from = sys::File::FROM_CURRENT;
         }

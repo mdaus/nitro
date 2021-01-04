@@ -22,7 +22,6 @@
 
 #ifndef __NET_CONNECTION_H__
 #define __NET_CONNECTION_H__
-#pragma once
 
 #include "net/Socket.h"
 #include "io/BidirectionalStream.h"
@@ -60,12 +59,8 @@ public:
     {}
 
     //! we own the ptr after this transaction
-    NetConnection(std::unique_ptr<net::Socket>&& socket) : mSocket(socket.release())
-    {}
-    #if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
     NetConnection(std::auto_ptr<net::Socket> socket) : mSocket(socket)
     {}
-    #endif
 
     /*!
      *  Copy constructor

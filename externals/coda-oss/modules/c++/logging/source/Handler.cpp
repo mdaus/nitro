@@ -64,7 +64,7 @@ bool Handler::handle(const LogRecord* record)
             emitRecord(record);
             rv = true;
         }
-        catch (const except::Throwable&)
+        catch (except::Throwable & t)
         {
             //TODO do something here?
             //std::cout << t.getTrace() << std::endl;

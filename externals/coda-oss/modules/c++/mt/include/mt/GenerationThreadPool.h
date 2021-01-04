@@ -36,7 +36,7 @@ namespace mt
     class TiedRequestHandler : public sys::Runnable
     {
 	RunnableRequestQueue* mRequestQueue;
-	sys::Semaphore* mSem = nullptr;
+	sys::Semaphore* mSem;
 	CPUAffinityThreadInitializer* mAffinityInit;
 
     public:

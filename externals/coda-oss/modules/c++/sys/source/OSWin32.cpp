@@ -20,26 +20,22 @@
  *
  */
 
-#include <assert.h>
+
+#if defined(WIN32)
+
+#include <sstream>
+#include "sys/OSWin32.h"
+#include "sys/File.h"
 
 #include <iostream>
 #include <vector>
-#include <sstream>
-
-#if defined(WIN32) || defined(_WIN32)
-
-#include "sys/OSWin32.h"
-#include "sys/File.h"
 
 std::string sys::OSWin32::getPlatformName() const
 {
     OSVERSIONINFO info;
     info.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
-    #pragma warning(push)
-    #pragma warning(disable : 4996)  // '...' : was declared deprecated
     if (!GetVersionEx(&info))
         throw sys::SystemException("While performing GetVersionEx()");
-    #pragma warning(pop)
 
     std::string platform;
     if (info.dwPlatformId == VER_PLATFORM_WIN32s)
@@ -104,7 +100,7 @@ sys::Pid_T sys::OSWin32::getProcessId() const
 
 void sys::OSWin32::removeFile(const std::string& pathname) const
 {
-    if (DeleteFile(pathname.c_str()) != TRUE)
+    if (DeleteFile(pathname.c_str()) != true)
     {
         sys::Err err;
         std::ostringstream oss;
@@ -117,7 +113,7 @@ void sys::OSWin32::removeFile(const std::string& pathname) const
 
 void sys::OSWin32::removeDirectory(const std::string& pathname) const
 {
-    if (RemoveDirectory(pathname.c_str()) != TRUE)
+    if (RemoveDirectory(pathname.c_str()) != true)
     {
         sys::Err err;
         std::ostringstream oss;
@@ -218,8 +214,10 @@ std::string sys::OSWin32::operator[](const std::string& s) const
     return getEnv(s);
 }
 
-static std::string getEnv(const std::string& s)
+
+std::string sys::OSWin32::getEnv(const std::string& s) const
 {
+    std::string result;
     const DWORD size = GetEnvironmentVariable(s.c_str(), NULL, 0);
     if (size == 0)
     {
@@ -242,44 +240,28 @@ static std::string getEnv(const std::string& s)
                "Environment variable size changed unexpectedly to zero \
                 following buffer allocation " + s));
     }
-    return buffer.data();
-}
-std::string sys::OSWin32::getEnv(const std::string& s) const
-{
-    std::string retval = ::getEnv(s);
-    assert(retval == getenv(s.c_str()));
-    return retval;
+    result = &buffer[0];
+    return result;
 }
 
 bool sys::OSWin32::isEnvSet(const std::string& s) const
 {
     const DWORD size = GetEnvironmentVariable(s.c_str(), NULL, 0);
-    if (size != 0)
-    {
-        return true;
-    }
-    return getenv(s.c_str()) != nullptr;
+    return (size != 0);
 }
 
-static void setEnv(const std::string& var,
-                          const std::string& val)
-{
-    const BOOL ret = SetEnvironmentVariable(var.c_str(), val.c_str());
-    if (!ret)
-    {
-        throw sys::SystemException(Ctxt(
-            "Unable to set windows environment variable " + var));
-    }
-    const auto s = var + "=" + val;
-    _putenv(s.c_str());
-}
 void sys::OSWin32::setEnv(const std::string& var,
                           const std::string& val,
 			  bool overwrite)
 {
     if (overwrite || !isEnvSet(var))
     {
-        ::setEnv(var, val);
+        const BOOL ret = SetEnvironmentVariable(var.c_str(), val.c_str());
+        if (!ret)
+        {
+            throw sys::SystemException(Ctxt(
+                "Unable to set windows environment variable " + var));
+        }
     }
 }
 
@@ -290,8 +272,6 @@ void sys::OSWin32::unsetEnv(const std::string& var)
     {
         throw sys::SystemException(Ctxt("Unable to unset windows environment variable " + var));
     }
-    const auto s = var + "=";
-    _putenv(s.c_str());
 }
 
 size_t sys::OSWin32::getNumCPUs() const
@@ -363,7 +343,7 @@ void sys::OSWin32::createSymlink(const std::string& origPathname,
 
 void sys::OSWin32::removeSymlink(const std::string& symlinkPathname) const
 {
-    if (RemoveDirectory(symlinkPathname.c_str()) != TRUE)
+    if (RemoveDirectory(symlinkPathname.c_str()) != true)
     {
         sys::Err err;
         std::ostringstream oss;

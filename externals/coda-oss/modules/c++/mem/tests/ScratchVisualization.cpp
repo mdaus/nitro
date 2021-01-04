@@ -421,10 +421,9 @@ int main(int argc, char** argv)
 
     try
     {
-        int result = system("firefox scratch_release.html");
-        if (result > 0) { /*fix compiler warning*/ }
+        system("firefox scratch_release.html");
     }
-    catch(const except::Exception&)
+    catch(except::Exception& ex)
     {
         std::cout << "Failed to open html file in firefox\n";
     }

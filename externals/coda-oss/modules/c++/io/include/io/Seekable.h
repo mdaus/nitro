@@ -22,7 +22,7 @@
 
 #ifndef __IO_SEEKABLE_H__
 #define __IO_SEEKABLE_H__
-#pragma once
+
 
 /*!
  *  Unlike in Java, we have chosen to make our InputStream and OutputStream
@@ -43,14 +43,11 @@ namespace io
 class Seekable
 {
 public:
-    Seekable() = default;
-    virtual ~Seekable() {}
-    
-    enum class Whence { CURRENT = 0, START, END };
-    static constexpr Whence CURRENT = Whence::CURRENT;
-    static constexpr Whence START = Whence::START;
-    static constexpr Whence END = Whence::END;
-
+    Seekable()
+    {}
+    virtual ~Seekable()
+    {}
+    enum Whence { CURRENT = 0, START, END };
     /*!
      *  Seek to an offset
      *  \param offset The place to seek

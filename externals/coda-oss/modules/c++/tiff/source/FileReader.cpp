@@ -65,7 +65,7 @@ void tiff::FileReader::openFile(const std::string& fileName)
 
 void tiff::FileReader::close()
 {
-    mHeader = tiff::Header{};
+    memset(&mHeader, 0, sizeof(mHeader));
 
     mInput.close();
 

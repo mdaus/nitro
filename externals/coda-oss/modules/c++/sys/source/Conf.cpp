@@ -20,47 +20,13 @@
  *
  */
 
-#include <stdexcept>
-#include <type_traits>
-
 
 #include "sys/Conf.h"
-#include "sys/Bit.h"
 
-using endian = sys::Endian;
-
-// https://en.cppreference.com/w/cpp/types/endian
-inline bool is_big_endian()
-{
-    if (endian::native == endian::big)
-    {
-        return true;
-    }
-    if (endian::native == endian::little)
-    {
-        return false;
-    }
-    throw std::logic_error("Mixed-endian not supported.");
-}
-constexpr inline bool is_big_or_little_endian()
-{
-    return (endian::native == endian::big) || (endian::native == endian::little) ? true : false;
-}
-
-inline bool isBigEndianSystem()
+bool sys::isBigEndianSystem()
 {
     // This is an endian test
     int intVal = 1;
-    unsigned char* endianTest = (unsigned char*)&intVal;
+    unsigned char* endianTest = (unsigned char*) & intVal;
     return endianTest[0] != 1;
-}
-bool sys::isBigEndianSystem()
-{
-    static_assert(is_big_or_little_endian(), "Mixed-endian not supported.");
-    const auto retval = ::isBigEndianSystem();
-    if (retval != is_big_endian())
-    {
-        throw std::logic_error("endian values don't agree!");
-    }
-    return retval;
 }

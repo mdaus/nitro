@@ -50,14 +50,14 @@ void xml::lite::Document::remove(Element * toDelete)
 xml::lite::Element *
 xml::lite::Document::createElement(const std::string& qname,
                                    const std::string& uri,
-                                   std::string characterData, const string_encoding* pEncoding)
+                                   std::string characterData)
 {
     Element *elem = new Element();
     elem->setQName(qname);
     //std::cout << "qname: " << qname << std::endl;
 
     elem->setUri(uri);
-    elem->setCharacterData(characterData, pEncoding);
+    elem->setCharacterData(characterData);
     return elem;
 }
 

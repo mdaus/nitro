@@ -60,7 +60,7 @@ public:
     {
     }
 
-    virtual mem::auto_ptr<const sys::ScopedCPUMaskUnix> nextCPU() override
+    virtual std::auto_ptr<const sys::ScopedCPUMaskUnix> nextCPU()
     {
         if (mNextCPUIndex >= mCPUs.size())
         {
@@ -69,9 +69,9 @@ public:
             throw except::Exception(Ctxt(msg.str()));
         }
 
-        std::unique_ptr<sys::ScopedCPUMaskUnix> mask(new sys::ScopedCPUMaskUnix());
+        std::auto_ptr<sys::ScopedCPUMaskUnix> mask(new sys::ScopedCPUMaskUnix());
         CPU_SET_S(mCPUs.at(mNextCPUIndex++), mask->getSize(), mask->getMask());
-        return mem::auto_ptr<const sys::ScopedCPUMaskUnix>(mask.release());
+        return std::auto_ptr<const sys::ScopedCPUMaskUnix>(mask);
     }
 
 private:
@@ -87,11 +87,11 @@ public:
     {
     }
 
-    virtual mem::auto_ptr<const sys::ScopedCPUMaskUnix> nextCPU() override
+    virtual std::auto_ptr<const sys::ScopedCPUMaskUnix> nextCPU()
     {
-        std::unique_ptr<sys::ScopedCPUMaskUnix> mask(new sys::ScopedCPUMaskUnix());
+        std::auto_ptr<sys::ScopedCPUMaskUnix> mask(new sys::ScopedCPUMaskUnix());
         CPU_SET_S(mNextCPU++, mask->getSize(), mask->getMask());
-        return mem::auto_ptr<const sys::ScopedCPUMaskUnix>(mask.release());
+        return std::auto_ptr<const sys::ScopedCPUMaskUnix>(mask);
     }
 
 private:

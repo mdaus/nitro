@@ -22,14 +22,12 @@
 
 #ifndef __NET_CONNECTION_SERVER_H__
 #define __NET_CONNECTION_SERVER_H__
-#pragma once
 
 #include "net/NetConnection.h"
 #include "net/Sockets.h"
 #include "net/ServerSocketFactory.h"
 #include "sys/SystemException.h"
 #include "net/SingleThreadedAllocStrategy.h"
-#include "mem/SharedPtr.h"
 
 
 /*! \file
@@ -105,9 +103,9 @@ protected:
     //! The amount of backlog
     int mBacklog;
     //! The socket we are listening on
-    mem::auto_ptr<net::Socket> mSocket;
+    std::auto_ptr<net::Socket> mSocket;
 
-    mem::auto_ptr<net::AllocStrategy> mAllocStrategy;
+    std::auto_ptr<net::AllocStrategy> mAllocStrategy;
 };
 }
 

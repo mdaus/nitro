@@ -82,11 +82,11 @@ int main(int argc, char* argv[])
 
         f.destroy(myConn);
     }
-    catch (const except::Throwable& t)
+    catch (except::Throwable& t)
     {
         std::cout << "EXCEPTION: " << t.getTrace() << std::endl;
     }
-    catch (const std::exception& e)
+    catch (std::exception e)
     {
         std::cout << "EXECEPTION: " << e.what() << std::endl;
     }

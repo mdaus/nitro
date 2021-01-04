@@ -58,7 +58,7 @@
 #include <str/Convert.h>
 
 const size_t NUM_TRIALS = 4;
-const size_t MAX_SIZE = SIZE_MAX;
+const size_t MAX_SIZE = 10E9;
 
 //Limits num so that it is less than 100
 template<typename T>
@@ -171,7 +171,7 @@ void getMultWDouble(sys::RealTimeStopWatch& wtch,
 //Prints out the results in a table format
 void print(std::ostream& out, size_t sze, double durOne, double durTwo)
 {
-    out << std::setw(15) << sze
+    std::cout << std::setw(15) << sze
         << std::setw(15) << durOne/1000
         << std::setw(25) << durTwo/1000 << std::endl;
 }

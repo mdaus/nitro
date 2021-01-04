@@ -30,7 +30,7 @@
 
 #include "logging/Setup.h"
 
-mem::auto_ptr<logging::Logger>
+std::auto_ptr<logging::Logger>
 logging::setupLogger(const std::string& program, 
                      const std::string& logLevel, 
                      const std::string& logFile,
@@ -38,7 +38,7 @@ logging::setupLogger(const std::string& program,
                      size_t logCount,
                      size_t logBytes)
 {
-    mem::auto_ptr<logging::Logger> log(new logging::Logger(program));
+    std::auto_ptr<logging::Logger> log(new logging::Logger(program));
 
     // setup logging level
     std::string lev = logLevel;
@@ -48,7 +48,7 @@ logging::setupLogger(const std::string& program,
                                               logging::LogLevel(lev);
 
     // setup logging formatter
-    mem::auto_ptr<logging::Formatter> formatter;
+    std::auto_ptr <logging::Formatter> formatter;
     std::string file = logFile;
     str::lower(file);
     if (str::endsWith(file, ".xml"))
@@ -62,7 +62,7 @@ logging::setupLogger(const std::string& program,
     }
     
     // setup logging handler
-    mem::auto_ptr<logging::Handler> logHandler;
+    std::auto_ptr < logging::Handler > logHandler;
     if (file.empty() || file == "console")
         logHandler.reset(new logging::StreamHandler());
     else

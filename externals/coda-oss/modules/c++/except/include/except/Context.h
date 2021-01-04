@@ -72,7 +72,7 @@ public:
      * Get the message describing the exception that occurred
      * \return The message
      */
-    const std::string& getMessage() const noexcept
+    const std::string& getMessage() const
     {
         return mMessage;
     }
@@ -81,7 +81,7 @@ public:
     * Get the system time
     * \return The system time
     */
-    const std::string& getTime() const noexcept
+    const std::string& getTime() const
     {
         return mTime;
     }
@@ -90,7 +90,7 @@ public:
      * Get the function where the exception occurred (may not be available
      * \return The function signature
      */
-    const std::string& getFunction() const noexcept
+    const std::string& getFunction() const
     {
         return mFunc;
     }
@@ -99,7 +99,7 @@ public:
      * Get the file where the exception occurred
      * \return The file
      */
-    const std::string& getFile() const noexcept
+    const std::string& getFile() const
     {
         return mFile;
     }
@@ -108,7 +108,7 @@ public:
      * Get the line number
      * \return The line number
      */
-    int getLine() const noexcept
+    int getLine() const
     {
         return mLine;
     }
