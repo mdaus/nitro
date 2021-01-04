@@ -23,11 +23,14 @@
 
 #ifndef __MT_CPU_AFFINITY_INITIALIZER_WIN32_H__
 #define __MT_CPU_AFFINITY_INITIALIZER_WIN32_H__
+#pragma once
 
-#if defined(WIN32)
+#if defined(WIN32) || defined(_WIN32)
 
 #include <mt/AbstractCPUAffinityInitializer.h>
 #include <mt/CPUAffinityThreadInitializerWin32.h>
+
+#include "mem/SharedPtr.h"
 
 namespace mt
 {
@@ -43,14 +46,14 @@ public:
      * \todo Not yet implemented
      * \returns NULL
      */
-    std::auto_ptr<CPUAffinityThreadInitializerWin32> newThreadInitializer()
+    mem::auto_ptr<CPUAffinityThreadInitializerWin32> newThreadInitializer()
     {
-        return std::auto_ptr<CPUAffinityThreadInitializerWin32>(
+        return mem::auto_ptr<CPUAffinityThreadInitializerWin32>(
                 newThreadInitializerImpl());
     }
 
 private:
-    virtual CPUAffinityThreadInitializerWin32* newThreadInitializerImpl()
+    virtual CPUAffinityThreadInitializerWin32* newThreadInitializerImpl() override
     {
         return NULL;
     }

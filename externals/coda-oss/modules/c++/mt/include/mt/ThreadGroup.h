@@ -22,6 +22,7 @@
 
 #ifndef __MT_THREAD_GROUP_H__
 #define __MT_THREAD_GROUP_H__
+#pragma once
 
 #include <vector>
 #include <memory>
@@ -78,7 +79,10 @@ public:
     *  Creates and starts a thread from a sys::Runnable.
     *  \param runnable auto_ptr to sys::Runnable
     */
+    void createThread(std::unique_ptr<sys::Runnable>&& runnable);
+    #if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
     void createThread(std::auto_ptr<sys::Runnable> runnable);
+    #endif
 
     /*!
      * Waits for all threads to complete.
@@ -107,7 +111,7 @@ public:
     static void setDefaultPinToCPU(bool newDefault);
 
 private:
-    std::auto_ptr<CPUAffinityInitializer> mAffinityInit;
+    std::unique_ptr<CPUAffinityInitializer> mAffinityInit;
     size_t mLastJoined;
     std::vector<mem::SharedPtr<sys::Thread> > mThreads;
     std::vector<except::Exception> mExceptions;
@@ -130,7 +134,7 @@ private:
      *          the internal CPUAffinityInitializer. If no initializer
      *          was created, will return NULL.
      */
-    std::auto_ptr<CPUAffinityThreadInitializer> getNextInitializer();
+    std::unique_ptr<CPUAffinityThreadInitializer> getNextInitializer();
 
     /*!
      * \class ThreadGroupRunnable
@@ -154,10 +158,17 @@ private:
          *                   will be enforced.
          */
         ThreadGroupRunnable(
+                std::unique_ptr<sys::Runnable>&& runnable,
+                mt::ThreadGroup& parentThreadGroup,
+                std::unique_ptr<CPUAffinityThreadInitializer>&& threadInit =
+                        std::unique_ptr<CPUAffinityThreadInitializer>(nullptr));
+        #if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
+        ThreadGroupRunnable(
                 std::auto_ptr<sys::Runnable> runnable,
                 mt::ThreadGroup& parentThreadGroup,
                 std::auto_ptr<CPUAffinityThreadInitializer> threadInit =
                         std::auto_ptr<CPUAffinityThreadInitializer>(NULL));
+        #endif
 
         /*!
          *  Call run() on the Runnable passed to createThread
@@ -165,9 +176,9 @@ private:
         virtual void run();
 
     private:
-        std::auto_ptr<sys::Runnable> mRunnable;
+        std::unique_ptr<sys::Runnable> mRunnable;
         mt::ThreadGroup& mParentThreadGroup;
-        std::auto_ptr<CPUAffinityThreadInitializer> mCPUInit;
+        std::unique_ptr<CPUAffinityThreadInitializer> mCPUInit;
     };
 };
 

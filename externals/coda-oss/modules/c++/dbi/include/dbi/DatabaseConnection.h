@@ -23,6 +23,7 @@
 
 #ifndef __DBI_DATABASECONNECTION_H__
 #define __DBI_DATABASECONNECTION_H__
+#pragma once
 
 #include <vector>
 #include <map>
@@ -31,6 +32,7 @@
 #include "except/Exception.h"
 #include "str/Convert.h"
 #include "sys/Conf.h"
+#include "mem/SharedPtr.h"
 
 /*!
  * \file DatabaseConnection.h
@@ -301,7 +303,7 @@ protected:
     Row mCurrentRow;
 };
 
-typedef std::auto_ptr< ResultSet > pResultSet;
+typedef mem::auto_ptr< ResultSet > pResultSet;
 
 /*!
  * \class DatabaseConnection
