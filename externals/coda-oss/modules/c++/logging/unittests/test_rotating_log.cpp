@@ -44,7 +44,7 @@ void cleanupFiles(std::string base)
 TEST_CASE(testRotate)
 {
     std::string outFile = "test_rotate.txt";
-    size_t maxFiles = 1;
+    int maxFiles = 1;
 
     cleanupFiles( outFile);
 
