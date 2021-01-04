@@ -22,12 +22,10 @@
 
 #ifndef __IO_PROXY_STREAMS_H__
 #define __IO_PROXY_STREAMS_H__
-#pragma once
 
 #include "io/InputStream.h"
 #include "io/OutputStream.h"
 #include "io/NullStreams.h"
-#include "mem/SharedPtr.h"
 
 namespace io
 {
@@ -65,7 +63,7 @@ protected:
         return mProxy->read(buffer, len);
     }
 
-    mem::auto_ptr<InputStream> mProxy;
+    std::auto_ptr<InputStream> mProxy;
     bool mOwnPtr;
 };
 
@@ -112,7 +110,7 @@ public:
     }
 
 protected:
-    mem::auto_ptr<OutputStream> mProxy;
+    std::auto_ptr<OutputStream> mProxy;
     bool mOwnPtr;
 };
 

@@ -23,11 +23,8 @@
 
 #ifndef __MT_ABSTRACT_CPU_AFFINITY_INITIALIZER_H__
 #define __MT_ABSTRACT_CPU_AFFINITY_INITIALIZER_H__
-#pragma once
 
 #include <mt/AbstractCPUAffinityThreadInitializer.h>
-#include "mem/SharedPtr.h"
-
 
 namespace mt
 {
@@ -46,9 +43,9 @@ public:
      * \returns a new thread initializer. In general, this should return
      *          a different affinity initializer each time it is called.
      */
-    mem::auto_ptr<AbstractCPUAffinityThreadInitializer> newThreadInitializer()
+    std::auto_ptr<AbstractCPUAffinityThreadInitializer> newThreadInitializer()
     {
-        return mem::auto_ptr<AbstractCPUAffinityThreadInitializer>(
+        return std::auto_ptr<AbstractCPUAffinityThreadInitializer>(
                 newThreadInitializerImpl());
     }
 

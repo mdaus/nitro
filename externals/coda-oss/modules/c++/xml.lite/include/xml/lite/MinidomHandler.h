@@ -108,7 +108,14 @@ public:
      * \param length The length of the char data
      */
     virtual void characters(const char* value, int length) override;
-    bool characters(const wchar_t* const value, const size_t length) override;
+    bool characters(
+        #ifdef _WIN32
+        const wchar_t* const value,
+        #else
+        // not really system dependent, but it's how the existing code works 
+        const uint16_t* const value,
+        #endif
+        const size_t length) override;
 
     // Which characters() routine should be called?
     bool use_wchar_t() const override;

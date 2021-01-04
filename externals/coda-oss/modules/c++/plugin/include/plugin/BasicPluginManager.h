@@ -345,7 +345,7 @@ public:
             if (loadDSO)
             {
                 // Load the DSO
-                std::unique_ptr<sys::DLL> autoDSO(new sys::DLL(file));
+                std::auto_ptr<sys::DLL> autoDSO(new sys::DLL(file));
                 mDSOs.push_back(autoDSO.get());
                 dso = autoDSO.release();
             }
