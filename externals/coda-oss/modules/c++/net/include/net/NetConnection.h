@@ -23,8 +23,6 @@
 #ifndef __NET_CONNECTION_H__
 #define __NET_CONNECTION_H__
 
-#include <memory>
-
 #include "net/Socket.h"
 #include "io/BidirectionalStream.h"
 #include "sys/SystemException.h"
@@ -61,7 +59,7 @@ public:
     {}
 
     //! we own the ptr after this transaction
-    NetConnection(std::unique_ptr<net::Socket>&& socket) : mSocket(std::move(socket))
+    NetConnection(std::auto_ptr<net::Socket> socket) : mSocket(socket)
     {}
 
     /*!
@@ -124,7 +122,7 @@ public:
      *  Get the socket by constant reference
      *  \return The socket
      */
-    std::shared_ptr<net::Socket> getSocket() const
+    mem::SharedPtr<net::Socket> getSocket() const
     {
         return mSocket;
     }
@@ -153,7 +151,7 @@ protected:
     virtual sys::SSize_T readImpl(void* buffer, size_t len);
 
     //! The socket
-    std::shared_ptr<net::Socket> mSocket;
+    mem::SharedPtr<net::Socket> mSocket;
 };
 
 }
