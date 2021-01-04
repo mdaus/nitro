@@ -65,7 +65,7 @@ public:
     Record(nitf_Record * x);
 
     //! Default Constructor
-    Record(nitf::Version version = NITF_VER_21);
+    Record(nitf::Version version = nitf::Version::NITF_VER_21);
 
     //! Clone
     nitf::Record clone() const;

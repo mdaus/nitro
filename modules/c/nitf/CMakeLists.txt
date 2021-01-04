@@ -36,6 +36,7 @@ coda_add_module(
         source/RESegment.c
         source/RESubheader.c
         source/NitfReader.c
+        source/NitfSystem.c
         source/Record.c
         source/RowSource.c
         source/SegmentReader.c
@@ -67,6 +68,7 @@ coda_add_tests(
         test_create.c
         test_create_nitf.c
         test_field.c
+        test_geo_utils.c
         test_image_io.c
         test_mem_source.c
         test_tre_mods.c

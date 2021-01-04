@@ -369,14 +369,13 @@ NRTAPI(NRT_BOOL) nrt_List_move(nrt_List * chain, uint32_t oldIndex,
     nrt_ListIterator iter;
     NRT_DATA *data = NULL;
 
-    /* don't need to check < 0, but in case params change, we'll do it anyway */
-    if (oldIndex < 0 || oldIndex == newIndex || oldIndex >= listSize)
+    if (oldIndex == newIndex || oldIndex >= listSize)
     {
         nrt_Error_init(error, "Invalid list index specified", NRT_CTXT,
                        NRT_ERR_INVALID_PARAMETER);
         return NRT_FAILURE;
     }
-    newIndex = newIndex > listSize || newIndex < 0 ? listSize : newIndex;
+    newIndex = newIndex > listSize ? listSize : newIndex;
 
     /* first, remove the data from the list */
     iter = nrt_List_at(chain, oldIndex);
@@ -451,6 +450,22 @@ NRTAPI(NRT_DATA *) nrt_ListIterator_get(nrt_ListIterator * this_iter)
 NRTAPI(uint32_t) nrt_List_size(nrt_List * list)
 {
     uint32_t size = 0;
+
+    if (list)
+    {
+        nrt_ListIterator iter = nrt_List_begin(list);
+        nrt_ListIterator end = nrt_List_end(list);
+        while (nrt_ListIterator_notEqualTo(&iter, &end))
+        {
+            ++size;
+            nrt_ListIterator_increment(&iter);
+        }
+    }
+    return size;
+}
+NRTAPI(uint16_t) nrt_List_size16(nrt_List* list)
+{
+    uint16_t size = 0;
 
     if (list)
     {

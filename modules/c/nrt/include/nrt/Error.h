@@ -22,6 +22,7 @@
 
 #ifndef __NRT_ERROR_H__
 #define __NRT_ERROR_H__
+#pragma once
 
 #include "nrt/Defines.h"
 #include "nrt/Types.h"
@@ -30,7 +31,7 @@
 #define  NRT_CTXT NRT_FILE, NRT_LINE, NRT_FUNC
 
 #if defined(WIN32) || defined(_WIN32)
-#   define NRT_ERRNO GetLastError()
+#   define NRT_ERRNO ((int) GetLastError())
 #else
 #   define  NRT_ERRNO errno
 #endif

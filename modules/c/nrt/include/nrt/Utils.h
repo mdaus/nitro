@@ -22,6 +22,7 @@
 
 #ifndef __NRT_UTILS_H__
 #define __NRT_UTILS_H__
+#pragma once
 
 #include "nrt/System.h"
 #include "nrt/List.h"
@@ -220,6 +221,16 @@ nrt_Utils_swap(uint8_t* value, size_t indexOne,
  *  \param size The size, in bytes, of each buffer element
  */
 NRTAPI(void) nrt_Utils_byteSwap(uint8_t* value, size_t size);
+
+NRTAPI(void) nrt_strcpy_s(char* dest, size_t sz, const char* src);
+NRTAPI(void) nrt_strncpy_s(char* dest, size_t dest_sz, const char* src, size_t src_chars);
+NRTAPI(void) nrt_strcat_s(char* dest, size_t sz, const char* src);
+NRTAPI(char*) nrt_strdup(const char* src);
+
+NRTAPI(size_t) nrt_strlen(const char* src); // aka strlen()
+NRTAPI(uint32_t) nrt_strlen32(const char* src);
+NRTAPI(uint16_t) nrt_strlen16(const char* src);
+NRTAPI(uint8_t) nrt_strlen8(const char* src);
 
 NRT_CXX_ENDGUARD
 #endif
