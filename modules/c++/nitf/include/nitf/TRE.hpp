@@ -43,9 +43,9 @@ namespace nitf
 class TREFieldIterator : public nitf::Object<nitf_TREEnumerator>
 {
     public:
-    TREFieldIterator() : mPair(nullptr)
+    TREFieldIterator() : mPair(NULL)
     {
-        setNative(nullptr);
+        setNative(NULL);
     }
 
     ~TREFieldIterator()
@@ -70,7 +70,7 @@ class TREFieldIterator : public nitf::Object<nitf_TREEnumerator>
     }
 
     //! Set native object
-    TREFieldIterator(nitf_TREEnumerator* x) : mPair(nullptr)
+    TREFieldIterator(nitf_TREEnumerator* x) : mPair(NULL)
     {
         setNative(x);
         getNativeOrThrow();
@@ -79,11 +79,14 @@ class TREFieldIterator : public nitf::Object<nitf_TREEnumerator>
 
     TREFieldIterator(NITF_DATA* x)
     {
-        *this = x;
+        setNative((nitf_TREEnumerator*)x);
+        getNativeOrThrow();
+        increment();
     }
+
     TREFieldIterator& operator=(NITF_DATA* x)
     {
-        setNative(static_cast<nitf_TREEnumerator*>(x));
+        setNative((nitf_TREEnumerator*)x);
         getNativeOrThrow();
         increment();
         return *this;
@@ -117,7 +120,7 @@ class TREFieldIterator : public nitf::Object<nitf_TREEnumerator>
         if (isValid() && enumerator->hasNext(&enumerator))
             mPair = enumerator->next(enumerator, &error);
         else
-            mPair = nullptr;
+            mPair = NULL;
         setNative(enumerator);  // always reset, in case it got destroyed
     }
 
@@ -141,7 +144,7 @@ class TREFieldIterator : public nitf::Object<nitf_TREEnumerator>
         return nitf::Pair(mPair);
     }
 
-    std::string getFieldDescription() const
+    std::string getFieldDescription()
     {
         nitf_TREEnumerator* enumerator = getNative();
         if (enumerator && isValid())
@@ -155,7 +158,7 @@ class TREFieldIterator : public nitf::Object<nitf_TREEnumerator>
     }
 
     private:
-    mutable nitf_Error error;
+    nitf_Error error;
     nitf_Pair* mPair;
 };
 
@@ -193,7 +196,7 @@ DECLARE_CLASS(TRE)
     TRE(const std::string& tag, const std::string& id);
 
     //! Clone
-    nitf::TRE clone() const;
+    nitf::TRE clone();
 
     ~TRE();
 
@@ -201,26 +204,26 @@ DECLARE_CLASS(TRE)
      *  Get a begin TRE field iterator
      *  \return  A field iterator pointing at the first field in the TRE
      */
-    Iterator begin() const;
+    Iterator begin();
 
     /*!
      *  Get an end TRE field iterator
      *  \return  A field iterator pointing PAST the last field in the TRE
      */
-    Iterator end() const;
+    Iterator end();
 
     /*!
      * Get the field specified by the key. Throws an exception if the field
      * does not exist.
      */
-    nitf::Field getField(const std::string& key) const;
+    nitf::Field getField(const std::string& key);
 
     nitf::Field operator[](const std::string& key);
 
     /*!
      * Returns a List of Fields that match the given pattern.
      */
-    nitf::List find(const std::string& pattern) const;
+    nitf::List find(const std::string& pattern);
 
     /*!
      * Recalculate the field counts and positions for the TRE.
@@ -304,10 +307,10 @@ DECLARE_CLASS(TRE)
      *  Does the field exist?
      *  \param key  The field name in which to check
      */
-    bool exists(const std::string& key) const;
+    bool exists(const std::string& key);
 
     //! Get the total length of the TRE data
-    size_t getCurrentSize() const;
+    size_t getCurrentSize();
 
     //! Get the tag
     std::string getTag() const;
@@ -324,9 +327,9 @@ DECLARE_CLASS(TRE)
     std::string getID() const;
 
     private:
-    std::string truncate(const std::string& value, size_t maxDigits) const;
+    std::string truncate(const std::string& value, size_t maxDigits);
 
-    mutable nitf_Error error;
+    nitf_Error error;
 };
 }
 #endif

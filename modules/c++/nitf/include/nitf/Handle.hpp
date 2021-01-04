@@ -95,13 +95,12 @@ template <typename Class_T, typename DestructFunctor_T = MemoryDestructor<Class_
 class BoundHandle : public Handle
 {
 private:
-    Class_T* handle = nullptr;
-    int managed = 1;
+    Class_T* handle;
+    int managed;
 
 public:
     //! Create handle from native object
-    BoundHandle() = default;
-    BoundHandle(Class_T* h) : handle(h) {}
+    BoundHandle(Class_T* h = NULL) : handle(h), managed(1) {}
 
     //! Destructor
     virtual ~BoundHandle()
@@ -123,7 +122,7 @@ public:
     }
 
     //! Get the native object
-    Class_T* get() noexcept { return handle; }
+    Class_T* get() { return handle; }
 
     //! Get the address of then native object
     Class_T** getAddress() { return &handle; }

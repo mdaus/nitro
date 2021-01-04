@@ -41,7 +41,9 @@ namespace nitf
 DECLARE_CLASS(SegmentReader)
 {
 public:
-    SegmentReader() = default;
+    SegmentReader()
+    {
+    }
 
     //! Copy constructor
     SegmentReader(const SegmentReader & x);
@@ -94,7 +96,7 @@ public:
      *
      * \return The offset from the beginning to the current position is set.
      */
-    nitf::Off tell() const;
+    nitf::Off tell();
 
     /*!
      * \brief getSize - Determine size of the data
@@ -107,10 +109,10 @@ public:
      *
      * \return The offset from the beginning to the current position is set.
      */
-    nitf::Off getSize() const;
+    nitf::Off getSize();
 
 private:
-    mutable nitf_Error error;
+    nitf_Error error;
 };
 
 }

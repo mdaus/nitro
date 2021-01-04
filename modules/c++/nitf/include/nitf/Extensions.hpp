@@ -92,7 +92,7 @@ public:
      */
     bool equals(nitf::ExtensionsIterator & it2)
     {
-        const NITF_BOOL x = nitf_ExtensionsIterator_equals(&handle, &it2.getHandle());
+        NITF_BOOL x = nitf_ExtensionsIterator_equals(&handle, &it2.getHandle());
         if (!x) return false;
         return true;
     }
@@ -109,7 +109,7 @@ public:
      */
     bool notEqualTo(nitf::ExtensionsIterator & it2)
     {
-        const NITF_BOOL x = nitf_ExtensionsIterator_notEqualTo(&handle, &it2.getHandle());
+        NITF_BOOL x = nitf_ExtensionsIterator_notEqualTo(&handle, &it2.getHandle());
         if (!x) return false;
         return true;
     }
@@ -148,14 +148,14 @@ public:
     /*!
      *  Get the TRE from the iterator
      */
-    nitf::TRE get() const
+    nitf::TRE get()
     {
         nitf_TRE * x = nitf_ExtensionsIterator_get(&handle);
         return nitf::TRE(x);
     }
 
 private:
-    mutable nitf_ExtensionsIterator handle;
+    nitf_ExtensionsIterator handle;
     nitf_Error error;
 };
 
@@ -204,7 +204,7 @@ typedef nitf::ExtensionsIterator Iterator;
     }
 
     //! Clone
-    nitf::Extensions clone() const
+    nitf::Extensions clone()
     {
         nitf::Extensions dolly(nitf_Extensions_clone(getNativeOrThrow(), &error));
         dolly.setManaged(false);
@@ -224,7 +224,7 @@ typedef nitf::ExtensionsIterator Iterator;
         if (tre.isManaged())
             throw nitf::NITFException(Ctxt("The given TRE is already managed by the library. Try cloning it first."));
 
-        const NITF_BOOL x = nitf_Extensions_appendTRE(getNative(),
+        NITF_BOOL x = nitf_Extensions_appendTRE(getNative(),
             tre.getNativeOrThrow(), &error);
         if (!x)
             throw nitf::NITFException(&error);
@@ -236,7 +236,7 @@ typedef nitf::ExtensionsIterator Iterator;
      *  \param  The name of the TRE to get
      *  \return  A List of TREs matching the specified name
      */
-    nitf::List getTREsByName(const std::string& name) const
+    nitf::List getTREsByName(const std::string& name)
     {
         nitf_List* x = nitf_Extensions_getTREsByName(getNative(), name.c_str());
         if (!x)
@@ -268,7 +268,7 @@ typedef nitf::ExtensionsIterator Iterator;
 
 
     //! Get the hash
-    nitf::HashTable getHash() const
+    nitf::HashTable getHash()
     {
         return nitf::HashTable(getNativeOrThrow()->hash);
     }
@@ -289,9 +289,9 @@ typedef nitf::ExtensionsIterator Iterator;
      *  Checks if the TRE exists
      *  \param  The name of the TRE
      */
-    bool exists(const std::string& key) const
+    bool exists(const std::string& key)
     {
-        const NITF_BOOL x = nitf_Extensions_exists(getNative(), key.c_str());
+        NITF_BOOL x = nitf_Extensions_exists(getNative(), key.c_str());
         return x ? true : false;
     }
 
@@ -299,9 +299,9 @@ typedef nitf::ExtensionsIterator Iterator;
      *  Get the begin iterator
      *  \return The iterator pointing to the first TRE
      */
-    Iterator begin() const
+    Iterator begin()
     {
-        const nitf_ExtensionsIterator x = nitf_Extensions_begin(getNative());
+        nitf_ExtensionsIterator x = nitf_Extensions_begin(getNative());
         return nitf::ExtensionsIterator(x);
     }
 
@@ -309,19 +309,19 @@ typedef nitf::ExtensionsIterator Iterator;
      *  Get the end iterator
      *  \return  The iterator pointing PAST the last TRE (null)
      */
-    Iterator end() const
+    Iterator end()
     {
-        const nitf_ExtensionsIterator x = nitf_Extensions_end(getNative());
+        nitf_ExtensionsIterator x = nitf_Extensions_end(getNative());
         return nitf::ExtensionsIterator(x);
     }
 
-    uint64_t computeLength(nitf::Version version) const
+    uint64_t computeLength(nitf::Version version)
     {
         return nitf_Extensions_computeLength(getNative(), version, &error);
     }
 
 private:
-    mutable nitf_Error error;
+    nitf_Error error;
 };
 }
 #endif

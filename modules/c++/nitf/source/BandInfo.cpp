@@ -26,7 +26,7 @@ using namespace nitf;
 
 BandInfo::BandInfo(const BandInfo & x)
 {
-    *this = x;
+    setNative(x.getNative());
 }
 
 BandInfo & BandInfo::operator=(const BandInfo & x)
@@ -42,44 +42,46 @@ BandInfo::BandInfo(nitf_BandInfo * x)
     getNativeOrThrow();
 }
 
-BandInfo::BandInfo() noexcept : BandInfo(nitf_BandInfo_construct(&error))
+BandInfo::BandInfo()
 {
+    setNative(nitf_BandInfo_construct(&error));
+    getNativeOrThrow();
     setManaged(false);
 }
 
 BandInfo::~BandInfo() {}
 
-nitf::Field BandInfo::getRepresentation() const
+nitf::Field BandInfo::getRepresentation()
 {
     return nitf::Field(getNativeOrThrow()->representation);
 }
 
-nitf::Field BandInfo::getSubcategory() const
+nitf::Field BandInfo::getSubcategory()
 {
     return nitf::Field(getNativeOrThrow()->subcategory);
 }
 
-nitf::Field BandInfo::getImageFilterCondition() const
+nitf::Field BandInfo::getImageFilterCondition()
 {
     return nitf::Field(getNativeOrThrow()->imageFilterCondition);
 }
 
-nitf::Field BandInfo::getImageFilterCode() const
+nitf::Field BandInfo::getImageFilterCode()
 {
     return nitf::Field(getNativeOrThrow()->imageFilterCode);
 }
 
-nitf::Field BandInfo::getNumLUTs() const
+nitf::Field BandInfo::getNumLUTs()
 {
     return nitf::Field(getNativeOrThrow()->numLUTs);
 }
 
-nitf::Field BandInfo::getBandEntriesPerLUT() const
+nitf::Field BandInfo::getBandEntriesPerLUT()
 {
     return nitf::Field(getNativeOrThrow()->bandEntriesPerLUT);
 }
 
-nitf::LookupTable BandInfo::getLookupTable() const
+nitf::LookupTable BandInfo::getLookupTable()
 {
     if (!getNativeOrThrow()->lut)
     {

@@ -49,14 +49,14 @@ protected:
     friend class HashTable;
 
     //! The handle to the underlying memory
-    BoundHandle<T, DestructFunctor_T>* mHandle = nullptr;
+    BoundHandle<T, DestructFunctor_T>* mHandle;
 
     //! Release this object's hold on the handle
     void releaseHandle()
     {
         if (mHandle && mHandle->get())
             HandleRegistry::getInstance().releaseHandle(mHandle->get());
-        mHandle = nullptr;
+        mHandle = NULL;
     }
 
     //! Set native object
@@ -93,6 +93,8 @@ protected:
     }
 
 public:
+    //! Constructor
+    Object() : mHandle(NULL) {}
 
     //! Destructor
     virtual ~Object() { releaseHandle(); }
@@ -100,7 +102,7 @@ public:
     //! Is the object valid (native object not null)?
     virtual bool isValid() const
     {
-        return getNative() != nullptr;
+        return getNative() != NULL;
     }
 
     //! Equality, based on handle
@@ -118,7 +120,7 @@ public:
     //! Get native object
     virtual T * getNative() const
     {
-        return mHandle ? mHandle->get() : nullptr;
+        return mHandle ? mHandle->get() : NULL;
     }
 
     //! Get native object
@@ -201,7 +203,7 @@ public:
     struct _Name##Destructor : public nitf::MemoryDestructor<_Package##_##_Name> \
   { \
       ~_Name##Destructor(){} \
-      virtual void operator()(_Package##_##_Name *nativeObject) override \
+      virtual void operator()(_Package##_##_Name *nativeObject) \
       { _Package##_##_Name##_destruct(&nativeObject); } \
   }; \
   \

@@ -49,7 +49,7 @@ FileSecurity::FileSecurity()
     setManaged(false);
 }
 
-nitf::FileSecurity FileSecurity::clone() const
+nitf::FileSecurity FileSecurity::clone()
 {
     nitf::FileSecurity dolly(nitf_FileSecurity_clone(getNativeOrThrow(), &error));
     dolly.setManaged(false);
@@ -59,77 +59,77 @@ nitf::FileSecurity FileSecurity::clone() const
 FileSecurity::~FileSecurity(){}
 
 
-nitf::Field FileSecurity::getClassificationSystem() const
+nitf::Field FileSecurity::getClassificationSystem()
 {
     return nitf::Field(getNativeOrThrow()->classificationSystem);
 }
 
-nitf::Field FileSecurity::getCodewords() const
+nitf::Field FileSecurity::getCodewords()
 {
     return nitf::Field(getNativeOrThrow()->codewords);
 }
 
-nitf::Field FileSecurity::getControlAndHandling() const
+nitf::Field FileSecurity::getControlAndHandling()
 {
     return nitf::Field(getNativeOrThrow()->controlAndHandling);
 }
 
-nitf::Field FileSecurity::getReleasingInstructions() const
+nitf::Field FileSecurity::getReleasingInstructions()
 {
     return nitf::Field(getNativeOrThrow()->releasingInstructions);
 }
 
-nitf::Field FileSecurity::getDeclassificationType() const
+nitf::Field FileSecurity::getDeclassificationType()
 {
     return nitf::Field(getNativeOrThrow()->declassificationType);
 }
 
-nitf::Field FileSecurity::getDeclassificationDate() const
+nitf::Field FileSecurity::getDeclassificationDate()
 {
     return nitf::Field(getNativeOrThrow()->declassificationDate);
 }
 
-nitf::Field FileSecurity::getDeclassificationExemption() const
+nitf::Field FileSecurity::getDeclassificationExemption()
 {
     return nitf::Field(getNativeOrThrow()->declassificationExemption);
 }
 
-nitf::Field FileSecurity::getDowngrade() const
+nitf::Field FileSecurity::getDowngrade()
 {
     return nitf::Field(getNativeOrThrow()->downgrade);
 }
 
-nitf::Field FileSecurity::getDowngradeDateTime() const
+nitf::Field FileSecurity::getDowngradeDateTime()
 {
     return nitf::Field(getNativeOrThrow()->downgradeDateTime);
 }
 
-nitf::Field FileSecurity::getClassificationText() const
+nitf::Field FileSecurity::getClassificationText()
 {
     return nitf::Field(getNativeOrThrow()->classificationText);
 }
 
-nitf::Field FileSecurity::getClassificationAuthorityType() const
+nitf::Field FileSecurity::getClassificationAuthorityType()
 {
     return nitf::Field(getNativeOrThrow()->classificationAuthorityType);
 }
 
-nitf::Field FileSecurity::getClassificationAuthority() const
+nitf::Field FileSecurity::getClassificationAuthority()
 {
     return nitf::Field(getNativeOrThrow()->classificationAuthority);
 }
 
-nitf::Field FileSecurity::getClassificationReason() const
+nitf::Field FileSecurity::getClassificationReason()
 {
     return nitf::Field(getNativeOrThrow()->classificationReason);
 }
 
-nitf::Field FileSecurity::getSecuritySourceDate() const
+nitf::Field FileSecurity::getSecuritySourceDate()
 {
     return nitf::Field(getNativeOrThrow()->securitySourceDate);
 }
 
-nitf::Field FileSecurity::getSecurityControlNumber() const
+nitf::Field FileSecurity::getSecurityControlNumber()
 {
     return nitf::Field(getNativeOrThrow()->securityControlNumber);
 }

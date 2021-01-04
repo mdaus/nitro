@@ -80,7 +80,9 @@ public:
 
 protected:
     //! Constructor
-    WriteHandler() = default;
+    WriteHandler()
+    {
+    }
 
     nitf_Error error;
 };

@@ -22,7 +22,6 @@
 
 #ifndef __NITF_TEXTSEGMENT_HPP__
 #define __NITF_TEXTSEGMENT_HPP__
-#pragma once
 
 #include "nitf/TextSegment.h"
 #include "nitf/System.hpp"
@@ -63,12 +62,12 @@ public:
     TextSegment & operator=(NITF_DATA * x);
 
     //! Clone
-    nitf::TextSegment clone() const;
+    nitf::TextSegment clone();
 
     ~TextSegment();
 
     //! Get the subheader
-    nitf::TextSubheader getSubheader() const;
+    nitf::TextSubheader getSubheader();
 
     //! Set the subheader
     void setSubheader(nitf::TextSubheader & value);
@@ -86,7 +85,7 @@ public:
     void setEnd(uint64_t value);
 
 private:
-    mutable nitf_Error error;
+    nitf_Error error;
 };
 
 }

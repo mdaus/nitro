@@ -60,57 +60,57 @@ public:
     FileSecurity();
 
     //! Clone
-    nitf::FileSecurity clone() const;
+    nitf::FileSecurity clone();
 
     ~FileSecurity();
 
     //! Get the classificationSystem
-    nitf::Field getClassificationSystem() const;
+    nitf::Field getClassificationSystem();
 
     //! Get the codewords
-    nitf::Field getCodewords() const;
+    nitf::Field getCodewords();
 
     //! Get the controlAndHandling
-    nitf::Field getControlAndHandling() const;
+    nitf::Field getControlAndHandling();
 
     //! Get the releasingInstructions
-    nitf::Field getReleasingInstructions() const;
+    nitf::Field getReleasingInstructions();
 
     //! Get the declassificationType
-    nitf::Field getDeclassificationType() const;
+    nitf::Field getDeclassificationType();
 
     //! Get the declassificationDate
-    nitf::Field getDeclassificationDate() const;
+    nitf::Field getDeclassificationDate();
 
     //! Get the declassificationExemption
-    nitf::Field getDeclassificationExemption() const;
+    nitf::Field getDeclassificationExemption();
 
     //! Get the downgrade
-    nitf::Field getDowngrade() const;
+    nitf::Field getDowngrade();
 
     //! Get the downgradeDateTime
-    nitf::Field getDowngradeDateTime() const;
+    nitf::Field getDowngradeDateTime();
 
     //! Get the classificationText
-    nitf::Field getClassificationText() const;
+    nitf::Field getClassificationText();
 
     //! Get the classificationAuthorityType
-    nitf::Field getClassificationAuthorityType() const;
+    nitf::Field getClassificationAuthorityType();
 
     //! Get the classificationAuthority
-    nitf::Field getClassificationAuthority() const;
+    nitf::Field getClassificationAuthority();
 
     //! Get the classificationReason
-    nitf::Field getClassificationReason() const;
+    nitf::Field getClassificationReason();
 
     //! Get the securitySourceDate
-    nitf::Field getSecuritySourceDate() const;
+    nitf::Field getSecuritySourceDate();
 
     //! Get the securityControlNumber
-    nitf::Field getSecurityControlNumber() const;
+    nitf::Field getSecurityControlNumber();
 
 private:
-    mutable nitf_Error error;
+    nitf_Error error;
 };
 
 }

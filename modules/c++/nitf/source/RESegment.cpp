@@ -51,17 +51,18 @@ RESegment::RESegment()
 
 RESegment::RESegment(NITF_DATA * x)
 {
-    *this = x;
+    setNative((nitf_RESegment*)x);
+    getNativeOrThrow();
 }
 
 RESegment & RESegment::operator=(NITF_DATA * x)
 {
-    setNative(static_cast<nitf_RESegment*>(x));
+    setNative((nitf_RESegment*)x);
     getNativeOrThrow();
     return *this;
 }
 
-nitf::RESegment RESegment::clone() const
+nitf::RESegment RESegment::clone()
 {
     nitf::RESegment dolly(
         nitf_RESegment_clone(getNativeOrThrow(), &error));
@@ -71,7 +72,7 @@ nitf::RESegment RESegment::clone() const
 
 RESegment::~RESegment(){}
 
-nitf::RESubheader RESegment::getSubheader() const
+nitf::RESubheader RESegment::getSubheader()
 {
     return nitf::RESubheader(getNativeOrThrow()->subheader);
 }

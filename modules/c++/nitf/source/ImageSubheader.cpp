@@ -53,7 +53,7 @@ ImageSubheader::ImageSubheader()
 }
 
 
-nitf::ImageSubheader ImageSubheader::clone() const
+nitf::ImageSubheader ImageSubheader::clone()
 {
     nitf::ImageSubheader dolly(nitf_ImageSubheader_clone(getNativeOrThrow(), &error));
     dolly.setManaged(false);
@@ -74,8 +74,8 @@ void ImageSubheader::setPixelInformation(std::string pvtype,
                          std::vector<nitf::BandInfo>& bands)
 {
     const size_t bandCount = bands.size();
-    auto bandInfo = static_cast<nitf_BandInfo**>(NITF_MALLOC(
-            sizeof(nitf_BandInfo*) * bandCount));
+    nitf_BandInfo ** bandInfo = (nitf_BandInfo **)NITF_MALLOC(
+            sizeof(nitf_BandInfo*) * bandCount);
     if (!bandInfo)
     {
         throw nitf::NITFException(Ctxt(FmtX("Out of Memory")));
@@ -88,7 +88,7 @@ void ImageSubheader::setPixelInformation(std::string pvtype,
             throw nitf::NITFException(&error);
     }
 
-    const NITF_BOOL x = nitf_ImageSubheader_setPixelInformation(getNativeOrThrow(),
+    NITF_BOOL x = nitf_ImageSubheader_setPixelInformation(getNativeOrThrow(),
         pvtype.c_str(), nbpp, abpp, justification.c_str(), irep.c_str(),
         icat.c_str(), static_cast<uint32_t>(bandCount), bandInfo, &error);
     if (!x)
@@ -101,7 +101,7 @@ void ImageSubheader::setBlocking(uint32_t numRows,
                      uint32_t numColsPerBlock,
                      const std::string& imode)
 {
-    const NITF_BOOL x = nitf_ImageSubheader_setBlocking(getNativeOrThrow(),
+    NITF_BOOL x = nitf_ImageSubheader_setBlocking(getNativeOrThrow(),
         numRows, numCols, numRowsPerBlock, numColsPerBlock, imode.c_str(),
         &error);
     if (!x)
@@ -125,15 +125,15 @@ void ImageSubheader::computeBlocking(uint32_t numRows,
 
 void ImageSubheader::setDimensions(uint32_t numRows, uint32_t numCols)
 {
-    const NITF_BOOL x = nitf_ImageSubheader_setDimensions(getNativeOrThrow(),
+    NITF_BOOL x = nitf_ImageSubheader_setDimensions(getNativeOrThrow(),
         numRows, numCols, &error);
     if (!x)
         throw nitf::NITFException(&error);
 }
 
-uint32_t ImageSubheader::getBandCount() const
+uint32_t ImageSubheader::getBandCount()
 {
-    const uint32_t x = nitf_ImageSubheader_getBandCount(getNativeOrThrow(), &error);
+    uint32_t x = nitf_ImageSubheader_getBandCount(getNativeOrThrow(), &error);
     if (x == NITF_INVALID_BAND_COUNT)
         throw nitf::NITFException(&error);
     return x;
@@ -149,7 +149,7 @@ void ImageSubheader::createBands(uint32_t numBands)
 void ImageSubheader::setCornersFromLatLons(nitf::CornersType type,
                                            double corners[4][2])
 {
-    const NITF_BOOL x = nitf_ImageSubheader_setCornersFromLatLons(getNativeOrThrow(),
+    NITF_BOOL x = nitf_ImageSubheader_setCornersFromLatLons(getNativeOrThrow(),
                                                             type,
                                                             corners,
                                                             &error);
@@ -158,9 +158,9 @@ void ImageSubheader::setCornersFromLatLons(nitf::CornersType type,
 
 }
 
-void ImageSubheader::getCornersAsLatLons(double corners[4][2]) const
+void ImageSubheader::getCornersAsLatLons(double corners[4][2])
 {
-    const NITF_BOOL x = nitf_ImageSubheader_getCornersAsLatLons(getNativeOrThrow(),
+    NITF_BOOL x = nitf_ImageSubheader_getCornersAsLatLons(getNativeOrThrow(),
                                                           corners,
                                                           &error);
     if (!x)
@@ -168,15 +168,15 @@ void ImageSubheader::getCornersAsLatLons(double corners[4][2]) const
 
 }
 
-nitf::CornersType ImageSubheader::getCornersType() const
+nitf::CornersType ImageSubheader::getCornersType()
 {
     return nitf_ImageSubheader_getCornersType(getNativeOrThrow());
 }
 
 int ImageSubheader::insertImageComment(std::string comment, int index)
 {
-    const int actualIndex = nitf_ImageSubheader_insertImageComment(getNativeOrThrow(),
-                  comment.c_str(), index, &error);
+    int actualIndex = nitf_ImageSubheader_insertImageComment(getNativeOrThrow(),
+                  (char*)comment.c_str(), index, &error);
     if (actualIndex < 0)
         throw nitf::NITFException(&error);
     return actualIndex;
@@ -185,44 +185,44 @@ int ImageSubheader::insertImageComment(std::string comment, int index)
 
 void ImageSubheader::removeImageComment(int index)
 {
-    const NITF_BOOL x = nitf_ImageSubheader_removeImageComment(getNativeOrThrow(),
+    NITF_BOOL x = nitf_ImageSubheader_removeImageComment(getNativeOrThrow(),
                   index, &error);
     if (!x)
         throw nitf::NITFException(&error);
 }
 
 
-nitf::Field ImageSubheader::getFilePartType() const
+nitf::Field ImageSubheader::getFilePartType()
 {
     return nitf::Field(getNativeOrThrow()->filePartType);
 }
 
-nitf::Field ImageSubheader::getImageId() const
+nitf::Field ImageSubheader::getImageId()
 {
     return nitf::Field(getNativeOrThrow()->imageId);
 }
 
-nitf::Field ImageSubheader::getImageDateAndTime() const
+nitf::Field ImageSubheader::getImageDateAndTime()
 {
     return nitf::Field(getNativeOrThrow()->imageDateAndTime);
 }
 
-nitf::Field ImageSubheader::getTargetId() const
+nitf::Field ImageSubheader::getTargetId()
 {
     return nitf::Field(getNativeOrThrow()->targetId);
 }
 
-nitf::Field ImageSubheader::getImageTitle() const
+nitf::Field ImageSubheader::getImageTitle()
 {
     return nitf::Field(getNativeOrThrow()->imageTitle);
 }
 
-nitf::Field ImageSubheader::getImageSecurityClass() const
+nitf::Field ImageSubheader::getImageSecurityClass()
 {
     return nitf::Field(getNativeOrThrow()->imageSecurityClass);
 }
 
-nitf::FileSecurity ImageSubheader::getSecurityGroup() const
+nitf::FileSecurity ImageSubheader::getSecurityGroup()
 {
     return nitf::FileSecurity(getNativeOrThrow()->securityGroup);
 }
@@ -238,173 +238,173 @@ void ImageSubheader::setSecurityGroup(nitf::FileSecurity value)
     value.setManaged(true);
 }
 
-nitf::Field ImageSubheader::getEncrypted() const
+nitf::Field ImageSubheader::getEncrypted()
 {
     return nitf::Field(getNativeOrThrow()->encrypted);
 }
 
-nitf::Field ImageSubheader::getImageSource() const
+nitf::Field ImageSubheader::getImageSource()
 {
     return nitf::Field(getNativeOrThrow()->imageSource);
 }
 
-nitf::Field ImageSubheader::getNumRows() const
+nitf::Field ImageSubheader::getNumRows()
 {
     return nitf::Field(getNativeOrThrow()->numRows);
 }
 
-nitf::Field ImageSubheader::getNumCols() const
+nitf::Field ImageSubheader::getNumCols()
 {
     return nitf::Field(getNativeOrThrow()->numCols);
 }
 
-nitf::Field ImageSubheader::getPixelValueType() const
-{ 
+nitf::Field ImageSubheader::getPixelValueType()
+{
     return nitf::Field(getNativeOrThrow()->pixelValueType);
 }
 
-nitf::Field ImageSubheader::getImageRepresentation() const
+nitf::Field ImageSubheader::getImageRepresentation()
 {
     return nitf::Field(getNativeOrThrow()->imageRepresentation);
 }
 
-nitf::Field ImageSubheader::getImageCategory() const
+nitf::Field ImageSubheader::getImageCategory()
 {
     return nitf::Field(getNativeOrThrow()->imageCategory);
 }
 
-nitf::Field ImageSubheader::getActualBitsPerPixel() const
+nitf::Field ImageSubheader::getActualBitsPerPixel()
 {
     return nitf::Field(getNativeOrThrow()->actualBitsPerPixel);
 }
 
-nitf::Field ImageSubheader::getPixelJustification() const
+nitf::Field ImageSubheader::getPixelJustification()
 {
     return nitf::Field(getNativeOrThrow()->pixelJustification);
 }
 
-nitf::Field ImageSubheader::getImageCoordinateSystem() const
+nitf::Field ImageSubheader::getImageCoordinateSystem()
 {
     return nitf::Field(getNativeOrThrow()->imageCoordinateSystem);
 }
 
-nitf::Field ImageSubheader::getCornerCoordinates() const
+nitf::Field ImageSubheader::getCornerCoordinates()
 {
     return nitf::Field(getNativeOrThrow()->cornerCoordinates);
 }
 
-nitf::Field ImageSubheader::getNumImageComments() const
+nitf::Field ImageSubheader::getNumImageComments()
 {
     return nitf::Field(getNativeOrThrow()->numImageComments);
 }
 
-nitf::List ImageSubheader::getImageComments() const
-{ 
+nitf::List ImageSubheader::getImageComments()
+{
     return nitf::List(getNativeOrThrow()->imageComments);
 }
 
-nitf::Field ImageSubheader::getImageCompression() const
+nitf::Field ImageSubheader::getImageCompression()
 {
     return nitf::Field(getNativeOrThrow()->imageCompression);
 }
 
-nitf::Field ImageSubheader::getCompressionRate() const
+nitf::Field ImageSubheader::getCompressionRate()
 {
     return nitf::Field(getNativeOrThrow()->compressionRate);
 }
 
-nitf::Field ImageSubheader::getNumImageBands() const 
+nitf::Field ImageSubheader::getNumImageBands()
 {
     return nitf::Field(getNativeOrThrow()->numImageBands);
 }
 
-nitf::Field ImageSubheader::getNumMultispectralImageBands() const
+nitf::Field ImageSubheader::getNumMultispectralImageBands()
 {
     return nitf::Field(getNativeOrThrow()->numMultispectralImageBands);
 }
 
-nitf::BandInfo ImageSubheader::getBandInfo(uint32_t band) const
+nitf::BandInfo ImageSubheader::getBandInfo(uint32_t band)
 {
     return nitf::BandInfo(nitf_ImageSubheader_getBandInfo(
         getNativeOrThrow(), band, &error));
 }
 
-nitf::Field ImageSubheader::getImageSyncCode() const
+nitf::Field ImageSubheader::getImageSyncCode()
 {
     return nitf::Field(getNativeOrThrow()->imageSyncCode);
 }
 
-nitf::Field ImageSubheader::getImageMode() const
+nitf::Field ImageSubheader::getImageMode()
 {
     return nitf::Field(getNativeOrThrow()->imageMode);
 }
 
-nitf::Field ImageSubheader::getNumBlocksPerRow() const
-{ 
+nitf::Field ImageSubheader::getNumBlocksPerRow()
+{
     return nitf::Field(getNativeOrThrow()->numBlocksPerRow);
 }
 
-nitf::Field ImageSubheader::getNumBlocksPerCol() const
+nitf::Field ImageSubheader::getNumBlocksPerCol()
 {
     return nitf::Field(getNativeOrThrow()->numBlocksPerCol);
 }
 
-nitf::Field ImageSubheader::getNumPixelsPerHorizBlock() const
+nitf::Field ImageSubheader::getNumPixelsPerHorizBlock()
 {
     return nitf::Field(getNativeOrThrow()->numPixelsPerHorizBlock);
 }
 
-nitf::Field ImageSubheader::getNumPixelsPerVertBlock() const
+nitf::Field ImageSubheader::getNumPixelsPerVertBlock()
 {
     return nitf::Field(getNativeOrThrow()->numPixelsPerVertBlock);
 }
 
-nitf::Field ImageSubheader::getNumBitsPerPixel() const
-{ 
+nitf::Field ImageSubheader::getNumBitsPerPixel()
+{
     return nitf::Field(getNativeOrThrow()->numBitsPerPixel);
 }
 
-nitf::Field ImageSubheader::getImageDisplayLevel() const
+nitf::Field ImageSubheader::getImageDisplayLevel()
 {
     return nitf::Field(getNativeOrThrow()->imageDisplayLevel);
 }
 
-nitf::Field ImageSubheader::getImageAttachmentLevel() const
+nitf::Field ImageSubheader::getImageAttachmentLevel()
 {
     return nitf::Field(getNativeOrThrow()->imageAttachmentLevel);
 }
 
-nitf::Field ImageSubheader::getImageLocation() const
+nitf::Field ImageSubheader::getImageLocation()
 {
     return nitf::Field(getNativeOrThrow()->imageLocation);
 }
 
-nitf::Field ImageSubheader::getImageMagnification() const
+nitf::Field ImageSubheader::getImageMagnification()
 {
     return nitf::Field(getNativeOrThrow()->imageMagnification);
 }
 
-nitf::Field ImageSubheader::getUserDefinedImageDataLength() const
+nitf::Field ImageSubheader::getUserDefinedImageDataLength()
 {
     return nitf::Field(getNativeOrThrow()->userDefinedImageDataLength);
 }
 
-nitf::Field ImageSubheader::getUserDefinedOverflow() const
+nitf::Field ImageSubheader::getUserDefinedOverflow()
 {
     return nitf::Field(getNativeOrThrow()->userDefinedOverflow);
 }
 
-nitf::Field ImageSubheader::getExtendedHeaderLength() const
+nitf::Field ImageSubheader::getExtendedHeaderLength()
 {
     return nitf::Field(getNativeOrThrow()->extendedHeaderLength);
 }
 
-nitf::Field ImageSubheader::getExtendedHeaderOverflow() const
+nitf::Field ImageSubheader::getExtendedHeaderOverflow()
 {
     return nitf::Field(getNativeOrThrow()->extendedHeaderOverflow);
 }
 
-nitf::Extensions ImageSubheader::getUserDefinedSection() const
+nitf::Extensions ImageSubheader::getUserDefinedSection()
 {
     return nitf::Extensions(getNativeOrThrow()->userDefinedSection);
 }
@@ -424,7 +424,7 @@ void ImageSubheader::setUserDefinedSection(nitf::Extensions value)
     value.setManaged(true);
 }
 
-nitf::Extensions ImageSubheader::getExtendedSection() const
+nitf::Extensions ImageSubheader::getExtendedSection()
 {
     return nitf::Extensions(getNativeOrThrow()->extendedSection);
 }
@@ -460,7 +460,7 @@ size_t ImageSubheader::getActualImageDim(size_t dim, size_t numDimsPerBlock)
     }
 }
 
-size_t ImageSubheader::getNumBytesPerPixel_() const
+size_t ImageSubheader::getNumBytesPerPixel() const
 {
     const size_t numBitsPerPixel =
             nitf::Field(getNativeOrThrow()->numBitsPerPixel);
@@ -469,8 +469,8 @@ size_t ImageSubheader::getNumBytesPerPixel_() const
 
 size_t ImageSubheader::getNumBytesOfImageData() const
 {
-    const size_t numBytes = getActualNumRows_() * getActualNumCols_() *
-            getNumImageBands_() * getNumBytesPerPixel_();
+    const size_t numBytes = getActualNumRows() * getActualNumCols() *
+            getNumImageBands() * getNumBytesPerPixel();
     return numBytes;
 }
 }

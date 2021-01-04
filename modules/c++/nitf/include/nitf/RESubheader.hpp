@@ -59,30 +59,30 @@ public:
     RESubheader();
 
     //! Clone
-    nitf::RESubheader clone() const;
+    nitf::RESubheader clone();
 
     ~RESubheader();
 
     //! Get the filePartType
-    nitf::Field getFilePartType() const;
+    nitf::Field getFilePartType();
 
     //! Get the typeID
-    nitf::Field getTypeID() const;
+    nitf::Field getTypeID();
 
     //! Get the version
-    nitf::Field getVersion() const;
+    nitf::Field getVersion();
 
     //! Get the securityClass
-    nitf::Field getSecurityClass() const;
+    nitf::Field getSecurityClass();
 
     //! Get the securityGroup
-    nitf::FileSecurity getSecurityGroup() const;
+    nitf::FileSecurity getSecurityGroup();
 
     //! Set the securityGroup
     void setSecurityGroup(nitf::FileSecurity value);
 
     //! Get the subheaderFieldsLength
-    nitf::Field getSubheaderFieldsLength() const;
+    nitf::Field getSubheaderFieldsLength();
 
     //! Get the subheaderFields
     char * getSubheaderFields() const;
@@ -94,7 +94,7 @@ public:
     void setDataLength(uint32_t value);
 
 private:
-    mutable nitf_Error error;
+    nitf_Error error;
 };
 
 }

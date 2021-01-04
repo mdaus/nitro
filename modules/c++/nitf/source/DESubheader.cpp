@@ -49,7 +49,7 @@ DESubheader::DESubheader()
     setManaged(false);
 }
 
-nitf::DESubheader DESubheader::clone() const
+nitf::DESubheader DESubheader::clone()
 {
     nitf::DESubheader dolly(nitf_DESubheader_clone(getNativeOrThrow(), &error));
     dolly.setManaged(false);
@@ -58,27 +58,27 @@ nitf::DESubheader DESubheader::clone() const
 
 DESubheader::~DESubheader(){}
 
-nitf::Field DESubheader::getFilePartType() const
+nitf::Field DESubheader::getFilePartType()
 {
     return nitf::Field(getNativeOrThrow()->filePartType);
 }
 
-nitf::Field DESubheader::getTypeID() const
+nitf::Field DESubheader::getTypeID()
 {
     return nitf::Field(getNativeOrThrow()->typeID);
 }
 
-nitf::Field DESubheader::getVersion() const
+nitf::Field DESubheader::getVersion()
 {
     return nitf::Field(getNativeOrThrow()->version);
 }
 
-nitf::Field DESubheader::getSecurityClass() const
+nitf::Field DESubheader::getSecurityClass()
 {
     return nitf::Field(getNativeOrThrow()->securityClass);
 }
 
-nitf::FileSecurity DESubheader::getSecurityGroup() const
+nitf::FileSecurity DESubheader::getSecurityGroup()
 {
     return nitf::FileSecurity(getNativeOrThrow()->securityGroup);
 }
@@ -94,22 +94,22 @@ void DESubheader::setSecurityGroup(nitf::FileSecurity value)
     value.setManaged(true);
 }
 
-nitf::Field DESubheader::getOverflowedHeaderType() const
+nitf::Field DESubheader::getOverflowedHeaderType()
 {
     return nitf::Field(getNativeOrThrow()->overflowedHeaderType);
 }
 
-nitf::Field DESubheader::getDataItemOverflowed() const
+nitf::Field DESubheader::getDataItemOverflowed()
 {
     return nitf::Field(getNativeOrThrow()->dataItemOverflowed);
 }
 
-nitf::Field DESubheader::getSubheaderFieldsLength() const
+nitf::Field DESubheader::getSubheaderFieldsLength()
 {
     return nitf::Field(getNativeOrThrow()->subheaderFieldsLength);
 }
 
-nitf::TRE DESubheader::getSubheaderFields() const
+nitf::TRE DESubheader::getSubheaderFields()
 {
     return nitf::TRE(getNativeOrThrow()->subheaderFields);
 }
@@ -139,7 +139,7 @@ void DESubheader::setDataLength(uint32_t value)
     getNativeOrThrow()->dataLength = value;
 }
 
-nitf::Extensions DESubheader::getUserDefinedSection() const
+nitf::Extensions DESubheader::getUserDefinedSection()
 {
     return nitf::Extensions(getNativeOrThrow()->userDefinedSection);
 }

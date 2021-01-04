@@ -29,8 +29,6 @@
 #include <except/Exception.h>
 #include <nitf/ImageSegmentComputer.h>
 
-#include "gsl/gsl.h"
-
 namespace nitf
 {
 const size_t ImageSegmentComputer::ILOC_MAX = 99999;
@@ -38,7 +36,7 @@ const uint64_t ImageSegmentComputer::NUM_BYTES_MAX = 9999999998LL;
 
 std::string ImageSegmentComputer::Segment::getILOC() const
 {
-    constexpr size_t COL = 0;
+    static const size_t COL = 0;
 
     std::ostringstream ostr;
     ostr.fill('0');
@@ -97,7 +95,7 @@ ImageSegmentComputer::ImageSegmentComputer(size_t numRows,
     mNumColsPaddedForBlocking(getActualDim(mNumCols, colsPerBlock)),
     mNumRowsPerBlock(rowsPerBlock),
     mMaxNumBytesPerSegment(maxSize),
-    mNumBytesTotal(gsl::narrow<uint64_t>(mNumBytesPerPixel) *
+    mNumBytesTotal(static_cast<uint64_t>(mNumBytesPerPixel) *
                  getActualDim(mNumRows, rowsPerBlock) *
                  mNumColsPaddedForBlocking)
 {
@@ -143,11 +141,11 @@ void ImageSegmentComputer::computeImageInfo()
 {
     // Consider possible blocking when determining the maximum number of rows
     const uint64_t bytesPerRow =
-        gsl::narrow<uint64_t>(mNumBytesPerPixel) *
+            static_cast<uint64_t>(mNumBytesPerPixel) *
             mNumColsPaddedForBlocking;
 
     const uint64_t maxRowsUint64 =
-        gsl::narrow<uint64_t>(mMaxNumBytesPerSegment) / bytesPerRow;
+            static_cast<uint64_t>(mMaxNumBytesPerSegment) / bytesPerRow;
     if (maxRowsUint64 > std::numeric_limits<size_t>::max())
     {
         // This should not be possible
@@ -156,7 +154,7 @@ void ImageSegmentComputer::computeImageInfo()
              << " rows which is too many";
         throw except::Exception(Ctxt(ostr.str()));
     }
-    size_t maxRows(gsl::narrow<size_t>(maxRowsUint64));
+    size_t maxRows(static_cast<size_t>(maxRowsUint64));
 
     if (maxRows == 0)
     {

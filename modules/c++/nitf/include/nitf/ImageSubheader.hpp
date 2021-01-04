@@ -64,7 +64,7 @@ public:
 
 
     //! Clone
-    nitf::ImageSubheader clone() const;
+    nitf::ImageSubheader clone();
 
     /*!
      *  Destructor
@@ -127,14 +127,14 @@ public:
      *
      *  following in line with 2500C.
      */
-    void getCornersAsLatLons(double corners[4][2]) const;
+    void getCornersAsLatLons(double corners[4][2]);
 
     /*!
      *  Get the type of corners.  This will return NITF_CORNERS_UNKNOWN
      *  in the event that it is not 'U', 'N', 'S', 'D', or 'G'.
      *
      */
-    nitf::CornersType getCornersType() const;
+    nitf::CornersType getCornersType();
 
     /*!
      * Set the image dimensions and blocking info.
@@ -200,7 +200,7 @@ public:
     void setDimensions(uint32_t numRows, uint32_t numCols);
 
     //! Get the number of bands
-    uint32_t getBandCount() const;
+    uint32_t getBandCount();
 
     //! Create new bands
     void createBands(uint32_t numBands);
@@ -212,136 +212,136 @@ public:
     void removeImageComment(int index);
 
     //! Get the filePartType
-    nitf::Field getFilePartType() const;
+    nitf::Field getFilePartType();
 
     //! Get the imageId
-    nitf::Field getImageId() const;
+    nitf::Field getImageId();
 
     //! Get the imageDateAndTime
-    nitf::Field getImageDateAndTime() const;
+    nitf::Field getImageDateAndTime();
 
     //! Get the targetId
-    nitf::Field getTargetId() const;
+    nitf::Field getTargetId();
 
     //! Get the imageTitle
-    nitf::Field getImageTitle() const;
+    nitf::Field getImageTitle();
 
     //! Get the imageSecurityClass
-    nitf::Field getImageSecurityClass() const;
+    nitf::Field getImageSecurityClass();
 
     //! Get the securityGroup
-    nitf::FileSecurity getSecurityGroup() const;
+    nitf::FileSecurity getSecurityGroup();
 
     //! Set the securityGroup
     void setSecurityGroup(nitf::FileSecurity value);
 
     //! Get the encrypted
-    nitf::Field getEncrypted() const;
+    nitf::Field getEncrypted();
 
     //! Get the imageSource
-    nitf::Field getImageSource() const;
+    nitf::Field getImageSource();
 
     //! Get the numRows
-    nitf::Field getNumRows() const;
+    nitf::Field getNumRows();
 
     //! Get the numCols
-    nitf::Field getNumCols() const;
+    nitf::Field getNumCols();
 
     //! Get the pixelValueType
-    nitf::Field getPixelValueType() const;
+    nitf::Field getPixelValueType();
 
     //! Get the imageRepresentation
-    nitf::Field getImageRepresentation() const;
+    nitf::Field getImageRepresentation();
 
     //! Get the imageCategory
-    nitf::Field getImageCategory() const;
+    nitf::Field getImageCategory();
 
     //! Get the actualBitsPerPixel
-    nitf::Field getActualBitsPerPixel() const;
+    nitf::Field getActualBitsPerPixel();
 
     //! Get the pixelJustification
-    nitf::Field getPixelJustification() const;
+    nitf::Field getPixelJustification();
 
     //! Get the imageCoordinateSystem
-    nitf::Field getImageCoordinateSystem() const;
+    nitf::Field getImageCoordinateSystem();
 
     //! Get the cornerCoordinates
-    nitf::Field getCornerCoordinates() const;
+    nitf::Field getCornerCoordinates();
 
     //! Get the numImageComments
-    nitf::Field getNumImageComments() const;
+    nitf::Field getNumImageComments();
 
     //! Get the imageComments
-    nitf::List getImageComments() const;
+    nitf::List getImageComments();
 
     //! Get the imageCompression
-    nitf::Field getImageCompression() const;
+    nitf::Field getImageCompression();
 
     //! Get the compressionRate
-    nitf::Field getCompressionRate() const;
+    nitf::Field getCompressionRate();
 
     //! Get the numImageBands
-    nitf::Field getNumImageBands() const;
+    nitf::Field getNumImageBands();
 
     //! Get the numMultispectralImageBands
-    nitf::Field getNumMultispectralImageBands() const;
+    nitf::Field getNumMultispectralImageBands();
 
     //! Get the bandInfo
-    nitf::BandInfo getBandInfo(uint32_t band) const;
+    nitf::BandInfo getBandInfo(uint32_t band);
 
     //! Get the imageSyncCode
-    nitf::Field getImageSyncCode() const;
+    nitf::Field getImageSyncCode();
 
     //! Get the imageMode
-    nitf::Field getImageMode() const;
+    nitf::Field getImageMode();
 
     //! Get the numBlocksPerRow
-    nitf::Field getNumBlocksPerRow() const;
+    nitf::Field getNumBlocksPerRow();
 
     //! Get the numBlocksPerCol
-    nitf::Field getNumBlocksPerCol() const;
+    nitf::Field getNumBlocksPerCol();
 
     //! Get the numPixelsPerHorizBlock
-    nitf::Field getNumPixelsPerHorizBlock() const;
+    nitf::Field getNumPixelsPerHorizBlock();
 
     //! Get the numPixelsPerVertBlock
-    nitf::Field getNumPixelsPerVertBlock() const;
+    nitf::Field getNumPixelsPerVertBlock();
 
     //! Get the numBitsPerPixel
-    nitf::Field getNumBitsPerPixel() const;
+    nitf::Field getNumBitsPerPixel();
 
     //! Get the imageDisplayLevel
-    nitf::Field getImageDisplayLevel() const;
+    nitf::Field getImageDisplayLevel();
 
     //! Get the imageAttachmentLevel
-    nitf::Field getImageAttachmentLevel() const;
+    nitf::Field getImageAttachmentLevel();
 
     //! Get the imageLocation
-    nitf::Field getImageLocation() const;
+    nitf::Field getImageLocation();
 
     //! Get the imageMagnification
-    nitf::Field getImageMagnification() const;
+    nitf::Field getImageMagnification();
 
     //! Get the userDefinedImageDataLength
-    nitf::Field getUserDefinedImageDataLength() const;
+    nitf::Field getUserDefinedImageDataLength();
 
     //! Get the userDefinedOverflow
-    nitf::Field getUserDefinedOverflow() const;
+    nitf::Field getUserDefinedOverflow();
 
     //! Get the extendedHeaderLength
-    nitf::Field getExtendedHeaderLength() const;
+    nitf::Field getExtendedHeaderLength();
 
     //! Get the extendedHeaderOverflow
-    nitf::Field getExtendedHeaderOverflow() const;
+    nitf::Field getExtendedHeaderOverflow();
 
     //! Get the userDefinedSection
-    nitf::Extensions getUserDefinedSection() const;
+    nitf::Extensions getUserDefinedSection();
 
     //! Set the userDefinedSection
     void setUserDefinedSection(nitf::Extensions value);
 
     //! Get the extendedSection
-    nitf::Extensions getExtendedSection() const;
+    nitf::Extensions getExtendedSection();
 
     //! Set the extendedSection
     void setExtendedSection(nitf::Extensions value);
@@ -365,44 +365,44 @@ public:
     size_t getNumBytesOfImageData() const;
 
 private:
-    size_t getNumRows_() const
+    size_t getNumRows() const
     {
         return nitf::Field(getNativeOrThrow()->numRows);
     }
 
-    size_t getNumCols_() const
+    size_t getNumCols() const
     {
         return nitf::Field(getNativeOrThrow()->numCols);
     }
 
-    size_t getNumPixelsPerHorizBlock_() const
+    size_t getNumPixelsPerHorizBlock() const
     {
         return nitf::Field(getNativeOrThrow()->numPixelsPerHorizBlock);
     }
 
-    size_t getNumPixelsPerVertBlock_() const
+    size_t getNumPixelsPerVertBlock() const
     {
         return nitf::Field(getNativeOrThrow()->numPixelsPerVertBlock);
     }
 
-    size_t getActualNumRows_() const
+    size_t getActualNumRows() const
     {
         return getActualImageDim(getNumRows(), getNumPixelsPerVertBlock());
     }
 
-    size_t getActualNumCols_() const
+    size_t getActualNumCols() const
     {
         return getActualImageDim(getNumCols(), getNumPixelsPerHorizBlock());
     }
 
-    size_t getNumImageBands_() const
+    size_t getNumImageBands() const
     {
         return nitf::Field(getNativeOrThrow()->numImageBands);
     }
 
-    size_t getNumBytesPerPixel_() const;
+    size_t getNumBytesPerPixel() const;
 
-    mutable nitf_Error error;
+    nitf_Error error;
 };
 
 }

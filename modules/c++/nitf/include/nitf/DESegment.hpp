@@ -64,12 +64,12 @@ public:
     DESegment & operator=(NITF_DATA * x);
 
     //! Clone
-    nitf::DESegment clone() const;
+    nitf::DESegment clone();
 
     ~DESegment();
 
     //! Get the subheader
-    nitf::DESubheader getSubheader() const;
+    nitf::DESubheader getSubheader();
 
     //! Set the subheader
     void setSubheader(nitf::DESubheader & value);
@@ -87,7 +87,7 @@ public:
     void setEnd(uint64_t value);
 
 private:
-    mutable nitf_Error error;
+    nitf_Error error;
 };
 
 }

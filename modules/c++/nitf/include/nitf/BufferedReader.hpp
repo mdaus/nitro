@@ -64,44 +64,44 @@ public:
 
     virtual ~BufferedReader();
 
-    size_t getTotalRead() const noexcept
+    size_t getTotalRead() const
     {
         return mTotalRead;
     }
 
-    size_t getNumBlocksRead() const noexcept
+    size_t getNumBlocksRead() const
     {
         return mBlocksRead;
     }
 
-    size_t getNumPartialBlocksRead() const noexcept
+    size_t getNumPartialBlocksRead() const
     {
         return mPartialBlocks;
     }
 
     //! Time spent reading
-    double getTotalWriteTime() const noexcept
+    double getTotalWriteTime()
     {
         return mElapsedTime;
     }
 
 protected:
 
-    void readImpl(void* buf, size_t size) override;
+    virtual void readImpl(void* buf, size_t size);
 
-    void writeImpl(const void* buf, size_t size) override;
+    virtual void writeImpl(const void* buf, size_t size);
 
-    bool canSeekImpl() const override;
+    virtual bool canSeekImpl() const;
 
-    nitf::Off seekImpl(nitf::Off offset, int whence) override;
+    virtual nitf::Off seekImpl(nitf::Off offset, int whence);
 
-    nitf::Off tellImpl() const override;
+    virtual nitf::Off tellImpl() const;
 
-    nitf::Off getSizeImpl() const override;
+    virtual nitf::Off getSizeImpl() const;
 
-    int getModeImpl() const override;
+    virtual int getModeImpl() const;
 
-    void closeImpl() override;
+    virtual void closeImpl();
 
 private:
     void readNextBuffer();

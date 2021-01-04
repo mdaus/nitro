@@ -39,8 +39,10 @@ nitf::ListNode::ListNode(nitf_ListNode * x)
 }
 
 nitf::ListNode::ListNode(nitf::ListNode & prev, nitf::ListNode & next, NITF_DATA* data)
-    : ListNode(nitf_ListNode_construct(prev.getNative(), next.getNative(), data, &error))
 {
+    setNative(nitf_ListNode_construct(prev.getNative(),
+        next.getNative(), data, &error));
+    getNativeOrThrow();
     setManaged(false);
 }
 
@@ -70,30 +72,29 @@ nitf::ListIterator & nitf::ListIterator::operator=(const nitf::ListIterator & x)
 nitf::ListIterator::ListIterator(nitf_ListIterator x) { setHandle(x); }
 
 nitf_ListIterator & nitf::ListIterator::getHandle() { return handle; }
-nitf_ListIterator& nitf::ListIterator::getHandle() const { return handle; }
 
-bool nitf::ListIterator::equals(const nitf::ListIterator& it2) const
+bool nitf::ListIterator::equals(nitf::ListIterator& it2)
 {
-    const NITF_BOOL x = nitf_ListIterator_equals(&handle, &it2.getHandle());
+    NITF_BOOL x = nitf_ListIterator_equals(&handle, &it2.getHandle());
     if (!x) return false;
     return true;
 }
 
-bool nitf::ListIterator::operator==(const nitf::ListIterator& it2) const
+bool nitf::ListIterator::operator==(const nitf::ListIterator& it2)
 {
-    return this->equals(it2);
+    return this->equals((nitf::ListIterator&)it2);
 }
 
-bool nitf::ListIterator::notEqualTo(const nitf::ListIterator& it2) const
+bool nitf::ListIterator::notEqualTo(nitf::ListIterator& it2)
 {
-    const NITF_BOOL x = nitf_ListIterator_notEqualTo(&handle, &it2.getHandle());
+    NITF_BOOL x = nitf_ListIterator_notEqualTo(&handle, &it2.getHandle());
     if (!x) return false;
     return true;
 }
 
-bool nitf::ListIterator::operator!=(const nitf::ListIterator& it2) const
+bool nitf::ListIterator::operator!=(const nitf::ListIterator& it2)
 {
-    return this->notEqualTo(it2);
+    return this->notEqualTo((nitf::ListIterator&)it2);
 }
 
 void nitf::ListIterator::increment()
@@ -123,7 +124,7 @@ nitf::ListIterator nitf::ListIterator::operator+(int x)
 
 nitf::List::List(const nitf::List & x)
 {
-    *this = x;
+    setNative(x.getNative());
 }
 
 nitf::List & nitf::List::operator=(const nitf::List & x)
@@ -139,22 +140,22 @@ nitf::List::List(nitf_List * x)
     getNativeOrThrow();
 }
 
-bool nitf::List::isEmpty() const
+bool nitf::List::isEmpty()
 {
-    const NITF_BOOL x = nitf_List_isEmpty(getNativeOrThrow());
+    NITF_BOOL x = nitf_List_isEmpty(getNativeOrThrow());
     return x ? true : false;
 }
 
 void nitf::List::pushFront(NITF_DATA* data)
 {
-    const NITF_BOOL x = nitf_List_pushFront(getNativeOrThrow(), data, &error);
+    NITF_BOOL x = nitf_List_pushFront(getNativeOrThrow(), data, &error);
     if (!x)
         throw nitf::NITFException(&error);
 }
 
 void nitf::List::pushBack(NITF_DATA* data)
 {
-    const NITF_BOOL x = nitf_List_pushBack(getNativeOrThrow(), data, &error);
+    NITF_BOOL x = nitf_List_pushBack(getNativeOrThrow(), data, &error);
     if (!x)
         throw nitf::NITFException(&error);
 }
@@ -171,12 +172,14 @@ NITF_DATA* nitf::List::popBack()
     return data;
 }
 
-nitf::List::List() : List(nitf_List_construct(&error))
+nitf::List::List()
 {
+    setNative(nitf_List_construct(&error));
+    getNativeOrThrow();
     setManaged(false);
 }
 
-nitf::List nitf::List::clone(NITF_DATA_ITEM_CLONE cloner) const
+nitf::List nitf::List::clone(NITF_DATA_ITEM_CLONE cloner)
 {
     nitf::List dolly(nitf_List_clone(getNativeOrThrow(), cloner, &error));
     dolly.setManaged(false);
@@ -185,21 +188,21 @@ nitf::List nitf::List::clone(NITF_DATA_ITEM_CLONE cloner) const
 
 nitf::List::~List(){}
 
-nitf::ListIterator nitf::List::begin() const
+nitf::ListIterator nitf::List::begin()
 {
-    const nitf_ListIterator x = nitf_List_begin(getNativeOrThrow());
+    nitf_ListIterator x = nitf_List_begin(getNativeOrThrow());
     return nitf::ListIterator(x);
 }
 
-nitf::ListIterator nitf::List::end() const
+nitf::ListIterator nitf::List::end()
 {
-    const nitf_ListIterator x = nitf_List_end(getNativeOrThrow());
+    nitf_ListIterator x = nitf_List_end(getNativeOrThrow());
     return nitf::ListIterator(x);
 }
 
 void nitf::List::insert(nitf::ListIterator & iter, NITF_DATA* data)
 {
-    const NITF_BOOL x = nitf_List_insert(getNativeOrThrow(), iter.getHandle(), data, &error);
+    NITF_BOOL x = nitf_List_insert(getNativeOrThrow(), iter.getHandle(), data, &error);
     if (!x)
         throw nitf::NITFException(&error);
 }
@@ -210,19 +213,19 @@ NITF_DATA* nitf::List::remove(nitf::ListIterator & where)
     return data;
 }
 
-nitf::ListNode nitf::List::getFirst() const
+nitf::ListNode nitf::List::getFirst()
 {
     return nitf::ListNode(getNativeOrThrow()->first);
 }
 
-nitf::ListNode nitf::List::getLast() const
+nitf::ListNode nitf::List::getLast()
 {
     return nitf::ListNode(getNativeOrThrow()->last);
 }
 
-size_t nitf::List::getSize() const
+size_t nitf::List::getSize()
 {
-    return static_cast<size_t>(nitf_List_size(getNativeOrThrow()));
+    return (size_t)nitf_List_size(getNativeOrThrow());
 }
 
 NITF_DATA* nitf::List::operator[] (size_t index)

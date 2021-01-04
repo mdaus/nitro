@@ -28,6 +28,11 @@
 
 namespace nitf
 {
+NITFBuffer::NITFBuffer() :
+    mData(NULL),
+    mNumBytes(0)
+{
+}
 
 NITFBuffer::NITFBuffer(const void* data, size_t numBytes) :
     mData(data),
@@ -79,7 +84,7 @@ size_t NITFBufferList::getNumBytesInBlock(
 
 const void* NITFBufferList::getBlock(size_t blockSize,
                                      size_t blockIdx,
-                                     std::vector<std::byte>& scratch,
+                                     std::vector<sys::byte>& scratch,
                                      size_t& numBytes) const
 {
     const size_t startByte = blockIdx * blockSize;
@@ -96,8 +101,8 @@ const void* NITFBufferList::getBlock(size_t blockSize,
             const size_t numBytesLeftInBuffer =
                     buffer.mNumBytes - numBytesToSkip;
 
-            const std::byte* const startPtr =
-                    static_cast<const std::byte*>(buffer.mData) +
+            const sys::byte* const startPtr =
+                    static_cast<const sys::byte*>(buffer.mData) +
                     numBytesToSkip;
             if (numBytesLeftInBuffer >= numBytes)
             {
@@ -139,6 +144,6 @@ const void* NITFBufferList::getBlock(size_t blockSize,
     }
 
     // Should not be possible to get here
-    return nullptr;
+    return NULL;
 }
 }

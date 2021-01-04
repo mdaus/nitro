@@ -62,15 +62,15 @@ public:
     ComponentInfo(nitf_ComponentInfo * x);
 
     //! Clone
-    nitf::ComponentInfo clone() const;
+    nitf::ComponentInfo clone();
 
     ~ComponentInfo();
 
     //! Get the lengthSubheader
-    nitf::Field getLengthSubheader() const;
+    nitf::Field getLengthSubheader();
 
     //! Get the lengthData
-    nitf::Field getLengthData() const;
+    nitf::Field getLengthData();
 
 protected:
     /*!
@@ -81,7 +81,7 @@ protected:
     ComponentInfo(uint32_t subHeaderSize = 0, uint64_t dataSize = 0);
 
 private:
-    mutable nitf_Error error;
+    nitf_Error error;
 };
 
 }

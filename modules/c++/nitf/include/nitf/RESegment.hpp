@@ -60,12 +60,12 @@ public:
     RESegment & operator=(NITF_DATA * x);
 
     //! Clone
-    nitf::RESegment clone() const;
+    nitf::RESegment clone();
 
     ~RESegment();
 
     //! Get the subheader
-    nitf::RESubheader getSubheader() const;
+    nitf::RESubheader getSubheader();
 
     //! Set the subheader
     void setSubheader(nitf::RESubheader & value);
@@ -83,7 +83,7 @@ public:
     void setEnd(uint64_t value);
 
 private:
-    mutable nitf_Error error;
+    nitf_Error error;
 };
 
 }

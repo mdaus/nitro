@@ -48,21 +48,21 @@ public:
     IOStreamWriter(std::shared_ptr<io::SeekableOutputStream> stream);
 
 private:
-    void readImpl(void* buffer, size_t size) override;
+    void readImpl(void* buffer, size_t size);
 
-    void writeImpl(const void* buffer, size_t size) override;
+    void writeImpl(const void* buffer, size_t size);
 
-    bool canSeekImpl() const override;
+    bool canSeekImpl() const;
 
-    nitf::Off seekImpl(nitf::Off offset, int whence) override;
+    nitf::Off seekImpl(nitf::Off offset, int whence);
 
-    nitf::Off tellImpl() const override;
+    nitf::Off tellImpl() const;
 
-    nitf::Off getSizeImpl() const override;
+    nitf::Off getSizeImpl() const;
 
-    int getModeImpl() const override;
+    int getModeImpl() const;
 
-    void closeImpl() override;
+    void closeImpl();
 
     std::shared_ptr<io::SeekableOutputStream> mStream;
 };

@@ -62,12 +62,12 @@ public:
     GraphicSegment & operator=(NITF_DATA * x);
 
     //! Clone
-    nitf::GraphicSegment clone() const;
+    nitf::GraphicSegment clone();
 
     ~GraphicSegment();
 
     //! Get the subheader
-    nitf::GraphicSubheader getSubheader() const;
+    nitf::GraphicSubheader getSubheader();
 
     //! Set the subheader
     void setSubheader(nitf::GraphicSubheader & value);
@@ -85,7 +85,7 @@ public:
     void setEnd(uint64_t value);
 
 private:
-    mutable nitf_Error error;
+    nitf_Error error;
 };
 
 }

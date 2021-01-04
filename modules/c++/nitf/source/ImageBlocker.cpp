@@ -221,7 +221,7 @@ size_t ImageBlocker::getNumBytesRequired(size_t startRow,
                      lastSegIdx, lastBlockWithinLastSeg);
 
     // Now count up the blocks
-    size_t totalNumRows = 0;
+    size_t totalNumRows;
     if (lastSegIdx == firstSegIdx)
     {
         totalNumRows =

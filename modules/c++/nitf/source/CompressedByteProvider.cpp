@@ -50,7 +50,7 @@ CompressedByteProvider::CompressedByteProvider(Record& record,
                numRowsPerBlock, numColsPerBlock);
 }
 
-void CompressedByteProvider::initialize(const Record& record,
+void CompressedByteProvider::initialize(Record& record,
         const std::vector<std::vector<size_t> >& bytesPerBlock,
         const std::vector<PtrAndLength>& desData,
         size_t numRowsPerBlock,
@@ -156,7 +156,7 @@ size_t CompressedByteProvider::addImageData(
     // We just need to figure out -which- blocks we're writing, and then grab
     // that from the member vector
     const std::vector<size_t>& bytesPerBlock = mBytesInEachBlock[seg];
-    const types::Range blockRange = findBlocksToWrite(seg, startRow, numRowsToWrite);
+    types::Range blockRange = findBlocksToWrite(seg, startRow, numRowsToWrite);
 
     // If the file offset hasn't been set yet,
     // advance it to our starting position
@@ -180,8 +180,9 @@ size_t CompressedByteProvider::addImageData(
     // Copy the image data into the buffer
     // Since we have it in contiguous memory, this can be added as one buffer
     size_t numBufferBytes(0);
-    const size_t end = blockRange.endElement();
-    for (size_t ii = blockRange.mStartElement; ii < end; ++ii)
+    for (size_t ii = blockRange.mStartElement, end = blockRange.endElement();
+         ii < end;
+         ++ii)
     {
         numBufferBytes += bytesPerBlock[ii];
     }

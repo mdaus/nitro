@@ -62,7 +62,7 @@ ImageSource::~ImageSource()
 
 void ImageSource::addBand(nitf::BandSource bandSource)
 {
-    const NITF_BOOL x = nitf_ImageSource_addBand(getNativeOrThrow(),
+    NITF_BOOL x = nitf_ImageSource_addBand(getNativeOrThrow(),
                                            bandSource.getNativeOrThrow(),
                                            &error);
     if (!x)

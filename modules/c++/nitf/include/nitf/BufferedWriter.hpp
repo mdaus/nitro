@@ -66,21 +66,21 @@ public:
 
 protected:
 
-    void readImpl(void* buf, size_t size) override;
+    virtual void readImpl(void* buf, size_t size);
 
-    void writeImpl(const void* buf, size_t size) override;
+    virtual void writeImpl(const void* buf, size_t size);
 
-    bool canSeekImpl() const override;
+    virtual bool canSeekImpl() const;
 
-    nitf::Off seekImpl(nitf::Off offset, int whence) override;
+    virtual nitf::Off seekImpl(nitf::Off offset, int whence);
 
-    nitf::Off tellImpl() const override;
+    virtual nitf::Off tellImpl() const;
 
-    nitf::Off getSizeImpl() const override;
+    virtual nitf::Off getSizeImpl() const;
 
-    int getModeImpl() const override;
+    virtual int getModeImpl() const;
 
-    void closeImpl() override;
+    virtual void closeImpl();
 
 private:
     const size_t mBufferSize;

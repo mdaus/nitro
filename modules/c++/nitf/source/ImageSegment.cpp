@@ -26,7 +26,7 @@ using namespace nitf;
 
 ImageSegment::ImageSegment(const ImageSegment & x)
 {
-    *this = x;
+    setNative(x.getNative());
 }
 
 ImageSegment & ImageSegment::operator=(const ImageSegment & x)
@@ -42,24 +42,28 @@ ImageSegment::ImageSegment(nitf_ImageSegment * x)
     getNativeOrThrow();
 }
 
-ImageSegment::ImageSegment() : ImageSegment(nitf_ImageSegment_construct(&error))
+ImageSegment::ImageSegment()
 {
+    setNative(nitf_ImageSegment_construct(&error));
+    getNativeOrThrow();
     setManaged(false);
 }
 
-ImageSegment::ImageSegment(NITF_DATA * x) : ImageSegment(static_cast<nitf_ImageSegment*>(x))
+ImageSegment::ImageSegment(NITF_DATA * x)
 {
+    setNative((nitf_ImageSegment*)x);
+    getNativeOrThrow();
 }
 
 ImageSegment & ImageSegment::operator=(NITF_DATA * x)
 {
-    setNative(static_cast<nitf_ImageSegment*>(x));
+    setNative((nitf_ImageSegment*)x);
     getNativeOrThrow();
     return *this;
 }
 
 
-nitf::ImageSegment ImageSegment::clone() const
+nitf::ImageSegment ImageSegment::clone()
 {
     nitf::ImageSegment dolly(nitf_ImageSegment_clone(getNativeOrThrow(), &error));
     dolly.setManaged(false);
@@ -69,7 +73,7 @@ nitf::ImageSegment ImageSegment::clone() const
 ImageSegment::~ImageSegment(){}
 
 
-nitf::ImageSubheader ImageSegment::getSubheader() const
+nitf::ImageSubheader ImageSegment::getSubheader()
 {
     return nitf::ImageSubheader(getNativeOrThrow()->subheader);
 }

@@ -26,7 +26,7 @@ using namespace nitf;
 
 DESegment::DESegment(const DESegment & x)
 {
-    *this = x;
+    setNative(x.getNative());
 }
 
 DESegment & DESegment::operator=(const DESegment & x)
@@ -51,18 +51,18 @@ DESegment::DESegment()
 
 DESegment::DESegment(NITF_DATA * x)
 {
-    setNative(static_cast<nitf_DESegment*>(x));
+    setNative((nitf_DESegment*)x);
     getNativeOrThrow();
 }
 
 DESegment & DESegment::operator=(NITF_DATA * x)
 {
-    setNative(static_cast<nitf_DESegment*>(x));
+    setNative((nitf_DESegment*)x);
     getNativeOrThrow();
     return *this;
 }
 
-nitf::DESegment DESegment::clone() const
+nitf::DESegment DESegment::clone()
 {
     nitf::DESegment dolly(nitf_DESegment_clone(getNativeOrThrow(), &error));
     dolly.setManaged(false);
@@ -71,7 +71,7 @@ nitf::DESegment DESegment::clone() const
 
 DESegment::~DESegment(){}
 
-nitf::DESubheader DESegment::getSubheader() const
+nitf::DESubheader DESegment::getSubheader()
 {
     return nitf::DESubheader(getNativeOrThrow()->subheader);
 }

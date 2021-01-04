@@ -63,7 +63,9 @@ public:
         getNativeOrThrow();
     }
 
-    DataSource() = default;
+    DataSource()
+    {
+    }
 
     //! Destructor
     virtual ~DataSource()

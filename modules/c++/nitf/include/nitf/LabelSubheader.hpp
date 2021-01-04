@@ -59,69 +59,69 @@ public:
     LabelSubheader();
 
     //! Clone
-    nitf::LabelSubheader clone() const;
+    nitf::LabelSubheader clone();
 
     ~LabelSubheader();
 
     //! Get the filePartType
-    nitf::Field getFilePartType() const;
+    nitf::Field getFilePartType();
 
     //! Get the labelID
-    nitf::Field getLabelID() const;
+    nitf::Field getLabelID();
 
     //! Get the securityClass
-    nitf::Field getSecurityClass() const;
+    nitf::Field getSecurityClass();
 
     //! Get the securityGroup
-    nitf::FileSecurity getSecurityGroup() const;
+    nitf::FileSecurity getSecurityGroup();
 
     //! Set the securityGroup
     void setSecurityGroup(nitf::FileSecurity value);
 
     //! Get the encrypted
-    nitf::Field getEncrypted() const;
+    nitf::Field getEncrypted();
 
     //! Get the fontStyle
-    nitf::Field getFontStyle() const;
+    nitf::Field getFontStyle();
 
     //! Get the cellWidth
-    nitf::Field getCellWidth() const;
+    nitf::Field getCellWidth();
 
     //! Get the cellHeight
-    nitf::Field getCellHeight() const;
+    nitf::Field getCellHeight();
 
     //! Get the displayLevel
-    nitf::Field getDisplayLevel() const;
+    nitf::Field getDisplayLevel();
 
     //! Get the attachmentLevel
-    nitf::Field getAttachmentLevel() const;
+    nitf::Field getAttachmentLevel();
 
     //! Get the locationRow
-    nitf::Field getLocationRow() const;
+    nitf::Field getLocationRow();
 
     //! Get the locationColumn
-    nitf::Field getLocationColumn() const;
+    nitf::Field getLocationColumn();
 
     //! Get the textColor
-    nitf::Field getTextColor() const;
+    nitf::Field getTextColor();
 
     //! Get the backgroundColor
-    nitf::Field getBackgroundColor() const;
+    nitf::Field getBackgroundColor();
 
     //! Get the extendedHeaderLength
-    nitf::Field getExtendedHeaderLength() const;
+    nitf::Field getExtendedHeaderLength();
 
     //! Get the extendedHeaderOverflow
-    nitf::Field getExtendedHeaderOverflow() const;
+    nitf::Field getExtendedHeaderOverflow();
 
     //! Get the extendedSection
-    nitf::Extensions getExtendedSection() const;
+    nitf::Extensions getExtendedSection();
 
     //! Set the extendedSection
     void setExtendedSection(nitf::Extensions value);
 
 private:
-    mutable nitf_Error error;
+    nitf_Error error;
 };
 
 }

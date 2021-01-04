@@ -61,7 +61,8 @@ nitf_IOInterface* CustomIO::createInterface(CustomIO* me)
         &CustomIO::adapterDestruct
     };
 
-    auto const impl = static_cast<nitf_IOInterface*>(NITF_MALLOC(sizeof(nitf_IOInterface)));
+    nitf_IOInterface* const impl =
+            (nitf_IOInterface *)NITF_MALLOC(sizeof(nitf_IOInterface));
     if (impl == nullptr)
     {
         return nullptr;
@@ -80,7 +81,7 @@ NRT_BOOL CustomIO::adapterRead(NRT_DATA* data,
 {
     try
     {
-        static_cast<CustomIO*>(data)->readImpl(buf, size);
+        reinterpret_cast<CustomIO*>(data)->readImpl(buf, size);
         return NRT_SUCCESS;
     }
     catch (const except::Exception& ex)
@@ -110,7 +111,7 @@ NRT_BOOL CustomIO::adapterWrite(NRT_DATA* data,
 {
     try
     {
-        static_cast<CustomIO*>(data)->writeImpl(buf, size);
+        reinterpret_cast<CustomIO*>(data)->writeImpl(buf, size);
         return NRT_SUCCESS;
     }
     catch (const except::Exception& ex)
@@ -138,7 +139,7 @@ NRT_BOOL CustomIO::adapterCanSeek(NRT_DATA* data,
 {
     try
     {
-        static_cast<CustomIO*>(data)->canSeekImpl();
+        reinterpret_cast<CustomIO*>(data)->canSeekImpl();
         return NRT_SUCCESS;
     }
     catch (const except::Exception& ex)
@@ -168,7 +169,7 @@ nrt_Off CustomIO::adapterSeek(NRT_DATA* data,
 {
     try
     {
-        return static_cast<CustomIO*>(data)->seekImpl(offset, whence);
+        return reinterpret_cast<CustomIO*>(data)->seekImpl(offset, whence);
     }
     catch (const except::Exception& ex)
     {
@@ -195,7 +196,7 @@ nrt_Off CustomIO::adapterTell(NRT_DATA* data,
 {
     try
     {
-        return static_cast<CustomIO*>(data)->tellImpl();
+        return reinterpret_cast<CustomIO*>(data)->tellImpl();
     }
     catch (const except::Exception& ex)
     {
@@ -222,7 +223,7 @@ nrt_Off CustomIO::adapterGetSize(NRT_DATA* data,
 {
     try
     {
-        return static_cast<CustomIO*>(data)->getSizeImpl();
+        return reinterpret_cast<CustomIO*>(data)->getSizeImpl();
     }
     catch (const except::Exception& ex)
     {
@@ -249,7 +250,7 @@ int CustomIO::adapterGetMode(NRT_DATA* data,
 {
     try
     {
-        return static_cast<CustomIO*>(data)->getMode();
+        return reinterpret_cast<CustomIO*>(data)->getMode();
     }
     catch (const except::Exception& ex)
     {
@@ -278,7 +279,7 @@ NRT_BOOL CustomIO::adapterClose(NRT_DATA* data,
     {
         try
         {
-            static_cast<CustomIO*>(data)->closeImpl();
+            reinterpret_cast<CustomIO*>(data)->closeImpl();
             return NRT_SUCCESS;
         }
         catch (const except::Exception& ex)
