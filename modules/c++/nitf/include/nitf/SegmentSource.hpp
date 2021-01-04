@@ -35,7 +35,6 @@
 #include "nitf/System.hpp"
 #include "nitf/NITFException.hpp"
 #include "nitf/Object.hpp"
-#include "nitf/span.h"
 
 /*!
  *  \file SegmentSource.hpp
