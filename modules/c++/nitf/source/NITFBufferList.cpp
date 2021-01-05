@@ -104,7 +104,7 @@ const void* getBlock(const NITFBufferList& rThis, size_t blockSize,
             const size_t numBytesLeftInBuffer =
                     buffer.mNumBytes - numBytesToSkip;
 
-            const auto const startPtr =
+            auto const startPtr =
                     static_cast<const TScratch*>(buffer.mData) +
                     numBytesToSkip;
             if (numBytesLeftInBuffer >= numBytes)
