@@ -20,29 +20,24 @@
  *
  */
 
-#include <import/nitf.hpp>
+#pragma once
 
-int main(int argc, char** argv)
-{
-    try
-    {
-        if (argc != 2)
-        {
-            throw nitf::NITFException(Ctxt(FmtX("Usage %s <file-to-create>\n",
-                                                argv[0])));
-        }
+// Setup coda-oss for our use
+#define CODA_OSS_AUGMENT_std_namespace 1 // add to std:: namespace
+#define CODA_OSS_Throwable_isa_std_exception 1 // except::Throwable derives from std::exception
+#include <sys/Conf.h>
+#include <except/Throwable.h>
 
-        nitf::IOHandle handle(argv[1], NITF_ACCESS_READONLY, NITF_CREATE);
-        if (handle.isValid())
-        {
-            throw nitf::NITFException(Ctxt("Test failed!"));
-        }
-        printf("Create succeeded.  Check file permissions to make sure they're OK\n");
-        handle.close();
-        return 0;
-    }
-    catch (const except::Throwable& t)
-    {
-        std::cout << t.getTrace() << std::endl;
-    }
-}
+#include <sys/Bit.h> // std::endian
+#include <sys/CStdDef.h> // std::byte
+#include <sys/Filesystem.h> // std::filesystem
+
+//--------------------------------------------------------------
+#include <import/except.h>
+#include <import/mt.h>
+#include <import/sys.h>
+#include <import/str.h>
+#include <import/types.h>
+#include <import/io.h>
+#include <import/mem.h>
+
