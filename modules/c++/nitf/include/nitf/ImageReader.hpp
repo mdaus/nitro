@@ -38,6 +38,42 @@
 
 namespace nitf
 {
+    class BufferList final
+    {
+        std::vector<std::byte*> buffer;
+        std::vector<std::unique_ptr<std::byte[]>> buffer_;
+
+    public:
+        BufferList(size_t nBands)
+            : buffer(nBands), buffer_(nBands)
+        {
+        }
+
+        void initialize(size_t subWindowSize)
+        {
+            for (size_t i = 0; i < size(); i++)
+            {
+                buffer_[i].reset(new std::byte[subWindowSize]);
+                buffer[i] = buffer_[i].get();
+            }
+        }
+
+        size_t size() const noexcept
+        {
+            assert(buffer.size() == buffer_.size());
+            return buffer.size();
+        }
+
+        std::byte** data() noexcept
+        {
+            return buffer.data();
+        }
+
+        std::byte*& operator[](size_t i)noexcept
+        {
+            return buffer[i];
+        }
+    };
 
 /*!
  *  \class ImageReader

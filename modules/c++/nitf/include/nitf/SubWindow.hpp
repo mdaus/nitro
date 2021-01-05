@@ -111,6 +111,7 @@ private:
 inline void setBands(SubWindow& subWindow, std::vector<uint32_t>& bands)
 {
     subWindow.setBandList(bands.data());
+    subWindow.setNumBands(static_cast<uint32_t>(bands.size()));
 }
 
 }

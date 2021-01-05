@@ -243,9 +243,17 @@ public:
 
     //! Get the numRows
     nitf::Field getNumRows();
+    size_t numRows()
+    {
+        return getNumRows();
+    }
 
     //! Get the numCols
     nitf::Field getNumCols();
+    size_t numCols()
+    {
+        return getNumCols();
+    }
 
     //! Get the pixelValueType
     nitf::Field getPixelValueType();
@@ -280,12 +288,20 @@ public:
 
     //! Get the imageCompression
     nitf::Field getImageCompression();
+    std::string imageCompression()
+    {
+        return getImageCompression();
+    }
 
     //! Get the compressionRate
     nitf::Field getCompressionRate();
 
     //! Get the numImageBands
     nitf::Field getNumImageBands();
+    size_t numImageBands()
+    {
+        return getNumImageBands();
+    }
 
     //! Get the numMultispectralImageBands
     nitf::Field getNumMultispectralImageBands();
@@ -298,21 +314,45 @@ public:
 
     //! Get the imageMode
     nitf::Field getImageMode();
+    std::string imageMode()
+    {
+        return getImageMode();
+    }
 
     //! Get the numBlocksPerRow
     nitf::Field getNumBlocksPerRow();
+    size_t numBlocksPerRow()
+    {
+        return getNumBlocksPerRow();
+    }
 
     //! Get the numBlocksPerCol
     nitf::Field getNumBlocksPerCol();
+    size_t numBlocksPerCol()
+    {
+        return getNumBlocksPerCol();
+    }
 
     //! Get the numPixelsPerHorizBlock
     nitf::Field getNumPixelsPerHorizBlock();
+    size_t numPixelsPerHorizBlock()
+    {
+        return getNumPixelsPerHorizBlock();
+    }
 
     //! Get the numPixelsPerVertBlock
     nitf::Field getNumPixelsPerVertBlock();
+    size_t numPixelsPerVertBlock()
+    {
+        return getNumPixelsPerVertBlock();
+    }
 
     //! Get the numBitsPerPixel
     nitf::Field getNumBitsPerPixel();
+    size_t numBitsPerPixel()
+    {
+        return getNumBitsPerPixel();
+    }
 
     //! Get the imageDisplayLevel
     nitf::Field getImageDisplayLevel();
