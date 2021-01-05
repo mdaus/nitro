@@ -533,7 +533,7 @@ int main(int argc, char **argv)
         const std::string nitfPathname(argv[1]);
         io::FileInputStream fis(nitfPathname);
         nitf::IOStreamReader io(fis);
-        if (nitf::Reader::getNITFVersion(io) == NITF_VER_UNKNOWN)
+        if (nitf::Reader::getNITFVersion(io) == nitf::Version::NITF_VER_UNKNOWN)
         {
             std::cout << "This file does not appear to be a valid NITF"
                       << std::endl;

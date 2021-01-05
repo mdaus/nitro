@@ -20,12 +20,12 @@
  *
  */
 
+#include <string.h>
+
 #include <iostream>
 #include <string>
 #include <vector>
-#include <string.h>
 
-#include <mem/SharedPtr.h>
 #include <import/nitf.hpp>
 
 class TestDirectBlockSource: public nitf::DirectBlockSource
@@ -69,7 +69,7 @@ int main(int argc, char **argv)
         }
 
         // Check that wew have a valid NITF
-        if (nitf::Reader::getNITFVersion(argv[1]) == nitf::Version::NITF_VER_UNKNOWN)
+        if (nitf::Reader::getNITFVersion(argv[1]) == NITF_VER_UNKNOWN)
         {
             std::cout << "Invalid NITF: " << argv[1] << std::endl;
             exit( EXIT_FAILURE);
@@ -91,7 +91,7 @@ int main(int argc, char **argv)
         std::vector<nitf::ImageReader> imageReaders;
         std::vector<nitf::ImageWriter> imageWriters;
         std::map<std::string, void*> writerOptions;
-        std::vector<mem::SharedPtr<nitf::DirectBlockSource> > bandSources;
+        std::vector<std::shared_ptr<nitf::DirectBlockSource> > bandSources;
 
         //uint32_t numRes = 1;
         //writerOptions[C8_NUM_RESOLUTIONS_KEY] = &numRes;
@@ -105,7 +105,7 @@ int main(int argc, char **argv)
             imageWriters.push_back(writer.newImageWriter(i, writerOptions));
             nitf::ImageSource iSource;
 
-            bandSources.push_back(mem::SharedPtr<nitf::DirectBlockSource>(
+            bandSources.push_back(std::shared_ptr<nitf::DirectBlockSource>(
                                       new TestDirectBlockSource(imageReaders[i], 1)));
             iSource.addBand(*bandSources[bandSources.size()-1]);
 
@@ -117,7 +117,7 @@ int main(int argc, char **argv)
         for (uint32_t i = 0; i < num; i++)
         {
             nitf::SegmentReaderSource readerSource(reader.newGraphicReader(i));
-            mem::SharedPtr< ::nitf::WriteHandler> segmentWriter(
+            std::shared_ptr< ::nitf::WriteHandler> segmentWriter(
                 new nitf::SegmentWriter(readerSource));
             writer.setGraphicWriteHandler(i, segmentWriter);
         }
@@ -126,7 +126,7 @@ int main(int argc, char **argv)
         for (uint32_t i = 0; i < num; i++)
         {
             nitf::SegmentReaderSource readerSource(reader.newTextReader(i));
-            mem::SharedPtr< ::nitf::WriteHandler> segmentWriter(
+            std::shared_ptr< ::nitf::WriteHandler> segmentWriter(
                 new nitf::SegmentWriter(readerSource));
             writer.setTextWriteHandler(i, segmentWriter);
         }
@@ -135,7 +135,7 @@ int main(int argc, char **argv)
         for (uint32_t i = 0; i < num; i++)
         {
             nitf::SegmentReaderSource readerSource(reader.newDEReader(i));
-            mem::SharedPtr< ::nitf::WriteHandler> segmentWriter(
+            std::shared_ptr< ::nitf::WriteHandler> segmentWriter(
                 new nitf::SegmentWriter(readerSource));
             writer.setDEWriteHandler(i, segmentWriter);
         }
@@ -148,11 +148,6 @@ int main(int argc, char **argv)
     catch (const std::exception& ex)
     {
         std::cerr << "Caught std::exception: " << ex.what() << std::endl;
-        return 1;
-    }
-    catch (const except::Throwable & t)
-    {
-        std::cerr << "Caught throwable: " << t.toString() << std::endl;
         return 1;
     }
     catch (...)
