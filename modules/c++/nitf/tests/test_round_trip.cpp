@@ -20,12 +20,12 @@
  *
  */
 
-#include <mem/SharedPtr.h>
-#include <import/nitf.hpp>
 #include <iostream>
 #include <string>
 #include <vector>
 #include <memory>
+
+#include <import/nitf.hpp>
 
 /*
  * This test tests the round-trip process of taking an input NITF
@@ -45,18 +45,16 @@ public:
         mReader(reader),
         mBand(band)
     {
-        mWindow.setStartRow(0);
         mWindow.setNumRows(1);
-        mWindow.setStartCol(0);
         mWindow.setNumCols(numCols);
         mWindow.setBandList(&mBand);
         mWindow.setNumBands(1);
     }
 
-    virtual void nextRow(uint32_t band, void* buffer)
+    virtual void nextRow(uint32_t /*band*/, void* buffer)
     {
         int padded;
-        mReader.read(mWindow, (uint8_t**) &buffer, &padded);
+        mReader.read(mWindow, reinterpret_cast<std::byte**>(&buffer), &padded);
         mWindow.setStartRow(mWindow.getStartRow() + 1);
     }
 
@@ -67,32 +65,18 @@ private:
 };
 
 // RAII for managing a list of RowStreamer's
-class RowStreamers
+struct RowStreamers final
 {
-public:
-    ~RowStreamers()
-    {
-        for (size_t ii = 0; ii < mStreamers.size(); ++ii)
-        {
-            delete mStreamers[ii];
-        }
-    }
-
     nitf::RowSourceCallback* add(uint32_t band,
                                  uint32_t numCols,
                                  nitf::ImageReader reader)
     {
-        std::auto_ptr<RowStreamer>
-            streamer(new RowStreamer(band, numCols, reader));
-        RowStreamer* const streamerPtr(streamer.get());
-
-        mStreamers.push_back(streamerPtr);
-        streamer.release();
-        return streamerPtr;
+        mStreamers.emplace_back(new RowStreamer(band, numCols, reader));
+        return mStreamers.back().get();
     }
 
 private:
-    std::vector<RowStreamer*> mStreamers;
+    std::vector<std::unique_ptr<RowStreamer>> mStreamers;
 };
 }
 
@@ -109,7 +93,7 @@ int main(int argc, char **argv)
         }
 
         // Check that wew have a valid NITF
-        if (nitf::Reader::getNITFVersion(argv[1]) == nitf::Version::NITF_VER_UNKNOWN)
+        if (nitf::Reader::getNITFVersion(argv[1]) == NITF_VER_UNKNOWN)
         {
             std::cout << "Invalid NITF: " << argv[1] << std::endl;
             exit( EXIT_FAILURE);
@@ -142,10 +126,10 @@ int main(int argc, char **argv)
             uint32_t pixelSize = NITF_NBPP_TO_BYTES(
                     imseg.getSubheader().getNumBitsPerPixel());
 
-            for (uint32_t i = 0; i < nBands; i++)
+            for (uint32_t ii = 0; i < nBands; i++)
             {
-                nitf::RowSource rowSource(i, nRows, nCols, pixelSize,
-                                          rowStreamers.add(i, nCols, iReader));
+                nitf::RowSource rowSource(ii, nRows, nCols, pixelSize,
+                                          rowStreamers.add(ii, nCols, iReader));
                 iSource.addBand(rowSource);
             }
             iWriter.attachSource(iSource);
@@ -155,7 +139,7 @@ int main(int argc, char **argv)
         for (uint32_t i = 0; i < num; i++)
         {
             nitf::SegmentReaderSource readerSource(reader.newGraphicReader(i));
-            mem::SharedPtr< ::nitf::WriteHandler> segmentWriter(
+            std::shared_ptr< ::nitf::WriteHandler> segmentWriter(
                 new nitf::SegmentWriter(readerSource));
             writer.setGraphicWriteHandler(i, segmentWriter);
         }
@@ -164,7 +148,7 @@ int main(int argc, char **argv)
         for (uint32_t i = 0; i < num; i++)
         {
             nitf::SegmentReaderSource readerSource(reader.newTextReader(i));
-            mem::SharedPtr< ::nitf::WriteHandler> segmentWriter(
+            std::shared_ptr< ::nitf::WriteHandler> segmentWriter(
                 new nitf::SegmentWriter(readerSource));
             writer.setTextWriteHandler(i, segmentWriter);
         }
@@ -173,7 +157,7 @@ int main(int argc, char **argv)
         for (uint32_t i = 0; i < num; i++)
         {
             nitf::SegmentReaderSource readerSource(reader.newDEReader(i));
-            mem::SharedPtr< ::nitf::WriteHandler> segmentWriter(
+            std::shared_ptr< ::nitf::WriteHandler> segmentWriter(
                 new nitf::SegmentWriter(readerSource));
             writer.setDEWriteHandler(i, segmentWriter);
         }
@@ -183,9 +167,9 @@ int main(int argc, char **argv)
         io.close();
         return 0;
     }
-    catch (except::Throwable & t)
+    catch (const std::exception& ex)
     {
-        std::cerr << "ERROR!: " << t.toString() << std::endl;
+        std::cerr << "ERROR!: " << ex.what() << "\n";
         return 1;
     }
 }

@@ -22,11 +22,14 @@
 
 #ifndef __NITF_SUBWINDOW_HPP__
 #define __NITF_SUBWINDOW_HPP__
+#pragma once
+
+#include <vector>
+#include <string>
 
 #include "nitf/SubWindow.h"
 #include "nitf/DownSampler.hpp"
 #include "nitf/Object.hpp"
-#include <string>
 
 /*!
  *  \file SubWindow.hpp
@@ -104,6 +107,11 @@ private:
     nitf::DownSampler* mDownSampler;
     nitf_Error error;
 };
+
+inline void setBands(SubWindow& subWindow, std::vector<uint32_t>& bands)
+{
+    subWindow.setBandList(bands.data());
+}
 
 }
 #endif

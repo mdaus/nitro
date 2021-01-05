@@ -252,6 +252,10 @@ public:
 
     //! Get the imageRepresentation
     nitf::Field getImageRepresentation();
+    std::string imageRepresentation()
+    {
+        return getImageRepresentation();
+    }
 
     //! Get the imageCategory
     nitf::Field getImageCategory();

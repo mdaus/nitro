@@ -22,11 +22,14 @@
 
 #ifndef __NITF_IMAGE_READER_HPP__
 #define __NITF_IMAGE_READER_HPP__
+#pragma once
 
+#include <string>
+
+#include "nitf/coda-oss.hpp"
 #include "nitf/ImageReader.h"
 #include "nitf/Object.hpp"
 #include "nitf/BlockingInfo.hpp"
-#include <string>
 
 /*!
  *  \file ImageReader.hpp
@@ -64,6 +67,10 @@ public:
      *  \param  padded  Returns TRUE if pad pixels may have been read
      */
     void read(nitf::SubWindow & subWindow, uint8_t ** user, int * padded);
+    void read(nitf::SubWindow & subWindow, std::byte ** user, int* padded)
+    {
+        read(subWindow, reinterpret_cast<uint8_t**>(user), padded);
+    }
 
     /*!
      *  Read a block directly from file
