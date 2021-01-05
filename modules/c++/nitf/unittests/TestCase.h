@@ -33,7 +33,7 @@
 #include "nitf/coda-oss.hpp"
 
 #  define IS_NAN(X) X != X
-#  define TEST_CHECK(X) try{ X(std::string(#X)); std::cerr << #X << ": PASSED" << std::endl; } catch(const std::exception& ex) { die_printf("%s: FAILED: Exception thrown: %s\n", std::string(#X).c_str(), ex.what()); }
+#  define TEST_CHECK(X) try{ X(std::string(#X)); std::cerr << #X << ": PASSED" << std::endl; } catch(const except::Throwable& ex) { die_printf("%s: FAILED: Exception thrown: %s\n", std::string(#X).c_str(), ex.what()); }
 #  define TEST_ASSERT(X) if (!(X)) { die_printf("%s (%s,%s,%d): FAILED: Value should not be NULL\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__); }
 #  define TEST_ASSERT_NULL(X) if ((X) != NULL) { die_printf("%s (%s,%s,%d): FAILED: Value should be NULL\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__); }
 #  define TEST_ASSERT_FALSE(X) if ((X)) { die_printf("%s (%s,%s,%d): FAILED: Value should evaluate to false\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__); }
