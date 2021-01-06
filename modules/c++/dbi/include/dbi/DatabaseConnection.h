@@ -23,7 +23,6 @@
 
 #ifndef __DBI_DATABASECONNECTION_H__
 #define __DBI_DATABASECONNECTION_H__
-#pragma once
 
 #include <vector>
 #include <map>
