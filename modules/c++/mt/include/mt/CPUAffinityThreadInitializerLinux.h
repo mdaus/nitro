@@ -61,7 +61,7 @@ public:
     virtual void initialize();
 
 private:
-    std::auto_ptr<const sys::ScopedCPUMaskUnix> mCPU;
+    mem::auto_ptr<const sys::ScopedCPUMaskUnix> mCPU;
 };
 }
 

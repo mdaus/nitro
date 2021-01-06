@@ -60,7 +60,7 @@ void ThreadGroup::createThread(std::auto_ptr<sys::Runnable> runnable)
 {
     // Note: If getNextInitializer throws, any previously created
     //       threads may never finish if cross-thread communication is used.
-    std::auto_ptr<sys::Runnable> internalRunnable(
+    std::unique_ptr<sys::Runnable> internalRunnable(
             new ThreadGroupRunnable(
                     runnable,
                     *this,
@@ -115,9 +115,9 @@ void ThreadGroup::addException(const except::Exception& ex)
     }
 }
 
-std::auto_ptr<CPUAffinityThreadInitializer> ThreadGroup::getNextInitializer()
+mem::auto_ptr<CPUAffinityThreadInitializer> ThreadGroup::getNextInitializer()
 {
-    std::auto_ptr<CPUAffinityThreadInitializer> threadInit(NULL);
+    mem::auto_ptr<CPUAffinityThreadInitializer> threadInit(NULL);
     if (mAffinityInit.get())
     {
         threadInit = mAffinityInit->newThreadInitializer();

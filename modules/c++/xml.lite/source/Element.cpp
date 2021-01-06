@@ -24,6 +24,7 @@
 
 #include "xml/lite/Element.h"
 #include <import/str.h>
+#include <import/mem.h>
 
 xml::lite::Element::Element(const xml::lite::Element& node)
 {
@@ -346,7 +347,7 @@ void xml::lite::Element::addChild(xml::lite::Element * node)
 void xml::lite::Element::addChild(std::auto_ptr<xml::lite::Element> node)
 {
     // Always take ownership
-    std::auto_ptr<xml::lite::Element> scopedValue(node);
+    mem::auto_ptr<xml::lite::Element> scopedValue(node);
     addChild(scopedValue.get());
     scopedValue.release();
 }

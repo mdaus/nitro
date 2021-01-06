@@ -107,7 +107,7 @@ public:
     static void setDefaultPinToCPU(bool newDefault);
 
 private:
-    std::auto_ptr<CPUAffinityInitializer> mAffinityInit;
+    std::unique_ptr<CPUAffinityInitializer> mAffinityInit;
     size_t mLastJoined;
     std::vector<mem::SharedPtr<sys::Thread> > mThreads;
     std::vector<except::Exception> mExceptions;
@@ -130,7 +130,7 @@ private:
      *          the internal CPUAffinityInitializer. If no initializer
      *          was created, will return NULL.
      */
-    std::auto_ptr<CPUAffinityThreadInitializer> getNextInitializer();
+    mem::auto_ptr<CPUAffinityThreadInitializer> getNextInitializer();
 
     /*!
      * \class ThreadGroupRunnable
@@ -165,9 +165,9 @@ private:
         virtual void run();
 
     private:
-        std::auto_ptr<sys::Runnable> mRunnable;
+        mem::auto_ptr<sys::Runnable> mRunnable;
         mt::ThreadGroup& mParentThreadGroup;
-        std::auto_ptr<CPUAffinityThreadInitializer> mCPUInit;
+        mem::auto_ptr<CPUAffinityThreadInitializer> mCPUInit;
     };
 };
 
