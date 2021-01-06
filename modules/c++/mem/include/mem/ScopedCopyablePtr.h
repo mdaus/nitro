@@ -57,9 +57,9 @@ public:
     {
     }
 
-    explicit ScopedCopyablePtr(std::auto_ptr<T> ptr) :
-        mPtr(ptr)
+    explicit ScopedCopyablePtr(std::auto_ptr<T> ptr)
     {
+        reset(ptr);
     }
 
     ScopedCopyablePtr(const ScopedCopyablePtr& rhs)

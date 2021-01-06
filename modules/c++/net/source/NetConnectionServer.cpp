@@ -23,7 +23,7 @@
 #include "net/NetConnectionServer.h"
 
 net::NetConnectionServer::NetConnectionServer() :
-    mPortNumber(0), mBacklog(0), mSocket(NULL), mAllocStrategy(NULL)
+    mPortNumber(0), mBacklog(0), mSocket(nullptr), mAllocStrategy(nullptr)
 {
 }
 

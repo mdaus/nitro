@@ -27,7 +27,7 @@
 #include <vector>
 #include <memory>
 
-#include <mem/SharedPtr.h>
+#include "mem/SharedPtr.h"
 
 namespace mem
 {
