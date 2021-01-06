@@ -22,7 +22,6 @@
 
 #ifndef __MT_THREAD_GROUP_H__
 #define __MT_THREAD_GROUP_H__
-#pragma once
 
 #include <vector>
 #include <memory>
@@ -79,10 +78,7 @@ public:
     *  Creates and starts a thread from a sys::Runnable.
     *  \param runnable auto_ptr to sys::Runnable
     */
-    void createThread(std::unique_ptr<sys::Runnable>&& runnable);
-    #if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
     void createThread(std::auto_ptr<sys::Runnable> runnable);
-    #endif
 
     /*!
      * Waits for all threads to complete.
@@ -134,7 +130,7 @@ private:
      *          the internal CPUAffinityInitializer. If no initializer
      *          was created, will return NULL.
      */
-    std::unique_ptr<CPUAffinityThreadInitializer> getNextInitializer();
+    mem::auto_ptr<CPUAffinityThreadInitializer> getNextInitializer();
 
     /*!
      * \class ThreadGroupRunnable
@@ -158,17 +154,10 @@ private:
          *                   will be enforced.
          */
         ThreadGroupRunnable(
-                std::unique_ptr<sys::Runnable>&& runnable,
-                mt::ThreadGroup& parentThreadGroup,
-                std::unique_ptr<CPUAffinityThreadInitializer>&& threadInit =
-                        std::unique_ptr<CPUAffinityThreadInitializer>(nullptr));
-        #if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
-        ThreadGroupRunnable(
                 std::auto_ptr<sys::Runnable> runnable,
                 mt::ThreadGroup& parentThreadGroup,
                 std::auto_ptr<CPUAffinityThreadInitializer> threadInit =
                         std::auto_ptr<CPUAffinityThreadInitializer>(NULL));
-        #endif
 
         /*!
          *  Call run() on the Runnable passed to createThread
@@ -176,9 +165,9 @@ private:
         virtual void run();
 
     private:
-        std::unique_ptr<sys::Runnable> mRunnable;
+        mem::auto_ptr<sys::Runnable> mRunnable;
         mt::ThreadGroup& mParentThreadGroup;
-        std::unique_ptr<CPUAffinityThreadInitializer> mCPUInit;
+        mem::auto_ptr<CPUAffinityThreadInitializer> mCPUInit;
     };
 };
 

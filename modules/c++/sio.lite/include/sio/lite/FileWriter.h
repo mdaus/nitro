@@ -27,6 +27,7 @@
 #include <vector>
 #include <import/sys.h>
 #include <import/io.h>
+#include <import/mem.h>
 #include "sio/lite/InvalidHeaderException.h"
 #include "sio/lite/FileHeader.h"
 #include "mem/SharedPtr.h"
