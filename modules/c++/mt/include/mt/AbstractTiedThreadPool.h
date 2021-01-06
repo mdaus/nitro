@@ -27,6 +27,7 @@
 #include "mt/AbstractThreadPool.h"
 #include "mt/TiedWorkerThread.h"
 #include "mt/CPUAffinityInitializer.h"
+#include "mem/SharedPtr.h"
 
 namespace mt
 {
@@ -47,10 +48,10 @@ public:
         mAffinityInit = affinityInit;
     }
 
-    virtual std::auto_ptr<CPUAffinityThreadInitializer>
+    virtual mem::auto_ptr<CPUAffinityThreadInitializer>
     getCPUAffinityThreadInitializer()
     {
-        std::auto_ptr<CPUAffinityThreadInitializer> threadInit(NULL);
+        mem::auto_ptr<CPUAffinityThreadInitializer> threadInit(NULL);
 
         // If we were passed a schematic
         // for initializing thread affinity...

@@ -140,7 +140,7 @@ public:
     }
 
 private:
-    std::auto_ptr<T> mPtr;
+    std::unique_ptr<T> mPtr;
 };
 }
 
