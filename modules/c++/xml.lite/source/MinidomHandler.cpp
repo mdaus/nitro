@@ -107,6 +107,7 @@ bool xml::lite::MinidomHandler::characters(
     characters(utf8Value.c_str(), length, &encoding);
     return true; // all done, characters(char*) already called, above
     #else
+    UNREFERENCED_PARAMETER(value);
     UNREFERENCED_PARAMETER(length_);
     // On Windows, we want std::string encoded as Windows-1252 (ISO8859-1)
     // so that western European characters will be displayed.  We can't convert
