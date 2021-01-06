@@ -261,7 +261,7 @@ protected:
     std::vector< Field > mData;
 };
 
-//typedef std::auto_ptr< Row > pRow;
+//typedef mem::auto_ptr< Row > pRow;
 
 /*!
  *  \class ResultSet

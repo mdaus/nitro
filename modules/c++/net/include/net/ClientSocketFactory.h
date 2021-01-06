@@ -25,6 +25,7 @@
 #pragma once
 
 #include "net/Socket.h"
+#include "mem/SharedPtr.h"
 
 #include "mem/SharedPtr.h"
 

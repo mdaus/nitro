@@ -26,6 +26,7 @@
 
 #include "mem/SharedPtr.h"
 #include "net/Socket.h"
+#include "mem/SharedPtr.h"
 
 /*!
  *  \file

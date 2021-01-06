@@ -27,6 +27,7 @@
 #include <memory>
 #include <string>
 
+#include "mem/SharedPtr.h"
 #include "logging/Logger.h"
 #include "mem/SharedPtr.h"
 
