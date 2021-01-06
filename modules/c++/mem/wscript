@@ -1,5 +1,4 @@
 NAME            = 'mem'
-MAINTAINER      = 'asylvest@users.sourceforge.net'
 VERSION         = '1.0'
 MODULE_DEPS     = 'sys'
 TEST_DEPS       = 'cli'
