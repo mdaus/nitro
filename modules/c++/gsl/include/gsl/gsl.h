@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of mem-c++
+ * This file is part of gsl-c++
  * =========================================================================
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
- * mem-c++ is free software; you can redistribute it and/or modify
+ * gsl-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -20,18 +20,33 @@
  *
  */
 
-#ifndef __IMPORT_MEM_H__
-#define __IMPORT_MEM_H__
+#ifndef CODA_OSS_gsl_h_INCLUDED_
+#define CODA_OSS_gsl_h_INCLUDED_
+
 #pragma once
 
-#include <mem/BufferView.h>
-#include <mem/ScopedAlignedArray.h>
-#include <mem/ScopedArray.h>
-#include <mem/ScopedCloneablePtr.h>
-#include <mem/ScopedCopyablePtr.h>
-#include <mem/SharedPtr.h>
-#include <mem/SwapBuffer.h>
-#include <mem/VectorOfPointers.h>
-#include <mem/Span.h>
+#include "sys/Conf.h"
+
+// Need a fairly decent C++ compiler to use the real GSL
+#if CODA_OSS_cpp14
+#define CODA_OSS_use_gsl_ 1
+#endif
+
+#if !CODA_OSS_use_gsl_
+
+#include "gsl/Gsl_.h" // our own "fake" GSL
+
+#else
+
+#include "gsl/gsl_algorithm"	// copy
+#include "gsl/gsl_assert"		// Ensures/Expects
+#include "gsl/gsl_byte"			// byte
+#include "gsl/gsl_util"			// finally()/narrow()/narrow_cast()...
+#include "gsl/multi_span"		// multi_span, strided_span...
+#include "gsl/pointers"			// owner, not_null
+#include "gsl/span"				// span
+#include "gsl/string_span"		// zstring, string_span, zstring_builder...
 
 #endif
+
+#endif  // CODA_OSS_gsl_h_INCLUDED_
