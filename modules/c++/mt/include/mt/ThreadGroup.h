@@ -27,6 +27,7 @@
 #include <memory>
 #include <exception>
 
+#include <sys/Conf.h>
 #include <except/Error.h>
 #include <sys/Runnable.h>
 #include <sys/Thread.h>
@@ -78,7 +79,10 @@ public:
     *  Creates and starts a thread from a sys::Runnable.
     *  \param runnable auto_ptr to sys::Runnable
     */
+    void createThread(std::unique_ptr<sys::Runnable>&& runnable);
+    #if !CODA_OSS_cpp17
     void createThread(std::auto_ptr<sys::Runnable> runnable);
+    #endif
 
     /*!
      * Waits for all threads to complete.
@@ -154,10 +158,17 @@ private:
          *                   will be enforced.
          */
         ThreadGroupRunnable(
+                std::unique_ptr<sys::Runnable>&& runnable,
+                mt::ThreadGroup& parentThreadGroup,
+                std::unique_ptr<CPUAffinityThreadInitializer>&& threadInit =
+                        std::unique_ptr<CPUAffinityThreadInitializer>(nullptr));
+        #if !CODA_OSS_cpp17
+        ThreadGroupRunnable(
                 std::auto_ptr<sys::Runnable> runnable,
                 mt::ThreadGroup& parentThreadGroup,
                 std::auto_ptr<CPUAffinityThreadInitializer> threadInit =
                         std::auto_ptr<CPUAffinityThreadInitializer>(NULL));
+        #endif
 
         /*!
          *  Call run() on the Runnable passed to createThread
@@ -165,9 +176,9 @@ private:
         virtual void run();
 
     private:
-        mem::auto_ptr<sys::Runnable> mRunnable;
+        std::unique_ptr<sys::Runnable> mRunnable;
         mt::ThreadGroup& mParentThreadGroup;
-        mem::auto_ptr<CPUAffinityThreadInitializer> mCPUInit;
+        std::unique_ptr<CPUAffinityThreadInitializer> mCPUInit;
     };
 };
 
