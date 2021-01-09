@@ -87,18 +87,12 @@ void xml::lite::MinidomHandler::characters(const char *value, int length)
     #endif
     characters(value, length, pEncoding);
 }
-bool xml::lite::MinidomHandler::characters(
-    #ifdef _WIN32
-    const wchar_t* const value,
-    #else
-    const uint16_t* const value_,
-    #endif
-    const size_t length_)
+bool xml::lite::MinidomHandler::characters(const wchar_t* const value_, const size_t length_)
 {
     #ifndef _WIN32
-    // As on Windows, this comes to us already encoded ... but UTF-16
-    const auto value = reinterpret_cast<std::u16string::const_pointer>(value_);
-    const std::u16string strValue(value, length_);
+    // As on Windows, this comes to us already encoded ... but UTF-32
+    const auto value = reinterpret_cast<std::u32string::const_pointer>(value_);
+    const std::u32string strValue(value, length_);
     std::string utf8Value;
     str::toUtf8(strValue, utf8Value);
 
@@ -107,7 +101,7 @@ bool xml::lite::MinidomHandler::characters(
     characters(utf8Value.c_str(), length, &encoding);
     return true; // all done, characters(char*) already called, above
     #else
-    UNREFERENCED_PARAMETER(value);
+    UNREFERENCED_PARAMETER(value_);
     UNREFERENCED_PARAMETER(length_);
     // On Windows, we want std::string encoded as Windows-1252 (ISO8859-1)
     // so that western European characters will be displayed.  We can't convert
