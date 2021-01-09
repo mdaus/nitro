@@ -25,6 +25,7 @@
 #define __MT_TIED_WORKER_THREAD_H__
 
 #include "mt/CPUAffinityThreadInitializer.h"
+#include "mem/SharedPtr.h"
 
 
 namespace mt
@@ -58,7 +59,7 @@ public:
 
 private:
     TiedWorkerThread();
-    std::auto_ptr<CPUAffinityThreadInitializer> mCPUAffinityInit;
+    std::unique_ptr<CPUAffinityThreadInitializer> mCPUAffinityInit;
 };
 
 }
