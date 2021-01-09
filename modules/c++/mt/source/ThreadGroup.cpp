@@ -53,7 +53,7 @@ ThreadGroup::~ThreadGroup()
 
 void ThreadGroup::createThread(sys::Runnable *runnable)
 {
-    createThread(std::auto_ptr<sys::Runnable>(runnable));
+    createThread(std::unique_ptr<sys::Runnable>(runnable));
 }
 
 void ThreadGroup::createThread(std::unique_ptr<sys::Runnable>&& runnable)
