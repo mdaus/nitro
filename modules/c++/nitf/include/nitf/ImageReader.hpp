@@ -40,8 +40,8 @@ namespace nitf
 {
     class BufferList final
     {
-        std::vector<std::byte*> buffer;
-        std::vector<std::unique_ptr<std::byte[]>> buffer_;
+        std::vector<nitf::byte*> buffer;
+        std::vector<std::unique_ptr<nitf::byte[]>> buffer_;
 
     public:
         BufferList(size_t nBands)
@@ -53,7 +53,7 @@ namespace nitf
         {
             for (size_t i = 0; i < size(); i++)
             {
-                buffer_[i].reset(new std::byte[subWindowSize]);
+                buffer_[i].reset(new nitf::byte[subWindowSize]);
                 buffer[i] = buffer_[i].get();
             }
         }
@@ -64,12 +64,12 @@ namespace nitf
             return buffer.size();
         }
 
-        std::byte** data() noexcept
+        nitf::byte** data() noexcept
         {
             return buffer.data();
         }
 
-        std::byte*& operator[](size_t i)noexcept
+        nitf::byte*& operator[](size_t i)noexcept
         {
             return buffer[i];
         }
@@ -103,7 +103,7 @@ public:
      *  \param  padded  Returns TRUE if pad pixels may have been read
      */
     void read(nitf::SubWindow & subWindow, uint8_t ** user, int * padded);
-    void read(nitf::SubWindow & subWindow, std::byte ** user, int* padded)
+    void read(nitf::SubWindow & subWindow, nitf::byte ** user, int* padded)
     {
         read(subWindow, reinterpret_cast<uint8_t**>(user), padded);
     }
