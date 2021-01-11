@@ -34,7 +34,7 @@ IOStreamReader::IOStreamReader(io::SeekableInputStream& stream) :
 
 void IOStreamReader::readImpl(void* buffer, size_t size)
 {
-    mStream.read(static_cast<std::byte*>(buffer), size);
+    mStream.read(static_cast<nitf::byte*>(buffer), size);
 }
 
 void IOStreamReader::writeImpl(const void* , size_t)

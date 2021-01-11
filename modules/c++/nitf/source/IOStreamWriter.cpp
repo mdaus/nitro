@@ -41,7 +41,7 @@ void IOStreamWriter::readImpl(void* , size_t )
 
 void IOStreamWriter::writeImpl(const void* buffer, size_t size)
 {
-    mStream->write(static_cast<const std::byte*>(buffer), size);
+    mStream->write(static_cast<const nitf::byte*>(buffer), size);
 }
 
 bool IOStreamWriter::canSeekImpl() const

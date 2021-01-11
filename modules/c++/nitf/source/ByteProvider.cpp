@@ -60,7 +60,7 @@ ByteProvider::~ByteProvider()
 }
 
 void ByteProvider::copyFromStreamAndClear(io::ByteStream& stream,
-                                          std::vector<std::byte>& rawBytes)
+                                          std::vector<nitf::byte>& rawBytes)
 {
     rawBytes.resize(stream.getSize());
     if (!rawBytes.empty())
@@ -403,8 +403,8 @@ void ByteProvider::addImageData(
     // Figure out what offset of 'imageData' we're writing from
     const size_t startLocalRowToWrite =
             startGlobalRowToWrite - startRow + numPadRowsSoFar;
-    const std::byte* imageDataPtr =
-            static_cast<const std::byte*>(imageData) +
+    const auto imageDataPtr =
+            static_cast<const nitf::byte*>(imageData) +
             startLocalRowToWrite * mNumBytesPerRow;
 
     if (buffers.empty())
