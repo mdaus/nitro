@@ -45,4 +45,3 @@ modules/drivers/zlib/zlib-1.2.7/
 project.sln
 .depproj/
 
-CMakeSettings.json
