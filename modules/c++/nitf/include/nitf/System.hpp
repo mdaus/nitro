@@ -34,6 +34,9 @@
 #include "nitf/Field.h"
 #include "nitf/Types.h"
 
+#include "sys/CStdDef.h"
+#include "sys/Conf.h"
+
 namespace nitf
 {
 	// Keeping these here so that code using "nitf::Uint64" still compiles;
@@ -54,5 +57,12 @@ typedef nitf_FieldType FieldType;
 typedef nitf_AccessFlags AccessFlags;
 typedef nitf_CreationFlags CreationFlags;
 typedef nitf_CornersType CornersType;
+
+#if CODA_OSS_cpp17
+using byte = nitf::byte;
+#else
+using byte = sys::byte;
+#endif
+
 }
 #endif
