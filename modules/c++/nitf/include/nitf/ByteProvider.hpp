@@ -130,7 +130,7 @@ public:
     }
 
     //! \return The raw file header bytes
-    const std::vector<std::byte>& getFileHeader() const
+    const std::vector<nitf::byte>& getFileHeader() const
     {
         return mFileHeader;
     }
@@ -139,7 +139,7 @@ public:
      * \return The raw bytes for each image subheader.  Vector size matches the
      * number of image segments.
      */
-    const std::vector<std::vector<std::byte> >& getImageSubheaders() const
+    const std::vector<std::vector<nitf::byte>>& getImageSubheaders() const
     {
         return mImageSubheaders;
     }
@@ -148,7 +148,7 @@ public:
      * \return The raw bytes for each DES (subheader immediately followed by
      * raw DES data).  Vector size matches the number of data extension segments.
      */
-    const std::vector<std::byte>& getDesSubheaderAndData() const
+    const std::vector<nitf::byte>& getDesSubheaderAndData() const
     {
         return mDesSubheaderAndData;
     }
@@ -263,7 +263,7 @@ protected:
                     size_t numColsPerBlock = 0);
 
     static void copyFromStreamAndClear(io::ByteStream& stream,
-                                       std::vector<std::byte>& rawBytes);
+                                       std::vector<nitf::byte>& rawBytes);
 
     size_t countPadRows(
             size_t seg, size_t numRowsToWrite,
@@ -351,11 +351,11 @@ protected:
 
     std::vector<SegmentInfo> mImageSegmentInfo; // Per segment
 
-    std::vector<std::byte> mFileHeader;
-    std::vector<std::vector<std::byte> > mImageSubheaders; // Per segment
+    std::vector<nitf::byte> mFileHeader;
+    std::vector<std::vector<nitf::byte> > mImageSubheaders; // Per segment
 
     // All DES subheaders and data together contiguously
-    std::vector<std::byte> mDesSubheaderAndData;
+    std::vector<nitf::byte> mDesSubheaderAndData;
 
     std::vector<nitf::Off> mImageSubheaderFileOffsets; // Per segment
     nitf::Off mDesSubheaderFileOffset;

@@ -22,11 +22,14 @@
 
 #ifndef __NITF_SUBWINDOW_HPP__
 #define __NITF_SUBWINDOW_HPP__
+#pragma once
+
+#include <vector>
+#include <string>
 
 #include "nitf/SubWindow.h"
 #include "nitf/DownSampler.hpp"
 #include "nitf/Object.hpp"
-#include <string>
 
 /*!
  *  \file SubWindow.hpp
@@ -93,6 +96,10 @@ public:
      * \param downSampler  The down sampler to reference
      */
     void setDownSampler(nitf::DownSampler* downSampler);
+    void setDownSampler(nitf::DownSampler& downSampler)
+    {
+        setDownSampler(&downSampler);
+    }
 
     /*!
      * Return the DownSampler that is referenced by this SubWindow.
@@ -104,6 +111,12 @@ private:
     nitf::DownSampler* mDownSampler;
     nitf_Error error;
 };
+
+inline void setBands(SubWindow& subWindow, std::vector<uint32_t>& bands)
+{
+    subWindow.setBandList(bands.data());
+    subWindow.setNumBands(static_cast<uint32_t>(bands.size()));
+}
 
 }
 #endif

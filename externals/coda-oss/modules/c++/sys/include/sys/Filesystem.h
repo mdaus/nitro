@@ -1,3 +1,23 @@
+/* =========================================================================
+ * This file is part of sys-c++
+ * =========================================================================
+ *
+ * (C) Copyright 2020, Maxar Technologies, Inc.
+ *
+ * sys-c++ is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not, http://www.gnu.org/licenses/.
+ *
+ */
 #ifndef CODA_OSS_sys_Filesystem_h_INCLUDED_
 #define CODA_OSS_sys_Filesystem_h_INCLUDED_
 #pragma once
@@ -92,35 +112,22 @@ bool exists(const path& p);  // https://en.cppreference.com/w/cpp/filesystem/exi
 }
 
 #ifndef CODA_OSS_DEFINE_std_filesystem_
-#if CODA_OSS_cpp17
-
-// Some versions of G++ say they're C++17 but don't have <filesystem>
-#if __has_include(<filesystem>) // __has_include is C++17
-#define CODA_OSS_DEFINE_std_filesystem_ 0  // got <filesystem>, don't need our own
-#else
-#define CODA_OSS_DEFINE_std_filesystem_ CODA_OSS_AUGMENT_std_namespace  // no <filesystem>, use our own
-#endif  //__has_include(<filesystem>)
-
-#else
-
-#define CODA_OSS_DEFINE_std_filesystem_ CODA_OSS_AUGMENT_std_namespace  // pre-C++17
-
-#endif  // CODA_OSS_cpp17
+    // Some versions of G++ say they're C++17 but don't have <filesystem>
+    #if CODA_OSS_cpp17 && __has_include(<filesystem>)  // __has_include is C++17
+        #define CODA_OSS_DEFINE_std_filesystem_ -1  // OK to #include <>, below
+    #else
+        #define CODA_OSS_DEFINE_std_filesystem_ CODA_OSS_AUGMENT_std_namespace  // maybe use our own
+    #endif
 #endif  // CODA_OSS_DEFINE_std_filesystem_
 
-#if CODA_OSS_DEFINE_std_filesystem_
-// This is ever-so-slightly uncouth: we're not supposed to augment "std".
-namespace std
-{
-namespace filesystem = ::sys::Filesystem;
-}
-#else
 
-// Not doing our own std::filesystem, can we get the real one?
-#if CODA_OSS_cpp17 && __has_include(<filesystem>)  // __has_include is C++17
-#include <filesystem>
-#endif
-
+#if CODA_OSS_DEFINE_std_filesystem_ == 1
+    namespace std // This is slightly uncouth: we're not supposed to augment "std".
+    {
+        namespace filesystem = ::sys::Filesystem;
+    }
+#elif CODA_OSS_DEFINE_std_filesystem_ == -1 // set above
+    #include <filesystem>
 #endif // CODA_OSS_DEFINE_std_filesystem_
 
 #endif  // CODA_OSS_sys_Filesystem_h_INCLUDED_
