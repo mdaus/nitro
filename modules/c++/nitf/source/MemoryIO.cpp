@@ -32,7 +32,7 @@ nitf_IOInterface* MemoryIO::create(void* buffer,
                                    size_t size,
                                    bool adopt)
 {
-    nitf_Error error{};
+    nitf_Error error;
     nitf_IOInterface* const ioInterface = nitf_BufferAdapter_construct(
             static_cast<char*>(buffer), size, adopt, &error);
 

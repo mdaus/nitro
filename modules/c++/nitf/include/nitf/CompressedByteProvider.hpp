@@ -159,7 +159,7 @@ protected:
      * \param numColsPerBlock The number of columns per block.  Defaults to no
      * blocking.
      */
-    void initialize(const Record& record,
+    void initialize(Record& record,
             const std::vector<std::vector<size_t> >& bytesPerBlock,
             const std::vector<PtrAndLength>& desData =
                     std::vector<PtrAndLength>(),
@@ -173,7 +173,7 @@ protected:
             size_t seg,
             size_t startRow,
             size_t numRowsToWrite,
-            const std::byte* imageData,
+            const nitf::byte* imageData,
             nitf::Off& fileOffset,
             NITFBufferList& buffers) const;
 

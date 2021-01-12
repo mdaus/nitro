@@ -34,6 +34,7 @@
 #include <sys/ScopedCPUAffinityUnix.h>
 #include <mt/AbstractCPUAffinityInitializer.h>
 #include <mt/CPUAffinityThreadInitializerLinux.h>
+#include <mem/SharedPtr.h>
 
 #include "mem/SharedPtr.h"
 

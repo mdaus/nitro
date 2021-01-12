@@ -34,7 +34,7 @@ NITF_BOOL CompressionInterface::adapterStart(
 {
     try
     {
-        static_cast<Compressor*>(object)->start(offset, 
+        reinterpret_cast<Compressor*>(object)->start(offset, 
                                                      dataLength, 
                                                      blockMask, 
                                                      padMask);
@@ -72,7 +72,7 @@ NITF_BOOL CompressionInterface::adapterWriteBlock(
     {
         nitf::IOInterface ioInter(io);
         ioInter.setManaged(true);
-        static_cast<Compressor*>(object)->writeBlock(ioInter,
+        reinterpret_cast<Compressor*>(object)->writeBlock(ioInter, 
                                                           data, 
                                                           pad, 
                                                           noData);
@@ -107,7 +107,7 @@ NITF_BOOL CompressionInterface::adapterEnd(
     {
         nitf::IOInterface ioInter(io);
         ioInter.setManaged(true);
-        static_cast<Compressor*>(object)->end(ioInter);
+        reinterpret_cast<Compressor*>(object)->end(ioInter);
         return NRT_SUCCESS;
     }
     catch (const except::Exception& ex)
@@ -135,7 +135,7 @@ void CompressionInterface::adapterDestroy(
 {
     if (object != nullptr && *object != nullptr)
     {
-        delete static_cast<Compressor*>(*object);
+        delete reinterpret_cast<Compressor*>(*object);
         *object = nullptr;
     }
 }

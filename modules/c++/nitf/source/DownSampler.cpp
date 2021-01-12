@@ -22,12 +22,12 @@
 
 #include "nitf/DownSampler.hpp"
 
-uint32_t nitf::DownSampler::getRowSkip() const
+uint32_t nitf::DownSampler::getRowSkip()
 {
     return getNativeOrThrow()->rowSkip;
 }
 
-uint32_t nitf::DownSampler::getColSkip() const
+uint32_t nitf::DownSampler::getColSkip()
 {
     return getNativeOrThrow()->colSkip;
 }

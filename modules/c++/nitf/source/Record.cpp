@@ -72,7 +72,7 @@ nitf::Version Record::getVersion() const
     return nitf_Record_getVersion(getNativeOrThrow());
 }
 
-nitf::FileHeader Record::getHeader() const
+nitf::FileHeader Record::getHeader()
 {
     return nitf::FileHeader(getNativeOrThrow()->header);
 }
@@ -95,7 +95,7 @@ constexpr inline bool INVALID_NUM_SEGMENTS(uint32_t num)
 
 uint32_t Record::getNumImages() const
 {
-    const uint32_t num = nitf_Record_getNumImages(getNativeOrThrow(), &error);
+    uint32_t num = nitf_Record_getNumImages(getNativeOrThrow(), &error);
     
     if (INVALID_NUM_SEGMENTS( num ))
         throw nitf::NITFException(&error);
@@ -105,7 +105,8 @@ uint32_t Record::getNumImages() const
     
 uint32_t Record::getNumGraphics() const
 {
-    const uint32_t num = nitf_Record_getNumGraphics(getNativeOrThrow(), &error);
+
+    uint32_t num = nitf_Record_getNumGraphics(getNativeOrThrow(), &error);
 
     if (INVALID_NUM_SEGMENTS( num ))
         throw nitf::NITFException(&error);
@@ -115,7 +116,8 @@ uint32_t Record::getNumGraphics() const
 
 uint32_t Record::getNumLabels() const
 {
-    const uint32_t num = nitf_Record_getNumLabels(getNativeOrThrow(), &error);
+
+    uint32_t num = nitf_Record_getNumLabels(getNativeOrThrow(), &error);
 
     if (INVALID_NUM_SEGMENTS( num ))
         throw nitf::NITFException(&error);
@@ -125,7 +127,7 @@ uint32_t Record::getNumLabels() const
 
 uint32_t Record::getNumTexts() const
 {
-    const uint32_t num = nitf_Record_getNumTexts(getNativeOrThrow(), &error);
+    uint32_t num = nitf_Record_getNumTexts(getNativeOrThrow(), &error);
 
     if (INVALID_NUM_SEGMENTS( num ))
         throw nitf::NITFException(&error);
@@ -135,7 +137,7 @@ uint32_t Record::getNumTexts() const
 
 uint32_t Record::getNumDataExtensions() const
 {
-    const uint32_t num = nitf_Record_getNumDataExtensions(getNativeOrThrow(), 
+    uint32_t num = nitf_Record_getNumDataExtensions(getNativeOrThrow(), 
                                                         &error);
 
     if (INVALID_NUM_SEGMENTS( num ))
@@ -146,7 +148,7 @@ uint32_t Record::getNumDataExtensions() const
 
 uint32_t Record::getNumReservedExtensions() const
 {
-    const uint32_t num = nitf_Record_getNumReservedExtensions(getNativeOrThrow(), 
+    uint32_t num = nitf_Record_getNumReservedExtensions(getNativeOrThrow(), 
                                                             &error);
 
     if (INVALID_NUM_SEGMENTS( num ))
@@ -156,32 +158,32 @@ uint32_t Record::getNumReservedExtensions() const
 }
 
 
-nitf::List Record::getImages() const
+nitf::List Record::getImages()
 {
     return nitf::List(getNativeOrThrow()->images);
 }
 
-nitf::List Record::getGraphics() const
+nitf::List Record::getGraphics()
 {
     return nitf::List(getNativeOrThrow()->graphics);
 }
 
-nitf::List Record::getLabels() const
+nitf::List Record::getLabels()
 {
     return nitf::List(getNativeOrThrow()->labels);
 }
 
-nitf::List Record::getTexts() const
+nitf::List Record::getTexts()
 {
     return nitf::List(getNativeOrThrow()->texts);
 }
 
-nitf::List Record::getDataExtensions() const
+nitf::List Record::getDataExtensions()
 {
     return nitf::List(getNativeOrThrow()->dataExtensions);
 }
 
-nitf::List Record::getReservedExtensions() const
+nitf::List Record::getReservedExtensions()
 {
     return nitf::List(getNativeOrThrow()->reservedExtensions);
 }

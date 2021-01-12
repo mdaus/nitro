@@ -95,59 +95,59 @@ public:
      * \param io The input IO handle containing the data
      * \param record The record to write out
      */
-    void setWriteHandlers(nitf::IOHandle& io, const nitf::Record& record);
+    void setWriteHandlers(nitf::IOHandle& io, nitf::Record& record);
 
     /*!
      * Set write handlers for images
      * \param io The input IO handle containing the data
      * \param record The record to write out
      */
-    void setImageWriteHandlers(nitf::IOHandle& io, const nitf::Record& record);
+    void setImageWriteHandlers(nitf::IOHandle& io, nitf::Record& record);
 
     /*!
      * Set write handlers for graphics
      * \param io The input IO handle containing the data
      * \param record The record to write out
      */
-    void setGraphicWriteHandlers(nitf::IOHandle& io, const nitf::Record& record);
+    void setGraphicWriteHandlers(nitf::IOHandle& io, nitf::Record& record);
 
     /*!
      * Set write handlers for texts
      * \param io The input IO handle containing the data
      * \param record The record to write out
      */
-    void setTextWriteHandlers(nitf::IOHandle& io, const nitf::Record& record);
+    void setTextWriteHandlers(nitf::IOHandle& io, nitf::Record& record);
 
     /*!
      * Set write handlers for DEs
      * \param io The input IO handle containing the data
      * \param record The record to write out
      */
-    void setDEWriteHandlers(nitf::IOHandle& io, const nitf::Record& record);
+    void setDEWriteHandlers(nitf::IOHandle& io, nitf::Record& record);
 
     /*!
      * Sets the WriteHandler for the Image at the given index.
      */
     void setImageWriteHandler(int index,
-                              std::shared_ptr<WriteHandler> writeHandler);
+                              mem::SharedPtr<WriteHandler> writeHandler);
 
     /*!
      * Sets the WriteHandler for the Graphic at the given index.
      */
     void setGraphicWriteHandler(int index,
-                                std::shared_ptr<WriteHandler> writeHandler);
+                                mem::SharedPtr<WriteHandler> writeHandler);
 
     /*!
      * Sets the WriteHandler for the Text at the given index.
      */
     void setTextWriteHandler(int index,
-                             std::shared_ptr<WriteHandler> writeHandler);
+                             mem::SharedPtr<WriteHandler> writeHandler);
 
     /*!
      * Sets the WriteHandler for the DE Segment at the given index.
      */
     void setDEWriteHandler(int index,
-                           std::shared_ptr<WriteHandler> writeHandler);
+                           mem::SharedPtr<WriteHandler> writeHandler);
 
     /**
      * Returns a NEW ImageWriter for the given index
@@ -251,7 +251,7 @@ private:
     nitf_Error  error{};
 
     //! c++ write handlers need to be kept in scope
-    std::vector<std::shared_ptr<nitf::WriteHandler> > mWriteHandlers;
+    std::vector<mem::SharedPtr<nitf::WriteHandler> > mWriteHandlers;
 };
 
 }
