@@ -22,10 +22,8 @@
 
 #ifndef __DBG_STREAM_H__
 #define __DBG_STREAM_H__
-#pragma once
 
 #include <memory>
-#include "mem/SharedPtr.h"
 
 #include "io/OutputStream.h"
 #include "mem/SharedPtr.h"
