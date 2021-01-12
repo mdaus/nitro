@@ -73,8 +73,8 @@ logging::setupLogger(const std::string& program,
         if (logBytes > 0)
         {
             logHandler.reset(new logging::RotatingFileHandler(logFile,
-                                                              logBytes,
-                                                              logCount));
+                                                              static_cast<long>(logBytes),
+                                                              static_cast<int>(logCount)));
         }
         // create regular logging to one file
         else
