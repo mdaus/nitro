@@ -62,11 +62,11 @@ TEST_CASE(testSpanVector)
 TEST_CASE(testGslNarrow)
 {
     constexpr int i = INT16_MAX;
-    constexpr auto s = gsl::narrow<int16_t>(i);
+    static /*constexpr*/ auto s = gsl::narrow<int16_t>(i); // avoid "conditional expression is constant"
     TEST_ASSERT_EQ(INT16_MAX, s);
 
     constexpr double d = 3.14;
-    constexpr auto v = gsl::narrow_cast<int>(d);
+    static /*constexpr*/ auto v = gsl::narrow_cast<int>(d); // avoid "conditional expression is constant"
     TEST_ASSERT_EQ(3, v);
 
     TEST_THROWS(gsl::narrow<int>(d));
