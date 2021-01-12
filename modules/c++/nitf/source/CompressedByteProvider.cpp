@@ -148,7 +148,7 @@ size_t CompressedByteProvider::addImageData(
         size_t seg,
         size_t startRow,
         size_t numRowsToWrite,
-        const std::byte* imageData,
+        const nitf::byte* imageData,
         nitf::Off& fileOffset,
         NITFBufferList& buffers) const
 {
@@ -226,7 +226,7 @@ void CompressedByteProvider::getBytes(
         nitf::Off& fileOffset,
         NITFBufferList& buffers) const
 {
-    const std::byte* imageDataPtr = static_cast<const std::byte*>(imageData);
+    auto imageDataPtr = static_cast<const nitf::byte*>(imageData);
     fileOffset = std::numeric_limits<nitf::Off>::max();
     buffers.clear();
 

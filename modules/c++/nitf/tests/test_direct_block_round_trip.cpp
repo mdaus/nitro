@@ -20,12 +20,12 @@
  *
  */
 
+#include <string.h>
+
 #include <iostream>
 #include <string>
 #include <vector>
-#include <string.h>
 
-#include <mem/SharedPtr.h>
 #include <import/nitf.hpp>
 
 class TestDirectBlockSource: public nitf::DirectBlockSource
@@ -69,7 +69,7 @@ int main(int argc, char **argv)
         }
 
         // Check that wew have a valid NITF
-        if (nitf::Reader::getNITFVersion(argv[1]) == nitf::Version::NITF_VER_UNKNOWN)
+        if (nitf::Reader::getNITFVersion(argv[1]) == NITF_VER_UNKNOWN)
         {
             std::cout << "Invalid NITF: " << argv[1] << std::endl;
             exit( EXIT_FAILURE);
@@ -148,11 +148,6 @@ int main(int argc, char **argv)
     catch (const std::exception& ex)
     {
         std::cerr << "Caught std::exception: " << ex.what() << std::endl;
-        return 1;
-    }
-    catch (const except::Throwable & t)
-    {
-        std::cerr << "Caught throwable: " << t.toString() << std::endl;
         return 1;
     }
     catch (...)
