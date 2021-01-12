@@ -203,7 +203,7 @@ void tiff::IFDEntry::addValues(const char* str, int tiffType)
     {
         mem::auto_ptr<tiff::TypeInterface>
             value(tiff::TypeFactory::create(strPtr + ii, tiffType));
-        addValue(value);
+        addValue(value.release());
     }
 }
 

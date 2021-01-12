@@ -71,7 +71,7 @@ public:
 
         mem::auto_ptr<sys::ScopedCPUMaskUnix> mask(new sys::ScopedCPUMaskUnix());
         CPU_SET_S(mCPUs.at(mNextCPUIndex++), mask->getSize(), mask->getMask());
-        return mem::auto_ptr<const sys::ScopedCPUMaskUnix>(mask);
+        return mem::auto_ptr<const sys::ScopedCPUMaskUnix>(mask.release());
     }
 
 private:
@@ -91,7 +91,7 @@ public:
     {
         mem::auto_ptr<sys::ScopedCPUMaskUnix> mask(new sys::ScopedCPUMaskUnix());
         CPU_SET_S(mNextCPU++, mask->getSize(), mask->getMask());
-        return mem::auto_ptr<const sys::ScopedCPUMaskUnix>(mask);
+        return mem::auto_ptr<const sys::ScopedCPUMaskUnix>(mask.release());
     }
 
 private:
