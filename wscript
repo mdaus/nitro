@@ -8,7 +8,7 @@ APPNAME = 'nitro'
 top     = '.'
 out     = 'target'
 
-TOOLS = 'build swig pythontool'
+TOOLS = 'build swig javatool pythontool matlabtool'
 DIRS = 'externals modules'
 
 def options(opt):
