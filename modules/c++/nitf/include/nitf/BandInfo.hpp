@@ -20,6 +20,8 @@
  *
  */
 
+#ifndef __NITF_BANDINFO_HPP__
+#define __NITF_BANDINFO_HPP__
 #pragma once
 
 #include <string>
@@ -123,4 +125,4 @@ private:
 };
 
 }
-
+#endif

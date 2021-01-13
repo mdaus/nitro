@@ -29,6 +29,7 @@
 #include <vector>
 
 #include "nitf/coda-oss.hpp"
+#include "nitf/System.hpp"
 
 namespace nitf
 {
@@ -268,11 +269,11 @@ private:
                           size_t& lastBlockWithinLastSeg) const;
 
     void blockImpl(size_t seg,
-                   const std::byte* input,
+                   const nitf::byte* input,
                    size_t numValidRowsInBlock,
                    size_t numValidColsInBlock,
                    size_t numBytesPerPixel,
-                   std::byte* output) const noexcept
+                   nitf::byte* output) const noexcept
     {
         block(input, numBytesPerPixel, mNumCols, mNumRowsPerBlock[seg],
               mNumColsPerBlock, numValidRowsInBlock, numValidColsInBlock,
@@ -280,10 +281,10 @@ private:
     }
 
     void blockAcrossRow(size_t seg,
-                        const std::byte*& input,
+                        const nitf::byte*& input,
                         size_t numValidRowsInBlock,
                         size_t numBytesPerPixel,
-                        std::byte*& output) const noexcept;
+                       nitf::byte*& output) const noexcept;
 
 private:
     // Vectors all indexed by segment

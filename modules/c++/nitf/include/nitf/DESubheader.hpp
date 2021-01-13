@@ -20,6 +20,8 @@
  *
  */
 
+#ifndef __NITF_DESUBHEADER_HPP__
+#define __NITF_DESUBHEADER_HPP__
 #pragma once
 
 #include <string>
@@ -130,4 +132,4 @@ private:
 };
 
 }
-
+#endif

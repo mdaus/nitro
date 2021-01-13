@@ -304,10 +304,10 @@ void ImageBlocker::block(const void* input,
 }
 
 void ImageBlocker::blockAcrossRow(size_t seg,
-                                  const std::byte*& input,
+                                  const nitf::byte*& input,
                                   size_t numValidRowsInBlock,
                                   size_t numBytesPerPixel,
-                                  std::byte*& output) const noexcept
+                                  nitf::byte*& output) const noexcept
 {
     const size_t outStride =
             mNumRowsPerBlock[seg] * mNumColsPerBlock * numBytesPerPixel;
@@ -356,8 +356,8 @@ void ImageBlocker::block(const void* input,
     findSegmentRange(startRow, numRows, firstSegIdx, startBlockWithinFirstSeg,
                      lastSegIdx, lastBlockWithinLastSeg);
 
-    const std::byte* inputPtr = static_cast<const std::byte*>(input);
-    std::byte* outputPtr = static_cast<std::byte*>(output);
+    auto inputPtr = static_cast<const nitf::byte*>(input);
+    auto outputPtr = static_cast<nitf::byte*>(output);
 
     for (size_t seg = firstSegIdx; seg <= lastSegIdx; ++seg)
     {

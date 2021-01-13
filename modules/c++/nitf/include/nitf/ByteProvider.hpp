@@ -127,7 +127,7 @@ public:
     }
 
     //! \return The raw file header bytes
-    const std::vector<std::byte>& getFileHeader() const noexcept
+    const std::vector<nitf::byte>& getFileHeader() const noexcept
     {
         return mFileHeader;
     }
@@ -136,7 +136,7 @@ public:
      * \return The raw bytes for each image subheader.  Vector size matches the
      * number of image segments.
      */
-    const std::vector<std::vector<std::byte> >& getImageSubheaders() const noexcept
+    const std::vector<std::vector<nitf::byte> >& getImageSubheaders() const noexcept
     {
         return mImageSubheaders;
     }
@@ -145,7 +145,7 @@ public:
      * \return The raw bytes for each DES (subheader immediately followed by
      * raw DES data).  Vector size matches the number of data extension segments.
      */
-    const std::vector<std::byte>& getDesSubheaderAndData() const noexcept
+    const std::vector<nitf::byte>& getDesSubheaderAndData() const noexcept
     {
         return mDesSubheaderAndData;
     }
@@ -233,7 +233,7 @@ public:
      * \return ImageBlocker with settings in sync with how the image will be
      * blocked in the NITF
      */
-    std::unique_ptr<const ImageBlocker> getImageBlocker() const;
+    mem::auto_ptr<const ImageBlocker> getImageBlocker() const;
 
 protected:
     /*!
@@ -260,7 +260,7 @@ protected:
                     size_t numColsPerBlock = 0);
 
     static void copyFromStreamAndClear(io::ByteStream& stream,
-                                       std::vector<std::byte>& rawBytes);
+                                       std::vector<nitf::byte>& rawBytes);
 
     size_t countPadRows(
             size_t seg, size_t numRowsToWrite,
@@ -344,11 +344,11 @@ protected:
 
     std::vector<SegmentInfo> mImageSegmentInfo; // Per segment
 
-    std::vector<std::byte> mFileHeader;
-    std::vector<std::vector<std::byte> > mImageSubheaders; // Per segment
+    std::vector<nitf::byte> mFileHeader;
+    std::vector<std::vector<nitf::byte> > mImageSubheaders; // Per segment
 
     // All DES subheaders and data together contiguously
-    std::vector<std::byte> mDesSubheaderAndData;
+    std::vector<nitf::byte> mDesSubheaderAndData;
 
     std::vector<nitf::Off> mImageSubheaderFileOffsets; // Per segment
     nitf::Off mDesSubheaderFileOffset = 0;

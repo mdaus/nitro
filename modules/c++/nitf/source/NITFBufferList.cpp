@@ -79,7 +79,7 @@ size_t NITFBufferList::getNumBytesInBlock(
 
 const void* NITFBufferList::getBlock(size_t blockSize,
                                      size_t blockIdx,
-                                     std::vector<std::byte>& scratch,
+                                     std::vector<nitf::byte>& scratch,
                                      size_t& numBytes) const
 {
     const size_t startByte = blockIdx * blockSize;
