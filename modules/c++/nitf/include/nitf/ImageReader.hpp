@@ -24,12 +24,17 @@
 #define __NITF_IMAGE_READER_HPP__
 #pragma once
 
+#include <assert.h>
+
+#include <vector>
 #include <string>
+#include <memory>
 
 #include "nitf/coda-oss.hpp"
 #include "nitf/ImageReader.h"
 #include "nitf/Object.hpp"
 #include "nitf/BlockingInfo.hpp"
+#include "nitf/System.hpp"
 
 /*!
  *  \file ImageReader.hpp
@@ -91,10 +96,10 @@ public:
     //! Set native object
     ImageReader(nitf_ImageReader * x);
 
-    ~ImageReader();
+    ~ImageReader() = default;
 
     //! Get the blocking info
-    nitf::BlockingInfo getBlockingInfo();
+    nitf::BlockingInfo getBlockingInfo() const;
 
     /*!
      *  Read a sub-window.  See ImageIO::read for more details.
@@ -102,8 +107,8 @@ public:
      *  \param  user  User-defined data buffers for read
      *  \param  padded  Returns TRUE if pad pixels may have been read
      */
-    void read(nitf::SubWindow & subWindow, uint8_t ** user, int * padded);
-    void read(nitf::SubWindow & subWindow, nitf::byte ** user, int* padded)
+    void read(const nitf::SubWindow & subWindow, uint8_t ** user, int * padded);
+    void read(const nitf::SubWindow & subWindow, nitf::byte ** user, int* padded)
     {
         read(subWindow, reinterpret_cast<uint8_t**>(user), padded);
     }
@@ -122,8 +127,8 @@ public:
     void setReadCaching();
 
 private:
-    nitf_Error error;
-    ImageReader(){}
+    mutable nitf_Error error{};
+    ImageReader() = default;
 };
 
 }
