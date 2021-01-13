@@ -22,7 +22,9 @@
 
 #include "nitf/SegmentSource.hpp"
 
-#include "gsl/gsl.h"
+#include <gsl/gsl.h>
+
+#include "nitf/System.hpp"
 
 nitf::SegmentMemorySource::SegmentMemorySource(const char* data, nitf::Off size,
         nitf::Off start, int byteSkip, bool copyData)

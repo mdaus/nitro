@@ -34,6 +34,7 @@
 #include "nitf/ImageReader.h"
 #include "nitf/Object.hpp"
 #include "nitf/BlockingInfo.hpp"
+#include "nitf/System.hpp"
 
 /*!
  *  \file ImageReader.hpp
