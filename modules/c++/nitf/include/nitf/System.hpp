@@ -55,7 +55,7 @@ typedef nitf_AccessFlags AccessFlags;
 typedef nitf_CreationFlags CreationFlags;
 
 #if CODA_OSS_cpp17
-using byte = nitf::byte;
+using byte = std::byte;
 #else
 using byte = sys::byte;
 #endif
