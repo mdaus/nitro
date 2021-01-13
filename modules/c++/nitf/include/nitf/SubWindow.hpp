@@ -72,7 +72,7 @@ public:
     SubWindow() noexcept(false);
 
     //! Destructor
-    ~SubWindow();
+    ~SubWindow() noexcept(false);
 
     uint32_t getStartRow() const;
     uint32_t getNumRows() const;

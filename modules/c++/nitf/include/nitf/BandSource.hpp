@@ -104,7 +104,7 @@ public:
 
 struct RowSourceCallback
 {
-    virtual ~RowSourceCallback()
+    virtual ~RowSourceCallback() noexcept(false)
     {
     }
 
