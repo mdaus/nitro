@@ -162,9 +162,12 @@ struct NITFBufferList
      */
     const void* getBlock(size_t blockSize,
                          size_t blockIdx,
-                         std::vector<nitf::byte>& scratch,
+                         std::vector<sys::byte>& scratch,
                          size_t& numBytes) const;
-};
+    const void* getBlock(size_t blockSize,
+                         size_t blockIdx,
+                         std::vector<std::byte>& scratch,
+                         size_t& numBytes) const;};
 }
 
 #endif
