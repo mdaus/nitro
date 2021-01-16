@@ -303,40 +303,6 @@ void ImageBlocker::block(const void* input,
     }
 }
 
-void ImageBlocker::blockAcrossRow(size_t seg,
-                                  const nitf::byte*& input,
-                                  size_t numValidRowsInBlock,
-                                  size_t numBytesPerPixel,
-                                  nitf::byte*& output) const noexcept
-{
-    const size_t outStride =
-            mNumRowsPerBlock[seg] * mNumColsPerBlock * numBytesPerPixel;
-    const size_t lastColBlock = mNumBlocksAcrossCols - 1;
-
-    for (size_t colBlock = 0;
-         colBlock < mNumBlocksAcrossCols;
-         ++colBlock, output += outStride)
-    {
-        const size_t numPadColsInBlock = (colBlock == lastColBlock) ?
-                mNumPadColsInFinalBlock : 0;
-
-        const size_t numValidColsInBlock = mNumColsPerBlock - numPadColsInBlock;
-
-        blockImpl(seg,
-                  input,
-                  numValidRowsInBlock,
-                  numValidColsInBlock,
-                  numBytesPerPixel,
-                  output);
-
-        input += numValidColsInBlock * numBytesPerPixel;
-    }
-
-    // At the end of this, we've incremented the input pointer an entire row
-    // We need to increment it the remaining rows in the block
-    input += mNumCols * numBytesPerPixel * (numValidRowsInBlock - 1);
-}
-
 void ImageBlocker::block(const void* input,
                          size_t startRow,
                          size_t numRows,
@@ -356,8 +322,8 @@ void ImageBlocker::block(const void* input,
     findSegmentRange(startRow, numRows, firstSegIdx, startBlockWithinFirstSeg,
                      lastSegIdx, lastBlockWithinLastSeg);
 
-    auto inputPtr = static_cast<const nitf::byte*>(input);
-    auto outputPtr = static_cast<nitf::byte*>(output);
+    auto inputPtr = static_cast<const std::byte*>(input);
+    auto outputPtr = static_cast<std::byte*>(output);
 
     for (size_t seg = firstSegIdx; seg <= lastSegIdx; ++seg)
     {

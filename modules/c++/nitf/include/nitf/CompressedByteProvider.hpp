@@ -173,7 +173,14 @@ protected:
             size_t seg,
             size_t startRow,
             size_t numRowsToWrite,
-            const nitf::byte* imageData,
+            const sys::byte* imageData,
+            nitf::Off& fileOffset,
+            NITFBufferList& buffers) const;
+    size_t addImageData(
+            size_t seg,
+            size_t startRow,
+            size_t numRowsToWrite,
+            const std::byte* imageData,
             nitf::Off& fileOffset,
             NITFBufferList& buffers) const;
 
