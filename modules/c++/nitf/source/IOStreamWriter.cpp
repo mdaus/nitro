@@ -42,7 +42,7 @@ void IOStreamWriter::writeImpl(const void* buffer, size_t size)
     mStream->write(static_cast<const std::byte*>(buffer), size);
 }
 
-bool IOStreamWriter::canSeekImpl() const noexcept
+bool IOStreamWriter::canSeekImpl() const
 {
     return true;
 }
@@ -86,12 +86,12 @@ nitf::Off IOStreamWriter::getSizeImpl() const
     return size;
 }
 
-int IOStreamWriter::getModeImpl() const noexcept
+int IOStreamWriter::getModeImpl() const
 {
     return NITF_ACCESS_WRITEONLY;
 }
 
-void IOStreamWriter::closeImpl() noexcept
+void IOStreamWriter::closeImpl()
 {
 }
 }

@@ -59,7 +59,7 @@ public:
     DESubheader(nitf_DESubheader * x);
 
     //! Constructor
-    DESubheader() noexcept(false);
+    DESubheader();
 
     //! Clone
     nitf::DESubheader clone() const;
