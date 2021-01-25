@@ -42,3 +42,8 @@
 #include <import/mem.h>
 #include <gsl/gsl.h>
 
+#if !CODA_OSS_cpp17
+#error Must build with C++17.
+#endif
+
+
