@@ -91,6 +91,11 @@ NITFPRIV(NITF_BOOL) defaultRead(nitf_IOInterface *io,
     }
 
     /*  malloc the space for the raw data */
+    if (length >= UINT32_MAX)
+    {
+        nitf_Error_init(error, "uint32_t+1 overflow", NITF_CTXT, NITF_ERR_MEMORY);
+        goto CATCH_ERROR;
+    }
     data = (char *) NITF_MALLOC(length + 1);
     if (!data)
     {

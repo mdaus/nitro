@@ -259,7 +259,7 @@ TEST_MAIN(
 argv0 = argv[0];
 
 TEST_CHECK(test_nitf_Record_unmergeTREs_crash); // 2
-//TEST_CHECK(test_defaultRead_crash); // 3
+TEST_CHECK(test_defaultRead_crash); // 3
 TEST_CHECK(test_readBandInfo_crash); // 4
 TEST_CHECK(test_readRESubheader_crash); // 5
 TEST_CHECK(test_nitf_Record_unmergeTREs_hangs); // 6

@@ -971,6 +971,11 @@ readRESubheader(nitf_Reader* reader,
     NITF_TRY_GET_UINT32(subhdr->subheaderFieldsLength, &subLen, error);
     if (subLen > 0)
     {
+        if (subLen >= UINT32_MAX)
+        {
+            nitf_Error_init(error, "uint32_t+1 overflow", NITF_CTXT, NITF_ERR_MEMORY);
+            goto CATCH_ERROR;
+        }
         subhdr->subheaderFields = NITF_MALLOC(subLen + 1);
         if (!subhdr->subheaderFields)
             goto CATCH_ERROR;
