@@ -335,20 +335,8 @@ public:
      *  Sets the character data for this element.
      *  \param characters The data to add to this element
      */
-    void setCharacterData(const std::string& characters, const string_encoding* pEncoding = nullptr)
-    {
-        mCharacterData = characters;
-        if (pEncoding != nullptr)
-        {
-            mpEncoding = std::make_shared<const string_encoding>(*pEncoding);
-        }
-    }
-    void setCharacterData(const sys::U8string& characters)
-    {
-        mCharacterData = str::toString(characters);
-        static const auto encoding = string_encoding::utf_8;
-        mpEncoding = std::make_shared<const string_encoding>(encoding);
-    }
+    void setCharacterData(const std::string& characters, const string_encoding* pEncoding = nullptr);
+    void setCharacterData(const sys::U8string& characters);
 
     /*!
      *  Sets the local name for this element.

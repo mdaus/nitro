@@ -443,3 +443,19 @@ void xml::lite::Element::setNamespaceURI(
 
     attr[std::string("xmlns:") + prefix] = uri;
 }
+
+void xml::lite::Element::setCharacterData(const std::string& characters,
+                      const string_encoding* pEncoding)
+{
+    mCharacterData = characters;
+    if (pEncoding != nullptr)
+    {
+        mpEncoding = std::make_shared<const string_encoding>(*pEncoding);
+    }
+}
+void xml::lite::Element::setCharacterData(const sys::U8string& characters)
+{
+    mCharacterData = str::toString(characters);
+    static const auto encoding = string_encoding::utf_8;
+    mpEncoding = std::make_shared<const string_encoding>(encoding);
+}
