@@ -162,9 +162,10 @@ NITFPRIV(NITF_BOOL) defaultRead(nitf_IOInterface *io,
 
     /* Handle any errors */
 CATCH_ERROR:
-    if (descr) NITF_FREE(descr);
     if (tre && tre->priv)
         nitf_TREPrivateData_destruct((nitf_TREPrivateData**)&tre->priv);
+    if (descr) NITF_FREE(descr);
+    if (data) NITF_FREE(data);
     return NITF_FAILURE;
 }
 
