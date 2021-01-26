@@ -1355,15 +1355,17 @@ nitf_Record_removeImageSegment(nitf_Record* record,
         /* Make new array, one smaller */
         infoArray = (nitf_ComponentInfo**)NITF_MALLOC(
                 sizeof(nitf_ComponentInfo*) * (num - 1));
-
-        /* Iterate over current infos */
-        for (i = 0; i < segmentNumber; ++i)
+        if (infoArray)
         {
-            infoArray[i] = record->header->imageInfo[i];
-        }
-        for (i = segmentNumber + 1; i < num; ++i)
-        {
-            infoArray[i - 1] = record->header->imageInfo[i];
+            /* Iterate over current infos */
+            for (i = 0; i < segmentNumber; ++i)
+            {
+                infoArray[i] = record->header->imageInfo[i];
+            }
+            for (i = segmentNumber + 1; i < num; ++i)
+            {
+                infoArray[i - 1] = record->header->imageInfo[i];
+            }
         }
     }
 
@@ -1429,15 +1431,17 @@ nitf_Record_removeGraphicSegment(nitf_Record* record,
         /* Make new array, one smaller */
         infoArray = (nitf_ComponentInfo**)NITF_MALLOC(
                 sizeof(nitf_ComponentInfo*) * (num - 1));
-
-        /* Iterate over current infos */
-        for (i = 0; i < segmentNumber; ++i)
+        if (infoArray)
         {
-            infoArray[i] = record->header->graphicInfo[i];
-        }
-        for (i = segmentNumber + 1; i < num; ++i)
-        {
-            infoArray[i - 1] = record->header->graphicInfo[i];
+            /* Iterate over current infos */
+            for (i = 0; i < segmentNumber; ++i)
+            {
+                infoArray[i] = record->header->graphicInfo[i];
+            }
+            for (i = segmentNumber + 1; i < num; ++i)
+            {
+                infoArray[i - 1] = record->header->graphicInfo[i];
+            }
         }
     }
 
@@ -1502,15 +1506,17 @@ nitf_Record_removeLabelSegment(nitf_Record* record,
         /* Make new array, one smaller */
         infoArray = (nitf_ComponentInfo**)NITF_MALLOC(
                 sizeof(nitf_ComponentInfo*) * (num - 1));
-
-        /* Iterate over current infos */
-        for (i = 0; i < segmentNumber; ++i)
+        if (infoArray)
         {
-            infoArray[i] = record->header->labelInfo[i];
-        }
-        for (i = segmentNumber + 1; i < num; ++i)
-        {
-            infoArray[i - 1] = record->header->labelInfo[i];
+            /* Iterate over current infos */
+            for (i = 0; i < segmentNumber; ++i)
+            {
+                infoArray[i] = record->header->labelInfo[i];
+            }
+            for (i = segmentNumber + 1; i < num; ++i)
+            {
+                infoArray[i - 1] = record->header->labelInfo[i];
+            }
         }
     }
 
@@ -1573,12 +1579,14 @@ nitf_Record_removeTextSegment(nitf_Record* record,
         /* Make new array, one smaller */
         infoArray = (nitf_ComponentInfo**)NITF_MALLOC(
                 sizeof(nitf_ComponentInfo*) * (num - 1));
-
-        /* Iterate over current infos */
-        for (i = 0; i < segmentNumber; ++i)
-            infoArray[i] = record->header->textInfo[i];
-        for (i = segmentNumber + 1; i < num; ++i)
-            infoArray[i - 1] = record->header->textInfo[i];
+        if (infoArray)
+        {
+            /* Iterate over current infos */
+            for (i = 0; i < segmentNumber; ++i)
+                infoArray[i] = record->header->textInfo[i];
+            for (i = segmentNumber + 1; i < num; ++i)
+                infoArray[i - 1] = record->header->textInfo[i];
+        }
     }
 
     /* Update the num field in the header */
@@ -1642,15 +1650,17 @@ nitf_Record_removeDataExtensionSegment(nitf_Record* record,
         /* Make new array, one smaller */
         infoArray = (nitf_ComponentInfo**)NITF_MALLOC(
                 sizeof(nitf_ComponentInfo*) * (num - 1));
-
-        /* Iterate over current infos */
-        for (i = 0; i < segmentNumber; ++i)
+        if (infoArray)
         {
-            infoArray[i] = record->header->dataExtensionInfo[i];
-        }
-        for (i = segmentNumber + 1; i < num; ++i)
-        {
-            infoArray[i - 1] = record->header->dataExtensionInfo[i];
+            /* Iterate over current infos */
+            for (i = 0; i < segmentNumber; ++i)
+            {
+                infoArray[i] = record->header->dataExtensionInfo[i];
+            }
+            for (i = segmentNumber + 1; i < num; ++i)
+            {
+                infoArray[i - 1] = record->header->dataExtensionInfo[i];
+            }
         }
     }
 
@@ -1719,15 +1729,17 @@ nitf_Record_removeReservedExtensionSegment(nitf_Record* record,
         /* Make new array, one smaller */
         infoArray = (nitf_ComponentInfo**)NITF_MALLOC(
                 sizeof(nitf_ComponentInfo*) * (num - 1));
-
-        /* Iterate over current infos */
-        for (i = 0; i < segmentNumber; ++i)
+        if (infoArray)
         {
-            infoArray[i] = record->header->reservedExtensionInfo[i];
-        }
-        for (i = segmentNumber + 1; i < num; ++i)
-        {
-            infoArray[i - 1] = record->header->reservedExtensionInfo[i];
+            /* Iterate over current infos */
+            for (i = 0; i < segmentNumber; ++i)
+            {
+                infoArray[i] = record->header->reservedExtensionInfo[i];
+            }
+            for (i = segmentNumber + 1; i < num; ++i)
+            {
+                infoArray[i - 1] = record->header->reservedExtensionInfo[i];
+            }
         }
     }
 
