@@ -20,6 +20,8 @@
  *
  */
 
+#include <assert.h>
+
 #include "nitf/Reader.h"
 
 /****************************
@@ -249,6 +251,8 @@ CATCH_ERROR:
 NITFPRIV(NITF_BOOL)
 readField(nitf_Reader* reader, char* fld, int length, nitf_Error* error)
 {
+    assert(fld != NULL);
+
     /* Make sure the field is nulled out  */
     memset(fld, 0, length);
 
@@ -967,6 +971,10 @@ readRESubheader(nitf_Reader* reader,
     NITF_TRY_GET_UINT32(subhdr->subheaderFieldsLength, &subLen, error);
     if (subLen > 0)
     {
+        subhdr->subheaderFields = NITF_MALLOC(subLen + 1);
+        if (!subhdr->subheaderFields)
+            goto CATCH_ERROR;
+
         /* for now, we just read it into a buffer... change in the future */
         if (!readField(reader, subhdr->subheaderFields, subLen, error))
             goto CATCH_ERROR;
