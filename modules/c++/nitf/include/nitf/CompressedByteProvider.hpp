@@ -147,7 +147,7 @@ protected:
      * this constructor, the inheriting class will call initialize() later in
      * its constructor.
      */
-    CompressedByteProvider() noexcept(false);
+    CompressedByteProvider();
 
     /*!
      * \param record Pre-populated NITF record.  All TREs, image subheader, and
