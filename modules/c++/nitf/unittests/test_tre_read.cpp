@@ -137,6 +137,28 @@ TEST_CASE(test_readBandInfo_crash)
     TEST_ASSERT_TRUE(true);
 }
 
+TEST_CASE(test_readRESubheader_crash)
+{
+    ::testName = testName;
+    const std::string input_file = findInputFile("bug5_crash.ntf");
+
+    nitf_Error error;
+    nitf_IOHandle io = nitf_IOHandle_create(input_file.c_str(), NITF_ACCESS_READONLY,
+        NITF_OPEN_EXISTING, &error);
+    if (NITF_INVALID_HANDLE(io))
+    {
+        TEST_ASSERT_FALSE(true);
+    }
+
+    /*  We need to make a reader so we can parse the NITF */
+    nitf_Reader* reader = nitf_Reader_construct(&error);
+    TEST_ASSERT_NOT_EQ(nullptr, reader);
+
+    /*  This parses all header data within the NITF  */
+    (void)nitf_Reader_read(reader, io, &error);
+    TEST_ASSERT_TRUE(true);
+}
+
 TEST_MAIN(
     (void)argc;
 argv0 = argv[0];
@@ -144,4 +166,5 @@ argv0 = argv[0];
 TEST_CHECK(test_nitf_Record_unmergeTREs_crash);
 TEST_CHECK(test_nitf_Record_unmergeTREs_hangs);
 TEST_CHECK(test_readBandInfo_crash);
+TEST_CHECK(test_readRESubheader_crash);
 )
