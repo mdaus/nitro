@@ -57,7 +57,43 @@ struct test_MinidomParser final
     }
 };
 
-TEST_CASE(test_CopyAssignClone)
+TEST_CASE(test_CloneCopy_root_encoding)
+{
+    io::StringStream ss;
+    ss.stream() << strXml;
+    TEST_ASSERT_EQ(ss.stream().str(), strXml);
+
+    static const auto encoding = xml::lite::string_encoding::utf_8;
+    {
+        xml::lite::MinidomParser xmlParser;
+        xmlParser.parse(ss);
+        const auto doc = xmlParser.getDocument();
+        TEST_ASSERT(doc != nullptr);
+        auto pRoot = doc->getRootElement();
+        TEST_ASSERT(pRoot != nullptr);
+
+        pRoot->setCharacterData("abc", &encoding);
+        const auto& root = *pRoot;
+        TEST_ASSERT(root.getEncoding() != nullptr);
+
+        xml::lite::Element clone;
+        clone.clone(root);
+        TEST_ASSERT(clone.getEncoding() != nullptr);
+        clone.setCharacterData("xyz");
+        TEST_ASSERT(clone.getEncoding() !=
+                    nullptr);  // TODO: this is wrong!
+        TEST_ASSERT(root.getEncoding() != nullptr);
+ 
+        auto copy(root);
+        copy.clearChildren();
+        TEST_ASSERT(copy.getEncoding() != nullptr);
+        copy.setCharacterData("xyz");
+        TEST_ASSERT(copy.getEncoding() != nullptr);  // TODO: this is wrong!
+        TEST_ASSERT(root.getEncoding() != nullptr);
+    }
+}
+
+TEST_CASE(test_CloneCopy_copy_encoding)
 {
     io::StringStream ss;
     ss.stream() << strXml;
@@ -70,35 +106,26 @@ TEST_CASE(test_CopyAssignClone)
     auto pRoot = doc->getRootElement();
     TEST_ASSERT(pRoot != nullptr);
 
-    static const auto encoding = xml::lite::string_encoding::utf_8;
-    pRoot->setCharacterData("abc", &encoding);
+    pRoot->setCharacterData("abc");
     const auto& root = *pRoot;
-    TEST_ASSERT(root.getEncoding() != nullptr);
+    TEST_ASSERT_EQ(nullptr, root.getEncoding());
 
+    static const auto encoding = xml::lite::string_encoding::utf_8;
     {
         xml::lite::Element clone;
         clone.clone(root);
-        clone.setCharacterData("abc");
-        //TEST_ASSERT_EQ(nullptr, clone.getEncoding());
-        TEST_ASSERT(clone.getEncoding() != nullptr); // TODO: this is wrong!
-        TEST_ASSERT(root.getEncoding() != nullptr);
+        TEST_ASSERT_EQ(nullptr, clone.getEncoding());
+        clone.setCharacterData("xyz", &encoding);
+        TEST_ASSERT(clone.getEncoding() != nullptr);
+        TEST_ASSERT_EQ(nullptr, root.getEncoding());
     }
     {
         auto copy(root);
         copy.clearChildren();
-        copy.setCharacterData("abc");
-        //TEST_ASSERT_EQ(nullptr, copy.getEncoding());
-        TEST_ASSERT(copy.getEncoding() != nullptr);  // TODO: this is wrong!
-        TEST_ASSERT(root.getEncoding() != nullptr);
-    }
-    {
-        xml::lite::Element assign;
-        assign = root;
-        assign.clearChildren();
-        assign.setCharacterData("abc");
-        // TEST_ASSERT_EQ(nullptr, assign.getEncoding());
-        TEST_ASSERT(assign.getEncoding() != nullptr);  // TODO: this is wrong!
-        TEST_ASSERT(root.getEncoding() != nullptr);
+        TEST_ASSERT_EQ(nullptr, copy.getEncoding());
+        copy.setCharacterData("xyz", &encoding);
+        TEST_ASSERT(copy.getEncoding() != nullptr);
+        TEST_ASSERT_EQ(nullptr, root.getEncoding());
     }
 }
 
@@ -336,7 +363,8 @@ TEST_CASE(test_setValue)
 
 int main(int, char**)
 {
-    TEST_CHECK(test_CopyAssignClone);
+    TEST_CHECK(test_CloneCopy_root_encoding);
+    TEST_CHECK(test_CloneCopy_copy_encoding);
 
     TEST_CHECK(test_getRootElement);
     TEST_CHECK(test_getElementsByTagName);
