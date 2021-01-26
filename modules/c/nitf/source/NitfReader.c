@@ -1462,9 +1462,21 @@ readBandInfo(nitf_Reader* reader, unsigned int nbands, nitf_Error* error)
                                 NITF_ERR_MEMORY);
                 return NULL;
             }
+
+            // Be sure the product of `numLuts` and `bandEntriesPerLut` does not overflow.
+            const uint64_t fieldLength_ = (uint64_t)numLuts * (uint64_t)bandEntriesPerLut;
+            const int fieldLength = (int)fieldLength_; // readField() has an "int" length parameter
+            if ((fieldLength_ > INT32_MAX)  || (fieldLength < 0))
+            {
+                nitf_Error_init(error,
+                                "fieldLength overflow",
+                                NITF_CTXT,
+                                NITF_ERR_MEMORY);
+                return NULL;
+            }
             if (!readField(reader,
                            (char*)bandInfo[i]->lut->table,
-                           numLuts * bandEntriesPerLut,
+                           fieldLength,
                            error))
                 goto CATCH_ERROR;
         }
