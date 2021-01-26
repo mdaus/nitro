@@ -47,10 +47,8 @@ xml::lite::Element& xml::lite::Element::operator=(const xml::lite::Element& node
 
 void xml::lite::Element::clone(const xml::lite::Element& node)
 {
-    mName = node.mName;
-    mCharacterData = node.mCharacterData;
-    mpEncoding = node.mpEncoding;
-    mAttributes = node.mAttributes;
+    *this = node;
+    clearChildren();
     mParent = NULL;
 
     std::vector<xml::lite::Element *>::const_iterator iter;

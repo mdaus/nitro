@@ -57,6 +57,35 @@ struct test_MinidomParser final
     }
 };
 
+TEST_CASE(test_CopyAssignClone)
+{
+    io::StringStream ss;
+    ss.stream() << strXml;
+    TEST_ASSERT_EQ(ss.stream().str(), strXml);
+
+    xml::lite::MinidomParser xmlParser;
+    xmlParser.parse(ss);
+    const auto doc = xmlParser.getDocument();
+    TEST_ASSERT(doc != nullptr);
+    auto pRoot = doc->getRootElement();
+    TEST_ASSERT(pRoot != nullptr);
+
+    static const auto encoding = xml::lite::string_encoding::utf_8;
+    pRoot->setCharacterData("abc", &encoding);
+    const auto& root = *pRoot;
+    TEST_ASSERT(root.getEncoding() != nullptr);
+
+    xml::lite::Element clone;
+    clone.clone(root);
+
+    auto copy(root);
+    copy.clearChildren();
+
+    xml::lite::Element assign;
+    assign = root;
+    assign.clearChildren();
+}
+
 TEST_CASE(test_getRootElement)
 {
     io::StringStream ss;
@@ -291,6 +320,8 @@ TEST_CASE(test_setValue)
 
 int main(int, char**)
 {
+    TEST_CHECK(test_CopyAssignClone);
+
     TEST_CHECK(test_getRootElement);
     TEST_CHECK(test_getElementsByTagName);
     TEST_CHECK(test_getElementsByTagName_b);

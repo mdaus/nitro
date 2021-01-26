@@ -437,6 +437,14 @@ public:
         return mChildren;
     }
 
+    /*!
+    * Removes all the children WITHOUT destroying them; see destroyChildren().
+    */
+    void clearChildren()
+    {
+        mChildren.clear();
+    }
+
     Element* getParent() const
     {
         return mParent;
