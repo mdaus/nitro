@@ -81,13 +81,11 @@ TEST_CASE(test_CloneCopy_root_encoding)
         copy.clearChildren();
         TEST_ASSERT(copy.getEncoding() != nullptr);
         copy.setCharacterData("xyz");
-        // TEST_ASSERT_EQ(nullptr, clone.getEncoding()); // TODO: correct
-        TEST_ASSERT(copy.getEncoding() != nullptr);  // TODO: this is wrong!
+        TEST_ASSERT_EQ(nullptr, copy.getEncoding());
         TEST_ASSERT(root.getEncoding() != nullptr);
 
         pRoot->setCharacterData("123");
-        // TEST_ASSERT_EQ(nullptr, root.getEncoding()); // TODO: correct
-        TEST_ASSERT(root.getEncoding() != nullptr);  // TODO: this is wrong!
+        TEST_ASSERT_EQ(nullptr, root.getEncoding());
     }
     {
         static const auto windows_1252 = xml::lite::string_encoding::windows_1252;
@@ -107,8 +105,8 @@ TEST_CASE(test_CloneCopy_root_encoding)
         TEST_ASSERT(*root.getEncoding() != *copy.getEncoding());
 
         pRoot->setCharacterData("123");
-        // TEST_ASSERT_EQ(nullptr, root.getEncoding()); // TODO: correct
-        TEST_ASSERT(root.getEncoding() != nullptr);  // TODO: this is wrong!
+        TEST_ASSERT_EQ(nullptr, root.getEncoding());
+        TEST_ASSERT(copy.getEncoding() != nullptr);
     }
 }
 

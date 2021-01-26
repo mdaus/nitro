@@ -466,10 +466,10 @@ protected:
     xml::lite::Attributes mAttributes;
     //! The character data ...
     std::string mCharacterData;
-    // ... and how that data is encoded
-    std::shared_ptr<const string_encoding> mpEncoding;
 
     private:
+        // ... and how that data is encoded
+        std::unique_ptr<const string_encoding> mpEncoding;
         void depthPrint(io::OutputStream& stream, bool utf8, int depth,
                 const std::string& formatter) const;
 };

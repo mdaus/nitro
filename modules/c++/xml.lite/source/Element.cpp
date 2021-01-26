@@ -37,7 +37,10 @@ xml::lite::Element& xml::lite::Element::operator=(const xml::lite::Element& node
     {
         mName = node.mName;
         mCharacterData = node.mCharacterData;
-        mpEncoding = node.mpEncoding;
+        if (node.mpEncoding)
+        {
+            mpEncoding = mem::make::unique<const string_encoding>(*node.mpEncoding);
+        }
         mAttributes = node.mAttributes;
         mChildren = node.mChildren;
         mParent = node.mParent;
@@ -450,12 +453,15 @@ void xml::lite::Element::setCharacterData(const std::string& characters,
     mCharacterData = characters;
     if (pEncoding != nullptr)
     {
-        mpEncoding = std::make_shared<const string_encoding>(*pEncoding);
+        mpEncoding = mem::make::unique<const string_encoding>(*pEncoding);
+    }
+    else
+    {
+        mpEncoding.reset();
     }
 }
 void xml::lite::Element::setCharacterData(const sys::U8string& characters)
 {
-    mCharacterData = str::toString(characters);
     static const auto encoding = string_encoding::utf_8;
-    mpEncoding = std::make_shared<const string_encoding>(encoding);
+    setCharacterData(str::toString(characters), &encoding);
 }
