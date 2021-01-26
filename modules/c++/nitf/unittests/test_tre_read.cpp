@@ -13,9 +13,9 @@ const std::string output_file = "test_writer_3++.nitf";
 namespace fs = std::filesystem;
 
 static std::string argv0;
-static fs::path findInputFile()
+static fs::path findInputFile(const std::string& name)
 {
-    const fs::path inputFile = fs::path("modules") / "c++" / "nitf" / "unittests" / "bug2_crash.ntf";
+    const fs::path inputFile = fs::path("modules") / "c++" / "nitf" / "unittests" / name;
 
     fs::path root;
     if (argv0.empty())
@@ -32,39 +32,52 @@ static fs::path findInputFile()
     return root / inputFile;
 }
 
-static nitf::Record doRead(const std::string& inFile, nitf::Reader& reader)
-{
-    // Check that wew have a valid NITF
-    const auto version = nitf::Reader::getNITFVersion(inFile);
-    TEST_ASSERT(version != NITF_VER_UNKNOWN);
-
-    nitf::IOHandle io(inFile);
-    nitf::Record record = reader.read(io);
-
-    /*  Set this to the end, so we'll know when we're done!  */
-    nitf::ListIterator end = record.getImages().end();
-    nitf::ListIterator iter = record.getImages().begin();
-    for (int count = 0, numImages = record.getHeader().getNumImages();
-        count < numImages && iter != end; ++count, ++iter)
-    {
-        nitf::ImageSegment imageSegment = *iter;
-        nitf::ImageReader deserializer = reader.newImageReader(count);
-    }
-
-    return record;
-}
-TEST_CASE(test_read_tre)
+TEST_CASE(test_nitf_Record_unmergeTREs_crash)
 {
     ::testName = testName;
-    const auto input_file = findInputFile().string();
+    const std::string input_file = findInputFile("bug2_crash.ntf");
 
-    nitf::Reader reader;
-    nitf::Record record = doRead(input_file, reader);
+    nitf_Error error;
+    nitf_IOHandle io = nitf_IOHandle_create(input_file.c_str(), NITF_ACCESS_READONLY,
+        NITF_OPEN_EXISTING, &error);
+    if (NITF_INVALID_HANDLE(io))
+    {
+        TEST_ASSERT_FALSE(true);
+    }
+
+    /*  We need to make a reader so we can parse the NITF */
+    nitf_Reader* reader = nitf_Reader_construct(&error);
+    TEST_ASSERT_NOT_EQ(nullptr, reader);
+
+    /*  This parses all header data within the NITF  */
+    nitf_Record* record = nitf_Reader_read(reader, io, &error);
+    if (!record) goto CATCH_ERROR;
+
+    /* Open the output IO Handle */
+    nitf_IOHandle output = nitf_IOHandle_create("bug2_crash_out.ntf", NITF_ACCESS_WRITEONLY, NITF_CREATE, &error);
+    if (NITF_INVALID_HANDLE(output)) goto CATCH_ERROR;
+
+    nitf_Writer* writer = nitf_Writer_construct(&error);
+    if (!writer) goto CATCH_ERROR;
+
+    /* prepare the writer with this record */
+    if (!nitf_Writer_prepare(writer, record, output, &error))
+        goto CATCH_ERROR;
+
+    nitf_IOHandle_close(io);
+    nitf_Record_destruct(&record);
+    nitf_Reader_destruct(&reader);
+
+    TEST_ASSERT_TRUE(true);
+    return;
+
+CATCH_ERROR:
+    TEST_ASSERT_FALSE(true);
 }
 
 TEST_MAIN(
     (void)argc;
-    argv0 = argv[0];
+argv0 = argv[0];
 
-    TEST_CHECK(test_read_tre);
-    )
+TEST_CHECK(test_nitf_Record_unmergeTREs_crash);
+)
