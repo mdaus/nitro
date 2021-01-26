@@ -3,10 +3,11 @@
 #include <string>
 
 #include <sys/Filesystem.h>
+#include <sys/OS.h>
 
 #include "nitf_Test.h"
 
-namespace fs = sys::Filesystem;
+namespace fs = std::filesystem;
 
 static bool is_x64_Configuration(const fs::path& path) // "Configuration" is typically "Debug" or "Release"
 {
@@ -133,3 +134,31 @@ struct nitf_test_tre_mods : public ::testing::Test {
 #undef TEST_CASE
 #define TEST_CASE(X) TEST(test_image_writer, X)
 #include "nitf/unittests/test_image_writer.cpp"
+
+
+struct test_load_plugins : public ::testing::Test {
+	test_load_plugins() {
+		// initialization code here
+		//const std::string NITF_PLUGIN_PATH = R"(C:\Users\jdsmith\source\repos\nitro\x64\Debug\share\nitf\plugins)";
+		sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
+	}
+
+	void SetUp() {
+		// code here will execute just before the test ensues 
+	}
+
+	void TearDown() {
+		// code here will be called just after the test completes
+		// ok to through exceptions from here if need be
+	}
+
+	~test_load_plugins() {
+		// cleanup any pending stuff, but no exceptions allowed
+	}
+
+	// put in any custom data members that you need 
+};
+
+#undef TEST_CASE
+#define TEST_CASE(X) TEST_F(test_load_plugins, X)
+#include "nitf/unittests/test_load_plugins.cpp"

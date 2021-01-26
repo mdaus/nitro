@@ -20,14 +20,12 @@
  *
  */
 
+#include <nitf/coda-oss.hpp>
 #include <nitf/IOStreamWriter.hpp>
-#include <except/Exception.h>
-
-#include "nitf/cstddef.h"
 
 namespace nitf
 {
-IOStreamWriter::IOStreamWriter(std::shared_ptr<io::SeekableOutputStream> stream) :
+IOStreamWriter::IOStreamWriter(mem::SharedPtr<io::SeekableOutputStream> stream) :
     mStream(stream)
 {
 }
