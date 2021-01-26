@@ -128,15 +128,17 @@ TEST_CASE(test_nitf_Record_unmergeTREs_crash)
 
     /*  This parses all header data within the NITF  */
     nitf_Record* record = nitf_Reader_read(reader, io, &error);
-    if (!record) goto CATCH_ERROR;
+    TEST_ASSERT_NOT_EQ(nullptr, record);
 
     /* Open the output IO Handle */
     nitf_IOHandle output = nitf_IOHandle_create("bug2_crash_out.ntf", NITF_ACCESS_WRITEONLY, NITF_CREATE, &error);
-    if (NITF_INVALID_HANDLE(output)) goto CATCH_ERROR;
+    if (NITF_INVALID_HANDLE(output))
+    {
+        TEST_ASSERT_FALSE(true);
+    }
 
     nitf_Writer* writer = nitf_Writer_construct(&error);
-    if (!writer) goto CATCH_ERROR;
-
+    TEST_ASSERT_NOT_EQ(nullptr, writer);
     (void)nitf_Writer_prepare(writer, record, output, &error);
 
     nitf_IOHandle_close(io);
@@ -144,10 +146,6 @@ TEST_CASE(test_nitf_Record_unmergeTREs_crash)
     nitf_Reader_destruct(&reader);
 
     TEST_ASSERT_TRUE(true);
-    return;
-
-CATCH_ERROR:
-    TEST_ASSERT_FALSE(true);
 }
 
 TEST_CASE(test_nitf_Record_unmergeTREs_hangs)
@@ -169,15 +167,17 @@ TEST_CASE(test_nitf_Record_unmergeTREs_hangs)
 
     /*  This parses all header data within the NITF  */
     nitf_Record* record = nitf_Reader_read(reader, io, &error);
-    if (!record) goto CATCH_ERROR;
+    TEST_ASSERT_NOT_EQ(nullptr, record);
 
     /* Open the output IO Handle */
     nitf_IOHandle output = nitf_IOHandle_create("bug6_hangs_out.ntf", NITF_ACCESS_WRITEONLY, NITF_CREATE, &error);
-    if (NITF_INVALID_HANDLE(output)) goto CATCH_ERROR;
+    if (NITF_INVALID_HANDLE(output))
+    {
+        TEST_ASSERT_FALSE(true);
+    }
 
     nitf_Writer* writer = nitf_Writer_construct(&error);
-    if (!writer) goto CATCH_ERROR;
-
+    TEST_ASSERT_NOT_EQ(nullptr, writer);
     (void)nitf_Writer_prepare(writer, record, output, &error);
 
     nitf_IOHandle_close(io);
@@ -185,10 +185,6 @@ TEST_CASE(test_nitf_Record_unmergeTREs_hangs)
     nitf_Reader_destruct(&reader);
 
     TEST_ASSERT_TRUE(true);
-    return;
-
-CATCH_ERROR:
-    TEST_ASSERT_FALSE(true);
 }
 
 TEST_CASE(test_defaultRead_crash)
@@ -263,7 +259,7 @@ TEST_MAIN(
 argv0 = argv[0];
 
 TEST_CHECK(test_nitf_Record_unmergeTREs_crash); // 2
-TEST_CHECK(test_defaultRead_crash); // 3
+//TEST_CHECK(test_defaultRead_crash); // 3
 TEST_CHECK(test_readBandInfo_crash); // 4
 TEST_CHECK(test_readRESubheader_crash); // 5
 TEST_CHECK(test_nitf_Record_unmergeTREs_hangs); // 6
