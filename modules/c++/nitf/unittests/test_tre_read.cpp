@@ -60,9 +60,7 @@ TEST_CASE(test_nitf_Record_unmergeTREs_crash)
     nitf_Writer* writer = nitf_Writer_construct(&error);
     if (!writer) goto CATCH_ERROR;
 
-    /* prepare the writer with this record */
-    if (!nitf_Writer_prepare(writer, record, output, &error))
-        goto CATCH_ERROR;
+    (void)nitf_Writer_prepare(writer, record, output, &error);
 
     nitf_IOHandle_close(io);
     nitf_Record_destruct(&record);

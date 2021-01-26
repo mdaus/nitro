@@ -2041,7 +2041,7 @@ CATCH_ERROR:
                 return NITF_FAILURE;                                           \
             }                                                                  \
         }                                                                      \
-        if (!moveTREs(section,                                                 \
+        if ((overflow == NULL) || !moveTREs(section,                                                 \
                       overflow->subheader->userDefinedSection,                 \
                       maxLength,                                               \
                       error))                                                  \
