@@ -43,7 +43,5 @@
 #include <gsl/gsl.h>
 
 #if !CODA_OSS_cpp17
-#error Must build with C++17.
+#error Must compile with C++17.
 #endif
-
-
