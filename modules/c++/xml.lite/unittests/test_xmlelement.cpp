@@ -45,8 +45,8 @@ static const auto strXml = strXml1_ + text + strXml2_;
 
 struct test_MinidomParser final
 {
-    xml::lite::MinidomParser xmlParser;
-    const xml::lite::Element* getRootElement()
+    mutable xml::lite::MinidomParser xmlParser;
+    const xml::lite::Element* getRootElement() const
     {
         io::StringStream ss;
         ss.stream() << strXml;
@@ -55,7 +55,77 @@ struct test_MinidomParser final
         const auto doc = xmlParser.getDocument();
         return doc->getRootElement();    
     }
+    xml::lite::Element* getRootElement()
+    {
+        io::StringStream ss;
+        ss.stream() << strXml;
+
+        xmlParser.parse(ss);
+        const auto doc = xmlParser.getDocument();
+        return doc->getRootElement();
+    }
 };
+
+TEST_CASE(test_CloneCopy_root_encoding)
+{
+    static const auto utf_8 = xml::lite::string_encoding::utf_8;
+    {
+        test_MinidomParser xmlParser;
+        auto pRoot = xmlParser.getRootElement();
+
+        pRoot->setCharacterData("abc", &utf_8);
+        const auto& root = *pRoot;
+        TEST_ASSERT(root.getEncoding() != nullptr);
+ 
+        auto copy(root);
+        copy.clearChildren();
+        TEST_ASSERT(copy.getEncoding() != nullptr);
+        copy.setCharacterData("xyz");
+        TEST_ASSERT_EQ(nullptr, copy.getEncoding());
+        TEST_ASSERT(root.getEncoding() != nullptr);
+
+        pRoot->setCharacterData("123");
+        TEST_ASSERT_EQ(nullptr, root.getEncoding());
+    }
+    {
+        static const auto windows_1252 = xml::lite::string_encoding::windows_1252;
+
+        test_MinidomParser xmlParser;
+        auto pRoot = xmlParser.getRootElement();
+
+        pRoot->setCharacterData("abc", &utf_8);
+        const auto& root = *pRoot;
+
+        auto copy(root);
+        copy.clearChildren();
+        TEST_ASSERT(copy.getEncoding() != nullptr);
+        copy.setCharacterData("xyz", &windows_1252);
+        TEST_ASSERT(copy.getEncoding() != nullptr);
+        TEST_ASSERT(root.getEncoding() != nullptr);
+        TEST_ASSERT(*root.getEncoding() != *copy.getEncoding());
+
+        pRoot->setCharacterData("123");
+        TEST_ASSERT_EQ(nullptr, root.getEncoding());
+        TEST_ASSERT(copy.getEncoding() != nullptr);
+    }
+}
+
+TEST_CASE(test_CloneCopy_copy_encoding)
+{
+    test_MinidomParser xmlParser;
+    auto pRoot = xmlParser.getRootElement();
+    pRoot->setCharacterData("abc");
+    const auto& root = *pRoot;
+    TEST_ASSERT_EQ(nullptr, root.getEncoding());
+
+    static const auto encoding = xml::lite::string_encoding::utf_8;
+    auto copy(root);
+    copy.clearChildren();
+    TEST_ASSERT_EQ(nullptr, copy.getEncoding());
+    copy.setCharacterData("xyz", &encoding);
+    TEST_ASSERT(copy.getEncoding() != nullptr);
+    TEST_ASSERT_EQ(nullptr, root.getEncoding());
+}
 
 TEST_CASE(test_getRootElement)
 {
@@ -291,6 +361,9 @@ TEST_CASE(test_setValue)
 
 int main(int, char**)
 {
+    TEST_CHECK(test_CloneCopy_root_encoding);
+    TEST_CHECK(test_CloneCopy_copy_encoding);
+
     TEST_CHECK(test_getRootElement);
     TEST_CHECK(test_getElementsByTagName);
     TEST_CHECK(test_getElementsByTagName_b);

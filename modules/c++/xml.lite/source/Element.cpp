@@ -37,7 +37,10 @@ xml::lite::Element& xml::lite::Element::operator=(const xml::lite::Element& node
     {
         mName = node.mName;
         mCharacterData = node.mCharacterData;
-        mpEncoding = node.mpEncoding;
+        if (node.mpEncoding)
+        {
+            mpEncoding = mem::make::unique<const string_encoding>(*node.mpEncoding);
+        }
         mAttributes = node.mAttributes;
         mChildren = node.mChildren;
         mParent = node.mParent;
@@ -47,10 +50,8 @@ xml::lite::Element& xml::lite::Element::operator=(const xml::lite::Element& node
 
 void xml::lite::Element::clone(const xml::lite::Element& node)
 {
-    mName = node.mName;
-    mCharacterData = node.mCharacterData;
-    mpEncoding = node.mpEncoding;
-    mAttributes = node.mAttributes;
+    *this = node;
+    clearChildren();
     mParent = NULL;
 
     std::vector<xml::lite::Element *>::const_iterator iter;
@@ -444,4 +445,23 @@ void xml::lite::Element::setNamespaceURI(
     attr[p] = uri;
 
     attr[std::string("xmlns:") + prefix] = uri;
+}
+
+void xml::lite::Element::setCharacterData(const std::string& characters,
+                      const string_encoding* pEncoding)
+{
+    mCharacterData = characters;
+    if (pEncoding != nullptr)
+    {
+        mpEncoding = mem::make::unique<const string_encoding>(*pEncoding);
+    }
+    else
+    {
+        mpEncoding.reset();
+    }
+}
+void xml::lite::Element::setCharacterData(const sys::U8string& characters)
+{
+    static const auto encoding = string_encoding::utf_8;
+    setCharacterData(str::toString(characters), &encoding);
 }
