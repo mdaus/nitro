@@ -2201,6 +2201,7 @@ nitf_Record_unmergeTREs(nitf_Record* record, nitf_Error* error)
                         LXSHD);
 
         segIndex += 1;
+        nitf_ListIterator_increment(&segIter);
     }
 
     /* Text segments */
