@@ -75,15 +75,31 @@ TEST_CASE(test_CopyAssignClone)
     const auto& root = *pRoot;
     TEST_ASSERT(root.getEncoding() != nullptr);
 
-    xml::lite::Element clone;
-    clone.clone(root);
-
-    auto copy(root);
-    copy.clearChildren();
-
-    xml::lite::Element assign;
-    assign = root;
-    assign.clearChildren();
+    {
+        xml::lite::Element clone;
+        clone.clone(root);
+        clone.setCharacterData("abc");
+        //TEST_ASSERT_EQ(nullptr, clone.getEncoding());
+        TEST_ASSERT(clone.getEncoding() != nullptr); // TODO: this is wrong!
+        TEST_ASSERT(root.getEncoding() != nullptr);
+    }
+    {
+        auto copy(root);
+        copy.clearChildren();
+        copy.setCharacterData("abc");
+        //TEST_ASSERT_EQ(nullptr, copy.getEncoding());
+        TEST_ASSERT(copy.getEncoding() != nullptr);  // TODO: this is wrong!
+        TEST_ASSERT(root.getEncoding() != nullptr);
+    }
+    {
+        xml::lite::Element assign;
+        assign = root;
+        assign.clearChildren();
+        assign.setCharacterData("abc");
+        // TEST_ASSERT_EQ(nullptr, assign.getEncoding());
+        TEST_ASSERT(assign.getEncoding() != nullptr);  // TODO: this is wrong!
+        TEST_ASSERT(root.getEncoding() != nullptr);
+    }
 }
 
 TEST_CASE(test_getRootElement)
