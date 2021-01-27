@@ -68,45 +68,42 @@ struct test_MinidomParser final
 
 TEST_CASE(test_CloneCopy_root_encoding)
 {
-    static const auto utf_8 = xml::lite::string_encoding::utf_8;
     {
         test_MinidomParser xmlParser;
         auto pRoot = xmlParser.getRootElement();
 
-        pRoot->setCharacterData("abc", &utf_8);
+        pRoot->setCharacterData("abc", xml::lite::string_encoding::utf_8);
         const auto& root = *pRoot;
-        TEST_ASSERT(root.getEncoding() != nullptr);
+        TEST_ASSERT_TRUE(root.getEncoding().has_value());
  
         auto copy(root);
         copy.clearChildren();
-        TEST_ASSERT(copy.getEncoding() != nullptr);
+        TEST_ASSERT_TRUE(copy.getEncoding().has_value());
         copy.setCharacterData("xyz");
-        TEST_ASSERT_EQ(nullptr, copy.getEncoding());
-        TEST_ASSERT(root.getEncoding() != nullptr);
+        TEST_ASSERT_FALSE(copy.getEncoding().has_value());
+        TEST_ASSERT_TRUE(root.getEncoding().has_value());
 
         pRoot->setCharacterData("123");
-        TEST_ASSERT_EQ(nullptr, root.getEncoding());
+        TEST_ASSERT_FALSE(root.getEncoding().has_value());
     }
     {
-        static const auto windows_1252 = xml::lite::string_encoding::windows_1252;
-
         test_MinidomParser xmlParser;
         auto pRoot = xmlParser.getRootElement();
 
-        pRoot->setCharacterData("abc", &utf_8);
+        pRoot->setCharacterData("abc", xml::lite::string_encoding::utf_8);
         const auto& root = *pRoot;
 
         auto copy(root);
         copy.clearChildren();
-        TEST_ASSERT(copy.getEncoding() != nullptr);
-        copy.setCharacterData("xyz", &windows_1252);
-        TEST_ASSERT(copy.getEncoding() != nullptr);
-        TEST_ASSERT(root.getEncoding() != nullptr);
+        TEST_ASSERT_TRUE(copy.getEncoding().has_value());
+        copy.setCharacterData("xyz", xml::lite::string_encoding::windows_1252);
+        TEST_ASSERT_TRUE(copy.getEncoding().has_value());
+        TEST_ASSERT_TRUE(root.getEncoding().has_value());
         TEST_ASSERT(*root.getEncoding() != *copy.getEncoding());
 
         pRoot->setCharacterData("123");
-        TEST_ASSERT_EQ(nullptr, root.getEncoding());
-        TEST_ASSERT(copy.getEncoding() != nullptr);
+        TEST_ASSERT_FALSE(root.getEncoding().has_value());
+        TEST_ASSERT_TRUE(copy.getEncoding().has_value());
     }
 }
 
@@ -116,15 +113,14 @@ TEST_CASE(test_CloneCopy_copy_encoding)
     auto pRoot = xmlParser.getRootElement();
     pRoot->setCharacterData("abc");
     const auto& root = *pRoot;
-    TEST_ASSERT_EQ(nullptr, root.getEncoding());
+    TEST_ASSERT_FALSE(root.getEncoding().has_value());
 
-    static const auto encoding = xml::lite::string_encoding::utf_8;
     auto copy(root);
     copy.clearChildren();
-    TEST_ASSERT_EQ(nullptr, copy.getEncoding());
-    copy.setCharacterData("xyz", &encoding);
-    TEST_ASSERT(copy.getEncoding() != nullptr);
-    TEST_ASSERT_EQ(nullptr, root.getEncoding());
+    TEST_ASSERT_FALSE(copy.getEncoding().has_value());
+    copy.setCharacterData("xyz", xml::lite::string_encoding::utf_8);
+    TEST_ASSERT_TRUE(copy.getEncoding().has_value());
+    TEST_ASSERT_FALSE(root.getEncoding().has_value());
 }
 
 TEST_CASE(test_getRootElement)
@@ -165,8 +161,8 @@ TEST_CASE(test_getElementsByTagName)
 
         const auto characterData = a.getCharacterData();
         TEST_ASSERT_EQ(characterData, text);
-        const auto pEncoding = a.getEncoding();
-        TEST_ASSERT_NULL(pEncoding);
+        const auto encoding = a.getEncoding();
+        TEST_ASSERT_FALSE(encoding.has_value());
     }
 }
 
