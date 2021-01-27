@@ -118,7 +118,7 @@ public:
     {
         return &value_; // "This operator does not check whether the optional contains a value!"
     }
-    constexpr T* operator->()
+    T* operator->()
     {
         return &value_; // "This operator does not check whether the optional contains a value!"
     }
