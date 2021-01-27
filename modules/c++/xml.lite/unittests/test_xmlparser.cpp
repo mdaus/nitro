@@ -212,8 +212,7 @@ TEST_CASE(testXmlPrintUtf8)
     xml::lite::MinidomParser xmlParser;
     auto pDocument = xmlParser.getDocument();
 
-    const auto encoding = xml::lite::string_encoding::windows_1252;
-    const auto pRootElement = pDocument->createElement("root", "" /*uri*/, iso88591Text, &encoding);
+    const auto pRootElement = pDocument->createElement("root", "" /*uri*/, iso88591Text, xml::lite::string_encoding::windows_1252);
 
     io::StringStream output;
     pRootElement->print(output, xml::lite::string_encoding::utf_8); // write UTF-8

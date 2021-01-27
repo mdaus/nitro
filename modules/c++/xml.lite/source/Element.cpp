@@ -447,8 +447,7 @@ void xml::lite::Element::setNamespaceURI(
     attr[std::string("xmlns:") + prefix] = uri;
 }
 
-void xml::lite::Element::setCharacterData(const std::string& characters,
-                      const string_encoding* pEncoding)
+void xml::lite::Element::setCharacterData_(const std::string& characters, const string_encoding* pEncoding)
 {
     mCharacterData = characters;
     if (pEncoding != nullptr)
@@ -460,8 +459,15 @@ void xml::lite::Element::setCharacterData(const std::string& characters,
         mpEncoding.reset();
     }
 }
+void xml::lite::Element::setCharacterData(const std::string& characters)
+{
+    setCharacterData_(characters, nullptr /*pEncoding*/);
+}
+void xml::lite::Element::setCharacterData(const std::string& characters, string_encoding encoding)
+{
+    setCharacterData_(characters, &encoding);
+}
 void xml::lite::Element::setCharacterData(const sys::U8string& characters)
 {
-    static const auto encoding = string_encoding::utf_8;
-    setCharacterData(str::toString(characters), &encoding);
+    setCharacterData(str::toString(characters), string_encoding::utf_8);
 }
