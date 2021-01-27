@@ -32,6 +32,7 @@
 #include <str/Convert.h>
 #include "xml/lite/XMLException.h"
 #include "xml/lite/Attributes.h"
+#include "sys/Conf.h"
 
 /*!
  * \file  Element.h
@@ -334,20 +335,8 @@ public:
      *  Sets the character data for this element.
      *  \param characters The data to add to this element
      */
-    void setCharacterData(const std::string& characters, const string_encoding* pEncoding = nullptr)
-    {
-        mCharacterData = characters;
-        if (pEncoding != nullptr)
-        {
-            mpEncoding = std::make_shared<const string_encoding>(*pEncoding);
-        }
-    }
-    void setCharacterData(const sys::U8string& characters)
-    {
-        mCharacterData = str::toString(characters);
-        static const auto encoding = string_encoding::utf_8;
-        mpEncoding = std::make_shared<const string_encoding>(encoding);
-    }
+    void setCharacterData(const std::string& characters, const string_encoding* pEncoding = nullptr);
+    void setCharacterData(const sys::U8string& characters);
 
     /*!
      *  Sets the local name for this element.
@@ -413,7 +402,10 @@ public:
      *  Adds a child element to this element
      *  \param node the child element to add
      */
+    virtual void addChild(std::unique_ptr<Element>&& node);
+    #if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
     virtual void addChild(std::auto_ptr<Element> node);
+    #endif
 
     /*!
      *  Returns all of the children of this element
@@ -431,6 +423,14 @@ public:
     const std::vector<Element*>& getChildren() const
     {
         return mChildren;
+    }
+
+    /*!
+    * Removes all the children WITHOUT destroying them; see destroyChildren().
+    */
+    void clearChildren()
+    {
+        mChildren.clear();
     }
 
     Element* getParent() const
@@ -466,10 +466,10 @@ protected:
     xml::lite::Attributes mAttributes;
     //! The character data ...
     std::string mCharacterData;
-    // ... and how that data is encoded
-    std::shared_ptr<const string_encoding> mpEncoding;
 
     private:
+        // ... and how that data is encoded
+        std::unique_ptr<const string_encoding> mpEncoding;
         void depthPrint(io::OutputStream& stream, bool utf8, int depth,
                 const std::string& formatter) const;
 };
@@ -479,8 +479,8 @@ protected:
  *  \param value the charater data as T
  *  \return whether or not there was a value of type T
  */
-template<typename T>
-inline bool getValue(const Element& element, T& value)
+template <typename T, typename ToType>
+inline bool getValue(const Element& element, T& value, ToType toType)
 {
     const auto characterData = element.getCharacterData();
     if (characterData.empty())
@@ -489,7 +489,7 @@ inline bool getValue(const Element& element, T& value)
     }
     try
     {
-        value = str::toType<T>(characterData);
+        value = toType(characterData);
     }
     catch (const except::BadCastException&)
     {
@@ -497,16 +497,25 @@ inline bool getValue(const Element& element, T& value)
     }
     return true;
 }
-
+template <typename T>
+inline bool getValue(const Element& element, T& value)
+{
+    return getValue(element, value, details::toType<T>);
+}
 
 /*!
  *  Sets the character data for this element by calling str::toString() on the value.
  *  \param value The data to add to this element
  */
+template <typename T, typename ToString>
+inline void setValue(Element& element, const T& value, ToString toString)
+{
+    element.setCharacterData(toString(value));
+}
 template <typename T>
 inline void setValue(Element& element, const T& value)
 {
-    element.setCharacterData(str::toString(value));
+    setValue(element, value, details::toString<T>);
 }
 
 }
