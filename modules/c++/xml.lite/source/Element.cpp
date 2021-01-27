@@ -202,33 +202,30 @@ void xml::lite::Element::prettyPrint(io::OutputStream& stream, string_encoding e
     stream.writeln("");
 }
 
-static xml::lite::string_encoding getEncoding(const xml::lite::string_encoding* pEncoding)
+static xml::lite::string_encoding getEncoding_(const sys::Optional<xml::lite::string_encoding>& encoding)
 {
-    if (pEncoding == nullptr)
+    if (encoding.has_value())
     {
-        // don't know the encoding ... assume a default based on the platform
-        #ifdef _WIN32
-        static const auto defaultEncoding = xml::lite::string_encoding::windows_1252;
-        #else
-        static const auto defaultEncoding = xml::lite::string_encoding::utf_8;
-        #endif
-        pEncoding = &defaultEncoding;
-    }
-    else
-    {
-        if (*pEncoding == xml::lite::string_encoding::utf_8) { }
-        else if (*pEncoding == xml::lite::string_encoding::windows_1252) { }
+        if (encoding == xml::lite::string_encoding::utf_8) { }
+        else if (encoding == xml::lite::string_encoding::windows_1252) { }
         else
         {
             throw std::logic_error("Unknown encoding.");
-        }    
+        }
+        return *encoding;
     }
-    return *pEncoding;
+
+    // don't know the encoding ... assume a default based on the platform
+    #ifdef _WIN32
+    return xml::lite::string_encoding::windows_1252;
+    #else
+    return xml::lite::string_encoding::utf_8;
+    #endif
 }
 
 void xml::lite::Element::getCharacterData(sys::U8string& result) const
 {
-    const auto encoding = ::getEncoding(this->getEncoding());
+    const auto encoding = ::getEncoding_(this->getEncoding());
 
     if (encoding == xml::lite::string_encoding::utf_8)
     {
@@ -242,9 +239,9 @@ void xml::lite::Element::getCharacterData(sys::U8string& result) const
 }
 
 static void writeCharacterData(io::OutputStream& stream,
-    const std::string& characterData, const xml::lite::string_encoding* pEncoding)
+    const std::string& characterData, const sys::Optional<xml::lite::string_encoding>& encoding)
 {
-    if (getEncoding(pEncoding) != xml::lite::string_encoding::utf_8)
+    if (getEncoding_(encoding) != xml::lite::string_encoding::utf_8)
     {
         std::string utf8; // need to convert before writing
         str::fromWindows1252(characterData, utf8);

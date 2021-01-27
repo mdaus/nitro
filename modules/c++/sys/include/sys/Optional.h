@@ -79,29 +79,79 @@ public:
         has_value_ = false;
     }
 
-    T& value()
+    // https://en.cppreference.com/w/cpp/utility/optional/value
+    T& value() &
     {
         if (!has_value())
         {
-            throw std::logic_error("No value for Optional<>.");
+            throw std::logic_error("No value for Optional<>."); // TODO: std::bad_optional_access
         }
         return value_;
     }
-    T& operator*()
-    {
-        return value();
-    }
-    const T& value() const
+    const T& value() const&
     {
         if (!has_value())
         {
-            throw std::logic_error("No value for Optional<>.");
+            throw std::logic_error("No value for Optional<>."); // TODO: std::bad_optional_access
         }
         return value_;
     }
-    const T& operator*() const
+    T&& value() &&
     {
-        return value();
+        if (!has_value())
+        {
+            throw std::logic_error("No value for Optional<>."); // TODO: std::bad_optional_access
+        }
+        return value_;
+    }
+    const T&& value() const&&
+    {
+        if (!has_value())
+        {
+            throw std::logic_error("No value for Optional<>."); // TODO: std::bad_optional_access
+        }
+        return value_;
+    }
+
+    // https://en.cppreference.com/w/cpp/utility/optional/operator*
+    const T* operator->() const
+    {
+        return &value_; // "This operator does not check whether the optional contains a value!"
+    }
+    constexpr T* operator->()
+    {
+        return &value_; // "This operator does not check whether the optional contains a value!"
+    }
+
+    const T& operator*() const&
+    {
+        return value_; // "This operator does not check whether the optional contains a value!"
+    }
+    T& operator*() &
+    {
+        return value_; // "This operator does not check whether the optional contains a value!"
+    }
+    const T&& operator*() const&&
+    {
+        return value_; // "This operator does not check whether the optional contains a value!"
+    }
+    T&& operator*() &&
+    {
+        return value_; // "This operator does not check whether the optional contains a value!"
+    }
+
+    // https://en.cppreference.com/w/cpp/utility/optional/value_or
+    template<typename U>
+    T value_or(U&& default_value) const&
+    {
+        // Equivalent to bool(*this) ? **this : static_cast<T>(std::forward<U>(default_value))
+        return has_value() ? **this : static_cast<T>(std::forward<U>(default_value));
+    }
+    template <typename U>
+    T value_or(U&& default_value) &&
+    {
+        // Equivalent to bool(*this) ? std::move(**this) : static_cast<T>(std::forward<U>(default_value))
+        return has_value() ? std::move(**this) : static_cast<T>(std::forward<U>(default_value));
     }
 };
 

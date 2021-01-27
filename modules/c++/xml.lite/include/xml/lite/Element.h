@@ -338,11 +338,11 @@ public:
     {
         return mCharacterData;
     }
-    const string_encoding* getEncoding() const
+    const sys::Optional<string_encoding>& getEncoding() const
     {
-        return mEncoding.has_value() ? &(*mEncoding) : nullptr;
+        return mEncoding;
     }
-    const string_encoding* getCharacterData(std::string& result) const
+   const sys::Optional<string_encoding>& getCharacterData(std::string& result) const
     {
         result = getCharacterData();
         return getEncoding();
