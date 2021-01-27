@@ -33,6 +33,7 @@
 #include "xml/lite/XMLException.h"
 #include "xml/lite/Attributes.h"
 #include "sys/Conf.h"
+#include "sys/Optional.h"
 
 /*!
  * \file  Element.h
@@ -339,7 +340,7 @@ public:
     }
     const string_encoding* getEncoding() const
     {
-        return mpEncoding.get();
+        return mEncoding.has_value() ? &(*mEncoding) : nullptr;
     }
     const string_encoding* getCharacterData(std::string& result) const
     {
@@ -488,7 +489,7 @@ protected:
 
     private:
         // ... and how that data is encoded
-        std::unique_ptr<const string_encoding> mpEncoding;
+        sys::Optional<string_encoding> mEncoding;
         void depthPrint(io::OutputStream& stream, bool utf8, int depth,
                 const std::string& formatter) const;
 };

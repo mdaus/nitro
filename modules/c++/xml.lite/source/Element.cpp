@@ -37,10 +37,7 @@ xml::lite::Element& xml::lite::Element::operator=(const xml::lite::Element& node
     {
         mName = node.mName;
         mCharacterData = node.mCharacterData;
-        if (node.mpEncoding)
-        {
-            mpEncoding = mem::make::unique<const string_encoding>(*node.mpEncoding);
-        }
+        mEncoding = node.mEncoding;
         mAttributes = node.mAttributes;
         mChildren = node.mChildren;
         mParent = node.mParent;
@@ -379,7 +376,7 @@ void xml::lite::Element::changePrefix(Element* element,
         }
     }
 
-    for (int i = 0, s = element->mChildren.size(); i < s; i++)
+    for (size_t i = 0, s = element->mChildren.size(); i < s; i++)
     {
         changePrefix(element->mChildren[i], prefix, uri);
     }
@@ -408,7 +405,7 @@ void xml::lite::Element::changeURI(Element* element,
         }
     }
 
-    for (int i = 0, s = element->mChildren.size(); i < s; i++)
+    for (size_t i = 0, s = element->mChildren.size(); i < s; i++)
     {
         changeURI(element->mChildren[i], prefix, uri);
         break;
@@ -452,11 +449,11 @@ void xml::lite::Element::setCharacterData_(const std::string& characters, const 
     mCharacterData = characters;
     if (pEncoding != nullptr)
     {
-        mpEncoding = mem::make::unique<const string_encoding>(*pEncoding);
+        mEncoding = *pEncoding;
     }
     else
     {
-        mpEncoding.reset();
+        mEncoding.reset();
     }
 }
 void xml::lite::Element::setCharacterData(const std::string& characters)
