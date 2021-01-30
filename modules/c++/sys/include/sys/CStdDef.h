@@ -34,7 +34,9 @@ namespace sys
 
 #ifndef CODA_OSS_DEFINE_std_byte_
 	#if CODA_OSS_cpp17
+        static_assert(__cpp_lib_byte >= 201603)
 		#define CODA_OSS_DEFINE_std_byte_ 0  // std::byte part of C++17
+		#define CODA_OSS_lib_byte 1
 	#else
 		#define CODA_OSS_DEFINE_std_byte_ CODA_OSS_AUGMENT_std_namespace  // maybe use our own
 	#endif  // CODA_OSS_cpp17
@@ -45,6 +47,16 @@ namespace sys
 	{
 		using byte = sys::Byte;
 	}
+	#define CODA_OSS_lib_byte 1
 #endif  // CODA_OSS_DEFINE_std_byte_
+
+namespace coda_oss
+{
+    #if CODA_OSS_lib_byte
+    using byte = std::byte;
+    #else
+    using byte = ::sys::Byte;
+    #endif
+}
 
 #endif  // CODA_OSS_sys_CStdDef_h_INCLUDED_

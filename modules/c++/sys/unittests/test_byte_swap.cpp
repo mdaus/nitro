@@ -128,12 +128,13 @@ TEST_CASE(testEndianness_std)
     #endif
 }
 
-TEST_CASE(testSysByte)
+template <typename TByte>
+static void test_byte_(const std::string& testName)
 {
-    std::array<sys::Byte, 256> bytes;
+    std::array<TByte, 256> bytes;
     for (size_t i = 0; i < bytes.size(); i++)
     {
-        auto value = static_cast<sys::Byte>(i);
+        auto value = static_cast<TByte>(i);
         bytes[i] = value;
     }
 
@@ -145,6 +146,15 @@ TEST_CASE(testSysByte)
         TEST_ASSERT_EQ(i, actual);
     }
 }
+TEST_CASE(testByte)
+{
+    test_byte_<sys::Byte>(testName);
+    test_byte_<coda_oss::byte>(testName);
+    #if CODA_OSS_lib_byte
+    test_byte_<std::byte>(testName);
+    #endif
+}
+    
 }
 
 int main(int /*argc*/, char** /*argv*/)
@@ -152,6 +162,6 @@ int main(int /*argc*/, char** /*argv*/)
     TEST_CHECK(testByteSwap);
     TEST_CHECK(testEndianness);
     TEST_CHECK(testEndianness_std);
-    TEST_CHECK(testSysByte);
+    TEST_CHECK(testByte);
     return 0;
 }
