@@ -42,7 +42,8 @@ namespace sys
 }
 
 #ifndef CODA_OSS_DEFINE_std_endian_
-    #if CODA_OSS_cpp20 && __has_include(<bit>)  // __has_include is C++17
+    #if CODA_OSS_cpp20
+        static_assert(__has_include(<bit>) || (__cpp_lib_endian >= 201703))
         #define CODA_OSS_DEFINE_std_endian_ -1  // OK to #include <>, below
     #else
         #define CODA_OSS_DEFINE_std_endian_ CODA_OSS_AUGMENT_std_namespace // maybe use our own
@@ -52,10 +53,21 @@ namespace sys
 #if CODA_OSS_DEFINE_std_endian_ == 1
     namespace std // This is slightly uncouth: we're not supposed to augment "std".
     {
-        using endian = sys::Endian;
+        using endian = ::sys::Endian;
     }
+    #define CODA_OSS_lib_endian 1
 #elif CODA_OSS_DEFINE_std_endian_ == -1  // set above
     #include <bit>
-#endif // CODA_OSS_DEFINE_std_endian_
+    #define CODA_OSS_lib_endian 1
+#endif  // CODA_OSS_DEFINE_std_endian_
+
+namespace coda_oss
+{
+    #if CODA_OSS_lib_endian
+    using endian = std::endian;
+    #else
+    using endian = ::sys::Endian;
+    #endif
+}
 
 #endif  // CODA_OSS_sys_Bit_h_INCLUDED_

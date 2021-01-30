@@ -102,25 +102,30 @@ TEST_CASE(testEndianness)
     }
 }
 
-TEST_CASE(testEndianness_std)
+template<typename TEndian>
+static void testEndianness_std_(const std::string& testName)
 {
-    /*const*/ auto native = sys::Endian::native; // "const" causes "conditional expression is constant."
-    if (native == sys::Endian::big)
+    /*const*/ auto native = TEndian::native; // "const" causes "conditional expression is constant."
+    if (native == TEndian::big)
     {
-        #if CODA_OSS_cpp20 || CODA_OSS_DEFINE_std_endian_
-        TEST_ASSERT(std::endian::native == std::endian::big);
-        #endif
+        TEST_ASSERT(coda_oss::endian::native == coda_oss::endian::big);
     }
-    else if (native == sys::Endian::little)
+    else if (native == TEndian::little)
     {
-        #if CODA_OSS_cpp20 || CODA_OSS_DEFINE_std_endian_
-        TEST_ASSERT(std::endian::native == std::endian::little);
-        #endif
+        TEST_ASSERT(coda_oss::endian::native == coda_oss::endian::little);
     }
     else
     {
         TEST_FAIL("Mixed-endian not supported!");
     }
+}
+TEST_CASE(testEndianness_std)
+{
+    testEndianness_std_<sys::Endian>(testName);
+    testEndianness_std_<coda_oss::endian>(testName);
+    #if CODA_OSS_lib_endian
+    testEndianness_std_<std::endian>(testName);
+    #endif
 }
 
 TEST_CASE(testSysByte)
