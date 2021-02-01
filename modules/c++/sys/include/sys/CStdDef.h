@@ -34,7 +34,7 @@ namespace sys
 
 #ifndef CODA_OSS_DEFINE_std_byte_
     #if CODA_OSS_cpp17
-        static_assert(__cpp_lib_byte >= 201603)
+        static_assert(__cpp_lib_byte >= 201603);
         #define CODA_OSS_DEFINE_std_byte_ 0  // part of C++17
         #define CODA_OSS_lib_byte 1
     #else
