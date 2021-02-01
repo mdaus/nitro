@@ -59,7 +59,14 @@ namespace sys
 #if CODA_OSS_DEFINE_std_u8string_ == 1
     namespace std // This is slightly uncouth: we're not supposed to augment "std".
     {
+        #if defined(_MSC_VER) && (_MSC_VER >= 1927)
+        #pragma warning(push)
+        #pragma warning(disable: 5052) // Keyword '...' was introduced in C++ 20 and requires use of the '...' command-line option
+        #endif
         using char8_t = ::str::Char8_T;
+        #if defined(_MSC_VER) && (_MSC_VER >= 1927)
+        #pragma warning(pop)
+        #endif
         using u8string = ::str::U8string;
     }
     #define CODA_OSS_lib_char8_t 1
@@ -67,12 +74,21 @@ namespace sys
 
 namespace coda_oss
 {
+    #if defined(_MSC_VER) && (_MSC_VER >= 1927)
+    #pragma warning(push)
+    #pragma warning(disable: 5052) // Keyword '...' was introduced in C++ 20 and requires use of the '...' command-line option
+    #endif
+
     #if CODA_OSS_lib_char8_t
     using char8_t = std::char8_t;
     using u8string = std::u8string;
     #else
     using char8_t = ::str::Char8_T;
     using u8string = ::str::U8string;
+    #endif
+
+    #if defined(_MSC_VER) && (_MSC_VER >= 1927)
+    #pragma warning(pop)
     #endif
 }
 
