@@ -157,17 +157,14 @@ bool exists(const path& p);  // https://en.cppreference.com/w/cpp/filesystem/exi
 #endif // CODA_OSS_lib_filesystem
 #endif
 
-// coda_oss::filesystem::path will always work, and will be std::filesystem::path if available.
+// coda_oss::filesystem will always work, and will be std::filesystem if available.
 namespace coda_oss
 {
-namespace filesystem
-{
     #if CODA_OSS_lib_filesystem
-    using path = std::filesystem::path;
+    namespace filesystem = ::std::filesystem;
     #else
-    using path = sys::Filesystem::path;
+    namespace filesystem = ::sys::Filesystem;
     #endif
-}
 }
 
 #endif  // CODA_OSS_sys_Filesystem_h_INCLUDED_
