@@ -28,7 +28,9 @@
 
 #ifndef CODA_OSS_DEFINE_std_span_
     #if CODA_OSS_cpp20
-        static_assert(__has_include(<span>) && (__cpp_lib_span >= 202002));
+        #if !(__has_include(<span>) && (__cpp_lib_span >= 202002))
+            #error "Missing <span>."
+        #endif
         #define CODA_OSS_DEFINE_std_span_ -1  // OK to #include <>, below
     #else
         #define CODA_OSS_DEFINE_std_span_ CODA_OSS_AUGMENT_std_namespace // maybe use our own
