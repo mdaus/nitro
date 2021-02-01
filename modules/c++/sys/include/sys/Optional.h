@@ -323,7 +323,12 @@ inline bool operator>=(const Optional<T>& opt, const U& value)
 
 #ifndef CODA_OSS_DEFINE_std_optional_
     #if CODA_OSS_cpp17
-        static_assert((__has_include(<optional>) && (__cpp_lib_optional >= 201606));
+        #if !__has_include(<optional>)
+            #error "Missing <optional>."
+        #endif
+        #if defined(__cpp_lib_optional) && (__cpp_lib_optional < 201606)
+            #error "Wrong value for __cpp_lib_optional."
+        #endif
         #define CODA_OSS_DEFINE_std_optional_ -1  // OK to #include <>, below
     #else
         #define CODA_OSS_DEFINE_std_optional_ CODA_OSS_AUGMENT_std_namespace // maybe use our own

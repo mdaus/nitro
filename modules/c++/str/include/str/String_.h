@@ -46,7 +46,9 @@ namespace sys
     // MSVC only sets __cplusplus >199711L with the /Zc:__cplusplus command-line option.
     // https://devblogs.microsoft.com/cppblog/msvc-now-correctly-reports-__cplusplus/
     #if (__cplusplus >= 202002L) || (defined(_MSVC_LANG) && (_MSVC_LANG >= 202002L)) || CODA_OSS_cpp20
-        static_assert(__cpp_lib_char8_t >= 201907);
+        #if defined(__cpp_lib_char8_t) && (__cpp_lib_char8_t < 201907)
+            #error "Wrong value for __cpp_lib_char8_t."
+        #endif
         #define CODA_OSS_DEFINE_std_u8string_ 0  // part of C++20
         #define CODA_OSS_lib_char8_t 1
     #else

@@ -136,7 +136,9 @@ void unique(TArgs&&...) = delete;
 
 #ifndef CODA_OSS_DEFINE_std_make_unique_
     #if CODA_OSS_cpp14
-        static_assert(__cpp_lib_make_unique >= 201304, "std::make_unique");
+        #if defined(__cpp_lib_make_unique) && (__cpp_lib_make_unique < 201304)
+            #error "Wrong value for __cpp_lib_make_unique."
+        #endif
         #define CODA_OSS_DEFINE_std_make_unique_ 0  // part of C++14
         #define CODA_OSS_lib_make_unique 1
     #else
