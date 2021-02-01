@@ -28,8 +28,11 @@
 
 #ifndef CODA_OSS_DEFINE_std_span_
     #if CODA_OSS_cpp20
-        #if !(__has_include(<span>) && (__cpp_lib_span >= 202002))
+        #if !__has_include(<span>)
             #error "Missing <span>."
+        #endif
+        #if defined(__cpp_lib_span) && (__cpp_lib_span < 202002)
+            #error "Wrong value for __cpp_lib_span."
         #endif
         #define CODA_OSS_DEFINE_std_span_ -1  // OK to #include <>, below
     #else
