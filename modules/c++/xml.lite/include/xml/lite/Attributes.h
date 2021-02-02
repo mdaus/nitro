@@ -269,6 +269,11 @@ public:
      * \throw NoSuchKeyException If the uri/localName is not found
      */
     std::string getValue(const std::string & uri, const std::string & localName) const;
+    std::string getValue(const std::tuple<std::string, std::string>& name) const
+    {
+        return getValue(std::get<0>(name), std::get<1>(name));
+    }
+
     /*!
      * Look up an attribute's value by Namespace name.
      * \param uri The uri association
@@ -381,6 +386,16 @@ private:
  * \param result The value after calling str::toType(), if found
  * \return If an attribute with the key is found or not
  */
+template < typename K, typename ToType>
+inline auto castValue_(const Attributes& attributes, const K& key, ToType toType) -> decltype(toType("")) 
+{
+    const auto value = attributes.getValue(key);
+    if (value.empty())
+    {
+        throw except::BadCastException(Ctxt("call Attributes::getValue() directly to get an empty string"));
+    }
+    return toType(value);
+}
 template <typename T, typename K, typename ToType>
 inline bool getValue_(const Attributes& attributes, const K& key, T& result,
     ToType toType)
@@ -419,16 +434,26 @@ inline T toType(const std::string& value)
  * \param result The value after calling str::toType(), if found
  * \return If the index is out of range or not
  */
+template <typename ToType>
+inline auto castValue(const Attributes& attributes, int i, ToType toType) -> decltype(toType(""))
+{
+    return castValue_(attributes, i, toType);
+}
+template <typename T>
+inline T getValue(const Attributes& attributes, int i)
+{
+    return castValue(attributes, i, details::toType<T>);
+}
+
 template <typename T, typename ToType>
-inline bool getValue(const Attributes& attributes, int i, T& result,
-    ToType toType)
+inline bool castValue(const Attributes& attributes, int i, T& result, ToType toType)
 {
     return getValue_(attributes, i, result, toType);
 }
 template<typename T>
 inline bool getValue(const Attributes& attributes, int i, T& result)
 {
-    return getValue(attributes, i, result, details::toType<T>);
+    return castValue(attributes, i, result, details::toType<T>);
 }
 
 /*!
@@ -437,16 +462,26 @@ inline bool getValue(const Attributes& attributes, int i, T& result)
  * \param result The value after calling str::toType(), if found
  * \return If the qname is not found or not
  */
+template <typename ToType>
+inline auto castValue(const Attributes& attributes, const std::string& qname, ToType toType) -> decltype(toType(""))
+{
+    return castValue_(attributes, qname, toType);
+}
+template <typename T>
+inline T getValue(const Attributes& attributes, const std::string& qname)
+{
+    return castValue(attributes, qname, details::toType<T>);
+}
+
 template <typename T, typename ToType>
-inline bool getValue(const Attributes& attributes, const std::string& qname, T& result,
-    ToType toType)
+inline bool castValue(const Attributes& attributes, const std::string& qname, T& result, ToType toType)
 {
     return getValue_(attributes, qname, result, toType);
 }
 template <typename T>
 inline bool getValue(const Attributes& attributes, const std::string& qname, T& result)
 {
-    return getValue(attributes, qname, result, details::toType<T>);
+    return castValue(attributes, qname, result, details::toType<T>);
 }
 
 /*!
@@ -456,27 +491,46 @@ inline bool getValue(const Attributes& attributes, const std::string& qname, T& 
  * \param result The value after calling str::toType(), if found
  * \return If the uri/localName is not found or not
  */
+template <typename ToType>
+inline auto castValue(const Attributes& attributes, const std::tuple<std::string, std::string>& name, ToType toType)  -> decltype(toType(""))
+{
+    return castValue_(attributes, name, toType);
+}
+template <typename T>
+inline T getValue(const Attributes& attributes, const std::tuple<std::string, std::string>& name)
+{
+    return castValue(attributes, name, details::toType<T>);
+}
+template <typename ToType>
+inline auto castValue(const Attributes& attributes, const std::string & uri, const std::string & localName, ToType toType)  -> decltype(toType(""))
+{
+    return castValue(attributes, std::make_tuple(uri, localName), toType);
+}
+template <typename T>
+inline T getValue(const Attributes& attributes, const std::string & uri, const std::string & localName)
+{
+    return castValue(attributes, uri, localName, result, details::toType<T>);
+}
+
 template <typename T, typename ToType>
-inline bool getValue(const Attributes& attributes, const std::tuple<std::string, std::string>& name, T& result,
-        ToType toType)
+inline bool castValue(const Attributes& attributes, const std::tuple<std::string, std::string>& name, T& result, ToType toType)
 {
     return getValue_(attributes, name, result, toType);
 }
 template <typename T>
 inline bool getValue(const Attributes& attributes, const std::tuple<std::string, std::string>& name, T& result)
 {
-    return getValue(attributes, name, result, details::toType<T>);
+    return castValue(attributes, name, result, details::toType<T>);
 }
 template <typename T, typename ToType>
-inline bool getValue(const Attributes& attributes, const std::string & uri, const std::string & localName, T& result,
-            ToType toType)
+inline bool castValue(const Attributes& attributes, const std::string & uri, const std::string & localName, T& result, ToType toType)
 {
     return getValue(attributes, std::make_tuple(uri, localName), result, toType);
 }
 template <typename T>
 inline bool getValue(const Attributes& attributes, const std::string & uri, const std::string & localName, T& result)
 {
-    return getValue(attributes, uri, localName, result, details::toType<T>);
+    return castValue(attributes, uri, localName, result, details::toType<T>);
 }
 
 /*!

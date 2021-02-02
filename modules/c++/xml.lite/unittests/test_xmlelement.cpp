@@ -285,17 +285,20 @@ TEST_CASE(test_getValue)
     {
         const auto& e = root->getElementByTagName("bool", true /*recurse*/);
         auto toType = [](const std::string& value) { return value == "yes"; };
+
         bool value;
         auto result = castValue(e, value, toType);
         TEST_ASSERT_TRUE(result);
         TEST_ASSERT_EQ(true, value);
+        value = castValue(e, toType);
+        TEST_ASSERT_EQ(true, value);
+
         std::string strValue;
         result = getValue(e, strValue);
         TEST_ASSERT_TRUE(result);
         TEST_ASSERT_EQ("yes", strValue);
-
-        value = castValue(e, toType);
-        TEST_ASSERT_EQ(true, value);
+        strValue = getValue<std::string>(e);
+        TEST_ASSERT_EQ("yes", strValue);
     }
     {
         const auto& e = root->getElementByTagName("empty", true /*recurse*/);
