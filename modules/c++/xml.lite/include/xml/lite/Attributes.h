@@ -386,7 +386,7 @@ private:
  * \param result The value after calling str::toType(), if found
  * \return If an attribute with the key is found or not
  */
-template < typename K, typename ToType>
+template <typename K, typename ToType>
 inline auto castValue_(const Attributes& attributes, const K& key, ToType toType) -> decltype(toType("")) 
 {
     const auto value = attributes.getValue(key);
@@ -397,21 +397,15 @@ inline auto castValue_(const Attributes& attributes, const K& key, ToType toType
     return toType(value);
 }
 template <typename T, typename K, typename ToType>
-inline bool getValue_(const Attributes& attributes, const K& key, T& result,
-    ToType toType)
+inline bool castValue_(const Attributes& attributes, const K& key, T& result, ToType toType)
 {
-    std::string value;
-    if (!attributes.getValue(key, value))
-    {
-        return false;
-    }
-    if (value.empty())
-    {
-        return false;  // call Attributes::getValue() directly to get an empty string
-    }
     try
     {
-        result = toType(value);
+        result = castValue_(attributes, key, toType);
+    }
+    catch (const except::NoSuchKeyException&)
+    {
+        return false;
     }
     catch (const except::BadCastException&)
     {
@@ -448,7 +442,7 @@ inline T getValue(const Attributes& attributes, int i)
 template <typename T, typename ToType>
 inline bool castValue(const Attributes& attributes, int i, T& result, ToType toType)
 {
-    return getValue_(attributes, i, result, toType);
+    return castValue_(attributes, i, result, toType);
 }
 template<typename T>
 inline bool getValue(const Attributes& attributes, int i, T& result)
@@ -476,7 +470,7 @@ inline T getValue(const Attributes& attributes, const std::string& qname)
 template <typename T, typename ToType>
 inline bool castValue(const Attributes& attributes, const std::string& qname, T& result, ToType toType)
 {
-    return getValue_(attributes, qname, result, toType);
+    return castValue_(attributes, qname, result, toType);
 }
 template <typename T>
 inline bool getValue(const Attributes& attributes, const std::string& qname, T& result)
@@ -515,7 +509,7 @@ inline T getValue(const Attributes& attributes, const std::string & uri, const s
 template <typename T, typename ToType>
 inline bool castValue(const Attributes& attributes, const std::tuple<std::string, std::string>& name, T& result, ToType toType)
 {
-    return getValue_(attributes, name, result, toType);
+    return castValue_(attributes, name, result, toType);
 }
 template <typename T>
 inline bool getValue(const Attributes& attributes, const std::tuple<std::string, std::string>& name, T& result)
