@@ -387,7 +387,8 @@ private:
  * \return If an attribute with the key is found or not
  */
 template <typename K, typename ToType>
-inline auto castValue_(const Attributes& attributes, const K& key, ToType toType) -> decltype(toType("")) 
+inline auto castValue_(const Attributes& attributes, const K& key, ToType toType)
+  -> decltype(toType(std::string())) 
 {
     const auto value = attributes.getValue(key);
     if (value.empty())
@@ -435,7 +436,8 @@ inline T toType(const std::string& value)
  * \return If the qname is not found or not
  */
 template <typename ToType, typename TKey>
-inline auto castValue(const Attributes& attributes, const TKey& k, ToType toType) -> decltype(toType(""))
+inline auto castValue(const Attributes& attributes, const TKey& k, ToType toType)
+  -> decltype(toType(std::string()))
 {
     return castValue_(attributes, k, toType);
 }
@@ -464,7 +466,8 @@ inline bool getValue(const Attributes& attributes, const TKey& k, T& result)
  * \return If the uri/localName is not found or not
  */
 template <typename ToType>
-inline auto castValue(const Attributes& attributes, const std::string & uri, const std::string & localName, ToType toType)  -> decltype(toType(""))
+inline auto castValue(const Attributes& attributes, const std::string & uri, const std::string & localName, ToType toType)
+-> decltype(toType(std::string()))
 {
     return castValue(attributes, std::make_tuple(uri, localName), toType);
 }

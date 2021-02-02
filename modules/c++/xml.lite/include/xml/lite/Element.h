@@ -477,7 +477,8 @@ protected:
  *  \return whether or not there was a value of type T
  */
 template <typename ToType>
-inline auto castValue(const Element& element, ToType toType) -> decltype(toType("")) // getValue() conflicts with below
+inline auto castValue(const Element& element, ToType toType)  // getValue() conflicts with below
+   -> decltype(toType(std::string()))
 {
     const auto characterData = element.getCharacterData();
     if (characterData.empty())
