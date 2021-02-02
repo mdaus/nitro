@@ -32,6 +32,8 @@
 #include <str/Convert.h>
 #include "xml/lite/XMLException.h"
 #include "xml/lite/Attributes.h"
+#include "sys/Conf.h"
+#include "sys/Optional.h"
 
 /*!
  * \file  Element.h
@@ -77,6 +79,11 @@ enum class string_encoding
  */
 class Element
 {
+    Element(const std::string& qname, const std::string& uri, std::nullptr_t) :
+        mParent(NULL), mName(uri, qname)
+    {
+    }
+
 public:
     //! Default constructor
     Element() :
@@ -91,10 +98,22 @@ public:
      * \param characterData The character data (if any)
      */
     Element(const std::string& qname, const std::string& uri = "",
-            std::string characterData = "", const string_encoding* pEncoding = nullptr) :
-        mParent(NULL), mName(uri, qname)
+            std::string characterData = "") :
+        Element(qname, uri, nullptr)
     {
-        setCharacterData(characterData, pEncoding);
+        setCharacterData(characterData);
+    }
+    Element(const std::string& qname, const std::string& uri,
+            const std::string& characterData, string_encoding encoding) :
+        Element(qname, uri, nullptr)
+    {
+        setCharacterData(characterData, encoding);
+    }
+    Element(const std::string& qname, const std::string& uri,
+            const sys::U8string& characterData) :
+        Element(qname, uri, nullptr)
+    {
+        setCharacterData(characterData);
     }
 
     //! Destructor
@@ -319,11 +338,11 @@ public:
     {
         return mCharacterData;
     }
-    const string_encoding* getEncoding() const
+    const sys::Optional<string_encoding>& getEncoding() const
     {
-        return mpEncoding.get();
+        return mEncoding;
     }
-    const string_encoding* getCharacterData(std::string& result) const
+   const sys::Optional<string_encoding>& getCharacterData(std::string& result) const
     {
         result = getCharacterData();
         return getEncoding();
@@ -334,20 +353,10 @@ public:
      *  Sets the character data for this element.
      *  \param characters The data to add to this element
      */
-    void setCharacterData(const std::string& characters, const string_encoding* pEncoding = nullptr)
-    {
-        mCharacterData = characters;
-        if (pEncoding != nullptr)
-        {
-            mpEncoding = std::make_shared<const string_encoding>(*pEncoding);
-        }
-    }
-    void setCharacterData(const sys::U8string& characters)
-    {
-        mCharacterData = str::toString(characters);
-        static const auto encoding = string_encoding::utf_8;
-        mpEncoding = std::make_shared<const string_encoding>(encoding);
-    }
+    void setCharacterData_(const std::string& characters, const string_encoding*);
+    void setCharacterData(const std::string& characters);
+    void setCharacterData(const std::string& characters, string_encoding);
+    void setCharacterData(const sys::U8string& characters);
 
     /*!
      *  Sets the local name for this element.
@@ -413,7 +422,10 @@ public:
      *  Adds a child element to this element
      *  \param node the child element to add
      */
+    virtual void addChild(std::unique_ptr<Element>&& node);
+    #if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
     virtual void addChild(std::auto_ptr<Element> node);
+    #endif
 
     /*!
      *  Returns all of the children of this element
@@ -431,6 +443,14 @@ public:
     const std::vector<Element*>& getChildren() const
     {
         return mChildren;
+    }
+
+    /*!
+    * Removes all the children WITHOUT destroying them; see destroyChildren().
+    */
+    void clearChildren()
+    {
+        mChildren.clear();
     }
 
     Element* getParent() const
@@ -466,10 +486,10 @@ protected:
     xml::lite::Attributes mAttributes;
     //! The character data ...
     std::string mCharacterData;
-    // ... and how that data is encoded
-    std::shared_ptr<const string_encoding> mpEncoding;
 
     private:
+        // ... and how that data is encoded
+        sys::Optional<string_encoding> mEncoding;
         void depthPrint(io::OutputStream& stream, bool utf8, int depth,
                 const std::string& formatter) const;
 };

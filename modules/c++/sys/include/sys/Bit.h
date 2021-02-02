@@ -41,29 +41,38 @@ namespace sys
     };
 }
 
-
-
 #ifndef CODA_OSS_DEFINE_std_endian_
-#if CODA_OSS_cpp20
-#define CODA_OSS_DEFINE_std_endian_ 0  // std::endian part of C++20
-#else
-#define CODA_OSS_DEFINE_std_endian_ CODA_OSS_AUGMENT_std_namespace // pre C++20
-#endif  // CODA_OSS_cpp20
+    #if CODA_OSS_cpp20
+        #if !__has_include(<bit>)
+            #error "Missing <bit>."
+        #endif
+        #if defined(__cpp_lib_endian) && (__cpp_lib_endian < 201703)
+            #error "Wrong value for __cpp_lib_endian."
+        #endif
+        #define CODA_OSS_DEFINE_std_endian_ -1  // OK to #include <>, below
+    #else
+        #define CODA_OSS_DEFINE_std_endian_ CODA_OSS_AUGMENT_std_namespace // maybe use our own
+    #endif  // CODA_OSS_cpp20
 #endif  // CODA_OSS_DEFINE_std_endian_
 
-#if CODA_OSS_DEFINE_std_endian_
-// This is ever-so-slightly uncouth: we're not supposed to augment "std".
-namespace std
+#if CODA_OSS_DEFINE_std_endian_ == 1
+    namespace std // This is slightly uncouth: we're not supposed to augment "std".
+    {
+        using endian = ::sys::Endian;
+    }
+    #define CODA_OSS_lib_endian 1
+#elif CODA_OSS_DEFINE_std_endian_ == -1  // set above
+    #include <bit>
+    #define CODA_OSS_lib_endian 1
+#endif  // CODA_OSS_DEFINE_std_endian_
+
+namespace coda_oss
 {
-    using endian = sys::Endian;
+    #if CODA_OSS_lib_endian
+    using endian = std::endian;
+    #else
+    using endian = ::sys::Endian;
+    #endif
 }
-#else
-
-// Not doing our own std::endian, can we get the real one?
-#if CODA_OSS_cpp20 && __has_include(<bit>)  // __has_include is C++17
-#include <bit>
-#endif // CODA_OSS_cpp20
-
-#endif // CODA_OSS_DEFINE_std_endian_
 
 #endif  // CODA_OSS_sys_Bit_h_INCLUDED_

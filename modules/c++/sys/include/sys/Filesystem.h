@@ -1,3 +1,23 @@
+/* =========================================================================
+ * This file is part of sys-c++
+ * =========================================================================
+ *
+ * (C) Copyright 2020, Maxar Technologies, Inc.
+ *
+ * sys-c++ is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not, http://www.gnu.org/licenses/.
+ *
+ */
 #ifndef CODA_OSS_sys_Filesystem_h_INCLUDED_
 #define CODA_OSS_sys_Filesystem_h_INCLUDED_
 #pragma once
@@ -27,21 +47,35 @@ namespace Filesystem
   }
 
 // http://en.cppreference.com/w/cpp/filesystem/path
-struct path // N.B. this is an INCOMPLETE implementation!
+struct path final // N.B. this is an INCOMPLETE and NON-STANDARD implementation!
 {
-    using string_type = std::string;
-    using value_type = string_type::value_type;
+    // character type used by the native encoding of the filesystem: char on POSIX, wchar_t on Windows
+    #ifdef _WIN32
+    using value_type = wchar_t;
+    #else
+    using value_type = char;
+    #endif
+    using string_type = std::basic_string<value_type>;
 
+    private:
+
+    public:
     // http://en.cppreference.com/w/cpp/filesystem/path/path
     path() noexcept;
     path(const path&);
     path(const string_type&);
-    path(const value_type*);
+    template<typename TSource>
+    path(const TSource& source)
+    {
+        p_ = to_native(source);
+    }
 
     path& operator/=(const path&);  // http://en.cppreference.com/w/cpp/filesystem/path/append
-    path& operator/=(const value_type*);  // http://en.cppreference.com/w/cpp/filesystem/path/append
-    path& operator/=(const string_type&);  // http://en.cppreference.com/w/cpp/filesystem/path/append
-
+    template <typename TSource>
+    path& operator/=(const TSource& source)  // http://en.cppreference.com/w/cpp/filesystem/path/append
+    {
+        return (*this) /= path(to_native(source));
+    }
     void clear() noexcept;  // http://en.cppreference.com/w/cpp/filesystem/path/clear
 
     // http://en.cppreference.com/w/cpp/filesystem/path/native
@@ -75,6 +109,7 @@ struct path // N.B. this is an INCOMPLETE implementation!
 
 private:
     string_type p_;
+    static string_type to_native(const std::string& s);
 };
 
 path operator/(const path& lhs, const path& rhs);  // http://en.cppreference.com/w/cpp/filesystem/path/operator_slash
@@ -92,35 +127,47 @@ bool exists(const path& p);  // https://en.cppreference.com/w/cpp/filesystem/exi
 }
 
 #ifndef CODA_OSS_DEFINE_std_filesystem_
-#if CODA_OSS_cpp17
-
-// Some versions of G++ say they're C++17 but don't have <filesystem>
-#if __has_include(<filesystem>) // __has_include is C++17
-#define CODA_OSS_DEFINE_std_filesystem_ 0  // got <filesystem>, don't need our own
-#else
-#define CODA_OSS_DEFINE_std_filesystem_ CODA_OSS_AUGMENT_std_namespace  // no <filesystem>, use our own
-#endif  //__has_include(<filesystem>)
-
-#else
-
-#define CODA_OSS_DEFINE_std_filesystem_ CODA_OSS_AUGMENT_std_namespace  // pre-C++17
-
-#endif  // CODA_OSS_cpp17
+    #if CODA_OSS_cpp17
+        // Some versions of G++ say they're C++17 but don't have <filesystem>
+        #if __has_include(<filesystem>)
+            #if defined(__cpp_lib_filesystem) && (__cpp_lib_filesystem < 201703)
+                #error "Wrong value for __cpp_lib_filesystem."
+            #endif
+            #define CODA_OSS_DEFINE_std_filesystem_ -1  // OK to #include <>, below
+        #else
+            #define CODA_OSS_DEFINE_std_filesystem_ 1 // must have std::filesystem w/C++17
+        #endif // __has_include
+    #else
+        #define CODA_OSS_DEFINE_std_filesystem_ CODA_OSS_AUGMENT_std_namespace  // maybe use our own
+    #endif
 #endif  // CODA_OSS_DEFINE_std_filesystem_
 
-#if CODA_OSS_DEFINE_std_filesystem_
-// This is ever-so-slightly uncouth: we're not supposed to augment "std".
-namespace std
-{
-namespace filesystem = ::sys::Filesystem;
-}
-#else
 
-// Not doing our own std::filesystem, can we get the real one?
-#if CODA_OSS_cpp17 && __has_include(<filesystem>)  // __has_include is C++17
-#include <filesystem>
+#if CODA_OSS_DEFINE_std_filesystem_ == 1
+    namespace std // This is slightly uncouth: we're not supposed to augment "std".
+    {
+        namespace filesystem = ::sys::Filesystem;
+    }
+    #define CODA_OSS_lib_filesystem 1
+#elif CODA_OSS_DEFINE_std_filesystem_ == -1 // set above
+    #include <filesystem>
+    #define CODA_OSS_lib_filesystem 1
+#endif  // CODA_OSS_DEFINE_std_filesystem_
+
+#if CODA_OSS_cpp17 || ( CODA_OSS_DEFINE_std_filesystem_ == 1) // sanity check on above
+#if !CODA_OSS_lib_filesystem
+#error must have std::filesystem with C++17
+#endif // CODA_OSS_lib_filesystem
 #endif
 
-#endif // CODA_OSS_DEFINE_std_filesystem_
+// coda_oss::filesystem will always work, and will be std::filesystem if available.
+namespace coda_oss
+{
+    #if CODA_OSS_lib_filesystem
+    namespace filesystem = ::std::filesystem;
+    #else
+    namespace filesystem = ::sys::Filesystem;
+    #endif
+}
 
 #endif  // CODA_OSS_sys_Filesystem_h_INCLUDED_
