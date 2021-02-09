@@ -724,14 +724,15 @@ NITFAPI(NITF_BOOL) nitf_ImageSubheader_createBands(nitf_ImageSubheader *
         goto CATCH_ERROR;
     }
 
-    for (uint32_t i = 0; subhdr->bandInfo && i < curBandCount; ++i)
+    uint32_t i;
+    for (i = 0; subhdr->bandInfo && i < curBandCount; ++i)
     {
         /* copy over old pointers -- assuming old array == curBandCount! */
         infos[i] = subhdr->bandInfo[i];
     }
 
     /* now, create the new infos */
-    for (uint32_t i = 0; i < numBands; ++i)
+    for (i = 0; i < numBands; ++i)
     {
         bandInfo = nitf_BandInfo_construct(error);
         if (!bandInfo)
