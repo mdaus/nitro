@@ -26,7 +26,7 @@ using namespace nitf;
 
 SubWindow::SubWindow(const SubWindow & x)
 {
-    setNative(x.getNative());
+    *this = x;
 }
 
 SubWindow & SubWindow::operator=(const SubWindow & x)
@@ -42,11 +42,14 @@ SubWindow::SubWindow(nitf_SubWindow * x)
     getNativeOrThrow();
 }
 
-SubWindow::SubWindow() throw(nitf::NITFException) : mDownSampler(NULL)
+SubWindow::SubWindow() : mDownSampler(nullptr)
 {
     setNative(nitf_SubWindow_construct(&error));
     getNativeOrThrow();
     setManaged(false);
+
+    setStartCol(0);
+    setStartRow(0);
 }
 
 SubWindow::~SubWindow()
@@ -59,68 +62,67 @@ SubWindow::~SubWindow()
     }
 }
 
-nitf::Uint32 SubWindow::getStartRow() const
+uint32_t SubWindow::getStartRow() const
 {
     return getNativeOrThrow()->startRow;
 }
 
-void SubWindow::setStartRow(nitf::Uint32 value)
+void SubWindow::setStartRow(uint32_t value)
 {
     getNativeOrThrow()->startRow = value;
 }
 
-nitf::Uint32 SubWindow::getNumRows() const
+uint32_t SubWindow::getNumRows() const
 {
     return getNativeOrThrow()->numRows;
 }
 
-void SubWindow::setNumRows(nitf::Uint32 value)
+void SubWindow::setNumRows(uint32_t value)
 {
     getNativeOrThrow()->numRows = value;
 }
 
-nitf::Uint32 SubWindow::getStartCol() const
+uint32_t SubWindow::getStartCol() const
 {
     return getNativeOrThrow()->startCol;
 }
 
-void SubWindow::setStartCol(nitf::Uint32 value)
+void SubWindow::setStartCol(uint32_t value)
 {
     getNativeOrThrow()->startCol = value;
 }
 
-nitf::Uint32 SubWindow::getNumCols() const
+uint32_t SubWindow::getNumCols() const
 {
     return getNativeOrThrow()->numCols;
 }
 
-void SubWindow::setNumCols(nitf::Uint32 value)
+void SubWindow::setNumCols(uint32_t value)
 {
     getNativeOrThrow()->numCols = value;
 }
 
-nitf::Uint32 SubWindow::getBandList(int i)
+uint32_t SubWindow::getBandList(int i)
 {
     return getNativeOrThrow()->bandList[i];
 }
 
-void SubWindow::setBandList(nitf::Uint32 * value)
+void SubWindow::setBandList(uint32_t * value)
 {
-    getNativeOrThrow()->bandList = (nitf_Uint32*)value;
+    getNativeOrThrow()->bandList = value;
 }
 
-nitf::Uint32 SubWindow::getNumBands() const
+uint32_t SubWindow::getNumBands() const
 {
     return getNativeOrThrow()->numBands;
 }
 
-void SubWindow::setNumBands(nitf::Uint32 value)
+void SubWindow::setNumBands(uint32_t value)
 {
     getNativeOrThrow()->numBands = value;
 }
 
 void SubWindow::setDownSampler(nitf::DownSampler* downSampler)
-    throw (nitf::NITFException)
 {
     if (getNativeOrThrow()->downsampler)
     {
@@ -129,14 +131,17 @@ void SubWindow::setDownSampler(nitf::DownSampler* downSampler)
         ds.decRef();
     }
 
-    //increment the reference for this DownSampler
-    getNativeOrThrow()->downsampler = downSampler->getNative();
-    downSampler->incRef();
+    if (downSampler != nullptr)
+    {
+        //increment the reference for this DownSampler
+        getNativeOrThrow()->downsampler = downSampler->getNative();
+        downSampler->incRef();
+    }
     mDownSampler = downSampler;
 }
 
 
-nitf::DownSampler* SubWindow::getDownSampler() throw (nitf::NITFException)
+nitf::DownSampler* SubWindow::getDownSampler() noexcept
 {
     return mDownSampler;
 }

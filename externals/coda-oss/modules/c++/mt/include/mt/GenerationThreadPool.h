@@ -36,7 +36,7 @@ namespace mt
     class TiedRequestHandler : public sys::Runnable
     {
 	RunnableRequestQueue* mRequestQueue;
-	sys::Semaphore* mSem;
+	sys::Semaphore* mSem = nullptr;
 	CPUAffinityThreadInitializer* mAffinityInit;
 
     public:
@@ -80,9 +80,10 @@ namespace mt
 	    handler->setSemaphore(&mGenerationSync);
 		
 	    if (mAffinityInit)
-		handler->setAffinityInit(mAffinityInit->newThreadInitializer());
-	    
-	    
+        {
+            handler->setAffinityInit(mAffinityInit->newThreadInitializer().release());
+        }
+
 	    return handler;
 	}
     

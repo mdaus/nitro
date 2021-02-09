@@ -1,8 +1,8 @@
 /* =========================================================================
- * This file is part of mt-c++ 
+ * This file is part of mt-c++
  * =========================================================================
- * 
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ *
+ * (C) Copyright 2004 - 2019, MDA Information Systems LLC
  *
  * mt-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -27,6 +27,7 @@
 #include "mt/AbstractThreadPool.h"
 #include "mt/TiedWorkerThread.h"
 #include "mt/CPUAffinityInitializer.h"
+#include "mem/SharedPtr.h"
 
 namespace mt
 {
@@ -35,39 +36,56 @@ class AbstractTiedThreadPool : public AbstractThreadPool<Request_T>
 {
 
 public:
-	AbstractTiedThreadPool(unsigned short numThreads = 0) : AbstractThreadPool<Request_T>(numThreads) {}
+    AbstractTiedThreadPool(unsigned short numThreads = 0) :
+            AbstractThreadPool<Request_T>(numThreads)
+    {
+    }
 
-	virtual ~AbstractTiedThreadPool(){}
+    virtual ~AbstractTiedThreadPool(){}
 
-	virtual void initialize(CPUAffinityInitializer* affinityInit = NULL)
-	{
-	    mAffinityInit = affinityInit;
-	}
-	virtual CPUAffinityThreadInitializer* getCPUAffinityThreadInitializer()
-	{
-	    CPUAffinityThreadInitializer* threadInit = NULL;
-	    
-	    // If we were passed a schematic 
-	    // for initializing thread affinity...
-	    if (mAffinityInit)
-	    {
-		threadInit = mAffinityInit->newThreadInitializer();
-	    }
-	    return threadInit;
-	}
+    virtual void initialize(CPUAffinityInitializer* affinityInit = NULL)
+    {
+        mAffinityInit = affinityInit;
+    }
 
-	virtual mt::WorkerThread<Request_T>* newWorker()
-	{
-	    return newTiedWorker(&this->mRequestQueue, 
-				 getCPUAffinityThreadInitializer());
-	}
+    virtual mem::auto_ptr<CPUAffinityThreadInitializer>
+    getCPUAffinityThreadInitializer()
+    {
+        mem::auto_ptr<CPUAffinityThreadInitializer> threadInit(NULL);
+
+        // If we were passed a schematic
+        // for initializing thread affinity...
+        if (mAffinityInit)
+        {
+            threadInit = mAffinityInit->newThreadInitializer();
+        }
+        return threadInit;
+    }
+
+    virtual mt::WorkerThread<Request_T>* newWorker()
+    {
+        return newTiedWorker(&this->mRequestQueue,
+                 getCPUAffinityThreadInitializer());
+    }
 
  protected:
-	virtual mt::TiedWorkerThread<Request_T>* newTiedWorker(mt::RequestQueue<Request_T>* q, 
-							       CPUAffinityThreadInitializer* init) = 0;
+    virtual mt::TiedWorkerThread<Request_T>*
+    newTiedWorker(mt::RequestQueue<Request_T>* q,
+#if CODA_OSS_cpp17
+                  std::unique_ptr<CPUAffinityThreadInitializer>&& init) = 0;
+#else
+                  std::auto_ptr<CPUAffinityThreadInitializer> init) = 0;
+    virtual mt::TiedWorkerThread<Request_T>*
+    newTiedWorker(mt::RequestQueue<Request_T>* q,
+                  std::unique_ptr<CPUAffinityThreadInitializer>&& init) {
+        std::auto_ptr<CPUAffinityThreadInitializer> init_(init.release());
+        return newTiedWorker(q, init_);
+    }
+#endif
+
 
 private:
-	CPUAffinityInitializer* mAffinityInit;
+    CPUAffinityInitializer* mAffinityInit;
 };
 
 }

@@ -21,9 +21,11 @@
  */
 
 #include <fstream>
+#include <sstream>
 
 #include <sys/OS.h>
 #include <sys/Path.h>
+#include <sys/Filesystem.h>
 #include "TestCase.h"
 
 namespace
@@ -147,6 +149,76 @@ TEST_CASE(testEnvVariables)
     TEST_ASSERT_FALSE(os.isEnvSet(testvar));
 }
 
+template <typename TPath>
+static void testFsExtension_(const std::string& testName)
+{
+    using fs_path = TPath;
+
+    // https://en.cppreference.com/w/cpp/filesystem/path/extension
+
+    // "If the pathname is either . or .., ... then empty path is returned."
+    const fs_path dot(".");
+    TEST_ASSERT_EQ("", dot.extension());
+    const fs_path dotdot("..");
+    TEST_ASSERT_EQ("", dotdot.extension());
+
+    // "If the first character in the filename is a period, that period is ignored
+    // (a filename like '.profile' is not treated as an extension)"
+    fs_path dotprofile("/path/to/.profile");
+    TEST_ASSERT_EQ("", dotprofile.extension());
+    dotprofile = ".profile";
+    TEST_ASSERT_EQ("", dotprofile.extension());
+    dotprofile = "/path/to/.profile.user";
+    TEST_ASSERT_EQ(".user", dotprofile.extension());
+    dotprofile = "/path.to/.profile.user";
+    TEST_ASSERT_EQ(".user", dotprofile.extension());
+    dotprofile = ".profile.user";
+    TEST_ASSERT_EQ(".user", dotprofile.extension());
+
+    fs_path filedottext("/path/to/file.txt");
+    TEST_ASSERT_EQ(".txt", filedottext.extension());
+    filedottext = "file.txt";
+    TEST_ASSERT_EQ(".txt", filedottext.extension());
+
+    // "If ... filename() does not contain the . character, then empty path is returned."
+    filedottext = "/path/to/file";
+    TEST_ASSERT_EQ("", filedottext.extension());
+    filedottext = "file";
+    TEST_ASSERT_EQ("", filedottext.extension());
+    filedottext = "/path.to/file";
+    TEST_ASSERT_EQ("", filedottext.extension());
+}
+TEST_CASE(testFsExtension)
+{
+    testFsExtension_<sys::Filesystem::path>(testName);
+    testFsExtension_<coda_oss::filesystem::path>(testName);
+    #if CODA_OSS_lib_filesystem
+    testFsExtension_<std::filesystem::path>(testName);
+    #endif
+}
+
+template <typename TPath>
+static void testFsOutput_(const std::string& testName)
+{
+    using fs_path = TPath;
+
+    const fs_path path("/path/to/file.txt");
+    const std::string expected = "\"" + path.string() + "\"";
+
+    std::stringstream ss;
+    ss << path;
+    const auto actual = ss.str();
+    TEST_ASSERT_EQ(expected, actual);
+}
+TEST_CASE(testFsOutput)
+{
+    testFsOutput_<sys::Filesystem::path>(testName);
+    testFsOutput_<coda_oss::filesystem::path>(testName);
+    #if CODA_OSS_lib_filesystem
+    testFsOutput_<std::filesystem::path>(testName);
+    #endif
+}
+
 }
 
 int main(int, char**)
@@ -154,6 +226,8 @@ int main(int, char**)
     TEST_CHECK(testRecursiveRemove);
     TEST_CHECK(testForcefulMove);
     TEST_CHECK(testEnvVariables);
+    TEST_CHECK(testFsExtension);
+    TEST_CHECK(testFsOutput);
     return 0;
 }
 

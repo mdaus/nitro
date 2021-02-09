@@ -20,8 +20,8 @@
  *
  */
 
+#include <nitf/coda-oss.hpp>
 #include <nitf/IOStreamWriter.hpp>
-#include <except/Exception.h>
 
 namespace nitf
 {
@@ -39,7 +39,7 @@ void IOStreamWriter::readImpl(void* , size_t )
 
 void IOStreamWriter::writeImpl(const void* buffer, size_t size)
 {
-    mStream->write(static_cast<const sys::byte*>(buffer), size);
+    mStream->write(static_cast<const std::byte*>(buffer), size);
 }
 
 bool IOStreamWriter::canSeekImpl() const
@@ -51,7 +51,7 @@ nitf::Off IOStreamWriter::seekImpl(nitf::Off offset, int whence)
 {
     // This whence does not match io::Seekable::Whence
     // We need to perform a mapping to the correct values.
-    io::Seekable::Whence ioWhence;
+    io::Seekable::Whence ioWhence = io::Seekable::START;
     switch (whence)
     {
     case SEEK_SET:
@@ -66,7 +66,7 @@ nitf::Off IOStreamWriter::seekImpl(nitf::Off offset, int whence)
     default:
         throw except::Exception(
                 Ctxt("Unknown whence value when seeking IOStreamWriter: " +
-                     str::toString(whence)));
+                     std::to_string(whence)));
     }
 
     return mStream->seek(offset, ioWhence);

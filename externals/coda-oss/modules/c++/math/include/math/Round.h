@@ -24,6 +24,7 @@
 #define __MATH_ROUND_H__
 
 #include <cmath>
+#include <stddef.h>
 
 namespace math
 {
@@ -47,7 +48,7 @@ template<typename T> inline T fix(T value)
  */
 template<typename T> inline T round(T value)
 {
-    return (value > 0.0 ? std::floor(value + 0.5) : std::ceil(value - 0.5));
+    return static_cast<T>(value > 0.0 ? std::floor(value + 0.5) : std::ceil(value - 0.5));
 }
 
 /*!
@@ -65,9 +66,19 @@ template<typename T> inline T round(T value, size_t fractionalDigits)
         power10 *= 10.0;
     }
 
-    return (value > 0.0 ? std::floor(value * power10 + 0.5) / power10
+    return static_cast<T>(value > 0.0 ? std::floor(value * power10 + 0.5) / power10
                         : std::ceil(value * power10 - 0.5) / power10);
 }
+
+/*!
+ * Equivalent to ceil((float)numerator / denominator)
+ *
+ * \param numerator Number to divide
+ * \param denominator Non-zero number to divide by
+ * \return Result of division, rounded up
+ * \throw if denominator is 0
+ */
+size_t ceilingDivide(size_t numerator, size_t denominator);
 }
 
 #endif

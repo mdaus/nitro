@@ -42,24 +42,28 @@ ImageReader::ImageReader(nitf_ImageReader * x)
     getNativeOrThrow();
 }
 
-ImageReader::~ImageReader(){}
-
-nitf::BlockingInfo ImageReader::getBlockingInfo() throw (nitf::NITFException)
+nitf::BlockingInfo ImageReader::getBlockingInfo() const
 {
-    return nitf::BlockingInfo(nitf_ImageReader_getBlockingInfo(getNativeOrThrow(), &error));
+    nitf_BlockingInfo* blockingInfo =
+            nitf_ImageReader_getBlockingInfo(getNativeOrThrow(), &error);
+    // This creates a new object, not a reference to a field,
+    // So need to tell the wrapper it needs to destruct itself
+    nitf::BlockingInfo cppBlockingInfo(blockingInfo);
+    cppBlockingInfo.setManaged(false);
+    return cppBlockingInfo;
 }
 
-void ImageReader::read(nitf::SubWindow & subWindow, nitf::Uint8 ** user, int * padded) throw (nitf::NITFException)
+void ImageReader::read(const nitf::SubWindow & subWindow, uint8_t** user, int * padded)
 {
-    NITF_BOOL x = nitf_ImageReader_read(getNativeOrThrow(), subWindow.getNative(), user, padded, &error);
+    auto user_ = reinterpret_cast<uint8_t**>(user);
+    const NITF_BOOL x = nitf_ImageReader_read(getNativeOrThrow(), subWindow.getNative(), user_, padded, &error);
     if (!x)
         throw nitf::NITFException(&error);
 }
 
-const nitf::Uint8* ImageReader::readBlock(nitf::Uint32 blockNumber, nitf::Uint64* blockSize)  
-    throw (nitf::NITFException)
+const uint8_t* ImageReader::readBlock(uint32_t blockNumber, uint64_t* blockSize)
 {
-    const nitf::Uint8* x = nitf_ImageReader_readBlock(
+    const auto x = nitf_ImageReader_readBlock(
         getNativeOrThrow(), blockNumber, blockSize, &error);
     if (!x)
         throw nitf::NITFException(&error);

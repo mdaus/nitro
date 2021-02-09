@@ -1,8 +1,8 @@
 /* =========================================================================
- * This file is part of mt-c++ 
+ * This file is part of mt-c++
  * =========================================================================
- * 
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ *
+ * (C) Copyright 2004 - 2019, MDA Information Systems LLC
  *
  * mt-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -25,6 +25,7 @@
 #define __MT_TIED_WORKER_THREAD_H__
 
 #include "mt/CPUAffinityThreadInitializer.h"
+#include "mem/SharedPtr.h"
 
 
 namespace mt
@@ -37,33 +38,37 @@ template <typename Request_T>
 class TiedWorkerThread : public mt::WorkerThread<Request_T>
 {
 public:
-	TiedWorkerThread(mt::RequestQueue<Request_T>* requestQueue, 
-			 CPUAffinityThreadInitializer* cpuAffinityInit = NULL):
-	    mt::WorkerThread<Request_T>(requestQueue), 
-	    mCPUAffinityInit(cpuAffinityInit){}
+    TiedWorkerThread(
+            mt::RequestQueue<Request_T>* requestQueue,
+            std::unique_ptr<CPUAffinityThreadInitializer>&& cpuAffinityInit =
+                    std::unique_ptr<CPUAffinityThreadInitializer>(NULL)) :
+        mt::WorkerThread<Request_T>(requestQueue),
+        mCPUAffinityInit(std::move(cpuAffinityInit))
+    {
+    }
+#if !CODA_OSS_cpp17
+    TiedWorkerThread(
+            mt::RequestQueue<Request_T>* requestQueue,
+            std::auto_ptr<CPUAffinityThreadInitializer> cpuAffinityInit =
+                    std::auto_ptr<CPUAffinityThreadInitializer>(NULL)) :
+        TiedWorkerThread(requestQueue, std::unique_ptr<CPUAffinityThreadInitializer>(cpuAffinityInit.release()))
+    {
+    }
+#endif
 
-	virtual ~TiedWorkerThread()
-	{
-	    if (mCPUAffinityInit)
-	    {
-		delete mCPUAffinityInit;
-		mCPUAffinityInit = NULL;
-	    }
-	}
-	
-	virtual void initialize()
-	{
-	    if (mCPUAffinityInit)
-	    {
-		mCPUAffinityInit->initialize();
-	    }
-	}
+    virtual void initialize()
+    {
+        if (mCPUAffinityInit.get())
+        {
+            mCPUAffinityInit->initialize();
+        }
+    }
 
-	virtual void performTask(Request_T& request) = 0;
+    virtual void performTask(Request_T& request) = 0;
 
 private:
-	TiedWorkerThread();
-	CPUAffinityThreadInitializer* mCPUAffinityInit;
+    TiedWorkerThread();
+    std::unique_ptr<CPUAffinityThreadInitializer> mCPUAffinityInit;
 };
 
 }

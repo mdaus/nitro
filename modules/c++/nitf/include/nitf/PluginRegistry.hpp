@@ -39,28 +39,39 @@ namespace nitf
  *  \class PluginRegistry
  *  \brief  The C++ wrapper for the nitf_PluginRegistry
  */
-class PluginRegistry
+namespace PluginRegistry
 {
-public:
-
     /*!
      * Load plugins from the given directory
      * \param dirName  The name of the directory to load
      */
-    static void loadDir(const std::string& dirName) throw(nitf::NITFException);
+    extern void loadDir(const std::string& dirName);
 
-    static void loadPlugin(const std::string& path) throw(nitf::NITFException);
+    extern void loadPlugin(const std::string& path);
 
     /*!
      *  This function allows you to register your own TRE handlers.  It
      *  will override any handlers that are currently handling the identifier.
      */
-    static void registerTREHandler(NITF_PLUGIN_INIT_FUNCTION init,
-            NITF_PLUGIN_TRE_HANDLER_FUNCTION handler)
-            throw(nitf::NITFException);
+    extern void registerTREHandler(NITF_PLUGIN_INIT_FUNCTION init,
+            NITF_PLUGIN_TRE_HANDLER_FUNCTION handler);
 
-    static nitf_CompressionInterface* retrieveCompressionInterface(
-            const std::string& comp) throw(nitf::NITFException);
+    /*!
+     *  This function allows you to register your own compression handlers.  It
+     *  will override any handlers that are currently handling the identifier.
+     */
+    extern void registerCompressionHandler(NITF_PLUGIN_INIT_FUNCTION init,
+            NITF_PLUGIN_COMPRESSION_CONSTRUCT_FUNCTION handler);
+
+    /*!
+     *  This function allows you to register your own decompression handlers.  It
+     *  will override any handlers that are currently handling the identifier.
+     */
+    extern void registerDecompressionHandler(NITF_PLUGIN_INIT_FUNCTION init,
+            NITF_PLUGIN_DECOMPRESSION_CONSTRUCT_FUNCTION handler);
+
+    extern nitf_CompressionInterface* retrieveCompressionInterface(
+            const std::string& comp);
 
     /*!
      * Checks if a TRE handler exists for 'ident'
@@ -69,15 +80,25 @@ public:
      *
      * \return true if a TRE handler exists, false otherwise
      */
-    static bool treHandlerExists(const std::string& ident);
+    extern bool treHandlerExists(const std::string& ident) noexcept;
 
-private:
-    PluginRegistry()
-    {
-    }
-    ~PluginRegistry()
-    {
-    }
+    /*!
+     * Checks if a compression handler exists for 'ident'
+     *
+     * \param ident ID of the compression
+     *
+     * \return true if a compression handler exists, false otherwise
+     */
+    extern bool compressionHandlerExists(const std::string& ident) noexcept;
+
+    /*!
+     * Checks if a decompression handler exists for 'ident'
+     *
+     * \param ident ID of the decompression
+     *
+     * \return true if a decompression handler exists, false otherwise
+     */
+    extern bool decompressionHandlerExists(const std::string& ident) noexcept;
 };
 }
 #endif

@@ -20,8 +20,8 @@
  *
  */
 
+#include <nitf/coda-oss.hpp>
 #include <nitf/IOStreamReader.hpp>
-#include <except/Exception.h>
 
 namespace nitf
 {
@@ -32,7 +32,7 @@ IOStreamReader::IOStreamReader(io::SeekableInputStream& stream) :
 
 void IOStreamReader::readImpl(void* buffer, size_t size)
 {
-    mStream.read(static_cast<sys::byte*>(buffer), size);
+    mStream.read(static_cast<std::byte*>(buffer), size);
 }
 
 void IOStreamReader::writeImpl(const void* , size_t)
@@ -51,7 +51,7 @@ nitf::Off IOStreamReader::seekImpl(nitf::Off offset, int whence)
 {
     // This whence does not match io::Seekable::Whence
     // We need to perform a mapping to the correct values.
-    io::Seekable::Whence ioWhence;
+    io::Seekable::Whence ioWhence = io::Seekable::START;
     switch (whence)
     {
     case SEEK_SET:
@@ -66,7 +66,7 @@ nitf::Off IOStreamReader::seekImpl(nitf::Off offset, int whence)
     default:
         throw except::Exception(
                 Ctxt("Unknown whence value when seeking IOStreamReader: " +
-                     str::toString(whence)));
+                     std::to_string(whence)));
     }
 
     return mStream.seek(offset, ioWhence);
@@ -79,7 +79,12 @@ nitf::Off IOStreamReader::tellImpl() const
 
 nitf::Off IOStreamReader::getSizeImpl() const
 {
-    return mStream.available();
+    // There's no way to ask a stream what its total size is, so need to seek
+    // to the end to find out
+    const nitf::Off origPos = mStream.tell();
+    const nitf::Off size = mStream.seek(0, io::Seekable::END);
+    mStream.seek(origPos, io::Seekable::START);
+    return size;
 }
 
 int IOStreamReader::getModeImpl() const

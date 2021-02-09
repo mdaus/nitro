@@ -22,11 +22,19 @@
 
 #ifndef __NITF_IMAGE_READER_HPP__
 #define __NITF_IMAGE_READER_HPP__
+#pragma once
 
+#include <assert.h>
+
+#include <vector>
+#include <string>
+#include <memory>
+
+#include "nitf/coda-oss.hpp"
 #include "nitf/ImageReader.h"
 #include "nitf/Object.hpp"
 #include "nitf/BlockingInfo.hpp"
-#include <string>
+#include "nitf/System.hpp"
 
 /*!
  *  \file ImageReader.hpp
@@ -35,6 +43,43 @@
 
 namespace nitf
 {
+    template<typename T>
+    class BufferList final
+    {
+        std::vector<T*> buffer;
+        std::vector<std::unique_ptr<T[]>> buffer_;
+
+    public:
+        BufferList(size_t nBands)
+            : buffer(nBands), buffer_(nBands)
+        {
+        }
+
+        void initialize(size_t subWindowSize)
+        {
+            for (size_t i = 0; i < size(); i++)
+            {
+                buffer_[i].reset(new T[subWindowSize]);
+                buffer[i] = buffer_[i].get();
+            }
+        }
+
+        size_t size() const noexcept
+        {
+            assert(buffer.size() == buffer_.size());
+            return buffer.size();
+        }
+
+        T** data() noexcept
+        {
+            return buffer.data();
+        }
+
+        T*& operator[](size_t i)noexcept
+        {
+            return buffer[i];
+        }
+    };
 
 /*!
  *  \class ImageReader
@@ -52,10 +97,10 @@ public:
     //! Set native object
     ImageReader(nitf_ImageReader * x);
 
-    ~ImageReader();
+    ~ImageReader() = default;
 
     //! Get the blocking info
-    nitf::BlockingInfo getBlockingInfo() throw (nitf::NITFException);
+    nitf::BlockingInfo getBlockingInfo() const;
 
     /*!
      *  Read a sub-window.  See ImageIO::read for more details.
@@ -63,8 +108,15 @@ public:
      *  \param  user  User-defined data buffers for read
      *  \param  padded  Returns TRUE if pad pixels may have been read
      */
-    void read(nitf::SubWindow & subWindow, nitf::Uint8 ** user, int * padded)
-        throw (nitf::NITFException);
+    void read(const nitf::SubWindow & subWindow, uint8_t ** user, int * padded);
+    void read(const nitf::SubWindow & subWindow, sys::byte** user, int * padded)
+    {
+        read(subWindow, reinterpret_cast<uint8_t**>(user), padded);
+    }
+    void read(const nitf::SubWindow& subWindow, std::byte** user, int* padded)
+    {
+        read(subWindow, reinterpret_cast<uint8_t**>(user), padded);
+    }
 
     /*!
      *  Read a block directly from file
@@ -73,16 +125,15 @@ public:
      *  \return The read block 
      *          (something must be done with buffer before next call)
      */
-    const nitf::Uint8* readBlock(nitf::Uint32 blockNumber, 
-                                 nitf::Uint64* blockSize) 
-                                 throw (nitf::NITFException);
+    const uint8_t* readBlock(uint32_t blockNumber, 
+                                 uint64_t* blockSize);
 
     //!  Set read caching
     void setReadCaching();
 
 private:
-    nitf_Error error;
-    ImageReader() throw(nitf::NITFException){}
+    mutable nitf_Error error{};
+    ImageReader() = default;
 };
 
 }

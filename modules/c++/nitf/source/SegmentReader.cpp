@@ -42,14 +42,12 @@ SegmentReader::SegmentReader(nitf_SegmentReader * x)
     getNativeOrThrow();
 }
 
-SegmentReader::~SegmentReader(){}
-
 
 void SegmentReader::read
 (
     NITF_DATA *buffer,           /*!< Buffer to hold data */
     size_t count                /*!< Amount of data to return */
-) throw (nitf::NITFException)
+)
 {
     if (!nitf_SegmentReader_read(getNativeOrThrow(), buffer, count, &error))
         throw nitf::NITFException(&error);
@@ -60,7 +58,7 @@ nitf::Off SegmentReader::seek
 (
     nitf::Off offset,                 /*!< The seek offset */
     int whence                   /*!< Starting at (SEEK_SET, SEEK_CUR, SEEK_END)*/
-) throw (nitf::NITFException)
+)
 {
     offset = nitf_SegmentReader_seek(getNativeOrThrow(), offset, whence, &error);
     if (offset < 0)
@@ -69,13 +67,13 @@ nitf::Off SegmentReader::seek
 }
 
 
-nitf::Off SegmentReader::tell()
+nitf::Off SegmentReader::tell() const
 {
     return nitf_SegmentReader_tell(getNativeOrThrow(), &error);
 }
 
 
-nitf::Off SegmentReader::getSize()
+nitf::Off SegmentReader::getSize() const
 {
     return nitf_SegmentReader_getSize(getNativeOrThrow(), &error);
 }

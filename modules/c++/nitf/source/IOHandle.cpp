@@ -22,11 +22,13 @@
 
 #include <nitf/IOHandle.hpp>
 
+#include "gsl/gsl.h"
+
 namespace nitf
 {
 IOHandle::IOHandle(const std::string& fname,
                    nitf::AccessFlags access,
-                   nitf::CreationFlags creation) throw (nitf::NITFException) :
+                   nitf::CreationFlags creation) :
     IOInterface(open(fname.c_str(), access, creation))
 {
     setManaged(false);
@@ -34,7 +36,7 @@ IOHandle::IOHandle(const std::string& fname,
 
 IOHandle::IOHandle(const char* fname,
                    nitf::AccessFlags access,
-                   nitf::CreationFlags creation) throw (nitf::NITFException) :
+                   nitf::CreationFlags creation) :
     IOInterface(open(fname, access, creation))
 {
     setManaged(false);
@@ -43,11 +45,13 @@ IOHandle::IOHandle(const char* fname,
 nitf_IOInterface*
 IOHandle::open(const char* fname,
                nitf::AccessFlags access,
-               nitf::CreationFlags creation) throw (nitf::NITFException)
+               nitf::CreationFlags creation)
 {
-    nitf_Error error;
+    nitf_Error error{};
+    const auto access_ = gsl::narrow_cast<int>(access);
+    const auto creation_ = gsl::narrow_cast<int>(creation);
     nitf_IOInterface* const ioInterface =
-            nitf_IOHandleAdapter_open(fname, access, creation, &error);
+            nitf_IOHandleAdapter_open(fname, access_, creation_, &error);
 
     if (!ioInterface)
     {

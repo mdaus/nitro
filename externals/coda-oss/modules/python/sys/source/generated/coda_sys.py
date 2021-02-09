@@ -98,29 +98,75 @@ except __builtin__.Exception:
 NativeLayer_func__ = _coda_sys.NativeLayer_func__
 SYS_FUNC = _coda_sys.SYS_FUNC
 
-def isBigEndianSystem():
+def isBigEndianSystem() -> "bool":
     """isBigEndianSystem() -> bool"""
     return _coda_sys.isBigEndianSystem()
 
-def byteSwap(*args):
+def byteSwap(*args) -> "void":
     """
     byteSwap(void * buffer, unsigned short elemSize, size_t numElems)
     byteSwap(void const * buffer, unsigned short elemSize, size_t numElems, void * outputBuffer)
     """
     return _coda_sys.byteSwap(*args)
 
-def alignedAlloc(*args):
+def alignedAlloc(*args) -> "void *":
     """
     alignedAlloc(size_t size, size_t alignment)
     alignedAlloc(size_t size) -> void *
     """
     return _coda_sys.alignedAlloc(*args)
 
-def alignedFree(p):
+def alignedFree(p: 'void *') -> "void":
     """alignedFree(void * p)"""
     return _coda_sys.alignedFree(p)
-# This file is compatible with both classic and new-style classes.
+class UTCDateTime(_object):
+    """Proxy of C++ sys::UTCDateTime class."""
 
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, UTCDateTime, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, UTCDateTime, name)
+    __repr__ = _swig_repr
+
+    def __init__(self, *args):
+        """
+        __init__(sys::UTCDateTime self) -> UTCDateTime
+        __init__(sys::UTCDateTime self, int hour, int minute, double second) -> UTCDateTime
+        __init__(sys::UTCDateTime self, int year, int month, int day) -> UTCDateTime
+        __init__(sys::UTCDateTime self, int year, int month, int day, int hour, int minute, double second) -> UTCDateTime
+        __init__(sys::UTCDateTime self, double timeInMillis) -> UTCDateTime
+        __init__(sys::UTCDateTime self, std::string const & time, std::string const & format) -> UTCDateTime
+        __init__(sys::UTCDateTime self, std::string const & time) -> UTCDateTime
+        """
+        this = _coda_sys.new_UTCDateTime(*args)
+        try:
+            self.this.append(this)
+        except __builtin__.Exception:
+            self.this = this
+
+    def format(self, *args) -> "std::string":
+        """
+        format(UTCDateTime self)
+        format(UTCDateTime self) -> std::string
+        """
+        return _coda_sys.UTCDateTime_format(self, *args)
+
+    __swig_destroy__ = _coda_sys.delete_UTCDateTime
+    __del__ = lambda self: None
+UTCDateTime_swigregister = _coda_sys.UTCDateTime_swigregister
+UTCDateTime_swigregister(UTCDateTime)
 cvar = _coda_sys.cvar
 SSE_INSTRUCTION_ALIGNMENT = cvar.SSE_INSTRUCTION_ALIGNMENT
+UTCDateTime.DEFAULT_DATETIME_FORMAT = _coda_sys.cvar.UTCDateTime_DEFAULT_DATETIME_FORMAT
+
+
+def __lshift__(os: 'std::ostream &', dateTime: 'UTCDateTime') -> "std::ostream &":
+    """__lshift__(std::ostream & os, UTCDateTime dateTime) -> std::ostream &"""
+    return _coda_sys.__lshift__(os, dateTime)
+
+def __rshift__(arg1: 'std::istream &', dateTime: 'UTCDateTime') -> "std::istream &":
+    """__rshift__(std::istream & arg1, UTCDateTime dateTime) -> std::istream &"""
+    return _coda_sys.__rshift__(arg1, dateTime)
+# This file is compatible with both classic and new-style classes.
+
 

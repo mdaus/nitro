@@ -20,23 +20,28 @@
  *
  */
 
+#include "nitf/ImageSegmentComputer.h"
+
 #include <sstream>
 #include <limits>
 #include <cmath>
 #include <algorithm>
 
-#include <sys/Conf.h>
-#include <except/Exception.h>
-#include <nitf/ImageSegmentComputer.h>
+#include <gsl/gsl.h>
+
+#include "nitf/coda-oss.hpp"
+
+#undef min
+#undef max
 
 namespace nitf
 {
 const size_t ImageSegmentComputer::ILOC_MAX = 99999;
-const Uint64 ImageSegmentComputer::NUM_BYTES_MAX = 9999999998LL;
+const uint64_t ImageSegmentComputer::NUM_BYTES_MAX = 9999999998LL;
 
 std::string ImageSegmentComputer::Segment::getILOC() const
 {
-    static const size_t COL = 0;
+    constexpr size_t COL = 0;
 
     std::ostringstream ostr;
     ostr.fill('0');
@@ -51,7 +56,7 @@ bool ImageSegmentComputer::Segment::isInRange(
         size_t rangeStartRow,
         size_t rangeNumRows,
         size_t& firstGlobalRowInThisSegment,
-        size_t& numRowsInThisSegment)
+        size_t& numRowsInThisSegment) noexcept
 {
     const size_t startGlobalRow = std::max(firstRow, rangeStartRow);
     const size_t endGlobalRow =
@@ -75,7 +80,7 @@ bool ImageSegmentComputer::Segment::isInRange(
         size_t rangeStartRow,
         size_t rangeNumRows,
         size_t& firstGlobalRowInThisSegment,
-        size_t& numRowsInThisSegment) const
+        size_t& numRowsInThisSegment) const noexcept
 {
     return isInRange(firstRow, endRow(), rangeStartRow, rangeNumRows,
                      firstGlobalRowInThisSegment, numRowsInThisSegment);
@@ -85,7 +90,7 @@ ImageSegmentComputer::ImageSegmentComputer(size_t numRows,
                                            size_t numCols,
                                            size_t numBytesPerPixel,
                                            size_t maxRows,
-                                           Uint64 maxSize,
+                                           uint64_t maxSize,
                                            size_t rowsPerBlock,
                                            size_t colsPerBlock) :
     mNumRows(numRows),
@@ -95,7 +100,7 @@ ImageSegmentComputer::ImageSegmentComputer(size_t numRows,
     mNumColsPaddedForBlocking(getActualDim(mNumCols, colsPerBlock)),
     mNumRowsPerBlock(rowsPerBlock),
     mMaxNumBytesPerSegment(maxSize),
-    mNumBytesTotal(static_cast<Uint64>(mNumBytesPerPixel) *
+    mNumBytesTotal(gsl::narrow<uint64_t>(mNumBytesPerPixel) *
                  getActualDim(mNumRows, rowsPerBlock) *
                  mNumColsPaddedForBlocking)
 {
@@ -121,7 +126,7 @@ ImageSegmentComputer::ImageSegmentComputer(size_t numRows,
     computeSegmentInfo();
 }
 
-size_t ImageSegmentComputer::getActualDim(size_t dim, size_t numDimsPerBlock)
+size_t ImageSegmentComputer::getActualDim(size_t dim, size_t numDimsPerBlock) noexcept
 {
     if (numDimsPerBlock == 0)
     {
@@ -140,12 +145,12 @@ size_t ImageSegmentComputer::getActualDim(size_t dim, size_t numDimsPerBlock)
 void ImageSegmentComputer::computeImageInfo()
 {
     // Consider possible blocking when determining the maximum number of rows
-    const Uint64 bytesPerRow =
-            static_cast<Uint64>(mNumBytesPerPixel) *
+    const uint64_t bytesPerRow =
+        gsl::narrow<uint64_t>(mNumBytesPerPixel) *
             mNumColsPaddedForBlocking;
 
-    const Uint64 maxRowsUint64 =
-            static_cast<Uint64>(mMaxNumBytesPerSegment) / bytesPerRow;
+    const uint64_t maxRowsUint64 =
+        gsl::narrow<uint64_t>(mMaxNumBytesPerSegment) / bytesPerRow;
     if (maxRowsUint64 > std::numeric_limits<size_t>::max())
     {
         // This should not be possible
@@ -154,7 +159,7 @@ void ImageSegmentComputer::computeImageInfo()
              << " rows which is too many";
         throw except::Exception(Ctxt(ostr.str()));
     }
-    size_t maxRows(static_cast<size_t>(maxRowsUint64));
+    size_t maxRows(gsl::narrow<size_t>(maxRowsUint64));
 
     if (maxRows == 0)
     {
@@ -186,6 +191,17 @@ void ImageSegmentComputer::computeImageInfo()
     {
         mNumRowsLimit = maxRows;
     }
+
+    // Ensure that the row limit is a multiple of block size
+    // The NITF spec requires that when blocking is used, all blocks are the
+    // same size (so when there is a "short" block, pad rows to make it a full
+    // block are used).  So, it's silly to not make the row limit a multiple of
+    // the block size - if we don't, the overall NITF will needlessly be bigger
+    // with pad rows.
+    if (mNumRowsPerBlock != 0)
+    {
+        mNumRowsLimit -= mNumRowsLimit % mNumRowsPerBlock;
+    }
 }
 
 void ImageSegmentComputer::computeSegmentInfo()
@@ -208,8 +224,8 @@ void ImageSegmentComputer::computeSegmentInfo()
     {
         // NOTE: See header for why rowOffset is always set to mNumRowsLimit
         //       for image segments 1 and above
-        const size_t numIS = static_cast<size_t>(std::ceil(
-                static_cast<double>(mNumRows) / mNumRowsLimit));
+        const auto numIS = static_cast<size_t>(std::ceil(
+                static_cast<double>(mNumRows) / static_cast<double>(mNumRowsLimit)));
 
         mSegments.resize(numIS);
         mSegments[0].numRows = mNumRowsLimit;

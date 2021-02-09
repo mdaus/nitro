@@ -42,7 +42,7 @@ LabelSegment::LabelSegment(nitf_LabelSegment * x)
     getNativeOrThrow();
 }
 
-LabelSegment::LabelSegment() throw(nitf::NITFException)
+LabelSegment::LabelSegment()
 {
     setNative(nitf_LabelSegment_construct(&error));
     getNativeOrThrow();
@@ -51,19 +51,19 @@ LabelSegment::LabelSegment() throw(nitf::NITFException)
 
 LabelSegment::LabelSegment(NITF_DATA * x)
 {
-    setNative((nitf_LabelSegment*)x);
+    setNative(static_cast<nitf_LabelSegment*>(x));
     getNativeOrThrow();
 }
 
 LabelSegment & LabelSegment::operator=(NITF_DATA * x)
 {
-    setNative((nitf_LabelSegment*)x);
+    setNative(static_cast<nitf_LabelSegment*>(x));
     getNativeOrThrow();
     return *this;
 }
 
 
-nitf::LabelSegment LabelSegment::clone() throw(nitf::NITFException)
+nitf::LabelSegment LabelSegment::clone() const
 {
     nitf::LabelSegment dolly(
         nitf_LabelSegment_clone(getNativeOrThrow(), &error));
@@ -71,9 +71,7 @@ nitf::LabelSegment LabelSegment::clone() throw(nitf::NITFException)
     return dolly;
 }
 
-LabelSegment::~LabelSegment(){}
-
-nitf::LabelSubheader LabelSegment::getSubheader()
+nitf::LabelSubheader LabelSegment::getSubheader() const
 {
     return nitf::LabelSubheader(getNativeOrThrow()->subheader);
 }
@@ -89,22 +87,22 @@ void LabelSegment::setSubheader(nitf::LabelSubheader & value)
     value.setManaged(true);
 }
 
-nitf::Uint64 LabelSegment::getOffset() const
+uint64_t LabelSegment::getOffset() const
 {
     return getNativeOrThrow()->offset;
 }
 
-void LabelSegment::setOffset(nitf::Uint64 value)
+void LabelSegment::setOffset(uint64_t value)
 {
     getNativeOrThrow()->offset = value;
 }
 
-nitf::Uint64 LabelSegment::getEnd() const
+uint64_t LabelSegment::getEnd() const
 {
     return getNativeOrThrow()->end;
 }
 
-void LabelSegment::setEnd(nitf::Uint64 value)
+void LabelSegment::setEnd(uint64_t value)
 {
     getNativeOrThrow()->end = value;
 }

@@ -29,11 +29,11 @@
  */
 typedef struct _ImageWriterImpl
 {
-    nitf_Uint32 numBitsPerPixel;
-    nitf_Uint32 numImageBands;
-    nitf_Uint32 numMultispectralImageBands;
-    nitf_Uint32 numRows;
-    nitf_Uint32 numCols;
+    uint32_t numBitsPerPixel;
+    uint32_t numImageBands;
+    uint32_t numMultispectralImageBands;
+    uint32_t numRows;
+    uint32_t numCols;
     nitf_ImageSource *imageSource;
     nitf_ImageIO *imageBlocker;
     NRT_BOOL directBlockWrite;
@@ -61,12 +61,10 @@ NITFPRIV(NITF_BOOL) ImageWriter_write(NITF_DATA * data,
                                       nitf_IOInterface* output,
                                       nitf_Error * error)
 {
-    nitf_Uint8 **user = NULL;
-    nitf_Uint8 *userContig = NULL;
-    nitf_Uint32 row, band, block;
-    size_t rowSize, blockSize, numBlocks;
-    nitf_Uint32 numImageBands = 0;
-    nitf_Off offset;
+    uint8_t **user = NULL;
+    uint8_t *userContig = NULL;
+    uint32_t row, band, block;
+    size_t blockSize, numBlocks;
     nitf_BandSource *bandSrc = NULL;
     nitf_BlockingInfo* blockInfo = NULL;
     nitf_ImageIO* imageIO = NULL;
@@ -74,11 +72,11 @@ NITFPRIV(NITF_BOOL) ImageWriter_write(NITF_DATA * data,
     NITF_BOOL rc = NITF_SUCCESS;
     int writeComplete = 0;
 
-    numImageBands = impl->numImageBands + impl->numMultispectralImageBands;
-    rowSize = impl->numCols * NITF_NBPP_TO_BYTES(impl->numBitsPerPixel);
+    const uint32_t numImageBands = impl->numImageBands + impl->numMultispectralImageBands;
+    const size_t rowSize = impl->numCols * NITF_NBPP_TO_BYTES(impl->numBitsPerPixel);
 
 
-    offset = nitf_IOInterface_tell(output, error);
+    const nitf_Off offset = nitf_IOInterface_tell(output, error);
     if (!NITF_IO_SUCCESS(offset))
         goto CATCH_ERROR;
 
@@ -144,7 +142,7 @@ NITFPRIV(NITF_BOOL) ImageWriter_write(NITF_DATA * data,
     }
     if (writeComplete == 0)
     {
-        user = (nitf_Uint8 **) NITF_MALLOC(sizeof(nitf_Uint8*) * numImageBands);
+        user = (uint8_t **) NITF_MALLOC(sizeof(uint8_t*) * numImageBands);
         if (!user)
         {
             nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO), NITF_CTXT,
@@ -153,7 +151,7 @@ NITFPRIV(NITF_BOOL) ImageWriter_write(NITF_DATA * data,
         }
         for (band = 0; band < numImageBands; band++)
         {
-            user[band] = (nitf_Uint8 *) NITF_MALLOC(rowSize);
+            user[band] = (uint8_t *) NITF_MALLOC(rowSize);
             if (!user[band])
             {
                 nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO), NITF_CTXT,
@@ -197,7 +195,8 @@ CLEANUP:
         if (user != NULL && user[band] != NULL)
             NITF_FREE(user[band]);
     }
-    NITF_FREE(user);
+    if (user != NULL)
+        NITF_FREE(user);
     if(userContig != NULL)
         NITF_FREE(userContig);
     return rc;
@@ -242,8 +241,11 @@ NITFAPI(nitf_ImageWriter *) nitf_ImageWriter_construct(
     /* Check for compression and get compression interface */
     /* get the compression string */
 
-    nitf_Field_get(subheader->NITF_IC,
-            compBuf, NITF_CONV_STRING, NITF_IC_SZ + 1, error);
+    if (!nitf_Field_get(subheader->NITF_IC,
+            compBuf, NITF_CONV_STRING, NITF_IC_SZ + 1, error))
+   {
+       goto CATCH_ERROR;
+   }
 
     if(memcmp(compBuf, "NC", 2) != 0 && memcmp(compBuf, "NM", 2) != 0)
     {
@@ -309,16 +311,29 @@ NITFAPI(int) nitf_ImageWriter_setWriteCaching(nitf_ImageWriter *imageWriter,
     return(nitf_ImageIO_setWriteCaching(impl->imageBlocker, enable));
 }
 
-NITFAPI(void) nitf_ImageWriter_setDirectBlockWrite(nitf_ImageWriter *imageWriter,
-        int enable)
+NITFAPI(NITF_BOOL) nitf_ImageWriter_setDirectBlockWrite(nitf_ImageWriter *imageWriter,
+        int enable,
+        nitf_Error *error)
 {
-    ImageWriterImpl *impl = (ImageWriterImpl*)imageWriter->data;
+    ImageWriterImpl *impl;
+    uint32_t numImageBands;
+
+    impl = (ImageWriterImpl*)imageWriter->data;
+    numImageBands = impl->numImageBands + impl->numMultispectralImageBands;
+
+    if (numImageBands > 1 && enable)
+    {
+        nitf_Error_init(error, "Direct block write not supported for multi-band images",
+            NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
+        return NITF_FAILURE;
+    }
     impl->directBlockWrite = enable;
+    return NITF_SUCCESS;
 }
 
 NITFAPI(NITF_BOOL) nitf_ImageWriter_setPadPixel(nitf_ImageWriter* imageWriter,
-                                                nitf_Uint8* value,
-                                                nitf_Uint32 length,
+                                                uint8_t* value,
+                                                uint32_t length,
                                                 nitf_Error* error)
 {
     ImageWriterImpl *impl = (ImageWriterImpl*)imageWriter->data;

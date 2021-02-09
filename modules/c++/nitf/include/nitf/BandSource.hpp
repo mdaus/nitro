@@ -68,7 +68,7 @@ public:
      *  \param pixelSkip  The amount of pixels to skip
      */
     MemorySource(const void* data, size_t size, nitf::Off start,
-            int numBytesPerPixel, int pixelSkip) throw (nitf::NITFException);
+            int numBytesPerPixel, int pixelSkip);
 };
 
 /*!
@@ -87,7 +87,7 @@ public:
     FileSource(const std::string& fname,
                nitf::Off start,
                int numBytesPerPixel,
-               int pixelSkip) throw (nitf::NITFException);
+               int pixelSkip);
 
     /*!
      *  Constructor
@@ -99,7 +99,7 @@ public:
     FileSource(nitf::IOHandle& io,
                nitf::Off start,
                int numBytesPerPixel,
-               int pixelSkip) throw (nitf::NITFException);
+               int pixelSkip);
 };
 
 struct RowSourceCallback
@@ -108,64 +108,61 @@ struct RowSourceCallback
     {
     }
 
-    virtual void nextRow(nitf::Uint32 band, void* buf) throw (nitf::NITFException) = 0;
+    virtual void nextRow(uint32_t band, void* buf) = 0;
 };
 
 class RowSource : public BandSource
 {
 public:
-    RowSource(nitf::Uint32 band, nitf::Uint32 numRows, nitf::Uint32 numCols,
-            nitf::Uint32 pixelSize, RowSourceCallback *callback)
-            throw (nitf::NITFException);
+    RowSource(uint32_t band, uint32_t numRows, uint32_t numCols,
+            uint32_t pixelSize, RowSourceCallback *callback);
 
 private:
     static
     NITF_BOOL nextRow(void* algorithm,
-                      nitf_Uint32 band,
+                      uint32_t band,
                       NITF_DATA* buffer,
                       nitf_Error* error);
 
 private:
-    nitf::Uint32 mBand, mNumRows, mNumCols, mPixelSize;
+    uint32_t mBand, mNumRows, mNumCols, mPixelSize;
 };
 
 class DirectBlockSource : public BandSource
 {
 public:
     DirectBlockSource(nitf::ImageReader& imageReader,
-                      nitf::Uint32 numBands)
-        throw (nitf::NITFException);
+                      uint32_t numBands);
 
 protected:
     virtual void nextBlock(void* buf,
                            const void* block,
-                           nitf::Uint32 blockNumber,
-                           nitf::Uint64 blockSize) throw (nitf::NITFException) = 0;
+                           uint32_t blockNumber,
+                           uint64_t blockSize) = 0;
 private:
     static
     NITF_BOOL nextBlock(void *algorithm,
                         void* buf,
                         const void* block,
-                        nitf_Uint32 blockNumber,
-                        nitf_Uint64 blockSize,
+                        uint32_t blockNumber,
+                        uint64_t blockSize,
                         nitf_Error * error);
 };
 
 class CopyBlockSource: public ::nitf::DirectBlockSource
 {
 public:
-    CopyBlockSource(nitf::ImageReader& imageReader, nitf::Uint32 numBands)
-        throw (::nitf::NITFException) :
+    CopyBlockSource(nitf::ImageReader& imageReader, uint32_t numBands) :
         nitf::DirectBlockSource(imageReader, numBands)
     {}
 
-    virtual ~CopyBlockSource(){}
+    ~CopyBlockSource() = default;
 
 protected:
-    virtual void nextBlock(void* buf,
+    void nextBlock(void* buf,
                            const void* block,
-                           nitf::Uint32 /*blockNumber*/,
-                           nitf::Uint64 blockSize) throw (::nitf::NITFException)
+                           uint32_t /*blockNumber*/,
+                           uint64_t blockSize) override
     {
         memcpy(buf, block, blockSize);
     }

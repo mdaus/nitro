@@ -20,136 +20,138 @@
  *
  */
 
-#include <string.h>
 #include "nitf/TRE.hpp"
+#include <string.h>
+#include "nitf/TREUtils.h"
+
+#include "gsl/gsl.h"
 
 using namespace nitf;
 
-TRE::TRE(const TRE & x)
+TRE::TRE(const TRE& x)
 {
-    setNative(x.getNative());
+    *this = x;
 }
 
-TRE & TRE::operator=(const TRE & x)
+TRE& TRE::operator=(const TRE& x)
 {
     if (&x != this)
         setNative(x.getNative());
     return *this;
 }
 
-TRE::TRE(nitf_TRE * x)
+TRE::TRE(nitf_TRE* x)
 {
     setNative(x);
     getNativeOrThrow();
 }
 
-TRE::TRE(NITF_DATA * x)
+TRE::TRE(NITF_DATA* x) : TRE(static_cast<nitf_TRE*>(x))
 {
-    setNative((nitf_TRE*)x);
-    getNativeOrThrow();
 }
 
-TRE & TRE::operator=(NITF_DATA * x)
+TRE& TRE::operator=(NITF_DATA* x)
 {
-    setNative((nitf_TRE*)x);
+    setNative(static_cast<nitf_TRE*>(x));
     getNativeOrThrow();
     return *this;
 }
 
-TRE::TRE(const char* tag) throw(nitf::NITFException)
+TRE::TRE(const char* tag) : TRE(nitf_TRE_construct(tag, nullptr, &error))
 {
-	setNative(nitf_TRE_construct(tag, NULL, &error));
-	getNativeOrThrow();
-	setManaged(false);
-}
-
-TRE::TRE(const char* tag, const char* id) throw(nitf::NITFException)
-{
-	setNative(nitf_TRE_construct(tag, (::strlen(id) > 0) ? id : NULL, &error));
-	getNativeOrThrow();
-	setManaged(false);
-}
-
-TRE::TRE(const std::string& tag) throw(nitf::NITFException)
-{
-	setNative(nitf_TRE_construct(tag.c_str(), NULL, &error));
-	getNativeOrThrow();
-	setManaged(false);
-}
-
-TRE::TRE(const std::string& tag, const std::string& id)
-    throw(nitf::NITFException)
-{
-    setNative(nitf_TRE_construct(tag.c_str(),
-    		                     id.empty() ? NULL : id.c_str(),
-    		                     &error));
-    getNativeOrThrow();
     setManaged(false);
 }
 
-nitf::TRE TRE::clone() throw(nitf::NITFException)
+TRE::TRE(const char* tag, const char* id)
+    : TRE(nitf_TRE_construct(tag, (::strlen(id) > 0) ? id : nullptr, & error))
+{
+    setManaged(false);
+}
+
+TRE::TRE(const std::string& tag) : TRE(tag.c_str())
+{
+}
+
+TRE::TRE(const std::string& tag, const std::string& id)
+    : TRE(nitf_TRE_construct(tag.c_str(), id.empty() ? nullptr : id.c_str(), & error))
+{
+    setManaged(false);
+}
+
+nitf::TRE TRE::clone() const
 {
     nitf::TRE dolly(nitf_TRE_clone(getNativeOrThrow(), &error));
     dolly.setManaged(false);
     return dolly;
 }
 
-TRE::~TRE(){}
+TRE::~TRE()
+{
+}
 
-TRE::Iterator TRE::begin()
+TRE::Iterator TRE::begin() const
 {
     nitf_TREEnumerator* iter = nitf_TRE_begin(getNativeOrThrow(), &error);
-    if(!iter)
+    if (!iter)
         throw nitf::NITFException(Ctxt("Invalid TRE: " + getTag()));
     return TRE::Iterator(iter);
 }
 
-TRE::Iterator TRE::end() throw (nitf::NITFException)
+TRE::Iterator TRE::end() const noexcept
 {
     return TRE::Iterator();
 }
 
-nitf::Field TRE::getField(const std::string& key)
-    throw(except::NoSuchKeyException)
+nitf::Field TRE::getField(const std::string& key) const
 {
     nitf_Field* field = nitf_TRE_getField(getNativeOrThrow(), key.c_str());
     if (!field)
-        throw except::NoSuchKeyException(Ctxt(FmtX(
-                "Field does not exist in TRE: %s", key.c_str())));
+        throw except::NoSuchKeyException(
+                Ctxt(FmtX("Field does not exist in TRE: %s", key.c_str())));
     return nitf::Field(field);
 }
 
-nitf::Field TRE::operator[] (const std::string& key)
-    throw(except::NoSuchKeyException)
+void TRE::updateFields()
+{
+    if (!nitf_TREUtils_fillData(
+                getNative(),
+                ((nitf_TREPrivateData*)getNative()->priv)->description,
+                &error))
+    {
+        throw NITFException(&error);
+    }
+}
+
+nitf::Field TRE::operator[](const std::string& key)
 {
     return getField(key);
 }
 
-bool TRE::exists(const std::string& key)
+bool TRE::exists(const std::string& key) const
 {
     return nitf_TRE_exists(getNativeOrThrow(), key.c_str()) == NITF_SUCCESS;
 }
 
-size_t TRE::getCurrentSize()
+size_t TRE::getCurrentSize() const
 {
-    int size = nitf_TRE_getCurrentSize(getNativeOrThrow(), &error);
+    const int size = nitf_TRE_getCurrentSize(getNativeOrThrow(), &error);
     if (size < 0)
         throw nitf::NITFException(&error);
-    return (size_t)size;
+    return gsl::narrow<size_t>(size >= 0 ? size : 0);
 }
 
 std::string TRE::getTag() const
 {
-    return std::string(getNativeOrThrow()->tag);
+    return getNativeOrThrow()->tag;
 }
 
-void TRE::setTag(const std::string & value)
+void TRE::setTag(const std::string& value)
 {
     memset(getNativeOrThrow()->tag, 0, 7);
     memcpy(getNativeOrThrow()->tag, value.c_str(), 7);
 }
 
-nitf::List TRE::find(const std::string& pattern)
+nitf::List TRE::find(const std::string& pattern) const
 {
     nitf_List* list = nitf_TRE_find(getNative(), pattern.c_str(), &error);
     if (!list)
@@ -161,4 +163,34 @@ std::string TRE::getID() const
 {
     const char* id = nitf_TRE_getID(getNativeOrThrow());
     return id ? std::string(id) : "";
+}
+
+static bool endsWith(const std::string& s, const std::string& match) noexcept
+{
+    const size_t mLen = match.length();
+    const size_t sLen = s.length();
+    for (size_t i = 0; i < sLen && i < mLen; ++i)
+        if (!(s[sLen - i - 1] == match[mLen - i - 1]))
+            return false;
+    return sLen >= mLen;
+}
+
+std::string TRE::truncate(const std::string& value, size_t maxDigits) const
+{
+    const size_t decimalIndex = value.find('.');
+    if (decimalIndex == std::string::npos)
+    {
+        return value;
+    }
+
+    const std::string truncated = value.substr(0, maxDigits);
+    if (endsWith(truncated, "."))
+    {
+        return truncated.substr(0, truncated.size() - 1);
+    }
+    if (truncated.size() > decimalIndex)
+    {
+        return truncated;
+    }
+    return value;
 }

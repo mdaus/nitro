@@ -22,7 +22,9 @@
 
 #ifndef __NITF_OBJECT_HPP__
 #define __NITF_OBJECT_HPP__
+#pragma once
 
+#include "nitf/coda-oss.hpp"
 #include "nitf/Handle.hpp"
 #include "nitf/HandleManager.hpp"
 #include "nitf/NITFException.hpp"
@@ -48,14 +50,14 @@ protected:
     friend class HashTable;
 
     //! The handle to the underlying memory
-    BoundHandle<T, DestructFunctor_T>* mHandle;
+    BoundHandle<T, DestructFunctor_T>* mHandle = nullptr;
 
     //! Release this object's hold on the handle
     void releaseHandle()
     {
         if (mHandle && mHandle->get())
             HandleRegistry::getInstance().releaseHandle(mHandle->get());
-        mHandle = NULL;
+        mHandle = nullptr;
     }
 
     //! Set native object
@@ -69,39 +71,59 @@ protected:
         }
     }
 
+    /*!
+     * Attempt to set native object, or throw if it is null
+     * Convenience method to help check errors from C "constructors"
+     * \param nativeObj Native C object to set
+     * \param error The error object used in "construction" of native C object
+     *              This allows the resulting exception to easily propogate
+     *              the correct error information
+     * \throws NITFException if `nativeObj` is NULL
+     *
+     * Usage:
+     *    auto* native = nitf_DESegment_construct(&error);
+     *    setNativeOrThrow(native, &error);
+     */
+    virtual void setNativeOrThrow(T* nativeObj, nitf_Error* error)
+    {
+        if (nativeObj == nullptr)
+        {
+            throw nitf::NITFException(error);
+        }
+        setNative(nativeObj);
+    }
+
 public:
-    //! Constructor
-    Object() : mHandle(NULL) {}
 
     //! Destructor
     virtual ~Object() { releaseHandle(); }
 
     //! Is the object valid (native object not null)?
-    virtual bool isValid() const
+    virtual bool isValid() const noexcept
     {
-        return getNative() != NULL;
+        return getNative() != nullptr;
     }
 
     //! Equality, based on handle
-    bool operator==(const Object& obj)
+    bool operator==(const Object& obj) const noexcept
     {
         return mHandle == obj.mHandle;
     }
 
     //! Inequality, based on handle
-    bool operator!=(const Object& obj)
+    bool operator!=(const Object& obj) const noexcept
     {
         return !(operator==(obj));
     }
 
     //! Get native object
-    virtual T * getNative() const
+    virtual T * getNative() const noexcept
     {
-        return mHandle ? mHandle->get() : NULL;
+        return mHandle ? mHandle->get() : nullptr;
     }
 
     //! Get native object
-    virtual T * getNativeOrThrow() const throw(nitf::NITFException)
+    virtual T * getNativeOrThrow() const
     {
         T* val = getNative();
         if (val)
@@ -122,7 +144,7 @@ public:
         return FmtX("%p", getNative());
     }
 
-    bool isManaged() const { return isValid() && mHandle->isManaged(); }
+    bool isManaged() const noexcept { return isValid() && mHandle->isManaged(); }
 
     /*!
      * Set the management of the underlying memory
@@ -130,7 +152,7 @@ public:
      * \param flag  if flag is true, the underlying library will adopt and manage the memory
      *              if flag is false, the memory can be freed when refcount == 0
      */
-    void setManaged(bool flag)
+    void setManaged(bool flag) noexcept
     {
         if (isValid())
             mHandle->setManaged(flag);
@@ -146,7 +168,7 @@ public:
         mHandle->incRef();
     }
 
-    void decRef()
+    void decRef() 
     {
         mHandle->decRef();
     }
@@ -165,7 +187,7 @@ public:
  *
  *  struct RecordDestructor : public MemoryDestructor<nitf_Record> \
  *  { \
- *      ~RecordDestructor(){} \
+ *      ~RecordDestructor() = default; \
  *      virtual void operator()(nitf_Record *nativeObject) \
  *      { nitf_Record_destruct(&nativeObject); } \
  *  }; \
@@ -176,15 +198,25 @@ public:
  * corresponding nitf_##_destruct method.
  */
 
+#define DECLARE_CLASS_IN_operator_function_(Name_, Package_) \
+void operator()(Package_##_##Name_ * nativeObject) override \
+      { Package_##_##Name_##_destruct(&nativeObject); }
+ 
+#ifdef _MSC_VER
+#define DECLARE_CLASS_IN_operator_function(Name_, Package_) \
+    __pragma(warning(push)) \
+    __pragma(warning(disable: 26440)) /* Function '...' can be declared '...' (f.6). */ \
+    DECLARE_CLASS_IN_operator_function_(Name_, Package_) \
+    __pragma(warning(pop))
+#else
+#define DECLARE_CLASS_IN_operator_function(Name_, Package_) \
+    DECLARE_CLASS_IN_operator_function_(Name_, Package_)
+#endif
+
 #define DECLARE_CLASS_IN(_Name, _Package) \
-    struct _Name##Destructor : public nitf::MemoryDestructor<_Package##_##_Name> \
-  { \
-      ~_Name##Destructor(){} \
-      virtual void operator()(_Package##_##_Name *nativeObject) \
-      { _Package##_##_Name##_destruct(&nativeObject); } \
-  }; \
-  \
-  class _Name : public nitf::Object<_Package##_##_Name, _Name##Destructor>
+    struct _Name##Destructor final : public nitf::MemoryDestructor<_Package##_##_Name> \
+    { DECLARE_CLASS_IN_operator_function(_Name, _Package) }; \
+    class _Name : public nitf::Object<_Package##_##_Name, _Name##Destructor>
 
 #define DECLARE_CLASS(_Name) DECLARE_CLASS_IN(_Name, nitf)
 

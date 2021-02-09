@@ -49,7 +49,7 @@ public:
     //! Copy constructor
     WriteHandler(const WriteHandler & x)
     {
-        setNative(x.getNative());
+        *this = x;
     }
 
     //! Assignment Operator
@@ -67,24 +67,19 @@ public:
         getNativeOrThrow();
     }
 
-    //! Destructor
-    virtual ~WriteHandler()
-    {
-    }
+    ~WriteHandler() = default;
 
     /*!
      *  Write to the given output IOInterface
      *  \param handle   the output IOInterface
      */
-    virtual void write(IOInterface& handle) throw (nitf::NITFException);
+    virtual void write(IOInterface& handle);
 
 protected:
     //! Constructor
-    WriteHandler()
-    {
-    }
+    WriteHandler() = default;
 
-    nitf_Error error;
+    nitf_Error error{};
 };
 
 
@@ -96,8 +91,8 @@ class StreamIOWriteHandler : public WriteHandler
 {
 public:
     //! Constructor
-    StreamIOWriteHandler(IOInterface& sourceHandle, nitf::Uint64 offset,
-            nitf::Uint64 bytes);
+    StreamIOWriteHandler(IOInterface& sourceHandle, uint64_t offset,
+            uint64_t bytes);
     ~StreamIOWriteHandler()
     {
     }

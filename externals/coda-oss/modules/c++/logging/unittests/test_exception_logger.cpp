@@ -20,8 +20,15 @@
  *
  */
 
-#include <import/logging.h>
+#include <vector>
+#include <memory>
+
 #include "TestCase.h"
+
+#include <sys/Mutex.h>
+#include <mem/SharedPtr.h>
+#include <mt/GenerationThreadPool.h>
+#include <logging/ExceptionLogger.h>
 
 class RunNothing : public sys::Runnable
 {
@@ -50,14 +57,12 @@ sys::Mutex RunNothing::counterLock;
 
 TEST_CASE(testExceptionLogger)
 {
-    std::auto_ptr<logging::Logger> log(new logging::Logger("test"));
-    std::auto_ptr<logging::Formatter>
-            formatter(new logging::StandardFormatter("%m"));
+    std::unique_ptr<logging::Logger> log(new logging::Logger("test"));
 
     mem::SharedPtr<logging::ExceptionLogger> exLog(new logging::ExceptionLogger(log.get()));
 
     size_t counter(0);
-    size_t numThreads(2);
+    uint16_t numThreads(2);
  
     std::vector<sys::Runnable*> runs;
    

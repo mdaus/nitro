@@ -28,10 +28,10 @@ using namespace nitf;
 NITF_BOOL DecompressionInterface::adapterStart(
     nitf_DecompressionControl* object,
     nitf_IOInterface* io,
-    nitf_Uint64 offset,
-    nitf_Uint64 fileLength,
+    uint64_t offset,
+    uint64_t fileLength,
     nitf_BlockingInfo* blockingDefinition,
-    nitf_Uint64* blockMask, 
+    uint64_t* blockMask, 
     nitf_Error* error)
 {
     try
@@ -40,7 +40,7 @@ NITF_BOOL DecompressionInterface::adapterStart(
         ioInter.setManaged(true);
         nitf::BlockingInfo blockInfo(blockingDefinition);
         blockInfo.setManaged(true);
-        reinterpret_cast<Decompressor*>(object)->start(ioInter, 
+        static_cast<Decompressor*>(object)->start(ioInter,
                                                        offset, 
                                                        fileLength, 
                                                        blockInfo,
@@ -67,45 +67,45 @@ NITF_BOOL DecompressionInterface::adapterStart(
     }
 }
 
-nitf_Uint8* DecompressionInterface::adapterReadBlock(
+uint8_t* DecompressionInterface::adapterReadBlock(
     nitf_DecompressionControl* object,
-    nitf_Uint32 blockNumber, 
-    nitf_Uint64* blockSize, 
+    uint32_t blockNumber, 
+    uint64_t* blockSize, 
     nitf_Error* error)
 {
     try
     {
-        return reinterpret_cast<Decompressor*>(object)->readBlock(blockNumber,
+        return static_cast<Decompressor*>(object)->readBlock(blockNumber,
                                                                   blockSize); 
     }
     catch (const except::Exception& ex)
     {
         nrt_Error_init(error, ex.getMessage().c_str(), NRT_CTXT,
                        NRT_ERR_DECOMPRESSION);
-        return NULL;
+        return nullptr;
     }
     catch (const std::exception& ex)
     {
         nrt_Error_init(error, ex.what(), NRT_CTXT,
                        NRT_ERR_DECOMPRESSION);
-        return NULL;
+        return nullptr;
     }
     catch (...)
     {
         nrt_Error_init(error, "Unknown error", NRT_CTXT,
                        NRT_ERR_DECOMPRESSION);
-        return NULL;
+        return nullptr;
     }
 }
 
 NITF_BOOL DecompressionInterface::adapterFreeBlock(
     nitf_DecompressionControl* object,
-    nitf_Uint8* block, 
+    std::byte* block,
     nitf_Error* error)
 {
     try
     {
-        reinterpret_cast<Decompressor*>(object)->freeBlock(block); 
+        static_cast<Decompressor*>(object)->freeBlock(block);
         return NRT_SUCCESS;
     }
     catch (const except::Exception& ex)
@@ -129,12 +129,12 @@ NITF_BOOL DecompressionInterface::adapterFreeBlock(
 }
 
 void DecompressionInterface::adapterDestroy(
-    nitf_DecompressionControl** object)
+    nitf_DecompressionControl** object) noexcept
 {
-    if (object != NULL && *object != NULL)
+    if (object != nullptr && *object != nullptr)
     {
-        delete reinterpret_cast<Decompressor*>(*object);
-        *object = NULL;
+        delete static_cast<Decompressor*>(*object);
+        *object = nullptr;
     }
 }
 

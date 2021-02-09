@@ -20,13 +20,14 @@
  *
  */
 
-#ifndef __NITF_SUBWINDOW_HPP__
-#define __NITF_SUBWINDOW_HPP__
+#pragma once
+
+#include <string>
 
 #include "nitf/SubWindow.h"
 #include "nitf/DownSampler.hpp"
 #include "nitf/Object.hpp"
-#include <string>
+#include "gsl/gsl.h"
 
 /*!
  *  \file SubWindow.hpp
@@ -68,43 +69,57 @@ public:
     SubWindow(nitf_SubWindow * x);
 
     //! Constructor
-    SubWindow() throw(nitf::NITFException);
+    SubWindow();
 
     //! Destructor
     ~SubWindow();
 
-    nitf::Uint32 getStartRow() const;
-    nitf::Uint32 getNumRows() const;
-    nitf::Uint32 getStartCol() const;
-    nitf::Uint32 getNumCols() const;
-    nitf::Uint32 getBandList(int i);
-    nitf::Uint32 getNumBands() const;
+    uint32_t getStartRow() const;
+    uint32_t getNumRows() const;
+    uint32_t getStartCol() const;
+    uint32_t getNumCols() const;
+    uint32_t getBandList(int i);
+    uint32_t getNumBands() const;
 
-    void setStartRow(nitf::Uint32 value);
-    void setNumRows(nitf::Uint32 value);
-    void setStartCol(nitf::Uint32 value);
-    void setNumCols(nitf::Uint32 value);
-    void setBandList(nitf::Uint32 * value);
-    void setNumBands(nitf::Uint32 value);
+    void setStartRow(uint32_t value);
+    void setNumRows(uint32_t value);
+    void setStartCol(uint32_t value);
+    void setNumCols(uint32_t value);
+    void setBandList(uint32_t * value);
+    void setNumBands(uint32_t value);
+
 
     /*!
      * Reference a DownSampler within the SubWindow
      * The SubWindow does NOT own the DownSampler
      * \param downSampler  The down sampler to reference
      */
-    void setDownSampler(nitf::DownSampler* downSampler)
-        throw (nitf::NITFException);
+    void setDownSampler(nitf::DownSampler* downSampler);
+    void setDownSampler(nitf::DownSampler& downSampler) // make it clear that ownership isn't transferred.
+    {
+        setDownSampler(&downSampler);
+    }
 
     /*!
      * Return the DownSampler that is referenced by this SubWindow.
      * If no DownSampler is referenced, a NITFException is thrown.
      */
-    nitf::DownSampler* getDownSampler() throw (nitf::NITFException);
+    nitf::DownSampler* getDownSampler() noexcept;
 
 private:
     nitf::DownSampler* mDownSampler;
-    nitf_Error error;
+    nitf_Error error{};
 };
 
+// This template<template> syntax allows an arbitary TContainer<uint32_t> to be passed
+// rather than requiring that it be std::vector<uint32_t>.  Note that the container
+// must support data() and size().
+template<template<typename, typename...> typename TContainer, typename ...TAlloc>
+inline void setBands(SubWindow& subWindow,
+    TContainer<uint32_t, TAlloc...>& bandList) // std::vector<T> really has another template parameter
+{
+    subWindow.setBandList(bandList.data());
+    subWindow.setNumBands(gsl::narrow<uint32_t>(bandList.size()));
 }
-#endif
+
+}

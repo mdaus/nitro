@@ -84,38 +84,146 @@ struct Range
     bool containsAll(size_t startElement, size_t numElements) const
     {
         return (numElements == 0 ||
-                (contains(startElement) && contains(startElement + numElements - 1)));
+                (contains(startElement) &&
+                 contains(startElement + numElements - 1)));
+    }
+
+    /*!
+     * \param rhs Range to compare with
+     *
+     * \return True if the ranges overlap, false otherwise
+     */
+    bool overlaps(const types::Range& rhs) const
+    {
+        return (endElement() > rhs.mStartElement &&
+                mStartElement < rhs.endElement());
+    }
+
+    /*!
+     * \param rhs Range to compare with
+     * \param[out] overlap Overlapping range (will be empty if there is no
+     * overlap)
+     *
+     * \return True if the ranges overlap, false otherwise
+     */
+    bool overlaps(const types::Range& rhs,
+                  types::Range& overlap) const
+    {
+        if (overlaps(rhs))
+        {
+            const size_t end = std::min(endElement(), rhs.endElement());
+            overlap.mStartElement = std::max(mStartElement, rhs.mStartElement);
+            overlap.mNumElements = end - overlap.mStartElement;
+            return true;
+        }
+        else
+        {
+            overlap = types::Range();
+            return false;
+        }
+    }
+
+    /*!
+     * Determine if a given range touches our range. Touching ranges do not
+     * overlap, but can be placed next to one another (irrespective of order)
+     * with no missing values in between.
+     *
+     * If either of the ranges is empty, touching is defined as always false.
+     *
+     * \param rhs Range to compare with
+     *
+     * \return True if the ranges touch, false otherwise
+     */
+    bool touches(const types::Range& rhs) const
+    {
+        if (empty() || rhs.empty())
+        {
+            return false;
+        }
+
+        return (mStartElement == rhs.endElement()) ||
+               (rhs.mStartElement == endElement());
     }
 
     /*!
      * \param startElementToTest The start element
      * \param numElementsToTest The total number of elements to check
      *
-     * \returns The number of shared elements
+     * \return The number of shared elements
      */
     size_t getNumSharedElements(size_t startElementToTest,
                                 size_t numElementsToTest) const
     {
-        const size_t endElementToTest =
-                startElementToTest + numElementsToTest;
-
-        // Ranges do not intersect
-        if(mStartElement >= endElementToTest ||
-                endElement() <= startElementToTest)
-        {
-            return 0;
-        }
-
-        const size_t startRow = std::max(mStartElement, startElementToTest);
-        const size_t endRow = std::min(endElement(), endElementToTest);
-
-        return endRow - startRow;
+        types::Range overlap;
+        overlaps(types::Range(startElementToTest, numElementsToTest), overlap);
+        return overlap.mNumElements;
     }
+
+    /*!
+     * Given an input range, removes numElementsReq elements from the end of it
+     * (if possible), and provides the new range composed of these elements
+     *
+     * \param inputRange Initial Range object
+     * \param numElementsReq The number elements requested to be split from
+     *        the end of inputRange
+     *
+     * \returns The resulting range formed from the removed elements of
+     *          inputRange. Has no more than numElementsReq elements,
+     *          but may have fewer depending on the size of inputRange.
+     */
+    Range split(size_t numElementsReq) const;
 
     //! \return True if there are no elements in this range, false otherwise
     bool empty() const
     {
         return (mNumElements == 0);
+    }
+
+    /*!
+     * \param rhs Range to compare with
+     *
+     * \return True if ranges match, false otherwise
+     */
+    bool operator==(const Range& rhs) const
+    {
+        return (mStartElement == rhs.mStartElement &&
+                mNumElements == rhs.mNumElements);
+    }
+
+    /*!
+     * \param rhs Range to compare with
+     *
+     * \return False if ranges match, true otherwise
+     */
+    bool operator!=(const Range& rhs) const
+    {
+        return !(*this == rhs);
+    }
+
+    /*!
+     * Comparator.  Primarily useful so that Range can be used as a key in an
+     * STL map.  Sorting first by the start element allows us to iterate
+     * through a map in order of when ranges start, which is generally speaking
+     * what we want.
+     *
+     * \param rhs Range to compare with
+     *
+     * \return True if this < rhs, false otherwise
+     */
+    bool operator<(const Range& rhs) const
+    {
+        if (mStartElement < rhs.mStartElement)
+        {
+            return true;
+        }
+        else if (rhs.mStartElement < mStartElement)
+        {
+            return false;
+        }
+        else
+        {
+            return (mNumElements < rhs.mNumElements);
+        }
     }
 };
 }

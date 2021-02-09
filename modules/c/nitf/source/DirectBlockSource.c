@@ -24,6 +24,8 @@
  *    Implementation of the direct block source object
  */
 
+#include <inttypes.h>
+
 #include "nitf/DirectBlockSource.h"
 
 /*   The instance data for the rowSource object */
@@ -35,7 +37,7 @@ typedef struct _DirectBlockSourceImpl
     /* Pointer to the next row function */
     NITF_DIRECT_BLOCK_SOURCE_NEXT_BLOCK nextBlock;
     nitf_ImageReader* imageReader;
-    nitf_Uint32 blockNumber;
+    uint32_t blockNumber;
     size_t numBlocks;
 }
 DirectBlockSourceImpl;
@@ -54,18 +56,13 @@ NITFPRIV(DirectBlockSourceImpl *) toDirectBlockSource(NITF_DATA * data,
 }
 
 
-/*
- *     DirectBlockSource_read - Read data function for row source
- */
-
-/* Instance data */
-/* Output buffer */
-NITFPRIV(NITF_BOOL) DirectBlockSource_read(NITF_DATA * data, void *buf, nitf_Off size,    /* Amount to read */
-                                           nitf_Error * error)  /* For error returns */
+NITFPRIV(NITF_BOOL) DirectBlockSource_read(NITF_DATA * data, void *buf,
+                                           nitf_Off size,
+                                           nitf_Error * error)
 {
     DirectBlockSourceImpl *directBlockSource = toDirectBlockSource(data, error);
     const void* block;
-    nitf_Uint64 blockSize;
+    uint64_t blockSize;
 
     if (!directBlockSource)
         return NITF_FAILURE;
@@ -76,6 +73,15 @@ NITFPRIV(NITF_BOOL) DirectBlockSource_read(NITF_DATA * data, void *buf, nitf_Off
                                          &blockSize, error);
     if(!block)
         return NITF_FAILURE;
+
+    if (blockSize != (uint64_t)size)
+    {
+        nitf_Error_initf(error, NITF_CTXT,
+                         NITF_ERR_READING_FROM_FILE,
+                         "Expected %lu bytes, but read %"PRIu64"",
+                         size, blockSize);
+        return NITF_FAILURE;
+    }
 
     if(!directBlockSource->nextBlock(directBlockSource->algorithm,
                                      buf,
@@ -106,6 +112,7 @@ NITFPRIV(void) DirectBlockSource_destruct(NITF_DATA * data)
 
 NITFPRIV(nitf_Off) DirectBlockSource_getSize(NITF_DATA * data, nitf_Error *e)
 {
+    (void)e;
     DirectBlockSourceImpl *directBlockSource = (DirectBlockSourceImpl *) data;
     return directBlockSource ? directBlockSource->numBlocks : 0;
 }
@@ -127,7 +134,7 @@ NITFAPI(nitf_BandSource *) nitf_DirectBlockSource_construct(void * algorithm,
                                                             NITF_DIRECT_BLOCK_SOURCE_NEXT_BLOCK
                                                             nextBlock,
                                                             nitf_ImageReader* imageReader,
-                                                            nitf_Uint32 numBands,
+                                                            uint32_t numBands,
                                                             nitf_Error * error)
 {
     static nitf_IDataSource iDirectBlockSource =

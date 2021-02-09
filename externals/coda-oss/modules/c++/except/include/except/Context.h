@@ -1,7 +1,7 @@
 /* =========================================================================
- * This file is part of except-c++ 
+ * This file is part of except-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * except-c++ is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -25,7 +25,8 @@
 #define __EXCEPT_CONTEXT_H__
 
 #include <string>
-#include <iostream>
+#include <ostream>
+#include <config/coda_oss_config.h>
 
 /*!
  * \file
@@ -39,7 +40,7 @@ namespace except
  * \class Context
  * \brief The information surrounding an exception or error
  *
- * This class contains information such as the file, line, 
+ * This class contains information such as the file, line,
  * function and time
  */
 class Context
@@ -58,27 +59,20 @@ public:
             int line,
             const std::string& func,
             const std::string& time,
-            const std::string& message) : mMessage(message), mTime(time), mFunc(func),
-            mFile(file), mLine(line)
-    {}
-
-    /*!
-     * Copy constructor
-     * \param c The context to copy
-     */
-    Context(const Context& c);
-
-    /*!
-     * Assignment operator
-     * \param c The context to copy
-     */
-    Context& operator=(const Context& c);
+            const std::string& message) :
+        mMessage(message),
+        mTime(time),
+        mFunc(func),
+        mFile(file),
+        mLine(line)
+    {
+    }
 
     /*!
      * Get the message describing the exception that occurred
      * \return The message
      */
-    const std::string& getMessage() const
+    const std::string& getMessage() const noexcept
     {
         return mMessage;
     }
@@ -87,16 +81,16 @@ public:
     * Get the system time
     * \return The system time
     */
-    const std::string& getTime() const
+    const std::string& getTime() const noexcept
     {
         return mTime;
     }
 
     /*!
      * Get the function where the exception occurred (may not be available
-     * \return The function signature 
+     * \return The function signature
      */
-    const std::string& getFunction() const
+    const std::string& getFunction() const noexcept
     {
         return mFunc;
     }
@@ -105,7 +99,7 @@ public:
      * Get the file where the exception occurred
      * \return The file
      */
-    const std::string& getFile() const
+    const std::string& getFile() const noexcept
     {
         return mFile;
     }
@@ -114,7 +108,7 @@ public:
      * Get the line number
      * \return The line number
      */
-    int getLine() const
+    int getLine() const noexcept
     {
         return mLine;
     }
@@ -131,8 +125,7 @@ public:
     int mLine;
 };
 
+std::ostream& operator<< (std::ostream& os, const Context& c);
 }
-
-std::ostream& operator<< (std::ostream& os, const except::Context& c);
 
 #endif

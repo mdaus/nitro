@@ -1,7 +1,7 @@
 /* =========================================================================
- * This file is part of io-c++ 
+ * This file is part of io-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * io-c++ is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -26,6 +26,7 @@
 #if !defined(USE_IO_STREAMS)
 
 #include "io/SeekableStreams.h"
+#include "sys/Filesystem.h"
 #include "sys/File.h"
 
 
@@ -63,13 +64,18 @@ public:
      *  \param outputFile The file name
      *  \param creationFlags  see sys::File
      */
-    FileOutputStreamOS(const std::string& outputFile,
+    FileOutputStreamOS(const coda_oss::filesystem::path& outputFile,
                        int creationFlags = sys::File::CREATE | sys::File::TRUNCATE);
 
 
     //! Destructor, closes the file stream.
     virtual ~FileOutputStreamOS()
-    {}
+    {
+        if ( isOpen() )
+        {
+            close();
+        }
+    }
 
     /*!
      *  Report whether or not the file is open
@@ -85,7 +91,7 @@ public:
      *  \param file The file to open
      *  \param creationFlags see sys::File
      */
-    virtual void create(const std::string& str,
+    virtual void create(const coda_oss::filesystem::path& str,
                         int creationFlags = sys::File::CREATE | sys::File::TRUNCATE);
 
     //!  Close the file
@@ -95,9 +101,9 @@ public:
     }
 
     virtual void flush();
-    
+
     sys::Off_T seek(sys::Off_T offset, io::Seekable::Whence whence);
-    
+
     sys::Off_T tell();
 
     using OutputStream::write;

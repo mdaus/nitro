@@ -31,23 +31,23 @@ namespace
 {
 TEST_CASE(testFix)
 {
-    float v1 = 12.3;
-    float expected1 = 12.0;
+    float v1 = 12.3f;
+    float expected1 = 12.0f;
     float actual1 = math::fix(v1);
     TEST_ASSERT_ALMOST_EQ(actual1, expected1);
 
-    float v2 = 42.9999;
-    float expected2 = 42.0;
+    float v2 = 42.9999f;
+    float expected2 = 42.0f;
     float actual2 = math::fix(v2);
     TEST_ASSERT_ALMOST_EQ(actual2, expected2);
 
-    float v3 = -532.0101;
-    float expected3 = -532.0;
+    float v3 = -532.0101f;
+    float expected3 = -532.0f;
     float actual3 = math::fix(v3);
     TEST_ASSERT_ALMOST_EQ(actual3, expected3);
 
-    float v4 = -23.9999;
-    float expected4 = -23.0;
+    float v4 = -23.9999f;
+    float expected4 = -23.0f;
     float actual4 = math::fix(v4);
     TEST_ASSERT_ALMOST_EQ(actual4, expected4);
 
@@ -74,23 +74,23 @@ TEST_CASE(testFix)
 
 TEST_CASE(testRound)
 {
-    float v1 = 12.49999;
-    float expected1 = 12.0;
+    float v1 = 12.49999f;
+    float expected1 = 12.0f;
     float actual1 = math::round(v1);
     TEST_ASSERT_ALMOST_EQ(actual1, expected1);
 
-    float v2 = 42.5;
-    float expected2 = 43.0;
+    float v2 = 42.5f;
+    float expected2 = 43.0f;
     float actual2 = math::round(v2);
     TEST_ASSERT_ALMOST_EQ(actual2, expected2);
 
-    float v3 = -532.4999;
-    float expected3 = -532.0;
+    float v3 = -532.4999f;
+    float expected3 = -532.0f;
     float actual3 = math::round(v3);
     TEST_ASSERT_ALMOST_EQ(actual3, expected3);
 
-    float v4 = -23.5;
-    float expected4 = -24.0;
+    float v4 = -23.5f;
+    float expected4 = -24.0f;
     float actual4 = math::round(v4);
     TEST_ASSERT_ALMOST_EQ(actual4, expected4);
 
@@ -117,23 +117,23 @@ TEST_CASE(testRound)
 
 TEST_CASE(testRoundDigits)
 {
-    float v1 = 12.499994;
-    float expected1 = 12.49999;
+    float v1 = 12.499994f;
+    float expected1 = 12.49999f;
     float actual1 = math::round(v1, 5);
     TEST_ASSERT_ALMOST_EQ(actual1, expected1);
 
-    float v2 = 42.234567;
-    float expected2 = 42.235;
+    float v2 = 42.234567f;
+    float expected2 = 42.235f;
     float actual2 = math::round(v2, 3);
     TEST_ASSERT_ALMOST_EQ(actual2, expected2);
 
-    float v3 = -532.499994;
-    float expected3 = -532.49999;
+    float v3 = -532.499994f;
+    float expected3 = -532.49999f;
     float actual3 = math::round(v3, 5);
     TEST_ASSERT_ALMOST_EQ(actual3, expected3);
 
-    float v4 = -23.123456;
-    float expected4 = -23.1235;
+    float v4 = -23.123456f;
+    float expected4 = -23.1235f;
     float actual4 = math::round(v4, 4);
     TEST_ASSERT_ALMOST_EQ(actual4, expected4);
 
@@ -157,6 +157,25 @@ TEST_CASE(testRoundDigits)
     double actual8 = math::round(v8, 2);
     TEST_ASSERT_ALMOST_EQ(actual8, expected8);
 }
+
+TEST_CASE(testCeilingDivide)
+{
+    size_t n0 = 0;
+    size_t d0 = 1;
+    TEST_ASSERT_EQ(math::ceilingDivide(n0, d0), 0);
+
+    size_t n1 = 4;
+    size_t d1 = 2;
+    TEST_ASSERT_EQ(math::ceilingDivide(n1, d1), 2);
+
+    size_t n2 = 5;
+    size_t d2 = 2;
+    TEST_ASSERT_EQ(math::ceilingDivide(n2, d2), 3);
+
+    size_t n3 = 1;
+    size_t d3 = 0;
+    TEST_THROWS(math::ceilingDivide(n3, d3));
+}
 }
 
 int main()
@@ -164,5 +183,6 @@ int main()
     TEST_CHECK(testFix);
     TEST_CHECK(testRound);
     TEST_CHECK(testRoundDigits);
+    TEST_CHECK(testCeilingDivide);
     return 0;
 }

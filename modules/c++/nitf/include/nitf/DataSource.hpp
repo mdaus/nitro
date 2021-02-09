@@ -63,14 +63,8 @@ public:
         getNativeOrThrow();
     }
 
-    DataSource()
-    {
-    }
-
-    //! Destructor
-    virtual ~DataSource()
-    {
-    }
+    DataSource() = default;
+    ~DataSource() = default;
 
     // NOTE: The methods below are used just for testing - the underlying C
     //       function pointers are what need to be modified if you want to
@@ -83,7 +77,7 @@ public:
      *  \param buf  The buffer
      *  \param size  The size of the buffer
      */
-    void read(void* buf, nitf::Off size) throw (nitf::NITFException);
+    void read(void* buf, nitf::Off size);
 
     /*
      * Returns the size of the DataSource, in bytes
@@ -93,7 +87,7 @@ public:
     void setSize(nitf::Off size);
 
 protected:
-    mutable nitf_Error error;
+    mutable nitf_Error error{};
 };
 
 }

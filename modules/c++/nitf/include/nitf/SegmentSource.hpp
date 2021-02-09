@@ -22,7 +22,12 @@
 
 #ifndef __NITF_SEGMENTSOURCE_HPP__
 #define __NITF_SEGMENTSOURCE_HPP__
+#pragma once
 
+#include <string>
+#include <vector>
+
+#include "nitf/coda-oss.hpp"
 #include "nitf/DataSource.hpp"
 #include "nitf/SegmentSource.h"
 #include "nitf/SegmentReader.hpp"
@@ -30,7 +35,6 @@
 #include "nitf/System.hpp"
 #include "nitf/NITFException.hpp"
 #include "nitf/Object.hpp"
-#include <string>
 
 /*!
  *  \file SegmentSource.hpp
@@ -67,8 +71,11 @@ public:
      *  \param copyData Whether or not to make a copy of the data.  If this is
      *  false, the data must outlive the memory source.
      */
-    SegmentMemorySource(const char* data, size_t size, nitf::Off start,
-                        int byteSkip, bool copyData) throw (nitf::NITFException);
+    SegmentMemorySource(const char* data, nitf::Off size, nitf::Off start,
+        int byteSkip, bool copyData);
+    template<typename TContainer>
+    SegmentMemorySource(const TContainer& data, nitf::Off start,
+                        int byteSkip, bool copyData);
 };
 
 /*!
@@ -88,8 +95,7 @@ public:
      *  \param start    The location to seek to (as the beginning)
      *  \param byteSkip The number of bytes to skip
      */
-    SegmentFileSource(nitf::IOHandle & io, nitf::Off start, int byteSkip)
-            throw (nitf::NITFException);
+    SegmentFileSource(nitf::IOHandle & io, nitf::Off start, int byteSkip);
 
     ~SegmentFileSource()
     {
@@ -105,7 +111,7 @@ public:
      *  \param start    The location to seek to (as the beginning)
      *  \param byteSkip The number of bytes to skip
      */
-    SegmentReaderSource(nitf::SegmentReader reader) throw (nitf::NITFException);
+    SegmentReaderSource(nitf::SegmentReader reader);
 
     ~SegmentReaderSource()
     {

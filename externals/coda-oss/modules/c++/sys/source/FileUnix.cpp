@@ -22,15 +22,16 @@
 
 #include "sys/File.h"
 
-#ifndef WIN32
+#if !(defined(WIN32) || defined(_WIN32))
 
 #include <unistd.h>
 #include <string.h>
 #include <errno.h>
 
-void sys::File::create(const std::string& str, int accessFlags,
+void sys::File::create(const coda_oss::filesystem::path& str_, int accessFlags,
         int creationFlags)
 {
+    const auto str = str_.string();
 
     if (accessFlags & sys::File::WRITE_ONLY)
         creationFlags |= sys::File::TRUNCATE;

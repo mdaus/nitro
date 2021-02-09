@@ -43,17 +43,17 @@ class DateTime
 {
 public:
     //! Sets to current date/time
-    DateTime() throw(nitf::NITFException);
+    DateTime();
 
     //! Set native object - takes ownership
-    DateTime(nitf_DateTime* dateTime) throw(nitf::NITFException);
+    DateTime(nitf_DateTime* dateTime);
 
     /*
      * Construct from a specified date/time
      *
      * \param timeInMillis Number of milliseconds since the epoch (1/1/1970)
      */
-    DateTime(double timeInMillis) throw(nitf::NITFException);
+    DateTime(double timeInMillis);
 
     /*!
      * Construct from a string representation of a date
@@ -70,7 +70,7 @@ public:
      * For example, the NITF 2.1 format is represented as "%Y%m%d%H%M%S"
      */
     DateTime(const std::string& dateString,
-             const std::string& dateFormat) throw(nitf::NITFException);
+             const std::string& dateFormat);
 
     /*!
      * Construct from a specified year, month, and day
@@ -97,42 +97,42 @@ public:
     //! Assignment Operator
     DateTime & operator=(const DateTime& rhs);
 
-    bool operator<(const DateTime& rhs) const
+    bool operator<(const DateTime& rhs) const noexcept
     {
         return (mDateTime->timeInMillis < rhs.mDateTime->timeInMillis);
     }
 
-    bool operator<=(const DateTime& rhs) const
+    bool operator<=(const DateTime& rhs) const noexcept
     {
         return (mDateTime->timeInMillis <= rhs.mDateTime->timeInMillis);
     }
 
-    bool operator>(const DateTime& rhs) const
+    bool operator>(const DateTime& rhs) const noexcept
     {
         return (mDateTime->timeInMillis > rhs.mDateTime->timeInMillis);
     }
 
-    bool operator>=(const DateTime& rhs) const
+    bool operator>=(const DateTime& rhs) const noexcept
     {
         return (mDateTime->timeInMillis >= rhs.mDateTime->timeInMillis);
     }
 
-    bool operator==(const DateTime& rhs) const
+    bool operator==(const DateTime& rhs) const noexcept
     {
         return (mDateTime->timeInMillis == rhs.mDateTime->timeInMillis);
     }
 
-    bool operator!=(const DateTime& rhs) const
+    bool operator!=(const DateTime& rhs) const noexcept
     {
         return (mDateTime->timeInMillis != rhs.mDateTime->timeInMillis);
     }
 
-    nitf_DateTime* getNative()
+    nitf_DateTime* getNative() noexcept
     {
         return mDateTime;
     }
 
-    const nitf_DateTime* getNative() const
+    const nitf_DateTime* getNative() const noexcept
     {
         return mDateTime;
     }
@@ -147,7 +147,7 @@ public:
      */
     void format(const std::string& format,
                 char* outBuf,
-                size_t maxSize) const throw(nitf::NITFException);
+                size_t maxSize) const;
 
     /*
      * Produce a string representation of the date/time, formatted as
@@ -157,7 +157,7 @@ public:
      * \param str Output string to store the formatted date/time in
      */
     void format(const std::string& format,
-                std::string &str) const throw(nitf::NITFException);
+                std::string &str) const;
 
     /*
      * Produce a string representation of the date/time, formatted as
@@ -167,35 +167,34 @@ public:
      *
      * \return Formatted date/time
      */
-    std::string format(const std::string& format) const
-        throw(nitf::NITFException);
+    std::string format(const std::string& format) const;
 
     //! Get the year
-    int getYear() const;
+    int getYear() const noexcept;
 
     //! Get the month (1-based)
-    int getMonth() const;
+    int getMonth() const noexcept;
 
     //! Get the day of the month (1-based)
-    int getDayOfMonth() const;
+    int getDayOfMonth() const noexcept;
 
     //! Get the day of the week (0-based with 0 = Saturday)
-    int getDayOfWeek() const;
+    int getDayOfWeek() const noexcept;
 
     //! Get the day of the year (1-based)
-    int getDayOfYear() const;
+    int getDayOfYear() const noexcept;
 
     //! Get the hour [0, 23]
-    int getHour() const;
+    int getHour() const noexcept;
 
     //! Get the minute [0, 59]
-    int getMinute() const;
+    int getMinute() const noexcept;
 
     //! Get the second [0, 60), including fractional seconds
-    double getSecond() const;
+    double getSecond() const noexcept;
 
     //! Get the number of milliseconds since the epoch (1/1/1970)
-    double getTimeInMillis() const;
+    double getTimeInMillis() const noexcept;
 
     //! Set the year
     void setYear(int year);
