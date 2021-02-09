@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of sys-c++
+ * This file is part of NITRO
  * =========================================================================
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
- * sys-c++ is free software; you can redistribute it and/or modify
+ * NITRO is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -15,25 +15,27 @@
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with this program; If not,
+ * License along with this program; if not, If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
 
-#ifndef CODA_OSS_sys_String_h_INCLUDED_
-#define CODA_OSS_sys_String_h_INCLUDED_
-#pragma once
 
-#include "sys/CPlusPlus.h"
-#include "str/String_.h"
+#include <import/nitf.h>
 
-#if !defined(CODA_OSS_sys_U8string_DEFINED_)
-#define CODA_OSS_sys_U8string_DEFINED_ 1
-namespace sys
-{
-	using Char8_T = str::Char8_T;
-	using U8string = str::U8string;
-}
-#endif  // CODA_OSS_sys_U8string_DEFINED_
+NITF_CXX_GUARD
 
-#endif  // CODA_OSS_sys_String_h_INCLUDED_
+static nitf_TREDescription description[] = {
+    {NITF_BCS_A, 14, "NITF Date Time", "FDATTIM"},
+    {NITF_BCS_A, 9, "NITF Version Flag", "NITFVER"},
+    {NITF_BCS_A, 207, "NITF Security Fields", "NFSECFLDS"},
+    {NITF_BCS_A, 8, "Security Standard", "SECSTD"},
+    {NITF_BCS_A, 8, "Security Field Compression", "SECCOMP"},
+    {NITF_BCS_N, 5, "Security Length", "SECLEN"},
+    {NITF_BINARY, NITF_TRE_CONDITIONAL_LENGTH, "Security Data", "SECURITY", "SECLEN"},
+    {NITF_END, 0, NULL, NULL}
+};
+
+NITF_DECLARE_SINGLE_PLUGIN(SECURA, description)
+
+NITF_CXX_ENDGUARD
