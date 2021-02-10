@@ -19,8 +19,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef CONFIG_COMPILER_EXTENSIONS
-#define CONFIG_COMPILER_EXTENSIONS
+#ifndef CODA_OSS_config_compiler_extentions_h_INCLUDED_
+#define CODA_OSS_config_compiler_extentions_h_INCLUDED_
+#pragma once
 
 #include <config/coda_oss_config.h>
 
@@ -37,10 +38,15 @@
 	#endif
 #endif // CODA_OSS_attribute_noinline_DEFINED_
 
-#ifdef HAVE_ATTRIBUTE_ALIGNED
-#define ATTRIBUTE_ALIGNED(x) __attribute__((aligned (x)))
-#else
-#define ATTRIBUTE_ALIGNED(X)
-#endif
+#ifndef CODA_OSS_attribute_aligned_DEFINED_
+	#define CODA_OSS_attribute_aligned_DEFINED_ 1
 
-#endif
+	#if defined(__GNUC__)
+	// https://gcc.gnu.org/onlinedocs/gcc-3.2/gcc/Variable-Attributes.html
+	#define ATTRIBUTE_ALIGNED(x) __attribute__((aligned(x)))
+	#else
+	#define ATTRIBUTE_ALIGNED(X)
+	#endif
+#endif // CODA_OSS_attribute_aligned_DEFINED_
+
+#endif // CODA_OSS_config_compiler_extentions_h_INCLUDED_
