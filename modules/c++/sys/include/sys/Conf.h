@@ -30,7 +30,8 @@
 // are defined by default: ... _POSIX_SOURCE, and _POSIX_C_SOURCE=200809L. [...] 
 // _POSIX_SOURCE Defining this obsolete macro ... is equivalent to defining _POSIX_C_SOURCE ..."
 #define CODA_OSS_POSIX_SOURCE (defined(_POSIX_C_SOURCE) && (_POSIX_C_SOURCE >= 1))
-#define CODA_OSS_POSIX2008_SOURCE CODA_OSS_POSIX_SOURCE && (_POSIX_C_SOURCE >= 200809L)
+#define CODA_OSS_POSIX2001_SOURCE CODA_OSS_POSIX_SOURCE && (_POSIX_C_SOURCE >= 200112L)
+#define CODA_OSS_POSIX2008_SOURCE CODA_OSS_POSIX2001_SOURCE && (_POSIX_C_SOURCE >= 200809L)
 
 #include <config/coda_oss_config.h>
 #include <sys/CPlusPlus.h>
@@ -323,19 +324,23 @@ namespace sys
     inline void* alignedAlloc(size_t size,
                               size_t alignment = SSE_INSTRUCTION_ALIGNMENT)
     {
-#if defined(WIN32) || defined(_WIN32)
-        void* p = _aligned_malloc(size, alignment);
-#elif defined(HAVE_POSIX_MEMALIGN)
         void* p = nullptr;
+#if defined(WIN32) || defined(_WIN32)
+        p = _aligned_malloc(size, alignment);
+#elif CODA_OSS_POSIX2001_SOURCE
+        // https://linux.die.net/man/3/posix_memalign
         if (posix_memalign(&p, alignment, size) != 0)
         {
             p = nullptr;
         }
-#elif defined(HAVE_MEMALIGN)
-        void* const p = memalign(alignment, size);
+#elif CODA_OSS_POSIX_SOURCE
+        // https://linux.die.net/man/3/posix_memalign
+        // "The functions memalign(), ... have been available in all Linux libc libraries."
+        p = memalign(alignment, size);
 #else
         //! this is a basic unaligned allocation
-        void* p = malloc(size);
+        p = malloc(size);
+        #error Don't know how to implement alignedAlloc().
 #endif
         if (!p)
             throw except::Exception(Ctxt(
