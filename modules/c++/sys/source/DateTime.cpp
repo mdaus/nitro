@@ -19,16 +19,18 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
+#include "sys/DateTime.h"
+
+#include <ctype.h>
+#include <errno.h>
+
+#include <vector>
 
 #include <config/coda_oss_config.h>
-
 #include "except/Exception.h"
-#include "sys/DateTime.h"
 #include "sys/Conf.h"
 #include "str/Convert.h"
 #include "str/Manip.h"
-#include <vector>
-#include <ctype.h>
 
 #if defined(HAVE_SYS_TIME_H)
 #include <sys/time.h>
@@ -600,4 +602,65 @@ std::string sys::DateTime::format(const std::string& formatStr) const
             "The format string was unable to be expanded");
 
     return std::string(str);
+}
+
+void sys::DateTime::localtime(time_t numSecondsSinceEpoch, tm& t)
+{
+    // Would like to use the reentrant version.  If we don't have one, cross
+    // our fingers and hope the regular function actually is reentrant
+    // (supposedly this is the case on Windows).
+#ifdef _WIN32
+    const auto errnum = ::localtime_s(&t, &numSecondsSinceEpoch);
+    if (errnum != 0)
+    {
+        throw except::Exception(Ctxt("localtime_s() failed (" +
+            std::string(::strerror(errnum)) + ")"));
+    }
+#elif defined(HAVE_LOCALTIME_R)
+    if (::localtime_r(&numSecondsSinceEpoch, &t) == NULL)
+    {
+        int const errnum = errno;
+        throw except::Exception(Ctxt("localtime_r() failed (" +
+            std::string(::strerror(errnum)) + ")"));
+    }
+#else
+    tm const * const localTimePtr = ::localtime(&numSecondsSinceEpoch);
+    if (localTimePtr == NULL)
+    {
+        int const errnum = errno;
+        throw except::Exception(Ctxt("localtime failed (" +
+            std::string(::strerror(errnum)) + ")"));
+    }
+    t = *localTimePtr;
+#endif
+}
+void sys::DateTime::gmtime(time_t numSecondsSinceEpoch, tm& t)
+{
+    // Would like to use the reentrant version.  If we don't have one, cross
+    // our fingers and hope the regular function actually is reentrant
+    // (supposedly this is the case on Windows).
+#if _WIN32
+    const auto errnum = ::gmtime_s(&t, &numSecondsSinceEpoch);
+    if (errnum != 0)
+    {
+        throw except::Exception(Ctxt("gmtime_s() failed (" +
+            std::string(::strerror(errnum)) + ")"));
+    }
+#elif defined(HAVE_GMTIME_R)
+    if (::gmtime_r(&numSecondsSinceEpoch, &t) == NULL)
+    {
+        int const errnum = errno;
+        throw except::Exception(Ctxt("gmtime_r() failed (" +
+            std::string(::strerror(errnum)) + ")"));
+    }
+#else
+    tm const * const gmTimePtr = ::gmtime(&numSecondsSinceEpoch);
+    if (gmTimePtr == NULL)
+    {
+        int const errnum = errno;
+        throw except::Exception(Ctxt("gmtime failed (" +
+            std::string(::strerror(errnum)) + ")"));
+    }
+    t = *gmTimePtr;
+#endif
 }

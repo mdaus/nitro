@@ -24,8 +24,9 @@
 #ifndef __SYS_DATE_TIME_H__
 #define __SYS_DATE_TIME_H__
 
-#include <string>
 #include <time.h>
+
+#include <string>
 
 namespace sys
 {
@@ -70,6 +71,9 @@ protected:
 
     //! @brief Given seconds since the epoch, provides the time
     virtual void getTime(time_t numSecondsSinceEpoch, tm& t) const = 0;
+
+    static void localtime(time_t numSecondsSinceEpoch, tm& t);
+    static void gmtime(time_t numSecondsSinceEpoch, tm& t);
 
 public:
     DateTime();
