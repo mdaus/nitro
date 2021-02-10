@@ -22,12 +22,15 @@
 
 #include <sys/Backtrace.h>
 
-#include <config/coda_oss_config.h>
 #include <sstream>
+
+#include <str/Format.h>
 
 static const size_t MAX_STACK_ENTRIES = 62;
 
-#ifdef HAVE_EXECINFO_H
+#if defined(__GNUC__)
+// https://man7.org/linux/man-pages/man3/backtrace.3.html
+// "These functions are GNU extensions."
 
 #include <execinfo.h>
 #include <cstdlib>
@@ -58,8 +61,13 @@ private:
 
 }
 
-std::string sys::getBacktrace()
+std::string sys::getBacktrace(bool* pSupported, std::vector<std::string>* pFrames)
 {
+    if (pSupported != nullptr)
+    {
+        *pSupported = true;
+    }
+
     void* stackBuffer[MAX_STACK_ENTRIES];
     int currentStackSize = backtrace(stackBuffer, MAX_STACK_ENTRIES);
     BacktraceHelper stackSymbols(backtrace_symbols(stackBuffer,
@@ -68,16 +76,71 @@ std::string sys::getBacktrace()
     std::stringstream ss;
     for (int ii = 0; ii < currentStackSize; ++ii)
     {
-        ss << stackSymbols[ii] << std::endl;
+        auto stackSymbol = stackSymbols[ii]; 
+        ss << stackSymbol << "\n";
+        if (pFrames != nullptr)
+        {
+            pFrames->emplace_back(std::move(stackSymbol));
+        }
     }
 
     return ss.str();
 }
 
+#elif _WIN32
+#include <windows.h>
+#include <dbghelp.h>
+#pragma comment(lib, "dbghelp")
+
+std::string sys::getBacktrace(bool* pSupported, std::vector<std::string>* pFrames)
+{
+    if (pSupported != nullptr)
+    {
+        *pSupported = true;
+    }
+
+    // https://stackoverflow.com/a/5699483/8877
+    HANDLE process = GetCurrentProcess();
+     SymInitialize(process, NULL, TRUE);
+
+     void* stack[100];
+     auto frames = CaptureStackBackTrace(0, 100, stack, NULL);
+     auto symbol = reinterpret_cast<SYMBOL_INFO*>(calloc( sizeof( SYMBOL_INFO) + 256 * sizeof( char ), 1 ));
+     if (symbol == nullptr)
+     {
+         return "sys::getBacktrace(): calloc() failed";
+     }
+    symbol->MaxNameLen = 255;
+    symbol->SizeOfStruct = sizeof(SYMBOL_INFO);
+
+    std::string retval;
+    for (unsigned int i = 0; i < frames; i++)
+    {
+        SymFromAddr(process, (DWORD64)(stack[i]), 0, symbol);
+
+        auto frame = str::format("%i: %s - 0x%0X\n",
+            frames - i - 1,
+            symbol->Name,
+            symbol->Address);
+        retval += frame;
+        if (pFrames != nullptr)
+        {
+            pFrames->emplace_back(std::move(frame));
+        }
+    }
+
+    free(symbol);
+    return retval;
+}
+
 #else
 
-std::string sys::getBacktrace()
+std::string sys::getBacktrace(bool* pSupported, std::vector<std::string>*)
 {
+    if (pSupported != nullptr)
+    {
+        *pSupported = false;
+    }
     return "sys::getBacktrace() is not supported "
         "on the current platform and/or libc";
 }

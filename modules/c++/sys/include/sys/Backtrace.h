@@ -24,6 +24,7 @@
 #define __SYS_BACKTRACE_H__
 
 #include <string>
+#include <vector>
 
 namespace sys
 {
@@ -36,7 +37,7 @@ namespace sys
  * return with an error message instead of a backtrace if the current
  * configuration is unsupported.
  */
-std::string getBacktrace();
+std::string getBacktrace(bool* pSupported = nullptr, std::vector<std::string>* pFrames = nullptr);
 }
 
 #endif
