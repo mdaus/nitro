@@ -186,6 +186,21 @@ TEST_CASE(testDateTimeDetails)
     }
 }
 
+TEST_CASE(testGetTimeInMillis)
+{
+    const sys::LocalDateTime lt;
+    const auto result = lt.getTimeInMillis();
+    TEST_ASSERT_GREATER_EQ(result, 0.0);
+    constexpr auto February_02_2021 = 1612928129.0 * 1000.0;  // in milliseconds
+    TEST_ASSERT_GREATER_EQ(result, February_02_2021);
+
+    constexpr auto recent_past = February_02_2021 * 0.999;
+    TEST_ASSERT_GREATER_EQ(result, recent_past);
+
+    constexpr auto far_into_the_future = February_02_2021 * 100.0;
+    TEST_ASSERT_LESSER_EQ(result, far_into_the_future);
+}
+
 }
 
 int main(int, char**)
@@ -193,6 +208,7 @@ int main(int, char**)
     TEST_CHECK(testDefaultConstructor);
     TEST_CHECK(testParameterizedConstructor);
     TEST_CHECK(testDateTimeDetails);
+    TEST_CHECK(testGetTimeInMillis);
 
     return 0;
 }

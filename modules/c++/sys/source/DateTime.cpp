@@ -384,15 +384,18 @@ double sys::DateTime::toMillis(tm t) const
 
 static double getNowInMillis()
 {
-#ifdef HAVE_CLOCK_GETTIME
+    // https://linux.die.net/man/2/gettimeofday
+    // "SVr4, 4.3BSD. POSIX.1-2001 describes gettimeofday() ... POSIX.1-2008 marks
+    // gettimeofday() as obsolete, recommending the use of clock_gettime(2) instead."
+#if CODA_OSS_POSIX2008_SOURCE
     struct timespec now;
     clock_gettime(CLOCK_REALTIME,&now);
     return (now.tv_sec + 1.0e-9 * now.tv_nsec) * 1000;
-#elif defined(HAVE_SYS_TIME_H)
+#elif CODA_OSS_POSIX_SOURCE
     struct timeval now;
     gettimeofday(&now,NULL);
     return (now.tv_sec + 1.0e-6 * now.tv_usec) * 1000;
-#elif defined(_WIN32)
+#elif _WIN32
     // Getting time twice may be inefficient but is quicker
     // than converting the SYSTEMTIME structure into
     // milliseconds
