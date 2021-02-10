@@ -157,12 +157,42 @@ TEST_CASE(testParameterizedConstructor)
     TEST_ASSERT_EQ(u5.getSecond(), u4.getSecond());
 }
 
+static void testDateTimeDetails_(const std::string& testName, const tm& result, const sys::DateTime& dt)
+{
+    const auto ad = result.tm_year + 1900;  // "years since 1900"
+    // this might break in 2038: https://en.wikipedia.org/wiki/Year_2038_problem
+    TEST_ASSERT_GREATER_EQ(ad, 1900);
+    TEST_ASSERT_GREATER_EQ(ad, 1970);
+    TEST_ASSERT_GREATER_EQ(ad, 2021);
+    TEST_ASSERT_LESSER_EQ(result.tm_yday, 365);  // "days since January 1"
+
+    TEST_ASSERT_EQ(ad, dt.getYear());
+    TEST_ASSERT_EQ(result.tm_yday + 1, dt.getDayOfYear());
+}
+TEST_CASE(testDateTimeDetails)
+{
+    const time_t now = time(nullptr);
+    {
+        tm local;
+        const auto result = sys::details::localtime_s(&local, &now);
+        TEST_ASSERT_EQ(0, result);
+        testDateTimeDetails_(testName, local, sys::LocalDateTime());
+    }
+    {
+        tm global;
+        const auto result = sys::details::gmtime_s(&global, &now);
+        TEST_ASSERT_EQ(0, result);
+        testDateTimeDetails_(testName, global, sys::UTCDateTime());
+    }
+}
+
 }
 
 int main(int, char**)
 {
     TEST_CHECK(testDefaultConstructor);
     TEST_CHECK(testParameterizedConstructor);
+    TEST_CHECK(testDateTimeDetails);
 
     return 0;
 }

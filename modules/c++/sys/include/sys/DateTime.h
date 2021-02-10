@@ -25,6 +25,7 @@
 #define __SYS_DATE_TIME_H__
 
 #include <time.h>
+#include <errno.h>
 
 #include <string>
 
@@ -178,6 +179,14 @@ public:
     }
     //@}
 };
+
+// Always make our own versions available for unit-testing.  Clients should use
+// DateTme methods and implementers DateTime::localtime()/DateTime::gmtime().
+namespace details
+{
+extern errno_t localtime_s(tm*, const time_t*);
+extern errno_t gmtime_s(tm*, const time_t*);
+}
 
 }
 

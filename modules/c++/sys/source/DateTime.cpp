@@ -25,6 +25,7 @@
 #include <errno.h>
 
 #include <vector>
+#include <mutex>
 
 #include <config/coda_oss_config.h>
 #include "except/Exception.h"
@@ -604,63 +605,88 @@ std::string sys::DateTime::format(const std::string& formatStr) const
     return std::string(str);
 }
 
+// https://en.cppreference.com/w/c/chrono/localtime
+// "The structure may be shared between gmtime, localtime, and ctime ... ."
+static std::mutex g_dateTimeMutex;
+template<typename F>
+static inline errno_t time_s(F f, tm* t,  const time_t* numSecondsSinceEpoch)
+{
+    tm* result = nullptr;
+    {
+        std::lock_guard<std::mutex> guard(g_dateTimeMutex);
+        result = f(numSecondsSinceEpoch);
+    }
+    if (result == nullptr)
+    {
+        return errno;
+    }
+
+    *t = *result;
+    return 0; // no error
+}
+errno_t sys::details::localtime_s(tm* t, const time_t* numSecondsSinceEpoch)
+{
+    return time_s(localtime, t, numSecondsSinceEpoch);
+}
+errno_t sys::details::gmtime_s(tm* t, const time_t* numSecondsSinceEpoch)
+{
+    return time_s(gmtime, t, numSecondsSinceEpoch);
+}
+
 void sys::DateTime::localtime(time_t numSecondsSinceEpoch, tm& t)
 {
     // Would like to use the reentrant version.  If we don't have one, cross
     // our fingers and hope the regular function actually is reentrant
     // (supposedly this is the case on Windows).
-#ifdef _WIN32
-    const auto errnum = ::localtime_s(&t, &numSecondsSinceEpoch);
-    if (errnum != 0)
-    {
-        throw except::Exception(Ctxt("localtime_s() failed (" +
-            std::string(::strerror(errnum)) + ")"));
-    }
-#elif defined(HAVE_LOCALTIME_R)
+#if CODA_OSS_POSIX_SOURCE
     if (::localtime_r(&numSecondsSinceEpoch, &t) == NULL)
     {
         int const errnum = errno;
         throw except::Exception(Ctxt("localtime_r() failed (" +
             std::string(::strerror(errnum)) + ")"));
     }
-#else
-    tm const * const localTimePtr = ::localtime(&numSecondsSinceEpoch);
-    if (localTimePtr == NULL)
+#elif _WIN32
+    const auto errnum = ::localtime_s(&t, &numSecondsSinceEpoch);
+    if (errnum != 0)
     {
-        int const errnum = errno;
+        throw except::Exception(Ctxt("localtime_s() failed (" +
+            std::string(::strerror(errnum)) + ")"));
+    }
+#else
+    const auto errnum = sys::details::localtime_s(&t, &numSecondsSinceEpoch);
+    if (errnum != 0)
+    {
         throw except::Exception(Ctxt("localtime failed (" +
             std::string(::strerror(errnum)) + ")"));
     }
-    t = *localTimePtr;
 #endif
 }
+
 void sys::DateTime::gmtime(time_t numSecondsSinceEpoch, tm& t)
 {
     // Would like to use the reentrant version.  If we don't have one, cross
     // our fingers and hope the regular function actually is reentrant
     // (supposedly this is the case on Windows).
-#if _WIN32
+#if CODA_OSS_POSIX_SOURCE
+        if (::gmtime_r(&numSecondsSinceEpoch, &t) == NULL)
+    {
+        int const errnum = errno;
+        throw except::Exception(Ctxt("gmtime_r() failed (" +
+            std::string(::strerror(errnum)) + ")"));
+    }
+#elif _WIN32
     const auto errnum = ::gmtime_s(&t, &numSecondsSinceEpoch);
     if (errnum != 0)
     {
         throw except::Exception(Ctxt("gmtime_s() failed (" +
             std::string(::strerror(errnum)) + ")"));
     }
-#elif defined(HAVE_GMTIME_R)
-    if (::gmtime_r(&numSecondsSinceEpoch, &t) == NULL)
-    {
-        int const errnum = errno;
-        throw except::Exception(Ctxt("gmtime_r() failed (" +
-            std::string(::strerror(errnum)) + ")"));
-    }
 #else
-    tm const * const gmTimePtr = ::gmtime(&numSecondsSinceEpoch);
-    if (gmTimePtr == NULL)
+    const auto errnum = sys::details::gmtime_s(&t, &numSecondsSinceEpoch);
+    if (errnum != 0)
     {
-        int const errnum = errno;
         throw except::Exception(Ctxt("gmtime failed (" +
             std::string(::strerror(errnum)) + ")"));
     }
-    t = *gmTimePtr;
 #endif
 }

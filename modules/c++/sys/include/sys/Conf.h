@@ -24,6 +24,13 @@
 #define __SYS_CONF_H__
 #pragma once
 
+// POSIX is more-or-less "Unix"
+// https://linux.die.net/man/7/feature_test_macros
+// "If no feature test macros are explicitly defined, then the following feature test macros
+// are defined by default: ... _POSIX_SOURCE, and _POSIX_C_SOURCE=200809L. [...] 
+// _POSIX_SOURCE Defining this obsolete macro ... is equivalent to defining _POSIX_C_SOURCE ..."
+#define CODA_OSS_POSIX_SOURCE (defined(_POSIX_C_SOURCE) && (_POSIX_C_SOURCE >= 1))
+
 #include <config/coda_oss_config.h>
 #include <sys/CPlusPlus.h>
 #include <str/Convert.h>
