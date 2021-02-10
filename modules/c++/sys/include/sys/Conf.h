@@ -114,13 +114,14 @@ namespace sys
     typedef HANDLE            Handle_T;
     typedef Int64_T           Off_T;
     typedef DWORD             Pid_T;
-#   if SIZEOF_SIZE_T == 8
+#   if _WIN64 // SIZEOF_SIZE_T == 8
+        static_assert(sizeof(size_t) == 8, "wrong sizeof(size_t)");
         typedef Int64_T   SSize_T;
-#   elif SIZEOF_SIZE_T == 4
+#   else // SIZEOF_SIZE_T == 4
+        static_assert(sizeof(size_t) == 4, "wrong sizeof(size_t)");
         typedef Int32_T   SSize_T;
-#   else
-        #error SIZEOF_SIZE_T must be set at configure time
 #   endif
+        static_assert(sizeof(size_t) == sizeof(SSize_T), "size_t and SSize_T should be the same size");
 }
 #else // !windows
 #   include <sys/types.h>

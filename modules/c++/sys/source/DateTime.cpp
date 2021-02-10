@@ -33,9 +33,9 @@
 #include "str/Convert.h"
 #include "str/Manip.h"
 
-#if defined(HAVE_SYS_TIME_H)
+#if CODA_OSS_POSIX_SOURCE
 #include <sys/time.h>
-#elif defined(_WIN32)
+#elif _WIN32
 #include <windows.h>
 #endif
 

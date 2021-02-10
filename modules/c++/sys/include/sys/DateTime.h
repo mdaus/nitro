@@ -23,9 +23,9 @@
 
 #ifndef __SYS_DATE_TIME_H__
 #define __SYS_DATE_TIME_H__
+#pragma once
 
 #include <time.h>
-#include <errno.h>
 
 #include <string>
 
