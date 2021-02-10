@@ -38,15 +38,15 @@ namespace sys
 class DateTime
 {
 protected:
-    int mYear;
-    int mMonth;
-    int mDayOfMonth;
-    int mDayOfWeek;
-    int mDayOfYear;
-    int mHour;
-    int mMinute;
-    double mSecond;
-    double mTimeInMillis;
+    int mYear = 0;
+    int mMonth = 0;
+    int mDayOfMonth = 0;
+    int mDayOfWeek = 0;
+    int mDayOfYear = 0;
+    int mHour = 0;
+    int mMinute = 0;
+    double mSecond = 0.0;
+    double mTimeInMillis = 0.0;
 
     // Turn a tm struct into a double
     double toMillis(tm t) const;
@@ -77,8 +77,8 @@ protected:
     static void gmtime(time_t numSecondsSinceEpoch, tm& t);
 
 public:
-    DateTime();
-    virtual ~DateTime();
+    DateTime() = default;
+    virtual ~DateTime() {}
 
     //! Return month {1,12}
     int getMonth() const { return mMonth; }
@@ -184,8 +184,8 @@ public:
 // DateTme methods and implementers DateTime::localtime()/DateTime::gmtime().
 namespace details
 {
-extern errno_t localtime_s(tm*, const time_t*);
-extern errno_t gmtime_s(tm*, const time_t*);
+extern int localtime_s(tm*, const time_t*);
+extern int gmtime_s(tm*, const time_t*);
 }
 
 }

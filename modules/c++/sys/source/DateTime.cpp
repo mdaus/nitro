@@ -382,16 +382,16 @@ double sys::DateTime::toMillis(tm t) const
     return (timeInSeconds + timediff) * 1000;
 }
 
-void sys::DateTime::setNow()
+static double getNowInMillis()
 {
 #ifdef HAVE_CLOCK_GETTIME
     struct timespec now;
     clock_gettime(CLOCK_REALTIME,&now);
-    mTimeInMillis = (now.tv_sec + 1.0e-9 * now.tv_nsec) * 1000;
+    return (now.tv_sec + 1.0e-9 * now.tv_nsec) * 1000;
 #elif defined(HAVE_SYS_TIME_H)
     struct timeval now;
     gettimeofday(&now,NULL);
-    mTimeInMillis = (now.tv_sec + 1.0e-6 * now.tv_usec) * 1000;
+    return (now.tv_sec + 1.0e-6 * now.tv_usec) * 1000;
 #elif defined(_WIN32)
     // Getting time twice may be inefficient but is quicker
     // than converting the SYSTEMTIME structure into
@@ -400,10 +400,14 @@ void sys::DateTime::setNow()
     // does not need millisecond accuracy
     SYSTEMTIME now;
     GetLocalTime(&now);
-    mTimeInMillis = (double)time(NULL) * 1000 + now.wMilliseconds;
+    return (double)time(NULL) * 1000 + now.wMilliseconds;
 #else
-    mTimeInMillis = (double)time(NULL) * 1000;
+    return (double)time(NULL) * 1000;
 #endif
+}
+void sys::DateTime::setNow()
+{
+    mTimeInMillis = getNowInMillis();
     fromMillis();
 }
 
@@ -411,21 +415,6 @@ void sys::DateTime::getTime(tm& t) const
 {
     getTime(static_cast<time_t>(mTimeInMillis / 1000), t);
 }
-
-sys::DateTime::DateTime() :
-    mYear(0),
-    mMonth(0),
-    mDayOfMonth(0),
-    mDayOfWeek(0),
-    mDayOfYear(0),
-    mHour(0),
-    mMinute(0),
-    mSecond(0.0),
-    mTimeInMillis(0.0)
-{ }
-
-sys::DateTime::~DateTime()
-{}
 
 std::string sys::DateTime::monthToString(int month)
 {
@@ -609,7 +598,7 @@ std::string sys::DateTime::format(const std::string& formatStr) const
 // "The structure may be shared between gmtime, localtime, and ctime ... ."
 static std::mutex g_dateTimeMutex;
 template<typename F>
-static inline errno_t time_s(F f, tm* t,  const time_t* numSecondsSinceEpoch)
+static inline int time_s(F f, tm* t, const time_t* numSecondsSinceEpoch)
 {
     tm* result = nullptr;
     {
@@ -624,11 +613,11 @@ static inline errno_t time_s(F f, tm* t,  const time_t* numSecondsSinceEpoch)
     *t = *result;
     return 0; // no error
 }
-errno_t sys::details::localtime_s(tm* t, const time_t* numSecondsSinceEpoch)
+int sys::details::localtime_s(tm* t, const time_t* numSecondsSinceEpoch)
 {
     return time_s(localtime, t, numSecondsSinceEpoch);
 }
-errno_t sys::details::gmtime_s(tm* t, const time_t* numSecondsSinceEpoch)
+int sys::details::gmtime_s(tm* t, const time_t* numSecondsSinceEpoch)
 {
     return time_s(gmtime, t, numSecondsSinceEpoch);
 }
