@@ -11,6 +11,7 @@
 #cmakedefine HAVE_SYS_TIME_H @HAVE_SYS_TIME_H@
 #cmakedefine HAVE_LOCALTIME_R @HAVE_LOCALTIME_R@
 #cmakedefine HAVE_GMTIME_R @HAVE_GMTIME_R@
+#cmakedefine HAVE_SETENV @HAVE_SETENV@
 #cmakedefine01 BIGENDIAN
 #cmakedefine SIZEOF_SIZE_T @SIZEOF_SIZE_T@
 #cmakedefine HAVE_POSIX_MEMALIGN @HAVE_POSIX_MEMALIGN@
@@ -19,7 +20,6 @@
 #cmakedefine HAVE_ATTRIBUTE_NOINLINE @HAVE_ATTRIBUTE_NOINLINE@
 
 /* still might need these ... for now */
-#cmakedefine HAVE_SETENV @HAVE_SETENV@
 #cmakedefine CODA_EXPORT @CODA_EXPORT@
 
 #endif /* _CODA_OSS_CONFIG_H_ */
