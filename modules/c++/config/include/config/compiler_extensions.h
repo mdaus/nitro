@@ -24,11 +24,18 @@
 
 #include <config/coda_oss_config.h>
 
-#ifdef HAVE_ATTRIBUTE_NOINLINE
-#define ATTRIBUTE_NOINLINE __attribute__((noinline))
-#else
-#define ATTRIBUTE_NOINLINE
-#endif
+#ifndef CODA_OSS_attribute_noinline_DEFINED_
+	#define CODA_OSS_attribute_noinline_DEFINED_ 1
+
+	// https://stackoverflow.com/a/49468469/8877
+	#if defined(__GNUC__)
+	#define ATTRIBUTE_NOINLINE __attribute__((noinline))
+	#elif defined(_MSC_VER)
+	#define ATTRIBUTE_NOINLINE __declspec(noinline)
+	#else
+	#define ATTRIBUTE_NOINLINE
+	#endif
+#endif // CODA_OSS_attribute_noinline_DEFINED_
 
 #ifdef HAVE_ATTRIBUTE_ALIGNED
 #define ATTRIBUTE_ALIGNED(x) __attribute__((aligned (x)))
