@@ -340,7 +340,7 @@ namespace sys
 #else
         //! this is a basic unaligned allocation
         p = malloc(size);
-        #error Don't know how to implement alignedAlloc().
+        #error "Don't know how to implement alignedAlloc()."
 #endif
         if (!p)
             throw except::Exception(Ctxt(
