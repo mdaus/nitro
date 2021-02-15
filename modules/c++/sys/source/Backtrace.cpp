@@ -73,8 +73,8 @@ static std::string getBacktrace(bool* pSupported, std::vector<std::string>* pFra
     std::stringstream ss;
     for (int ii = 0; ii < currentStackSize; ++ii)
     {
-        auto stackSymbol = stackSymbols[ii]; 
-        ss << stackSymbol << "\n";
+        auto stackSymbol = stackSymbols[ii] + "\n"; 
+        ss << stackSymbol;
         if (pFrames != nullptr)
         {
             pFrames->push_back(std::move(stackSymbol));

@@ -30,6 +30,7 @@
 #include <sys/Path.h>
 #include <sys/Filesystem.h>
 #include <sys/Backtrace.h>
+#include <sys/Dbg.h>
 #include "TestCase.h"
 
 namespace
@@ -249,15 +250,13 @@ TEST_CASE(testBacktrace)
     #endif
     if (supported)
     {
-        #ifdef NDEBUG // i.e., release
-            constexpr auto frames_size = 0;
+        #if _WIN32
+            constexpr auto frames_size = CODA_OSS_release_or_debug(2, 13);
         #else
-            #if _WIN32
-            constexpr auto frames_size = 13;
-            #else
-            constexpr auto frames_size = 5;
-            #endif
+            constexpr auto frames_size = CODA_OSS_release_or_debug(0, 5);
         #endif
+            std::clog << frames_size << "\n";
+            std::clog << frames.size() << "\n";
         TEST_ASSERT_EQ(frames.size(), frames_size);
 
         const auto msg = std::accumulate(frames.begin(), frames.end(), std::string());
