@@ -25,7 +25,7 @@
 
 void sys::dbgPrintf(const char *format, ...)
 {
-#ifdef __DEBUG
+#if CODA_OSS_debugging
     va_list args;
     va_start(args, format);
     fprintf(DEBUG_STREAM, "<DBG> ");

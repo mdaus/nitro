@@ -3,6 +3,7 @@
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2021, Maxar Technologies, Inc.
  *
  * sys-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -21,8 +22,8 @@
  */
 
 
-#ifndef __DBG_H__
-#define __DBG_H__
+#ifndef CODA_OSS_sys_Dbg_h_INCLUDED_
+#define CODA_OSS_sys_Dbg_h_INCLUDED_
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -34,6 +35,41 @@
 #else
 #   include <cstdarg>
 #endif
+
+#ifndef CODA_OSS_DEBUG
+#if defined(_MSC_VER)
+	// https://docs.microsoft.com/en-us/cpp/preprocessor/predefined-macros?view=msvc-160
+	#if _DEBUG // "Defined as 1 ... . Otherwise, undefined."
+		#define CODA_OSS_DEBUG 1
+	#else
+		#define CODA_OSS_DEBUG 0
+	#endif // _DEBUG
+#elif defined(__GNUC__)
+	// https://gcc.gnu.org/onlinedocs/cpp/Common-Predefined-Macros.html#Common-Predefined-Macros
+	#if __OPTIMIZE__ // "__OPTIMIZE__ is defined ... . If they are defined, their value is 1."
+		#define CODA_OSS_DEBUG 0
+	#else
+		#define CODA_OSS_DEBUG 1
+	#endif  // _DEBUG
+#else	
+	//#error "Can't #define CODA_OSS_DEBUG for this compiler."
+#endif  
+#endif // CODA_OSS_DEBUG
+#ifndef CODA_OSS_DEBUG
+	// not set above, fallback to NDEBUG
+	#if defined(NDEBUG)
+	#define CODA_OSS_DEBUG 0
+	#else
+	#define CODA_OSS_DEBUG 1
+	#endif  // NDEBUG
+#endif
+
+// Be sure NDEBUG and CODA_OSS_DEBUG are in-sync
+#if defined(NDEBUG)
+	static_assert(!CODA_OSS_DEBUG, "NDEBUG is #define'd while CODA_OSS_DEBUG=0");
+#else
+	static_assert(CODA_OSS_DEBUG, "NDEBUG is not #define'd but CODA_OSS_DEBUG!=1");
+#endif  // NDEBUG
 
 #ifndef DEBUG_STREAM
 #define DEBUG_STREAM stderr
@@ -79,6 +115,18 @@
  *  open emacs, for instance, with the file in question at the line number
  *  in question.
  */
+// Keep __DEBUG for existing code/scripts; but shouldn't be used.
+#ifndef CODA_OSS_debugging
+	#ifdef __DEBUG
+		#define CODA_OSS_debugging 1
+		// or ... use the value of CODA_OSS_DEBUG ?
+		//#define CODA_OSS_debugging CODA_OSS_DEBUG
+	#else
+		// or here ... ?
+		//#define CODA_OSS_debugging CODA_OSS_DEBUG
+		#define CODA_OSS_debugging 0
+	#endif
+#endif // CODA_OSS_debugging
 
 namespace sys
 {
@@ -101,7 +149,7 @@ void diePrintf(const char *format, ...);
 #define die_printf sys::diePrintf
 #define dbg_ln(STR) dbg_printf("[%s, %d]: '%s'\n", __FILE__, __LINE__, STR)
 
-#ifdef __DEBUG
+#if CODA_OSS_debugging
 
 #ifndef __DEBUG_SHORTEN_EVAL
  #define EVAL(X) std::cout << '(' << __FILE__ << ',' <<__LINE__ << ") <EVAL> "#X"=" << X << std::endl
@@ -121,29 +169,6 @@ void diePrintf(const char *format, ...);
  #define ASSERT_OR(A, E) 1
 #endif
 
-#ifndef CODA_OSS_DEBUG
-#if defined(_MSC_VER)
-	#if defined(_DEBUG)
-		#define CODA_OSS_DEBUG 1
-	#else
-		#define CODA_OSS_DEBUG 0
-	#endif // _DEBUG
-#elif defined(__GNUC__)
-	// https://gcc.gnu.org/onlinedocs/cpp/Common-Predefined-Macros.html#Common-Predefined-Macros
-	#if defined(__OPTIMIZE__)
-		#define CODA_OSS_DEBUG 0
-	#else
-		#define CODA_OSS_DEBUG 1
-	#endif  // _DEBUG
-#else	
-	#if defined(NDEBUG)
-		#define CODA_OSS_DEBUG 0
-	#else
-		#define CODA_OSS_DEBUG 1
-	#endif  // _DEBUG	
-#endif  
-#endif // CODA_OSS_DEBUG
-
 #if CODA_OSS_DEBUG
 #define CODA_OSS_debug_or_release(debug_value, release_value) debug_value
 #define CODA_OSS_release_or_debug(release_value, debug_value) debug_value
@@ -153,4 +178,4 @@ void diePrintf(const char *format, ...);
 #endif
 
 
-#endif // __DBG_H__
+#endif // CODA_OSS_sys_Dbg_h_INCLUDED_
