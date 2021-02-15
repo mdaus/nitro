@@ -22,26 +22,24 @@
 
 #include <sys/Backtrace.h>
 
+#include <cstdlib>
 #include <sstream>
 
 #include <str/Format.h>
-
-static const size_t MAX_STACK_ENTRIES = 62;
 
 #if defined(__GNUC__)
 // https://man7.org/linux/man-pages/man3/backtrace.3.html
 // "These functions are GNU extensions."
 
 #include <execinfo.h>
-#include <cstdlib>
+
+constexpr size_t MAX_STACK_ENTRIES = 62;
 
 namespace
 {
-
 //! RAII wrapper for stack symbols
-class BacktraceHelper
+struct BacktraceHelper final
 {
-public:
     BacktraceHelper(char** stackSymbols)
         : mStackSymbols(stackSymbols)
     {}
@@ -51,17 +49,16 @@ public:
         std::free(mStackSymbols);
     }
 
-    std::string operator[](size_t idx)
+    std::string operator[](size_t idx) const
     {
         return mStackSymbols[idx];
     }
 private:
     char** mStackSymbols;
 };
-
 }
 
-std::string sys::getBacktrace(bool* pSupported, std::vector<std::string>* pFrames)
+static std::string getBacktrace(bool* pSupported, std::vector<std::string>* pFrames)
 {
     if (pSupported != nullptr)
     {
@@ -80,7 +77,7 @@ std::string sys::getBacktrace(bool* pSupported, std::vector<std::string>* pFrame
         ss << stackSymbol << "\n";
         if (pFrames != nullptr)
         {
-            pFrames->emplace_back(std::move(stackSymbol));
+            pFrames->push_back(std::move(stackSymbol));
         }
     }
 
@@ -92,7 +89,7 @@ std::string sys::getBacktrace(bool* pSupported, std::vector<std::string>* pFrame
 #include <dbghelp.h>
 #pragma comment(lib, "dbghelp")
 
-std::string sys::getBacktrace(bool* pSupported, std::vector<std::string>* pFrames)
+static std::string getBacktrace(bool* pSupported, std::vector<std::string>* pFrames)
 {
     if (pSupported != nullptr)
     {
@@ -101,11 +98,15 @@ std::string sys::getBacktrace(bool* pSupported, std::vector<std::string>* pFrame
 
     // https://stackoverflow.com/a/5699483/8877
     HANDLE process = GetCurrentProcess();
-     SymInitialize(process, NULL, TRUE);
+    auto result = SymInitialize(process, NULL, TRUE) == TRUE ? true : false; // https://docs.microsoft.com/en-us/windows/win32/api/dbghelp/nf-dbghelp-syminitialize
+    if (!result)
+    {
+        return "sys::getBacktrace(): SymInitialize() failed";
+    }
 
-     void* stack[100];
+     PVOID stack[100];
      auto frames = CaptureStackBackTrace(0, 100, stack, NULL);
-     auto symbol = reinterpret_cast<SYMBOL_INFO*>(calloc( sizeof( SYMBOL_INFO) + 256 * sizeof( char ), 1 ));
+     auto symbol = reinterpret_cast<PSYMBOL_INFO>(calloc(sizeof(SYMBOL_INFO) + 256 * sizeof(char), 1));
      if (symbol == nullptr)
      {
          return "sys::getBacktrace(): calloc() failed";
@@ -116,8 +117,12 @@ std::string sys::getBacktrace(bool* pSupported, std::vector<std::string>* pFrame
     std::string retval;
     for (unsigned int i = 0; i < frames; i++)
     {
-        SymFromAddr(process, (DWORD64)(stack[i]), 0, symbol);
-
+        const auto address = reinterpret_cast<DWORD64>(stack[i]);
+        result = SymFromAddr(process, address, 0, symbol) == TRUE ? true : false;
+        if (!result)
+        {
+            continue;
+        }
         auto frame = str::format("%i: %s - 0x%0X\n",
             frames - i - 1,
             symbol->Name,
@@ -125,7 +130,7 @@ std::string sys::getBacktrace(bool* pSupported, std::vector<std::string>* pFrame
         retval += frame;
         if (pFrames != nullptr)
         {
-            pFrames->emplace_back(std::move(frame));
+            pFrames->push_back(std::move(frame));
         }
     }
 
@@ -135,7 +140,7 @@ std::string sys::getBacktrace(bool* pSupported, std::vector<std::string>* pFrame
 
 #else
 
-std::string sys::getBacktrace(bool* pSupported, std::vector<std::string>*)
+static std::string getBacktrace(bool* pSupported, std::vector<std::string>*)
 {
     if (pSupported != nullptr)
     {
@@ -146,3 +151,12 @@ std::string sys::getBacktrace(bool* pSupported, std::vector<std::string>*)
 }
 
 #endif
+
+std::string sys::getBacktrace(bool* pSupported)
+{
+    return ::getBacktrace(pSupported, nullptr /*frames*/);
+}
+std::string sys::getBacktrace(bool& supported, std::vector<std::string>& frames)
+{
+    return ::getBacktrace(&supported, &frames);
+}

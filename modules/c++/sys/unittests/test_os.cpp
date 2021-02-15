@@ -20,8 +20,11 @@
  *
  */
 
+#include <assert.h>
+
 #include <fstream>
 #include <sstream>
+#include <numeric> // std::accumulate
 
 #include <sys/OS.h>
 #include <sys/Path.h>
@@ -222,7 +225,7 @@ TEST_CASE(testFsOutput)
 
 static std::string f(bool& supported, std::vector<std::string>& frames)
 {
-    return sys::getBacktrace(&supported, &frames);
+    return sys::getBacktrace(supported, frames);
 }
 static std::string g(bool& supported, std::vector<std::string>& frames)
 {
@@ -246,12 +249,19 @@ TEST_CASE(testBacktrace)
     #endif
     if (supported)
     {
-        #if _WIN32
-        constexpr auto frames_size = 12;
+        #ifdef NDEBUG // i.e., release
+            constexpr auto frames_size = 0;
         #else
-        constexpr auto frames_size = 4;
+            #if _WIN32
+            constexpr auto frames_size = 13;
+            #else
+            constexpr auto frames_size = 5;
+            #endif
         #endif
         TEST_ASSERT_EQ(frames.size(), frames_size);
+
+        const auto msg = std::accumulate(frames.begin(), frames.end(), std::string());
+        TEST_ASSERT_EQ(result, msg);
     }
 }
 
