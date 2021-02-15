@@ -121,4 +121,36 @@ void diePrintf(const char *format, ...);
  #define ASSERT_OR(A, E) 1
 #endif
 
+#ifndef CODA_OSS_DEBUG
+#if defined(_MSC_VER)
+	#if defined(_DEBUG)
+		#define CODA_OSS_DEBUG 1
+	#else
+		#define CODA_OSS_DEBUG 0
+	#endif // _DEBUG
+#elif defined(__GNUC__)
+	// https://gcc.gnu.org/onlinedocs/cpp/Common-Predefined-Macros.html#Common-Predefined-Macros
+	#if defined(__OPTIMIZE__)
+		#define CODA_OSS_DEBUG 0
+	#else
+		#define CODA_OSS_DEBUG 1
+	#endif  // _DEBUG
+#else	
+	#if defined(NDEBUG)
+		#define CODA_OSS_DEBUG 0
+	#else
+		#define CODA_OSS_DEBUG 1
+	#endif  // _DEBUG	
+#endif  
+#endif // CODA_OSS_DEBUG
+
+#if CODA_OSS_DEBUG
+#define CODA_OSS_debug_or_release(debug_value, release_value) debug_value
+#define CODA_OSS_release_or_debug(release_value, debug_value) debug_value
+#else
+#define CODA_OSS_debug_or_release(debug_value, release_value) release_value
+#define CODA_OSS_release_or_debug(release_value, debug_value) release_value
+#endif
+
+
 #endif // __DBG_H__

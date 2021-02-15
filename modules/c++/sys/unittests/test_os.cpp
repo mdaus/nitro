@@ -20,12 +20,17 @@
  *
  */
 
+#include <assert.h>
+
 #include <fstream>
 #include <sstream>
+#include <numeric> // std::accumulate
 
 #include <sys/OS.h>
 #include <sys/Path.h>
 #include <sys/Filesystem.h>
+#include <sys/Backtrace.h>
+#include <sys/Dbg.h>
 #include "TestCase.h"
 
 namespace
@@ -219,6 +224,44 @@ TEST_CASE(testFsOutput)
     #endif
 }
 
+static std::string f(bool& supported, std::vector<std::string>& frames)
+{
+    return sys::getBacktrace(supported, frames);
+}
+static std::string g(bool& supported, std::vector<std::string>& frames)
+{
+    return f(supported, frames);
+}
+static std::string h(bool& supported, std::vector<std::string>& frames)
+{
+    return g(supported, frames);
+}
+TEST_CASE(testBacktrace)
+{
+    bool supported;
+    std::vector<std::string> frames;
+    const auto result = h(supported, frames);
+    TEST_ASSERT_TRUE(!result.empty());
+
+    #if defined(__GNUC__) || defined(_WIN32)
+    TEST_ASSERT_TRUE(supported);
+    #else
+    TEST_ASSERT_FALSE(supported);
+    #endif
+    if (supported)
+    {
+        #if _WIN32
+            constexpr auto frames_size = CODA_OSS_release_or_debug(2, 13);
+        #else
+            constexpr auto frames_size = CODA_OSS_release_or_debug(5, 9);
+        #endif
+        TEST_ASSERT_EQ(frames.size(), frames_size);
+
+        const auto msg = std::accumulate(frames.begin(), frames.end(), std::string());
+        TEST_ASSERT_EQ(result, msg);
+    }
+}
+
 }
 
 int main(int, char**)
@@ -228,6 +271,7 @@ int main(int, char**)
     TEST_CHECK(testEnvVariables);
     TEST_CHECK(testFsExtension);
     TEST_CHECK(testFsOutput);
+    TEST_CHECK(testBacktrace);
     return 0;
 }
 
