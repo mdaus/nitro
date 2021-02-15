@@ -253,10 +253,8 @@ TEST_CASE(testBacktrace)
         #if _WIN32
             constexpr auto frames_size = CODA_OSS_release_or_debug(2, 13);
         #else
-            constexpr auto frames_size = CODA_OSS_release_or_debug(0, 5);
+            constexpr auto frames_size = CODA_OSS_release_or_debug(5, 9);
         #endif
-            std::clog << frames_size << "\n";
-            std::clog << frames.size() << "\n";
         TEST_ASSERT_EQ(frames.size(), frames_size);
 
         const auto msg = std::accumulate(frames.begin(), frames.end(), std::string());
