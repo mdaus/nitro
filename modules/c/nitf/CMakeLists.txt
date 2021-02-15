@@ -2,6 +2,13 @@ set(MODULE_NAME nitf)
 
 coda_generate_module_config_header(${MODULE_NAME})
 
+if (BUILD_SHARED)
+    set(BUILD_SHARED_LIBS ON)
+    add_definitions(
+        -DNITF_MODULE_EXPORTS
+    )
+endif()
+
 coda_add_module(
     ${MODULE_NAME}
     DEPS nrt-c
