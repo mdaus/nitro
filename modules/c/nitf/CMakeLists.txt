@@ -79,7 +79,8 @@ coda_add_tests(
         test_image_io.c
         test_mem_source.c
         test_tre_mods.c
-        test_zero_field.c)
+        test_zero_field.c
+        test_moveTREs.c)
 
 
 # Build all the TRE
