@@ -34,7 +34,7 @@ namespace sys
  * function calls. Usefulness and format may vary depending on 
  * your platform and what kind of symbols are compiled in.
  *
- * Currently only supported on *nix with glibc. This function will
+ * Currently only supported on *nix with glibc and Windows. This function will
  * return with an error message instead of a backtrace if the current
  * configuration is unsupported.
  */
@@ -45,9 +45,9 @@ std::string getBacktrace(bool& supported, std::vector<std::string>& frames);
 #if defined(__GNUC__)
 // https://man7.org/linux/man-pages/man3/backtrace.3.html
 // "These functions are GNU extensions."
-#define CODA_OSS_sys_Backtrace 1
+#define CODA_OSS_sys_Backtrace 20210216L
 #elif _WIN32
-#define CODA_OSS_sys_Backtrace 1
+#define CODA_OSS_sys_Backtrace 20210216L
 #else
 #define CODA_OSS_sys_Backtrace 0
 #endif 
