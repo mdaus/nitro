@@ -243,22 +243,35 @@ TEST_CASE(testBacktrace)
     const auto result = h(supported, frames);
     TEST_ASSERT_TRUE(!result.empty());
 
-    #if defined(__GNUC__) || defined(_WIN32)
+    #if CODA_OSS_sys_Backtrace
     TEST_ASSERT_TRUE(supported);
+
+    #if _WIN32
+    constexpr auto frames_size_RELEASE = 2;
+    constexpr auto frames_size_DEBUG = 13;
+    constexpr auto frames_size = CODA_OSS_release_or_debug(frames_size_RELEASE, frames_size_DEBUG);
+    #elif defined(__GNUC__)
+    constexpr auto frames_size_RELEASE = 5;
+    constexpr auto frames_size_DEBUG = 9
+    constexpr auto frames_size = CODA_OSS_release_or_debug(frames_size_RELEASE, frames_size_DEBUG);
+    #else
+    #error "CODA_OSS_sys_Backtrace inconsistency."
+    #endif
+
     #else
     TEST_ASSERT_FALSE(supported);
+    constexpr auto frames_size = 0;
     #endif
+    TEST_ASSERT_EQ(frames.size(), frames_size);
+
+    const auto msg = std::accumulate(frames.begin(), frames.end(), std::string());
     if (supported)
     {
-        #if _WIN32
-            constexpr auto frames_size = CODA_OSS_release_or_debug(2, 13);
-        #else
-            constexpr auto frames_size = CODA_OSS_release_or_debug(5, 9);
-        #endif
-        TEST_ASSERT_EQ(frames.size(), frames_size);
-
-        const auto msg = std::accumulate(frames.begin(), frames.end(), std::string());
         TEST_ASSERT_EQ(result, msg);
+    }
+    else
+    {
+        TEST_ASSERT_TRUE(msg.empty());
     }
 }
 

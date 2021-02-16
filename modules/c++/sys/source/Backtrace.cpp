@@ -27,6 +27,20 @@
 
 #include <str/Format.h>
 
+#if !CODA_OSS_sys_Backtrace
+
+static std::string getBacktrace(bool* pSupported, std::vector<std::string>*)
+{
+    if (pSupported != nullptr)
+    {
+        *pSupported = false;
+    }
+    return "sys::getBacktrace() is not supported "
+           "on the current platform and/or libc";
+}
+
+#else
+
 #if defined(__GNUC__)
 // https://man7.org/linux/man-pages/man3/backtrace.3.html
 // "These functions are GNU extensions."
@@ -140,17 +154,10 @@ static std::string getBacktrace(bool* pSupported, std::vector<std::string>* pFra
 
 #else
 
-static std::string getBacktrace(bool* pSupported, std::vector<std::string>*)
-{
-    if (pSupported != nullptr)
-    {
-        *pSupported = false;
-    }
-    return "sys::getBacktrace() is not supported "
-        "on the current platform and/or libc";
-}
+#error "CODA_OSS_sys_Backtrace inconsistency."
 
 #endif
+#endif // CODA_OSS_sys_Backtrace
 
 std::string sys::getBacktrace(bool* pSupported)
 {

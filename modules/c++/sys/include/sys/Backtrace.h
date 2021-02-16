@@ -20,8 +20,9 @@
  *
  */
 
-#ifndef __SYS_BACKTRACE_H__
-#define __SYS_BACKTRACE_H__
+#ifndef CODA_OSS_sys_Backtrace_h_INCLUDED_
+#define CODA_OSS_sys_Backtrace_h_INCLUDED_
+#pragma once
 
 #include <string>
 #include <vector>
@@ -41,5 +42,14 @@ std::string getBacktrace(bool* pSupported = nullptr);
 std::string getBacktrace(bool& supported, std::vector<std::string>& frames);
 }
 
-#endif
+#if defined(__GNUC__)
+// https://man7.org/linux/man-pages/man3/backtrace.3.html
+// "These functions are GNU extensions."
+#define CODA_OSS_sys_Backtrace 1
+#elif _WIN32
+#define CODA_OSS_sys_Backtrace 1
+#else
+#define CODA_OSS_sys_Backtrace 0
+#endif 
 
+#endif // CODA_OSS_sys_Backtrace_h_INCLUDED_
