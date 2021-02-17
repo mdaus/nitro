@@ -243,25 +243,27 @@ TEST_CASE(testBacktrace)
     const auto result = h(supported, frames);
     TEST_ASSERT_TRUE(!result.empty());
 
-    #if CODA_OSS_sys_Backtrace
-    TEST_ASSERT_TRUE(supported);
+    size_t frames_size = 0;
+    auto version_sys_backtrace_ = version::sys::backtrace; // "Conditional expression is constant"
+    if (version_sys_backtrace_ >= 20210216L)
+    {
+        TEST_ASSERT_TRUE(supported);
 
-    #if _WIN32
-    constexpr auto frames_size_RELEASE = 2;
-    constexpr auto frames_size_DEBUG = 13;
-    constexpr auto frames_size = CODA_OSS_release_or_debug(frames_size_RELEASE, frames_size_DEBUG);
-    #elif defined(__GNUC__)
-    constexpr auto frames_size_RELEASE = 5;
-    constexpr auto frames_size_DEBUG = 9;
-    constexpr auto frames_size = CODA_OSS_release_or_debug(frames_size_RELEASE, frames_size_DEBUG);
-    #else
-    #error "CODA_OSS_sys_Backtrace inconsistency."
-    #endif
-
-    #else
-    TEST_ASSERT_FALSE(supported);
-    constexpr auto frames_size = 0;
-    #endif // CODA_OSS_sys_Backtrace
+        #if _WIN32
+        constexpr auto frames_size_RELEASE = 2;
+        constexpr auto frames_size_DEBUG = 13;
+        #elif defined(__GNUC__)
+        constexpr auto frames_size_RELEASE = 5;
+        constexpr auto frames_size_DEBUG = 9;
+        #else
+        #error "CODA_OSS_sys_Backtrace inconsistency."
+        #endif
+        frames_size = sys::debug_build ? frames_size_DEBUG : frames_size_RELEASE;
+    }
+    else
+    {
+        TEST_ASSERT_FALSE(supported);
+    }
     TEST_ASSERT_EQ(frames.size(), frames_size);
 
     const auto msg = std::accumulate(frames.begin(), frames.end(), std::string());

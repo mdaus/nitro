@@ -3,6 +3,7 @@
  * =========================================================================
  * 
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2021, Maxar Technologies, Inc.
  *
  * sys-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -27,6 +28,21 @@
 #include <string>
 #include <vector>
 
+// We know at compile-time whether sys::getBacktrace() is supported.
+#if defined(__GNUC__)
+// https://man7.org/linux/man-pages/man3/backtrace.3.html
+// "These functions are GNU extensions."
+#define CODA_OSS_sys_Backtrace 20210216L
+#elif _WIN32
+#define CODA_OSS_sys_Backtrace 20210216L
+#else
+#define CODA_OSS_sys_Backtrace 0
+#endif 
+
+namespace version { namespace sys {
+constexpr auto backtrace = CODA_OSS_sys_Backtrace;
+} }
+
 namespace sys
 {
 /*! 
@@ -41,15 +57,5 @@ namespace sys
 std::string getBacktrace(bool* pSupported = nullptr);
 std::string getBacktrace(bool& supported, std::vector<std::string>& frames);
 }
-
-#if defined(__GNUC__)
-// https://man7.org/linux/man-pages/man3/backtrace.3.html
-// "These functions are GNU extensions."
-#define CODA_OSS_sys_Backtrace 20210216L
-#elif _WIN32
-#define CODA_OSS_sys_Backtrace 20210216L
-#else
-#define CODA_OSS_sys_Backtrace 0
-#endif 
 
 #endif // CODA_OSS_sys_Backtrace_h_INCLUDED_
