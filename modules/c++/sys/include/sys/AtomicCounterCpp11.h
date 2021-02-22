@@ -57,7 +57,6 @@ struct AtomicCounterImplCpp11 final
         return mValue.load();
     }
 
-    // Noncopyable
     AtomicCounterImplCpp11(const AtomicCounterImplCpp11&) = delete;
     AtomicCounterImplCpp11& operator=(const AtomicCounterImplCpp11&) = delete;
 

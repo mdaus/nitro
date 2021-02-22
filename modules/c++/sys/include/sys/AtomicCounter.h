@@ -148,7 +148,6 @@ struct AtomicCounterT final
         return mImpl.get();
     }
 
-    // Noncopyable
     AtomicCounterT(const AtomicCounterT&) = delete;
     AtomicCounterT& operator=(const AtomicCounterT&) = delete;
 
