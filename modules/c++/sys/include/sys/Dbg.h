@@ -42,40 +42,43 @@
 #if defined(_MSC_VER)
     // https://docs.microsoft.com/en-us/cpp/preprocessor/predefined-macros?view=msvc-160
     #if _DEBUG // "Defined as 1 ... . Otherwise, undefined."
+        #ifdef NDEBUG
+            #error "NDEBUG #define'd with _DEBUG"
+        #endif
         #define CODA_OSS_DEBUG 1
-    #else
-        #define CODA_OSS_DEBUG 0
     #endif // _DEBUG
 #elif defined(__GNUC__)
     // https://gcc.gnu.org/onlinedocs/cpp/Common-Predefined-Macros.html#Common-Predefined-Macros
-    #if __OPTIMIZE__ // "__OPTIMIZE__ is defined ... . If they are defined, their value is 1."
+    #if __OPTIMIZE__ // "... is defined ... . If they are defined, their value is 1."
+        #ifndef NDEBUG
+            //#error "NDEBUG should be #define'd with __OPTIMIZE__"
+        #endif
         #define CODA_OSS_DEBUG 0
-    #else
-        #define CODA_OSS_DEBUG 1
-    #endif  // _DEBUG
+    #endif  // __OPTIMIZE__
 #else	
-    //#error "Can't #define CODA_OSS_DEBUG for this compiler."
+    #error "Can't #define CODA_OSS_DEBUG for this compiler."
 #endif  
 #endif // CODA_OSS_DEBUG
-#ifndef CODA_OSS_DEBUG
-    // not set above, fallback to NDEBUG
-    #if defined(NDEBUG)
-    #define CODA_OSS_DEBUG 0
+#ifndef CODA_OSS_DEBUG // not set above, check NDEBUG
+    #ifdef NDEBUG // https://en.cppreference.com/w/c/error/assert
+        #define CODA_OSS_DEBUG 0 // NDEBUG = "No DEBUG"
     #else
-    #define CODA_OSS_DEBUG 1
+        #define CODA_OSS_DEBUG 1
     #endif  // NDEBUG
+#endif
+#ifndef CODA_OSS_DEBUG
+    #error "Unable to #define CODA_OSS_DEBUG"
 #endif
 
 // Be sure NDEBUG and CODA_OSS_DEBUG are in-sync
-#if defined(NDEBUG)
-    static_assert(!CODA_OSS_DEBUG, "NDEBUG is #define'd while CODA_OSS_DEBUG=0");
-#else
-    static_assert(CODA_OSS_DEBUG, "NDEBUG is not #define'd but CODA_OSS_DEBUG!=1");
-#endif  // NDEBUG
+// GCC doesn't set NDEBUG w/__OPTIMIZE__ (see above), so we can't be too rigorous
+#if CODA_OSS_DEBUG && defined(NDEBUG)
+   #error "Both CODA_OSS_DEBUG and NDEBUG are set."
+#endif
 
 namespace sys
 {
-constexpr bool debug_build = CODA_OSS_DEBUG ? true : false;
+constexpr auto debug_build = CODA_OSS_DEBUG ? true : false;
 constexpr auto release_build = !debug_build;
 }
 
