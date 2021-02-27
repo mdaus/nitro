@@ -38,6 +38,11 @@
  *  processing, you simply redefine (parts of) the ContentHandler to
  *  suit your needs.
  */
+#ifndef CODA_OSS_wchar_t_is_type_
+// If your "wchar_t" isn't a distinct type, set this to 0. On old systems, it might be a typedef for uint16_t or uint32_t
+//#define CODA_OSS_wchar_t_is_type_ 0
+#define CODA_OSS_wchar_t_is_type_ 1
+#endif
 
 namespace xml
 {
@@ -93,7 +98,13 @@ public:
      *  \param length The length of the new data
      */
     virtual void characters(const char *data, int length) = 0;
-    virtual bool characters(const wchar_t* const /*data*/, const size_t /*length*/)
+    #if CODA_OSS_wchar_t_is_type_
+    virtual bool characters(const wchar_t* /*data*/, size_t /*length*/)
+    { return false; /* continue on to existing characters()*/ } /* =0 would break existing code */
+    #endif
+    virtual bool characters(const uint16_t* /*data*/, size_t /*length*/)
+    { return false; /* continue on to existing characters()*/ } /* =0 would break existing code */
+    virtual bool characters(const uint32_t* /*data*/, size_t /*length*/)
     { return false; /* continue on to existing characters()*/ } /* =0 would break existing code */
 
     virtual bool use_wchar_t() const // =0 would break existing code
