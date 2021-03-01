@@ -2048,26 +2048,19 @@ NITFPRIV(NITF_BOOL) unmergeSegment_(nitf_Version version, nitf_Record* record,
                     idx, pOverflowIndex, NITF_CONV_INT, NITF_INT32_SZ, error))
         {
             nitf_Error_init(error,
-                            "Could not retrieve overflow segment index",
-                            NITF_CTXT,
-                            NITF_ERR_INVALID_OBJECT);
-            return NITF_FAILURE;
+                            "Could not retrieve overflow segment index", 
+                            NITF_CTXT, NITF_ERR_INVALID_OBJECT); 
+            return NITF_FAILURE; 
         }
         if (*pOverflowIndex == 0)
         {
-            *pOverflowIndex = addOverflowSegment(record,
-                                               segIndex,
-                                               segmentType,
-                                               securityCls,
-                                               securityGrp,
-                                               &overflow,
-                                               error);
+            *pOverflowIndex = addOverflowSegment(record, segIndex, segmentType,
+                                               securityCls, securityGrp, &overflow, error); 
             if (*pOverflowIndex == 0)
             {
-                nitf_Error_init(error,
+                nitf_Error_init(error, 
                                 "Could not add overflow segment",
-                                NITF_CTXT,
-                                NITF_ERR_INVALID_OBJECT);
+                                NITF_CTXT, NITF_ERR_INVALID_OBJECT);
                 return NITF_FAILURE;
             }
         }
@@ -2076,19 +2069,17 @@ NITFPRIV(NITF_BOOL) unmergeSegment_(nitf_Version version, nitf_Record* record,
                       maxLength,
                       error))
         {
-            nitf_Error_init(error,
-                            "Could not transfer TREs to overflow segment",
-                            NITF_CTXT,
-                            NITF_ERR_INVALID_OBJECT);
-            return NITF_FAILURE;
+            nitf_Error_init(error, 
+                            "Could not transfer TREs to overflow segment", 
+                            NITF_CTXT, NITF_ERR_INVALID_OBJECT); 
+            return NITF_FAILURE; 
         }
         if (!nitf_Field_setUint32(idx, *pOverflowIndex, error))
         {
-            nitf_Error_init(error,
-                            "Could not set overflow segment index",
-                            NITF_CTXT,
-                            NITF_ERR_INVALID_OBJECT);
-            return NITF_FAILURE;
+                nitf_Error_init(error,
+                                "Could not set overflow segment index",
+                                NITF_CTXT, NITF_ERR_INVALID_OBJECT);
+                return NITF_FAILURE;
         }
     }
     return NITF_SUCCESS;
