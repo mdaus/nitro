@@ -2063,6 +2063,20 @@ NITFPRIV(NITF_BOOL) unmergeSegment_(nitf_Version version, nitf_Record* record,
                                 NITF_CTXT, NITF_ERR_INVALID_OBJECT);
                 return NITF_FAILURE;
             }
+
+            if (!nitf_Field_setUint32(idx, *pOverflowIndex, error))
+            {
+                    nitf_Error_init(error,
+                                    "Could not set overflow segment index",
+                                    NITF_CTXT, NITF_ERR_INVALID_OBJECT);
+            }
+        }
+        if (overflow == NULL)
+        {
+            nitf_Error_init(error,
+                             "Invalid dataExtension segment number",
+                             NITF_CTXT, NITF_ERR_INVALID_OBJECT);
+            return NITF_FAILURE;
         }
         if ((overflow == NULL) || !moveTREs(section,
                       overflow->subheader->userDefinedSection,
