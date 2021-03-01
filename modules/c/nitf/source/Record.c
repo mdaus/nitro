@@ -2037,12 +2037,14 @@ CATCH_ERROR:
  * typeStr     - Type string (i.e.,UDID)
  */
 
-#define UNMERGE_SEGMENT_(section, securityCls, securityGrp, idx, segmentType)       \
-    length = nitf_Extensions_computeLength(section, version, error);           \
-    if (length > maxLength)                                                    \
+#define UNMERGE_SEGMENT_(version, record, \
+    pLength, pOverflowIndex, overflow, \
+    section, securityCls, securityGrp, idx, segmentType)       \
+    *pLength = nitf_Extensions_computeLength(section, version, error);           \
+    if (*pLength > maxLength)                                                    \
     {                                                                          \
         if (!nitf_Field_get(                                                   \
-                    idx, &overflowIndex, NITF_CONV_INT, NITF_INT32_SZ, error)) \
+                    idx, pOverflowIndex, NITF_CONV_INT, NITF_INT32_SZ, error)) \
         {                                                                      \
             nitf_Error_init(error,                                             \
                             "Could not retrieve overflow segment index",       \
@@ -2050,16 +2052,16 @@ CATCH_ERROR:
                             NITF_ERR_INVALID_OBJECT);                          \
             return NITF_FAILURE;                                               \
         }                                                                      \
-        if (overflowIndex == 0)                                                \
+        if (*pOverflowIndex == 0)                                                \
         {                                                                      \
-            overflowIndex = addOverflowSegment(record,                         \
+            *pOverflowIndex = addOverflowSegment(record,                         \
                                                segIndex,                       \
                                                segmentType,                       \
                                                securityCls,                    \
                                                securityGrp,                    \
                                                &overflow,                      \
                                                error);                         \
-            if (overflowIndex == 0)                                            \
+            if (*pOverflowIndex == 0)                                            \
             {                                                                  \
                 nitf_Error_init(error,                                         \
                                 "Could not add overflow segment",              \
@@ -2079,7 +2081,7 @@ CATCH_ERROR:
                             NITF_ERR_INVALID_OBJECT);                          \
             return NITF_FAILURE;                                               \
         }                                                                      \
-        if (!nitf_Field_setUint32(idx, overflowIndex, error))                  \
+        if (!nitf_Field_setUint32(idx, *pOverflowIndex, error))                  \
         {                                                                      \
             nitf_Error_init(error,                                             \
                             "Could not set overflow segment index",            \
@@ -2088,20 +2090,17 @@ CATCH_ERROR:
             return NITF_FAILURE;                                               \
         }                                                                      \
     }
+#define UNMERGE_SEGMENT(section, securityCls, securityGrp, idx, segmentType)       \
+    UNMERGE_SEGMENT_(version, record, \
+        pLength, pOverflowIndex, overflow, \
+        section, securityCls, securityGrp, idx, segmentType)
 NITFPRIV(NITF_BOOL) unmergeSegment_(nitf_Version version, nitf_Record * record,
     uint32_t* pLength, uint32_t* pOverflowIndex, nitf_DESegment* overflow,
     nitf_Extensions * section, nitf_Field * securityCls, nitf_FileSecurity * securityGrp, nitf_Field * idx, char* segmentType,
     nitf_Uint32 maxLength, nitf_Uint32 segIndex, nitf_Error * error)
 {
-    uint32_t length = *pLength;
-    uint32_t overflowIndex = *pOverflowIndex;
-    NITF_BOOL retval = UNMERGE_SEGMENT_(section, securityCls, securityGrp, idx, segmentType);
-    if (retval)
-    {
-        *pLength = length;
-        *pOverflowIndex = overflowIndex;
-    }
-    return retval;
+    UNMERGE_SEGMENT(section, securityCls, securityGrp, idx, segmentType);
+    return NITF_FAILURE;                                               \
 }
 #define unmergeSegment(version_, record_, \
     section, securityCls, securityGrp, idx, typeStr, \
