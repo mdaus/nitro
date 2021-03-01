@@ -20,6 +20,8 @@
  *
  */
 
+#include <assert.h>
+
 #include "nitf/Record.h"
 
 /*
@@ -2041,6 +2043,9 @@ NITFPRIV(NITF_BOOL) unmergeSegment_(nitf_Version version, nitf_Record* record,
     nitf_Extensions* section, nitf_Field* securityCls, nitf_FileSecurity* securityGrp, nitf_Field* idx, char* segmentType, 
     uint32_t maxLength, uint32_t segIndex, nitf_Error* error)
 {
+    assert(pLength != NULL);
+    assert(pOverflowIndex != NULL);
+
     *pLength = nitf_Extensions_computeLength(section,version,error);
     if (*pLength > maxLength)
     { 
@@ -2111,26 +2116,10 @@ NITFPRIV(NITF_BOOL) unmergeSegment_(nitf_Version version, nitf_Record* record,
 NITFAPI(NITF_BOOL)
 nitf_Record_unmergeTREs(nitf_Record* record, nitf_Error* error)
 {
-    /* NITF version */
-    nitf_Version version;
-
-    /* File header */
-    nitf_FileHeader* header;
-
-    /* Current segment list */
-    nitf_ListIterator segIter;
-
-    /* Current segment list end */
-    nitf_ListIterator segEnd;
-
-    /* Current segment index */
-    uint32_t segIndex;
+    assert(record != NULL);
 
     /* Length of TREs in current section */
     uint32_t length;
-
-    /* Max length for this type of section */
-    uint32_t maxLength;
 
     /* Overflow index of current extension */
     uint32_t overflowIndex;
@@ -2138,14 +2127,18 @@ nitf_Record_unmergeTREs(nitf_Record* record, nitf_Error* error)
     /* Overflow segment */
     nitf_DESegment* overflow = NULL;
 
-    version = nitf_Record_getVersion(record);
+    /* NITF version */
+    nitf_Version version = nitf_Record_getVersion(record);
+
+    /* Max length for this type of section */
+    uint32_t maxLength = 99999;
+
+    /* Current segment index */
+    uint32_t segIndex = 1; /* ??? I moved this up so this would be initialized!! */
 
     /* File header */
-
-    maxLength = 99999;
-    segIndex = 1; /* ??? I moved this up so this would be initialized!! */
-
-    header = record->header;
+    nitf_FileHeader*  header = record->header;
+    assert(header != NULL);
     unmergeSegment(version, record, header->userDefinedSection,
                    header->classification, header->securityGroup,
                    header->NITF_UDHOFL, "UDHD",
@@ -2157,8 +2150,8 @@ nitf_Record_unmergeTREs(nitf_Record* record, nitf_Error* error)
                    maxLength, segIndex, error);
 
     /* Image segments */
-    segIter = nitf_List_begin(record->images);
-    segEnd = nitf_List_end(record->images);
+    nitf_ListIterator segIter = nitf_List_begin(record->images);
+    nitf_ListIterator segEnd = nitf_List_end(record->images);
     while (nitf_ListIterator_notEqualTo(&segIter, &segEnd))
     {
         /* Current subheader */
