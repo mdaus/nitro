@@ -2044,7 +2044,7 @@ NITFPRIV(NITF_BOOL) unmergeSegment_(nitf_Version version, nitf_Record* record,
     *pLength = nitf_Extensions_computeLength(section,version,error); 
     if (*pLength > maxLength)
     { 
-        if (!nitf_Field_get(idx, pOverflowIndex,
+        if (!nitf_Field_get(idx, pOverflowIndex, 
                            NITF_CONV_INT,NITF_INT32_SZ, error)) 
         { 
             nitf_Error_init(error,
@@ -2072,6 +2072,11 @@ NITFPRIV(NITF_BOOL) unmergeSegment_(nitf_Version version, nitf_Record* record,
                 return NITF_FAILURE;
             }
         }
+        else
+        {
+          //nitf_ListIterator iter = nitf_List_at(record->dataExtensions, *pOverflowIndex-1);
+          //overflow = (nitf_DESegment*)nitf_ListIterator_get(&iter);
+        }
 
         if (overflow == NULL)
         {
@@ -2089,14 +2094,6 @@ NITFPRIV(NITF_BOOL) unmergeSegment_(nitf_Version version, nitf_Record* record,
                             NITF_CTXT, NITF_ERR_INVALID_OBJECT); 
             return NITF_FAILURE; 
         } 
-
-        if (!nitf_Field_setUint32(idx, *pOverflowIndex, error))
-        {
-                nitf_Error_init(error,
-                                "Could not set overflow segment index",
-                                NITF_CTXT, NITF_ERR_INVALID_OBJECT);
-                return NITF_FAILURE;
-        }
     }
     return NITF_SUCCESS;
 }
@@ -2106,7 +2103,6 @@ NITFPRIV(NITF_BOOL) unmergeSegment_(nitf_Version version, nitf_Record* record,
     unmergeSegment_(version, record, &length, &overflowIndex, overflow, \
         section, securityCls, securityGrp, idx, #typeStr, \
         maxLength, segmentIndex, error)
-
 
 NITFAPI(NITF_BOOL)
 nitf_Record_unmergeTREs(nitf_Record* record, nitf_Error* error)
