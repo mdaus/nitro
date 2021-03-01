@@ -2041,7 +2041,7 @@ NITFPRIV(NITF_BOOL) unmergeSegment_(nitf_Version version, nitf_Record* record,
     nitf_Extensions* section, nitf_Field* securityCls, nitf_FileSecurity* securityGrp, nitf_Field* idx, char* segmentType, 
     uint32_t maxLength, uint32_t segIndex, nitf_Error* error)
 {
-    *pLength = nitf_Extensions_computeLength(section,version,error); 
+    *pLength = nitf_Extensions_computeLength(section,version,error);
     if (*pLength > maxLength)
     { 
         if (!nitf_Field_get(idx, pOverflowIndex, 
@@ -2072,10 +2072,14 @@ NITFPRIV(NITF_BOOL) unmergeSegment_(nitf_Version version, nitf_Record* record,
                 return NITF_FAILURE;
             }
         }
-        else
+        else if (*pOverflowIndex > 0) // avoid uint32_t wrap-around: -1, below
         {
-          //nitf_ListIterator iter = nitf_List_at(record->dataExtensions, *pOverflowIndex-1);
-          //overflow = (nitf_DESegment*)nitf_ListIterator_get(&iter);
+          nitf_ListIterator iter = nitf_List_at(record->dataExtensions, *pOverflowIndex-1);
+          nitf_ListIterator end = nitf_List_end(record->dataExtensions);
+          if (nitf_ListIterator_notEqualTo(&iter, &end))
+          {
+              overflow = (nitf_DESegment*)nitf_ListIterator_get(&iter);
+          }
         }
 
         if (overflow == NULL)
