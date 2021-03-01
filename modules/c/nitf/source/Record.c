@@ -2041,36 +2041,38 @@ NITFPRIV(NITF_BOOL) unmergeSegment_(nitf_Version version, nitf_Record* record,
     nitf_Extensions* section, nitf_Field* securityCls, nitf_FileSecurity* securityGrp, nitf_Field* idx, char* segmentType, 
     uint32_t maxLength, uint32_t segIndex, nitf_Error* error)
 {
-    *pLength = nitf_Extensions_computeLength(section, version, error);
+    *pLength = nitf_Extensions_computeLength(section,version,error); 
     if (*pLength > maxLength)
-    {
-        if (!nitf_Field_get(
-                    idx, pOverflowIndex, NITF_CONV_INT, NITF_INT32_SZ, error))
-        {
+    { 
+        if (!nitf_Field_get(idx, pOverflowIndex,
+                           NITF_CONV_INT,NITF_INT32_SZ, error)) 
+        { 
             nitf_Error_init(error,
                             "Could not retrieve overflow segment index", 
                             NITF_CTXT, NITF_ERR_INVALID_OBJECT); 
             return NITF_FAILURE; 
-        }
+        } 
         if (*pOverflowIndex == 0)
-        {
+        { 
             *pOverflowIndex = addOverflowSegment(record, segIndex, segmentType,
                                                securityCls, securityGrp, &overflow, error); 
             if (*pOverflowIndex == 0)
-            {
+            { 
                 nitf_Error_init(error, 
                                 "Could not add overflow segment",
                                 NITF_CTXT, NITF_ERR_INVALID_OBJECT);
-                return NITF_FAILURE;
+                return NITF_FAILURE; 
             }
 
             if (!nitf_Field_setUint32(idx, *pOverflowIndex, error))
             {
-                    nitf_Error_init(error,
-                                    "Could not set overflow segment index",
-                                    NITF_CTXT, NITF_ERR_INVALID_OBJECT);
+                nitf_Error_init(error,
+                                "Could not set overflow segment index",
+                                NITF_CTXT, NITF_ERR_INVALID_OBJECT);
+                return NITF_FAILURE;
             }
         }
+
         if (overflow == NULL)
         {
             nitf_Error_init(error,
@@ -2078,16 +2080,16 @@ NITFPRIV(NITF_BOOL) unmergeSegment_(nitf_Version version, nitf_Record* record,
                              NITF_CTXT, NITF_ERR_INVALID_OBJECT);
             return NITF_FAILURE;
         }
-        if ((overflow == NULL) || !moveTREs(section,
-                      overflow->subheader->userDefinedSection,
-                      maxLength,
-                      error))
-        {
+
+        if((overflow == NULL) || !moveTREs(section,
+                     overflow->subheader->userDefinedSection,maxLength,error)) 
+        { 
             nitf_Error_init(error, 
                             "Could not transfer TREs to overflow segment", 
                             NITF_CTXT, NITF_ERR_INVALID_OBJECT); 
             return NITF_FAILURE; 
-        }
+        } 
+
         if (!nitf_Field_setUint32(idx, *pOverflowIndex, error))
         {
                 nitf_Error_init(error,
