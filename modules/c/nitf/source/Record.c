@@ -2039,7 +2039,8 @@ CATCH_ERROR:
 
 #define UNMERGE_SEGMENT_(version, record, \
     pLength, pOverflowIndex, overflow, \
-    section, securityCls, securityGrp, idx, segmentType)       \
+    section, securityCls, securityGrp, idx, segmentType,        \
+    maxLength, segIndex, error) \
     *pLength = nitf_Extensions_computeLength(section, version, error);           \
     if (*pLength > maxLength)                                                    \
     {                                                                          \
@@ -2093,21 +2094,22 @@ CATCH_ERROR:
 #define UNMERGE_SEGMENT(section, securityCls, securityGrp, idx, segmentType)       \
     UNMERGE_SEGMENT_(version, record, \
         pLength, pOverflowIndex, overflow, \
-        section, securityCls, securityGrp, idx, segmentType)
+        section, securityCls, securityGrp, idx, segmentType, \
+        maxLength, segmentIndex, error)
 NITFPRIV(NITF_BOOL) unmergeSegment_(nitf_Version version, nitf_Record * record,
     uint32_t* pLength, uint32_t* pOverflowIndex, nitf_DESegment* overflow,
     nitf_Extensions * section, nitf_Field * securityCls, nitf_FileSecurity * securityGrp, nitf_Field * idx, char* segmentType,
-    nitf_Uint32 maxLength, nitf_Uint32 segIndex, nitf_Error * error)
+    uint32_t maxLength, uint32_t segmentIndex, nitf_Error * error)
 {
     UNMERGE_SEGMENT(section, securityCls, securityGrp, idx, segmentType);
-    return NITF_FAILURE;                                               \
+    return NITF_FAILURE;
 }
 #define unmergeSegment(version_, record_, \
     section, securityCls, securityGrp, idx, typeStr, \
-    maxLength_, segIndex_, error_) \
+    maxLength, segmentIndex, error) \
     unmergeSegment_(version_, record_, &length, &overflowIndex, overflow, \
         section, securityCls, securityGrp, idx, #typeStr, \
-        maxLength_, segIndex_, error_)
+        maxLength, segmentIndex, error)
 
 
 NITFAPI(NITF_BOOL)
