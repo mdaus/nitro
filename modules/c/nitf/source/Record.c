@@ -2024,73 +2024,75 @@ CATCH_ERROR:
     return NITF_FAILURE;
 }
 
-NITFPRIV(NITF_BOOL) unmergeSegment(nitf_Version version, nitf_Record* record, nitf_Extensions* section, nitf_Field* securityCls, nitf_FileSecurity* securityGrp, nitf_Field* idx, char* typeStr, nitf_Uint32 maxLength, nitf_Uint32 segIndex, nitf_Error* error)
-{
-    /* Length of TREs in current section */
-    nitf_Uint32 length;
+/*
+ * Ugly macro that is most of the merge logic for a single extension section
+ *
+ * This macro is very localized and assumes several local variables exist and
+ * are initialized.
+ *
+ * section      - Extended section (i.e., userDefinedSection)
+ * securityCls - security class field (i.e., imageSecurityClass)
+ * securityGrp - Security group object (i.e., securityGroup)
+ * idx         - Index field (DE index in original segment) (i.e.,UDOFL)
+ * typeStr     - Type string (i.e.,UDID)
+ */
 
-    /* Overflow index of current extension */
-    nitf_Uint32 overflowIndex;
-
-    /* Overflow segment */
-    nitf_DESegment* overflow;
-
-    length = nitf_Extensions_computeLength(section,version,error); 
-    if (length > maxLength) 
-    { 
-        if (!nitf_Field_get(idx, &overflowIndex, 
-                           NITF_CONV_INT,NITF_INT32_SZ, error)) 
-        { 
-            nitf_Error_init(error,
-                            "Could not retrieve overflow segment index", 
-                            NITF_CTXT, NITF_ERR_INVALID_OBJECT); 
-            return NITF_FAILURE; 
-        } 
-        if (overflowIndex == 0) 
-        { 
-            overflowIndex = addOverflowSegment(record, segIndex, typeStr, 
-                                               securityCls, securityGrp, &overflow, error); 
-            if (overflowIndex == 0) 
-            { 
-                nitf_Error_init(error, 
-                                "Could not add overflow segment",
-                                NITF_CTXT, NITF_ERR_INVALID_OBJECT);
-                return NITF_FAILURE; 
-            }
-
-            if (!nitf_Field_setUint32(idx, overflowIndex, error))
-            {
-                nitf_Error_init(error,
-                                "Could not set overflow segment index",
-                                NITF_CTXT, NITF_ERR_INVALID_OBJECT);
-                return NITF_FAILURE;
-            }
-        }
-        else
-        {
-          nitf_ListIterator iter = nitf_List_at(record->dataExtensions, overflowIndex-1);
-          overflow = (nitf_DESegment*)nitf_ListIterator_get(&iter);
-        }
-
-        if (overflow == NULL)
-        {
-            nitf_Error_init(error,
-                             "Invalid dataExtension segment number",
-                             NITF_CTXT, NITF_ERR_INVALID_OBJECT);
-            return NITF_FAILURE;
-        }
-
-        if(!moveTREs(section, 
-                     overflow->subheader->userDefinedSection,maxLength,error)) 
-        { 
-            nitf_Error_init(error, 
-                            "Could not transfer TREs to overflow segment", 
-                            NITF_CTXT, NITF_ERR_INVALID_OBJECT); 
-            return NITF_FAILURE; 
-        } 
+#define UNMERGE_SEGMENT_(section, securityCls, securityGrp, idx, segmentType)       \
+    length = nitf_Extensions_computeLength(section, version, error);           \
+    if (length > maxLength)                                                    \
+    {                                                                          \
+        if (!nitf_Field_get(                                                   \
+                    idx, &overflowIndex, NITF_CONV_INT, NITF_INT32_SZ, error)) \
+        {                                                                      \
+            nitf_Error_init(error,                                             \
+                            "Could not retrieve overflow segment index",       \
+                            NITF_CTXT,                                         \
+                            NITF_ERR_INVALID_OBJECT);                          \
+            return NITF_FAILURE;                                               \
+        }                                                                      \
+        if (overflowIndex == 0)                                                \
+        {                                                                      \
+            overflowIndex = addOverflowSegment(record,                         \
+                                               segIndex,                       \
+                                               segmentType,                       \
+                                               securityCls,                    \
+                                               securityGrp,                    \
+                                               &overflow,                      \
+                                               error);                         \
+            if (overflowIndex == 0)                                            \
+            {                                                                  \
+                nitf_Error_init(error,                                         \
+                                "Could not add overflow segment",              \
+                                NITF_CTXT,                                     \
+                                NITF_ERR_INVALID_OBJECT);                      \
+                return NITF_FAILURE;                                           \
+            }                                                                  \
+        }                                                                      \
+        if ((overflow == NULL) || !moveTREs(section,                                                 \
+                      overflow->subheader->userDefinedSection,                 \
+                      maxLength,                                               \
+                      error))                                                  \
+        {                                                                      \
+            nitf_Error_init(error,                                             \
+                            "Could not transfer TREs to overflow segment",     \
+                            NITF_CTXT,                                         \
+                            NITF_ERR_INVALID_OBJECT);                          \
+            return NITF_FAILURE;                                               \
+        }                                                                      \
+        if (!nitf_Field_setUint32(idx, overflowIndex, error))                  \
+        {                                                                      \
+            nitf_Error_init(error,                                             \
+                            "Could not set overflow segment index",            \
+                            NITF_CTXT,                                         \
+                            NITF_ERR_INVALID_OBJECT);                          \
+            return NITF_FAILURE;                                               \
+        }                                                                      \
     }
-    return NITF_SUCCESS;
-}
+#define unmergeSegment(version_, record_, \
+    section, securityCls, securityGrp, idx, typeStr, \
+    maxLength_, segIndex_, error_) \
+    UNMERGE_SEGMENT_(section, securityCls, securityGrp, idx, #typeStr)
+
 
 NITFAPI(NITF_BOOL)
 nitf_Record_unmergeTREs(nitf_Record* record, nitf_Error* error)
@@ -2110,8 +2112,17 @@ nitf_Record_unmergeTREs(nitf_Record* record, nitf_Error* error)
     /* Current segment index */
     uint32_t segIndex;
 
+    /* Length of TREs in current section */
+    uint32_t length;
+
     /* Max length for this type of section */
     uint32_t maxLength;
+
+    /* Overflow index of current extension */
+    uint32_t overflowIndex;
+
+    /* Overflow segment */
+    nitf_DESegment* overflow = NULL;
 
     version = nitf_Record_getVersion(record);
 
