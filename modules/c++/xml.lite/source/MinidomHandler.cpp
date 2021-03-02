@@ -113,7 +113,7 @@ inline std::string toUtf8(const wchar_t* value_, size_t length)
     using wchar_t_type = std::conditional<sizeof(wchar_t) == sizeof(uint32_t), uint32_t, uint16_t>::type;
 #ifdef _WIN32
     // if we somehow get here on Windows (shouldn't, see below), wchar_t is UTF-16 not UTF-32
-    static_assert(sizeof(wchar_t) == sizeof(wchar_t_type), "wchar_t should be 16-bits on Windows.");
+    static_assert(sizeof(wchar_t_type) == sizeof(uint16_t), "wchar_t should be 16-bits on Windows.");
 #endif
     const auto value = reinterpret_cast<const wchar_t_type*>(value_);
     return toUtf8(value, length);
