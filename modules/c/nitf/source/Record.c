@@ -2038,18 +2038,21 @@ CATCH_ERROR:
  * idx         - Index field (DE index in original segment) (i.e.,UDOFL)
  * typeStr     - Type string (i.e.,UDID)
  */
-NITFPRIV(NITF_BOOL) unmergeSegment_(nitf_Version version, nitf_Record* record,
-    uint32_t* pLength, uint32_t* pOverflowIndex, nitf_DESegment* overflow,
-    nitf_Extensions* section, nitf_Field* securityCls, nitf_FileSecurity* securityGrp, nitf_Field* idx, char* segmentType, 
-    uint32_t maxLength, uint32_t segIndex, nitf_Error* error)
+NITFPRIV(NITF_BOOL) unmergeSegment(nitf_Version version, nitf_Record* record, nitf_Extensions* section, nitf_Field* securityCls, nitf_FileSecurity* securityGrp, nitf_Field* idx, char* typeStr, nitf_Uint32 maxLength, nitf_Uint32 segIndex, nitf_Error* error)
 {
-    assert(pLength != NULL);
-    assert(pOverflowIndex != NULL);
+    /* Length of TREs in current section */
+    nitf_Uint32 length;
 
-    *pLength = nitf_Extensions_computeLength(section,version,error);
-    if (*pLength > maxLength)
+    /* Overflow index of current extension */
+    nitf_Uint32 overflowIndex;
+
+    /* Overflow segment */
+    nitf_DESegment* overflow = NULL;
+
+    length = nitf_Extensions_computeLength(section,version,error); 
+    if (length > maxLength) 
     { 
-        if (!nitf_Field_get(idx, pOverflowIndex, 
+        if (!nitf_Field_get(idx, &overflowIndex, 
                            NITF_CONV_INT,NITF_INT32_SZ, error)) 
         { 
             nitf_Error_init(error,
@@ -2057,11 +2060,11 @@ NITFPRIV(NITF_BOOL) unmergeSegment_(nitf_Version version, nitf_Record* record,
                             NITF_CTXT, NITF_ERR_INVALID_OBJECT); 
             return NITF_FAILURE; 
         } 
-        if (*pOverflowIndex == 0)
+        if (overflowIndex == 0) 
         { 
-            *pOverflowIndex = addOverflowSegment(record, segIndex, segmentType,
+            overflowIndex = addOverflowSegment(record, segIndex, typeStr, 
                                                securityCls, securityGrp, &overflow, error); 
-            if (*pOverflowIndex == 0)
+            if (overflowIndex == 0) 
             { 
                 nitf_Error_init(error, 
                                 "Could not add overflow segment",
@@ -2069,7 +2072,7 @@ NITFPRIV(NITF_BOOL) unmergeSegment_(nitf_Version version, nitf_Record* record,
                 return NITF_FAILURE; 
             }
 
-            if (!nitf_Field_setUint32(idx, *pOverflowIndex, error))
+            if (!nitf_Field_setUint32(idx, overflowIndex, error))
             {
                 nitf_Error_init(error,
                                 "Could not set overflow segment index",
@@ -2077,9 +2080,9 @@ NITFPRIV(NITF_BOOL) unmergeSegment_(nitf_Version version, nitf_Record* record,
                 return NITF_FAILURE;
             }
         }
-        else if (*pOverflowIndex > 0) // avoid uint32_t wrap-around: -1, below
+        else if (overflowIndex > 0) // avoid uint32_t wrap-around: -1, below
         {
-          nitf_ListIterator iter = nitf_List_at(record->dataExtensions, *pOverflowIndex-1);
+          nitf_ListIterator iter = nitf_List_at(record->dataExtensions, overflowIndex-1);
           nitf_ListIterator end = nitf_List_end(record->dataExtensions);
           if (nitf_ListIterator_notEqualTo(&iter, &end))
           {
@@ -2095,7 +2098,7 @@ NITFPRIV(NITF_BOOL) unmergeSegment_(nitf_Version version, nitf_Record* record,
             return NITF_FAILURE;
         }
 
-        if((overflow == NULL) || !moveTREs(section,
+        if(!moveTREs(section, 
                      overflow->subheader->userDefinedSection,maxLength,error)) 
         { 
             nitf_Error_init(error, 
@@ -2106,27 +2109,10 @@ NITFPRIV(NITF_BOOL) unmergeSegment_(nitf_Version version, nitf_Record* record,
     }
     return NITF_SUCCESS;
 }
-#define unmergeSegment(version, record, \
-    section, securityCls, securityGrp, idx, typeStr, \
-    maxLength, segmentIndex, error) \
-    unmergeSegment_(version, record, &length, &overflowIndex, overflow, \
-        section, securityCls, securityGrp, idx, #typeStr, \
-        maxLength, segmentIndex, error)
 
 NITFAPI(NITF_BOOL)
 nitf_Record_unmergeTREs(nitf_Record* record, nitf_Error* error)
 {
-    assert(record != NULL);
-
-    /* Length of TREs in current section */
-    uint32_t length;
-
-    /* Overflow index of current extension */
-    uint32_t overflowIndex;
-
-    /* Overflow segment */
-    nitf_DESegment* overflow = NULL;
-
     /* NITF version */
     nitf_Version version = nitf_Record_getVersion(record);
 
