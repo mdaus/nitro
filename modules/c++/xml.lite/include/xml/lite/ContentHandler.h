@@ -30,6 +30,8 @@
 #include <string>
 #include <typeinfo>
 
+#include "sys/CPlusPlus.h"
+
 #include "xml/lite/Attributes.h"
 
 /*!
@@ -41,22 +43,28 @@
  *  processing, you simply redefine (parts of) the ContentHandler to
  *  suit your needs.
  */
+
+// If `wchar_t` is built-in (as it should be), then `f(wchar_t)` can be overloaded
+// with `f(uint16_t)` and/or `f(uint32_t)`.  If it is **not** (old "C++11" compilers)
+// then one of those overload attempts will fail.
 #ifndef CODA_OSS_wchar_t_is_type_
     #if defined(_MSC_VER)
         // https://docs.microsoft.com/en-us/cpp/preprocessor/predefined-macros?view=msvc-160
         // "Defined as 1 when the /Zc:wchar_t compiler option is set. Otherwise, undefined."
         #define CODA_OSS_wchar_t_is_type_  (_NATIVE_WCHAR_T_DEFINED == 1)
-
-        // https://docs.microsoft.com/en-us/cpp/build/reference/zc-wchar-t-wchar-t-is-native-type?view=msvc-160
-        // "... the C++ standard requires that wchar_t be a built-in type. "
-        static_assert(CODA_OSS_wchar_t_is_type_, "wchar_t should be a built-in type.");
     #else
-        // If your "wchar_t" isn't a distinct type, set this to 0. On old systems, it might be a typedef for uint16_t or uint32_t
-        //#define CODA_OSS_wchar_t_is_type_ 0
-        //#define CODA_OSS_wchar_t_is_type_ (typeid(wchar_t) != typeid(uint16_t)) && (typeid(wchar_t) != typeid(uint32_t))
-        #define CODA_OSS_wchar_t_is_type_ 1
+        #if CODA_OSS_cpp14
+            #define CODA_OSS_wchar_t_is_type_ 1
+        #else
+            // If your "wchar_t" isn't a distinct type, set this to 0.
+            // On old systems, it might be a typedef for uint16_t or uint32_t
+            //#define CODA_OSS_wchar_t_is_type_ 0
+            #define CODA_OSS_wchar_t_is_type_ 1
+        #endif // CODA_OSS_cpp14
     #endif
 #endif
+// https://docs.microsoft.com/en-us/cpp/build/reference/zc-wchar-t-wchar-t-is-native-type?view=msvc-160
+// "... the C++ standard requires that wchar_t be a built-in type. "
 static_assert(CODA_OSS_wchar_t_is_type_, "wchar_t should be a built-in type.");
 
 namespace xml
