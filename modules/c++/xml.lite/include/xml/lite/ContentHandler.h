@@ -53,10 +53,11 @@
     #else
         // If your "wchar_t" isn't a distinct type, set this to 0. On old systems, it might be a typedef for uint16_t or uint32_t
         //#define CODA_OSS_wchar_t_is_type_ 0
-        #define CODA_OSS_wchar_t_is_type_ !((typeid(wchar_t) == typeid(uint16_t)) || (typeid(wchar_t) == typeid(uint32_t)))
+        //#define CODA_OSS_wchar_t_is_type_ (typeid(wchar_t) != typeid(uint16_t)) && (typeid(wchar_t) != typeid(uint32_t))
+        #define CODA_OSS_wchar_t_is_type_ 1
     #endif
 #endif
-//static_assert(CODA_OSS_wchar_t_is_type_, "wchar_t should be a built-in type.");
+static_assert(CODA_OSS_wchar_t_is_type_, "wchar_t should be a built-in type.");
 
 namespace xml
 {
