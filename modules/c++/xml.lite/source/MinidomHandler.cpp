@@ -21,6 +21,7 @@
  */
 
 #include <stdexcept>
+#include <type_traits>
 
 #include "str/Manip.h"
 #include "str/Convert.h"
@@ -109,14 +110,11 @@ inline std::string toUtf8(const uint32_t* value_, size_t length)
 #if CODA_OSS_wchar_t_is_type_
 inline std::string toUtf8(const wchar_t* value_, size_t length)
 {
-#ifndef _WIN32
-    // As on Windows, this comes to us already encoded ... but UTF-16
-    using wchar_t_type = uint32_t;
-#else
+    using wchar_t_type = std::conditional<sizeof(wchar_t) == sizeof(uint32_t), uint32_t, uint16_t>::type;
+#ifdef _WIN32
     // if we somehow get here on Windows (shouldn't, see below), wchar_t is UTF-16 not UTF-32
-    using wchar_t_type = uint16_t;
+    static_assert(sizeof(wchar_t) == sizeof(wchar_t_type), "wchar_t should be 16-bits on Windows.");
 #endif
-    static_assert(sizeof(wchar_t) == sizeof(wchar_t_type), "wrong size for 'wchar_t'");
     const auto value = reinterpret_cast<const wchar_t_type*>(value_);
     return toUtf8(value, length);
 }
