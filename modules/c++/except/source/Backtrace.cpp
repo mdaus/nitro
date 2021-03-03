@@ -1,8 +1,9 @@
 /* =========================================================================
- * This file is part of sys-c++
+ * This file is part of except-c++
  * =========================================================================
  *
  * (C) Copyright 2004 - 2016, MDA Information Systems LLC
+  * (C) Copyright 2021, Maxar Technologies, Inc.
  *
  * sys-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -20,22 +21,17 @@
  *
  */
 
-#include <sys/Backtrace.h>
+#include <except/Backtrace.h>
 
 #include <cstdlib>
 #include <sstream>
 
-#include <str/Format.h>
+#if !CODA_OSS_except_Backtrace
 
-#if !CODA_OSS_sys_Backtrace
-
-static std::string getBacktrace(bool* pSupported, std::vector<std::string>*)
+static std::string getBacktrace_(bool& supported, std::vector<std::string>&)
 {
-    if (pSupported != nullptr)
-    {
-        *pSupported = false;
-    }
-    return "sys::getBacktrace() is not supported "
+    supported = true;
+    return "except::getBacktrace() is not supported "
            "on the current platform and/or libc";
 }
 
@@ -72,12 +68,9 @@ private:
 };
 }
 
-static std::string getBacktrace(bool* pSupported, std::vector<std::string>* pFrames)
+static std::string getBacktrace_(bool& supported, std::vector<std::string>& symbolNames)
 {
-    if (pSupported != nullptr)
-    {
-        *pSupported = true;
-    }
+    supported = true;
 
     void* stackBuffer[MAX_STACK_ENTRIES];
     int currentStackSize = backtrace(stackBuffer, MAX_STACK_ENTRIES);
@@ -87,12 +80,9 @@ static std::string getBacktrace(bool* pSupported, std::vector<std::string>* pFra
     std::stringstream ss;
     for (int ii = 0; ii < currentStackSize; ++ii)
     {
-        auto stackSymbol = stackSymbols[ii] + "\n"; 
-        ss << stackSymbol;
-        if (pFrames != nullptr)
-        {
-            pFrames->push_back(std::move(stackSymbol));
-        }
+        auto symbolName = stackSymbols[ii] + "\n"; 
+        ss << symbolName;
+        symbolNames.push_back(std::move(symbolName));
     }
 
     return ss.str();
@@ -103,19 +93,16 @@ static std::string getBacktrace(bool* pSupported, std::vector<std::string>* pFra
 #include <dbghelp.h>
 #pragma comment(lib, "dbghelp")
 
-static std::string getBacktrace(bool* pSupported, std::vector<std::string>* pFrames)
+static std::string getBacktrace_(bool& supported, std::vector<std::string>& symbolNames)
 {
-    if (pSupported != nullptr)
-    {
-        *pSupported = true;
-    }
+    supported = true;
 
     // https://stackoverflow.com/a/5699483/8877
     HANDLE process = GetCurrentProcess();
     auto result = SymInitialize(process, NULL, TRUE) == TRUE ? true : false; // https://docs.microsoft.com/en-us/windows/win32/api/dbghelp/nf-dbghelp-syminitialize
     if (!result)
     {
-        return "sys::getBacktrace(): SymInitialize() failed";
+        return "getBacktrace_(): SymInitialize() failed";
     }
 
      PVOID stack[100];
@@ -123,7 +110,7 @@ static std::string getBacktrace(bool* pSupported, std::vector<std::string>* pFra
      auto symbol = reinterpret_cast<PSYMBOL_INFO>(calloc(sizeof(SYMBOL_INFO) + 256 * sizeof(char), 1));
      if (symbol == nullptr)
      {
-         return "sys::getBacktrace(): calloc() failed";
+         return "getBacktrace_(): calloc() failed";
      }
     symbol->MaxNameLen = 255;
     symbol->SizeOfStruct = sizeof(SYMBOL_INFO);
@@ -137,15 +124,10 @@ static std::string getBacktrace(bool* pSupported, std::vector<std::string>* pFra
         {
             continue;
         }
-        auto frame = str::format("%i: %s - 0x%0X\n",
-            frames - i - 1,
-            symbol->Name,
-            symbol->Address);
-        retval += frame;
-        if (pFrames != nullptr)
-        {
-            pFrames->push_back(std::move(frame));
-        }
+        std::string symbolName = symbol->Name == nullptr ? "<no symbol->Name>" : symbol->Name;
+        symbolName += "\n";
+        retval += symbolName;
+        symbolNames.push_back(std::move(symbolName));
     }
 
     free(symbol);
@@ -154,16 +136,12 @@ static std::string getBacktrace(bool* pSupported, std::vector<std::string>* pFra
 
 #else
 
-#error "CODA_OSS_sys_Backtrace inconsistency."
+#error "CODA_OSS_except_Backtrace inconsistency."
 
 #endif
-#endif // CODA_OSS_sys_Backtrace
+#endif // CODA_OSS_except_Backtrace
 
-std::string sys::getBacktrace(bool* pSupported)
+std::string except::getBacktrace(bool& supported, std::vector<std::string>& frames)
 {
-    return ::getBacktrace(pSupported, nullptr /*frames*/);
-}
-std::string sys::getBacktrace(bool& supported, std::vector<std::string>& frames)
-{
-    return ::getBacktrace(&supported, &frames);
+    return getBacktrace_(supported, frames);
 }
