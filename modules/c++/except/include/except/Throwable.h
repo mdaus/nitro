@@ -64,7 +64,8 @@ class Throwable
     : public std::exception
 #endif
 {
-    Throwable(const Context*, const Throwable* pT = nullptr, const std::string* pMessage = nullptr, bool getBacktrace = false);
+    void doGetBacktrace();
+    Throwable(const Context*, const Throwable* pT = nullptr, const std::string* pMessage = nullptr, bool callGetBacktrace = false);
 
 public:
     Throwable();
@@ -145,6 +146,14 @@ public:
     const std::vector<std::string>& getBacktrace() const
     {
         return mBacktrace;
+    }
+
+    // It seems that overloading constructors creates ambiguities ... so allow for a "fluent" way
+    // of doing this.: throw Exception(...).backtrace()
+    Throwable& backtrace()
+    {
+        doGetBacktrace();
+        return *this;
     }
 
     virtual std::string toString(bool includeBacktrace) const
