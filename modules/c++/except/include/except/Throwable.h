@@ -28,6 +28,8 @@
 #include <vector>
 #include <sstream>
 #include <exception>
+#include <numeric> // std::accumulate
+
 #include "except/Trace.h"
 
 /*!
@@ -62,7 +64,7 @@ class Throwable
     : public std::exception
 #endif
 {
-    Throwable(const Context*, const Throwable* pT = nullptr, const std::string* pMessage = nullptr);
+    Throwable(const Context*, const Throwable* pT = nullptr, const std::string* pMessage = nullptr, bool getBacktrace = false);
 
 public:
     Throwable();
@@ -77,14 +79,14 @@ public:
      * Constructor.  Takes a Context.
      * \param c The Context
      */
-    Throwable(Context c);
+    Throwable(Context);
 
     /*!
      * Constructor. Takes a Throwable and a Context
      * \param t The throwable
      * \param c The Context
      */
-    Throwable(const Throwable& t, Context c);
+    Throwable(const Throwable&, Context);
 
     /*!
      * Destructor
@@ -140,12 +142,30 @@ public:
         return s.str();
     }
 
+    const std::vector<std::string>& getBacktrace() const
+    {
+        return mBacktrace;
+    }
+
+    virtual std::string toString(bool includeBacktrace) const
+    {
+        // Adding the backtrace to existing toString() output could substantally alter existing strings.
+        std::string backtrace;
+        if (includeBacktrace)
+        {
+            backtrace = "***** getBacktrace() *****\n";
+            backtrace +=  std::accumulate(mBacktrace.begin(), mBacktrace.end(), std::string());
+        }
+        return toString() + backtrace;
+    }
+
     const char* what() const noexcept
 #if CODA_OSS_Throwable_isa_std_exception
         override final // derived classes override toString()
 #endif
     {
-        mWhat = toString(); // call any derived toString()
+        // adding this to toString() output could (significantly) alter existing display
+        mWhat = toString(true /*includeBacktrace*/); // call any derived toString()
         return mWhat.c_str();
     }
 
@@ -157,7 +177,7 @@ protected:
 
 private:
     mutable std::string mWhat;
-    std::vector<std::string> mFrames;
+    std::vector<std::string> mBacktrace;
 };
 }
 

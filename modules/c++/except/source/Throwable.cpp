@@ -26,7 +26,7 @@
 
 #include "except/Backtrace.h"
 
-except::Throwable::Throwable(const Context* pContext, const Throwable* pThrowable, const std::string* pMessage)
+except::Throwable::Throwable(const Context* pContext, const Throwable* pThrowable, const std::string* pMessage, bool getBacktrace)
 {
     if (pThrowable != nullptr)
     {
@@ -58,8 +58,12 @@ except::Throwable::Throwable(const Context* pContext, const Throwable* pThrowabl
     //    might_throw(e);
     // rather, the idiom is usually
     //    throw Exception(...); // instantiate and throw
-    bool supported;
-    (void)except::getBacktrace(supported, mFrames);
+    if (getBacktrace)
+    {
+        // This could be time-consuming or generate a lot of (noisy) output; only do it if requested
+        bool supported;
+        (void)except::getBacktrace(supported, mBacktrace);
+    }
 }
 
 except::Throwable::Throwable() : Throwable(nullptr)
