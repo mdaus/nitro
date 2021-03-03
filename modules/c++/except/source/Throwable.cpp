@@ -58,8 +58,8 @@ except::Throwable::Throwable(const Context* pContext, const Throwable* pThrowabl
     //    might_throw(e);
     // rather, the idiom is usually
     //    throw Exception(...); // instantiate and throw
-    //bool supported;
-    //(void)except::getBacktrace(supported, mFrames);
+    bool supported;
+    (void)except::getBacktrace(supported, mFrames);
 }
 
 except::Throwable::Throwable() : Throwable(nullptr)

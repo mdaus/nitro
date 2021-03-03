@@ -23,6 +23,8 @@
 
 #include <except/Backtrace.h>
 
+#include <assert.h>
+
 #include <cstdlib>
 #include <sstream>
 
@@ -93,24 +95,44 @@ static std::string getBacktrace_(bool& supported, std::vector<std::string>& symb
 #include <dbghelp.h>
 #pragma comment(lib, "dbghelp")
 
+// https://docs.microsoft.com/en-us/windows/win32/api/dbghelp/nf-dbghelp-syminitialize
+// "A process that calls SymInitialize should not call it again unless it calls SymCleanup first."
+class SymInitialize_RAII final
+{
+    HANDLE process_;
+
+public:
+    bool result;
+    SymInitialize_RAII(HANDLE process) : process_(process)
+    {
+        result = SymInitialize(process_, NULL, TRUE) == TRUE ? true : false;  // https://docs.microsoft.com/en-us/windows/win32/api/dbghelp/nf-dbghelp-syminitialize
+    }
+
+    ~SymInitialize_RAII()
+    {
+        result = SymCleanup(process_) == TRUE ? true : false; // https://docs.microsoft.com/en-us/windows/win32/api/dbghelp/nf-dbghelp-symcleanup
+        assert(result);
+    }
+};
+
 static std::string getBacktrace_(bool& supported, std::vector<std::string>& symbolNames)
 {
     supported = true;
 
     // https://stackoverflow.com/a/5699483/8877
-    HANDLE process = GetCurrentProcess();
-    auto result = SymInitialize(process, NULL, TRUE) == TRUE ? true : false; // https://docs.microsoft.com/en-us/windows/win32/api/dbghelp/nf-dbghelp-syminitialize
-    if (!result)
+    const auto process = GetCurrentProcess();
+    SymInitialize_RAII symInitialize(process);
+    if (!symInitialize.result)
     {
-        return "getBacktrace_(): SymInitialize() failed";
+        return "getBacktrace_(): SymInitialize() failed.";
     }
 
      PVOID stack[100];
-     auto frames = CaptureStackBackTrace(0, 100, stack, NULL);
+     const auto frames = CaptureStackBackTrace(0, 100, stack, NULL);
      auto symbol = reinterpret_cast<PSYMBOL_INFO>(calloc(sizeof(SYMBOL_INFO) + 256 * sizeof(char), 1));
      if (symbol == nullptr)
      {
-         return "getBacktrace_(): calloc() failed";
+         return "getBacktrace_(): calloc() failed.";
      }
     symbol->MaxNameLen = 255;
     symbol->SizeOfStruct = sizeof(SYMBOL_INFO);
@@ -119,7 +141,7 @@ static std::string getBacktrace_(bool& supported, std::vector<std::string>& symb
     for (unsigned int i = 0; i < frames; i++)
     {
         const auto address = reinterpret_cast<DWORD64>(stack[i]);
-        result = SymFromAddr(process, address, 0, symbol) == TRUE ? true : false;
+        const auto result = SymFromAddr(process, address, 0, symbol) == TRUE ? true : false;
         if (!result)
         {
             continue;

@@ -242,6 +242,9 @@ TEST_CASE(testBacktrace)
     std::vector<std::string> frames;
     const auto result = h(supported, frames);
     TEST_ASSERT_TRUE(!result.empty());
+    const auto failed_pos = result.find(" failed.");
+    TEST_ASSERT_EQ(failed_pos, std::string::npos);
+
 
     size_t frames_size = 0;
     auto version_sys_backtrace_ = version::sys::backtrace; // "Conditional expression is constant"
