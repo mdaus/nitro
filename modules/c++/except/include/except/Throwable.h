@@ -20,11 +20,12 @@
  *
  */
 
-#ifndef __EXCEPT_THROWABLE_H__
-#define __EXCEPT_THROWABLE_H__
+#ifndef CODA_OSS_except_Throwable_h_INCLUDED_
+#define CODA_OSS_except_Throwable_h_INCLUDED_
 #pragma once
 
 #include <string>
+#include <vector>
 #include <sstream>
 #include <exception>
 #include "except/Trace.h"
@@ -61,17 +62,16 @@ class Throwable
     : public std::exception
 #endif
 {
+    Throwable(const Context*, const Throwable* pT = nullptr, const std::string* pMessage = nullptr);
+
 public:
-    Throwable() = default;
+    Throwable();
 
     /*!
      * Constructor.  Takes a message
      * \param message The message
      */
-    Throwable(const std::string& message) :
-        mMessage(message)
-    {
-    }
+    Throwable(const std::string& message);
 
     /*!
      * Constructor.  Takes a Context.
@@ -157,7 +157,8 @@ protected:
 
 private:
     mutable std::string mWhat;
+    std::vector<std::string> mFrames;
 };
 }
 
-#endif
+#endif // CODA_OSS_except_Throwable_h_INCLUDED_

@@ -20,23 +20,60 @@
  *
  */
 
+#include <assert.h>
+
 #include "except/Throwable.h"
 
-except::Throwable::Throwable(except::Context c)
-{
-    // Assign c's message to our internal one
-    mMessage = c.getMessage();
+#include "except/Backtrace.h"
 
-    // Push context onto exception stack
-    mTrace.pushContext(c);
+except::Throwable::Throwable(const Context* pContext, const Throwable* pThrowable, const std::string* pMessage)
+{
+    if (pThrowable != nullptr)
+    {
+        // Copy t's exception stack and push c onto local one
+        mTrace = pThrowable->getTrace();
+    }
+
+    if (pContext != nullptr)
+    {
+        assert(pMessage == nullptr);
+
+        // Push context onto exception stack
+        mTrace.pushContext(*pContext);
+
+        // Assign c's message as our internal one
+        mMessage = pContext->getMessage();
+    }
+    
+    if (pMessage != nullptr)
+    {
+        assert(pContext == nullptr);
+        mMessage = *pMessage;
+    }
+
+    // This will record a back-trace from where the Throwable object was instantiated.
+    // That's not necessarily where the "throw" will occur, but it's often the case; Throwable
+    // instances ususally aren't passed around.  That is, hardly anybody does:
+    //    Exception e; // Throwable instance
+    //    might_throw(e);
+    // rather, the idiom is usually
+    //    throw Exception(...); // instantiate and throw
+    //bool supported;
+    //(void)except::getBacktrace(supported, mFrames);
 }
 
-except::Throwable::Throwable(const except::Throwable& t, except::Context c)
+except::Throwable::Throwable() : Throwable(nullptr)
 {
-    // Copy t's exception stack and push c onto local one
-    mTrace = t.getTrace();
-    mTrace.pushContext(c);
+}
 
-    // Assign c's message as our internal one
-    mMessage = c.getMessage();
+except::Throwable::Throwable(const std::string& message) : Throwable(nullptr, nullptr, &message)
+{
+}
+
+except::Throwable::Throwable(except::Context c) : Throwable(&c)
+{
+}
+
+except::Throwable::Throwable(const except::Throwable& t, except::Context c) : Throwable(&c, &t)
+{
 }
