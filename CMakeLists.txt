@@ -36,11 +36,12 @@ if (${CMAKE_PROJECT_NAME} STREQUAL nitro)
         set(ENABLE_UUID OFF CACHE BOOL "enable uuid library" FORCE)
         set(ENABLE_ZIP OFF CACHE BOOL "enable ZIP library" FORCE)
 
+        set(CODA_OSS "externals/coda-oss_2021-03-02")
         list(APPEND CMAKE_MODULE_PATH
-             "${CMAKE_CURRENT_SOURCE_DIR}/externals/coda-oss/cmake")
+             "${CMAKE_CURRENT_SOURCE_DIR}/${CODA_OSS}/cmake")
         include(CodaBuild)
         coda_initialize_build()
-        add_subdirectory("externals/coda-oss")
+        add_subdirectory(${CODA_OSS})
     endif()
 endif()
 
