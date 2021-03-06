@@ -84,6 +84,10 @@ TEST_CASE(testExceptionLogger)
     TEST_ASSERT(counter == 1);
 }
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 4702)  // unreachable code
+#endif
 TEST_CASE(testExceptionWithBacktrace)
 {
     const std::string getBacktrace("***** getBacktrace() *****");
@@ -106,7 +110,7 @@ TEST_CASE(testExceptionWithBacktrace)
     TEST_ASSERT_EQ(getBacktrace_pos, std::string::npos);
     getBacktrace_pos = what.find(getBacktrace);
     TEST_ASSERT_NOT_EQ(getBacktrace_pos, std::string::npos);
-
+    
     try
     {
         throw except::Exception("Bad run").backtrace();
@@ -118,6 +122,7 @@ TEST_CASE(testExceptionWithBacktrace)
         s = t.toString(true /*includeBacktrace*/);
         what = t.what();
     }
+
     TEST_ASSERT(!s.empty());
     TEST_ASSERT(!what.empty());
     TEST_ASSERT_EQ(s, what);
@@ -126,6 +131,9 @@ TEST_CASE(testExceptionWithBacktrace)
     getBacktrace_pos = what.find(getBacktrace);
     TEST_ASSERT_NOT_EQ(getBacktrace_pos, std::string::npos);
 }
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 int main(int, char**)
 {
