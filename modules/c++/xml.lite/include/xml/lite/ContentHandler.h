@@ -107,15 +107,15 @@ public:
     inline bool wcharacters(const T* data_, size_t length)
     {
         static_assert(sizeof(T) == sizeof(wchar_t), "T should be a wchar_t.");
-        if (sizeof(T) == sizeof(uint16_t))
+        auto sizeof_T = sizeof(T); // "conditional expression is constant"
+        const void* data = data_;
+        if (sizeof_T == sizeof(uint16_t))
         {
-            const auto data = reinterpret_cast<const uint16_t*>(data_);
-            return wcharacters_(data, length);
+            return wcharacters_(static_cast<const uint16_t*>(data), length);
         }
-        if (sizeof(T) == sizeof(uint32_t))
+        if (sizeof_T == sizeof(uint32_t))
         {
-            const auto data = reinterpret_cast<const uint32_t*>(data_);
-            return wcharacters_(data, length);
+            return wcharacters_(static_cast<const uint32_t*>(data), length);
         }
         throw std::invalid_argument("Wrong size for T");
     }
