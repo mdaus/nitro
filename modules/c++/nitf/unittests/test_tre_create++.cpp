@@ -2,7 +2,7 @@
 
 #include "TestCase.h"
 
-TEST_CASE(test_nitf_create_tre)
+TEST_CASE(test_tre_create_329)
 {
     // https://github.com/mdaus/nitro/issues/329
 
@@ -14,7 +14,7 @@ TEST_CASE(test_nitf_create_tre)
     TEST_ASSERT_TRUE(true);
 }
 
-TEST_CASE(test_nitf_clone_tre)
+TEST_CASE(test_tre_clone_329)
 {
     // https://github.com/mdaus/nitro/issues/329
     const std::string rd = "begin1020030004ABCDEFend";
@@ -29,6 +29,6 @@ TEST_CASE(test_nitf_clone_tre)
 }
 
 TEST_MAIN(
-    TEST_CHECK(test_nitf_create_tre);
-    TEST_CHECK(test_nitf_clone_tre);
+    TEST_CHECK(test_tre_create_329);
+    TEST_CHECK(test_tre_clone_329);
     )
