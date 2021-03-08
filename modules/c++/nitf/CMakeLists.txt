@@ -87,4 +87,5 @@ coda_add_tests(
         test_image_segment_computer.cpp
         test_image_writer.cpp
         test_nitf_buffer_list.cpp
-        test_tre_mods++.cpp)
+        test_tre_mods++.cpp
+        test_tre_create++.cpp)
