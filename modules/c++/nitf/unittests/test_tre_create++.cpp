@@ -1,3 +1,4 @@
+#include <stdlib.h>
 
 #include <import/nitf.hpp>
 
@@ -11,7 +12,7 @@ TEST_CASE(test_nitf_create_tre)
     tre.setField("SYSTYPE", "M1");
     TEST_ASSERT_TRUE(true);
 
-    //tre.setField("PDATE[0]", "20200210184728"); // aborts program; worked prior to 2.10
+    tre.setField("PDATE[0]", "20200210184728"); // aborts program; worked prior to 2.10
     TEST_ASSERT_TRUE(true);
 }
 
@@ -28,8 +29,10 @@ TEST_CASE(test_nitf_clone_tre)
     TEST_ASSERT_TRUE(true);
 }
 
-void main()
+int main()
 {
     TEST_CHECK(test_nitf_create_tre);
     TEST_CHECK(test_nitf_clone_tre);
+
+    return EXIT_SUCCESS;
 }
