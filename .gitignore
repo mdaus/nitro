@@ -10,8 +10,7 @@ CMakeFiles/
 CMakeCache.txt
 CMakeSettings.json
 
-externals/coda-oss_*/modules/c++/**/Makefile
-externals/coda-oss/
+externals/coda-oss/modules/c++/**/Makefile
 modules/**/Makefile
 
 # Build artifacts
