@@ -24,7 +24,11 @@ TEST_CASE(test_tre_clone_329)
     nitf_TRE_setField(rawTre, "raw_data", const_cast<char*>(rd.c_str()), rd.size(), &error);
     TEST_ASSERT_TRUE(true);
 
-    nitf::TRE cloneTre(rawTre); // leads to free(): invalid size(): in libc.so.6 when the program exits; worked prior to 2.10
+    nitf::TRE tre(rawTre);
+    TEST_ASSERT_TRUE(true);
+
+    nitf::TRE cloneTre = tre.clone();  // leads to free(): invalid size(): in libc.so.6 when the program exits; worked prior to 2.10
+
     TEST_ASSERT_TRUE(true);
 }
 
