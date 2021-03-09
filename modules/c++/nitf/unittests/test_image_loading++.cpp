@@ -24,9 +24,7 @@
 #include <string>
 
 #include <import/nitf.hpp>
-#include <import/except.h>
 
-#include <sys/Filesystem.h>
 namespace fs = std::filesystem;
 
 #include "TestCase.h"
@@ -116,7 +114,7 @@ static void writeImage(nitf::ImageSegment &segment,
     TEST_ASSERT_EQ("NC", subheader.imageCompression());
     TEST_ASSERT_EQ("    ", subheader.getCompressionRate().toString());
 
-    nitf::BufferList buffer(nBands);
+    nitf::BufferList<std::byte> buffer(nBands);
     std::vector<uint32_t> bandList(nBands);
 
     nitf::SubWindow subWindow;

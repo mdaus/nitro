@@ -70,10 +70,10 @@ public:
     SubWindow(nitf_SubWindow * x);
 
     //! Constructor
-    SubWindow() noexcept(false);
+    SubWindow();
 
     //! Destructor
-    ~SubWindow() noexcept(false);
+    ~SubWindow();
 
     uint32_t getStartRow() const;
     uint32_t getNumRows() const;

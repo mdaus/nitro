@@ -34,11 +34,6 @@
 #undef min
 #undef max
 
-#include "gsl/gsl.h"
-
-#undef min
-#undef max
-
 namespace nitf
 {
 const size_t ImageSegmentComputer::ILOC_MAX = 99999;
