@@ -1,4 +1,10 @@
 set(TARGET_LANGUAGE c++)
+# turn on warnings as errors
+if (MSVC)
+    add_compile_options(/WX)
+elseif (UNIX)
+    add_compile_options(-Werror)
+endif()
 
 # add an interface library for unittests
 add_library(TestCase INTERFACE)
@@ -45,7 +51,6 @@ add_subdirectory("except")
 add_subdirectory("sys")
 add_subdirectory("str")
 add_subdirectory("mem")
-add_subdirectory("re")
 add_subdirectory("io")
 add_subdirectory("sio.lite")
 add_subdirectory("cli")

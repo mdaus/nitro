@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
 project(nitro)
 
-set(CMAKE_C_STANDARD 99)
+set(CMAKE_C_STANDARD 90)
 set(CMAKE_CXX_STANDARD 11)
 
 if (${CMAKE_PROJECT_NAME} STREQUAL nitro)
@@ -36,11 +36,12 @@ if (${CMAKE_PROJECT_NAME} STREQUAL nitro)
         set(ENABLE_UUID OFF CACHE BOOL "enable uuid library" FORCE)
         set(ENABLE_ZIP OFF CACHE BOOL "enable ZIP library" FORCE)
 
+        set(CODA_OSS_DIR "coda-oss")
         list(APPEND CMAKE_MODULE_PATH
-             "${CMAKE_CURRENT_SOURCE_DIR}/externals/coda-oss/cmake")
+             "${CMAKE_CURRENT_SOURCE_DIR}/externals/${CODA_OSS_DIR}/cmake")
         include(CodaBuild)
         coda_initialize_build()
-        add_subdirectory("externals/coda-oss")
+        add_subdirectory("externals/${CODA_OSS_DIR}")
     endif()
 endif()
 

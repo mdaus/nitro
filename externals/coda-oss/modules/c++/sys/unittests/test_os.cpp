@@ -20,12 +20,17 @@
  *
  */
 
+#include <assert.h>
+
 #include <fstream>
 #include <sstream>
+#include <numeric> // std::accumulate
 
 #include <sys/OS.h>
 #include <sys/Path.h>
 #include <sys/Filesystem.h>
+#include <sys/Backtrace.h>
+#include <sys/Dbg.h>
 #include "TestCase.h"
 
 namespace
@@ -149,22 +154,22 @@ TEST_CASE(testEnvVariables)
     TEST_ASSERT_FALSE(os.isEnvSet(testvar));
 }
 
-
-TEST_CASE(testFsExtension)
+template <typename TPath>
+static void testFsExtension_(const std::string& testName)
 {
-    namespace fs = sys::Filesystem;
+    using fs_path = TPath;
 
     // https://en.cppreference.com/w/cpp/filesystem/path/extension
 
     // "If the pathname is either . or .., ... then empty path is returned."
-    const fs::path dot(".");
+    const fs_path dot(".");
     TEST_ASSERT_EQ("", dot.extension());
-    const fs::path dotdot("..");
+    const fs_path dotdot("..");
     TEST_ASSERT_EQ("", dotdot.extension());
 
     // "If the first character in the filename is a period, that period is ignored
     // (a filename like '.profile' is not treated as an extension)"
-    fs::path dotprofile("/path/to/.profile");
+    fs_path dotprofile("/path/to/.profile");
     TEST_ASSERT_EQ("", dotprofile.extension());
     dotprofile = ".profile";
     TEST_ASSERT_EQ("", dotprofile.extension());
@@ -175,7 +180,7 @@ TEST_CASE(testFsExtension)
     dotprofile = ".profile.user";
     TEST_ASSERT_EQ(".user", dotprofile.extension());
 
-    fs::path filedottext("/path/to/file.txt");
+    fs_path filedottext("/path/to/file.txt");
     TEST_ASSERT_EQ(".txt", filedottext.extension());
     filedottext = "file.txt";
     TEST_ASSERT_EQ(".txt", filedottext.extension());
@@ -188,31 +193,87 @@ TEST_CASE(testFsExtension)
     filedottext = "/path.to/file";
     TEST_ASSERT_EQ("", filedottext.extension());
 }
+TEST_CASE(testFsExtension)
+{
+    testFsExtension_<sys::Filesystem::path>(testName);
+    testFsExtension_<coda_oss::filesystem::path>(testName);
+    #if CODA_OSS_lib_filesystem
+    testFsExtension_<std::filesystem::path>(testName);
+    #endif
+}
 
+template <typename TPath>
+static void testFsOutput_(const std::string& testName)
+{
+    using fs_path = TPath;
+
+    const fs_path path("/path/to/file.txt");
+    const std::string expected = "\"" + path.string() + "\"";
+
+    std::stringstream ss;
+    ss << path;
+    const auto actual = ss.str();
+    TEST_ASSERT_EQ(expected, actual);
+}
 TEST_CASE(testFsOutput)
 {
-    #if CODA_OSS_cpp17 && __has_include(<filesystem>)  // __has_include is C++17
-    {
-        namespace fs = std::filesystem;
-        const fs::path path("/path/to/file.txt");
-        const std::string expected = "\"" + path.string() + "\"";
-
-        std::stringstream ss;
-        ss << path;
-        const auto actual = ss.str();
-        TEST_ASSERT_EQ(expected, actual);
-    }
+    testFsOutput_<sys::Filesystem::path>(testName);
+    testFsOutput_<coda_oss::filesystem::path>(testName);
+    #if CODA_OSS_lib_filesystem
+    testFsOutput_<std::filesystem::path>(testName);
     #endif
+}
 
+static std::string f(bool& supported, std::vector<std::string>& frames)
+{
+    return sys::getBacktrace(supported, frames);
+}
+static std::string g(bool& supported, std::vector<std::string>& frames)
+{
+    return f(supported, frames);
+}
+static std::string h(bool& supported, std::vector<std::string>& frames)
+{
+    return g(supported, frames);
+}
+TEST_CASE(testBacktrace)
+{
+    bool supported;
+    std::vector<std::string> frames;
+    const auto result = h(supported, frames);
+    TEST_ASSERT_TRUE(!result.empty());
+
+    size_t frames_size = 0;
+    auto version_sys_backtrace_ = version::sys::backtrace; // "Conditional expression is constant"
+    if (version_sys_backtrace_ >= 20210216L)
     {
-        namespace fs = sys::Filesystem;
-        const fs::path path("/path/to/file.txt");
-        const std::string expected = "\"" + path.string() + "\"";
+        TEST_ASSERT_TRUE(supported);
 
-        std::stringstream ss;
-        ss << path;
-        const auto actual = ss.str();
-        TEST_ASSERT_EQ(expected, actual);
+        #if _WIN32
+        constexpr auto frames_size_RELEASE = 2;
+        constexpr auto frames_size_DEBUG = 13;
+        #elif defined(__GNUC__)
+        constexpr auto frames_size_RELEASE = 5;
+        constexpr auto frames_size_DEBUG = 9;
+        #else
+        #error "CODA_OSS_sys_Backtrace inconsistency."
+        #endif
+        frames_size = sys::debug_build ? frames_size_DEBUG : frames_size_RELEASE;
+    }
+    else
+    {
+        TEST_ASSERT_FALSE(supported);
+    }
+    TEST_ASSERT_EQ(frames.size(), frames_size);
+
+    const auto msg = std::accumulate(frames.begin(), frames.end(), std::string());
+    if (supported)
+    {
+        TEST_ASSERT_EQ(result, msg);
+    }
+    else
+    {
+        TEST_ASSERT_TRUE(msg.empty());
     }
 }
 
@@ -225,6 +286,7 @@ int main(int, char**)
     TEST_CHECK(testEnvVariables);
     TEST_CHECK(testFsExtension);
     TEST_CHECK(testFsOutput);
+    TEST_CHECK(testBacktrace);
     return 0;
 }
 
