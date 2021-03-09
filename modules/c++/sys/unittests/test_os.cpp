@@ -242,6 +242,9 @@ TEST_CASE(testBacktrace)
     std::vector<std::string> frames;
     const auto result = h(supported, frames);
     TEST_ASSERT_TRUE(!result.empty());
+    const auto failed_pos = result.find(" failed.");
+    TEST_ASSERT_EQ(failed_pos, std::string::npos);
+
 
     size_t frames_size = 0;
     auto version_sys_backtrace_ = version::sys::backtrace; // "Conditional expression is constant"
@@ -251,10 +254,10 @@ TEST_CASE(testBacktrace)
 
         #if _WIN32
         constexpr auto frames_size_RELEASE = 2;
-        constexpr auto frames_size_DEBUG = 13;
+        constexpr auto frames_size_DEBUG = 14;
         #elif defined(__GNUC__)
-        constexpr auto frames_size_RELEASE = 5;
-        constexpr auto frames_size_DEBUG = 9;
+        constexpr auto frames_size_RELEASE = 6;
+        constexpr auto frames_size_DEBUG = 10;
         #else
         #error "CODA_OSS_sys_Backtrace inconsistency."
         #endif
