@@ -1,7 +1,6 @@
-name: Build, unittest
+name: build_unittest
 
 on: [push]
-
 
 jobs:
   build-windows:
@@ -16,17 +15,21 @@ jobs:
         python-version: '3.7'
     - name: configure
       run: |
-        mkdir build
-        cd build
-        cmake -DCMAKE_INSTALL_PREFIX=installWindows-Github -DPYTHON_VERSION="3.7" ..
-    - name: make
+        ls env:
+        mkdir target
+        cd target
+        cmake .. -DCMAKE_INSTALL_PREFIX=installWindows-Github -DPYTHON_VERSION="3.7"
+    - name: build
       run: |
-        cd build
+        cd target
         cmake --build . --config Release -j
+    - name: install
+      run: |
+        cd target
         cmake --build . --config Release --target install
     - name: test
       run: |
-        cd build
+        cd target
         ctest -C Release
 
 
@@ -42,15 +45,20 @@ jobs:
         python-version: '3.7'
     - name: configure
       run: |
-        mkdir build
-        cd build
-        cmake -DCMAKE_INSTALL_PREFIX=installLinux-Github -DPYTHON_VERSION=3.7 ..
-    - name: make
+        env
+        which python
+        mkdir target
+        cd target
+        cmake .. -DCMAKE_INSTALL_PREFIX=installLinux-Github -DPYTHON_VERSION=3.7
+    - name: build
       run: |
-        cd build
+        cd target
         cmake --build . -j
+    - name: install
+      run: |
+        cd target
         cmake --build . --target install
     - name: test
       run: |
-        cd build
+        cd target
         ctest
