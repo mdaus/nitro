@@ -20,14 +20,16 @@
  *
  */
 
+#ifndef __NITF_DECOMPRESSION_INTERFACE_HPP__
+#define __NITF_DECOMPRESSION_INTERFACE_HPP__
 #pragma once
 
+#include <nitf/coda-oss.hpp>
 #include <nitf/ImageSubheader.hpp>
 #include <nitf/IOInterface.hpp>
 #include <nitf/BlockingInfo.hpp>
 #include <nitf/ImageIO.h>
 
-#include "cstddef.h"
 
 /*!
  *  This is a macro for quickly exposing hooks to a c++ layer 
@@ -99,11 +101,14 @@ public:
                                   uint64_t* blockMask, 
                                   nitf_Error* error);
 
-    static std::byte* adapterReadBlock(nitf_DecompressionControl* object,
+    static uint8_t* adapterReadBlock(nitf_DecompressionControl* object,
                                         uint32_t blockNumber, 
                                         uint64_t* blockSize, 
                                         nitf_Error* error);
 
+    static NITF_BOOL adapterFreeBlock(nitf_DecompressionControl* object,
+                                      uint8_t* block, 
+                                      nitf_Error* error);
     static NITF_BOOL adapterFreeBlock(nitf_DecompressionControl* object,
                                       std::byte* block, 
                                       nitf_Error* error);
@@ -127,11 +132,16 @@ struct Decompressor
                        nitf::BlockingInfo& blockingDefinition,
                        uint64_t* blockMask) = 0;
 
-    virtual std::byte* readBlock(uint32_t blockNumber,
+    virtual uint8_t* readBlock(uint32_t blockNumber,
                                   uint64_t* blockSize) = 0;
 
-    virtual void freeBlock(std::byte* block) = 0;
+    virtual void freeBlock(uint8_t* block) = 0;
+    virtual void freeBlock(std::byte* block)
+    {
+        freeBlock(reinterpret_cast<uint8_t*>(block));
+    }
 };
 
 }
 
+#endif

@@ -20,22 +20,22 @@
  *
  */
 
+#ifndef __NITF_FIELD_HPP__
+#define __NITF_FIELD_HPP__
 #pragma once
 
 #include <string>
 #include <limits>
 
-#include <import/str.h>
-
 #include <nitf/Field.h>
+
+#include <nitf/coda-oss.hpp>
 #include <nitf/System.hpp>
 #include <nitf/HashTable.hpp>
 #include <nitf/List.hpp>
 #include <nitf/DateTime.hpp>
 #include <nitf/Object.hpp>
 #include <nitf/NITFException.hpp>
-
-#include "gsl/gsl.h"
 
 /*!
  *  \file Field.hpp
@@ -353,17 +353,16 @@ public:
     //! Returns the field as a string
     operator std::string() const
     {
-        return toString();
+        return std::string(getNativeOrThrow()->raw,
+            getNativeOrThrow()->length);
     }
-
     std::string toString() const
     {
-        return std::string(getNativeOrThrow()->raw,
-                           getNativeOrThrow()->length );
+        return *this;
     }
     std::string toTrimString() const
     {
-        auto retval = toString();
+        std::string retval = *this; // implicitly converted to std::string
         str::trim(retval);
         return retval;
     }
@@ -393,4 +392,4 @@ private:
 };
 
 }
-
+#endif

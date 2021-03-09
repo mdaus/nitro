@@ -108,13 +108,11 @@
       <WarningLevel>EnableAllWarnings</WarningLevel>
       <AdditionalIncludeDirectories>$(MSBuildThisFileDirectory)include;%(AdditionalIncludeDirectories);$(SolutionDir)modules\c\nrt\include\;$(SolutionDir)modules\c\nitf\include\;$(SolutionDir)modules\c\jpeg\include\;$(SolutionDir)modules\c\j2k\include\;$(SolutionDir)modules\c\cgm\include;$(SolutionDir)modules\c\;$(SolutionDir)modules\c++\;$(SolutionDir)modules\c++\nitf\include\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <TreatWarningAsError>true</TreatWarningAsError>
       <SDLCheck>true</SDLCheck>
       <ControlFlowGuard>Guard</ControlFlowGuard>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -137,7 +135,6 @@
       <ControlFlowGuard>Guard</ControlFlowGuard>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
-      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

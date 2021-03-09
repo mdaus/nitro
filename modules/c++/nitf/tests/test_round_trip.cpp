@@ -20,12 +20,12 @@
  *
  */
 
-#include <mem/SharedPtr.h>
-#include <import/nitf.hpp>
 #include <iostream>
 #include <string>
 #include <vector>
 #include <memory>
+
+#include <import/nitf.hpp>
 
 /*
  * This test tests the round-trip process of taking an input NITF
@@ -93,7 +93,7 @@ int main(int argc, char **argv)
         }
 
         // Check that wew have a valid NITF
-        if (nitf::Reader::getNITFVersion(argv[1]) == NITF_VER_UNKNOWN)
+        if (nitf::Reader::getNITFVersion(argv[1]) == nitf::Version::NITF_VER_UNKNOWN)
         {
             std::cout << "Invalid NITF: " << argv[1] << std::endl;
             exit( EXIT_FAILURE);
@@ -167,9 +167,9 @@ int main(int argc, char **argv)
         io.close();
         return 0;
     }
-    catch (except::Throwable & t)
+    catch (const std::exception& ex)
     {
-        std::cerr << "ERROR!: " << t.toString() << std::endl;
+        std::cerr << "ERROR!: " << ex.what() << "\n";
         return 1;
     }
 }

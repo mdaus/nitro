@@ -1,3 +1,23 @@
+/* =========================================================================
+ * This file is part of sys-c++
+ * =========================================================================
+ *
+ * (C) Copyright 2020, Maxar Technologies, Inc.
+ *
+ * sys-c++ is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not, http://www.gnu.org/licenses/.
+ *
+ */
 #ifndef CODA_OSS_sys_Filesystem_h_INCLUDED_
 #define CODA_OSS_sys_Filesystem_h_INCLUDED_
 #pragma once
@@ -19,6 +39,13 @@ namespace sys
 // http://en.cppreference.com/w/cpp/filesystem
 namespace Filesystem
 {
+  struct path; // forward
+  namespace details
+  {
+    extern bool Equals(const path& lhs, const path& rhs) noexcept;
+    extern std::ostream& Ostream(std::ostream& os, const path& p);
+  }
+
 // http://en.cppreference.com/w/cpp/filesystem/path
 struct path // N.B. this is an INCOMPLETE implementation!
 {
@@ -53,9 +80,18 @@ struct path // N.B. this is an INCOMPLETE implementation!
     bool is_absolute() const;  // http://en.cppreference.com/w/cpp/filesystem/path/is_absrel
     bool is_relative() const;  // http://en.cppreference.com/w/cpp/filesystem/path/is_absrel
 
-    friend bool operator==(const path& lhs, const path& rhs) noexcept;  // https://en.cppreference.com/w/cpp/filesystem/path/operator_cmp
-    friend bool operator!=(const path& lhs, const path& rhs) noexcept;  // https://en.cppreference.com/w/cpp/filesystem/path/operator_cmp
-    friend std::ostream& operator<<(std::ostream&, const path&); // https://en.cppreference.com/w/cpp/filesystem/path/operator_ltltgtgt
+    friend bool operator==(const path& lhs, const path& rhs) noexcept  // https://en.cppreference.com/w/cpp/filesystem/path/operator_cmp
+    {
+      return details::Equals(lhs, rhs);
+    }
+    friend bool operator!=(const path& lhs, const path& rhs) noexcept  // https://en.cppreference.com/w/cpp/filesystem/path/operator_cmp
+    {
+      return !(lhs == rhs);
+    }
+    friend std::ostream& operator<<(std::ostream& os, const path& p) // https://en.cppreference.com/w/cpp/filesystem/path/operator_ltltgtgt
+    {
+      return details::Ostream(os, p);
+    }
 
 private:
     string_type p_;
@@ -76,30 +112,22 @@ bool exists(const path& p);  // https://en.cppreference.com/w/cpp/filesystem/exi
 }
 
 #ifndef CODA_OSS_DEFINE_std_filesystem_
-#if CODA_OSS_cplusplus >= 201703L  // C++17
-
-#if defined(__GNUC__) && (__GNUC__ < 9)
-// https://www.gnu.org/software/gcc/gcc-9/changes.html
-#define CODA_OSS_DEFINE_std_filesystem_ 1  // <filesystem> not fully supported until G++ 9.0
-#else
-#define CODA_OSS_DEFINE_std_filesystem_ 0  // fully supported C++17 <filesystem>, don't need our own
-#endif  // __GNUC__
-
-#else
-
-#define CODA_OSS_DEFINE_std_filesystem_ 1  // pre-C++17
-
-#endif  // CODA_OSS_cplusplus
+    // Some versions of G++ say they're C++17 but don't have <filesystem>
+    #if CODA_OSS_cpp17 && __has_include(<filesystem>)  // __has_include is C++17
+        #define CODA_OSS_DEFINE_std_filesystem_ -1  // OK to #include <>, below
+    #else
+        #define CODA_OSS_DEFINE_std_filesystem_ CODA_OSS_AUGMENT_std_namespace  // maybe use our own
+    #endif
 #endif  // CODA_OSS_DEFINE_std_filesystem_
 
-#if CODA_OSS_DEFINE_std_filesystem_
-// This is ever-so-slightly uncouth: we're not supposed to augment "std".
-namespace std
-{
-namespace filesystem = ::sys::Filesystem;
-}
-#else
-#include <filesystem>
-#endif
+
+#if CODA_OSS_DEFINE_std_filesystem_ == 1
+    namespace std // This is slightly uncouth: we're not supposed to augment "std".
+    {
+        namespace filesystem = ::sys::Filesystem;
+    }
+#elif CODA_OSS_DEFINE_std_filesystem_ == -1 // set above
+    #include <filesystem>
+#endif // CODA_OSS_DEFINE_std_filesystem_
 
 #endif  // CODA_OSS_sys_Filesystem_h_INCLUDED_
