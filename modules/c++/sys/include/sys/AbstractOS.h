@@ -20,8 +20,9 @@
  *
  */
 
-#ifndef __SYS_ABSTRACT_OS_H__
-#define __SYS_ABSTRACT_OS_H__
+#ifndef CODA_OSS_sys_AbstractOS_h_INCLUDED_
+#define CODA_OSS_sys_AbstractOS_h_INCLUDED_
+#pragma once
 
 #include <vector>
 #include <string>
@@ -29,6 +30,8 @@
 #include "sys/FileFinder.h"
 #include "sys/SystemException.h"
 #include "str/Tokenizer.h"
+#include "sys/Filesystem.h"
+
 
 /*!
  *  \file
@@ -199,6 +202,16 @@ public:
      */
     bool getEnvIfSet(const std::string& envVar, std::string& value) const;
 
+    // A variable like PATH is often several directories, return each one that exists.
+    bool splitEnv(const std::string& envVar, std::vector<std::string>&) const;
+    bool splitEnv(const std::string& envVar, std::vector<std::string>&, Filesystem::FileType) const;
+
+    // Modify the specified env-var as indicated.
+    // If the variable doesn't already exists and overwrite=false, false is returned.
+    // Otherwise, true: 1) variable is new (overwrite doesn't matter) or 2) overwrite = true
+    bool prependEnv(const std::string& envVar, const std::vector<std::string>&, bool overwrite);
+    bool appendEnv(const std::string& envVar, const std::vector<std::string>&, bool overwrite);
+
     /*!
      *  Set an environment variable
      */
@@ -313,5 +326,4 @@ public:
 
 }
 
-#endif
-
+#endif  // CODA_OSS_sys_AbstractOS_h_INCLUDED_

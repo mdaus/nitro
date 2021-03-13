@@ -46,6 +46,16 @@ namespace Filesystem
     extern std::ostream& Ostream(std::ostream& os, const path& p);
   }
 
+  // https://en.cppreference.com/w/cpp/filesystem/file_type
+  enum class FileType
+  {
+      None = 0,
+      NotFound = 1,
+      Regular,
+      Directory,
+      Unknown
+  };
+
 // http://en.cppreference.com/w/cpp/filesystem/path
 struct path final // N.B. this is an INCOMPLETE and NON-STANDARD implementation!
 {
