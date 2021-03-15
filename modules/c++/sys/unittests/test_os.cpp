@@ -1,7 +1,7 @@
 /* =========================================================================
  * This file is part of sys-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2016, MDA Information Systems LLC
  *
  * sys-c++ is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -32,6 +32,8 @@
 #include <sys/Backtrace.h>
 #include <sys/Dbg.h>
 #include "TestCase.h"
+
+namespace fs = coda_oss::filesystem;
 
 namespace
 {
@@ -117,11 +119,11 @@ TEST_CASE(testEnvVariables)
     const std::string testvalue2 = "TESTVALUE2";
 
     // Start by clearing the environment variable, if set.
-    os.unsetEnv(testvar);    
+    os.unsetEnv(testvar);
     TEST_ASSERT_FALSE(os.isEnvSet(testvar));
 
     // Check getEnv throws an sys::SystemException exception when trying unset var
-    
+
     TEST_SPECIFIC_EXCEPTION(os.getEnv(testvar),sys::SystemException);
 
     // Test getEnvIfSet doesn't update value and returns false on unset var.
@@ -150,7 +152,7 @@ TEST_CASE(testEnvVariables)
 
     // Finally unset the variable again.
     os.unsetEnv(testvar);
-    
+
     TEST_ASSERT_FALSE(os.isEnvSet(testvar));
 }
 
@@ -168,7 +170,7 @@ TEST_CASE(testSplitEnv)
     {
         TEST_ASSERT_TRUE(sys::Filesystem::exists(path));
     }
-    
+
     // create an environemnt variable with a known bogus path
     const auto bogusValue =  paths[0] + sys::Path::separator() + "this does not exist";
     paths.clear();
@@ -323,6 +325,15 @@ TEST_CASE(testBacktrace)
     }
 }
 
+TEST_CASE(testARGV0)
+{
+    const sys::OS os;
+    const auto result = os.getSpecialEnv("ARGV0");
+    TEST_ASSERT_FALSE(result.empty());
+    const fs::path fsresult(result);
+    TEST_ASSERT_EQ(fsresult.stem(), "test_os");
+}
+
 }
 
 int main(int, char**)
@@ -334,6 +345,7 @@ int main(int, char**)
     TEST_CHECK(testFsExtension);
     TEST_CHECK(testFsOutput);
     TEST_CHECK(testBacktrace);
+    TEST_CHECK(testARGV0);
 
     return 0;
 }

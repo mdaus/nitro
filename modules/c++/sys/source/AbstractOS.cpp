@@ -1,8 +1,9 @@
 /* =========================================================================
  * This file is part of sys-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2016, MDA Information Systems LLC
+ * (C) Copyright 2021, Maxar Technologies, Inc.
  *
  * sys-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -14,15 +15,24 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
 #include <sys/AbstractOS.h>
+
+#include <assert.h>
+
+#include <functional>
+#include <map>
+#include <stdexcept>
+
 #include <sys/Path.h>
 #include <sys/DirectoryEntry.h>
+#include <sys/Filesystem.h>
+
+namespace fs = coda_oss::filesystem;
 
 namespace sys
 {
@@ -99,14 +109,35 @@ void AbstractOS::remove(const std::string& path) const
     }
 }
 
-bool AbstractOS::getEnvIfSet(const std::string& envVar, std::string& value) const
+bool AbstractOS::getEnvIfSet(const std::string& envVar, std::string& value, bool includeSpecial) const
 {
     if (isEnvSet(envVar))
     {
         value = getEnv(envVar);
         return true;
     }
+
+    if (includeSpecial && isSpecialEnv(envVar))
+    {
+        value = getSpecialEnv(envVar);
+        return true;
+    }
+
     return false;
+}
+
+std::string s_argvPathname;
+void AbstractOS::setArgvPathname(const std::string& argvPathname)
+{
+    if (argvPathname.empty())
+    {
+        throw std::invalid_argument("argvPathname is empty");
+    }
+    s_argvPathname = argvPathname;
+}
+std::string AbstractOS::getArgvPathname(const std::string& argvPathname) const
+{
+    return argvPathname.empty() ? s_argvPathname : argvPathname;
 }
 
 std::string AbstractOS::getCurrentExecutable(
@@ -185,15 +216,15 @@ bool AbstractOS::splitEnv(const std::string& envVar, std::vector<std::string>& r
     return splitEnv_(*this, envVar, result);
 }
 
-static bool modifyEnv(AbstractOS& os, const std::string& envVar, bool overwrite,
+static void modifyEnv(AbstractOS& os, const std::string& envVar, bool overwrite,
                       const std::vector<std::string>& prepend, const std::vector<std::string>& append)
 {
     std::vector<std::string> values;
     auto splitResult = os.splitEnv(envVar, values);
-    if (splitResult && !overwrite)
+    if (!overwrite)
     {
         // envVar already exists and we can't overwrite it
-        return false;
+        return;
     }
 
     values.insert(values.begin(), prepend.begin(), prepend.end()); // prepend
@@ -209,21 +240,73 @@ static bool modifyEnv(AbstractOS& os, const std::string& envVar, bool overwrite,
             {
                 val += Path::separator();  // ':' or ';'
             }
-        }    
+        }
     }
 
     os.setEnv(envVar, val, true /*overwrite*/);
-    return true;
 }
-bool AbstractOS::prependEnv(const std::string& envVar, const std::vector<std::string>& values, bool overwrite)
+void AbstractOS::prependEnv(const std::string& envVar, const std::vector<std::string>& values, bool overwrite)
 {
     static const std::vector<std::string> empty;
-    return modifyEnv(*this, envVar, overwrite, values, empty);
+    modifyEnv(*this, envVar, overwrite, values, empty);
 }
-bool AbstractOS::appendEnv(const std::string& envVar, const std::vector<std::string>& values, bool overwrite)
+void AbstractOS::appendEnv(const std::string& envVar, const std::vector<std::string>& values, bool overwrite)
 {
     static const std::vector<std::string> empty;
-    return modifyEnv(*this, envVar, overwrite, empty, values);
+    modifyEnv(*this, envVar, overwrite, empty, values);
+}
+
+// See https://www.gnu.org/software/bash/manual/html_node/Bash-Variables.html
+// and https://wiki.bash-hackers.org/syntax/shellvars
+typedef std::string (*get_env_fp)(const AbstractOS&, const std::string&);
+// For some special variables, a separate function may be needed;
+// others can be done in-line.
+static const std::map<std::string, get_env_fp> s_get_env{
+                                                    {"0", nullptr}, {"ARGV0", nullptr},
+                                                    {"$", nullptr}, {"PID", nullptr},
+                                                    {"PWD", nullptr},
+                                                    {"USER", nullptr}, {"USERNAME", nullptr},
+                                                    {"EPOCHSECONDS", nullptr},
+                                                    {"HOSTNAME", nullptr},
+                                                    {"HOSTTYPE", nullptr}, // x86_64
+                                                    {"MACHTYPE", nullptr}, // x86_64-pc-linux-gnu
+                                                    {"OSTYPE", nullptr}, // linux-gnu
+                                                    {"SECONDS", nullptr},
+};
+bool AbstractOS::isSpecialEnv(const std::string& envVar) const
+{
+    const auto it = s_get_env.find(envVar);
+    return it != s_get_env.end();
+}
+
+std::string AbstractOS::getSpecialEnv(const std::string& envVar) const
+{
+    const auto it = s_get_env.find(envVar);
+    if (it == s_get_env.end())
+    {
+        // see sys::OSUnix::getEnv()
+        throw sys::SystemException(Ctxt("Unable to get special environment variable " + envVar));
+    }
+
+    // call the function if there is one
+    auto f = it->second;
+    if (f != nullptr)
+    {
+        return f(*this, envVar);
+    }
+
+    if ((envVar == "0") || (envVar == "ARGV0")) 
+    {
+        return getCurrentExecutable(); // $0
+    }
+
+    //if (envVar == "dirname0")
+    //{
+    //    const auto dirname = fs::path(getSpecialEnv("0")).parent_path();
+    //    return dirname.string();
+    //}
+
+    return ""; // variable was found, so no exception
 }
 
 }

@@ -325,33 +325,50 @@ static separated_path separate_path(const std::string& path)
 
 static void clean_slashes(std::string& path, bool isAbsolute)
 {
-    // get rid of a trailing /
-    if (str::endsWith(path, Path::delimiter()))
+    // Directories will consistently have a trailing '/', files won't
+    while (str::endsWith(path, Path::delimiter()))
     {
         path = path.substr(0, path.length() - 1);
     }
-    if (!isAbsolute && str::startsWith(path, Path::delimiter()))
+
+    // get rid of multiple "//"s
+    while (str::startsWith(path, Path::delimiter()))
     {
-        path = path.substr(1);
+	path = path.substr(1);
     }
-    // std::filesystem has (some?) support for UNC paths, but not this code
-    #if _WIN32
-    if (str::startsWith(path, "\\"))
+    #ifndef _WIN32 // std::filesystem has (some?) support for UNC paths, but not this code
+    if (isAbsolute)
     {
-        path = path.substr(1);
+        path = Path::delimiter() + path;
     }
     #endif
+
+    // Do this last so that we have the best chance of finding the path on disk
+    if (fs::is_directory(path))
+    {
+        if (!str::endsWith(path, Path::delimiter()))
+        {
+            path += Path::delimiter();
+        }
+    }
+    else if (fs::is_regular_file(path))
+    {
+      while (str::endsWith(path, Path::delimiter()))
+        {
+            path = path.substr(0, path.length() - 1);
+      }
+    }
 
     assert(isAbsolute ? fs::path(path).is_absolute() : fs::path(path).is_relative());
 }
 std::string Path::merge(const std::vector<std::string>& components, bool isAbsolute)
 {
-    fs::path result(isAbsolute ? "/" : "");
+    std::string retval = isAbsolute ? delimiter() : "";
     for (const auto& component : components)
     {
-        result /= component;
+        retval += component + delimiter();
     }
-    auto retval = result.string();
+
     clean_slashes(retval, isAbsolute);
     return retval;
 }
@@ -432,6 +449,21 @@ static ExtractedEnvironmentVariable extractEnvironmentVariable_percent(std::stri
 
 static ExtractedEnvironmentVariable extractEnvironmentVariable(const std::string& component)
 {
+    // http://www.kitebird.com/csh-tcsh-book/tcsh.pdf
+    /* The word or words in a history reference can be edited, or "modified", by following it with one or more modifiers,
+        each preceded by a ':':
+            h Remove a trailing pathname component, leaving the head.
+            t Remove all leading pathname components, leaving the tail.
+            r Remove a filename extension '.xxx', leaving the root name.
+            e Remove all but the extension.
+    */
+    // http://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html#Shell-Parameter-Expansion
+    /*
+    ${parameter@operator} The expansion is either a transformation of the value of parameter or information about parameter itself,
+    depending on the value of operator. Each operator is a single letter:
+    */
+
+
     ExtractedEnvironmentVariable retval;
     retval.variable = component; // assume this really isn't an env. var
 
@@ -651,11 +683,11 @@ static std::vector<std::string> expandedEnvironmentVariables_(const std::string&
     {
         separated_path unmerged_path(unmerged_path_);
         unmerged_path.absolute = components.absolute;
-	    // $PATH doesn't look absolute, but /usr/bin is
-	    if (!unmerged_path.absolute && !unmerged_path_.empty())
-	    {
-	        unmerged_path.absolute = fs::path(unmerged_path_.front()).is_absolute();
-	    }
+        // $PATH doesn't look absolute, but /usr/bin is
+        if (!unmerged_path.absolute && !unmerged_path_.empty())
+        {
+            unmerged_path.absolute = fs::path(unmerged_path_.front()).is_absolute();
+        }
         path = merge_path(unmerged_path);
         retval.push_back(std::move(path));
     }
