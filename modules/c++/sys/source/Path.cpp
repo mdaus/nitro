@@ -334,7 +334,7 @@ static void clean_slashes(std::string& path, bool isAbsolute)
     // get rid of multiple "//"s
     while (str::startsWith(path, Path::delimiter()))
     {
-	path = path.substr(1);
+    path = path.substr(1);
     }
     #ifndef _WIN32 // std::filesystem has (some?) support for UNC paths, but not this code
     if (isAbsolute)
@@ -379,8 +379,11 @@ static std::string merge_path(const separated_path& components)
 
 struct ExtractedEnvironmentVariable final
 {
+    std::string component; // copy of what was passed
+
     std::string begin; // "foo" of "foo$(BAR)baz"
     std::string variable; // "BAR" of "foo$(BAR)baz"
+    std::string op; // for ${FOO@b}, "b"; http://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html#Shell-Parameter-Expansion
     std::string end; // "baz" of "foo$(BAR)baz"
 };
 
@@ -388,7 +391,7 @@ static ExtractedEnvironmentVariable extractEnvironmentVariable_dollar(std::strin
 {
     assert(pos != std::string::npos);
     ExtractedEnvironmentVariable retval;
-    retval.variable = component;  // assume this really isn't an env. var
+    retval.component = retval.variable = component;  // assume this really isn't an env. var
 
     retval.begin = component.substr(0, pos);
     str::replace(component, retval.begin + "$", ""); // don't want to find "(" before "$"
@@ -407,6 +410,23 @@ static ExtractedEnvironmentVariable extractEnvironmentVariable_dollar(std::strin
         {
             retval.variable = component.substr(paren + 1, paren_match_pos - 1);
             retval.end = component.substr(paren_match_pos + 1);
+
+            // We're going to support a very specific format for modifiers, just: ${FOO@c}
+            // If it's anythng else, assume it's something else
+            if (paren_match == '}')  // only "${...", not "$(..."
+            {
+                const auto at_pos = retval.variable.find('@');
+                if ((at_pos != std::string::npos) && (at_pos >= 1) && (at_pos < retval.variable.length()))
+                {
+                    auto op = retval.variable.substr(at_pos + 1); // at_pos < length(), from above()
+                    if (op.length() == 1)  // only single-characters
+                    {
+                        retval.variable = retval.variable.substr(0, at_pos);
+                        retval.op = std::move(op);
+                    }
+                }
+            }
+
             return retval;
         }
     }
@@ -484,6 +504,32 @@ static ExtractedEnvironmentVariable extractEnvironmentVariable(const std::string
     return retval;
 }
 
+static std::string apply_edits(const std::string& path, const std::string& op)
+{
+    // http://www.kitebird.com/csh-tcsh-book/tcsh.pdf
+    /* The word or words in a history reference can be edited, or "modified", by following it with one or more modifiers,
+        each preceded by a ':':
+            h Remove a trailing pathname component, leaving the head.
+            t Remove all leading pathname components, leaving the tail.
+            r Remove a filename extension '.xxx', leaving the root name.
+            e Remove all but the extension.
+    */
+    if (op.length() == 1)
+    {
+        const fs::path fspath(path);
+        switch (op[0])
+        {
+        case 'h': return fspath.parent_path().string();
+        case 't': return fspath.filename().string();
+        case 'r': return fspath.stem().string();
+        case 'e': return fspath.extension().string();
+        default: break;
+        }
+    }
+
+    return path;
+}
+
 static path_components expandEnvironmentVariable(const std::string& component)
 {
     const auto extractedEnvVar = extractEnvironmentVariable(component);
@@ -499,7 +545,7 @@ static path_components expandEnvironmentVariable(const std::string& component)
     // of a longer path: /foo/$BAR/baz/file.txt
     static const sys::OS os;
     std::string value;
-    if (!os.getEnvIfSet(extractedEnvVar.variable, value))
+    if (!os.getEnvIfSet(extractedEnvVar.variable, value, true /*includeSpecial*/))
     {
         // No value for the purported "environment variable," assume it's just a
         // path with some funky characters: $({})
@@ -515,8 +561,10 @@ static path_components expandEnvironmentVariable(const std::string& component)
     const auto endExpandedEnvVar = expandEnvironmentVariable(extractedEnvVar.end); // note: recursion
 
     path_components updated_paths;
-    for (const auto& path : paths)
+    for (const auto& path_ : paths)
     {
+        const auto path = apply_edits(path_, extractedEnvVar.op);
+
         for (const auto& endVar : endExpandedEnvVar)
         {
             auto p = extractedEnvVar.begin + path + endVar;

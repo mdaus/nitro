@@ -25,12 +25,14 @@
 #include <fstream>
 #include <sstream>
 #include <numeric> // std::accumulate
+#include <string>
 
 #include <sys/OS.h>
 #include <sys/Path.h>
 #include <sys/Filesystem.h>
 #include <sys/Backtrace.h>
 #include <sys/Dbg.h>
+#include <sys/DateTime.h>
 #include "TestCase.h"
 
 namespace fs = coda_oss::filesystem;
@@ -325,19 +327,61 @@ TEST_CASE(testBacktrace)
     }
 }
 
-TEST_CASE(testARGV0)
+TEST_CASE(testSpecialEnvVars)
 {
     const sys::OS os;
-    const auto result = os.getSpecialEnv("ARGV0");
+    const auto argv0 = os.getSpecialEnv("ARGV0");
+    TEST_ASSERT_FALSE(argv0.empty());
+    auto result = os.getSpecialEnv("0"); // i.e., ${0)
     TEST_ASSERT_FALSE(result.empty());
+    TEST_ASSERT_EQ(result, argv0);
     const fs::path fsresult(result);
-    TEST_ASSERT_EQ(fsresult.stem(), "test_os");
+    const fs::path this_file(__FILE__);
+    TEST_ASSERT_EQ(fsresult.stem(), this_file.stem());
+
+    const auto pid = os.getSpecialEnv("PID");
+    TEST_ASSERT_FALSE(pid.empty());
+    result = os.getSpecialEnv("$"); // i.e., ${$}
+    TEST_ASSERT_FALSE(result.empty());
+    TEST_ASSERT_EQ(result, pid);
+    const auto strPid = std::to_string(os.getProcessId());
+    TEST_ASSERT_EQ(result, strPid);
+
+    result = os.getSpecialEnv("PWD");
+    TEST_ASSERT_FALSE(result.empty());
+
+    result = os.getSpecialEnv("USER");
+    TEST_ASSERT_FALSE(result.empty());
+    const auto username = os.getSpecialEnv("USERNAME");
+    TEST_ASSERT_FALSE(result.empty());
+    TEST_ASSERT_EQ(username, result);
+
+    result = os.getSpecialEnv("HOSTNAME");
+    TEST_ASSERT_FALSE(result.empty());
+
+    result = os.getSpecialEnv("SECONDS");
+    TEST_ASSERT_FALSE(result.empty());
+    const auto seconds = std::stoll(result);
+    TEST_ASSERT_GREATER_EQ(seconds, 0);
+
+    const auto epochSeconds = sys::DateTime::getEpochSeconds();
+    result = os.getSpecialEnv("EPOCHSECONDS");
+    TEST_ASSERT_FALSE(result.empty());
+    const auto resultEpochSeconds = std::stoll(result);
+    TEST_ASSERT_GREATER_EQ(resultEpochSeconds, epochSeconds);
+
+    result = os.getSpecialEnv("Configuration");
+    TEST_ASSERT_FALSE(result.empty());
+    result = os.getSpecialEnv("Platform");
+    TEST_ASSERT_FALSE(result.empty());
 }
 
 }
 
-int main(int, char**)
+int main(int, char** argv)
 {
+    sys::AbstractOS::setArgvPathname(argv[0]);
+
     TEST_CHECK(testRecursiveRemove);
     TEST_CHECK(testForcefulMove);
     TEST_CHECK(testEnvVariables);
@@ -345,7 +389,7 @@ int main(int, char**)
     TEST_CHECK(testFsExtension);
     TEST_CHECK(testFsOutput);
     TEST_CHECK(testBacktrace);
-    TEST_CHECK(testARGV0);
+    TEST_CHECK(testSpecialEnvVars);
 
     return 0;
 }
