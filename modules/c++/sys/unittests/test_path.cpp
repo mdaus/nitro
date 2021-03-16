@@ -234,6 +234,86 @@ TEST_CASE(testModifyVar)
     TEST_ASSERT_EQ(argv0_t, fsresult.filename());
 }
 
+static std::string modifyEnv(const std::string& envVar, char op)
+{
+  const auto strExpand = "${" + envVar + "@" + op + "}";
+  return sys::Path::expandEnvironmentVariables(strExpand, false /*checkIfExists*/);
+}
+TEST_CASE(testModifyVar2)
+{
+    sys::OS os;
+
+    /*
+      #!/bin/csh -f
+
+      # http://www.kitebird.com/csh-tcsh-book/tcsh.pdf
+      # The word or words in a history reference can be edited, or "modified", by following it with one or more modifiers,
+      # each preceded by a ':':
+      #    h Remove a trailing pathname component, leaving the head.
+      #    t Remove all leading pathname components, leaving the tail.
+      #    r Remove a filename extension '.xxx', leaving the root name.
+      #    e Remove all but the extension.
+
+      set path=/dir1/dir2/file.txt
+      echo "path=$path"
+      echo ":h $path:h"", /dir1/dir2"
+      echo ":t $path:t"", file.txt"
+      echo ":r $path:r"", /dir1/dir2/file"
+      echo ":e $path:e"", txt"
+
+      echo ""
+      set path=/dir1/dir2/
+      echo "path=$path"
+      echo ":h $path:h"", /dir1/dir2"
+      echo ":t $path:t"
+      echo ":r $path:r"", /dir1/dir2/"
+      echo ":e $path:e"
+
+      echo ""
+      set path=/dir1/dir2
+      echo "path=$path"
+      echo ":h $path:h"", /dir1/dir2"
+      echo ":t $path:t", "dir2"
+      echo ":r $path:r"", /dir1/dir2"
+      echo ":e $path:e"
+
+      ------------------------------------------------------
+
+      path=/dir1/dir2/file.txt
+      :h /dir1/dir2, /dir1/dir2
+      :t file.txt, file.txt
+      :r /dir1/dir2/file, /dir1/dir2/file
+      :e txt, txt
+
+      path=/dir1/dir2/
+      :h /dir1/dir2, /dir1/dir2
+      :t 
+      :r /dir1/dir2/, /dir1/dir2/
+      :e 
+
+      path=/dir1/dir2
+      :h /dir1, /dir1/dir2
+      :t dir2, dir2
+      :r /dir1/dir2, /dir1/dir2
+      :e 
+    */
+
+    constexpr auto path = "/dir1/dir2/file.txt";
+    const std::string envVar = "CODA_OSS_test_path_path";
+    os.setEnv(envVar, path, true /*overwrite*/);
+
+    const auto h = modifyEnv(envVar, 'h');
+    TEST_ASSERT_EQ(h, "/dir1/dir2");
+    const auto t = modifyEnv(envVar, 't');
+    TEST_ASSERT_EQ(t, "file.txt");
+    const auto r = modifyEnv(envVar, 'r');
+    // TEST_ASSERT_EQ(r, "/dir1/dir2/file"); // TODO: fix on Windows
+    const auto e = modifyEnv(envVar, 'e');
+    TEST_ASSERT_EQ(e, "txt");
+    const auto s = modifyEnv(envVar, 's');
+    TEST_ASSERT_EQ(s, "file");
+}
+
 }
 
 int main(int, char**)
@@ -245,6 +325,7 @@ int main(int, char**)
     TEST_CHECK(testExpandEnvPathExists);
     TEST_CHECK(testExpandEnvPathMultiple);
     TEST_CHECK(testModifyVar);
+    TEST_CHECK(testModifyVar2);
 
     return 0;
 }

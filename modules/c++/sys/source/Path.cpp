@@ -509,21 +509,63 @@ static std::string apply_edits(const std::string& path, const std::string& op)
     // http://www.kitebird.com/csh-tcsh-book/tcsh.pdf
     /* The word or words in a history reference can be edited, or "modified", by following it with one or more modifiers,
         each preceded by a ':':
-            h Remove a trailing pathname component, leaving the head.
-            t Remove all leading pathname components, leaving the tail.
-            r Remove a filename extension '.xxx', leaving the root name.
-            e Remove all but the extension.
     */
     if (op.length() == 1)
     {
         const fs::path fspath(path);
         switch (op[0])
         {
-        case 'h': return fspath.parent_path().string();
-        case 't': return fspath.filename().string();
-        case 'r': return fspath.stem().string();
-        case 'e': return fspath.extension().string();
-        default: break;
+	   // h Remove a trailing pathname component, leaving the head.
+           case 'h': return fspath.parent_path().string();
+
+	   // t Remove all leading pathname components, leaving the tail.
+           case 't': return fspath.filename().string();
+
+	   // r Remove a filename extension '.xxx', leaving the root name.
+           case 'r': return fspath.root_path().string();
+
+
+	   // e Remove all but the extension.
+          case 'e':
+	  {
+	      // CSH "e" doesn't include the "."
+	      auto ext = fspath.extension().string();
+	      const auto dot_pos = ext.find(".");
+	      if (dot_pos == 0)
+	      {
+	          ext = ext.substr(1);
+	      }    	    
+	      return ext;
+	  }
+
+
+	  // We're already "off the reservation" by combining BASH and CSH syntax/functionality,
+	  // so ... provide access to other std::file_system::path routines too.
+	  // https://en.cppreference.com/w/cpp/filesystem/path
+
+	  // root_name()
+	  case 'n' : break; // return fspath.root_name().string();
+
+	  // root_directory()
+	  case 'd' : break; // return fspath.root_directory().string();
+
+	  // root_path(), 'r' above
+
+	  // relative_path()
+	  case 'p' : break; // return fspath.relative_path().string();
+
+	  // parent_path(), 'h' above
+
+	  // Force use of CSH names rather than providing and alisas: 'f' filename()
+	  // filename(), 't' above
+	  case 'f' : break; // return fspath.filename().string();
+
+	  // stem()
+	  case 's' : return fspath.stem().string();
+
+	  // extension(), 'e' above
+
+          default: break;
         }
     }
 

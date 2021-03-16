@@ -67,9 +67,6 @@ struct path final // N.B. this is an INCOMPLETE and NON-STANDARD implementation!
     #endif
     using string_type = std::basic_string<value_type>;
 
-    private:
-
-    public:
     // http://en.cppreference.com/w/cpp/filesystem/path/path
     path() noexcept;
     path(const path&);
@@ -95,6 +92,7 @@ struct path final // N.B. this is an INCOMPLETE and NON-STANDARD implementation!
 
     std::string string() const;  // http://en.cppreference.com/w/cpp/filesystem/path/string
 
+    path root_path() const; // https://en.cppreference.com/w/cpp/filesystem/path/root_path
     path parent_path() const;  // http://en.cppreference.com/w/cpp/filesystem/path/parent_path
     path filename() const;  // http://en.cppreference.com/w/cpp/filesystem/path/filename
     path stem() const;  // http://en.cppreference.com/w/cpp/filesystem/path/stem
