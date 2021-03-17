@@ -54,7 +54,7 @@ public:
     virtual void nextRow(uint32_t /*band*/, void* buffer)
     {
         int padded;
-        mReader.read(mWindow, reinterpret_cast<nitf::byte**>(&buffer), &padded);
+        mReader.read(mWindow, reinterpret_cast<std::byte**>(&buffer), &padded);
         mWindow.setStartRow(mWindow.getStartRow() + 1);
     }
 
@@ -65,7 +65,7 @@ private:
 };
 
 // RAII for managing a list of RowStreamer's
-struct RowStreamers final
+struct RowStreamers /*final*/   // no "final", SWIG doesn't like it
 {
     nitf::RowSourceCallback* add(uint32_t band,
                                  uint32_t numCols,
