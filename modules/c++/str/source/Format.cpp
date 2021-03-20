@@ -25,7 +25,7 @@
 #include <stdio.h>
 
 
-static std::string vformat(const char* format, const va_list& args)
+static std::string vformat(const char* format, va_list& args)
 {
     char buffer[1024];
 #if !_WIN32

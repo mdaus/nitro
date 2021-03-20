@@ -74,6 +74,7 @@ protected:
     //! @brief Given seconds since the epoch, provides the time
     virtual void getTime(time_t numSecondsSinceEpoch, tm& t) const = 0;
 
+public: // for unit-testing
     static void localtime(time_t numSecondsSinceEpoch, tm& t);
     static void gmtime(time_t numSecondsSinceEpoch, tm& t);
 
