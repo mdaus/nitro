@@ -100,7 +100,7 @@ public:
     //! Return the current year
     int getYear() const { return mYear; }
     //! Return the number of seconds since the time epoch
-    static int64_t getEpochSeconds();
+    static int64_t getEpochSeconds() noexcept;
 
     // ! Given the {1,12} month return the alphabetic equivalent
     static std::string monthToString(int month);
