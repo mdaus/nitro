@@ -43,10 +43,11 @@ static_assert(CODA_OSS_sys_Endian >= 201907L, "missing sys::Endian");
         using endian = ::sys::Endian;
     }
     #define CODA_OSS_lib_endian CODA_OSS_sys_Endian
-    #define __cpp_lib_endian CODA_OSS_lib_endian // https://en.cppreference.com/w/cpp/utility/feature_test
 #elif CODA_OSS_DEFINE_std_endian_ == -1  // set above
     #include <bit>
-    #define CODA_OSS_lib_endian CODA_OSS_sys_Endian
+    #ifndef __cpp_lib_endian
+        #define __cpp_lib_endian 201907L  // https://en.cppreference.com/w/cpp/utility/feature_test
+    #endif
 #endif  // CODA_OSS_DEFINE_std_endian_
 
 #endif  // CODA_OSS_std_bit_INCLUDED_

@@ -43,10 +43,11 @@ static_assert(CODA_OSS_sys_Byte >= 201603L, "missing sys::Byte");
         using byte = sys::Byte;
     }
     #define CODA_OSS_lib_byte CODA_OSS_sys_Byte
-    #define __cpp_lib_byte CODA_OSS_lib_byte // https://en.cppreference.com/w/cpp/utility/feature_test
 #elif CODA_OSS_DEFINE_std_byte_ == -1  // set above
     #include <cstddef>
-    #define CODA_OSS_lib_byte CODA_OSS_sys_Byte
+    #ifndef __cpp_lib_byte
+        #define __cpp_lib_byte 201603L  // https://en.cppreference.com/w/cpp/utility/feature_test
+    #endif
 #endif  // CODA_OSS_DEFINE_std_byte_
 
 #endif  // CODA_OSS_std_cstddef_INCLUDED_
