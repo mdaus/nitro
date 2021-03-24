@@ -53,10 +53,11 @@ static_assert(CODA_OSS_sys_Char8_T >= 201907L, "missing sys::Char8_T");
         using u8string = ::str::U8string;
     }
     #define CODA_OSS_char8_t CODA_OSS_sys_Char8_T
-    #define __cpp_lib_char8_t CODA_OSS_char8_t // https://en.cppreference.com/w/cpp/utility/feature_test
 #elif CODA_OSS_DEFINE_std_u8string_ == -1  // set above
     #include <string>
-    #define CODA_OSS_char8_t CODA_OSS_sys_Char8_T
+    #ifndef __cpp_lib_char8_t
+        #define __cpp_lib_char8_t 201907L  // https://en.cppreference.com/w/cpp/utility/feature_test
+    #endif
 #endif  // CODA_OSS_DEFINE_std_u8string_
 
 #endif  // CODA_OSS_std_string_INCLUDED_
