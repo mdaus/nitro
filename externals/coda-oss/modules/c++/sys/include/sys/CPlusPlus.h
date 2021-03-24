@@ -50,8 +50,8 @@
 #define CODA_OSS_cpp23 0
 
 // static_assert() is C++11
-#if !defined(CODA_OSS_cpp11) || (CODA_OSS_cpp11 <= 0)
-#error "Must compile with C++11 or greater."
+#if !defined(CODA_OSS_cpp17) || (CODA_OSS_cpp17 <= 0)
+#error "Must compile with C++17 or greater."
 #endif
 
 // We've got various "replacements" (to a degree) for C++ library functionality
