@@ -51,10 +51,11 @@ static_assert(CODA_OSS_sys_Filesystem >= 201703L, "missing sys::Filesystem");
         namespace filesystem = ::sys::Filesystem;
     }
     #define CODA_OSS_lib_filesystem CODA_OSS_sys_Filesystem
-    #define __cpp_lib_filesystem CODA_OSS_lib_filesystem // https://en.cppreference.com/w/cpp/utility/feature_test
 #elif CODA_OSS_DEFINE_std_filesystem_ == -1 // set above
     #include <filesystem>
-    #define CODA_OSS_lib_filesystem CODA_OSS_sys_Filesystem
+    #ifndef __cpp_lib_filesystem
+        #define __cpp_lib_filesystem 201703L  // https://en.cppreference.com/w/cpp/utility/feature_test
+    #endif
 #endif  // CODA_OSS_DEFINE_std_filesystem_
 
 #endif  // CODA_OSS_std_filesystem_INCLUDED_
