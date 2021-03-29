@@ -5320,8 +5320,7 @@ int nitf_ImageIO_setup_SBR(_nitf_ImageIOControl * cntl, nitf_Error * error)
                     blockIO->rwBuffer.buffer = readBuffer +
                         (cntl->rowSkip) * (nitf->numColumnsPerBlock +
                                            cntl->columnSkip) * bytes * bandIdx;
-                    blockIO->rwBuffer.offset.mark = blockIO->residual * bytes;
-                    blockIO->rwBuffer.offset.orig = blockIO->residual * bytes;
+                    blockIO->rwBuffer.offset.mark = blockIO->rwBuffer.offset.orig = ((uint64_t)blockIO->residual) * bytes;
                     blockIO->userEqBuffer = 0;
                 }
                 else
@@ -5594,8 +5593,7 @@ int nitf_ImageIO_setup_P(_nitf_ImageIOControl * cntl, nitf_Error * error)
                  * If we're only requesting e.g. bands 2..n, need to adjust
                  * the starting point so that band 2 maps to position 0.
                  */
-                blockIO->rwBuffer.offset.mark = bytes * (band - cntl->bandSubset[0]);
-                blockIO->rwBuffer.offset.orig = bytes * (band - cntl->bandSubset[0]);
+                blockIO->rwBuffer.offset.mark = blockIO->rwBuffer.offset.orig = bytes * (band - cntl->bandSubset[0]);
             }
             else
             {
@@ -5613,8 +5611,7 @@ int nitf_ImageIO_setup_P(_nitf_ImageIOControl * cntl, nitf_Error * error)
                 blockIO->unpacked.buffer = unpackedBuffer +
                     (cntl->rowSkip) * (nitf->numColumnsPerBlock +
                                        cntl->columnSkip) * bytes * band;
-                blockIO->unpacked.offset.mark = blockIO->residual * bytes;
-                blockIO->unpacked.offset.orig = blockIO->residual * bytes;
+                blockIO->unpacked.offset.mark = blockIO->unpacked.offset.orig = ((uint64_t)blockIO->residual) * bytes;
                 blockIO->unpackedNoFree = 0;
             }
             else
@@ -6994,7 +6991,7 @@ NITFPRIV(int) nitf_ImageIO_readRequestDownSample(_nitf_ImageIOControl *
                 uint32_t colsInLastWindow;
 
                 /* Partial neighborhoods happen in last block */
-                if (col == (nBlockCols - 1))
+                if ((col == (nBlockCols - 1)) && (blockIO != NULL))
                     colsInLastWindow =
                         cntl->columnSkip - blockIO->myResidual;
                 else

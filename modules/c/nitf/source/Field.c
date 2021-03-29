@@ -441,11 +441,6 @@ NITFAPI(NITF_BOOL) nitf_Field_setReal(nitf_Field * field,
                                       const char *type, NITF_BOOL plus,
                                       double value, nitf_Error *error)
 {
-    uint32_t precision;     /* Format precision */
-    uint32_t bufferLen;     /* Length of buffer */
-    char *buffer;              /* Holds intermediate and final results */
-    char fmt[64];              /* Format used */
-
     /*  Check type */
 
     if (
@@ -461,8 +456,8 @@ NITFAPI(NITF_BOOL) nitf_Field_setReal(nitf_Field * field,
     /* Allocate buffer used to build value */
 
     /* The 64 covers the puncuation and exponent and is overkill */
-    bufferLen = (uint32_t)(field->length * 2 + 64);
-    buffer = (char* )NITF_MALLOC(bufferLen + 1);
+    uint32_t bufferLen = (uint32_t)(field->length * 2 + 64); /* Length of buffer */
+    char* buffer = (char* )NITF_MALLOC(bufferLen + 1); /* Holds intermediate and final results */
     if (buffer == NULL)
     {
         nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
@@ -477,12 +472,14 @@ NITFAPI(NITF_BOOL) nitf_Field_setReal(nitf_Field * field,
       number of digits in the whole part of the number.
     */
 
-    precision = (uint32_t)field->length;   /* Must be too big */
+    uint32_t precision = (uint32_t)field->length;   /* Must be too big */
+    char fmt[64];              /* Format used */
     if (plus)
         NITF_SNPRINTF(fmt, 64, "%%+-1.%dl%s", precision, type);
     else
         NITF_SNPRINTF(fmt, 64, "%%-1.%dl%s", precision, type);
-    NITF_SNPRINTF(buffer, bufferLen + 1, fmt, value);
+    size_t bufferLen_ = ((size_t)bufferLen) + 1;
+    NITF_SNPRINTF(buffer, bufferLen_, fmt, value);
 
     bufferLen = nrt_strlen32(buffer);
 
@@ -504,7 +501,8 @@ NITFAPI(NITF_BOOL) nitf_Field_setReal(nitf_Field * field,
             NITF_SNPRINTF(fmt, 64, "%%+-1.%dl%s", precision, type);
         else
             NITF_SNPRINTF(fmt, 64, "%%-1.%dl%s", precision, type);
-        NITF_SNPRINTF(buffer, bufferLen + 1, fmt, value);
+        bufferLen_ = ((size_t)bufferLen) + 1;
+        NITF_SNPRINTF(buffer, bufferLen_, fmt, value);
     }
 
     if (!nitf_Field_setRawData(field, buffer, field->length, error))
