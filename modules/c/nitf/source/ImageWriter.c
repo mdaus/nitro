@@ -64,7 +64,6 @@ NITFPRIV(NITF_BOOL) ImageWriter_write(NITF_DATA * data,
     uint8_t **user = NULL;
     uint8_t *userContig = NULL;
     uint32_t row, band, block;
-    size_t blockSize, numBlocks;
     nitf_BandSource *bandSrc = NULL;
     nitf_BlockingInfo* blockInfo = NULL;
     nitf_ImageIO* imageIO = NULL;
@@ -95,8 +94,8 @@ NITFPRIV(NITF_BOOL) ImageWriter_write(NITF_DATA * data,
         if (blockInfo == NULL)
             return NITF_FAILURE;
 
-        numBlocks = blockInfo->numBlocksPerRow * blockInfo->numBlocksPerCol;
-        blockSize = blockInfo->length;
+        const size_t numBlocks = ((size_t)blockInfo->numBlocksPerRow) * blockInfo->numBlocksPerCol;
+        const size_t blockSize = blockInfo->length;
 
         nitf_BlockingInfo_destruct(&blockInfo);
 

@@ -868,7 +868,8 @@ NRTPRIV(char *) _NRT_strptime(const char *buf, const char *fmt, struct tm *tm,
                 bp++;
                 while (*bp >= '0' && *bp <= '9')
                 {
-                    double num = (double) (*bp++ - '0');
+                    const char num_ = *bp++ - '0';
+                    double num = (double) (num_);
                     decimalPlaces++;
 
                     switch (decimalPlaces)
