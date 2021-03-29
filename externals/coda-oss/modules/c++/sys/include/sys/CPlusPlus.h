@@ -49,7 +49,6 @@
 #define CODA_OSS_cpp20 (CODA_OSS_cplusplus >= 202002L)
 #define CODA_OSS_cpp23 0
 
-// static_assert() is C++11
 #if !defined(CODA_OSS_cpp17) || (CODA_OSS_cpp17 <= 0)
 #error "Must compile with C++17 or greater."
 #endif
