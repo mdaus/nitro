@@ -3658,7 +3658,7 @@ NITFPROT(NITF_BOOL) nitf_ImageIO_writeRows(nitf_ImageIO * object,
     if (cntl->nextRow + numRows > nitf->numRows)
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_MEMORY,
-                         "Row write request of %ld rows at row %ld exceeds row limit %ld",
+                         "Row write request of %u rows at row %u exceeds row limit %u",
                          numRows, cntl->nextRow, nitf->numRows);
         return NITF_FAILURE;
     }
