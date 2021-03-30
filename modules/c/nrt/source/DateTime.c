@@ -270,7 +270,7 @@ static void nrt_DateTime_gmtime(struct tm* tm, const time_t* const time)
 #ifdef _WIN32
     gmtime_s(tm, time);
 #else
-    *tm = *gmtime(t);
+    *tm = *gmtime(time);
 #endif
 }
 #define gmtime(tm, time) nrt_DateTime_gmtime(tm, time)
