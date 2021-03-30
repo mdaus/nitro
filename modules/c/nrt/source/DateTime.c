@@ -265,15 +265,16 @@ NRTAPI(NRT_BOOL) nrt_DateTime_setDayOfYear(nrt_DateTime * dateTime,
     return NRT_FAILURE;
 }
 
-static void nrt_DateTime_gmtime(struct tm* tm, const time_t* const time)
+static void nrt_DateTime_gmtime_s(struct tm* result, const time_t* const time)
 {
 #ifdef _WIN32
-    gmtime_s(tm, time);
+    gmtime_s(result, time);
 #else
-    *tm = *gmtime(time);
+    // https://linux.die.net/man/3/gmtime_r
+    gmtime_r(time, result);
 #endif
 }
-#define gmtime(tm, time) nrt_DateTime_gmtime(tm, time)
+#define gmtime_s(result, time) nrt_DateTime_gmtime_s(result, time)
 
 NRTAPI(NRT_BOOL) nrt_DateTime_setTimeInMillis(nrt_DateTime * dateTime,
                                               double timeInMillis,
@@ -286,7 +287,7 @@ NRTAPI(NRT_BOOL) nrt_DateTime_setTimeInMillis(nrt_DateTime * dateTime,
     (void)error;
 
     timeInSeconds = (time_t) (timeInMillis / 1000);
-    gmtime(&t, &timeInSeconds);
+    gmtime_s(&t, &timeInSeconds);
 
     dateTime->timeInMillis = timeInMillis;
 
@@ -403,7 +404,7 @@ NRTAPI(NRT_BOOL) nrt_DateTime_formatMillis(double millis, const char *format,
     NRT_BOOL found = 0;
 
     timeInSeconds = (time_t) (millis / 1000);
-    gmtime(&t, &timeInSeconds);
+    gmtime_s(&t, &timeInSeconds);
     fractSeconds = (millis / 1000.0) - timeInSeconds;
 
     /* Search for "%...S" string */

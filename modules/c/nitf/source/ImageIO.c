@@ -5208,10 +5208,11 @@ int nitf_ImageIO_setup_SBR(_nitf_ImageIOControl * cntl, nitf_Error * error)
              * number of rows must be accumulated before
              * you can reuse the buffer.
              */
-            readBuffer = (uint8_t *) NITF_MALLOC((cntl->rowSkip) *
-                                                    (nitf->numColumnsPerBlock +
+            const size_t size = ((size_t)cntl->rowSkip) *
+                                                    (((size_t)nitf->numColumnsPerBlock) +
                                                      cntl->columnSkip) *
-                                                    ((size_t)bytes) * bandCnt);
+                                                    bytes * bandCnt;
+            readBuffer = (uint8_t *) NITF_MALLOC(size);
             if (readBuffer == NULL)
             {
                 nitf_Error_initf(error, NITF_CTXT, NITF_ERR_MEMORY,
@@ -5224,7 +5225,7 @@ int nitf_ImageIO_setup_SBR(_nitf_ImageIOControl * cntl, nitf_Error * error)
     else
     {
         writeBuffer =
-            (uint8_t *) NITF_MALLOC(nitf->numColumnsPerBlock * bytes);
+            (uint8_t *) NITF_MALLOC(nitf->numColumnsPerBlock * ((size_t)bytes));
         if (writeBuffer == NULL)
         {
             nitf_Error_initf(error, NITF_CTXT, NITF_ERR_MEMORY,
@@ -5473,10 +5474,11 @@ int nitf_ImageIO_setup_P(_nitf_ImageIOControl * cntl, nitf_Error * error)
     /* Allocate I/O and unpacked buffer */
     if (cntl->downSampling)
     {
-        unpackedBuffer = (uint8_t *) NITF_MALLOC((cntl->rowSkip) *
-                                                    (nitf->numColumnsPerBlock +
+        const size_t size = ((size_t)cntl->rowSkip) *
+                                                    (((size_t)nitf->numColumnsPerBlock) +
                                                     cntl->columnSkip) *
-                                                    bytes * (nitf->numBands));
+                                                    bytes * (nitf->numBands);
+        unpackedBuffer = (uint8_t *) NITF_MALLOC(size);
         if (unpackedBuffer == NULL)
         {
             nitf_Error_initf(error, NITF_CTXT, NITF_ERR_MEMORY,
@@ -5488,9 +5490,9 @@ int nitf_ImageIO_setup_P(_nitf_ImageIOControl * cntl, nitf_Error * error)
     else
         unpackedBuffer = NULL;
 
-
-    ioBuffer = (uint8_t *) NITF_MALLOC(nitf->numColumnsPerBlock *
-                                          nitf->numBands * ((size_t)bytes));
+    const size_t size = ((size_t)nitf->numColumnsPerBlock) *
+                                          nitf->numBands * bytes;
+    ioBuffer = (uint8_t *) NITF_MALLOC(size);
     if (ioBuffer == NULL)
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_MEMORY,
@@ -5789,11 +5791,11 @@ nitf_ImageIOControl_construct(_nitf_ImageIO * nitf,
     if (cntl->downSampling)
     {
         /* Full resolution */
-        cntl->columnSave =
-            (uint8_t *) NITF_MALLOC((cntl->numRows) * (cntl->rowSkip) *
+        const size_t size = ((size_t)cntl->numRows) * (cntl->rowSkip) *
                                        (cntl->columnSkip) *
                                        (cntl->numBandSubset) *
-                                       ((size_t)nitf->pixel.bytes));
+                                       (nitf->pixel.bytes);
+        cntl->columnSave = (uint8_t *) NITF_MALLOC(size);
         if (cntl->columnSave == NULL)
         {
             nitf_Error_initf(error, NITF_CTXT, NITF_ERR_MEMORY,
