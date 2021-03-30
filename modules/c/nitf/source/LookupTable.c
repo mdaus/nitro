@@ -129,7 +129,7 @@ NITFAPI(NITF_BOOL) nitf_LookupTable_init(nitf_LookupTable * lut,
     {
         if (!lut->table)
         {
-            lut->table = (uint8_t *) NITF_MALLOC(numTables * numEntries);
+            lut->table = (uint8_t *) NITF_MALLOC(nitf_LookupTable_size(numTables, numEntries));
             if (!lut->table)
             {
                 nitf_Error_initf(error, NITF_CTXT,
