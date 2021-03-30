@@ -6071,8 +6071,7 @@ NITFPRIV(int) nitf_ImageIO_checkSubWindow(_nitf_ImageIO * nitf,
     if (subWindow->numBands <= 0)
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_READING_FROM_FILE,
-                         "Invalid bands count %ld\n", subWindow->numBands,
-                         nitf->numBands);
+                         "Invalid bands count %u\n", subWindow->numBands);
         return NITF_FAILURE;
     }
 
@@ -6081,7 +6080,7 @@ NITFPRIV(int) nitf_ImageIO_checkSubWindow(_nitf_ImageIO * nitf,
         if (subWindow->bandList[bandIdx] >= nitf->numBands)
         {
             nitf_Error_initf(error, NITF_CTXT, NITF_ERR_READING_FROM_FILE,
-                             "Invalid band %ld (limit is %ld)\n",
+                             "Invalid band %u (limit is %u)\n",
                              subWindow->bandList[bandIdx],
                              nitf->numBands - 1);
             return NITF_FAILURE;

@@ -697,7 +697,7 @@ NITFPRIV(NITF_BOOL) toRaw(nitf_Field * field, char *outValue,
     else
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER,
-                         "Length [%d] is longer than field width [%ju]",
+                         "Length [%ju] is longer than field width [%ju]",
                          length, field->length);
         status = NITF_FAILURE;
     }
