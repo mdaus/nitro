@@ -3795,7 +3795,7 @@ NITFPROT(NITF_BOOL) nitf_ImageIO_setPadPixel(nitf_ImageIO * object,
         /* The 16 byte complex pixel is not actually possible */
     default:
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER,
-                         "Invalid format size [%s]", length);
+                         "Invalid format size [%u]", length);
         return NITF_FAILURE;
     }
 
@@ -4632,7 +4632,7 @@ NITFPRIV(int) nitf_ImageIO_setPixelDef(_nitf_ImageIO * nitf,
     if (!found)
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_READING_FROM_FILE,
-                         "Invalid pixel options: Type %s bits %ld justification %1s",
+                         "Invalid pixel options: Type %s bits %u justification %1s",
                          pixelType, nBits, justify);
         return NITF_FAILURE;
     }
@@ -5211,7 +5211,7 @@ int nitf_ImageIO_setup_SBR(_nitf_ImageIOControl * cntl, nitf_Error * error)
             readBuffer = (uint8_t *) NITF_MALLOC((cntl->rowSkip) *
                                                     (nitf->numColumnsPerBlock +
                                                      cntl->columnSkip) *
-                                                    bytes * bandCnt);
+                                                    ((size_t)bytes) * bandCnt);
             if (readBuffer == NULL)
             {
                 nitf_Error_initf(error, NITF_CTXT, NITF_ERR_MEMORY,
@@ -5490,7 +5490,7 @@ int nitf_ImageIO_setup_P(_nitf_ImageIOControl * cntl, nitf_Error * error)
 
 
     ioBuffer = (uint8_t *) NITF_MALLOC(nitf->numColumnsPerBlock *
-                                          nitf->numBands * bytes);
+                                          nitf->numBands * ((size_t)bytes));
     if (ioBuffer == NULL)
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_MEMORY,
@@ -5793,7 +5793,7 @@ nitf_ImageIOControl_construct(_nitf_ImageIO * nitf,
             (uint8_t *) NITF_MALLOC((cntl->numRows) * (cntl->rowSkip) *
                                        (cntl->columnSkip) *
                                        (cntl->numBandSubset) *
-                                       (nitf->pixel.bytes));
+                                       ((size_t)nitf->pixel.bytes));
         if (cntl->columnSave == NULL)
         {
             nitf_Error_initf(error, NITF_CTXT, NITF_ERR_MEMORY,
@@ -6007,7 +6007,7 @@ NITFPRIV(int) nitf_ImageIO_checkSubWindow(_nitf_ImageIO * nitf,
         || (colSkip > nitf->blockInfo.numColsPerBlock))
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_READING_FROM_FILE,
-                         "Invalid pixel skips %ld %ld (limits are %ld %ld)",
+                         "Invalid pixel skips %u %u (limits are %u %u)",
                          rowSkip, colSkip,
                          nitf->blockInfo.numRowsPerBlock,
                          nitf->blockInfo.numColsPerBlock);
@@ -6022,7 +6022,7 @@ NITFPRIV(int) nitf_ImageIO_checkSubWindow(_nitf_ImageIO * nitf,
     if (numRowsFR > (nitf->numRows + rowSkip - 1) || numRowsFR == 0)
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_READING_FROM_FILE,
-                         "Invalid number of rows %"PRIu32" (Full resolution) (limit is %ld)",
+                         "Invalid number of rows %u (Full resolution) (limit is %u)",
                          numRowsFR, nitf->numRows);
         return NITF_FAILURE;
     }
@@ -6030,7 +6030,7 @@ NITFPRIV(int) nitf_ImageIO_checkSubWindow(_nitf_ImageIO * nitf,
     if (numColsFR > (nitf->numColumns + colSkip - 1) || numColsFR == 0)
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_READING_FROM_FILE,
-                         "Invalid number of columns %"PRIu32" (Full resolution) (limit is %ld)",
+                         "Invalid number of columns %u (Full resolution) (limit is %u)",
                          numColsFR, nitf->numColumns);
         return NITF_FAILURE;
     }
@@ -6040,8 +6040,8 @@ NITFPRIV(int) nitf_ImageIO_checkSubWindow(_nitf_ImageIO * nitf,
     if (subWindow->startRow + numRowsFR > (nitf->numRows + rowSkip - 1))
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_READING_FROM_FILE,
-                         "Invalid start row %ld for sub-window height %ld rows,"
-                         "full resolution (limit is %ld)",
+                         "Invalid start row %u for sub-window height %u rows,"
+                         "full resolution (limit is %u)",
                          subWindow->startRow, numRowsFR, nitf->numRows - 1);
         return NITF_FAILURE;
     }
@@ -6049,8 +6049,8 @@ NITFPRIV(int) nitf_ImageIO_checkSubWindow(_nitf_ImageIO * nitf,
     if (subWindow->startCol + numColsFR > (nitf->numColumns + colSkip - 1))
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_READING_FROM_FILE,
-                         "Invalid start column %ld for sub-window width %ld columns,"
-                         "full resolution (limit is %ld)",
+                         "Invalid start column %u for sub-window width %u columns,"
+                         "full resolution (limit is %u)",
                          subWindow->startCol, numColsFR,
                          nitf->numColumns - 1);
         return NITF_FAILURE;
@@ -6061,7 +6061,7 @@ NITFPRIV(int) nitf_ImageIO_checkSubWindow(_nitf_ImageIO * nitf,
     if (subWindow->numBands > nitf->numBands)
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_READING_FROM_FILE,
-                         "Too many bands %ld (limit is %ld)\n",
+                         "Too many bands %u (limit is %u)\n",
                          subWindow->numBands, nitf->numBands);
         return NITF_FAILURE;
     }
@@ -6092,7 +6092,7 @@ NITFPRIV(int) nitf_ImageIO_checkSubWindow(_nitf_ImageIO * nitf,
         if (subWindow->bandList[bandIdx] < subWindow->bandList[0])
         {
             nitf_Error_initf(error, NITF_CTXT, NITF_ERR_READING_FROM_FILE,
-                             "Band <%ld> at index 0 is not the lowest band\n",
+                             "Band <%u> at index 0 is not the lowest band\n",
                              subWindow->bandList[0]);
             return NITF_FAILURE;
         }
