@@ -58,10 +58,14 @@ jobs:
     # ✏️ If the Autobuild fails above, remove it and uncomment the following three lines
     #    and modify them (or add more) to build your code if your project
     #    uses a compiled language
-
     - run: |
-       make bootstrap
-       make release
-
+        env
+        which python
+        mkdir target
+        cd target
+        cmake .. -DCMAKE_INSTALL_PREFIX=installLinux-Github -DPYTHON_VERSION=3.7
+        cmake --build . -j
+        cmake --build . --target install     
+                   
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
