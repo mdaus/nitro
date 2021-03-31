@@ -24,7 +24,7 @@
 #include "nitf/TREPrivateData.h"
 
 
-#define TAG_BUF_LEN 256
+#define TAG_BUF_LEN NITF_TRECursor_tag_str_LEN
 
 
 
@@ -115,8 +115,11 @@ NITFAPI(nitf_TRECursor) nitf_TRECursor_begin(nitf_TRE * tre)
         }
         tre_cursor.end_ptr = dptr;
         memset(tre_cursor.tag_str, 0, TAG_BUF_LEN);
-		NITF_SNPRINTF(tre_cursor.tag_str, TAG_BUF_LEN, "%s",
-		        ((nitf_TREPrivateData*)tre->priv)->description->tag);
+        nitf_TREDescription* description = ((nitf_TREPrivateData*)tre->priv)->description;
+        if (description != NULL)
+        {
+            NITF_SNPRINTF(tre_cursor.tag_str, TAG_BUF_LEN, "%s", description->tag);
+        }
         tre_cursor.tre = tre;
     }
 
@@ -138,7 +141,7 @@ NITFAPI(nitf_TRECursor) nitf_TRECursor_clone(nitf_TRECursor *tre_cursor,
 
     cursor.prev_ptr = tre_cursor->prev_ptr;
     cursor.desc_ptr = tre_cursor->desc_ptr;
-    strcpy(cursor.tag_str, tre_cursor->tag_str);
+    nrt_strcpy_s(cursor.tag_str, NITF_TRECursor_tag_str_LEN, tre_cursor->tag_str);
     cursor.length = tre_cursor->length;
     return cursor;
 }
@@ -153,6 +156,8 @@ NITFPRIV(nitf_Pair *) nitf_TRECursor_getTREPair(nitf_TRE * tre,
                                                 char idx_str[10][10],
                                                 int looping, nitf_Error * error)
 {
+    (void)error;
+
     /* temp buf used for storing the qualified tag */
     char tag_str[TAG_BUF_LEN];
 
@@ -168,7 +173,7 @@ NITFPRIV(nitf_Pair *) nitf_TRECursor_getTREPair(nitf_TRE * tre,
     /* the pair to return */
     nitf_Pair *pair = NULL;
 
-    strncpy(tag_str, descTag, sizeof(tag_str)-1);
+    nrt_strncpy_s(tag_str, TAG_BUF_LEN, descTag, sizeof(tag_str)-1);
 
     /* deal with braces */
     if (strchr(descTag, '['))
@@ -181,7 +186,7 @@ NITFPRIV(nitf_Pair *) nitf_TRECursor_getTREPair(nitf_TRE * tre,
         while ((bracePtr = strchr(bracePtr + 1, '[')) != NULL)
         {
             /* tack on the depth */
-            strcat(tag_str, idx_str[index++]);
+            nrt_strcat_s(tag_str, TAG_BUF_LEN, idx_str[index++]);
         }
     }
     else
@@ -194,7 +199,7 @@ NITFPRIV(nitf_Pair *) nitf_TRECursor_getTREPair(nitf_TRE * tre,
                 ((nitf_TREPrivateData*)tre->priv)->hash, tag_str);
         for (i = 0; i < looping && !pair; ++i)
         {
-            strcat(tag_str, idx_str[i]);
+            nrt_strcat_s(tag_str, TAG_BUF_LEN, idx_str[i]);
             pair = nitf_HashTable_find(
                     ((nitf_TREPrivateData*)tre->priv)->hash, tag_str);
         }
@@ -310,7 +315,7 @@ NITFAPI(int) nitf_TRECursor_iterate(nitf_TRECursor * tre_cursor,
                     {
                         char entry[64];
                         NITF_SNPRINTF(entry, 64, "[%d]", stack[index]);
-                        strcat(tre_cursor->tag_str, entry);
+                        nrt_strcat_s(tre_cursor->tag_str, NITF_TRECursor_tag_str_LEN, entry);
                     }
                 }
 
@@ -541,7 +546,7 @@ NITFPRIV(int) nitf_TRECursor_evalLoops(nitf_TRE* tre,
         {
             assert(strlen(desc_ptr->label) < sizeof(str));
 
-            strcpy(str, desc_ptr->label);
+            nrt_strcpy_s(str, TAG_BUF_LEN, desc_ptr->label);
             op = str;
             while (isspace(*op))
                 op++;
@@ -640,7 +645,7 @@ NITFPRIV(int) nitf_TRECursor_evalIf(nitf_TRE* tre,
     field = (nitf_Field *) pair->data;
     assert(strlen(desc_ptr->label) < sizeof(str));
 
-    strcpy(str, desc_ptr->label);
+    nrt_strcpy_s(str, TAG_BUF_LEN, desc_ptr->label);
     op = str;
 
     while (isspace(*op))
@@ -792,7 +797,7 @@ NITFPRIV(int) nitf_TRECursor_evalCondLength(nitf_TRE* tre,
     {
         assert(strlen(desc_ptr->label) < sizeof(str));
 
-        strcpy(str, desc_ptr->label);
+        nrt_strcpy_s(str, TAG_BUF_LEN, desc_ptr->label);
         op = str;
         while (isspace(*op))
             op++;

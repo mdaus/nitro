@@ -20,14 +20,12 @@
  *
  */
 
+#include <nitf/coda-oss.hpp>
 #include <nitf/IOStreamWriter.hpp>
-#include <except/Exception.h>
-
-#include "nitf/cstddef.h"
 
 namespace nitf
 {
-IOStreamWriter::IOStreamWriter(std::shared_ptr<io::SeekableOutputStream> stream) :
+IOStreamWriter::IOStreamWriter(mem::SharedPtr<io::SeekableOutputStream> stream) :
     mStream(stream)
 {
 }
@@ -53,7 +51,7 @@ nitf::Off IOStreamWriter::seekImpl(nitf::Off offset, int whence)
 {
     // This whence does not match io::Seekable::Whence
     // We need to perform a mapping to the correct values.
-    io::Seekable::Whence ioWhence;
+    io::Seekable::Whence ioWhence = io::Seekable::START;
     switch (whence)
     {
     case SEEK_SET:

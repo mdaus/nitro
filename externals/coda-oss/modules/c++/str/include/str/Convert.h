@@ -22,6 +22,7 @@
 
 #ifndef __STR_CONVERT_H__
 #define __STR_CONVERT_H__
+#pragma once
 
 #include <import/except.h>
 #include <cerrno>
@@ -34,6 +35,9 @@
 #include <sstream>
 #include <string>
 #include <typeinfo>
+
+// This is a fairly low-level file, so don't #include a lot of our other files
+#include "str/String_.h"
 
 namespace str
 {
@@ -58,11 +62,48 @@ std::string toString(const uint8_t& value);
 template <>
 std::string toString(const int8_t& value);
 
+template <>
+inline std::string toString(const std::nullptr_t&)
+{
+    return "<nullptr>";
+}
+
 template <typename T>
 std::string toString(const T& real, const T& imag)
 {
     return toString(std::complex<T>(real, imag));
 }
+
+template <>
+inline std::string toString(const sys::U8string& value)
+{
+    // This is OK as UTF-8 can be stored in std::string
+    // Note that casting between the string types will CRASH on some implementatons.
+    // NO: reinterpret_cast<const std::string&>(value)
+    const void* const pValue = value.c_str();
+    return static_cast<std::string::const_pointer>(pValue);  // copy
+}
+
+inline sys::U8string castToU8string(const std::string& value)
+{
+    // This is dangerous as we don't know the encoding of std::string!
+    // If it is Windows-1252, the reteurned sys::U8string will be garbage.
+    // Only use when you are sure of the encoding.
+    const void* const pValue = value.c_str();
+    return static_cast<sys::U8string::const_pointer>(pValue);
+}
+
+sys::U8string fromWindows1252(const std::string&);
+void fromWindows1252(const std::string&, sys::U8string&);
+void fromWindows1252(const std::string&, std::string&);
+
+sys::U8string toUtf8(const std::u16string&);
+sys::U8string toUtf8(const std::u32string&);
+
+void toUtf8(const std::u16string&, sys::U8string&);
+void toUtf8(const std::u16string&, std::string&);
+void toUtf8(const std::u32string&, sys::U8string&);
+void toUtf8(const std::u32string&, std::string&);
 
 template <typename T>
 T toType(const std::string& s)

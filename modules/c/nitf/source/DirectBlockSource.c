@@ -24,6 +24,8 @@
  *    Implementation of the direct block source object
  */
 
+#include <inttypes.h>
+
 #include "nitf/DirectBlockSource.h"
 
 /*   The instance data for the rowSource object */
@@ -72,11 +74,11 @@ NITFPRIV(NITF_BOOL) DirectBlockSource_read(NITF_DATA * data, void *buf,
     if(!block)
         return NITF_FAILURE;
 
-    if (blockSize != size)
+    if (blockSize != (uint64_t)size)
     {
         nitf_Error_initf(error, NITF_CTXT,
                          NITF_ERR_READING_FROM_FILE,
-                         "Expected %lu bytes, but read %llu",
+                         "Expected %lu bytes, but read %"PRIu64"",
                          size, blockSize);
         return NITF_FAILURE;
     }
@@ -110,6 +112,7 @@ NITFPRIV(void) DirectBlockSource_destruct(NITF_DATA * data)
 
 NITFPRIV(nitf_Off) DirectBlockSource_getSize(NITF_DATA * data, nitf_Error *e)
 {
+    (void)e;
     DirectBlockSourceImpl *directBlockSource = (DirectBlockSourceImpl *) data;
     return directBlockSource ? directBlockSource->numBlocks : 0;
 }
@@ -144,7 +147,6 @@ NITFAPI(nitf_BandSource *) nitf_DirectBlockSource_construct(void * algorithm,
     DirectBlockSourceImpl *impl;
     nitf_BandSource *bandSource;
     nitf_BlockingInfo* blockInfo;
-    size_t numBlocks;
 
     impl = (DirectBlockSourceImpl *) NITF_MALLOC(sizeof(DirectBlockSourceImpl));
     if (!impl)
@@ -164,7 +166,7 @@ NITFAPI(nitf_BandSource *) nitf_DirectBlockSource_construct(void * algorithm,
     if (blockInfo == NULL)
         return NITF_FAILURE;
 
-    numBlocks = blockInfo->numBlocksPerRow * blockInfo->numBlocksPerCol;
+    const size_t numBlocks = ((size_t)blockInfo->numBlocksPerRow) * blockInfo->numBlocksPerCol;
 
     nitf_BlockingInfo_destruct(&blockInfo);
 

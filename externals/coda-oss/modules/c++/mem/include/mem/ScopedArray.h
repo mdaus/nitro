@@ -33,12 +33,11 @@ namespace mem
      *         It is based on boost::scoped_array.
      */
     template <class T>
-    class ScopedArray
-    {
-    public:
+    struct ScopedArray
+    { 
         typedef T ElementType;
 
-        explicit ScopedArray(T* array = NULL) :
+        explicit ScopedArray(T* array = nullptr) :
             mArray(array)
         {
         }
@@ -48,7 +47,7 @@ namespace mem
             delete[] mArray;
         }
 
-        void reset(T* array = NULL)
+        void reset(T* array = nullptr)
         {
             delete[] mArray;
             mArray = array;
@@ -67,14 +66,12 @@ namespace mem
         T* release()
         {
             T* const array = mArray;
-            mArray = NULL;
+            mArray = nullptr;
             return array;
         }
 
-    private:
-        // Noncopyable
-        ScopedArray(const ScopedArray& );
-        const ScopedArray& operator=(const ScopedArray& );
+        ScopedArray(const ScopedArray&) = delete;
+        ScopedArray& operator=(const ScopedArray&) = delete;
 
     private:
         T* mArray;

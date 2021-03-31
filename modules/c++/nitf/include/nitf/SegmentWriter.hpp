@@ -52,7 +52,7 @@ public:
     {
     }
 
-    ~SegmentWriter();
+    ~SegmentWriter() = default;
 
     /*!
      *  Attach a segment source from which to write.
@@ -61,7 +61,7 @@ public:
     void attachSource(nitf::SegmentSource segmentSource);
 
 private:
-    nitf_Error error;
+    nitf_Error error{};
 //    bool mAdopt;
 //    nitf::SegmentSource* mSegmentSource;
 };

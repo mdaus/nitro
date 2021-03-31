@@ -269,7 +269,7 @@ NRTAPI(void) nrt_List_destruct(nrt_List ** this_list)
 
 }
 
-NRTAPI(nrt_ListIterator) nrt_List_begin(nrt_List * list)
+NRTAPI(nrt_ListIterator) nrt_List_begin(const nrt_List * list)
 {
     nrt_ListIterator list_iterator;
 
@@ -280,7 +280,7 @@ NRTAPI(nrt_ListIterator) nrt_List_begin(nrt_List * list)
     return list_iterator;
 }
 
-NRTAPI(nrt_ListIterator) nrt_List_at(nrt_List * chain, int i)
+NRTAPI(nrt_ListIterator) nrt_List_at(const nrt_List * chain, int i)
 {
     nrt_ListIterator list_iterator = nrt_List_begin(chain);
     nrt_ListIterator end = nrt_List_end(chain);
@@ -298,19 +298,19 @@ NRTAPI(nrt_ListIterator) nrt_List_at(nrt_List * chain, int i)
     return list_iterator;
 }
 
-NRTAPI(NRT_BOOL) nrt_ListIterator_equals(nrt_ListIterator * it1,
-                                         nrt_ListIterator * it2)
+NRTAPI(NRT_BOOL) nrt_ListIterator_equals(const nrt_ListIterator * it1,
+                                         const nrt_ListIterator * it2)
 {
     return (it1->current == it2->current);
 }
 
-NRTAPI(NRT_BOOL) nrt_ListIterator_notEqualTo(nrt_ListIterator * it1,
-                                             nrt_ListIterator * it2)
+NRTAPI(NRT_BOOL) nrt_ListIterator_notEqualTo(const nrt_ListIterator * it1,
+                                             const nrt_ListIterator * it2)
 {
     return !nrt_ListIterator_equals(it1, it2);
 }
 
-NRTAPI(nrt_ListIterator) nrt_List_end(nrt_List * this_list)
+NRTAPI(nrt_ListIterator) nrt_List_end(const nrt_List * this_list)
 {
     nrt_ListIterator list_iterator;
 
@@ -369,14 +369,13 @@ NRTAPI(NRT_BOOL) nrt_List_move(nrt_List * chain, uint32_t oldIndex,
     nrt_ListIterator iter;
     NRT_DATA *data = NULL;
 
-    /* don't need to check < 0, but in case params change, we'll do it anyway */
-    if (oldIndex < 0 || oldIndex == newIndex || oldIndex >= listSize)
+    if (oldIndex == newIndex || oldIndex >= listSize)
     {
         nrt_Error_init(error, "Invalid list index specified", NRT_CTXT,
                        NRT_ERR_INVALID_PARAMETER);
         return NRT_FAILURE;
     }
-    newIndex = newIndex > listSize || newIndex < 0 ? listSize : newIndex;
+    newIndex = newIndex > listSize ? listSize : newIndex;
 
     /* first, remove the data from the list */
     iter = nrt_List_at(chain, oldIndex);
@@ -451,6 +450,22 @@ NRTAPI(NRT_DATA *) nrt_ListIterator_get(nrt_ListIterator * this_iter)
 NRTAPI(uint32_t) nrt_List_size(nrt_List * list)
 {
     uint32_t size = 0;
+
+    if (list)
+    {
+        nrt_ListIterator iter = nrt_List_begin(list);
+        nrt_ListIterator end = nrt_List_end(list);
+        while (nrt_ListIterator_notEqualTo(&iter, &end))
+        {
+            ++size;
+            nrt_ListIterator_increment(&iter);
+        }
+    }
+    return size;
+}
+NRTAPI(uint16_t) nrt_List_size16(nrt_List* list)
+{
+    uint16_t size = 0;
 
     if (list)
     {

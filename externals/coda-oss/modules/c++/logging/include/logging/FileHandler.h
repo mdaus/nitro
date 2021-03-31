@@ -32,6 +32,7 @@
 #include "logging/LogRecord.h"
 #include "logging/StreamHandler.h"
 #include <import/io.h>
+#include <import/sys.h>
 
 namespace logging
 {
@@ -43,9 +44,9 @@ class FileHandler : public StreamHandler
 {
 
 public:
-    FileHandler(const std::string& fname, LogLevel level = LogLevel::LOG_NOTSET,
+    FileHandler(const sys::Filesystem::path& fname, LogLevel level = LogLevel::LOG_NOTSET,
                 int creationFlags = sys::File::CREATE | sys::File::TRUNCATE) :
-        StreamHandler(new io::FileOutputStream(fname, creationFlags), level)
+        StreamHandler(new io::FileOutputStream(fname.string(), creationFlags), level)
     {
         // In case we are in append mode
         ((io::FileOutputStream*) mStream.get())->seek(0, io::Seekable::END);

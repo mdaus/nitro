@@ -24,8 +24,7 @@
 #define __NRT_TYPES_H__
 #pragma once
 
-//#include "nrt/nrt_config.h"
-#define NRT_LIB_VERSION "2.9"
+#include "nrt/Config.h"
 
 #   include <assert.h>
 #   include <stdlib.h>
@@ -162,6 +161,14 @@ typedef int nrt_CreationFlags;
 #define NRT_FAILURE  (0)
 #define NRT_TRUE     (1)
 #define NRT_FALSE    (0)
+
+
+#if defined(__cplusplus) && !defined(SWIGPYTHON)
+// "enum class" for C++ w/o SWIG
+#define NRT_DECLARE_ENUM(name, ...) enum class name { __VA_ARGS__ }
+#else
+#define NRT_DECLARE_ENUM(name, ...) typedef enum _ ## name { __VA_ARGS__ } name
+#endif
 
 typedef enum _nrt_CornersType
 {

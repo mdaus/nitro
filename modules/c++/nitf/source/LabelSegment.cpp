@@ -42,28 +42,26 @@ LabelSegment::LabelSegment(nitf_LabelSegment * x)
     getNativeOrThrow();
 }
 
-LabelSegment::LabelSegment()
+LabelSegment::LabelSegment() : LabelSegment(nitf_LabelSegment_construct(&error))
 {
-    setNative(nitf_LabelSegment_construct(&error));
-    getNativeOrThrow();
     setManaged(false);
 }
 
 LabelSegment::LabelSegment(NITF_DATA * x)
 {
-    setNative((nitf_LabelSegment*)x);
+    setNative(static_cast<nitf_LabelSegment*>(x));
     getNativeOrThrow();
 }
 
 LabelSegment & LabelSegment::operator=(NITF_DATA * x)
 {
-    setNative((nitf_LabelSegment*)x);
+    setNative(static_cast<nitf_LabelSegment*>(x));
     getNativeOrThrow();
     return *this;
 }
 
 
-nitf::LabelSegment LabelSegment::clone()
+nitf::LabelSegment LabelSegment::clone() const
 {
     nitf::LabelSegment dolly(
         nitf_LabelSegment_clone(getNativeOrThrow(), &error));
@@ -71,9 +69,7 @@ nitf::LabelSegment LabelSegment::clone()
     return dolly;
 }
 
-LabelSegment::~LabelSegment(){}
-
-nitf::LabelSubheader LabelSegment::getSubheader()
+nitf::LabelSubheader LabelSegment::getSubheader() const
 {
     return nitf::LabelSubheader(getNativeOrThrow()->subheader);
 }

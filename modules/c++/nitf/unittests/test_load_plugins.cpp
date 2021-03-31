@@ -52,10 +52,6 @@ static void load_plugin(const char* tre)
 
 static const std::vector<std::string> all_plugins
 {
-#if _MSC_VER && NITRO_PCH
-    // only build a handful in Visual Studio
-    "ACCHZB", "ACCPOB", "ACFTA", "AIMIDB", "CSCRNA", "HISTOA", "JITCID", "PTPRAA", "RPFHDR",
-#else
     "ACCHZB", "BANDSB", "CSDIDA", "GEOLOB", "JITCID", "NBLOCA", "PIAPEB", "REGPTB", "RSMIDA", "STEROB",
     "ACCPOB", "BCKGDA", "CSEPHA", "GEOPSB", "MAPLOB", "OBJCTA", "PIAPRC", "RPC00B", "RSMPCA", "STREOB",
     "ACCVTB", "BLOCKA", "CSEXRA", "GRDPSB", "MATESA", "OFFSET", "PIAPRD", "RPFDES", "RSMPIA", "TEST_DES",
@@ -65,8 +61,7 @@ static const std::vector<std::string> all_plugins
     "AIMIDB", "CLCTNB", "ENGRDA", "IMGDTA", "MSDIRA", "PIAEVA", "PLTFMA", "RSMDCA", "SNSPSB",
     "AIPBCA", "CMETAA", "EXOPTA", "IMRFCA", "MSTGTA", "PIAIMB", "PRADAA", "RSMECA", "SNSRA",
     "ASTORA", "CSCCGA", "EXPLTA", "IOMAPA", "MTIRPA", "PIAIMC", "PRJPSB", "RSMGGA", "SOURCB",
-    "BANDSA", "CSCRNA", "EXPLTB", "HISTOA", "J2KLRA", "MTIRPB", "PIAPEA", "PTPRAA", "RSMGIA", "STDIDC",
-#endif
+    "BANDSA", "CSCRNA", "EXPLTB", "J2KLRA", "MTIRPB", "PIAPEA", "PTPRAA", "RSMGIA", "STDIDC",
 };
 
 TEST_CASE(test_load_all_plugins_C)

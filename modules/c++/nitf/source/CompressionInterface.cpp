@@ -34,7 +34,7 @@ NITF_BOOL CompressionInterface::adapterStart(
 {
     try
     {
-        reinterpret_cast<Compressor*>(object)->start(offset, 
+        static_cast<Compressor*>(object)->start(offset, 
                                                      dataLength, 
                                                      blockMask, 
                                                      padMask);
@@ -72,7 +72,7 @@ NITF_BOOL CompressionInterface::adapterWriteBlock(
     {
         nitf::IOInterface ioInter(io);
         ioInter.setManaged(true);
-        reinterpret_cast<Compressor*>(object)->writeBlock(ioInter, 
+        static_cast<Compressor*>(object)->writeBlock(ioInter,
                                                           data, 
                                                           pad, 
                                                           noData);
@@ -97,6 +97,17 @@ NITF_BOOL CompressionInterface::adapterWriteBlock(
         return NRT_FAILURE;
     }
 }
+NITF_BOOL CompressionInterface::adapterWriteBlock(
+    nitf_CompressionControl* object,
+    nitf_IOInterface* io,
+    const std::byte* data,
+    NITF_BOOL pad,
+    NITF_BOOL noData,
+    nitf_Error* error)
+{
+    const void* const data_ = data;
+    return adapterWriteBlock(object, io, static_cast<const uint8_t*>(data_), pad, noData, error);
+}
 
 NITF_BOOL CompressionInterface::adapterEnd(
     nitf_CompressionControl* object,
@@ -107,7 +118,7 @@ NITF_BOOL CompressionInterface::adapterEnd(
     {
         nitf::IOInterface ioInter(io);
         ioInter.setManaged(true);
-        reinterpret_cast<Compressor*>(object)->end(ioInter);
+        static_cast<Compressor*>(object)->end(ioInter);
         return NRT_SUCCESS;
     }
     catch (const except::Exception& ex)
@@ -131,11 +142,11 @@ NITF_BOOL CompressionInterface::adapterEnd(
 }
 
 void CompressionInterface::adapterDestroy(
-    nitf_CompressionControl** object)
+    nitf_CompressionControl** object) noexcept
 {
     if (object != nullptr && *object != nullptr)
     {
-        delete reinterpret_cast<Compressor*>(*object);
+        delete static_cast<Compressor*>(*object);
         *object = nullptr;
     }
 }

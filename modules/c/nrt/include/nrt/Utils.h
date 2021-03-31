@@ -186,33 +186,6 @@ NRTPROT(void) nrt_Utils_decimalLonToGeoCharArray(double decimal, char *buffer8);
  */
 NRTAPI(char) nrt_Utils_cornersTypeAsCoordRep(nrt_CornersType type);
 
-
-/*!
- * Helper function to actually perform a byte-swap.
- *
- * \param value Pointer to value being swapped
- * \param indexOne Index of first byte to be swapped
- * \param indexTwo Index of second byte to be swapped
- */
-/*
- * Older versions of Visual Studio do not support `inline` for C
- * Using `__inline` for Windows instead
- */
-NRTPRIV(void)
-#if defined(WIN32) || defined(_WIN32)
-__inline
-#else
-inline
-#endif
-nrt_Utils_swap(uint8_t* value, size_t indexOne,
-        size_t indexTwo)
-{
-    uint8_t temp;
-    temp = value[indexOne];
-    value[indexOne] = value[indexTwo];
-    value[indexTwo] = temp;
-}
-
 /*!
  *  Byte-swap a given value of length `size` bytes in-place.
  *  Sizes of length 2, 4, and 8 are supported.
@@ -222,16 +195,15 @@ nrt_Utils_swap(uint8_t* value, size_t indexOne,
  */
 NRTAPI(void) nrt_Utils_byteSwap(uint8_t* value, size_t size);
 
-/*!
- *  Our own str*() routines to avoid compiler warnings.
- */
-NRTAPI(char*) nrt_Utils_strcpy(char* destination, char const* source);
-#define strcpy(destination, source) nrt_Utils_strcpy(destination, source)
-NRTAPI(char*) nrt_Utils_strncpy(char* destination, char const* source, size_t count);
-#define strncpy(destination, source, count) nrt_Utils_strncpy(destination, source, count)
+NRTAPI(void) nrt_strcpy_s(char* dest, size_t sz, const char* src);
+NRTAPI(void) nrt_strncpy_s(char* dest, size_t dest_sz, const char* src, size_t src_chars);
+NRTAPI(void) nrt_strcat_s(char* dest, size_t sz, const char* src);
+NRTAPI(char*) nrt_strdup(const char* src);
 
-NRTAPI(char*) nrt_Utils_strcat(char* destination, char const* source);
-#define strcat(destination, source) nrt_Utils_strcat(destination, source)
+NRTAPI(size_t) nrt_strlen(const char* src); // aka strlen()
+NRTAPI(uint32_t) nrt_strlen32(const char* src);
+NRTAPI(uint16_t) nrt_strlen16(const char* src);
+NRTAPI(uint8_t) nrt_strlen8(const char* src);
 
 NRT_CXX_ENDGUARD
 #endif
