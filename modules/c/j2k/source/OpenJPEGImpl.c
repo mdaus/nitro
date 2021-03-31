@@ -20,12 +20,11 @@
  *
  */
 
- //#include "j2k/j2k_config.h"
-//#define HAVE_OPENJPEG_H 1
+#include "j2k/Config.h"
 
-#ifdef _MSC_VER // Visual Studio
-#pragma warning(disable: 4206) //	nonstandard extension used : translation unit is empty
-#endif
+#ifdef _MSC_VER
+#pragma warning(disable: 4706) // assignment within conditional expression
+#endif // _MSC_VER
 
 #ifdef HAVE_OPENJPEG_H
 
@@ -427,6 +426,15 @@ OpenJPEG_readHeader(OpenJPEGReaderImpl *impl, nrt_Error *error)
         case OPJ_CLRSPC_GRAY:
             imageType = J2K_TYPE_MONO;
             break;
+
+        case OPJ_CLRSPC_CMYK:
+        case OPJ_CLRSPC_SYCC:
+        case OPJ_CLRSPC_EYCC:
+            imageType = J2K_TYPE_UNKNOWN;
+            break;
+
+        case OPJ_CLRSPC_UNKNOWN:
+        case OPJ_CLRSPC_UNSPECIFIED:
         default:
             imageType = J2K_TYPE_UNKNOWN;
         }
@@ -522,7 +530,7 @@ J2KPRIV( NRT_BOOL) OpenJPEG_initImage(OpenJPEGWriterImpl *impl,
         const OPJ_UINT32 minX = (OPJ_UINT32)floor(log(tileWidth) / logTwo);
         const OPJ_UINT32 minY = (OPJ_UINT32)floor(log(tileHeight) / logTwo);
         const OPJ_UINT32 minXY = (minX < minY) ? minX : minY;
-        if (minXY < encoderParams.numresolution)
+        if (minXY < (OPJ_UINT32)encoderParams.numresolution)
         {
             encoderParams.numresolution = minXY;
         }
@@ -558,7 +566,7 @@ J2KPRIV( NRT_BOOL) OpenJPEG_initImage(OpenJPEGWriterImpl *impl,
     }
 
     nBytes = (j2k_Container_getPrecision(impl->container, error) - 1) / 8 + 1;
-    uncompressedSize = width * height * nComponents * nBytes;
+    uncompressedSize = ((size_t)width) * height * nComponents * nBytes;
 
     /* this is not ideal, but there is really no other way */
     if (!(impl->compressedBuf = (char*)J2K_MALLOC(uncompressedSize)))
@@ -660,6 +668,8 @@ J2KPRIV( NRT_BOOL) OpenJPEG_initImage(OpenJPEGWriterImpl *impl,
 J2KPRIV( NRT_BOOL)
 OpenJPEGReader_canReadTiles(J2K_USER_DATA *data, nrt_Error *error)
 {
+    (void)data;
+    (void)error;
     return NRT_SUCCESS;
 }
 
@@ -752,7 +762,7 @@ OpenJPEGReader_readTile(J2K_USER_DATA *data, uint32_t tileX, uint32_t tileY,
                     j2k_Container_getPrecision(impl->container, error);
                 numBytesPerPixel =
                     (numBitsPerPixel / 8) + (numBitsPerPixel % 8 != 0);
-                fullBufSize = tileWidth * thisTileHeight * numBytesPerPixel;
+                fullBufSize = ((uint64_t)tileWidth) * thisTileHeight * numBytesPerPixel;
             }
             else
             {
@@ -770,7 +780,7 @@ OpenJPEGReader_readTile(J2K_USER_DATA *data, uint32_t tileX, uint32_t tileY,
                 }
             }
 
-            if (!opj_decode_tile_data(codec, tileIndex, *buf, bufSize, stream))
+            if ((buf != NULL) && !opj_decode_tile_data(codec, tileIndex, *buf, bufSize, stream))
             {
                 /*nrt_Error_init(error, "Error decoding tile", NRT_CTXT,
                   NRT_ERR_UNK);*/
@@ -790,7 +800,7 @@ OpenJPEGReader_readTile(J2K_USER_DATA *data, uint32_t tileX, uint32_t tileY,
                 size_t srcOffset = lastRow * srcStride;
                 size_t destOffset = lastRow * destStride;
                 OPJ_UINT32 ii;
-                uint8_t* bufPtr = *buf;
+                uint8_t* bufPtr = buf != NULL ? *buf : NULL;
 
                 for (ii = 0;
                      ii < thisTileHeight;
@@ -888,7 +898,7 @@ OpenJPEGReader_readRegion(J2K_USER_DATA *data, uint32_t x0, uint32_t y0,
 
             if (keepGoing)
             {
-                if (!opj_decode_tile_data(codec, tileIndex, (*buf + offset),
+                if ((buf != NULL) && !opj_decode_tile_data(codec, tileIndex, (*buf + offset),
                                           reqSize, stream))
                 {
                     /*nrt_Error_init(error, "Error decoding tile", NRT_CTXT,
@@ -918,6 +928,8 @@ OpenJPEGReader_readRegion(J2K_USER_DATA *data, uint32_t x0, uint32_t y0,
 J2KPRIV( j2k_Container*)
 OpenJPEGReader_getContainer(J2K_USER_DATA *data, nrt_Error *error)
 {
+    (void)error;
+
     OpenJPEGReaderImpl *impl = (OpenJPEGReaderImpl*) data;
     return impl->container;
 }
@@ -1012,8 +1024,8 @@ OpenJPEGWriter_setTile(J2K_USER_DATA *data, uint32_t tileX, uint32_t tileY,
             OPJ_UINT32 ii;
             size_t srcOffset = 0;
             size_t destOffset = 0;
-            const size_t srcStride = tileWidth * nBytes;
-            const size_t destStride = thisTileWidth * nBytes;
+            const size_t srcStride = ((size_t)tileWidth) * nBytes;
+            const size_t destStride = ((size_t)thisTileWidth) * nBytes;
 
             newTileBuf = (uint8_t*) J2K_MALLOC(thisTileSize);
             if(!newTileBuf)
@@ -1131,6 +1143,8 @@ OpenJPEGWriter_write(J2K_USER_DATA *data, nrt_IOInterface *io, nrt_Error *error)
 J2KPRIV( j2k_Container*)
 OpenJPEGWriter_getContainer(J2K_USER_DATA *data, nrt_Error *error)
 {
+    (void)error;
+
     OpenJPEGWriterImpl *impl = (OpenJPEGWriterImpl*) data;
     return impl->container;
 }

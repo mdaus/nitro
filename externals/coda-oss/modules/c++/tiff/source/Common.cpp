@@ -49,12 +49,6 @@ static inline void memcpy_(T* pDest, const void* pSrc)
     memcpy(pDest, pSrc, sizeof(T));
 }
 
-template<typename T>
-static inline void memcpy_(T* pDest, const void* pSrc)
-{
-    memcpy(pDest, pSrc, sizeof(T));
-}
-
 sys::Uint64_T tiff::combine(sys::Uint32_T numerator,
         sys::Uint32_T denominator)
 {
