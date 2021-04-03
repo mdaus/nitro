@@ -68,9 +68,10 @@ static fs::path buildDir(const fs::path& path)
 		// Running GTest unit-tests in Visual Studio on Windows
 		if (is_x64_Configuration(cwd))
 		{
-			const auto root = cwd.parent_path().parent_path();
-			const auto install = "install-" + Configuration() + "-" + Platform() + "." + PlatformToolset();
-			return root / install / path;
+			//const auto root = cwd.parent_path().parent_path();
+			//const auto install = "install-" + Configuration() + "-" + Platform() + "." + PlatformToolset();
+			//return root / install / path;
+			return cwd / path;
 		}
 	}
 
