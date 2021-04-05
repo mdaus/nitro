@@ -234,4 +234,4 @@ to make sure NITRO can find them.
 Contact
 ---------
 
-July 2020, Dan.Smith@maxar.com
+July 2020, Dan <dot> Smith <at> maxar.com
