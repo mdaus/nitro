@@ -42,8 +42,10 @@ LabelSegment::LabelSegment(nitf_LabelSegment * x)
     getNativeOrThrow();
 }
 
-LabelSegment::LabelSegment() : LabelSegment(nitf_LabelSegment_construct(&error))
+LabelSegment::LabelSegment()
 {
+    setNative(nitf_LabelSegment_construct(&error));
+    getNativeOrThrow();
     setManaged(false);
 }
 

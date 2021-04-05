@@ -645,11 +645,11 @@ readImageSubheader(nitf_Reader* reader,
         nitf_Error_initf(error,
                          NITF_CTXT,
                          NITF_ERR_READING_FROM_FILE,
-                         "Image subheader %u expected to have length %ju, "
-                         "but read %ju bytes",
+                         "Image subheader %u expected to have length %u, "
+                         "but read %u bytes",
                          imageIndex,
-                         (size_t)expectedSubheaderLength,
-                         (size_t)(subheaderEnd - subheaderStart));
+                         expectedSubheaderLength,
+                         subheaderEnd - subheaderStart);
         goto CATCH_ERROR;
     }
 
@@ -924,11 +924,11 @@ readDESubheader(nitf_Reader* reader,
         nitf_Error_initf(error,
                          NITF_CTXT,
                          NITF_ERR_READING_FROM_FILE,
-                         "DE subheader %d expected to have length %u, "
-                         "but read %ju bytes",
+                         "DE subheader %u expected to have length %u, "
+                         "but read %u bytes",
                          desIndex,
                          expectedSubheaderLength,
-                         (size_t)(subheaderEnd - subheaderStart));
+                         subheaderEnd - subheaderStart);
         goto CATCH_ERROR;
     }
     return NITF_SUCCESS;

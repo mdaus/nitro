@@ -52,7 +52,7 @@ public:
     {
     }
 
-    ~SegmentWriter() = default;
+    ~SegmentWriter();
 
     /*!
      *  Attach a segment source from which to write.

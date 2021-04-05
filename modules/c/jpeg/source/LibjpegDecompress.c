@@ -448,7 +448,7 @@ void JPEGBlock_reorder(JPEGBlock* block)
 
     for (i = 0; i < block->bands; i++)
     {
-        bands[i] = (DATA_BUFFER) NITF_MALLOC(((size_t)block->rows) * block->cols);
+        bands[i] = (DATA_BUFFER) NITF_MALLOC(block->rows * block->cols);
     }
 
     for (n = 0; n < block->rows * block->cols; n++)

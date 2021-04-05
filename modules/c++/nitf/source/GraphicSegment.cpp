@@ -44,8 +44,10 @@ GraphicSegment::GraphicSegment(nitf_GraphicSegment * x)
 }
 
 
-GraphicSegment::GraphicSegment() : GraphicSegment(nitf_GraphicSegment_construct(&error))
+GraphicSegment::GraphicSegment()
 {
+    setNative(nitf_GraphicSegment_construct(&error));
+    getNativeOrThrow();
     setManaged(false);
 }
 

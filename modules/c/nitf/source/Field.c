@@ -652,7 +652,7 @@ NITFPRIV(NITF_BOOL) fromIntToString(nitf_Field * field, char *outValue,
     if (actualLength > length)
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER,
-                         "Out value too small [%ju] size required",
+                         "Out value too small [%d] size required",
                          strlen(buffer));
         return NITF_FAILURE;
     }
@@ -697,7 +697,7 @@ NITFPRIV(NITF_BOOL) toRaw(nitf_Field * field, char *outValue,
     else
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER,
-                         "Length [%ju] is longer than field width [%ju]",
+                         "Length [%d] is longer than field width [%d]",
                          length, field->length);
         status = NITF_FAILURE;
     }
@@ -813,7 +813,7 @@ NITFPRIV(NITF_BOOL) fromStringToInt(nitf_Field * field,
     if (field->length >= 256)
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER,
-                         "Field length too long for string conversion [%ju]",
+                         "Field length too long for string conversion [%d]",
                          field->length);
         return NITF_FAILURE;
     }
@@ -851,7 +851,7 @@ NITFPRIV(NITF_BOOL) fromStringToInt(nitf_Field * field,
         break;
         default:
             nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER,
-                             NITF_CTXT, "Unsupported length [%ju]", length);
+                             NITF_CTXT, "Unsupported length [%d]", length);
             return NITF_FAILURE;
     }
     return NITF_SUCCESS;
@@ -866,7 +866,7 @@ NITFPRIV(NITF_BOOL) fromStringToUint(nitf_Field * field,
     if (field->length >= 256)
     {
         nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER,
-                         "Field length too long for string conversion [%ju]",
+                         "Field length too long for string conversion [%d]",
                          field->length);
         return NITF_FAILURE;
     }
@@ -904,7 +904,7 @@ NITFPRIV(NITF_BOOL) fromStringToUint(nitf_Field * field,
         break;
         default:
             nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_PARAMETER,
-                             "Unsupported length [%ju]", length);
+                             "Unsupported length [%d]", length);
             return NITF_FAILURE;
     }
     return NITF_SUCCESS;
@@ -935,7 +935,7 @@ NITFPRIV(NITF_BOOL) toInt(nitf_Field * field,
             default:
                 nitf_Error_initf(error, NITF_CTXT,
                                  NITF_ERR_INVALID_PARAMETER,
-                                 "Unexpected field size for int [%ju]",
+                                 "Unexpected field size for int [%d]",
                                  field->length);
         }
     }
@@ -971,7 +971,7 @@ NITFPRIV(NITF_BOOL) toUint(nitf_Field * field,
             default:
                 nitf_Error_initf(error, NITF_CTXT,
                                  NITF_ERR_INVALID_PARAMETER,
-                                 "Unexpected field size for uint [%ju]",
+                                 "Unexpected field size for uint [%d]",
                                  field->length);
         }
     }

@@ -42,8 +42,10 @@ ImageSource::ImageSource(nitf_ImageSource * x)
     getNativeOrThrow();
 }
 
-ImageSource::ImageSource() : ImageSource(nitf_ImageSource_construct(&error))
+ImageSource::ImageSource()
 {
+    setNative(nitf_ImageSource_construct(&error));
+    getNativeOrThrow();
     setManaged(false);
 }
 

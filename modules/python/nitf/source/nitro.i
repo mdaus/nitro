@@ -231,7 +231,6 @@
 %include "nitf/PluginRegistry.h"
 /* warning list */
 %typemap(out) nitf_List* {	NITF_LIST_TO_PYTHON_LIST(nitf_FieldWarning) }
-// for whatever reason, Reader and Writer don't expand properly?
 %include "nitf/Reader.h"
 %include "nitf/Writer.h"
 %include "nitf/Record.h"
@@ -275,9 +274,6 @@
 %include "nitf/DownSampler.h"
 %include "nitf/SegmentSource.h"
 %include "nitf/BandInfo.h"
-
-%include "nitf/NitfWriter.h"
-%include "nitf/NitfReader.h"
 
 %clearnodefaultctor;   // Re-enable default constructors
 
@@ -354,18 +350,7 @@
 
 %}
 
-%typemap(in) (char* pfsrd_buf) {
-    if ($input)
-    {
-        char *buffer;
-        Py_ssize_t outlength;
-        if(PyBytes_AsStringAndSize($input,&buffer,&outlength) == -1) {
-            SWIG_fail;
-        }
-        $1 = buffer;
-        //$2 = outlength;
-    }
-}
+
 // Field
 %inline %{
 
@@ -390,24 +375,14 @@
         return 0;
     }
 
-    void py_Field_setRawData(nitf_Field *field, char* pfsrd_buf, int length,  nitf_Error *error)
+    void py_Field_setRawData(nitf_Field *field, char* buf, int length,  nitf_Error *error)
     {
-        nitf_Field_setRawData(field, (NITF_DATA*)pfsrd_buf, length, error);
+        nitf_Field_setRawData(field, (NITF_DATA*)buf, length, error);
     }
 
     void py_TRE_setField(nitf_TRE *tre, const char* tag, char* buf, int length, nitf_Error *error)
     {
         nitf_TRE_setField(tre, tag, (NITF_DATA*)buf, length, error);
-    }
-
-    PyObject* py_Field_getRawData(nitf_Field *field, nitf_Error *error)
-    {
-        return PyBytes_FromStringAndSize(field->raw, field->length);
-    }
-
-    nitf_TRE *py_TRE_clone(nitf_TRE *tre, nitf_Error *error)
-    {
-        return nitf_TRE_clone(tre, error);
     }
 
 %}
@@ -495,7 +470,6 @@
     {
         return nitf_Record_getVersion(record);
     }
-
 %}
 
 
@@ -551,17 +525,6 @@
     }
 %}
 
-// PluginRegistry wrapper functions
-%inline %{
-
-    bool py_nitf_PluginRegistry_canRetrieveTREHandler(nitf_PluginRegistry * reg, const char *ident, nitf_Error * error)
-    {
-        int had_error;
-        nitf_TREHandler *result = nitf_PluginRegistry_retrieveTREHandler(reg, ident, &had_error, error);
-        if (had_error) { return false; }
-        else { return (result != NULL); }
-    }
-%}
 
 
 %inline %{
@@ -570,21 +533,6 @@
         /* TODO: Support taking in options here and converting it */
         nrt_HashTable* nullOptions = NULL;
         return nitf_Reader_newImageReader(reader, imageSegmentNumber, nullOptions, error);
-    }
-
-    nitf_Writer* py_nitf_Writer_construct(nitf_Error *error)
-    {
-        return nitf_Writer_construct(error);
-    }
-
-    bool py_nitf_Writer_prepare(nitf_Writer *writer, nitf_Record *record, nitf_IOHandle ioHandle, nitf_Error *error)
-    {
-        return nitf_Writer_prepare(writer, record, ioHandle, error);
-    }
-
-    void py_nitf_Writer_destruct(nitf_Writer ** writer)
-    {
-        nitf_Writer_destruct(writer);
     }
 
     nitf_ImageWriter* py_nitf_Writer_newImageWriter(nitf_Writer* writer, int index, PyObject* options, nitf_Error* error)

@@ -42,8 +42,10 @@ TextSubheader::TextSubheader(nitf_TextSubheader * x)
     getNativeOrThrow();
 }
 
-TextSubheader::TextSubheader() : TextSubheader(nitf_TextSubheader_construct(&error))
+TextSubheader::TextSubheader()
 {
+    setNative(nitf_TextSubheader_construct(&error));
+    getNativeOrThrow();
     setManaged(false);
 }
 
