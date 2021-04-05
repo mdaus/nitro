@@ -22,6 +22,7 @@ if (${CMAKE_PROJECT_NAME} STREQUAL nitro)
         add_definitions(-D_CRT_SECURE_NO_WARNINGS -D_SCL_SECURE_NO_WARNINGS)
     elseif (UNIX)
         add_compile_options(
+            -Wall
             -Wno-deprecated
             -Wno-unused-value
             -Wno-unused-but-set-variable
