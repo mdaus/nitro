@@ -207,8 +207,7 @@ nitf_TREUtils_getRawData(nitf_TRE* tre,
                         NITF_ERR_MEMORY);
         goto CATCH_ERROR;
     }
-    const size_t length_ = ((size_t)length) + 1;
-    memset(data, 0, length_);
+    memset(data, 0, length + 1);
 
     cursor = nitf_TRECursor_begin(tre);
     while (!nitf_TRECursor_isDone(&cursor) && status && offset < length)

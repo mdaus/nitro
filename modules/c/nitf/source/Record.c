@@ -916,22 +916,6 @@ NITFAPI(nitf_Version) nitf_Record_getVersion(const nitf_Record* record)
     return fver;
 }
 
-static nitf_ComponentInfo** nitf_malloc_ComponentInfo(uint32_t num, nitf_Error* error)
-{
-    assert(error != NULL);
-    const size_t num_ = ((size_t)num) + 1;
-    nitf_ComponentInfo** infoArray = (nitf_ComponentInfo**)NITF_MALLOC(sizeof(nitf_ComponentInfo*) * num_);
-    if (!infoArray)
-    {
-        nitf_Error_init(error,
-            NITF_STRERROR(NITF_ERRNO),
-            NITF_CTXT,
-            NITF_ERR_MEMORY);
-    }
-    return infoArray;
-}
-
-
 NITFAPI(nitf_ImageSegment*)
 nitf_Record_newImageSegment(nitf_Record* record, nitf_Error* error)
 {
@@ -973,9 +957,14 @@ nitf_Record_newImageSegment(nitf_Record* record, nitf_Error* error)
         goto CATCH_ERROR;
 
     /* Make new array, one bigger */
-    infoArray = nitf_malloc_ComponentInfo(num, error);
+    infoArray = (nitf_ComponentInfo**)NITF_MALLOC(sizeof(nitf_ComponentInfo*) *
+                                                  (num + 1));
     if (!infoArray)
     {
+        nitf_Error_init(error,
+                        NITF_STRERROR(NITF_ERRNO),
+                        NITF_CTXT,
+                        NITF_ERR_MEMORY);
         goto CATCH_ERROR;
     }
 
@@ -1074,9 +1063,14 @@ nitf_Record_newGraphicSegment(nitf_Record* record, nitf_Error* error)
         goto CATCH_ERROR;
 
     /* Make new array, one bigger */
-    infoArray = nitf_malloc_ComponentInfo(num, error);
+    infoArray = (nitf_ComponentInfo**)NITF_MALLOC(sizeof(nitf_ComponentInfo*) *
+                                                  (num + 1));
     if (!infoArray)
     {
+        nitf_Error_init(error,
+                        NITF_STRERROR(NITF_ERRNO),
+                        NITF_CTXT,
+                        NITF_ERR_MEMORY);
         goto CATCH_ERROR;
     }
 
@@ -1177,9 +1171,14 @@ nitf_Record_newTextSegment(nitf_Record* record, nitf_Error* error)
     }
 
     /* Make new array, one bigger */
-    infoArray = nitf_malloc_ComponentInfo(num, error);
+    infoArray = (nitf_ComponentInfo**)NITF_MALLOC(sizeof(nitf_ComponentInfo*) *
+                                                  (num + 1));
     if (!infoArray)
     {
+        nitf_Error_init(error,
+                        NITF_STRERROR(NITF_ERRNO),
+                        NITF_CTXT,
+                        NITF_ERR_MEMORY);
         goto CATCH_ERROR;
     }
 
@@ -1277,9 +1276,14 @@ nitf_Record_newDataExtensionSegment(nitf_Record* record, nitf_Error* error)
         goto CATCH_ERROR;
 
     /* Make new array, one bigger */
-    infoArray = nitf_malloc_ComponentInfo(num, error);
+    infoArray = (nitf_ComponentInfo**)NITF_MALLOC(sizeof(nitf_ComponentInfo*) *
+                                                  (num + 1));
     if (!infoArray)
     {
+        nitf_Error_init(error,
+                        NITF_STRERROR(NITF_ERRNO),
+                        NITF_CTXT,
+                        NITF_ERR_MEMORY);
         goto CATCH_ERROR;
     }
 

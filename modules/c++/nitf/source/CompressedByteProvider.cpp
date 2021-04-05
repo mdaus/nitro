@@ -36,6 +36,10 @@
 
 namespace nitf
 {
+CompressedByteProvider::CompressedByteProvider() :
+    ByteProvider()
+{
+}
 
 CompressedByteProvider::CompressedByteProvider(Record& record,
         const std::vector<std::vector<size_t> >& bytesPerBlock,

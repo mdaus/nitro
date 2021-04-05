@@ -96,8 +96,7 @@ NITFPRIV(NITF_BOOL) defaultRead(nitf_IOInterface *io,
         nitf_Error_init(error, "uint32_t+1 overflow", NITF_CTXT, NITF_ERR_MEMORY);
         goto CATCH_ERROR;
     }
-    const size_t length_ = ((size_t)length) + 1;
-    data = (char *) NITF_MALLOC(length_);
+    data = (char *) NITF_MALLOC(length + 1);
     if (!data)
     {
         nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
@@ -105,7 +104,7 @@ NITFPRIV(NITF_BOOL) defaultRead(nitf_IOInterface *io,
 
         goto CATCH_ERROR;
     }
-    memset(data, 0, length_);
+    memset(data, 0, length + 1);
 
     descr =
         (nitf_TREDescription *) NITF_MALLOC(2 *

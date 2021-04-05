@@ -59,7 +59,8 @@ public:
     //! Constructor
     BandInfo();
 
-    ~BandInfo() = default;
+    //! Destructor
+    ~BandInfo();
 
     //! Get the representation
     nitf::Field getRepresentation() const;
