@@ -20,15 +20,15 @@
  *
  */
  
-#ifndef CODA_OSS_logging_Setup_h_INCLUDED_
-#define CODA_OSS_logging_Setup_h_INCLUDED_
+#ifndef __LOGGING_SETUP_H__
+#define __LOGGING_SETUP_H__
 
 #include <memory>
 #include <string>
 
-#include "coda_oss/filesystem.h"
 #include "mem/SharedPtr.h"
 #include "logging/Logger.h"
+#include "sys/Filesystem.h"
 
 namespace logging
 {
@@ -54,6 +54,7 @@ mem::auto_ptr<logging::Logger> setupLogger(
     const std::string& logFormat = "[%p] (%d) %m",
     size_t logCount = 0,
     size_t logBytes = 0);
+
 }
 
-#endif // CODA_OSS_logging_Setup_h_INCLUDED_
+#endif

@@ -121,11 +121,11 @@ protected:
 class ToggleOutputStream: public io::ProxyOutputStream
 {
 public:
-    ToggleOutputStream(io::OutputStream *output = nullptr, bool ownPtr = false) :
-        io::ProxyOutputStream(nullptr), mPtr(output),
+    ToggleOutputStream(io::OutputStream *output = NULL, bool ownPtr = false) :
+        io::ProxyOutputStream(NULL), mPtr(output),
                 mNullStream(new io::NullOutputStream), mOwnPtr(ownPtr)
     {
-        setEnabled(mPtr != nullptr);
+        setEnabled(mPtr != NULL);
     }
 
     virtual ~ToggleOutputStream()

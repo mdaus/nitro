@@ -174,12 +174,14 @@ TEST_CASE(testDateTimeDetails)
     const time_t now = time(nullptr);
     {
         tm local;
-        sys::DateTime::localtime(now, local);
+        const auto result = sys::details::localtime_s(&local, &now);
+        TEST_ASSERT_EQ(0, result);
         testDateTimeDetails_(testName, local, sys::LocalDateTime());
     }
     {
         tm global;
-        sys::DateTime::gmtime(now, global);
+        const auto result = sys::details::gmtime_s(&global, &now);
+        TEST_ASSERT_EQ(0, result);
         testDateTimeDetails_(testName, global, sys::UTCDateTime());
     }
 }

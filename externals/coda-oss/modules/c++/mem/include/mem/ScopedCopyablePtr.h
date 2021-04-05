@@ -55,7 +55,7 @@ template <class T>
 class ScopedCopyablePtr
 {
 public:
-    explicit ScopedCopyablePtr(T* ptr = nullptr) :
+    explicit ScopedCopyablePtr(T* ptr = NULL) :
         mPtr(ptr)
     {
     }
@@ -99,12 +99,12 @@ public:
 
     bool operator==(const ScopedCopyablePtr<T>& rhs) const
     {
-        if (get() == nullptr && rhs.get() == nullptr)
+        if (get() == NULL && rhs.get() == NULL)
         {
             return true;
         }
 
-        if (get() == nullptr || rhs.get() == nullptr)
+        if (get() == NULL || rhs.get() == NULL)
         {
             return false;
         }
@@ -120,7 +120,7 @@ public:
     // explicit operators not supported until C++11
     explicit operator bool() const
     {
-        return get() == nullptr ? false : true;
+        return get() == NULL ? false : true;
     }
 
     T* get() const
@@ -138,7 +138,7 @@ public:
         return mPtr.get();
     }
 
-    void reset(T* ptr = nullptr)
+    void reset(T* ptr = NULL)
     {
         mPtr.reset(ptr);
     }

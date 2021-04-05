@@ -98,7 +98,7 @@ public:
      */
     PgSQLConnection()
     {
-        mDBHandle = nullptr;
+        mDBHandle = NULL;
     }
 
     /*!

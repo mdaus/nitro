@@ -30,8 +30,6 @@
 #include <string>
 #include <memory>
 
-#include <std/span>
-
 #include "nitf/coda-oss.hpp"
 #include "nitf/ImageReader.h"
 #include "nitf/Object.hpp"

@@ -3,7 +3,6 @@
  * =========================================================================
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
- * (C) Copyright 2021, Maxar Technologies, Inc.
  *
  * sys-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -21,9 +20,8 @@
  *
  */
 
-#ifndef CODA_OSS_sys_AbstractOS_h_INCLUDED_
-#define CODA_OSS_sys_AbstractOS_h_INCLUDED_
-#pragma once
+#ifndef __SYS_ABSTRACT_OS_H__
+#define __SYS_ABSTRACT_OS_H__
 
 #include <vector>
 #include <string>
@@ -31,8 +29,6 @@
 #include "sys/FileFinder.h"
 #include "sys/SystemException.h"
 #include "str/Tokenizer.h"
-#include "sys/Filesystem.h"
-
 
 /*!
  *  \file
@@ -190,33 +186,18 @@ public:
     /*!
      *  Get an environment variable
      */
-    virtual std::string getEnv(const std::string&) const = 0;
-
-    // Get a "speical" enviroment variable such as $0 or $PWD.
-    // See https://www.gnu.org/software/bash/manual/html_node/Bash-Variables.html
-    // and https://wiki.bash-hackers.org/syntax/shellvars
-    std::string getSpecialEnv(const std::string&) const;
+    virtual std::string getEnv(const std::string& s) const = 0;
 
     /*!
      *  Returns true if environment variable is set, false otherwise
      */
-    virtual bool isEnvSet(const std::string&) const = 0;
-    bool isSpecialEnv(const std::string&) const;
-
+    virtual bool isEnvSet(const std::string& s) const = 0;
 
     /*!
      *  Get an environment variable and updates value, but only if set.
      *  Returns true if environment variable is set, false otherwise
      */
-    bool getEnvIfSet(const std::string& envVar, std::string& value, bool includeSpecial=false) const;
-
-    // A variable like PATH is often several directories, return each one that exists.
-    bool splitEnv(const std::string& envVar, std::vector<std::string>&) const;
-    bool splitEnv(const std::string& envVar, std::vector<std::string>&, Filesystem::FileType) const;
-
-    // Modify the specified env-var as indicated.
-    void prependEnv(const std::string& envVar, const std::vector<std::string>&, bool overwrite);
-    void appendEnv(const std::string& envVar, const std::vector<std::string>&, bool overwrite);
+    bool getEnvIfSet(const std::string& envVar, std::string& value) const;
 
     /*!
      *  Set an environment variable
@@ -301,12 +282,8 @@ public:
      */
     virtual std::string getCurrentExecutable(
             const std::string& argvPathname="") const;
-    // Access to argv[0] might be far away from a getCurrentExecutable() call.
-    static void setArgvPathname(const std::string& argvPathname);
 
 protected:
-    std::string getArgvPathname(const std::string& argvPathname) const;
-
     /*!
      *  Remove file with this pathname
      */
@@ -336,4 +313,5 @@ public:
 
 }
 
-#endif  // CODA_OSS_sys_AbstractOS_h_INCLUDED_
+#endif
+

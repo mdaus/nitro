@@ -244,19 +244,10 @@ static std::string getEnv(const std::string& s)
     }
     return buffer.data();
 }
-
-static const char* getenv_(const std::string& s)
-{
-    #pragma warning(push)
-    #pragma warning(disable: 4996) // '...': This function or variable may be unsafe. Consider using _dupenv_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-    return getenv(s.c_str());
-    #pragma warning(pop)
-}
-
 std::string sys::OSWin32::getEnv(const std::string& s) const
 {
     std::string retval = ::getEnv(s);
-    assert(retval == getenv_(s));
+    assert(retval == getenv(s.c_str()));
     return retval;
 }
 
@@ -267,7 +258,7 @@ bool sys::OSWin32::isEnvSet(const std::string& s) const
     {
         return true;
     }
-    return getenv_(s) != nullptr;
+    return getenv(s.c_str()) != nullptr;
 }
 
 static void setEnv(const std::string& var,
@@ -404,7 +395,7 @@ void sys::OSWin32::getMemInfo(size_t& totalPhysMem, size_t& freePhysMem) const
 }
 
 std::string sys::OSWin32::getCurrentExecutable(
-        const std::string& argvPathname_) const
+        const std::string& argvPathname) const
 {
     //XP doesn't always null-terminate the buffer, so taking some precautions
     char buffer[MAX_PATH + 2];
@@ -416,7 +407,6 @@ std::string sys::OSWin32::getCurrentExecutable(
     {
         // Path may be up to 32,767 characters, so take a more manual
         // approach instead of guess-and-checking our way up
-        const auto argvPathname = AbstractOS::getArgvPathname(argvPathname_);
         return AbstractOS::getCurrentExecutable(argvPathname);
     }
     return std::string(buffer);

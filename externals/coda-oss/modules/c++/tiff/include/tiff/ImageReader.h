@@ -51,7 +51,7 @@ public:
      *   the stream to read the TIFF image from
      *****************************************************************/
     ImageReader(io::FileInputStream *input) :
-        mIFD(), mStripByteCounts(nullptr), mStripOffsets(nullptr), mInput(input),
+        mIFD(), mStripByteCounts(NULL), mStripOffsets(NULL), mInput(input),
                 mNextOffset(0), mBytePosition(0), mStripIndex(0),
                 mElementSize(0), mReverseBytes(false)
     {

@@ -1,9 +1,8 @@
 /* =========================================================================
- * This file is part of except-c++
+ * This file is part of sys-c++
  * =========================================================================
  *
  * (C) Copyright 2004 - 2016, MDA Information Systems LLC
-  * (C) Copyright 2021, Maxar Technologies, Inc.
  *
  * sys-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -21,19 +20,22 @@
  *
  */
 
-#include <except/Backtrace.h>
-
-#include <assert.h>
+#include <sys/Backtrace.h>
 
 #include <cstdlib>
 #include <sstream>
 
-#if !CODA_OSS_except_Backtrace
+#include <str/Format.h>
 
-static std::string getBacktrace_(bool& supported, std::vector<std::string>&)
+#if !CODA_OSS_sys_Backtrace
+
+static std::string getBacktrace(bool* pSupported, std::vector<std::string>*)
 {
-    supported = true;
-    return "except::getBacktrace() is not supported "
+    if (pSupported != nullptr)
+    {
+        *pSupported = false;
+    }
+    return "sys::getBacktrace() is not supported "
            "on the current platform and/or libc";
 }
 
@@ -70,9 +72,12 @@ private:
 };
 }
 
-static std::string getBacktrace_(bool& supported, std::vector<std::string>& symbolNames)
+static std::string getBacktrace(bool* pSupported, std::vector<std::string>* pFrames)
 {
-    supported = true;
+    if (pSupported != nullptr)
+    {
+        *pSupported = true;
+    }
 
     void* stackBuffer[MAX_STACK_ENTRIES];
     int currentStackSize = backtrace(stackBuffer, MAX_STACK_ENTRIES);
@@ -82,9 +87,12 @@ static std::string getBacktrace_(bool& supported, std::vector<std::string>& symb
     std::stringstream ss;
     for (int ii = 0; ii < currentStackSize; ++ii)
     {
-        auto symbolName = stackSymbols[ii] + "\n"; 
-        ss << symbolName;
-        symbolNames.push_back(std::move(symbolName));
+        auto stackSymbol = stackSymbols[ii] + "\n"; 
+        ss << stackSymbol;
+        if (pFrames != nullptr)
+        {
+            pFrames->push_back(std::move(stackSymbol));
+        }
     }
 
     return ss.str();
@@ -95,44 +103,27 @@ static std::string getBacktrace_(bool& supported, std::vector<std::string>& symb
 #include <dbghelp.h>
 #pragma comment(lib, "dbghelp")
 
-// https://docs.microsoft.com/en-us/windows/win32/api/dbghelp/nf-dbghelp-syminitialize
-// "A process that calls SymInitialize should not call it again unless it calls SymCleanup first."
-class SymInitialize_RAII final
+static std::string getBacktrace(bool* pSupported, std::vector<std::string>* pFrames)
 {
-    HANDLE process_;
-
-public:
-    bool result;
-    SymInitialize_RAII(HANDLE process) : process_(process)
+    if (pSupported != nullptr)
     {
-        result = SymInitialize(process_, NULL, TRUE) == TRUE ? true : false;  // https://docs.microsoft.com/en-us/windows/win32/api/dbghelp/nf-dbghelp-syminitialize
+        *pSupported = true;
     }
-
-    ~SymInitialize_RAII()
-    {
-        result = SymCleanup(process_) == TRUE ? true : false; // https://docs.microsoft.com/en-us/windows/win32/api/dbghelp/nf-dbghelp-symcleanup
-        assert(result);
-    }
-};
-
-static std::string getBacktrace_(bool& supported, std::vector<std::string>& symbolNames)
-{
-    supported = true;
 
     // https://stackoverflow.com/a/5699483/8877
-    const auto process = GetCurrentProcess();
-    SymInitialize_RAII symInitialize(process);
-    if (!symInitialize.result)
+    HANDLE process = GetCurrentProcess();
+    auto result = SymInitialize(process, NULL, TRUE) == TRUE ? true : false; // https://docs.microsoft.com/en-us/windows/win32/api/dbghelp/nf-dbghelp-syminitialize
+    if (!result)
     {
-        return "getBacktrace_(): SymInitialize() failed.";
+        return "sys::getBacktrace(): SymInitialize() failed";
     }
 
      PVOID stack[100];
-     const auto frames = CaptureStackBackTrace(0, 100, stack, NULL);
+     auto frames = CaptureStackBackTrace(0, 100, stack, NULL);
      auto symbol = reinterpret_cast<PSYMBOL_INFO>(calloc(sizeof(SYMBOL_INFO) + 256 * sizeof(char), 1));
      if (symbol == nullptr)
      {
-         return "getBacktrace_(): calloc() failed.";
+         return "sys::getBacktrace(): calloc() failed";
      }
     symbol->MaxNameLen = 255;
     symbol->SizeOfStruct = sizeof(SYMBOL_INFO);
@@ -141,15 +132,20 @@ static std::string getBacktrace_(bool& supported, std::vector<std::string>& symb
     for (unsigned int i = 0; i < frames; i++)
     {
         const auto address = reinterpret_cast<DWORD64>(stack[i]);
-        const auto result = SymFromAddr(process, address, 0, symbol) == TRUE ? true : false;
+        result = SymFromAddr(process, address, 0, symbol) == TRUE ? true : false;
         if (!result)
         {
             continue;
         }
-        std::string symbolName = symbol->Name == nullptr ? "<no symbol->Name>" : symbol->Name;
-        symbolName += "\n";
-        retval += symbolName;
-        symbolNames.push_back(std::move(symbolName));
+        auto frame = str::format("%i: %s - 0x%0X\n",
+            frames - i - 1,
+            symbol->Name,
+            symbol->Address);
+        retval += frame;
+        if (pFrames != nullptr)
+        {
+            pFrames->push_back(std::move(frame));
+        }
     }
 
     free(symbol);
@@ -158,12 +154,16 @@ static std::string getBacktrace_(bool& supported, std::vector<std::string>& symb
 
 #else
 
-#error "CODA_OSS_except_Backtrace inconsistency."
+#error "CODA_OSS_sys_Backtrace inconsistency."
 
 #endif
-#endif // CODA_OSS_except_Backtrace
+#endif // CODA_OSS_sys_Backtrace
 
-std::string except::getBacktrace(bool& supported, std::vector<std::string>& frames)
+std::string sys::getBacktrace(bool* pSupported)
 {
-    return getBacktrace_(supported, frames);
+    return ::getBacktrace(pSupported, nullptr /*frames*/);
+}
+std::string sys::getBacktrace(bool& supported, std::vector<std::string>& frames)
+{
+    return ::getBacktrace(&supported, &frames);
 }

@@ -92,7 +92,7 @@ class StreamReader : public io::InputStream
 public:
     /** Constructor */
     StreamReader() : 
-        inputStream(nullptr), header(nullptr), headerLength(0), own(false) {}
+        inputStream(NULL), header(NULL), headerLength(0), own(false) {}
 
     /** Destructor */
     virtual ~StreamReader()
@@ -107,7 +107,7 @@ public:
      *  an address.  This is for legacy compatibility.
      */
     StreamReader(io::InputStream* is, bool adopt = false) : 
-        inputStream(is), header(nullptr), headerLength(0), own(adopt)
+        inputStream(is), header(NULL), headerLength(0), own(adopt)
     {
         // No longer calling setInputStream directly -- its virtual now
         parseHeader(true);

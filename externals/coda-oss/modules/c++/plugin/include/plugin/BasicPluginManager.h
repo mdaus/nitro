@@ -196,7 +196,7 @@ public:
             mHandlers.find( name );
         if ( it != mHandlers.end() )
             return it->second.first;
-        return nullptr;
+        return NULL;
     }
 
     /*!
@@ -275,7 +275,7 @@ public:
             {
                 std::ostringstream oss;
 
-                for (unsigned int i = 0; ops[i] != nullptr; i++)
+                for (unsigned int i = 0;  ops[i] != NULL; i++)
                     oss << ops[i] << ":";
                 eh->onPluginVersionUnsupported(
                     FmtX("For plugin supporting ops %s version [%d.%d] not supported (%d.%d)",
@@ -286,7 +286,7 @@ public:
                 return;
             }
 
-            for (size_t i = 0; ops[i] != nullptr; ++i)
+            for (size_t i = 0; ops[i] != NULL; ++i)
             {
                 T* pluginHandler = identity->spawnHandler();
                 if (! pluginHandler )
@@ -317,7 +317,7 @@ public:
     {
         try
         {
-            sys::DLL* dso = nullptr;
+            sys::DLL *dso = NULL;
             bool loadDSO = true;
 
             std::string baseFile = sys::Path(file).getBasePath();

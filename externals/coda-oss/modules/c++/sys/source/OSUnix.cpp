@@ -499,7 +499,7 @@ void sys::OSUnix::getMemInfo(size_t &totalPhysMem, size_t &freePhysMem) const
 }
 
 std::string sys::OSUnix::getCurrentExecutable(
-        const std::string& argvPathname_) const
+        const std::string& argvPathname) const
 {
     std::vector<std::string> possibleSymlinks;
 
@@ -529,7 +529,6 @@ std::string sys::OSUnix::getCurrentExecutable(
         }
     }
 
-    const auto argvPathname = AbstractOS::getArgvPathname(argvPathname_);
     return AbstractOS::getCurrentExecutable(argvPathname);
 }
 

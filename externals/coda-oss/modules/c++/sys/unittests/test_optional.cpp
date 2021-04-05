@@ -24,7 +24,7 @@
 
 #include <array>
 
-#include <std/optional>
+#include <sys/Optional.h>
 
 namespace
 {
@@ -115,6 +115,28 @@ TEST_CASE(test_sys_Optional)
     }
 }
 
+TEST_CASE(test_codaoss_optional)
+{
+    const coda_oss::optional<int> null;
+    TEST_ASSERT_FALSE(null.has_value());
+
+    {
+        coda_oss::optional<int> opt;
+        TEST_ASSERT_FALSE(opt.has_value());
+        TEST_ASSERT_EQ(null, opt);
+        opt = 314;
+        testOptional_(testName, opt);
+    }
+    {
+        coda_oss::optional<int> opt = 314;
+        testOptional_(testName, opt);
+    }
+    {
+        auto opt = coda_oss::make_optional<int>(314);
+        testOptional_(testName, opt);
+    }
+}
+
 TEST_CASE(test_std_optional)
 {
     #if CODA_OSS_lib_optional
@@ -143,6 +165,7 @@ TEST_CASE(test_std_optional)
 int main(int /*argc*/, char** /*argv*/)
 {
     TEST_CHECK(test_sys_Optional);
+    TEST_CHECK(test_codaoss_optional);
     TEST_CHECK(test_std_optional);
     return 0;
 }

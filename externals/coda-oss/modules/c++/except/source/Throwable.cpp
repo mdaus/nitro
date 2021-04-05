@@ -20,70 +20,23 @@
  *
  */
 
-#include <assert.h>
-
 #include "except/Throwable.h"
 
-#include "except/Backtrace.h"
-
-void except::Throwable::doGetBacktrace()
+except::Throwable::Throwable(except::Context c)
 {
-    // This could be time-consuming or generate a lot of (noisy) output; only do
-    // it if requested
-    bool supported;
-    (void)except::getBacktrace(supported, mBacktrace);
+    // Assign c's message to our internal one
+    mMessage = c.getMessage();
+
+    // Push context onto exception stack
+    mTrace.pushContext(c);
 }
 
-except::Throwable::Throwable(const Context* pContext, const Throwable* pThrowable, const std::string* pMessage, bool callGetBacktrace)
+except::Throwable::Throwable(const except::Throwable& t, except::Context c)
 {
-    if (pThrowable != nullptr)
-    {
-        // Copy t's exception stack and push c onto local one
-        mTrace = pThrowable->getTrace();
-    }
+    // Copy t's exception stack and push c onto local one
+    mTrace = t.getTrace();
+    mTrace.pushContext(c);
 
-    if (pContext != nullptr)
-    {
-        assert(pMessage == nullptr);
-
-        // Push context onto exception stack
-        mTrace.pushContext(*pContext);
-
-        // Assign c's message as our internal one
-        mMessage = pContext->getMessage();
-    }
-    
-    if (pMessage != nullptr)
-    {
-        assert(pContext == nullptr);
-        mMessage = *pMessage;
-    }
-
-    // This will record a back-trace from where the Throwable object was instantiated.
-    // That's not necessarily where the "throw" will occur, but it's often the case; Throwable
-    // instances ususally aren't passed around.  That is, hardly anybody does:
-    //    Exception e; // Throwable instance
-    //    might_throw(e);
-    // rather, the idiom is usually
-    //    throw Exception(...); // instantiate and throw
-    if (callGetBacktrace)
-    {
-        doGetBacktrace();
-    }
-}
-
-except::Throwable::Throwable() : Throwable(nullptr)
-{
-}
-
-except::Throwable::Throwable(const std::string& message) : Throwable(nullptr, nullptr, &message)
-{
-}
-
-except::Throwable::Throwable(except::Context c) : Throwable(&c)
-{
-}
-
-except::Throwable::Throwable(const except::Throwable& t, except::Context c) : Throwable(&c, &t)
-{
+    // Assign c's message as our internal one
+    mMessage = c.getMessage();
 }

@@ -1,6 +1,7 @@
 NAME            = 'io'
+MAINTAINER      = 'jmrandol@users.sourceforge.net'
 VERSION         = '1.0'
-MODULE_DEPS     = 'sys mem coda_oss std'
+MODULE_DEPS     = 'sys mem'
 SOURCE_FILTER   = 'MMapInputStream.cpp'
 TEST_FILTER     = 'mmByteStreamTest.cpp'
 
