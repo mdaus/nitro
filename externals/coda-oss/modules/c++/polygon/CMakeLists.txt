@@ -5,3 +5,11 @@ coda_add_module(
     VERSION 1.0
     DEPS sys-c++ mem-c++ types-c++ math-c++ except-c++)
 
+coda_add_tests(
+    MODULE_NAME ${MODULE_NAME}
+    DIRECTORY "tests"
+    DEPS sio.lite-c++)
+coda_add_tests(
+    MODULE_NAME ${MODULE_NAME}
+    DIRECTORY "unittests"
+    UNITTEST)

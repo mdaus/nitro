@@ -5,3 +5,11 @@ coda_add_module(
     VERSION 1.0
     DEPS except-c++)
 
+coda_add_tests(
+    MODULE_NAME ${MODULE_NAME}
+    DIRECTORY "tests")
+coda_add_tests(
+    MODULE_NAME ${MODULE_NAME}
+    DIRECTORY "unittests"
+    DEPS sys-c++
+    UNITTEST)

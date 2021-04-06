@@ -7,3 +7,12 @@ coda_add_module(
     VERSION 1.2
     DEPS config-c++ except-c++ str-c++)
 
+coda_add_tests(
+    MODULE_NAME ${MODULE_NAME}
+    DIRECTORY "tests"
+    FILTER_LIST "MMapReadOnlyTest.cpp" "ProcessTest1.cpp")
+coda_add_tests(
+    MODULE_NAME ${MODULE_NAME}
+    DIRECTORY "unittests"
+    DEPS mt-c++ std-c++
+    UNITTEST)
