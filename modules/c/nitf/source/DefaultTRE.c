@@ -96,7 +96,8 @@ NITFPRIV(NITF_BOOL) defaultRead(nitf_IOInterface *io,
         nitf_Error_init(error, "uint32_t+1 overflow", NITF_CTXT, NITF_ERR_MEMORY);
         goto CATCH_ERROR;
     }
-    data = (char *) NITF_MALLOC(length + 1);
+    const size_t length_ = ((size_t)length) + 1;
+    data = (char *) NITF_MALLOC(length_);
     if (!data)
     {
         nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
@@ -104,7 +105,7 @@ NITFPRIV(NITF_BOOL) defaultRead(nitf_IOInterface *io,
 
         goto CATCH_ERROR;
     }
-    memset(data, 0, length + 1);
+    memset(data, 0, length_);
 
     descr =
         (nitf_TREDescription *) NITF_MALLOC(2 *
@@ -367,9 +368,10 @@ NITFPRIV(NITF_BOOL) defaultClone(nitf_TRE *source,
     nitf_TREPrivateData* sourcePriv = (nitf_TREPrivateData*)source->priv;
 
     /* this clones the hash */
-    nitf_TREPrivateData* trePriv = nitf_TREPrivateData_clone(sourcePriv, error);
-    if (trePriv == NULL)
+    tre->priv = nitf_TREPrivateData_clone(sourcePriv, error);
+    if (tre->priv == NULL)
         return NITF_FAILURE;
+    nitf_TREPrivateData* trePriv = tre->priv;
 
     /* just copy over the optional length */
     trePriv->length = sourcePriv->length;

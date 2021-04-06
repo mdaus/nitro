@@ -20,14 +20,17 @@
  *
  */
 
-#ifndef __IO_FILE_OUTPUT_STREAM_OS_H__
-#define __IO_FILE_OUTPUT_STREAM_OS_H__
+#ifndef CODA_OSS_io_FileOutputStreamOS_h_INCLUDED_
+#define CODA_OSS_io_FileOutputStreamOS_h_INCLUDED_
+
+#include <string>
 
 #if !defined(USE_IO_STREAMS)
 
 #include "io/SeekableStreams.h"
 #include "sys/Filesystem.h"
 #include "sys/File.h"
+#include "coda_oss/filesystem.h"
 
 
 /*!
@@ -66,7 +69,6 @@ public:
      */
     FileOutputStreamOS(const coda_oss::filesystem::path& outputFile,
                        int creationFlags = sys::File::CREATE | sys::File::TRUNCATE);
-
 
     //! Destructor, closes the file stream.
     virtual ~FileOutputStreamOS()
@@ -121,5 +123,4 @@ public:
 }
 
 #endif
-#endif
-
+#endif // CODA_OSS_io_FileOutputStreamOS_h_INCLUDED_

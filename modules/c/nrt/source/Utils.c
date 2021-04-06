@@ -229,6 +229,13 @@ NRTAPI(void) nrt_Utils_baseName(char *base, const char *fullName,
 NRTAPI(NRT_BOOL) nrt_Utils_parseDecimalString(const char *d, double *decimal,
                                               nrt_Error * error)
 {
+    if (d == NULL)
+    {
+        nrt_Error_initf(error, NRT_CTXT, NRT_ERR_INVALID_PARAMETER,
+                        "Invalid decimal string: <NULL>. Should be +-dd.ddd or +-ddd.ddd");
+        return NRT_FAILURE;
+    }
+
     /* +-dd.ddd or += ddd.ddd */
     const size_t len = strlen(d);
     if (len != 7 && len != 8)
@@ -342,6 +349,13 @@ NRTAPI(NRT_BOOL) nrt_Utils_parseGeographicString(const char *dms, int *degrees,
                                                  int *minutes, double *seconds,
                                                  nrt_Error * error)
 {
+    if (dms == NULL)
+    {
+        nrt_Error_initf(error, NRT_CTXT, NRT_ERR_INVALID_PARAMETER,
+                        "Invalid decimal string: <NULL>. Should be ddmmssX or dddmmssY");
+        return NRT_FAILURE;
+    }
+
     int degreeOffset = 0;
     const size_t len = strlen(dms);
     char dir;
@@ -602,6 +616,32 @@ NRTPROT(void) nrt_Utils_decimalLonToGeoCharArray(double decimal, char *buffer8)
 
     nrt_Utils_decimalToGeographic(decimal, &d, &m, &s);
     nrt_Utils_geographicLonToCharArray(d, m, s, buffer8);
+}
+
+/*!
+ * Helper function to actually perform a byte-swap.
+ *
+ * \param value Pointer to value being swapped
+ * \param indexOne Index of first byte to be swapped
+ * \param indexTwo Index of second byte to be swapped
+ */
+/*
+ * Older versions of Visual Studio do not support `inline` for C
+ * Using `__inline` for Windows instead
+ */
+NRTPRIV(void)
+#if defined(WIN32) || defined(_WIN32)
+__inline
+#else
+inline
+#endif
+nrt_Utils_swap(uint8_t* value, size_t indexOne,
+        size_t indexTwo)
+{
+    uint8_t temp;
+    temp = value[indexOne];
+    value[indexOne] = value[indexTwo];
+    value[indexTwo] = temp;
 }
 
 NRTAPI(void) nrt_Utils_byteSwap(uint8_t *value, size_t size)
