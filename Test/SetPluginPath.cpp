@@ -27,16 +27,16 @@ static std::string Platform()
 #endif
 }
 
-// https://stackoverflow.com/questions/13794130/visual-studio-how-to-check-used-c-platform-toolset-programmatically
-static std::string PlatformToolset()
-{
-	// https://docs.microsoft.com/en-us/cpp/build/how-to-modify-the-target-framework-and-platform-toolset?view=msvc-160
-#if _MSC_FULL_VER >= 190000000
-	return "v142";
-#else
-#error "Don't know $(PlatformToolset) value.'"
-#endif
-}
+//// https://stackoverflow.com/questions/13794130/visual-studio-how-to-check-used-c-platform-toolset-programmatically
+//static std::string PlatformToolset()
+//{
+//	// https://docs.microsoft.com/en-us/cpp/build/how-to-modify-the-target-framework-and-platform-toolset?view=msvc-160
+//#if _MSC_FULL_VER >= 190000000
+//	return "v142";
+//#else
+//#error "Don't know $(PlatformToolset) value.'"
+//#endif
+//}
 
 static bool is_x64_Configuration(const fs::path& path) // "Configuration" is typically "Debug" or "Release"
 {
