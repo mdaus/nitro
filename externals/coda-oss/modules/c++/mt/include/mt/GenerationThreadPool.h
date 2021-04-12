@@ -24,6 +24,8 @@
 #ifndef __MT_GENERATION_THREAD_POOL_H__
 #define __MT_GENERATION_THREAD_POOL_H__
 
+#include <assert.h>
+
 #if !defined(__APPLE_CC__)
 
 #include <import/sys.h>
@@ -80,6 +82,7 @@ namespace mt
 	virtual TiedRequestHandler *newRequestHandler()
 	{
 	    TiedRequestHandler* handler = BasicThreadPool<TiedRequestHandler>::newRequestHandler();
+        assert(handler != nullptr);
 	    handler->setSemaphore(&mGenerationSync);
 		
 	    if (mAffinityInit)
