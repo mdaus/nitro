@@ -44,9 +44,9 @@ class FileHandler : public StreamHandler
 {
 
 public:
-    FileHandler(const coda_oss::filesystem::path& fname, LogLevel level = LogLevel::LOG_NOTSET,
+    FileHandler(const sys::Filesystem::path& fname, LogLevel level = LogLevel::LOG_NOTSET,
                 int creationFlags = sys::File::CREATE | sys::File::TRUNCATE) :
-        StreamHandler(new io::FileOutputStream(fname, creationFlags), level)
+        StreamHandler(new io::FileOutputStream(fname.string(), creationFlags), level)
     {
         // In case we are in append mode
         ((io::FileOutputStream*) mStream.get())->seek(0, io::Seekable::END);
