@@ -63,16 +63,19 @@ namespace mt
     class GenerationThreadPool : public BasicThreadPool<TiedRequestHandler>
     {
 	sys::Semaphore mGenerationSync;
-	CPUAffinityInitializer* mAffinityInit;
-	int mGenSize;
+	CPUAffinityInitializer* mAffinityInit = nullptr;
+	int mGenSize = 0;
     public:
 	GenerationThreadPool(unsigned short numThreads = 0,
 			     CPUAffinityInitializer* affinityInit = nullptr) 
 	    : BasicThreadPool<TiedRequestHandler>(numThreads), 
-	    mAffinityInit(affinityInit), mGenSize(0)
+	    mAffinityInit(affinityInit)
 	    {
 	    }
 	virtual ~GenerationThreadPool() {}
+
+	GenerationThreadPool(const GenerationThreadPool&) = delete;
+    GenerationThreadPool& operator=(const GenerationThreadPool&) = delete;
 	
 	virtual TiedRequestHandler *newRequestHandler()
 	{
