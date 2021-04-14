@@ -3,14 +3,14 @@ name: build_unittest
 on: [push]
 
 jobs:
-  build-windows:
+  build-windows-cmake:
     name: Windows
     runs-on: [windows-latest]
 
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python
-      uses: actions/setup-python@v1
+      uses: actions/setup-python@v2
       with:
         python-version: '3.7'
     - name: configure
@@ -33,14 +33,14 @@ jobs:
         ctest -C Release
 
 
-  build-linux:
+  build-linux-cmake:
     name: Linux
     runs-on: [ubuntu-latest]
 
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python
-      uses: actions/setup-python@v1
+      uses: actions/setup-python@v2
       with:
         python-version: '3.7'
     - name: configure
@@ -62,3 +62,55 @@ jobs:
       run: |
         cd target
         ctest
+
+
+  build-windows-waf:
+    name: Windows
+    runs-on: [windows-latest]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.7'
+    - name: configure
+      run: |
+        pip install numpy
+        mkdir installLinux-Github
+        # test_os.cpp is a little fritzy w/o --enable-debugging
+        python waf configure --enable-debugging --prefix="$PWD/installLinux-Github"
+    - name: build
+      run: |
+        python waf build
+    - name: install
+      run: |
+        python waf install
+    - name: test
+      run: |
+        python waf install --alltests
+
+  build-linux-waf:
+    name: Linux
+    runs-on: [ubuntu-latest]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.7'
+    - name: configure
+      run: |
+        pip install numpy
+        mkdir installLinux-Github
+        python waf configure --prefix="$PWD/installLinux-Github"
+    - name: build
+      run: |
+        python waf build
+    - name: install
+      run: |
+        python waf install
+    - name: test
+      run: |
+        python waf install --alltests
