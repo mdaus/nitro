@@ -53,11 +53,10 @@ OneD<_T>::integrate(double start, double end) const
     double ret(0.0);
    double endAtPwr = end;
    double startAtPwr = start;
-   double div = 0;
    const auto sz = mCoef.size();
    for (size_t i = 0; i < sz; i++)
    {
-      div = 1.0 / (i + 1);
+      const auto div = 1.0 / (static_cast<double>(i) + 1.0);
       const double newCoef = mCoef[i] * div;
       ret += newCoef * endAtPwr;
       ret -= newCoef * startAtPwr;
@@ -94,18 +93,18 @@ OneD<math::linear::VectorN<3, double> >::integrate(double start, double end) con
    return ret;
 }
 
-template<typename _T>
-OneD<_T>
-OneD<_T>::derivative() const
+template<typename T>
+OneD<T>
+OneD<T>::derivative() const
 {
-    OneD<_T> ret(0);
+    OneD<T> ret(0);
     if (order() > 0)
     {
-        ret = OneD<_T>(order()-1);
+        ret = OneD<T>(order()-1);
         const auto sz = mCoef.size() - 1;
         for (size_t ii = 0; ii < sz; ii++)
         {
-            ret[ii] = static_cast<_T>(mCoef[ii + 1] * (ii + 1));
+            ret[ii] = mCoef[ii + 1] * static_cast<T>(ii + 1);
         }
     }
     return ret;
@@ -453,17 +452,19 @@ OneD<_T> OneD<_T>::transformInput(const OneD<_T>& gx,
 template<typename _T>
 void OneD<_T>::copyFrom(const OneD<_T>& p)
 {
-    const size_t numCopy(std::min(size(), p.size()));
-    std::copy(p.mCoef.begin(), p.mCoef.begin() + numCopy, mCoef.begin());
+    const auto numCopy = static_cast<ptrdiff_t>(std::min(size(), p.size()));
+    const auto begin = p.mCoef.begin();
+    const auto end = begin + numCopy;
+    std::copy(begin, end, mCoef.begin());
 }
 
 template<typename _T>
 template<typename Vector_T>
 bool OneD<_T>::equalImpl(const Vector_T& p) const
 {
-    size_t sz = size();
-    size_t psz = p.size();
-    size_t minSize = std::min<size_t>(sz, psz);
+    const auto sz = size();
+    const auto psz = p.size();
+    const auto minSize = std::min(sz, psz);
 
     // guard against uninitialized
     if (minSize == 0 && (sz != psz))
