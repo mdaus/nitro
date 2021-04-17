@@ -98,7 +98,7 @@ public:
      *  Report whether or not the file is open
      *  \return True if file is open
      */
-    virtual bool isOpen()
+    virtual bool isOpen() const noexcept
     {
         return mFile.isOpen();
     }

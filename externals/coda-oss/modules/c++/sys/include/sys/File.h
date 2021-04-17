@@ -136,7 +136,7 @@ struct File
      *  Is the file open?
      *  \return true if open, false if invalid handle
      */
-    bool isOpen()
+    bool isOpen() const noexcept
     {
         return (mHandle != SYS_INVALID_HANDLE);
     }
@@ -145,7 +145,7 @@ struct File
      *  Return the underlying file handle
      *
      */
-    _SYS_HANDLE_TYPE getHandle()
+    _SYS_HANDLE_TYPE getHandle() noexcept
     {
         return mHandle;
     }
