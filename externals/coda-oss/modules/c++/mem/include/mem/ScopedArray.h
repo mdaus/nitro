@@ -37,7 +37,8 @@ namespace mem
     { 
         typedef T ElementType;
 
-        explicit ScopedArray(T* array = nullptr) :
+        explicit ScopedArray() = default;
+        explicit ScopedArray(T* array) :
             mArray(array)
         {
         }
@@ -74,7 +75,7 @@ namespace mem
         ScopedArray& operator=(const ScopedArray&) = delete;
 
     private:
-        T* mArray;
+        T* mArray = nullptr;
     };
 }
 
