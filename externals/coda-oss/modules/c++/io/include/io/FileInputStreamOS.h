@@ -50,15 +50,13 @@ namespace io
  *  method is based on the pos in the file, and the streamTo() and read()
  *  are file operations
  */
-class FileInputStreamOS : public SeekableInputStream
+struct FileInputStreamOS : public SeekableInputStream
 {
 protected:
     sys::File mFile;
 public:
 
-    //!  Constructor
-    FileInputStreamOS()
-    {}
+    FileInputStreamOS() = default;
 
     /*!
      *  Alternate Constructor.  Takes an input file and a mode
