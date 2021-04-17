@@ -122,6 +122,10 @@ struct nitf_test_tre_mods : public ::testing::Test {
         // cleanup any pending stuff, but no exceptions allowed
     }
 
+	nitf_test_tre_mods(const nitf_test_tre_mods&) = delete;
+	nitf_test_tre_mods& operator=(const nitf_test_tre_mods&) = delete;
+
+
     // put in any custom data members that you need 
 };
 
@@ -155,6 +159,10 @@ struct test_load_plugins : public ::testing::Test {
 	~test_load_plugins() {
 		// cleanup any pending stuff, but no exceptions allowed
 	}
+
+	test_load_plugins(const test_load_plugins&) = delete;
+	test_load_plugins& operator=(const test_load_plugins&) = delete;
+
 
 	// put in any custom data members that you need 
 };

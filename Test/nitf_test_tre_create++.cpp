@@ -24,6 +24,10 @@ struct nitf_test_tre_create__ : public ::testing::Test {
 		// cleanup any pending stuff, but no exceptions allowed
 	}
 
+
+	nitf_test_tre_create__(const nitf_test_tre_create__&) = delete;
+	nitf_test_tre_create__& operator=(const nitf_test_tre_create__&) = delete;
+
 	// put in any custom data members that you need 
 };
 

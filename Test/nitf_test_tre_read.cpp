@@ -24,6 +24,10 @@ struct test_tre_read : public ::testing::Test {
 		// cleanup any pending stuff, but no exceptions allowed
 	}
 
+	test_tre_read(const test_tre_read&) = delete;
+	test_tre_read& operator=(const test_tre_read&) = delete;
+
+
 	// put in any custom data members that you need 
 };
 
