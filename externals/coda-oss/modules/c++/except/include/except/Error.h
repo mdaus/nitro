@@ -44,7 +44,7 @@
       _Name##Error(const except::Context& c) : _Base(c){} \
       _Name##Error(const std::string& msg) : _Base(msg){} \
       _Name##Error(const except::Throwable& t, const except::Context& c) : _Base(t, c){} \
-      virtual std::string getType() const { return #_Name; } \
+      std::string getType() const override { return #_Name; } \
   };
 
 #define DECLARE_ERROR(_Name) DECLARE_EXTENDED_ERROR(_Name, except::Error)
