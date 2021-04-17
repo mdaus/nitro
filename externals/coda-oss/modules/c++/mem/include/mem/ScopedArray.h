@@ -24,6 +24,9 @@
 #define __MEM_SCOPED_ARRAY_H__
 
 #include <cstddef>
+#include <memory>
+
+#include "mem/SharedPtr.h" // mem::make::unique
 
 namespace mem
 {
@@ -38,21 +41,20 @@ namespace mem
         typedef T ElementType;
 
         explicit ScopedArray() = default;
-        explicit ScopedArray(T* array) :
-            mArray(array)
+        explicit ScopedArray(T* array)
+        {
+            reset(array);
+        }
+        explicit ScopedArray(std::unique_ptr<T[]>&& array) : mArray(std::move(array))
         {
         }
 
-        ~ScopedArray()
-        {
-            delete[] mArray;
-        }
+        ~ScopedArray() = default;
 
         void reset(T* array = nullptr)
         {
-            delete[] mArray;
-            mArray = array;
-        }
+            mArray.reset(array);
+         }
 
         T& operator[](std::ptrdiff_t idx) const
         {
@@ -61,21 +63,19 @@ namespace mem
 
         T* get() const
         {
-            return mArray;
+            return mArray.get();
         }
 
         T* release()
         {
-            T* const array = mArray;
-            mArray = nullptr;
-            return array;
+            return mArray.release();
         }
 
         ScopedArray(const ScopedArray&) = delete;
         ScopedArray& operator=(const ScopedArray&) = delete;
 
     private:
-        T* mArray = nullptr;
+        std::unique_ptr<T[]> mArray;
     };
 }
 
