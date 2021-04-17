@@ -24,12 +24,6 @@
 
 #if _MSC_VER
 #pragma warning(push)
-#pragma warning(disable: 26447) // The function is declared '...' but calls function '..' which may throw exceptions (f.6).
-#pragma warning(disable: 26455) // Default constructor may not throw. Declare it '...' (f.6).
-#pragma warning(disable: 26440) // Function '...' can be declared '...' (f.6).
-#pragma warning(disable: 26432) // If you define or delete any default operation in the type '...', define or delete them all(c.21).
-#pragma warning(disable: 26433) // Function '...' should be marked with '...' (c.128).
-#pragma warning(disable: 26481) // Don't use pointer arithmetic. Use span instead (bounds.1).
 #pragma warning(disable: 26487) // Don't return a pointer '...' that may be invalid (lifetime.4).
 #endif // _MSC_VER
 
@@ -40,20 +34,18 @@
 
 #if _MSC_VER
 #pragma warning(disable: 26432) // If you define or delete any default operation in the type '...', define or delete them all(c.21).
+#pragma warning(disable: 26447) // The function is declared '...' but calls function '..' which may throw exceptions (f.6).
 #pragma warning(disable: 26440) // Function '...' can be declared '...' (f.6).
+#pragma warning(disable: 26481) // Don't use pointer arithmetic. Use span instead (bounds.1).
+#pragma warning(disable: 26455) // Default constructor may not throw. Declare it '...' (f.6).
+#pragma warning(disable: 26446) // Prefer to use gsl::at() instead of unchecked subscript operator (bounds.4)
+#pragma warning(disable: 26433) // Function '...' should be marked with '...' (c.128).
 
 // TODO: get rid of these someday? ... from Visual Studio code-analysis
-#pragma warning(disable: 26401) // Do not delete a raw pointer that is not an owner<T>(i.11).
 #pragma warning(disable: 26434) // Function '...' hides a non-virtual function '...' (c.128).
-#pragma warning(disable: 26446) // Prefer to use gsl::at() instead of unchecked subscript operator (bounds.4)
-#pragma warning(disable: 26481) // Don't use pointer arithmetic. Use span instead (bounds.1).
-#pragma warning(disable: 26485) // Expression '...' : No array to pointer decay(bounds.3).
-#pragma warning(disable: 26486) // Don't pass a pointer that may be invalid to a function. Parameter 3 '...' in call to '...' may be invalid (lifetime.3).
-#pragma warning(disable: 26487) // Don't return a pointer '...' that may be invalid(lifetime.4).
-#pragma warning(disable: 26440) // Function '...' can be declared '...' (f.6).
-#pragma warning(disable: 26409) // Avoid calling new and delete explicitly, use std::make_unique<T> instead (r.11).
 #pragma warning(disable: 26456) // Operator '...' hides a non-virtual operator '...' (c.128).
-#pragma warning(disable: 26429) // Symbol '...' is never tested for nullness, it can be marked as not_null (f.23).
+#pragma warning(disable: 26487) // Don't return a pointer '...' that may be invalid(lifetime.4).
+#pragma warning(disable: 26409) // Avoid calling new and delete explicitly, use std::make_unique<T> instead (r.11).
 #endif // _MSC_VER
 
 //#define CODA_OSS_Throwable_isa_std_exception 1 // except::Throwable derives from std::exception
