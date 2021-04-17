@@ -57,10 +57,7 @@ class FileOutputStreamOS : public SeekableOutputStream
 protected:
     sys::File mFile;
 public:
-    //!  Default constructor
-    FileOutputStreamOS()
-    {}
-
+    FileOutputStreamOS() = default;
 
     /*!
      *  Alternate Constructor.  Takes an output file and a mode
