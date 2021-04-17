@@ -68,10 +68,8 @@ typedef int _SYS_HANDLE_TYPE;
 
 namespace sys
 {
-class File
+struct File
 {
-public:
-
     enum
     {
         FROM_START = _SYS_SEEK_SET,
@@ -88,10 +86,7 @@ public:
     /*!
      *  Default constructor.  Does nothing
      */
-    File() :
-        mHandle(SYS_INVALID_HANDLE)
-    {
-    }
+    File() = default;
 
     /*!
      *  Constructor.  Initializes to a file.
@@ -242,7 +237,7 @@ public:
     void close();
 
 protected:
-    _SYS_HANDLE_TYPE mHandle;
+    _SYS_HANDLE_TYPE mHandle = SYS_INVALID_HANDLE;
     std::string mPath;
 
 };
