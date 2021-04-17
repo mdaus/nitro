@@ -59,7 +59,7 @@
       _Name##Exception(const std::string& msg) : _Base(msg){} \
       _Name##Exception(const except::Throwable& t, const except::Context& c) : _Base(t, c){} \
       CODA_OSS_except_Exception_suppress_26447_BEGIN_ \
-      virtual std::string getType() const { return #_Name"Exception"; } \
+      std::string getType() const override { return #_Name"Exception"; } \
      CODA_OSS_except_Exception_suppress_26447_END_ };
 
 #define DECLARE_EXCEPTION(_Name) DECLARE_EXTENDED_EXCEPTION(_Name, except::Exception)
