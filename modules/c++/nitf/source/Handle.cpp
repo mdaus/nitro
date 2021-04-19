@@ -20,8 +20,9 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
 #include "nitf/Handle.hpp"
+
+#include <std/memory>
 
 class nitf::Handle::Impl
 {
