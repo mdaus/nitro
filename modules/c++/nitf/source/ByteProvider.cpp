@@ -137,7 +137,7 @@ void ByteProvider::initialize(const Record& record,
 void ByteProvider::getFileLayout(const nitf::Record& inRecord,
                                  const std::vector<PtrAndLength>& desData)
 {
-    std::shared_ptr<io::ByteStream> byteStream(new io::ByteStream());
+   auto byteStream = std::make_shared<io::ByteStream>();
 
     nitf::IOStreamWriter io(byteStream);
 
