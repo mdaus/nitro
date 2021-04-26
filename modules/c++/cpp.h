@@ -1,10 +1,6 @@
 #pragma once
 
 #pragma warning(push)
-#pragma warning(disable: 4668) // '...' is not defined as a preprocessor macro, replacing with '...' for '...'
-#pragma warning(disable: 4820) // '...': '...' bytes padding added after data member '...'
-#pragma warning(disable: 4710) // '...': function not inlined
-
 #pragma warning(disable: 5039) //	'...': pointer or reference to potentially throwing function passed to 'extern "C"' function under - EHc.Undefined behavior may occur if this function throws an exception.
 #pragma warning(disable: 5219) // implicit conversion from '...' to '...', possible loss of data
 #pragma warning(disable: 4355) // '...': used in base member initializer list
@@ -15,6 +11,7 @@
 #pragma warning(disable: 5026) // '...': move constructor was implicitly defined as deleted
 #pragma warning(disable: 5027) //	'...': move assignment operator was implicitly defined as deleted
 #pragma warning(disable: 5219) // implicit conversion from '...' to '...', possible loss of data
+#pragma warning(disable: 4820) // '...': '...' bytes padding added after data member '...'
 
 #define _USE_MATH_DEFINES
 #include <math.h>
