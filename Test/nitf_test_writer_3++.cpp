@@ -24,6 +24,9 @@ struct nitf_test_writer_3__ : public ::testing::Test {
 		// cleanup any pending stuff, but no exceptions allowed
 	}
 
+	nitf_test_writer_3__(const nitf_test_writer_3__&) = delete;
+	nitf_test_writer_3__& operator=(const nitf_test_writer_3__&) = delete;
+
 	// put in any custom data members that you need 
 };
 
