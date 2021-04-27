@@ -28,6 +28,7 @@
 
 #include "nitf/coda-oss.hpp"
 #include "nitf/Handle.hpp"
+#include "nitf/exports.hpp"
 #include "nitf/HandleManager.hpp"
 #include "nitf/NITFException.hpp"
 
@@ -223,7 +224,7 @@ void operator()(Package_##_##Name_ * nativeObject) override \
 #define DECLARE_CLASS_IN(_Name, _Package) \
     struct _Name##Destructor /*final*/ : public nitf::MemoryDestructor<_Package##_##_Name> \
     { DECLARE_CLASS_IN_operator_function(_Name, _Package) }; \
-    class _Name : public nitf::Object<_Package##_##_Name, _Name##Destructor>
+    class NITRO_NITFCPP_API _Name : public nitf::Object<_Package##_##_Name, _Name##Destructor>
 
 #define DECLARE_CLASS(_Name) DECLARE_CLASS_IN(_Name, nitf)
 

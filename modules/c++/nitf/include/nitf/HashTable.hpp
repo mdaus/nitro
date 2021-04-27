@@ -32,6 +32,7 @@
 #include "nitf/Pair.hpp"
 #include "nitf/List.hpp"
 #include "nitf/Object.hpp"
+#include "nitf/exports.hpp"
 
 /*!
  *  \file HashTable.hpp
@@ -45,7 +46,7 @@ class HashTable; //forward declaration
 /*!
  * HashTable Iterator Functor
  */
-class HashIterator
+class NITRO_NITFCPP_API HashIterator
 {
 public:
     virtual ~HashIterator() {}
@@ -61,7 +62,7 @@ public:
  *
  *  Iterates a hash table, unordered.
  */
-struct HashTableIterator /*final*/   // no "final", SWIG doesn't like it
+struct NITRO_NITFCPP_API HashTableIterator /*final*/   // no "final", SWIG doesn't like it
 {
     HashTableIterator() = default;
     ~HashTableIterator() = default;

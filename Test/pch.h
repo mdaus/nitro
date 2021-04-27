@@ -16,6 +16,7 @@
 #pragma warning(disable: 4464) // relative include path contains '..'
 #include "../modules/c++/cpp.h"
 #pragma warning(pop)
+#pragma comment(lib, "ws2_32")
 
 // We're building in Visual Studio ... used to control where we get a little bit of config info
 #define NITRO_PCH 1

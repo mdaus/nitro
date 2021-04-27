@@ -33,6 +33,7 @@
  *  \brief Contains handle wrapper to manage shared native objects
  */
 #include "nitf/System.hpp"
+#include "nitf/exports.hpp"
 
 namespace nitf
 {
@@ -41,7 +42,7 @@ namespace nitf
  *  \class Handle
  *  \brief  This class is the base definition of a Handle
  */
-class Handle
+class NITRO_NITFCPP_API Handle
 {
     class Impl;
     std::unique_ptr<Impl> mPimpl;

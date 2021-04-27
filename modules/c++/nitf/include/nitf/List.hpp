@@ -29,8 +29,9 @@
 #include "nitf/coda-oss.hpp"
 #include "nitf/System.hpp"
 #include "nitf/Object.hpp"
-
-/*!
+#include "nitf/exports.hpp"
+ 
+ /*!
  *  \file List.hpp
  *  \brief  Contains wrapper implementation for List
  */
@@ -91,7 +92,7 @@ private:
  *
  *  Iterates a linked list.
  */
-struct ListIterator /*final*/   // no "final", SWIG doesn't like it
+struct NITRO_NITFCPP_API ListIterator /*final*/   // no "final", SWIG doesn't like it
 {
     ListIterator() = default;
     ~ListIterator() = default;
