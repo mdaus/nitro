@@ -88,9 +88,6 @@
     <ProjectReference Include="..\modules\c\nitf\RPFHDR.vcxproj">
       <Project>{cf5b4f02-364d-4117-9fb9-6c9c7938e412}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\modules\c\nitf-c.vcxproj">
-      <Project>{f06550ad-cfc7-40b8-8727-6c82c69a8982}</Project>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
