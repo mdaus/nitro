@@ -182,6 +182,7 @@ public:
      *  Debug tool to find out whats in the hash table
      */
     void print() const noexcept;
+    static void print(const nitf_HashTable&) noexcept; // for unit-tests
 
     /*!
      *  For each item in the hash table, do something (slow);
