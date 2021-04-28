@@ -22,6 +22,62 @@
 
 #include "nitf/Field.hpp"
 
+void nitf::Field::setU_(uint32_t data)
+{
+    const NITF_BOOL x = nitf_Field_setUint32(getNativeOrThrow(), data, &error);
+    if (!x)
+        throw nitf::NITFException(&error);
+}
+void nitf::Field::set_(int32_t data)
+{
+    if (!nitf_Field_setInt32(getNativeOrThrow(), data, &error))
+        throw nitf::NITFException(&error);
+}
+void nitf::Field::set_(double data)
+{
+    if (!nitf_Field_setReal(getNativeOrThrow(), "f", false, data, &error))
+        throw nitf::NITFException(&error);
+}
+void nitf::Field::set(uint64_t data)
+{
+    const NITF_BOOL x = nitf_Field_setUint64(getNativeOrThrow(), data, &error);
+    if (!x)
+        throw nitf::NITFException(&error);
+}
+void nitf::Field::set(int64_t data)
+{
+    if (!nitf_Field_setInt64(getNativeOrThrow(), data, &error))
+        throw nitf::NITFException(&error);
+}
+void nitf::Field::set(const char* data)
+{
+    const NITF_BOOL x = nitf_Field_setString(getNativeOrThrow(), data, &error);
+    if (!x)
+        throw nitf::NITFException(&error);
+}
+void nitf::Field::set(const nitf::DateTime& dateTime, const std::string& format)
+{
+    const NITF_BOOL x = nitf_Field_setDateTime(getNativeOrThrow(), dateTime.getNative(), format.c_str(), &error);
+    if (!x)
+        throw nitf::NITFException(&error);
+}
+void nitf::Field::set(NITF_DATA* inval, size_t length)
+{
+    const NITF_BOOL x = nitf_Field_setRawData(getNativeOrThrow(), inval, length, &error);
+    if (!x)
+        throw nitf::NITFException(&error);
+}
+
+nitf::DateTime nitf::Field::asDateTime(const std::string& format) const
+{
+    nitf_DateTime* const dateTime = nitf_Field_asDateTime(getNativeOrThrow(), format.c_str(), &error);
+    if (!dateTime)
+    {
+        throw nitf::NITFException(&error);
+    }
+    return nitf::DateTime(dateTime);
+}
+
 void nitf::Field::get_(NITF_DATA* outval, nitf_ConvType vtype, size_t length) const
 {
     nitf_Error e;
@@ -30,9 +86,13 @@ void nitf::Field::get_(NITF_DATA* outval, nitf_ConvType vtype, size_t length) co
         throw nitf::NITFException(&e);
 }
 
-void nitf::Field::set(NITF_DATA* inval, size_t length)
+void nitf::Field::resize(size_t length)
 {
-    const NITF_BOOL x = nitf_Field_setRawData(getNativeOrThrow(), inval, length, &error);
-    if (!x)
+    nitf_Field* field = getNativeOrThrow();
+    const NITF_BOOL resizable = field->resizable;
+    field->resizable = 1;
+
+    if (!nitf_Field_resizeField(field, length, &error))
         throw nitf::NITFException(&error);
+    field->resizable = resizable;
 }

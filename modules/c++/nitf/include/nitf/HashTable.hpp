@@ -105,11 +105,8 @@ struct NITRO_NITFCPP_API HashTableIterator /*final*/   // no "final", SWIG doesn
     void operator++() noexcept { increment(); }
 
     //! Get the data
+    nitf::Pair get() const;
     nitf::Pair operator*() { return get(); }
-
-    //! Get the data
-    nitf::Pair get() const { return nitf_HashTableIterator_get(&handle); }
-
 
 private:
     mutable nitf_HashTableIterator handle{};

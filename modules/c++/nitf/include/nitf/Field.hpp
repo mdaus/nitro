@@ -85,23 +85,9 @@ struct GetConvType<false, IsSignedT>
  */
 class NITRO_NITFCPP_API Field /*final*/ : public nitf::Object<nitf_Field> // no "final", SWIG doesn't like it
 {
-    void setU_(uint32_t data)
-    {
-        const NITF_BOOL x = nitf_Field_setUint32(getNativeOrThrow(), data, &error);
-        if (!x)
-            throw nitf::NITFException(&error);
-    }
-    void set_(int32_t data)
-    {
-        if (!nitf_Field_setInt32(getNativeOrThrow(), data, &error))
-            throw nitf::NITFException(&error);
-    }
-    void set_(double data)
-    {
-        if (!nitf_Field_setReal(getNativeOrThrow(),
-            "f", false, data, &error))
-            throw nitf::NITFException(&error);
-    }
+    void setU_(uint32_t data);
+    void set_(int32_t data);
+    void set_(double data);
 
 public:
     using FieldType = nitf::FieldType;
@@ -184,7 +170,7 @@ public:
     //! Copy constructor
     Field(const Field & x)
     {
-        setNative(x.getNative());
+        *this = x;
     }
 
     //! Assignment Operator
@@ -228,13 +214,7 @@ public:
     {
         setU_(data);
     }
-    void set(uint64_t data)
-    {
-        const NITF_BOOL x = nitf_Field_setUint64(getNativeOrThrow(), data, &error);
-        if (!x)
-            throw nitf::NITFException(&error);
-    }
-
+    void set(uint64_t data);
     void set(int8_t data)
     {
         set_(data);
@@ -247,12 +227,7 @@ public:
     {
         set_(data);
     }
-    void set(int64_t data)
-    {
-        if (!nitf_Field_setInt64(getNativeOrThrow(), data, &error))
-            throw nitf::NITFException(&error);
-    }
-
+    void set(int64_t data);
     void set(float data)
     {
         set_(data);
@@ -261,38 +236,14 @@ public:
     {
         set_(data);
     }
-
-    void set(const char * data)
-    {
-        const NITF_BOOL x = nitf_Field_setString(getNativeOrThrow(), data, &error);
-        if (!x)
-            throw nitf::NITFException(&error);
-    }
+    void set(const char* data);
     void set(const std::string& data)
     {
         set(data.c_str());
     }
+    void set(const nitf::DateTime& dateTime, const std::string& format = NITF_DATE_FORMAT_21);
 
-    void set(const nitf::DateTime& dateTime,
-             const std::string& format = NITF_DATE_FORMAT_21)
-    {
-        const NITF_BOOL x = nitf_Field_setDateTime(getNativeOrThrow(),
-                dateTime.getNative(), format.c_str(), &error);
-        if (!x)
-            throw nitf::NITFException(&error);
-    }
-
-    nitf::DateTime asDateTime(const std::string& format = NITF_DATE_FORMAT_21)
-    {
-        nitf_DateTime* const dateTime =
-                nitf_Field_asDateTime(getNativeOrThrow(), format.c_str(),
-                                      &error);
-        if (!dateTime)
-        {
-            throw nitf::NITFException(&error);
-        }
-        return nitf::DateTime(dateTime);
-    }
+    nitf::DateTime asDateTime(const std::string& format = NITF_DATE_FORMAT_21) const;
 
     //! Get the type
     FieldType getType() const
@@ -328,16 +279,7 @@ public:
      * Use this method with caution as it can resize a field to be larger than
      * it should be, according to specs.
      */
-    void resize(size_t length)
-    {
-        nitf_Field *field = getNativeOrThrow();
-        const NITF_BOOL resizable = field->resizable;
-        field->resizable = 1;
-
-        if (!nitf_Field_resizeField(field, length, &error))
-            throw nitf::NITFException(&error);
-        field->resizable = resizable;
-    }
+    void resize(size_t length);
 
     //! Returns the field as any numeric type T
     template <typename T>
@@ -354,8 +296,8 @@ public:
     //! Returns the field as a string
     operator std::string() const
     {
-        return std::string(getNativeOrThrow()->raw,
-            getNativeOrThrow()->length);
+        const auto pNative = getNativeOrThrow();
+        return std::string(pNative->raw, pNative->length);
     }
     std::string toString() const
     {
@@ -382,7 +324,7 @@ private:
     //! set the value
     void set(NITF_DATA* inval, size_t length);
 
-    nitf_Error error{};
+    mutable nitf_Error error{};
 };
 
 }

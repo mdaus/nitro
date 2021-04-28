@@ -77,7 +77,10 @@ nitf::HashTableIterator nitf::HashTableIterator::operator+(int x) noexcept
     return it;
 }
 
-
+nitf::Pair nitf::HashTableIterator::get() const
+{
+    return nitf_HashTableIterator_get(&handle);
+}
 
 
 nitf::HashTable::HashTable(const HashTable & x)
