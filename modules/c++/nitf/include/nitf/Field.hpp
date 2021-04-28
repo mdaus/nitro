@@ -181,6 +181,9 @@ public:
         return *this;
     }
 
+    Field() = delete; // does not make sense to construct a Field from scratch
+    Field(size_t length, FieldType type);
+
     //! Set native object
     Field(nitf_Field * field)
     {
@@ -310,7 +313,6 @@ public:
         return retval;
     }
 
-    Field() = delete; // does not make sense to construct a Field from scratch
     operator char* () const = delete; // Don't allow this cast ever.
 
 private:

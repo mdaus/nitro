@@ -224,3 +224,13 @@ void TRE::setField(const std::string& key, const std::string& strValue, NITF_DAT
     }
 
 }
+
+nitf_TRE* TRE::create(const std::string& tag, const std::string& id, nitf_Error& error)
+{
+    return nitf_TRE_construct(tag.c_str(), id.c_str(), &error);
+}
+
+bool TRE::setField(nitf_TRE* tre, const std::string& tag, const std::string& data, nitf_Error& error)
+{
+    return nitf_TRE_setField(tre, tag.c_str(), const_cast<char*>(data.c_str()), data.size(), &error);
+}

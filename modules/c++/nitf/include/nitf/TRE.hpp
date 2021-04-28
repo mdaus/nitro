@@ -196,6 +196,10 @@ DECLARE_CLASS(TRE)
 
     TRE(const std::string& tag, const std::string& id);
 
+    // for unit-tests
+    static nitf_TRE* create(const std::string & tag, const std::string & id, nitf_Error& error);
+    static bool setField(nitf_TRE * tre, const std::string & tag, const std::string& data, nitf_Error& error);
+
     //! Clone
     nitf::TRE clone() const;
 

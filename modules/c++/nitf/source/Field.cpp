@@ -22,6 +22,11 @@
 
 #include "nitf/Field.hpp"
 
+nitf::Field::Field(size_t length, FieldType type)
+    : Field(nitf_Field_construct(length, type, &error))
+{    
+}
+
 void nitf::Field::setU_(uint32_t data)
 {
     const NITF_BOOL x = nitf_Field_setUint32(getNativeOrThrow(), data, &error);
