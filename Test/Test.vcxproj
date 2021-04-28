@@ -54,8 +54,8 @@
     <ClCompile Include="SetPluginPath.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\modules\c++\nitf-c++.vcxproj">
-      <Project>{8f357a19-799e-4971-850e-3f28485c130b}</Project>
+    <ProjectReference Include="..\modules\c\nitf-c.vcxproj">
+      <Project>{f06550ad-cfc7-40b8-8727-6c82c69a8982}</Project>
     </ProjectReference>
     <ProjectReference Include="..\modules\c\nitf\ACCHZB.vcxproj">
       <Project>{53f9f908-c678-4dee-9309-e71c1d03a45f}</Project>
