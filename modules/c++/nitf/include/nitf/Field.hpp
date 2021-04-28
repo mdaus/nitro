@@ -36,6 +36,7 @@
 #include <nitf/DateTime.hpp>
 #include <nitf/Object.hpp>
 #include <nitf/NITFException.hpp>
+#include <nitf/exports.hpp>
 
 /*!
  *  \file Field.hpp
@@ -82,7 +83,7 @@ struct GetConvType<false, IsSignedT>
  *  The Field is a generic type object that allows storage
  *  and casting of data amongst disparate data types.
  */
-class Field /*final*/ : public nitf::Object<nitf_Field> // no "final", SWIG doesn't like it
+class NITRO_NITFCPP_API Field /*final*/ : public nitf::Object<nitf_Field> // no "final", SWIG doesn't like it
 {
     void setU_(uint32_t data)
     {
@@ -372,21 +373,10 @@ public:
 
 private:
     //! get the value
-    void get(NITF_DATA* outval, nitf::ConvType vtype, size_t length) const
-    {
-        nitf_Error e;
-        const NITF_BOOL x = nitf_Field_get(getNativeOrThrow(), outval, vtype, length, &e);
-        if (!x)
-            throw nitf::NITFException(&e);
-    }
+    void get(NITF_DATA* outval, nitf::ConvType vtype, size_t length) const;
 
     //! set the value
-    void set(NITF_DATA* inval, size_t length)
-    {
-        const NITF_BOOL x = nitf_Field_setRawData(getNativeOrThrow(), inval, length, &error);
-        if (!x)
-            throw nitf::NITFException(&error);
-    }
+    void set(NITF_DATA* inval, size_t length);
 
     nitf_Error error{};
 };

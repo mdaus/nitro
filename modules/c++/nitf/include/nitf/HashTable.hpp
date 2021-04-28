@@ -123,7 +123,7 @@ private:
  *  \class HashTable
  *  \brief  The C++ wrapper for the nitf_HashTable
  */
-DECLARE_CLASS(HashTable)
+NITRO_DECLARE_CLASS_NRT(HashTable)
 {
 public:
 

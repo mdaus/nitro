@@ -47,7 +47,7 @@ namespace nitf
  *  It is a doubly-linked list with pair data (the first of
  *  which is copied, the second of which is not).
  */
-DECLARE_CLASS(ListNode)
+NITRO_DECLARE_CLASS_NRT(ListNode)
 {
 public:
     //! Constructor
@@ -135,10 +135,8 @@ struct NITRO_NITFCPP_API ListIterator /*final*/   // no "final", SWIG doesn't li
     void operator++() { increment(); }
 
     //! Get the data
+    NITF_DATA* get() noexcept;
     NITF_DATA* operator*() noexcept { return get(); }
-
-    //! Get the data
-    NITF_DATA* get() noexcept { return nitf_ListIterator_get(&handle); }
 
     //! Get the current
     nitf::ListNode & getCurrent() noexcept { return mCurrent; }
@@ -169,7 +167,7 @@ private:
  *  This object is the controller for the ListNode nodes.
  *  It contains a pointer to the first and last items in its set.
  */
-DECLARE_CLASS(List)
+NITRO_DECLARE_CLASS_NRT(List)
 {
 public:
 
