@@ -22,17 +22,7 @@
 
 #include "nitf/Field.hpp"
 
-using namespace nitf;
-
-void Field::get(NITF_DATA* outval, nitf::ConvType vtype, size_t length) const
-{
-    nitf_Error e;
-    const NITF_BOOL x = nitf_Field_get(getNativeOrThrow(), outval, vtype, length, &e);
-    if (!x)
-        throw nitf::NITFException(&e);
-}
-
-void Field::set(NITF_DATA* inval, size_t length)
+void nitf::Field::set(NITF_DATA* inval, size_t length)
 {
     const NITF_BOOL x = nitf_Field_setRawData(getNativeOrThrow(), inval, length, &error);
     if (!x)
