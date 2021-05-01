@@ -3,25 +3,42 @@
 #include <string>
 
 #include <std/filesystem>
-#include <sys/OS.h>
+#include <import/sys.h>
 
 #include "nitf_Test.h"
 
 namespace fs = std::filesystem;
 
+static std::string Configuration() // "Configuration" is typically "Debug" or "Release"
+{
+	static const sys::OS os;
+	return os.getSpecialEnv("Configuration");
+}
+
+static std::string Platform()
+{
+	static const sys::OS os;
+	return os.getSpecialEnv("Platform");
+}
+
+//// https://stackoverflow.com/questions/13794130/visual-studio-how-to-check-used-c-platform-toolset-programmatically
+//static std::string PlatformToolset()
+//{
+//	// https://docs.microsoft.com/en-us/cpp/build/how-to-modify-the-target-framework-and-platform-toolset?view=msvc-160
+//#if _MSC_FULL_VER >= 190000000
+//	return "v142";
+//#else
+//#error "Don't know $(PlatformToolset) value.'"
+//#endif
+//}
+
 static bool is_x64_Configuration(const fs::path& path) // "Configuration" is typically "Debug" or "Release"
 {
-	const std::string build_configuration =
-#if defined(NDEBUG) // i.e., release
-		"Release";
-#else
-		"Debug";
-#endif
-
+	static const std::string build_configuration = Configuration();
 	const auto Configuration = path.filename();
 	const auto path_parent_path = path.parent_path();
 	const auto x64 = path_parent_path.filename();
-	return (Configuration == build_configuration) && (x64 == "x64");
+	return (Configuration == build_configuration) && (x64 == Platform());
 }
 
 static bool is_install_unittests(const fs::path& path)
@@ -46,11 +63,14 @@ static fs::path buildDir(const fs::path& path)
 	const sys::OS os;
 	const auto exec = fs::path(os.getCurrentExecutable());
 	const auto argv0 = exec.filename();
-	if (argv0 == "Test.exe")
+	if (argv0 == "Test++.exe")
 	{
 		// Running GTest unit-tests in Visual Studio on Windows
 		if (is_x64_Configuration(cwd))
 		{
+			//const auto root = cwd.parent_path().parent_path();
+			//const auto install = "install-" + Configuration() + "-" + Platform() + "." + PlatformToolset();
+			//return root / install / path;
 			return cwd / path;
 		}
 	}
@@ -100,34 +120,7 @@ static fs::path buildPluginsDir()
 {
 	return buildDir(fs::path("share") / "nitf" / "plugins");
 }
-
-struct nitf_test_tre_mods : public ::testing::Test {
-    nitf_test_tre_mods() {
-        // initialization code here
-        //const std::string NITF_PLUGIN_PATH = R"(C:\Users\jdsmith\source\repos\nitro\x64\Debug\share\nitf\plugins)";
-		const std::string putenv_ = "NITF_PLUGIN_PATH=" + buildPluginsDir().string();
-        _putenv(putenv_.c_str());
-    }
-
-    void SetUp() {
-        // code here will execute just before the test ensues 
-    }
-
-    void TearDown() {
-        // code here will be called just after the test completes
-        // ok to through exceptions from here if need be
-    }
-
-    ~nitf_test_tre_mods() {
-        // cleanup any pending stuff, but no exceptions allowed
-    }
-
-	nitf_test_tre_mods(const nitf_test_tre_mods&) = delete;
-	nitf_test_tre_mods& operator=(const nitf_test_tre_mods&) = delete;
-
-
-    // put in any custom data members that you need 
-};
-
-#define TEST_CASE(X) TEST_F(nitf_test_tre_mods, X)
-#include "nitf/unittests/test_tre_mods.c"
+std::string nitf::Test::buildPluginsDir()
+{
+	return ::buildPluginsDir().string();
+}

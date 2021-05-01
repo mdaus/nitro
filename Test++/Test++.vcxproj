@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{FDEA6187-F4C4-45BC-B793-C0AC0728B776}</ProjectGuid>
+    <ProjectGuid>{E610F11D-1240-4260-87F8-504B49DB6915}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <ConfigurationType>Application</ConfigurationType>
     <PlatformToolset>v142</PlatformToolset>
@@ -32,22 +32,17 @@
     <ClInclude Include="TestCase.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="nitf_test_create.cpp" />
-    <ClCompile Include="nitf_test_create_nitf.cpp" />
-    <ClCompile Include="nitf_test_field.cpp" />
-    <ClCompile Include="nitf_test_geo_utils.cpp" />
+    <ClCompile Include="nitf_test_create_nitf++.cpp" />
+    <ClCompile Include="nitf_test_field++.cpp" />
+    <ClCompile Include="nitf_test_hash_table_1++.cpp" />
+    <ClCompile Include="nitf_test_image_blocker.cpp" />
     <ClCompile Include="nitf_test_image_io.cpp" />
-    <ClCompile Include="nitf_test_mem_source.cpp" />
+    <ClCompile Include="nitf_test_image_segment_blank_nm_compression.cpp" />
+    <ClCompile Include="nitf_test_image_segment_computer.cpp" />
+    <ClCompile Include="nitf_test_nitf_buffer_list.cpp" />
+    <ClCompile Include="nitf_test_tre_create++.cpp" />
     <ClCompile Include="nitf_test_tre_mods.cpp" />
-    <ClCompile Include="nitf_test_tre_read.cpp" />
-    <ClCompile Include="nitf_test_zero_field.cpp" />
-    <ClCompile Include="nrt_test_buffer_adapter.cpp" />
-    <ClCompile Include="nrt_test_core_values.cpp" />
-    <ClCompile Include="nrt_test_list.cpp" />
-    <ClCompile Include="nrt_test_nrt_byte_swap.cpp" />
-    <ClCompile Include="nrt_test_nrt_datetime.cpp" />
-    <ClCompile Include="nrt_test_tree.cpp" />
-    <ClCompile Include="nrt_test_utils.cpp" />
+    <ClCompile Include="nitf_test_writer_3++.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
@@ -55,8 +50,8 @@
     <ClCompile Include="SetPluginPath.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\modules\c\nitf-c.vcxproj">
-      <Project>{f06550ad-cfc7-40b8-8727-6c82c69a8982}</Project>
+    <ProjectReference Include="..\modules\c++\nitf-c++.vcxproj">
+      <Project>{8f357a19-799e-4971-850e-3f28485c130b}</Project>
     </ProjectReference>
     <ProjectReference Include="..\modules\c\nitf\ACCHZB.vcxproj">
       <Project>{53f9f908-c678-4dee-9309-e71c1d03a45f}</Project>
