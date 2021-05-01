@@ -2,6 +2,22 @@
 #define NITRO_nitf_exports_hpp_INCLUDED_
 #pragma once
 
+// Use Windows naming conventions (DLL, LIB) because this really only matters
+// for _MSC_VER, see below.
+#if !defined(NITRO_NITFCPP_LIB) && !defined(NITRO_NITFCPP_DLL)
+    // Building a static library (not a DLL) is the default.
+    #define NITRO_NITFCPP_LIB 1
+#endif
+#if !defined(NITRO_NITFCPP_DLL)
+    #if defined(NITRO_NITFCPP_EXPORTS) && defined(NITRO_NITFCPP_LIB)
+        #error "Can't export from a LIB'"
+    #endif
+
+    #if !defined(NITRO_NITFCPP_LIB)
+        #define NITRO_NITFCPP_DLL 1
+    #endif
+#endif
+
 // The following ifdef block is the standard way of creating macros which make exporting
 // from a DLL simpler. All files within this DLL are compiled with the NITRO_NITFCPP_EXPORTS
 // symbol defined on the command line. This symbol should not be defined on any project
@@ -29,7 +45,9 @@
         #ifdef NITRO_NITFCPP_DLL
             // Actually, it seems that the linker is able to figure this out from the .LIB, so 
             // there doesn't seem to be a need for __declspec(dllimport).  Clients don't
-            // need to #define NITRO_NITFCPP_DLL ... ?
+            // need to #define NITRO_NITFCPP_DLL ... ?  Well, almost ... it looks
+            // like __declspec(dllimport) is needed to get virtual "inline"s (e.g., 
+            // destructors) correct.
             #define NITRO_NITFCPP_API __declspec(dllimport)
         #else
             #define NITRO_NITFCPP_API /* "importing" a static LIB */
