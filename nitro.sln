@@ -41,6 +41,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PTPRAA", "modules\c\nitf\PT
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HISTOA", "modules\c\nitf\HISTOA.vcxproj", "{D749AA73-4C9A-473D-96BB-070A6D9CAA54}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test++", "Test++\Test++.vcxproj", "{E610F11D-1240-4260-87F8-504B49DB6915}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -103,6 +105,10 @@ Global
 		{D749AA73-4C9A-473D-96BB-070A6D9CAA54}.Debug|x64.Build.0 = Debug|x64
 		{D749AA73-4C9A-473D-96BB-070A6D9CAA54}.Release|x64.ActiveCfg = Release|x64
 		{D749AA73-4C9A-473D-96BB-070A6D9CAA54}.Release|x64.Build.0 = Release|x64
+		{E610F11D-1240-4260-87F8-504B49DB6915}.Debug|x64.ActiveCfg = Debug|x64
+		{E610F11D-1240-4260-87F8-504B49DB6915}.Debug|x64.Build.0 = Debug|x64
+		{E610F11D-1240-4260-87F8-504B49DB6915}.Release|x64.ActiveCfg = Release|x64
+		{E610F11D-1240-4260-87F8-504B49DB6915}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
