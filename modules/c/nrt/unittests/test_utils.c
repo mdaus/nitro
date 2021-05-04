@@ -392,6 +392,83 @@ TEST_CASE(nrt_Utils_normalize_dms)
     TEST_ASSERT_EQ_INT(-83, degrees);
     TEST_ASSERT_EQ_INT(-54, minutes);
     TEST_ASSERT_EQ_INT(-59, seconds);
+
+    degrees = 0; minutes = 0; seconds = 0;
+    nrt_Utils_normalize_dms_(&degrees, &minutes, &seconds);
+    TEST_ASSERT_EQ_INT(0, degrees);
+    TEST_ASSERT_EQ_INT(0, minutes);
+    TEST_ASSERT_EQ_INT(0, seconds);
+    degrees = 360; minutes = 0; seconds = 0;
+    nrt_Utils_normalize_dms_(&degrees, &minutes, &seconds);
+    TEST_ASSERT_EQ_INT(0, degrees);
+    TEST_ASSERT_EQ_INT(0, minutes);
+    TEST_ASSERT_EQ_INT(0, seconds);
+    degrees = -360; minutes = 0; seconds = 0;
+    nrt_Utils_normalize_dms_(&degrees, &minutes, &seconds);
+    TEST_ASSERT_EQ_INT(0, degrees);
+    TEST_ASSERT_EQ_INT(0, minutes);
+    TEST_ASSERT_EQ_INT(0, seconds);
+
+    degrees = 1; minutes = 0; seconds = 0;
+    nrt_Utils_normalize_dms_(&degrees, &minutes, &seconds);
+    TEST_ASSERT_EQ_INT(1, degrees);
+    TEST_ASSERT_EQ_INT(0, minutes);
+    TEST_ASSERT_EQ_INT(0, seconds);
+    degrees = 0; minutes = 60; seconds = 0;
+    nrt_Utils_normalize_dms_(&degrees, &minutes, &seconds);
+    TEST_ASSERT_EQ_INT(1, degrees);
+    TEST_ASSERT_EQ_INT(0, minutes);
+    TEST_ASSERT_EQ_INT(0, seconds);
+    degrees = 361; minutes = 0; seconds = 0;
+    nrt_Utils_normalize_dms_(&degrees, &minutes, &seconds);
+    TEST_ASSERT_EQ_INT(1, degrees);
+    TEST_ASSERT_EQ_INT(0, minutes);
+    TEST_ASSERT_EQ_INT(0, seconds);
+    degrees = 0; minutes = 61; seconds = 0;
+    nrt_Utils_normalize_dms_(&degrees, &minutes, &seconds);
+    TEST_ASSERT_EQ_INT(1, degrees);
+    TEST_ASSERT_EQ_INT(1, minutes);
+    TEST_ASSERT_EQ_INT(0, seconds);
+
+    degrees = -1; minutes = 0; seconds = 0;
+    nrt_Utils_normalize_dms_(&degrees, &minutes, &seconds);
+    TEST_ASSERT_EQ_INT(-1, degrees);
+    TEST_ASSERT_EQ_INT(0, minutes);
+    TEST_ASSERT_EQ_INT(0, seconds);
+
+    degrees = 0; minutes = 1; seconds = 0;
+    nrt_Utils_normalize_dms_(&degrees, &minutes, &seconds);
+    TEST_ASSERT_EQ_INT(0, degrees);
+    TEST_ASSERT_EQ_INT(1, minutes);
+    TEST_ASSERT_EQ_INT(0, seconds);
+    degrees = 0; minutes = 0; seconds = 60;
+    nrt_Utils_normalize_dms_(&degrees, &minutes, &seconds);
+    TEST_ASSERT_EQ_INT(0, degrees);
+    TEST_ASSERT_EQ_INT(1, minutes);
+    TEST_ASSERT_EQ_INT(0, seconds);
+    degrees = 0; minutes = 0; seconds = 61;
+    nrt_Utils_normalize_dms_(&degrees, &minutes, &seconds);
+    TEST_ASSERT_EQ_INT(0, degrees);
+    TEST_ASSERT_EQ_INT(1, minutes);
+    TEST_ASSERT_EQ_INT(1, seconds);
+
+    degrees = 0; minutes = -1; seconds = 0;
+    nrt_Utils_normalize_dms_(&degrees, &minutes, &seconds);
+    TEST_ASSERT_EQ_INT(0, degrees);
+    TEST_ASSERT_EQ_INT(-1, minutes);
+    TEST_ASSERT_EQ_INT(0, seconds);
+
+    degrees = 0; minutes = 0; seconds = 1;
+    nrt_Utils_normalize_dms_(&degrees, &minutes, &seconds);
+    TEST_ASSERT_EQ_INT(0, degrees);
+    TEST_ASSERT_EQ_INT(0, minutes);
+    TEST_ASSERT_EQ_INT(1, seconds);
+
+    degrees = 0; minutes = 0; seconds = -1;
+    nrt_Utils_normalize_dms_(&degrees, &minutes, &seconds);
+    TEST_ASSERT_EQ_INT(0, degrees);
+    TEST_ASSERT_EQ_INT(0, minutes);
+    TEST_ASSERT_EQ_INT(-1, seconds);
 }
 
 TEST_MAIN(
