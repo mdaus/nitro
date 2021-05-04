@@ -491,6 +491,13 @@ static void normalize_dms(int* pDegrees, int* pMinutes, int* pSeconds)
 
     *pSeconds = total_seconds;
 }
+NRTPROT(void) nrt_Utils_normalize_dms_(int* pDegrees, int* pMinutes, int* pSeconds)
+{
+    assert(pDegrees != NULL);
+    assert(pMinutes != NULL);
+    assert(pSeconds != NULL);
+    normalize_dms(pDegrees, pMinutes, pSeconds);
+}
 
 static void adjust_dms(int* pDegrees, int* pMinutes, int* pSeconds, char* pDir,
     char positive_dir, char negative_dir)

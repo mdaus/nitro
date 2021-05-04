@@ -380,6 +380,20 @@ TEST_CASE(testDmsToCharArrayZero)
     TEST_ASSERT_EQ_STR(latCharArray, "000000N");
 }
 
+TEST_CASE(nrt_Utils_normalize_dms)
+{
+    // I tracked it down to a new function named normalize_dms that's causing the behavior. 
+    // If the input is degrees=-84, minutes=5, seconds=1, the normalize_dms function returns degrees=-83, minutes=-54, seconds=-59.
+    int degrees = -84;
+    int minutes = 5;
+    int seconds = 1;
+    nrt_Utils_normalize_dms_(&degrees, &minutes, &seconds);
+
+    TEST_ASSERT_EQ_INT(-83, degrees);
+    TEST_ASSERT_EQ_INT(-54, minutes);
+    TEST_ASSERT_EQ_INT(-59, seconds);
+}
+
 TEST_MAIN(
     (void)argc;
     (void)argv;
@@ -400,5 +414,6 @@ TEST_MAIN(
     CHECK(testDmsToCharArrayNegativeSeconds);
     CHECK(testDmsToCharArrayPositiveSeconds);
     CHECK(testDmsToCharArrayZero);
+    CHECK(nrt_Utils_normalize_dms);
     )
 
