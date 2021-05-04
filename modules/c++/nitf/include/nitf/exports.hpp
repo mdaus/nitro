@@ -62,4 +62,8 @@
     #endif
 #endif
 
+#if defined(_MSC_VER) && defined(NITRO_NITFCPP_DLL)
+#pragma warning(disable: 4251) // '...' : class '...' needs to have dll-interface to be used by clients of struct '...'
+#endif
+
 #endif // NITRO_nitf_exports_hpp_INCLUDED_
