@@ -478,7 +478,6 @@ TEST_MAIN(
     CHECK(testDmsToCharArrayNegativeSeconds);
     CHECK(testDmsToCharArrayPositiveSeconds);
     CHECK(testDmsToCharArrayZero);
-    CHECK(nrt_Utils_normalize_dms);
     CHECK(test_matlab_dms);
     )
 
