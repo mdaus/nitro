@@ -70,7 +70,7 @@ TEST_CASE(test_geo_utils)
     TEST_ASSERT_EQ_INT(m, 45);
     TEST_ASSERT_EQ_FLOAT(s, 67.0);
     nitf_Utils_geographicLonToCharArray(d, m, s, ll);
-    TEST_ASSERT_EQ_STR(ll, "1234607E");
+    TEST_ASSERT_EQ_STR(ll, "9999999E");
     TEST_ASSERT((decimal >= 123.768) && (decimal <= 123.769));
 
     nitf_Utils_decimalLonToGeoCharArray(decimal, ll);

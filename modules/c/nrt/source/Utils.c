@@ -465,82 +465,159 @@ NRTAPI(char) nrt_Utils_cornersTypeAsCoordRep(nrt_CornersType type)
     return cornerRep;
 }
 
-NRTPROT(void) nrt_Utils_geographicLatToCharArray(int degrees, int minutes,
-    double seconds, char* buffer7)
+static int is_valid_dms(int degrees, int minutes, double seconds)
 {
-    char dir = 'N';
-    if (degrees <= 0)
+    // these are maximums; values for lat/lon may be smaller
+    if (abs(degrees) >= 360)
     {
-        if (degrees < 0)
+        return 0;
+    }
+    if (abs(minutes) >= 60)
+    {
+        return 0;
+    }
+    if (fabs(seconds) >= 60.0)
+    {
+        return 0;
+    }
+
+    // A negative value is allowed for the first non-zero value
+    if (degrees != 0)
+    {
+        if ((minutes < 0) || (seconds < 0.0))
         {
-            dir = 'S';
-            degrees *= -1;
+            return 0;
         }
-        else if (minutes < 0)
+    }
+    else if (minutes != 0)
+    {
+        if (seconds < 0.0)
         {
-            dir = 'S';
-            minutes *= -1;
-        }
-        else if (minutes == 0 && seconds < 0)
-        {
-            dir = 'S';
-            seconds *= -1;
+            return 0;
         }
     }
 
-    seconds = round(seconds);
+    return 1;
+}
 
-    /* Ensure seconds and minutes are still within valid range. */
-    if (seconds >= 60.0)
+static int is_valid_lat_dms(int degrees, int minutes, double seconds)
+{
+    if (abs(degrees) > 90)
     {
-        seconds -= 60.0;
+        return 0;
+    }
+    return is_valid_dms(degrees, minutes, seconds);
+}
 
-        if (++minutes >= 60)
+NRTPROT(void) nrt_Utils_geographicLatToCharArray(int degrees, int minutes,
+    double seconds, char* buffer7)
+{
+    assert(buffer7 != NULL);
+    char dir = 'N';
+
+    if (is_valid_lat_dms(degrees, minutes, seconds))
+    {
+        if (degrees <= 0)
         {
-            minutes -= 60;
-            ++degrees;
+            if (degrees < 0)
+            {
+                dir = 'S';
+                degrees *= -1;
+            }
+            else if (minutes < 0)
+            {
+                dir = 'S';
+                minutes *= -1;
+            }
+            else if (minutes == 0 && seconds < 0)
+            {
+                dir = 'S';
+                seconds *= -1;
+            }
         }
+
+        seconds = round(seconds);
+
+        /* Ensure seconds and minutes are still within valid range. */
+        if (seconds >= 60.0)
+        {
+            seconds -= 60.0;
+
+            if (++minutes >= 60)
+            {
+                minutes -= 60;
+                ++degrees;
+            }
+        }
+    }
+    else
+    {
+        // setup an error result
+        degrees = minutes = 99;
+        seconds = 99.0;
     }
 
     NRT_SNPRINTF(buffer7, 8, "%02d%02d%02d%c", degrees, minutes,
         (int)seconds, dir);
 }
 
+static int is_valid_lon_dms(int degrees, int minutes, double seconds)
+{
+    if (abs(degrees) > 180)
+    {
+        return 0;
+    }
+    return is_valid_dms(degrees, minutes, seconds);
+}
+
 NRTPROT(void) nrt_Utils_geographicLonToCharArray(int degrees, int minutes,
     double seconds, char* buffer8)
 {
+    assert(buffer8 != NULL);
+
     char dir = 'E';
-    if (degrees <= 0)
+
+    if (is_valid_lon_dms(degrees, minutes, seconds))
     {
-        if (degrees < 0)
+        if (degrees <= 0)
         {
-            dir = 'W';
-            degrees *= -1;
+            if (degrees < 0)
+            {
+                dir = 'W';
+                degrees *= -1;
+            }
+            else if (minutes < 0)
+            {
+                minutes *= -1;
+                dir = 'W';
+            }
+            else if (minutes == 0 && seconds < 0)
+            {
+                seconds *= -1;
+                dir = 'W';
+            }
         }
-        else if (minutes < 0)
+
+        seconds = round(seconds);
+
+        /* Ensure seconds and minutes are still within valid range. */
+        if (seconds >= 60.0)
         {
-            minutes *= -1;
-            dir = 'W';
-        }
-        else if (minutes == 0 && seconds < 0)
-        {
-            seconds *= -1;
-            dir = 'W';
+            seconds -= 60.0;
+
+            if (++minutes >= 60)
+            {
+                minutes -= 60;
+                ++degrees;
+            }
         }
     }
-
-    seconds = round(seconds);
-
-    /* Ensure seconds and minutes are still within valid range. */
-    if (seconds >= 60.0)
+    else
     {
-        seconds -= 60.0;
-
-        if (++minutes >= 60)
-        {
-            minutes -= 60;
-            ++degrees;
-        }
+        // setup an error result
+        degrees = 999;
+        minutes = 99;
+        seconds = 99.0;
     }
 
     NRT_SNPRINTF(buffer8, 9, "%03d%02d%02d%c", degrees, minutes,
