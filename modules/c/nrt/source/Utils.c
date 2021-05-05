@@ -465,58 +465,6 @@ NRTAPI(char) nrt_Utils_cornersTypeAsCoordRep(nrt_CornersType type)
     return cornerRep;
 }
 
-static void normalize_dms(int* pDegrees, int* pMinutes, int* pSeconds)
-{
-    const int sign = (*pDegrees < 0) || (*pMinutes < 0) || (*pSeconds < 0) ? -1 : 1;
-
-    *pDegrees = abs(*pDegrees);
-    *pMinutes = abs(*pMinutes);
-    *pSeconds = abs(*pSeconds);
-
-    /* Ensure seconds and minutes are still within valid range. */
-    *pMinutes += (*pSeconds / 60);
-    *pSeconds %= 60;
-
-    *pDegrees += (*pMinutes / 60);
-    *pMinutes %= 60;
-
-    *pDegrees %= 360;
-
-    const int minutes_to_seconds = 60;
-    const int degrees_to_seconds = 60 * minutes_to_seconds;
-    int total_seconds = (*pDegrees * degrees_to_seconds) + (*pMinutes * minutes_to_seconds) + *pSeconds;
-
-    *pDegrees = total_seconds / degrees_to_seconds;
-    total_seconds -= (*pDegrees * degrees_to_seconds);
-
-    *pMinutes = total_seconds / minutes_to_seconds;
-    total_seconds -= (*pMinutes * minutes_to_seconds);
-
-    *pSeconds = total_seconds;
-
-    // https://www.mathworks.com/help/map/angle-representations-and-angular-units.html#bragfhi
-    // "Rather than storing the sign in a separate element, degrees2dm applies to the first nonzero element in each row."
-    if (*pDegrees != 0)
-    {
-        *pDegrees *= sign;
-    }
-    else if (*pMinutes != 0)
-    {
-        *pMinutes *= sign;
-    }
-    else
-    {
-        *pSeconds *= sign;
-    }
-}
-NRTPROT(void) nrt_Utils_normalize_dms_(int* pDegrees, int* pMinutes, int* pSeconds)
-{
-    assert(pDegrees != NULL);
-    assert(pMinutes != NULL);
-    assert(pSeconds != NULL);
-    normalize_dms(pDegrees, pMinutes, pSeconds);
-}
-
 NRTPROT(void) nrt_Utils_geographicLatToCharArray(int degrees, int minutes,
     double seconds, char* buffer7)
 {

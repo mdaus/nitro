@@ -88,8 +88,6 @@ NRTAPI(double) nrt_Utils_getCurrentTimeMillis(void);
 
 NRTAPI(int) nrt_Utils_strncasecmp(const char *s1, const char *s2, size_t n);
 
-NRTAPI(void) nrt_Utils_normalize_dms_(int* pDegrees, int* pMinutes, int* pSeconds);
-
 /*!
  *  Convert a double representing decimal degrees into 2 integers,
  *  one for degrees, one for minutes, and a double for seconds.
