@@ -47,11 +47,11 @@ TEST_CASE(test_geo_utils)
     TEST_ASSERT_EQ_INT(m, 34);
     TEST_ASSERT_EQ_FLOAT(s, 56.0);
     nitf_Utils_geographicLatToCharArray(d, m, s, ll);
-    TEST_ASSERT_EQ_STR(ll, "112504S");
+    TEST_ASSERT_EQ_STR(ll, DMS_LAT_STR);
 
     TEST_ASSERT((decimal <= -12.582) && (decimal >= -12.583));
     nitf_Utils_decimalLatToGeoCharArray(decimal, ll);
-    TEST_ASSERT_EQ_STR(ll, "112504S");
+    TEST_ASSERT_EQ_STR(ll, DMS_LAT_STR);
 
     /* Now convert it back */
     nitf_Utils_decimalToGeographic(decimal, &d, &m, &s);
