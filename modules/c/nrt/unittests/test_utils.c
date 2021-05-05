@@ -520,7 +520,7 @@ TEST_CASE(test_matlab_dms)
     nrt_Utils_decimalToGeographic(-57.29578 /* -1 radian */, &degrees, &minutes, &seconds);
     TEST_ASSERT_EQ_INT(-57, degrees);
     TEST_ASSERT_EQ_INT(17, minutes);
-    TEST_ASSERT_EQ_FLOAT(44.80799, seconds);
+    TEST_ASSERT_EQ_FLOAT(44.808, seconds);
 
     nrt_Utils_decimalToGeographic(-57 /* ~ -1 radian */, &degrees, &minutes, &seconds);
     TEST_ASSERT_EQ_INT(-57, degrees);
@@ -530,7 +530,7 @@ TEST_CASE(test_matlab_dms)
     nrt_Utils_decimalToGeographic(57.29578 /* 1 radian */, &degrees, &minutes, &seconds);
     TEST_ASSERT_EQ_INT(57, degrees);
     TEST_ASSERT_EQ_INT(17, minutes);
-    TEST_ASSERT_EQ_FLOAT(44.80799, seconds);
+    TEST_ASSERT_EQ_FLOAT(44.808, seconds);
 
     nrt_Utils_decimalToGeographic(57 /* ~ -1 radian */, &degrees, &minutes, &seconds);
     TEST_ASSERT_EQ_INT(57, degrees);
