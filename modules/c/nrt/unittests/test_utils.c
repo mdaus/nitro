@@ -388,10 +388,13 @@ TEST_CASE(nrt_Utils_normalize_dms)
     int minutes = 5;
     int seconds = 1;
     nrt_Utils_normalize_dms_(&degrees, &minutes, &seconds);
-
+    // The unit test definitely confirms the current behavior is wrong.  If we pass in (-84, 5, 1), the correct output is (-84, 5, 1).
     TEST_ASSERT_EQ_INT(-83, degrees);
     TEST_ASSERT_EQ_INT(-54, minutes);
     TEST_ASSERT_EQ_INT(-59, seconds);
+    //TEST_ASSERT_EQ_INT(-84, degrees);
+    //TEST_ASSERT_EQ_INT(5, minutes);
+    //TEST_ASSERT_EQ_INT(1, seconds);
 
     degrees = 0; minutes = 0; seconds = 0;
     nrt_Utils_normalize_dms_(&degrees, &minutes, &seconds);
