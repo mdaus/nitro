@@ -474,6 +474,84 @@ TEST_CASE(nrt_Utils_normalize_dms)
     TEST_ASSERT_EQ_INT(-1, seconds);
 }
 
+TEST_CASE(test_matlab_dms)
+{
+    // https://www.mathworks.com/help/map/angle-representations-and-angular-units.html#bragfhi
+    int degrees, minutes; double seconds;
+    nrt_Utils_decimalToGeographic(-57.29578 /* -1 radian */, &degrees, &minutes, &seconds);
+    TEST_ASSERT_EQ_INT(-57, degrees);
+    TEST_ASSERT_EQ_INT(17, minutes);
+    TEST_ASSERT_EQ_FLOAT(44.80799, seconds);
+
+    nrt_Utils_decimalToGeographic(-57 /* ~ -1 radian */, &degrees, &minutes, &seconds);
+    TEST_ASSERT_EQ_INT(-57, degrees);
+    TEST_ASSERT_EQ_INT(0, minutes);
+    TEST_ASSERT_EQ_FLOAT(0.0, seconds);
+
+    nrt_Utils_decimalToGeographic(57.29578 /* 1 radian */, &degrees, &minutes, &seconds);
+    TEST_ASSERT_EQ_INT(57, degrees);
+    TEST_ASSERT_EQ_INT(17, minutes);
+    TEST_ASSERT_EQ_FLOAT(44.80799, seconds);
+
+    nrt_Utils_decimalToGeographic(57 /* ~ -1 radian */, &degrees, &minutes, &seconds);
+    TEST_ASSERT_EQ_INT(57, degrees);
+    TEST_ASSERT_EQ_INT(0, minutes);
+    TEST_ASSERT_EQ_FLOAT(0.0, seconds);
+
+    // https://www.mathworks.com/help/map/angle-representations-and-angular-units.html#bragfhi
+    // "Rather than storing the sign in a separate element, degrees2dm applies to the first nonzero element in each row."
+    nrt_Utils_decimalToGeographic(1.0, &degrees, &minutes, &seconds);
+    TEST_ASSERT_EQ_INT(1, degrees);
+    TEST_ASSERT_EQ_INT(0, minutes);
+    TEST_ASSERT_EQ_FLOAT(0.0, seconds);
+    nrt_Utils_decimalToGeographic(0.1, &degrees, &minutes, &seconds);
+    TEST_ASSERT_EQ_INT(0, degrees);
+    TEST_ASSERT_EQ_INT(6, minutes);
+    TEST_ASSERT_EQ_FLOAT(0.0, seconds);
+    nrt_Utils_decimalToGeographic(-0.1, &degrees, &minutes, &seconds);
+    TEST_ASSERT_EQ_INT(0, degrees);
+    TEST_ASSERT_EQ_INT(-6, minutes);
+    TEST_ASSERT_EQ_FLOAT(0.0, seconds);
+    nrt_Utils_decimalToGeographic(0.01, &degrees, &minutes, &seconds);
+    TEST_ASSERT_EQ_INT(0, degrees);
+    TEST_ASSERT_EQ_INT(0, minutes);
+    TEST_ASSERT_EQ_FLOAT(36.0, seconds);
+    nrt_Utils_decimalToGeographic(-0.01, &degrees, &minutes, &seconds);
+    TEST_ASSERT_EQ_INT(0, degrees);
+    TEST_ASSERT_EQ_INT(0, minutes);
+    TEST_ASSERT_EQ_FLOAT(-36.0, seconds);
+    nrt_Utils_decimalToGeographic(0.001, &degrees, &minutes, &seconds);
+    TEST_ASSERT_EQ_INT(0, degrees);
+    TEST_ASSERT_EQ_INT(0, minutes);
+    TEST_ASSERT_EQ_FLOAT(3.6, seconds);
+    nrt_Utils_decimalToGeographic(-0.001, &degrees, &minutes, &seconds);
+    TEST_ASSERT_EQ_INT(0, degrees);
+    TEST_ASSERT_EQ_INT(0, minutes);
+    TEST_ASSERT_EQ_FLOAT(-3.6, seconds);
+
+    nrt_Utils_decimalToGeographic(0.0, &degrees, &minutes, &seconds);
+    TEST_ASSERT_EQ_INT(0, degrees);
+    TEST_ASSERT_EQ_INT(0, minutes);
+    TEST_ASSERT_EQ_FLOAT(0.0, seconds);
+    //nrt_Utils_decimalToGeographic(360.0, &degrees, &minutes, &seconds);
+    //TEST_ASSERT_EQ_INT(0, degrees);
+    //TEST_ASSERT_EQ_INT(0, minutes);
+    //TEST_ASSERT_EQ_FLOAT(0.0, seconds);
+    //nrt_Utils_decimalToGeographic(-360.0, &degrees, &minutes, &seconds);
+    //TEST_ASSERT_EQ_INT(0, degrees);
+    //TEST_ASSERT_EQ_INT(0, minutes);
+    //TEST_ASSERT_EQ_FLOAT(0.0, seconds);
+    //nrt_Utils_decimalToGeographic(361.0, &degrees, &minutes, &seconds);
+    //TEST_ASSERT_EQ_INT(1, degrees);
+    //TEST_ASSERT_EQ_INT(0, minutes);
+    //TEST_ASSERT_EQ_FLOAT(0.0, seconds);
+    //nrt_Utils_decimalToGeographic(-361.0, &degrees, &minutes, &seconds);
+    //TEST_ASSERT_EQ_INT(-1, degrees);
+    //TEST_ASSERT_EQ_INT(0, minutes);
+    //TEST_ASSERT_EQ_FLOAT(0.0, seconds);
+}
+
+
 TEST_MAIN(
     (void)argc;
     (void)argv;
@@ -495,5 +573,6 @@ TEST_MAIN(
     CHECK(testDmsToCharArrayPositiveSeconds);
     CHECK(testDmsToCharArrayZero);
     CHECK(nrt_Utils_normalize_dms);
+    CHECK(test_matlab_dms);
     )
 
