@@ -29,7 +29,7 @@ TEST_CASE(test_geo_utils)
     const char* DECIMAL_LON_STR = "+123.456";
 
     const char* DMS_LAT_STR = "123456S";
-    const char* DMS_LON_STR = "1234567E";
+    const char* DMS_LON_STR = "1234556E";
 
     /* Try geographic stuff */
     char ll[10];
@@ -68,19 +68,21 @@ TEST_CASE(test_geo_utils)
     decimal = nitf_Utils_geographicToDecimal(d, m, s);
     TEST_ASSERT_EQ_INT(d, 123);
     TEST_ASSERT_EQ_INT(m, 45);
-    TEST_ASSERT_EQ_FLOAT(s, 67.0);
+    TEST_ASSERT_EQ_FLOAT(s, 56.0);
+    TEST_ASSERT((decimal >= 123.765) && (decimal <= 123.766));
+
+    s = 67.0;
     nitf_Utils_geographicLonToCharArray(d, m, s, ll);
     TEST_ASSERT_EQ_STR(ll, "9999999E");
-    TEST_ASSERT((decimal >= 123.768) && (decimal <= 123.769));
 
     nitf_Utils_decimalLonToGeoCharArray(decimal, ll);
-    TEST_ASSERT_EQ_STR(ll, "1234607E");
+    TEST_ASSERT_EQ_STR(ll, "1234556E");
 
     /* Now convert it back */
     nitf_Utils_decimalToGeographic(decimal, &d, &m, &s);
     TEST_ASSERT_EQ_INT(d, 123);
-    TEST_ASSERT_EQ_INT(m, 46);
-    TEST_ASSERT_EQ_FLOAT(s, 7.0);
+    TEST_ASSERT_EQ_INT(m, 45);
+    TEST_ASSERT_EQ_FLOAT(s, 56.0);
 
     /* Try decimal stuff */
     if (!nitf_Utils_parseDecimalString(DECIMAL_LAT_STR, &decimal, &e))

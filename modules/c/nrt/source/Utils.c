@@ -358,7 +358,6 @@ NRTAPI(NRT_BOOL) nrt_Utils_parseGeographicString(const char *dms, int *degrees,
 
     int degreeOffset = 0;
     const size_t len = strlen(dms);
-    char dir;
 
     char d[4];
     char m[3];
@@ -380,7 +379,7 @@ NRTAPI(NRT_BOOL) nrt_Utils_parseGeographicString(const char *dms, int *degrees,
                         dms);
         return NRT_FAILURE;
     }
-    dir = dms[len - 1];
+    const char dir = dms[len - 1];
     if (dir != 'N' && dir != 'S' && dir != 'E' && dir != 'W')
     {
         nrt_Error_initf(error, NRT_CTXT, NRT_ERR_INVALID_PARAMETER,
@@ -432,6 +431,25 @@ NRTAPI(NRT_BOOL) nrt_Utils_parseGeographicString(const char *dms, int *degrees,
 
     free(dmsCopy);
 
+    if ((dir == 'N') || (dir == 'S'))
+    {
+        if (!nrt_Utils_isGeographicLat(*degrees, *minutes, *seconds))
+        {
+            nrt_Error_initf(error, NRT_CTXT, NRT_ERR_INVALID_PARAMETER,
+                "Invalid latitude value; full DMS field is '%s'.", dms);
+            return NRT_FAILURE;
+        }
+    }
+    else if ((dir == 'E') || (dir == 'W'))
+    {
+        if (!nrt_Utils_isGeographicLon(*degrees, *minutes, *seconds))
+        {
+            nrt_Error_initf(error, NRT_CTXT, NRT_ERR_INVALID_PARAMETER,
+                "Invalid longitude value; full DMS field is '%s'.", dms);
+            return NRT_FAILURE;
+        }
+    }
+
     return NRT_SUCCESS;
 }
 
@@ -468,20 +486,20 @@ NRTAPI(char) nrt_Utils_cornersTypeAsCoordRep(nrt_CornersType type)
     return cornerRep;
 }
 
-static int is_valid_dms(int degrees, int minutes, double seconds)
+static NRT_BOOL is_valid_dms(int degrees, int minutes, double seconds)
 {
     // these are maximums; values for lat/lon may be smaller
     if (abs(degrees) >= 360)
     {
-        return 0;
+        return NRT_FALSE;
     }
     if (abs(minutes) >= 60)
     {
-        return 0;
+        return NRT_FALSE;
     }
     if (fabs(seconds) >= 60.0)
     {
-        return 0;
+        return NRT_FALSE;
     }
 
     // A negative value is allowed for the first non-zero value
@@ -489,25 +507,25 @@ static int is_valid_dms(int degrees, int minutes, double seconds)
     {
         if ((minutes < 0) || (seconds < 0.0))
         {
-            return 0;
+            return NRT_FALSE;
         }
     }
     else if (minutes != 0)
     {
         if (seconds < 0.0)
         {
-            return 0;
+            return NRT_FALSE;
         }
     }
 
-    return 1;
+    return NRT_TRUE;
 }
 
-static int is_valid_lat_dms(int degrees, int minutes, double seconds)
+NRTAPI(NRT_BOOL) nrt_Utils_isGeographicLat(int degrees, int minutes, double seconds)
 {
     if (abs(degrees) > 90)
     {
-        return 0;
+        return NRT_FALSE;
     }
     return is_valid_dms(degrees, minutes, seconds);
 }
@@ -518,7 +536,7 @@ NRTPROT(void) nrt_Utils_geographicLatToCharArray(int degrees, int minutes,
     assert(buffer7 != NULL);
     char dir = 'N';
 
-    if (is_valid_lat_dms(degrees, minutes, seconds))
+    if (nrt_Utils_isGeographicLat(degrees, minutes, seconds))
     {
         if (degrees <= 0)
         {
@@ -564,11 +582,11 @@ NRTPROT(void) nrt_Utils_geographicLatToCharArray(int degrees, int minutes,
         (int)seconds, dir);
 }
 
-static int is_valid_lon_dms(int degrees, int minutes, double seconds)
+NRTAPI(NRT_BOOL) nrt_Utils_isGeographicLon(int degrees, int minutes, double seconds)
 {
     if (abs(degrees) > 180)
     {
-        return 0;
+        return NRT_FALSE;
     }
     return is_valid_dms(degrees, minutes, seconds);
 }
@@ -580,7 +598,7 @@ NRTPROT(void) nrt_Utils_geographicLonToCharArray(int degrees, int minutes,
 
     char dir = 'E';
 
-    if (is_valid_lon_dms(degrees, minutes, seconds))
+    if (nrt_Utils_isGeographicLon(degrees, minutes, seconds))
     {
         if (degrees <= 0)
         {

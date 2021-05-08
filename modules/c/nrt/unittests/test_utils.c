@@ -63,6 +63,30 @@ TEST_CASE(testParseZeroMinutesEast)
             &error);
     decimal = nrt_Utils_geographicToDecimal(degrees, minutes, seconds);
     TEST_ASSERT(fabs(decimal - .009444) < 1e-6);
+}
+
+TEST_CASE(testParseErrorLat)
+{
+    const char* geoString = "999999N";
+    int degrees;
+    int minutes;
+    double seconds;
+    nrt_Error error;
+    NRT_BOOL result = nrt_Utils_parseGeographicString(geoString, &degrees, &minutes, &seconds,
+        &error);
+    TEST_ASSERT_EQ(NRT_FALSE, result);
+}
+
+TEST_CASE(testParseErrorLon)
+{
+    const char* geoString = "9999999E";
+    int degrees;
+    int minutes;
+    double seconds;
+    nrt_Error error;
+    NRT_BOOL result = nrt_Utils_parseGeographicString(geoString, &degrees, &minutes, &seconds,
+        &error);
+    TEST_ASSERT_EQ(NRT_FALSE, result);
 
 }
 
@@ -463,6 +487,8 @@ TEST_MAIN(
     (void)argv;
     CHECK(testParseZeroDegrees);
     CHECK(testParseZeroMinutes);
+    CHECK(testParseErrorLat);
+    CHECK(testParseErrorLon);
     CHECK(testParseZeroMinutesEast);
     CHECK(testDecimalToDmsNegativeMinutes);
     CHECK(testDecimalToDmsPositiveMinutes);
