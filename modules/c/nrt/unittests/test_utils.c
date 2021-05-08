@@ -74,7 +74,7 @@ TEST_CASE(testParseErrorLat)
     nrt_Error error;
     NRT_BOOL result = nrt_Utils_parseGeographicString(geoString, &degrees, &minutes, &seconds,
         &error);
-    TEST_ASSERT_EQ(NRT_FALSE, result);
+    TEST_ASSERT_EQ_INT(NRT_FALSE, result);
 }
 
 TEST_CASE(testParseErrorLon)
@@ -86,8 +86,7 @@ TEST_CASE(testParseErrorLon)
     nrt_Error error;
     NRT_BOOL result = nrt_Utils_parseGeographicString(geoString, &degrees, &minutes, &seconds,
         &error);
-    TEST_ASSERT_EQ(NRT_FALSE, result);
-
+    TEST_ASSERT_EQ_INT(NRT_FALSE, result);
 }
 
 TEST_CASE(testDecimalToDmsNegativeMinutes)
