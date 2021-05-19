@@ -33,7 +33,7 @@ bool Utils::isNumeric(const std::string& str) noexcept
 
 bool Utils::isAlpha(const std::string& str) noexcept
 {
-    return nitf_Utils_isNumeric(str.c_str()) ? true : false;
+    return nitf_Utils_isAlpha(str.c_str()) ? true : false;
 }
 
 void Utils::decimalToGeographic(double decimal, int* degrees, int* minutes,
