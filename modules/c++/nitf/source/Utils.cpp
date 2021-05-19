@@ -20,6 +20,7 @@
  *
  */
 
+#include <assert.h>
 
 #include "nitf/Utils.hpp"
 
@@ -51,3 +52,20 @@ char Utils::cornersTypeAsCoordRep(nitf::CornersType type) noexcept
     return nitf_Utils_cornersTypeAsCoordRep(type);
 }
 
+void Utils::error_init(nrt_Error& error, const std::string& message,
+    const char* file, int line, const char* func, int level)
+{
+    nrt_Error_init(&error, message.c_str(), file, line, func, level);
+}
+void Utils::error_init(nrt_Error* error, const std::string& message,
+    const char* file, int line, const char* func, int level)
+{
+    assert(error != nullptr);
+    error_init(*error, message, file, line, func, level);
+}
+void Utils::error_init(nrt_Error* error, const std::exception& ex,
+    const char* file, int line, const char* func, int level)
+{
+    assert(error != nullptr);
+    nrt_Error_init(error, ex.what(), file, line, func, level);
+}
