@@ -32,6 +32,11 @@
 #include <except/Throwable.h>
 
 //--------------------------------------------------------------
+
+#pragma warning(push)
+#pragma warning(disable: 5039) // '...': pointer or reference to potentially throwing function passed to '...' function under -EHc. Undefined behavior may occur if this function throws an exception.
+#include <mt/Singleton.h>
+#pragma warning(pop)
 #include <import/except.h>
 #include <import/mt.h>
 #include <import/sys.h>
