@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   build-windows-cmake:
-    name: Windows
+    name: Windows-CMake
     runs-on: [windows-latest]
 
     steps:
@@ -18,7 +18,7 @@ jobs:
         ls env:
         mkdir target
         cd target
-        cmake .. -DCMAKE_INSTALL_PREFIX=installWindows-Github -DPYTHON_VERSION="3.7"
+        cmake .. -DCMAKE_INSTALL_PREFIX=installWindowsCMake-Github -DPYTHON_VERSION="3.7"
     - name: build
       run: |
         cd target
@@ -34,7 +34,7 @@ jobs:
 
 
   build-linux-cmake:
-    name: Linux
+    name: Linux-CMake
     runs-on: [ubuntu-latest]
 
     steps:
@@ -49,7 +49,7 @@ jobs:
         which python
         mkdir target
         cd target
-        cmake .. -DCMAKE_INSTALL_PREFIX=installLinux-Github -DPYTHON_VERSION=3.7
+        cmake .. -DCMAKE_INSTALL_PREFIX=installLinuxCMake-Github -DPYTHON_VERSION=3.7
     - name: build
       run: |
         cd target
@@ -65,7 +65,7 @@ jobs:
 
 
   build-windows-waf:
-    name: Windows
+    name: Windows-waf
     runs-on: [windows-latest]
 
     steps:
@@ -77,9 +77,8 @@ jobs:
     - name: configure
       run: |
         pip install numpy
-        mkdir installLinux-Github
-        # test_os.cpp is a little fritzy w/o --enable-debugging
-        python waf configure --enable-debugging --prefix="$PWD/installLinux-Github"
+        mkdir installWindowsWaf-Github
+        python waf configure --prefix="$PWD/installWindowsWaf-Github"
     - name: build
       run: |
         python waf build
@@ -91,7 +90,7 @@ jobs:
         python waf install --alltests
 
   build-linux-waf:
-    name: Linux
+    name: Linux-waf
     runs-on: [ubuntu-latest]
 
     steps:
@@ -103,8 +102,8 @@ jobs:
     - name: configure
       run: |
         pip install numpy
-        mkdir installLinux-Github
-        python waf configure --prefix="$PWD/installLinux-Github"
+        mkdir installLinuxWaf-Github
+        python waf configure --prefix="$PWD/installLinuxWaf-Github"
     - name: build
       run: |
         python waf build
