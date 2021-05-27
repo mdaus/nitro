@@ -85,7 +85,7 @@ BufferList<std::byte> ImageReader::read(const nitf::SubWindow& window, size_t nb
 
     const auto numBitsPerPixel = nbpp;
     const size_t numBytesPerPixel = NITF_NBPP_TO_BYTES(numBitsPerPixel);
-    const size_t numBytesPerBand = window.getNumRows() * window.getNumCols() *  numBytesPerPixel;
+    const auto numBytesPerBand = static_cast<size_t>(window.getNumRows()) * static_cast<size_t>(window.getNumCols()) *  numBytesPerPixel;
 
     auto downsampler = window.getDownSampler();
     const uint32_t rowSkip = downsampler ? downsampler->getRowSkip() : 1;

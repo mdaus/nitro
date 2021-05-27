@@ -56,7 +56,7 @@ static  std::vector<std::string> extract_image(const nitf::ImageSubheader& subhe
     for (const auto& data : bandData) // for band, data in enumerate(bandData):
     {
         auto outName = str::format("%s_%d__%d_x_%d_%d_band_%d.out",
-            baseName.c_str(), index, window.getNumRows(), window.getNumCols(), nbpp, band);
+            baseName.c_str(), index, window.getNumRows(), window.getNumCols(), static_cast<int>(nbpp), static_cast<int>(band));
         outName = sys::Path::joinPaths(outDir, outName);
         auto f = fopen(outName.c_str(), "wb"); // f = open(outName, "wb");
         nitf::write(f, data); // fwrite(data.data(), sizeof(data[0]), data.size() / sizeof(data[0]), f);
