@@ -4,8 +4,8 @@ on: [push]
 
 
 jobs:
-  build-windows:
-    name: Windows
+  build-windows-release:
+    name: WindowsRelease
     runs-on: [windows-latest]
 
     steps:
@@ -16,19 +16,43 @@ jobs:
         python-version: '3.7'
     - name: configure
       run: |
-        mkdir build
-        cd build
-        cmake -DCMAKE_INSTALL_PREFIX=installWindows-Github -DPYTHON_VERSION="3.7" ..
+        mkdir build-release
+        cd build-release
+        cmake -DCMAKE_INSTALL_PREFIX=installWindowsRelease-Github -DPYTHON_VERSION="3.7" ..
     - name: make
       run: |
-        cd build
+        cd build-release
         cmake --build . --config Release -j
         cmake --build . --config Release --target install
     - name: test
       run: |
-        cd build
+        cd build-release
         ctest -C Release
 
+  build-windows-debug:
+    name: WindowsDebug
+    runs-on: [windows-latest]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v1
+      with:
+        python-version: '3.7'
+    - name: configure
+      run: |
+        mkdir build-debug
+        cd build-debug
+        cmake -DCMAKE_INSTALL_PREFIX=installWindowsDebug-Github -DPYTHON_VERSION="3.7" ..
+    - name: make
+      run: |
+        cd build-debug
+        cmake --build . --config Debug -j
+        cmake --build . --config Debug --target install
+    - name: test
+      run: |
+        cd build-debug
+        ctest -C Debug 
 
   build-linux:
     name: Linux
