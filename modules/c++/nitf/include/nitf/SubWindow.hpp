@@ -72,7 +72,7 @@ public:
     SubWindow(nitf_SubWindow * x);
 
     //! Constructor
-    SubWindow() noexcept(false);
+    SubWindow();
 
     //! Destructor
     ~SubWindow();

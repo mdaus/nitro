@@ -103,7 +103,10 @@ struct NITRO_NITFCPP_API FileSource : public BandSource
 
 struct NITRO_NITFCPP_API RowSourceCallback
 {
-    virtual ~RowSourceCallback() = default; // can't be "noexcpet" as that breaks derived classes
+    virtual ~RowSourceCallback() // can't be "noexcpet" as that breaks derived classes
+    {
+    }
+
     virtual void nextRow(uint32_t band, void* buf) = 0;
 };
 

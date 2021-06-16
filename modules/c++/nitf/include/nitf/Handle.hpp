@@ -76,7 +76,7 @@ template <typename T>
 struct NITRO_NITFCPP_API MemoryDestructor
 {
     virtual void operator() (T* /*nativeObject*/) noexcept(false) {}
-    virtual ~MemoryDestructor() noexcept(false) {}
+    virtual ~MemoryDestructor() {}
 };
 
 
