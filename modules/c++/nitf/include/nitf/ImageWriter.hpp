@@ -57,8 +57,6 @@ struct NITRO_NITFCPP_API ImageWriter : public WriteHandler
     {
     }
 
-    ~ImageWriter();
-
     /*!
      *  Attach an image source from which to write.
      *  \param imageSource  The image source from which to write

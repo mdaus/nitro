@@ -103,8 +103,6 @@ struct NITRO_NITFCPP_API SegmentFileSource : public SegmentSource
      *  \param byteSkip The number of bytes to skip
      */
     SegmentFileSource(nitf::IOHandle & io, nitf::Off start, int byteSkip);
-
-    ~SegmentFileSource() = default;
 };
 
 struct NITRO_NITFCPP_API SegmentReaderSource : public SegmentSource
@@ -116,8 +114,6 @@ struct NITRO_NITFCPP_API SegmentReaderSource : public SegmentSource
      *  \param byteSkip The number of bytes to skip
      */
     SegmentReaderSource(nitf::SegmentReader reader);
-
-    ~SegmentReaderSource() = default;
 };
 }
 #endif

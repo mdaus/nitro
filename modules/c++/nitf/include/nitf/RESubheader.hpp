@@ -63,6 +63,8 @@ public:
     nitf::RESubheader clone() const;
 
     ~RESubheader() = default;
+    RESubheader(RESubheader&&) = default;
+    RESubheader& operator=(RESubheader&&) = default;
 
     //! Get the filePartType
     nitf::Field getFilePartType() const;

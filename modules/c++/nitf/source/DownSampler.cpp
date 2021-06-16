@@ -60,18 +60,10 @@ nitf::PixelSkip::PixelSkip(uint32_t rowSkip, uint32_t colSkip)
     setManaged(false);
 }
 
-nitf::PixelSkip::~PixelSkip()
-{
-}
-
 nitf::MaxDownSample::MaxDownSample(uint32_t rowSkip, uint32_t colSkip)
 {
     setNative(nitf_MaxDownSample_construct(rowSkip, colSkip, &error));
     setManaged(false);
-}
-
-nitf::MaxDownSample::~MaxDownSample()
-{
 }
 
 nitf::SumSq2DownSample::SumSq2DownSample(uint32_t rowSkip,
@@ -81,17 +73,9 @@ nitf::SumSq2DownSample::SumSq2DownSample(uint32_t rowSkip,
     setManaged(false);
 }
 
-nitf::SumSq2DownSample::~SumSq2DownSample()
-{
-}
-
 nitf::Select2DownSample::Select2DownSample(uint32_t rowSkip,
         uint32_t colSkip)
 {
     setNative(nitf_Select2DownSample_construct(rowSkip, colSkip, &error));
     setManaged(false);
-}
-
-nitf::Select2DownSample::~Select2DownSample()
-{
 }

@@ -65,6 +65,8 @@ public:
     nitf::ImageSegment clone() const;
 
     ~ImageSegment() = default;
+    ImageSegment(ImageSegment&&) = default;
+    ImageSegment& operator=(ImageSegment&&) = default;
 
     //! Get the subheader
     nitf::ImageSubheader getSubheader() const;

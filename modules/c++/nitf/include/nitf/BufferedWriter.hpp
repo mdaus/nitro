@@ -43,8 +43,11 @@ struct NITRO_NITFCPP_API BufferedWriter : public CustomIO
 
     ~BufferedWriter();
 
+    BufferedWriter() = delete;
     BufferedWriter(const BufferedWriter&) = delete;
     BufferedWriter& operator=(const BufferedWriter&) = delete;
+    BufferedWriter(BufferedWriter&&) = delete;
+    BufferedWriter& operator=(BufferedWriter&&) = delete;
 
     void flushBuffer();
 

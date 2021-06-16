@@ -52,6 +52,9 @@ public:
     WriteHandler(nitf_WriteHandler* x);
 
     ~WriteHandler() = default;
+    WriteHandler(WriteHandler&&) = default;
+    WriteHandler& operator=(WriteHandler&&) = default;
+
 
     /*!
      *  Write to the given output IOInterface
@@ -77,9 +80,13 @@ public:
     //! Constructor
     StreamIOWriteHandler(IOInterface& sourceHandle, uint64_t offset,
             uint64_t bytes);
-    ~StreamIOWriteHandler()
-    {
-    }
+    StreamIOWriteHandler() = delete;
+    ~StreamIOWriteHandler() = default;
+    StreamIOWriteHandler(const StreamIOWriteHandler&) = delete;
+    StreamIOWriteHandler& operator=(const StreamIOWriteHandler&) = delete;
+    StreamIOWriteHandler(StreamIOWriteHandler&&) = default;
+    StreamIOWriteHandler& operator=(StreamIOWriteHandler&&) = default;
+
 };
 
 }

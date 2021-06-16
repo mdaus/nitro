@@ -53,10 +53,6 @@ ByteProvider::ByteProvider(Record& record,
     initialize(record, desData, numRowsPerBlock, numColsPerBlock);
 }
 
-ByteProvider::~ByteProvider()
-{
-}
-
 template<typename T>
 static void copyFromStreamAndClear_(io::ByteStream& stream,
                                           std::vector<T>& rawBytes)

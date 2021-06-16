@@ -54,6 +54,8 @@ public:
         *this = x;
     }
     ~FieldWarning() = default;
+    FieldWarning(FieldWarning&&) = default;
+    FieldWarning& operator=(FieldWarning&&) = default;
 
     //! Assignment Operator
     FieldWarning & operator=(const FieldWarning & x)

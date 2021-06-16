@@ -118,13 +118,19 @@ public:
 };
 
 /*!
- *  \class Compressor
- *  \brief This is the c++ interface for nitf_CompressionControl
+ *  \class Decompressor
+ *  \brief This is the c++ interface for nitf_DecompressionControl
  */
-struct Decompressor
+class Decompressor
 {
+protected:
     Decompressor() = default;
-    virtual ~Decompressor() {}
+public:
+    virtual ~Decompressor() = default;
+    Decompressor(const Decompressor&) = delete;
+    Decompressor& operator=(const Decompressor&) = delete;
+    Decompressor(Decompressor&&) = default;
+    Decompressor& operator=(Decompressor&&) = default;
 
     virtual void start(nitf::IOInterface& io,
                        uint64_t offset,

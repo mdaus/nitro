@@ -47,6 +47,13 @@ public:
      */
     IOStreamWriter(mem::SharedPtr<io::SeekableOutputStream> stream);
 
+    IOStreamWriter() = delete;
+    ~IOStreamWriter() = default;
+    IOStreamWriter(const IOStreamWriter&) = delete;
+    IOStreamWriter& operator=(const IOStreamWriter&) = delete;
+    IOStreamWriter(IOStreamWriter&&) = default;
+    IOStreamWriter& operator=(IOStreamWriter&&) = default;
+
 private:
     void readImpl(void* buffer, size_t size) override;
 

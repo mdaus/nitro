@@ -61,6 +61,9 @@ public:
 
     ~ImageSource();
 
+    ImageSource(ImageSource&&) = default;
+    ImageSource& operator=(ImageSource&&) = default;
+
     //! Add a band
     void addBand(nitf::BandSource bandSource);
 

@@ -65,6 +65,9 @@ public:
     nitf::DESubheader clone() const;
 
     ~DESubheader() = default;
+    DESubheader(DESubheader&&) = default;
+    DESubheader& operator=(DESubheader&&) = default;
+
 
     //! Get the filePartType
     nitf::Field getFilePartType() const;

@@ -72,6 +72,8 @@ public:
     nitf::Record clone() const;
 
     ~Record() = default;
+    Record(Record&&) = default;
+    Record& operator=(Record&&) = default;
 
     //! Returns the NITF version
     nitf::Version getVersion() const;

@@ -63,6 +63,8 @@ public:
     nitf::TextSubheader clone() const;
 
     ~TextSubheader() = default;
+    TextSubheader(TextSubheader&&) = default;
+    TextSubheader& operator=(TextSubheader&&) = default;
 
     //! Get the filePartType
     nitf::Field getFilePartType() const;

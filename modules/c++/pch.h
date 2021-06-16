@@ -33,7 +33,6 @@
 #pragma warning(disable: 26455) // Default constructor may not throw. Declare it '...' (f.6).
 #pragma warning(disable: 26447) // The function is declared '...' but calls function '..' which may throw exceptions (f.6).
 #pragma warning(disable: 26456) // Operator '...' hides a non-virtual operator '...' (c.128).
-#pragma warning(disable: 26432) // If you define or delete any default operation in the type '...', define or delete them all(c.21).
 #pragma warning(disable: 26481) // Don't use pointer arithmetic. Use span instead (bounds.1).
 #pragma warning(disable: 26434) // Function '...' hides a non-virtual function '...' (c.128).
 #pragma warning(disable: 26440) // Function '...' can be declared '...' (f.6).

@@ -41,6 +41,12 @@ struct NITRO_NITFCPP_API IOInterfaceDestructor : public nitf::MemoryDestructor<n
 {
     ~IOInterfaceDestructor() = default;
     void operator()(nitf_IOInterface *io) override;
+
+    IOInterfaceDestructor() = default;
+    IOInterfaceDestructor(const IOInterfaceDestructor&) = delete;
+    IOInterfaceDestructor& operator=(const IOInterfaceDestructor&) = delete;
+    IOInterfaceDestructor(IOInterfaceDestructor&&) = delete;
+    IOInterfaceDestructor& operator=(IOInterfaceDestructor&&) = delete;
 };
 
 /*!
@@ -65,10 +71,11 @@ public:
     }
 
     IOInterface(const IOInterface& lhs);
+    IOInterface & operator=(const IOInterface & x);
 
     ~IOInterface() = default;
-
-    IOInterface & operator=(const IOInterface & x);
+    IOInterface(IOInterface&&) = default;
+    IOInterface& operator=(IOInterface&&) = default;
 
     void read(void* buf, size_t size);
 

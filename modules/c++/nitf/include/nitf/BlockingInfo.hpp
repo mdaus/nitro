@@ -66,6 +66,8 @@ public:
     BlockingInfo() noexcept(false);
 
     ~BlockingInfo() = default;
+    BlockingInfo(BlockingInfo&&) = default;
+    BlockingInfo& operator=(BlockingInfo&&) = default;
 
     //! Get the number of blocks per row
     uint32_t getNumBlocksPerRow() const;

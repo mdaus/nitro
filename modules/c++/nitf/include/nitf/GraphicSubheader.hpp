@@ -61,6 +61,8 @@ public:
     nitf::GraphicSubheader clone() const;
 
     ~GraphicSubheader() = default;
+    GraphicSubheader(GraphicSubheader&&) = default;
+    GraphicSubheader& operator=(GraphicSubheader&&) = default;
 
     //! Get the filePartType
     nitf::Field getFilePartType() const;

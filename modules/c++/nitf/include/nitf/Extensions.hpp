@@ -46,8 +46,10 @@ namespace nitf
  */
 struct NITRO_NITFCPP_API ExtensionsIterator
 {
-    //! Constructor
     ExtensionsIterator() = default;
+    ~ExtensionsIterator() = default;
+    ExtensionsIterator(ExtensionsIterator&&) = default;
+    ExtensionsIterator& operator=(ExtensionsIterator&&) = default;
 
     //! Copy constructor
     ExtensionsIterator(const ExtensionsIterator & x) noexcept
@@ -191,6 +193,8 @@ typedef nitf::ExtensionsIterator Iterator;
     }
 
     ~Extensions() = default;
+    Extensions(Extensions&&) = default;
+    Extensions& operator=(Extensions&&) = default;
 
     /*!
      *  Insert a TRE into the extensions section

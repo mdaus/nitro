@@ -64,10 +64,12 @@ public:
                    size_t size,
                    bool adopt = false);
 
+    BufferedReader() = delete;
     ~BufferedReader() = default;
-
     BufferedReader(const BufferedReader&) = delete;
     BufferedReader& operator=(const BufferedReader&) = delete;
+    BufferedReader(BufferedReader&&) = delete;
+    BufferedReader& operator=(BufferedReader&&) = delete;
 
     size_t getTotalRead() const noexcept
     {

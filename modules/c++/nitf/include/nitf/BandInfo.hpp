@@ -60,6 +60,8 @@ public:
     BandInfo();
 
     ~BandInfo() = default;
+    BandInfo(BandInfo&&) = default;
+    BandInfo& operator=(BandInfo&&) = default;
 
     //! Get the representation
     nitf::Field getRepresentation() const;

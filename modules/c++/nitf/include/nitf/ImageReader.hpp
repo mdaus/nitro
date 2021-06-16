@@ -118,6 +118,8 @@ public:
     ImageReader(nitf_ImageReader * x);
 
     ~ImageReader() = default;
+    ImageReader(ImageReader&&) = default;
+    ImageReader& operator=(ImageReader&&) = default;
 
     //! Get the blocking info
     nitf::BlockingInfo getBlockingInfo() const;

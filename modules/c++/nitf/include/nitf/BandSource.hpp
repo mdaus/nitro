@@ -103,11 +103,14 @@ struct NITRO_NITFCPP_API FileSource : public BandSource
 
 struct NITRO_NITFCPP_API RowSourceCallback
 {
-    virtual ~RowSourceCallback()
-    {
-    }
-
+    virtual ~RowSourceCallback() = default;
     virtual void nextRow(uint32_t band, void* buf) = 0;
+
+    RowSourceCallback() = default;
+    RowSourceCallback(const RowSourceCallback&) = delete;
+    RowSourceCallback& operator=(const RowSourceCallback&) = delete;
+    RowSourceCallback(RowSourceCallback&&) = default;
+    RowSourceCallback& operator=(RowSourceCallback&&) = default;
 };
 
 struct NITRO_NITFCPP_API RowSource : public BandSource
@@ -151,8 +154,6 @@ struct NITRO_NITFCPP_API CopyBlockSource: public ::nitf::DirectBlockSource
     CopyBlockSource(nitf::ImageReader& imageReader, uint32_t numBands) :
         nitf::DirectBlockSource(imageReader, numBands)
     {}
-
-    ~CopyBlockSource() = default;
 
 protected:
     void nextBlock(void* buf,
