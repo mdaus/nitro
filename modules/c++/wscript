@@ -9,9 +9,9 @@ def options(opt):
 
 def configure(conf):
     if conf.env['COMPILER_CXX'] == 'msvc':
-        conf.env.CXXFLAGS += ['/std:c++17']
+        conf.env.CXXFLAGS += ['/std:c++latest']
     else:
-        conf.env.CXXFLAGS += ['-std=c++17']
+        conf.env.CXXFLAGS += ['-std=c++2a]
     conf.recurse(MODULES)
 
 def build(bld):
