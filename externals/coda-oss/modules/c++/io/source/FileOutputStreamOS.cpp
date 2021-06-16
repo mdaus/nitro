@@ -24,20 +24,13 @@
 
 #if !defined(USE_IO_STREAMS)
 
-io::FileOutputStreamOS::FileOutputStreamOS(const sys::Filesystem::path& str,
+io::FileOutputStreamOS::FileOutputStreamOS(const path& str,
         int creationFlags)
 {
     mFile.create(str.string(), sys::File::WRITE_ONLY, creationFlags);
 }
-#if CODA_OSS_cpp17
-io::FileOutputStreamOS::FileOutputStreamOS(const std::filesystem::path& str,
-        int creationFlags)
-{
-    mFile.create(str.string(), sys::File::WRITE_ONLY, creationFlags);
-}
-#endif
 
-void io::FileOutputStreamOS::create(const sys::Filesystem::path& str_,
+void io::FileOutputStreamOS::create(const path& str_,
                                     int creationFlags)
 {
     const auto str = str_.string();
@@ -48,14 +41,6 @@ void io::FileOutputStreamOS::create(const sys::Filesystem::path& str_,
             "File could not be opened: " + str);
     }
 }
-#if CODA_OSS_cpp17
-void io::FileOutputStreamOS::create(const std::filesystem::path& str_,
-                                    int creationFlags)
-{
-    sys::Filesystem::path str(str_.string());
-    create(str, creationFlags);
-}
-#endif
 
 void io::FileOutputStreamOS::write(const void* buffer, size_t len)
 {

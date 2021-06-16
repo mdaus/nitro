@@ -52,24 +52,18 @@ namespace logging
  *  \param logCount - number of rotating logs to keep (default: 0 no rotation)
  *  \param logBytes - number of bytes per rotating log (default: 0 no rotation)
  */
-mem::auto_ptr<logging::Logger> setupLogger(
-    const sys::Filesystem::path& program, 
-    const std::string& logLevel = "warning", 
-    const sys::Filesystem::path& logFile = "console",
-    const std::string& logFormat = "[%p] (%d) %m",
-    size_t logCount = 0,
-    size_t logBytes = 0);
-}
 #if CODA_OSS_cpp17
-std::unique_ptr<logging::Logger> setupLogger(
-    const std::filesystem::path& program, 
+using path = std::filesystem::path;
+#else
+using path = sys::Filesystem::path;
+#endif
+mem::auto_ptr<logging::Logger> setupLogger(
+    const path& program, 
     const std::string& logLevel = "warning", 
-    const std::filesystem::path& logFile = "console",
+    const path& logFile = "console",
     const std::string& logFormat = "[%p] (%d) %m",
     size_t logCount = 0,
     size_t logBytes = 0);
 }
-#endif
-
 
 #endif // CODA_OSS_logging_Setup_h_INCLUDED_
