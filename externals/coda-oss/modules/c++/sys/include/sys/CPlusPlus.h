@@ -52,7 +52,7 @@
 
 #endif // CODA_OSS_cplusplus
 
-#if CODA_OSS_cplusplus < 201703L  
+#if CODA_OSS_cplusplus < 201703L
 #error "Must compile with C++17 or greater."
 #endif
 

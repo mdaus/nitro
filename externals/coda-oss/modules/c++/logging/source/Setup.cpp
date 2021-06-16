@@ -31,9 +31,9 @@
 #include "logging/Setup.h"
 
 mem::auto_ptr<logging::Logger>
-logging::setupLogger(const coda_oss::filesystem::path& program_, 
+logging::setupLogger(const sys::Filesystem::path& program_, 
                      const std::string& logLevel, 
-                     const coda_oss::filesystem::path& logFile_,
+                     const sys::Filesystem::path& logFile_,
                      const std::string& logFormat,
                      size_t logCount,
                      size_t logBytes)
@@ -92,3 +92,19 @@ logging::setupLogger(const coda_oss::filesystem::path& program_,
     return log;
 }
 
+#if CODA_OSS_cpp17
+std::unique_ptr<logging::Logger> logging::setupLogger(
+        const std::filesystem::path& program_,
+        const std::string& logLevel,
+        const std::filesystem::path& logFile_,
+        const std::string& logFormat,
+        size_t logCount,
+        size_t logBytes)
+{
+    sys::Filesystem::path program(program_.string());
+    sys::Filesystem::path logFile(logFile_.string());
+
+    auto retval = seteupLogger(program, logLevel, logFile, logFormat, logCount, logBytes);
+    return std::unique_ptr<logging::Logger>(retval.release());
+}
+#endif

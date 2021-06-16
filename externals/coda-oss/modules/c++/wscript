@@ -9,9 +9,9 @@ def configure(conf):
     conf.env.append_value('INCLUDES_UNITTEST',
                           os.path.join(conf.path.abspath(), 'include'))
     if conf.env['COMPILER_CXX'] == 'msvc':
-        conf.env.CXXFLAGS += ['/std:c++17']
+        conf.env.CXXFLAGS += ['/std:c++latest']
     else:
-        conf.env.CXXFLAGS += ['-std=c++17']
+        conf.env.CXXFLAGS += ['-std=c++2a']
     conf.recurse()
 
 
