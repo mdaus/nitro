@@ -190,7 +190,7 @@ static NITF_BOOL TRE_setField(nitf_TRE* tre,
     const NITF_DATA* data,
     size_t dataLength, nitf_Error& error)
 {
-    return nitf_TRE_setField(tre, tag.c_str(), const_cast<NITF_DATA*>(data), dataLength, &error);
+    return nitf_TRE_setField(tre, tag.c_str(), data, dataLength, &error);
 }
 static NITF_BOOL TRE_setField(nitf_TRE* tre,
     const std::string& tag,
