@@ -89,7 +89,7 @@ public:
         Handle* handle = nullptr;
         {
             std::lock_guard<std::mutex> obtainLock(mMutex);
-            std::map<CAddress, Handle*>::iterator it = mHandleMap.find(object);
+            auto it = mHandleMap.find(object);
             if (it != mHandleMap.end())
             {
                 handle = it->second;

@@ -49,7 +49,7 @@ class NITRO_NITFCPP_API Handle
 
 public:
     Handle();
-    virtual ~Handle();
+    virtual ~Handle()  noexcept(false);
 
     Handle(const Handle&) = delete;
     Handle(Handle&&) = default;
@@ -97,7 +97,7 @@ public:
     BoundHandle() = delete;
     BoundHandle(Class_T* h) : handle(h) {}
 
-    ~BoundHandle()
+    ~BoundHandle() noexcept(false)
     {
         //call the destructor, to destroy the object
         if(handle && !isManaged())
