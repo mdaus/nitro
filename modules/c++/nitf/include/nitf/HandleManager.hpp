@@ -55,7 +55,7 @@ class HandleManager
     }
 
 public:
-    HandleManager() = default;
+    HandleManager() noexcept(false) {}
     virtual ~HandleManager() = default;
 
     HandleManager(const HandleManager&) = delete;

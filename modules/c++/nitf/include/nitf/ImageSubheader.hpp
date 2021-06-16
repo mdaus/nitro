@@ -62,7 +62,7 @@ public:
     ImageSubheader(nitf_ImageSubheader * x);
 
     //! Constructor
-    ImageSubheader();
+    ImageSubheader() noexcept(false);
 
 
     //! Clone

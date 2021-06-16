@@ -102,7 +102,7 @@ nitf::HashTable::HashTable(nitf_HashTable * x)
     getNativeOrThrow();
 }
 
-nitf::HashTable::HashTable(int nbuckets) : HashTable(nitf_HashTable_construct(nbuckets, &error))
+nitf::HashTable::HashTable(int nbuckets) noexcept(false) : HashTable(nitf_HashTable_construct(nbuckets, &error))
 {
     setManaged(false);
 }

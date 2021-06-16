@@ -24,7 +24,7 @@
 
 #include <array>
 
-nitf::DateTime::DateTime()
+nitf::DateTime::DateTime() noexcept(false)
 {
     nitf_Error error;
     mDateTime = nitf_DateTime_now(&error);

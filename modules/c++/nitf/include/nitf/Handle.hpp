@@ -48,7 +48,7 @@ class NITRO_NITFCPP_API Handle
     std::unique_ptr<Impl> mPimpl;
 
 public:
-    Handle();
+    Handle() noexcept(false);
     virtual ~Handle()  noexcept(false);
 
     Handle(const Handle&) = delete;

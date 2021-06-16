@@ -47,7 +47,7 @@ ImageSubheader::ImageSubheader(nitf_ImageSubheader * x)
     getNativeOrThrow();
 }
 
-ImageSubheader::ImageSubheader() : ImageSubheader(nitf_ImageSubheader_construct(&error))
+ImageSubheader::ImageSubheader() noexcept(false) : ImageSubheader(nitf_ImageSubheader_construct(&error))
 {
     setManaged(false);
 }
