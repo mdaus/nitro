@@ -60,10 +60,8 @@ struct NITRO_NITFCPP_API LookupTable : public nitf::Object<nitf_LookupTable>
     //! Set native object
     LookupTable(nitf_LookupTable * x);
 
+    //! Destructor
     ~LookupTable();
-
-    LookupTable(LookupTable&&) = default;
-    LookupTable& operator=(LookupTable&&) = default;
 
     //! Get the tables
     size_t getTables() const;

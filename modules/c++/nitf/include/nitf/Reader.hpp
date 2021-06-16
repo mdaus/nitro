@@ -46,12 +46,6 @@ struct NITRO_NITFCPP_API ReaderDestructor : public nitf::MemoryDestructor<nitf_R
 {
     ~ReaderDestructor() = default;
     void operator()(nitf_Reader *reader) override;
-
-    ReaderDestructor() = default;
-    ReaderDestructor(const ReaderDestructor&) = delete;
-    ReaderDestructor& operator=(const ReaderDestructor&) = delete;
-    ReaderDestructor(ReaderDestructor&&) = delete;
-    ReaderDestructor& operator=(ReaderDestructor&&) = delete;
 };
 
 /*!
@@ -73,8 +67,6 @@ struct NITRO_NITFCPP_API Reader : public nitf::Object<nitf_Reader, ReaderDestruc
     Reader();
 
     ~Reader() = default;
-    Reader(Reader&&) = default;
-    Reader& operator=(Reader&&) = default;
 
     /*!
      * Return the Version of the file passed in by its file name.

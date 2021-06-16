@@ -55,10 +55,6 @@ public:
     }
 
     ~SegmentWriter() = default;
-    SegmentWriter(const SegmentWriter&) = delete;
-    SegmentWriter& operator=(const SegmentWriter&) = delete;
-    SegmentWriter(SegmentWriter&&) = default;
-    SegmentWriter& operator=(SegmentWriter&&) = default;
 
     /*!
      *  Attach a segment source from which to write.

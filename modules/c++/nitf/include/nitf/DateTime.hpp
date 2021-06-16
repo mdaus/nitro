@@ -91,11 +91,11 @@ struct NITRO_NITFCPP_API DateTime
 
     ~DateTime();
 
+    //! Copy constructor
     DateTime(const DateTime& rhs);
-    DateTime & operator=(const DateTime& rhs);
 
-    DateTime(DateTime&&) = default;
-    DateTime& operator=(DateTime&&) = default;
+    //! Assignment Operator
+    DateTime & operator=(const DateTime& rhs);
 
     bool operator<(const DateTime& rhs) const noexcept
     {

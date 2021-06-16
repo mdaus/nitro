@@ -75,14 +75,8 @@ public:
 template <typename T>
 struct NITRO_NITFCPP_API MemoryDestructor
 {
-    MemoryDestructor() = default;
     virtual void operator() (T* /*nativeObject*/) noexcept(false) {}
     virtual ~MemoryDestructor() noexcept(false) {}
-
-    MemoryDestructor(const MemoryDestructor&) = delete;
-    MemoryDestructor& operator=(const MemoryDestructor&) = delete;
-    MemoryDestructor(MemoryDestructor&&) = delete;
-    MemoryDestructor& operator=(MemoryDestructor&&) = delete;
 };
 
 

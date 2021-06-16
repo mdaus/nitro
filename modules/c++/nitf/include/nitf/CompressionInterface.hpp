@@ -124,16 +124,10 @@ public:
  *  \class Compressor
  *  \brief This is the c++ interface for nitf_CompressionControl
  */
-class Compressor
+struct Compressor
 {
-protected:
     Compressor() = default;
-public:
-    virtual ~Compressor() = default;
-    Compressor(const Compressor&) = delete;
-    Compressor& operator=(const Compressor&) = delete;
-    Compressor(Compressor&&) = default;
-    Compressor& operator=(Compressor&&) = default;
+    virtual ~Compressor() {}
 
     virtual void start(uint64_t offset,
                        uint64_t dataLength,

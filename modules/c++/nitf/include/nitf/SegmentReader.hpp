@@ -54,8 +54,6 @@ public:
     SegmentReader(nitf_SegmentReader * x);
 
     ~SegmentReader() = default;
-    SegmentReader(SegmentReader&&) = default;
-    SegmentReader& operator=(SegmentReader&&) = default;
 
     /*!
      * \brief nitf_SegmentReader_read - Read segment data

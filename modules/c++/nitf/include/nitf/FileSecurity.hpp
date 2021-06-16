@@ -63,8 +63,6 @@ public:
     nitf::FileSecurity clone() const;
 
     ~FileSecurity() = default;
-    FileSecurity(FileSecurity&&) = default;
-    FileSecurity& operator=(FileSecurity&&) = default;
 
     //! Get the classificationSystem
     nitf::Field getClassificationSystem() const;

@@ -204,8 +204,6 @@ public:
     }
 
     ~Field() = default;
-    Field(Field&&) = default;
-    Field& operator=(Field&&) = default;
 
     void set(uint8_t data)
     {

@@ -31,6 +31,10 @@ ImageWriter::ImageWriter(nitf::ImageSubheader& subheader)
     setNativeOrThrow(writer, &error);
 }
 
+ImageWriter::~ImageWriter()
+{
+}
+
 void ImageWriter::attachSource(nitf::ImageSource imageSource)
 {
     if (!nitf_ImageWriter_attachSource(getNativeOrThrow(),

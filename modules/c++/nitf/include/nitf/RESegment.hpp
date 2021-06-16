@@ -63,8 +63,6 @@ public:
     nitf::RESegment clone() const;
 
     ~RESegment() = default;
-    RESegment(RESegment&&) = default;
-    RESegment& operator=(RESegment&&) = default;
 
     //! Get the subheader
     nitf::RESubheader getSubheader() const;

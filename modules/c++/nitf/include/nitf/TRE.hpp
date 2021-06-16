@@ -51,8 +51,6 @@ struct NITRO_NITFCPP_API TREFieldIterator : public nitf::Object<nitf_TREEnumerat
     }
 
     ~TREFieldIterator() = default;
-    TREFieldIterator(TREFieldIterator&&) = default;
-    TREFieldIterator& operator=(TREFieldIterator&&) = default;
 
 
     //! Copy constructor
@@ -208,8 +206,6 @@ DECLARE_CLASS(TRE)
     nitf::TRE clone() const;
 
     ~TRE() = default;
-    TRE(TRE&&) = default;
-    TRE& operator=(TRE&&) = default;
 
     /*!
      *  Get a begin TRE field iterator

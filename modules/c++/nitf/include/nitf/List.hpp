@@ -52,17 +52,12 @@ NITRO_DECLARE_CLASS_NRT(ListNode)
 public:
     //! Constructor
     ListNode() = default;
-    ~ListNode() = default;
 
     //! Copy constructor
     ListNode(const ListNode& x) { *this = x; }
 
     //! Assignment Operator
     ListNode & operator=(const ListNode & x);
-
-    ListNode(ListNode&&) = default;
-    ListNode& operator=(ListNode&&) = default;
-
 
     //! Set native object
     ListNode(nitf_ListNode * x);
@@ -74,6 +69,9 @@ public:
      *  \param data  The data to insert into the list
      */
     ListNode(nitf::ListNode & prev, nitf::ListNode & next, NITF_DATA* data);
+
+    //! Destructor
+    ~ListNode() {}
 
     //! Get the data
     NITF_DATA * getData() const;
@@ -104,10 +102,6 @@ struct NITRO_NITFCPP_API ListIterator /*final*/   // no "final", SWIG doesn't li
 
     //! Assignment Operator
     ListIterator & operator=(const ListIterator & x);
-
-    ListIterator(ListIterator&&) = default;
-    ListIterator& operator=(ListIterator&&) = default;
-
 
     //! Set native object
     ListIterator(nitf_ListIterator x);
@@ -241,8 +235,6 @@ public:
     nitf::List clone(NITF_DATA_ITEM_CLONE cloner) const;
 
     ~List() = default;
-    List(List&&) = default;
-    List& operator=(List&&) = default;
 
     /*!
      *  Get the begin iterator

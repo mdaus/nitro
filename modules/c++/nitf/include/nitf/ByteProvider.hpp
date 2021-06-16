@@ -118,11 +118,7 @@ struct NITRO_NITFCPP_API ByteProvider
      * Destructor.  No virtual methods but this is virtual in case it's useful
      * to inherit from this class and use it polymorphically.
      */
-    virtual ~ByteProvider() = default;
-    ByteProvider(const ByteProvider&) = default;
-    ByteProvider& operator=(const ByteProvider&) = default;
-    ByteProvider(ByteProvider&&) = default;
-    ByteProvider& operator=(ByteProvider&&) = default;
+    virtual ~ByteProvider();
 
     //! \return The total number of bytes in the NITF
     nitf::Off getFileNumBytes() const noexcept

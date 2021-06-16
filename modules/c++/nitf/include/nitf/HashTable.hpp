@@ -49,16 +49,10 @@ class HashTable; //forward declaration
 class NITRO_NITFCPP_API HashIterator
 {
 public:
-    HashIterator() = default;
-    virtual ~HashIterator() = default;
+    virtual ~HashIterator() {}
     virtual void operator()(nitf::HashTable* ht,
                             nitf::Pair& pair,
                             NITF_DATA* userData) = 0;
-
-    HashIterator(const HashIterator&) = delete;
-    HashIterator& operator=(const HashIterator&) = delete;
-    HashIterator(HashIterator&&) = delete;
-    HashIterator& operator=(HashIterator&&) = delete;
 };
 
 
@@ -78,9 +72,6 @@ struct NITRO_NITFCPP_API HashTableIterator /*final*/   // no "final", SWIG doesn
 
     //! Assignment Operator
     HashTableIterator & operator=(const HashTableIterator & x) noexcept;
-
-    HashTableIterator(HashTableIterator&&) = default;
-    HashTableIterator& operator=(HashTableIterator&&) = default;
 
     //! Set native object
     HashTableIterator(nitf_HashTableIterator x) noexcept { setHandle(x); }
@@ -179,8 +170,6 @@ public:
     void initDefaults() noexcept;
 
     ~HashTable() = default;
-    HashTable(HashTable&&) = default;
-    HashTable& operator=(HashTable&&) = default;
 
     /*!
      *  Check to see whether such a key exists in the table

@@ -102,13 +102,8 @@ protected:
         setNative(nativeObj);
     }
 
-    Object() = default;
 public:
     virtual ~Object() { releaseHandle(); }
-    Object(const Object&) = delete;
-    Object& operator=(const Object&) = delete;
-    Object(Object&&) = default;
-    Object& operator=(Object&&) = default;
 
     //! Is the object valid (native object not null)?
     virtual bool isValid() const noexcept
@@ -229,9 +224,7 @@ void operator()(Package_##_##Name_ * nativeObject) override \
 // SWIG doesn't like "final"
 #define DECLARE_CLASS_IN(_Name, _Package) \
     struct NITRO_NITFCPP_API _Name##Destructor /*final*/ : public nitf::MemoryDestructor<_Package##_##_Name> \
-    { DECLARE_CLASS_IN_operator_function(_Name, _Package);  _Name##Destructor() = default; \
-    _Name##Destructor(const _Name##Destructor&) = delete; _Name##Destructor& operator=(const _Name##Destructor&) = delete; \
-    _Name##Destructor(_Name##Destructor&&) = delete; _Name##Destructor& operator=(_Name##Destructor&&) = delete; }; \
+    { DECLARE_CLASS_IN_operator_function(_Name, _Package) }; \
     class NITRO_NITFCPP_API _Name : public nitf::Object<_Package##_##_Name, _Name##Destructor>
 
 #define NITRO_DECLARE_CLASS_NRT(_Name) DECLARE_CLASS_IN(_Name, nrt)

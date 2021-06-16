@@ -63,8 +63,6 @@ public:
     nitf::LabelSegment clone() const;
 
     ~LabelSegment() = default;
-    LabelSegment(LabelSegment&&) = default;
-    LabelSegment& operator=(LabelSegment&&) = default;
 
     //! Get the subheader
     nitf::LabelSubheader getSubheader() const;

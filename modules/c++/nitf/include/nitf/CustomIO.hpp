@@ -32,10 +32,6 @@ struct NITRO_NITFCPP_API CustomIO : public IOInterface
 {
     CustomIO();
     ~CustomIO();
-    CustomIO(const CustomIO&) = delete;
-    CustomIO& operator=(const CustomIO&) = delete;
-    CustomIO(CustomIO&&) = default;
-    CustomIO& operator=(CustomIO&&) = default;
 
 protected:
     virtual void readImpl(void* buf, size_t size) = 0;

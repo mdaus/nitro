@@ -69,9 +69,6 @@ public:
     }
 
     ~DownSampler() = default;
-    DownSampler(DownSampler&&) = default;
-    DownSampler& operator=(DownSampler&&) = default;
-
 
     /*!
      *  Applies a sampling method while reading.
@@ -148,6 +145,9 @@ struct NITRO_NITFCPP_API PixelSkip : public DownSampler
      */
     PixelSkip(uint32_t rowSkip,
               uint32_t colSkip);
+
+    //! Destructor
+    ~PixelSkip();
 };
 
 /*!
@@ -175,6 +175,8 @@ public:
      */
     MaxDownSample(uint32_t rowSkip,
                   uint32_t colSkip);
+    //! Destructor
+    ~MaxDownSample();
 };
 
 /*!
@@ -199,6 +201,8 @@ public:
      */
     SumSq2DownSample(uint32_t rowSkip,
                      uint32_t colSkip);
+    //! Destructor
+    ~SumSq2DownSample();
 };
 
 /*!
@@ -222,6 +226,8 @@ public:
      */
     Select2DownSample(uint32_t rowSkip,
                       uint32_t colSkip);
+    //! Destructor
+    ~Select2DownSample();
 };
 }
 #endif

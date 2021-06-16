@@ -69,8 +69,6 @@ public:
     nitf::ImageSubheader clone() const;
 
     ~ImageSubheader() = default;
-    ImageSubheader(ImageSubheader&&) = default;
-    ImageSubheader& operator=(ImageSubheader&&) = default;
 
     /*!
      *  Set the pixel type and band related information

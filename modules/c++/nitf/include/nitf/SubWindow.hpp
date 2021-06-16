@@ -77,9 +77,6 @@ public:
     //! Destructor
     ~SubWindow();
 
-    SubWindow(SubWindow&&) = default;
-    SubWindow& operator=(SubWindow&&) = default;
-
     uint32_t getStartRow() const;
     uint32_t getNumRows() const;
     uint32_t getStartCol() const;

@@ -49,12 +49,6 @@ namespace nitf
 struct NITRO_NITFCPP_API WriterDestructor : public nitf::MemoryDestructor<nitf_Writer>
 {
     void operator()(nitf_Writer *writer) override;
-
-    WriterDestructor() = default;
-    WriterDestructor(const WriterDestructor&) = delete;
-    WriterDestructor& operator=(const WriterDestructor&) = delete;
-    WriterDestructor(WriterDestructor&&) = delete;
-    WriterDestructor& operator=(WriterDestructor&&) = delete;
 };
 
 /*!

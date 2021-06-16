@@ -66,8 +66,6 @@ public:
     nitf::TextSegment clone() const;
 
     ~TextSegment() = default;
-    TextSegment(TextSegment&&) = default;
-    TextSegment& operator=(TextSegment&&) = default;
 
     //! Get the subheader
     nitf::TextSubheader getSubheader() const;
