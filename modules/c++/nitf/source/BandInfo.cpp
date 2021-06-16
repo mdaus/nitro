@@ -97,7 +97,7 @@ static NITF_BOOL BandInfo_init(nitf_BandInfo* bandInfo,
     uint32_t numLUTs,
     uint32_t bandEntriesPerLUT,
     nitf_LookupTable* lut,
-    nitf_Error& error)
+    nitf_Error& error) noexcept
 {
     return nitf_BandInfo_init(bandInfo,
         representation.c_str(),

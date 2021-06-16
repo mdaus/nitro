@@ -158,7 +158,7 @@ protected:
     void nextBlock(void* buf,
                            const void* block,
                            uint32_t /*blockNumber*/,
-                           uint64_t blockSize) override
+                           uint64_t blockSize) noexcept override
     {
         memcpy(buf, block, blockSize);
     }

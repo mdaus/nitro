@@ -216,7 +216,7 @@ nitf::HashTableIterator nitf::HashTable::end() const noexcept
     return nitf::HashTableIterator(x);
 }
 
-void nitf::HashTable::clearBuckets()
+void nitf::HashTable::clearBuckets() noexcept
 {
     std::vector<nitf::List *>::iterator i;
     i = mBuckets.begin();

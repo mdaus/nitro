@@ -36,7 +36,6 @@
 #pragma warning(disable: 26432) // If you define or delete any default operation in the type '...', define or delete them all(c.21).
 #pragma warning(disable: 26481) // Don't use pointer arithmetic. Use span instead (bounds.1).
 #pragma warning(disable: 26434) // Function '...' hides a non-virtual function '...' (c.128).
-#pragma warning(disable: 26440) // Function '...' can be declared '...' (f.6).
 #pragma warning(disable: 26446) // Prefer to use gsl::at() instead of unchecked subscript operator (bounds.4)
 #pragma warning(disable: 26458) // Prefer to use gsl::at() instead of unchecked subscript operator (bounds.4).
 #pragma warning(disable: 26486) // Don't pass a pointer that may be invalid to a function. Parameter 3 '...' in call to '...' may be invalid (lifetime.3).

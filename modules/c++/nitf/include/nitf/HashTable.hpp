@@ -242,7 +242,7 @@ private:
     nitf_Error error{};
 
     //! Clear the buckets
-    void clearBuckets();
+    void clearBuckets() noexcept;
 
 };
 
