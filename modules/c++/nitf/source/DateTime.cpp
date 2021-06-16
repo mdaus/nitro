@@ -22,6 +22,8 @@
 
 #include "nitf/DateTime.hpp"
 
+#include <array>
+
 nitf::DateTime::DateTime()
 {
     nitf_Error error;
@@ -139,10 +141,10 @@ void nitf::DateTime::format(const std::string& format,
 {
     str.clear();
 
-    char raw[256];
+    std::array<char, 256> raw;
     raw[255] = '\0';
-    this->format(format, raw, 255);
-    str.assign(raw);
+    this->format(format, raw.data(), 255);
+    str.assign(raw.data());
 }
 
 std::string nitf::DateTime::format(const std::string& format) const

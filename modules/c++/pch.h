@@ -40,7 +40,6 @@
 #pragma warning(disable: 26458) // Prefer to use gsl::at() instead of unchecked subscript operator (bounds.4).
 #pragma warning(disable: 26486) // Don't pass a pointer that may be invalid to a function. Parameter 3 '...' in call to '...' may be invalid (lifetime.3).
 #pragma warning(disable: 26487) // Don't return a pointer '...' that may be invalid(lifetime.4).
-#pragma warning(disable: 26485) // Expression '...' : No array to pointer decay (bounds.3).
 #pragma warning(disable: 26401) // Do not delete a raw pointer that is not an owner<T> (i.11).
 #pragma warning(disable: 26821) // For '...', consider using gsl::span instead of std::span to guarantee runtime bounds safety (gsl.view).
 #include "nitf/Object.hpp"

@@ -131,14 +131,14 @@ size_t TRE::getCurrentSize() const
 
 std::string TRE::getTag() const
 {
-    return getNativeOrThrow()->tag;
+    return static_cast<const char*>(getNativeOrThrow()->tag);
 }
 
 void TRE::setTag(const std::string& value)
 {
-    auto pNative = getNativeOrThrow();
-    memset(pNative->tag, 0, 7);
-    memcpy(pNative->tag, value.c_str(), 7);
+    auto pTag = static_cast<char*>(getNativeOrThrow()->tag);
+    memset(pTag, 0, 7);
+    memcpy(pTag, value.c_str(), 7);
 }
 
 nitf::List TRE::find(const std::string& pattern) const
