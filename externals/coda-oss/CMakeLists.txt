@@ -6,7 +6,7 @@ cmake_minimum_required(VERSION 3.14)
 
 project(coda-oss)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 17)
 
 if (${CMAKE_PROJECT_NAME} STREQUAL coda-oss)
     # this is the top level project
@@ -29,7 +29,7 @@ if (MSVC)
     string(REGEX REPLACE "/W[0-4]" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
     string(REGEX REPLACE "/W[0-4]" "" CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
     add_compile_options(/W3 /wd4290 /wd4512)
-    add_compile_options(/std:c++latest)
+    add_compile_options(/std:c++17)
     add_compile_options(/wd4267) # '...': conversion from '...' to '...', possible loss of data
     add_definitions(-D_CRT_SECURE_NO_WARNINGS -D_SCL_SECURE_NO_WARNINGS)
 elseif (UNIX)
@@ -38,7 +38,7 @@ elseif (UNIX)
         -Wno-unused-value
         -Wno-unused-but-set-variable
     )
-    add_compile_options(-std=c++2a)
+    add_compile_options(-std=c++17)
 endif()
 
 add_subdirectory("modules")

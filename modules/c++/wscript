@@ -5,13 +5,13 @@ from build import CPPBuildContext
 MODULES = 'nitf'
 
 def options(opt):
+    if conf.env['COMPILER_CXX'] == 'msvc':
+        conf.env.CXXFLAGS += ['/std:c++17']
+    else:
+        conf.env.CXXFLAGS += ['-std=c++17']
     opt.recurse(MODULES)
 
 def configure(conf):
-    if conf.env['COMPILER_CXX'] == 'msvc':
-        conf.env.CXXFLAGS += ['/std:c++latest']
-    else:
-        conf.env.CXXFLAGS += ['-std=c++2a']
     conf.recurse(MODULES)
 
 def build(bld):

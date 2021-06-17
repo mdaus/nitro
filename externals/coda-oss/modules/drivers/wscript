@@ -2,9 +2,6 @@ def options(opt):
     opt.recurse()
 
 def configure(conf):
-    if conf.env['COMPILER_CXX'] == 'msvc':
-        conf.env.CXXFLAGS += ['/wd4127'] # conditional expression is constant
-        conf.env.CXXFLAGS += ['/wd4100'] # '...' unreferenced formal parameter'
     conf.recurse()
 
 def build(bld):
