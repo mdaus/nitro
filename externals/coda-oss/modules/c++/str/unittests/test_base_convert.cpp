@@ -31,22 +31,28 @@
 
 #include "TestCase.h"
 
-static void test_assert_eq(const std::string& testName,
-                           const std::u8string& actual, const std::u8string& expected)
+template<typename T>
+std::string to_std_string(const T& value)
 {
-    TEST_ASSERT(actual == expected);
-    const auto actual_ = str::toString(actual);    
-    const auto expected_ = str::toString(expected);
-    TEST_ASSERT_EQ(actual_, expected_);
+    // This is OK as UTF-8 can be stored in std::string
+    // Note that casting between the string types will CRASH on some
+    // implementatons. NO: reinterpret_cast<const std::string&>(value)
+    const void* const pValue = value.c_str();
+    return static_cast<std::string::const_pointer>(pValue);  // copy
 }
-static void test_assert_eq(const std::string& testName,
-                           const std::u8string& actual, const std::u32string& expected_)
+template<>
+std::string to_std_string(const std::u32string& value)
 {
-    std::string result;
-    utf8::utf32to8(expected_.begin(), expected_.end(), std::back_inserter(result));
-    const auto expected = str::castToU8string(result);
-
-    test_assert_eq(testName, actual, expected);
+    return to_std_string(str::toUtf8(value));
+}
+template<typename TActual, typename TExpected>
+void test_assert_eq(const std::string& testName,
+                           const TActual& actual, const TExpected& expected)
+{
+    //TEST_ASSERT(actual == expected);
+    const auto actual_ = to_std_string(actual);
+    const auto expected_ = to_std_string(expected);
+    TEST_ASSERT_EQ(actual_, expected_);
 }
 
 TEST_CASE(testConvert)
