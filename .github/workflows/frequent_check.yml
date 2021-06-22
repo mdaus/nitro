@@ -19,7 +19,7 @@ jobs:
         mkdir build-Release
         cd build-Release
         cmake -DCMAKE_INSTALL_PREFIX=installWindowsRelease-Github -DPYTHON_VERSION="3.7" ..
-	cd ..
+        cd ..
         mkdir build-Debug
         cd build-Debug
         cmake -DCMAKE_INSTALL_PREFIX=installWindowsDebug-Github -DPYTHON_VERSION="3.7" ..
@@ -28,7 +28,7 @@ jobs:
         cd build-Release
         cmake --build . --config Release -j
         cmake --build . --config Release --target install
-	cd ..
+        cd ..
         cd build-Debug
         cmake --build . --config Debug -j
         cmake --build . --config Debug --target install
@@ -36,7 +36,7 @@ jobs:
       run: |
         cd build-Release
         ctest -C Release
-	cd ..
+        cd ..
         cd build-Debug
         ctest -C Debug
 
