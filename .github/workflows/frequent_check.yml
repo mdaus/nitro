@@ -22,7 +22,7 @@ jobs:
         cd ..
         mkdir build-Debug
         cd build-Debug
-        cmake -DCMAKE_INSTALL_PREFIX=installWindowsDebug-Github -DPYTHON_VERSION="3.7" ..
+        cmake -DCMAKE_INSTALL_PREFIX=installWindowsDebug-Github -DENABLE_PYTHON=OFF ..
     - name: make
       run: |
         cd build-Release
