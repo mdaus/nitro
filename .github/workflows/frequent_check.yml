@@ -16,19 +16,29 @@ jobs:
         python-version: '3.7'
     - name: configure
       run: |
-        mkdir build
-        cd build
-        cmake -DCMAKE_INSTALL_PREFIX=installWindows-Github -DPYTHON_VERSION="3.7" ..
+        mkdir build-Release
+        cd build-Release
+        cmake -DCMAKE_INSTALL_PREFIX=installWindowsRelease-Github -DPYTHON_VERSION="3.7" ..
+	cd ..
+        mkdir build-Debug
+        cd build-Debug
+        cmake -DCMAKE_INSTALL_PREFIX=installWindowsDebug-Github -DPYTHON_VERSION="3.7" ..
     - name: make
       run: |
-        cd build
+        cd build-Release
         cmake --build . --config Release -j
         cmake --build . --config Release --target install
+	cd ..
+        cd build-Debug
+        cmake --build . --config Debug -j
+        cmake --build . --config Debug --target install
     - name: test
       run: |
-        cd build
+        cd build-Release
         ctest -C Release
-
+	cd ..
+        cd build-Debug
+        ctest -C Debug
 
   build-linux:
     name: Linux
