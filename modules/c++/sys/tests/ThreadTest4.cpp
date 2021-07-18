@@ -1,7 +1,7 @@
 /* =========================================================================
- * This file is part of sys-c++ 
+ * This file is part of sys-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * sys-c++ is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -30,8 +30,7 @@ class Getter : public sys::Runnable
 public:
     Getter(sys::Mutex *by, int * val, int n) : theVal(val), syncBy(by), id(n)
     {}
-    virtual ~Getter()
-    {}
+    virtual ~Getter() = default;
 
     #if _MSC_VER
     #pragma warning(push)
@@ -71,9 +70,12 @@ class Putter : public sys::Runnable
 public:
     Putter(sys::Mutex *by,int *val, int n) : theVal(val), syncBy(by), id(n)
     {}
-    virtual ~Putter()
-    {}
+    virtual ~Putter() = default;
 
+    #if _MSC_VER
+    #pragma warning(push)
+    #pragma warning(disable : 4702)  // unreachable code
+    #endif
     virtual void run()
     {
 
@@ -92,6 +94,10 @@ public:
         }
 
     }
+    #if _MSC_VER
+    #pragma warning(pop)
+    #endif
+
     void set(int val)
     {
         *theVal = val;
