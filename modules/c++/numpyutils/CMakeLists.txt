@@ -5,6 +5,9 @@ if(Python_Development_FOUND AND Python_NumPy_FOUND)
     if (UNIX)
         list(APPEND MODULE_DEPS util)
     endif()
+    if (MSVC)
+        add_compile_options(/wd4505) # disable warning 'unreferenced local function has been removed'
+    endif()
     coda_add_module(
         ${MODULE_NAME}
         VERSION 1.0
