@@ -28,7 +28,7 @@
 
 #include <exception>
 #include <type_traits>
-#include <utility>  
+#include <utility>
 
 #include "gsl/use_gsl.h" // Can't compile all of GSL with older versions of GCC/MSVC
 #include "gsl/gsl_span_.h"
@@ -66,12 +66,20 @@ namespace Gsl
         {
             return (static_cast<U>(t) != u) ? narrow_throw_exception(t) : t;
         }
+
+        #if defined(_MSC_VER) && _MSC_VER <= 1900
+        #pragma warning( push )
+        #pragma warning( disable : 4100 ) // unreferenced formal parameter
+        #endif
         template <class T, class U>
         constexpr T narrow2_(T t, U u) noexcept(false)
         {
             return (!is_same_signedness<T, U>::value && ((t < T{}) != (u < U{}))) ?
                 narrow_throw_exception(t) : t;
         }
+        #if defined(_MSC_VER) && _MSC_VER <= 1900
+        #pragma warning( pop )
+        #endif
 
         template <class T, class U>
         constexpr T narrow(T t, U u) noexcept(false)
