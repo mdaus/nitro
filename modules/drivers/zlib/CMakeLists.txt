@@ -69,8 +69,8 @@ elseif(ENABLE_ZIP)
     message("ZIP_HOME not specified, so zlib and minizip will be built")
     coda_fetch_driver(
         NAME ${TARGET_NAME}
-        ARCHIVE "zlib-1.2.7.tar"
-        HASH "SHA256=df0ba700245709ea54a18536ed266c2f0a0b3e4c3eb029abc42bf48a087901c5")
+        ARCHIVE "zlib-1.2.11.tar"
+        HASH "SHA256=FAC54AC78F4DED16C64AEC1A9C7D73BC082305306AF849A16787D7828FABA783")
 
     set(SOURCE_DIR "${${CMAKE_PROJECT_NAME}_${TARGET_NAME}_SOURCE_DIR}")
     foreach(src "adler32.c" "crc32.c" "deflate.c" "infback.c" "inffast.c"
