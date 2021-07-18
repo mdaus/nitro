@@ -38,8 +38,8 @@ else()
 
     coda_fetch_driver(
         NAME ${TARGET_NAME}
-        ARCHIVE "jpegsrc.v9.tar"
-        HASH "SHA256=650de9b9c73b627c365c2c1617436bfdef47decddc1c6f7e006bd7655c4f8111"
+        ARCHIVE "jpegsrc.v9d.tar"
+        HASH "SHA256=898C46BFE9152D51220C6679E905DE4DF75D2A67DCF315BF80459673AB1EB797"
     )
     set(HAVE_PROTOTYPES 1)
     check_cxx_source_compiles("int main() { unsigned short; return 0; }"
