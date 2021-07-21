@@ -33,6 +33,7 @@ class CodaOssConan(ConanFile):
                "ENABLE_PYTHON": [True, False],
                "ENABLE_SWIG": [True, False],
                "ENABLE_JARS": [True, False],
+               "ENABLE_XML": [True, False],
                "ENABLE_ZIP": [True, False],
                "CMAKE_DISABLE_FIND_PACKAGE_OpenSSL": [True, False],
                "CMAKE_DISABLE_FIND_PACKAGE_CURL": [True, False],
@@ -48,6 +49,7 @@ class CodaOssConan(ConanFile):
                        "ENABLE_PYTHON": True,
                        "ENABLE_SWIG": False,
                        "ENABLE_JARS": True,
+                       "ENABLE_XML": True,
                        "ENABLE_ZIP": True,
                        "CMAKE_DISABLE_FIND_PACKAGE_OpenSSL": False,
                        "CMAKE_DISABLE_FIND_PACKAGE_CURL": False,
@@ -93,6 +95,14 @@ class CodaOssConan(ConanFile):
         # command line (otherwise it will fail).
         Dep = namedtuple("Dep", ["name", "version", "user", "channel", "path"])
         in_tree_dependencies = []
+
+        if self.options.ENABLE_XML:
+            in_tree_dependencies.append(
+                Dep(name="xerces-c",
+                    version="3.2.3",
+                    user="coda",
+                    channel="driver",
+                    path=os.path.join("modules", "drivers", "xml", "xerces")))
 
         if self.options.ENABLE_ZIP:
             in_tree_dependencies.append(
