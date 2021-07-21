@@ -9,7 +9,9 @@ environment variable CONAN_USER_HOME_SHORT. For further information see
 https://docs.conan.io/en/latest/reference/conanfile/attributes.html#short-paths
 """
 
+from collections import namedtuple
 from conans import ConanFile, CMake, tools
+from conans.client.conan_api import Conan
 import os
 import sys
 
@@ -31,6 +33,7 @@ class CodaOssConan(ConanFile):
                "ENABLE_PYTHON": [True, False],
                "ENABLE_SWIG": [True, False],
                "ENABLE_JARS": [True, False],
+               "ENABLE_ZIP": [True, False],
                "CMAKE_DISABLE_FIND_PACKAGE_OpenSSL": [True, False],
                "CMAKE_DISABLE_FIND_PACKAGE_CURL": [True, False],
                "MT_DEFAULT_PINNING": [True, False],
@@ -45,6 +48,7 @@ class CodaOssConan(ConanFile):
                        "ENABLE_PYTHON": True,
                        "ENABLE_SWIG": False,
                        "ENABLE_JARS": True,
+                       "ENABLE_ZIP": True,
                        "CMAKE_DISABLE_FIND_PACKAGE_OpenSSL": False,
                        "CMAKE_DISABLE_FIND_PACKAGE_CURL": False,
                        "MT_DEFAULT_PINNING": False,
@@ -52,6 +56,7 @@ class CodaOssConan(ConanFile):
                        "CODA_INSTALL_TESTS": False,
                        }
     license = "GNU LESSER GENERAL PUBLIC LICENSE Version 3"
+    generators = ("cmake", "cmake_paths")
 
     # default to short_paths mode (Windows only)
     short_paths = True
@@ -65,6 +70,45 @@ class CodaOssConan(ConanFile):
     def set_version(self):
         git = tools.Git(folder=self.recipe_folder)
         self.version = "%s_%s" % (git.get_branch(), git.get_revision()[:16])
+
+    def requirements(self):
+        # Get location of the scm_source directory in the conan cache.
+        # This is needed to support exporting the dependency recipes from
+        # the repo while using the scm mechanism. At the time the current
+        # method (requirements()) is running, the only place to consistently
+        # find the dependency conan recipes is within the scm_sources folder
+        # in the conan cache.
+        (cpm, _, _) = Conan.factory()
+        cpm.create_app()
+        package_layout = cpm.app.cache.package_layout(self.ref)
+        source_path = package_layout.scm_sources()
+        if not os.path.exists(source_path):
+            # When running "conan install" outside the cache, scm_sources is not
+            # populated. Try using the local recipe path instead.
+            source_path = self.recipe_folder
+
+        # Export the conan recipes for each of the in-tree dependencies.
+        # To automatically compile them when a package is not already built,
+        # add the "--build outdated" option to the conan "create" or "install"
+        # command line (otherwise it will fail).
+        Dep = namedtuple("Dep", ["name", "version", "user", "channel", "path"])
+        in_tree_dependencies = []
+
+        if self.options.ENABLE_ZIP:
+            in_tree_dependencies.append(
+                Dep(name="zlib",
+                    version="1.2.11",
+                    user="coda",
+                    channel="driver",
+                    path=os.path.join("modules", "drivers", "zlib")))
+
+        for dep in in_tree_dependencies:
+            # export the dependency recipe
+            cpm.export(os.path.join(source_path, dep.path),
+                       dep.name, dep.version, dep.user, dep.channel)
+
+            # add dependency to the coda-oss requirements
+            self.requires(f"{dep.name}/{dep.version}@{dep.user}/{dep.channel}")
 
     def _configure_cmake(self):
         cmake = CMake(self)

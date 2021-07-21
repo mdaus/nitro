@@ -1,7 +1,15 @@
 set(TARGET_NAME z)
 
-if (MSVC)
-    add_compile_options(/wd4996) # '...': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: .... See online help for details.
+if (EXISTS "${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
+    # use this CMakeLists.txt to build and package zlib with conan
+    project(coda-oss_zlib)
+    include("${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
+    conan_basic_setup()
+    set(CODA_SKIP_SYSTEM_DEPENDENCIES ON)
+    include(CodaBuild.cmake)
+    coda_initialize_build()
+    set(ENABLE_ZIP ON)
+    coda_generate_package_config()
 endif()
 
 if (ZIP_HOME)
@@ -71,6 +79,10 @@ elseif(ENABLE_ZIP)
         NAME ${TARGET_NAME}
         ARCHIVE "zlib-1.2.11.tar"
         HASH "SHA256=FAC54AC78F4DED16C64AEC1A9C7D73BC082305306AF849A16787D7828FABA783")
+
+    if (MSVC)
+        add_compile_options(/wd4996) # '...': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: .... See online help for details.
+    endif()
 
     set(SOURCE_DIR "${${CMAKE_PROJECT_NAME}_${TARGET_NAME}_SOURCE_DIR}")
     foreach(src "adler32.c" "crc32.c" "deflate.c" "infback.c" "inffast.c"
