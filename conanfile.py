@@ -33,6 +33,7 @@ class CodaOssConan(ConanFile):
                "ENABLE_PYTHON": [True, False],
                "ENABLE_SWIG": [True, False],
                "ENABLE_JARS": [True, False],
+               "ENABLE_JPEG": [True, False],
                "ENABLE_XML": [True, False],
                "ENABLE_ZIP": [True, False],
                "CMAKE_DISABLE_FIND_PACKAGE_OpenSSL": [True, False],
@@ -49,6 +50,7 @@ class CodaOssConan(ConanFile):
                        "ENABLE_PYTHON": True,
                        "ENABLE_SWIG": False,
                        "ENABLE_JARS": True,
+                       "ENABLE_JPEG": True,
                        "ENABLE_XML": True,
                        "ENABLE_ZIP": True,
                        "CMAKE_DISABLE_FIND_PACKAGE_OpenSSL": False,
@@ -95,6 +97,14 @@ class CodaOssConan(ConanFile):
         # command line (otherwise it will fail).
         Dep = namedtuple("Dep", ["name", "version", "user", "channel", "path"])
         in_tree_dependencies = []
+
+        if self.options.ENABLE_JPEG:
+            in_tree_dependencies.append(
+                Dep(name="libjpeg",
+                    version="9d",
+                    user="coda",
+                    channel="driver",
+                    path=os.path.join("modules", "drivers", "jpeg")))
 
         if self.options.ENABLE_XML:
             in_tree_dependencies.append(
