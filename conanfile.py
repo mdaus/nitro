@@ -32,8 +32,10 @@ class CodaOssConan(ConanFile):
                "ENABLE_BOOST": [True, False],
                "ENABLE_PYTHON": [True, False],
                "ENABLE_SWIG": [True, False],
+               "ENABLE_J2K": [True, False],
                "ENABLE_JARS": [True, False],
                "ENABLE_JPEG": [True, False],
+               "ENABLE_PCRE": [True, False],
                "ENABLE_XML": [True, False],
                "ENABLE_ZIP": [True, False],
                "CMAKE_DISABLE_FIND_PACKAGE_OpenSSL": [True, False],
@@ -49,8 +51,10 @@ class CodaOssConan(ConanFile):
                        "ENABLE_BOOST": False,
                        "ENABLE_PYTHON": True,
                        "ENABLE_SWIG": False,
+                       "ENABLE_J2K": True,
                        "ENABLE_JARS": True,
                        "ENABLE_JPEG": True,
+                       "ENABLE_PCRE": True,
                        "ENABLE_XML": True,
                        "ENABLE_ZIP": True,
                        "CMAKE_DISABLE_FIND_PACKAGE_OpenSSL": False,
@@ -98,6 +102,14 @@ class CodaOssConan(ConanFile):
         Dep = namedtuple("Dep", ["name", "version", "user", "channel", "path"])
         in_tree_dependencies = []
 
+        if self.options.ENABLE_J2K:
+            in_tree_dependencies.append(
+                Dep(name="openjpeg",
+                    version="2.3.1",
+                    user="coda",
+                    channel="driver",
+                    path=os.path.join("modules", "drivers", "j2k", "openjpeg")))
+
         if self.options.ENABLE_JPEG:
             in_tree_dependencies.append(
                 Dep(name="libjpeg",
@@ -105,6 +117,14 @@ class CodaOssConan(ConanFile):
                     user="coda",
                     channel="driver",
                     path=os.path.join("modules", "drivers", "jpeg")))
+
+        if self.options.ENABLE_PCRE:
+            in_tree_dependencies.append(
+                Dep(name="pcre2",
+                    version="10.22",
+                    user="coda",
+                    channel="driver",
+                    path=os.path.join("modules", "drivers", "pcre")))
 
         if self.options.ENABLE_XML:
             in_tree_dependencies.append(
