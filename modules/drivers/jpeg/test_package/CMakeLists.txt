@@ -7,7 +7,7 @@ conan_basic_setup()
 
 # import targets
 include("${CMAKE_BINARY_DIR}/conan_paths.cmake")
-find_package(coda-oss)
+find_package(coda-oss_libjpeg)
 
 add_executable(test test.cpp)
 target_link_libraries(test jpeg)
