@@ -1053,6 +1053,11 @@ def configureCompilerOptions(self):
                   '_LARGEFILE_SOURCE WIN32 _USE_MATH_DEFINES NOMINMAX WIN32_LEAN_AND_MEAN'.split()
         flags = '/UUNICODE /U_UNICODE /EHs /GR'.split()
 
+        #If building with cpp17 add flags/defines to enable auto_ptr
+        if Options.options.enablecpp17:
+            defines.append('_HAS_AUTO_PTR_ETC=1')
+            flags.append('/std:c++17')
+
         self.env.append_value('DEFINES', defines)
         self.env.append_value('CXXFLAGS', flags)
         self.env.append_value('CFLAGS', flags)
