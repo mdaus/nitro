@@ -507,12 +507,14 @@ function(coda_add_module MODULE_NAME)
             RUNTIME DESTINATION "${CODA_STD_PROJECT_BIN_DIR}")
 
     # Set up install destination for headers
-    install(DIRECTORY "${CODA_STD_PROJECT_INCLUDE_DIR}/"
-            DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}/"
-            ${CODA_INSTALL_OPTION}
-            FILES_MATCHING
-                PATTERN "*.in" EXCLUDE
-                PATTERN "*")
+    if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}")
+        install(DIRECTORY "${CODA_STD_PROJECT_INCLUDE_DIR}/"
+                DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}/"
+                ${CODA_INSTALL_OPTION}
+                FILES_MATCHING
+                    PATTERN "*.in" EXCLUDE
+                    PATTERN "*")
+    endif()
 
     # install conf directory, if present
     if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/conf")
