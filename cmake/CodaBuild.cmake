@@ -511,8 +511,8 @@ function(coda_add_module MODULE_NAME)
             DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}/"
             ${CODA_INSTALL_OPTION}
             FILES_MATCHING
-                PATTERN "*.h"
-                PATTERN "*.hpp")
+                PATTERN "*.in" EXCLUDE
+                PATTERN "*")
 
     # install conf directory, if present
     if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/conf")
