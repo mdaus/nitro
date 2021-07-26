@@ -9,6 +9,7 @@ import itertools, sys
 
 def thinking(evt):
     def thought():
+        # https://stackoverflow.com/a/22616059/5401366
         spinner = itertools.cycle(["-", "/", "|", "\\"])
         while not evt.isSet():
             stdout.write(next(spinner))  # write the next character
