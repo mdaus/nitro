@@ -27,29 +27,10 @@
 
 import sys
 
-global_failure = False
-
-
-def ok(ans):
-    if not ans:
-        global_failure = True
-
-
-def complete():
-    if global_failure:
-        sys.exit(-1)
-
-
 def test_nitf_import():
-    try:
-        import nitf
-
-        print("imported nitf module")
-        return True
-    except e as Exception:
-        print("failed to import nitf module")
-        return False
-
+    import nitf
+    print("imported nitf module")
+    return True
 
 if __name__ == "__main__":
-    ok(test_nitf_import())
+    test_nitf_import()
