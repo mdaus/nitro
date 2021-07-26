@@ -30,7 +30,7 @@ def python(args):
 def main():
     sv = swig_version()
     if sv != "3.0.12":
-        print("Found unapproved swig version '{}'. Output may vary a great deal!")
+        print("Found unapproved swig version '{}'. Output may vary a great deal!".format(sv))
 
     print("Thinking about how great cmake is...")
 
