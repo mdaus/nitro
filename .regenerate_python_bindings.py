@@ -1,5 +1,7 @@
 from subprocess import check_output, check_call, DEVNULL
+import os
 import sys
+from platform import dist
 from sys import stdout
 from threading import Timer, Event
 import itertools, sys
@@ -16,21 +18,41 @@ def thinking(evt):
     return thought
 
 
+def linux_version():
+    distro, version, _ = dist()
+    maj_version = version.split(".")[0]
+    return distro, maj_version
+
+
 def swig_version():
     decoded_result = check_output(["swig", "-version"]).decode("ascii")
     return decoded_result.split("\n")[1].split(" ")[-1]
 
 
 def python(args):
-    return check_call(
-        [sys.executable] + args.split(" "), stderr=DEVNULL, stdout=DEVNULL
+
+    stdout, stderr = (
+        (sys.stdout, sys.stderr)
+        if "DEBUG_PY_BINDINGS" in os.environ
+        else (DEVNULL, DEVNULL)
     )
+
+    return check_call([sys.executable] + args.split(" "), stdout=stdout, stderr=stderr)
 
 
 def main():
+
+    (distro, major_version) = linux_version()
+
+    if distro != "centos" and major_version != "7":
+        print(
+            "Found non-standard os %s{}:%s{}, which may introduce subtle differences in generated code; YMMV"
+            % (distro, major_version)
+        )
+
     sv = swig_version()
     if sv != "3.0.12":
-        print("Found unapproved swig version '{}'. Output may vary a great deal!".format(sv))
+        print("Found unapproved swig version '%s'. Output may vary a great deal!" % sv)
 
     print("Thinking about how great cmake is...")
 
