@@ -25,12 +25,12 @@
 """
 
 
-import sys
-
 def test_nitf_import():
     import nitf
+
     print("imported nitf module")
     return True
+
 
 if __name__ == "__main__":
     test_nitf_import()
