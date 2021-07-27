@@ -20,7 +20,7 @@ jobs:
     - name: Install python dependencies
       run: |
         python3 -m pip install --upgrade pip
-        pip install numpy==1.13.1 # 1.13.x
+        pip install numpy
     - name: configure
       run: |
         mkdir build
