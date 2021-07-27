@@ -4,21 +4,27 @@ on: [push]
 
 
 jobs:
-  build-windows:
-    name: Windows
-    runs-on: [windows-latest]
-
+  build:
+    strategy:
+        matrix:
+            os: [ubuntu-latest, windows-latest]
+    name: ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python
       uses: actions/setup-python@v1
       with:
         python-version: '3.7'
+    - name: Install python dependencies
+      run: |
+        python3 -m pip install --upgrade pip
+        pip install numpy==1.13.1 # 1.13.x
     - name: configure
       run: |
         mkdir build
         cd build
-        cmake -DCMAKE_INSTALL_PREFIX=installWindows-Github -DPYTHON_VERSION="3.7" ..
+        cmake -DCMAKE_INSTALL_PREFIX=install${{ matrix.os }}-Github -DPYTHON_VERSION=${{ python-version }} ..
     - name: make
       run: |
         cd build
@@ -29,28 +35,3 @@ jobs:
         cd build
         ctest -C Release
 
-
-  build-linux:
-    name: Linux
-    runs-on: [ubuntu-latest]
-
-    steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python
-      uses: actions/setup-python@v1
-      with:
-        python-version: '3.7'
-    - name: configure
-      run: |
-        mkdir build
-        cd build
-        cmake -DCMAKE_INSTALL_PREFIX=installLinux-Github -DPYTHON_VERSION=3.7 ..
-    - name: make
-      run: |
-        cd build
-        cmake --build . -j
-        cmake --build . --target install
-    - name: test
-      run: |
-        cd build
-        ctest
