@@ -72,5 +72,6 @@ void sys::ProcessUnix::waitFor()
     }
     dbg_printf("Finished waiting on pid: %d\n", mChildProcessID);
     assert(whatExited == mChildProcessID);
+    CODA_OSS_mark_symbol_unused(whatExited);
 }
 #endif
