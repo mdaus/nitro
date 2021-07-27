@@ -21,6 +21,7 @@
  */
 
 #include <TestCase.h>
+#include <config/compiler_extensions.h>
 #include <numpyutils/numpyutils.h>
 
 namespace
