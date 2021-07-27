@@ -86,5 +86,11 @@
     #endif
 #endif  // _MM256_EXTRACTF
 
+#ifndef CODA_OSS_mark_symbol_unused
+    // Fix unused symbol warnings that crash Release build on -Werror
+    // (won't work without C-style cast)
+    // https://stackoverflow.com/a/777359/5401366
+    #define CODA_OSS_mark_symbol_unused(x) ((void)x)
+#endif
 
 #endif  // CODA_OSS_config_compiler_extentions_h_INCLUDED_
