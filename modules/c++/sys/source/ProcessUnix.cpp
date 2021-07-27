@@ -22,6 +22,7 @@
 
 
 #if !(defined(WIN32) || defined(_WIN32))
+#include <config/compiler_extensions.h>
 #include "sys/ProcessUnix.h"
 #include <stdlib.h>
 
