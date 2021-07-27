@@ -3,26 +3,32 @@ name: build_unittest
 on: [push]
 
 jobs:
-  build-windows-cmake:
-    name: Windows-CMake
-    runs-on: [windows-latest]
-
+  build-cmake-windows:
+    strategy:
+      matrix:
+        os: [windows-latest]
+        python-version: ['3.7']
+    name: ${{ matrix.os }}-${{ matrix.python-version }}-CMake
+    runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: '3.7'
+        python-version: ${{ matrix.python-version }}
+    - name: Install python dependencies
+      run: |
+        pip install numpy
     - name: configure
       run: |
         ls env:
         mkdir target-Release
         cd target-Release
-        cmake .. -DCMAKE_INSTALL_PREFIX=installWindowsCMake-Github -DPYTHON_VERSION="3.7"
+        cmake .. -DCMAKE_INSTALL_PREFIX=install${{ matrix.os }}CMake-Github -DPYTHON_VERSION=${{ matrix.python-version }}
         cd ..
         mkdir target-Debug
         cd target-Debug
-        cmake .. -DCMAKE_INSTALL_PREFIX=installWindowsCMake-Github -DENABLE_PYTHON=OFF
+        cmake .. -DCMAKE_INSTALL_PREFIX=install${{ matrix.os }}CMake-Github -DENABLE_PYTHON=OFF
     - name: build
       run: |
         cd target-Release
@@ -45,24 +51,29 @@ jobs:
         cd target-Debug
         ctest -C Debug
 
-
   build-linux-cmake:
-    name: Linux-CMake
-    runs-on: [ubuntu-latest]
-
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        python-version: ['3.7']
+    name: ${{ matrix.os }}-${{ matrix.python-version }}-CMake
+    runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: '3.7'
+        python-version: ${{ matrix.python-version }}
+    - name: Install python dependencies
+      run: |
+        pip install numpy
     - name: configure
       run: |
         env
         which python
         mkdir target
         cd target
-        cmake .. -DCMAKE_INSTALL_PREFIX=installLinuxCMake-Github -DPYTHON_VERSION=3.7
+        cmake .. -DCMAKE_INSTALL_PREFIX=install${{ matrix.os }}CMake-Github -DPYTHON_VERSION=${{ matrix.python-version }}
     - name: build
       run: |
         cd target
@@ -76,22 +87,25 @@ jobs:
         cd target
         ctest
 
-
-  build-windows-waf:
-    name: Windows-waf
-    runs-on: [windows-latest]
-
+  build-waf:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python-version: ['3.7']
+        debugging: ['--enable-debugging', '']
+    name: ${{ matrix.os }}-${{ matrix.python-version }}-waf
+    runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: '3.7'
+        python-version: ${{ matrix.python-version }}
     - name: configure
       run: |
         pip install numpy
-        mkdir installWindowsWaf-Github
-        python waf configure --prefix="$PWD/installWindowsWaf-Github"
+        mkdir install${{ matrix.os }}Waf-Github
+        python waf configure --prefix="$PWD/install${{ matrix.os }}Waf-Github" ${{ matrix.debugging }}
     - name: build
       run: |
         python waf build
@@ -102,77 +116,3 @@ jobs:
       run: |
         python waf install --alltests
 
-  build-windows-waf-debug:
-    name: Windows-waf-Debug
-    runs-on: [windows-latest]
-
-    steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.7'
-    - name: configure
-      run: |
-        pip install numpy
-        mkdir installWindowsWafDebug-Github
-        python waf configure --prefix="$PWD/installWindowsWafDebug-Github" --enable-debugging
-    - name: build
-      run: |
-        python waf build
-    - name: install
-      run: |
-        python waf install
-    - name: test
-      run: |
-        python waf install --alltests
-
-  build-linux-waf:
-    name: Linux-waf
-    runs-on: [ubuntu-latest]
-
-    steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.7'
-    - name: configure
-      run: |
-        pip install numpy
-        mkdir installLinuxWaf-Github
-        python waf configure --prefix="$PWD/installLinuxWaf-Github" --enable-debugging
-    - name: build
-      run: |
-        python waf build
-    - name: install
-      run: |
-        python waf install
-    - name: test
-      run: |
-        python waf install --alltests
-
-  build-linux-waf-debug:
-    name: Linux-waf-Debug
-    runs-on: [ubuntu-latest]
-
-    steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.7'
-    - name: configure
-      run: |
-        pip install numpy
-        mkdir installLinuxWafDebug-Github
-        python waf configure --prefix="$PWD/installLinuxWafDebug-Github" --enable-debugging
-    - name: build
-      run: |
-        python waf build
-    - name: install
-      run: |
-        python waf install
-    - name: test
-      run: |
-        python waf install --alltests
