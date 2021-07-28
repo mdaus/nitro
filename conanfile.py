@@ -9,9 +9,8 @@ environment variable CONAN_USER_HOME_SHORT. For further information see
 https://docs.conan.io/en/latest/reference/conanfile/attributes.html#short-paths
 """
 
-from collections import namedtuple
 from conans import ConanFile, CMake, tools
-from conans.client.conan_api import Conan
+from conans.client.conan_api import ConanAPIV1
 import os
 import sys
 
@@ -81,76 +80,63 @@ class CodaOssConan(ConanFile):
         git = tools.Git(folder=self.recipe_folder)
         self.version = "%s_%s" % (git.get_branch(), git.get_revision()[:16])
 
-    def requirements(self):
-        # Get location of the scm_source directory in the conan cache.
-        # This is needed to support exporting the dependency recipes from
-        # the repo while using the scm mechanism. At the time the current
-        # method (requirements()) is running, the only place to consistently
-        # find the dependency conan recipes is within the scm_sources folder
-        # in the conan cache.
-        (cpm, _, _) = Conan.factory()
-        cpm.create_app()
-        package_layout = cpm.app.cache.package_layout(self.ref)
-        source_path = package_layout.scm_sources()
-        if not os.path.exists(source_path):
-            # When running "conan install" outside the cache, scm_sources is not
-            # populated. Try using the local recipe path instead.
-            source_path = self.recipe_folder
-
-        # Export the conan recipes for each of the in-tree dependencies.
+    def _get_in_tree_dependencies(self):
+        # The in-tree dependencies ("drivers").
         # To automatically compile them when a package is not already built,
         # add the "--build outdated" option to the conan "create" or "install"
         # command line (otherwise it will fail).
-        Dep = namedtuple("Dep", ["name", "version", "user", "channel", "path"])
-        in_tree_dependencies = []
+        in_tree_dependencies = {
+            "openjpeg": dict(
+                version="2.3.1",
+                user="coda",
+                channel="driver",
+                path=os.path.join("modules", "drivers", "j2k", "openjpeg"),
+                enable_option="ENABLE_J2K",
+            ),
+            "libjpeg": dict(
+                version="9d",
+                user="coda",
+                channel="driver",
+                path=os.path.join("modules", "drivers", "jpeg"),
+                enable_option="ENABLE_JPEG",
+            ),
+            "pcre2": dict(
+                version="10.22",
+                user="coda",
+                channel="driver",
+                path=os.path.join("modules", "drivers", "pcre"),
+                enable_option="ENABLE_PCRE",
+            ),
+            "xerces-c": dict(
+                version="3.2.3",
+                user="coda",
+                channel="driver",
+                path=os.path.join("modules", "drivers", "xml", "xerces"),
+                enable_option="ENABLE_XML",
+            ),
+            "zlib": dict(
+                version="1.2.11",
+                user="coda",
+                channel="driver",
+                path=os.path.join("modules", "drivers", "zlib"),
+                enable_option="ENABLE_ZIP",
+            ),
+        }
+        return in_tree_dependencies
 
-        if self.options.ENABLE_J2K:
-            in_tree_dependencies.append(
-                Dep(name="openjpeg",
-                    version="2.3.1",
-                    user="coda",
-                    channel="driver",
-                    path=os.path.join("modules", "drivers", "j2k", "openjpeg")))
+    def export(self):
+        # Export the driver dependency recipes when the coda-oss recipe is
+        # exported.
+        (cpm, _, _) = ConanAPIV1.factory()
+        for dep_name, dep_info in self._get_in_tree_dependencies().items():
+            cpm.export(os.path.join(self.recipe_folder, dep_info["path"]),
+                       dep_name, dep_info["version"],
+                       dep_info["user"], dep_info["channel"])
 
-        if self.options.ENABLE_JPEG:
-            in_tree_dependencies.append(
-                Dep(name="libjpeg",
-                    version="9d",
-                    user="coda",
-                    channel="driver",
-                    path=os.path.join("modules", "drivers", "jpeg")))
-
-        if self.options.ENABLE_PCRE:
-            in_tree_dependencies.append(
-                Dep(name="pcre2",
-                    version="10.22",
-                    user="coda",
-                    channel="driver",
-                    path=os.path.join("modules", "drivers", "pcre")))
-
-        if self.options.ENABLE_XML:
-            in_tree_dependencies.append(
-                Dep(name="xerces-c",
-                    version="3.2.3",
-                    user="coda",
-                    channel="driver",
-                    path=os.path.join("modules", "drivers", "xml", "xerces")))
-
-        if self.options.ENABLE_ZIP:
-            in_tree_dependencies.append(
-                Dep(name="zlib",
-                    version="1.2.11",
-                    user="coda",
-                    channel="driver",
-                    path=os.path.join("modules", "drivers", "zlib")))
-
-        for dep in in_tree_dependencies:
-            # export the dependency recipe
-            cpm.export(os.path.join(source_path, dep.path),
-                       dep.name, dep.version, dep.user, dep.channel)
-
-            # add dependency to the coda-oss requirements
-            self.requires(f"{dep.name}/{dep.version}@{dep.user}/{dep.channel}")
+    def requirements(self):
+        for dep_name, dep_info in self._get_in_tree_dependencies().items():
+            if self.options.__getattr__(dep_info["enable_option"]):
+                self.requires(f'{dep_name}/{dep_info["version"]}@{dep_info["user"]}/{dep_info["channel"]}')
 
     def _configure_cmake(self):
         cmake = CMake(self)
