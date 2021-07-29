@@ -99,9 +99,9 @@ void CurlHandle::verify(CURLcode code, const std::string& prefix)
 }
 
 size_t CurlHandle::writeBetterCallback(char* data,
-	size_t size,
-	size_t nmemb,
-	std::string* writeData)
+									   size_t size,
+									   size_t nmemb,
+									   std::string* writeData)
 {
     if (writeData == NULL)
     {
