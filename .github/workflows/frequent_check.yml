@@ -13,8 +13,10 @@ jobs:
             - os: ubuntu-latest
               build_with: ""
               # build_with: "-G Ninja"
+              python_info: ""
             - os: windows-latest
               build_with: "" # default, makefiles
+              python_info: "-DENABLE_PYTHON=OFF"
     name: ${{ matrix.os }}-${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}
     steps:
@@ -34,7 +36,7 @@ jobs:
       run: |
         mkdir build
         cd build
-        cmake ${{ matrix.build_with }} -DCMAKE_INSTALL_PREFIX=install${{ matrix.os }}-Github -DPYTHON_VERSION=${{ matrix.python-version }} ..
+        cmake ${{ matrix.build_with }} -DCMAKE_INSTALL_PREFIX=install${{ matrix.os }}-Github -DPYTHON_VERSION=${{ matrix.python-version }} ${{ matrix.python_info }} ..
     - name: make
       run: |
         cd build
