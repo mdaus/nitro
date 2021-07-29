@@ -21,6 +21,9 @@ jobs:
       run: |
         python3 -m pip install --upgrade pip
         pip install numpy
+    - name: Get latest CMake and ninja
+      # Using 'latest' branch, the most recent CMake and ninja are installed.
+      uses: lukka/get-cmake@latest        # THIS IS THE ONE LINER YOU NEED
     - name: configure
       run: |
         mkdir build
