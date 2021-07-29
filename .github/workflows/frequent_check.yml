@@ -9,6 +9,11 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest]
         python-version: ['3.7']
+        include:
+            - os: ubuntu-latest
+              build_with: "-G Ninja"
+            - os: windows-latest
+              build_with: "" # default, makefiles
     name: ${{ matrix.os }}-${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}
     steps:
@@ -30,7 +35,7 @@ jobs:
         python3 -c 'import numpy'
         mkdir build
         cd build
-        cmake -G Ninja -DCMAKE_INSTALL_PREFIX=install${{ matrix.os }}-Github -DPYTHON_VERSION=${{ matrix.python-version }} ..
+        cmake ${{ matrix.build_with }} -DCMAKE_INSTALL_PREFIX=install${{ matrix.os }}-Github -DPYTHON_VERSION=${{ matrix.python-version }} ..
     - name: make
       run: |
         python3 -c 'import numpy'
