@@ -7,14 +7,13 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [ubuntu-latest]
-        #os: [ubuntu-latest, windows-latest]
+        os: [ubuntu-latest, windows-latest]
         python-version: ['3.7']
         include:
             - os: ubuntu-latest
               build_with: "-G Ninja"
-              #- os: windows-latest
-              #build_with: "" # default, makefiles
+            - os: windows-latest
+              build_with: "" # default, makefiles
     name: ${{ matrix.os }}-${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}
     steps:
@@ -27,25 +26,21 @@ jobs:
       run: |
         python3 -m pip install --upgrade pip
         pip install numpy
-        python3 -c 'import numpy'
     - name: Get latest CMake and ninja
       # Using 'latest' branch, the most recent CMake and ninja are installed.
       uses: lukka/get-cmake@latest        # THIS IS THE ONE LINER YOU NEED
     - name: configure
       run: |
-        python3 -c 'import numpy'
         mkdir build
         cd build
         cmake ${{ matrix.build_with }} -DCMAKE_INSTALL_PREFIX=install${{ matrix.os }}-Github -DPYTHON_VERSION=${{ matrix.python-version }} ..
     - name: make
       run: |
-        python3 -c 'import numpy'
         cd build
         cmake --build . --config Release -j
         cmake --build . --config Release --target install
     - name: test
       run: |
-        python3 -c 'import numpy'
         cd build
         ctest -VV -C Release
 
