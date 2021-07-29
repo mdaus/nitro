@@ -11,7 +11,8 @@ jobs:
         python-version: ['3.7']
         include:
             - os: ubuntu-latest
-              build_with: "-G Ninja"
+              build_with: ""
+              # build_with: "-G Ninja"
             - os: windows-latest
               build_with: "" # default, makefiles
     name: ${{ matrix.os }}-${{ matrix.python-version }}
@@ -26,9 +27,9 @@ jobs:
       run: |
         python3 -m pip install --upgrade pip
         pip install numpy
-    - name: Get latest CMake and ninja
+    #- name: Get latest CMake and ninja
       # Using 'latest' branch, the most recent CMake and ninja are installed.
-      uses: lukka/get-cmake@latest        # THIS IS THE ONE LINER YOU NEED
+      #uses: lukka/get-cmake@latest        # THIS IS THE ONE LINER YOU NEED
     - name: configure
       run: |
         mkdir build
