@@ -25,7 +25,7 @@ jobs:
       run: |
         mkdir build
         cd build
-        cmake -DCMAKE_INSTALL_PREFIX=install${{ matrix.os }}-Github -DPYTHON_VERSION=${{ matrix.python-version }} ..
+        cmake -G Ninja -DCMAKE_INSTALL_PREFIX=install${{ matrix.os }}-Github -DPYTHON_VERSION=${{ matrix.python-version }} ..
     - name: make
       run: |
         cd build
