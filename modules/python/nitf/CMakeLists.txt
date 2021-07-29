@@ -24,8 +24,8 @@ if (TARGET numpyutils-c++)
             COPYONLY
         )
 
-        # Get the parent of the bin dir for use as the PYTHONPATH
-        get_filename_component(PYTHONPATH ${CMAKE_CURRENT_BINARY_DIR} DIRECTORY)
+        # Get the parent of the bin dir for use as the MY_PYTHONPATH
+        get_filename_component(MY_PYTHONPATH ${CMAKE_CURRENT_BINARY_DIR} DIRECTORY)
 
         include(FindPython3)
         file(GLOB local_tests ${CMAKE_CURRENT_LIST_DIR}/unittests/*.py)
@@ -40,7 +40,7 @@ if (TARGET numpyutils-c++)
             )
             # Set the PYTHONPATH on the test so that it can see the module
             set_tests_properties(${test_target}
-                PROPERTIES ENVIRONMENT "PYTHONPATH=${PYTHONPATH}")
+                PROPERTIES ENVIRONMENT "PYTHONPATH=${MY_PYTHONPATH}:$ENV{PYTHONPATH}")
         endforeach()
     endif()
 
