@@ -34,6 +34,14 @@ def test_nitf_import():
 
 if __name__ == "__main__":
     import sys
+    import os
     from pprint import pprint
+    for dirname in sys.path:
+        try:
+            print('Contents of %s' % dirname)
+            pprint(os.listdir(dirname))
+        except:
+            pass
+
     print(pprint(sys.path))
     test_nitf_import()
