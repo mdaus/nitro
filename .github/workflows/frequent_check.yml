@@ -34,5 +34,5 @@ jobs:
     - name: test
       run: |
         cd build
-        ctest -C Release
+        ctest -VV -C Release
 
