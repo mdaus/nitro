@@ -86,11 +86,40 @@
     #endif
 #endif  // _MM256_EXTRACTF
 
+
+#ifndef CODA_OSS_HAVE_DISABLE_WARNINGS
+    #define CODA_OSS_HAVE_DISABLE_WARNINGS 1
+
+    // Adapted from
+    // https://www.fluentcpp.com/2019/08/30/how-to-disable-a-warning-in-cpp/
+    #if defined(_MSC_VER)
+        #define CODA_OSS_disable_warning_push           __pragma(warning( push ))
+        #define CODA_OSS_disable_warning_pop            __pragma(warning( pop ))
+
+        #define CODA_OSS_disable_warning(warningNumber) __pragma(warning( disable : warningNumber ))
+    #elif defined(__GNUC__) || defined(__clang__)
+        #define CODA_OSS_do_pragma(X) _Pragma(#X)
+        #define CODA_OSS_disable_warning_push           CODA_OSS_do_pragma(GCC diagnostic push)
+        #define CODA_OSS_disable_warning_pop            CODA_OSS_do_pragma(gcc diagnostic pop)
+        #define CODA_OSS_disable_warning(warningName)   CODA_OSS_do_pragma(GCC diagnostic ignored #warningName)
+    #else
+        #define CODA_OSS_disable_warning_push
+        #define CODA_OSS_disable_warning_pop
+        #define CODA_OSS_disable_warning(warningName)
+    #endif
+#endif // CODA_OSS_HAVE_DISABLE_WARNINGS
+
 #ifndef CODA_OSS_mark_symbol_unused
     // Fix unused symbol warnings that crash Release build on -Werror
     // (won't work without C-style cast)
     // https://stackoverflow.com/a/777359/5401366
-    #define CODA_OSS_mark_symbol_unused(x) ((void)x)
+    // 4551 => 'function call missing argument list'
+    #define CODA_OSS_mark_symbol_unused(x) do { \
+        CODA_OSS_disable_warning_push \
+        CODA_OSS_disable_warning(4551) \
+        ((void)x); \
+        CODA_OSS_disable_warning_pop \
+    } while (0);
 #endif
 
 #endif  // CODA_OSS_config_compiler_extentions_h_INCLUDED_
