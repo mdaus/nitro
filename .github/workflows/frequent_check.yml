@@ -14,7 +14,8 @@ jobs:
               build_with: "-G Ninja"
               python_info: ""
             - os: windows-latest
-              build_with: "-G Ninja"
+              build_with: "" # default
+              #build_with: "-G Ninja"
               python_info: "-DENABLE_PYTHON=OFF"
     name: ${{ matrix.os }}-${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}
