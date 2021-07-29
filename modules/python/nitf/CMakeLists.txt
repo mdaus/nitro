@@ -27,7 +27,6 @@ if (TARGET numpyutils-c++)
         # Get the parent of the bin dir for use as the MY_PYTHONPATH
         get_filename_component(MY_PYTHONPATH ${CMAKE_CURRENT_BINARY_DIR} DIRECTORY)
 
-        include(FindPython3)
         file(GLOB local_tests ${CMAKE_CURRENT_LIST_DIR}/unittests/*.py)
         foreach(test_src ${local_tests})
             get_filename_component(test_file "${test_src}" NAME)
@@ -35,7 +34,7 @@ if (TARGET numpyutils-c++)
             set(test_target "nitropy_${test_name}")
 
             add_test(NAME ${test_target}
-                COMMAND ${Python3_EXECUTABLE} ${test_file}
+                COMMAND ${Python_EXECUTABLE} ${test_file}
                 WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/unittests
             )
             # Set the PYTHONPATH on the test so that it can see the module
