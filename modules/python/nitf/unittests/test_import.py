@@ -33,4 +33,7 @@ def test_nitf_import():
 
 
 if __name__ == "__main__":
+    import sys
+    from pprint import pprint
+    print(pprint(sys.path))
     test_nitf_import()
