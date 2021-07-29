@@ -24,6 +24,7 @@
  *
 """
 
+import os
 
 def test_nitf_import():
     import nitf
@@ -33,15 +34,15 @@ def test_nitf_import():
 
 
 if __name__ == "__main__":
-    import sys
-    import os
-    from pprint import pprint
-    for dirname in sys.path:
-        try:
-            print('Contents of %s' % dirname)
-            pprint(os.listdir(dirname))
-        except:
-            pass
 
-    print(pprint(sys.path))
+    if 'DEBUG_PYTHONPATH' in os.environ:
+        import sys
+        from pprint import pprint
+        for dirname in sys.path:
+            try:
+                print('Contents of %s' % dirname)
+                pprint(os.listdir(dirname))
+            except:
+                pass
+
     test_nitf_import()
