@@ -24,7 +24,8 @@
 #include "dbi/MySQLConnection.h"
 #include "dbi/PgSQLConnection.h"
 #include "dbi/OracleConnection.h"
-
+#pragma warning(push)
+#pragma warning(disable : 4702)
 dbi::DatabaseClientFactory::DatabaseClientFactory()
 {
 #    if defined(USE_PGSQL)
@@ -37,6 +38,7 @@ dbi::DatabaseClientFactory::DatabaseClientFactory()
     throw except::Exception(Ctxt("No database is defined"));
 #    endif
 }
+#pragma warning(pop)
 
 dbi::DatabaseConnection * dbi::DatabaseClientFactory::create(const std::string& database,
         const std::string& user,
