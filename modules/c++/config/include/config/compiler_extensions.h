@@ -97,9 +97,11 @@
         #define CODA_OSS_disable_warning_pop            __pragma(warning( pop ))
         #define CODA_OSS_disable_warning(warningNumber) __pragma(warning( disable : warningNumber ))
 
+        #define CODA_OSS_disable_warning_system_header_push  __pragma(warning(push, 0))
+
         // 4551 => 'function call missing argument list'
         #define CODA_OSS_FUNCTION_CALL_MISSING_ARG_LIST CODA_OSS_disable_warning(4551)
-		
+
         // 4702 Unreachable Code Warning
         #define CODA_OSS_DISABLE_UNREACHABLE_CODE CODA_OSS_disable_warning(4702)
     #elif defined(__GNUC__) || defined(__clang__)
@@ -108,6 +110,9 @@
         #define CODA_OSS_disable_warning_pop            CODA_OSS_do_pragma(gcc diagnostic pop)
         #define CODA_OSS_disable_warning(warningName)   CODA_OSS_do_pragma(GCC diagnostic ignored #warningName)
 
+        #define CODA_OSS_disable_warning_system_header_push \
+            CODA_OSS_disable_warning_push \
+            CODA_OSS_disable_warning(-w)
 
         // no such thing
         #define CODA_OSS_DISABLE_UNREACHABLE_CODE
@@ -116,6 +121,8 @@
         #define CODA_OSS_disable_warning_push
         #define CODA_OSS_disable_warning_pop
         #define CODA_OSS_disable_warning(warningName)
+        #define CODA_OSS_disable_warning_system_header_push
+        #define CODA_OSS_DISABLE_UNREACHABLE_CODE
         #define CODA_OSS_FUNCTION_CALL_MISSING_ARG_LIST
     #endif
 #endif // CODA_OSS_HAVE_DISABLE_WARNINGS
