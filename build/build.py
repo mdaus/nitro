@@ -1055,7 +1055,6 @@ def configureCompilerOptions(self):
 
         #If building with cpp17 add flags/defines to enable auto_ptr
         if Options.options.enablecpp17:
-            defines.append('_HAS_AUTO_PTR_ETC=1')
             flags.append('/std:c++17')
 
         self.env.append_value('DEFINES', defines)
