@@ -112,7 +112,8 @@
 
         #define CODA_OSS_disable_warning_system_header_push \
             CODA_OSS_disable_warning_push \
-            CODA_OSS_disable_warning(-w)
+            CODA_OSS_disable_warning(-Wall) \
+            CODA_OSS_disable_warning(-Wextra)
 
         // no such thing
         #define CODA_OSS_DISABLE_UNREACHABLE_CODE
