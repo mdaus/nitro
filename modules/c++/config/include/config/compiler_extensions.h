@@ -95,17 +95,23 @@
     #if defined(_MSC_VER)
         #define CODA_OSS_disable_warning_push           __pragma(warning( push ))
         #define CODA_OSS_disable_warning_pop            __pragma(warning( pop ))
-
         #define CODA_OSS_disable_warning(warningNumber) __pragma(warning( disable : warningNumber ))
+
+        // 4551 => 'function call missing argument list'
+        #define CODA_OSS_FUNCTION_CALL_MISSING_ARG_LIST CODA_OSS_disable_warning(4551)
     #elif defined(__GNUC__) || defined(__clang__)
         #define CODA_OSS_do_pragma(X) _Pragma(#X)
         #define CODA_OSS_disable_warning_push           CODA_OSS_do_pragma(GCC diagnostic push)
         #define CODA_OSS_disable_warning_pop            CODA_OSS_do_pragma(gcc diagnostic pop)
         #define CODA_OSS_disable_warning(warningName)   CODA_OSS_do_pragma(GCC diagnostic ignored #warningName)
+
+        // no such thing
+        #define CODA_OSS_FUNCTION_CALL_MISSING_ARG_LIST
     #else
         #define CODA_OSS_disable_warning_push
         #define CODA_OSS_disable_warning_pop
         #define CODA_OSS_disable_warning(warningName)
+        #define CODA_OSS_FUNCTION_CALL_MISSING_ARG_LIST
     #endif
 #endif // CODA_OSS_HAVE_DISABLE_WARNINGS
 
@@ -113,10 +119,9 @@
     // Fix unused symbol warnings that crash Release build on -Werror
     // (won't work without C-style cast)
     // https://stackoverflow.com/a/777359/5401366
-    // 4551 => 'function call missing argument list'
     #define CODA_OSS_mark_symbol_unused(x) do { \
         CODA_OSS_disable_warning_push \
-        CODA_OSS_disable_warning(4551) \
+        CODA_OSS_FUNCTION_CALL_MISSING_ARG_LIST \
         ((void)x); \
         CODA_OSS_disable_warning_pop \
     } while (0);
