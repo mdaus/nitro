@@ -107,7 +107,7 @@
     #elif defined(__GNUC__) || defined(__clang__)
         #define CODA_OSS_do_pragma(X) _Pragma(#X)
         #define CODA_OSS_disable_warning_push           CODA_OSS_do_pragma(GCC diagnostic push)
-        #define CODA_OSS_disable_warning_pop            CODA_OSS_do_pragma(gcc diagnostic pop)
+        #define CODA_OSS_disable_warning_pop            CODA_OSS_do_pragma(GCC diagnostic pop)
         #define CODA_OSS_disable_warning(warningName)   CODA_OSS_do_pragma(GCC diagnostic ignored #warningName)
 
         #define CODA_OSS_disable_warning_system_header_push \
@@ -116,15 +116,15 @@
             CODA_OSS_disable_warning(-Wextra)
 
         // no such thing
-        #define CODA_OSS_DISABLE_UNREACHABLE_CODE
         #define CODA_OSS_FUNCTION_CALL_MISSING_ARG_LIST
+        #define CODA_OSS_DISABLE_UNREACHABLE_CODE
     #else
         #define CODA_OSS_disable_warning_push
         #define CODA_OSS_disable_warning_pop
         #define CODA_OSS_disable_warning(warningName)
         #define CODA_OSS_disable_warning_system_header_push
-        #define CODA_OSS_DISABLE_UNREACHABLE_CODE
         #define CODA_OSS_FUNCTION_CALL_MISSING_ARG_LIST
+        #define CODA_OSS_DISABLE_UNREACHABLE_CODE
     #endif
 #endif // CODA_OSS_HAVE_DISABLE_WARNINGS
 
