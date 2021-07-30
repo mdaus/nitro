@@ -99,13 +99,18 @@
 
         // 4551 => 'function call missing argument list'
         #define CODA_OSS_FUNCTION_CALL_MISSING_ARG_LIST CODA_OSS_disable_warning(4551)
+		
+        // 4702 Unreachable Code Warning
+        #define CODA_OSS_DISABLE_UNREACHABLE_CODE CODA_OSS_disable_warning(4702)
     #elif defined(__GNUC__) || defined(__clang__)
         #define CODA_OSS_do_pragma(X) _Pragma(#X)
         #define CODA_OSS_disable_warning_push           CODA_OSS_do_pragma(GCC diagnostic push)
         #define CODA_OSS_disable_warning_pop            CODA_OSS_do_pragma(gcc diagnostic pop)
         #define CODA_OSS_disable_warning(warningName)   CODA_OSS_do_pragma(GCC diagnostic ignored #warningName)
 
+
         // no such thing
+        #define CODA_OSS_DISABLE_UNREACHABLE_CODE
         #define CODA_OSS_FUNCTION_CALL_MISSING_ARG_LIST
     #else
         #define CODA_OSS_disable_warning_push
