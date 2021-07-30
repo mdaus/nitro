@@ -26,7 +26,7 @@
 #include "dbi/OracleConnection.h"
 #include "config/compiler_extensions.h"
 CODA_OSS_disable_warning_push
-CODA_OSS_disable_warning(4702)
+CODA_OSS_DISABLE_UNREACHABLE_CODE
 dbi::DatabaseClientFactory::DatabaseClientFactory()
 {
 #    if defined(USE_PGSQL)
