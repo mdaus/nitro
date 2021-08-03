@@ -30,6 +30,7 @@
 #include <type_traits>
 #include <utility>
 
+#include <config/compiler_extensions.h>
 #include "gsl/use_gsl.h" // Can't compile all of GSL with older versions of GCC/MSVC
 #include "gsl/gsl_span_.h"
 
@@ -67,19 +68,15 @@ namespace Gsl
             return (static_cast<U>(t) != u) ? narrow_throw_exception(t) : t;
         }
 
-        #if defined(_MSC_VER) && _MSC_VER <= 1900
-        #pragma warning( push )
-        #pragma warning( disable : 4100 ) // unreferenced formal parameter
-        #endif
+        CODA_OSS_disable_warning_push
+        CODA_OSS_UNREFERENCED_FORMAL_PARAMETER
         template <class T, class U>
         constexpr T narrow2_(T t, U u) noexcept(false)
         {
             return (!is_same_signedness<T, U>::value && ((t < T{}) != (u < U{}))) ?
                 narrow_throw_exception(t) : t;
         }
-        #if defined(_MSC_VER) && _MSC_VER <= 1900
-        #pragma warning( pop )
-        #endif
+        CODA_OSS_disable_warning_pop
 
         template <class T, class U>
         constexpr T narrow(T t, U u) noexcept(false)

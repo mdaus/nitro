@@ -20,6 +20,7 @@
  *
  */
 
+#include <config/compiler_extensions.h>
 #include <import/sys.h>
 
 using namespace sys;
@@ -32,10 +33,8 @@ public:
     {}
     virtual ~Getter() = default;
 
-    #if _MSC_VER
-    #pragma warning(push)
-    #pragma warning(disable : 4702)  // unreachable code
-    #endif
+    CODA_OSS_disable_warning_push
+    CODA_OSS_DISABLE_UNREACHABLE_CODE
     virtual void run()
     {
         for (int i = 0; i < 250; i++)
@@ -50,9 +49,7 @@ public:
             sys::Thread::yield();
         }
     }
-    #if _MSC_VER
-    #pragma warning(pop)
-    #endif
+    CODA_OSS_disable_warning_pop
 
     int get()
     {
@@ -72,10 +69,8 @@ public:
     {}
     virtual ~Putter() = default;
 
-    #if _MSC_VER
-    #pragma warning(push)
-    #pragma warning(disable : 4702)  // unreachable code
-    #endif
+    CODA_OSS_disable_warning_push
+    CODA_OSS_DISABLE_UNREACHABLE_CODE
     virtual void run()
     {
 
@@ -94,9 +89,7 @@ public:
         }
 
     }
-    #if _MSC_VER
-    #pragma warning(pop)
-    #endif
+    CODA_OSS_disable_warning_pop
 
     void set(int val)
     {
