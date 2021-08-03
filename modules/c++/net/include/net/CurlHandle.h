@@ -114,11 +114,16 @@ private:
     void verify(CURLcode code, const std::string& prefix);
 
     static
-    size_t writeCallback(char* data,
+    int writeCallback(char* data,
                          size_t size,
                          size_t nmemb,
                          std::string* writerData);
 
+    static
+    size_t writeBetterCallback(char* data,
+                               size_t size,
+                               size_t nmemb,
+                               std::string* writerData);
     CURL* const mHandle;
 };
 }
