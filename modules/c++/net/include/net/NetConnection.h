@@ -63,7 +63,7 @@ public:
     NetConnection(std::unique_ptr<net::Socket>&& socket) : mSocket(socket.release())
     {}
     #if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
-    NetConnection(std::auto_ptr<net::Socket> socket) : mSocket(socket)
+    NetConnection(mem::auto_ptr<net::Socket> socket) : mSocket(socket)
     {}
     #endif
 

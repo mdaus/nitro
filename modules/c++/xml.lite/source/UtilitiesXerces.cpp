@@ -173,9 +173,9 @@ void XercesErrorHandler::
 error(const SAXParseException &exception)
 {
     XercesLocalString m(exception.getMessage());
-    throw(XMLParseException(m.str(),
+    throw XMLParseException(m.str(),
                                        static_cast<int>(exception.getLineNumber()),
-                                       static_cast<int>(exception.getColumnNumber())));
+                                       static_cast<int>(exception.getColumnNumber()));
 }
 
 void XercesErrorHandler::
@@ -202,7 +202,7 @@ XercesContext::XercesContext() :
     {
         XercesLocalString local(toCatch.getMessage());
         except::Error e(Ctxt(local.str() + " (Initialization error)"));
-        throw (e);
+        throw e;
     }
 }
 
@@ -234,7 +234,7 @@ void XercesContext::destroy()
             mIsDestroyed = false;
             XercesLocalString local(toCatch.getMessage());
             except::Error e(Ctxt(local.str() + " (Termination error)"));
-            throw (e);
+            throw e;
         }
     }
 }

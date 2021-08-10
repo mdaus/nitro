@@ -31,6 +31,18 @@
 
 namespace mem
 {
+// This won't work everywhere since C++11's std::unique_ptr<> often requries
+// "&&" and std::move. But for member data and the like it can reduce some
+// boiler-plate code; note that it's often possible to just use std::unique_ptr
+// directly.  This is mostly needed to support existing interfaces.
+#if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
+template <typename T>
+using auto_ptr = std::auto_ptr<T>;
+#else
+template <typename T>
+using auto_ptr = std::unique_ptr<T>;
+#endif
+
 /*!
  *  \class SharedPtr
  *  \brief This is a derived class of std::shared_ptr. The purpose of this
@@ -73,19 +85,19 @@ public:
 
     #if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
     // The base class only handles auto_ptr<T>&&
-    explicit SharedPtr(std::auto_ptr<T> ptr) :
+    explicit SharedPtr(mem::auto_ptr<T> ptr) :
         std::shared_ptr<T>(ptr.release())
     {
     }
 
     // The base class only handles auto_ptr<T>&&
     template <typename OtherT>
-    explicit SharedPtr(std::auto_ptr<OtherT> ptr) :
+    explicit SharedPtr(mem::auto_ptr<OtherT> ptr) :
         std::shared_ptr<T>(ptr.release())
     {
     }
 
-    void reset(std::auto_ptr<T> scopedPtr)
+    void reset(mem::auto_ptr<T> scopedPtr)
     {
         std::shared_ptr<T>::reset(scopedPtr.release());
     }
@@ -97,17 +109,6 @@ public:
         return std::shared_ptr<T>::use_count();
     }
 };
-
-// This won't work everywhere since C++11's std::unique_ptr<> often requries "&&" and std::move.
-// But for member data and the like it can reduce some boiler-plate code; note that it's often
-// possible to just use std::unique_ptr directly.  This is mostly needed to support existing interfaces.
-#if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
-template<typename T>
-using auto_ptr = std::auto_ptr<T>;
-#else
-template <typename T>
-using auto_ptr = std::unique_ptr<T>;
-#endif
 
 // C++11 inadvertently ommitted make_unique; provide it here. (Swiped from <memory>.)
 namespace make
