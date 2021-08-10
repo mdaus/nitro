@@ -72,7 +72,7 @@ void ThreadGroup::createThread(std::unique_ptr<sys::Runnable>&& runnable)
     thread->start();
 }
 #if !CODA_OSS_cpp17
-void ThreadGroup::createThread(std::auto_ptr<sys::Runnable> runnable)
+void ThreadGroup::createThread(mem::auto_ptr<sys::Runnable> runnable)
 {
     createThread(std::unique_ptr<sys::Runnable>(runnable.release()));
 }
@@ -143,9 +143,9 @@ ThreadGroup::ThreadGroupRunnable::ThreadGroupRunnable(
 }
 #if !CODA_OSS_cpp17
 ThreadGroup::ThreadGroupRunnable::ThreadGroupRunnable(
-        std::auto_ptr<sys::Runnable> runnable,
+        mem::auto_ptr<sys::Runnable> runnable,
         ThreadGroup& parentThreadGroup,
-        std::auto_ptr<CPUAffinityThreadInitializer> threadInit) :
+        mem::auto_ptr<CPUAffinityThreadInitializer> threadInit) :
         ThreadGroupRunnable(std::unique_ptr<sys::Runnable>(runnable.release()),
         parentThreadGroup,
          std::unique_ptr<CPUAffinityThreadInitializer>(threadInit.release()))

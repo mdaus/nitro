@@ -82,7 +82,7 @@ struct ThreadGroup
     */
     void createThread(std::unique_ptr<sys::Runnable>&& runnable);
     #if !CODA_OSS_cpp17
-    void createThread(std::auto_ptr<sys::Runnable> runnable);
+    void createThread(mem::auto_ptr<sys::Runnable> runnable);
     #endif
 
     /*!
@@ -163,10 +163,10 @@ private:
                         std::unique_ptr<CPUAffinityThreadInitializer>(nullptr));
         #if !CODA_OSS_cpp17
         ThreadGroupRunnable(
-                std::auto_ptr<sys::Runnable> runnable,
+                mem::auto_ptr<sys::Runnable> runnable,
                 mt::ThreadGroup& parentThreadGroup,
-                std::auto_ptr<CPUAffinityThreadInitializer> threadInit =
-                        std::auto_ptr<CPUAffinityThreadInitializer>(nullptr));
+                mem::auto_ptr<CPUAffinityThreadInitializer> threadInit =
+                        mem::auto_ptr<CPUAffinityThreadInitializer>(nullptr));
         #endif
 
         ThreadGroupRunnable(const ThreadGroupRunnable&) = delete;
