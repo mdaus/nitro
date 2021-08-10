@@ -66,7 +66,7 @@ void ThreadGroup::createThread(std::unique_ptr<sys::Runnable>&& runnable)
                     *this,
                     getNextInitializer()));
 
-    mem::SharedPtr<sys::Thread> thread(new sys::Thread(internalRunnable.get()));
+    auto thread(std::make_shared<sys::Thread>(internalRunnable.get()));
     internalRunnable.release();
     mThreads.push_back(thread);
     thread->start();

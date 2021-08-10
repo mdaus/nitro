@@ -187,7 +187,7 @@ template <typename T>
         return mValues.empty();
     }
 
-    SharedPtr<T> operator[](std::ptrdiff_t idx) const
+    std::shared_ptr<T> operator[](std::ptrdiff_t idx) const
     {
         return mValues[idx];
     }
@@ -218,7 +218,7 @@ template <typename T>
     }
     #endif
 
-    void push_back(SharedPtr<T> value)
+    void push_back(std::shared_ptr<T> value)
     {
         mValues.push_back(value);
     }
@@ -239,13 +239,13 @@ template <typename T>
     #endif
 
     template <typename OtherT>
-        void push_back(SharedPtr<OtherT> value)
+        void push_back(std::shared_ptr<OtherT> value)
     {
         mValues.push_back(value);
     }
 
-    typedef typename std::vector<SharedPtr<T> >::iterator iterator;
-    typedef typename std::vector<SharedPtr<T> >::const_iterator const_iterator;
+    typedef typename std::vector<std::shared_ptr<T>>::iterator iterator;
+    typedef typename std::vector<std::shared_ptr<T> >::const_iterator const_iterator;
 
     iterator begin() { return mValues.begin(); }
     const_iterator begin() const { return mValues.begin(); }
@@ -263,7 +263,7 @@ template <typename T>
     }
 
 private:
-    std::vector<SharedPtr<T> > mValues;
+    std::vector<std::shared_ptr<T>> mValues;
 };
 }
 
