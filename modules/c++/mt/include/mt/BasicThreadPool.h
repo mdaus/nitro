@@ -60,7 +60,7 @@ struct BasicThreadPool
     {
         if (mStarted)
         {
-            throw(ThreadPoolException("The thread pool is already started."));
+            throw ThreadPoolException("The thread pool is already started.");
         }
 
         mStarted = true;
