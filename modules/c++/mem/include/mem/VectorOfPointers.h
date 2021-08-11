@@ -37,7 +37,7 @@ namespace mem
  *  \brief This class provides safe cleanup for vectors of pointers
  */
 template <typename T>
-struct VectorOfPointers final
+struct VectorOfPointers
 {
     VectorOfPointers() = default;
 
@@ -133,7 +133,7 @@ private:
 };
 
 template <typename T>
-    struct VectorOfSharedPointers final
+    struct VectorOfSharedPointers
 {
     VectorOfSharedPointers() = default;
     ~VectorOfSharedPointers() = default;
