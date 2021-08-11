@@ -254,10 +254,22 @@ void lower(std::string& s)
 {
     std::transform(s.begin(), s.end(), s.begin(), tolowerCheck);
 }
+std::string toLower(const std::string& s)
+{
+    auto retval = s;
+    lower(retval); // TODO
+    return retval;
+}
 
 void upper(std::string& s)
 {
     std::transform(s.begin(), s.end(), s.begin(), toupperCheck);
+}
+std::string toUpper(const std::string& s)
+{
+    auto retval = s;
+    upper(retval);  // TODO
+    return retval;
 }
 
 void escapeForXML(std::string& str)

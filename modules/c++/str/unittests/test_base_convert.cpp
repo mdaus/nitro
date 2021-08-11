@@ -165,6 +165,36 @@ TEST_CASE(test_string_to_u8string_iso8859_1)
     }
 }
 
+static void test_change_case_(const std::string& testName, const std::string& lower, const std::string& upper)
+{
+    auto s = str::toLower(upper);
+    TEST_ASSERT_EQ(lower, s);
+    s = str::toUpper(lower);
+    TEST_ASSERT_EQ(upper, s);
+
+    s = str::toUpper(upper);
+    TEST_ASSERT_EQ(upper, s);
+    s = str::toLower(lower);
+    TEST_ASSERT_EQ(lower, s);
+}
+
+TEST_CASE(test_change_case)
+{
+    constexpr uint8_t latin_capital_letter_a = 'A';
+    const std::string ABC{static_cast<char>(latin_capital_letter_a), 'B', 'C'};
+    constexpr uint8_t latin_small_letter_a = 'a';
+    const std::string abc{static_cast<char>(latin_small_letter_a), 'b', 'c'};
+    test_change_case_(testName, abc, ABC);
+
+    // Yes, this can really come up, "non classifié" is French for "unclassified".
+    constexpr uint8_t latin_capital_letter_e_with_acute = 0xc9;
+    const std::string DEF{'D', static_cast<char>(latin_capital_letter_e_with_acute), 'F'};
+    constexpr uint8_t latin_small_letter_e_with_acute = 0xe9;
+    const std::string def{'d', static_cast<char>(latin_small_letter_e_with_acute), 'f'};
+    //test_change_case_(testName, def, DEF);
+}
+
+
 int main(int, char**)
 {
     TEST_CHECK(testConvert);
@@ -174,4 +204,5 @@ int main(int, char**)
     TEST_CHECK(test_string_to_u8string_ascii);
     TEST_CHECK(test_string_to_u8string_windows_1252);
     TEST_CHECK(test_string_to_u8string_iso8859_1);
+    TEST_CHECK(test_change_case);
 }

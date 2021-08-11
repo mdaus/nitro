@@ -141,9 +141,11 @@ std::vector<std::string> split(const std::string& s,
 
 //! Uses std::transform to convert all chars to lower case
 void lower(std::string& s);
+std::string toLower(const std::string&);  // handles "foreign" characters too, such as French (for Canada)
 
 //! Uses std::transform to convert all chars to upper case
 void upper(std::string& s);
+std::string toUpper(const std::string&);  // handles "foreign" characters too, such as French (for Canada)
 
 /*!
  * Replaces any characters that are invalid in XML (&, <, >, ', ") with their
