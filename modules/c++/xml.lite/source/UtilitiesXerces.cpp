@@ -28,7 +28,7 @@ namespace xml
 {
 namespace lite
 {
-sys::Mutex XercesContext::mMutex;
+std::mutex XercesContext::mMutex;
 
 XercesLocalString::XercesLocalString(XMLCh* xmlStr) :
     mLocal(xmlStr)
@@ -195,7 +195,7 @@ XercesContext::XercesContext() :
     //! XMLPlatformUtils::Initialize is not thread safe!
     try
     {
-        mt::CriticalSection<sys::Mutex> cs(&mMutex);
+        std::lock_guard<std::mutex> cs(mMutex);
         XMLPlatformUtils::Initialize();
     }
     catch (const ::XMLException& toCatch)
@@ -225,7 +225,7 @@ void XercesContext::destroy()
         //! XMLPlatformUtils::Terminate is not thread safe!
         try
         {
-            mt::CriticalSection<sys::Mutex> cs(&mMutex);
+            std::lock_guard<std::mutex> cs(mMutex);
             XMLPlatformUtils::Terminate();
             mIsDestroyed = true;
         }
