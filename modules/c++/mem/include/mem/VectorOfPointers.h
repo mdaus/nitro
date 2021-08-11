@@ -37,11 +37,9 @@ namespace mem
  *  \brief This class provides safe cleanup for vectors of pointers
  */
 template <typename T>
-struct VectorOfPointers
+struct VectorOfPointers final
 {
-    VectorOfPointers()
-    {
-    }
+    VectorOfPointers() = default;
 
     ~VectorOfPointers()
     {
@@ -50,10 +48,7 @@ struct VectorOfPointers
 
     void clear()
     {
-        for (size_t ii = 0; ii < mValues.size(); ++ii)
-        {
-            delete mValues[ii];
-        }
+        erase(begin(), end());
         mValues.clear();
     }
 
@@ -82,12 +77,6 @@ struct VectorOfPointers
         return mValues.back();
     }
 
-    void push_back(T* value)
-    {
-        std::unique_ptr<T> scopedValue(value);
-        push_back(std::move(scopedValue));
-    }
-
     template <typename OtherT>
         void push_back(OtherT* value)
     {
@@ -104,21 +93,15 @@ struct VectorOfPointers
     template <typename OtherT>
     void push_back(std::unique_ptr<OtherT>&& value)
     {
-        mValues.resize(mValues.size() + 1);
-        mValues.back() = value.release();
+        std::unique_ptr<T> scopedValue(value.release());
+        push_back(std::move(scopedValue));
     }
     #if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
-    void push_back(mem::auto_ptr<T> value)
-    {
-        mValues.resize(mValues.size() + 1);
-        mValues.back() = value.release();
-    }
-
     template <typename OtherT>
         void push_back(mem::auto_ptr<OtherT> value)
     {
-        mValues.resize(mValues.size() + 1);
-        mValues.back() = value.release();
+        std::unique_ptr<OtherT> scopedValue(value.release());
+        push_back(std::move(scopedValue));
     }
     #endif
 
@@ -156,11 +139,9 @@ private:
 };
 
 template <typename T>
-    struct VectorOfSharedPointers
+    struct VectorOfSharedPointers final
 {
-    VectorOfSharedPointers()
-    {
-    }
+    VectorOfSharedPointers() = default;
 
     void clear()
     {
@@ -169,8 +150,8 @@ template <typename T>
 
     std::vector<T*> get() const
     {
-        std::vector<T*> values(mValues.size());
-        for (size_t ii = 0; ii < mValues.size(); ++ii)
+        std::vector<T*> values(size());
+        for (size_t ii = 0; ii < size(); ++ii)
         {
             values[ii] = mValues[ii].get();
         }
@@ -192,12 +173,6 @@ template <typename T>
         return mValues[idx];
     }
 
-    void push_back(T* value)
-    {
-        std::unique_ptr<T> scopedValue(value);
-        push_back(std::move(scopedValue));
-    }
-
     template <typename OtherT>
         void push_back(OtherT* value)
     {
@@ -213,15 +188,10 @@ template <typename T>
     #if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
     void push_back(mem::auto_ptr<T> value)
     {
-        mValues.resize(mValues.size() + 1);
-        mValues.back().reset(value.release());
+        std::unique_ptr<T> scopedValue(value.release());
+        push_back(std::move(scopedValue));
     }
     #endif
-
-    void push_back(std::shared_ptr<T> value)
-    {
-        mValues.push_back(value);
-    }
 
     template <typename OtherT>
     void push_back(std::unique_ptr<OtherT>&& value)
@@ -233,8 +203,8 @@ template <typename T>
     template <typename OtherT>
         void push_back(mem::auto_ptr<OtherT> value)
     {
-        mValues.resize(mValues.size() + 1);
-        mValues.back().reset(value.release());
+        std::unique_ptr<OtherT> scopedValue(value.release());
+        push_back(std::move(scopedValue));
     }
     #endif
 
