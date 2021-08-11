@@ -141,12 +141,32 @@ bool contains(const std::string& str, const std::string& match)
     return str.find(match) != std::string::npos;
 }
 
+inline bool isTest(const std::string& s, int (*is)(int))
+{
+    for (const auto& ch : s)
+    {
+        if (!is(ch))
+            return false;
+    }
+    return !s.empty();
+}
+
 bool isAlpha(const std::string& s)
 {
-    typedef std::string::const_iterator StringIter;
-    for (StringIter it = s.begin(); it != s.end(); ++it)
+    return isTest(s, isalpha);
+}
+
+static inline bool isBlank(std::string::value_type ch)
+{
+    return ch == ' ';
+}
+
+template<typename Pred>
+inline bool isTest(const std::string& s, int (*is1)(int), Pred is2)
+{
+    for (const auto& ch : s)
     {
-        if (!isalpha(*it))
+        if (!is1(ch) && !is2(ch))
             return false;
     }
     return !s.empty();
@@ -154,43 +174,24 @@ bool isAlpha(const std::string& s)
 
 bool isAlphaSpace(const std::string& s)
 {
-    typedef std::string::const_iterator StringIter;
-    for (StringIter it = s.begin(); it != s.end(); ++it)
-    {
-        if (!isalpha(*it) && *it != ' ')
-            return false;
-    }
-    return !s.empty();
+    return isTest(s, isalpha, isBlank);
 }
 
 bool isNumeric(const std::string& s)
 {
-    typedef std::string::const_iterator StringIter;
-    for (StringIter it = s.begin(); it != s.end(); ++it)
-    {
-        if (!isdigit(*it))
-            return false;
-    }
-    return !s.empty();
+    return isTest(s, isdigit);
 }
 
 bool isNumericSpace(const std::string& s)
 {
-    typedef std::string::const_iterator StringIter;
-    for (StringIter it = s.begin(); it != s.end(); ++it)
-    {
-        if (!isdigit(*it) && *it != ' ')
-            return false;
-    }
-    return !s.empty();
+    return isTest(s, isdigit, isBlank);
 }
 
 bool isWhitespace(const std::string& s)
 {
-    typedef std::string::const_iterator StringIter;
-    for (StringIter it = s.begin(); it != s.end(); ++it)
+    for (const auto& ch : s)
     {
-        if (!isspace(*it))
+        if (!isspace(ch))
             return false;
     }
     return true;
@@ -198,21 +199,14 @@ bool isWhitespace(const std::string& s)
 
 bool isAlphanumeric(const std::string& s)
 {
-    typedef std::string::const_iterator StringIter;
-    for (StringIter it = s.begin(); it != s.end(); ++it)
-    {
-        if (!isalpha(*it) && !isdigit(*it))
-            return false;
-    }
-    return !s.empty();
+    return isTest(s, isalpha, isdigit);
 }
 
 bool isAsciiPrintable(const std::string& s)
 {
-    typedef std::string::const_iterator StringIter;
-    for (StringIter it = s.begin(); it != s.end(); ++it)
+    for (const auto& ch : s)
     {
-        char c = *it;
+        char c = ch;
         if (c < 32 || c > 126)
             return false;
     }
