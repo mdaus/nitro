@@ -72,6 +72,19 @@ public:
     {
     }
 
+    SharedPtr(const SharedPtr&) = default;
+    SharedPtr& operator=(const SharedPtr&) = default;
+    SharedPtr(SharedPtr&&) = default;
+    SharedPtr& operator=(SharedPtr&&) = default;
+
+    explicit SharedPtr(std::shared_ptr<T> ptr) : std::shared_ptr<T>(ptr) {}
+    SharedPtr& operator=(const std::shared_ptr<T>& ptr)
+    {
+      std::shared_ptr<T>& base = *this;
+      base = ptr;
+      return *this;
+    }
+
     template <typename OtherT>
     explicit SharedPtr(std::unique_ptr<OtherT>&& ptr) :
         std::shared_ptr<T>(ptr.release())

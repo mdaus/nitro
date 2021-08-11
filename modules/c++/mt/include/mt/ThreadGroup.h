@@ -114,7 +114,7 @@ struct ThreadGroup
 private:
     std::unique_ptr<CPUAffinityInitializer> mAffinityInit;
     size_t mLastJoined;
-    std::vector<mem::SharedPtr<sys::Thread> > mThreads;
+    std::vector<std::shared_ptr<sys::Thread> > mThreads;
     std::vector<except::Exception> mExceptions;
     sys::Mutex mMutex;
 
