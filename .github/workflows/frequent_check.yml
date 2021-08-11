@@ -29,7 +29,6 @@ jobs:
         cd build
         ctest -C Release
 
-
   build-linux:
     name: Linux
     runs-on: [ubuntu-latest]
