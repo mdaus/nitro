@@ -84,17 +84,11 @@ struct VectorOfPointers final
         push_back(std::move(scopedValue));
     }
 
-    void push_back(std::unique_ptr<T>&& value)
-    {
-        mValues.resize(mValues.size() + 1);
-        mValues.back() = value.release();
-    }
-
     template <typename OtherT>
     void push_back(std::unique_ptr<OtherT>&& value)
     {
-        std::unique_ptr<T> scopedValue(value.release());
-        push_back(std::move(scopedValue));
+        mValues.resize(mValues.size() + 1);
+        mValues.back() = value.release();
     }
     #if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
     template <typename OtherT>
@@ -142,6 +136,21 @@ template <typename T>
     struct VectorOfSharedPointers final
 {
     VectorOfSharedPointers() = default;
+    ~VectorOfSharedPointers() = default;
+    VectorOfSharedPointers(const VectorOfSharedPointers&) = default;
+    VectorOfSharedPointers(VectorOfSharedPointers&&) = default;
+    VectorOfSharedPointers& operator=(const VectorOfSharedPointers&) = default;
+    VectorOfSharedPointers& operator=(VectorOfSharedPointers&&) = default;
+
+    VectorOfSharedPointers(const std::vector<std::shared_ptr<T>>& values) : mValues(values) { }
+    VectorOfSharedPointers& operator=(const std::vector<std::shared_ptr<T>>& values)
+    {
+        mValues = values;
+        return *this;
+    }
+
+    operator std::vector<std::shared_ptr<T>>&() { return mValues; }
+    operator const std::vector<std::shared_ptr<T>>&() const { return mValues; }
 
     void clear()
     {
@@ -168,7 +177,11 @@ template <typename T>
         return mValues.empty();
     }
 
-    std::shared_ptr<T> operator[](std::ptrdiff_t idx) const
+    const std::shared_ptr<T>& operator[](std::ptrdiff_t idx) const
+    {
+        return mValues[idx];
+    }
+    std::shared_ptr<T>& operator[](std::ptrdiff_t idx)
     {
         return mValues[idx];
     }
@@ -179,19 +192,6 @@ template <typename T>
         std::unique_ptr<OtherT> scopedValue(value);
         push_back(std::move(scopedValue));
     }
-
-    void push_back(std::unique_ptr<T>&& value)
-    {
-        mValues.resize(mValues.size() + 1);
-        mValues.back().reset(value.release());
-    }
-    #if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
-    void push_back(mem::auto_ptr<T> value)
-    {
-        std::unique_ptr<T> scopedValue(value.release());
-        push_back(std::move(scopedValue));
-    }
-    #endif
 
     template <typename OtherT>
     void push_back(std::unique_ptr<OtherT>&& value)
