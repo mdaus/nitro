@@ -168,7 +168,8 @@ TEST_CASE(testXml_setCharacterData)
     xml::lite::MinidomParser xmlParser;
     auto& a = testXmlUtf8_(xmlParser);
 
-    const sys::U8string characters = str::castToU8string(utf8Text);
+    const void* const pText = utf8Text.c_str();
+    const sys::U8string characters = static_cast<sys::U8string::const_pointer>(pText); // copy
     a.setCharacterData(characters);
     auto encoding = a.getEncoding();
     TEST_ASSERT_TRUE(encoding.has_value());

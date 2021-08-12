@@ -84,19 +84,19 @@ inline std::string toString(const sys::U8string& value)
     return static_cast<std::string::const_pointer>(pValue);  // copy
 }
 
-inline sys::U8string castToU8string(const std::string& value)
-{
-    // This is dangerous as we don't know the encoding of std::string!
-    // If it is Windows-1252, the reteurned sys::U8string will be garbage.
-    // Only use when you are sure of the encoding.
-    const void* const pValue = value.c_str();
-    return static_cast<sys::U8string::const_pointer>(pValue);
-}
-
 // This is to make it difficult to get encodings mixed up; it's here (in a .h file) as
 // we want to unit-test it. Windows1252_T for Windows-1252 characters
 enum class Windows1252_T : unsigned char { }; // https://en.cppreference.com/w/cpp/language/types
 using W1252string = std::basic_string<Windows1252_T>; // https://en.cppreference.com/w/cpp/string
+template <>
+inline std::string toString(const W1252string& value)
+{
+    // This is OK as UTF-8 can be stored in std::string
+    // Note that casting between the string types will CRASH on some
+    // implementatons. NO: reinterpret_cast<const std::string&>(value)
+    const void* const pValue = value.c_str();
+    return static_cast<std::string::const_pointer>(pValue);  // copy
+}
 
 void windows1252to8(W1252string::const_pointer, size_t, sys::U8string&); // c.f. utf16to8
 

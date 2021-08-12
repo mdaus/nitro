@@ -470,6 +470,7 @@ bool str::wctomb(std::wstring::const_pointer in, size_t in_sz, sys::U8string& re
     auto const out = static_cast<char*>(out_);
     auto p = out;
     size_t rc = 0;
+    ptrdiff_t rc_ = 0;
     for (size_t n = 0; n < in_sz; ++n)
     {
         #if _MSC_VER
@@ -480,12 +481,12 @@ bool str::wctomb(std::wstring::const_pointer in, size_t in_sz, sys::U8string& re
         #if _MSC_VER
         #pragma warning(pop)
         #endif
+         rc_ = static_cast<ptrdiff_t>(rc);
 
-        if (rc == -1)
+        if (rc_ == -1)
             break;
         p += rc;
     }
-    const auto rc_ = static_cast<ptrdiff_t>(rc);
     if (rc_ < 0)
     {
         // https://en.cppreference.com/w/c/string/multibyte/wcrtomb
