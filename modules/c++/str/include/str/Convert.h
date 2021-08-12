@@ -96,7 +96,7 @@ inline sys::U8string castToU8string(const std::string& value)
 sys::U8string fromWindows1252(const std::string&);
 void fromWindows1252(const std::string&, sys::U8string&);
 void fromWindows1252(const std::string&, std::string&);
-std::string toWindows1252(const sys::U8string&);
+std::string toWindows1252(const std::wstring&);
 
 sys::U8string toUtf8(const std::u16string&);
 void toUtf8(const std::u16string&, sys::U8string&);
