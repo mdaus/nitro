@@ -22,8 +22,11 @@
 
 #include <assert.h>
 #include <string.h> // strlen()
+#include <wchar.h>
 
 #include <map>
+#include <locale>
+#include <stdexcept>
 
 #include "str/Convert.h"
 #include "str/Manip.h"
@@ -226,6 +229,33 @@ void str::toUtf8(const std::u32string& str, std::string& result)
     utf8::utf32to8(str.begin(), str.end(), std::back_inserter(result));
 }
 
+// What is the corresponding std::uXXstring for std::wstring?
+template<size_t sizeof_wchar_t> struct const_pointer final { };
+template<> struct const_pointer<2> // wchar_t is 2 bytes, UTF-16
+{
+    using type = std::u16string::const_pointer;
+};
+template <> struct const_pointer<4> // wchar_t is 4 bytes, UTF-32
+{
+    using type = std::u32string::const_pointer;
+};
+inline void toUtf8_(std::u16string::const_pointer begin, std::u16string::const_pointer end, std::string& result)
+{
+    utf8::utf16to8(begin, end, std::back_inserter(result));
+}
+inline void toUtf8_(std::u32string::const_pointer begin, std::u32string::const_pointer end, std::string& result)
+{
+    utf8::utf32to8(begin, end, std::back_inserter(result));
+}
+void str::toUtf8(const std::wstring& str, std::string& result)
+{
+    // std::wstring is UTF-16 on Windows, UTF-32 on Linux
+    using const_pointer_t = const_pointer<sizeof(std::wstring::value_type)>::type;
+    const void* const pStr = str.c_str();
+    auto const begin = static_cast<const_pointer_t>(pStr);
+    toUtf8_(begin, begin + str.size(), result);
+}
+
 struct back_inserter final
 { 
     sys::U8string* container = nullptr; // pointer instead of reference for copy
@@ -248,6 +278,23 @@ void str::toUtf8(const std::u32string& str, sys::U8string& result)
     utf8::utf32to8(str.begin(), str.end(), back_inserter(result));
 }
 
+inline void toUtf8_(std::u16string::const_pointer begin, std::u16string::const_pointer end, sys::U8string& result)
+{
+    utf8::utf16to8(begin, end, back_inserter(result));
+}
+inline void toUtf8_(std::u32string::const_pointer begin, std::u32string::const_pointer end, sys::U8string& result)
+{
+    utf8::utf32to8(begin, end, back_inserter(result));
+}
+void str::toUtf8(const std::wstring& str, sys::U8string& result)
+{
+    // std::wstring is UTF-16 on Windows, UTF-32 on Linux
+    using const_pointer_t = const_pointer<sizeof(std::wstring::value_type)>::type;
+    const void* const pStr = str.c_str();
+    auto const begin = static_cast<const_pointer_t>(pStr);
+    toUtf8_(begin, begin + str.size(), result);
+}
+
 sys::U8string str::toUtf8(const std::u16string& str)
 {
     sys::U8string retval;
@@ -260,5 +307,107 @@ sys::U8string str::toUtf8(const std::u32string& str)
     toUtf8(str, retval);
     return retval;
 }
+sys::U8string str::toUtf8(const std::wstring& str)
+{
+    sys::U8string retval;
+    toUtf8(str, retval);
+    return retval;
+}
 
+struct setlocale_en_US_UTF8 final
+{
+    char* const locale_;
+    setlocale_en_US_UTF8() : locale_(setlocale(LC_ALL, "en_US.utf8"))
+    {
+        if (locale_ == nullptr)
+        {
+            throw std::runtime_error("setlocale() failed.");
+        }
+    }
+    ~setlocale_en_US_UTF8() noexcept(false)
+    {
+        if (setlocale(LC_ALL, locale_) == nullptr)
+        {
+            throw std::runtime_error("setlocale() failed.");       
+        }
+    }
+};
 
+std::wstring str::to_wstring(const std::string& s)
+{
+    const auto utf8 = 
+    #ifdef _WIN32
+        fromWindows1252(s);
+    #else
+       castToU8string(s);
+    #endif
+    return to_wstring(utf8);
+}
+
+std::wstring str::to_wstring(const sys::U8string& utf8)
+{
+    const setlocale_en_US_UTF8 utf8_locale;
+
+    // This is OK as UTF-8 can be stored in std::string
+    // Note that casting between the string types will CRASH on some
+    // implementatons. NO: reinterpret_cast<const std::string&>(value)
+    const void* const pValue = utf8.c_str();
+
+    // https://en.cppreference.com/w/c/string/multibyte/mbrtowc
+    mbstate_t state;
+    memset(&state, 0, sizeof(state));
+
+    auto const in = static_cast<std::string::const_pointer>(pValue);
+    const auto in_sz = utf8.size();
+ 
+    std::vector<wchar_t> v_out(in_sz);
+    auto const out = v_out.data();
+    const char *p_in = in, *end = in + in_sz;
+    wchar_t* p_out = out;
+    int rc;
+    while ((rc = mbrtowc(p_out, p_in, end - p_in, &state)) > 0)
+    {
+        p_in += rc;
+        p_out += 1;
+    }
+    const size_t out_sz = p_out - out;
+    return std::wstring(out, out_sz); // UTF-16 on Windows, UTF-32 on Linux
+}
+
+sys::U8string str::to_u8string(const std::wstring& s)
+{
+    const setlocale_en_US_UTF8 utf8_locale;
+
+    // https://en.cppreference.com/w/c/string/multibyte/wcrtomb
+    mbstate_t state;
+    memset(&state, 0, sizeof(state));
+
+    auto const in = s.c_str();
+    const auto in_sz = s.size();
+
+    std::vector<sys::U8string::value_type> v_out(MB_CUR_MAX * in_sz);
+    void* const out_ = v_out.data();
+    auto const out = static_cast<char*>(out_);
+    auto p = out;
+    for (size_t n = 0; n < in_sz; ++n)
+    {
+        int rc = wcrtomb(p, in[n], &state);
+        if (rc == -1)
+            break;
+        p += rc;
+    }
+
+    const size_t out_sz = p - out;
+    return sys::U8string(v_out.data(), out_sz);
+}
+
+std::string str::to_string(const std::wstring& s)
+{
+    const auto utf8 = to_u8string(s);
+    return 
+    #ifdef _WIN32
+        toWindows1252(utf8);
+    #else
+        toString(utf8);
+    #endif
+}

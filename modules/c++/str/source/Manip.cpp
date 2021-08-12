@@ -19,7 +19,7 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#include <str/Manip.h>
+#include "str/Manip.h"
 
 #include <limits.h>
 #include <stdio.h>
@@ -29,6 +29,8 @@
 #include <sstream>
 #include <algorithm>
 #include <stdexcept>
+
+#include "str/Convert.h"
 
 namespace
 {
@@ -254,11 +256,19 @@ void lower(std::string& s)
 {
     std::transform(s.begin(), s.end(), s.begin(), tolowerCheck);
 }
+
+static std::string tow_(const std::string& s, wint_t (*tow)(wint_t))
+{
+    // Doing toupper()/tolower() on std::string doesn't work for "special"
+    // characters like 'é' (French).
+    auto w_s = str::to_wstring(s);
+    std::transform(w_s.begin(), w_s.end(), w_s.begin(), tow);
+    return to_string(w_s);
+}
+
 std::string toLower(const std::string& s)
 {
-    auto retval = s;
-    lower(retval); // TODO
-    return retval;
+    return tow_(s, towlower);
 }
 
 void upper(std::string& s)
@@ -267,9 +277,7 @@ void upper(std::string& s)
 }
 std::string toUpper(const std::string& s)
 {
-    auto retval = s;
-    upper(retval);  // TODO
-    return retval;
+    return tow_(s, towupper);
 }
 
 void escapeForXML(std::string& str)

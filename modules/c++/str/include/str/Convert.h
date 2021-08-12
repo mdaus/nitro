@@ -96,14 +96,24 @@ inline sys::U8string castToU8string(const std::string& value)
 sys::U8string fromWindows1252(const std::string&);
 void fromWindows1252(const std::string&, sys::U8string&);
 void fromWindows1252(const std::string&, std::string&);
+std::string toWindows1252(const sys::U8string&);
 
 sys::U8string toUtf8(const std::u16string&);
-sys::U8string toUtf8(const std::u32string&);
-
 void toUtf8(const std::u16string&, sys::U8string&);
 void toUtf8(const std::u16string&, std::string&);
+
+sys::U8string toUtf8(const std::u32string&);
 void toUtf8(const std::u32string&, sys::U8string&);
 void toUtf8(const std::u32string&, std::string&);
+
+sys::U8string toUtf8(const std::wstring&);
+void toUtf8(const std::wstring&, sys::U8string&);
+void toUtf8(const std::wstring&, std::string&);
+
+std::wstring to_wstring(const std::string&); // assume Windows-1252 or UTF-8 based on platform
+std::wstring to_wstring(const sys::U8string&); // mbtowc
+sys::U8string to_u8string(const std::wstring&); // wctomb
+std::string to_string(const std::wstring&); // assume Windows-1252 or UTF-8 based on platform
 
 template <typename T>
 T toType(const std::string& s)
