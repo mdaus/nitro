@@ -194,6 +194,40 @@ TEST_CASE(test_change_case)
     test_change_case_(testName, def, DEF);
 }
 
+static void test_wstring_to_utf8_(const std::string& testName, const  std::u32string& input, const std::u8string& expected)
+{
+    std::wstring w_input;
+    for (const auto& ch : input)
+    {
+        // This isnt quite right as "ch" could be > U+0FFFF which needs to become a 
+        // surrogate pair on Windows/UTF-16.
+        w_input += static_cast<std::wstring::value_type>(ch);
+    }
+
+    const auto utf8 = str::toUtf8(w_input); // utf8::utfNNto8()
+    TEST_ASSERT_EQ(utf8, expected);
+    const auto u8str = str::to_u8string(w_input); // wctomb()
+    TEST_ASSERT_EQ(u8str, expected);
+    TEST_ASSERT_EQ(u8str, utf8);
+}
+TEST_CASE(test_wstring_to_utf8)
+{
+    {
+        const std::u32string input{cast32('|'), 0x20AC, cast32('|')};  // UTF-32,  "|€|"    
+        const std::u8string expected8{cast8('|'), cast8('\xE2'), cast8('\x82'), cast8('\xAC'), cast8('|')};  // UTF-8,  "|€|"
+        test_wstring_to_utf8_(testName, input, expected8);
+    }
+    {
+        const std::u32string input{cast32('|'), 0x0178, cast32('|')};  // UTF-32,  "|Ÿ|"
+        const std::u8string expected8{cast8('|'), cast8('\xC5'), cast8('\xB8'), cast8('|')};  // UTF-8,  "|Ÿ|"
+        test_wstring_to_utf8_(testName, input, expected8);
+    }
+    {
+        const std::u32string input{cast32('|'), 0xfffd, cast32('|')};  // UTF-32,  "|<REPLACEMENT CHARACTER>|"
+        const std::u8string expected8{cast8('|'), cast8('\xEF'), cast8('\xBF'), cast8('\xBD'), cast8('|')};  // UTF-8,  "|<REPLACEMENT CHARACTER>|"
+        test_wstring_to_utf8_(testName, input, expected8);
+    }
+}
 
 int main(int, char**)
 {
@@ -205,4 +239,5 @@ int main(int, char**)
     TEST_CHECK(test_string_to_u8string_windows_1252);
     TEST_CHECK(test_string_to_u8string_iso8859_1);
     TEST_CHECK(test_change_case);
+    TEST_CHECK(test_wstring_to_utf8);
 }
