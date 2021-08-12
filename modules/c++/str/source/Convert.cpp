@@ -337,9 +337,9 @@ struct back_inserter final
     back_inserter& operator*() noexcept { return *this; }
     back_inserter operator++(int) noexcept { return *this; }
 };
-void utf16to8(std::u16string::const_pointer p, size_t sz, sys::U8string& result)
+void str::utf16to8(std::u16string::const_pointer p, size_t sz, sys::U8string& result)
 {
-    utf8::utf16to8(p, p+sz, back_inserter(result));
+    utf8::utf16to8(p, p + sz, back_inserter(result));
 }
 void str::utf32to8(std::u32string::const_pointer p, size_t sz, sys::U8string& result)
 {
