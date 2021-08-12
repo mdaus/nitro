@@ -223,8 +223,11 @@ static std::map<std::u32string::value_type, std::string::value_type> make_u32str
         const auto& str_utf8 = p.second;
 
         const auto ch = static_cast<char>(ch_utf32);
-        const auto str_wc = to_wstring(str_utf8);
-        retval[ch] = str_wc[0];
+        std::wstring str_wc;
+        if (mbtowc(str_utf8, str_wc))
+        {
+            retval[ch] = str_wc[0];
+        }
     }
 
     return retval;
@@ -397,10 +400,15 @@ std::wstring str::to_wstring(const std::string& s)
     #else
        castToU8string(s);
     #endif
-    return to_wstring(utf8);
+    std::wstring retval;
+    if (mbtowc(utf8, retval))
+    {
+        return retval; 
+    }
+    throw std::runtime_error("mbtowc() failed.");
 }
 
-std::wstring str::to_wstring(const sys::U8string& utf8)
+bool str::mbtowc(const sys::U8string& utf8, std::wstring& result)
 {
     const setlocale_en_US_UTF8 utf8_locale;
 
@@ -426,11 +434,18 @@ std::wstring str::to_wstring(const sys::U8string& utf8)
         p_in += rc;
         p_out += 1;
     }
+    if ((rc < 0) && (rc != -2)) // "if the next n bytes constitute an incomplete, but so far valid, multibyte character. Nothing is written to *pwc."
+    {
+        // https://en.cppreference.com/w/cpp/string/multibyte/mbrtowc
+        // "if encoding error occurs. Nothing is written to *pwc, the value EILSEQ is stored in errno and the value of *ps is left unspecified."
+        return false;
+    }
     const size_t out_sz = p_out - out;
-    return std::wstring(out, out_sz); // UTF-16 on Windows, UTF-32 on Linux
+    result = std::wstring(out, out_sz);  // UTF-16 on Windows, UTF-32 on Linux
+    return true;
 }
 
-sys::U8string str::to_u8string(const std::wstring& s)
+bool str::wctomb(const std::wstring& s, sys::U8string& result)
 {
     const setlocale_en_US_UTF8 utf8_locale;
 
@@ -445,16 +460,23 @@ sys::U8string str::to_u8string(const std::wstring& s)
     void* const out_ = v_out.data();
     auto const out = static_cast<char*>(out_);
     auto p = out;
+    int rc = 0;
     for (size_t n = 0; n < in_sz; ++n)
     {
-        int rc = wcrtomb(p, in[n], &state);
+        rc = wcrtomb(p, in[n], &state);
         if (rc == -1)
             break;
         p += rc;
     }
+    if (rc < 0)
+    {
+        // https://en.cppreference.com/w/c/string/multibyte/wcrtomb
+        return false;
+    }
 
     const size_t out_sz = p - out;
-    return sys::U8string(v_out.data(), out_sz);
+    result = sys::U8string(v_out.data(), out_sz);
+    return true;
 }
 
 std::string str::to_string(const std::wstring& s)
@@ -462,6 +484,11 @@ std::string str::to_string(const std::wstring& s)
     #ifdef _WIN32
         return toWindows1252(s);
     #else
-        return toString(to_u8string(s));
+    str::U8string result;
+    if (wctomb(s, result))
+    {
+        return toString(result);
+    }
+    throw std::runtime_error("wctomb() failed.");
     #endif
 }

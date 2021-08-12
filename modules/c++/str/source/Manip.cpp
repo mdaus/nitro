@@ -261,7 +261,7 @@ static std::string tow_(const std::string& s, wint_t (*tow)(wint_t))
 {
     // Doing toupper()/tolower() on std::string doesn't work for "special"
     // characters like 'é' (French).
-    auto w_s = str::to_wstring(s);
+    auto w_s = to_wstring(s);
     std::transform(w_s.begin(), w_s.end(), w_s.begin(), tow);
     return to_string(w_s);
 }

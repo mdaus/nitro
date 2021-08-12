@@ -110,9 +110,10 @@ sys::U8string toUtf8(const std::wstring&);
 void toUtf8(const std::wstring&, sys::U8string&);
 void toUtf8(const std::wstring&, std::string&);
 
-std::wstring to_wstring(const std::string&); // assume Windows-1252 or UTF-8 based on platform
-std::wstring to_wstring(const sys::U8string&); // mbtowc
-sys::U8string to_u8string(const std::wstring&); // wctomb
+bool mbtowc(const sys::U8string&, std::wstring&);
+bool wctomb(const std::wstring&, sys::U8string&);
+
+std::wstring to_wstring(const std::string&);  // assume Windows-1252 or UTF-8  based on platform
 std::string to_string(const std::wstring&); // assume Windows-1252 or UTF-8 based on platform
 
 template <typename T>

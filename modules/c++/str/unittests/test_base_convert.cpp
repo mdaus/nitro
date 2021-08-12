@@ -206,7 +206,9 @@ static void test_wstring_to_utf8_(const std::string& testName, const  std::u32st
 
     const auto utf8 = str::toUtf8(w_input); // utf8::utfNNto8()
     TEST_ASSERT_EQ(utf8, expected);
-    const auto u8str = str::to_u8string(w_input); // wctomb()
+    str::U8string u8str;
+    const auto result = str::wctomb(w_input, u8str);
+    TEST_ASSERT_TRUE(result);
     TEST_ASSERT_EQ(u8str, expected);
     TEST_ASSERT_EQ(u8str, utf8);
 }
