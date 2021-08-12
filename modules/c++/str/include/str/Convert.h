@@ -104,11 +104,6 @@ void utf16to1252(std::u16string::const_pointer, size_t, W1252string&);
 void utf32to1252(std::u32string::const_pointer, size_t, W1252string&);
 void wsto1252(std::wstring::const_pointer, size_t, W1252string&);
 
-sys::U8string fromWindows1252(const std::string&);
-void fromWindows1252(const std::string&, sys::U8string&);
-void fromWindows1252(const std::string&, std::string&);
-std::string toWindows1252(const std::wstring&);
-
 //////////////////////////////////////////////////////////////////////////////////////////
 // These use utf8:: routines; see utf8.h
 void utf16to8(std::u16string::const_pointer, size_t, sys::U8string&);

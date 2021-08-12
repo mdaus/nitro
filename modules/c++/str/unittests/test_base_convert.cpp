@@ -89,6 +89,15 @@ TEST_CASE(testCharToString)
     TEST_ASSERT_EQ(str::toString<char>(65), "A");
 }
 
+static sys::U8string fromWindows1252(const std::string& s)
+{
+    const void* const pValue = s.c_str();
+    auto const pStr = static_cast<str::W1252string::const_pointer>(pValue);
+    sys::U8string retval;
+    str::windows1252to8(pStr, s.size(), retval);
+    return retval;
+}
+
 template<typename T>
 static constexpr std::u8string::value_type cast8(T ch)
 {
@@ -104,7 +113,7 @@ TEST_CASE(test_string_to_u8string_ascii)
 {
     {
         const std::string input = "|\x00";  //  ASCII, "|<NULL>"
-        const auto actual = str::fromWindows1252(input);
+        const auto actual = fromWindows1252(input);
         const std::u8string expected{cast8('|')}; // '\x00' is the end of the string in C/C++
         test_assert_eq(testName, actual, expected);
     }
@@ -113,7 +122,7 @@ TEST_CASE(test_string_to_u8string_ascii)
     for (uint8_t ch = start_of_heading; ch <= delete_character; ch++)  // ASCII
     {
         const std::string input { '|', static_cast<std::string::value_type>(ch), '|'};
-        const auto actual = str::fromWindows1252(input);
+        const auto actual = fromWindows1252(input);
         const std::u8string expected8{cast8('|'), cast8(ch), cast8('|')}; 
         test_assert_eq(testName, actual, expected8);
         const std::u32string expected{cast32('|'), cast32(ch), cast32('|')};
@@ -126,7 +135,7 @@ TEST_CASE(test_string_to_u8string_windows_1252)
     // Windows-1252 only characters must be mapped to UTF-8
     {
         const std::string input = "|\x80|";  // Windows-1252, "|€|"
-        const auto actual = str::fromWindows1252(input);
+        const auto actual = fromWindows1252(input);
         const std::u8string expected8{cast8('|'), cast8('\xE2'), cast8('\x82'), cast8('\xAC'), cast8('|')};  // UTF-8,  "|€|"
         test_assert_eq(testName, actual, expected8);
         const std::u32string expected{cast32('|'), 0x20AC, cast32('|')};  // UTF-32,  "|€|"
@@ -134,7 +143,7 @@ TEST_CASE(test_string_to_u8string_windows_1252)
     }
     {
         const std::string input = "|\x9F|";  // Windows-1252, "|Ÿ|"
-        const auto actual = str::fromWindows1252(input);
+        const auto actual = fromWindows1252(input);
         const std::u8string expected8{cast8('|'), cast8('\xC5'), cast8('\xB8'), cast8('|')};  // UTF-8,  "|Ÿ|"
         test_assert_eq(testName, actual, expected8);
         const std::u32string expected{cast32('|'), 0x0178, cast32('|')};  // UTF-32,  "|Ÿ|"
@@ -145,7 +154,7 @@ TEST_CASE(test_string_to_u8string_windows_1252)
     for (const auto& ch : undefined)
     {
         const std::string input{'|', ch, '|'};
-        const auto actual = str::fromWindows1252(input);
+        const auto actual = fromWindows1252(input);
         static const std::u8string expected8{cast8('|'), cast8('\xEF'), cast8('\xBF'), cast8('\xBD'), cast8('|')};  // UTF-8,  "|<REPLACEMENT CHARACTER>|"
         test_assert_eq(testName, actual, expected8);
         const std::u32string expected{cast32('|'), 0xfffd, cast32('|')};  // UTF-32,  "|<REPLACEMENT CHARACTER>|"
@@ -161,7 +170,7 @@ TEST_CASE(test_string_to_u8string_iso8859_1)
     for (uint32_t ch = nobreak_space; ch <= latin_small_letter_y_with_diaeresis; ch++)  // ISO8859-1
     {
         const std::string input { '|', static_cast<std::string::value_type>(ch), '|'};
-        const auto actual = str::fromWindows1252(input);
+        const auto actual = fromWindows1252(input);
         const std::u32string expected{cast32('|'), cast32(ch), cast32('|')};
         test_assert_eq(testName, actual, expected);
     }
@@ -189,10 +198,10 @@ TEST_CASE(test_change_case)
     // Yes, this can really come up, "non classifié" is French for "unclassified".
     constexpr uint8_t latin_capital_letter_e_with_acute = 0xc9; // Windows-1252
     const std::string DEF_1252{'D', static_cast<char>(latin_capital_letter_e_with_acute), 'F'};
-    const auto DEF = str::toString(str::fromWindows1252(DEF_1252)); // UTF-8 in std::string
+    const auto DEF = str::toString(fromWindows1252(DEF_1252)); // UTF-8 in std::string
     constexpr uint8_t latin_small_letter_e_with_acute = 0xe9; // Windows-1252
     const std::string def_1252{'d', static_cast<char>(latin_small_letter_e_with_acute), 'f'};
-    const auto def = str::toString(str::fromWindows1252(def_1252)); // UTF-8 in std::string
+    const auto def = str::toString(fromWindows1252(def_1252)); // UTF-8 in std::string
     //test_change_case_(testName, def, DEF); // TODO
 }
 

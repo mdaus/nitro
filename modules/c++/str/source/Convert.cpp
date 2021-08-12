@@ -205,30 +205,6 @@ void str::windows1252to8(W1252string::const_pointer p, size_t sz, sys::U8string&
     }
 }
 
-void str::fromWindows1252(const std::string& str, sys::U8string& result)
-{
-    // Assume the input string is Windows-1252 (western European) and convert to UTF-8
-    for (const auto& ch : str)
-    {
-        result += ::fromWindows1252(ch);
-    }
-}
-sys::U8string str::fromWindows1252(const std::string& str)
-{
-    sys::U8string retval;
-    fromWindows1252(str, retval);
-    return retval;
-}
-void str::fromWindows1252(const std::string& str, std::string& result)
-{
-    // Assume the input string is Windows-1252 (western European) and convert to UTF-8
-    for (const auto& ch : str)
-    {
-        const auto utf8 = ::fromWindows1252(ch);
-        result += toString(utf8);
-    }
-}
-
 static std::map<std::u32string::value_type, std::string::value_type> make_u32string_to_Windows1252()
 {
     std::map<std::u32string::value_type, std::string::value_type> retval;
@@ -293,16 +269,6 @@ void str::utf32to1252(std::u32string::const_pointer p, size_t sz, W1252string& r
 void str::wsto1252(std::wstring::const_pointer p, size_t sz, W1252string& result)
 {
     strto1252_(p, sz, result);
-}
-
-std::string str::toWindows1252(const std::wstring& str)
-{
-    std::string retval;
-    for (const auto& ch : str)
-    {
-        retval += ::toWindows1252(ch);
-    }
-    return retval;
 }
 
 namespace
@@ -415,7 +381,9 @@ struct setlocale_en_US_UTF8 final
     }
 };
 
-static bool fromWindows1252_(const std::string& s, std::wstring& result)
+namespace
+{
+bool fromWindows1252_(const std::string& s, std::wstring& result)
 {
     const void* const pStr = s.c_str();
     auto const p = static_cast<str::W1252string::const_pointer>(pStr);
@@ -424,11 +392,12 @@ static bool fromWindows1252_(const std::string& s, std::wstring& result)
     str::windows1252to8(p, s.size(), utf8);
     return str::mbtowc(utf8, result);
 }
-static bool fromUTF8_(const std::string& s, std::wstring& result)
+bool fromUTF8_(const std::string& s, std::wstring& result)
 {
     const void* const pStr = s.c_str();
     auto const p = static_cast<sys::U8string::const_pointer>(pStr);
     return str::mbtowc(p, s.size(), result);
+}
 }
 std::wstring str::to_wstring(const std::string& s)
 {
@@ -532,7 +501,9 @@ bool str::wctomb(const std::wstring& s, sys::U8string& result)
     return wctomb(s.c_str(), s.size(), result);
 }
 
-static bool toWindows1252_(const std::wstring& s, std::string& result)
+namespace
+{
+bool toWindows1252_(const std::wstring& s, std::string& result)
 {
     str::W1252string w1252;
     str::wsto1252(s.c_str(), s.size(), w1252);
@@ -544,7 +515,7 @@ static bool toWindows1252_(const std::wstring& s, std::string& result)
     result = pStr;  // copy
     return true;
 }
-static bool toUTF8_(const std::wstring& s, std::string& result)
+bool toUTF8_(const std::wstring& s, std::string& result)
 {
     str::U8string utf8;
     if (str::wctomb(s, utf8))
@@ -554,10 +525,11 @@ static bool toUTF8_(const std::wstring& s, std::string& result)
         // implementatons. NO: reinterpret_cast<const std::string&>(value)
         const void* const pValue = utf8.c_str();
         auto const pStr = static_cast<std::string::const_pointer>(pValue);
-        result = pStr; // copy
+        result = pStr;  // copy
         return true;
     }
     return false;
+}
 }
 std::string str::to_string(const std::wstring& s)
 {
