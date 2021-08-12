@@ -24,6 +24,7 @@
 #define __STR_MANIP_H__
 
 #include <ctype.h>
+#include <wchar.h>
 
 #include <string>
 #include <vector>
@@ -141,10 +142,12 @@ std::vector<std::string> split(const std::string& s,
 
 //! Uses std::transform to convert all chars to lower case
 void lower(std::string& s);
+void lower(std::wstring& s);
 std::string toLower(const std::string&);  // handles "foreign" characters too, such as French (for Canada)
 
 //! Uses std::transform to convert all chars to upper case
 void upper(std::string& s);
+void upper(std::wstring& s);
 std::string toUpper(const std::string&);  // handles "foreign" characters too, such as French (for Canada)
 
 /*!

@@ -176,17 +176,22 @@ TEST_CASE(test_string_to_u8string_iso8859_1)
     }
 }
 
-static void test_change_case_(const std::string& testName, const std::string& lower, const std::string& upper)
+template<typename TString>
+static void test_change_case_(const std::string& testName, const TString& lower, const TString& upper)
 {
-    auto s = str::toLower(upper);
-    TEST_ASSERT_EQ(s, lower);
-    s = str::toUpper(lower);
-    TEST_ASSERT_EQ(s, upper);
+    auto s = upper;
+    str::lower(s);
+    TEST_ASSERT(s == lower);
+    s = lower;
+    str::upper(s);
+    TEST_ASSERT(s == upper);
 
-    s = str::toUpper(upper);
-    TEST_ASSERT_EQ(s, upper);
-    s = str::toLower(lower);
-    TEST_ASSERT_EQ(s, lower);
+    s = upper;
+    str::upper(s);
+    TEST_ASSERT(s == upper);
+    s = lower;
+    str::lower(s);
+    TEST_ASSERT(s == lower);
 }
 
 TEST_CASE(test_change_case)
@@ -198,10 +203,20 @@ TEST_CASE(test_change_case)
     // Yes, this can really come up, "non classifié" is French for "unclassified".
     constexpr uint8_t latin_capital_letter_e_with_acute = 0xc9; // Windows-1252
     const std::string DEF_1252{'D', static_cast<char>(latin_capital_letter_e_with_acute), 'F'};
-    const auto DEF = str::toString(fromWindows1252(DEF_1252)); // UTF-8 in std::string
+    const auto DEF8 = fromWindows1252(DEF_1252);
+    std::wstring w_s;
+    auto result = str::mbtowc(DEF8, w_s);
+    TEST_ASSERT_TRUE(result);
+    const auto DEF = w_s;
+
     constexpr uint8_t latin_small_letter_e_with_acute = 0xe9; // Windows-1252
     const std::string def_1252{'d', static_cast<char>(latin_small_letter_e_with_acute), 'f'};
-    const auto def = str::toString(fromWindows1252(def_1252)); // UTF-8 in std::string
+    const auto def8 = fromWindows1252(def_1252);
+    result = str::mbtowc(def8, w_s);
+    TEST_ASSERT_TRUE(result);
+    const auto def = w_s;
+
+    // It looks like a non-default locale needs to be set on Windows; DEF lowers to "dEf".
     //test_change_case_(testName, def, DEF); // TODO
 }
 

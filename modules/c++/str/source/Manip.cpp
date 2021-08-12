@@ -252,32 +252,39 @@ std::vector<std::string> split(const std::string& s,
     return vec;
 }
 
-void lower(std::string& s)
-{
-    std::transform(s.begin(), s.end(), s.begin(), tolowerCheck);
-}
-
-static std::string tow_(const std::string& s, wint_t (*tow)(wint_t))
+static std::string tow_(const std::string& s, void (*tow)(std::wstring&))
 {
     // Doing toupper()/tolower() on std::string doesn't work for "special"
     // characters like 'é' (French).
     auto w_s = to_wstring(s);
-    std::transform(w_s.begin(), w_s.end(), w_s.begin(), tow);
+    tow(w_s);
     return to_string(w_s);
 }
 
+void lower(std::string& s)
+{
+    std::transform(s.begin(), s.end(), s.begin(), tolowerCheck);
+}
+void lower(std::wstring& s)
+{
+    std::transform(s.begin(), s.end(), s.begin(), towlower);
+}
 std::string toLower(const std::string& s)
 {
-    return tow_(s, towlower);
+    return tow_(s, lower);
 }
 
 void upper(std::string& s)
 {
     std::transform(s.begin(), s.end(), s.begin(), toupperCheck);
 }
+void upper(std::wstring& s)
+{
+    std::transform(s.begin(), s.end(), s.begin(), towupper);
+}
 std::string toUpper(const std::string& s)
 {
-    return tow_(s, towupper);
+    return tow_(s, upper);
 }
 
 void escapeForXML(std::string& str)
