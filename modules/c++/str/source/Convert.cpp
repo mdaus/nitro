@@ -538,7 +538,7 @@ std::string str::to_string(const std::wstring& s)
     #ifdef _WIN32
         toWindows1252_(s, retval);
     #else
-        toUTF8_(s, retval)
+        toUTF8_(s, retval);
     #endif
     if (!result)
     {
