@@ -224,11 +224,10 @@ static std::map<std::u32string::value_type, std::string::value_type> make_u32str
         const auto ch_utf32 = p.first;
         const auto& str_utf8 = p.second;
 
-        const auto ch = static_cast<char>(ch_utf32);
         std::wstring str_wc;
         if (mbtowc(str_utf8, str_wc))
         {
-            retval[ch] = str_wc[0];
+            retval[str_wc[0]] = static_cast<char>(ch_utf32);
         }
     }
 
@@ -256,7 +255,7 @@ static std::string::value_type toWindows1252(std::wstring::value_type ch_)
     {
         // This will **corrupt** the input data as information is lost.
         // https://en.wikipedia.org/wiki/Windows-1252
-        return 0x81; // UNDEFINED
+        return static_cast <std::string::value_type>(0x81); // UNDEFINED
     }
 
     return static_cast<std::string::value_type>(ch_);
@@ -271,7 +270,9 @@ std::string str::toWindows1252(const std::wstring& str)
     return retval;
 }
 
-void str::utf16to8(const std::u16string& str, std::string& result)
+namespace
+{
+void utf16to8(const std::u16string& str, std::string& result)
 {
     // http://utfcpp.sourceforge.net/#introsample
     /*
@@ -285,9 +286,10 @@ void str::utf16to8(const std::u16string& str, std::string& result)
     */
     utf8::utf16to8(str.begin(), str.end(), std::back_inserter(result));
 }
-void str::utf32to8(const std::u32string& str, std::string& result)
+void utf32to8(const std::u32string& str, std::string& result)
 {
     utf8::utf32to8(str.begin(), str.end(), std::back_inserter(result));
+}
 }
 
 // What is the corresponding std::uXXstring for std::wstring?
@@ -308,13 +310,17 @@ inline void wsto8_(std::u32string::const_pointer begin, std::u32string::const_po
 {
     utf8::utf32to8(begin, end, std::back_inserter(result));
 }
-void str::wsto8(const std::wstring& str, std::string& result)
+namespace
+{
+void wsto8(const std::wstring& str, std::string& result)
 {
     // std::wstring is UTF-16 on Windows, UTF-32 on Linux
-    using const_pointer_t = const_pointer<sizeof(std::wstring::value_type)>::type;
+    using const_pointer_t =
+            const_pointer<sizeof(std::wstring::value_type)>::type;
     const void* const pStr = str.c_str();
     auto const begin = static_cast<const_pointer_t>(pStr);
     wsto8_(begin, begin + str.size(), result);
+}
 }
 
 struct back_inserter final
@@ -411,13 +417,14 @@ bool str::mbtowc(const sys::U8string& utf8, std::wstring& result)
     auto const out = v_out.data();
     const char *p_in = in, *end = in + in_sz;
     wchar_t* p_out = out;
-    int rc;
+    size_t rc;
     while ((rc = mbrtowc(p_out, p_in, end - p_in, &state)) > 0)
     {
         p_in += rc;
         p_out += 1;
     }
-    if ((rc < 0) && (rc != -2)) // "if the next n bytes constitute an incomplete, but so far valid, multibyte character. Nothing is written to *pwc."
+    const auto rc_ = static_cast<ptrdiff_t>(rc);
+    if ((rc_ < 0) && (rc_ != -2)) // "if the next n bytes constitute an incomplete, but so far valid, multibyte character. Nothing is written to *pwc."
     {
         // https://en.cppreference.com/w/cpp/string/multibyte/mbrtowc
         // "if encoding error occurs. Nothing is written to *pwc, the value EILSEQ is stored in errno and the value of *ps is left unspecified."
@@ -443,7 +450,7 @@ bool str::wctomb(const std::wstring& s, sys::U8string& result)
     void* const out_ = v_out.data();
     auto const out = static_cast<char*>(out_);
     auto p = out;
-    int rc = 0;
+    size_t rc = 0;
     for (size_t n = 0; n < in_sz; ++n)
     {
         rc = wcrtomb(p, in[n], &state);
@@ -451,7 +458,8 @@ bool str::wctomb(const std::wstring& s, sys::U8string& result)
             break;
         p += rc;
     }
-    if (rc < 0)
+    const auto rc_ = static_cast<ptrdiff_t>(rc);
+    if (rc_ < 0)
     {
         // https://en.cppreference.com/w/c/string/multibyte/wcrtomb
         return false;

@@ -92,9 +92,9 @@ template<typename CharT>
 inline std::string toUtf8_(const CharT* value,  size_t length)
 {
     const std::basic_string<CharT> strValue(value, length);
-    std::string utf8Value;
+    str::U8string utf8Value;
     str::strto8(strValue, utf8Value);
-    return utf8Value;
+    return str::toString(utf8Value);
 }
 inline std::string toUtf8(const uint16_t* value_, size_t length)
 {

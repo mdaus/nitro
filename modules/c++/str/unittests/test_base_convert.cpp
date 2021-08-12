@@ -43,7 +43,7 @@ std::string to_std_string(const T& value)
 template<>
 std::string to_std_string(const std::u32string& value)
 {
-    std::string result;
+    str::U8string result;
     str::utf32to8(value, result);
     return to_std_string(result);
 }

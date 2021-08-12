@@ -100,23 +100,17 @@ std::string toWindows1252(const std::wstring&);
 
 // These use utf8:: routines; see utf8.h
 void utf16to8(const std::u16string&, sys::U8string&);
-void utf16to8(const std::u16string&, std::string&);
 void utf32to8(const std::u32string&, sys::U8string&);
-void utf32to8(const std::u32string&, std::string&);
 void wsto8(const std::wstring&, sys::U8string&);
-void wsto8(const std::wstring&, std::string&);
-template<typename TResult>
-inline void strto8(const std::u16string& s, TResult& result)
+inline void strto8(const std::u16string& s, sys::U8string& result)
 {
     utf16to8(s, result);
 }
-template <typename TResult>
-inline void strto8(const std::u32string& s, TResult& result)
+inline void strto8(const std::u32string& s, sys::U8string& result)
 {
     utf32to8(s, result);
 }
-template <typename TResult>
-inline void strto8(const std::wstring& s, TResult& result)
+inline void strto8(const std::wstring& s, sys::U8string& result)
 {
     wsto8(s, result);
 }
