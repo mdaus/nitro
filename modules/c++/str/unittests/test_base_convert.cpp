@@ -43,7 +43,9 @@ std::string to_std_string(const T& value)
 template<>
 std::string to_std_string(const std::u32string& value)
 {
-    return to_std_string(str::toUtf8(value));
+    std::string result;
+    str::utf32to8(value, result);
+    return to_std_string(result);
 }
 template<typename TActual, typename TExpected>
 void test_assert_eq(const std::string& testName,
@@ -204,7 +206,8 @@ static void test_wstring_to_utf8_(const std::string& testName, const  std::u32st
         w_input += static_cast<std::wstring::value_type>(ch);
     }
 
-    const auto utf8 = str::toUtf8(w_input); // utf8::utfNNto8()
+    str::U8string utf8;
+    str::wsto8(w_input, utf8);
     TEST_ASSERT_EQ(utf8, expected);
     str::U8string u8str;
     const auto result = str::wctomb(w_input, u8str);

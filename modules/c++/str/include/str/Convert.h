@@ -98,17 +98,28 @@ void fromWindows1252(const std::string&, sys::U8string&);
 void fromWindows1252(const std::string&, std::string&);
 std::string toWindows1252(const std::wstring&);
 
-sys::U8string toUtf8(const std::u16string&);
-void toUtf8(const std::u16string&, sys::U8string&);
-void toUtf8(const std::u16string&, std::string&);
-
-sys::U8string toUtf8(const std::u32string&);
-void toUtf8(const std::u32string&, sys::U8string&);
-void toUtf8(const std::u32string&, std::string&);
-
-sys::U8string toUtf8(const std::wstring&);
-void toUtf8(const std::wstring&, sys::U8string&);
-void toUtf8(const std::wstring&, std::string&);
+// These use utf8:: routines; see utf8.h
+void utf16to8(const std::u16string&, sys::U8string&);
+void utf16to8(const std::u16string&, std::string&);
+void utf32to8(const std::u32string&, sys::U8string&);
+void utf32to8(const std::u32string&, std::string&);
+void wsto8(const std::wstring&, sys::U8string&);
+void wsto8(const std::wstring&, std::string&);
+template<typename TResult>
+inline void strto8(const std::u16string& s, TResult& result)
+{
+    utf16to8(s, result);
+}
+template <typename TResult>
+inline void strto8(const std::u32string& s, TResult& result)
+{
+    utf32to8(s, result);
+}
+template <typename TResult>
+inline void strto8(const std::wstring& s, TResult& result)
+{
+    wsto8(s, result);
+}
 
 bool mbtowc(const sys::U8string&, std::wstring&);
 bool wctomb(const std::wstring&, sys::U8string&);

@@ -113,7 +113,9 @@ template<> int str::getPrecision(const long double& )
 static inline str::U8string utf8_(uint32_t ch)
 {
     const std::u32string s{static_cast<std::u32string::value_type>(ch)};
-    return str::toUtf8(s);
+    str::U8string retval;
+    str::utf32to8(s, retval);
+    return retval;
 };
 static const std::map<uint32_t, sys::U8string> Windows1252_x80_x9F_to_u8string{
     {0x80, utf8_(0x20AC) } // EURO SIGN
@@ -269,7 +271,7 @@ std::string str::toWindows1252(const std::wstring& str)
     return retval;
 }
 
-void str::toUtf8(const std::u16string& str, std::string& result)
+void str::utf16to8(const std::u16string& str, std::string& result)
 {
     // http://utfcpp.sourceforge.net/#introsample
     /*
@@ -283,7 +285,7 @@ void str::toUtf8(const std::u16string& str, std::string& result)
     */
     utf8::utf16to8(str.begin(), str.end(), std::back_inserter(result));
 }
-void str::toUtf8(const std::u32string& str, std::string& result)
+void str::utf32to8(const std::u32string& str, std::string& result)
 {
     utf8::utf32to8(str.begin(), str.end(), std::back_inserter(result));
 }
@@ -298,21 +300,21 @@ template <> struct const_pointer<4> // wchar_t is 4 bytes, UTF-32
 {
     using type = std::u32string::const_pointer;
 };
-inline void toUtf8_(std::u16string::const_pointer begin, std::u16string::const_pointer end, std::string& result)
+inline void wsto8_(std::u16string::const_pointer begin, std::u16string::const_pointer end, std::string& result)
 {
     utf8::utf16to8(begin, end, std::back_inserter(result));
 }
-inline void toUtf8_(std::u32string::const_pointer begin, std::u32string::const_pointer end, std::string& result)
+inline void wsto8_(std::u32string::const_pointer begin, std::u32string::const_pointer end, std::string& result)
 {
     utf8::utf32to8(begin, end, std::back_inserter(result));
 }
-void str::toUtf8(const std::wstring& str, std::string& result)
+void str::wsto8(const std::wstring& str, std::string& result)
 {
     // std::wstring is UTF-16 on Windows, UTF-32 on Linux
     using const_pointer_t = const_pointer<sizeof(std::wstring::value_type)>::type;
     const void* const pStr = str.c_str();
     auto const begin = static_cast<const_pointer_t>(pStr);
-    toUtf8_(begin, begin + str.size(), result);
+    wsto8_(begin, begin + str.size(), result);
 }
 
 struct back_inserter final
@@ -328,49 +330,30 @@ struct back_inserter final
     back_inserter& operator*() noexcept { return *this; }
     back_inserter operator++(int) noexcept { return *this; }
 };
-void str::toUtf8(const std::u16string& str, sys::U8string& result)
+void str::utf16to8(const std::u16string& str, sys::U8string& result)
 {
     utf8::utf16to8(str.begin(), str.end(), back_inserter(result));
 }
-void str::toUtf8(const std::u32string& str, sys::U8string& result)
+void str::utf32to8(const std::u32string& str, sys::U8string& result)
 {
     utf8::utf32to8(str.begin(), str.end(), back_inserter(result));
 }
 
-inline void toUtf8_(std::u16string::const_pointer begin, std::u16string::const_pointer end, sys::U8string& result)
+inline void wsto8_(std::u16string::const_pointer begin, std::u16string::const_pointer end, sys::U8string& result)
 {
     utf8::utf16to8(begin, end, back_inserter(result));
 }
-inline void toUtf8_(std::u32string::const_pointer begin, std::u32string::const_pointer end, sys::U8string& result)
+inline void wsto8_(std::u32string::const_pointer begin, std::u32string::const_pointer end, sys::U8string& result)
 {
     utf8::utf32to8(begin, end, back_inserter(result));
 }
-void str::toUtf8(const std::wstring& str, sys::U8string& result)
+void str::wsto8(const std::wstring& str, sys::U8string& result)
 {
     // std::wstring is UTF-16 on Windows, UTF-32 on Linux
     using const_pointer_t = const_pointer<sizeof(std::wstring::value_type)>::type;
     const void* const pStr = str.c_str();
     auto const begin = static_cast<const_pointer_t>(pStr);
-    toUtf8_(begin, begin + str.size(), result);
-}
-
-sys::U8string str::toUtf8(const std::u16string& str)
-{
-    sys::U8string retval;
-    toUtf8(str, retval);
-    return retval;
-}
-sys::U8string str::toUtf8(const std::u32string& str)
-{
-    sys::U8string retval;
-    toUtf8(str, retval);
-    return retval;
-}
-sys::U8string str::toUtf8(const std::wstring& str)
-{
-    sys::U8string retval;
-    toUtf8(str, retval);
-    return retval;
+    wsto8_(begin, begin + str.size(), result);
 }
 
 struct setlocale_en_US_UTF8 final
