@@ -93,6 +93,17 @@ inline sys::U8string castToU8string(const std::string& value)
     return static_cast<sys::U8string::const_pointer>(pValue);
 }
 
+// This is to make it difficult to get encodings mixed up; it's here (in a .h file) as
+// we want to unit-test it. Windows1252_T for Windows-1252 characters
+enum class Windows1252_T : unsigned char { }; // https://en.cppreference.com/w/cpp/language/types
+using W1252string = std::basic_string<Windows1252_T>; // https://en.cppreference.com/w/cpp/string
+
+void windows1252to8(W1252string::const_pointer, size_t, sys::U8string&); // c.f. utf16to8
+
+void utf16to1252(std::u16string::const_pointer, size_t, W1252string&);
+void utf32to1252(std::u32string::const_pointer, size_t, W1252string&);
+void wsto1252(std::wstring::const_pointer, size_t, W1252string&);
+
 sys::U8string fromWindows1252(const std::string&);
 void fromWindows1252(const std::string&, sys::U8string&);
 void fromWindows1252(const std::string&, std::string&);
@@ -143,7 +154,9 @@ inline void strto8(const std::wstring& s, sys::U8string& result)
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
+bool mbtowc(sys::U8string::const_pointer, size_t, std::wstring&);
 bool mbtowc(const sys::U8string&, std::wstring&);
+bool wctomb(std::wstring::const_pointer, size_t, sys::U8string&);
 bool wctomb(const std::wstring&, sys::U8string&);
 
 std::wstring to_wstring(const std::string&);  // assume Windows-1252 or UTF-8  based on platform

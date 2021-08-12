@@ -159,10 +159,8 @@ static constexpr sys::U8string::value_type cast(uint8_t ch)
     static_assert(sizeof(decltype(ch)) == sizeof(sys::U8string::value_type), "sizeof(uint8_t) != sizeof(Char8_t)");
     return static_cast<sys::U8string::value_type>(ch);
 }
-static sys::U8string fromWindows1252(std::string::value_type ch_)
+static sys::U8string fromWindows1252(uint8_t ch)
 {
-    const auto ch = static_cast<uint8_t>(ch_);
-
     // ASCII is the same in UTF-8
     if (ch < 0x80)
     {
@@ -190,6 +188,23 @@ static sys::U8string fromWindows1252(std::string::value_type ch_)
     static const sys::U8string replacement_character = utf8_(0xfffd);
     return replacement_character;
 }
+inline sys::U8string fromWindows1252(std::string::value_type ch_)
+{
+    return fromWindows1252(static_cast<uint8_t>(ch_));
+}
+inline sys::U8string fromWindows1252(str::W1252string::value_type ch_)
+{
+    return fromWindows1252(static_cast<uint8_t>(ch_));
+}
+
+void str::windows1252to8(W1252string::const_pointer p, size_t sz, sys::U8string& result)
+{
+    for (size_t i = 0; i < sz; i++)
+    {
+        result += ::fromWindows1252(p[i]);    
+    }
+}
+
 void str::fromWindows1252(const std::string& str, sys::U8string& result)
 {
     // Assume the input string is Windows-1252 (western European) and convert to UTF-8
@@ -233,18 +248,16 @@ static std::map<std::u32string::value_type, std::string::value_type> make_u32str
 
     return retval;
 }
-static std::string::value_type toWindows1252(std::wstring::value_type ch_)
+static std::string::value_type toWindows1252(std::u32string::value_type ch)
 {
-    const auto ch = static_cast<uint32_t>(ch_);
-
     // ASCII
     if (ch < 0x00000080)
     {
-        return static_cast <std::string::value_type>(ch_);
+        return static_cast <std::string::value_type>(ch);
     }
 
     static const auto map = make_u32string_to_Windows1252();
-    const auto it = map.find(ch_);
+    const auto it = map.find(ch);
     if (it != map.end())
     {
         return it->second;
@@ -258,8 +271,30 @@ static std::string::value_type toWindows1252(std::wstring::value_type ch_)
         return static_cast <std::string::value_type>(0x81); // UNDEFINED
     }
 
-    return static_cast<std::string::value_type>(ch_);
+    return static_cast<std::string::value_type>(ch);
 }
+
+template<typename T>
+inline void strto1252_(const T& p, size_t sz, str::W1252string& result)
+{
+    for (size_t i = 0; i < sz; i++)
+    {
+        result += static_cast<str::W1252string::value_type>(::toWindows1252(p[i]));
+    }
+}
+void str::utf16to1252(std::u16string::const_pointer p, size_t sz, W1252string& result)
+{
+    strto1252_(p, sz, result);
+}
+void str::utf32to1252(std::u32string::const_pointer p, size_t sz, W1252string& result)
+{
+    strto1252_(p, sz, result);
+}
+void str::wsto1252(std::wstring::const_pointer p, size_t sz, W1252string& result)
+{
+    strto1252_(p, sz, result);
+}
+
 std::string str::toWindows1252(const std::wstring& str)
 {
     std::string retval;
@@ -380,37 +415,52 @@ struct setlocale_en_US_UTF8 final
     }
 };
 
+static bool fromWindows1252_(const std::string& s, std::wstring& result)
+{
+    const void* const pStr = s.c_str();
+    auto const p = static_cast<str::W1252string::const_pointer>(pStr);
+
+    sys::U8string utf8;
+    str::windows1252to8(p, s.size(), utf8);
+    return str::mbtowc(utf8, result);
+}
+static bool fromUTF8_(const std::string& s, std::wstring& result)
+{
+    const void* const pStr = s.c_str();
+    auto const p = static_cast<sys::U8string::const_pointer>(pStr);
+    return str::mbtowc(p, s.size(), result);
+}
 std::wstring str::to_wstring(const std::string& s)
 {
-    const auto utf8 = 
-    #ifdef _WIN32
-        fromWindows1252(s);
-    #else
-       castToU8string(s);
-    #endif
     std::wstring retval;
-    if (mbtowc(utf8, retval))
+    const auto result =
+    #ifdef _WIN32
+    fromWindows1252_(s, retval);
+    #else
+    fromUTF8_(s, retval);
+    #endif
+
+    if (!result)
     {
-        return retval; 
+        throw std::runtime_error("mbtowc() failed.");
     }
-    throw std::runtime_error("mbtowc() failed.");
+    return retval;
 }
 
-bool str::mbtowc(const sys::U8string& utf8, std::wstring& result)
+bool str::mbtowc(sys::U8string::const_pointer in_, size_t in_sz, std::wstring& result)
 {
     const setlocale_en_US_UTF8 utf8_locale;
 
     // This is OK as UTF-8 can be stored in std::string
     // Note that casting between the string types will CRASH on some
     // implementatons. NO: reinterpret_cast<const std::string&>(value)
-    const void* const pValue = utf8.c_str();
+    const void* const pValue = in_;
 
     // https://en.cppreference.com/w/c/string/multibyte/mbrtowc
     mbstate_t state;
     memset(&state, 0, sizeof(state));
 
     auto const in = static_cast<std::string::const_pointer>(pValue);
-    const auto in_sz = utf8.size();
  
     std::vector<std::wstring::value_type> v_out(in_sz+1);
     auto const out = v_out.data();
@@ -433,17 +483,18 @@ bool str::mbtowc(const sys::U8string& utf8, std::wstring& result)
     result = std::wstring(out, out_sz);  // UTF-16 on Windows, UTF-32 on Linux
     return true;
 }
+bool str::mbtowc(const sys::U8string& utf8, std::wstring& result)
+{
+    return mbtowc(utf8.c_str(), utf8.size(), result);
+}
 
-bool str::wctomb(const std::wstring& s, sys::U8string& result)
+bool str::wctomb(std::wstring::const_pointer in, size_t in_sz, sys::U8string& result)
 {
     const setlocale_en_US_UTF8 utf8_locale;
 
     // https://en.cppreference.com/w/c/string/multibyte/wcrtomb
     mbstate_t state;
     memset(&state, 0, sizeof(state));
-
-    auto const in = s.c_str();
-    const auto in_sz = s.size();
 
     std::vector<sys::U8string::value_type> v_out(MB_CUR_MAX * (in_sz+1));
     void* const out_ = v_out.data();
@@ -452,7 +503,15 @@ bool str::wctomb(const std::wstring& s, sys::U8string& result)
     size_t rc = 0;
     for (size_t n = 0; n < in_sz; ++n)
     {
+        #if _MSC_VER
+        #pragma warning(push)
+        #pragma warning(disable: 4996) // may be unsafe
+        #endif
         rc = wcrtomb(p, in[n], &state);
+        #if _MSC_VER
+        #pragma warning(pop)
+        #endif
+
         if (rc == -1)
             break;
         p += rc;
@@ -468,17 +527,50 @@ bool str::wctomb(const std::wstring& s, sys::U8string& result)
     result = sys::U8string(v_out.data(), out_sz);
     return true;
 }
+bool str::wctomb(const std::wstring& s, sys::U8string& result)
+{
+    return wctomb(s.c_str(), s.size(), result);
+}
 
+static bool toWindows1252_(const std::wstring& s, std::string& result)
+{
+    str::W1252string w1252;
+    str::wsto1252(s.c_str(), s.size(), w1252);
+
+    // Note that casting between the string types will CRASH on some
+    // implementatons. NO: reinterpret_cast<const std::string&>(value)
+    const void* const pValue = w1252.c_str();
+    auto const pStr = static_cast<std::string::const_pointer>(pValue);
+    result = pStr;  // copy
+    return true;
+}
+static bool toUTF8_(const std::wstring& s, std::string& result)
+{
+    str::U8string utf8;
+    if (str::wctomb(s, utf8))
+    {
+        // This is OK as UTF-8 can be stored in std::string
+        // Note that casting between the string types will CRASH on some
+        // implementatons. NO: reinterpret_cast<const std::string&>(value)
+        const void* const pValue = utf8.c_str();
+        auto const pStr = static_cast<std::string::const_pointer>(pValue);
+        result = pStr; // copy
+        return true;
+    }
+    return false;
+}
 std::string str::to_string(const std::wstring& s)
 {
+    std::string retval;
+    const auto result = 
     #ifdef _WIN32
-        return toWindows1252(s);
+        toWindows1252_(s, retval);
     #else
-    str::U8string result;
-    if (wctomb(s, result))
-    {
-        return toString(result);
-    }
-    throw std::runtime_error("wctomb() failed.");
+        toUTF8_(s, retval)
     #endif
+    if (!result)
+    {
+        throw std::runtime_error("wctomb() failed.");
+    }
+    return retval;
 }
