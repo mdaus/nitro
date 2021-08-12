@@ -37,8 +37,7 @@ std::string to_std_string(const T& value)
     // This is OK as UTF-8 can be stored in std::string
     // Note that casting between the string types will CRASH on some
     // implementatons. NO: reinterpret_cast<const std::string&>(value)
-    const void* const pValue = value.c_str();
-    return static_cast<std::string::const_pointer>(pValue);  // copy
+    return str::c_str<std::string::const_pointer>(value);  // copy
 }
 template<>
 std::string to_std_string(const std::u32string& value)

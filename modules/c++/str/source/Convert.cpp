@@ -316,10 +316,8 @@ namespace
 void wsto8(const std::wstring& str, std::string& result)
 {
     // std::wstring is UTF-16 on Windows, UTF-32 on Linux
-    using const_pointer_t =
-            const_pointer<sizeof(std::wstring::value_type)>::type;
-    const void* const pStr = str.c_str();
-    auto const begin = static_cast<const_pointer_t>(pStr);
+    using const_pointer_t = const_pointer<sizeof(std::wstring::value_type)>::type;
+    auto const begin = str::c_str<const_pointer_t>(str);
     wsto8_(begin, begin + str.size(), result);
 }
 }
@@ -385,8 +383,7 @@ namespace
 {
 bool fromWindows1252_(const std::string& s, std::wstring& result)
 {
-    const void* const pStr = s.c_str();
-    auto const p = static_cast<str::W1252string::const_pointer>(pStr);
+    auto const p = str::c_str<str::W1252string::const_pointer>(s);
 
     sys::U8string utf8;
     str::windows1252to8(p, s.size(), utf8);
@@ -394,8 +391,7 @@ bool fromWindows1252_(const std::string& s, std::wstring& result)
 }
 bool fromUTF8_(const std::string& s, std::wstring& result)
 {
-    const void* const pStr = s.c_str();
-    auto const p = static_cast<sys::U8string::const_pointer>(pStr);
+    auto const p = str::c_str<sys::U8string::const_pointer>(s);
     return str::mbtowc(p, s.size(), result);
 }
 }
@@ -509,10 +505,7 @@ bool toWindows1252_(const std::wstring& s, std::string& result)
     str::W1252string w1252;
     str::wsto1252(s.c_str(), s.size(), w1252);
 
-    // Note that casting between the string types will CRASH on some
-    // implementatons. NO: reinterpret_cast<const std::string&>(value)
-    const void* const pValue = w1252.c_str();
-    auto const pStr = static_cast<std::string::const_pointer>(pValue);
+    auto const pStr = str::c_str<std::string::const_pointer>(w1252);
     result = pStr;  // copy
     return true;
 }
@@ -521,11 +514,7 @@ bool toUTF8_(const std::wstring& s, std::string& result)
     str::U8string utf8;
     if (str::wctomb(s, utf8))
     {
-        // This is OK as UTF-8 can be stored in std::string
-        // Note that casting between the string types will CRASH on some
-        // implementatons. NO: reinterpret_cast<const std::string&>(value)
-        const void* const pValue = utf8.c_str();
-        auto const pStr = static_cast<std::string::const_pointer>(pValue);
+        auto const pStr = str::c_str<std::string::const_pointer>(utf8);
         result = pStr;  // copy
         return true;
     }
