@@ -98,10 +98,36 @@ void fromWindows1252(const std::string&, sys::U8string&);
 void fromWindows1252(const std::string&, std::string&);
 std::string toWindows1252(const std::wstring&);
 
+//////////////////////////////////////////////////////////////////////////////////////////
 // These use utf8:: routines; see utf8.h
-void utf16to8(const std::u16string&, sys::U8string&);
-void utf32to8(const std::u32string&, sys::U8string&);
-void wsto8(const std::wstring&, sys::U8string&);
+void utf16to8(std::u16string::const_pointer, size_t, sys::U8string&);
+void utf32to8(std::u32string::const_pointer, size_t, sys::U8string&);
+void wsto8(std::wstring::const_pointer, size_t, sys::U8string&);
+inline void strto8(std::u16string::const_pointer p, size_t sz, sys::U8string& result)
+{
+    utf16to8(p, sz, result);
+}
+inline void strto8(std::u32string::const_pointer p, size_t sz, sys::U8string& result)
+{
+    utf32to8(p, sz, result);
+}
+inline void strto8(std::wstring::const_pointer p, size_t sz, sys::U8string& result)
+{
+    wsto8(p, sz, result);
+}
+
+inline void utf16to8(const std::u16string& s, sys::U8string& result)
+{
+    utf16to8(s.c_str(), s.size(), result);
+}
+inline void utf32to8(const std::u32string& s, sys::U8string& result)
+{
+    utf32to8(s.c_str(), s.size(), result);
+}
+inline void wsto8(const std::wstring& s, sys::U8string& result)
+{
+    wsto8(s.c_str(), s.size(), result);
+}
 inline void strto8(const std::u16string& s, sys::U8string& result)
 {
     utf16to8(s, result);
@@ -114,6 +140,8 @@ inline void strto8(const std::wstring& s, sys::U8string& result)
 {
     wsto8(s, result);
 }
+
+//////////////////////////////////////////////////////////////////////////////////////////
 
 bool mbtowc(const sys::U8string&, std::wstring&);
 bool wctomb(const std::wstring&, sys::U8string&);
