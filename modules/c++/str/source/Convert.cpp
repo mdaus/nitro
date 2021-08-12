@@ -407,7 +407,7 @@ bool str::mbtowc(const sys::U8string& utf8, std::wstring& result)
     auto const in = static_cast<std::string::const_pointer>(pValue);
     const auto in_sz = utf8.size();
  
-    std::vector<wchar_t> v_out(in_sz);
+    std::vector<std::wstring::value_type> v_out(in_sz+1);
     auto const out = v_out.data();
     const char *p_in = in, *end = in + in_sz;
     wchar_t* p_out = out;
@@ -439,7 +439,7 @@ bool str::wctomb(const std::wstring& s, sys::U8string& result)
     auto const in = s.c_str();
     const auto in_sz = s.size();
 
-    std::vector<sys::U8string::value_type> v_out(MB_CUR_MAX * in_sz);
+    std::vector<sys::U8string::value_type> v_out(MB_CUR_MAX * (in_sz+1));
     void* const out_ = v_out.data();
     auto const out = static_cast<char*>(out_);
     auto p = out;
