@@ -360,24 +360,20 @@ void str::wsto8(std::wstring::const_pointer p, size_t sz, sys::U8string& result)
     wsto8_(begin, begin + sz, result);
 }
 
-struct setlocale_en_US_UTF8 final
+str::setlocale::setlocale(const char* locale) : locale_(::setlocale(LC_ALL, locale))
 {
-    char* const locale_;
-    setlocale_en_US_UTF8() : locale_(setlocale(LC_ALL, "en_US.utf8"))
+    if (locale_ == nullptr)
     {
-        if (locale_ == nullptr)
-        {
-            throw std::runtime_error("setlocale() failed.");
-        }
+        throw std::runtime_error("setlocale() failed.");
     }
-    ~setlocale_en_US_UTF8() noexcept(false)
+}
+str::setlocale::~setlocale() noexcept(false)
+{
+    if (::setlocale(LC_ALL, locale_) == nullptr)
     {
-        if (setlocale(LC_ALL, locale_) == nullptr)
-        {
-            throw std::runtime_error("setlocale() failed.");       
-        }
+        throw std::runtime_error("setlocale() failed.");       
     }
-};
+}
 
 namespace
 {
@@ -414,7 +410,7 @@ std::wstring str::to_wstring(const std::string& s)
 
 bool str::mbtowc(sys::U8string::const_pointer in_, size_t in_sz, std::wstring& result)
 {
-    const setlocale_en_US_UTF8 utf8_locale;
+    const setlocale utf8_locale;
 
     // This is OK as UTF-8 can be stored in std::string
     // Note that casting between the string types will CRASH on some
@@ -455,7 +451,7 @@ bool str::mbtowc(const sys::U8string& utf8, std::wstring& result)
 
 bool str::wctomb(std::wstring::const_pointer in, size_t in_sz, sys::U8string& result)
 {
-    const setlocale_en_US_UTF8 utf8_locale;
+    const setlocale utf8_locale;
 
     // https://en.cppreference.com/w/c/string/multibyte/wcrtomb
     mbstate_t state;

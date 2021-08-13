@@ -251,6 +251,11 @@ static std::string tow_(const std::string& s, void (*tow)(std::wstring&))
 {
     // Doing toupper()/tolower() on std::string doesn't work for "special"
     // characters like 'é' (French).
+    
+    // Need a UTF-8 locale (or something other than "C") for this to work
+    // https://en.cppreference.com/w/c/string/wide/towlower
+    const setlocale utf8_locale;
+
     auto w_s = to_wstring(s);
     tow(w_s);
     return to_string(w_s);
@@ -262,6 +267,9 @@ void lower(std::string& s)
 }
 void lower(std::wstring& s)
 {
+    // Need a UTF-8 locale (or something other than "C") for this to work
+    // https://en.cppreference.com/w/c/string/wide/towlower
+    const setlocale utf8_locale;
     std::transform(s.begin(), s.end(), s.begin(), towlower);
 }
 std::string toLower(const std::string& s)
@@ -275,6 +283,9 @@ void upper(std::string& s)
 }
 void upper(std::wstring& s)
 {
+    // Need a UTF-8 locale (or something other than "C") for this to work
+    // https://en.cppreference.com/w/c/string/wide/towlower
+    const setlocale utf8_locale;
     std::transform(s.begin(), s.end(), s.begin(), towupper);
 }
 std::string toUpper(const std::string& s)

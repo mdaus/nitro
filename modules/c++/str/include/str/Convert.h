@@ -312,6 +312,17 @@ T generic_cast(const std::string& value)
 {
     return str::toType<T>(value);
 }
+
+// Some string conversion routines only work with the right locale; the default
+// is platform-dependent.
+class setlocale final
+{
+    char* const locale_;
+public:
+    setlocale(const char* locale = "en_US.utf8");
+    ~setlocale() noexcept(false);
+};
+
 }
 
 #endif
