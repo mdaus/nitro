@@ -153,10 +153,10 @@ inline void strto8(const std::wstring& s, sys::U8string& result)
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-bool mbtowc(sys::U8string::const_pointer, size_t, std::wstring&);
-bool mbtowc(const sys::U8string&, std::wstring&);
-bool wctomb(std::wstring::const_pointer, size_t, sys::U8string&);
-bool wctomb(const std::wstring&, sys::U8string&);
+bool mbsrtowcs(sys::U8string::const_pointer, size_t, std::wstring&);
+bool mbsrtowcs(const sys::U8string&, std::wstring&);
+bool wcsrtombs(std::wstring::const_pointer, size_t, sys::U8string&);
+bool wcsrtombs(const std::wstring&, sys::U8string&);
 
 std::wstring to_wstring(const std::string&);  // assume Windows-1252 or UTF-8  based on platform
 std::string to_string(const std::wstring&); // assume Windows-1252 or UTF-8 based on platform

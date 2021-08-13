@@ -221,7 +221,7 @@ static void test_wstring_to_utf8_(const std::string& testName, const  std::u32st
     str::wsto8(w_input, utf8);
     TEST_ASSERT_EQ(utf8, expected);
     str::U8string u8str;
-    const auto result = str::wctomb(w_input, u8str);
+    const auto result = str::wcsrtombs(w_input, u8str);
     TEST_ASSERT_TRUE(result);
     TEST_ASSERT_EQ(u8str, expected);
     TEST_ASSERT_EQ(u8str, utf8);
@@ -254,6 +254,6 @@ int main(int, char**)
     TEST_CHECK(test_string_to_u8string_ascii);
     TEST_CHECK(test_string_to_u8string_windows_1252);
     TEST_CHECK(test_string_to_u8string_iso8859_1);
-    //TEST_CHECK(test_change_case);
+    TEST_CHECK(test_change_case);
     TEST_CHECK(test_wstring_to_utf8);
 }

@@ -27,6 +27,10 @@
 #include <map>
 #include <locale>
 #include <stdexcept>
+#include <iostream>
+#include <vector>
+#include <clocale>
+#include <cwchar>
 
 #include "str/Convert.h"
 #include "str/Manip.h"
@@ -216,7 +220,7 @@ static std::map<std::u32string::value_type, std::string::value_type> make_u32str
         const auto& str_utf8 = p.second;
 
         std::wstring str_wc;
-        if (mbtowc(str_utf8, str_wc))
+        if (mbsrtowcs(str_utf8, str_wc))
         {
             retval[str_wc[0]] = static_cast<char>(ch_utf32);
         }
@@ -382,13 +386,13 @@ bool fromWindows1252_(const TString& s, std::wstring& result)
 
     sys::U8string utf8;
     str::windows1252to8(p, s.size(), utf8);
-    return str::mbtowc(utf8, result);
+    return str::mbsrtowcs(utf8, result);
 }
 template<typename TString>
 bool fromUTF8_(const TString& s, std::wstring& result)
 {
     auto const p = str::c_str<sys::U8string::const_pointer>(s);
-    return str::mbtowc(p, s.size(), result);
+    return str::mbsrtowcs(p, s.size(), result);
 }
 
 std::wstring str::to_wstring(const sys::U8string& s)
@@ -396,7 +400,7 @@ std::wstring str::to_wstring(const sys::U8string& s)
     std::wstring retval;
     if (!fromUTF8_(s, retval))
     {
-        throw std::runtime_error("mbtowc() failed.");
+        throw std::runtime_error("mbsrtowcs() failed.");
     }
     return retval;
 }
@@ -421,7 +425,7 @@ std::wstring str::to_wstring(const std::string& s)
 
     if (!result)
     {
-        throw std::runtime_error("mbtowc() failed.");
+        throw std::runtime_error("mbsrtowcs() failed.");
     }
     return retval;
 }
@@ -429,9 +433,9 @@ std::wstring str::to_wstring(const std::string& s)
 sys::U8string str::to_u8string(const std::wstring& s)
 {
     sys::U8string retval;
-    if (!wctomb(s, retval))
+    if (!wcsrtombs(s, retval))
     {
-        throw std::runtime_error("wctomb() failed.");
+        throw std::runtime_error("wcsrtombs() failed.");
     }
 
     #ifndef NDEBUG
@@ -455,37 +459,31 @@ sys::U8string str::to_u8string(const std::string& s)
 #ifdef _WIN32
     windows1252to8(str::c_str<W1252string::const_pointer>(s), s.size(), retval);
 #else
-    retval = return c_str<sys::U8string::const_pointer>(s);  // copy
+    retval = c_str<sys::U8string::const_pointer>(s);  // copy
 #endif
-
     return retval;
 }
 
-bool str::mbtowc(sys::U8string::const_pointer in_, size_t in_sz, std::wstring& result)
+// https://en.cppreference.com/w/cpp/string/multibyte/mbsrtowcs
+bool str::mbsrtowcs(sys::U8string::const_pointer in, size_t in_sz, std::wstring& result)
 {
     const setlocale utf8_locale;
 
-    // This is OK as UTF-8 can be stored in std::string
-    // Note that casting between the string types will CRASH on some
-    // implementatons. NO: reinterpret_cast<const std::string&>(value)
-    const void* const pValue = in_;
+    const void* const pValue = in;
+    auto mbstr = static_cast<std::string::const_pointer>(pValue);
 
-    // https://en.cppreference.com/w/c/string/multibyte/mbrtowc
-    mbstate_t state;
-    memset(&state, 0, sizeof(state));
+    std::vector<wchar_t> wstr(1 + in_sz);    
+    std::mbstate_t state{};
 
-    auto const in = static_cast<std::string::const_pointer>(pValue);
- 
-    std::vector<std::wstring::value_type> v_out(in_sz+1);
-    auto const out = v_out.data();
-    const char *p_in = in, *end = in + in_sz;
-    wchar_t* p_out = out;
-    size_t rc;
-    while ((rc = mbrtowc(p_out, p_in, end - p_in, &state)) > 0)
-    {
-        p_in += rc;
-        p_out += 1;
-    }
+    #if _MSC_VER
+    #pragma warning(push)
+    #pragma warning(disable : 4996)  // may be unsafe
+    #endif
+    const auto rc = std::mbsrtowcs(wstr.data(), &mbstr, wstr.size(), &state);
+    #if _MSC_VER
+    #pragma warning(pop)
+    #endif
+
     const auto rc_ = static_cast<ptrdiff_t>(rc);
     if ((rc_ < 0) && (rc_ != -2)) // "if the next n bytes constitute an incomplete, but so far valid, multibyte character. Nothing is written to *pwc."
     {
@@ -493,58 +491,50 @@ bool str::mbtowc(sys::U8string::const_pointer in_, size_t in_sz, std::wstring& r
         // "if encoding error occurs. Nothing is written to *pwc, the value EILSEQ is stored in errno and the value of *ps is left unspecified."
         return false;
     }
-    const size_t out_sz = p_out - out;
-    result = std::wstring(out, out_sz);  // UTF-16 on Windows, UTF-32 on Linux
+
+    result.append(wstr.data(), rc);
     return true;
 }
-bool str::mbtowc(const sys::U8string& utf8, std::wstring& result)
+bool str::mbsrtowcs(const sys::U8string& utf8, std::wstring& result)
 {
-    return mbtowc(utf8.c_str(), utf8.size(), result);
+    return mbsrtowcs(utf8.c_str(), utf8.size(), result);
 }
 
-bool str::wctomb(std::wstring::const_pointer in, size_t in_sz, sys::U8string& result)
+bool str::wcsrtombs(std::wstring::const_pointer wstr, size_t in_sz, sys::U8string& result)
 {
     const setlocale utf8_locale;
 
-    // https://en.cppreference.com/w/c/string/multibyte/wcrtomb
-    mbstate_t state;
-    memset(&state, 0, sizeof(state));
+    // https://en.cppreference.com/w/cpp/string/multibyte/wcsrtombs
 
-    std::vector<sys::U8string::value_type> v_out(MB_CUR_MAX * (in_sz+1));
-    void* const out_ = v_out.data();
-    auto const out = static_cast<char*>(out_);
-    auto p = out;
-    size_t rc = 0;
-    ptrdiff_t rc_ = 0;
-    for (size_t n = 0; n < in_sz; ++n)
-    {
-        #if _MSC_VER
-        #pragma warning(push)
-        #pragma warning(disable: 4996) // may be unsafe
-        #endif
-        rc = wcrtomb(p, in[n], &state);
-        #if _MSC_VER
-        #pragma warning(pop)
-        #endif
-         rc_ = static_cast<ptrdiff_t>(rc);
+    std::mbstate_t state{};
 
-        if (rc_ == -1)
-            break;
-        p += rc;
-    }
+    const auto len = MB_CUR_MAX * (in_sz + 1);
+    std::vector<char> mbstr(len);
+
+    #if _MSC_VER
+    #pragma warning(push)
+    #pragma warning(disable: 4996) // may be unsafe
+    #endif
+    const auto rc = std::wcsrtombs(mbstr.data(), &wstr, mbstr.size(), &state);
+    #if _MSC_VER
+    #pragma warning(pop)
+    #endif
+
+    const auto rc_ = static_cast<ptrdiff_t>(rc);
     if (rc_ < 0)
     {
         // https://en.cppreference.com/w/c/string/multibyte/wcrtomb
         return false;
     }
 
-    const size_t out_sz = p - out;
-    result = sys::U8string(v_out.data(), out_sz);
+    void* const pStr = mbstr.data();
+    const auto p = static_cast<sys::U8string::const_pointer>(pStr);
+    result.append(p, rc);
     return true;
 }
-bool str::wctomb(const std::wstring& s, sys::U8string& result)
+bool str::wcsrtombs(const std::wstring& s, sys::U8string& result)
 {
-    return wctomb(s.c_str(), s.size(), result);
+    return wcsrtombs(s.c_str(), s.size(), result);
 }
 
 namespace
@@ -561,7 +551,7 @@ bool toWindows1252_(const std::wstring& s, std::string& result)
 bool toUTF8_(const std::wstring& s, std::string& result)
 {
     str::U8string utf8;
-    if (str::wctomb(s, utf8))
+    if (str::wcsrtombs(s, utf8))
     {
         auto const pStr = str::c_str<std::string::const_pointer>(utf8);
         result = pStr;  // copy
@@ -581,7 +571,7 @@ std::string str::to_string(const std::wstring& s)
     #endif
     if (!result)
     {
-        throw std::runtime_error("wctomb() failed.");
+        throw std::runtime_error("wcsrtombs() failed.");
     }
     return retval;
 }
