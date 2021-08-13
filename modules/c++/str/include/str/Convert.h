@@ -74,16 +74,21 @@ std::string toString(const T& real, const T& imag)
     return toString(std::complex<T>(real, imag));
 }
 
-template <typename TReturn, typename TString>
-inline TReturn c_str(const TString& s)
+template <typename TReturn, typename TChar>
+inline TReturn cast(const TChar* s)
 {
     // This is OK as UTF-8 can be stored in std::string
     // Note that casting between the string types will CRASH on some
     // implementatons. NO: reinterpret_cast<const std::string&>(value)
-    const void* const pStr = s.c_str();
-    auto const retval = static_cast<TReturn>(pStr); 
-    static_assert(sizeof(*retval) == sizeof(s[0]), "sizeof(*TReturn) != sizeof(s[0])");
+    const void* const pStr = s;
+    auto const retval = static_cast<TReturn>(pStr);
+    static_assert(sizeof(*retval) == sizeof(*s), "sizeof(*TReturn) != sizeof(*TChar)"); 
     return retval;
+}
+template <typename TReturn, typename TChar>
+inline TReturn c_str(const std::basic_string<TChar>& s)
+{
+    return cast<TReturn>(s.c_str());
 }
 
 template <>
@@ -158,16 +163,28 @@ bool mbsrtowcs(const sys::U8string&, std::wstring&);
 bool wcsrtombs(std::wstring::const_pointer, size_t, sys::U8string&);
 bool wcsrtombs(const std::wstring&, sys::U8string&);
 
-std::wstring to_wstring(const std::string&);  // assume Windows-1252 or UTF-8  based on platform
-std::string to_string(const std::wstring&); // assume Windows-1252 or UTF-8 based on platform
-
 // When the encoding is important, we want to "traffic" in either std::wstring (UTF-16 or UTF-32) or sys::U8string (UTF-8),
 // not str::W1252string (Windows-1252) or std::string (unknown).  Make it easy to get those from other encodings.
-std::wstring to_wstring(const sys::U8string&);
-std::wstring to_wstring(const str::W1252string&);
-sys::U8string to_u8string(const std::string&);  // assume Windows-1252 or UTF-8  based on platform
-sys::U8string to_u8string(const std::wstring&);
-sys::U8string to_u8string(const str::W1252string&);
+std::wstring to_wstring(std::string::const_pointer, size_t); // assume Windows-1252 or UTF-8  based on platform
+std::wstring to_wstring(sys::U8string::const_pointer, size_t);
+std::wstring to_wstring(str::W1252string::const_pointer, size_t);
+template<typename TChar>
+inline std::wstring to_wstring(const std::basic_string<TChar>& s)
+{
+    return to_wstring(s.c_str(), s.size());
+}
+
+sys::U8string to_u8string(std::string::const_pointer, size_t);  // assume Windows-1252 or UTF-8  based on platform
+sys::U8string to_u8string(std::wstring::const_pointer, size_t);
+sys::U8string to_u8string(str::W1252string::const_pointer, size_t);
+template <typename TChar>
+inline sys::U8string to_u8string(const std::basic_string<TChar>& s)
+{
+    return to_u8string(s.c_str(), s.size());
+}
+
+// Encoding information is lost, will be UTF-8 or Windows-1252 or UTF-8 based on platform
+std::string to_string(const std::wstring&);
 
 template <typename T>
 T toType(const std::string& s)
