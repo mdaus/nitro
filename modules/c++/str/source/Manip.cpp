@@ -158,11 +158,6 @@ bool isAlpha(const std::string& s)
     return isTest(s, isalpha);
 }
 
-static inline bool isBlank(std::string::value_type ch)
-{
-    return ch == ' ';
-}
-
 template<typename Pred>
 inline bool isTest(const std::string& s, int (*is1)(int), Pred is2)
 {
@@ -176,7 +171,7 @@ inline bool isTest(const std::string& s, int (*is1)(int), Pred is2)
 
 bool isAlphaSpace(const std::string& s)
 {
-    return isTest(s, isalpha, isBlank);
+    return isTest(s, isalpha, isspace);
 }
 
 bool isNumeric(const std::string& s)
@@ -186,7 +181,7 @@ bool isNumeric(const std::string& s)
 
 bool isNumericSpace(const std::string& s)
 {
-    return isTest(s, isdigit, isBlank);
+    return isTest(s, isdigit, isspace);
 }
 
 bool isWhitespace(const std::string& s)
