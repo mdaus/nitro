@@ -195,7 +195,7 @@ TEST_CASE(test_change_case)
     const std::string abc = "abc";
     test_change_case_(testName, abc, ABC);
 
-    // Yes, this can really come up, "non classifié" is French for "unclassified".
+    // Yes, this can really come up, "non classifié" is French (Canadian) for "unclassified".
     const std::string DEF_1252{'D', '\xc9', 'F'}; // "DÉF" Windows-1252
     const auto DEF8 = fromWindows1252(DEF_1252);
     const auto DEF = str::to_wstring(DEF8);

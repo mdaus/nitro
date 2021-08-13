@@ -258,20 +258,19 @@ void xml::lite::Element::getCharacterData(sys::U8string& result) const
 {
     const auto encoding = ::getEncoding_(this->getEncoding());
 
-    const void* const pValue = mCharacterData.c_str();
     if (encoding == xml::lite::string_encoding::utf_8)
     {
         // already in UTF-8, no converstion necessary
-        result = static_cast<sys::U8string::const_pointer>(pValue); // copy
+        result = str::c_str<sys::U8string::const_pointer>(mCharacterData); // copy
     }
     else if (encoding == xml::lite::string_encoding::windows_1252)
     {
-        auto const pStr = static_cast<str::W1252string::const_pointer>(pValue);
-        str::windows1252to8(pStr, mCharacterData.size(), result);
+        auto const pStr = str::c_str<str::W1252string::const_pointer>(mCharacterData);
+        result = str::to_u8string(pStr);
     }
     else
     {
-        throw std::runtime_error("getCharacterData(): unknown encoding");
+        throw std::logic_error("getCharacterData(): unknown encoding");
     }
 }
 
@@ -282,15 +281,11 @@ static void writeCharacterData(io::OutputStream& stream,
 
     if (encoding == xml::lite::string_encoding::windows_1252)
     {
-        sys::U8string utf8;  // need to convert before writing
-        {
-            const void* const pValue = characterData.c_str();
-            auto const pStr = static_cast<str::W1252string::const_pointer>(pValue);
-            str::windows1252to8(pStr, characterData.size(), utf8);
-        }
+        // need to convert before writing
+        auto const pCharacterData = str::c_str<str::W1252string::const_pointer>(characterData);
+        const auto utf8 = str::to_u8string(pCharacterData);
 
-        const void* const pValue = utf8.c_str();
-        auto const pStr = static_cast<std::string::const_pointer>(pValue);
+        auto const pStr = str::c_str<std::string::const_pointer>(utf8);
         stream.write(pStr);
     }
     else if (encoding == xml::lite::string_encoding::utf_8)
@@ -300,7 +295,7 @@ static void writeCharacterData(io::OutputStream& stream,
     }
     else
     {
-        throw std::runtime_error("writeCharacterData(): unknown encoding");
+        throw std::logic_error("writeCharacterData(): unknown encoding");
     }
 }
 

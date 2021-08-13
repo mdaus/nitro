@@ -275,28 +275,6 @@ void str::wsto1252(std::wstring::const_pointer p, size_t sz, W1252string& result
     strto1252_(p, sz, result);
 }
 
-namespace
-{
-void utf16to8(const std::u16string& str, std::string& result)
-{
-    // http://utfcpp.sourceforge.net/#introsample
-    /*
-    // Convert it to utf-16
-    vector<unsigned short> utf16line;
-    utf8::utf8to16(line.begin(), end_it, back_inserter(utf16line));
-
-    // And back to utf-8
-    string utf8line;
-    utf8::utf16to8(utf16line.begin(), utf16line.end(), back_inserter(utf8line));
-    */
-    utf8::utf16to8(str.begin(), str.end(), std::back_inserter(result));
-}
-void utf32to8(const std::u32string& str, std::string& result)
-{
-    utf8::utf32to8(str.begin(), str.end(), std::back_inserter(result));
-}
-}
-
 // What is the corresponding std::uXXstring for std::wstring?
 template<size_t sizeof_wchar_t> struct const_pointer final { };
 template<> struct const_pointer<2> // wchar_t is 2 bytes, UTF-16
@@ -307,24 +285,6 @@ template <> struct const_pointer<4> // wchar_t is 4 bytes, UTF-32
 {
     using type = std::u32string::const_pointer;
 };
-inline void wsto8_(std::u16string::const_pointer begin, std::u16string::const_pointer end, std::string& result)
-{
-    utf8::utf16to8(begin, end, std::back_inserter(result));
-}
-inline void wsto8_(std::u32string::const_pointer begin, std::u32string::const_pointer end, std::string& result)
-{
-    utf8::utf32to8(begin, end, std::back_inserter(result));
-}
-namespace
-{
-void wsto8(const std::wstring& str, std::string& result)
-{
-    // std::wstring is UTF-16 on Windows, UTF-32 on Linux
-    using const_pointer_t = const_pointer<sizeof(std::wstring::value_type)>::type;
-    auto const begin = str::c_str<const_pointer_t>(str);
-    wsto8_(begin, begin + str.size(), result);
-}
-}
 
 struct back_inserter final
 { 
@@ -341,6 +301,16 @@ struct back_inserter final
 };
 void str::utf16to8(std::u16string::const_pointer p, size_t sz, sys::U8string& result)
 {
+    // http://utfcpp.sourceforge.net/#introsample
+    /*
+    // Convert it to utf-16
+    vector<unsigned short> utf16line;
+    utf8::utf8to16(line.begin(), end_it, back_inserter(utf16line));
+
+    // And back to utf-8
+    string utf8line;
+    utf8::utf16to8(utf16line.begin(), utf16line.end(), back_inserter(utf8line));
+    */
     utf8::utf16to8(p, p + sz, back_inserter(result));
 }
 void str::utf32to8(std::u32string::const_pointer p, size_t sz, sys::U8string& result)
