@@ -90,11 +90,7 @@ TEST_CASE(testCharToString)
 
 static sys::U8string fromWindows1252(const std::string& s)
 {
-    const void* const pValue = s.c_str();
-    auto const pStr = static_cast<str::W1252string::const_pointer>(pValue);
-    sys::U8string retval;
-    str::windows1252to8(pStr, s.size(), retval);
-    return retval;
+    return str::to_u8string(str::c_str<str::W1252string::const_pointer>(s));
 }
 
 template<typename T>
@@ -200,23 +196,15 @@ TEST_CASE(test_change_case)
     test_change_case_(testName, abc, ABC);
 
     // Yes, this can really come up, "non classifié" is French for "unclassified".
-    constexpr uint8_t latin_capital_letter_e_with_acute = 0xc9; // Windows-1252
-    const std::string DEF_1252{'D', static_cast<char>(latin_capital_letter_e_with_acute), 'F'};
+    const std::string DEF_1252{'D', '\xc9', 'F'}; // "DÉF" Windows-1252
     const auto DEF8 = fromWindows1252(DEF_1252);
-    std::wstring w_s;
-    auto result = str::mbtowc(DEF8, w_s);
-    TEST_ASSERT_TRUE(result);
-    const auto DEF = w_s;
+    const auto DEF = str::to_wstring(DEF8);
 
-    constexpr uint8_t latin_small_letter_e_with_acute = 0xe9; // Windows-1252
-    const std::string def_1252{'d', static_cast<char>(latin_small_letter_e_with_acute), 'f'};
+    const std::string def_1252{'d', '\xe9', 'f'};  // "déf" Windows-1252
     const auto def8 = fromWindows1252(def_1252);
-    result = str::mbtowc(def8, w_s);
-    TEST_ASSERT_TRUE(result);
-    const auto def = w_s;
+    const auto def = str::to_wstring(def8);
 
-    // It looks like a non-default locale needs to be set on Windows; DEF lowers to "dEf".
-    //test_change_case_(testName, def, DEF); // TODO
+    test_change_case_(testName, def, DEF);
 }
 
 static void test_wstring_to_utf8_(const std::string& testName, const  std::u32string& input, const std::u8string& expected)

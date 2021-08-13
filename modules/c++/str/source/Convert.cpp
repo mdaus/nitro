@@ -375,9 +375,8 @@ str::setlocale::~setlocale() noexcept(false)
     }
 }
 
-namespace
-{
-bool fromWindows1252_(const std::string& s, std::wstring& result)
+template<typename TString>
+bool fromWindows1252_(const TString& s, std::wstring& result)
 {
     auto const p = str::c_str<str::W1252string::const_pointer>(s);
 
@@ -385,11 +384,30 @@ bool fromWindows1252_(const std::string& s, std::wstring& result)
     str::windows1252to8(p, s.size(), utf8);
     return str::mbtowc(utf8, result);
 }
-bool fromUTF8_(const std::string& s, std::wstring& result)
+template<typename TString>
+bool fromUTF8_(const TString& s, std::wstring& result)
 {
     auto const p = str::c_str<sys::U8string::const_pointer>(s);
     return str::mbtowc(p, s.size(), result);
 }
+
+std::wstring str::to_wstring(const sys::U8string& s)
+{
+    std::wstring retval;
+    if (!fromUTF8_(s, retval))
+    {
+        throw std::runtime_error("mbtowc() failed.");
+    }
+    return retval;
+}
+std::wstring to_wstring(const str::W1252string& s)
+{
+    std::wstring retval;
+    if (!fromWindows1252_(s, retval))
+    {
+        throw std::runtime_error("mbtowc() failed.");
+    }
+    return retval;
 }
 std::wstring str::to_wstring(const std::string& s)
 {
@@ -405,6 +423,41 @@ std::wstring str::to_wstring(const std::string& s)
     {
         throw std::runtime_error("mbtowc() failed.");
     }
+    return retval;
+}
+
+sys::U8string str::to_u8string(const std::wstring& s)
+{
+    sys::U8string retval;
+    if (!wctomb(s, retval))
+    {
+        throw std::runtime_error("wctomb() failed.");
+    }
+
+    #ifndef NDEBUG
+    // Double-check against utf8:: code
+    sys::U8string retval2;
+    strto8(s, retval2);
+    assert(retval == retval2);
+    #endif
+
+    return retval;
+}
+sys::U8string str::to_u8string(const W1252string& s)
+{
+    sys::U8string retval;
+    windows1252to8(s.c_str(), s.size(), retval);
+    return retval;
+}
+sys::U8string str::to_u8string(const std::string& s)
+{
+    sys::U8string retval;
+#ifdef _WIN32
+    windows1252to8(str::c_str<W1252string::const_pointer>(s), s.size(), retval);
+#else
+    retval = return c_str<sys::U8string::const_pointer>(s);  // copy
+#endif
+
     return retval;
 }
 

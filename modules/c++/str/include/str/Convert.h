@@ -161,6 +161,14 @@ bool wctomb(const std::wstring&, sys::U8string&);
 std::wstring to_wstring(const std::string&);  // assume Windows-1252 or UTF-8  based on platform
 std::string to_string(const std::wstring&); // assume Windows-1252 or UTF-8 based on platform
 
+// When the encoding is important, we want to "traffic" in either std::wstring (UTF-16 or UTF-32) or sys::U8string (UTF-8),
+// not str::W1252string (Windows-1252) or std::string (unknown).  Make it easy to get those from other encodings.
+std::wstring to_wstring(const sys::U8string&);
+std::wstring to_wstring(const str::W1252string&);
+sys::U8string to_u8string(const std::string&);  // assume Windows-1252 or UTF-8  based on platform
+sys::U8string to_u8string(const std::wstring&);
+sys::U8string to_u8string(const str::W1252string&);
+
 template <typename T>
 T toType(const std::string& s)
 {
