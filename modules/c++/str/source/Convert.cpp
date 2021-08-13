@@ -350,13 +350,17 @@ str::setlocale::~setlocale() noexcept(false)
 }
 
 template <typename TStringPtr>
-bool fromWindows1252_(TStringPtr p, size_t sz, std::wstring& result)
+void fromWindows1252_(TStringPtr p, size_t sz, sys::U8string& result)
 {
     const void* const pStr = p;
     auto const s = static_cast <str::W1252string::const_pointer>(pStr);
-
+    str::windows1252to8(s, sz, result);
+}
+template <typename TStringPtr>
+bool fromWindows1252_(TStringPtr p, size_t sz, std::wstring& result)
+{
     sys::U8string utf8;
-    str::windows1252to8(s, sz, utf8);
+    fromWindows1252_(p, sz, utf8);
     return str::mbsrtowcs(utf8, result);
 }
 template<typename TStringPtr>
@@ -436,6 +440,11 @@ sys::U8string str::to_u8string(std::string::const_pointer p, size_t sz)
     retval = static_cast<sys::U8string::const_pointer>(pStr);  // copy
 #endif
     return retval;
+}
+
+sys::U8string str::fromWindows1252(std::string::const_pointer p, size_t sz)
+{
+    return to_u8string(cast<W1252string::const_pointer>(p), sz);
 }
 
 // https://en.cppreference.com/w/cpp/string/multibyte/mbsrtowcs

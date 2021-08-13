@@ -91,8 +91,7 @@ TEST_CASE(testCharToString)
 static sys::U8string fromWindows1252(const std::string& s)
 {
     // s is Windows-1252 on ALL platforms
-    const str::W1252string w1252 = str::c_str<str::W1252string::const_pointer>(s);
-    return str::to_u8string(w1252);
+    return str::fromWindows1252(s);
 }
 
 template<typename T>

@@ -113,6 +113,13 @@ void utf16to1252(std::u16string::const_pointer, size_t, W1252string&);
 void utf32to1252(std::u32string::const_pointer, size_t, W1252string&);
 void wsto1252(std::wstring::const_pointer, size_t, W1252string&);
 
+// assume std::string is Windows-1252 **ON ALL PLATFORMS**
+sys::U8string fromWindows1252(std::string::const_pointer, size_t);
+inline sys::U8string fromWindows1252(const std::string& s)
+{
+    return fromWindows1252(s.c_str(), s.size());
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////
 // These use utf8:: routines; see utf8.h
 void utf16to8(std::u16string::const_pointer, size_t, sys::U8string&);
