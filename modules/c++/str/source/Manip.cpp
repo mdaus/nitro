@@ -31,6 +31,7 @@
 #include <stdexcept>
 
 #include "str/Convert.h"
+#include "str/Encoding.h"
 
 namespace
 {

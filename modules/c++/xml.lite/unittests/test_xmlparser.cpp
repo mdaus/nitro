@@ -128,7 +128,7 @@ TEST_CASE(testXmlUtf8_u8string)
 
     sys::U8string actual_;
     a.getCharacterData(actual_);
-    const std::string actual = str::toString(actual_);
+    const std::string actual = str::c_str<std::string::const_pointer>(actual_);
     TEST_ASSERT_EQ(actual, utf8Text);
 }
 

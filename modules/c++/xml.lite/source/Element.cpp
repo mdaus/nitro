@@ -514,5 +514,5 @@ void xml::lite::Element::setCharacterData(const std::string& characters, string_
 }
 void xml::lite::Element::setCharacterData(const sys::U8string& characters)
 {
-    setCharacterData(str::toString(characters), string_encoding::utf_8);
+    setCharacterData(str::c_str<std::string::const_pointer>(characters), string_encoding::utf_8);
 }

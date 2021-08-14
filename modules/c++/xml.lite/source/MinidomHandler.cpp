@@ -93,7 +93,7 @@ inline std::string toUtf8_(const CharT* value,  size_t length)
 {
     str::U8string utf8Value;
     str::strto8(value, length, utf8Value);
-    return str::toString(utf8Value);
+    return str::c_str<std::string::const_pointer>(utf8Value);
 }
 inline std::string toUtf8(const uint16_t* value_, size_t length)
 {
