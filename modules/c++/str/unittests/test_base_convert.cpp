@@ -20,6 +20,8 @@
  *
  */
 
+#include <wchar.h>
+
 #include <vector>
 #include <string>
 #include <iterator>
@@ -51,7 +53,7 @@ std::string to_std_string(const T& value)
 {
     // This is OK as UTF-8 can be stored in std::string
     // Note that casting between the string types will CRASH on some
-    // implementatons. NO: reinterpret_cast<const std::string&>(value)
+    // implementations. NO: reinterpret_cast<const std::string&>(value)
     return str::c_str<std::string::const_pointer>(value);  // copy
 }
 template<>
@@ -187,36 +189,42 @@ TEST_CASE(test_string_to_u8string_iso8859_1)
     }
 }
 
-static void test_change_case_(const std::string& testName, const std::string& lower, const std::string& upper)
+template<typename TString>
+static void test_change_case_(const std::string& testName, const TString& lower, const TString& upper)
 {
-    auto s = str::toLower(upper);
-    TEST_ASSERT_EQ(s, lower);
-    s = str::toUpper(lower);
-    TEST_ASSERT_EQ(s, upper);
+    auto s = upper;
+    str::lower(s);
+    TEST_ASSERT(s == lower);
+    s = lower;
+    str::upper(s);
+    TEST_ASSERT(s == upper);
 
-    s = str::toUpper(upper);
-    TEST_ASSERT_EQ(s, upper);
-    s = str::toLower(lower);
-    TEST_ASSERT_EQ(s, lower);
+    s = upper;
+    str::upper(s);
+    TEST_ASSERT(s == upper);
+    s = lower;
+    str::lower(s);
+    TEST_ASSERT(s == lower);
 }
-
 TEST_CASE(test_change_case)
 {
     const std::string ABC = "ABC";
     const std::string abc = "abc";
     test_change_case_(testName, abc, ABC);
 
-    // Yes, this can really come up, "non classifié" is French (Canadian) for "unclassified".
-    const std::string DEF_1252{'D', '\xc9', 'F'}; // "DÉF" Windows-1252
-    const auto DEF8 = fromWindows1252(DEF_1252);
-    const auto DEF = str::to_wstring(DEF8);
+    const std::wstring ABC_w = L"ABC";
+    const std::wstring abc_w = L"abc";
+    test_change_case_(testName, abc_w, ABC_w);
 
-    const std::string def_1252{'d', '\xe9', 'f'};  // "déf" Windows-1252
-    const auto def8 = fromWindows1252(def_1252);
-    const auto def = str::to_wstring(def8);
+    //// Yes, this can really come up, "non classifié" is French (Canadian) for "unclassified".
+    //const std::string DEF_1252{'D', '\xc9', 'F'}; // "DÉF" Windows-1252
+    //const auto DEF8 = fromWindows1252(DEF_1252);
 
-    //test_change_case_(testName, def, DEF);
-    test_change_case_(testName, def_1252, DEF_1252);
+    //const std::string def_1252{'d', '\xe9', 'f'};  // "déf" Windows-1252
+    //const auto def8 = fromWindows1252(def_1252);
+
+    ////test_change_case_(testName, def, DEF);
+    //test_change_case_(testName, def_1252, DEF_1252);
 }
 
 static void test_wstring_to_utf8_(const std::string& testName, const  std::u32string& input, const std::u8string& expected)
