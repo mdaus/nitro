@@ -273,50 +273,65 @@ static std::string fromWString(const std::wstring& s)
     throw std::runtime_error("fromWString() failed.");    
 }
 
-static std::string tow_(const std::string& s, void (*tow)(std::wstring&))
+template <typename TChar, typename Fn>
+inline void transform(std::basic_string<TChar>& s, Fn f)
 {
-    // Doing toupper()/tolower() on std::string doesn't work for "special"
-    // characters like 'é' (French).
-    
-    // Need a UTF-8 locale (or something other than "C") for this to work
-    // https://en.cppreference.com/w/c/string/wide/towlower
-    const setlocale utf8_locale;
+    (void) std::transform(s.begin(), s.end(), s.begin(), f);
+}
 
-    auto w_s = to_wstring(s);
-    tow(w_s);
-    return fromWString(w_s);
+static std::string to___er(const std::string& s, int (*to)(int), void (*tow)(std::wstring&)) // "___" = "low" or "upp"
+{
+    // tolowerCheck() on std::string doesn't work for "special" characters like 'é' (used by French-speaking Canadians).
+    auto platform = details::Platform; // "conditional expression is constant"
+    if (platform == details::PlatformType::Windows)
+    {    
+        // On Windows, assume Windows-1252. tolower() works, but NOT our own tolowerCheck()
+        const setlocale locale;
+        auto retval = s;
+        transform(retval, [&](int ch) {
+                           return static_cast<std::string::value_type>(to(ch));
+                       });
+        return retval;
+    }
+    else
+    {
+        // Not Windows, assume string is UTF-8
+        auto w_s = to_wstring(s);
+        tow(w_s);
+        return fromWString(w_s);
+    }
 }
 
 void lower(std::string& s)
 {
-    std::transform(s.begin(), s.end(), s.begin(), tolowerCheck);
+    transform(s, tolowerCheck);
 }
 void lower(std::wstring& s)
 {
     // Need a UTF-8 locale (or something other than "C") for this to work
     // https://en.cppreference.com/w/c/string/wide/towlower
-    const setlocale utf8_locale;
-    std::transform(s.begin(), s.end(), s.begin(), towlower);
+    const setlocale locale;
+    transform(s, towlower);
 }
 std::string toLower(const std::string& s)
 {
-    return tow_(s, lower);
+   return to___er(s, tolower, lower);
 }
 
 void upper(std::string& s)
 {
-    std::transform(s.begin(), s.end(), s.begin(), toupperCheck);
+    transform(s, toupperCheck);
 }
 void upper(std::wstring& s)
 {
     // Need a UTF-8 locale (or something other than "C") for this to work
     // https://en.cppreference.com/w/c/string/wide/towlower
-    const setlocale utf8_locale;
-    std::transform(s.begin(), s.end(), s.begin(), towupper);
+    const setlocale locale;
+    transform(s, towupper);
 }
 std::string toUpper(const std::string& s)
 {
-    return tow_(s, upper);
+    return to___er(s, toupper, upper);
 }
 
 void escapeForXML(std::string& str)

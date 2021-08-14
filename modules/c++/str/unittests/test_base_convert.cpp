@@ -187,22 +187,17 @@ TEST_CASE(test_string_to_u8string_iso8859_1)
     }
 }
 
-template<typename TString>
-static void test_change_case_(const std::string& testName, const TString& lower, const TString& upper)
+static void test_change_case_(const std::string& testName, const std::string& lower, const std::string& upper)
 {
-    auto s = upper;
-    str::lower(s);
-    TEST_ASSERT(s == lower);
-    s = lower;
-    str::upper(s);
-    TEST_ASSERT(s == upper);
+    auto s = str::toLower(upper);
+    TEST_ASSERT_EQ(s, lower);
+    s = str::toUpper(lower);
+    TEST_ASSERT_EQ(s, upper);
 
-    s = upper;
-    str::upper(s);
-    TEST_ASSERT(s == upper);
-    s = lower;
-    str::lower(s);
-    TEST_ASSERT(s == lower);
+    s = str::toUpper(upper);
+    TEST_ASSERT_EQ(s, upper);
+    s = str::toLower(lower);
+    TEST_ASSERT_EQ(s, lower);
 }
 
 TEST_CASE(test_change_case)
@@ -221,6 +216,7 @@ TEST_CASE(test_change_case)
     const auto def = str::to_wstring(def8);
 
     //test_change_case_(testName, def, DEF);
+    test_change_case_(testName, def_1252, DEF_1252);
 }
 
 static void test_wstring_to_utf8_(const std::string& testName, const  std::u32string& input, const std::u8string& expected)

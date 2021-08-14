@@ -265,6 +265,18 @@ str::setlocale::setlocale(const char* locale) : locale_(::setlocale(LC_ALL, loca
         throw std::runtime_error("setlocale() failed.");
     }
 }
+static const char* platform_locale()
+{
+    auto platform = str::details::Platform;  // "conditional expression is constant"
+    if (platform == str::details::PlatformType::Windows)
+    {
+        return "en-US";
+    }
+    return "en_US.utf8";
+}
+str::setlocale::setlocale() :  setlocale(platform_locale())
+{
+}
 str::setlocale::~setlocale() noexcept(false)
 {
     if (::setlocale(LC_ALL, locale_) == nullptr)
