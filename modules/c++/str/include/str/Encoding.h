@@ -81,7 +81,6 @@ void windows1252to8(W1252string::const_pointer, size_t, sys::U8string&); // c.f.
 
 void utf16to1252(std::u16string::const_pointer, size_t, W1252string&);
 void utf32to1252(std::u32string::const_pointer, size_t, W1252string&);
-void wsto1252(std::wstring::const_pointer, size_t, W1252string&);
 
 // assume std::string is Windows-1252 **ON ALL PLATFORMS**
 sys::U8string fromWindows1252(std::string::const_pointer, size_t);
@@ -100,44 +99,32 @@ inline sys::U8string fromUtf8(const std::string& s)
 //////////////////////////////////////////////////////////////////////////////////////////
 // These use utf8:: routines; see utf8.h
 void utf16to8(std::u16string::const_pointer, size_t, sys::U8string&);
-void utf32to8(std::u32string::const_pointer, size_t, sys::U8string&);
-void wsto8(std::wstring::const_pointer, size_t, sys::U8string&);
-inline void strto8(std::u16string::const_pointer p, size_t sz, sys::U8string& result)
-{
-    utf16to8(p, sz, result);
-}
-inline void strto8(std::u32string::const_pointer p, size_t sz, sys::U8string& result)
-{
-    utf32to8(p, sz, result);
-}
-inline void strto8(std::wstring::const_pointer p, size_t sz, sys::U8string& result)
-{
-    wsto8(p, sz, result);
-}
-
 inline void utf16to8(const std::u16string& s, sys::U8string& result)
 {
     utf16to8(s.c_str(), s.size(), result);
 }
+
+void utf32to8(std::u32string::const_pointer, size_t, sys::U8string&);
 inline void utf32to8(const std::u32string& s, sys::U8string& result)
 {
     utf32to8(s.c_str(), s.size(), result);
 }
-inline void wsto8(const std::wstring& s, sys::U8string& result)
+
+inline void strto8(std::u16string::const_pointer p, size_t sz, sys::U8string& result)
 {
-    wsto8(s.c_str(), s.size(), result);
+    utf16to8(p, sz, result);
 }
 inline void strto8(const std::u16string& s, sys::U8string& result)
 {
     utf16to8(s, result);
 }
+inline void strto8(std::u32string::const_pointer p, size_t sz, sys::U8string& result)
+{
+    utf32to8(p, sz, result);
+}
 inline void strto8(const std::u32string& s, sys::U8string& result)
 {
     utf32to8(s, result);
-}
-inline void strto8(const std::wstring& s, sys::U8string& result)
-{
-    wsto8(s, result);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -147,23 +134,9 @@ bool mbsrtowcs(const sys::U8string&, std::wstring&);
 bool wcsrtombs(std::wstring::const_pointer, size_t, sys::U8string&);
 bool wcsrtombs(const std::wstring&, sys::U8string&);
 
-// When the encoding is important, we want to "traffic" in either std::wstring (UTF-16 or UTF-32) or sys::U8string (UTF-8),
-// not str::W1252string (Windows-1252) or std::string (unknown).  Make it easy to get those from other encodings.
-std::wstring to_wstring(std::string::const_pointer, size_t); // assume Windows-1252 or UTF-8  based on platform
-std::wstring to_wstring(sys::U8string::const_pointer, size_t);
-std::wstring to_wstring(str::W1252string::const_pointer, size_t);
-inline std::wstring to_wstring(std::wstring::const_pointer s, size_t sz)
-{
-    return std::wstring(s, sz);
-}
-template <typename TChar>
-inline std::wstring to_wstring(const std::basic_string<TChar>& s)
-{
-    return to_wstring(s.c_str(), s.size());
-}
-
+// When the encoding is important, we want to "traffic" in sys::U8string (UTF-8), not
+// str::W1252string (Windows-1252) or std::string (unknown).  Make it easy to get those from other encodings.
 sys::U8string to_u8string(std::string::const_pointer, size_t);  // assume Windows-1252 or UTF-8  based on platform
-sys::U8string to_u8string(std::wstring::const_pointer, size_t);
 sys::U8string to_u8string(str::W1252string::const_pointer, size_t);
 inline sys::U8string to_u8string(sys::U8string::const_pointer s, size_t sz)
 {
@@ -174,12 +147,6 @@ inline sys::U8string to_u8string(const std::basic_string<TChar>& s)
 {
     return to_u8string(s.c_str(), s.size());
 }
-
-// This is intentionally a bit cumbersome so that WE don't lose encoding;
-// that will be up to the caller :-). std::unique_ptr<> is a work-around for
-// not wanting to use sys::Optional; the appropriate one for the platform
-// will be non-NULL.
-bool fromWString(const std::wstring&, std::unique_ptr<sys::U8string>&, std::unique_ptr<str::W1252string>&);
 
 // Some string conversion routines only work with the right locale;
 // the default locale is platform-dependent.

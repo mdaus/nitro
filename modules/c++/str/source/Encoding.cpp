@@ -194,21 +194,6 @@ void str::utf32to1252(std::u32string::const_pointer p, size_t sz, W1252string& r
 {
     strto1252_(p, sz, result);
 }
-void str::wsto1252(std::wstring::const_pointer p, size_t sz, W1252string& result)
-{
-    strto1252_(p, sz, result);
-}
-
-// What is the corresponding std::uXXstring for std::wstring?
-template<size_t sizeof_wchar_t> struct const_pointer final { };
-template<> struct const_pointer<2> // wchar_t is 2 bytes, UTF-16
-{
-    using type = std::u16string::const_pointer;
-};
-template <> struct const_pointer<4> // wchar_t is 4 bytes, UTF-32
-{
-    using type = std::u32string::const_pointer;
-};
 
 struct back_inserter final
 { 
@@ -250,13 +235,6 @@ inline void wsto8_(std::u32string::const_pointer begin, std::u32string::const_po
 {
     utf8::utf32to8(begin, end, back_inserter(result));
 }
-void str::wsto8(std::wstring::const_pointer p, size_t sz, sys::U8string& result)
-{
-    using const_pointer_t = const_pointer<sizeof(*p)>::type;
-    const void* const pStr = p;
-    auto const begin = static_cast<const_pointer_t>(pStr);
-    wsto8_(begin, begin + sz, result);
-}
 
 str::setlocale::setlocale(const char* locale) : locale_(::setlocale(LC_ALL, locale))
 {
@@ -292,13 +270,6 @@ void fromWindows1252_(TStringPtr p, size_t sz, sys::U8string& result)
     auto const s = static_cast <str::W1252string::const_pointer>(pStr);
     str::windows1252to8(s, sz, result);
 }
-template <typename TStringPtr>
-bool fromWindows1252_(TStringPtr p, size_t sz, std::wstring& result)
-{
-    sys::U8string utf8;
-    fromWindows1252_(p, sz, utf8);
-    return str::mbsrtowcs(utf8, result);
-}
 template<typename TStringPtr>
 bool fromUTF8_(TStringPtr p, size_t sz, std::wstring& result)
 {
@@ -307,58 +278,6 @@ bool fromUTF8_(TStringPtr p, size_t sz, std::wstring& result)
     return str::mbsrtowcs(s, sz, result);
 }
 
-std::wstring str::to_wstring(sys::U8string::const_pointer p, size_t sz)
-{
-    std::wstring retval;
-    if (!fromUTF8_(p, sz, retval))
-    {
-        throw std::runtime_error("mbsrtowcs() failed.");
-    }
-    return retval;
-}
-std::wstring to_wstring(str::W1252string::const_pointer p, size_t sz)
-{
-    std::wstring retval;
-    if (!fromWindows1252_(p, sz, retval))
-    {
-        throw std::runtime_error("mbsrtowcs() failed.");
-    }
-    return retval;
-}
-std::wstring str::to_wstring(std::string::const_pointer p, size_t sz)
-{
-    std::wstring retval;
-    const auto result =
-    #ifdef _WIN32
-    fromWindows1252_(p, sz, retval);
-    #else
-    fromUTF8_(p, sz, retval);
-    #endif
-
-    if (!result)
-    {
-        throw std::runtime_error("mbsrtowcs() failed.");
-    }
-    return retval;
-}
-
-sys::U8string str::to_u8string(std::wstring::const_pointer p, size_t sz)
-{
-    sys::U8string retval;
-    if (!wcsrtombs(p, sz, retval))
-    {
-        throw std::runtime_error("wcsrtombs() failed.");
-    }
-
-    #ifndef NDEBUG
-    // Double-check against utf8:: code
-    sys::U8string retval2;
-    strto8(p, sz, retval2);
-    assert(retval == retval2);
-    #endif
-
-    return retval;
-}
 sys::U8string str::to_u8string(W1252string::const_pointer p, size_t sz)
 {
     sys::U8string retval;
@@ -391,7 +310,7 @@ sys::U8string str::fromUtf8(std::string::const_pointer p, size_t sz)
 // https://en.cppreference.com/w/cpp/string/multibyte/mbsrtowcs
 bool str::mbsrtowcs(sys::U8string::const_pointer in, size_t in_sz, std::wstring& result)
 {
-    const setlocale utf8_locale;
+    const setlocale locale;
 
     const void* const pValue = in;
     auto mbstr = static_cast<std::string::const_pointer>(pValue);
@@ -426,7 +345,7 @@ bool str::mbsrtowcs(const sys::U8string& utf8, std::wstring& result)
 
 bool str::wcsrtombs(std::wstring::const_pointer wstr, size_t in_sz, sys::U8string& result)
 {
-    const setlocale utf8_locale;
+    const setlocale locale;
 
     // https://en.cppreference.com/w/cpp/string/multibyte/wcsrtombs
 
@@ -460,55 +379,3 @@ bool str::wcsrtombs(const std::wstring& s, sys::U8string& result)
 {
     return wcsrtombs(s.c_str(), s.size(), result);
 }
-
-namespace
-{
-bool toWindows1252_(const std::wstring& s, std::string& result)
-{
-    str::W1252string w1252;
-    str::wsto1252(s.c_str(), s.size(), w1252);
-
-    auto const pStr = str::c_str<std::string::const_pointer>(w1252);
-    result = pStr;  // copy
-    return true;
-}
-bool toUTF8_(const std::wstring& s, std::string& result)
-{
-    str::U8string utf8;
-    if (str::wcsrtombs(s, utf8))
-    {
-        auto const pStr = str::c_str<std::string::const_pointer>(utf8);
-        result = pStr;  // copy
-        return true;
-    }
-    return false;
-}
-}
-
-bool str::fromWString(const std::wstring& s, std::unique_ptr<sys::U8string>& u8, std::unique_ptr<str::W1252string>& w1252)
-{
-    std::string result;
-    const auto success =
-    #ifdef _WIN32
-        toWindows1252_(s, result);
-    #else
-        toUTF8_(s, result);
-    #endif
-    if (!success)
-    {
-        return success;
-    }
-
-    #ifdef _WIN32
-        u8.reset();
-        auto const p = c_str<str::W1252string::const_pointer>(result);
-        w1252.reset(new str::W1252string(p));
-    #else
-        w1252.reset();
-        auto const p = c_str<sys::U8string::const_pointer>(result);
-        u8.reset(new sys::U8string(p));
-    #endif
-
-    return success;
-}
-
