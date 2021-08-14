@@ -24,17 +24,10 @@
 #define CODA_OSS_Encoding_h_INCLUDED_
 #pragma once
 
-#include <import/except.h>
-#include <cerrno>
-#include <complex>
-#include <cstdlib>
-#include <iomanip>
-#include <iostream>
-#include <limits>
-#include <ostream>
-#include <sstream>
+#include <wchar.h>
+
+#include <memory>
 #include <string>
-#include <typeinfo>
 
 // This is a fairly low-level file, so don't #include a lot of our other files
 #include "str/String_.h"
@@ -46,7 +39,7 @@ inline TReturn cast(const TChar* s)
 {
     // This is OK as UTF-8 can be stored in std::string
     // Note that casting between the string types will CRASH on some
-    // implementatons. NO: reinterpret_cast<const std::string&>(value)
+    // implementations. NO: reinterpret_cast<const std::string&>(value)
     const void* const pStr = s;
     auto const retval = static_cast<TReturn>(pStr);
     static_assert(sizeof(*retval) == sizeof(*s), "sizeof(*TReturn) != sizeof(*TChar)"); 
@@ -73,6 +66,13 @@ sys::U8string fromWindows1252(std::string::const_pointer, size_t);
 inline sys::U8string fromWindows1252(const std::string& s)
 {
     return fromWindows1252(s.c_str(), s.size());
+}
+
+// assume std::string is UTF-8 **ON ALL PLATFORMS**
+sys::U8string fromUtf8(std::string::const_pointer, size_t);
+inline sys::U8string fromUtf8(const std::string& s)
+{
+    return fromUtf8(s.c_str(), s.size());
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -130,7 +130,11 @@ bool wcsrtombs(const std::wstring&, sys::U8string&);
 std::wstring to_wstring(std::string::const_pointer, size_t); // assume Windows-1252 or UTF-8  based on platform
 std::wstring to_wstring(sys::U8string::const_pointer, size_t);
 std::wstring to_wstring(str::W1252string::const_pointer, size_t);
-template<typename TChar>
+inline std::wstring to_wstring(std::wstring::const_pointer s, size_t sz)
+{
+    return std::wstring(s, sz);
+}
+template <typename TChar>
 inline std::wstring to_wstring(const std::basic_string<TChar>& s)
 {
     return to_wstring(s.c_str(), s.size());
@@ -139,17 +143,24 @@ inline std::wstring to_wstring(const std::basic_string<TChar>& s)
 sys::U8string to_u8string(std::string::const_pointer, size_t);  // assume Windows-1252 or UTF-8  based on platform
 sys::U8string to_u8string(std::wstring::const_pointer, size_t);
 sys::U8string to_u8string(str::W1252string::const_pointer, size_t);
+inline sys::U8string to_u8string(sys::U8string::const_pointer s, size_t sz)
+{
+    return sys::U8string(s, sz);
+}
 template <typename TChar>
 inline sys::U8string to_u8string(const std::basic_string<TChar>& s)
 {
     return to_u8string(s.c_str(), s.size());
 }
 
-// Encoding information is lost, will be UTF-8 or Windows-1252 or UTF-8 based on platform
-std::string to_string(const std::wstring&);
+// This is intentionally a bit cumbersome so that WE don't lose encoding;
+// that will be up to the caller :-). std::unique_ptr<> is a work-around for
+// not wanting to use sys::Optional; the appropriate one for the platform
+// will be non-NULL.
+bool fromWString(const std::wstring&, std::unique_ptr<sys::U8string>&, std::unique_ptr<str::W1252string>&);
 
-// Some string conversion routines only work with the right locale; the default
-// is platform-dependent.
+// Some string conversion routines only work with the right locale;
+// the default locale is platform-dependent.
 class setlocale final
 {
     char* const locale_;

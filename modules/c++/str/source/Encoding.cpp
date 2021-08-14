@@ -309,7 +309,7 @@ std::wstring to_wstring(str::W1252string::const_pointer p, size_t sz)
     std::wstring retval;
     if (!fromWindows1252_(p, sz, retval))
     {
-        throw std::runtime_error("mbtowc() failed.");
+        throw std::runtime_error("mbsrtowcs() failed.");
     }
     return retval;
 }
@@ -369,6 +369,11 @@ sys::U8string str::to_u8string(std::string::const_pointer p, size_t sz)
 sys::U8string str::fromWindows1252(std::string::const_pointer p, size_t sz)
 {
     return to_u8string(cast<W1252string::const_pointer>(p), sz);
+}
+
+sys::U8string str::fromUtf8(std::string::const_pointer p, size_t sz)
+{
+    return sys::U8string(cast<sys::U8string::const_pointer>(p), sz);
 }
 
 // https://en.cppreference.com/w/cpp/string/multibyte/mbsrtowcs
@@ -467,18 +472,31 @@ bool toUTF8_(const std::wstring& s, std::string& result)
     return false;
 }
 }
-std::string str::to_string(const std::wstring& s)
+
+bool str::fromWString(const std::wstring& s, std::unique_ptr<sys::U8string>& u8, std::unique_ptr<str::W1252string>& w1252)
 {
-    std::string retval;
-    const auto result = 
+    std::string result;
+    const auto success =
     #ifdef _WIN32
-        toWindows1252_(s, retval);
+        toWindows1252_(s, result);
     #else
-        toUTF8_(s, retval);
+        toUTF8_(s, result);
     #endif
-    if (!result)
+    if (!success)
     {
-        throw std::runtime_error("wcsrtombs() failed.");
+        return success;
     }
-    return retval;
+
+    #ifdef _WIN32
+        u8.reset();
+        auto const p = c_str<str::W1252string::const_pointer>(result);
+        w1252.reset(new str::W1252string(p));
+    #else
+        w1252.reset();
+        auto const p = c_str<sys::U8string::const_pointer>(result);
+        u8.reset(new sys::U8string(p));
+    #endif
+
+    return success;
 }
+

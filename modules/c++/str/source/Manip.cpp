@@ -24,6 +24,7 @@
 #include <limits.h>
 #include <stdio.h>
 #include <wctype.h>
+#include <assert.h>
 
 #include <iostream>
 #include <sstream>
@@ -248,6 +249,30 @@ std::vector<std::string> split(const std::string& s,
     return vec;
 }
 
+static std::string fromWString(const std::wstring& s)
+{
+    std::unique_ptr<sys::U8string> u8;
+    std::unique_ptr<str::W1252string> w1252;
+
+    if (!str::fromWString(s, u8, w1252))
+    {
+        throw std::runtime_error("wcsrtombs() failed.");    
+    }
+
+    if (u8)
+    {
+        assert(!w1252);
+        return str::cast<std::string::const_pointer>(u8->c_str());
+    }
+    if (w1252)
+    {
+        assert(!u8);
+        return str::cast<std::string::const_pointer>(w1252->c_str());
+    }
+
+    throw std::runtime_error("fromWString() failed.");    
+}
+
 static std::string tow_(const std::string& s, void (*tow)(std::wstring&))
 {
     // Doing toupper()/tolower() on std::string doesn't work for "special"
@@ -259,7 +284,7 @@ static std::string tow_(const std::string& s, void (*tow)(std::wstring&))
 
     auto w_s = to_wstring(s);
     tow(w_s);
-    return to_string(w_s);
+    return fromWString(w_s);
 }
 
 void lower(std::string& s)
