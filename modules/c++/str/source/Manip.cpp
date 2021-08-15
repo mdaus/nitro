@@ -253,29 +253,13 @@ inline void transform(std::basic_string<TChar>& s, Fn f)
 {
     (void) std::transform(s.begin(), s.end(), s.begin(), f);
 }
-
 void lower(std::string& s)
 {
     transform(s, tolowerCheck);
 }
-void lower(std::wstring& s)
-{
-    // Need a UTF-8 locale (or something other than "C") for this to work
-    // https://en.cppreference.com/w/c/string/wide/towlower
-    const setlocale locale;
-    transform(s, towlower);
-}
-
 void upper(std::string& s)
 {
     transform(s, toupperCheck);
-}
-void upper(std::wstring& s)
-{
-    // Need a UTF-8 locale (or something other than "C") for this to work
-    // https://en.cppreference.com/w/c/string/wide/towlower
-    const setlocale locale;
-    transform(s, towupper);
 }
 
 void escapeForXML(std::string& str)

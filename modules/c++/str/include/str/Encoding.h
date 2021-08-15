@@ -140,17 +140,6 @@ inline sys::U8string to_u8string(const std::basic_string<TChar>& s)
     return to_u8string(s.c_str(), s.size());
 }
 
-// Some string conversion routines only work with the right locale;
-// the default locale is platform-dependent.
-class setlocale final
-{
-    char* const locale_;
-public:
-    setlocale();
-    setlocale(const char* locale);
-    ~setlocale() noexcept(false);
-};
-
 }
 
 #endif // CODA_OSS_Encoding_h_INCLUDED_

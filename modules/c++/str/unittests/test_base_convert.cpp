@@ -212,9 +212,9 @@ TEST_CASE(test_change_case)
     const std::string abc = "abc";
     test_change_case_(testName, abc, ABC);
 
-    const std::wstring ABC_w = L"ABC";
-    const std::wstring abc_w = L"abc";
-    test_change_case_(testName, abc_w, ABC_w);
+    //const std::wstring ABC_w = L"ABC";
+    //const std::wstring abc_w = L"abc";
+    //test_change_case_(testName, abc_w, ABC_w);
 
     //// Yes, this can really come up, "non classifié" is French (Canadian) for "unclassified".
     //const std::string DEF_1252{'D', '\xc9', 'F'}; // "DÉF" Windows-1252

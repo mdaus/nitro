@@ -143,9 +143,7 @@ std::vector<std::string> split(const std::string& s,
 //! Uses std::transform to convert all chars to lower case
 //! Uses std::transform to convert all chars to upper case
 void lower(std::string& s);
-void lower(std::wstring& s);
 void upper(std::string& s);
-void upper(std::wstring& s);
 
 /*!
  * Replaces any characters that are invalid in XML (&, <, >, ', ") with their

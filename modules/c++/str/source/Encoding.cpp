@@ -21,16 +21,11 @@
  */
 
 #include <assert.h>
-#include <string.h> // strlen()
-#include <wchar.h>
 
 #include <map>
 #include <locale>
 #include <stdexcept>
-#include <iostream>
 #include <vector>
-#include <clocale>
-#include <cwchar>
 
 #include "str/Encoding.h"
 #include "str/Manip.h"
@@ -116,13 +111,13 @@ static sys::U8string fromWindows1252(uint8_t ch)
     static const sys::U8string replacement_character = utf8_(0xfffd);
     return replacement_character;
 }
-inline sys::U8string fromWindows1252(std::string::value_type ch_)
+inline sys::U8string fromWindows1252(std::string::value_type ch)
 {
-    return fromWindows1252(static_cast<uint8_t>(ch_));
+    return fromWindows1252(static_cast<uint8_t>(ch));
 }
-inline sys::U8string fromWindows1252(str::W1252string::value_type ch_)
+inline sys::U8string fromWindows1252(str::W1252string::value_type ch)
 {
-    return fromWindows1252(static_cast<uint8_t>(ch_));
+    return fromWindows1252(static_cast<std::string::value_type>(ch));
 }
 
 void str::windows1252to8(W1252string::const_pointer p, size_t sz, sys::U8string& result)
@@ -159,6 +154,12 @@ void str::utf16to8(std::u16string::const_pointer p, size_t sz, sys::U8string& re
     utf8::utf16to8(utf16line.begin(), utf16line.end(), back_inserter(utf8line));
     */
     utf8::utf16to8(p, p + sz, back_inserter(result));
+    
+    /*
+    std::vector<unsigned short> utf16line;
+    auto begin = c_str<const uint8_t*>(result);
+    utf8::utf8to16(begin, begin+result.size(), std::back_inserter(utf16line));
+    */
 }
 void str::utf32to8(std::u32string::const_pointer p, size_t sz, sys::U8string& result)
 {
@@ -174,41 +175,6 @@ inline void wsto8_(std::u32string::const_pointer begin, std::u32string::const_po
     utf8::utf32to8(begin, end, back_inserter(result));
 }
 
-str::setlocale::setlocale(const char* locale) : locale_(::setlocale(LC_ALL, locale))
-{
-    if (locale_ == nullptr)
-    {
-        throw std::runtime_error("setlocale() failed.");
-    }
-}
-static const char* platform_locale()
-{
-    auto platform = str::details::Platform;  // "conditional expression is constant"
-    if (platform == str::details::PlatformType::Windows)
-    {
-        return "en-US";
-    }
-    return "en_US.utf8";
-}
-str::setlocale::setlocale() :  setlocale(platform_locale())
-{
-}
-str::setlocale::~setlocale() noexcept(false)
-{
-    if (::setlocale(LC_ALL, locale_) == nullptr)
-    {
-        throw std::runtime_error("setlocale() failed.");       
-    }
-}
-
-template <typename TStringPtr>
-void fromWindows1252_(TStringPtr p, size_t sz, sys::U8string& result)
-{
-    const void* const pStr = p;
-    auto const s = static_cast <str::W1252string::const_pointer>(pStr);
-    str::windows1252to8(s, sz, result);
-}
-
 sys::U8string str::to_u8string(W1252string::const_pointer p, size_t sz)
 {
     sys::U8string retval;
@@ -217,15 +183,23 @@ sys::U8string str::to_u8string(W1252string::const_pointer p, size_t sz)
 }
 sys::U8string str::to_u8string(std::string::const_pointer p, size_t sz)
 {
-    sys::U8string retval;
-
     const void* const pStr = p;
-#ifdef _WIN32
-    windows1252to8(static_cast<W1252string::const_pointer>(pStr), sz, retval);
-#else
-    retval = static_cast<sys::U8string::const_pointer>(pStr);  // copy
-#endif
-    return retval;
+
+    auto platform = details::Platform;  // "conditional expression is constant"
+    if (platform == details::PlatformType::Windows)
+    {    
+        sys::U8string retval;
+        windows1252to8(static_cast<W1252string::const_pointer>(pStr), sz, retval);
+        return retval;
+    }
+    else if (platform == details::PlatformType::Linux)
+    {
+        return static_cast<sys::U8string::const_pointer>(pStr);  // copy
+    }
+    else
+    {
+        throw std::logic_error("Unknown platform.");
+    }
 }
 
 sys::U8string str::fromWindows1252(std::string::const_pointer p, size_t sz)
@@ -233,9 +207,7 @@ sys::U8string str::fromWindows1252(std::string::const_pointer p, size_t sz)
     return to_u8string(cast<W1252string::const_pointer>(p), sz);
 }
 
-sys::U8string str::fromUtf8(std::string::const_pointer p, size_t sz)
+sys::U8string str::fromUtf8(std::string::const_pointer p, size_t)
 {
-    return sys::U8string(cast<sys::U8string::const_pointer>(p), sz);
+    return cast<sys::U8string::const_pointer>(p); // copy
 }
-
-
