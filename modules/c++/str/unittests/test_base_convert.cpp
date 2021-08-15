@@ -33,21 +33,6 @@
 
 #include "TestCase.h"
 
-namespace str
-{
-template <>
-inline std::string toString(const sys::U8string& value)
-{
-    return c_str<std::string::const_pointer>(value);  // copy
-}
-
-template <>
-inline std::string toString(const W1252string& value)
-{
-    return c_str<std::string::const_pointer>(value);  // copy
-}
-}
-
 template<typename T>
 std::string to_std_string(const T& value)
 {
