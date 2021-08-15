@@ -79,9 +79,6 @@ enum class Windows1252_T : unsigned char { };  // https://en.cppreference.com/w/
 using W1252string = std::basic_string<Windows1252_T>;  // https://en.cppreference.com/w/cpp/string
 void windows1252to8(W1252string::const_pointer, size_t, sys::U8string&); // c.f. utf16to8
 
-void utf16to1252(std::u16string::const_pointer, size_t, W1252string&);
-void utf32to1252(std::u32string::const_pointer, size_t, W1252string&);
-
 // assume std::string is Windows-1252 **ON ALL PLATFORMS**
 sys::U8string fromWindows1252(std::string::const_pointer, size_t);
 inline sys::U8string fromWindows1252(const std::string& s)
@@ -128,11 +125,6 @@ inline void strto8(const std::u32string& s, sys::U8string& result)
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
-
-bool mbsrtowcs(sys::U8string::const_pointer, size_t, std::wstring&);
-bool mbsrtowcs(const sys::U8string&, std::wstring&);
-bool wcsrtombs(std::wstring::const_pointer, size_t, sys::U8string&);
-bool wcsrtombs(const std::wstring&, sys::U8string&);
 
 // When the encoding is important, we want to "traffic" in sys::U8string (UTF-8), not
 // str::W1252string (Windows-1252) or std::string (unknown).  Make it easy to get those from other encodings.
