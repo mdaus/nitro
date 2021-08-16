@@ -473,12 +473,12 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
                         throw except::Exception(Ctxt(
                                 FmtX("Invalid option: [%s]", argStr.c_str())));
                     }
-                    
+
                 }
             }
         }
 
-        
+
         if (arg != NULL)
         {
             std::string argVar = arg->getVariable();
@@ -600,9 +600,16 @@ cli::Results* cli::ArgumentParser::parse(const std::vector<std::string>& args)
                 }
             }
             if (lastPosVal)
+            {
                 lastPosVal->add(argStr);
+            }
             else
-                parseError("too many arguments");
+            {
+                if (!mIgnoreUnknownArguments)
+                {
+                    parseError("too many arguments");
+                }
+            }
         }
     }
 
