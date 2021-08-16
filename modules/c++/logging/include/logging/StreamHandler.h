@@ -31,6 +31,7 @@
 #include "logging/LogRecord.h"
 #include "logging/Handler.h"
 #include <import/io.h>
+#include <mem/SharedPtr.h>
 
 namespace logging
 {
@@ -39,16 +40,19 @@ namespace logging
  * \class StreamHandler
  * \brief Emits LogRecords to an io::OutputStream
  */
-class StreamHandler : public Handler
+struct StreamHandler : public Handler
 {
-public:
     //! Constructs a StreamHandler that uses an io::StandardOutStream
     StreamHandler(LogLevel level = LogLevel::LOG_NOTSET);
 
     //! Constructs a StreamHandler using the specified OutputStream
     StreamHandler(io::OutputStream* stream, LogLevel level = LogLevel::LOG_NOTSET);
+    StreamHandler(std::unique_ptr<io::OutputStream>&& stream, LogLevel level = LogLevel::LOG_NOTSET) : StreamHandler(stream.release(), level) { }
 
     virtual ~StreamHandler();
+
+    StreamHandler(const StreamHandler&) = delete;
+    StreamHandler& operator=(const StreamHandler&) = delete;
 
     //! adds the need to write epilogue before deleting formatter
     //  and then writing the prologue with the new formatter
@@ -68,7 +72,7 @@ protected:
     // used for the bulk of the logging for speed
     virtual void emitRecord(const LogRecord* record);
 
-    std::auto_ptr<io::OutputStream> mStream;
+    mem::auto_ptr<io::OutputStream> mStream;
 
 private:
     bool mClosed;

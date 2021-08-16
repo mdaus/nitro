@@ -22,8 +22,16 @@
 
 #ifndef __XML_LITE_CONTENT_HANDLER_H__
 #define __XML_LITE_CONTENT_HANDLER_H__
+#pragma once
+
+#include <stdint.h>
+#include <stddef.h>
 
 #include <string>
+#include <stdexcept>
+
+#include "sys/CPlusPlus.h"
+
 #include "xml/lite/Attributes.h"
 
 /*!
@@ -90,6 +98,32 @@ public:
      *  \param length The length of the new data
      */
     virtual void characters(const char *data, int length) = 0;
+
+    virtual bool wcharacters_(const uint16_t* /*data*/, size_t /*length*/)
+    { return false; /* continue on to existing characters()*/ } /* =0 would break existing code */
+    virtual bool wcharacters_(const uint32_t* /*data*/, size_t /*length*/)
+    { return false; /* continue on to existing characters()*/ } /* =0 would break existing code */
+    template <typename T>
+    inline bool wcharacters(const T* data_, size_t length)
+    {
+        static_assert(sizeof(T) == sizeof(wchar_t), "T should be a wchar_t.");
+        auto sizeof_T = sizeof(T); // "conditional expression is constant"
+        const void* data = data_;
+        if (sizeof_T == sizeof(uint16_t))
+        {
+            return wcharacters_(static_cast<const uint16_t*>(data), length);
+        }
+        if (sizeof_T == sizeof(uint32_t))
+        {
+            return wcharacters_(static_cast<const uint32_t*>(data), length);
+        }
+        throw std::invalid_argument("Wrong size for T");
+    }
+
+    virtual bool use_wchar_t() const // =0 would break existing code
+    {
+        return false; // call characters(const char*)
+    }
 
     /*!
      *  Receive notification of the beginning of an element.

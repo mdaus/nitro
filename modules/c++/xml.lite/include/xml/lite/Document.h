@@ -22,6 +22,7 @@
 
 #ifndef __XML_LITE_DOM_DOCUMENT_H__
 #define __XML_LITE_DOM_DOCUMENT_H__
+#pragma once
 
 /*!
  * \file  Document.h
@@ -52,7 +53,7 @@ class Document
 {
 public:
     //! Constructor
-    Document(Element* rootNode = NULL, bool own = true) :
+    Document(Element* rootNode = nullptr, bool own = true) :
         mRootNode(rootNode), mOwnRoot(own)
     {
     }
@@ -86,6 +87,12 @@ public:
     virtual Element *createElement(const std::string & qname,
                                    const std::string & uri,
                                    std::string characterData = "");
+    virtual Element *createElement(const std::string & qname,
+                                   const std::string & uri,
+                                   const std::string& characterData, string_encoding);
+    virtual Element* createElement(const std::string& qname,
+                                   const std::string& uri,
+                                   const sys::U8string& characterData);
 
     /*!
      * Blanket destructor.  This thing deletes everything

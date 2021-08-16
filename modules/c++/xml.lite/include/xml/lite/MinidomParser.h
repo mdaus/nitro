@@ -22,6 +22,8 @@
 
 #ifndef __XML_LITE_MINIDOM_PARSER_H__
 #define __XML_LITE_MINIDOM_PARSER_H__
+#pragma once
+
 
 #include "xml/lite/XMLReader.h"
 #include "xml/lite/Document.h"
@@ -52,18 +54,21 @@ namespace lite
  * bloat of the spec.  It was inspired by python's xml.dom.minidom
  * module.
  */
-class MinidomParser
+struct MinidomParser
 {
-public:
     /*!
      *  Constructor.  Set our SAX ContentHandler.
      */
-    MinidomParser();
+    MinidomParser(bool storeEncoding = false); // see MinidomHandler::storeEncoding()
 
     //! Destructor.
     virtual ~MinidomParser()
     {
     }
+
+    MinidomParser(const MinidomParser&) = delete;
+    MinidomParser& operator=(const MinidomParser&) = delete;
+
 
     /*!
      *  Present our parsing interface.  Similar to DOM, the input
@@ -122,6 +127,11 @@ public:
      * @see MinidomHandler::preserveCharacterData
      */
     virtual void preserveCharacterData(bool preserve);
+
+     /*!
+     * @see MinidomHandler::storeEncoding
+     */
+    virtual void storeEncoding(bool preserve);
 
 protected:
     MinidomHandler mHandler;

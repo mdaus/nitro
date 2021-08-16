@@ -22,6 +22,7 @@
 
 #ifndef __XML_LITE_MINIDOM_HANDLER_H__
 #define __XML_LITE_MINIDOM_HANDLER_H__
+#pragma once
 
 /*!
  *  \file MinidomHandler.h
@@ -45,6 +46,8 @@
  */
 
 #include <stack>
+#include <memory>
+
 #include "XMLReader.h"
 #include "io/StandardStreams.h"
 #include "io/DbgStream.h"
@@ -68,7 +71,7 @@ class MinidomHandler : public ContentHandler
 public:
     //! Constructor.  Uses default document
     MinidomHandler() :
-        mDocument(NULL), mOwnDocument(true), mPreserveCharData(false)
+        mDocument(nullptr), mOwnDocument(true), mPreserveCharData(false)
     {
         setDocument(new Document());
     }
@@ -76,7 +79,7 @@ public:
     //! Destructor
     virtual ~ MinidomHandler()
     {
-        setDocument(NULL, true);
+        setDocument(nullptr, true);
     }
 
     virtual void setDocument(Document *newDocument, bool own = true);
@@ -104,7 +107,13 @@ public:
      * \param value The value of the char data
      * \param length The length of the char data
      */
-    virtual void characters(const char *value, int length);
+    virtual void characters(const char* value, int length) override;
+
+    bool wcharacters_(const uint16_t* /*data*/, size_t /*length*/) override;
+    bool wcharacters_(const uint32_t* /*data*/, size_t /*length*/) override;
+
+    // Which characters() routine should be called?
+    bool use_wchar_t() const override;
 
     /*!
      * This method is fired when a new tag is entered.
@@ -155,14 +164,37 @@ public:
      * character data. Otherwise, it will be trimmed.
      */
     virtual void preserveCharacterData(bool preserve);
+    
+    /*!
+     * If set to true, how std::string values are encoded will be set.
+     * 
+     * This is a bit goofy to preserve existing behavior: on *ix,
+     * XML containing non-ASCII data is lost (it turns into 
+     * Windows-1252 on Windows).
+     * 
+     * When set, there won't be any change on Windows.  However,
+     * on *ix, std::string will be encoding as UTF-8 thus preserving
+     * the non-ASCII data.
+     */
+    virtual void storeEncoding(bool value);
 
 protected:
+    void characters(const char* value, int length, const string_encoding*);
+    bool storeEncoding() const;
+
     std::string currentCharacterData;
+    std::shared_ptr<const string_encoding> mpEncoding;
     std::stack<int> bytesForElement;
     std::stack<Element *> nodeStack;
     Document *mDocument;
     bool mOwnDocument;
     bool mPreserveCharData;
+    bool mStoreEncoding = false;
+
+ private:
+    template <typename T>
+    bool characters_(const T* value, size_t length);
+    bool call_characters(const std::string& utf8Value);
 };
 }
 }

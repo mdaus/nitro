@@ -47,16 +47,38 @@ void xml::lite::Document::remove(Element * toDelete)
         remove(toDelete, mRootNode);
 }
 
+static
 xml::lite::Element *
-xml::lite::Document::createElement(const std::string& qname,
-                                   const std::string& uri,
-                                   std::string characterData)
+newElement(const std::string& qname, const std::string& uri)
 {
-    Element *elem = new Element();
+    auto elem = new xml::lite::Element();
     elem->setQName(qname);
     //std::cout << "qname: " << qname << std::endl;
 
     elem->setUri(uri);
+    return elem;
+}
+xml::lite::Element* xml::lite::Document::createElement(const std::string& qname,
+                                   const std::string& uri,
+                                   std::string characterData)
+{
+    auto elem = newElement(qname, uri);
+    elem->setCharacterData(characterData);
+    return elem;
+}
+xml::lite::Element* xml::lite::Document::createElement(const std::string& qname,
+                                   const std::string& uri,
+                                   const std::string& characterData, string_encoding encoding)
+{
+    auto elem = newElement(qname, uri);
+    elem->setCharacterData(characterData, encoding);
+    return elem;
+}
+xml::lite::Element* xml::lite::Document::createElement(const std::string& qname,
+                                   const std::string& uri,
+                                   const sys::U8string& characterData)
+{
+    auto elem = newElement(qname, uri);
     elem->setCharacterData(characterData);
     return elem;
 }

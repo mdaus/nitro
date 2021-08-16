@@ -51,10 +51,14 @@ namespace lite
 
 typedef xercesc::DOMError ValidationError;
 
-class ValidationErrorHandler : public xercesc::DOMErrorHandler
+struct ValidationErrorHandler : public xercesc::DOMErrorHandler
 {
-public:
-    ValidationErrorHandler() {}
+    ValidationErrorHandler() = default;
+
+    ValidationErrorHandler(const ValidationErrorHandler&) = delete;
+    ValidationErrorHandler& operator=(const ValidationErrorHandler&) = delete;
+    ValidationErrorHandler(ValidationErrorHandler&&) = delete;
+    ValidationErrorHandler& operator=(ValidationErrorHandler&&) = delete;
 
     //! handle the errors during validation
     virtual bool handleError (const ValidationError& err);
@@ -94,7 +98,6 @@ private:
  */
 class ValidatorXerces : public ValidatorInterface
 {
-private:
     XercesContext mCtxt;    //! this must be the first member listed
 
 public:
@@ -111,6 +114,9 @@ public:
                     logging::Logger* log,
                     bool recursive = true);
 
+    ValidatorXerces(const ValidatorXerces&) = delete;
+    ValidatorXerces& operator=(const ValidatorXerces&) = delete;
+
     using ValidatorInterface::validate;
 
     /*!
@@ -125,9 +131,9 @@ public:
 
 private:
 
-    std::auto_ptr<xercesc::XMLGrammarPool> mSchemaPool;
-    std::auto_ptr<xml::lite::ValidationErrorHandler> mErrorHandler;
-    std::auto_ptr<xercesc::DOMLSParser> mValidator;
+    std::unique_ptr<xercesc::XMLGrammarPool> mSchemaPool;
+    std::unique_ptr<xml::lite::ValidationErrorHandler> mErrorHandler;
+    std::unique_ptr<xercesc::DOMLSParser> mValidator;
 
 };
 

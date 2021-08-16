@@ -61,7 +61,7 @@ public:
     std::vector<OneD<_T> >& coeffs(){ return mCoef; }
 
     //! The polynomial is invalid (i.e. orderX() and orderY() will throw)
-    TwoD() {}
+    TwoD() = default;
 
     TwoD(size_t orderX, size_t orderY) : mCoef(orderX+1,OneD<_T>(orderY)) {}
 
@@ -242,7 +242,7 @@ public:
     TwoD<_T> power(size_t toThe) const;
 
     template<typename _TT>
-        friend std::ostream& operator << (std::ostream& out, const TwoD<_TT> p);
+        friend std::ostream& operator << (std::ostream& out, const TwoD<_TT>& p);
 
     /*!
      *  serialize out to a boost stream

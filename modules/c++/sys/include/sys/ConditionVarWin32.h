@@ -24,7 +24,7 @@
 #ifndef __SYS_WIN32_CONDITION_VARIABLE_H__
 #define __SYS_WIN32_CONDITION_VARIABLE_H__
 
-#if defined(WIN32)
+#if defined(WIN32) || defined(_WIN32)
 #if !defined(USE_NSPR_THREADS)
 
 #include "sys/ConditionVarInterface.h"
@@ -74,11 +74,9 @@ private:
     bool mWasBroadcast;
 };
 
-class ConditionVarWin32 : public ConditionVarInterface
+struct ConditionVarWin32 final : public ConditionVarInterface
 
 {
-public:
-
     ConditionVarWin32();
     
     ConditionVarWin32(MutexWin32 *theLock, bool isOwner = false);
@@ -86,6 +84,9 @@ public:
     virtual ~ConditionVarWin32()
     {}
     
+    ConditionVarWin32(const ConditionVarWin32&) = delete;
+    ConditionVarWin32& operator=(const ConditionVarWin32&) = delete;
+
     /*!
      *  Acquire the lock
      */
@@ -145,7 +146,7 @@ public:
 
 private:
     // This is set if we own the mutex, to make sure it gets deleted.
-    std::auto_ptr<MutexWin32> mMutexOwned;
+    std::unique_ptr<MutexWin32> mMutexOwned;
     MutexWin32 *mMutex;
     ConditionVarDataWin32 mNative;
 };

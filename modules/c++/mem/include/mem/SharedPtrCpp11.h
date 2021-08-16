@@ -22,11 +22,27 @@
 
 #ifndef __MEM_SHARED_PTR_CPP_11_H__
 #define __MEM_SHARED_PTR_CPP_11_H__
+#pragma once
 
 #include <memory>
+#include <type_traits>
+
+#include "sys/CPlusPlus.h"
 
 namespace mem
 {
+// This won't work everywhere since C++11's std::unique_ptr<> often requries
+// "&&" and std::move. But for member data and the like it can reduce some
+// boiler-plate code; note that it's often possible to just use std::unique_ptr
+// directly.  This is mostly needed to support existing interfaces.
+#if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
+template <typename T>
+using auto_ptr = std::auto_ptr<T>;
+#else
+template <typename T>
+using auto_ptr = std::unique_ptr<T>;
+#endif
+
 /*!
  *  \class SharedPtr
  *  \brief This is a derived class of std::shared_ptr. The purpose of this
@@ -51,23 +67,54 @@ public:
 
     using std::shared_ptr<T>::reset;
 
+    explicit SharedPtr(std::unique_ptr<T>&& ptr) :
+        std::shared_ptr<T>(ptr.release())
+    {
+    }
+
+    SharedPtr(const SharedPtr&) = default;
+    SharedPtr& operator=(const SharedPtr&) = default;
+    SharedPtr(SharedPtr&&) = default;
+    SharedPtr& operator=(SharedPtr&&) = default;
+
+    explicit SharedPtr(std::shared_ptr<T> ptr) : std::shared_ptr<T>(ptr) {}
+    SharedPtr& operator=(const std::shared_ptr<T>& ptr)
+    {
+      std::shared_ptr<T>& base = *this;
+      base = ptr;
+      return *this;
+    }
+
+    template <typename OtherT>
+    explicit SharedPtr(std::unique_ptr<OtherT>&& ptr) :
+        std::shared_ptr<T>(ptr.release())
+    {
+    }
+
+    void reset(std::unique_ptr<T>&& scopedPtr)
+    {
+        std::shared_ptr<T>::reset(scopedPtr.release());
+    }
+
+    #if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
     // The base class only handles auto_ptr<T>&&
-    explicit SharedPtr(std::auto_ptr<T> ptr) :
+    explicit SharedPtr(mem::auto_ptr<T> ptr) :
         std::shared_ptr<T>(ptr.release())
     {
     }
 
     // The base class only handles auto_ptr<T>&&
     template <typename OtherT>
-    explicit SharedPtr(std::auto_ptr<OtherT> ptr) :
+    explicit SharedPtr(mem::auto_ptr<OtherT> ptr) :
         std::shared_ptr<T>(ptr.release())
     {
     }
 
-    void reset(std::auto_ptr<T> scopedPtr)
+    void reset(mem::auto_ptr<T> scopedPtr)
     {
         std::shared_ptr<T>::reset(scopedPtr.release());
     }
+    #endif
 
     // Implemented to support the legacy SharedPtr. Prefer use_count.
     long getCount() const
@@ -75,6 +122,51 @@ public:
         return std::shared_ptr<T>::use_count();
     }
 };
+
+// C++11 inadvertently ommitted make_unique; provide it here. (Swiped from <memory>.)
+namespace make
+{
+// Using a nested namespace in case somebody does both
+// "using namespace std" and "using namespace mem".
+
+template <typename T, typename... TArgs, typename std::enable_if<!std::is_array<T>::value, int>::type = 0>
+std::unique_ptr<T> unique(TArgs&&... args)
+{
+    #if _MSC_VER
+    #pragma warning(push)
+    #pragma warning(disable: 26409) // Avoid calling new and delete explicitly, use std::make_unique<T> instead (r .11).
+    #endif
+
+    return std::unique_ptr<T>(new T(std::forward<TArgs>(args)...));
+
+    #if _MSC_VER
+    #pragma warning(pop)
+    #endif
 }
+
+template <typename T, typename std::enable_if<std::is_array<T>::value &&  std::extent<T>::value == 0, int>::type = 0>
+std::unique_ptr<T> unique(size_t size)
+{
+    using element_t = typename std::remove_extent<T>::type;
+
+    #if _MSC_VER
+    #pragma warning(push)
+    #pragma warning(disable: 26409) // Avoid calling new and delete explicitly, use std::make_unique<T> instead (r .11).
+    #endif
+    
+    return std::unique_ptr<T>(new element_t[size]());
+
+    #if _MSC_VER
+    #pragma warning(pop)
+    #endif
+}
+
+template <typename T, typename... TArgs, typename std::enable_if<std::extent<T>::value != 0, int>::type = 0>
+void unique(TArgs&&...) = delete;
+
+#define CODA_OSS_mem_make_unique 201304L  // c.f., __cpp_lib_make_unique
+
+}  // namespace make
+} // namespace mem
 
 #endif

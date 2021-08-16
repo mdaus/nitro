@@ -26,6 +26,7 @@
 #include <vector>
 #include <import/sys.h>
 #include <import/io.h>
+#include <import/mem.h>
 #include "sio/lite/InvalidHeaderException.h"
 #include "sio/lite/FileHeader.h"
 
@@ -96,7 +97,7 @@ public:
 
 protected:
     std::string mFileName;
-    std::auto_ptr<io::OutputStream> mStream;
+    mem::auto_ptr<io::OutputStream> mStream;
     bool mAdopt;
 };
 
@@ -165,7 +166,7 @@ template<typename T> void writeSIO(const T* image, size_t rows, size_t cols,
 
     io::FileOutputStream imageStream(imageFile);
 
-    FileHeader fhdr(rows, cols, es, et);
+    FileHeader fhdr(static_cast<int>(rows), static_cast<int>(cols), es, et);
     fhdr.to(1, imageStream);
 
     imageStream.write(reinterpret_cast<const sys::byte*>(image),

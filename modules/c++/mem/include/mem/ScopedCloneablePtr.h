@@ -22,9 +22,12 @@
 
 #ifndef __MEM_SCOPED_CLONEABLE_PTR_H__
 #define __MEM_SCOPED_CLONEABLE_PTR_H__
+#pragma once
 
 #include <memory>
 #include <cstddef>
+
+#include "sys/Conf.h"
 
 namespace mem
 {
@@ -51,15 +54,21 @@ template <class T>
 class ScopedCloneablePtr
 {
 public:
-    explicit ScopedCloneablePtr(T* ptr = NULL) :
+    explicit ScopedCloneablePtr(T* ptr = nullptr) :
         mPtr(ptr)
     {
     }
 
-    explicit ScopedCloneablePtr(std::auto_ptr<T> ptr) :
-        mPtr(ptr)
+    explicit ScopedCloneablePtr(std::unique_ptr<T>&& ptr) :
+        mPtr(std::move(ptr))
     {
     }
+    #if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
+    explicit ScopedCloneablePtr(mem::auto_ptr<T> ptr)
+    {
+        reset(ptr);
+    }
+    #endif
 
     ScopedCloneablePtr(const ScopedCloneablePtr& rhs)
     {
@@ -89,12 +98,12 @@ public:
 
     bool operator==(const ScopedCloneablePtr<T>& rhs) const
     {
-        if (get() == NULL && rhs.get() == NULL)
+        if (get() == nullptr && rhs.get() == nullptr)
         {
             return true;
         }
 
-        if (get() == NULL || rhs.get() == NULL)
+        if (get() == nullptr || rhs.get() == nullptr)
         {
             return false;
         }
@@ -122,18 +131,24 @@ public:
         return mPtr.get();
     }
 
-    void reset(T* ptr = NULL)
+    void reset(T* ptr = nullptr)
     {
         mPtr.reset(ptr);
     }
 
-    void reset(std::auto_ptr<T> ptr)
+    void reset(std::unique_ptr<T>&& ptr)
     {
-        mPtr = ptr;
+        mPtr = std::move(ptr);
     }
+    #if !CODA_OSS_cpp17  // std::auto_ptr removed in C++17
+    void reset(mem::auto_ptr<T> ptr)
+    {
+        reset(std::unique_ptr<T>(ptr.release()));
+    }
+    #endif
 
 private:
-    std::auto_ptr<T> mPtr;
+    std::unique_ptr<T> mPtr;
 };
 }
 
