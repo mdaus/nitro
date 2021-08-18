@@ -59,7 +59,8 @@ public:
     FileHeader & operator=(const FileHeader & x);
 
     //! Set native object
-    FileHeader(nitf_FileHeader * x);
+    using native_t = nitf_FileHeader;
+    FileHeader(native_t * x);
 
     //! Constructor
     FileHeader() noexcept(false);
