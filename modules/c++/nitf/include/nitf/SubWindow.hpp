@@ -74,6 +74,7 @@ public:
     //! Constructor
     SubWindow();
     SubWindow(const ImageSubheader&);
+    SubWindow(uint32_t rows, uint32_t cols, uint32_t* bands = nullptr, uint32_t numBands = 0);
 
     //! Destructor
     ~SubWindow();

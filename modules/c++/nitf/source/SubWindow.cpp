@@ -67,17 +67,23 @@ SubWindow::SubWindow() : SubWindow(nitf_SubWindow_construct(&error))
     setStartRow(0);
 }
 
+SubWindow::SubWindow(uint32_t rows, uint32_t cols, uint32_t* bands, uint32_t numBands) : SubWindow()
+{
+    setNumRows(rows);
+    setNumCols(cols);
+    setBandList(bands);
+    setNumBands(numBands);
+}
+
 static inline std::vector<uint32_t> iota(size_t count, uint32_t value = 0)
 {
     std::vector<uint32_t> retval(count);
     std::iota(retval.begin(), retval.end(), value);
     return retval;
 }
-SubWindow::SubWindow(const ImageSubheader& subheader) : SubWindow()
+SubWindow::SubWindow(const ImageSubheader& subheader) : SubWindow(subheader.numRows(), subheader.numCols())
 {
-    setNumRows(subheader.numRows());
-    setNumCols(subheader.numCols());
-    setBandList(iota(subheader.getBandCount())); // window.bandList = list(range(subheader.getBandCount()))
+    setBandList(iota(subheader.getBandCount()));
 }
 
 SubWindow::~SubWindow()
