@@ -231,4 +231,44 @@ void operator()(Package_##_##Name_ * nativeObject) override \
 #define NITRO_DECLARE_CLASS_NITF(_Name) DECLARE_CLASS_IN(_Name, nitf)
 #define DECLARE_CLASS(_Name) NITRO_DECLARE_CLASS_NITF(_Name)
 
+namespace nitf
+{
+    // Refer to a field in a native structure without have to explicitly name it; rather
+    // use the offset and pointer math.  Besides making it easier to refer to fields
+    // without naming them, it makes it easier to iterate over all of the fields in
+    // a struct.
+
+    // fieldOffset is  offsetof(TNative, <field>), e.g., offsetof(nitf_TextSubheader, filePartType)
+    template<typename TReturn, typename TNative>
+    inline TReturn fromNativeOffset_(TNative& native, size_t fieldOffset) noexcept
+    {
+        static_assert(std::is_standard_layout<TNative>::value, "!std::is_standard_layout<>");
+
+        void* const pNative_ = &native;
+        auto pNativeBytes = static_cast<std::byte*>(pNative_); // for pointer math
+        pNativeBytes += fieldOffset;
+        void* const pAddressOfField_ = pNativeBytes;
+
+        auto pAddressOfField = static_cast<TReturn*>(pAddressOfField_);
+        if (pAddressOfField != nullptr) // code-analysis diagnostic
+        {
+            return *pAddressOfField;
+        }
+        return nullptr;
+    }
+    template<typename TReturn, typename TObject>
+    inline TReturn fromNativeOffset(TObject& object, size_t fieldOffset) noexcept(false)
+    {
+        auto& native = *(object.getNativeOrThrow());
+        using native_object_t = typename TObject::native_t;
+        using get_native_t = typename std::remove_reference<decltype(native)>::type;
+        static_assert(std::is_same<native_object_t, get_native_t>::value, "!std::is_same<>");
+
+        using native_t = typename TReturn::native_t;
+        auto const pField = fromNativeOffset_<native_t*>(native, fieldOffset);
+        return TReturn(pField);
+    }
+    #define nitf_offsetof(name) offsetof(native_t, name)
+}
+
 #endif

@@ -47,32 +47,6 @@
 
 namespace nitf
 {
-    // fieldOffset is  offsetof(TNative, <field>), e.g., offsetof(nitf_TextSubheader, filePartType)
-    template<typename TReturn, typename TNative>
-    inline TReturn fromNativeOffset_(TNative& native, size_t fieldOffset) noexcept
-    {
-        static_assert(std::is_standard_layout<TNative>::value, "!std::is_standard_layout<>");
-
-        void* const pNative_ = &native;
-        auto pNativeBytes = static_cast<std::byte*>(pNative_); // for pointer math
-        pNativeBytes += fieldOffset;
-        void* const pAddressOfField_ = pNativeBytes;
-
-        auto pAddressOfField = static_cast<TReturn*>(pAddressOfField_);
-        if (pAddressOfField != nullptr) // code-analysis diagnostic
-        {
-            return *pAddressOfField;
-        }
-        return nullptr;
-    }
-    template<typename TReturn, typename TNative>
-    inline TReturn fromNativeOffset(TNative& native, size_t fieldOffset)
-    {
-        using native_t = typename TReturn::native_t;
-        auto const pField = fromNativeOffset_<native_t*>(native, fieldOffset);
-        return TReturn(pField);
-    }
-
 namespace detail
 {
 // Some template metaprogramming to allow us to provide a templated
@@ -357,18 +331,6 @@ private:
 
     mutable nitf_Error error{};
 };
-
-// fieldOffset is  offsetof(TNative, <field>), e.g., offsetof(nitf_TextSubheader, filePartType)
-template<typename TObject>
-inline Field getField(const TObject& object, size_t fieldOffset) noexcept(false)
-{
-    auto& native = *(object.getNativeOrThrow());
-    using native_t = typename TObject::native_t;
-    using my_native_t = typename std::remove_reference<decltype(native)>::type;
-    static_assert(std::is_same<native_t, my_native_t>::value, "!std::is_same<>");
-
-    return ::fromNativeOffset<Field>(native, fieldOffset);
-}
 
 }
 #endif
