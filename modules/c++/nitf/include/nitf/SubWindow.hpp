@@ -38,7 +38,7 @@
  */
 namespace nitf
 {
-
+    class ImageSubheader;
 /*!
  *  \class SubWindow
  *  \brief  The C++ wrapper for the nitf_SubWindow
@@ -73,6 +73,7 @@ public:
 
     //! Constructor
     SubWindow();
+    SubWindow(const ImageSubheader&);
 
     //! Destructor
     ~SubWindow();

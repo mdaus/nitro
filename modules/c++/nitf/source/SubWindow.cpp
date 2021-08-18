@@ -22,6 +22,8 @@
 
 #include "nitf/SubWindow.hpp"
 
+#include "nitf/ImageSubheader.hpp"
+
 using namespace nitf;
 
 SubWindow::SubWindow(const SubWindow & x)
@@ -63,6 +65,19 @@ SubWindow::SubWindow() : SubWindow(nitf_SubWindow_construct(&error))
 
     setStartCol(0);
     setStartRow(0);
+}
+
+static inline std::vector<uint32_t> iota(size_t count, uint32_t value = 0)
+{
+    std::vector<uint32_t> retval(count);
+    std::iota(retval.begin(), retval.end(), value);
+    return retval;
+}
+SubWindow::SubWindow(const ImageSubheader& subheader) : SubWindow()
+{
+    setNumRows(subheader.numRows());
+    setNumCols(subheader.numCols());
+    setBandList(iota(subheader.getBandCount())); // window.bandList = list(range(subheader.getBandCount()))
 }
 
 SubWindow::~SubWindow()
@@ -129,7 +144,6 @@ void SubWindow::setBandList(std::vector<uint32_t>&& value)
     bandList = std::move(value);
     updateBandList();
 }
-
 
 uint32_t SubWindow::getNumBands() const
 {
