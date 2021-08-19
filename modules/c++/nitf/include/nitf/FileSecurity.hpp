@@ -54,8 +54,7 @@ public:
     FileSecurity & operator=(const FileSecurity & x);
 
     //! Set native object
-    using native_t = nitf_FileSecurity;
-    FileSecurity(native_t* x);
+    FileSecurity(nitf_FileSecurity * x);
 
     //! Constructor
     FileSecurity() noexcept(false);

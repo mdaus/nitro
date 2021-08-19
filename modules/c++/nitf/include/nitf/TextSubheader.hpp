@@ -56,8 +56,7 @@ public:
     TextSubheader & operator=(const TextSubheader & x);
 
     //! Set native object
-    using native_t = nitf_TextSubheader;
-    TextSubheader(native_t* x);
+    TextSubheader(nitf_TextSubheader * x);
 
     //! Default Constructor
     TextSubheader() noexcept(false);

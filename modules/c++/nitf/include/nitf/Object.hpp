@@ -130,7 +130,7 @@ public:
     }
 
     //! Get native object
-    virtual T * getNativeOrThrow() const noexcept(false)
+    virtual T * getNativeOrThrow() const
     {
         T* val = getNative();
         if (val)
