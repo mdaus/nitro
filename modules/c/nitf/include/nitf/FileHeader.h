@@ -37,7 +37,6 @@
 #include "nitf/FileSecurity.h"
 #include "nitf/ComponentInfo.h"
 #include "nitf/Extensions.h"
-#include "nitf/Types.h"
 
 #define NITF_FHDR_SZ   4
 #define NITF_FVER_SZ   5
@@ -218,22 +217,6 @@ NITFAPI(nitf_FileHeader *) nitf_FileHeader_clone(nitf_FileHeader * source,
  */
 NITFAPI(void) nitf_FileHeader_destruct(nitf_FileHeader ** fh);
 
-
-
-NITF_DECLARE_struct_2(TestTest,
-    Field, f1,
-    Extensions, e1);
-
-NITF_DECLARE_struct_3(TestTestTest,
-    Field, f1,
-    Field, f2,
-    Field, f3);
-
-NITF_DECLARE_struct_4(Test4,
-    Field, f1,
-    Field, f2,
-    Field, f2a,
-    Field, f3);
 
 NITF_CXX_ENDGUARD
 
