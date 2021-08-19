@@ -167,12 +167,12 @@ typedef struct _nitf_FileHeader
     nitf_Field *numDataExtensions;
     nitf_Field *numReservedExtensions;
 
-    nitf_ComponentInfo **imageInfo;
-    nitf_ComponentInfo **graphicInfo;
-    nitf_ComponentInfo **labelInfo;
-    nitf_ComponentInfo **textInfo;
-    nitf_ComponentInfo **dataExtensionInfo;
-    nitf_ComponentInfo **reservedExtensionInfo;
+    nitf_PComponentInfo *imageInfo;
+    nitf_PComponentInfo *graphicInfo;
+    nitf_PComponentInfo *labelInfo;
+    nitf_PComponentInfo *textInfo;
+    nitf_PComponentInfo *dataExtensionInfo;
+    nitf_PComponentInfo *reservedExtensionInfo;
 
     nitf_Field *userDefinedHeaderLength;
     nitf_Field *userDefinedOverflow;
@@ -226,22 +226,10 @@ NITF_DECLARE_struct_2(TestTest,
     Extensions, e1);
 
 NITF_DECLARE_struct_3(TestTestTest,
-    Field, f1,
+    PComponentInfo, pc1,
     Field, f2,
     Field, f3);
 
-NITF_DECLARE_struct_4(Test4,
-    Field, f1,
-    Field, f2,
-    Field, f2a,
-    Field, f3);
-
-NITF_DECLARE_struct_5(Test5,
-    Field, f1,
-    Field, f2,
-    Field, f3,
-    Field, f4,
-    Field, f5);
 
 NITF_CXX_ENDGUARD
 

@@ -51,6 +51,7 @@ typedef enum nitf_StructFieldType_
     NITF_FieldType_Field, // nitf_Field*
     NITF_FieldType_FileSecurity, // nitf_FileSecurity*
     NITF_FieldType_ComponentInfo, // nitf_ComponentInfo*
+    NITF_FieldType_PComponentInfo, // nitf_ComponentInfo** aka nitf_PComponentInfo*
     NITF_FieldType_Extensions, // nitf_Extensions*
 } nitf_StructFieldType;
 
@@ -66,44 +67,218 @@ typedef struct nitf_StructFieldDescriptor_
 
 #define NITF_DECLARE_struct_(name, fields, descriptors) typedef struct _##nitf_##name { fields; } nitf_##name; \
     static const nitf_StructFieldDescriptor nitf_##name##_fields[] = { descriptors }
+//
+//#define NITF_DECLARE_struct_1_(n_1, t, f) nitf_##t* f
+//#define NITF_StructFieldDescriptor_value_1_(n_1, name, t, f) NITF_StructFieldDescriptor_value(t, name, f)
+//#define NITF_DECLARE_struct_1(name, ...) NITF_DECLARE_struct_(name, \
+//    NITF_DECLARE_struct_1_(0, __VA_ARGS__), NITF_StructFieldDescriptor_value_1_(0, name, __VA_ARGS__))
+//
+//#define NITF_DECLARE_struct_2_(n_1, t, f, ...) nitf_##t* f; NITF_expand_(NITF_DECLARE_struct_##n_1##_(0, __VA_ARGS__))
+//#define NITF_StructFieldDescriptor_value_2_(n_1, name, t, f, ...) NITF_StructFieldDescriptor_value(t, name, f), \
+//    NITF_expand_(NITF_StructFieldDescriptor_value_##n_1##_(0, name, __VA_ARGS__))
+//#define NITF_DECLARE_struct_2(name, ...) NITF_DECLARE_struct_(name, \
+//    NITF_DECLARE_struct_2_(1, __VA_ARGS__), NITF_StructFieldDescriptor_value_2_(1, name, __VA_ARGS__))
+//
+//#define NITF_DECLARE_struct_3_(n_1, t, f, ...) nitf_##t* f; NITF_expand_(NITF_DECLARE_struct_##n_1##_(1, __VA_ARGS__))
+//#define NITF_StructFieldDescriptor_value_3_(n_1, name, t, f, ...) NITF_StructFieldDescriptor_value(t, name, f), \
+//    NITF_expand_(NITF_StructFieldDescriptor_value_##n_1##_(1, name, __VA_ARGS__))
+//#define NITF_DECLARE_struct_3(name, ...) NITF_DECLARE_struct_(name, \
+//    NITF_DECLARE_struct_3_(2, __VA_ARGS__), NITF_StructFieldDescriptor_value_3_(2, name, __VA_ARGS__))
+//
+//#define NITF_DECLARE_struct_4_(n_1, t, f, ...) nitf_##t* f; NITF_expand_(NITF_DECLARE_struct_##n_1##_(2, __VA_ARGS__))
+//#define NITF_StructFieldDescriptor_value_4_(n_1, name, t, f, ...) NITF_StructFieldDescriptor_value(t, name, f), \
+//    NITF_expand_(NITF_StructFieldDescriptor_value_##n_1##_(2, name, __VA_ARGS__))
+//#define NITF_DECLARE_struct_4(name, ...) NITF_DECLARE_struct_(name, \
+//    NITF_DECLARE_struct_4_(3, __VA_ARGS__), NITF_StructFieldDescriptor_value_4_(3, name, __VA_ARGS__))
+////#define NITF_DECLARE_struct_4(name, ...) NITF_DECLARE_struct_n(4, name, __VA_ARGS__)
+//
+//
+//#define NITF_DECLARE_struct_5_(n_1, t, f, ...) nitf_##t* f; NITF_expand_(NITF_DECLARE_struct_##n_1##_(3,  __VA_ARGS__))
+//#define NITF_StructFieldDescriptor_value_5_(n_1, name, t, f, ...) NITF_StructFieldDescriptor_value(t, name, f), \
+//    NITF_expand_(NITF_StructFieldDescriptor_value_##n_1##_(3, name, __VA_ARGS__))
+//#define NITF_DECLARE_struct_5(name, ...) NITF_DECLARE_struct_(name, \
+//    NITF_DECLARE_struct_5_(4, __VA_ARGS__), NITF_StructFieldDescriptor_value_5_(4, name, __VA_ARGS__))
+////#define NITF_DECLARE_struct_5(name, ...) NITF_DECLARE_struct_n(5, name, __VA_ARGS__)
 
-#define NITF_DECLARE_struct_1_(n_1, t, f) nitf_##t* f
-#define NITF_StructFieldDescriptor_value_1_(n_1, name, t, f) NITF_StructFieldDescriptor_value(t, name, f)
+
+#define NITF_DECLARE_struct_1_(t, f) nitf_##t* f
+#define NITF_StructFieldDescriptor_value_1_(name, t, f) NITF_StructFieldDescriptor_value(t, name, f)
 #define NITF_DECLARE_struct_1(name, ...) NITF_DECLARE_struct_(name, \
-    NITF_DECLARE_struct_1_(0, __VA_ARGS__), NITF_StructFieldDescriptor_value_1_(0, name, __VA_ARGS__))
+    NITF_DECLARE_struct_1_(__VA_ARGS__), NITF_StructFieldDescriptor_value_1_(name, __VA_ARGS__))
 
 #define NITF_expand_(v) v
-//#define NITF_DECLARE_struct_n_(n, ...) NITF_expand_(NITF_DECLARE_struct_##n##_(__VA_ARGS__))
-//#define NITF_StructFieldDescriptor_value_n_(n, name, ...) NITF_expand_(NITF_StructFieldDescriptor_value_## n##_(name, __VA_ARGS__))
-//#define NITF_DECLARE_struct_n(n, name, ...) NITF_DECLARE_struct_(name, \
-//    NITF_DECLARE_struct_n_(n, __VA_ARGS__), NITF_StructFieldDescriptor_value_n_(n, name, __VA_ARGS__))
+#define NITF_DECLARE_struct_n(n, name, ...) NITF_DECLARE_struct_(name, \
+    NITF_expand_(NITF_DECLARE_struct_##n##_(__VA_ARGS__)), \
+    NITF_expand_(NITF_StructFieldDescriptor_value_##n##_(name, __VA_ARGS__)))
 
-#define NITF_DECLARE_struct_2_(n_1, t, f, ...) nitf_##t* f; NITF_expand_(NITF_DECLARE_struct_##n_1##_(0, __VA_ARGS__))
-#define NITF_StructFieldDescriptor_value_2_(n_1, name, t, f, ...) NITF_StructFieldDescriptor_value(t, name, f), \
-    NITF_expand_(NITF_StructFieldDescriptor_value_##n_1##_(0, name, __VA_ARGS__))
-#define NITF_DECLARE_struct_2(name, ...) NITF_DECLARE_struct_(name, \
-    NITF_DECLARE_struct_2_(1, __VA_ARGS__), NITF_StructFieldDescriptor_value_2_(1, name, __VA_ARGS__))
+#define NITF_DECLARE_struct_2_(t, f, ...) nitf_##t* f; NITF_expand_(NITF_DECLARE_struct_1_(__VA_ARGS__))
+#define NITF_StructFieldDescriptor_value_2_( name, t, f, ...) NITF_StructFieldDescriptor_value(t, name, f), \
+    NITF_expand_(NITF_StructFieldDescriptor_value_1_(name, __VA_ARGS__))
+#define NITF_DECLARE_struct_2(name, ...) NITF_DECLARE_struct_n(2, name, __VA_ARGS__)
 
-#define NITF_DECLARE_struct_3_(n_1, t, f, ...) nitf_##t* f; NITF_expand_(NITF_DECLARE_struct_##n_1##_(1, __VA_ARGS__))
-#define NITF_StructFieldDescriptor_value_3_(n_1, name, t, f, ...) NITF_StructFieldDescriptor_value(t, name, f), \
-    NITF_expand_(NITF_StructFieldDescriptor_value_##n_1##_(1, name, __VA_ARGS__))
-#define NITF_DECLARE_struct_3(name, ...) NITF_DECLARE_struct_(name, \
-    NITF_DECLARE_struct_3_(2, __VA_ARGS__), NITF_StructFieldDescriptor_value_3_(2, name, __VA_ARGS__))
+#define NITF_DECLARE_struct_3_(t, f, ...) nitf_##t* f; NITF_expand_(NITF_DECLARE_struct_2_(__VA_ARGS__))
+#define NITF_StructFieldDescriptor_value_3_(name, t, f, ...) NITF_StructFieldDescriptor_value(t, name, f), \
+    NITF_expand_(NITF_StructFieldDescriptor_value_2_(name, __VA_ARGS__))
+#define NITF_DECLARE_struct_3(name, ...) NITF_DECLARE_struct_n(3, name, __VA_ARGS__)
 
-#define NITF_DECLARE_struct_4_(n_1, t, f, ...) nitf_##t* f; NITF_expand_(NITF_DECLARE_struct_##n_1##_(2, __VA_ARGS__))
-#define NITF_StructFieldDescriptor_value_4_(n_1, name, t, f, ...) NITF_StructFieldDescriptor_value(t, name, f), \
-    NITF_expand_(NITF_StructFieldDescriptor_value_##n_1##_(2, name, __VA_ARGS__))
-#define NITF_DECLARE_struct_4(name, ...) NITF_DECLARE_struct_(name, \
-    NITF_DECLARE_struct_4_(3, __VA_ARGS__), NITF_StructFieldDescriptor_value_4_(3, name, __VA_ARGS__))
-//#define NITF_DECLARE_struct_4(name, ...) NITF_DECLARE_struct_n(4, name, __VA_ARGS__)
+#define NITF_DECLARE_struct_4_(t, f, ...) nitf_##t* f; NITF_expand_(NITF_DECLARE_struct_3_(__VA_ARGS__))
+#define NITF_StructFieldDescriptor_value_4_( name, t, f, ...) NITF_StructFieldDescriptor_value(t, name, f), \
+    NITF_expand_(NITF_StructFieldDescriptor_value_3_(name, __VA_ARGS__))
+#define NITF_DECLARE_struct_4(name, ...) NITF_DECLARE_struct_n(4, name, __VA_ARGS__)
 
+#define NITF_DECLARE_struct_5_(t, f, ...) nitf_##t* f; NITF_expand_(NITF_DECLARE_struct_4_( __VA_ARGS__))
+#define NITF_StructFieldDescriptor_value_5_(name, t, f, ...) NITF_StructFieldDescriptor_value(t, name, f), \
+    NITF_expand_(NITF_StructFieldDescriptor_value_4_(name, __VA_ARGS__))
+#define NITF_DECLARE_struct_5(name, ...) NITF_DECLARE_struct_n(5, name, __VA_ARGS__)
 
-#define NITF_DECLARE_struct_5_(n_1, t, f, ...) nitf_##t* f; NITF_expand_(NITF_DECLARE_struct_##n_1##_(3,  __VA_ARGS__))
-#define NITF_StructFieldDescriptor_value_5_(n_1, name, t, f, ...) NITF_StructFieldDescriptor_value(t, name, f), \
-    NITF_expand_(NITF_StructFieldDescriptor_value_##n_1##_(3, name, __VA_ARGS__))
-#define NITF_DECLARE_struct_5(name, ...) NITF_DECLARE_struct_(name, \
-    NITF_DECLARE_struct_5_(4, __VA_ARGS__), NITF_StructFieldDescriptor_value_5_(4, name, __VA_ARGS__))
-//#define NITF_DECLARE_struct_5(name, ...) NITF_DECLARE_struct_n(5, name, __VA_ARGS__)
+#define NITF_DECLARE_struct_6_(t, f, ...) nitf_##t* f; NITF_expand_(NITF_DECLARE_struct_5_( __VA_ARGS__))
+#define NITF_StructFieldDescriptor_value_6_(name, t, f, ...) NITF_StructFieldDescriptor_value(t, name, f), \
+    NITF_expand_(NITF_StructFieldDescriptor_value_5_(name, __VA_ARGS__))
+#define NITF_DECLARE_struct_6(name, ...) NITF_DECLARE_struct_n(6, name, __VA_ARGS__)
 
+#define NITF_DECLARE_struct_7_(t, f, ...) nitf_##t* f; NITF_expand_(NITF_DECLARE_struct_6_( __VA_ARGS__))
+#define NITF_StructFieldDescriptor_value_7_(name, t, f, ...) NITF_StructFieldDescriptor_value(t, name, f), \
+    NITF_expand_(NITF_StructFieldDescriptor_value_6_(name, __VA_ARGS__))
+#define NITF_DECLARE_struct_7(name, ...) NITF_DECLARE_struct_n(7, name, __VA_ARGS__)
+
+#define NITF_DECLARE_struct_8_(t, f, ...) nitf_##t* f; NITF_expand_(NITF_DECLARE_struct_7_( __VA_ARGS__))
+#define NITF_StructFieldDescriptor_value_8_(name, t, f, ...) NITF_StructFieldDescriptor_value(t, name, f), \
+    NITF_expand_(NITF_StructFieldDescriptor_value_7_(name, __VA_ARGS__))
+#define NITF_DECLARE_struct_8(name, ...) NITF_DECLARE_struct_n(8, name, __VA_ARGS__)
+
+#define NITF_DECLARE_struct_9_(t, f, ...) nitf_##t* f; NITF_expand_(NITF_DECLARE_struct_8_( __VA_ARGS__))
+#define NITF_StructFieldDescriptor_value_9_(name, t, f, ...) NITF_StructFieldDescriptor_value(t, name, f), \
+    NITF_expand_(NITF_StructFieldDescriptor_value_8_(name, __VA_ARGS__))
+#define NITF_DECLARE_struct_9(name, ...) NITF_DECLARE_struct_n(9, name, __VA_ARGS__)
+
+#define NITF_DECLARE_struct_10_(t, f, ...) nitf_##t* f; NITF_expand_(NITF_DECLARE_struct_9_( __VA_ARGS__))
+#define NITF_StructFieldDescriptor_value_10_(name, t, f, ...) NITF_StructFieldDescriptor_value(t, name, f), \
+    NITF_expand_(NITF_StructFieldDescriptor_value_9_(name, __VA_ARGS__))
+#define NITF_DECLARE_struct_10(name, ...) NITF_DECLARE_struct_n(10, name, __VA_ARGS__)
+
+#define NITF_DECLARE_struct_11_(t, f, ...) nitf_##t* f; NITF_expand_(NITF_DECLARE_struct_10_( __VA_ARGS__))
+#define NITF_StructFieldDescriptor_value_11_(name, t, f, ...) NITF_StructFieldDescriptor_value(t, name, f), \
+    NITF_expand_(NITF_StructFieldDescriptor_value_10_(name, __VA_ARGS__))
+#define NITF_DECLARE_struct_11(name, ...) NITF_DECLARE_struct_n(11, name, __VA_ARGS__)
+
+#define NITF_DECLARE_struct_12_(t, f, ...) nitf_##t* f; NITF_expand_(NITF_DECLARE_struct_11_( __VA_ARGS__))
+#define NITF_StructFieldDescriptor_value_12_(name, t, f, ...) NITF_StructFieldDescriptor_value(t, name, f), \
+    NITF_expand_(NITF_StructFieldDescriptor_value_11_(name, __VA_ARGS__))
+#define NITF_DECLARE_struct_12(name, ...) NITF_DECLARE_struct_n(12, name, __VA_ARGS__)
+
+#define NITF_DECLARE_struct_13_(t, f, ...) nitf_##t* f; NITF_expand_(NITF_DECLARE_struct_12_( __VA_ARGS__))
+#define NITF_StructFieldDescriptor_value_13_(name, t, f, ...) NITF_StructFieldDescriptor_value(t, name, f), \
+    NITF_expand_(NITF_StructFieldDescriptor_value_12_(name, __VA_ARGS__))
+#define NITF_DECLARE_struct_13(name, ...) NITF_DECLARE_struct_n(13, name, __VA_ARGS__)
+
+#define NITF_DECLARE_struct_14_(t, f, ...) nitf_##t* f; NITF_expand_(NITF_DECLARE_struct_13_( __VA_ARGS__))
+#define NITF_StructFieldDescriptor_value_14_(name, t, f, ...) NITF_StructFieldDescriptor_value(t, name, f), \
+    NITF_expand_(NITF_StructFieldDescriptor_value_13_(name, __VA_ARGS__))
+#define NITF_DECLARE_struct_14(name, ...) NITF_DECLARE_struct_n(14, name, __VA_ARGS__)
+
+#define NITF_DECLARE_struct_15_(t, f, ...) nitf_##t* f; NITF_expand_(NITF_DECLARE_struct_14_( __VA_ARGS__))
+#define NITF_StructFieldDescriptor_value_15_(name, t, f, ...) NITF_StructFieldDescriptor_value(t, name, f), \
+    NITF_expand_(NITF_StructFieldDescriptor_value_14_(name, __VA_ARGS__))
+#define NITF_DECLARE_struct_15(name, ...) NITF_DECLARE_struct_n(15, name, __VA_ARGS__)
+
+#define NITF_DECLARE_struct_16_(t, f, ...) nitf_##t* f; NITF_expand_(NITF_DECLARE_struct_15_( __VA_ARGS__))
+#define NITF_StructFieldDescriptor_value_16_(name, t, f, ...) NITF_StructFieldDescriptor_value(t, name, f), \
+    NITF_expand_(NITF_StructFieldDescriptor_value_15_(name, __VA_ARGS__))
+#define NITF_DECLARE_struct_16(name, ...) NITF_DECLARE_struct_n(16, name, __VA_ARGS__)
+
+#define NITF_DECLARE_struct_17_(t, f, ...) nitf_##t* f; NITF_expand_(NITF_DECLARE_struct_16_( __VA_ARGS__))
+#define NITF_StructFieldDescriptor_value_17_(name, t, f, ...) NITF_StructFieldDescriptor_value(t, name, f), \
+    NITF_expand_(NITF_StructFieldDescriptor_value_16_(name, __VA_ARGS__))
+#define NITF_DECLARE_struct_17(name, ...) NITF_DECLARE_struct_n(17, name, __VA_ARGS__)
+
+#define NITF_DECLARE_struct_18_(t, f, ...) nitf_##t* f; NITF_expand_(NITF_DECLARE_struct_17_( __VA_ARGS__))
+#define NITF_StructFieldDescriptor_value_18_(name, t, f, ...) NITF_StructFieldDescriptor_value(t, name, f), \
+    NITF_expand_(NITF_StructFieldDescriptor_value_17_(name, __VA_ARGS__))
+#define NITF_DECLARE_struct_18(name, ...) NITF_DECLARE_struct_n(18, name, __VA_ARGS__)
+
+#define NITF_DECLARE_struct_19_(t, f, ...) nitf_##t* f; NITF_expand_(NITF_DECLARE_struct_18_( __VA_ARGS__))
+#define NITF_StructFieldDescriptor_value_19_(name, t, f, ...) NITF_StructFieldDescriptor_value(t, name, f), \
+    NITF_expand_(NITF_StructFieldDescriptor_value_18_(name, __VA_ARGS__))
+#define NITF_DECLARE_struct_19(name, ...) NITF_DECLARE_struct_n(19, name, __VA_ARGS__)
+
+#define NITF_DECLARE_struct_20_(t, f, ...) nitf_##t* f; NITF_expand_(NITF_DECLARE_struct_19_( __VA_ARGS__))
+#define NITF_StructFieldDescriptor_value_20_(name, t, f, ...) NITF_StructFieldDescriptor_value(t, name, f), \
+    NITF_expand_(NITF_StructFieldDescriptor_value_19_(name, __VA_ARGS__))
+#define NITF_DECLARE_struct_20(name, ...) NITF_DECLARE_struct_n(20, name, __VA_ARGS__)
+
+#define NITF_DECLARE_struct_21_(t, f, ...) nitf_##t* f; NITF_expand_(NITF_DECLARE_struct_20_( __VA_ARGS__))
+#define NITF_StructFieldDescriptor_value_21_(name, t, f, ...) NITF_StructFieldDescriptor_value(t, name, f), \
+    NITF_expand_(NITF_StructFieldDescriptor_value_20_(name, __VA_ARGS__))
+#define NITF_DECLARE_struct_21(name, ...) NITF_DECLARE_struct_n(21, name, __VA_ARGS__)
+
+#define NITF_DECLARE_struct_22_(t, f, ...) nitf_##t* f; NITF_expand_(NITF_DECLARE_struct_21_( __VA_ARGS__))
+#define NITF_StructFieldDescriptor_value_22_(name, t, f, ...) NITF_StructFieldDescriptor_value(t, name, f), \
+    NITF_expand_(NITF_StructFieldDescriptor_value_21_(name, __VA_ARGS__))
+#define NITF_DECLARE_struct_22(name, ...) NITF_DECLARE_struct_n(22, name, __VA_ARGS__)
+
+#define NITF_DECLARE_struct_23_(t, f, ...) nitf_##t* f; NITF_expand_(NITF_DECLARE_struct_22_( __VA_ARGS__))
+#define NITF_StructFieldDescriptor_value_23_(name, t, f, ...) NITF_StructFieldDescriptor_value(t, name, f), \
+    NITF_expand_(NITF_StructFieldDescriptor_value_22_(name, __VA_ARGS__))
+#define NITF_DECLARE_struct_23(name, ...) NITF_DECLARE_struct_n(23, name, __VA_ARGS__)
+
+#define NITF_DECLARE_struct_24_(t, f, ...) nitf_##t* f; NITF_expand_(NITF_DECLARE_struct_23_( __VA_ARGS__))
+#define NITF_StructFieldDescriptor_value_24_(name, t, f, ...) NITF_StructFieldDescriptor_value(t, name, f), \
+    NITF_expand_(NITF_StructFieldDescriptor_value_23_(name, __VA_ARGS__))
+#define NITF_DECLARE_struct_24(name, ...) NITF_DECLARE_struct_n(24, name, __VA_ARGS__)
+
+#define NITF_DECLARE_struct_25_(t, f, ...) nitf_##t* f; NITF_expand_(NITF_DECLARE_struct_24_( __VA_ARGS__))
+#define NITF_StructFieldDescriptor_value_25_(name, t, f, ...) NITF_StructFieldDescriptor_value(t, name, f), \
+    NITF_expand_(NITF_StructFieldDescriptor_value_24_(name, __VA_ARGS__))
+#define NITF_DECLARE_struct_25(name, ...) NITF_DECLARE_struct_n(25, name, __VA_ARGS__)
+
+#define NITF_DECLARE_struct_26_(t, f, ...) nitf_##t* f; NITF_expand_(NITF_DECLARE_struct_25_( __VA_ARGS__))
+#define NITF_StructFieldDescriptor_value_26_(name, t, f, ...) NITF_StructFieldDescriptor_value(t, name, f), \
+    NITF_expand_(NITF_StructFieldDescriptor_value_25_(name, __VA_ARGS__))
+#define NITF_DECLARE_struct_26(name, ...) NITF_DECLARE_struct_n(26, name, __VA_ARGS__)
+
+#define NITF_DECLARE_struct_27_(t, f, ...) nitf_##t* f; NITF_expand_(NITF_DECLARE_struct_26_( __VA_ARGS__))
+#define NITF_StructFieldDescriptor_value_27_(name, t, f, ...) NITF_StructFieldDescriptor_value(t, name, f), \
+    NITF_expand_(NITF_StructFieldDescriptor_value_26_(name, __VA_ARGS__))
+#define NITF_DECLARE_struct_27(name, ...) NITF_DECLARE_struct_n(27, name, __VA_ARGS__)
+
+#define NITF_DECLARE_struct_28_(t, f, ...) nitf_##t* f; NITF_expand_(NITF_DECLARE_struct_27_( __VA_ARGS__))
+#define NITF_StructFieldDescriptor_value_28_(name, t, f, ...) NITF_StructFieldDescriptor_value(t, name, f), \
+    NITF_expand_(NITF_StructFieldDescriptor_value_27_(name, __VA_ARGS__))
+#define NITF_DECLARE_struct_28(name, ...) NITF_DECLARE_struct_n(5, name, __VA_ARGS__)
+
+#define NITF_DECLARE_struct_29_(t, f, ...) nitf_##t* f; NITF_expand_(NITF_DECLARE_struct_28_( __VA_ARGS__))
+#define NITF_StructFieldDescriptor_value_29_(name, t, f, ...) NITF_StructFieldDescriptor_value(t, name, f), \
+    NITF_expand_(NITF_StructFieldDescriptor_value_28_(name, __VA_ARGS__))
+#define NITF_DECLARE_struct_29(name, ...) NITF_DECLARE_struct_n(29, name, __VA_ARGS__)
+
+#define NITF_DECLARE_struct_30_(t, f, ...) nitf_##t* f; NITF_expand_(NITF_DECLARE_struct_29_( __VA_ARGS__))
+#define NITF_StructFieldDescriptor_value_30_(name, t, f, ...) NITF_StructFieldDescriptor_value(t, name, f), \
+    NITF_expand_(NITF_StructFieldDescriptor_value_29_(name, __VA_ARGS__))
+#define NITF_DECLARE_struct_30(name, ...) NITF_DECLARE_struct_n(30, name, __VA_ARGS__)
+
+#define NITF_DECLARE_struct_31_(t, f, ...) nitf_##t* f; NITF_expand_(NITF_DECLARE_struct_30_( __VA_ARGS__))
+#define NITF_StructFieldDescriptor_value_31_(name, t, f, ...) NITF_StructFieldDescriptor_value(t, name, f), \
+    NITF_expand_(NITF_StructFieldDescriptor_value_30_(name, __VA_ARGS__))
+#define NITF_DECLARE_struct_31(name, ...) NITF_DECLARE_struct_n(31, name, __VA_ARGS__)
+
+#define NITF_DECLARE_struct_32_(t, f, ...) nitf_##t* f; NITF_expand_(NITF_DECLARE_struct_31_( __VA_ARGS__))
+#define NITF_StructFieldDescriptor_value_32_(name, t, f, ...) NITF_StructFieldDescriptor_value(t, name, f), \
+    NITF_expand_(NITF_StructFieldDescriptor_value_31_(name, __VA_ARGS__))
+#define NITF_DECLARE_struct_32(name, ...) NITF_DECLARE_struct_n(32, name, __VA_ARGS__)
+
+#define NITF_DECLARE_struct_33_(t, f, ...) nitf_##t* f; NITF_expand_(NITF_DECLARE_struct_32_( __VA_ARGS__))
+#define NITF_StructFieldDescriptor_value_33_(name, t, f, ...) NITF_StructFieldDescriptor_value(t, name, f), \
+    NITF_expand_(NITF_StructFieldDescriptor_value_32_(name, __VA_ARGS__))
+#define NITF_DECLARE_struct_33(name, ...) NITF_DECLARE_struct_n(33, name, __VA_ARGS__)
+
+#define NITF_DECLARE_struct_34_(t, f, ...) nitf_##t* f; NITF_expand_(NITF_DECLARE_struct_33_( __VA_ARGS__))
+#define NITF_StructFieldDescriptor_value_34_(name, t, f, ...) NITF_StructFieldDescriptor_value(t, name, f), \
+    NITF_expand_(NITF_StructFieldDescriptor_value_33_(name, __VA_ARGS__))
+#define NITF_DECLARE_struct_34(name, ...) NITF_DECLARE_struct_n(34, name, __VA_ARGS__)
+
+#define NITF_DECLARE_struct_35_(t, f, ...) nitf_##t* f; NITF_expand_(NITF_DECLARE_struct_34_( __VA_ARGS__))
+#define NITF_StructFieldDescriptor_value_35_(name, t, f, ...) NITF_StructFieldDescriptor_value(t, name, f), \
+    NITF_expand_(NITF_StructFieldDescriptor_value_34_(name, __VA_ARGS__))
+#define NITF_DECLARE_struct_35(name, ...) NITF_DECLARE_struct_n(35, name, __VA_ARGS__)
 
 #endif
