@@ -219,6 +219,7 @@ NITFAPI(nitf_FileHeader *) nitf_FileHeader_clone(nitf_FileHeader * source,
 NITFAPI(void) nitf_FileHeader_destruct(nitf_FileHeader ** fh);
 
 
+NITF_DECLARE_struct_1(Test1, Field, f1);
 
 NITF_DECLARE_struct_2(TestTest,
     Field, f1,
