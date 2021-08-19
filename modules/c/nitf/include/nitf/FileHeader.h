@@ -137,55 +137,52 @@ NITF_CXX_GUARD
  *  given only the name, using the construction {SHORTNAME}##SZ
  *
  */
-typedef struct _nitf_FileHeader
-{
-    nitf_Field *fileHeader;
-    nitf_Field *fileVersion;
-    nitf_Field *complianceLevel;
-    nitf_Field *systemType;
-    nitf_Field *originStationID;
-    nitf_Field *fileDateTime;
-    nitf_Field *fileTitle;
-    nitf_Field *classification;
+NITF_DECLARE_struct_35(FileHeader,
+    Field, fileHeader,
+    Field, fileVersion,
+    Field, complianceLevel,
+    Field, systemType,
+    Field, originStationID,
+    Field, fileDateTime,
+    Field, fileTitle,
+    Field, classification,
 
-    nitf_FileSecurity *securityGroup;
+    FileSecurity, securityGroup,
 
-    nitf_Field *messageCopyNum;
-    nitf_Field *messageNumCopies;
-    nitf_Field *encrypted;
-    nitf_Field *backgroundColor;
-    nitf_Field *originatorName;
-    nitf_Field *originatorPhone;
+    Field, messageCopyNum,
+    Field, messageNumCopies,
+    Field, encrypted,
+    Field, backgroundColor,
+    Field, originatorName,
+    Field, originatorPhone,
 
-    nitf_Field *fileLength;
-    nitf_Field *headerLength;
+    Field, fileLength,
+    Field, headerLength,
 
-    nitf_Field *numImages;
-    nitf_Field *numGraphics;
-    nitf_Field *numLabels;
-    nitf_Field *numTexts;
-    nitf_Field *numDataExtensions;
-    nitf_Field *numReservedExtensions;
+    Field, numImages,
+    Field, numGraphics,
+    Field, numLabels,
+    Field, numTexts,
+    Field, numDataExtensions,
+    Field, numReservedExtensions,
 
-    nitf_PComponentInfo *imageInfo;
-    nitf_PComponentInfo *graphicInfo;
-    nitf_PComponentInfo *labelInfo;
-    nitf_PComponentInfo *textInfo;
-    nitf_PComponentInfo *dataExtensionInfo;
-    nitf_PComponentInfo *reservedExtensionInfo;
+    PComponentInfo, imageInfo,
+    PComponentInfo, graphicInfo,
+    PComponentInfo, labelInfo,
+    PComponentInfo, textInfo,
+    PComponentInfo, dataExtensionInfo,
+    PComponentInfo, reservedExtensionInfo,
 
-    nitf_Field *userDefinedHeaderLength;
-    nitf_Field *userDefinedOverflow;
-    nitf_Field *extendedHeaderLength;
-    nitf_Field *extendedHeaderOverflow;
+    Field, userDefinedHeaderLength,
+    Field, userDefinedOverflow,
+    Field, extendedHeaderLength,
+    Field, extendedHeaderOverflow,
 
-    nitf_Extensions *userDefinedSection;
-    nitf_Extensions *extendedSection;
+    Extensions, userDefinedSection,
+    Extensions, extendedSection
     /* udhdl, udhofl, udhd */
     /* xhdl, xhdlofl, xhd */
-
-}
-nitf_FileHeader;
+    );
 
 /*!
  *  We want to construct and init the whole object.
