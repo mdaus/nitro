@@ -84,11 +84,10 @@ typedef struct nitf_StructFieldDescriptor_
 #define NITF_DECLARE_struct_3(name, ...) NITF_DECLARE_struct_(name, \
     NITF_DECLARE_struct_3_(__VA_ARGS__), NITF_StructFieldDescriptor_value_3_(name, __VA_ARGS__))
 
-#define NITF_expand_(v) v
-
-#define NITF_DECLARE_struct_4_(t1, f1, ...) nitf_##t1* f1; NITF_expand_(NITF_DECLARE_struct_3_(__VA_ARGS__))
-#define NITF_StructFieldDescriptor_value_4_(name, t1, f1, ...) NITF_StructFieldDescriptor_value(t1, name, f1), \
-    NITF_expand_(NITF_StructFieldDescriptor_value_3_(name, __VA_ARGS__))
+#define NITF_DECLARE_struct_4_(t1, f1, t2, f2, t3, f3, t4, f4) nitf_##t1* f1; NITF_DECLARE_struct_3_(t2, f2, t3, f3, t4, f4)
+#define NITF_StructFieldDescriptor_value_4_(name, t1, f1, t2, f2, t3, f3, t4, f4) \
+    NITF_StructFieldDescriptor_value(t1, name, f1), \
+    NITF_StructFieldDescriptor_value_3_(name, t2, f2, t3, f3, t4, f4)
 #define NITF_DECLARE_struct_4(name, ...) NITF_DECLARE_struct_(name, \
     NITF_DECLARE_struct_4_(__VA_ARGS__), NITF_StructFieldDescriptor_value_4_(name, __VA_ARGS__))
 
