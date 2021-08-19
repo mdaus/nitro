@@ -56,7 +56,7 @@ nitf::FileHeader FileHeader::clone() const
 }
 
 #define getField_(name) nitf::Field(getNativeOrThrow()->name)
-//#define getField_(name) fromNativeOffset<Field>(*this, nitf_offsetof(name));
+//#define getField_(name) getField(*this, offsetof(native_t, name));
 
 nitf::Field FileHeader::getFileHeader() const
 {
@@ -100,7 +100,6 @@ nitf::Field FileHeader::getClassification() const
 
 nitf::FileSecurity FileHeader::getSecurityGroup() const
 {
-    //return fromNativeOffset<FileSecurity>(*this, nitf_offsetof(securityGroup));
     return nitf::FileSecurity(getNativeOrThrow()->securityGroup);
 }
 

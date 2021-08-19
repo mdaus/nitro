@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef NITF_Property_hpp_INCLUDED_
-#define NITF_Property_hpp_INCLUDED_
+#ifndef NITRO_Property_hpp_INCLUDED_
+#define NITRO_Property_hpp_INCLUDED_
 #pragma once
 
 #include <functional>
@@ -62,4 +62,4 @@ namespace nitf
         void operator=(const T& t) { set(t); }
     };
 }
-#endif // NITF_Property_hpp_INCLUDED_
+#endif // NITRO_Property_hpp_INCLUDED_
