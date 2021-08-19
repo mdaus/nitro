@@ -236,6 +236,13 @@ NITF_DECLARE_struct_4(Test4,
     Field, f2a,
     Field, f3);
 
+NITF_DECLARE_struct_5(Test5,
+    Field, f1,
+    Field, f2,
+    Field, f2a,
+    Field, f2b,
+    Field, f3);
+
 NITF_CXX_ENDGUARD
 
 #endif
