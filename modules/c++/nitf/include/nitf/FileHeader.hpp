@@ -196,6 +196,8 @@ public:
     //! Set the extendedSection
     void setExtendedSection(nitf::Extensions value);
 
+    std::vector<nitf::Field> getFields() const;
+
 private:
     mutable nitf_Error error{};
 };

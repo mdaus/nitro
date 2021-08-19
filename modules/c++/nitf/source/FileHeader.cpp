@@ -20,6 +20,8 @@
  *
  */
 
+#include <type_traits>
+
 #include "nitf/FileHeader.hpp"
 
 using namespace nitf;
@@ -310,3 +312,20 @@ void FileHeader::setExtendedSection(nitf::Extensions value)
     value.setManaged(true);
 }
 
+std::vector<nitf::Field> FileHeader::getFields() const
+{
+    std::vector<nitf::Field> retval;
+
+    constexpr auto extent = std::extent<decltype(nitf_FileHeader_fields)>::value;
+    for (size_t i = 0; i < extent; i++)
+    {
+        const auto& desc = nitf_FileHeader_fields[i];
+        if (desc.type == NITF_FieldType_Field)
+        {
+            auto field = fromNativeOffset<Field>(*this, desc.offset);
+            retval.push_back(std::move(field));
+        }
+    }
+
+    return retval;
+}
