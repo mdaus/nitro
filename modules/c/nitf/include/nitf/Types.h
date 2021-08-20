@@ -62,9 +62,16 @@ typedef struct nitf_StructFieldDescriptor_
     size_t offset;
 } nitf_StructFieldDescriptor;
 
+// A bunch of ugly macros to generate two things: the struct itself and a list of descriptors the fields.
+// The end result of NITF_DECLARE_struct_1_(Test, Field, f) is:
+//   typedef struct _nitf_Test { Filed* f; };
+//   static const nitf_StructFieldDescriptor nitf_Test_fields[] = { { NITF_FieldType_Field, "f", 0} };
+
+// Generates `{ NITF_FieldType_Field, "f", 0}` from NITF_StructFieldDescriptor_value(Field, Test, f)
 #define NITF_StructFieldDescriptor_value_(type, s, m) {type, #m, offsetof(s, m) }
 #define NITF_StructFieldDescriptor_value(type, s, m) NITF_StructFieldDescriptor_value_(NITF_FieldType_##type, nitf_##s, m)
 
+// The overall structure of what we want to generate.
 #define NITF_DECLARE_struct_(name, fields, descriptors) typedef struct _##nitf_##name { fields; } nitf_##name; \
     static const nitf_StructFieldDescriptor nitf_##name##_fields[] = { descriptors }
 //
@@ -101,8 +108,13 @@ typedef struct nitf_StructFieldDescriptor_
 ////#define NITF_DECLARE_struct_5(name, ...) NITF_DECLARE_struct_n(5, name, __VA_ARGS__)
 
 
-#define NITF_DECLARE_struct_1_(t, f) nitf_##t* f
-#define NITF_StructFieldDescriptor_value_1_(name, t, f) NITF_StructFieldDescriptor_value(t, name, f)
+// These are gnarly :-( And with a lot of repitition :-( :-(
+//
+// Each N macro peels off the first two arguments 't' and 'f' (type and field)
+// and then passes the rest to the N-1 macro via __VA_ARGS__.
+
+#define NITF_DECLARE_struct_1_(t, f) nitf_##t* f /* nitf_Field* f */
+#define NITF_StructFieldDescriptor_value_1_(name, t, f) NITF_StructFieldDescriptor_value(t, name, f) /* { NITF_FieldType_Field, "f", 0} */
 #define NITF_DECLARE_struct_1(name, ...) NITF_DECLARE_struct_(name, \
     NITF_DECLARE_struct_1_(__VA_ARGS__), NITF_StructFieldDescriptor_value_1_(name, __VA_ARGS__))
 
