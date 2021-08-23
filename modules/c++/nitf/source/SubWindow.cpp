@@ -22,6 +22,8 @@
 
 #include "nitf/SubWindow.hpp"
 
+#include <gsl/gsl.h>
+
 #include "nitf/ImageSubheader.hpp"
 
 using namespace nitf;
@@ -81,7 +83,8 @@ static inline std::vector<uint32_t> iota(size_t count, uint32_t value = 0)
     std::iota(retval.begin(), retval.end(), value);
     return retval;
 }
-SubWindow::SubWindow(const ImageSubheader& subheader) : SubWindow(subheader.numRows(), subheader.numCols())
+SubWindow::SubWindow(const ImageSubheader& subheader) :
+    SubWindow(gsl::narrow<uint32_t>(subheader.numRows()), gsl::narrow<uint32_t>(subheader.numCols()))
 {
     setBandList(iota(subheader.getBandCount()));
 }

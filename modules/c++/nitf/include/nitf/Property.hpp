@@ -41,7 +41,7 @@ namespace nitf
     {
         std::function<T(void)> get_;
     public:
-        PropertyGet(std::function<T(void)> get) : get_(get) {}
+        PropertyGet(const std::function<T(void)>& get) : get_(get) {}
 
         T get() const { return get_(); }
         operator T() const { return get(); }
@@ -53,7 +53,7 @@ namespace nitf
         PropertyGet<T> get_;
         std::function<void(const T&)> set_;
     public:
-        Property(std::function<T(void)> get, std::function<void(const T&)> set) : get_(get), set_(set) { }
+        Property(const std::function<T(void)>& get, const std::function<void(const T&)>& set) : get_(get), set_(set) { }
 
         T get() const { return get_.get()(); }
         operator T() const { return get(); }
