@@ -42,19 +42,20 @@ endfunction()
 
 # set the appropriate CRT link flags for MSVC builds
 macro(coda_setup_msvc_crt)
-    set(STATIC_CRT OFF CACHE BOOL "use static CRT library /MT, or /MTd for Debug (/MD or /MDd if off)")
-    if (CONAN_LINK_RUNTIME MATCHES "MT") # will also match MTd
-        set(STATIC_CRT ON CACHE BOOL "" FORCE)
-    endif()
-    if (STATIC_CRT)
-        set(CODA_MSVC_RUNTIME "/MT")
+    if (CONAN_PACKAGE_NAME)
+        # conan handles this
     else()
-        set(CODA_MSVC_RUNTIME "/MD")
+        set(STATIC_CRT OFF CACHE BOOL "use static CRT library /MT, or /MTd for Debug (/MD or /MDd if off)")
+        if (STATIC_CRT)
+            set(CODA_MSVC_RUNTIME "/MT")
+        else()
+            set(CODA_MSVC_RUNTIME "/MD")
+        endif()
+        foreach(build_config DEBUG RELEASE RELWITHDEBINFO MINSIZEREL)
+            string(REGEX REPLACE "/M[DT]" "${CODA_MSVC_RUNTIME}" CMAKE_CXX_FLAGS_${build_config} "${CMAKE_CXX_FLAGS_${build_config}}")
+            string(REGEX REPLACE "/M[DT]" "${CODA_MSVC_RUNTIME}" CMAKE_C_FLAGS_${build_config} "${CMAKE_C_FLAGS_${build_config}}")
+        endforeach()
     endif()
-    foreach(build_config DEBUG RELEASE RELWITHDEBINFO MINSIZEREL)
-        string(REGEX REPLACE "/M[DT]" "${CODA_MSVC_RUNTIME}" CMAKE_CXX_FLAGS_${build_config} "${CMAKE_CXX_FLAGS_${build_config}}")
-        string(REGEX REPLACE "/M[DT]" "${CODA_MSVC_RUNTIME}" CMAKE_C_FLAGS_${build_config} "${CMAKE_C_FLAGS_${build_config}}")
-    endforeach()
 endmacro()
 
 # Set up the global build configuration
@@ -177,8 +178,10 @@ macro(coda_initialize_build)
     # all targets should be installed using this export set
     set(CODA_EXPORT_SET_NAME "${CMAKE_PROJECT_NAME}Targets")
 
-    include(CodaFindSystemDependencies)
-    coda_find_system_dependencies()
+    if (NOT CODA_SKIP_SYSTEM_DEPENDENCIES)
+        include(CodaFindSystemDependencies)
+        coda_find_system_dependencies()
+    endif()
     coda_show_compile_options()
 endmacro()
 
@@ -502,12 +505,14 @@ function(coda_add_module MODULE_NAME)
             RUNTIME DESTINATION "${CODA_STD_PROJECT_BIN_DIR}")
 
     # Set up install destination for headers
-    install(DIRECTORY "${CODA_STD_PROJECT_INCLUDE_DIR}/"
-            DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}/"
-            ${CODA_INSTALL_OPTION}
-            FILES_MATCHING
-                PATTERN "*.h"
-                PATTERN "*.hpp")
+    if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}")
+        install(DIRECTORY "${CODA_STD_PROJECT_INCLUDE_DIR}/"
+                DESTINATION "${CODA_STD_PROJECT_INCLUDE_DIR}/"
+                ${CODA_INSTALL_OPTION}
+                FILES_MATCHING
+                    PATTERN "*.in" EXCLUDE
+                    PATTERN "*")
+    endif()
 
     # install conf directory, if present
     if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/conf")
