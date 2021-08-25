@@ -37,8 +37,7 @@ class AbstractTiedThreadPool : public AbstractThreadPool<Request_T>
 
 public:
     AbstractTiedThreadPool(unsigned short numThreads = 0) :
-            AbstractThreadPool<Request_T>(numThreads),
-            mAffinityInit(nullptr)
+            AbstractThreadPool<Request_T>(numThreads)
     {
     }
 

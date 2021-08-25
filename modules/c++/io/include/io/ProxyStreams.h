@@ -127,7 +127,7 @@ struct ToggleOutputStream: public io::ProxyOutputStream
 {
     ToggleOutputStream() = default;
     ToggleOutputStream(io::OutputStream *output, bool ownPtr = false) :
-        io::ProxyOutputStream(nullptr, ownPtr), mPtr(output)
+        io::ProxyOutputStream(nullptr), mPtr(output), mOwnPtr(ownPtr)
     {
     }
     virtual ~ToggleOutputStream()
@@ -161,7 +161,7 @@ struct ToggleOutputStream: public io::ProxyOutputStream
 protected:
     io::OutputStream* mPtr = nullptr;
     io::NullOutputStream mNullStream;
-    bool mEnabled = false;
+    bool mOwnPtr = false, mEnabled = false;
 };
 
 }
