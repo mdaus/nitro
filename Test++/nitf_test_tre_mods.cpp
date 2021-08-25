@@ -11,13 +11,7 @@ namespace fs = std::filesystem;
 
 static bool is_x64_Configuration(const fs::path& path) // "Configuration" is typically "Debug" or "Release"
 {
-	const std::string build_configuration =
-#if defined(NDEBUG) // i.e., release
-		"Release";
-#else
-		"Debug";
-#endif
-
+	const std::string build_configuration = sys::OS().getSpecialEnv("Configuration");
 	const auto Configuration = path.filename();
 	const auto path_parent_path = path.parent_path();
 	const auto x64 = path_parent_path.filename();

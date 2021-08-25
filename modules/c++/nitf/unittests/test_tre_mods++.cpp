@@ -98,6 +98,25 @@ TEST_CASE(basicIteration)
     TEST_ASSERT_EQ(numFields, 29);
 }
 
+TEST_CASE(basicIteration_ENGRDA)
+{
+    // https://github.com/mdaus/nitro/discussions/394
+
+    nitf::TRE engrda("ENGRDA", "ENGRDA");
+
+    engrda.setField("RESRC", "HSS");
+    engrda.setField("RECNT", 1);
+
+    char val = 'A';
+    engrda.setField("ENGLN[0]", 5);
+    engrda.setField("ENGMTXC[0]", 1);
+    engrda.setField("ENGMTXR[0]", 1);
+    engrda.setField("ENGTYP[0]", "A");
+    engrda.setField("ENGDTS[0]", 1);
+    engrda.setField("ENGDATC[0]", 1);
+    engrda.setField("ENGDATA[0]", val);
+}
+
 TEST_CASE(populateWhileIterating)
 {
     nitf::TRE tre("ACCPOB");
@@ -154,6 +173,7 @@ TEST_MAIN(
     TEST_CHECK(setBinaryFields);
     TEST_CHECK(cloneTRE);
     TEST_CHECK(basicIteration);
+    TEST_CHECK(basicIteration_ENGRDA);
     TEST_CHECK(populateWhileIterating);
     TEST_CHECK(overflowingNumericFields);
     )
