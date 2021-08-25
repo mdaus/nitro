@@ -204,6 +204,33 @@ TEST_CASE(testAssigning)
 
     mem::SharedPtr<int> result;
     result = getIntSP();
+
+    // code like this is in CODA
+    {
+      std::shared_ptr<Bar> mTileStreams_;
+      auto mTileStreams = &mTileStreams_;
+      mem::SharedPtr<Foo> outStream_(mTileStreams[0]); // clearly copy
+      mem::SharedPtr<Foo> outStream = mTileStreams[0]; // copy
+      outStream = mTileStreams[0]; // assignment
+    }    
+    { // variations of the above;
+      mem::SharedPtr<Bar> mTileStreams_;
+      auto mTileStreams = &mTileStreams_;
+      mem::SharedPtr<Foo> outStream = mTileStreams[0]; // copy
+      outStream = mTileStreams[0]; // assignment
+    }
+    { // variations of the above;
+      std::shared_ptr<Bar> mTileStreams_;
+      auto mTileStreams = &mTileStreams_;
+      std::shared_ptr<Foo> outStream = mTileStreams[0]; // copy
+      outStream = mTileStreams[0]; // assignment
+    }
+    { // variations of the above;
+      mem::SharedPtr<Bar> mTileStreams_;
+      auto mTileStreams = &mTileStreams_;
+      std::shared_ptr<Foo> outStream = mTileStreams[0]; // copy
+      outStream = mTileStreams[0]; // assignment
+    }
 }
 
 TEST_CASE(testSyntax)
