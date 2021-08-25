@@ -37,7 +37,8 @@ class AbstractTiedThreadPool : public AbstractThreadPool<Request_T>
 
 public:
     AbstractTiedThreadPool(unsigned short numThreads = 0) :
-            AbstractThreadPool<Request_T>(numThreads)
+            AbstractThreadPool<Request_T>(numThreads),
+            mAffinityInit(nullptr)
     {
     }
 
@@ -74,11 +75,11 @@ public:
 #if CODA_OSS_cpp17
                   std::unique_ptr<CPUAffinityThreadInitializer>&& init) = 0;
 #else
-                  std::auto_ptr<CPUAffinityThreadInitializer> init) = 0;
+                  mem::auto_ptr<CPUAffinityThreadInitializer> init) = 0;
     virtual mt::TiedWorkerThread<Request_T>*
     newTiedWorker(mt::RequestQueue<Request_T>* q,
                   std::unique_ptr<CPUAffinityThreadInitializer>&& init) {
-        std::auto_ptr<CPUAffinityThreadInitializer> init_(init.release());
+        mem::auto_ptr<CPUAffinityThreadInitializer> init_(init.release());
         return newTiedWorker(q, init_);
     }
 #endif

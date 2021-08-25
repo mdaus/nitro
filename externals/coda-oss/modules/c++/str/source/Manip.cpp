@@ -32,6 +32,7 @@
 #include <stdexcept>
 
 #include "str/Convert.h"
+#include "str/Encoding.h"
 
 namespace
 {
@@ -144,7 +145,7 @@ bool contains(const std::string& str, const std::string& match)
     return str.find(match) != std::string::npos;
 }
 
-static inline bool isTest(const std::string& s, int (*is)(int))
+inline bool isTest(const std::string& s, int (*is)(int))
 {
     for (const auto& ch : s)
     {
@@ -160,7 +161,7 @@ bool isAlpha(const std::string& s)
 }
 
 template<typename Pred>
-static inline bool isTest(const std::string& s, int (*is1)(int), Pred is2)
+inline bool isTest(const std::string& s, int (*is1)(int), Pred is2)
 {
     for (const auto& ch : s)
     {
