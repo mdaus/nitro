@@ -100,21 +100,48 @@ TEST_CASE(basicIteration)
 
 TEST_CASE(basicIteration_ENGRDA)
 {
-    // https://github.com/mdaus/nitro/discussions/394
-
     nitf::TRE engrda("ENGRDA", "ENGRDA");
 
     engrda.setField("RESRC", "HSS");
     engrda.setField("RECNT", 1);
 
-    char val = 'A';
+    std::vector<std::string> keys;
+    for (const auto& pair : engrda)
+    {
+        auto first = pair.first();
+        const auto second = pair.second();
+
+        keys.push_back(std::move(first));
+    }
+    static const  std::vector<std::string> expected_keys{ "RESRC", "RECNT", 
+        "ENGLN[0]" , "ENGMTXC[0]",  "ENGMTXR[0]",  "ENGTYP[0]",  "ENGDTS[0]",  "ENGDATU[0]", "ENGDATC[0]" };
+    TEST_ASSERT_EQ(expected_keys, keys);
+
+    for (const auto& key : keys)
+    {
+        engrda.setField(key, 1);
+
+        constexpr char val = 'A';
+        engrda.setField(key, val);
+
+        engrda.setField(key, "A");
+
+        const auto field = engrda.getField(key);
+        if (field.getLength() >= key.length())
+        {
+            engrda.setField(key, key);
+        }
+    }
+
+    // https://github.com/mdaus/nitro/discussions/394
     engrda.setField("ENGLN[0]", 5);
     engrda.setField("ENGMTXC[0]", 1);
     engrda.setField("ENGMTXR[0]", 1);
     engrda.setField("ENGTYP[0]", "A");
     engrda.setField("ENGDTS[0]", 1);
     engrda.setField("ENGDATC[0]", 1);
-    engrda.setField("ENGDATA[0]", val);
+    //constexpr char val = 'A';
+    //engrda.setField("ENGDATA[0]", val);
 }
 
 TEST_CASE(populateWhileIterating)
