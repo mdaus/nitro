@@ -7,6 +7,9 @@ __pycache__/
 install/
 install-*/
 target/
+
+# Conan
+modules/drivers/**/build
 test_package/build/
 
 # CMake
