@@ -165,7 +165,7 @@ static bool endsWith(const std::string& s, const std::string& match) noexcept
     return sLen >= mLen;
 }
 
-static std::string truncate(const std::string& value, size_t maxDigits) 
+std::string TRE::truncate(const std::string& value, size_t maxDigits) const 
 {
     const size_t decimalIndex = value.find('.');
     if (decimalIndex == std::string::npos)
@@ -184,10 +184,6 @@ static std::string truncate(const std::string& value, size_t maxDigits)
     }
     return value;
 }
-std::string TRE::truncate(const std::string& value, size_t maxDigits) const
-{
-    return ::truncate(value, maxDigits);
-}
 
 void TRE::setField(const std::string& key, const void* data, size_t dataLength, bool forceUpdate)
 {
@@ -201,11 +197,24 @@ void TRE::setField(const std::string& key, const void* data, size_t dataLength, 
         updateFields();
     }
 }
+void TRE::setField(const nitf_Field& field, const std::string& key, const std::string& data, bool forceUpdate)
+{
+    if (field.type == NITF_BINARY)
+    {
+        // this mostly matches existing code ... except for NOT calling sizeof(std::string)
+        setField(key, data.c_str(), data.size(), forceUpdate);
+    }
+    else
+    {
+        // call truncate() first
+        const auto s = truncate(data, field.length);
+        setField(key, s.c_str(), s.size(), forceUpdate);
+    }
+}
 void TRE::setField(const std::string& key, const std::string& data, bool forceUpdate)
 {
     const nitf_Field* const field = nitf_TRE_getField(getNative(), key.c_str());
-    const auto s = truncate(data, field->length);
-    setField(key, s.c_str(), s.size(), forceUpdate);
+    setField(*field, key, data, forceUpdate);
 }
 void TRE::setField(const std::string& key, const char* data, bool forceUpdate)
 {
