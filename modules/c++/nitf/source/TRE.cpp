@@ -165,7 +165,7 @@ static bool endsWith(const std::string& s, const std::string& match) noexcept
     return sLen >= mLen;
 }
 
-std::string TRE::truncate(const std::string& value, size_t maxDigits) const
+static std::string truncate(const std::string& value, size_t maxDigits) 
 {
     const size_t decimalIndex = value.find('.');
     if (decimalIndex == std::string::npos)
@@ -184,21 +184,37 @@ std::string TRE::truncate(const std::string& value, size_t maxDigits) const
     }
     return value;
 }
+std::string TRE::truncate(const std::string& value, size_t maxDigits) const
+{
+    return ::truncate(value, maxDigits);
+}
 
-static bool TRE_setField(nitf_TRE* tre,
-    const std::string& tag,
-    const std::string& data,
-    nitf_Error& error) noexcept
+void TRE::setField(const std::string& key, const void* data, size_t dataLength, bool forceUpdate)
 {
-    return nitf_TRE_setField(tre, tag.c_str(), data.c_str(), data.size(), &error) ? true : false;
+    if (!nitf_TRE_setField(getNative(), key.c_str(), data, dataLength, &error))
+    {
+        throw NITFException(&error);
+    }
+
+    if (forceUpdate)
+    {
+        updateFields();
+    }
 }
-bool TRE::setField(nitf_TRE& tre, const std::string& key, void* data, size_t dataLength) noexcept
+void TRE::setField(const std::string& key, const std::string& data, bool forceUpdate)
 {
-    return nitf_TRE_setField(&tre, key.c_str(), data, dataLength, &error) ? true : false;
+    const nitf_Field* const field = nitf_TRE_getField(getNative(), key.c_str());
+    const auto s = truncate(data, field->length);
+    setField(key, s.c_str(), s.size(), forceUpdate);
 }
-bool TRE::setField(nitf_TRE& tre, const std::string& key, const std::string& data) noexcept
+void TRE::setField(const std::string& key, const char* data, bool forceUpdate)
 {
-    return TRE_setField(&tre, key, data, error);
+    setField(key, data, strlen(data), forceUpdate);
+}
+
+bool TRE::setField(nitf_TRE* tre, const std::string& tag, const std::string& data, nitf_Error& error) noexcept
+{
+    return nitf_TRE_setField(tre, tag.c_str(), data.c_str(), data.length(), &error) ? true : false;
 }
 
 nitf_TRE* TRE::create(const std::string& tag, const std::string& id, nitf_Error& error) noexcept
@@ -207,7 +223,4 @@ nitf_TRE* TRE::create(const std::string& tag, const std::string& id, nitf_Error&
     return nitf_TRE_construct(tag.c_str(), pId, &error);
 }
 
-bool TRE::setField(nitf_TRE* tre, const std::string& tag, const std::string& data, nitf_Error& error) noexcept
-{
-    return TRE_setField(tre, tag, data, error);
-}
+

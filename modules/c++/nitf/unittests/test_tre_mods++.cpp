@@ -115,7 +115,7 @@ TEST_CASE(basicIteration_ENGRDA)
     // * strings will be endian swapped if they're of length 2 or 4. */
     //{NITF_BINARY, NITF_TRE_CONDITIONAL_LENGTH, "Engineering Data",
     //    "ENGDATA", "ENGDATC ENGDTS *"},
-    engrda.setField("ENGDTS[0]", 8); // size
+    engrda.setField("ENGDTS[0]", 3); // size
     engrda.setField("ENGDATC[0]", 1); // count
     engrda.updateFields();
     engrda.setField("ENGDATA[0]", "ABC");

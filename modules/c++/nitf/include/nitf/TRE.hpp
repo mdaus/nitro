@@ -169,9 +169,6 @@ struct NITRO_NITFCPP_API TREFieldIterator : public nitf::Object<nitf_TREEnumerat
  */
 DECLARE_CLASS(TRE)
 {
-    bool setField(nitf_TRE&, const std::string& key, void* data, size_t dataLength) noexcept;
-    bool setField(nitf_TRE&, const std::string& key, const std::string & data) noexcept;
-
     public:
     typedef nitf::TREFieldIterator Iterator;
 
@@ -271,11 +268,16 @@ DECLARE_CLASS(TRE)
      * \param forceUpdate If true, recalculate the number and positions
      *                    of the TRE fields. See `updateFields()`
      */
+
+    void setField(const std::string& key, const std::string& value, bool forceUpdate = false);
+    void setField(const std::string & key, const char* value, bool forceUpdate = false);
+    void setField(const std::string& key, const void* data, size_t dataLength, bool forceUpdate = false);
+
+    // This is wrong when T is "const char*" and the field is NITF_BINARY; sizeof(T) won't make sense.
     template <typename T>
     void setField(const std::string& key, T value, bool forceUpdate = false)
     {
-        auto const pNative = getNative();
-        nitf_Field* field = nitf_TRE_getField(pNative, key.c_str());
+        nitf_Field* field = nitf_TRE_getField(getNative(), key.c_str());
         if (!field)
         {
             std::ostringstream msg;
@@ -285,21 +287,11 @@ DECLARE_CLASS(TRE)
         bool result = false;
         if (field->type == NITF_BINARY)
         {
-            result = setField(*pNative, key, &value, sizeof(value));
+            setField(key, &value, sizeof(value), forceUpdate);
         }
         else
         {
-            const auto s = truncate(str::toString(value), field->length);
-            result = setField(*pNative, key, s);
-        }
-        if (!result)
-        {
-            throw NITFException(&error);
-        }
-
-        if (forceUpdate)
-        {
-            updateFields();
+            setField(key, str::toString(value), forceUpdate);
         }
     }
 
