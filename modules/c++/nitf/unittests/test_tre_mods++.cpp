@@ -21,6 +21,7 @@
  */
 
 #include <iostream>
+#include <vector>
 
 #include <nitf/TRE.hpp>
 
@@ -98,6 +99,28 @@ TEST_CASE(basicIteration)
     TEST_ASSERT_EQ(numFields, 29);
 }
 
+TEST_CASE(basicIteration_ENGRDA)
+{
+    nitf::TRE engrda("ENGRDA", "ENGRDA");
+
+    engrda.setField("RESRC", "HSS");
+    engrda.setField("RECNT", 1, true /*forceUpdate*/);
+
+    // From ENGRDA.c
+    ///* This one we don't know the length of, so we have to use the special length tag */
+    ///* Notice that we use postfix notation to compute the length
+    // * We also don't know the type of data (it depends on ENGDTS), so
+    // * we need to override the TREHandler's read method.  If we don't do
+    // * this, not only will the field type potentially be wrong, but
+    // * strings will be endian swapped if they're of length 2 or 4. */
+    //{NITF_BINARY, NITF_TRE_CONDITIONAL_LENGTH, "Engineering Data",
+    //    "ENGDATA", "ENGDATC ENGDTS *"},
+    engrda.setField("ENGDTS[0]", 8); // size
+    engrda.setField("ENGDATC[0]", 1); // count
+    engrda.updateFields();
+    engrda.setField("ENGDATA[0]", "ABC");
+}
+
 TEST_CASE(populateWhileIterating)
 {
     nitf::TRE tre("ACCPOB");
@@ -154,6 +177,7 @@ TEST_MAIN(
     TEST_CHECK(setBinaryFields);
     TEST_CHECK(cloneTRE);
     TEST_CHECK(basicIteration);
+    TEST_CHECK(basicIteration_ENGRDA);
     TEST_CHECK(populateWhileIterating);
     TEST_CHECK(overflowingNumericFields);
     )
