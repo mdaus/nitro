@@ -185,57 +185,20 @@ std::string TRE::truncate(const std::string& value, size_t maxDigits) const
     return value;
 }
 
-static NITF_BOOL TRE_setField(nitf_TRE* tre,
-    const std::string& tag,
-    const NITF_DATA* data,
-    size_t dataLength, nitf_Error& error) noexcept
-{
-    return nitf_TRE_setField(tre, tag.c_str(), data, dataLength, &error);
-}
-static NITF_BOOL TRE_setField(nitf_TRE* tre,
+static bool TRE_setField(nitf_TRE* tre,
     const std::string& tag,
     const std::string& data,
     nitf_Error& error) noexcept
 {
-    return TRE_setField(tre, tag, data.c_str(), data.size(), error);
+    return nitf_TRE_setField(tre, tag.c_str(), data.c_str(), data.size(), &error) ? true : false;
 }
-
-void TRE::setField(const std::string& key, const std::string& strValue, NITF_DATA* data, size_t dataLength, bool forceUpdate)
+bool TRE::setField(nitf_TRE& tre, const std::string& key, void* data, size_t dataLength) noexcept
 {
-    const nitf_Field* const field = nitf_TRE_getField(getNative(), key.c_str());
-    if (!field)
-    {
-        std::ostringstream msg;
-        msg << key << " is not a recognized field for this TRE";
-        throw except::Exception(Ctxt(msg.str()));
-    }
-    if (field->type == NITF_BINARY)
-    {
-        if (!TRE_setField(getNative(),
-            key,
-            data, dataLength,
-            error))
-        {
-            throw NITFException(&error);
-        }
-    }
-    else
-    {
-        std::string s = truncate(strValue, field->length);
-        if (!TRE_setField(getNative(),
-            key,
-            s,
-            error))
-        {
-            throw NITFException(&error);
-        }
-    }
-
-    if (forceUpdate)
-    {
-        updateFields();
-    }
-
+    return nitf_TRE_setField(&tre, key.c_str(), data, dataLength, &error) ? true : false;
+}
+bool TRE::setField(nitf_TRE& tre, const std::string& key, const std::string& data) noexcept
+{
+    return TRE_setField(&tre, key, data, error);
 }
 
 nitf_TRE* TRE::create(const std::string& tag, const std::string& id, nitf_Error& error) noexcept
