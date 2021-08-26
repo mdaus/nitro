@@ -116,7 +116,7 @@ TEST_CASE(use_ENGRDA)
     // * strings will be endian swapped if they're of length 2 or 4. */
     //{NITF_BINARY, NITF_TRE_CONDITIONAL_LENGTH, "Engineering Data",
     //    "ENGDATA", "ENGDATC ENGDTS *"},
-    engrda.setField("ENGDTS[0]", 8); // size
+    engrda.setField("ENGDTS[0]", 3); // size
     engrda.setField("ENGDATC[0]", 1); // count
     engrda.updateFields();
     engrda.setField("ENGDATA[0]", "ABC");
@@ -129,19 +129,10 @@ TEST_CASE(use_typed_ENGRDA)
     engrda.RESRC = "HSS";
     engrda.RECNT = 1;
 
-    // From ENGRDA.c
-    ///* This one we don't know the length of, so we have to use the special length tag */
-    ///* Notice that we use postfix notation to compute the length
-    // * We also don't know the type of data (it depends on ENGDTS), so
-    // * we need to override the TREHandler's read method.  If we don't do
-    // * this, not only will the field type potentially be wrong, but
-    // * strings will be endian swapped if they're of length 2 or 4. */
-    //{NITF_BINARY, NITF_TRE_CONDITIONAL_LENGTH, "Engineering Data",
-    //    "ENGDATA", "ENGDATC ENGDTS *"},
-    engrda.setField("ENGDTS[0]", 8); // size
-    engrda.setField("ENGDATC[0]", 1); // count
+    engrda.ENGDTS[0] = 3; // engrda.setField("ENGDTS[0]", 3); // size
+    engrda.ENGDATC[0] = 1; // engrda.setField("ENGDATC[0]", 1); // count
     engrda.updateFields();
-    engrda.setField("ENGDATA[0]", "ABC");
+    engrda.ENGDATA[0] = "ABC"; // engrda.setField("ENGDATA[0]", "ABC");
 }
 
 TEST_CASE(populateWhileIterating)

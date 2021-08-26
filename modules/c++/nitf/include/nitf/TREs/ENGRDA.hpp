@@ -35,6 +35,39 @@ namespace nitf
 {
     namespace TREs
     {
+        template<typename T>
+        struct NITRO_NITFCPP_API SetIndexedFieldProxy final
+        {  
+            nitf::TRE& tre_;
+            std::string tag_;
+
+            SetIndexedFieldProxy& operator=(const T& v)
+            {
+                tre_.setField(tag_, v);
+                return *this;
+            }
+        };
+
+        template<typename T>
+        struct NITRO_NITFCPP_API IndexedField final
+        {
+            nitf::TRE& tre_;
+            std::string name_;
+
+            SetIndexedFieldProxy<T> operator[](size_t i)
+            {
+                auto tag = name_ + "[" + std::to_string(i) + "]";
+                return SetIndexedFieldProxy<T>{ tre_, std::move(tag) };
+            }
+        };
+    }
+}
+
+
+namespace nitf
+{
+    namespace TREs
+    {
         class NITRO_NITFCPP_API ENGRDA final
         {
             nitf::TRE tre_;
@@ -70,8 +103,12 @@ namespace nitf
             //        {NITF_BCS_N, 4, "Engineering Matrix Data Row Count", "ENGMTXR" },
             //        {NITF_BCS_A, 1, "Value Type of Engineering Data Element", "ENGTYP" },
             //        {NITF_BCS_N, 1, "Engineering Data Element Size", "ENGDTS" },
+            IndexedField<int64_t> ENGDTS;
+
             //        {NITF_BCS_A, 2, "Engineering Data Units", "ENGDATU" },
             //        {NITF_BCS_N, 8, "Engineering Data Count", "ENGDATC" },
+            IndexedField<int64_t> ENGDATC;
+
             //        /* This one we don't know the length of, so we have to use the special length tag */
             //        /* Notice that we use postfix notation to compute the length
             //         * We also don't know the type of data (it depends on ENGDTS), so
@@ -80,9 +117,12 @@ namespace nitf
             //         * strings will be endian swapped if they're of length 2 or 4. */
             //        {NITF_BINARY, NITF_TRE_CONDITIONAL_LENGTH, "Engineering Data",
             //                "ENGDATA", "ENGDATC ENGDTS *"},
+            IndexedField<std::string> ENGDATA;
+
             //    {NITF_ENDLOOP, 0, NULL, NULL},
             //    {NITF_END, 0, NULL, NULL}
             //};
+
 
             void setField(const std::string& tag, const std::string& data, bool forceUpdate = false);
             void getField(const std::string& tag, std::string& data) const;

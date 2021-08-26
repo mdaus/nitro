@@ -26,7 +26,10 @@
 using namespace nitf;
 
 TREs::ENGRDA::ENGRDA()
-	: tre_("ENGRDA", "ENGRDA") // what's the difference between "tag" and "id"?
+	: tre_("ENGRDA", "ENGRDA"), // what's the difference between "tag" and "id"?
+	ENGDTS{ tre_, "ENGDTS" },
+	ENGDATC{ tre_, "ENGDATC" },
+	ENGDATA{ tre_, "ENGDATA" }
 {
 }
 
