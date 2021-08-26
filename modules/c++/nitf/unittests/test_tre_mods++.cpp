@@ -126,10 +126,8 @@ TEST_CASE(use_typed_ENGRDA)
 {
     nitf::TREs::ENGRDA engrda;
 
-    //engrda.RESRC = "HSS";
-    //engrda.RECNT = 1;
-    engrda.setField("RESRC", "HSS");
-    engrda.setField("RECNT", 1, true /*forceUpdate*/);
+    engrda.RESRC = "HSS";
+    engrda.RECNT = 1;
 
     // From ENGRDA.c
     ///* This one we don't know the length of, so we have to use the special length tag */
