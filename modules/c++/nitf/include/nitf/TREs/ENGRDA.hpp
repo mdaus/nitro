@@ -29,12 +29,61 @@
 
 #include "nitf/TRE.hpp"
 #include "nitf/exports.hpp"
-#include "nitf/Property.hpp"
 
 namespace nitf
 {
     namespace TREs
     {
+        template<nitf_FieldType, size_t>
+        struct TREField final { };
+
+        template<size_t sz>
+        class TREField<NITF_BCS_A, sz> final
+        {
+            nitf::TRE& tre_;
+            std::string key_;
+            bool forceUpdate_;
+        public:
+            TREField(nitf::TRE& tre, const std::string& key, bool forceUpdate = false) : tre_(tre), key_(key), forceUpdate_(forceUpdate) {}
+
+            void operator=(const std::string& v)
+            {
+                tre_.setField(key_, v, forceUpdate_);
+            }
+
+            const std::string value() const
+            {
+                return tre_.getField(key_);
+            }
+            operator const std::string() const
+            {
+                return value();
+            }
+        };
+        template<size_t sz>
+        class TREField<NITF_BCS_N, sz> final
+        {
+            nitf::TRE& tre_;
+            std::string key_;
+            bool forceUpdate_;
+        public:
+            TREField(nitf::TRE& tre, const std::string& key, bool forceUpdate = false) : tre_(tre), key_(key), forceUpdate_(forceUpdate) {}
+
+            void operator=(double v)
+            {
+                tre_.setField(key_, v, forceUpdate_);
+            }
+
+            const double value() const
+            {
+                return static_cast<double>(tre_.getField(key_));
+            }
+            operator const double() const
+            {
+                return value();
+            }
+        };
+
         template<typename T>
         struct IndexedFieldProxy final
         {  
@@ -113,10 +162,12 @@ namespace nitf
             //
             //static nitf_TREDescription description[] = {
             //    {NITF_BCS_A, 20, "Unique Source System Name", "RESRC" },
-            Property<std::string> RESRC{ [&]() -> std::string { return get_A("RESRC"); }, [&](const std::string& v) -> void {  setField("RESRC", v); } };
+            //Property<std::string> RESRC{ [&]() -> std::string { return get_A("RESRC"); }, [&](const std::string& v) -> void {  setField("RESRC", v); } };
+            TREField<NITF_BCS_A, 20> RESRC;
 
             //    {NITF_BCS_N, 3, "Record Entry Count", "RECNT" },
-            Property<double> RECNT{ [&]() -> double { return get_N("RECNT"); }, [&](double v) -> void {  set_RECNT(v); } };
+            //Property<double> RECNT{ [&]() -> double { return get_N("RECNT"); }, [&](double v) -> void {  set_RECNT(v); } };
+            TREField<NITF_BCS_N, 3> RECNT;
 
             //    {NITF_LOOP, 0, NULL, "RECNT"},
             //        {NITF_BCS_N, 2, "Engineering Data Label Length", "ENGLN" },

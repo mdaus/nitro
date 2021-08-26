@@ -34,6 +34,8 @@ using namespace nitf;
  */
 TREs::ENGRDA::ENGRDA(const std::string& id)
 	: tre_("ENGRDA", id.empty() ? "ENGRDA" : id.c_str()),
+	RESRC(tre_, "RESRC"),
+	RECNT(tre_, "RECNT", true /*forceUpdate*/),
 	ENGDTS{ tre_, "ENGDTS" },
 	ENGDATC{ tre_, "ENGDATC" },
 	ENGDATA{ tre_, "ENGDATA" }
