@@ -36,28 +36,52 @@ namespace nitf
     namespace TREs
     {
         template<typename T>
-        struct NITRO_NITFCPP_API SetIndexedFieldProxy final
+        struct IndexedFieldProxy final
         {  
             nitf::TRE& tre_;
             std::string tag_;
 
-            SetIndexedFieldProxy& operator=(const T& v)
+            ~IndexedFieldProxy() = default;
+            IndexedFieldProxy(const IndexedFieldProxy&) = delete;
+            IndexedFieldProxy& operator=(const IndexedFieldProxy&) = delete;
+            IndexedFieldProxy(IndexedFieldProxy&&) = default;
+            IndexedFieldProxy& operator=(IndexedFieldProxy&&) = delete;
+
+            void operator=(const T& v)
             {
                 tre_.setField(tag_, v);
-                return *this;
+            }
+            operator const T() const
+            {
+                return tre_.getField(tag_);
             }
         };
 
         template<typename T>
-        struct NITRO_NITFCPP_API IndexedField final
+        class IndexedField final
         {
+            std::string make_tag(size_t i) const
+            {
+                return name_ + "[" + std::to_string(i) + "]";
+            }
+        public:
             nitf::TRE& tre_;
             std::string name_;
 
-            SetIndexedFieldProxy<T> operator[](size_t i)
+            ~IndexedField() = default;
+            IndexedField(const IndexedField&) = delete;
+            IndexedField& operator=(const IndexedField&) = delete;
+            IndexedField(IndexedField&&) = default;
+            IndexedField& operator=(IndexedField&&) = delete;
+
+            IndexedFieldProxy<T> operator[](size_t i)
             {
-                auto tag = name_ + "[" + std::to_string(i) + "]";
-                return SetIndexedFieldProxy<T>{ tre_, std::move(tag) };
+                return IndexedFieldProxy<T>{ tre_, make_tag(i) };
+            }
+
+            const T operator[](size_t i) const
+            {
+                return tre_.getField(make_tag(i));
             }
         };
     }
@@ -72,18 +96,18 @@ namespace nitf
         {
             nitf::TRE tre_;
 
-            std::string get_A(const std::string& tag) const;
-            int64_t get_N(const std::string& tag) const;
+            std::string get_A(const std::string& tag) const; // NITF_BCS_A
+            double get_N(const std::string& tag) const; // NITF_BCS_N
 
-            void set_RECNT(int64_t, bool forceUpdate = true); // call updateFields()
+            void set_RECNT(double, bool forceUpdate = true); // call updateFields()
 
         public:
-            ENGRDA() noexcept(false);
+            ENGRDA(const std::string& id = "") noexcept(false);
             ~ENGRDA();
             ENGRDA(const ENGRDA&) = delete;
             ENGRDA& operator=(const ENGRDA&) = delete;
             ENGRDA(ENGRDA&&) = default;
-            ENGRDA& operator=(ENGRDA&&) = default;
+            ENGRDA& operator=(ENGRDA&&) = delete;
 
             // From ENGRDA.c
             //
@@ -92,7 +116,7 @@ namespace nitf
             Property<std::string> RESRC{ [&]() -> std::string { return get_A("RESRC"); }, [&](const std::string& v) -> void {  setField("RESRC", v); } };
 
             //    {NITF_BCS_N, 3, "Record Entry Count", "RECNT" },
-            Property<int64_t> RECNT{ [&]() -> int64_t { return get_N("RECNT"); }, [&](int64_t v) -> void {  set_RECNT(v); } };
+            Property<double> RECNT{ [&]() -> double { return get_N("RECNT"); }, [&](double v) -> void {  set_RECNT(v); } };
 
             //    {NITF_LOOP, 0, NULL, "RECNT"},
             //        {NITF_BCS_N, 2, "Engineering Data Label Length", "ENGLN" },
@@ -103,11 +127,11 @@ namespace nitf
             //        {NITF_BCS_N, 4, "Engineering Matrix Data Row Count", "ENGMTXR" },
             //        {NITF_BCS_A, 1, "Value Type of Engineering Data Element", "ENGTYP" },
             //        {NITF_BCS_N, 1, "Engineering Data Element Size", "ENGDTS" },
-            IndexedField<int64_t> ENGDTS;
+            IndexedField<double> ENGDTS;
 
             //        {NITF_BCS_A, 2, "Engineering Data Units", "ENGDATU" },
             //        {NITF_BCS_N, 8, "Engineering Data Count", "ENGDATC" },
-            IndexedField<int64_t> ENGDATC;
+            IndexedField<double> ENGDATC;
 
             //        /* This one we don't know the length of, so we have to use the special length tag */
             //        /* Notice that we use postfix notation to compute the length
@@ -126,8 +150,8 @@ namespace nitf
 
             void setField(const std::string& tag, const std::string& data, bool forceUpdate = false);
             void getField(const std::string& tag, std::string& data) const;
-            void setField(const std::string& tag, int64_t, bool forceUpdate = false);
-            void getField(const std::string& tag, int64_t&) const;
+            void setField(const std::string& tag, double, bool forceUpdate = false);
+            void getField(const std::string& tag, double&) const;
 
             void updateFields();
         };

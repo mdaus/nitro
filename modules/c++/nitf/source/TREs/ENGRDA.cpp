@@ -25,21 +25,27 @@
 
 using namespace nitf;
 
-TREs::ENGRDA::ENGRDA()
-	: tre_("ENGRDA", "ENGRDA"), // what's the difference between "tag" and "id"?
+// from TRE::getID()
+/**
+ * Get the TRE identifier. This is NOT the tag, however it may be the
+ * same value as the tag. The ID is used to identify a specific
+ * version/incarnation of the TRE, if multiple are possible. For most TREs,
+ * this value will be the same as the tag.
+ */
+TREs::ENGRDA::ENGRDA(const std::string& id)
+	: tre_("ENGRDA", id.empty() ? "ENGRDA" : id.c_str()),
 	ENGDTS{ tre_, "ENGDTS" },
 	ENGDATC{ tre_, "ENGDATC" },
 	ENGDATA{ tre_, "ENGDATA" }
 {
 }
-
 TREs::ENGRDA::~ENGRDA() = default;
 
 void TREs::ENGRDA::setField(const std::string& tag, const std::string& data, bool forceUpdate)
 {
 	tre_.setField(tag, data, forceUpdate);
 }
-void TREs::ENGRDA::setField(const std::string& tag, int64_t data, bool forceUpdate)
+void TREs::ENGRDA::setField(const std::string& tag, double data, bool forceUpdate)
 {
 	tre_.setField(tag, data, forceUpdate);
 }
@@ -53,16 +59,16 @@ void TREs::ENGRDA::getField(const std::string& tag, std::string& data) const
 	data = get_A(tag);
 }
 
-int64_t TREs::ENGRDA::get_N(const std::string& tag) const
+double TREs::ENGRDA::get_N(const std::string& tag) const
 {
 	return tre_.getField(tag);
 }
-void TREs::ENGRDA::getField(const std::string& tag, int64_t& data) const
+void TREs::ENGRDA::getField(const std::string& tag, double& data) const
 {
 	data = get_N(tag);
 }
 
-void TREs::ENGRDA::set_RECNT(int64_t data, bool forceUpdate /*=true*/) 
+void TREs::ENGRDA::set_RECNT(double data, bool forceUpdate /*=true*/)
 {
 	setField("RECNT", data, forceUpdate);
 }
