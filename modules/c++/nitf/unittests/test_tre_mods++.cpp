@@ -104,45 +104,21 @@ TEST_CASE(basicIteration_ENGRDA)
     nitf::TRE engrda("ENGRDA", "ENGRDA");
 
     engrda.setField("RESRC", "HSS");
-    engrda.setField("RECNT", 1);
+    engrda.setField("RECNT", 1, true /*forceUpdate*/);
 
-    std::vector<std::string> keys;
-    for (const auto& pair : engrda)
-    {
-        auto first = pair.first();
-        const auto second = pair.second();
-
-        keys.push_back(std::move(first));
-    }
-    static const  std::vector<std::string> expected_keys{ "RESRC", "RECNT", 
-        "ENGLN[0]" , "ENGMTXC[0]",  "ENGMTXR[0]",  "ENGTYP[0]",  "ENGDTS[0]",  "ENGDATU[0]", "ENGDATC[0]" };
-    TEST_ASSERT(keys == expected_keys);
-
-    for (const auto& key : keys)
-    {
-        engrda.setField(key, 1);
-
-        constexpr char val = 'A';
-        engrda.setField(key, val);
-
-        engrda.setField(key, "A");
-
-        const auto field = engrda.getField(key);
-        if (field.getLength() >= key.length())
-        {
-            engrda.setField(key, key);
-        }
-    }
-
-    // https://github.com/mdaus/nitro/discussions/394
-    engrda.setField("ENGLN[0]", 5);
-    engrda.setField("ENGMTXC[0]", 1);
-    engrda.setField("ENGMTXR[0]", 1);
-    engrda.setField("ENGTYP[0]", "A");
-    engrda.setField("ENGDTS[0]", 1);
-    engrda.setField("ENGDATC[0]", 1);
-    //constexpr char val = 'A';
-    //engrda.setField("ENGDATA[0]", val);
+    // From ENGRDA.c
+    ///* This one we don't know the length of, so we have to use the special length tag */
+    ///* Notice that we use postfix notation to compute the length
+    // * We also don't know the type of data (it depends on ENGDTS), so
+    // * we need to override the TREHandler's read method.  If we don't do
+    // * this, not only will the field type potentially be wrong, but
+    // * strings will be endian swapped if they're of length 2 or 4. */
+    //{NITF_BINARY, NITF_TRE_CONDITIONAL_LENGTH, "Engineering Data",
+    //    "ENGDATA", "ENGDATC ENGDTS *"},
+    engrda.setField("ENGDTS[0]", 8); // size
+    engrda.setField("ENGDATC[0]", 1); // count
+    engrda.updateFields();
+    engrda.setField("ENGDATA[0]", "ABC");
 }
 
 TEST_CASE(populateWhileIterating)
