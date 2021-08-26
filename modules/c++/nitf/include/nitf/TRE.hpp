@@ -169,7 +169,9 @@ struct NITRO_NITFCPP_API TREFieldIterator : public nitf::Object<nitf_TREEnumerat
  */
 DECLARE_CLASS(TRE)
 {
-    public:
+    void setField(const nitf_Field&, const std::string & key, const std::string & data, bool forceUpdate);
+
+public:
     typedef nitf::TREFieldIterator Iterator;
 
     //! Copy constructor
@@ -277,21 +279,20 @@ DECLARE_CLASS(TRE)
     template <typename T>
     void setField(const std::string& key, T value, bool forceUpdate = false)
     {
-        nitf_Field* field = nitf_TRE_getField(getNative(), key.c_str());
+        const nitf_Field* const field = nitf_TRE_getField(getNative(), key.c_str());
         if (!field)
         {
             std::ostringstream msg;
             msg << key << " is not a recognized field for this TRE";
             throw except::Exception(Ctxt(msg.str()));
         }
-        bool result = false;
         if (field->type == NITF_BINARY)
         {
             setField(key, &value, sizeof(value), forceUpdate);
         }
         else
         {
-            setField(key, str::toString(value), forceUpdate);
+            setField(*field, key, str::toString(value), forceUpdate);
         }
     }
 
