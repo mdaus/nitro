@@ -21,6 +21,7 @@
  */
 
 #include <iostream>
+#include <vector>
 
 #include <nitf/TRE.hpp>
 
@@ -115,7 +116,7 @@ TEST_CASE(basicIteration_ENGRDA)
     }
     static const  std::vector<std::string> expected_keys{ "RESRC", "RECNT", 
         "ENGLN[0]" , "ENGMTXC[0]",  "ENGMTXR[0]",  "ENGTYP[0]",  "ENGDTS[0]",  "ENGDATU[0]", "ENGDATC[0]" };
-    TEST_ASSERT_EQ(expected_keys, keys);
+    TEST_ASSERT(keys == expected_keys);
 
     for (const auto& key : keys)
     {
