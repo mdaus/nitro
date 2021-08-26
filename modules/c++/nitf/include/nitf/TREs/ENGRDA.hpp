@@ -34,51 +34,58 @@ namespace nitf
 {
     namespace TREs
     {
-        template<nitf_FieldType, size_t>
-        struct TREField final { };
-
-        template<size_t sz>
-        class TREField<NITF_BCS_A, sz> final
+        template<typename T>
+        struct TREField_ final
         {
             nitf::TRE& tre_;
             std::string key_;
             bool forceUpdate_;
-        public:
-            TREField(nitf::TRE& tre, const std::string& key, bool forceUpdate = false) : tre_(tre), key_(key), forceUpdate_(forceUpdate) {}
 
-            void operator=(const std::string& v)
+            TREField_(nitf::TRE& tre, const std::string& key, bool forceUpdate = false) : tre_(tre), key_(key), forceUpdate_(forceUpdate) {}
+            void setField(const T& v)
             {
                 tre_.setField(key_, v, forceUpdate_);
             }
-
-            const std::string value() const
+            const T getField() const
             {
-                return tre_.getField(key_);
-            }
-            operator const std::string() const
-            {
-                return value();
+                return static_cast<T>(tre_.getField(key_)); // Field::operator T()
             }
         };
-        template<size_t sz>
-        class TREField<NITF_BCS_N, sz> final
+        template<>
+        struct TREField_<std::string> final
         {
             nitf::TRE& tre_;
             std::string key_;
             bool forceUpdate_;
-        public:
-            TREField(nitf::TRE& tre, const std::string& key, bool forceUpdate = false) : tre_(tre), key_(key), forceUpdate_(forceUpdate) {}
 
-            void operator=(double v)
+            TREField_(nitf::TRE& tre, const std::string& key, bool forceUpdate = false) : tre_(tre), key_(key), forceUpdate_(forceUpdate) {}
+            void setField(const std::string& v)
             {
                 tre_.setField(key_, v, forceUpdate_);
             }
-
-            const double value() const
+            const std::string getField() const
             {
-                return static_cast<double>(tre_.getField(key_));
+                return tre_.getField(key_); // Field has an implicit conversion to std::string
             }
-            operator const double() const
+        };
+
+        template<nitf_FieldType, size_t, typename T = std::string>
+        class TREField final
+        {
+            TREField_<T> field_;
+        public:
+            TREField(nitf::TRE& tre, const std::string& key, bool forceUpdate = false) : field_(tre, key, forceUpdate) {}
+
+            void operator=(const T& v)
+            {
+                field_.setField(v);
+            }
+
+            const T value() const
+            {
+                return field_.getField();
+            }
+            operator const T() const
             {
                 return value();
             }
@@ -167,7 +174,7 @@ namespace nitf
 
             //    {NITF_BCS_N, 3, "Record Entry Count", "RECNT" },
             //Property<double> RECNT{ [&]() -> double { return get_N("RECNT"); }, [&](double v) -> void {  set_RECNT(v); } };
-            TREField<NITF_BCS_N, 3> RECNT;
+            TREField<NITF_BCS_N, 3, int64_t> RECNT;
 
             //    {NITF_LOOP, 0, NULL, "RECNT"},
             //        {NITF_BCS_N, 2, "Engineering Data Label Length", "ENGLN" },

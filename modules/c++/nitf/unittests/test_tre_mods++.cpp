@@ -129,12 +129,12 @@ TEST_CASE(use_typed_ENGRDA)
     engrda.RESRC = "HSS";
     const std::string RESRC = engrda.RESRC;
     engrda.RECNT = 1;
-    const double RECNT = engrda.RECNT;
+    const int64_t RECNT = engrda.RECNT;
 
     engrda.ENGDTS[0] = 3; // engrda.setField("ENGDTS[0]", 3); // size
-    const double ENGDTS_0 = engrda.ENGDTS[0];
+    const int64_t ENGDTS_0 = engrda.ENGDTS[0];
     engrda.ENGDATC[0] = 1; // engrda.setField("ENGDATC[0]", 1); // count
-    const double ENGDATC_0 = engrda.ENGDATC[0];
+    const int64_t ENGDATC_0 = engrda.ENGDATC[0];
     engrda.updateFields();
     engrda.ENGDATA[0] = "ABC"; // engrda.setField("ENGDATA[0]", "ABC");
     const std::string ENGDATA_0 = engrda.ENGDATA[0];
