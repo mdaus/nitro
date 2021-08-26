@@ -37,8 +37,8 @@ TREs::ENGRDA::ENGRDA(const std::string& id)
 	RESRC(tre_, "RESRC"),
 	RECNT(tre_, "RECNT", true /*forceUpdate*/),
 	ENGDTS{ tre_, "ENGDTS" },
-	ENGDATC{ tre_, "ENGDATC" },
-	ENGDATA{ tre_, "ENGDATA" }
+	ENGDATC{ tre_, "ENGDATC" }
+	//ENGDATA{ tre_, "ENGDATA" }
 {
 }
 TREs::ENGRDA::~ENGRDA() = default;
@@ -69,12 +69,6 @@ void TREs::ENGRDA::getField(const std::string& tag, double& data) const
 {
 	data = get_N(tag);
 }
-
-void TREs::ENGRDA::set_RECNT(double data, bool forceUpdate /*=true*/)
-{
-	setField("RECNT", data, forceUpdate);
-}
-
 
 void TREs::ENGRDA::updateFields()
 {

@@ -136,8 +136,8 @@ TEST_CASE(use_typed_ENGRDA)
     engrda.ENGDATC[0] = 1; // engrda.setField("ENGDATC[0]", 1); // count
     const int64_t ENGDATC_0 = engrda.ENGDATC[0];
     engrda.updateFields();
-    engrda.ENGDATA[0] = "ABC"; // engrda.setField("ENGDATA[0]", "ABC");
-    const std::string ENGDATA_0 = engrda.ENGDATA[0];
+    //engrda.ENGDATA[0] = "ABC"; // engrda.setField("ENGDATA[0]", "ABC");
+    //const std::string ENGDATA_0 = engrda.ENGDATA[0];
 }
 
 TEST_CASE(populateWhileIterating)
