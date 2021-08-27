@@ -45,12 +45,12 @@ namespace nitf
             struct const_field final
             {
                 const TRE& tre_;
-                std::string key_;
+                std::string tag_;
 
-                const_field(const TRE& tre, const std::string& key) : tre_(tre), key_(key) {}
+                const_field(const TRE& tre, const std::string& tag) : tre_(tre), tag_(tag) {}
                 const T getFieldValue() const // "const" as a hint to clients that this value is really stored elsewhere
                 {
-                    return tre_.getFieldValue<T>(key_);
+                    return tre_.getFieldValue<T>(tag_);
                 }
             };
             template<typename T>
@@ -60,10 +60,10 @@ namespace nitf
                 TRE& tre_; // need non-const
                 bool forceUpdate_;
 
-                field(TRE& tre, const std::string& key, bool forceUpdate = false) : field_(tre, key), tre_(tre), forceUpdate_(forceUpdate) {}
+                field(TRE& tre, const std::string& tag, bool forceUpdate = false) : field_(tre, tag), tre_(tre), forceUpdate_(forceUpdate) {}
                 void setFieldValue(const T& v)
                 {
-                    tre_.setFieldValue(field_.key_, v, forceUpdate_);
+                    tre_.setFieldValue(field_.tag_, v, forceUpdate_);
                 }
                 const T getFieldValue() const 
                 {
@@ -75,14 +75,13 @@ namespace nitf
         // Include the size of the TRE field to make the types more unique; maybe check it against what's reported at run-time?
         // This class turns assignment into a call to setFieldValue() and a cast calls getFieldValue()
         template<nitf_FieldType, size_t sz, typename T>
-        class TREField final
+        struct TREField final
         {
             details::field<T> field_;
-        public:
             using value_type = T;
             static constexpr size_t size = sz;
 
-            TREField(TRE& tre, const std::string& key, bool forceUpdate = false) : field_(tre, key, forceUpdate) {}
+            TREField(TRE& tre, const std::string& tag, bool forceUpdate = false) : field_(tre, tag, forceUpdate) {}
 
             void operator=(const value_type& v)
             {
@@ -110,7 +109,18 @@ namespace nitf
         {
             TRE& tre_;
             std::string name_;
-            std::string indexFieldName_;
+            // regardless of the actual count field, store it as size_t
+            TREField_BCS_N< SIZE_MAX, size_t> countField_;
+            template<typename size_t sz, typename T>
+            static decltype(countField_) getCountField(const TREField_BCS_N<sz, T>& countField)
+            {
+                // Regardless of how the count field is actually defined, we'll store
+                // in a fixed format; this avoids more template parameters.
+                auto& tre = countField.field_.tre_;
+                auto& tag = countField.field_.field_.tag_;
+                auto& forceUpdate = countField.field_.forceUpdate_;
+                return TREField_BCS_N< SIZE_MAX, size_t>(tre, tag, forceUpdate);
+            }
 
             std::string make_tag(size_t i, std::nothrow_t) const
             {
@@ -139,13 +149,14 @@ namespace nitf
             }
 
             using value_type = typename TTREField_BCS::value_type;
+
         public:
-            // Indexed fields have their size set by another field.  Rather than trying to get (really)
-            // fancy as pass a TREField<>, just use another name.
-            IndexedField(TRE& tre, const std::string& name, const std::string& indexFieldName)
-                : tre_(tre), name_(name), indexFieldName_(indexFieldName)
+            // Indexed fields have their size set by another field.
+            template<typename size_t sz, typename T = int64_t>
+            IndexedField(TRE& tre, const std::string& name, const TREField_BCS_N<sz, T>& countField)
+                : tre_(tre), name_(name), countField_(getCountField(countField))
             {
-                (void)size(); // be sure the index field exists
+                (void)size(); // be sure the count field exists
             }
             ~IndexedField() = default;
             IndexedField(const IndexedField&) = delete;
@@ -174,8 +185,7 @@ namespace nitf
 
             size_t size() const // c.f. std::vector
             {
-                // don't save this value as it could change after updateFields()
-                return TREField_BCS_N< SIZE_MAX, size_t>(tre_, indexFieldName_);
+                return countField_.value(); // don't save this value as it could change after updateFields()
             }
             bool empty() const // c.f. std::vector
             {
