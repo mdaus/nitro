@@ -67,8 +67,7 @@ coda_add_module(
         source/WriteHandler.cpp
         source/Writer.cpp
 
-
-        source/TREs/ENGRDA.cpp
+        source/TREs_ENGRDA.cpp
         )
 
 target_compile_features(nitf-c++ PUBLIC cxx_inheriting_constructors)

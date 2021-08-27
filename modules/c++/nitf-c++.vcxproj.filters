@@ -184,7 +184,7 @@
     <ClCompile Include="nitf\source\FieldWarning.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="nitf\source\TREs\ENGRDA.cpp">
+    <ClCompile Include="nitf\source\TREs_ENGRDA.cpp">
       <Filter>TREs</Filter>
     </ClCompile>
   </ItemGroup>
