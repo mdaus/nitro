@@ -169,7 +169,8 @@ struct NITRO_NITFCPP_API TREFieldIterator : public nitf::Object<nitf_TREEnumerat
  */
 DECLARE_CLASS(TRE)
 {
-    void setField(const nitf_Field&, const std::string & key, const std::string & data, bool forceUpdate);
+    nitf_Field& nitf_TRE_getField(const std::string&) const;
+    void setFieldValue(const nitf_Field&, const std::string & tag, const std::string & data, bool forceUpdate);
 
 public:
     typedef nitf::TREFieldIterator Iterator;
@@ -200,7 +201,11 @@ public:
 
     // for unit-tests
     static nitf_TRE* create(const std::string & tag, const std::string & id, nitf_Error& error) noexcept;
-    static bool setField(nitf_TRE * tre, const std::string & tag, const std::string& data, nitf_Error& error) noexcept;
+    static bool setFieldValue(nitf_TRE*, const std::string & tag, const std::string& data, nitf_Error&) noexcept;
+    static bool setField(nitf_TRE* tre, const std::string & tag, const std::string & data, nitf_Error & error) noexcept
+    {
+        return setFieldValue(tre, tag, data, error);
+    }
 
     //! Clone
     nitf::TRE clone() const;
@@ -271,30 +276,57 @@ public:
      *                    of the TRE fields. See `updateFields()`
      */
 
-    void setField(const std::string& key, const std::string& value, bool forceUpdate = false);
-    void setField(const std::string & key, const char* value, bool forceUpdate = false);
-    void setField(const std::string& key, const void* data, size_t dataLength, bool forceUpdate = false);
+    // TRE fields use some of the "field" infrastructure, but have their own API.
+
+    void setFieldValue(const std::string& tag, const std::string& value, bool forceUpdate);
+    void setFieldValue(const std::string & tag, const char* value, bool forceUpdate);
+    void setFieldValue(const std::string& tag, const void* data, size_t dataLength, bool forceUpdate);
 
     // This is wrong when T is "const char*" and the field is NITF_BINARY; sizeof(T) won't make sense.
+    // That's why there is a "const char*" overload above.
     template <typename T>
-    void setField(const std::string& key, T value, bool forceUpdate = false)
+    void setFieldValue(const std::string& tag, const T& value, bool forceUpdate)
     {
-        const nitf_Field* const field = nitf_TRE_getField(getNative(), key.c_str());
-        if (!field)
+        const auto& field = nitf_TRE_getField(tag);
+        if (field.type == NITF_BINARY)
         {
-            std::ostringstream msg;
-            msg << key << " is not a recognized field for this TRE";
-            throw except::Exception(Ctxt(msg.str()));
-        }
-        if (field->type == NITF_BINARY)
-        {
-            setField(key, &value, sizeof(value), forceUpdate);
+            setFieldValue(tag, &value, sizeof(value), forceUpdate);
         }
         else
         {
-            setField(*field, key, str::toString(value), forceUpdate);
+            setFieldValue(field, tag, str::toString(value), forceUpdate);
         }
     }
+
+    template <typename T>
+    void setField(const std::string& tag, const T& value, bool forceUpdate = false)
+    {
+        setFieldValue(tag, value, forceUpdate);
+    }
+    void setField(const std::string& tag, const void* data, size_t dataLength, bool forceUpdate = false)
+    {
+        setFieldValue(tag, data, dataLength, forceUpdate);
+    }
+
+    template<typename T>
+    const T& getFieldValue(const std::string& tag, T& value) const
+    {
+        value = static_cast<T>(getField(tag));
+        return value;
+    }
+    const std::string& getFieldValue(const std::string& tag, std::string& value, bool trim = false) const
+    {
+        value = getField(tag).toString(trim);
+        return value;
+    }
+    template<typename T>
+    const T getFieldValue(const std::string& tag) const
+    {
+        T retval;
+        getFieldValue(tag, retval);
+        return retval;
+    }
+
 
     /*!
      *  Does the field exist?
