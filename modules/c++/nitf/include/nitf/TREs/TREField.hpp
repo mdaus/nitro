@@ -98,10 +98,10 @@ namespace nitf
             }
         };
 
-        template<typename size_t sz = SIZE_MAX>
+        template<size_t sz = SIZE_MAX>
         using TREField_BCS_A = TREField<NITF_BCS_A, sz, std::string>;
 
-        template<typename size_t sz, typename T = int64_t>
+        template<size_t sz, typename T = int64_t>
         using TREField_BCS_N = TREField<NITF_BCS_N, sz, T>;
 
         template<typename TTREField_BCS>
@@ -111,7 +111,7 @@ namespace nitf
             std::string name_;
             // regardless of the actual count field, store it as size_t
             TREField_BCS_N< SIZE_MAX, size_t> countField_;
-            template<typename size_t sz, typename T>
+            template<size_t sz, typename T>
             static decltype(countField_) getCountField(const TREField_BCS_N<sz, T>& countField)
             {
                 // Regardless of how the count field is actually defined, we'll store
@@ -152,7 +152,7 @@ namespace nitf
 
         public:
             // Indexed fields have their size set by another field.
-            template<typename size_t sz, typename T = int64_t>
+            template<size_t sz, typename T = int64_t>
             IndexedField(TRE& tre, const std::string& name, const TREField_BCS_N<sz, T>& countField)
                 : tre_(tre), name_(name), countField_(getCountField(countField))
             {
