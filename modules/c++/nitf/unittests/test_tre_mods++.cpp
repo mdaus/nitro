@@ -124,11 +124,11 @@ TEST_CASE(use_ENGRDA)
 
 TEST_CASE(use_typed_ENGRDA)
 {
-    nitf::TREs::ENGRDA engrda;
+    nitf::TREs::ENGRDA engrda; // nitf::TRE engrda("ENGRDA", "ENGRDA");
 
-    engrda.RESRC = "HSS";
+    engrda.RESRC = "HSS"; // engrda.setField("RESRC", "HSS");
     const std::string RESRC = engrda.RESRC;
-    engrda.RECNT = 1;
+    engrda.RECNT = 1; // engrda.setField("RECNT", 1, true /*forceUpdate*/);
     const int64_t RECNT = engrda.RECNT;
 
     engrda.ENGDTS[0] = 3; // engrda.setField("ENGDTS[0]", 3); // size

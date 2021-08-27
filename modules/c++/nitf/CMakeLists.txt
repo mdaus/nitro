@@ -65,7 +65,11 @@ coda_add_module(
         source/TextSubheader.cpp
         source/Utils.cpp
         source/WriteHandler.cpp
-        source/Writer.cpp)
+        source/Writer.cpp
+
+
+        source/TREs/ENGRDA.cpp
+        )
 
 target_compile_features(nitf-c++ PUBLIC cxx_inheriting_constructors)
 

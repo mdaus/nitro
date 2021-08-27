@@ -24,6 +24,7 @@
 #pragma once
 
 #include <stdint.h>
+#include <assert.h>
 
 #include <string>
 #include <stdexcept>
@@ -52,6 +53,14 @@ namespace nitf
                 {
                     return tre_.getFieldValue<T>(key_);
                 }
+                const T value() const
+                {
+                    return getFieldValue();
+                }
+                operator const T() const
+                {
+                    return value();
+                }
             };
             template<typename T>
             struct field final
@@ -65,9 +74,22 @@ namespace nitf
                 {
                     tre_.setFieldValue(field_.key_, v, forceUpdate_);
                 }
+                void operator=(const T& v)
+                {
+                    setFieldValue(v);
+                }
+
                 const T getFieldValue() const
                 {
                     return field_.getFieldValue();
+                }
+                const T value() const
+                {
+                    return getFieldValue();
+                }
+                operator const T() const
+                {
+                    return value();
                 }
             };
         }
@@ -87,12 +109,12 @@ namespace nitf
 
             void operator=(const value_type& v)
             {
-                field_.setFieldValue(v);
+                field_ = v;
             }
 
             const value_type value() const
             {
-                return field_.getFieldValue();
+                return field_.value();
             }
             operator const value_type() const
             {
@@ -111,15 +133,16 @@ namespace nitf
         {
             TRE& tre_;
             std::string name_;
+            std::string indexFieldName_;
+
             std::string make_tag(size_t i, std::nothrow_t) const
             {
                 return name_ + "[" + std::to_string(i) + "]";
             }
             std::string make_tag(size_t i) const
             {
-                constexpr auto sz = TTREField_BCS::size;
                 auto retval = make_tag(i, std::nothrow); // don't duplicate code in throw(), below
-                if (i < sz) // OK to try, calling exists() could be expensive
+                if (i < size()) // better than calling exists() on a non-existent field?
                 {
                     if (tre_.exists(retval))
                     {
@@ -129,9 +152,24 @@ namespace nitf
                 throw std::out_of_range("tag '" + retval + "' does not exist.");
             }
 
+            TTREField_BCS make_field(size_t i, std::nothrow_t) const
+            {
+                return TTREField_BCS(tre_, make_tag(i, std::nothrow));
+            }
+            TTREField_BCS make_field(size_t i) const
+            {
+                return TTREField_BCS(tre_, make_tag(i));
+            }
+
             using value_type = typename TTREField_BCS::value_type;
         public:
-            IndexedField(TRE& tre, const std::string& name) : tre_(tre), name_(name) {}
+            // Indexed fields have their size set by another field.  Rather than trying to get (really)
+            // fancy as pass a TREField<>, just use another name.
+            IndexedField(TRE& tre, const std::string& name, const std::string& indexFieldName)
+                : tre_(tre), name_(name), indexFieldName_(indexFieldName)
+            {
+                (void)size(); // be sure the index field exists
+            }
             ~IndexedField() = default;
             IndexedField(const IndexedField&) = delete;
             IndexedField& operator=(const IndexedField&) = delete;
@@ -140,25 +178,32 @@ namespace nitf
 
             TTREField_BCS operator[](size_t i)
             {
-                return TTREField_BCS(tre_, make_tag(i, std::nothrow));
+                return make_field(i, std::nothrow);
             }
             TTREField_BCS at(size_t i) // c.f. std::vector
             {
-                return TTREField_BCS(tre_, make_tag(i));
+                return make_field(i);
             }
 
             // Directly return the underlying value rather than a TTREField_BCS
-            const value_type operator[](size_t i) const
+            value_type operator[](size_t i) const
             {
-                const TTREField_BCS field(tre_, make_tag(i, std::nothrow));
-                return field.value();
+                return make_field(i, std::nothrow).value();
             }
-            const value_type at(size_t i) const // c.f. std::vector
+            value_type at(size_t i) const // c.f. std::vector
             {
-                const TTREField_BCS field(tre_, make_tag(i));
-                return field.value();
+                return make_field(i).value();
             }
 
+            size_t size() const // c.f. std::vector
+            {
+                // don't save this value as it could change after updateFields()
+                return details::const_field<size_t>(tre_, indexFieldName_);
+            }
+            bool empty() const // c.f. std::vector
+            {
+                return size() == 0;
+            }
         };
     }
 }
