@@ -37,38 +37,11 @@ TREs::ENGRDA::ENGRDA(const std::string& id)
 	RESRC(tre_, "RESRC"),
 	RECNT(tre_, "RECNT", true /*forceUpdate*/),
 	ENGDTS{ tre_, "ENGDTS" },
-	ENGDATC{ tre_, "ENGDATC" }
-	//ENGDATA{ tre_, "ENGDATA" }
+	ENGDATC{ tre_, "ENGDATC" },
+	ENGDATA{ tre_, "ENGDATA" }
 {
 }
 TREs::ENGRDA::~ENGRDA() = default;
-
-void TREs::ENGRDA::setField(const std::string& tag, const std::string& data, bool forceUpdate)
-{
-	tre_.setField(tag, data, forceUpdate);
-}
-void TREs::ENGRDA::setField(const std::string& tag, double data, bool forceUpdate)
-{
-	tre_.setField(tag, data, forceUpdate);
-}
-std::string TREs::ENGRDA::get_A(const std::string& tag) const
-{
-	return tre_.getField(tag);
-
-}
-void TREs::ENGRDA::getField(const std::string& tag, std::string& data) const
-{
-	data = get_A(tag);
-}
-
-double TREs::ENGRDA::get_N(const std::string& tag) const
-{
-	return tre_.getField(tag);
-}
-void TREs::ENGRDA::getField(const std::string& tag, double& data) const
-{
-	data = get_N(tag);
-}
 
 void TREs::ENGRDA::updateFields()
 {

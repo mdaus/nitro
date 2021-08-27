@@ -34,45 +34,49 @@ namespace nitf
 {
     namespace TREs
     {
-        template<typename T>
-        struct TREField_ final
+        namespace details
         {
-            TRE& tre_;
-            std::string key_;
-            bool forceUpdate_;
+            // A simple wrapper around TRE::setFieldValue() and TRE::getFieldValue().
+            // Everything to make the call is in one spot.  More importantly, it turns
+            // and assignment into a call to setFieldValue() and a cast calls getFieldValue()
+            template<typename T>
+            struct const_field final
+            {
+                const TRE& tre_;
+                std::string key_;
 
-            TREField_(TRE& tre, const std::string& key, bool forceUpdate = false) : tre_(tre), key_(key), forceUpdate_(forceUpdate) {}
-            void setField(const T& v)
+                const_field(const TRE& tre, const std::string& key) : tre_(tre), key_(key) {}
+                const T getFieldValue() const
+                {
+                    return tre_.getFieldValue<T>(key_);
+                }
+            };
+            template<typename T>
+            struct field final
             {
-                tre_.setField(key_, v, forceUpdate_);
-            }
-            const T getField() const
-            {
-                return static_cast<T>(tre_.getField(key_)); // Field::operator T()
-            }
-        };
-        template<>
-        struct TREField_<std::string> final
-        {
-            TRE& tre_;
-            std::string key_;
-            bool forceUpdate_;
+                const_field<T> field_;
+                TRE& tre_; // need non-const
+                bool forceUpdate_;
 
-            TREField_(TRE& tre, const std::string& key, bool forceUpdate = false) : tre_(tre), key_(key), forceUpdate_(forceUpdate) {}
-            void setField(const std::string& v)
-            {
-                tre_.setField(key_, v, forceUpdate_);
-            }
-            const std::string getField() const
-            {
-                return tre_.getField(key_); // Field has an implicit conversion to std::string
-            }
-        };
+                field(TRE& tre, const std::string& key, bool forceUpdate = false) : field_(tre, key), tre_(tre), forceUpdate_(forceUpdate) {}
+                void setFieldValue(const T& v)
+                {
+                    tre_.setFieldValue(field_.key_, v, forceUpdate_);
+                }
+                const T getFieldValue() const
+                {
+                    return field_.getFieldValue();
+                }
+            };
+        }
 
+
+        // Include the size of the TRE field to make the types more unique.
+        // Maybe check it against what's reported at run-time?
         template<nitf_FieldType, size_t, typename T>
         class TREField final
         {
-            TREField_<T> field_;
+            details::field<T> field_;
         public:
             using value_type = T;
 
@@ -80,12 +84,12 @@ namespace nitf
 
             void operator=(const value_type& v)
             {
-                field_.setField(v);
+                field_.setFieldValue(v);
             }
 
             const value_type value() const
             {
-                return field_.getField();
+                return field_.getFieldValue();
             }
             operator const value_type() const
             {
@@ -93,33 +97,11 @@ namespace nitf
             }
         };
 
-        template<typename size_t sz>
+        template<typename size_t sz = SIZE_MAX>
         using TREField_BCS_A = TREField<NITF_BCS_A, sz, std::string>;
 
         template<typename size_t sz, typename T = int64_t>
         using TREField_BCS_N = TREField<NITF_BCS_N, sz, T>;
-
-        template<typename T>
-        struct IndexedFieldProxy final
-        {  
-            TRE& tre_;
-            std::string tag_;
-
-            ~IndexedFieldProxy() = default;
-            IndexedFieldProxy(const IndexedFieldProxy&) = delete;
-            IndexedFieldProxy& operator=(const IndexedFieldProxy&) = delete;
-            IndexedFieldProxy(IndexedFieldProxy&&) = default;
-            IndexedFieldProxy& operator=(IndexedFieldProxy&&) = delete;
-
-            void operator=(const T& v)
-            {
-                tre_.setField(tag_, v);
-            }
-            operator const T() const
-            {
-                return tre_.getField(tag_);
-            }
-        };
 
         template<typename TTREField_BCS>
         class IndexedField final
@@ -131,7 +113,7 @@ namespace nitf
                 return name_ + "[" + std::to_string(i) + "]";
             }
 
-            using value_type = typename TTREField_BCS::value_type;
+            //using value_type = typename TTREField_BCS::value_type;
         public:
             IndexedField(TRE& tre, const std::string& name) : tre_(tre), name_(name) {}
             ~IndexedField() = default;
@@ -140,21 +122,16 @@ namespace nitf
             IndexedField(IndexedField&&) = default;
             IndexedField& operator=(IndexedField&&) = delete;
 
-            //IndexedFieldProxy<T> operator[](size_t i)
-            //{
-            //    return IndexedFieldProxy<T>{ tre_, make_tag(i) };
-            //}
-
             TTREField_BCS operator[](size_t i)
             {
                 return TTREField_BCS(tre_, make_tag(i));
             }
 
-            const value_type operator[](size_t i) const
-            {
-                TTREField_BCS field(tre_, make_tag(i));
-                return field.getField();
-            }
+            //const value_type operator[](size_t i) const
+            //{
+            //    TTREField_BCS field(tre_, make_tag(i));
+            //    return field.value();
+            //}
         };
     }
 }
@@ -168,9 +145,6 @@ namespace nitf
         {
             nitf::TRE tre_;
 
-            std::string get_A(const std::string& tag) const; // NITF_BCS_A
-            double get_N(const std::string& tag) const; // NITF_BCS_N
-
         public:
             ENGRDA(const std::string& id = "") noexcept(false);
             ~ENGRDA();
@@ -183,11 +157,9 @@ namespace nitf
             //
             //static nitf_TREDescription description[] = {
             //    {NITF_BCS_A, 20, "Unique Source System Name", "RESRC" },
-            //Property<std::string> RESRC{ [&]() -> std::string { return get_A("RESRC"); }, [&](const std::string& v) -> void {  setField("RESRC", v); } };
             TREField_BCS_A<20> RESRC;
 
             //    {NITF_BCS_N, 3, "Record Entry Count", "RECNT" },
-            //Property<double> RECNT{ [&]() -> double { return get_N("RECNT"); }, [&](double v) -> void {  set_RECNT(v); } };
             TREField_BCS_N<3> RECNT;
 
             //    {NITF_LOOP, 0, NULL, "RECNT"},
@@ -213,17 +185,32 @@ namespace nitf
             //         * strings will be endian swapped if they're of length 2 or 4. */
             //        {NITF_BINARY, NITF_TRE_CONDITIONAL_LENGTH, "Engineering Data",
             //                "ENGDATA", "ENGDATC ENGDTS *"},
-            //IndexedField<std::string> ENGDATA;
+            IndexedField<TREField_BCS_A<>> ENGDATA;
 
             //    {NITF_ENDLOOP, 0, NULL, NULL},
             //    {NITF_END, 0, NULL, NULL}
             //};
 
+            template <typename T>
+            void setFieldValue(const std::string& tag, const T& value, bool forceUpdate = false)
+            {
+                tre_.setFieldValue(tag, value, forceUpdate);
+            }
+            void setFieldValue(const std::string& tag, const void* data, size_t dataLength, bool forceUpdate = false)
+            {
+                tre_.setFieldValue(tag, data, dataLength, forceUpdate);
+            }
 
-            void setField(const std::string& tag, const std::string& data, bool forceUpdate = false);
-            void getField(const std::string& tag, std::string& data) const;
-            void setField(const std::string& tag, double, bool forceUpdate = false);
-            void getField(const std::string& tag, double&) const;
+            template<typename T>
+            const T& getFieldValue(const std::string& tag, T& value) const
+            {
+                return tre_.getFieldValue(tag, value);
+            }
+            template<typename T>
+            const T getFieldValue(const std::string& tag) const
+            {
+                return tre_.getFieldValue<T>(tag);
+            }
 
             void updateFields();
         };
