@@ -309,18 +309,18 @@ public:
     }
 
     template<typename T>
-    const T& getFieldValue(const std::string& tag, T& value) const
+    const T& getFieldValue(const std::string& tag, T& value) const  // "const" as a hint to clients that this value is really stored elsewhere
     {
         value = static_cast<T>(getField(tag));
         return value;
     }
-    const std::string& getFieldValue(const std::string& tag, std::string& value, bool trim = false) const
+    const std::string& getFieldValue(const std::string& tag, std::string& value, bool trim = false) const  // "const" as a hint to clients that this value is really stored elsewhere
     {
         value = getField(tag).toString(trim);
         return value;
     }
     template<typename T>
-    const T getFieldValue(const std::string& tag) const
+    const T getFieldValue(const std::string& tag) const  // "const" as a hint to clients that this value is really stored elsewhere
     {
         T retval;
         getFieldValue(tag, retval);

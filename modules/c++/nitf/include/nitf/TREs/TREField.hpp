@@ -40,8 +40,7 @@ namespace nitf
         namespace details
         {
             // A simple wrapper around TRE::setFieldValue() and TRE::getFieldValue().
-            // Everything to make the call is in one spot.  More importantly, it turns
-            // and assignment into a call to setFieldValue() and a cast calls getFieldValue()
+            // Everything to make the call is in one spot.
             template<typename T>
             struct const_field final
             {
@@ -49,17 +48,9 @@ namespace nitf
                 std::string key_;
 
                 const_field(const TRE& tre, const std::string& key) : tre_(tre), key_(key) {}
-                const T getFieldValue() const
+                const T getFieldValue() const // "const" as a hint to clients that this value is really stored elsewhere
                 {
                     return tre_.getFieldValue<T>(key_);
-                }
-                const T value() const
-                {
-                    return getFieldValue();
-                }
-                operator const T() const
-                {
-                    return value();
                 }
             };
             template<typename T>
@@ -74,29 +65,15 @@ namespace nitf
                 {
                     tre_.setFieldValue(field_.key_, v, forceUpdate_);
                 }
-                void operator=(const T& v)
-                {
-                    setFieldValue(v);
-                }
-
-                const T getFieldValue() const
+                const T getFieldValue() const 
                 {
                     return field_.getFieldValue();
-                }
-                const T value() const
-                {
-                    return getFieldValue();
-                }
-                operator const T() const
-                {
-                    return value();
                 }
             };
         }
 
-
-        // Include the size of the TRE field to make the types more unique.
-        // Maybe check it against what's reported at run-time?
+        // Include the size of the TRE field to make the types more unique; maybe check it against what's reported at run-time?
+        // This class turns assignment into a call to setFieldValue() and a cast calls getFieldValue()
         template<nitf_FieldType, size_t sz, typename T>
         class TREField final
         {
@@ -109,12 +86,12 @@ namespace nitf
 
             void operator=(const value_type& v)
             {
-                field_ = v;
+                field_.setFieldValue(v);
             }
 
-            const value_type value() const
+            const value_type value() const // "const" as a hint to clients that this value is really stored elsewhere
             {
-                return field_.value();
+                return field_.getFieldValue();
             }
             operator const value_type() const
             {
@@ -198,7 +175,7 @@ namespace nitf
             size_t size() const // c.f. std::vector
             {
                 // don't save this value as it could change after updateFields()
-                return details::const_field<size_t>(tre_, indexFieldName_);
+                return TREField_BCS_N< SIZE_MAX, size_t>(tre_, indexFieldName_);
             }
             bool empty() const // c.f. std::vector
             {
