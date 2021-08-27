@@ -392,5 +392,8 @@
     <ClInclude Include="nitf\include\nitf\TREs\ENGRDA.hpp">
       <Filter>TREs</Filter>
     </ClInclude>
+    <ClInclude Include="nitf\include\nitf\TREs\TREField.hpp">
+      <Filter>TREs</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

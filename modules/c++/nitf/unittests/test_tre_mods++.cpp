@@ -137,7 +137,29 @@ TEST_CASE(use_typed_ENGRDA)
     const int64_t ENGDATC_0 = engrda.ENGDATC[0];
     engrda.updateFields();
     engrda.ENGDATA[0] = "ABC"; // engrda.setField("ENGDATA[0]", "ABC");
-    const std::string ENGDATA_0 = engrda.ENGDATA[0];
+    const auto& engrda_ = engrda;
+    const auto ENGDATA_0 = engrda_.ENGDATA[0];
+
+    try
+    {
+        (void) engrda_.ENGDATA.at(999);
+        TEST_ASSERT_FALSE(false);
+    }
+    catch (const std::out_of_range&)
+    {
+        TEST_ASSERT_TRUE(true);
+    }
+
+    try
+    {
+        (void)engrda_.ENGDATA[999]; // unchecked can still throw, just a different exception
+        TEST_ASSERT_FALSE(false);
+    }
+    catch (const except::NoSuchKeyException& ex)
+    {
+        TEST_ASSERT_TRUE(true);
+    }
+
 }
 
 TEST_CASE(populateWhileIterating)
