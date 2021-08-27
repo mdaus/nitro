@@ -307,6 +307,27 @@ public:
         setFieldValue(tag, data, dataLength, forceUpdate);
     }
 
+    template<typename T>
+    const T& getFieldValue(const std::string& tag, T& value) const
+    {
+        value = static_cast<T>(getField(tag));
+        return value;
+    }
+    template<>
+    const std::string& getFieldValue(const std::string& tag, std::string& value) const
+    {
+        value = getField(tag).toString();
+        return value;
+    }
+    template<typename T>
+    const T getFieldValue(const std::string& tag) const
+    {
+        T retval;
+        getFieldValue(tag, retval);
+        return retval;
+    }
+
+
     /*!
      *  Does the field exist?
      *  \param key  The field name in which to check

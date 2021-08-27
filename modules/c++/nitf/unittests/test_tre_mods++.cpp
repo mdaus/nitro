@@ -153,6 +153,9 @@ TEST_CASE(overflowingNumericFields)
     // truncated
     tre.setField("ULCNR_LAT", 1.0 / 9);
     TEST_ASSERT_EQ(tre.getField("ULCNR_LAT").toString(), "0.1111111");
+    TEST_ASSERT_EQ(tre.getFieldValue<std::string>("ULCNR_LAT"), "0.1111111");
+    std::string value;
+    TEST_ASSERT_EQ(tre.getFieldValue("ULCNR_LAT", value), "0.1111111");
 
     tre.setField("ULCNR_LAT", 123456789);
     TEST_ASSERT_EQ(tre.getField("ULCNR_LAT").toString(), "123456789");
