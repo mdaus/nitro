@@ -283,8 +283,9 @@ public:
     void setFieldValue(const std::string& tag, const void* data, size_t dataLength, bool forceUpdate);
 
     // This is wrong when T is "const char*" and the field is NITF_BINARY; sizeof(T) won't make sense.
+    // That's why there is a "const char*" overload above.
     template <typename T>
-    void setFieldValue(const std::string& tag, T value, bool forceUpdate)
+    void setFieldValue(const std::string& tag, const T& value, bool forceUpdate)
     {
         const auto& field = nitf_TRE_getField(tag);
         if (field.type == NITF_BINARY)
@@ -313,10 +314,9 @@ public:
         value = static_cast<T>(getField(tag));
         return value;
     }
-    template<>
-    const std::string& getFieldValue(const std::string& tag, std::string& value) const
+    const std::string& getFieldValue(const std::string& tag, std::string& value, bool trim = false) const
     {
-        value = getField(tag).toString();
+        value = getField(tag).toString(trim);
         return value;
     }
     template<typename T>
