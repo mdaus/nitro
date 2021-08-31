@@ -1,8 +1,8 @@
 /*
  * =========================================================================
- * This file is part of xml.lite-python 
+ * This file is part of xml.lite-python
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2015, MDA Information Systems LLC
  *
  * xml.lite-python is free software; you can redistribute it and/or modify
@@ -15,8 +15,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  */
 
@@ -36,6 +36,8 @@
 %ignore xml::lite::Element::setAttributes;
 %ignore xml::lite::Element::getAttributes;
 %ignore xml::lite::Element::addChild;
+%ignore xml::lite::Element::create; // returns unique_ptr: unsupported by SWIG
+%ignore xml::lite::Element::createU8; // returns unique_ptr: unsupported by SWIG
 
 %include "xml/lite/Element.h"
 %include "xml/lite/Document.h"
