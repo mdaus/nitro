@@ -156,6 +156,7 @@ def i_file(self, node):
     tsk.env.append_value('SWIGFLAGS', flags)
     if not '-noextranative' in flags:
         tsk.env.append_value('SWIGFLAGS', ['-extranative'])
+    tsk.env.append_value('SWIGFLAGS', ['-D_POSIX_C_SOURCE=200809L'])
 
     tsk.swig_install_fun = getattr(self, 'swig_install_fun', None)
 
