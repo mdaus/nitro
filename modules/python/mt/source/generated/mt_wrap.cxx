@@ -2690,25 +2690,27 @@ SWIGINTERN PyObject *SWIG_PyStaticMethod_New(PyObject *SWIGUNUSEDPARM(self), PyO
 
 /* -------- TYPES TABLE (BEGIN) -------- */
 
-#define SWIGTYPE_p_DWORD swig_types[0]
-#define SWIGTYPE_p_HANDLE swig_types[1]
-#define SWIGTYPE_p_char swig_types[2]
-#define SWIGTYPE_p_except__NullPointerReferenceException swig_types[3]
-#define SWIGTYPE_p_int16_t swig_types[4]
-#define SWIGTYPE_p_int32_t swig_types[5]
-#define SWIGTYPE_p_int64_t swig_types[6]
-#define SWIGTYPE_p_int8_t swig_types[7]
-#define SWIGTYPE_p_mt__ThreadGroup swig_types[8]
-#define SWIGTYPE_p_mt__ThreadPlanner swig_types[9]
-#define SWIGTYPE_p_size_t swig_types[10]
-#define SWIGTYPE_p_sys__Runnable swig_types[11]
-#define SWIGTYPE_p_uint16_t swig_types[12]
-#define SWIGTYPE_p_uint32_t swig_types[13]
-#define SWIGTYPE_p_uint64_t swig_types[14]
-#define SWIGTYPE_p_uint8_t swig_types[15]
-#define SWIGTYPE_p_unsigned_char swig_types[16]
-static swig_type_info *swig_types[18];
-static swig_module_info swig_module = {swig_types, 17, 0, 0, 0, 0};
+#define SWIGTYPE_p_char swig_types[0]
+#define SWIGTYPE_p_except__NullPointerReferenceException swig_types[1]
+#define SWIGTYPE_p_int swig_types[2]
+#define SWIGTYPE_p_int16_t swig_types[3]
+#define SWIGTYPE_p_int32_t swig_types[4]
+#define SWIGTYPE_p_int64_t swig_types[5]
+#define SWIGTYPE_p_int8_t swig_types[6]
+#define SWIGTYPE_p_mt__ThreadGroup swig_types[7]
+#define SWIGTYPE_p_mt__ThreadPlanner swig_types[8]
+#define SWIGTYPE_p_off_t swig_types[9]
+#define SWIGTYPE_p_pid_t swig_types[10]
+#define SWIGTYPE_p_size_t swig_types[11]
+#define SWIGTYPE_p_ssize_t swig_types[12]
+#define SWIGTYPE_p_sys__Runnable swig_types[13]
+#define SWIGTYPE_p_uint16_t swig_types[14]
+#define SWIGTYPE_p_uint32_t swig_types[15]
+#define SWIGTYPE_p_uint64_t swig_types[16]
+#define SWIGTYPE_p_uint8_t swig_types[17]
+#define SWIGTYPE_p_unsigned_char swig_types[18]
+static swig_type_info *swig_types[20];
+static swig_module_info swig_module = {swig_types, 19, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -3136,7 +3138,7 @@ SWIGINTERN void mt_ThreadGroup_createThread(mt::ThreadGroup *self,PyObject *runn
     sys::Runnable *n;
     if (SWIG_ConvertPtr(runnable, (void **) &n, SWIGTYPE_p_sys__Runnable, SWIG_POINTER_DISOWN) == -1)
     {
-        throw except::Exception(except::Context("C:\\Users\\ke006616\\repos\\coda-oss\\modules\\python\\mt\\source\\mt.i", 74, "",          sys::TimeStamp().local(), "Invalid data type in createThread(expected sys::Runnable)")
+        throw except::Exception(except::Context("../modules/python/mt/source/mt.i", 74, "",          sys::TimeStamp().local(), "Invalid data type in createThread(expected sys::Runnable)")
 );
     }
     self->createThread(n);
@@ -4017,17 +4019,19 @@ static PyMethodDef SwigMethods_proxydocs[] = {
 
 /* -------- TYPE CONVERSION AND EQUIVALENCE RULES (BEGIN) -------- */
 
-static swig_type_info _swigt__p_DWORD = {"_p_DWORD", "DWORD *|sys::Pid_T *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_HANDLE = {"_p_HANDLE", "sys::Handle_T *|HANDLE *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_char = {"_p_char", "char *|sys::byte *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_except__NullPointerReferenceException = {"_p_except__NullPointerReferenceException", "except::NullPointerReferenceException *|except::NullPointerReference *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_int = {"_p_int", "int *|sys::Handle_T *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_int16_t = {"_p_int16_t", "sys::Int16_T *|int16_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_int32_t = {"_p_int32_t", "sys::Int32_T *|int32_t *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_int64_t = {"_p_int64_t", "sys::Int64_T *|sys::SSize_T *|int64_t *|sys::Off_T *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_int64_t = {"_p_int64_t", "sys::Int64_T *|int64_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_int8_t = {"_p_int8_t", "sys::Int8_T *|int8_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_mt__ThreadGroup = {"_p_mt__ThreadGroup", "mt::ThreadGroup *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_mt__ThreadPlanner = {"_p_mt__ThreadPlanner", "mt::ThreadPlanner *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_off_t = {"_p_off_t", "off_t *|sys::Off_T *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_pid_t = {"_p_pid_t", "sys::Pid_T *|pid_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_size_t = {"_p_size_t", "sys::Size_T *|size_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_ssize_t = {"_p_ssize_t", "sys::SSize_T *|ssize_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_sys__Runnable = {"_p_sys__Runnable", "sys::Runnable *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_uint16_t = {"_p_uint16_t", "sys::Uint16_T *|uint16_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_uint32_t = {"_p_uint32_t", "sys::Uint32_T *|uint32_t *", 0, 0, (void*)0, 0};
@@ -4036,17 +4040,19 @@ static swig_type_info _swigt__p_uint8_t = {"_p_uint8_t", "sys::Uint8_T *|uint8_t
 static swig_type_info _swigt__p_unsigned_char = {"_p_unsigned_char", "unsigned char *|sys::ubyte *", 0, 0, (void*)0, 0};
 
 static swig_type_info *swig_type_initial[] = {
-  &_swigt__p_DWORD,
-  &_swigt__p_HANDLE,
   &_swigt__p_char,
   &_swigt__p_except__NullPointerReferenceException,
+  &_swigt__p_int,
   &_swigt__p_int16_t,
   &_swigt__p_int32_t,
   &_swigt__p_int64_t,
   &_swigt__p_int8_t,
   &_swigt__p_mt__ThreadGroup,
   &_swigt__p_mt__ThreadPlanner,
+  &_swigt__p_off_t,
+  &_swigt__p_pid_t,
   &_swigt__p_size_t,
+  &_swigt__p_ssize_t,
   &_swigt__p_sys__Runnable,
   &_swigt__p_uint16_t,
   &_swigt__p_uint32_t,
@@ -4055,17 +4061,19 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_unsigned_char,
 };
 
-static swig_cast_info _swigc__p_DWORD[] = {  {&_swigt__p_DWORD, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_HANDLE[] = {  {&_swigt__p_HANDLE, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_except__NullPointerReferenceException[] = {  {&_swigt__p_except__NullPointerReferenceException, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_int[] = {  {&_swigt__p_int, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_int16_t[] = {  {&_swigt__p_int16_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_int32_t[] = {  {&_swigt__p_int32_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_int64_t[] = {  {&_swigt__p_int64_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_int8_t[] = {  {&_swigt__p_int8_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_mt__ThreadGroup[] = {  {&_swigt__p_mt__ThreadGroup, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_mt__ThreadPlanner[] = {  {&_swigt__p_mt__ThreadPlanner, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_off_t[] = {  {&_swigt__p_off_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_pid_t[] = {  {&_swigt__p_pid_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_size_t[] = {  {&_swigt__p_size_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_ssize_t[] = {  {&_swigt__p_ssize_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_sys__Runnable[] = {  {&_swigt__p_sys__Runnable, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_uint16_t[] = {  {&_swigt__p_uint16_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_uint32_t[] = {  {&_swigt__p_uint32_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -4074,17 +4082,19 @@ static swig_cast_info _swigc__p_uint8_t[] = {  {&_swigt__p_uint8_t, 0, 0, 0},{0,
 static swig_cast_info _swigc__p_unsigned_char[] = {  {&_swigt__p_unsigned_char, 0, 0, 0},{0, 0, 0, 0}};
 
 static swig_cast_info *swig_cast_initial[] = {
-  _swigc__p_DWORD,
-  _swigc__p_HANDLE,
   _swigc__p_char,
   _swigc__p_except__NullPointerReferenceException,
+  _swigc__p_int,
   _swigc__p_int16_t,
   _swigc__p_int32_t,
   _swigc__p_int64_t,
   _swigc__p_int8_t,
   _swigc__p_mt__ThreadGroup,
   _swigc__p_mt__ThreadPlanner,
+  _swigc__p_off_t,
+  _swigc__p_pid_t,
   _swigc__p_size_t,
+  _swigc__p_ssize_t,
   _swigc__p_sys__Runnable,
   _swigc__p_uint16_t,
   _swigc__p_uint32_t,

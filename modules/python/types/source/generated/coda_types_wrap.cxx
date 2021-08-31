@@ -2693,43 +2693,45 @@ SWIGINTERN PyObject *SWIG_PyStaticMethod_New(PyObject *SWIGUNUSEDPARM(self), PyO
 
 /* -------- TYPES TABLE (BEGIN) -------- */
 
-#define SWIGTYPE_p_DWORD swig_types[0]
-#define SWIGTYPE_p_HANDLE swig_types[1]
-#define SWIGTYPE_p_allocator_type swig_types[2]
-#define SWIGTYPE_p_char swig_types[3]
-#define SWIGTYPE_p_difference_type swig_types[4]
-#define SWIGTYPE_p_int16_t swig_types[5]
-#define SWIGTYPE_p_int32_t swig_types[6]
-#define SWIGTYPE_p_int64_t swig_types[7]
-#define SWIGTYPE_p_int8_t swig_types[8]
+#define SWIGTYPE_p_allocator_type swig_types[0]
+#define SWIGTYPE_p_char swig_types[1]
+#define SWIGTYPE_p_difference_type swig_types[2]
+#define SWIGTYPE_p_int swig_types[3]
+#define SWIGTYPE_p_int16_t swig_types[4]
+#define SWIGTYPE_p_int32_t swig_types[5]
+#define SWIGTYPE_p_int64_t swig_types[6]
+#define SWIGTYPE_p_int8_t swig_types[7]
+#define SWIGTYPE_p_off_t swig_types[8]
 #define SWIGTYPE_p_p_PyObject swig_types[9]
-#define SWIGTYPE_p_size_t swig_types[10]
-#define SWIGTYPE_p_size_type swig_types[11]
-#define SWIGTYPE_p_std__allocatorT_size_t_t swig_types[12]
-#define SWIGTYPE_p_std__allocatorT_std__string_t swig_types[13]
-#define SWIGTYPE_p_std__allocatorT_types__RowColT_double_t_t swig_types[14]
-#define SWIGTYPE_p_std__allocatorT_types__RowColT_sys__SSize_T_t_t swig_types[15]
-#define SWIGTYPE_p_std__invalid_argument swig_types[16]
-#define SWIGTYPE_p_std__pairT_double_double_t swig_types[17]
-#define SWIGTYPE_p_std__pairT_int64_t_int64_t_t swig_types[18]
-#define SWIGTYPE_p_std__pairT_size_t_size_t_t swig_types[19]
-#define SWIGTYPE_p_std__vectorT_size_t_std__allocatorT_size_t_t_t swig_types[20]
-#define SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t swig_types[21]
-#define SWIGTYPE_p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t swig_types[22]
-#define SWIGTYPE_p_std__vectorT_types__RowColT_sys__SSize_T_t_std__allocatorT_types__RowColT_sys__SSize_T_t_t_t swig_types[23]
-#define SWIGTYPE_p_swig__SwigPyIterator swig_types[24]
-#define SWIGTYPE_p_types__RgAzT_double_t swig_types[25]
-#define SWIGTYPE_p_types__RowColT_double_t swig_types[26]
-#define SWIGTYPE_p_types__RowColT_int64_t_t swig_types[27]
-#define SWIGTYPE_p_types__RowColT_size_t_t swig_types[28]
-#define SWIGTYPE_p_uint16_t swig_types[29]
-#define SWIGTYPE_p_uint32_t swig_types[30]
-#define SWIGTYPE_p_uint64_t swig_types[31]
-#define SWIGTYPE_p_uint8_t swig_types[32]
-#define SWIGTYPE_p_unsigned_char swig_types[33]
-#define SWIGTYPE_p_value_type swig_types[34]
-static swig_type_info *swig_types[36];
-static swig_module_info swig_module = {swig_types, 35, 0, 0, 0, 0};
+#define SWIGTYPE_p_pid_t swig_types[10]
+#define SWIGTYPE_p_size_t swig_types[11]
+#define SWIGTYPE_p_size_type swig_types[12]
+#define SWIGTYPE_p_ssize_t swig_types[13]
+#define SWIGTYPE_p_std__allocatorT_size_t_t swig_types[14]
+#define SWIGTYPE_p_std__allocatorT_std__string_t swig_types[15]
+#define SWIGTYPE_p_std__allocatorT_types__RowColT_double_t_t swig_types[16]
+#define SWIGTYPE_p_std__allocatorT_types__RowColT_sys__SSize_T_t_t swig_types[17]
+#define SWIGTYPE_p_std__invalid_argument swig_types[18]
+#define SWIGTYPE_p_std__pairT_double_double_t swig_types[19]
+#define SWIGTYPE_p_std__pairT_size_t_size_t_t swig_types[20]
+#define SWIGTYPE_p_std__pairT_ssize_t_ssize_t_t swig_types[21]
+#define SWIGTYPE_p_std__vectorT_size_t_std__allocatorT_size_t_t_t swig_types[22]
+#define SWIGTYPE_p_std__vectorT_std__string_std__allocatorT_std__string_t_t swig_types[23]
+#define SWIGTYPE_p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t swig_types[24]
+#define SWIGTYPE_p_std__vectorT_types__RowColT_sys__SSize_T_t_std__allocatorT_types__RowColT_sys__SSize_T_t_t_t swig_types[25]
+#define SWIGTYPE_p_swig__SwigPyIterator swig_types[26]
+#define SWIGTYPE_p_types__RgAzT_double_t swig_types[27]
+#define SWIGTYPE_p_types__RowColT_double_t swig_types[28]
+#define SWIGTYPE_p_types__RowColT_size_t_t swig_types[29]
+#define SWIGTYPE_p_types__RowColT_ssize_t_t swig_types[30]
+#define SWIGTYPE_p_uint16_t swig_types[31]
+#define SWIGTYPE_p_uint32_t swig_types[32]
+#define SWIGTYPE_p_uint64_t swig_types[33]
+#define SWIGTYPE_p_uint8_t swig_types[34]
+#define SWIGTYPE_p_unsigned_char swig_types[35]
+#define SWIGTYPE_p_value_type swig_types[36]
+static swig_type_info *swig_types[38];
+static swig_module_info swig_module = {swig_types, 37, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -4598,22 +4600,22 @@ SWIGINTERN bool std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg____nonzero__(st
 SWIGINTERN bool std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg____bool__(std::vector< types::RowCol< sys::SSize_T > > const *self){
       return !(self->empty());
     }
-SWIGINTERN std::vector< types::RowCol< int64_t > >::size_type std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg____len__(std::vector< types::RowCol< sys::SSize_T > > const *self){
+SWIGINTERN std::vector< types::RowCol< ssize_t > >::size_type std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg____len__(std::vector< types::RowCol< sys::SSize_T > > const *self){
       return self->size();
     }
-SWIGINTERN std::vector< types::RowCol< sys::SSize_T >,std::allocator< types::RowCol< sys::SSize_T > > > *std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg____getslice__(std::vector< types::RowCol< sys::SSize_T > > *self,std::vector< types::RowCol< int64_t > >::difference_type i,std::vector< types::RowCol< int64_t > >::difference_type j){
+SWIGINTERN std::vector< types::RowCol< sys::SSize_T >,std::allocator< types::RowCol< sys::SSize_T > > > *std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg____getslice__(std::vector< types::RowCol< sys::SSize_T > > *self,std::vector< types::RowCol< ssize_t > >::difference_type i,std::vector< types::RowCol< ssize_t > >::difference_type j){
       return swig::getslice(self, i, j, 1);
     }
-SWIGINTERN void std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg____setslice____SWIG_0(std::vector< types::RowCol< sys::SSize_T > > *self,std::vector< types::RowCol< int64_t > >::difference_type i,std::vector< types::RowCol< int64_t > >::difference_type j){
+SWIGINTERN void std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg____setslice____SWIG_0(std::vector< types::RowCol< sys::SSize_T > > *self,std::vector< types::RowCol< ssize_t > >::difference_type i,std::vector< types::RowCol< ssize_t > >::difference_type j){
       swig::setslice(self, i, j, 1, std::vector< types::RowCol< sys::SSize_T >,std::allocator< types::RowCol< sys::SSize_T > > >());
     }
-SWIGINTERN void std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg____setslice____SWIG_1(std::vector< types::RowCol< sys::SSize_T > > *self,std::vector< types::RowCol< int64_t > >::difference_type i,std::vector< types::RowCol< int64_t > >::difference_type j,std::vector< types::RowCol< sys::SSize_T >,std::allocator< types::RowCol< sys::SSize_T > > > const &v){
+SWIGINTERN void std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg____setslice____SWIG_1(std::vector< types::RowCol< sys::SSize_T > > *self,std::vector< types::RowCol< ssize_t > >::difference_type i,std::vector< types::RowCol< ssize_t > >::difference_type j,std::vector< types::RowCol< sys::SSize_T >,std::allocator< types::RowCol< sys::SSize_T > > > const &v){
       swig::setslice(self, i, j, 1, v);
     }
-SWIGINTERN void std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg____delslice__(std::vector< types::RowCol< sys::SSize_T > > *self,std::vector< types::RowCol< int64_t > >::difference_type i,std::vector< types::RowCol< int64_t > >::difference_type j){
+SWIGINTERN void std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg____delslice__(std::vector< types::RowCol< sys::SSize_T > > *self,std::vector< types::RowCol< ssize_t > >::difference_type i,std::vector< types::RowCol< ssize_t > >::difference_type j){
       swig::delslice(self, i, j, 1);
     }
-SWIGINTERN void std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg____delitem____SWIG_0(std::vector< types::RowCol< sys::SSize_T > > *self,std::vector< types::RowCol< int64_t > >::difference_type i){
+SWIGINTERN void std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg____delitem____SWIG_0(std::vector< types::RowCol< sys::SSize_T > > *self,std::vector< types::RowCol< ssize_t > >::difference_type i){
       swig::erase(self, swig::getpos(self, i));
     }
 SWIGINTERN std::vector< types::RowCol< sys::SSize_T >,std::allocator< types::RowCol< sys::SSize_T > > > *std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg____getitem____SWIG_0(std::vector< types::RowCol< sys::SSize_T > > *self,PySliceObject *slice){
@@ -4660,7 +4662,7 @@ SWIGINTERN void std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg____delitem____S
       std::vector< types::RowCol< sys::SSize_T >,std::allocator< types::RowCol< sys::SSize_T > > >::difference_type jd = j;
       swig::delslice(self, id, jd, step);
     }
-SWIGINTERN std::vector< types::RowCol< int64_t > >::value_type const &std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg____getitem____SWIG_1(std::vector< types::RowCol< sys::SSize_T > > const *self,std::vector< types::RowCol< int64_t > >::difference_type i){
+SWIGINTERN std::vector< types::RowCol< ssize_t > >::value_type const &std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg____getitem____SWIG_1(std::vector< types::RowCol< sys::SSize_T > > const *self,std::vector< types::RowCol< ssize_t > >::difference_type i){
       return *(swig::cgetpos(self, i));
     }
 
@@ -4698,23 +4700,23 @@ namespace swig {
   };
 }
 
-SWIGINTERN void std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg____setitem____SWIG_2(std::vector< types::RowCol< sys::SSize_T > > *self,std::vector< types::RowCol< int64_t > >::difference_type i,std::vector< types::RowCol< int64_t > >::value_type const &x){
+SWIGINTERN void std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg____setitem____SWIG_2(std::vector< types::RowCol< sys::SSize_T > > *self,std::vector< types::RowCol< ssize_t > >::difference_type i,std::vector< types::RowCol< ssize_t > >::value_type const &x){
       *(swig::getpos(self,i)) = x;
     }
-SWIGINTERN std::vector< types::RowCol< int64_t > >::value_type std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg__pop(std::vector< types::RowCol< sys::SSize_T > > *self){
+SWIGINTERN std::vector< types::RowCol< ssize_t > >::value_type std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg__pop(std::vector< types::RowCol< sys::SSize_T > > *self){
       if (self->size() == 0)
 	throw std::out_of_range("pop from empty container");
       std::vector< types::RowCol< sys::SSize_T >,std::allocator< types::RowCol< sys::SSize_T > > >::value_type x = self->back();
       self->pop_back();
       return x;
     }
-SWIGINTERN void std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg__append(std::vector< types::RowCol< sys::SSize_T > > *self,std::vector< types::RowCol< int64_t > >::value_type const &x){
+SWIGINTERN void std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg__append(std::vector< types::RowCol< sys::SSize_T > > *self,std::vector< types::RowCol< ssize_t > >::value_type const &x){
       self->push_back(x);
     }
-SWIGINTERN std::vector< types::RowCol< int64_t > >::iterator std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg__erase__SWIG_0(std::vector< types::RowCol< sys::SSize_T > > *self,std::vector< types::RowCol< int64_t > >::iterator pos){ return self->erase(pos); }
-SWIGINTERN std::vector< types::RowCol< int64_t > >::iterator std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg__erase__SWIG_1(std::vector< types::RowCol< sys::SSize_T > > *self,std::vector< types::RowCol< int64_t > >::iterator first,std::vector< types::RowCol< int64_t > >::iterator last){ return self->erase(first, last); }
-SWIGINTERN std::vector< types::RowCol< int64_t > >::iterator std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg__insert__SWIG_0(std::vector< types::RowCol< sys::SSize_T > > *self,std::vector< types::RowCol< int64_t > >::iterator pos,std::vector< types::RowCol< int64_t > >::value_type const &x){ return self->insert(pos, x); }
-SWIGINTERN void std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg__insert__SWIG_1(std::vector< types::RowCol< sys::SSize_T > > *self,std::vector< types::RowCol< int64_t > >::iterator pos,std::vector< types::RowCol< int64_t > >::size_type n,std::vector< types::RowCol< int64_t > >::value_type const &x){ self->insert(pos, n, x); }
+SWIGINTERN std::vector< types::RowCol< ssize_t > >::iterator std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg__erase__SWIG_0(std::vector< types::RowCol< sys::SSize_T > > *self,std::vector< types::RowCol< ssize_t > >::iterator pos){ return self->erase(pos); }
+SWIGINTERN std::vector< types::RowCol< ssize_t > >::iterator std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg__erase__SWIG_1(std::vector< types::RowCol< sys::SSize_T > > *self,std::vector< types::RowCol< ssize_t > >::iterator first,std::vector< types::RowCol< ssize_t > >::iterator last){ return self->erase(first, last); }
+SWIGINTERN std::vector< types::RowCol< ssize_t > >::iterator std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg__insert__SWIG_0(std::vector< types::RowCol< sys::SSize_T > > *self,std::vector< types::RowCol< ssize_t > >::iterator pos,std::vector< types::RowCol< ssize_t > >::value_type const &x){ return self->insert(pos, x); }
+SWIGINTERN void std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg__insert__SWIG_1(std::vector< types::RowCol< sys::SSize_T > > *self,std::vector< types::RowCol< ssize_t > >::iterator pos,std::vector< types::RowCol< ssize_t > >::size_type n,std::vector< types::RowCol< ssize_t > >::value_type const &x){ self->insert(pos, n, x); }
 
   namespace swig {
     template <>  struct traits< types::RowCol< double > > {
@@ -6694,31 +6696,23 @@ SWIGINTERN PyObject *RowColDouble_swiginit(PyObject *SWIGUNUSEDPARM(self), PyObj
 SWIGINTERN PyObject *_wrap_RowColInt_row_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   types::RowCol< sys::SSize_T > *arg1 = (types::RowCol< sys::SSize_T > *) 0 ;
-  int64_t arg2 ;
+  ssize_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
   PyObject *swig_obj[2] ;
   
   if (!SWIG_Python_UnpackTuple(args, "RowColInt_row_set", 2, 2, swig_obj)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_types__RowColT_int64_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_types__RowColT_ssize_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RowColInt_row_set" "', argument " "1"" of type '" "types::RowCol< sys::SSize_T > *""'"); 
   }
   arg1 = reinterpret_cast< types::RowCol< sys::SSize_T > * >(argp1);
   {
-    res2 = SWIG_ConvertPtr(swig_obj[1], &argp2, SWIGTYPE_p_int64_t,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "RowColInt_row_set" "', argument " "2"" of type '" "int64_t""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "RowColInt_row_set" "', argument " "2"" of type '" "int64_t""'");
-    } else {
-      int64_t * temp = reinterpret_cast< int64_t * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
+#if PY_VERSION_HEX >= 0x03000000
+    arg2 = PyLong_AsSsize_t(swig_obj[1]);
+#else
+    arg2 = PyInt_AsSsize_t(swig_obj[1]);
+#endif
   }
   if (arg1) (arg1)->row = arg2;
   resultobj = SWIG_Py_Void();
@@ -6734,17 +6728,23 @@ SWIGINTERN PyObject *_wrap_RowColInt_row_get(PyObject *SWIGUNUSEDPARM(self), PyO
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject *swig_obj[1] ;
-  int64_t result;
+  ssize_t result;
   
   if (!args) SWIG_fail;
   swig_obj[0] = args;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_types__RowColT_int64_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_types__RowColT_ssize_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RowColInt_row_get" "', argument " "1"" of type '" "types::RowCol< sys::SSize_T > *""'"); 
   }
   arg1 = reinterpret_cast< types::RowCol< sys::SSize_T > * >(argp1);
   result =  ((arg1)->row);
-  resultobj = SWIG_NewPointerObj((new int64_t(static_cast< const int64_t& >(result))), SWIGTYPE_p_int64_t, SWIG_POINTER_OWN |  0 );
+  {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = PyLong_FromSsize_t(result);
+#else
+    resultobj = PyInt_FromSsize_t(result);
+#endif
+  }
   return resultobj;
 fail:
   return NULL;
@@ -6754,31 +6754,23 @@ fail:
 SWIGINTERN PyObject *_wrap_RowColInt_col_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   types::RowCol< sys::SSize_T > *arg1 = (types::RowCol< sys::SSize_T > *) 0 ;
-  int64_t arg2 ;
+  ssize_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
   PyObject *swig_obj[2] ;
   
   if (!SWIG_Python_UnpackTuple(args, "RowColInt_col_set", 2, 2, swig_obj)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_types__RowColT_int64_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_types__RowColT_ssize_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RowColInt_col_set" "', argument " "1"" of type '" "types::RowCol< sys::SSize_T > *""'"); 
   }
   arg1 = reinterpret_cast< types::RowCol< sys::SSize_T > * >(argp1);
   {
-    res2 = SWIG_ConvertPtr(swig_obj[1], &argp2, SWIGTYPE_p_int64_t,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "RowColInt_col_set" "', argument " "2"" of type '" "int64_t""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "RowColInt_col_set" "', argument " "2"" of type '" "int64_t""'");
-    } else {
-      int64_t * temp = reinterpret_cast< int64_t * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
+#if PY_VERSION_HEX >= 0x03000000
+    arg2 = PyLong_AsSsize_t(swig_obj[1]);
+#else
+    arg2 = PyInt_AsSsize_t(swig_obj[1]);
+#endif
   }
   if (arg1) (arg1)->col = arg2;
   resultobj = SWIG_Py_Void();
@@ -6794,17 +6786,23 @@ SWIGINTERN PyObject *_wrap_RowColInt_col_get(PyObject *SWIGUNUSEDPARM(self), PyO
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject *swig_obj[1] ;
-  int64_t result;
+  ssize_t result;
   
   if (!args) SWIG_fail;
   swig_obj[0] = args;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_types__RowColT_int64_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_types__RowColT_ssize_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RowColInt_col_get" "', argument " "1"" of type '" "types::RowCol< sys::SSize_T > *""'"); 
   }
   arg1 = reinterpret_cast< types::RowCol< sys::SSize_T > * >(argp1);
   result =  ((arg1)->col);
-  resultobj = SWIG_NewPointerObj((new int64_t(static_cast< const int64_t& >(result))), SWIGTYPE_p_int64_t, SWIG_POINTER_OWN |  0 );
+  {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = PyLong_FromSsize_t(result);
+#else
+    resultobj = PyInt_FromSsize_t(result);
+#endif
+  }
   return resultobj;
 fail:
   return NULL;
@@ -6817,7 +6815,7 @@ SWIGINTERN PyObject *_wrap_new_RowColInt__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
   
   if ((nobjs < 0) || (nobjs > 0)) SWIG_fail;
   result = (types::RowCol< sys::SSize_T > *)new types::RowCol< sys::SSize_T >();
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_types__RowColT_int64_t_t, SWIG_POINTER_NEW |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_types__RowColT_ssize_t_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -6826,43 +6824,27 @@ fail:
 
 SWIGINTERN PyObject *_wrap_new_RowColInt__SWIG_1(PyObject *SWIGUNUSEDPARM(self), Py_ssize_t nobjs, PyObject **swig_obj) {
   PyObject *resultobj = 0;
-  int64_t arg1 ;
-  int64_t arg2 ;
-  void *argp1 ;
-  int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
+  ssize_t arg1 ;
+  ssize_t arg2 ;
   types::RowCol< sys::SSize_T > *result = 0 ;
   
   if ((nobjs < 2) || (nobjs > 2)) SWIG_fail;
   {
-    res1 = SWIG_ConvertPtr(swig_obj[0], &argp1, SWIGTYPE_p_int64_t,  0  | 0);
-    if (!SWIG_IsOK(res1)) {
-      SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_RowColInt" "', argument " "1"" of type '" "int64_t""'"); 
-    }  
-    if (!argp1) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_RowColInt" "', argument " "1"" of type '" "int64_t""'");
-    } else {
-      int64_t * temp = reinterpret_cast< int64_t * >(argp1);
-      arg1 = *temp;
-      if (SWIG_IsNewObj(res1)) delete temp;
-    }
+#if PY_VERSION_HEX >= 0x03000000
+    arg1 = PyLong_AsSsize_t(swig_obj[0]);
+#else
+    arg1 = PyInt_AsSsize_t(swig_obj[0]);
+#endif
   }
   {
-    res2 = SWIG_ConvertPtr(swig_obj[1], &argp2, SWIGTYPE_p_int64_t,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_RowColInt" "', argument " "2"" of type '" "int64_t""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_RowColInt" "', argument " "2"" of type '" "int64_t""'");
-    } else {
-      int64_t * temp = reinterpret_cast< int64_t * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
+#if PY_VERSION_HEX >= 0x03000000
+    arg2 = PyLong_AsSsize_t(swig_obj[1]);
+#else
+    arg2 = PyInt_AsSsize_t(swig_obj[1]);
+#endif
   }
   result = (types::RowCol< sys::SSize_T > *)new types::RowCol< sys::SSize_T >(arg1,arg2);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_types__RowColT_int64_t_t, SWIG_POINTER_NEW |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_types__RowColT_ssize_t_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -6871,22 +6853,22 @@ fail:
 
 SWIGINTERN PyObject *_wrap_new_RowColInt__SWIG_2(PyObject *SWIGUNUSEDPARM(self), Py_ssize_t nobjs, PyObject **swig_obj) {
   PyObject *resultobj = 0;
-  std::pair< int64_t,int64_t > *arg1 = 0 ;
+  std::pair< ssize_t,ssize_t > *arg1 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   types::RowCol< sys::SSize_T > *result = 0 ;
   
   if ((nobjs < 1) || (nobjs > 1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1, SWIGTYPE_p_std__pairT_int64_t_int64_t_t,  0  | 0);
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1, SWIGTYPE_p_std__pairT_ssize_t_ssize_t_t,  0  | 0);
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_RowColInt" "', argument " "1"" of type '" "std::pair< int64_t,int64_t > const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_RowColInt" "', argument " "1"" of type '" "std::pair< ssize_t,ssize_t > const &""'"); 
   }
   if (!argp1) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_RowColInt" "', argument " "1"" of type '" "std::pair< int64_t,int64_t > const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_RowColInt" "', argument " "1"" of type '" "std::pair< ssize_t,ssize_t > const &""'"); 
   }
-  arg1 = reinterpret_cast< std::pair< int64_t,int64_t > * >(argp1);
-  result = (types::RowCol< sys::SSize_T > *)new types::RowCol< sys::SSize_T >((std::pair< int64_t,int64_t > const &)*arg1);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_types__RowColT_int64_t_t, SWIG_POINTER_NEW |  0 );
+  arg1 = reinterpret_cast< std::pair< ssize_t,ssize_t > * >(argp1);
+  result = (types::RowCol< sys::SSize_T > *)new types::RowCol< sys::SSize_T >((std::pair< ssize_t,ssize_t > const &)*arg1);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_types__RowColT_ssize_t_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -6906,7 +6888,7 @@ SWIGINTERN PyObject *_wrap_new_RowColInt(PyObject *self, PyObject *args) {
   }
   if (argc == 1) {
     int _v;
-    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_std__pairT_int64_t_int64_t_t, SWIG_POINTER_NO_NULL | 0);
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_std__pairT_ssize_t_ssize_t_t, SWIG_POINTER_NO_NULL | 0);
     _v = SWIG_CheckState(res);
     if (_v) {
       return _wrap_new_RowColInt__SWIG_2(self, argc, argv);
@@ -6914,11 +6896,21 @@ SWIGINTERN PyObject *_wrap_new_RowColInt(PyObject *self, PyObject *args) {
   }
   if (argc == 2) {
     int _v;
-    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_int64_t, SWIG_POINTER_NO_NULL | 0);
-    _v = SWIG_CheckState(res);
+    {
+#if PY_VERSION_HEX >= 0x03000000
+      _v = PyLong_Check(argv[0]) ? 1 : 0;
+#else
+      _v = PyInt_Check(argv[0]) ? 1 : 0;
+#endif
+    }
     if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_int64_t, SWIG_POINTER_NO_NULL | 0);
-      _v = SWIG_CheckState(res);
+      {
+#if PY_VERSION_HEX >= 0x03000000
+        _v = PyLong_Check(argv[1]) ? 1 : 0;
+#else
+        _v = PyInt_Check(argv[1]) ? 1 : 0;
+#endif
+      }
       if (_v) {
         return _wrap_new_RowColInt__SWIG_1(self, argc, argv);
       }
@@ -6929,8 +6921,8 @@ fail:
   SWIG_Python_RaiseOrModifyTypeError("Wrong number or type of arguments for overloaded function 'new_RowColInt'.\n"
     "  Possible C/C++ prototypes are:\n"
     "    types::RowCol< sys::SSize_T >::RowCol()\n"
-    "    types::RowCol< sys::SSize_T >::RowCol(int64_t,int64_t)\n"
-    "    types::RowCol< sys::SSize_T >::RowCol(std::pair< int64_t,int64_t > const &)\n");
+    "    types::RowCol< sys::SSize_T >::RowCol(ssize_t,ssize_t)\n"
+    "    types::RowCol< sys::SSize_T >::RowCol(std::pair< ssize_t,ssize_t > const &)\n");
   return 0;
 }
 
@@ -6938,35 +6930,27 @@ fail:
 SWIGINTERN PyObject *_wrap_RowColInt___iadd__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   types::RowCol< sys::SSize_T > *arg1 = (types::RowCol< sys::SSize_T > *) 0 ;
-  int64_t arg2 ;
+  ssize_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
   PyObject *swig_obj[2] ;
   types::RowCol< sys::SSize_T > *result = 0 ;
   
   if (!SWIG_Python_UnpackTuple(args, "RowColInt___iadd__", 2, 2, swig_obj)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_types__RowColT_int64_t_t, SWIG_POINTER_DISOWN |  0 );
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_types__RowColT_ssize_t_t, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RowColInt___iadd__" "', argument " "1"" of type '" "types::RowCol< sys::SSize_T > *""'"); 
   }
   arg1 = reinterpret_cast< types::RowCol< sys::SSize_T > * >(argp1);
   {
-    res2 = SWIG_ConvertPtr(swig_obj[1], &argp2, SWIGTYPE_p_int64_t,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "RowColInt___iadd__" "', argument " "2"" of type '" "int64_t""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "RowColInt___iadd__" "', argument " "2"" of type '" "int64_t""'");
-    } else {
-      int64_t * temp = reinterpret_cast< int64_t * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
+#if PY_VERSION_HEX >= 0x03000000
+    arg2 = PyLong_AsSsize_t(swig_obj[1]);
+#else
+    arg2 = PyInt_AsSsize_t(swig_obj[1]);
+#endif
   }
   result = (types::RowCol< sys::SSize_T > *) &(arg1)->operator +=(arg2);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_types__RowColT_int64_t_t, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_types__RowColT_ssize_t_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -6976,35 +6960,27 @@ fail:
 SWIGINTERN PyObject *_wrap_RowColInt___add__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   types::RowCol< sys::SSize_T > *arg1 = (types::RowCol< sys::SSize_T > *) 0 ;
-  int64_t arg2 ;
+  ssize_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
   PyObject *swig_obj[2] ;
   types::RowCol< sys::SSize_T > result;
   
   if (!SWIG_Python_UnpackTuple(args, "RowColInt___add__", 2, 2, swig_obj)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_types__RowColT_int64_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_types__RowColT_ssize_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RowColInt___add__" "', argument " "1"" of type '" "types::RowCol< sys::SSize_T > const *""'"); 
   }
   arg1 = reinterpret_cast< types::RowCol< sys::SSize_T > * >(argp1);
   {
-    res2 = SWIG_ConvertPtr(swig_obj[1], &argp2, SWIGTYPE_p_int64_t,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "RowColInt___add__" "', argument " "2"" of type '" "int64_t""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "RowColInt___add__" "', argument " "2"" of type '" "int64_t""'");
-    } else {
-      int64_t * temp = reinterpret_cast< int64_t * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
+#if PY_VERSION_HEX >= 0x03000000
+    arg2 = PyLong_AsSsize_t(swig_obj[1]);
+#else
+    arg2 = PyInt_AsSsize_t(swig_obj[1]);
+#endif
   }
   result = ((types::RowCol< sys::SSize_T > const *)arg1)->operator +(arg2);
-  resultobj = SWIG_NewPointerObj((new types::RowCol< sys::SSize_T >(static_cast< const types::RowCol< sys::SSize_T >& >(result))), SWIGTYPE_p_types__RowColT_int64_t_t, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_NewPointerObj((new types::RowCol< sys::SSize_T >(static_cast< const types::RowCol< sys::SSize_T >& >(result))), SWIGTYPE_p_types__RowColT_ssize_t_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   PyErr_Clear();
@@ -7016,35 +6992,27 @@ fail:
 SWIGINTERN PyObject *_wrap_RowColInt___isub__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   types::RowCol< sys::SSize_T > *arg1 = (types::RowCol< sys::SSize_T > *) 0 ;
-  int64_t arg2 ;
+  ssize_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
   PyObject *swig_obj[2] ;
   types::RowCol< sys::SSize_T > *result = 0 ;
   
   if (!SWIG_Python_UnpackTuple(args, "RowColInt___isub__", 2, 2, swig_obj)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_types__RowColT_int64_t_t, SWIG_POINTER_DISOWN |  0 );
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_types__RowColT_ssize_t_t, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RowColInt___isub__" "', argument " "1"" of type '" "types::RowCol< sys::SSize_T > *""'"); 
   }
   arg1 = reinterpret_cast< types::RowCol< sys::SSize_T > * >(argp1);
   {
-    res2 = SWIG_ConvertPtr(swig_obj[1], &argp2, SWIGTYPE_p_int64_t,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "RowColInt___isub__" "', argument " "2"" of type '" "int64_t""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "RowColInt___isub__" "', argument " "2"" of type '" "int64_t""'");
-    } else {
-      int64_t * temp = reinterpret_cast< int64_t * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
+#if PY_VERSION_HEX >= 0x03000000
+    arg2 = PyLong_AsSsize_t(swig_obj[1]);
+#else
+    arg2 = PyInt_AsSsize_t(swig_obj[1]);
+#endif
   }
   result = (types::RowCol< sys::SSize_T > *) &(arg1)->operator -=(arg2);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_types__RowColT_int64_t_t, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_types__RowColT_ssize_t_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -7054,35 +7022,27 @@ fail:
 SWIGINTERN PyObject *_wrap_RowColInt___sub__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   types::RowCol< sys::SSize_T > *arg1 = (types::RowCol< sys::SSize_T > *) 0 ;
-  int64_t arg2 ;
+  ssize_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
   PyObject *swig_obj[2] ;
   types::RowCol< sys::SSize_T > result;
   
   if (!SWIG_Python_UnpackTuple(args, "RowColInt___sub__", 2, 2, swig_obj)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_types__RowColT_int64_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_types__RowColT_ssize_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RowColInt___sub__" "', argument " "1"" of type '" "types::RowCol< sys::SSize_T > const *""'"); 
   }
   arg1 = reinterpret_cast< types::RowCol< sys::SSize_T > * >(argp1);
   {
-    res2 = SWIG_ConvertPtr(swig_obj[1], &argp2, SWIGTYPE_p_int64_t,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "RowColInt___sub__" "', argument " "2"" of type '" "int64_t""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "RowColInt___sub__" "', argument " "2"" of type '" "int64_t""'");
-    } else {
-      int64_t * temp = reinterpret_cast< int64_t * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
+#if PY_VERSION_HEX >= 0x03000000
+    arg2 = PyLong_AsSsize_t(swig_obj[1]);
+#else
+    arg2 = PyInt_AsSsize_t(swig_obj[1]);
+#endif
   }
   result = ((types::RowCol< sys::SSize_T > const *)arg1)->operator -(arg2);
-  resultobj = SWIG_NewPointerObj((new types::RowCol< sys::SSize_T >(static_cast< const types::RowCol< sys::SSize_T >& >(result))), SWIGTYPE_p_types__RowColT_int64_t_t, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_NewPointerObj((new types::RowCol< sys::SSize_T >(static_cast< const types::RowCol< sys::SSize_T >& >(result))), SWIGTYPE_p_types__RowColT_ssize_t_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   PyErr_Clear();
@@ -7094,35 +7054,27 @@ fail:
 SWIGINTERN PyObject *_wrap_RowColInt___imul__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   types::RowCol< sys::SSize_T > *arg1 = (types::RowCol< sys::SSize_T > *) 0 ;
-  int64_t arg2 ;
+  ssize_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
   PyObject *swig_obj[2] ;
   types::RowCol< sys::SSize_T > *result = 0 ;
   
   if (!SWIG_Python_UnpackTuple(args, "RowColInt___imul__", 2, 2, swig_obj)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_types__RowColT_int64_t_t, SWIG_POINTER_DISOWN |  0 );
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_types__RowColT_ssize_t_t, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RowColInt___imul__" "', argument " "1"" of type '" "types::RowCol< sys::SSize_T > *""'"); 
   }
   arg1 = reinterpret_cast< types::RowCol< sys::SSize_T > * >(argp1);
   {
-    res2 = SWIG_ConvertPtr(swig_obj[1], &argp2, SWIGTYPE_p_int64_t,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "RowColInt___imul__" "', argument " "2"" of type '" "int64_t""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "RowColInt___imul__" "', argument " "2"" of type '" "int64_t""'");
-    } else {
-      int64_t * temp = reinterpret_cast< int64_t * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
+#if PY_VERSION_HEX >= 0x03000000
+    arg2 = PyLong_AsSsize_t(swig_obj[1]);
+#else
+    arg2 = PyInt_AsSsize_t(swig_obj[1]);
+#endif
   }
   result = (types::RowCol< sys::SSize_T > *) &(arg1)->operator *=(arg2);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_types__RowColT_int64_t_t, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_types__RowColT_ssize_t_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -7132,35 +7084,27 @@ fail:
 SWIGINTERN PyObject *_wrap_RowColInt___mul__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   types::RowCol< sys::SSize_T > *arg1 = (types::RowCol< sys::SSize_T > *) 0 ;
-  int64_t arg2 ;
+  ssize_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
   PyObject *swig_obj[2] ;
   types::RowCol< sys::SSize_T > result;
   
   if (!SWIG_Python_UnpackTuple(args, "RowColInt___mul__", 2, 2, swig_obj)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_types__RowColT_int64_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_types__RowColT_ssize_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RowColInt___mul__" "', argument " "1"" of type '" "types::RowCol< sys::SSize_T > const *""'"); 
   }
   arg1 = reinterpret_cast< types::RowCol< sys::SSize_T > * >(argp1);
   {
-    res2 = SWIG_ConvertPtr(swig_obj[1], &argp2, SWIGTYPE_p_int64_t,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "RowColInt___mul__" "', argument " "2"" of type '" "int64_t""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "RowColInt___mul__" "', argument " "2"" of type '" "int64_t""'");
-    } else {
-      int64_t * temp = reinterpret_cast< int64_t * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
+#if PY_VERSION_HEX >= 0x03000000
+    arg2 = PyLong_AsSsize_t(swig_obj[1]);
+#else
+    arg2 = PyInt_AsSsize_t(swig_obj[1]);
+#endif
   }
   result = ((types::RowCol< sys::SSize_T > const *)arg1)->operator *(arg2);
-  resultobj = SWIG_NewPointerObj((new types::RowCol< sys::SSize_T >(static_cast< const types::RowCol< sys::SSize_T >& >(result))), SWIGTYPE_p_types__RowColT_int64_t_t, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_NewPointerObj((new types::RowCol< sys::SSize_T >(static_cast< const types::RowCol< sys::SSize_T >& >(result))), SWIGTYPE_p_types__RowColT_ssize_t_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   PyErr_Clear();
@@ -7172,35 +7116,27 @@ fail:
 SWIGINTERN PyObject *_wrap_RowColInt___itruediv__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   types::RowCol< sys::SSize_T > *arg1 = (types::RowCol< sys::SSize_T > *) 0 ;
-  int64_t arg2 ;
+  ssize_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
   PyObject *swig_obj[2] ;
   types::RowCol< sys::SSize_T > *result = 0 ;
   
   if (!SWIG_Python_UnpackTuple(args, "RowColInt___itruediv__", 2, 2, swig_obj)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_types__RowColT_int64_t_t, SWIG_POINTER_DISOWN |  0 );
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_types__RowColT_ssize_t_t, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RowColInt___itruediv__" "', argument " "1"" of type '" "types::RowCol< sys::SSize_T > *""'"); 
   }
   arg1 = reinterpret_cast< types::RowCol< sys::SSize_T > * >(argp1);
   {
-    res2 = SWIG_ConvertPtr(swig_obj[1], &argp2, SWIGTYPE_p_int64_t,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "RowColInt___itruediv__" "', argument " "2"" of type '" "int64_t""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "RowColInt___itruediv__" "', argument " "2"" of type '" "int64_t""'");
-    } else {
-      int64_t * temp = reinterpret_cast< int64_t * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
+#if PY_VERSION_HEX >= 0x03000000
+    arg2 = PyLong_AsSsize_t(swig_obj[1]);
+#else
+    arg2 = PyInt_AsSsize_t(swig_obj[1]);
+#endif
   }
   result = (types::RowCol< sys::SSize_T > *) &(arg1)->operator /=(arg2);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_types__RowColT_int64_t_t, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_types__RowColT_ssize_t_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -7210,35 +7146,27 @@ fail:
 SWIGINTERN PyObject *_wrap_RowColInt___truediv__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   types::RowCol< sys::SSize_T > *arg1 = (types::RowCol< sys::SSize_T > *) 0 ;
-  int64_t arg2 ;
+  ssize_t arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
   PyObject *swig_obj[2] ;
   types::RowCol< sys::SSize_T > result;
   
   if (!SWIG_Python_UnpackTuple(args, "RowColInt___truediv__", 2, 2, swig_obj)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_types__RowColT_int64_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_types__RowColT_ssize_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RowColInt___truediv__" "', argument " "1"" of type '" "types::RowCol< sys::SSize_T > const *""'"); 
   }
   arg1 = reinterpret_cast< types::RowCol< sys::SSize_T > * >(argp1);
   {
-    res2 = SWIG_ConvertPtr(swig_obj[1], &argp2, SWIGTYPE_p_int64_t,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "RowColInt___truediv__" "', argument " "2"" of type '" "int64_t""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "RowColInt___truediv__" "', argument " "2"" of type '" "int64_t""'");
-    } else {
-      int64_t * temp = reinterpret_cast< int64_t * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
+#if PY_VERSION_HEX >= 0x03000000
+    arg2 = PyLong_AsSsize_t(swig_obj[1]);
+#else
+    arg2 = PyInt_AsSsize_t(swig_obj[1]);
+#endif
   }
   result = ((types::RowCol< sys::SSize_T > const *)arg1)->operator /(arg2);
-  resultobj = SWIG_NewPointerObj((new types::RowCol< sys::SSize_T >(static_cast< const types::RowCol< sys::SSize_T >& >(result))), SWIGTYPE_p_types__RowColT_int64_t_t, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_NewPointerObj((new types::RowCol< sys::SSize_T >(static_cast< const types::RowCol< sys::SSize_T >& >(result))), SWIGTYPE_p_types__RowColT_ssize_t_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   PyErr_Clear();
@@ -7250,7 +7178,7 @@ fail:
 SWIGINTERN PyObject *_wrap_RowColInt___eq__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   types::RowCol< sys::SSize_T > *arg1 = (types::RowCol< sys::SSize_T > *) 0 ;
-  types::RowCol< int64_t > *arg2 = 0 ;
+  types::RowCol< ssize_t > *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -7259,20 +7187,20 @@ SWIGINTERN PyObject *_wrap_RowColInt___eq__(PyObject *SWIGUNUSEDPARM(self), PyOb
   bool result;
   
   if (!SWIG_Python_UnpackTuple(args, "RowColInt___eq__", 2, 2, swig_obj)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_types__RowColT_int64_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_types__RowColT_ssize_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RowColInt___eq__" "', argument " "1"" of type '" "types::RowCol< sys::SSize_T > const *""'"); 
   }
   arg1 = reinterpret_cast< types::RowCol< sys::SSize_T > * >(argp1);
-  res2 = SWIG_ConvertPtr(swig_obj[1], &argp2, SWIGTYPE_p_types__RowColT_int64_t_t,  0  | 0);
+  res2 = SWIG_ConvertPtr(swig_obj[1], &argp2, SWIGTYPE_p_types__RowColT_ssize_t_t,  0  | 0);
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "RowColInt___eq__" "', argument " "2"" of type '" "types::RowCol< int64_t > const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "RowColInt___eq__" "', argument " "2"" of type '" "types::RowCol< ssize_t > const &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "RowColInt___eq__" "', argument " "2"" of type '" "types::RowCol< int64_t > const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "RowColInt___eq__" "', argument " "2"" of type '" "types::RowCol< ssize_t > const &""'"); 
   }
-  arg2 = reinterpret_cast< types::RowCol< int64_t > * >(argp2);
-  result = (bool)((types::RowCol< sys::SSize_T > const *)arg1)->operator ==((types::RowCol< int64_t > const &)*arg2);
+  arg2 = reinterpret_cast< types::RowCol< ssize_t > * >(argp2);
+  result = (bool)((types::RowCol< sys::SSize_T > const *)arg1)->operator ==((types::RowCol< ssize_t > const &)*arg2);
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
@@ -7285,7 +7213,7 @@ fail:
 SWIGINTERN PyObject *_wrap_RowColInt___ne__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   types::RowCol< sys::SSize_T > *arg1 = (types::RowCol< sys::SSize_T > *) 0 ;
-  types::RowCol< int64_t > *arg2 = 0 ;
+  types::RowCol< ssize_t > *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -7294,20 +7222,20 @@ SWIGINTERN PyObject *_wrap_RowColInt___ne__(PyObject *SWIGUNUSEDPARM(self), PyOb
   bool result;
   
   if (!SWIG_Python_UnpackTuple(args, "RowColInt___ne__", 2, 2, swig_obj)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_types__RowColT_int64_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_types__RowColT_ssize_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RowColInt___ne__" "', argument " "1"" of type '" "types::RowCol< sys::SSize_T > const *""'"); 
   }
   arg1 = reinterpret_cast< types::RowCol< sys::SSize_T > * >(argp1);
-  res2 = SWIG_ConvertPtr(swig_obj[1], &argp2, SWIGTYPE_p_types__RowColT_int64_t_t,  0  | 0);
+  res2 = SWIG_ConvertPtr(swig_obj[1], &argp2, SWIGTYPE_p_types__RowColT_ssize_t_t,  0  | 0);
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "RowColInt___ne__" "', argument " "2"" of type '" "types::RowCol< int64_t > const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "RowColInt___ne__" "', argument " "2"" of type '" "types::RowCol< ssize_t > const &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "RowColInt___ne__" "', argument " "2"" of type '" "types::RowCol< int64_t > const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "RowColInt___ne__" "', argument " "2"" of type '" "types::RowCol< ssize_t > const &""'"); 
   }
-  arg2 = reinterpret_cast< types::RowCol< int64_t > * >(argp2);
-  result = (bool)((types::RowCol< sys::SSize_T > const *)arg1)->operator !=((types::RowCol< int64_t > const &)*arg2);
+  arg2 = reinterpret_cast< types::RowCol< ssize_t > * >(argp2);
+  result = (bool)((types::RowCol< sys::SSize_T > const *)arg1)->operator !=((types::RowCol< ssize_t > const &)*arg2);
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
@@ -7323,17 +7251,23 @@ SWIGINTERN PyObject *_wrap_RowColInt_area(PyObject *SWIGUNUSEDPARM(self), PyObje
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject *swig_obj[1] ;
-  int64_t result;
+  ssize_t result;
   
   if (!args) SWIG_fail;
   swig_obj[0] = args;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_types__RowColT_int64_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_types__RowColT_ssize_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RowColInt_area" "', argument " "1"" of type '" "types::RowCol< sys::SSize_T > const *""'"); 
   }
   arg1 = reinterpret_cast< types::RowCol< sys::SSize_T > * >(argp1);
   result = ((types::RowCol< sys::SSize_T > const *)arg1)->area();
-  resultobj = SWIG_NewPointerObj((new int64_t(static_cast< const int64_t& >(result))), SWIGTYPE_p_int64_t, SWIG_POINTER_OWN |  0 );
+  {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = PyLong_FromSsize_t(result);
+#else
+    resultobj = PyInt_FromSsize_t(result);
+#endif
+  }
   return resultobj;
 fail:
   return NULL;
@@ -7346,17 +7280,23 @@ SWIGINTERN PyObject *_wrap_RowColInt_normL2(PyObject *SWIGUNUSEDPARM(self), PyOb
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject *swig_obj[1] ;
-  int64_t result;
+  ssize_t result;
   
   if (!args) SWIG_fail;
   swig_obj[0] = args;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_types__RowColT_int64_t_t, 0 |  0 );
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_types__RowColT_ssize_t_t, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RowColInt_normL2" "', argument " "1"" of type '" "types::RowCol< sys::SSize_T > const *""'"); 
   }
   arg1 = reinterpret_cast< types::RowCol< sys::SSize_T > * >(argp1);
   result = ((types::RowCol< sys::SSize_T > const *)arg1)->normL2();
-  resultobj = SWIG_NewPointerObj((new int64_t(static_cast< const int64_t& >(result))), SWIGTYPE_p_int64_t, SWIG_POINTER_OWN |  0 );
+  {
+#if PY_VERSION_HEX >= 0x03000000
+    resultobj = PyLong_FromSsize_t(result);
+#else
+    resultobj = PyInt_FromSsize_t(result);
+#endif
+  }
   return resultobj;
 fail:
   return NULL;
@@ -7372,7 +7312,7 @@ SWIGINTERN PyObject *_wrap_delete_RowColInt(PyObject *SWIGUNUSEDPARM(self), PyOb
   
   if (!args) SWIG_fail;
   swig_obj[0] = args;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_types__RowColT_int64_t_t, SWIG_POINTER_DISOWN |  0 );
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_types__RowColT_ssize_t_t, SWIG_POINTER_DISOWN |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_RowColInt" "', argument " "1"" of type '" "types::RowCol< sys::SSize_T > *""'"); 
   }
@@ -7388,7 +7328,7 @@ fail:
 SWIGINTERN PyObject *RowColInt_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
   if (!SWIG_Python_UnpackTuple(args, "swigregister", 1, 1, &obj)) return NULL;
-  SWIG_TypeNewClientData(SWIGTYPE_p_types__RowColT_int64_t_t, SWIG_NewClientData(obj));
+  SWIG_TypeNewClientData(SWIGTYPE_p_types__RowColT_ssize_t_t, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
 
@@ -8616,7 +8556,7 @@ SWIGINTERN PyObject *_wrap_VectorRowColInt___nonzero__(PyObject *SWIGUNUSEDPARM(
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorRowColInt___nonzero__" "', argument " "1"" of type '" "std::vector< types::RowCol< sys::SSize_T > > const *""'"); 
   }
   arg1 = reinterpret_cast< std::vector< types::RowCol< sys::SSize_T > > * >(argp1);
-  result = (bool)std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg____nonzero__((std::vector< types::RowCol< int64_t > > const *)arg1);
+  result = (bool)std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg____nonzero__((std::vector< types::RowCol< ssize_t > > const *)arg1);
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
@@ -8639,7 +8579,7 @@ SWIGINTERN PyObject *_wrap_VectorRowColInt___bool__(PyObject *SWIGUNUSEDPARM(sel
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorRowColInt___bool__" "', argument " "1"" of type '" "std::vector< types::RowCol< sys::SSize_T > > const *""'"); 
   }
   arg1 = reinterpret_cast< std::vector< types::RowCol< sys::SSize_T > > * >(argp1);
-  result = (bool)std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg____bool__((std::vector< types::RowCol< int64_t > > const *)arg1);
+  result = (bool)std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg____bool__((std::vector< types::RowCol< ssize_t > > const *)arg1);
   resultobj = SWIG_From_bool(static_cast< bool >(result));
   return resultobj;
 fail:
@@ -8653,7 +8593,7 @@ SWIGINTERN PyObject *_wrap_VectorRowColInt___len__(PyObject *SWIGUNUSEDPARM(self
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject *swig_obj[1] ;
-  std::vector< types::RowCol< int64_t > >::size_type result;
+  std::vector< types::RowCol< ssize_t > >::size_type result;
   
   if (!args) SWIG_fail;
   swig_obj[0] = args;
@@ -8662,7 +8602,7 @@ SWIGINTERN PyObject *_wrap_VectorRowColInt___len__(PyObject *SWIGUNUSEDPARM(self
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorRowColInt___len__" "', argument " "1"" of type '" "std::vector< types::RowCol< sys::SSize_T > > const *""'"); 
   }
   arg1 = reinterpret_cast< std::vector< types::RowCol< sys::SSize_T > > * >(argp1);
-  result = std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg____len__((std::vector< types::RowCol< int64_t > > const *)arg1);
+  result = std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg____len__((std::vector< types::RowCol< ssize_t > > const *)arg1);
   resultobj = SWIG_From_size_t(static_cast< size_t >(result));
   return resultobj;
 fail:
@@ -8673,8 +8613,8 @@ fail:
 SWIGINTERN PyObject *_wrap_VectorRowColInt___getslice__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   std::vector< types::RowCol< sys::SSize_T > > *arg1 = (std::vector< types::RowCol< sys::SSize_T > > *) 0 ;
-  std::vector< types::RowCol< int64_t > >::difference_type arg2 ;
-  std::vector< types::RowCol< int64_t > >::difference_type arg3 ;
+  std::vector< types::RowCol< ssize_t > >::difference_type arg2 ;
+  std::vector< types::RowCol< ssize_t > >::difference_type arg3 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   ptrdiff_t val2 ;
@@ -8692,14 +8632,14 @@ SWIGINTERN PyObject *_wrap_VectorRowColInt___getslice__(PyObject *SWIGUNUSEDPARM
   arg1 = reinterpret_cast< std::vector< types::RowCol< sys::SSize_T > > * >(argp1);
   ecode2 = SWIG_AsVal_ptrdiff_t(swig_obj[1], &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorRowColInt___getslice__" "', argument " "2"" of type '" "std::vector< types::RowCol< int64_t > >::difference_type""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorRowColInt___getslice__" "', argument " "2"" of type '" "std::vector< types::RowCol< ssize_t > >::difference_type""'");
   } 
-  arg2 = static_cast< std::vector< types::RowCol< int64_t > >::difference_type >(val2);
+  arg2 = static_cast< std::vector< types::RowCol< ssize_t > >::difference_type >(val2);
   ecode3 = SWIG_AsVal_ptrdiff_t(swig_obj[2], &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "VectorRowColInt___getslice__" "', argument " "3"" of type '" "std::vector< types::RowCol< int64_t > >::difference_type""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "VectorRowColInt___getslice__" "', argument " "3"" of type '" "std::vector< types::RowCol< ssize_t > >::difference_type""'");
   } 
-  arg3 = static_cast< std::vector< types::RowCol< int64_t > >::difference_type >(val3);
+  arg3 = static_cast< std::vector< types::RowCol< ssize_t > >::difference_type >(val3);
   try {
     result = (std::vector< types::RowCol< sys::SSize_T >,std::allocator< types::RowCol< sys::SSize_T > > > *)std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg____getslice__(arg1,arg2,arg3);
   } catch(std::out_of_range &_e) {
@@ -8717,8 +8657,8 @@ fail:
 SWIGINTERN PyObject *_wrap_VectorRowColInt___setslice____SWIG_0(PyObject *SWIGUNUSEDPARM(self), Py_ssize_t nobjs, PyObject **swig_obj) {
   PyObject *resultobj = 0;
   std::vector< types::RowCol< sys::SSize_T > > *arg1 = (std::vector< types::RowCol< sys::SSize_T > > *) 0 ;
-  std::vector< types::RowCol< int64_t > >::difference_type arg2 ;
-  std::vector< types::RowCol< int64_t > >::difference_type arg3 ;
+  std::vector< types::RowCol< ssize_t > >::difference_type arg2 ;
+  std::vector< types::RowCol< ssize_t > >::difference_type arg3 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   ptrdiff_t val2 ;
@@ -8734,14 +8674,14 @@ SWIGINTERN PyObject *_wrap_VectorRowColInt___setslice____SWIG_0(PyObject *SWIGUN
   arg1 = reinterpret_cast< std::vector< types::RowCol< sys::SSize_T > > * >(argp1);
   ecode2 = SWIG_AsVal_ptrdiff_t(swig_obj[1], &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorRowColInt___setslice__" "', argument " "2"" of type '" "std::vector< types::RowCol< int64_t > >::difference_type""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorRowColInt___setslice__" "', argument " "2"" of type '" "std::vector< types::RowCol< ssize_t > >::difference_type""'");
   } 
-  arg2 = static_cast< std::vector< types::RowCol< int64_t > >::difference_type >(val2);
+  arg2 = static_cast< std::vector< types::RowCol< ssize_t > >::difference_type >(val2);
   ecode3 = SWIG_AsVal_ptrdiff_t(swig_obj[2], &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "VectorRowColInt___setslice__" "', argument " "3"" of type '" "std::vector< types::RowCol< int64_t > >::difference_type""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "VectorRowColInt___setslice__" "', argument " "3"" of type '" "std::vector< types::RowCol< ssize_t > >::difference_type""'");
   } 
-  arg3 = static_cast< std::vector< types::RowCol< int64_t > >::difference_type >(val3);
+  arg3 = static_cast< std::vector< types::RowCol< ssize_t > >::difference_type >(val3);
   try {
     std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg____setslice____SWIG_0(arg1,arg2,arg3);
   } catch(std::out_of_range &_e) {
@@ -8759,8 +8699,8 @@ fail:
 SWIGINTERN PyObject *_wrap_VectorRowColInt___setslice____SWIG_1(PyObject *SWIGUNUSEDPARM(self), Py_ssize_t nobjs, PyObject **swig_obj) {
   PyObject *resultobj = 0;
   std::vector< types::RowCol< sys::SSize_T > > *arg1 = (std::vector< types::RowCol< sys::SSize_T > > *) 0 ;
-  std::vector< types::RowCol< int64_t > >::difference_type arg2 ;
-  std::vector< types::RowCol< int64_t > >::difference_type arg3 ;
+  std::vector< types::RowCol< ssize_t > >::difference_type arg2 ;
+  std::vector< types::RowCol< ssize_t > >::difference_type arg3 ;
   std::vector< types::RowCol< sys::SSize_T >,std::allocator< types::RowCol< sys::SSize_T > > > *arg4 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -8778,14 +8718,14 @@ SWIGINTERN PyObject *_wrap_VectorRowColInt___setslice____SWIG_1(PyObject *SWIGUN
   arg1 = reinterpret_cast< std::vector< types::RowCol< sys::SSize_T > > * >(argp1);
   ecode2 = SWIG_AsVal_ptrdiff_t(swig_obj[1], &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorRowColInt___setslice__" "', argument " "2"" of type '" "std::vector< types::RowCol< int64_t > >::difference_type""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorRowColInt___setslice__" "', argument " "2"" of type '" "std::vector< types::RowCol< ssize_t > >::difference_type""'");
   } 
-  arg2 = static_cast< std::vector< types::RowCol< int64_t > >::difference_type >(val2);
+  arg2 = static_cast< std::vector< types::RowCol< ssize_t > >::difference_type >(val2);
   ecode3 = SWIG_AsVal_ptrdiff_t(swig_obj[2], &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "VectorRowColInt___setslice__" "', argument " "3"" of type '" "std::vector< types::RowCol< int64_t > >::difference_type""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "VectorRowColInt___setslice__" "', argument " "3"" of type '" "std::vector< types::RowCol< ssize_t > >::difference_type""'");
   } 
-  arg3 = static_cast< std::vector< types::RowCol< int64_t > >::difference_type >(val3);
+  arg3 = static_cast< std::vector< types::RowCol< ssize_t > >::difference_type >(val3);
   {
     std::vector< types::RowCol< sys::SSize_T >,std::allocator< types::RowCol< sys::SSize_T > > > *ptr = (std::vector< types::RowCol< sys::SSize_T >,std::allocator< types::RowCol< sys::SSize_T > > > *)0;
     res4 = swig::asptr(swig_obj[3], &ptr);
@@ -8798,7 +8738,7 @@ SWIGINTERN PyObject *_wrap_VectorRowColInt___setslice____SWIG_1(PyObject *SWIGUN
     arg4 = ptr;
   }
   try {
-    std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg____setslice____SWIG_1(arg1,arg2,arg3,(std::vector< types::RowCol< int64_t >,std::allocator< types::RowCol< int64_t > > > const &)*arg4);
+    std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg____setslice____SWIG_1(arg1,arg2,arg3,(std::vector< types::RowCol< ssize_t >,std::allocator< types::RowCol< ssize_t > > > const &)*arg4);
   } catch(std::out_of_range &_e) {
     SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
   } catch(std::invalid_argument &_e) {
@@ -8869,8 +8809,8 @@ SWIGINTERN PyObject *_wrap_VectorRowColInt___setslice__(PyObject *self, PyObject
 fail:
   SWIG_Python_RaiseOrModifyTypeError("Wrong number or type of arguments for overloaded function 'VectorRowColInt___setslice__'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    std::vector< types::RowCol< sys::SSize_T > >::__setslice__(std::vector< types::RowCol< int64_t > >::difference_type,std::vector< types::RowCol< int64_t > >::difference_type)\n"
-    "    std::vector< types::RowCol< sys::SSize_T > >::__setslice__(std::vector< types::RowCol< int64_t > >::difference_type,std::vector< types::RowCol< int64_t > >::difference_type,std::vector< types::RowCol< sys::SSize_T >,std::allocator< types::RowCol< sys::SSize_T > > > const &)\n");
+    "    std::vector< types::RowCol< sys::SSize_T > >::__setslice__(std::vector< types::RowCol< ssize_t > >::difference_type,std::vector< types::RowCol< ssize_t > >::difference_type)\n"
+    "    std::vector< types::RowCol< sys::SSize_T > >::__setslice__(std::vector< types::RowCol< ssize_t > >::difference_type,std::vector< types::RowCol< ssize_t > >::difference_type,std::vector< types::RowCol< sys::SSize_T >,std::allocator< types::RowCol< sys::SSize_T > > > const &)\n");
   return 0;
 }
 
@@ -8878,8 +8818,8 @@ fail:
 SWIGINTERN PyObject *_wrap_VectorRowColInt___delslice__(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   std::vector< types::RowCol< sys::SSize_T > > *arg1 = (std::vector< types::RowCol< sys::SSize_T > > *) 0 ;
-  std::vector< types::RowCol< int64_t > >::difference_type arg2 ;
-  std::vector< types::RowCol< int64_t > >::difference_type arg3 ;
+  std::vector< types::RowCol< ssize_t > >::difference_type arg2 ;
+  std::vector< types::RowCol< ssize_t > >::difference_type arg3 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   ptrdiff_t val2 ;
@@ -8896,14 +8836,14 @@ SWIGINTERN PyObject *_wrap_VectorRowColInt___delslice__(PyObject *SWIGUNUSEDPARM
   arg1 = reinterpret_cast< std::vector< types::RowCol< sys::SSize_T > > * >(argp1);
   ecode2 = SWIG_AsVal_ptrdiff_t(swig_obj[1], &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorRowColInt___delslice__" "', argument " "2"" of type '" "std::vector< types::RowCol< int64_t > >::difference_type""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorRowColInt___delslice__" "', argument " "2"" of type '" "std::vector< types::RowCol< ssize_t > >::difference_type""'");
   } 
-  arg2 = static_cast< std::vector< types::RowCol< int64_t > >::difference_type >(val2);
+  arg2 = static_cast< std::vector< types::RowCol< ssize_t > >::difference_type >(val2);
   ecode3 = SWIG_AsVal_ptrdiff_t(swig_obj[2], &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "VectorRowColInt___delslice__" "', argument " "3"" of type '" "std::vector< types::RowCol< int64_t > >::difference_type""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "VectorRowColInt___delslice__" "', argument " "3"" of type '" "std::vector< types::RowCol< ssize_t > >::difference_type""'");
   } 
-  arg3 = static_cast< std::vector< types::RowCol< int64_t > >::difference_type >(val3);
+  arg3 = static_cast< std::vector< types::RowCol< ssize_t > >::difference_type >(val3);
   try {
     std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg____delslice__(arg1,arg2,arg3);
   } catch(std::out_of_range &_e) {
@@ -8921,7 +8861,7 @@ fail:
 SWIGINTERN PyObject *_wrap_VectorRowColInt___delitem____SWIG_0(PyObject *SWIGUNUSEDPARM(self), Py_ssize_t nobjs, PyObject **swig_obj) {
   PyObject *resultobj = 0;
   std::vector< types::RowCol< sys::SSize_T > > *arg1 = (std::vector< types::RowCol< sys::SSize_T > > *) 0 ;
-  std::vector< types::RowCol< int64_t > >::difference_type arg2 ;
+  std::vector< types::RowCol< ssize_t > >::difference_type arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   ptrdiff_t val2 ;
@@ -8935,9 +8875,9 @@ SWIGINTERN PyObject *_wrap_VectorRowColInt___delitem____SWIG_0(PyObject *SWIGUNU
   arg1 = reinterpret_cast< std::vector< types::RowCol< sys::SSize_T > > * >(argp1);
   ecode2 = SWIG_AsVal_ptrdiff_t(swig_obj[1], &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorRowColInt___delitem__" "', argument " "2"" of type '" "std::vector< types::RowCol< int64_t > >::difference_type""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorRowColInt___delitem__" "', argument " "2"" of type '" "std::vector< types::RowCol< ssize_t > >::difference_type""'");
   } 
-  arg2 = static_cast< std::vector< types::RowCol< int64_t > >::difference_type >(val2);
+  arg2 = static_cast< std::vector< types::RowCol< ssize_t > >::difference_type >(val2);
   try {
     std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg____delitem____SWIG_0(arg1,arg2);
   } catch(std::out_of_range &_e) {
@@ -9019,7 +8959,7 @@ SWIGINTERN PyObject *_wrap_VectorRowColInt___setitem____SWIG_0(PyObject *SWIGUNU
     arg3 = ptr;
   }
   try {
-    std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg____setitem____SWIG_0(arg1,arg2,(std::vector< types::RowCol< int64_t >,std::allocator< types::RowCol< int64_t > > > const &)*arg3);
+    std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg____setitem____SWIG_0(arg1,arg2,(std::vector< types::RowCol< ssize_t >,std::allocator< types::RowCol< ssize_t > > > const &)*arg3);
   } catch(std::out_of_range &_e) {
     SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
   } catch(std::invalid_argument &_e) {
@@ -9139,7 +9079,7 @@ SWIGINTERN PyObject *_wrap_VectorRowColInt___delitem__(PyObject *self, PyObject 
 fail:
   SWIG_Python_RaiseOrModifyTypeError("Wrong number or type of arguments for overloaded function 'VectorRowColInt___delitem__'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    std::vector< types::RowCol< sys::SSize_T > >::__delitem__(std::vector< types::RowCol< int64_t > >::difference_type)\n"
+    "    std::vector< types::RowCol< sys::SSize_T > >::__delitem__(std::vector< types::RowCol< ssize_t > >::difference_type)\n"
     "    std::vector< types::RowCol< sys::SSize_T > >::__delitem__(PySliceObject *)\n");
   return 0;
 }
@@ -9148,12 +9088,12 @@ fail:
 SWIGINTERN PyObject *_wrap_VectorRowColInt___getitem____SWIG_1(PyObject *SWIGUNUSEDPARM(self), Py_ssize_t nobjs, PyObject **swig_obj) {
   PyObject *resultobj = 0;
   std::vector< types::RowCol< sys::SSize_T > > *arg1 = (std::vector< types::RowCol< sys::SSize_T > > *) 0 ;
-  std::vector< types::RowCol< int64_t > >::difference_type arg2 ;
+  std::vector< types::RowCol< ssize_t > >::difference_type arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   ptrdiff_t val2 ;
   int ecode2 = 0 ;
-  std::vector< types::RowCol< int64_t > >::value_type *result = 0 ;
+  std::vector< types::RowCol< ssize_t > >::value_type *result = 0 ;
   
   if ((nobjs < 2) || (nobjs > 2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_std__vectorT_types__RowColT_sys__SSize_T_t_std__allocatorT_types__RowColT_sys__SSize_T_t_t_t, 0 |  0 );
@@ -9163,16 +9103,16 @@ SWIGINTERN PyObject *_wrap_VectorRowColInt___getitem____SWIG_1(PyObject *SWIGUNU
   arg1 = reinterpret_cast< std::vector< types::RowCol< sys::SSize_T > > * >(argp1);
   ecode2 = SWIG_AsVal_ptrdiff_t(swig_obj[1], &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorRowColInt___getitem__" "', argument " "2"" of type '" "std::vector< types::RowCol< int64_t > >::difference_type""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorRowColInt___getitem__" "', argument " "2"" of type '" "std::vector< types::RowCol< ssize_t > >::difference_type""'");
   } 
-  arg2 = static_cast< std::vector< types::RowCol< int64_t > >::difference_type >(val2);
+  arg2 = static_cast< std::vector< types::RowCol< ssize_t > >::difference_type >(val2);
   try {
-    result = (std::vector< types::RowCol< int64_t > >::value_type *) &std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg____getitem____SWIG_1((std::vector< types::RowCol< int64_t > > const *)arg1,arg2);
+    result = (std::vector< types::RowCol< ssize_t > >::value_type *) &std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg____getitem____SWIG_1((std::vector< types::RowCol< ssize_t > > const *)arg1,arg2);
   } catch(std::out_of_range &_e) {
     SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_types__RowColT_int64_t_t, 0 |  0 );
-  (void)swig::container_owner<swig::traits<std::vector< types::RowCol< int64_t > >::value_type>::category>::back_reference(resultobj, swig_obj[0]);
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_types__RowColT_ssize_t_t, 0 |  0 );
+  (void)swig::container_owner<swig::traits<std::vector< types::RowCol< ssize_t > >::value_type>::category>::back_reference(resultobj, swig_obj[0]);
   return resultobj;
 fail:
   return NULL;
@@ -9219,7 +9159,7 @@ fail:
   SWIG_Python_RaiseOrModifyTypeError("Wrong number or type of arguments for overloaded function 'VectorRowColInt___getitem__'.\n"
     "  Possible C/C++ prototypes are:\n"
     "    std::vector< types::RowCol< sys::SSize_T > >::__getitem__(PySliceObject *)\n"
-    "    std::vector< types::RowCol< sys::SSize_T > >::__getitem__(std::vector< types::RowCol< int64_t > >::difference_type) const\n");
+    "    std::vector< types::RowCol< sys::SSize_T > >::__getitem__(std::vector< types::RowCol< ssize_t > >::difference_type) const\n");
   return 0;
 }
 
@@ -9227,8 +9167,8 @@ fail:
 SWIGINTERN PyObject *_wrap_VectorRowColInt___setitem____SWIG_2(PyObject *SWIGUNUSEDPARM(self), Py_ssize_t nobjs, PyObject **swig_obj) {
   PyObject *resultobj = 0;
   std::vector< types::RowCol< sys::SSize_T > > *arg1 = (std::vector< types::RowCol< sys::SSize_T > > *) 0 ;
-  std::vector< types::RowCol< int64_t > >::difference_type arg2 ;
-  std::vector< types::RowCol< int64_t > >::value_type *arg3 = 0 ;
+  std::vector< types::RowCol< ssize_t > >::difference_type arg2 ;
+  std::vector< types::RowCol< ssize_t > >::value_type *arg3 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   ptrdiff_t val2 ;
@@ -9244,19 +9184,19 @@ SWIGINTERN PyObject *_wrap_VectorRowColInt___setitem____SWIG_2(PyObject *SWIGUNU
   arg1 = reinterpret_cast< std::vector< types::RowCol< sys::SSize_T > > * >(argp1);
   ecode2 = SWIG_AsVal_ptrdiff_t(swig_obj[1], &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorRowColInt___setitem__" "', argument " "2"" of type '" "std::vector< types::RowCol< int64_t > >::difference_type""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorRowColInt___setitem__" "', argument " "2"" of type '" "std::vector< types::RowCol< ssize_t > >::difference_type""'");
   } 
-  arg2 = static_cast< std::vector< types::RowCol< int64_t > >::difference_type >(val2);
-  res3 = SWIG_ConvertPtr(swig_obj[2], &argp3, SWIGTYPE_p_types__RowColT_int64_t_t,  0  | 0);
+  arg2 = static_cast< std::vector< types::RowCol< ssize_t > >::difference_type >(val2);
+  res3 = SWIG_ConvertPtr(swig_obj[2], &argp3, SWIGTYPE_p_types__RowColT_ssize_t_t,  0  | 0);
   if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "VectorRowColInt___setitem__" "', argument " "3"" of type '" "std::vector< types::RowCol< int64_t > >::value_type const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "VectorRowColInt___setitem__" "', argument " "3"" of type '" "std::vector< types::RowCol< ssize_t > >::value_type const &""'"); 
   }
   if (!argp3) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorRowColInt___setitem__" "', argument " "3"" of type '" "std::vector< types::RowCol< int64_t > >::value_type const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorRowColInt___setitem__" "', argument " "3"" of type '" "std::vector< types::RowCol< ssize_t > >::value_type const &""'"); 
   }
-  arg3 = reinterpret_cast< std::vector< types::RowCol< int64_t > >::value_type * >(argp3);
+  arg3 = reinterpret_cast< std::vector< types::RowCol< ssize_t > >::value_type * >(argp3);
   try {
-    std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg____setitem____SWIG_2(arg1,arg2,(types::RowCol< int64_t > const &)*arg3);
+    std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg____setitem____SWIG_2(arg1,arg2,(types::RowCol< ssize_t > const &)*arg3);
   } catch(std::out_of_range &_e) {
     SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
   }
@@ -9315,7 +9255,7 @@ SWIGINTERN PyObject *_wrap_VectorRowColInt___setitem__(PyObject *self, PyObject 
         _v = SWIG_CheckState(res);
       }
       if (_v) {
-        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_types__RowColT_int64_t_t, SWIG_POINTER_NO_NULL | 0);
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_types__RowColT_ssize_t_t, SWIG_POINTER_NO_NULL | 0);
         _v = SWIG_CheckState(res);
         if (_v) {
           return _wrap_VectorRowColInt___setitem____SWIG_2(self, argc, argv);
@@ -9329,7 +9269,7 @@ fail:
     "  Possible C/C++ prototypes are:\n"
     "    std::vector< types::RowCol< sys::SSize_T > >::__setitem__(PySliceObject *,std::vector< types::RowCol< sys::SSize_T >,std::allocator< types::RowCol< sys::SSize_T > > > const &)\n"
     "    std::vector< types::RowCol< sys::SSize_T > >::__setitem__(PySliceObject *)\n"
-    "    std::vector< types::RowCol< sys::SSize_T > >::__setitem__(std::vector< types::RowCol< int64_t > >::difference_type,std::vector< types::RowCol< int64_t > >::value_type const &)\n");
+    "    std::vector< types::RowCol< sys::SSize_T > >::__setitem__(std::vector< types::RowCol< ssize_t > >::difference_type,std::vector< types::RowCol< ssize_t > >::value_type const &)\n");
   return 0;
 }
 
@@ -9340,7 +9280,7 @@ SWIGINTERN PyObject *_wrap_VectorRowColInt_pop(PyObject *SWIGUNUSEDPARM(self), P
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject *swig_obj[1] ;
-  std::vector< types::RowCol< int64_t > >::value_type result;
+  std::vector< types::RowCol< ssize_t > >::value_type result;
   
   if (!args) SWIG_fail;
   swig_obj[0] = args;
@@ -9354,7 +9294,7 @@ SWIGINTERN PyObject *_wrap_VectorRowColInt_pop(PyObject *SWIGUNUSEDPARM(self), P
   } catch(std::out_of_range &_e) {
     SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
   }
-  resultobj = SWIG_NewPointerObj((new std::vector< types::RowCol< int64_t > >::value_type(static_cast< const std::vector< types::RowCol< int64_t > >::value_type& >(result))), SWIGTYPE_p_types__RowColT_int64_t_t, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_NewPointerObj((new std::vector< types::RowCol< ssize_t > >::value_type(static_cast< const std::vector< types::RowCol< ssize_t > >::value_type& >(result))), SWIGTYPE_p_types__RowColT_ssize_t_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -9364,7 +9304,7 @@ fail:
 SWIGINTERN PyObject *_wrap_VectorRowColInt_append(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   std::vector< types::RowCol< sys::SSize_T > > *arg1 = (std::vector< types::RowCol< sys::SSize_T > > *) 0 ;
-  std::vector< types::RowCol< int64_t > >::value_type *arg2 = 0 ;
+  std::vector< types::RowCol< ssize_t > >::value_type *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -9377,15 +9317,15 @@ SWIGINTERN PyObject *_wrap_VectorRowColInt_append(PyObject *SWIGUNUSEDPARM(self)
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorRowColInt_append" "', argument " "1"" of type '" "std::vector< types::RowCol< sys::SSize_T > > *""'"); 
   }
   arg1 = reinterpret_cast< std::vector< types::RowCol< sys::SSize_T > > * >(argp1);
-  res2 = SWIG_ConvertPtr(swig_obj[1], &argp2, SWIGTYPE_p_types__RowColT_int64_t_t,  0  | 0);
+  res2 = SWIG_ConvertPtr(swig_obj[1], &argp2, SWIGTYPE_p_types__RowColT_ssize_t_t,  0  | 0);
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VectorRowColInt_append" "', argument " "2"" of type '" "std::vector< types::RowCol< int64_t > >::value_type const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VectorRowColInt_append" "', argument " "2"" of type '" "std::vector< types::RowCol< ssize_t > >::value_type const &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorRowColInt_append" "', argument " "2"" of type '" "std::vector< types::RowCol< int64_t > >::value_type const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorRowColInt_append" "', argument " "2"" of type '" "std::vector< types::RowCol< ssize_t > >::value_type const &""'"); 
   }
-  arg2 = reinterpret_cast< std::vector< types::RowCol< int64_t > >::value_type * >(argp2);
-  std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg__append(arg1,(types::RowCol< int64_t > const &)*arg2);
+  arg2 = reinterpret_cast< std::vector< types::RowCol< ssize_t > >::value_type * >(argp2);
+  std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg__append(arg1,(types::RowCol< ssize_t > const &)*arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -9463,7 +9403,7 @@ SWIGINTERN PyObject *_wrap_VectorRowColInt_size(PyObject *SWIGUNUSEDPARM(self), 
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject *swig_obj[1] ;
-  std::vector< types::RowCol< int64_t > >::size_type result;
+  std::vector< types::RowCol< ssize_t > >::size_type result;
   
   if (!args) SWIG_fail;
   swig_obj[0] = args;
@@ -9518,7 +9458,7 @@ SWIGINTERN PyObject *_wrap_VectorRowColInt_begin(PyObject *SWIGUNUSEDPARM(self),
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject *swig_obj[1] ;
-  SwigValueWrapper< std::vector< types::RowCol< int64_t > >::iterator > result;
+  SwigValueWrapper< std::vector< types::RowCol< ssize_t > >::iterator > result;
   
   if (!args) SWIG_fail;
   swig_obj[0] = args;
@@ -9528,7 +9468,7 @@ SWIGINTERN PyObject *_wrap_VectorRowColInt_begin(PyObject *SWIGUNUSEDPARM(self),
   }
   arg1 = reinterpret_cast< std::vector< types::RowCol< sys::SSize_T > > * >(argp1);
   result = (arg1)->begin();
-  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< types::RowCol< int64_t > >::iterator & >(result)),
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< types::RowCol< ssize_t > >::iterator & >(result)),
     swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
   return resultobj;
 fail:
@@ -9542,7 +9482,7 @@ SWIGINTERN PyObject *_wrap_VectorRowColInt_end(PyObject *SWIGUNUSEDPARM(self), P
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject *swig_obj[1] ;
-  SwigValueWrapper< std::vector< types::RowCol< int64_t > >::iterator > result;
+  SwigValueWrapper< std::vector< types::RowCol< ssize_t > >::iterator > result;
   
   if (!args) SWIG_fail;
   swig_obj[0] = args;
@@ -9552,7 +9492,7 @@ SWIGINTERN PyObject *_wrap_VectorRowColInt_end(PyObject *SWIGUNUSEDPARM(self), P
   }
   arg1 = reinterpret_cast< std::vector< types::RowCol< sys::SSize_T > > * >(argp1);
   result = (arg1)->end();
-  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< types::RowCol< int64_t > >::iterator & >(result)),
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< types::RowCol< ssize_t > >::iterator & >(result)),
     swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
   return resultobj;
 fail:
@@ -9566,7 +9506,7 @@ SWIGINTERN PyObject *_wrap_VectorRowColInt_rbegin(PyObject *SWIGUNUSEDPARM(self)
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject *swig_obj[1] ;
-  SwigValueWrapper< std::vector< types::RowCol< int64_t > >::reverse_iterator > result;
+  SwigValueWrapper< std::vector< types::RowCol< ssize_t > >::reverse_iterator > result;
   
   if (!args) SWIG_fail;
   swig_obj[0] = args;
@@ -9576,7 +9516,7 @@ SWIGINTERN PyObject *_wrap_VectorRowColInt_rbegin(PyObject *SWIGUNUSEDPARM(self)
   }
   arg1 = reinterpret_cast< std::vector< types::RowCol< sys::SSize_T > > * >(argp1);
   result = (arg1)->rbegin();
-  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< types::RowCol< int64_t > >::reverse_iterator & >(result)),
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< types::RowCol< ssize_t > >::reverse_iterator & >(result)),
     swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
   return resultobj;
 fail:
@@ -9590,7 +9530,7 @@ SWIGINTERN PyObject *_wrap_VectorRowColInt_rend(PyObject *SWIGUNUSEDPARM(self), 
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject *swig_obj[1] ;
-  SwigValueWrapper< std::vector< types::RowCol< int64_t > >::reverse_iterator > result;
+  SwigValueWrapper< std::vector< types::RowCol< ssize_t > >::reverse_iterator > result;
   
   if (!args) SWIG_fail;
   swig_obj[0] = args;
@@ -9600,7 +9540,7 @@ SWIGINTERN PyObject *_wrap_VectorRowColInt_rend(PyObject *SWIGUNUSEDPARM(self), 
   }
   arg1 = reinterpret_cast< std::vector< types::RowCol< sys::SSize_T > > * >(argp1);
   result = (arg1)->rend();
-  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< types::RowCol< int64_t > >::reverse_iterator & >(result)),
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< types::RowCol< ssize_t > >::reverse_iterator & >(result)),
     swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
   return resultobj;
 fail:
@@ -9636,7 +9576,7 @@ SWIGINTERN PyObject *_wrap_VectorRowColInt_get_allocator(PyObject *SWIGUNUSEDPAR
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject *swig_obj[1] ;
-  SwigValueWrapper< std::allocator< types::RowCol< int64_t > > > result;
+  SwigValueWrapper< std::allocator< types::RowCol< ssize_t > > > result;
   
   if (!args) SWIG_fail;
   swig_obj[0] = args;
@@ -9646,7 +9586,7 @@ SWIGINTERN PyObject *_wrap_VectorRowColInt_get_allocator(PyObject *SWIGUNUSEDPAR
   }
   arg1 = reinterpret_cast< std::vector< types::RowCol< sys::SSize_T > > * >(argp1);
   result = ((std::vector< types::RowCol< sys::SSize_T > > const *)arg1)->get_allocator();
-  resultobj = SWIG_NewPointerObj((new std::vector< types::RowCol< int64_t > >::allocator_type(static_cast< const std::vector< types::RowCol< int64_t > >::allocator_type& >(result))), SWIGTYPE_p_std__allocatorT_types__RowColT_sys__SSize_T_t_t, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_NewPointerObj((new std::vector< types::RowCol< ssize_t > >::allocator_type(static_cast< const std::vector< types::RowCol< ssize_t > >::allocator_type& >(result))), SWIGTYPE_p_std__allocatorT_types__RowColT_sys__SSize_T_t_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -9655,7 +9595,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_new_VectorRowColInt__SWIG_2(PyObject *SWIGUNUSEDPARM(self), Py_ssize_t nobjs, PyObject **swig_obj) {
   PyObject *resultobj = 0;
-  std::vector< types::RowCol< int64_t > >::size_type arg1 ;
+  std::vector< types::RowCol< ssize_t > >::size_type arg1 ;
   size_t val1 ;
   int ecode1 = 0 ;
   std::vector< types::RowCol< sys::SSize_T > > *result = 0 ;
@@ -9663,9 +9603,9 @@ SWIGINTERN PyObject *_wrap_new_VectorRowColInt__SWIG_2(PyObject *SWIGUNUSEDPARM(
   if ((nobjs < 1) || (nobjs > 1)) SWIG_fail;
   ecode1 = SWIG_AsVal_size_t(swig_obj[0], &val1);
   if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_VectorRowColInt" "', argument " "1"" of type '" "std::vector< types::RowCol< int64_t > >::size_type""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_VectorRowColInt" "', argument " "1"" of type '" "std::vector< types::RowCol< ssize_t > >::size_type""'");
   } 
-  arg1 = static_cast< std::vector< types::RowCol< int64_t > >::size_type >(val1);
+  arg1 = static_cast< std::vector< types::RowCol< ssize_t > >::size_type >(val1);
   result = (std::vector< types::RowCol< sys::SSize_T > > *)new std::vector< types::RowCol< sys::SSize_T > >(arg1);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_types__RowColT_sys__SSize_T_t_std__allocatorT_types__RowColT_sys__SSize_T_t_t_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
@@ -9699,7 +9639,7 @@ fail:
 SWIGINTERN PyObject *_wrap_VectorRowColInt_resize__SWIG_0(PyObject *SWIGUNUSEDPARM(self), Py_ssize_t nobjs, PyObject **swig_obj) {
   PyObject *resultobj = 0;
   std::vector< types::RowCol< sys::SSize_T > > *arg1 = (std::vector< types::RowCol< sys::SSize_T > > *) 0 ;
-  std::vector< types::RowCol< int64_t > >::size_type arg2 ;
+  std::vector< types::RowCol< ssize_t > >::size_type arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   size_t val2 ;
@@ -9713,9 +9653,9 @@ SWIGINTERN PyObject *_wrap_VectorRowColInt_resize__SWIG_0(PyObject *SWIGUNUSEDPA
   arg1 = reinterpret_cast< std::vector< types::RowCol< sys::SSize_T > > * >(argp1);
   ecode2 = SWIG_AsVal_size_t(swig_obj[1], &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorRowColInt_resize" "', argument " "2"" of type '" "std::vector< types::RowCol< int64_t > >::size_type""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorRowColInt_resize" "', argument " "2"" of type '" "std::vector< types::RowCol< ssize_t > >::size_type""'");
   } 
-  arg2 = static_cast< std::vector< types::RowCol< int64_t > >::size_type >(val2);
+  arg2 = static_cast< std::vector< types::RowCol< ssize_t > >::size_type >(val2);
   (arg1)->resize(arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -9727,12 +9667,12 @@ fail:
 SWIGINTERN PyObject *_wrap_VectorRowColInt_erase__SWIG_0(PyObject *SWIGUNUSEDPARM(self), Py_ssize_t nobjs, PyObject **swig_obj) {
   PyObject *resultobj = 0;
   std::vector< types::RowCol< sys::SSize_T > > *arg1 = (std::vector< types::RowCol< sys::SSize_T > > *) 0 ;
-  SwigValueWrapper< std::vector< types::RowCol< int64_t > >::iterator > arg2 ;
+  SwigValueWrapper< std::vector< types::RowCol< ssize_t > >::iterator > arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   swig::SwigPyIterator *iter2 = 0 ;
   int res2 ;
-  SwigValueWrapper< std::vector< types::RowCol< int64_t > >::iterator > result;
+  SwigValueWrapper< std::vector< types::RowCol< ssize_t > >::iterator > result;
   
   if ((nobjs < 2) || (nobjs > 2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_std__vectorT_types__RowColT_sys__SSize_T_t_std__allocatorT_types__RowColT_sys__SSize_T_t_t_t, 0 |  0 );
@@ -9742,17 +9682,17 @@ SWIGINTERN PyObject *_wrap_VectorRowColInt_erase__SWIG_0(PyObject *SWIGUNUSEDPAR
   arg1 = reinterpret_cast< std::vector< types::RowCol< sys::SSize_T > > * >(argp1);
   res2 = SWIG_ConvertPtr(swig_obj[1], SWIG_as_voidptrptr(&iter2), swig::SwigPyIterator::descriptor(), 0);
   if (!SWIG_IsOK(res2) || !iter2) {
-    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorRowColInt_erase" "', argument " "2"" of type '" "std::vector< types::RowCol< int64_t > >::iterator""'");
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorRowColInt_erase" "', argument " "2"" of type '" "std::vector< types::RowCol< ssize_t > >::iterator""'");
   } else {
-    swig::SwigPyIterator_T<std::vector< types::RowCol< int64_t > >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< types::RowCol< int64_t > >::iterator > *>(iter2);
+    swig::SwigPyIterator_T<std::vector< types::RowCol< ssize_t > >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< types::RowCol< ssize_t > >::iterator > *>(iter2);
     if (iter_t) {
       arg2 = iter_t->get_current();
     } else {
-      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorRowColInt_erase" "', argument " "2"" of type '" "std::vector< types::RowCol< int64_t > >::iterator""'");
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorRowColInt_erase" "', argument " "2"" of type '" "std::vector< types::RowCol< ssize_t > >::iterator""'");
     }
   }
   result = std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg__erase__SWIG_0(arg1,arg2);
-  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< types::RowCol< int64_t > >::iterator & >(result)),
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< types::RowCol< ssize_t > >::iterator & >(result)),
     swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
   return resultobj;
 fail:
@@ -9763,15 +9703,15 @@ fail:
 SWIGINTERN PyObject *_wrap_VectorRowColInt_erase__SWIG_1(PyObject *SWIGUNUSEDPARM(self), Py_ssize_t nobjs, PyObject **swig_obj) {
   PyObject *resultobj = 0;
   std::vector< types::RowCol< sys::SSize_T > > *arg1 = (std::vector< types::RowCol< sys::SSize_T > > *) 0 ;
-  SwigValueWrapper< std::vector< types::RowCol< int64_t > >::iterator > arg2 ;
-  SwigValueWrapper< std::vector< types::RowCol< int64_t > >::iterator > arg3 ;
+  SwigValueWrapper< std::vector< types::RowCol< ssize_t > >::iterator > arg2 ;
+  SwigValueWrapper< std::vector< types::RowCol< ssize_t > >::iterator > arg3 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   swig::SwigPyIterator *iter2 = 0 ;
   int res2 ;
   swig::SwigPyIterator *iter3 = 0 ;
   int res3 ;
-  SwigValueWrapper< std::vector< types::RowCol< int64_t > >::iterator > result;
+  SwigValueWrapper< std::vector< types::RowCol< ssize_t > >::iterator > result;
   
   if ((nobjs < 3) || (nobjs > 3)) SWIG_fail;
   res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_std__vectorT_types__RowColT_sys__SSize_T_t_std__allocatorT_types__RowColT_sys__SSize_T_t_t_t, 0 |  0 );
@@ -9781,28 +9721,28 @@ SWIGINTERN PyObject *_wrap_VectorRowColInt_erase__SWIG_1(PyObject *SWIGUNUSEDPAR
   arg1 = reinterpret_cast< std::vector< types::RowCol< sys::SSize_T > > * >(argp1);
   res2 = SWIG_ConvertPtr(swig_obj[1], SWIG_as_voidptrptr(&iter2), swig::SwigPyIterator::descriptor(), 0);
   if (!SWIG_IsOK(res2) || !iter2) {
-    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorRowColInt_erase" "', argument " "2"" of type '" "std::vector< types::RowCol< int64_t > >::iterator""'");
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorRowColInt_erase" "', argument " "2"" of type '" "std::vector< types::RowCol< ssize_t > >::iterator""'");
   } else {
-    swig::SwigPyIterator_T<std::vector< types::RowCol< int64_t > >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< types::RowCol< int64_t > >::iterator > *>(iter2);
+    swig::SwigPyIterator_T<std::vector< types::RowCol< ssize_t > >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< types::RowCol< ssize_t > >::iterator > *>(iter2);
     if (iter_t) {
       arg2 = iter_t->get_current();
     } else {
-      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorRowColInt_erase" "', argument " "2"" of type '" "std::vector< types::RowCol< int64_t > >::iterator""'");
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorRowColInt_erase" "', argument " "2"" of type '" "std::vector< types::RowCol< ssize_t > >::iterator""'");
     }
   }
   res3 = SWIG_ConvertPtr(swig_obj[2], SWIG_as_voidptrptr(&iter3), swig::SwigPyIterator::descriptor(), 0);
   if (!SWIG_IsOK(res3) || !iter3) {
-    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorRowColInt_erase" "', argument " "3"" of type '" "std::vector< types::RowCol< int64_t > >::iterator""'");
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorRowColInt_erase" "', argument " "3"" of type '" "std::vector< types::RowCol< ssize_t > >::iterator""'");
   } else {
-    swig::SwigPyIterator_T<std::vector< types::RowCol< int64_t > >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< types::RowCol< int64_t > >::iterator > *>(iter3);
+    swig::SwigPyIterator_T<std::vector< types::RowCol< ssize_t > >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< types::RowCol< ssize_t > >::iterator > *>(iter3);
     if (iter_t) {
       arg3 = iter_t->get_current();
     } else {
-      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorRowColInt_erase" "', argument " "3"" of type '" "std::vector< types::RowCol< int64_t > >::iterator""'");
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorRowColInt_erase" "', argument " "3"" of type '" "std::vector< types::RowCol< ssize_t > >::iterator""'");
     }
   }
   result = std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg__erase__SWIG_1(arg1,arg2,arg3);
-  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< types::RowCol< int64_t > >::iterator & >(result)),
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< types::RowCol< ssize_t > >::iterator & >(result)),
     swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
   return resultobj;
 fail:
@@ -9825,7 +9765,7 @@ SWIGINTERN PyObject *_wrap_VectorRowColInt_erase(PyObject *self, PyObject *args)
     if (_v) {
       swig::SwigPyIterator *iter = 0;
       int res = SWIG_ConvertPtr(argv[1], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
-      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< types::RowCol< int64_t > >::iterator > *>(iter) != 0));
+      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< types::RowCol< ssize_t > >::iterator > *>(iter) != 0));
       if (_v) {
         return _wrap_VectorRowColInt_erase__SWIG_0(self, argc, argv);
       }
@@ -9838,11 +9778,11 @@ SWIGINTERN PyObject *_wrap_VectorRowColInt_erase(PyObject *self, PyObject *args)
     if (_v) {
       swig::SwigPyIterator *iter = 0;
       int res = SWIG_ConvertPtr(argv[1], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
-      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< types::RowCol< int64_t > >::iterator > *>(iter) != 0));
+      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< types::RowCol< ssize_t > >::iterator > *>(iter) != 0));
       if (_v) {
         swig::SwigPyIterator *iter = 0;
         int res = SWIG_ConvertPtr(argv[2], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
-        _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< types::RowCol< int64_t > >::iterator > *>(iter) != 0));
+        _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< types::RowCol< ssize_t > >::iterator > *>(iter) != 0));
         if (_v) {
           return _wrap_VectorRowColInt_erase__SWIG_1(self, argc, argv);
         }
@@ -9853,16 +9793,16 @@ SWIGINTERN PyObject *_wrap_VectorRowColInt_erase(PyObject *self, PyObject *args)
 fail:
   SWIG_Python_RaiseOrModifyTypeError("Wrong number or type of arguments for overloaded function 'VectorRowColInt_erase'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    std::vector< types::RowCol< sys::SSize_T > >::erase(std::vector< types::RowCol< int64_t > >::iterator)\n"
-    "    std::vector< types::RowCol< sys::SSize_T > >::erase(std::vector< types::RowCol< int64_t > >::iterator,std::vector< types::RowCol< int64_t > >::iterator)\n");
+    "    std::vector< types::RowCol< sys::SSize_T > >::erase(std::vector< types::RowCol< ssize_t > >::iterator)\n"
+    "    std::vector< types::RowCol< sys::SSize_T > >::erase(std::vector< types::RowCol< ssize_t > >::iterator,std::vector< types::RowCol< ssize_t > >::iterator)\n");
   return 0;
 }
 
 
 SWIGINTERN PyObject *_wrap_new_VectorRowColInt__SWIG_3(PyObject *SWIGUNUSEDPARM(self), Py_ssize_t nobjs, PyObject **swig_obj) {
   PyObject *resultobj = 0;
-  std::vector< types::RowCol< int64_t > >::size_type arg1 ;
-  std::vector< types::RowCol< int64_t > >::value_type *arg2 = 0 ;
+  std::vector< types::RowCol< ssize_t > >::size_type arg1 ;
+  std::vector< types::RowCol< ssize_t > >::value_type *arg2 = 0 ;
   size_t val1 ;
   int ecode1 = 0 ;
   void *argp2 = 0 ;
@@ -9872,18 +9812,18 @@ SWIGINTERN PyObject *_wrap_new_VectorRowColInt__SWIG_3(PyObject *SWIGUNUSEDPARM(
   if ((nobjs < 2) || (nobjs > 2)) SWIG_fail;
   ecode1 = SWIG_AsVal_size_t(swig_obj[0], &val1);
   if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_VectorRowColInt" "', argument " "1"" of type '" "std::vector< types::RowCol< int64_t > >::size_type""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_VectorRowColInt" "', argument " "1"" of type '" "std::vector< types::RowCol< ssize_t > >::size_type""'");
   } 
-  arg1 = static_cast< std::vector< types::RowCol< int64_t > >::size_type >(val1);
-  res2 = SWIG_ConvertPtr(swig_obj[1], &argp2, SWIGTYPE_p_types__RowColT_int64_t_t,  0  | 0);
+  arg1 = static_cast< std::vector< types::RowCol< ssize_t > >::size_type >(val1);
+  res2 = SWIG_ConvertPtr(swig_obj[1], &argp2, SWIGTYPE_p_types__RowColT_ssize_t_t,  0  | 0);
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_VectorRowColInt" "', argument " "2"" of type '" "std::vector< types::RowCol< int64_t > >::value_type const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_VectorRowColInt" "', argument " "2"" of type '" "std::vector< types::RowCol< ssize_t > >::value_type const &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_VectorRowColInt" "', argument " "2"" of type '" "std::vector< types::RowCol< int64_t > >::value_type const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_VectorRowColInt" "', argument " "2"" of type '" "std::vector< types::RowCol< ssize_t > >::value_type const &""'"); 
   }
-  arg2 = reinterpret_cast< std::vector< types::RowCol< int64_t > >::value_type * >(argp2);
-  result = (std::vector< types::RowCol< sys::SSize_T > > *)new std::vector< types::RowCol< sys::SSize_T > >(arg1,(std::vector< types::RowCol< int64_t > >::value_type const &)*arg2);
+  arg2 = reinterpret_cast< std::vector< types::RowCol< ssize_t > >::value_type * >(argp2);
+  result = (std::vector< types::RowCol< sys::SSize_T > > *)new std::vector< types::RowCol< sys::SSize_T > >(arg1,(std::vector< types::RowCol< ssize_t > >::value_type const &)*arg2);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_std__vectorT_types__RowColT_sys__SSize_T_t_std__allocatorT_types__RowColT_sys__SSize_T_t_t_t, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
@@ -9927,7 +9867,7 @@ SWIGINTERN PyObject *_wrap_new_VectorRowColInt(PyObject *self, PyObject *args) {
       _v = SWIG_CheckState(res);
     }
     if (_v) {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_types__RowColT_int64_t_t, SWIG_POINTER_NO_NULL | 0);
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_types__RowColT_ssize_t_t, SWIG_POINTER_NO_NULL | 0);
       _v = SWIG_CheckState(res);
       if (_v) {
         return _wrap_new_VectorRowColInt__SWIG_3(self, argc, argv);
@@ -9940,8 +9880,8 @@ fail:
     "  Possible C/C++ prototypes are:\n"
     "    std::vector< types::RowCol< sys::SSize_T > >::vector()\n"
     "    std::vector< types::RowCol< sys::SSize_T > >::vector(std::vector< types::RowCol< sys::SSize_T > > const &)\n"
-    "    std::vector< types::RowCol< sys::SSize_T > >::vector(std::vector< types::RowCol< int64_t > >::size_type)\n"
-    "    std::vector< types::RowCol< sys::SSize_T > >::vector(std::vector< types::RowCol< int64_t > >::size_type,std::vector< types::RowCol< int64_t > >::value_type const &)\n");
+    "    std::vector< types::RowCol< sys::SSize_T > >::vector(std::vector< types::RowCol< ssize_t > >::size_type)\n"
+    "    std::vector< types::RowCol< sys::SSize_T > >::vector(std::vector< types::RowCol< ssize_t > >::size_type,std::vector< types::RowCol< ssize_t > >::value_type const &)\n");
   return 0;
 }
 
@@ -9949,7 +9889,7 @@ fail:
 SWIGINTERN PyObject *_wrap_VectorRowColInt_push_back(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   std::vector< types::RowCol< sys::SSize_T > > *arg1 = (std::vector< types::RowCol< sys::SSize_T > > *) 0 ;
-  std::vector< types::RowCol< int64_t > >::value_type *arg2 = 0 ;
+  std::vector< types::RowCol< ssize_t > >::value_type *arg2 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -9962,15 +9902,15 @@ SWIGINTERN PyObject *_wrap_VectorRowColInt_push_back(PyObject *SWIGUNUSEDPARM(se
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorRowColInt_push_back" "', argument " "1"" of type '" "std::vector< types::RowCol< sys::SSize_T > > *""'"); 
   }
   arg1 = reinterpret_cast< std::vector< types::RowCol< sys::SSize_T > > * >(argp1);
-  res2 = SWIG_ConvertPtr(swig_obj[1], &argp2, SWIGTYPE_p_types__RowColT_int64_t_t,  0  | 0);
+  res2 = SWIG_ConvertPtr(swig_obj[1], &argp2, SWIGTYPE_p_types__RowColT_ssize_t_t,  0  | 0);
   if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VectorRowColInt_push_back" "', argument " "2"" of type '" "std::vector< types::RowCol< int64_t > >::value_type const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VectorRowColInt_push_back" "', argument " "2"" of type '" "std::vector< types::RowCol< ssize_t > >::value_type const &""'"); 
   }
   if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorRowColInt_push_back" "', argument " "2"" of type '" "std::vector< types::RowCol< int64_t > >::value_type const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorRowColInt_push_back" "', argument " "2"" of type '" "std::vector< types::RowCol< ssize_t > >::value_type const &""'"); 
   }
-  arg2 = reinterpret_cast< std::vector< types::RowCol< int64_t > >::value_type * >(argp2);
-  (arg1)->push_back((std::vector< types::RowCol< int64_t > >::value_type const &)*arg2);
+  arg2 = reinterpret_cast< std::vector< types::RowCol< ssize_t > >::value_type * >(argp2);
+  (arg1)->push_back((std::vector< types::RowCol< ssize_t > >::value_type const &)*arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -9984,7 +9924,7 @@ SWIGINTERN PyObject *_wrap_VectorRowColInt_front(PyObject *SWIGUNUSEDPARM(self),
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject *swig_obj[1] ;
-  std::vector< types::RowCol< int64_t > >::value_type *result = 0 ;
+  std::vector< types::RowCol< ssize_t > >::value_type *result = 0 ;
   
   if (!args) SWIG_fail;
   swig_obj[0] = args;
@@ -9993,9 +9933,9 @@ SWIGINTERN PyObject *_wrap_VectorRowColInt_front(PyObject *SWIGUNUSEDPARM(self),
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorRowColInt_front" "', argument " "1"" of type '" "std::vector< types::RowCol< sys::SSize_T > > const *""'"); 
   }
   arg1 = reinterpret_cast< std::vector< types::RowCol< sys::SSize_T > > * >(argp1);
-  result = (std::vector< types::RowCol< int64_t > >::value_type *) &((std::vector< types::RowCol< sys::SSize_T > > const *)arg1)->front();
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_types__RowColT_int64_t_t, 0 |  0 );
-  (void)swig::container_owner<swig::traits<std::vector< types::RowCol< int64_t > >::value_type>::category>::back_reference(resultobj, swig_obj[0]);
+  result = (std::vector< types::RowCol< ssize_t > >::value_type *) &((std::vector< types::RowCol< sys::SSize_T > > const *)arg1)->front();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_types__RowColT_ssize_t_t, 0 |  0 );
+  (void)swig::container_owner<swig::traits<std::vector< types::RowCol< ssize_t > >::value_type>::category>::back_reference(resultobj, swig_obj[0]);
   return resultobj;
 fail:
   return NULL;
@@ -10008,7 +9948,7 @@ SWIGINTERN PyObject *_wrap_VectorRowColInt_back(PyObject *SWIGUNUSEDPARM(self), 
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject *swig_obj[1] ;
-  std::vector< types::RowCol< int64_t > >::value_type *result = 0 ;
+  std::vector< types::RowCol< ssize_t > >::value_type *result = 0 ;
   
   if (!args) SWIG_fail;
   swig_obj[0] = args;
@@ -10017,9 +9957,9 @@ SWIGINTERN PyObject *_wrap_VectorRowColInt_back(PyObject *SWIGUNUSEDPARM(self), 
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VectorRowColInt_back" "', argument " "1"" of type '" "std::vector< types::RowCol< sys::SSize_T > > const *""'"); 
   }
   arg1 = reinterpret_cast< std::vector< types::RowCol< sys::SSize_T > > * >(argp1);
-  result = (std::vector< types::RowCol< int64_t > >::value_type *) &((std::vector< types::RowCol< sys::SSize_T > > const *)arg1)->back();
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_types__RowColT_int64_t_t, 0 |  0 );
-  (void)swig::container_owner<swig::traits<std::vector< types::RowCol< int64_t > >::value_type>::category>::back_reference(resultobj, swig_obj[0]);
+  result = (std::vector< types::RowCol< ssize_t > >::value_type *) &((std::vector< types::RowCol< sys::SSize_T > > const *)arg1)->back();
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_types__RowColT_ssize_t_t, 0 |  0 );
+  (void)swig::container_owner<swig::traits<std::vector< types::RowCol< ssize_t > >::value_type>::category>::back_reference(resultobj, swig_obj[0]);
   return resultobj;
 fail:
   return NULL;
@@ -10029,8 +9969,8 @@ fail:
 SWIGINTERN PyObject *_wrap_VectorRowColInt_assign(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   std::vector< types::RowCol< sys::SSize_T > > *arg1 = (std::vector< types::RowCol< sys::SSize_T > > *) 0 ;
-  std::vector< types::RowCol< int64_t > >::size_type arg2 ;
-  std::vector< types::RowCol< int64_t > >::value_type *arg3 = 0 ;
+  std::vector< types::RowCol< ssize_t > >::size_type arg2 ;
+  std::vector< types::RowCol< ssize_t > >::value_type *arg3 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   size_t val2 ;
@@ -10047,18 +9987,18 @@ SWIGINTERN PyObject *_wrap_VectorRowColInt_assign(PyObject *SWIGUNUSEDPARM(self)
   arg1 = reinterpret_cast< std::vector< types::RowCol< sys::SSize_T > > * >(argp1);
   ecode2 = SWIG_AsVal_size_t(swig_obj[1], &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorRowColInt_assign" "', argument " "2"" of type '" "std::vector< types::RowCol< int64_t > >::size_type""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorRowColInt_assign" "', argument " "2"" of type '" "std::vector< types::RowCol< ssize_t > >::size_type""'");
   } 
-  arg2 = static_cast< std::vector< types::RowCol< int64_t > >::size_type >(val2);
-  res3 = SWIG_ConvertPtr(swig_obj[2], &argp3, SWIGTYPE_p_types__RowColT_int64_t_t,  0  | 0);
+  arg2 = static_cast< std::vector< types::RowCol< ssize_t > >::size_type >(val2);
+  res3 = SWIG_ConvertPtr(swig_obj[2], &argp3, SWIGTYPE_p_types__RowColT_ssize_t_t,  0  | 0);
   if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "VectorRowColInt_assign" "', argument " "3"" of type '" "std::vector< types::RowCol< int64_t > >::value_type const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "VectorRowColInt_assign" "', argument " "3"" of type '" "std::vector< types::RowCol< ssize_t > >::value_type const &""'"); 
   }
   if (!argp3) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorRowColInt_assign" "', argument " "3"" of type '" "std::vector< types::RowCol< int64_t > >::value_type const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorRowColInt_assign" "', argument " "3"" of type '" "std::vector< types::RowCol< ssize_t > >::value_type const &""'"); 
   }
-  arg3 = reinterpret_cast< std::vector< types::RowCol< int64_t > >::value_type * >(argp3);
-  (arg1)->assign(arg2,(std::vector< types::RowCol< int64_t > >::value_type const &)*arg3);
+  arg3 = reinterpret_cast< std::vector< types::RowCol< ssize_t > >::value_type * >(argp3);
+  (arg1)->assign(arg2,(std::vector< types::RowCol< ssize_t > >::value_type const &)*arg3);
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -10069,8 +10009,8 @@ fail:
 SWIGINTERN PyObject *_wrap_VectorRowColInt_resize__SWIG_1(PyObject *SWIGUNUSEDPARM(self), Py_ssize_t nobjs, PyObject **swig_obj) {
   PyObject *resultobj = 0;
   std::vector< types::RowCol< sys::SSize_T > > *arg1 = (std::vector< types::RowCol< sys::SSize_T > > *) 0 ;
-  std::vector< types::RowCol< int64_t > >::size_type arg2 ;
-  std::vector< types::RowCol< int64_t > >::value_type *arg3 = 0 ;
+  std::vector< types::RowCol< ssize_t > >::size_type arg2 ;
+  std::vector< types::RowCol< ssize_t > >::value_type *arg3 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   size_t val2 ;
@@ -10086,18 +10026,18 @@ SWIGINTERN PyObject *_wrap_VectorRowColInt_resize__SWIG_1(PyObject *SWIGUNUSEDPA
   arg1 = reinterpret_cast< std::vector< types::RowCol< sys::SSize_T > > * >(argp1);
   ecode2 = SWIG_AsVal_size_t(swig_obj[1], &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorRowColInt_resize" "', argument " "2"" of type '" "std::vector< types::RowCol< int64_t > >::size_type""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorRowColInt_resize" "', argument " "2"" of type '" "std::vector< types::RowCol< ssize_t > >::size_type""'");
   } 
-  arg2 = static_cast< std::vector< types::RowCol< int64_t > >::size_type >(val2);
-  res3 = SWIG_ConvertPtr(swig_obj[2], &argp3, SWIGTYPE_p_types__RowColT_int64_t_t,  0  | 0);
+  arg2 = static_cast< std::vector< types::RowCol< ssize_t > >::size_type >(val2);
+  res3 = SWIG_ConvertPtr(swig_obj[2], &argp3, SWIGTYPE_p_types__RowColT_ssize_t_t,  0  | 0);
   if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "VectorRowColInt_resize" "', argument " "3"" of type '" "std::vector< types::RowCol< int64_t > >::value_type const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "VectorRowColInt_resize" "', argument " "3"" of type '" "std::vector< types::RowCol< ssize_t > >::value_type const &""'"); 
   }
   if (!argp3) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorRowColInt_resize" "', argument " "3"" of type '" "std::vector< types::RowCol< int64_t > >::value_type const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorRowColInt_resize" "', argument " "3"" of type '" "std::vector< types::RowCol< ssize_t > >::value_type const &""'"); 
   }
-  arg3 = reinterpret_cast< std::vector< types::RowCol< int64_t > >::value_type * >(argp3);
-  (arg1)->resize(arg2,(std::vector< types::RowCol< int64_t > >::value_type const &)*arg3);
+  arg3 = reinterpret_cast< std::vector< types::RowCol< ssize_t > >::value_type * >(argp3);
+  (arg1)->resize(arg2,(std::vector< types::RowCol< ssize_t > >::value_type const &)*arg3);
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -10137,7 +10077,7 @@ SWIGINTERN PyObject *_wrap_VectorRowColInt_resize(PyObject *self, PyObject *args
         _v = SWIG_CheckState(res);
       }
       if (_v) {
-        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_types__RowColT_int64_t_t, SWIG_POINTER_NO_NULL | 0);
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_types__RowColT_ssize_t_t, SWIG_POINTER_NO_NULL | 0);
         _v = SWIG_CheckState(res);
         if (_v) {
           return _wrap_VectorRowColInt_resize__SWIG_1(self, argc, argv);
@@ -10149,8 +10089,8 @@ SWIGINTERN PyObject *_wrap_VectorRowColInt_resize(PyObject *self, PyObject *args
 fail:
   SWIG_Python_RaiseOrModifyTypeError("Wrong number or type of arguments for overloaded function 'VectorRowColInt_resize'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    std::vector< types::RowCol< sys::SSize_T > >::resize(std::vector< types::RowCol< int64_t > >::size_type)\n"
-    "    std::vector< types::RowCol< sys::SSize_T > >::resize(std::vector< types::RowCol< int64_t > >::size_type,std::vector< types::RowCol< int64_t > >::value_type const &)\n");
+    "    std::vector< types::RowCol< sys::SSize_T > >::resize(std::vector< types::RowCol< ssize_t > >::size_type)\n"
+    "    std::vector< types::RowCol< sys::SSize_T > >::resize(std::vector< types::RowCol< ssize_t > >::size_type,std::vector< types::RowCol< ssize_t > >::value_type const &)\n");
   return 0;
 }
 
@@ -10158,15 +10098,15 @@ fail:
 SWIGINTERN PyObject *_wrap_VectorRowColInt_insert__SWIG_0(PyObject *SWIGUNUSEDPARM(self), Py_ssize_t nobjs, PyObject **swig_obj) {
   PyObject *resultobj = 0;
   std::vector< types::RowCol< sys::SSize_T > > *arg1 = (std::vector< types::RowCol< sys::SSize_T > > *) 0 ;
-  SwigValueWrapper< std::vector< types::RowCol< int64_t > >::iterator > arg2 ;
-  std::vector< types::RowCol< int64_t > >::value_type *arg3 = 0 ;
+  SwigValueWrapper< std::vector< types::RowCol< ssize_t > >::iterator > arg2 ;
+  std::vector< types::RowCol< ssize_t > >::value_type *arg3 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   swig::SwigPyIterator *iter2 = 0 ;
   int res2 ;
   void *argp3 = 0 ;
   int res3 = 0 ;
-  SwigValueWrapper< std::vector< types::RowCol< int64_t > >::iterator > result;
+  SwigValueWrapper< std::vector< types::RowCol< ssize_t > >::iterator > result;
   
   if ((nobjs < 3) || (nobjs > 3)) SWIG_fail;
   res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_std__vectorT_types__RowColT_sys__SSize_T_t_std__allocatorT_types__RowColT_sys__SSize_T_t_t_t, 0 |  0 );
@@ -10176,25 +10116,25 @@ SWIGINTERN PyObject *_wrap_VectorRowColInt_insert__SWIG_0(PyObject *SWIGUNUSEDPA
   arg1 = reinterpret_cast< std::vector< types::RowCol< sys::SSize_T > > * >(argp1);
   res2 = SWIG_ConvertPtr(swig_obj[1], SWIG_as_voidptrptr(&iter2), swig::SwigPyIterator::descriptor(), 0);
   if (!SWIG_IsOK(res2) || !iter2) {
-    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorRowColInt_insert" "', argument " "2"" of type '" "std::vector< types::RowCol< int64_t > >::iterator""'");
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorRowColInt_insert" "', argument " "2"" of type '" "std::vector< types::RowCol< ssize_t > >::iterator""'");
   } else {
-    swig::SwigPyIterator_T<std::vector< types::RowCol< int64_t > >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< types::RowCol< int64_t > >::iterator > *>(iter2);
+    swig::SwigPyIterator_T<std::vector< types::RowCol< ssize_t > >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< types::RowCol< ssize_t > >::iterator > *>(iter2);
     if (iter_t) {
       arg2 = iter_t->get_current();
     } else {
-      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorRowColInt_insert" "', argument " "2"" of type '" "std::vector< types::RowCol< int64_t > >::iterator""'");
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorRowColInt_insert" "', argument " "2"" of type '" "std::vector< types::RowCol< ssize_t > >::iterator""'");
     }
   }
-  res3 = SWIG_ConvertPtr(swig_obj[2], &argp3, SWIGTYPE_p_types__RowColT_int64_t_t,  0  | 0);
+  res3 = SWIG_ConvertPtr(swig_obj[2], &argp3, SWIGTYPE_p_types__RowColT_ssize_t_t,  0  | 0);
   if (!SWIG_IsOK(res3)) {
-    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "VectorRowColInt_insert" "', argument " "3"" of type '" "std::vector< types::RowCol< int64_t > >::value_type const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "VectorRowColInt_insert" "', argument " "3"" of type '" "std::vector< types::RowCol< ssize_t > >::value_type const &""'"); 
   }
   if (!argp3) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorRowColInt_insert" "', argument " "3"" of type '" "std::vector< types::RowCol< int64_t > >::value_type const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorRowColInt_insert" "', argument " "3"" of type '" "std::vector< types::RowCol< ssize_t > >::value_type const &""'"); 
   }
-  arg3 = reinterpret_cast< std::vector< types::RowCol< int64_t > >::value_type * >(argp3);
-  result = std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg__insert__SWIG_0(arg1,arg2,(types::RowCol< int64_t > const &)*arg3);
-  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< types::RowCol< int64_t > >::iterator & >(result)),
+  arg3 = reinterpret_cast< std::vector< types::RowCol< ssize_t > >::value_type * >(argp3);
+  result = std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg__insert__SWIG_0(arg1,arg2,(types::RowCol< ssize_t > const &)*arg3);
+  resultobj = SWIG_NewPointerObj(swig::make_output_iterator(static_cast< const std::vector< types::RowCol< ssize_t > >::iterator & >(result)),
     swig::SwigPyIterator::descriptor(),SWIG_POINTER_OWN);
   return resultobj;
 fail:
@@ -10205,9 +10145,9 @@ fail:
 SWIGINTERN PyObject *_wrap_VectorRowColInt_insert__SWIG_1(PyObject *SWIGUNUSEDPARM(self), Py_ssize_t nobjs, PyObject **swig_obj) {
   PyObject *resultobj = 0;
   std::vector< types::RowCol< sys::SSize_T > > *arg1 = (std::vector< types::RowCol< sys::SSize_T > > *) 0 ;
-  SwigValueWrapper< std::vector< types::RowCol< int64_t > >::iterator > arg2 ;
-  std::vector< types::RowCol< int64_t > >::size_type arg3 ;
-  std::vector< types::RowCol< int64_t > >::value_type *arg4 = 0 ;
+  SwigValueWrapper< std::vector< types::RowCol< ssize_t > >::iterator > arg2 ;
+  std::vector< types::RowCol< ssize_t > >::size_type arg3 ;
+  std::vector< types::RowCol< ssize_t > >::value_type *arg4 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   swig::SwigPyIterator *iter2 = 0 ;
@@ -10225,29 +10165,29 @@ SWIGINTERN PyObject *_wrap_VectorRowColInt_insert__SWIG_1(PyObject *SWIGUNUSEDPA
   arg1 = reinterpret_cast< std::vector< types::RowCol< sys::SSize_T > > * >(argp1);
   res2 = SWIG_ConvertPtr(swig_obj[1], SWIG_as_voidptrptr(&iter2), swig::SwigPyIterator::descriptor(), 0);
   if (!SWIG_IsOK(res2) || !iter2) {
-    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorRowColInt_insert" "', argument " "2"" of type '" "std::vector< types::RowCol< int64_t > >::iterator""'");
+    SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorRowColInt_insert" "', argument " "2"" of type '" "std::vector< types::RowCol< ssize_t > >::iterator""'");
   } else {
-    swig::SwigPyIterator_T<std::vector< types::RowCol< int64_t > >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< types::RowCol< int64_t > >::iterator > *>(iter2);
+    swig::SwigPyIterator_T<std::vector< types::RowCol< ssize_t > >::iterator > *iter_t = dynamic_cast<swig::SwigPyIterator_T<std::vector< types::RowCol< ssize_t > >::iterator > *>(iter2);
     if (iter_t) {
       arg2 = iter_t->get_current();
     } else {
-      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorRowColInt_insert" "', argument " "2"" of type '" "std::vector< types::RowCol< int64_t > >::iterator""'");
+      SWIG_exception_fail(SWIG_ArgError(SWIG_TypeError), "in method '" "VectorRowColInt_insert" "', argument " "2"" of type '" "std::vector< types::RowCol< ssize_t > >::iterator""'");
     }
   }
   ecode3 = SWIG_AsVal_size_t(swig_obj[2], &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "VectorRowColInt_insert" "', argument " "3"" of type '" "std::vector< types::RowCol< int64_t > >::size_type""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "VectorRowColInt_insert" "', argument " "3"" of type '" "std::vector< types::RowCol< ssize_t > >::size_type""'");
   } 
-  arg3 = static_cast< std::vector< types::RowCol< int64_t > >::size_type >(val3);
-  res4 = SWIG_ConvertPtr(swig_obj[3], &argp4, SWIGTYPE_p_types__RowColT_int64_t_t,  0  | 0);
+  arg3 = static_cast< std::vector< types::RowCol< ssize_t > >::size_type >(val3);
+  res4 = SWIG_ConvertPtr(swig_obj[3], &argp4, SWIGTYPE_p_types__RowColT_ssize_t_t,  0  | 0);
   if (!SWIG_IsOK(res4)) {
-    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "VectorRowColInt_insert" "', argument " "4"" of type '" "std::vector< types::RowCol< int64_t > >::value_type const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "VectorRowColInt_insert" "', argument " "4"" of type '" "std::vector< types::RowCol< ssize_t > >::value_type const &""'"); 
   }
   if (!argp4) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorRowColInt_insert" "', argument " "4"" of type '" "std::vector< types::RowCol< int64_t > >::value_type const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VectorRowColInt_insert" "', argument " "4"" of type '" "std::vector< types::RowCol< ssize_t > >::value_type const &""'"); 
   }
-  arg4 = reinterpret_cast< std::vector< types::RowCol< int64_t > >::value_type * >(argp4);
-  std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg__insert__SWIG_1(arg1,arg2,arg3,(types::RowCol< int64_t > const &)*arg4);
+  arg4 = reinterpret_cast< std::vector< types::RowCol< ssize_t > >::value_type * >(argp4);
+  std_vector_Sl_types_RowCol_Sl_sys_SSize_T_Sg__Sg__insert__SWIG_1(arg1,arg2,arg3,(types::RowCol< ssize_t > const &)*arg4);
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
@@ -10270,9 +10210,9 @@ SWIGINTERN PyObject *_wrap_VectorRowColInt_insert(PyObject *self, PyObject *args
     if (_v) {
       swig::SwigPyIterator *iter = 0;
       int res = SWIG_ConvertPtr(argv[1], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
-      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< types::RowCol< int64_t > >::iterator > *>(iter) != 0));
+      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< types::RowCol< ssize_t > >::iterator > *>(iter) != 0));
       if (_v) {
-        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_types__RowColT_int64_t_t, SWIG_POINTER_NO_NULL | 0);
+        int res = SWIG_ConvertPtr(argv[2], 0, SWIGTYPE_p_types__RowColT_ssize_t_t, SWIG_POINTER_NO_NULL | 0);
         _v = SWIG_CheckState(res);
         if (_v) {
           return _wrap_VectorRowColInt_insert__SWIG_0(self, argc, argv);
@@ -10287,14 +10227,14 @@ SWIGINTERN PyObject *_wrap_VectorRowColInt_insert(PyObject *self, PyObject *args
     if (_v) {
       swig::SwigPyIterator *iter = 0;
       int res = SWIG_ConvertPtr(argv[1], SWIG_as_voidptrptr(&iter), swig::SwigPyIterator::descriptor(), 0);
-      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< types::RowCol< int64_t > >::iterator > *>(iter) != 0));
+      _v = (SWIG_IsOK(res) && iter && (dynamic_cast<swig::SwigPyIterator_T<std::vector< types::RowCol< ssize_t > >::iterator > *>(iter) != 0));
       if (_v) {
         {
           int res = SWIG_AsVal_size_t(argv[2], NULL);
           _v = SWIG_CheckState(res);
         }
         if (_v) {
-          int res = SWIG_ConvertPtr(argv[3], 0, SWIGTYPE_p_types__RowColT_int64_t_t, SWIG_POINTER_NO_NULL | 0);
+          int res = SWIG_ConvertPtr(argv[3], 0, SWIGTYPE_p_types__RowColT_ssize_t_t, SWIG_POINTER_NO_NULL | 0);
           _v = SWIG_CheckState(res);
           if (_v) {
             return _wrap_VectorRowColInt_insert__SWIG_1(self, argc, argv);
@@ -10307,8 +10247,8 @@ SWIGINTERN PyObject *_wrap_VectorRowColInt_insert(PyObject *self, PyObject *args
 fail:
   SWIG_Python_RaiseOrModifyTypeError("Wrong number or type of arguments for overloaded function 'VectorRowColInt_insert'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    std::vector< types::RowCol< sys::SSize_T > >::insert(std::vector< types::RowCol< int64_t > >::iterator,std::vector< types::RowCol< int64_t > >::value_type const &)\n"
-    "    std::vector< types::RowCol< sys::SSize_T > >::insert(std::vector< types::RowCol< int64_t > >::iterator,std::vector< types::RowCol< int64_t > >::size_type,std::vector< types::RowCol< int64_t > >::value_type const &)\n");
+    "    std::vector< types::RowCol< sys::SSize_T > >::insert(std::vector< types::RowCol< ssize_t > >::iterator,std::vector< types::RowCol< ssize_t > >::value_type const &)\n"
+    "    std::vector< types::RowCol< sys::SSize_T > >::insert(std::vector< types::RowCol< ssize_t > >::iterator,std::vector< types::RowCol< ssize_t > >::size_type,std::vector< types::RowCol< ssize_t > >::value_type const &)\n");
   return 0;
 }
 
@@ -10316,7 +10256,7 @@ fail:
 SWIGINTERN PyObject *_wrap_VectorRowColInt_reserve(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   std::vector< types::RowCol< sys::SSize_T > > *arg1 = (std::vector< types::RowCol< sys::SSize_T > > *) 0 ;
-  std::vector< types::RowCol< int64_t > >::size_type arg2 ;
+  std::vector< types::RowCol< ssize_t > >::size_type arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   size_t val2 ;
@@ -10331,9 +10271,9 @@ SWIGINTERN PyObject *_wrap_VectorRowColInt_reserve(PyObject *SWIGUNUSEDPARM(self
   arg1 = reinterpret_cast< std::vector< types::RowCol< sys::SSize_T > > * >(argp1);
   ecode2 = SWIG_AsVal_size_t(swig_obj[1], &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorRowColInt_reserve" "', argument " "2"" of type '" "std::vector< types::RowCol< int64_t > >::size_type""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VectorRowColInt_reserve" "', argument " "2"" of type '" "std::vector< types::RowCol< ssize_t > >::size_type""'");
   } 
-  arg2 = static_cast< std::vector< types::RowCol< int64_t > >::size_type >(val2);
+  arg2 = static_cast< std::vector< types::RowCol< ssize_t > >::size_type >(val2);
   (arg1)->reserve(arg2);
   resultobj = SWIG_Py_Void();
   return resultobj;
@@ -10348,7 +10288,7 @@ SWIGINTERN PyObject *_wrap_VectorRowColInt_capacity(PyObject *SWIGUNUSEDPARM(sel
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject *swig_obj[1] ;
-  std::vector< types::RowCol< int64_t > >::size_type result;
+  std::vector< types::RowCol< ssize_t > >::size_type result;
   
   if (!args) SWIG_fail;
   swig_obj[0] = args;
@@ -15945,27 +15885,27 @@ static PyMethodDef SwigMethods[] = {
 	 { "delete_RowColDouble", _wrap_delete_RowColDouble, METH_O, "delete_RowColDouble(RowColDouble self)"},
 	 { "RowColDouble_swigregister", RowColDouble_swigregister, METH_O, NULL},
 	 { "RowColDouble_swiginit", RowColDouble_swiginit, METH_VARARGS, NULL},
-	 { "RowColInt_row_set", _wrap_RowColInt_row_set, METH_VARARGS, "RowColInt_row_set(RowColInt self, int64_t row)"},
-	 { "RowColInt_row_get", _wrap_RowColInt_row_get, METH_O, "RowColInt_row_get(RowColInt self) -> int64_t"},
-	 { "RowColInt_col_set", _wrap_RowColInt_col_set, METH_VARARGS, "RowColInt_col_set(RowColInt self, int64_t col)"},
-	 { "RowColInt_col_get", _wrap_RowColInt_col_get, METH_O, "RowColInt_col_get(RowColInt self) -> int64_t"},
+	 { "RowColInt_row_set", _wrap_RowColInt_row_set, METH_VARARGS, "RowColInt_row_set(RowColInt self, ssize_t row)"},
+	 { "RowColInt_row_get", _wrap_RowColInt_row_get, METH_O, "RowColInt_row_get(RowColInt self) -> ssize_t"},
+	 { "RowColInt_col_set", _wrap_RowColInt_col_set, METH_VARARGS, "RowColInt_col_set(RowColInt self, ssize_t col)"},
+	 { "RowColInt_col_get", _wrap_RowColInt_col_get, METH_O, "RowColInt_col_get(RowColInt self) -> ssize_t"},
 	 { "new_RowColInt", _wrap_new_RowColInt, METH_VARARGS, "\n"
 		"RowColInt()\n"
-		"RowColInt(int64_t r, int64_t c)\n"
-		"new_RowColInt(std::pair< int64_t,int64_t > const & p) -> RowColInt\n"
+		"RowColInt(ssize_t r, ssize_t c)\n"
+		"new_RowColInt(std::pair< ssize_t,ssize_t > const & p) -> RowColInt\n"
 		""},
-	 { "RowColInt___iadd__", _wrap_RowColInt___iadd__, METH_VARARGS, "RowColInt___iadd__(RowColInt self, int64_t scalar) -> RowColInt"},
-	 { "RowColInt___add__", _wrap_RowColInt___add__, METH_VARARGS, "RowColInt___add__(RowColInt self, int64_t scalar) -> RowColInt"},
-	 { "RowColInt___isub__", _wrap_RowColInt___isub__, METH_VARARGS, "RowColInt___isub__(RowColInt self, int64_t scalar) -> RowColInt"},
-	 { "RowColInt___sub__", _wrap_RowColInt___sub__, METH_VARARGS, "RowColInt___sub__(RowColInt self, int64_t scalar) -> RowColInt"},
-	 { "RowColInt___imul__", _wrap_RowColInt___imul__, METH_VARARGS, "RowColInt___imul__(RowColInt self, int64_t scalar) -> RowColInt"},
-	 { "RowColInt___mul__", _wrap_RowColInt___mul__, METH_VARARGS, "RowColInt___mul__(RowColInt self, int64_t scalar) -> RowColInt"},
-	 { "RowColInt___itruediv__", _wrap_RowColInt___itruediv__, METH_VARARGS, "RowColInt___itruediv__(RowColInt self, int64_t scalar) -> RowColInt"},
-	 { "RowColInt___truediv__", _wrap_RowColInt___truediv__, METH_VARARGS, "RowColInt___truediv__(RowColInt self, int64_t scalar) -> RowColInt"},
+	 { "RowColInt___iadd__", _wrap_RowColInt___iadd__, METH_VARARGS, "RowColInt___iadd__(RowColInt self, ssize_t scalar) -> RowColInt"},
+	 { "RowColInt___add__", _wrap_RowColInt___add__, METH_VARARGS, "RowColInt___add__(RowColInt self, ssize_t scalar) -> RowColInt"},
+	 { "RowColInt___isub__", _wrap_RowColInt___isub__, METH_VARARGS, "RowColInt___isub__(RowColInt self, ssize_t scalar) -> RowColInt"},
+	 { "RowColInt___sub__", _wrap_RowColInt___sub__, METH_VARARGS, "RowColInt___sub__(RowColInt self, ssize_t scalar) -> RowColInt"},
+	 { "RowColInt___imul__", _wrap_RowColInt___imul__, METH_VARARGS, "RowColInt___imul__(RowColInt self, ssize_t scalar) -> RowColInt"},
+	 { "RowColInt___mul__", _wrap_RowColInt___mul__, METH_VARARGS, "RowColInt___mul__(RowColInt self, ssize_t scalar) -> RowColInt"},
+	 { "RowColInt___itruediv__", _wrap_RowColInt___itruediv__, METH_VARARGS, "RowColInt___itruediv__(RowColInt self, ssize_t scalar) -> RowColInt"},
+	 { "RowColInt___truediv__", _wrap_RowColInt___truediv__, METH_VARARGS, "RowColInt___truediv__(RowColInt self, ssize_t scalar) -> RowColInt"},
 	 { "RowColInt___eq__", _wrap_RowColInt___eq__, METH_VARARGS, "RowColInt___eq__(RowColInt self, RowColInt p) -> bool"},
 	 { "RowColInt___ne__", _wrap_RowColInt___ne__, METH_VARARGS, "RowColInt___ne__(RowColInt self, RowColInt p) -> bool"},
-	 { "RowColInt_area", _wrap_RowColInt_area, METH_O, "RowColInt_area(RowColInt self) -> int64_t"},
-	 { "RowColInt_normL2", _wrap_RowColInt_normL2, METH_O, "RowColInt_normL2(RowColInt self) -> int64_t"},
+	 { "RowColInt_area", _wrap_RowColInt_area, METH_O, "RowColInt_area(RowColInt self) -> ssize_t"},
+	 { "RowColInt_normL2", _wrap_RowColInt_normL2, METH_O, "RowColInt_normL2(RowColInt self) -> ssize_t"},
 	 { "delete_RowColInt", _wrap_delete_RowColInt, METH_O, "delete_RowColInt(RowColInt self)"},
 	 { "RowColInt_swigregister", RowColInt_swigregister, METH_O, NULL},
 	 { "RowColInt_swiginit", RowColInt_swiginit, METH_VARARGS, NULL},
@@ -16018,62 +15958,62 @@ static PyMethodDef SwigMethods[] = {
 	 { "VectorRowColInt_iterator", _wrap_VectorRowColInt_iterator, METH_O, "VectorRowColInt_iterator(VectorRowColInt self) -> SwigPyIterator"},
 	 { "VectorRowColInt___nonzero__", _wrap_VectorRowColInt___nonzero__, METH_O, "VectorRowColInt___nonzero__(VectorRowColInt self) -> bool"},
 	 { "VectorRowColInt___bool__", _wrap_VectorRowColInt___bool__, METH_O, "VectorRowColInt___bool__(VectorRowColInt self) -> bool"},
-	 { "VectorRowColInt___len__", _wrap_VectorRowColInt___len__, METH_O, "VectorRowColInt___len__(VectorRowColInt self) -> std::vector< types::RowCol< int64_t > >::size_type"},
-	 { "VectorRowColInt___getslice__", _wrap_VectorRowColInt___getslice__, METH_VARARGS, "VectorRowColInt___getslice__(VectorRowColInt self, std::vector< types::RowCol< int64_t > >::difference_type i, std::vector< types::RowCol< int64_t > >::difference_type j) -> VectorRowColInt"},
+	 { "VectorRowColInt___len__", _wrap_VectorRowColInt___len__, METH_O, "VectorRowColInt___len__(VectorRowColInt self) -> std::vector< types::RowCol< ssize_t > >::size_type"},
+	 { "VectorRowColInt___getslice__", _wrap_VectorRowColInt___getslice__, METH_VARARGS, "VectorRowColInt___getslice__(VectorRowColInt self, std::vector< types::RowCol< ssize_t > >::difference_type i, std::vector< types::RowCol< ssize_t > >::difference_type j) -> VectorRowColInt"},
 	 { "VectorRowColInt___setslice__", _wrap_VectorRowColInt___setslice__, METH_VARARGS, "\n"
-		"VectorRowColInt___setslice__(VectorRowColInt self, std::vector< types::RowCol< int64_t > >::difference_type i, std::vector< types::RowCol< int64_t > >::difference_type j)\n"
-		"VectorRowColInt___setslice__(VectorRowColInt self, std::vector< types::RowCol< int64_t > >::difference_type i, std::vector< types::RowCol< int64_t > >::difference_type j, VectorRowColInt v)\n"
+		"VectorRowColInt___setslice__(VectorRowColInt self, std::vector< types::RowCol< ssize_t > >::difference_type i, std::vector< types::RowCol< ssize_t > >::difference_type j)\n"
+		"VectorRowColInt___setslice__(VectorRowColInt self, std::vector< types::RowCol< ssize_t > >::difference_type i, std::vector< types::RowCol< ssize_t > >::difference_type j, VectorRowColInt v)\n"
 		""},
-	 { "VectorRowColInt___delslice__", _wrap_VectorRowColInt___delslice__, METH_VARARGS, "VectorRowColInt___delslice__(VectorRowColInt self, std::vector< types::RowCol< int64_t > >::difference_type i, std::vector< types::RowCol< int64_t > >::difference_type j)"},
+	 { "VectorRowColInt___delslice__", _wrap_VectorRowColInt___delslice__, METH_VARARGS, "VectorRowColInt___delslice__(VectorRowColInt self, std::vector< types::RowCol< ssize_t > >::difference_type i, std::vector< types::RowCol< ssize_t > >::difference_type j)"},
 	 { "VectorRowColInt___delitem__", _wrap_VectorRowColInt___delitem__, METH_VARARGS, "\n"
-		"VectorRowColInt___delitem__(VectorRowColInt self, std::vector< types::RowCol< int64_t > >::difference_type i)\n"
+		"VectorRowColInt___delitem__(VectorRowColInt self, std::vector< types::RowCol< ssize_t > >::difference_type i)\n"
 		"VectorRowColInt___delitem__(VectorRowColInt self, PySliceObject * slice)\n"
 		""},
 	 { "VectorRowColInt___getitem__", _wrap_VectorRowColInt___getitem__, METH_VARARGS, "\n"
 		"VectorRowColInt___getitem__(VectorRowColInt self, PySliceObject * slice) -> VectorRowColInt\n"
-		"VectorRowColInt___getitem__(VectorRowColInt self, std::vector< types::RowCol< int64_t > >::difference_type i) -> RowColInt\n"
+		"VectorRowColInt___getitem__(VectorRowColInt self, std::vector< types::RowCol< ssize_t > >::difference_type i) -> RowColInt\n"
 		""},
 	 { "VectorRowColInt___setitem__", _wrap_VectorRowColInt___setitem__, METH_VARARGS, "\n"
 		"VectorRowColInt___setitem__(VectorRowColInt self, PySliceObject * slice, VectorRowColInt v)\n"
 		"VectorRowColInt___setitem__(VectorRowColInt self, PySliceObject * slice)\n"
-		"VectorRowColInt___setitem__(VectorRowColInt self, std::vector< types::RowCol< int64_t > >::difference_type i, RowColInt x)\n"
+		"VectorRowColInt___setitem__(VectorRowColInt self, std::vector< types::RowCol< ssize_t > >::difference_type i, RowColInt x)\n"
 		""},
 	 { "VectorRowColInt_pop", _wrap_VectorRowColInt_pop, METH_O, "VectorRowColInt_pop(VectorRowColInt self) -> RowColInt"},
 	 { "VectorRowColInt_append", _wrap_VectorRowColInt_append, METH_VARARGS, "VectorRowColInt_append(VectorRowColInt self, RowColInt x)"},
 	 { "VectorRowColInt_empty", _wrap_VectorRowColInt_empty, METH_O, "VectorRowColInt_empty(VectorRowColInt self) -> bool"},
-	 { "VectorRowColInt_size", _wrap_VectorRowColInt_size, METH_O, "VectorRowColInt_size(VectorRowColInt self) -> std::vector< types::RowCol< int64_t > >::size_type"},
+	 { "VectorRowColInt_size", _wrap_VectorRowColInt_size, METH_O, "VectorRowColInt_size(VectorRowColInt self) -> std::vector< types::RowCol< ssize_t > >::size_type"},
 	 { "VectorRowColInt_swap", _wrap_VectorRowColInt_swap, METH_VARARGS, "VectorRowColInt_swap(VectorRowColInt self, VectorRowColInt v)"},
-	 { "VectorRowColInt_begin", _wrap_VectorRowColInt_begin, METH_O, "VectorRowColInt_begin(VectorRowColInt self) -> std::vector< types::RowCol< int64_t > >::iterator"},
-	 { "VectorRowColInt_end", _wrap_VectorRowColInt_end, METH_O, "VectorRowColInt_end(VectorRowColInt self) -> std::vector< types::RowCol< int64_t > >::iterator"},
-	 { "VectorRowColInt_rbegin", _wrap_VectorRowColInt_rbegin, METH_O, "VectorRowColInt_rbegin(VectorRowColInt self) -> std::vector< types::RowCol< int64_t > >::reverse_iterator"},
-	 { "VectorRowColInt_rend", _wrap_VectorRowColInt_rend, METH_O, "VectorRowColInt_rend(VectorRowColInt self) -> std::vector< types::RowCol< int64_t > >::reverse_iterator"},
+	 { "VectorRowColInt_begin", _wrap_VectorRowColInt_begin, METH_O, "VectorRowColInt_begin(VectorRowColInt self) -> std::vector< types::RowCol< ssize_t > >::iterator"},
+	 { "VectorRowColInt_end", _wrap_VectorRowColInt_end, METH_O, "VectorRowColInt_end(VectorRowColInt self) -> std::vector< types::RowCol< ssize_t > >::iterator"},
+	 { "VectorRowColInt_rbegin", _wrap_VectorRowColInt_rbegin, METH_O, "VectorRowColInt_rbegin(VectorRowColInt self) -> std::vector< types::RowCol< ssize_t > >::reverse_iterator"},
+	 { "VectorRowColInt_rend", _wrap_VectorRowColInt_rend, METH_O, "VectorRowColInt_rend(VectorRowColInt self) -> std::vector< types::RowCol< ssize_t > >::reverse_iterator"},
 	 { "VectorRowColInt_clear", _wrap_VectorRowColInt_clear, METH_O, "VectorRowColInt_clear(VectorRowColInt self)"},
-	 { "VectorRowColInt_get_allocator", _wrap_VectorRowColInt_get_allocator, METH_O, "VectorRowColInt_get_allocator(VectorRowColInt self) -> std::vector< types::RowCol< int64_t > >::allocator_type"},
+	 { "VectorRowColInt_get_allocator", _wrap_VectorRowColInt_get_allocator, METH_O, "VectorRowColInt_get_allocator(VectorRowColInt self) -> std::vector< types::RowCol< ssize_t > >::allocator_type"},
 	 { "VectorRowColInt_pop_back", _wrap_VectorRowColInt_pop_back, METH_O, "VectorRowColInt_pop_back(VectorRowColInt self)"},
 	 { "VectorRowColInt_erase", _wrap_VectorRowColInt_erase, METH_VARARGS, "\n"
-		"VectorRowColInt_erase(VectorRowColInt self, std::vector< types::RowCol< int64_t > >::iterator pos) -> std::vector< types::RowCol< int64_t > >::iterator\n"
-		"VectorRowColInt_erase(VectorRowColInt self, std::vector< types::RowCol< int64_t > >::iterator first, std::vector< types::RowCol< int64_t > >::iterator last) -> std::vector< types::RowCol< int64_t > >::iterator\n"
+		"VectorRowColInt_erase(VectorRowColInt self, std::vector< types::RowCol< ssize_t > >::iterator pos) -> std::vector< types::RowCol< ssize_t > >::iterator\n"
+		"VectorRowColInt_erase(VectorRowColInt self, std::vector< types::RowCol< ssize_t > >::iterator first, std::vector< types::RowCol< ssize_t > >::iterator last) -> std::vector< types::RowCol< ssize_t > >::iterator\n"
 		""},
 	 { "new_VectorRowColInt", _wrap_new_VectorRowColInt, METH_VARARGS, "\n"
 		"VectorRowColInt()\n"
 		"VectorRowColInt(VectorRowColInt other)\n"
-		"VectorRowColInt(std::vector< types::RowCol< int64_t > >::size_type size)\n"
-		"new_VectorRowColInt(std::vector< types::RowCol< int64_t > >::size_type size, RowColInt value) -> VectorRowColInt\n"
+		"VectorRowColInt(std::vector< types::RowCol< ssize_t > >::size_type size)\n"
+		"new_VectorRowColInt(std::vector< types::RowCol< ssize_t > >::size_type size, RowColInt value) -> VectorRowColInt\n"
 		""},
 	 { "VectorRowColInt_push_back", _wrap_VectorRowColInt_push_back, METH_VARARGS, "VectorRowColInt_push_back(VectorRowColInt self, RowColInt x)"},
 	 { "VectorRowColInt_front", _wrap_VectorRowColInt_front, METH_O, "VectorRowColInt_front(VectorRowColInt self) -> RowColInt"},
 	 { "VectorRowColInt_back", _wrap_VectorRowColInt_back, METH_O, "VectorRowColInt_back(VectorRowColInt self) -> RowColInt"},
-	 { "VectorRowColInt_assign", _wrap_VectorRowColInt_assign, METH_VARARGS, "VectorRowColInt_assign(VectorRowColInt self, std::vector< types::RowCol< int64_t > >::size_type n, RowColInt x)"},
+	 { "VectorRowColInt_assign", _wrap_VectorRowColInt_assign, METH_VARARGS, "VectorRowColInt_assign(VectorRowColInt self, std::vector< types::RowCol< ssize_t > >::size_type n, RowColInt x)"},
 	 { "VectorRowColInt_resize", _wrap_VectorRowColInt_resize, METH_VARARGS, "\n"
-		"VectorRowColInt_resize(VectorRowColInt self, std::vector< types::RowCol< int64_t > >::size_type new_size)\n"
-		"VectorRowColInt_resize(VectorRowColInt self, std::vector< types::RowCol< int64_t > >::size_type new_size, RowColInt x)\n"
+		"VectorRowColInt_resize(VectorRowColInt self, std::vector< types::RowCol< ssize_t > >::size_type new_size)\n"
+		"VectorRowColInt_resize(VectorRowColInt self, std::vector< types::RowCol< ssize_t > >::size_type new_size, RowColInt x)\n"
 		""},
 	 { "VectorRowColInt_insert", _wrap_VectorRowColInt_insert, METH_VARARGS, "\n"
-		"VectorRowColInt_insert(VectorRowColInt self, std::vector< types::RowCol< int64_t > >::iterator pos, RowColInt x) -> std::vector< types::RowCol< int64_t > >::iterator\n"
-		"VectorRowColInt_insert(VectorRowColInt self, std::vector< types::RowCol< int64_t > >::iterator pos, std::vector< types::RowCol< int64_t > >::size_type n, RowColInt x)\n"
+		"VectorRowColInt_insert(VectorRowColInt self, std::vector< types::RowCol< ssize_t > >::iterator pos, RowColInt x) -> std::vector< types::RowCol< ssize_t > >::iterator\n"
+		"VectorRowColInt_insert(VectorRowColInt self, std::vector< types::RowCol< ssize_t > >::iterator pos, std::vector< types::RowCol< ssize_t > >::size_type n, RowColInt x)\n"
 		""},
-	 { "VectorRowColInt_reserve", _wrap_VectorRowColInt_reserve, METH_VARARGS, "VectorRowColInt_reserve(VectorRowColInt self, std::vector< types::RowCol< int64_t > >::size_type n)"},
-	 { "VectorRowColInt_capacity", _wrap_VectorRowColInt_capacity, METH_O, "VectorRowColInt_capacity(VectorRowColInt self) -> std::vector< types::RowCol< int64_t > >::size_type"},
+	 { "VectorRowColInt_reserve", _wrap_VectorRowColInt_reserve, METH_VARARGS, "VectorRowColInt_reserve(VectorRowColInt self, std::vector< types::RowCol< ssize_t > >::size_type n)"},
+	 { "VectorRowColInt_capacity", _wrap_VectorRowColInt_capacity, METH_O, "VectorRowColInt_capacity(VectorRowColInt self) -> std::vector< types::RowCol< ssize_t > >::size_type"},
 	 { "delete_VectorRowColInt", _wrap_delete_VectorRowColInt, METH_O, "delete_VectorRowColInt(VectorRowColInt self)"},
 	 { "VectorRowColInt_swigregister", VectorRowColInt_swigregister, METH_O, NULL},
 	 { "VectorRowColInt_swiginit", VectorRowColInt_swiginit, METH_VARARGS, NULL},
@@ -16273,35 +16213,37 @@ static PyMethodDef SwigMethods_proxydocs[] = {
 
 /* -------- TYPE CONVERSION AND EQUIVALENCE RULES (BEGIN) -------- */
 
-static swig_type_info _swigt__p_DWORD = {"_p_DWORD", "DWORD *|sys::Pid_T *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_HANDLE = {"_p_HANDLE", "sys::Handle_T *|HANDLE *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_allocator_type = {"_p_allocator_type", "allocator_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_char = {"_p_char", "char *|sys::byte *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_difference_type = {"_p_difference_type", "difference_type *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_int = {"_p_int", "int *|sys::Handle_T *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_int16_t = {"_p_int16_t", "sys::Int16_T *|int16_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_int32_t = {"_p_int32_t", "sys::Int32_T *|int32_t *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_int64_t = {"_p_int64_t", "sys::Int64_T *|sys::SSize_T *|int64_t *|sys::Off_T *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_int64_t = {"_p_int64_t", "sys::Int64_T *|int64_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_int8_t = {"_p_int8_t", "sys::Int8_T *|int8_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_off_t = {"_p_off_t", "off_t *|sys::Off_T *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_p_PyObject = {"_p_p_PyObject", "PyObject **", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_pid_t = {"_p_pid_t", "sys::Pid_T *|pid_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_size_t = {"_p_size_t", "sys::Size_T *|size_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_size_type = {"_p_size_type", "size_type *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_ssize_t = {"_p_ssize_t", "sys::SSize_T *|ssize_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__allocatorT_size_t_t = {"_p_std__allocatorT_size_t_t", "std::vector< size_t >::allocator_type *|std::allocator< size_t > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__allocatorT_std__string_t = {"_p_std__allocatorT_std__string_t", "std::vector< std::string >::allocator_type *|std::allocator< std::string > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__allocatorT_types__RowColT_double_t_t = {"_p_std__allocatorT_types__RowColT_double_t_t", "std::allocator< types::RowCol< double > > *|std::vector< types::RowCol< double > >::allocator_type *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__allocatorT_types__RowColT_sys__SSize_T_t_t = {"_p_std__allocatorT_types__RowColT_sys__SSize_T_t_t", "std::allocator< types::RowCol< int64_t > > *|std::allocator< types::RowCol< sys::SSize_T > > *|std::vector< types::RowCol< int64_t > >::allocator_type *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__allocatorT_types__RowColT_sys__SSize_T_t_t = {"_p_std__allocatorT_types__RowColT_sys__SSize_T_t_t", "std::allocator< types::RowCol< ssize_t > > *|std::allocator< types::RowCol< sys::SSize_T > > *|std::vector< types::RowCol< ssize_t > >::allocator_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__invalid_argument = {"_p_std__invalid_argument", "std::invalid_argument *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__pairT_double_double_t = {"_p_std__pairT_double_double_t", "std::pair< double,double > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__pairT_int64_t_int64_t_t = {"_p_std__pairT_int64_t_int64_t_t", "std::pair< int64_t,int64_t > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__pairT_size_t_size_t_t = {"_p_std__pairT_size_t_size_t_t", "std::pair< size_t,size_t > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__pairT_ssize_t_ssize_t_t = {"_p_std__pairT_ssize_t_ssize_t_t", "std::pair< ssize_t,ssize_t > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_size_t_std__allocatorT_size_t_t_t = {"_p_std__vectorT_size_t_std__allocatorT_size_t_t_t", "std::vector< size_t,std::allocator< size_t > > *|std::vector< size_t > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_std__string_std__allocatorT_std__string_t_t = {"_p_std__vectorT_std__string_std__allocatorT_std__string_t_t", "std::vector< std::string,std::allocator< std::string > > *|std::vector< std::string > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t = {"_p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t", "std::vector< types::RowCol< double > > *|std::vector< types::RowCol< double >,std::allocator< types::RowCol< double > > > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_std__vectorT_types__RowColT_sys__SSize_T_t_std__allocatorT_types__RowColT_sys__SSize_T_t_t_t = {"_p_std__vectorT_types__RowColT_sys__SSize_T_t_std__allocatorT_types__RowColT_sys__SSize_T_t_t_t", "std::vector< types::RowCol< int64_t > > *|std::vector< types::RowCol< sys::SSize_T > > *|std::vector< types::RowCol< int64_t >,std::allocator< types::RowCol< int64_t > > > *|std::vector< types::RowCol< sys::SSize_T >,std::allocator< types::RowCol< sys::SSize_T > > > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_std__vectorT_types__RowColT_sys__SSize_T_t_std__allocatorT_types__RowColT_sys__SSize_T_t_t_t = {"_p_std__vectorT_types__RowColT_sys__SSize_T_t_std__allocatorT_types__RowColT_sys__SSize_T_t_t_t", "std::vector< types::RowCol< ssize_t > > *|std::vector< types::RowCol< sys::SSize_T > > *|std::vector< types::RowCol< ssize_t >,std::allocator< types::RowCol< ssize_t > > > *|std::vector< types::RowCol< sys::SSize_T >,std::allocator< types::RowCol< sys::SSize_T > > > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_swig__SwigPyIterator = {"_p_swig__SwigPyIterator", "swig::SwigPyIterator *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_types__RgAzT_double_t = {"_p_types__RgAzT_double_t", "types::RgAz< double > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_types__RowColT_double_t = {"_p_types__RowColT_double_t", "std::vector< types::RowCol< double > >::value_type *|types::RowCol< double > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_types__RowColT_int64_t_t = {"_p_types__RowColT_int64_t_t", "types::RowCol< sys::SSize_T > *|types::RowCol< int64_t > *|std::vector< types::RowCol< int64_t > >::value_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_types__RowColT_size_t_t = {"_p_types__RowColT_size_t_t", "types::RowCol< size_t > *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_types__RowColT_ssize_t_t = {"_p_types__RowColT_ssize_t_t", "types::RowCol< sys::SSize_T > *|types::RowCol< ssize_t > *|std::vector< types::RowCol< ssize_t > >::value_type *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_uint16_t = {"_p_uint16_t", "sys::Uint16_T *|uint16_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_uint32_t = {"_p_uint32_t", "sys::Uint32_T *|uint32_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_uint64_t = {"_p_uint64_t", "sys::Uint64_T *|uint64_t *", 0, 0, (void*)0, 0};
@@ -16310,26 +16252,28 @@ static swig_type_info _swigt__p_unsigned_char = {"_p_unsigned_char", "unsigned c
 static swig_type_info _swigt__p_value_type = {"_p_value_type", "value_type *", 0, 0, (void*)0, 0};
 
 static swig_type_info *swig_type_initial[] = {
-  &_swigt__p_DWORD,
-  &_swigt__p_HANDLE,
   &_swigt__p_allocator_type,
   &_swigt__p_char,
   &_swigt__p_difference_type,
+  &_swigt__p_int,
   &_swigt__p_int16_t,
   &_swigt__p_int32_t,
   &_swigt__p_int64_t,
   &_swigt__p_int8_t,
+  &_swigt__p_off_t,
   &_swigt__p_p_PyObject,
+  &_swigt__p_pid_t,
   &_swigt__p_size_t,
   &_swigt__p_size_type,
+  &_swigt__p_ssize_t,
   &_swigt__p_std__allocatorT_size_t_t,
   &_swigt__p_std__allocatorT_std__string_t,
   &_swigt__p_std__allocatorT_types__RowColT_double_t_t,
   &_swigt__p_std__allocatorT_types__RowColT_sys__SSize_T_t_t,
   &_swigt__p_std__invalid_argument,
   &_swigt__p_std__pairT_double_double_t,
-  &_swigt__p_std__pairT_int64_t_int64_t_t,
   &_swigt__p_std__pairT_size_t_size_t_t,
+  &_swigt__p_std__pairT_ssize_t_ssize_t_t,
   &_swigt__p_std__vectorT_size_t_std__allocatorT_size_t_t_t,
   &_swigt__p_std__vectorT_std__string_std__allocatorT_std__string_t_t,
   &_swigt__p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t,
@@ -16337,8 +16281,8 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_swig__SwigPyIterator,
   &_swigt__p_types__RgAzT_double_t,
   &_swigt__p_types__RowColT_double_t,
-  &_swigt__p_types__RowColT_int64_t_t,
   &_swigt__p_types__RowColT_size_t_t,
+  &_swigt__p_types__RowColT_ssize_t_t,
   &_swigt__p_uint16_t,
   &_swigt__p_uint32_t,
   &_swigt__p_uint64_t,
@@ -16347,26 +16291,28 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_value_type,
 };
 
-static swig_cast_info _swigc__p_DWORD[] = {  {&_swigt__p_DWORD, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_HANDLE[] = {  {&_swigt__p_HANDLE, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_allocator_type[] = {  {&_swigt__p_allocator_type, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_difference_type[] = {  {&_swigt__p_difference_type, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_int[] = {  {&_swigt__p_int, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_int16_t[] = {  {&_swigt__p_int16_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_int32_t[] = {  {&_swigt__p_int32_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_int64_t[] = {  {&_swigt__p_int64_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_int8_t[] = {  {&_swigt__p_int8_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_off_t[] = {  {&_swigt__p_off_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_p_PyObject[] = {  {&_swigt__p_p_PyObject, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_pid_t[] = {  {&_swigt__p_pid_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_size_t[] = {  {&_swigt__p_size_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_size_type[] = {  {&_swigt__p_size_type, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_ssize_t[] = {  {&_swigt__p_ssize_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__allocatorT_size_t_t[] = {  {&_swigt__p_std__allocatorT_size_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__allocatorT_std__string_t[] = {  {&_swigt__p_std__allocatorT_std__string_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__allocatorT_types__RowColT_double_t_t[] = {  {&_swigt__p_std__allocatorT_types__RowColT_double_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__allocatorT_types__RowColT_sys__SSize_T_t_t[] = {  {&_swigt__p_std__allocatorT_types__RowColT_sys__SSize_T_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__invalid_argument[] = {  {&_swigt__p_std__invalid_argument, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__pairT_double_double_t[] = {  {&_swigt__p_std__pairT_double_double_t, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_std__pairT_int64_t_int64_t_t[] = {  {&_swigt__p_std__pairT_int64_t_int64_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__pairT_size_t_size_t_t[] = {  {&_swigt__p_std__pairT_size_t_size_t_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_std__pairT_ssize_t_ssize_t_t[] = {  {&_swigt__p_std__pairT_ssize_t_ssize_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_size_t_std__allocatorT_size_t_t_t[] = {  {&_swigt__p_std__vectorT_size_t_std__allocatorT_size_t_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_std__string_std__allocatorT_std__string_t_t[] = {  {&_swigt__p_std__vectorT_std__string_std__allocatorT_std__string_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t[] = {  {&_swigt__p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -16374,8 +16320,8 @@ static swig_cast_info _swigc__p_std__vectorT_types__RowColT_sys__SSize_T_t_std__
 static swig_cast_info _swigc__p_swig__SwigPyIterator[] = {  {&_swigt__p_swig__SwigPyIterator, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_types__RgAzT_double_t[] = {  {&_swigt__p_types__RgAzT_double_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_types__RowColT_double_t[] = {  {&_swigt__p_types__RowColT_double_t, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_types__RowColT_int64_t_t[] = {  {&_swigt__p_types__RowColT_int64_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_types__RowColT_size_t_t[] = {  {&_swigt__p_types__RowColT_size_t_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_types__RowColT_ssize_t_t[] = {  {&_swigt__p_types__RowColT_ssize_t_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_uint16_t[] = {  {&_swigt__p_uint16_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_uint32_t[] = {  {&_swigt__p_uint32_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_uint64_t[] = {  {&_swigt__p_uint64_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -16384,26 +16330,28 @@ static swig_cast_info _swigc__p_unsigned_char[] = {  {&_swigt__p_unsigned_char, 
 static swig_cast_info _swigc__p_value_type[] = {  {&_swigt__p_value_type, 0, 0, 0},{0, 0, 0, 0}};
 
 static swig_cast_info *swig_cast_initial[] = {
-  _swigc__p_DWORD,
-  _swigc__p_HANDLE,
   _swigc__p_allocator_type,
   _swigc__p_char,
   _swigc__p_difference_type,
+  _swigc__p_int,
   _swigc__p_int16_t,
   _swigc__p_int32_t,
   _swigc__p_int64_t,
   _swigc__p_int8_t,
+  _swigc__p_off_t,
   _swigc__p_p_PyObject,
+  _swigc__p_pid_t,
   _swigc__p_size_t,
   _swigc__p_size_type,
+  _swigc__p_ssize_t,
   _swigc__p_std__allocatorT_size_t_t,
   _swigc__p_std__allocatorT_std__string_t,
   _swigc__p_std__allocatorT_types__RowColT_double_t_t,
   _swigc__p_std__allocatorT_types__RowColT_sys__SSize_T_t_t,
   _swigc__p_std__invalid_argument,
   _swigc__p_std__pairT_double_double_t,
-  _swigc__p_std__pairT_int64_t_int64_t_t,
   _swigc__p_std__pairT_size_t_size_t_t,
+  _swigc__p_std__pairT_ssize_t_ssize_t_t,
   _swigc__p_std__vectorT_size_t_std__allocatorT_size_t_t_t,
   _swigc__p_std__vectorT_std__string_std__allocatorT_std__string_t_t,
   _swigc__p_std__vectorT_types__RowColT_double_t_std__allocatorT_types__RowColT_double_t_t_t,
@@ -16411,8 +16359,8 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_swig__SwigPyIterator,
   _swigc__p_types__RgAzT_double_t,
   _swigc__p_types__RowColT_double_t,
-  _swigc__p_types__RowColT_int64_t_t,
   _swigc__p_types__RowColT_size_t_t,
+  _swigc__p_types__RowColT_ssize_t_t,
   _swigc__p_uint16_t,
   _swigc__p_uint32_t,
   _swigc__p_uint64_t,

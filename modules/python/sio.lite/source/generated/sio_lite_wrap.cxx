@@ -2690,45 +2690,47 @@ SWIGINTERN PyObject *SWIG_PyStaticMethod_New(PyObject *SWIGUNUSEDPARM(self), PyO
 
 /* -------- TYPES TABLE (BEGIN) -------- */
 
-#define SWIGTYPE_p_DWORD swig_types[0]
-#define SWIGTYPE_p_HANDLE swig_types[1]
-#define SWIGTYPE_p_char swig_types[2]
-#define SWIGTYPE_p_except__NullPointerReferenceException swig_types[3]
-#define SWIGTYPE_p_int16_t swig_types[4]
-#define SWIGTYPE_p_int32_t swig_types[5]
-#define SWIGTYPE_p_int64_t swig_types[6]
-#define SWIGTYPE_p_int8_t swig_types[7]
-#define SWIGTYPE_p_io__BidirectionalStream swig_types[8]
-#define SWIGTYPE_p_io__FileInputStream swig_types[9]
-#define SWIGTYPE_p_io__FileInputStreamOS swig_types[10]
-#define SWIGTYPE_p_io__FileOutputStreamOS swig_types[11]
-#define SWIGTYPE_p_io__InputStream swig_types[12]
-#define SWIGTYPE_p_io__NullInputStream swig_types[13]
-#define SWIGTYPE_p_io__NullOutputStream swig_types[14]
-#define SWIGTYPE_p_io__OutputStream swig_types[15]
-#define SWIGTYPE_p_io__Seekable swig_types[16]
-#define SWIGTYPE_p_io__SeekableBidirectionalStream swig_types[17]
-#define SWIGTYPE_p_io__SeekableInputStream swig_types[18]
-#define SWIGTYPE_p_io__SeekableNullOutputStream swig_types[19]
-#define SWIGTYPE_p_io__SeekableOutputStream swig_types[20]
-#define SWIGTYPE_p_io__StringStream swig_types[21]
+#define SWIGTYPE_p_char swig_types[0]
+#define SWIGTYPE_p_except__NullPointerReferenceException swig_types[1]
+#define SWIGTYPE_p_int swig_types[2]
+#define SWIGTYPE_p_int16_t swig_types[3]
+#define SWIGTYPE_p_int32_t swig_types[4]
+#define SWIGTYPE_p_int64_t swig_types[5]
+#define SWIGTYPE_p_int8_t swig_types[6]
+#define SWIGTYPE_p_io__BidirectionalStream swig_types[7]
+#define SWIGTYPE_p_io__FileInputStream swig_types[8]
+#define SWIGTYPE_p_io__FileInputStreamOS swig_types[9]
+#define SWIGTYPE_p_io__FileOutputStreamOS swig_types[10]
+#define SWIGTYPE_p_io__InputStream swig_types[11]
+#define SWIGTYPE_p_io__NullInputStream swig_types[12]
+#define SWIGTYPE_p_io__NullOutputStream swig_types[13]
+#define SWIGTYPE_p_io__OutputStream swig_types[14]
+#define SWIGTYPE_p_io__Seekable swig_types[15]
+#define SWIGTYPE_p_io__SeekableBidirectionalStream swig_types[16]
+#define SWIGTYPE_p_io__SeekableInputStream swig_types[17]
+#define SWIGTYPE_p_io__SeekableNullOutputStream swig_types[18]
+#define SWIGTYPE_p_io__SeekableOutputStream swig_types[19]
+#define SWIGTYPE_p_io__StringStream swig_types[20]
+#define SWIGTYPE_p_off_t swig_types[21]
 #define SWIGTYPE_p_path swig_types[22]
-#define SWIGTYPE_p_sio__lite__FileHeader swig_types[23]
-#define SWIGTYPE_p_sio__lite__FileReader swig_types[24]
-#define SWIGTYPE_p_sio__lite__FileWriter swig_types[25]
-#define SWIGTYPE_p_sio__lite__StreamReader swig_types[26]
-#define SWIGTYPE_p_sio__lite__UserDataDictionary swig_types[27]
-#define SWIGTYPE_p_size_t swig_types[28]
-#define SWIGTYPE_p_std__vectorT_char_t swig_types[29]
-#define SWIGTYPE_p_std__vectorT_io__InputStream_p_t swig_types[30]
-#define SWIGTYPE_p_std__vectorT_std__string_t swig_types[31]
-#define SWIGTYPE_p_uint16_t swig_types[32]
-#define SWIGTYPE_p_uint32_t swig_types[33]
-#define SWIGTYPE_p_uint64_t swig_types[34]
-#define SWIGTYPE_p_uint8_t swig_types[35]
-#define SWIGTYPE_p_unsigned_char swig_types[36]
-static swig_type_info *swig_types[38];
-static swig_module_info swig_module = {swig_types, 37, 0, 0, 0, 0};
+#define SWIGTYPE_p_pid_t swig_types[23]
+#define SWIGTYPE_p_sio__lite__FileHeader swig_types[24]
+#define SWIGTYPE_p_sio__lite__FileReader swig_types[25]
+#define SWIGTYPE_p_sio__lite__FileWriter swig_types[26]
+#define SWIGTYPE_p_sio__lite__StreamReader swig_types[27]
+#define SWIGTYPE_p_sio__lite__UserDataDictionary swig_types[28]
+#define SWIGTYPE_p_size_t swig_types[29]
+#define SWIGTYPE_p_ssize_t swig_types[30]
+#define SWIGTYPE_p_std__vectorT_char_t swig_types[31]
+#define SWIGTYPE_p_std__vectorT_io__InputStream_p_t swig_types[32]
+#define SWIGTYPE_p_std__vectorT_std__string_t swig_types[33]
+#define SWIGTYPE_p_uint16_t swig_types[34]
+#define SWIGTYPE_p_uint32_t swig_types[35]
+#define SWIGTYPE_p_uint64_t swig_types[36]
+#define SWIGTYPE_p_uint8_t swig_types[37]
+#define SWIGTYPE_p_unsigned_char swig_types[38]
+static swig_type_info *swig_types[40];
+static swig_module_info swig_module = {swig_types, 39, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -8021,13 +8023,12 @@ static void *_p_io__SeekableBidirectionalStreamTo_p_io__Seekable(void *x, int *S
 static void *_p_io__SeekableNullOutputStreamTo_p_io__Seekable(void *x, int *SWIGUNUSEDPARM(newmemory)) {
     return (void *)((io::Seekable *) (io::SeekableOutputStream *) ((io::SeekableNullOutputStream *) x));
 }
-static swig_type_info _swigt__p_DWORD = {"_p_DWORD", "DWORD *|sys::Pid_T *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_HANDLE = {"_p_HANDLE", "sys::Handle_T *|HANDLE *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_char = {"_p_char", "char *|sys::byte *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_except__NullPointerReferenceException = {"_p_except__NullPointerReferenceException", "except::NullPointerReferenceException *|except::NullPointerReference *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_int = {"_p_int", "int *|sys::Handle_T *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_int16_t = {"_p_int16_t", "sys::Int16_T *|int16_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_int32_t = {"_p_int32_t", "sys::Int32_T *|int32_t *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_int64_t = {"_p_int64_t", "sys::Int64_T *|sys::SSize_T *|int64_t *|sys::Off_T *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_int64_t = {"_p_int64_t", "sys::Int64_T *|int64_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_int8_t = {"_p_int8_t", "sys::Int8_T *|int8_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_io__FileInputStream = {"_p_io__FileInputStream", "io::FileInputStream *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_io__InputStream = {"_p_io__InputStream", "io::InputStream *", 0, 0, (void*)0, 0};
@@ -8043,13 +8044,16 @@ static swig_type_info _swigt__p_io__SeekableOutputStream = {"_p_io__SeekableOutp
 static swig_type_info _swigt__p_io__NullOutputStream = {"_p_io__NullOutputStream", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_io__SeekableNullOutputStream = {"_p_io__SeekableNullOutputStream", 0, 0, 0, 0, 0};
 static swig_type_info _swigt__p_io__Seekable = {"_p_io__Seekable", "io::Seekable *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_off_t = {"_p_off_t", "off_t *|sys::Off_T *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_path = {"_p_path", "path *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_pid_t = {"_p_pid_t", "sys::Pid_T *|pid_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_sio__lite__FileHeader = {"_p_sio__lite__FileHeader", "sio::lite::FileHeader *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_sio__lite__FileReader = {"_p_sio__lite__FileReader", "sio::lite::FileReader *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_sio__lite__FileWriter = {"_p_sio__lite__FileWriter", "sio::lite::FileWriter *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_sio__lite__StreamReader = {"_p_sio__lite__StreamReader", "sio::lite::StreamReader *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_sio__lite__UserDataDictionary = {"_p_sio__lite__UserDataDictionary", "sio::lite::UserDataDictionary *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_size_t = {"_p_size_t", "sys::Size_T *|size_t *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_ssize_t = {"_p_ssize_t", "sys::SSize_T *|ssize_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_char_t = {"_p_std__vectorT_char_t", "std::vector< sys::byte > *|std::vector< char > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_io__InputStream_p_t = {"_p_std__vectorT_io__InputStream_p_t", "std::vector< io::InputStream * > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__vectorT_std__string_t = {"_p_std__vectorT_std__string_t", "std::vector< std::string > *", 0, 0, (void*)0, 0};
@@ -8060,10 +8064,9 @@ static swig_type_info _swigt__p_uint8_t = {"_p_uint8_t", "sys::Uint8_T *|uint8_t
 static swig_type_info _swigt__p_unsigned_char = {"_p_unsigned_char", "unsigned char *|sys::ubyte *", 0, 0, (void*)0, 0};
 
 static swig_type_info *swig_type_initial[] = {
-  &_swigt__p_DWORD,
-  &_swigt__p_HANDLE,
   &_swigt__p_char,
   &_swigt__p_except__NullPointerReferenceException,
+  &_swigt__p_int,
   &_swigt__p_int16_t,
   &_swigt__p_int32_t,
   &_swigt__p_int64_t,
@@ -8082,13 +8085,16 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_io__SeekableNullOutputStream,
   &_swigt__p_io__SeekableOutputStream,
   &_swigt__p_io__StringStream,
+  &_swigt__p_off_t,
   &_swigt__p_path,
+  &_swigt__p_pid_t,
   &_swigt__p_sio__lite__FileHeader,
   &_swigt__p_sio__lite__FileReader,
   &_swigt__p_sio__lite__FileWriter,
   &_swigt__p_sio__lite__StreamReader,
   &_swigt__p_sio__lite__UserDataDictionary,
   &_swigt__p_size_t,
+  &_swigt__p_ssize_t,
   &_swigt__p_std__vectorT_char_t,
   &_swigt__p_std__vectorT_io__InputStream_p_t,
   &_swigt__p_std__vectorT_std__string_t,
@@ -8099,10 +8105,9 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_unsigned_char,
 };
 
-static swig_cast_info _swigc__p_DWORD[] = {  {&_swigt__p_DWORD, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_HANDLE[] = {  {&_swigt__p_HANDLE, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_except__NullPointerReferenceException[] = {  {&_swigt__p_except__NullPointerReferenceException, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_int[] = {  {&_swigt__p_int, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_int16_t[] = {  {&_swigt__p_int16_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_int32_t[] = {  {&_swigt__p_int32_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_int64_t[] = {  {&_swigt__p_int64_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -8121,13 +8126,16 @@ static swig_cast_info _swigc__p_io__NullOutputStream[] = {{&_swigt__p_io__NullOu
 static swig_cast_info _swigc__p_io__SeekableNullOutputStream[] = {{&_swigt__p_io__SeekableNullOutputStream, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_io__OutputStream[] = {  {&_swigt__p_io__StringStream, _p_io__StringStreamTo_p_io__OutputStream, 0, 0},  {&_swigt__p_io__FileOutputStreamOS, _p_io__FileOutputStreamOSTo_p_io__OutputStream, 0, 0},  {&_swigt__p_io__OutputStream, 0, 0, 0},  {&_swigt__p_io__BidirectionalStream, _p_io__BidirectionalStreamTo_p_io__OutputStream, 0, 0},  {&_swigt__p_io__SeekableOutputStream, _p_io__SeekableOutputStreamTo_p_io__OutputStream, 0, 0},  {&_swigt__p_io__SeekableBidirectionalStream, _p_io__SeekableBidirectionalStreamTo_p_io__OutputStream, 0, 0},  {&_swigt__p_io__NullOutputStream, _p_io__NullOutputStreamTo_p_io__OutputStream, 0, 0},  {&_swigt__p_io__SeekableNullOutputStream, _p_io__SeekableNullOutputStreamTo_p_io__OutputStream, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_io__Seekable[] = {  {&_swigt__p_io__StringStream, _p_io__StringStreamTo_p_io__Seekable, 0, 0},  {&_swigt__p_io__FileInputStreamOS, _p_io__FileInputStreamOSTo_p_io__Seekable, 0, 0},  {&_swigt__p_io__FileOutputStreamOS, _p_io__FileOutputStreamOSTo_p_io__Seekable, 0, 0},  {&_swigt__p_sio__lite__FileReader, _p_sio__lite__FileReaderTo_p_io__Seekable, 0, 0},  {&_swigt__p_io__Seekable, 0, 0, 0},  {&_swigt__p_io__SeekableInputStream, _p_io__SeekableInputStreamTo_p_io__Seekable, 0, 0},  {&_swigt__p_io__SeekableOutputStream, _p_io__SeekableOutputStreamTo_p_io__Seekable, 0, 0},  {&_swigt__p_io__SeekableBidirectionalStream, _p_io__SeekableBidirectionalStreamTo_p_io__Seekable, 0, 0},  {&_swigt__p_io__SeekableNullOutputStream, _p_io__SeekableNullOutputStreamTo_p_io__Seekable, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_off_t[] = {  {&_swigt__p_off_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_path[] = {  {&_swigt__p_path, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_pid_t[] = {  {&_swigt__p_pid_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_sio__lite__FileHeader[] = {  {&_swigt__p_sio__lite__FileHeader, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_sio__lite__FileReader[] = {  {&_swigt__p_sio__lite__FileReader, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_sio__lite__FileWriter[] = {  {&_swigt__p_sio__lite__FileWriter, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_sio__lite__StreamReader[] = {  {&_swigt__p_sio__lite__StreamReader, 0, 0, 0},  {&_swigt__p_sio__lite__FileReader, _p_sio__lite__FileReaderTo_p_sio__lite__StreamReader, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_sio__lite__UserDataDictionary[] = {  {&_swigt__p_sio__lite__UserDataDictionary, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_size_t[] = {  {&_swigt__p_size_t, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_ssize_t[] = {  {&_swigt__p_ssize_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_char_t[] = {  {&_swigt__p_std__vectorT_char_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_io__InputStream_p_t[] = {  {&_swigt__p_std__vectorT_io__InputStream_p_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__vectorT_std__string_t[] = {  {&_swigt__p_std__vectorT_std__string_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -8138,10 +8146,9 @@ static swig_cast_info _swigc__p_uint8_t[] = {  {&_swigt__p_uint8_t, 0, 0, 0},{0,
 static swig_cast_info _swigc__p_unsigned_char[] = {  {&_swigt__p_unsigned_char, 0, 0, 0},{0, 0, 0, 0}};
 
 static swig_cast_info *swig_cast_initial[] = {
-  _swigc__p_DWORD,
-  _swigc__p_HANDLE,
   _swigc__p_char,
   _swigc__p_except__NullPointerReferenceException,
+  _swigc__p_int,
   _swigc__p_int16_t,
   _swigc__p_int32_t,
   _swigc__p_int64_t,
@@ -8160,13 +8167,16 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_io__SeekableNullOutputStream,
   _swigc__p_io__SeekableOutputStream,
   _swigc__p_io__StringStream,
+  _swigc__p_off_t,
   _swigc__p_path,
+  _swigc__p_pid_t,
   _swigc__p_sio__lite__FileHeader,
   _swigc__p_sio__lite__FileReader,
   _swigc__p_sio__lite__FileWriter,
   _swigc__p_sio__lite__StreamReader,
   _swigc__p_sio__lite__UserDataDictionary,
   _swigc__p_size_t,
+  _swigc__p_ssize_t,
   _swigc__p_std__vectorT_char_t,
   _swigc__p_std__vectorT_io__InputStream_p_t,
   _swigc__p_std__vectorT_std__string_t,

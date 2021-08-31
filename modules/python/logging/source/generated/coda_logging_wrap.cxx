@@ -2821,6 +2821,9 @@ namespace swig {
   using namespace logging;
 
 
+#include <string>
+
+
 SWIGINTERN swig_type_info*
 SWIG_pchar_descriptor(void)
 {
