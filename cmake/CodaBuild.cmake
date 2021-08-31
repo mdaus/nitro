@@ -570,6 +570,8 @@ function(coda_add_swig_python_module)
         if (CMAKE_GENERATOR_PLATFORM STREQUAL x64)
             list(APPEND swig_compile_defs _WIN64=1)
         endif()
+    elseif (UNIX)
+        set(swig_compile_defs _POSIX_C_SOURCE=200809L)
     endif()
 
     set_property(SOURCE ${ARG_INPUT}
