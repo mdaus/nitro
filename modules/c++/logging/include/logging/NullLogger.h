@@ -1,7 +1,7 @@
 /* =========================================================================
- * This file is part of logging-c++ 
+ * This file is part of logging-c++
  * =========================================================================
- * 
+ *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
  *
  * logging-c++ is free software; you can redistribute it and/or modify
@@ -14,8 +14,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public 
- * License along with this program; If not, 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not,
  * see <http://www.gnu.org/licenses/>.
  *
  */
@@ -49,7 +49,7 @@ struct NullHandler : public Handler
     NullHandler& operator=(const NullHandler&) = delete;
 
 protected:
-        
+
     void write(const std::string&) override
     {
         // does nothing...
@@ -64,7 +64,7 @@ protected:
  * A Logger that doesn't actually log anything. It can be used in cases where
  * a Logger is required but you don't want anything to log.
  */
-class NullLogger final : public Logger
+class NullLogger : public Logger
 {
     NullHandler mHandler;
 
