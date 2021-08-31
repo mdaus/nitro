@@ -27,6 +27,8 @@
 #include <string>
 #include <cstddef>
 #include <type_traits>
+#include <stdexcept>
+#include <utility>
 
 #include "nitf/Field.hpp"
 #include "nitf/Object.hpp"
@@ -287,6 +289,32 @@ public:
     // This is wrong when T is "const char*" and the field is NITF_BINARY; sizeof(T) won't make sense.
     // That's why there is a "const char*" overload above.
     private:
+        void setFieldValue_(const nitf_Field* pField, const std::string& tag, const void* data, size_t dataLength, bool forceUpdate)
+        {
+            const auto& field = pField != nullptr ? *pField : nitf_TRE_getField(tag);
+            if (field.type == NITF_BINARY)
+            {
+                setFieldValue(tag, data, dataLength, forceUpdate);
+            }
+            else
+            {
+                throw std::invalid_argument("Can't call setFieldValue() with non-NITF_BINARY field.");
+            }
+        }
+        template<typename TArray>
+        void setFieldArrayValue_(const std::string& tag, const TArray& array, bool forceUpdate)
+        {
+            using value_t = typename std::remove_reference<decltype(array[0])>::type;
+            static_assert(!std::is_same<value_t, char>::value, "const char[] shouldn't get up here!");
+
+            // In the C code, this is a call to memcpy(). be sure that is OK for T.
+            static_assert(can_call_setFieldValue<value_t>::value, "Can't call setFieldValue() with T.");
+
+            const void* const p = array;
+            constexpr size_t sz = std::extent<TArray>::value * sizeof(value_t);
+            setFieldValue_(nullptr /*pField*/, tag, p, sz, forceUpdate);
+        }
+
         template<typename T> struct can_call_setFieldValue : std::integral_constant<bool,
             std::is_trivially_copyable<T>::value &&
             !std::is_pointer<T>::value && !std::is_array<T>::value> {};
@@ -298,8 +326,8 @@ public:
             if (field.type == NITF_BINARY)
             {
                 // In the C code, this is a call to memcpy(). be sure that is OK for T.
-                static_assert(can_call_setFieldValue<T>::value, "Can't use memcpy() with T.");
-                setFieldValue(tag, &value, sizeof(value), forceUpdate);
+                static_assert(can_call_setFieldValue<T>::value, "Can't call setFieldValue() with T.");
+                setFieldValue_(&field, tag, &value, sizeof(value), forceUpdate);
             }
             else
             {
@@ -309,12 +337,20 @@ public:
     // TODO: add overloads for e.g., std::vector<T> ???
     //template <typename T>
     //void setFieldValue(const std::string& tag, const std::vector<T>& value, bool forceUpdate)
+        template <typename T, size_t N>
+        void setFieldValue(const std::string& tag, const T (&value)[N], bool forceUpdate)
+        {
+            using value_t = typename std::remove_reference<typename std::remove_cv<decltype(value)>::type>::type;
+            static_assert(std::is_array<value_t>::value, "Can't call setFieldValue() with T.");
+            setFieldArrayValue_(tag, value, forceUpdate);
+        }
 
     template <typename T>
-    void setField(const std::string& tag, const T& value, bool forceUpdate = false)
+    void setField(const std::string& tag, T&& value, bool forceUpdate = false)
     {
-        setFieldValue(tag, value, forceUpdate);
+        setFieldValue(tag, std::forward<T>(value), forceUpdate);
     }
+
     void setField(const std::string& tag, const void* data, size_t dataLength, bool forceUpdate = false)
     {
         setFieldValue(tag, data, dataLength, forceUpdate);
