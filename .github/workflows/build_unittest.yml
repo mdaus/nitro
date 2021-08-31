@@ -24,7 +24,7 @@ jobs:
         ls env:
         mkdir target-Release
         cd target-Release
-        cmake .. -DCMAKE_INSTALL_PREFIX=install${{ matrix.os }}CMake-Github -DPYTHON_VERSION=${{ matrix.python-version }}
+        cmake .. -DCMAKE_INSTALL_PREFIX=install${{ matrix.os }}CMake-Github -DPYTHON_VERSION=${{ matrix.python-version }} -DENABLE_SWIG=ON
         cd ..
         mkdir target-Debug
         cd target-Debug
@@ -73,7 +73,7 @@ jobs:
         which python
         mkdir target
         cd target
-        cmake .. -DCMAKE_INSTALL_PREFIX=install${{ matrix.os }}CMake-Github -DPYTHON_VERSION=${{ matrix.python-version }}
+        cmake .. -DCMAKE_INSTALL_PREFIX=install${{ matrix.os }}CMake-Github -DPYTHON_VERSION=${{ matrix.python-version }} -DENABLE_SWIG=ON
     - name: build
       run: |
         cd target
