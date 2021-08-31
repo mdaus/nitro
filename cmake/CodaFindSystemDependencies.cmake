@@ -107,7 +107,7 @@ macro(coda_find_system_dependencies)
             if (ENABLE_SWIG)
                 # if SWIG found, sets path to swig utilities in SWIG_USE_FILE
                 # see https://cmake.org/cmake/help/latest/module/UseSWIG.html
-                find_package(SWIG 3.0)
+                find_package(SWIG 4.0)
                 if (SWIG_FOUND)
                     cmake_policy(SET CMP0078 NEW) # UseSWIG generates standard target names
                     cmake_policy(SET CMP0086 NEW) # UseSWIG honors SWIG_MODULE_NAME via -module
