@@ -20,11 +20,13 @@
  *
  */
 
-#ifndef __NITF_TRE_HPP__
-#define __NITF_TRE_HPP__
+#ifndef NITF_TRE_hpp_INCLUDED_
+#define NITF_TRE_hpp_INCLUDED_
+#pragma once
 
 #include <string>
 #include <cstddef>
+#include <type_traits>
 
 #include "nitf/Field.hpp"
 #include "nitf/Object.hpp"
@@ -304,9 +306,9 @@ public:
                 setFieldValue(field, tag, str::toString(value), forceUpdate);
             }
         }
-        // TODO: add overloads for e.g., std::vector<T> ???
-        //template <typename T>
-        //void setFieldValue(const std::string& tag, const std::vector<T>& value, bool forceUpdate)
+    // TODO: add overloads for e.g., std::vector<T> ???
+    //template <typename T>
+    //void setFieldValue(const std::string& tag, const std::vector<T>& value, bool forceUpdate)
 
     template <typename T>
     void setField(const std::string& tag, const T& value, bool forceUpdate = false)
@@ -319,18 +321,18 @@ public:
     }
 
     template<typename T>
-    const T& getFieldValue(const std::string& tag, T& value) const  // "const" as a hint to clients that this value is really stored elsewhere
+    const T& getFieldValue(const std::string& tag, T& value) const
     {
         value = static_cast<T>(getField(tag));
         return value;
     }
-    const std::string& getFieldValue(const std::string& tag, std::string& value, bool trim = false) const  // "const" as a hint to clients that this value is really stored elsewhere
+    const std::string& getFieldValue(const std::string& tag, std::string& value, bool trim = false) const
     {
         value = getField(tag).toString(trim);
         return value;
     }
     template<typename T>
-    const T getFieldValue(const std::string& tag) const  // "const" as a hint to clients that this value is really stored elsewhere
+    const T getFieldValue(const std::string& tag) const
     {
         T retval;
         getFieldValue(tag, retval);
@@ -367,4 +369,4 @@ public:
     mutable nitf_Error error{};
 };
 }
-#endif
+#endif // NITF_TRE_hpp_INCLUDED_
