@@ -284,19 +284,29 @@ public:
 
     // This is wrong when T is "const char*" and the field is NITF_BINARY; sizeof(T) won't make sense.
     // That's why there is a "const char*" overload above.
-    template <typename T>
-    void setFieldValue(const std::string& tag, const T& value, bool forceUpdate)
-    {
-        const auto& field = nitf_TRE_getField(tag);
-        if (field.type == NITF_BINARY)
+    private:
+        template<typename T> struct can_call_setFieldValue : std::integral_constant<bool,
+            std::is_trivially_copyable<T>::value &&
+            !std::is_pointer<T>::value && !std::is_array<T>::value> {};
+    public:
+        template <typename T>
+        void setFieldValue(const std::string& tag, const T& value, bool forceUpdate)
         {
-            setFieldValue(tag, &value, sizeof(value), forceUpdate);
+            const auto& field = nitf_TRE_getField(tag);
+            if (field.type == NITF_BINARY)
+            {
+                // In the C code, this is a call to memcpy(). be sure that is OK for T.
+                static_assert(can_call_setFieldValue<T>::value, "Can't use memcpy() with T.");
+                setFieldValue(tag, &value, sizeof(value), forceUpdate);
+            }
+            else
+            {
+                setFieldValue(field, tag, str::toString(value), forceUpdate);
+            }
         }
-        else
-        {
-            setFieldValue(field, tag, str::toString(value), forceUpdate);
-        }
-    }
+        // TODO: add overloads for e.g., std::vector<T> ???
+        //template <typename T>
+        //void setFieldValue(const std::string& tag, const std::vector<T>& value, bool forceUpdate)
 
     template <typename T>
     void setField(const std::string& tag, const T& value, bool forceUpdate = false)
