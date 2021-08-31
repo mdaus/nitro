@@ -105,7 +105,7 @@ jobs:
       run: |
         pip install numpy
         mkdir install${{ matrix.os }}Waf-Github
-        python waf configure --prefix="$PWD/install${{ matrix.os }}Waf-Github" ${{ matrix.debugging }}
+        python waf configure --prefix="$PWD/install${{ matrix.os }}Waf-Github" --enable-swig ${{ matrix.debugging }}
     - name: build
       run: |
         python waf build
