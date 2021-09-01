@@ -119,12 +119,6 @@ TEST_CASE(basicIteration_ENGRDA)
     engrda.setField("ENGDATC[0]", 1); // count
     engrda.updateFields();
     engrda.setField("ENGDATA[0]", "ABC");
-
-    const char abc[] = { "abc" };
-    engrda.setField("ENGDATA[0]", abc);
-
-    const uint8_t i_abc[] = { 'a', 'b', 'c' };
-    engrda.setField("ENGDATA[0]", i_abc);
 }
 
 TEST_CASE(populateWhileIterating)
