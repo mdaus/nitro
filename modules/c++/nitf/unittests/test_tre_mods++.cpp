@@ -24,7 +24,6 @@
 #include <vector>
 
 #include <nitf/TRE.hpp>
-#include <nitf/TREs/ENGRDA.hpp>
 
 #include "TestCase.h"
 
@@ -100,7 +99,7 @@ TEST_CASE(basicIteration)
     TEST_ASSERT_EQ(numFields, 29);
 }
 
-TEST_CASE(use_ENGRDA)
+TEST_CASE(basicIteration_ENGRDA)
 {
     nitf::TRE engrda("ENGRDA", "ENGRDA");
 
@@ -120,46 +119,6 @@ TEST_CASE(use_ENGRDA)
     engrda.setField("ENGDATC[0]", 1); // count
     engrda.updateFields();
     engrda.setField("ENGDATA[0]", "ABC");
-}
-
-TEST_CASE(use_typed_ENGRDA)
-{
-    nitf::TREs::ENGRDA engrda; // nitf::TRE engrda("ENGRDA", "ENGRDA");
-
-    engrda.RESRC = "HSS"; // engrda.setField("RESRC", "HSS");
-    const std::string RESRC = engrda.RESRC;
-    engrda.RECNT = 1; // engrda.setField("RECNT", 1, true /*forceUpdate*/);
-    const int64_t RECNT = engrda.RECNT;
-
-    engrda.ENGDTS[0] = 3; // engrda.setField("ENGDTS[0]", 3); // size
-    const int64_t ENGDTS_0 = engrda.ENGDTS[0];
-    engrda.ENGDATC[0] = 1; // engrda.setField("ENGDATC[0]", 1); // count
-    const int64_t ENGDATC_0 = engrda.ENGDATC[0];
-    engrda.updateFields();
-    engrda.ENGDATA[0] = "ABC"; // engrda.setField("ENGDATA[0]", "ABC");
-    const auto& engrda_ = engrda;
-    const auto ENGDATA_0 = engrda_.ENGDATA[0];
-
-    try
-    {
-        (void) engrda_.ENGDATA.at(999);
-        TEST_ASSERT_FALSE(false);
-    }
-    catch (const std::out_of_range&)
-    {
-        TEST_ASSERT_TRUE(true);
-    }
-
-    try
-    {
-        (void)engrda_.ENGDATA[999]; // unchecked can still throw, just a different exception
-        TEST_ASSERT_FALSE(false);
-    }
-    catch (const except::NoSuchKeyException& ex)
-    {
-        TEST_ASSERT_TRUE(true);
-    }
-
 }
 
 TEST_CASE(populateWhileIterating)
@@ -221,8 +180,7 @@ TEST_MAIN(
     TEST_CHECK(setBinaryFields);
     TEST_CHECK(cloneTRE);
     TEST_CHECK(basicIteration);
-    TEST_CHECK(use_ENGRDA);
-    TEST_CHECK(use_typed_ENGRDA);
+    TEST_CHECK(basicIteration_ENGRDA);
     TEST_CHECK(populateWhileIterating);
     TEST_CHECK(overflowingNumericFields);
     )
