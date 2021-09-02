@@ -34,6 +34,8 @@
 #include <except/Exception.h>
 %}
 
+%import "types.i"
+%import "except.i"
 
 %inline
 %{
