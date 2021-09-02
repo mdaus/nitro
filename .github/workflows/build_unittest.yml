@@ -101,11 +101,18 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
-    - name: configure
+    - name: configure_with_swig
+      if: ${{ matrix.os == 'ubuntu-latest' }}
       run: |
         pip install numpy
         mkdir install${{ matrix.os }}Waf-Github
         python waf configure --prefix="$PWD/install${{ matrix.os }}Waf-Github" --enable-swig ${{ matrix.debugging }}
+    - name: configure_without_swig
+      if: ${{ matrix.os == 'windows-latest' }}
+      run: |
+        pip install numpy
+        mkdir install${{ matrix.os }}Waf-Github
+        python waf configure --prefix="$PWD/install${{ matrix.os }}Waf-Github" ${{ matrix.debugging }}
     - name: build
       run: |
         python waf build
