@@ -11,8 +11,8 @@
 
 %import "except.i"
 
-%include "std_vector.i"
-%include "std_string.i"
+%include <std_vector.i>
+%include <std_string.i>
 
 %ignore *::operator=;
 
@@ -26,7 +26,7 @@
 %{
 from coda.coda_types import pickle
 %}
-%import <types.i>
+%import "types.i"
 
 %extend math::linear::VectorN
 {

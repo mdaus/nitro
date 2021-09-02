@@ -1,12 +1,14 @@
 
 import os
+import re
 from os.path import join, basename
 from waflib import Utils
 
 distclean = options = configure = lambda p: None
 
 def build(bld):
-    bld.swigModule(name = 'numpyutilstest',
-                   use = 'types-python except-python numpyutils-c++',
-                   package = 'coda')
+    if 'PLATFORM' in bld.env and not re.match('win32', bld.env['PLATFORM']):
+        bld.swigModule(name = 'numpyutilstest',
+                       use = 'types-python except-python numpyutils-c++',
+                       package = 'coda')
 

@@ -23,16 +23,16 @@
 %module(package="coda") mt
 
 %feature("autodoc","1");
- 
+
 %{
 #include <mt/ThreadPlanner.h>
 #include <import/except.h>
 #include <mt/ThreadGroup.h>
 #include <sys/Runnable.h>
 %}
- 
-%import <except.i>
-%import <sys.i>
+
+%import "except.i"
+%import "sys.i"
 
 %include <sys/Runnable.h>
 
@@ -49,7 +49,7 @@ PyObject* getThreadInfo(size_t threadNum)
 }
 
 }
- 
+
 %ignore mt::ThreadPlanner::getThreadInfo;
 %include <mt/ThreadPlanner.h>
 
