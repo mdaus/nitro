@@ -23,6 +23,9 @@
 #include <sstream>
 #include <stdio.h>
 
+#include <vector>
+#include <iterator>
+
 #include "import/sys.h"
 #include "import/mt.h"
 #include "TestCase.h"
@@ -54,8 +57,7 @@ public:
 class LocalStorage
 {
 public:
-    LocalStorage() :
-        mValue(0)
+    LocalStorage() : mValue(0)
     {
     }
 
@@ -90,12 +92,30 @@ TEST_CASE(Runnable1DWithCopiesTest)
     std::cout << "Calling run1D" << std::endl;
     run1DWithCopies(47, 16, op);
 }
+
+template <typename InputIt, typename OutputIt>
+static OutputIt parallel_sum(InputIt beg, InputIt end, OutputIt output)
+{
+    using type_t = decltype(*beg);
+    const auto f = [&](const type_t&) { return std::accumulate(beg, end, 0); };
+    return mt::transform_async(beg, end, output, f, 1000);
+    //return std::transform(beg, end, output, f);
+}
+ 
+TEST_CASE(transform_async_test)
+{
+    std::vector<int> ints(10000, 1);
+    std::vector<int> results(10000);
+    parallel_sum(ints.begin(), ints.end(), results.begin());
+    TEST_ASSERT_EQ(10000, results[0]);
+}
 }
 
 int main(int, char**)
 {
     TEST_CHECK(Runnable1DTest);
     TEST_CHECK(Runnable1DWithCopiesTest);
+    TEST_CHECK(transform_async_test);
 
     return 0;
 }
