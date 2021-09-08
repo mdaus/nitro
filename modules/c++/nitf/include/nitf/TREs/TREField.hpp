@@ -48,6 +48,11 @@ namespace nitf
                 std::string tag_;
 
                 const_field(const TRE& tre, const std::string& tag) : tre_(tre), tag_(tag) {}
+                const_field(const const_field&) = default;
+                const_field& operator=(const const_field&) = delete;
+                const_field(const_field&&) = default;
+                const_field& operator=(const_field&&) = delete;
+
                 const T getFieldValue() const // "const" as a hint to clients that this value is really stored elsewhere
                 {
                     return tre_.getFieldValue<T>(tag_);
@@ -61,6 +66,11 @@ namespace nitf
                 bool forceUpdate_;
 
                 field(TRE& tre, const std::string& tag, bool forceUpdate = false) : field_(tre, tag), tre_(tre), forceUpdate_(forceUpdate) {}
+                field(const field&) = default;
+                field& operator=(const field&) = delete;
+                field(field&&) = default;
+                field& operator=(field&&) = delete;
+
                 void setFieldValue(const T& v)
                 {
                     tre_.setFieldValue(field_.tag_, v, forceUpdate_);
@@ -82,6 +92,10 @@ namespace nitf
             static constexpr size_t size = sz;
 
             TREField(TRE& tre, const std::string& tag, bool forceUpdate = false) : field_(tre, tag, forceUpdate) {}
+            TREField(const TREField&) = default;
+            TREField& operator=(const TREField&) = delete;
+            TREField(TREField&&) = default;
+            TREField& operator=(TREField&&) = delete;
 
             void operator=(const value_type& v)
             {
