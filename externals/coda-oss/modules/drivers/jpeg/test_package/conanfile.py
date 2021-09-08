@@ -1,7 +1,7 @@
 from conans import ConanFile, CMake
 import os
 
-class CodaOssTestConan(ConanFile):
+class LibjpegTestConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     generators = ("cmake", "cmake_paths")
 
