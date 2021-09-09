@@ -64,7 +64,7 @@ protected:
  * A Logger that doesn't actually log anything. It can be used in cases where
  * a Logger is required but you don't want anything to log.
  */
-class NullLogger : public Logger
+class NullLogger final : public Logger
 {
     NullHandler mHandler;
 

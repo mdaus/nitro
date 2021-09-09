@@ -123,7 +123,7 @@ struct NullOutputStream : public OutputStream
  * class hierarchy is set up, you can't just inherit from NullOutputStream and
  * Seekable to get this
  */
-struct SeekableNullOutputStream : public io::SeekableOutputStream
+struct SeekableNullOutputStream final : public io::SeekableOutputStream
 {
     SeekableNullOutputStream() = default;
 
