@@ -3138,7 +3138,7 @@ SWIGINTERN void mt_ThreadGroup_createThread(mt::ThreadGroup *self,PyObject *runn
     sys::Runnable *n;
     if (SWIG_ConvertPtr(runnable, (void **) &n, SWIGTYPE_p_sys__Runnable, SWIG_POINTER_DISOWN) == -1)
     {
-        throw except::Exception(except::Context("../modules/python/mt/source/mt.i", 74, "",          sys::TimeStamp().local(), "Invalid data type in createThread(expected sys::Runnable)")
+        throw except::Exception(except::Context("../modules/python/mt/source/mt.i", 76, "",          sys::TimeStamp().local(), "Invalid data type in createThread(expected sys::Runnable)")
 );
     }
     self->createThread(n);
@@ -3165,7 +3165,7 @@ SWIGINTERN PyObject *_wrap_delete_Runnable(PyObject *SWIGUNUSEDPARM(self), PyObj
     try
     {
       delete arg1;
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -3217,7 +3217,7 @@ SWIGINTERN PyObject *_wrap_Runnable_run(PyObject *SWIGUNUSEDPARM(self), PyObject
     try
     {
       (arg1)->run();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -3284,7 +3284,7 @@ SWIGINTERN PyObject *_wrap_new_ThreadPlanner(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = (mt::ThreadPlanner *)new mt::ThreadPlanner(arg1,arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -3337,7 +3337,7 @@ SWIGINTERN PyObject *_wrap_ThreadPlanner_getNumElementsPerThread(PyObject *SWIGU
     try
     {
       result = ((mt::ThreadPlanner const *)arg1)->getNumElementsPerThread();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -3390,7 +3390,7 @@ SWIGINTERN PyObject *_wrap_ThreadPlanner_getNumThreadsThatWillBeUsed(PyObject *S
     try
     {
       result = ((mt::ThreadPlanner const *)arg1)->getNumThreadsThatWillBeUsed();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -3450,7 +3450,7 @@ SWIGINTERN PyObject *_wrap_ThreadPlanner_getThreadInfo(PyObject *SWIGUNUSEDPARM(
     try
     {
       result = (PyObject *)mt_ThreadPlanner_getThreadInfo(arg1,arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -3502,7 +3502,7 @@ SWIGINTERN PyObject *_wrap_delete_ThreadPlanner(PyObject *SWIGUNUSEDPARM(self), 
     try
     {
       delete arg1;
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -3564,7 +3564,7 @@ SWIGINTERN PyObject *_wrap_new_ThreadGroup__SWIG_0(PyObject *SWIGUNUSEDPARM(self
     try
     {
       result = (mt::ThreadGroup *)new mt::ThreadGroup(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -3607,7 +3607,7 @@ SWIGINTERN PyObject *_wrap_new_ThreadGroup__SWIG_1(PyObject *SWIGUNUSEDPARM(self
     try
     {
       result = (mt::ThreadGroup *)new mt::ThreadGroup();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -3690,7 +3690,7 @@ SWIGINTERN PyObject *_wrap_delete_ThreadGroup(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       delete arg1;
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -3742,7 +3742,7 @@ SWIGINTERN PyObject *_wrap_ThreadGroup_joinAll(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       (arg1)->joinAll();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -3795,7 +3795,7 @@ SWIGINTERN PyObject *_wrap_ThreadGroup_isPinToCPUEnabled(PyObject *SWIGUNUSEDPAR
     try
     {
       result = (bool)((mt::ThreadGroup const *)arg1)->isPinToCPUEnabled();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -3838,7 +3838,7 @@ SWIGINTERN PyObject *_wrap_ThreadGroup_getDefaultPinToCPU(PyObject *SWIGUNUSEDPA
     try
     {
       result = (bool)mt::ThreadGroup::getDefaultPinToCPU();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -3890,7 +3890,7 @@ SWIGINTERN PyObject *_wrap_ThreadGroup_setDefaultPinToCPU(PyObject *SWIGUNUSEDPA
     try
     {
       mt::ThreadGroup::setDefaultPinToCPU(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -3943,7 +3943,7 @@ SWIGINTERN PyObject *_wrap_ThreadGroup_createThread(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       mt_ThreadGroup_createThread(arg1,arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())

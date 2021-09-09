@@ -24,7 +24,7 @@
 
 %feature("autodoc","1");
 
-#define final // SWIG (as of 4.0.2) does not understand "final"
+%include "config.i"
 
 %include <std_string.i>
 

@@ -2,6 +2,8 @@
 
 %feature("autodoc", "1");
 
+%include "config.i"
+
 %ignore math::poly::OneD<Vector3>::truncateToNonZeros;
 %ignore math::poly::OneD<Vector3>::transformInput;
 %ignore math::poly::OneD<Vector3>::integrate;

@@ -2,6 +2,8 @@
 
 %feature("autodoc", "1");
 
+%include "config.i"
+
 %{
 #include "math/linear/VectorN.h"
 #include "math/linear/Vector.h"

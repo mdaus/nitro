@@ -143,6 +143,9 @@ class SwigPyIterator(object):
 # Register SwigPyIterator in _numpyutilstest:
 _numpyutilstest.SwigPyIterator_swigregister(SwigPyIterator)
 
+import coda.coda_types
+import coda.coda_sys
+import coda.coda_except
 
 def elementDoubleTest(*args) -> "PyObject *":
     r"""elementDoubleTest(PyObject * inputNPArray, PyObject * outputNPArray=Py_None) -> PyObject"""

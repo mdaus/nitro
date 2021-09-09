@@ -24,6 +24,8 @@
 
 %feature("autodoc","1");
 
+%include "config.i"
+
 %{
 #include <mt/ThreadPlanner.h>
 #include <import/except.h>

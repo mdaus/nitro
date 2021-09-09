@@ -5190,7 +5190,7 @@ SWIGINTERN PyObject *_wrap_new_doubleArray(PyObject *SWIGUNUSEDPARM(self), PyObj
     try
     {
       result = (double *)new_doubleArray(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -5242,7 +5242,7 @@ SWIGINTERN PyObject *_wrap_delete_doubleArray(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       delete_doubleArray(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -5302,7 +5302,7 @@ SWIGINTERN PyObject *_wrap_doubleArray_getitem(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = (double)doubleArray_getitem(arg1,arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -5369,7 +5369,7 @@ SWIGINTERN PyObject *_wrap_doubleArray_setitem(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       doubleArray_setitem(arg1,arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -5412,7 +5412,7 @@ SWIGINTERN PyObject *_wrap_new_Poly1D__SWIG_0(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (math::poly::OneD< double > *)new math::poly::OneD< double >();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -5468,7 +5468,7 @@ SWIGINTERN PyObject *_wrap_new_Poly1D__SWIG_1(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (math::poly::OneD< double > *)new math::poly::OneD< double >((std::vector< double,std::allocator< double > > const &)*arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -5521,7 +5521,7 @@ SWIGINTERN PyObject *_wrap_new_Poly1D__SWIG_2(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (math::poly::OneD< double > *)new math::poly::OneD< double >(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -5580,7 +5580,7 @@ SWIGINTERN PyObject *_wrap_new_Poly1D__SWIG_3(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (math::poly::OneD< double > *)new math::poly::OneD< double >(arg1,(double const *)arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -5689,7 +5689,7 @@ SWIGINTERN PyObject *_wrap_Poly1D_order(PyObject *SWIGUNUSEDPARM(self), PyObject
     try
     {
       result = ((math::poly::OneD< double > const *)arg1)->order();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -5742,7 +5742,7 @@ SWIGINTERN PyObject *_wrap_Poly1D_size(PyObject *SWIGUNUSEDPARM(self), PyObject 
     try
     {
       result = ((math::poly::OneD< double > const *)arg1)->size();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -5795,7 +5795,7 @@ SWIGINTERN PyObject *_wrap_Poly1D_empty(PyObject *SWIGUNUSEDPARM(self), PyObject
     try
     {
       result = (bool)((math::poly::OneD< double > const *)arg1)->empty();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -5848,7 +5848,7 @@ SWIGINTERN PyObject *_wrap_Poly1D_coeffs(PyObject *SWIGUNUSEDPARM(self), PyObjec
     try
     {
       result = (std::vector< double,std::allocator< double > > *) &((math::poly::OneD< double > const *)arg1)->coeffs();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -5908,7 +5908,7 @@ SWIGINTERN PyObject *_wrap_Poly1D_scaleVariable(PyObject *SWIGUNUSEDPARM(self), 
     try
     {
       result = ((math::poly::OneD< double > const *)arg1)->scaleVariable(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -5968,7 +5968,7 @@ SWIGINTERN PyObject *_wrap_Poly1D_truncateTo(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::poly::OneD< double > const *)arg1)->truncateTo(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -6027,7 +6027,7 @@ SWIGINTERN PyObject *_wrap_Poly1D_truncateToNonZeros__SWIG_0(PyObject *SWIGUNUSE
     try
     {
       result = ((math::poly::OneD< double > const *)arg1)->truncateToNonZeros(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -6078,7 +6078,7 @@ SWIGINTERN PyObject *_wrap_Poly1D_truncateToNonZeros__SWIG_1(PyObject *SWIGUNUSE
     try
     {
       result = ((math::poly::OneD< double > const *)arg1)->truncateToNonZeros();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -6190,7 +6190,7 @@ SWIGINTERN PyObject *_wrap_Poly1D_transformInput__SWIG_0(PyObject *SWIGUNUSEDPAR
     try
     {
       result = ((math::poly::OneD< double > const *)arg1)->transformInput((math::poly::OneD< double > const &)*arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -6252,7 +6252,7 @@ SWIGINTERN PyObject *_wrap_Poly1D_transformInput__SWIG_1(PyObject *SWIGUNUSEDPAR
     try
     {
       result = ((math::poly::OneD< double > const *)arg1)->transformInput((math::poly::OneD< double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -6364,7 +6364,7 @@ SWIGINTERN PyObject *_wrap_Poly1D_copyFrom(PyObject *SWIGUNUSEDPARM(self), PyObj
     try
     {
       (arg1)->copyFrom((math::poly::OneD< double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -6423,7 +6423,7 @@ SWIGINTERN PyObject *_wrap_Poly1D___call____SWIG_0(PyObject *SWIGUNUSEDPARM(self
     try
     {
       result = (double)((math::poly::OneD< double > const *)arg1)->operator ()(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -6491,7 +6491,7 @@ SWIGINTERN PyObject *_wrap_Poly1D_integrate(PyObject *SWIGUNUSEDPARM(self), PyOb
     try
     {
       result = (double)((math::poly::OneD< double > const *)arg1)->integrate(arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -6544,7 +6544,7 @@ SWIGINTERN PyObject *_wrap_Poly1D_derivative(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::poly::OneD< double > const *)arg1)->derivative();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -6604,7 +6604,7 @@ SWIGINTERN PyObject *_wrap_Poly1D_velocity(PyObject *SWIGUNUSEDPARM(self), PyObj
     try
     {
       result = (double)((math::poly::OneD< double > const *)arg1)->velocity(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -6664,7 +6664,7 @@ SWIGINTERN PyObject *_wrap_Poly1D_acceleration(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = (double)((math::poly::OneD< double > const *)arg1)->acceleration(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -6723,7 +6723,7 @@ SWIGINTERN PyObject *_wrap_Poly1D___imul____SWIG_0(PyObject *SWIGUNUSEDPARM(self
     try
     {
       result = (math::poly::OneD< double > *) &(arg1)->operator *=(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -6782,7 +6782,7 @@ SWIGINTERN PyObject *_wrap_Poly1D___mul____SWIG_0(PyObject *SWIGUNUSEDPARM(self)
     try
     {
       result = ((math::poly::OneD< double > const *)arg1)->operator *(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -6846,7 +6846,7 @@ SWIGINTERN PyObject *_wrap_Poly1D___imul____SWIG_1(PyObject *SWIGUNUSEDPARM(self
     try
     {
       result = (math::poly::OneD< double > *) &(arg1)->operator *=((math::poly::OneD< double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -6954,7 +6954,7 @@ SWIGINTERN PyObject *_wrap_Poly1D___mul____SWIG_1(PyObject *SWIGUNUSEDPARM(self)
     try
     {
       result = ((math::poly::OneD< double > const *)arg1)->operator *((math::poly::OneD< double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -7062,7 +7062,7 @@ SWIGINTERN PyObject *_wrap_Poly1D___iadd__(PyObject *SWIGUNUSEDPARM(self), PyObj
     try
     {
       result = (math::poly::OneD< double > *) &(arg1)->operator +=((math::poly::OneD< double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -7125,7 +7125,7 @@ SWIGINTERN PyObject *_wrap_Poly1D___add__(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::poly::OneD< double > const *)arg1)->operator +((math::poly::OneD< double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -7190,7 +7190,7 @@ SWIGINTERN PyObject *_wrap_Poly1D___isub__(PyObject *SWIGUNUSEDPARM(self), PyObj
     try
     {
       result = (math::poly::OneD< double > *) &(arg1)->operator -=((math::poly::OneD< double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -7253,7 +7253,7 @@ SWIGINTERN PyObject *_wrap_Poly1D___sub__(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::poly::OneD< double > const *)arg1)->operator -((math::poly::OneD< double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -7315,7 +7315,7 @@ SWIGINTERN PyObject *_wrap_Poly1D___itruediv__(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = (math::poly::OneD< double > *) &(arg1)->operator /=(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -7375,7 +7375,7 @@ SWIGINTERN PyObject *_wrap_Poly1D___truediv__(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = ((math::poly::OneD< double > const *)arg1)->operator /(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -7437,7 +7437,7 @@ SWIGINTERN PyObject *_wrap_Poly1D_power(PyObject *SWIGUNUSEDPARM(self), PyObject
     try
     {
       result = ((math::poly::OneD< double > const *)arg1)->power(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -7500,7 +7500,7 @@ SWIGINTERN PyObject *_wrap_Poly1D___eq__(PyObject *SWIGUNUSEDPARM(self), PyObjec
     try
     {
       result = (bool)(arg1)->operator ==((math::poly::OneD< double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -7565,7 +7565,7 @@ SWIGINTERN PyObject *_wrap_Poly1D___ne__(PyObject *SWIGUNUSEDPARM(self), PyObjec
     try
     {
       result = (bool)(arg1)->operator !=((math::poly::OneD< double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -7627,7 +7627,7 @@ SWIGINTERN PyObject *_wrap_Poly1D___getitem__(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (double)math_poly_OneD_Sl_double_Sg____getitem__(arg1,arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -7694,7 +7694,7 @@ SWIGINTERN PyObject *_wrap_Poly1D___setitem__(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       math_poly_OneD_Sl_double_Sg____setitem__(arg1,arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -7747,7 +7747,7 @@ SWIGINTERN PyObject *_wrap_Poly1D___str__(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = math_poly_OneD_Sl_double_Sg____str__(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -7801,7 +7801,7 @@ SWIGINTERN PyObject *_wrap_Poly1D___deepcopy__(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = math_poly_OneD_Sl_double_Sg____deepcopy__(arg1,arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -7854,7 +7854,7 @@ SWIGINTERN PyObject *_wrap_Poly1D___call____SWIG_1(PyObject *SWIGUNUSEDPARM(self
     try
     {
       result = (PyObject *)math_poly_OneD_Sl_double_Sg____call____SWIG_1(arg1,arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -7952,7 +7952,7 @@ SWIGINTERN PyObject *_wrap_Poly1D_asArray(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = (PyObject *)math_poly_OneD_Sl_double_Sg__asArray(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -8004,7 +8004,7 @@ SWIGINTERN PyObject *_wrap_delete_Poly1D(PyObject *SWIGUNUSEDPARM(self), PyObjec
     try
     {
       delete arg1;
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -8070,7 +8070,7 @@ SWIGINTERN PyObject *_wrap_Vector3Coefficients_iterator(PyObject *SWIGUNUSEDPARM
     try
     {
       result = (swig::SwigPyIterator *)std_vector_Sl_math_linear_VectorN_Sl_3_Sc_double_Sg__Sg__iterator(arg1,arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -8123,7 +8123,7 @@ SWIGINTERN PyObject *_wrap_Vector3Coefficients___nonzero__(PyObject *SWIGUNUSEDP
     try
     {
       result = (bool)std_vector_Sl_math_linear_VectorN_Sl_3_Sc_double_Sg__Sg____nonzero__((std::vector< math::linear::VectorN< 3,double > > const *)arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -8176,7 +8176,7 @@ SWIGINTERN PyObject *_wrap_Vector3Coefficients___bool__(PyObject *SWIGUNUSEDPARM
     try
     {
       result = (bool)std_vector_Sl_math_linear_VectorN_Sl_3_Sc_double_Sg__Sg____bool__((std::vector< math::linear::VectorN< 3,double > > const *)arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -8229,7 +8229,7 @@ SWIGINTERN PyObject *_wrap_Vector3Coefficients___len__(PyObject *SWIGUNUSEDPARM(
     try
     {
       result = std_vector_Sl_math_linear_VectorN_Sl_3_Sc_double_Sg__Sg____len__((std::vector< math::linear::VectorN< 3,double > > const *)arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -8303,7 +8303,7 @@ SWIGINTERN PyObject *_wrap_Vector3Coefficients___getslice__(PyObject *SWIGUNUSED
       } catch(std::invalid_argument &_e) {
         SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -8375,7 +8375,7 @@ SWIGINTERN PyObject *_wrap_Vector3Coefficients___setslice____SWIG_0(PyObject *SW
       } catch(std::invalid_argument &_e) {
         SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -8460,7 +8460,7 @@ SWIGINTERN PyObject *_wrap_Vector3Coefficients___setslice____SWIG_1(PyObject *SW
       } catch(std::invalid_argument &_e) {
         SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -8597,7 +8597,7 @@ SWIGINTERN PyObject *_wrap_Vector3Coefficients___delslice__(PyObject *SWIGUNUSED
       } catch(std::invalid_argument &_e) {
         SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -8661,7 +8661,7 @@ SWIGINTERN PyObject *_wrap_Vector3Coefficients___delitem____SWIG_0(PyObject *SWI
       } catch(std::invalid_argument &_e) {
         SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -8725,7 +8725,7 @@ SWIGINTERN PyObject *_wrap_Vector3Coefficients___getitem____SWIG_0(PyObject *SWI
       } catch(std::invalid_argument &_e) {
         SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -8801,7 +8801,7 @@ SWIGINTERN PyObject *_wrap_Vector3Coefficients___setitem____SWIG_0(PyObject *SWI
       } catch(std::invalid_argument &_e) {
         SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -8866,7 +8866,7 @@ SWIGINTERN PyObject *_wrap_Vector3Coefficients___setitem____SWIG_1(PyObject *SWI
       } catch(std::invalid_argument &_e) {
         SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -8929,7 +8929,7 @@ SWIGINTERN PyObject *_wrap_Vector3Coefficients___delitem____SWIG_1(PyObject *SWI
       } catch(std::invalid_argument &_e) {
         SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -9037,7 +9037,7 @@ SWIGINTERN PyObject *_wrap_Vector3Coefficients___getitem____SWIG_1(PyObject *SWI
       } catch(std::out_of_range &_e) {
         SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -9156,7 +9156,7 @@ SWIGINTERN PyObject *_wrap_Vector3Coefficients___setitem____SWIG_2(PyObject *SWI
       } catch(std::out_of_range &_e) {
         SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -9280,7 +9280,7 @@ SWIGINTERN PyObject *_wrap_Vector3Coefficients_pop(PyObject *SWIGUNUSEDPARM(self
       } catch(std::out_of_range &_e) {
         SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -9342,7 +9342,7 @@ SWIGINTERN PyObject *_wrap_Vector3Coefficients_append(PyObject *SWIGUNUSEDPARM(s
     try
     {
       std_vector_Sl_math_linear_VectorN_Sl_3_Sc_double_Sg__Sg__append(arg1,(math::linear::VectorN< 3,double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -9385,7 +9385,7 @@ SWIGINTERN PyObject *_wrap_new_Vector3Coefficients__SWIG_0(PyObject *SWIGUNUSEDP
     try
     {
       result = (std::vector< math::linear::VectorN< 3,double > > *)new std::vector< math::linear::VectorN< 3,double > >();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -9441,7 +9441,7 @@ SWIGINTERN PyObject *_wrap_new_Vector3Coefficients__SWIG_1(PyObject *SWIGUNUSEDP
     try
     {
       result = (std::vector< math::linear::VectorN< 3,double > > *)new std::vector< math::linear::VectorN< 3,double > >((std::vector< math::linear::VectorN< 3,double > > const &)*arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -9496,7 +9496,7 @@ SWIGINTERN PyObject *_wrap_Vector3Coefficients_empty(PyObject *SWIGUNUSEDPARM(se
     try
     {
       result = (bool)((std::vector< math::linear::VectorN< 3,double > > const *)arg1)->empty();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -9549,7 +9549,7 @@ SWIGINTERN PyObject *_wrap_Vector3Coefficients_size(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       result = ((std::vector< math::linear::VectorN< 3,double > > const *)arg1)->size();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -9611,7 +9611,7 @@ SWIGINTERN PyObject *_wrap_Vector3Coefficients_swap(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       (arg1)->swap(*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -9664,7 +9664,7 @@ SWIGINTERN PyObject *_wrap_Vector3Coefficients_begin(PyObject *SWIGUNUSEDPARM(se
     try
     {
       result = (arg1)->begin();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -9718,7 +9718,7 @@ SWIGINTERN PyObject *_wrap_Vector3Coefficients_end(PyObject *SWIGUNUSEDPARM(self
     try
     {
       result = (arg1)->end();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -9772,7 +9772,7 @@ SWIGINTERN PyObject *_wrap_Vector3Coefficients_rbegin(PyObject *SWIGUNUSEDPARM(s
     try
     {
       result = (arg1)->rbegin();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -9826,7 +9826,7 @@ SWIGINTERN PyObject *_wrap_Vector3Coefficients_rend(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       result = (arg1)->rend();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -9879,7 +9879,7 @@ SWIGINTERN PyObject *_wrap_Vector3Coefficients_clear(PyObject *SWIGUNUSEDPARM(se
     try
     {
       (arg1)->clear();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -9932,7 +9932,7 @@ SWIGINTERN PyObject *_wrap_Vector3Coefficients_get_allocator(PyObject *SWIGUNUSE
     try
     {
       result = ((std::vector< math::linear::VectorN< 3,double > > const *)arg1)->get_allocator();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -9983,7 +9983,7 @@ SWIGINTERN PyObject *_wrap_new_Vector3Coefficients__SWIG_2(PyObject *SWIGUNUSEDP
     try
     {
       result = (std::vector< math::linear::VectorN< 3,double > > *)new std::vector< math::linear::VectorN< 3,double > >(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -10035,7 +10035,7 @@ SWIGINTERN PyObject *_wrap_Vector3Coefficients_pop_back(PyObject *SWIGUNUSEDPARM
     try
     {
       (arg1)->pop_back();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -10093,7 +10093,7 @@ SWIGINTERN PyObject *_wrap_Vector3Coefficients_resize__SWIG_0(PyObject *SWIGUNUS
     try
     {
       (arg1)->resize(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -10158,7 +10158,7 @@ SWIGINTERN PyObject *_wrap_Vector3Coefficients_erase__SWIG_0(PyObject *SWIGUNUSE
     try
     {
       result = std_vector_Sl_math_linear_VectorN_Sl_3_Sc_double_Sg__Sg__erase__SWIG_0(arg1,arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -10238,7 +10238,7 @@ SWIGINTERN PyObject *_wrap_Vector3Coefficients_erase__SWIG_1(PyObject *SWIGUNUSE
     try
     {
       result = std_vector_Sl_math_linear_VectorN_Sl_3_Sc_double_Sg__Sg__erase__SWIG_1(arg1,arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -10350,7 +10350,7 @@ SWIGINTERN PyObject *_wrap_new_Vector3Coefficients__SWIG_3(PyObject *SWIGUNUSEDP
     try
     {
       result = (std::vector< math::linear::VectorN< 3,double > > *)new std::vector< math::linear::VectorN< 3,double > >(arg1,(std::vector< math::linear::VectorN< 3,double > >::value_type const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -10467,7 +10467,7 @@ SWIGINTERN PyObject *_wrap_Vector3Coefficients_push_back(PyObject *SWIGUNUSEDPAR
     try
     {
       (arg1)->push_back((std::vector< math::linear::VectorN< 3,double > >::value_type const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -10520,7 +10520,7 @@ SWIGINTERN PyObject *_wrap_Vector3Coefficients_front(PyObject *SWIGUNUSEDPARM(se
     try
     {
       result = (std::vector< math::linear::VectorN< 3,double > >::value_type *) &((std::vector< math::linear::VectorN< 3,double > > const *)arg1)->front();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -10574,7 +10574,7 @@ SWIGINTERN PyObject *_wrap_Vector3Coefficients_back(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       result = (std::vector< math::linear::VectorN< 3,double > >::value_type *) &((std::vector< math::linear::VectorN< 3,double > > const *)arg1)->back();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -10645,7 +10645,7 @@ SWIGINTERN PyObject *_wrap_Vector3Coefficients_assign(PyObject *SWIGUNUSEDPARM(s
     try
     {
       (arg1)->assign(arg2,(std::vector< math::linear::VectorN< 3,double > >::value_type const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -10714,7 +10714,7 @@ SWIGINTERN PyObject *_wrap_Vector3Coefficients_resize__SWIG_1(PyObject *SWIGUNUS
     try
     {
       (arg1)->resize(arg2,(std::vector< math::linear::VectorN< 3,double > >::value_type const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -10840,7 +10840,7 @@ SWIGINTERN PyObject *_wrap_Vector3Coefficients_insert__SWIG_0(PyObject *SWIGUNUS
     try
     {
       result = std_vector_Sl_math_linear_VectorN_Sl_3_Sc_double_Sg__Sg__insert__SWIG_0(arg1,arg2,(math::linear::VectorN< 3,double > const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -10924,7 +10924,7 @@ SWIGINTERN PyObject *_wrap_Vector3Coefficients_insert__SWIG_1(PyObject *SWIGUNUS
     try
     {
       std_vector_Sl_math_linear_VectorN_Sl_3_Sc_double_Sg__Sg__insert__SWIG_1(arg1,arg2,arg3,(math::linear::VectorN< 3,double > const &)*arg4);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -11041,7 +11041,7 @@ SWIGINTERN PyObject *_wrap_Vector3Coefficients_reserve(PyObject *SWIGUNUSEDPARM(
     try
     {
       (arg1)->reserve(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -11094,7 +11094,7 @@ SWIGINTERN PyObject *_wrap_Vector3Coefficients_capacity(PyObject *SWIGUNUSEDPARM
     try
     {
       result = ((std::vector< math::linear::VectorN< 3,double > > const *)arg1)->capacity();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -11146,7 +11146,7 @@ SWIGINTERN PyObject *_wrap_delete_Vector3Coefficients(PyObject *SWIGUNUSEDPARM(s
     try
     {
       delete arg1;
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -11210,7 +11210,7 @@ SWIGINTERN PyObject *_wrap_Poly2D_coeffs(PyObject *SWIGUNUSEDPARM(self), PyObjec
     try
     {
       result = (std::vector< math::poly::OneD< double >,std::allocator< math::poly::OneD< double > > > *) &(arg1)->coeffs();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -11253,7 +11253,7 @@ SWIGINTERN PyObject *_wrap_new_Poly2D__SWIG_0(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (math::poly::TwoD< double > *)new math::poly::TwoD< double >();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -11312,7 +11312,7 @@ SWIGINTERN PyObject *_wrap_new_Poly2D__SWIG_1(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (math::poly::TwoD< double > *)new math::poly::TwoD< double >(arg1,arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -11366,7 +11366,7 @@ SWIGINTERN PyObject *_wrap_new_Poly2D__SWIG_2(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (math::poly::TwoD< double > *)new math::poly::TwoD< double >((std::vector< math::poly::OneD< double >,std::allocator< math::poly::OneD< double > > > const &)*arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -11465,7 +11465,7 @@ SWIGINTERN PyObject *_wrap_Poly2D_empty(PyObject *SWIGUNUSEDPARM(self), PyObject
     try
     {
       result = (bool)((math::poly::TwoD< double > const *)arg1)->empty();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -11518,7 +11518,7 @@ SWIGINTERN PyObject *_wrap_Poly2D_orderX(PyObject *SWIGUNUSEDPARM(self), PyObjec
     try
     {
       result = ((math::poly::TwoD< double > const *)arg1)->orderX();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -11571,7 +11571,7 @@ SWIGINTERN PyObject *_wrap_Poly2D_orderY(PyObject *SWIGUNUSEDPARM(self), PyObjec
     try
     {
       result = ((math::poly::TwoD< double > const *)arg1)->orderY();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -11638,7 +11638,7 @@ SWIGINTERN PyObject *_wrap_Poly2D___call____SWIG_0(PyObject *SWIGUNUSEDPARM(self
     try
     {
       result = (double)((math::poly::TwoD< double > const *)arg1)->operator ()(arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -11722,7 +11722,7 @@ SWIGINTERN PyObject *_wrap_Poly2D_integrate(PyObject *SWIGUNUSEDPARM(self), PyOb
     try
     {
       result = (double)((math::poly::TwoD< double > const *)arg1)->integrate(arg2,arg3,arg4,arg5);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -11792,7 +11792,7 @@ SWIGINTERN PyObject *_wrap_Poly2D_set(PyObject *SWIGUNUSEDPARM(self), PyObject *
     try
     {
       (arg1)->set(arg2,(math::poly::OneD< double > const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -11845,7 +11845,7 @@ SWIGINTERN PyObject *_wrap_Poly2D_flipXY(PyObject *SWIGUNUSEDPARM(self), PyObjec
     try
     {
       result = ((math::poly::TwoD< double > const *)arg1)->flipXY();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -11898,7 +11898,7 @@ SWIGINTERN PyObject *_wrap_Poly2D_derivativeY(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = ((math::poly::TwoD< double > const *)arg1)->derivativeY();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -11951,7 +11951,7 @@ SWIGINTERN PyObject *_wrap_Poly2D_derivativeX(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = ((math::poly::TwoD< double > const *)arg1)->derivativeX();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -12004,7 +12004,7 @@ SWIGINTERN PyObject *_wrap_Poly2D_derivativeXY(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = ((math::poly::TwoD< double > const *)arg1)->derivativeXY();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -12071,7 +12071,7 @@ SWIGINTERN PyObject *_wrap_Poly2D_scaleVariable__SWIG_0(PyObject *SWIGUNUSEDPARM
     try
     {
       result = ((math::poly::TwoD< double > const *)arg1)->scaleVariable(arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -12130,7 +12130,7 @@ SWIGINTERN PyObject *_wrap_Poly2D_scaleVariable__SWIG_1(PyObject *SWIGUNUSEDPARM
     try
     {
       result = ((math::poly::TwoD< double > const *)arg1)->scaleVariable(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -12252,7 +12252,7 @@ SWIGINTERN PyObject *_wrap_Poly2D_truncateTo(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::poly::TwoD< double > const *)arg1)->truncateTo(arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -12311,7 +12311,7 @@ SWIGINTERN PyObject *_wrap_Poly2D_truncateToNonZeros__SWIG_0(PyObject *SWIGUNUSE
     try
     {
       result = ((math::poly::TwoD< double > const *)arg1)->truncateToNonZeros(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -12362,7 +12362,7 @@ SWIGINTERN PyObject *_wrap_Poly2D_truncateToNonZeros__SWIG_1(PyObject *SWIGUNUSE
     try
     {
       result = ((math::poly::TwoD< double > const *)arg1)->truncateToNonZeros();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -12485,7 +12485,7 @@ SWIGINTERN PyObject *_wrap_Poly2D_transformInput__SWIG_0(PyObject *SWIGUNUSEDPAR
     try
     {
       result = ((math::poly::TwoD< double > const *)arg1)->transformInput((math::poly::TwoD< double > const &)*arg2,(math::poly::TwoD< double > const &)*arg3,arg4);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -12558,7 +12558,7 @@ SWIGINTERN PyObject *_wrap_Poly2D_transformInput__SWIG_1(PyObject *SWIGUNUSEDPAR
     try
     {
       result = ((math::poly::TwoD< double > const *)arg1)->transformInput((math::poly::TwoD< double > const &)*arg2,(math::poly::TwoD< double > const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -12628,7 +12628,7 @@ SWIGINTERN PyObject *_wrap_Poly2D_transformInput__SWIG_2(PyObject *SWIGUNUSEDPAR
     try
     {
       result = ((math::poly::TwoD< double > const *)arg1)->transformInput((math::poly::TwoD< double > const &)*arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -12690,7 +12690,7 @@ SWIGINTERN PyObject *_wrap_Poly2D_transformInput__SWIG_3(PyObject *SWIGUNUSEDPAR
     try
     {
       result = ((math::poly::TwoD< double > const *)arg1)->transformInput((math::poly::TwoD< double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -12842,7 +12842,7 @@ SWIGINTERN PyObject *_wrap_Poly2D_atY(PyObject *SWIGUNUSEDPARM(self), PyObject *
     try
     {
       result = ((math::poly::TwoD< double > const *)arg1)->atY(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -12901,7 +12901,7 @@ SWIGINTERN PyObject *_wrap_Poly2D___imul____SWIG_0(PyObject *SWIGUNUSEDPARM(self
     try
     {
       result = (math::poly::TwoD< double > *) &(arg1)->operator *=(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -12960,7 +12960,7 @@ SWIGINTERN PyObject *_wrap_Poly2D___mul____SWIG_0(PyObject *SWIGUNUSEDPARM(self)
     try
     {
       result = ((math::poly::TwoD< double > const *)arg1)->operator *(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -13024,7 +13024,7 @@ SWIGINTERN PyObject *_wrap_Poly2D___imul____SWIG_1(PyObject *SWIGUNUSEDPARM(self
     try
     {
       result = (math::poly::TwoD< double > *) &(arg1)->operator *=((math::poly::TwoD< double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -13132,7 +13132,7 @@ SWIGINTERN PyObject *_wrap_Poly2D___mul____SWIG_1(PyObject *SWIGUNUSEDPARM(self)
     try
     {
       result = ((math::poly::TwoD< double > const *)arg1)->operator *((math::poly::TwoD< double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -13240,7 +13240,7 @@ SWIGINTERN PyObject *_wrap_Poly2D___iadd__(PyObject *SWIGUNUSEDPARM(self), PyObj
     try
     {
       result = (math::poly::TwoD< double > *) &(arg1)->operator +=((math::poly::TwoD< double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -13303,7 +13303,7 @@ SWIGINTERN PyObject *_wrap_Poly2D___add__(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::poly::TwoD< double > const *)arg1)->operator +((math::poly::TwoD< double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -13368,7 +13368,7 @@ SWIGINTERN PyObject *_wrap_Poly2D___isub__(PyObject *SWIGUNUSEDPARM(self), PyObj
     try
     {
       result = (math::poly::TwoD< double > *) &(arg1)->operator -=((math::poly::TwoD< double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -13431,7 +13431,7 @@ SWIGINTERN PyObject *_wrap_Poly2D___sub__(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::poly::TwoD< double > const *)arg1)->operator -((math::poly::TwoD< double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -13493,7 +13493,7 @@ SWIGINTERN PyObject *_wrap_Poly2D___itruediv__(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = (math::poly::TwoD< double > *) &(arg1)->operator /=(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -13553,7 +13553,7 @@ SWIGINTERN PyObject *_wrap_Poly2D___truediv__(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = ((math::poly::TwoD< double > const *)arg1)->operator /(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -13618,7 +13618,7 @@ SWIGINTERN PyObject *_wrap_Poly2D___eq__(PyObject *SWIGUNUSEDPARM(self), PyObjec
     try
     {
       result = (bool)((math::poly::TwoD< double > const *)arg1)->operator ==((math::poly::TwoD< double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -13683,7 +13683,7 @@ SWIGINTERN PyObject *_wrap_Poly2D___ne__(PyObject *SWIGUNUSEDPARM(self), PyObjec
     try
     {
       result = (bool)((math::poly::TwoD< double > const *)arg1)->operator !=((math::poly::TwoD< double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -13745,7 +13745,7 @@ SWIGINTERN PyObject *_wrap_Poly2D_power(PyObject *SWIGUNUSEDPARM(self), PyObject
     try
     {
       result = ((math::poly::TwoD< double > const *)arg1)->power(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -13798,7 +13798,7 @@ SWIGINTERN PyObject *_wrap_Poly2D_isScalar(PyObject *SWIGUNUSEDPARM(self), PyObj
     try
     {
       result = (bool)((math::poly::TwoD< double > const *)arg1)->isScalar();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -13852,7 +13852,7 @@ SWIGINTERN PyObject *_wrap_Poly2D___getitem__(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (double)math_poly_TwoD_Sl_double_Sg____getitem__(arg1,arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -13913,7 +13913,7 @@ SWIGINTERN PyObject *_wrap_Poly2D___setitem__(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       math_poly_TwoD_Sl_double_Sg____setitem__(arg1,arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -13966,7 +13966,7 @@ SWIGINTERN PyObject *_wrap_Poly2D___str__(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = math_poly_TwoD_Sl_double_Sg____str__(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -14020,7 +14020,7 @@ SWIGINTERN PyObject *_wrap_Poly2D___deepcopy__(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = math_poly_TwoD_Sl_double_Sg____deepcopy__(arg1,arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -14075,7 +14075,7 @@ SWIGINTERN PyObject *_wrap_Poly2D___call____SWIG_1(PyObject *SWIGUNUSEDPARM(self
     try
     {
       result = (PyObject *)math_poly_TwoD_Sl_double_Sg____call____SWIG_1(arg1,arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -14182,7 +14182,7 @@ SWIGINTERN PyObject *_wrap_Poly2D_asArray(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = (PyObject *)math_poly_TwoD_Sl_double_Sg__asArray(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -14234,7 +14234,7 @@ SWIGINTERN PyObject *_wrap_delete_Poly2D(PyObject *SWIGUNUSEDPARM(self), PyObjec
     try
     {
       delete arg1;
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -14300,7 +14300,7 @@ SWIGINTERN PyObject *_wrap_Poly1DVector_iterator(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (swig::SwigPyIterator *)std_vector_Sl_math_poly_OneD_Sl_double_Sg__Sg__iterator(arg1,arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -14353,7 +14353,7 @@ SWIGINTERN PyObject *_wrap_Poly1DVector___nonzero__(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       result = (bool)std_vector_Sl_math_poly_OneD_Sl_double_Sg__Sg____nonzero__((std::vector< math::poly::OneD< double > > const *)arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -14406,7 +14406,7 @@ SWIGINTERN PyObject *_wrap_Poly1DVector___bool__(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (bool)std_vector_Sl_math_poly_OneD_Sl_double_Sg__Sg____bool__((std::vector< math::poly::OneD< double > > const *)arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -14459,7 +14459,7 @@ SWIGINTERN PyObject *_wrap_Poly1DVector___len__(PyObject *SWIGUNUSEDPARM(self), 
     try
     {
       result = std_vector_Sl_math_poly_OneD_Sl_double_Sg__Sg____len__((std::vector< math::poly::OneD< double > > const *)arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -14533,7 +14533,7 @@ SWIGINTERN PyObject *_wrap_Poly1DVector___getslice__(PyObject *SWIGUNUSEDPARM(se
       } catch(std::invalid_argument &_e) {
         SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -14605,7 +14605,7 @@ SWIGINTERN PyObject *_wrap_Poly1DVector___setslice____SWIG_0(PyObject *SWIGUNUSE
       } catch(std::invalid_argument &_e) {
         SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -14690,7 +14690,7 @@ SWIGINTERN PyObject *_wrap_Poly1DVector___setslice____SWIG_1(PyObject *SWIGUNUSE
       } catch(std::invalid_argument &_e) {
         SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -14827,7 +14827,7 @@ SWIGINTERN PyObject *_wrap_Poly1DVector___delslice__(PyObject *SWIGUNUSEDPARM(se
       } catch(std::invalid_argument &_e) {
         SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -14891,7 +14891,7 @@ SWIGINTERN PyObject *_wrap_Poly1DVector___delitem____SWIG_0(PyObject *SWIGUNUSED
       } catch(std::invalid_argument &_e) {
         SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -14955,7 +14955,7 @@ SWIGINTERN PyObject *_wrap_Poly1DVector___getitem____SWIG_0(PyObject *SWIGUNUSED
       } catch(std::invalid_argument &_e) {
         SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -15031,7 +15031,7 @@ SWIGINTERN PyObject *_wrap_Poly1DVector___setitem____SWIG_0(PyObject *SWIGUNUSED
       } catch(std::invalid_argument &_e) {
         SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -15096,7 +15096,7 @@ SWIGINTERN PyObject *_wrap_Poly1DVector___setitem____SWIG_1(PyObject *SWIGUNUSED
       } catch(std::invalid_argument &_e) {
         SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -15159,7 +15159,7 @@ SWIGINTERN PyObject *_wrap_Poly1DVector___delitem____SWIG_1(PyObject *SWIGUNUSED
       } catch(std::invalid_argument &_e) {
         SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -15267,7 +15267,7 @@ SWIGINTERN PyObject *_wrap_Poly1DVector___getitem____SWIG_1(PyObject *SWIGUNUSED
       } catch(std::out_of_range &_e) {
         SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -15386,7 +15386,7 @@ SWIGINTERN PyObject *_wrap_Poly1DVector___setitem____SWIG_2(PyObject *SWIGUNUSED
       } catch(std::out_of_range &_e) {
         SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -15510,7 +15510,7 @@ SWIGINTERN PyObject *_wrap_Poly1DVector_pop(PyObject *SWIGUNUSEDPARM(self), PyOb
       } catch(std::out_of_range &_e) {
         SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -15572,7 +15572,7 @@ SWIGINTERN PyObject *_wrap_Poly1DVector_append(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       std_vector_Sl_math_poly_OneD_Sl_double_Sg__Sg__append(arg1,(math::poly::OneD< double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -15615,7 +15615,7 @@ SWIGINTERN PyObject *_wrap_new_Poly1DVector__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       result = (std::vector< math::poly::OneD< double > > *)new std::vector< math::poly::OneD< double > >();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -15671,7 +15671,7 @@ SWIGINTERN PyObject *_wrap_new_Poly1DVector__SWIG_1(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       result = (std::vector< math::poly::OneD< double > > *)new std::vector< math::poly::OneD< double > >((std::vector< math::poly::OneD< double > > const &)*arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -15726,7 +15726,7 @@ SWIGINTERN PyObject *_wrap_Poly1DVector_empty(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (bool)((std::vector< math::poly::OneD< double > > const *)arg1)->empty();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -15779,7 +15779,7 @@ SWIGINTERN PyObject *_wrap_Poly1DVector_size(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((std::vector< math::poly::OneD< double > > const *)arg1)->size();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -15841,7 +15841,7 @@ SWIGINTERN PyObject *_wrap_Poly1DVector_swap(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       (arg1)->swap(*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -15894,7 +15894,7 @@ SWIGINTERN PyObject *_wrap_Poly1DVector_begin(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (arg1)->begin();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -15948,7 +15948,7 @@ SWIGINTERN PyObject *_wrap_Poly1DVector_end(PyObject *SWIGUNUSEDPARM(self), PyOb
     try
     {
       result = (arg1)->end();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -16002,7 +16002,7 @@ SWIGINTERN PyObject *_wrap_Poly1DVector_rbegin(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = (arg1)->rbegin();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -16056,7 +16056,7 @@ SWIGINTERN PyObject *_wrap_Poly1DVector_rend(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = (arg1)->rend();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -16109,7 +16109,7 @@ SWIGINTERN PyObject *_wrap_Poly1DVector_clear(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       (arg1)->clear();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -16162,7 +16162,7 @@ SWIGINTERN PyObject *_wrap_Poly1DVector_get_allocator(PyObject *SWIGUNUSEDPARM(s
     try
     {
       result = ((std::vector< math::poly::OneD< double > > const *)arg1)->get_allocator();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -16213,7 +16213,7 @@ SWIGINTERN PyObject *_wrap_new_Poly1DVector__SWIG_2(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       result = (std::vector< math::poly::OneD< double > > *)new std::vector< math::poly::OneD< double > >(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -16265,7 +16265,7 @@ SWIGINTERN PyObject *_wrap_Poly1DVector_pop_back(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->pop_back();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -16323,7 +16323,7 @@ SWIGINTERN PyObject *_wrap_Poly1DVector_resize__SWIG_0(PyObject *SWIGUNUSEDPARM(
     try
     {
       (arg1)->resize(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -16388,7 +16388,7 @@ SWIGINTERN PyObject *_wrap_Poly1DVector_erase__SWIG_0(PyObject *SWIGUNUSEDPARM(s
     try
     {
       result = std_vector_Sl_math_poly_OneD_Sl_double_Sg__Sg__erase__SWIG_0(arg1,arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -16468,7 +16468,7 @@ SWIGINTERN PyObject *_wrap_Poly1DVector_erase__SWIG_1(PyObject *SWIGUNUSEDPARM(s
     try
     {
       result = std_vector_Sl_math_poly_OneD_Sl_double_Sg__Sg__erase__SWIG_1(arg1,arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -16580,7 +16580,7 @@ SWIGINTERN PyObject *_wrap_new_Poly1DVector__SWIG_3(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       result = (std::vector< math::poly::OneD< double > > *)new std::vector< math::poly::OneD< double > >(arg1,(std::vector< math::poly::OneD< double > >::value_type const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -16697,7 +16697,7 @@ SWIGINTERN PyObject *_wrap_Poly1DVector_push_back(PyObject *SWIGUNUSEDPARM(self)
     try
     {
       (arg1)->push_back((std::vector< math::poly::OneD< double > >::value_type const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -16750,7 +16750,7 @@ SWIGINTERN PyObject *_wrap_Poly1DVector_front(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (std::vector< math::poly::OneD< double > >::value_type *) &((std::vector< math::poly::OneD< double > > const *)arg1)->front();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -16804,7 +16804,7 @@ SWIGINTERN PyObject *_wrap_Poly1DVector_back(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = (std::vector< math::poly::OneD< double > >::value_type *) &((std::vector< math::poly::OneD< double > > const *)arg1)->back();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -16875,7 +16875,7 @@ SWIGINTERN PyObject *_wrap_Poly1DVector_assign(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       (arg1)->assign(arg2,(std::vector< math::poly::OneD< double > >::value_type const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -16944,7 +16944,7 @@ SWIGINTERN PyObject *_wrap_Poly1DVector_resize__SWIG_1(PyObject *SWIGUNUSEDPARM(
     try
     {
       (arg1)->resize(arg2,(std::vector< math::poly::OneD< double > >::value_type const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -17070,7 +17070,7 @@ SWIGINTERN PyObject *_wrap_Poly1DVector_insert__SWIG_0(PyObject *SWIGUNUSEDPARM(
     try
     {
       result = std_vector_Sl_math_poly_OneD_Sl_double_Sg__Sg__insert__SWIG_0(arg1,arg2,(math::poly::OneD< double > const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -17154,7 +17154,7 @@ SWIGINTERN PyObject *_wrap_Poly1DVector_insert__SWIG_1(PyObject *SWIGUNUSEDPARM(
     try
     {
       std_vector_Sl_math_poly_OneD_Sl_double_Sg__Sg__insert__SWIG_1(arg1,arg2,arg3,(math::poly::OneD< double > const &)*arg4);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -17271,7 +17271,7 @@ SWIGINTERN PyObject *_wrap_Poly1DVector_reserve(PyObject *SWIGUNUSEDPARM(self), 
     try
     {
       (arg1)->reserve(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -17324,7 +17324,7 @@ SWIGINTERN PyObject *_wrap_Poly1DVector_capacity(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = ((std::vector< math::poly::OneD< double > > const *)arg1)->capacity();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -17376,7 +17376,7 @@ SWIGINTERN PyObject *_wrap_delete_Poly1DVector(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       delete arg1;
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -17441,7 +17441,7 @@ SWIGINTERN PyObject *_wrap_compute_mean_value__SWIG_0(PyObject *SWIGUNUSEDPARM(s
     try
     {
       result = (double)math::poly::compute_mean_value((math::linear::Vector< double > const &)*arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -17495,7 +17495,7 @@ SWIGINTERN PyObject *_wrap_compute_mean_value__SWIG_1(PyObject *SWIGUNUSEDPARM(s
     try
     {
       result = (double)math::poly::compute_mean_value((math::linear::Matrix2D< double > const &)*arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -17604,7 +17604,7 @@ SWIGINTERN PyObject *_wrap_fit__SWIG_1(PyObject *SWIGUNUSEDPARM(self), Py_ssize_
     try
     {
       result = math::poly::fit(arg1,(double const *)arg2,(double const *)arg3,arg4);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -17696,7 +17696,7 @@ SWIGINTERN PyObject *_wrap_fit__SWIG_2(PyObject *SWIGUNUSEDPARM(self), Py_ssize_
     try
     {
       result = math::poly::fit((math::linear::Matrix2D< double > const &)*arg1,(math::linear::Matrix2D< double > const &)*arg2,(math::linear::Matrix2D< double > const &)*arg3,arg4,arg5);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -17795,7 +17795,7 @@ SWIGINTERN PyObject *_wrap_fit__SWIG_3(PyObject *SWIGUNUSEDPARM(self), Py_ssize_
     try
     {
       result = math::poly::fit(arg1,arg2,(double const *)arg3,(double const *)arg4,(double const *)arg5,arg6,arg7);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -17890,7 +17890,7 @@ SWIGINTERN PyObject *_wrap_fit__SWIG_4(PyObject *SWIGUNUSEDPARM(self), Py_ssize_
     try
     {
       result = math::poly::fit((math::linear::Vector< double > const &)*arg1,(math::linear::Vector< double > const &)*arg2,(math::linear::Vector< double > const &)*arg3,(math::linear::Vector< double > const &)*arg4,arg5);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -17963,7 +17963,7 @@ SWIGINTERN PyObject *_wrap_fit__SWIG_5(PyObject *SWIGUNUSEDPARM(self), Py_ssize_
     try
     {
       result = math::poly::fit((math::linear::Vector< double > const &)*arg1,(math::linear::Matrix2D< double > const &)*arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -18066,7 +18066,7 @@ SWIGINTERN PyObject *_wrap_fit__SWIG_6(PyObject *SWIGUNUSEDPARM(self), Py_ssize_
     try
     {
       result = math::poly::fit((std::vector< double,std::allocator< double > > const &)*arg1,(std::vector< double,std::allocator< double > > const &)*arg2,(std::vector< double,std::allocator< double > > const &)*arg3,(std::vector< double,std::allocator< double > > const &)*arg4,arg5);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -18337,7 +18337,7 @@ SWIGINTERN PyObject *_wrap_FitVectorDouble(PyObject *SWIGUNUSEDPARM(self), PyObj
     try
     {
       result = math::poly::SWIGTEMPLATEDISAMBIGUATOR fit< VectorDouble >((math::linear::Vector< double > const &)*arg1,(math::linear::Vector< double > const &)*arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -18380,7 +18380,7 @@ SWIGINTERN PyObject *_wrap_new_PolyVector3__SWIG_0(PyObject *SWIGUNUSEDPARM(self
     try
     {
       result = (math::poly::OneD< Vector3 > *)new math::poly::OneD< Vector3 >();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -18436,7 +18436,7 @@ SWIGINTERN PyObject *_wrap_new_PolyVector3__SWIG_1(PyObject *SWIGUNUSEDPARM(self
     try
     {
       result = (math::poly::OneD< Vector3 > *)new math::poly::OneD< Vector3 >((std::vector< math::linear::VectorN< 3,double >,std::allocator< math::linear::VectorN< 3,double > > > const &)*arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -18489,7 +18489,7 @@ SWIGINTERN PyObject *_wrap_new_PolyVector3__SWIG_2(PyObject *SWIGUNUSEDPARM(self
     try
     {
       result = (math::poly::OneD< Vector3 > *)new math::poly::OneD< Vector3 >(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -18548,7 +18548,7 @@ SWIGINTERN PyObject *_wrap_new_PolyVector3__SWIG_3(PyObject *SWIGUNUSEDPARM(self
     try
     {
       result = (math::poly::OneD< Vector3 > *)new math::poly::OneD< Vector3 >(arg1,(math::linear::VectorN< 3,double > const *)arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -18657,7 +18657,7 @@ SWIGINTERN PyObject *_wrap_PolyVector3_order(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::poly::OneD< Vector3 > const *)arg1)->order();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -18710,7 +18710,7 @@ SWIGINTERN PyObject *_wrap_PolyVector3_size(PyObject *SWIGUNUSEDPARM(self), PyOb
     try
     {
       result = ((math::poly::OneD< Vector3 > const *)arg1)->size();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -18763,7 +18763,7 @@ SWIGINTERN PyObject *_wrap_PolyVector3_empty(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = (bool)((math::poly::OneD< Vector3 > const *)arg1)->empty();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -18816,7 +18816,7 @@ SWIGINTERN PyObject *_wrap_PolyVector3_coeffs(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (std::vector< math::linear::VectorN< 3,double >,std::allocator< math::linear::VectorN< 3,double > > > *) &((math::poly::OneD< Vector3 > const *)arg1)->coeffs();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -18876,7 +18876,7 @@ SWIGINTERN PyObject *_wrap_PolyVector3_scaleVariable(PyObject *SWIGUNUSEDPARM(se
     try
     {
       result = ((math::poly::OneD< Vector3 > const *)arg1)->scaleVariable(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -18936,7 +18936,7 @@ SWIGINTERN PyObject *_wrap_PolyVector3_truncateTo(PyObject *SWIGUNUSEDPARM(self)
     try
     {
       result = ((math::poly::OneD< Vector3 > const *)arg1)->truncateTo(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -18998,7 +18998,7 @@ SWIGINTERN PyObject *_wrap_PolyVector3_copyFrom(PyObject *SWIGUNUSEDPARM(self), 
     try
     {
       (arg1)->copyFrom((math::poly::OneD< math::linear::VectorN< 3,double > > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -19057,7 +19057,7 @@ SWIGINTERN PyObject *_wrap_PolyVector3___call____SWIG_0(PyObject *SWIGUNUSEDPARM
     try
     {
       result = ((math::poly::OneD< Vector3 > const *)arg1)->operator ()(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -19110,7 +19110,7 @@ SWIGINTERN PyObject *_wrap_PolyVector3_derivative(PyObject *SWIGUNUSEDPARM(self)
     try
     {
       result = ((math::poly::OneD< Vector3 > const *)arg1)->derivative();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -19170,7 +19170,7 @@ SWIGINTERN PyObject *_wrap_PolyVector3_velocity(PyObject *SWIGUNUSEDPARM(self), 
     try
     {
       result = ((math::poly::OneD< Vector3 > const *)arg1)->velocity(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -19230,7 +19230,7 @@ SWIGINTERN PyObject *_wrap_PolyVector3_acceleration(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       result = ((math::poly::OneD< Vector3 > const *)arg1)->acceleration(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -19289,7 +19289,7 @@ SWIGINTERN PyObject *_wrap_PolyVector3___imul____SWIG_0(PyObject *SWIGUNUSEDPARM
     try
     {
       result = (math::poly::OneD< math::linear::VectorN< 3,double > > *) &(arg1)->operator *=(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -19348,7 +19348,7 @@ SWIGINTERN PyObject *_wrap_PolyVector3___mul____SWIG_0(PyObject *SWIGUNUSEDPARM(
     try
     {
       result = ((math::poly::OneD< Vector3 > const *)arg1)->operator *(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -19412,7 +19412,7 @@ SWIGINTERN PyObject *_wrap_PolyVector3___imul____SWIG_1(PyObject *SWIGUNUSEDPARM
     try
     {
       result = (math::poly::OneD< math::linear::VectorN< 3,double > > *) &(arg1)->operator *=((math::poly::OneD< math::linear::VectorN< 3,double > > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -19520,7 +19520,7 @@ SWIGINTERN PyObject *_wrap_PolyVector3___mul____SWIG_1(PyObject *SWIGUNUSEDPARM(
     try
     {
       result = ((math::poly::OneD< Vector3 > const *)arg1)->operator *((math::poly::OneD< math::linear::VectorN< 3,double > > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -19628,7 +19628,7 @@ SWIGINTERN PyObject *_wrap_PolyVector3___iadd__(PyObject *SWIGUNUSEDPARM(self), 
     try
     {
       result = (math::poly::OneD< math::linear::VectorN< 3,double > > *) &(arg1)->operator +=((math::poly::OneD< math::linear::VectorN< 3,double > > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -19691,7 +19691,7 @@ SWIGINTERN PyObject *_wrap_PolyVector3___add__(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = ((math::poly::OneD< Vector3 > const *)arg1)->operator +((math::poly::OneD< math::linear::VectorN< 3,double > > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -19756,7 +19756,7 @@ SWIGINTERN PyObject *_wrap_PolyVector3___isub__(PyObject *SWIGUNUSEDPARM(self), 
     try
     {
       result = (math::poly::OneD< math::linear::VectorN< 3,double > > *) &(arg1)->operator -=((math::poly::OneD< math::linear::VectorN< 3,double > > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -19819,7 +19819,7 @@ SWIGINTERN PyObject *_wrap_PolyVector3___sub__(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = ((math::poly::OneD< Vector3 > const *)arg1)->operator -((math::poly::OneD< math::linear::VectorN< 3,double > > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -19881,7 +19881,7 @@ SWIGINTERN PyObject *_wrap_PolyVector3___itruediv__(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       result = (math::poly::OneD< math::linear::VectorN< 3,double > > *) &(arg1)->operator /=(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -19941,7 +19941,7 @@ SWIGINTERN PyObject *_wrap_PolyVector3___truediv__(PyObject *SWIGUNUSEDPARM(self
     try
     {
       result = ((math::poly::OneD< Vector3 > const *)arg1)->operator /(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -20006,7 +20006,7 @@ SWIGINTERN PyObject *_wrap_PolyVector3___eq__(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (bool)(arg1)->operator ==((math::poly::OneD< math::linear::VectorN< 3,double > > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -20071,7 +20071,7 @@ SWIGINTERN PyObject *_wrap_PolyVector3___ne__(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (bool)(arg1)->operator !=((math::poly::OneD< math::linear::VectorN< 3,double > > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -20133,7 +20133,7 @@ SWIGINTERN PyObject *_wrap_PolyVector3___getitem__(PyObject *SWIGUNUSEDPARM(self
     try
     {
       result = math_poly_OneD_Sl_Vector3_Sg____getitem__(arg1,arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -20208,7 +20208,7 @@ SWIGINTERN PyObject *_wrap_PolyVector3___setitem__(PyObject *SWIGUNUSEDPARM(self
     try
     {
       math_poly_OneD_Sl_Vector3_Sg____setitem__(arg1,arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -20261,7 +20261,7 @@ SWIGINTERN PyObject *_wrap_PolyVector3___str__(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = math_poly_OneD_Sl_Vector3_Sg____str__(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -20315,7 +20315,7 @@ SWIGINTERN PyObject *_wrap_PolyVector3___deepcopy__(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       result = math_poly_OneD_Sl_Vector3_Sg____deepcopy__(arg1,arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -20368,7 +20368,7 @@ SWIGINTERN PyObject *_wrap_PolyVector3___call____SWIG_1(PyObject *SWIGUNUSEDPARM
     try
     {
       result = (PyObject *)math_poly_OneD_Sl_Vector3_Sg____call____SWIG_1(arg1,arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -20466,7 +20466,7 @@ SWIGINTERN PyObject *_wrap_PolyVector3_asArray(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = (PyObject *)math_poly_OneD_Sl_Vector3_Sg__asArray(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -20518,7 +20518,7 @@ SWIGINTERN PyObject *_wrap_delete_PolyVector3(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       delete arg1;
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -20584,7 +20584,7 @@ SWIGINTERN PyObject *_wrap_StdVectorDouble_iterator(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       result = (swig::SwigPyIterator *)std_vector_Sl_double_Sg__iterator(arg1,arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -20637,7 +20637,7 @@ SWIGINTERN PyObject *_wrap_StdVectorDouble___nonzero__(PyObject *SWIGUNUSEDPARM(
     try
     {
       result = (bool)std_vector_Sl_double_Sg____nonzero__((std::vector< double > const *)arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -20690,7 +20690,7 @@ SWIGINTERN PyObject *_wrap_StdVectorDouble___bool__(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       result = (bool)std_vector_Sl_double_Sg____bool__((std::vector< double > const *)arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -20743,7 +20743,7 @@ SWIGINTERN PyObject *_wrap_StdVectorDouble___len__(PyObject *SWIGUNUSEDPARM(self
     try
     {
       result = std_vector_Sl_double_Sg____len__((std::vector< double > const *)arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -20817,7 +20817,7 @@ SWIGINTERN PyObject *_wrap_StdVectorDouble___getslice__(PyObject *SWIGUNUSEDPARM
       } catch(std::invalid_argument &_e) {
         SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -20889,7 +20889,7 @@ SWIGINTERN PyObject *_wrap_StdVectorDouble___setslice____SWIG_0(PyObject *SWIGUN
       } catch(std::invalid_argument &_e) {
         SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -20974,7 +20974,7 @@ SWIGINTERN PyObject *_wrap_StdVectorDouble___setslice____SWIG_1(PyObject *SWIGUN
       } catch(std::invalid_argument &_e) {
         SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -21111,7 +21111,7 @@ SWIGINTERN PyObject *_wrap_StdVectorDouble___delslice__(PyObject *SWIGUNUSEDPARM
       } catch(std::invalid_argument &_e) {
         SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -21175,7 +21175,7 @@ SWIGINTERN PyObject *_wrap_StdVectorDouble___delitem____SWIG_0(PyObject *SWIGUNU
       } catch(std::invalid_argument &_e) {
         SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -21239,7 +21239,7 @@ SWIGINTERN PyObject *_wrap_StdVectorDouble___getitem____SWIG_0(PyObject *SWIGUNU
       } catch(std::invalid_argument &_e) {
         SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -21315,7 +21315,7 @@ SWIGINTERN PyObject *_wrap_StdVectorDouble___setitem____SWIG_0(PyObject *SWIGUNU
       } catch(std::invalid_argument &_e) {
         SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -21380,7 +21380,7 @@ SWIGINTERN PyObject *_wrap_StdVectorDouble___setitem____SWIG_1(PyObject *SWIGUNU
       } catch(std::invalid_argument &_e) {
         SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -21443,7 +21443,7 @@ SWIGINTERN PyObject *_wrap_StdVectorDouble___delitem____SWIG_1(PyObject *SWIGUNU
       } catch(std::invalid_argument &_e) {
         SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -21551,7 +21551,7 @@ SWIGINTERN PyObject *_wrap_StdVectorDouble___getitem____SWIG_1(PyObject *SWIGUNU
       } catch(std::out_of_range &_e) {
         SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -21624,7 +21624,7 @@ SWIGINTERN PyObject *_wrap_StdVectorDouble___setitem____SWIG_2(PyObject *SWIGUNU
       } catch(std::out_of_range &_e) {
         SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -21681,7 +21681,7 @@ SWIGINTERN PyObject *_wrap_StdVectorDouble_pop(PyObject *SWIGUNUSEDPARM(self), P
       } catch(std::out_of_range &_e) {
         SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -21742,7 +21742,7 @@ SWIGINTERN PyObject *_wrap_StdVectorDouble_append(PyObject *SWIGUNUSEDPARM(self)
     try
     {
       std_vector_Sl_double_Sg__append(arg1,(double const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -21785,7 +21785,7 @@ SWIGINTERN PyObject *_wrap_new_StdVectorDouble__SWIG_0(PyObject *SWIGUNUSEDPARM(
     try
     {
       result = (std::vector< double > *)new std::vector< double >();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -21841,7 +21841,7 @@ SWIGINTERN PyObject *_wrap_new_StdVectorDouble__SWIG_1(PyObject *SWIGUNUSEDPARM(
     try
     {
       result = (std::vector< double > *)new std::vector< double >((std::vector< double > const &)*arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -21896,7 +21896,7 @@ SWIGINTERN PyObject *_wrap_StdVectorDouble_empty(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (bool)((std::vector< double > const *)arg1)->empty();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -21949,7 +21949,7 @@ SWIGINTERN PyObject *_wrap_StdVectorDouble_size(PyObject *SWIGUNUSEDPARM(self), 
     try
     {
       result = ((std::vector< double > const *)arg1)->size();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -22011,7 +22011,7 @@ SWIGINTERN PyObject *_wrap_StdVectorDouble_swap(PyObject *SWIGUNUSEDPARM(self), 
     try
     {
       (arg1)->swap(*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -22064,7 +22064,7 @@ SWIGINTERN PyObject *_wrap_StdVectorDouble_begin(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (arg1)->begin();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -22118,7 +22118,7 @@ SWIGINTERN PyObject *_wrap_StdVectorDouble_end(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = (arg1)->end();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -22172,7 +22172,7 @@ SWIGINTERN PyObject *_wrap_StdVectorDouble_rbegin(PyObject *SWIGUNUSEDPARM(self)
     try
     {
       result = (arg1)->rbegin();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -22226,7 +22226,7 @@ SWIGINTERN PyObject *_wrap_StdVectorDouble_rend(PyObject *SWIGUNUSEDPARM(self), 
     try
     {
       result = (arg1)->rend();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -22279,7 +22279,7 @@ SWIGINTERN PyObject *_wrap_StdVectorDouble_clear(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->clear();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -22332,7 +22332,7 @@ SWIGINTERN PyObject *_wrap_StdVectorDouble_get_allocator(PyObject *SWIGUNUSEDPAR
     try
     {
       result = ((std::vector< double > const *)arg1)->get_allocator();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -22383,7 +22383,7 @@ SWIGINTERN PyObject *_wrap_new_StdVectorDouble__SWIG_2(PyObject *SWIGUNUSEDPARM(
     try
     {
       result = (std::vector< double > *)new std::vector< double >(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -22435,7 +22435,7 @@ SWIGINTERN PyObject *_wrap_StdVectorDouble_pop_back(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       (arg1)->pop_back();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -22493,7 +22493,7 @@ SWIGINTERN PyObject *_wrap_StdVectorDouble_resize__SWIG_0(PyObject *SWIGUNUSEDPA
     try
     {
       (arg1)->resize(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -22558,7 +22558,7 @@ SWIGINTERN PyObject *_wrap_StdVectorDouble_erase__SWIG_0(PyObject *SWIGUNUSEDPAR
     try
     {
       result = std_vector_Sl_double_Sg__erase__SWIG_0(arg1,arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -22638,7 +22638,7 @@ SWIGINTERN PyObject *_wrap_StdVectorDouble_erase__SWIG_1(PyObject *SWIGUNUSEDPAR
     try
     {
       result = std_vector_Sl_double_Sg__erase__SWIG_1(arg1,arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -22749,7 +22749,7 @@ SWIGINTERN PyObject *_wrap_new_StdVectorDouble__SWIG_3(PyObject *SWIGUNUSEDPARM(
     try
     {
       result = (std::vector< double > *)new std::vector< double >(arg1,(std::vector< double >::value_type const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -22867,7 +22867,7 @@ SWIGINTERN PyObject *_wrap_StdVectorDouble_push_back(PyObject *SWIGUNUSEDPARM(se
     try
     {
       (arg1)->push_back((std::vector< double >::value_type const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -22920,7 +22920,7 @@ SWIGINTERN PyObject *_wrap_StdVectorDouble_front(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (std::vector< double >::value_type *) &((std::vector< double > const *)arg1)->front();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -22974,7 +22974,7 @@ SWIGINTERN PyObject *_wrap_StdVectorDouble_back(PyObject *SWIGUNUSEDPARM(self), 
     try
     {
       result = (std::vector< double >::value_type *) &((std::vector< double > const *)arg1)->back();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -23044,7 +23044,7 @@ SWIGINTERN PyObject *_wrap_StdVectorDouble_assign(PyObject *SWIGUNUSEDPARM(self)
     try
     {
       (arg1)->assign(arg2,(std::vector< double >::value_type const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -23112,7 +23112,7 @@ SWIGINTERN PyObject *_wrap_StdVectorDouble_resize__SWIG_1(PyObject *SWIGUNUSEDPA
     try
     {
       (arg1)->resize(arg2,(std::vector< double >::value_type const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -23239,7 +23239,7 @@ SWIGINTERN PyObject *_wrap_StdVectorDouble_insert__SWIG_0(PyObject *SWIGUNUSEDPA
     try
     {
       result = std_vector_Sl_double_Sg__insert__SWIG_0(arg1,arg2,(double const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -23322,7 +23322,7 @@ SWIGINTERN PyObject *_wrap_StdVectorDouble_insert__SWIG_1(PyObject *SWIGUNUSEDPA
     try
     {
       std_vector_Sl_double_Sg__insert__SWIG_1(arg1,arg2,arg3,(double const &)*arg4);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -23443,7 +23443,7 @@ SWIGINTERN PyObject *_wrap_StdVectorDouble_reserve(PyObject *SWIGUNUSEDPARM(self
     try
     {
       (arg1)->reserve(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -23496,7 +23496,7 @@ SWIGINTERN PyObject *_wrap_StdVectorDouble_capacity(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       result = ((std::vector< double > const *)arg1)->capacity();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -23555,7 +23555,7 @@ SWIGINTERN PyObject *_wrap_StdVectorDouble___getitem____SWIG_2(PyObject *SWIGUNU
     try
     {
       result = (double)std_vector_Sl_double_Sg____getitem____SWIG_2(arg1,arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -23681,7 +23681,7 @@ SWIGINTERN PyObject *_wrap_StdVectorDouble___setitem____SWIG_3(PyObject *SWIGUNU
     try
     {
       std_vector_Sl_double_Sg____setitem____SWIG_3(arg1,arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -23824,7 +23824,7 @@ SWIGINTERN PyObject *_wrap_StdVectorDouble___str__(PyObject *SWIGUNUSEDPARM(self
     try
     {
       result = std_vector_Sl_double_Sg____str__(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -23876,7 +23876,7 @@ SWIGINTERN PyObject *_wrap_delete_StdVectorDouble(PyObject *SWIGUNUSEDPARM(self)
     try
     {
       delete arg1;
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())

@@ -5863,7 +5863,7 @@ SWIGINTERN PyObject *_wrap_delete_SwigPyIterator(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       delete arg1;
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -5924,7 +5924,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator_value(PyObject *SWIGUNUSEDPARM(self), 
           SWIG_fail;
         }
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -5991,7 +5991,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator_incr__SWIG_0(PyObject *SWIGUNUSEDPARM(
           SWIG_fail;
         }
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -6050,7 +6050,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator_incr__SWIG_1(PyObject *SWIGUNUSEDPARM(
           SWIG_fail;
         }
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -6159,7 +6159,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator_decr__SWIG_0(PyObject *SWIGUNUSEDPARM(
           SWIG_fail;
         }
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -6218,7 +6218,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator_decr__SWIG_1(PyObject *SWIGUNUSEDPARM(
           SWIG_fail;
         }
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -6327,7 +6327,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator_distance(PyObject *SWIGUNUSEDPARM(self
       } catch(std::invalid_argument &_e) {
         SWIG_Python_Raise(SWIG_NewPointerObj((new std::invalid_argument(static_cast< const std::invalid_argument& >(_e))),SWIGTYPE_p_std__invalid_argument,SWIG_POINTER_OWN), "std::invalid_argument", SWIGTYPE_p_std__invalid_argument); SWIG_fail;
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -6394,7 +6394,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator_equal(PyObject *SWIGUNUSEDPARM(self), 
       } catch(std::invalid_argument &_e) {
         SWIG_Python_Raise(SWIG_NewPointerObj((new std::invalid_argument(static_cast< const std::invalid_argument& >(_e))),SWIGTYPE_p_std__invalid_argument,SWIG_POINTER_OWN), "std::invalid_argument", SWIGTYPE_p_std__invalid_argument); SWIG_fail;
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -6447,7 +6447,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator_copy(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = (swig::SwigPyIterator *)((swig::SwigPyIterator const *)arg1)->copy();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -6508,7 +6508,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator_next(PyObject *SWIGUNUSEDPARM(self), P
           SWIG_fail;
         }
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -6569,7 +6569,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator___next__(PyObject *SWIGUNUSEDPARM(self
           SWIG_fail;
         }
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -6630,7 +6630,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator_previous(PyObject *SWIGUNUSEDPARM(self
           SWIG_fail;
         }
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -6698,7 +6698,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator_advance(PyObject *SWIGUNUSEDPARM(self)
           SWIG_fail;
         }
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -6761,7 +6761,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator___eq__(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (bool)((swig::SwigPyIterator const *)arg1)->operator ==((swig::SwigPyIterator const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -6826,7 +6826,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator___ne__(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (bool)((swig::SwigPyIterator const *)arg1)->operator !=((swig::SwigPyIterator const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -6896,7 +6896,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator___iadd__(PyObject *SWIGUNUSEDPARM(self
           SWIG_fail;
         }
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -6964,7 +6964,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator___isub__(PyObject *SWIGUNUSEDPARM(self
           SWIG_fail;
         }
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -7032,7 +7032,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator___add__(PyObject *SWIGUNUSEDPARM(self)
           SWIG_fail;
         }
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -7101,7 +7101,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator___sub____SWIG_0(PyObject *SWIGUNUSEDPA
           SWIG_fail;
         }
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -7165,7 +7165,7 @@ SWIGINTERN PyObject *_wrap_SwigPyIterator___sub____SWIG_1(PyObject *SWIGUNUSEDPA
     try
     {
       result = ((swig::SwigPyIterator const *)arg1)->operator -((swig::SwigPyIterator const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -7272,7 +7272,7 @@ SWIGINTERN PyObject *_wrap_std_vector_double_iterator(PyObject *SWIGUNUSEDPARM(s
     try
     {
       result = (swig::SwigPyIterator *)std_vector_Sl_double_Sg__iterator(arg1,arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -7325,7 +7325,7 @@ SWIGINTERN PyObject *_wrap_std_vector_double___nonzero__(PyObject *SWIGUNUSEDPAR
     try
     {
       result = (bool)std_vector_Sl_double_Sg____nonzero__((std::vector< double > const *)arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -7378,7 +7378,7 @@ SWIGINTERN PyObject *_wrap_std_vector_double___bool__(PyObject *SWIGUNUSEDPARM(s
     try
     {
       result = (bool)std_vector_Sl_double_Sg____bool__((std::vector< double > const *)arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -7431,7 +7431,7 @@ SWIGINTERN PyObject *_wrap_std_vector_double___len__(PyObject *SWIGUNUSEDPARM(se
     try
     {
       result = std_vector_Sl_double_Sg____len__((std::vector< double > const *)arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -7505,7 +7505,7 @@ SWIGINTERN PyObject *_wrap_std_vector_double___getslice__(PyObject *SWIGUNUSEDPA
       } catch(std::invalid_argument &_e) {
         SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -7577,7 +7577,7 @@ SWIGINTERN PyObject *_wrap_std_vector_double___setslice____SWIG_0(PyObject *SWIG
       } catch(std::invalid_argument &_e) {
         SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -7662,7 +7662,7 @@ SWIGINTERN PyObject *_wrap_std_vector_double___setslice____SWIG_1(PyObject *SWIG
       } catch(std::invalid_argument &_e) {
         SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -7799,7 +7799,7 @@ SWIGINTERN PyObject *_wrap_std_vector_double___delslice__(PyObject *SWIGUNUSEDPA
       } catch(std::invalid_argument &_e) {
         SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -7863,7 +7863,7 @@ SWIGINTERN PyObject *_wrap_std_vector_double___delitem____SWIG_0(PyObject *SWIGU
       } catch(std::invalid_argument &_e) {
         SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -7927,7 +7927,7 @@ SWIGINTERN PyObject *_wrap_std_vector_double___getitem____SWIG_0(PyObject *SWIGU
       } catch(std::invalid_argument &_e) {
         SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -8003,7 +8003,7 @@ SWIGINTERN PyObject *_wrap_std_vector_double___setitem____SWIG_0(PyObject *SWIGU
       } catch(std::invalid_argument &_e) {
         SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -8068,7 +8068,7 @@ SWIGINTERN PyObject *_wrap_std_vector_double___setitem____SWIG_1(PyObject *SWIGU
       } catch(std::invalid_argument &_e) {
         SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -8131,7 +8131,7 @@ SWIGINTERN PyObject *_wrap_std_vector_double___delitem____SWIG_1(PyObject *SWIGU
       } catch(std::invalid_argument &_e) {
         SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -8239,7 +8239,7 @@ SWIGINTERN PyObject *_wrap_std_vector_double___getitem____SWIG_1(PyObject *SWIGU
       } catch(std::out_of_range &_e) {
         SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -8357,7 +8357,7 @@ SWIGINTERN PyObject *_wrap_std_vector_double___setitem____SWIG_2(PyObject *SWIGU
       } catch(std::out_of_range &_e) {
         SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -8483,7 +8483,7 @@ SWIGINTERN PyObject *_wrap_std_vector_double_pop(PyObject *SWIGUNUSEDPARM(self),
       } catch(std::out_of_range &_e) {
         SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -8544,7 +8544,7 @@ SWIGINTERN PyObject *_wrap_std_vector_double_append(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       std_vector_Sl_double_Sg__append(arg1,(double const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -8587,7 +8587,7 @@ SWIGINTERN PyObject *_wrap_new_std_vector_double__SWIG_0(PyObject *SWIGUNUSEDPAR
     try
     {
       result = (std::vector< double > *)new std::vector< double >();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -8643,7 +8643,7 @@ SWIGINTERN PyObject *_wrap_new_std_vector_double__SWIG_1(PyObject *SWIGUNUSEDPAR
     try
     {
       result = (std::vector< double > *)new std::vector< double >((std::vector< double > const &)*arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -8698,7 +8698,7 @@ SWIGINTERN PyObject *_wrap_std_vector_double_empty(PyObject *SWIGUNUSEDPARM(self
     try
     {
       result = (bool)((std::vector< double > const *)arg1)->empty();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -8751,7 +8751,7 @@ SWIGINTERN PyObject *_wrap_std_vector_double_size(PyObject *SWIGUNUSEDPARM(self)
     try
     {
       result = ((std::vector< double > const *)arg1)->size();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -8813,7 +8813,7 @@ SWIGINTERN PyObject *_wrap_std_vector_double_swap(PyObject *SWIGUNUSEDPARM(self)
     try
     {
       (arg1)->swap(*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -8866,7 +8866,7 @@ SWIGINTERN PyObject *_wrap_std_vector_double_begin(PyObject *SWIGUNUSEDPARM(self
     try
     {
       result = (arg1)->begin();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -8920,7 +8920,7 @@ SWIGINTERN PyObject *_wrap_std_vector_double_end(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (arg1)->end();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -8974,7 +8974,7 @@ SWIGINTERN PyObject *_wrap_std_vector_double_rbegin(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       result = (arg1)->rbegin();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -9028,7 +9028,7 @@ SWIGINTERN PyObject *_wrap_std_vector_double_rend(PyObject *SWIGUNUSEDPARM(self)
     try
     {
       result = (arg1)->rend();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -9081,7 +9081,7 @@ SWIGINTERN PyObject *_wrap_std_vector_double_clear(PyObject *SWIGUNUSEDPARM(self
     try
     {
       (arg1)->clear();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -9134,7 +9134,7 @@ SWIGINTERN PyObject *_wrap_std_vector_double_get_allocator(PyObject *SWIGUNUSEDP
     try
     {
       result = ((std::vector< double > const *)arg1)->get_allocator();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -9185,7 +9185,7 @@ SWIGINTERN PyObject *_wrap_new_std_vector_double__SWIG_2(PyObject *SWIGUNUSEDPAR
     try
     {
       result = (std::vector< double > *)new std::vector< double >(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -9237,7 +9237,7 @@ SWIGINTERN PyObject *_wrap_std_vector_double_pop_back(PyObject *SWIGUNUSEDPARM(s
     try
     {
       (arg1)->pop_back();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -9295,7 +9295,7 @@ SWIGINTERN PyObject *_wrap_std_vector_double_resize__SWIG_0(PyObject *SWIGUNUSED
     try
     {
       (arg1)->resize(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -9360,7 +9360,7 @@ SWIGINTERN PyObject *_wrap_std_vector_double_erase__SWIG_0(PyObject *SWIGUNUSEDP
     try
     {
       result = std_vector_Sl_double_Sg__erase__SWIG_0(arg1,arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -9440,7 +9440,7 @@ SWIGINTERN PyObject *_wrap_std_vector_double_erase__SWIG_1(PyObject *SWIGUNUSEDP
     try
     {
       result = std_vector_Sl_double_Sg__erase__SWIG_1(arg1,arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -9551,7 +9551,7 @@ SWIGINTERN PyObject *_wrap_new_std_vector_double__SWIG_3(PyObject *SWIGUNUSEDPAR
     try
     {
       result = (std::vector< double > *)new std::vector< double >(arg1,(std::vector< double >::value_type const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -9669,7 +9669,7 @@ SWIGINTERN PyObject *_wrap_std_vector_double_push_back(PyObject *SWIGUNUSEDPARM(
     try
     {
       (arg1)->push_back((std::vector< double >::value_type const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -9722,7 +9722,7 @@ SWIGINTERN PyObject *_wrap_std_vector_double_front(PyObject *SWIGUNUSEDPARM(self
     try
     {
       result = (std::vector< double >::value_type *) &((std::vector< double > const *)arg1)->front();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -9776,7 +9776,7 @@ SWIGINTERN PyObject *_wrap_std_vector_double_back(PyObject *SWIGUNUSEDPARM(self)
     try
     {
       result = (std::vector< double >::value_type *) &((std::vector< double > const *)arg1)->back();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -9846,7 +9846,7 @@ SWIGINTERN PyObject *_wrap_std_vector_double_assign(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       (arg1)->assign(arg2,(std::vector< double >::value_type const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -9914,7 +9914,7 @@ SWIGINTERN PyObject *_wrap_std_vector_double_resize__SWIG_1(PyObject *SWIGUNUSED
     try
     {
       (arg1)->resize(arg2,(std::vector< double >::value_type const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -10041,7 +10041,7 @@ SWIGINTERN PyObject *_wrap_std_vector_double_insert__SWIG_0(PyObject *SWIGUNUSED
     try
     {
       result = std_vector_Sl_double_Sg__insert__SWIG_0(arg1,arg2,(double const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -10124,7 +10124,7 @@ SWIGINTERN PyObject *_wrap_std_vector_double_insert__SWIG_1(PyObject *SWIGUNUSED
     try
     {
       std_vector_Sl_double_Sg__insert__SWIG_1(arg1,arg2,arg3,(double const &)*arg4);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -10245,7 +10245,7 @@ SWIGINTERN PyObject *_wrap_std_vector_double_reserve(PyObject *SWIGUNUSEDPARM(se
     try
     {
       (arg1)->reserve(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -10298,7 +10298,7 @@ SWIGINTERN PyObject *_wrap_std_vector_double_capacity(PyObject *SWIGUNUSEDPARM(s
     try
     {
       result = ((std::vector< double > const *)arg1)->capacity();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -10350,7 +10350,7 @@ SWIGINTERN PyObject *_wrap_delete_std_vector_double(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       delete arg1;
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -10416,7 +10416,7 @@ SWIGINTERN PyObject *_wrap_std_vector_vector_double_iterator(PyObject *SWIGUNUSE
     try
     {
       result = (swig::SwigPyIterator *)std_vector_Sl_std_vector_Sl_double_Sg__Sg__iterator(arg1,arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -10469,7 +10469,7 @@ SWIGINTERN PyObject *_wrap_std_vector_vector_double___nonzero__(PyObject *SWIGUN
     try
     {
       result = (bool)std_vector_Sl_std_vector_Sl_double_Sg__Sg____nonzero__((std::vector< std::vector< double > > const *)arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -10522,7 +10522,7 @@ SWIGINTERN PyObject *_wrap_std_vector_vector_double___bool__(PyObject *SWIGUNUSE
     try
     {
       result = (bool)std_vector_Sl_std_vector_Sl_double_Sg__Sg____bool__((std::vector< std::vector< double > > const *)arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -10575,7 +10575,7 @@ SWIGINTERN PyObject *_wrap_std_vector_vector_double___len__(PyObject *SWIGUNUSED
     try
     {
       result = std_vector_Sl_std_vector_Sl_double_Sg__Sg____len__((std::vector< std::vector< double > > const *)arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -10649,7 +10649,7 @@ SWIGINTERN PyObject *_wrap_std_vector_vector_double___getslice__(PyObject *SWIGU
       } catch(std::invalid_argument &_e) {
         SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -10721,7 +10721,7 @@ SWIGINTERN PyObject *_wrap_std_vector_vector_double___setslice____SWIG_0(PyObjec
       } catch(std::invalid_argument &_e) {
         SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -10806,7 +10806,7 @@ SWIGINTERN PyObject *_wrap_std_vector_vector_double___setslice____SWIG_1(PyObjec
       } catch(std::invalid_argument &_e) {
         SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -10943,7 +10943,7 @@ SWIGINTERN PyObject *_wrap_std_vector_vector_double___delslice__(PyObject *SWIGU
       } catch(std::invalid_argument &_e) {
         SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -11007,7 +11007,7 @@ SWIGINTERN PyObject *_wrap_std_vector_vector_double___delitem____SWIG_0(PyObject
       } catch(std::invalid_argument &_e) {
         SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -11071,7 +11071,7 @@ SWIGINTERN PyObject *_wrap_std_vector_vector_double___getitem____SWIG_0(PyObject
       } catch(std::invalid_argument &_e) {
         SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -11147,7 +11147,7 @@ SWIGINTERN PyObject *_wrap_std_vector_vector_double___setitem____SWIG_0(PyObject
       } catch(std::invalid_argument &_e) {
         SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -11212,7 +11212,7 @@ SWIGINTERN PyObject *_wrap_std_vector_vector_double___setitem____SWIG_1(PyObject
       } catch(std::invalid_argument &_e) {
         SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -11275,7 +11275,7 @@ SWIGINTERN PyObject *_wrap_std_vector_vector_double___delitem____SWIG_1(PyObject
       } catch(std::invalid_argument &_e) {
         SWIG_exception_fail(SWIG_ValueError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -11383,7 +11383,7 @@ SWIGINTERN PyObject *_wrap_std_vector_vector_double___getitem____SWIG_1(PyObject
       } catch(std::out_of_range &_e) {
         SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -11504,7 +11504,7 @@ SWIGINTERN PyObject *_wrap_std_vector_vector_double___setitem____SWIG_2(PyObject
       } catch(std::out_of_range &_e) {
         SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -11630,7 +11630,7 @@ SWIGINTERN PyObject *_wrap_std_vector_vector_double_pop(PyObject *SWIGUNUSEDPARM
       } catch(std::out_of_range &_e) {
         SWIG_exception_fail(SWIG_IndexError, (&_e)->what());
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -11694,7 +11694,7 @@ SWIGINTERN PyObject *_wrap_std_vector_vector_double_append(PyObject *SWIGUNUSEDP
     try
     {
       std_vector_Sl_std_vector_Sl_double_Sg__Sg__append(arg1,(std::vector< double,std::allocator< double > > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -11739,7 +11739,7 @@ SWIGINTERN PyObject *_wrap_new_std_vector_vector_double__SWIG_0(PyObject *SWIGUN
     try
     {
       result = (std::vector< std::vector< double > > *)new std::vector< std::vector< double > >();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -11795,7 +11795,7 @@ SWIGINTERN PyObject *_wrap_new_std_vector_vector_double__SWIG_1(PyObject *SWIGUN
     try
     {
       result = (std::vector< std::vector< double > > *)new std::vector< std::vector< double > >((std::vector< std::vector< double,std::allocator< double > > > const &)*arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -11850,7 +11850,7 @@ SWIGINTERN PyObject *_wrap_std_vector_vector_double_empty(PyObject *SWIGUNUSEDPA
     try
     {
       result = (bool)((std::vector< std::vector< double > > const *)arg1)->empty();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -11903,7 +11903,7 @@ SWIGINTERN PyObject *_wrap_std_vector_vector_double_size(PyObject *SWIGUNUSEDPAR
     try
     {
       result = ((std::vector< std::vector< double > > const *)arg1)->size();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -11965,7 +11965,7 @@ SWIGINTERN PyObject *_wrap_std_vector_vector_double_swap(PyObject *SWIGUNUSEDPAR
     try
     {
       (arg1)->swap(*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -12018,7 +12018,7 @@ SWIGINTERN PyObject *_wrap_std_vector_vector_double_begin(PyObject *SWIGUNUSEDPA
     try
     {
       result = (arg1)->begin();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -12072,7 +12072,7 @@ SWIGINTERN PyObject *_wrap_std_vector_vector_double_end(PyObject *SWIGUNUSEDPARM
     try
     {
       result = (arg1)->end();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -12126,7 +12126,7 @@ SWIGINTERN PyObject *_wrap_std_vector_vector_double_rbegin(PyObject *SWIGUNUSEDP
     try
     {
       result = (arg1)->rbegin();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -12180,7 +12180,7 @@ SWIGINTERN PyObject *_wrap_std_vector_vector_double_rend(PyObject *SWIGUNUSEDPAR
     try
     {
       result = (arg1)->rend();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -12233,7 +12233,7 @@ SWIGINTERN PyObject *_wrap_std_vector_vector_double_clear(PyObject *SWIGUNUSEDPA
     try
     {
       (arg1)->clear();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -12286,7 +12286,7 @@ SWIGINTERN PyObject *_wrap_std_vector_vector_double_get_allocator(PyObject *SWIG
     try
     {
       result = ((std::vector< std::vector< double > > const *)arg1)->get_allocator();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -12337,7 +12337,7 @@ SWIGINTERN PyObject *_wrap_new_std_vector_vector_double__SWIG_2(PyObject *SWIGUN
     try
     {
       result = (std::vector< std::vector< double > > *)new std::vector< std::vector< double > >(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -12389,7 +12389,7 @@ SWIGINTERN PyObject *_wrap_std_vector_vector_double_pop_back(PyObject *SWIGUNUSE
     try
     {
       (arg1)->pop_back();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -12447,7 +12447,7 @@ SWIGINTERN PyObject *_wrap_std_vector_vector_double_resize__SWIG_0(PyObject *SWI
     try
     {
       (arg1)->resize(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -12512,7 +12512,7 @@ SWIGINTERN PyObject *_wrap_std_vector_vector_double_erase__SWIG_0(PyObject *SWIG
     try
     {
       result = std_vector_Sl_std_vector_Sl_double_Sg__Sg__erase__SWIG_0(arg1,arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -12592,7 +12592,7 @@ SWIGINTERN PyObject *_wrap_std_vector_vector_double_erase__SWIG_1(PyObject *SWIG
     try
     {
       result = std_vector_Sl_std_vector_Sl_double_Sg__Sg__erase__SWIG_1(arg1,arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -12706,7 +12706,7 @@ SWIGINTERN PyObject *_wrap_new_std_vector_vector_double__SWIG_3(PyObject *SWIGUN
     try
     {
       result = (std::vector< std::vector< double > > *)new std::vector< std::vector< double > >(arg1,(std::vector< std::vector< double > >::value_type const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -12827,7 +12827,7 @@ SWIGINTERN PyObject *_wrap_std_vector_vector_double_push_back(PyObject *SWIGUNUS
     try
     {
       (arg1)->push_back((std::vector< std::vector< double > >::value_type const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -12882,7 +12882,7 @@ SWIGINTERN PyObject *_wrap_std_vector_vector_double_front(PyObject *SWIGUNUSEDPA
     try
     {
       result = (std::vector< std::vector< double > >::value_type *) &((std::vector< std::vector< double > > const *)arg1)->front();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -12936,7 +12936,7 @@ SWIGINTERN PyObject *_wrap_std_vector_vector_double_back(PyObject *SWIGUNUSEDPAR
     try
     {
       result = (std::vector< std::vector< double > >::value_type *) &((std::vector< std::vector< double > > const *)arg1)->back();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -13009,7 +13009,7 @@ SWIGINTERN PyObject *_wrap_std_vector_vector_double_assign(PyObject *SWIGUNUSEDP
     try
     {
       (arg1)->assign(arg2,(std::vector< std::vector< double > >::value_type const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -13082,7 +13082,7 @@ SWIGINTERN PyObject *_wrap_std_vector_vector_double_resize__SWIG_1(PyObject *SWI
     try
     {
       (arg1)->resize(arg2,(std::vector< std::vector< double > >::value_type const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -13212,7 +13212,7 @@ SWIGINTERN PyObject *_wrap_std_vector_vector_double_insert__SWIG_0(PyObject *SWI
     try
     {
       result = std_vector_Sl_std_vector_Sl_double_Sg__Sg__insert__SWIG_0(arg1,arg2,(std::vector< double,std::allocator< double > > const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -13300,7 +13300,7 @@ SWIGINTERN PyObject *_wrap_std_vector_vector_double_insert__SWIG_1(PyObject *SWI
     try
     {
       std_vector_Sl_std_vector_Sl_double_Sg__Sg__insert__SWIG_1(arg1,arg2,arg3,(std::vector< double,std::allocator< double > > const &)*arg4);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -13419,7 +13419,7 @@ SWIGINTERN PyObject *_wrap_std_vector_vector_double_reserve(PyObject *SWIGUNUSED
     try
     {
       (arg1)->reserve(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -13472,7 +13472,7 @@ SWIGINTERN PyObject *_wrap_std_vector_vector_double_capacity(PyObject *SWIGUNUSE
     try
     {
       result = ((std::vector< std::vector< double > > const *)arg1)->capacity();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -13524,7 +13524,7 @@ SWIGINTERN PyObject *_wrap_delete_std_vector_vector_double(PyObject *SWIGUNUSEDP
     try
     {
       delete arg1;
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -13608,7 +13608,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x1_mRaw_set(PyObject *SWIGUNUSEDPARM(self), Py
           SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in variable '""mRaw""' of type '""double [1][1]""'");
         }
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -13661,7 +13661,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x1_mRaw_get(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (double (*)[1])(double (*)[1]) ((arg1)->mRaw);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -13704,7 +13704,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix1x1__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 1,1,double > *)new math::linear::MatrixMxN< 1,1,double >();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -13755,7 +13755,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix1x1__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 1,1,double > *)new math::linear::MatrixMxN< 1,1,double >(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -13806,7 +13806,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix1x1__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 1,1,double > *)new math::linear::MatrixMxN< 1,1,double >((double const *)arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -13862,7 +13862,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix1x1__SWIG_3(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 1,1,double > *)new math::linear::MatrixMxN< 1,1,double >((std::vector< double,std::allocator< double > > const &)*arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -13918,7 +13918,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix1x1__SWIG_4(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 1,1,double > *)new math::linear::MatrixMxN< 1,1,double >((math::linear::MatrixMxN< 1,1,double > const &)*arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -14029,7 +14029,7 @@ SWIGINTERN PyObject *_wrap_delete_Matrix1x1(PyObject *SWIGUNUSEDPARM(self), PyOb
     try
     {
       delete arg1;
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -14096,7 +14096,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x1___call____SWIG_0(PyObject *SWIGUNUSEDPARM(s
     try
     {
       result = (double)((math::linear::MatrixMxN< 1,1,double > const *)arg1)->operator ()(arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -14163,7 +14163,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x1___call____SWIG_1(PyObject *SWIGUNUSEDPARM(s
     try
     {
       result = (double *) &(arg1)->operator ()(arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -14282,7 +14282,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x1_row__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (double *)((math::linear::MatrixMxN< 1,1,double > const *)arg1)->row(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -14341,7 +14341,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x1_row__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (double *)(arg1)->row(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -14407,7 +14407,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x1_row__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->row(arg2,(double const *)arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -14478,7 +14478,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x1_row__SWIG_3(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->row(arg2,(std::vector< double,std::allocator< double > > const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -14628,7 +14628,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x1_col__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = ((math::linear::MatrixMxN< 1,1,double > const *)arg1)->col(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -14694,7 +14694,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x1_col__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->col(arg2,(double const *)arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -14765,7 +14765,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x1_col__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->col(arg2,(std::vector< double,std::allocator< double > > const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -14836,7 +14836,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x1_col__SWIG_3(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->col(arg2,(math::linear::MatrixMxN< 1,1,double > const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -14982,7 +14982,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x1_rows(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 1,1,double > const *)arg1)->rows();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -15035,7 +15035,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x1_cols(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 1,1,double > const *)arg1)->cols();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -15088,7 +15088,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x1_size(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 1,1,double > const *)arg1)->size();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -15148,7 +15148,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x1_scale(PyObject *SWIGUNUSEDPARM(self), PyObj
     try
     {
       result = (math::linear::MatrixMxN< 1,1,double > *) &(arg1)->scale(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -15208,7 +15208,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x1_multiply(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = ((math::linear::MatrixMxN< 1,1,double > const *)arg1)->multiply(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -15271,7 +15271,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x1_scaleDiagonal(PyObject *SWIGUNUSEDPARM(self
     try
     {
       result = (math::linear::MatrixMxN< 1,1,double > *) &(arg1)->scaleDiagonal((math::linear::MatrixMxN< 1,1,double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -15334,7 +15334,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x1_multiplyDiagonal(PyObject *SWIGUNUSEDPARM(s
     try
     {
       result = ((math::linear::MatrixMxN< 1,1,double > const *)arg1)->multiplyDiagonal((math::linear::MatrixMxN< 1,1,double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -15397,7 +15397,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x1___iadd__(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (math::linear::MatrixMxN< 1,1,double >::Like_T *) &(arg1)->operator +=((math::linear::MatrixMxN< 1,1,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -15460,7 +15460,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x1___isub__(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (math::linear::MatrixMxN< 1,1,double >::Like_T *) &(arg1)->operator -=((math::linear::MatrixMxN< 1,1,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -15523,7 +15523,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x1_add(PyObject *SWIGUNUSEDPARM(self), PyObjec
     try
     {
       result = ((math::linear::MatrixMxN< 1,1,double > const *)arg1)->add((math::linear::MatrixMxN< 1,1,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -15586,7 +15586,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x1_subtract(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = ((math::linear::MatrixMxN< 1,1,double > const *)arg1)->subtract((math::linear::MatrixMxN< 1,1,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -15639,7 +15639,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x1_transpose(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = ((math::linear::MatrixMxN< 1,1,double > const *)arg1)->transpose();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -15702,7 +15702,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x1_decomposeLU(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = ((math::linear::MatrixMxN< 1,1,double > const *)arg1)->decomposeLU(*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -15774,7 +15774,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x1_permute__SWIG_0(PyObject *SWIGUNUSEDPARM(se
     try
     {
       result = ((math::linear::MatrixMxN< 1,1,double > const *)arg1)->permute((std::vector< size_t,std::allocator< size_t > > const &)*arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -15840,7 +15840,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x1_permute__SWIG_1(PyObject *SWIGUNUSEDPARM(se
     try
     {
       result = ((math::linear::MatrixMxN< 1,1,double > const *)arg1)->permute((std::vector< size_t,std::allocator< size_t > > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -15945,7 +15945,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x1_normSq(PyObject *SWIGUNUSEDPARM(self), PyOb
     try
     {
       result = (double)((math::linear::MatrixMxN< 1,1,double > const *)arg1)->normSq();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -15998,7 +15998,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x1_norm(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = (double)((math::linear::MatrixMxN< 1,1,double > const *)arg1)->norm();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -16051,7 +16051,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x1_normalize(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = (math::linear::MatrixMxN< 1,1,double > *) &(arg1)->normalize();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -16104,7 +16104,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x1_unit(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 1,1,double > const *)arg1)->unit();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -16167,7 +16167,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x1___add__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 1,1,double > const *)arg1)->operator +((math::linear::MatrixMxN< 1,1,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -16232,7 +16232,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x1___sub__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 1,1,double > const *)arg1)->operator -((math::linear::MatrixMxN< 1,1,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -16294,7 +16294,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x1___mul__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 1,1,double > const *)arg1)->operator *(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -16356,7 +16356,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x1___truediv__(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = ((math::linear::MatrixMxN< 1,1,double > const *)arg1)->operator /(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -16411,7 +16411,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x1___neg__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 1,1,double > const *)arg1)->operator -();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -16467,7 +16467,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x1___getitem__(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (double)math_linear_MatrixMxN_Sl_1_Sc_1_Sc_double_Sg____getitem__(arg1,arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -16528,7 +16528,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x1___setitem__(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       math_linear_MatrixMxN_Sl_1_Sc_1_Sc_double_Sg____setitem__(arg1,arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -16581,7 +16581,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x1___str__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = math_linear_MatrixMxN_Sl_1_Sc_1_Sc_double_Sg____str__(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -16634,7 +16634,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x1_vals(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = math_linear_MatrixMxN_Sl_1_Sc_1_Sc_double_Sg__vals(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -16718,7 +16718,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x2_mRaw_set(PyObject *SWIGUNUSEDPARM(self), Py
           SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in variable '""mRaw""' of type '""double [1][2]""'");
         }
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -16771,7 +16771,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x2_mRaw_get(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (double (*)[2])(double (*)[2]) ((arg1)->mRaw);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -16814,7 +16814,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix1x2__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 1,2,double > *)new math::linear::MatrixMxN< 1,2,double >();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -16865,7 +16865,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix1x2__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 1,2,double > *)new math::linear::MatrixMxN< 1,2,double >(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -16916,7 +16916,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix1x2__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 1,2,double > *)new math::linear::MatrixMxN< 1,2,double >((double const *)arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -16972,7 +16972,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix1x2__SWIG_3(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 1,2,double > *)new math::linear::MatrixMxN< 1,2,double >((std::vector< double,std::allocator< double > > const &)*arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -17028,7 +17028,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix1x2__SWIG_4(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 1,2,double > *)new math::linear::MatrixMxN< 1,2,double >((math::linear::MatrixMxN< 1,2,double > const &)*arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -17139,7 +17139,7 @@ SWIGINTERN PyObject *_wrap_delete_Matrix1x2(PyObject *SWIGUNUSEDPARM(self), PyOb
     try
     {
       delete arg1;
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -17206,7 +17206,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x2___call____SWIG_0(PyObject *SWIGUNUSEDPARM(s
     try
     {
       result = (double)((math::linear::MatrixMxN< 1,2,double > const *)arg1)->operator ()(arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -17273,7 +17273,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x2___call____SWIG_1(PyObject *SWIGUNUSEDPARM(s
     try
     {
       result = (double *) &(arg1)->operator ()(arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -17392,7 +17392,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x2_row__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (double *)((math::linear::MatrixMxN< 1,2,double > const *)arg1)->row(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -17451,7 +17451,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x2_row__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (double *)(arg1)->row(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -17517,7 +17517,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x2_row__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->row(arg2,(double const *)arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -17588,7 +17588,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x2_row__SWIG_3(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->row(arg2,(std::vector< double,std::allocator< double > > const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -17738,7 +17738,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x2_col__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = ((math::linear::MatrixMxN< 1,2,double > const *)arg1)->col(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -17804,7 +17804,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x2_col__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->col(arg2,(double const *)arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -17875,7 +17875,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x2_col__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->col(arg2,(std::vector< double,std::allocator< double > > const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -17946,7 +17946,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x2_col__SWIG_3(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->col(arg2,(math::linear::MatrixMxN< 1,1,double > const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -18092,7 +18092,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x2_rows(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 1,2,double > const *)arg1)->rows();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -18145,7 +18145,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x2_cols(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 1,2,double > const *)arg1)->cols();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -18198,7 +18198,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x2_size(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 1,2,double > const *)arg1)->size();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -18258,7 +18258,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x2_scale(PyObject *SWIGUNUSEDPARM(self), PyObj
     try
     {
       result = (math::linear::MatrixMxN< 1,2,double > *) &(arg1)->scale(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -18318,7 +18318,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x2_multiply(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = ((math::linear::MatrixMxN< 1,2,double > const *)arg1)->multiply(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -18381,7 +18381,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x2_scaleDiagonal(PyObject *SWIGUNUSEDPARM(self
     try
     {
       result = (math::linear::MatrixMxN< 1,2,double > *) &(arg1)->scaleDiagonal((math::linear::MatrixMxN< 2,2,double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -18444,7 +18444,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x2_multiplyDiagonal(PyObject *SWIGUNUSEDPARM(s
     try
     {
       result = ((math::linear::MatrixMxN< 1,2,double > const *)arg1)->multiplyDiagonal((math::linear::MatrixMxN< 2,2,double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -18507,7 +18507,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x2___iadd__(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (math::linear::MatrixMxN< 1,2,double >::Like_T *) &(arg1)->operator +=((math::linear::MatrixMxN< 1,2,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -18570,7 +18570,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x2___isub__(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (math::linear::MatrixMxN< 1,2,double >::Like_T *) &(arg1)->operator -=((math::linear::MatrixMxN< 1,2,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -18633,7 +18633,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x2_add(PyObject *SWIGUNUSEDPARM(self), PyObjec
     try
     {
       result = ((math::linear::MatrixMxN< 1,2,double > const *)arg1)->add((math::linear::MatrixMxN< 1,2,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -18696,7 +18696,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x2_subtract(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = ((math::linear::MatrixMxN< 1,2,double > const *)arg1)->subtract((math::linear::MatrixMxN< 1,2,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -18749,7 +18749,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x2_transpose(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = ((math::linear::MatrixMxN< 1,2,double > const *)arg1)->transpose();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -18812,7 +18812,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x2_decomposeLU(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = ((math::linear::MatrixMxN< 1,2,double > const *)arg1)->decomposeLU(*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -18884,7 +18884,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x2_permute__SWIG_0(PyObject *SWIGUNUSEDPARM(se
     try
     {
       result = ((math::linear::MatrixMxN< 1,2,double > const *)arg1)->permute((std::vector< size_t,std::allocator< size_t > > const &)*arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -18950,7 +18950,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x2_permute__SWIG_1(PyObject *SWIGUNUSEDPARM(se
     try
     {
       result = ((math::linear::MatrixMxN< 1,2,double > const *)arg1)->permute((std::vector< size_t,std::allocator< size_t > > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -19055,7 +19055,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x2_normSq(PyObject *SWIGUNUSEDPARM(self), PyOb
     try
     {
       result = (double)((math::linear::MatrixMxN< 1,2,double > const *)arg1)->normSq();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -19108,7 +19108,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x2_norm(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = (double)((math::linear::MatrixMxN< 1,2,double > const *)arg1)->norm();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -19161,7 +19161,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x2_normalize(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = (math::linear::MatrixMxN< 1,2,double > *) &(arg1)->normalize();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -19214,7 +19214,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x2_unit(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 1,2,double > const *)arg1)->unit();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -19277,7 +19277,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x2___add__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 1,2,double > const *)arg1)->operator +((math::linear::MatrixMxN< 1,2,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -19342,7 +19342,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x2___sub__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 1,2,double > const *)arg1)->operator -((math::linear::MatrixMxN< 1,2,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -19404,7 +19404,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x2___mul__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 1,2,double > const *)arg1)->operator *(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -19466,7 +19466,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x2___truediv__(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = ((math::linear::MatrixMxN< 1,2,double > const *)arg1)->operator /(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -19521,7 +19521,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x2___neg__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 1,2,double > const *)arg1)->operator -();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -19577,7 +19577,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x2___getitem__(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (double)math_linear_MatrixMxN_Sl_1_Sc_2_Sc_double_Sg____getitem__(arg1,arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -19638,7 +19638,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x2___setitem__(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       math_linear_MatrixMxN_Sl_1_Sc_2_Sc_double_Sg____setitem__(arg1,arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -19691,7 +19691,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x2___str__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = math_linear_MatrixMxN_Sl_1_Sc_2_Sc_double_Sg____str__(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -19744,7 +19744,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x2_vals(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = math_linear_MatrixMxN_Sl_1_Sc_2_Sc_double_Sg__vals(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -19828,7 +19828,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x3_mRaw_set(PyObject *SWIGUNUSEDPARM(self), Py
           SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in variable '""mRaw""' of type '""double [1][3]""'");
         }
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -19881,7 +19881,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x3_mRaw_get(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (double (*)[3])(double (*)[3]) ((arg1)->mRaw);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -19924,7 +19924,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix1x3__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 1,3,double > *)new math::linear::MatrixMxN< 1,3,double >();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -19975,7 +19975,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix1x3__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 1,3,double > *)new math::linear::MatrixMxN< 1,3,double >(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -20026,7 +20026,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix1x3__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 1,3,double > *)new math::linear::MatrixMxN< 1,3,double >((double const *)arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -20082,7 +20082,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix1x3__SWIG_3(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 1,3,double > *)new math::linear::MatrixMxN< 1,3,double >((std::vector< double,std::allocator< double > > const &)*arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -20138,7 +20138,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix1x3__SWIG_4(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 1,3,double > *)new math::linear::MatrixMxN< 1,3,double >((math::linear::MatrixMxN< 1,3,double > const &)*arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -20249,7 +20249,7 @@ SWIGINTERN PyObject *_wrap_delete_Matrix1x3(PyObject *SWIGUNUSEDPARM(self), PyOb
     try
     {
       delete arg1;
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -20316,7 +20316,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x3___call____SWIG_0(PyObject *SWIGUNUSEDPARM(s
     try
     {
       result = (double)((math::linear::MatrixMxN< 1,3,double > const *)arg1)->operator ()(arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -20383,7 +20383,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x3___call____SWIG_1(PyObject *SWIGUNUSEDPARM(s
     try
     {
       result = (double *) &(arg1)->operator ()(arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -20502,7 +20502,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x3_row__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (double *)((math::linear::MatrixMxN< 1,3,double > const *)arg1)->row(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -20561,7 +20561,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x3_row__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (double *)(arg1)->row(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -20627,7 +20627,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x3_row__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->row(arg2,(double const *)arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -20698,7 +20698,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x3_row__SWIG_3(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->row(arg2,(std::vector< double,std::allocator< double > > const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -20848,7 +20848,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x3_col__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = ((math::linear::MatrixMxN< 1,3,double > const *)arg1)->col(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -20914,7 +20914,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x3_col__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->col(arg2,(double const *)arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -20985,7 +20985,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x3_col__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->col(arg2,(std::vector< double,std::allocator< double > > const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -21056,7 +21056,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x3_col__SWIG_3(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->col(arg2,(math::linear::MatrixMxN< 1,1,double > const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -21202,7 +21202,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x3_rows(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 1,3,double > const *)arg1)->rows();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -21255,7 +21255,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x3_cols(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 1,3,double > const *)arg1)->cols();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -21308,7 +21308,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x3_size(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 1,3,double > const *)arg1)->size();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -21368,7 +21368,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x3_scale(PyObject *SWIGUNUSEDPARM(self), PyObj
     try
     {
       result = (math::linear::MatrixMxN< 1,3,double > *) &(arg1)->scale(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -21428,7 +21428,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x3_multiply(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = ((math::linear::MatrixMxN< 1,3,double > const *)arg1)->multiply(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -21491,7 +21491,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x3_scaleDiagonal(PyObject *SWIGUNUSEDPARM(self
     try
     {
       result = (math::linear::MatrixMxN< 1,3,double > *) &(arg1)->scaleDiagonal((math::linear::MatrixMxN< 3,3,double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -21554,7 +21554,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x3_multiplyDiagonal(PyObject *SWIGUNUSEDPARM(s
     try
     {
       result = ((math::linear::MatrixMxN< 1,3,double > const *)arg1)->multiplyDiagonal((math::linear::MatrixMxN< 3,3,double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -21617,7 +21617,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x3___iadd__(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (math::linear::MatrixMxN< 1,3,double >::Like_T *) &(arg1)->operator +=((math::linear::MatrixMxN< 1,3,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -21680,7 +21680,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x3___isub__(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (math::linear::MatrixMxN< 1,3,double >::Like_T *) &(arg1)->operator -=((math::linear::MatrixMxN< 1,3,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -21743,7 +21743,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x3_add(PyObject *SWIGUNUSEDPARM(self), PyObjec
     try
     {
       result = ((math::linear::MatrixMxN< 1,3,double > const *)arg1)->add((math::linear::MatrixMxN< 1,3,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -21806,7 +21806,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x3_subtract(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = ((math::linear::MatrixMxN< 1,3,double > const *)arg1)->subtract((math::linear::MatrixMxN< 1,3,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -21859,7 +21859,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x3_transpose(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = ((math::linear::MatrixMxN< 1,3,double > const *)arg1)->transpose();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -21922,7 +21922,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x3_decomposeLU(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = ((math::linear::MatrixMxN< 1,3,double > const *)arg1)->decomposeLU(*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -21994,7 +21994,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x3_permute__SWIG_0(PyObject *SWIGUNUSEDPARM(se
     try
     {
       result = ((math::linear::MatrixMxN< 1,3,double > const *)arg1)->permute((std::vector< size_t,std::allocator< size_t > > const &)*arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -22060,7 +22060,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x3_permute__SWIG_1(PyObject *SWIGUNUSEDPARM(se
     try
     {
       result = ((math::linear::MatrixMxN< 1,3,double > const *)arg1)->permute((std::vector< size_t,std::allocator< size_t > > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -22165,7 +22165,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x3_normSq(PyObject *SWIGUNUSEDPARM(self), PyOb
     try
     {
       result = (double)((math::linear::MatrixMxN< 1,3,double > const *)arg1)->normSq();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -22218,7 +22218,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x3_norm(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = (double)((math::linear::MatrixMxN< 1,3,double > const *)arg1)->norm();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -22271,7 +22271,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x3_normalize(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = (math::linear::MatrixMxN< 1,3,double > *) &(arg1)->normalize();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -22324,7 +22324,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x3_unit(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 1,3,double > const *)arg1)->unit();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -22387,7 +22387,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x3___add__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 1,3,double > const *)arg1)->operator +((math::linear::MatrixMxN< 1,3,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -22452,7 +22452,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x3___sub__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 1,3,double > const *)arg1)->operator -((math::linear::MatrixMxN< 1,3,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -22514,7 +22514,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x3___mul__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 1,3,double > const *)arg1)->operator *(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -22576,7 +22576,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x3___truediv__(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = ((math::linear::MatrixMxN< 1,3,double > const *)arg1)->operator /(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -22631,7 +22631,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x3___neg__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 1,3,double > const *)arg1)->operator -();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -22687,7 +22687,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x3___getitem__(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (double)math_linear_MatrixMxN_Sl_1_Sc_3_Sc_double_Sg____getitem__(arg1,arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -22748,7 +22748,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x3___setitem__(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       math_linear_MatrixMxN_Sl_1_Sc_3_Sc_double_Sg____setitem__(arg1,arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -22801,7 +22801,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x3___str__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = math_linear_MatrixMxN_Sl_1_Sc_3_Sc_double_Sg____str__(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -22854,7 +22854,7 @@ SWIGINTERN PyObject *_wrap_Matrix1x3_vals(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = math_linear_MatrixMxN_Sl_1_Sc_3_Sc_double_Sg__vals(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -22938,7 +22938,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x1_mRaw_set(PyObject *SWIGUNUSEDPARM(self), Py
           SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in variable '""mRaw""' of type '""double [2][1]""'");
         }
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -22991,7 +22991,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x1_mRaw_get(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (double (*)[1])(double (*)[1]) ((arg1)->mRaw);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -23034,7 +23034,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix2x1__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 2,1,double > *)new math::linear::MatrixMxN< 2,1,double >();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -23085,7 +23085,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix2x1__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 2,1,double > *)new math::linear::MatrixMxN< 2,1,double >(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -23136,7 +23136,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix2x1__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 2,1,double > *)new math::linear::MatrixMxN< 2,1,double >((double const *)arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -23192,7 +23192,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix2x1__SWIG_3(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 2,1,double > *)new math::linear::MatrixMxN< 2,1,double >((std::vector< double,std::allocator< double > > const &)*arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -23248,7 +23248,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix2x1__SWIG_4(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 2,1,double > *)new math::linear::MatrixMxN< 2,1,double >((math::linear::MatrixMxN< 2,1,double > const &)*arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -23359,7 +23359,7 @@ SWIGINTERN PyObject *_wrap_delete_Matrix2x1(PyObject *SWIGUNUSEDPARM(self), PyOb
     try
     {
       delete arg1;
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -23426,7 +23426,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x1___call____SWIG_0(PyObject *SWIGUNUSEDPARM(s
     try
     {
       result = (double)((math::linear::MatrixMxN< 2,1,double > const *)arg1)->operator ()(arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -23493,7 +23493,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x1___call____SWIG_1(PyObject *SWIGUNUSEDPARM(s
     try
     {
       result = (double *) &(arg1)->operator ()(arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -23612,7 +23612,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x1_row__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (double *)((math::linear::MatrixMxN< 2,1,double > const *)arg1)->row(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -23671,7 +23671,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x1_row__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (double *)(arg1)->row(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -23737,7 +23737,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x1_row__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->row(arg2,(double const *)arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -23808,7 +23808,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x1_row__SWIG_3(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->row(arg2,(std::vector< double,std::allocator< double > > const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -23958,7 +23958,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x1_col__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = ((math::linear::MatrixMxN< 2,1,double > const *)arg1)->col(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -24024,7 +24024,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x1_col__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->col(arg2,(double const *)arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -24095,7 +24095,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x1_col__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->col(arg2,(std::vector< double,std::allocator< double > > const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -24166,7 +24166,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x1_col__SWIG_3(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->col(arg2,(math::linear::MatrixMxN< 2,1,double > const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -24312,7 +24312,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x1_rows(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 2,1,double > const *)arg1)->rows();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -24365,7 +24365,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x1_cols(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 2,1,double > const *)arg1)->cols();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -24418,7 +24418,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x1_size(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 2,1,double > const *)arg1)->size();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -24478,7 +24478,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x1_scale(PyObject *SWIGUNUSEDPARM(self), PyObj
     try
     {
       result = (math::linear::MatrixMxN< 2,1,double > *) &(arg1)->scale(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -24538,7 +24538,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x1_multiply(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = ((math::linear::MatrixMxN< 2,1,double > const *)arg1)->multiply(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -24601,7 +24601,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x1_scaleDiagonal(PyObject *SWIGUNUSEDPARM(self
     try
     {
       result = (math::linear::MatrixMxN< 2,1,double > *) &(arg1)->scaleDiagonal((math::linear::MatrixMxN< 1,1,double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -24664,7 +24664,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x1_multiplyDiagonal(PyObject *SWIGUNUSEDPARM(s
     try
     {
       result = ((math::linear::MatrixMxN< 2,1,double > const *)arg1)->multiplyDiagonal((math::linear::MatrixMxN< 1,1,double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -24727,7 +24727,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x1___iadd__(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (math::linear::MatrixMxN< 2,1,double >::Like_T *) &(arg1)->operator +=((math::linear::MatrixMxN< 2,1,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -24790,7 +24790,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x1___isub__(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (math::linear::MatrixMxN< 2,1,double >::Like_T *) &(arg1)->operator -=((math::linear::MatrixMxN< 2,1,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -24853,7 +24853,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x1_add(PyObject *SWIGUNUSEDPARM(self), PyObjec
     try
     {
       result = ((math::linear::MatrixMxN< 2,1,double > const *)arg1)->add((math::linear::MatrixMxN< 2,1,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -24916,7 +24916,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x1_subtract(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = ((math::linear::MatrixMxN< 2,1,double > const *)arg1)->subtract((math::linear::MatrixMxN< 2,1,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -24969,7 +24969,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x1_transpose(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = ((math::linear::MatrixMxN< 2,1,double > const *)arg1)->transpose();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -25032,7 +25032,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x1_decomposeLU(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = ((math::linear::MatrixMxN< 2,1,double > const *)arg1)->decomposeLU(*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -25104,7 +25104,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x1_permute__SWIG_0(PyObject *SWIGUNUSEDPARM(se
     try
     {
       result = ((math::linear::MatrixMxN< 2,1,double > const *)arg1)->permute((std::vector< size_t,std::allocator< size_t > > const &)*arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -25170,7 +25170,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x1_permute__SWIG_1(PyObject *SWIGUNUSEDPARM(se
     try
     {
       result = ((math::linear::MatrixMxN< 2,1,double > const *)arg1)->permute((std::vector< size_t,std::allocator< size_t > > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -25275,7 +25275,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x1_normSq(PyObject *SWIGUNUSEDPARM(self), PyOb
     try
     {
       result = (double)((math::linear::MatrixMxN< 2,1,double > const *)arg1)->normSq();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -25328,7 +25328,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x1_norm(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = (double)((math::linear::MatrixMxN< 2,1,double > const *)arg1)->norm();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -25381,7 +25381,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x1_normalize(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = (math::linear::MatrixMxN< 2,1,double > *) &(arg1)->normalize();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -25434,7 +25434,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x1_unit(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 2,1,double > const *)arg1)->unit();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -25497,7 +25497,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x1___add__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 2,1,double > const *)arg1)->operator +((math::linear::MatrixMxN< 2,1,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -25562,7 +25562,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x1___sub__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 2,1,double > const *)arg1)->operator -((math::linear::MatrixMxN< 2,1,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -25624,7 +25624,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x1___mul__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 2,1,double > const *)arg1)->operator *(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -25686,7 +25686,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x1___truediv__(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = ((math::linear::MatrixMxN< 2,1,double > const *)arg1)->operator /(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -25741,7 +25741,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x1___neg__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 2,1,double > const *)arg1)->operator -();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -25797,7 +25797,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x1___getitem__(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (double)math_linear_MatrixMxN_Sl_2_Sc_1_Sc_double_Sg____getitem__(arg1,arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -25858,7 +25858,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x1___setitem__(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       math_linear_MatrixMxN_Sl_2_Sc_1_Sc_double_Sg____setitem__(arg1,arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -25911,7 +25911,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x1___str__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = math_linear_MatrixMxN_Sl_2_Sc_1_Sc_double_Sg____str__(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -25964,7 +25964,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x1_vals(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = math_linear_MatrixMxN_Sl_2_Sc_1_Sc_double_Sg__vals(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -26048,7 +26048,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x2_mRaw_set(PyObject *SWIGUNUSEDPARM(self), Py
           SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in variable '""mRaw""' of type '""double [2][2]""'");
         }
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -26101,7 +26101,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x2_mRaw_get(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (double (*)[2])(double (*)[2]) ((arg1)->mRaw);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -26144,7 +26144,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix2x2__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 2,2,double > *)new math::linear::MatrixMxN< 2,2,double >();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -26195,7 +26195,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix2x2__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 2,2,double > *)new math::linear::MatrixMxN< 2,2,double >(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -26246,7 +26246,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix2x2__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 2,2,double > *)new math::linear::MatrixMxN< 2,2,double >((double const *)arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -26302,7 +26302,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix2x2__SWIG_3(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 2,2,double > *)new math::linear::MatrixMxN< 2,2,double >((std::vector< double,std::allocator< double > > const &)*arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -26358,7 +26358,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix2x2__SWIG_4(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 2,2,double > *)new math::linear::MatrixMxN< 2,2,double >((math::linear::MatrixMxN< 2,2,double > const &)*arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -26469,7 +26469,7 @@ SWIGINTERN PyObject *_wrap_delete_Matrix2x2(PyObject *SWIGUNUSEDPARM(self), PyOb
     try
     {
       delete arg1;
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -26536,7 +26536,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x2___call____SWIG_0(PyObject *SWIGUNUSEDPARM(s
     try
     {
       result = (double)((math::linear::MatrixMxN< 2,2,double > const *)arg1)->operator ()(arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -26603,7 +26603,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x2___call____SWIG_1(PyObject *SWIGUNUSEDPARM(s
     try
     {
       result = (double *) &(arg1)->operator ()(arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -26722,7 +26722,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x2_row__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (double *)((math::linear::MatrixMxN< 2,2,double > const *)arg1)->row(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -26781,7 +26781,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x2_row__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (double *)(arg1)->row(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -26847,7 +26847,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x2_row__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->row(arg2,(double const *)arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -26918,7 +26918,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x2_row__SWIG_3(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->row(arg2,(std::vector< double,std::allocator< double > > const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -27068,7 +27068,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x2_col__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = ((math::linear::MatrixMxN< 2,2,double > const *)arg1)->col(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -27134,7 +27134,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x2_col__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->col(arg2,(double const *)arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -27205,7 +27205,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x2_col__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->col(arg2,(std::vector< double,std::allocator< double > > const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -27276,7 +27276,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x2_col__SWIG_3(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->col(arg2,(math::linear::MatrixMxN< 2,1,double > const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -27422,7 +27422,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x2_rows(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 2,2,double > const *)arg1)->rows();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -27475,7 +27475,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x2_cols(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 2,2,double > const *)arg1)->cols();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -27528,7 +27528,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x2_size(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 2,2,double > const *)arg1)->size();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -27588,7 +27588,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x2_scale(PyObject *SWIGUNUSEDPARM(self), PyObj
     try
     {
       result = (math::linear::MatrixMxN< 2,2,double > *) &(arg1)->scale(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -27648,7 +27648,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x2_multiply(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = ((math::linear::MatrixMxN< 2,2,double > const *)arg1)->multiply(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -27711,7 +27711,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x2_scaleDiagonal(PyObject *SWIGUNUSEDPARM(self
     try
     {
       result = (math::linear::MatrixMxN< 2,2,double > *) &(arg1)->scaleDiagonal((math::linear::MatrixMxN< 2,2,double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -27774,7 +27774,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x2_multiplyDiagonal(PyObject *SWIGUNUSEDPARM(s
     try
     {
       result = ((math::linear::MatrixMxN< 2,2,double > const *)arg1)->multiplyDiagonal((math::linear::MatrixMxN< 2,2,double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -27837,7 +27837,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x2___iadd__(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (math::linear::MatrixMxN< 2,2,double >::Like_T *) &(arg1)->operator +=((math::linear::MatrixMxN< 2,2,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -27900,7 +27900,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x2___isub__(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (math::linear::MatrixMxN< 2,2,double >::Like_T *) &(arg1)->operator -=((math::linear::MatrixMxN< 2,2,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -27963,7 +27963,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x2_add(PyObject *SWIGUNUSEDPARM(self), PyObjec
     try
     {
       result = ((math::linear::MatrixMxN< 2,2,double > const *)arg1)->add((math::linear::MatrixMxN< 2,2,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -28026,7 +28026,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x2_subtract(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = ((math::linear::MatrixMxN< 2,2,double > const *)arg1)->subtract((math::linear::MatrixMxN< 2,2,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -28079,7 +28079,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x2_transpose(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = ((math::linear::MatrixMxN< 2,2,double > const *)arg1)->transpose();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -28142,7 +28142,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x2_decomposeLU(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = ((math::linear::MatrixMxN< 2,2,double > const *)arg1)->decomposeLU(*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -28214,7 +28214,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x2_permute__SWIG_0(PyObject *SWIGUNUSEDPARM(se
     try
     {
       result = ((math::linear::MatrixMxN< 2,2,double > const *)arg1)->permute((std::vector< size_t,std::allocator< size_t > > const &)*arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -28280,7 +28280,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x2_permute__SWIG_1(PyObject *SWIGUNUSEDPARM(se
     try
     {
       result = ((math::linear::MatrixMxN< 2,2,double > const *)arg1)->permute((std::vector< size_t,std::allocator< size_t > > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -28385,7 +28385,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x2_normSq(PyObject *SWIGUNUSEDPARM(self), PyOb
     try
     {
       result = (double)((math::linear::MatrixMxN< 2,2,double > const *)arg1)->normSq();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -28438,7 +28438,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x2_norm(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = (double)((math::linear::MatrixMxN< 2,2,double > const *)arg1)->norm();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -28491,7 +28491,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x2_normalize(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = (math::linear::MatrixMxN< 2,2,double > *) &(arg1)->normalize();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -28544,7 +28544,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x2_unit(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 2,2,double > const *)arg1)->unit();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -28607,7 +28607,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x2___add__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 2,2,double > const *)arg1)->operator +((math::linear::MatrixMxN< 2,2,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -28672,7 +28672,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x2___sub__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 2,2,double > const *)arg1)->operator -((math::linear::MatrixMxN< 2,2,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -28734,7 +28734,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x2___mul__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 2,2,double > const *)arg1)->operator *(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -28796,7 +28796,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x2___truediv__(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = ((math::linear::MatrixMxN< 2,2,double > const *)arg1)->operator /(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -28851,7 +28851,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x2___neg__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 2,2,double > const *)arg1)->operator -();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -28907,7 +28907,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x2___getitem__(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (double)math_linear_MatrixMxN_Sl_2_Sc_2_Sc_double_Sg____getitem__(arg1,arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -28968,7 +28968,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x2___setitem__(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       math_linear_MatrixMxN_Sl_2_Sc_2_Sc_double_Sg____setitem__(arg1,arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -29021,7 +29021,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x2___str__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = math_linear_MatrixMxN_Sl_2_Sc_2_Sc_double_Sg____str__(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -29074,7 +29074,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x2_vals(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = math_linear_MatrixMxN_Sl_2_Sc_2_Sc_double_Sg__vals(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -29158,7 +29158,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x3_mRaw_set(PyObject *SWIGUNUSEDPARM(self), Py
           SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in variable '""mRaw""' of type '""double [2][3]""'");
         }
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -29211,7 +29211,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x3_mRaw_get(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (double (*)[3])(double (*)[3]) ((arg1)->mRaw);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -29254,7 +29254,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix2x3__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 2,3,double > *)new math::linear::MatrixMxN< 2,3,double >();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -29305,7 +29305,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix2x3__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 2,3,double > *)new math::linear::MatrixMxN< 2,3,double >(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -29356,7 +29356,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix2x3__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 2,3,double > *)new math::linear::MatrixMxN< 2,3,double >((double const *)arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -29412,7 +29412,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix2x3__SWIG_3(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 2,3,double > *)new math::linear::MatrixMxN< 2,3,double >((std::vector< double,std::allocator< double > > const &)*arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -29468,7 +29468,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix2x3__SWIG_4(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 2,3,double > *)new math::linear::MatrixMxN< 2,3,double >((math::linear::MatrixMxN< 2,3,double > const &)*arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -29579,7 +29579,7 @@ SWIGINTERN PyObject *_wrap_delete_Matrix2x3(PyObject *SWIGUNUSEDPARM(self), PyOb
     try
     {
       delete arg1;
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -29646,7 +29646,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x3___call____SWIG_0(PyObject *SWIGUNUSEDPARM(s
     try
     {
       result = (double)((math::linear::MatrixMxN< 2,3,double > const *)arg1)->operator ()(arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -29713,7 +29713,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x3___call____SWIG_1(PyObject *SWIGUNUSEDPARM(s
     try
     {
       result = (double *) &(arg1)->operator ()(arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -29832,7 +29832,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x3_row__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (double *)((math::linear::MatrixMxN< 2,3,double > const *)arg1)->row(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -29891,7 +29891,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x3_row__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (double *)(arg1)->row(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -29957,7 +29957,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x3_row__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->row(arg2,(double const *)arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -30028,7 +30028,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x3_row__SWIG_3(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->row(arg2,(std::vector< double,std::allocator< double > > const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -30178,7 +30178,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x3_col__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = ((math::linear::MatrixMxN< 2,3,double > const *)arg1)->col(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -30244,7 +30244,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x3_col__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->col(arg2,(double const *)arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -30315,7 +30315,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x3_col__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->col(arg2,(std::vector< double,std::allocator< double > > const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -30386,7 +30386,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x3_col__SWIG_3(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->col(arg2,(math::linear::MatrixMxN< 2,1,double > const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -30532,7 +30532,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x3_rows(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 2,3,double > const *)arg1)->rows();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -30585,7 +30585,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x3_cols(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 2,3,double > const *)arg1)->cols();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -30638,7 +30638,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x3_size(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 2,3,double > const *)arg1)->size();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -30698,7 +30698,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x3_scale(PyObject *SWIGUNUSEDPARM(self), PyObj
     try
     {
       result = (math::linear::MatrixMxN< 2,3,double > *) &(arg1)->scale(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -30758,7 +30758,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x3_multiply(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = ((math::linear::MatrixMxN< 2,3,double > const *)arg1)->multiply(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -30821,7 +30821,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x3_scaleDiagonal(PyObject *SWIGUNUSEDPARM(self
     try
     {
       result = (math::linear::MatrixMxN< 2,3,double > *) &(arg1)->scaleDiagonal((math::linear::MatrixMxN< 3,3,double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -30884,7 +30884,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x3_multiplyDiagonal(PyObject *SWIGUNUSEDPARM(s
     try
     {
       result = ((math::linear::MatrixMxN< 2,3,double > const *)arg1)->multiplyDiagonal((math::linear::MatrixMxN< 3,3,double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -30947,7 +30947,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x3___iadd__(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (math::linear::MatrixMxN< 2,3,double >::Like_T *) &(arg1)->operator +=((math::linear::MatrixMxN< 2,3,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -31010,7 +31010,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x3___isub__(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (math::linear::MatrixMxN< 2,3,double >::Like_T *) &(arg1)->operator -=((math::linear::MatrixMxN< 2,3,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -31073,7 +31073,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x3_add(PyObject *SWIGUNUSEDPARM(self), PyObjec
     try
     {
       result = ((math::linear::MatrixMxN< 2,3,double > const *)arg1)->add((math::linear::MatrixMxN< 2,3,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -31136,7 +31136,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x3_subtract(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = ((math::linear::MatrixMxN< 2,3,double > const *)arg1)->subtract((math::linear::MatrixMxN< 2,3,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -31189,7 +31189,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x3_transpose(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = ((math::linear::MatrixMxN< 2,3,double > const *)arg1)->transpose();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -31252,7 +31252,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x3_decomposeLU(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = ((math::linear::MatrixMxN< 2,3,double > const *)arg1)->decomposeLU(*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -31324,7 +31324,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x3_permute__SWIG_0(PyObject *SWIGUNUSEDPARM(se
     try
     {
       result = ((math::linear::MatrixMxN< 2,3,double > const *)arg1)->permute((std::vector< size_t,std::allocator< size_t > > const &)*arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -31390,7 +31390,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x3_permute__SWIG_1(PyObject *SWIGUNUSEDPARM(se
     try
     {
       result = ((math::linear::MatrixMxN< 2,3,double > const *)arg1)->permute((std::vector< size_t,std::allocator< size_t > > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -31495,7 +31495,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x3_normSq(PyObject *SWIGUNUSEDPARM(self), PyOb
     try
     {
       result = (double)((math::linear::MatrixMxN< 2,3,double > const *)arg1)->normSq();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -31548,7 +31548,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x3_norm(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = (double)((math::linear::MatrixMxN< 2,3,double > const *)arg1)->norm();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -31601,7 +31601,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x3_normalize(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = (math::linear::MatrixMxN< 2,3,double > *) &(arg1)->normalize();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -31654,7 +31654,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x3_unit(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 2,3,double > const *)arg1)->unit();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -31717,7 +31717,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x3___add__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 2,3,double > const *)arg1)->operator +((math::linear::MatrixMxN< 2,3,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -31782,7 +31782,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x3___sub__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 2,3,double > const *)arg1)->operator -((math::linear::MatrixMxN< 2,3,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -31844,7 +31844,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x3___mul__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 2,3,double > const *)arg1)->operator *(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -31906,7 +31906,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x3___truediv__(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = ((math::linear::MatrixMxN< 2,3,double > const *)arg1)->operator /(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -31961,7 +31961,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x3___neg__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 2,3,double > const *)arg1)->operator -();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -32017,7 +32017,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x3___getitem__(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (double)math_linear_MatrixMxN_Sl_2_Sc_3_Sc_double_Sg____getitem__(arg1,arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -32078,7 +32078,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x3___setitem__(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       math_linear_MatrixMxN_Sl_2_Sc_3_Sc_double_Sg____setitem__(arg1,arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -32131,7 +32131,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x3___str__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = math_linear_MatrixMxN_Sl_2_Sc_3_Sc_double_Sg____str__(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -32184,7 +32184,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x3_vals(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = math_linear_MatrixMxN_Sl_2_Sc_3_Sc_double_Sg__vals(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -32268,7 +32268,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x7_mRaw_set(PyObject *SWIGUNUSEDPARM(self), Py
           SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in variable '""mRaw""' of type '""double [2][7]""'");
         }
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -32321,7 +32321,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x7_mRaw_get(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (double (*)[7])(double (*)[7]) ((arg1)->mRaw);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -32364,7 +32364,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix2x7__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 2,7,double > *)new math::linear::MatrixMxN< 2,7,double >();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -32415,7 +32415,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix2x7__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 2,7,double > *)new math::linear::MatrixMxN< 2,7,double >(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -32466,7 +32466,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix2x7__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 2,7,double > *)new math::linear::MatrixMxN< 2,7,double >((double const *)arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -32522,7 +32522,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix2x7__SWIG_3(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 2,7,double > *)new math::linear::MatrixMxN< 2,7,double >((std::vector< double,std::allocator< double > > const &)*arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -32578,7 +32578,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix2x7__SWIG_4(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 2,7,double > *)new math::linear::MatrixMxN< 2,7,double >((math::linear::MatrixMxN< 2,7,double > const &)*arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -32689,7 +32689,7 @@ SWIGINTERN PyObject *_wrap_delete_Matrix2x7(PyObject *SWIGUNUSEDPARM(self), PyOb
     try
     {
       delete arg1;
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -32756,7 +32756,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x7___call____SWIG_0(PyObject *SWIGUNUSEDPARM(s
     try
     {
       result = (double)((math::linear::MatrixMxN< 2,7,double > const *)arg1)->operator ()(arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -32823,7 +32823,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x7___call____SWIG_1(PyObject *SWIGUNUSEDPARM(s
     try
     {
       result = (double *) &(arg1)->operator ()(arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -32942,7 +32942,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x7_row__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (double *)((math::linear::MatrixMxN< 2,7,double > const *)arg1)->row(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -33001,7 +33001,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x7_row__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (double *)(arg1)->row(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -33067,7 +33067,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x7_row__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->row(arg2,(double const *)arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -33138,7 +33138,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x7_row__SWIG_3(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->row(arg2,(std::vector< double,std::allocator< double > > const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -33288,7 +33288,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x7_col__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = ((math::linear::MatrixMxN< 2,7,double > const *)arg1)->col(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -33354,7 +33354,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x7_col__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->col(arg2,(double const *)arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -33425,7 +33425,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x7_col__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->col(arg2,(std::vector< double,std::allocator< double > > const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -33496,7 +33496,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x7_col__SWIG_3(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->col(arg2,(math::linear::MatrixMxN< 2,1,double > const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -33642,7 +33642,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x7_rows(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 2,7,double > const *)arg1)->rows();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -33695,7 +33695,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x7_cols(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 2,7,double > const *)arg1)->cols();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -33748,7 +33748,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x7_size(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 2,7,double > const *)arg1)->size();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -33808,7 +33808,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x7_scale(PyObject *SWIGUNUSEDPARM(self), PyObj
     try
     {
       result = (math::linear::MatrixMxN< 2,7,double > *) &(arg1)->scale(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -33868,7 +33868,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x7_multiply(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = ((math::linear::MatrixMxN< 2,7,double > const *)arg1)->multiply(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -33931,7 +33931,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x7_scaleDiagonal(PyObject *SWIGUNUSEDPARM(self
     try
     {
       result = (math::linear::MatrixMxN< 2,7,double > *) &(arg1)->scaleDiagonal((math::linear::MatrixMxN< 7,7,double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -33994,7 +33994,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x7_multiplyDiagonal(PyObject *SWIGUNUSEDPARM(s
     try
     {
       result = ((math::linear::MatrixMxN< 2,7,double > const *)arg1)->multiplyDiagonal((math::linear::MatrixMxN< 7,7,double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -34057,7 +34057,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x7___iadd__(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (math::linear::MatrixMxN< 2,7,double >::Like_T *) &(arg1)->operator +=((math::linear::MatrixMxN< 2,7,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -34120,7 +34120,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x7___isub__(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (math::linear::MatrixMxN< 2,7,double >::Like_T *) &(arg1)->operator -=((math::linear::MatrixMxN< 2,7,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -34183,7 +34183,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x7_add(PyObject *SWIGUNUSEDPARM(self), PyObjec
     try
     {
       result = ((math::linear::MatrixMxN< 2,7,double > const *)arg1)->add((math::linear::MatrixMxN< 2,7,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -34246,7 +34246,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x7_subtract(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = ((math::linear::MatrixMxN< 2,7,double > const *)arg1)->subtract((math::linear::MatrixMxN< 2,7,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -34299,7 +34299,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x7_transpose(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = ((math::linear::MatrixMxN< 2,7,double > const *)arg1)->transpose();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -34362,7 +34362,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x7_decomposeLU(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = ((math::linear::MatrixMxN< 2,7,double > const *)arg1)->decomposeLU(*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -34434,7 +34434,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x7_permute__SWIG_0(PyObject *SWIGUNUSEDPARM(se
     try
     {
       result = ((math::linear::MatrixMxN< 2,7,double > const *)arg1)->permute((std::vector< size_t,std::allocator< size_t > > const &)*arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -34500,7 +34500,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x7_permute__SWIG_1(PyObject *SWIGUNUSEDPARM(se
     try
     {
       result = ((math::linear::MatrixMxN< 2,7,double > const *)arg1)->permute((std::vector< size_t,std::allocator< size_t > > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -34605,7 +34605,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x7_normSq(PyObject *SWIGUNUSEDPARM(self), PyOb
     try
     {
       result = (double)((math::linear::MatrixMxN< 2,7,double > const *)arg1)->normSq();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -34658,7 +34658,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x7_norm(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = (double)((math::linear::MatrixMxN< 2,7,double > const *)arg1)->norm();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -34711,7 +34711,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x7_normalize(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = (math::linear::MatrixMxN< 2,7,double > *) &(arg1)->normalize();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -34764,7 +34764,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x7_unit(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 2,7,double > const *)arg1)->unit();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -34827,7 +34827,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x7___add__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 2,7,double > const *)arg1)->operator +((math::linear::MatrixMxN< 2,7,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -34892,7 +34892,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x7___sub__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 2,7,double > const *)arg1)->operator -((math::linear::MatrixMxN< 2,7,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -34954,7 +34954,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x7___mul__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 2,7,double > const *)arg1)->operator *(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -35016,7 +35016,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x7___truediv__(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = ((math::linear::MatrixMxN< 2,7,double > const *)arg1)->operator /(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -35071,7 +35071,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x7___neg__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 2,7,double > const *)arg1)->operator -();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -35127,7 +35127,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x7___getitem__(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (double)math_linear_MatrixMxN_Sl_2_Sc_7_Sc_double_Sg____getitem__(arg1,arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -35188,7 +35188,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x7___setitem__(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       math_linear_MatrixMxN_Sl_2_Sc_7_Sc_double_Sg____setitem__(arg1,arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -35241,7 +35241,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x7___str__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = math_linear_MatrixMxN_Sl_2_Sc_7_Sc_double_Sg____str__(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -35294,7 +35294,7 @@ SWIGINTERN PyObject *_wrap_Matrix2x7_vals(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = math_linear_MatrixMxN_Sl_2_Sc_7_Sc_double_Sg__vals(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -35378,7 +35378,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x1_mRaw_set(PyObject *SWIGUNUSEDPARM(self), Py
           SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in variable '""mRaw""' of type '""double [3][1]""'");
         }
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -35431,7 +35431,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x1_mRaw_get(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (double (*)[1])(double (*)[1]) ((arg1)->mRaw);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -35474,7 +35474,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix3x1__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 3,1,double > *)new math::linear::MatrixMxN< 3,1,double >();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -35525,7 +35525,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix3x1__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 3,1,double > *)new math::linear::MatrixMxN< 3,1,double >(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -35576,7 +35576,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix3x1__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 3,1,double > *)new math::linear::MatrixMxN< 3,1,double >((double const *)arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -35632,7 +35632,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix3x1__SWIG_3(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 3,1,double > *)new math::linear::MatrixMxN< 3,1,double >((std::vector< double,std::allocator< double > > const &)*arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -35688,7 +35688,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix3x1__SWIG_4(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 3,1,double > *)new math::linear::MatrixMxN< 3,1,double >((math::linear::MatrixMxN< 3,1,double > const &)*arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -35799,7 +35799,7 @@ SWIGINTERN PyObject *_wrap_delete_Matrix3x1(PyObject *SWIGUNUSEDPARM(self), PyOb
     try
     {
       delete arg1;
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -35866,7 +35866,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x1___call____SWIG_0(PyObject *SWIGUNUSEDPARM(s
     try
     {
       result = (double)((math::linear::MatrixMxN< 3,1,double > const *)arg1)->operator ()(arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -35933,7 +35933,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x1___call____SWIG_1(PyObject *SWIGUNUSEDPARM(s
     try
     {
       result = (double *) &(arg1)->operator ()(arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -36052,7 +36052,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x1_row__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (double *)((math::linear::MatrixMxN< 3,1,double > const *)arg1)->row(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -36111,7 +36111,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x1_row__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (double *)(arg1)->row(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -36177,7 +36177,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x1_row__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->row(arg2,(double const *)arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -36248,7 +36248,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x1_row__SWIG_3(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->row(arg2,(std::vector< double,std::allocator< double > > const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -36398,7 +36398,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x1_col__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = ((math::linear::MatrixMxN< 3,1,double > const *)arg1)->col(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -36464,7 +36464,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x1_col__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->col(arg2,(double const *)arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -36535,7 +36535,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x1_col__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->col(arg2,(std::vector< double,std::allocator< double > > const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -36606,7 +36606,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x1_col__SWIG_3(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->col(arg2,(math::linear::MatrixMxN< 3,1,double > const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -36752,7 +36752,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x1_rows(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 3,1,double > const *)arg1)->rows();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -36805,7 +36805,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x1_cols(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 3,1,double > const *)arg1)->cols();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -36858,7 +36858,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x1_size(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 3,1,double > const *)arg1)->size();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -36918,7 +36918,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x1_scale(PyObject *SWIGUNUSEDPARM(self), PyObj
     try
     {
       result = (math::linear::MatrixMxN< 3,1,double > *) &(arg1)->scale(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -36978,7 +36978,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x1_multiply(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = ((math::linear::MatrixMxN< 3,1,double > const *)arg1)->multiply(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -37041,7 +37041,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x1_scaleDiagonal(PyObject *SWIGUNUSEDPARM(self
     try
     {
       result = (math::linear::MatrixMxN< 3,1,double > *) &(arg1)->scaleDiagonal((math::linear::MatrixMxN< 1,1,double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -37104,7 +37104,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x1_multiplyDiagonal(PyObject *SWIGUNUSEDPARM(s
     try
     {
       result = ((math::linear::MatrixMxN< 3,1,double > const *)arg1)->multiplyDiagonal((math::linear::MatrixMxN< 1,1,double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -37167,7 +37167,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x1___iadd__(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (math::linear::MatrixMxN< 3,1,double >::Like_T *) &(arg1)->operator +=((math::linear::MatrixMxN< 3,1,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -37230,7 +37230,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x1___isub__(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (math::linear::MatrixMxN< 3,1,double >::Like_T *) &(arg1)->operator -=((math::linear::MatrixMxN< 3,1,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -37293,7 +37293,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x1_add(PyObject *SWIGUNUSEDPARM(self), PyObjec
     try
     {
       result = ((math::linear::MatrixMxN< 3,1,double > const *)arg1)->add((math::linear::MatrixMxN< 3,1,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -37356,7 +37356,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x1_subtract(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = ((math::linear::MatrixMxN< 3,1,double > const *)arg1)->subtract((math::linear::MatrixMxN< 3,1,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -37409,7 +37409,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x1_transpose(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = ((math::linear::MatrixMxN< 3,1,double > const *)arg1)->transpose();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -37472,7 +37472,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x1_decomposeLU(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = ((math::linear::MatrixMxN< 3,1,double > const *)arg1)->decomposeLU(*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -37544,7 +37544,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x1_permute__SWIG_0(PyObject *SWIGUNUSEDPARM(se
     try
     {
       result = ((math::linear::MatrixMxN< 3,1,double > const *)arg1)->permute((std::vector< size_t,std::allocator< size_t > > const &)*arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -37610,7 +37610,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x1_permute__SWIG_1(PyObject *SWIGUNUSEDPARM(se
     try
     {
       result = ((math::linear::MatrixMxN< 3,1,double > const *)arg1)->permute((std::vector< size_t,std::allocator< size_t > > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -37715,7 +37715,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x1_normSq(PyObject *SWIGUNUSEDPARM(self), PyOb
     try
     {
       result = (double)((math::linear::MatrixMxN< 3,1,double > const *)arg1)->normSq();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -37768,7 +37768,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x1_norm(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = (double)((math::linear::MatrixMxN< 3,1,double > const *)arg1)->norm();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -37821,7 +37821,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x1_normalize(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = (math::linear::MatrixMxN< 3,1,double > *) &(arg1)->normalize();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -37874,7 +37874,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x1_unit(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 3,1,double > const *)arg1)->unit();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -37937,7 +37937,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x1___add__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 3,1,double > const *)arg1)->operator +((math::linear::MatrixMxN< 3,1,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -38002,7 +38002,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x1___sub__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 3,1,double > const *)arg1)->operator -((math::linear::MatrixMxN< 3,1,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -38064,7 +38064,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x1___mul__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 3,1,double > const *)arg1)->operator *(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -38126,7 +38126,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x1___truediv__(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = ((math::linear::MatrixMxN< 3,1,double > const *)arg1)->operator /(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -38181,7 +38181,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x1___neg__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 3,1,double > const *)arg1)->operator -();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -38237,7 +38237,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x1___getitem__(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (double)math_linear_MatrixMxN_Sl_3_Sc_1_Sc_double_Sg____getitem__(arg1,arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -38298,7 +38298,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x1___setitem__(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       math_linear_MatrixMxN_Sl_3_Sc_1_Sc_double_Sg____setitem__(arg1,arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -38351,7 +38351,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x1___str__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = math_linear_MatrixMxN_Sl_3_Sc_1_Sc_double_Sg____str__(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -38404,7 +38404,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x1_vals(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = math_linear_MatrixMxN_Sl_3_Sc_1_Sc_double_Sg__vals(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -38488,7 +38488,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x2_mRaw_set(PyObject *SWIGUNUSEDPARM(self), Py
           SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in variable '""mRaw""' of type '""double [3][2]""'");
         }
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -38541,7 +38541,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x2_mRaw_get(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (double (*)[2])(double (*)[2]) ((arg1)->mRaw);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -38584,7 +38584,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix3x2__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 3,2,double > *)new math::linear::MatrixMxN< 3,2,double >();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -38635,7 +38635,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix3x2__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 3,2,double > *)new math::linear::MatrixMxN< 3,2,double >(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -38686,7 +38686,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix3x2__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 3,2,double > *)new math::linear::MatrixMxN< 3,2,double >((double const *)arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -38742,7 +38742,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix3x2__SWIG_3(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 3,2,double > *)new math::linear::MatrixMxN< 3,2,double >((std::vector< double,std::allocator< double > > const &)*arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -38798,7 +38798,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix3x2__SWIG_4(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 3,2,double > *)new math::linear::MatrixMxN< 3,2,double >((math::linear::MatrixMxN< 3,2,double > const &)*arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -38909,7 +38909,7 @@ SWIGINTERN PyObject *_wrap_delete_Matrix3x2(PyObject *SWIGUNUSEDPARM(self), PyOb
     try
     {
       delete arg1;
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -38976,7 +38976,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x2___call____SWIG_0(PyObject *SWIGUNUSEDPARM(s
     try
     {
       result = (double)((math::linear::MatrixMxN< 3,2,double > const *)arg1)->operator ()(arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -39043,7 +39043,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x2___call____SWIG_1(PyObject *SWIGUNUSEDPARM(s
     try
     {
       result = (double *) &(arg1)->operator ()(arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -39162,7 +39162,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x2_row__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (double *)((math::linear::MatrixMxN< 3,2,double > const *)arg1)->row(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -39221,7 +39221,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x2_row__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (double *)(arg1)->row(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -39287,7 +39287,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x2_row__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->row(arg2,(double const *)arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -39358,7 +39358,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x2_row__SWIG_3(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->row(arg2,(std::vector< double,std::allocator< double > > const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -39508,7 +39508,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x2_col__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = ((math::linear::MatrixMxN< 3,2,double > const *)arg1)->col(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -39574,7 +39574,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x2_col__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->col(arg2,(double const *)arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -39645,7 +39645,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x2_col__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->col(arg2,(std::vector< double,std::allocator< double > > const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -39716,7 +39716,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x2_col__SWIG_3(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->col(arg2,(math::linear::MatrixMxN< 3,1,double > const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -39862,7 +39862,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x2_rows(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 3,2,double > const *)arg1)->rows();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -39915,7 +39915,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x2_cols(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 3,2,double > const *)arg1)->cols();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -39968,7 +39968,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x2_size(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 3,2,double > const *)arg1)->size();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -40028,7 +40028,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x2_scale(PyObject *SWIGUNUSEDPARM(self), PyObj
     try
     {
       result = (math::linear::MatrixMxN< 3,2,double > *) &(arg1)->scale(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -40088,7 +40088,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x2_multiply(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = ((math::linear::MatrixMxN< 3,2,double > const *)arg1)->multiply(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -40151,7 +40151,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x2_scaleDiagonal(PyObject *SWIGUNUSEDPARM(self
     try
     {
       result = (math::linear::MatrixMxN< 3,2,double > *) &(arg1)->scaleDiagonal((math::linear::MatrixMxN< 2,2,double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -40214,7 +40214,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x2_multiplyDiagonal(PyObject *SWIGUNUSEDPARM(s
     try
     {
       result = ((math::linear::MatrixMxN< 3,2,double > const *)arg1)->multiplyDiagonal((math::linear::MatrixMxN< 2,2,double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -40277,7 +40277,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x2___iadd__(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (math::linear::MatrixMxN< 3,2,double >::Like_T *) &(arg1)->operator +=((math::linear::MatrixMxN< 3,2,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -40340,7 +40340,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x2___isub__(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (math::linear::MatrixMxN< 3,2,double >::Like_T *) &(arg1)->operator -=((math::linear::MatrixMxN< 3,2,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -40403,7 +40403,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x2_add(PyObject *SWIGUNUSEDPARM(self), PyObjec
     try
     {
       result = ((math::linear::MatrixMxN< 3,2,double > const *)arg1)->add((math::linear::MatrixMxN< 3,2,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -40466,7 +40466,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x2_subtract(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = ((math::linear::MatrixMxN< 3,2,double > const *)arg1)->subtract((math::linear::MatrixMxN< 3,2,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -40519,7 +40519,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x2_transpose(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = ((math::linear::MatrixMxN< 3,2,double > const *)arg1)->transpose();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -40582,7 +40582,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x2_decomposeLU(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = ((math::linear::MatrixMxN< 3,2,double > const *)arg1)->decomposeLU(*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -40654,7 +40654,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x2_permute__SWIG_0(PyObject *SWIGUNUSEDPARM(se
     try
     {
       result = ((math::linear::MatrixMxN< 3,2,double > const *)arg1)->permute((std::vector< size_t,std::allocator< size_t > > const &)*arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -40720,7 +40720,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x2_permute__SWIG_1(PyObject *SWIGUNUSEDPARM(se
     try
     {
       result = ((math::linear::MatrixMxN< 3,2,double > const *)arg1)->permute((std::vector< size_t,std::allocator< size_t > > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -40825,7 +40825,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x2_normSq(PyObject *SWIGUNUSEDPARM(self), PyOb
     try
     {
       result = (double)((math::linear::MatrixMxN< 3,2,double > const *)arg1)->normSq();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -40878,7 +40878,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x2_norm(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = (double)((math::linear::MatrixMxN< 3,2,double > const *)arg1)->norm();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -40931,7 +40931,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x2_normalize(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = (math::linear::MatrixMxN< 3,2,double > *) &(arg1)->normalize();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -40984,7 +40984,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x2_unit(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 3,2,double > const *)arg1)->unit();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -41047,7 +41047,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x2___add__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 3,2,double > const *)arg1)->operator +((math::linear::MatrixMxN< 3,2,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -41112,7 +41112,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x2___sub__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 3,2,double > const *)arg1)->operator -((math::linear::MatrixMxN< 3,2,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -41174,7 +41174,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x2___mul__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 3,2,double > const *)arg1)->operator *(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -41236,7 +41236,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x2___truediv__(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = ((math::linear::MatrixMxN< 3,2,double > const *)arg1)->operator /(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -41291,7 +41291,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x2___neg__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 3,2,double > const *)arg1)->operator -();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -41347,7 +41347,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x2___getitem__(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (double)math_linear_MatrixMxN_Sl_3_Sc_2_Sc_double_Sg____getitem__(arg1,arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -41408,7 +41408,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x2___setitem__(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       math_linear_MatrixMxN_Sl_3_Sc_2_Sc_double_Sg____setitem__(arg1,arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -41461,7 +41461,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x2___str__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = math_linear_MatrixMxN_Sl_3_Sc_2_Sc_double_Sg____str__(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -41514,7 +41514,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x2_vals(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = math_linear_MatrixMxN_Sl_3_Sc_2_Sc_double_Sg__vals(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -41598,7 +41598,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x3_mRaw_set(PyObject *SWIGUNUSEDPARM(self), Py
           SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in variable '""mRaw""' of type '""double [3][3]""'");
         }
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -41651,7 +41651,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x3_mRaw_get(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (double (*)[3])(double (*)[3]) ((arg1)->mRaw);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -41694,7 +41694,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix3x3__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 3,3,double > *)new math::linear::MatrixMxN< 3,3,double >();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -41745,7 +41745,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix3x3__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 3,3,double > *)new math::linear::MatrixMxN< 3,3,double >(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -41796,7 +41796,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix3x3__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 3,3,double > *)new math::linear::MatrixMxN< 3,3,double >((double const *)arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -41852,7 +41852,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix3x3__SWIG_3(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 3,3,double > *)new math::linear::MatrixMxN< 3,3,double >((std::vector< double,std::allocator< double > > const &)*arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -41908,7 +41908,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix3x3__SWIG_4(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 3,3,double > *)new math::linear::MatrixMxN< 3,3,double >((math::linear::MatrixMxN< 3,3,double > const &)*arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -42019,7 +42019,7 @@ SWIGINTERN PyObject *_wrap_delete_Matrix3x3(PyObject *SWIGUNUSEDPARM(self), PyOb
     try
     {
       delete arg1;
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -42086,7 +42086,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x3___call____SWIG_0(PyObject *SWIGUNUSEDPARM(s
     try
     {
       result = (double)((math::linear::MatrixMxN< 3,3,double > const *)arg1)->operator ()(arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -42153,7 +42153,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x3___call____SWIG_1(PyObject *SWIGUNUSEDPARM(s
     try
     {
       result = (double *) &(arg1)->operator ()(arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -42272,7 +42272,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x3_row__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (double *)((math::linear::MatrixMxN< 3,3,double > const *)arg1)->row(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -42331,7 +42331,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x3_row__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (double *)(arg1)->row(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -42397,7 +42397,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x3_row__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->row(arg2,(double const *)arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -42468,7 +42468,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x3_row__SWIG_3(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->row(arg2,(std::vector< double,std::allocator< double > > const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -42618,7 +42618,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x3_col__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = ((math::linear::MatrixMxN< 3,3,double > const *)arg1)->col(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -42684,7 +42684,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x3_col__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->col(arg2,(double const *)arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -42755,7 +42755,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x3_col__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->col(arg2,(std::vector< double,std::allocator< double > > const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -42826,7 +42826,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x3_col__SWIG_3(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->col(arg2,(math::linear::MatrixMxN< 3,1,double > const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -42972,7 +42972,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x3_rows(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 3,3,double > const *)arg1)->rows();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -43025,7 +43025,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x3_cols(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 3,3,double > const *)arg1)->cols();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -43078,7 +43078,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x3_size(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 3,3,double > const *)arg1)->size();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -43138,7 +43138,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x3_scale(PyObject *SWIGUNUSEDPARM(self), PyObj
     try
     {
       result = (math::linear::MatrixMxN< 3,3,double > *) &(arg1)->scale(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -43198,7 +43198,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x3_multiply(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = ((math::linear::MatrixMxN< 3,3,double > const *)arg1)->multiply(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -43261,7 +43261,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x3_scaleDiagonal(PyObject *SWIGUNUSEDPARM(self
     try
     {
       result = (math::linear::MatrixMxN< 3,3,double > *) &(arg1)->scaleDiagonal((math::linear::MatrixMxN< 3,3,double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -43324,7 +43324,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x3_multiplyDiagonal(PyObject *SWIGUNUSEDPARM(s
     try
     {
       result = ((math::linear::MatrixMxN< 3,3,double > const *)arg1)->multiplyDiagonal((math::linear::MatrixMxN< 3,3,double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -43387,7 +43387,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x3___iadd__(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (math::linear::MatrixMxN< 3,3,double >::Like_T *) &(arg1)->operator +=((math::linear::MatrixMxN< 3,3,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -43450,7 +43450,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x3___isub__(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (math::linear::MatrixMxN< 3,3,double >::Like_T *) &(arg1)->operator -=((math::linear::MatrixMxN< 3,3,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -43513,7 +43513,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x3_add(PyObject *SWIGUNUSEDPARM(self), PyObjec
     try
     {
       result = ((math::linear::MatrixMxN< 3,3,double > const *)arg1)->add((math::linear::MatrixMxN< 3,3,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -43576,7 +43576,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x3_subtract(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = ((math::linear::MatrixMxN< 3,3,double > const *)arg1)->subtract((math::linear::MatrixMxN< 3,3,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -43629,7 +43629,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x3_transpose(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = ((math::linear::MatrixMxN< 3,3,double > const *)arg1)->transpose();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -43692,7 +43692,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x3_decomposeLU(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = ((math::linear::MatrixMxN< 3,3,double > const *)arg1)->decomposeLU(*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -43764,7 +43764,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x3_permute__SWIG_0(PyObject *SWIGUNUSEDPARM(se
     try
     {
       result = ((math::linear::MatrixMxN< 3,3,double > const *)arg1)->permute((std::vector< size_t,std::allocator< size_t > > const &)*arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -43830,7 +43830,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x3_permute__SWIG_1(PyObject *SWIGUNUSEDPARM(se
     try
     {
       result = ((math::linear::MatrixMxN< 3,3,double > const *)arg1)->permute((std::vector< size_t,std::allocator< size_t > > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -43935,7 +43935,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x3_normSq(PyObject *SWIGUNUSEDPARM(self), PyOb
     try
     {
       result = (double)((math::linear::MatrixMxN< 3,3,double > const *)arg1)->normSq();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -43988,7 +43988,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x3_norm(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = (double)((math::linear::MatrixMxN< 3,3,double > const *)arg1)->norm();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -44041,7 +44041,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x3_normalize(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = (math::linear::MatrixMxN< 3,3,double > *) &(arg1)->normalize();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -44094,7 +44094,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x3_unit(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 3,3,double > const *)arg1)->unit();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -44157,7 +44157,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x3___add__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 3,3,double > const *)arg1)->operator +((math::linear::MatrixMxN< 3,3,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -44222,7 +44222,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x3___sub__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 3,3,double > const *)arg1)->operator -((math::linear::MatrixMxN< 3,3,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -44284,7 +44284,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x3___mul__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 3,3,double > const *)arg1)->operator *(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -44346,7 +44346,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x3___truediv__(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = ((math::linear::MatrixMxN< 3,3,double > const *)arg1)->operator /(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -44401,7 +44401,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x3___neg__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 3,3,double > const *)arg1)->operator -();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -44457,7 +44457,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x3___getitem__(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (double)math_linear_MatrixMxN_Sl_3_Sc_3_Sc_double_Sg____getitem__(arg1,arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -44518,7 +44518,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x3___setitem__(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       math_linear_MatrixMxN_Sl_3_Sc_3_Sc_double_Sg____setitem__(arg1,arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -44571,7 +44571,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x3___str__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = math_linear_MatrixMxN_Sl_3_Sc_3_Sc_double_Sg____str__(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -44624,7 +44624,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x3_vals(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = math_linear_MatrixMxN_Sl_3_Sc_3_Sc_double_Sg__vals(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -44708,7 +44708,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x7_mRaw_set(PyObject *SWIGUNUSEDPARM(self), Py
           SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in variable '""mRaw""' of type '""double [3][7]""'");
         }
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -44761,7 +44761,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x7_mRaw_get(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (double (*)[7])(double (*)[7]) ((arg1)->mRaw);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -44804,7 +44804,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix3x7__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 3,7,double > *)new math::linear::MatrixMxN< 3,7,double >();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -44855,7 +44855,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix3x7__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 3,7,double > *)new math::linear::MatrixMxN< 3,7,double >(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -44906,7 +44906,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix3x7__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 3,7,double > *)new math::linear::MatrixMxN< 3,7,double >((double const *)arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -44962,7 +44962,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix3x7__SWIG_3(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 3,7,double > *)new math::linear::MatrixMxN< 3,7,double >((std::vector< double,std::allocator< double > > const &)*arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -45018,7 +45018,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix3x7__SWIG_4(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 3,7,double > *)new math::linear::MatrixMxN< 3,7,double >((math::linear::MatrixMxN< 3,7,double > const &)*arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -45129,7 +45129,7 @@ SWIGINTERN PyObject *_wrap_delete_Matrix3x7(PyObject *SWIGUNUSEDPARM(self), PyOb
     try
     {
       delete arg1;
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -45196,7 +45196,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x7___call____SWIG_0(PyObject *SWIGUNUSEDPARM(s
     try
     {
       result = (double)((math::linear::MatrixMxN< 3,7,double > const *)arg1)->operator ()(arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -45263,7 +45263,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x7___call____SWIG_1(PyObject *SWIGUNUSEDPARM(s
     try
     {
       result = (double *) &(arg1)->operator ()(arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -45382,7 +45382,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x7_row__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (double *)((math::linear::MatrixMxN< 3,7,double > const *)arg1)->row(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -45441,7 +45441,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x7_row__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (double *)(arg1)->row(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -45507,7 +45507,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x7_row__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->row(arg2,(double const *)arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -45578,7 +45578,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x7_row__SWIG_3(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->row(arg2,(std::vector< double,std::allocator< double > > const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -45728,7 +45728,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x7_col__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = ((math::linear::MatrixMxN< 3,7,double > const *)arg1)->col(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -45794,7 +45794,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x7_col__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->col(arg2,(double const *)arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -45865,7 +45865,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x7_col__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->col(arg2,(std::vector< double,std::allocator< double > > const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -45936,7 +45936,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x7_col__SWIG_3(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->col(arg2,(math::linear::MatrixMxN< 3,1,double > const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -46082,7 +46082,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x7_rows(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 3,7,double > const *)arg1)->rows();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -46135,7 +46135,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x7_cols(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 3,7,double > const *)arg1)->cols();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -46188,7 +46188,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x7_size(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 3,7,double > const *)arg1)->size();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -46248,7 +46248,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x7_scale(PyObject *SWIGUNUSEDPARM(self), PyObj
     try
     {
       result = (math::linear::MatrixMxN< 3,7,double > *) &(arg1)->scale(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -46308,7 +46308,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x7_multiply(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = ((math::linear::MatrixMxN< 3,7,double > const *)arg1)->multiply(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -46371,7 +46371,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x7_scaleDiagonal(PyObject *SWIGUNUSEDPARM(self
     try
     {
       result = (math::linear::MatrixMxN< 3,7,double > *) &(arg1)->scaleDiagonal((math::linear::MatrixMxN< 7,7,double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -46434,7 +46434,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x7_multiplyDiagonal(PyObject *SWIGUNUSEDPARM(s
     try
     {
       result = ((math::linear::MatrixMxN< 3,7,double > const *)arg1)->multiplyDiagonal((math::linear::MatrixMxN< 7,7,double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -46497,7 +46497,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x7___iadd__(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (math::linear::MatrixMxN< 3,7,double >::Like_T *) &(arg1)->operator +=((math::linear::MatrixMxN< 3,7,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -46560,7 +46560,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x7___isub__(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (math::linear::MatrixMxN< 3,7,double >::Like_T *) &(arg1)->operator -=((math::linear::MatrixMxN< 3,7,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -46623,7 +46623,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x7_add(PyObject *SWIGUNUSEDPARM(self), PyObjec
     try
     {
       result = ((math::linear::MatrixMxN< 3,7,double > const *)arg1)->add((math::linear::MatrixMxN< 3,7,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -46686,7 +46686,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x7_subtract(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = ((math::linear::MatrixMxN< 3,7,double > const *)arg1)->subtract((math::linear::MatrixMxN< 3,7,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -46739,7 +46739,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x7_transpose(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = ((math::linear::MatrixMxN< 3,7,double > const *)arg1)->transpose();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -46802,7 +46802,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x7_decomposeLU(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = ((math::linear::MatrixMxN< 3,7,double > const *)arg1)->decomposeLU(*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -46874,7 +46874,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x7_permute__SWIG_0(PyObject *SWIGUNUSEDPARM(se
     try
     {
       result = ((math::linear::MatrixMxN< 3,7,double > const *)arg1)->permute((std::vector< size_t,std::allocator< size_t > > const &)*arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -46940,7 +46940,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x7_permute__SWIG_1(PyObject *SWIGUNUSEDPARM(se
     try
     {
       result = ((math::linear::MatrixMxN< 3,7,double > const *)arg1)->permute((std::vector< size_t,std::allocator< size_t > > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -47045,7 +47045,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x7_normSq(PyObject *SWIGUNUSEDPARM(self), PyOb
     try
     {
       result = (double)((math::linear::MatrixMxN< 3,7,double > const *)arg1)->normSq();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -47098,7 +47098,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x7_norm(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = (double)((math::linear::MatrixMxN< 3,7,double > const *)arg1)->norm();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -47151,7 +47151,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x7_normalize(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = (math::linear::MatrixMxN< 3,7,double > *) &(arg1)->normalize();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -47204,7 +47204,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x7_unit(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 3,7,double > const *)arg1)->unit();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -47267,7 +47267,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x7___add__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 3,7,double > const *)arg1)->operator +((math::linear::MatrixMxN< 3,7,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -47332,7 +47332,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x7___sub__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 3,7,double > const *)arg1)->operator -((math::linear::MatrixMxN< 3,7,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -47394,7 +47394,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x7___mul__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 3,7,double > const *)arg1)->operator *(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -47456,7 +47456,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x7___truediv__(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = ((math::linear::MatrixMxN< 3,7,double > const *)arg1)->operator /(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -47511,7 +47511,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x7___neg__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 3,7,double > const *)arg1)->operator -();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -47567,7 +47567,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x7___getitem__(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (double)math_linear_MatrixMxN_Sl_3_Sc_7_Sc_double_Sg____getitem__(arg1,arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -47628,7 +47628,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x7___setitem__(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       math_linear_MatrixMxN_Sl_3_Sc_7_Sc_double_Sg____setitem__(arg1,arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -47681,7 +47681,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x7___str__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = math_linear_MatrixMxN_Sl_3_Sc_7_Sc_double_Sg____str__(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -47734,7 +47734,7 @@ SWIGINTERN PyObject *_wrap_Matrix3x7_vals(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = math_linear_MatrixMxN_Sl_3_Sc_7_Sc_double_Sg__vals(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -47818,7 +47818,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x2_mRaw_set(PyObject *SWIGUNUSEDPARM(self), Py
           SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in variable '""mRaw""' of type '""double [7][2]""'");
         }
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -47871,7 +47871,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x2_mRaw_get(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (double (*)[2])(double (*)[2]) ((arg1)->mRaw);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -47914,7 +47914,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix7x2__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 7,2,double > *)new math::linear::MatrixMxN< 7,2,double >();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -47965,7 +47965,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix7x2__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 7,2,double > *)new math::linear::MatrixMxN< 7,2,double >(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -48016,7 +48016,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix7x2__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 7,2,double > *)new math::linear::MatrixMxN< 7,2,double >((double const *)arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -48072,7 +48072,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix7x2__SWIG_3(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 7,2,double > *)new math::linear::MatrixMxN< 7,2,double >((std::vector< double,std::allocator< double > > const &)*arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -48128,7 +48128,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix7x2__SWIG_4(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 7,2,double > *)new math::linear::MatrixMxN< 7,2,double >((math::linear::MatrixMxN< 7,2,double > const &)*arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -48239,7 +48239,7 @@ SWIGINTERN PyObject *_wrap_delete_Matrix7x2(PyObject *SWIGUNUSEDPARM(self), PyOb
     try
     {
       delete arg1;
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -48306,7 +48306,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x2___call____SWIG_0(PyObject *SWIGUNUSEDPARM(s
     try
     {
       result = (double)((math::linear::MatrixMxN< 7,2,double > const *)arg1)->operator ()(arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -48373,7 +48373,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x2___call____SWIG_1(PyObject *SWIGUNUSEDPARM(s
     try
     {
       result = (double *) &(arg1)->operator ()(arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -48492,7 +48492,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x2_row__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (double *)((math::linear::MatrixMxN< 7,2,double > const *)arg1)->row(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -48551,7 +48551,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x2_row__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (double *)(arg1)->row(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -48617,7 +48617,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x2_row__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->row(arg2,(double const *)arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -48688,7 +48688,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x2_row__SWIG_3(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->row(arg2,(std::vector< double,std::allocator< double > > const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -48838,7 +48838,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x2_col__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = ((math::linear::MatrixMxN< 7,2,double > const *)arg1)->col(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -48904,7 +48904,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x2_col__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->col(arg2,(double const *)arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -48975,7 +48975,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x2_col__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->col(arg2,(std::vector< double,std::allocator< double > > const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -49046,7 +49046,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x2_col__SWIG_3(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->col(arg2,(math::linear::MatrixMxN< 7,1,double > const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -49192,7 +49192,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x2_rows(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 7,2,double > const *)arg1)->rows();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -49245,7 +49245,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x2_cols(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 7,2,double > const *)arg1)->cols();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -49298,7 +49298,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x2_size(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 7,2,double > const *)arg1)->size();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -49358,7 +49358,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x2_scale(PyObject *SWIGUNUSEDPARM(self), PyObj
     try
     {
       result = (math::linear::MatrixMxN< 7,2,double > *) &(arg1)->scale(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -49418,7 +49418,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x2_multiply(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = ((math::linear::MatrixMxN< 7,2,double > const *)arg1)->multiply(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -49481,7 +49481,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x2_scaleDiagonal(PyObject *SWIGUNUSEDPARM(self
     try
     {
       result = (math::linear::MatrixMxN< 7,2,double > *) &(arg1)->scaleDiagonal((math::linear::MatrixMxN< 2,2,double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -49544,7 +49544,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x2_multiplyDiagonal(PyObject *SWIGUNUSEDPARM(s
     try
     {
       result = ((math::linear::MatrixMxN< 7,2,double > const *)arg1)->multiplyDiagonal((math::linear::MatrixMxN< 2,2,double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -49607,7 +49607,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x2___iadd__(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (math::linear::MatrixMxN< 7,2,double >::Like_T *) &(arg1)->operator +=((math::linear::MatrixMxN< 7,2,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -49670,7 +49670,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x2___isub__(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (math::linear::MatrixMxN< 7,2,double >::Like_T *) &(arg1)->operator -=((math::linear::MatrixMxN< 7,2,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -49733,7 +49733,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x2_add(PyObject *SWIGUNUSEDPARM(self), PyObjec
     try
     {
       result = ((math::linear::MatrixMxN< 7,2,double > const *)arg1)->add((math::linear::MatrixMxN< 7,2,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -49796,7 +49796,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x2_subtract(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = ((math::linear::MatrixMxN< 7,2,double > const *)arg1)->subtract((math::linear::MatrixMxN< 7,2,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -49849,7 +49849,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x2_transpose(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = ((math::linear::MatrixMxN< 7,2,double > const *)arg1)->transpose();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -49912,7 +49912,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x2_decomposeLU(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = ((math::linear::MatrixMxN< 7,2,double > const *)arg1)->decomposeLU(*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -49984,7 +49984,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x2_permute__SWIG_0(PyObject *SWIGUNUSEDPARM(se
     try
     {
       result = ((math::linear::MatrixMxN< 7,2,double > const *)arg1)->permute((std::vector< size_t,std::allocator< size_t > > const &)*arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -50050,7 +50050,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x2_permute__SWIG_1(PyObject *SWIGUNUSEDPARM(se
     try
     {
       result = ((math::linear::MatrixMxN< 7,2,double > const *)arg1)->permute((std::vector< size_t,std::allocator< size_t > > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -50155,7 +50155,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x2_normSq(PyObject *SWIGUNUSEDPARM(self), PyOb
     try
     {
       result = (double)((math::linear::MatrixMxN< 7,2,double > const *)arg1)->normSq();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -50208,7 +50208,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x2_norm(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = (double)((math::linear::MatrixMxN< 7,2,double > const *)arg1)->norm();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -50261,7 +50261,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x2_normalize(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = (math::linear::MatrixMxN< 7,2,double > *) &(arg1)->normalize();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -50314,7 +50314,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x2_unit(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 7,2,double > const *)arg1)->unit();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -50377,7 +50377,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x2___add__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 7,2,double > const *)arg1)->operator +((math::linear::MatrixMxN< 7,2,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -50442,7 +50442,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x2___sub__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 7,2,double > const *)arg1)->operator -((math::linear::MatrixMxN< 7,2,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -50504,7 +50504,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x2___mul__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 7,2,double > const *)arg1)->operator *(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -50566,7 +50566,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x2___truediv__(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = ((math::linear::MatrixMxN< 7,2,double > const *)arg1)->operator /(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -50621,7 +50621,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x2___neg__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 7,2,double > const *)arg1)->operator -();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -50677,7 +50677,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x2___getitem__(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (double)math_linear_MatrixMxN_Sl_7_Sc_2_Sc_double_Sg____getitem__(arg1,arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -50738,7 +50738,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x2___setitem__(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       math_linear_MatrixMxN_Sl_7_Sc_2_Sc_double_Sg____setitem__(arg1,arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -50791,7 +50791,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x2___str__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = math_linear_MatrixMxN_Sl_7_Sc_2_Sc_double_Sg____str__(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -50844,7 +50844,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x2_vals(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = math_linear_MatrixMxN_Sl_7_Sc_2_Sc_double_Sg__vals(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -50928,7 +50928,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x3_mRaw_set(PyObject *SWIGUNUSEDPARM(self), Py
           SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in variable '""mRaw""' of type '""double [7][3]""'");
         }
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -50981,7 +50981,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x3_mRaw_get(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (double (*)[3])(double (*)[3]) ((arg1)->mRaw);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -51024,7 +51024,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix7x3__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 7,3,double > *)new math::linear::MatrixMxN< 7,3,double >();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -51075,7 +51075,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix7x3__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 7,3,double > *)new math::linear::MatrixMxN< 7,3,double >(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -51126,7 +51126,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix7x3__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 7,3,double > *)new math::linear::MatrixMxN< 7,3,double >((double const *)arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -51182,7 +51182,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix7x3__SWIG_3(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 7,3,double > *)new math::linear::MatrixMxN< 7,3,double >((std::vector< double,std::allocator< double > > const &)*arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -51238,7 +51238,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix7x3__SWIG_4(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 7,3,double > *)new math::linear::MatrixMxN< 7,3,double >((math::linear::MatrixMxN< 7,3,double > const &)*arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -51349,7 +51349,7 @@ SWIGINTERN PyObject *_wrap_delete_Matrix7x3(PyObject *SWIGUNUSEDPARM(self), PyOb
     try
     {
       delete arg1;
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -51416,7 +51416,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x3___call____SWIG_0(PyObject *SWIGUNUSEDPARM(s
     try
     {
       result = (double)((math::linear::MatrixMxN< 7,3,double > const *)arg1)->operator ()(arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -51483,7 +51483,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x3___call____SWIG_1(PyObject *SWIGUNUSEDPARM(s
     try
     {
       result = (double *) &(arg1)->operator ()(arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -51602,7 +51602,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x3_row__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (double *)((math::linear::MatrixMxN< 7,3,double > const *)arg1)->row(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -51661,7 +51661,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x3_row__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (double *)(arg1)->row(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -51727,7 +51727,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x3_row__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->row(arg2,(double const *)arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -51798,7 +51798,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x3_row__SWIG_3(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->row(arg2,(std::vector< double,std::allocator< double > > const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -51948,7 +51948,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x3_col__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = ((math::linear::MatrixMxN< 7,3,double > const *)arg1)->col(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -52014,7 +52014,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x3_col__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->col(arg2,(double const *)arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -52085,7 +52085,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x3_col__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->col(arg2,(std::vector< double,std::allocator< double > > const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -52156,7 +52156,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x3_col__SWIG_3(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->col(arg2,(math::linear::MatrixMxN< 7,1,double > const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -52302,7 +52302,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x3_rows(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 7,3,double > const *)arg1)->rows();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -52355,7 +52355,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x3_cols(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 7,3,double > const *)arg1)->cols();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -52408,7 +52408,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x3_size(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 7,3,double > const *)arg1)->size();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -52468,7 +52468,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x3_scale(PyObject *SWIGUNUSEDPARM(self), PyObj
     try
     {
       result = (math::linear::MatrixMxN< 7,3,double > *) &(arg1)->scale(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -52528,7 +52528,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x3_multiply(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = ((math::linear::MatrixMxN< 7,3,double > const *)arg1)->multiply(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -52591,7 +52591,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x3_scaleDiagonal(PyObject *SWIGUNUSEDPARM(self
     try
     {
       result = (math::linear::MatrixMxN< 7,3,double > *) &(arg1)->scaleDiagonal((math::linear::MatrixMxN< 3,3,double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -52654,7 +52654,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x3_multiplyDiagonal(PyObject *SWIGUNUSEDPARM(s
     try
     {
       result = ((math::linear::MatrixMxN< 7,3,double > const *)arg1)->multiplyDiagonal((math::linear::MatrixMxN< 3,3,double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -52717,7 +52717,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x3___iadd__(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (math::linear::MatrixMxN< 7,3,double >::Like_T *) &(arg1)->operator +=((math::linear::MatrixMxN< 7,3,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -52780,7 +52780,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x3___isub__(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (math::linear::MatrixMxN< 7,3,double >::Like_T *) &(arg1)->operator -=((math::linear::MatrixMxN< 7,3,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -52843,7 +52843,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x3_add(PyObject *SWIGUNUSEDPARM(self), PyObjec
     try
     {
       result = ((math::linear::MatrixMxN< 7,3,double > const *)arg1)->add((math::linear::MatrixMxN< 7,3,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -52906,7 +52906,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x3_subtract(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = ((math::linear::MatrixMxN< 7,3,double > const *)arg1)->subtract((math::linear::MatrixMxN< 7,3,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -52959,7 +52959,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x3_transpose(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = ((math::linear::MatrixMxN< 7,3,double > const *)arg1)->transpose();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -53022,7 +53022,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x3_decomposeLU(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = ((math::linear::MatrixMxN< 7,3,double > const *)arg1)->decomposeLU(*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -53094,7 +53094,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x3_permute__SWIG_0(PyObject *SWIGUNUSEDPARM(se
     try
     {
       result = ((math::linear::MatrixMxN< 7,3,double > const *)arg1)->permute((std::vector< size_t,std::allocator< size_t > > const &)*arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -53160,7 +53160,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x3_permute__SWIG_1(PyObject *SWIGUNUSEDPARM(se
     try
     {
       result = ((math::linear::MatrixMxN< 7,3,double > const *)arg1)->permute((std::vector< size_t,std::allocator< size_t > > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -53265,7 +53265,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x3_normSq(PyObject *SWIGUNUSEDPARM(self), PyOb
     try
     {
       result = (double)((math::linear::MatrixMxN< 7,3,double > const *)arg1)->normSq();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -53318,7 +53318,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x3_norm(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = (double)((math::linear::MatrixMxN< 7,3,double > const *)arg1)->norm();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -53371,7 +53371,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x3_normalize(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = (math::linear::MatrixMxN< 7,3,double > *) &(arg1)->normalize();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -53424,7 +53424,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x3_unit(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 7,3,double > const *)arg1)->unit();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -53487,7 +53487,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x3___add__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 7,3,double > const *)arg1)->operator +((math::linear::MatrixMxN< 7,3,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -53552,7 +53552,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x3___sub__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 7,3,double > const *)arg1)->operator -((math::linear::MatrixMxN< 7,3,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -53614,7 +53614,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x3___mul__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 7,3,double > const *)arg1)->operator *(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -53676,7 +53676,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x3___truediv__(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = ((math::linear::MatrixMxN< 7,3,double > const *)arg1)->operator /(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -53731,7 +53731,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x3___neg__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 7,3,double > const *)arg1)->operator -();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -53787,7 +53787,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x3___getitem__(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (double)math_linear_MatrixMxN_Sl_7_Sc_3_Sc_double_Sg____getitem__(arg1,arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -53848,7 +53848,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x3___setitem__(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       math_linear_MatrixMxN_Sl_7_Sc_3_Sc_double_Sg____setitem__(arg1,arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -53901,7 +53901,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x3___str__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = math_linear_MatrixMxN_Sl_7_Sc_3_Sc_double_Sg____str__(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -53954,7 +53954,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x3_vals(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = math_linear_MatrixMxN_Sl_7_Sc_3_Sc_double_Sg__vals(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -54038,7 +54038,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x7_mRaw_set(PyObject *SWIGUNUSEDPARM(self), Py
           SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in variable '""mRaw""' of type '""double [7][7]""'");
         }
       }
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -54091,7 +54091,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x7_mRaw_get(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (double (*)[7])(double (*)[7]) ((arg1)->mRaw);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -54134,7 +54134,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix7x7__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 7,7,double > *)new math::linear::MatrixMxN< 7,7,double >();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -54185,7 +54185,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix7x7__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 7,7,double > *)new math::linear::MatrixMxN< 7,7,double >(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -54236,7 +54236,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix7x7__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 7,7,double > *)new math::linear::MatrixMxN< 7,7,double >((double const *)arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -54292,7 +54292,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix7x7__SWIG_3(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 7,7,double > *)new math::linear::MatrixMxN< 7,7,double >((std::vector< double,std::allocator< double > > const &)*arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -54348,7 +54348,7 @@ SWIGINTERN PyObject *_wrap_new_Matrix7x7__SWIG_4(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::MatrixMxN< 7,7,double > *)new math::linear::MatrixMxN< 7,7,double >((math::linear::MatrixMxN< 7,7,double > const &)*arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -54459,7 +54459,7 @@ SWIGINTERN PyObject *_wrap_delete_Matrix7x7(PyObject *SWIGUNUSEDPARM(self), PyOb
     try
     {
       delete arg1;
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -54526,7 +54526,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x7___call____SWIG_0(PyObject *SWIGUNUSEDPARM(s
     try
     {
       result = (double)((math::linear::MatrixMxN< 7,7,double > const *)arg1)->operator ()(arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -54593,7 +54593,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x7___call____SWIG_1(PyObject *SWIGUNUSEDPARM(s
     try
     {
       result = (double *) &(arg1)->operator ()(arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -54712,7 +54712,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x7_row__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (double *)((math::linear::MatrixMxN< 7,7,double > const *)arg1)->row(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -54771,7 +54771,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x7_row__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (double *)(arg1)->row(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -54837,7 +54837,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x7_row__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->row(arg2,(double const *)arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -54908,7 +54908,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x7_row__SWIG_3(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->row(arg2,(std::vector< double,std::allocator< double > > const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -55058,7 +55058,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x7_col__SWIG_0(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = ((math::linear::MatrixMxN< 7,7,double > const *)arg1)->col(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -55124,7 +55124,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x7_col__SWIG_1(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->col(arg2,(double const *)arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -55195,7 +55195,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x7_col__SWIG_2(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->col(arg2,(std::vector< double,std::allocator< double > > const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -55266,7 +55266,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x7_col__SWIG_3(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->col(arg2,(math::linear::MatrixMxN< 7,1,double > const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -55412,7 +55412,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x7_rows(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 7,7,double > const *)arg1)->rows();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -55465,7 +55465,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x7_cols(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 7,7,double > const *)arg1)->cols();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -55518,7 +55518,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x7_size(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 7,7,double > const *)arg1)->size();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -55578,7 +55578,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x7_scale(PyObject *SWIGUNUSEDPARM(self), PyObj
     try
     {
       result = (math::linear::MatrixMxN< 7,7,double > *) &(arg1)->scale(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -55638,7 +55638,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x7_multiply(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = ((math::linear::MatrixMxN< 7,7,double > const *)arg1)->multiply(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -55701,7 +55701,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x7_scaleDiagonal(PyObject *SWIGUNUSEDPARM(self
     try
     {
       result = (math::linear::MatrixMxN< 7,7,double > *) &(arg1)->scaleDiagonal((math::linear::MatrixMxN< 7,7,double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -55764,7 +55764,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x7_multiplyDiagonal(PyObject *SWIGUNUSEDPARM(s
     try
     {
       result = ((math::linear::MatrixMxN< 7,7,double > const *)arg1)->multiplyDiagonal((math::linear::MatrixMxN< 7,7,double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -55827,7 +55827,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x7___iadd__(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (math::linear::MatrixMxN< 7,7,double >::Like_T *) &(arg1)->operator +=((math::linear::MatrixMxN< 7,7,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -55890,7 +55890,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x7___isub__(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (math::linear::MatrixMxN< 7,7,double >::Like_T *) &(arg1)->operator -=((math::linear::MatrixMxN< 7,7,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -55953,7 +55953,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x7_add(PyObject *SWIGUNUSEDPARM(self), PyObjec
     try
     {
       result = ((math::linear::MatrixMxN< 7,7,double > const *)arg1)->add((math::linear::MatrixMxN< 7,7,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -56016,7 +56016,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x7_subtract(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = ((math::linear::MatrixMxN< 7,7,double > const *)arg1)->subtract((math::linear::MatrixMxN< 7,7,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -56069,7 +56069,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x7_transpose(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = ((math::linear::MatrixMxN< 7,7,double > const *)arg1)->transpose();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -56132,7 +56132,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x7_decomposeLU(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = ((math::linear::MatrixMxN< 7,7,double > const *)arg1)->decomposeLU(*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -56204,7 +56204,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x7_permute__SWIG_0(PyObject *SWIGUNUSEDPARM(se
     try
     {
       result = ((math::linear::MatrixMxN< 7,7,double > const *)arg1)->permute((std::vector< size_t,std::allocator< size_t > > const &)*arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -56270,7 +56270,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x7_permute__SWIG_1(PyObject *SWIGUNUSEDPARM(se
     try
     {
       result = ((math::linear::MatrixMxN< 7,7,double > const *)arg1)->permute((std::vector< size_t,std::allocator< size_t > > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -56375,7 +56375,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x7_normSq(PyObject *SWIGUNUSEDPARM(self), PyOb
     try
     {
       result = (double)((math::linear::MatrixMxN< 7,7,double > const *)arg1)->normSq();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -56428,7 +56428,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x7_norm(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = (double)((math::linear::MatrixMxN< 7,7,double > const *)arg1)->norm();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -56481,7 +56481,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x7_normalize(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = (math::linear::MatrixMxN< 7,7,double > *) &(arg1)->normalize();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -56534,7 +56534,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x7_unit(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = ((math::linear::MatrixMxN< 7,7,double > const *)arg1)->unit();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -56597,7 +56597,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x7___add__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 7,7,double > const *)arg1)->operator +((math::linear::MatrixMxN< 7,7,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -56662,7 +56662,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x7___sub__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 7,7,double > const *)arg1)->operator -((math::linear::MatrixMxN< 7,7,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -56724,7 +56724,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x7___mul__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 7,7,double > const *)arg1)->operator *(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -56786,7 +56786,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x7___truediv__(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = ((math::linear::MatrixMxN< 7,7,double > const *)arg1)->operator /(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -56841,7 +56841,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x7___neg__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::MatrixMxN< 7,7,double > const *)arg1)->operator -();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -56897,7 +56897,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x7___getitem__(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (double)math_linear_MatrixMxN_Sl_7_Sc_7_Sc_double_Sg____getitem__(arg1,arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -56958,7 +56958,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x7___setitem__(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       math_linear_MatrixMxN_Sl_7_Sc_7_Sc_double_Sg____setitem__(arg1,arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -57011,7 +57011,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x7___str__(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = math_linear_MatrixMxN_Sl_7_Sc_7_Sc_double_Sg____str__(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -57064,7 +57064,7 @@ SWIGINTERN PyObject *_wrap_Matrix7x7_vals(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = math_linear_MatrixMxN_Sl_7_Sc_7_Sc_double_Sg__vals(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -57118,7 +57118,7 @@ SWIGINTERN PyObject *_wrap_new_Vector2__SWIG_0(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = (math::linear::VectorN< 2,double > *)new math::linear::VectorN< 2,double >();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -57169,7 +57169,7 @@ SWIGINTERN PyObject *_wrap_new_Vector2__SWIG_1(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = (math::linear::VectorN< 2,double > *)new math::linear::VectorN< 2,double >(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -57220,7 +57220,7 @@ SWIGINTERN PyObject *_wrap_new_Vector2__SWIG_2(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = (math::linear::VectorN< 2,double > *)new math::linear::VectorN< 2,double >((double const *)arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -57274,7 +57274,7 @@ SWIGINTERN PyObject *_wrap_new_Vector2__SWIG_3(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = (math::linear::VectorN< 2,double > *)new math::linear::VectorN< 2,double >((math::linear::VectorN< 2,double > const &)*arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -57328,7 +57328,7 @@ SWIGINTERN PyObject *_wrap_new_Vector2__SWIG_4(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = (math::linear::VectorN< 2,double > *)new math::linear::VectorN< 2,double >((math::linear::MatrixMxN< 2,1,double > const &)*arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -57384,7 +57384,7 @@ SWIGINTERN PyObject *_wrap_new_Vector2__SWIG_5(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = (math::linear::VectorN< 2,double > *)new math::linear::VectorN< 2,double >((std::vector< double,std::allocator< double > > const &)*arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -57506,7 +57506,7 @@ SWIGINTERN PyObject *_wrap_delete_Vector2(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       delete arg1;
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -57557,7 +57557,7 @@ SWIGINTERN PyObject *_wrap_Vector2_matrix__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
     try
     {
       result = (math::linear::MatrixMxN< 2,1,double > *) &(arg1)->matrix();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -57608,7 +57608,7 @@ SWIGINTERN PyObject *_wrap_Vector2_matrix__SWIG_1(PyObject *SWIGUNUSEDPARM(self)
     try
     {
       result = (math::linear::MatrixMxN< 2,1,double > *) &((math::linear::VectorN< 2,double > const *)arg1)->matrix();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -57697,7 +57697,7 @@ SWIGINTERN PyObject *_wrap_Vector2_size(PyObject *SWIGUNUSEDPARM(self), PyObject
     try
     {
       result = ((math::linear::VectorN< 2,double > const *)arg1)->size();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -57760,7 +57760,7 @@ SWIGINTERN PyObject *_wrap_Vector2_dot(PyObject *SWIGUNUSEDPARM(self), PyObject 
     try
     {
       result = (double)((math::linear::VectorN< 2,double > const *)arg1)->dot((math::linear::VectorN< 2 > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -57823,7 +57823,7 @@ SWIGINTERN PyObject *_wrap_Vector2_normDot(PyObject *SWIGUNUSEDPARM(self), PyObj
     try
     {
       result = (double)((math::linear::VectorN< 2,double > const *)arg1)->normDot((math::linear::VectorN< 2 > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -57876,7 +57876,7 @@ SWIGINTERN PyObject *_wrap_Vector2_norm(PyObject *SWIGUNUSEDPARM(self), PyObject
     try
     {
       result = (double)((math::linear::VectorN< 2,double > const *)arg1)->norm();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -57929,7 +57929,7 @@ SWIGINTERN PyObject *_wrap_Vector2_normSq(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = (double)((math::linear::VectorN< 2,double > const *)arg1)->normSq();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -57992,7 +57992,7 @@ SWIGINTERN PyObject *_wrap_Vector2_angle(PyObject *SWIGUNUSEDPARM(self), PyObjec
     try
     {
       result = (double)((math::linear::VectorN< 2,double > const *)arg1)->angle((math::linear::VectorN< 2,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -58044,7 +58044,7 @@ SWIGINTERN PyObject *_wrap_Vector2_normalize(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       (arg1)->normalize();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -58097,7 +58097,7 @@ SWIGINTERN PyObject *_wrap_Vector2_unit(PyObject *SWIGUNUSEDPARM(self), PyObject
     try
     {
       result = ((math::linear::VectorN< 2,double > const *)arg1)->unit();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -58156,7 +58156,7 @@ SWIGINTERN PyObject *_wrap_Vector2_scale(PyObject *SWIGUNUSEDPARM(self), PyObjec
     try
     {
       (arg1)->scale(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -58219,7 +58219,7 @@ SWIGINTERN PyObject *_wrap_Vector2___iadd__(PyObject *SWIGUNUSEDPARM(self), PyOb
     try
     {
       result = (math::linear::VectorN< 2,double >::Like_T *) &(arg1)->operator +=((math::linear::VectorN< 2,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -58282,7 +58282,7 @@ SWIGINTERN PyObject *_wrap_Vector2___isub__(PyObject *SWIGUNUSEDPARM(self), PyOb
     try
     {
       result = (math::linear::VectorN< 2,double >::Like_T *) &(arg1)->operator -=((math::linear::VectorN< 2,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -58345,7 +58345,7 @@ SWIGINTERN PyObject *_wrap_Vector2_add(PyObject *SWIGUNUSEDPARM(self), PyObject 
     try
     {
       result = ((math::linear::VectorN< 2,double > const *)arg1)->add((math::linear::VectorN< 2,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -58408,7 +58408,7 @@ SWIGINTERN PyObject *_wrap_Vector2_subtract(PyObject *SWIGUNUSEDPARM(self), PyOb
     try
     {
       result = ((math::linear::VectorN< 2,double > const *)arg1)->subtract((math::linear::VectorN< 2,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -58471,7 +58471,7 @@ SWIGINTERN PyObject *_wrap_Vector2___add__(PyObject *SWIGUNUSEDPARM(self), PyObj
     try
     {
       result = ((math::linear::VectorN< 2,double > const *)arg1)->operator +((math::linear::VectorN< 2,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -58536,7 +58536,7 @@ SWIGINTERN PyObject *_wrap_Vector2___sub__(PyObject *SWIGUNUSEDPARM(self), PyObj
     try
     {
       result = ((math::linear::VectorN< 2,double > const *)arg1)->operator -((math::linear::VectorN< 2,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -58591,7 +58591,7 @@ SWIGINTERN PyObject *_wrap_Vector2___neg__(PyObject *SWIGUNUSEDPARM(self), PyObj
     try
     {
       result = ((math::linear::VectorN< 2,double > const *)arg1)->operator -();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -58655,7 +58655,7 @@ SWIGINTERN PyObject *_wrap_Vector2___imul____SWIG_0(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       result = (math::linear::VectorN< 2,double >::Like_T *) &(arg1)->operator *=((math::linear::VectorN< 2,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -58714,7 +58714,7 @@ SWIGINTERN PyObject *_wrap_Vector2___imul____SWIG_1(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       result = (math::linear::VectorN< 2,double >::Like_T *) &(arg1)->operator *=(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -58819,7 +58819,7 @@ SWIGINTERN PyObject *_wrap_Vector2___mul____SWIG_0(PyObject *SWIGUNUSEDPARM(self
     try
     {
       result = ((math::linear::VectorN< 2,double > const *)arg1)->operator *(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -58884,7 +58884,7 @@ SWIGINTERN PyObject *_wrap_Vector2___itruediv__(PyObject *SWIGUNUSEDPARM(self), 
     try
     {
       result = (math::linear::VectorN< 2,double >::Like_T *) &(arg1)->operator /=((math::linear::VectorN< 2,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -58946,7 +58946,7 @@ SWIGINTERN PyObject *_wrap_Vector2___mul____SWIG_1(PyObject *SWIGUNUSEDPARM(self
     try
     {
       result = ((math::linear::VectorN< 2,double > const *)arg1)->operator *((math::linear::VectorN< 2,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -59054,7 +59054,7 @@ SWIGINTERN PyObject *_wrap_Vector2___truediv__(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = ((math::linear::VectorN< 2,double > const *)arg1)->operator /((math::linear::VectorN< 2,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -59116,7 +59116,7 @@ SWIGINTERN PyObject *_wrap_Vector2___getitem__(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = (double)math_linear_VectorN_Sl_2_Sc_double_Sg____getitem__(arg1,arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -59183,7 +59183,7 @@ SWIGINTERN PyObject *_wrap_Vector2___setitem__(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       math_linear_VectorN_Sl_2_Sc_double_Sg____setitem__(arg1,arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -59236,7 +59236,7 @@ SWIGINTERN PyObject *_wrap_Vector2___str__(PyObject *SWIGUNUSEDPARM(self), PyObj
     try
     {
       result = math_linear_VectorN_Sl_2_Sc_double_Sg____str__(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -59290,7 +59290,7 @@ SWIGINTERN PyObject *_wrap_Vector2___deepcopy__(PyObject *SWIGUNUSEDPARM(self), 
     try
     {
       result = math_linear_VectorN_Sl_2_Sc_double_Sg____deepcopy__(arg1,arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -59343,7 +59343,7 @@ SWIGINTERN PyObject *_wrap_Vector2_vals(PyObject *SWIGUNUSEDPARM(self), PyObject
     try
     {
       result = math_linear_VectorN_Sl_2_Sc_double_Sg__vals(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -59397,7 +59397,7 @@ SWIGINTERN PyObject *_wrap_new_Vector3__SWIG_0(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = (math::linear::VectorN< 3,double > *)new math::linear::VectorN< 3,double >();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -59448,7 +59448,7 @@ SWIGINTERN PyObject *_wrap_new_Vector3__SWIG_1(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = (math::linear::VectorN< 3,double > *)new math::linear::VectorN< 3,double >(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -59499,7 +59499,7 @@ SWIGINTERN PyObject *_wrap_new_Vector3__SWIG_2(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = (math::linear::VectorN< 3,double > *)new math::linear::VectorN< 3,double >((double const *)arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -59553,7 +59553,7 @@ SWIGINTERN PyObject *_wrap_new_Vector3__SWIG_3(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = (math::linear::VectorN< 3,double > *)new math::linear::VectorN< 3,double >((math::linear::VectorN< 3,double > const &)*arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -59607,7 +59607,7 @@ SWIGINTERN PyObject *_wrap_new_Vector3__SWIG_4(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = (math::linear::VectorN< 3,double > *)new math::linear::VectorN< 3,double >((math::linear::MatrixMxN< 3,1,double > const &)*arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -59663,7 +59663,7 @@ SWIGINTERN PyObject *_wrap_new_Vector3__SWIG_5(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = (math::linear::VectorN< 3,double > *)new math::linear::VectorN< 3,double >((std::vector< double,std::allocator< double > > const &)*arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -59785,7 +59785,7 @@ SWIGINTERN PyObject *_wrap_delete_Vector3(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       delete arg1;
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -59836,7 +59836,7 @@ SWIGINTERN PyObject *_wrap_Vector3_matrix__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
     try
     {
       result = (math::linear::MatrixMxN< 3,1,double > *) &(arg1)->matrix();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -59887,7 +59887,7 @@ SWIGINTERN PyObject *_wrap_Vector3_matrix__SWIG_1(PyObject *SWIGUNUSEDPARM(self)
     try
     {
       result = (math::linear::MatrixMxN< 3,1,double > *) &((math::linear::VectorN< 3,double > const *)arg1)->matrix();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -59976,7 +59976,7 @@ SWIGINTERN PyObject *_wrap_Vector3_size(PyObject *SWIGUNUSEDPARM(self), PyObject
     try
     {
       result = ((math::linear::VectorN< 3,double > const *)arg1)->size();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -60039,7 +60039,7 @@ SWIGINTERN PyObject *_wrap_Vector3_dot(PyObject *SWIGUNUSEDPARM(self), PyObject 
     try
     {
       result = (double)((math::linear::VectorN< 3,double > const *)arg1)->dot((math::linear::VectorN< 3 > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -60102,7 +60102,7 @@ SWIGINTERN PyObject *_wrap_Vector3_normDot(PyObject *SWIGUNUSEDPARM(self), PyObj
     try
     {
       result = (double)((math::linear::VectorN< 3,double > const *)arg1)->normDot((math::linear::VectorN< 3 > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -60155,7 +60155,7 @@ SWIGINTERN PyObject *_wrap_Vector3_norm(PyObject *SWIGUNUSEDPARM(self), PyObject
     try
     {
       result = (double)((math::linear::VectorN< 3,double > const *)arg1)->norm();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -60208,7 +60208,7 @@ SWIGINTERN PyObject *_wrap_Vector3_normSq(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       result = (double)((math::linear::VectorN< 3,double > const *)arg1)->normSq();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -60271,7 +60271,7 @@ SWIGINTERN PyObject *_wrap_Vector3_angle(PyObject *SWIGUNUSEDPARM(self), PyObjec
     try
     {
       result = (double)((math::linear::VectorN< 3,double > const *)arg1)->angle((math::linear::VectorN< 3,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -60323,7 +60323,7 @@ SWIGINTERN PyObject *_wrap_Vector3_normalize(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       (arg1)->normalize();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -60376,7 +60376,7 @@ SWIGINTERN PyObject *_wrap_Vector3_unit(PyObject *SWIGUNUSEDPARM(self), PyObject
     try
     {
       result = ((math::linear::VectorN< 3,double > const *)arg1)->unit();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -60435,7 +60435,7 @@ SWIGINTERN PyObject *_wrap_Vector3_scale(PyObject *SWIGUNUSEDPARM(self), PyObjec
     try
     {
       (arg1)->scale(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -60498,7 +60498,7 @@ SWIGINTERN PyObject *_wrap_Vector3___iadd__(PyObject *SWIGUNUSEDPARM(self), PyOb
     try
     {
       result = (math::linear::VectorN< 3,double >::Like_T *) &(arg1)->operator +=((math::linear::VectorN< 3,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -60561,7 +60561,7 @@ SWIGINTERN PyObject *_wrap_Vector3___isub__(PyObject *SWIGUNUSEDPARM(self), PyOb
     try
     {
       result = (math::linear::VectorN< 3,double >::Like_T *) &(arg1)->operator -=((math::linear::VectorN< 3,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -60624,7 +60624,7 @@ SWIGINTERN PyObject *_wrap_Vector3_add(PyObject *SWIGUNUSEDPARM(self), PyObject 
     try
     {
       result = ((math::linear::VectorN< 3,double > const *)arg1)->add((math::linear::VectorN< 3,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -60687,7 +60687,7 @@ SWIGINTERN PyObject *_wrap_Vector3_subtract(PyObject *SWIGUNUSEDPARM(self), PyOb
     try
     {
       result = ((math::linear::VectorN< 3,double > const *)arg1)->subtract((math::linear::VectorN< 3,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -60750,7 +60750,7 @@ SWIGINTERN PyObject *_wrap_Vector3___add__(PyObject *SWIGUNUSEDPARM(self), PyObj
     try
     {
       result = ((math::linear::VectorN< 3,double > const *)arg1)->operator +((math::linear::VectorN< 3,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -60815,7 +60815,7 @@ SWIGINTERN PyObject *_wrap_Vector3___sub__(PyObject *SWIGUNUSEDPARM(self), PyObj
     try
     {
       result = ((math::linear::VectorN< 3,double > const *)arg1)->operator -((math::linear::VectorN< 3,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -60870,7 +60870,7 @@ SWIGINTERN PyObject *_wrap_Vector3___neg__(PyObject *SWIGUNUSEDPARM(self), PyObj
     try
     {
       result = ((math::linear::VectorN< 3,double > const *)arg1)->operator -();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -60934,7 +60934,7 @@ SWIGINTERN PyObject *_wrap_Vector3___imul____SWIG_0(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       result = (math::linear::VectorN< 3,double >::Like_T *) &(arg1)->operator *=((math::linear::VectorN< 3,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -60993,7 +60993,7 @@ SWIGINTERN PyObject *_wrap_Vector3___imul____SWIG_1(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       result = (math::linear::VectorN< 3,double >::Like_T *) &(arg1)->operator *=(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -61098,7 +61098,7 @@ SWIGINTERN PyObject *_wrap_Vector3___mul____SWIG_0(PyObject *SWIGUNUSEDPARM(self
     try
     {
       result = ((math::linear::VectorN< 3,double > const *)arg1)->operator *(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -61163,7 +61163,7 @@ SWIGINTERN PyObject *_wrap_Vector3___itruediv__(PyObject *SWIGUNUSEDPARM(self), 
     try
     {
       result = (math::linear::VectorN< 3,double >::Like_T *) &(arg1)->operator /=((math::linear::VectorN< 3,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -61225,7 +61225,7 @@ SWIGINTERN PyObject *_wrap_Vector3___mul____SWIG_1(PyObject *SWIGUNUSEDPARM(self
     try
     {
       result = ((math::linear::VectorN< 3,double > const *)arg1)->operator *((math::linear::VectorN< 3,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -61333,7 +61333,7 @@ SWIGINTERN PyObject *_wrap_Vector3___truediv__(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = ((math::linear::VectorN< 3,double > const *)arg1)->operator /((math::linear::VectorN< 3,double >::Like_T const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -61395,7 +61395,7 @@ SWIGINTERN PyObject *_wrap_Vector3___getitem__(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = (double)math_linear_VectorN_Sl_3_Sc_double_Sg____getitem__(arg1,arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -61462,7 +61462,7 @@ SWIGINTERN PyObject *_wrap_Vector3___setitem__(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       math_linear_VectorN_Sl_3_Sc_double_Sg____setitem__(arg1,arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -61515,7 +61515,7 @@ SWIGINTERN PyObject *_wrap_Vector3___str__(PyObject *SWIGUNUSEDPARM(self), PyObj
     try
     {
       result = math_linear_VectorN_Sl_3_Sc_double_Sg____str__(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -61569,7 +61569,7 @@ SWIGINTERN PyObject *_wrap_Vector3___deepcopy__(PyObject *SWIGUNUSEDPARM(self), 
     try
     {
       result = math_linear_VectorN_Sl_3_Sc_double_Sg____deepcopy__(arg1,arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -61622,7 +61622,7 @@ SWIGINTERN PyObject *_wrap_Vector3_vals(PyObject *SWIGUNUSEDPARM(self), PyObject
     try
     {
       result = math_linear_VectorN_Sl_3_Sc_double_Sg__vals(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -61698,7 +61698,7 @@ SWIGINTERN PyObject *_wrap_cross__SWIG_2(PyObject *SWIGUNUSEDPARM(self), Py_ssiz
     try
     {
       result = math::linear::SWIGTEMPLATEDISAMBIGUATOR cross< double >((math::linear::VectorN< 3,double > const &)*arg1,(math::linear::VectorN< 3,double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -61763,7 +61763,7 @@ SWIGINTERN PyObject *_wrap_cross__SWIG_3(PyObject *SWIGUNUSEDPARM(self), Py_ssiz
     try
     {
       result = math::linear::SWIGTEMPLATEDISAMBIGUATOR cross< double >((math::linear::Vector< double > const &)*arg1,(math::linear::Vector< double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -61848,7 +61848,7 @@ SWIGINTERN PyObject *_wrap_new_VectorDouble__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       result = (math::linear::Vector< double > *)new math::linear::Vector< double >();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -61907,7 +61907,7 @@ SWIGINTERN PyObject *_wrap_new_VectorDouble__SWIG_1(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       result = (math::linear::Vector< double > *)new math::linear::Vector< double >(arg1,arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -61958,7 +61958,7 @@ SWIGINTERN PyObject *_wrap_new_VectorDouble__SWIG_2(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       result = (math::linear::Vector< double > *)new math::linear::Vector< double >(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -62017,7 +62017,7 @@ SWIGINTERN PyObject *_wrap_new_VectorDouble__SWIG_3(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       result = (math::linear::Vector< double > *)new math::linear::Vector< double >(arg1,(double const *)arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -62071,7 +62071,7 @@ SWIGINTERN PyObject *_wrap_new_VectorDouble__SWIG_4(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       result = (math::linear::Vector< double > *)new math::linear::Vector< double >((math::linear::Vector< double > const &)*arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -62127,7 +62127,7 @@ SWIGINTERN PyObject *_wrap_new_VectorDouble__SWIG_5(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       result = (math::linear::Vector< double > *)new math::linear::Vector< double >((std::vector< double,std::allocator< double > > const &)*arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -62183,7 +62183,7 @@ SWIGINTERN PyObject *_wrap_new_VectorDouble__SWIG_6(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       result = (math::linear::Vector< double > *)new math::linear::Vector< double >((math::linear::Matrix2D< double > const &)*arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -62326,7 +62326,7 @@ SWIGINTERN PyObject *_wrap_delete_VectorDouble(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       delete arg1;
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -62379,7 +62379,7 @@ SWIGINTERN PyObject *_wrap_VectorDouble_size(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::Vector< double > const *)arg1)->size();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -62430,7 +62430,7 @@ SWIGINTERN PyObject *_wrap_VectorDouble_matrix__SWIG_0(PyObject *SWIGUNUSEDPARM(
     try
     {
       result = (math::linear::Matrix2D< double > *) &(arg1)->matrix();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -62481,7 +62481,7 @@ SWIGINTERN PyObject *_wrap_VectorDouble_matrix__SWIG_1(PyObject *SWIGUNUSEDPARM(
     try
     {
       result = (math::linear::Matrix2D< double > *) &((math::linear::Vector< double > const *)arg1)->matrix();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -62570,7 +62570,7 @@ SWIGINTERN PyObject *_wrap_VectorDouble_get(PyObject *SWIGUNUSEDPARM(self), PyOb
     try
     {
       result = (double *)((math::linear::Vector< double > const *)arg1)->get();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -62633,7 +62633,7 @@ SWIGINTERN PyObject *_wrap_VectorDouble_dot(PyObject *SWIGUNUSEDPARM(self), PyOb
     try
     {
       result = (double)((math::linear::Vector< double > const *)arg1)->dot((math::linear::Vector< double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -62696,7 +62696,7 @@ SWIGINTERN PyObject *_wrap_VectorDouble_angle(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (double)((math::linear::Vector< double > const *)arg1)->angle((math::linear::Vector< double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -62749,7 +62749,7 @@ SWIGINTERN PyObject *_wrap_VectorDouble_normSq(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = (double)((math::linear::Vector< double > const *)arg1)->normSq();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -62802,7 +62802,7 @@ SWIGINTERN PyObject *_wrap_VectorDouble_norm(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = (double)((math::linear::Vector< double > const *)arg1)->norm();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -62854,7 +62854,7 @@ SWIGINTERN PyObject *_wrap_VectorDouble_normalize(PyObject *SWIGUNUSEDPARM(self)
     try
     {
       (arg1)->normalize();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -62913,7 +62913,7 @@ SWIGINTERN PyObject *_wrap_VectorDouble_scale(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       (arg1)->scale(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -62966,7 +62966,7 @@ SWIGINTERN PyObject *_wrap_VectorDouble_unit(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::Vector< double > const *)arg1)->unit();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -63029,7 +63029,7 @@ SWIGINTERN PyObject *_wrap_VectorDouble___iadd__(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::Vector< double > *) &(arg1)->operator +=((math::linear::Vector< double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -63092,7 +63092,7 @@ SWIGINTERN PyObject *_wrap_VectorDouble___isub__(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::Vector< double > *) &(arg1)->operator -=((math::linear::Vector< double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -63155,7 +63155,7 @@ SWIGINTERN PyObject *_wrap_VectorDouble_add(PyObject *SWIGUNUSEDPARM(self), PyOb
     try
     {
       result = ((math::linear::Vector< double > const *)arg1)->add((math::linear::Vector< double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -63218,7 +63218,7 @@ SWIGINTERN PyObject *_wrap_VectorDouble_subtract(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = ((math::linear::Vector< double > const *)arg1)->subtract((math::linear::Vector< double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -63281,7 +63281,7 @@ SWIGINTERN PyObject *_wrap_VectorDouble___add__(PyObject *SWIGUNUSEDPARM(self), 
     try
     {
       result = ((math::linear::Vector< double > const *)arg1)->operator +((math::linear::Vector< double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -63346,7 +63346,7 @@ SWIGINTERN PyObject *_wrap_VectorDouble___sub__(PyObject *SWIGUNUSEDPARM(self), 
     try
     {
       result = ((math::linear::Vector< double > const *)arg1)->operator -((math::linear::Vector< double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -63401,7 +63401,7 @@ SWIGINTERN PyObject *_wrap_VectorDouble___neg__(PyObject *SWIGUNUSEDPARM(self), 
     try
     {
       result = ((math::linear::Vector< double > const *)arg1)->operator -();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -63465,7 +63465,7 @@ SWIGINTERN PyObject *_wrap_VectorDouble___imul____SWIG_0(PyObject *SWIGUNUSEDPAR
     try
     {
       result = (math::linear::Vector< double > *) &(arg1)->operator *=((math::linear::Vector< double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -63524,7 +63524,7 @@ SWIGINTERN PyObject *_wrap_VectorDouble___imul____SWIG_1(PyObject *SWIGUNUSEDPAR
     try
     {
       result = (math::linear::Vector< double > *) &(arg1)->operator *=(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -63629,7 +63629,7 @@ SWIGINTERN PyObject *_wrap_VectorDouble___mul____SWIG_0(PyObject *SWIGUNUSEDPARM
     try
     {
       result = ((math::linear::Vector< double > const *)arg1)->operator *(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -63694,7 +63694,7 @@ SWIGINTERN PyObject *_wrap_VectorDouble___itruediv__(PyObject *SWIGUNUSEDPARM(se
     try
     {
       result = (math::linear::Vector< double > *) &(arg1)->operator /=((math::linear::Vector< double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -63756,7 +63756,7 @@ SWIGINTERN PyObject *_wrap_VectorDouble___mul____SWIG_1(PyObject *SWIGUNUSEDPARM
     try
     {
       result = ((math::linear::Vector< double > const *)arg1)->operator *((math::linear::Vector< double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -63864,7 +63864,7 @@ SWIGINTERN PyObject *_wrap_VectorDouble___truediv__(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       result = ((math::linear::Vector< double > const *)arg1)->operator /((math::linear::Vector< double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -63926,7 +63926,7 @@ SWIGINTERN PyObject *_wrap_VectorDouble___getitem__(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       result = (double)math_linear_Vector_Sl_double_Sg____getitem__(arg1,arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -63993,7 +63993,7 @@ SWIGINTERN PyObject *_wrap_VectorDouble___setitem__(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       math_linear_Vector_Sl_double_Sg____setitem__(arg1,arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -64046,7 +64046,7 @@ SWIGINTERN PyObject *_wrap_VectorDouble___str__(PyObject *SWIGUNUSEDPARM(self), 
     try
     {
       result = math_linear_Vector_Sl_double_Sg____str__(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -64099,7 +64099,7 @@ SWIGINTERN PyObject *_wrap_VectorDouble_vals(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = math_linear_Vector_Sl_double_Sg__vals(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -64153,7 +64153,7 @@ SWIGINTERN PyObject *_wrap_new_MatrixDouble__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       result = (math::linear::Matrix2D< double > *)new math::linear::Matrix2D< double >();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -64220,7 +64220,7 @@ SWIGINTERN PyObject *_wrap_new_MatrixDouble__SWIG_1(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       result = (math::linear::Matrix2D< double > *)new math::linear::Matrix2D< double >(arg1,arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -64279,7 +64279,7 @@ SWIGINTERN PyObject *_wrap_new_MatrixDouble__SWIG_2(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       result = (math::linear::Matrix2D< double > *)new math::linear::Matrix2D< double >(arg1,arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -64346,7 +64346,7 @@ SWIGINTERN PyObject *_wrap_new_MatrixDouble__SWIG_3(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       result = (math::linear::Matrix2D< double > *)new math::linear::Matrix2D< double >(arg1,arg2,(double const *)arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -64418,7 +64418,7 @@ SWIGINTERN PyObject *_wrap_new_MatrixDouble__SWIG_4(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       result = (math::linear::Matrix2D< double > *)new math::linear::Matrix2D< double >(arg1,arg2,(std::vector< double,std::allocator< double > > const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -64474,7 +64474,7 @@ SWIGINTERN PyObject *_wrap_new_MatrixDouble__SWIG_5(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       result = (math::linear::Matrix2D< double > *)new math::linear::Matrix2D< double >((math::linear::Matrix2D< double > const &)*arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -64549,7 +64549,7 @@ SWIGINTERN PyObject *_wrap_new_MatrixDouble__SWIG_6(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       result = (math::linear::Matrix2D< double > *)new math::linear::Matrix2D< double >(arg1,arg2,arg3,arg4);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -64741,7 +64741,7 @@ SWIGINTERN PyObject *_wrap_delete_MatrixDouble(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       delete arg1;
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -64808,7 +64808,7 @@ SWIGINTERN PyObject *_wrap_MatrixDouble___call____SWIG_0(PyObject *SWIGUNUSEDPAR
     try
     {
       result = (double)((math::linear::Matrix2D< double > const *)arg1)->operator ()(arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -64875,7 +64875,7 @@ SWIGINTERN PyObject *_wrap_MatrixDouble___call____SWIG_1(PyObject *SWIGUNUSEDPAR
     try
     {
       result = (double *) &(arg1)->operator ()(arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -64994,7 +64994,7 @@ SWIGINTERN PyObject *_wrap_MatrixDouble_row__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       result = (double *)((math::linear::Matrix2D< double > const *)arg1)->row(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -65053,7 +65053,7 @@ SWIGINTERN PyObject *_wrap_MatrixDouble_row__SWIG_1(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       result = (double *)(arg1)->row(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -65119,7 +65119,7 @@ SWIGINTERN PyObject *_wrap_MatrixDouble_row__SWIG_2(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       (arg1)->row(arg2,(double const *)arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -65190,7 +65190,7 @@ SWIGINTERN PyObject *_wrap_MatrixDouble_row__SWIG_3(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       (arg1)->row(arg2,(std::vector< double,std::allocator< double > > const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -65340,7 +65340,7 @@ SWIGINTERN PyObject *_wrap_MatrixDouble_col__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       result = ((math::linear::Matrix2D< double > const *)arg1)->col(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -65406,7 +65406,7 @@ SWIGINTERN PyObject *_wrap_MatrixDouble_col__SWIG_1(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       (arg1)->col(arg2,(double const *)arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -65477,7 +65477,7 @@ SWIGINTERN PyObject *_wrap_MatrixDouble_col__SWIG_2(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       (arg1)->col(arg2,(std::vector< double,std::allocator< double > > const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -65605,7 +65605,7 @@ SWIGINTERN PyObject *_wrap_MatrixDouble_rows(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::Matrix2D< double > const *)arg1)->rows();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -65658,7 +65658,7 @@ SWIGINTERN PyObject *_wrap_MatrixDouble_cols(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::Matrix2D< double > const *)arg1)->cols();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -65711,7 +65711,7 @@ SWIGINTERN PyObject *_wrap_MatrixDouble_size(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::Matrix2D< double > const *)arg1)->size();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -65764,7 +65764,7 @@ SWIGINTERN PyObject *_wrap_MatrixDouble_get(PyObject *SWIGUNUSEDPARM(self), PyOb
     try
     {
       result = (double *)((math::linear::Matrix2D< double > const *)arg1)->get();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -65824,7 +65824,7 @@ SWIGINTERN PyObject *_wrap_MatrixDouble_scale(PyObject *SWIGUNUSEDPARM(self), Py
     try
     {
       result = (math::linear::Matrix2D< double > *) &(arg1)->scale(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -65883,7 +65883,7 @@ SWIGINTERN PyObject *_wrap_MatrixDouble_multiply__SWIG_0(PyObject *SWIGUNUSEDPAR
     try
     {
       result = ((math::linear::Matrix2D< double > const *)arg1)->multiply(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -65945,7 +65945,7 @@ SWIGINTERN PyObject *_wrap_MatrixDouble_multiply__SWIG_1(PyObject *SWIGUNUSEDPAR
     try
     {
       result = ((math::linear::Matrix2D< double > const *)arg1)->multiply((math::linear::Matrix2D< double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -66017,7 +66017,7 @@ SWIGINTERN PyObject *_wrap_MatrixDouble_multiply__SWIG_2(PyObject *SWIGUNUSEDPAR
     try
     {
       ((math::linear::Matrix2D< double > const *)arg1)->multiply((math::linear::Matrix2D< double > const &)*arg2,*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -66145,7 +66145,7 @@ SWIGINTERN PyObject *_wrap_MatrixDouble_scaleDiagonal(PyObject *SWIGUNUSEDPARM(s
     try
     {
       result = (math::linear::Matrix2D< double > *) &(arg1)->scaleDiagonal((math::linear::Matrix2D< double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -66208,7 +66208,7 @@ SWIGINTERN PyObject *_wrap_MatrixDouble_scaleDiagonalRowVector(PyObject *SWIGUNU
     try
     {
       result = (math::linear::Matrix2D< double > *) &(arg1)->scaleDiagonalRowVector((math::linear::Matrix2D< double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -66271,7 +66271,7 @@ SWIGINTERN PyObject *_wrap_MatrixDouble_multiplyDiagonal(PyObject *SWIGUNUSEDPAR
     try
     {
       result = ((math::linear::Matrix2D< double > const *)arg1)->multiplyDiagonal((math::linear::Matrix2D< double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -66334,7 +66334,7 @@ SWIGINTERN PyObject *_wrap_MatrixDouble_multiplyDiagonalRowVector(PyObject *SWIG
     try
     {
       result = ((math::linear::Matrix2D< double > const *)arg1)->multiplyDiagonalRowVector((math::linear::Matrix2D< double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -66397,7 +66397,7 @@ SWIGINTERN PyObject *_wrap_MatrixDouble___iadd__(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::Matrix2D< double > *) &(arg1)->operator +=((math::linear::Matrix2D< double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -66460,7 +66460,7 @@ SWIGINTERN PyObject *_wrap_MatrixDouble___isub__(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (math::linear::Matrix2D< double > *) &(arg1)->operator -=((math::linear::Matrix2D< double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -66523,7 +66523,7 @@ SWIGINTERN PyObject *_wrap_MatrixDouble_add(PyObject *SWIGUNUSEDPARM(self), PyOb
     try
     {
       result = ((math::linear::Matrix2D< double > const *)arg1)->add((math::linear::Matrix2D< double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -66586,7 +66586,7 @@ SWIGINTERN PyObject *_wrap_MatrixDouble_subtract(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = ((math::linear::Matrix2D< double > const *)arg1)->subtract((math::linear::Matrix2D< double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -66639,7 +66639,7 @@ SWIGINTERN PyObject *_wrap_MatrixDouble_transpose(PyObject *SWIGUNUSEDPARM(self)
     try
     {
       result = ((math::linear::Matrix2D< double > const *)arg1)->transpose();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -66702,7 +66702,7 @@ SWIGINTERN PyObject *_wrap_MatrixDouble_decomposeLU(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       result = ((math::linear::Matrix2D< double > const *)arg1)->decomposeLU(*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -66774,7 +66774,7 @@ SWIGINTERN PyObject *_wrap_MatrixDouble_permute__SWIG_0(PyObject *SWIGUNUSEDPARM
     try
     {
       result = ((math::linear::Matrix2D< double > const *)arg1)->permute((std::vector< size_t,std::allocator< size_t > > const &)*arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -66840,7 +66840,7 @@ SWIGINTERN PyObject *_wrap_MatrixDouble_permute__SWIG_1(PyObject *SWIGUNUSEDPARM
     try
     {
       result = ((math::linear::Matrix2D< double > const *)arg1)->permute((std::vector< size_t,std::allocator< size_t > > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -66945,7 +66945,7 @@ SWIGINTERN PyObject *_wrap_MatrixDouble_normSq(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       result = (double)((math::linear::Matrix2D< double > const *)arg1)->normSq();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -66998,7 +66998,7 @@ SWIGINTERN PyObject *_wrap_MatrixDouble_norm(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = (double)((math::linear::Matrix2D< double > const *)arg1)->norm();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -67051,7 +67051,7 @@ SWIGINTERN PyObject *_wrap_MatrixDouble_normalize(PyObject *SWIGUNUSEDPARM(self)
     try
     {
       result = (math::linear::Matrix2D< double > *) &(arg1)->normalize();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -67104,7 +67104,7 @@ SWIGINTERN PyObject *_wrap_MatrixDouble_unit(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = ((math::linear::Matrix2D< double > const *)arg1)->unit();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -67167,7 +67167,7 @@ SWIGINTERN PyObject *_wrap_MatrixDouble___add__(PyObject *SWIGUNUSEDPARM(self), 
     try
     {
       result = ((math::linear::Matrix2D< double > const *)arg1)->operator +((math::linear::Matrix2D< double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -67232,7 +67232,7 @@ SWIGINTERN PyObject *_wrap_MatrixDouble___sub__(PyObject *SWIGUNUSEDPARM(self), 
     try
     {
       result = ((math::linear::Matrix2D< double > const *)arg1)->operator -((math::linear::Matrix2D< double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -67293,7 +67293,7 @@ SWIGINTERN PyObject *_wrap_MatrixDouble___mul____SWIG_0(PyObject *SWIGUNUSEDPARM
     try
     {
       result = ((math::linear::Matrix2D< double > const *)arg1)->operator *(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -67355,7 +67355,7 @@ SWIGINTERN PyObject *_wrap_MatrixDouble___truediv__(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       result = ((math::linear::Matrix2D< double > const *)arg1)->operator /(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -67419,7 +67419,7 @@ SWIGINTERN PyObject *_wrap_MatrixDouble___mul____SWIG_1(PyObject *SWIGUNUSEDPARM
     try
     {
       result = ((math::linear::Matrix2D< double > const *)arg1)->operator *((math::linear::Matrix2D< double > const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -67517,7 +67517,7 @@ SWIGINTERN PyObject *_wrap_MatrixDouble___neg__(PyObject *SWIGUNUSEDPARM(self), 
     try
     {
       result = ((math::linear::Matrix2D< double > const *)arg1)->operator -();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -67573,7 +67573,7 @@ SWIGINTERN PyObject *_wrap_MatrixDouble___getitem__(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       result = (double)math_linear_Matrix2D_Sl_double_Sg____getitem__(arg1,arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -67634,7 +67634,7 @@ SWIGINTERN PyObject *_wrap_MatrixDouble___setitem__(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       math_linear_Matrix2D_Sl_double_Sg____setitem__(arg1,arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -67687,7 +67687,7 @@ SWIGINTERN PyObject *_wrap_MatrixDouble___str__(PyObject *SWIGUNUSEDPARM(self), 
     try
     {
       result = math_linear_Matrix2D_Sl_double_Sg____str__(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -67740,7 +67740,7 @@ SWIGINTERN PyObject *_wrap_MatrixDouble_vals(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = math_linear_Matrix2D_Sl_double_Sg__vals(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())

@@ -30,6 +30,8 @@
 
 %feature("autodoc", "1");
 
+%include "config.i"
+
 %include <std_auto_ptr.i>
 
 %{

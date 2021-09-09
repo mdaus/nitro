@@ -25,6 +25,8 @@
 
 %feature("autodoc", "1");
 
+%include "config.i"
+
 %{
   #include "import/xml/lite.h"
   using xml::lite::Element;

@@ -3457,7 +3457,7 @@ SWIGINTERN PyObject *_wrap_new_FileHeader__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
     try
     {
       result = (sio::lite::FileHeader *)new sio::lite::FileHeader(arg1,arg2,arg3,arg4,arg5);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -3532,7 +3532,7 @@ SWIGINTERN PyObject *_wrap_new_FileHeader__SWIG_1(PyObject *SWIGUNUSEDPARM(self)
     try
     {
       result = (sio::lite::FileHeader *)new sio::lite::FileHeader(arg1,arg2,arg3,arg4);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -3575,7 +3575,7 @@ SWIGINTERN PyObject *_wrap_new_FileHeader__SWIG_2(PyObject *SWIGUNUSEDPARM(self)
     try
     {
       result = (sio::lite::FileHeader *)new sio::lite::FileHeader();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -3711,7 +3711,7 @@ SWIGINTERN PyObject *_wrap_delete_FileHeader(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       delete arg1;
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -3764,7 +3764,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_getLength(PyObject *SWIGUNUSEDPARM(self), 
     try
     {
       result = (long)((sio::lite::FileHeader const *)arg1)->getLength();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -3817,7 +3817,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_getNumLines(PyObject *SWIGUNUSEDPARM(self)
     try
     {
       result = (int)((sio::lite::FileHeader const *)arg1)->getNumLines();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -3876,7 +3876,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_setNumLines(PyObject *SWIGUNUSEDPARM(self)
     try
     {
       (arg1)->setNumLines(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -3929,7 +3929,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_getNumElements(PyObject *SWIGUNUSEDPARM(se
     try
     {
       result = (int)((sio::lite::FileHeader const *)arg1)->getNumElements();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -3988,7 +3988,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_setNumElements(PyObject *SWIGUNUSEDPARM(se
     try
     {
       (arg1)->setNumElements(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -4041,7 +4041,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_getElementSize(PyObject *SWIGUNUSEDPARM(se
     try
     {
       result = (int)((sio::lite::FileHeader const *)arg1)->getElementSize();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -4100,7 +4100,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_setElementSize(PyObject *SWIGUNUSEDPARM(se
     try
     {
       (arg1)->setElementSize(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -4153,7 +4153,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_getElementType(PyObject *SWIGUNUSEDPARM(se
     try
     {
       result = (int)((sio::lite::FileHeader const *)arg1)->getElementType();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -4212,7 +4212,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_setElementType(PyObject *SWIGUNUSEDPARM(se
     try
     {
       (arg1)->setElementType(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -4265,7 +4265,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_getElementTypeAsString(PyObject *SWIGUNUSE
     try
     {
       result = ((sio::lite::FileHeader const *)arg1)->getElementTypeAsString();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -4318,7 +4318,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_getVersion(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       result = (int)((sio::lite::FileHeader const *)arg1)->getVersion();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -4377,7 +4377,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_setVersion(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->setVersion(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -4430,7 +4430,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_idsAreNullTerminated(PyObject *SWIGUNUSEDP
     try
     {
       result = (bool)((sio::lite::FileHeader const *)arg1)->idsAreNullTerminated();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -4489,7 +4489,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_setNullTerminationFlag(PyObject *SWIGUNUSE
     try
     {
       (arg1)->setNullTerminationFlag(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -4542,7 +4542,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_isDifferentByteOrdering(PyObject *SWIGUNUS
     try
     {
       result = (bool)((sio::lite::FileHeader const *)arg1)->isDifferentByteOrdering();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -4601,7 +4601,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_setIsDifferentByteOrdering(PyObject *SWIGU
     try
     {
       (arg1)->setIsDifferentByteOrdering(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -4666,7 +4666,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_userDataFieldExists(PyObject *SWIGUNUSEDPA
     try
     {
       result = (bool)((sio::lite::FileHeader const *)arg1)->userDataFieldExists((std::string const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -4730,7 +4730,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_getAllUserDataFields(PyObject *SWIGUNUSEDP
     try
     {
       ((sio::lite::FileHeader const *)arg1)->getAllUserDataFields(*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -4783,7 +4783,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_getNumUserDataFields(PyObject *SWIGUNUSEDP
     try
     {
       result = ((sio::lite::FileHeader const *)arg1)->getNumUserDataFields();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -4848,7 +4848,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_getUserData(PyObject *SWIGUNUSEDPARM(self)
     try
     {
       result = (std::vector< sys::byte > *) &(arg1)->getUserData((std::string const &)*arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -4901,7 +4901,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_getUserDataSection__SWIG_0(PyObject *SWIGU
     try
     {
       result = (sio::lite::UserDataDictionary *) &((sio::lite::FileHeader const *)arg1)->getUserDataSection();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -4952,7 +4952,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_getUserDataSection__SWIG_1(PyObject *SWIGU
     try
     {
       result = (sio::lite::UserDataDictionary *) &(arg1)->getUserDataSection();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -5064,7 +5064,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_addUserData__SWIG_0(PyObject *SWIGUNUSEDPA
     try
     {
       (arg1)->addUserData((std::string const &)*arg2,(std::string const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -5142,7 +5142,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_addUserData__SWIG_1(PyObject *SWIGUNUSEDPA
     try
     {
       (arg1)->addUserData((std::string const &)*arg2,(std::vector< sys::byte > const &)*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -5215,7 +5215,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_addUserData__SWIG_2(PyObject *SWIGUNUSEDPA
     try
     {
       (arg1)->addUserData((std::string const &)*arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -5359,7 +5359,7 @@ SWIGINTERN PyObject *_wrap_FileHeader_to(PyObject *SWIGUNUSEDPARM(self), PyObjec
     try
     {
       (arg1)->to(arg2,*arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -5426,7 +5426,7 @@ SWIGINTERN PyObject *_wrap_new_FileWriter__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
     try
     {
       result = (sio::lite::FileWriter *)new sio::lite::FileWriter((std::string const &)*arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -5480,7 +5480,7 @@ SWIGINTERN PyObject *_wrap_new_FileWriter__SWIG_1(PyObject *SWIGUNUSEDPARM(self)
     try
     {
       result = (sio::lite::FileWriter *)new sio::lite::FileWriter((char const *)arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -5541,7 +5541,7 @@ SWIGINTERN PyObject *_wrap_new_FileWriter__SWIG_2(PyObject *SWIGUNUSEDPARM(self)
     try
     {
       result = (sio::lite::FileWriter *)new sio::lite::FileWriter(arg1,arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -5592,7 +5592,7 @@ SWIGINTERN PyObject *_wrap_new_FileWriter__SWIG_3(PyObject *SWIGUNUSEDPARM(self)
     try
     {
       result = (sio::lite::FileWriter *)new sio::lite::FileWriter(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -5704,7 +5704,7 @@ SWIGINTERN PyObject *_wrap_delete_FileWriter(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       delete arg1;
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -5778,7 +5778,7 @@ SWIGINTERN PyObject *_wrap_FileWriter_write__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       (arg1)->write(arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -5876,7 +5876,7 @@ SWIGINTERN PyObject *_wrap_FileWriter_write__SWIG_1(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       (arg1)->write(arg2,arg3,arg4,arg5,arg6);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -5948,7 +5948,7 @@ SWIGINTERN PyObject *_wrap_FileWriter_write__SWIG_2(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       (arg1)->write(arg2,(void const *)arg3,arg4);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -6012,7 +6012,7 @@ SWIGINTERN PyObject *_wrap_FileWriter_write__SWIG_3(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       (arg1)->write(arg2,(void const *)arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -6108,7 +6108,7 @@ SWIGINTERN PyObject *_wrap_FileWriter_write__SWIG_4(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       (arg1)->write(arg2,arg3,arg4,arg5,(void const *)arg6,arg7);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -6196,7 +6196,7 @@ SWIGINTERN PyObject *_wrap_FileWriter_write__SWIG_5(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       (arg1)->write(arg2,arg3,arg4,arg5,(void const *)arg6);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -6262,7 +6262,7 @@ SWIGINTERN PyObject *_wrap_FileWriter_write__SWIG_6(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       sio_lite_FileWriter_write__SWIG_6(arg1,arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -6540,7 +6540,7 @@ SWIGINTERN PyObject *_wrap_new_StreamReader__SWIG_0(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       result = (sio::lite::StreamReader *)new sio::lite::StreamReader();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -6592,7 +6592,7 @@ SWIGINTERN PyObject *_wrap_delete_StreamReader(PyObject *SWIGUNUSEDPARM(self), P
     try
     {
       delete arg1;
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -6651,7 +6651,7 @@ SWIGINTERN PyObject *_wrap_new_StreamReader__SWIG_1(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       result = (sio::lite::StreamReader *)new sio::lite::StreamReader(arg1,arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -6702,7 +6702,7 @@ SWIGINTERN PyObject *_wrap_new_StreamReader__SWIG_2(PyObject *SWIGUNUSEDPARM(sel
     try
     {
       result = (sio::lite::StreamReader *)new sio::lite::StreamReader(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -6814,7 +6814,7 @@ SWIGINTERN PyObject *_wrap_StreamReader_setInputStream__SWIG_0(PyObject *SWIGUNU
     try
     {
       (arg1)->setInputStream(arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -6872,7 +6872,7 @@ SWIGINTERN PyObject *_wrap_StreamReader_setInputStream__SWIG_1(PyObject *SWIGUNU
     try
     {
       (arg1)->setInputStream(arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -6977,7 +6977,7 @@ SWIGINTERN PyObject *_wrap_StreamReader_getInputStream(PyObject *SWIGUNUSEDPARM(
     try
     {
       result = (io::InputStream *)(arg1)->getInputStream();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -7028,7 +7028,7 @@ SWIGINTERN PyObject *_wrap_StreamReader_getHeader__SWIG_0(PyObject *SWIGUNUSEDPA
     try
     {
       result = (sio::lite::FileHeader *)(arg1)->getHeader();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -7079,7 +7079,7 @@ SWIGINTERN PyObject *_wrap_StreamReader_getHeader__SWIG_1(PyObject *SWIGUNUSEDPA
     try
     {
       result = (sio::lite::FileHeader *)((sio::lite::StreamReader const *)arg1)->getHeader();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -7168,7 +7168,7 @@ SWIGINTERN PyObject *_wrap_StreamReader_readHeader(PyObject *SWIGUNUSEDPARM(self
     try
     {
       result = (sio::lite::FileHeader *)(arg1)->readHeader();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -7221,7 +7221,7 @@ SWIGINTERN PyObject *_wrap_StreamReader_available(PyObject *SWIGUNUSEDPARM(self)
     try
     {
       result = (arg1)->available();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -7295,7 +7295,7 @@ SWIGINTERN PyObject *_wrap_StreamReader_read(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       result = sio_lite_StreamReader_read(arg1,arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -7355,7 +7355,7 @@ SWIGINTERN PyObject *_wrap_new_FileReader__SWIG_0(PyObject *SWIGUNUSEDPARM(self)
     try
     {
       result = (sio::lite::FileReader *)new sio::lite::FileReader();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -7407,7 +7407,7 @@ SWIGINTERN PyObject *_wrap_delete_FileReader(PyObject *SWIGUNUSEDPARM(self), PyO
     try
     {
       delete arg1;
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -7463,7 +7463,7 @@ SWIGINTERN PyObject *_wrap_new_FileReader__SWIG_1(PyObject *SWIGUNUSEDPARM(self)
     try
     {
       result = (sio::lite::FileReader *)new sio::lite::FileReader((std::string const &)*arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -7524,7 +7524,7 @@ SWIGINTERN PyObject *_wrap_new_FileReader__SWIG_2(PyObject *SWIGUNUSEDPARM(self)
     try
     {
       result = (sio::lite::FileReader *)new sio::lite::FileReader(arg1,arg2);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -7575,7 +7575,7 @@ SWIGINTERN PyObject *_wrap_new_FileReader__SWIG_3(PyObject *SWIGUNUSEDPARM(self)
     try
     {
       result = (sio::lite::FileReader *)new sio::lite::FileReader(arg1);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -7698,7 +7698,7 @@ SWIGINTERN PyObject *_wrap_FileReader_seek(PyObject *SWIGUNUSEDPARM(self), PyObj
     try
     {
       result = (arg1)->seek(arg2,arg3);
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -7757,7 +7757,7 @@ SWIGINTERN PyObject *_wrap_FileReader_tell(PyObject *SWIGUNUSEDPARM(self), PyObj
     try
     {
       result = (arg1)->tell();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())
@@ -7815,7 +7815,7 @@ SWIGINTERN PyObject *_wrap_FileReader_killStream(PyObject *SWIGUNUSEDPARM(self),
     try
     {
       (arg1)->killStream();
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())

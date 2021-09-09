@@ -26,6 +26,8 @@
 
 %feature("autodoc", "1");
 
+%include "config.i"
+
 %include <std_vector.i>
 %include <std_string.i>
 

@@ -3531,7 +3531,7 @@ SWIGINTERN PyObject *_wrap_delete_Context(PyObject *SWIGUNUSEDPARM(self), PyObje
     try
     {
       delete arg1;
-    } 
+    }
     catch (const std::exception& e)
     {
       if (!PyErr_Occurred())

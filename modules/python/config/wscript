@@ -4,4 +4,4 @@ def configure(conf):
   conf.env['prefix_except'] = 'coda_'
 
 def build(bld):
-  bld.swigModule(name = 'except', use = 'except-c++ config-python', package='coda')
+  bld.swigModule(name = 'config', use = '', package='coda')
