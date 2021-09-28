@@ -189,7 +189,12 @@ NITFAPI(void) nitf_TREPrivateData_destruct(nitf_TREPrivateData **priv)
 NITFPROT(NITF_BOOL) nitf_TREPrivateData_flush(nitf_TREPrivateData *priv,
                                          nitf_Error * error)
 {
-    if (priv && priv->hash)
+    if (!priv)
+    {
+        return NITF_FAILURE;
+    }
+
+    if (priv->hash)
     {
         /* destruct each field in the hash */
         nitf_HashTable_foreach(priv->hash,
@@ -227,10 +232,10 @@ NITFPROT(NITF_BOOL) nitf_TREPrivateData_setDescriptionName(
 
     /* copy the description id */
     priv->descriptionName = nitf_strdup(name);
-    if (!priv->descriptionName)
+    if ((name) && (!priv->descriptionName))
     {
         nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),
-                NITF_CTXT, NITF_ERR_MEMORY);
+            NITF_CTXT, NITF_ERR_MEMORY);
         return NITF_FAILURE;
     }
 

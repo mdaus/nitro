@@ -20,71 +20,42 @@
  *
  */
 
+#include <wchar.h>
+
 #include <vector>
 #include <string>
 #include <iterator>
 
-#if defined(_MSC_VER)
-#define CODA_OSS_have_codecvt_ 1
-#elif (__GNUC__ >= 7) && (__GNUC_MINOR__ >= 2) 
-// not available in older versions of GCC, even with --std=c++11
-#define CODA_OSS_have_codecvt_ 1
-#endif
-#ifdef CODA_OSS_have_codecvt_
-#include <codecvt>
-#else
-#error "You've got an old C++ compiler, no <codecvt> header."
-#endif
-
+#include <std/string>
 
 #include <import/str.h>
 #include <str/utf8.h>
 
 #include "TestCase.h"
 
-#ifdef CODA_OSS_have_codecvt_ 
-// https://en.cppreference.com/w/cpp/locale/codecvt_utf8
-template <typename T>
-static void codecvt_toUtf8_(const T& str, std::string& result)
+template<typename T>
+std::string to_std_string(const T& value)
 {
-    // This is deprecated in C++17 ... but there is no standard replacement.
-
-    // https:en.cppreference.com/w/cpp/locale/codecvt
-    using value_type = typename T::value_type;
-    std::wstring_convert<std::codecvt_utf8<value_type>, value_type> conv;
-
-    // https://en.cppreference.com/w/cpp/locale/wstring_convert/to_bytes
-    result = conv.to_bytes(str);
+    // This is OK as UTF-8 can be stored in std::string
+    // Note that casting between the string types will CRASH on some
+    // implementations. NO: reinterpret_cast<const std::string&>(value)
+    return str::c_str<std::string::const_pointer>(value);  // copy
 }
-static void codecvt_toUtf8(const std::u32string& str, std::string& result)
+template<>
+std::string to_std_string(const std::u32string& value)
 {
-    return codecvt_toUtf8_(str, result);
+    str::U8string result;
+    str::utf32to8(value, result);
+    return to_std_string(result);
 }
-#endif
-
-static void test_assert_eq(const std::string& testName,
-                           const sys::U8string& actual, const sys::U8string& expected)
+template<typename TActual, typename TExpected>
+void test_assert_eq(const std::string& testName,
+                           const TActual& actual, const TExpected& expected)
 {
-    TEST_ASSERT(actual == expected);
-    const auto actual_ = str::toString(actual);    
-    const auto expected_ = str::toString(expected);
+    //TEST_ASSERT(actual == expected);
+    const auto actual_ = to_std_string(actual);
+    const auto expected_ = to_std_string(expected);
     TEST_ASSERT_EQ(actual_, expected_);
-}
-static void test_assert_eq(const std::string& testName,
-                           const sys::U8string& actual, const std::u32string& expected_)
-{
-    std::string result;
-    utf8::utf32to8(expected_.begin(), expected_.end(), std::back_inserter(result));
-    const auto expected = str::castToU8string(result);
-
-    test_assert_eq(testName, actual, expected);
-    
-#ifdef CODA_OSS_have_codecvt_ 
-    std::string codecvt_expected;
-    codecvt_toUtf8(expected_, codecvt_expected);
-    TEST_ASSERT_EQ(str::toString(actual), codecvt_expected);
-    TEST_ASSERT_EQ(str::toString(expected), codecvt_expected);
-#endif
 }
 
 TEST_CASE(testConvert)
@@ -119,17 +90,29 @@ TEST_CASE(testCharToString)
     TEST_ASSERT_EQ(str::toString<char>(65), "A");
 }
 
-static constexpr sys::U8string::value_type cast(char ch)
+static sys::U8string fromWindows1252(const std::string& s)
 {
-    static_assert(sizeof(sys::U8string::value_type) == sizeof(char), "sizeof(Char8_T) != sizeof(char)");
-    return static_cast<sys::U8string::value_type>(ch);
+    // s is Windows-1252 on ALL platforms
+    return str::fromWindows1252(s);
+}
+
+template<typename T>
+static constexpr std::u8string::value_type cast8(T ch)
+{
+    static_assert(sizeof(std::u8string::value_type) == sizeof(char), "sizeof(Char8_T) != sizeof(char)");
+    return static_cast<std::u8string::value_type>(ch);
+}
+template <typename T>
+static constexpr std::u32string::value_type cast32(T ch)
+{
+    return static_cast<std::u32string::value_type>(ch);
 }
 TEST_CASE(test_string_to_u8string_ascii)
 {
     {
         const std::string input = "|\x00";  //  ASCII, "|<NULL>"
-        const auto actual = str::fromWindows1252(input);
-        const sys::U8string expected{cast('|')}; // '\x00' is the end of the string in C/C++
+        const auto actual = fromWindows1252(input);
+        const std::u8string expected{cast8('|')}; // '\x00' is the end of the string in C/C++
         test_assert_eq(testName, actual, expected);
     }
     constexpr uint8_t start_of_heading = 0x01;
@@ -137,10 +120,10 @@ TEST_CASE(test_string_to_u8string_ascii)
     for (uint8_t ch = start_of_heading; ch <= delete_character; ch++)  // ASCII
     {
         const std::string input { '|', static_cast<std::string::value_type>(ch), '|'};
-        const auto actual = str::fromWindows1252(input);
-        const sys::U8string expected8{cast('|'), cast(ch),  cast('|')}; 
+        const auto actual = fromWindows1252(input);
+        const std::u8string expected8{cast8('|'), cast8(ch), cast8('|')}; 
         test_assert_eq(testName, actual, expected8);
-        const std::u32string expected{cast('|'), cast(ch), cast('|')};
+        const std::u32string expected{cast32('|'), cast32(ch), cast32('|')};
         test_assert_eq(testName, actual, expected);
     }
 }
@@ -150,18 +133,18 @@ TEST_CASE(test_string_to_u8string_windows_1252)
     // Windows-1252 only characters must be mapped to UTF-8
     {
         const std::string input = "|\x80|";  // Windows-1252, "|€|"
-        const auto actual = str::fromWindows1252(input);
-        const sys::U8string expected8{cast('|'), cast('\xE2'), cast('\x82'), cast('\xAC'), cast('|')};  // UTF-8,  "|€|"
+        const auto actual = fromWindows1252(input);
+        const std::u8string expected8{cast8('|'), cast8('\xE2'), cast8('\x82'), cast8('\xAC'), cast8('|')};  // UTF-8,  "|€|"
         test_assert_eq(testName, actual, expected8);
-        const std::u32string expected{cast('|'), 0x20AC, cast('|')};  // UTF-32,  "|€|"
+        const std::u32string expected{cast32('|'), 0x20AC, cast32('|')};  // UTF-32,  "|€|"
         test_assert_eq(testName, actual, expected);
     }
     {
         const std::string input = "|\x9F|";  // Windows-1252, "|Ÿ|"
-        const auto actual = str::fromWindows1252(input);
-        const sys::U8string expected8{cast('|'), cast('\xC5'), cast('\xB8'), cast('|')};  // UTF-8,  "|Ÿ|"
+        const auto actual = fromWindows1252(input);
+        const std::u8string expected8{cast8('|'), cast8('\xC5'), cast8('\xB8'), cast8('|')};  // UTF-8,  "|Ÿ|"
         test_assert_eq(testName, actual, expected8);
-        const std::u32string expected{cast('|'), 0x0178, cast('|')};  // UTF-32,  "|Ÿ|"
+        const std::u32string expected{cast32('|'), 0x0178, cast32('|')};  // UTF-32,  "|Ÿ|"
         test_assert_eq(testName, actual, expected);
 
     }
@@ -169,10 +152,10 @@ TEST_CASE(test_string_to_u8string_windows_1252)
     for (const auto& ch : undefined)
     {
         const std::string input{'|', ch, '|'};
-        const auto actual = str::fromWindows1252(input);
-        static const sys::U8string expected8{cast('|'), cast('\xEF'), cast('\xBF'), cast('\xBD'), cast('|')};  // UTF-8,  "|<REPLACEMENT CHARACTER>|"
+        const auto actual = fromWindows1252(input);
+        static const std::u8string expected8{cast8('|'), cast8('\xEF'), cast8('\xBF'), cast8('\xBD'), cast8('|')};  // UTF-8,  "|<REPLACEMENT CHARACTER>|"
         test_assert_eq(testName, actual, expected8);
-        const std::u32string expected{cast('|'), 0xfffd, cast('|')};  // UTF-32,  "|<REPLACEMENT CHARACTER>|"
+        const std::u32string expected{cast32('|'), 0xfffd, cast32('|')};  // UTF-32,  "|<REPLACEMENT CHARACTER>|"
         test_assert_eq(testName, actual, expected);
     }
 }
@@ -185,10 +168,48 @@ TEST_CASE(test_string_to_u8string_iso8859_1)
     for (uint32_t ch = nobreak_space; ch <= latin_small_letter_y_with_diaeresis; ch++)  // ISO8859-1
     {
         const std::string input { '|', static_cast<std::string::value_type>(ch), '|'};
-        const auto actual = str::fromWindows1252(input);
-        const std::u32string expected { cast('|'), cast(ch), cast('|') };
+        const auto actual = fromWindows1252(input);
+        const std::u32string expected{cast32('|'), cast32(ch), cast32('|')};
         test_assert_eq(testName, actual, expected);
     }
+}
+
+template<typename TString>
+static void test_change_case_(const std::string& testName, const TString& lower, const TString& upper)
+{
+    auto s = upper;
+    str::lower(s);
+    TEST_ASSERT(s == lower);
+    s = lower;
+    str::upper(s);
+    TEST_ASSERT(s == upper);
+
+    s = upper;
+    str::upper(s);
+    TEST_ASSERT(s == upper);
+    s = lower;
+    str::lower(s);
+    TEST_ASSERT(s == lower);
+}
+TEST_CASE(test_change_case)
+{
+    const std::string ABC = "ABC";
+    const std::string abc = "abc";
+    test_change_case_(testName, abc, ABC);
+
+    //const std::wstring ABC_w = L"ABC";
+    //const std::wstring abc_w = L"abc";
+    //test_change_case_(testName, abc_w, ABC_w);
+
+    //// Yes, this can really come up, "non classifié" is French (Canadian) for "unclassified".
+    //const std::string DEF_1252{'D', '\xc9', 'F'}; // "DÉF" Windows-1252
+    //const auto DEF8 = fromWindows1252(DEF_1252);
+
+    //const std::string def_1252{'d', '\xe9', 'f'};  // "déf" Windows-1252
+    //const auto def8 = fromWindows1252(def_1252);
+
+    ////test_change_case_(testName, def, DEF);
+    //test_change_case_(testName, def_1252, DEF_1252);
 }
 
 int main(int, char**)
@@ -200,4 +221,5 @@ int main(int, char**)
     TEST_CHECK(test_string_to_u8string_ascii);
     TEST_CHECK(test_string_to_u8string_windows_1252);
     TEST_CHECK(test_string_to_u8string_iso8859_1);
+    TEST_CHECK(test_change_case);
 }

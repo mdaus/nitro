@@ -114,12 +114,10 @@ static void writeImage(nitf::ImageSegment &segment,
     TEST_ASSERT_EQ("NC", subheader.imageCompression());
     TEST_ASSERT_EQ("    ", subheader.getCompressionRate().toString());
 
-    nitf::BufferList buffer(nBands);
+    nitf::BufferList<std::byte> buffer(nBands);
     std::vector<uint32_t> bandList(nBands);
 
-    nitf::SubWindow subWindow;
-    subWindow.setNumRows(nRows / rowSkipFactor);
-    subWindow.setNumCols(nCols / columnSkipFactor);
+    nitf::SubWindow subWindow(nRows / rowSkipFactor, nCols / columnSkipFactor);
 
     nitf::PixelSkip pixelSkip(rowSkipFactor, columnSkipFactor);
     subWindow.setDownSampler(pixelSkip);

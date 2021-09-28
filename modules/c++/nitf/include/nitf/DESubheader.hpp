@@ -20,6 +20,8 @@
  *
  */
 
+#ifndef __NITF_DESUBHEADER_HPP__
+#define __NITF_DESUBHEADER_HPP__
 #pragma once
 
 #include <string>
@@ -86,7 +88,8 @@ public:
     }
 
     //! Get the securityClass
-    nitf::Field getSecurityClass() const;
+    nitf::Field getSecurityClass();
+    const nitf::Field getSecurityClass() const;
     std::string securityClass() const
     {
         return getSecurityClass(); // nitf::Field implicitly converts to std::string
@@ -130,4 +133,4 @@ private:
 };
 
 }
-
+#endif

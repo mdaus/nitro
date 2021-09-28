@@ -23,12 +23,10 @@
 
 #ifndef __MT_ABSTRACT_TIED_THREAD_POOL_H__
 #define __MT_ABSTRACT_TIED_THREAD_POOL_H__
-#pragma once
 
 #include "mt/AbstractThreadPool.h"
 #include "mt/TiedWorkerThread.h"
 #include "mt/CPUAffinityInitializer.h"
-
 #include "mem/SharedPtr.h"
 
 namespace mt
@@ -45,7 +43,7 @@ public:
 
     virtual ~AbstractTiedThreadPool(){}
 
-    virtual void initialize(CPUAffinityInitializer* affinityInit = NULL)
+    virtual void initialize(CPUAffinityInitializer* affinityInit = nullptr)
     {
         mAffinityInit = affinityInit;
     }
@@ -73,7 +71,18 @@ public:
  protected:
     virtual mt::TiedWorkerThread<Request_T>*
     newTiedWorker(mt::RequestQueue<Request_T>* q,
+#if CODA_OSS_cpp17
+                  std::unique_ptr<CPUAffinityThreadInitializer>&& init) = 0;
+#else
                   mem::auto_ptr<CPUAffinityThreadInitializer> init) = 0;
+    virtual mt::TiedWorkerThread<Request_T>*
+    newTiedWorker(mt::RequestQueue<Request_T>* q,
+                  std::unique_ptr<CPUAffinityThreadInitializer>&& init) {
+        mem::auto_ptr<CPUAffinityThreadInitializer> init_(init.release());
+        return newTiedWorker(q, init_);
+    }
+#endif
+
 
 private:
     CPUAffinityInitializer* mAffinityInit;

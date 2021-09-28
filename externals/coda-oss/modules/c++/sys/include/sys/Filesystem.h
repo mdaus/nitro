@@ -1,3 +1,23 @@
+/* =========================================================================
+ * This file is part of sys-c++
+ * =========================================================================
+ *
+ * (C) Copyright 2020, Maxar Technologies, Inc.
+ *
+ * sys-c++ is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; If not, http://www.gnu.org/licenses/.
+ *
+ */
 #ifndef CODA_OSS_sys_Filesystem_h_INCLUDED_
 #define CODA_OSS_sys_Filesystem_h_INCLUDED_
 #pragma once
@@ -12,7 +32,7 @@
 #include <string>
 #include <ostream>
 
-#include "Conf.h"
+#include "CPlusPlus.h"
 
 namespace sys
 {
@@ -26,22 +46,43 @@ namespace Filesystem
     extern std::ostream& Ostream(std::ostream& os, const path& p);
   }
 
+  // https://en.cppreference.com/w/cpp/filesystem/file_type
+  enum class FileType
+  {
+      None = 0,
+      NotFound = 1,
+      Regular,
+      Directory,
+      Unknown
+  };
+
 // http://en.cppreference.com/w/cpp/filesystem/path
-struct path // N.B. this is an INCOMPLETE implementation!
+struct path final // N.B. this is an INCOMPLETE and NON-STANDARD implementation!
 {
-    using string_type = std::string;
-    using value_type = string_type::value_type;
+    // character type used by the native encoding of the filesystem: char on POSIX, wchar_t on Windows
+    #ifdef _WIN32
+    using value_type = wchar_t;
+    #else
+    using value_type = char;
+    #endif
+    using string_type = std::basic_string<value_type>;
 
     // http://en.cppreference.com/w/cpp/filesystem/path/path
     path() noexcept;
     path(const path&);
     path(const string_type&);
-    path(const value_type*);
+    template<typename TSource>
+    path(const TSource& source)
+    {
+        p_ = to_native(source);
+    }
 
     path& operator/=(const path&);  // http://en.cppreference.com/w/cpp/filesystem/path/append
-    path& operator/=(const value_type*);  // http://en.cppreference.com/w/cpp/filesystem/path/append
-    path& operator/=(const string_type&);  // http://en.cppreference.com/w/cpp/filesystem/path/append
-
+    template <typename TSource>
+    path& operator/=(const TSource& source)  // http://en.cppreference.com/w/cpp/filesystem/path/append
+    {
+        return (*this) /= path(to_native(source));
+    }
     void clear() noexcept;  // http://en.cppreference.com/w/cpp/filesystem/path/clear
 
     // http://en.cppreference.com/w/cpp/filesystem/path/native
@@ -51,6 +92,7 @@ struct path // N.B. this is an INCOMPLETE implementation!
 
     std::string string() const;  // http://en.cppreference.com/w/cpp/filesystem/path/string
 
+    path root_path() const; // https://en.cppreference.com/w/cpp/filesystem/path/root_path
     path parent_path() const;  // http://en.cppreference.com/w/cpp/filesystem/path/parent_path
     path filename() const;  // http://en.cppreference.com/w/cpp/filesystem/path/filename
     path stem() const;  // http://en.cppreference.com/w/cpp/filesystem/path/stem
@@ -75,6 +117,7 @@ struct path // N.B. this is an INCOMPLETE implementation!
 
 private:
     string_type p_;
+    static string_type to_native(const std::string& s);
 };
 
 path operator/(const path& lhs, const path& rhs);  // http://en.cppreference.com/w/cpp/filesystem/path/operator_slash
@@ -89,25 +132,8 @@ bool is_regular_file(const path& p);  // https://en.cppreference.com/w/cpp/files
 bool is_directory(const path& p);  // https://en.cppreference.com/w/cpp/filesystem/is_directory
 bool exists(const path& p);  // https://en.cppreference.com/w/cpp/filesystem/exists
 }
+
+#define CODA_OSS_sys_Filesystem 201703L  // c.f., __cpp_lib_filesystem
 }
-
-#ifndef CODA_OSS_DEFINE_std_filesystem_
-    // Some versions of G++ say they're C++17 but don't have <filesystem>
-    #if CODA_OSS_cpp17 && __has_include(<filesystem>)  // __has_include is C++17
-        #define CODA_OSS_DEFINE_std_filesystem_ -1  // OK to #include <>, below
-    #else
-        #define CODA_OSS_DEFINE_std_filesystem_ CODA_OSS_AUGMENT_std_namespace  // maybe use our own
-    #endif
-#endif  // CODA_OSS_DEFINE_std_filesystem_
-
-
-#if CODA_OSS_DEFINE_std_filesystem_ == 1
-    namespace std // This is slightly uncouth: we're not supposed to augment "std".
-    {
-        namespace filesystem = ::sys::Filesystem;
-    }
-#elif CODA_OSS_DEFINE_std_filesystem_ == -1 // set above
-    #include <filesystem>
-#endif // CODA_OSS_DEFINE_std_filesystem_
 
 #endif  // CODA_OSS_sys_Filesystem_h_INCLUDED_

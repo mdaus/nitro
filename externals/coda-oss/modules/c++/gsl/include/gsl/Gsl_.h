@@ -3,6 +3,7 @@
  * =========================================================================
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2021, Maxar Technologies, Inc.
  *
  * gsl-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,21 +20,19 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-
-#ifndef CODA_OSS_Gsl__h_INCLUDED_
-#define CODA_OSS_Gsl__h_INCLUDED_
-
+#ifndef CODA_OSS_gsl_Gsl__h_INCLUDED_
+#define CODA_OSS_gsl_Gsl__h_INCLUDED_
 #pragma once
-
-// Can't compile all of GSL with older versions of GCC
 
 #include <assert.h>
 
 #include <exception>
 #include <type_traits>
-#include <utility>  
+#include <utility>
 
-#include <mem/Span.h>
+#include <config/compiler_extensions.h>
+#include "gsl/use_gsl.h" // Can't compile all of GSL with older versions of GCC/MSVC
+#include "gsl/gsl_span_.h"
 
 namespace Gsl
 {
@@ -68,12 +67,16 @@ namespace Gsl
         {
             return (static_cast<U>(t) != u) ? narrow_throw_exception(t) : t;
         }
+
+        CODA_OSS_disable_warning_push
+        CODA_OSS_UNREFERENCED_FORMAL_PARAMETER
         template <class T, class U>
         constexpr T narrow2_(T t, U u) noexcept(false)
         {
             return (!is_same_signedness<T, U>::value && ((t < T{}) != (u < U{}))) ?
                 narrow_throw_exception(t) : t;
         }
+        CODA_OSS_disable_warning_pop
 
         template <class T, class U>
         constexpr T narrow(T t, U u) noexcept(false)
@@ -89,6 +92,8 @@ namespace Gsl
     }
 }
 
+#if !CODA_OSS_use_real_gsl
+// Add to "gsl" if we're not using the real thing
 namespace gsl
 {
     template <class T, class U>
@@ -102,27 +107,7 @@ namespace gsl
     {
         return Gsl::narrow<T>(u);
     }
-
-
-    template <typename T>
-    using span = mem::Span<T>;
-
-    template <typename T>
-    inline span<T> make_span(T* d, size_t sz)
-    {
-        return mem::make_Span<T>(d, sz);
-    }
-
-    template <typename TContainer>
-    inline span<typename TContainer::value_type> make_span(TContainer& c)
-    {
-        return mem::make_Span(c);
-    }
-    template <typename TContainer>
-    inline span<typename TContainer::value_type> make_span(const TContainer& c)
-    {
-        return make_span(const_cast<TContainer&>(c));
-    }
  }
+#endif // CODA_OSS_use_real_gsl
 
-#endif  // CODA_OSS_Gsl__h_INCLUDED_
+#endif  // CODA_OSS_gsl_Gsl__h_INCLUDED_

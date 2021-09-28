@@ -44,12 +44,17 @@ NITFAPI(int) nitf_TREUtils_parse(nitf_TRE* tre, char* bufptr, nitf_Error* error)
     }
 
     privData = (nitf_TREPrivateData*)tre->priv;
+    if (!privData)
+    {
+        nitf_Error_init(error,
+            "invalid tre->priv object",
+            NITF_CTXT,
+            NITF_ERR_INVALID_PARAMETER);
+        return NITF_FAILURE;
+    }
 
     /* flush the hash first, to protect from duplicate entries */
-    if (privData)
-    {
-        nitf_TREPrivateData_flush(privData, error);
-    }
+   nitf_TREPrivateData_flush(privData, error);
 
     cursor = nitf_TRECursor_begin(tre);
     while (offset < privData->length && status)
@@ -202,7 +207,8 @@ nitf_TREUtils_getRawData(nitf_TRE* tre,
                         NITF_ERR_MEMORY);
         goto CATCH_ERROR;
     }
-    memset(data, 0, length + 1);
+    const size_t length_ = ((size_t)length) + 1;
+    memset(data, 0, length_);
 
     cursor = nitf_TRECursor_begin(tre);
     while (!nitf_TRECursor_isDone(&cursor) && status && offset < length)
@@ -313,7 +319,7 @@ nitf_TREUtils_readField(nitf_IOInterface* io,
 NITFAPI(NITF_BOOL)
 nitf_TREUtils_setValue(nitf_TRE* tre,
                        const char* tag,
-                       NITF_DATA* data,
+                       const NITF_DATA* data,
                        size_t dataLength,
                        nitf_Error* error)
 {
@@ -1026,7 +1032,7 @@ nitf_TREUtils_basicFind(nitf_TRE* tre, const char* pattern, nitf_Error* error)
 NITFAPI(NITF_BOOL)
 nitf_TREUtils_basicSetField(nitf_TRE* tre,
                             const char* tag,
-                            NITF_DATA* data,
+                            const NITF_DATA* data,
                             size_t dataLength,
                             nitf_Error* error)
 {

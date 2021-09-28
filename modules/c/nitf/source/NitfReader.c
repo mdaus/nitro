@@ -20,6 +20,9 @@
  *
  */
 
+#include <assert.h>
+#include <limits.h>
+
 #include "nitf/Reader.h"
 
 /****************************
@@ -249,6 +252,8 @@ CATCH_ERROR:
 NITFPRIV(NITF_BOOL)
 readField(nitf_Reader* reader, char* fld, int length, nitf_Error* error)
 {
+    assert(fld != NULL);
+
     /* Make sure the field is nulled out  */
     memset(fld, 0, length);
 
@@ -640,11 +645,11 @@ readImageSubheader(nitf_Reader* reader,
         nitf_Error_initf(error,
                          NITF_CTXT,
                          NITF_ERR_READING_FROM_FILE,
-                         "Image subheader %u expected to have length %u, "
-                         "but read %u bytes",
+                         "Image subheader %u expected to have length %ju, "
+                         "but read %ju bytes",
                          imageIndex,
-                         expectedSubheaderLength,
-                         subheaderEnd - subheaderStart);
+                         (size_t)expectedSubheaderLength,
+                         (size_t)(subheaderEnd - subheaderStart));
         goto CATCH_ERROR;
     }
 
@@ -919,11 +924,11 @@ readDESubheader(nitf_Reader* reader,
         nitf_Error_initf(error,
                          NITF_CTXT,
                          NITF_ERR_READING_FROM_FILE,
-                         "DE subheader %u expected to have length %u, "
-                         "but read %u bytes",
+                         "DE subheader %d expected to have length %u, "
+                         "but read %ju bytes",
                          desIndex,
                          expectedSubheaderLength,
-                         subheaderEnd - subheaderStart);
+                         (size_t)(subheaderEnd - subheaderStart));
         goto CATCH_ERROR;
     }
     return NITF_SUCCESS;
@@ -967,6 +972,15 @@ readRESubheader(nitf_Reader* reader,
     NITF_TRY_GET_UINT32(subhdr->subheaderFieldsLength, &subLen, error);
     if (subLen > 0)
     {
+        if (subLen >= UINT32_MAX)
+        {
+            nitf_Error_init(error, "uint32_t+1 overflow", NITF_CTXT, NITF_ERR_MEMORY);
+            goto CATCH_ERROR;
+        }
+        subhdr->subheaderFields = NITF_MALLOC(subLen + 1);
+        if (!subhdr->subheaderFields)
+            goto CATCH_ERROR;
+
         /* for now, we just read it into a buffer... change in the future */
         if (!readField(reader, subhdr->subheaderFields, subLen, error))
             goto CATCH_ERROR;
@@ -1462,9 +1476,21 @@ readBandInfo(nitf_Reader* reader, unsigned int nbands, nitf_Error* error)
                                 NITF_ERR_MEMORY);
                 return NULL;
             }
+
+            // Be sure the product of `numLuts` and `bandEntriesPerLut` does not overflow.
+            const uint64_t fieldLength_ = (uint64_t)numLuts * (uint64_t)bandEntriesPerLut;
+            const int fieldLength = (int)fieldLength_; // readField() has an "int" length parameter
+            if ((fieldLength_ > INT_MAX)  || (fieldLength < 0))
+            {
+                nitf_Error_init(error,
+                                "fieldLength overflow",
+                                NITF_CTXT,
+                                NITF_ERR_MEMORY);
+                return NULL;
+            }
             if (!readField(reader,
                            (char*)bandInfo[i]->lut->table,
-                           numLuts * bandEntriesPerLut,
+                           fieldLength,
                            error))
                 goto CATCH_ERROR;
         }

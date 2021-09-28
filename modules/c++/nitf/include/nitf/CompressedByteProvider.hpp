@@ -55,10 +55,8 @@ namespace nitf
  *
  * The NITF layout is described in ByteProvider.hpp
  */
-class CompressedByteProvider : public ByteProvider
+struct NITRO_NITFCPP_API CompressedByteProvider : public ByteProvider
 {
-public:
-
     /*!
      * \param record Pre-populated NITF record.  All TREs, image subheader, and
      * DES subheader information must be filled out.  Record won't be modified.
@@ -147,7 +145,7 @@ protected:
      * this constructor, the inheriting class will call initialize() later in
      * its constructor.
      */
-    CompressedByteProvider() noexcept(false);
+    CompressedByteProvider() = default;
 
     /*!
      * \param record Pre-populated NITF record.  All TREs, image subheader, and
@@ -169,6 +167,13 @@ protected:
     size_t countBytesForCompressedImageData(
             size_t seg, size_t startRow, size_t numRowsToWrite) const;
 
+    size_t addImageData(
+            size_t seg,
+            size_t startRow,
+            size_t numRowsToWrite,
+            const sys::byte* imageData,
+            nitf::Off& fileOffset,
+            NITFBufferList& buffers) const;
     size_t addImageData(
             size_t seg,
             size_t startRow,

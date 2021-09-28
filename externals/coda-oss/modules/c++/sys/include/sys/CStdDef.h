@@ -24,27 +24,14 @@
 
 #include <cstddef>
 
-#include "Conf.h"
+#include "CPlusPlus.h"
 
 namespace sys
 {
-	// https://en.cppreference.com/w/cpp/types/byte
-	enum class Byte : unsigned char {};
+    // https://en.cppreference.com/w/cpp/types/byte
+    enum class Byte : unsigned char {};
+
+    #define CODA_OSS_sys_Byte 201603L  // __cpp_lib_byte
 }
-
-#ifndef CODA_OSS_DEFINE_std_byte_
-	#if CODA_OSS_cpp17
-		#define CODA_OSS_DEFINE_std_byte_ 0  // std::byte part of C++17
-	#else
-		#define CODA_OSS_DEFINE_std_byte_ CODA_OSS_AUGMENT_std_namespace  // maybe use our own
-	#endif  // CODA_OSS_cpp17
-#endif  // CODA_OSS_DEFINE_std_byte_
-
-#if CODA_OSS_DEFINE_std_byte_ == 1
-	namespace std // This is slightly uncouth: we're not supposed to augment "std".
-	{
-		using byte = sys::Byte;
-	}
-#endif  // CODA_OSS_DEFINE_std_byte_
 
 #endif  // CODA_OSS_sys_CStdDef_h_INCLUDED_

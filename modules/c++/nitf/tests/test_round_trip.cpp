@@ -40,15 +40,12 @@ class RowStreamer : public nitf::RowSourceCallback
 {
 public:
     RowStreamer(uint32_t band,
-                uint32_t numCols,
-                nitf::ImageReader reader) :
+        uint32_t numCols,
+        nitf::ImageReader reader) :
         mReader(reader),
-        mBand(band)
+        mBand(band),
+        mWindow(1, numCols, &mBand, 1)
     {
-        mWindow.setNumRows(1);
-        mWindow.setNumCols(numCols);
-        mWindow.setBandList(&mBand);
-        mWindow.setNumBands(1);
     }
 
     virtual void nextRow(uint32_t /*band*/, void* buffer)
@@ -60,12 +57,12 @@ public:
 
 private:
     nitf::ImageReader mReader;
-    nitf::SubWindow mWindow;
     uint32_t mBand;
+    nitf::SubWindow mWindow;
 };
 
 // RAII for managing a list of RowStreamer's
-struct RowStreamers final
+struct RowStreamers /*final*/   // no "final", SWIG doesn't like it
 {
     nitf::RowSourceCallback* add(uint32_t band,
                                  uint32_t numCols,
@@ -93,7 +90,7 @@ int main(int argc, char **argv)
         }
 
         // Check that wew have a valid NITF
-        if (nitf::Reader::getNITFVersion(argv[1]) == NITF_VER_UNKNOWN)
+        if (nitf::Reader::getNITFVersion(argv[1]) == nitf::Version::NITF_VER_UNKNOWN)
         {
             std::cout << "Invalid NITF: " << argv[1] << std::endl;
             exit( EXIT_FAILURE);
@@ -123,8 +120,8 @@ int main(int argc, char **argv)
             uint32_t nBands = imseg.getSubheader().getNumImageBands();
             uint32_t nRows = imseg.getSubheader().getNumRows();
             uint32_t nCols = imseg.getSubheader().getNumCols();
-            uint32_t pixelSize = NITF_NBPP_TO_BYTES(
-                    imseg.getSubheader().getNumBitsPerPixel());
+            const auto pixelSize = static_cast<uint32_t>(NITF_NBPP_TO_BYTES(
+                    imseg.getSubheader().getNumBitsPerPixel()));
 
             for (uint32_t ii = 0; i < nBands; i++)
             {
@@ -139,7 +136,7 @@ int main(int argc, char **argv)
         for (uint32_t i = 0; i < num; i++)
         {
             nitf::SegmentReaderSource readerSource(reader.newGraphicReader(i));
-            std::shared_ptr< ::nitf::WriteHandler> segmentWriter(
+            mem::SharedPtr< ::nitf::WriteHandler> segmentWriter(
                 new nitf::SegmentWriter(readerSource));
             writer.setGraphicWriteHandler(i, segmentWriter);
         }
@@ -148,7 +145,7 @@ int main(int argc, char **argv)
         for (uint32_t i = 0; i < num; i++)
         {
             nitf::SegmentReaderSource readerSource(reader.newTextReader(i));
-            std::shared_ptr< ::nitf::WriteHandler> segmentWriter(
+            mem::SharedPtr< ::nitf::WriteHandler> segmentWriter(
                 new nitf::SegmentWriter(readerSource));
             writer.setTextWriteHandler(i, segmentWriter);
         }
@@ -157,7 +154,7 @@ int main(int argc, char **argv)
         for (uint32_t i = 0; i < num; i++)
         {
             nitf::SegmentReaderSource readerSource(reader.newDEReader(i));
-            std::shared_ptr< ::nitf::WriteHandler> segmentWriter(
+            mem::SharedPtr< ::nitf::WriteHandler> segmentWriter(
                 new nitf::SegmentWriter(readerSource));
             writer.setDEWriteHandler(i, segmentWriter);
         }

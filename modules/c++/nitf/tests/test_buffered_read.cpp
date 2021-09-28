@@ -39,22 +39,14 @@ void doRead(const std::string& inFile,
 
     /*  Set this to the end, so we'll know when we're done!  */
     nitf::List imageList(record.getImages());
-    size_t idx(0);
+    uint32_t idx(0);
     for (nitf::ImageSegment imageSegment : imageList)
     {
         ++idx;
         std::cout << "Reading image " << idx << "..." << std::endl;
         nitf::ImageSubheader subheader(imageSegment.getSubheader());
 
-        nitf::SubWindow subWindow;
-        subWindow.setNumRows(subheader.getNumRows());
-        subWindow.setNumCols(subheader.getNumCols());
-        std::vector<uint32_t> bandList;
-        for (size_t ii = 0; ii < subWindow.getNumBands(); ++ii)
-        {
-            bandList.push_back(ii);
-        }
-        setBands(subWindow, bandList);
+        nitf::SubWindow subWindow(subheader);
 
         // Read in the image
         const size_t numBitsPerPixel(static_cast<uint64_t>(subheader.getActualBitsPerPixel()));
@@ -70,7 +62,7 @@ void doRead(const std::string& inFile,
         if (!image.empty())
         {
             std::vector<std::byte*> imagePtrs;
-            std::byte*imagePtr(image.data());
+            auto imagePtr(image.data());
             for (size_t ii = 0;
                     ii < subWindow.getNumBands();
                     ++ii, imagePtr += numBytesPerBand)
@@ -113,7 +105,7 @@ int main(int argc, char **argv)
             blockSize = std::stoi(argv[2]);
 
         // Check that wew have a valid NITF
-        if (nitf::Reader::getNITFVersion(argv[1]) == NITF_VER_UNKNOWN )
+        if (nitf::Reader::getNITFVersion(argv[1]) == nitf::Version::NITF_VER_UNKNOWN )
         {
             std::cout << "Invalid NITF: " << argv[1] << std::endl;
             exit(EXIT_FAILURE);

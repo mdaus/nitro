@@ -29,6 +29,8 @@
 #include <vector>
 
 #include "nitf/coda-oss.hpp"
+#include "nitf/System.hpp"
+#include "nitf/exports.hpp"
 
 namespace nitf
 {
@@ -42,7 +44,7 @@ namespace nitf
  * means for multi-segment cases, there may be a different num rows / block in
  * each segment).
  */
-struct ImageBlocker final
+struct NITRO_NITFCPP_API ImageBlocker /*final*/   // no "final", SWIG doesn't like it
 {
     ImageBlocker(const ImageBlocker&) = delete;
     ImageBlocker& operator=(const ImageBlocker&) = delete;
@@ -268,6 +270,17 @@ private:
                           size_t& lastBlockWithinLastSeg) const;
 
     void blockImpl(size_t seg,
+                   const sys::byte* input,
+                   size_t numValidRowsInBlock,
+                   size_t numValidColsInBlock,
+                   size_t numBytesPerPixel,
+                   sys::byte* output) const noexcept
+    {
+        block(input, numBytesPerPixel, mNumCols, mNumRowsPerBlock[seg],
+              mNumColsPerBlock, numValidRowsInBlock, numValidColsInBlock,
+              output);
+    }
+    void blockImpl(size_t seg,
                    const std::byte* input,
                    size_t numValidRowsInBlock,
                    size_t numValidColsInBlock,
@@ -279,11 +292,56 @@ private:
               output);
     }
 
+    template<typename T>
+    void blockAcrossRowImpl(size_t seg,
+                        const T*& input,
+                        size_t numValidRowsInBlock,
+                        size_t numBytesPerPixel,
+                       T*& output) const noexcept
+    {
+        const size_t outStride =
+            mNumRowsPerBlock[seg] * mNumColsPerBlock * numBytesPerPixel;
+        const size_t lastColBlock = mNumBlocksAcrossCols - 1;
+
+        for (size_t colBlock = 0;
+            colBlock < mNumBlocksAcrossCols;
+            ++colBlock, output += outStride)
+        {
+            const size_t numPadColsInBlock = (colBlock == lastColBlock) ?
+                mNumPadColsInFinalBlock : 0;
+
+            const size_t numValidColsInBlock = mNumColsPerBlock - numPadColsInBlock;
+
+            blockImpl(seg,
+                input,
+                numValidRowsInBlock,
+                numValidColsInBlock,
+                numBytesPerPixel,
+                output);
+
+            input += numValidColsInBlock * numBytesPerPixel;
+        }
+
+        // At the end of this, we've incremented the input pointer an entire row
+        // We need to increment it the remaining rows in the block
+        input += mNumCols * numBytesPerPixel * (numValidRowsInBlock - 1);
+    }
+    void blockAcrossRow(size_t seg,
+                        const sys::byte*& input,
+                        size_t numValidRowsInBlock,
+                        size_t numBytesPerPixel,
+                       sys::byte*& output) const noexcept
+    {
+        blockAcrossRowImpl(seg, input, numValidRowsInBlock, numBytesPerPixel, output);
+    }
     void blockAcrossRow(size_t seg,
                         const std::byte*& input,
                         size_t numValidRowsInBlock,
                         size_t numBytesPerPixel,
-                        std::byte*& output) const noexcept;
+                       std::byte*& output) const noexcept
+    {
+        blockAcrossRowImpl(seg, input, numValidRowsInBlock, numBytesPerPixel, output);
+    }
 
 private:
     // Vectors all indexed by segment

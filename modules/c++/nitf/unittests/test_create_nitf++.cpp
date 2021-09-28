@@ -39,7 +39,6 @@
 
 #include <import/nitf.hpp>
 #include <nitf/CompressedByteProvider.hpp>
-#include <gsl/gsl.h>
 
 #include "TestCase.h"
 
@@ -1070,7 +1069,7 @@ namespace test_create_nitf_with_byte_provider
         std::vector<nitf::BandInfo> bands(NUM_BANDS, nitf::BandInfo());
         for (size_t ii = 0; ii < bands.size(); ++ii)
         {
-            bands[ii].init("M",   /* The band representation, Nth band */
+            bands[ii].init(nitf::Representation::M,   /* The band representation, Nth band */
                 " ",       /* The band subcategory */
                 "N",       /* The band filter condition */
                 "   ");     /* The band standard image filter code */
@@ -1156,7 +1155,7 @@ namespace test_create_nitf_with_byte_provider
         nitf::Reader reader;
         nitf::Record record = reader.read(handle);
 
-        for (int ii = 0; ii < gsl::narrow<int>(record.getNumImages()); ++ii)
+        for (int ii = 0; ii < static_cast<int>(record.getNumImages()); ++ii)
         {
             nitf::ImageReader imageReader = reader.newImageReader(ii);
             uint64_t blockSize;
@@ -1191,7 +1190,7 @@ TEST_CASE(test_create_nitf_with_byte_provider_test)
 
 namespace test_create_nitf
 {
-    static const char* RGB[] = { "R", "G", "B" };
+    static const nitf::Representation RGB[] = { nitf::Representation::R,  nitf::Representation::G,  nitf::Representation::B };
 
     void addImageSegment(nitf::Record& record, bool isMono = false,
         bool shouldCompress = false)
@@ -1210,7 +1209,7 @@ namespace test_create_nitf
         /* Set the geo-corners to Ann Arbor, MI */
         setCornersFromDMSBox(header);
 
-        const auto NUM_BANDS = gsl::narrow<size_t>(isMono ? 1 : 3);
+        const auto NUM_BANDS = static_cast<size_t>(isMono ? 1 : 3);
         std::vector<nitf::BandInfo> bands(NUM_BANDS, nitf::BandInfo());
         for (size_t ii = 0; ii < bands.size(); ++ii)
         {
@@ -1292,7 +1291,7 @@ namespace test_create_nitf
         nitf::Reader reader;
         nitf::Record record = reader.read(handle);
 
-        for (int ii = 0; ii < gsl::narrow<int>(record.getNumImages()); ++ii)
+        for (int ii = 0; ii < static_cast<int>(record.getNumImages()); ++ii)
         {
             nitf::ImageReader imageReader = reader.newImageReader(ii);
             uint64_t blockSize;

@@ -1,4 +1,4 @@
-name: Build, unittest, compress
+name: Build, unittest
 
 on:
   push:
@@ -32,17 +32,10 @@ jobs:
       run: |
         cd build
         ctest -C Release
-    - name: compress
-      run: Compress-Archive -DestinationPath installWindows-Github.zip -Path build/installWindows-Github
-    - name: Upload artifact
-      uses: actions/upload-artifact@v1.0.0
-      with:
-        name: windows_install
-        path: installWindows-Github.zip
 
   build-linux:
     name: Linux
-    runs-on: [ubuntu-20.04]
+    runs-on: [ubuntu-latest]
 
     steps:
     - uses: actions/checkout@v2
@@ -64,11 +57,5 @@ jobs:
       run: |
         cd build
         ctest
-    - name: compress
-      run: tar -czvf installLinux-Github.tar.gz build/installLinux-Github
-    - name: Upload artifact
-      uses: actions/upload-artifact@v1.0.0
-      with:
-        name: linux_install
-        path: installLinux-Github.tar.gz
+
 

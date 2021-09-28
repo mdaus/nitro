@@ -25,6 +25,7 @@
 #pragma once
 
 #include <memory>
+#include <string>
 
 #include "nitf/Writer.h"
 #include "nitf/List.hpp"
@@ -35,7 +36,7 @@
 #include "nitf/ImageWriter.hpp"
 #include "nitf/SegmentWriter.hpp"
 #include "nitf/Object.hpp"
-#include <string>
+#include "nitf/exports.hpp"
 
 /*!
  *  \file Writer.hpp
@@ -45,7 +46,7 @@
 namespace nitf
 {
 
-struct WriterDestructor : public nitf::MemoryDestructor<nitf_Writer>
+struct NITRO_NITFCPP_API WriterDestructor : public nitf::MemoryDestructor<nitf_Writer>
 {
     void operator()(nitf_Writer *writer) override;
 };
@@ -54,9 +55,8 @@ struct WriterDestructor : public nitf::MemoryDestructor<nitf_Writer>
  *  \class Writer
  *  \brief  The C++ wrapper for the nitf_Writer
  */
-class Writer : public nitf::Object<nitf_Writer, WriterDestructor>
+struct NITRO_NITFCPP_API Writer : public nitf::Object<nitf_Writer, WriterDestructor>
 {
-public:
     //! Copy constructor
     Writer(const Writer & x);
 
@@ -69,7 +69,7 @@ public:
     //! Constructor
     Writer() noexcept(false);
 
-    ~Writer();
+    ~Writer() = default;
     Writer(Writer&&) = default;
     Writer& operator=(Writer&&) = default;
 
