@@ -123,13 +123,13 @@ void ThreadGroup::addException(const except::Exception& ex)
 
 mem::auto_ptr<CPUAffinityThreadInitializer> ThreadGroup::getNextInitializer()
 {
-    mem::auto_ptr<CPUAffinityThreadInitializer> threadInit;
+    std::unique_ptr<CPUAffinityThreadInitializer> threadInit;
     if (mAffinityInit.get())
     {
         threadInit = mAffinityInit->newThreadInitializer();
     }
 
-    return threadInit;
+    return mem::auto_ptr<CPUAffinityThreadInitializer>(threadInit.release());
 }
 
 ThreadGroup::ThreadGroupRunnable::ThreadGroupRunnable(
