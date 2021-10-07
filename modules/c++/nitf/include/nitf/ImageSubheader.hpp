@@ -51,7 +51,23 @@ namespace nitf
         SI, /*Two's complement signed integer*/
         R, /*Floating point */
         C, /*Complex floating point*/
-        INT12 /*12 bit integer signed or unsigned*/ );
+        // ImageIO.c doesn't look at pixelType in this case, rather (nBits == 12) && (nBitsActual == 12)
+        INT12 /*12 bit integer signed or unsigned*/
+    );
+
+    // see ComplexityLevel.c
+    //NITF_ENUM(4, IREP /* image represenation*/, MONO, RGB, RGB_LUT, MULTI);
+    enum class IREP { MONO, RGB, RGB_LUT, MULTI };
+    NITF_ENUM_define_string_to_enum_begin_(IREP) // need to do this manually because of "RGB/LUT"
+    { "MONO", IREP::MONO }, { "RGB", IREP::RGB }, { "RGB/LUT", IREP::RGB_LUT }, { "MULTI", IREP::MULTI }
+    NITF_ENUM_define_string_to_end_
+
+    // see nitf_ImageIO_setup_SBR() in ImageIO.c
+    //NITF_ENUM(4, BlockingMode, B /*band interleaved by block*/, P /*band interleaved by pixel*/, R /*band interleaved by row*/, S /*band sequential*/);
+    enum class BlockingMode { Block, Pixel, Row, Sequential };
+    NITF_ENUM_define_string_to_enum_begin_(BlockingMode)
+    { "B", BlockingMode::Block }, { "P", BlockingMode::Pixel }, { "R", BlockingMode::Row }, { "S", BlockingMode::Sequential }
+    NITF_ENUM_define_string_to_end_
 
 /*!
  *  \class ImageSubheader
@@ -100,7 +116,7 @@ public:
                              uint32_t nbpp,
                              uint32_t abpp,
                              std::string justification,
-                             std::string irep, std::string icat,
+                             IREP irep, std::string icat,
                              std::vector<nitf::BandInfo>& bands);
 
     /*!
@@ -183,6 +199,11 @@ public:
                      uint32_t numRowsPerBlock,
                      uint32_t numColsPerBlock,
                      const std::string& imode);
+    void setBlocking(uint32_t numRows,
+                     uint32_t numCols,
+                     uint32_t numRowsPerBlock,
+                     uint32_t numColsPerBlock,
+                     BlockingMode imode);
 
     /*!
      * Compute blocking parameters
