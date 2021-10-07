@@ -39,10 +39,9 @@
 
 #include <import/nitf.hpp>
 #include <nitf/CompressedByteProvider.hpp>
+#include <nitf/../../unittests/nitro_image_.c_>
 
 #include "TestCase.h"
-
-#include "../c/nitf/unittests/nitro_image_.c"
 
 void populateFileHeader(nitf::Record& record, const std::string& title)
 {
@@ -125,8 +124,8 @@ namespace test_create_nitf_with_byte_provider
 
         }
 
-        const std::string iRep = "MONO";
-        header.setPixelInformation("INT",     /* Pixel value type */
+        const auto iRep = nitf::IREP::MONO;
+        header.setPixelInformation(nitf::PixelType::INT,     /* Pixel value type */
             8,         /* Number of bits/pixel */
             8,         /* Actual number of bits/pixel */
             "R",       /* Pixel justification */
@@ -149,7 +148,7 @@ namespace test_create_nitf_with_byte_provider
             NITRO_IMAGE.width,  /*!< The number of columns */
             NITRO_IMAGE.height, /*!< The number of rows/block */
             NITRO_IMAGE.width,  /*!< The number of columns/block */
-            "P");               /*!< Image mode */
+            nitf::BlockingMode::Pixel);               /*!< Image mode */
     }
 
 

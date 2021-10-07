@@ -30,7 +30,7 @@
 #include <import/nitf.h>
 #include "Test.h"
 
-#include "nitro_image_.c"
+#include "nitro_image_.c_"
 
 static const char* RGB[] = {"R", "G", "B"};
 
