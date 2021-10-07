@@ -36,7 +36,7 @@ namespace mem
 // boiler-plate code; note that it's often possible to just use std::unique_ptr
 // directly.  This is mostly needed to support existing interfaces.
 #if CODA_OSS_cpp17  // std::auto_ptr removed in C++17
-    #if defeind(CODA_OSS_no_autoptr) && (!CODA_OSS_no_autoptr)
+    #if defined(CODA_OSS_no_autoptr) && (!CODA_OSS_no_autoptr)
         #error "std::auto_ptr was removed in C++17."
     #endif
     #define CODA_OSS_autoptr_is_std 0  // mem::auto_ptr != std::auto_ptr
