@@ -108,6 +108,15 @@ void ImageSubheader::setPixelInformation(std::string pvtype,
     if (!x)
         throw nitf::NITFException(&error);
 }
+void ImageSubheader::setPixelInformation(PixelType pvtype,
+                         uint32_t nbpp,
+                         uint32_t abpp,
+                         std::string justification,
+                         std::string irep, std::string icat,
+                         std::vector<nitf::BandInfo>& bands)
+{
+    setPixelInformation(to_string(pvtype), nbpp, abpp, justification, irep, icat, bands);
+}
 
 void ImageSubheader::setBlocking(uint32_t numRows,
                      uint32_t numCols,

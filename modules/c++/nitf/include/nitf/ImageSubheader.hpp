@@ -35,6 +35,7 @@
 #include "FileSecurity.hpp"
 #include "Extensions.hpp"
 #include "System.hpp"
+#include "Enum.hpp"
 
 /*!
  *  \file ImageSubheader.hpp
@@ -43,6 +44,14 @@
 
 namespace nitf
 {
+    // see NITF_IMAGE_IO_PIXEL_TYPE_INT, et. al. in ImageIO.h
+    NITF_ENUM(6, PixelType,
+        INT, /*Integer*/
+        B, /* Bi-valued*/
+        SI, /*Two's complement signed integer*/
+        R, /*Floating point */
+        C, /*Complex floating point*/
+        INT12 /*12 bit integer signed or unsigned*/ );
 
 /*!
  *  \class ImageSubheader
@@ -82,6 +91,12 @@ public:
      *  \param bands  Band information object list
      */
     void setPixelInformation(std::string pvtype,
+                             uint32_t nbpp,
+                             uint32_t abpp,
+                             std::string justification,
+                             std::string irep, std::string icat,
+                             std::vector<nitf::BandInfo>& bands);
+    void setPixelInformation(PixelType pvtype,
                              uint32_t nbpp,
                              uint32_t abpp,
                              std::string justification,

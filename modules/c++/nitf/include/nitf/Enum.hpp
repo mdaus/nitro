@@ -81,7 +81,8 @@ namespace nitf
 #define NITF_ENUM_map_entry_2_(name, n1, n2) NITF_ENUM_map_entry_(name, n1), NITF_ENUM_map_entry_(name, n2)
 #define NITF_ENUM_map_entry_3_(name, n1, n2, n3) NITF_ENUM_map_entry_(name, n1), NITF_ENUM_map_entry_2_(name, n2, n3)
 #define NITF_ENUM_map_entry_4_(name, n1, n2, n3, n4)  NITF_ENUM_map_entry_(name, n1), NITF_ENUM_map_entry_3_(name, n2, n3, n4)
-#define NITF_ENUM_map_entry_5_(name, n1, n2, n3, n4, n5)  NITF_ENUM_map_entry_(name, n1), NITF_ENUM_map_entry_4_(name, n2, n3, n4, n5),
+#define NITF_ENUM_map_entry_5_(name, n1, n2, n3, n4, n5)  NITF_ENUM_map_entry_(name, n1), NITF_ENUM_map_entry_4_(name, n2, n3, n4, n5)
+#define NITF_ENUM_map_entry_6_(name, n1, n2, n3, n4, n5, n6)  NITF_ENUM_map_entry_(name, n1), NITF_ENUM_map_entry_5_(name, n2, n3, n4, n5, n6)
 
 #define NITF_ENUM_define_string_to_enum_(name, ...) namespace details { \
     template<> inline const std::map<std::string, name>& string_to_enum() { \

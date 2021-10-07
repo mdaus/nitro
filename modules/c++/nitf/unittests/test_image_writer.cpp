@@ -130,7 +130,7 @@ TEST_CASE(constructValidImageWriter)
     nitf::ImageSegment segment = record.newImageSegment();
     nitf::ImageSubheader subheader = segment.getSubheader();
     std::vector<nitf::BandInfo> bands = {nitf::BandInfo(), nitf::BandInfo()};
-    subheader.setPixelInformation("INT", 8, 8, "R", "MONO", "VIS", bands);
+    subheader.setPixelInformation(nitf::PixelType::INT, 8, 8, "R", "MONO", "VIS", bands);
     subheader.setBlocking(100, 200, 10, 10, "P");
     nitf::ImageWriter writer(subheader);
 }
