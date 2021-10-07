@@ -41,7 +41,7 @@ namespace mem
     #endif
     #define CODA_OSS_autoptr_is_std 0  // mem::auto_ptr != std::auto_ptr
 #else // C++11 or C++14 still have std::auto_ptr, but it's depricated
-    #if CODA_OSS_no_autoptr  // don't use std::auto_ptr even if it's available
+    #ifdef CODA_OSS_no_autoptr  // don't use std::auto_ptr even if it's available
         #define CODA_OSS_autoptr_is_std 0  // mem::auto_ptr != std::auto_ptr
     #else
         #define CODA_OSS_autoptr_is_std 1  // mem::auto_ptr == std::auto_ptr
