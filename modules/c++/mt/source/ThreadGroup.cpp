@@ -71,7 +71,7 @@ void ThreadGroup::createThread(std::unique_ptr<sys::Runnable>&& runnable)
     mThreads.push_back(thread);
     thread->start();
 }
-#if !CODA_OSS_cpp17
+#if CODA_OSS_autoptr_is_std
 void ThreadGroup::createThread(mem::auto_ptr<sys::Runnable> runnable)
 {
     createThread(std::unique_ptr<sys::Runnable>(runnable.release()));
@@ -141,7 +141,7 @@ ThreadGroup::ThreadGroupRunnable::ThreadGroupRunnable(
         mCPUInit(std::move(threadInit))
 {
 }
-#if !CODA_OSS_cpp17
+#if CODA_OSS_autoptr_is_std
 ThreadGroup::ThreadGroupRunnable::ThreadGroupRunnable(
         mem::auto_ptr<sys::Runnable> runnable,
         ThreadGroup& parentThreadGroup,
