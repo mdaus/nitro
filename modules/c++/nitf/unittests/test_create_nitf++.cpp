@@ -124,8 +124,8 @@ namespace test_create_nitf_with_byte_provider
 
         }
 
-        const auto iRep = nitf::IREP::MONO;
-        header.setPixelInformation(nitf::PixelType::INT,     /* Pixel value type */
+        const auto iRep = nitf::ImageRepresentation::MONO;
+        header.setPixelInformation(nitf::PixelType::Integer,     /* Pixel value type */
             8,         /* Number of bits/pixel */
             8,         /* Actual number of bits/pixel */
             "R",       /* Pixel justification */

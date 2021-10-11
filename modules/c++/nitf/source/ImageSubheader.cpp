@@ -112,7 +112,7 @@ void ImageSubheader::setPixelInformation(PixelType pvtype,
                          uint32_t nbpp,
                          uint32_t abpp,
                          std::string justification,
-                         IREP irep, std::string icat,
+                         ImageRepresentation irep, std::string icat,
                          std::vector<nitf::BandInfo>& bands)
 {
     setPixelInformation(to_string(pvtype), nbpp, abpp, justification, to_string(irep), icat, bands);
