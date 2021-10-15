@@ -52,9 +52,9 @@ public:
     virtual ~Handle()  noexcept(false);
 
     Handle(const Handle&) = delete;
-    Handle(Handle&&) = default;
     Handle& operator=(const Handle&) = delete;
-    Handle& operator=(Handle&&) = default;
+    Handle(Handle&&);
+    Handle& operator=(Handle&&);
 
     //! Get the ref count
     int getRef() const noexcept;

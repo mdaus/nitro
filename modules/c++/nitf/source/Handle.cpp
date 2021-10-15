@@ -65,6 +65,9 @@ nitf::Handle::Handle() noexcept(false) : mPimpl(std::make_unique<Impl>())
 {
 }
 nitf::Handle::~Handle() noexcept(false) {}
+nitf::Handle::Handle(Handle&&) = default;
+nitf::Handle& nitf::Handle::operator=(Handle&&) = default;
+
 
 int nitf::Handle::getRef() const noexcept
 {
