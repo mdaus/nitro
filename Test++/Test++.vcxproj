@@ -68,6 +68,9 @@
     <ProjectReference Include="..\modules\c\nitf\CSCRNA.vcxproj">
       <Project>{023de06d-3967-4406-b1b8-032118bb2552}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\modules\c\nitf\ENGRDA.vcxproj">
+      <Project>{53f9f908-c678-4dee-9309-e71c1e03a45f}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\modules\c\nitf\JITCID.vcxproj">
       <Project>{d1d7fcd3-6130-4504-9da0-9d80506be55e}</Project>
     </ProjectReference>
