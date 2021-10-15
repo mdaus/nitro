@@ -53,8 +53,8 @@ public:
 
     Handle(const Handle&) = delete;
     Handle& operator=(const Handle&) = delete;
-    Handle(Handle&&);
-    Handle& operator=(Handle&&);
+    Handle(Handle&&) noexcept;
+    Handle& operator=(Handle&&) noexcept;
 
     //! Get the ref count
     int getRef() const noexcept;
