@@ -6,7 +6,7 @@
 // for _MSC_VER, see below.
 #if !defined(NITRO_NITFCPP_LIB) && !defined(NITRO_NITFCPP_DLL)
     // Building a static library (not a DLL) is the default.
-    #define NITRO_NITFCPP_LIB 1
+    //#define NITRO_NITFCPP_LIB 1
 #endif
 #if !defined(NITRO_NITFCPP_DLL)
     #if defined(NITRO_NITFCPP_EXPORTS) && defined(NITRO_NITFCPP_LIB)
