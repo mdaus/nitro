@@ -37,9 +37,17 @@
 #include <array>
 #include <memory>
 
+#include <config/compiler_extensions.h>
+
 #include <import/nitf.hpp>
 #include <nitf/CompressedByteProvider.hpp>
+
+CODA_OSS_disable_warning_push
+#if _MSC_VER
+#pragma warning(disable: 4464) // relative include path contains '..'
+#endif
 #include <nitf/../../unittests/nitro_image_.c_>
+CODA_OSS_disable_warning_pop
 
 #include "TestCase.h"
 
