@@ -33,7 +33,7 @@ static_assert(CODA_OSS_sys_Char8_T >= 201907L, "missing sys::Char8_T");
 
 #if defined(__cpp_char8_t) && (__cpp_char8_t >= 201811L) // https://en.cppreference.com/w/cpp/feature_test
     #undef CODA_OSS_NO_std_u8string
-    #define CODA_OSS_NO_std_u8string 0  // already have it
+    #define CODA_OSS_NO_std_u8string 1  // don't need our own
 #endif
 
 #ifndef CODA_OSS_NO_std_u8string
