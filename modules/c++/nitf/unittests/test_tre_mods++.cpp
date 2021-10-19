@@ -67,7 +67,7 @@ namespace nitf
 {
     namespace TREs
     {
-        class ENGRDA final
+        class NITRO_NITFCPP_API ENGRDA final
         {
             nitf::TRE tre_;
 
