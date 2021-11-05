@@ -26,7 +26,7 @@
 
 #include "nitf/System.hpp"
 
-nitf::SegmentMemorySource::SegmentMemorySource(const sys::byte* data, nitf::Off size,
+nitf::SegmentMemorySource::SegmentMemorySource(const nitf::byte* data, nitf::Off size,
         nitf::Off start, int byteSkip, bool copyData)
 {
     setNative(nitf_SegmentMemorySource_construct(data, size, start, byteSkip,
@@ -41,16 +41,16 @@ SegmentMemorySource::SegmentMemorySource(const std::string& data,
     : SegmentMemorySource(data.c_str(), gsl::narrow<nitf::Off>(data.size()), start, byteSkip, copyData)
 {
 }
-SegmentMemorySource::SegmentMemorySource(const std::span<const sys::byte>& data, nitf::Off start,
+SegmentMemorySource::SegmentMemorySource(const std::span<const nitf::byte>& data, nitf::Off start,
     int byteSkip, bool copyData)
     : SegmentMemorySource(data.data(), gsl::narrow<nitf::Off>(data.size()), start, byteSkip, copyData)
 {
 }
 
-static const sys::byte* data(const std::span<const std::byte>& data) noexcept
+static const nitf::byte* data(const std::span<const std::byte>& data) noexcept
 {
     const void* pData = data.data();
-    return static_cast<const sys::byte*>(pData);
+    return static_cast<const nitf::byte*>(pData);
 }
 SegmentMemorySource::SegmentMemorySource(const std::span<const std::byte>& s, nitf::Off start,
     int byteSkip, bool copyData)
@@ -68,11 +68,11 @@ SegmentMemorySource::SegmentMemorySource(const std::vector<std::byte>& data,
 {
 }
 
-static std::span<const sys::byte> make_span(const std::vector<sys::byte>& data) noexcept
+static std::span<const nitf::byte> make_span(const std::vector<nitf::byte>& data) noexcept
 {
-  return std::span<const sys::byte>(data.data(), data.size());
+  return std::span<const nitf::byte>(data.data(), data.size());
 }
-SegmentMemorySource::SegmentMemorySource(const std::vector<sys::byte>& data,
+SegmentMemorySource::SegmentMemorySource(const std::vector<nitf::byte>& data,
     nitf::Off start, int byteSkip, bool copyData)
     : SegmentMemorySource(make_span(data), start, byteSkip, copyData)
 {
