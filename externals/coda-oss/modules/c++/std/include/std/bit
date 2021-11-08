@@ -28,34 +28,24 @@
 static_assert(CODA_OSS_sys_Endian >= 201907L, "missing sys::Endian");
 
 #include "sys/CPlusPlus.h"
-#if CODA_OSS_cpp20
-    #define CODA_OSS_std_bit_include_bit 1   
-#elif defined(__has_include) && __has_include(<bit>)
-   #define CODA_OSS_std_bit_include_bit 1
-#else
-    #define CODA_OSS_std_bit_include_bit 0 // "#include <bit>" will fail
-    #ifndef CODA_OSS_AUGMENT_std_endian // might have disabled off via command-line
-        #define CODA_OSS_AUGMENT_std_endian 1
+#if CODA_OSS_cpp17
+    // Some C++17 implementations have <bit>
+    #if __has_include(<bit>) // __has_include is C++17
+        #include <bit>
+        #undef CODA_OSS_NO_std_endian
+        #define CODA_OSS_NO_std_endian 1  // don't need our own
     #endif
 #endif
 
-#if CODA_OSS_std_bit_include_bit == 1
-    #include <bit>
-    #ifndef __cpp_lib_endian
-        #define __cpp_lib_endian 201907L  // https://en.cppreference.com/w/cpp/utility/feature_test
-    #endif
-#elif CODA_OSS_AUGMENT_std_endian == 1
+#ifndef CODA_OSS_NO_std_endian
+    #define CODA_OSS_NO_std_endian 0  // enabled, unless explicitly disabled
+#endif
+
+#if !CODA_OSS_NO_std_endian
     namespace std // This is slightly uncouth: we're not supposed to augment "std".
     {
         using endian = ::sys::Endian;
     }
-    #define CODA_OSS_lib_endian CODA_OSS_sys_Endian
-    #ifndef __cpp_lib_endian
-        #define __cpp_lib_endian 201907L  // https://en.cppreference.com/w/cpp/utility/feature_test
-    #endif
-#endif  // CODA_OSS_AUGMENT_std_endian
-
-// The real one or our substitute?
-#define CODA_OSS__cpp_lib_endian (defined(__cpp_lib_endian) && (__cpp_lib_endian >= 201907L)) && !defined(CODA_OSS_lib_endian)
+#endif  // CODA_OSS_NO_std_endian
 
 #endif  // CODA_OSS_std_bit_INCLUDED_
