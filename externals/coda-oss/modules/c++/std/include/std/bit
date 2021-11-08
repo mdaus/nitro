@@ -32,6 +32,8 @@ static_assert(CODA_OSS_sys_Endian >= 201907L, "missing sys::Endian");
     // Some C++17 implementations have <bit>
     #if __has_include(<bit>) // __has_include is C++17
         #include <bit>
+   #endif
+    #if defined(__cpp_lib_endian) && (__cpp_lib_endian >= 201907) // https://en.cppreference.com/w/User:D41D8CD98F/feature_testing_macros
         #undef CODA_OSS_NO_std_endian
         #define CODA_OSS_NO_std_endian 1  // don't need our own
     #endif
@@ -39,13 +41,13 @@ static_assert(CODA_OSS_sys_Endian >= 201907L, "missing sys::Endian");
 
 #ifndef CODA_OSS_NO_std_endian
     #define CODA_OSS_NO_std_endian 0  // enabled, unless explicitly disabled
-#endif
+#endif    
 
 #if !CODA_OSS_NO_std_endian
-    namespace std // This is slightly uncouth: we're not supposed to augment "std".
-    {
-        using endian = ::sys::Endian;
-    }
-#endif  // CODA_OSS_NO_std_endian
+namespace std  // This is slightly uncouth: we're not supposed to augment "std".
+{
+using endian = ::sys::Endian;
+}
+#endif // !CODA_OSS_NO_std_endian
 
 #endif  // CODA_OSS_std_bit_INCLUDED_
