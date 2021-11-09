@@ -116,7 +116,7 @@ TestState* constructTestSubheader(TestSpec* spec)
     assert(imageIO);
 
     nitf_IOInterface *io = nitf_BufferAdapter_construct(
-            spec->pixels, spec->imageSize, 0, &error);
+            (char*) spec->pixels, spec->imageSize, 0, &error);
     assert(io);
 
     nitf_SubWindow *subwindow = nitf_SubWindow_construct(&error);
