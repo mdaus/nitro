@@ -28,7 +28,7 @@ typedef struct TestSpec
     // Image spec
     const char* imageMode;
     uint32_t bitsPerPixel;
-    char* pixels;
+    const char* pixels;
     uint64_t imageSize;
     uint32_t numBands;
 
@@ -249,7 +249,7 @@ static NITF_BOOL doReadTest(TestSpec* spec, TestState* test)
     return result;
 }
 
-static NITF_BOOL roundTripTest(TestSpec* spec, TestState* test, char* pixels)
+static NITF_BOOL roundTripTest(TestSpec* spec, TestState* test, const char* pixels)
 {
     NITF_BOOL result = NITF_SUCCESS;
     nitf_Error error;
