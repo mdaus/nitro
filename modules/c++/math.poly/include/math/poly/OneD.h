@@ -213,26 +213,10 @@ public:
     OneD<_T>operator /(double cv) const;
 
     OneD<_T> power(size_t toThe) const;
-
-    template<typename Vector_T> bool operator==(const Vector_T& p) const
+    
+    template<typename Vector_T> bool equals_(const Vector_T& p) const
     {
         return equalImpl(p);
-    }
-
-    template<typename Vector_T> bool operator!=(const Vector_T& p) const
-    {
-        return !(*this == p);
-    }
-
-    // Explicit overload to make SWIG wrap it
-    bool operator==(const OneD<_T>& p)
-    {
-        return equalImpl(p);
-    }
-
-    bool operator!=(const OneD<_T>& p)
-    {
-        return !(*this == p);
     }
 
     /*!
@@ -244,6 +228,39 @@ public:
         ar & mCoef;
     }
 };
+
+template <typename T, typename Vector_T>
+inline bool operator==(const OneD<T>& lhs, const Vector_T& rhs)
+{
+    return lhs.equals_(rhs);
+}
+template <typename T, typename Vector_T>
+inline bool operator!=(const OneD<T>& lhs, const Vector_T& rhs)
+{
+    return !(lhs == rhs);
+}
+template <typename Vector_T, typename T>
+inline bool operator==(const Vector_T& lhs, const OneD<T>& rhs)
+{
+    return rhs == lhs;
+}
+template <typename Vector_T, typename T>
+inline bool operator!=(const Vector_T& lhs, const OneD<T>& rhs)
+{
+    return !(lhs == rhs);
+}
+
+// Explicit overload to make SWIG wrap it
+template <typename T>
+inline bool operator==(const OneD<T>& lhs, const OneD<T>& rhs)
+{
+    return lhs.equals_(rhs);
+}
+template <typename T>
+inline bool operator!=(const OneD<T>& lhs, const OneD<T>& rhs)
+{
+    return !(lhs == rhs);
+}
 
 
 } // poly
