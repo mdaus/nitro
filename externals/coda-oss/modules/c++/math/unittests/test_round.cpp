@@ -160,20 +160,20 @@ TEST_CASE(testRoundDigits)
 
 TEST_CASE(testCeilingDivide)
 {
-    int n0 = 0;
-    int d0 = 1;
-    TEST_ASSERT_EQ(math::ceilingDivide(n0, d0), 0);
+    size_t n0 = 0;
+    size_t d0 = 1;
+    TEST_ASSERT_EQ(math::ceilingDivide(n0, d0), static_cast<size_t>(0));
 
-    int n1 = 4;
-    int d1 = 2;
-    TEST_ASSERT_EQ(math::ceilingDivide(n1, d1), 2);
+    size_t n1 = 4;
+    size_t d1 = 2;
+    TEST_ASSERT_EQ(math::ceilingDivide(n1, d1), static_cast<size_t>(2));
 
-    int n2 = 5;
-    int d2 = 2;
-    TEST_ASSERT_EQ(math::ceilingDivide(n2, d2), 3);
+    size_t n2 = 5;
+    size_t d2 = 2;
+    TEST_ASSERT_EQ(math::ceilingDivide(n2, d2), static_cast<size_t>(3));
 
-    int n3 = 1;
-    int d3 = 0;
+    size_t n3 = 1;
+    size_t d3 = 0;
     TEST_THROWS(math::ceilingDivide(n3, d3));
 }
 }
