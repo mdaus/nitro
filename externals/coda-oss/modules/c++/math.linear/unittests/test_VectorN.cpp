@@ -99,7 +99,7 @@ TEST_CASE(testStdVectorConstructor)
     stdvec.push_back(12);
 
     VectorN<3,double> v(stdvec);
-    TEST_ASSERT_EQ(v.size(), static_cast<size_t>(3);
+    TEST_ASSERT_EQ(v.size(), static_cast<size_t>(3));
     TEST_ASSERT_EQ(v[0], stdvec[0]);
     TEST_ASSERT_EQ(v[1], stdvec[1]);
     TEST_ASSERT_EQ(v[2], stdvec[2]);
@@ -121,7 +121,7 @@ TEST_CASE(testAssignmentOperator)
     vsrc[1] = 99;
     VectorN<2,double> v;
     v = vsrc;
-    TEST_ASSERT_EQ(v.size(), static_cast<size_t>(2);
+    TEST_ASSERT_EQ(v.size(), static_cast<size_t>(2));
     TEST_ASSERT_EQ(v[0], 42);
     TEST_ASSERT_EQ(v[1], 99);
 }
