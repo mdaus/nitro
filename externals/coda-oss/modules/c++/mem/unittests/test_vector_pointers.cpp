@@ -37,7 +37,7 @@ TEST_CASE(testVecOfRawPointers)
     myVec.push_back(new int(4));
     myVec.push_back(new int(5));
 
-    TEST_ASSERT_EQ(myVec.size(), 5);
+    TEST_ASSERT_EQ(myVec.size(), static_cast<size_t>(5));
 
     myVec.erase(myVec.begin() + 2);
 
