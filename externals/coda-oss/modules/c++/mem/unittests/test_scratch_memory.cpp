@@ -592,12 +592,12 @@ TEST_CASE(testScratchMemory)
         TEST_EXCEPTION(scratch.get<sys::ubyte>("buf2", 3));
 
         // verify alignment
-        TEST_ASSERT_EQ(reinterpret_cast<size_t>(pBuf0) % 13, 0);
-        TEST_ASSERT_EQ(reinterpret_cast<size_t>(pBuf1) % 23, 0);
-        TEST_ASSERT_EQ(reinterpret_cast<size_t>(pBuf2_0) % 31, 0);
-        TEST_ASSERT_EQ(reinterpret_cast<size_t>(pBuf2_1) % 31, 0);
-        TEST_ASSERT_EQ(reinterpret_cast<size_t>(pBuf2_2) % 31, 0);
-        TEST_ASSERT_EQ(reinterpret_cast<size_t>(pBuf3) % sys::SSE_INSTRUCTION_ALIGNMENT, 0);
+        TEST_ASSERT_EQ(reinterpret_cast<size_t>(pBuf0) % 13, static_cast<size_t>(0));
+        TEST_ASSERT_EQ(reinterpret_cast<size_t>(pBuf1) % 23, static_cast<size_t>(0));
+        TEST_ASSERT_EQ(reinterpret_cast<size_t>(pBuf2_0) % 31, static_cast<size_t>(0));
+        TEST_ASSERT_EQ(reinterpret_cast<size_t>(pBuf2_1) % 31, static_cast<size_t>(0));
+        TEST_ASSERT_EQ(reinterpret_cast<size_t>(pBuf2_2) % 31, static_cast<size_t>(0));
+        TEST_ASSERT_EQ(reinterpret_cast<size_t>(pBuf3) % sys::SSE_INSTRUCTION_ALIGNMENT, static_cast<size_t>(0));
 
         // verify no overlap between buffers
         TEST_ASSERT_TRUE(pBuf1 - pBuf0 >= static_cast<ptrdiff_t>(11));
