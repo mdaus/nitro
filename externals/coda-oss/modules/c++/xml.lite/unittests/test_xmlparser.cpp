@@ -114,7 +114,7 @@ TEST_CASE(testXmlUtf8Legacy)
     #ifdef _WIN32
     TEST_ASSERT_EQ(actual, iso88591Text);
     #else
-    TEST_ASSERT_EQ(actual.length(), 4);
+    TEST_ASSERT_EQ(actual.length(), static_cast<size_t>(4));
     #endif
 
     const auto encoding = a.getEncoding();
