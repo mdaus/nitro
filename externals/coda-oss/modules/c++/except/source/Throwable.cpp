@@ -83,3 +83,70 @@ except::Throwable::Throwable(except::Context c) : Throwable(&c)
 except::Throwable::Throwable(const except::Throwable& t, except::Context c) : Throwable(&c, &t)
 {
 }
+
+//******************************************************************************
+
+void except::Throwable11::doGetBacktrace()
+{
+    // This could be time-consuming or generate a lot of (noisy) output; only do
+    // it if requested
+    bool supported;
+    (void)except::getBacktrace(supported, mBacktrace);
+}
+
+except::Throwable11::Throwable11(const Context* pContext,
+                                 const Throwable11* pThrowable,
+                                 const std::string* pMessage,
+                                 bool callGetBacktrace)
+{
+    if (pThrowable != nullptr)
+    {
+        // Copy t's exception stack and push c onto local one
+        mTrace = pThrowable->getTrace();
+    }
+
+    if (pContext != nullptr)
+    {
+        assert(pMessage == nullptr);
+
+        // Push context onto exception stack
+        mTrace.pushContext(*pContext);
+
+        // Assign c's message as our internal one
+        mMessage = pContext->getMessage();
+    }
+
+    if (pMessage != nullptr)
+    {
+        assert(pContext == nullptr);
+        mMessage = *pMessage;
+    }
+
+    // This will record a back-trace from where the Throwable object was
+    // instantiated. That's not necessarily where the "throw" will occur, but
+    // it's often the case; Throwable instances ususally aren't passed around.
+    // That is, hardly anybody does:
+    //    Exception e; // Throwable instance
+    //    might_throw(e);
+    // rather, the idiom is usually
+    //    throw Exception(...); // instantiate and throw
+    if (callGetBacktrace)
+    {
+        doGetBacktrace();
+    }
+}
+
+except::Throwable11::Throwable11(const std::string& message) :
+    Throwable11(nullptr, nullptr, &message)
+{
+}
+
+except::Throwable11::Throwable11(except::Context c) : Throwable11(&c)
+{
+}
+
+except::Throwable11::Throwable11(const except::Throwable11& t,
+                                 except::Context c) :
+    Throwable11(&c, &t)
+{
+}
