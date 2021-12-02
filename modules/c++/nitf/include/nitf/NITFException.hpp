@@ -123,6 +123,14 @@ public:
     NITFException(const except::Context& c) : except::Exception11(c){}
 
     /*!
+     *  Construct from Throwable and Context
+     *  \param t  The Throwable
+     *  \param c  The Context
+     */
+    NITFException(const except::Throwable& t, const except::Context& c) :
+        except::Exception11(t, c) {}
+
+    /*!
      *  Construct from an error message
      *  \param message  The error message
      */
