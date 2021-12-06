@@ -37,19 +37,20 @@
 /*!
  * Useful macro for defining Exception classes
  */
-#define DECLARE_EXTENDED_ERROR_(_Name, Error_, _Base, Throwable_, getType_specifiers) \
+#define DECLARE_EXTENDED_ERROR_(_Name, Error_, _Base, getType_specifiers) \
   struct _Name##Error_ : public _Base \
   { \
       _Name##Error_() = default; virtual ~_Name##Error_() = default; \
       _Name##Error_(const except::Context& c) : _Base(c){} \
       _Name##Error_(const std::string& msg) : _Base(msg){} \
-      _Name##Error_(const Throwable_& t, const except::Context& c) : _Base(t, c){} \
+      _Name##Error_(const except::Throwable& t, const except::Context& c) : _Base(t, c){} \
+      _Name##Error_(const except::Throwable11& t, const except::Context& c) : _Base(t, c){} \
       std::string getType() getType_specifiers { return #_Name; } \
   };
 #define DECLARE_EXTENDED_ERROR(_Name, _Base) \
-    DECLARE_EXTENDED_ERROR_(_Name, Error, _Base, except::Throwable, const override)
+    DECLARE_EXTENDED_ERROR_(_Name, Error, _Base, const override)
 #define DECLARE_EXTENDED_ERROR11(_Name, _Base) \
-    DECLARE_EXTENDED_ERROR_(_Name, Error11, _Base, except::Throwable11,  const noexcept override)
+    DECLARE_EXTENDED_ERROR_(_Name, Error11, _Base,  const noexcept override)
 
 #define DECLARE_ERROR(_Name) \
     DECLARE_EXTENDED_ERROR(_Name, except::Error); \
@@ -98,6 +99,9 @@ struct Error : public Throwable
         Throwable(t, c)
     {
     }
+    Error(const Throwable11& t, const Context& c) : Throwable(t, c)
+    {
+    }
 
     std::string getType() const override 
     {
@@ -132,6 +136,9 @@ struct Error11 : public Throwable11
      * \param c The Context
      */
     Error11(const Throwable11& t, const Context& c) : Throwable11(t, c)
+    {
+    }
+    Error11(const Throwable& t, const Context& c) : Throwable11(t, c)
     {
     }
 
