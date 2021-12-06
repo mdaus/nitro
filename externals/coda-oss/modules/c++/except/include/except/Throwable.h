@@ -29,6 +29,7 @@
 #include <sstream>
 #include <exception>
 #include <numeric> // std::accumulate
+#include <memory>
 
 #include "except/Trace.h"
 
@@ -49,10 +50,14 @@ namespace except
  * This class provides the base interface for exceptions and errors.
  */
 
+class Throwable11;
 class Throwable
 {
     void doGetBacktrace();
+    template<typename TThrowable>
+    Throwable(const Context*, const TThrowable* pT, const std::string* pMessage, bool callGetBacktrace, std::nullptr_t);
     Throwable(const Context*, const Throwable* pT = nullptr, const std::string* pMessage = nullptr, bool callGetBacktrace = false);
+    Throwable(const Context*, const Throwable11* pT, const std::string* pMessage = nullptr, bool callGetBacktrace = false);
 
 public:
     Throwable() = default;
@@ -75,6 +80,7 @@ public:
      * \param c The Context
      */
     Throwable(const Throwable&, Context);
+    Throwable(const Throwable11&, Context);
 
     /*!
      * Destructor
@@ -189,8 +195,18 @@ private:
 class Throwable11 : public std::exception
 {
     void doGetBacktrace();
+    template <typename TThrowable>
+    Throwable11(const Context*,
+              const TThrowable* pT,
+              const std::string* pMessage,
+              bool callGetBacktrace,
+              std::nullptr_t);
     Throwable11(const Context*,
                 const Throwable11* pT = nullptr,
+                const std::string* pMessage = nullptr,
+                bool callGetBacktrace = false);
+    Throwable11(const Context*,
+                const Throwable* pT,
                 const std::string* pMessage = nullptr,
                 bool callGetBacktrace = false);
 
@@ -215,6 +231,7 @@ public:
      * \param c The Context
      */
     Throwable11(const Throwable11&, Context);
+    Throwable11(const Throwable&, Context);
 
     virtual ~Throwable11() = default;
 
@@ -293,7 +310,7 @@ public:
         return toString() + backtrace;
     }
 
-    const char* what() const noexcept final  // derived classes override toString()
+    const char* what() const noexcept override final  // derived classes override toString()
     {
         // adding this to toString() output could (significantly) alter existing display
         mWhat = toString(true /*includeBacktrace*/);  // call any derived toString()
