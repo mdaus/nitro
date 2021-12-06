@@ -65,7 +65,7 @@ public:
     Throwable& operator=(const Throwable&) = default;
     Throwable(Throwable&&) = default;
     Throwable& operator=(Throwable&&) = default;
-    
+
     Throwable(const Throwable11&);
 
     /*!
@@ -91,9 +91,7 @@ public:
     /*!
      * Destructor
      */
-    virtual ~Throwable()
-    {
-    }
+    virtual ~Throwable() = default;
 
     /*!
      * Get the message
@@ -218,6 +216,8 @@ class Throwable11 : public std::exception
 
 public:
     Throwable11() = default;
+    virtual ~Throwable11() = default;
+    Throwable11(const Throwable11&) = default;
     Throwable11& operator=(const Throwable11&) = default;
     Throwable11(Throwable11&&) = default;
     Throwable11& operator=(Throwable11&&) = default;
@@ -243,8 +243,6 @@ public:
      */
     Throwable11(const Throwable11&, const Context&);
     Throwable11(const Throwable&, const Context&);
-
-    virtual ~Throwable11() = default;
 
     /*!
      * Get the message

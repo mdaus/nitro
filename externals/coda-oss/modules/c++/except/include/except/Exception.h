@@ -51,7 +51,7 @@
     #endif
 #endif
 
-#define DECLARE_EXTENDED_EXCEPTION_(_Name, Exception_, _Base, Throwable_, getType_specifiers) \
+#define DECLARE_EXTENDED_EXCEPTION_(_Name, Exception_, _Base, getType_specifiers) \
   struct _Name##Exception_ : public _Base \
   { \
       _Name##Exception_() = default; virtual ~_Name##Exception_() = default; \
@@ -59,14 +59,15 @@
       _Name##Exception_(_Name##Exception_&&) = default;  _Name##Exception_& operator=(_Name##Exception_&&) = default; \
       _Name##Exception_(const except::Context& c) : _Base(c){} \
       _Name##Exception_(const std::string& msg) : _Base(msg){} \
-      _Name##Exception_(const Throwable_& t, const except::Context& c) : _Base(t, c){} \
+      _Name##Exception_(const except::Throwable& t, const except::Context& c) : _Base(t, c){} \
+      _Name##Exception_(const except::Throwable11& t, const except::Context& c) : _Base(t, c){} \
       CODA_OSS_except_Exception_suppress_26447_BEGIN_ \
       std::string getType() getType_specifiers { return #_Name #Exception_; } \
      CODA_OSS_except_Exception_suppress_26447_END_ };
 #define DECLARE_EXTENDED_EXCEPTION(_Name, _Base) \
-    DECLARE_EXTENDED_EXCEPTION_(_Name, Exception, _Base, except::Throwable, const override)
+    DECLARE_EXTENDED_EXCEPTION_(_Name, Exception, _Base, const override)
 #define DECLARE_EXTENDED_EXCEPTION11(_Name, _Base) \
-    DECLARE_EXTENDED_EXCEPTION_(_Name, Exception11, _Base, except::Throwable11, const noexcept override)
+    DECLARE_EXTENDED_EXCEPTION_(_Name, Exception11, _Base, const noexcept override)
 
 #define DECLARE_EXCEPTION(_Name) \
     DECLARE_EXTENDED_EXCEPTION(_Name, except::Exception) \
@@ -104,6 +105,9 @@ struct Exception : public Throwable
         Throwable(t, c)
     {
     }
+    Exception(const Throwable11& t, const Context& c) : Throwable(t, c)
+    {
+    }
 
     /*!
      * Constructor.  Takes a message
@@ -139,6 +143,9 @@ struct Exception11 : public Throwable11
      * \param c The Context
      */
     Exception11(const Throwable11& t, const Context& c) : Throwable11(t, c)
+    {
+    }
+    Exception11(const Throwable& t, const Context& c) : Throwable11(t, c)
     {
     }
 
