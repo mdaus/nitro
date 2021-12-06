@@ -61,6 +61,12 @@ class Throwable
 
 public:
     Throwable() = default;
+    Throwable(const Throwable&) = default;
+    Throwable& operator=(const Throwable&) = default;
+    Throwable(Throwable&&) = default;
+    Throwable& operator=(Throwable&&) = default;
+    
+    Throwable(const Throwable11&);
 
     /*!
      * Constructor.  Takes a message
@@ -212,6 +218,11 @@ class Throwable11 : public std::exception
 
 public:
     Throwable11() = default;
+    Throwable11& operator=(const Throwable11&) = default;
+    Throwable11(Throwable11&&) = default;
+    Throwable11& operator=(Throwable11&&) = default;
+
+    Throwable11(const Throwable&);
 
     /*!
      * Constructor.  Takes a message
@@ -223,15 +234,15 @@ public:
      * Constructor.  Takes a Context.
      * \param c The Context
      */
-    Throwable11(Context);
+    Throwable11(const Context&);
 
     /*!
      * Constructor. Takes a Throwable and a Context
      * \param t The throwable
      * \param c The Context
      */
-    Throwable11(const Throwable11&, Context);
-    Throwable11(const Throwable&, Context);
+    Throwable11(const Throwable11&, const Context&);
+    Throwable11(const Throwable&, const Context&);
 
     virtual ~Throwable11() = default;
 

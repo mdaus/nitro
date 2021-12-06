@@ -92,6 +92,12 @@ except::Throwable::Throwable(except::Context c) : Throwable(&c)
 except::Throwable::Throwable(const except::Throwable& t, except::Context c) : Throwable(&c, &t)
 {
 }
+except::Throwable::Throwable(const except::Throwable11& t, except::Context c) : Throwable(&c, &t)
+{
+}
+except::Throwable::Throwable(const except::Throwable11& t) : Throwable(nullptr, &t)
+{
+}
 
 //******************************************************************************
 
@@ -166,12 +172,21 @@ except::Throwable11::Throwable11(const std::string& message) :
 {
 }
 
-except::Throwable11::Throwable11(except::Context c) : Throwable11(&c)
+except::Throwable11::Throwable11(const except::Context& c) : Throwable11(&c)
 {
 }
 
 except::Throwable11::Throwable11(const except::Throwable11& t,
-                                 except::Context c) :
+                                 const except::Context& c) :
     Throwable11(&c, &t)
+{
+}
+except::Throwable11::Throwable11(const except::Throwable& t,
+                                 const except::Context& c) :
+    Throwable11(&c, &t)
+{
+}
+except::Throwable11::Throwable11(const except::Throwable& t) :
+    Throwable11(nullptr, &t)
 {
 }
