@@ -29,6 +29,7 @@
 #include <sstream>
 #include <exception>
 #include <numeric> // std::accumulate
+#include <memory>
 
 #include "except/Trace.h"
 
@@ -49,13 +50,23 @@ namespace except
  * This class provides the base interface for exceptions and errors.
  */
 
+class Throwable11;
 class Throwable
 {
     void doGetBacktrace();
+    template<typename TThrowable>
+    Throwable(const Context*, const TThrowable* pT, const std::string* pMessage, bool callGetBacktrace, std::nullptr_t);
     Throwable(const Context*, const Throwable* pT = nullptr, const std::string* pMessage = nullptr, bool callGetBacktrace = false);
+    Throwable(const Context*, const Throwable11* pT, const std::string* pMessage = nullptr, bool callGetBacktrace = false);
 
 public:
     Throwable() = default;
+    Throwable(const Throwable&) = default;
+    Throwable& operator=(const Throwable&) = default;
+    Throwable(Throwable&&) = default;
+    Throwable& operator=(Throwable&&) = default;
+    
+    Throwable(const Throwable11&);
 
     /*!
      * Constructor.  Takes a message
@@ -75,6 +86,7 @@ public:
      * \param c The Context
      */
     Throwable(const Throwable&, Context);
+    Throwable(const Throwable11&, Context);
 
     /*!
      * Destructor
@@ -189,13 +201,28 @@ private:
 class Throwable11 : public std::exception
 {
     void doGetBacktrace();
+    template <typename TThrowable>
+    Throwable11(const Context*,
+              const TThrowable* pT,
+              const std::string* pMessage,
+              bool callGetBacktrace,
+              std::nullptr_t);
     Throwable11(const Context*,
                 const Throwable11* pT = nullptr,
+                const std::string* pMessage = nullptr,
+                bool callGetBacktrace = false);
+    Throwable11(const Context*,
+                const Throwable* pT,
                 const std::string* pMessage = nullptr,
                 bool callGetBacktrace = false);
 
 public:
     Throwable11() = default;
+    Throwable11& operator=(const Throwable11&) = default;
+    Throwable11(Throwable11&&) = default;
+    Throwable11& operator=(Throwable11&&) = default;
+
+    Throwable11(const Throwable&);
 
     /*!
      * Constructor.  Takes a message
@@ -207,14 +234,15 @@ public:
      * Constructor.  Takes a Context.
      * \param c The Context
      */
-    Throwable11(Context);
+    Throwable11(const Context&);
 
     /*!
      * Constructor. Takes a Throwable and a Context
      * \param t The throwable
      * \param c The Context
      */
-    Throwable11(const Throwable11&, Context);
+    Throwable11(const Throwable11&, const Context&);
+    Throwable11(const Throwable&, const Context&);
 
     virtual ~Throwable11() = default;
 
