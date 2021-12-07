@@ -102,7 +102,7 @@ public:
     bool operator==(const ScopedCloneablePtr<T>& rhs) const
     {
         auto ptr = get();
-        auto rhs_ptr = get();
+        auto rhs_ptr = rhs.get();
         if (ptr == nullptr && rhs_ptr == nullptr)
         {
             return true;
