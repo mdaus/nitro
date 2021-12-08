@@ -36,9 +36,9 @@ struct Foo final
     Foo() = default;
     Foo(const Foo&) = delete;
     Foo& operator=(const Foo&) = delete;
-    Foo* clone() const
+    std::unique_ptr<Foo> clone() const
     {
-        return new Foo{val1, val2};
+        return std::unique_ptr<Foo>(new Foo{val1, val2});
     }
 };
 

@@ -58,14 +58,10 @@ class ScopedPtr
 {
     std::unique_ptr<T> mPtr;
 
-    template <typename U>
-    void duplicate(const T& from, U);
-    template<>
     void duplicate(const T& from, std::true_type)
     {
         reset(from.clone());    
     }
-    template<>
     void duplicate(const T& from, std::false_type)
     {
         reset(make::unique<T>(from));
