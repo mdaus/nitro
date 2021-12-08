@@ -3,6 +3,7 @@
  * =========================================================================
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2021, Maxar Technologies, Inc.
  *
  * sys-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -22,7 +23,7 @@
 
 #include <memory>
 
-#include <mem/ScopedCopyablePtr.h>
+#include <mem/ScopedCloneablePtr.h>
 
 #include "TestCase.h"
 
@@ -32,13 +33,18 @@ struct Foo final
 {
     int val1 = 0;
     int val2 = 0;
-    
-    Foo* clone() const = delete; // be sure there is no clone()
+    Foo() = default;
+    Foo(const Foo&) = delete;
+    Foo& operator=(const Foo&) = delete;
+    Foo* clone() const
+    {
+        return new Foo{val1, val2};
+    }
 };
 
 struct Bar final
 {
-    mem::ScopedCopyablePtr<Foo> foo;
+    mem::ScopedCloneablePtr<Foo> foo;
     int val3 = 0;
 };
 
@@ -99,7 +105,7 @@ TEST_CASE(testSharedCopyConstructor)
     b1.pFoo->val2 = 20;
     b1.val3 = 30;
 
-    // Show that memory is shared, not copied as with mem::ScopedCopyablePtr
+    // Show that memory is shared, not copied as with mem::ScopedCloneablePtr
     auto b2 = b1;
     b2.pFoo->val1 = 40;
     b2.pFoo->val2 = 50;
@@ -146,7 +152,7 @@ TEST_CASE(testSharedAssignmentOperator)
     Baz b2;
     b2 = b1;
 
-    // Show that memory is shared, not copied as with mem::ScopedCopyablePtr
+    // Show that memory is shared, not copied as with mem::ScopedCloneablePtr
     b2.pFoo->val1 = 40;
     b2.pFoo->val2 = 50;
     b2.val3 = 60;
@@ -157,12 +163,12 @@ TEST_CASE(testSharedAssignmentOperator)
 
 TEST_CASE(testDestructor)
 {
-    // When the ScopedCopyablePtr goes out of scope, it should delete the
+    // When the ScopedCloneablePtr goes out of scope, it should delete the
     // pointer which will cause the AssignOnDestruct destructor to assign
     // 'val'
     int val(0);
     {
-        const mem::ScopedCopyablePtr<AssignOnDestruct> ptr(
+        const mem::ScopedCloneablePtr<AssignOnDestruct> ptr(
             new AssignOnDestruct(val, 334));
         TEST_ASSERT_EQ(val, 0);
     }
@@ -173,7 +179,7 @@ TEST_CASE(testDestructor)
 TEST_CASE(testSyntax)
 {
     Foo* const rawPtr(new Foo());
-    const mem::ScopedCopyablePtr<Foo> ptr(rawPtr);
+    const mem::ScopedCloneablePtr<Foo> ptr(rawPtr);
 
     TEST_ASSERT_EQ(ptr.get(), rawPtr);
     TEST_ASSERT_EQ(&*ptr, rawPtr);
@@ -182,8 +188,8 @@ TEST_CASE(testSyntax)
 
 TEST_CASE(testEqualityOperator)
 {
-    mem::ScopedCopyablePtr<int> ptr1;
-    mem::ScopedCopyablePtr<int> ptr2;
+    mem::ScopedCloneablePtr<int> ptr1;
+    mem::ScopedCloneablePtr<int> ptr2;
 
     //Null smart pointers are equal
     TEST_ASSERT(ptr1 == ptr2);
