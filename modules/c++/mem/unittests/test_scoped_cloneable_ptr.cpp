@@ -21,7 +21,7 @@
  *
  */
 
-#include <memory>
+#include <std/memory>
 
 #include <mem/ScopedCloneablePtr.h>
 
@@ -31,14 +31,14 @@ namespace
 {
 struct Foo final
 {
-    int val1 = 0;
-    int val2 = 0;
-    Foo() = default;
+    int val1;
+    int val2;
+    Foo(int v1 = 0, int v2 = 0) : val1(v1), val2(v2) {};
     Foo(const Foo&) = delete;
     Foo& operator=(const Foo&) = delete;
     std::unique_ptr<Foo> clone() const
     {
-        return std::unique_ptr<Foo>(new Foo{val1, val2});
+      return std::make_unique<Foo>(val1, val2);
     }
 };
 
