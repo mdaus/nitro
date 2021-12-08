@@ -31,9 +31,10 @@ namespace
 {
 struct Foo final
 {
-    int val1;
-    int val2;
-    Foo(int v1 = 0, int v2 = 0) : val1(v1), val2(v2) {};
+    int val1 = 0;
+    int val2 = 0;
+    Foo() = default;
+    Foo(int v1, int v2) : val1(v1), val2(v2){};
     Foo(const Foo&) = delete;
     Foo& operator=(const Foo&) = delete;
     std::unique_ptr<Foo> clone() const
