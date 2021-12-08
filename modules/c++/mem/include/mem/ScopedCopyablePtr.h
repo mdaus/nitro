@@ -100,7 +100,7 @@ public:
     ScopedCopyablePtr(ScopedCopyablePtr&&) = default;
     ScopedCopyablePtr& operator=(ScopedCopyablePtr&&) = default;
 
-    bool operator==(const ScopedCopyablePtr<T>& rhs) const
+    bool operator==(const ScopedCopyablePtr<T>& rhs) const noexcept
     {
         auto ptr = get();
         auto rhs_ptr = rhs.get();
@@ -117,18 +117,18 @@ public:
         return *ptr == *rhs_ptr;
     }
 
-    bool operator!=(const ScopedCopyablePtr<T>& rhs) const
+    bool operator!=(const ScopedCopyablePtr<T>& rhs) const noexcept
     {
         return !(*this == rhs);
     }
 
     // explicit operators not supported until C++11
-    explicit operator bool() const
+    explicit operator bool() const noexcept
     {
         return get() == nullptr ? false : true;
     }
 
-    T* get() const
+    T* get() const noexcept
     {
         return mPtr.get();
     }
@@ -138,12 +138,12 @@ public:
         return *get();
     }
 
-    T* operator->() const
+    T* operator->() const noexcept
     {
         return get();
     }
 
-    void reset(T* ptr = nullptr)
+    void reset(T* ptr = nullptr) 
     {
         mPtr.reset(ptr);
     }

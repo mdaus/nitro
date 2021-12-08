@@ -99,7 +99,7 @@ public:
     ScopedCloneablePtr(ScopedCloneablePtr&&) = default;
     ScopedCloneablePtr& operator=(ScopedCloneablePtr&&) = default;
 
-    bool operator==(const ScopedCloneablePtr<T>& rhs) const
+    bool operator==(const ScopedCloneablePtr<T>& rhs) const noexcept
     {
         auto ptr = get();
         auto rhs_ptr = rhs.get();
@@ -116,12 +116,17 @@ public:
         return *ptr == *rhs_ptr;
     }
 
-    bool operator!=(const ScopedCloneablePtr<T>& rhs) const
+    bool operator!=(const ScopedCloneablePtr<T>& rhs) const noexcept
     {
         return !(*this == rhs);
     }
 
-    T* get() const
+    explicit operator bool() const noexcept
+    {
+        return get() == nullptr ? false : true;
+    }
+
+    T* get() const noexcept
     {
         return mPtr.get();
     }
@@ -131,7 +136,7 @@ public:
         return *get();
     }
 
-    T* operator->() const
+    T* operator->() const noexcept
     {
         return get();
     }
