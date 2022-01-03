@@ -28,14 +28,29 @@
 #include <import/mem.h>
 #include <sys/OS.h>
 
+constexpr auto PlatformEncoding = sys::Platform == sys::PlatformType::Windows
+        ? xml::lite::StringEncoding::Windows1252
+        : xml::lite::StringEncoding::Utf8;
+
 std::unique_ptr<xml::lite::Element> xml::lite::Element::create(const std::string& qname, const std::string& uri, const std::string& characterData)
 {
-    constexpr auto encoding = sys::Platform == sys::PlatformType::Windows ? StringEncoding::Windows1252 : StringEncoding::Utf8;
-    return mem::make::unique<Element>(qname, uri, characterData, encoding);
+    return mem::make::unique<Element>(qname, uri, characterData, PlatformEncoding);
 }
-std::unique_ptr<xml::lite::Element> xml::lite::Element::createU8(const std::string& qname, const std::string& uri, const std::string& characterData)
+std::unique_ptr<xml::lite::Element> xml::lite::Element::create(const std::string& qname, const Uri& uri, const std::string& characterData)
 {
-    return mem::make::unique<Element>(qname, uri,  str::to_u8string(characterData));
+    return create(qname, uri.value, characterData);
+}
+std::unique_ptr<xml::lite::Element> xml::lite::Element::create(const QName& qname, const std::string& characterData)
+{
+    return create(qname.getName(), qname.getUri(), characterData);
+}
+std::unique_ptr<xml::lite::Element> xml::lite::Element::create(const QName& qname, const sys::U8string& characterData)
+{
+    return mem::make::unique<Element>(qname.getName(), qname.getUri().value,  characterData);
+}
+std::unique_ptr<xml::lite::Element> xml::lite::Element::createU8(const QName& qname, const std::string& characterData)
+{
+    return create(qname,  str::to_u8string(characterData));
 }
 
 xml::lite::Element::Element(const xml::lite::Element& node)
@@ -74,8 +89,10 @@ void xml::lite::Element::clone(const xml::lite::Element& node)
     }
 }
 
-bool xml::lite::Element::hasElement(const std::string& uri, const std::string& localName) const
+bool xml::lite::Element::hasElement(const QName& qname) const
 {
+    const auto uri = qname.getUri().value;
+    const auto localName = qname.getName();
 
     for (unsigned int i = 0; i < mChildren.size(); i++)
     {
@@ -97,10 +114,11 @@ bool xml::lite::Element::hasElement(const std::string& localName) const
     return false;
 }
 
-void xml::lite::Element::getElementsByTagName(const std::string& uri, const std::string& localName,
-                                              std::vector<Element*>& elements,
-                                              bool recurse) const
+void xml::lite::Element::getElementsByTagName(const QName& n, std::vector<Element*>& elements, bool recurse) const
 {
+    const auto uri = n.getUri().value;
+    const auto localName = n.getName();
+
     for (unsigned int i = 0; i < mChildren.size(); i++)
     {
         if (mChildren[i]->getUri() == uri && mChildren[i]->getLocalName()
@@ -134,19 +152,17 @@ xml::lite::Element& getElement(TGetElements getElements, TMakeContext makeContex
     return *pElement;
 }
 
-xml::lite::Element* xml::lite::Element::getElementByTagName(std::nothrow_t,
-    const std::string& uri, const std::string& localName,
-    bool recurse) const
+xml::lite::Element* xml::lite::Element::getElementByTagName(std::nothrow_t, const QName& n, bool recurse) const
 {
-    auto getElements = [&]() { return getElementsByTagName(uri, localName, recurse); };
+    auto getElements = [&]() { return getElementsByTagName(n, recurse); };
     return std::get<0>(getElement(getElements));
 }
-xml::lite::Element& xml::lite::Element::getElementByTagName(
-    const std::string& uri, const std::string& localName,
-    bool recurse) const
+xml::lite::Element& xml::lite::Element::getElementByTagName(const QName& n, bool recurse) const
 {
-    auto getElements = [&]() { return getElementsByTagName(uri, localName, recurse); };
+    auto getElements = [&]() { return getElementsByTagName(n, recurse); };
     auto makeContext = [&](const std::string& sz) {
+        const auto uri = n.getUri().value;
+        const auto localName = n.getName();
        return Ctxt("Expected exactly one '" + localName + "' (uri=" + uri + "); but got " + sz); };
     return getElement(getElements, makeContext);
 }
@@ -259,11 +275,7 @@ static xml::lite::StringEncoding getEncoding_(const sys::Optional<xml::lite::Str
     }
 
     // don't know the encoding ... assume a default based on the platform
-    #ifdef _WIN32
-    return xml::lite::StringEncoding::Windows1252;
-    #else
-    return xml::lite::StringEncoding::Utf8;
-    #endif
+    return PlatformEncoding;
 }
 
 void xml::lite::Element::getCharacterData(sys::U8string& result) const
@@ -289,18 +301,17 @@ static void writeCharacterData(io::OutputStream& stream,
     const std::string& characterData, const sys::Optional<xml::lite::StringEncoding>& encoding_)
 {
     const auto encoding = getEncoding_(encoding_);
-
     if (encoding == xml::lite::StringEncoding::Windows1252)
     {
         // need to convert before writing
         const auto utf8 = str::fromWindows1252(characterData);
-        auto const pStr = str::c_str<std::string::const_pointer>(utf8);
-        stream.write(pStr);
+        stream.write(utf8);
     }
     else if (encoding == xml::lite::StringEncoding::Utf8)
     {
-        // already UTF-8
-        stream.write(characterData);    
+        // already in UTF-8, no converstion necessary
+        auto pUtf8 = str::c_str<sys::U8string::const_pointer>(characterData);
+        stream.write(pUtf8, characterData.length()); // call UTF-8 overload
     }
     else
     {
@@ -475,9 +486,10 @@ void xml::lite::Element::changeURI(Element* element,
 #endif
 
 void xml::lite::Element::setNamespacePrefix(
-    std::string prefix, std::string uri)
+    std::string prefix, const Uri& uri_)
 {
     str::trim(prefix);
+    auto uri = uri_.value;
     changePrefix(this, prefix, uri);
 
     // Add namespace definition
@@ -490,9 +502,10 @@ void xml::lite::Element::setNamespacePrefix(
 }
 
 void xml::lite::Element::setNamespaceURI(
-    std::string prefix, std::string uri)
+    std::string prefix,  const Uri& uri_)
 {
     str::trim(prefix);
+    auto uri = uri_.value;
     changeURI(this, prefix, uri);
 
     // Add namespace definition
@@ -531,8 +544,11 @@ void xml::lite::Element::setCharacterData(const sys::U8string& characters)
     setCharacterData(str::c_str<std::string::const_pointer>(characters), StringEncoding::Utf8);
 }
 
-xml::lite::Element& xml::lite::create(const std::string& name, const std::string& uri,
-                       const std::string& value, Element& parent)
+xml::lite::Element& xml::lite::add(const QName& qname,
+                                   const std::string& value,
+                                   Element& parent)
 {
-    return parent.addChild(Element::create(name, uri, value));
+    auto elem = Element::create(qname, value);
+    return parent.addChild(std::move(elem));
 }
+
