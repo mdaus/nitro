@@ -95,3 +95,10 @@ coda_add_tests(
         test_tre_mods++.cpp
         test_tre_create++.cpp
         test_tre_read.cpp)
+
+add_executable(show_nitf++ apps/show_nitf++.cpp)
+target_link_libraries(show_nitf++ PRIVATE nitf-c++)
+
+install(TARGETS show_nitf++
+        ${CODA_INSTALL_OPTION}
+        RUNTIME DESTINATION "${CODA_STD_PROJECT_BIN_DIR}")
