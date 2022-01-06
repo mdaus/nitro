@@ -312,6 +312,7 @@ void FileHeader::setExtendedSection(nitf::Extensions value)
     value.setManaged(true);
 }
 
+/*
 std::vector<nitf::Field> FileHeader::getFields() const
 {
     std::vector<nitf::Field> retval;
@@ -329,3 +330,4 @@ std::vector<nitf::Field> FileHeader::getFields() const
 
     return retval;
 }
+*/

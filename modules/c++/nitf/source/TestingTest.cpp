@@ -1,0 +1,114 @@
+/* =========================================================================
+ * This file is part of NITRO
+ * =========================================================================
+ *
+ * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ *
+ * NITRO is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, If not,
+ * see <http://www.gnu.org/licenses/>.
+ *
+ */
+
+#include <type_traits>
+
+#include "nitf/TestingTest.hpp"
+
+nitf::testing_Test1a::testing_Test1a(const testing_Test1a& x)
+{
+    *this = x;
+}
+
+nitf::testing_Test1a& nitf::testing_Test1a::operator=(const testing_Test1a& x)
+{
+    if (&x != this)
+        setNative(x.getNative());
+    return *this;
+}
+
+nitf::testing_Test1a::testing_Test1a(testing_Test1a::native_t* x)
+{
+    setNative(x);
+    getNativeOrThrow();
+}
+
+nitf::testing_Test1a::testing_Test1a() noexcept(false)  : testing_Test1a(nitf_testing_Test1a_construct(&error))
+{
+    setManaged(false);
+}
+
+#define getField_(name) nitf::Field(getNativeOrThrow()->name)
+//#define getField_(name) fromNativeOffset<Field>(*this, nitf_offsetof(name));
+
+std::vector<nitf::Field> nitf::testing_Test1a::getFields() const
+{
+    std::vector<nitf::Field> retval;
+
+    constexpr auto extent = std::extent<decltype(nitf_testing_Test1a_fields)>::value;
+    for (size_t i = 0; i < extent; i++)
+    {
+        const auto& desc = nitf_testing_Test1a_fields[i];
+        if (desc.type == NITF_FieldType_Field)
+        {
+            auto field = fromNativeOffset<Field>(*this, desc.offset);
+            retval.push_back(std::move(field));
+        }
+    }
+
+    return retval;
+}
+
+
+nitf::testing_Test1b::testing_Test1b(const testing_Test1b& x)
+{
+    *this = x;
+}
+
+nitf::testing_Test1b& nitf::testing_Test1b::operator=(const testing_Test1b& x)
+{
+    if (&x != this)
+        setNative(x.getNative());
+    return *this;
+}
+
+nitf::testing_Test1b::testing_Test1b(testing_Test1b::native_t* x)
+{
+    setNative(x);
+    getNativeOrThrow();
+}
+
+nitf::testing_Test1b::testing_Test1b() noexcept(false) : testing_Test1b(nitf_testing_Test1b_construct(&error))
+{
+    setManaged(false);
+}
+
+#define getField_(name) nitf::Field(getNativeOrThrow()->name)
+//#define getField_(name) fromNativeOffset<Field>(*this, nitf_offsetof(name));
+
+std::vector<nitf::Field> nitf::testing_Test1b::getFields() const
+{
+    std::vector<nitf::Field> retval;
+
+    constexpr auto extent = std::extent<decltype(nitf_testing_Test1b_fields)>::value;
+    for (size_t i = 0; i < extent; i++)
+    {
+        const auto& desc = nitf_testing_Test1b_fields[i];
+        if (desc.type == NITF_FieldType_Field)
+        {
+            auto field = fromNativeOffset<Field>(*this, desc.offset);
+            retval.push_back(std::move(field));
+        }
+    }
+
+    return retval;
+}

@@ -61,6 +61,7 @@ coda_add_module(
         source/SegmentWriter.cpp
         source/SubWindow.cpp
         source/TRE.cpp
+        source/TestingTest.cpp
         source/TextSegment.cpp
         source/TextSubheader.cpp
         source/Utils.cpp

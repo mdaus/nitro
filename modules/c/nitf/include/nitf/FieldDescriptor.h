@@ -279,22 +279,5 @@ typedef struct nitf_StructFieldDescriptor_
     NITF_expand_(NITF_StructFieldDescriptor_value_34_(name, __VA_ARGS__))
 #define NITF_DECLARE_struct_35(name, ...) NITF_DECLARE_struct_n(35, name, __VA_ARGS__)
 
-// ***********************************************************************************
-
-/*
-typedef struct _nitf_testing_Test1 { Field* f; };
-static const nitf_StructFieldDescriptor _nitf_testing_Test1_fields[] = { { NITF_FieldType_Field, "f", 0} };
-*/
-NITF_DECLARE_struct_1(testing_Test1, Field, f);
-
-NITF_DECLARE_struct_2(testing_Test2, Field, f1, Field, f2);
-
-NITF_DECLARE_struct_5(testing_Test5,
-    Field, field,
-    FileSecurity, fileSecurity,
-    ComponentInfo, componentInfo,
-    PComponentInfo, pComponentInfo,
-    Extensions, extensions);
-
 #endif // NITRO_nitf_FieldDescriptor_h_INCLUDED_
 

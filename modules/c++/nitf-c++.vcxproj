@@ -62,6 +62,7 @@
     <ClCompile Include="nitf\source\SegmentSource.cpp" />
     <ClCompile Include="nitf\source\SegmentWriter.cpp" />
     <ClCompile Include="nitf\source\SubWindow.cpp" />
+    <ClCompile Include="nitf\source\TestingTest.cpp" />
     <ClCompile Include="nitf\source\TextSegment.cpp" />
     <ClCompile Include="nitf\source\TextSubheader.cpp" />
     <ClCompile Include="nitf\source\TRE.cpp" />
@@ -135,6 +136,7 @@
     <ClInclude Include="nitf\include\nitf\SegmentWriter.hpp" />
     <ClInclude Include="nitf\include\nitf\SubWindow.hpp" />
     <ClInclude Include="nitf\include\nitf\System.hpp" />
+    <ClInclude Include="nitf\include\nitf\TestingTest.hpp" />
     <ClInclude Include="nitf\include\nitf\TextSegment.hpp" />
     <ClInclude Include="nitf\include\nitf\TextSubheader.hpp" />
     <ClInclude Include="nitf\include\nitf\TRE.hpp" />
