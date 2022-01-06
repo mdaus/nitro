@@ -86,7 +86,19 @@ void trim(std::string & s)
         s.erase(i + 1);
 }
 
-bool endsWith(const std::string & s, const std::string & match)
+// https://stackoverflow.com/questions/31959532/best-way-to-remove-white-spaces-from-stdstring
+std::string& strip(std::string& str)
+{
+    str.erase(std::remove_if(str.begin(), str.end(), ::isspace), str.end());
+    return str;
+}
+std::string strip(const std::string& str)
+{
+    auto retval = str;
+    return strip(retval);
+}
+
+bool ends_with(const std::string& s, const std::string& match) noexcept
 {
     const size_t mLen = match.length();
     const size_t sLen = s.length();
@@ -95,8 +107,12 @@ bool endsWith(const std::string & s, const std::string & match)
             return false;
     return sLen >= mLen;
 }
+bool endsWith(const std::string& s, const std::string& match)
+{
+    return ends_with(s, match);
+}
 
-bool startsWith(const std::string & s, const std::string & match)
+bool starts_with(const std::string& s, const std::string& match) noexcept
 {
     const size_t mLen = match.length();
     const size_t sLen = s.length();
@@ -105,11 +121,15 @@ bool startsWith(const std::string & s, const std::string & match)
             return false;
     return sLen >= mLen;
 }
+bool startsWith(const std::string& s, const std::string& match)
+{
+    return starts_with(s, match);
+}
 
 size_t replace(std::string& str,
-               const std::string& search,
-               const std::string& replace,
-               size_t start)
+        const std::string& search,
+        const std::string& replace,
+        size_t start)
 {
     size_t index = str.find(search, start);
 
@@ -145,7 +165,7 @@ bool contains(const std::string& str, const std::string& match)
     return str.find(match) != std::string::npos;
 }
 
-inline bool isTest(const std::string& s, int (*is)(int))
+static inline bool isTest(const std::string& s, int (*is)(int))
 {
     for (const auto& ch : s)
     {
@@ -161,7 +181,7 @@ bool isAlpha(const std::string& s)
 }
 
 template<typename Pred>
-inline bool isTest(const std::string& s, int (*is1)(int), Pred is2)
+static inline bool isTest(const std::string& s, int (*is1)(int), Pred is2)
 {
     for (const auto& ch : s)
     {

@@ -63,6 +63,11 @@ template <typename T> inline bool isNaN(T value) noexcept
     return std::isnan(value);
 }
 
+// https://man7.org/linux/man-pages/man3/sincos.3.html
+void SinCos(float angle, float& sin, float& cos) noexcept;
+void SinCos(double angle, double& sin, double& cos) noexcept;
+void SinCos(long double angle, long double& sin, long double& cos) noexcept;
+
 /*
  * Calculate the binomial coefficient
  * Be wary of the possibility of overflow from integer arithmetic.
