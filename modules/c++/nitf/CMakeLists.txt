@@ -27,6 +27,7 @@ coda_add_module(
         source/DownSampler.cpp
         source/Extensions.cpp
         source/Field.cpp
+        source/FieldDescriptor.cpp
         source/FieldWarning.cpp
         source/FileHeader.cpp
         source/FileSecurity.cpp

@@ -29,6 +29,7 @@
     <ClCompile Include="nitf\source\DownSampler.cpp" />
     <ClCompile Include="nitf\source\Extensions.cpp" />
     <ClCompile Include="nitf\source\Field.cpp" />
+    <ClCompile Include="nitf\source\FieldDescriptor.cpp" />
     <ClCompile Include="nitf\source\FieldWarning.cpp" />
     <ClCompile Include="nitf\source\FileHeader.cpp" />
     <ClCompile Include="nitf\source\FileSecurity.cpp" />

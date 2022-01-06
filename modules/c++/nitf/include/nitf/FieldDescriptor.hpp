@@ -26,6 +26,8 @@
 #pragma once
 
 #include <string>
+#include <vector>
+#include <std/span>
 
 #include "nitf/FieldDescriptor.h"
 
@@ -64,5 +66,14 @@ namespace nitf
             return pNative->offset;
         }
     };
+
+    extern std::vector<FieldDescriptor> getFieldDescriptors(std::span<const nitf_StructFieldDescriptor>);
+    template<size_t N>
+    inline std::vector<FieldDescriptor> getFieldDescriptors(const nitf_StructFieldDescriptor(&descriptors)[N])
+    {
+        // constexpr auto extent = std::extent<decltype(nitf_testing_Test1b_fields)>::value;
+        const std::span<const nitf_StructFieldDescriptor> s(descriptors, N);
+        return getFieldDescriptors(s);
+    }
 }
 #endif // NITRO_nitf_FieldDescriptor_hpp_INCLUDED_

@@ -22,6 +22,7 @@
 
 #include <nitf/Field.hpp>
 #include <nitf/TestingTest.hpp>
+#include <nitf/FieldDescriptor.hpp>
 #include "TestCase.h"
 
 namespace
@@ -108,6 +109,13 @@ TEST_CASE(testDescriptors)
     {
         const std::string value = field; // nitf::Field will implicitly cast
         TEST_ASSERT_EQ("1234", value);
+    }
+
+    const auto descriptors = test1a.getDescriptors();
+    TEST_ASSERT_EQ(1, descriptors.size());
+    for (const auto& descriptor : descriptors)
+    {
+        TEST_ASSERT_EQ("f1", descriptor.name());
     }
 }
 }

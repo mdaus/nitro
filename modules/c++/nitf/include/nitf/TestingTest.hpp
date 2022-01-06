@@ -31,6 +31,7 @@
 #include "nitf/System.hpp"
 #include "nitf/Field.hpp"
 #include "nitf/Object.hpp"
+#include "nitf/FieldDescriptor.hpp"
 
 namespace nitf
 {
@@ -57,6 +58,7 @@ namespace nitf
             void setF1(const std::string & v) { getF1().set(v); }
 
             std::vector<nitf::Field> getFields() const;
+            std::vector<FieldDescriptor> getDescriptors() const;
 
         private:
             mutable nitf_Error error{};

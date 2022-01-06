@@ -55,24 +55,24 @@ nitf::Field nitf::testing::Test1a::getF1() const
     return getField_(f1);
 }
 
+std::vector<nitf::FieldDescriptor> nitf::testing::Test1a::getDescriptors() const
+{
+    return getFieldDescriptors(nitf_testing_Test1a_fields);
+}
+
 std::vector<nitf::Field> nitf::testing::Test1a::getFields() const
 {
     std::vector<nitf::Field> retval;
 
-    constexpr auto extent = std::extent<decltype(nitf_testing_Test1a_fields)>::value;
-    for (size_t i = 0; i < extent; i++)
+    const auto descriptors = getDescriptors();
+    for (const auto& desc : descriptors)
     {
-        const auto& desc = nitf_testing_Test1a_fields[i];
-        if (desc.type == NITF_FieldType_Field)
-        {
-            auto field = fromNativeOffset<Field>(*this, desc.offset);
-            retval.push_back(std::move(field));
-        }
+        auto field = fromNativeOffset<Field>(*this, desc.offset());
+        retval.push_back(std::move(field));
     }
 
     return retval;
 }
-
 
 nitf::testing::Test1b::Test1b(const Test1b& x)
 {
