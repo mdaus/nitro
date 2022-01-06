@@ -25,6 +25,8 @@
 
 #define NITF_Testing_F_SZ   4
 #define NITF_Testing_F     f
+#define NITF_Testing_F1_SZ   4
+#define NITF_Testing_F1     f1
 
 #define _NITF_CONSTRUCT_FIELD(OWNER, ID, TYPE) \
     OWNER->ID = nitf_Field_construct(ID##_SZ, TYPE, error); \
@@ -39,10 +41,10 @@ NITFAPI(nitf_testing_Test1a*) nitf_testing_Test1a_construct(nitf_Error * error)
 
     /*  First, we initialize all of our sections to NULL */
     /*  This will prevent problems when we allocate them */
-    retval->f = NULL;
+    retval->f1 = NULL;
 
     /*  Zero out a known block of memory, by ID */
-    _NITF_CONSTRUCT_FIELD(retval, NITF_Testing_F, NITF_BCS_A);
+    _NITF_CONSTRUCT_FIELD(retval, NITF_Testing_F1, NITF_BCS_A);
 
     return retval;
 
@@ -63,7 +65,7 @@ NITFAPI(void) nitf_testing_Test1a_destruct(nitf_testing_Test1a** obj)
         return;
 
 //CATCH_ERROR:     /* need this for the above calls */
-    _NITF_DESTRUCT_FIELD(&(*obj), NITF_Testing_F);
+    _NITF_DESTRUCT_FIELD(&(*obj), NITF_Testing_F1);
 
     NITF_FREE(*obj);
     *obj = NULL;

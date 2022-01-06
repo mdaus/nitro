@@ -24,25 +24,25 @@
 
 #include "nitf/TestingTest.hpp"
 
-nitf::testing_Test1a::testing_Test1a(const testing_Test1a& x)
+nitf::testing::Test1a::Test1a(const Test1a& x)
 {
     *this = x;
 }
 
-nitf::testing_Test1a& nitf::testing_Test1a::operator=(const testing_Test1a& x)
+nitf::testing::Test1a& nitf::testing::Test1a::operator=(const Test1a& x)
 {
     if (&x != this)
         setNative(x.getNative());
     return *this;
 }
 
-nitf::testing_Test1a::testing_Test1a(testing_Test1a::native_t* x)
+nitf::testing::Test1a::Test1a(native_t* x)
 {
     setNative(x);
     getNativeOrThrow();
 }
 
-nitf::testing_Test1a::testing_Test1a() noexcept(false)  : testing_Test1a(nitf_testing_Test1a_construct(&error))
+nitf::testing::Test1a::Test1a() noexcept(false)  : Test1a(nitf_testing_Test1a_construct(&error))
 {
     setManaged(false);
 }
@@ -50,7 +50,12 @@ nitf::testing_Test1a::testing_Test1a() noexcept(false)  : testing_Test1a(nitf_te
 #define getField_(name) nitf::Field(getNativeOrThrow()->name)
 //#define getField_(name) fromNativeOffset<Field>(*this, nitf_offsetof(name));
 
-std::vector<nitf::Field> nitf::testing_Test1a::getFields() const
+nitf::Field nitf::testing::Test1a::getF1() const
+{
+    return getField_(f1);
+}
+
+std::vector<nitf::Field> nitf::testing::Test1a::getFields() const
 {
     std::vector<nitf::Field> retval;
 
@@ -69,25 +74,25 @@ std::vector<nitf::Field> nitf::testing_Test1a::getFields() const
 }
 
 
-nitf::testing_Test1b::testing_Test1b(const testing_Test1b& x)
+nitf::testing::Test1b::Test1b(const Test1b& x)
 {
     *this = x;
 }
 
-nitf::testing_Test1b& nitf::testing_Test1b::operator=(const testing_Test1b& x)
+nitf::testing::Test1b& nitf::testing::Test1b::operator=(const Test1b& x)
 {
     if (&x != this)
         setNative(x.getNative());
     return *this;
 }
 
-nitf::testing_Test1b::testing_Test1b(testing_Test1b::native_t* x)
+nitf::testing::Test1b::Test1b(native_t* x)
 {
     setNative(x);
     getNativeOrThrow();
 }
 
-nitf::testing_Test1b::testing_Test1b() noexcept(false) : testing_Test1b(nitf_testing_Test1b_construct(&error))
+nitf::testing::Test1b::Test1b() noexcept(false) : Test1b(nitf_testing_Test1b_construct(&error))
 {
     setManaged(false);
 }
@@ -95,7 +100,7 @@ nitf::testing_Test1b::testing_Test1b() noexcept(false) : testing_Test1b(nitf_tes
 #define getField_(name) nitf::Field(getNativeOrThrow()->name)
 //#define getField_(name) fromNativeOffset<Field>(*this, nitf_offsetof(name));
 
-std::vector<nitf::Field> nitf::testing_Test1b::getFields() const
+std::vector<nitf::Field> nitf::testing::Test1b::getFields() const
 {
     std::vector<nitf::Field> retval;
 

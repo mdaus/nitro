@@ -21,6 +21,7 @@
  */
 
 #include <nitf/Field.hpp>
+#include <nitf/TestingTest.hpp>
 #include "TestCase.h"
 
 namespace
@@ -96,10 +97,24 @@ TEST_CASE(testCastOperator)
     const std::string valStr = field;
     TEST_ASSERT_EQ(valStr, "ABCxyz              ");
 }
+TEST_CASE(testDescriptors)
+{
+    nitf::testing::Test1a test1a;
+    test1a.setF1("1234");
+
+    const auto fields = test1a.getFields();
+    TEST_ASSERT_EQ(1, fields.size());
+    for (const auto& field : fields)
+    {
+        const std::string value = field; // nitf::Field will implicitly cast
+        TEST_ASSERT_EQ("1234", value);
+    }
+}
 }
 
 TEST_MAIN(
     (void)argc;
     (void)argv;
     TEST_CHECK(testCastOperator);
-)
+    TEST_CHECK(testDescriptors);
+    )

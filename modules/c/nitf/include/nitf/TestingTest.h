@@ -35,10 +35,10 @@
 NITF_CXX_GUARD
 
 /*
- typedef struct _nitf_testing_Test1 { Field* f; } nitf_testing_Test1;
- static const nitf_StructFieldDescriptor _nitf_testing_Test1_fields[] = { { NITF_FieldType_Field, "f", 0} };
+ typedef struct _nitf_testing_Test1 { Field* f1; } nitf_testing_Test1;
+ static const nitf_StructFieldDescriptor _nitf_testing_Test1_fields[] = { { NITF_FieldType_Field, "f1", 0} };
  */
-NITF_DECLARE_struct_1(testing_Test1a, Field, f);
+NITF_DECLARE_struct_1(testing_Test1a, Field, f1);
 NITFAPI(nitf_testing_Test1a*) nitf_testing_Test1a_construct(nitf_Error* error);
 NITFAPI(void) nitf_testing_Test1a_destruct(nitf_testing_Test1a** fh);
 

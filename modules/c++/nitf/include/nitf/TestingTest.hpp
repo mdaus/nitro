@@ -34,44 +34,51 @@
 
 namespace nitf
 {
+    namespace testing
+    {
+        // wrap the test classes, ala FileHeader, etc.
+        DECLARE_CLASS_IN(Test1a, nitf_testing)
+        {
+        public:
+            Test1a() noexcept(false);
+            ~Test1a() = default;
+            Test1a(const Test1a & x);
+            Test1a& operator=(const Test1a & x);
 
-// wrap the test classes, ala FileHeader, etc.
+            //! Set native object
+            using native_t = nitf_testing_Test1a;
+            Test1a(native_t * x);
 
-DECLARE_CLASS(testing_Test1a)
-{
-public:
-    testing_Test1a() noexcept(false);
-    ~testing_Test1a() = default;
-    testing_Test1a(const testing_Test1a & x);
-    testing_Test1a& operator=(const testing_Test1a & x);
+            nitf::Field getF1() const;
+            std::string f1() const
+            {
+                return getF1(); // nitf::Field implicitly converts to std::string
+            }
+            void setF1(const std::string & v) { getF1().set(v); }
 
-    //! Set native object
-    using native_t = nitf_testing_Test1a;
-    testing_Test1a(native_t * x);
+            std::vector<nitf::Field> getFields() const;
 
-    std::vector<nitf::Field> getFields() const;
+        private:
+            mutable nitf_Error error{};
+        };
 
-private:
-    mutable nitf_Error error{};
-};
+        DECLARE_CLASS_IN(Test1b, nitf_testing)
+        {
+        public:
+            Test1b() noexcept(false);
+            ~Test1b() = default;
+            Test1b(const Test1b & x);
+            Test1b& operator=(const Test1b & x);
 
-DECLARE_CLASS(testing_Test1b)
-{
-public:
-    testing_Test1b() noexcept(false);
-    ~testing_Test1b() = default;
-    testing_Test1b(const testing_Test1b & x);
-    testing_Test1b& operator=(const testing_Test1b & x);
+            //! Set native object
+            using native_t = nitf_testing_Test1b;
+            Test1b(native_t * x);
 
-    //! Set native object
-    using native_t = nitf_testing_Test1b;
-    testing_Test1b(native_t * x);
+            std::vector<nitf::Field> getFields() const;
 
-    std::vector<nitf::Field> getFields() const;
-
-private:
-    mutable nitf_Error error{};
-};
-
+        private:
+            mutable nitf_Error error{};
+        };
+    }
 }
 #endif // NITRO_nitf_FieldDescriptor_hpp_INCLUDED_
