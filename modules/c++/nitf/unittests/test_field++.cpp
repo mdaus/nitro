@@ -103,19 +103,14 @@ TEST_CASE(testDescriptors)
     nitf::testing::Test1a test1a;
     test1a.setF1("1234");
 
-    const auto fields = test1a.getFields();
-    TEST_ASSERT_EQ(1, fields.size());
-    for (const auto& field : fields)
-    {
-        const std::string value = field; // nitf::Field will implicitly cast
-        TEST_ASSERT_EQ("1234", value);
-    }
-
     const auto descriptors = test1a.getDescriptors();
     TEST_ASSERT_EQ(1, descriptors.size());
     for (const auto& descriptor : descriptors)
     {
         TEST_ASSERT_EQ("f1", descriptor.name());
+        const auto field = descriptor.getField(test1a);
+        const std::string value = field; // nitf::Field will implicitly cast
+        TEST_ASSERT_EQ("1234", value);
     }
 }
 }

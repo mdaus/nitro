@@ -20,8 +20,6 @@
  *
  */
 
-#include <type_traits>
-
 #include "nitf/TestingTest.hpp"
 
 nitf::testing::Test1a::Test1a(const Test1a& x)
@@ -60,20 +58,6 @@ std::vector<nitf::FieldDescriptor> nitf::testing::Test1a::getDescriptors() const
     return getFieldDescriptors(nitf_testing_Test1a_fields);
 }
 
-std::vector<nitf::Field> nitf::testing::Test1a::getFields() const
-{
-    std::vector<nitf::Field> retval;
-
-    const auto descriptors = getDescriptors();
-    for (const auto& desc : descriptors)
-    {
-        auto field = fromNativeOffset<Field>(*this, desc.offset());
-        retval.push_back(std::move(field));
-    }
-
-    return retval;
-}
-
 nitf::testing::Test1b::Test1b(const Test1b& x)
 {
     *this = x;
@@ -97,23 +81,4 @@ nitf::testing::Test1b::Test1b() noexcept(false) : Test1b(nitf_testing_Test1b_con
     setManaged(false);
 }
 
-#define getField_(name) nitf::Field(getNativeOrThrow()->name)
-//#define getField_(name) fromNativeOffset<Field>(*this, nitf_offsetof(name));
 
-std::vector<nitf::Field> nitf::testing::Test1b::getFields() const
-{
-    std::vector<nitf::Field> retval;
-
-    constexpr auto extent = std::extent<decltype(nitf_testing_Test1b_fields)>::value;
-    for (size_t i = 0; i < extent; i++)
-    {
-        const auto& desc = nitf_testing_Test1b_fields[i];
-        if (desc.type == NITF_FieldType_Field)
-        {
-            auto field = fromNativeOffset<Field>(*this, desc.offset);
-            retval.push_back(std::move(field));
-        }
-    }
-
-    return retval;
-}

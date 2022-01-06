@@ -57,7 +57,6 @@ namespace nitf
             }
             void setF1(const std::string & v) { getF1().set(v); }
 
-            std::vector<nitf::Field> getFields() const;
             std::vector<FieldDescriptor> getDescriptors() const;
 
         private:
@@ -75,8 +74,6 @@ namespace nitf
             //! Set native object
             using native_t = nitf_testing_Test1b;
             Test1b(native_t * x);
-
-            std::vector<nitf::Field> getFields() const;
 
         private:
             mutable nitf_Error error{};

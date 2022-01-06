@@ -28,8 +28,11 @@
 #include <string>
 #include <vector>
 #include <std/span>
+#include <stdexcept>
 
 #include "nitf/FieldDescriptor.h"
+#include "nitf/Field.hpp"
+#include "nitf/Object.hpp"
 
 namespace nitf
 {
@@ -64,6 +67,16 @@ namespace nitf
         size_t offset() const noexcept
         {
             return pNative->offset;
+        }
+
+        template<typename TObject>
+        Field getField(TObject& object) const
+        {
+            if (type() != Type::Field)
+            {
+                throw std::logic_error("Descriptor '" + name() + "' is not a 'Field' type.");
+            }
+            return fromNativeOffset<Field>(object, offset());
         }
     };
 
