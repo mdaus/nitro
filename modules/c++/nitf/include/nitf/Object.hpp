@@ -243,16 +243,17 @@ namespace nitf
 
     // fieldOffset is  offsetof(TNative, <field>), e.g., offsetof(nitf_TextSubheader, filePartType)
     template<typename TReturn, typename TNative>
-    inline TReturn fromNativeOffset_(TNative& native, size_t fieldOffset) noexcept
+    inline TReturn fromNativeOffset_(const TNative& native, size_t fieldOffset) noexcept
     {
+        // This should be a C struct
         static_assert(std::is_standard_layout<TNative>::value, "!std::is_standard_layout<>");
 
-        void* const pNative_ = &native;
-        auto pNativeBytes = static_cast<std::byte*>(pNative_); // for pointer math
+        const void* const pNative_ = &native;
+        auto pNativeBytes = static_cast<const std::byte*>(pNative_); // for pointer math
         pNativeBytes += fieldOffset;
-        void* const pAddressOfField_ = pNativeBytes;
+        const void* const pAddressOfField_ = pNativeBytes;
 
-        auto pAddressOfField = static_cast<TReturn*>(pAddressOfField_);
+        auto pAddressOfField = static_cast<const TReturn*>(pAddressOfField_);
         if (pAddressOfField != nullptr) // code-analysis diagnostic
         {
             return *pAddressOfField;
@@ -260,16 +261,19 @@ namespace nitf
         return nullptr;
     }
     template<typename TReturn, typename TObject>
-    inline TReturn fromNativeOffset(TObject& object, size_t fieldOffset) noexcept(false)
+    inline TReturn fromNativeOffset(const TObject& object, size_t fieldOffset) noexcept(false)
     {
-        auto& native = *(object.getNativeOrThrow());
-        using native_object_t = typename TObject::native_t;
+        auto& native = *(object.getNativeOrThrow()); // e.g., nitf_testing_Test1a&
+
+        // Be sure this is one of our wrapper objects; if it is, it will have:
+        //    using native_t = nitf_<C type>;
+        using native_object_t = typename TObject::native_t; // e.g., nitf_testing_Test1a
         using get_native_t = typename std::remove_reference<decltype(native)>::type;
         static_assert(std::is_same<native_object_t, get_native_t>::value, "!std::is_same<>");
 
-        using native_t = typename TReturn::native_t;
+        using native_t = typename TReturn::native_t; // e.g., nitf_Field
         auto const pField = fromNativeOffset_<native_t*>(native, fieldOffset);
-        return TReturn(pField);
+        return TReturn(pField); // e.g., nitf::Field(pNativeField)
     }
     #define nitf_offsetof(name) offsetof(native_t, name)
 }

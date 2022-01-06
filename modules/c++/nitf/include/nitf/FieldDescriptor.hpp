@@ -70,7 +70,7 @@ namespace nitf
         }
 
         template<typename TObject>
-        Field getField(TObject& object) const
+        Field getField(const TObject& object) const
         {
             if (type() != Type::Field)
             {
