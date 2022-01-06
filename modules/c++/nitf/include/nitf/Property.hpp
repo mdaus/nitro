@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef NITF_Property_hpp_INCLUDED_
-#define NITF_Property_hpp_INCLUDED_
+#ifndef NITRO_Property_hpp_INCLUDED_
+#define NITRO_Property_hpp_INCLUDED_
 #pragma once
 
 #include <functional>
@@ -41,7 +41,7 @@ namespace nitf
     {
         std::function<T(void)> get_;
     public:
-        PropertyGet(std::function<T(void)> get) : get_(get) {}
+        PropertyGet(const std::function<T(void)>& get) : get_(get) {}
 
         T get() const { return get_(); }
         operator T() const { return get(); }
@@ -53,7 +53,7 @@ namespace nitf
         PropertyGet<T> get_;
         std::function<void(const T&)> set_;
     public:
-        Property(std::function<T(void)> get, std::function<void(const T&)> set) : get_(get), set_(set) { }
+        Property(const std::function<T(void)>& get, const std::function<void(const T&)>& set) : get_(get), set_(set) { }
 
         T get() const { return get_.get()(); }
         operator T() const { return get(); }
@@ -62,4 +62,4 @@ namespace nitf
         void operator=(const T& t) { set(t); }
     };
 }
-#endif // NITF_Property_hpp_INCLUDED_
+#endif // NITRO_Property_hpp_INCLUDED_
