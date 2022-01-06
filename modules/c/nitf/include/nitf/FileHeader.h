@@ -37,7 +37,7 @@
 #include "nitf/FileSecurity.h"
 #include "nitf/ComponentInfo.h"
 #include "nitf/Extensions.h"
-#include "nitf/Types.h"
+#include "nitf/FieldDescriptor.h"
 
 #define NITF_FHDR_SZ   4
 #define NITF_FVER_SZ   5
@@ -137,52 +137,55 @@ NITF_CXX_GUARD
  *  given only the name, using the construction {SHORTNAME}##SZ
  *
  */
-NITF_DECLARE_struct_35(FileHeader,
-    Field, fileHeader,
-    Field, fileVersion,
-    Field, complianceLevel,
-    Field, systemType,
-    Field, originStationID,
-    Field, fileDateTime,
-    Field, fileTitle,
-    Field, classification,
+typedef struct _nitf_FileHeader
+{
+    nitf_Field *fileHeader;
+    nitf_Field *fileVersion;
+    nitf_Field *complianceLevel;
+    nitf_Field *systemType;
+    nitf_Field *originStationID;
+    nitf_Field *fileDateTime;
+    nitf_Field *fileTitle;
+    nitf_Field *classification;
 
-    FileSecurity, securityGroup,
+    nitf_FileSecurity *securityGroup;
 
-    Field, messageCopyNum,
-    Field, messageNumCopies,
-    Field, encrypted,
-    Field, backgroundColor,
-    Field, originatorName,
-    Field, originatorPhone,
+    nitf_Field *messageCopyNum;
+    nitf_Field *messageNumCopies;
+    nitf_Field *encrypted;
+    nitf_Field *backgroundColor;
+    nitf_Field *originatorName;
+    nitf_Field *originatorPhone;
 
-    Field, fileLength,
-    Field, headerLength,
+    nitf_Field *fileLength;
+    nitf_Field *headerLength;
 
-    Field, numImages,
-    Field, numGraphics,
-    Field, numLabels,
-    Field, numTexts,
-    Field, numDataExtensions,
-    Field, numReservedExtensions,
+    nitf_Field *numImages;
+    nitf_Field *numGraphics;
+    nitf_Field *numLabels;
+    nitf_Field *numTexts;
+    nitf_Field *numDataExtensions;
+    nitf_Field *numReservedExtensions;
 
-    PComponentInfo, imageInfo,
-    PComponentInfo, graphicInfo,
-    PComponentInfo, labelInfo,
-    PComponentInfo, textInfo,
-    PComponentInfo, dataExtensionInfo,
-    PComponentInfo, reservedExtensionInfo,
+    nitf_ComponentInfo **imageInfo;
+    nitf_ComponentInfo **graphicInfo;
+    nitf_ComponentInfo **labelInfo;
+    nitf_ComponentInfo **textInfo;
+    nitf_ComponentInfo **dataExtensionInfo;
+    nitf_ComponentInfo **reservedExtensionInfo;
 
-    Field, userDefinedHeaderLength,
-    Field, userDefinedOverflow,
-    Field, extendedHeaderLength,
-    Field, extendedHeaderOverflow,
+    nitf_Field *userDefinedHeaderLength;
+    nitf_Field *userDefinedOverflow;
+    nitf_Field *extendedHeaderLength;
+    nitf_Field *extendedHeaderOverflow;
 
-    Extensions, userDefinedSection,
-    Extensions, extendedSection
+    nitf_Extensions *userDefinedSection;
+    nitf_Extensions *extendedSection;
     /* udhdl, udhofl, udhd */
     /* xhdl, xhdlofl, xhd */
-    );
+
+}
+nitf_FileHeader;
 
 /*!
  *  We want to construct and init the whole object.
@@ -214,18 +217,6 @@ NITFAPI(nitf_FileHeader *) nitf_FileHeader_clone(nitf_FileHeader * source,
  *  \param fh The file header to destroy.  We point fh at NULL.
  */
 NITFAPI(void) nitf_FileHeader_destruct(nitf_FileHeader ** fh);
-
-
-NITF_DECLARE_struct_1(Test1, Field, f1);
-
-NITF_DECLARE_struct_2(TestTest,
-    Field, f1,
-    Extensions, e1);
-
-NITF_DECLARE_struct_3(TestTestTest,
-    PComponentInfo, pc1,
-    Field, f2,
-    Field, f3);
 
 
 NITF_CXX_ENDGUARD
