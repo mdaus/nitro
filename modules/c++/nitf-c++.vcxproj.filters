@@ -398,5 +398,8 @@
     <ClInclude Include="nitf\include\nitf\TestingTest.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="nitf\include\nitf\FieldDescriptor.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

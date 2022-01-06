@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef NITRO_nitf_FieldDescriptor_hpp_INCLUDED_
-#define NITRO_nitf_FieldDescriptor_hpp_INCLUDED_
+#ifndef NITRO_nitf_TestingTest_hpp_INCLUDED_
+#define NITRO_nitf_TestingTest_hpp_INCLUDED_
 #pragma once
 
 #include <string>
@@ -81,4 +81,4 @@ namespace nitf
         };
     }
 }
-#endif // NITRO_nitf_FieldDescriptor_hpp_INCLUDED_
+#endif // NITRO_nitf_TestingTest_hpp_INCLUDED_

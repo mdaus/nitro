@@ -97,6 +97,7 @@
     <ClInclude Include="nitf\include\nitf\exports.hpp" />
     <ClInclude Include="nitf\include\nitf\Extensions.hpp" />
     <ClInclude Include="nitf\include\nitf\Field.hpp" />
+    <ClInclude Include="nitf\include\nitf\FieldDescriptor.hpp" />
     <ClInclude Include="nitf\include\nitf\FieldWarning.hpp" />
     <ClInclude Include="nitf\include\nitf\FileHeader.hpp" />
     <ClInclude Include="nitf\include\nitf\FileSecurity.hpp" />
