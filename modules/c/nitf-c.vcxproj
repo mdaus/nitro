@@ -149,6 +149,7 @@
     <ClInclude Include="nitf\include\nitf\DownSampler.h" />
     <ClInclude Include="nitf\include\nitf\Extensions.h" />
     <ClInclude Include="nitf\include\nitf\Field.h" />
+    <ClInclude Include="nitf\include\nitf\FieldDescriptor.h" />
     <ClInclude Include="nitf\include\nitf\FieldWarning.h" />
     <ClInclude Include="nitf\include\nitf\FileHeader.h" />
     <ClInclude Include="nitf\include\nitf\FileSecurity.h" />
