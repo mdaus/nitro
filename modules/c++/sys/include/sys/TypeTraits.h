@@ -28,18 +28,19 @@
 
 namespace sys
 {
-    template <class T>
+template <class T>
+// workaround missing "is_trivially_copyable" in g++ < 5.0
+#if defined(__GNUC__) && (__GNUC__ < 5)
+    static_assert(CODA_OSS_cplusplus < 201402L, "C++14 must have is_trivially_copyable.");
     struct IsTriviallyCopyable final
     {
         // https://stackoverflow.com/a/31798726/8877
-        // workaround missing "is_trivially_copyable" in g++ < 5.0
-        #if defined(__GNUC__) && (__GNUC__ < 5)
-            static_assert(CODA_OSS_cplusplus < 201402L, "C++14 must have is_trivially_copyable.");
-            static constexpr bool value = __has_trivial_copy(T);
-        #else
-            static constexpr bool value = std::is_trivially_copyable<T>::value
-        #endif
+        static constexpr bool value = __has_trivial_copy(T);
     };
+#else
+    template <typename T>
+    using IsTriviallyCopyable = std::is_trivially_copyable<T>;
+#endif
 }
 
 #endif  // CODA_OSS_sys_TypeTraits_h_INCLUDED_
