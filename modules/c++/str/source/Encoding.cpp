@@ -173,16 +173,19 @@ void str::utf32to8(std::u32string::const_pointer p, size_t sz, sys::U8string& re
     utf8::utf32to8(p, p + sz, back_inserter(result));
 }
 
+#if _WIN32
+// Breaks on Linux, not needed there anyway.  TODO: fix compiler error! 
 void str::utf8to16(sys::U8string::const_pointer p, size_t sz, std::u16string& result)
 {
     auto p8 = cast<const uint8_t*>(p);
     utf8::utf8to16(p8, p8 + sz, std::back_inserter(result));
 }
-void str::utf8to32(sys::U8string::const_pointer p, size_t sz, std::u32string& result)
-{
-    auto p8 = cast<const uint8_t*>(p);
-    utf8::utf8to32(p8, p8 + sz, std::back_inserter(result));
-}
+#endif
+//void str::utf8to32(sys::U8string::const_pointer p, size_t sz, std::u32string& result)
+//{
+//    auto p8 = cast<const uint8_t*>(p);
+//    utf8::utf8to32(p8, p8 + sz, std::back_inserter(result));
+//}
 
 inline void wsto8_(std::u16string::const_pointer begin, std::u16string::const_pointer end, sys::U8string& result)
 {

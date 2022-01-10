@@ -130,11 +130,11 @@ inline void utf8to16(const sys::U8string& s, std::u16string& result)
     utf8to16(s.c_str(), s.size(), result);
 }
 
-void utf8to32(sys::U8string::const_pointer, size_t, std::u32string&);
-inline void utf8to32(const sys::U8string& s, std::u32string& result)
-{
-    utf8to32(s.c_str(), s.size(), result);
-}
+//void utf8to32(sys::U8string::const_pointer, size_t, std::u32string&);
+//inline void utf8to32(const sys::U8string& s, std::u32string& result)
+//{
+//    utf8to32(s.c_str(), s.size(), result);
+//}
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
