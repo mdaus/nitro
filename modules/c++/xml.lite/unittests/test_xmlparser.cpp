@@ -29,16 +29,17 @@
 #include "str/Convert.h"
 #include "str/Encoding.h"
 #include "sys/OS.h"
+#include "xml/lite/String.h"
 #include <TestCase.h>
 
 #include "xml/lite/MinidomParser.h"
 
 static const std::string text("TEXT");
 static const std::string strXml = "<root><doc><a>" + text + "</a></doc></root>";
-static const std::string iso88591Text("T\xc9XT");  // ISO8859-1, "TÉXT"
-static const std::string utf8Text("T\xc3\x89XT");  // UTF-8,  "TÉXT"
-static const sys::U8string utf8Text8 = str::fromUtf8(utf8Text);
-static const auto strUtf8Xml = "<root><doc><a>" + utf8Text + "</a></doc></root>";
+static const xml::lite::String iso88591Text("T\xc9XT", xml::lite::StringEncoding::Windows1252);  // ISO8859-1, "TÉXT"
+static const xml::lite::String utf8Text("T\xc3\x89XT", xml::lite::StringEncoding::Utf8);  // UTF-8,  "TÉXT"
+static const sys::U8string utf8Text8 = utf8Text.u8string();
+static const auto strUtf8Xml = "<root><doc><a>" + utf8Text.cref<std::string>() + "</a></doc></root>";
 constexpr auto PlatformEncoding = sys::Platform == sys::PlatformType::Windows
         ? xml::lite::StringEncoding::Windows1252
         : xml::lite::StringEncoding::Utf8;
@@ -121,7 +122,7 @@ TEST_CASE(testXmlUtf8Legacy)
     // This is LEGACY behavior, it is INCORRECT on Linux!
     const auto actual = a.getCharacterData();
     #ifdef _WIN32
-    TEST_ASSERT_EQ(actual, iso88591Text);
+    TEST_ASSERT_EQ(xml::lite::String(actual, xml::lite::StringEncoding::Windows1252), iso88591Text);
     #else
     TEST_ASSERT_EQ(actual.length(), static_cast<size_t>(4));
     #endif
@@ -138,8 +139,7 @@ TEST_CASE(testXmlUtf8_u8string)
     sys::U8string actual;
     a.getCharacterData(actual);
     TEST_ASSERT(actual == utf8Text8);
-    const std::string actual_ = str::c_str<std::string::const_pointer>(actual);
-    TEST_ASSERT_EQ(actual_, utf8Text);
+    TEST_ASSERT_EQ(actual, utf8Text);
 }
 
 TEST_CASE(testXmlUtf8)
@@ -149,7 +149,7 @@ TEST_CASE(testXmlUtf8)
 
     auto actual = a.getCharacterData();
     const auto expected = sys::Platform == sys::PlatformType::Windows ? iso88591Text : utf8Text;
-    TEST_ASSERT_EQ(actual, expected);
+    TEST_ASSERT_EQ(xml::lite::String(actual, PlatformEncoding), expected);
 
     auto encoding = a.getEncoding();
     TEST_ASSERT_TRUE(encoding.has_value());
@@ -157,7 +157,7 @@ TEST_CASE(testXmlUtf8)
 
     // different getCharacterData() API
     encoding = a.getCharacterData(actual);
-    TEST_ASSERT_EQ(actual, expected);
+    TEST_ASSERT_EQ(xml::lite::String(actual, *encoding), expected);
     TEST_ASSERT(encoding == PlatformEncoding);
 }
 
@@ -175,7 +175,7 @@ TEST_CASE(testXml_setCharacterData)
     encoding = a.getCharacterData(actual);
     TEST_ASSERT_TRUE(encoding.has_value());
     TEST_ASSERT(encoding == xml::lite::StringEncoding::Utf8);
-    TEST_ASSERT_EQ(actual, utf8Text);
+    TEST_ASSERT_EQ(xml::lite::String(actual, *encoding), utf8Text);
 }
 
 static std::string testXmlPrint_(std::string& expected, const std::string& characterData)
@@ -201,7 +201,7 @@ TEST_CASE(testXmlPrintLegacy)
 {
     // This is LEGACY behavior, it generates bad XML
     std::string expected;
-    const auto actual = testXmlPrint_(expected, iso88591Text);
+    const auto actual = testXmlPrint_(expected, iso88591Text.cref<std::string>());
     TEST_ASSERT_EQ(actual, expected);
 }
 
@@ -210,12 +210,12 @@ TEST_CASE(testXmlPrintUtf8)
     xml::lite::MinidomParser xmlParser;
     auto& document = getDocument(xmlParser);
 
-    const auto pRootElement = document.createElement(xml::lite::QName(xml::lite::Uri(), "root"), iso88591Text, xml::lite::StringEncoding::Windows1252);
+    const auto pRootElement = document.createElement(xml::lite::QName(xml::lite::Uri(), "root"), iso88591Text.cref<std::string>(), xml::lite::StringEncoding::Windows1252);
 
     io::StringStream output;
     pRootElement->print(output, xml::lite::StringEncoding::Utf8); // write UTF-8
     const auto actual = output.stream().str();
-    const auto expected = "<root>" + utf8Text + "</root>";
+    const auto expected = "<root>" + utf8Text.cref<std::string>() + "</root>";
     TEST_ASSERT_EQ(actual, expected);
 }
 
@@ -255,15 +255,14 @@ static void testReadEncodedXmlFile(const std::string& testName, const std::strin
 
     const auto& a = root.getElementByTagName("a", true /*recurse*/);
     auto characterData = a.getCharacterData();
-    TEST_ASSERT_EQ(characterData, sys::Platform == sys::PlatformType::Linux ? utf8Text : iso88591Text);
     const auto encoding = a.getEncoding();
     TEST_ASSERT(encoding == PlatformEncoding);
+    TEST_ASSERT_EQ(xml::lite::String(characterData, *encoding), sys::Platform == sys::PlatformType::Linux ? utf8Text : iso88591Text);
 
     std::u8string u8_characterData;
     a.getCharacterData(u8_characterData);
     TEST_ASSERT(u8_characterData == utf8Text8);     
-    const std::string u8_characterData_(str::c_str<std::string::const_pointer>(u8_characterData));
-    TEST_ASSERT_EQ(utf8Text, u8_characterData_);     
+    TEST_ASSERT_EQ(utf8Text, u8_characterData);     
 
     const auto& textXML = root.getElementByTagName("text", true /*recurse*/);
     characterData = textXML.getCharacterData();
@@ -311,15 +310,14 @@ static void testReadXmlFile(const std::string& testName, const std::string& xmlF
     const auto& a = *(aElements[0]);
 
     auto characterData = a.getCharacterData();
-    TEST_ASSERT_EQ(characterData, sys::Platform == sys::PlatformType::Linux ? utf8Text : iso88591Text);
     const auto encoding = a.getEncoding();
     TEST_ASSERT(encoding == PlatformEncoding);
+    TEST_ASSERT_EQ(xml::lite::String(characterData, *encoding), sys::Platform == sys::PlatformType::Linux ? utf8Text : iso88591Text);
 
     std::u8string u8_characterData;
     a.getCharacterData(u8_characterData);
     TEST_ASSERT(u8_characterData == utf8Text8);    
-    const std::string u8_characterData_(str::c_str<std::string::const_pointer>(u8_characterData));
-    TEST_ASSERT_EQ(utf8Text, u8_characterData_);
+    TEST_ASSERT_EQ(utf8Text, u8_characterData);
 
     const auto& textXML = root.getElementByTagName("text", true /*recurse*/);
     characterData = textXML.getCharacterData();
