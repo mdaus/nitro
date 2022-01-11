@@ -26,6 +26,7 @@
 #include <assert.h>
 
 #include <stdexcept>
+#include <utility>
 
 #include "sys/OS.h"
 #include "str/Convert.h"
@@ -38,6 +39,10 @@ xml::lite::String::String(const std::string& s, StringEncoding encoding) :
     mpString(s), mEncoding(encoding)
 {
 }
+xml::lite::String::String(std::string&& s, StringEncoding encoding) :
+    mpString(std::move(s)), mEncoding(encoding)
+{
+}
 xml::lite::String::String(const char* s) : String(s, PlatformEncoding) // need to know encoding to use std::string
 {
 }
@@ -46,6 +51,10 @@ xml::lite::String::String() : String("")
 }
 xml::lite::String::String(const sys::U8string& s) :
     mpU8String(s), mEncoding(xml::lite::StringEncoding::Utf8)
+{
+}
+xml::lite::String::String(sys::U8string&& s) :
+    mpU8String(std::move(s)), mEncoding(xml::lite::StringEncoding::Utf8)
 {
 }
 xml::lite::String::String(const str::W1252string& s) :
@@ -155,8 +164,9 @@ xml::lite::StringEncoding xml::lite::String::u8string(std::string& result) const
     return mEncoding;
 }
 
-bool xml::lite::operator_eq(const String& lhs, const String& rhs)
+bool xml::lite::String::operator_eq(const String& rhs) const
 {
+    auto& lhs = *this;
     if (lhs.mpU8String.has_value())
     {
         assert(!lhs.mpString.has_value());

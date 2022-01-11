@@ -64,9 +64,11 @@ class String final
 public:
     String();
     String(const std::string&, StringEncoding);
-    //explicit String(const std::string&);
+    String(std::string&&, StringEncoding);
+    // explicit String(const std::string&);
     explicit String(const char*); // really should know encoding if using std::string
     String(const sys::U8string&);
+    String(sys::U8string&&);
     String(const str::W1252string&);
 
     ~String() = default;
@@ -112,7 +114,7 @@ public:
     }
     mem::Span<const sys::Byte> bytes() const;
 
-    friend bool operator_eq(const String& lhs, const String& rhs);
+    bool operator_eq(const String& rhs) const;
 };
 
 // GCC wants the specializations outside of the class
@@ -150,7 +152,7 @@ inline sys::U8string& String::ref()  // no conversion, might throw
 
 inline bool operator==(const String& lhs, const String& rhs)
 {
-    return operator_eq(lhs, rhs);
+    return lhs.operator_eq(rhs);
 }
 inline bool operator!=(const String& lhs, const String& rhs)
 {
