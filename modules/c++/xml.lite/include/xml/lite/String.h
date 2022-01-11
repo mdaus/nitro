@@ -104,39 +104,6 @@ public:
         return cref<T>();
     }
 
-    template <>
-    bool has<std::string>() const
-    {
-        return mpString.has_value();
-    }
-    template <>
-    bool has<sys::U8string>() const
-    {
-        return mpU8String.has_value();
-    }
-
-    template<>
-    const std::string& cref() const  // no conversion, might throw
-    {
-        return *mpString;
-    }
-    template <>
-    std::string& ref()  // no conversion, might throw
-    {
-        return *mpString;
-    }
-
-    template <>
-    const sys::U8string& cref()  const // no conversion, might throw
-    {
-        return *mpU8String;
-    }
-    template <>
-    sys::U8string& ref()  // no conversion, might throw
-    {
-        return *mpU8String;
-    }
-
     // either mpString->c_str() or mpU8String->c_str()
     const char* c_str() const;
     const void* data() const // for I/O
@@ -147,6 +114,39 @@ public:
 
     friend bool operator_eq(const String& lhs, const String& rhs);
 };
+
+// GCC wants the specializations outside of the class
+template <>
+inline bool String::has<std::string>() const
+{
+    return mpString.has_value();
+}
+template <>
+inline bool String::has<sys::U8string>() const
+{
+    return mpU8String.has_value();
+}
+
+template <>
+inline const std::string& String::cref() const  // no conversion, might throw
+{
+    return *mpString;
+}
+template <>
+inline std::string& String::ref()  // no conversion, might throw
+{
+    return *mpString;
+}
+template <>
+inline const sys::U8string& String::cref() const  // no conversion, might throw
+{
+    return *mpU8String;
+}
+template <>
+inline sys::U8string& String::ref()  // no conversion, might throw
+{
+    return *mpU8String;
+}
 
 inline bool operator==(const String& lhs, const String& rhs)
 {
