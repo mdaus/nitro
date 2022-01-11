@@ -3,6 +3,7 @@
  * =========================================================================
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2020, 2021, 2022, Maxar Technologies, Inc.
  *
  * str-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -43,7 +44,7 @@ static inline str::U8string utf8_(uint32_t ch)
     str::utf32to8(s, retval);
     return retval;
 };
-static const std::map<uint32_t, sys::U8string> Windows1252_x80_x9F_to_u8string{
+static const std::map<std::u32string::value_type, sys::U8string> Windows1252_x80_x9F_to_u8string{
     {0x80, utf8_(0x20AC) } // EURO SIGN
     // , {0x81, replacement_character } // UNDEFINED
     , {0x82, utf8_(0x201A) } // SINGLE LOW-9 QUOTATION MARK
@@ -86,7 +87,7 @@ static constexpr sys::U8string::value_type cast(uint8_t ch)
     return static_cast<sys::U8string::value_type>(ch);
 }
 
-static std::map<uint32_t, sys::U8string> Windows1252_to_u8string()
+static std::map<std::u32string::value_type, sys::U8string> Windows1252_to_u8string()
 {
     auto retval = Windows1252_x80_x9F_to_u8string;
 
