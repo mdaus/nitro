@@ -3,6 +3,7 @@
  * =========================================================================
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2020, 2021, 2022, Maxar Technologies, Inc.
  *
  * str-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -26,10 +27,13 @@
 #include <locale>
 #include <stdexcept>
 #include <vector>
+#include<iterator>
 
 #include "str/Encoding.h"
 #include "str/Manip.h"
+#include "str/Convert.h"
 #include "str/utf8.h"
+
 
 // Need to look up characters from \x80 (EURO SIGN) to \x9F (LATIN CAPITAL LETTER Y WITH DIAERESIS)
 // in a map: http://www.unicode.org/Public/MAPPINGS/VENDORS/MICSFT/WINDOWS/CP1252.TXT
@@ -40,7 +44,7 @@ static inline str::U8string utf8_(uint32_t ch)
     str::utf32to8(s, retval);
     return retval;
 };
-static const std::map<uint32_t, sys::U8string> Windows1252_x80_x9F_to_u8string{
+static const std::map<std::u32string::value_type, sys::U8string> Windows1252_x80_x9F_to_u8string{
     {0x80, utf8_(0x20AC) } // EURO SIGN
     // , {0x81, replacement_character } // UNDEFINED
     , {0x82, utf8_(0x201A) } // SINGLE LOW-9 QUOTATION MARK
@@ -82,6 +86,28 @@ static constexpr sys::U8string::value_type cast(uint8_t ch)
     static_assert(sizeof(decltype(ch)) == sizeof(sys::U8string::value_type), "sizeof(uint8_t) != sizeof(Char8_t)");
     return static_cast<sys::U8string::value_type>(ch);
 }
+
+static std::map<std::u32string::value_type, sys::U8string> Windows1252_to_u8string()
+{
+    auto retval = Windows1252_x80_x9F_to_u8string;
+
+    // Add the ISO8859-1 values to the map too.  1) We're already looking
+    // in the map anyway for Windows-1252 characters. 2) Need map
+    // entires for conversion from UTF-8 to Windows-1252.
+    for (uint32_t ch_ = 0xA0; ch_ <= 0xff; ch_++)
+    {
+        // ISO8859-1 can be converted to UTF-8 with bit-twiddling
+        const auto ch = static_cast<uint8_t>(ch_);
+
+        // https://stackoverflow.com/questions/4059775/convert-iso-8859-1-strings-to-utf-8-in-c-c
+        // *out++=0xc2+(*in>0xbf), *out++=(*in++&0x3f)+0x80;
+        sys::U8string s{cast(0xc2 + (ch > 0xbf)), cast((ch & 0x3f) + 0x80)};  // ISO8859-1
+        retval[ch_] = std::move(s);    
+    }
+
+    return retval;
+}
+
 static sys::U8string fromWindows1252(uint8_t ch)
 {
     // ASCII is the same in UTF-8
@@ -90,15 +116,7 @@ static sys::U8string fromWindows1252(uint8_t ch)
         return sys::U8string{cast(ch)};  // ASCII
     }
 
-    // ISO8859-1 can be converted to UTF-8 with bit-twiddling
-    if (ch > 0x9F)
-    {
-        // https://stackoverflow.com/questions/4059775/convert-iso-8859-1-strings-to-utf-8-in-c-c
-        // *out++=0xc2+(*in>0xbf), *out++=(*in++&0x3f)+0x80;
-        return sys::U8string{cast(0xc2 + (ch > 0xbf)), cast((ch & 0x3f) + 0x80)}; // ISO8859-1
-    }
-
-    static const auto map = Windows1252_x80_x9F_to_u8string;
+    static const auto map = Windows1252_to_u8string();
     const auto it = map.find(ch);
     if (it != map.end())
     {
@@ -127,6 +145,79 @@ void str::windows1252to8(W1252string::const_pointer p, size_t sz, sys::U8string&
         result += ::fromWindows1252(p[i]);    
     }
 }
+
+template<typename TKey, typename TValue>
+std::map<TValue, TKey> kv_to_vk(const std::map<TKey, TValue>& kv)
+{
+    std::map<TValue, TKey> retval;
+    for (const auto& p : kv)
+    {
+        retval[p.second] = p.first;
+    }
+    return retval;
+}
+
+// Keeping this "static" for now, don't want to encouarge this converstion.  Client
+// access is via str::toString(). 
+static void toWindows1252(str::U8string::const_pointer p, size_t sz, str::W1252string& result)
+{
+    for (size_t i = 0; i < sz; i++)
+    {
+        // ASCII is the same in UTF-8
+        if (p[i] < static_cast<str::U8string::value_type>(0x80))
+        {
+            result += static_cast<str::W1252string::value_type>(p[i]);  // ASCII
+            continue;
+        }
+
+        constexpr auto invalid = static_cast<str::W1252string::value_type>(0x7F);  // <DEL>
+        if (!(i + i < sz))
+        {
+            // No remaining bytes, invalid UTF-8 encoding
+            result += invalid;
+            return;
+        }
+
+        // https://en.wikipedia.org/wiki/UTF-8
+        const auto b1 = static_cast<uint8_t>(p[i]);
+        i++;  // move to second byte
+        if (b1 >= 0xE0)  // 1110xxxx
+        {
+            // not a two-byte sequence, nothing to convert to Windows-1252
+            result += invalid;  // <DEL>
+
+            i++;  // skip third byte
+            if (b1 >= 0xF0)  // 1111xxx
+            {
+                i++;  // skip fourth byte
+            }
+            continue;
+        }
+
+        const auto b2 = static_cast<uint8_t>(p[i]);
+        if (b2 < 0x80)  // 10xxxxxx
+        {
+            // invalid second byte
+            result += invalid;  // <DEL>
+            continue;
+        }
+
+        const str::U8string utf8{cast(b1), cast(b2)};
+
+        static const auto map = kv_to_vk(Windows1252_to_u8string());
+        const auto it = map.find(utf8);
+        if (it != map.end())
+        {
+            result += static_cast<str::W1252string::value_type>(it->second);
+        }
+        else
+        {
+            // UTF-8 character can't be converted to Windows-1252
+            result += invalid;  // <DEL>
+        }
+    }
+}
+
 
 struct back_inserter final
 { 
@@ -183,23 +274,18 @@ sys::U8string str::to_u8string(W1252string::const_pointer p, size_t sz)
 }
 sys::U8string str::to_u8string(std::string::const_pointer p, size_t sz)
 {
-    const void* const pStr = p;
-
     auto platform = details::Platform;  // "conditional expression is constant"
     if (platform == details::PlatformType::Windows)
     {    
         sys::U8string retval;
-        windows1252to8(static_cast<W1252string::const_pointer>(pStr), sz, retval);
+        windows1252to8(cast<W1252string::const_pointer>(p), sz, retval);
         return retval;
     }
     else if (platform == details::PlatformType::Linux)
     {
-        return static_cast<sys::U8string::const_pointer>(pStr);  // copy
+        return cast<sys::U8string::const_pointer>(p);  // copy
     }
-    else
-    {
-        throw std::logic_error("Unknown platform.");
-    }
+    throw std::logic_error("Unknown platform.");
 }
 
 sys::U8string str::fromWindows1252(std::string::const_pointer p, size_t sz)
@@ -210,4 +296,22 @@ sys::U8string str::fromWindows1252(std::string::const_pointer p, size_t sz)
 sys::U8string str::fromUtf8(std::string::const_pointer p, size_t)
 {
     return cast<sys::U8string::const_pointer>(p); // copy
+}
+
+template <>
+std::string str::toString(const str::U8string& utf8)
+{
+    auto platform = details::Platform;  // "conditional expression is constant"
+    if (platform == details::PlatformType::Windows)
+    {
+        str::W1252string w1252;
+        toWindows1252(utf8.c_str(), utf8.length(), w1252);
+        return c_str<std::string::const_pointer>(w1252);  // copy
+    }
+    else if (platform == details::PlatformType::Linux)
+    {
+        return c_str<std::string::const_pointer>(utf8);  // copy
+    }
+    
+    throw std::logic_error("Unknown platform.");
 }
