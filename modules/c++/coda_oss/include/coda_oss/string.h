@@ -1,10 +1,10 @@
 /* =========================================================================
- * This file is part of gsl-c++
+ * This file is part of coda_oss-c++
  * =========================================================================
  *
- * (C) Copyright 2021, Maxar Technologies, Inc.
+ * (C) Copyright 2020-2022, Maxar Technologies, Inc.
  *
- * gsl-c++ is free software; you can redistribute it and/or modify
+ * sys-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -19,19 +19,18 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef CODA_OSS_gsl_use_gsl_h_INCLUDED_
-#define CODA_OSS_gsl_use_gsl_h_INCLUDED_
+
+#ifndef CODA_OSS_coda_oss_string_h_INCLUDED_
+#define CODA_OSS_coda_oss_string_h_INCLUDED_
 #pragma once
 
-// Need a fairly decent C++ compiler to use the real GSL
-// It seems that the WAF build on GitHub gets a old compiler ...? Using just CODA_OSS_cpp14 doesn't work.
-#ifndef CODA_OSS_coda_oss_use_real_gsl_
-	#if defined(_MSC_VER) && (_MSC_VER < 1910) // VS2017: https://docs.microsoft.com/en-us/cpp/preprocessor/predefined-macros?view=msvc-160
-		#define CODA_OSS_coda_oss_use_real_gsl_ 0
-	#else
-		#include "sys/CPlusPlus.h"
-		#define CODA_OSS_coda_oss_use_real_gsl_ CODA_OSS_cpp14
-	#endif
-#endif
+#include <string>
 
-#endif  // CODA_OSS_gsl_use_gsl_h_INCLUDED_
+namespace coda_oss
+{
+    // char8_t for UTF-8 characters
+    enum class char8_t : unsigned char { }; // https://en.cppreference.com/w/cpp/language/types
+    using u8string = std::basic_string<char8_t>; // https://en.cppreference.com/w/cpp/string
+}
+
+#endif  // CODA_OSS_coda_oss_string_h_INCLUDED_

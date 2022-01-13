@@ -4196,7 +4196,7 @@ SWIGINTERN PyObject *StreamHandler_swiginit(PyObject *SWIGUNUSEDPARM(self), PyOb
 
 SWIGINTERN PyObject *_wrap_new_FileHandler__SWIG_0(PyObject *SWIGUNUSEDPARM(self), Py_ssize_t nobjs, PyObject **swig_obj) {
   PyObject *resultobj = 0;
-  sys::Filesystem::path *arg1 = 0 ;
+  coda_oss::filesystem::path *arg1 = 0 ;
   LogLevel arg2 ;
   int arg3 ;
   void *argp1 = 0 ;
@@ -4210,12 +4210,12 @@ SWIGINTERN PyObject *_wrap_new_FileHandler__SWIG_0(PyObject *SWIGUNUSEDPARM(self
   if ((nobjs < 3) || (nobjs > 3)) SWIG_fail;
   res1 = SWIG_ConvertPtr(swig_obj[0], &argp1, SWIGTYPE_p_sys__Filesystem__path,  0  | 0);
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_FileHandler" "', argument " "1"" of type '" "sys::Filesystem::path const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_FileHandler" "', argument " "1"" of type '" "coda_oss::filesystem::path const &""'"); 
   }
   if (!argp1) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_FileHandler" "', argument " "1"" of type '" "sys::Filesystem::path const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_FileHandler" "', argument " "1"" of type '" "coda_oss::filesystem::path const &""'"); 
   }
-  arg1 = reinterpret_cast< sys::Filesystem::path * >(argp1);
+  arg1 = reinterpret_cast< coda_oss::filesystem::path * >(argp1);
   {
     res2 = SWIG_ConvertPtr(swig_obj[1], &argp2, SWIGTYPE_p_LogLevel,  0  | 0);
     if (!SWIG_IsOK(res2)) {
@@ -4234,7 +4234,7 @@ SWIGINTERN PyObject *_wrap_new_FileHandler__SWIG_0(PyObject *SWIGUNUSEDPARM(self
     SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new_FileHandler" "', argument " "3"" of type '" "int""'");
   } 
   arg3 = static_cast< int >(val3);
-  result = (logging::FileHandler *)new logging::FileHandler((sys::Filesystem::path const &)*arg1,arg2,arg3);
+  result = (logging::FileHandler *)new logging::FileHandler((coda_oss::filesystem::path const &)*arg1,arg2,arg3);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_logging__FileHandler, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
@@ -4244,7 +4244,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_new_FileHandler__SWIG_1(PyObject *SWIGUNUSEDPARM(self), Py_ssize_t nobjs, PyObject **swig_obj) {
   PyObject *resultobj = 0;
-  sys::Filesystem::path *arg1 = 0 ;
+  coda_oss::filesystem::path *arg1 = 0 ;
   LogLevel arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -4255,12 +4255,12 @@ SWIGINTERN PyObject *_wrap_new_FileHandler__SWIG_1(PyObject *SWIGUNUSEDPARM(self
   if ((nobjs < 2) || (nobjs > 2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(swig_obj[0], &argp1, SWIGTYPE_p_sys__Filesystem__path,  0  | 0);
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_FileHandler" "', argument " "1"" of type '" "sys::Filesystem::path const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_FileHandler" "', argument " "1"" of type '" "coda_oss::filesystem::path const &""'"); 
   }
   if (!argp1) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_FileHandler" "', argument " "1"" of type '" "sys::Filesystem::path const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_FileHandler" "', argument " "1"" of type '" "coda_oss::filesystem::path const &""'"); 
   }
-  arg1 = reinterpret_cast< sys::Filesystem::path * >(argp1);
+  arg1 = reinterpret_cast< coda_oss::filesystem::path * >(argp1);
   {
     res2 = SWIG_ConvertPtr(swig_obj[1], &argp2, SWIGTYPE_p_LogLevel,  0  | 0);
     if (!SWIG_IsOK(res2)) {
@@ -4274,7 +4274,7 @@ SWIGINTERN PyObject *_wrap_new_FileHandler__SWIG_1(PyObject *SWIGUNUSEDPARM(self
       if (SWIG_IsNewObj(res2)) delete temp;
     }
   }
-  result = (logging::FileHandler *)new logging::FileHandler((sys::Filesystem::path const &)*arg1,arg2);
+  result = (logging::FileHandler *)new logging::FileHandler((coda_oss::filesystem::path const &)*arg1,arg2);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_logging__FileHandler, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
@@ -4284,7 +4284,7 @@ fail:
 
 SWIGINTERN PyObject *_wrap_new_FileHandler__SWIG_2(PyObject *SWIGUNUSEDPARM(self), Py_ssize_t nobjs, PyObject **swig_obj) {
   PyObject *resultobj = 0;
-  sys::Filesystem::path *arg1 = 0 ;
+  coda_oss::filesystem::path *arg1 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   logging::FileHandler *result = 0 ;
@@ -4292,13 +4292,13 @@ SWIGINTERN PyObject *_wrap_new_FileHandler__SWIG_2(PyObject *SWIGUNUSEDPARM(self
   if ((nobjs < 1) || (nobjs > 1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(swig_obj[0], &argp1, SWIGTYPE_p_sys__Filesystem__path,  0  | 0);
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_FileHandler" "', argument " "1"" of type '" "sys::Filesystem::path const &""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_FileHandler" "', argument " "1"" of type '" "coda_oss::filesystem::path const &""'"); 
   }
   if (!argp1) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_FileHandler" "', argument " "1"" of type '" "sys::Filesystem::path const &""'"); 
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_FileHandler" "', argument " "1"" of type '" "coda_oss::filesystem::path const &""'"); 
   }
-  arg1 = reinterpret_cast< sys::Filesystem::path * >(argp1);
-  result = (logging::FileHandler *)new logging::FileHandler((sys::Filesystem::path const &)*arg1);
+  arg1 = reinterpret_cast< coda_oss::filesystem::path * >(argp1);
+  result = (logging::FileHandler *)new logging::FileHandler((coda_oss::filesystem::path const &)*arg1);
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_logging__FileHandler, SWIG_POINTER_NEW |  0 );
   return resultobj;
 fail:
@@ -4356,9 +4356,9 @@ SWIGINTERN PyObject *_wrap_new_FileHandler(PyObject *self, PyObject *args) {
 fail:
   SWIG_Python_RaiseOrModifyTypeError("Wrong number or type of arguments for overloaded function 'new_FileHandler'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    logging::FileHandler::FileHandler(sys::Filesystem::path const &,LogLevel,int)\n"
-    "    logging::FileHandler::FileHandler(sys::Filesystem::path const &,LogLevel)\n"
-    "    logging::FileHandler::FileHandler(sys::Filesystem::path const &)\n");
+    "    logging::FileHandler::FileHandler(coda_oss::filesystem::path const &,LogLevel,int)\n"
+    "    logging::FileHandler::FileHandler(coda_oss::filesystem::path const &,LogLevel)\n"
+    "    logging::FileHandler::FileHandler(coda_oss::filesystem::path const &)\n");
   return 0;
 }
 
@@ -6999,7 +6999,7 @@ static PyMethodDef SwigMethods[] = {
 	 { "StreamHandler_close", _wrap_StreamHandler_close, METH_O, "StreamHandler_close(StreamHandler self)"},
 	 { "StreamHandler_swigregister", StreamHandler_swigregister, METH_O, NULL},
 	 { "StreamHandler_swiginit", StreamHandler_swiginit, METH_VARARGS, NULL},
-	 { "new_FileHandler", _wrap_new_FileHandler, METH_VARARGS, "FileHandler(sys::Filesystem::path const & fname, LogLevel level=LogLevel::LOG_NOTSET, int creationFlags=sys::File::CREATE|sys::File::TRUNCATE)"},
+	 { "new_FileHandler", _wrap_new_FileHandler, METH_VARARGS, "FileHandler(coda_oss::filesystem::path const & fname, LogLevel level=LogLevel::LOG_NOTSET, int creationFlags=sys::File::CREATE|sys::File::TRUNCATE)"},
 	 { "delete_FileHandler", _wrap_delete_FileHandler, METH_O, "delete_FileHandler(FileHandler self)"},
 	 { "FileHandler_swigregister", FileHandler_swigregister, METH_O, NULL},
 	 { "FileHandler_swiginit", FileHandler_swiginit, METH_VARARGS, NULL},
@@ -7157,7 +7157,7 @@ static swig_type_info _swigt__p_logging__StreamHandler = {"_p_logging__StreamHan
 static swig_type_info _swigt__p_mt__SingletonT_logging__LoggerManager_true_t = {"_p_mt__SingletonT_logging__LoggerManager_true_t", "logging::LoggerFactory *|mt::Singleton< logging::LoggerManager,true > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__shared_ptrT_logging__Logger_t = {"_p_std__shared_ptrT_logging__Logger_t", "std::shared_ptr< logging::Logger > *|logging::LoggerPtr *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__unique_ptrT_io__OutputStream_t = {"_p_std__unique_ptrT_io__OutputStream_t", "std::unique_ptr< io::OutputStream > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_sys__Filesystem__path = {"_p_sys__Filesystem__path", "sys::Filesystem::path *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_sys__Filesystem__path = {"_p_sys__Filesystem__path", "coda_oss::filesystem::path *", 0, 0, (void*)0, 0};
 
 static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Filter,

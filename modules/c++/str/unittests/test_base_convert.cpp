@@ -44,7 +44,7 @@ std::string to_std_string(const T& value)
 
 inline void utf32to8(const std::u32string& s, sys::U8string& result)
 {
-    utf32to8(s.c_str(), s.size(), result);
+    str::utf32to8(s.c_str(), s.size(), result);
 }
 template<>
 std::string to_std_string(const std::u32string& value)

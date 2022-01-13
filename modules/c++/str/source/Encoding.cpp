@@ -40,7 +40,7 @@
 // in a map: http://www.unicode.org/Public/MAPPINGS/VENDORS/MICSFT/WINDOWS/CP1252.TXT
 inline void utf32to8(const std::u32string& s, sys::U8string& result)
 {
-    utf32to8(s.c_str(), s.size(), result);
+    str::utf32to8(s.c_str(), s.size(), result);
 }
 static inline str::U8string utf8_(uint32_t ch)
 {
