@@ -261,7 +261,7 @@ void xml::lite::Element::prettyPrint(io::OutputStream& stream, StringEncoding en
     stream.writeln("");
 }
 
-static xml::lite::StringEncoding getEncoding_(const sys::Optional<xml::lite::StringEncoding>& encoding)
+static xml::lite::StringEncoding getEncoding_(const coda_oss::optional<xml::lite::StringEncoding>& encoding)
 {
     if (encoding.has_value())
     {
@@ -298,7 +298,7 @@ void xml::lite::Element::getCharacterData(sys::U8string& result) const
 }
 
 static void writeCharacterData(io::OutputStream& stream,
-    const std::string& characterData, const sys::Optional<xml::lite::StringEncoding>& encoding_)
+    const std::string& characterData, const coda_oss::optional<xml::lite::StringEncoding>& encoding_)
 {
     const auto encoding = getEncoding_(encoding_);
     if (encoding == xml::lite::StringEncoding::Windows1252)
