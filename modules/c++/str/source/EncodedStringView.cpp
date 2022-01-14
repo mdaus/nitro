@@ -27,6 +27,7 @@
 #include <string.h>
 
 #include <stdexcept>
+#include "coda_oss/memory.h"
 
 #include "str/Convert.h"
 #include "str/Encoding.h"
@@ -37,7 +38,8 @@ struct str::EncodedStringView::Impl final
     struct Pointer final
     {
         using string = std::basic_string<TChar>;
-        using const_pointer = typename string::const_pointer;
+        //using const_pointer = typename string::const_pointer;
+        using const_pointer = const TChar*;
         Pointer() = default;
         Pointer(const_pointer p) : pChars(p)
         {
@@ -291,14 +293,14 @@ struct str::EncodedStringView::Impl final
     }
 };
 
-str::EncodedStringView::EncodedStringView() : pImpl(new Impl()) { }
+str::EncodedStringView::EncodedStringView() : pImpl(coda_oss::make_unique<Impl>()) { }
 str::EncodedStringView::~EncodedStringView() = default;
 str::EncodedStringView::EncodedStringView(EncodedStringView&&) = default;
 str::EncodedStringView& str::EncodedStringView::operator=(EncodedStringView&&) = default;
 
 str::EncodedStringView& str::EncodedStringView::operator=(const EncodedStringView& other)
 {
-    this->pImpl.reset(new Impl(*other.pImpl));
+    this->pImpl = coda_oss::make_unique<Impl>(*other.pImpl);
     return *this;
 }
 str::EncodedStringView::EncodedStringView(const EncodedStringView& other)
@@ -306,12 +308,12 @@ str::EncodedStringView::EncodedStringView(const EncodedStringView& other)
     *this = other;
 }
 
-str::EncodedStringView::EncodedStringView(std::string::const_pointer p) : pImpl(new Impl(p)) { }
-str::EncodedStringView::EncodedStringView(sys::U8string::const_pointer p) : pImpl(new Impl(p)){ }
-str::EncodedStringView::EncodedStringView(str::W1252string::const_pointer p) :  pImpl(new Impl(p)) { }
-str::EncodedStringView::EncodedStringView(const std::string& s) : pImpl(new Impl(s)) { }
-str::EncodedStringView::EncodedStringView(const sys::U8string& s) : pImpl(new Impl(s)) { }
-str::EncodedStringView::EncodedStringView(const str::W1252string& s) : pImpl(new Impl(s)) { }
+str::EncodedStringView::EncodedStringView(std::string::const_pointer p) : pImpl(coda_oss::make_unique<Impl>(p)) { }
+str::EncodedStringView::EncodedStringView(sys::U8string::const_pointer p) : pImpl(coda_oss::make_unique<Impl>(p)){ }
+str::EncodedStringView::EncodedStringView(str::W1252string::const_pointer p) :  pImpl(coda_oss::make_unique<Impl>(p)) { }
+str::EncodedStringView::EncodedStringView(const std::string& s) : pImpl(coda_oss::make_unique<Impl>(s)) { }
+str::EncodedStringView::EncodedStringView(const sys::U8string& s) : pImpl(coda_oss::make_unique<Impl>(s)) { }
+str::EncodedStringView::EncodedStringView(const str::W1252string& s) : pImpl(coda_oss::make_unique<Impl>(s)) { }
 
 str::EncodedStringView& str::EncodedStringView::operator=(std::string::const_pointer s)
 {
@@ -368,8 +370,10 @@ bool str::EncodedStringView::operator_eq(const EncodedStringView& rhs) const
 }
 
 
+namespace str
+{
 template <typename TReturn, typename T2, typename T3>
-typename TReturn::const_pointer str::EncodedStringView::cast_(const TReturn& retval, const T2& t2, const T3& t3) const
+typename TReturn::const_pointer EncodedStringView::cast_(const TReturn& retval, const T2& t2, const T3& t3) const
 {
     if (!retval.empty())
     {
@@ -383,17 +387,19 @@ typename TReturn::const_pointer str::EncodedStringView::cast_(const TReturn& ret
 // GCC wants specializations outside of the class.  We need these here (now)
 // anyway for access to pImpl.
 template <>
-std::string::const_pointer str::EncodedStringView::cast() const
+std::string::const_pointer EncodedStringView::cast() const
 {
     return cast_(pImpl->mString, pImpl->mU8String, pImpl->mW1252String);
 }
 template <>
-sys::U8string::const_pointer str::EncodedStringView::cast() const
+sys::U8string::const_pointer EncodedStringView::cast() const
 {
     return cast_(pImpl->mU8String, pImpl->mString, pImpl->mW1252String);
 }
 template <>
-str::W1252string::const_pointer str::EncodedStringView::cast() const
+str::W1252string::const_pointer EncodedStringView::cast() const
 {
     return cast_(pImpl->mW1252String, pImpl->mString, pImpl->mU8String);
 }
+} // namespace str
+
