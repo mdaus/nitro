@@ -25,21 +25,6 @@
 #pragma once
 
 #include <string>
-
-#include "config/compiler_extensions.h"
-
-#include "coda_oss/namespace_.h"
-namespace coda_oss
-{
-    // char8_t for UTF-8 characters
-    CODA_OSS_disable_warning_push
-    #if _MSC_VER
-    #pragma warning(disable: 5052) // Keyword '...' was introduced in C++20 and requires use of the '...' command-line option
-    #endif
-    enum class char8_t : unsigned char { }; // https://en.cppreference.com/w/cpp/language/types
-    CODA_OSS_disable_warning_pop
-
-    using u8string = std::basic_string<char8_t>; // https://en.cppreference.com/w/cpp/string
-}
+#include "coda_oss/namespace_.h"  // coda_oss -> std
 
 #endif  // CODA_OSS_coda_oss_string_h_INCLUDED_

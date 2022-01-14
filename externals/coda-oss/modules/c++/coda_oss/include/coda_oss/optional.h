@@ -18,32 +18,11 @@
  * License along with this program; If not, http://www.gnu.org/licenses/.
  *
  */
-#ifndef CODA_OSS_sys_Optional_h_INCLUDED_
-#define CODA_OSS_sys_Optional_h_INCLUDED_
+#ifndef CODA_OSS_coda_oss_optional_h_INCLUDED_
+#define CODA_OSS_coda_oss_optional_h_INCLUDED_
 #pragma once
 
 #include <optional>
-namespace sys
-{
-    template<typename T>
-    using Optional = std::optional<T>;
+#include "coda_oss/namespace_.h"  // coda_oss -> std
 
-    // https://en.cppreference.com/w/cpp/utility/optional/make_optional
-    template <typename T, typename... TArgs>
-    inline Optional<T> make_Optional(TArgs&&... args)
-    {
-        return std::make_optional<T>(std::forward<TArgs>(args)...);
-    }
-}
-
-#include "str/Convert.h"
-namespace str
-{
-    template <typename T>
-    std::string toString(const sys::Optional<T>& value)
-    {
-        return toString(value.value());
-    }
-}
-
-#endif  // CODA_OSS_sys_Optional_h_INCLUDED_
+#endif  // CODA_OSS_coda_oss_optional_h_INCLUDED_
