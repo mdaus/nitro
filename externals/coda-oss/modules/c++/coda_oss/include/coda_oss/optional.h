@@ -22,7 +22,10 @@
 #define CODA_OSS_coda_oss_optional_h_INCLUDED_
 #pragma once
 
+#include <assert.h>
+
 #include <utility>
+#include <stdexcept>
 
 // Simple version of std::optional since that doesn't exist until C++17.
 //
