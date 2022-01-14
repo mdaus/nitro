@@ -18,8 +18,8 @@
  * License along with this program; If not, http://www.gnu.org/licenses/.
  *
  */
-#ifndef CODA_OSS_sys_Filesystem_h_INCLUDED_
-#define CODA_OSS_sys_Filesystem_h_INCLUDED_
+#ifndef CODA_OSS_sys_filesystem_h_INCLUDED_
+#define CODA_OSS_sys_filesystem_h_INCLUDED_
 #pragma once
 
 //
@@ -33,7 +33,7 @@
 #include <ostream>
 
 #include "sys/CPlusPlus.h"
-#include "coda_oss/string.h" // get something in the "coda_oss" namespace
+#include "coda_oss/namespace_.h" // get something in the "coda_oss" namespace
 
 namespace coda_oss // should be in coda_oss, but implementation needs sys::Path
 {
@@ -137,4 +137,4 @@ bool exists(const path& p);  // https://en.cppreference.com/w/cpp/filesystem/exi
 #define CODA_OSS_coda_oss_filesystem 201703L  // c.f., __cpp_lib_filesystem
 }
 
-#endif  // CODA_OSS_sys_Filesystem_h_INCLUDED_
+#endif  // CODA_OSS_sys_filesystem_h_INCLUDED_

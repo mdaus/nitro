@@ -31,6 +31,7 @@
 
 #include "config/compiler_extensions.h"
 
+#include "coda_oss/namespace_.h"
 namespace coda_oss
 {
 // C++11 inadvertently ommitted make_unique; provide it here. (Swiped from <memory>.)

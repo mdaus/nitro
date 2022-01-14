@@ -2711,7 +2711,7 @@ SWIGINTERN PyObject *SWIG_PyStaticMethod_New(PyObject *SWIGUNUSEDPARM(self), PyO
 #define SWIGTYPE_p_mt__SingletonT_logging__LoggerManager_true_t swig_types[18]
 #define SWIGTYPE_p_std__shared_ptrT_logging__Logger_t swig_types[19]
 #define SWIGTYPE_p_std__unique_ptrT_io__OutputStream_t swig_types[20]
-#define SWIGTYPE_p_sys__Filesystem__path swig_types[21]
+#define SWIGTYPE_p_coda_oss__filesystem__path swig_types[21]
 static swig_type_info *swig_types[23];
 static swig_module_info swig_module = {swig_types, 22, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
@@ -4208,7 +4208,7 @@ SWIGINTERN PyObject *_wrap_new_FileHandler__SWIG_0(PyObject *SWIGUNUSEDPARM(self
   logging::FileHandler *result = 0 ;
   
   if ((nobjs < 3) || (nobjs > 3)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1, SWIGTYPE_p_sys__Filesystem__path,  0  | 0);
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1, SWIGTYPE_p_coda_oss__filesystem__path,  0  | 0);
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_FileHandler" "', argument " "1"" of type '" "coda_oss::filesystem::path const &""'"); 
   }
@@ -4253,7 +4253,7 @@ SWIGINTERN PyObject *_wrap_new_FileHandler__SWIG_1(PyObject *SWIGUNUSEDPARM(self
   logging::FileHandler *result = 0 ;
   
   if ((nobjs < 2) || (nobjs > 2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1, SWIGTYPE_p_sys__Filesystem__path,  0  | 0);
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1, SWIGTYPE_p_coda_oss__filesystem__path,  0  | 0);
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_FileHandler" "', argument " "1"" of type '" "coda_oss::filesystem::path const &""'"); 
   }
@@ -4290,7 +4290,7 @@ SWIGINTERN PyObject *_wrap_new_FileHandler__SWIG_2(PyObject *SWIGUNUSEDPARM(self
   logging::FileHandler *result = 0 ;
   
   if ((nobjs < 1) || (nobjs > 1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1, SWIGTYPE_p_sys__Filesystem__path,  0  | 0);
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1, SWIGTYPE_p_coda_oss__filesystem__path,  0  | 0);
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_FileHandler" "', argument " "1"" of type '" "coda_oss::filesystem::path const &""'"); 
   }
@@ -4316,7 +4316,7 @@ SWIGINTERN PyObject *_wrap_new_FileHandler(PyObject *self, PyObject *args) {
   --argc;
   if (argc == 1) {
     int _v;
-    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_sys__Filesystem__path, SWIG_POINTER_NO_NULL | 0);
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_coda_oss__filesystem__path, SWIG_POINTER_NO_NULL | 0);
     _v = SWIG_CheckState(res);
     if (_v) {
       return _wrap_new_FileHandler__SWIG_2(self, argc, argv);
@@ -4324,7 +4324,7 @@ SWIGINTERN PyObject *_wrap_new_FileHandler(PyObject *self, PyObject *args) {
   }
   if (argc == 2) {
     int _v;
-    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_sys__Filesystem__path, SWIG_POINTER_NO_NULL | 0);
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_coda_oss__filesystem__path, SWIG_POINTER_NO_NULL | 0);
     _v = SWIG_CheckState(res);
     if (_v) {
       int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_LogLevel, SWIG_POINTER_NO_NULL | 0);
@@ -4336,7 +4336,7 @@ SWIGINTERN PyObject *_wrap_new_FileHandler(PyObject *self, PyObject *args) {
   }
   if (argc == 3) {
     int _v;
-    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_sys__Filesystem__path, SWIG_POINTER_NO_NULL | 0);
+    int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_coda_oss__filesystem__path, SWIG_POINTER_NO_NULL | 0);
     _v = SWIG_CheckState(res);
     if (_v) {
       int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_LogLevel, SWIG_POINTER_NO_NULL | 0);
@@ -7157,7 +7157,7 @@ static swig_type_info _swigt__p_logging__StreamHandler = {"_p_logging__StreamHan
 static swig_type_info _swigt__p_mt__SingletonT_logging__LoggerManager_true_t = {"_p_mt__SingletonT_logging__LoggerManager_true_t", "logging::LoggerFactory *|mt::Singleton< logging::LoggerManager,true > *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__shared_ptrT_logging__Logger_t = {"_p_std__shared_ptrT_logging__Logger_t", "std::shared_ptr< logging::Logger > *|logging::LoggerPtr *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_std__unique_ptrT_io__OutputStream_t = {"_p_std__unique_ptrT_io__OutputStream_t", "std::unique_ptr< io::OutputStream > *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_sys__Filesystem__path = {"_p_sys__Filesystem__path", "coda_oss::filesystem::path *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_coda_oss__filesystem__path = {"_p_coda_oss__filesystem__path", "coda_oss::filesystem::path *", 0, 0, (void*)0, 0};
 
 static swig_type_info *swig_type_initial[] = {
   &_swigt__p_Filter,
@@ -7181,7 +7181,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_mt__SingletonT_logging__LoggerManager_true_t,
   &_swigt__p_std__shared_ptrT_logging__Logger_t,
   &_swigt__p_std__unique_ptrT_io__OutputStream_t,
-  &_swigt__p_sys__Filesystem__path,
+  &_swigt__p_coda_oss__filesystem__path,
 };
 
 static swig_cast_info _swigc__p_Filter[] = {  {&_swigt__p_Filter, 0, 0, 0},{0, 0, 0, 0}};
@@ -7205,7 +7205,7 @@ static swig_cast_info _swigc__p_logging__StreamHandler[] = {  {&_swigt__p_loggin
 static swig_cast_info _swigc__p_mt__SingletonT_logging__LoggerManager_true_t[] = {  {&_swigt__p_mt__SingletonT_logging__LoggerManager_true_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__shared_ptrT_logging__Logger_t[] = {  {&_swigt__p_std__shared_ptrT_logging__Logger_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_std__unique_ptrT_io__OutputStream_t[] = {  {&_swigt__p_std__unique_ptrT_io__OutputStream_t, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_sys__Filesystem__path[] = {  {&_swigt__p_sys__Filesystem__path, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_coda_oss__filesystem__path[] = {  {&_swigt__p_coda_oss__filesystem__path, 0, 0, 0},{0, 0, 0, 0}};
 
 static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_Filter,
@@ -7229,7 +7229,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_mt__SingletonT_logging__LoggerManager_true_t,
   _swigc__p_std__shared_ptrT_logging__Logger_t,
   _swigc__p_std__unique_ptrT_io__OutputStream_t,
-  _swigc__p_sys__Filesystem__path,
+  _swigc__p_coda_oss__filesystem__path,
 };
 
 

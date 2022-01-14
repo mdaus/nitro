@@ -26,6 +26,7 @@
 
 #include "CPlusPlus.h"
 
+#include "coda_oss/namespace_.h"
 namespace coda_oss
 {
 // workaround missing "is_trivially_copyable" in g++ < 5.0

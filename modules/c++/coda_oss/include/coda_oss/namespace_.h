@@ -2,7 +2,7 @@
  * This file is part of coda_oss-c++
  * =========================================================================
  *
- * (C) Copyright 2020-2022, Maxar Technologies, Inc.
+ * (C) Copyright 2020, Maxar Technologies, Inc.
  *
  * sys-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -18,27 +18,12 @@
  * License along with this program; If not, http://www.gnu.org/licenses/.
  *
  */
-#ifndef CODA_OSS_coda_oss_bit_h_INCLUDED_
-#define CODA_OSS_coda_oss_bit_h_INCLUDED_
+#ifndef CODA_OSS_coda_oss_namespace__h_INCLUDED_
+#define CODA_OSS_coda_oss_namespace__h_INCLUDED_
 #pragma once
 
-#include "coda_oss/namespace_.h"
 namespace coda_oss
 {
-    // https://en.cppreference.com/w/cpp/types/endian
-    enum class endian
-    {
-    #ifdef _WIN32
-        little = 0,
-        big = 1,
-        native = little
-    #else
-        little = __ORDER_LITTLE_ENDIAN__,
-        big = __ORDER_BIG_ENDIAN__,
-        native = __BYTE_ORDER__
-    #endif
-    };
-    #define CODA_OSS_coda_oss_endian 201907L // __cpp_lib_endian
 }
 
-#endif  // CODA_OSS_coda_oss_bit_h_INCLUDED_
+#endif  // CODA_OSS_coda_oss_namespace__h_INCLUDED_

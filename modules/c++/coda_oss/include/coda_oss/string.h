@@ -26,6 +26,7 @@
 
 #include <string>
 
+#include "coda_oss/namespace_.h"
 namespace coda_oss
 {
     // char8_t for UTF-8 characters

@@ -30,6 +30,8 @@
 // it only tries to minimize code changes.
 //
 // http://en.cppreference.com/w/cpp/utility/Optional
+
+#include "coda_oss/namespace_.h"
 namespace coda_oss
 {
 namespace details
