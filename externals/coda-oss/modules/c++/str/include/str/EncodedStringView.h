@@ -29,7 +29,8 @@
 #include <ostream>
 #include <memory>
 
-#include "str/Encoding.h"
+#include "coda_oss/span.h"
+ #include "str/Encoding.h"
 
 /*!
  * \file EncodedStringView.h
@@ -47,49 +48,32 @@ namespace str
 {
 class EncodedStringView final
 {
-    struct Impl;
-    std::unique_ptr<Impl> pImpl;
+    // Since we only support two encodings--UTF-8 (native on Linux) and Windows-1252
+    // (native on Windows)--both of which are 8-bits, a simple "bool" flag will do.
+    coda_oss::span<const char> mString;
+    static constexpr bool mNativeIsUtf8 = details::Platform == details::PlatformType::Linux ? true : false;
+    bool mIsUtf8 = mNativeIsUtf8;
 
 public:
-    EncodedStringView();
-    ~EncodedStringView();
-    EncodedStringView(const EncodedStringView&);
-    EncodedStringView& operator=(const EncodedStringView&);
-    EncodedStringView(EncodedStringView&&);
-    EncodedStringView& operator=(EncodedStringView&&);
+    EncodedStringView() = default;
+    ~EncodedStringView() = default;
+    EncodedStringView(const EncodedStringView&) = default;
+    EncodedStringView& operator=(const EncodedStringView&) = default;
+    EncodedStringView(EncodedStringView&&) = default;
+    EncodedStringView& operator=(EncodedStringView&&) = default;
 
-    // Need these overloads to avoid creating temporary std::basic_string<> instances.
+    // Need the const char* overloads to avoid creating temporary std::basic_string<> instances.
     // Routnes always return a copy, never a reference, so there's no additional overhead
     // with storing a raw pointer rather than a pointer to  std::basic_string<>.
-    explicit EncodedStringView(sys::U8string::const_pointer);
-    explicit EncodedStringView(str::W1252string::const_pointer);
+    EncodedStringView(sys::U8string::const_pointer);
+    EncodedStringView(const sys::U8string&);
+    EncodedStringView(str::W1252string::const_pointer);
+    EncodedStringView(const str::W1252string&);
+
+    // Don't want to make it easy to use these; a known encoding is preferred.
     explicit EncodedStringView(std::string::const_pointer);  // Assume platform native encoding: UTF-8 on Linux, Windows-1252 on Windows
-
-    explicit EncodedStringView(const sys::U8string&);
-    explicit EncodedStringView(const str::W1252string&);
     explicit EncodedStringView(const std::string&);  // Assume platform native encoding: UTF-8 on Linux, Windows-1252 on Windows
-
-    EncodedStringView& operator=(sys::U8string::const_pointer);
-    EncodedStringView& operator=(str::W1252string::const_pointer);
-    EncodedStringView& operator=(std::string::const_pointer);  // Assume platform native encoding: UTF-8 on Linux, Windows-1252 on Windows
-    EncodedStringView& operator=(const sys::U8string&);
-    EncodedStringView& operator=(const str::W1252string&);
-    EncodedStringView& operator=(const std::string&);  // Assume platform native encoding: UTF-8 on Linux, Windows-1252 on Windows
     
-    // Input is encoded as specified on all platforms.
-    template <typename TBasicString>
-    EncodedStringView& assign(const char* s)
-    {
-        using const_pointer = typename TBasicString::const_pointer;
-        *this = str::cast<const_pointer>(s);
-        return *this;
-    }
-    template <typename TBasicString>
-    EncodedStringView& assign(const std::string& s)
-    {
-        return assign<TBasicString>(s.c_str());
-    }
-
     // Input is encoded as specified on all platforms.
     template <typename TBasicString>
     static EncodedStringView create(const char* s)
@@ -120,10 +104,6 @@ public:
     TConstPointer cast() const;  // returns NULL if stored pointer not of the desired type
 
     bool operator_eq(const EncodedStringView&) const;
-
-private:
-    template <typename TReturn, typename T2, typename T3>
-    typename TReturn::const_pointer cast_(const TReturn& retval, const T2& t2, const T3& t3) const;
 };
 
 inline bool operator==(const EncodedStringView& lhs, const EncodedStringView& rhs)
@@ -131,48 +111,6 @@ inline bool operator==(const EncodedStringView& lhs, const EncodedStringView& rh
     return lhs.operator_eq(rhs);
 }
 inline bool operator!=(const EncodedStringView& lhs, const EncodedStringView& rhs)
-{
-    return !(lhs == rhs);
-}
-
-template<typename TChar>
-inline bool operator==(const EncodedStringView& lhs, const TChar* rhs)
-{
-    return lhs == EncodedStringView(rhs);
-}
-template <typename TChar>
-inline bool operator==(const TChar* lhs, const EncodedStringView& rhs)
-{
-    return rhs == lhs;
-}
-template <typename TChar>
-inline bool operator!=(const EncodedStringView& lhs, const TChar* rhs)
-{
-    return !(lhs == rhs);
-}
-template <typename TChar>
-inline bool operator!=(const TChar* lhs, const EncodedStringView& rhs)
-{
-    return !(lhs == rhs);
-}
-
-template <typename TChar>
-inline bool operator==(const EncodedStringView& lhs, const std::basic_string<TChar>& rhs)
-{
-    return lhs == EncodedStringView(rhs);
-}
-template <typename TChar>
-inline bool operator==(const std::basic_string<TChar>& lhs, const EncodedStringView& rhs)
-{
-    return rhs == lhs;
-}
-template <typename TChar>
-inline bool operator!=(const EncodedStringView& lhs, const std::basic_string<TChar>& rhs)
-{
-    return !(lhs == rhs);
-}
-template <typename TChar>
-inline bool operator!=(const std::basic_string<TChar>& lhs, const EncodedStringView& rhs)
 {
     return !(lhs == rhs);
 }
