@@ -126,7 +126,7 @@ TEST_CASE(test_sys_Optional)
 
 TEST_CASE(test_std_optional)
 {
-    TEST_ASSERT_TRUE(true);
+    TEST_ASSERT(!testName.empty());
 #if CODA_OSS_cpp17
     const std::optional<int> null;
     TEST_ASSERT_FALSE(null.has_value());

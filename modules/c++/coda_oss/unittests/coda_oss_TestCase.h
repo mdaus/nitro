@@ -7,7 +7,10 @@
 #include <exception>
 #include <iostream>
 
-#define TEST_ASSERT_OP_(X, Y, op) ((void)testName); assert((X) op (Y))
+//#define TEST_ASSERT_assert_(X) assert(X)
+#define TEST_ASSERT_assert_(X) if (!((X))) { assert(X); exit(EXIT_FAILURE); }
+
+#define TEST_ASSERT_OP_(X, Y, op) ((void)testName); TEST_ASSERT_assert_((X) op (Y))
 #define TEST_ASSERT_EQ(X, Y) TEST_ASSERT_OP_(X, Y, ==)
 #define TEST_ASSERT_NOT_EQ(X, Y) TEST_ASSERT_OP_(X, Y, !=)
 #define TEST_ASSERT_GREATER(X, Y) TEST_ASSERT_OP_(X, Y, >)

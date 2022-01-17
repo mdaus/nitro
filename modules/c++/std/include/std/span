@@ -41,7 +41,7 @@ static_assert(CODA_OSS_coda_oss_span >= 202002L, "missing coda_oss::span");
     namespace std // This is slightly uncouth: we're not supposed to augment "std".
     {
         template<typename T>
-        using span = gsl::span<T>;
+        using span = coda_oss::span<T>;
     }
 #endif  // CODA_OSS_DEFINE_std_span_
 
