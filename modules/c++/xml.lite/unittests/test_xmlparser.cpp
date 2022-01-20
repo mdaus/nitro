@@ -141,7 +141,7 @@ TEST_CASE(testXmlUtf8_u8string)
     xml::lite::MinidomParser xmlParser(true /*storeEncoding*/);
     const auto& a = testXmlUtf8_(xmlParser);
 
-    sys::U8string actual;
+    coda_oss::u8string actual;
     a.getCharacterData(actual);
     TEST_ASSERT_EQ(actual, utf8Text8);
 }

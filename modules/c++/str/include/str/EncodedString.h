@@ -64,8 +64,8 @@ public:
     EncodedString(EncodedString&&) = default;
     EncodedString& operator=(EncodedString&&) = default;
 
-    explicit EncodedString(const sys::U8string& s);
-    explicit EncodedString(sys::U8string::const_pointer);
+    explicit EncodedString(const coda_oss::u8string& s);
+    explicit EncodedString(coda_oss::u8string::const_pointer);
     explicit EncodedString(const str::W1252string&);
     explicit EncodedString(str::W1252string::const_pointer);
     explicit EncodedString(const std::string&);  // Assume platform native encoding: UTF-8 on Linux, Windows-1252 on Windows
@@ -83,7 +83,7 @@ public:
     static EncodedString fromUtf16(const std::wstring&); // not currently implemetned, no need
     static EncodedString fromUtf32(const std::wstring&); // not currently implemetned, no need
 
-    void assign(sys::U8string::const_pointer);
+    void assign(coda_oss::u8string::const_pointer);
     void assign(str::W1252string::const_pointer);
     void assign(std::string::const_pointer);
     template <typename CharT>
@@ -108,7 +108,7 @@ public:
     }
 
     // Convert (perhaps) whatever we're looking at to UTF-8
-    sys::U8string u8string() const  // c.f. std::filesystem::path::u8string()
+    coda_oss::u8string u8string() const  // c.f. std::filesystem::path::u8string()
     {
         return view().u8string();
     }

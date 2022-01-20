@@ -32,7 +32,7 @@
 
 #include "TestCase.h"
 
-inline std::string to_std_string(const sys::U8string& value)
+inline std::string to_std_string(const coda_oss::u8string& value)
 {
     return str::c_str<std::string::const_pointer>(value);  // copy
 }
@@ -82,7 +82,7 @@ TEST_CASE(testCharToString)
     TEST_ASSERT_EQ(str::toString<char>(65), "A");
 }
 
-static sys::U8string fromWindows1252(const std::string& s)
+static coda_oss::u8string fromWindows1252(const std::string& s)
 {
     // s is Windows-1252 on ALL platforms
     return str::fromWindows1252(s.c_str(), s.size());
