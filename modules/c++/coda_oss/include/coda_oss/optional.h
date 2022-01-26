@@ -22,8 +22,6 @@
 #define CODA_OSS_coda_oss_optional_h_INCLUDED_
 #pragma once
 
-#include <assert.h>
-
 #include <utility>
 
 #include "coda_oss/optional_.h"

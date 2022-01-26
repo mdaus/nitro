@@ -25,43 +25,25 @@
 #define CODA_OSS_coda_oss_memory_h_INCLUDED_
 #pragma once
 
-#include <memory>
-#include <type_traits>
 #include <utility>
+#include <memory>
 
-#include "config/compiler_extensions.h"
+#include "coda_oss/memory_.h"
+#include "bpstd/memory.hpp"
+#include "coda_oss/bpstd_.h"
 
-#include "coda_oss/namespace_.h"
 namespace coda_oss
 {
-// C++11 inadvertently ommitted make_unique; provide it here. (Swiped from <memory>.)
-template <typename T, typename... TArgs, typename std::enable_if<!std::is_array<T>::value, int>::type = 0>
-std::unique_ptr<T> make_unique(TArgs&&... args)
-{
-    CODA_OSS_disable_warning_push
-    #if _MSC_VER
-    #pragma warning(disable: 26409) // Avoid calling new and delete explicitly, use std::make_unique<T> instead (r .11).
-    #endif
-    return std::unique_ptr<T>(new T(std::forward<TArgs>(args)...));
-    CODA_OSS_disable_warning_pop
-}
-
-template <typename T, typename std::enable_if<std::is_array<T>::value &&  std::extent<T>::value == 0, int>::type = 0>
-std::unique_ptr<T> make_unique(size_t size)
-{
-    using element_t = typename std::remove_extent<T>::type;
-
-    CODA_OSS_disable_warning_push
-    #if _MSC_VER
-    #pragma warning(disable: 26409) // Avoid calling new and delete explicitly, use std::make_unique<T> instead (r .11).
-    #endif    
-    return std::unique_ptr<T>(new element_t[size]());
-    CODA_OSS_disable_warning_pop
-}
-
-template <typename T, typename... TArgs, typename std::enable_if<std::extent<T>::value != 0, int>::type = 0>
-void make_unique(TArgs&&...) = delete;
-
+    template <typename T, typename... TArgs>
+    std::unique_ptr<T> make_unique(TArgs&&... args)
+    {
+        // Let the actual make_unique implementation do all the template magic.
+        #if CODA_OSS_coda_oss_USE_BPSTD_
+        return bpstd::make_unique<T>(std::forward<TArgs>(args)...);
+        #else
+        return details::make_unique<T>(std::forward<TArgs>(args)...);
+        #endif
+    }
 } // namespace coda_oss
 
 #endif // CODA_OSS_coda_oss_memory_h_INCLUDED_

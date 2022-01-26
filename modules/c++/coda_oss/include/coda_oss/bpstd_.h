@@ -22,9 +22,11 @@
 #define CODA_OSS_coda_oss_bpstd__h_INCLUDED_
 #pragma once
 
+#include "coda_oss/CPlusPlus.h"
+
 // Should we use bpstd/ ?
 #ifndef CODA_OSS_coda_oss_USE_BPSTD_
-	#define CODA_OSS_coda_oss_USE_BPSTD_ 1 // yes, use it
+	#define CODA_OSS_coda_oss_USE_BPSTD_ !CODA_OSS_cpp20 // yes, use it; not needed at all w/C++20
 	//#define CODA_OSS_coda_oss_USE_BPSTD_ 0  // no, use our own
 #endif  // CODA_OSS_coda_oss_USE_BPSTD_
 
