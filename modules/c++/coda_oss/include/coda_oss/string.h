@@ -1,8 +1,8 @@
 /* =========================================================================
- * This file is part of sys-c++
+ * This file is part of coda_oss-c++
  * =========================================================================
  *
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2020-2022, Maxar Technologies, Inc.
  *
  * sys-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,28 +19,26 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef CODA_OSS_str_String__h_INCLUDED_
-#define CODA_OSS_str_String__h_INCLUDED_
-#pragma once
 
-// prefer "sys/String.h" instead of this file
+#ifndef CODA_OSS_coda_oss_string_h_INCLUDED_
+#define CODA_OSS_coda_oss_string_h_INCLUDED_
+#pragma once
 
 #include <string>
 
-namespace str
-{
-    // Char8_T for UTF-8 characters
-    enum class Char8_T : unsigned char { }; // https://en.cppreference.com/w/cpp/language/types
-    using U8string = std::basic_string<Char8_T>; // https://en.cppreference.com/w/cpp/string
-}
-#if !defined(CODA_OSS_sys_U8string_DEFINED_)
-#define CODA_OSS_sys_U8string_DEFINED_ 1
-namespace sys
-{
-    using Char8_T = str::Char8_T;
-    using U8string = str::U8string;
-   #define CODA_OSS_sys_Char8_T 201907L // c.f., __cpp_lib_char8_t
-}
-#endif  // CODA_OSS_sys_U8string_DEFINED_
+#include "config/compiler_extensions.h"
 
-#endif  // CODA_OSS_str_String__h_INCLUDED_
+#include "coda_oss/namespace_.h"
+namespace coda_oss
+{
+    // char8_t for UTF-8 characters
+    CODA_OSS_disable_warning_push
+    #if _MSC_VER
+    #pragma warning(disable: 5052) // Keyword '...' was introduced in C++20 and requires use of the '...' command-line option
+    #endif
+    enum class char8_t : unsigned char { }; // https://en.cppreference.com/w/cpp/language/types
+    using u8string = std::basic_string<char8_t>; // https://en.cppreference.com/w/cpp/string
+    CODA_OSS_disable_warning_pop
+}
+
+#endif  // CODA_OSS_coda_oss_string_h_INCLUDED_
