@@ -85,13 +85,7 @@ jobs:
     - name: test
       run: |
         cd target
-        ctest
-    - name: Initialize CodeQL
-      uses: github/codeql-action/init@v1
-      with:
-        languages: cpp      
-    - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v1        
+        ctest   
 
   build-waf:
     strategy:
