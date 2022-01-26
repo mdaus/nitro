@@ -1061,7 +1061,7 @@ NITFPRIV(NITF_BOOL) implStart(nitf_DecompressionControl* control,
         while (nitf_ListIterator_notEqualTo(&x, &e))
 
         {
-            JPEGMarkerItem *item = nitf_ListIterator_get(&x);
+            JPEGMarkerItem *item = (JPEGMarkerItem*) nitf_ListIterator_get(&x);
             DPRINTA2("[%s:%d]", item->name, item->off );
 
             if (strcmp(item->name, "SOI") == 0)
