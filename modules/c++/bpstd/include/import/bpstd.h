@@ -25,6 +25,6 @@
 #define CODA_OSS_bpstd_import_bpstd_h_INCLUDED_
 #pragma once
 
-// We'll use this code via coda_oss
+// We'll use this code via coda_oss/
 
 #endif // CODA_OSS_bpstd_import_bpstd_h_INCLUDED_

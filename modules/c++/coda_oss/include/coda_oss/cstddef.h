@@ -29,8 +29,6 @@ namespace coda_oss
 {
     // https://en.cppreference.com/w/cpp/types/byte
     enum class byte : unsigned char {};
-
-    #define CODA_OSS_coda_oss_byte 201603L  // __cpp_lib_byte
 }
 
 #endif  // CODA_OSS_coda_oss_cstddef_h_INCLUDED_

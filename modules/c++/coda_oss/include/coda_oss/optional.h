@@ -43,6 +43,4 @@ inline optional<T> make_optional(TArgs&&... args)
 }
 }
 
-#define CODA_OSS_coda_oss_optional 201606L // c.f., __cpp_lib_optional
-
 #endif  // CODA_OSS_coda_oss_optional_h_INCLUDED_

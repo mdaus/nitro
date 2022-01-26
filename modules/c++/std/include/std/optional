@@ -23,9 +23,7 @@
 #pragma once
 
 // Make it (too?) easy for clients to get our various std:: implementations
-
 #include "coda_oss/optional.h"
-static_assert(CODA_OSS_coda_oss_optional >= 201606L, "missing coda_oss::optional");
 
 #include "coda_oss/CPlusPlus.h"
 #if CODA_OSS_cpp17
