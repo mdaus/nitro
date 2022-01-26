@@ -18,38 +18,14 @@
  * License along with this program; If not, http://www.gnu.org/licenses/.
  *
  */
-#ifndef CODA_OSS_coda_oss_optional_h_INCLUDED_
-#define CODA_OSS_coda_oss_optional_h_INCLUDED_
+#ifndef CODA_OSS_coda_oss_bpstd__h_INCLUDED_
+#define CODA_OSS_coda_oss_bpstd__h_INCLUDED_
 #pragma once
 
-#include <assert.h>
+// Should we use bpstd/ ?
+#ifndef CODA_OSS_coda_oss_USE_BPSTD_
+	#define CODA_OSS_coda_oss_USE_BPSTD_ 1 // yes, use it
+	//#define CODA_OSS_coda_oss_USE_BPSTD_ 0  // no, use our own
+#endif  // CODA_OSS_coda_oss_USE_BPSTD_
 
-#include <utility>
-
-#include "coda_oss/optional_.h"
-#include "bpstd/optional.hpp"
-#include "coda_oss/bpstd_.h"
-
-namespace coda_oss
-{
-#if CODA_OSS_coda_oss_USE_BPSTD_
-template<typename T>
-using optional = bpstd::optional<T>;
-#else
-template<typename T>
-using optional = details::optional<T>;
-#endif
-
-// https://en.cppreference.com/w/cpp/utility/optional/make_optional
-template <typename T, typename... TArgs>
-inline optional<T> make_optional(TArgs&&... args)
-{
-    #if CODA_OSS_coda_oss_USE_BPSTD_
-    return bpstd::make_optional<T>(std::forward<TArgs>(args)...);
-    #else
-    return details::make_optional<T>(std::forward<TArgs>(args)...);
-    #endif
-}
-}
-
-#endif  // CODA_OSS_coda_oss_optional_h_INCLUDED_
+#endif  // CODA_OSS_coda_oss_bpstd__h_INCLUDED_
