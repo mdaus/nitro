@@ -21,10 +21,12 @@
  */
 
 
-#ifndef CODA_OSS_coda_oss_coda_oss_h_INCLUDED_
-#define CODA_OSS_coda_oss_coda_oss_h_INCLUDED_
+#ifndef CODA_OSS_coda_oss_import_coda_oss_h_INCLUDED_
+#define CODA_OSS_coda_oss_import_coda_oss_h_INCLUDED_
 #pragma once
 
-#endif // CODA_OSS_coda_oss_coda_oss_h_INCLUDED_
+// We'll use this code via std/ or an explicit #include of a coda_oss file
+
+#endif // CODA_OSS_coda_oss_import_coda_oss_h_INCLUDED_
 
 

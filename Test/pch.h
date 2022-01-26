@@ -21,9 +21,11 @@
 // We're building in Visual Studio ... used to control where we get a little bit of config info
 #define NITRO_PCH 1
 
+#pragma warning(disable: 5032) // detected #pragma warning(push) with no corresponding #pragma warning(pop)
 #pragma warning(push)
 #pragma warning(disable: 4464) // relative include path contains '..'
 #include <nitf/coda-oss.hpp>
+#pragma warning(disable: 5031) // #pragma warning(pop): likely mismatch, popping warning state pushed in different file
 #pragma comment(lib, "io-c++")
 #pragma comment(lib, "except-c++")
 #pragma comment(lib, "sys-c++")

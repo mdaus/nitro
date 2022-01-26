@@ -24,13 +24,18 @@
 
 #include <cstddef>
 
+#include "bpstd/cstddef.hpp"
+#include "coda_oss/bpstd_.h"
+
 #include "coda_oss/namespace_.h"
 namespace coda_oss
 {
     // https://en.cppreference.com/w/cpp/types/byte
+    #if CODA_OSS_coda_oss_USE_BPSTD_
+    using byte = bpstd::byte;
+    #else   
     enum class byte : unsigned char {};
-
-    #define CODA_OSS_coda_oss_byte 201603L  // __cpp_lib_byte
+    #endif
 }
 
 #endif  // CODA_OSS_coda_oss_cstddef_h_INCLUDED_

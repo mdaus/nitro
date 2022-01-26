@@ -26,8 +26,9 @@
 #include <assert.h>
 #include <stddef.h>
 
-#include "coda_oss/namespace_.h"
 #include "coda_oss/span_.h"
+#include "bpstd/span.hpp"
+#include "coda_oss/bpstd_.h"
 
 // Need a fairly decent C++ compiler to use the real GSL.  This brings in more than 
 // we really need for span (e.g., gsl::narrow()), but it keeps things simple.
@@ -35,7 +36,10 @@
 
 namespace coda_oss
 {
-#if defined(GSL_SPAN_H) // the above #include'd gsl/span
+#if CODA_OSS_coda_oss_USE_BPSTD_ // prefer bpstd as that's the same on all platforms
+	template <typename T>
+	using span = bpstd::span<T>;
+#elif defined(GSL_SPAN_H) // the above #include'd gsl/span
 	template <typename T>
 	using span = gsl::span<T>;
 #else // no gsl::span, use our own
@@ -43,7 +47,5 @@ namespace coda_oss
 	using span = details::span<T>;
 #endif  // GSL_SPAN_H
 }
-
-#define CODA_OSS_coda_oss_span 202002L  // c.f., __cpp_lib_span
 
 #endif  // CODA_OSS_coda_oss_span_h_INCLUDED_
