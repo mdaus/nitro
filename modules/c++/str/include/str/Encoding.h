@@ -32,6 +32,7 @@
 #include <string>
 
 #include "coda_oss/string.h"
+#include "gsl/gsl.h"
 
 // This can be useful for code that will compile on all platforms, but needs
 // different platform-specific behavior.  This avoids the use of more #ifdefs
@@ -81,12 +82,12 @@ using W1252string = std::basic_string<Windows1252_T>;  // https://en.cppreferenc
 coda_oss::u8string fromWindows1252(std::string::const_pointer, size_t); // std::string is Windows-1252 **ON ALL PLATFORMS**
 inline coda_oss::u8string fromWindows1252(std::string::const_pointer s)
 {
-    return fromWindows1252(s, static_cast<size_t>(strlen(s)));
+    return fromWindows1252(s, gsl::narrow<size_t>(strlen(s)));
 }
 coda_oss::u8string fromUtf8(std::string::const_pointer, size_t); // std::string is UTF-8 **ON ALL PLATFORMS**
 inline coda_oss::u8string fromUtf8(std::string::const_pointer s)
 {
-    return fromUtf8(s, static_cast<size_t>(strlen(s)));
+    return fromUtf8(s, gsl::narrow<size_t>(strlen(s)));
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
