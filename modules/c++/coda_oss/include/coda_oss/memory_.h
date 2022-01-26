@@ -29,8 +29,6 @@
 #include <type_traits>
 #include <utility>
 
-#include "config/compiler_extensions.h"
-
 #include "coda_oss/namespace_.h"
 namespace coda_oss
 {
@@ -40,25 +38,14 @@ namespace details
 template <typename T, typename... TArgs, typename std::enable_if<!std::is_array<T>::value, int>::type = 0>
 std::unique_ptr<T> make_unique(TArgs&&... args)
 {
-    CODA_OSS_disable_warning_push
-    #if _MSC_VER
-    #pragma warning(disable: 26409) // Avoid calling new and delete explicitly, use std::make_unique<T> instead (r .11).
-    #endif
     return std::unique_ptr<T>(new T(std::forward<TArgs>(args)...));
-    CODA_OSS_disable_warning_pop
 }
 
 template <typename T, typename std::enable_if<std::is_array<T>::value &&  std::extent<T>::value == 0, int>::type = 0>
 std::unique_ptr<T> make_unique(size_t size)
 {
     using element_t = typename std::remove_extent<T>::type;
-
-    CODA_OSS_disable_warning_push
-    #if _MSC_VER
-    #pragma warning(disable: 26409) // Avoid calling new and delete explicitly, use std::make_unique<T> instead (r .11).
-    #endif    
     return std::unique_ptr<T>(new element_t[size]());
-    CODA_OSS_disable_warning_pop
 }
 
 template <typename T, typename... TArgs, typename std::enable_if<std::extent<T>::value != 0, int>::type = 0>

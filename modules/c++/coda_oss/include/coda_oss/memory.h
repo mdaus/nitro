@@ -28,8 +28,18 @@
 #include <utility>
 #include <memory>
 
+#include "config/compiler_extensions.h"
+
 #include "coda_oss/memory_.h"
+
+CODA_OSS_disable_warning_push
+#if _MSC_VER
+#pragma warning(disable: 26409) // Avoid calling new and delete explicitly, use std::make_unique<T> instead (r .11).
+__pragma(warning(disable: 26409)) // Avoid calling new and delete explicitly, use std::make_unique<T> instead (r .11).
+#endif
 #include "bpstd/memory.hpp"
+CODA_OSS_disable_warning_pop
+
 #include "coda_oss/bpstd_.h"
 
 namespace coda_oss
@@ -37,12 +47,20 @@ namespace coda_oss
     template <typename T, typename... TArgs>
     std::unique_ptr<T> make_unique(TArgs&&... args)
     {
-        // Let the actual make_unique implementation do all the template magic.
+        CODA_OSS_disable_warning_push
+        #if _MSC_VER
+        #pragma warning(disable: 26409) // Avoid calling new and delete explicitly, use std::make_unique<T> instead (r .11).
+        __pragma(warning(disable: 26409)) // Avoid calling new and delete explicitly, use std::make_unique<T> instead (r .11).
+        #endif
+
+        // Let the actual make_unique implementation do all the template magic. 
         #if CODA_OSS_coda_oss_USE_BPSTD_
         return bpstd::make_unique<T>(std::forward<TArgs>(args)...);
         #else
         return details::make_unique<T>(std::forward<TArgs>(args)...);
         #endif
+
+        CODA_OSS_disable_warning_pop
     }
 } // namespace coda_oss
 
