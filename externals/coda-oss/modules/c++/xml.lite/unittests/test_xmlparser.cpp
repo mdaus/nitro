@@ -22,7 +22,6 @@
 
 #include <std/string>
 #include <std/filesystem>
-#include <std/optional>
 
 #include "io/StringStream.h"
 #include "io/FileInputStream.h"
@@ -157,16 +156,14 @@ TEST_CASE(testXmlUtf8)
     const auto expected = platfromText_;
     TEST_ASSERT_EQ(actual, expected);
 
-    std::optional<xml::lite::StringEncoding> encoding; // avoid compiler warning about possible uninitialized variable
-    encoding = a.getEncoding();
+    auto encoding = a.getEncoding();
     TEST_ASSERT_TRUE(encoding.has_value());
-    TEST_ASSERT(*encoding == PlatformEncoding);
+    TEST_ASSERT(encoding == PlatformEncoding);
 
     // different getCharacterData() API
     encoding = a.getCharacterData(actual);
     TEST_ASSERT_EQ(actual, expected);
-    TEST_ASSERT_TRUE(encoding.has_value());
-    TEST_ASSERT(*encoding == PlatformEncoding);
+    TEST_ASSERT(encoding == PlatformEncoding);
 }
 
 TEST_CASE(testXml_setCharacterData)
