@@ -14,19 +14,30 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef GSL_GSL_H
-#define GSL_GSL_H
+#include <gtest/gtest.h>
 
-#include <gsl/algorithm>   // copy
-#include <gsl/assert>      // Ensures/Expects
-#include <gsl/byte>        // byte
-#include <gsl/pointers>    // owner, not_null
-#include <gsl/span>        // span
-#include <gsl/string_span> // zstring, string_span, zstring_builder...
-#include <gsl/util>        // finally()/narrow_cast()...
+#include <gsl/pointers> // for owner
 
-#ifdef __cpp_exceptions
-#include <gsl/narrow> // narrow()
+using namespace gsl;
+
+GSL_SUPPRESS(f .23) // NO-FORMAT: attribute
+void f(int* i) { *i += 1; }
+
+TEST(owner_tests, basic_test)
+{
+    owner<int*> p = new int(120);
+    EXPECT_TRUE(*p == 120);
+    f(p);
+    EXPECT_TRUE(*p == 121);
+    delete p;
+}
+
+TEST(owner_tests, check_pointer_constraint)
+{
+#ifdef CONFIRM_COMPILATION_ERRORS
+    {
+        owner<int> integerTest = 10;
+        owner<std::shared_ptr<int>> sharedPtrTest(new int(10));
+    }
 #endif
-
-#endif // GSL_GSL_H
+}

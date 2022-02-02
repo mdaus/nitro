@@ -40,8 +40,9 @@
 	#endif
 
 	#include "gsl/gsl"
-	#include "gsl/gsl_byte"
+	#include "gsl/byte"
 	#include "gsl/span"
+	#include "gsl/narrow"
 
 	#if _MSC_VER
 	#pragma warning(pop)
