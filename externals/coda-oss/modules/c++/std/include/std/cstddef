@@ -25,8 +25,8 @@
 #include <cstddef>
 
 // Make it (too?) easy for clients to get our various std:: implementations
-#include "coda_oss/cstddef.h"
 
+#include "coda_oss/cstddef.h"
 #if defined(__cpp_lib_byte) && (__cpp_lib_byte >= 201603L) // https://en.cppreference.com/w/cpp/utility/feature_test
     #undef CODA_OSS_NO_std_byte
     #define CODA_OSS_NO_std_byte 1  // don't need our own
