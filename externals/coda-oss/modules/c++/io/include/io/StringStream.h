@@ -115,7 +115,7 @@ struct StringStreamT final : public SeekableBidirectionalStream
     void write(const void* buffer, sys::Size_T size)
     {
         auto buffer_ = static_cast<const CharT*>(buffer);
-        mData.write(buffer_, gsl::narrow<std::streamsize>(size));
+        mData.write(buffer_, size);
     }
 
     //! Returns the internal std::stringstream
@@ -140,25 +140,24 @@ private:
      * \throw IoException
      * \return  The number of bytes read
      */
-    sys::SSize_T readImpl(void* buffer, size_t len_) override
+    sys::SSize_T readImpl(void* buffer, size_t len) override
     {
         const auto maxSize = available();
         if (maxSize <= 0)
             return io::InputStream::IS_END;
             
-        auto len = gsl::narrow<sys::Off_T>(len_);
-        if (maxSize < len)
+        if (maxSize < gsl::narrow<sys::Off_T>(len))
             len = maxSize;
             
         if (len <= 0)
             return 0;
             
         auto buffer_ = static_cast<CharT*>(buffer);
-        mData.read(buffer_, gsl::narrow<std::streamsize>(len));
+        mData.read(buffer_, len);
             
         // Could be problem if streams are broken alternately could
         // return gcount in else case above
-        return gsl::narrow<sys::SSize_T>(len);
+        return len;
     }
 
     stringstream mData{stringstream::in | stringstream::out | stringstream::binary};
