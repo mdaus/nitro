@@ -161,7 +161,7 @@ TEST_CASE(changeFileHeader)
 
 TEST_MAIN(
     (void)argc;
-	argv0 = fs::absolute(argv[0]).string();
+    argv0 = absolute(fs::path(argv[0])).string();
 
     TEST_CHECK(imageWriterThrowsOnFailedConstruction);
     TEST_CHECK(constructValidImageWriter);
