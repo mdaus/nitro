@@ -26,6 +26,7 @@
 #include <vector>
 #include <memory>
 #include <stdexcept>
+#include <std/filesystem>
 
 #include <import/nitf.hpp>
 #include <nitf/ImageSubheader.hpp>
@@ -140,7 +141,7 @@ TEST_CASE(changeFileHeader)
 	const auto inputPathname = buildFileDir(fs::path("modules") / "c++" / "nitf" / "tests" / "test_blank.ntf").string();
     TEST_ASSERT_NOT_EQ(inputPathname, "");
     //std::clog << "'" << inputPathname << "'\n";
-    TEST_ASSERT_TRUE(fs::is_regular_file(inputPathname));
+    TEST_ASSERT_TRUE(is_regular_file(fs::path(inputPathname)));
 	const auto outputPathname = buildFileDir(fs::path("outputPathname.ntf")).string();
 
     doChangeFileHeader(inputPathname, outputPathname);

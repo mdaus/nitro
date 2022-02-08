@@ -48,7 +48,7 @@ static fs::path findInputFile()
     }
     else
     {
-        root = fs::absolute(argv0).parent_path().parent_path().parent_path().parent_path();
+        root = absolute(fs::path(argv0)).parent_path().parent_path().parent_path().parent_path();
         root = root.parent_path().parent_path();
     }
 
