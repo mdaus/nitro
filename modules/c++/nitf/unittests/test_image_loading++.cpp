@@ -22,6 +22,7 @@
 
 #include <vector>
 #include <string>
+#include <std/filesystem>
 
 #include <import/nitf.hpp>
 
@@ -42,7 +43,7 @@ static fs::path findInputFile(const fs::path& inputFile)
     }
     else
     {
-        root = absolute(fs::path(argv0)).parent_path().parent_path().parent_path().parent_path();
+        root = fs::absolute(argv0).parent_path().parent_path().parent_path().parent_path();
         root = root.parent_path().parent_path();
     }
 

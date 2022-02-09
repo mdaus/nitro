@@ -23,6 +23,7 @@
 #include <vector>
 #include <iostream>
 #include <string>
+#include <std/filesystem>
 
 #include <gsl/gsl.h>
 
@@ -48,7 +49,7 @@ static fs::path findInputFile()
     }
     else
     {
-        root = absolute(fs::path(argv0)).parent_path().parent_path().parent_path().parent_path();
+        root = fs::absolute(argv0).parent_path().parent_path().parent_path().parent_path();
         root = root.parent_path().parent_path();
     }
 

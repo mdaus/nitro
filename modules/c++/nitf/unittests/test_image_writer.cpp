@@ -141,7 +141,7 @@ TEST_CASE(changeFileHeader)
 	const auto inputPathname = buildFileDir(fs::path("modules") / "c++" / "nitf" / "tests" / "test_blank.ntf").string();
     TEST_ASSERT_NOT_EQ(inputPathname, "");
     //std::clog << "'" << inputPathname << "'\n";
-    TEST_ASSERT_TRUE(is_regular_file(fs::path(inputPathname)));
+    TEST_ASSERT_TRUE(fs::is_regular_file(inputPathname));
 	const auto outputPathname = buildFileDir(fs::path("outputPathname.ntf")).string();
 
     doChangeFileHeader(inputPathname, outputPathname);
@@ -161,7 +161,7 @@ TEST_CASE(changeFileHeader)
 
 TEST_MAIN(
     (void)argc;
-    argv0 = absolute(fs::path(argv[0])).string();
+    argv0 = fs::absolute(argv[0]).string();
 
     TEST_CHECK(imageWriterThrowsOnFailedConstruction);
     TEST_CHECK(constructValidImageWriter);

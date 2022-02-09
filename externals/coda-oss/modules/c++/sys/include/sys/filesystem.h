@@ -48,7 +48,15 @@ namespace coda_oss
 		#endif
 		using CODA_OSS_coda_oss_filesystem_impl_::filesystem::file_type;
 		using CODA_OSS_coda_oss_filesystem_impl_::filesystem::path;
-        using CODA_OSS_coda_oss_filesystem_impl_::filesystem::current_path;
+
+		using CODA_OSS_coda_oss_filesystem_impl_::filesystem::absolute;
+		using CODA_OSS_coda_oss_filesystem_impl_::filesystem::create_directory;
+		using CODA_OSS_coda_oss_filesystem_impl_::filesystem::current_path;
+		using CODA_OSS_coda_oss_filesystem_impl_::filesystem::remove;
+		using CODA_OSS_coda_oss_filesystem_impl_::filesystem::temp_directory_path;
+		using CODA_OSS_coda_oss_filesystem_impl_::filesystem::is_regular_file;
+		using CODA_OSS_coda_oss_filesystem_impl_::filesystem::is_directory;
+		using CODA_OSS_coda_oss_filesystem_impl_::filesystem::exists;
 	}
 }
 
