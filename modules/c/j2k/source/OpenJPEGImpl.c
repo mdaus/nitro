@@ -868,7 +868,15 @@ OpenJPEGReader_readRegion(J2K_USER_DATA *data, uint32_t x0, uint32_t y0,
 
     nComponents = j2k_Container_getNumComponents(impl->container, error);
     componentBytes = (j2k_Container_getPrecision(impl->container, error) - 1) / 8 + 1;
-    bufSize = (uint64_t)(x1 - x0) * (y1 - y0) * componentBytes * nComponents;
+
+    // The buffer size must account for the remainder of the tile height and width
+    // given that opj_decode_tile_data have a memory access violation otherwise
+    uint64_t tile_width = j2k_Component_getWidth(impl->container, error);
+    uint64_t tile_height = j2k_Component_getHeight(impl->container, error);
+    uint64_t x_tiles = (x1 - x0) % tile_width + (x1 - x0);
+    uint64_t y_tiles = (y1 - y0) % tile_height + (y1 - y0);
+    bufSize = x_tiles * y_tiles * componentBytes * nComponents;
+
     if (buf && !*buf)
     {
         *buf = (uint8_t*)J2K_MALLOC(bufSize);
