@@ -176,7 +176,7 @@ int main(int argc, char **argv)
                         buf = NULL;
                     }
                     width = j2k_Container_getWidth(container, &error);
-                    height = j2k_Container_getWidth(container, &error);
+                    height = j2k_Container_getHeight(container, &error);
 
                     if ((bufSize = j2k_Reader_readRegion(j2kReader, 0, 0,
                                                          width, height,
