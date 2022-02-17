@@ -24,16 +24,11 @@
 #define CODA_OSS_gsl_Gsl__h_INCLUDED_
 #pragma once
 
-#include <assert.h>
-
-#include <exception>
-#include <type_traits>
 #include <utility>
 
-#include <config/compiler_extensions.h>
-#include "gsl/use_gsl.h" // Can't compile all of GSL with older versions of GCC/MSVC
 #include "gsl/Gsl_narrow.h"
 
+#include "gsl/use_gsl.h" // Can't compile all of GSL with older versions of GCC/MSVC
 #if !CODA_OSS_gsl_use_real_gsl_
 // Add to "gsl" if we're not using the real thing
 namespace gsl

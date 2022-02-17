@@ -73,10 +73,6 @@ public:
     }
     explicit FileInputStreamOS(const coda_oss::filesystem::path& inputFile) :
         FileInputStreamOS(inputFile.string()) { }
-    #if CODA_OSS_cpp17
-    explicit FileInputStreamOS(const std::filesystem::path& inputFile) :
-        FileInputStreamOS(inputFile.string()) { }
-    #endif
     FileInputStreamOS(const char* inputFile) : // "file.txt" could be either std::string or std::filesystem::path
         FileInputStreamOS(std::string(inputFile))  {  }
 

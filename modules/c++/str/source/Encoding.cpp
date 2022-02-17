@@ -127,7 +127,6 @@ static void fromWindows1252_(str::W1252string::value_type ch, std::basic_string<
         return;
     }
 
-    using const_pointer = typename std::basic_string<TChar>::const_pointer;
     static const auto map = Windows1252_to_u8string();
     const auto it = map.find(static_cast<std::u32string::value_type>(ch));
     if (it != map.end())
