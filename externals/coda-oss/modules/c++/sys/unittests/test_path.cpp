@@ -26,6 +26,7 @@
 #include <sys/Path.h>
 #include "TestCase.h"
 
+#include <sys/filesystem.h>
 namespace fs = coda_oss::filesystem;
 
 namespace
@@ -36,7 +37,7 @@ static std::string find_directory(const std::vector<std::string>& paths)
     bad_delim += sys::Path::delimiter();
     for (const auto& p : paths)
     {
-        if (fs::is_directory(p))
+        if (is_directory(fs::path(p)))
         {
             // Sometimes the value of PATH has "bad" strings in it ... at least it will
             // confuse the unit-tests as we don't expect "C:\D1\\D2
@@ -60,7 +61,7 @@ TEST_CASE(testPathMerge)
     TEST_ASSERT_GREATER(paths.size(), 0);
 
     auto path = find_directory(paths);
-    TEST_ASSERT_TRUE(fs::is_directory(path));
+    TEST_ASSERT_TRUE(is_directory(fs::path(path)));
     // add trailing '/'
     if (!str::endsWith(path, sys::Path::delimiter()))
     {
@@ -72,7 +73,7 @@ TEST_CASE(testPathMerge)
     TEST_ASSERT_GREATER(components.size(), 0);
     auto result = sys::Path::merge(components, isAbsolute);
     TEST_ASSERT_EQ(result, path);
-    TEST_ASSERT_TRUE(fs::is_directory(result));
+    TEST_ASSERT_TRUE(is_directory(fs::path(result)));
 
     #if _WIN32
     path = R"(C:\dir\file.txt)";
@@ -88,10 +89,10 @@ TEST_CASE(testPathMerge)
 TEST_CASE(testExpandEnvTilde)
 {
     auto path = sys::Path::expandEnvironmentVariables("~");
-    TEST_ASSERT_TRUE(fs::is_directory(path));
+    TEST_ASSERT_TRUE(is_directory(fs::path(path)));
 
     path = sys::Path::expandEnvironmentVariables("~", fs::file_type::directory);
-    TEST_ASSERT_TRUE(fs::is_directory(path));
+    TEST_ASSERT_TRUE(is_directory(fs::path(path)));
 
     path = sys::Path::expandEnvironmentVariables("~", fs::file_type::regular);
     TEST_ASSERT_TRUE(path.empty());
@@ -104,7 +105,7 @@ TEST_CASE(testExpandEnvTildePath)
     os.prependEnv("exts", exts, true /*overwrite*/);
 
     const auto path = sys::Path::expandEnvironmentVariables("~/$(exts)", fs::file_type::regular);
-    TEST_ASSERT_TRUE(fs::is_regular_file(path));
+    TEST_ASSERT_TRUE(is_regular_file(fs::path(path)));
 }
 
 TEST_CASE(testExpandEnv)
@@ -192,7 +193,7 @@ TEST_CASE(testExpandEnvPathMultiple)
     os.prependEnv("paths", paths, true /*overwrite*/);
     auto expanded_path = sys::Path::expandEnvironmentVariables("$(paths)", false /*checkIfExists*/);
     std::string home = "home";
-    if (fs::is_directory(home) && !str::endsWith(home, sys::Path::delimiter()))
+    if (is_directory(fs::path(home)) && !str::endsWith(home, sys::Path::delimiter()))
     {
         home += sys::Path::delimiter();
     }

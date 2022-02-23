@@ -23,6 +23,7 @@
 
 #include <algorithm>
 
+#include <sys/filesystem.h>
 namespace fs = coda_oss::filesystem;
 
 namespace sys
@@ -344,14 +345,14 @@ static void clean_slashes(std::string& path, bool isAbsolute)
     #endif
 
     // Do this last so that we have the best chance of finding the path on disk
-    if (fs::is_directory(path))
+    if (is_directory(fs::path(path)))
     {
         if (!str::endsWith(path, Path::delimiter()))
         {
             path += Path::delimiter();
         }
     }
-    else if (fs::is_regular_file(path))
+    else if (is_regular_file(fs::path(path)))
     {
       while (str::endsWith(path, Path::delimiter()))
         {
@@ -769,13 +770,14 @@ std::vector<std::string> Path::expandedEnvironmentVariables(const std::string& p
     return expandedEnvironmentVariables_(path, unused_specialPath);
 }
 
-static bool path_matches_type(const std::string &path, fs::file_type type)
+static bool path_matches_type(const std::string &path_, fs::file_type type)
 {
-    if ((type == fs::file_type::regular) && fs::is_regular_file(path))
+    const fs::path path(path_);
+    if ((type == fs::file_type::regular) && is_regular_file(path))
     {
         return true;
     }
-    if ((type== fs::file_type::directory) && fs::is_directory(path))
+    if ((type== fs::file_type::directory) && is_directory(path))
     {
         return true;
     }
@@ -820,7 +822,7 @@ static std::string expandEnvironmentVariables_(const std::string& path,
             {
                 return expanded_path; // not checking for existence, just grab the first one
             }
-            if (fs::exists(expanded_path))
+            if (exists(fs::path(expanded_path)))
             {
                 return expanded_path;
             }
