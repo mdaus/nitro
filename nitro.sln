@@ -9,6 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		CHANGES = CHANGES
 		LICENSE = LICENSE
 		README.md = README.md
+		ReleaseNotes.md = ReleaseNotes.md
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "nitf-c", "modules\c\nitf-c.vcxproj", "{F06550AD-CFC7-40B8-8727-6C82C69A8982}"
@@ -44,6 +45,12 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test", "Test\Test.vcxproj", "{238C9787-B27D-4107-B8FD-1BDB49EA8023}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test++", "Test++\Test++.vcxproj", "{E610F11D-1240-4260-87F8-504B49DB6915}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_j2k_read_tile", "modules\c\j2k\tests\test_j2k_read_tile.vcxproj", "{E34A31A2-609F-44E8-AF49-A9272CAC45D6}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_j2k_nitf", "modules\c\j2k\tests\test_j2k_nitf.vcxproj", "{D901F2CE-09F9-42D2-A38A-6376E2A9F25B}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_j2k_nitf_read_region", "modules\c++\nitf\tests\test_j2k_nitf_read_region.vcxproj", "{E34A31A2-609F-44E8-AF49-A9272CAC45D7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -115,6 +122,18 @@ Global
 		{E610F11D-1240-4260-87F8-504B49DB6915}.Debug|x64.Build.0 = Debug|x64
 		{E610F11D-1240-4260-87F8-504B49DB6915}.Release|x64.ActiveCfg = Release|x64
 		{E610F11D-1240-4260-87F8-504B49DB6915}.Release|x64.Build.0 = Release|x64
+		{E34A31A2-609F-44E8-AF49-A9272CAC45D6}.Debug|x64.ActiveCfg = Debug|x64
+		{E34A31A2-609F-44E8-AF49-A9272CAC45D6}.Debug|x64.Build.0 = Debug|x64
+		{E34A31A2-609F-44E8-AF49-A9272CAC45D6}.Release|x64.ActiveCfg = Release|x64
+		{E34A31A2-609F-44E8-AF49-A9272CAC45D6}.Release|x64.Build.0 = Release|x64
+		{D901F2CE-09F9-42D2-A38A-6376E2A9F25B}.Debug|x64.ActiveCfg = Debug|x64
+		{D901F2CE-09F9-42D2-A38A-6376E2A9F25B}.Debug|x64.Build.0 = Debug|x64
+		{D901F2CE-09F9-42D2-A38A-6376E2A9F25B}.Release|x64.ActiveCfg = Release|x64
+		{D901F2CE-09F9-42D2-A38A-6376E2A9F25B}.Release|x64.Build.0 = Release|x64
+		{E34A31A2-609F-44E8-AF49-A9272CAC45D7}.Debug|x64.ActiveCfg = Debug|x64
+		{E34A31A2-609F-44E8-AF49-A9272CAC45D7}.Debug|x64.Build.0 = Debug|x64
+		{E34A31A2-609F-44E8-AF49-A9272CAC45D7}.Release|x64.ActiveCfg = Release|x64
+		{E34A31A2-609F-44E8-AF49-A9272CAC45D7}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
