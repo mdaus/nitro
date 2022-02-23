@@ -25,6 +25,7 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
+    <ClInclude Include="j2k_Test.h" />
     <ClInclude Include="nitf_Test.h" />
     <ClInclude Include="nrt_Test.h" />
     <ClInclude Include="pch.h" />

@@ -39,6 +39,8 @@
     <ClCompile Include="nitf_test_image_io.cpp" />
     <ClCompile Include="nitf_test_image_segment_blank_nm_compression.cpp" />
     <ClCompile Include="nitf_test_image_segment_computer.cpp" />
+    <ClCompile Include="nitf_test_j2k_loading++.cpp" />
+    <ClCompile Include="nitf_test_j2k_read_tile.cpp" />
     <ClCompile Include="nitf_test_nitf_buffer_list.cpp" />
     <ClCompile Include="nitf_test_tre_create++.cpp" />
     <ClCompile Include="nitf_test_tre_mods.cpp" />
