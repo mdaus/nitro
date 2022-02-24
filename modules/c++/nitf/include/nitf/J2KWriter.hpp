@@ -125,5 +125,25 @@ private:
     details::Writer impl_;
     const Container* pContainer_ = nullptr;
 };
+
+// Encapsulate some messy code that's needed to call Writer::setTile()
+struct WriteTiler final
+{
+    WriteTiler(Writer&, std::span<const uint8_t>);
+    WriteTiler(const WriteTiler&) = delete;
+    WriteTiler& operator=(const WriteTiler&) = delete;
+    WriteTiler(WriteTiler&&) = delete;
+    WriteTiler& operator=(WriteTiler&&) = delete;
+    ~WriteTiler() = default;
+
+    void setTile(uint32_t tileX, uint32_t tileY, uint32_t i);
+
+private:
+    Writer& writer_;
+    std::span<const uint8_t> buf_;
+    size_t tileSize_ = 0;
+    uint32_t num_x_tiles_ = 0;
+    uint32_t numComponents_ = 0;
+};
 }
 #endif // NITF_J2KWriter_hpp_INCLUDED_

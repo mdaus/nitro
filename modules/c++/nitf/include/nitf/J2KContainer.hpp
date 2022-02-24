@@ -102,7 +102,8 @@ struct Container final
 
     Writer createWriter(const WriterOptions&) const;
 
-    // Not part of the C API
+    // Not part of the C API.  It might be easier to use WriteTiler than calling
+    // these individual methods.
     size_t tileSize() const; // getTileWidth() * getTileHeight()
     size_t numBytes(uint32_t) const;
     ptrdiff_t bufferOffset(uint32_t tileX, uint32_t tileY, uint32_t i) const;

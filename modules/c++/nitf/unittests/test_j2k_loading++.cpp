@@ -191,16 +191,14 @@ void writeJ2K(uint32_t x0, uint32_t y0,
 
     nitf::IOHandle outIO(outName, NRT_ACCESS_WRITEONLY, NRT_CREATE);
 
-    const auto tileSize = inContainer.tileSize();
+    j2k::WriteTiler tiler(writer, buf);
     // TODO: determine tile range from read region
     for (uint32_t y = 0; y < num_y_tiles; ++y)
     {
         for (uint32_t x = 0; x < num_x_tiles; ++x)
         {
             // TODO: May need to handle this differently for multiple components
-            const auto offset = inContainer.bufferOffset(x, y, 0);
-            const std::span<const uint8_t> buf_(buf.data() + offset, tileSize);
-            writer.setTile(x, y, buf_);
+            tiler.setTile(x, y, 0);
         }
     }
 
