@@ -81,6 +81,7 @@ struct Container final
 
     //! Set native object
     Container(j2k_Container*&&);
+    j2k_Container* getNativeOrThrow() const;
 
     uint32_t getNumComponents() const;
     Component getComponent(uint32_t) const;

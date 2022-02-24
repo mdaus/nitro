@@ -82,8 +82,13 @@ NITRO_DECLARE_CLASS_J2K(Writer)
 
 public:
     // TODO: put in Object.hpp?
+    template<typename TReturn, typename Func, typename... Args>
+    TReturn callNativeOrThrow(Func f, Args&&... args) const // c.f. getNativeOrThrow()
+    {
+        return nitf::callNativeOrThrow<TReturn>(f, getNativeOrThrow(), std::forward<Args>(args)...);
+    }
     template<typename Func, typename... Args>
-    void callNativeOrThrowV(Func f, Args&&... args) // c.f. getNativeOrThrow()
+    void callNativeOrThrowV(Func f, Args&&... args) const // c.f. getNativeOrThrow()
     {
         nitf::callNativeOrThrowV(f, getNativeOrThrow(), std::forward<Args>(args)...);
     }
@@ -113,10 +118,12 @@ struct Writer final
 
     Writer(const Container&, const WriterOptions&);
 
+    const Container& getContainer() const;
     void setTile(uint32_t tileX, uint32_t tileY, std::span<const uint8_t> buf);
     void write(nitf::IOHandle&);
 private:
     details::Writer impl_;
+    const Container* pContainer_ = nullptr;
 };
 }
 #endif // NITF_J2KWriter_hpp_INCLUDED_

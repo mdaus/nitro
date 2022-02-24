@@ -23,6 +23,8 @@
 
 #include "nitf/J2KWriter.hpp"
 
+#include <stdexcept>
+
 #include <gsl/gsl.h>
 
 #include "nitf/J2KContainer.hpp"
@@ -35,7 +37,20 @@ j2k::details::Writer::Writer(j2k_Writer* x)
 j2k::Writer::Writer(j2k_Writer*&& x) : impl_(x) {}
 
 j2k::Writer::Writer(const Container& container, const WriterOptions& options)
-    : Writer(container.createWriter(options)) { }
+    : Writer(container.createWriter(options))
+{
+    pContainer_ = &container;
+}
+
+const j2k::Container& j2k::Writer::getContainer() const
+{
+    auto pContainer = impl_.callNativeOrThrow<j2k_Container*>(j2k_Writer_getContainer);
+    if (pContainer != pContainer_->getNativeOrThrow())
+    {
+        throw std::logic_error("Pointers to native containers don't match!");
+    }
+    return *pContainer_;
+}
 
 void j2k::Writer::setTile(uint32_t tileX, uint32_t tileY, std::span<const uint8_t> buf)
 {
