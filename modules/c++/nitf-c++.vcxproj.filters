@@ -199,6 +199,9 @@
     <ClCompile Include="nitf\source\J2KWriter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="nitf\source\J2KCompressionParameters.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -426,6 +429,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="nitf\include\nitf\J2KWriter.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\J2KCompressionParameters.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
