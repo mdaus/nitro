@@ -45,17 +45,19 @@ namespace j2k
     {
         j2k_WriterOptions value_{};
     public:
-        // is there any reason to complicate this with getters and setters?
-        double& compressionRatio;
-        uint32_t& numResolutions;
-        WriterOptions() noexcept
-            : compressionRatio(value_.compressionRatio),
-            numResolutions(value_.numResolutions) { }
+        // make this look like CompressionParameters since that's existing code
+        WriterOptions() = default;
+        WriterOptions(const j2k_WriterOptions& v) noexcept : value_(v) {}
+        WriterOptions(double compressionRatio, uint32_t numResolutions) noexcept :
+            WriterOptions(j2k_WriterOptions{ compressionRatio , numResolutions }) {}
         WriterOptions(const WriterOptions&) = default;
-        WriterOptions& operator=(const WriterOptions&) = delete;
+        WriterOptions& operator=(const WriterOptions&) = default;
         WriterOptions(WriterOptions&&) = default;
-        WriterOptions& operator=(WriterOptions&&) = delete;
+        WriterOptions& operator=(WriterOptions&&) = default;
         ~WriterOptions() = default;
+
+        double getCcompressionRatio() const { return value_.compressionRatio; }
+        uint32_t getNumResolutions() const { return value_.numResolutions; }
 
         // for use when calling C code
         j2k_WriterOptions* getNative() const noexcept
