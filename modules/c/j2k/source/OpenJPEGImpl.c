@@ -26,6 +26,8 @@
 #include <assert.h>
 #include <string.h>
 
+#include "j2k/j2k_Stream.h"
+
 #ifdef _MSC_VER
 #pragma warning(disable: 4706) // assignment within conditional expression
 #endif // _MSC_VER
@@ -1495,4 +1497,29 @@ J2KAPI(j2k_Implementation) j2k_getImplementation(nrt_Error* error)
     }
     return j2k_Implementation_OpenJPEG;
 }
+
+J2KAPI(j2k_Stream*) j2k_Stream_create(size_t chunkSize, J2K_BOOL isInputStream)
+{
+    j2k_Stream* retval = (j2k_Stream*)J2K_MALLOC(sizeof(j2k_Stream));
+    if (retval != NULL)
+    {
+        retval->opj_stream = opj_stream_create(chunkSize, isInputStream);
+        if (retval->opj_stream == NULL)
+        {
+            J2K_FREE(retval);
+            retval = NULL;
+        }
+    }
+    return retval;
+}
+
+J2KAPI(void) j2k_Stream_destroy(j2k_Stream* pStream)
+{
+    if (pStream != NULL)
+    {
+        opj_stream_destroy((opj_stream_t*)pStream->opj_stream);
+        J2K_FREE(pStream);
+    }
+}
+
 #endif

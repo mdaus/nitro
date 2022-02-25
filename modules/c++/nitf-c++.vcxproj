@@ -52,6 +52,7 @@
     <ClCompile Include="nitf\source\J2KCompressionParameters.cpp" />
     <ClCompile Include="nitf\source\J2KContainer.cpp" />
     <ClCompile Include="nitf\source\J2KReader.cpp" />
+    <ClCompile Include="nitf\source\J2KStream.cpp" />
     <ClCompile Include="nitf\source\J2KWriter.cpp" />
     <ClCompile Include="nitf\source\LabelSegment.cpp" />
     <ClCompile Include="nitf\source\LabelSubheader.cpp" />
@@ -127,6 +128,7 @@
     <ClInclude Include="nitf\include\nitf\J2KCompressionParameters.hpp" />
     <ClInclude Include="nitf\include\nitf\J2KContainer.hpp" />
     <ClInclude Include="nitf\include\nitf\J2KReader.hpp" />
+    <ClInclude Include="nitf\include\nitf\J2KStream.hpp" />
     <ClInclude Include="nitf\include\nitf\J2KWriter.hpp" />
     <ClInclude Include="nitf\include\nitf\LabelSegment.hpp" />
     <ClInclude Include="nitf\include\nitf\LabelSubheader.hpp" />
