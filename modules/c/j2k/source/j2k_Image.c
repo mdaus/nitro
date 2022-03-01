@@ -20,24 +20,21 @@
  *
  */
 
- // J2K isn't part of "nitf" (yet?) so use NITRO, not NITF prefix
-#ifndef NITRO_j2k_Stream_h_INCLUDED_ 
-#define NITRO_j2k_Stream_h_INCLUDED_
+#include "j2k/Config.h"
+#include "j2k/j2k_Image.h"
 
-#include "j2k/Defines.h"
-
-J2K_CXX_GUARD
-
-typedef struct _j2k_Stream
+#ifndef HAVE_OPENJPEG_H
+J2KAPI(j2k_Image*) j2k_Image_tile_create(uint32_t numcmpts, const j2k_Image_comptparm* cmptparms, J2K_COLOR_SPACE clrspc)
 {
-    void /*obj_stream_t*/ *opj_stream;
-} j2k_Stream;
+	return NULL;
+}
 
-#define NITRO_J2K_STREAM_CHUNK_SIZE 0x100000 /** 1 mega by default */ // c.f. OPJ_J2K_STREAM_CHUNK_SIZE in <openjpeg.h>
+J2KAPI(J2K_BOOL) j2k_Image_init(j2k_Image* pImage, int x0, int y0, int x1, int y1, int numcmpts, J2K_COLOR_SPACE color_space)
+{
+	return J2K_FALSE;
+}
 
-J2KAPI(j2k_Stream*) j2k_Stream_create(size_t chunkSize, J2K_BOOL isInputStream);
-J2KAPI(void) j2k_Stream_destroy(j2k_Stream* pStream);
-
-J2K_CXX_ENDGUARD
-
-#endif // NITRO_j2k_Stream_h_INCLUDED_
+J2KAPI(void) j2k_Image_destroy(j2k_Image* pImage)
+{
+}
+#endif

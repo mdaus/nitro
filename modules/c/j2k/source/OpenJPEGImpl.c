@@ -27,6 +27,7 @@
 #include <string.h>
 
 #include "j2k/j2k_Stream.h"
+#include "j2k/j2k_Image.h"
 
 #ifdef _MSC_VER
 #pragma warning(disable: 4706) // assignment within conditional expression
@@ -1519,6 +1520,70 @@ J2KAPI(void) j2k_Stream_destroy(j2k_Stream* pStream)
     {
         opj_stream_destroy((opj_stream_t*)pStream->opj_stream);
         J2K_FREE(pStream);
+    }
+}
+
+J2KAPI(j2k_Image*) j2k_Image_tile_create(uint32_t numcmpts, const j2k_Image_comptparm* cmptparms, J2K_COLOR_SPACE clrspc)
+{
+    if (cmptparms == NULL)
+    {
+        return NULL;
+    }
+
+    j2k_Image* retval = (j2k_Image*)J2K_MALLOC(sizeof(j2k_Image));
+    if (retval != NULL)
+    {
+        opj_image_cmptparm_t cmptparms_;
+        cmptparms_.dx = cmptparms->dx;
+        cmptparms_.dy = cmptparms->dy;
+        cmptparms_.w = cmptparms->w;
+        cmptparms_.h = cmptparms->h;
+        cmptparms_.x0 = cmptparms->x0;
+        cmptparms_.y0 = cmptparms->y0;
+        cmptparms_.prec = cmptparms->prec;
+        cmptparms_.bpp = cmptparms->bpp;
+        cmptparms_.sgnd = cmptparms->sgnd;
+
+        retval->opj_image = opj_image_tile_create(numcmpts, &cmptparms_, clrspc);
+        if (retval->opj_image == NULL)
+        {
+            J2K_FREE(retval);
+            retval = NULL;
+        }
+    }
+    return retval;
+}
+
+J2KAPI(J2K_BOOL) j2k_Image_init(j2k_Image* pImage, int x0, int y0, int x1, int y1, int numcmpts, J2K_COLOR_SPACE color_space)
+{
+    if (pImage == NULL)
+    {
+        return J2K_FALSE;
+    }
+    opj_image_t* pImage_ = (opj_image_t*)pImage->opj_image;
+    if (pImage_ == NULL)
+    {
+        return J2K_FALSE;
+    }
+
+    // One image component corresponding to the full grayscale image
+    pImage_->numcomps = numcmpts;
+
+    pImage_->x0 = x0;
+    pImage_->y0 = y0;
+    pImage_->x1 = x1;
+    pImage_->y1 = y1;
+    pImage_->color_space = color_space;
+
+    return J2K_TRUE;
+}
+
+J2KAPI(void) j2k_Image_destroy(j2k_Image* pImage)
+{
+    if (pImage != NULL)
+    {
+        opj_image_destroy((opj_image_t*)pImage->opj_image);
+        J2K_FREE(pImage);
     }
 }
 

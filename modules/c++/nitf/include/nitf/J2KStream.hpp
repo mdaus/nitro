@@ -72,7 +72,7 @@ namespace j2k
         /*!
          * \return The openjpeg stream.
          */
-        j2k_Stream* get()
+        j2k_Stream* getNative() const noexcept
         {
             return mStream;
         }
