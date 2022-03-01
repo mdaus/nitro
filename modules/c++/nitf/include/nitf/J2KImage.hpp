@@ -27,7 +27,7 @@
 
 #include <types/RowCol.h>
 
-#include <j2k/j2k_image.h>
+#include <j2k/j2k_Image.h>
 
 namespace j2k
 {
@@ -73,4 +73,4 @@ namespace j2k
     };
 }
 
-#endif NITF_J2KImage_hpp_INCLUDED_
+#endif // NITF_J2KImage_hpp_INCLUDED_

@@ -90,4 +90,4 @@ namespace j2k
     };
 }
 
-#endif NITF_J2KEncoder_hpp_INCLUDED_
+#endif // NITF_J2KEncoder_hpp_INCLUDED_

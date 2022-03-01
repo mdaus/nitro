@@ -1680,7 +1680,7 @@ J2KAPI(NRT_BOOL) j2k_initEncoderParameters(j2k_cparameters_t* pParameters,
         const size_t minX = (size_t) (floor(log((double)tileCol) / logTwo));
         const size_t minY = (size_t) (floor(log((double)tileRow) / logTwo));
 
-        const size_t minXY = min(minX, minY);
+        const size_t minXY = (minX < minY) ? minX : minY;
         if (minXY < (size_t)(opj_cparameters->numresolution))
         {
             opj_cparameters->numresolution = (int)minXY;
