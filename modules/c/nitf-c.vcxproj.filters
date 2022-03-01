@@ -361,6 +361,9 @@
     <ClInclude Include="j2k\include\j2k\j2k_Image.h">
       <Filter>j2k</Filter>
     </ClInclude>
+    <ClInclude Include="j2k\include\j2k\j2k_Encoder.h">
+      <Filter>j2k</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cgm\source\CircleElement.c">
@@ -677,6 +680,9 @@
       <Filter>j2k</Filter>
     </ClCompile>
     <ClCompile Include="j2k\source\j2k_Image.c">
+      <Filter>j2k</Filter>
+    </ClCompile>
+    <ClCompile Include="j2k\source\j2k_Encoder.c">
       <Filter>j2k</Filter>
     </ClCompile>
   </ItemGroup>

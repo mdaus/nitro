@@ -208,6 +208,9 @@
     <ClCompile Include="nitf\source\J2KImage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="nitf\source\J2KEncoder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -444,6 +447,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="nitf\include\nitf\J2KImage.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nitf\include\nitf\J2KEncoder.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

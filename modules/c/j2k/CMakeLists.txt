@@ -22,6 +22,7 @@ coda_add_module(
         source/Defines.c
         source/JasPerImpl.c
         source/OpenJPEGImpl.c
+        source/j2k_Encoder.c
         source/j2k_Image.c
         source/j2k_Reader.c
         source/j2k_Stream.c

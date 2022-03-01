@@ -79,7 +79,7 @@ namespace j2k
 
     private:
         //! The openjpeg output/input stream.
-        j2k_Stream* mStream;
+        j2k_Stream* mStream = nullptr;
     };
 }
 

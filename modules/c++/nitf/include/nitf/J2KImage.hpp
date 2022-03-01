@@ -38,7 +38,7 @@ namespace j2k
     class Image final
     {
         //! The openjpeg image.
-        j2k_Image* mImage;
+        j2k_Image* mImage = nullptr;
 
         //! The openjpeg image component parameters.
         j2k_Image_comptparm mImageComponentParams;

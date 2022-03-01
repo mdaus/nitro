@@ -28,6 +28,7 @@
 
 #include "j2k/j2k_Stream.h"
 #include "j2k/j2k_Image.h"
+#include "j2k/j2k_Encoder.h"
 
 #ifdef _MSC_VER
 #pragma warning(disable: 4706) // assignment within conditional expression
@@ -1585,6 +1586,145 @@ J2KAPI(void) j2k_Image_destroy(j2k_Image* pImage)
         opj_image_destroy((opj_image_t*)pImage->opj_image);
         J2K_FREE(pImage);
     }
+}
+
+J2KAPI(j2k_codec_t*) j2k_create_compress(void)
+{
+    j2k_codec_t* retval = (j2k_codec_t*)J2K_MALLOC(sizeof(j2k_codec_t));
+    if (retval != NULL)
+    {
+        retval->opj_codec = opj_create_compress(OPJ_CODEC_J2K);
+        if (retval->opj_codec == NULL)
+        {
+            J2K_FREE(retval);
+            retval = NULL;
+        }
+    }
+    return retval;
+}
+
+J2KAPI(void) j2k_destroy_codec(j2k_codec_t* pEncoder)
+{
+    if (pEncoder != NULL)
+    {
+        opj_destroy_codec((opj_codec_t*)pEncoder->opj_codec);
+        J2K_FREE(pEncoder);
+    }
+}
+
+J2KAPI(j2k_cparameters_t*) j2k_set_default_encoder_parameters(void)
+{
+    j2k_cparameters_t* retval = (j2k_cparameters_t*)J2K_MALLOC(sizeof(j2k_cparameters_t));
+    if (retval != NULL)
+    {
+
+        //! The openjpeg codec parameters used to store the tiling and compression
+        //! configuration.
+        retval->opj_cparameters = J2K_MALLOC(sizeof(opj_cparameters_t));
+        if (retval->opj_cparameters == NULL)
+        {
+            J2K_FREE(retval);
+            retval = NULL;
+        }
+        else
+        {
+            opj_set_default_encoder_parameters((opj_cparameters_t*)retval->opj_cparameters);
+        }
+    }
+    return retval;
+}
+J2KAPI(void) j2k_destroy_encoder_parameters(j2k_cparameters_t* pParameters)
+{
+    if (pParameters != NULL)
+    {
+        J2K_FREE((opj_cparameters_t*)pParameters->opj_cparameters);
+        J2K_FREE(pParameters);
+    }
+}
+
+J2KAPI(NRT_BOOL) j2k_initEncoderParameters(j2k_cparameters_t* pParameters,
+    size_t tileRow, size_t tileCol, double compressionRatio, size_t numResolutions)
+{
+    if (pParameters == NULL)
+    {
+        return NRT_FALSE;
+    }
+    opj_cparameters_t* opj_cparameters = (opj_cparameters_t*)pParameters->opj_cparameters;
+    if (opj_cparameters == NULL)
+    {
+        return NRT_FALSE;
+    }
+
+    // 0: J2K, 1: JP2, 2: JPT
+    opj_cparameters->cod_format = 0;
+
+    // Turn on tiling
+    opj_cparameters->tile_size_on = 1;
+
+    // Set the tile dimensions
+    opj_cparameters->cp_tx0 = 0;
+    opj_cparameters->cp_tdx = (int)tileCol;
+    opj_cparameters->cp_tdy = (int)tileRow;
+
+    // Initialize number of resolutions
+    if (numResolutions > 0)
+    {
+        opj_cparameters->numresolution = (int)numResolutions;
+    }
+    else
+    {
+        // OpenJPEG defaults this to 6, but that causes the compressor
+        // to fail if the tile sizes are less than 2^6.  So we adjust this
+        // down if necessary.
+        const double logTwo = log(2);
+        const size_t minX = (size_t) (floor(log((double)tileCol) / logTwo));
+        const size_t minY = (size_t) (floor(log((double)tileRow) / logTwo));
+
+        const size_t minXY = min(minX, minY);
+        if (minXY < (size_t)(opj_cparameters->numresolution))
+        {
+            opj_cparameters->numresolution = (int)minXY;
+        }
+    }
+
+    if (compressionRatio > 0)
+    {
+        opj_cparameters->tcp_rates[0] = (float)compressionRatio;
+    }
+    else
+    {
+        // Lossless compression
+        opj_cparameters->tcp_rates[0] = 1;
+    }
+
+    opj_cparameters->tcp_numlayers++;
+    opj_cparameters->cp_disto_alloc = 1;
+
+    return NRT_TRUE;
+}
+
+J2KAPI(NRT_BOOL) j2k_set_error_handler(j2k_codec_t* p_codec, j2k_msg_callback p_callback, void* p_user_data)
+{
+    if (p_codec == NULL)
+    {
+        return NRT_FALSE;
+    }
+
+    const int result = opj_set_error_handler((opj_codec_t*)p_codec->opj_codec, (opj_msg_callback)p_callback, p_user_data);
+    return result ? NRT_TRUE : NRT_FALSE;
+}
+
+J2KAPI(NRT_BOOL) j2k_setup_encoder(j2k_codec_t* p_codec, const j2k_cparameters_t* parameters, j2k_Image* image)
+{
+    if ((p_codec == NULL) || (parameters == NULL) || (image == NULL))
+    {
+        return NRT_FALSE;
+    }
+
+    const int result = opj_setup_encoder((opj_codec_t*)p_codec->opj_codec,
+        (opj_cparameters_t*)parameters->opj_cparameters,
+        (opj_image_t*)image->opj_image);
+    return result ? NRT_TRUE : NRT_FALSE;
 }
 
 #endif
