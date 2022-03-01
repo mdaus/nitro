@@ -29,6 +29,7 @@
 #include "j2k/j2k_Stream.h"
 #include "j2k/j2k_Image.h"
 #include "j2k/j2k_Encoder.h"
+#include "j2k/j2k_TileWriter.h"
 
 #ifdef _MSC_VER
 #pragma warning(disable: 4706) // assignment within conditional expression
@@ -1725,6 +1726,30 @@ J2KAPI(NRT_BOOL) j2k_setup_encoder(j2k_codec_t* p_codec, const j2k_cparameters_t
         (opj_cparameters_t*)parameters->opj_cparameters,
         (opj_image_t*)image->opj_image);
     return result ? NRT_TRUE : NRT_FALSE;
+}
+
+J2KAPI(void) j2k_stream_set_write_function(j2k_Stream* p_stream, j2k_stream_write_fn p_function)
+{
+    if (p_stream != NULL)
+    {
+        opj_stream_set_write_function((opj_stream_t*)p_stream->opj_stream, p_function);
+    }
+}
+
+J2KAPI(void) j2k_stream_set_skip_function(j2k_Stream* p_stream, j2k_stream_skip_fn p_function)
+{
+    if (p_stream != NULL)
+    {
+        opj_stream_set_skip_function((opj_stream_t*)p_stream->opj_stream, p_function);
+    }
+}
+
+J2KAPI(void) j2k_stream_set_seek_function(j2k_Stream* p_stream, j2k_stream_seek_fn p_function)
+{
+    if (p_stream != NULL)
+    {
+        opj_stream_set_seek_function((opj_stream_t*)p_stream->opj_stream, p_function);
+    }
 }
 
 #endif

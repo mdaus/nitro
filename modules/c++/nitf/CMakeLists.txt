@@ -53,6 +53,7 @@ coda_add_module(
         source/J2KImage.cpp
         source/J2KReader.cpp
         source/J2KStream.cpp
+        source/J2KTileWriter.cpp
         source/J2KWriter.cpp
         source/LabelSegment.cpp
         source/LabelSubheader.cpp

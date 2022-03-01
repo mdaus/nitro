@@ -29,11 +29,10 @@
 #include <sys/Conf.h>
 #include <types/RowCol.h>
 
-#include <j2k/OPJStream.h>
-#include <j2k/OPJImage.h>
-#include <j2k/OPJEncoder.h>
-
-#include <j2k/CompressionParams.h>
+#include "nitf/J2KStream.hpp"
+#include "nitf/J2KImage.hpp"
+#include "nitf/J2KEncoder.hpp"
+#include "nitf/J2KCompressionParameters.hpp"
 
 namespace j2k
 {
@@ -44,8 +43,18 @@ namespace j2k
          * \desc Implementation class for writing compressed tiles to an output stream.
          * This class is used by OPJCompressor to do thread based tile compression.
          */
-        class OPJTileWriter
+        class TileWriter final
         {
+            std::shared_ptr< ::io::SeekableOutputStream> mOutputStream;
+            std::shared_ptr<const CompressionParameters> mCompressionParams;
+
+            Stream mStream;             //! The openjpeg stream.
+            Image mImage;             //! The openjpeg image.
+            Encoder mEncoder;             //! The openjpeg encoder.
+            bool mIsCompressing;             //! Whether we are currently compressing or not.
+
+            void resizeTile(types::RowCol<size_t>& tile, size_t tileIndex);
+
         public:
             /*!
              * Constructor
@@ -54,14 +63,14 @@ namespace j2k
              *
              * \param compressionParams The J2K compression parameters.
              */
-            OPJTileWriter(
+            TileWriter(
                 std::shared_ptr< ::io::SeekableOutputStream> outputStream,
-                std::shared_ptr<const CompressionParams> compressionParams);
+                std::shared_ptr<const CompressionParameters> compressionParams);
 
             /*!
              * Destructor - calls end().
              */
-            ~OPJTileWriter();
+            ~TileWriter();
 
             /*!
              * Starts the J2K compression. The first call to flush() after this
@@ -115,25 +124,6 @@ namespace j2k
              */
             void setOutputStream(
                 std::shared_ptr< ::io::SeekableOutputStream> outputStream);
-
-        private:
-            void resizeTile(types::RowCol<size_t>& tile, size_t tileIndex);
-
-        private:
-            std::shared_ptr< ::io::SeekableOutputStream> mOutputStream;
-            std::shared_ptr<const CompressionParams> mCompressionParams;
-
-            //! The openjpeg stream.
-            OPJStream mStream;
-
-            //! The openjpeg image.
-            OPJImage mImage;
-
-            //! The openjpeg encoder.
-            OPJEncoder mEncoder;
-
-            //! Whether we are currently compressing or not.
-            bool mIsCompressing;
         };
     }
 }
