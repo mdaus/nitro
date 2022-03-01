@@ -1752,4 +1752,24 @@ J2KAPI(void) j2k_stream_set_seek_function(j2k_Stream* p_stream, j2k_stream_seek_
     }
 }
 
+J2KAPI(void) j2k_stream_set_user_data(j2k_Stream* p_stream, void* p_data, j2k_stream_free_user_data_fn p_function)
+{
+    if (p_stream != NULL)
+    {
+        opj_stream_set_user_data((opj_stream_t*)p_stream->opj_stream, p_data, p_function);
+    }
+}
+
+J2KAPI(NRT_BOOL) j2k_flush(j2k_codec_t* p_codec, j2k_Stream* p_stream)
+{
+    if ((p_codec == NULL) || (p_stream == NULL))
+    {
+        return NRT_FALSE;
+    }
+
+    const OPJ_BOOL result = opj_flush((opj_codec_t*)p_codec->opj_codec, (opj_stream_t*)p_stream->opj_stream);
+    return result ? NRT_TRUE : NRT_FALSE;
+}
+
+
 #endif

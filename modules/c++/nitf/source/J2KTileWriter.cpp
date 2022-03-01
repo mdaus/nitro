@@ -166,7 +166,7 @@ void j2k::details::TileWriter::flush()
         throw except::Exception(Ctxt("Cannot flush data to output stream: compression has not been started."));
     }
 
-    const int flushSuccess = opj_flush(mEncoder.getNative(), mStream.getNative());
+    const auto flushSuccess = j2k_flush(mEncoder.getNative(), mStream.getNative());
     if (!flushSuccess)
     {
         if (mEncoder.errorOccurred())
@@ -236,7 +236,7 @@ void j2k::details::TileWriter::writeTile(const sys::ubyte* tileData, size_t tile
 void j2k::details::TileWriter::setOutputStream(std::shared_ptr<::io::SeekableOutputStream> outputStream)
 {
     mOutputStream = outputStream;
-    opj_stream_set_user_data(mStream.getNative(), mOutputStream.get(), nullptr);
+    j2k_stream_set_user_data(mStream.getNative(), mOutputStream.get(), nullptr);
 
 }
 

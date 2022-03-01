@@ -25,16 +25,22 @@
 #define NITRO_j2k_TileWriter_h_INCLUDED_
 
 #include "j2k/j2k_Stream.h"
+#include "j2k/j2k_Encoder.h"
 
 J2K_CXX_GUARD
 
 typedef size_t(*j2k_stream_write_fn)(void* p_buffer, size_t p_nb_bytes, void* p_user_data);
 typedef int64_t(*j2k_stream_skip_fn)(int64_t p_nb_bytes, void* p_user_data);
 typedef NRT_BOOL(*j2k_stream_seek_fn)(int64_t p_nb_bytes, void* p_user_data);
+typedef void (*j2k_stream_free_user_data_fn)(void* p_user_data);
 
 J2KAPI(void) j2k_stream_set_write_function(j2k_Stream* p_stream, j2k_stream_write_fn p_function);
 J2KAPI(void) j2k_stream_set_skip_function(j2k_Stream* p_stream, j2k_stream_skip_fn p_function);
 J2KAPI(void) j2k_stream_set_seek_function(j2k_Stream* p_stream, j2k_stream_seek_fn p_function);
+
+J2KAPI(void) j2k_stream_set_user_data(j2k_Stream* p_stream, void* p_data, j2k_stream_free_user_data_fn p_function);
+
+J2KAPI(NRT_BOOL) j2k_flush(j2k_codec_t* p_codec, j2k_Stream* p_stream);
 
 J2K_CXX_ENDGUARD
 

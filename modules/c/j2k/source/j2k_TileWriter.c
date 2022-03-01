@@ -37,4 +37,16 @@ J2KAPI(void) j2k_stream_set_seek_function(j2k_Stream* p_stream, j2k_stream_seek_
 {
 }
 
+J2KAPI(void) j2k_stream_set_user_data(j2k_Stream* p_stream, void* p_data, j2k_stream_free_user_data_fn p_function)
+{
+
+}
+
+
+J2KAPI(NRT_BOOL) j2k_flush(j2k_codec_t* p_codec, j2k_Stream* p_stream)
+{
+	return NRT_FALSE;
+}
+
+
 #endif
