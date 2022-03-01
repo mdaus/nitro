@@ -44,12 +44,10 @@ namespace
     {
         try
         {
-            ::io::SeekableOutputStream* compressedOutputStream =
-                static_cast<::io::SeekableOutputStream*>(data);
-
+            auto compressedOutputStream = static_cast<::io::SeekableOutputStream*>(data);
             compressedOutputStream->write(buffer, numBytes);
         }
-        catch (const except::Exception& ex)
+        catch (const except::Exception&)
         {
             // Openjpeg expects (OPJ_SIZE_T)-1 as the result of a failed
             // call to a user provided write.
@@ -62,15 +60,12 @@ namespace
     {
         try
         {
-            ::io::SeekableOutputStream* compressedOutputStream =
-                static_cast<::io::SeekableOutputStream*>(data);
-
+            auto compressedOutputStream = static_cast<::io::SeekableOutputStream*>(data);
             compressedOutputStream->seek(bytesToSkip, ::io::Seekable::CURRENT);
         }
-        catch (const except::Exception& ex)
+        catch (const except::Exception&)
         {
-            // Openjpeg expects -1 as the result of a failed call to a user
-            // provided skip
+            // Openjpeg expects -1 as the result of a failed call to a user provided skip()
             return -1;
         }
 
@@ -81,15 +76,12 @@ namespace
     {
         try
         {
-            ::io::SeekableOutputStream* compressedOutputStream =
-                static_cast<::io::SeekableOutputStream*>(data);
-
+            auto compressedOutputStream = static_cast<::io::SeekableOutputStream*>(data);
             compressedOutputStream->seek(numBytes, ::io::Seekable::START);
         }
-        catch (const except::Exception& ex)
+        catch (const except::Exception&)
         {
-            // Openjpeg expects 0 (OPJ_FALSE) as the result of a failed call
-            // to a user provided seek
+            // Openjpeg expects 0 (OPJ_FALSE) as the result of a failed call to a user provided seek()
             return false;
         }
 
@@ -97,7 +89,7 @@ namespace
     }
 }
 
-j2k::impl::TileWriter::TileWriter(
+j2k::details::TileWriter::TileWriter(
     std::shared_ptr< ::io::SeekableOutputStream> outputStream,
     std::shared_ptr<const CompressionParameters> compressionParams) :
     mCompressionParams(compressionParams),
@@ -112,7 +104,7 @@ j2k::impl::TileWriter::TileWriter(
     j2k_stream_set_skip_function(mStream.getNative(), skipImpl);
 }
 
-j2k::impl::TileWriter::~TileWriter()
+j2k::details::TileWriter::~TileWriter()
 {
     try
     {
@@ -123,7 +115,7 @@ j2k::impl::TileWriter::~TileWriter()
     }
 }
 
-void j2k::impl::TileWriter::start()
+void j2k::details::TileWriter::start()
 {
     if (!mIsCompressing)
     {
@@ -135,9 +127,7 @@ void j2k::impl::TileWriter::start()
                 const std::string opjErrorMsg = mEncoder.getErrorMessage();
                 mEncoder.clearError();
 
-                throw except::Exception(
-                    Ctxt("Error starting compression "
-                        "with openjpeg error: " + opjErrorMsg));
+                throw except::Exception(Ctxt("Error starting compression with openjpeg error: " + opjErrorMsg));
             }
 
             throw except::Exception(Ctxt("Error starting compression."));
@@ -147,7 +137,7 @@ void j2k::impl::TileWriter::start()
     }
 }
 
-void j2k::impl::TileWriter::end()
+void j2k::details::TileWriter::end()
 {
     if (mIsCompressing)
     {
@@ -159,9 +149,7 @@ void j2k::impl::TileWriter::end()
                 const std::string opjErrorMsg = mEncoder.getErrorMessage();
                 mEncoder.clearError();
 
-                throw except::Exception(
-                    Ctxt("Error ending compression "
-                        "with openjpeg error: " + opjErrorMsg));
+                throw except::Exception(Ctxt("Error ending compression with openjpeg error: " + opjErrorMsg));
             }
 
             throw except::Exception(Ctxt("Error ending compression."));
@@ -171,13 +159,11 @@ void j2k::impl::TileWriter::end()
     }
 }
 
-void j2k::impl::TileWriter::flush()
+void j2k::details::TileWriter::flush()
 {
     if (!mIsCompressing)
     {
-        throw except::Exception(
-            Ctxt("Cannot flush data to output stream: compression "
-                "has not been started."));
+        throw except::Exception(Ctxt("Cannot flush data to output stream: compression has not been started."));
     }
 
     const int flushSuccess = opj_flush(mEncoder.getNative(), mStream.getNative());
@@ -195,7 +181,7 @@ void j2k::impl::TileWriter::flush()
     }
 }
 
-void j2k::impl::TileWriter::writeTile(const sys::ubyte* tileData, size_t tileIndex)
+void j2k::details::TileWriter::writeTile(const sys::ubyte* tileData, size_t tileIndex)
 {
     start();
 
@@ -207,8 +193,7 @@ void j2k::impl::TileWriter::writeTile(const sys::ubyte* tileData, size_t tileInd
 
     // Create a smaller buffer for our partial tile
     mem::ScopedArray<sys::ubyte> partialTileBuffer;
-    if (resizedTileDims.col < tileDims.col ||
-        resizedTileDims.row < tileDims.row)
+    if (resizedTileDims.col < tileDims.col || resizedTileDims.row < tileDims.row)
     {
         partialTileBuffer.reset(new sys::ubyte[resizedTileDims.area()]);
         for (size_t row = 0; row < resizedTileDims.row; ++row)
@@ -234,9 +219,7 @@ void j2k::impl::TileWriter::writeTile(const sys::ubyte* tileData, size_t tileInd
     if (!writeSuccess)
     {
         std::ostringstream os;
-        os << "Failed to compress tile " << tileIndex
-            << " (rows: " << resizedTileDims.row << ", cols: "
-            << resizedTileDims.col << ")";
+        os << "Failed to compress tile " << tileIndex << " (rows: " << resizedTileDims.row << ", cols: " << resizedTileDims.col << ")";
         if (mEncoder.errorOccurred())
         {
             const std::string opjErrorMsg = mEncoder.getErrorMessage();
@@ -250,36 +233,28 @@ void j2k::impl::TileWriter::writeTile(const sys::ubyte* tileData, size_t tileInd
     }
 }
 
-void j2k::impl::TileWriter::setOutputStream(std::shared_ptr<::io::SeekableOutputStream> outputStream)
+void j2k::details::TileWriter::setOutputStream(std::shared_ptr<::io::SeekableOutputStream> outputStream)
 {
     mOutputStream = outputStream;
-    opj_stream_set_user_data(mStream.getNative(),
-        mOutputStream.get(),
-        NULL);
+    opj_stream_set_user_data(mStream.getNative(), mOutputStream.get(), nullptr);
 
 }
 
-void j2k::impl::TileWriter::resizeTile(types::RowCol<size_t>& tile, size_t tileIndex)
+void j2k::details::TileWriter::resizeTile(types::RowCol<size_t>& tile, size_t tileIndex)
 {
-    const types::RowCol<size_t> tileDims =
-        mCompressionParams->getTileDims();
+    const auto tileDims = mCompressionParams->getTileDims();
+    const auto rawImageDims = mCompressionParams->getRawImageDims();
+    const auto numColsOfTiles = mCompressionParams->getNumColsOfTiles();
+    const auto numRowsOfTiles = mCompressionParams->getNumRowsOfTiles();
 
-    const types::RowCol<size_t> rawImageDims =
-        mCompressionParams->getRawImageDims();
-
-    const size_t numColsOfTiles = mCompressionParams->getNumColsOfTiles();
-    const size_t numRowsOfTiles = mCompressionParams->getNumRowsOfTiles();
-
-    const size_t tileRow = tileIndex / numColsOfTiles;
-    if (tileRow == numRowsOfTiles - 1 &&
-        rawImageDims.row % tileDims.row != 0)
+    const auto tileRow = tileIndex / numColsOfTiles;
+    if ((tileRow == numRowsOfTiles - 1) && (rawImageDims.row % tileDims.row != 0))
     {
         tile.row = rawImageDims.row % tileDims.row;
     }
 
     const size_t tileCol = tileIndex - (tileRow * numColsOfTiles);
-    if (tileCol == numColsOfTiles - 1 &&
-        rawImageDims.col % tileDims.col != 0)
+    if ((tileCol == numColsOfTiles - 1) && (rawImageDims.col % tileDims.col != 0))
     {
         tile.col = rawImageDims.col % tileDims.col;
     }

@@ -36,7 +36,7 @@
 
 namespace j2k
 {
-    namespace impl
+    namespace details
     {
         /*!
          * \class OPJTileWriter
@@ -66,6 +66,10 @@ namespace j2k
             TileWriter(
                 std::shared_ptr< ::io::SeekableOutputStream> outputStream,
                 std::shared_ptr<const CompressionParameters> compressionParams);
+            TileWriter(const TileWriter&) = delete;
+            TileWriter& operator=(const TileWriter&) = delete;
+            TileWriter(TileWriter&&) = default;
+            TileWriter& operator=(TileWriter&&) = default;
 
             /*!
              * Destructor - calls end().
