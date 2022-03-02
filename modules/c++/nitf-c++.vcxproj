@@ -50,6 +50,7 @@
     <ClCompile Include="nitf\source\IOStreamWriter.cpp" />
     <ClCompile Include="nitf\source\J2KComponent.cpp" />
     <ClCompile Include="nitf\source\J2KCompressionParameters.cpp" />
+    <ClCompile Include="nitf\source\J2KCompressor.cpp" />
     <ClCompile Include="nitf\source\J2KContainer.cpp" />
     <ClCompile Include="nitf\source\J2KEncoder.cpp" />
     <ClCompile Include="nitf\source\J2KImage.cpp" />
@@ -129,6 +130,7 @@
     <ClInclude Include="nitf\include\nitf\IOStreamWriter.hpp" />
     <ClInclude Include="nitf\include\nitf\J2KComponent.hpp" />
     <ClInclude Include="nitf\include\nitf\J2KCompressionParameters.hpp" />
+    <ClInclude Include="nitf\include\nitf\J2KCompressor.hpp" />
     <ClInclude Include="nitf\include\nitf\J2KContainer.hpp" />
     <ClInclude Include="nitf\include\nitf\J2KEncoder.hpp" />
     <ClInclude Include="nitf\include\nitf\J2KImage.hpp" />

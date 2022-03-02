@@ -130,4 +130,4 @@ namespace j2k
     }
 }
 
-#endif NITF_J2KTileWriter_hpp_INCLUDED_
+#endif // NITF_J2KTileWriter_hpp_INCLUDED_

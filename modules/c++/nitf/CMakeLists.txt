@@ -48,6 +48,7 @@ coda_add_module(
         source/ImageWriter.cpp
         source/J2KComponent.cpp
         source/J2KCompressionParameters.cpp
+        source/J2KCompressor.cpp
         source/J2KContainer.cpp
         source/J2KEncoder.cpp
         source/J2KImage.cpp
