@@ -49,7 +49,7 @@ namespace j2k
      */
     class Compressor final
     {
-        std::shared_ptr<const CompressionParameters> mCompressionParams;
+        CompressionParameters mCompressionParams;
 
     public:
         /*!
@@ -57,12 +57,12 @@ namespace j2k
          *
          * \param The J2K compression parameters.
          */
-        Compressor(std::shared_ptr<const CompressionParameters> compressionParams);
+        Compressor(const CompressionParameters& compressionParams) noexcept;
 
         Compressor(const Compressor&) = delete;
         Compressor& operator=(const Compressor&) = delete;
         Compressor(Compressor&&) = default;
-        Compressor& operator=(Compressor&&) = default;
+        Compressor& operator=(Compressor&&) = delete;
 
         /*!
          * Calculate the bytes required to allocate for compression.
@@ -74,7 +74,7 @@ namespace j2k
          *
          * \return Max bytes required to compress the entire image
          */
-        size_t getMaxBytesRequiredToCompress() const;
+        size_t getMaxBytesRequiredToCompress() const noexcept;
 
         /*!
          * Calculate how many bytes caller should supply to compress
@@ -82,7 +82,7 @@ namespace j2k
          * \param numTiles How many tiles do you want to compress?
          * \return Bytes required to compress number of tiles
          */
-        size_t getMaxBytesRequiredToCompress(size_t numTiles) const;
+        size_t getMaxBytesRequiredToCompress(size_t numTiles) const noexcept;
 
         /*!
          * Accessor to return the number of layers.
@@ -98,7 +98,7 @@ namespace j2k
          */
         size_t getCompressionRatio() const noexcept
         {
-            return gsl::narrow_cast<size_t>(mCompressionParams->getCompressionRatio());
+            return gsl::narrow_cast<size_t>(mCompressionParams.getCompressionRatio());
         }
 
         /*!

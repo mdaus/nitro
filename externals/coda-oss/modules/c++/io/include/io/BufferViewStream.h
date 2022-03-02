@@ -159,7 +159,7 @@ sys::Off_T BufferViewStream<T>::seek(sys::Off_T offset, Whence whence)
             newPos = offset;
             break;
         case END:
-            if (offset > static_cast<sys::Off_T>(mBufferView.size))
+            if (offset > gsl::narrow<sys::Off_T>(mBufferView.size))
             {
                 newPos = 0;
             }
@@ -174,7 +174,7 @@ sys::Off_T BufferViewStream<T>::seek(sys::Off_T offset, Whence whence)
             break;
     }
 
-    if (newPos > static_cast<sys::Off_T>(mBufferView.size) || newPos < 0)
+    if (newPos > gsl::narrow<sys::Off_T>(mBufferView.size) || newPos < 0)
     {
         throw except::Exception(Ctxt("Attempted to seek beyond end of stream"));
     }
@@ -202,7 +202,7 @@ template <typename T>
 sys::SSize_T BufferViewStream<T>::readImpl(void* buffer, size_t numBytes)
 {
     size_t numElements = numBytes / sizeof(T);
-    if (available() < static_cast<sys::Off_T>(numBytes))
+    if (available() < gsl::narrow<sys::Off_T>(numBytes))
     {
         numBytes = gsl::narrow<size_t>(available());
         numElements = numBytes / sizeof(T);
