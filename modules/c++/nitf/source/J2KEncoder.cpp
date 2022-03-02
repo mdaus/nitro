@@ -68,7 +68,7 @@ struct j2k::Encoder::Impl final
     //! The openjpeg error message.
     std::string mErrorMessage;
 
-    Impl()
+    Impl() noexcept
     {
         mEncoder = j2k_create_compress(/*OPJ_CODEC_J2K*/);
     }

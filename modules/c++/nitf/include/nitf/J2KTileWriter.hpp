@@ -25,6 +25,9 @@
 #define NITF_J2KTileWriter_hpp_INCLUDED_
 #pragma once
 
+#include <std/cstddef> // std::byte
+#include <memory>
+
 #include <io/SeekableStreams.h>
 #include <sys/Conf.h>
 #include <types/RowCol.h>
@@ -109,8 +112,7 @@ namespace j2k
              *
              *  should be laid out in contiguous memory as: 0 1 2 6 7 8.
              */
-            void writeTile(const sys::ubyte* tileData,
-                size_t tileIndex);
+            void writeTile(const std::byte* tileData, size_t tileIndex);
 
             /*!
              *  \return true if compression has started, false otherwise.
