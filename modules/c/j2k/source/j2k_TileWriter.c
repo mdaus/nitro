@@ -48,5 +48,19 @@ J2KAPI(NRT_BOOL) j2k_flush(j2k_codec_t* p_codec, j2k_Stream* p_stream)
 	return NRT_FALSE;
 }
 
+J2KAPI(NRT_BOOL) j2k_start_compress(j2k_codec_t* p_codec, j2k_Image* p_image, j2k_Stream* p_stream)
+{
+	return NRT_FALSE;
+}
+J2KAPI(NRT_BOOL) j2k_end_compress(j2k_codec_t* p_codec, j2k_Stream* p_stream)
+{
+	return NRT_FALSE;
+}
+
+J2KAPI(NRT_BOOL) j2k_write_tile(j2k_codec_t* p_codec, uint32_t p_tile_index, const uint8_t* p_data, uint32_t p_data_size, j2k_Stream* p_stream)
+{
+	return NRT_FALSE;
+}
+
 
 #endif

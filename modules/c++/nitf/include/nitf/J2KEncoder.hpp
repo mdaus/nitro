@@ -86,7 +86,7 @@ namespace j2k
         /*!
          * Clears the openjpeg error message.
          */
-        void clearError();
+        void clearError() noexcept;
     };
 }
 

@@ -53,7 +53,7 @@ namespace j2k
             Encoder mEncoder;             //! The openjpeg encoder.
             bool mIsCompressing;             //! Whether we are currently compressing or not.
 
-            void resizeTile(types::RowCol<size_t>& tile, size_t tileIndex);
+            void resizeTile(types::RowCol<size_t>& tile, size_t tileIndex) noexcept;
 
         public:
             /*!
@@ -115,7 +115,7 @@ namespace j2k
             /*!
              *  \return true if compression has started, false otherwise.
              */
-            bool isCompressing() const
+            bool isCompressing() const noexcept
             {
                 return mIsCompressing;
             }
@@ -126,8 +126,7 @@ namespace j2k
              *
              * \param outputStream The stream to write to.
              */
-            void setOutputStream(
-                std::shared_ptr< ::io::SeekableOutputStream> outputStream);
+            void setOutputStream(std::shared_ptr< ::io::SeekableOutputStream> outputStream) noexcept;
         };
     }
 }

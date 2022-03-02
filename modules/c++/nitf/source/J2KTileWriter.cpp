@@ -119,7 +119,7 @@ void j2k::details::TileWriter::start()
 {
     if (!mIsCompressing)
     {
-        const int startCompressSuccess = opj_start_compress(mEncoder.getNative(), mImage.getNative(), mStream.getNative());
+        const auto startCompressSuccess = j2k_start_compress(mEncoder.getNative(), mImage.getNative(), mStream.getNative());
         if (!startCompressSuccess)
         {
             if (mEncoder.errorOccurred())
@@ -141,7 +141,7 @@ void j2k::details::TileWriter::end()
 {
     if (mIsCompressing)
     {
-        const int endCompressSuccess = opj_end_compress(mEncoder.getNative(), mStream.getNative());
+        const auto endCompressSuccess = j2k_end_compress(mEncoder.getNative(), mStream.getNative());
         if (!endCompressSuccess)
         {
             if (mEncoder.errorOccurred())
@@ -206,15 +206,13 @@ void j2k::details::TileWriter::writeTile(const sys::ubyte* tileData, size_t tile
         }
     }
 
-    sys::ubyte* imageData = partialTileBuffer.get() ?
-        partialTileBuffer.get() : const_cast<sys::ubyte*>(tileData);
+    const auto imageData = partialTileBuffer.get() ? partialTileBuffer.get() : const_cast<sys::ubyte*>(tileData);
 
     // Compress the tile - if an I/O error occurs in our write handler,
     // the OPJEncoder error handler will get called.
-    const int writeSuccess = opj_write_tile(mEncoder.getNative(),
-        tileIndex,
-        imageData,
-        resizedTileDims.area(),
+    const int writeSuccess = j2k_write_tile(mEncoder.getNative(),
+        gsl::narrow<uint32_t>(tileIndex),
+        imageData, gsl::narrow<uint32_t>(resizedTileDims.area()),
         mStream.getNative());
     if (!writeSuccess)
     {
@@ -233,14 +231,14 @@ void j2k::details::TileWriter::writeTile(const sys::ubyte* tileData, size_t tile
     }
 }
 
-void j2k::details::TileWriter::setOutputStream(std::shared_ptr<::io::SeekableOutputStream> outputStream)
+void j2k::details::TileWriter::setOutputStream(std::shared_ptr<::io::SeekableOutputStream> outputStream) noexcept
 {
     mOutputStream = outputStream;
     j2k_stream_set_user_data(mStream.getNative(), mOutputStream.get(), nullptr);
 
 }
 
-void j2k::details::TileWriter::resizeTile(types::RowCol<size_t>& tile, size_t tileIndex)
+void j2k::details::TileWriter::resizeTile(types::RowCol<size_t>& tile, size_t tileIndex) noexcept
 {
     const auto tileDims = mCompressionParams->getTileDims();
     const auto rawImageDims = mCompressionParams->getRawImageDims();

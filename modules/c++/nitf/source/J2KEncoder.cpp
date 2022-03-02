@@ -134,7 +134,7 @@ void j2k::Encoder::setError(const std::string& msg)
     pImpl_->mErrorMessage = msg;
 }
 
-void j2k::Encoder::clearError()
+void j2k::Encoder::clearError() noexcept
 {
     pImpl_->mErrorMessage.clear();
 }

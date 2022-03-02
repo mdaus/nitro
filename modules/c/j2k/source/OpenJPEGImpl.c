@@ -1771,5 +1771,39 @@ J2KAPI(NRT_BOOL) j2k_flush(j2k_codec_t* p_codec, j2k_Stream* p_stream)
     return result ? NRT_TRUE : NRT_FALSE;
 }
 
+J2KAPI(NRT_BOOL) j2k_start_compress(j2k_codec_t* p_codec, j2k_Image* p_image, j2k_Stream* p_stream)
+{
+    if ((p_codec == NULL) || (p_image == NULL) || (p_stream == NULL))
+    {
+        return NRT_FALSE;
+    }
+
+    const OPJ_BOOL result = opj_start_compress((opj_codec_t*)p_codec->opj_codec, (opj_image_t*)p_image->opj_image, (opj_stream_t*)p_stream->opj_stream);
+    return result ? NRT_TRUE : NRT_FALSE;
+}
+
+J2KAPI(NRT_BOOL) j2k_end_compress(j2k_codec_t* p_codec, j2k_Stream* p_stream)
+{
+    if ((p_codec == NULL) || (p_stream == NULL))
+    {
+        return NRT_FALSE;
+    }
+
+    const OPJ_BOOL result = opj_end_compress((opj_codec_t*)p_codec->opj_codec, (opj_stream_t*)p_stream->opj_stream);
+    return result ? NRT_TRUE : NRT_FALSE;
+}
+
+J2KAPI(NRT_BOOL) j2k_write_tile(j2k_codec_t* p_codec, uint32_t p_tile_index, const uint8_t* p_data, uint32_t p_data_size, j2k_Stream* p_stream)
+{
+    if ((p_codec == NULL) || (p_stream == NULL))
+    {
+        return NRT_FALSE;
+    }
+
+    const OPJ_BOOL result = opj_write_tile((opj_codec_t*)p_codec->opj_codec,
+        p_tile_index, (OPJ_BYTE*)p_data, p_data_size,
+        (opj_stream_t*)p_stream->opj_stream);
+    return result ? NRT_TRUE : NRT_FALSE;
+}
 
 #endif
