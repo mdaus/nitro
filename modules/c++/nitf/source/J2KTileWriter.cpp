@@ -29,6 +29,7 @@
 #include <vector>
 #include <algorithm>
 #include <std/span>
+#include <iterator>
 
 #include <gsl/gsl.h>
 #include <except/Exception.h>
@@ -96,14 +97,11 @@ namespace
     }
 }
 
-j2k::details::TileWriter::TileWriter(
-    std::shared_ptr< ::io::SeekableOutputStream> outputStream,
-    std::shared_ptr<const CompressionParameters> compressionParams) :
+j2k::details::TileWriter::TileWriter(::io::SeekableOutputStream& outputStream, const CompressionParameters& compressionParams) :
     mCompressionParams(compressionParams),
     mStream(j2k::StreamType::OUTPUT),
-    mImage(mCompressionParams->getRawImageDims()),
-    mEncoder(mImage, *mCompressionParams),
-    mIsCompressing(false)
+    mImage(mCompressionParams.getRawImageDims()),
+    mEncoder(mImage, mCompressionParams)
 {
     setOutputStream(outputStream);
     j2k_stream_set_write_function(mStream.getNative(), writeImpl);
@@ -194,7 +192,7 @@ void j2k::details::TileWriter::writeTile(const std::byte* tileData, size_t tileI
 {
     start();
 
-    const auto tileDims(mCompressionParams->getTileDims());
+    const auto tileDims(mCompressionParams.getTileDims());
 
     // Resize of the dimensions of this tile if it is a partial tile
     types::RowCol<size_t> resizedTileDims(tileDims);
@@ -244,18 +242,18 @@ void j2k::details::TileWriter::writeTile(const std::byte* tileData, size_t tileI
     }
 }
 
-void j2k::details::TileWriter::setOutputStream(std::shared_ptr<::io::SeekableOutputStream> outputStream) noexcept
+void j2k::details::TileWriter::setOutputStream(::io::SeekableOutputStream& outputStream) noexcept
 {
-    mOutputStream = outputStream;
-    j2k_stream_set_user_data(mStream.getNative(), mOutputStream.get(), nullptr);
+    mOutputStream = &outputStream;
+    j2k_stream_set_user_data(mStream.getNative(), mOutputStream, nullptr);
 }
 
 void j2k::details::TileWriter::resizeTile(types::RowCol<size_t>& tile, size_t tileIndex) noexcept
 {
-    const auto tileDims = mCompressionParams->getTileDims();
-    const auto rawImageDims = mCompressionParams->getRawImageDims();
-    const auto numColsOfTiles = mCompressionParams->getNumColsOfTiles();
-    const auto numRowsOfTiles = mCompressionParams->getNumRowsOfTiles();
+    const auto tileDims = mCompressionParams.getTileDims();
+    const auto rawImageDims = mCompressionParams.getRawImageDims();
+    const auto numColsOfTiles = mCompressionParams.getNumColsOfTiles();
+    const auto numRowsOfTiles = mCompressionParams.getNumRowsOfTiles();
 
     const auto tileRow = tileIndex / numColsOfTiles;
     if ((tileRow == numRowsOfTiles - 1) && (rawImageDims.row % tileDims.row != 0))

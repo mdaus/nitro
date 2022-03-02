@@ -26,7 +26,6 @@
 #pragma once
 
 #include <std/cstddef> // std::byte
-#include <memory>
 
 #include <io/SeekableStreams.h>
 #include <sys/Conf.h>
@@ -48,13 +47,13 @@ namespace j2k
          */
         class TileWriter final
         {
-            std::shared_ptr< ::io::SeekableOutputStream> mOutputStream;
-            std::shared_ptr<const CompressionParameters> mCompressionParams;
+            ::io::SeekableOutputStream* mOutputStream = nullptr;
+            CompressionParameters mCompressionParams;
 
             Stream mStream;             //! The openjpeg stream.
             Image mImage;             //! The openjpeg image.
             Encoder mEncoder;             //! The openjpeg encoder.
-            bool mIsCompressing;             //! Whether we are currently compressing or not.
+            bool mIsCompressing = false;             //! Whether we are currently compressing or not.
 
             void resizeTile(types::RowCol<size_t>& tile, size_t tileIndex) noexcept;
 
@@ -66,13 +65,11 @@ namespace j2k
              *
              * \param compressionParams The J2K compression parameters.
              */
-            TileWriter(
-                std::shared_ptr< ::io::SeekableOutputStream> outputStream,
-                std::shared_ptr<const CompressionParameters> compressionParams);
+            TileWriter(::io::SeekableOutputStream& outputStream, const CompressionParameters& compressionParams);
             TileWriter(const TileWriter&) = delete;
             TileWriter& operator=(const TileWriter&) = delete;
             TileWriter(TileWriter&&) = default;
-            TileWriter& operator=(TileWriter&&) = default;
+            TileWriter& operator=(TileWriter&&) = delete;
 
             /*!
              * Destructor - calls end().
@@ -128,7 +125,7 @@ namespace j2k
              *
              * \param outputStream The stream to write to.
              */
-            void setOutputStream(std::shared_ptr< ::io::SeekableOutputStream> outputStream) noexcept;
+            void setOutputStream(::io::SeekableOutputStream& outputStream) noexcept;
         };
     }
 }
