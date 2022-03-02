@@ -38,9 +38,7 @@
 #include <gsl/gsl.h>
 #include <except/Exception.h>
 #include <sys/Conf.h>
-#include <mem/ScopedArray.h>
 #include <io/ByteStream.h>
-#include <except/Exception.h>
 #include <math/Round.h>
 #include <nitf/ImageBlocker.hpp>
 #include <mt/WorkSharingBalancedRunnable1D.h>
@@ -71,22 +69,23 @@ namespace
         j2k::CompressionParameters mCompressionParams;
 
         mutable std::unique_ptr<j2k::details::TileWriter> mWriter;
-
-        mutable std::vector<std::byte> mImageBlock;
+        std::vector<std::byte> mImageBlock;
+        std::byte* mpImageBlock = nullptr;
 
     public:
         CodestreamOp(
             size_t startTile,
             std::shared_ptr<BufferViewStream>* tileStreams,
             const std::byte* uncompressedImage,
-            const j2k::CompressionParameters& compressionParams) noexcept :
+            const j2k::CompressionParameters& compressionParams) :
             mStartTile(startTile),
             mTileStreams(tileStreams),
             mUncompressedImage(uncompressedImage),
             mCompressionParams(compressionParams)
         {
+            mImageBlock.resize(mCompressionParams.getTileDims().area());
+            mpImageBlock = mImageBlock.data();
         }
-
         CodestreamOp(const CodestreamOp&) = delete;
         CodestreamOp& operator=(const CodestreamOp&) = delete;
         CodestreamOp(CodestreamOp&&) = default;
@@ -94,16 +93,10 @@ namespace
 
         void operator()(size_t localTileIndex) const
         {
-            const size_t globalTileIndex = localTileIndex + mStartTile;
-
-            const auto fullDims = mCompressionParams.getRawImageDims();
             const auto tileDims = mCompressionParams.getTileDims();
-            if (mImageBlock.empty())
-            {
-                // Intentionally allocating here hoping to get thread-local memory
-                mImageBlock.resize(tileDims.area());
-            }
-            const auto imageBlock = mImageBlock.data();
+            const auto imageBlock = mpImageBlock;
+            const auto globalTileIndex = localTileIndex + mStartTile;
+            const auto fullDims = mCompressionParams.getRawImageDims();
 
             // Need local indices to offset into the uncompressed image properly
             const auto localTileIndices = getRowColIndices(localTileIndex);
@@ -112,25 +105,19 @@ namespace
 
             const auto uncompressedImage = mUncompressedImage + localStart.row * fullDims.col + localStart.col;
 
-            // Need global indices to determine if we're on the edge of the global
-            // image or not
+            // Need global indices to determine if we're on the edge of the global image or not
             const auto globalTileIndices = getRowColIndices(globalTileIndex);
-
             const types::RowCol<size_t> globalStart(globalTileIndices.row * tileDims.row, globalTileIndices.col * tileDims.col);
-
             const types::RowCol<size_t> globalEnd(std::min(globalStart.row + tileDims.row, fullDims.row), std::min(globalStart.col + tileDims.col, fullDims.col));
 
             // Block it
             nitf::ImageBlocker::block(uncompressedImage,
-                sizeof(std::byte),
-                fullDims.col,
-                tileDims.row,
-                tileDims.col,
-                globalEnd.row - globalStart.row,
-                globalEnd.col - globalStart.col,
+                sizeof(std::byte), fullDims.col,
+                tileDims.row, tileDims.col,
+                globalEnd.row - globalStart.row, globalEnd.col - globalStart.col,
                 imageBlock);
 
-            std::shared_ptr<BufferViewStream> tileStream = mTileStreams[localTileIndex];
+            auto tileStream = mTileStreams[localTileIndex];
             if (!mWriter)
             {
                 mWriter = std::make_unique<j2k::details::TileWriter>(*tileStream, mCompressionParams);
@@ -278,9 +265,8 @@ std::span<std::byte> j2k::Compressor::compressRowSubrange(
         throw except::Exception(Ctxt(ostr.str()));
     }
 
-    if (numLocalRows % numRowsInTile != 0 &&
-        globalStartRow + numLocalRows !=
-        mCompressionParams.getRawImageDims().row)
+    if ((numLocalRows % numRowsInTile != 0) &&
+        (globalStartRow + numLocalRows != mCompressionParams.getRawImageDims().row))
     {
         std::ostringstream ostr;
         ostr << "Number of local rows = " << numLocalRows << " must be a multiple of number of rows in tile = " << numRowsInTile;
@@ -310,7 +296,7 @@ std::span<std::byte> j2k::Compressor::compressTileSubrange(
 {
     // We write initially directly into 'compressedData', reserving the max
     // expected # of bytes/tile
-    const size_t numTiles(tileRange.mNumElements);
+    const auto numTiles = tileRange.mNumElements;
     const auto maxNumBytesPerTile = getMaxBytesRequiredToCompress(1);
     const auto numBytesNeeded = maxNumBytesPerTile * numTiles;
     if (compressedData.size() < numBytesNeeded)
@@ -323,9 +309,7 @@ std::span<std::byte> j2k::Compressor::compressTileSubrange(
 
     auto compressedPtr = compressedData.data();
     std::vector<std::shared_ptr<BufferViewStream>> tileStreams(numTiles);
-    for (size_t tile = 0;
-        tile < numTiles;
-        ++tile, compressedPtr += maxNumBytesPerTile)
+    for (size_t tile = 0; tile < numTiles; ++tile, compressedPtr += maxNumBytesPerTile)
     {
         auto bufferStream = std::make_shared<BufferViewStream>(mem::BufferView<std::byte>(compressedPtr, maxNumBytesPerTile));
         tileStreams[tile] = bufferStream;

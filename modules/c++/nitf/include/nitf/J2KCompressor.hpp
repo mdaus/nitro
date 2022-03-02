@@ -35,7 +35,6 @@
 #include <types/Range.h>
 #include <gsl/gsl.h>
 
-#include "nitf/J2KTileWriter.hpp"
 #include "nitf/J2KCompressionParameters.hpp"
 
 namespace j2k
