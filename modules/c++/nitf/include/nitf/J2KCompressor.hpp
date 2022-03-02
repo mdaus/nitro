@@ -49,6 +49,7 @@ namespace j2k
     class Compressor final
     {
         CompressionParameters mCompressionParams;
+        size_t mNumThreads = 1;
 
     public:
         /*!
@@ -56,7 +57,7 @@ namespace j2k
          *
          * \param The J2K compression parameters.
          */
-        Compressor(const CompressionParameters& compressionParams) noexcept;
+        Compressor(const CompressionParameters& compressionParams, size_t numThreads = 1) noexcept;
 
         Compressor(const Compressor&) = delete;
         Compressor& operator=(const Compressor&) = delete;
@@ -110,7 +111,6 @@ namespace j2k
          * \param[out] bytesPerTile Number of bytes in each compressed tile.
          */
         void compress(const std::byte* rawImageData,
-            size_t numThreads,
             std::vector<std::byte>& compressedData,
             std::vector<size_t>& bytesPerTile) const;
 
@@ -126,7 +126,6 @@ namespace j2k
          * \param[out] bytesPerTile Number of bytes in each compressed tile.
          */
         std::span<std::byte> compress(const std::byte* rawImageData,
-            size_t numThreads,
             std::span<std::byte> compressedData,
             std::vector<size_t>& bytesPerTile) const;
 
@@ -183,7 +182,6 @@ namespace j2k
         std::span<std::byte> compressRowSubrange(const std::byte* rawImageData,
             size_t globalStartRow,
             size_t numLocalRows,
-            size_t numThreads,
             std::span<std::byte> compressedData,
             types::Range& tileRange,
             std::vector<size_t>& bytesPerTile) const;
@@ -206,7 +204,6 @@ namespace j2k
          */
         std::span<std::byte> compressTileSubrange(const std::byte* rawImageData,
             const types::Range& tileRange,
-            size_t numThreads,
             std::span<std::byte> compressedData,
             std::vector<size_t>& bytesPerTile) const;
     };

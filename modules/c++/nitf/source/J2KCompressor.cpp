@@ -71,59 +71,56 @@
 #undef min
 #undef max
 
-namespace
+static size_t writeImpl(void* buffer, size_t numBytes, void* data)
 {
-    size_t writeImpl(void* buffer, size_t numBytes, void* data)
+    auto compressedOutputStream = static_cast<::io::SeekableOutputStream*>(data);
+    if (compressedOutputStream != nullptr)
     {
-        auto compressedOutputStream = static_cast<::io::SeekableOutputStream*>(data);
-        if (compressedOutputStream != nullptr)
+        try
         {
-            try
-            {
-                compressedOutputStream->write(buffer, numBytes);
-                return numBytes;
-            }
-            catch (const except::Exception&) {}
+            compressedOutputStream->write(buffer, numBytes);
+            return numBytes;
         }
-
-        // Openjpeg expects (OPJ_SIZE_T)-1 as the result of a failed
-        // call to a user provided write.
-        return static_cast<size_t>(-1);
+        catch (const except::Exception&) {}
     }
 
-    int64_t skipImpl(sys::Off_T bytesToSkip, void* data)
-    {
-        auto compressedOutputStream = static_cast<::io::SeekableOutputStream*>(data);
-        if (compressedOutputStream != nullptr)
-        {
-            try
-            {
-                compressedOutputStream->seek(bytesToSkip, ::io::Seekable::CURRENT);
-                return bytesToSkip;
-            }
-            catch (const except::Exception&) {}
-        }
+    // Openjpeg expects (OPJ_SIZE_T)-1 as the result of a failed
+    // call to a user provided write.
+    return static_cast<size_t>(-1);
+}
 
-        // Openjpeg expects -1 as the result of a failed call to a user provided skip()
-        return -1;
+static int64_t skipImpl(sys::Off_T bytesToSkip, void* data)
+{
+    auto compressedOutputStream = static_cast<::io::SeekableOutputStream*>(data);
+    if (compressedOutputStream != nullptr)
+    {
+        try
+        {
+            compressedOutputStream->seek(bytesToSkip, ::io::Seekable::CURRENT);
+            return bytesToSkip;
+        }
+        catch (const except::Exception&) {}
     }
 
-    bool seekImpl(int64_t numBytes, void* data)
-    {
-        auto compressedOutputStream = static_cast<::io::SeekableOutputStream*>(data);
-        if (compressedOutputStream != nullptr)
-        {
-            try
-            {
-                compressedOutputStream->seek(numBytes, ::io::Seekable::START);
-                return true;
-            }
-            catch (const except::Exception&) {}
-        }
+    // Openjpeg expects -1 as the result of a failed call to a user provided skip()
+    return -1;
+}
 
-        // Openjpeg expects 0 (OPJ_FALSE) as the result of a failed call to a user provided seek()
-        return false;
+static bool seekImpl(int64_t numBytes, void* data)
+{
+    auto compressedOutputStream = static_cast<::io::SeekableOutputStream*>(data);
+    if (compressedOutputStream != nullptr)
+    {
+        try
+        {
+            compressedOutputStream->seek(numBytes, ::io::Seekable::START);
+            return true;
+        }
+        catch (const except::Exception&) {}
     }
+
+    // Openjpeg expects 0 (OPJ_FALSE) as the result of a failed call to a user provided seek()
+    return false;
 }
 
 /*!
@@ -182,13 +179,13 @@ public:
     }
     TileWriter(const TileWriter&) = delete;
     TileWriter& operator=(const TileWriter&) = delete;
-    TileWriter(TileWriter&&) = default;
+    TileWriter(TileWriter&&) = delete;
     TileWriter& operator=(TileWriter&&) = delete;
 
     /*!
         * Destructor - calls end().
         */
-    ~TileWriter()
+    ~TileWriter() noexcept
     {
         try
         {
@@ -227,8 +224,7 @@ public:
     }
 
     /*!
-        * Ends the J2K compression. This will flush the J2K footer to the
-        * output stream.
+        * Ends the J2K compression. This will flush the J2K footer to the output stream.
         */
     void end()
     {
@@ -307,7 +303,7 @@ public:
 
         // Create a smaller buffer for our partial tile
         std::vector<std::byte> partialTileBuffer;
-        if (resizedTileDims.col < tileDims.col || resizedTileDims.row < tileDims.row)
+        if ((resizedTileDims.col < tileDims.col) || (resizedTileDims.row < tileDims.row))
         {
             partialTileBuffer.resize(resizedTileDims.area());
             for (size_t row = 0; row < resizedTileDims.row; ++row)
@@ -350,14 +346,6 @@ public:
     }
 
     /*!
-        *  \return true if compression has started, false otherwise.
-        */
-    bool isCompressing() const noexcept
-    {
-        return mIsCompressing;
-    }
-
-    /*!
         * Updates the output stream that openjpeg will write J2K codestream
         * data to when flush() is called.
         *
@@ -370,139 +358,129 @@ public:
     }
 };
 
-namespace
+using BufferViewStream = io::BufferViewStream<std::byte> ;
+
+class CodestreamOp final
 {
-    using BufferViewStream = io::BufferViewStream<std::byte> ;
-
-    class CodestreamOp final
+    types::RowCol<size_t> getRowColIndices(size_t tileIndex) const noexcept
     {
-        types::RowCol<size_t> getRowColIndices(size_t tileIndex) const noexcept
+        return types::RowCol<size_t>(
+            tileIndex / mCompressionParams.getNumColsOfTiles(),
+            tileIndex % mCompressionParams.getNumColsOfTiles());
+    }
+
+    const size_t mStartTile;
+    std::shared_ptr<BufferViewStream>* const mTileStreams;
+    const std::byte* const mUncompressedImage;
+    j2k::CompressionParameters mCompressionParams;
+
+    mutable std::unique_ptr<TileWriter> mWriter;
+    std::vector<std::byte> mImageBlock;
+    std::byte* mpImageBlock = nullptr;
+
+public:
+    CodestreamOp(
+        size_t startTile,
+        std::shared_ptr<BufferViewStream>* tileStreams,
+        const std::byte* uncompressedImage,
+        const j2k::CompressionParameters& compressionParams) :
+        mStartTile(startTile),
+        mTileStreams(tileStreams),
+        mUncompressedImage(uncompressedImage),
+        mCompressionParams(compressionParams)
+    {
+        mImageBlock.resize(mCompressionParams.getTileDims().area());
+        mpImageBlock = mImageBlock.data();
+    }
+    CodestreamOp(const CodestreamOp&) = delete;
+    CodestreamOp& operator=(const CodestreamOp&) = delete;
+    CodestreamOp(CodestreamOp&&) = default;
+    CodestreamOp& operator=(CodestreamOp&&) = delete;
+
+    void operator()(size_t localTileIndex) const
+    {
+        const auto tileDims = mCompressionParams.getTileDims();
+        const auto imageBlock = mpImageBlock;
+        const auto globalTileIndex = localTileIndex + mStartTile;
+        const auto fullDims = mCompressionParams.getRawImageDims();
+
+        // Need local indices to offset into the uncompressed image properly
+        const auto localTileIndices = getRowColIndices(localTileIndex);
+
+        const types::RowCol<size_t> localStart(localTileIndices.row * tileDims.row, localTileIndices.col * tileDims.col);
+
+        const auto uncompressedImage = mUncompressedImage + localStart.row * fullDims.col + localStart.col;
+
+        // Need global indices to determine if we're on the edge of the global image or not
+        const auto globalTileIndices = getRowColIndices(globalTileIndex);
+        const types::RowCol<size_t> globalStart(globalTileIndices.row * tileDims.row, globalTileIndices.col * tileDims.col);
+        const types::RowCol<size_t> globalEnd(std::min(globalStart.row + tileDims.row, fullDims.row), std::min(globalStart.col + tileDims.col, fullDims.col));
+
+        // Block it
+        nitf::ImageBlocker::block(uncompressedImage,
+            sizeof(std::byte), fullDims.col,
+            tileDims.row, tileDims.col,
+            globalEnd.row - globalStart.row, globalEnd.col - globalStart.col,
+            imageBlock);
+
+        auto tileStream = mTileStreams[localTileIndex];
+        if (!mWriter)
         {
-            return types::RowCol<size_t>(
-                tileIndex / mCompressionParams.getNumColsOfTiles(),
-                tileIndex % mCompressionParams.getNumColsOfTiles());
-        }
+            mWriter = std::make_unique<TileWriter>(*tileStream, mCompressionParams);
 
-        const size_t mStartTile;
-        std::shared_ptr<BufferViewStream>* const mTileStreams;
-        const std::byte* const mUncompressedImage;
-        j2k::CompressionParameters mCompressionParams;
-
-        mutable std::unique_ptr<TileWriter> mWriter;
-        std::vector<std::byte> mImageBlock;
-        std::byte* mpImageBlock = nullptr;
-
-    public:
-        CodestreamOp(
-            size_t startTile,
-            std::shared_ptr<BufferViewStream>* tileStreams,
-            const std::byte* uncompressedImage,
-            const j2k::CompressionParameters& compressionParams) :
-            mStartTile(startTile),
-            mTileStreams(tileStreams),
-            mUncompressedImage(uncompressedImage),
-            mCompressionParams(compressionParams)
-        {
-            mImageBlock.resize(mCompressionParams.getTileDims().area());
-            mpImageBlock = mImageBlock.data();
-        }
-        CodestreamOp(const CodestreamOp&) = delete;
-        CodestreamOp& operator=(const CodestreamOp&) = delete;
-        CodestreamOp(CodestreamOp&&) = default;
-        CodestreamOp& operator=(CodestreamOp&&) = delete;
-
-        void operator()(size_t localTileIndex) const
-        {
-            const auto tileDims = mCompressionParams.getTileDims();
-            const auto imageBlock = mpImageBlock;
-            const auto globalTileIndex = localTileIndex + mStartTile;
-            const auto fullDims = mCompressionParams.getRawImageDims();
-
-            // Need local indices to offset into the uncompressed image properly
-            const auto localTileIndices = getRowColIndices(localTileIndex);
-
-            const types::RowCol<size_t> localStart(localTileIndices.row * tileDims.row, localTileIndices.col * tileDims.col);
-
-            const auto uncompressedImage = mUncompressedImage + localStart.row * fullDims.col + localStart.col;
-
-            // Need global indices to determine if we're on the edge of the global image or not
-            const auto globalTileIndices = getRowColIndices(globalTileIndex);
-            const types::RowCol<size_t> globalStart(globalTileIndices.row * tileDims.row, globalTileIndices.col * tileDims.col);
-            const types::RowCol<size_t> globalEnd(std::min(globalStart.row + tileDims.row, fullDims.row), std::min(globalStart.col + tileDims.col, fullDims.col));
-
-            // Block it
-            nitf::ImageBlocker::block(uncompressedImage,
-                sizeof(std::byte), fullDims.col,
-                tileDims.row, tileDims.col,
-                globalEnd.row - globalStart.row, globalEnd.col - globalStart.col,
-                imageBlock);
-
-            auto tileStream = mTileStreams[localTileIndex];
-            if (!mWriter)
-            {
-                mWriter = std::make_unique<TileWriter>(*tileStream, mCompressionParams);
-
-                // Write out the header
-                // OpenJPEG makes us write the header, but we only want to keep it if we're tile 0
-                mWriter->start();
-                mWriter->flush();
-
-                if (globalTileIndex != 0)
-                {
-                    tileStream->seek(0, io::Seekable::START);
-                }
-            }
-            else
-            {
-                mWriter->setOutputStream(*tileStream);
-            }
-
-            // Write out the tile
-            mWriter->writeTile(imageBlock, globalTileIndex);
+            // Write out the header
+            // OpenJPEG makes us write the header, but we only want to keep it if we're tile 0
+            mWriter->start();
             mWriter->flush();
+
+            if (globalTileIndex != 0)
+            {
+                tileStream->seek(0, io::Seekable::START);
+            }
+        }
+        else
+        {
+            mWriter->setOutputStream(*tileStream);
         }
 
-        void finalize(bool keepFooter)
+        // Write out the tile
+        mWriter->writeTile(imageBlock, globalTileIndex);
+        mWriter->flush();
+    }
+
+    void finalize(bool keepFooter)
+    {
+        if (!mWriter)
         {
-            if (!mWriter)
-            {
-                return;
-            }
+            return;
+        }
             
-            // Writer::end() is required to clean up OpenJPEG objects
-            // This step also writes out the footer, which we may or may not
-            // actually want to keep
-            if (keepFooter)
-            {
-                // tileIdx is guaranteed to be in-bounds if keepFooter is true
-                const size_t lastTile = mCompressionParams.getNumTiles() - 1;
-                const size_t tileIdx = lastTile - mStartTile;
-                mWriter->setOutputStream(*mTileStreams[tileIdx]);
+        // Writer::end() is required to clean up OpenJPEG objects
+        // This step also writes out the footer, which we may or may not
+        // actually want to keep
+        if (keepFooter)
+        {
+            // tileIdx is guaranteed to be in-bounds if keepFooter is true
+            const size_t lastTile = mCompressionParams.getNumTiles() - 1;
+            const size_t tileIdx = lastTile - mStartTile;
+            mWriter->setOutputStream(*mTileStreams[tileIdx]);
 
-                // Write out the footer
-                mWriter->end();
-            }
-            else
-            {
-                io::SeekableNullOutputStream outStream;
-                mWriter->setOutputStream(outStream);
+            // Write out the footer
+            mWriter->end();
+        }
+        else
+        {
+            io::SeekableNullOutputStream outStream;
+            mWriter->setOutputStream(outStream);
 
-                // Write out the footer
-                mWriter->end();
-            }
-        }        
-    };
-}
+            // Write out the footer
+            mWriter->end();
+        }
+    }        
+};
 
-/*!
- * In rare cases, the "compressed" image will actually be slightly larger
- * than the uncompressed image.  This is a presumably worst case number
- * here - it's probably much larger than it needs to be.
- */
-constexpr long double POOR_COMPRESSION_SCALE_FACTOR = 2.0;
-
-j2k::Compressor::Compressor(const CompressionParameters& compressionParams) noexcept :
-    mCompressionParams(compressionParams)
+j2k::Compressor::Compressor(const CompressionParameters& compressionParams, size_t numThreads) noexcept :
+    mCompressionParams(compressionParams), mNumThreads(numThreads)
 {
 }
 
@@ -511,6 +489,12 @@ size_t j2k::Compressor::getMaxBytesRequiredToCompress() const noexcept
     return getMaxBytesRequiredToCompress(mCompressionParams.getNumTiles());
 }
 
+/*!
+ * In rare cases, the "compressed" image will actually be slightly larger
+ * than the uncompressed image.  This is a presumably worst case number
+ * here - it's probably much larger than it needs to be.
+ */
+constexpr long double POOR_COMPRESSION_SCALE_FACTOR = 2.0;
 size_t j2k::Compressor::getMaxBytesRequiredToCompress(size_t numTiles) const noexcept
 {
     const auto bytesPerTile = mCompressionParams.getTileDims().area();
@@ -521,25 +505,22 @@ size_t j2k::Compressor::getMaxBytesRequiredToCompress(size_t numTiles) const noe
 
 void j2k::Compressor::compress(
     const std::byte* rawImageData,
-    size_t numThreads,
     std::vector<std::byte>& compressedData,
     std::vector<size_t>& bytesPerTile) const
 {
     compressedData.resize(getMaxBytesRequiredToCompress());
     std::span<std::byte> compressedDataView(compressedData.data(), compressedData.size());
 
-    compressedDataView = compress(rawImageData, numThreads, compressedDataView, bytesPerTile);
+    compressedDataView = compress(rawImageData, compressedDataView, bytesPerTile);
     compressedData.resize(compressedDataView.size());
 }
 
 std::span<std::byte> j2k::Compressor::compress(const std::byte* rawImageData,
-    size_t numThreads,
     std::span<std::byte> compressedData,
     std::vector<size_t>& bytesPerTile) const
 {
     return compressTileSubrange(rawImageData,
         types::Range(0, mCompressionParams.getNumTiles()),
-        numThreads,
         compressedData,
         bytesPerTile);
 }
@@ -552,7 +533,7 @@ void j2k::Compressor::compressTile(
     compressedTile.resize(getMaxBytesRequiredToCompress(1));
     std::vector<size_t> bytesPerTile;
     std::span<std::byte> compressedView(compressedTile.data(), compressedTile.size());
-    compressedView = compressTileSubrange(rawImageData, types::Range(tileIndex, 1), 1,
+    compressedView = compressTileSubrange(rawImageData, types::Range(tileIndex, 1), 
         compressedView, bytesPerTile);
     compressedTile.resize(compressedView.size());
 }
@@ -563,7 +544,7 @@ std::span<std::byte> j2k::Compressor::compressTile(
     std::span<std::byte> compressedTile) const
 {
     std::vector<size_t> bytesPerTile;
-    return compressTileSubrange(rawImageData, types::Range(tileIndex, 1), 1,
+    return compressTileSubrange(rawImageData, types::Range(tileIndex, 1), 
         compressedTile, bytesPerTile);
 }
 
@@ -571,7 +552,6 @@ std::span<std::byte> j2k::Compressor::compressRowSubrange(
     const std::byte* rawImageData,
     size_t globalStartRow,
     size_t numLocalRows,
-    size_t numThreads,
     std::span<std::byte> compressedData,
     types::Range& tileRange,
     std::vector<size_t>& bytesPerTile) const
@@ -602,7 +582,6 @@ std::span<std::byte> j2k::Compressor::compressRowSubrange(
 
     return compressTileSubrange(rawImageData,
         tileRange,
-        numThreads,
         compressedData,
         bytesPerTile);
 }
@@ -610,7 +589,6 @@ std::span<std::byte> j2k::Compressor::compressRowSubrange(
 std::span<std::byte> j2k::Compressor::compressTileSubrange(
     const std::byte* rawImageData,
     const types::Range& tileRange,
-    size_t numThreads,
     std::span<std::byte> compressedData,
     std::vector<size_t>& bytesPerTile) const
 {
@@ -636,14 +614,14 @@ std::span<std::byte> j2k::Compressor::compressTileSubrange(
     }
 
     std::vector<CodestreamOp> ops;
-    ops.reserve(numThreads);
-    for (size_t ii = 0; ii < numThreads; ++ii)
+    ops.reserve(mNumThreads);
+    for (size_t ii = 0; ii < mNumThreads; ++ii)
     {
         ops.emplace_back(tileRange.mStartElement, tileStreams.data(), rawImageData, mCompressionParams);
     }
 
     // Compress the image
-    mt::runWorkSharingBalanced1D(numTiles, numThreads, ops);
+    mt::runWorkSharingBalanced1D(numTiles, mNumThreads, ops);
 
     // End compression for each thread
     // If the last tile is in 'tileRange', we need to ensure that we write the
