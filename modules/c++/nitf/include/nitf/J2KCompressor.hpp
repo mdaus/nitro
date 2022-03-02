@@ -27,11 +27,11 @@
 
 #include <std/cstddef> // std::byte
 #include <vector>
+#include <std/span>
 
 #include <io/SeekableStreams.h>
 #include <sys/Conf.h>
 #include <types/RowCol.h>
-#include <mem/BufferView.h>
 #include <types/Range.h>
 #include <gsl/gsl.h>
 
@@ -126,9 +126,9 @@ namespace j2k
          * contain the compressed image.
          * \param[out] bytesPerTile Number of bytes in each compressed tile.
          */
-        void compress(const std::byte* rawImageData,
+        std::span<std::byte> compress(const std::byte* rawImageData,
             size_t numThreads,
-            mem::BufferView<std::byte>& compressedData,
+            std::span<std::byte> compressedData,
             std::vector<size_t>& bytesPerTile) const;
 
         /*!
@@ -156,9 +156,9 @@ namespace j2k
          *  to the number of compressed bytes actually written to the tile, and
          *  data will point to the compressed tile.
          */
-        void compressTile(const std::byte* rawImageData,
+        std::span<std::byte> compressTile(const std::byte* rawImageData,
             size_t tileIndex,
-            mem::BufferView<std::byte>& compressedTile) const;
+            std::span<std::byte> compressedTile) const;
 
         /*!
          * Compresses the local portion of the image, taking into account that it
@@ -181,11 +181,11 @@ namespace j2k
         * is tileRange.mNumElements long, where index 0 corresponds to global tile
         * tileRange.mStartElement.
          */
-        void compressRowSubrange(const std::byte* rawImageData,
+        std::span<std::byte> compressRowSubrange(const std::byte* rawImageData,
             size_t globalStartRow,
             size_t numLocalRows,
             size_t numThreads,
-            mem::BufferView<std::byte>& compressedData,
+            std::span<std::byte> compressedData,
             types::Range& tileRange,
             std::vector<size_t>& bytesPerTile) const;
 
@@ -205,10 +205,10 @@ namespace j2k
         * is tileRange.mNumElements long, where index 0 corresponds to global tile
         * tileRange.mStartElement.
          */
-        void compressTileSubrange(const std::byte* rawImageData,
+        std::span<std::byte> compressTileSubrange(const std::byte* rawImageData,
             const types::Range& tileRange,
             size_t numThreads,
-            mem::BufferView<std::byte>& compressedData,
+            std::span<std::byte> compressedData,
             std::vector<size_t>& bytesPerTile) const;
     };
 }

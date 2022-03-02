@@ -219,20 +219,18 @@ void j2k::Compressor::compress(
     std::vector<size_t>& bytesPerTile) const
 {
     compressedData.resize(getMaxBytesRequiredToCompress());
+    std::span<std::byte> compressedDataView(compressedData.data(), compressedData.size());
 
-    mem::BufferView<std::byte> compressedDataView(compressedData.data(),
-        compressedData.size());
-
-    compress(rawImageData, numThreads, compressedDataView, bytesPerTile);
-    compressedData.resize(compressedDataView.size);
+    compressedDataView = compress(rawImageData, numThreads, compressedDataView, bytesPerTile);
+    compressedData.resize(compressedDataView.size());
 }
 
-void j2k::Compressor::compress(const std::byte* rawImageData,
+std::span<std::byte> j2k::Compressor::compress(const std::byte* rawImageData,
     size_t numThreads,
-    mem::BufferView<std::byte>& compressedData,
+    std::span<std::byte> compressedData,
     std::vector<size_t>& bytesPerTile) const
 {
-    compressTileSubrange(rawImageData,
+    return compressTileSubrange(rawImageData,
         types::Range(0, mCompressionParams.getNumTiles()),
         numThreads,
         compressedData,
@@ -246,29 +244,28 @@ void j2k::Compressor::compressTile(
 {
     compressedTile.resize(getMaxBytesRequiredToCompress(1));
     std::vector<size_t> bytesPerTile;
-    mem::BufferView<std::byte> compressedView(compressedTile.data(),
-        compressedTile.size());
-    compressTileSubrange(rawImageData, types::Range(tileIndex, 1), 1,
+    std::span<std::byte> compressedView(compressedTile.data(), compressedTile.size());
+    compressedView = compressTileSubrange(rawImageData, types::Range(tileIndex, 1), 1,
         compressedView, bytesPerTile);
-    compressedTile.resize(compressedView.size);
+    compressedTile.resize(compressedView.size());
 }
 
-void j2k::Compressor::compressTile(
+std::span<std::byte> j2k::Compressor::compressTile(
     const std::byte* rawImageData,
     size_t tileIndex,
-    mem::BufferView<std::byte>& compressedTile) const
+    std::span<std::byte> compressedTile) const
 {
     std::vector<size_t> bytesPerTile;
-    compressTileSubrange(rawImageData, types::Range(tileIndex, 1), 1,
+    return compressTileSubrange(rawImageData, types::Range(tileIndex, 1), 1,
         compressedTile, bytesPerTile);
 }
 
-void j2k::Compressor::compressRowSubrange(
+std::span<std::byte> j2k::Compressor::compressRowSubrange(
     const std::byte* rawImageData,
     size_t globalStartRow,
     size_t numLocalRows,
     size_t numThreads,
-    mem::BufferView<std::byte>& compressedData,
+    std::span<std::byte> compressedData,
     types::Range& tileRange,
     std::vector<size_t>& bytesPerTile) const
 {
@@ -277,9 +274,7 @@ void j2k::Compressor::compressRowSubrange(
     if (globalStartRow % numRowsInTile != 0)
     {
         std::ostringstream ostr;
-        ostr << "Global start row = " << globalStartRow
-            << " must be a multiple of number of rows in tile = "
-            << numRowsInTile;
+        ostr << "Global start row = " << globalStartRow << " must be a multiple of number of rows in tile = " << numRowsInTile;
         throw except::Exception(Ctxt(ostr.str()));
     }
 
@@ -288,32 +283,29 @@ void j2k::Compressor::compressRowSubrange(
         mCompressionParams.getRawImageDims().row)
     {
         std::ostringstream ostr;
-        ostr << "Number of local rows = " << numLocalRows
-            << " must be a multiple of number of rows in tile = "
-            << numRowsInTile;
+        ostr << "Number of local rows = " << numLocalRows << " must be a multiple of number of rows in tile = " << numRowsInTile;
         throw except::Exception(Ctxt(ostr.str()));
     }
 
-    const size_t startRowOfTiles = globalStartRow / numRowsInTile;
-    const size_t numRowsOfTiles =
-        math::ceilingDivide(numLocalRows, numRowsInTile);
+    const auto startRowOfTiles = globalStartRow / numRowsInTile;
+    const auto numRowsOfTiles = math::ceilingDivide(numLocalRows, numRowsInTile);
 
-    const size_t numColsOfTiles = mCompressionParams.getNumColsOfTiles();
+    const auto numColsOfTiles = mCompressionParams.getNumColsOfTiles();
     tileRange.mStartElement = startRowOfTiles * numColsOfTiles;
     tileRange.mNumElements = numRowsOfTiles * numColsOfTiles;
 
-    compressTileSubrange(rawImageData,
+    return compressTileSubrange(rawImageData,
         tileRange,
         numThreads,
         compressedData,
         bytesPerTile);
 }
 
-void j2k::Compressor::compressTileSubrange(
+std::span<std::byte> j2k::Compressor::compressTileSubrange(
     const std::byte* rawImageData,
     const types::Range& tileRange,
     size_t numThreads,
-    mem::BufferView<std::byte>& compressedData,
+    std::span<std::byte> compressedData,
     std::vector<size_t>& bytesPerTile) const
 {
     // We write initially directly into 'compressedData', reserving the max
@@ -321,15 +313,15 @@ void j2k::Compressor::compressTileSubrange(
     const size_t numTiles(tileRange.mNumElements);
     const auto maxNumBytesPerTile = getMaxBytesRequiredToCompress(1);
     const auto numBytesNeeded = maxNumBytesPerTile * numTiles;
-    if (compressedData.size < numBytesNeeded)
+    if (compressedData.size() < numBytesNeeded)
     {
         std::ostringstream ostr;
         ostr << "Require " << numBytesNeeded << " bytes for compression of "
-            << numTiles << " tiles but only received " << compressedData.size << " bytes";
+            << numTiles << " tiles but only received " << compressedData.size() << " bytes";
         throw except::Exception(Ctxt(ostr.str()));
     }
 
-    auto compressedPtr = compressedData.data;
+    auto compressedPtr = compressedData.data();
     std::vector<std::shared_ptr<BufferViewStream>> tileStreams(numTiles);
     for (size_t tile = 0;
         tile < numTiles;
@@ -364,7 +356,7 @@ void j2k::Compressor::compressTileSubrange(
     size_t numBytesWritten = 0;
     bytesPerTile.resize(numTiles);
 
-    auto dest = compressedData.data;
+    auto dest = compressedData.data();
     for (size_t tileNum = 0; tileNum < numTiles; ++tileNum)
     {
         BufferViewStream& tileStream = *tileStreams[tileNum];
@@ -372,11 +364,11 @@ void j2k::Compressor::compressTileSubrange(
         // This shouldn't be possible because if a tile was too big, it would
         // have thrown when compressing
         const auto numBytesThisTile = gsl::narrow<size_t>(tileStream.tell());
-        if (numBytesWritten + numBytesThisTile > compressedData.size)
+        if (numBytesWritten + numBytesThisTile > compressedData.size())
         {
             std::ostringstream os;
             os << "Cannot write " << numBytesThisTile << " bytes for tile " << tileNum << " at byte offset " << numBytesWritten
-                << " - exceeds maximum compressed image size (" << compressedData.size << " bytes)!";
+                << " - exceeds maximum compressed image size (" << compressedData.size() << " bytes)!";
             throw except::Exception(Ctxt(os.str()));
         }
 
@@ -395,7 +387,7 @@ void j2k::Compressor::compressTileSubrange(
         dest += numBytesThisTile;
     }
 
-    compressedData.size = numBytesWritten;
+    return std::span<std::byte>(compressedData.data(), numBytesWritten);
 }
 
 
