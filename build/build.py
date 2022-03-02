@@ -676,7 +676,7 @@ def getPlatform(pwd=None, default=None):
                 out.close()
             except:{}
             try:
-                out = subprocess.Popen(loc, shell=True, stdout=PIPE).stdout
+                out = subprocess.Popen(loc, shell=True, stdout=subprocess.PIPE).stdout
                 platform = out.readline()
                 platform = platform.strip('\n')
                 out.close()
