@@ -56,7 +56,6 @@
     <ClCompile Include="nitf\source\J2KImage.cpp" />
     <ClCompile Include="nitf\source\J2KReader.cpp" />
     <ClCompile Include="nitf\source\J2KStream.cpp" />
-    <ClCompile Include="nitf\source\J2KTileWriter.cpp" />
     <ClCompile Include="nitf\source\J2KWriter.cpp" />
     <ClCompile Include="nitf\source\LabelSegment.cpp" />
     <ClCompile Include="nitf\source\LabelSubheader.cpp" />
@@ -136,7 +135,6 @@
     <ClInclude Include="nitf\include\nitf\J2KImage.hpp" />
     <ClInclude Include="nitf\include\nitf\J2KReader.hpp" />
     <ClInclude Include="nitf\include\nitf\J2KStream.hpp" />
-    <ClInclude Include="nitf\include\nitf\J2KTileWriter.hpp" />
     <ClInclude Include="nitf\include\nitf\J2KWriter.hpp" />
     <ClInclude Include="nitf\include\nitf\LabelSegment.hpp" />
     <ClInclude Include="nitf\include\nitf\LabelSubheader.hpp" />

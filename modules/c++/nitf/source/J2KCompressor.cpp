@@ -25,6 +25,8 @@
 
 #include <string.h>
 
+#include "j2k/j2k_TileWriter.h"
+
 #include <numeric>
 #include <stdexcept>
 #include <limits>
@@ -34,6 +36,14 @@
 #include <std/span>
 #include <iterator>
 #include <std/memory>
+#include <std/cstddef> // std::byte
+#include <stdexcept>
+#include <limits>
+#include <sstream>
+#include <vector>
+#include <algorithm>
+#include <std/span>
+#include <iterator>
 
 #include <gsl/gsl.h>
 #include <except/Exception.h>
@@ -44,11 +54,347 @@
 #include <mt/WorkSharingBalancedRunnable1D.h>
 #include <io/BufferViewStream.h>
 #include <io/NullStreams.h>
+#include <io/SeekableStreams.h>
+#include <sys/Conf.h>
+#include <types/RowCol.h>
+#include <gsl/gsl.h>
+#include <except/Exception.h>
+#include <sys/Conf.h>
+#include <mem/ScopedArray.h>
+#include <io/ByteStream.h>
 
-#include "nitf/J2KTileWriter.hpp"
+#include "nitf/J2KStream.hpp"
+#include "nitf/J2KImage.hpp"
+#include "nitf/J2KEncoder.hpp"
+#include "nitf/J2KCompressionParameters.hpp"
 
 #undef min
 #undef max
+
+namespace j2k
+{
+    namespace details
+    {
+        /*!
+         * \class OPJTileWriter
+         * \desc Implementation class for writing compressed tiles to an output stream.
+         * This class is used by OPJCompressor to do thread based tile compression.
+         */
+        class TileWriter final
+        {
+            ::io::SeekableOutputStream* mOutputStream = nullptr;
+            CompressionParameters mCompressionParams;
+
+            Stream mStream;             //! The openjpeg stream.
+            Image mImage;             //! The openjpeg image.
+            Encoder mEncoder;             //! The openjpeg encoder.
+            bool mIsCompressing = false;             //! Whether we are currently compressing or not.
+
+            void resizeTile(types::RowCol<size_t>& tile, size_t tileIndex) noexcept;
+
+        public:
+            /*!
+             * Constructor
+             *
+             * \param outputStream The output stream to write the J2K codestream to.
+             *
+             * \param compressionParams The J2K compression parameters.
+             */
+            TileWriter(::io::SeekableOutputStream& outputStream, const CompressionParameters& compressionParams);
+            TileWriter(const TileWriter&) = delete;
+            TileWriter& operator=(const TileWriter&) = delete;
+            TileWriter(TileWriter&&) = default;
+            TileWriter& operator=(TileWriter&&) = delete;
+
+            /*!
+             * Destructor - calls end().
+             */
+            ~TileWriter();
+
+            /*!
+             * Starts the J2K compression. The first call to flush() after this
+             * is invoked will write the J2K header to the output stream.
+             */
+            void start();
+
+            /*!
+             * Ends the J2K compression. This will flush the J2K footer to the
+             * output stream.
+             */
+            void end();
+
+            /*!
+             * Writes any J2K codestream data currently in the internal buffer used by
+             * openjpeg to the output stream.
+             */
+            void flush();
+
+            /*!
+             *  Calls opj_write_tile. Tiles should be structured as contiguous,
+             *  increasing rows with a fixed column width i.e given 2x6 image
+             *  with 2x3 tiles:
+             *
+             *            0  1  2  3  4  5
+             *            6  7  8  9  10 11
+             *
+             *  The 0th tile:
+             *
+             *            0  1  2
+             *            6  7  8
+             *
+             *  should be laid out in contiguous memory as: 0 1 2 6 7 8.
+             */
+            void writeTile(const std::byte* tileData, size_t tileIndex);
+
+            /*!
+             *  \return true if compression has started, false otherwise.
+             */
+            bool isCompressing() const noexcept
+            {
+                return mIsCompressing;
+            }
+
+            /*!
+             * Updates the output stream that openjpeg will write J2K codestream
+             * data to when flush() is called.
+             *
+             * \param outputStream The stream to write to.
+             */
+            void setOutputStream(::io::SeekableOutputStream& outputStream) noexcept;
+        };
+    }
+}
+
+
+
+
+
+namespace
+{
+    size_t writeImpl(void* buffer, size_t numBytes, void* data)
+    {
+        auto compressedOutputStream = static_cast<::io::SeekableOutputStream*>(data);
+        if (compressedOutputStream != nullptr)
+        {
+            try
+            {
+                compressedOutputStream->write(buffer, numBytes);
+                return numBytes;
+            }
+            catch (const except::Exception&) {}
+        }
+
+        // Openjpeg expects (OPJ_SIZE_T)-1 as the result of a failed
+        // call to a user provided write.
+        return static_cast<size_t>(-1);
+    }
+
+    int64_t skipImpl(sys::Off_T bytesToSkip, void* data)
+    {
+        auto compressedOutputStream = static_cast<::io::SeekableOutputStream*>(data);
+        if (compressedOutputStream != nullptr)
+        {
+            try
+            {
+                compressedOutputStream->seek(bytesToSkip, ::io::Seekable::CURRENT);
+                return bytesToSkip;
+            }
+            catch (const except::Exception&) {}
+        }
+
+        // Openjpeg expects -1 as the result of a failed call to a user provided skip()
+        return -1;
+    }
+
+    bool seekImpl(int64_t numBytes, void* data)
+    {
+        auto compressedOutputStream = static_cast<::io::SeekableOutputStream*>(data);
+        if (compressedOutputStream != nullptr)
+        {
+            try
+            {
+                compressedOutputStream->seek(numBytes, ::io::Seekable::START);
+                return true;
+            }
+            catch (const except::Exception&) {}
+        }
+
+        // Openjpeg expects 0 (OPJ_FALSE) as the result of a failed call to a user provided seek()
+        return false;
+    }
+}
+
+j2k::details::TileWriter::TileWriter(::io::SeekableOutputStream& outputStream, const CompressionParameters& compressionParams) :
+    mCompressionParams(compressionParams),
+    mStream(j2k::StreamType::OUTPUT),
+    mImage(mCompressionParams.getRawImageDims()),
+    mEncoder(mImage, mCompressionParams)
+{
+    setOutputStream(outputStream);
+    j2k_stream_set_write_function(mStream.getNative(), writeImpl);
+    j2k_stream_set_seek_function(mStream.getNative(), seekImpl);
+    j2k_stream_set_skip_function(mStream.getNative(), skipImpl);
+}
+
+j2k::details::TileWriter::~TileWriter()
+{
+    try
+    {
+        end();
+    }
+    catch (...)
+    {
+    }
+}
+
+void j2k::details::TileWriter::start()
+{
+    if (mIsCompressing)
+    {
+        return;
+    }
+
+    const auto startCompressSuccess = j2k_start_compress(mEncoder.getNative(), mImage.getNative(), mStream.getNative());
+    if (!startCompressSuccess)
+    {
+        if (mEncoder.errorOccurred())
+        {
+            const std::string opjErrorMsg = mEncoder.getErrorMessage();
+            mEncoder.clearError();
+
+            throw except::Exception(Ctxt("Error starting compression with openjpeg error: " + opjErrorMsg));
+        }
+
+        throw except::Exception(Ctxt("Error starting compression."));
+    }
+    mIsCompressing = true;
+}
+
+void j2k::details::TileWriter::end()
+{
+    if (!mIsCompressing)
+    {
+        return;
+    }
+
+    const auto endCompressSuccess = j2k_end_compress(mEncoder.getNative(), mStream.getNative());
+    if (!endCompressSuccess)
+    {
+        if (mEncoder.errorOccurred())
+        {
+            const std::string opjErrorMsg = mEncoder.getErrorMessage();
+            mEncoder.clearError();
+
+            throw except::Exception(Ctxt("Error ending compression with openjpeg error: " + opjErrorMsg));
+        }
+
+        throw except::Exception(Ctxt("Error ending compression."));
+    }
+    mIsCompressing = false;
+}
+
+void j2k::details::TileWriter::flush()
+{
+    if (!mIsCompressing)
+    {
+        throw except::Exception(Ctxt("Cannot flush data to output stream: compression has not been started."));
+    }
+
+    const auto flushSuccess = j2k_flush(mEncoder.getNative(), mStream.getNative());
+    if (!flushSuccess)
+    {
+        if (mEncoder.errorOccurred())
+        {
+            const std::string opjErrorMsg = mEncoder.getErrorMessage();
+            mEncoder.clearError();
+
+            throw except::Exception(Ctxt("Failed to flush J2K codestream data with openjpeg error: " + opjErrorMsg));
+        }
+
+        throw except::Exception(Ctxt("Failed to flush J2K codestream data."));
+    }
+}
+
+void j2k::details::TileWriter::writeTile(const std::byte* tileData, size_t tileIndex)
+{
+    start();
+
+    const auto tileDims(mCompressionParams.getTileDims());
+
+    // Resize of the dimensions of this tile if it is a partial tile
+    types::RowCol<size_t> resizedTileDims(tileDims);
+    resizeTile(resizedTileDims, tileIndex);
+
+    // Create a smaller buffer for our partial tile
+    std::vector<std::byte> partialTileBuffer;
+    if (resizedTileDims.col < tileDims.col || resizedTileDims.row < tileDims.row)
+    {
+        partialTileBuffer.resize(resizedTileDims.area());
+        for (size_t row = 0; row < resizedTileDims.row; ++row)
+        {
+            const auto srcTileRowStart = tileData + row * tileDims.col;
+            const std::span<const std::byte> src(srcTileRowStart, resizedTileDims.col);
+
+            // partialTileBuffer.data() + row * resizedTileDims.col
+            auto dest = partialTileBuffer.begin();
+            std::advance(dest, gsl::narrow<ptrdiff_t>(row * resizedTileDims.col));
+
+            std::copy(src.begin(), src.end(), dest);
+        }
+    }
+
+    const auto imageData = partialTileBuffer.empty() ? tileData : partialTileBuffer.data();
+    const void* imageData_ = imageData;
+
+    // Compress the tile - if an I/O error occurs in our write handler,
+    // the OPJEncoder error handler will get called.
+    const auto writeSuccess = j2k_write_tile(mEncoder.getNative(),
+        gsl::narrow<uint32_t>(tileIndex),
+        static_cast<const uint8_t*>(imageData_), gsl::narrow<uint32_t>(resizedTileDims.area()),
+        mStream.getNative());
+    if (!writeSuccess)
+    {
+        std::ostringstream os;
+        os << "Failed to compress tile " << tileIndex << " (rows: " << resizedTileDims.row << ", cols: " << resizedTileDims.col << ")";
+        if (mEncoder.errorOccurred())
+        {
+            const std::string opjErrorMsg = mEncoder.getErrorMessage();
+            mEncoder.clearError();
+
+            os << " with openjpeg error: " << opjErrorMsg;
+            throw except::Exception(Ctxt(os.str()));
+        }
+
+        throw except::Exception(Ctxt(os.str()));
+    }
+}
+
+void j2k::details::TileWriter::setOutputStream(::io::SeekableOutputStream& outputStream) noexcept
+{
+    mOutputStream = &outputStream;
+    j2k_stream_set_user_data(mStream.getNative(), mOutputStream, nullptr);
+}
+
+void j2k::details::TileWriter::resizeTile(types::RowCol<size_t>& tile, size_t tileIndex) noexcept
+{
+    const auto tileDims = mCompressionParams.getTileDims();
+    const auto rawImageDims = mCompressionParams.getRawImageDims();
+    const auto numColsOfTiles = mCompressionParams.getNumColsOfTiles();
+    const auto numRowsOfTiles = mCompressionParams.getNumRowsOfTiles();
+
+    const auto tileRow = tileIndex / numColsOfTiles;
+    if ((tileRow == numRowsOfTiles - 1) && (rawImageDims.row % tileDims.row != 0))
+    {
+        tile.row = rawImageDims.row % tileDims.row;
+    }
+
+    const auto tileCol = tileIndex - (tileRow * numColsOfTiles);
+    if ((tileCol == numColsOfTiles - 1) && (rawImageDims.col % tileDims.col != 0))
+    {
+        tile.col = rawImageDims.col % tileDims.col;
+    }
+}
+
 
 namespace
 {
