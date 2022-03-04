@@ -30,6 +30,7 @@
 #include "sys/Conf.h"
 #include "coda_oss/string.h"
 #include "coda_oss/cstddef.h"
+#include "coda_oss/span.h"
 
 /*!
  * \file OutputStream.h
@@ -114,6 +115,16 @@ struct OutputStream
      * \throw IOException
      */
     virtual void write(const void* buffer, size_t len) = 0;
+    template<typename T>
+    void write(coda_oss::span<const T> buffer)
+    {
+        write(buffer.data(), buffer.size_bytes());
+    }
+    template <typename T>
+    void write(coda_oss::span<T> buffer)
+    {
+        write(coda_oss::span<const T>(buffer.data(), buffer.size()));
+    }
 
     /*!
      *  Flush the stream if needed
