@@ -53,7 +53,7 @@ J2KAPI(void) j2k_destroy_encoder_parameters(j2k_cparameters_t* pParameters);
 J2KAPI(NRT_BOOL) j2k_initEncoderParameters(j2k_cparameters_t* pParameters,
     size_t tileRow, size_t tileCol, double compressionRatio, size_t numResolutions);
 J2KAPI(NRT_BOOL) j2k_set_error_handler(j2k_codec_t* p_codec, j2k_msg_callback p_callback, void* p_user_data);
-J2KAPI(NRT_BOOL) j2k_setup_encoder(j2k_codec_t* p_codec, const j2k_cparameters_t* parameters, j2k_Image* image);
+J2KAPI(NRT_BOOL) j2k_setup_encoder(j2k_codec_t* p_codec, const j2k_cparameters_t* parameters, j2k_image_t* image);
 
 J2K_CXX_ENDGUARD
 

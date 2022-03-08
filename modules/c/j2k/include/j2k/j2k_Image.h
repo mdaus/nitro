@@ -28,12 +28,12 @@
 
 J2K_CXX_GUARD
 
-typedef struct _j2k_Image
+typedef struct _j2k_image_t
 {
     void /*opj_image_t*/* opj_image;
-} j2k_Image;
+} j2k_image_t;
 
-typedef struct _j2k_Image_comptparm // c.f. opj_image_comptparm in <openjpeg.h>
+typedef struct _j2k_image_comptparm // c.f. opj_image_comptparm in <openjpeg.h>
 {
     uint32_t dx;     /** XRsiz: horizontal separation of a sample of ith component with respect to the reference grid */
     uint32_t dy;     /** YRsiz: vertical separation of a sample of ith component with respect to the reference grid */
@@ -44,7 +44,7 @@ typedef struct _j2k_Image_comptparm // c.f. opj_image_comptparm in <openjpeg.h>
     uint32_t prec;     /** precision */
     uint32_t bpp;  /** image depth in bits */
     J2K_BOOL sgnd;     /** signed (1) / unsigned (0) */
-} j2k_Image_comptparm;
+} j2k_image_comptparm;
 
 typedef enum J2K_COLOR_SPACE { // c.f. OBJ_COLOR_SPACE in <openjpeg.h>
     J2K_CLRSPC_UNKNOWN = -1,    /**< not supported by the library */
@@ -56,9 +56,9 @@ typedef enum J2K_COLOR_SPACE { // c.f. OBJ_COLOR_SPACE in <openjpeg.h>
     J2K_CLRSPC_CMYK = 5         /**< CMYK */
 } J2K_COLOR_SPACE;
 
-J2KAPI(j2k_Image*) j2k_Image_tile_create(uint32_t numcmpts, const j2k_Image_comptparm* cmptparms, J2K_COLOR_SPACE clrspc);
-J2KAPI(J2K_BOOL) j2k_Image_init(j2k_Image* pImage, int x0, int y0, int x1, int y1, int numcmpts, J2K_COLOR_SPACE color_space);
-J2KAPI(void) j2k_Image_destroy(j2k_Image* pImage);
+J2KAPI(j2k_image_t*) j2k_image_tile_create(uint32_t numcmpts, const j2k_image_comptparm* cmptparms, J2K_COLOR_SPACE clrspc);
+J2KAPI(J2K_BOOL) j2k_image_init(j2k_image_t* pImage, int x0, int y0, int x1, int y1, int numcmpts, J2K_COLOR_SPACE color_space);
+J2KAPI(void) j2k_image_destroy(j2k_image_t* pImage);
 
 J2K_CXX_ENDGUARD
 

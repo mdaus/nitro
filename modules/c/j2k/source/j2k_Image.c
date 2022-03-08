@@ -24,17 +24,17 @@
 #include "j2k/j2k_Image.h"
 
 #ifndef HAVE_OPENJPEG_H
-J2KAPI(j2k_Image*) j2k_Image_tile_create(uint32_t numcmpts, const j2k_Image_comptparm* cmptparms, J2K_COLOR_SPACE clrspc)
+J2KAPI(j2k_image_t*) j2k_image_tile_create(uint32_t numcmpts, const j2k_image_comptparm* cmptparms, J2K_COLOR_SPACE clrspc)
 {
 	return NULL;
 }
 
-J2KAPI(J2K_BOOL) j2k_Image_init(j2k_Image* pImage, int x0, int y0, int x1, int y1, int numcmpts, J2K_COLOR_SPACE color_space)
+J2KAPI(J2K_BOOL) j2k_image_init(j2k_image_t* pImage, int x0, int y0, int x1, int y1, int numcmpts, J2K_COLOR_SPACE color_space)
 {
 	return J2K_FALSE;
 }
 
-J2KAPI(void) j2k_Image_destroy(j2k_Image* pImage)
+J2KAPI(void) j2k_image_destroy(j2k_image_t* pImage)
 {
 }
 #endif

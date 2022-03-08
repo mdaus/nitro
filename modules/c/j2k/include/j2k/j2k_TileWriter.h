@@ -42,7 +42,7 @@ J2KAPI(void) j2k_stream_set_seek_function(j2k_stream_t* p_stream, j2k_stream_see
 J2KAPI(void) j2k_stream_set_user_data(j2k_stream_t* p_stream, void* p_data, j2k_stream_free_user_data_fn p_function);
 
 J2KAPI(NRT_BOOL) j2k_flush(j2k_codec_t* p_codec, j2k_stream_t* p_stream);
-J2KAPI(NRT_BOOL) j2k_start_compress(j2k_codec_t* p_codec, j2k_Image* p_image, j2k_stream_t* p_stream);
+J2KAPI(NRT_BOOL) j2k_start_compress(j2k_codec_t* p_codec, j2k_image_t* p_image, j2k_stream_t* p_stream);
 J2KAPI(NRT_BOOL) j2k_end_compress(j2k_codec_t* p_codec, j2k_stream_t* p_stream);
 
 J2KAPI(NRT_BOOL) j2k_write_tile(j2k_codec_t* p_codec, uint32_t p_tile_index, const uint8_t* p_data, uint32_t p_data_size, j2k_stream_t* p_stream);

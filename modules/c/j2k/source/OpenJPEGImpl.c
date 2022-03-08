@@ -1525,14 +1525,14 @@ J2KAPI(void) j2k_stream_destroy(j2k_stream_t* pStream)
     }
 }
 
-J2KAPI(j2k_Image*) j2k_Image_tile_create(uint32_t numcmpts, const j2k_Image_comptparm* cmptparms, J2K_COLOR_SPACE clrspc)
+J2KAPI(j2k_image_t*) j2k_image_tile_create(uint32_t numcmpts, const j2k_image_comptparm* cmptparms, J2K_COLOR_SPACE clrspc)
 {
     if (cmptparms == NULL)
     {
         return NULL;
     }
 
-    j2k_Image* retval = (j2k_Image*)J2K_MALLOC(sizeof(j2k_Image));
+    j2k_image_t* retval = (j2k_image_t*)J2K_MALLOC(sizeof(j2k_image_t));
     if (retval != NULL)
     {
         opj_image_cmptparm_t cmptparms_;
@@ -1556,7 +1556,7 @@ J2KAPI(j2k_Image*) j2k_Image_tile_create(uint32_t numcmpts, const j2k_Image_comp
     return retval;
 }
 
-J2KAPI(J2K_BOOL) j2k_Image_init(j2k_Image* pImage, int x0, int y0, int x1, int y1, int numcmpts, J2K_COLOR_SPACE color_space)
+J2KAPI(J2K_BOOL) j2k_image_init(j2k_image_t* pImage, int x0, int y0, int x1, int y1, int numcmpts, J2K_COLOR_SPACE color_space)
 {
     if (pImage == NULL)
     {
@@ -1580,7 +1580,7 @@ J2KAPI(J2K_BOOL) j2k_Image_init(j2k_Image* pImage, int x0, int y0, int x1, int y
     return J2K_TRUE;
 }
 
-J2KAPI(void) j2k_Image_destroy(j2k_Image* pImage)
+J2KAPI(void) j2k_image_destroy(j2k_image_t* pImage)
 {
     if (pImage != NULL)
     {
@@ -1715,7 +1715,7 @@ J2KAPI(NRT_BOOL) j2k_set_error_handler(j2k_codec_t* p_codec, j2k_msg_callback p_
     return result ? NRT_TRUE : NRT_FALSE;
 }
 
-J2KAPI(NRT_BOOL) j2k_setup_encoder(j2k_codec_t* p_codec, const j2k_cparameters_t* parameters, j2k_Image* image)
+J2KAPI(NRT_BOOL) j2k_setup_encoder(j2k_codec_t* p_codec, const j2k_cparameters_t* parameters, j2k_image_t* image)
 {
     if ((p_codec == NULL) || (parameters == NULL) || (image == NULL))
     {
@@ -1771,7 +1771,7 @@ J2KAPI(NRT_BOOL) j2k_flush(j2k_codec_t* p_codec, j2k_stream_t* p_stream)
     return result ? NRT_TRUE : NRT_FALSE;
 }
 
-J2KAPI(NRT_BOOL) j2k_start_compress(j2k_codec_t* p_codec, j2k_Image* p_image, j2k_stream_t* p_stream)
+J2KAPI(NRT_BOOL) j2k_start_compress(j2k_codec_t* p_codec, j2k_image_t* p_image, j2k_stream_t* p_stream)
 {
     if ((p_codec == NULL) || (p_image == NULL) || (p_stream == NULL))
     {

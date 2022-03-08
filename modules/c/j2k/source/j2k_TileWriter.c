@@ -48,7 +48,7 @@ J2KAPI(NRT_BOOL) j2k_flush(j2k_codec_t* p_codec, j2k_stream_t* p_stream)
 	return NRT_FALSE;
 }
 
-J2KAPI(NRT_BOOL) j2k_start_compress(j2k_codec_t* p_codec, j2k_Image* p_image, j2k_stream_t* p_stream)
+J2KAPI(NRT_BOOL) j2k_start_compress(j2k_codec_t* p_codec, j2k_image_t* p_image, j2k_stream_t* p_stream)
 {
 	return NRT_FALSE;
 }

@@ -38,10 +38,10 @@ namespace j2k
     class Image final
     {
         //! The openjpeg image.
-        j2k_Image* mImage = nullptr;
+        j2k_image_t* mImage = nullptr;
 
         //! The openjpeg image component parameters.
-        j2k_Image_comptparm mImageComponentParams;
+        j2k_image_comptparm mImageComponentParams;
 
         void initComponents(const types::RowCol<size_t>& rawImageDims);
         void initImage();
@@ -66,7 +66,7 @@ namespace j2k
         /*!
          * \return The openjpeg image.
          */
-        j2k_Image* getNative() const noexcept
+        j2k_image_t* getNative() const noexcept
         {
             return mImage;
         }

@@ -34,7 +34,7 @@ j2k::Image::Image(const types::RowCol<size_t>& rawImageDims)
     initComponents(rawImageDims);
 
     // Create our image
-    mImage = j2k_Image_tile_create(1, &mImageComponentParams, J2K_CLRSPC_GRAY);
+    mImage = j2k_image_tile_create(1, &mImageComponentParams, J2K_CLRSPC_GRAY);
     if (mImage == nullptr)
     {
         std::ostringstream os;
@@ -49,7 +49,7 @@ j2k::Image::Image(const types::RowCol<size_t>& rawImageDims)
 
 j2k::Image::~Image()
 {
-    j2k_Image_destroy(mImage);
+    j2k_image_destroy(mImage);
 }
 
 void j2k::Image::initComponents(const types::RowCol<size_t>& rawImageDims)
@@ -79,7 +79,7 @@ void j2k::Image::initComponents(const types::RowCol<size_t>& rawImageDims)
 
 void j2k::Image::initImage()
 {
-    j2k_Image_init(mImage, 0, 0,
+    j2k_image_init(mImage, 0, 0,
         gsl::narrow<int>(mImageComponentParams.w), gsl::narrow<int>(mImageComponentParams.h),
         1, // One image component corresponding to the full grayscale image
         J2K_CLRSPC_GRAY);
