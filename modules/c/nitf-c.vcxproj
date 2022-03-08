@@ -135,7 +135,6 @@
     <ClInclude Include="j2k\include\j2k\j2k_Encoder.h" />
     <ClInclude Include="j2k\include\j2k\j2k_Image.h" />
     <ClInclude Include="j2k\include\j2k\j2k_Reader.h" />
-    <ClInclude Include="j2k\include\j2k\j2k_Stream.h" />
     <ClInclude Include="j2k\include\j2k\j2k_TileWriter.h" />
     <ClInclude Include="j2k\include\j2k\j2k_Writer.h" />
     <ClInclude Include="nitf\include\import\nitf.h" />
@@ -250,7 +249,6 @@
     <ClCompile Include="j2k\source\j2k_Encoder.c" />
     <ClCompile Include="j2k\source\j2k_Image.c" />
     <ClCompile Include="j2k\source\j2k_Reader.c" />
-    <ClCompile Include="j2k\source\j2k_Stream.c" />
     <ClCompile Include="j2k\source\j2k_TileWriter.c" />
     <ClCompile Include="j2k\source\j2k_Writer.c" />
     <ClCompile Include="j2k\source\JasPerImpl.c" />

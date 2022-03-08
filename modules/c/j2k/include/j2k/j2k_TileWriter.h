@@ -24,11 +24,22 @@
 #ifndef NITRO_j2k_TileWriter_h_INCLUDED_ 
 #define NITRO_j2k_TileWriter_h_INCLUDED_
 
-#include "j2k/j2k_Stream.h"
 #include "j2k/j2k_Encoder.h"
 #include "j2k/j2k_Image.h"
 
 J2K_CXX_GUARD
+
+typedef struct _j2k_stream_t
+{
+    void /*obj_stream_t*/* opj_stream;
+} j2k_stream_t;
+
+#define NITRO_J2K_STREAM_CHUNK_SIZE 0x100000 /** 1 mega by default */ // c.f. OPJ_J2K_STREAM_CHUNK_SIZE in <openjpeg.h>
+
+J2KAPI(j2k_stream_t*) j2k_stream_create(size_t chunkSize, J2K_BOOL isInputStream);
+J2KAPI(void) j2k_stream_destroy(j2k_stream_t* pStream);
+
+//----------------------------------------------------------------------------------------------------------------
 
 typedef size_t(*j2k_stream_write_fn)(void* p_buffer, size_t p_nb_bytes, void* p_user_data);
 typedef int64_t(*j2k_stream_skip_fn)(int64_t p_nb_bytes, void* p_user_data);

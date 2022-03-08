@@ -25,6 +25,16 @@
 
 #ifndef HAVE_OPENJPEG_H
 
+J2KAPI(j2k_stream_t*) j2k_stream_create(size_t chunkSize, J2K_BOOL isInputStream)
+{
+	return NULL;
+}
+
+J2KAPI(void) j2k_stream_destroy(j2k_stream_t* pStream)
+{
+
+}
+
 J2KAPI(void) j2k_stream_set_write_function(j2k_stream_t* p_stream, j2k_stream_write_fn p_function)
 {
 }

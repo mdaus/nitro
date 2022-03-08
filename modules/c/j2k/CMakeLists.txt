@@ -25,7 +25,6 @@ coda_add_module(
         source/j2k_Encoder.c
         source/j2k_Image.c
         source/j2k_Reader.c
-        source/j2k_Stream.c
         source/j2k_TileWriter.c
         source/SimpleComponentImpl.c
         source/SimpleContainerImpl.c
