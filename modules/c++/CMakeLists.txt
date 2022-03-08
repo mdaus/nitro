@@ -49,7 +49,6 @@ check_cxx_source_compiles(
 
 add_subdirectory("config")
 add_subdirectory("coda_oss")
-add_subdirectory("bpstd")
 add_subdirectory("avx")
 add_subdirectory("serialize")
 add_subdirectory("except")

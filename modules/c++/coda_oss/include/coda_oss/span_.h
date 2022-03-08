@@ -26,7 +26,6 @@
 #include <assert.h>
 #include <stddef.h>
 
-#include "coda_oss/namespace_.h"
 namespace coda_oss
 {
 namespace details
