@@ -30,7 +30,7 @@
 
 #include <types/RowCol.h>
 
-#include "j2k/j2k_Encoder.h"
+#include "j2k/j2k_TileWriter.h"
 
 #include "nitf/J2KImage.hpp"
 #include "nitf/J2KCompressionParameters.hpp"

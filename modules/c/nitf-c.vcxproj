@@ -132,7 +132,6 @@
     <ClInclude Include="j2k\include\j2k\Config.h" />
     <ClInclude Include="j2k\include\j2k\Container.h" />
     <ClInclude Include="j2k\include\j2k\Defines.h" />
-    <ClInclude Include="j2k\include\j2k\j2k_Encoder.h" />
     <ClInclude Include="j2k\include\j2k\j2k_Image.h" />
     <ClInclude Include="j2k\include\j2k\j2k_Reader.h" />
     <ClInclude Include="j2k\include\j2k\j2k_TileWriter.h" />
@@ -246,7 +245,6 @@
     <ClCompile Include="j2k\source\Component.c" />
     <ClCompile Include="j2k\source\Container.c" />
     <ClCompile Include="j2k\source\Defines.c" />
-    <ClCompile Include="j2k\source\j2k_Encoder.c" />
     <ClCompile Include="j2k\source\j2k_Image.c" />
     <ClCompile Include="j2k\source\j2k_Reader.c" />
     <ClCompile Include="j2k\source\j2k_TileWriter.c" />

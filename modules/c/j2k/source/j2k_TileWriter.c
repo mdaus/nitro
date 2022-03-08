@@ -35,6 +35,40 @@ J2KAPI(void) j2k_stream_destroy(j2k_stream_t* pStream)
 
 }
 
+J2KAPI(j2k_codec_t*) j2k_create_compress(void)
+{
+	return NULL;
+}
+
+J2KAPI(void) opj_destroy_codec(j2k_codec_t* pEncoder)
+{
+
+}
+
+J2KAPI(j2k_cparameters_t*) j2k_set_default_encoder_parameters(void)
+{
+	return NULL;
+}
+J2KAPI(void) j2k_destroy_encoder_parameters(j2k_cparameters_t* pParameters)
+{
+
+}
+J2KAPI(NRT_BOOL) j2k_initEncoderParameters(j2k_cparameters_t* pParameters,
+	size_t tileRow, size_t tileCol, double compressionRatio, size_t numResolutions)
+{
+	return NRT_FALSE;
+}
+
+J2KAPI(NRT_BOOL) j2k_set_error_handler(j2k_codec_t* p_codec, j2k_msg_callback p_callback, void* p_user_data)
+{
+	return NRT_FALSE;
+}
+
+J2KAPI(NRT_BOOL) j2k_setup_encoder(j2k_codec_t* p_codec, const j2k_cparameters_t* parameters, j2k_image_t* image)
+{
+	return NRT_FALSE;
+}
+
 J2KAPI(void) j2k_stream_set_write_function(j2k_stream_t* p_stream, j2k_stream_write_fn p_function)
 {
 }

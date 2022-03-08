@@ -27,7 +27,6 @@
 #include <string.h>
 
 #include "j2k/j2k_Image.h"
-#include "j2k/j2k_Encoder.h"
 #include "j2k/j2k_TileWriter.h"
 
 #ifdef _MSC_VER
