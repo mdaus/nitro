@@ -25,7 +25,6 @@
 #define NITRO_j2k_TileWriter_h_INCLUDED_
 
 #include "j2k/Defines.h"
-#include "j2k/j2k_Image.h"
 
 J2K_CXX_GUARD
 
@@ -38,6 +37,40 @@ typedef struct _j2k_stream_t
 
 J2KAPI(j2k_stream_t*) j2k_stream_create(size_t chunkSize, J2K_BOOL isInputStream);
 J2KAPI(void) j2k_stream_destroy(j2k_stream_t* pStream);
+
+//----------------------------------------------------------------------------------------------------------------
+
+typedef struct _j2k_image_t
+{
+    void /*opj_image_t*/* opj_image;
+} j2k_image_t;
+
+typedef struct _j2k_image_comptparm // c.f. opj_image_comptparm in <openjpeg.h>
+{
+    uint32_t dx;     /** XRsiz: horizontal separation of a sample of ith component with respect to the reference grid */
+    uint32_t dy;     /** YRsiz: vertical separation of a sample of ith component with respect to the reference grid */
+    uint32_t w;     /** data width */
+    uint32_t h;     /** data height */
+    uint32_t x0;     /** x component offset compared to the whole image */
+    uint32_t y0;     /** y component offset compared to the whole image */
+    uint32_t prec;     /** precision */
+    uint32_t bpp;  /** image depth in bits */
+    J2K_BOOL sgnd;     /** signed (1) / unsigned (0) */
+} j2k_image_comptparm;
+
+typedef enum J2K_COLOR_SPACE { // c.f. OBJ_COLOR_SPACE in <openjpeg.h>
+    J2K_CLRSPC_UNKNOWN = -1,    /**< not supported by the library */
+    J2K_CLRSPC_UNSPECIFIED = 0, /**< not specified in the codestream */
+    J2K_CLRSPC_SRGB = 1,        /**< sRGB */
+    J2K_CLRSPC_GRAY = 2,        /**< grayscale */
+    J2K_CLRSPC_SYCC = 3,        /**< YUV */
+    J2K_CLRSPC_EYCC = 4,        /**< e-YCC */
+    J2K_CLRSPC_CMYK = 5         /**< CMYK */
+} J2K_COLOR_SPACE;
+
+J2KAPI(j2k_image_t*) j2k_image_tile_create(uint32_t numcmpts, const j2k_image_comptparm* cmptparms, J2K_COLOR_SPACE clrspc);
+J2KAPI(J2K_BOOL) j2k_image_init(j2k_image_t* pImage, int x0, int y0, int x1, int y1, int numcmpts, J2K_COLOR_SPACE color_space);
+J2KAPI(void) j2k_image_destroy(j2k_image_t* pImage);
 
 //----------------------------------------------------------------------------------------------------------------
 

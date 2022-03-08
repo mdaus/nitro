@@ -35,6 +35,20 @@ J2KAPI(void) j2k_stream_destroy(j2k_stream_t* pStream)
 
 }
 
+J2KAPI(j2k_image_t*) j2k_image_tile_create(uint32_t numcmpts, const j2k_image_comptparm* cmptparms, J2K_COLOR_SPACE clrspc)
+{
+	return NULL;
+}
+
+J2KAPI(J2K_BOOL) j2k_image_init(j2k_image_t* pImage, int x0, int y0, int x1, int y1, int numcmpts, J2K_COLOR_SPACE color_space)
+{
+	return J2K_FALSE;
+}
+
+J2KAPI(void) j2k_image_destroy(j2k_image_t* pImage)
+{
+}
+
 J2KAPI(j2k_codec_t*) j2k_create_compress(void)
 {
 	return NULL;

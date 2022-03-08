@@ -27,7 +27,7 @@
 
 #include <types/RowCol.h>
 
-#include <j2k/j2k_Image.h>
+#include <j2k/j2k_TileWriter.h>
 
 namespace j2k
 {
