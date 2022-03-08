@@ -26,7 +26,7 @@
 #include <assert.h>
 #include <string.h>
 
-#include "j2k/j2k_TileWriter.h"
+#include "j2k/TileWriter.h"
 
 #ifdef _MSC_VER
 #pragma warning(disable: 4706) // assignment within conditional expression
@@ -35,8 +35,8 @@
 #ifdef HAVE_OPENJPEG_H
 
 #include "j2k/Container.h"
-#include "j2k/Reader.h"
-#include "j2k/Writer.h"
+#include "j2k/j2k_Reader.h"
+#include "j2k/j2k_Writer.h"
 
 #include <openjpeg.h>
 

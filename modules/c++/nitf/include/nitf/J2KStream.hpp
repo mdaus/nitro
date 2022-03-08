@@ -27,7 +27,7 @@
 
 #include <stddef.h>
 
-#include "j2k/j2k_TileWriter.h"
+#include "j2k/TileWriter.h"
 
 
 namespace j2k

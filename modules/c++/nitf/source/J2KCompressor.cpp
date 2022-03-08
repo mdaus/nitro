@@ -25,7 +25,7 @@
 
 #include <string.h>
 
-#include "j2k/j2k_TileWriter.h"
+#include "j2k/TileWriter.h"
 
 #include <numeric>
 #include <stdexcept>

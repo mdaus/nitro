@@ -23,7 +23,7 @@ coda_add_module(
         source/JasPerImpl.c
         source/OpenJPEGImpl.c
         source/j2k_Reader.c
-        source/j2k_TileWriter.c
+        source/TileWriter.c
         source/SimpleComponentImpl.c
         source/SimpleContainerImpl.c
         source/j2k_Writer.c)

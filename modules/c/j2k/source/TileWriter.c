@@ -21,7 +21,7 @@
  */
 
 #include "j2k/Config.h"
-#include "j2k/j2k_TileWriter.h"
+#include "j2k/TileWriter.h"
 
 #ifndef HAVE_OPENJPEG_H
 
