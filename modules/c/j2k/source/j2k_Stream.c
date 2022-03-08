@@ -24,12 +24,12 @@
 #include "j2k/j2k_Stream.h"
 
 #ifndef HAVE_OPENJPEG_H
-J2KAPI(j2k_Stream*) j2k_Stream_create(size_t chunkSize, J2K_BOOL isInputStream)
+J2KAPI(j2k_stream_t*) j2k_stream_create(size_t chunkSize, J2K_BOOL isInputStream)
 {
 	return NULL;
 }
 
-J2KAPI(void) j2k_Stream_destroy(j2k_Stream* pStream)
+J2KAPI(void) j2k_stream_destroy(j2k_stream_t* pStream)
 {
 
 }

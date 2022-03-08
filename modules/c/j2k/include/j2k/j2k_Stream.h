@@ -28,15 +28,15 @@
 
 J2K_CXX_GUARD
 
-typedef struct _j2k_Stream
+typedef struct _j2k_stream_t
 {
     void /*obj_stream_t*/ *opj_stream;
-} j2k_Stream;
+} j2k_stream_t;
 
 #define NITRO_J2K_STREAM_CHUNK_SIZE 0x100000 /** 1 mega by default */ // c.f. OPJ_J2K_STREAM_CHUNK_SIZE in <openjpeg.h>
 
-J2KAPI(j2k_Stream*) j2k_Stream_create(size_t chunkSize, J2K_BOOL isInputStream);
-J2KAPI(void) j2k_Stream_destroy(j2k_Stream* pStream);
+J2KAPI(j2k_stream_t*) j2k_stream_create(size_t chunkSize, J2K_BOOL isInputStream);
+J2KAPI(void) j2k_stream_destroy(j2k_stream_t* pStream);
 
 J2K_CXX_ENDGUARD
 

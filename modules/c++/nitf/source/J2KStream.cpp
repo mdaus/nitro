@@ -32,7 +32,7 @@ j2k::Stream::Stream(j2k::StreamType streamType, size_t chunkSize)
 {
     const auto isInputStream = streamType == j2k::StreamType::INPUT;
 
-    mStream = j2k_Stream_create(chunkSize, isInputStream);
+    mStream = j2k_stream_create(chunkSize, isInputStream);
     if (!mStream)
     {
         std::ostringstream os;
@@ -43,5 +43,5 @@ j2k::Stream::Stream(j2k::StreamType streamType, size_t chunkSize)
 
 j2k::Stream::~Stream()
 {
-    j2k_Stream_destroy(mStream);
+    j2k_stream_destroy(mStream);
 }

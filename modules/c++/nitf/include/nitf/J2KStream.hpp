@@ -72,14 +72,14 @@ namespace j2k
         /*!
          * \return The openjpeg stream.
          */
-        j2k_Stream* getNative() const noexcept
+        j2k_stream_t* getNative() const noexcept
         {
             return mStream;
         }
 
     private:
         //! The openjpeg output/input stream.
-        j2k_Stream* mStream = nullptr;
+        j2k_stream_t* mStream = nullptr;
     };
 }
 
