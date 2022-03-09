@@ -371,7 +371,7 @@ class CodestreamOp final
 
     const size_t mStartTile;
     std::shared_ptr<BufferViewStream>* const mTileStreams;
-    const std::byte* const mUncompressedImage;
+    const std::span<const std::byte> mUncompressedImage;
     j2k::CompressionParameters mCompressionParams;
 
     mutable std::unique_ptr<TileWriter> mWriter;
@@ -382,7 +382,7 @@ public:
     CodestreamOp(
         size_t startTile,
         std::shared_ptr<BufferViewStream>* tileStreams,
-        const std::byte* uncompressedImage,
+        std::span<const std::byte> uncompressedImage,
         const j2k::CompressionParameters& compressionParams) :
         mStartTile(startTile),
         mTileStreams(tileStreams),
@@ -409,7 +409,7 @@ public:
 
         const types::RowCol<size_t> localStart(localTileIndices.row * tileDims.row, localTileIndices.col * tileDims.col);
 
-        const auto uncompressedImage = mUncompressedImage + localStart.row * fullDims.col + localStart.col;
+        const auto uncompressedImage = mUncompressedImage.data() + localStart.row * fullDims.col + localStart.col;
 
         // Need global indices to determine if we're on the edge of the global image or not
         const auto globalTileIndices = getRowColIndices(globalTileIndex);
@@ -504,7 +504,7 @@ size_t j2k::Compressor::getMaxBytesRequiredToCompress(size_t numTiles) const noe
 }
 
 void j2k::Compressor::compress(
-    const std::byte* rawImageData,
+    std::span<const std::byte> rawImageData,
     std::vector<std::byte>& compressedData,
     std::vector<size_t>& bytesPerTile) const
 {
@@ -514,7 +514,7 @@ void j2k::Compressor::compress(
     compressedData.resize(compressedDataView.size());
 }
 
-std::span<std::byte> j2k::Compressor::compress(const std::byte* rawImageData,
+std::span<std::byte> j2k::Compressor::compress(std::span<const std::byte> rawImageData,
     std::span<std::byte> compressedData,
     std::vector<size_t>& bytesPerTile) const
 {
@@ -525,7 +525,7 @@ std::span<std::byte> j2k::Compressor::compress(const std::byte* rawImageData,
 }
 
 void j2k::Compressor::compressTile(
-    const std::byte* rawImageData,
+    std::span<const std::byte> rawImageData,
     size_t tileIndex,
     std::vector<std::byte>& compressedTile) const
 {
@@ -538,7 +538,7 @@ void j2k::Compressor::compressTile(
 }
 
 std::span<std::byte> j2k::Compressor::compressTile(
-    const std::byte* rawImageData,
+    std::span<const std::byte> rawImageData,
     size_t tileIndex,
     std::span<std::byte> compressedTile) const
 {
@@ -548,7 +548,7 @@ std::span<std::byte> j2k::Compressor::compressTile(
 }
 
 std::span<std::byte> j2k::Compressor::compressRowSubrange(
-    const std::byte* rawImageData,
+    std::span<const std::byte> rawImageData,
     size_t globalStartRow,
     size_t numLocalRows,
     std::span<std::byte> compressedData,
@@ -586,7 +586,7 @@ std::span<std::byte> j2k::Compressor::compressRowSubrange(
 }
 
 std::span<std::byte> j2k::Compressor::compressTileSubrange(
-    const std::byte* rawImageData,
+    std::span<const std::byte> rawImageData,
     const types::Range& tileRange,
     std::span<std::byte> compressedData,
     std::vector<size_t>& bytesPerTile) const

@@ -368,9 +368,10 @@ TEST_CASE(test_j2k_compress_raw_image)
     const j2k::CompressionParameters params(rawDims, tileDims);
     const j2k::Compressor compressor(params, numThreads);
 
+    const std::span<const std::byte> rawImage_(rawImage.data(), rawImage.size() * sizeof(rawImage[0]));
     std::vector<std::byte> compressedImage;
     std::vector<size_t> bytesPerBlock;
-    compressor.compress(rawImage.data(), compressedImage, bytesPerBlock);
+    compressor.compress(rawImage_, compressedImage, bytesPerBlock);
 
     size_t sumCompressedBytes = 0;
     sumCompressedBytes = std::accumulate(bytesPerBlock.begin(), bytesPerBlock.end(), sumCompressedBytes);

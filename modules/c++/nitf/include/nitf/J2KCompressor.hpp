@@ -110,7 +110,7 @@ namespace j2k
          * \param[out] compressedData The compressed image data.
          * \param[out] bytesPerTile Number of bytes in each compressed tile.
          */
-        void compress(const std::byte* rawImageData,
+        void compress(std::span<const std::byte> rawImageData,
             std::vector<std::byte>& compressedData,
             std::vector<size_t>& bytesPerTile) const;
 
@@ -125,7 +125,7 @@ namespace j2k
          * contain the compressed image.
          * \param[out] bytesPerTile Number of bytes in each compressed tile.
          */
-        std::span<std::byte> compress(const std::byte* rawImageData,
+        std::span<std::byte> compress(std::span<const std::byte> rawImageData,
             std::span<std::byte> compressedData,
             std::vector<size_t>& bytesPerTile) const;
 
@@ -137,7 +137,7 @@ namespace j2k
          * \param tileIndex Index of tile.
          * \param[out] compressedTile The compressed tile.
          */
-        void compressTile(const std::byte* rawImageData,
+        void compressTile(std::span<const std::byte> rawImageData,
             size_t tileIndex,
             std::vector<std::byte>& compressedTile) const;
 
@@ -154,7 +154,7 @@ namespace j2k
          *  to the number of compressed bytes actually written to the tile, and
          *  data will point to the compressed tile.
          */
-        std::span<std::byte> compressTile(const std::byte* rawImageData,
+        std::span<std::byte> compressTile(std::span<const std::byte> rawImageData,
             size_t tileIndex,
             std::span<std::byte> compressedTile) const;
 
@@ -179,7 +179,7 @@ namespace j2k
         * is tileRange.mNumElements long, where index 0 corresponds to global tile
         * tileRange.mStartElement.
          */
-        std::span<std::byte> compressRowSubrange(const std::byte* rawImageData,
+        std::span<std::byte> compressRowSubrange(std::span<const std::byte> rawImageData,
             size_t globalStartRow,
             size_t numLocalRows,
             std::span<std::byte> compressedData,
@@ -202,7 +202,7 @@ namespace j2k
         * is tileRange.mNumElements long, where index 0 corresponds to global tile
         * tileRange.mStartElement.
          */
-        std::span<std::byte> compressTileSubrange(const std::byte* rawImageData,
+        std::span<std::byte> compressTileSubrange(std::span<const std::byte> rawImageData,
             const types::Range& tileRange,
             std::span<std::byte> compressedData,
             std::vector<size_t>& bytesPerTile) const;
