@@ -376,7 +376,7 @@ class CodestreamOp final
 
     mutable std::unique_ptr<TileWriter> mWriter;
     std::vector<std::byte> mImageBlock;
-    std::byte* mpImageBlock = nullptr;
+    std::span<std::byte> mpImageBlock;
 
 public:
     CodestreamOp(
@@ -390,7 +390,7 @@ public:
         mCompressionParams(compressionParams)
     {
         mImageBlock.resize(mCompressionParams.getTileDims().area());
-        mpImageBlock = mImageBlock.data();
+        mpImageBlock = std::span<std::byte>(mImageBlock.data(), mImageBlock.size());
     }
     CodestreamOp(const CodestreamOp&) = delete;
     CodestreamOp& operator=(const CodestreamOp&) = delete;
@@ -400,7 +400,6 @@ public:
     void operator()(size_t localTileIndex) const
     {
         const auto tileDims = mCompressionParams.getTileDims();
-        const auto imageBlock = mpImageBlock;
         const auto globalTileIndex = localTileIndex + mStartTile;
         const auto fullDims = mCompressionParams.getRawImageDims();
 
@@ -409,7 +408,8 @@ public:
 
         const types::RowCol<size_t> localStart(localTileIndices.row * tileDims.row, localTileIndices.col * tileDims.col);
 
-        const auto uncompressedImage = mUncompressedImage.data() + localStart.row * fullDims.col + localStart.col;
+        const size_t offset = localStart.row * fullDims.col + localStart.col;
+        const std::span<const std::byte> uncompressedImage(mUncompressedImage.data() + offset, mUncompressedImage.size_bytes() - offset);
 
         // Need global indices to determine if we're on the edge of the global image or not
         const auto globalTileIndices = getRowColIndices(globalTileIndex);
@@ -417,11 +417,11 @@ public:
         const types::RowCol<size_t> globalEnd(std::min(globalStart.row + tileDims.row, fullDims.row), std::min(globalStart.col + tileDims.col, fullDims.col));
 
         // Block it
+        const types::RowCol<size_t> validInBlock(globalEnd.row - globalStart.row, globalEnd.col - globalStart.col);
         nitf::ImageBlocker::block(uncompressedImage,
             sizeof(std::byte), fullDims.col,
-            tileDims.row, tileDims.col,
-            globalEnd.row - globalStart.row, globalEnd.col - globalStart.col,
-            imageBlock);
+            tileDims, validInBlock,
+            mpImageBlock);
 
         auto tileStream = mTileStreams[localTileIndex];
         if (!mWriter)
@@ -444,7 +444,7 @@ public:
         }
 
         // Write out the tile
-        mWriter->writeTile(imageBlock, globalTileIndex);
+        mWriter->writeTile(mpImageBlock.data(), globalTileIndex);
         mWriter->flush();
     }
 
