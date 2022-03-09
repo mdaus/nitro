@@ -31,6 +31,8 @@
 #include <std/cstddef>
 #include <iostream>
 #include <string>
+#include <algorithm>
+#include <numeric>
 
 #include <gsl/gsl.h>
 #include <str/Format.h>
@@ -353,28 +355,25 @@ TEST_CASE(test_j2k_compress_raw_image)
 
     // J2K compresses the raw image data of an SIO file
 
-    const fs::path inPathname;
-    const fs::path testJ2KPathname;
-
-    types::RowCol<size_t> tileDims;
-    const size_t numThreads = sys::OS().getNumCPUs() - 1;
+    const fs::path inPathname = "test_j2k_compress_raw_image.sio";
+    const auto testJ2KPathname = findInputFile("j2k_compressed_file1_jp2.ntf"); // This is a JP2 file, not J2K; see OpenJPEG_setup_()
 
     // Read in the raw data from the input SIO
     types::RowCol<size_t> rawDims;
     std::vector<std::byte> rawImage;
     sio::lite::readSIO(inPathname, rawDims, rawImage);
 
+    const types::RowCol<size_t> tileDims{ 10, 10 };
+    const size_t numThreads = sys::OS().getNumCPUs() - 1;
     const j2k::CompressionParameters params(rawDims, tileDims);
-    j2k::Compressor compressor(params, numThreads);
+    const j2k::Compressor compressor(params, numThreads);
+
     std::vector<std::byte> compressedImage;
     std::vector<size_t> bytesPerBlock;
     compressor.compress(rawImage.data(), compressedImage, bytesPerBlock);
 
     size_t sumCompressedBytes = 0;
-    for (size_t block = 0; block < bytesPerBlock.size(); ++block)
-    {
-        sumCompressedBytes += bytesPerBlock[block];
-    }
+    sumCompressedBytes = std::accumulate(bytesPerBlock.begin(), bytesPerBlock.end(), sumCompressedBytes);
     TEST_ASSERT_EQ(sumCompressedBytes, compressedImage.size()); // "Size of compressed image does not match sum of bytes per block"
 
     const auto compressedPathname = "compressed_" + std::to_string(tileDims.row) + "x" + std::to_string(tileDims.col) + ".j2k";
@@ -396,6 +395,6 @@ TEST_MAIN(
     TEST_CHECK(test_j2k_loading);
     TEST_CHECK(test_j2k_nitf);
     TEST_CHECK(test_j2k_nitf_read_region);
-    TEST_CHECK(test_decompress_nitf_to_sio);
+    //TEST_CHECK(test_decompress_nitf_to_sio);
     //TEST_CHECK(test_j2k_compress_raw_image);
     )

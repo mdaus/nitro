@@ -509,9 +509,8 @@ void j2k::Compressor::compress(
     std::vector<size_t>& bytesPerTile) const
 {
     compressedData.resize(getMaxBytesRequiredToCompress());
-    std::span<std::byte> compressedDataView(compressedData.data(), compressedData.size());
-
-    compressedDataView = compress(rawImageData, compressedDataView, bytesPerTile);
+    const auto compressedDataView = compress(rawImageData,
+        std::span<std::byte>(compressedData.data(), compressedData.size()), bytesPerTile);
     compressedData.resize(compressedDataView.size());
 }
 
