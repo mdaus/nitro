@@ -28,13 +28,23 @@
 #include <string>
 #include <std/filesystem>
 #include <std/span>
+#include <std/cstddef>
 
 #include <gsl/gsl.h>
 #include <str/Format.h>
+#include <io/FileInputStream.h>
+#include <io/FileOutputStream.h>
+#include <sio/lite/FileWriter.h>
 
 #include <import/nitf.hpp>
 #include <nitf/J2KReader.hpp>
 #include <nitf/J2KWriter.hpp>
+#include <nitf/ComponentInfo.hpp>
+#include <nitf/FileHeader.hpp>
+#include <nitf/IOHandle.hpp>
+#include <nitf/List.hpp>
+#include <nitf/Reader.hpp>
+#include <nitf/Record.hpp>
 
 namespace fs = std::filesystem;
 
@@ -101,7 +111,7 @@ TEST_CASE(test_j2k_loading)
 {
     ::testName = testName;
 
-    auto input_file = findInputFile("j2k_compressed_file1_jp2.ntf").string();
+    const auto input_file = findInputFile("j2k_compressed_file1_jp2.ntf").string();
     test_image_loading_(input_file, false /*optz*/);
     //test_image_loading_(input_file, true /*optz*/);
 
@@ -164,7 +174,7 @@ TEST_CASE(test_j2k_nitf)
     }
 
     // This is a JP2 file, not J2K; see OpenJPEG_setup_()
-    auto input_file = findInputFile("j2k_compressed_file1_jp2.ntf").string();
+    const auto input_file = findInputFile("j2k_compressed_file1_jp2.ntf").string();
     test_j2k_nitf_(input_file);
 }
 
@@ -280,8 +290,43 @@ TEST_CASE(test_j2k_nitf_read_region)
 {
     ::testName = testName;
     // This is a JP2 file, not J2K; see OpenJPEG_setup_()
-    auto input_file = findInputFile("j2k_compressed_file1_jp2.ntf");
+    const auto input_file = findInputFile("j2k_compressed_file1_jp2.ntf");
     test_j2k_nitf_read_region_(input_file);
+}
+
+TEST_CASE(test_decompress_nitf_to_sio)
+{
+    ::testName = testName;
+
+   // Take a J2K-compressed NITF, decompress the image and save to an SIO.
+
+    const auto inputPathname = findInputFile("j2k_compressed_file1_jp2.ntf"); // This is a JP2 file, not J2K; see OpenJPEG_setup_()
+    const fs::path outputPathname = "test_decompress_nitf.sio";
+
+    nitf::Reader reader;
+    nitf::IOHandle io(inputPathname.string());
+    nitf::Record record = reader.read(io);
+    auto iter = record.getImages().begin();
+    nitf::ImageSegment imageSegment = *iter;
+    const auto imageSubheader = imageSegment.getSubheader();
+    const auto numBlocks = imageSubheader.numBlocksPerRow() * imageSubheader.numBlocksPerCol();
+
+    const auto imageLength = imageSubheader.getNumBytesOfImageData();
+    std::vector<std::byte> imageData(imageLength);
+
+    // This assumes vertical blocking.
+    // Interleaving would be required for horizontal blocks
+    auto imageReader = reader.newImageReader(0);
+    uint64_t byteOffset = 0;
+    for (uint32_t block = 0; block < numBlocks; ++block)
+    {
+        uint64_t bytesRead;
+        const auto blockData = imageReader.readBlock(block, &bytesRead);
+        memcpy(imageData.data() + byteOffset, blockData, bytesRead);
+        byteOffset += bytesRead;
+    }
+
+    sio::lite::writeSIO(imageData.data(), imageSubheader.dims(), outputPathname);
 }
 
 TEST_MAIN(
@@ -290,4 +335,5 @@ TEST_MAIN(
     TEST_CHECK(test_j2k_loading);
     TEST_CHECK(test_j2k_nitf);
     TEST_CHECK(test_j2k_nitf_read_region);
+    //TEST_CHECK(test_decompress_nitf_to_sio);
     )
