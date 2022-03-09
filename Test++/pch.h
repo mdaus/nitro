@@ -31,6 +31,8 @@
 #pragma comment(lib, "sys-c++")
 #pragma comment(lib, "str-c++")
 #pragma comment(lib, "sio.lite-c++.lib")
+#pragma comment(lib, "math-c++")
+#pragma comment(lib, "mt-c++")
 #pragma warning(pop)
 
 #pragma warning(push)

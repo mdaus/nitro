@@ -29,12 +29,20 @@
 #include <std/filesystem>
 #include <std/span>
 #include <std/cstddef>
+#include <iostream>
+#include <string>
 
 #include <gsl/gsl.h>
 #include <str/Format.h>
 #include <io/FileInputStream.h>
 #include <io/FileOutputStream.h>
 #include <sio/lite/FileWriter.h>
+#include <sio/lite/ReadUtils.h>
+#include <io/ReadUtils.h>
+#include <io/FileOutputStream.h>
+#include <sys/OS.h>
+
+
 
 #include <import/nitf.hpp>
 #include <nitf/J2KReader.hpp>
@@ -45,10 +53,11 @@
 #include <nitf/List.hpp>
 #include <nitf/Reader.hpp>
 #include <nitf/Record.hpp>
+#include <nitf/J2KCompressor.hpp>
+
+#include <TestCase.h>
 
 namespace fs = std::filesystem;
-
-#include "TestCase.h"
 
 static std::string testName;
 
@@ -329,6 +338,54 @@ TEST_CASE(test_decompress_nitf_to_sio)
     sio::lite::writeSIO(imageData.data(), imageSubheader.dims(), outputPathname);
 }
 
+TEST_CASE(test_j2k_compress_raw_image)
+{
+    ::testName = testName;
+
+    // J2K compresses the raw image data of an SIO file
+
+    const fs::path inPathname;
+    const fs::path testJ2KPathname;
+
+    types::RowCol<size_t> tileDims;
+    const size_t numThreads = sys::OS().getNumCPUs() - 1;
+
+    types::RowCol<size_t> rawDims;
+    std::unique_ptr<std::byte[]> rawImage;
+
+    // Read in the raw data from the input SIO
+    sio::lite::readSIO(inPathname.string(), rawDims, rawImage);
+
+    const j2k::CompressionParameters params(rawDims, tileDims);
+    j2k::Compressor compressor(params, numThreads);
+    std::vector<std::byte> compressedImage;
+    std::vector<size_t> bytesPerBlock;
+    compressor.compress(rawImage.get(), compressedImage, bytesPerBlock);
+
+    size_t sumCompressedBytes = 0;
+    for (size_t block = 0; block < bytesPerBlock.size(); ++block)
+    {
+        sumCompressedBytes += bytesPerBlock[block];
+    }
+    TEST_ASSERT_EQ(sumCompressedBytes, compressedImage.size()); // "Size of compressed image does not match sum of bytes per block"
+
+    const std::string compressedPathname = "compressed_" + std::to_string(tileDims.row) + "x" + std::to_string(tileDims.col) + ".j2k";
+    ::io::FileOutputStream os(compressedPathname);
+    os.write(&compressedImage[0], compressedImage.size());
+
+    if (!testJ2KPathname.empty())
+    {
+        std::vector<std::byte> j2kData;
+        io::readFileContents(testJ2KPathname, j2kData);
+        TEST_ASSERT_EQ(compressedImage.size(), j2kData.size());
+
+        for (size_t ii = 0; ii < compressedImage.size(); ++ii)
+        {
+            TEST_ASSERT_EQ(j2kData[ii], compressedImage[ii]);
+        }
+    }
+}
+
 TEST_MAIN(
     (void)argc;
     argv0 = argv[0];
@@ -336,4 +393,5 @@ TEST_MAIN(
     TEST_CHECK(test_j2k_nitf);
     TEST_CHECK(test_j2k_nitf_read_region);
     //TEST_CHECK(test_decompress_nitf_to_sio);
+    //TEST_CHECK(test_j2k_compress_raw_image);
     )

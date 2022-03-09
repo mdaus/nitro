@@ -26,6 +26,7 @@
 #include <string>
 #include <memory>
 
+#include <gsl/gsl.h>
 #include <sys/Conf.h>
 #include <except/Exception.h>
 #include <types/RowCol.h>
@@ -53,8 +54,8 @@ void readSIO(const std::string& pathname,
 {
     sio::lite::FileReader reader(pathname);
     const sio::lite::FileHeader* const header(reader.getHeader());
-    dims.row = header->getNumLines();
-    dims.col = header->getNumElements();
+    dims.row = gsl::narrow<size_t>(header->getNumLines());
+    dims.col = gsl::narrow<size_t>(header->getNumElements());
 
     if (header->getElementSize() != sizeof(InputT) ||
         header->getElementType() != sio::lite::ElementType<InputT>::Type)
