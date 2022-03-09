@@ -43,41 +43,24 @@ namespace
     }
 }
 
-struct EncoderParameters final
-{
-    j2k_cparameters_t* pEncoderParameters = nullptr;
-    EncoderParameters() = default;
-    EncoderParameters(const EncoderParameters&) = delete;
-    EncoderParameters& operator=(const EncoderParameters&) = delete;
-    EncoderParameters(EncoderParameters&&) = default;
-    EncoderParameters& operator=(EncoderParameters&&) = default;
-    ~EncoderParameters()
-    {
-        j2k_destroy_encoder_parameters(pEncoderParameters);
-    }
-};
-
 struct j2k::Encoder::Impl final
 {
     //! Scoped encoder - Internal RAII wrapper around opj_codec_t -
     //! calls opj_create_compress() on construction and opj_destroy_codec()
     //! on destruction.
-    j2k_codec_t* mEncoder = nullptr;
-    EncoderParameters mEncoderParameters;
+    std::unique_ptr<j2k_codec_t, decltype(&j2k_destroy_codec)> mEncoder;
+    std::unique_ptr<j2k_cparameters_t, decltype(&j2k_destroy_encoder_parameters)> mEncoderParameters;
 
     //! The openjpeg error message.
     std::string mErrorMessage;
 
-    Impl() noexcept
+    Impl() noexcept : 
+        mEncoder(j2k_create_compress(/*OPJ_CODEC_J2K*/), j2k_destroy_codec),
+        mEncoderParameters(j2k_set_default_encoder_parameters(), j2k_destroy_encoder_parameters)
     {
-        mEncoder = j2k_create_compress(/*OPJ_CODEC_J2K*/);
     }
     Impl(const Impl&) = delete;
     Impl& operator=(const Impl&) = delete;
-    ~Impl()
-    {
-        j2k_destroy_codec(mEncoder);
-    }
 };
 
 j2k::Encoder::~Encoder() = default;
@@ -85,8 +68,7 @@ j2k::Encoder::~Encoder() = default;
 j2k::Encoder::Encoder(Image& image, const CompressionParameters& compressionParams)
     : pImpl_(std::make_unique<Impl>())
 {
-    pImpl_->mEncoderParameters.pEncoderParameters = j2k_set_default_encoder_parameters();
-    j2k_initEncoderParameters(pImpl_->mEncoderParameters.pEncoderParameters,
+    j2k_initEncoderParameters(pImpl_->mEncoderParameters.get(),
         compressionParams.getTileDims().row, compressionParams.getTileDims().col,
         compressionParams.getCompressionRatio(),
         compressionParams.getNumResolutions());
@@ -97,7 +79,7 @@ j2k::Encoder::Encoder(Image& image, const CompressionParameters& compressionPara
         throw except::Exception(Ctxt("Failed to setup openjpeg encoder error handler."));
     }
 
-    const auto setupSuccess = j2k_setup_encoder(getNative(), pImpl_->mEncoderParameters.pEncoderParameters, image.getNative());
+    const auto setupSuccess = j2k_setup_encoder(getNative(), pImpl_->mEncoderParameters.get(), image.getNative());
     if (!setupSuccess)
     {
         if (errorOccurred())
@@ -116,7 +98,7 @@ j2k::Encoder::Encoder(Image& image, const CompressionParameters& compressionPara
 
 j2k_codec_t* j2k::Encoder::getNative() const noexcept
 {
-    return pImpl_->mEncoder;
+    return pImpl_->mEncoder.get();
 }
 
 std::string j2k::Encoder::getErrorMessage() const
