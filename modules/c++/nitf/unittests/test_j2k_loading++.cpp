@@ -350,17 +350,16 @@ TEST_CASE(test_j2k_compress_raw_image)
     types::RowCol<size_t> tileDims;
     const size_t numThreads = sys::OS().getNumCPUs() - 1;
 
-    types::RowCol<size_t> rawDims;
-    std::unique_ptr<std::byte[]> rawImage;
-
     // Read in the raw data from the input SIO
-    sio::lite::readSIO(inPathname.string(), rawDims, rawImage);
+    types::RowCol<size_t> rawDims;
+    std::vector<std::byte> rawImage;
+    sio::lite::readSIO(inPathname, rawDims, rawImage);
 
     const j2k::CompressionParameters params(rawDims, tileDims);
     j2k::Compressor compressor(params, numThreads);
     std::vector<std::byte> compressedImage;
     std::vector<size_t> bytesPerBlock;
-    compressor.compress(rawImage.get(), compressedImage, bytesPerBlock);
+    compressor.compress(rawImage.data(), compressedImage, bytesPerBlock);
 
     size_t sumCompressedBytes = 0;
     for (size_t block = 0; block < bytesPerBlock.size(); ++block)
@@ -369,20 +368,16 @@ TEST_CASE(test_j2k_compress_raw_image)
     }
     TEST_ASSERT_EQ(sumCompressedBytes, compressedImage.size()); // "Size of compressed image does not match sum of bytes per block"
 
-    const std::string compressedPathname = "compressed_" + std::to_string(tileDims.row) + "x" + std::to_string(tileDims.col) + ".j2k";
+    const auto compressedPathname = "compressed_" + std::to_string(tileDims.row) + "x" + std::to_string(tileDims.col) + ".j2k";
     ::io::FileOutputStream os(compressedPathname);
-    os.write(&compressedImage[0], compressedImage.size());
+    os.write(std::span<const std::byte>(compressedImage.data(), compressedImage.size()));
 
-    if (!testJ2KPathname.empty())
+    std::vector<std::byte> j2kData;
+    io::readFileContents(testJ2KPathname, j2kData);
+    TEST_ASSERT_EQ(compressedImage.size(), j2kData.size());
+    for (size_t ii = 0; ii < compressedImage.size(); ++ii)
     {
-        std::vector<std::byte> j2kData;
-        io::readFileContents(testJ2KPathname, j2kData);
-        TEST_ASSERT_EQ(compressedImage.size(), j2kData.size());
-
-        for (size_t ii = 0; ii < compressedImage.size(); ++ii)
-        {
-            TEST_ASSERT_EQ(j2kData[ii], compressedImage[ii]);
-        }
+        TEST_ASSERT_EQ(j2kData[ii], compressedImage[ii]);
     }
 }
 
