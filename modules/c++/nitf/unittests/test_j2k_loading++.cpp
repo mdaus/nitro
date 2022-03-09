@@ -303,6 +303,28 @@ TEST_CASE(test_j2k_nitf_read_region)
     test_j2k_nitf_read_region_(input_file);
 }
 
+static std::vector<std::byte> readImage(nitf::ImageReader& imageReader, const nitf::ImageSubheader& imageSubheader)
+{
+    const auto numBlocks = imageSubheader.numBlocksPerRow() * imageSubheader.numBlocksPerCol();
+    TEST_ASSERT_GREATER(numBlocks, 0);
+
+    const auto imageLength = imageSubheader.getNumBytesOfImageData();
+    TEST_ASSERT_GREATER(imageLength, 0);
+
+    // This assumes vertical blocking.
+    // Interleaving would be required for horizontal blocks
+    std::vector<std::byte> retval(imageLength);
+    uint64_t byteOffset = 0;
+    for (uint32_t block = 0; block < numBlocks; ++block)
+    {
+        uint64_t bytesRead;
+        const auto blockData = imageReader.readBlock(block, &bytesRead);
+        TEST_ASSERT(blockData != nullptr);
+        memcpy(retval.data() + byteOffset, blockData, bytesRead);
+        byteOffset += bytesRead;
+    }
+    return retval;
+}
 TEST_CASE(test_decompress_nitf_to_sio)
 {
     ::testName = testName;
@@ -314,26 +336,13 @@ TEST_CASE(test_decompress_nitf_to_sio)
 
     nitf::Reader reader;
     nitf::IOHandle io(inputPathname.string());
-    nitf::Record record = reader.read(io);
+    const auto record = reader.read(io);
     auto iter = record.getImages().begin();
     nitf::ImageSegment imageSegment = *iter;
     const auto imageSubheader = imageSegment.getSubheader();
-    const auto numBlocks = imageSubheader.numBlocksPerRow() * imageSubheader.numBlocksPerCol();
 
-    const auto imageLength = imageSubheader.getNumBytesOfImageData();
-    std::vector<std::byte> imageData(imageLength);
-
-    // This assumes vertical blocking.
-    // Interleaving would be required for horizontal blocks
-    auto imageReader = reader.newImageReader(0);
-    uint64_t byteOffset = 0;
-    for (uint32_t block = 0; block < numBlocks; ++block)
-    {
-        uint64_t bytesRead;
-        const auto blockData = imageReader.readBlock(block, &bytesRead);
-        memcpy(imageData.data() + byteOffset, blockData, bytesRead);
-        byteOffset += bytesRead;
-    }
+    auto imageReader = reader.newImageReader(0 /*imageSegmentNumber*/);
+    const auto imageData = readImage(imageReader, imageSubheader);
 
     sio::lite::writeSIO(imageData.data(), imageSubheader.dims(), outputPathname);
 }
@@ -387,6 +396,6 @@ TEST_MAIN(
     TEST_CHECK(test_j2k_loading);
     TEST_CHECK(test_j2k_nitf);
     TEST_CHECK(test_j2k_nitf_read_region);
-    //TEST_CHECK(test_decompress_nitf_to_sio);
+    TEST_CHECK(test_decompress_nitf_to_sio);
     //TEST_CHECK(test_j2k_compress_raw_image);
     )
