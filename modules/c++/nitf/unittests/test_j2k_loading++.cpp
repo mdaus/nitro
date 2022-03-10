@@ -344,7 +344,6 @@ static void test_decompress_nitf_to_sio_(const fs::path& inputPathname, const fs
 TEST_CASE(test_decompress_nitf_to_sio)
 {
     ::testName = testName;
-    //const std::string NITF_PLUGIN_PATH = R"(C:\Users\jdsmith\source\repos\nitro\x64\Debug\share\nitf\plugins)";
     sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
 
     const auto inputPathname = findInputFile("j2k_compressed_file1_jp2.ntf"); // This is a JP2 file, not J2K; see OpenJPEG_setup_()
@@ -354,7 +353,6 @@ TEST_CASE(test_decompress_nitf_to_sio)
 TEST_CASE(test_j2k_compress_raw_image)
 {
     ::testName = testName;
-    //const std::string NITF_PLUGIN_PATH = R"(C:\Users\jdsmith\source\repos\nitro\x64\Debug\share\nitf\plugins)";
     sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
 
     const auto inputPathname = findInputFile("j2k_compressed_file1_jp2.ntf"); // This is a JP2 file, not J2K; see OpenJPEG_setup_()
@@ -403,6 +401,6 @@ TEST_MAIN(
     TEST_CHECK(test_j2k_loading);
     TEST_CHECK(test_j2k_nitf);
     TEST_CHECK(test_j2k_nitf_read_region);
-    TEST_CHECK(test_decompress_nitf_to_sio);
-    TEST_CHECK(test_j2k_compress_raw_image);
+    //TEST_CHECK(test_decompress_nitf_to_sio);
+    //TEST_CHECK(test_j2k_compress_raw_image);
     )
