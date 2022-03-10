@@ -69,6 +69,7 @@ coda_add_module(
         source/TestingTest.cpp
         source/TextSegment.cpp
         source/TextSubheader.cpp
+        source/UnitTests.cpp
         source/Utils.cpp
         source/WriteHandler.cpp
         source/Writer.cpp

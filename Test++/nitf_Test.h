@@ -8,10 +8,4 @@
 
 #include <string>
 
-namespace nitf
-{
-	namespace Test
-	{
-		std::string buildPluginsDir();
-	}
-}
+#include <nitf/UnitTests.hpp>
