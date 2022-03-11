@@ -10,6 +10,10 @@
     <ClCompile Include="nrt_test_core_values.cpp" />
     <ClCompile Include="nrt_test_list.cpp" />
     <ClCompile Include="nitf_test_create.cpp" />
+    <ClCompile Include="nitf_test_zero_field.cpp" />
+    <ClCompile Include="nitf_test_mem_source.cpp" />
+    <ClCompile Include="nitf_test_geo_utils.cpp" />
+    <ClCompile Include="nitf_test_field.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="nrt_Test.h" />
