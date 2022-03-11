@@ -3,6 +3,7 @@
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="nrt_test_utils.cpp" />
+    <ClCompile Include="nrt_test_tree.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="nrt_Test.h" />

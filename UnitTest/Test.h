@@ -19,14 +19,14 @@ inline void test_assert_str_eq_(const T& t, const U& u)
 #define TEST_ASSERT_EQ_STR(X1, X2) { test_assert_str_eq_(X1, X2); test_assert_str_eq_(X2, X1); }
 #define TEST_ASSERT_EQ_FLOAT(X1, X2) Assert::AreEqual(static_cast<float>(X1), static_cast<float>(X2))
 
-#define TEST_ASSERT_NULL(X) TEST_ASSERT_EQ((X), nullptr)
-#define TEST_ASSERT_TRUE(X) TEST_ASSERT_EQ((X), true)
-#define TEST_ASSERT_FALSE(X) TEST_ASSERT_EQ((X), false)
+#define TEST_ASSERT_NULL(X) Assert::IsNull((X))
+#define TEST_ASSERT_TRUE(X) Assert::IsTrue((X))
+#define TEST_ASSERT_FALSE(X) Assert::IsFalse((X))
 
 template<typename T, typename U>
 inline void test_assert_not_eq_(const T& t, const U& u)
 {
-	EXPECT_NE(t, u);
+	Assert::AreNotEqual(t, u);
 }
 #define TEST_ASSERT_NOT_EQ(X1, X2) { test_assert_not_eq_(X1, X2); test_assert_not_eq_(X2, X1);}
 
