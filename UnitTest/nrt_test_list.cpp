@@ -4,10 +4,10 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-TEST_CLASS(nrt_test_utils) {
+TEST_CLASS(nrt_test_list) {
 public:
 
 #define TEST_CASE(X) TEST_METHOD(X)
-#include "nrt/unittests/test_utils.c"
+#include "nrt/unittests/test_list.c"
 
 };

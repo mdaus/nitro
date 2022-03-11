@@ -87,6 +87,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="nrt_test_buffer_adapter.cpp" />
+    <ClCompile Include="nrt_test_core_values.cpp" />
+    <ClCompile Include="nrt_test_list.cpp" />
+    <ClCompile Include="nrt_test_nrt_byte_swap.cpp" />
+    <ClCompile Include="nrt_test_nrt_datetime.cpp" />
     <ClCompile Include="nrt_test_tree.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
