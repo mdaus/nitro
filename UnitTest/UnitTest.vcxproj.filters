@@ -14,6 +14,8 @@
     <ClCompile Include="nitf_test_mem_source.cpp" />
     <ClCompile Include="nitf_test_geo_utils.cpp" />
     <ClCompile Include="nitf_test_field.cpp" />
+    <ClCompile Include="nitf_test_image_io.cpp" />
+    <ClCompile Include="nitf_test_create_nitf.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="nrt_Test.h" />
