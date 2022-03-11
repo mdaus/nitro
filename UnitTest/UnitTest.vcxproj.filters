@@ -9,6 +9,7 @@
     <ClCompile Include="nrt_test_buffer_adapter.cpp" />
     <ClCompile Include="nrt_test_core_values.cpp" />
     <ClCompile Include="nrt_test_list.cpp" />
+    <ClCompile Include="nitf_test_create.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="nrt_Test.h" />

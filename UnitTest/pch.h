@@ -41,6 +41,7 @@
 #pragma warning(pop)
 
 #include <import/nrt.h>
+#include <import/nitf.h>
 #include <nitf/System.hpp>
 
 #include "nitf_Test.h"
