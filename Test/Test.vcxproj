@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|x64">
       <Configuration>Debug</Configuration>
@@ -11,27 +11,81 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{238c9787-b27d-4107-b8fd-1bdb49ea8023}</ProjectGuid>
+    <VCProjectVersion>17.0</VCProjectVersion>
+    <ProjectGuid>{238C9787-B27D-4107-B8FD-1BDB49EA8023}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <WindowsTargetPlatformVersion>10.0.20348.0</WindowsTargetPlatformVersion>
-    <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v143</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <RootNamespace>UnitTest</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectSubType>NativeUnitTestProject</ProjectSubType>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>false</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>false</UseOfMfc>
+  </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
-  <ImportGroup Label="ExtensionSettings" />
-  <ImportGroup Label="Shared" />
-  <ImportGroup Label="PropertySheets" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <ItemGroup>
-    <ClInclude Include="j2k_Test.h" />
-    <ClInclude Include="nitf_Test.h" />
-    <ClInclude Include="nrt_Test.h" />
-    <ClInclude Include="pch.h" />
-    <ClInclude Include="Test.h" />
-    <ClInclude Include="TestCase.h" />
-  </ItemGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(SolutionDir)modules\c\nrt\include\;$(SolutionDir)modules\c\nitf\include\;$(SolutionDir)modules\c\jpeg\include\;$(SolutionDir)modules\c\j2k\include\;$(SolutionDir)modules\c\cgm\include;$(SolutionDir)modules\c\;$(SolutionDir)modules\c++\;$(SolutionDir)modules\c++\nitf\include\;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\;$(VCInstallDir)UnitTest\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <UseFullPaths>true</UseFullPaths>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalLibraryDirectories>$(VCInstallDir)UnitTest\lib;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\lib\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(SolutionDir)modules\c\nrt\include\;$(SolutionDir)modules\c\nitf\include\;$(SolutionDir)modules\c\jpeg\include\;$(SolutionDir)modules\c\j2k\include\;$(SolutionDir)modules\c\cgm\include;$(SolutionDir)modules\c\;$(SolutionDir)modules\c++\;$(SolutionDir)modules\c++\nitf\include\;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\;$(VCInstallDir)UnitTest\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <UseFullPaths>true</UseFullPaths>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(VCInstallDir)UnitTest\lib;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\lib\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="nitf_test_create.cpp" />
     <ClCompile Include="nitf_test_create_nitf.cpp" />
@@ -47,14 +101,24 @@
     <ClCompile Include="nrt_test_nrt_byte_swap.cpp" />
     <ClCompile Include="nrt_test_nrt_datetime.cpp" />
     <ClCompile Include="nrt_test_tree.cpp" />
-    <ClCompile Include="nrt_test_utils.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="SetPluginPath.cpp" />
+    <ClCompile Include="nrt_test_utils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="j2k_Test.h" />
+    <ClInclude Include="nitf_Test.h" />
+    <ClInclude Include="nrt_Test.h" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="Test.h" />
+    <ClInclude Include="TestCase.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\modules\c++\nitf-c++.vcxproj">
+      <Project>{8f357a19-799e-4971-850e-3f28485c130b}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\modules\c\nitf-c.vcxproj">
       <Project>{f06550ad-cfc7-40b8-8727-6c82c69a8982}</Project>
     </ProjectReference>
@@ -92,67 +156,7 @@
       <Project>{78849481-d356-4cc7-b182-31c21f857ed1}</Project>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemDefinitionGroup />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="..\packages\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.1.8.1.5\build\native\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.targets" Condition="Exists('..\packages\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.1.8.1.5\build\native\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.targets')" />
   </ImportGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>X64;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <WarningLevel>EnableAllWarnings</WarningLevel>
-      <AdditionalIncludeDirectories>$(SolutionDir)modules\c\nrt\include\;$(SolutionDir)modules\c\nitf\include\;$(SolutionDir)modules\c\jpeg\include\;$(SolutionDir)modules\c\j2k\include\;$(SolutionDir)modules\c\cgm\include;$(SolutionDir)modules\c\;$(SolutionDir)modules\c++\;$(SolutionDir)modules\c++\nitf\include\;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <ControlFlowGuard>Guard</ControlFlowGuard>
-      <SDLCheck>true</SDLCheck>
-      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
-      <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
-      <TreatWarningAsError>true</TreatWarningAsError>
-    </ClCompile>
-    <Link>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Console</SubSystem>
-      <AdditionalLibraryDirectories>$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\lib\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <PreprocessorDefinitions>X64;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <WarningLevel>Level3</WarningLevel>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>$(SolutionDir)modules\c\nrt\include\;$(SolutionDir)modules\c\nitf\include\;$(SolutionDir)modules\c\jpeg\include\;$(SolutionDir)modules\c\j2k\include\;$(SolutionDir)modules\c\cgm\include;$(SolutionDir)modules\c\;$(SolutionDir)modules\c++\;$(SolutionDir)modules\c++\nitf\include\;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <ControlFlowGuard>Guard</ControlFlowGuard>
-      <SDLCheck>true</SDLCheck>
-      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
-      <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
-    </ClCompile>
-    <Link>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Console</SubSystem>
-      <OptimizeReferences>true</OptimizeReferences>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <AdditionalLibraryDirectories>$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\lib\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-    </Link>
-  </ItemDefinitionGroup>
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.1.8.1.5\build\native\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.1.8.1.5\build\native\Microsoft.googletest.v140.windesktop.msvcstl.static.rt-dyn.targets'))" />
-  </Target>
 </Project>

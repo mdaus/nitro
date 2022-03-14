@@ -2,5 +2,12 @@
 
 #include "nrt_Test.h"
 
-#define TEST_CASE(X) TEST(nrt_test_utils, X)
+using namespace Microsoft::VisualStudio::CppUnitTestFramework;
+
+TEST_CLASS(nrt_test_utils) {
+public:
+
+#define TEST_CASE(X) TEST_METHOD(X)
 #include "nrt/unittests/test_utils.c"
+
+};
