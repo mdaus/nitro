@@ -44,6 +44,7 @@
     <ClCompile Include="nitf_test_nitf_buffer_list.cpp" />
     <ClCompile Include="nitf_test_tre_create++.cpp" />
     <ClCompile Include="nitf_test_tre_mods.cpp" />
+    <ClCompile Include="nitf_test_tre_read.cpp" />
     <ClCompile Include="nitf_test_writer_3++.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
