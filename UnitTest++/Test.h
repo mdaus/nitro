@@ -20,19 +20,14 @@ inline std::wstring ToString(const uint16_t& q)
 }}}
 
 template<typename T, typename U>
-inline void test_assert_eq_(const T& t, const U& u)
+inline void test_assert_eq_(T&& t, U&& u)
 {
 	Assert::AreEqual(t, u);
 }
 #define TEST_ASSERT_EQ(X1, X2) { test_assert_eq_(X1, X2); test_assert_eq_(X2, X1); }
 #define TEST_ASSERT_EQ_INT(X1, X2) TEST_ASSERT_EQ(X2, X1)
-template<typename T, typename U>
-inline void test_assert_str_eq_(const T& t, const U& u)
-{
-	Assert::AreEqual(std::string(t), std::string(u));
-}
-#define TEST_ASSERT_EQ_STR(X1, X2) { test_assert_str_eq_(X1, X2); test_assert_str_eq_(X2, X1); }
-#define TEST_ASSERT_EQ_FLOAT(X1, X2) Assert::AreEqual(static_cast<float>(X1), static_cast<float>(X2))
+#define TEST_ASSERT_EQ_STR(X1, X2) TEST_ASSERT_EQ(X1, X2)
+#define TEST_ASSERT_EQ_FLOAT(X1, X2) TEST_ASSERT_EQ(static_cast<float>(X1), static_cast<float>(X2))
 
 #define TEST_ASSERT_NULL(X) Assert::IsNull((X))
 #define TEST_ASSERT_TRUE(X) Assert::IsTrue((X))
