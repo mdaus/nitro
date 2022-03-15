@@ -30,7 +30,10 @@
 #pragma warning(disable: 4464) // relative include path contains '..'
 #include <nitf/coda-oss.hpp>
 #include <math/Round.h>
+#include <import/io.h>
 #include <io/TempFile.h>
+#include <io/ReadUtils.h>
+#include <import/sio/lite.h>
 #pragma warning(disable: 5031) // #pragma warning(pop): likely mismatch, popping warning state pushed in different file
 #pragma comment(lib, "io-c++")
 #pragma comment(lib, "except-c++")
@@ -57,6 +60,7 @@
 #include <nitf/J2KContainer.hpp>
 #include <nitf/J2KReader.hpp>
 #include <nitf/J2KWriter.hpp>
+#include <nitf/J2KCompressor.hpp>
 
 #include "nitf_Test.h"
 #include "Test.h"
