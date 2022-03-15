@@ -1,6 +1,6 @@
 #pragma once
 
-#if defined(GTEST_API_)
+#if defined(MS_CPP_UNITTESTFRAMEWORK)
 #define __TEST_H__ // #include "../nitf/unittests/Test.h"
 #define __TEST_CASE_H__ // #include "../nitf/unittests/TestCase.h"
 #endif
@@ -8,10 +8,4 @@
 
 #include <string>
 
-namespace nitf
-{
-	namespace Test
-	{
-		std::string buildPluginsDir();
-	}
-}
+#include "import/nitf.h"

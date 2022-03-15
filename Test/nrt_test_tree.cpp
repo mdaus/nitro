@@ -2,6 +2,13 @@
 
 #include "nrt_Test.h"
 
+using namespace Microsoft::VisualStudio::CppUnitTestFramework;
+
 const char* testName = "testTree";
-#define TEST_CASE(X) TEST(nrt_test_tree, X)
+TEST_CLASS(nrt_test_tree) {
+public:
+
+#define TEST_CASE(X) TEST_METHOD(X)
 #include "nrt/unittests/test_tree.c"
+
+};
