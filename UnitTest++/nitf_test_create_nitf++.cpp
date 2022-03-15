@@ -17,7 +17,7 @@ TEST_CLASS(nitf_test_create_nitf__) {
 public:
 	nitf_test_create_nitf__() {
 		// initialization code here
-		//sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
+		sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
 	}
 
 	~nitf_test_create_nitf__() = default;

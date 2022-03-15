@@ -10,10 +10,4 @@
 
 #include "import/nitf.h"
 
-namespace nitf
-{
-	namespace Test
-	{
-		std::string buildPluginsDir();
-	}
-}
+#include <nitf/UnitTests.hpp>
