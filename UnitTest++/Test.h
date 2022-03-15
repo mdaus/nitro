@@ -5,8 +5,6 @@
 
 #include "CppUnitTest.h"
 
-#define TEST_ASSERT(X) Assert::IsTrue(X)
-
 namespace Microsoft{ namespace VisualStudio {namespace CppUnitTestFramework
 {
 inline std::wstring ToString(const uint8_t& q)
@@ -18,6 +16,8 @@ inline std::wstring ToString(const uint16_t& q)
 	return std::to_wstring(q);
 }
 }}}
+
+#define TEST_ASSERT(X) Assert::IsTrue(X)
 
 template<typename T, typename U>
 inline void test_assert_eq_(T&& t, U&& u)

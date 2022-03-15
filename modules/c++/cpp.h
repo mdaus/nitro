@@ -38,6 +38,7 @@
 #include <ios>
 #include <iomanip>
 #include <vector>
+#include <array>
 #include <map>
 #include <utility>
 #include <functional>
