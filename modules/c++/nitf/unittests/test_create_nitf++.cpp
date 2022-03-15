@@ -177,7 +177,7 @@ static void test_create_nitf_with_byte_provider__writeNITF(nitf::Record& record,
         * should work the same
         */
     std::vector<std::vector<size_t> > bytesPerBlock(1);
-    bytesPerBlock[0].push_back(NITRO_IMAGE.width * NITRO_IMAGE.height * NUM_BANDS);
+    bytesPerBlock[0].push_back(static_cast<size_t>(NITRO_IMAGE.width) * NITRO_IMAGE.height * NUM_BANDS);
     nitf::CompressedByteProvider byteProvider(record,
         bytesPerBlock);
     nitf::Off fileOffset;
@@ -216,7 +216,7 @@ static bool test_create_nitf_with_byte_provider__testRead(const std::string& pat
         // Read one block. It should match the first blockSize points of the
         // image. If it does, we got the blocking mode right.
         auto block = reinterpret_cast<const unsigned char*>(imageReader.readBlock(0, &blockSize));
-        const size_t imageLength = NITRO_IMAGE.width * NITRO_IMAGE.height;
+        const size_t imageLength = static_cast<size_t>(NITRO_IMAGE.width) * NITRO_IMAGE.height;
 
         for (size_t jj = 0; jj < imageLength * NUM_BANDS; ++jj)
         {
@@ -314,7 +314,7 @@ static void test_create_nitf__writeNITF(nitf::Record& record, const std::string&
     {
         nitf::BandSource bandSource = nitf::MemorySource(
             (char*)NITRO_IMAGE.data,
-            NITRO_IMAGE.width * NITRO_IMAGE.height,
+            static_cast<size_t>(NITRO_IMAGE.width) * NITRO_IMAGE.height,
             ii, 1, 2);
         imageSource.addBand(bandSource);
     }
@@ -348,7 +348,7 @@ static bool test_create_nitf__testRead(const std::string& pathname, bool isMono 
         // Read one block. It should match the first blockSize points of the
         // image. If it does, we got the blocking mode right.
         auto block = reinterpret_cast<const unsigned char*>(imageReader.readBlock(0, &blockSize));
-        const size_t imageLength = NITRO_IMAGE.width * NITRO_IMAGE.height;
+        const auto imageLength = static_cast<size_t>(NITRO_IMAGE.width) * NITRO_IMAGE.height;
 
         // The image data is interleaved by pixel. When feeding it to the
         // writer, we unpack to interleave by block. Now that we're reading
