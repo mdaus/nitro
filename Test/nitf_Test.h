@@ -9,11 +9,3 @@
 #include <string>
 
 #include "import/nitf.h"
-
-namespace nitf
-{
-	namespace Test
-	{
-		std::string buildPluginsDir();
-	}
-}
