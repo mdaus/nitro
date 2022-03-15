@@ -36,34 +36,34 @@
 #include <nitf/J2KReader.hpp>
 #include <nitf/J2KWriter.hpp>
 
-namespace fs = std::filesystem;
+using path = std::filesystem::path;
 
 #include "TestCase.h"
 
 static std::string testName;
 
-static fs::path findRoot(const fs::path& p)
+static path findRoot(const path& p)
 {
-    if (fs::is_regular_file(p / "LICENSE") && fs::is_regular_file(p / "README.md") && fs::is_regular_file(p / "CMakeLists.txt"))
+    if (is_regular_file(p / "LICENSE") && is_regular_file(p / "README.md") && is_regular_file(p / "CMakeLists.txt"))
     {
         return p;
     }
     return findRoot(p.parent_path());
 }
-inline fs::path findRoot()
+inline static path findRoot()
 {
-    return findRoot(fs::current_path());
+    return findRoot(std::filesystem::current_path());
 }
 
 static std::string argv0;
-static fs::path findInputFile_(const fs::path& inputFile)
+static path findInputFile_(const path& inputFile)
 {
-    fs::path root = findRoot();
+    auto root = findRoot();
     return root / inputFile;
 }
-static fs::path findInputFile(const fs::path& fn)
+static path findInputFile(const path& fn)
 {
-    const auto inputPath = fs::path("modules") / "c++" / "nitf" / "unittests" / fn;
+    const auto inputPath = path("modules") / "c++" / "nitf" / "unittests" / fn;
     return findInputFile_(inputPath);
 }
 
@@ -99,8 +99,6 @@ static void test_image_loading_(const std::string& input_file, bool /*optz*/)
 
 TEST_CASE(test_j2k_loading)
 {
-    ::testName = testName;
-
     auto input_file = findInputFile("j2k_compressed_file1_jp2.ntf").string();
     test_image_loading_(input_file, false /*optz*/);
     //test_image_loading_(input_file, true /*optz*/);
@@ -150,8 +148,6 @@ static void test_j2k_nitf_(const std::string& fname)
 }
 TEST_CASE(test_j2k_nitf)
 {
-    ::testName = testName;
-
     j2k_Reader* pNative = nullptr;
     try
     {
@@ -207,7 +203,7 @@ void writeJ2K(uint32_t x0, uint32_t y0,
     writer.write(outIO);
     //printf("Wrote file: %s\n", outName.c_str());
 }
-void test_j2k_nitf_read_region_(const fs::path& fname)
+void test_j2k_nitf_read_region_(const path& fname)
 {
     nitf::IOHandle io(fname.string(), NRT_ACCESS_READONLY, NRT_OPEN_EXISTING);
     nitf::Reader reader;
@@ -280,7 +276,6 @@ void test_j2k_nitf_read_region_(const fs::path& fname)
 }
 TEST_CASE(test_j2k_nitf_read_region)
 {
-    ::testName = testName;
     // This is a JP2 file, not J2K; see OpenJPEG_setup_()
     auto input_file = findInputFile("j2k_compressed_file1_jp2.ntf");
     test_j2k_nitf_read_region_(input_file);

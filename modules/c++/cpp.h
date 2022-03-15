@@ -26,6 +26,7 @@
 #include <time.h>
 #include <stdint.h>
 #include <stddef.h>
+#include <inttypes.h>
 
 #include <string>
 #include <numeric>
@@ -35,6 +36,7 @@
 #include <sstream>
 #include <ostream>
 #include <iostream>
+#include <fstream>
 #include <ios>
 #include <iomanip>
 #include <vector>

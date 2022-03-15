@@ -11,3 +11,26 @@
 #include "import/nitf.h"
 
 #include <nitf/UnitTests.hpp>
+
+namespace Microsoft{ namespace VisualStudio {namespace CppUnitTestFramework
+{
+
+template<>
+inline std::wstring ToString(const nitf::PixelValueType& q)
+{
+	return nitf::to_wstring(q);
+}
+
+template<>
+inline std::wstring ToString(const nitf::BlockingMode& q)
+{
+	return nitf::to_wstring(q);
+}
+
+template<>
+inline std::wstring ToString(const nitf::ImageCompression& q)
+{
+	return nitf::to_wstring(q);
+}
+
+}}}

@@ -29,6 +29,8 @@
 #pragma warning(push)
 #pragma warning(disable: 4464) // relative include path contains '..'
 #include <nitf/coda-oss.hpp>
+#include <math/Round.h>
+#include <io/TempFile.h>
 #pragma warning(disable: 5031) // #pragma warning(pop): likely mismatch, popping warning state pushed in different file
 #pragma comment(lib, "io-c++")
 #pragma comment(lib, "except-c++")
@@ -43,8 +45,15 @@
 #include <import/nitf.h>
 
 #include <import/nitf.hpp>
+#include <nitf/TRE.hpp>
+#include <nitf/exports.hpp>
+#include <nitf/TREField.hpp>
 #include <nitf/FieldDescriptor.hpp>
 #include <nitf/TestingTest.hpp>
+#include <nitf/J2KComponent.hpp>
+#include <nitf/J2KContainer.hpp>
+#include <nitf/J2KReader.hpp>
+#include <nitf/J2KWriter.hpp>
 
 #include "nitf_Test.h"
 #include "Test.h"
