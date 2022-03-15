@@ -78,7 +78,7 @@ static fs::path buildDir(const fs::path& path)
 
 	const auto exec = fs::path(os.getCurrentExecutable());
 	const auto argv0 = exec.filename();
-	if (argv0 == "Test++.exe")
+	if ((argv0 == "Test++.exe") || (argv0 == "testhost.exe"))
 	{
 		// Running GTest unit-tests in Visual Studio on Windows
 		if (is_x64_Configuration(cwd))
