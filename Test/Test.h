@@ -25,7 +25,7 @@ inline void test_assert_eq_(T&& t, U&& u)
 #define TEST_ASSERT_EQ(X1, X2) test_assert_eq_(X1, X2);
 #define TEST_ASSERT_EQ_INT(X1, X2) TEST_ASSERT_EQ(X2, X1)
 #define TEST_ASSERT_EQ_STR(X1, X2) TEST_ASSERT_EQ(std::string(X1), std::string(X2))
-#define TEST_ASSERT_EQ_FLOAT(X1, X2) TEST_ASSERT_EQ(X1, X2)
+#define TEST_ASSERT_EQ_FLOAT(X1, X2) TEST_ASSERT_EQ(static_cast<float>(X1), static_cast<float>(X2))
 
 #define TEST_ASSERT_NULL(X) Assert::IsNull((X))
 #define TEST_ASSERT_NOT_NULL(X) Assert::IsNotNull((X))
