@@ -185,7 +185,8 @@ static void test_create_nitf_with_byte_provider__writeNITF(nitf::Record& record,
     io::FileOutputStream outputStream(filename);
     for (size_t ii = 0; ii < buffers.mBuffers.size(); ++ii)
     {
-        outputStream.write(buffers.mBuffers[ii].getBytes());
+        const auto bytes = buffers.mBuffers[ii].getBytes();
+        outputStream.write(bytes);
     }
 }
 
