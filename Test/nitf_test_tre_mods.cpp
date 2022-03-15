@@ -46,9 +46,9 @@ static fs::path buildDir(const fs::path& path)
 	const sys::OS os;
 	const auto exec = fs::path(os.getCurrentExecutable());
 	const auto argv0 = exec.filename();
-	if (argv0 == "Test.exe")
+	if (argv0 == "testhost.exe")
 	{
-		// Running GTest unit-tests in Visual Studio on Windows
+		// Running Visual Studio unit-tests on Windows
 		if (is_x64_Configuration(cwd))
 		{
 			return cwd / path;
@@ -101,33 +101,23 @@ static fs::path buildPluginsDir()
 	return buildDir(fs::path("share") / "nitf" / "plugins");
 }
 
-struct nitf_test_tre_mods : public ::testing::Test {
-    nitf_test_tre_mods() {
-        // initialization code here
-        //const std::string NITF_PLUGIN_PATH = R"(C:\Users\jdsmith\source\repos\nitro\x64\Debug\share\nitf\plugins)";
+using namespace Microsoft::VisualStudio::CppUnitTestFramework;
+
+TEST_CLASS(nitf_test_tre_mods) {
+public:
+	nitf_test_tre_mods()
+	{
+		// initialization code here
+		//const std::string NITF_PLUGIN_PATH = R"(C:\Users\jdsmith\source\repos\nitro\x64\Debug\share\nitf\plugins)";
 		const std::string putenv_ = "NITF_PLUGIN_PATH=" + buildPluginsDir().string();
-        _putenv(putenv_.c_str());
-    }
+		_putenv(putenv_.c_str());
+	}
 
-    void SetUp() {
-        // code here will execute just before the test ensues 
-    }
-
-    void TearDown() {
-        // code here will be called just after the test completes
-        // ok to through exceptions from here if need be
-    }
-
-    ~nitf_test_tre_mods() {
-        // cleanup any pending stuff, but no exceptions allowed
-    }
-
+	~nitf_test_tre_mods() = default;
 	nitf_test_tre_mods(const nitf_test_tre_mods&) = delete;
 	nitf_test_tre_mods& operator=(const nitf_test_tre_mods&) = delete;
 
-
-    // put in any custom data members that you need 
-};
-
-#define TEST_CASE(X) TEST_F(nitf_test_tre_mods, X)
+#define TEST_CASE(X) TEST_METHOD(X)
 #include "nitf/unittests/test_tre_mods.c"
+
+};
