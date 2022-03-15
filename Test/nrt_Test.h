@@ -1,6 +1,6 @@
 #pragma once
 
-#if defined(GTEST_API_)
+#if defined(MS_CPP_UNITTESTFRAMEWORK)
 #define __TEST_H__ // #include "../nrt/unittests/Test.h"
 #endif
 #include "Test.h"

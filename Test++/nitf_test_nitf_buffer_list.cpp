@@ -2,5 +2,12 @@
 
 #include "nitf_Test.h"
 
-#define TEST_CASE(X) TEST(test_nitf_buffer_list, X)
+using namespace Microsoft::VisualStudio::CppUnitTestFramework;
+
+TEST_CLASS(test_nitf_buffer_list) {
+public:
+
+#define TEST_CASE(X) TEST_METHOD(X)
 #include "nitf/unittests/test_nitf_buffer_list.cpp"
+
+};

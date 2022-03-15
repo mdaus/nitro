@@ -2,5 +2,12 @@
 
 #include "nitf_Test.h"
 
-#define TEST_CASE(X) TEST(test_image_blocker, X)
+using namespace Microsoft::VisualStudio::CppUnitTestFramework;
+
+TEST_CLASS(test_image_blocker) {
+public:
+
+#define TEST_CASE(X) TEST_METHOD(X)
 #include "nitf/unittests/test_image_blocker.cpp"
+
+};

@@ -96,7 +96,7 @@ TEST_CASE(test_hash_table_1)
             }
             catch (const except::NoSuchKeyException& t)
             {
-                TEST_ASSERT_EQ("NOT FOUND", keyBuf);
+                TEST_ASSERT_EQ_STR("NOT FOUND", keyBuf);
                 const auto message = t.getMessage();
                 TEST_ASSERT_EQ(message, keyBuf);
             }

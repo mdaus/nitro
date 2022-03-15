@@ -35,10 +35,10 @@
 
 #include "TestCase.h"
 
-namespace fs = std::filesystem;
+using path = std::filesystem::path;
 
-static fs::path argv0;
-static const fs::path file = __FILE__;
+static path argv0;
+static const path file;
 
 static bool is_linux()
 {
@@ -52,11 +52,11 @@ static bool is_vs_gtest()
 	return argv0.empty(); // no argv[0] in VS w/GTest
 }
 
-static fs::path buildFileDir(const fs::path& relativePath)
+static path buildFileDir(const path& relativePath)
 {
 	if (is_vs_gtest())
 	{
-		static const auto cwd = fs::current_path();
+		static const auto cwd = std::filesystem::current_path();
 
 		// Running GTest unit-tests in Visual Studio on Windows
 		return cwd.parent_path().parent_path() / relativePath;
@@ -117,8 +117,6 @@ static void doChangeFileHeader(const std::string& inputPathname, const std::stri
     writer.write();
 }
 
-namespace
-{
 TEST_CASE(imageWriterThrowsOnFailedConstruction)
 {
     nitf::ImageSubheader subheader;
@@ -138,11 +136,9 @@ TEST_CASE(constructValidImageWriter)
 
 TEST_CASE(changeFileHeader)
 {
-	const auto inputPathname = buildFileDir(fs::path("modules") / "c++" / "nitf" / "tests" / "test_blank.ntf").string();
-    TEST_ASSERT_NOT_EQ(inputPathname, "");
-    //std::clog << "'" << inputPathname << "'\n";
-    TEST_ASSERT_TRUE(fs::is_regular_file(inputPathname));
-	const auto outputPathname = buildFileDir(fs::path("outputPathname.ntf")).string();
+	const auto inputPathname = buildFileDir(path("modules") / "c++" / "nitf" / "tests" / "test_blank.ntf").string();
+    TEST_ASSERT_TRUE(std::filesystem::is_regular_file(inputPathname));
+	const auto outputPathname = buildFileDir(path("outputPathname.ntf")).string();
 
     doChangeFileHeader(inputPathname, outputPathname);
 
@@ -157,11 +153,10 @@ TEST_CASE(changeFileHeader)
     npos = fileTitle.find("*");
     TEST_ASSERT(npos != std::string::npos);
 }
-}
 
 TEST_MAIN(
     (void)argc;
-    argv0 = fs::absolute(argv[0]).string();
+    argv0 = std::filesystem::absolute(argv[0]).string();
 
     TEST_CHECK(imageWriterThrowsOnFailedConstruction);
     TEST_CHECK(constructValidImageWriter);

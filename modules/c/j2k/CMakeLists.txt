@@ -36,5 +36,3 @@ coda_add_tests(
         test_j2k_nitf.c
         test_j2k_read_region.c
         test_j2k_read_tile.c)
-
-
