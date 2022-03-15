@@ -2,7 +2,8 @@
  * This file is part of NITRO
  * =========================================================================
  *
- * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2017, MDA Information Systems LLC
+ * (C) Copyright 2022, Maxar Technologies, Inc.
  *
  * NITRO is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -20,12 +21,13 @@
  *
  */
 
-#ifndef __IMPORT_J2K_H__
-#define __IMPORT_J2K_H__
+#include "nitf/J2KCompressionParameters.hpp"
 
-#include "j2k/Container.h"
-#include "j2k/Defines.h"
-#include "j2k/j2k_Reader.h"
-#include "j2k/j2k_Writer.h"
-
-#endif
+j2k::CompressionParameters::CompressionParameters(const types::RowCol<size_t>& rawImageDims, const types::RowCol<size_t>& tileDims,
+    double compressionRatio, size_t numResolutions) noexcept:
+    mRawImageDims(rawImageDims), mTileDims(tileDims), mCompressionRatio(compressionRatio), mNumResolutions(numResolutions),
+    mNumRowsOfTiles((mRawImageDims.row / mTileDims.row) + ((mRawImageDims.row % mTileDims.row) ? 1 : 0)),
+    mNumColsOfTiles((mRawImageDims.col / mTileDims.col) + ((mRawImageDims.col % mTileDims.col) ? 1 : 0)),
+    mNumTiles(mNumRowsOfTiles * mNumColsOfTiles)
+{
+}
