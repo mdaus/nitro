@@ -345,14 +345,14 @@ static void clean_slashes(std::string& path, bool isAbsolute)
     #endif
 
     // Do this last so that we have the best chance of finding the path on disk
-    if (fs::is_directory(path))
+    if (is_directory(fs::path(path)))
     {
         if (!str::endsWith(path, Path::delimiter()))
         {
             path += Path::delimiter();
         }
     }
-    else if (fs::is_regular_file(path))
+    else if (is_regular_file(fs::path(path)))
     {
       while (str::endsWith(path, Path::delimiter()))
         {
@@ -822,7 +822,7 @@ static std::string expandEnvironmentVariables_(const std::string& path,
             {
                 return expanded_path; // not checking for existence, just grab the first one
             }
-            if (fs::exists(expanded_path))
+            if (exists(fs::path(expanded_path)))
             {
                 return expanded_path;
             }

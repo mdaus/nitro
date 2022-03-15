@@ -19,6 +19,7 @@ coda_add_module(
     SOURCES
         source/Container.c
         source/Component.c
+        source/Defines.c
         source/JasPerImpl.c
         source/OpenJPEGImpl.c
         source/j2k_Reader.c

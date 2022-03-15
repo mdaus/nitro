@@ -9,6 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		CHANGES = CHANGES
 		LICENSE = LICENSE
 		README.md = README.md
+		ReleaseNotes.md = ReleaseNotes.md
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "nitf-c", "modules\c\nitf-c.vcxproj", "{F06550AD-CFC7-40B8-8727-6C82C69A8982}"
@@ -41,9 +42,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HISTOA", "modules\c\nitf\HI
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ENGRDA", "modules\c\nitf\ENGRDA.vcxproj", "{53F9F908-C678-4DEE-9309-E71C1E03A45F}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test", "Test\Test.vcxproj", "{238C9787-B27D-4107-B8FD-1BDB49EA8023}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test++", "Test++\Test++.vcxproj", "{E610F11D-1240-4260-87F8-504B49DB6915}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Test", "Test\Test.vcxproj", "{238C9787-B27D-4107-B8FD-1BDB49EA8023}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -107,14 +108,14 @@ Global
 		{53F9F908-C678-4DEE-9309-E71C1E03A45F}.Debug|x64.Build.0 = Debug|x64
 		{53F9F908-C678-4DEE-9309-E71C1E03A45F}.Release|x64.ActiveCfg = Release|x64
 		{53F9F908-C678-4DEE-9309-E71C1E03A45F}.Release|x64.Build.0 = Release|x64
-		{238C9787-B27D-4107-B8FD-1BDB49EA8023}.Debug|x64.ActiveCfg = Debug|x64
-		{238C9787-B27D-4107-B8FD-1BDB49EA8023}.Debug|x64.Build.0 = Debug|x64
-		{238C9787-B27D-4107-B8FD-1BDB49EA8023}.Release|x64.ActiveCfg = Release|x64
-		{238C9787-B27D-4107-B8FD-1BDB49EA8023}.Release|x64.Build.0 = Release|x64
 		{E610F11D-1240-4260-87F8-504B49DB6915}.Debug|x64.ActiveCfg = Debug|x64
 		{E610F11D-1240-4260-87F8-504B49DB6915}.Debug|x64.Build.0 = Debug|x64
 		{E610F11D-1240-4260-87F8-504B49DB6915}.Release|x64.ActiveCfg = Release|x64
 		{E610F11D-1240-4260-87F8-504B49DB6915}.Release|x64.Build.0 = Release|x64
+		{238C9787-B27D-4107-B8FD-1BDB49EA8023}.Debug|x64.ActiveCfg = Debug|x64
+		{238C9787-B27D-4107-B8FD-1BDB49EA8023}.Debug|x64.Build.0 = Debug|x64
+		{238C9787-B27D-4107-B8FD-1BDB49EA8023}.Release|x64.ActiveCfg = Release|x64
+		{238C9787-B27D-4107-B8FD-1BDB49EA8023}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

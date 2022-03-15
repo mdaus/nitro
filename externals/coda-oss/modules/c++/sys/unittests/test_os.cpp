@@ -171,7 +171,7 @@ TEST_CASE(testSplitEnv)
     TEST_ASSERT_GREATER(paths.size(), 0);
     for (const auto& path : paths)
     {
-        TEST_ASSERT_TRUE(fs::exists(path));
+        TEST_ASSERT_TRUE(exists(fs::path(path)));
     }
 
     // create an environemnt variable with a known bogus path

@@ -23,7 +23,7 @@ TEST_CASE(test_tre_clone_329)
     {
         nitf_Error error;
         rawTre = nitf::TRE::create("TESTxyz", NITF_TRE_RAW, error);
-        TEST_ASSERT_NOT_EQ(nullptr, rawTre);
+        TEST_ASSERT_NOT_NULL(rawTre);
 
         nitf::TRE::setField(rawTre, "raw_data", rd, error);
         TEST_ASSERT_TRUE(true);

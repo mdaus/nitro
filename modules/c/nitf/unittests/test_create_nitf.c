@@ -32,7 +32,7 @@
 
 #include "nitro_image_.c_"
 
-static const char* RGB[] = {"R", "G", "B"};
+const char* RGB[3] = {"R", "G", "B"};
 
 
 
