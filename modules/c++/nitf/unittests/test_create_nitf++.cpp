@@ -176,10 +176,8 @@ static void test_create_nitf_with_byte_provider__writeNITF(nitf::Record& record,
         * Once you have CompressedByteProvider constructed, everything else
         * should work the same
         */
-    std::vector<std::vector<size_t> > bytesPerBlock(1);
-    bytesPerBlock[0].push_back(static_cast<size_t>(NITRO_IMAGE.width) * NITRO_IMAGE.height * NUM_BANDS);
-    nitf::CompressedByteProvider byteProvider(record,
-        bytesPerBlock);
+    const std::vector<std::vector<size_t> > bytesPerBlock{ { static_cast<size_t>(NITRO_IMAGE.width) * NITRO_IMAGE.height * NUM_BANDS } };
+    nitf::CompressedByteProvider byteProvider(record, bytesPerBlock);
     nitf::Off fileOffset;
     nitf::NITFBufferList buffers;
     byteProvider.getBytes(NITRO_IMAGE.data, 0, NITRO_IMAGE.height,
@@ -187,9 +185,7 @@ static void test_create_nitf_with_byte_provider__writeNITF(nitf::Record& record,
     io::FileOutputStream outputStream(filename);
     for (size_t ii = 0; ii < buffers.mBuffers.size(); ++ii)
     {
-        outputStream.write(
-            static_cast<const std::byte*>(buffers.mBuffers[ii].mData),
-            buffers.mBuffers[ii].mNumBytes);
+        outputStream.write(buffers.mBuffers[ii].getBytes());
     }
 }
 
@@ -312,10 +308,8 @@ static void test_create_nitf__writeNITF(nitf::Record& record, const std::string&
     /* make one bandSource per band */
     for (int ii = 0; ii < NUM_BANDS; ++ii)
     {
-        nitf::BandSource bandSource = nitf::MemorySource(
-            (char*)NITRO_IMAGE.data,
-            static_cast<size_t>(NITRO_IMAGE.width) * NITRO_IMAGE.height,
-            ii, 1, 2);
+        const std::span<const uint8_t> image(NITRO_IMAGE.data, static_cast<size_t>(NITRO_IMAGE.width) * NITRO_IMAGE.height);
+        nitf::BandSource bandSource = nitf::MemorySource(image, ii, 2);
         imageSource.addBand(bandSource);
     }
 
