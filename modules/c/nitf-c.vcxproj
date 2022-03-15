@@ -133,6 +133,7 @@
     <ClInclude Include="j2k\include\j2k\Container.h" />
     <ClInclude Include="j2k\include\j2k\Defines.h" />
     <ClInclude Include="j2k\include\j2k\j2k_Reader.h" />
+    <ClInclude Include="j2k\include\j2k\TileWriter.h" />
     <ClInclude Include="j2k\include\j2k\j2k_Writer.h" />
     <ClInclude Include="nitf\include\import\nitf.h" />
     <ClInclude Include="nitf\include\nitf\BandInfo.h" />
@@ -244,6 +245,7 @@
     <ClCompile Include="j2k\source\Container.c" />
     <ClCompile Include="j2k\source\Defines.c" />
     <ClCompile Include="j2k\source\j2k_Reader.c" />
+    <ClCompile Include="j2k\source\TileWriter.c" />
     <ClCompile Include="j2k\source\j2k_Writer.c" />
     <ClCompile Include="j2k\source\JasPerImpl.c" />
     <ClCompile Include="j2k\source\OpenJPEGImpl.c" />

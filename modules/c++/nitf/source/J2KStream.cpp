@@ -3,6 +3,7 @@
  * =========================================================================
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2017, MDA Information Systems LLC
  *
  * NITRO is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -20,12 +21,27 @@
  *
  */
 
-#ifndef __IMPORT_J2K_H__
-#define __IMPORT_J2K_H__
+#include "nitf/J2KStream.hpp"
 
-#include "j2k/Container.h"
-#include "j2k/Defines.h"
-#include "j2k/j2k_Reader.h"
-#include "j2k/j2k_Writer.h"
+#include <sstream>
+#include <stdexcept>
 
-#endif
+#include "nitf/NITFException.hpp"
+
+j2k::Stream::Stream(j2k::StreamType streamType, size_t chunkSize)
+{
+    const auto isInputStream = streamType == j2k::StreamType::INPUT;
+
+    mStream = j2k_stream_create(chunkSize, isInputStream);
+    if (!mStream)
+    {
+        std::ostringstream os;
+        os << "Failed creating an openjpeg stream with a chunk size of " << chunkSize << " bytes.";
+        throw except::Exception(Ctxt(os.str()));
+    }
+}
+
+j2k::Stream::~Stream()
+{
+    j2k_stream_destroy(mStream);
+}

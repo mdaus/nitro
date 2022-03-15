@@ -31,6 +31,10 @@ j2k::details::Container::Container(j2k_Container* x)
     getNativeOrThrow();
 }
 j2k::Container::Container(j2k_Container*&& x) : impl_(x) {}
+j2k_Container* j2k::Container::getNativeOrThrow() const
+{
+    return impl_.getNativeOrThrow();
+}
 
 j2k::Writer j2k::Container::createWriter(const WriterOptions& options) const
 {
