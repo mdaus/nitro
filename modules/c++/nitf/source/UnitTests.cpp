@@ -37,16 +37,16 @@ static std::string Platform()
 	return os.getSpecialEnv("Platform");
 }
 
-//// https://stackoverflow.com/questions/13794130/visual-studio-how-to-check-used-c-platform-toolset-programmatically
-//static std::string PlatformToolset()
-//{
-//	// https://docs.microsoft.com/en-us/cpp/build/how-to-modify-the-target-framework-and-platform-toolset?view=msvc-160
-//#if _MSC_FULL_VER >= 190000000
-//	return "v142";
-//#else
-//#error "Don't know $(PlatformToolset) value.'"
-//#endif
-//}
+// https://stackoverflow.com/questions/13794130/visual-studio-how-to-check-used-c-platform-toolset-programmatically
+static std::string PlatformToolset()
+{
+	// https://docs.microsoft.com/en-us/cpp/build/how-to-modify-the-target-framework-and-platform-toolset?view=msvc-160
+#if _MSC_FULL_VER >= 190000000
+	return "v142";
+#else
+#error "Don't know $(PlatformToolset) value.'"
+#endif
+}
 
 static bool is_x64_Configuration(const fs::path& path) // "Configuration" is typically "Debug" or "Release"
 {
@@ -72,11 +72,27 @@ static bool is_install_tests(const fs::path& path)
 	return (tests == "tests") && (install == "install");
 }
 
+static fs::path make_waf_install(const fs::path& p)
+{
+	// just "install" on Linux; install-Debug-x64.v142 on Windows
+	const auto configuration_and_platform = Configuration() + "-" + Platform() + "." + PlatformToolset();
+	return p / ("install-" + configuration_and_platform);
+}
+
+static fs::path findRoot(const fs::path& p)
+{
+	if (is_regular_file(p / "LICENSE") && is_regular_file(p / "README.md") && is_regular_file(p / "CMakeLists.txt"))
+	{
+		return p;
+	}
+	return findRoot(p.parent_path());
+}
+
 static fs::path buildDir(const fs::path& path)
 {
 	const auto cwd = fs::current_path();
 
-	const auto exec = fs::path(os.getCurrentExecutable());
+	const auto exec = fs::absolute(fs::path(os.getCurrentExecutable()));
 	const auto argv0 = exec.filename();
 	if ((argv0 == "Test++.exe") || (argv0 == "testhost.exe"))
 	{
@@ -90,15 +106,21 @@ static fs::path buildDir(const fs::path& path)
 		}
 	}
 
-	if (argv0 == "unittests.exe")
+	auto extension = argv0.extension().string();
+	str::upper(extension);
+	if (extension == ".EXE")
 	{
-		// stand-alone unittest executable on Windows (ends in .EXE)
+		// stand-alone executable on Windows (ends in .EXE)
 		const auto parent_path = exec.parent_path();
 		if (is_x64_Configuration(parent_path))
 		{
 			const auto parent_path_ = parent_path.parent_path().parent_path();
 			return parent_path_ / "dev" / "tests" / "images";
 		}
+
+		const auto root = findRoot(exec);
+		const auto install = make_waf_install(root);
+		return install / path;
 	}
 
 	// stand-alone unit-test on Linux
