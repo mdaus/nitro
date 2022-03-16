@@ -41,10 +41,15 @@ static std::string Platform()
 static std::string PlatformToolset()
 {
 	// https://docs.microsoft.com/en-us/cpp/build/how-to-modify-the-target-framework-and-platform-toolset?view=msvc-160
+#ifdef _WIN32
 #if _MSC_FULL_VER >= 190000000
 	return "v142";
 #else
 #error "Don't know $(PlatformToolset) value.'"
+#endif
+#else 
+	// Linux
+	return "";
 #endif
 }
 
@@ -75,8 +80,29 @@ static bool is_install_tests(const fs::path& path)
 static fs::path make_waf_install(const fs::path& p)
 {
 	// just "install" on Linux; install-Debug-x64.v142 on Windows
+#ifdef _WIN32
 	const auto configuration_and_platform = Configuration() + "-" + Platform() + "." + PlatformToolset();
 	return p / ("install-" + configuration_and_platform);
+#else
+	// Linux
+	return "install";
+#endif
+}
+
+static fs::path make_cmake_install(const fs::path& p)
+{
+	auto out = p;
+	fs::path configuration_and_platform;
+	fs::path build;
+	while (out.stem() != "out")
+	{
+		configuration_and_platform = build; // "...\out\build\x64-Debug"
+		build = out; // "...\out\build"
+		out = out.parent_path(); // "...\out"
+	}
+
+	const auto install = out / "install"; // "...\out\install"
+	return install / configuration_and_platform.stem(); // "...\out\install\x64-Debug"
 }
 
 static fs::path findRoot(const fs::path& p)
@@ -119,7 +145,18 @@ static fs::path buildDir(const fs::path& path)
 		}
 
 		const auto root = findRoot(exec);
-		const auto install = make_waf_install(root);
+		std::string relative_exec = exec.string();
+		str::replaceAll(relative_exec, root.string(), "");
+		fs::path install;
+		if (str::starts_with(relative_exec, "/out") || str::starts_with(relative_exec, "\\out"))
+		{
+			install = make_cmake_install(exec);
+		}
+		else
+		{
+			install = make_waf_install(root);
+		}
+		
 		return install / path;
 	}
 
