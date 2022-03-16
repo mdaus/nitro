@@ -74,7 +74,7 @@ NITFPRIV(int) nitf_TRECursor_evalCondLength(nitf_TRE * tre,
 NITFPRIV(int) nitf_TRECursor_evaluatePostfix(nitf_TRE *tre,
                                              char idx[10][10],
                                              int looping,
-                                             char *expression,
+                                             const char *expression,
                                              nitf_Error *error);
 
 typedef unsigned int (*NITF_TRE_CURSOR_COUNT_FUNCTION) (nitf_TRE *,
@@ -854,7 +854,7 @@ NITFPRIV(int) nitf_TRECursor_evalCondLength(nitf_TRE* tre,
 NITFPRIV(int) nitf_TRECursor_evaluatePostfix(nitf_TRE *tre,
                                              char idx[10][10],
                                              int looping,
-                                             char *expression,
+                                             const char *expression,
                                              nitf_Error *error)
 {
     nitf_List *parts = NULL;
