@@ -43,7 +43,7 @@ cgm_FillAttributes* createFillAttributes(cgm_ParseContext* pc, nitf_Error*error)
     atts->interiorStyle = pc->style;
     atts->edgeVisibility = pc->visibility;
     atts->edgeWidth = pc->width;
-    atts->edgeType = pc->type;
+    atts->edgeType = (short) pc->type;
     
     atts->edgeColor->r = pc->color.r;
     atts->edgeColor->g = pc->color.g;
@@ -170,16 +170,16 @@ NITFPRIV(cgm_Rectangle*) readRectangle(char* b, int len, nitf_Error* error)
         return NULL;
 
     memcpy(&x1, &b[0], 2);
-    rectangle->x1 = NITF_NTOHS(x1);
+    rectangle->x1 = (short) NITF_NTOHS(x1);
 
     memcpy(&y1, &b[2], 2);
-    rectangle->y1 = NITF_NTOHS(y1);
+    rectangle->y1 = (short)NITF_NTOHS(y1);
 
     memcpy(&x2, &b[4], 2);
-    rectangle->x2 = NITF_NTOHS(x2);
+    rectangle->x2 = (short)NITF_NTOHS(x2);
 
     memcpy(&y2, &b[6], 2);
-    rectangle->y2 = NITF_NTOHS(y2);
+    rectangle->y2 = (short)NITF_NTOHS(y2);
     return rectangle;
 }
 
@@ -191,9 +191,9 @@ NITFPRIV(cgm_Vertex*) readVertex(char* b, nitf_Error* error)
         return NULL;
     
     memcpy(&s, &b[0], 2);
-    v->x = NITF_NTOHS(s);
+    v->x = (short)NITF_NTOHS(s);
     memcpy(&s, &b[2], 2);
-    v->y = NITF_NTOHS(s);
+    v->y = (short)NITF_NTOHS(s);
     
     return v;
 }
@@ -205,9 +205,9 @@ NITFPRIV(cgm_VertexClose*) readVertexClose(char* b, nitf_Error* error)
     if (!v) return NULL;
 
     memcpy(&s, &b[0], 2);
-    v->x = NITF_NTOHS(s);
+    v->x = (short)NITF_NTOHS(s);
     memcpy(&s, &b[2], 2);
-    v->y = NITF_NTOHS(s);
+    v->y = (short)NITF_NTOHS(s);
     memcpy(&s, &b[4], 2);
     v->edgeOutFlag = (cgm_EdgeCloseType) NITF_NTOHS(s);
     return v;
