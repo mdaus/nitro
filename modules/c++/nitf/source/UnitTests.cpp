@@ -45,12 +45,11 @@ static const fs::path& getCurrentExecutable()
 	static const auto exec = fs::absolute(os.getCurrentExecutable());
 	return exec;
 }
-static const fs::path& current_path()
+static fs::path current_path()
 {
-	static const auto cwd = fs::absolute(fs::current_path());
-	return cwd;
+	// the current working directory can change while a program is running
+	return fs::absolute(fs::current_path());
 }
-
 
 // https://stackoverflow.com/questions/13794130/visual-studio-how-to-check-used-c-platform-toolset-programmatically
 static inline std::string PlatformToolset()
@@ -68,6 +67,34 @@ static inline std::string PlatformToolset()
 #endif
 }
 
+static std::optional<fs::path> findRoot(const fs::path& p)
+{
+	if (is_regular_file(p / "LICENSE") && is_regular_file(p / "README.md") && is_regular_file(p / "CMakeLists.txt"))
+	{
+		return p;
+	}
+	return p.parent_path() == p ? std::optional<fs::path>() : findRoot(p.parent_path());
+}
+static fs::path findRoot(fs::path& exec_root, fs::path& cwd_root)
+{
+	static const auto exec_root_ = findRoot(getCurrentExecutable());
+	if (exec_root_.has_value())
+	{
+		exec_root = exec_root_.value();
+		return exec_root;
+	}
+
+	// CWD can change while the program is running
+	const auto cwd_root_ = findRoot(current_path());
+	cwd_root = cwd_root_.value();
+	return cwd_root;
+}
+static fs::path findRoot()
+{
+	fs::path exec_root, cwd_root;
+	return findRoot(exec_root, cwd_root);
+}
+
 static fs::path make_waf_install(const fs::path& p)
 {
 	// just "install" on Linux; "install-Debug-x64.v142" on Windows
@@ -80,47 +107,37 @@ static fs::path make_waf_install(const fs::path& p)
 #endif
 }
 
-static fs::path make_cmake_install(const fs::path& p)
+static fs::path make_cmake_install(const fs::path& exec)
 {
-	auto out = p;
+	auto out = exec;
 	fs::path configuration_and_platform;
 	fs::path build;
-	while (out.stem() != "out")
+	while (true)
 	{
 		configuration_and_platform = build; // "...\out\build\x64-Debug"
 		build = out; // "...\out\build"
 		out = out.parent_path(); // "...\out"
+
+		if (out.stem() == "out")
+		{
+			break;
+		}
+		if ((out.stem() == "build") && (build.stem() != "build"))
+		{
+			break;
+		}
 	}
 
-	const auto install = out / "install"; // "...\out\install"
-	return install / configuration_and_platform.stem(); // "...\out\install\x64-Debug"
-}
-
-static std::optional<fs::path> findRoot(const fs::path& p)
-{
-	if (is_regular_file(p / "LICENSE") && is_regular_file(p / "README.md") && is_regular_file(p / "CMakeLists.txt"))
+	auto extension = exec.extension().string();
+	str::upper(extension);
+	if (extension == ".EXE")
 	{
-		return p;
-	}
-	return p.parent_path() == p ? std::optional<fs::path>() : findRoot(p.parent_path());
-}
-static const fs::path& findRoot(fs::path& exec_root, fs::path& cwd_root)
-{
-	static const auto exec_root_ = findRoot(getCurrentExecutable());
-	if (exec_root_.has_value())
-	{
-		exec_root = exec_root_.value();
-		return exec_root;
+		// stand - alone executable on Windows(ends in.EXE)
+		const auto install = out / "install"; // "...\out\install"
+		return install / configuration_and_platform.stem(); // "...\out\install\x64-Debug"
 	}
 
-	static const auto cwd_root_ = findRoot(current_path());
-	cwd_root = cwd_root_.value();
-	return cwd_root;
-}
-static fs::path findRoot()
-{
-	fs::path exec_root, cwd_root;
-	return findRoot(exec_root, cwd_root);
+	return findRoot() / build;
 }
 
 static std::string makeRelative(const fs::path& path, const fs::path& root)
@@ -155,6 +172,9 @@ static bool is_cmake_build()
 
 static fs::path buildDir(const fs::path& path)
 {
+	std::clog << "getCurrentExecutable(): " << getCurrentExecutable() << '\n';
+	std::clog << "current_path(): " << current_path() << '\n';
+
 	static const auto& exec = getCurrentExecutable();
 	static const auto exec_filename = exec.filename();
 
@@ -164,19 +184,7 @@ static fs::path buildDir(const fs::path& path)
 		return current_path() / path;
 	}
 
-	const auto root = findRoot();
-	std::string relative_exec = exec.string();
-	str::replaceAll(relative_exec, root.string(), "");
-
-	auto extension = exec.extension().string();
-	str::upper(extension);
-	
-	fs::path install = make_waf_install(root);
-	if (is_cmake_build())
-	{
-		// stand-alone executable on Windows (ends in .EXE)
-		install = extension == ".EXE" ? make_cmake_install(exec) : root / "install";
-	}
+	const auto install = is_cmake_build() ? make_cmake_install(exec) : make_waf_install(findRoot());
 	return install / path;
 }
 
