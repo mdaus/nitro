@@ -107,37 +107,40 @@ static fs::path make_waf_install(const fs::path& p)
 #endif
 }
 
-static fs::path make_cmake_install(const fs::path& exec)
+static fs::path make_cmake_install(const fs::path& exec, const fs::path& relativePath)
 {
+	const auto root = findRoot();
+
 	auto out = exec;
 	fs::path configuration_and_platform;
 	fs::path build;
-	while (true)
+	while (out.parent_path() != root)
 	{
-		configuration_and_platform = build; // "...\out\build\x64-Debug"
+		configuration_and_platform = build.stem(); // "x64-Debug"
 		build = out; // "...\out\build"
 		out = out.parent_path(); // "...\out"
-
-		if (out.stem() == "out")
-		{
-			break;
-		}
-		if ((out.stem() == "build") && (build.stem() != "build"))
-		{
-			break;
-		}
 	}
 
-	auto extension = exec.extension().string();
-	str::upper(extension);
-	if (extension == ".EXE")
+	fs::path install;
+	const sys::DirectoryEntry dirEntry(out.string());
+	for (auto entry : dirEntry)
 	{
-		// stand - alone executable on Windows(ends in.EXE)
-		const auto install = out / "install"; // "...\out\install"
-		return install / configuration_and_platform.stem(); // "...\out\install\x64-Debug"
+		str::upper(entry);
+		if (str::contains(entry, "INSTALL"))
+		{
+			install = out / dirEntry.getCurrent(); // preserve orignal case
+			break;
+		}
 	}
 
-	return findRoot() / build;
+	if (is_directory(install / configuration_and_platform / relativePath))
+	{
+		return install / configuration_and_platform;
+	}
+	else
+	{
+		return install;
+	}
 }
 
 static std::string makeRelative(const fs::path& path, const fs::path& root)
@@ -170,7 +173,7 @@ static bool is_cmake_build()
 	return retval;
 }
 
-static fs::path buildDir(const fs::path& path)
+static fs::path buildDir(const fs::path& relativePath)
 {
 	std::clog << "getCurrentExecutable(): " << getCurrentExecutable() << '\n';
 	std::clog << "current_path(): " << current_path() << '\n';
@@ -181,11 +184,11 @@ static fs::path buildDir(const fs::path& path)
 	if (exec_filename == "testhost.exe")
 	{
 		// Running in Visual Studio on Windows
-		return current_path() / path;
+		return current_path() / relativePath;
 	}
 
-	const auto install = is_cmake_build() ? make_cmake_install(exec) : make_waf_install(findRoot());
-	return install / path;
+	const auto install = is_cmake_build() ? make_cmake_install(exec, relativePath) : make_waf_install(findRoot());
+	return install / relativePath;
 }
 
 std::string nitf::Test::buildPluginsDir()
