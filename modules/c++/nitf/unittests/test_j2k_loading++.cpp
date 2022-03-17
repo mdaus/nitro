@@ -339,7 +339,6 @@ static void test_decompress_nitf_to_sio_(const path& inputPathname, const path& 
 TEST_CASE(test_decompress_nitf_to_sio)
 {
     const auto pluginsDir = nitf::Test::buildPluginsDir();
-    std::clog << pluginsDir;
     sys::OS().setEnv("NITF_PLUGIN_PATH", pluginsDir, true /*overwrite*/);
 
     const auto inputPathname = findInputFile("j2k_compressed_file1_jp2.ntf"); // This is a JP2 file, not J2K; see OpenJPEG_setup_()

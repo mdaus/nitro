@@ -22,6 +22,8 @@
 
 #include "nitf/UnitTests.hpp"
 
+#include <assert.h>
+
 #include <std/filesystem>
 #include <std/optional>
 #include <import/sys.h>
@@ -37,6 +39,18 @@ static std::string Platform()
 {
 	return os.getSpecialEnv("Platform");
 }
+
+static const fs::path& getCurrentExecutable()
+{
+	static const auto exec = fs::absolute(os.getCurrentExecutable());
+	return exec;
+}
+static const fs::path& current_path()
+{
+	static const auto cwd = fs::absolute(fs::current_path());
+	return cwd;
+}
+
 
 // https://stackoverflow.com/questions/13794130/visual-studio-how-to-check-used-c-platform-toolset-programmatically
 static std::string PlatformToolset()
@@ -62,7 +76,7 @@ static fs::path make_waf_install(const fs::path& p)
 	return p / ("install-" + configuration_and_platform);
 #else
 	// Linux
-	return "install";
+	return p / "install";
 #endif
 }
 
@@ -90,64 +104,90 @@ static std::optional<fs::path> findRoot(const fs::path& p)
 	}
 	return p.parent_path() == p ? std::optional<fs::path>() : findRoot(p.parent_path());
 }
-static fs::path findRoot()
+static const fs::path& findRoot(fs::path& exec_root, fs::path& cwd_root)
 {
+	static const auto exec_root_ = findRoot(getCurrentExecutable());
+	if (exec_root_.has_value())
 	{
-		static const auto exec = fs::absolute(os.getCurrentExecutable());
-		static const auto exec_root = findRoot(exec);
-		if (exec_root.has_value())
-		{
-			return exec_root.value();
-		}
+		exec_root = exec_root_.value();
+		return exec_root;
 	}
 
-	static const auto cwd = fs::current_path();
-	static const auto cwd_root = findRoot(cwd);
-	return cwd_root.value();
+	static const auto cwd_root_ = findRoot(current_path());
+	cwd_root = cwd_root_.value();
+	return cwd_root;
+}
+static fs::path findRoot()
+{
+	fs::path exec_root, cwd_root;
+	return findRoot(exec_root, cwd_root);
+}
+
+static std::string makeRelative(const fs::path& path, const fs::path& root)
+{
+	// remove the "root" part from "path"
+	std::string relative = path.string();
+	str::replaceAll(relative, root.string(), "");
+	return relative;
+}
+static std::string relativeRoot()
+{
+	fs::path exec_root, cwd_root;
+	findRoot(exec_root, cwd_root);
+
+	if (!exec_root.empty())
+	{
+		return makeRelative(getCurrentExecutable(), exec_root);
+	}
+
+	assert(!cwd_root.empty());
+	return makeRelative(current_path(), cwd_root);
+}
+
+static bool is_cmake_build()
+{
+	const auto retlativeRoot = relativeRoot();
+	return str::starts_with(retlativeRoot, "/out") || str::starts_with(retlativeRoot, "\\out");
 }
 
 static fs::path buildDir(const fs::path& path)
 {
-	const auto cwd = fs::current_path();
-
-	const auto exec = fs::absolute(os.getCurrentExecutable());
-	const auto exec_filename = exec.filename();
+	static const auto& exec = getCurrentExecutable();
+	static const auto exec_filename = exec.filename();
 
 	if (exec_filename == "testhost.exe")
 	{
 		// Running in Visual Studio on Windows
-		return cwd / path;
+		return current_path() / path;
 	}
+
+	const auto root = findRoot();
+	std::string relative_exec = exec.string();
+	str::replaceAll(relative_exec, root.string(), "");
 
 	auto extension = exec.extension().string();
 	str::upper(extension);
 	if (extension == ".EXE")
 	{
 		// stand-alone executable on Windows (ends in .EXE)
-		const auto root = findRoot();
-		std::string relative_exec = exec.string();
-		str::replaceAll(relative_exec, root.string(), "");
-		fs::path install;
-		if (str::starts_with(relative_exec, "/out") || str::starts_with(relative_exec, "\\out"))
-		{
-			install = make_cmake_install(exec);
-		}
-		else
-		{
-			install = make_waf_install(root);
-		}
-		
+		const auto install = is_cmake_build() ? make_cmake_install(exec) : make_waf_install(root);		
 		return install / path;
 	}
 
 	//fprintf(stderr, "cwd = %s\n", cwd.c_str());
 	//fprintf(stderr, "exec = %s\n", exec.c_str());
 
-	// running a CTest from CMake
-	const auto nitro_out = cwd.parent_path().parent_path().parent_path().parent_path().parent_path();
-	const auto install = nitro_out / "install" / (Platform() + "-" + Configuration()); // e.g., "x64-Debug"
+	fs::path install;
+	if (is_cmake_build())
+	{
+		install = root / "install" / (Platform() + "-" + Configuration()); // e.g., "x64-Debug"
+	}
+	else
+	{
+		install = make_waf_install(root);
+	}
+
 	return install / path;
-	// return cwd;
 }
 
 std::string nitf::Test::buildPluginsDir()
