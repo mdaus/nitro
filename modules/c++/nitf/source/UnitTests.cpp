@@ -31,11 +31,11 @@
 namespace fs = std::filesystem;
 
 static const sys::OS os;
-static std::string Configuration() // "Configuration" is typically "Debug" or "Release"
+static inline std::string Configuration() // "Configuration" is typically "Debug" or "Release"
 {
 	return os.getSpecialEnv("Configuration");
 }
-static std::string Platform()
+static inline std::string Platform()
 {
 	return os.getSpecialEnv("Platform");
 }
@@ -53,7 +53,7 @@ static const fs::path& current_path()
 
 
 // https://stackoverflow.com/questions/13794130/visual-studio-how-to-check-used-c-platform-toolset-programmatically
-static std::string PlatformToolset()
+static inline std::string PlatformToolset()
 {
 	// https://docs.microsoft.com/en-us/cpp/build/how-to-modify-the-target-framework-and-platform-toolset?view=msvc-160
 #ifdef _WIN32
@@ -70,7 +70,7 @@ static std::string PlatformToolset()
 
 static fs::path make_waf_install(const fs::path& p)
 {
-	// just "install" on Linux; install-Debug-x64.v142 on Windows
+	// just "install" on Linux; "install-Debug-x64.v142" on Windows
 #ifdef _WIN32
 	const auto configuration_and_platform = Configuration() + "-" + Platform() + "." + PlatformToolset();
 	return p / ("install-" + configuration_and_platform);
@@ -146,8 +146,11 @@ static std::string relativeRoot()
 
 static bool is_cmake_build()
 {
-	const auto retlativeRoot = relativeRoot();
-	return str::starts_with(retlativeRoot, "/out") || str::starts_with(retlativeRoot, "\\out");
+	static const auto retlativeRoot = relativeRoot();
+	static const auto retval = 
+		(str::starts_with(retlativeRoot, "/out") || str::starts_with(retlativeRoot, "\\out")) ||
+		(str::starts_with(retlativeRoot, "/build") || str::starts_with(retlativeRoot, "\\build"));
+	return retval;
 }
 
 static fs::path buildDir(const fs::path& path)
@@ -167,26 +170,13 @@ static fs::path buildDir(const fs::path& path)
 
 	auto extension = exec.extension().string();
 	str::upper(extension);
-	if (extension == ".EXE")
-	{
-		// stand-alone executable on Windows (ends in .EXE)
-		const auto install = is_cmake_build() ? make_cmake_install(exec) : make_waf_install(root);		
-		return install / path;
-	}
-
-	//fprintf(stderr, "cwd = %s\n", cwd.c_str());
-	//fprintf(stderr, "exec = %s\n", exec.c_str());
-
-	fs::path install;
+	
+	fs::path install = make_waf_install(root);
 	if (is_cmake_build())
 	{
-		install = root / "install" / (Platform() + "-" + Configuration()); // e.g., "x64-Debug"
+		// stand-alone executable on Windows (ends in .EXE)
+		install = extension == ".EXE" ? make_cmake_install(exec) : root / "install";
 	}
-	else
-	{
-		install = make_waf_install(root);
-	}
-
 	return install / path;
 }
 
