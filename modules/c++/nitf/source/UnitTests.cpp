@@ -129,7 +129,10 @@ static fs::path make_cmake_install(const fs::path& exec, const fs::path& relativ
 		if (str::contains(entry, "INSTALL"))
 		{
 			install = out / dirEntry.getCurrent(); // preserve orignal case
-			break;
+			if (is_directory(install))
+			{
+			  break;
+			}
 		}
 	}
 
