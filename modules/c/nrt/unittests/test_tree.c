@@ -23,7 +23,7 @@
 #include <import/nrt.h>
 #include "Test.h"
 
-char *C(const char *p)
+static char *C(const char *p)
 {
     const size_t p_sz = strlen(p) + 1;
     void* x_ = malloc(p_sz);

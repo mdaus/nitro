@@ -36,8 +36,8 @@
 #include <string>
 #include <typeinfo>
 
-// This is a fairly low-level file, so don't #include a lot of our other files
-#include "str/String_.h"
+#include "coda_oss/string.h"
+#include "coda_oss/optional.h"
 
 namespace str
 {
@@ -47,6 +47,8 @@ int getPrecision(const T& type);
 template <typename T>
 int getPrecision(const std::complex<T>& type);
 
+// Note that std::to_string() doesn't necessarily generate the same output as writing
+// to std::cout; see https://en.cppreference.com/w/cpp/string/basic_string/to_string
 template <typename T>
 std::string toString(const T& value)
 {
@@ -68,42 +70,20 @@ inline std::string toString(const std::nullptr_t&)
     return "<nullptr>";
 }
 
+template <>
+std::string toString(const coda_oss::u8string&);
+
+template <typename T>
+std::string toString(const coda_oss::optional<T>& value)
+{
+    return toString(value.value());
+}
+
 template <typename T>
 std::string toString(const T& real, const T& imag)
 {
     return toString(std::complex<T>(real, imag));
 }
-
-template <>
-inline std::string toString(const sys::U8string& value)
-{
-    // This is OK as UTF-8 can be stored in std::string
-    // Note that casting between the string types will CRASH on some implementatons.
-    // NO: reinterpret_cast<const std::string&>(value)
-    const void* const pValue = value.c_str();
-    return static_cast<std::string::const_pointer>(pValue);  // copy
-}
-
-inline sys::U8string castToU8string(const std::string& value)
-{
-    // This is dangerous as we don't know the encoding of std::string!
-    // If it is Windows-1252, the reteurned sys::U8string will be garbage.
-    // Only use when you are sure of the encoding.
-    const void* const pValue = value.c_str();
-    return static_cast<sys::U8string::const_pointer>(pValue);
-}
-
-sys::U8string fromWindows1252(const std::string&);
-void fromWindows1252(const std::string&, sys::U8string&);
-void fromWindows1252(const std::string&, std::string&);
-
-sys::U8string toUtf8(const std::u16string&);
-sys::U8string toUtf8(const std::u32string&);
-
-void toUtf8(const std::u16string&, sys::U8string&);
-void toUtf8(const std::u16string&, std::string&);
-void toUtf8(const std::u32string&, sys::U8string&);
-void toUtf8(const std::u32string&, std::string&);
 
 template <typename T>
 T toType(const std::string& s)
@@ -256,6 +236,7 @@ T generic_cast(const std::string& value)
 {
     return str::toType<T>(value);
 }
+
 }
 
 #endif

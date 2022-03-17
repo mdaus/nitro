@@ -20,6 +20,11 @@ def options(opt):
 def configure(conf):
     conf.env['APPNAME'] = APPNAME
     conf.load(TOOLS, tooldir='build')
+
+    if conf.env['COMPILER_CXX'] != 'msvc':
+        conf.env.CFLAGS += ['-Wall'];
+        conf.env.CXXFLAGS += ['-Wall'];
+
     conf.recurse(DIRS)
 
 def build(bld):

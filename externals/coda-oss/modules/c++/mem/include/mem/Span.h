@@ -23,8 +23,13 @@
 #define CODA_OSS_mem_Span_h_INCLUDED_
 #pragma once
 
-#include "sys/CPlusPlus.h"
-#include "gsl/gsl_span_.h"
-#define CODA_OSS_mem_Span 202002L  // c.f., __cpp_lib_span
+#include "coda_oss/span.h"
+
+namespace mem
+{
+template <typename T>
+using Span = coda_oss::span<T>;
+
+}
 
 #endif  // CODA_OSS_mem_Span_h_INCLUDED_

@@ -31,13 +31,12 @@
 
 #include <sys/OS.h>
 #include <sys/Path.h>
-#include <sys/Filesystem.h>
 #include <sys/Backtrace.h>
 #include <sys/Dbg.h>
 #include <sys/DateTime.h>
 #include "TestCase.h"
 
-namespace fs = sys::Filesystem;
+namespace fs = coda_oss::filesystem;
 
 namespace
 {
@@ -172,7 +171,7 @@ TEST_CASE(testSplitEnv)
     TEST_ASSERT_GREATER(paths.size(), 0);
     for (const auto& path : paths)
     {
-        TEST_ASSERT_TRUE(sys::Filesystem::exists(path));
+        TEST_ASSERT_TRUE(exists(fs::path(path)));
     }
 
     // create an environemnt variable with a known bogus path
@@ -184,15 +183,15 @@ TEST_CASE(testSplitEnv)
     os.setEnv(bogusEnvVar, bogusValue, false /*overwrite*/);
     result = os.splitEnv(bogusEnvVar, paths);
     TEST_ASSERT_TRUE(result);
-    TEST_ASSERT_EQ(paths.size(), 1);
+    TEST_ASSERT_EQ(paths.size(), static_cast<size_t>(1));
 
     // PATHs are directories, not files
     paths.clear();
-    result = os.splitEnv(pathEnvVar, paths, sys::Filesystem::FileType::Directory);
+    result = os.splitEnv(pathEnvVar, paths, fs::file_type::directory);
     TEST_ASSERT_TRUE(result);
-    TEST_ASSERT_GREATER(paths.size(), 0);
+    TEST_ASSERT_GREATER(paths.size(), static_cast<size_t>(0));
     paths.clear();
-    result = os.splitEnv(pathEnvVar, paths, sys::Filesystem::FileType::Regular);
+    result = os.splitEnv(pathEnvVar, paths, fs::file_type::regular);
     TEST_ASSERT_FALSE(result);
     TEST_ASSERT_TRUE(paths.empty());
 
@@ -244,7 +243,7 @@ static void testFsExtension_(const std::string& testName)
 }
 TEST_CASE(testFsExtension)
 {
-    testFsExtension_<sys::Filesystem::path>(testName);
+    testFsExtension_<fs::path>(testName);
     testFsExtension_<std::filesystem::path>(testName);
     #if CODA_OSS_lib_filesystem
     testFsExtension_<std::filesystem::path>(testName);
@@ -266,7 +265,7 @@ static void testFsOutput_(const std::string& testName)
 }
 TEST_CASE(testFsOutput)
 {
-    testFsOutput_<sys::Filesystem::path>(testName);
+    testFsOutput_<fs::path>(testName);
     testFsOutput_<std::filesystem::path>(testName);
     #if CODA_OSS_lib_filesystem
     testFsOutput_<std::filesystem::path>(testName);
@@ -287,6 +286,10 @@ static std::string h(bool& supported, std::vector<std::string>& frames)
 }
 TEST_CASE(testBacktrace)
 {
+    // These don't **have** to be the same; but it would be unusual for build scripts pass
+    // different flags to these pieces ... and likely cause all kinds of weird problems.
+    TEST_ASSERT_EQ(sys::debug_build(), sys::debug);
+
     bool supported;
     std::vector<std::string> frames;
     const auto result = h(supported, frames);
@@ -295,7 +298,8 @@ TEST_CASE(testBacktrace)
     TEST_ASSERT_EQ(failed_pos, std::string::npos);
 
 
-    size_t frames_size = 0;
+    size_t expected = 0;
+    size_t expected_other = 0;
     auto version_sys_backtrace_ = version::sys::backtrace; // "Conditional expression is constant"
     if (version_sys_backtrace_ >= 20210216L)
     {
@@ -303,20 +307,23 @@ TEST_CASE(testBacktrace)
 
         #if _WIN32
         constexpr auto frames_size_RELEASE = 2;
+        constexpr auto frames_size_RELEASE_other = frames_size_RELEASE;
         constexpr auto frames_size_DEBUG = 14;
         #elif defined(__GNUC__)
         constexpr auto frames_size_RELEASE = 6;
+        constexpr auto frames_size_RELEASE_other = 7;
         constexpr auto frames_size_DEBUG = 10;
         #else
         #error "CODA_OSS_sys_Backtrace inconsistency."
         #endif
-        frames_size = sys::debug_build ? frames_size_DEBUG : frames_size_RELEASE;
+        expected = sys::debug_build() ? frames_size_DEBUG : frames_size_RELEASE;
+        expected_other = sys::debug_build() ? frames_size_DEBUG : frames_size_RELEASE_other;
     }
     else
     {
         TEST_ASSERT_FALSE(supported);
     }
-    TEST_ASSERT_EQ(frames.size(), frames_size);
+    TEST_ASSERT( (frames.size() == expected) || (frames.size() == expected_other) );
 
     const auto msg = std::accumulate(frames.begin(), frames.end(), std::string());
     if (supported)
@@ -346,7 +353,7 @@ TEST_CASE(testSpecialEnvVars)
     result = os.getSpecialEnv("$"); // i.e., ${$}
     TEST_ASSERT_FALSE(result.empty());
     TEST_ASSERT_EQ(result, pid);
-    const auto strPid = std::to_string(os.getProcessId());
+    const auto strPid = str::toString(os.getProcessId());
     TEST_ASSERT_EQ(result, strPid);
 
     result = os.getSpecialEnv("PWD");
@@ -371,6 +378,9 @@ TEST_CASE(testSpecialEnvVars)
     TEST_ASSERT_FALSE(result.empty());
     const auto resultEpochSeconds = std::stoll(result);
     TEST_ASSERT_GREATER_EQ(resultEpochSeconds, epochSeconds);
+
+    result = os.getSpecialEnv("OSTYPE");
+    TEST_ASSERT_FALSE(result.empty());
 
     result = os.getSpecialEnv("Configuration");
     TEST_ASSERT_FALSE(result.empty());

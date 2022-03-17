@@ -24,19 +24,45 @@
 #define __STR_MANIP_H__
 
 #include <ctype.h>
+#include <wchar.h>
 
 #include <string>
 #include <vector>
 
+#include "config/compiler_extensions.h"
+#include "coda_oss/CPlusPlus.h"
 #include "str/Convert.h"
 
 namespace str
 {
+// non-const overload for .data() in C++17
+template<typename CharT>
+inline CharT* data(std::basic_string<CharT>& s) noexcept
+{
+    #if CODA_OSS_cpp17
+    return s.data();
+    #else
+    CODA_OSS_disable_warning_push
+    #if _MSC_VER
+    #pragma warning(disable : 26492)  // Don't use const_cast to cast away const or volatile (type.3).
+    #endif  
+    return const_cast <typename std::basic_string<CharT>::pointer>(s.data());
+    CODA_OSS_disable_warning_pop
+    #endif // CODA_OSS_cpp17
+}
+template <typename CharT>
+inline const CharT* data(const std::basic_string<CharT>& s) noexcept // to make generic programming easier
+{
+    return s.data();
+}
+
 /**
  *  Trim the white space off the back and front of a string
  *  @param  s  String to trim
  */
 void trim(std::string& s);
+extern std::string strip(const std::string& s);
+extern std::string& strip(std::string& s);
 
 /**
  *  Checks the end of s with match
@@ -45,6 +71,7 @@ void trim(std::string& s);
  *  @return true if it matches, otherwise false
  */
 bool endsWith(const std::string& s, const std::string& match);
+extern bool ends_with(const std::string& s, const std::string&) noexcept;
 
 /**
  *  Checks the start of s with match
@@ -53,6 +80,8 @@ bool endsWith(const std::string& s, const std::string& match);
  *  @return true if it matches, otherwise false
  */
 bool startsWith(const std::string& s, const std::string& match);
+extern bool starts_with(const std::string& s, const std::string&) noexcept;
+
 
 /**
  *  finds the first instance of "search" and
@@ -140,9 +169,8 @@ std::vector<std::string> split(const std::string& s,
                                size_t maxSplit = std::string::npos);
 
 //! Uses std::transform to convert all chars to lower case
-void lower(std::string& s);
-
 //! Uses std::transform to convert all chars to upper case
+void lower(std::string& s);
 void upper(std::string& s);
 
 /*!
@@ -152,12 +180,12 @@ void upper(std::string& s);
 void escapeForXML(std::string& str);
 
 template<typename T>
-std::string join(std::vector<T> toks, std::string with)
+std::string join(const std::vector<T>& toks, std::string with)
 {
     if (toks.empty())
         return "";
 
-    int len = (int)toks.size();
+    const auto len = static_cast<int>(toks.size());
     std::ostringstream oss;
     int i = 0;
     for (; i < len - 1; i++)
