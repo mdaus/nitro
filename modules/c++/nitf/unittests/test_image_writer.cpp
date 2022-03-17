@@ -32,6 +32,7 @@
 #include <nitf/ImageSubheader.hpp>
 #include <nitf/ImageWriter.hpp>
 #include <nitf/Record.hpp>
+#include <nitf/UnitTests.hpp>
 
 #include "TestCase.h"
 
