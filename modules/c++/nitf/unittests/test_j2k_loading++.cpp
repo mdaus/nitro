@@ -62,29 +62,10 @@ using path = std::filesystem::path;
 
 static std::string testName;
 
-static path findRoot(const path& p)
-{
-    if (is_regular_file(p / "LICENSE") && is_regular_file(p / "README.md") && is_regular_file(p / "CMakeLists.txt"))
-    {
-        return p;
-    }
-    return findRoot(p.parent_path());
-}
-inline static path findRoot()
-{
-    return findRoot(std::filesystem::current_path());
-}
-
-static std::string argv0;
-static path findInputFile_(const path& inputFile)
-{
-    auto root = findRoot();
-    return root / inputFile;
-}
 static path findInputFile(const path& fn)
 {
     const auto inputPath = path("modules") / "c++" / "nitf" / "unittests" / fn;
-    return findInputFile_(inputPath);
+    return nitf::Test::findInputFile(inputPath);
 }
 
 static void test_image_loading_(const std::string& input_file, bool /*optz*/)
@@ -391,10 +372,10 @@ TEST_CASE(test_j2k_compress_raw_image)
 
 TEST_MAIN(
     (void)argc;
-    argv0 = argv[0];
+    (void) argv;
     TEST_CHECK(test_j2k_loading);
     TEST_CHECK(test_j2k_nitf);
     TEST_CHECK(test_j2k_nitf_read_region);
     TEST_CHECK(test_decompress_nitf_to_sio);
-    //TEST_CHECK(test_j2k_compress_raw_image);
+    TEST_CHECK(test_j2k_compress_raw_image);
     )

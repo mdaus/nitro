@@ -200,9 +200,14 @@ std::string nitf::Test::buildPluginsDir()
 	return plugins.string();
 }
 
-static const fs::path argv0;
 fs::path nitf::Test::buildFileDir(const fs::path& relativePath)
 {
 	const auto root = findRoot();
 	return root / relativePath;
+}
+
+fs::path nitf::Test::findInputFile(const fs::path& inputFile)
+{
+	const auto root = findRoot();
+	return root / inputFile;
 }
