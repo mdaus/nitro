@@ -30,8 +30,6 @@ public:
 #include "nitf/unittests/test_image_writer.cpp"
 
 };
-std::filesystem::path test_image_writer::argv0;
-const std::filesystem::path  test_image_writer::file = __FILE__;
 
 #undef TEST_CASE
 TEST_CLASS(test_load_plugins) {

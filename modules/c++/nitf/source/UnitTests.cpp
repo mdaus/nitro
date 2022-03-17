@@ -23,6 +23,7 @@
 #include "nitf/UnitTests.hpp"
 
 #include <std/filesystem>
+#include <std/optional>
 #include <import/sys.h>
 
 namespace fs = std::filesystem;
@@ -81,34 +82,49 @@ static fs::path make_cmake_install(const fs::path& p)
 	return install / configuration_and_platform.stem(); // "...\out\install\x64-Debug"
 }
 
-static fs::path findRoot(const fs::path& p)
+static std::optional<fs::path> findRoot(const fs::path& p)
 {
 	if (is_regular_file(p / "LICENSE") && is_regular_file(p / "README.md") && is_regular_file(p / "CMakeLists.txt"))
 	{
 		return p;
 	}
-	return findRoot(p.parent_path());
+	return p.parent_path() == p ? std::optional<fs::path>() : findRoot(p.parent_path());
+}
+static fs::path findRoot()
+{
+	{
+		static const auto exec = fs::absolute(os.getCurrentExecutable());
+		static const auto exec_root = findRoot(exec);
+		if (exec_root.has_value())
+		{
+			return exec_root.value();
+		}
+	}
+
+	static const auto cwd = fs::current_path();
+	static const auto cwd_root = findRoot(cwd);
+	return cwd_root.value();
 }
 
 static fs::path buildDir(const fs::path& path)
 {
 	const auto cwd = fs::current_path();
 
-	const auto exec = fs::absolute(fs::path(os.getCurrentExecutable()));
-	const auto argv0 = exec.filename();
+	const auto exec = fs::absolute(os.getCurrentExecutable());
+	const auto exec_filename = exec.filename();
 
-	if (argv0 == "testhost.exe")
+	if (exec_filename == "testhost.exe")
 	{
 		// Running in Visual Studio on Windows
 		return cwd / path;
 	}
 
-	auto extension = argv0.extension().string();
+	auto extension = exec.extension().string();
 	str::upper(extension);
 	if (extension == ".EXE")
 	{
 		// stand-alone executable on Windows (ends in .EXE)
-		const auto root = findRoot(exec);
+		const auto root = findRoot();
 		std::string relative_exec = exec.string();
 		str::replaceAll(relative_exec, root.string(), "");
 		fs::path install;
@@ -138,4 +154,11 @@ std::string nitf::Test::buildPluginsDir()
 {
 	const auto plugins = buildDir(fs::path("share") / "nitf" / "plugins");
 	return plugins.string();
+}
+
+static const fs::path argv0;
+fs::path nitf::Test::buildFileDir(const fs::path& relativePath)
+{
+	const auto root = findRoot();
+	return root / relativePath;
 }

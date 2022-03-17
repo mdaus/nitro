@@ -25,12 +25,14 @@
 #pragma once
 
 #include <string>
+#include <std/filesystem>
 
 namespace nitf
 {
 	namespace Test
 	{
 		std::string buildPluginsDir();
+		std::filesystem::path buildFileDir(const std::filesystem::path& relativePath);
 	}
 }
 
