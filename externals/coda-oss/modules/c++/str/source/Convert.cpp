@@ -20,6 +20,18 @@
  *
  */
 
+#include <assert.h>
+#include <string.h> // strlen()
+#include <wchar.h>
+
+#include <map>
+#include <locale>
+#include <stdexcept>
+#include <iostream>
+#include <vector>
+#include <clocale>
+#include <cwchar>
+
 #include "str/Convert.h"
 #include "str/Manip.h"
 
@@ -98,3 +110,4 @@ template<> int str::getPrecision(const long double& )
 {
     return std::numeric_limits<long double>::max_digits10;
 }
+

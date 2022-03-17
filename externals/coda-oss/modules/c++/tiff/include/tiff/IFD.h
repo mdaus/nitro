@@ -52,16 +52,13 @@ public:
     typedef std::map<unsigned short, tiff::IFDEntry *> IFDType;
 
     //! Constructor
-    IFD() :
-        mNextIFDOffsetPosition(0)
-    {
-    }
+    IFD() = default;
 
     //! Deconstructor
     ~IFD()
     {
-        for (sys::Uint32_T i = 0; i < mIFD.size(); ++i)
-            delete mIFD[i];
+        for (auto& kv : mIFD)
+            delete kv.second;
     }
 
     /**
@@ -149,14 +146,14 @@ public:
      *****************************************************************/
     template <typename T> void addEntry(const std::string& name, const T& value)
     {
-        tiff::IFDEntry *mapEntry = tiff::KnownTagsRegistry::getInstance()[name];
+        const tiff::IFDEntry *mapEntry = tiff::KnownTagsRegistry::getInstance()[name];
         //we can't add it if we don't know about it
         if (!mapEntry)
             throw except::Exception(Ctxt(FmtX(
                                     "Unable to add IFD Entry: unknown tag [%s]", name.c_str())));
 
-        unsigned short id = mapEntry->getTagID();
-        unsigned short type = mapEntry->getType();
+        const auto id = mapEntry->getTagID();
+        const auto type = mapEntry->getType();
 
         mIFD[id] = new tiff::IFDEntry;
         *(mIFD[id]) = *mapEntry;
@@ -223,7 +220,7 @@ public:
      *****************************************************************/
     sys::Uint32_T size()
     {
-        return mIFD.size();
+        return static_cast<sys::Uint32_T>(mIFD.size());
     }
 
     /**
@@ -303,7 +300,7 @@ private:
     IFDType mIFD;
 
     //! Offset where the next IFD offset can be written to
-    sys::Uint32_T mNextIFDOffsetPosition;
+    sys::Uint32_T mNextIFDOffsetPosition = 0;
 };
 
 } // End namespace.

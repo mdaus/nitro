@@ -22,7 +22,7 @@
 
 #include "nitf/PluginRegistry.h"
 
-NITFPRIV(nitf_PluginRegistry*) implicitConstruct(nitf_Error* error);
+NITFPRIV(nitf_PluginRegistry*) implicitConstruct(nitf_Error* error, FILE* log);
 NITFPRIV(void) implicitDestruct(nitf_PluginRegistry** reg);
 NITFPRIV(void) exitListener(void);
 NITFPRIV(NITF_BOOL)
@@ -83,7 +83,7 @@ static NITF_BOOL isDelimiter(char ch)
  *
  */
 NITFPROT(nitf_PluginRegistry*)
-nitf_PluginRegistry_getInstance(nitf_Error* error)
+nitf_PluginRegistry_getInstanceLog(nitf_Error* error, FILE* log)
 {
     static nitf_PluginRegistry* theInstance = NULL;
 
@@ -98,7 +98,7 @@ nitf_PluginRegistry_getInstance(nitf_Error* error)
         /*  constructed                                         */
         if (theInstance == NULL)
         {
-            theInstance = implicitConstruct(error);
+            theInstance = implicitConstruct(error, log);
             /*  If this succeeded...  */
             if (theInstance)
             {
@@ -120,6 +120,11 @@ nitf_PluginRegistry_getInstance(nitf_Error* error)
     }
 
     return theInstance;
+}
+NITFPROT(nitf_PluginRegistry*)
+nitf_PluginRegistry_getInstance(nitf_Error* error)
+{
+    return nitf_PluginRegistry_getInstanceLog(error, stderr);
 }
 
 NITFPRIV(NITF_BOOL)
@@ -194,7 +199,7 @@ static char* nitf_PluginRegistry_getenv(char const* varName)
 }
 #define getenv(varName) nitf_PluginRegistry_getenv(varName)
 
-NITFPRIV(nitf_PluginRegistry*) implicitConstruct(nitf_Error* error)
+NITFPRIV(nitf_PluginRegistry*) implicitConstruct(nitf_Error* error, FILE* log)
 {
     size_t pathLen;
     const char* pluginEnvVar;
@@ -279,22 +284,25 @@ NITFPRIV(nitf_PluginRegistry*) implicitConstruct(nitf_Error* error)
 #endif
         if (nrt_Directory_exists(NITF_DEFAULT_PLUGIN_PATH))
         {
-            strncpy(reg->path, NITF_DEFAULT_PLUGIN_PATH, NITF_MAX_PATH);
+            nrt_strncpy_s(reg->path, NITF_MAX_PATH, NITF_DEFAULT_PLUGIN_PATH, NITF_MAX_PATH);
             return reg;
         }
         else
         {
-            fprintf(stderr,
+            if (log != NULL)
+            {
+                fprintf(log,
                     "Warning: Unable to find plugin path.\n"
                     "Specify plugin location by setting environment variable "
                     "%s, or by building the library from source\n",
                     NITF_PLUGIN_PATH);
+            }
             return reg;
         }
     }
     else
     {
-        strncpy(reg->path, pluginEnvVar, NITF_MAX_PATH);
+        nrt_strncpy_s(reg->path, NITF_MAX_PATH, pluginEnvVar, NITF_MAX_PATH);
     }
     /*
      * If the we have a user-defined path, they might not
@@ -369,9 +377,10 @@ doInit(nitf_DLL* dll, const char* prefix, nitf_Error* error)
     NITF_PLUGIN_INIT_FUNCTION init;
     const char** ident;
 
-    char name[NITF_MAX_PATH];
-    memset(name, 0, NITF_MAX_PATH);
-    NITF_SNPRINTF(name, NITF_MAX_PATH, "%s%s", prefix, NITF_PLUGIN_INIT_SUFFIX);
+#define NITF_MAX_PATH_NAME_SIZE_ NITF_MAX_PATH+4096
+    char name[NITF_MAX_PATH_NAME_SIZE_];
+    memset(name, 0, NITF_MAX_PATH_NAME_SIZE_);
+    NITF_SNPRINTF(name, NITF_MAX_PATH_NAME_SIZE_, "%s" NITF_PLUGIN_INIT_SUFFIX, prefix);
     init = (NITF_PLUGIN_INIT_FUNCTION)nitf_DLL_retrieve(dll, name, error);
     if (!init)
     {
@@ -655,6 +664,8 @@ nitf_PluginRegistry_internalLoadDir(nitf_PluginRegistry* reg,
                                     const char* dirName,
                                     nitf_Error* error)
 {
+    (void)reg;
+
     const char* name;
     size_t sizePath;
     nitf_Directory* dir = NULL;
@@ -685,7 +696,7 @@ nitf_PluginRegistry_internalLoadDir(nitf_PluginRegistry* reg,
             {
                 char* end;
                 char fullName[NITF_MAX_PATH];
-                int pathSize = sizePath;
+                size_t pathSize = sizePath;
                 memset(fullName, 0, NITF_MAX_PATH);
                 memcpy(fullName, dirName, sizePath);
                 if (!isDelimiter(dirName[pathSize - 1]))
@@ -757,13 +768,14 @@ nitf_PluginRegistry_internalDecompressionHandlerExists(nitf_PluginRegistry* reg,
 NITFPROT(NITF_BOOL)
 nitf_PluginRegistry_internalHandlerExists(
         const char* ident,
-        NITF_BOOL handlerCheck(nitf_PluginRegistry*, const char*))
+        NITF_BOOL handlerCheck(nitf_PluginRegistry*, const char*),
+        FILE* log)
 {
     NITF_BOOL exists;
     nitf_Error error;
 
     /* first, get the registry */
-    nitf_PluginRegistry* const reg = nitf_PluginRegistry_getInstance(&error);
+    nitf_PluginRegistry* const reg = nitf_PluginRegistry_getInstanceLog(&error, log);
     if (reg == NULL)
     {
         return NITF_FAILURE;
@@ -805,24 +817,29 @@ nitf_PluginRegistry_loadDir(const char* dirName, nitf_Error* error)
 }
 
 NITFAPI(NITF_BOOL)
-nitf_PluginRegistry_TREHandlerExists(const char* ident)
+nitf_PluginRegistry_TREHandlerExistsLog(const char* ident, FILE* log)
 {
     return nitf_PluginRegistry_internalHandlerExists(
-            ident, nitf_PluginRegistry_internalTREHandlerExists);
+        ident, nitf_PluginRegistry_internalTREHandlerExists, log);
+}
+NITFAPI(NITF_BOOL)
+nitf_PluginRegistry_TREHandlerExists(const char* ident)
+{
+    return nitf_PluginRegistry_TREHandlerExistsLog(ident, stderr);
 }
 
 NITFAPI(NITF_BOOL)
 nitf_PluginRegistry_compressionHandlerExists(const char* ident)
 {
     return nitf_PluginRegistry_internalHandlerExists(
-            ident, nitf_PluginRegistry_internalCompressionHandlerExists);
+            ident, nitf_PluginRegistry_internalCompressionHandlerExists, stderr);
 }
 
 NITFAPI(NITF_BOOL)
 nitf_PluginRegistry_decompressionHandlerExists(const char* ident)
 {
     return nitf_PluginRegistry_internalHandlerExists(
-            ident, nitf_PluginRegistry_internalDecompressionHandlerExists);
+            ident, nitf_PluginRegistry_internalDecompressionHandlerExists, stderr);
 }
 
 NITFPROT(NITF_PLUGIN_DECOMPRESSION_CONSTRUCT_FUNCTION)

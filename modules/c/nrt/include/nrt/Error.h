@@ -22,6 +22,7 @@
 
 #ifndef __NRT_ERROR_H__
 #define __NRT_ERROR_H__
+#pragma once
 
 #include "nrt/Defines.h"
 #include "nrt/Types.h"
@@ -30,7 +31,7 @@
 #define  NRT_CTXT NRT_FILE, NRT_LINE, NRT_FUNC
 
 #if defined(WIN32) || defined(_WIN32)
-#   define NRT_ERRNO GetLastError()
+#   define NRT_ERRNO ((int) GetLastError())
 #else
 #   define  NRT_ERRNO errno
 #endif
@@ -71,6 +72,10 @@ enum
  *
  *  The important components of an error are stored here
  */
+#if _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4820) // '...': '...' bytes padding added after data member '...'
+#endif
 typedef struct _NRT_Error
 {
     char message[NRT_MAX_EMESSAGE + 1];
@@ -79,6 +84,9 @@ typedef struct _NRT_Error
     char func[NRT_MAX_PATH + 1];
     int level;
 } nrt_Error;
+#if _MSC_VER
+#pragma warning(pop)
+#endif
 
 /*!
  *  \fn nrt_Error_init

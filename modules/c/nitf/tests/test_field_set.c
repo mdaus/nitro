@@ -20,6 +20,8 @@
  *
  */
 
+#include <inttypes.h>
+
 /*
     Test program for testing field set functions
 
@@ -32,7 +34,7 @@
 
 #define STR_LEN 100             /* Test string max length */
 
-int main(int argc, char *argv[])
+int main(void)
 {
     nitf_FileHeader *fhdr;          /* File header supplying fields */
     nitf_ImageSubheader *subhdr;    /* Subheader supplying fields */
@@ -43,7 +45,6 @@ int main(int argc, char *argv[])
     char *valueStrBefore;           /* Value buffer */
     /* Value buffer */
     static char valueStrAfter[STR_LEN + 2];
-    uint32_t valueStrLen;        /* Value buffer */
     static nitf_Error errorObj;     /* Error object for messages */
     nitf_Error *error;              /* Pointer to the error object */
 
@@ -103,7 +104,7 @@ int main(int argc, char *argv[])
     nitf_Field_get(fhdr->NITF_FL, (NITF_DATA *) & valueU64After,
                    NITF_CONV_UINT, NITF_INT64_SZ, error);
     fprintf(stdout,
-            "Set of FL via nitf_Field_setUint64 original %llu readback %llu\n",
+            "Set of FL via nitf_Field_setUint64 original %" PRIu64 " readback %" PRIu64 "\n",
             valueU64Before, valueU64After);
 
     valueStrBefore = "TestStr";

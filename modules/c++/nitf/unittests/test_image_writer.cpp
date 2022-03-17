@@ -20,13 +20,103 @@
  *
  */
 
+#include <fstream>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <memory>
+#include <stdexcept>
+#include <std/filesystem>
+
+#include <import/nitf.hpp>
 #include <nitf/ImageSubheader.hpp>
 #include <nitf/ImageWriter.hpp>
 #include <nitf/Record.hpp>
+
 #include "TestCase.h"
 
-namespace
+using path = std::filesystem::path;
+
+static path argv0;
+static const path file;
+
+static bool is_linux()
 {
+	const auto cpp = file.filename().stem(); // i.e., "test_valid_six"
+	const auto exe = argv0.filename(); // e.g., "test_valid_six.exe"
+	return cpp == exe; // no ".exe", must be Linux
+}
+
+static bool is_vs_gtest()
+{
+	return argv0.empty(); // no argv[0] in VS w/GTest
+}
+
+static path buildFileDir(const path& relativePath)
+{
+	if (is_vs_gtest())
+	{
+		static const auto cwd = std::filesystem::current_path();
+
+		// Running GTest unit-tests in Visual Studio on Windows
+		return cwd.parent_path().parent_path() / relativePath;
+	}
+
+    auto root_dir = argv0.parent_path().parent_path().parent_path().parent_path();
+    if (is_linux())
+    {
+        if (root_dir.stem() == "build") // CMake, in ./build directory
+        {
+            root_dir = root_dir.parent_path();
+        }
+        else if (root_dir.stem() == "modules") // WAF
+        {
+	  root_dir = root_dir.parent_path().parent_path();
+        }
+        return root_dir / relativePath;
+    }
+
+    // must be Windows w/o VS
+    root_dir = root_dir.parent_path();
+    if (root_dir.stem() == "build") // in ./build directory, CMake
+    {
+        root_dir = root_dir.parent_path();
+    }
+    else if (root_dir.stem() == "target") // WAF
+    {
+        root_dir = root_dir.parent_path();
+    }
+
+    return root_dir / relativePath;
+}
+
+static void doChangeFileHeader(const std::string& inputPathname, const std::string& outputPathname)
+{
+    if (nitf::Reader::getNITFVersion(inputPathname) == nitf::Version::NITF_VER_UNKNOWN)
+    {
+        throw std::invalid_argument("Invalid NITF: " + inputPathname);
+    }
+
+    nitf::Reader reader;
+    nitf::IOHandle io(inputPathname);
+    
+    nitf::Record record = reader.read(io);
+    nitf::FileHeader fileHeader = record.getHeader();
+
+    auto fileTitle = fileHeader.getFileTitle();
+    std::string strFileTitle = fileTitle;
+    str::replaceAll(strFileTitle, " ", "*"); // field is fixed length
+    fileTitle.set(strFileTitle);
+
+    record.setHeader(fileHeader);
+
+    nitf::Writer writer;
+    nitf::IOHandle output(outputPathname, NITF_ACCESS_WRITEONLY, NITF_CREATE);
+    writer.prepare(output, record);
+    writer.setWriteHandlers(io, record);
+    writer.write();
+}
+
 TEST_CASE(imageWriterThrowsOnFailedConstruction)
 {
     nitf::ImageSubheader subheader;
@@ -39,13 +129,36 @@ TEST_CASE(constructValidImageWriter)
     nitf::ImageSegment segment = record.newImageSegment();
     nitf::ImageSubheader subheader = segment.getSubheader();
     std::vector<nitf::BandInfo> bands = {nitf::BandInfo(), nitf::BandInfo()};
-    subheader.setPixelInformation("INT", 8, 8, "R", "MONO", "VIS", bands);
-    subheader.setBlocking(100, 200, 10, 10, "P");
+    subheader.setPixelInformation(nitf::PixelValueType::Integer, 8, 8, "R", nitf::ImageRepresentation::MONO, "VIS", bands);
+    subheader.setBlocking(100, 200, 10, 10, nitf::BlockingMode::Pixel);
     nitf::ImageWriter writer(subheader);
 }
+
+TEST_CASE(changeFileHeader)
+{
+	const auto inputPathname = buildFileDir(path("modules") / "c++" / "nitf" / "tests" / "test_blank.ntf").string();
+    TEST_ASSERT_TRUE(std::filesystem::is_regular_file(inputPathname));
+	const auto outputPathname = buildFileDir(path("outputPathname.ntf")).string();
+
+    doChangeFileHeader(inputPathname, outputPathname);
+
+    nitf::Reader reader;
+    nitf::IOHandle io(outputPathname);
+    nitf::Record record = reader.read(io);
+    nitf::FileHeader fileHeader = record.getHeader();
+
+    const std::string fileTitle = fileHeader.getFileTitle();
+    auto npos = fileTitle.find(" ");
+    TEST_ASSERT_EQ(npos, std::string::npos);
+    npos = fileTitle.find("*");
+    TEST_ASSERT(npos != std::string::npos);
 }
 
 TEST_MAIN(
+    (void)argc;
+    argv0 = std::filesystem::absolute(argv[0]).string();
+
     TEST_CHECK(imageWriterThrowsOnFailedConstruction);
     TEST_CHECK(constructValidImageWriter);
+    TEST_CHECK(changeFileHeader);
     )

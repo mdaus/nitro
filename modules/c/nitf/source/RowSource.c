@@ -108,12 +108,17 @@ NITFPRIV(void) RowSource_destruct(NITF_DATA * data)
 
 NITFPRIV(nitf_Off) RowSource_getSize(NITF_DATA * data, nitf_Error *e)
 {
+    (void)e;
+
     RowSourceImpl *impl = (RowSourceImpl *) data;
     return (nitf_Off)impl->numRows * (nitf_Off)impl->rowLength;
 }
 
 NITFPRIV(NITF_BOOL) RowSource_setSize(NITF_DATA * data, nitf_Off size, nitf_Error *e)
 {
+    (void)data;
+    (void)size;
+    (void)e;
     return NITF_SUCCESS;
 }
 
@@ -157,7 +162,7 @@ NITFAPI(nitf_BandSource *) nitf_RowSource_construct(void *algorithm,
     impl->numRows = numRows;
     impl->rowLength = rowLength;
 
-    impl->rowBuffer = (NITF_DATA *) NITF_MALLOC(rowLength);
+    impl->rowBuffer = (uint8_t*) NITF_MALLOC(rowLength);
     if (impl->rowBuffer == NULL)
     {
         nitf_Error_init(error, NITF_STRERROR(NITF_ERRNO),

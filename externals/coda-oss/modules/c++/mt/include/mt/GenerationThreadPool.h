@@ -24,6 +24,8 @@
 #ifndef __MT_GENERATION_THREAD_POOL_H__
 #define __MT_GENERATION_THREAD_POOL_H__
 
+#include <assert.h>
+
 #if !defined(__APPLE_CC__)
 
 #include <import/sys.h>
@@ -36,12 +38,12 @@ namespace mt
     class TiedRequestHandler : public sys::Runnable
     {
 	RunnableRequestQueue* mRequestQueue;
-	sys::Semaphore* mSem;
+	sys::Semaphore* mSem = nullptr;
 	CPUAffinityThreadInitializer* mAffinityInit;
 
     public:
 	TiedRequestHandler(RunnableRequestQueue* requestQueue) :
-	    mRequestQueue(requestQueue), mAffinityInit(NULL) {}
+	    mRequestQueue(requestQueue), mAffinityInit(nullptr) {}
 		
 	virtual ~TiedRequestHandler();
 
@@ -63,20 +65,24 @@ namespace mt
     class GenerationThreadPool : public BasicThreadPool<TiedRequestHandler>
     {
 	sys::Semaphore mGenerationSync;
-	CPUAffinityInitializer* mAffinityInit;
-	int mGenSize;
+	CPUAffinityInitializer* mAffinityInit = nullptr;
+	int mGenSize = 0;
     public:
-	GenerationThreadPool(unsigned short numThreads = 0,
-			     CPUAffinityInitializer* affinityInit = NULL) 
+        GenerationThreadPool() = default;
+	GenerationThreadPool(unsigned short numThreads,
+			     CPUAffinityInitializer* affinityInit = nullptr) 
 	    : BasicThreadPool<TiedRequestHandler>(numThreads), 
-	    mAffinityInit(affinityInit), mGenSize(0)
+	    mAffinityInit(affinityInit)
 	    {
 	    }
-	virtual ~GenerationThreadPool() {}
+	virtual ~GenerationThreadPool() = default;
+	GenerationThreadPool(const GenerationThreadPool&) = delete;
+    GenerationThreadPool& operator=(const GenerationThreadPool&) = delete;
 	
 	virtual TiedRequestHandler *newRequestHandler()
 	{
 	    TiedRequestHandler* handler = BasicThreadPool<TiedRequestHandler>::newRequestHandler();
+        assert(handler != nullptr);
 	    handler->setSemaphore(&mGenerationSync);
 		
 	    if (mAffinityInit)

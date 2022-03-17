@@ -62,23 +62,17 @@ Reader::Reader(nitf_Reader * x)
     getNativeOrThrow();
 }
 
-Reader::Reader()
+Reader::Reader() noexcept(false) : Reader(nitf_Reader_construct(&error))
 {
-    setNative(nitf_Reader_construct(&error));
-    getNativeOrThrow();
     setManaged(false);
 }
 
-Reader::~Reader()
-{
-}
-
-nitf::Version Reader::getNITFVersion(const std::string& fileName)
+nitf::Version Reader::getNITFVersion(const std::string& fileName) noexcept
 {
     return nitf_Reader_getNITFVersion(fileName.c_str());
 }
 
-nitf::Version Reader::getNITFVersion(IOInterface& io)
+nitf::Version Reader::getNITFVersion(const IOInterface& io)
 {
     return nitf_Reader_getNITFVersionIO(io.getNativeOrThrow());
 }

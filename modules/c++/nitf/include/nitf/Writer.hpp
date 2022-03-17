@@ -25,6 +25,7 @@
 #pragma once
 
 #include <memory>
+#include <string>
 
 #include "nitf/Writer.h"
 #include "nitf/List.hpp"
@@ -35,7 +36,7 @@
 #include "nitf/ImageWriter.hpp"
 #include "nitf/SegmentWriter.hpp"
 #include "nitf/Object.hpp"
-#include <string>
+#include "nitf/exports.hpp"
 
 /*!
  *  \file Writer.hpp
@@ -45,21 +46,17 @@
 namespace nitf
 {
 
-struct WriterDestructor : public nitf::MemoryDestructor<nitf_Writer>
+struct NITRO_NITFCPP_API WriterDestructor : public nitf::MemoryDestructor<nitf_Writer>
 {
-    ~WriterDestructor()
-    {
-    }
-    void operator()(nitf_Writer *writer);
+    void operator()(nitf_Writer *writer) override;
 };
 
 /*!
  *  \class Writer
  *  \brief  The C++ wrapper for the nitf_Writer
  */
-class Writer : public nitf::Object<nitf_Writer, WriterDestructor>
+struct NITRO_NITFCPP_API Writer : public nitf::Object<nitf_Writer, WriterDestructor>
 {
-public:
     //! Copy constructor
     Writer(const Writer & x);
 
@@ -70,9 +67,11 @@ public:
     Writer(nitf_Writer * x);
 
     //! Constructor
-    Writer();
+    Writer() noexcept(false);
 
-    ~Writer();
+    ~Writer() = default;
+    Writer(Writer&&) = default;
+    Writer& operator=(Writer&&) = default;
 
     //! Write the record to disk
     void write();
@@ -96,35 +95,35 @@ public:
      * \param io The input IO handle containing the data
      * \param record The record to write out
      */
-    void setWriteHandlers(nitf::IOHandle& io, nitf::Record& record);
+    void setWriteHandlers(nitf::IOHandle& io, const nitf::Record& record);
 
     /*!
      * Set write handlers for images
      * \param io The input IO handle containing the data
      * \param record The record to write out
      */
-    void setImageWriteHandlers(nitf::IOHandle& io, nitf::Record& record);
+    void setImageWriteHandlers(nitf::IOHandle& io, const nitf::Record& record);
 
     /*!
      * Set write handlers for graphics
      * \param io The input IO handle containing the data
      * \param record The record to write out
      */
-    void setGraphicWriteHandlers(nitf::IOHandle& io, nitf::Record& record);
+    void setGraphicWriteHandlers(nitf::IOHandle& io, const nitf::Record& record);
 
     /*!
      * Set write handlers for texts
      * \param io The input IO handle containing the data
      * \param record The record to write out
      */
-    void setTextWriteHandlers(nitf::IOHandle& io, nitf::Record& record);
+    void setTextWriteHandlers(nitf::IOHandle& io, const nitf::Record& record);
 
     /*!
      * Set write handlers for DEs
      * \param io The input IO handle containing the data
      * \param record The record to write out
      */
-    void setDEWriteHandlers(nitf::IOHandle& io, nitf::Record& record);
+    void setDEWriteHandlers(nitf::IOHandle& io, const nitf::Record& record);
 
     /*!
      * Sets the WriteHandler for the Image at the given index.
@@ -249,7 +248,7 @@ public:
                          uint32_t fillDir);
 
 private:
-    nitf_Error error;
+    nitf_Error  error{};
 
     //! c++ write handlers need to be kept in scope
     std::vector<std::shared_ptr<nitf::WriteHandler> > mWriteHandlers;

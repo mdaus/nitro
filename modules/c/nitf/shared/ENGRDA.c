@@ -20,6 +20,11 @@
  *
  */
 
+#if _MSC_VER
+#pragma warning(disable: 4820) // '...' : '...' bytes padding added after data member '...'
+#pragma warning(disable: 4668) // '...' is not defined as a preprocessor macro, replacing with '...' for '...'
+#pragma warning(disable: 5045) // Compiler will insert Spectre mitigation for memory load if / Qspectre switch specified
+#endif
 
 #include <import/nitf.h>
 
@@ -72,7 +77,7 @@ NITFPRIV(int) ENGRDA_parse(nitf_TRE * tre,
 {
     int status = 1;
     int iterStatus = NITF_SUCCESS;
-    int offset = 0;
+    size_t offset = 0;
     int length;
     nitf_TRECursor cursor;
     nitf_Field *field = NULL;
@@ -106,7 +111,7 @@ NITFPRIV(int) ENGRDA_parse(nitf_TRE * tre,
             length = cursor.length;
             if (length == NITF_TRE_GOBBLE)
             {
-                length = privData->length - offset;
+                length = (int)(privData->length - offset);
             }
 
             /* no need to call setValue, because we already know
@@ -215,9 +220,10 @@ NITFPRIV(NITF_BOOL) ENGRDA_read(nitf_IOInterface* io,
                                 struct _nitf_Record* record,
                                 nitf_Error* error)
 {
+    (void)record;
+
     int ok;
     char *data = NULL;
-    nitf_TREDescriptionSet *descriptions = NULL;
     nitf_TREDescriptionInfo *infoPtr = NULL;
 
     if (!tre)
@@ -236,9 +242,8 @@ NITFPRIV(NITF_BOOL) ENGRDA_read(nitf_IOInterface* io,
         return NITF_FAILURE;
     }
 
-    descriptions = (nitf_TREDescriptionSet*)tre->handler->data;
-
-    if (!descriptions)
+    nitf_TREDescriptionSet* treDescriptionSet = (nitf_TREDescriptionSet*)tre->handler->data;
+    if (!treDescriptionSet)
     {
         nitf_Error_init(error, "TRE Description Set is NULL",
                         NITF_CTXT, NITF_ERR_INVALID_OBJECT);
@@ -248,7 +253,7 @@ NITFPRIV(NITF_BOOL) ENGRDA_read(nitf_IOInterface* io,
     }
 
     tre->priv = NULL;
-    infoPtr = descriptions->descriptions;
+    infoPtr = treDescriptionSet->descriptions;
     tre->priv = nitf_TREPrivateData_construct(error);
     ((nitf_TREPrivateData*)tre->priv)->length = length;
 
@@ -306,6 +311,7 @@ NITFAPI(const char**) ENGRDA_init(nitf_Error* error)
 
 NITFAPI(nitf_TREHandler*) ENGRDA_handler(nitf_Error* error)
 {
+    (void)error;
     return &engrdaHandler;
 }
 

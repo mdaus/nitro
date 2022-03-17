@@ -22,6 +22,7 @@
 
 #ifndef __NITF_FIELD_H__
 #define __NITF_FIELD_H__
+#pragma once
 
 #include "nitf/System.h"
 
@@ -75,6 +76,10 @@ typedef enum _nitf_FieldType
  *  for determining how it should compensate for the disparity between
  *  an actual length provided by the user, and the length that is required
  */
+#if _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4820) // '...': '...' bytes padding added after data member '...'
+#endif
 typedef struct _nitf_Field
 {
     nitf_FieldType type;
@@ -84,7 +89,9 @@ typedef struct _nitf_Field
                             can be resized - default is false */
 }
 nitf_Field;
-
+#if _MSC_VER
+#pragma warning(pop)
+#endif
 
 /*!
  *  \fn nitf_Field_construct
@@ -110,7 +117,7 @@ NITFAPI(nitf_Field *) nitf_Field_construct(size_t length,
  *  \return Success or failure
  */
 NITFAPI(NITF_BOOL) nitf_Field_setRawData(nitf_Field * field,
-        NITF_DATA * data,
+        const NITF_DATA * data,
         size_t dataLength,
         nitf_Error * error);
 
@@ -357,6 +364,7 @@ NITFPROT(NITF_BOOL) nitf_Field_resetLength(nitf_Field * field,
  *  \param field The field object
  */
 NITFPROT(void) nitf_Field_print(nitf_Field * field);
+NITFPROT(void) nitf_Field_snprint(char* buffer, size_t buf_size, nitf_Field* field);
 
 
 /*!

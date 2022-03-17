@@ -22,6 +22,7 @@
 
 #ifndef __XML_LITE_MINIDOM_HANDLER_H__
 #define __XML_LITE_MINIDOM_HANDLER_H__
+#pragma once
 
 /*!
  *  \file MinidomHandler.h
@@ -45,9 +46,10 @@
  */
 
 #include <stack>
+#include <memory>
+
 #include "XMLReader.h"
 #include "io/StandardStreams.h"
-#include "io/DbgStream.h"
 #include "Document.h"
 
 namespace xml
@@ -63,12 +65,11 @@ namespace lite
  * whether it is allocated externally or not.  DONT delete it 
  * explicitly unless you are looking for disaster.
  */
-class MinidomHandler : public ContentHandler
+struct MinidomHandler final : public ContentHandler
 {
-public:
     //! Constructor.  Uses default document
     MinidomHandler() :
-        mDocument(NULL), mOwnDocument(true), mPreserveCharData(false)
+        mDocument(nullptr), mOwnDocument(true), mPreserveCharData(false)
     {
         setDocument(new Document());
     }
@@ -76,10 +77,15 @@ public:
     //! Destructor
     virtual ~ MinidomHandler()
     {
-        setDocument(NULL, true);
+        setDocument(nullptr, true);
     }
+    MinidomHandler(const MinidomHandler&) = delete;
+    MinidomHandler& operator=(const MinidomHandler&) = delete;
+    MinidomHandler(MinidomHandler&&) = default;
+    MinidomHandler& operator=(MinidomHandler&&) = default;
 
     virtual void setDocument(Document *newDocument, bool own = true);
+    void setDocument(std::unique_ptr<Document>&&);  // own = true
 
     /**
      * Retrieves the Document.
@@ -91,6 +97,7 @@ public:
             mOwnDocument = false;
         return mDocument;
     }
+    void getDocument(std::unique_ptr<Document>&);  // steal = true
 
     virtual Document *getDocument() const
     {
@@ -104,7 +111,10 @@ public:
      * \param value The value of the char data
      * \param length The length of the char data
      */
-    virtual void characters(const char *value, int length);
+    virtual void characters(const char* value, int length) override;
+
+    bool vcharacters(const void /*XMLCh*/*, size_t length) override;  
+    bool call_vcharacters() const override;
 
     /*!
      * This method is fired when a new tag is entered.
@@ -155,6 +165,20 @@ public:
      * character data. Otherwise, it will be trimmed.
      */
     virtual void preserveCharacterData(bool preserve);
+    
+    /*!
+     * If set to true, how std::string values are encoded will be set.
+     * 
+     * This is a bit goofy to preserve existing behavior: on *ix,
+     * XML containing non-ASCII data is lost (it turns into 
+     * Windows-1252 on Windows).
+     * 
+     * When set, there won't be any change on Windows.  However,
+     * on *ix, std::string will be encoding as UTF-8 thus preserving
+     * the non-ASCII data.
+     */
+    virtual void storeEncoding(bool value);
+    bool storeEncoding() const;
 
 protected:
     std::string currentCharacterData;
@@ -163,6 +187,12 @@ protected:
     Document *mDocument;
     bool mOwnDocument;
     bool mPreserveCharData;
+
+ private:
+    void characters(const char* value, int length, const StringEncoding*);
+    void call_characters(const std::string&, StringEncoding);
+    std::shared_ptr<const StringEncoding> mpEncoding;
+    bool mStoreEncoding = false;
 };
 }
 }

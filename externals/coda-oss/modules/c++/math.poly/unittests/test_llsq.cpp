@@ -64,7 +64,8 @@ TEST_CASE(test1DPolyfit)
     // Polys better match
     TEST_ASSERT_EQ(polyFromRaw, polyFromVec);
     TEST_ASSERT_EQ(polyFromRaw, truth);
-    TEST_ASSERT_EQ(polyFromRaw, fixed);
+    //TEST_ASSERT_EQ(polyFromRaw, fixed);
+    TEST_ASSERT(polyFromRaw == fixed);
     assert(polyFromRaw == truthSTLVec);
     TEST_ASSERT_EQ(polyFromSTL, truth);
 }
@@ -185,7 +186,7 @@ TEST_CASE(test2DPolyfitLarge)
     Matrix2D<double> x(gridSize, gridSize);
     for (size_t i = 0; i < gridSize; i++)
     {
-        double xidx = xOffset + i * xSpacing;
+        auto xidx = static_cast<double>(xOffset + i * xSpacing);
         for (size_t j = 0; j < gridSize; j++)
         {
             x(i, j) = xidx;
@@ -195,7 +196,7 @@ TEST_CASE(test2DPolyfitLarge)
     Matrix2D<double> y(gridSize, gridSize);
     for (size_t j = 0; j < gridSize; j++)
     {
-        double yidx = yOffset + j * ySpacing;
+        auto yidx = static_cast<double>(yOffset + j * ySpacing);
         for (size_t i = 0; i < gridSize; i++)
         {
             y(i, j) = yidx;
@@ -207,7 +208,7 @@ TEST_CASE(test2DPolyfitLarge)
     {
         for (size_t j = 0; j < gridSize; j++)
         {
-            z(i, j) = truth(i, j);
+            z(i, j) = truth(static_cast<double>(i), static_cast<double>(j));
         }
     }
 
@@ -255,9 +256,12 @@ TEST_CASE(testVectorValuedOrderChange)
     const OneD<double> poly1 = fit(indep, comp1, 2);
     const OneD<double> poly2 = fit(indep, comp2, 2);
 
-    TEST_ASSERT_EQ(polyZeroed.order(), 0);
-    TEST_ASSERT_EQ(poly1.order(), 2);
-    TEST_ASSERT_EQ(poly2.order(), 2);
+    auto order = polyZeroed.order();
+    TEST_ASSERT_EQ(order, static_cast<size_t>(0));
+    order = poly1.order();
+    TEST_ASSERT_EQ(order, static_cast<size_t>(2));
+    order = poly2.order();
+    TEST_ASSERT_EQ(order, static_cast<size_t>(2));
 
     // Now, attempt to fit the vector-vector version.
     // We'll check reshuffle the zero component to make sure we caught all
@@ -268,7 +272,7 @@ TEST_CASE(testVectorValuedOrderChange)
         const OneD<VectorN<3, double> > poly =
                 fit(indep, compZeroed, comp1, comp2, 2);
 
-        TEST_ASSERT_EQ(poly.order(), 2);
+        TEST_ASSERT_EQ(poly.order(), static_cast<size_t>(2));
 
         // X-component
         TEST_ASSERT_ALMOST_EQ(poly[0][0], 0.0);
@@ -291,7 +295,7 @@ TEST_CASE(testVectorValuedOrderChange)
         const OneD<VectorN<3, double> > poly =
                 fit(indep, comp1, compZeroed, comp2, 2);
 
-        TEST_ASSERT_EQ(poly.order(), 2);
+        TEST_ASSERT_EQ(poly.order(), static_cast<size_t>(2));
 
         // X-component
         TEST_ASSERT_ALMOST_EQ(poly[0][0], 1.0);
@@ -314,7 +318,7 @@ TEST_CASE(testVectorValuedOrderChange)
         const OneD<VectorN<3, double> > poly =
                 fit(indep, comp1, comp2, compZeroed, 2);
 
-        TEST_ASSERT_EQ(poly.order(), 2);
+        TEST_ASSERT_EQ(poly.order(), static_cast<size_t>(2));
 
         // X-component
         TEST_ASSERT_ALMOST_EQ(poly[0][0], 1.0);

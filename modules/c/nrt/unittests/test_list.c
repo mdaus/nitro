@@ -45,7 +45,7 @@ TEST_CASE(testPushPop)
     TEST_ASSERT(nrt_List_pushBack(l, (NRT_DATA *) "NITRO", &e));
     TEST_ASSERT(nrt_List_pushBack(l, (NRT_DATA *) "Rocks!", &e));
 
-    TEST_ASSERT_EQ_INT(2, nrt_List_size(l));
+    TEST_ASSERT_EQ_INT((uint32_t)2, nrt_List_size(l));
 
     /* test iterating */
     it = nrt_List_begin(l);
@@ -65,24 +65,22 @@ TEST_CASE(testPushPop)
         char *p = (char *) nrt_List_popFront(l);
         TEST_ASSERT(p);
     }
-    TEST_ASSERT_EQ_INT(0, nrt_List_size(l));
+    TEST_ASSERT_EQ_INT((uint32_t)0, nrt_List_size(l));
     nrt_List_destruct(&l);
     TEST_ASSERT_NULL(l);
 }
 
-char *cloneString(char *data, nrt_Error * error)
+static char *cloneString(const char *data, nrt_Error * error)
 {
-    size_t data_len = strlen(data);
-    char *new_data = (char *) NRT_MALLOC(data_len + 1);
-    new_data[data_len] = 0;
+    (void)error;
+
+    char* new_data = nrt_strdup(data);
     assert(new_data);
-    strcpy(new_data, data);
     return new_data;
 }
 
 TEST_CASE(testClone)
 {
-    uint32_t i;
     nrt_Error e;
     nrt_List *l = nrt_List_construct(&e), *dolly = NULL;
     TEST_ASSERT(l);
@@ -97,15 +95,16 @@ TEST_CASE(testClone)
     TEST_ASSERT(dolly);
     TEST_ASSERT_EQ_INT(nrt_List_size(l), nrt_List_size(dolly));
 
-    i = 0;
+    int32_t i = 0;
     while (!nrt_List_isEmpty(dolly))
     {
         char *p = (char *) nrt_List_popFront(dolly);
         TEST_ASSERT(p);
-        TEST_ASSERT_EQ_INT(NRT_ATO32(p), ++i);
+        const long value = ++i;
+        TEST_ASSERT_EQ_INT(NRT_ATO32(p), value);
     }
 
-    TEST_ASSERT_EQ_INT(0, nrt_List_size(dolly));
+    TEST_ASSERT_EQ_INT((uint32_t)0, nrt_List_size(dolly));
     nrt_List_destruct(&dolly);
     TEST_ASSERT_NULL(dolly);
     nrt_List_destruct(&l);
@@ -114,7 +113,6 @@ TEST_CASE(testClone)
 
 TEST_CASE(testIterate)
 {
-    uint32_t i;
     nrt_Error e;
     nrt_List *l = nrt_List_construct(&e);
     nrt_ListIterator it, end;
@@ -130,12 +128,13 @@ TEST_CASE(testIterate)
     it = nrt_List_begin(l);
     end = nrt_List_end(l);
 
-    i = 0;
+    int32_t i = 0;
     while (nrt_ListIterator_notEqualTo(&it, &end))
     {
         char *p = (char *) nrt_ListIterator_get(&it);
         TEST_ASSERT(p);
-        TEST_ASSERT_EQ_INT(NRT_ATO32(p), ++i);
+        const long value = ++i;
+        TEST_ASSERT_EQ_INT(NRT_ATO32(p), value);
         nrt_ListIterator_increment(&it);
     }
 
@@ -165,13 +164,16 @@ TEST_CASE(testIterateRemove)
         char *p = (char *) nrt_List_remove(l, &it);
         TEST_ASSERT(p);
     }
-    TEST_ASSERT_EQ_INT(0, nrt_List_size(l));
+    TEST_ASSERT_EQ_INT((uint32_t)0, nrt_List_size(l));
 
     nrt_List_destruct(&l);
     TEST_ASSERT_NULL(l);
 }
 
 TEST_MAIN(
+    (void)argc;
+    (void)argv;
+
     CHECK(testCreate);
     CHECK(testPushPop);
     CHECK(testClone);

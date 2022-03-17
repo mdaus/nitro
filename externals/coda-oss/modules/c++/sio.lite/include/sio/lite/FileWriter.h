@@ -19,13 +19,18 @@
  * see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef __SIO_LITE_FILE_WRITER_H__
-#define __SIO_LITE_FILE_WRITER_H__
+#ifndef CODA_OSS_sio_lite_FileWriter_h_INCLUDED_
+#define CODA_OSS_sio_lite_FileWriter_h_INCLUDED_
 
 #include <memory>
 #include <vector>
+
 #include <import/sys.h>
 #include <import/io.h>
+#include <import/mem.h>
+#include <types/RowCol.h>
+#include <sys/filesystem.h>
+
 #include "sio/lite/InvalidHeaderException.h"
 #include "sio/lite/FileHeader.h"
 
@@ -96,7 +101,7 @@ public:
 
 protected:
     std::string mFileName;
-    std::auto_ptr<io::OutputStream> mStream;
+    mem::auto_ptr<io::OutputStream> mStream;
     bool mAdopt;
 };
 
@@ -165,7 +170,7 @@ template<typename T> void writeSIO(const T* image, size_t rows, size_t cols,
 
     io::FileOutputStream imageStream(imageFile);
 
-    FileHeader fhdr(rows, cols, es, et);
+    FileHeader fhdr(static_cast<int>(rows), static_cast<int>(cols), es, et);
     fhdr.to(1, imageStream);
 
     imageStream.write(reinterpret_cast<const sys::byte*>(image),
@@ -173,10 +178,15 @@ template<typename T> void writeSIO(const T* image, size_t rows, size_t cols,
 
     imageStream.close();
 }
+template<typename T>
+void writeSIO(const T* image, const types::RowCol<size_t>& dims, const sys::filesystem::path& imageFile,
+                                   int et = AUTO, int es = AUTO)
+{
+    writeSIO(image, dims.row, dims.col, imageFile.string(), et, es);
+}
+
 
 }
 }
 
-#endif
-
-
+#endif  // CODA_OSS_sio_lite_FileWriter_h_INCLUDED_

@@ -60,10 +60,9 @@ TEST_CASE(testIncompleteCondMod)
 {
     nitf_Error error;
     NITF_BOOL exists;
-    uint32_t treLength = 0;
     nitf_TRE* tre = nitf_TRE_construct("ACCPOB", NULL, &error);
     TEST_ASSERT(tre);
-    treLength = tre->handler->getCurrentSize(tre, &error);
+    int treLength = tre->handler->getCurrentSize(tre, &error);
     TEST_ASSERT_EQ_INT(treLength, 2);
 
     exists = nitf_TRE_setField(tre, "NUMACPO", "01", 2, &error);
@@ -166,7 +165,7 @@ TEST_CASE(iterateUnfilled)
         ++numFields;
     }
 
-    TEST_ASSERT_EQ_INT(numFields, 1);
+    TEST_ASSERT_EQ_INT(numFields, (uint32_t)1);
 
     nitf_TRECursor_cleanup(&cursor);
     nitf_TRE_destruct(&tre);
@@ -192,7 +191,7 @@ TEST_CASE(populateThenIterate)
         ++numFields;
     }
 
-    TEST_ASSERT_EQ_INT(numFields, 29);
+    TEST_ASSERT_EQ_INT(numFields, (uint32_t)29);
 
     nitf_TRECursor_cleanup(&cursor);
     nitf_TRE_destruct(&tre);
@@ -224,7 +223,7 @@ TEST_CASE(populateWhileIterating)
             nitf_TRE_setField(cursor.tre, cursor.tag_str, "2", 1, &error);
         }
     }
-    TEST_ASSERT_EQ_INT(numFields, 29);
+    TEST_ASSERT_EQ_INT(numFields, (uint32_t)29);
 
     nitf_TRECursor_cleanup(&cursor);
     nitf_TRE_destruct(&tre);

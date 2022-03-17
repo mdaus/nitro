@@ -2,6 +2,13 @@ set(MODULE_NAME nitf)
 
 coda_generate_module_config_header(${MODULE_NAME})
 
+if (BUILD_SHARED)
+    set(BUILD_SHARED_LIBS ON)
+    add_definitions(
+        -DNITF_MODULE_EXPORTS
+    )
+endif()
+
 coda_add_module(
     ${MODULE_NAME}
     DEPS nrt-c
@@ -36,6 +43,7 @@ coda_add_module(
         source/RESegment.c
         source/RESubheader.c
         source/NitfReader.c
+        source/NitfSystem.c
         source/Record.c
         source/RowSource.c
         source/SegmentReader.c
@@ -47,6 +55,7 @@ coda_add_module(
         source/TRECursor.c
         source/TREPrivateData.c
         source/TREUtils.c
+        source/TestingTest.c
         source/TextSegment.c
         source/TextSubheader.c
         source/WriteHandler.c
@@ -67,10 +76,13 @@ coda_add_tests(
         test_create.c
         test_create_nitf.c
         test_field.c
+        test_geo_utils.c
         test_image_io.c
         test_mem_source.c
+        test_moveTREs.c
         test_tre_mods.c
-        test_zero_field.c)
+        test_zero_field.c
+        )
 
 
 # Build all the TRE
@@ -98,6 +110,7 @@ set(tre_srcs  ACCHZB
               CSDIDA
               CSEPHA
               CSEXRA
+              CSEXRB
               CSPROA
               CSSFAA
               CSSHPA
@@ -110,14 +123,18 @@ set(tre_srcs  ACCHZB
               GRDPSB
               HISTOA
               ICHIPB
+              IMASDA
               IMGDTA
+              IMRFCA
               IOMAPA
               J2KLRA
               JITCID
               MAPLOB
+              MATESA
               MENSRA
               MENSRB
               MPDSRA
+              MSDIRA
               MSTGTA
               MTIRPA
               MTIRPB
@@ -136,9 +153,12 @@ set(tre_srcs  ACCHZB
               PIAPRD
               PIATGA
               PIATGB
+              PIXMTA
               PIXQLA
               PLTFMA
+              PRADAA
               PRJPSB
+              PTPRAA
               REGPTB
               RPC00B
               RPFDES

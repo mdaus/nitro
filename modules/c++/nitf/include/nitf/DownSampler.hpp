@@ -22,12 +22,15 @@
 
 #ifndef __NITF_DOWN_SAMPLER_HPP__
 #define __NITF_DOWN_SAMPLER_HPP__
+#pragma once
+
+#include <string>
 
 #include "nitf/DownSampler.h"
 #include "nitf/IOInterface.hpp"
 #include "nitf/System.hpp"
 #include "nitf/Object.hpp"
-#include <string>
+#include "nitf/exports.hpp"
 
 /*!
  *  \file DownSampler.hpp
@@ -47,7 +50,7 @@ public:
     //! Copy constructor
     DownSampler(const DownSampler & x)
     {
-        setNative(x.getNative());
+        *this = x;
     }
 
     //! Assignment Operator
@@ -65,7 +68,7 @@ public:
         getNativeOrThrow();
     }
 
-    virtual ~DownSampler(){}
+    ~DownSampler() = default;
 
     /*!
      *  Applies a sampling method while reading.
@@ -107,14 +110,14 @@ public:
                        uint32_t rowsInLastWindow,
                        uint32_t colsInLastWindow);
 
-    uint32_t getRowSkip();
+    uint32_t getRowSkip() const;
 
-    uint32_t getColSkip();
+    uint32_t getColSkip() const;
 
 protected:
 
-    DownSampler(){}
-    nitf_Error error;
+    DownSampler() = default;
+    mutable nitf_Error error{};
 };
 
 
@@ -133,9 +136,8 @@ protected:
  *  drawbacks of this type of down sampling, please refer to
  *  the NITF manual.
  */
-class PixelSkip : public DownSampler
+struct NITRO_NITFCPP_API PixelSkip : public DownSampler
 {
-public:
     /*!
      *  Constructor
      *  \param rowSkip  The number of rows to skip

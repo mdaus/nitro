@@ -22,6 +22,7 @@
 
 #ifndef __STR_CONVERT_H__
 #define __STR_CONVERT_H__
+#pragma once
 
 #include <import/except.h>
 #include <cerrno>
@@ -35,6 +36,9 @@
 #include <string>
 #include <typeinfo>
 
+#include "coda_oss/string.h"
+#include "coda_oss/optional.h"
+
 namespace str
 {
 template <typename T>
@@ -43,6 +47,8 @@ int getPrecision(const T& type);
 template <typename T>
 int getPrecision(const std::complex<T>& type);
 
+// Note that std::to_string() doesn't necessarily generate the same output as writing
+// to std::cout; see https://en.cppreference.com/w/cpp/string/basic_string/to_string
 template <typename T>
 std::string toString(const T& value)
 {
@@ -57,6 +63,21 @@ std::string toString(const uint8_t& value);
 
 template <>
 std::string toString(const int8_t& value);
+
+template <>
+inline std::string toString(const std::nullptr_t&)
+{
+    return "<nullptr>";
+}
+
+template <>
+std::string toString(const coda_oss::u8string&);
+
+template <typename T>
+std::string toString(const coda_oss::optional<T>& value)
+{
+    return toString(value.value());
+}
 
 template <typename T>
 std::string toString(const T& real, const T& imag)
@@ -215,6 +236,7 @@ T generic_cast(const std::string& value)
 {
     return str::toType<T>(value);
 }
+
 }
 
 #endif

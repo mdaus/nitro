@@ -28,7 +28,7 @@ typedef struct TestSpec
     // Image spec
     const char* imageMode;
     uint32_t bitsPerPixel;
-    char* pixels;
+    const char* pixels;
     uint64_t imageSize;
     uint32_t numBands;
 
@@ -116,7 +116,7 @@ TestState* constructTestSubheader(TestSpec* spec)
     assert(imageIO);
 
     nitf_IOInterface *io = nitf_BufferAdapter_construct(
-            spec->pixels, spec->imageSize, 0, &error);
+            (char*) spec->pixels, spec->imageSize, 0, &error);
     assert(io);
 
     nitf_SubWindow *subwindow = nitf_SubWindow_construct(&error);
@@ -158,7 +158,7 @@ void freeTestState(TestState* state)
     free(state);
 }
 
-void freeBands(uint8_t** bands, size_t numBands)
+static void freeBands(uint8_t** bands, size_t numBands)
 {
     size_t bandIndex;
     for (bandIndex = 0; bandIndex < numBands; ++bandIndex)
@@ -218,7 +218,8 @@ static NITF_BOOL doReadTest(TestSpec* spec, TestState* test)
     nitf_ImageIO_read(test->imageIO, test->interface, test->subwindow,
                       bands, &padded, &error);
 
-    void* joinedBands_ = malloc(strlen(spec->expectedRead) + 1);
+    const size_t joinedBands_sz = strlen(spec->expectedRead) + 1;
+    void* joinedBands_ = malloc(joinedBands_sz);
     char* joinedBands =
 #ifdef __cplusplus
         static_cast<char*>(joinedBands_);
@@ -227,11 +228,11 @@ static NITF_BOOL doReadTest(TestSpec* spec, TestState* test)
 #endif
     if (joinedBands)
     {
-        strcpy(joinedBands, (const char*) bands[0]);
+        nrt_strcpy_s(joinedBands, joinedBands_sz, (const char*) bands[0]);
         uint32_t bandIdx;
         for (bandIdx = 1; bandIdx < numBands; ++bandIdx)
         {
-            strcat(joinedBands, (const char*) bands[bandIdx]);
+            nrt_strcat_s(joinedBands, joinedBands_sz, (const char*) bands[bandIdx]);
         }
         if (strcmp((char *)joinedBands, spec->expectedRead) != 0)
         {
@@ -248,7 +249,7 @@ static NITF_BOOL doReadTest(TestSpec* spec, TestState* test)
     return result;
 }
 
-static NITF_BOOL roundTripTest(TestSpec* spec, TestState* test, char* pixels)
+static NITF_BOOL roundTripTest(TestSpec* spec, TestState* test, const char* pixels)
 {
     NITF_BOOL result = NITF_SUCCESS;
     nitf_Error error;
@@ -926,6 +927,9 @@ TEST_CASE(testPBlock4BytePixels)
 }
 
 TEST_MAIN(
+    (void)argc;
+    (void)argv;
+
     CHECK(testPBlockOneBand);
     CHECK(testPBlockTwoBands);
     CHECK(testPBlockOffsetBand);

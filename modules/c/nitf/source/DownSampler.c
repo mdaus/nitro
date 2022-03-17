@@ -48,6 +48,11 @@ NITFPRIV(NITF_BOOL) PixelSkip_apply(nitf_DownSampler * object,
                                     uint32_t colsInLastWindow,
                                     nitf_Error * error)
 {
+    (void)pixelType;
+    (void)rowsInLastWindow;
+    (void)colsInLastWindow;
+    (void)error;
+
     uint32_t row;            /* Current row */
     uint32_t column;         /* Current column */
     uint32_t colInc;         /* Column increment */
@@ -199,6 +204,7 @@ NITFPRIV(NITF_BOOL) PixelSkip_apply(nitf_DownSampler * object,
 
 NITFPRIV(void) PixelSkip_destruct(NITF_DATA * data)
 {
+    (void)data;
     return;                     /* There is no implementation data */
 }
 
@@ -326,7 +332,7 @@ NITFAPI(nitf_DownSampler *) nitf_PixelSkip_construct(uint32_t rowSkip,
 *  preserves order it is not necessary to do it
 */
 
-#define MAX_DOWN_SAMPLE_CMPX(type) \
+#define MAX_DOWN_SAMPLE_CMPX_(type) \
     { \
         uint32_t colSkip;     /* Column skip */ \
         uint32_t rowSkip;     /* Row skip */ \
@@ -409,8 +415,8 @@ NITFAPI(nitf_DownSampler *) nitf_PixelSkip_construct(uint32_t rowSkip,
                                 pixelReal += 2; \
                                 pixelImg += 2; \
                             } \
-                            pixelReal += 2*(colSkip - colsInLastWindow); \
-                            pixelImg += 2*(colSkip - colsInLastWindow); \
+                            pixelReal += 2*(((size_t)colSkip) - colsInLastWindow); \
+                            pixelImg += 2*(((size_t)colSkip) - colsInLastWindow); \
                         } \
                         pixelReal += winRowInc; \
                         pixelImg += winRowInc; \
@@ -426,6 +432,35 @@ NITFAPI(nitf_DownSampler *) nitf_PixelSkip_construct(uint32_t rowSkip,
         \
         return(1); \
     }
+
+static int max_down_sample_cmpx_float(nitf_DownSampler* object,
+    NITF_DATA** inputWindows,
+    NITF_DATA** outputWindows,
+    uint32_t numBands,
+    uint32_t numWindowRows,
+    uint32_t numWindowCols, uint32_t numCols,
+    uint32_t rowsInLastWindow,
+    uint32_t colsInLastWindow)
+{
+    uint32_t band;           /* Current band */
+    MAX_DOWN_SAMPLE_CMPX_(float);
+}
+static int max_down_sample_cmpx_double(nitf_DownSampler* object,
+    NITF_DATA** inputWindows,
+    NITF_DATA** outputWindows,
+    uint32_t numBands,
+    uint32_t numWindowRows,
+    uint32_t numWindowCols, uint32_t numCols,
+    uint32_t rowsInLastWindow,
+    uint32_t colsInLastWindow)
+{
+    uint32_t band;           /* Current band */
+    MAX_DOWN_SAMPLE_CMPX_(double);
+}
+#define MAX_DOWN_SAMPLE_CMPX(type) max_down_sample_cmpx_ ## type (\
+    object, inputWindows, outputWindows, numBands, numWindowRows, numWindowCols, numCols, rowsInLastWindow, colsInLastWindow)
+
+
 
 NITFPRIV(NITF_BOOL) MaxDownSample_apply(nitf_DownSampler * object,
                                         NITF_DATA ** inputWindows,
@@ -503,9 +538,9 @@ NITFPRIV(NITF_BOOL) MaxDownSample_apply(nitf_DownSampler * object,
         switch (pixelSize)
         {
             case 8:
-                MAX_DOWN_SAMPLE_CMPX(float)
+                MAX_DOWN_SAMPLE_CMPX(float);
             case 16:               /* This case may not be possible */
-                MAX_DOWN_SAMPLE_CMPX(double)
+                MAX_DOWN_SAMPLE_CMPX(double);
             default:
                 nitf_Error_init(error, "Invalid pixel type",
                                 NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
@@ -522,6 +557,7 @@ NITFPRIV(NITF_BOOL) MaxDownSample_apply(nitf_DownSampler * object,
 
 NITFPRIV(void) MaxDownSample_destruct(NITF_DATA * data)
 {
+    (void)data;
     return;                     /* There is no instance data */
 }
 
@@ -772,6 +808,7 @@ nitf_Error * error)
 
 NITFPRIV(void) SumSq2DownSample_destruct(NITF_DATA * data)
 {
+    (void)data;
     return;                     /* There is no instance data */
 }
 
@@ -1031,6 +1068,7 @@ nitf_Error * error)
 
 NITFPRIV(void) Select2DownSample_destruct(NITF_DATA * data)
 {
+    (void)data;
     return;                     /* There is no instance data */
 }
 

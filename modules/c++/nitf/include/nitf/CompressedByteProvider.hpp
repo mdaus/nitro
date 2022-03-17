@@ -28,15 +28,13 @@
 #include <utility>
 #include <memory>
 
-#include <sys/Conf.h>
+#include <nitf/coda-oss.hpp>
 #include <nitf/ByteProvider.hpp>
 #include <nitf/System.hpp>
 #include <nitf/Record.hpp>
 #include <nitf/ImageBlocker.hpp>
 #include <nitf/NITFBufferList.hpp>
 #include <nitf/ImageSegmentComputer.h>
-
-#include "cstddef.h"
 
 namespace nitf
 {
@@ -57,10 +55,8 @@ namespace nitf
  *
  * The NITF layout is described in ByteProvider.hpp
  */
-class CompressedByteProvider : public ByteProvider
+struct NITRO_NITFCPP_API CompressedByteProvider : public ByteProvider
 {
-public:
-
     /*!
      * \param record Pre-populated NITF record.  All TREs, image subheader, and
      * DES subheader information must be filled out.  Record won't be modified.
@@ -95,7 +91,7 @@ public:
      *
      * \return The associated number of bytes in the NITF
      */
-    virtual nitf::Off getNumBytes(size_t startRow, size_t numRows) const;
+    nitf::Off getNumBytes(size_t startRow, size_t numRows) const override;
 
     /*!
      * The caller provides an AOI of the pixel data.  This method provides back
@@ -137,11 +133,11 @@ public:
      * bytes for the NITF headers) and the lifetime of the passed-in image
      * data.
      */
-    virtual void getBytes(const void* imageData,
+    void getBytes(const void* imageData,
                           size_t startRow,
                           size_t numRows,
                           nitf::Off& fileOffset,
-                          NITFBufferList& buffers) const;
+                          NITFBufferList& buffers) const override;
 
 protected:
     /*!
@@ -149,7 +145,7 @@ protected:
      * this constructor, the inheriting class will call initialize() later in
      * its constructor.
      */
-    CompressedByteProvider();
+    CompressedByteProvider() = default;
 
     /*!
      * \param record Pre-populated NITF record.  All TREs, image subheader, and
@@ -161,7 +157,7 @@ protected:
      * \param numColsPerBlock The number of columns per block.  Defaults to no
      * blocking.
      */
-    void initialize(Record& record,
+    void initialize(const Record& record,
             const std::vector<std::vector<size_t> >& bytesPerBlock,
             const std::vector<PtrAndLength>& desData =
                     std::vector<PtrAndLength>(),
@@ -171,6 +167,13 @@ protected:
     size_t countBytesForCompressedImageData(
             size_t seg, size_t startRow, size_t numRowsToWrite) const;
 
+    size_t addImageData(
+            size_t seg,
+            size_t startRow,
+            size_t numRowsToWrite,
+            const sys::byte* imageData,
+            nitf::Off& fileOffset,
+            NITFBufferList& buffers) const;
     size_t addImageData(
             size_t seg,
             size_t startRow,

@@ -35,9 +35,10 @@ class RunNothing : public sys::Runnable
 private:
     size_t& counter;
     logging::ExceptionLogger* exLog;
+    bool getBacktrace;
     static sys::Mutex counterLock;
 public:
-    RunNothing(size_t& c, logging::ExceptionLogger* el) : counter(c), exLog(el) {}
+    RunNothing(size_t& c, logging::ExceptionLogger* el, bool getBacktrace=false) : counter(c), exLog(el), getBacktrace(getBacktrace) {}
 
     virtual void run()
     {
@@ -49,7 +50,10 @@ public:
             counter++;
         }
 
-        exLog->log(except::Exception("Bad run"), logging::LogLevel::LOG_ERROR);
+        if (getBacktrace)
+            exLog->log(except::Exception("Bad run").backtrace(), logging::LogLevel::LOG_ERROR);
+        else
+            exLog->log(except::Exception("Bad run"), logging::LogLevel::LOG_ERROR);
     }
 };
 
@@ -57,30 +61,82 @@ sys::Mutex RunNothing::counterLock;
 
 TEST_CASE(testExceptionLogger)
 {
-    std::auto_ptr<logging::Logger> log(new logging::Logger("test"));
+    logging::Logger log("test");
 
-    mem::SharedPtr<logging::ExceptionLogger> exLog(new logging::ExceptionLogger(log.get()));
+    logging::ExceptionLogger exLog(&log);
 
     size_t counter(0);
-    size_t numThreads(2);
+    uint16_t numThreads(2);
  
     std::vector<sys::Runnable*> runs;
    
     mt::GenerationThreadPool pool(numThreads);
     pool.start();
 
-    runs.push_back(new RunNothing(counter, exLog.get()));
+    runs.push_back(new RunNothing(counter, &exLog));
     pool.addAndWaitGroup(runs);
     runs.clear();
 
-    runs.push_back(new RunNothing(counter, exLog.get()));
+    runs.push_back(new RunNothing(counter, &exLog));
     pool.addAndWaitGroup(runs);
     runs.clear();
 
     TEST_ASSERT(counter == 1);
 }
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 4702)  // unreachable code
+#endif
+TEST_CASE(testExceptionWithBacktrace)
+{
+    const std::string getBacktrace("***** getBacktrace() *****");
+    std::string s, what;
+    try
+    {
+        throw except::Exception("Bad run");
+        TEST_FAIL("Should not get here");
+    }
+    catch (const except::Throwable& t)
+    {
+        TEST_ASSERT_EQ(t.getBacktrace().size(), static_cast<size_t>(0));
+        s = t.toString();
+        what = t.what();
+    }
+    TEST_ASSERT(!s.empty());
+    TEST_ASSERT(!what.empty());
+    TEST_ASSERT_NOT_EQ(s, what);
+    auto getBacktrace_pos = s.find(getBacktrace);
+    TEST_ASSERT_EQ(getBacktrace_pos, std::string::npos);
+    getBacktrace_pos = what.find(getBacktrace);
+    TEST_ASSERT_NOT_EQ(getBacktrace_pos, std::string::npos);
+    
+    try
+    {
+        throw except::Exception("Bad run").backtrace();
+        TEST_FAIL("Should not get here");
+    }
+    catch (const except::Throwable& t)
+    {
+        TEST_ASSERT_GREATER(t.getBacktrace().size(), 0);
+        s = t.toString(true /*includeBacktrace*/);
+        what = t.what();
+    }
+
+    TEST_ASSERT(!s.empty());
+    TEST_ASSERT(!what.empty());
+    TEST_ASSERT_EQ(s, what);
+    getBacktrace_pos = s.find(getBacktrace);
+    TEST_ASSERT_NOT_EQ(getBacktrace_pos, std::string::npos);
+    getBacktrace_pos = what.find(getBacktrace);
+    TEST_ASSERT_NOT_EQ(getBacktrace_pos, std::string::npos);
+}
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
+
 int main(int, char**)
 {
     TEST_CHECK(testExceptionLogger);
+    TEST_CHECK(testExceptionWithBacktrace);
 }
