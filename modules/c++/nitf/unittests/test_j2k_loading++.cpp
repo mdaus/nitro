@@ -333,37 +333,38 @@ TEST_CASE(test_j2k_compress_raw_image)
     const auto inputPathname = findInputFile("j2k_compressed_file1_jp2.ntf"); // This is a JP2 file, not J2K; see OpenJPEG_setup_()
     const path outputPathname = "test_j2k_compress_raw_image.sio";
     test_decompress_nitf_to_sio_(inputPathname, outputPathname);
+    // ---------------------------------------------------------------------------------------
 
     // J2K compresses the raw image data of an SIO file
-    const auto& inPathname = outputPathname;
-    //const auto& testJ2KPathname = inputPathname;
+    const auto& inPathname = outputPathname; // "input pathname to raw file or sio to compress"
+    const auto& testJ2KPathname = inputPathname; // "optional J2K file to compare compressed result to"
 
     // Read in the raw data from the input SIO
     types::RowCol<size_t> rawDims;
-    std::vector<std::byte> rawImage;
-    sio::lite::readSIO(inPathname, rawDims, rawImage);
+    std::vector<std::byte> rawImage_;
+    sio::lite::readSIO(inPathname, rawDims, rawImage_);
+    const std::span<const std::byte> rawImage(rawImage_.data(), rawImage_.size());
 
-    const types::RowCol<size_t> tileDims{ 2000, 2000 };
+    const auto& tileDims = rawDims;
     const size_t numThreads = sys::OS().getNumCPUs() - 1;
     const j2k::CompressionParameters params(rawDims, tileDims);
     const j2k::Compressor compressor(params, numThreads);
 
-    const std::span<const std::byte> rawImage_(rawImage.data(), rawImage.size() * sizeof(rawImage[0]));
-    std::vector<std::byte> compressedImage;
+    std::vector<std::byte> compressedImage_;
     std::vector<size_t> bytesPerBlock;
-    compressor.compress(rawImage_, compressedImage, bytesPerBlock);
+    compressor.compress(rawImage, compressedImage_, bytesPerBlock);
+    const std::span<const std::byte> compressedImage(compressedImage_.data(), compressedImage_.size());
 
-    size_t sumCompressedBytes = 0;
-    sumCompressedBytes = std::accumulate(bytesPerBlock.begin(), bytesPerBlock.end(), sumCompressedBytes);
+    const auto sumCompressedBytes = std::accumulate(bytesPerBlock.begin(), bytesPerBlock.end(), gsl::narrow<size_t>(0));
     TEST_ASSERT_EQ(sumCompressedBytes, compressedImage.size()); // "Size of compressed image does not match sum of bytes per block"
 
     const auto compressedPathname = "compressed_" + std::to_string(tileDims.row) + "x" + std::to_string(tileDims.col) + ".j2k";
     ::io::FileOutputStream os(compressedPathname);
-    os.write(std::span<const std::byte>(compressedImage.data(), compressedImage.size()));
+    os.write(compressedImage);
 
-    //std::vector<std::byte> j2kData;
-    //io::readFileContents(testJ2KPathname, j2kData);
-    //TEST_ASSERT_EQ(compressedImage.size(), j2kData.size());
+    std::vector<std::byte> j2kData;
+    io::readFileContents(testJ2KPathname, j2kData);
+    //TEST_ASSERT_EQ((compressedImage.size(), j2kData.size());
     //for (size_t ii = 0; ii < compressedImage.size(); ++ii)
     //{
     //  //TEST_ASSERT_EQ(j2kData[ii], compressedImage[ii]);
