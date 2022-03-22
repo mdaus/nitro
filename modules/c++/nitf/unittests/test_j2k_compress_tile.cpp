@@ -63,8 +63,7 @@ static void generateTestImage(Image& image)
 
 static void compressEntireImage(const j2k::Compressor& compressor,
     const Image& inputImage,
-    std::vector<std::byte>& outputImage,
-    size_t numThreads)
+    std::vector<std::byte>& outputImage)
 {
     std::vector<size_t> bytesPerBlock;
     const std::span<const std::byte> pixels(inputImage.pixels.data(), inputImage.pixels.size());
@@ -119,14 +118,111 @@ static void compressTileSubrange(const j2k::Compressor& compressor,
     }
 }
 
+static void compressByTile(const j2k::Compressor& compressor,
+    const j2k::CompressionParameters& params,
+    const Image& inputImage,
+    std::vector<std::byte>& outputImage)
+{
+    const auto tileDims = params.getTileDims();
+    const types::RowCol<size_t> numTiles(params.getNumRowsOfTiles(), params.getNumColsOfTiles());
+
+    outputImage.resize(compressor.getMaxBytesRequiredToCompress());
+
+    // Compress and write a block/tile at a time
+    size_t bytesWritten = 0;
+
+    for (size_t blockRow = 0, blockNum = 0; blockRow < numTiles.row; ++blockRow)
+    {
+        for (size_t blockCol = 0; blockCol < numTiles.col; ++blockCol, ++blockNum)
+        {
+            const auto offset = blockRow * tileDims.row * inputImage.dims.col + blockCol * tileDims.col;
+            const std::span<const std::byte> uncompressed(inputImage.pixels.data() + offset, inputImage.pixels.size() - offset);
+            const std::span<std::byte> compressedTile(&outputImage[bytesWritten], outputImage.size() - bytesWritten);
+
+            compressor.compressTile(uncompressed, blockNum, compressedTile);
+            bytesWritten += compressedTile.size();
+        }
+    }
+
+    outputImage.resize(bytesWritten);
+}
+
+static bool equals(const std::vector<std::byte>& lhs, const std::vector<std::byte>& rhs)
+{
+    if (lhs == rhs)
+    {
+        return true;
+    }
+
+    if (lhs.size() != rhs.size())
+    {
+        std::cerr << "Image sizes do not match: " << lhs.size() << " vs. " << rhs.size() << "\n";
+        return false;
+    }
+
+    for (size_t ii = 0; ii < lhs.size(); ++ii)
+    {
+        if (lhs[ii] != rhs[ii])
+        {
+            std::cerr << "Data mismatch from index: " << ii << "\n";
+            for (size_t errorIndex = ii; errorIndex < ii + 15; ++errorIndex)
+            {
+                if (errorIndex >= lhs.size())
+                {
+                    break;
+                }
+                std::cerr << errorIndex << ": " << 
+                    static_cast<int>(lhs[errorIndex]) << " vs. " <<
+                    static_cast<int>(rhs[errorIndex]) << "\n";
+            }
+            break;
+        }
+    }
+    return false;
+}
+
 TEST_CASE(unittest_compress_tile)
 {
-    /* placeholder */
+    const size_t numThreads = sys::OS().getNumCPUs() - 1;
+
+    Image source;
+    generateTestImage(source);
+
+    for (size_t tilesPerDim = 1; tilesPerDim <= 5; ++tilesPerDim)
+    {
+        std::vector<std::byte> imageCompressedWhole;
+        std::vector<std::byte> imageCompressedByTile;
+
+        const types::RowCol<size_t> tileDims(source.dims.row / tilesPerDim, source.dims.col / tilesPerDim);
+        const j2k::CompressionParameters params(source.dims, tileDims, 1, 2);
+        j2k::Compressor compressor(params, numThreads);
+
+        compressEntireImage(compressor, source, imageCompressedWhole);
+        compressByTile(compressor, params, source, imageCompressedByTile);
+
+        //TEST_ASSERT(equals(imageCompressedWhole, imageCompressedByTile));
+    }
+
+    for (size_t numSubsets = 1; numSubsets <= 5; ++numSubsets)
+    {
+        std::vector<std::byte> imageCompressedWhole;
+        std::vector<std::byte> imageCompressedBySubset;
+        constexpr size_t TILES_PER_DIM = 10;
+
+        const types::RowCol<size_t> tileDims(source.dims.row / TILES_PER_DIM, source.dims.col / TILES_PER_DIM);
+        const j2k::CompressionParameters params(source.dims, tileDims, 1, 2);
+        const j2k::Compressor compressor(params, numThreads);
+
+        compressEntireImage(compressor, source, imageCompressedWhole);
+        compressTileSubrange(compressor, params, source, numSubsets, imageCompressedBySubset);
+
+        //TEST_ASSERT(equals(imageCompressedWhole, imageCompressedBySubset));
+    }
 }
 
 TEST_MAIN(
     (void)argc;
     (void)argv;
-    TEST_CHECK(unittest_compress_tile);
+    //TEST_CHECK(unittest_compress_tile);
     )
 
