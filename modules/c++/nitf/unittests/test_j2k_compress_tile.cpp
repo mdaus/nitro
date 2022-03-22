@@ -181,7 +181,7 @@ static bool equals(const std::vector<std::byte>& lhs, const std::vector<std::byt
     return false;
 }
 
-TEST_CASE(unittest_compress_tile)
+TEST_CASE(j2k_compress_tile)
 {
     const size_t numThreads = sys::OS().getNumCPUs() - 1;
 
@@ -223,6 +223,6 @@ TEST_CASE(unittest_compress_tile)
 TEST_MAIN(
     (void)argc;
     (void)argv;
-    //TEST_CHECK(unittest_compress_tile);
+    //TEST_CHECK(j2k_compress_tile);
     )
 
