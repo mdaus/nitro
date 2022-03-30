@@ -56,8 +56,11 @@ namespace j2k
         WriterOptions& operator=(WriterOptions&&) = default;
         ~WriterOptions() = default;
 
-        double getCcompressionRatio() const noexcept { return value_.compressionRatio; }
+        double getCompressionRatio() const noexcept { return value_.compressionRatio; }
         uint32_t getNumResolutions() const noexcept { return value_.numResolutions; }
+
+        void setCompressionRatio(double compRatio) { value_.compressionRatio = compRatio; }
+        void setNumResolutions(uint32_t numResoltuions) { value_.numResolutions = numResoltuions;  }
 
         // for use when calling C code
         j2k_WriterOptions* getNative() const noexcept
