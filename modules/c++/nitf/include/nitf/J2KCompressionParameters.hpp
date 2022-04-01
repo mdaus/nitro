@@ -32,8 +32,8 @@ class CompressionParameters final
 {
     const types::RowCol<size_t> mRawImageDims;
     const types::RowCol<size_t> mTileDims;
-    const double mCompressionRatio;
-    const size_t mNumResolutions;
+    const double mCompressionRatio = 1.0;
+    const size_t mNumResolutions = 6;
     const size_t mNumRowsOfTiles;     //! Number of rows of tiles (rounded up if a partial tile is present).
     const size_t mNumColsOfTiles;     //! Number of columns of tiles (rounded up if a partial tile is present).
     const size_t mNumTiles;     //! Total number of tiles (includes partial tiles).
