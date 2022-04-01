@@ -668,24 +668,32 @@ J2KPRIV( NRT_BOOL) OpenJPEG_initImage_(OpenJPEGWriterImpl *impl,
     /* TODO allow overrides somehow? */
     opj_set_default_encoder_parameters(&encoderParams);
 
-    /* For now we are enforcing lossless compression.  If we have a better
-     * way to allow overrides in the future, uncomment out the tcp_rates logic
-     * below (tcp_rates[0] == 0 via opj_set_default_encoder_parameters()).
+    /* TODO:
      * Also consider setting encoderParams.irreversible = 1; to use the
      * lossy DWT 9-7 instead of the reversible 5-3.
      */
-
-    /*if (writerOps && writerOps->compressionRatio > 0.0001)
-        encoderParams.tcp_rates[0] = 1.0 / writerOps->compressionRatio;
+    if (writerOps && writerOps->compressionRatio <= 1.0) // Compression Ratio 1:1
+    {
+        encoderParams.tcp_rates[0] = 0.0; // lossless
+        /* TODO: These two lines should not be necessary when using lossless
+         *       encoding but appear to be needed (at least in OpenJPEG 2.0) -
+         *       otherwise we get a seg fault.
+         *       The sample opj_compress.c is doing the same thing with a comment
+         *       indicating that it's a bug. */
+        ++encoderParams.tcp_numlayers;
+        encoderParams.cp_disto_alloc = 1;
+    }
+    else if (writerOps && writerOps->compressionRatio)
+    {
+        // Compression ratio is writerOps->compressionRatio : 1
+        encoderParams.tcp_rates[0] = writerOps->compressionRatio;
+    }
     else
+    {
+        // High quality, but not lossless
         encoderParams.tcp_rates[0] = 4.0;
-    */
+    }
 
-    /* TODO: These two lines should not be necessary when using lossless
-     *       encoding but appear to be needed (at least in OpenJPEG 2.0) -
-     *       otherwise we get a seg fault.
-     *       The sample opj_compress.c is doing the same thing with a comment
-     *       indicating that it's a bug. */
     ++encoderParams.tcp_numlayers;
     encoderParams.cp_disto_alloc = 1;
 
