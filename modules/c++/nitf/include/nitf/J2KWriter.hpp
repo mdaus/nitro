@@ -48,7 +48,7 @@ namespace j2k
         // make this look like CompressionParameters since that's existing code
         WriterOptions() = default;
         WriterOptions(const j2k_WriterOptions& v) noexcept : value_(v) {}
-        WriterOptions(double compressionRatio, uint32_t numResolutions) noexcept :
+        WriterOptions(float compressionRatio, uint32_t numResolutions) noexcept :
             WriterOptions(j2k_WriterOptions{ compressionRatio , numResolutions }) {}
         WriterOptions(const WriterOptions&) = default;
         WriterOptions& operator=(const WriterOptions&) = default;
@@ -56,10 +56,10 @@ namespace j2k
         WriterOptions& operator=(WriterOptions&&) = default;
         ~WriterOptions() = default;
 
-        double getCompressionRatio() const noexcept { return value_.compressionRatio; }
+        float getCompressionRatio() const noexcept { return value_.compressionRatio; }
         uint32_t getNumResolutions() const noexcept { return value_.numResolutions; }
 
-        void setCompressionRatio(double compRatio) { value_.compressionRatio = compRatio; }
+        void setCompressionRatio(float compRatio) { value_.compressionRatio = compRatio; }
         void setNumResolutions(uint32_t numResoltuions) { value_.numResolutions = numResoltuions;  }
 
         // for use when calling C code
