@@ -126,6 +126,7 @@ NITFPRIV(nitf_CompressionControl*) implOpen(nitf_ImageSubheader *subheader,
     int imageType;
     J2K_BOOL isSigned = 0;
     uint32_t idx;
+    j2k_Component** components = NULL;
 
     /* reset the options */
     memset(&options, 0, sizeof(j2k_WriterOptions));
@@ -288,7 +289,7 @@ NITFPRIV(nitf_CompressionControl*) implOpen(nitf_ImageSubheader *subheader,
     implControl->comratField = subheader->NITF_COMRAT;
 
     /* initialize the container */
-    j2k_Component** components = (j2k_Component**)J2K_MALLOC(
+    components = (j2k_Component**)J2K_MALLOC(
         sizeof(j2k_Component*) * nBands);
     if (!components)
     {

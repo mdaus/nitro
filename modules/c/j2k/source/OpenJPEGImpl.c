@@ -1022,11 +1022,16 @@ OpenJPEGReader_readRegion(J2K_USER_DATA *data, uint32_t x0, uint32_t y0,
 {
     OpenJPEGReaderImpl *impl = (OpenJPEGReaderImpl*) data;
 
-    opj_stream_t *stream = NULL;
-    opj_image_t *image = NULL;
-    opj_codec_t *codec = NULL;
+    opj_stream_t* stream = NULL;
+    opj_image_t* image = NULL;
+    opj_codec_t* codec = NULL;
     uint64_t offset = 0;
     uint32_t componentBytes, nComponents;
+    uint64_t bufSize = 0;
+    uint64_t tile_width = 0;
+    uint64_t tile_height = 0;
+    uint64_t x_tiles = 0;
+    uint64_t y_tiles = 0;
 
     if (!OpenJPEG_setup(impl, &stream, &codec, error))
     {
@@ -1057,11 +1062,11 @@ OpenJPEGReader_readRegion(J2K_USER_DATA *data, uint32_t x0, uint32_t y0,
 
     // The buffer size must account for the remainder of the tile height and width
     // given that opj_decode_tile_data have a memory access violation otherwise
-    const uint64_t tile_width = j2k_Container_getWidth(impl->container, error);
-    const uint64_t tile_height = j2k_Container_getHeight(impl->container, error);
-    const uint64_t x_tiles = (x1 - x0) % tile_width + (x1 - x0);
-    const uint64_t y_tiles = (y1 - y0) % tile_height + (y1 - y0);
-    uint64_t bufSize = x_tiles * y_tiles * componentBytes * nComponents;
+    tile_width = j2k_Container_getWidth(impl->container, error);
+    tile_height = j2k_Container_getHeight(impl->container, error);
+    x_tiles = (x1 - x0) % tile_width + (x1 - x0);
+    y_tiles = (y1 - y0) % tile_height + (y1 - y0);
+    bufSize = x_tiles * y_tiles * componentBytes * nComponents;
 
     if (buf && !*buf)
     {
@@ -1543,7 +1548,7 @@ J2KAPI(j2k_image_t*) j2k_image_tile_create(uint32_t numcmpts, const j2k_image_co
         cmptparms_.bpp = cmptparms->bpp;
         cmptparms_.sgnd = cmptparms->sgnd;
 
-        retval->opj_image = opj_image_tile_create(numcmpts, &cmptparms_, clrspc);
+        retval->opj_image = opj_image_tile_create(numcmpts, &cmptparms_, (OPJ_COLOR_SPACE)clrspc);
         if (retval->opj_image == NULL)
         {
             J2K_FREE(retval);
@@ -1572,7 +1577,7 @@ J2KAPI(J2K_BOOL) j2k_image_init(j2k_image_t* pImage, int x0, int y0, int x1, int
     pImage_->y0 = y0;
     pImage_->x1 = x1;
     pImage_->y1 = y1;
-    pImage_->color_space = color_space;
+    pImage_->color_space = (OPJ_COLOR_SPACE)color_space;
 
     return J2K_TRUE;
 }
@@ -1745,7 +1750,7 @@ J2KAPI(void) j2k_stream_set_seek_function(j2k_stream_t* p_stream, j2k_stream_see
 {
     if (p_stream != NULL)
     {
-        opj_stream_set_seek_function((opj_stream_t*)p_stream->opj_stream, p_function);
+        opj_stream_set_seek_function((opj_stream_t*)p_stream->opj_stream, (opj_stream_seek_fn)p_function);
     }
 }
 
@@ -1753,7 +1758,7 @@ J2KAPI(void) j2k_stream_set_user_data(j2k_stream_t* p_stream, void* p_data, j2k_
 {
     if (p_stream != NULL)
     {
-        opj_stream_set_user_data((opj_stream_t*)p_stream->opj_stream, p_data, p_function);
+        opj_stream_set_user_data((opj_stream_t*)p_stream->opj_stream, p_data, (opj_stream_free_user_data_fn)p_function);
     }
 }
 

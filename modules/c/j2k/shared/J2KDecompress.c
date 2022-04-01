@@ -56,7 +56,7 @@ static const char *ident[] =
 
 static nitf_DecompressionInterface interfaceTable =
 {
-    implOpen, implStart, implReadBlock, implFreeBlock, implClose, NULL
+    implOpen, implStart, implReadBlock, (NITF_DECOMPRESSION_INTERFACE_FREE_BLOCK_FUNCTION)implFreeBlock, implClose, NULL
 };
 
 typedef struct _ImplControl
