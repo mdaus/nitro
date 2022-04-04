@@ -24,8 +24,10 @@
 #include <vector>
 
 #include <str/Manip.h>
+#include <sys/OS.h>
 
 #include <nitf/TRE.hpp>
+#include <nitf/UnitTests.hpp>
 
 #include "TestCase.h"
 
@@ -157,6 +159,8 @@ struct /*namespace*/ TREs
 
 TEST_CASE(setFields)
 {
+    sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
+
     // create an ACFTA TRE
     nitf::TRE tre("ACFTA");
 
@@ -176,6 +180,8 @@ TEST_CASE(setFields)
 
 TEST_CASE(setBinaryFields)
 {
+    sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
+
     nitf::TRE tre("RPFHDR");
     const int value = 123;
     tre.setField("LOCSEC", value);
@@ -187,6 +193,8 @@ TEST_CASE(setBinaryFields)
 
 TEST_CASE(cloneTRE)
 {
+    sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
+
     nitf::TRE tre("JITCID");
     tre.setField("FILCMT", "fyi");
 
@@ -200,6 +208,8 @@ TEST_CASE(cloneTRE)
 
 TEST_CASE(basicIteration)
 {
+    sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
+
     nitf::TRE tre("ACCPOB");
 
     // The entire TRE is one loop, and we haven't told it
@@ -227,6 +237,8 @@ TEST_CASE(basicIteration)
 
 TEST_CASE(use_ENGRDA)
 {
+    sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
+
     nitf::TRE engrda("ENGRDA", "ENGRDA");
 
     engrda.setField("RESRC", "HSS");
@@ -249,6 +261,8 @@ TEST_CASE(use_ENGRDA)
 
 TEST_CASE(use_ENGRDA_typed_fields)
 {
+    sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
+
     nitf::TRE engrda("ENGRDA", "ENGRDA");
 
     nitf::TREField_BCS_A<20> RESRC(engrda, "RESRC");
@@ -281,6 +295,8 @@ TEST_CASE(use_ENGRDA_typed_fields)
 
 TEST_CASE(use_typed_ENGRDA)
 {
+    sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
+
     TREs::ENGRDA engrda; // nitf::TRE engrda("ENGRDA", "ENGRDA");
 
     engrda.RESRC = "HSS"; // engrda.setField("RESRC", "HSS");
@@ -329,6 +345,8 @@ TEST_CASE(use_typed_ENGRDA)
 
 TEST_CASE(populateWhileIterating)
 {
+    sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
+
     nitf::TRE tre("ACCPOB");
     size_t numFields = 0;
     for (auto it = tre.begin(); it != tre.end(); ++it)
@@ -353,6 +371,8 @@ TEST_CASE(populateWhileIterating)
 
 TEST_CASE(overflowingNumericFields)
 {
+    sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
+
     nitf::TRE tre("CSCRNA");
 
     // This field has a length of 9, so check that it's properly
