@@ -66,8 +66,9 @@ struct FileWriter
         mStream.reset(stream);
     }
 
-    FileWriter(const FileWriter&) = delete;
-    FileWriter& operator=(const FileWriter&) = delete;
+    // need copy for Python binding w/SWIG
+    FileWriter(const FileWriter&) = default;
+    FileWriter& operator=(const FileWriter&) = default;
     FileWriter(FileWriter&&) = default;
     FileWriter& operator=(FileWriter&&) = default;
 
