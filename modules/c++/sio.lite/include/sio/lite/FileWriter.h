@@ -67,10 +67,10 @@ struct FileWriter
     }
 
     // need copy for Python binding w/SWIG
-    FileWriter(const FileWriter&) = default;
-    FileWriter& operator=(const FileWriter&) = default;
-    FileWriter(FileWriter&&) = default;
-    FileWriter& operator=(FileWriter&&) = default;
+    //FileWriter(const FileWriter&) = default;
+    //FileWriter& operator=(const FileWriter&) = default;
+    //FileWriter(FileWriter&&) = default;
+    //FileWriter& operator=(FileWriter&&) = default;
 
     virtual ~FileWriter()
     {
