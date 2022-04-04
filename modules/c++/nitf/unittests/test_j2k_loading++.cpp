@@ -286,10 +286,10 @@ TEST_CASE(test_j2k_nitf_read_region)
 static std::vector<std::byte> readImage(nitf::ImageReader& imageReader, const nitf::ImageSubheader& imageSubheader)
 {
     const auto numBlocks = imageSubheader.numBlocksPerRow() * imageSubheader.numBlocksPerCol();
-    TEST_ASSERT_GREATER(numBlocks, 0);
+    TEST_ASSERT_GREATER(numBlocks, static_cast<size_t>(0));
 
     const auto imageLength = imageSubheader.getNumBytesOfImageData();
-    TEST_ASSERT_GREATER(imageLength, 0);
+    TEST_ASSERT_GREATER(imageLength, static_cast<size_t>(0));
 
     // This assumes vertical blocking.
     // Interleaving would be required for horizontal blocks
