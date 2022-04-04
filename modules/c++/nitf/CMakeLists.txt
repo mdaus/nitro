@@ -109,6 +109,7 @@ coda_add_tests(
         test_tre_create++.cpp
         test_j2k_loading++.cpp
         test_j2k_read_tile.cpp
+        test_j2k_compress_tile.cpp
         test_tre_read.cpp)
 
 add_executable(show_nitf++ apps/show_nitf++.cpp)
