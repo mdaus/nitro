@@ -297,6 +297,10 @@ NRTAPI(nrt_ListIterator) nrt_List_at(const nrt_List * chain, int i)
 
     return list_iterator;
 }
+NRTAPI(nrt_ListIterator) nrt_List_atui(const nrt_List* chain, uint32_t i)
+{
+    return nrt_List_at(chain, (int)i);
+}
 
 NRTAPI(NRT_BOOL) nrt_ListIterator_equals(const nrt_ListIterator * it1,
                                          const nrt_ListIterator * it2)
@@ -506,4 +510,8 @@ NRTAPI(NRT_DATA *) nrt_List_get(nrt_List * list, int index, nrt_Error * error)
                        NRT_ERR_INVALID_OBJECT);
         return NULL;
     }
+}
+NRTAPI(NRT_DATA*) nrt_List_getui(nrt_List* list, uint32_t index, nrt_Error* error)
+{
+    return nrt_List_get(list, (int)index, error);
 }
