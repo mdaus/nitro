@@ -378,10 +378,10 @@ NRTAPI(NRT_BOOL) nrt_List_move(nrt_List * chain, uint32_t oldIndex,
     newIndex = newIndex > listSize ? listSize : newIndex;
 
     /* first, remove the data from the list */
-    iter = nrt_List_at(chain, oldIndex);
+    iter = nrt_List_at(chain, (int)oldIndex);
     data = nrt_List_remove(chain, &iter);
     /* next, insert it at the new location */
-    iter = nrt_List_at(chain, newIndex);
+    iter = nrt_List_at(chain, (int)newIndex);
     return nrt_List_insert(chain, iter, data, error);
 }
 
