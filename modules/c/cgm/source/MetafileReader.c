@@ -164,10 +164,11 @@ NITFPRIV(cgm_Rectangle*) readRectangle(char* b, int len, nitf_Error* error)
 {
     (void)len;
 
-    short x1, x2, y1, y2;
     cgm_Rectangle* rectangle = cgm_Rectangle_construct(error);
     if (!rectangle)
         return NULL;
+
+    uint16_t x1, x2, y1, y2;
 
     memcpy(&x1, &b[0], 2);
     rectangle->x1 = (short) NITF_NTOHS(x1);
@@ -185,11 +186,11 @@ NITFPRIV(cgm_Rectangle*) readRectangle(char* b, int len, nitf_Error* error)
 
 NITFPRIV(cgm_Vertex*) readVertex(char* b, nitf_Error* error)
 {
-    short s;
     cgm_Vertex* v = cgm_Vertex_construct(-1, -1, error);
     if (!v)
         return NULL;
     
+    uint16_t s;
     memcpy(&s, &b[0], 2);
     v->x = (short)NITF_NTOHS(s);
     memcpy(&s, &b[2], 2);
@@ -201,9 +202,9 @@ NITFPRIV(cgm_Vertex*) readVertex(char* b, nitf_Error* error)
 NITFPRIV(cgm_VertexClose*) readVertexClose(char* b, nitf_Error* error)
 {
     cgm_VertexClose* v = cgm_VertexClose_construct(error);
-    short s;
     if (!v) return NULL;
 
+    uint16_t s;
     memcpy(&s, &b[0], 2);
     v->x = (short)NITF_NTOHS(s);
     memcpy(&s, &b[2], 2);
@@ -241,9 +242,9 @@ NITFPRIV(NITF_BOOL) readVertices(char* b,
 
 NITFPRIV(short) readShort(char* b)
 {
-    short s;
+    uint16_t s;
     memcpy(&s, b, 2);
-    return NITF_NTOHS(s);
+    return (short) NITF_NTOHS(s);
 }
 
 NITFPRIV(char*) readString(char* b, int length)
@@ -251,11 +252,11 @@ NITFPRIV(char*) readString(char* b, int length)
     char* str = NULL;
     if (length > 0)
     {
-        str = (char*)NITF_MALLOC(length + 1);
+        str = (char*)NITF_MALLOC((size_t)length + 1);
         if (str != NULL)
         {
             str[length] = 0;
-            memcpy(str, b, length);
+            memcpy(str, b, (size_t)length);
         }
     }
     return str;
@@ -449,11 +450,11 @@ NITF_BOOL fontList(cgm_Metafile* mf, cgm_ParseContext* pc, int classType,
         int slen = 0x000000FF & bu;
         assert(i <= len);
 
-        p = (char*)NITF_MALLOC(slen + 1);
+        p = (char*)NITF_MALLOC((size_t)slen + 1);
         if (p != NULL)
         {
             p[slen] = 0;
-            memcpy(p, &b[++i], slen);
+            memcpy(p, &b[++i], (size_t)slen);
         }
         total += slen + 1;
 
