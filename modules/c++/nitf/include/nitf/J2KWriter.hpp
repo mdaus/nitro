@@ -33,6 +33,7 @@
 #include "j2k/j2k_Writer.h"
 
 #include "nitf/coda-oss.hpp"
+#include "nitf/exports.hpp"
 #include "nitf/Object.hpp"
 #include "nitf/System.hpp"
 #include "nitf/NITFException.hpp"
@@ -41,7 +42,7 @@
 namespace j2k
 {
     // Our own wrapper class so we can initialize j2k_WriterOptions
-    class WriterOptions final
+    class NITRO_NITFCPP_API WriterOptions final
     {
         j2k_WriterOptions value_{};
     public:
@@ -59,8 +60,8 @@ namespace j2k
         float getCompressionRatio() const noexcept { return value_.compressionRatio; }
         uint32_t getNumResolutions() const noexcept { return value_.numResolutions; }
 
-        void setCompressionRatio(float compRatio) { value_.compressionRatio = compRatio; }
-        void setNumResolutions(uint32_t numResoltuions) { value_.numResolutions = numResoltuions;  }
+        void setCompressionRatio(float compRatio) noexcept { value_.compressionRatio = compRatio; }
+        void setNumResolutions(uint32_t numResoltuions) noexcept { value_.numResolutions = numResoltuions;  }
 
         // for use when calling C code
         j2k_WriterOptions* getNative() const noexcept
@@ -109,7 +110,7 @@ public:
 };
 }
 struct Container; // forward
-struct Writer final
+struct NITRO_NITFCPP_API Writer final
 {
     Writer() = delete;
     Writer(const Writer&) = delete;
@@ -132,7 +133,7 @@ private:
 };
 
 // Encapsulate some messy code that's needed to call Writer::setTile()
-struct WriteTiler final
+struct NITRO_NITFCPP_API WriteTiler final
 {
     WriteTiler(Writer&, std::span<const uint8_t>);
     WriteTiler(const WriteTiler&) = delete;

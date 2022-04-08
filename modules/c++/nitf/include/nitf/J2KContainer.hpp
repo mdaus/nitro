@@ -30,6 +30,7 @@
 #include "j2k/Container.h"
 #include "j2k/Writer.h"
 
+#include "nitf/exports.hpp"
 #include "nitf/Object.hpp"
 #include "nitf/System.hpp"
 #include "nitf/NITFException.hpp"
@@ -71,7 +72,7 @@ public:
     Container(j2k_Container*);
 };
 }
-struct Container final
+struct NITRO_NITFCPP_API Container final
 {
     Container(const Container&) = delete;
     Container& operator=(const Container&) = delete;

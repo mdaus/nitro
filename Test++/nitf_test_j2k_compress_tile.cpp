@@ -4,7 +4,7 @@
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-TEST_CLASS(test_j2k_read_tile) {
+TEST_CLASS(test_j2k_compress_tile) {
 public:
 
 #define TEST_CASE(X) TEST_METHOD(X)

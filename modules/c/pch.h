@@ -40,4 +40,9 @@
 #pragma warning(disable: 4514) // '...' : unreferenced inline function has been removed
 #pragma warning(disable: 5039) // '...': pointer or reference to potentially throwing function passed to '...' function under -EHc. Undefined behavior may occur if this function throws an exception.
 
+#pragma comment(lib, "Ws2_32")
+
+#pragma comment(lib, "jpeg")
+
 #define OPJ_STATIC
+#pragma comment(lib, "openjpeg")
