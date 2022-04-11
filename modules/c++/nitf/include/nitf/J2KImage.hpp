@@ -29,13 +29,15 @@
 
 #include <j2k/TileWriter.h>
 
+#include "nitf/exports.hpp"
+
 namespace j2k
 {
     /*!
      * \class OPJImage
      * \desc RAII wrapper around j2k_image_t.
      */
-    class Image final
+    class NITRO_NITFCPP_API Image final
     {
         //! The openjpeg image.
         j2k_image_t* mImage = nullptr;

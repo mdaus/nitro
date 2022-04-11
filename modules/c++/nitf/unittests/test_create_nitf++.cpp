@@ -308,8 +308,12 @@ static void test_create_nitf__writeNITF(nitf::Record& record, const std::string&
     /* make one bandSource per band */
     for (int ii = 0; ii < NUM_BANDS; ++ii)
     {
-        const std::span<const uint8_t> image(NITRO_IMAGE.data, static_cast<size_t>(NITRO_IMAGE.width) * NITRO_IMAGE.height);
-        nitf::BandSource bandSource = nitf::MemorySource(image, ii, 2);
+        const void* data_ = NITRO_IMAGE.data;
+        const std::span<const std::byte> image(static_cast<const std::byte*>(data_), static_cast<size_t>(NITRO_IMAGE.width) * NITRO_IMAGE.height);
+        const nitf::Off start = ii;
+        const int numBytesPerPixel = sizeof(image[0]);
+        const int pixelSkip = 2;
+        nitf::BandSource bandSource = nitf::MemorySource(image.data(), image.size(), start, numBytesPerPixel, pixelSkip);
         imageSource.addBand(bandSource);
     }
 

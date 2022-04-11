@@ -32,6 +32,7 @@
 
 #include "j2k/TileWriter.h"
 
+#include "nitf/exports.hpp"
 #include "nitf/J2KImage.hpp"
 #include "nitf/J2KCompressionParameters.hpp"
 
@@ -41,7 +42,7 @@ namespace j2k
      * \class OPJEncoder
      * \desc RAII wrapper around opj_codec_t.
      */
-    class Encoder final
+    class NITRO_NITFCPP_API Encoder final
     {
         struct Impl;
         std::unique_ptr<Impl> pImpl_;
@@ -57,8 +58,8 @@ namespace j2k
         Encoder(Image& image, const CompressionParameters& compressionParams);
         Encoder(const Encoder&) = delete;
         Encoder& operator=(const Encoder&) = delete;
-        Encoder(Encoder&&) = default;
-        Encoder& operator=(Encoder&&) = default;
+        Encoder(Encoder&&) = delete;
+        Encoder& operator=(Encoder&&) = delete;
         ~Encoder();
 
         /*!

@@ -35,6 +35,7 @@
 #include <types/Range.h>
 #include <gsl/gsl.h>
 
+#include "nitf/exports.hpp"
 #include "nitf/J2KCompressionParameters.hpp"
 
 namespace j2k
@@ -46,7 +47,7 @@ namespace j2k
      * compressed independently) and with NITF file format expectations (a
      * J2K tile == a NITF block)
      */
-    class Compressor final
+    class NITRO_NITFCPP_API Compressor final
     {
         CompressionParameters mCompressionParams;
         size_t mNumThreads = 1;
