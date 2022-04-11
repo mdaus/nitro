@@ -56,11 +56,13 @@
 #include <nitf/TREField.hpp>
 #include <nitf/FieldDescriptor.hpp>
 #include <nitf/TestingTest.hpp>
+#include <nitf/ImageWriter.hpp>
 #include <nitf/J2KComponent.hpp>
 #include <nitf/J2KContainer.hpp>
 #include <nitf/J2KReader.hpp>
 #include <nitf/J2KWriter.hpp>
 #include <nitf/J2KCompressor.hpp>
+#include <nitf/IOStreamWriter.hpp>
 
 #include "nitf_Test.h"
 #include "Test.h"
