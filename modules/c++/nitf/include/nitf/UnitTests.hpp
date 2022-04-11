@@ -27,13 +27,15 @@
 #include <string>
 #include <std/filesystem>
 
+#include "nitf/exports.hpp"
+
 namespace nitf
 {
 	namespace Test
 	{
-		std::string buildPluginsDir();
-		std::filesystem::path buildFileDir(const std::filesystem::path& relativePath);
-		std::filesystem::path findInputFile(const std::filesystem::path&);
+		NITRO_NITFCPP_API std::string buildPluginsDir();
+		NITRO_NITFCPP_API std::filesystem::path buildFileDir(const std::filesystem::path& relativePath);
+		NITRO_NITFCPP_API std::filesystem::path findInputFile(const std::filesystem::path&);
 	}
 }
 
