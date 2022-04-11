@@ -38,6 +38,7 @@
 #include <import/nrt.h>
 #include <nitf/ImageBlocker.hpp>
 #include <nitf/J2KCompressor.hpp>
+#include <nitf/UnitTests.hpp>
 
 #include "TestCase.h"
 
@@ -97,18 +98,16 @@ static void compressTileSubrange(const j2k::Compressor& compressor,
         std::vector<size_t> compressedBytesPerBlock;
 
         const auto offset = (tileRow * tileDims.row) * inputImage.dims.col;
-        const std::span<const std::byte> uncompressed(inputImage.pixels.data() + offset, inputImage.pixels.size() - offset);
+        const auto& pixels = inputImage.pixels;
+        const std::span<const std::byte> uncompressed(pixels.data() + offset, pixels.size() - offset);
 
-        compressor.compressTileSubrange(
-            uncompressed,
-            types::Range(tileRow * numTiles.col, subsetNumTiles),
-            compressedTiles,
-            compressedBytesPerBlock);
-        numBytesCompressed[subset] = compressedTiles.size();
+        const auto result = compressor.compressTileSubrange(
+            uncompressed, types::Range(tileRow * numTiles.col, subsetNumTiles),
+            compressedTiles, compressedBytesPerBlock);
+        numBytesCompressed[subset] = result.size();
     }
 
     const auto numTotalBytesCompressed = std::accumulate(numBytesCompressed.begin(), numBytesCompressed.end(), static_cast<size_t>(0));
-
     outputImage.resize(numTotalBytesCompressed);
     auto outputPtr = outputImage.data();
     for (size_t ii = 0; ii < numSubsets; ++ii)
@@ -136,11 +135,12 @@ static void compressByTile(const j2k::Compressor& compressor,
         for (size_t blockCol = 0; blockCol < numTiles.col; ++blockCol, ++blockNum)
         {
             const auto offset = blockRow * tileDims.row * inputImage.dims.col + blockCol * tileDims.col;
-            const std::span<const std::byte> uncompressed(inputImage.pixels.data() + offset, inputImage.pixels.size() - offset);
+            const auto& pixels = inputImage.pixels;
+            const std::span<const std::byte> uncompressed(pixels.data() + offset, pixels.size() - offset);
             const std::span<std::byte> compressedTile(&outputImage[bytesWritten], outputImage.size() - bytesWritten);
 
-            compressor.compressTile(uncompressed, blockNum, compressedTile);
-            bytesWritten += compressedTile.size();
+            const auto result = compressor.compressTile(uncompressed, blockNum, compressedTile);
+            bytesWritten += result.size();
         }
     }
 
@@ -171,9 +171,7 @@ static bool equals(const std::vector<std::byte>& lhs, const std::vector<std::byt
                 {
                     break;
                 }
-                std::cerr << errorIndex << ": " << 
-                    static_cast<int>(lhs[errorIndex]) << " vs. " <<
-                    static_cast<int>(rhs[errorIndex]) << "\n";
+                std::cerr << errorIndex << ": " << static_cast<int>(lhs[errorIndex]) << " vs. " << static_cast<int>(rhs[errorIndex]) << "\n";
             }
             break;
         }
@@ -183,6 +181,8 @@ static bool equals(const std::vector<std::byte>& lhs, const std::vector<std::byt
 
 TEST_CASE(j2k_compress_tile)
 {
+    sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir(), true /*overwrite*/);
+
     const size_t numThreads = sys::OS().getNumCPUs() - 1;
 
     Image source;
@@ -220,9 +220,7 @@ TEST_CASE(j2k_compress_tile)
     }
 }
 
-TEST_MAIN(
-    (void)argc;
-    (void)argv;
-    //TEST_CHECK(j2k_compress_tile);
+TEST_MAIN((void)argc; (void)argv;
+    TEST_CHECK(j2k_compress_tile);
     )
 

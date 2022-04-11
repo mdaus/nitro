@@ -320,7 +320,7 @@ static void test_decompress_nitf_to_sio_(const path& inputPathname, const path& 
 
     sio::lite::writeSIO(imageData.data(), imageSubheader.dims(), outputPathname);
 }
-TEST_CASE(test_decompress_nitf_to_sio)
+TEST_CASE(test_j2k_decompress_nitf_to_sio)
 {
     const auto pluginsDir = nitf::Test::buildPluginsDir();
     sys::OS().setEnv("NITF_PLUGIN_PATH", pluginsDir, true /*overwrite*/);
@@ -374,15 +374,11 @@ TEST_CASE(test_j2k_compress_raw_image)
     //}
 }
 
-TEST_MAIN(
-    (void)argc;
-    (void) argv;
+TEST_MAIN((void)argc; (void) argv;
     TEST_CHECK(test_j2k_loading);
     TEST_CHECK(test_j2k_nitf);
     TEST_CHECK(test_j2k_nitf_read_region);
 
-    // TODO: These tests are causing exceptions in 
-    // test_decompress_nitf_to_sio 
-    //TEST_CHECK(test_decompress_nitf_to_sio);
-    //TEST_CHECK(test_j2k_compress_raw_image);
+    TEST_CHECK(test_j2k_decompress_nitf_to_sio);
+    TEST_CHECK(test_j2k_compress_raw_image);
     )
