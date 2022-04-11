@@ -59,8 +59,8 @@ namespace j2k
         float getCompressionRatio() const noexcept { return value_.compressionRatio; }
         uint32_t getNumResolutions() const noexcept { return value_.numResolutions; }
 
-        void setCompressionRatio(float compRatio) { value_.compressionRatio = compRatio; }
-        void setNumResolutions(uint32_t numResoltuions) { value_.numResolutions = numResoltuions;  }
+        void setCompressionRatio(float compRatio) noexcept { value_.compressionRatio = compRatio; }
+        void setNumResolutions(uint32_t numResoltuions) noexcept { value_.numResolutions = numResoltuions;  }
 
         // for use when calling C code
         j2k_WriterOptions* getNative() const noexcept
