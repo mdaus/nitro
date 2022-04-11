@@ -26,9 +26,11 @@
 
 #include <types/RowCol.h>
 
+#include "nitf/exports.hpp"
+
 namespace j2k
 {
-class CompressionParameters final
+class NITRO_NITFCPP_API CompressionParameters final
 {
     const types::RowCol<size_t> mRawImageDims;
     const types::RowCol<size_t> mTileDims;

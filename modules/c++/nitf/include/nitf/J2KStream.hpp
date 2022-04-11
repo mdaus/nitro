@@ -29,6 +29,7 @@
 
 #include "j2k/TileWriter.h"
 
+#include "nitf/exports.hpp"
 
 namespace j2k
 {
@@ -48,7 +49,7 @@ namespace j2k
      * \class Stream
      * \desc RAII wrapper around opj_stream_t.
      */
-    struct Stream final
+    struct NITRO_NITFCPP_API Stream final
     {
         /*!
          * Constructor
