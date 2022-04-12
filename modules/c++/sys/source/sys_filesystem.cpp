@@ -16,6 +16,7 @@
 #include <vector>
 
 #include "sys/Path.h"
+#include "gsl/gsl.h"
 
 namespace fs = sys::filesystem;
 
@@ -290,6 +291,12 @@ fs::path fs::current_path()
             (temp, sizeof(temp))
             ? std::string(temp)
             : std::string("");
+}
+
+std::uintmax_t fs::file_size(const fs::path& p)
+{
+    const sys::Path path(p.string());
+    return gsl::narrow <std::uintmax_t>(path.length());
 }
 
 bool fs::details::Equals(const path& lhs, const path& rhs) noexcept
