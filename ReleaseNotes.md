@@ -13,6 +13,7 @@
 
 ## WIP: (Release 202?-??-??)
 * Fixed a bug in `Poly2D::atY()`; imporved `flipXY()` behavior.
+* Implement [std::filesystem::file_size()](https://en.cppreference.com/w/cpp/filesystem/file_size).
 
 ## (Release 2022-02-22)
 * new `EnocdedString` and `EncodedStringView` to manage strings in different encodings
