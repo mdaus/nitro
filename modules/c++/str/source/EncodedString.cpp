@@ -23,12 +23,6 @@
 
 #include "str/EncodedString.h"
 
-void str::EncodedString::assign(std::string::const_pointer s)
-{
-    s_ = s; // copy
-    v_ = EncodedStringView(s_);
-}
-
 void str::EncodedString::assign(coda_oss::u8string::const_pointer s)
 {
     s_ = cast<std::string::const_pointer>(s);  // copy
@@ -52,11 +46,8 @@ static str::EncodedStringView make_EncodedStringView(const std::string& s, bool 
     return str::EncodedStringView(str::c_str<str::W1252string::const_pointer>(s));
 }
 
-str::EncodedString::EncodedString(std::string::const_pointer s)
-{
-    assign(s);
-}
-str::EncodedString::EncodedString(const std::string& s) : EncodedString(s.c_str()) { }
+str::EncodedString::EncodedString(std::string::const_pointer s) :  s_(s) /*copy*/, v_ (s_)  { }
+str::EncodedString::EncodedString(const std::string& s) :  s_(s) /*copy*/, v_ (s_) { }
 
 str::EncodedString::EncodedString(coda_oss::u8string::const_pointer s)
 {
