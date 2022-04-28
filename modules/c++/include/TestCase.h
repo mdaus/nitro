@@ -90,10 +90,41 @@ inline void assert_eq(const TX1& X1, const TX2& X2,
 //#  define TEST_ASSERT_EQ(X1, X2) if ((X1) != (X2)) { die_printf("%s (%s,%s,%d): FAILED: Recv'd %s, Expected %s\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__, str::toString(X1).c_str(), str::toString(X2).c_str()); }
 
 #  define TEST_ASSERT_EQ_MSG(msg, X1, X2) if ((X1) != (X2)) die_printf("%s (%s,%d): FAILED (%s): Recv'd %s, Expected %s\n", testName.c_str(), __FILE__, __LINE__, (msg).c_str(), str::toString((X1)).c_str(), str::toString((X2)).c_str());
-#  define TEST_ASSERT_NOT_EQ(X1, X2) if ((X1) == (X2)) { die_printf("%s (%s,%s,%d): FAILED: Recv'd %s should not equal %s\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__, str::toString(X1).c_str(), str::toString(X2).c_str()); }
+
+namespace coda_oss { namespace test {
+template<typename TX1, typename TX2>
+inline void assert_not_eq(const TX1& X1, const TX2& X2,
+    const std::string& testName,  const char* file, const char* func, int line)
+{
+    if (X1 == X2)
+    {
+        die_printf("%s (%s,%s,%d): FAILED: Recv'd %s should not equal %s\n", testName.c_str(), file, func, line,
+                   str::toString(X1).c_str(), str::toString(X2).c_str());
+    }
+}
+}}
+#define TEST_ASSERT_NOT_EQ(X1, X2) coda_oss::test::assert_not_eq(X1, X2, testName, __FILE__, SYS_FUNC, __LINE__)
+//#  define TEST_ASSERT_NOT_EQ(X1, X2) if ((X1) == (X2)) { die_printf("%s (%s,%s,%d): FAILED: Recv'd %s should not equal %s\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__, str::toString(X1).c_str(), str::toString(X2).c_str()); }
+
 #  define TEST_ASSERT_NOT_EQ_MSG(msg, X1, X2) if ((X1) == (X2)) die_printf("%s (%s,%d): FAILED (%s): Recv'd %s should not equal %s\n", testName.c_str(), __FILE__, __LINE__, (msg).c_str(), str::toString((X1)).c_str(), str::toString((X2)).c_str());
 #  define TEST_ASSERT_ALMOST_EQ_EPS(X1, X2, EPS) if (std::abs((X1) - (X2)) > EPS || IS_NAN(std::abs((X1) - (X2)))) die_printf("%s (%s,%d): FAILED: Recv'd %s, Expected %s\n", testName.c_str(), __FILE__, __LINE__, str::toString((X1)).c_str(), str::toString((X2)).c_str());
-#  define TEST_ASSERT_ALMOST_EQ(X1, X2) if (std::abs((X1) - (X2)) > std::numeric_limits<float>::epsilon() || IS_NAN(std::abs((X1) - (X2)))) { die_printf("%s (%s,%s,%d): FAILED: Recv'd %s, Expected %s\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__, str::toString(X1).c_str(), str::toString(X2).c_str()); }
+
+namespace coda_oss { namespace test {
+template<typename TX1, typename TX2>
+inline void assert_almost_eq(const TX1& X1, const TX2& X2,
+    const std::string& testName,  const char* file, const char* func, int line)
+{
+    const auto abs_difference = std::abs(X1 - X2);
+    if (abs_difference > std::numeric_limits<float>::epsilon() || IS_NAN(abs_difference))
+    {
+        die_printf("%s (%s,%s,%d): FAILED: Recv'd %s, Expected %s\n", testName.c_str(), file, func, line,
+                   str::toString(X1).c_str(), str::toString(X2).c_str());
+    }
+}
+}}
+#define TEST_ASSERT_ALMOST_EQ(X1, X2) coda_oss::test::assert_almost_eq(X1, X2, testName, __FILE__, SYS_FUNC, __LINE__)
+//#  define TEST_ASSERT_ALMOST_EQ(X1, X2) if (std::abs((X1) - (X2)) > std::numeric_limits<float>::epsilon() || IS_NAN(std::abs((X1) - (X2)))) { die_printf("%s (%s,%s,%d): FAILED: Recv'd %s, Expected %s\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__, str::toString(X1).c_str(), str::toString(X2).c_str()); }
+
 #  define TEST_ASSERT_GREATER_EQ(X1, X2) if ((X1) < X2) { die_printf("%s (%s,%s,%d): FAILED: Value should be greater than or equal\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__); }
 #  define TEST_ASSERT_GREATER(X1, X2) if ((X1) <= X2) { die_printf("%s (%s,%s,%d): FAILED: Value should be greater than\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__); }
 #  define TEST_ASSERT_LESSER_EQ(X1, X2) if ((X1) > X2) { die_printf("%s (%s,%s,%d): FAILED: Value should be less than or equal\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__); }
