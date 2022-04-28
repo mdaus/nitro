@@ -67,7 +67,7 @@ TEST_CASE(testMatchOptional)
 
     rx.match(url, matches);
     TEST_ASSERT_EQ(matches.size(), 7);
-    TEST_ASSERT_EQ(matches[0], url)
+    TEST_ASSERT_EQ(matches[0], url);
     TEST_ASSERT_EQ(matches[1], "http");
     TEST_ASSERT_EQ(matches[2], "localhost");
     TEST_ASSERT_EQ(matches[3], "80");
@@ -79,7 +79,7 @@ TEST_CASE(testMatchOptional)
     matches.clear();
     rx.match(url, matches);
     TEST_ASSERT_GREATER_EQ(matches.size(), 7);
-    TEST_ASSERT_EQ(matches[0], url)
+    TEST_ASSERT_EQ(matches[0], url);
     TEST_ASSERT_EQ(matches[1], "http");
     TEST_ASSERT_EQ(matches[2], "localhost");
     TEST_ASSERT_EQ(matches[3], "");

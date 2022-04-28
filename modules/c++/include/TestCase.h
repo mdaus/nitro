@@ -60,11 +60,35 @@ inline void check(TFunc f, const std::string& testName)
 //    catch(const except::Throwable& ex) { die_printf("%s: FAILED: Exception thrown: %s\n", std::string(#X).c_str(), ex.toString().c_str()); } \
 //    catch(const except::Throwable11& ex) { die_printf("%s: FAILED: Exception thrown: %s\n", std::string(#X).c_str(), ex.what()); }
 
-#  define TEST_ASSERT(X) if (!(X)) { die_printf("%s (%s,%s,%d): FAILED: Value should not be NULL\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__); }
+namespace coda_oss { namespace test {
+inline void assert_(bool X, const std::string& testName,  const char* file, const char* func, int line)
+{
+    if (!X)
+    {
+        die_printf("%s (%s,%s,%d): FAILED: Value should not be NULL\n", testName.c_str(), file, func, line);
+    }
+}
+}}
+#define TEST_ASSERT(X) coda_oss::test::assert_((X), testName, __FILE__, SYS_FUNC, __LINE__)
+//#  define TEST_ASSERT(X) if (!(X)) { die_printf("%s (%s,%s,%d): FAILED: Value should not be NULL\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__); }
 #  define TEST_ASSERT_NULL(X) if ((X) != nullptr) { die_printf("%s (%s,%s,%d): FAILED: Value should be NULL\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__); }
 #  define TEST_ASSERT_FALSE(X) if ((X)) { die_printf("%s (%s,%s,%d): FAILED: Value should evaluate to false\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__); }
 #  define TEST_ASSERT_TRUE(X) if (!(X)) { die_printf("%s (%s,%s,%d): FAILED: Value should evaluate to true\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__); }
-#  define TEST_ASSERT_EQ(X1, X2) if ((X1) != (X2)) { die_printf("%s (%s,%s,%d): FAILED: Recv'd %s, Expected %s\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__, str::toString(X1).c_str(), str::toString(X2).c_str()); }
+namespace coda_oss { namespace test {
+template<typename TX1, typename TX2>
+inline void assert_eq(const TX1& X1, const TX2& X2,
+    const std::string& testName,  const char* file, const char* func, int line)
+{
+    if (X1 != X2)
+    {
+        die_printf("%s (%s,%s,%d): FAILED: Recv'd %s, Expected %s\n", testName.c_str(), file, func, line,
+                   str::toString(X1).c_str(), str::toString(X2).c_str());
+    }
+}
+}}
+#define TEST_ASSERT_EQ(X1, X2) coda_oss::test::assert_eq(X1, X2, testName, __FILE__, SYS_FUNC, __LINE__)
+//#  define TEST_ASSERT_EQ(X1, X2) if ((X1) != (X2)) { die_printf("%s (%s,%s,%d): FAILED: Recv'd %s, Expected %s\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__, str::toString(X1).c_str(), str::toString(X2).c_str()); }
+
 #  define TEST_ASSERT_EQ_MSG(msg, X1, X2) if ((X1) != (X2)) die_printf("%s (%s,%d): FAILED (%s): Recv'd %s, Expected %s\n", testName.c_str(), __FILE__, __LINE__, (msg).c_str(), str::toString((X1)).c_str(), str::toString((X2)).c_str());
 #  define TEST_ASSERT_NOT_EQ(X1, X2) if ((X1) == (X2)) { die_printf("%s (%s,%s,%d): FAILED: Recv'd %s should not equal %s\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__, str::toString(X1).c_str(), str::toString(X2).c_str()); }
 #  define TEST_ASSERT_NOT_EQ_MSG(msg, X1, X2) if ((X1) == (X2)) die_printf("%s (%s,%d): FAILED (%s): Recv'd %s should not equal %s\n", testName.c_str(), __FILE__, __LINE__, (msg).c_str(), str::toString((X1)).c_str(), str::toString((X2)).c_str());
@@ -81,7 +105,7 @@ inline void check(TFunc f, const std::string& testName)
 namespace coda_oss { namespace test {
 template <typename TException, typename TFunc>
 inline void specific_exception(TFunc f,
-                                    const char* format, const std::string& testName, const char* func, const char* file, int line)
+                                    const char* format, const std::string& testName, const char* file, const char* func, int line)
 {
     try
     {
