@@ -215,9 +215,45 @@ inline void assert_lesser(TX1&& X1, TX2&& X2,
 //#  define TEST_ASSERT_LESSER_EQ(X1, X2) if ((X1) > X2) { die_printf("%s (%s,%s,%d): FAILED: Value should be less than or equal\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__); }
 //#  define TEST_ASSERT_LESSER(X1, X2) if ((X1) >= X2) { die_printf("%s (%s,%s,%d): FAILED: Value should be less than\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__); }
 
-#  define TEST_FAIL(msg) die_printf("%s (%s,%s,%d): FAILED: %s\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__, str::toString(msg).c_str());
-#  define TEST_EXCEPTION(X) try{ (X); die_printf("%s (%s,%s,%d): FAILED: Should have thrown exception\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__); } catch (const except::Throwable&){} catch (const except::Throwable11&){}
-#  define TEST_THROWS(X) try{ (X); die_printf("%s (%s,%s,%d): FAILED: Should have thrown exception\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__); } catch (...){}
+namespace coda_oss { namespace test {
+template<typename Tmsg>
+inline void fail(Tmsg&& msg,
+    const std::string& testName,  const char* file, const char* func, int line)
+{
+    die_printf("%s (%s,%s,%d): FAILED: %s\n", testName.c_str(), file, func, line, str::toString(msg).c_str());
+}
+
+template<typename TFunc>
+inline void exception(TFunc f,
+    const std::string& testName,  const char* file, const char* func, int line)
+{
+    try
+    {
+        f();
+        die_printf("%s (%s,%s,%d): FAILED: Should have thrown exception\n", testName.c_str(), file, func, line);
+    }
+    catch (const except::Throwable&) { }
+    catch (const except::Throwable11&) { }
+}
+
+template<typename TFunc>
+inline void throws(TFunc f,
+    const std::string& testName,  const char* file, const char* func, int line)
+{
+    try
+    {
+        f();
+        die_printf("%s (%s,%s,%d): FAILED: Should have thrown exception\n", testName.c_str(), file, func, line);
+    }
+    catch (...) { }
+}
+}}
+#define TEST_FAIL(msg) coda_oss::test::fail(msg, testName, __FILE__, SYS_FUNC, __LINE__)
+#define TEST_EXCEPTION(X) coda_oss::test::exception([&](){(X);}, testName, __FILE__, SYS_FUNC, __LINE__)
+#define TEST_THROWS(X) coda_oss::test::throws([&](){(X);}, testName, __FILE__, SYS_FUNC, __LINE__)
+//#  define TEST_FAIL(msg) die_printf("%s (%s,%s,%d): FAILED: %s\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__, str::toString(msg).c_str());
+//#  define TEST_EXCEPTION(X) try{ (X); die_printf("%s (%s,%s,%d): FAILED: Should have thrown exception\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__); } catch (const except::Throwable&){} catch (const except::Throwable11&){}
+//#  define TEST_THROWS(X) try{ (X); die_printf("%s (%s,%s,%d): FAILED: Should have thrown exception\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__); } catch (...){}
 
 namespace coda_oss { namespace test {
 template <typename TException, typename TFunc>
