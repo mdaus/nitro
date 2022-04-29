@@ -55,16 +55,21 @@ public:
      * \param file The file where the exception occurred
      * \param line The line number where the exception occurred
      */
-    Context(const std::string& file,
-            int line,
+    Context(const char* file /*__FILE__*/, int line /*__LINE__*/,
             const std::string& func,
             const std::string& time,
-            const std::string& message) :
+            const std::string& message = "") :
         mMessage(message),
         mTime(time),
         mFunc(func),
         mFile(file),
         mLine(line)
+    {
+    }
+    Context(const std::string& message,
+        const char* file /*__FILE__*/, int line /*__LINE__*/,
+        const std::string& func = "",
+        const std::string& time = "") : Context(file, line, func, time, message)
     {
     }
 
