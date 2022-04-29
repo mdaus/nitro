@@ -79,7 +79,7 @@ namespace coda_oss { namespace test {
 template<typename TX>
 inline void assert_null(TX&& X, const std::string& testName,  const char* file, const char* func, int line)
 {
-    if (X != nullptr)
+    if ((X != nullptr) || (!(X == nullptr)))
     {
         die_printf("%s (%s,%s,%d): FAILED: Value should be NULL\n", testName.c_str(), file, func, line);
     }
@@ -117,7 +117,7 @@ template<typename TX1, typename TX2>
 inline void assert_eq(TX1&& X1, TX2&& X2,
     const std::string& testName,  const char* file, const char* func, int line)
 {
-    if ((X1 != X2) || (X2 != X1))
+    if ((X1 != X2) || (X2 != X1) || (!(X1 == X2)))
     {
         die_printf("%s (%s,%s,%d): FAILED: Recv'd %s, Expected %s\n", testName.c_str(), file, func, line,
                    str::toString(X1).c_str(), str::toString(X2).c_str());
@@ -134,7 +134,7 @@ template<typename TX1, typename TX2>
 inline void assert_not_eq(TX1&& X1, TX2&& X2,
     const std::string& testName,  const char* file, const char* func, int line)
 {
-    if ((X1 == X2) || (X2 == X1))
+    if ((X1 == X2) || (X2 == X1) || (!(X1 != X2)))
     {
         die_printf("%s (%s,%s,%d): FAILED: Recv'd %s should not equal %s\n", testName.c_str(), file, func, line,
                    str::toString(X1).c_str(), str::toString(X2).c_str());
@@ -163,8 +163,32 @@ inline void assert_almost_eq(TX1&& X1, TX2&& X2,
 #define TEST_ASSERT_ALMOST_EQ(X1, X2) coda_oss::test::assert_almost_eq(X1, X2, testName, __FILE__, SYS_FUNC, __LINE__)
 //#  define TEST_ASSERT_ALMOST_EQ(X1, X2) if (std::abs((X1) - (X2)) > std::numeric_limits<float>::epsilon() || IS_NAN(std::abs((X1) - (X2)))) { die_printf("%s (%s,%s,%d): FAILED: Recv'd %s, Expected %s\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__, str::toString(X1).c_str(), str::toString(X2).c_str()); }
 
-#  define TEST_ASSERT_GREATER_EQ(X1, X2) if ((X1) < X2) { die_printf("%s (%s,%s,%d): FAILED: Value should be greater than or equal\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__); }
-#  define TEST_ASSERT_GREATER(X1, X2) if ((X1) <= X2) { die_printf("%s (%s,%s,%d): FAILED: Value should be greater than\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__); }
+namespace coda_oss { namespace test {
+template<typename TX1, typename TX2>
+inline void assert_greater_eq(TX1&& X1, TX2&& X2,
+    const std::string& testName,  const char* file, const char* func, int line)
+{
+    if ((X1 < X2) || (!(X1 >= X2)))
+    {
+        die_printf("%s (%s,%s,%d): FAILED: Value should be greater than or equal\n", testName.c_str(), file, func, line);
+    }
+}
+
+template<typename TX1, typename TX2>
+inline void assert_greater(TX1&& X1, TX2&& X2,
+    const std::string& testName,  const char* file, const char* func, int line)
+{
+    if ((X1 <= X2) || (!(X1 > X2)))
+    {
+        die_printf("%s (%s,%s,%d): FAILED: Value should be greater than\n", testName.c_str(), file, func, line);
+    }
+}
+}}
+#define TEST_ASSERT_GREATER_EQ(X1, X2) coda_oss::test::assert_greater_eq(X1, X2, testName, __FILE__, SYS_FUNC, __LINE__)
+#define TEST_ASSERT_GREATER(X1, X2) coda_oss::test::assert_greater(X1, X2, testName, __FILE__, SYS_FUNC, __LINE__)
+//#  define TEST_ASSERT_GREATER_EQ(X1, X2) if ((X1) < X2) { die_printf("%s (%s,%s,%d): FAILED: Value should be greater than or equal\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__); }
+//#  define TEST_ASSERT_GREATER(X1, X2) if ((X1) <= X2) { die_printf("%s (%s,%s,%d): FAILED: Value should be greater than\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__); }
+
 #  define TEST_ASSERT_LESSER_EQ(X1, X2) if ((X1) > X2) { die_printf("%s (%s,%s,%d): FAILED: Value should be less than or equal\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__); }
 #  define TEST_ASSERT_LESSER(X1, X2) if ((X1) >= X2) { die_printf("%s (%s,%s,%d): FAILED: Value should be less than\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__); }
 #  define TEST_FAIL(msg) die_printf("%s (%s,%s,%d): FAILED: %s\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__, str::toString(msg).c_str());
