@@ -63,7 +63,8 @@ inline void check(TFunc f, const std::string& testName)
 */
 
 namespace coda_oss { namespace test {
-inline void assert_(bool X, const std::string& testName,  const char* file, const char* func, int line)
+    template<typename TX>
+inline void assert_(TX&& X, const std::string& testName,  const char* file, const char* func, int line)
 {
     if (!X)
     {
@@ -71,11 +72,46 @@ inline void assert_(bool X, const std::string& testName,  const char* file, cons
     }
 }
 }}
-#define TEST_ASSERT(X) coda_oss::test::assert_((X), testName, __FILE__, SYS_FUNC, __LINE__)
+#define TEST_ASSERT(X) coda_oss::test::assert_(X, testName, __FILE__, SYS_FUNC, __LINE__)
 //#  define TEST_ASSERT(X) if (!(X)) { die_printf("%s (%s,%s,%d): FAILED: Value should not be NULL\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__); }
-#  define TEST_ASSERT_NULL(X) if ((X) != nullptr) { die_printf("%s (%s,%s,%d): FAILED: Value should be NULL\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__); }
-#  define TEST_ASSERT_FALSE(X) if ((X)) { die_printf("%s (%s,%s,%d): FAILED: Value should evaluate to false\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__); }
-#  define TEST_ASSERT_TRUE(X) if (!(X)) { die_printf("%s (%s,%s,%d): FAILED: Value should evaluate to true\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__); }
+
+namespace coda_oss { namespace test {
+template<typename TX>
+inline void assert_null(TX&& X, const std::string& testName,  const char* file, const char* func, int line)
+{
+    if (X != nullptr)
+    {
+        die_printf("%s (%s,%s,%d): FAILED: Value should be NULL\n", testName.c_str(), file, func, line);
+    }
+}
+}}
+#define TEST_ASSERT_NULL(X) coda_oss::test::assert_null(X, testName, __FILE__, SYS_FUNC, __LINE__)
+//#  define TEST_ASSERT_NULL(X) if ((X) != nullptr) { die_printf("%s (%s,%s,%d): FAILED: Value should be NULL\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__); }
+
+namespace coda_oss { namespace test {
+template<typename TX>
+inline void test_assert_false(TX&& X, const std::string& testName,  const char* file, const char* func, int line)
+{
+    if (X)
+    {
+        die_printf("%s (%s,%s,%d): FAILED: Value should evaluate to false\n", testName.c_str(), file, func, line);
+    }
+}
+
+template<typename TX>
+inline void test_assert_true(TX&& X, const std::string& testName,  const char* file, const char* func, int line)
+{
+    if (!X)
+    {
+        die_printf("%s (%s,%s,%d): FAILED: Value should evaluate to true\n", testName.c_str(), file, func, line);
+    }
+}
+}}
+#define TEST_ASSERT_FALSE(X) coda_oss::test::test_assert_false(X, testName, __FILE__, SYS_FUNC, __LINE__)
+#define TEST_ASSERT_TRUE(X) coda_oss::test::test_assert_true(X, testName, __FILE__, SYS_FUNC, __LINE__)
+//#  define TEST_ASSERT_FALSE(X) if ((X)) { die_printf("%s (%s,%s,%d): FAILED: Value should evaluate to false\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__); }
+//#  define TEST_ASSERT_TRUE(X) if (!(X)) { die_printf("%s (%s,%s,%d): FAILED: Value should evaluate to true\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__); }
+
 namespace coda_oss { namespace test {
 template<typename TX1, typename TX2>
 inline void assert_eq(TX1&& X1, TX2&& X2,
