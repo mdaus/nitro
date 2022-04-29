@@ -311,9 +311,9 @@ TEST_CASE(testBacktrace)
         constexpr auto frames_size_RELEASE_other = frames_size_RELEASE;
         constexpr auto frames_size_DEBUG = 16;
         #elif defined(__GNUC__)
-        constexpr auto frames_size_RELEASE = 7;
-        constexpr auto frames_size_RELEASE_other = frames_size_RELEASE + 1; // 8
-        constexpr auto frames_size_DEBUG = frames_size_RELEASE + 5; // 12
+        constexpr auto frames_size_RELEASE = 6;
+        constexpr auto frames_size_RELEASE_other = frames_size_RELEASE + 1; // 7
+        constexpr auto frames_size_DEBUG = frames_size_RELEASE + 6; // 12
         #else
         #error "CODA_OSS_sys_Backtrace inconsistency."
         #endif
@@ -324,8 +324,6 @@ TEST_CASE(testBacktrace)
     {
         TEST_ASSERT_FALSE(supported);
     }
-    std::clog << expected << " " << expected_other << "\n";
-    std::clog << frames.size() << "\n";
     TEST_ASSERT( (frames.size() == expected) || (frames.size() == expected_other) );
 
     const auto msg = std::accumulate(frames.begin(), frames.end(), std::string());
