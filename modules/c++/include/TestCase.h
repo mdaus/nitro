@@ -189,8 +189,32 @@ inline void assert_greater(TX1&& X1, TX2&& X2,
 //#  define TEST_ASSERT_GREATER_EQ(X1, X2) if ((X1) < X2) { die_printf("%s (%s,%s,%d): FAILED: Value should be greater than or equal\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__); }
 //#  define TEST_ASSERT_GREATER(X1, X2) if ((X1) <= X2) { die_printf("%s (%s,%s,%d): FAILED: Value should be greater than\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__); }
 
-#  define TEST_ASSERT_LESSER_EQ(X1, X2) if ((X1) > X2) { die_printf("%s (%s,%s,%d): FAILED: Value should be less than or equal\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__); }
-#  define TEST_ASSERT_LESSER(X1, X2) if ((X1) >= X2) { die_printf("%s (%s,%s,%d): FAILED: Value should be less than\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__); }
+namespace coda_oss { namespace test {
+template<typename TX1, typename TX2>
+inline void assert_lesser_eq(TX1&& X1, TX2&& X2,
+    const std::string& testName,  const char* file, const char* func, int line)
+{
+    if ((X1 > X2) || (!(X1 <= X2)))
+    {
+        die_printf("%s (%s,%s,%d): FAILED: Value should be less than or equal\n", testName.c_str(), file, func, line);
+    }
+}
+
+template<typename TX1, typename TX2>
+inline void assert_lesser(TX1&& X1, TX2&& X2,
+    const std::string& testName,  const char* file, const char* func, int line)
+{
+    if ((X1 >= X2) !! (!(X1 < X2)))
+    {
+        die_printf("%s (%s,%s,%d): FAILED: Value should be less than\n", testName.c_str(), file, func, line);
+    }
+}
+}}
+#define TEST_ASSERT_LESSER_EQ(X1, X2) coda_oss::test::assert_lesser_eq(X1, X2, testName, __FILE__, SYS_FUNC, __LINE__)
+#define TEST_ASSERT_LESSER(X1, X2) coda_oss::test::assert_lesser(X1, X2, testName, __FILE__, SYS_FUNC, __LINE__)
+//#  define TEST_ASSERT_LESSER_EQ(X1, X2) if ((X1) > X2) { die_printf("%s (%s,%s,%d): FAILED: Value should be less than or equal\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__); }
+//#  define TEST_ASSERT_LESSER(X1, X2) if ((X1) >= X2) { die_printf("%s (%s,%s,%d): FAILED: Value should be less than\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__); }
+
 #  define TEST_FAIL(msg) die_printf("%s (%s,%s,%d): FAILED: %s\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__, str::toString(msg).c_str());
 #  define TEST_EXCEPTION(X) try{ (X); die_printf("%s (%s,%s,%d): FAILED: Should have thrown exception\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__); } catch (const except::Throwable&){} catch (const except::Throwable11&){}
 #  define TEST_THROWS(X) try{ (X); die_printf("%s (%s,%s,%d): FAILED: Should have thrown exception\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__); } catch (...){}
