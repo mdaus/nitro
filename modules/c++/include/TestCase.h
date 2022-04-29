@@ -56,9 +56,11 @@ inline void check(TFunc f, const std::string& testName)
 }
 }}
 #define TEST_CHECK(X) coda_oss::test::check([&](const std::string& testName) { X(testName); }, #X)
-//#  define TEST_CHECK(X) try{ X(std::string(#X)); std::cerr << #X << ": PASSED" << std::endl; } \
-//    catch(const except::Throwable& ex) { die_printf("%s: FAILED: Exception thrown: %s\n", std::string(#X).c_str(), ex.toString().c_str()); } \
-//    catch(const except::Throwable11& ex) { die_printf("%s: FAILED: Exception thrown: %s\n", std::string(#X).c_str(), ex.what()); }
+/*
+#  define TEST_CHECK(X) try{ X(std::string(#X)); std::cerr << #X << ": PASSED" << std::endl; } \
+    catch(const except::Throwable& ex) { die_printf("%s: FAILED: Exception thrown: %s\n", std::string(#X).c_str(), ex.toString().c_str()); } \
+    catch(const except::Throwable11& ex) { die_printf("%s: FAILED: Exception thrown: %s\n", std::string(#X).c_str(), ex.what()); }
+*/
 
 namespace coda_oss { namespace test {
 inline void assert_(bool X, const std::string& testName,  const char* file, const char* func, int line)
@@ -76,10 +78,10 @@ inline void assert_(bool X, const std::string& testName,  const char* file, cons
 #  define TEST_ASSERT_TRUE(X) if (!(X)) { die_printf("%s (%s,%s,%d): FAILED: Value should evaluate to true\n", testName.c_str(), __FILE__, SYS_FUNC, __LINE__); }
 namespace coda_oss { namespace test {
 template<typename TX1, typename TX2>
-inline void assert_eq(const TX1& X1, const TX2& X2,
+inline void assert_eq(TX1&& X1, TX2&& X2,
     const std::string& testName,  const char* file, const char* func, int line)
 {
-    if (X1 != X2)
+    if ((X1 != X2) || (X2 != X1))
     {
         die_printf("%s (%s,%s,%d): FAILED: Recv'd %s, Expected %s\n", testName.c_str(), file, func, line,
                    str::toString(X1).c_str(), str::toString(X2).c_str());
@@ -93,10 +95,10 @@ inline void assert_eq(const TX1& X1, const TX2& X2,
 
 namespace coda_oss { namespace test {
 template<typename TX1, typename TX2>
-inline void assert_not_eq(const TX1& X1, const TX2& X2,
+inline void assert_not_eq(TX1&& X1, TX2&& X2,
     const std::string& testName,  const char* file, const char* func, int line)
 {
-    if (X1 == X2)
+    if ((X1 == X2) || (X2 == X1))
     {
         die_printf("%s (%s,%s,%d): FAILED: Recv'd %s should not equal %s\n", testName.c_str(), file, func, line,
                    str::toString(X1).c_str(), str::toString(X2).c_str());
@@ -111,7 +113,7 @@ inline void assert_not_eq(const TX1& X1, const TX2& X2,
 
 namespace coda_oss { namespace test {
 template<typename TX1, typename TX2>
-inline void assert_almost_eq(const TX1& X1, const TX2& X2,
+inline void assert_almost_eq(TX1&& X1, TX2&& X2,
     const std::string& testName,  const char* file, const char* func, int line)
 {
     const auto abs_difference = std::abs(X1 - X2);
@@ -156,9 +158,11 @@ inline void specific_exception(TFunc f,
 }}
 # define TEST_SPECIFIC_EXCEPTION(X, Y) coda_oss::test::specific_exception<Y>([&](){(X);}, \
     "%s (%s,%s,%d): FAILED: Should have thrown exception: " # Y ,  testName, __FILE__, SYS_FUNC, __LINE__)
-//#  define TEST_SPECIFIC_EXCEPTION(X,Y) try{ (X); die_printf("%s (%s,%s,%d): FAILED: Should have thrown exception: " # Y ,  testName.c_str(), __FILE__, SYS_FUNC, __LINE__); } catch(const Y&) { }  \
-//    catch (const except::Throwable&){ die_printf("%s (%s,%s,%d): FAILED: Should have thrown exception: " # Y ,  testName.c_str(), __FILE__, SYS_FUNC, __LINE__);} \
-//    catch (const except::Throwable11&){ die_printf("%s (%s,%s,%d): FAILED: Should have thrown exception: " # Y ,  testName.c_str(), __FILE__, SYS_FUNC, __LINE__);}
+/*
+#  define TEST_SPECIFIC_EXCEPTION(X,Y) try{ (X); die_printf("%s (%s,%s,%d): FAILED: Should have thrown exception: " # Y ,  testName.c_str(), __FILE__, SYS_FUNC, __LINE__); } catch(const Y&) { }  \
+    catch (const except::Throwable&){ die_printf("%s (%s,%s,%d): FAILED: Should have thrown exception: " # Y ,  testName.c_str(), __FILE__, SYS_FUNC, __LINE__);} \
+    catch (const except::Throwable11&){ die_printf("%s (%s,%s,%d): FAILED: Should have thrown exception: " # Y ,  testName.c_str(), __FILE__, SYS_FUNC, __LINE__);}
+*/
 
 #  define TEST_CASE(X) void X(std::string testName)
 
@@ -187,11 +191,13 @@ inline int main(int argc, char** argv, TFunc f)
 }
 }}
 #define TEST_MAIN(X) int main(int argc, char** argv) { return coda_oss::test::main(argc, argv, [&](){(X);}); }
-//#define TEST_MAIN(X) int main(int argc, char** argv) {  try { X;  return EXIT_SUCCESS; } \
-//    catch (const except::Exception& ex) { std::cerr << ex.toString() << std::endl; } \
-//    catch (const std::exception& e)  { std::cerr << e.what() << std::endl; } \
-//    catch (...) { std::cerr << "Unknown exception\n"; } \
-//    return EXIT_FAILURE; }
+/*
+#define TEST_MAIN(X) int main(int argc, char** argv) {  try { X;  return EXIT_SUCCESS; } \
+    catch (const except::Exception& ex) { std::cerr << ex.toString() << std::endl; } \
+    catch (const std::exception& e)  { std::cerr << e.what() << std::endl; } \
+    catch (...) { std::cerr << "Unknown exception\n"; } \
+    return EXIT_FAILURE; }
+*/
 
 #else /* C only */
 #  include <math.h>
