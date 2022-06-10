@@ -28,6 +28,7 @@
 #include <map>
 #include <stdexcept>
 #include <ostream>
+#include <std/optional>
 
 #include "str/Manip.h"
 #include "str/EncodedStringView.h"
@@ -47,20 +48,47 @@ namespace nitf
             return retval;
         }
 
+        template<typename TKey, typename TValue>
+        inline std::optional<TValue> optional_index(const std::map<TKey, TValue>& map, const TKey& key)
+        {
+            const auto it = map.find(key);
+            return it == map.end() ? std::optional<TValue>() : std::optional<TValue>(it->second);
+        }
+        template<typename TKey, typename TValue, typename TException>
+        inline std::optional<TValue> index(const std::map<TKey, TValue>& map, const TKey& key, const TException* pEx) noexcept(false)
+        {
+            auto result = optional_index(map, key);
+            if (!result.has_value() && (pEx != nullptr))
+            {
+                throw *pEx;
+            }
+            return result;
+        }
+
         template<typename TKey, typename TValue, typename TException>
         inline TValue index(const std::map<TKey, TValue>& map, const TKey& key, const TException& ex) noexcept(false)
         {
-            const auto it = map.find(key);
-            if (it == map.end())
-            {
-                throw ex;
-            }
-            return it->second;
+            const auto result = index(map, key, &ex);
+            return *result;
         }
         template<typename TKey, typename TValue>
-        inline TValue index(const std::map<TKey, TValue>& map, const TKey& key)
+        inline TValue index(const std::map<TKey, TValue>& map, const TKey& key) noexcept(false)
         {
             return index(map, key, std::invalid_argument("key not found in map."));
+        }
+
+        template<typename T, typename TException>
+        inline std::optional<std::string> to_string(T v, const TException* pEx, const std::map<std::string, T>& string_to_enum) noexcept(false)
+        {
+            static const auto enum_to_string = details::swap_key_value(string_to_enum);
+            return index(enum_to_string, v, pEx);
+        }
+
+        template<typename T, typename TException>
+        inline std::optional<T> from_string(std::string v, const TException* pEx, const std::map<std::string, T>& string_to_enum) noexcept(false)
+        {
+            str::trim(v);
+            return index(string_to_enum, v, pEx);
         }
     }
 
@@ -94,24 +122,24 @@ namespace nitf
 
 
     template<typename T>
-    inline std::string to_string(T v, const std::map<std::string, T>& string_to_enum) noexcept(false)
+    inline std::string to_string(T v, const std::map<std::string, T>& string_to_enum)
     {
         static const auto enum_to_string = details::swap_key_value(string_to_enum);
         return details::index(enum_to_string, v);
     }
     template<typename T>
-    inline std::string to_string(T v) noexcept(false)
+    inline std::string to_string(T v)
     {
         return to_string(v, string_to_enum(T()));
     }
 
     template<typename T>
-    inline std::wstring to_wstring(T v, const std::map<std::string, T>& string_to_enum) noexcept(false)
+    inline std::wstring to_wstring(T v, const std::map<std::string, T>& string_to_enum)
     {
         return str::EncodedStringView(to_string(v, string_to_enum)).wstring();
     }
     template<typename T>
-    inline std::wstring to_wstring(T v) noexcept(false)
+    inline std::wstring to_wstring(T v)
     {
         return str::EncodedStringView(to_string(v)).wstring();
     }
