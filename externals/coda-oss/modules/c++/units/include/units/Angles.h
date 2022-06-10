@@ -28,6 +28,7 @@
 #include <cmath>
 
 #include "math/Constants.h"
+#include "math/Utilities.h"
 #include "units/Unit.h"
 
 namespace units
@@ -54,14 +55,16 @@ using Degrees = Angle<tags::Degrees, T>;
 //using Gradians = Angle<tags::Gradians, T>;
 
 template <typename T, typename TResult = T>
-inline constexpr void convert(Radians<T> v, Degrees<TResult>& result) noexcept
+inline /*constexpr*/ Degrees<TResult>& convert(Radians<T> v, Degrees<TResult>& result) noexcept
 {
-    result.value() = v.value() * math::Constants::RADIANS_TO_DEGREES;
+    result.value() = v.value() * math::Constants::radians_to_degrees<T>();
+    return result;  // ICC doesn't like "constexpr void"
 }
 template <typename T, typename TResult = T>
-inline constexpr void convert(Degrees<T> v, Radians<TResult>& result) noexcept
+inline /*constexpr*/ Radians<TResult>& convert(Degrees<T> v, Radians<TResult>& result) noexcept
 {
-    result.value() = v.value() * math::Constants::DEGREES_TO_RADIANS;
+    result.value() = v.value() * math::Constants::degrees_to_radians<T>();
+    return result;  // ICC doesn't like "constexpr void"
 }
 
 template<typename Tag, typename T>
@@ -91,6 +94,13 @@ inline T tan(Angle<Tag, T> v) noexcept
   //return std::tan(v.to<tags::Radians>().value());
   return std::tan(toRadians(v).value());
 }
+
+template <typename Tag, typename T>
+inline void SinCos(Angle<Tag, T> v, T& sin, T& cos) noexcept
+{
+    math::SinCos(toRadians(v).value(), sin, cos);
+}
+
 }
 
 #endif  // CODA_OSS_units_Angles_h_INCLUDED_

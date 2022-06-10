@@ -55,6 +55,7 @@ coda_add_module(
         source/TRECursor.c
         source/TREPrivateData.c
         source/TREUtils.c
+        source/TestingTest.c
         source/TextSegment.c
         source/TextSubheader.c
         source/WriteHandler.c
@@ -78,9 +79,10 @@ coda_add_tests(
         test_geo_utils.c
         test_image_io.c
         test_mem_source.c
+        test_moveTREs.c
         test_tre_mods.c
         test_zero_field.c
-        test_moveTREs.c)
+        )
 
 
 # Build all the TRE

@@ -1,6 +1,6 @@
 #pragma once
 
-#if defined(GTEST_API_)
+#if defined(MS_CPP_UNITTESTFRAMEWORK)
 #define __TEST_H__ // #include "../nitf/unittests/Test.h"
 #define __TEST_CASE_H__ // #include "../nitf/unittests/TestCase.h"
 #endif
@@ -8,10 +8,29 @@
 
 #include <string>
 
-namespace nitf
+#include "import/nitf.h"
+
+#include <nitf/UnitTests.hpp>
+
+namespace Microsoft{ namespace VisualStudio {namespace CppUnitTestFramework
 {
-	namespace Test
-	{
-		std::string buildPluginsDir();
-	}
+
+template<>
+inline std::wstring ToString(const nitf::PixelValueType& q)
+{
+	return nitf::to_wstring(q);
 }
+
+template<>
+inline std::wstring ToString(const nitf::BlockingMode& q)
+{
+	return nitf::to_wstring(q);
+}
+
+template<>
+inline std::wstring ToString(const nitf::ImageCompression& q)
+{
+	return nitf::to_wstring(q);
+}
+
+}}}

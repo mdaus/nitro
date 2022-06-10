@@ -61,7 +61,7 @@ SubWindow::SubWindow(nitf_SubWindow * x)
     getNativeOrThrow();
 }
 
-SubWindow::SubWindow() : SubWindow(nitf_SubWindow_construct(&error))
+SubWindow::SubWindow() noexcept(false) : SubWindow(nitf_SubWindow_construct(&error))
 {
     setManaged(false);
 
@@ -91,9 +91,10 @@ SubWindow::SubWindow(const ImageSubheader& subheader) :
 
 SubWindow::~SubWindow()
 {
-    if (isValid() && getNative()->downsampler)
+    auto downsampler = getNative()->downsampler;
+    if (downsampler)
     {
-        nitf::DownSampler ds(getNativeOrThrow()->downsampler);
+        nitf::DownSampler ds(downsampler);
         //decrement the current DownSampler
         ds.decRef();
     }

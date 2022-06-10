@@ -31,13 +31,13 @@
 
 #include <sys/OS.h>
 #include <sys/Path.h>
-#include <sys/Filesystem.h>
 #include <sys/Backtrace.h>
 #include <sys/Dbg.h>
 #include <sys/DateTime.h>
+#include <sys/sys_filesystem.h>
 #include "TestCase.h"
 
-namespace fs = sys::Filesystem;
+namespace fs = std::filesystem;
 
 namespace
 {
@@ -169,10 +169,10 @@ TEST_CASE(testSplitEnv)
     std::vector<std::string> paths;
     bool result = os.splitEnv(pathEnvVar, paths);
     TEST_ASSERT_TRUE(result);
-    TEST_ASSERT_GREATER(paths.size(), 0);
+    TEST_ASSERT_GREATER(paths.size(), static_cast<size_t>(0));
     for (const auto& path : paths)
     {
-        TEST_ASSERT_TRUE(sys::Filesystem::exists(path));
+        TEST_ASSERT_TRUE(fs::exists(path));
     }
 
     // create an environemnt variable with a known bogus path
@@ -184,15 +184,15 @@ TEST_CASE(testSplitEnv)
     os.setEnv(bogusEnvVar, bogusValue, false /*overwrite*/);
     result = os.splitEnv(bogusEnvVar, paths);
     TEST_ASSERT_TRUE(result);
-    TEST_ASSERT_EQ(paths.size(), 1);
+    TEST_ASSERT_EQ(paths.size(), static_cast<size_t>(1));
 
     // PATHs are directories, not files
     paths.clear();
-    result = os.splitEnv(pathEnvVar, paths, sys::Filesystem::FileType::Directory);
+    result = os.splitEnv(pathEnvVar, paths, fs::file_type::directory);
     TEST_ASSERT_TRUE(result);
-    TEST_ASSERT_GREATER(paths.size(), 0);
+    TEST_ASSERT_GREATER(paths.size(), static_cast<size_t>(0));
     paths.clear();
-    result = os.splitEnv(pathEnvVar, paths, sys::Filesystem::FileType::Regular);
+    result = os.splitEnv(pathEnvVar, paths, fs::file_type::regular);
     TEST_ASSERT_FALSE(result);
     TEST_ASSERT_TRUE(paths.empty());
 
@@ -244,7 +244,7 @@ static void testFsExtension_(const std::string& testName)
 }
 TEST_CASE(testFsExtension)
 {
-    testFsExtension_<sys::Filesystem::path>(testName);
+    testFsExtension_<fs::path>(testName);
     testFsExtension_<std::filesystem::path>(testName);
     #if CODA_OSS_lib_filesystem
     testFsExtension_<std::filesystem::path>(testName);
@@ -266,7 +266,7 @@ static void testFsOutput_(const std::string& testName)
 }
 TEST_CASE(testFsOutput)
 {
-    testFsOutput_<sys::Filesystem::path>(testName);
+    testFsOutput_<fs::path>(testName);
     testFsOutput_<std::filesystem::path>(testName);
     #if CODA_OSS_lib_filesystem
     testFsOutput_<std::filesystem::path>(testName);
@@ -300,6 +300,7 @@ TEST_CASE(testBacktrace)
 
 
     size_t expected = 0;
+    size_t expected_other = 0;
     auto version_sys_backtrace_ = version::sys::backtrace; // "Conditional expression is constant"
     if (version_sys_backtrace_ >= 20210216L)
     {
@@ -307,20 +308,23 @@ TEST_CASE(testBacktrace)
 
         #if _WIN32
         constexpr auto frames_size_RELEASE = 2;
-        constexpr auto frames_size_DEBUG = 14;
+        constexpr auto frames_size_RELEASE_other = frames_size_RELEASE;
+        constexpr auto frames_size_DEBUG = 16;
         #elif defined(__GNUC__)
         constexpr auto frames_size_RELEASE = 6;
-        constexpr auto frames_size_DEBUG = 10;
+        constexpr auto frames_size_RELEASE_other = frames_size_RELEASE + 1; // 7
+        constexpr auto frames_size_DEBUG = frames_size_RELEASE + 6; // 12
         #else
         #error "CODA_OSS_sys_Backtrace inconsistency."
         #endif
         expected = sys::debug_build() ? frames_size_DEBUG : frames_size_RELEASE;
+        expected_other = sys::debug_build() ? frames_size_DEBUG : frames_size_RELEASE_other;
     }
     else
     {
         TEST_ASSERT_FALSE(supported);
     }
-    TEST_ASSERT_EQ(frames.size(), expected);
+    TEST_ASSERT( (frames.size() == expected) || (frames.size() == expected_other) );
 
     const auto msg = std::accumulate(frames.begin(), frames.end(), std::string());
     if (supported)
@@ -350,7 +354,7 @@ TEST_CASE(testSpecialEnvVars)
     result = os.getSpecialEnv("$"); // i.e., ${$}
     TEST_ASSERT_FALSE(result.empty());
     TEST_ASSERT_EQ(result, pid);
-    const auto strPid = std::to_string(os.getProcessId());
+    const auto strPid = str::toString(os.getProcessId());
     TEST_ASSERT_EQ(result, strPid);
 
     result = os.getSpecialEnv("PWD");
@@ -385,6 +389,22 @@ TEST_CASE(testSpecialEnvVars)
     TEST_ASSERT_FALSE(result.empty());
 }
 
+TEST_CASE(testFsFileSize)
+{
+    const sys::OS os;
+    {
+        const fs::path argv0(os.getSpecialEnv("ARGV0"));
+        const auto size = file_size(argv0);
+        TEST_ASSERT_GREATER(size, static_cast<size_t>(0));
+    }
+    {
+        // We always have  sys::filesystem, even if it's not used.
+        const sys::filesystem::path argv0(os.getSpecialEnv("ARGV0"));
+        const auto size = file_size(argv0);
+        TEST_ASSERT_GREATER(size, static_cast<size_t>(0));
+    }
+}
+
 }
 
 int main(int, char** argv)
@@ -399,6 +419,7 @@ int main(int, char** argv)
     TEST_CHECK(testFsOutput);
     TEST_CHECK(testBacktrace);
     TEST_CHECK(testSpecialEnvVars);
+    TEST_CHECK(testFsFileSize);
 
     return 0;
 }

@@ -18,9 +18,9 @@
 
 #include "TestCase.h"
 
-const int64_t BLOCK_LENGTH = 256;
-const int64_t ILOC_MAX = 99999;
-std::string generateILOC(const types::RowCol<int64_t>& offset)
+static constexpr int64_t BLOCK_LENGTH = 256;
+static constexpr int64_t ILOC_MAX = 99999;
+static std::string generateILOC(const types::RowCol<int64_t>& offset)
 {
    std::ostringstream oss;
 
@@ -184,11 +184,11 @@ TEST_CASE(testBlankSegmentsValid)
    const std::vector<nitf::ImageSegmentComputer::Segment> &segments = imageSegmentComputer.getSegments();
 
    auto numberOfTests = numSegments;
-   TEST_ASSERT_EQ(numSegments, 3);
+   TEST_ASSERT_EQ(numSegments, static_cast<size_t>(3));
    for (size_t testSegmentIdx = 0; testSegmentIdx < numSegments; ++testSegmentIdx)
    {
       const types::RowCol<size_t> dims(segments[testSegmentIdx].numRows, numberElements);
-      TEST_ASSERT_EQ(dims.area(), bytesPerSegment);
+      TEST_ASSERT_EQ(dims.area(), static_cast<size_t>(bytesPerSegment));
    }
    createBuffers(buffers, imageSegmentComputer, fullDims);
    for (size_t testIdx = 0; testIdx < numberOfTests; ++testIdx)
@@ -266,7 +266,7 @@ TEST_CASE(testBlankSegmentsValid)
 
             if (imgCtr == static_cast<int>(testIdx))
             {
-               TEST_ASSERT_EQ(nBlocksPresent, 0);
+               TEST_ASSERT_EQ(nBlocksPresent, static_cast<int64_t>(0));
             }
             else
             {

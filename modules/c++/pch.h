@@ -6,15 +6,22 @@
 #pragma warning(disable: 4668) // '...' is not defined as a preprocessor macro, replacing with '...' for '...'
 // TODO: get rid of these someday?
 #pragma warning(disable: 4514) //	'...': unreferenced inline function has been removed
+#pragma warning(disable: 26823) // Dereferencing a possibly null pointer '...' (lifetime.1).
 
 #include "cpp.h"
 #pragma comment(lib, "ws2_32")
 
+#pragma warning(disable: 26822) // Dereferencing a null pointer '...' (lifetime.1).
+#pragma warning(disable: 26467) // Converting from floating point to unsigned integral types results in non-portable code if the double/float has a negative value. Use gsl::narrow_cast or gsl::narrow instead to guard against undefined behavior and potential data loss(es.46).
+
 #include "nitf/coda-oss.hpp"
+
 #pragma comment(lib, "io-c++")
 #pragma comment(lib, "except-c++")
 #pragma comment(lib, "sys-c++")
 #pragma comment(lib, "str-c++")
+#pragma comment(lib, "mt-c++")
+#pragma comment(lib, "math-c++")
 
 // We're building in Visual Studio ... used to control where we get a little bit of config info
 #define NITRO_PCH 1
@@ -25,6 +32,7 @@
 #include "nitf/Field.h"
 #include "nitf/Types.h"
 #pragma comment(lib, "nitf-c")
+#pragma comment(lib, "openjpeg")
 
 // changing this breaks SWIG
 #pragma warning (disable: 26812) // The enum type '...' is unscoped. Prefer '...' over '...'
@@ -38,4 +46,5 @@
 #pragma warning(disable: 26458) // Prefer to use gsl::at() instead of unchecked subscript operator (bounds.4).
 #pragma warning(disable: 26486) // Don't pass a pointer that may be invalid to a function. Parameter '...' in call to '...' may be invalid (lifetime.3).
 #pragma warning(disable: 26487) // Don't return a pointer '...' that may be invalid(lifetime.4).
+
 #include "nitf/Object.hpp"

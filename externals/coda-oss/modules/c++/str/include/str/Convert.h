@@ -20,11 +20,10 @@
  *
  */
 
-#ifndef __STR_CONVERT_H__
-#define __STR_CONVERT_H__
+#ifndef CODA_OSS_str_Convert_h_INCLUDED_
+#define CODA_OSS_str_Convert_h_INCLUDED_
 #pragma once
 
-#include <import/except.h>
 #include <cerrno>
 #include <complex>
 #include <cstdlib>
@@ -36,10 +35,10 @@
 #include <string>
 #include <typeinfo>
 
-// This is a fairly low-level file, so don't #include a lot of our other files
-#include "str/String_.h"
-
-#include "str/Encoding.h"
+#include "config/Exports.h"
+#include "coda_oss/string.h"
+#include "coda_oss/optional.h"
+#include "import/except.h"
 
 namespace str
 {
@@ -49,6 +48,8 @@ int getPrecision(const T& type);
 template <typename T>
 int getPrecision(const std::complex<T>& type);
 
+// Note that std::to_string() doesn't necessarily generate the same output as writing
+// to std::cout; see https://en.cppreference.com/w/cpp/string/basic_string/to_string
 template <typename T>
 std::string toString(const T& value)
 {
@@ -59,15 +60,24 @@ std::string toString(const T& value)
 }
 
 template <>
-std::string toString(const uint8_t& value);
+CODA_OSS_API std::string toString(const uint8_t& value);
 
 template <>
-std::string toString(const int8_t& value);
+CODA_OSS_API std::string toString(const int8_t& value);
 
 template <>
 inline std::string toString(const std::nullptr_t&)
 {
     return "<nullptr>";
+}
+
+template <>
+CODA_OSS_API std::string toString(const coda_oss::u8string&);
+
+template <typename T>
+std::string toString(const coda_oss::optional<T>& value)
+{
+    return toString(value.value());
 }
 
 template <typename T>
@@ -116,11 +126,11 @@ std::string toType<std::string>(const std::string& s);
 /**
  *  strtoll wrapper for msvc compatibility.
  */
-long long strtoll(const char* str, char** endptr, int base);
+CODA_OSS_API long long strtoll(const char* str, char** endptr, int base);
 /**
  *  strtoull wrapper for msvc compatibility.
  */
-unsigned long long strtoull(const char* str, char** endptr, int base);
+CODA_OSS_API unsigned long long strtoull(const char* str, char** endptr, int base);
 
 /**
  *  Convert a string containing a number in any base to a numerical type.
@@ -230,4 +240,4 @@ T generic_cast(const std::string& value)
 
 }
 
-#endif
+#endif // CODA_OSS_str_Convert_h_INCLUDED_

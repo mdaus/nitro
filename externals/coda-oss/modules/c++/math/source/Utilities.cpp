@@ -57,7 +57,7 @@ sys::Uint64_T nChooseK(size_t n, size_t k)
 }
 }
 
-static inline void sincosf_(float x, float& sin, float& cos)
+inline void sincosf_(float x, float& sin, float& cos)
 {
     #if !_WIN32 // TODO: what about Apple?
     sincosf(x, &sin, &cos);
@@ -66,7 +66,7 @@ static inline void sincosf_(float x, float& sin, float& cos)
     cos = std::cos(x);
     #endif
 }
-static inline void sincos_(double x, double& sin, double& cos)
+inline void sincos_(double x, double& sin, double& cos)
 {
 #if !_WIN32  // TODO: what about Apple?
     sincos(x, &sin, &cos);
@@ -75,11 +75,24 @@ static inline void sincos_(double x, double& sin, double& cos)
     cos = std::cos(x);
 #endif
 }
-void math::SinCos(float x, float& sin, float& cos)
+inline void sincosl_(long double x, long double& sin, long double& cos)
+{
+#if !_WIN32  // TODO: what about Apple?
+    sincosl(x, &sin, &cos);
+#else
+    sin = std::sin(x);
+    cos = std::cos(x);
+#endif
+}
+void math::SinCos(float x, float& sin, float& cos) noexcept
 {
     sincosf_(x, sin, cos);
 }
-void math::SinCos(double x, double& sin, double& cos)
+void math::SinCos(double x, double& sin, double& cos) noexcept
 {
     sincos_(x, sin, cos);
+}
+void math::SinCos(long double x, long double& sin, long double& cos) noexcept
+{
+    sincosl_(x, sin, cos);
 }

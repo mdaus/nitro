@@ -29,6 +29,7 @@
     <ClCompile Include="nitf\source\DownSampler.cpp" />
     <ClCompile Include="nitf\source\Extensions.cpp" />
     <ClCompile Include="nitf\source\Field.cpp" />
+    <ClCompile Include="nitf\source\FieldDescriptor.cpp" />
     <ClCompile Include="nitf\source\FieldWarning.cpp" />
     <ClCompile Include="nitf\source\FileHeader.cpp" />
     <ClCompile Include="nitf\source\FileSecurity.cpp" />
@@ -47,6 +48,15 @@
     <ClCompile Include="nitf\source\IOInterface.cpp" />
     <ClCompile Include="nitf\source\IOStreamReader.cpp" />
     <ClCompile Include="nitf\source\IOStreamWriter.cpp" />
+    <ClCompile Include="nitf\source\J2KComponent.cpp" />
+    <ClCompile Include="nitf\source\J2KCompressionParameters.cpp" />
+    <ClCompile Include="nitf\source\J2KCompressor.cpp" />
+    <ClCompile Include="nitf\source\J2KContainer.cpp" />
+    <ClCompile Include="nitf\source\J2KEncoder.cpp" />
+    <ClCompile Include="nitf\source\J2KImage.cpp" />
+    <ClCompile Include="nitf\source\J2KReader.cpp" />
+    <ClCompile Include="nitf\source\J2KStream.cpp" />
+    <ClCompile Include="nitf\source\J2KWriter.cpp" />
     <ClCompile Include="nitf\source\LabelSegment.cpp" />
     <ClCompile Include="nitf\source\LabelSubheader.cpp" />
     <ClCompile Include="nitf\source\List.cpp" />
@@ -62,9 +72,11 @@
     <ClCompile Include="nitf\source\SegmentSource.cpp" />
     <ClCompile Include="nitf\source\SegmentWriter.cpp" />
     <ClCompile Include="nitf\source\SubWindow.cpp" />
+    <ClCompile Include="nitf\source\TestingTest.cpp" />
     <ClCompile Include="nitf\source\TextSegment.cpp" />
     <ClCompile Include="nitf\source\TextSubheader.cpp" />
     <ClCompile Include="nitf\source\TRE.cpp" />
+    <ClCompile Include="nitf\source\UnitTests.cpp" />
     <ClCompile Include="nitf\source\Utils.cpp" />
     <ClCompile Include="nitf\source\WriteHandler.cpp" />
     <ClCompile Include="nitf\source\Writer.cpp" />
@@ -96,6 +108,7 @@
     <ClInclude Include="nitf\include\nitf\exports.hpp" />
     <ClInclude Include="nitf\include\nitf\Extensions.hpp" />
     <ClInclude Include="nitf\include\nitf\Field.hpp" />
+    <ClInclude Include="nitf\include\nitf\FieldDescriptor.hpp" />
     <ClInclude Include="nitf\include\nitf\FieldWarning.hpp" />
     <ClInclude Include="nitf\include\nitf\FileHeader.hpp" />
     <ClInclude Include="nitf\include\nitf\FileSecurity.hpp" />
@@ -115,6 +128,15 @@
     <ClInclude Include="nitf\include\nitf\IOInterface.hpp" />
     <ClInclude Include="nitf\include\nitf\IOStreamReader.hpp" />
     <ClInclude Include="nitf\include\nitf\IOStreamWriter.hpp" />
+    <ClInclude Include="nitf\include\nitf\J2KComponent.hpp" />
+    <ClInclude Include="nitf\include\nitf\J2KCompressionParameters.hpp" />
+    <ClInclude Include="nitf\include\nitf\J2KCompressor.hpp" />
+    <ClInclude Include="nitf\include\nitf\J2KContainer.hpp" />
+    <ClInclude Include="nitf\include\nitf\J2KEncoder.hpp" />
+    <ClInclude Include="nitf\include\nitf\J2KImage.hpp" />
+    <ClInclude Include="nitf\include\nitf\J2KReader.hpp" />
+    <ClInclude Include="nitf\include\nitf\J2KStream.hpp" />
+    <ClInclude Include="nitf\include\nitf\J2KWriter.hpp" />
     <ClInclude Include="nitf\include\nitf\LabelSegment.hpp" />
     <ClInclude Include="nitf\include\nitf\LabelSubheader.hpp" />
     <ClInclude Include="nitf\include\nitf\List.hpp" />
@@ -135,10 +157,12 @@
     <ClInclude Include="nitf\include\nitf\SegmentWriter.hpp" />
     <ClInclude Include="nitf\include\nitf\SubWindow.hpp" />
     <ClInclude Include="nitf\include\nitf\System.hpp" />
+    <ClInclude Include="nitf\include\nitf\TestingTest.hpp" />
     <ClInclude Include="nitf\include\nitf\TextSegment.hpp" />
     <ClInclude Include="nitf\include\nitf\TextSubheader.hpp" />
     <ClInclude Include="nitf\include\nitf\TRE.hpp" />
-    <ClInclude Include="nitf\include\nitf\TREs\TREField.hpp" />
+    <ClInclude Include="nitf\include\nitf\TREField.hpp" />
+    <ClInclude Include="nitf\include\nitf\UnitTests.hpp" />
     <ClInclude Include="nitf\include\nitf\Utils.hpp" />
     <ClInclude Include="nitf\include\nitf\Version.hpp" />
     <ClInclude Include="nitf\include\nitf\WriteHandler.hpp" />
@@ -162,11 +186,11 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -195,7 +219,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)nitf\include\;$(ProjectDir)..\c\nrt\include\;$(ProjectDir)..\c\nitf\include\;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)nitf\include\;$(ProjectDir)..\c\nrt\include\;$(ProjectDir)..\c\nitf\include\;$(ProjectDir)..\c\j2k\include\;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
@@ -203,11 +227,12 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <EnablePREfast>true</EnablePREfast>
-      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <Optimization>Disabled</Optimization>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <SupportJustMyCode>true</SupportJustMyCode>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -226,14 +251,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)nitf\include\;$(ProjectDir)..\c\nrt\include\;$(ProjectDir)..\c\nitf\include\;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)nitf\include\;$(ProjectDir)..\c\nrt\include\;$(ProjectDir)..\c\nitf\include\;$(ProjectDir)..\c\j2k\include\;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\include\</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
       <ControlFlowGuard>Guard</ControlFlowGuard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <WarningLevel>Level3</WarningLevel>
     </ClCompile>

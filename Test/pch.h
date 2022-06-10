@@ -1,7 +1,11 @@
-//
-// pch.h
-// Header for standard system include files.
-//
+// pch.h: This is a precompiled header file.
+// Files listed below are compiled only once, improving build performance for future builds.
+// This also affects IntelliSense performance, including code completion and many code browsing features.
+// However, files listed here are ALL re-compiled if any one of them is updated between builds.
+// Do not add files here that you will be updating frequently as this negates the performance advantage.
+
+#ifndef PCH_H
+#define PCH_H
 #pragma once
 
 #pragma warning(disable: 4820) // '...': '...' bytes padding added after data member '...'
@@ -21,9 +25,11 @@
 // We're building in Visual Studio ... used to control where we get a little bit of config info
 #define NITRO_PCH 1
 
+#pragma warning(disable: 5032) // detected #pragma warning(push) with no corresponding #pragma warning(pop)
 #pragma warning(push)
 #pragma warning(disable: 4464) // relative include path contains '..'
 #include <nitf/coda-oss.hpp>
+#pragma warning(disable: 5031) // #pragma warning(pop): likely mismatch, popping warning state pushed in different file
 #pragma comment(lib, "io-c++")
 #pragma comment(lib, "except-c++")
 #pragma comment(lib, "sys-c++")
@@ -31,20 +37,14 @@
 #pragma warning(pop)
 
 #pragma warning(push)
-#pragma warning(disable: 4388) // '...': signed / unsigned mismatch
-#pragma warning(disable: 4389) // '...': signed / unsigned mismatch
-#pragma warning(disable: 4800) // Implicit conversion from '...' to bool. Possible information loss
-#pragma warning(disable: 4625) // '...': copy constructor was implicitly defined as deleted
-#pragma warning(disable: 4626) // '...': assignment operator was implicitly defined as deleted
-#pragma warning(disable: 5026) // '...': move constructor was implicitly defined as deleted
-#pragma warning(disable: 5027) //	'...': move assignment operator was implicitly defined as deleted
-#include "gtest/gtest.h"
+#include "CppUnitTest.h"
 #pragma warning(pop)
 
 #include <import/nrt.h>
+#include <import/nitf.h>
 #include <nitf/System.hpp>
 
 #include "nitf_Test.h"
 #include "Test.h"
 
-
+#endif //PCH_H

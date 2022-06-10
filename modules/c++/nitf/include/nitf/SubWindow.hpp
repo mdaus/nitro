@@ -72,12 +72,12 @@ public:
     SubWindow(nitf_SubWindow * x);
 
     //! Constructor
-    SubWindow();
+    SubWindow() noexcept(false);
     SubWindow(const ImageSubheader&);
     SubWindow(uint32_t rows, uint32_t cols, uint32_t* bands = nullptr, uint32_t numBands = 0);
 
     //! Destructor
-    ~SubWindow();
+    ~SubWindow() /*noexcept(false)*/;
 
     uint32_t getStartRow() const;
     uint32_t getNumRows() const;

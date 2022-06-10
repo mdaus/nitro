@@ -20,13 +20,10 @@
  *
  */
 
-#include <config/coda_oss_config.h>
 #include <mem/SharedPtr.h>
 
 #include "TestCase.h"
 
-namespace
-{
 struct Foo
 {
     Foo(size_t val) :
@@ -347,12 +344,10 @@ TEST_CASE(testStdSharedPtr)
     std::shared_ptr<Foo> fooAssign = fooLegacy;
     TEST_ASSERT_EQ(fooLegacy.get(), fooAssign.get());
 
-    TEST_ASSERT_EQ(cpp11Function(fooLegacy), 123);
-}
+    TEST_ASSERT_EQ(cpp11Function(fooLegacy), static_cast<size_t>(123));
 }
 
-int main(int, char**)
-{
+TEST_MAIN(
    TEST_CHECK(testNullCopying);
    TEST_CHECK(testAutoPtrConstructor);
    TEST_CHECK(testAutoPtrReset);
@@ -361,6 +356,4 @@ int main(int, char**)
    TEST_CHECK(testSyntax);
    TEST_CHECK(testCasting);
    TEST_CHECK(testStdSharedPtr);
-
-   return 0;
-}
+   )

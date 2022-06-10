@@ -1,11 +1,13 @@
 #include "pch.h"
 
-#include <windows.h>
-#include <combaseapi.h>
-#undef interface
-
 #include "nitf_Test.h"
 
-#define TEST_CASE(X) TEST(nitf_test_image_io, X)
+using namespace Microsoft::VisualStudio::CppUnitTestFramework;
+
+TEST_CLASS(nitf_test_image_io) {
+public:
+
+#define TEST_CASE(X) TEST_METHOD(X)
 #include "nitf/unittests/test_image_io.c"
 
+};

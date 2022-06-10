@@ -20,11 +20,17 @@
  *
  */
 
-#ifndef __IO_OUTPUT_STREAM_H__
-#define __IO_OUTPUT_STREAM_H__
+#ifndef CODA_OSS_io_OutputStream_h_INCLUDED_
+#define CODA_OSS_io_OutputStream_h_INCLUDED_
+#pragma once
+
+#include <string>
 
 #include "sys/Dbg.h"
 #include "sys/Conf.h"
+#include "coda_oss/string.h"
+#include "coda_oss/cstddef.h"
+#include "coda_oss/span.h"
 
 /*!
  * \file OutputStream.h
@@ -57,6 +63,10 @@ struct OutputStream
     {
         write(&b, 1);
     }
+    void write(coda_oss::byte b)
+    {
+        write(&b, 1);
+    }
 
     /*!
      *  Write a string
@@ -64,8 +74,11 @@ struct OutputStream
      */
     void write(const std::string& str)
     {
-        const void* const pStr = str.c_str();
-        write(static_cast<const sys::byte*>(pStr), str.length());
+        write(coda_oss::span<const std::string::value_type>(str.data(), str.size()));
+    }
+    void write(const coda_oss::u8string& str)
+    {
+        write(coda_oss::span<const coda_oss::u8string::value_type>(str.data(), str.size()));
     }
 
     /*!
@@ -73,6 +86,11 @@ struct OutputStream
      *  \param str
      */
     void writeln(const std::string& str)
+    {
+        write(str);
+        write('\n');
+    }
+    void writeln(const coda_oss::u8string& str)
     {
         write(str);
         write('\n');
@@ -87,6 +105,16 @@ struct OutputStream
      * \throw IOException
      */
     virtual void write(const void* buffer, size_t len) = 0;
+    template<typename T>
+    void write(coda_oss::span<const T> buffer)
+    {
+        write(buffer.data(), buffer.size_bytes());
+    }
+    template <typename T>
+    void write(coda_oss::span<T> buffer)
+    {
+        write(coda_oss::span<const T>(buffer.data(), buffer.size()));
+    }
 
     /*!
      *  Flush the stream if needed
@@ -104,4 +132,4 @@ struct OutputStream
 };
 }
 
-#endif
+#endif // CODA_OSS_io_OutputStream_h_INCLUDED_

@@ -29,33 +29,18 @@
 #include <std/string>
 
 #include <import/str.h>
-#include <str/utf8.h>
+#include <str/EncodedString.h>
+#include <str/Encoding.h>
 
 #include "TestCase.h"
 
-template<typename T>
-std::string to_std_string(const T& value)
+static std::string to_string(const coda_oss::u8string& value)
 {
-    // This is OK as UTF-8 can be stored in std::string
-    // Note that casting between the string types will CRASH on some
-    // implementations. NO: reinterpret_cast<const std::string&>(value)
-    return str::c_str<std::string::const_pointer>(value);  // copy
+    return str::c_str<std::string>(value);  // copy
 }
-template<>
-std::string to_std_string(const std::u32string& value)
+static std::string to_string(const std::u32string& s)
 {
-    str::U8string result;
-    str::utf32to8(value, result);
-    return to_std_string(result);
-}
-template<typename TActual, typename TExpected>
-void test_assert_eq(const std::string& testName,
-                           const TActual& actual, const TExpected& expected)
-{
-    //TEST_ASSERT(actual == expected);
-    const auto actual_ = to_std_string(actual);
-    const auto expected_ = to_std_string(expected);
-    TEST_ASSERT_EQ(actual_, expected_);
+    return to_string(str::to_u8string(s));
 }
 
 TEST_CASE(testConvert)
@@ -90,10 +75,10 @@ TEST_CASE(testCharToString)
     TEST_ASSERT_EQ(str::toString<char>(65), "A");
 }
 
-static sys::U8string fromWindows1252(const std::string& s)
+static coda_oss::u8string fromWindows1252(const std::string& s)
 {
     // s is Windows-1252 on ALL platforms
-    return str::fromWindows1252(s);
+    return str::fromWindows1252(s.c_str(), s.size());
 }
 
 template<typename T>
@@ -113,7 +98,7 @@ TEST_CASE(test_string_to_u8string_ascii)
         const std::string input = "|\x00";  //  ASCII, "|<NULL>"
         const auto actual = fromWindows1252(input);
         const std::u8string expected{cast8('|')}; // '\x00' is the end of the string in C/C++
-        test_assert_eq(testName, actual, expected);
+        TEST_ASSERT_EQ(actual, expected);
     }
     constexpr uint8_t start_of_heading = 0x01;
     constexpr uint8_t delete_character = 0x7f;
@@ -122,9 +107,9 @@ TEST_CASE(test_string_to_u8string_ascii)
         const std::string input { '|', static_cast<std::string::value_type>(ch), '|'};
         const auto actual = fromWindows1252(input);
         const std::u8string expected8{cast8('|'), cast8(ch), cast8('|')}; 
-        test_assert_eq(testName, actual, expected8);
+        TEST_ASSERT_EQ(actual, expected8);
         const std::u32string expected{cast32('|'), cast32(ch), cast32('|')};
-        test_assert_eq(testName, actual, expected);
+        TEST_ASSERT_EQ(to_string(actual), to_string(expected));
     }
 }
 
@@ -135,31 +120,84 @@ TEST_CASE(test_string_to_u8string_windows_1252)
         const std::string input = "|\x80|";  // Windows-1252, "|€|"
         const auto actual = fromWindows1252(input);
         const std::u8string expected8{cast8('|'), cast8('\xE2'), cast8('\x82'), cast8('\xAC'), cast8('|')};  // UTF-8,  "|€|"
-        test_assert_eq(testName, actual, expected8);
+        TEST_ASSERT_EQ(actual, expected8);
         const std::u32string expected{cast32('|'), 0x20AC, cast32('|')};  // UTF-32,  "|€|"
-        test_assert_eq(testName, actual, expected);
+        TEST_ASSERT_EQ(to_string(actual), to_string(expected));
     }
     {
         const std::string input = "|\x9F|";  // Windows-1252, "|Ÿ|"
         const auto actual = fromWindows1252(input);
         const std::u8string expected8{cast8('|'), cast8('\xC5'), cast8('\xB8'), cast8('|')};  // UTF-8,  "|Ÿ|"
-        test_assert_eq(testName, actual, expected8);
+        TEST_ASSERT_EQ(actual, expected8);
         const std::u32string expected{cast32('|'), 0x0178, cast32('|')};  // UTF-32,  "|Ÿ|"
-        test_assert_eq(testName, actual, expected);
-
+        TEST_ASSERT_EQ(to_string(actual), to_string(expected));
     }
-    const std::vector<char> undefined{ '\x81', '\x8d', '\x8f', '\x90', '\x9d' };
-    for (const auto& ch : undefined)
     {
-        const std::string input{'|', ch, '|'};
-        const auto actual = fromWindows1252(input);
-        static const std::u8string expected8{cast8('|'), cast8('\xEF'), cast8('\xBF'), cast8('\xBD'), cast8('|')};  // UTF-8,  "|<REPLACEMENT CHARACTER>|"
-        test_assert_eq(testName, actual, expected8);
-        const std::u32string expected{cast32('|'), 0xfffd, cast32('|')};  // UTF-32,  "|<REPLACEMENT CHARACTER>|"
-        test_assert_eq(testName, actual, expected);
+        const std::vector<char> undefined{ '\x81', '\x8d', '\x8f', '\x90', '\x9d' };
+        for (const auto& ch : undefined)
+        {
+            const std::string input{'|', ch, '|'};
+            const auto actual = fromWindows1252(input);
+            static const std::u8string expected8{cast8('|'), cast8('\xEF'), cast8('\xBF'), cast8('\xBD'), cast8('|')};  // UTF-8,  "|<REPLACEMENT CHARACTER>|"
+            TEST_ASSERT_EQ(actual, expected8);
+            const std::u32string expected{cast32('|'), 0xfffd, cast32('|')};  // UTF-32,  "|<REPLACEMENT CHARACTER>|"
+            TEST_ASSERT_EQ(to_string(actual), to_string(expected));
+        }    
+    }
+    {
+        //  http://www.unicode.org/Public/MAPPINGS/VENDORS/MICSFT/WINDOWS/CP1252.TXT
+        const std::vector<uint8_t> windows1252_characters{
+                //0x80,  // EURO SIGN
+                //0x82,  // SINGLE LOW-9 QUOTATION MARK
+                //0x83,  // LATIN SMALL LETTER F WITH HOOK
+                //0x84,  // DOUBLE LOW-9 QUOTATION MARK
+                //0x85,  // HORIZONTAL ELLIPSIS
+                //0x86,  // DAGGER
+                //0x87,  // DOUBLE DAGGER
+                //0x88,  // MODIFIER LETTER CIRCUMFLEX ACCENT
+                //0x89,  // PER MILLE SIGN
+                //0x8A,  // LATIN CAPITAL LETTER S WITH CARON
+                //0x8B,  // SINGLE LEFT-POINTING ANGLE QUOTATION MARK
+                //0x8C,  // LATIN CAPITAL LIGATURE OE
+                0x8E,  // LATIN CAPITAL LETTER Z WITH CARON
+                0x91,  // LEFT SINGLE QUOTATION MARK
+                0x92,  // RIGHT SINGLE QUOTATION MARK
+                0x93,  // LEFT DOUBLE QUOTATION MARK
+                0x94,  // RIGHT DOUBLE QUOTATION MARK
+                0x95,  // BULLET
+                0x96,  // EN DASH
+                0x97,  // EM DASH
+                0x98,  // SMALL TILDE
+                0x99,  // TRADE MARK SIGN
+                0x9A,  // LATIN SMALL LETTER S WITH CARON
+                0x9B,  // SINGLE RIGHT-POINTING ANGLE QUOTATION MARK
+                0x9C,  // LATIN SMALL LIGATURE OE
+                0x9E,  // LATIN SMALL LETTER Z WITH CARON
+                0x9F};  // LATIN CAPITAL LETTER Y WITH DIAERESIS
+        for (const auto& ch : windows1252_characters)
+        {
+            const std::string input_ { '|', static_cast<std::string::value_type>(ch), '|'};
+            const str::W1252string input(str::c_str<str::W1252string>(input_));
+            const auto actual = to_u8string(input);
+
+            // No "expected" to test against as the UTF-8 values for these Windows-1252 characters
+            // are mapped one-by-one.  However, we can test that UTF-8 to Windows-1252
+            // works as that walks through a UTF-8 string which can have 1-, 2-, 3- and 4-bytes
+            // for a single code-point.
+            const str::W1252string w1252 = str::details::to_w1252string(actual.data(), actual.size());
+            TEST_ASSERT(input == w1252);
+
+            // Can't compare the values with == because TEST_ASSERT_EQ()
+            // wants to do toString() and that doesn't work on Linux as the encoding
+            // is wrong (see above).
+            //const std::string w1252_ = str::c_str<std::string::const_pointer>(w1252);
+            //TEST_ASSERT_EQ(input_, w1252_);
+            const str::EncodedStringView inputView(input);
+            const str::EncodedStringView w1252View(w1252);
+            TEST_ASSERT_EQ(inputView, w1252View);
+        }    
     }
 }
-
 
 TEST_CASE(test_string_to_u8string_iso8859_1)
 {
@@ -167,16 +205,29 @@ TEST_CASE(test_string_to_u8string_iso8859_1)
     constexpr uint8_t latin_small_letter_y_with_diaeresis = 0xff;  // 'ÿ'
     for (uint32_t ch = nobreak_space; ch <= latin_small_letter_y_with_diaeresis; ch++)  // ISO8859-1
     {
-        const std::string input { '|', static_cast<std::string::value_type>(ch), '|'};
-        const auto actual = fromWindows1252(input);
+        const std::string input_ { '|', static_cast<std::string::value_type>(ch), '|'};
+        const str::W1252string input(str::c_str<str::W1252string>(input_));
+        const auto actual = to_u8string(input);
         const std::u32string expected{cast32('|'), cast32(ch), cast32('|')};
-        test_assert_eq(testName, actual, expected);
+        TEST_ASSERT_EQ(to_string(actual), to_string(expected));
+
+        // Can't compare the values with == because TEST_ASSERT_EQ()
+        // wants to do toString() and that doesn't work on Linux as the encoding
+        // is wrong (see above).
+        //std::string actual_;
+        //str::details::toString(actual.c_str(), actual_);
+        //TEST_ASSERT_EQ(input_, actual_);
+        const str::EncodedStringView inputView(input);
+        const str::EncodedStringView actualView(actual);
+        TEST_ASSERT_EQ(inputView, actualView);
     }
 }
 
 template<typename TString>
 static void test_change_case_(const std::string& testName, const TString& lower, const TString& upper)
 {
+    (void)testName;
+
     auto s = upper;
     str::lower(s);
     TEST_ASSERT(s == lower);
@@ -195,7 +246,7 @@ TEST_CASE(test_change_case)
 {
     const std::string ABC = "ABC";
     const std::string abc = "abc";
-    test_change_case_(testName, abc, ABC);
+    test_change_case_("test_change_case", abc, ABC);
 
     //const std::wstring ABC_w = L"ABC";
     //const std::wstring abc_w = L"abc";
@@ -212,8 +263,156 @@ TEST_CASE(test_change_case)
     //test_change_case_(testName, def_1252, DEF_1252);
 }
 
-int main(int, char**)
+// https://en.wikipedia.org/wiki/%C3%89#Character_mappings
+static const str::EncodedString& classificationText_utf_8()
 {
+    static const str::EncodedString retval(str::cast<coda_oss::u8string::const_pointer>("NON CLASSIFI\xc3\x89 / UNCLASSIFIED")); // UTF-8 "NON CLASSIFIÉ / UNCLASSIFIED"
+    return retval;
+ }
+static const str::EncodedString& classificationText_iso8859_1()
+{
+    static const str::EncodedString retval(str::cast<str::W1252string::const_pointer>("NON CLASSIFI\xc9 / UNCLASSIFIED"));  // ISO8859-1 "NON CLASSIFIÉ / UNCLASSIFIED"    
+    return retval;
+ }
+// UTF-16 on Windows, UTF-32 on Linux
+static const wchar_t* classificationText_wide_() { return L"NON CLASSIFI\xc9 / UNCLASSIFIED"; } // UTF-8 "NON CLASSIFIÉ / UNCLASSIFIED"
+static str::EncodedString classificationText_wide() { return str::EncodedString(classificationText_wide_()); }
+static std::string classificationText_platform() { return 
+    sys::Platform == sys::PlatformType::Linux ? classificationText_utf_8().native() : classificationText_iso8859_1().native(); }
+
+TEST_CASE(test_u8string_to_string)
+{
+    {
+        const auto utf8 = classificationText_utf_8().u8string();
+        const str::EncodedStringView utf8View(utf8);
+        const auto actual = utf8View.native();
+        TEST_ASSERT_EQ(classificationText_platform(), actual);
+    }
+    {
+        const auto utf8 = classificationText_iso8859_1().u8string();
+        const str::EncodedStringView utf8View(utf8);
+        const auto actual = utf8View.native();
+        TEST_ASSERT_EQ(classificationText_platform(), actual);
+    }
+}
+
+TEST_CASE(test_u8string_to_u16string)
+{
+    #if _WIN32
+    const auto actual = classificationText_utf_8().u16string();
+    const std::wstring s = str::c_str<std::wstring>(actual); // Windows: std::wstring == std::u16string
+    TEST_ASSERT(classificationText_wide_() == s);  // _EQ wants to do toString()
+    #endif
+
+    TEST_ASSERT_EQ(classificationText_wide(), classificationText_utf_8());
+    TEST_ASSERT_EQ(classificationText_wide(), classificationText_iso8859_1());
+
+    TEST_ASSERT(classificationText_wide().u16string() == classificationText_utf_8().u16string()); // _EQ wants to do toString()
+    TEST_ASSERT(classificationText_wide().u16string() == classificationText_iso8859_1().u16string()); // _EQ wants to do toString()
+}
+
+TEST_CASE(test_u8string_to_u32string)
+{
+    #if !_WIN32
+    const auto actual = classificationText_utf_8().u32string();
+    const std::wstring s  = str::c_str<std::wstring>(actual); // Linux: std::wstring == std::u32string
+    TEST_ASSERT(classificationText_wide_() == s); // _EQ wants to do toString()
+    #endif
+
+    TEST_ASSERT_EQ(classificationText_wide(), classificationText_utf_8());
+    TEST_ASSERT_EQ(classificationText_wide(), classificationText_iso8859_1());
+
+    TEST_ASSERT(classificationText_wide().u32string() == classificationText_utf_8().u32string()); // _EQ wants to do toString()
+    TEST_ASSERT(classificationText_wide().u32string() == classificationText_iso8859_1().u32string()); // _EQ wants to do toString()
+}
+
+static void test_EncodedStringView_(const std::string& testName,
+    const str::EncodedStringView& utf_8_view, const str::EncodedStringView& iso8859_1_view)
+{
+    (void)testName;
+    TEST_ASSERT_EQ(iso8859_1_view, iso8859_1_view);
+    TEST_ASSERT_EQ(utf_8_view, utf_8_view);
+    TEST_ASSERT_EQ(iso8859_1_view, utf_8_view);
+    TEST_ASSERT_EQ(utf_8_view, iso8859_1_view);
+
+    TEST_ASSERT_EQ(iso8859_1_view.native(), utf_8_view.native());
+    const auto native = classificationText_platform();
+    TEST_ASSERT_EQ(iso8859_1_view.native(), native);
+    TEST_ASSERT_EQ(utf_8_view.native(), native);
+
+    TEST_ASSERT(utf_8_view == classificationText_utf_8());
+    TEST_ASSERT_EQ(utf_8_view, classificationText_utf_8());
+    TEST_ASSERT(iso8859_1_view == classificationText_utf_8());
+    TEST_ASSERT_EQ(iso8859_1_view, classificationText_utf_8());
+    TEST_ASSERT(iso8859_1_view.u8string() == utf_8_view.u8string());
+
+    std::string utf8;
+    TEST_ASSERT_EQ(utf_8_view.toUtf8(utf8), str::EncodedString::details::string(classificationText_utf_8()));
+    utf8.clear();
+    TEST_ASSERT_EQ(iso8859_1_view.toUtf8(utf8), str::EncodedString::details::string(classificationText_utf_8()));
+}
+TEST_CASE(test_EncodedStringView)
+{
+    str::EncodedStringView esv;
+    auto copy(esv);
+    copy = esv; // assignment
+
+    {
+        auto utf_8_view(classificationText_utf_8().view());
+        auto iso8859_1_view(classificationText_iso8859_1().view());
+        test_EncodedStringView_("test_EncodedStringView", utf_8_view, iso8859_1_view);
+        
+        utf_8_view = classificationText_iso8859_1().view();
+        iso8859_1_view = classificationText_utf_8().view();
+        test_EncodedStringView_("test_EncodedStringView", utf_8_view, iso8859_1_view);
+    }
+    {
+        auto utf_8_view = classificationText_utf_8().view();
+        auto iso8859_1_view = classificationText_iso8859_1().view();
+        test_EncodedStringView_("test_EncodedStringView", utf_8_view, iso8859_1_view);
+
+        utf_8_view = classificationText_iso8859_1().view();
+        iso8859_1_view = classificationText_utf_8().view();
+        test_EncodedStringView_("test_EncodedStringView", utf_8_view, iso8859_1_view);
+    }
+    {
+        str::EncodedStringView utf_8_view;
+        utf_8_view = classificationText_iso8859_1().view();
+        str::EncodedStringView iso8859_1_view;
+        iso8859_1_view = classificationText_utf_8().view();
+        test_EncodedStringView_("test_EncodedStringView", utf_8_view, iso8859_1_view);
+    }
+}
+
+TEST_CASE(test_EncodedString)
+{
+    str::EncodedString es;
+    TEST_ASSERT_TRUE(es.native().empty());
+    {
+        str::EncodedString es_copy(es);  // copy
+        TEST_ASSERT_TRUE(es_copy.native().empty());
+    }
+    es = str::EncodedString("abc"); // assignment
+    TEST_ASSERT_EQ(es.native(), "abc");
+    {
+        str::EncodedString es_copy(es);  // copy, again; this time w/o default content
+        TEST_ASSERT_EQ(es_copy.native(), "abc");
+    }
+
+    str::EncodedString abc(es); // copy, for use below
+    TEST_ASSERT_EQ(abc.native(), "abc");
+    
+    str::EncodedString es2;
+    es = std::move(es2);  // move assignment
+    TEST_ASSERT_TRUE(es.native().empty());
+    str::EncodedString abc_(abc);  // copy
+    es = std::move(abc_); // move assignment, w/o default content
+    TEST_ASSERT_EQ(es.native(), "abc");
+
+    str::EncodedString es3(std::move(abc)); // move constructor
+    TEST_ASSERT_EQ(es3.native(), "abc");
+}
+TEST_MAIN(
     TEST_CHECK(testConvert);
     TEST_CHECK(testBadConvert);
     TEST_CHECK(testEightBitIntToString);
@@ -222,4 +421,9 @@ int main(int, char**)
     TEST_CHECK(test_string_to_u8string_windows_1252);
     TEST_CHECK(test_string_to_u8string_iso8859_1);
     TEST_CHECK(test_change_case);
-}
+    TEST_CHECK(test_u8string_to_string);
+    TEST_CHECK(test_u8string_to_u16string);
+    TEST_CHECK(test_u8string_to_u32string);
+    TEST_CHECK(test_EncodedStringView);
+    TEST_CHECK(test_EncodedString);
+    )
