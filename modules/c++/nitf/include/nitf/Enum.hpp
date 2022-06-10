@@ -62,18 +62,6 @@ namespace nitf
         {
             return index(map, key, std::invalid_argument("key not found in map."));
         }
-
-        template<typename T>
-        inline std::string to_string(T v, const std::map<std::string, T>& string_to_enum) noexcept(false)
-        {
-            static const auto enum_to_string = swap_key_value(string_to_enum);
-            return index(enum_to_string, v);
-        }
-        template<typename T>
-        inline T from_string(const std::string& v, const std::map<std::string, T>& string_to_enum) noexcept(false)
-        {
-            return index(string_to_enum, v);
-        }
     }
 
 #define NITF_ENUM_define_enum_(name, ...) enum class name { __VA_ARGS__ }
@@ -104,21 +92,40 @@ namespace nitf
 #define NITF_ENUM(n, name, ...) NITF_ENUM_define_enum_(name, __VA_ARGS__); \
         NITF_ENUM_define_string_to_enum_(name, NITF_ENUM_map_entry_##n(name, __VA_ARGS__))
 
+
+    template<typename T>
+    inline std::string to_string(T v, const std::map<std::string, T>& string_to_enum) noexcept(false)
+    {
+        static const auto enum_to_string = details::swap_key_value(string_to_enum);
+        return details::index(enum_to_string, v);
+    }
     template<typename T>
     inline std::string to_string(T v) noexcept(false)
     {
-        return details::to_string(v, string_to_enum(T()));
+        return to_string(v, string_to_enum(T()));
+    }
+
+    template<typename T>
+    inline std::wstring to_wstring(T v, const std::map<std::string, T>& string_to_enum) noexcept(false)
+    {
+        return str::EncodedStringView(to_string(v, string_to_enum)).wstring();
     }
     template<typename T>
     inline std::wstring to_wstring(T v) noexcept(false)
     {
         return str::EncodedStringView(to_string(v)).wstring();
     }
+
     template<typename T>
-    inline T from_string(std::string v) noexcept(false)
+    inline T from_string(std::string v, const std::map<std::string, T>& string_to_enum) noexcept(false)
     {
         str::trim(v);
-        return details::from_string<T>(v, string_to_enum(T()));
+        return details::index(string_to_enum, v);
+    }
+    template<typename T>
+    inline T from_string(const std::string& v) noexcept(false)
+    {
+        return from_string<T>(v, string_to_enum(T()));
     }
 }
 #endif // NITF_Enum_hpp_INCLUDED_
