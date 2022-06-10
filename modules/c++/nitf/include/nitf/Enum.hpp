@@ -63,24 +63,16 @@ namespace nitf
             return index(map, key, std::invalid_argument("key not found in map."));
         }
 
-        // You need to specialize string_to_enum() for each "enum class"
-        template<typename T> const std::map<std::string, T>& string_to_enum();
         template<typename T>
-        inline const std::map<T, std::string>& enum_to_string()
+        inline std::string to_string(T v, const std::map<std::string, T>& string_to_enum) noexcept(false)
         {
-            static const auto retval = swap_key_value(string_to_enum<T>());
-            return retval;
-        }
-
-        template<typename T>
-        inline std::string to_string(T v) noexcept(false)
-        {
-            return index(enum_to_string<T>(), v);
+            static const auto enum_to_string = swap_key_value(string_to_enum);
+            return index(enum_to_string, v);
         }
         template<typename T>
-        inline T from_string(const std::string& v) noexcept(false)
+        inline T from_string(const std::string& v, const std::map<std::string, T>& string_to_enum) noexcept(false)
         {
-            return index(string_to_enum<T>(), v);
+            return index(string_to_enum, v);
         }
     }
 
@@ -104,9 +96,8 @@ namespace nitf
 
 #define NITF_ENUM_define_string_to_enum_ostream_(name) inline std::ostream& operator<<(std::ostream& os, name e) { os << to_string(e); return os; }
 #define NITF_ENUM_define_string_to_enum_begin(name)  NITF_ENUM_define_string_to_enum_ostream_(name) \
-    namespace details { template<> inline const std::map<std::string, name>& string_to_enum() { \
-    static const std::map<std::string, name> retval {
-#define NITF_ENUM_define_string_to_end }; return retval; } }
+   inline const std::map<std::string, name>& string_to_enum(name) { static const std::map<std::string, name> retval {
+#define NITF_ENUM_define_string_to_end }; return retval; }
 #define NITF_ENUM_define_string_to_enum_(name, ...) NITF_ENUM_define_string_to_enum_begin(name) __VA_ARGS__  \
     NITF_ENUM_define_string_to_end
 
@@ -116,18 +107,18 @@ namespace nitf
     template<typename T>
     inline std::string to_string(T v) noexcept(false)
     {
-        return details::to_string(v);
+        return details::to_string(v, string_to_enum(T()));
     }
     template<typename T>
     inline std::wstring to_wstring(T v) noexcept(false)
     {
-        return str::EncodedStringView(details::to_string(v)).wstring();
+        return str::EncodedStringView(to_string(v)).wstring();
     }
     template<typename T>
     inline T from_string(std::string v) noexcept(false)
     {
         str::trim(v);
-        return details::from_string<T>(v);
+        return details::from_string<T>(v, string_to_enum(T()));
     }
 }
 #endif // NITF_Enum_hpp_INCLUDED_
