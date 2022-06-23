@@ -34,7 +34,6 @@ double getRand()
     static const auto call_srand = [](){ srand(176); return true; };
     static auto srand_called = call_srand();
     assert(srand_called);
-
     return (50.0 * rand() / RAND_MAX - 25.0);
 }
 
