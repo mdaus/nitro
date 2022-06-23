@@ -25,13 +25,14 @@
 #include <math/poly/Fixed1D.h>
 #include "TestCase.h"
 
-namespace
-{
 static const size_t ORDER = 5;
 typedef math::poly::Fixed1D<ORDER, double> TestFixed1D;
 
 double getRand()
 {
+    static const auto call_srand = [](){ srand(176); return true; };
+    static auto srand_called = call_srand();
+
     return (50.0 * rand() / RAND_MAX - 25.0);
 }
 
@@ -77,10 +78,7 @@ TEST_CASE(testScaleVariable)
                                   std::abs(.01 * expectedValue));
     }
 }
-}
 
-int main()
-{
-    srand(176);
+TEST_MAIN(
     TEST_CHECK(testScaleVariable);
-}
+)
