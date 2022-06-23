@@ -43,6 +43,8 @@
 #include <numeric> // std::accumulate
 #include <std/filesystem>
 #include <future>
+#include <cassert>
+#include <tuple>
 
 #include "CppUnitTest.h"
 
@@ -83,7 +85,8 @@
 #include <sys/Thread.h>
 #include <sys/Mutex.h>
 #include <import/sys.h>
-
+#include <import/math/linear.h>
+#include <import/math/poly.h>
 #include <mt/CriticalSection.h>
 #include <mt/ThreadPlanner.h>
 #include <mt/ThreadGroup.h>
@@ -94,7 +97,6 @@
 #include <mt/ThreadPoolException.h>
 #include <mt/GenerationThreadPool.h>
 #include <import/mt.h>
-
 #include <avx/extractf.h>
 #include <logging/ExceptionLogger.h>
 #include <import/logging.h>
