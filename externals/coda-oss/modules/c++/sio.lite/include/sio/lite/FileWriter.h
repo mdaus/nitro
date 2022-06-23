@@ -48,10 +48,8 @@ namespace lite
  *  may be accessed directly.  Additionally, the writeSIO() routine provides
  *  simpler functionality
  */
-class FileWriter
+struct FileWriter
 {
-public:
-
     FileWriter(const std::string& outputFile) : mFileName(outputFile), mAdopt(true)
     {
         mStream.reset(new io::FileOutputStream(mFileName));
@@ -67,6 +65,12 @@ public:
     {
         mStream.reset(stream);
     }
+
+    // need copy for Python binding w/SWIG
+    //FileWriter(const FileWriter&) = default;
+    //FileWriter& operator=(const FileWriter&) = default;
+    //FileWriter(FileWriter&&) = default;
+    //FileWriter& operator=(FileWriter&&) = default;
 
     virtual ~FileWriter()
     {
