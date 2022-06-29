@@ -27,7 +27,8 @@
 
 #include <string>
 #include <ostream>
-#include <config/coda_oss_config.h>
+
+#include "config/Exports.h"
 
 /*!
  * \file
@@ -44,7 +45,7 @@ namespace except
  * This class contains information such as the file, line,
  * function and time
  */
-struct Context final
+struct CODA_OSS_API Context final
 {
     /*!
      * Constructor
@@ -134,7 +135,7 @@ struct Context final
     int mLine;
 };
 
-std::ostream& operator<< (std::ostream& os, const Context& c);
+CODA_OSS_API std::ostream& operator<<(std::ostream& os, const Context& c);
 }
 
 #endif  // CODA_OSS_except_Context_h_INCLUDED_
