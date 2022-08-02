@@ -52,7 +52,7 @@ std::unique_ptr<xml::lite::Element> xml::lite::Element::create(const QName& qnam
 }
 std::unique_ptr<xml::lite::Element> xml::lite::Element::createU8(const QName& qname, const std::string& characterData)
 {
-    return create(qname,  str::to_u8string(characterData));
+    return create(qname,  str::EncodedStringView(characterData).u8string());
 }
 
 xml::lite::Element::Element(const xml::lite::Element& node)
