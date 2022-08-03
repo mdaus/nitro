@@ -23,8 +23,6 @@ if (${CMAKE_PROJECT_NAME} STREQUAL nitro)
             add_compile_options(/fsanitize=address)
         endif()
     elseif (UNIX)
-	set(CMAKE_C_COMPILER gcc-10)
-	set(CMAKE_CXX_COMPILER g++-10)
         add_compile_options(-std=c++20)
         add_compile_options(
             -Wall
