@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.14)
 project(nitro)
 
-set(CMAKE_C_STANDARD 99)
+set(CMAKE_C_STANDARD 11)
 set(C_STANDARD_REQUIRED true)
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 14)
 set(CXX_STANDARD_REQUIRED true)
 
 if (${CMAKE_PROJECT_NAME} STREQUAL nitro)
@@ -11,7 +11,6 @@ if (${CMAKE_PROJECT_NAME} STREQUAL nitro)
 
     # set up warnings
     if (MSVC)
-        add_compile_options(/std:c++20)
         # set warning level to /W4
         string(REGEX REPLACE "/W[0-4]" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
         string(REGEX REPLACE "/W[0-4]" "" CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
@@ -22,8 +21,9 @@ if (${CMAKE_PROJECT_NAME} STREQUAL nitro)
             # https://docs.microsoft.com/en-us/cpp/sanitizers/asan?view=msvc-160
             add_compile_options(/fsanitize=address)
         endif()
+	add_compile_options(/std:c++14)
+    add_compile_options(/std:c11)
     elseif (UNIX)
-        add_compile_options(-std=c++20)
         add_compile_options(
             -Wall
             -Wno-deprecated
@@ -34,6 +34,7 @@ if (${CMAKE_PROJECT_NAME} STREQUAL nitro)
             # https://gcc.gnu.org/onlinedocs/gcc/Instrumentation-Options.html
             add_compile_options(-fsanitize=address)
         endif()
+	add_compile_options(-std=c++14)
     endif()
 
     if (EXISTS "${CMAKE_BINARY_DIR}/conan_paths.cmake")

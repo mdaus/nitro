@@ -749,7 +749,7 @@ def options(opt):
     opt.add_option('--enable-debugging', action='store_true', dest='debugging',
                    help='Enable debugging')
     opt.add_option('--enable-cpp11', action='callback', callback=deprecated_callback)
-    opt.add_option('--enable-cpp17', action='callback', callback=deprecated_callback)
+    opt.add_option('--enable-cpp17', action='store_true', dest='enablecpp17')
     opt.add_option('--enable-64bit', action='callback', callback=deprecated_callback)
     opt.add_option('--enable-32bit', action='callback', callback=deprecated_callback)
     opt.add_option('--with-cflags', action='store', nargs=1, dest='cflags',
@@ -792,7 +792,7 @@ def options(opt):
                    default=True, help='Allow swig to print memory leaks it detects')
 
 
-def ensureCpp11Support(self):
+def ensureCpp14Support(self):
     # DEPRECATED.
     # Keeping for now in case downstream code is still looking for it
     self.env['cpp11support'] = True
@@ -802,7 +802,6 @@ def configureCompilerOptions(self):
     sys_platform = getPlatform(default=Options.platform)
     appleRegex = r'i.86-apple-.*'
     linuxRegex = r'.*-.*-linux-.*|i686-pc-.*|linux'
-    solarisRegex = r'sparc-sun.*|i.86-pc-solaris.*|sunos'
     winRegex = r'win32'
     osxRegex = r'darwin'
 
@@ -811,14 +810,6 @@ def configureCompilerOptions(self):
 
     if ccCompiler == 'msvc':
         cxxCompiler = ccCompiler
-    else:
-        if ccCompiler == 'gcc':
-            ccCompiler = 'gcc-10'
-            self.env['COMPILER_CC'] =ccCompiler
-
-        if cxxCompiler == 'g++':
-            cxxCompiler = 'g++-10'
-            self.env['COMPILER_CXX'] = cxxCompiler
 
     if not cxxCompiler or not ccCompiler:
         self.fatal('Unable to find C/C++ compiler')
@@ -856,7 +847,7 @@ def configureCompilerOptions(self):
         self.env.append_value('CFLAGS', '-fPIC -dynamiclib'.split())
 
     # GCC / ICC (for Linux or Solaris)
-    elif ccCompiler == 'gcc' or ccCompiler == 'gcc-10' or ccCompiler == 'icc':
+    elif ccCompiler == 'gcc' or ccCompiler == 'icc':
         if not re.match(winRegex, sys_platform):
             self.env.append_value('LIB_DL', 'dl')
             if not re.match(osxRegex, sys_platform):
@@ -866,7 +857,7 @@ def configureCompilerOptions(self):
         self.check_cc(lib='pthread', mandatory=True)
 
         warningFlags = '-Wall'
-        if ccCompiler == 'gcc' or ccCompiler == 'gcc-10':
+        if ccCompiler == 'gcc':
             #warningFlags += ' -Wno-deprecated-declarations -Wold-style-cast'
             warningFlags += ' -Wno-deprecated-declarations'
         else:
@@ -880,7 +871,7 @@ def configureCompilerOptions(self):
         #       If you want the plugins to not depend on Intel libraries,
         #       configure with:
         #       --with-cflags=-static-intel --with-cxxflags=-static-intel --with-linkflags=-static-intel
-        if cxxCompiler == 'g++' or cxxCompiler == 'g++-10' or cxxCompiler == 'icpc':
+        if cxxCompiler == 'g++' or cxxCompiler == 'icpc':
             config['cxx']['debug']          = '-g'
             config['cxx']['warn']           = warningFlags.split()
             config['cxx']['verbose']        = '-v'
@@ -890,7 +881,10 @@ def configureCompilerOptions(self):
             config['cxx']['optz_fast']      = '-O2'
             config['cxx']['optz_fastest']   = '-O3'
 
-            gxxCompileFlags='-fPIC -std=c++2a'
+            if not Options.options.enablecpp17:
+                gxxCompileFlags='-fPIC -std=c++14'
+            else:
+                gxxCompileFlags='-fPIC -std=c++17'
             self.env.append_value('CXXFLAGS', gxxCompileFlags.split())
 
             # DEFINES and LINKFLAGS will apply to both gcc and g++
@@ -900,12 +894,12 @@ def configureCompilerOptions(self):
             #       Is there an equivalent to get the same functionality or
             #       is this an OS limitation?
             linkFlags = '-fPIC'
-            if (not re.match(osxRegex, sys_platform)) and (not re.match(solarisRegex, sys_platform)):
+            if (not re.match(osxRegex, sys_platform)):
                 linkFlags += ' -Wl,-E'
 
             self.env.append_value('LINKFLAGS', linkFlags.split())
 
-        if ccCompiler == 'gcc' or ccCompiler == 'gcc-10' or ccCompiler == 'icc':
+        if ccCompiler == 'gcc' or ccCompiler == 'icc':
             config['cc']['debug']          = '-g'
             config['cc']['warn']           = warningFlags.split()
             config['cc']['verbose']        = '-v'
@@ -975,7 +969,10 @@ def configureCompilerOptions(self):
         flags = '/UUNICODE /U_UNICODE /EHs /GR'.split()
 
         #If building with cpp17 add flags/defines to enable auto_ptr
-        flags.append('/std:c++20')
+        if Options.options.enablecpp17:
+            flags.append('/std:c++17')
+        else:
+            flags.append('/std:c++14')
 
         self.env.append_value('DEFINES', defines)
         self.env.append_value('CXXFLAGS', flags)
@@ -1193,7 +1190,7 @@ def configure(self):
     if Options.options._defs:
         env.append_unique('DEFINES', Options.options._defs.split(','))
     configureCompilerOptions(self)
-    ensureCpp11Support(self)
+    ensureCpp14Support(self)
 
     env['PLATFORM'] = sys_platform
 
@@ -1242,7 +1239,6 @@ def process_swig_linkage(tsk):
     # options for specifying soname and passing linker
     # flags
 
-    solarisRegex = r'sparc-sun.*|i.86-pc-solaris.*|sunos'
     darwinRegex = r'i.86-apple-.*'
     osxRegex = r'darwin'
 
