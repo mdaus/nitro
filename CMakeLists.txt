@@ -35,6 +35,7 @@ if (${CMAKE_PROJECT_NAME} STREQUAL nitro)
             add_compile_options(-fsanitize=address)
         endif()
 	add_compile_options(-std=c++14)
+    add_compile_options(-std=c11)
     endif()
 
     if (EXISTS "${CMAKE_BINARY_DIR}/conan_paths.cmake")
