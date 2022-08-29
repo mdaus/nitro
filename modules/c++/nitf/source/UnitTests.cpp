@@ -87,9 +87,32 @@ inline bool isNitroRoot(const std::filesystem::path& p)
 {
 	return is_regular_file(p / "nitro.sln") && isRoot(p); 	// specific to NITRO
 }
-inline bool isGitNitroRoot(const std::filesystem::path& p)
+
+// Build/install directories are usually here
+static fs::path find_GIT_root()
 {
-	return is_directory(p / ".git") && isNitroRoot(p);
+	const auto is_GIT_root = [](const std::filesystem::path& p) { return is_directory(p / ".git") && isRoot(p); };
+	try
+	{
+		return sys::test::findRootDirectory(getCurrentExecutable(), "" /*rootName*/, is_GIT_root);
+	}
+	catch (const std::invalid_argument&) {}
+
+	return sys::test::findRootDirectory(current_path(), "" /*rootName*/, is_GIT_root);
+}
+
+// Sample files are usually here.
+// This may be the same as find_GIT_root() if this code isn't in "externals"
+static fs::path find_NITRO_root()
+{
+	const auto is_NITRO_root = [](const std::filesystem::path& p) { return is_directory(p / ".git") && isRoot(p); };
+	try
+	{
+		return sys::test::findRootDirectory(getCurrentExecutable(), "nitro", isNitroRoot);
+	}
+	catch (const std::invalid_argument&) {}
+
+	return sys::test::findRootDirectory(current_path(), "nitro", isNitroRoot);
 }
 
 static fs::path findRoot(fs::path& exec_root, fs::path& cwd_root)
@@ -124,7 +147,7 @@ static fs::path make_waf_install(const fs::path& p)
 
 static fs::path make_cmake_install(const fs::path& exec, const fs::path& relativePath)
 {
-	const auto root = findRoot();
+	const auto root = find_GIT_root();
 
 	auto out = exec;
 	fs::path configuration_and_platform;
@@ -217,12 +240,12 @@ std::string nitf::Test::buildPluginsDir()
 
 fs::path nitf::Test::buildFileDir(const fs::path& relativePath)
 {
-	const auto root = findRoot();
+	const auto root = find_GIT_root();
 	return root / relativePath;
 }
 
 fs::path nitf::Test::findInputFile(const fs::path& inputFile)
 {
-	const auto root = findRoot();
+	const auto root = find_NITRO_root();
 	return root / inputFile;
 }
