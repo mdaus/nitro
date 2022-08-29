@@ -125,7 +125,8 @@ static fs::path findRoot(fs::path& exec_root, fs::path& cwd_root)
 	catch (const std::invalid_argument&) { }
 
 	// CWD can change while the program is running
-	return sys::test::findRootDirectory(current_path(), "" /*rootName*/, isRoot);
+	cwd_root = sys::test::findRootDirectory(current_path(), "" /*rootName*/, isRoot);
+	return cwd_root;
 }
 static fs::path findRoot()
 {
