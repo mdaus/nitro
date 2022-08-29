@@ -24,6 +24,7 @@
 
 #include <assert.h>
 
+#include <stdexcept>
 #include <std/filesystem>
 #include <std/optional>
 #include <import/sys.h>
@@ -67,27 +68,41 @@ static inline std::string PlatformToolset()
 #endif
 }
 
-static std::optional<fs::path> findRoot(const fs::path& p)
+// Depending on the unittest we're running, how we're running it and what platform we're on, there could
+//  be quite a varietry of paths:
+// * Windows vs. Linux; Debug or Release (usually Windows-only)
+// * Visual Studio unittest, CMake or WAF
+// * As the "root" project or "externals" in another project (e.g., SIX)
+//
+// Furthermore, sample input files (e.g.) don't typically get built/installed, while
+// TREs (dynamically loaded) are; so we need paths to both source code
+// and install locations.
+
+inline bool isRoot(const std::filesystem::path& p)
 {
-	if (is_regular_file(p / "LICENSE") && is_regular_file(p / "README.md") && is_regular_file(p / "CMakeLists.txt"))
-	{
-		return p;
-	}
-	return p.parent_path() == p ? std::optional<fs::path>() : findRoot(p.parent_path());
+	// We typically have these files in any of our "root" directories, regardless of the proejct
+	return is_regular_file(p / "LICENSE") && is_regular_file(p / "README.md") && is_regular_file(p / "CMakeLists.txt");
 }
+inline bool isNitroRoot(const std::filesystem::path& p)
+{
+	return is_regular_file(p / "nitro.sln") && isRoot(p); 	// specific to NITRO
+}
+inline bool isGitNitroRoot(const std::filesystem::path& p)
+{
+	return is_directory(p / ".git") && isNitroRoot(p);
+}
+
 static fs::path findRoot(fs::path& exec_root, fs::path& cwd_root)
 {
-	static const auto exec_root_ = findRoot(getCurrentExecutable());
-	if (exec_root_.has_value())
+	try
 	{
-		exec_root = exec_root_.value();
+		exec_root = sys::test::findRootDirectory(getCurrentExecutable(), "" /*rootName*/, isRoot);
 		return exec_root;
 	}
+	catch (const std::invalid_argument&) { }
 
 	// CWD can change while the program is running
-	const auto cwd_root_ = findRoot(current_path());
-	cwd_root = cwd_root_.value();
-	return cwd_root;
+	return sys::test::findRootDirectory(current_path(), "" /*rootName*/, isRoot);
 }
 static fs::path findRoot()
 {
