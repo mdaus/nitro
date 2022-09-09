@@ -170,7 +170,7 @@ inline int main(TFunc f)
 }
 
 #define TEST_CHECK(X) try{ X(std::string(#X)); std::cerr << #X << ": PASSED\n"; } \
-  catch(const except::Throwable& ex) { test::diePrintf("%s: FAILED: Exception thrown: %s\n", #X, test::toString(ex).c_str()); } \
+  catch(const except::Throwable& ex) { test::diePrintf("%s: FAILED: Exception thrown: %s\n", #X, ex.toString().c_str()); } \
   catch(const except::Throwable11& ex) { test::diePrintf("%s: FAILED: Exception thrown: %s\n", #X, ex.what()); }
 
 #define TEST_ASSERT_NULL(X) if ((X) != nullptr) { test_diePrintf0("%s (%s,%s,%d): FAILED: Value should be NULL\n"); }

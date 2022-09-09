@@ -103,7 +103,11 @@ namespace details
 template <typename T>
 inline std::string toString(const T& value) // no dectype() noise here, leave that in details::toString_()
 {
-    return details::toString_(value);
+    // This breaks the Windows-CMake build on GitHub (when building as an "external" in NITRO)
+    // ... different compilers or compile-options?
+    //return details::toString_(value);
+
+    return details::default_toString(value);
 }
 
 // C++11 has a bunch of overloads, do the same.
