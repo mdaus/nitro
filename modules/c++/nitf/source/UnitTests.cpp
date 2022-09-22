@@ -38,7 +38,7 @@ static inline std::string Configuration() // "Configuration" is typically "Debug
 }
 static inline std::string Platform()
 {
-	return os.getSpecialEnv("Platform");
+	return os.getSpecialEnv("Platform"); // e.g., "x64" on Windows
 }
 
 static const fs::path& getCurrentExecutable()
@@ -55,13 +55,16 @@ static fs::path current_path()
 // https://stackoverflow.com/questions/13794130/visual-studio-how-to-check-used-c-platform-toolset-programmatically
 static inline std::string PlatformToolset()
 {
-	// https://docs.microsoft.com/en-us/cpp/build/how-to-modify-the-target-framework-and-platform-toolset?view=msvc-160
 #ifdef _WIN32
-#if _MSC_FULL_VER >= 190000000
-	return "v142";
-#else
-#error "Don't know $(PlatformToolset) value.'"
-#endif
+	// https://docs.microsoft.com/en-us/cpp/build/how-to-modify-the-target-framework-and-platform-toolset?view=msvc-160
+	// https://learn.microsoft.com/en-us/cpp/preprocessor/predefined-macros?view=msvc-170
+	#if _MSC_VER >= 1930
+		return "v143"; // Visual Studio 2022
+	#elif _MSC_VER >= 1920
+		return "v142"; // Visual Studio 2019
+	#else
+		#error "Don't know $(PlatformToolset) value.'"
+	#endif
 #else 
 	// Linux
 	return "";
@@ -117,6 +120,7 @@ static fs::path find_NITRO_root()
 
 static fs::path findRoot(fs::path& exec_root, fs::path& cwd_root)
 {
+	cwd_root.clear();
 	try
 	{
 		exec_root = sys::test::findRootDirectory(getCurrentExecutable(), "" /*rootName*/, isRoot);
@@ -155,7 +159,7 @@ static fs::path make_cmake_install(const fs::path& exec, const fs::path& relativ
 	fs::path build;
 	while (out.parent_path() != root)
 	{
-		configuration_and_platform = build.stem(); // "x64-Debug"
+		configuration_and_platform = build.filename(); // "x64-Debug"
 		build = out; // "...\out\build"
 		out = out.parent_path(); // "...\out"
 	}
@@ -233,14 +237,32 @@ static fs::path buildDir(const fs::path& relativePath)
 	return install / relativePath;
 }
 
+static std::filesystem::path find_cmake_build_root(const std::filesystem::path& path)
+{
+	// .../out/build/x64-Debug
+
+	const auto platform_and_configuration = Platform() + "-" + Configuration(); // "x64-Debug"
+	const auto pred = [&](const std::filesystem::path& p)
+	{
+		return p.filename() == platform_and_configuration;
+	};
+	return sys::test::findRootDirectory(path, "", pred);
+}
+
 std::string nitf::Test::buildPluginsDir(const std::string& dir)
 {
-	const auto buildDir_ = buildDir("");
-	auto plugins = buildDir_ / "share" / "nitf" / "plugins";
+	auto installDir_ = buildDir("");
+	auto plugins = installDir_ / "share" / "nitf" / "plugins";
 	if (!is_directory(plugins))
 	{
 		// Developers might not set things up for "cmake --install ."
-		plugins = buildDir_.parent_path() / "modules" / "c" / dir;
+		const auto modules_c_dir = std::filesystem::path("modules") / "c" / dir;
+		plugins = installDir_.parent_path() / modules_c_dir;
+		if (!is_directory(plugins))
+		{
+			static const auto exec = getCurrentExecutable();
+			plugins = find_cmake_build_root(exec) / modules_c_dir;
+		}
 		if (!is_directory(plugins))
 		{
 			throw std::logic_error("Can't find 'plugins' directory: " + plugins.string());
