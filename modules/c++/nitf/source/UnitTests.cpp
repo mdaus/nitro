@@ -150,66 +150,6 @@ static fs::path make_waf_install(const fs::path& p)
 #endif
 }
 
-static fs::path make_cmake_install(const fs::path& exec, const fs::path& relativePath)
-{
-	const auto root = find_GIT_root();
-
-	auto out = exec;
-	fs::path configuration_and_platform;
-	fs::path build;
-	while (out.parent_path() != root)
-	{
-		configuration_and_platform = build.filename(); // "x64-Debug"
-		build = out; // "...\out\build"
-		out = out.parent_path(); // "...\out"
-	}
-
-	fs::path install;
-	const sys::DirectoryEntry dirEntry(out.string());
-	for (auto entry : dirEntry)
-	{
-		str::upper(entry);
-		if (str::contains(entry, "INSTALL"))
-		{
-			install = out / dirEntry.getCurrent(); // preserve orignal case
-			if (is_directory(install))
-			{
-			  break;
-			}
-		}
-	}
-
-	if (is_directory(install / configuration_and_platform / relativePath))
-	{
-		return install / configuration_and_platform;
-	}
-	else
-	{
-		return install;
-	}
-}
-
-static std::string makeRelative(const fs::path& path, const fs::path& root)
-{
-	// remove the "root" part from "path"
-	std::string relative = path.string();
-	str::replaceAll(relative, root.string(), "");
-	return relative;
-}
-static std::string relativeRoot()
-{
-	fs::path exec_root, cwd_root;
-	findRoot(exec_root, cwd_root);
-
-	if (!exec_root.empty())
-	{
-		return makeRelative(getCurrentExecutable(), exec_root);
-	}
-
-	assert(!cwd_root.empty());
-	return makeRelative(current_path(), cwd_root);
-}
-
 static bool is_cmake_build()
 {
 	static const auto retval = sys::test::isCMakeBuild(getCurrentExecutable());
