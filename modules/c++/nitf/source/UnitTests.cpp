@@ -212,10 +212,7 @@ static std::string relativeRoot()
 
 static bool is_cmake_build()
 {
-	static const auto retlativeRoot = relativeRoot();
-	static const auto retval = 
-		(str::starts_with(retlativeRoot, "/out") || str::starts_with(retlativeRoot, "\\out")) ||
-		(str::starts_with(retlativeRoot, "/build") || str::starts_with(retlativeRoot, "\\build"));
+	static const auto retval = sys::test::isCMakeBuild(getCurrentExecutable());
 	return retval;
 }
 
@@ -233,40 +230,45 @@ static fs::path buildDir(const fs::path& relativePath)
 		return current_path() / relativePath;
 	}
 
-	const auto install = is_cmake_build() ? make_cmake_install(exec, relativePath) : make_waf_install(findRoot());
+	const auto install = is_cmake_build() ? sys::test::findCMakeInstallRoot(exec) : make_waf_install(findRoot());
 	return install / relativePath;
 }
 
-static std::filesystem::path find_cmake_build_root(const std::filesystem::path& path)
+std::string buildPluginsDir_(const std::string& dir, const std::filesystem::path& installDir)
 {
-	// .../out/build/x64-Debug
-
-	const auto platform_and_configuration = Platform() + "-" + Configuration(); // "x64-Debug"
-	const auto pred = [&](const std::filesystem::path& p)
+	// Developers might not set things up for "cmake --install ."
+	const auto modules_c_dir = std::filesystem::path("modules") / "c" / dir;
+	auto plugins = installDir.parent_path() / modules_c_dir;
+	if (is_directory(plugins))
 	{
-		return p.filename() == platform_and_configuration;
-	};
-	return sys::test::findRootDirectory(path, "", pred);
-}
+		return plugins.string();
+	}
 
+	static const auto exec = getCurrentExecutable();
+	auto buildRoot = sys::test::findCMakeBuildRoot(exec);
+	plugins = buildRoot / modules_c_dir;
+	if (is_directory(plugins))
+	{
+		return plugins.string();
+	}
+
+	buildRoot = buildRoot / "externals" / "nitro";
+	plugins = buildRoot / modules_c_dir;
+	if (is_directory(plugins))
+	{
+		return plugins.string();
+	}
+
+	throw std::logic_error("Can't find 'plugins' directory: " + plugins.string());
+}
 std::string nitf::Test::buildPluginsDir(const std::string& dir)
 {
-	auto installDir_ = buildDir("");
-	auto plugins = installDir_ / "share" / "nitf" / "plugins";
+	auto installDir = buildDir("");
+	auto plugins = installDir / "share" / "nitf" / "plugins";
 	if (!is_directory(plugins))
 	{
 		// Developers might not set things up for "cmake --install ."
-		const auto modules_c_dir = std::filesystem::path("modules") / "c" / dir;
-		plugins = installDir_.parent_path() / modules_c_dir;
-		if (!is_directory(plugins))
-		{
-			static const auto exec = getCurrentExecutable();
-			plugins = find_cmake_build_root(exec) / modules_c_dir;
-		}
-		if (!is_directory(plugins))
-		{
-			throw std::logic_error("Can't find 'plugins' directory: " + plugins.string());
-		}
+		return buildPluginsDir_(dir, installDir);
 	}
 	return plugins.string();
 }

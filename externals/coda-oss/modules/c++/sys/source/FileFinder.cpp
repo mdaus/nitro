@@ -23,6 +23,7 @@
 
 #include <iterator>
 #include <stdexcept>
+#include <tuple> // std::ignore
 
 #include "sys/DirectoryEntry.h"
 #include "sys/Path.h"
@@ -242,6 +243,91 @@ coda_oss::filesystem::path sys::test::findRootDirectory(const coda_oss::filesyst
         return findRootDirectory(p.parent_path(), rootName, isRoot);
     }
     
-    // TODO: since we're in the "FileFinder" module, maybe try a bit hard to find "rootName"?
+    // TODO: since we're in the "FileFinder" module, maybe try a bit harder to find "rootName"?
     throw std::invalid_argument("Can't find '" + rootName + "' root directory");
+}
+
+static const sys::OS os;
+static inline std::string Configuration()  // "Configuration" is typically "Debug" or "Release"
+{
+    return os.getSpecialEnv("Configuration");
+}
+static inline std::string Platform()
+{
+    return os.getSpecialEnv("Platform");  // e.g., "x64" on Windows
+}
+
+static coda_oss::filesystem::path findCMakeRoot(const coda_oss::filesystem::path& path, const coda_oss::filesystem::path& dir)
+{
+	static const auto platform_and_configuration = ::Platform() + "-" + ::Configuration(); // "x64-Debug"
+    const auto pred = [&](const coda_oss::filesystem::path& p)
+    {
+        if (p.filename() == platform_and_configuration)
+        {
+            return p.parent_path().filename() == dir;
+        }
+
+        // "x64-Debug" is common on Windows from Visual Studio, things
+        // may be a bit different on Linux.
+        const auto CMakeCache_txt = p / "CMakeCache.txt";
+        const auto CMakeFiles = p / "CMakeFiles";
+        if (is_regular_file(CMakeCache_txt) && is_directory(CMakeFiles))
+        {
+            // looks promising ... if ../.git exists, this is probably it
+            return is_directory(p.parent_path() / ".git");
+        }
+
+        return false;
+    };
+	return sys::test::findRootDirectory(path, "", pred);
+}
+
+coda_oss::filesystem::path findCMake_Root(const coda_oss::filesystem::path& path,
+    const std::string& build, const std::string& install)
+{
+    // Calling these directories "build" and "install" for clarity, even though they may be
+    // "install" and "build" (or maybe even something else).
+    
+    // .../out/build/x64-Debug
+    try
+    {
+        return findCMakeRoot(path, build);
+    }
+    catch (const std::invalid_argument&)
+    {
+    }
+
+    // Might be given a path to something in "install" ...
+    const auto configAndPlatformDir = findCMakeRoot(path, install);  // should be, e.g., "x64-Debug"
+    const auto installDir = configAndPlatformDir.parent_path();
+    if (installDir.filename() == install)
+    {
+        auto retval = installDir.parent_path() / build;
+        if (is_directory(retval))
+        {
+            return retval;
+        }
+    }
+    return findCMakeRoot(path, build);  // throw an exception
+}
+coda_oss::filesystem::path sys::test::findCMakeBuildRoot(const coda_oss::filesystem::path& path)
+{
+    return findCMake_Root(path, "build", "install");
+}
+coda_oss::filesystem::path sys::test::findCMakeInstallRoot(const coda_oss::filesystem::path& path)
+{
+    return findCMake_Root(path, "install", "build");
+}
+
+bool sys::test::isCMakeBuild(const coda_oss::filesystem::path& path)
+{
+    try
+    {
+        std::ignore = sys::test::findCMakeBuildRoot(path);
+        return true;
+    }
+    catch (const std::invalid_argument&)
+    {
+        return false;
+    }
 }
