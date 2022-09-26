@@ -170,8 +170,8 @@ static fs::path buildDir(const fs::path& relativePath)
 		return current_path() / relativePath;
 	}
 
-	const auto install = is_cmake_build() ? sys::test::findCMakeInstallRoot(exec) : make_waf_install(findRoot());
-	return install / relativePath;
+	const auto p = is_cmake_build() ? sys::test::findCMakeBuildRoot(exec) : make_waf_install(findRoot());
+	return p / relativePath;
 }
 
 std::string buildPluginsDir_(const std::string& dir, const std::filesystem::path& installDir)

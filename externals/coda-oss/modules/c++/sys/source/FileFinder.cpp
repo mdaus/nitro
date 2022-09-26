@@ -273,10 +273,10 @@ static coda_oss::filesystem::path findCMakeRoot(const coda_oss::filesystem::path
         const auto CMakeFiles = p / "CMakeFiles";
         if (is_regular_file(CMakeCache_txt) && is_directory(CMakeFiles))
         {
-            // looks promising ... if ../.git exists, this is probably it
-            const auto dot_git = p.parent_path() / ".git";
-            std::clog << ".git: " << dot_git << '\n';
-            return is_directory(dot_git);
+            // looks promising ... _deps and modules directories are there, call it good.
+            const auto deps = p / "_deps";
+            const auto modules = p / "modules";
+            return is_directory(deps) && is_directory(modules);
         }
 
         return false;
