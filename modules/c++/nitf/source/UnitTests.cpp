@@ -178,7 +178,8 @@ std::string buildPluginsDir_(const std::string& dir, const std::filesystem::path
 {
 	// Developers might not set things up for "cmake --install ."
 	const auto modules_c_dir = std::filesystem::path("modules") / "c" / dir;
-	auto plugins = installDir.parent_path() / modules_c_dir;
+	auto plugins = installDir / modules_c_dir;
+	std::clog << "plugins: " << plugins << '\n';
 	if (is_directory(plugins))
 	{
 		return plugins.string();
@@ -187,6 +188,7 @@ std::string buildPluginsDir_(const std::string& dir, const std::filesystem::path
 	static const auto exec = getCurrentExecutable();
 	auto buildRoot = sys::test::findCMakeBuildRoot(exec);
 	plugins = buildRoot / modules_c_dir;
+	std::clog << "plugins: " << plugins << '\n';
 	if (is_directory(plugins))
 	{
 		return plugins.string();
@@ -194,6 +196,7 @@ std::string buildPluginsDir_(const std::string& dir, const std::filesystem::path
 
 	buildRoot = buildRoot / "externals" / "nitro";
 	plugins = buildRoot / modules_c_dir;
+	std::clog << "plugins: " << plugins << '\n';
 	if (is_directory(plugins))
 	{
 		return plugins.string();

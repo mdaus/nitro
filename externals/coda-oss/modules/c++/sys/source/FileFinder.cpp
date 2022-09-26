@@ -259,7 +259,7 @@ static inline std::string Platform()
 
 static coda_oss::filesystem::path findCMakeRoot(const coda_oss::filesystem::path& path, const coda_oss::filesystem::path& dir)
 {
-	static const auto platform_and_configuration = ::Platform() + "-" + ::Configuration(); // "x64-Debug"
+   	static const auto platform_and_configuration = ::Platform() + "-" + ::Configuration(); // "x64-Debug"
     const auto pred = [&](const coda_oss::filesystem::path& p)
     {
         if (p.filename() == platform_and_configuration)
@@ -274,7 +274,9 @@ static coda_oss::filesystem::path findCMakeRoot(const coda_oss::filesystem::path
         if (is_regular_file(CMakeCache_txt) && is_directory(CMakeFiles))
         {
             // looks promising ... if ../.git exists, this is probably it
-            return is_directory(p.parent_path() / ".git");
+            const auto dot_git = p.parent_path() / ".git";
+            std::clog << ".git: " << dot_git << '\n';
+            return is_directory(dot_git);
         }
 
         return false;
@@ -298,11 +300,13 @@ coda_oss::filesystem::path findCMake_Root(const coda_oss::filesystem::path& path
     }
 
     // Might be given a path to something in "install" ...
+    std::clog << "path: " << path << '\n';
     const auto configAndPlatformDir = findCMakeRoot(path, install);  // should be, e.g., "x64-Debug"
     const auto installDir = configAndPlatformDir.parent_path();
     if (installDir.filename() == install)
     {
         auto retval = installDir.parent_path() / build;
+        std::clog << "root: " << retval << '\n';
         if (is_directory(retval))
         {
             return retval;
@@ -312,11 +316,15 @@ coda_oss::filesystem::path findCMake_Root(const coda_oss::filesystem::path& path
 }
 coda_oss::filesystem::path sys::test::findCMakeBuildRoot(const coda_oss::filesystem::path& path)
 {
-    return findCMake_Root(path, "build", "install");
+    auto retval = findCMake_Root(path, "build", "install");
+    std::clog << "findCMakeBuildRoot(): " << retval << "\n";
+    return retval;
 }
 coda_oss::filesystem::path sys::test::findCMakeInstallRoot(const coda_oss::filesystem::path& path)
 {
-    return findCMake_Root(path, "install", "build");
+    auto retval = findCMake_Root(path, "install", "build");
+    std::clog << "findCMakeInstallRoot(): " << retval << "\n";
+    return retval;
 }
 
 bool sys::test::isCMakeBuild(const coda_oss::filesystem::path& path)
