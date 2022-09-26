@@ -118,6 +118,6 @@ public:
 	nitf_test_tre_mods& operator=(const nitf_test_tre_mods&) = delete;
 
 #define TEST_CASE(X) TEST_METHOD(X)
-#include "nitf/unittests/test_tre_mods.c"
+#include "nitf/unittests/test_tre_mods.cpp"
 
 };
