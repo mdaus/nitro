@@ -178,7 +178,13 @@ std::string buildPluginsDir_(const std::string& dir, const std::filesystem::path
 {
 	// Developers might not set things up for "cmake --install ."
 	const auto modules_c_dir = std::filesystem::path("modules") / "c" / dir;
-	auto plugins = installDir / modules_c_dir;
+	auto plugins = installDir / modules_c_dir / Configuration();
+	std::clog << "plugins: " << plugins << '\n';
+	if (is_directory(plugins))
+	{
+		return plugins.string();
+	}
+	plugins = installDir / modules_c_dir;
 	std::clog << "plugins: " << plugins << '\n';
 	if (is_directory(plugins))
 	{
