@@ -349,10 +349,10 @@ TEST_CASE(use_CSEXRB_typed_fields)
 
     nitf::TRE tre("CSEXRB", "CSEXRB");
 
-    nitf::TREField_BCS_A<5> MAX_GSD(tre, "MAX_GSD");
-    MAX_GSD = "01234";
+    nitf::TREField_BCS_A<12> MAX_GSD(tre, "MAX_GSD");
+    MAX_GSD = "0123456789ab";
     const auto s = str::trim(MAX_GSD);
-    TEST_ASSERT_EQ_STR(s, "01234");
+    TEST_ASSERT_EQ_STR(s, "0123456789ab");
 }
 
 TEST_CASE(populateWhileIterating)

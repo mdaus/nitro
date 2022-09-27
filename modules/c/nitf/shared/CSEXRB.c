@@ -111,13 +111,13 @@ static nitf_TREDescription description[] = {
         {NITF_ENDIF,   0,  NULL, NULL},  // TIME_STAMP_LOC eq 0
         {NITF_ENDIF,   0,  NULL, NULL},  // SENSOR_TYPE eq F
 
-        {NITF_BCS_A,   5,  "Max Mean GSD", "MAX_GSD"},
-        {NITF_BCS_A,   5,  "Measured Along-Scan GSD", "ALONG_SCAN_GSD"},
-        {NITF_BCS_A,   5,  "Measured Cross-Scan GSD", "CROSS_SCAN_GSD"},
-        {NITF_BCS_A,   5,  "Measured Geometric Mean GSD", "GEO_MEAN_GSD"},
-        {NITF_BCS_A,   5,  "Measured Along-Scan Vertical GSD", "A_S_VERT_GSD"},
-        {NITF_BCS_A,   5,  "Measured Cross-Scan Vertical GSD", "C_S_VERT_GSD"},
-        {NITF_BCS_A,   5,  "Measured Geometric Mean Vertical GSD", "GEO_MEAN_VERT_GSD"},
+        {NITF_BCS_A,   12,  "Max Mean GSD", "MAX_GSD"},
+        {NITF_BCS_A,   12,  "Measured Along-Scan GSD", "ALONG_SCAN_GSD"},
+        {NITF_BCS_A,   12,  "Measured Cross-Scan GSD", "CROSS_SCAN_GSD"},
+        {NITF_BCS_A,   12,  "Measured Geometric Mean GSD", "GEO_MEAN_GSD"},
+        {NITF_BCS_A,   12,  "Measured Along-Scan Vertical GSD", "A_S_VERT_GSD"},
+        {NITF_BCS_A,   12,  "Measured Cross-Scan Vertical GSD", "C_S_VERT_GSD"},
+        {NITF_BCS_A,   12,  "Measured Geometric Mean Vertical GSD", "GEO_MEAN_VERT_GSD"},
         {NITF_BCS_A,   5,  "Angle Between Along-Scan and Cross-Scan Directions", "GSD_BETA_ANGLE"},
         {NITF_BCS_A,   5,  "Dynamic Range of Pixels", "DYNAMIC_RANGE"},
         {NITF_BCS_N,   7,  "Number of Lines in Entire Image Plane", "NUM_LINES"},
