@@ -349,7 +349,10 @@ TEST_CASE(use_CSEXRB_typed_fields)
 
     nitf::TRE tre("CSEXRB", "CSEXRB");
 
-    nitf::TREField_BCS_A<12> MAX_GSD(tre, "MAX_GSD");
+    constexpr auto length = 12;
+    nitf::TREField_BCS_A<length> MAX_GSD(tre, "MAX_GSD");
+    TEST_ASSERT_EQ(length, static_cast<int>(MAX_GSD.getLength()));
+
     MAX_GSD = "0123456789ab";
     const auto s = str::trim(MAX_GSD);
     TEST_ASSERT_EQ_STR(s, "0123456789ab");
