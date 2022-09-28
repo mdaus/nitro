@@ -34,6 +34,8 @@ namespace nitf
 	namespace Test
 	{
 		NITRO_NITFCPP_API std::string buildPluginsDir(const std::string& dir = "nitf");
+		NITRO_NITFCPP_API void setNitfPluginPath(); // setenv("NITF_PLUGIN_PATH", ...)
+
 		NITRO_NITFCPP_API std::filesystem::path buildFileDir(const std::filesystem::path& relativePath);
 		NITRO_NITFCPP_API std::filesystem::path findInputFile(const std::filesystem::path&);
 	}

@@ -233,3 +233,9 @@ fs::path nitf::Test::findInputFile(const fs::path& inputFile)
 	const auto root = find_NITRO_root();
 	return root / inputFile;
 }
+
+void nitf::Test::setNitfPluginPath()
+{
+	const auto path = buildPluginsDir();
+	sys::OS().setEnv("NITF_PLUGIN_PATH", path, true /*overwrite*/);
+}
