@@ -68,7 +68,6 @@
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <ConformanceMode>true</ConformanceMode>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <LanguageStandard_C>stdc11</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -90,7 +89,6 @@
       <ControlFlowGuard>Guard</ControlFlowGuard>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard_C>stdc11</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -113,6 +111,7 @@
     <ClCompile Include="nitf_test_j2k_read_tile.cpp" />
     <ClCompile Include="nitf_test_nitf_buffer_list.cpp" />
     <ClCompile Include="nitf_test_tre_create++.cpp" />
+    <ClCompile Include="nitf_test_tre_mods++.cpp" />
     <ClCompile Include="nitf_test_tre_mods.cpp" />
     <ClCompile Include="nitf_test_tre_read.cpp" />
     <ClCompile Include="nitf_test_writer_3++.cpp" />
