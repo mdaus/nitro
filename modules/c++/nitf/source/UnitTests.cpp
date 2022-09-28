@@ -309,12 +309,12 @@ static std::string buildPluginName(const std::string& base)
 void nitf::Test::setNitfPluginPath()
 {
 	// The name of the plugin we know exists and will always be built, see test_load_plugins
-	constexpr auto plugin_base_name = "ENGRDA";
-	static auto p = getNitfPluginPath(buildPluginName(plugin_base_name));
+	static auto p = getNitfPluginPath(buildPluginName("ENGRDA"));
 	sys::OS().setEnv("NITF_PLUGIN_PATH", p.string(), true /*overwrite*/);	
 }
 
 void nitf::Test::j2kSetNitfPluginPath()
 {
-	sys::OS().setEnv("NITF_PLUGIN_PATH", nitf::Test::buildPluginsDir("j2k"), true /*overwrite*/);
+	static auto p = getNitfPluginPath(buildPluginName("J2KCompress"));
+	sys::OS().setEnv("NITF_PLUGIN_PATH", p.string(), true /*overwrite*/);
 }
