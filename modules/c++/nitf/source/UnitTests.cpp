@@ -231,7 +231,15 @@ fs::path nitf::Test::buildFileDir(const fs::path& relativePath)
 fs::path nitf::Test::findInputFile(const fs::path& inputFile)
 {
 	const auto root = find_NITRO_root();
-	return root / inputFile;
+
+	auto p = root / inputFile;
+	if (is_regular_file(p))
+	{
+		return p;
+	}
+
+	p = sys::findFirstFile(root, inputFile);
+	return p / inputFile;
 }
 
 static std::filesystem::path getNitfPluginPath(const std::string& pluginName)
