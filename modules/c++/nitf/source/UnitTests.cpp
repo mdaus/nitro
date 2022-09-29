@@ -109,7 +109,6 @@ static fs::path find_GIT_root()
 // This may be the same as find_GIT_root() if this code isn't in "externals"
 static fs::path find_NITRO_root()
 {
-	const auto is_NITRO_root = [](const std::filesystem::path& p) { return is_directory(p / ".git") && isRoot(p); };
 	try
 	{
 		return sys::test::findRootDirectory(getCurrentExecutable(), "nitro", isNitroRoot);
