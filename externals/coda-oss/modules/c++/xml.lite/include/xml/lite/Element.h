@@ -414,7 +414,7 @@ struct Element // SOAPElement derives :-(
     virtual Element& addChild(std::unique_ptr<Element>&& node);
     #endif // SWIG
     #if CODA_OSS_autoptr_is_std  // std::auto_ptr removed in C++17
-    virtual Element& addChild(mem::auto_ptr<Element> node);
+    virtual Element& addChild(std::unique_ptr<Element> node);
     #endif
 
     /*!
