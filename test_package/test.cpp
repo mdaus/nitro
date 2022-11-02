@@ -1,9 +1,6 @@
-#include <import/types.h>
-#include <import/str.h>
+#include <nitf/Reader.hpp>
 
 int main() {
-    types::RowCol<int> ind;
-    std::string testString = " test ";
-    str::trim(testString);
+    nitf::Reader reader;
     return 0;
 }

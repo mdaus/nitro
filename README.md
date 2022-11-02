@@ -1,20 +1,58 @@
-     _________________________
-    |   ____  _||_  ___  __   |
-    |  /___ \/_||_\| __\/  \  |
-    | //   \// || \||  \\ _ \ |
-    | ||   [===||===]  ||(_)| |
-    | ||   _|| || |||  ||__ | |
-    | \\ _/ |\_||_/||__/|| || |
-    |  \___/ \_||_/|___/|| || |
-    |__________||_____________|
+Building NITRO
+---------------
 
-CODA is a set of modules, and each module, while complimentary to one another, has
-a very specific and largely independent purpose.
+CMake is the preferred build method. Version 3.14 or better is required.
 
-Building CODA
---------------
+Sample Build Scenario
+---------------------
 
-CODA may be built using Waf or CMake. Below are all of the options available for Waf. See cmake/README.md for CMake build instructions.
+    mkdir build
+    cd build
+    cmake ..
+    cmake --build . -j
+    cmake --build . --target install
+    ctest
+
+Problems and Configurations
+---------------------------
+  - If your system compiler does not fully support C++11, you may have to
+    specify a different one during the configure step. e.g.
+
+        cmake -DCMAKE_C_COMPILER=/some/path/gcc/4.9.1/bin/gcc -DCMAKE_CXX_COMPILER=/...../bin/g++ ..
+
+  - Pass -DCMAKE_INSTALL_PREFIX to set the install location.
+
+  - Python and C++ bindings are built. Just make sure the relevant tools
+    are on your PATH.  Java and MATLAB bindings are now in the **archive** directory
+    and no longer built.
+
+  - See the [coda-oss CMake build README](externals/coda-oss/cmake/README.md)
+    for further build configuration information, particularly for Python-related
+    details. The same options there may be passed to Nitro.
+
+  - Build types `Release`, `RelWithDebInfo`, and `Debug` may be chosen
+    - On Linux, debug symbols are available by default (`RelWithDebInfo`). Configure build type with [-DCMAKE_BUILD_TYPE](https://cmake.org/cmake/help/v3.0/variable/CMAKE_BUILD_TYPE.html)
+    - On Windows, release type should be configured during the build and install steps
+
+          cmake --build . --config Release -j
+          cmake --build . --config Release --target install
+      The CMake default build type `Debug` may not work with Python, unless the Python installation includes debug versions of the Python libraries.
+  - Regenerating python bindings
+      - Currently, cmake configuration for regenerating swig bindings is incomplete and use of `waf` is required.
+      - The `.regenerate_python_bindings.py` script is wrapper around `waf` can be run to quickly update these files.
+
+          python3 .regenerate_python_bindings.py
+          DEBUG_PY_BINDINGS=1 python3 .regenerate_python_bindings.py # see all details
+      - This is typically required when project dependencies (e.g. CODA-OSS) are updated.
+
+  - If the CMake build system does not support a required feature that Waf does, create
+    an issue or a pull request!
+
+
+Building with Waf
+-----------------
+Waf is the legacy build system. Below are all of the options available.
+
 
     > python waf --help
     waf [command] [options]
@@ -42,57 +80,24 @@ CODA may be built using Waf or CMake. Below are all of the options available for
       --enable-warnings     Enable warnings
       --enable-debugging    Enable debugging
       --enable-64bit        Enable 64bit builds
-      --enable-32bit        Enable 32bit builds
       --enable-doxygen      Enable running doxygen
       --with-cflags=FLAGS   Set non-standard CFLAGS
       --with-cxxflags=FLAGS
                             Set non-standard CXXFLAGS (C++)
-      --with-linkflags=FLAGS
-                            Set non-standard LINKFLAGS (C/C++)
       --with-defs=DEFS      Use DEFS as macro definitions
       --with-optz=OPTZ      Specify the optimization level for optimized/release builds
       --libs-only           Only build the libs (skip building the tests, etc.)
       --shared              Build all libs as shared libs
       --disable-symlinks    Disable creating symlinks for libs
-      --unittests           Build-time option to run unit tests after the build has completed
-      --disable-pcre        turn off PCRE
-      --enable-pcre         turn on PCRE (default)
-      --with-pcre-home=WITH_PCRE_HOME
-                            Specify the PCRE Home - where PCRE is installed to
-      --build-pcre          force building PCRE from scratch
-      --nobuild-pcre        force building PCRE from scratch
-      --disable-xml         turn off XML
-      --enable-xml-layer=XML_LAYER
-                            Specify the XML layer
-      --with-xml-home=XML_HOME
-                            Specify the XML Home - where the XML library is installed to
-      --build-xml           force building XML library (expat) from scratch
-      --nobuild-xml         force not building XML library from scratch
-      --enable-sql-layer=SQL_LAYER
-                            Specify the SQL layer
-      --with-sql-home=SQL_HOME
-                            Specify the SQL Home - where the SQL library is installed to
-      --with-fft-home=FFT_HOME
-                            Specify the FFT Home - where an FFT library is installed
-      --with-fftw3-home=FFT3_HOME
-                            Specify the FFT3 Home - where the FFT3 library is installed
-      --disable-fft         turn off building FFT (default)
-      --enable-fft          turn on FFT
-      --enable-fft-double   turn on double precision FFT
-      --build-fft           force building FFT library (fftw) from scratch
-      --nobuild-fft         force building FFT library (fftw) from scratch
-      --with-zip-home=ZIP_HOME
-                            Specify the ZIP Home - where the ZIP library is installed
-      --disable-zip         will not build the zip (zlib) library
-      --enable-zip          will build the zip (libz) library if not found on the system (default)
-      --build-zip           force building zip (zlib) library from scratch
-      --nobuild-zip         force building zip (zlib) library from scratch
-      --disable-uuid        will not build the uuid library
-      --enable-uuid         will build the uuid library if not found on the system (default)
-      --build-uuid          force building libuuid from scratch
-      --nobuild-uuid        force building libuuid from scratch
-      --with-uuid-home=UUID_HOME
-                            Specify the UUID lib/headers home
+      --disable-java        Disable java (default)
+      --with-java-home=JAVA_HOME
+                            Specify the location of the java home
+      --require-java        Require Java lib/headers (configure option)
+      --nopyc               Do not install bytecode compiled .pyc files (configuration) [Default:install]
+      --nopyo               Do not install optimised compiled .pyo files (configuration) [Default:install]
+      --disable-python      Disable python
+      --require-python      Require Python lib/headers (configure option)
+      --enable-openjpeg     Enable openjpeg
 
       configuration options:
         -b BLDDIR, --blddir=BLDDIR
@@ -111,12 +116,13 @@ CODA may be built using Waf or CMake. Below are all of the options available for
 
       C++ Compiler Options:
         --check-cxx-compiler=CHECK_CXX_COMPILER
-                            On this platform (linux) the following C++ Compiler will be checked by default: "g++ icpc sunc++"
+                            On this platform (linux) the following C++ Compiler will be checked by default: "g++ icpc
+                            sunc++"
+
 
 
 Sample Build Scenario
 ---------------------
-    > cd modules
     > python waf configure --enable-debugging --prefix=installed
     > python waf build
     > python waf install
@@ -127,13 +133,113 @@ Enabling a debugger
 `-g` and its variants can be achieved at configure time using the
 `--enable-debugging` switch at waf configure time
 
-Common Errors
+Memory Debugging
+----------------
+To ease debugging and memory leak detection, macros are used
+to malloc, realloc and free information.
+`NITF_MALLOC()`, `NITF_REALLOC()`, and `NITF_FREE()` should be used
+instead of the stdlib.h functions.
+
+If you defined `NITF_DEBUG` during compilation
+(using configure, give the argument `--with-defs="-DNITF_DEBUG"`
+and this will occur automatically), you will get
+an memory image information dump every time you run an executable,
+named `memory_trace.<pid>` where `<pid>` is the PID of the process
+you just ran.  There is a verification tool located in
+nitf/tests/verify, called `mem_sane.pl`.  If you run `mem_sane.pl`
+with the memory trace as the single argument, you will get a
+formatted output of all memory that is questionably allocated
+or deallocated in the nitf library's calls.  Please, please, please
+check your stuff.
+
+C Conventions
 -------------
-    Fatal Python error: initfsencoding: unable to load the file system codec
-    ModuleNotFoundError: No module named 'encodings'
+In order to keep the C code easy to program and debug, and
+above all, OO, we stick to certain conventions herein:
 
-Problem: Python is unable to find its `modules` directory, necessary for using the Python C API.
+*	All constructors must be passed an error
+	On failure, they return `NULL`, and populate the error
 
-Solution: Set the `PYTHONHOME` environment variable. On Windows, this may look like:
+*	All destructors must `NULL` set the object after they
+	are done deleting, and should check the object prior,
+	to make sure that it has not been deleted already.
+	This means, of course, that all destructors take a pointer
+	to the object.  In practice, usually most of these, then,
+	take double pointers (where usually you pass it a pointer
+	by address)
 
-    set PYTHONHOME=C:\ProgramData\Anaconda3\
+*	All objects are in structs with an underscore in front of
+	their name, and a typedef to the real name (.e.g.,
+	`struct _nitf_PluginRegistry` => `nitf_PluginRegistry`)
+
+*	All functions that are non-static should be wrapped in
+	a `NITFAPI(return-val)` or `NITFPROT(return-val)` for protected
+	data.
+
+*	This allows for easy macro definitions in order to
+	control the decoration algorithm for windows, and to assure
+	that the import decoration and
+	export decoration are identical (otherwise we cant use them)
+
+*	IMPORTANT: The difference between `NITFAPI()` and `NITFPROT()`
+	is that the C++ code binding generator exposes API() calls
+	and ignores PROT() calls.
+
+*	All enumerations and constants have a NITF/NITF20/NITF21
+	prefix.  Along these lines, all functions and objects
+	are prefixed with a 'namespace' (nitf/nitf20/nitf21).
+
+Platforms
+---------
+While the ultimate goal is to be cross-platform and cross-language,
+the C and C++ layers get the most support.
+
+The Python layer gets some use for scripting convenience.
+
+The MATLAB and JAVA layers have not been touched in years; they are
+no longer built, code remains in the **archive** directory.
+
+TREs need to be coded in C (only).
+
+Before you commit
+-----------------
+*	Create a unit test for your all code you
+	are adding
+
+*	Compile and test. (`ctest`)
+
+* A clang-format script is available at `externals/coda-oss/.clang-format`.
+  Use it.
+
+* Doxygen on root directory and view in
+	browser the doxygen code (in nitf/doc/html/).
+
+Doxygen Commenting
+------------------
+Please make an effort to write doxygen comments.  I know,
+especially in C, that doxygen has some issues.  However,
+its the best, cheapest thing we have, and its important
+to have the APIs documented.  It will save me the trouble
+of fixing it later, which will make me eternally grateful.
+
+
+NITF Library Users: General Issues
+----------------------------------
+NITRO handles TREs by loading dynamic libraries at runtime. Therefore, you need
+to make sure NITRO can find them.
+
+* If you are building from source, the location will be compiled in, and
+  you don't have to do anything extra.
+
+* If you are working from a binary release, you will have to tell
+  NITRO where the plugins are by setting the `NITF_PLUGIN_PATH`
+  enviornment variable.
+  This should look something like `<install>/share/nitf/plugins`.
+
+* If you wish to use a custom TRE location, you can also specify that
+  with `NITF_PLUGIN_PATH`.
+
+Contact
+---------
+
+February 2022, Dan <dot> Smith <at> Maxar <dot><see><oh><em>

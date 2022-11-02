@@ -1,9 +1,9 @@
 from conans import ConanFile, CMake
 import os
 
-class CodaOssTestConan(ConanFile):
+class NitroTestConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
-    generators = ("cmake", "cmake_paths")
+    generators = "cmake_paths"
 
     def build(self):
         cmake = CMake(self)

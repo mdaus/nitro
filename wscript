@@ -1,31 +1,45 @@
 import os
-from build import CPPOptionsContext, enableWafUnitTests
-from waflib import Scripting, Options, Context
+from build import CPPOptionsContext
+from waflib import Scripting, Options
+from waflib.Build import BuildContext
+from waflib.Tools import waf_unit_test
 
-VERSION = '3.0-dev'
-APPNAME = 'CODA-OSS'
-Context.APPNAME = APPNAME
-top  = '.'
-out  = 'target'
+APPNAME = 'nitro'
+top     = '.'
+out     = 'target'
 
-DIRS = 'modules'
-
-TOOLS = 'build pythontool swig'
+TOOLS = 'build swig pythontool'
+DIRS = 'externals modules'
 
 def options(opt):
-    opt.load(TOOLS, tooldir='./build/')
-    # always set_options on all
+    opt.load(TOOLS + ' msvs dumpenv', tooldir='build')
+    opt.add_option('--release', action='store_true', dest='release',
+                   help='Configure release', default=False)
     opt.recurse(DIRS)
 
 def configure(conf):
-    conf.options.swigver = '3.0.12'
-    conf.load(TOOLS, tooldir='./build/')
+    conf.env['APPNAME'] = APPNAME
+    conf.load(TOOLS, tooldir='build')
+
+    if conf.env['COMPILER_CXX'] == 'msvc':
+       conf.env.CXXFLAGS += ['/std:c++14'];
+
+    if conf.env['COMPILER_CXX'] != 'msvc':
+        conf.env.CFLAGS += ['-Wall'];
+        conf.env.CXXFLAGS += ['-Wall', '-std=c++14'];
+
     conf.recurse(DIRS)
 
 def build(bld):
+    bld.launch_dir = os.path.join(bld.launch_dir, 'modules')
     bld.recurse(DIRS)
-    enableWafUnitTests(bld)
 
-def distclean(ctxt):
-    ctxt.recurse(DIRS)
-    Scripting.distclean(ctxt)
+    dct = {'INSTALL':bld.env['PREFIX'], 'VERSION':bld.env['VERSION'], 'PLATFORM':bld.env['PLATFORM']}
+    bld(features='subst', dct=dct, source='utils/installer/nitro_installer.iss.in',
+        target=bld.path.find_or_declare('installer/nitro_installer.iss'), name='installer')
+    bld.install_files('target/installer', bld.path.ant_glob(['utils/installer/*.bmp','utils/installer/*.ico']))
+    bld.add_post_fun(waf_unit_test.summary)
+
+def distclean(context):
+    context.recurse(DIRS)
+    Scripting.distclean(context)

@@ -1,54 +1,63 @@
-# - CODA-OSS CMake Build script.
-#
-# Author:  Scott A. Colcord
-
 cmake_minimum_required(VERSION 3.14)
+project(nitro)
 
-project(coda-oss)
-
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 set(CXX_STANDARD_REQUIRED true)
 
-if (EXISTS "${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
-    # build and package with conan
-    include("${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
-    conan_basic_setup()
-
-    include("${CMAKE_BINARY_DIR}/conan_paths.cmake")
-endif()
-
-if (${CMAKE_PROJECT_NAME} STREQUAL coda-oss)
-    # this is the top level project
+if (${CMAKE_PROJECT_NAME} STREQUAL nitro)
+    # we are the top-level project and are responsible for configuration
 
     # set up warnings
     if (MSVC)
-        # set warning level to /W3
+        # set warning level to /W4
         string(REGEX REPLACE "/W[0-4]" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
         string(REGEX REPLACE "/W[0-4]" "" CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
+        add_compile_options(/W4)
+        add_compile_options(/wd4100) # '...': unreferenced formal parameter
+        add_compile_options(/wd4127) # conditional expression is constant
+        if (ENABLE_ASAN)
+            # https://docs.microsoft.com/en-us/cpp/sanitizers/asan?view=msvc-160
+            add_compile_options(/fsanitize=address)
+        endif()
+	add_compile_options(/std:c++14)
     elseif (UNIX)
         add_compile_options(
+            -Wall
             -Wno-deprecated
             -Wno-unused-value
             -Wno-unused-but-set-variable
         )
+        if (ENABLE_ASAN)
+            # https://gcc.gnu.org/onlinedocs/gcc/Instrumentation-Options.html
+            add_compile_options(-fsanitize=address)
+        endif()
+	add_compile_options(-std=c++14)
     endif()
 
-    list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-    include(CodaBuild)
+    if (EXISTS "${CMAKE_BINARY_DIR}/conan_paths.cmake")
+        # use pre-built coda-oss from conan package
+        include("${CMAKE_BINARY_DIR}/conan_paths.cmake")
+        find_package(coda-oss REQUIRED)
+        include(CodaBuild)
+        coda_initialize_build()
+    else()
+        # build coda-oss ourselves
 
-    coda_initialize_build()
+        # disable some unneeded drivers from coda-oss
+        set(ENABLE_PCRE OFF CACHE BOOL "enable PCRE library" FORCE)
+        set(ENABLE_UUID OFF CACHE BOOL "enable uuid library" FORCE)
+        set(ENABLE_ZIP OFF CACHE BOOL "enable ZIP library" FORCE)
 
-    # install our cmake build modules for downstream use
-    install(DIRECTORY "cmake/"
-            DESTINATION "${CODA_STD_PROJECT_LIB_DIR}/cmake/"
-            FILES_MATCHING PATTERN "*.cmake")
+        set(CODA_OSS_DIR "coda-oss")
+        list(APPEND CMAKE_MODULE_PATH
+             "${CMAKE_CURRENT_SOURCE_DIR}/externals/${CODA_OSS_DIR}/cmake")
+        include(CodaBuild)
+        coda_initialize_build()
+        add_subdirectory("externals/${CODA_OSS_DIR}")
+    endif()
 endif()
 
+set(NITRO_C_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/modules/c)
 add_subdirectory("modules")
 
-# generate package config, with the following paths exported
-set(JARS_DIR ${CODA_STD_PROJECT_LIB_DIR} CACHE INTERNAL
-    "path to installed jars, needed by downstream projects")
-set(SWIG_INCLUDE_DIR "${CODA_STD_PROJECT_INCLUDE_DIR}/swig" CACHE INTERNAL
-    "path to installed SWIG includes, needed by downstream projects")
-coda_generate_package_config(JARS_DIR SWIG_INCLUDE_DIR)
+coda_generate_package_config()
