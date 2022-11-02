@@ -68,6 +68,7 @@
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <ConformanceMode>true</ConformanceMode>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -89,6 +90,7 @@
       <ControlFlowGuard>Guard</ControlFlowGuard>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -104,7 +106,6 @@
     <ClCompile Include="nitf_test_geo_utils.cpp" />
     <ClCompile Include="nitf_test_image_io.cpp" />
     <ClCompile Include="nitf_test_mem_source.cpp" />
-    <ClCompile Include="nitf_test_tre_mods.cpp" />
     <ClCompile Include="nitf_test_zero_field.cpp" />
     <ClCompile Include="nrt_test_buffer_adapter.cpp" />
     <ClCompile Include="nrt_test_core_values.cpp" />
