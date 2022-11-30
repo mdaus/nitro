@@ -10,16 +10,8 @@ class NitroConan(ConanFile):
     description = "library for reading and writing the National Imagery Transmission Format (NITF)"
     settings = "os", "compiler", "build_type", "arch"
     requires = ("coda-oss/master_1ac97fe4897896fd", )
-    options = {"shared": [True, False],
-               "PYTHON_HOME": "ANY",
-               "PYTHON_VERSION": "ANY",
-               "ENABLE_PYTHON": [True, False],
-               }
-    default_options = {"shared": False,
-                       "PYTHON_HOME": "",
-                       "PYTHON_VERSION": "",
-                       "ENABLE_PYTHON": True,
-                       }
+    options = {"shared": [True, False]}
+    default_options = {"shared": False}
     exports_sources = ("CMakeLists.txt",
                        "LICENSE",
                        "README.md",
@@ -41,12 +33,6 @@ class NitroConan(ConanFile):
     def set_version(self):
         git = tools.Git(folder=self.recipe_folder)
         self.version = git.get_revision()[:16]
-
-    def configure(self):
-        # Python-related options are forced to be the same for coda-oss
-        self.options["coda-oss"].PYTHON_HOME = self.options.PYTHON_HOME
-        self.options["coda-oss"].PYTHON_VERSION = self.options.PYTHON_VERSION
-        self.options["coda-oss"].ENABLE_PYTHON = self.options.ENABLE_PYTHON
 
     def _configure_cmake(self):
         cmake = CMake(self)
