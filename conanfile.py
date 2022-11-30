@@ -9,7 +9,7 @@ class NitroConan(ConanFile):
     url = "https://github.com/mdaus/nitro"
     description = "library for reading and writing the National Imagery Transmission Format (NITF)"
     settings = "os", "compiler", "build_type", "arch"
-    requires = ("coda-oss/master_67d6362bcfcf07e2", )
+    requires = ("coda-oss/master_1ac97fe4897896fd", )
     options = {"shared": [True, False],
                "PYTHON_HOME": "ANY",
                "PYTHON_VERSION": "ANY",
@@ -51,6 +51,7 @@ class NitroConan(ConanFile):
     def _configure_cmake(self):
         cmake = CMake(self)
         cmake.definitions["ENABLE_STATIC_TRES"] = True # always build static TRES
+        cmake.definitions["ENABLE_J2K"] = self.options["coda-oss"].ENABLE_J2K
         cmake.configure()
         return cmake
 
