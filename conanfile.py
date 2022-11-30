@@ -40,7 +40,7 @@ class NitroConan(ConanFile):
 
     def set_version(self):
         git = tools.Git(folder=self.recipe_folder)
-        self.version = "%s_%s" % (git.get_branch(), git.get_revision()[:16])
+        self.version = git.get_revision()[:16]
 
     def configure(self):
         # Python-related options are forced to be the same for coda-oss
