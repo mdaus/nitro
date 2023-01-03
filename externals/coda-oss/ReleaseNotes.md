@@ -11,12 +11,25 @@
  ```
 # coda-oss Release Notes
 
-## [Release 202?-??-??](https://github.com/mdaus/coda-oss/releases/tag/202?-??-??)
+## [Release 2022-12-14](https://github.com/mdaus/coda-oss/releases/tag/2022-12-14)
+* removed remaining vestigates of `std::auto_ptr`, provide `mem::AutoPtr` for the tiny handful of
+  places (e.g., SWIG bindings) that still need copying.
+* `xml::lite::Element` overloads to make creting new XML documents easier; see unittests for examples.
+* try even harder to find unittest files in various scenarios.
+* build *hdf5.lite* with **waf**.
+* New `--optz=fastest-possible` (**waf** only) which adds
+  [`-march=native`](https://gcc.gnu.org/onlinedocs/gcc-12.2.0/gcc/x86-Options.html#x86-Options)
+  to *fastest* for **waf** builds.  There is a new *faster* option (the default) which is currently
+  the same as *fastest* (i.e., no `-march=native`).
+
+## [Release 2022-11-04](https://github.com/mdaus/coda-oss/releases/tag/2022-11-04)
+* "Cut" from [main](https://github.com/mdaus/coda-oss/tree/main), not *master*.
 * The [HDFGroup](https://hdfgroup.org/)s [HDF5 library](https://github.com/HDFGroup/hdf5) is built
    and installed; a simple (and very incomplete!) wrapper is provided, this is at the "hello world!" stage.
 * A few **cli** routines have been tweaked to make unit-testing easier.
 * Utilitiy routines for finding various files when unit-testing.
-* Removed C++14 work-arounds needed in C++11.
+* Removed C++14 work-arounds needed in C++11. Legacy C++ exception specificatons removed.
+* Rebuild `waf` for FIPS error; added more debug options.
 
 ## [Release 2022-08-30](https://github.com/mdaus/coda-oss/releases/tag/2022-08-30)
 * XML is now always written as UTF-8; the code will still try to read Windows-1252.
