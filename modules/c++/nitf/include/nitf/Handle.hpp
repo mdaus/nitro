@@ -67,7 +67,11 @@ public:
 };
 
 // Some older C++14 (kind of) compilers get confused with "noexcept(false)"
-#define NITRO_nitf_MemoryDestructor_noexcept_false_ noexcept(false) 
+#if defined(__INTEL_COMPILER) && (__INTEL_COMPILER_BUILD_DATE <= 20151021)
+    #define NITRO_nitf_MemoryDestructor_noexcept_false_
+#else
+    #define NITRO_nitf_MemoryDestructor_noexcept_false_ noexcept(false)
+#endif // __INTEL_COMPILER
 
 /*!
  *  \struct MemoryDestructor
