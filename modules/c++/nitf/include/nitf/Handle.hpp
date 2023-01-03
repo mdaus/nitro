@@ -66,6 +66,8 @@ public:
     int decRef();
 };
 
+// Some older C++14 (kind of) compilers get confused with "noexcept(false)"
+#define NITRO_nitf_MemoryDestructor_noexcept_false_ noexcept(false) 
 
 /*!
  *  \struct MemoryDestructor
@@ -75,7 +77,7 @@ public:
 template <typename T>
 struct NITRO_NITFCPP_API MemoryDestructor
 {
-    virtual void operator() (T* /*nativeObject*/) noexcept(false) {}
+    virtual void operator() (T* /*nativeObject*/) NITRO_nitf_MemoryDestructor_noexcept_false_ {}
     virtual ~MemoryDestructor() {}
 };
 
