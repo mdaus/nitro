@@ -25,7 +25,7 @@
 #include <cmath>
 #include <algorithm>
 #include <functional>
-#include <std/memory>
+#include <memory>
 #include <cstddef>
 
 #include <import/sys.h>
