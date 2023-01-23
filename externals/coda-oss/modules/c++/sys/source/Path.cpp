@@ -663,8 +663,7 @@ static std::vector<expanded_component> expand_components(const separated_path& c
     std::vector<expanded_component> retval;
     for (const auto& component : components.components())
     {
-        expanded_component e{component};
-        e.value = expandEnvironmentVariable(component);
+        expanded_component e{component, expandEnvironmentVariable(component)};
         assert(e.value.size() >= 1);  // the component itself should always be there
 
         retval.push_back(std::move(e));

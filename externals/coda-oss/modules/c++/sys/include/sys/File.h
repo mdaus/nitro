@@ -27,6 +27,7 @@
 #include "sys/SystemException.h"
 #include "sys/Path.h"
 #include "sys/filesystem.h"
+#include "config/Exports.h"
 
 #if defined(WIN32) || defined(_WIN32)
 #    define _SYS_SEEK_CUR FILE_CURRENT
@@ -68,7 +69,7 @@ typedef int _SYS_HANDLE_TYPE;
 
 namespace sys
 {
-struct File
+struct CODA_OSS_API File
 {
     enum
     {

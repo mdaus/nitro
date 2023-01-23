@@ -44,7 +44,7 @@
 inline coda_oss::u8string utf8_(std::u32string::value_type ch)
 {
     return str::to_u8string(std::u32string{ch});
-};
+}
 static const std::map<std::u32string::value_type, coda_oss::u8string> Windows1252_x80_x9F_to_u8string{
     {0x80, utf8_(0x20AC) } // EURO SIGN
     // , {0x81, replacement_character } // UNDEFINED
