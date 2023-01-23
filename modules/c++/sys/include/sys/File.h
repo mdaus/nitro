@@ -29,7 +29,7 @@
 #include "sys/filesystem.h"
 #include "config/Exports.h"
 
-#if defined(WIN32) || defined(_WIN32)
+#ifdef _WIN32
 #    define _SYS_SEEK_CUR FILE_CURRENT
 #    define _SYS_SEEK_SET FILE_BEGIN
 #    define _SYS_SEEK_END FILE_END
