@@ -204,10 +204,6 @@ std::u16string str::to_u16string(str::W1252string::const_pointer p, size_t sz)
     #endif
     return retval;
 }
-str::ui16string str::to_ui16string(str::W1252string::const_pointer p, size_t sz)
-{
-    return to_Tstring<str::ui16string>(p, sz);
-}
 std::u32string str::to_u32string(str::W1252string::const_pointer p, size_t sz)
 {
     return to_Tstring<std::u32string>(p, sz);
@@ -349,13 +345,6 @@ std::u16string str::to_u16string(coda_oss::u8string::const_pointer p_, size_t sz
 {
     auto p = str::cast<std::string::const_pointer>(p_);
     std::u16string retval;
-    utf8::utf8to16(p, p + sz, std::back_inserter(retval));
-    return retval;
-}
-str::ui16string str::to_ui16string(coda_oss::u8string::const_pointer p_, size_t sz)
-{
-    auto p = str::cast<std::string::const_pointer>(p_);
-    str::ui16string retval;
     utf8::utf8to16(p, p + sz, std::back_inserter(retval));
     return retval;
 }
