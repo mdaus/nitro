@@ -82,6 +82,8 @@ elseif(ENABLE_ZIP)
 
     if (MSVC)
         add_compile_options(/wd4996) # '...': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: .... See online help for details.
+    elseif (UNIX)
+	add_compile_options(-Wno-implicit-function-declaration)
     endif()
 
     set(SOURCE_DIR "${${CMAKE_PROJECT_NAME}_${TARGET_NAME}_SOURCE_DIR}")
