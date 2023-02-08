@@ -9,7 +9,7 @@ if (MSVC)
     add_compile_options(/wd4996) # '...': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name:
 elseif (UNIX)
     add_compile_options(-Wno-misleading-indentation)
-    add_compile_options(-Wno-enum-compare -Wno-sign-compare)
+    add_compile_options(-Wno-enum-compare -Wno-sign-compare -Wno-nonnull-compare)
 endif()
 
 #add_subdirectory("curl") # this is handled in coda_find_system_dependencies
