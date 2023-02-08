@@ -1,6 +1,21 @@
 set(NITRO_VERSION "2.9")
 set(TARGET_LANGUAGE c)
 
+# turn on warnings as errors
+if (MSVC)
+    add_compile_options(/WX /W4) # /Wall
+elseif (UNIX)
+    #add_compile_options(-Werror -Wall -Wpedantic -Wextra)
+    add_compile_options(-Werror -Wall -Wextra)
+
+    add_compile_options(-Wno-implicit-fallthrough)
+    add_compile_options(-Wno-unused-function)
+    add_compile_options(-Wno-sign-compare -Wno-pointer-sign)
+    add_compile_options(-Wno-missing-field-initializers)
+    add_compile_options(-Wno-unused-parameter)
+    add_compile_options(-Wno-cast-function-type)
+endif()
+
 add_subdirectory(nrt)
 add_subdirectory(nitf)
 add_subdirectory(cgm)

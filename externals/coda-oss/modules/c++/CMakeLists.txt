@@ -6,6 +6,7 @@ set(CXX_STANDARD_REQUIRED true)
 if (MSVC)
     add_compile_options(/WX /W4) # /Wall
 elseif (UNIX)
+    add_compile_options(-std=c++14)
     add_compile_options(-Werror -Wall -Wpedantic -Wextra)
 endif()
 
