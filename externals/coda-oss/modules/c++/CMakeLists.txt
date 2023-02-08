@@ -1,6 +1,4 @@
 set(TARGET_LANGUAGE c++)
-set(CMAKE_CXX_STANDARD 14)
-set(CXX_STANDARD_REQUIRED true)
 
 # turn on warnings as errors
 if (MSVC)

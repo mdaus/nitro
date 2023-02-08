@@ -21,13 +21,6 @@ endif()
 if (${CMAKE_PROJECT_NAME} STREQUAL coda-oss)
     # this is the top level project
 
-    # set up warnings
-    if (MSVC)
-        # set warning level to /W3
-        string(REGEX REPLACE "/W[0-4]" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-        string(REGEX REPLACE "/W[0-4]" "" CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
-    endif()
-
     list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
     include(CodaBuild)
 

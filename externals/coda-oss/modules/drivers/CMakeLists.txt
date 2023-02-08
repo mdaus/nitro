@@ -1,15 +1,10 @@
 if (MSVC)
     add_definitions(-D_CRT_SECURE_NO_WARNINGS -D_SCL_SECURE_NO_WARNINGS)
     add_compile_options(/W3)
-    add_compile_options(/wd4267) # '...': conversion from '...' to '...', possible loss of data
-    add_compile_options(/wd4244) # '...': conversion from '...' to '...', possible loss of data
-    add_compile_options(/wd4018) # '...': signed/unsigned mismatch
-    add_compile_options(/wd4101) # '...': unreferenced local variable
-    add_compile_options(/wd4334) # '...': result of 32-bit shift implicitly converted to 64 bits (was 64-bit shift intended?)
-    add_compile_options(/wd4996) # '...': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name:
 elseif (UNIX)
     add_compile_options(-Wno-misleading-indentation)
     add_compile_options(-Wno-enum-compare -Wno-sign-compare -Wno-nonnull-compare)
+    add_compile_options(-Wno-unused-function -Wno-unused-variable)
 endif()
 
 #add_subdirectory("curl") # this is handled in coda_find_system_dependencies
