@@ -28,6 +28,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #if defined(WIN32) || defined(_WIN32)
+    #undef BIGENDIAN
     #include <Winsock2.h>
 #else
     #include <netinet/in.h>

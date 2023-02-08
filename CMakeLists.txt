@@ -12,14 +12,12 @@ if (${CMAKE_PROJECT_NAME} STREQUAL nitro)
         # set warning level to /W4
         string(REGEX REPLACE "/W[0-4]" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
         string(REGEX REPLACE "/W[0-4]" "" CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
-        add_compile_options(/W4)
         add_compile_options(/wd4100) # '...': unreferenced formal parameter
         add_compile_options(/wd4127) # conditional expression is constant
         if (ENABLE_ASAN)
             # https://docs.microsoft.com/en-us/cpp/sanitizers/asan?view=msvc-160
             add_compile_options(/fsanitize=address)
         endif()
-	add_compile_options(/std:c++14)
     elseif (UNIX)
         add_compile_options(
             -Wall
