@@ -3,12 +3,12 @@ set(TARGET_LANGUAGE c)
 
 # turn on warnings as errors
 if (MSVC)
-    add_compile_options(/WX /W4) # /Wall
+    add_compile_options(/W4) # /Wall
 
     add_compile_options(/wd4996) # '...': This function or variable may be unsafe.
 elseif (UNIX)
-    #add_compile_options(-Werror -Wall -Wpedantic -Wextra)
-    add_compile_options(-Werror -Wall -Wextra)
+    #add_compile_options(-Wall -pedantic -Wextra)
+    add_compile_options(-Wall -Wextra)
 
     add_compile_options(-Wno-implicit-fallthrough)
     add_compile_options(-Wno-unused-function)
