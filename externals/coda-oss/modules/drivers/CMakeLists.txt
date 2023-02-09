@@ -1,6 +1,11 @@
 if (MSVC)
     add_definitions(-D_CRT_SECURE_NO_WARNINGS -D_SCL_SECURE_NO_WARNINGS)
-    add_compile_options(/W0)
+
+    # By default, there is a /W3 on the command-line from somewhere (?); adding
+    # /W4 results in a compiler warning.
+    #add_compile_options(/W0)
+    string(REGEX REPLACE "/W[0-4]" "/W0" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+    string(REGEX REPLACE "/W[0-4]" "/W0" CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
 elseif (UNIX)
     add_compile_options(-w) # "Inhibit all warning messages"
 endif()
