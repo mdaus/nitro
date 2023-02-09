@@ -4,9 +4,11 @@ set(TARGET_LANGUAGE c++)
 if (MSVC)
     add_compile_options(/std:c++14)
 
-    add_compile_options(/W4) # /Wall
-    add_compile_options(/wd4996) # '...': This function or variable may be unsafe.
-    add_compile_options(/wd4459) # declaration of '...' hides global declaration
+    # By default, there is a /W3 on the command-line from somewhere (?); adding
+    # /W4 results in a compiler warning.
+    #add_compile_options(/W4) # /Wall
+    string(REGEX REPLACE "/W[0-4]" "/W4" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}") # /Wall
+
 elseif (UNIX)
     add_compile_options(-std=c++14)
 

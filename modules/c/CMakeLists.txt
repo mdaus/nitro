@@ -3,7 +3,10 @@ set(TARGET_LANGUAGE c)
 
 # turn on warnings as errors
 if (MSVC)
-    add_compile_options(/W4) # /Wall
+    # By default, there is a /W3 on the command-line from somewhere (?); adding
+    # /W4 results in a compiler warning.
+    #add_compile_options(/W4) # /Wall
+    string(REGEX REPLACE "/W[0-4]" "/W4" CMAKE_C_FLAGS "${CMAKE_C_FLAGS}") # /Wall
 
     add_compile_options(/wd4996) # '...': This function or variable may be unsafe.
 elseif (UNIX)
