@@ -863,9 +863,10 @@ NITFPRIV(NITF_BOOL) scanOffsets(nitf_IOInterface* io,
             {
                 off_t where = (off_t)nitf_IOInterface_tell(io, error);
 
-                uint64_t totalBytes = (fileLength - bytesRead) +
-                    (where - origin);
+                #ifndef NDEBUG // i.e., debug
+                const uint64_t totalBytes = (fileLength - bytesRead) +  (where - origin);
                 assert( fileLength == totalBytes);
+                #endif
                 switch (tokenType)
                 {
                 case JPEG_MARKER_EOI:
