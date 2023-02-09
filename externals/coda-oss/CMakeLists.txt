@@ -21,6 +21,14 @@ endif()
 if (${CMAKE_PROJECT_NAME} STREQUAL coda-oss)
     # this is the top level project
 
+    # Always turn on "warnings as errors" to avoid lots of (meaningless?) build output;
+    # we'll dial-back warnings as necessary.
+    if (MSVC)
+       add_compile_options(/WX) # warnings as errors
+    elseif (UNIX)
+       add_compile_options(-Werror) # warnings as errors
+    endif()
+
     list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
     include(CodaBuild)
 

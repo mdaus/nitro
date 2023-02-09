@@ -4,11 +4,11 @@ set(TARGET_LANGUAGE c++)
 if (MSVC)
     add_compile_options(/std:c++14)
 
-    add_compile_options(/WX /W4) # /Wall
+    add_compile_options(/W4) # /Wall
 elseif (UNIX)
     add_compile_options(-std=c++14)
 
-    add_compile_options(-Werror -Wall -Wpedantic -Wextra)
+    add_compile_options(-Wall -pedantic -Wextra)
 endif()
 
 # add an interface library for unittests
