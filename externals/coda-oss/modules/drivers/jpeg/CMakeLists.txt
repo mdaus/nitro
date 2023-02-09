@@ -1,11 +1,5 @@
 set(TARGET_NAME jpeg)
 
-if (MSVC)
-elseif (UNIX)
-    add_compile_options(-Wno-pointer-sign)
-endif()
-
-
 if (EXISTS "${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
     # use this CMakeLists.txt to build and package libjpeg with conan
     project(coda-oss_jpeg)
