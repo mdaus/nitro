@@ -1,3 +1,5 @@
+set(TARGET_LANGUAGE c++)
+
 if (MSVC)
     add_definitions(-D_CRT_SECURE_NO_WARNINGS -D_SCL_SECURE_NO_WARNINGS)
 elseif (UNIX)
