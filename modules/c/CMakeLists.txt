@@ -16,6 +16,7 @@ elseif (UNIX)
     add_compile_options(-Wno-missing-field-initializers)
     add_compile_options(-Wno-unused-parameter)
     add_compile_options(-Wno-cast-function-type)
+    add_compile_options(-Wno-misleading-indentation)
 endif()
 
 add_subdirectory(nrt)
