@@ -180,22 +180,22 @@ int sys::close(int fd)
 #undef CODA_OSS_close
 
 #ifdef _WIN32
-#define CODA_OSS_stat ::_stat
+#define CODA_OSS_stat_ ::_stat
 #else
-#define CODA_OSS_stat ::stat
+#define CODA_OSS_stat_ ::stat
 #endif
-static inline int stat_(const std::string& pathname,  CODA_OSS_struct_stat &buffer)
+static inline int stat_(const std::string& pathname, struct CODA_OSS_stat  &buffer)
 {
     const auto p = pathname.c_str();
     CODA_OSS_disable_warning_push
     #ifdef _MSC_VER
     #pragma warning(disable: 4996) // '...': This function or variable may be unsafe. Consider using _sopen_s instead.
     #endif
-    return CODA_OSS_stat(p, &buffer);
+    return CODA_OSS_stat_(p, &buffer);
     CODA_OSS_disable_warning_pop
 }
-#undef CODA_OSS_stat
-int sys::stat(const coda_oss::filesystem::path& path, CODA_OSS_struct_stat &buffer)
+#undef CODA_OSS_stat_
+int sys::stat(const coda_oss::filesystem::path& path, struct CODA_OSS_stat &buffer)
 {
     // Call  sys::expandEnvironmentVariables() if the initial stat() fails.
     const auto retval = stat_(path.string(), buffer);
