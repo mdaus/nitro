@@ -186,6 +186,18 @@ set(tre_srcs  ACCHZB
               USE00A
               XML_DATA_CONTENT)
 
+# Optionaly build all TREs into a single Shared Library
+set(ENABLE_SINGLEPLUGIN OFF CACHE BOOL "enable building all plugins as a single plugin")
+if (ENABLE_SINGLEPLUGIN)
+    set(tre_srcs_default ${tre_srcs})
+    set(tre_srcs DEFAULT_TRES)
+    
+    file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}/tre_config.h" "// Default TREs\n")
+    foreach(tre ${tre_srcs_default})
+        file(APPEND "${CMAKE_CURRENT_BINARY_DIR}/${CODA_STD_PROJECT_INCLUDE_DIR}/tre_config.h" "\"${tre}\",\n")
+    endforeach()
+endif()
+
 foreach(tre ${tre_srcs})
     add_library(${tre} SHARED shared/${tre}.c)
     target_link_libraries(${tre} PUBLIC nitf-c)
@@ -194,6 +206,12 @@ foreach(tre ${tre_srcs})
     # This line is making sure the resultant TRE is named, e.g.
     # XML_DATA_CONTENT.so instead of libXML_DATA_CONTENT.so
     set_target_properties(${tre} PROPERTIES PREFIX "")
+
+    if (ENABLE_SINGLEPLUGIN)
+        foreach(tre ${tre_srcs_default})
+            target_sources(DEFAULT_TRES PUBLIC shared/${tre}.c)
+        endforeach()
+    endif()
 
     if (ENABLE_STATIC_TRES)
         set(tre_static ${tre}-static-c)
