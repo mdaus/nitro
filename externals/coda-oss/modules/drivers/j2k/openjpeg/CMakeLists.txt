@@ -85,6 +85,13 @@ else()
     configure_file("${SOURCE_DIR}/src/lib/openjp2/opj_config_private.h.cmake.in"
                    "opj_config_private.h")
 
+    if (UNIX)
+        remove_definitions(
+            -D_LARGEFILE_SOURCE
+            -D_FILE_OFFSET_BITS=64
+        )
+    endif()
+
     foreach(src "bio.c" "cio.c" "dwt.c" "event.c" "image.c" "invert.c"
                 "j2k.c" "jp2.c" "mct.c" "mqc.c" "openjpeg.c"
                 "opj_clock.c" "opj_malloc.c" "pi.c" "sparse_array.c"
