@@ -42,10 +42,17 @@ TEST_CASE(testDefaultConstructor)
     //VectorN<0, double> v0;
     //TEST_ASSERT_EQ(v0.size(), 0);
 
+<<<<<<< HEAD
     VectorN<1,double> v1{};
     TEST_ASSERT_EQ(v1.size(), static_cast<size_t>(1));
 
     VectorN<2,double> v2{};
+=======
+    VectorN<1,double> v1;
+    TEST_ASSERT_EQ(v1.size(), static_cast<size_t>(1));
+
+    VectorN<2,double> v2;
+>>>>>>> 383f590466d76803908065e342ae20c6f2f6eeb7
     TEST_ASSERT_EQ(v2.size(), static_cast<size_t>(2));
 }
 
@@ -79,7 +86,11 @@ TEST_CASE(testCopyConstructor)
 {
     using namespace math::linear;
 
+<<<<<<< HEAD
     VectorN<3,double> vsrc{};
+=======
+    VectorN<3,double> vsrc;
+>>>>>>> 383f590466d76803908065e342ae20c6f2f6eeb7
     vsrc[0] = 1;
     vsrc[1] = 2;
     vsrc[2] = 3;
@@ -121,7 +132,11 @@ TEST_CASE(testAssignmentOperator)
 {
     using namespace math::linear;
 
+<<<<<<< HEAD
     VectorN<2,double> vsrc{};
+=======
+    VectorN<2,double> vsrc;
+>>>>>>> 383f590466d76803908065e342ae20c6f2f6eeb7
     vsrc[0] = 42;
     vsrc[1] = 99;
     VectorN<2,double> v{};
@@ -301,8 +316,13 @@ TEST_CASE(testNegate)
 {
     using namespace math::linear;
 
+<<<<<<< HEAD
     VectorN<3,double> X{};
     VectorN<3,double> Y{};
+=======
+    VectorN<3,double> X;
+    VectorN<3,double> Y;
+>>>>>>> 383f590466d76803908065e342ae20c6f2f6eeb7
     X[0] = Y[2] =  1.;
     X[1] = Y[1] =  0.;
     X[2] = Y[0] = -1.;
@@ -368,8 +388,13 @@ TEST_CASE(testOperatorMinus)
 {
     using namespace math::linear;
 
+<<<<<<< HEAD
     VectorN<4,double> v1{};
     VectorN<4,double> v2{};
+=======
+    VectorN<4,double> v1;
+    VectorN<4,double> v2;
+>>>>>>> 383f590466d76803908065e342ae20c6f2f6eeb7
     for (int i = 0; i < 4; i++)
     {
         v1[i] = i;
@@ -396,7 +421,11 @@ TEST_CASE(testOperatorTimesEquals)
 {
     using namespace math::linear;
 
+<<<<<<< HEAD
     VectorN<4,double> v1{};
+=======
+    VectorN<4,double> v1;
+>>>>>>> 383f590466d76803908065e342ae20c6f2f6eeb7
     for (int i = 0; i < 4; i++)
         v1[i] = i;
     VectorN<4,double> v2{};
@@ -416,7 +445,11 @@ TEST_CASE(testOperatorTimesEqualsScalar)
 {
     using namespace math::linear;
 
+<<<<<<< HEAD
     VectorN<5,double> v1{};
+=======
+    VectorN<5,double> v1;
+>>>>>>> 383f590466d76803908065e342ae20c6f2f6eeb7
     for (int i = 0; i < 5; i++)
         v1[i] = i;
 
@@ -431,7 +464,11 @@ TEST_CASE(testOperatorTimesScalar)
 {
     using namespace math::linear;
 
+<<<<<<< HEAD
     VectorN<5,double> v1{};
+=======
+    VectorN<5,double> v1;
+>>>>>>> 383f590466d76803908065e342ae20c6f2f6eeb7
     for (int i = 0; i < 5; i++)
         v1[i] = i;
 
@@ -447,7 +484,11 @@ TEST_CASE(testElementDivision)
 {
     using namespace math::linear;
 
+<<<<<<< HEAD
     VectorN<3,double> numerator{};
+=======
+    VectorN<3,double> numerator;
+>>>>>>> 383f590466d76803908065e342ae20c6f2f6eeb7
     numerator[0] = 0;
     numerator[1] = 1;
     numerator[2] = 2;
@@ -467,7 +508,11 @@ TEST_CASE(testOperatorTimes)
 {
     using namespace math::linear;
 
+<<<<<<< HEAD
     VectorN<3,double> v1{}, v2{};
+=======
+    VectorN<3,double> v1, v2;
+>>>>>>> 383f590466d76803908065e342ae20c6f2f6eeb7
     for (int i = 0; i < 3; i++)
     {
         v1[i] = i;
@@ -484,7 +529,11 @@ TEST_CASE(testOperatorDivide)
 {
     using namespace math::linear;
 
+<<<<<<< HEAD
     VectorN<3,double> v1{}, v2{};
+=======
+    VectorN<3,double> v1, v2;
+>>>>>>> 383f590466d76803908065e342ae20c6f2f6eeb7
     for (int i = 0; i < 3; i++)
     {
         v1[i] = i + 1.;
