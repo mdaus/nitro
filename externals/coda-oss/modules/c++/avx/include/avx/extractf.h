@@ -26,11 +26,7 @@
 
 // Not supported on GCC < 7.1; see https://gcc.gnu.org/bugzilla/show_bug.cgi?id=80322 (also 80323-80325)
 #if ((__GNUC__) && (GCC_VERSION < 70100))
-<<<<<<< HEAD
-//#pragma warning Disabling CODA AVX m256 support due to gcc compiler bug.
-=======
 #pragma warning Disabling CODA AVX m256 support due to gcc compiler bug.
->>>>>>> 383f590466d76803908065e342ae20c6f2f6eeb7
 #else
 
 #include <config/compiler_extensions.h>
