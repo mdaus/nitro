@@ -106,7 +106,7 @@ NITF_BOOL DecompressionInterface::adapterFreeBlock(
 {
     try
     {
-        static_cast<Decompressor*>(object)->freeBlock(reinterpret_cast<std::byte*>(block));
+        static_cast<Decompressor*>(object)->freeBlock(block);
         return NRT_SUCCESS;
     }
     catch (const except::Exception& ex)
