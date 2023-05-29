@@ -101,6 +101,36 @@ uint8_t* DecompressionInterface::adapterReadBlock(
 
 NITF_BOOL DecompressionInterface::adapterFreeBlock(
     nitf_DecompressionControl* object,
+    uint8_t* block,
+    nitf_Error* error)
+{
+    try
+    {
+        static_cast<Decompressor*>(object)->freeBlock(block);
+        return NRT_SUCCESS;
+    }
+    catch (const except::Exception& ex)
+    {
+        Utils::error_init(error, ex.getMessage(), NRT_CTXT,
+                       NRT_ERR_DECOMPRESSION);
+        return NRT_FAILURE;
+    }
+    catch (const std::exception& ex)
+    {
+        Utils::error_init(error, ex, NRT_CTXT,
+                       NRT_ERR_DECOMPRESSION);
+        return NRT_FAILURE;
+    }
+    catch (...)
+    {
+        nrt_Error_init(error, "Unknown error", NRT_CTXT,
+                       NRT_ERR_DECOMPRESSION);
+        return NRT_FAILURE;
+    }
+}
+
+NITF_BOOL DecompressionInterface::adapterFreeBlock(
+    nitf_DecompressionControl* object,
     std::byte* block,
     nitf_Error* error)
 {
