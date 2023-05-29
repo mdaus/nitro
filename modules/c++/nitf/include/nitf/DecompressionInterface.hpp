@@ -87,10 +87,8 @@ namespace nitf
  *         during decompression, and gives a c++ api for getting
  *         things done.
  */
-class DecompressionInterface
+struct DecompressionInterface final
 {
-public:
-
     //! These are canned methods which turn around 
     //  and call the nitf_DecompressionControl of your choice
     static NITF_BOOL adapterStart(nitf_DecompressionControl* object,
