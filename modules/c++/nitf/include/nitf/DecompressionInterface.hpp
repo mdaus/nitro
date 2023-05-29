@@ -121,7 +121,7 @@ public:
  *  \class Compressor
  *  \brief This is the c++ interface for nitf_CompressionControl
  */
-struct Decompressor
+struct Decompressor final
 {
     Decompressor() = default;
     virtual ~Decompressor() {}
