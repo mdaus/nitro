@@ -24,6 +24,8 @@
 #define __NITF_DECOMPRESSION_INTERFACE_HPP__
 #pragma once
 
+#include <stdint.h>
+
 #include <nitf/coda-oss.hpp>
 #include <nitf/ImageSubheader.hpp>
 #include <nitf/IOInterface.hpp>
