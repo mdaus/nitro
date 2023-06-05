@@ -120,8 +120,8 @@ public:
 
     ValidatorXerces(const ValidatorXerces&) = delete;
     ValidatorXerces& operator=(const ValidatorXerces&) = delete;
-    ValidatorXerces(ValidatorXerces&&) = delete;
-    ValidatorXerces& operator=(ValidatorXerces&&) = delete;
+    ValidatorXerces(ValidatorXerces&&) = default;
+    ValidatorXerces& operator=(ValidatorXerces&&) = default;
 
     using ValidatorInterface::validate;
 
@@ -136,6 +136,9 @@ public:
                           std::vector<ValidationInfo>& errors) const override;
     bool validate(const coda_oss::u8string&, const std::string& xmlID, std::vector<ValidationInfo>&) const override;
     bool validate(const str::W1252string&, const std::string& xmlID, std::vector<ValidationInfo>&) const override;
+
+    // Search each directory for XSD files
+    static std::vector<coda_oss::filesystem::path> loadSchemas(const std::vector<coda_oss::filesystem::path>& schemaPaths, bool recursive=true);
 
 private:
     bool validate_(const coda_oss::u8string& xml, 
