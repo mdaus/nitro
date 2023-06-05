@@ -17,6 +17,8 @@
 * adjust compiler flags for clean *CMake* builds.
 * wrap common "file open" routines (e.g., `fopen()`) to support `sys::expandEnvironmentVariables()`.
 * add header-only [HighFive](https://github.com/BlueBrain/HighFive) HDF5-wrapper library.
+* Revamp `sys::byteSwap()` for improved type-safety and
+  [better performance](https://devblogs.microsoft.com/cppblog/a-tour-of-4-msvc-backend-improvements/).
 
 ## [Release 2022-12-14](https://github.com/mdaus/coda-oss/releases/tag/2022-12-14)
 * removed remaining vestiges of `std::auto_ptr`, provide `mem::AutoPtr` for the tiny handful of
