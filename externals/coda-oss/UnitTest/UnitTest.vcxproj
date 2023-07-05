@@ -71,6 +71,7 @@
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -96,6 +97,7 @@
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
