@@ -364,6 +364,10 @@ static std::string getSpecialEnv_Platform(const AbstractOS&, const std::string& 
 static std::string getSpecialEnv_PlatformToolset(const AbstractOS&, const std::string& envVar)
 {
     assert(envVar == "PlatformToolset");
+    #if _MSC_VER
+    UNREFERENCED_PARAMETER(envVar);
+    #endif
+
 #ifdef _WIN32
 	// https://docs.microsoft.com/en-us/cpp/build/how-to-modify-the-target-framework-and-platform-toolset?view=msvc-160
 	// https://learn.microsoft.com/en-us/cpp/preprocessor/predefined-macros?view=msvc-170
