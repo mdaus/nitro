@@ -81,7 +81,7 @@
       <SubSystem>
       </SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\lib\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\lib\</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)out\install\$(Platform)-$(Configuration)\lib\;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\lib\;$(SolutionDir)\target-$(Configuration)\installwindows-latestCMake-Github\lib\</AdditionalLibraryDirectories>
       <AdditionalDependencies>openjpeg.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -107,7 +107,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\lib\;$(SolutionDir)externals\coda-oss\install-$(Configuration)-$(Platform).$(PlatformToolset)\lib\</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)out\install\$(Platform)-$(Configuration)\lib\;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\lib\;$(SolutionDir)\target-$(Configuration)\installwindows-latestCMake-Github\lib\</AdditionalLibraryDirectories>
       <AdditionalDependencies>openjpeg.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
