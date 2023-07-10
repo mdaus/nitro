@@ -28,6 +28,17 @@ jobs:
       run: |
         cd out
         ctest -C Release --output-on-failure
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v1.1
+      with:
+        msbuild-architecture: x64
+    - name: msbuild
+      run: |
+        msbuild nitro.sln /p:configuration=Release
+    #- name: mstest
+    #  run: |
+        # mstest /testcontainer:${RUNNER_WORKSPACE}\coda-oss\x64\Releast\Test.dll
+        # mstest /testcontainer:${RUNNER_WORKSPACE}\coda-oss\x64\Releast\Test++.dll
 
   build-linux:
     name: Linux
