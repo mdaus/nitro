@@ -21,12 +21,14 @@
  *
  */
 
+#pragma once 
 #ifndef CODA_OSS_mem_ScopedPtr_h_INCLUDED_
 #define CODA_OSS_mem_ScopedPtr_h_INCLUDED_
-#pragma once
+
+#include <assert.h>
 
 #include <cstddef>
-#include <memory>
+#include <std/memory>
 #include <type_traits>
 
 #include "sys/Conf.h"
@@ -37,7 +39,7 @@ namespace mem
 /*!
  *  \class ScopedPtr
  *  \brief This class provides RAII for object allocations via new.  It is a
- *         light wrapper around std::auto_ptr and has the same semantics
+ *         light wrapper around std::unique_ptr and has the same semantics
  *         except that the copy constructor and assignment operator are deep
  *         copies (by using T's clone() method) rather than transferring
  *         ownership.
@@ -45,7 +47,7 @@ namespace mem
  *         This is useful for cases where you have a class which has a member
  *         variable that's dynamically allocated and you want to provide a
  *         valid copy constructor / assignment operator.  With raw pointers or
- *         std::auto_ptr's, you'll have to write the copy constructor /
+ *         std::unique_ptr's, you'll have to write the copy constructor /
  *         assignment operator for this class - this is tedious and
  *         error-prone since you need to include all the members in the class.
  *         Using ScopedCloneablePtr's instead, the compiler-generated copy
@@ -64,7 +66,7 @@ class ScopedPtr
     }
     void duplicate(const T& from, std::false_type)
     {
-        reset(coda_oss::make_unique<T>(from));
+        reset(std::make_unique<T>(from));
     }
 
 public:
@@ -77,12 +79,6 @@ public:
     {
         reset(std::move(ptr));
     }
-#if CODA_OSS_autoptr_is_std  // std::auto_ptr removed in C++17
-    explicit ScopedPtr(mem::auto_ptr<T> ptr)
-    {
-        reset(ptr);
-    }
-#endif
 
     ScopedPtr(const ScopedPtr& rhs)
     {
@@ -116,15 +112,13 @@ public:
         auto rhs_ptr = rhs.get();
         if (ptr == nullptr && rhs_ptr == nullptr)
         {
-            return true;
+            return true; // both NULL: equal
         }
-
         if (ptr == nullptr || rhs_ptr == nullptr)
         {
-            return false;
+            return false; // either NULL, but not both (above): not equal
         }
-
-        return *ptr == *rhs_ptr;
+        return *ptr == *rhs_ptr; // compare the (non-NULL) objects
     }
 
     bool operator!=(const ScopedPtr& rhs) const noexcept
@@ -144,12 +138,16 @@ public:
 
     T& operator*() const
     {
-        return *get();
+        auto ptr = get();
+        assert(ptr != nullptr);
+        return *ptr;
     }
 
     T* operator->() const noexcept
     {
-        return get();
+        auto ptr = get();
+        assert(ptr != nullptr);
+        return ptr;
     }
 
     void reset(T* ptr = nullptr)
@@ -161,12 +159,6 @@ public:
     {
         mPtr = std::move(ptr);
     }
-#if CODA_OSS_autoptr_is_std  // std::auto_ptr removed in C++17
-    void reset(mem::auto_ptr<T> ptr)
-    {
-        reset(std::unique_ptr<T>(ptr.release()));
-    }
-#endif
 };
 }
 

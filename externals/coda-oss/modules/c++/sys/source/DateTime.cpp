@@ -350,7 +350,7 @@ char* strptime(const char *buf, const char *fmt, struct tm& tm, double& millis)
 
     // LINTED functional specification
     return ((char *) bp);
-};
+}
 }
 
 void sys::DateTime::fromMillis()
@@ -380,7 +380,7 @@ double sys::DateTime::toMillis(tm t) const
 {
     time_t timeInSeconds = mktime(&t);
     double timediff = mSecond - t.tm_sec;
-    return (timeInSeconds + timediff) * 1000;
+    return (timeInSeconds + timediff) * 1000.0;
 }
 
 static double getNowInMillis()

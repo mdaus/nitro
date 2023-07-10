@@ -177,8 +177,18 @@ std::string Path::absolutePath(const std::string& path)
 
 bool Path::isAbsolutePath(const std::string& path)
 {
-#if defined(WIN32) || defined(_WIN32)
-    return !Path::splitDrive(path).first.empty();
+#ifdef _WIN32
+    const auto split = Path::splitDrive(path);
+    const auto drive = split.first;
+
+    // a URL such as "http://example.com" should NOT be an absolute path
+    // according to std::filesystem::path::is_absolute().
+    if (drive.length() > 2) // "C:"
+    {
+        return false; // drive letters are single characters, e.g., "C:\Windows"
+    }
+
+    return !drive.empty();
 #else
     return (!path.empty() && path[0] == Path::delimiter()[0]);
 #endif
@@ -232,7 +242,7 @@ std::string Path::basename(const std::string& path, bool removeExt)
 
 Path::StringPair Path::splitDrive(const std::string& path)
 {
-#if defined(WIN32) || defined(_WIN32)
+#ifdef _WIN32
     std::string::size_type pos = path.find(":");
 #else
     std::string::size_type pos = std::string::npos;
@@ -245,7 +255,7 @@ Path::StringPair Path::splitDrive(const std::string& path)
 
 const char* Path::delimiter()
 {
-#if defined(WIN32) || defined(_WIN32)
+#ifdef _WIN32
     return "\\";
 #else
     return "/";
@@ -254,7 +264,7 @@ const char* Path::delimiter()
 
 const char* Path::separator()
 {
-#if defined(WIN32) || defined(_WIN32)
+#ifdef _WIN32
     return ";";
 #else
     return ":";
@@ -663,8 +673,7 @@ static std::vector<expanded_component> expand_components(const separated_path& c
     std::vector<expanded_component> retval;
     for (const auto& component : components.components())
     {
-        expanded_component e{component};
-        e.value = expandEnvironmentVariable(component);
+        expanded_component e{component, expandEnvironmentVariable(component)};
         assert(e.value.size() >= 1);  // the component itself should always be there
 
         retval.push_back(std::move(e));

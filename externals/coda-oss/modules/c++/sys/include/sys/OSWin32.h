@@ -26,7 +26,7 @@
 
 #include "sys/AbstractOS.h"
 
-#if defined(WIN32) || defined(_WIN32)
+#ifdef _WIN32
 
 /*!
  *  \file OSWin32.h
@@ -59,7 +59,7 @@ struct CODA_OSS_API OSWin32 final : public AbstractOS
      *  For unix it will be one slash /
      *  \return The path delimiter
      */
-    virtual const char* getDelimiter() const
+    const char* getDelimiter() const noexcept override
     {
         return "\\";
     }
@@ -225,6 +225,12 @@ struct CODA_OSS_API OSWin32 final : public AbstractOS
      */
     virtual void getAvailableCPUs(std::vector<int>& physicalCPUs,
                                   std::vector<int>& htCPUs) const;
+
+    /*!
+     * Figure out what SIMD instrunctions are available.  Keep in mind these
+     * are RUN-TIME, not compile-time, checks.
+     */
+    SIMDInstructionSet getSIMDInstructionSet() const override;
 
     /*!
      *  Create a symlink, pathnames can be either absolute or relative

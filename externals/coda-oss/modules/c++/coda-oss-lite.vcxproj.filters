@@ -30,9 +30,6 @@
     <ClInclude Include="coda_oss\include\coda_oss\cstddef.h">
       <Filter>coda_oss</Filter>
     </ClInclude>
-    <ClInclude Include="coda_oss\include\coda_oss\memory.h">
-      <Filter>coda_oss</Filter>
-    </ClInclude>
     <ClInclude Include="coda_oss\include\coda_oss\namespace_.h">
       <Filter>coda_oss</Filter>
     </ClInclude>
@@ -108,18 +105,6 @@
     <ClInclude Include="sys\include\sys\AtomicCounterCpp11.h">
       <Filter>sys</Filter>
     </ClInclude>
-    <ClInclude Include="sys\include\sys\AtomicCounterMutex.h">
-      <Filter>sys</Filter>
-    </ClInclude>
-    <ClInclude Include="sys\include\sys\AtomicCounterSolaris.h">
-      <Filter>sys</Filter>
-    </ClInclude>
-    <ClInclude Include="sys\include\sys\AtomicCounterWin32.h">
-      <Filter>sys</Filter>
-    </ClInclude>
-    <ClInclude Include="sys\include\sys\AtomicCounterX86.h">
-      <Filter>sys</Filter>
-    </ClInclude>
     <ClInclude Include="sys\include\sys\Backtrace.h">
       <Filter>sys</Filter>
     </ClInclude>
@@ -129,16 +114,7 @@
     <ClInclude Include="sys\include\sys\ConditionVarInterface.h">
       <Filter>sys</Filter>
     </ClInclude>
-    <ClInclude Include="sys\include\sys\ConditionVarIrix.h">
-      <Filter>sys</Filter>
-    </ClInclude>
-    <ClInclude Include="sys\include\sys\ConditionVarNSPR.h">
-      <Filter>sys</Filter>
-    </ClInclude>
     <ClInclude Include="sys\include\sys\ConditionVarPosix.h">
-      <Filter>sys</Filter>
-    </ClInclude>
-    <ClInclude Include="sys\include\sys\ConditionVarSolaris.h">
       <Filter>sys</Filter>
     </ClInclude>
     <ClInclude Include="sys\include\sys\ConditionVarWin32.h">
@@ -186,16 +162,7 @@
     <ClInclude Include="sys\include\sys\MutexInterface.h">
       <Filter>sys</Filter>
     </ClInclude>
-    <ClInclude Include="sys\include\sys\MutexIrix.h">
-      <Filter>sys</Filter>
-    </ClInclude>
-    <ClInclude Include="sys\include\sys\MutexNSPR.h">
-      <Filter>sys</Filter>
-    </ClInclude>
     <ClInclude Include="sys\include\sys\MutexPosix.h">
-      <Filter>sys</Filter>
-    </ClInclude>
-    <ClInclude Include="sys\include\sys\MutexSolaris.h">
       <Filter>sys</Filter>
     </ClInclude>
     <ClInclude Include="sys\include\sys\MutexWin32.h">
@@ -243,16 +210,7 @@
     <ClInclude Include="sys\include\sys\SemaphoreInterface.h">
       <Filter>sys</Filter>
     </ClInclude>
-    <ClInclude Include="sys\include\sys\SemaphoreIrix.h">
-      <Filter>sys</Filter>
-    </ClInclude>
-    <ClInclude Include="sys\include\sys\SemaphoreNSPR.h">
-      <Filter>sys</Filter>
-    </ClInclude>
     <ClInclude Include="sys\include\sys\SemaphorePosix.h">
-      <Filter>sys</Filter>
-    </ClInclude>
-    <ClInclude Include="sys\include\sys\SemaphoreSolaris.h">
       <Filter>sys</Filter>
     </ClInclude>
     <ClInclude Include="sys\include\sys\SemaphoreWin32.h">
@@ -262,9 +220,6 @@
       <Filter>sys</Filter>
     </ClInclude>
     <ClInclude Include="sys\include\sys\String.h">
-      <Filter>sys</Filter>
-    </ClInclude>
-    <ClInclude Include="sys\include\sys\SyncFactoryIrix.h">
       <Filter>sys</Filter>
     </ClInclude>
     <ClInclude Include="sys\include\sys\sys_filesystem.h">
@@ -279,16 +234,7 @@
     <ClInclude Include="sys\include\sys\ThreadInterface.h">
       <Filter>sys</Filter>
     </ClInclude>
-    <ClInclude Include="sys\include\sys\ThreadIrix.h">
-      <Filter>sys</Filter>
-    </ClInclude>
-    <ClInclude Include="sys\include\sys\ThreadNSPR.h">
-      <Filter>sys</Filter>
-    </ClInclude>
     <ClInclude Include="sys\include\sys\ThreadPosix.h">
-      <Filter>sys</Filter>
-    </ClInclude>
-    <ClInclude Include="sys\include\sys\ThreadSolaris.h">
       <Filter>sys</Filter>
     </ClInclude>
     <ClInclude Include="sys\include\sys\ThreadWin32.h">
@@ -765,6 +711,90 @@
     <ClInclude Include="plugin\include\plugin\PluginDefines.h">
       <Filter>plugin</Filter>
     </ClInclude>
+    <ClInclude Include="sys\include\sys\MutexCpp11.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="mem\include\mem\AutoPtr.h">
+      <Filter>mem</Filter>
+    </ClInclude>
+    <ClInclude Include="mem\include\mem\ComplexView.h">
+      <Filter>mem</Filter>
+    </ClInclude>
+    <ClInclude Include="std\include\import\cpp14.h">
+      <Filter>std</Filter>
+    </ClInclude>
+    <ClInclude Include="std\include\import\cpp17.h">
+      <Filter>std</Filter>
+    </ClInclude>
+    <ClInclude Include="std\include\import\std.h">
+      <Filter>std</Filter>
+    </ClInclude>
+    <ClInclude Include="config\include\config\disable_compiler_warnings.h">
+      <Filter>config</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\ByteSwap.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\ByteSwapValue.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="mt\include\mt\ThreadedByteSwap.h">
+      <Filter>mt</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\Span.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="sys\include\sys\SysInt.h">
+      <Filter>sys</Filter>
+    </ClInclude>
+    <ClInclude Include="types\include\types\Complex.h">
+      <Filter>types</Filter>
+    </ClInclude>
+    <ClInclude Include="coda_oss\include\coda_oss\numbers.h">
+      <Filter>coda_oss</Filter>
+    </ClInclude>
+    <ClInclude Include="hdf5.lite\source\H5.h">
+      <Filter>hdf5.lite</Filter>
+    </ClInclude>
+    <ClInclude Include="hdf5.lite\source\hdf5.lite.h">
+      <Filter>hdf5.lite</Filter>
+    </ClInclude>
+    <ClInclude Include="hdf5.lite\include\hdf5\lite\HDF5Exception.h">
+      <Filter>hdf5.lite</Filter>
+    </ClInclude>
+    <ClInclude Include="hdf5.lite\include\hdf5\lite\highfive.h">
+      <Filter>hdf5.lite</Filter>
+    </ClInclude>
+    <ClInclude Include="hdf5.lite\include\hdf5\lite\Info.h">
+      <Filter>hdf5.lite</Filter>
+    </ClInclude>
+    <ClInclude Include="hdf5.lite\include\hdf5\lite\Read.h">
+      <Filter>hdf5.lite</Filter>
+    </ClInclude>
+    <ClInclude Include="hdf5.lite\include\hdf5\lite\SpanRC.h">
+      <Filter>hdf5.lite</Filter>
+    </ClInclude>
+    <ClInclude Include="hdf5.lite\include\hdf5\lite\Write.h">
+      <Filter>hdf5.lite</Filter>
+    </ClInclude>
+    <ClInclude Include="zip\include\zip\GZipInputStream.h">
+      <Filter>zip</Filter>
+    </ClInclude>
+    <ClInclude Include="zip\include\zip\GZipOutputStream.h">
+      <Filter>zip</Filter>
+    </ClInclude>
+    <ClInclude Include="zip\include\zip\Types.h">
+      <Filter>zip</Filter>
+    </ClInclude>
+    <ClInclude Include="zip\include\zip\ZipEntry.h">
+      <Filter>zip</Filter>
+    </ClInclude>
+    <ClInclude Include="zip\include\zip\ZipFile.h">
+      <Filter>zip</Filter>
+    </ClInclude>
+    <ClInclude Include="zip\include\zip\ZipOutputStream.h">
+      <Filter>zip</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -804,16 +834,7 @@
     <ClCompile Include="sys\source\AbstractOS.cpp">
       <Filter>sys</Filter>
     </ClCompile>
-    <ClCompile Include="sys\source\ConditionVarIrix.cpp">
-      <Filter>sys</Filter>
-    </ClCompile>
-    <ClCompile Include="sys\source\ConditionVarNSPR.cpp">
-      <Filter>sys</Filter>
-    </ClCompile>
     <ClCompile Include="sys\source\ConditionVarPosix.cpp">
-      <Filter>sys</Filter>
-    </ClCompile>
-    <ClCompile Include="sys\source\ConditionVarSolaris.cpp">
       <Filter>sys</Filter>
     </ClCompile>
     <ClCompile Include="sys\source\ConditionVarWin32.cpp">
@@ -861,16 +882,7 @@
     <ClCompile Include="sys\source\LocalDateTime.cpp">
       <Filter>sys</Filter>
     </ClCompile>
-    <ClCompile Include="sys\source\MutexIrix.cpp">
-      <Filter>sys</Filter>
-    </ClCompile>
-    <ClCompile Include="sys\source\MutexNSPR.cpp">
-      <Filter>sys</Filter>
-    </ClCompile>
     <ClCompile Include="sys\source\MutexPosix.cpp">
-      <Filter>sys</Filter>
-    </ClCompile>
-    <ClCompile Include="sys\source\MutexSolaris.cpp">
       <Filter>sys</Filter>
     </ClCompile>
     <ClCompile Include="sys\source\MutexWin32.cpp">
@@ -900,13 +912,7 @@
     <ClCompile Include="sys\source\ScopedCPUAffinityUnix.cpp">
       <Filter>sys</Filter>
     </ClCompile>
-    <ClCompile Include="sys\source\SemaphoreIrix.cpp">
-      <Filter>sys</Filter>
-    </ClCompile>
     <ClCompile Include="sys\source\SemaphorePosix.cpp">
-      <Filter>sys</Filter>
-    </ClCompile>
-    <ClCompile Include="sys\source\SemaphoreSolaris.cpp">
       <Filter>sys</Filter>
     </ClCompile>
     <ClCompile Include="sys\source\SemaphoreWin32.cpp">
@@ -915,25 +921,13 @@
     <ClCompile Include="sys\source\StopWatch.cpp">
       <Filter>sys</Filter>
     </ClCompile>
-    <ClCompile Include="sys\source\SyncFactoryIrix.cpp">
-      <Filter>sys</Filter>
-    </ClCompile>
     <ClCompile Include="sys\source\sys_Backtrace.cpp">
       <Filter>sys</Filter>
     </ClCompile>
     <ClCompile Include="sys\source\sys_filesystem.cpp">
       <Filter>sys</Filter>
     </ClCompile>
-    <ClCompile Include="sys\source\ThreadIrix.cpp">
-      <Filter>sys</Filter>
-    </ClCompile>
-    <ClCompile Include="sys\source\ThreadNSPR.cpp">
-      <Filter>sys</Filter>
-    </ClCompile>
     <ClCompile Include="sys\source\ThreadPosix.cpp">
-      <Filter>sys</Filter>
-    </ClCompile>
-    <ClCompile Include="sys\source\ThreadSolaris.cpp">
       <Filter>sys</Filter>
     </ClCompile>
     <ClCompile Include="sys\source\ThreadWin32.cpp">
@@ -1137,6 +1131,42 @@
     <ClCompile Include="plugin\source\ErrorHandler.cpp">
       <Filter>plugin</Filter>
     </ClCompile>
+    <ClCompile Include="sys\source\MutexCpp11.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="sys\source\File.cpp">
+      <Filter>sys</Filter>
+    </ClCompile>
+    <ClCompile Include="hdf5.lite\source\H5.cpp">
+      <Filter>hdf5.lite</Filter>
+    </ClCompile>
+    <ClCompile Include="hdf5.lite\source\hdf5.lite.cpp">
+      <Filter>hdf5.lite</Filter>
+    </ClCompile>
+    <ClCompile Include="hdf5.lite\source\Info.cpp">
+      <Filter>hdf5.lite</Filter>
+    </ClCompile>
+    <ClCompile Include="hdf5.lite\source\Read.cpp">
+      <Filter>hdf5.lite</Filter>
+    </ClCompile>
+    <ClCompile Include="hdf5.lite\source\Write.cpp">
+      <Filter>hdf5.lite</Filter>
+    </ClCompile>
+    <ClCompile Include="zip\source\GZipInputStream.cpp">
+      <Filter>zip</Filter>
+    </ClCompile>
+    <ClCompile Include="zip\source\GZipOutputStream.cpp">
+      <Filter>zip</Filter>
+    </ClCompile>
+    <ClCompile Include="zip\source\ZipEntry.cpp">
+      <Filter>zip</Filter>
+    </ClCompile>
+    <ClCompile Include="zip\source\ZipFile.cpp">
+      <Filter>zip</Filter>
+    </ClCompile>
+    <ClCompile Include="zip\source\ZipOutputStream.cpp">
+      <Filter>zip</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="config">
@@ -1211,6 +1241,12 @@
     <Filter Include="plugin">
       <UniqueIdentifier>{387bc6cb-323a-42b3-8502-4fac72586d12}</UniqueIdentifier>
     </Filter>
+    <Filter Include="hdf5.lite">
+      <UniqueIdentifier>{e4db8b19-0870-4cb2-af64-14b928c68725}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="zip">
+      <UniqueIdentifier>{a2682912-3963-489a-9cf0-c5224b27eb84}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="gsl\include\gsl\algorithm">
@@ -1269,6 +1305,9 @@
     </None>
     <None Include="sys\include\sys\sys_config.h.cmake.in">
       <Filter>sys</Filter>
+    </None>
+    <None Include="std\include\std\numbers">
+      <Filter>std</Filter>
     </None>
   </ItemGroup>
 </Project>

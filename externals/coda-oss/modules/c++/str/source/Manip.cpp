@@ -30,6 +30,8 @@
 #include <sstream>
 #include <algorithm>
 #include <stdexcept>
+#include <string>
+#include <cctype>
 
 #include "str/Convert.h"
 #include "str/Encoding.h"
@@ -66,36 +68,47 @@ char toupperCheck(char c)
 
 namespace str
 {
-void trim(std::string & s)
+
+// TODO: https://stackoverflow.com/questions/31959532/best-way-to-remove-white-spaces-from-stdstring
+template<typename TChar>
+inline void trim_(std::basic_string<TChar> & s)
 {
     size_t i;
     for (i = 0; i < s.length(); i++)
     {
-        if (!iswspace(s[i]))
+        if (!iswspace(static_cast<wint_t>(s[i])))
             break;
     }
     s.erase(0, i);
 
     for (i = s.length() - 1; (int) i >= 0; i--)
     {
-        if (!iswspace(s[i]))
+        if (!iswspace(static_cast<wint_t>(s[i])))
             break;
 
     }
     if (i + 1 < s.length())
         s.erase(i + 1);
 }
-
-// https://stackoverflow.com/questions/31959532/best-way-to-remove-white-spaces-from-stdstring
-std::string& strip(std::string& str)
+void trim(std::string& s)
 {
-    str.erase(std::remove_if(str.begin(), str.end(), ::isspace), str.end());
-    return str;
+    trim_(s);
 }
-std::string strip(const std::string& str)
+std::string trim(const std::string& str)
 {
     auto retval = str;
-    return strip(retval);
+    trim(retval);
+    return retval;
+}
+void trim(coda_oss::u8string& s)
+{
+    trim_(s);
+}
+coda_oss::u8string trim(const coda_oss::u8string& str)
+{
+    auto retval = str;
+    trim(retval);
+    return retval;
 }
 
 bool ends_with(const std::string& s, const std::string& match) noexcept
@@ -135,7 +148,8 @@ size_t replace(std::string& str,
 
     if (index != std::string::npos)
     {
-        str.replace(index, search.length(), replace);
+        // ASAN error: str.replace(index, search.length(), replace);
+        str = str.substr(0, index) + replace + str.substr(index + search.length());
         start = index;
     }
     else
@@ -294,4 +308,54 @@ void escapeForXML(std::string& str)
     replaceAll(str, "\n", "&#10;");
     replaceAll(str, "\r", "&#13;");
 }
+
+// https://en.cppreference.com/w/cpp/string/char_traits
+class ci_char_traits final : public std::char_traits<char>
+{
+    // Use our own routine rather than strcasecmp() so that the same
+    // toupperCheck() is used as when calling upper().
+    static auto to_upper(char ch) noexcept
+    {
+        return toupperCheck(ch);
+    }
+
+    static int compare(const char* s1, const char* s2, std::size_t n) noexcept
+    {
+        while (n-- != 0)
+        {
+            if (to_upper(*s1) < to_upper(*s2))
+                return -1;
+            if (to_upper(*s1) > to_upper(*s2))
+                return 1;
+            ++s1;
+            ++s2;
+        }
+        return 0;
+    }
+
+    public:
+    static int compare(const std::string& s1, const std::string& s2) noexcept
+    {
+        if (s1.length() < s2.length())
+        {
+            return -1;
+        }
+        if (s1.length() > s2.length())
+        {
+            return 1;
+        }
+        assert(s1.length() == s2.length());
+        return compare(s1.c_str(), s2.c_str(), s1.length());
+    }
+};
+
+bool eq(const std::string& lhs, const std::string& rhs) noexcept
+{
+    return ci_char_traits::compare(lhs, rhs) == 0;
+}
+bool ne(const std::string& lhs, const std::string& rhs) noexcept
+{
+    return ci_char_traits::compare(lhs, rhs) != 0;
+}
+
 }

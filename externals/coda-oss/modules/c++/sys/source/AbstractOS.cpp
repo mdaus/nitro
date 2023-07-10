@@ -28,6 +28,8 @@
 #include <map>
 #include <stdexcept>
 #include <string>
+#include <iterator>
+#include <algorithm>
 
 #include <import/str.h>
 #include <sys/Path.h>
@@ -81,6 +83,31 @@ AbstractOS::search(const std::vector<std::string>& searchPaths,
                                                 recursive);
     }
     return elementsFound;
+}
+
+inline auto convert(const std::vector<fs::path>& paths)
+{
+    std::vector<std::string> retval;
+    std::transform(paths.begin(), paths.end(), std::back_inserter(retval),
+                   [](const fs::path& p) { return p.string(); });
+    return retval;
+}
+inline auto convert(const std::vector<std::string>& paths)
+{
+    std::vector<fs::path> retval;
+    std::transform(paths.begin(), paths.end(), std::back_inserter(retval),
+                   [](const auto& p) { return p; });
+    return retval;
+}
+
+std::vector<coda_oss::filesystem::path> AbstractOS::search(
+        const std::vector<coda_oss::filesystem::path>& searchPaths,
+        const std::string& fragment,
+        const std::string& extension,
+        bool recursive) const
+{
+    const auto results = search(convert(searchPaths), fragment, extension, recursive);
+    return convert(results);
 }
 
 void AbstractOS::remove(const std::string& path) const
@@ -333,6 +360,34 @@ static std::string getSpecialEnv_Platform(const AbstractOS&, const std::string& 
     #endif
 }
 
+// https://stackoverflow.com/questions/13794130/visual-studio-how-to-check-used-c-platform-toolset-programmatically
+static std::string getSpecialEnv_PlatformToolset(const AbstractOS&, const std::string& envVar)
+{
+    assert(envVar == "PlatformToolset");
+    #if _MSC_VER
+    UNREFERENCED_PARAMETER(envVar);
+    #endif
+
+#ifdef _WIN32
+	// https://docs.microsoft.com/en-us/cpp/build/how-to-modify-the-target-framework-and-platform-toolset?view=msvc-160
+	// https://learn.microsoft.com/en-us/cpp/preprocessor/predefined-macros?view=msvc-170
+	#if _MSC_VER >= 1930
+		return "v143"; // Visual Studio 2022
+	#elif _MSC_VER >= 1920
+		return "v142"; // Visual Studio 2019
+    #elif _MSC_VER >= 1910
+        return "v141";  // Visual Studio 2017
+    #elif _MSC_VER >= 1900
+        return "v140";  // Visual Studio 2015
+	#else
+		#error "Don't know $(PlatformToolset) value.'"
+	#endif
+#else 
+	// Linux
+	return "";
+#endif
+}
+
 static std::string getSpecialEnv_SECONDS_()
 {
     // https://en.cppreference.com/w/cpp/chrono/c/difftime
@@ -372,6 +427,7 @@ static const std::map<std::string, get_env_fp> s_get_env{
                                                     // c.f., Visual Studio
                                                     {"Configuration", getSpecialEnv_Configuration},
                                                     {"Platform", getSpecialEnv_Platform},
+                                                    {"PlatformToolset", getSpecialEnv_PlatformToolset},
 };
 bool AbstractOS::isSpecialEnv(const std::string& envVar) const
 {
@@ -413,6 +469,12 @@ std::string AbstractOS::getSpecialEnv(const std::string& envVar) const
     if (envVar == "EPOCHSECONDS")
     {
         return str::toString(sys::DateTime::getEpochSeconds());
+    }
+
+    if (envVar == "OSTYPE")
+    {
+        // TODO: Mac
+        return sys::Platform == sys::PlatformType::Linux ? " linux-gnu" : "Windows";
     }
 
     if (envVar == "OSTYPE")

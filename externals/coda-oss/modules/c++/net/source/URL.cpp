@@ -24,21 +24,28 @@
 #include <import/str.h>
 #include <import/sys.h>
 
-net::URL::URL(const std::string url) :
-    mPort(-1)
+net::URL::URL(std::string url)
 {
     if (!url.empty())
         set(url);
 }
 
-net::URL::URL(const net::URL& url)
+net::URL& net::URL::operator=(const URL& url)
 {
+  if (this != &url)
+  {
     mProtocol = url.getProtocol();
     mHost = url.getHost();
     setPort(url.getPort());
     mPath = url.getPath();
     mFragment = url.getFragment();
     mParams = net::URLParams(url.getParams().toString());
+  }
+  return *this;
+}
+net::URL::URL(const URL& url)
+{
+    *this = url;
 }
 
 void net::URL::set(std::string url)
@@ -122,7 +129,7 @@ bool net::URL::operator==(const net::URL& url) const
     return toString() == url.toString();
 }
 
-net::URLParams::URLParams(const std::string paramString)
+net::URLParams::URLParams(std::string paramString)
 {
     if (!paramString.empty())
     {
@@ -154,7 +161,7 @@ bool net::URLParams::contains(std::string key) const
 net::URLParams::ParamValues& net::URLParams::get(std::string key)
 {
     net::URLParams::Params::iterator it = mParams.find(key);
-    if (it == mParams.end() || it->second.size() == 0)
+    if (it == mParams.end() || it->second.empty())
         throw except::NoSuchKeyException(Ctxt(key));
     return it->second;
 }
@@ -162,14 +169,14 @@ net::URLParams::ParamValues& net::URLParams::get(std::string key)
 const net::URLParams::ParamValues& net::URLParams::get(std::string key) const
 {
     net::URLParams::Params::const_iterator it = mParams.find(key);
-    if (it == mParams.end() || it->second.size() == 0)
+    if (it == mParams.end() || it->second.empty())
         throw except::NoSuchKeyException(Ctxt(key));
     return it->second;
 }
 std::string net::URLParams::getFirst(std::string key) const
 {
     net::URLParams::Params::const_iterator it = mParams.find(key);
-    if (it == mParams.end() || it->second.size() == 0)
+    if (it == mParams.end() || it->second.empty())
         throw except::NoSuchKeyException(Ctxt(key));
     return it->second.front();
 }

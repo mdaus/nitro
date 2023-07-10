@@ -39,15 +39,15 @@ protected:
     int mDST;
 
     //! @brief Set members from the tm struct value.
-    virtual void fromMillis(const tm& t);
+    virtual void fromMillis(const tm& t) override;
 
     /**
      * @brief Set the millis value from the members
      */
-    virtual void toMillis();
+    virtual void toMillis() override;
 
     // ! Given seconds since the epoch, provides the local time
-    virtual void getTime(time_t numSecondsSinceEpoch, tm& t) const;
+    virtual void getTime(time_t numSecondsSinceEpoch, tm& t) const override;
 
 public:
     /*!
@@ -78,7 +78,7 @@ public:
     LocalDateTime(const std::string& time, const std::string& format);
 
     //! Return the Daylight Savings Time flag (true = on, false = off)
-    bool getDST() const { return mDST == 1; }
+    bool getDST() const noexcept { return mDST == 1; }
 
     //! Set the Daylight Savings Time flag (true = on, false = off)
     void setDST(bool isDST);

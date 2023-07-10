@@ -19,8 +19,8 @@
     <ClInclude Include="coda_oss\include\coda_oss\bit.h" />
     <ClInclude Include="coda_oss\include\coda_oss\CPlusPlus.h" />
     <ClInclude Include="coda_oss\include\coda_oss\cstddef.h" />
-    <ClInclude Include="coda_oss\include\coda_oss\memory.h" />
     <ClInclude Include="coda_oss\include\coda_oss\namespace_.h" />
+    <ClInclude Include="coda_oss\include\coda_oss\numbers.h" />
     <ClInclude Include="coda_oss\include\coda_oss\optional.h" />
     <ClInclude Include="coda_oss\include\coda_oss\optional_.h" />
     <ClInclude Include="coda_oss\include\coda_oss\span.h" />
@@ -28,6 +28,7 @@
     <ClInclude Include="coda_oss\include\coda_oss\string.h" />
     <ClInclude Include="coda_oss\include\coda_oss\type_traits.h" />
     <ClInclude Include="config\include\config\compiler_extensions.h" />
+    <ClInclude Include="config\include\config\disable_compiler_warnings.h" />
     <ClInclude Include="config\include\config\Exports.h" />
     <ClInclude Include="config\include\config\Version.h" />
     <ClInclude Include="except\include\except\Backtrace.h" />
@@ -42,6 +43,14 @@
     <ClInclude Include="gsl\include\gsl\Gsl_.h" />
     <ClInclude Include="gsl\include\gsl\Gsl_narrow.h" />
     <ClInclude Include="gsl\include\gsl\use_gsl.h" />
+    <ClInclude Include="hdf5.lite\include\hdf5\lite\HDF5Exception.h" />
+    <ClInclude Include="hdf5.lite\include\hdf5\lite\highfive.h" />
+    <ClInclude Include="hdf5.lite\include\hdf5\lite\Info.h" />
+    <ClInclude Include="hdf5.lite\include\hdf5\lite\Read.h" />
+    <ClInclude Include="hdf5.lite\include\hdf5\lite\SpanRC.h" />
+    <ClInclude Include="hdf5.lite\include\hdf5\lite\Write.h" />
+    <ClInclude Include="hdf5.lite\source\H5.h" />
+    <ClInclude Include="hdf5.lite\source\hdf5.lite.h" />
     <ClInclude Include="include\TestCase.h" />
     <ClInclude Include="io\include\io\BidirectionalStream.h" />
     <ClInclude Include="io\include\io\BufferViewStream.h" />
@@ -114,7 +123,9 @@
     <ClInclude Include="math\include\math\Round.h" />
     <ClInclude Include="math\include\math\Utilities.h" />
     <ClInclude Include="mem\include\mem\Align.h" />
+    <ClInclude Include="mem\include\mem\AutoPtr.h" />
     <ClInclude Include="mem\include\mem\BufferView.h" />
+    <ClInclude Include="mem\include\mem\ComplexView.h" />
     <ClInclude Include="mem\include\mem\ScopedAlignedArray.h" />
     <ClInclude Include="mem\include\mem\ScopedArray.h" />
     <ClInclude Include="mem\include\mem\ScopedCloneablePtr.h" />
@@ -146,6 +157,7 @@
     <ClInclude Include="mt\include\mt\RequestQueue.h" />
     <ClInclude Include="mt\include\mt\Runnable1D.h" />
     <ClInclude Include="mt\include\mt\Singleton.h" />
+    <ClInclude Include="mt\include\mt\ThreadedByteSwap.h" />
     <ClInclude Include="mt\include\mt\ThreadGroup.h" />
     <ClInclude Include="mt\include\mt\ThreadPlanner.h" />
     <ClInclude Include="mt\include\mt\ThreadPoolException.h" />
@@ -173,6 +185,9 @@
     <ClInclude Include="sio.lite\include\sio\lite\StreamReader.h" />
     <ClInclude Include="sio.lite\include\sio\lite\UnsupportedDataTypeException.h" />
     <ClInclude Include="sio.lite\include\sio\lite\UserDataDictionary.h" />
+    <ClInclude Include="std\include\import\cpp14.h" />
+    <ClInclude Include="std\include\import\cpp17.h" />
+    <ClInclude Include="std\include\import\std.h" />
     <ClInclude Include="str\include\str\Convert.h" />
     <ClInclude Include="str\include\str\EncodedString.h" />
     <ClInclude Include="str\include\str\EncodedStringView.h" />
@@ -184,17 +199,12 @@
     <ClInclude Include="sys\include\sys\AbstractOS.h" />
     <ClInclude Include="sys\include\sys\AtomicCounter.h" />
     <ClInclude Include="sys\include\sys\AtomicCounterCpp11.h" />
-    <ClInclude Include="sys\include\sys\AtomicCounterMutex.h" />
-    <ClInclude Include="sys\include\sys\AtomicCounterSolaris.h" />
-    <ClInclude Include="sys\include\sys\AtomicCounterWin32.h" />
-    <ClInclude Include="sys\include\sys\AtomicCounterX86.h" />
     <ClInclude Include="sys\include\sys\Backtrace.h" />
+    <ClInclude Include="sys\include\sys\ByteSwap.h" />
+    <ClInclude Include="sys\include\sys\ByteSwapValue.h" />
     <ClInclude Include="sys\include\sys\ConditionVar.h" />
     <ClInclude Include="sys\include\sys\ConditionVarInterface.h" />
-    <ClInclude Include="sys\include\sys\ConditionVarIrix.h" />
-    <ClInclude Include="sys\include\sys\ConditionVarNSPR.h" />
     <ClInclude Include="sys\include\sys\ConditionVarPosix.h" />
-    <ClInclude Include="sys\include\sys\ConditionVarSolaris.h" />
     <ClInclude Include="sys\include\sys\ConditionVarWin32.h" />
     <ClInclude Include="sys\include\sys\Conf.h" />
     <ClInclude Include="sys\include\sys\CPlusPlus.h" />
@@ -209,11 +219,9 @@
     <ClInclude Include="sys\include\sys\filesystem.h" />
     <ClInclude Include="sys\include\sys\LocalDateTime.h" />
     <ClInclude Include="sys\include\sys\Mutex.h" />
+    <ClInclude Include="sys\include\sys\MutexCpp11.h" />
     <ClInclude Include="sys\include\sys\MutexInterface.h" />
-    <ClInclude Include="sys\include\sys\MutexIrix.h" />
-    <ClInclude Include="sys\include\sys\MutexNSPR.h" />
     <ClInclude Include="sys\include\sys\MutexPosix.h" />
-    <ClInclude Include="sys\include\sys\MutexSolaris.h" />
     <ClInclude Include="sys\include\sys\MutexWin32.h" />
     <ClInclude Include="sys\include\sys\OS.h" />
     <ClInclude Include="sys\include\sys\OSUnix.h" />
@@ -229,22 +237,17 @@
     <ClInclude Include="sys\include\sys\ScopedCPUAffinityUnix.h" />
     <ClInclude Include="sys\include\sys\Semaphore.h" />
     <ClInclude Include="sys\include\sys\SemaphoreInterface.h" />
-    <ClInclude Include="sys\include\sys\SemaphoreIrix.h" />
-    <ClInclude Include="sys\include\sys\SemaphoreNSPR.h" />
     <ClInclude Include="sys\include\sys\SemaphorePosix.h" />
-    <ClInclude Include="sys\include\sys\SemaphoreSolaris.h" />
     <ClInclude Include="sys\include\sys\SemaphoreWin32.h" />
+    <ClInclude Include="sys\include\sys\Span.h" />
+    <ClInclude Include="sys\include\sys\SysInt.h" />
     <ClInclude Include="sys\include\sys\StopWatch.h" />
     <ClInclude Include="sys\include\sys\String.h" />
-    <ClInclude Include="sys\include\sys\SyncFactoryIrix.h" />
     <ClInclude Include="sys\include\sys\SystemException.h" />
     <ClInclude Include="sys\include\sys\sys_filesystem.h" />
     <ClInclude Include="sys\include\sys\Thread.h" />
     <ClInclude Include="sys\include\sys\ThreadInterface.h" />
-    <ClInclude Include="sys\include\sys\ThreadIrix.h" />
-    <ClInclude Include="sys\include\sys\ThreadNSPR.h" />
     <ClInclude Include="sys\include\sys\ThreadPosix.h" />
-    <ClInclude Include="sys\include\sys\ThreadSolaris.h" />
     <ClInclude Include="sys\include\sys\ThreadWin32.h" />
     <ClInclude Include="sys\include\sys\TimeStamp.h" />
     <ClInclude Include="sys\include\sys\UTCDateTime.h" />
@@ -262,6 +265,7 @@
     <ClInclude Include="tiff\include\tiff\KnownTags.h" />
     <ClInclude Include="tiff\include\tiff\TypeFactory.h" />
     <ClInclude Include="tiff\include\tiff\Utils.h" />
+    <ClInclude Include="types\include\types\Complex.h" />
     <ClInclude Include="types\include\types\PageRowCol.h" />
     <ClInclude Include="types\include\types\Range.h" />
     <ClInclude Include="types\include\types\RangeList.h" />
@@ -270,6 +274,12 @@
     <ClInclude Include="units\include\units\Angles.h" />
     <ClInclude Include="units\include\units\Lengths.h" />
     <ClInclude Include="units\include\units\Unit.h" />
+    <ClInclude Include="zip\include\zip\GZipInputStream.h" />
+    <ClInclude Include="zip\include\zip\GZipOutputStream.h" />
+    <ClInclude Include="zip\include\zip\Types.h" />
+    <ClInclude Include="zip\include\zip\ZipEntry.h" />
+    <ClInclude Include="zip\include\zip\ZipFile.h" />
+    <ClInclude Include="zip\include\zip\ZipOutputStream.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cli\source\Argument.cpp" />
@@ -278,6 +288,11 @@
     <ClCompile Include="except\source\Context.cpp" />
     <ClCompile Include="except\source\Throwable.cpp" />
     <ClCompile Include="except\source\Trace.cpp" />
+    <ClCompile Include="hdf5.lite\source\H5.cpp" />
+    <ClCompile Include="hdf5.lite\source\hdf5.lite.cpp" />
+    <ClCompile Include="hdf5.lite\source\Info.cpp" />
+    <ClCompile Include="hdf5.lite\source\Read.cpp" />
+    <ClCompile Include="hdf5.lite\source\Write.cpp" />
     <ClCompile Include="io\source\ByteStream.cpp" />
     <ClCompile Include="io\source\FileInputStreamIOS.cpp" />
     <ClCompile Include="io\source\FileInputStreamOS.cpp" />
@@ -347,10 +362,7 @@
     <ClCompile Include="str\source\Manip.cpp" />
     <ClCompile Include="str\source\Tokenizer.cpp" />
     <ClCompile Include="sys\source\AbstractOS.cpp" />
-    <ClCompile Include="sys\source\ConditionVarIrix.cpp" />
-    <ClCompile Include="sys\source\ConditionVarNSPR.cpp" />
     <ClCompile Include="sys\source\ConditionVarPosix.cpp" />
-    <ClCompile Include="sys\source\ConditionVarSolaris.cpp" />
     <ClCompile Include="sys\source\ConditionVarWin32.cpp" />
     <ClCompile Include="sys\source\Conf.cpp" />
     <ClCompile Include="sys\source\DateTime.cpp" />
@@ -362,14 +374,13 @@
     <ClCompile Include="sys\source\ErrWin32.cpp" />
     <ClCompile Include="sys\source\ExecUnix.cpp" />
     <ClCompile Include="sys\source\ExecWin32.cpp" />
+    <ClCompile Include="sys\source\File.cpp" />
     <ClCompile Include="sys\source\FileFinder.cpp" />
     <ClCompile Include="sys\source\FileUnix.cpp" />
     <ClCompile Include="sys\source\FileWin32.cpp" />
     <ClCompile Include="sys\source\LocalDateTime.cpp" />
-    <ClCompile Include="sys\source\MutexIrix.cpp" />
-    <ClCompile Include="sys\source\MutexNSPR.cpp" />
+    <ClCompile Include="sys\source\MutexCpp11.cpp" />
     <ClCompile Include="sys\source\MutexPosix.cpp" />
-    <ClCompile Include="sys\source\MutexSolaris.cpp" />
     <ClCompile Include="sys\source\MutexWin32.cpp" />
     <ClCompile Include="sys\source\OSUnix.cpp" />
     <ClCompile Include="sys\source\OSWin32.cpp" />
@@ -379,18 +390,12 @@
     <ClCompile Include="sys\source\ReadWriteMutex.cpp" />
     <ClCompile Include="sys\source\ResourceCheck.cpp" />
     <ClCompile Include="sys\source\ScopedCPUAffinityUnix.cpp" />
-    <ClCompile Include="sys\source\SemaphoreIrix.cpp" />
     <ClCompile Include="sys\source\SemaphorePosix.cpp" />
-    <ClCompile Include="sys\source\SemaphoreSolaris.cpp" />
     <ClCompile Include="sys\source\SemaphoreWin32.cpp" />
     <ClCompile Include="sys\source\StopWatch.cpp" />
-    <ClCompile Include="sys\source\SyncFactoryIrix.cpp" />
     <ClCompile Include="sys\source\sys_Backtrace.cpp" />
     <ClCompile Include="sys\source\sys_filesystem.cpp" />
-    <ClCompile Include="sys\source\ThreadIrix.cpp" />
-    <ClCompile Include="sys\source\ThreadNSPR.cpp" />
     <ClCompile Include="sys\source\ThreadPosix.cpp" />
-    <ClCompile Include="sys\source\ThreadSolaris.cpp" />
     <ClCompile Include="sys\source\ThreadWin32.cpp" />
     <ClCompile Include="sys\source\UTCDateTime.cpp" />
     <ClCompile Include="tiff\source\Common.cpp" />
@@ -406,6 +411,11 @@
     <ClCompile Include="tiff\source\Utils.cpp" />
     <ClCompile Include="types\source\Range.cpp" />
     <ClCompile Include="types\source\RangeList.cpp" />
+    <ClCompile Include="zip\source\GZipInputStream.cpp" />
+    <ClCompile Include="zip\source\GZipOutputStream.cpp" />
+    <ClCompile Include="zip\source\ZipEntry.cpp" />
+    <ClCompile Include="zip\source\ZipFile.cpp" />
+    <ClCompile Include="zip\source\ZipOutputStream.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="gsl\include\gsl\algorithm" />
@@ -422,6 +432,7 @@
     <None Include="std\include\std\cstddef" />
     <None Include="std\include\std\filesystem" />
     <None Include="std\include\std\memory" />
+    <None Include="std\include\std\numbers" />
     <None Include="std\include\std\optional" />
     <None Include="std\include\std\span" />
     <None Include="std\include\std\string" />
@@ -462,6 +473,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -471,21 +484,28 @@
       <WarningLevel>EnableAllWarnings</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions);CODA_OSS_EXPORTS;CODA_OSS_DLL;MT_DEFAULT_PINNING=0;RE_ENABLE_STD_REGEX=1</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
-      <AdditionalIncludeDirectories>cli\include\;coda_oss\include;config\include\;except\include\;gsl\include\;io\include\;logging\include\;math\include\;math.linear\include\;math.poly\include\;mem\include\;mt\include\;plugin\include\;polygon\include\;re\include\;sio.lite\include\;std\include\;str\include\;sys\include\;tiff\include;types\include\;units\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>cli\include\;coda_oss\include;config\include\;except\include\;gsl\include\;hdf5.lite\include\;io\include\;logging\include\;math\include\;math.linear\include\;math.poly\include\;mem\include\;mt\include\;plugin\include\;polygon\include\;re\include\;sio.lite\include\;std\include\;str\include\;sys\include\;tiff\include;types\include\;units\include\;zip\include\;$(SolutionDir)out\install\$(Platform)-$(Configuration)\include\</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <ControlFlowGuard>Guard</ControlFlowGuard>
-      <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <TranslateIncludes>true</TranslateIncludes>
+      <UseStandardPreprocessor>true</UseStandardPreprocessor>
+      <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+      <EnablePREfast>true</EnablePREfast>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
     </ClCompile>
     <Link>
       <SubSystem>
       </SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)\out\install\$(Platform)-$(Configuration)\lib\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>hdf5-c++.lib;z.lib;minizip.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -495,15 +515,19 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions);CODA_OSS_EXPORTS;CODA_OSS_DLL;MT_DEFAULT_PINNING=0;RE_ENABLE_STD_REGEX=1</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
       <ForcedIncludeFiles>pch.h</ForcedIncludeFiles>
-      <AdditionalIncludeDirectories>cli\include\;coda_oss\include;config\include\;except\include\;gsl\include\;io\include\;logging\include\;math\include\;math.linear\include\;math.poly\include\;mem\include\;mt\include\;plugin\include\;polygon\include\;re\include\;sio.lite\include\;std\include\;str\include\;sys\include\;tiff\include;types\include\;units\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>cli\include\;coda_oss\include;config\include\;except\include\;gsl\include\;hdf5.lite\include\;io\include\;logging\include\;math\include\;math.linear\include\;math.poly\include\;mem\include\;mt\include\;plugin\include\;polygon\include\;re\include\;sio.lite\include\;std\include\;str\include\;sys\include\;tiff\include;types\include\;units\include\;zip\include\;$(SolutionDir)out\install\$(Platform)-$(Configuration)\include\</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <ControlFlowGuard>Guard</ControlFlowGuard>
-      <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
       <TranslateIncludes>true</TranslateIncludes>
+      <UseStandardPreprocessor>true</UseStandardPreprocessor>
+      <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -511,6 +535,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)\out\install\$(Platform)-$(Configuration)\lib\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>hdf5-c++.lib;z.lib;minizip.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -26,7 +26,7 @@
 #include <vector>
 #include <sstream>
 
-#if defined(WIN32) || defined(_WIN32)
+#ifdef _WIN32
 
 #include "sys/OSWin32.h"
 #include "sys/File.h"
@@ -148,10 +148,14 @@ bool sys::OSWin32::isFile(const std::string& path) const
     //  2) Not Directory
     //  3) Not Archive - we aren't doing that...
     const DWORD what = GetFileAttributes(path.c_str());
-    return (what != INVALID_FILE_ATTRIBUTES &&
-            !(what & FILE_ATTRIBUTE_DIRECTORY));
+    if (what == INVALID_FILE_ATTRIBUTES) // "if the function fails, the return value is INVALID_FILE_ATTRIBUTES."
+    {
+        //const auto dwError = GetLastError();
+        return false;
+    }
+    const auto fileAttributeDirectory = (what & FILE_ATTRIBUTE_DIRECTORY) == FILE_ATTRIBUTE_DIRECTORY;
+    return !fileAttributeDirectory;
 }
-
 
 bool sys::OSWin32::isDirectory(const std::string& path) const
 {
@@ -183,7 +187,7 @@ bool sys::OSWin32::changeDirectory(const std::string& path) const
 std::string sys::OSWin32::getTempName(const std::string& path,
                                       const std::string& prefix) const
 {
-    char buffer[MAX_PATH];
+    char buffer[MAX_PATH]{};
     if (GetTempFileName(path.c_str(),
                         prefix.c_str(),
                         0, buffer) == 0)
@@ -205,7 +209,7 @@ sys::Off_T sys::OSWin32::getLastModifiedTime(const std::string& path) const
 
 void sys::OSWin32::millisleep(int milliseconds) const
 {
-    Sleep(milliseconds);
+    Sleep(static_cast<DWORD>(milliseconds));
 }
 
 std::string sys::OSWin32::getDSOSuffix() const
@@ -336,6 +340,25 @@ void sys::OSWin32::getAvailableCPUs(std::vector<int>& /*physicalCPUs*/,
 {
     throw except::NotImplementedException(
         Ctxt("Windows getAvailableCPUs not yet implemented."));
+}
+
+sys::SIMDInstructionSet sys::OSWin32::getSIMDInstructionSet() const
+{
+    // https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-isprocessorfeaturepresent
+    if (IsProcessorFeaturePresent(PF_AVX512F_INSTRUCTIONS_AVAILABLE))
+    {
+        return SIMDInstructionSet::AVX512F;
+    }
+    if (IsProcessorFeaturePresent(PF_AVX2_INSTRUCTIONS_AVAILABLE))
+    {
+        return SIMDInstructionSet::AVX2;
+    }
+    if (IsProcessorFeaturePresent(PF_XMMI64_INSTRUCTIONS_AVAILABLE))
+    {
+        return SIMDInstructionSet::SSE2;
+    }
+
+    throw std::runtime_error("SSE2 support is required.");
 }
 
 void sys::OSWin32::createSymlink(const std::string& origPathname,

@@ -54,7 +54,7 @@ void xml::lite::NamespaceStack::getMapping(const std::string& prefix, Uri& resul
     {
         if (mMappingStack[i].first == prefix)
         {
-            result = mMappingStack[i].second;
+            result = Uri(mMappingStack[i].second);
             return;
         }
     }
@@ -64,6 +64,7 @@ void xml::lite::NamespaceStack::getMapping(const std::string& prefix, Uri& resul
 void xml::lite::NamespaceStack::
 getAllPrefixes(std::vector<std::string>& allPrefixes) const
 {
+    allPrefixes.reserve(mMappingStack.size());
     for (unsigned int i = 0; i < mMappingStack.size(); i++)
     {
         allPrefixes.push_back(mMappingStack[i].first);

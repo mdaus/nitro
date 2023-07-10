@@ -20,8 +20,8 @@
  *
  */
 
-#ifndef __XML_LITE_VALIDATOR_XERCES_H__
-#define __XML_LITE_VALIDATOR_XERCES_H__
+#ifndef CODA_OSS_xml_lite_ValidatorXerces_h_INCLUDED_
+#define CODA_OSS_xml_lite_ValidatorXerces_h_INCLUDED_
 
 #include <xml/lite/xml_lite_config.h>
 
@@ -29,6 +29,7 @@
 
 #include <memory>
 #include <vector>
+#include <coda_oss/string.h>
 
 #include <xml/lite/UtilitiesXerces.h>
 #include <xml/lite/ValidatorInterface.h>
@@ -51,7 +52,7 @@ namespace lite
 
 typedef xercesc::DOMError ValidationError;
 
-struct ValidationErrorHandler : public xercesc::DOMErrorHandler
+struct ValidationErrorHandler final : public xercesc::DOMErrorHandler
 {
     ValidationErrorHandler() = default;
 
@@ -61,7 +62,7 @@ struct ValidationErrorHandler : public xercesc::DOMErrorHandler
     ValidationErrorHandler& operator=(ValidationErrorHandler&&) = delete;
 
     //! handle the errors during validation
-    virtual bool handleError (const ValidationError& err);
+    bool handleError (const ValidationError& err) override;
 
     //! get the raw information
     const std::vector<ValidationInfo>& getErrorLog() const
@@ -99,7 +100,6 @@ private:
 class ValidatorXerces : public ValidatorInterface
 {
     XercesContext mCtxt;    //! this must be the first member listed
-    bool mLegacyStringConversion = true; // use exsiting code for XMLCh* conversion
 
 public:
 
@@ -120,8 +120,8 @@ public:
 
     ValidatorXerces(const ValidatorXerces&) = delete;
     ValidatorXerces& operator=(const ValidatorXerces&) = delete;
-    ValidatorXerces(ValidatorXerces&&) = delete;
-    ValidatorXerces& operator=(ValidatorXerces&&) = delete;
+    ValidatorXerces(ValidatorXerces&&) = default;
+    ValidatorXerces& operator=(ValidatorXerces&&) = default;
 
     using ValidatorInterface::validate;
 
@@ -137,9 +137,11 @@ public:
     bool validate(const coda_oss::u8string&, const std::string& xmlID, std::vector<ValidationInfo>&) const override;
     bool validate(const str::W1252string&, const std::string& xmlID, std::vector<ValidationInfo>&) const override;
 
+    // Search each directory for XSD files
+    static std::vector<coda_oss::filesystem::path> loadSchemas(const std::vector<coda_oss::filesystem::path>& schemaPaths, bool recursive=true);
+
 private:
-    template <typename CharT>
-    bool validate_(const std::basic_string<CharT>& xml, bool legacyStringConversion,
+    bool validate_(const coda_oss::u8string& xml, 
                    const std::string& xmlID,
                    std::vector<ValidationInfo>& errors) const;
 
@@ -157,4 +159,4 @@ std::ostream& operator<< (std::ostream& out,
 
 #endif
 
-#endif
+#endif  // CODA_OSS_xml_lite_ValidatorXerces_h_INCLUDED_
