@@ -16,17 +16,17 @@ jobs:
         python-version: '3.7'
     - name: configure
       run: |
-        mkdir build
-        cd build
+        mkdir out
+        cd out
         cmake -DCMAKE_INSTALL_PREFIX=installWindows-Github -DPYTHON_VERSION="3.7" ..
     - name: make
       run: |
-        cd build
+        cd out
         cmake --build . --config Release -j
         cmake --build . --config Release --target install
     - name: test
       run: |
-        cd build
+        cd out
         ctest -C Release --output-on-failure
 
   build-linux:
@@ -41,16 +41,16 @@ jobs:
         python-version: '3.7'
     - name: configure
       run: |
-        mkdir build
-        cd build
+        mkdir out
+        cd out
         cmake -DCMAKE_INSTALL_PREFIX=installLinux-Github -DPYTHON_VERSION=3.7 ..
     - name: make
       run: |
-        cd build
+        cd out
         # using the default number of threads (-j) causes G++ to crash
         cmake --build . -j 6
         cmake --build . --target install
     - name: test
       run: |
-        cd build
+        cd out
         ctest --output-on-failure
