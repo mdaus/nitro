@@ -8,9 +8,9 @@ TEST_CLASS(test_create){ public:
 #include "nitf/unittests/test_create.c"
 };
 
-//TEST_CLASS(test_create_nitf){ public:
-//#include "nitf/unittests/test_create_nitf.c"
-//};
+TEST_CLASS(test_create_nitf){ public:
+#include "nitf/unittests/test_create_nitf.c"
+};
 
 TEST_CLASS(test_field){ public:
 #include "nitf/unittests/test_field.c"
