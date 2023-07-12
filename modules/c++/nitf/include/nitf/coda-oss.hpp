@@ -53,9 +53,13 @@ CODA_OSS_disable_warning_push
 #include <import/sys.h>
 #include <import/mt.h>
 #include <import/io.h>
+#include <io/ReadUtils.h>
+#include <io/TempFile.h>
 #include <import/types.h>
 #include <import/mem.h>
+#include <import/math.h>
 #include <gsl/gsl.h>
 #include <sys/Span.h>
+#include <import/sio/lite.h>
 
 CODA_OSS_disable_warning_pop
