@@ -58,16 +58,16 @@ jobs:
         python-version: '3.7'
     - name: configure
       run: |
-        mkdir target
-        cd target
+        mkdir target-Release
+        cd target-Release
         cmake -DCMAKE_INSTALL_PREFIX=install${{ matrix.os }}CMake-Github -DPYTHON_VERSION=3.7 ..
     - name: make
       run: |
-        cd target
+        cd target-Release
         # using the default number of threads (-j) causes G++ to crash
         cmake --build . -j 6
         cmake --build . --target install
     - name: test
       run: |
-        cd target
+        cd target-Release
         ctest --output-on-failure
