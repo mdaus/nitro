@@ -303,7 +303,7 @@ TEST_CASE(testRead)
 }
 
 TEST_MAIN(
-    CHECK_ARGS(testCreate);
-    CHECK_ARGS(testRead);
+    CHECK(testCreate);
+    CHECK(testRead);
     )
 

@@ -28,15 +28,15 @@
 #pragma warning(push)
 #pragma warning(disable: 4125) // decimal digit terminates octal escape sequence
 #endif
-struct NITRO_IMAGE_t {
+typedef struct {
   unsigned int 	 width;
   unsigned int 	 height;
   unsigned int 	 bytesPerPixel;
   unsigned char	 data[188 * 36 * 3 + 1];
-};
-inline const NITRO_IMAGE_t* getNitroImage()
+} NITRO_IMAGE_t;
+static inline const NITRO_IMAGE_t* getNitroImage()
 {
-static const struct NITRO_IMAGE_t retval = {
+static const NITRO_IMAGE_t retval = {
   188, 36, 3,
   "\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377"
   "\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377\377"
