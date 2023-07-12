@@ -9,4 +9,21 @@
 
 // add headers that you want to pre-compile here
 
+#define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
+#define NOMINMAX
+#pragma warning(push)
+#pragma warning(disable: 5039) //	'...': pointer or reference to potentially throwing function passed to 'extern "C"' function under -EHc. Undefined behavior may occur if this function throws an exception.
+#include <windows.h>
+#pragma warning(pop)
+#pragma comment(lib, "ws2_32")
+
+// We're building in Visual Studio ... used to control where we get a little bit of config info
+#define NITRO_PCH 1
+
+#include <import/nrt.h>
+
+#include <nitf/coda-oss.hpp>
+
+#include "Test.h"
+
 #endif //PCH_H
