@@ -22,12 +22,14 @@
 
 #include <import/nrt.h>
 #include <import/nitf.h>
+#include <nitf/TestingTest.h>
 
 #include <nitf/coda-oss.hpp>
 
 #include <import/nitf.hpp>
 #include <nitf/UnitTests.hpp>
 #include <nitf/TREField.hpp>
+#include <nitf/TestingTest.hpp>
 
 #include "Test.h"
 

@@ -8,9 +8,9 @@ TEST_CLASS(test_create_nitf__){ public:
 #include "nitf/unittests/test_create_nitf++.cpp"
 };
 
-//TEST_CLASS(test_field__){ public:
-//#include "nitf/unittests/test_field++.cpp"
-//};
+TEST_CLASS(test_field__){ public:
+#include "nitf/unittests/test_field++.cpp"
+};
 
 TEST_CLASS(test_hash_table_1__){ public:
 #include "nitf/unittests/test_hash_table_1++.cpp"
