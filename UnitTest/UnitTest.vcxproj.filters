@@ -14,6 +14,24 @@
       <Filter>nrt</Filter>
     </ClCompile>
     <ClCompile Include="CppUnitTestAssert.cpp" />
+    <ClCompile Include="..\modules\c\nrt\unittests\test_buffer_adapter.c">
+      <Filter>nrt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\c\nrt\unittests\test_core_values.c">
+      <Filter>nrt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\c\nrt\unittests\test_list.c">
+      <Filter>nrt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\c\nrt\unittests\test_nrt_byte_swap.c">
+      <Filter>nrt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\c\nrt\unittests\test_nrt_datetime.c">
+      <Filter>nrt</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\c\nrt\unittests\test_tree.c">
+      <Filter>nrt</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
