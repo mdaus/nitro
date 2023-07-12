@@ -40,4 +40,13 @@
 #pragma warning(disable: 4514) // '...' : unreferenced inline function has been removed
 #pragma warning(disable: 5039) // '...': pointer or reference to potentially throwing function passed to '...' function under -EHc. Undefined behavior may occur if this function throws an exception.
 
+#if __cplusplus
+#pragma warning(disable: 4365) // '...': conversion from '...' to '...', signed/unsigned mismatch
+#pragma warning(disable: 4800) // Implicit conversion from '...' to bool. Possible information loss
+#pragma warning(disable: 4804) // '...: unsafe use of type '...' in operation
+#pragma warning(disable: 5219) // implicit conversion from '...' to '...', possible loss of data
+#pragma warning(disable: 4191) // '...': unsafe conversion from '...' to '...'
+#pragma warning(disable: 4244) // '...': conversion from '...' to '...', possible loss of data
+#endif
+
 #define OPJ_STATIC
