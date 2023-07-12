@@ -67,6 +67,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
       <CompileAs>CompileAsCpp</CompileAs>
+      <ExceptionHandling>false</ExceptionHandling>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -92,6 +93,7 @@
       <WarningLevel>Level3</WarningLevel>
       <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
       <CompileAs>CompileAsCpp</CompileAs>
+      <ExceptionHandling>false</ExceptionHandling>
     </ClCompile>
     <Link>
       <SubSystem>
