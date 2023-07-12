@@ -56,6 +56,8 @@ CODA_OSS_disable_warning(-Wzero-as-null-pointer-constant)
 #include <H5Cpp.h>
 
 #include <highfive/H5Easy.hpp>
+#include <highfive/H5File.hpp>
+#include <highfive/H5Group.hpp>
 #include <highfive/H5DataSet.hpp>
 #include <highfive/H5DataType.hpp>
 #include <highfive/H5DataSpace.hpp>
