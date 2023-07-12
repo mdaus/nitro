@@ -4,6 +4,9 @@
     <Filter Include="nrt">
       <UniqueIdentifier>{d6b8959a-344d-4af2-b926-05be973609a4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="nitf-c">
+      <UniqueIdentifier>{a03980e8-d43d-473b-9f2a-a883ddd94df0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="nrt.cpp">
@@ -31,6 +34,33 @@
     </ClCompile>
     <ClCompile Include="..\modules\c\nrt\unittests\test_tree.c">
       <Filter>nrt</Filter>
+    </ClCompile>
+    <ClCompile Include="nitf-c.cpp">
+      <Filter>nitf-c</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\c\nitf\unittests\test_create.c">
+      <Filter>nitf-c</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\c\nitf\unittests\test_create_nitf.c">
+      <Filter>nitf-c</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\c\nitf\unittests\test_field.c">
+      <Filter>nitf-c</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\c\nitf\unittests\test_geo_utils.c">
+      <Filter>nitf-c</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\c\nitf\unittests\test_image_io.c">
+      <Filter>nitf-c</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\c\nitf\unittests\test_mem_source.c">
+      <Filter>nitf-c</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\c\nitf\unittests\test_moveTREs.c">
+      <Filter>nitf-c</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\c\nitf\unittests\test_zero_field.c">
+      <Filter>nitf-c</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

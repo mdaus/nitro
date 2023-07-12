@@ -4,8 +4,14 @@
 #include <string>
 
 #include "CppUnitTest.h"
-#include <include/TestCase.h>
+
 #include <str/EncodedStringView.h>
+
+#undef TEST_ASSERT_NULL 
+#undef TEST_ASSERT
+#undef TEST_ASSERT_ALMOST_EQ
+#undef TEST_ASSERT_EQ
+#include <include/TestCase.h>
 
 #undef TEST_CHECK
 #undef TEST_ASSERT

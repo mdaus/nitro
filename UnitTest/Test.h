@@ -1,6 +1,7 @@
 #pragma once
 
 #include "nrt/unittests/Test.h"
+#include "nitf/unittests/Test.h"
 
 #include "TestCase.h"
 

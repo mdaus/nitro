@@ -21,6 +21,7 @@
 #define NITRO_PCH 1
 
 #include <import/nrt.h>
+#include <import/nitf.h>
 
 #include <nitf/coda-oss.hpp>
 
