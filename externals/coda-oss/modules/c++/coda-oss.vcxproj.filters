@@ -966,6 +966,9 @@
     <ClInclude Include="mt\include\import\mt.h">
       <Filter>mt</Filter>
     </ClInclude>
+    <ClInclude Include="include\UnitTest.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
@@ -1589,5 +1592,8 @@
       <Filter>std</Filter>
     </None>
     <None Include="coda-oss.ruleset" />
+    <None Include="sys\source\CppUnitTestAssert_.cpp_">
+      <Filter>sys</Filter>
+    </None>
   </ItemGroup>
 </Project>

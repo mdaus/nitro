@@ -15,6 +15,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnitTest", "UnitTest\UnitTest.vcxproj", "{34A31B3F-47C5-441D-AB22-3C85B3C5314E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{E0FA1194-0806-4A6B-A331-33CB43C0C946}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{4EC1396F-3781-409E-B209-A920C464853C}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\build_unittest.yml = .github\workflows\build_unittest.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -32,6 +39,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E0FA1194-0806-4A6B-A331-33CB43C0C946} = {DEB848DD-4285-4BFA-9B2F-60FA46200205}
+		{4EC1396F-3781-409E-B209-A920C464853C} = {E0FA1194-0806-4A6B-A331-33CB43C0C946}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3CAB4AC9-7865-44AD-8623-57905729A559}
