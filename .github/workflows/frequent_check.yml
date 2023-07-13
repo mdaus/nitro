@@ -44,7 +44,7 @@ jobs:
       matrix:
         os: [windows-latest]
         platform: [x64]
-        configuration: [Release, Debug]
+        configuration: [Release]
     name: ${{ matrix.os }}-msbuild-${{ matrix.configuration }}
     runs-on: ${{ matrix.os }}
 
@@ -67,10 +67,12 @@ jobs:
     - name: msbuild
       run: |
         msbuild nitro.sln /p:configuration=${{ matrix.configuration }}
-    #- name: mstest
-    #  run: |
-        # mstest /testcontainer:${RUNNER_WORKSPACE}\coda-oss\x64\Releast\Test.dll
-        # mstest /testcontainer:${RUNNER_WORKSPACE}\coda-oss\x64\Releast\Test++.dll
+    - name: vstest # https://github.com/marketplace/actions/vstest-action
+      uses: microsoft-approved-actions/vstest@master
+      with:
+          testAssembly: UnitTest.dll
+          searchFolder: .\${{ matrix.platform }}\${{ matrix.configuration }}
+          runInParallel: true  
 
   build-linux-cmake:
     strategy:
