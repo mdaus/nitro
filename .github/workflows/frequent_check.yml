@@ -22,6 +22,7 @@ jobs:
     - name: configure
       run: |
         mkdir out
+        cd out
         cmake .. -DCMAKE_INSTALL_PREFIX=install\${{ matrix.platform }}-${{ matrix.configuration }} -DPYTHON_VERSION="3.7"
     - name: make
       run: |
