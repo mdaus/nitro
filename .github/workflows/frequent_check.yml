@@ -45,7 +45,7 @@ jobs:
         os: [windows-latest]
         platform: [x64]
         configuration: [Release, Debug]
-    name: ${{ matrix.os }}-msbuild-${{ matrix.platform }}
+    name: ${{ matrix.os }}-msbuild-${{ matrix.configuration }}
     runs-on: ${{ matrix.os }}
 
     steps:
