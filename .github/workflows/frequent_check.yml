@@ -71,7 +71,7 @@ jobs:
       uses: microsoft/vstest-action@v1.0.0
       with:
           testAssembly: UnitTest.dll
-          searchFolder: .\${{ matrix.platform }}\${{ matrix.configuration }}
+          searchFolder: ${RUNNER_WORKSPACE}\nitro\${{ matrix.platform }}\${{ matrix.configuration }}
           runInParallel: true  
 
   build-linux-cmake:
