@@ -21,7 +21,7 @@ jobs:
       run: |
         mkdir target-Release
         cd target-Release
-        cmake -DCMAKE_INSTALL_PREFIX=install${{ matrix.os }}CMake-Github -DPYTHON_VERSION="3.7" ..
+        cmake .. -DCMAKE_INSTALL_PREFIX=install${{ matrix.os }}CMake-Github -DPYTHON_VERSION="3.7"
     - name: make
       run: |
         cd target-Release
@@ -44,7 +44,7 @@ jobs:
       matrix:
         os: [windows-latest]
         platform: [x64]
-        configuration: [Release]
+        configuration: [Debug] # Debug turns on more compiler warnings
     name: ${{ matrix.os }}-msbuild
     runs-on: ${{ matrix.os }}
 
@@ -54,7 +54,7 @@ jobs:
       run: |
         mkdir externals\coda-oss\out
         cd externals\coda-oss\out
-        cmake -DCMAKE_INSTALL_PREFIX=install\${{ matrix.platform }}-${{ matrix.configuration }} -DENABLE_PYTHON=OFF ..
+        cmake .. -DCMAKE_INSTALL_PREFIX=install\${{ matrix.platform }}-${{ matrix.configuration }} -DENABLE_PYTHON=OFF
     - name: make CODA-OSS
       run: |
         cd externals\coda-oss\out
@@ -92,7 +92,7 @@ jobs:
       run: |
         mkdir target-Release
         cd target-Release
-        cmake -DCMAKE_INSTALL_PREFIX=install${{ matrix.os }}CMake-Github -DPYTHON_VERSION=3.7 ..
+        cmake .. -DCMAKE_INSTALL_PREFIX=install${{ matrix.os }}CMake-Github -DPYTHON_VERSION=3.7
     - name: make
       run: |
         cd target-Release
