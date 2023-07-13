@@ -1,6 +1,12 @@
 #include "pch.h"
 #include "CppUnitTest.h"
 
+#include <nitf/coda-oss.hpp>
+#include <import/nitf.hpp>
+#include <nitf/UnitTests.hpp>
+#include <nitf/TREField.hpp>
+#include <nitf/TestingTest.hpp>
+
 namespace nitf_cpp
 {
 

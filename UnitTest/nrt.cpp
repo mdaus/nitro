@@ -1,6 +1,9 @@
 #include "pch.h"
 #include "CppUnitTest.h"
 
+#include <import/nrt.h>
+#include <nrt/unittests/Test.h>
+
 namespace nrt
 {
 

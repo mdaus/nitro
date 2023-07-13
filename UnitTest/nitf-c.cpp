@@ -1,6 +1,10 @@
 #include "pch.h"
 #include "CppUnitTest.h"
 
+#include <import/nitf.h>
+#include <nitf/TestingTest.h>
+#include <nitf/unittests/Test.h>
+
 namespace nitf_c
 {
 

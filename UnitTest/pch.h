@@ -25,7 +25,6 @@
 #include <nitf/TestingTest.h>
 
 #include <nitf/coda-oss.hpp>
-
 #include <import/nitf.hpp>
 #include <nitf/UnitTests.hpp>
 #include <nitf/TREField.hpp>

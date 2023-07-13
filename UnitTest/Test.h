@@ -1,8 +1,6 @@
 #pragma once
 
-#include "nrt/unittests/Test.h"
 #include "nitf/unittests/Test.h"
-
 #include "TestCase.h"
 
 #define TEST_ASSERT_EQ_INT(X1, X2) TEST_ASSERT_EQ(X2, X1)
