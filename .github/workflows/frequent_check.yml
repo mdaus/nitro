@@ -54,7 +54,7 @@ jobs:
       run: |
         mkdir externals\coda-oss\out
         cd externals\coda-oss\out
-        cmake -DCMAKE_INSTALL_PREFIX=install\${{ matrix.platform }}-${{ matrix.configuration }} -DENABLE_PYTHON=OFF
+        cmake -DCMAKE_INSTALL_PREFIX=install\${{ matrix.platform }}-${{ matrix.configuration }} -DENABLE_PYTHON=OFF ..
     - name: make CODA-OSS
       run: |
         cd externals\coda-oss\out
