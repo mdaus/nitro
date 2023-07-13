@@ -61,14 +61,14 @@ jobs:
         cmake --build . --config ${{ matrix.configuration }} -j
         cmake --build . --config ${{ matrix.configuration }} --target install
     - name: Add msbuild to PATH
-      uses: microsoft/setup-msbuild@v1.1
+      uses: microsoft/setup-msbuild@v1 # https://github.com/marketplace/actions/setup-msbuild
       with:
         msbuild-architecture: x64
     - name: msbuild
       run: |
         msbuild nitro.sln /p:configuration=${{ matrix.configuration }}
-    - name: vstest # https://github.com/marketplace/actions/vstest-action
-      uses: microsoft/vstest-action@v1.0.0
+    - name: vstest 
+      uses: microsoft/vstest-action@v1.0.0 # https://github.com/marketplace/actions/vstest-action
       with:
           testAssembly: UnitTest.dll
           searchFolder: D:\a\nitro\nitro\${{ matrix.platform }}\${{ matrix.configuration }}
