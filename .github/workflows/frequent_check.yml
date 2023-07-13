@@ -38,6 +38,35 @@ jobs:
     - name: msbuild
       run: |
         msbuild nitro.sln /p:configuration=Release
+
+  build-msbuild-windows:
+    strategy:
+      matrix:
+        os: [windows-latest]
+        platform: [x64]
+        configuration: [Release, Debug]
+    name: ${{ matrix.os }}-msbuild-${{ matrix.platform }}
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: configure CODA-OSS
+      run: |
+        mkdir externals\coda-oss\out
+        cd externals\coda-oss\out
+        cmake -DCMAKE_INSTALL_PREFIX=install\${{ matrix.platform }}-${{ matrix.configuration }} -DENABLE_PYTHON=OFF
+    - name: make CODA-OSS
+      run: |
+        cd externals\coda-oss\out
+        cmake --build . --config ${{ matrix.configuration }} -j
+        cmake --build . --config ${{ matrix.configuration }} --target install
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v1.1
+      with:
+        msbuild-architecture: x64
+    - name: msbuild
+      run: |
+        msbuild nitro.sln /p:configuration=${{ matrix.configuration }}
     #- name: mstest
     #  run: |
         # mstest /testcontainer:${RUNNER_WORKSPACE}\coda-oss\x64\Releast\Test.dll
