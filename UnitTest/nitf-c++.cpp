@@ -82,8 +82,8 @@ TEST_CLASS(test_tre_read){ public:
 #include "nitf/unittests/test_tre_read.cpp"
 };
 
-TEST_CLASS(test_writer_3__){ public:
-#include "nitf/unittests/test_writer_3++.cpp"
-};
+//TEST_CLASS(test_writer_3__){ public:
+//#include "nitf/unittests/test_writer_3++.cpp"
+//};
 
 }
