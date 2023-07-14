@@ -497,8 +497,6 @@ TEST_CASE(test_mt_record)
 
 
 TEST_MAIN(
-    (void)argc;
-    (void)argv;
     TEST_CHECK(test_create_nitf_with_byte_provider_test);
     TEST_CHECK(test_create_nitf_test);
     TEST_CHECK(test_mt_record);

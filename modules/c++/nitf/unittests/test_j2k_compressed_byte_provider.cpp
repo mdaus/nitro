@@ -631,7 +631,14 @@ TEST_CASE(j2k_compressed_byte_provider)
     }
 }
 
-TEST_MAIN((void)argc;(void)argv;
+TEST_CASE(j2k_do_nothing)
+{
+    /* placeholder */
+    TEST_ASSERT_TRUE(true);
+}
+
+TEST_MAIN(
+    TEST_CHECK(j2k_do_nothing);
 //TEST_CHECK(j2k_compressed_byte_provider_maxRowsPerSegment0); // TODO: get working with CMake
 //TEST_CHECK(j2k_compressed_byte_provider); // TODO: get working with CMake
 )

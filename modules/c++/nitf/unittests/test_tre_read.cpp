@@ -277,8 +277,6 @@ TEST_CASE(test_nitf_CSEXRB_bugfix)
 }
 
 TEST_MAIN(
-    (void)argc; (void)argv;
-
 TEST_CHECK(test_nitf_Record_unmergeTREs_crash); // 2
 TEST_CHECK(test_defaultRead_crash); // 3
 TEST_CHECK(test_readBandInfo_crash); // 4
