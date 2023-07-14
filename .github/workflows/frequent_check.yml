@@ -69,13 +69,12 @@ jobs:
     - name: msbuild
       run: |
         msbuild nitro.sln /p:configuration=${{ matrix.configuration }}
-    # Can't figure out how to make this work :-(
-    #- name: vstest 
-    #  uses: microsoft/vstest-action@v1.0.0 # https://github.com/marketplace/actions/vstest-action
-    #  with:
-    #      testAssembly: UnitTest.dll
-    #      searchFolder: D:\a\nitro\nitro\${{ matrix.platform }}\${{ matrix.configuration }}
-    #      runInParallel: true  
+    - name: vstest 
+      uses: microsoft/vstest-action@v1.0.0 # https://github.com/marketplace/actions/vstest-action
+      with:
+        platform: ${{ matrix.platform }}
+        testAssembly: UnitTest*.dll
+        searchFolder: D:\a\nitro\nitro\x64\Debug
 
   build-linux-cmake:
     strategy:
