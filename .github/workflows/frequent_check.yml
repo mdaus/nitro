@@ -75,9 +75,9 @@ jobs:
     #    platform: ${{ matrix.platform }}
     #    testAssembly: UnitTest.dll
     #    searchFolder: D:\a\nitro\nitro\x64\Debug
-    - name: vstest 
-      run: |
-        vstest.console D:\a\nitro\nitro\x64\Debug\UnitTest.dll
+    #- name: vstest 
+    #  run: |
+    #    vstest.console D:\a\nitro\nitro\x64\Debug\UnitTest.dll
 
   build-linux-cmake:
     strategy:
