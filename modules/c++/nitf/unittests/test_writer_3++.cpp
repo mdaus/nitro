@@ -31,7 +31,6 @@
 
 #include "TestCase.h"
 
-static std::string testName;
 const std::string output_file = "test_writer_3++.nitf";
 
 using path = std::filesystem::path;

@@ -91,7 +91,6 @@ files, this bug may allow an attacker to cause a denial of service.
 
 */
 
-static std::string testName;
 const char* output_file = "test_writer_3++.nitf";
 
 static std::filesystem::path findInputFile_(const std::string& name)

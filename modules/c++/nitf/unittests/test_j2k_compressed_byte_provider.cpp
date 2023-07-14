@@ -54,8 +54,6 @@
 
 #include "TestCase.h"
 
-static std::string testName;
-
 static void setCornersFromDMSBox(nitf::ImageSubheader& header)
 {
     /*

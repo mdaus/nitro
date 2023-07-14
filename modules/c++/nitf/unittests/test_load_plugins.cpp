@@ -29,8 +29,6 @@
 
 #include "TestCase.h"
 
-static std::string testName;
-
 static void load_plugin(const char* tre)
 {
     nitf_Error error;
