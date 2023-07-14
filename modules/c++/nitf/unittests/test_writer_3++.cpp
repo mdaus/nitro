@@ -38,8 +38,9 @@ using path = std::filesystem::path;
 
 static path findInputFile()
 {
-    static const auto sicd_50x50(path("modules") / "c++" / "nitf" / "unittests" / "sicd_50x50.nitf");
-    return nitf::Test::findInputFile(sicd_50x50);
+    static const auto unittests = path("modules") / "c++" / "nitf" / "unittests";
+    static const auto inputPath = nitf::Test::findInputFile(unittests, "sicd_50x50.nitf");
+    return inputPath;
 }
 
 static std::string makeBandName(const std::string& rootFile, int imageNum, int bandNum)
