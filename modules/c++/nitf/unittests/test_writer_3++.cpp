@@ -36,24 +36,10 @@ const std::string output_file = "test_writer_3++.nitf";
 
 using path = std::filesystem::path;
 
-static std::string argv0;
 static path findInputFile()
 {
-    const auto inputFile = path("modules") / "c++" / "nitf" / "unittests" / "sicd_50x50.nitf";
- 
-    path root;
-    if (argv0.empty())
-    {
-        // running in Visual Studio
-        root = std::filesystem::current_path().parent_path().parent_path();
-    }
-    else
-    {
-        root = absolute(path(argv0)).parent_path().parent_path().parent_path().parent_path();
-        root = root.parent_path().parent_path();
-    }
-
-    return root / inputFile;
+    static const auto sicd_50x50(path("modules") / "c++" / "nitf" / "unittests" / "sicd_50x50.nitf");
+    return nitf::Test::findInputFile(sicd_50x50);
 }
 
 static std::string makeBandName(const std::string& rootFile, int imageNum, int bandNum)
@@ -279,8 +265,6 @@ TEST_CASE(test_buffered_write_)
 }
 
 TEST_MAIN(
-    (void)argc;
-    argv0 = argv[0];
     TEST_CHECK(test_writer_3_);
     TEST_CHECK(test_buffered_write_);
     )

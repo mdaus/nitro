@@ -297,7 +297,11 @@ fs::path sys::test::findRootDirectory(const fs::path& p, const std::string& root
     // Once we're at a .git directory, we have to go down, not up ... or fail.
     if (!is_directory(p / ".git"))
     {
-        return findRootDirectory(p.parent_path(), rootName, isRoot);
+        const auto parent_path = p.parent_path();
+        if (p != parent_path)
+        {
+            return findRootDirectory(parent_path, rootName, isRoot);
+        }       
     }
     
     // TODO: since we're in the "FileFinder" module, maybe try a bit harder to find "rootName"?
