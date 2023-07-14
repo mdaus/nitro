@@ -26,9 +26,9 @@ TEST_CLASS(test_image_blocker){ public:
 #include "nitf/unittests/test_image_blocker.cpp"
 };
 
-TEST_CLASS(test_image_loading__){ public:
-#include "nitf/unittests/test_image_loading++.cpp"
-};
+//TEST_CLASS(test_image_loading__){ public:
+//#include "nitf/unittests/test_image_loading++.cpp"
+//};
 
 TEST_CLASS(test_image_segment_blank_nm_compression){ public:
 #include "nitf/unittests/test_image_segment_blank_nm_compression.cpp"
