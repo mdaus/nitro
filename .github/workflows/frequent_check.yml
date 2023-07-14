@@ -69,12 +69,15 @@ jobs:
     - name: msbuild
       run: |
         msbuild nitro.sln /p:configuration=${{ matrix.configuration }}
+    #- name: vstest 
+    #  uses: microsoft/vstest-action@v1.0.0 # https://github.com/marketplace/actions/vstest-action
+    #  with:
+    #    platform: ${{ matrix.platform }}
+    #    testAssembly: UnitTest.dll
+    #    searchFolder: D:\a\nitro\nitro\x64\Debug
     - name: vstest 
-      uses: microsoft/vstest-action@v1.0.0 # https://github.com/marketplace/actions/vstest-action
-      with:
-        platform: ${{ matrix.platform }}
-        testAssembly: UnitTest*.dll
-        searchFolder: D:\a\nitro\nitro\x64\Debug
+      run: |
+        vstest.console D:\a\nitro\nitro\x64\Debug\UnitTest.dll
 
   build-linux-cmake:
     strategy:
