@@ -57,7 +57,7 @@ jobs:
       matrix:
         os: [windows-latest]
         platform: [x64]
-        configuration: [Release]
+        configuration: [Debug] # Debug turns on more compiler warnings
     name: ${{ matrix.os }}-msbuild
     runs-on: ${{ matrix.os }}
 
