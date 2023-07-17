@@ -45,11 +45,11 @@ TEST_CLASS(test_image_writer){ public:
 //TEST_CLASS(test_j2k_compress_tile){ public:
 //#include "nitf/unittests/test_j2k_compress_tile.cpp"
 //};
-
+//
 //TEST_CLASS(test_j2k_compressed_byte_provider){ public:
 //#include "nitf/unittests/test_j2k_compressed_byte_provider.cpp"
 //};
-
+//
 //TEST_CLASS(test_j2k_loading__){ public:
 //#include "nitf/unittests/test_j2k_loading++.cpp"
 //};
@@ -66,17 +66,17 @@ TEST_CLASS(test_nitf_buffer_list){ public:
 #include "nitf/unittests/test_nitf_buffer_list.cpp"
 };
 
-//TEST_CLASS(test_tre_create__){ public:
-//#include "nitf/unittests/test_tre_create++.cpp"
-//};
-//
-//TEST_CLASS(test_tre_mods){ public:
-//#include "nitf/unittests/test_tre_mods.cpp"
-//};
-//
-//TEST_CLASS(test_tre_mods__){ public:
-//#include "nitf/unittests/test_tre_mods++.cpp"
-//};
+TEST_CLASS(test_tre_create__){ public:
+#include "nitf/unittests/test_tre_create++.cpp"
+};
+
+TEST_CLASS(test_tre_mods){ public:
+#include "nitf/unittests/test_tre_mods.cpp"
+};
+
+TEST_CLASS(test_tre_mods__){ public:
+#include "nitf/unittests/test_tre_mods++.cpp"
+};
 
 TEST_CLASS(test_tre_read){ public:
 #include "nitf/unittests/test_tre_read.cpp"
