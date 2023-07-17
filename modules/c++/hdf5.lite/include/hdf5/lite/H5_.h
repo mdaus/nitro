@@ -28,6 +28,7 @@
 
 CODA_OSS_disable_warning_system_header_push
 #if _MSC_VER
+#pragma warning(disable: 6313) // Incorrect operator.  Use an equality test to check for zero-valued flags.
 #pragma warning(disable: 26493) // Don't use C-style casts (type.4).
 #pragma warning(disable: 26494) // Variable '...' is uninitialized. Always initialize an object (type.5).
 #pragma warning(disable: 26451) // Arithmetic overflow: Using operator '...' on a 4 byte value and then casting the result to a 8 byte value. Cast the value to the wider type before calling operator '...' to avoid overflow (io.2).
