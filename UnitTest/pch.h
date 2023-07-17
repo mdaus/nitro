@@ -29,6 +29,7 @@
 #include <nitf/UnitTests.hpp>
 #include <nitf/TREField.hpp>
 #include <nitf/TestingTest.hpp>
+#include <nitf/UnitTests.hpp>
 
 #include "Test.h"
 

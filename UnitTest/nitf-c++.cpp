@@ -58,9 +58,9 @@ TEST_CLASS(test_j2k_read_tile){ public:
 #include "nitf/unittests/test_j2k_read_tile.cpp"
 };
 
-//TEST_CLASS(test_load_plugins){ public:
-//#include "nitf/unittests/test_load_plugins.cpp"
-//};
+TEST_CLASS(test_load_plugins){ public:
+#include "nitf/unittests/test_load_plugins.cpp"
+};
 
 TEST_CLASS(test_nitf_buffer_list){ public:
 #include "nitf/unittests/test_nitf_buffer_list.cpp"
