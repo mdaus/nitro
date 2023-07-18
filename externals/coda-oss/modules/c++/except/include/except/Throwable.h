@@ -167,7 +167,6 @@ public:
             s << ": " << t;
 
         return s.str();
-        //return s.str().c_str(); // truncate to first '\0'
     }
 
     const std::vector<std::string>& getBacktrace() const noexcept
