@@ -165,9 +165,7 @@ public:
         const Trace& t = getTrace();
         if (t.getSize() > 0)
             s << ": " << t;
-
-        std::string retval(s.str().c_str()); // truncate to first '\0'
-        return retval;
+        return s.str();
     }
 
     const std::vector<std::string>& getBacktrace() const noexcept
@@ -267,7 +265,7 @@ public:
     ThrowableEx(const Throwable& t, const Context& ctx) : Throwable(t, ctx) {}
 
     #if !CODA_OSS_except_Throwable_ISA_std_exception
-    const char* what() const noexcept override final  // derived classes override toString()
+    const char* what() const noexcept final  // derived classes override toString()
     {
         const Throwable* pThrowable = this;
         return pThrowable->what();

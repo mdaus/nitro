@@ -20,15 +20,16 @@
  *
  */
 
-#pragma once
 #ifndef CODA_OSS_hdf5_lite_H5_h_INCLUDED_
 #define CODA_OSS_hdf5_lite_H5_h_INCLUDED_
+#pragma once
 
 #include <vector>
 
-#include "types/RowCol.h"
+// see https://docs.hdfgroup.org/archive/support/HDF5/doc1.8/cpplus_RM/readdata_8cpp-example.html
+#include <H5Cpp.h>
 
-#include "hdf5/lite/H5_.h"
+#include "types/RowCol.h"
 
 // Utility routines for INTERNAL use!
 

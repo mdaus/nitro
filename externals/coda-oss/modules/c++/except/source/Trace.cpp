@@ -26,9 +26,12 @@ namespace except
 {
 std::ostream& operator<<(std::ostream& os, const Trace& t)
 {
-    for (auto&& trace : t.getStack())
+    const std::list<Context>& stack = t.getStack();
+
+    for (std::list<Context>::const_iterator it = stack.begin();
+            it != stack.end(); ++it)
     {
-        os << trace << "\n";
+        os << *it << std::endl;
     }
     return os;
 }

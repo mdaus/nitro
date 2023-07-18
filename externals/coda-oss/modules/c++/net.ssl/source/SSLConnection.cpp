@@ -45,11 +45,11 @@ net::ssl::SSLConnection::SSLConnection(std::unique_ptr<net::Socket>&& socket,
 
 net::ssl::SSLConnection::~SSLConnection()
 {
-    if(mSSL != nullptr)
+    if(mSSL != NULL)
     {
         SSL_shutdown(mSSL);
     }
-    if(mSSL != nullptr)
+    if(mSSL != NULL)
     {
         SSL_free(mSSL);
     }
