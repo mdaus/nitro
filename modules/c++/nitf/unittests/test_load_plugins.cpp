@@ -45,7 +45,7 @@ static void retrieveTREHandler(const std::string& testName, const char* tre)
     TEST_ASSERT(test_main_ != nullptr);
 }
 
-static const auto& all_plugins()
+static const auto& all_TREs()
 {
     static const std::vector<std::string> retval
     {
@@ -70,7 +70,7 @@ static const auto& all_plugins()
 
 TEST_CASE(test_retrieveTREHandler)
 {
-    for (const auto& tre : all_plugins())
+    for (const auto& tre : all_TREs())
     {
         retrieveTREHandler(testName, tre.c_str());
     }
@@ -85,10 +85,20 @@ TEST_CASE(test_load_ENGRDA)
     retrieveTREHandler(testName, "ENGRDA");
 }
 
-TEST_CASE(test_load_all_plugins)
+TEST_CASE(test_load_all_TREs)
 {
-    for (const auto& tre : all_plugins())
+    const nitf::TRE tre("ACCPOB");
+
+    for (const auto& tre : all_TREs())
     {
+        // TREs are quite the same thing as an arbitrary "plug in;" the underlying
+        // infrastructure is all built on shared-libraries/DLLs, but details differ.
+        //
+        // As a result, we can't expect loadPlugin() will "just work" on a TRE name.
+        // Unfortunately, the behavior is different on Windows and Linux. :-(
+        #if _WIN32
+        // Keep this around for now as it works ... but it's not necessarily correct.
+        // Mostly an excuse to exercise more code.
         try
         {
             nitf::PluginRegistry::loadPlugin(tre);
@@ -97,6 +107,8 @@ TEST_CASE(test_load_all_plugins)
         {
             TEST_FAIL_MSG(ex.toString());
         }
+        #endif // _WIN32
+
         TEST_ASSERT(nitf::PluginRegistry::treHandlerExists(tre));
     }
 }
@@ -107,5 +119,5 @@ TEST_MAIN(
     TEST_CHECK(test_load_PTPRAA);
     TEST_CHECK(test_load_ENGRDA);    
     TEST_CHECK(test_retrieveTREHandler);
-    TEST_CHECK(test_load_all_plugins);
+    TEST_CHECK(test_load_all_TREs);
 )
