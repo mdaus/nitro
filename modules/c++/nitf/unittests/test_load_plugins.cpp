@@ -49,13 +49,13 @@ static void load_plugin(const std::string& testName, const char* tre)
     TEST_ASSERT(test_main_ != nullptr);
 }
 
-static const std::vector<std::string>& all_plugins()
+static const auto& all_plugins()
 {
-    static const std::vector<std::string> all_plugins_
+    static const std::vector<std::string> retval
     {
     #if _MSC_VER && NITRO_PCH
         // only build a handful in Visual Studio
-        "ACCHZB", "ACCPOB", "ACFTA", "AIMIDB", "CSCRNA", "ENGRDA", "HISTOA", "JITCID", "PTPRAA", "RPFHDR",
+        "ACCHZB", "ACCPOB", "ACFTA", "AIMIDB", "CSCRNA", "CSEXRB", "ENGRDA", "HISTOA", "JITCID", "PTPRAA", "RPFHDR",
     #else
         "ACCHZB", "BANDSB", "CSDIDA", "GEOLOB", "JITCID", "NBLOCA", "PIAPEB", "REGPTB", "RSMIDA", "STEROB",
         "ACCPOB", "BCKGDA", "CSEPHA", "GEOPSB", "MAPLOB", "OBJCTA", "PIAPRC", "RPC00B", "RSMPCA", "STREOB",
@@ -69,7 +69,7 @@ static const std::vector<std::string>& all_plugins()
         "BANDSA", "CSCRNA", "EXPLTB", "J2KLRA", "MTIRPB", "PIAPEA", "PTPRAA", "RSMGIA", "STDIDC",
     #endif
     };
-    return all_plugins_;
+    return retval;
 }
 
 TEST_CASE(test_load_all_plugins_C)
@@ -97,10 +97,7 @@ static void loadPlugin(const std::string& testName, const std::string& path)
 {
     try
     {
-#ifdef _WIN32
-        // need the full path to load on Linux
         nitf::PluginRegistry::loadPlugin(path);
-#endif
         TEST_SUCCESS;
     }
     catch (const nitf::NITFException& ex)
@@ -121,7 +118,7 @@ TEST_CASE(test_load_all_plugins)
 
 TEST_MAIN(
     TEST_CHECK(test_load_PTPRAA);
-    TEST_CHECK(test_load_ENGRDA);
+    TEST_CHECK(test_load_ENGRDA);    
     TEST_CHECK(test_load_all_plugins_C);
     TEST_CHECK(test_load_all_plugins);
 )
