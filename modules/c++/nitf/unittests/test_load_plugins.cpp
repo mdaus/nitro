@@ -30,7 +30,7 @@
 
 #include "TestCase.h"
 
-static void load_plugin(const std::string& testName, const char* tre)
+static void retrieveTREHandler(const std::string& testName, const char* tre)
 {
     nitf_Error error;
 
@@ -72,53 +72,44 @@ static const auto& all_plugins()
     return retval;
 }
 
-TEST_CASE(test_load_all_plugins_C)
+TEST_CASE(test_retrieveTREHandler)
 {
-    nitf::Test::setNitfPluginPath();
-
     for (const auto& tre : all_plugins())
     {
-        load_plugin(testName, tre.c_str());
+        retrieveTREHandler(testName, tre.c_str());
     }
 }
 
 TEST_CASE(test_load_PTPRAA)
 {
-    nitf::Test::setNitfPluginPath();
-    load_plugin(testName, "PTPRAA");
+    retrieveTREHandler(testName, "PTPRAA");
 }
 TEST_CASE(test_load_ENGRDA)
 {
-    nitf::Test::setNitfPluginPath();
-    load_plugin(testName, "ENGRDA");
+    retrieveTREHandler(testName, "ENGRDA");
 }
 
-static void loadPlugin(const std::string& testName, const std::string& path)
-{
-    try
-    {
-        nitf::PluginRegistry::loadPlugin(path);
-        TEST_SUCCESS;
-    }
-    catch (const nitf::NITFException& ex)
-    {
-        TEST_FAIL_MSG(ex.toString());
-    }
-}
 TEST_CASE(test_load_all_plugins)
 {
-    nitf::Test::setNitfPluginPath();
-
     for (const auto& tre : all_plugins())
     {
-        loadPlugin(testName, tre);
+        try
+        {
+            nitf::PluginRegistry::loadPlugin(tre);
+        }
+        catch (const nitf::NITFException& ex)
+        {
+            TEST_FAIL_MSG(ex.toString());
+        }
         TEST_ASSERT(nitf::PluginRegistry::treHandlerExists(tre));
     }
 }
 
 TEST_MAIN(
+    nitf::Test::setNitfPluginPath();
+
     TEST_CHECK(test_load_PTPRAA);
     TEST_CHECK(test_load_ENGRDA);    
-    TEST_CHECK(test_load_all_plugins_C);
+    TEST_CHECK(test_retrieveTREHandler);
     TEST_CHECK(test_load_all_plugins);
 )
