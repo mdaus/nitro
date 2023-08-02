@@ -85,11 +85,15 @@
 
 // Get feature-testing macros: https://en.cppreference.com/w/cpp/feature_test
 #if CODA_OSS_cpp17 // C++17 for __has_include
-    // https://en.cppreference.com/w/cpp/header/version
-    // "Prior to C++20, including <ciso646> is sometimes used for this purpose."
-    #if __has_include(<ciso646>)
-        #include <ciso646>
-    #endif
+    #if !CODA_OSS_cpp20
+        // "error C4996: '...': warning STL4036: <ciso646> is removed in C++20. You can define _SILENCE_CXX20_CISO646_REMOVED_WARNING or _SILENCE_ALL_CXX20_DEPRECATION_WARNINGS to suppress this warning."
+
+        // https://en.cppreference.com/w/cpp/header/version
+        // "Prior to C++20, including <ciso646> is sometimes used for this purpose."
+        #if __has_include(<ciso646>)
+            #include <ciso646>
+        #endif
+    #endif // !CODA_OSS_cpp20
 
     #if __has_include(<version>)
         #include <version>
