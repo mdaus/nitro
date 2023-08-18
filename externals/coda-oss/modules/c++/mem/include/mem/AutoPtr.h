@@ -1,11 +1,11 @@
 /* =========================================================================
- * This file is part of numpyutils-c++
+ * This file is part of mem-c++
  * =========================================================================
  *
  * (C) Copyright 2004 - 2018, MDA Information Systems LLC
  * (C) Copyright 2022, Maxar Technologies, Inc.
  *
- * numpyutils-c++ is free software; you can redistribute it and/or modify
+ * mem-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
  * (at your option) any later version.
@@ -22,12 +22,12 @@
  */
 
 #pragma once
-#ifndef CODA_OSS_numpyutils_AutoPtr_h_INCLUDED_
-#define CODA_OSS_numpyutils_AutoPtr_h_INCLUDED_
+#ifndef CODA_OSS_mem_AutoPtr_h_INCLUDED_
+#define CODA_OSS_mem_AutoPtr_h_INCLUDED_
 
 #include <memory>
 
-namespace numpyutils
+namespace mem
 {
 // std::auto_ptr (deprecated in C++17) is copyable while
 // std::unique_ptr (new in C++11) isn't.  While unique_ptr
@@ -123,8 +123,9 @@ public:
 
     operator std::unique_ptr<T>& () { return ptr_; }
     operator const std::unique_ptr<T>& () const { return ptr_; }
+    
 };
 
-} // namespace numpyutils
+} // namespace mem
 
-#endif // CODA_OSS_numpyutils_AutoPtr_h_INCLUDED_
+#endif // CODA_OSS_mem_AutoPtr_h_INCLUDED_
