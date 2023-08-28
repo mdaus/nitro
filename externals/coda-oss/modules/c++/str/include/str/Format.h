@@ -27,6 +27,7 @@
 
 #include <stdarg.h>
 #include<stdint.h>
+#include<stddef.h>
 
 #include <string>
 
@@ -74,6 +75,10 @@ inline std::string format(const char* format, uint32_t i)
 {
     return Format(format, i);
 }
+inline std::string format(const char* format, ptrdiff_t l)
+{
+    return Format(format, l);
+}
 inline std::string format(const char* format, size_t ul)
 {
     return Format(format, ul);
@@ -94,6 +99,10 @@ inline std::string format(const char* format, char ch, const std::string& s)
 inline std::string format(const char* format, const std::string& s1, const std::string& s2)
 {
     return Format(format, s1.c_str(), s2.c_str());
+}
+inline std::string format(const char* format, const std::string& s, size_t ul)
+{
+    return Format(format, s.c_str(), ul);
 }
 inline std::string format(const char* format, char ch1, char ch2)
 {
@@ -119,6 +128,14 @@ inline std::string format(const char* format, char ch1, char ch2, const std::str
 inline std::string format(const char* format, int i1, int i2, unsigned long ul)
 {
     return Format(format, i1, i2, ul);
+}
+inline std::string format(const char* format, int i1, int i2, int i3)
+{
+    return Format(format, i1, i2, i3);
+}
+inline std::string format(const char* format, const std::string& s1, const std::string& s2, uint32_t ui)
+{
+    return Format(format, s1.c_str(), s2.c_str(), ui);
 }
 
 }
