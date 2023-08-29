@@ -120,7 +120,7 @@ inline auto FmtX(const char* format, int i, const char* pStr)
 }
 inline auto FmtX(const char* fmt, int i, const std::string& s)
 {
-    return str::Format(fmt, i, s.c_str());
+    return FmtX(fmt, i, s.c_str());
 }
 
 inline auto FmtX(const char* format, char ch1, char ch2, const std::string& s)
@@ -134,6 +134,10 @@ inline auto FmtX(const char* format, int i1, int i2, unsigned long ul)
 inline auto FmtX(const char* format, int i1, int i2, int i3)
 {
     return str::Format(format, i1, i2, i3);
+}
+inline std::string FmtX(const char* format, const std::string& s1, int i2, int i3)
+{
+    return str::Format(format, s1.c_str(), i2, i3);
 }
 inline auto FmtX(const char* format, const std::string& s1, const std::string& s2, uint32_t ui)
 {
