@@ -135,6 +135,10 @@ inline auto FmtX(const char* format, int i1, int i2, int i3)
 {
     return str::Format(format, i1, i2, i3);
 }
+inline auto FmtX(const char* format, float f1, float f2, float f3)
+{
+    return str::Format(format, f1, f2, f3);
+}
 inline std::string FmtX(const char* format, const std::string& s1, int i2, int i3)
 {
     return str::Format(format, s1.c_str(), i2, i3);
