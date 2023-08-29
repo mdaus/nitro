@@ -24,7 +24,6 @@
 
 #include <type_traits>
 
-#include "coda_oss/namespace_.h"
 namespace coda_oss
 {
 using std::is_trivially_copyable;
