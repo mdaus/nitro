@@ -134,12 +134,6 @@ CODA_OSS_API std::wstring toWString(const str::W1252string&); // platform determ
 CODA_OSS_API coda_oss::u8string u8FromWString(const std::wstring&); // platform determines UTF16 or UTF-32 input
 
 
-CODA_OSS_API std::wstring toWString(const std::string&); // platform determines Windows-1252 or UTF-8 input and output encoding
-CODA_OSS_API std::wstring toWString(const coda_oss::u8string&); // platform determines UTF-16 or UTF-32 output encoding
-CODA_OSS_API std::wstring toWString(const str::W1252string&); // platform determines UTF-16 or UTF-32 output encoding
-
-CODA_OSS_API coda_oss::u8string u8FromWString(const std::wstring&); // platform determines UTF16 or UTF-32 input
-
 template <typename T>
 T toType(const std::string& s)
 {
