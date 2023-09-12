@@ -150,6 +150,10 @@ inline auto FmtX(const char* format, size_t ul1, size_t ul2)
 {
     return str::details::Format(format, ul1, ul2);
 }
+inline auto FmtX(const char* format, size_t ul1, int i2)
+{
+    return str::details::Format(format, ul1, i2);
+}
 inline auto FmtX(const char* format, double d1, double d2)
 {
     return str::details::Format(format, d1, d2);
