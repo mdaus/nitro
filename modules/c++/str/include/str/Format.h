@@ -26,8 +26,8 @@
 #define CODA_OSS_str_Format_h_INCLUDED_
 
 #include <stdarg.h>
-#include<stdint.h>
-#include<stddef.h>
+#include <stdint.h>
+#include <stddef.h>
 
 #include <string>
 
@@ -109,6 +109,10 @@ inline auto FmtX(const char* format, double d)
 {
     return str::details::Format(format, d);
 }
+inline auto FmtX(const char* format, const void* p)
+{
+    return str::details::Format(format, p);
+}
 
 inline auto FmtX(const char* format, char ch, const char* pStr)
 {
@@ -130,13 +134,25 @@ inline auto FmtX(const char* format, char ch1, char ch2)
 {
     return str::details::Format(format, ch1, ch2);
 }
+inline auto FmtX(const char* format, int i1, int i2)
+{
+    return str::details::Format(format, i1, i2);
+}
 inline auto FmtX(const char* format, long l1, long l2)
 {
     return str::details::Format(format, l1, l2);
 }
+inline auto FmtX(const char* format, uint32_t ui1, uint32_t ui2)
+{
+    return str::details::Format(format, ui1, ui2);
+}
 inline auto FmtX(const char* format, size_t ul1, size_t ul2)
 {
     return str::details::Format(format, ul1, ul2);
+}
+inline auto FmtX(const char* format, size_t ul1, int i2)
+{
+    return str::details::Format(format, ul1, i2);
 }
 inline auto FmtX(const char* format, double d1, double d2)
 {
@@ -183,6 +199,10 @@ inline auto FmtX(const char* format, const std::string& s1, const std::string& s
 inline auto FmtX(const char* format, int i1, int i2, int i3, int i4)
 {
     return str::details::Format(format, i1, i2, i3, i4);
+}
+inline auto FmtX(const char* format, uint32_t ui1, uint32_t ui2, uint32_t ui3, uint32_t ui4)
+{
+    return str::details::Format(format, ui1, ui2, ui3, ui4);
 }
 inline auto FmtX(const char* format, const char* pStr1, const std::string& s2, const char* pStr3, const std::string& s4)
 {
