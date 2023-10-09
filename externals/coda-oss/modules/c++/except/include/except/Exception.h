@@ -66,7 +66,8 @@
 #define DECLARE_EXTENDED_EXCEPTION(_Name, _Base) DECLARE_EXTENDED_EXCEPTION_(_Name, Exception, _Base)
 
 // Need to keep this around for existing code
-#define DECLARE_EXCEPTION(_Name) DECLARE_EXTENDED_EXCEPTION(_Name, except::Exception)
+#define DECLARE_EXCEPTION(_Name) DECLARE_EXTENDED_EXCEPTION(_Name, except::Exception); \
+  using _Name ## ExceptionEx = _Name ##Exception
 
 namespace except
 {
