@@ -27,11 +27,6 @@ if (${CMAKE_PROJECT_NAME} STREQUAL coda-oss)
         # set warning level to /W3
         string(REGEX REPLACE "/W[0-4]" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
         string(REGEX REPLACE "/W[0-4]" "" CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
-
-       if (ENABLE_ASAN)
-            # https://docs.microsoft.com/en-us/cpp/sanitizers/asan?view=msvc-160
-            add_compile_options(/fsanitize=address)
-       endif()
     elseif (UNIX)
        add_compile_options(-Werror) # warnings as errors
     endif()
@@ -48,4 +43,3 @@ if (${CMAKE_PROJECT_NAME} STREQUAL coda-oss)
 endif()
 
 add_subdirectory("modules")
-
