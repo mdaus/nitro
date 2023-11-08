@@ -470,12 +470,33 @@ nitf_PluginRegistry_unload(nitf_PluginRegistry* reg, nitf_Error* error)
     return success;
 }
 
+static NITF_BOOL insertPlugin_(const char* msg,
+    nitf_PluginRegistry* reg, const char** ident, nitf_DLL* dll, nitf_Error* error)
+{
+    /*  If no ident, we have a set error and an invalid plugin  */
+    if (ident)
+    {
+        /*  I expect to have problems with this now and then  */
+        int ok = insertPlugin(reg, ident, dll, error);
+
+        /*  If insertion failed, take our toys and leave  */
+        if (!ok)
+        {
+            return NITF_FAILURE;
+        }
+#ifdef NITF_DEBUG_PLUGIN_REG
+        printf(msg, keyName, dll);
+#endif
+        return NITF_SUCCESS;
+    }
+    return NITF_FAILURE;
+}
+
 NITFAPI(NITF_BOOL)
 nitf_PluginRegistry_loadPlugin(const char* fullName, nitf_Error* error)
 {
     /*  For now, the key is the dll name minus the extension  */
     char keyName[NITF_MAX_PATH] = "";
-    int ok;
     nitf_DLL* dll;
     const char** ident;
     nitf_PluginRegistry* reg = nitf_PluginRegistry_getInstance(error);
@@ -499,24 +520,8 @@ nitf_PluginRegistry_loadPlugin(const char* fullName, nitf_Error* error)
 
     /* Now init the plugin!!!  */
     ident = doInit(dll, keyName, error);
-
-    /*  If no ident, we have a set error and an invalid plugin  */
-    if (ident)
-    {
-        /*  I expect to have problems with this now and then  */
-        ok = insertPlugin(reg, ident, dll, error);
-
-        /*  If insertion failed, take our toys and leave  */
-        if (!ok)
-        {
-            return NITF_FAILURE;
-        }
-#ifdef NITF_DEBUG_PLUGIN_REG
-        printf("Successfully loaded plugin: [%s] at [%p]\n", keyName, dll);
-#endif
-        return NITF_SUCCESS;
-    }
-    return NITF_FAILURE;
+    return insertPlugin_("Successfully loaded plugin: [%s] at [%p]\n",
+        reg, ident, dll, error);
 }
 
 NITFAPI(NITF_BOOL)
@@ -945,7 +950,6 @@ insertCreator(nitf_DLL* dso,
     /*  We are trying to find tre_main  */
     /*  Retrieve the main  */
     NITF_DLL_FUNCTION_PTR dsoMain  = nitf_DLL_retrieve(dso, name, error);
-
     if (!dsoMain)
     {
         /*  If it didnt work, we are done  */
