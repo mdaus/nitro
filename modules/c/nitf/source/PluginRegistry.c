@@ -484,6 +484,7 @@ static NITF_BOOL insertPlugin_(const char* msg,
         {
             return NITF_FAILURE;
         }
+        (void)msg;
 #ifdef NITF_DEBUG_PLUGIN_REG
         printf(msg, keyName, dll);
 #endif
