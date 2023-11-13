@@ -41,7 +41,6 @@
 #include "../shared/JITCID.c"
 #include "../shared/PTPRAA.c"
 #include "../shared/RPFHDR.c"
-#include "../shared/XML_DATA_CONTENT.c"
 
 #include "../shared/TEST_DES.c"
 
@@ -55,12 +54,11 @@ const nitf_TREPreloaded preloadedTREs[] = {
 	NITF_preload_TRE(AIMIDB),
 	NITF_preload_TRE(CSCRNA),
 	NITF_preload_TRE(CSEXRB),
-	NITF_preload_TRE(ENGRDA),
+	//NITF_preload_TRE(ENGRDA),
 	NITF_preload_TRE(HISTOA),
 	NITF_preload_TRE(JITCID),
 	NITF_preload_TRE(PTPRAA),
 	NITF_preload_TRE(RPFHDR),
-	NITF_preload_TRE(XML_DATA_CONTENT),
 
 	NITF_preload_TRE(TEST_DES),
 
