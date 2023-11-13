@@ -31,13 +31,35 @@
 #endif
 
 #include "../shared/ACCHZB.c"
+#include "../shared/ACCPOB.c"
+#include "../shared/ACFTA.c"
+#include "../shared/AIMIDB.c"
+#include "../shared/CSCRNA.c"
+#include "../shared/CSEXRB.c"
+#include "../shared/ENGRDA.c"
 #include "../shared/HISTOA.c"
-#include "../shared/TEST_DES.c"
+#include "../shared/JITCID.c"
+#include "../shared/PTPRAA.c"
+#include "../shared/RPFHDR.c"
 #include "../shared/XML_DATA_CONTENT.c"
+#include "../shared/TEST_DES.c"
+
+#define NITF_preload_TRE(Tre_) { #Tre_, Tre_##_init, Tre_##_handler }
 
 extern const nitf_TREPreloaded preloaded[];
 const nitf_TREPreloaded preloaded[] = {
-	{ "ACCHZB",  ACCHZB_init, ACCHZB_handler },
-	{ "HISTOA",  HISTOA_init, HISTOA_handler },
+	NITF_preload_TRE(ACCHZB),
+	NITF_preload_TRE(ACCPOB),
+	NITF_preload_TRE(ACFTA),
+	NITF_preload_TRE(AIMIDB),
+	NITF_preload_TRE(CSCRNA),
+	NITF_preload_TRE(CSEXRB),
+	NITF_preload_TRE(ENGRDA),
+	NITF_preload_TRE(HISTOA),
+	NITF_preload_TRE(JITCID),
+	NITF_preload_TRE(PTPRAA),
+	NITF_preload_TRE(RPFHDR),
+	NITF_preload_TRE(TEST_DES),
+	NITF_preload_TRE(XML_DATA_CONTENT),
 	{ NULL, NULL, NULL }
 };
