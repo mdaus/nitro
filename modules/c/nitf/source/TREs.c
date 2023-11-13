@@ -35,7 +35,8 @@
 #include "../shared/TEST_DES.c"
 #include "../shared/XML_DATA_CONTENT.c"
 
-const void* preloaded[] = {
-	"ACCHZB",  (void*)&ACCHZB_init,(void*)&ACCHZB_handler,
-	"HISTOA",  (void*)&HISTOA_init, (void*)&HISTOA_handler,
-	NULL, NULL, NULL };
+const nitf_TREPreloaded preloaded[] = {
+	{ "ACCHZB",  ACCHZB_init, ACCHZB_handler },
+	{ "HISTOA",  HISTOA_init, HISTOA_handler },
+	{ NULL, NULL, NULL }
+};
