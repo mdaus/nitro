@@ -48,6 +48,7 @@
 
 extern const nitf_TREPreloaded preloadedTREs[];
 const nitf_TREPreloaded preloadedTREs[] = {
+/*
 	NITF_preload_TRE(ACCHZB),
 	NITF_preload_TRE(ACCPOB),
 	NITF_preload_TRE(ACFTA),
@@ -61,6 +62,6 @@ const nitf_TREPreloaded preloadedTREs[] = {
 	NITF_preload_TRE(RPFHDR),
 
 	NITF_preload_TRE(TEST_DES),
-
+*/
 	{ NULL, NULL, NULL }
 };
