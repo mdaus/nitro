@@ -39,6 +39,7 @@ NRTAPI(nrt_DLL *) nrt_DLL_construct(nrt_Error * error)
     }
     dll->libname = NULL;
     dll->lib = NULL;
+    dll->dsoMain = NULL;
     return dll;
 }
 
