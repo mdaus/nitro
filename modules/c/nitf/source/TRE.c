@@ -127,39 +127,82 @@ static const nitf_TREPreloaded* findPreloadedTRE(const char* keyName)
     }
     return NULL;
 }
+
+/*
+ *  Initialize a DSO.  The init hook is retrieved and called once
+ *  when the DSO is loaded
+ */
+static const char** doInit(NITF_PLUGIN_INIT_FUNCTION init, const char* prefix, nitf_Error* error)
+{
+    /*  Else, call it  */
+    const char**  ident = (*init)(error);
+    if (!ident)
+    {
+        nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_OBJECT, "The plugin [%s] is not retrievable", prefix);
+        return NULL;
+    }
+    return ident;
+}
+
+static NRT_BOOL preloadTRE(const char* keyName, nitf_Error* error)
+{
+    const char** ident;
+    nitf_PluginRegistry* reg = nitf_PluginRegistry_getInstance(error);
+
+    /*  Construct the DLL object  */
+    nitf_DLL* dll = nitf_DLL_construct(error);
+    if (!dll)
+    {
+        return NITF_FAILURE;
+    }
+    dll->lib = NULL; // not a real DLL
+    dll->dsoMain = NULL; // filled in after successful findPreloadedTRE()
+
+    const nitf_TREPreloaded* plugin = findPreloadedTRE(keyName);
+    if (plugin == NULL)
+    {
+        return NITF_FAILURE;
+    }
+    dll->dsoMain = (NRT_DLL_FUNCTION_PTR)plugin->handler;
+
+    /* Now init the plugin!!!  */
+    ident = doInit(plugin->init, keyName, error);
+    return nitf_PluginRegistry_insertPlugin_("Successfully pre-loaded plugin: [%s] at [%p]\n", reg, ident, dll, error);
+}
+
 static nitf_TREHandler* retrievePreloadedTREHandler(nitf_PluginRegistry* reg, const char* treIdent,
     int* hadError, nitf_Error* error)
 {
-    /*  No error has occurred (yet)  */
-    *hadError = 0;
-
-    const nitf_TREPreloaded* plugin = findPreloadedTRE(treIdent);
-    if (plugin == NULL)
+    if (!preloadTRE(treIdent, error))
     {
         *hadError = 1;
         return NULL;
     }
 
-    /*  If something is, get its DLL part  */
-    NITF_PLUGIN_TRE_HANDLER_FUNCTION treMain = plugin->handler;
-
-    nitf_TREHandler* theHandler = (*treMain)(error);
-    if (!theHandler)
-    {
-        *hadError = 1;
-    }
-    return theHandler;
+    // Successfully preloaded the TRE, it should now be in the hash table.
+    return nitf_PluginRegistry_retrieveTREHandler(reg, treIdent, hadError, error);
 }
 
 static nitf_TREHandler* retrieveTREHandler(nitf_PluginRegistry* reg, const char* treIdent,
     int* hadError, nitf_Error* error)
 {
     nitf_TREHandler* handler = nitf_PluginRegistry_retrieveTREHandler(reg, treIdent, hadError, error);
+
     if (*hadError)
     {
         *hadError = 0;
-        handler = retrievePreloadedTREHandler(reg, treIdent, hadError, error);
+        return retrievePreloadedTREHandler(reg, treIdent, hadError, error);
     }
+
+    // Normally, a NULL handler is **not** an error.
+    if (handler == NULL)
+    {
+        int bad = 0;
+        nitf_TREHandler* preloadedHandler = retrievePreloadedTREHandler(reg, treIdent, &bad, error);
+        if (!bad)
+            return preloadedHandler;
+    }
+
     return handler;
 }
 

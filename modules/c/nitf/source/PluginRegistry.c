@@ -470,7 +470,7 @@ nitf_PluginRegistry_unload(nitf_PluginRegistry* reg, nitf_Error* error)
     return success;
 }
 
-static NITF_BOOL insertPlugin_(const char* msg,
+NITFAPI(NITF_BOOL) nitf_PluginRegistry_insertPlugin_(const char* msg,
     nitf_PluginRegistry* reg, const char** ident, nitf_DLL* dll, nitf_Error* error)
 {
     /*  If no ident, we have a set error and an invalid plugin  */
@@ -521,7 +521,7 @@ nitf_PluginRegistry_loadPlugin(const char* fullName, nitf_Error* error)
 
     /* Now init the plugin!!!  */
     ident = doInit(dll, keyName, error);
-    return insertPlugin_("Successfully loaded plugin: [%s] at [%p]\n",
+    return nitf_PluginRegistry_insertPlugin_("Successfully loaded plugin: [%s] at [%p]\n",
         reg, ident, dll, error);
 }
 

@@ -87,6 +87,7 @@ NRTAPI(NRT_BOOL) nrt_DLL_load(nrt_DLL * dll, const char *libname,
         dll->libname = NULL;
         return NRT_FAILURE;
     }
+    dll->dsoMain = NULL;
     return NRT_SUCCESS;
 }
 
@@ -130,6 +131,16 @@ NRTAPI(NRT_DLL_FUNCTION_PTR) nrt_DLL_retrieve(nrt_DLL * dll,
 
         }
         return ptr;
+    }
+
+    // This might be a "preloaded" TRE
+    if (dll->dsoMain)
+    {
+        const char* underscore = strchr(function, '_');
+        if ((underscore != NULL) && strcmp(underscore, "_handler") == 0)
+        {
+            return dll->dsoMain;
+        }
     }
 
     nrt_Error_initf(error, NRT_CTXT, NRT_ERR_UNINITIALIZED_DLL_READ,
