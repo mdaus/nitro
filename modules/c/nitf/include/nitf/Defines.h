@@ -31,6 +31,9 @@
  *
  * _Tre the name of the input TRE
  */
+#ifndef NITF_PLUGIN_FUNCTION_EXPORT
+#define NITF_PLUGIN_FUNCTION_EXPORT(retval_) NITFAPI(retval_)
+#endif
 #define NITF_DECLARE_PLUGIN(_Tre) \
     static const char* _Tre##Ident[] = { \
         NITF_PLUGIN_TRE_KEY, \
@@ -38,10 +41,10 @@
         NULL \
     }; \
     static nitf_TREHandler _Tre##Handler; \
-    NITFAPI(const char**) _Tre##_init(nitf_Error* error){ \
+    NITF_PLUGIN_FUNCTION_EXPORT(const char**) _Tre##_init(nitf_Error* error){ \
        if (!nitf_TREUtils_createBasicHandler(&_Tre##DescriptionSet, &_Tre##Handler,error)) return NULL; \
        return  _Tre##Ident; }					  \
-    NITFAPI(nitf_TREHandler*) _Tre##_handler(nitf_Error* error) { \
+    NITF_PLUGIN_FUNCTION_EXPORT(nitf_TREHandler*) _Tre##_handler(nitf_Error* error) { \
         (void)error; \
         return &_Tre##Handler; \
     }

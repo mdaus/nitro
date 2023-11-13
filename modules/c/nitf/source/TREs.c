@@ -20,6 +20,9 @@
  *
  */
 
+#undef NITF_PLUGIN_FUNCTION_EXPORT
+#define NITF_PLUGIN_FUNCTION_EXPORT(retval_) static retval_
+
 #include "nitf/TRE.h"
 #include "nitf/PluginIdentifier.h"
 
