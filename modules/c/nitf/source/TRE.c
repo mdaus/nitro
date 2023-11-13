@@ -130,14 +130,8 @@ static const nitf_TREPreloaded* findPreloadedTRE(const char* keyName)
 static nitf_TREHandler* retrievePreloadedTREHandler(nitf_PluginRegistry* reg, const char* treIdent,
     int* hadError, nitf_Error* error)
 {
-    /*  Construct the DLL object  */
-    nitf_DLL* dll = nitf_DLL_construct(error);
-    if (!dll)
-    {
-        *hadError = 1;
-        return NULL;
-    }
-    dll->libname = NULL; // not really a DLL
+    /*  No error has occurred (yet)  */
+    *hadError = 0;
 
     const nitf_TREPreloaded* plugin = findPreloadedTRE(treIdent);
     if (plugin == NULL)
@@ -145,20 +139,16 @@ static nitf_TREHandler* retrievePreloadedTREHandler(nitf_PluginRegistry* reg, co
         *hadError = 1;
         return NULL;
     }
-    dll->lib = (NRT_NATIVE_DLL)plugin->handler; // stash the handler here
 
-    /* Now init the plugin!!!  */
-    const char** ident = (*plugin->init)(error);
-    if (!ident)
+    /*  If something is, get its DLL part  */
+    NITF_PLUGIN_TRE_HANDLER_FUNCTION treMain = plugin->handler;
+
+    nitf_TREHandler* theHandler = (*treMain)(error);
+    if (!theHandler)
     {
-        nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_OBJECT, "The plugin [%s] is not preloadable", treIdent);
         *hadError = 1;
-        return NULL;
     }
-    //return insertPlugin_("Successfully pre-loaded plugin: [%s] at [%p]\n",
-    //    reg, ident, dll, error);
-    *hadError = 1;
-    return NULL;
+    return theHandler;
 }
 
 static nitf_TREHandler* retrieveTREHandler(nitf_PluginRegistry* reg, const char* treIdent,
