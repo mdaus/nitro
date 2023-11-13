@@ -110,6 +110,7 @@ NITFAPI(void) nitf_TRE_destruct(nitf_TRE ** tre)
 }
 NITFAPI(nitf_TREHandler*) nitf_DefaultTRE_handler(nitf_Error * error);
 
+
 NITFAPI(nitf_TRE *) nitf_TRE_construct(const char* tag,
                                        const char* id,
                                        nitf_Error * error)
@@ -127,7 +128,9 @@ NITFAPI(nitf_TRE *) nitf_TRE_construct(const char* tag,
     if (!id || strcmp(id, NITF_TRE_RAW) != 0)
     {
         int bad = 0;
-        tre->handler = nitf_PluginRegistry_retrieveTREHandler(reg, tag, &bad, error);
+        tre->handler =
+            nitf_PluginRegistry_retrieveTREHandler(reg, tag, &bad, error);
+
         if (bad)
             return NULL;
     }
