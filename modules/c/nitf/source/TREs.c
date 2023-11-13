@@ -23,10 +23,16 @@
 #include "nitf/TRE.h"
 #include "nitf/PluginIdentifier.h"
 
-//#include "../shared/ACCHZB.c"
-//#include "../shared/HISTOA.c"
+#if _MSC_VER
+#pragma warning(disable: 4464) // relative include path contains '..'
+#endif
+
+#include "../shared/ACCHZB.c"
+#include "../shared/HISTOA.c"
+#include "../shared/TEST_DES.c"
+#include "../shared/XML_DATA_CONTENT.c"
 
 const void* preloaded[] = {
-	//"ACCHZB",  &ACCHZB_init, &ACCHZB_handler,
-	//"HISTOA",  &HISTOA_init, &HISTOA_handler,
+	"ACCHZB",  (void*)&ACCHZB_init,(void*)&ACCHZB_handler,
+	"HISTOA",  (void*)&HISTOA_init, (void*)&HISTOA_handler,
 	NULL, NULL, NULL };
