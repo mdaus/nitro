@@ -35,6 +35,7 @@
 #include "../shared/TEST_DES.c"
 #include "../shared/XML_DATA_CONTENT.c"
 
+extern const nitf_TREPreloaded preloaded[];
 const nitf_TREPreloaded preloaded[] = {
 	{ "ACCHZB",  ACCHZB_init, ACCHZB_handler },
 	{ "HISTOA",  HISTOA_init, HISTOA_handler },

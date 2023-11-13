@@ -110,10 +110,67 @@ NITFAPI(void) nitf_TRE_destruct(nitf_TRE ** tre)
 }
 NITFAPI(nitf_TREHandler*) nitf_DefaultTRE_handler(nitf_Error * error);
 
+static const nitf_TREPreloaded* findPreloadedTRE(const char* keyName)
+{
+    extern const nitf_TREPreloaded preloaded[];
+    for (size_t i = 0;; i++)
+    {
+        const char* pKeyName = preloaded[i].name;
+        if (pKeyName == NULL) // end of list
+        {
+            return NULL;
+        }
+        if (strcmp(keyName, pKeyName) == 0)
+        {
+            return &(preloaded[i]);
+        }
+    }
+    return NULL;
+}
+static nitf_TREHandler* retrievePreloadedTREHandler(nitf_PluginRegistry* reg, const char* treIdent,
+    int* hadError, nitf_Error* error)
+{
+    /*  Construct the DLL object  */
+    nitf_DLL* dll = nitf_DLL_construct(error);
+    if (!dll)
+    {
+        *hadError = 1;
+        return NULL;
+    }
+    dll->libname = NULL; // not really a DLL
+
+    const nitf_TREPreloaded* plugin = findPreloadedTRE(treIdent);
+    if (plugin == NULL)
+    {
+        *hadError = 1;
+        return NULL;
+    }
+    dll->lib = (NRT_NATIVE_DLL)plugin->handler; // stash the handler here
+
+    /* Now init the plugin!!!  */
+    const char** ident = (*plugin->init)(error);
+    if (!ident)
+    {
+        nitf_Error_initf(error, NITF_CTXT, NITF_ERR_INVALID_OBJECT, "The plugin [%s] is not preloadable", treIdent);
+        *hadError = 1;
+        return NULL;
+    }
+    //return insertPlugin_("Successfully pre-loaded plugin: [%s] at [%p]\n",
+    //    reg, ident, dll, error);
+    *hadError = 1;
+    return NULL;
+}
+
 static nitf_TREHandler* retrieveTREHandler(nitf_PluginRegistry* reg, const char* treIdent,
     int* hadError, nitf_Error* error)
 {
-    return nitf_PluginRegistry_retrieveTREHandler(reg, treIdent, hadError, error);
+    nitf_TREHandler* handler = nitf_PluginRegistry_retrieveTREHandler(reg, treIdent, hadError, error);
+    if (*hadError)
+    {
+        *hadError = 0;
+        handler = retrievePreloadedTREHandler(reg, treIdent, hadError, error);
+    }
+    return handler;
 }
 
 NITFAPI(nitf_TRE *) nitf_TRE_construct(const char* tag,
