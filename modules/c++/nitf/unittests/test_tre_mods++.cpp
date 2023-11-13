@@ -168,8 +168,9 @@ TEST_CASE(setFields)
                    std::string("fly-by    "));
 
     // re-set the field
-    tre.setField("AC_MSN_ID", 1.23456);
-    TEST_ASSERT_EQ(tre.getField("AC_MSN_ID").toString(), "1.234560  ");
+    tre.setField("AC_MSN_ID", 1.2345678);
+    TEST_ASSERT_EQ(tre.getField("AC_MSN_ID").toString(),
+                   std::string("1.2345678 "));
 
     // try setting an invalid tag
     TEST_EXCEPTION(tre.setField("invalid-tag", "some data"));
@@ -371,10 +372,10 @@ TEST_CASE(overflowingNumericFields)
 {
     nitf::TRE tre("CSCRNA");
 
-    // This field has a length of 9, so check that it's properly truncated
+    // This field has a length of 9, so check that it's properly
+    // truncated
     tre.setField("ULCNR_LAT", 1.0 / 9);
-    auto actual = tre.getField("ULCNR_LAT").toString();
-    TEST_ASSERT_EQ(actual, "0.1111111");
+    TEST_ASSERT_EQ_STR(tre.getField("ULCNR_LAT").toString(), "0.1111111");
     TEST_ASSERT_EQ_STR(tre.getFieldValue<std::string>("ULCNR_LAT"), "0.1111111");
     std::string value;
     TEST_ASSERT_EQ_STR(tre.getFieldValue("ULCNR_LAT", value), "0.1111111");
