@@ -87,7 +87,7 @@ NITF_PLUGIN_FUNCTION_EXPORT(const char**) TEST_DES_init(nitf_Error* error)
         return NULL;
     return TEST_DES_ident;
 }
-NITFAPI(void) TEST_DES_cleanup(void){}
+NITF_PLUGIN_FUNCTION_EXPORT(void) TEST_DES_cleanup(void){}
 NITF_PLUGIN_FUNCTION_EXPORT(nitf_TREHandler*) TEST_DES_handler(nitf_Error* error) {
     (void)error;
     return &TEST_DESHandler;
