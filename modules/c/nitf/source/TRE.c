@@ -112,20 +112,19 @@ NITFAPI(nitf_TREHandler*) nitf_DefaultTRE_handler(nitf_Error * error);
 
 static const nitf_TREPreloaded* findPreloadedTRE(const char* keyName)
 {
-    extern const nitf_TREPreloaded preloaded[];
+    extern const nitf_TREPreloaded preloadedTREs[];
     for (size_t i = 0;; i++)
     {
-        const char* pKeyName = preloaded[i].name;
+        const char* pKeyName = preloadedTREs[i].name;
         if (pKeyName == NULL) // end of list
         {
             return NULL;
         }
         if (strcmp(keyName, pKeyName) == 0)
         {
-            return &(preloaded[i]);
+            return &(preloadedTREs[i]);
         }
     }
-    return NULL;
 }
 
 /*

@@ -47,8 +47,8 @@
 
 #define NITF_preload_TRE(Tre_) { #Tre_, Tre_##_init, Tre_##_handler }
 
-extern const nitf_TREPreloaded preloaded[];
-const nitf_TREPreloaded preloaded[] = {
+extern const nitf_TREPreloaded preloadedTREs[];
+const nitf_TREPreloaded preloadedTREs[] = {
 	NITF_preload_TRE(ACCHZB),
 	NITF_preload_TRE(ACCPOB),
 	NITF_preload_TRE(ACFTA),
