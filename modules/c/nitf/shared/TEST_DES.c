@@ -80,7 +80,7 @@ static nitf_TREDescriptionInfo TEST_DES_descriptions[] = {
 static nitf_TREDescriptionSet TEST_DES_descriptionSet = { 0, TEST_DES_descriptions };
 static nitf_TREHandler TEST_DESHandler;
 
-NITFAPI(const char**) TEST_DES_init(nitf_Error* error)
+NITF_PLUGIN_FUNCTION_EXPORT(const char**) TEST_DES_init(nitf_Error* error)
 {
     if (!nitf_TREUtils_createBasicHandler(&TEST_DES_descriptionSet,
                                           &TEST_DESHandler,error))
@@ -88,7 +88,7 @@ NITFAPI(const char**) TEST_DES_init(nitf_Error* error)
     return TEST_DES_ident;
 }
 NITFAPI(void) TEST_DES_cleanup(void){}
-NITFAPI(nitf_TREHandler*) TEST_DES_handler(nitf_Error* error) {
+NITF_PLUGIN_FUNCTION_EXPORT(nitf_TREHandler*) TEST_DES_handler(nitf_Error* error) {
     (void)error;
     return &TEST_DESHandler;
 }

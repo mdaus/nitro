@@ -294,7 +294,7 @@ NITFPRIV(NITF_BOOL) ENGRDA_read(nitf_IOInterface* io,
     return ok;
 }
 
-NITFAPI(const char**) ENGRDA_init(nitf_Error* error)
+NITF_PLUGIN_FUNCTION_EXPORT(const char**) ENGRDA_init(nitf_Error* error)
 {
     if (!nitf_TREUtils_createBasicHandler(&ENGRDA_descriptionSet,
                                           &engrdaHandler,
@@ -310,7 +310,7 @@ NITFAPI(const char**) ENGRDA_init(nitf_Error* error)
     return ident;
 }
 
-NITFAPI(nitf_TREHandler*) ENGRDA_handler(nitf_Error* error)
+NITF_PLUGIN_FUNCTION_EXPORT(nitf_TREHandler*) ENGRDA_handler(nitf_Error* error)
 {
     (void)error;
     return &engrdaHandler;
