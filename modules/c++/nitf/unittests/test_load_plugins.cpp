@@ -103,9 +103,10 @@ TEST_CASE(test_load_all_TREs)
         {
             nitf::PluginRegistry::loadPlugin(tre);
         }
-        catch (const nitf::NITFException& ex)
+        catch (const nitf::NITFException&)
         {
-            TEST_FAIL_MSG(ex.toString());
+            // assume this is a pre-loaded plugin
+            retrieveTREHandler(testName, tre.c_str());
         }
         #endif // _WIN32
 
