@@ -31,6 +31,7 @@ CODA_OSS_disable_warning_pop
 #pragma warning(disable: 5105) // macro expansion producing '...' has undefined behavior
 #include <windows.h>
 #pragma warning(pop)
+#pragma comment(lib, "Ws2_32")
 
 #pragma warning(disable: 4619) // #pragma warning: there is no warning number '...'
 #pragma warning(disable: 4820) // '...': '...' bytes padding added after data member '...'
