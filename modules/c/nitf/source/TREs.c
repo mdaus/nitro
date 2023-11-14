@@ -42,12 +42,73 @@
 #include "../shared/PTPRAA.c"
 #include "../shared/RPFHDR.c"
 
-#include "../shared/TEST_DES.c"
+ /******************************************************************************/
+ /*
+ *   Simple example DES for testing.
+
+   This file defines a very simple Data Extension Segment. This example is
+   used for test of the UserSegment object and can be used aa an example
+   and starting point for the development of DES.
+
+   This example defines a "standard" DE segment which means the user
+   header can be implemented via a TRE object and there are no out of
+   segment dependencies
+
+   The DES ID will be TEST_PRELOADED_DES
+
+   The user header will have three fields
+
+     NITF_TEST_PRELOADED_DES_COUNT     - Number of data values
+     NITF_TEST_PRELOADED_DES_START     - Start value in ramp
+     NITF_TEST_PRELOADED_DES_INCREMENT - Increment between values in ramp
+
+   The data is an 8-bit ramp defined by the three values. in testing, the
+   ramp will be setup to contain printable values.
+ */
+
+ /*    TRE description for user header */
+
+static nitf_TREDescription TEST_PRELOADED_DES_description[] = {
+    {NITF_BCS_N, 2, "Number of data values", "TEST_PRELOADED_DES_COUNT" },
+    {NITF_BCS_N, 3, "Start value in ramp", "TEST_PRELOADED_DES_START" },
+    {NITF_BCS_N, 2, "Increment between values in ramp", "TEST_PRELOADED_DES_INCREMENT" },
+    {NITF_END, 0, NULL, NULL}
+};
+
+static const char* TEST_PRELOADED_DES_ident[] =
+{
+    NITF_PLUGIN_TRE_KEY, "TEST Preloaded DES", "TEST_PRELOADED_DES", NULL
+};
+
+static nitf_TREDescriptionInfo TEST_PRELOADED_DES_descriptions[] = {
+    { "TEST Preloaded DES", TEST_PRELOADED_DES_description, NITF_TRE_DESC_NO_LENGTH },
+    { "TEST_PRELOADED_DES", TEST_PRELOADED_DES_description, NITF_TRE_DESC_NO_LENGTH },
+    { NULL, NULL, NITF_TRE_DESC_NO_LENGTH }
+};
+
+static nitf_TREDescriptionSet TEST_PRELOADED_DES_descriptionSet = { 0, TEST_PRELOADED_DES_descriptions };
+
+static nitf_TREHandler TEST_PRELOADED_DESHandler;
+static const char** TEST_PRELOADED_DES_init(nitf_Error* error)
+{
+    if (!nitf_TREUtils_createBasicHandler(&TEST_PRELOADED_DES_descriptionSet,
+        &TEST_PRELOADED_DESHandler, error))
+        return NULL;
+    return TEST_PRELOADED_DES_ident;
+}
+static nitf_TREHandler* TEST_PRELOADED_DES_handler(nitf_Error*) {
+    return &TEST_PRELOADED_DESHandler;
+}
+
+/******************************************************************************/
 
 #define NITF_preload_TRE(Tre_) { #Tre_, Tre_##_init, Tre_##_handler }
 
 extern const nitf_TREPreloaded preloadedTREs[];
 const nitf_TREPreloaded preloadedTREs[] = {
+    // Not preloading any TREs right now: with the existing system,
+    // a TRE can be removed by deleting the DLL/SO.  If that same TRE
+    // were preloaded, there would be no way to get rid of it.
 /*
 	NITF_preload_TRE(ACCHZB),
 	NITF_preload_TRE(ACCPOB),
@@ -60,8 +121,9 @@ const nitf_TREPreloaded preloadedTREs[] = {
 	NITF_preload_TRE(JITCID),
 	NITF_preload_TRE(PTPRAA),
 	NITF_preload_TRE(RPFHDR),
-
-	NITF_preload_TRE(TEST_DES),
 */
+
+    NITF_preload_TRE(TEST_PRELOADED_DES),
+
 	{ NULL, NULL, NULL }
 };
