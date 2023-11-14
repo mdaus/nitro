@@ -67,26 +67,23 @@
  */
 
  /*    TRE description for user header */
-
 static nitf_TREDescription TEST_PRELOADED_DES_description[] = {
     {NITF_BCS_N, 2, "Number of data values", "TEST_PRELOADED_DES_COUNT" },
     {NITF_BCS_N, 3, "Start value in ramp", "TEST_PRELOADED_DES_START" },
     {NITF_BCS_N, 2, "Increment between values in ramp", "TEST_PRELOADED_DES_INCREMENT" },
     {NITF_END, 0, NULL, NULL}
 };
-
-static const char* TEST_PRELOADED_DES_ident[] =
-{
-    NITF_PLUGIN_TRE_KEY, "TEST Preloaded DES", "TEST_PRELOADED_DES", NULL
-};
-
 static nitf_TREDescriptionInfo TEST_PRELOADED_DES_descriptions[] = {
-    { "TEST Preloaded DES", TEST_PRELOADED_DES_description, NITF_TRE_DESC_NO_LENGTH },
+    { "Preloaded DES (for testing)", TEST_PRELOADED_DES_description, NITF_TRE_DESC_NO_LENGTH },
     { "TEST_PRELOADED_DES", TEST_PRELOADED_DES_description, NITF_TRE_DESC_NO_LENGTH },
     { NULL, NULL, NITF_TRE_DESC_NO_LENGTH }
 };
-
 static nitf_TREDescriptionSet TEST_PRELOADED_DES_descriptionSet = { 0, TEST_PRELOADED_DES_descriptions };
+
+static const char* TEST_PRELOADED_DES_ident[] =
+{
+    NITF_PLUGIN_TRE_KEY, "TEST_PRELOADED_DES", "Preloaded DES (for testing)", NULL
+};
 
 static nitf_TREHandler TEST_PRELOADED_DESHandler;
 static const char** TEST_PRELOADED_DES_init(nitf_Error* error)

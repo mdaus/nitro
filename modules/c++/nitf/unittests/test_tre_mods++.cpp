@@ -227,6 +227,19 @@ TEST_CASE(basicIteration)
     TEST_ASSERT_EQ(numFields, static_cast<size_t>(29));
 }
 
+TEST_CASE(use_TEST_PRELOADED_DES)
+{
+    nitf::TRE des("TEST_PRELOADED_DES", "TEST_PRELOADED_DES");
+
+    des.setField("TEST_PRELOADED_DES_COUNT", 12);
+    des.setField("TEST_PRELOADED_DES_START", 345);
+    des.setField("TEST_PRELOADED_DES_INCREMENT", 67);
+
+    TEST_ASSERT_EQ(des.getFieldValue<int>("TEST_PRELOADED_DES_COUNT"), 12);
+    TEST_ASSERT_EQ(des.getFieldValue<int>("TEST_PRELOADED_DES_START"), 345);
+    TEST_ASSERT_EQ(des.getFieldValue<int>("TEST_PRELOADED_DES_INCREMENT"), 67);
+}
+
 TEST_CASE(use_ENGRDA)
 {
     nitf::TRE engrda("ENGRDA", "ENGRDA");
@@ -404,6 +417,7 @@ TEST_MAIN(
     TEST_CHECK(setBinaryFields);
     TEST_CHECK(cloneTRE);
     TEST_CHECK(basicIteration);
+    TEST_CHECK(use_TEST_PRELOADED_DES);
     TEST_CHECK(use_ENGRDA);
     TEST_CHECK(use_ENGRDA_typed_fields);
     TEST_CHECK(use_typed_ENGRDA);
