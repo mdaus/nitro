@@ -26,6 +26,7 @@
 #include <str/Manip.h>
 #include <sys/OS.h>
 
+#include <nitf/PluginRegistry.h>
 #include <nitf/TRE.hpp>
 #include <nitf/UnitTests.hpp>
 
@@ -229,6 +230,7 @@ TEST_CASE(basicIteration)
 
 TEST_CASE(use_TEST_PRELOADED_DES)
 {
+    TEST_ASSERT_TRUE( nitf_PluginRegistry_PreloadedTREHandlerEnable("TEST_PRELOADED_DES", NRT_TRUE) );
     nitf::TRE des("TEST_PRELOADED_DES", "TEST_PRELOADED_DES");
 
     des.setField("TEST_PRELOADED_DES_COUNT", 12);

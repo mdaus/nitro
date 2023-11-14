@@ -102,8 +102,8 @@ static nitf_TREHandler* TEST_PRELOADED_DES_handler(nitf_Error*) {
 #define NITF_preload_TRE_(Tre_, enabled_) { #Tre_, Tre_##_init, Tre_##_handler, enabled_ }
 #define NITF_preload_TRE(Tre_, enabled_) NITF_preload_TRE_(Tre_, NRT_TRUE /*enabled*/)
 
-extern const nitf_TREPreloaded preloadedTREs[];
-const nitf_TREPreloaded preloadedTREs[] = {
+extern nitf_TREPreloaded preloadedTREs[];
+nitf_TREPreloaded preloadedTREs[] = {
     // Not preloading any TREs right now: with the existing system,
     // a TRE can be removed by deleting the DLL/SO.  If that same TRE
     // were preloaded, there would be no way to get rid of it.
