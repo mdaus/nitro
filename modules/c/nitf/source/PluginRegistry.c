@@ -973,9 +973,15 @@ insertCreator(nitf_DLL* dso,
  *
  *  No more talking to the DSOs directly
  */
-static nitf_TREPreloaded* findPreloadedTRE_(const char* keyName)
+static nitf_TREPreloaded* getPreloadedTREs()
 {
     extern nitf_TREPreloaded preloadedTREs[];
+    return preloadedTREs;
+}
+
+static nitf_TREPreloaded* findPreloadedTRE_(const char* keyName)
+{
+    nitf_TREPreloaded* preloadedTREs = getPreloadedTREs();
     for (size_t i = 0;; i++)
     {
         const char* pKeyName = preloadedTREs[i].name;
@@ -999,7 +1005,7 @@ static const nitf_TREPreloaded* findPreloadedTRE(const char* keyName)
     return NULL;
 }
 
-NITFPROT(NITF_BOOL)
+NITFAPI(NITF_BOOL)
 nitf_PluginRegistry_PreloadedTREHandlerEnable(const char* keyName, NITF_BOOL enable)
 {
     nitf_TREPreloaded* result = findPreloadedTRE_(keyName);
@@ -1009,6 +1015,22 @@ nitf_PluginRegistry_PreloadedTREHandlerEnable(const char* keyName, NITF_BOOL ena
         return NRT_TRUE;
     }
     return NRT_FALSE;
+}
+
+NITFAPI(void)
+nitf_PluginRegistry_PreloadedTREHandlersEnable(NITF_BOOL enable)
+{
+    nitf_TREPreloaded* preloadedTREs = getPreloadedTREs();
+    for (size_t i = 0;; i++)
+    {
+        const char* pKeyName = preloadedTREs[i].name;
+        if (pKeyName == NULL) // end of list
+        {
+            return;
+        }
+
+        preloadedTREs[i].enabled = enable;
+    }
 }
 
 /*
