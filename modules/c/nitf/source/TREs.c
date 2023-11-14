@@ -93,14 +93,15 @@ static const char** TEST_PRELOADED_DES_init(nitf_Error* error)
         return NULL;
     return TEST_PRELOADED_DES_ident;
 }
-static nitf_TREHandler* TEST_PRELOADED_DES_handler(nitf_Error*) {
+static nitf_TREHandler* TEST_PRELOADED_DES_handler(nitf_Error* error) {
+    (void)error;
     return &TEST_PRELOADED_DESHandler;
 }
 
 /******************************************************************************/
 
 #define NITF_preload_TRE_(Tre_, enabled_) { #Tre_, Tre_##_init, Tre_##_handler, enabled_ }
-#define NITF_preload_TRE(Tre_, enabled_) NITF_preload_TRE_(Tre_, NRT_TRUE /*enabled*/)
+#define NITF_preload_TRE(Tre_) NITF_preload_TRE_(Tre_, NRT_TRUE /*enabled*/)
 
 extern nitf_TREPreloaded preloadedTREs[];
 nitf_TREPreloaded preloadedTREs[] = {

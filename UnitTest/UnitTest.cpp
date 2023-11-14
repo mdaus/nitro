@@ -10,5 +10,5 @@ TEST_MODULE_INITIALIZE(methodName)
     nitf_PluginRegistry_PreloadedTREHandlersEnable(NRT_TRUE);
 
     // module initialization code
-    nitf::Test::setNitfPluginPath();
+    nitf::Test::j2kSetNitfPluginPath();
 }
