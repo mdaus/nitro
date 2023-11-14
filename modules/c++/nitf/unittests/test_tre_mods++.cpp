@@ -164,12 +164,11 @@ TEST_CASE(setFields)
 
     // set a field
     tre.setField("AC_MSN_ID", "fly-by");
-    TEST_ASSERT_EQ(tre.getField("AC_MSN_ID").toString(),
-                   std::string("fly-by    "));
+    TEST_ASSERT_EQ(tre.getField("AC_MSN_ID").toString(), "fly-by    ");
 
     // re-set the field
     tre.setField("AC_MSN_ID", 1.2345678);
-    TEST_ASSERT_EQ(tre.getField("AC_MSN_ID").toString(), "  1.234568");
+    TEST_ASSERT_EQ(tre.getField("AC_MSN_ID").toString(), "1.234568  ");
 
     // try setting an invalid tag
     TEST_EXCEPTION(tre.setField("invalid-tag", "some data"));
