@@ -194,7 +194,8 @@ static std::string truncate(const nitf_Field& field, const std::string& value)
         // is BCS-A data, it is space-filled, right-aligned.
         while (retval.length() < field.length)
         {
-            retval = " " + retval;
+            // copyAndFillSpaces() in Field.c "Spaces are added to the right" 
+            retval += " ";
         }
     }
     else if (field.type == NITF_BCS_N)
