@@ -983,9 +983,13 @@ static const nitf_TREPreloaded* findPreloadedTRE(const char* keyName)
         {
             return NULL;
         }
-        if (strcmp(keyName, pKeyName) == 0)
+
+        if (preloadedTREs[i].enabled)
         {
-            return &(preloadedTREs[i]);
+            if (strcmp(keyName, pKeyName) == 0)
+            {
+                return &(preloadedTREs[i]);
+            }
         }
     }
 }

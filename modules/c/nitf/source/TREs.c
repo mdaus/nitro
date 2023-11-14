@@ -99,28 +99,27 @@ static nitf_TREHandler* TEST_PRELOADED_DES_handler(nitf_Error*) {
 
 /******************************************************************************/
 
-#define NITF_preload_TRE(Tre_) { #Tre_, Tre_##_init, Tre_##_handler }
+#define NITF_preload_TRE_(Tre_, enabled_) { #Tre_, Tre_##_init, Tre_##_handler, enabled_ }
+#define NITF_preload_TRE(Tre_, enabled_) NITF_preload_TRE_(Tre_, NRT_TRUE /*enabled*/)
 
 extern const nitf_TREPreloaded preloadedTREs[];
 const nitf_TREPreloaded preloadedTREs[] = {
     // Not preloading any TREs right now: with the existing system,
     // a TRE can be removed by deleting the DLL/SO.  If that same TRE
     // were preloaded, there would be no way to get rid of it.
-/*
-	NITF_preload_TRE(ACCHZB),
-	NITF_preload_TRE(ACCPOB),
-	NITF_preload_TRE(ACFTA),
-	NITF_preload_TRE(AIMIDB),
-	NITF_preload_TRE(CSCRNA),
-	NITF_preload_TRE(CSEXRB),
-	//NITF_preload_TRE(ENGRDA),
-	NITF_preload_TRE(HISTOA),
-	NITF_preload_TRE(JITCID),
-	NITF_preload_TRE(PTPRAA),
-	NITF_preload_TRE(RPFHDR),
-*/
+    NITF_preload_TRE_(ACCHZB, NRT_FALSE /*enabled*/),
+    NITF_preload_TRE_(ACCPOB, NRT_FALSE /*enabled*/),
+    NITF_preload_TRE_(ACFTA, NRT_FALSE /*enabled*/),
+    NITF_preload_TRE_(AIMIDB, NRT_FALSE /*enabled*/),
+    NITF_preload_TRE_(CSCRNA, NRT_FALSE /*enabled*/),
+    NITF_preload_TRE_(CSEXRB, NRT_FALSE /*enabled*/),
+	NITF_preload_TRE_(ENGRDA, NRT_FALSE /*enabled*/),
+    NITF_preload_TRE_(HISTOA, NRT_FALSE /*enabled*/),
+    NITF_preload_TRE_(JITCID, NRT_FALSE /*enabled*/),
+    NITF_preload_TRE_(PTPRAA, NRT_FALSE /*enabled*/),
+    NITF_preload_TRE_(RPFHDR, NRT_FALSE /*enabled*/),
 
     NITF_preload_TRE(TEST_PRELOADED_DES),
 
-	{ NULL, NULL, NULL }
+	{ NULL, NULL, NULL, NRT_FALSE }
 };
