@@ -27,7 +27,6 @@
 
 #include <nitf/coda-oss.hpp>
 #pragma comment(lib, "io-c++")
-#pragma comment(lib, "io-c++")
 #pragma comment(lib, "except-c++")
 #pragma comment(lib, "sys-c++")
 #pragma comment(lib, "str-c++")
