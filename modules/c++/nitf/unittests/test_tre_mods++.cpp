@@ -253,6 +253,7 @@ TEST_CASE(use_TEST_DES)
     TEST_ASSERT_EQ(test_preloaded_des.INCREMENT, 67);
 
     /***********************************************************/
+    nitf::Test::setNitfPluginPath();
 
     nitf::TRE des("TEST_DES", "TEST_DES");
     test_des_(testName, des, "TEST_DES_");
