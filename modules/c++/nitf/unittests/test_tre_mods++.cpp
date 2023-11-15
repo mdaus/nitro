@@ -257,7 +257,6 @@ TEST_CASE(use_TEST_DES)
 
     /***********************************************************/
 
-    nitf::Test::setNitfPluginPath();
     nitf::TRE des("TEST_DES", "TEST_DES");
     test_des_(testName, des, "TEST_DES_");
 
@@ -447,6 +446,9 @@ TEST_CASE(overflowingNumericFields)
 }
 
 TEST_MAIN(
+    // must be set before making any NITRO calls
+    nitf::Test::setNitfPluginPath();
+
     TEST_CHECK(setFields);
     TEST_CHECK(setBinaryFields);
     TEST_CHECK(cloneTRE);
