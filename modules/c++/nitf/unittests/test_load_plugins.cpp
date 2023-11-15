@@ -87,7 +87,7 @@ TEST_CASE(test_load_ENGRDA)
 
 TEST_CASE(test_load_all_TREs)
 {
-    const nitf::TRE tre("ACCPOB");
+    const nitf::TRE ACCPOB("ACCPOB");
 
     for (const auto& tre : all_TREs())
     {
