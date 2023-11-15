@@ -7,8 +7,7 @@
 // https://learn.microsoft.com/en-us/visualstudio/test/microsoft-visualstudio-testtools-cppunittestframework-api-reference?view=vs-2022
 TEST_MODULE_INITIALIZE(methodName)
 {
-    nitf_PluginRegistry_PreloadedTREHandlersEnable(NRT_TRUE);
-
     // module initialization code
+    nitf_PluginRegistry_PreloadedTREHandlersEnable(NRT_TRUE);
     nitf::Test::j2kSetNitfPluginPath();
 }
