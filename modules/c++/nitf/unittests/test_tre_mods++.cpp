@@ -26,6 +26,7 @@
 #include <str/Manip.h>
 #include <sys/OS.h>
 
+#include <nitf/PluginRegistry.h>
 #include <nitf/TRE.hpp>
 #include <nitf/UnitTests.hpp>
 
@@ -58,7 +59,7 @@
 
 #include "nitf/TRE.hpp"
 #include "nitf/exports.hpp"
-#include "nitf/TREField.hpp"
+#include "nitf/TREsTyped.hpp"
 
 // A sample "strongly-typed" TRE.  There are too many TREs (and too much unwillingness to change) to
 // actually hook this up.  But it's kind of neat code that I don't want to lose.
@@ -225,6 +226,45 @@ TEST_CASE(basicIteration)
         ++numFields;
     }
     TEST_ASSERT_EQ(numFields, static_cast<size_t>(29));
+}
+
+static void test_des_(const std::string& testName, nitf::TRE& des, const std::string& prefix)
+{
+    des.setField(prefix + "COUNT", 12);
+    des.setField(prefix + "START", 345);
+    des.setField(prefix + "INCREMENT", 67);
+
+    TEST_ASSERT_EQ(des.getFieldValue<int>(prefix + "COUNT"), 12);
+    TEST_ASSERT_EQ(des.getFieldValue<int>(prefix + "START"), 345);
+    TEST_ASSERT_EQ(des.getFieldValue<int>(prefix + "INCREMENT"), 67);
+}
+TEST_CASE(use_TEST_DES)
+{
+    TEST_ASSERT_TRUE( nitf_PluginRegistry_PreloadedTREHandlerEnable("TEST_PRELOADED_DES", NRT_TRUE) );
+    nitf::TRE preloaded("TEST_PRELOADED_DES", "TEST_PRELOADED_DES");
+    test_des_(testName, preloaded, "");
+
+    nitf::TREs::TEST_PRELOADED_DES test_preloaded_des;
+    test_preloaded_des.COUNT = 12;
+    test_preloaded_des.START = 345;
+    test_preloaded_des.INCREMENT = 67;
+    TEST_ASSERT_EQ(test_preloaded_des.COUNT, 12);
+    TEST_ASSERT_EQ(test_preloaded_des.START, 345);
+    TEST_ASSERT_EQ(test_preloaded_des.INCREMENT, 67);
+
+    /***********************************************************/
+    nitf::Test::setNitfPluginPath();
+
+    nitf::TRE des("TEST_DES", "TEST_DES");
+    test_des_(testName, des, "TEST_DES_");
+
+    nitf::TREs::TEST_DES test_des;
+    test_des.TEST_DES_COUNT = 12;
+    test_des.TEST_DES_START = 345;
+    test_des.TEST_DES_INCREMENT = 67;
+    TEST_ASSERT_EQ(test_des.TEST_DES_COUNT, 12);
+    TEST_ASSERT_EQ(test_des.TEST_DES_START, 345);
+    TEST_ASSERT_EQ(test_des.TEST_DES_INCREMENT, 67);
 }
 
 TEST_CASE(use_ENGRDA)
@@ -404,6 +444,7 @@ TEST_MAIN(
     TEST_CHECK(setBinaryFields);
     TEST_CHECK(cloneTRE);
     TEST_CHECK(basicIteration);
+    TEST_CHECK(use_TEST_DES);
     TEST_CHECK(use_ENGRDA);
     TEST_CHECK(use_ENGRDA_typed_fields);
     TEST_CHECK(use_typed_ENGRDA);
