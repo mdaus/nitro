@@ -3,6 +3,7 @@
  * =========================================================================
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * © Copyright 2023, Maxar Technologies, Inc.
  *
  * NITRO is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -41,6 +42,9 @@
 #include "../shared/JITCID.c"
 #include "../shared/PTPRAA.c"
 #include "../shared/RPFHDR.c"
+
+#include "../shared/TEST_DES.c"
+#include "../shared/XML_DATA_CONTENT.c"
 
  /******************************************************************************/
  /*
@@ -101,26 +105,25 @@ static nitf_TREHandler* TEST_PRELOADED_DES_handler(nitf_Error* error) {
 /******************************************************************************/
 
 #define NITF_preload_TRE_(Tre_, enabled_) { #Tre_, Tre_##_init, Tre_##_handler, enabled_ }
-#define NITF_preload_TRE(Tre_) NITF_preload_TRE_(Tre_, NRT_TRUE /*enabled*/)
+#define NITF_preload_TRE(Tre_) NITF_preload_TRE_(Tre_, NRT_FALSE /*enabled*/)
 
-extern nitf_TREPreloaded preloadedTREs[];
 nitf_TREPreloaded preloadedTREs[] = {
     // Not preloading any TREs right now: with the existing system,
     // a TRE can be removed by deleting the DLL/SO.  If that same TRE
     // were preloaded, there would be no way to get rid of it.
-    NITF_preload_TRE_(ACCHZB, NRT_FALSE /*enabled*/),
-    NITF_preload_TRE_(ACCPOB, NRT_FALSE /*enabled*/),
-    NITF_preload_TRE_(ACFTA, NRT_FALSE /*enabled*/),
-    NITF_preload_TRE_(AIMIDB, NRT_FALSE /*enabled*/),
-    NITF_preload_TRE_(CSCRNA, NRT_FALSE /*enabled*/),
-    NITF_preload_TRE_(CSEXRB, NRT_FALSE /*enabled*/),
-	NITF_preload_TRE_(ENGRDA, NRT_FALSE /*enabled*/),
-    NITF_preload_TRE_(HISTOA, NRT_FALSE /*enabled*/),
-    NITF_preload_TRE_(JITCID, NRT_FALSE /*enabled*/),
-    NITF_preload_TRE_(PTPRAA, NRT_FALSE /*enabled*/),
-    NITF_preload_TRE_(RPFHDR, NRT_FALSE /*enabled*/),
+    NITF_preload_TRE(ACCHZB),
+    NITF_preload_TRE(ACCPOB),
+    NITF_preload_TRE(ACFTA),
+    NITF_preload_TRE(AIMIDB),
+    NITF_preload_TRE(CSCRNA),
+    NITF_preload_TRE(CSEXRB),
+	NITF_preload_TRE(ENGRDA),
+    NITF_preload_TRE(HISTOA),
+    NITF_preload_TRE(JITCID),
+    NITF_preload_TRE(PTPRAA),
+    NITF_preload_TRE(RPFHDR),
 
-    NITF_preload_TRE(TEST_PRELOADED_DES),
+    NITF_preload_TRE_(TEST_PRELOADED_DES,  NRT_TRUE /*enabled*/),
 
-	{ NULL, NULL, NULL, NRT_FALSE }
+	{ NULL, NULL, NULL, NRT_FALSE } // end of list
 };

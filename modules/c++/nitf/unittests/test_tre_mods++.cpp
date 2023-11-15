@@ -228,18 +228,24 @@ TEST_CASE(basicIteration)
     TEST_ASSERT_EQ(numFields, static_cast<size_t>(29));
 }
 
-TEST_CASE(use_TEST_PRELOADED_DES)
+static void test_des_(const std::string& testName, nitf::TRE& des, const std::string& prefix)
+{
+    des.setField(prefix + "COUNT", 12);
+    des.setField(prefix + "START", 345);
+    des.setField(prefix + "INCREMENT", 67);
+
+    TEST_ASSERT_EQ(des.getFieldValue<int>(prefix + "COUNT"), 12);
+    TEST_ASSERT_EQ(des.getFieldValue<int>(prefix + "START"), 345);
+    TEST_ASSERT_EQ(des.getFieldValue<int>(prefix + "INCREMENT"), 67);
+}
+TEST_CASE(use_TEST_DES)
 {
     TEST_ASSERT_TRUE( nitf_PluginRegistry_PreloadedTREHandlerEnable("TEST_PRELOADED_DES", NRT_TRUE) );
-    nitf::TRE des("TEST_PRELOADED_DES", "TEST_PRELOADED_DES");
+    nitf::TRE preloaded("TEST_PRELOADED_DES", "TEST_PRELOADED_DES");
+    test_des_(testName, preloaded, "TEST_PRELOADED_DES_");
 
-    des.setField("TEST_PRELOADED_DES_COUNT", 12);
-    des.setField("TEST_PRELOADED_DES_START", 345);
-    des.setField("TEST_PRELOADED_DES_INCREMENT", 67);
-
-    TEST_ASSERT_EQ(des.getFieldValue<int>("TEST_PRELOADED_DES_COUNT"), 12);
-    TEST_ASSERT_EQ(des.getFieldValue<int>("TEST_PRELOADED_DES_START"), 345);
-    TEST_ASSERT_EQ(des.getFieldValue<int>("TEST_PRELOADED_DES_INCREMENT"), 67);
+    nitf::TRE des("TEST_DES", "TEST_DES");
+    test_des_(testName, des, "TEST_DES_");
 }
 
 TEST_CASE(use_ENGRDA)
@@ -419,7 +425,7 @@ TEST_MAIN(
     TEST_CHECK(setBinaryFields);
     TEST_CHECK(cloneTRE);
     TEST_CHECK(basicIteration);
-    TEST_CHECK(use_TEST_PRELOADED_DES);
+    TEST_CHECK(use_TEST_DES);
     TEST_CHECK(use_ENGRDA);
     TEST_CHECK(use_ENGRDA_typed_fields);
     TEST_CHECK(use_typed_ENGRDA);
