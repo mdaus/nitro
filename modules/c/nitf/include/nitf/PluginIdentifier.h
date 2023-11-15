@@ -72,7 +72,6 @@ typedef struct _nitf_TREPreloaded
     NITF_PLUGIN_TRE_HANDLER_FUNCTION handler;
     NITF_BOOL enabled; // most preloaded TREs are disabled by default
 } nitf_TREPreloaded;
-extern nitf_TREPreloaded preloadedTREs[];
 
 /*
   \brief NITF_PLUGIN_COMPRESSION_HANDLER_FUNCTION - Function pointer for
