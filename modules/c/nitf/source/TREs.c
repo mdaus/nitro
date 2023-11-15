@@ -62,9 +62,9 @@
 
    The user header will have three fields
 
-     NITF_TEST_PRELOADED_DES_COUNT     - Number of data values
-     NITF_TEST_PRELOADED_DES_START     - Start value in ramp
-     NITF_TEST_PRELOADED_DES_INCREMENT - Increment between values in ramp
+     COUNT     - Number of data values
+     START     - Start value in ramp
+     INCREMENT - Increment between values in ramp
 
    The data is an 8-bit ramp defined by the three values. in testing, the
    ramp will be setup to contain printable values.
@@ -72,9 +72,9 @@
 
  /*    TRE description for user header */
 static nitf_TREDescription TEST_PRELOADED_DES_description[] = {
-    {NITF_BCS_N, 2, "Number of data values", "TEST_PRELOADED_DES_COUNT" },
-    {NITF_BCS_N, 3, "Start value in ramp", "TEST_PRELOADED_DES_START" },
-    {NITF_BCS_N, 2, "Increment between values in ramp", "TEST_PRELOADED_DES_INCREMENT" },
+    {NITF_BCS_N, 2, "Number of data values", "COUNT" },
+    {NITF_BCS_N, 3, "Start value in ramp", "START" },
+    {NITF_BCS_N, 2, "Increment between values in ramp", "INCREMENT" },
     {NITF_END, 0, NULL, NULL}
 };
 static nitf_TREDescriptionInfo TEST_PRELOADED_DES_descriptions[] = {
