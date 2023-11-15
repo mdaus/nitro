@@ -78,10 +78,12 @@ TEST_CASE(test_retrieveTREHandler)
 
 TEST_CASE(test_load_PTPRAA)
 {
+    TEST_ASSERT_TRUE(nitf_PluginRegistry_PreloadedTREHandlerEnable("PTPRAA", NRT_TRUE));
     retrieveTREHandler(testName, "PTPRAA");
 }
 TEST_CASE(test_load_ENGRDA)
 {
+    TEST_ASSERT_TRUE(nitf_PluginRegistry_PreloadedTREHandlerEnable("ENGRDA", NRT_TRUE));
     retrieveTREHandler(testName, "ENGRDA");
 }
 
