@@ -55,7 +55,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)modules\c\nrt\include;$(SolutionDir)modules\c\nitf\include;$(SolutionDir)modules\c++\nitf\include;$(SolutionDir)modules\c\j2k\include;$(SolutionDir)modules\c;$(SolutionDir)modules\c++;$(SolutionDir)externals\coda-oss\modules\c++;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include;$(SolutionDir)out\install\$(Platform)-$(Configuration)\include;$(VCInstallDir)UnitTest\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
