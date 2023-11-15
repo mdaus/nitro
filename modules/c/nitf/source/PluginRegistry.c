@@ -972,7 +972,7 @@ insertCreator(nitf_DLL* dso,
 // Somebody might want to use a different set of preloadedTREs, or we might even want multiple
 // sets of preloaded TREs.  There's nothing to support either of those right now, but it's easy enough
 // to put the infrastructure in place to make it easy to hook-up.
-extern nitf_TREPreloaded preloadedTREs[];
+extern nitf_TREPreloaded defaultPreloadedTREs[];
 static nitf_TREPreloaded* findPreloadedTRE_(nitf_TREPreloaded preloadedTREs[], const char* keyName)
 {
     if (preloadedTREs == NULL)
@@ -1021,7 +1021,7 @@ static NITF_BOOL PreloadedTREHandlerEnable(nitf_TREPreloaded preloadedTREs[],
 NITFAPI(NITF_BOOL)
 nitf_PluginRegistry_PreloadedTREHandlerEnable(const char* keyName, NITF_BOOL enable)
 {
-    return PreloadedTREHandlerEnable(preloadedTREs, keyName, enable);
+    return PreloadedTREHandlerEnable(defaultPreloadedTREs, keyName, enable);
 }
 
 static void preloadedTREHandlersEnable(nitf_TREPreloaded preloadedTREs[], NITF_BOOL enable)
@@ -1045,7 +1045,7 @@ static void preloadedTREHandlersEnable(nitf_TREPreloaded preloadedTREs[], NITF_B
 NITFAPI(void)
 nitf_PluginRegistry_PreloadedTREHandlersEnable(NITF_BOOL enable)
 {
-    preloadedTREHandlersEnable(preloadedTREs, enable);
+    preloadedTREHandlersEnable(defaultPreloadedTREs, enable);
 }
 
 /*
@@ -1173,7 +1173,7 @@ nitf_PluginRegistry_retrieveTREHandler(nitf_PluginRegistry* reg,
                                        int* hadError,
                                        nitf_Error* error)
 {
-    return retrieveTREHandler(preloadedTREs, reg, treIdent, hadError, error);
+    return retrieveTREHandler(defaultPreloadedTREs, reg, treIdent, hadError, error);
 }
 
 NITFPROT(nitf_CompressionInterface*)
