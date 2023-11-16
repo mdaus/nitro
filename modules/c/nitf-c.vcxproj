@@ -155,6 +155,7 @@
     <ClInclude Include="nitf\include\nitf\DESubheader.h" />
     <ClInclude Include="nitf\include\nitf\DirectBlockSource.h" />
     <ClInclude Include="nitf\include\nitf\DownSampler.h" />
+    <ClInclude Include="nitf\include\nitf\Exports.h" />
     <ClInclude Include="nitf\include\nitf\Extensions.h" />
     <ClInclude Include="nitf\include\nitf\Field.h" />
     <ClInclude Include="nitf\include\nitf\FieldDescriptor.h" />
