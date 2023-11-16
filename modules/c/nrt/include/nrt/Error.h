@@ -138,7 +138,7 @@ NRTAPI(void) nrt_Error_fprintf(nrt_Error * error, FILE * file,
  *  \param level The type of error (an enum value)
  *  \param format A format string
  */
-NRTPROT(void) nrt_Error_initf(nrt_Error * error, const char *file, int line,
+NRTAPI(void) nrt_Error_initf(nrt_Error * error, const char *file, int line,
                               const char *func, int level, const char *format,
                               ...);
 
