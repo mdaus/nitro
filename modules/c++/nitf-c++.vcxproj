@@ -171,6 +171,9 @@
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\externals\coda-oss\modules\c++\coda-oss.vcxproj">
+      <Project>{9997e895-5161-4ddf-8f3f-099894cb2f21}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\c\nitf-c.vcxproj">
       <Project>{f06550ad-cfc7-40b8-8727-6c82c69a8982}</Project>
     </ProjectReference>
