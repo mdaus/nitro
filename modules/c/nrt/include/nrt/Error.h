@@ -103,7 +103,7 @@ typedef struct _NRT_Error
  *  \param func Context info from NRT_CTXT (if C99)
  &  \param level The level of error (This is an enum value)
  */
-NRTPROT(void) nrt_Error_init(nrt_Error * error, const char *message,
+NRTAPI(void) nrt_Error_init(nrt_Error * error, const char *message,
                              const char *file, int line, const char *func,
                              int level);
 
