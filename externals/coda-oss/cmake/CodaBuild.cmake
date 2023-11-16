@@ -183,13 +183,13 @@ macro(coda_initialize_build)
 
     endif()
 
-    # Unix/Linux specific options
-    if (UNIX)
         add_definitions(
             -D_LARGEFILE_SOURCE
             -D_FILE_OFFSET_BITS=64
         )
 
+    # Unix/Linux specific options
+    if (UNIX)
        if (ENABLE_ASAN)
             # https://gcc.gnu.org/onlinedocs/gcc/Instrumentation-Options.html
             add_compile_options(-fsanitize=address)
