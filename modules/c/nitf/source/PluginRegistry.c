@@ -1002,11 +1002,11 @@ static void enable_notset_TREs(nitf_TREPreloaded preloadedTREs[], NITF_BOOL enab
 }
 static nitf_TREPreloaded* getNitfPreloadedTREs(const char* name)
 {
-    // If NITF_PRELOAD_TRES is set to *name*", we'll preload those TREs.
-    // This will NOT override a call to nitf_PluginRegistry_PreloadedTREHandlersEnable().
-    // By default, the `enabled` status of TREs is set to -1 "not set."
-    const char* nitfPreloadTREs = getenv("NITF_PRELOAD_TRES");
-    if ((nitfPreloadTREs != NULL) && (strcmp(nitfPreloadTREs, name) == 0))
+    // If NITF_PRELOADED_TRE_HANDLERS_ENABLE is set to *name*", we'll preload those TREs.
+    // This will NOT override a call to nitf_PluginRegistry_PreloadedTREHandlersEnable();
+    // by default, the `enabled` status of TREs is set to -1 "not set."
+    const char* envVar = getenv("NITF_PRELOADED_TRE_HANDLERS_ENABLE");
+    if ((envVar != NULL) && (strcmp(envVar, name) == 0))
     {
         nitf_TREPreloaded* preloadedTREs = getPreloadedTREs(name);
         if (preloadedTREs != NULL)
@@ -1021,8 +1021,7 @@ static nitf_TREPreloaded* getNitfPreloadedTREs(const char* name)
 }
 static nitf_TREPreloaded* getDefaultPreloadedTREs()
 {
-    static nitf_TREPreloaded* defaultPreloadedTREs = getNitfPreloadedTREs("default");
-    return defaultPreloadedTREs;
+    return getNitfPreloadedTREs("default");
 }
 
 static nitf_TREPreloaded* findPreloadedTRE_(nitf_TREPreloaded preloadedTREs[], const char* keyName)
