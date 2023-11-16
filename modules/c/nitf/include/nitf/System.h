@@ -48,7 +48,7 @@
 #define NITF_BOOL           NRT_BOOL
 
 #include "nitf/Exports.h"
-#define NITFAPI(RT)         NITFC_API NRTAPI(RT)
+#define NITFAPI(RT)           NRT_C NITFC_API RT
 #define NITFPROT(RT)        NRTPROT(RT)
 
 #define NITF_ATO32          NRT_ATO32
