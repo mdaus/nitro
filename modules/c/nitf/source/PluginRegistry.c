@@ -1051,9 +1051,14 @@ static nitf_TREPreloaded* findPreloadedTRE_(nitf_TREPreloaded preloadedTREs[], c
 static const nitf_TREPreloaded* findPreloadedTRE(nitf_TREPreloaded preloadedTREs[], const char* keyName)
 {
     const nitf_TREPreloaded* retval = findPreloadedTRE_(preloadedTREs, keyName);
-    if ((retval != NULL) && (retval->enabled == NRT_TRUE))
+    if (retval != NULL)
     {
-        return retval;
+        if (retval->enabled < 0)
+        {
+            return NULL; // "not set" == disabled
+        }
+        const NRT_BOOL enabled = retval->enabled ? NRT_TRUE : NRT_FALSE;
+        return enabled ? retval : NULL;
     }
     return NULL;
 }
@@ -1061,10 +1066,15 @@ static const nitf_TREPreloaded* findPreloadedTRE(nitf_TREPreloaded preloadedTREs
 static NITF_BOOL PreloadedTREHandlerEnable(nitf_TREPreloaded preloadedTREs[],
     const char* keyName, NITF_BOOL enable)
 {
+    if (preloadedTREs == NULL)
+    {
+        return NRT_FALSE;
+    }
+
     nitf_TREPreloaded* result = findPreloadedTRE_(preloadedTREs, keyName);
     if (result != NULL)
     {
-        result->enabled = enable;
+        result->enabled = enable ? NRT_TRUE : NRT_FALSE;
         return NRT_TRUE;
     }
     return NRT_FALSE;
@@ -1089,8 +1099,7 @@ static void preloadedTREHandlersEnable(nitf_TREPreloaded preloadedTREs[], NITF_B
         {
             return;
         }
-
-        preloadedTREs[i].enabled = enable;
+        preloadedTREs[i].enabled = enable ? NRT_TRUE : NRT_FALSE;
     }
 }
 NITFAPI(void)
