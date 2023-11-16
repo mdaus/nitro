@@ -8,8 +8,8 @@
 //
 // Use Windows naming conventions (DLL, LIB) because this really only matters for _MSC_VER, see below.
 #if !defined(NITRO_NITFCPP_LIB) && !defined(NITRO_NITFCPP_DLL)
-    //#define NITRO_NITFCPP_LIB 1
-    #define NITRO_NITFCPP_DLL 1
+    #define NITRO_NITFCPP_LIB 1
+    //#define NITRO_NITFCPP_DLL 1
 #endif
 #if defined(NITRO_NITFCPP_LIB) && defined(NITRO_NITFCPP_DLL)
     #error "Both NITRO_NITFCPP_LIB and NITRO_NITFCPP_DLL are #define'd'"
