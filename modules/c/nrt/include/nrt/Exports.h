@@ -31,8 +31,14 @@
 //
 // Use Windows naming conventions (DLL, LIB) because this really only matters for _MSC_VER, see below.
 #if !defined(NRT_LIB) && !defined(NRT_DLL)
-    #define NRT_LIB 1
-    //#define NRT_DLL 1
+    // A bit of a hack so that this file can be commited ... if building in Visual Studio,
+    // NITRO_PCH will be set from **pch.h**.  Note that it is still neccessary to
+    // 1) change the project type, and 2) `#define NRT_EXPORTS`
+    #ifdef NITRO_PCH
+        #define NRT_DLL 1 // build a DLL in Visual Studio
+    #else
+        #define NRT_LIB 1 // otherwise, build a static LIB
+    #endif
 #endif
 #if defined(NRT_LIB) && defined(NRT_DLL)
     #error "Both NRT_LIB and NRT_DLL are #define'd'"
