@@ -77,10 +77,10 @@
 #define NRT_VSNPRINTF vsnprintf
 
 // Export no matter what ... when you KNOW you're building a DLL/SO, e.g. a TRE
-#define NRTEXPORT(RT) NRT_C NRT_library_export RT // extern "C" __declspec(dllexport) void* foo();
+#define NRTEXPORT(RT) NRT_C NITRO_NRT_library_export RT // extern "C" __declspec(dllexport) void* foo();
 
 // Adjust the above ... but w/o chaning too much :-(
-#if defined(NRT_DLL) // See Exports.h
+#if defined(NITRO_NRT_DLL) // See Exports.h
 	#ifdef NRTAPI
 		#undef NRTAPI
 		#define NRTAPI(RT) NRTEXPORT(RT)

@@ -59,7 +59,6 @@ CODA_OSS_disable_warning_pop
 #include "nitf/System.h"
 #include "nitf/Field.h"
 #include "nitf/Types.h"
-#pragma comment(lib, "nitf-c")
 #pragma comment(lib, "openjpeg")
 
 #pragma warning(disable: 5039) //	'...': pointer or reference to potentially throwing function passed to 'extern "C"' function under -EHc. Undefined behavior may occur if this function throws an exception.

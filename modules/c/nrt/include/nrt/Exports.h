@@ -22,82 +22,73 @@
  */
 
 #pragma once
-#ifndef NRT_Exports_h_INCLUDED_
-#define NRT_Exports_h_INCLUDED_
 
-// Need to specify how this code will be consumed, either NRT_LIB (static library)
-// or NRT_DLL (aka "shared" library).  For DLLs, it needs to be set for BOTH
+// Need to specify how this code will be consumed, either NITRO_NRT_LIB (static library)
+// or NITRO_NRT_DLL (aka "shared" library).  For DLLs, it needs to be set for BOTH
 // "exporting" (building this code) and "importing" (consuming).
 //
 // Use Windows naming conventions (DLL, LIB) because this really only matters for _MSC_VER, see below.
-#if !defined(NRT_LIB) && !defined(NRT_DLL)
-    // A bit of a hack so that this file can be commited ... if building in Visual Studio,
-    // NITRO_PCH will be set from **pch.h**.  Note that it is still neccessary to
-    // 1) change the project type, and 2) `#define NRT_EXPORTS`
-    #ifdef NITRO_PCH
-        #define NRT_DLL 1 // build a DLL in Visual Studio
-    #else
-        #define NRT_LIB 1 // otherwise, build a static LIB
-    #endif
+#if !defined(NITRO_NRT_LIB) && !defined(NITRO_NRT_DLL)
+    #define NITRO_NRT_DLL 1 // build a DLL in Visual Studio
+    //#define NITRO_NRT_LIB 1 // otherwise, build a static LIB
 #endif
-#if defined(NRT_LIB) && defined(NRT_DLL)
-    #error "Both NRT_LIB and NRT_DLL are #define'd'"
+#if defined(NITRO_NRT_LIB) && defined(NITRO_NRT_DLL)
+    #error "Both NITRO_NRT_LIB and NITRO_NRT_DLL are #define'd'"
 #endif
-#if defined(NRT_EXPORTS) && defined(NRT_LIB)
+#if defined(NITRO_NRT_EXPORTS) && defined(NITRO_NRT_LIB)
     #error "Can't export from a LIB'"
 #endif
 
 // https://www.gnu.org/software/gnulib/manual/html_node/Exported-Symbols-of-Shared-Libraries.html
-#if !defined(NRT_library_export) && !defined(NRT_library_import)
+#if !defined(NITRO_NRT_library_export) && !defined(NITRO_NRT_library_import)
     #if defined(__GNUC__) // && HAVE_VISIBILITY 
         // https://www.gnu.org/software/gnulib/manual/html_node/Exported-Symbols-of-Shared-Libraries.html
-        #define NRT_library_export __attribute__((visibility("default")))
+        #define NITRO_NRT_library_export __attribute__((visibility("default")))
 
         // For GCC, there's no difference in consuming ("importing") an .a or .so
-        #define NRT_library_import /* no __declspec(dllimport) for GCC */
+        #define NITRO_NRT_library_import /* no __declspec(dllimport) for GCC */
 
     #elif defined(_MSC_VER) // && (defined(_WINDLL) && !defined(_LIB))
-        #define NRT_library_export __declspec(dllexport)
+        #define NITRO_NRT_library_export __declspec(dllexport)
 
         // Actually, it seems that the linker is able to figure this out from the .LIB,
         // so there doesn't seem to be a need for __declspec(dllimport).  Clients don't
         // need to #define NITRO_NITFCPP_DLL ... ?  Well, almost ... it looks
         // like __declspec(dllimport) is needed to get virtual "inline"s (e.g.,
         // destructors) correct.
-        #define NRT_library_import __declspec(dllimport)
+        #define NITRO_NRT_library_import __declspec(dllimport)
 
     #else
         // https://stackoverflow.com/a/2164853/8877
-        #define NRT_library_export /* do nothing and hope for the best? */
-        #define NRT_library_import /* do nothing and hope for the best? */
+        #define NITRO_NRT_library_export /* do nothing and hope for the best? */
+        #define NITRO_NRT_library_import /* do nothing and hope for the best? */
         #pragma warning Unknown dynamic link import semantics.
     #endif
 #endif
 
 // The following ifdef block is the standard way of creating macros which make exporting
-// from a DLL simpler. All files within this DLL are compiled with the NRT_EXPORTS
+// from a DLL simpler. All files within this DLL are compiled with the NITRO_NRT_EXPORTS
 // symbol defined on the command line. This symbol should not be defined on any project
 // that uses this DLL. This way any other project whose source files include this file see
-// NRT_API functions as being imported from a DLL, whereas this DLL sees symbols
+// NITRO_NRT_API functions as being imported from a DLL, whereas this DLL sees symbols
 // defined with this macro as being exported.
-#ifdef NRT_EXPORTS
-    #define NRT_API NRT_library_export
+#ifdef NITRO_NRT_EXPORTS
+    #define NITRO_NRT_API NITRO_NRT_library_export
 #else
-    // Either building a static library (no NRT_EXPORTS) or
+    // Either building a static library (no NITRO_NRT_EXPORTS) or
     // importing (not building) a shared library.
 
     // We need to know whether we're consuming (importing) a DLL or static LIB
     // The default is a static LIB as that's what existing code/builds expect.
-    #ifdef NRT_DLL
+    #ifdef NITRO_NRT_DLL
         // Actually, it seems that the linker is able to figure this out from the .LIB, so 
         // there doesn't seem to be a need for __declspec(dllimport).  Clients don't
-        // need to #define NRT_DLL ... ?  Well, almost ... it looks
+        // need to #define NITRO_NRT_DLL ... ?  Well, almost ... it looks
         // like __declspec(dllimport) is needed to get virtual "inline"s (e.g., 
         // destructors) correct.
-        #define NRT_API NRT_library_import
+        #define NITRO_NRT_API NITRO_NRT_library_import
     #else
-        #define NRT_API /* "importing" a static LIB */
+        #define NITRO_NRT_API /* "importing" a static LIB */
     #endif
 #endif
 
-#endif // NRT_Exports_h_INCLUDED_
