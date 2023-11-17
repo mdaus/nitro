@@ -29,21 +29,8 @@
 //
 // Use Windows naming conventions (DLL, LIB) because this really only matters for _MSC_VER, see below.
 #if !defined(NITRO_NRT_LIB) && !defined(NITRO_NRT_DLL)
-    // **A huge HACK so this file can be commited.**
-    // Windows clients must know whether the LIB is an static LIB or an export
-    // LIB for a DLL (see comments below); thus, CODA_OSS_DLL/CODA_OSS_LIB
-    // must always be set to the same value.  Having to add this to every
-    // **vcxproj** project is a pain (and error-prone) ... so, the hack is to 
-    // use *_FILE_OFFSET_BITS* and *_LARGEFILE_SOURCE* which are
-    // only set by our **waf** and/or **cmake** build tools.
-    #if defined(_FILE_OFFSET_BITS) || defined(_LARGEFILE_SOURCE)
-        // **cmake** or **waf** build, assume static LIB
-        #define NITRO_NRT_LIB 1  // Static library, all symbols visible.
-    #else
-        // Not building with **cmake** or **waf**, assume we're in Visual Studio
-        // and thus are using DLLs.
-        #define NITRO_NRT_DLL 1  // Symbols must be exported and imported (see below).
-    #endif // defined(_FILE_OFFSET_BITS) || defined(_LARGEFILE_SOURCE)
+    #define NITRO_NRT_DLL 1  // Symbols must be exported and imported (see below).
+    //#define NITRO_NRT_DLL 1  // Static library, all symbols visible.
 #endif
 #if defined(NITRO_NRT_LIB) && defined(NITRO_NRT_DLL)
     #error "Both NITRO_NRT_LIB and NITRO_NRT_DLL are #define'd'"
