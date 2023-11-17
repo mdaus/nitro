@@ -8,8 +8,8 @@
 //
 // Use Windows naming conventions (DLL, LIB) because this really only matters for _MSC_VER, see below.
 #if !defined(CODA_OSS_LIB) && !defined(CODA_OSS_DLL)
-    //#define CODA_OSS_DLL 1  // Symbols must be exported and imported (see below).
-    #define CODA_OSS_LIB 1  // Static library, all symbols visible.
+    #define CODA_OSS_DLL 1  // Symbols must be exported and imported (see below).
+    //#define CODA_OSS_LIB 1  // Static library, all symbols visible.
 #endif
 #if !defined(CODA_OSS_LIB) && !defined(CODA_OSS_DLL)
     #error "One of CODA_OSS_LIB pr CODA_OSS_DLL must be #define'd'"

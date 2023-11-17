@@ -29,8 +29,8 @@
 //
 // Use Windows naming conventions (DLL, LIB) because this really only matters for _MSC_VER, see below.
 #if !defined(NITRO_NRT_LIB) && !defined(NITRO_NRT_DLL)
-    //#define NITRO_NRT_DLL 1  // Symbols must be exported and imported (see below).
-    #define NITRO_NRT_LIB 1  // Static library, all symbols visible.
+    #define NITRO_NRT_DLL 1  // Symbols must be exported and imported (see below).
+    //#define NITRO_NRT_LIB 1  // Static library, all symbols visible.
 #endif
 #if !defined(NITRO_NRT_LIB) && !defined(NITRO_NRT_DLL)
     #error "One of NITRO_NRT_LIB pr NITRO_NRT_DLL must be #define'd'"
