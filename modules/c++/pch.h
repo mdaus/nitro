@@ -31,6 +31,7 @@ CODA_OSS_disable_warning_pop
 #pragma warning(disable: 5105) // macro expansion producing '...' has undefined behavior
 #include <windows.h>
 #pragma warning(pop)
+#pragma comment(lib, "Ws2_32")
 
 #pragma warning(disable: 4619) // #pragma warning: there is no warning number '...'
 #pragma warning(disable: 4820) // '...': '...' bytes padding added after data member '...'
@@ -58,7 +59,6 @@ CODA_OSS_disable_warning_pop
 #include "nitf/System.h"
 #include "nitf/Field.h"
 #include "nitf/Types.h"
-#pragma comment(lib, "nitf-c")
 #pragma comment(lib, "openjpeg")
 
 #pragma warning(disable: 5039) //	'...': pointer or reference to potentially throwing function passed to 'extern "C"' function under -EHc. Undefined behavior may occur if this function throws an exception.
@@ -78,9 +78,3 @@ CODA_OSS_disable_warning_pop
 #include "nitf/Handle.hpp"
 
 #include "nitf/coda-oss.hpp"
-#pragma comment(lib, "io-c++")
-#pragma comment(lib, "except-c++")
-#pragma comment(lib, "sys-c++")
-#pragma comment(lib, "str-c++")
-#pragma comment(lib, "mt-c++")
-#pragma comment(lib, "math-c++")

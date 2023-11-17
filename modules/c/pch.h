@@ -27,12 +27,15 @@
 #if defined(_WIN32)
 #undef BIGENDIAN
 #include <Winsock2.h>
+#pragma comment(lib, "Ws2_32")
 #else
 #include <netinet/in.h>
 #endif
 
 #include <jpeglib.h>
 #include <jerror.h>
+#pragma comment(lib, "openjpeg")
+#pragma comment(lib, "jpeg")
 
 #pragma warning(pop)
 

@@ -1,5 +1,3 @@
-#ifndef CODA_OSS_config_Exports_h_INCLUDED_
-#define CODA_OSS_config_Exports_h_INCLUDED_
 #pragma once
 
 #include "config/compiler_extensions.h"
@@ -10,8 +8,11 @@
 //
 // Use Windows naming conventions (DLL, LIB) because this really only matters for _MSC_VER, see below.
 #if !defined(CODA_OSS_LIB) && !defined(CODA_OSS_DLL)
-    #define CODA_OSS_LIB 1
-    //#define CODA_OSS_DLL 1
+    //#define CODA_OSS_DLL 1  // Symbols must be exported and imported (see below).
+    #define CODA_OSS_LIB 1  // Static library, all symbols visible.
+#endif
+#if !defined(CODA_OSS_LIB) && !defined(CODA_OSS_DLL)
+    #error "One of CODA_OSS_LIB pr CODA_OSS_DLL must be #define'd'"
 #endif
 #if defined(CODA_OSS_LIB) && defined(CODA_OSS_DLL)
     #error "Both CODA_OSS_LIB and CODA_OSS_DLL are #define'd'"
@@ -50,5 +51,3 @@
 #if defined(_MSC_VER)
 #pragma warning(disable: 4251) // '...' : class '...' needs to have dll-interface to be used by clients of struct '...'
 #endif
-
-#endif // CODA_OSS_config_Exports_h_INCLUDED_

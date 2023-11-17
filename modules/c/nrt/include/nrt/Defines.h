@@ -38,6 +38,8 @@
 #   define NRT_BOOL int
 #endif
 
+#include "nrt/Exports.h"
+
 #if defined(WIN32) || defined(_WIN32)
 /*  Negotiate the meaning of NRTAPI, NRTPROT (for public and protected)  */
 #      if defined(NRT_MODULE_EXPORTS)
@@ -73,6 +75,17 @@
 #endif
 #define NRT_SNPRINTF snprintf
 #define NRT_VSNPRINTF vsnprintf
+
+// Export no matter what ... when you KNOW you're building a DLL/SO, e.g. a TRE
+#define NRTEXPORT(RT) NRT_C NITRO_NRT_library_export RT // extern "C" __declspec(dllexport) void* foo();
+
+// Adjust the above ... but w/o chaning too much :-(
+#if defined(NITRO_NRT_DLL) // See Exports.h
+	#ifdef NRTAPI
+		#undef NRTAPI
+		#define NRTAPI(RT) NRTEXPORT(RT)
+	#endif
+#endif
 
 /*
  *  This section describes a set of macros to help with
