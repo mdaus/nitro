@@ -23,22 +23,29 @@
 
 #pragma once
 
-// Need to specify how this code will be consumed, either NITRO_NRT_LIB (static library)
-// or NITRO_NRT_DLL (aka "shared" library).  For DLLs, it needs to be set for BOTH
+// Need to specify how this code will be consumed, either NITRO_NRT_LIB_ (static library)
+// or NITRO_NRT_DLL_ (aka "shared" library).  For DLLs, it needs to be set for BOTH
 // "exporting" (building this code) and "importing" (consuming).
 //
 // Use Windows naming conventions (DLL, LIB) because this really only matters for _MSC_VER, see below.
-#if !defined(NITRO_NRT_LIB) && !defined(NITRO_NRT_DLL)
-    #define NITRO_NRT_DLL 1  // Symbols must be exported and imported (see below).
-    //#define NITRO_NRT_LIB 1  // Static library, all symbols visible.
+#if !defined(NITRO_NRT_LIB_) && !defined(NITRO_NRT_DLL_)
+    #if CODA_OSS_LIBRARY_SHARED
+        #if CODA_OSS_LIBRARY_STATIC
+            #error "CODA_OSS_LIBRARY_SHARED already #define'd'"
+        #endif
+        #define NITRO_NRT_DLL_ 1  // Symbols must be exported and imported (see below).
+    #else
+        // CODA_OSS_LIBRARY_STATIC doesn't have to be defined
+        #define NITRO_NRT_LIB_ 1  // Static library, all symbols visible.
+    #endif
 #endif
-#if !defined(NITRO_NRT_LIB) && !defined(NITRO_NRT_DLL)
-    #error "One of NITRO_NRT_LIB pr NITRO_NRT_DLL must be #define'd'"
+#if !defined(NITRO_NRT_LIB_) && !defined(NITRO_NRT_DLL_)
+    #error "One of NITRO_NRT_LIB_ pr NITRO_NRT_DLL_ must be #define'd'"
 #endif
-#if defined(NITRO_NRT_LIB) && defined(NITRO_NRT_DLL)
-    #error "Both NITRO_NRT_LIB and NITRO_NRT_DLL are #define'd'"
+#if defined(NITRO_NRT_LIB_) && defined(NITRO_NRT_DLL_)
+    #error "Both NITRO_NRT_LIB_ and NITRO_NRT_DLL_ are #define'd'"
 #endif
-#if defined(NITRO_NRT_EXPORTS) && defined(NITRO_NRT_LIB)
+#if defined(NITRO_NRT_EXPORTS) && defined(NITRO_NRT_LIB_)
     #error "Can't export from a LIB'"
 #endif
 
@@ -83,10 +90,10 @@
 
     // We need to know whether we're consuming (importing) a DLL or static LIB
     // The default is a static LIB as that's what existing code/builds expect.
-    #ifdef NITRO_NRT_DLL
+    #ifdef NITRO_NRT_DLL_
         // Actually, it seems that the linker is able to figure this out from the .LIB, so 
         // there doesn't seem to be a need for __declspec(dllimport).  Clients don't
-        // need to #define NITRO_NRT_DLL ... ?  Well, almost ... it looks
+        // need to #define NITRO_NRT_DLL_ ... ?  Well, almost ... it looks
         // like __declspec(dllimport) is needed to get virtual "inline"s (e.g., 
         // destructors) correct.
         #define NITRO_NRT_API NITRO_NRT_library_import
