@@ -9,6 +9,9 @@
 // We're building in Visual Studio ... used to control where we get a little bit
 // of config info
 #define CODA_OSS_PCH 1
+#ifndef CODA_OSS_LIBRARY_SHARED
+#define CODA_OSS_LIBRARY_SHARED 1
+#endif
 
 #include "coda_oss/CPlusPlus.h"
 #include "config/disable_compiler_warnings.h"

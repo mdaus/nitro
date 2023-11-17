@@ -80,10 +80,12 @@
 #define NRTEXPORT(RT) NRT_C NITRO_NRT_library_export RT // extern "C" __declspec(dllexport) void* foo();
 
 // Adjust the above ... but w/o chaning too much :-(
-#if defined(NITRO_NRT_DLL) // See Exports.h
-	#ifdef NRTAPI
-		#undef NRTAPI
+#if defined(NRTAPI) && defined(CODA_OSS_LIBRARY_SHARED)
+	#undef NRTAPI
+	#ifdef NITRO_NRT_EXPORTS  // See Exports.h
 		#define NRTAPI(RT) NRTEXPORT(RT)
+	#else
+		#define NRTAPI(RT) NRT_C NITRO_NRT_library_import RT // extern "C" __declspec(dllimport) void* foo();		
 	#endif
 #endif
 

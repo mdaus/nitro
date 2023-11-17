@@ -49,7 +49,7 @@
     <ClCompile>
       <WarningLevel>Level4</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);CODA_OSS_LIBRARY_SHARED=1</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)modules\c\nrt\include;$(SolutionDir)modules\c\nitf\include;$(SolutionDir)modules\c\jpeg\include;$(SolutionDir)modules\c\j2k\include;$(SolutionDir)modules\c\cgm\include;$(SolutionDir)modules\c;$(SolutionDir)modules\c++;$(SolutionDir)modules\c++\nitf\include;$(SolutionDir)out\install\$(Platform)-$(Configuration)\include;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -78,7 +78,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);CODA_OSS_LIBRARY_SHARED=1</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)modules\c\nrt\include;$(SolutionDir)modules\c\nitf\include;$(SolutionDir)modules\c\jpeg\include;$(SolutionDir)modules\c\j2k\include;$(SolutionDir)modules\c\cgm\include;$(SolutionDir)modules\c;$(SolutionDir)modules\c++;$(SolutionDir)modules\c++\nitf\include;$(SolutionDir)out\install\$(Platform)-$(Configuration)\include;$(SolutionDir)externals\coda-oss\out\install\$(Platform)-$(Configuration)\include</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>

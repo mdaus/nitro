@@ -20,6 +20,9 @@
 
 // We're building in Visual Studio ... used to control where we get a little bit of config info
 #define NITRO_PCH 1
+#ifndef CODA_OSS_LIBRARY_SHARED
+#define CODA_OSS_LIBRARY_SHARED 1
+#endif
 
 #include <import/nrt.h>
 #include <import/nitf.h>
