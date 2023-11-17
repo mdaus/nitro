@@ -8,8 +8,11 @@
 //
 // Use Windows naming conventions (DLL, LIB) because this really only matters for _MSC_VER, see below.
 #if !defined(NITRO_NITFCPP_LIB) && !defined(NITRO_NITFCPP_DLL)
-    #define NITRO_NITFCPP_DLL 1  // Symbols must be exported and imported (see below).
-    //#define NITRO_NITFCPP_DLL 1  // Static library, all symbols visible.
+    //#define NITRO_NITFCPP_DLL 1  // Symbols must be exported and imported (see below).
+    #define NITRO_NITFCPP_LIB 1  // Static library, all symbols visible.
+#endif
+#if !defined(NITRO_NITFCPP_LIB) && !defined(NITRO_NITFCPP_DLL)
+    #error "One of NITRO_NITFCPP_LIB pr NITRO_NITFCPP_DLL must be #define'd'"
 #endif
 #if defined(NITRO_NITFCPP_LIB) && defined(NITRO_NITFCPP_DLL)
     #error "Both NITRO_NITFCPP_LIB and NITRO_NITFCPP_DLL are #define'd'"
