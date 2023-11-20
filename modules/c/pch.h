@@ -2,6 +2,9 @@
 
 // We're building in Visual Studio ... used to control where we get a little bit of config info
 #define NITRO_PCH 1
+#ifndef CODA_OSS_LIBRARY_SHARED
+#define CODA_OSS_LIBRARY_SHARED 1
+#endif
 
 // TODO: get rid of these someday? ... from Visual Studio code-analysis
 #pragma warning(disable: 6385) // Reading invalid data from '...':  the readable size is '...' bytes, but '...' bytes may be read.

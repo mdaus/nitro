@@ -2,22 +2,29 @@
 
 #include "config/compiler_extensions.h"
 
-// Need to specify how this code will be consumed, either NITRO_NITFCPP_LIB (static library)
-// or NITRO_NITFCPP_DLL (aka "shared" library).  For DLLs, it needs to be set for BOTH
+// Need to specify how this code will be consumed, either NITRO_NITFCPP_LIB_ (static library)
+// or NITRO_NITFCPP_DLL_ (aka "shared" library).  For DLLs, it needs to be set for BOTH
 // "exporting" (building this code) and "importing" (consuming).
 //
 // Use Windows naming conventions (DLL, LIB) because this really only matters for _MSC_VER, see below.
-#if !defined(NITRO_NITFCPP_LIB) && !defined(NITRO_NITFCPP_DLL)
-    //#define NITRO_NITFCPP_DLL 1  // Symbols must be exported and imported (see below).
-    #define NITRO_NITFCPP_LIB 1  // Static library, all symbols visible.
+#if !defined(NITRO_NITFCPP_LIB_) && !defined(NITRO_NITFCPP_DLL_)
+    #if CODA_OSS_LIBRARY_SHARED
+        #if CODA_OSS_LIBRARY_STATIC
+            #error "CODA_OSS_LIBRARY_SHARED already #define'd'"
+        #endif
+        #define NITRO_NITFCPP_DLL_ 1  // Symbols must be exported and imported (see below).
+    #else
+        // CODA_OSS_LIBRARY_STATIC doesn't have to be defined
+        #define NITRO_NITFCPP_LIB_ 1  // Static library, all symbols visible.
+    #endif
 #endif
-#if !defined(NITRO_NITFCPP_LIB) && !defined(NITRO_NITFCPP_DLL)
-    #error "One of NITRO_NITFCPP_LIB pr NITRO_NITFCPP_DLL must be #define'd'"
+#if !defined(NITRO_NITFCPP_LIB_) && !defined(NITRO_NITFCPP_DLL_)
+    #error "One of NITRO_NITFCPP_LIB_ pr NITRO_NITFCPP_DLL_ must be #define'd'"
 #endif
-#if defined(NITRO_NITFCPP_LIB) && defined(NITRO_NITFCPP_DLL)
-    #error "Both NITRO_NITFCPP_LIB and NITRO_NITFCPP_DLL are #define'd'"
+#if defined(NITRO_NITFCPP_LIB_) && defined(NITRO_NITFCPP_DLL_)
+    #error "Both NITRO_NITFCPP_LIB_ and NITRO_NITFCPP_DLL_ are #define'd'"
 #endif
-#if defined(NITRO_NITFCPP_EXPORTS) && defined(NITRO_NITFCPP_LIB)
+#if defined(NITRO_NITFCPP_EXPORTS) && defined(NITRO_NITFCPP_LIB_)
     #error "Can't export from a LIB'"
 #endif
 
@@ -36,10 +43,10 @@
 
     // We need to know whether we're consuming (importing) a DLL or static LIB
     // The default is a static LIB as that's what existing code/builds expect.
-    #ifdef NITRO_NITFCPP_DLL
+    #ifdef NITRO_NITFCPP_DLL_
         // Actually, it seems that the linker is able to figure this out from the .LIB, so 
         // there doesn't seem to be a need for __declspec(dllimport).  Clients don't
-        // need to #define NITRO_NITFCPP_DLL ... ?  Well, almost ... it looks
+        // need to #define NITRO_NITFCPP_DLL_ ... ?  Well, almost ... it looks
         // like __declspec(dllimport) is needed to get virtual "inline"s (e.g., destructors) correct.
         #define NITRO_NITFCPP_API CODA_OSS_library_import
     #else
