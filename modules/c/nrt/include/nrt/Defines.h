@@ -76,7 +76,7 @@
 #define NRT_SNPRINTF snprintf
 #define NRT_VSNPRINTF vsnprintf
 
-// Export no matter what ... when you KNOW you're building a DLL/SO, e.g. a TRE
+// Export no matter what ... when you KNOW you're building a DLL/SO, e.g. a plugin
 #define NRTEXPORT(RT) NRT_C NITRO_NRT_library_export RT // extern "C" __declspec(dllexport) void* foo();
 
 // Adjust the above ... but w/o chaning too much :-(
