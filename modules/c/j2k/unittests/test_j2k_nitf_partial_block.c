@@ -366,8 +366,10 @@ TEST_CASE(test_multiband_j2k_nitf_partial_block)
     free(pixbuf);
     pixbuf = NULL;
 
-    nitf_Reader_destruct(&reader);
+
+    j2k_Reader_destruct(&j2kReader);
     nitf_Record_destruct(&record);
+    nitf_Reader_destruct(&reader);
     nrt_IOInterface_destruct(&io);
 }
 
