@@ -312,6 +312,8 @@ TEST_CASE(test_multiband_j2k_nitf_partial_block)
         TEST_ASSERT_EQ_INT(*pixptr++, 217);
     for (int i = 0; i < npix; i++)
         TEST_ASSERT_EQ_INT(*pixptr++, 101);
+    free(pixbuf);
+    pixbuf = NULL;
 
     // ************ Block B ************
     npix = 1024 * 92;
@@ -327,6 +329,8 @@ TEST_CASE(test_multiband_j2k_nitf_partial_block)
         TEST_ASSERT_EQ_INT(*pixptr++, 217);
     for (int i = 0; i < npix; i++)
         TEST_ASSERT_EQ_INT(*pixptr++, 101);
+    free(pixbuf);
+    pixbuf = NULL;
 
     // ************ Block C ************
     npix = 38 * 1024;
@@ -342,6 +346,8 @@ TEST_CASE(test_multiband_j2k_nitf_partial_block)
         TEST_ASSERT_EQ_INT(*pixptr++, 217);
     for (int i = 0; i < npix; i++)
         TEST_ASSERT_EQ_INT(*pixptr++, 101);
+    free(pixbuf);
+    pixbuf = NULL;
 
     // ************ Block D ************
     npix = 38 * 92;
@@ -357,6 +363,8 @@ TEST_CASE(test_multiband_j2k_nitf_partial_block)
         TEST_ASSERT_EQ_INT(*pixptr++, 217);
     for (int i = 0; i < npix; i++)
         TEST_ASSERT_EQ_INT(*pixptr++, 101);
+    free(pixbuf);
+    pixbuf = NULL;
 
     nitf_Reader_destruct(&reader);
     nitf_Record_destruct(&record);
