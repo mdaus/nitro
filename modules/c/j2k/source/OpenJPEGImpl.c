@@ -944,7 +944,8 @@ OpenJPEGReader_readTile(J2K_USER_DATA *data, uint32_t tileX, uint32_t tileY,
                     j2k_Container_getPrecision(impl->container, error);
                 numBytesPerPixel =
                     (numBitsPerPixel / 8) + (numBitsPerPixel % 8 != 0);
-                fullBufSize = ((uint64_t)tileWidth) * tileHeight * numBytesPerPixel * nComponents;
+                fullBufSize = ((uint64_t)tileWidth) * tileHeight *
+                        numBytesPerPixel * nComponents;
             }
             else
             {
@@ -969,7 +970,8 @@ OpenJPEGReader_readTile(J2K_USER_DATA *data, uint32_t tileX, uint32_t tileY,
                 goto CATCH_ERROR;
             }
 
-            if (buf != NULL && (thisTileHeight < tileHeight || thisTileWidth < tileWidth))
+            if (buf != NULL &&
+                (thisTileHeight < tileHeight || thisTileWidth < tileWidth))
             {
                 /* We have a tile that isn't as wide as it "should" be
                  * Need to add in the extra columns ourselves.  By marching
@@ -981,15 +983,20 @@ OpenJPEGReader_readTile(J2K_USER_DATA *data, uint32_t tileX, uint32_t tileY,
                 int comp;
                 for (comp = nComponents - 1; comp >= 0; comp--)
                 {
-                    size_t srcOffset = (comp * thisTileHeight + thisTileHeight - 1) * srcStride;
-                    size_t destOffset = (comp * tileHeight + thisTileHeight - 1) * destStride;
+                    size_t srcOffset =
+                            (comp * thisTileHeight + thisTileHeight - 1) *
+                            srcStride;
+                    size_t destOffset =
+                            (comp * tileHeight + thisTileHeight - 1) *
+                            destStride;
                     OPJ_UINT32 ii;
                     uint8_t* bufPtr = *buf;
 
                     // Zero remaining rows in block (if any)
-                    memset(bufPtr + destOffset + destStride, 0, (tileHeight - thisTileHeight) * destStride);
-                    for (ii = 0;
-                         ii < thisTileHeight;
+                    memset(bufPtr + destOffset + destStride,
+                           0,
+                           (tileHeight - thisTileHeight) * destStride);
+                    for (ii = 0; ii < thisTileHeight;
                          ++ii, srcOffset -= srcStride, destOffset -= destStride)
                     {
                         uint8_t* const dest = bufPtr + destOffset;
