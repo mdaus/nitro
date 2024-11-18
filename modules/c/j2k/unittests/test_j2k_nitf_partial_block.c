@@ -419,11 +419,11 @@ TEST_CASE(test_multiband_j2k_nitf_partial_block)
     TEST_ASSERT(pixbuf != NULL);
 
     uint8_t* pixptr = pixbuf;
-    for (int i = 0; i < npix; i++)
+    for (i = 0; i < npix; i++)
         TEST_ASSERT_EQ_INT(*pixptr++, 20);
-    for (int i = 0; i < npix; i++)
+    for (i = 0; i < npix; i++)
         TEST_ASSERT_EQ_INT(*pixptr++, 217);
-    for (int i = 0; i < npix; i++)
+    for (i = 0; i < npix; i++)
         TEST_ASSERT_EQ_INT(*pixptr++, 101);
     free(pixbuf);
     pixbuf = NULL;
@@ -436,11 +436,11 @@ TEST_CASE(test_multiband_j2k_nitf_partial_block)
     TEST_ASSERT(pixbuf != NULL);
 
     pixptr = pixbuf;
-    for (int i = 0; i < npix; i++)
+    for (i = 0; i < npix; i++)
         TEST_ASSERT_EQ_INT(*pixptr++, 20);
-    for (int i = 0; i < npix; i++)
+    for (i = 0; i < npix; i++)
         TEST_ASSERT_EQ_INT(*pixptr++, 217);
-    for (int i = 0; i < npix; i++)
+    for (i = 0; i < npix; i++)
         TEST_ASSERT_EQ_INT(*pixptr++, 101);
     free(pixbuf);
     pixbuf = NULL;
@@ -453,11 +453,11 @@ TEST_CASE(test_multiband_j2k_nitf_partial_block)
     TEST_ASSERT(pixbuf != NULL);
 
     pixptr = pixbuf;
-    for (int i = 0; i < npix; i++)
+    for (i = 0; i < npix; i++)
         TEST_ASSERT_EQ_INT(*pixptr++, 20);
-    for (int i = 0; i < npix; i++)
+    for (i = 0; i < npix; i++)
         TEST_ASSERT_EQ_INT(*pixptr++, 217);
-    for (int i = 0; i < npix; i++)
+    for (i = 0; i < npix; i++)
         TEST_ASSERT_EQ_INT(*pixptr++, 101);
     free(pixbuf);
     pixbuf = NULL;
@@ -470,11 +470,11 @@ TEST_CASE(test_multiband_j2k_nitf_partial_block)
     TEST_ASSERT(pixbuf != NULL);
 
     pixptr = pixbuf;
-    for (int i = 0; i < npix; i++)
+    for (i = 0; i < npix; i++)
         TEST_ASSERT_EQ_INT(*pixptr++, 20);
-    for (int i = 0; i < npix; i++)
+    for (i = 0; i < npix; i++)
         TEST_ASSERT_EQ_INT(*pixptr++, 217);
-    for (int i = 0; i < npix; i++)
+    for (i = 0; i < npix; i++)
         TEST_ASSERT_EQ_INT(*pixptr++, 101);
     free(pixbuf);
     pixbuf = NULL;
