@@ -315,7 +315,7 @@ TEST_CASE(test_multiband_j2k_nitf_partial_block)
     nitf_Record* record = NULL;
     uint8_t* pixbuf = NULL;
 
-    printf("Buffer length: %ld\n", sizeof(multiband_j2k_nitf));
+    printf("Buffer length: %zd\n", sizeof(multiband_j2k_nitf));
     io = nrt_BufferAdapter_construct(multiband_j2k_nitf,
                                      sizeof(multiband_j2k_nitf),
                                      0,
