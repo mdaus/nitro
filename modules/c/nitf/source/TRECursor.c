@@ -669,7 +669,8 @@ NITFPRIV(int) nitf_TRECursor_evalIf(nitf_TRE* tre,
                             NITF_CTXT, NITF_ERR_INVALID_PARAMETER);
             return NITF_FAILURE;
         }
-        status = strncmp(field->raw, valPtr, field->length);
+        int valLen = strlen(valPtr);
+        status = strncmp(field->raw, valPtr, valLen < field->length ? valLen : field->length);
         status = strcmp(op, "eq") == 0 ? !status : status;
     }
     /* check if it is a logical operator for ints */
