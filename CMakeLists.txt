@@ -6,7 +6,9 @@ set(CXX_STANDARD_REQUIRED true)
 
 if (${CMAKE_PROJECT_NAME} STREQUAL nitro)
     # we are the top-level project and are responsible for configuration
-
+    set(CMAKE_CXX_STANDARD 14)
+    set(CXX_STANDARD_REQUIRED true)
+    
     # Always turn on "warnings as errors" to avoid lots of (meaningless?) build output;
     # we'll dial-back warnings as necessary.
     if (MSVC)
