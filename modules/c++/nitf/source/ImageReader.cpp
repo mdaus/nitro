@@ -51,6 +51,8 @@ nitf::BlockingInfo ImageReader::getBlockingInfo() const
 {
     nitf_BlockingInfo* blockingInfo =
             nitf_ImageReader_getBlockingInfo(getNativeOrThrow(), &error);
+    if (!blockingInfo)
+        throw nitf::NITFException(&error);
     // This creates a new object, not a reference to a field,
     // So need to tell the wrapper it needs to destruct itself
     nitf::BlockingInfo cppBlockingInfo(blockingInfo);
