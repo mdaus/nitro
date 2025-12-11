@@ -21,7 +21,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v5 # https://github.com/marketplace/actions/setup-python
       with:
-        python-version: '3.9'
+        python-version: '3.7'
     - name: configure
       run: |
         mkdir out
@@ -94,12 +94,12 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v5 # https://github.com/marketplace/actions/setup-python
       with:
-        python-version: '3.7'
+        python-version: '3.9'
     - name: configure
       run: |
         mkdir target-Release
         cd target-Release
-        cmake -DCMAKE_INSTALL_PREFIX=install${{ matrix.os }}CMake-Github -DPYTHON_VERSION=3.7 ..
+        cmake -DCMAKE_INSTALL_PREFIX=install${{ matrix.os }}CMake-Github -DPYTHON_VERSION=3.9 ..
     - name: make
       run: |
         cd target-Release
