@@ -21,7 +21,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v5 # https://github.com/marketplace/actions/setup-python
       with:
-        python-version: '3.7'
+        python-version: '3.9'
     - name: configure
       run: |
         mkdir out
