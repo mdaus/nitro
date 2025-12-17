@@ -21,6 +21,10 @@ if (${CMAKE_PROJECT_NAME} STREQUAL nitro)
     elseif (UNIX)
        add_compile_options(-Werror) # warnings as errors
 
+        if (CMAKE_COMPILER_IS_GNUCC AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 10.0)
+           add_compile_options(-Wno-error=c++20-compat -Wno-error=format-truncation)
+        endif()
+
        if (ENABLE_ASAN)
        	  # https://gcc.gnu.org/onlinedocs/gcc/Instrumentation-Options.html
           add_compile_options(-fsanitize=address)
