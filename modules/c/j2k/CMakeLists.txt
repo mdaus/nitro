@@ -59,4 +59,4 @@ foreach(j2k_shared ${j2k_shared_srcs})
     set_target_properties(${j2k_shared} PROPERTIES PREFIX "")
 endforeach()
 
-install(TARGETS ${j2k_shared_srcs} DESTINATION "share/nitf/plugins")
+install(TARGETS ${j2k_shared_srcs} DESTINATION "share/nitf/plugins" OPTIONAL)
