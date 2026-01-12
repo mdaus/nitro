@@ -216,4 +216,4 @@ endforeach()
 install(TARGETS ${tre_srcs} DESTINATION "share/nitf/plugins" OPTIONAL)
 
 add_custom_target(nitro-plugins)
-add_dependancies(nitro-plugins ${tre_srcs})
+add_dependencies(nitro-plugins ${tre_srcs})
