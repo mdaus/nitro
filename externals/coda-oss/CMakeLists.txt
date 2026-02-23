@@ -3,10 +3,7 @@
 # Author:  Scott A. Colcord
 
 cmake_minimum_required(VERSION 3.14)
-project(coda-oss)
-
-set(CMAKE_CXX_STANDARD 14)
-set(CXX_STANDARD_REQUIRED true)
+project(coda-oss VERSION 1.0.0)
 
 if (EXISTS "${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
     # build and package with conan
@@ -18,6 +15,10 @@ endif()
 
 if (${CMAKE_PROJECT_NAME} STREQUAL coda-oss)
     # this is the top level project
+
+    # Allow other project to set different standard.
+    set(CMAKE_CXX_STANDARD 14)
+    set(CXX_STANDARD_REQUIRED true)
 
     # Always turn on "warnings as errors" to avoid lots of (meaningless?) build output;
     # we'll dial-back warnings as necessary.
@@ -37,6 +38,13 @@ if (${CMAKE_PROJECT_NAME} STREQUAL coda-oss)
     install(DIRECTORY "cmake/"
             DESTINATION "${CODA_STD_PROJECT_LIB_DIR}/cmake/"
             FILES_MATCHING PATTERN "*.cmake")
+
+    # If the package version is defined, write a version file for find_package
+    set(version_file "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}ConfigVersion.cmake")
+    include(CMakePackageConfigHelpers)
+    write_basic_package_version_file(${version_file} VERSION ${CMAKE_PROJECT_VERSION} COMPATIBILITY SameMajorVersion)
+    install(FILES ${version_file} DESTINATION "lib/cmake")
+    
 endif()
 
 add_subdirectory("modules")

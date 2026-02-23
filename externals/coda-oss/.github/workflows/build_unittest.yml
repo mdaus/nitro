@@ -1,6 +1,14 @@
+env:
+  CTEST_TIMEOUT: 120
+
 name: build_unittest
 
-on: [push]
+on:
+  push:
+  pull_request:
+    branches:
+      - main
+
 
 jobs:
   build-cmake-windows:
@@ -11,6 +19,8 @@ jobs:
     name: ${{ matrix.os }}-${{ matrix.python-version }}-CMake
     runs-on: ${{ matrix.os }}
     steps:
+    - name: Skip Duplicate Actions
+      uses: fkirc/skip-duplicate-actions@v5.3.1
     - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
     - name: Set up Python
       uses: actions/setup-python@v5 # https://github.com/marketplace/actions/setup-python
@@ -39,10 +49,10 @@ jobs:
     - name: test # should run w/o install
       run: |
         cd target-Release
-        ctest -C Release --output-on-failure
+        ctest -C Release --output-on-failure --timeout $env:CTEST_TIMEOUT
         cd ..
         cd target-Debug
-        ctest -C Debug --output-on-failure
+        ctest -C Debug --output-on-failure --timeout $env:CTEST_TIMEOUT
     - name: install
       run: |
         cd target-Release
@@ -63,6 +73,8 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
+    - name: Skip Duplicate Actions
+      uses: fkirc/skip-duplicate-actions@v5.3.1
     - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
     - name: configure
       run: |
@@ -93,11 +105,13 @@ jobs:
   build-linux-cmake-default:
     strategy:
       matrix:
-        os: [ubuntu-latest]
+        os: [ubuntu-22.04]
         python-version: ['3.7']
     name: ${{ matrix.os }}-${{ matrix.python-version }}-CMake
     runs-on: ${{ matrix.os }}
     steps:
+    - name: Skip Duplicate Actions
+      uses: fkirc/skip-duplicate-actions@v5.3.1
     - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
     - name: Set up Python
       uses: actions/setup-python@v5 # https://github.com/marketplace/actions/setup-python
@@ -121,7 +135,7 @@ jobs:
     # should run w/o install
       run: |
         cd target
-        ctest --output-on-failure
+        ctest --output-on-failure --timeout $CTEST_TIMEOUT
     - name: install
       run: |
         cd target
@@ -130,50 +144,56 @@ jobs:
   build-linux-cmake:
     strategy:
       matrix:
-        os: [ubuntu-latest]
+        os: [ubuntu-22.04]
         configuration: [Debug, Release]
         avx: [AVX512F]
     name: ${{ matrix.os }}-${{ matrix.configuration }}-${{ matrix.avx }}-CMake
     runs-on: ${{ matrix.os }}
     steps:
+    - name: Skip Duplicate Actions
+      uses: fkirc/skip-duplicate-actions@v5.3.1
     - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
     - name: configure
       run: |
         mkdir out && cd out
-        cmake .. -DENABLE_PYTHON=OFF -DENABLE_${{ matrix.avx }}=ON
+        cmake .. -DENABLE_PYTHON=OFF -DENABLE_${{ matrix.avx }}=ON -DCMAKE_INSTALL_PREFIX=${{ matrix.configuration }}
     - name: build
       run: |
         cd out
         # "-j" spawns too many processes causing GCC to crash
-        cmake --build . --config ${{ matrix.configuration }} -j 12
+        cmake --build . -j 12
     - name: test
     # should run w/o install
       run: |
         cd out
-        ctest -C ${{ matrix.configuration }} --output-on-failure
+        ctest --output-on-failure --timeout $CTEST_TIMEOUT
 
   build-waf:
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-2019]
+        os: [
+            # BROKEN: windows-latest, 
+            ubuntu-22.04]
         python-version: ['3.7']
         debugging: ['--enable-debugging', '']
     name: ${{ matrix.os }}-${{ matrix.python-version }}-waf${{ matrix.debugging }}
     runs-on: ${{ matrix.os }}
     steps:
+    - name: Skip Duplicate Actions
+      uses: fkirc/skip-duplicate-actions@v5.3.1
     - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
     - name: Set up Python
       uses: actions/setup-python@v5 # https://github.com/marketplace/actions/setup-python
       with:
         python-version: ${{ matrix.python-version }}
     - name: configure_with_swig
-      if: ${{ matrix.os == 'ubuntu-latest' }}
+      if: ${{ matrix.os == 'ubuntu-22.04' }}
       run: |
         pip install numpy
         mkdir install${{ matrix.os }}Waf-Github
         python waf configure --prefix="$PWD/install${{ matrix.os }}Waf-Github" --enable-swig ${{ matrix.debugging }}
     - name: configure_without_swig
-      if: ${{ matrix.os == 'windows-2019' }}
+      if: ${{ matrix.os == 'windows-latest' }}
       run: |
         pip install numpy
         mkdir install${{ matrix.os }}Waf-Github

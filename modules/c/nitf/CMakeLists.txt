@@ -105,6 +105,7 @@ set(tre_srcs  ACCHZB
               CLCTNA
               CLCTNB
               CMETAA
+              CSATTB
               CSCCGA
               CSCRNA
               CSDIDA
@@ -173,6 +174,7 @@ set(tre_srcs  ACCHZB
               RSMPCA
               RSMPIA
               SECTGA
+              SECURA
               SENSRA
               SENSRB
               SNSPSB
@@ -206,8 +208,12 @@ foreach(tre ${tre_srcs})
         install(TARGETS ${tre_static}
             EXPORT ${CODA_EXPORT_SET_NAME}
             LIBRARY DESTINATION "lib"
-            ARCHIVE DESTINATION "lib")
+            ARCHIVE DESTINATION "lib"
+            OPTIONAL)
     endif()
 endforeach()
 
-install(TARGETS ${tre_srcs} DESTINATION "share/nitf/plugins")
+install(TARGETS ${tre_srcs} DESTINATION "share/nitf/plugins" OPTIONAL)
+
+add_custom_target(nitro-plugins)
+add_dependencies(nitro-plugins ${tre_srcs})
