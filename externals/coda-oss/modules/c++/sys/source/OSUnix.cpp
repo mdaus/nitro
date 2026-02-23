@@ -3,6 +3,7 @@
  * =========================================================================
  *
  * (C) Copyright 2004 - 2014, MDA Information Systems LLC
+ * (C) Copyright 2025-26 ARKA Group, L.P. All rights reserved
  *
  * sys-c++ is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -425,6 +426,7 @@ void sys::OSUnix::getAvailableCPUs(std::vector<int>& physicalCPUs,
 
 sys::SIMDInstructionSet sys::OSUnix::getSIMDInstructionSet() const
 {
+#if defined(__x86_64__) || defined(__i386__)
     // https://gcc.gnu.org/onlinedocs/gcc-4.8.2/gcc/X86-Built-in-Functions.html
     __builtin_cpu_init();
 
@@ -440,6 +442,7 @@ sys::SIMDInstructionSet sys::OSUnix::getSIMDInstructionSet() const
     {
         return SIMDInstructionSet::SSE2;
     }
+#endif
 
     throw std::runtime_error("SSE2 support is required.");
 }

@@ -3,7 +3,7 @@
 # Author:  Scott A. Colcord
 
 cmake_minimum_required(VERSION 3.14)
-project(coda-oss)
+project(coda-oss VERSION 1.0.0)
 
 if (EXISTS "${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
     # build and package with conan
@@ -38,6 +38,13 @@ if (${CMAKE_PROJECT_NAME} STREQUAL coda-oss)
     install(DIRECTORY "cmake/"
             DESTINATION "${CODA_STD_PROJECT_LIB_DIR}/cmake/"
             FILES_MATCHING PATTERN "*.cmake")
+
+    # If the package version is defined, write a version file for find_package
+    set(version_file "${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_PROJECT_NAME}ConfigVersion.cmake")
+    include(CMakePackageConfigHelpers)
+    write_basic_package_version_file(${version_file} VERSION ${CMAKE_PROJECT_VERSION} COMPATIBILITY SameMajorVersion)
+    install(FILES ${version_file} DESTINATION "lib/cmake")
+    
 endif()
 
 add_subdirectory("modules")
