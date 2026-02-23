@@ -1271,7 +1271,7 @@ def configure(self):
     env['install_libdir'] = Options.options.libdir if Options.options.libdir else join(Options.options.prefix, 'lib')
     env['install_bindir'] = Options.options.bindir if Options.options.bindir else join(Options.options.prefix, 'bin')
     env['install_sharedir'] = Options.options.sharedir if Options.options.sharedir else join(Options.options.prefix, 'share')
-    env['install_pydir'] = Options.options.pydir if Options.options.pydir else '${PYTHONDIR}'
+    env['install_pydir'] = Options.options.pydir if Options.options.pydir else join(Options.options.prefix, 'lib/python/site-packages')
 
     # Swig memory leak output
     if Options.options.swig_silent_leak:
@@ -1526,7 +1526,12 @@ def copytree_tgt(tsk):
         symlinks = tsk.symlinks
     if hasattr(tsk, 'ignore'):
         ignore = tsk.ignore
-    shutil.copytree(tsk.src, dest, symlinks, ignore)
+
+    def copytree_helper(src, dst):
+        Logs.pprint('GREEN', f'- copy {dst} (from {src})')
+        shutil.copy2(src, dst)
+
+    shutil.copytree(tsk.src, dest, symlinks, ignore, copy_function=copytree_helper)
 
 @task_gen
 @feature('install_as_tgt')
