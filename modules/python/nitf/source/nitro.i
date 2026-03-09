@@ -65,93 +65,93 @@
  * Setup some typemaps for the destructors
  */
 %typemap(in) nitf_DataSource**{
+    nitf_DataSource* temp = 0;
     if ($input)
     {
-        nitf_DataSource* temp = 0;
         if (SWIG_ConvertPtr($input, (void**)&temp, $descriptor(nitf_DataSource *), 0 |  0 ) != -1 && temp)
             $1 = (nitf_DataSource**)&temp;
     }
 }
 
 %typemap(in) nitf_Writer**{
+    nitf_Writer* temp = 0;
     if ($input)
     {
-        nitf_Writer* temp = 0;
         if (SWIG_ConvertPtr($input, (void**)&temp,$descriptor(nitf_Writer*), 0 |  0 ) != -1 && temp)
             $1 = (nitf_Writer**)&temp;
     }
 }
 %typemap(in) nitf_ImageWriter**{
+    nitf_ImageWriter* temp = 0;
     if ($input)
     {
-        nitf_ImageWriter* temp = 0;
         if (SWIG_ConvertPtr($input, (void**)&temp,$descriptor(nitf_ImageWriter*), 0 |  0 ) != -1 && temp)
             $1 = (nitf_ImageWriter**)&temp;
     }
 }
 %typemap(in) nitf_ImageSource**{
+    nitf_ImageSource* temp = 0;
     if ($input)
     {
-        nitf_ImageSource* temp = 0;
         if (SWIG_ConvertPtr($input, (void**)&temp,$descriptor(nitf_ImageSource*), 0 |  0 ) != -1 && temp)
             $1 = (nitf_ImageSource**)&temp;
     }
 }
 %typemap(in) nitf_ImageReader**{
+    nitf_ImageReader* temp = 0;
     if ($input)
     {
-        nitf_ImageReader* temp = 0;
         if (SWIG_ConvertPtr($input, (void**)&temp,$descriptor(nitf_ImageReader*), 0 |  0 ) != -1 && temp)
             $1 = (nitf_ImageReader**)&temp;
     }
 }
 %typemap(in) nitf_Reader**{
+    nitf_Reader* temp = 0;
     if ($input)
     {
-        nitf_Reader* temp = 0;
         if (SWIG_ConvertPtr($input, (void**)&temp,$descriptor(nitf_Reader*), 0 |  0 ) != -1 && temp)
             $1 = (nitf_Reader**)&temp;
     }
 }
 %typemap(in) nitf_DownSampler**{
+    nitf_DownSampler* temp = 0;
     if ($input)
     {
-        nitf_DownSampler* temp = 0;
         if (SWIG_ConvertPtr($input, (void**)&temp,$descriptor(nitf_DownSampler*), 0 |  0 ) != -1 && temp)
             $1 = (nitf_DownSampler**)&temp;
     }
 }
 %typemap(in) nitf_Record**{
+    nitf_Record* temp = 0;
     if ($input)
     {
-        nitf_Record* temp = 0;
         if (SWIG_ConvertPtr($input, (void**)&temp,$descriptor(nitf_Record*), 0 |  0 ) != -1 && temp)
             $1 = (nitf_Record**)&temp;
     }
 }
 
 %typemap(in) nitf_TREEnumerator**{
+    nitf_TREEnumerator* temp = 0;
     if ($input)
     {
-        nitf_TREEnumerator* temp = 0;
         if (SWIG_ConvertPtr($input, (void**)&temp,$descriptor(nitf_TREEnumerator*), 0 |  0 ) != -1 && temp)
             $1 = (nitf_TREEnumerator**)&temp;
     }
 }
 
 %typemap(in) nitf_SegmentReader**{
+    nitf_SegmentReader* temp = 0;
     if ($input)
     {
-        nitf_SegmentReader* temp = 0;
         if (SWIG_ConvertPtr($input, (void**)&temp,$descriptor(nitf_SegmentReader*), 0 |  0 ) != -1 && temp)
             $1 = (nitf_SegmentReader**)&temp;
     }
 }
 
 %typemap(in) nitf_SegmentSource**{
+    nitf_SegmentSource* temp = 0;
     if ($input)
     {
-        nitf_SegmentSource* temp = 0;
         if (SWIG_ConvertPtr($input, (void**)&temp,$descriptor(nitf_SegmentSource*), 0 |  0 ) != -1 && temp)
             $1 = (nitf_SegmentSource**)&temp;
     }
