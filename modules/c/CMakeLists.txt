@@ -12,7 +12,7 @@ if (MSVC)
     string(REGEX REPLACE "/W[0-4]" "/W4" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}") # add_compile_options(/W4)
 
     add_compile_options(/wd4996) # '...': This function or variable may be unsafe.
-elseif (UNIX)
+elseif (CMAKE_C_COMPILER_ID STREQUAL "GNU")
     #add_compile_options(-Wall -pedantic -Wextra)
     add_compile_options(-Wall -Wextra)
 
