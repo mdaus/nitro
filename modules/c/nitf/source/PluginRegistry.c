@@ -126,7 +126,7 @@ nitf_PluginRegistry_getInstanceLog(nitf_Error* error, FILE* log)
 NITFPROT(nitf_PluginRegistry*)
 nitf_PluginRegistry_getInstance(nitf_Error* error)
 {
-    return nitf_PluginRegistry_getInstanceLog(error, stderr);
+    return nitf_PluginRegistry_getInstanceLog(error, NULL);
 }
 
 NITFPRIV(NITF_BOOL)
