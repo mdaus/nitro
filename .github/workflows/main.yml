@@ -30,7 +30,8 @@ jobs:
     - name: make
       run: |
         cd out
-        cmake --build . --config ${{ matrix.configuration }} -j
+        # uncomment end of following line for *VERBOSE* output
+        cmake --build . --config ${{ matrix.configuration }} -j # -- /verbosity:detailed
         cmake --build . --config ${{ matrix.configuration }} --target install
     - name: test
       run: |
@@ -43,44 +44,6 @@ jobs:
     - name: msbuild
       run: |
         msbuild nitro.sln /p:configuration=${{ matrix.configuration }}
-
-  build-msbuild-windows:
-    strategy:
-      matrix:
-        os: [windows-latest]
-        platform: [x64]
-        configuration: [Debug] # Debug turns on more compiler warnings
-    name: ${{ matrix.os }}-msbuild
-    runs-on: ${{ matrix.os }}
-
-    steps:
-    - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
-    - name: configure CODA-OSS
-      run: |
-        mkdir externals\coda-oss\out
-        cd externals\coda-oss\out
-        cmake .. -DCMAKE_INSTALL_PREFIX=install\${{ matrix.platform }}-${{ matrix.configuration }} -DENABLE_PYTHON=OFF
-    - name: make CODA-OSS
-      run: |
-        cd externals\coda-oss\out
-        cmake --build . --config ${{ matrix.configuration }} -j
-        cmake --build . --config ${{ matrix.configuration }} --target install
-    - name: Add msbuild to PATH
-      uses: microsoft/setup-msbuild@v2 # https://github.com/marketplace/actions/setup-msbuild
-      with:
-        msbuild-architecture: x64
-    - name: msbuild
-      run: |
-        msbuild nitro.sln /p:configuration=${{ matrix.configuration }}
-    #- name: vstest 
-    #  uses: microsoft/vstest-action@v1.0.0 # https://github.com/marketplace/actions/vstest-action
-    #  with:
-    #    platform: ${{ matrix.platform }}
-    #    testAssembly: UnitTest.dll
-    #    searchFolder: D:\a\nitro\nitro\x64\Debug
-    #- name: vstest 
-    #  run: |
-    #    vstest.console D:\a\nitro\nitro\x64\Debug\UnitTest.dll
 
   build-linux-cmake:
     strategy:
