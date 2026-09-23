@@ -11,6 +11,7 @@ if (${CMAKE_PROJECT_NAME} STREQUAL nitro)
     if (MSVC)
        add_compile_options(/WX) # warnings as errors
        add_compile_options(/MP) # multi-processor compile
+       add_compile_options(/wd4875)
 
        if (ENABLE_ASAN)
        	  # https://docs.microsoft.com/en-us/cpp/sanitizers/asan?view=msvc-160
