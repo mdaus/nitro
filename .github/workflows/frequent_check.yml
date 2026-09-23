@@ -1,6 +1,11 @@
 name: Build, unittest
 
-on: [push]
+on:
+  push:
+  schedule:
+    # Runs at 09:00 UTC every Saturday
+    - cron: '0 9 * * 6'
+  workflow_dispatch: # Optional: allows manual triggering for testing
 
 
 jobs:
