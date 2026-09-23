@@ -32,7 +32,7 @@ jobs:
     - name: make
       run: |
         cd out
-        cmake --build . --config ${{ matrix.configuration }} -j
+        cmake --build . --config ${{ matrix.configuration }} -j -- /verbosity:detailed
         cmake --build . --config ${{ matrix.configuration }} --target install
     - name: test
       run: |
