@@ -37,7 +37,7 @@ jobs:
         cmake --build . --config ${{ matrix.configuration }} --target install
     - name: test
       run: |
-        cd out
+        cd out/modules
         ctest -C ${{ matrix.configuration }} --output-on-failure
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v2 # https://github.com/marketplace/actions/setup-msbuild
@@ -69,5 +69,5 @@ jobs:
         cmake --build . -j 6
     - name: test
       run: |
-        cd target-Release
+        cd target-Release/modules
         ctest --output-on-failure

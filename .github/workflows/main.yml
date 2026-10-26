@@ -45,7 +45,7 @@ jobs:
       run: |
         msbuild nitro.sln /p:configuration=${{ matrix.configuration }}
 
-  build-linux-cmake:
+  build-linux-cmake-gcc:
     strategy:
       matrix:
         os: [ubuntu-latest]
@@ -62,11 +62,33 @@ jobs:
     - name: make
       run: |
         cd target-Release
-        # using the default number of threads (-j) causes G++ to crash
-        cmake --build . -j 6
+        cmake --build . -j
     - name: test
       run: |
-        cd target-Release
+        cd target-Release/modules
         ctest --output-on-failure
 
+  build-linux-cmake-clang:
+    strategy:
+        matrix:
+            os: [ubuntu-latest]
+    name: ${{ matrix.os }}-CXX${{ matrix.CXX }}-CMake
+    runs-on: ${{ matrix.os }}
+    container:
+      image: silkeh/clang:latest
+    steps:
+    - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
+    - name: configure
+      run: |
+        mkdir target-Release
+        cd target-Release
+        cmake -DCMAKE_BUILD_TYPE=Release ..
+    - name: make
+      run: |
+        cd target-Release
+        cmake --build . -j
+    - name: test
+      run: |
+        cd target-Release/modules
+        ctest --output-on-failure
 
