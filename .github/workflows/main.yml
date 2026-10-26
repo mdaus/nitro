@@ -51,7 +51,7 @@ jobs:
       run: |
         mkdir target-Release
         cd target-Release
-        cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=${{ matrix.CXX }} ..
+        cmake -DCMAKE_CXX_STANDARD=${{ matrix.CXX }} ..
     - name: make
       run: |
         cd target-Release
@@ -75,7 +75,7 @@ jobs:
       run: |
         mkdir target-Release
         cd target-Release
-        cmake -DCMAKE_BUILD_TYPE=Release ..
+        cmake ..
     - name: make
       run: |
         cd target-Release
