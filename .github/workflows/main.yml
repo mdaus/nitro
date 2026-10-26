@@ -61,6 +61,28 @@ jobs:
         cd target-Release/modules
         ctest --output-on-failure
 
+  build-linux-sanitizer:
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+    name: gcc-${{ matrix.os }}-CMake
+    runs-on: ${{ matrix.os }}
+    steps:
+    - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
+    - name: configure
+      run: |
+        mkdir target-Debug
+        cd target-Debug
+        cmake -DCMAKE_CXX_STANDARD=${{ matrix.CXX }} -DCMAKE_INSTALL_PREFIX=install -DCMAKE_BUILD_TYPE=Debug -DENABLE_ASAN=ON ..
+    - name: make
+      run: |
+        cd target-Debug
+        cmake --build . -t install -j
+    - name: test
+      run: |
+        cd target-Debug/modules
+        ctest --output-on-failure
+
   build-linux-cmake-clang:
     strategy:
         matrix:
