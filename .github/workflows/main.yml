@@ -51,7 +51,7 @@ jobs:
       run: |
         mkdir target-Release
         cd target-Release
-        cmake -DCMAKE_CXX_STANDARD=${{ matrix.CXX }} ..
+        cmake -DCMAKE_CXX_STANDARD=${{ matrix.CXX }} -DCMAKE_INSTALL_PREFIX=install ..
     - name: make
       run: |
         cd target-Release
@@ -75,7 +75,7 @@ jobs:
       run: |
         mkdir target-Release
         cd target-Release
-        cmake ..
+        cmake .. -DCMAKE_INSTALL_PREFIX=install
     - name: make
       run: |
         cd target-Release
