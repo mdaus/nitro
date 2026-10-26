@@ -82,6 +82,7 @@ jobs:
         cmake --build . -j
     - name: test
       run: |
+        mkdir .git
         cd target-Release/modules
         ctest --output-on-failure
 
