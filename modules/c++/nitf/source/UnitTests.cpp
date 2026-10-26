@@ -37,7 +37,6 @@ static inline std::string Configuration() // "Configuration" is typically "Debug
 {
 	return os.getSpecialEnv("Configuration");
 }
-
 static const fs::path& getCurrentExecutable()
 {
 	static const auto exec = fs::absolute(os.getCurrentExecutable());
@@ -119,7 +118,7 @@ static fs::path make_waf_install(const fs::path& p)
 {
 	// just "install" on Linux; "install-Debug-x64.v142" on Windows
 #ifdef _WIN32
-	const auto configuration_and_platform = Configuration() + "-" + Platform() + "." + PlatformToolset();
+	const auto configuration_and_platform = Configuration() + "-" + os.getSpecialEnv("Platform") + "." + os.getSpecialEnv("PlatformToolset");
 	return p / ("install-" + configuration_and_platform);
 #else
 	// Linux
