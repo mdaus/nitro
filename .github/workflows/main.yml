@@ -31,8 +31,8 @@ jobs:
       run: |
         cd out
         # uncomment end of following line for *VERBOSE* output
-        cmake --build . --config ${{ matrix.configuration }} -j # -- /verbosity:detailed
-        cmake --build . --config ${{ matrix.configuration }} --target install
+        cmake --build . --config ${{ matrix.configuration }} -j -t install # -- /verbosity:detailed
+
     - name: test
       run: |
         cd out
@@ -55,7 +55,7 @@ jobs:
     - name: make
       run: |
         cd target-Release
-        cmake --build . -j
+        cmake --build . -t install -j
     - name: test
       run: |
         cd target-Release/modules
@@ -79,7 +79,7 @@ jobs:
     - name: make
       run: |
         cd target-Release
-        cmake --build . -j
+        cmake --build . -t install -j
     - name: test
       run: |
         mkdir .git
