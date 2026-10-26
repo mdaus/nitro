@@ -46,7 +46,7 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         CXX: [14, 17, 20, 23]
-    name: ${{ matrix.os }}-CXX${{ matrix.CXX }}-CMake
+    name: gcc-${{ matrix.os }}-CXX${{ matrix.CXX }}-CMake
     runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
