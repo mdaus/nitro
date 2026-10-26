@@ -37,13 +37,6 @@ jobs:
       run: |
         cd out
         ctest -C ${{ matrix.configuration }} --output-on-failure
-    - name: Add msbuild to PATH
-      uses: microsoft/setup-msbuild@v2 # https://github.com/marketplace/actions/setup-msbuild
-      with:
-        msbuild-architecture: x64
-    - name: msbuild
-      run: |
-        msbuild nitro.sln /p:configuration=${{ matrix.configuration }}
 
   build-linux-cmake-gcc:
     strategy:
