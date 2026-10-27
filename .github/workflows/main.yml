@@ -26,16 +26,16 @@ jobs:
       run: |
         mkdir out
         cd out
-        cmake .. -DCMAKE_INSTALL_PREFIX=install\${{ matrix.platform }}-${{ matrix.configuration }} -DPYTHON_VERSION="3.7"
+        cmake .. -DPYTHON_VERSION="3.7"
     - name: make
       run: |
         cd out
         # uncomment end of following line for *VERBOSE* output
-        cmake --build . --config ${{ matrix.configuration }} -j -t install # -- /verbosity:detailed
+        cmake --build . --config ${{ matrix.configuration }} -j # -- /verbosity:detailed
 
     - name: test
       run: |
-        cd out
+        cd out/modules
         ctest -C ${{ matrix.configuration }} --output-on-failure
 
   build-linux-cmake-gcc:
@@ -51,11 +51,11 @@ jobs:
       run: |
         mkdir target-Release
         cd target-Release
-        cmake -DCMAKE_CXX_STANDARD=${{ matrix.CXX }} -DCMAKE_INSTALL_PREFIX=install ..
+        cmake -DCMAKE_CXX_STANDARD=${{ matrix.CXX }} ..
     - name: make
       run: |
         cd target-Release
-        cmake --build . -t install -j
+        cmake --build . -j
     - name: test
       run: |
         cd target-Release/modules
@@ -65,7 +65,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-    name: gcc-${{ matrix.os }}-CMake
+    name: gcc-asan-${{ matrix.os }}-CMake
     runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
@@ -73,11 +73,11 @@ jobs:
       run: |
         mkdir target-Debug
         cd target-Debug
-        cmake -DCMAKE_CXX_STANDARD=${{ matrix.CXX }} -DCMAKE_INSTALL_PREFIX=install -DCMAKE_BUILD_TYPE=Debug -DENABLE_ASAN=ON ..
+        cmake -DCMAKE_BUILD_TYPE=Debug -DENABLE_ASAN=ON ..
     - name: make
       run: |
         cd target-Debug
-        cmake --build . -t install -j
+        cmake --build . -j
     - name: test
       run: |
         cd target-Debug/modules
@@ -97,11 +97,11 @@ jobs:
       run: |
         mkdir target-Release
         cd target-Release
-        cmake .. -DCMAKE_INSTALL_PREFIX=install
+        cmake ..
     - name: make
       run: |
         cd target-Release
-        cmake --build . -t install -j
+        cmake --build . -j
     - name: test
       run: |
         mkdir .git
