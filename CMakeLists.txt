@@ -3,7 +3,7 @@ project(nitro)
 
 if (${CMAKE_PROJECT_NAME} STREQUAL nitro)
     # we are the top-level project and are responsible for configuration
-    set(CMAKE_CXX_STANDARD 14)
+    set(CMAKE_CXX_STANDARD 14 CACHE STRING "Requested C++ standard")
     set(CXX_STANDARD_REQUIRED true)
 
     # Always turn on "warnings as errors" to avoid lots of (meaningless?) build output;
@@ -45,7 +45,7 @@ if (${CMAKE_PROJECT_NAME} STREQUAL nitro)
              "${CMAKE_CURRENT_SOURCE_DIR}/externals/${CODA_OSS_DIR}/cmake")
         include(CodaBuild)
         coda_initialize_build()
-        add_subdirectory("externals/${CODA_OSS_DIR}")
+        add_subdirectory("externals/${CODA_OSS_DIR}" EXCLUDE_FROM_ALL)
     endif()
 endif()
 

@@ -37,42 +37,30 @@ jobs:
         cmake --build . --config ${{ matrix.configuration }} --target install
     - name: test
       run: |
-        cd out
+        cd out/modules
         ctest -C ${{ matrix.configuration }} --output-on-failure
-    - name: Add msbuild to PATH
-      uses: microsoft/setup-msbuild@v2 # https://github.com/marketplace/actions/setup-msbuild
-      with:
-        msbuild-architecture: x64
-    - name: msbuild
-      run: |
-        msbuild nitro.sln /p:configuration=${{ matrix.configuration }}
 
 
   build-linux-cmake:
     strategy:
       matrix:
         os: [ubuntu-latest]
-    name: ${{ matrix.os }}-CMake
+        CXX: [14, 17, 20, 23]
+    name: gcc-${{ matrix.os }}-CXX${{ matrix.CXX }}-CMake
     runs-on: ${{ matrix.os }}
-
     steps:
     - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
-    - name: Set up Python
-      uses: actions/setup-python@v5 # https://github.com/marketplace/actions/setup-python
-      with:
-        python-version: '3.9'
     - name: configure
       run: |
         mkdir target-Release
         cd target-Release
-        cmake .. -DCMAKE_INSTALL_PREFIX=install${{ matrix.os }}CMake-Github -DPYTHON_VERSION=3.9
+        cmake .. -DCMAKE_CXX_STANDARD=${{ matrix.CXX }}
     - name: make
       run: |
         cd target-Release
         # using the default number of threads (-j) causes G++ to crash
         cmake --build . -j 6
-        cmake --build . --target install
     - name: test
       run: |
-        cd target-Release
+        cd target-Release/modules
         ctest --output-on-failure
