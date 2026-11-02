@@ -84,6 +84,11 @@ coda_add_tests(
         test_zero_field.c
         )
 
+include(CheckCCompilerFlag)
+check_c_compiler_flag(-Wcalloc-transposed-args HAS_CALLOC_TRANSPOSED_ARGS_FLAG)
+if (HAS_CALLOC_TRANSPOSED_ARGS_FLAG)
+    target_compile_options(${MODULE_NAME}_test_image_io PRIVATE -Wno-error=calloc-transposed-args)
+endif()
 
 # Build all the TRE
 set(ENABLE_STATIC_TRES OFF CACHE BOOL "Build static libraries for each TRE")
