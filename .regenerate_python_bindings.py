@@ -1,7 +1,7 @@
 from subprocess import check_output, check_call, DEVNULL
 import os
 import sys
-from platform import dist
+import distro
 from sys import stdout
 from threading import Timer, Event
 import itertools, sys
@@ -20,9 +20,9 @@ def thinking(evt):
 
 
 def linux_version():
-    distro, version, _ = dist()
-    maj_version = version.split(".")[0]
-    return distro, maj_version
+    linux_distro = distro.name()
+    maj_version = distro.major_version()
+    return linux_distro, maj_version
 
 
 def swig_version():
