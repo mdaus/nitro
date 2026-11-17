@@ -54,9 +54,9 @@ NITFPRIV(NITF_BOOL) writeHeader(short classType, short code, short size,
         (*actual)++;
     }
 
-    if (*actual >= 31)
+    if (size >= 31)
     {
-        extendedParams = *actual;
+        extendedParams = size;
         params = 31;
     }
 
