@@ -9,9 +9,15 @@ if (BUILD_SHARED)
     )
 endif()
 
+# Utils.c calls round(), which is in libm on Unix-like systems. The waf build links it
+# through MATH; without it a BUILD_SHARED_LIBS=ON build fails with an undefined `round`.
+if (UNIX)
+    set(NRT_MATH_LIB m)
+endif()
+
 coda_add_module(
     ${MODULE_NAME}
-    DEPS ${CMAKE_DL_LIBS} config-c++
+    DEPS ${CMAKE_DL_LIBS} ${NRT_MATH_LIB} config-c++
     SOURCES
         source/DateTime.c
         source/Debug.c
