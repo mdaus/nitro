@@ -61,6 +61,28 @@ jobs:
         cd target-Release/modules
         ctest --output-on-failure
 
+  build-linux-cmake-shared:
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+    name: gcc-shared-${{ matrix.os }}-CMake
+    runs-on: ${{ matrix.os }}
+    steps:
+    - uses: actions/checkout@v4 # https://github.com/marketplace/actions/checkout
+    - name: configure
+      run: |
+        mkdir target-Release
+        cd target-Release
+        cmake -DBUILD_SHARED_LIBS=ON ..
+    - name: make
+      run: |
+        cd target-Release
+        cmake --build . -j
+    - name: test
+      run: |
+        cd target-Release/modules
+        ctest --output-on-failure
+
   build-linux-sanitizer:
     # Right now there is a utest which fails, leave this in for debugging
     continue-on-error: true
